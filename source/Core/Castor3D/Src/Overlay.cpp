@@ -121,26 +121,26 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Overlay::Overlay( Engine * p_engine, eOVERLAY_TYPE p_type )
-		: m_manager( p_engine->GetOverlayManager() )
+	Overlay::Overlay( Engine & p_engine, eOVERLAY_TYPE p_type )
+		: OwnedBy< Engine >( p_engine )
+		, m_manager( p_engine.GetOverlayManager() )
 		, m_pParent()
 		, m_pScene()
-		, m_factory( p_engine->GetOverlayFactory() )
-		, m_engine( p_engine )
-		, m_renderSystem( p_engine->GetRenderSystem() )
-		, m_category( p_engine->GetOverlayFactory().Create( p_type ) )
+		, m_factory( p_engine.GetOverlayFactory() )
+		, m_renderSystem( p_engine.GetRenderSystem() )
+		, m_category( p_engine.GetOverlayFactory().Create( p_type ) )
 	{
 		m_category->SetOverlay( this );
 	}
 
-	Overlay::Overlay( Engine * p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
-		: m_manager( p_engine->GetOverlayManager() )
+	Overlay::Overlay( Engine & p_engine, eOVERLAY_TYPE p_type, SceneSPtr p_scene, OverlaySPtr p_parent )
+		: OwnedBy< Engine >( p_engine )
+		, m_manager( p_engine.GetOverlayManager() )
 		, m_pParent( p_parent )
 		, m_pScene( p_scene )
-		, m_factory( p_engine->GetOverlayFactory() )
-		, m_renderSystem( p_engine->GetRenderSystem() )
-		, m_engine( p_engine )
-		, m_category( p_engine->GetOverlayFactory().Create( p_type ) )
+		, m_factory( p_engine.GetOverlayFactory() )
+		, m_renderSystem( p_engine.GetRenderSystem() )
+		, m_category( p_engine.GetOverlayFactory().Create( p_type ) )
 	{
 		m_category->SetOverlay( this );
 	}

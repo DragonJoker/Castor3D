@@ -37,8 +37,8 @@ namespace GlRender
 	\remark		Permet aux implémentations d'utiliser les optimisations spécifiques aux API (comme les Vertex arrays objects OpenGL)
 	*/
 	class GlGeometryBuffers
-		:	public Castor3D::GeometryBuffers
-		,	public Castor::NonCopyable
+		: public Castor3D::GeometryBuffers
+		, public Castor::NonCopyable
 	{
 	private:
 		typedef std::function< bool() >	PFnBind;

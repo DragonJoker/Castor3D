@@ -30,8 +30,8 @@ namespace Dx11Render
 		,	public Castor::NonCopyable
 	{
 	public:
-		DxRenderBufferAttachment( DxRenderSystem * p_pRenderSystem, DxColourRenderBufferSPtr p_pRenderBuffer );
-		DxRenderBufferAttachment( DxRenderSystem * p_pRenderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer );
+		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_pRenderBuffer );
+		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer );
 		virtual ~DxRenderBufferAttachment();
 
 		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );

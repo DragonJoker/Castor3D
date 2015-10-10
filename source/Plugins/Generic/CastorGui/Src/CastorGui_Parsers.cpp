@@ -87,7 +87,7 @@ namespace CastorGui
 
 	ControlsManager & GetControlsManager( FileParserContextSPtr p_context )
 	{
-		return static_cast< ControlsManager & >( std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetEngine()->GetFrameListener( PLUGIN_NAME ) );
+		return static_cast< ControlsManager & >( std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetOwner()->GetFrameListener( PLUGIN_NAME ) );
 	}
 
 	ParserContext & GetParserContext( FileParserContextSPtr p_context )
@@ -118,7 +118,7 @@ namespace CastorGui
 IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_Gui )
 {
 	ParserContext * l_context = new ParserContext;
-	l_context->m_engine = std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetEngine();
+	l_context->m_engine = std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetOwner();
 	p_context->RegisterUserContext( PLUGIN_NAME, l_context );
 }
 END_ATTRIBUTE_PUSH( CastorGui::eSECTION_GUI )

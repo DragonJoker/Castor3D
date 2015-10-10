@@ -39,7 +39,7 @@ namespace Dx11Render
 		DECLARE_VECTOR( ID3D11RenderTargetView *,							D3D11RenderTargetView	);
 
 	public:
-		DxFrameBuffer( DxRenderSystem * p_pRenderSystem );
+		DxFrameBuffer( DxRenderSystem * p_renderSystem );
 		virtual ~DxFrameBuffer();
 
 		virtual bool Create( int p_iSamplesCount );

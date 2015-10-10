@@ -33,8 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique de maillages
 	*/
-	class C3D_API OverlayFactory
-		:	public Castor::Factory< OverlayCategory, eOVERLAY_TYPE >
+	class OverlayFactory
+		: public Castor::Factory< OverlayCategory, eOVERLAY_TYPE >
 	{
 	public:
 		/**
@@ -43,22 +43,24 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		OverlayFactory();
+		C3D_API OverlayFactory();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~OverlayFactory();
+		C3D_API virtual ~OverlayFactory();
 		/**
 		 *\~english
 		 *\brief		Registers all objects types
 		 *\~french
 		 *\brief		Enregistre tous les types d'objets
 		 */
-		virtual void Initialise();
+		C3D_API virtual void Initialise();
+
 #if !CASTOR_HAS_VARIADIC_TEMPLATES
+
 		/**
 		 *\~english
 		 *\brief		Creates an object from a key
@@ -81,7 +83,9 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 #endif
+
 	};
 }
 

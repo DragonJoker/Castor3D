@@ -8,7 +8,10 @@
 #		include <stdlib.h>
 #	else
 #		include <Windows.h>
+#		pragma warning( push )
+#		pragma warning( disable:4091 )
 #		include <Dbghelp.h>
+#		pragma warning( pop )
 #	endif
 #endif
 

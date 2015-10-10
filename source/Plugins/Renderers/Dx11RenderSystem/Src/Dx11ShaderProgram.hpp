@@ -24,14 +24,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Dx11Render
 {
-	class C3D_Dx11_API UniformsBase
+	class UniformsBase
 	{
-	protected:
-		Castor::String m_strVertexInMatrices;
-		Castor::String m_strPixelInMatrices;
-		Castor::String m_strPixelPass;
-		Castor::String m_strPixelScene;
-
 	public:
 		inline Castor::String GetVertexInMatrices( int32_t p_index )const
 		{
@@ -43,6 +37,7 @@ namespace Dx11Render
 #endif
 			return l_buffer;
 		}
+
 		inline Castor::String GetPixelInMatrices( int32_t p_index )const
 		{
 			xchar l_buffer[1024];
@@ -53,6 +48,7 @@ namespace Dx11Render
 #endif
 			return l_buffer;
 		}
+
 		inline Castor::String GetPixelPass( int32_t p_index )const
 		{
 			xchar l_buffer[1024];
@@ -63,6 +59,7 @@ namespace Dx11Render
 #endif
 			return l_buffer;
 		}
+
 		inline Castor::String GetPixelScene( int32_t p_index )const
 		{
 			xchar l_buffer[1024];
@@ -73,13 +70,21 @@ namespace Dx11Render
 #endif
 			return l_buffer;
 		}
-		static std::unique_ptr< UniformsBase > Get( DxRenderSystem const & p_renderSystem );
+
+		C3D_Dx11_API static std::unique_ptr< UniformsBase > Get( DxRenderSystem const & p_renderSystem );
+
+	protected:
+		Castor::String m_strVertexInMatrices;
+		Castor::String m_strPixelInMatrices;
+		Castor::String m_strPixelPass;
+		Castor::String m_strPixelScene;
 	};
 
-	class C3D_Dx11_API UniformsBuf : public UniformsBase
+	class UniformsBuf
+		: public UniformsBase
 	{
 	public:
-		UniformsBuf()
+		C3D_Dx11_API UniformsBuf()
 		{
 			m_strVertexInMatrices =
 				cuT( "cbuffer Matrices : register( cb%d )\n" )
@@ -132,10 +137,11 @@ namespace Dx11Render
 		}
 	};
 
-	class C3D_Dx11_API UniformsStd : public UniformsBase
+	class UniformsStd
+		: public UniformsBase
 	{
 	public:
-		UniformsStd()
+		C3D_Dx11_API UniformsStd()
 		{
 			m_strVertexInMatrices =
 				cuT( "uniform float4x4 c3d_mtxProjection;\n" )
@@ -174,38 +180,43 @@ namespace Dx11Render
 		}
 	};
 
-	class C3D_Dx11_API InOutsBase
+	class InOutsBase
 	{
-	protected:
-		Castor::String	m_strVtxInput;
-		Castor::String	m_strVtxOutput;
-		Castor::String	m_strPxlInput;
-		Castor::String	m_strPxlOutput;
-
 	public:
 		Castor::String const & GetVtxInput()const
 		{
 			return m_strVtxInput;
 		}
+
 		Castor::String const & GetVtxOutput()const
 		{
 			return m_strVtxOutput;
 		}
+
 		Castor::String const & GetPxlInput()const
 		{
 			return m_strPxlInput;
 		}
+
 		Castor::String const & GetPxlOutput()const
 		{
 			return m_strPxlOutput;
 		}
-		static std::unique_ptr< InOutsBase > Get( DxRenderSystem const & p_renderSystem );
+
+		C3D_Dx11_API static std::unique_ptr< InOutsBase > Get( DxRenderSystem const & p_renderSystem );
+
+	protected:
+		Castor::String m_strVtxInput;
+		Castor::String m_strVtxOutput;
+		Castor::String m_strPxlInput;
+		Castor::String m_strPxlOutput;
 	};
 
-	class C3D_Dx11_API InOutsOld : public InOutsBase
+	class InOutsOld
+		: public InOutsBase
 	{
 	public:
-		InOutsOld()
+		C3D_Dx11_API InOutsOld()
 		{
 			m_strVtxInput =
 				cuT( "struct VtxInput\n" )
@@ -245,10 +256,11 @@ namespace Dx11Render
 		}
 	};
 
-	class C3D_Dx11_API InOutsNew : public InOutsBase
+	class InOutsNew
+		: public InOutsBase
 	{
 	public:
-		InOutsNew()
+		C3D_Dx11_API InOutsNew()
 		{
 			m_strVtxInput =
 				cuT( "struct VtxInput\n" )
@@ -289,10 +301,10 @@ namespace Dx11Render
 	};
 
 	class DxShaderProgram
-		:	public Castor3D::ShaderProgramBase
+		: public Castor3D::ShaderProgramBase
 	{
 	public:
-		DxShaderProgram( DxRenderSystem * p_pRenderSystem );
+		DxShaderProgram( DxRenderSystem & p_renderSystem );
 		virtual ~DxShaderProgram();
 
 		/**

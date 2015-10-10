@@ -32,8 +32,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	OverlayManager::OverlayManager( Engine * p_engine )
-		: m_engine( p_engine )
+	OverlayManager::OverlayManager( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
 		, m_overlayCountPerLevel( 1000, 0 )
 	{
 	}
@@ -57,12 +57,12 @@ namespace Castor3D
 
 		for ( auto && l_overlay : *this )
 		{
-			m_engine->PostEvent( MakeCleanupEvent( *l_overlay ) );
+			GetOwner()->PostEvent( MakeCleanupEvent( *l_overlay ) );
 		}
 
 		for ( auto && l_it : m_fontTextures )
 		{
-			m_engine->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			GetOwner()->PostEvent( MakeCleanupEvent( *l_it.second ) );
 		}
 
 		Castor::Collection< Overlay, Castor::String >::unlock();
@@ -136,7 +136,7 @@ namespace Castor3D
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Overlay >( m_engine, p_type, p_scene, p_parent );
+			l_pReturn = std::make_shared< Overlay >( *GetOwner(), p_type, p_scene, p_parent );
 			l_pReturn->SetName( p_name );
 
 			if ( p_scene )
@@ -208,7 +208,7 @@ namespace Castor3D
 
 	void OverlayManager::Update()
 	{
-		if ( m_engine->IsCleaned() )
+		if ( GetOwner()->IsCleaned() )
 		{
 			if ( m_pRenderer )
 			{
@@ -220,7 +220,7 @@ namespace Castor3D
 		{
 			if ( !m_pRenderer )
 			{
-				m_pRenderer = m_engine->GetRenderSystem()->CreateOverlayRenderer();
+				m_pRenderer = GetOwner()->GetRenderSystem()->CreateOverlayRenderer();
 				m_pRenderer->Initialise();
 			}
 		}
@@ -228,7 +228,7 @@ namespace Castor3D
 
 	void OverlayManager::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
 
 		if ( m_size != p_size )
@@ -315,7 +315,7 @@ namespace Castor3D
 
 	bool OverlayManager::ReadOverlays( Castor::TextFile & p_file )
 	{
-		SceneFileParser l_parser( m_engine );
+		SceneFileParser l_parser( *GetOwner() );
 		return l_parser.ParseFile( p_file );
 	}
 
@@ -359,7 +359,7 @@ namespace Castor3D
 
 				if ( !l_overlay )
 				{
-					l_overlay = std::make_shared< Overlay >( m_engine, l_type );
+					l_overlay = std::make_shared< Overlay >( *GetOwner(), l_type );
 					l_overlay->SetName( l_name );
 					AddOverlay( l_name, l_overlay, nullptr );
 				}
@@ -397,9 +397,9 @@ namespace Castor3D
 
 		if ( l_it == m_fontTextures.end() )
 		{
-			l_return = std::make_shared< FontTexture >( m_engine, p_font );
+			l_return = std::make_shared< FontTexture >( *GetOwner(), p_font );
 			m_fontTextures.insert( std::make_pair( p_font->GetName(), l_return ) );
-			m_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
+			GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
 		}
 
 		return l_return;

@@ -22,18 +22,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AttachObject( static_cast< CMovableObject * >( val )->GetInternal().get() );
+			m_internal->AttachObject( static_cast< CMovableObject * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "AttachObject" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "AttachObject" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -45,18 +39,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->DetachObject( static_cast< CMovableObject * >( val )->GetInternal().get() );
+			m_internal->DetachObject( static_cast< CMovableObject * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "DetachObject" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "DetachObject" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -68,18 +56,12 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AttachTo( static_cast< CSceneNode * >( val )->GetInternal().get() );
+			m_internal->AttachTo( static_cast< CSceneNode * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "AttachTo" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "AttachTo" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -96,13 +78,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "Detach" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "Detach" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -119,13 +95,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "Yaw" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "Yaw" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -142,13 +112,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "Pitch" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "Pitch" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -165,13 +129,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "Roll" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "Roll" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -188,13 +146,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "Rotate" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "Rotate" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -211,13 +163,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "Translate" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "Translate" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -234,13 +180,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,						// This represents the error
-					 IID_ISceneNode,				// This is the GUID of component throwing error
-					 cuT( "Scale" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED.c_str(),	// This is the description
-					 0,								// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "Scale" ), ERROR_UNINITIALISED.c_str(), 0, NULL );
 		}
 
 		return hr;

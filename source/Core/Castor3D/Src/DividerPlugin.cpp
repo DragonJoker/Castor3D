@@ -35,7 +35,7 @@ namespace Castor3D
 #endif
 
 	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary, p_engine )
+		: PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary, *p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnGetDividerType, GetDividerTypeFunctionABIName ) )
 		{
@@ -60,7 +60,7 @@ namespace Castor3D
 
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( m_engine );
+			m_pfnOnLoad( GetOwner() );
 		}
 	}
 
@@ -68,7 +68,7 @@ namespace Castor3D
 	{
 		if ( m_pfnOnUnload )
 		{
-			m_pfnOnUnload( m_engine );
+			m_pfnOnUnload( GetOwner() );
 		}
 	}
 

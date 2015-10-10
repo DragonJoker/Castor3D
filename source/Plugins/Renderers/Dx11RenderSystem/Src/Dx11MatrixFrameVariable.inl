@@ -1,15 +1,15 @@
 namespace Dx11Render
 {
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	DxMatrixFrameVariable< T, Rows, Columns >::DxMatrixFrameVariable( DxRenderSystem * p_pRenderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc )
-		:	DxFrameVariableBase( p_pRenderSystem )
+	DxMatrixFrameVariable< T, Rows, Columns >::DxMatrixFrameVariable( DxRenderSystem * p_renderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc )
+		:	DxFrameVariableBase( p_renderSystem )
 		,	Castor3D::MatrixFrameVariable< T, Rows, Columns >( p_pProgram, p_uiOcc )
 	{
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	DxMatrixFrameVariable< T, Rows, Columns >::DxMatrixFrameVariable( DxRenderSystem * p_pRenderSystem, Castor3D::MatrixFrameVariable<T, Rows, Columns> * p_pVariable )
-		:	DxFrameVariableBase( p_pRenderSystem )
+	DxMatrixFrameVariable< T, Rows, Columns >::DxMatrixFrameVariable( DxRenderSystem * p_renderSystem, Castor3D::MatrixFrameVariable<T, Rows, Columns> * p_pVariable )
+		:	DxFrameVariableBase( p_renderSystem )
 		,	Castor3D::MatrixFrameVariable< T, Rows, Columns >( *p_pVariable )
 	{
 	}

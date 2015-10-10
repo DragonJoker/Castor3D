@@ -480,6 +480,9 @@ namespace CastorViewer
 		if ( m_pRenderPanel )
 		{
 			m_pRenderPanel->SetRenderWindow( nullptr );
+			m_pRenderPanel->UnFocus();
+			m_pRenderPanel->Close( true );
+			m_pRenderPanel = NULL;
 		}
 
 		if ( wxGetApp().GetCastor() )
@@ -488,13 +491,6 @@ namespace CastorViewer
 			wxGetApp().GetCastor()->EndRendering();
 #endif
 			wxGetApp().GetCastor()->Cleanup();
-		}
-
-		if ( m_pRenderPanel )
-		{
-			m_pRenderPanel->UnFocus();
-			m_pRenderPanel->Close( true );
-			m_pRenderPanel = NULL;
 		}
 
 		DestroyChildren();

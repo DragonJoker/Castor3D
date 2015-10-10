@@ -19,13 +19,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_RENDER_SYSTEM_PREREQUISITES_H___
 
 #if defined( _WIN32 )
-#	if defined( _MSC_VER )
+#	if defined( _MSC_VER ) && _MSC_VER < 1900
 #		pragma warning( push )
 #		pragma warning( disable:4311 )
 #		pragma warning( disable:4312 )
 #	endif
 #	include <Windows.h>
-#	if defined( _MSC_VER )
+#	if defined( _MSC_VER ) && _MSC_VER < 1900
 #		pragma warning( pop )
 #	endif
 #elif defined( __linux__ )
@@ -55,6 +55,7 @@ using Castor::real;
 
 namespace GlRender
 {
+	class GlRenderSystem;
 	class GlAttributeBase;
 	template< typename T, uint32_t Count > class GlAttribute;
 	template< typename T > class GlBufferBase;

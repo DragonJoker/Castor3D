@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		WindowHandle & operator =( WindowHandle const & p_copy );
+		WindowHandle & operator=( WindowHandle const & p_copy );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -175,7 +175,7 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		WindowHandle & operator =( WindowHandle && p_copy );
+		WindowHandle & operator=( WindowHandle && p_copy );
 		/**
 		 *\~english
 		 *\brief		Destructor

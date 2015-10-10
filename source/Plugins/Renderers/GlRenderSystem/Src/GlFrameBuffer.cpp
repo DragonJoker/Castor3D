@@ -12,10 +12,10 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlFrameBuffer::GlFrameBuffer( OpenGl & p_gl, Engine * p_engine )
-		:	FrameBuffer( p_engine )
-		,	m_uiGlName( uint32_t( eGL_INVALID_INDEX ) )
-		,	m_gl( p_gl )
+	GlFrameBuffer::GlFrameBuffer( OpenGl & p_gl, Engine & p_engine )
+		: FrameBuffer( p_engine )
+		, m_uiGlName( uint32_t( eGL_INVALID_INDEX ) )
+		, m_gl( p_gl )
 	{
 	}
 

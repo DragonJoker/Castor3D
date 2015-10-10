@@ -15,8 +15,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FrameBuffer::FrameBuffer( Engine * p_engine )
-		:	m_engine( p_engine )
+	FrameBuffer::FrameBuffer( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
 	{
 	}
 
@@ -158,7 +158,7 @@ namespace Castor3D
 			{
 				p_pDepthStencilState->Apply();
 				p_pRasteriserState->Apply();
-				m_engine->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_pTexture, p_uiComponents );
+				GetOwner()->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_pTexture, p_uiComponents );
 				p_pBuffer->Unbind();
 
 				if ( p_pBuffer->m_mapTex.size() )

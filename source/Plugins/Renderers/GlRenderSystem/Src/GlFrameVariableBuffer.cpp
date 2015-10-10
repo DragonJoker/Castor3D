@@ -662,8 +662,8 @@ namespace GlRender
 		}
 	}
 
-	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlRenderSystem * p_pRenderSystem )
-		: FrameVariableBuffer( p_name, p_pRenderSystem )
+	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlRenderSystem & p_renderSystem )
+		: FrameVariableBuffer( p_name, p_renderSystem )
 		, m_glBuffer( p_gl, eGL_BUFFER_TARGET_UNIFORM )
 		, m_iUniformBlockIndex( eGL_INVALID_INDEX )
 		, m_iUniformBlockSize( 0 )

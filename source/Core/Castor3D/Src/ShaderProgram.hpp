@@ -21,9 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "FrameVariable.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -39,6 +37,7 @@ namespace Castor3D
 	\brief		Implémentation de base d'un programme de shader, utilisé afin d'exposer les fonctions communes aux langages de shader
 	*/
 	class C3D_API ShaderProgramBase
+		: public Castor::OwnedBy< RenderSystem >
 	{
 		template< class Ty > friend struct FrameVariableCreator;
 		template< class Ty > friend struct ShaderObjectCreator;
@@ -197,14 +196,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem instance
+		 *\param[in]	p_renderSystem	The RenderSystem instance
 		 *\param[in]	p_eLanguage		The program language
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	L'instance du RenderSystem
+		 *\param[in]	p_renderSystem	L'instance du RenderSystem
 		 *\param[in]	p_eLanguage		Le langage du programme
 		 */
-		ShaderProgramBase( RenderSystem * p_pRenderSystem, eSHADER_LANGUAGE p_eLanguage );
+		ShaderProgramBase( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -597,18 +596,6 @@ namespace Castor3D
 		{
 			return m_eLanguage;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RenderSystem
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le RenderSystem
-		 *\return		La valeur
-		 */
-		inline RenderSystem * GetRenderSystem()const
-		{
-			return m_renderSystem;
-		}
 
 	protected:
 		/**
@@ -654,8 +641,6 @@ namespace Castor3D
 		std::vector< ShaderObjectBaseSPtr > m_activeShaders;
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
-		//!\~english The RenderSystem instance	\~french L'instance du RenderSystem
-		RenderSystem * m_renderSystem;
 		//!\~english The frame variable buffers map, ordered by name	\~french La liste des buffers de variable de frame, triés par nom
 		FrameVariableBufferPtrStrMap m_frameVariableBuffersByName;
 		//!\~english The frame variable buffers map, ordered by shader type	\~french La liste des buffers de variable de frame, triés par type de shader
@@ -664,7 +649,5 @@ namespace Castor3D
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

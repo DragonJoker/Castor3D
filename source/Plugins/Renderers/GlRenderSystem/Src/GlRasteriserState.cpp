@@ -1,5 +1,7 @@
 #include "GlRasteriserState.hpp"
 
+#include "GlRenderSystem.hpp"
+
 using namespace Castor;
 using namespace Castor3D;
 
@@ -10,9 +12,10 @@ namespace GlRender
 		bool g_creatingCurrent = false;
 	}
 
-	GlRasteriserState::GlRasteriserState( OpenGl & p_gl )
-		: RasteriserState()
+	GlRasteriserState::GlRasteriserState( GlRenderSystem * p_renderSystem, OpenGl & p_gl )
+		: RasteriserState( *p_renderSystem->GetOwner() )
 		, m_gl( p_gl )
+		, m_renderSystem( p_renderSystem )
 	{
 		CreateCurrent();
 	}
@@ -150,6 +153,6 @@ namespace GlRender
 
 	RasteriserStateSPtr GlRasteriserState::DoCreateCurrent()
 	{
-		return std::make_shared< GlRasteriserState >( m_gl );
+		return std::make_shared< GlRasteriserState >( m_renderSystem, m_gl );
 	}
 }

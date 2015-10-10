@@ -73,7 +73,7 @@ namespace GuiCommon
 		else
 		{
 			PassSPtr l_pass = m_pPass.lock();
-			Engine * l_engine = l_pass->GetEngine();
+			Engine * l_engine = l_pass->GetOwner();
 			auto && l_it = l_engine->RenderWindowsBegin();
 
 			if ( l_it != l_engine->RenderWindowsEnd() && l_it->second->GetRenderTarget() )

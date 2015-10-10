@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -35,7 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
 	*/
-	template< class Type, eINTERPOLATOR_MODE Mode > class C3D_API Interpolator
+	template< class Type, eINTERPOLATOR_MODE Mode >
+	class C3D_API Interpolator
 	{
 	public:
 		/**
@@ -100,7 +97,5 @@ namespace Castor3D
 		Type m_tDest;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

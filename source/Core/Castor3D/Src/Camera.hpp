@@ -22,10 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BinaryParser.hpp"
 
 #include <PlaneEquation.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -79,8 +76,9 @@ namespace Castor3D
 	\brief		Classe de représentation de Camera
 	\remark		Donne la position, orientation, viewport ...
 	*/
-	class C3D_API Camera
+	class Camera
 		: public MovableObject
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -92,7 +90,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Camera
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public MovableObject::TextLoader
 		{
 		public:
@@ -106,7 +104,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_camera	La camera
 			 */
-			virtual bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
 		};
 		/*
 		\author		Sylvain DOREMUS
@@ -116,7 +114,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de Camera
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public MovableObject::BinaryParser
 		{
 		public:
@@ -128,7 +126,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -141,7 +139,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Camera const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Camera const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -154,7 +152,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Camera & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Camera & p_obj, BinaryChunk & p_chunk )const;
 		};
 		/**
 		 *\~english
@@ -172,7 +170,7 @@ namespace Castor3D
 		 *\param[in]	p_viewport			Viewport à copier
 		 *\param[in]	p_topology	Mode d'affichage de la caméra
 		 */
-		Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, ViewportSPtr p_viewport, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
+		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, ViewportSPtr p_viewport, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -191,28 +189,28 @@ namespace Castor3D
 		 *\param[in]	p_type				Type de projection
 		 *\param[in]	p_topology	Mode d'affichage de la caméra
 		 */
-		Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, Castor::Size const & p_size, eVIEWPORT_TYPE p_type, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
+		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, Castor::Size const & p_size, eVIEWPORT_TYPE p_type, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Camera();
+		C3D_API virtual ~Camera();
 		/**
 		 *\~english
 		 *\brief		Applies the viewport, the rotation ...
 		 *\~french
 		 *\brief		Applique le viewport, la rotation ...
 		 */
-		virtual void Render();
+		C3D_API virtual void Render();
 		/**
 		 *\~english
 		 *\brief		Removes the transformations
 		 *\~french
 		 *\brief		Enlève les transformations
 		 */
-		virtual void EndRender();
+		C3D_API virtual void EndRender();
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -221,7 +219,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le viewport
 		 *\param[in]	p_width, p_height	Dimensions de la fenêtre d'affichage
 		 */
-		void Resize( uint32_t p_width, uint32_t p_height );
+		C3D_API void Resize( uint32_t p_width, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -230,21 +228,21 @@ namespace Castor3D
 		 *\brief		Redimensionne le viewport
 		 *\param[in]	p_size	Dimensions de la fenêtre d'affichage
 		 */
-		void Resize( Castor::Size const & p_size );
+		C3D_API void Resize( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Sets the orientation to identity
 		 *\~french
 		 *\brief		Met l'orientation à l'identité
 		 */
-		void ResetOrientation();
+		C3D_API void ResetOrientation();
 		/**
 		 *\~english
 		 *\brief		Sets the position to 0
 		 *\~french
 		 *\brief		Réinitialise la position
 		 */
-		void ResetPosition();
+		C3D_API void ResetPosition();
 		/**
 		 *\~english
 		 *\brief		Returns the first object at mouse coords x and y
@@ -262,7 +260,69 @@ namespace Castor3D
 		 *\param[out]	p_stFound	Le résultat de la sélection
 		 *\return		\p false si aucun objet n'a été trouvé
 		*/
-		bool Select( SceneSPtr p_scene, eSELECTION_MODE p_mode, int p_x, int p_y, stSELECT_RESULT & p_stFound );
+		C3D_API bool Select( SceneSPtr p_scene, eSELECTION_MODE p_mode, int p_x, int p_y, stSELECT_RESULT & p_stFound );
+		/**
+		*\~english
+		*\brief		Retrieves the viewport type
+		*\return		The viewport type
+		*\~french
+		*\brief		Récupère le type de viewport
+		*\return		Le type de viewport
+		*/
+		C3D_API eVIEWPORT_TYPE GetViewportType()const;
+		/**
+		*\~english
+		*\brief		Sets the viewport type
+		*\param[in]	val	The viewport type
+		*\~french
+		*\brief		Définit le type de viewport
+		*\param[in]	val	Le type de viewport
+		*/
+		C3D_API void SetViewportType( eVIEWPORT_TYPE val );
+		/**
+		*\~english
+		*\brief		Retrieves the viewport width
+		*\return		The width
+		*\~french
+		*\brief		Récupère la largeur du viewport
+		*\return		La largeur
+		*/
+		C3D_API uint32_t GetWidth()const;
+		/**
+		*\~english
+		*\brief		Retrieves the viewport height
+		*\return		The height
+		*\~french
+		*\brief		Récupère la hauteur du viewport
+		*\return		La hauteur
+		*/
+		C3D_API uint32_t GetHeight()const;
+		/**
+		*\~english
+		*\brief		Checks if given CubeBox is in the view frustum
+		*\param[in]	p_box				The CubeBox
+		*\param[in]	m_transformations	The CubeBox transformations matrix
+		*\return		\p false if the CubeBox is completely out of the view frustum
+		*\~french
+		*\brief
+		*\brief		Vérifie si la CubeBox donnée est dans le frustum de vue
+		*\param[in]	p_box				La CubeBox
+		*\param[in]	m_transformations	La matrice de transformations de la CubeBox
+		*\return		\p false si la CubeBox est complètement en dehors du frustum de vue
+		*/
+		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
+		/**
+		*\~english
+		*\brief		Checks if given point is in the view frustum
+		*\param[in]	p_point	The point
+		*\return		\p false if the point out of the view frustum
+		*\~french
+		*\brief
+		*\brief		Vérifie si le point donné est dans le frustum de vue
+		*\param[in]	p_point	Le point
+		*\return		\p false si le point en dehors du frustum de vue
+		*/
+		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the Viewport
@@ -301,78 +361,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the viewport type
-		 *\return		The viewport type
-		 *\~french
-		 *\brief		Récupère le type de viewport
-		 *\return		Le type de viewport
-		 */
-		eVIEWPORT_TYPE GetViewportType()const;
-		/**
-		 *\~english
-		 *\brief		Sets the viewport type
-		 *\param[in]	val	The viewport type
-		 *\~french
-		 *\brief		Définit le type de viewport
-		 *\param[in]	val	Le type de viewport
-		 */
-		void SetViewportType( eVIEWPORT_TYPE val );
-		/**
-		 *\~english
-		 *\brief		Retrieves the viewport width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur du viewport
-		 *\return		La largeur
-		 */
-		uint32_t GetWidth()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the viewport height
-		 *\return		The height
-		 *\~french
-		 *\brief		Récupère la hauteur du viewport
-		 *\return		La hauteur
-		 */
-		uint32_t GetHeight()const;
-		/**
-		 *\~english
-		 *\brief		Checks if given CubeBox is in the view frustum
-		 *\param[in]	p_box				The CubeBox
-		 *\param[in]	m_transformations	The CubeBox transformations matrix
-		 *\return		\p false if the CubeBox is completely out of the view frustum
-		 *\~french
-		 *\brief
-		 *\brief		Vérifie si la CubeBox donnée est dans le frustum de vue
-		 *\param[in]	p_box				La CubeBox
-		 *\param[in]	m_transformations	La matrice de transformations de la CubeBox
-		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue
-		 */
-		bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
-		/**
-		 *\~english
-		 *\brief		Checks if given point is in the view frustum
-		 *\param[in]	p_point	The point
-		 *\return		\p false if the point out of the view frustum
-		 *\~french
-		 *\brief
-		 *\brief		Vérifie si le point donné est dans le frustum de vue
-		 *\param[in]	p_point	Le point
-		 *\return		\p false si le point en dehors du frustum de vue
-		 */
-		bool IsVisible( Castor::Point3r const & p_point )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the view matrix
 		 *\~french
 		 *\brief		Récupère la matrice de vue
@@ -385,8 +373,6 @@ namespace Castor3D
 	private:
 		friend class Scene;
 		friend class CameraRenderer;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
 		ViewportSPtr m_viewport;
 		//!\~english Primitive display type	\~french Type des primitives d'affichage
@@ -397,7 +383,5 @@ namespace Castor3D
 		Castor::Matrix4x4r m_view;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

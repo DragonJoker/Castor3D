@@ -13,6 +13,9 @@
 #undef abs
 
 #include <SceneFileParser.hpp>
+#include <InitialiseEvent.hpp>
+#include <FunctorEvent.hpp>
+#include <Material.hpp>
 
 #define CASTOR3D_THREADED 0
 
@@ -24,6 +27,221 @@ static const int CASTOR_WANTED_FPS	= 30;
 
 namespace CastorCom
 {
+	namespace
+	{
+		template< typename TObj >
+		std::shared_ptr< TObj > CreateObject( Castor3D::Engine & p_engine )
+		{
+			return std::make_shared< TObj >( p_engine );
+		}
+
+		template<>
+		std::shared_ptr< Castor3D::Sampler > CreateObject< Castor3D::Sampler >( Castor3D::Engine & p_engine )
+		{
+			return p_engine.CreateSampler( Castor::String() );
+		}
+
+		template<>
+		std::shared_ptr< Castor3D::Scene > CreateObject< Castor3D::Scene >( Castor3D::Engine & p_engine )
+		{
+			return std::make_shared< Castor3D::Scene >( p_engine, p_engine.GetLightFactory() );
+		}
+
+		template< typename TObj >
+		void InitialiseObject( std::shared_ptr< TObj > p_object, Castor3D::Engine & p_engine )
+		{
+			p_engine.PostEvent( Castor3D::MakeInitialiseEvent( *p_object ) );
+		}
+
+		template<>
+		void InitialiseObject< Castor3D::Mesh >( std::shared_ptr< Castor3D::Mesh > p_object, Castor3D::Engine & p_engine )
+		{
+			p_engine.PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [&p_object]()
+			{
+				p_object->GenerateBuffers();
+			} ) );
+		}
+
+		template<>
+		void InitialiseObject< Castor3D::Scene >( std::shared_ptr< Castor3D::Scene > p_object, Castor3D::Engine & p_engine )
+		{
+		}
+
+		template< typename TObj, typename TKey >
+		bool DoFillCollection( Castor3D::Engine & p_engine, Castor::Collection< TObj, TKey > & p_collection, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		{
+			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine );
+			bool l_return = p_parser.Parse( *l_obj, p_chunk );
+
+			if ( l_return )
+			{
+				if ( !p_collection.has( l_obj->GetName() ) )
+				{
+					p_collection.insert( l_obj->GetName(), l_obj );
+					InitialiseObject( l_obj, p_engine );
+				}
+				else
+				{
+					Castor::Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
+					l_return = false;
+				}
+			}
+
+			return l_return;
+		}
+
+		bool DoLoadMeshFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
+		{
+			bool l_return = true;
+
+			if ( p_fileName.GetExtension() != cuT( "cbsn" ) && p_fileName.GetExtension() != cuT( "zip" ) )
+			{
+				Castor::Path l_meshFilePath = p_fileName;
+				Castor::string::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
+
+				if ( Castor::File::FileExists( l_meshFilePath ) )
+				{
+					Castor::BinaryFile l_fileMesh( l_meshFilePath, Castor::File::eOPEN_MODE_READ );
+					Castor::Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
+
+					if ( p_engine.LoadMeshes( l_fileMesh ) )
+					{
+						Castor::Logger::LogInfo( cuT( "Meshes read" ) );
+					}
+					else
+					{
+						Castor::Logger::LogError( cuT( "Can't read meshes" ) );
+						l_return = false;
+					}
+				}
+			}
+
+			return l_return;
+		}
+
+		Castor3D::RenderWindowSPtr DoLoadTextSceneFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
+		{
+			Castor3D::RenderWindowSPtr l_return;
+			Castor3D::SceneFileParser l_parser( p_engine );
+
+			if ( l_parser.ParseFile( p_fileName ) )
+			{
+				l_return = l_parser.GetRenderWindow();
+			}
+			else
+			{
+				Castor::Logger::LogWarning( cuT( "Can't read scene file" ) );
+			}
+
+			return l_return;
+		}
+
+		Castor3D::RenderWindowSPtr DoLoadBinarySceneFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
+		{
+			Castor3D::RenderWindowSPtr l_return;
+			bool l_continue = true;
+			Castor::BinaryFile l_file( p_fileName, Castor::File::eOPEN_MODE_READ );
+			Castor3D::BinaryChunk l_chunkFile;
+			Castor3D::RenderWindowSPtr l_window;
+			Castor::Path l_path = l_file.GetFilePath();
+			l_chunkFile.Read( l_file );
+
+			if ( l_chunkFile.GetChunkType() == Castor3D::eCHUNK_TYPE_CBSN_FILE )
+			{
+				while ( l_continue && l_chunkFile.CheckAvailable( 1 ) )
+				{
+					Castor3D::BinaryChunk l_chunk;
+					l_continue = l_chunkFile.GetSubChunk( l_chunk );
+
+					switch ( l_chunk.GetChunkType() )
+					{
+					case Castor3D::eCHUNK_TYPE_SAMPLER:
+						l_continue = DoFillCollection( p_engine, p_engine.GetSamplerManager(), l_chunk, Castor3D::Sampler::BinaryParser( l_path ) );
+						break;
+
+					case Castor3D::eCHUNK_TYPE_MATERIAL:
+						l_continue = DoFillCollection( p_engine, p_engine.GetMaterialManager(), l_chunk, Castor3D::Material::BinaryParser( l_path, &p_engine ) );
+						break;
+
+					case Castor3D::eCHUNK_TYPE_MESH:
+						l_continue = DoFillCollection( p_engine, p_engine.GetMeshManager(), l_chunk, Castor3D::Mesh::BinaryParser( l_path ) );
+						break;
+
+					case Castor3D::eCHUNK_TYPE_SCENE:
+						l_continue = DoFillCollection( p_engine, p_engine.GetSceneManager(), l_chunk, Castor3D::Scene::BinaryParser( l_path ) );
+						break;
+
+					case Castor3D::eCHUNK_TYPE_WINDOW:
+						l_return = p_engine.CreateRenderWindow();
+						l_continue = Castor3D::RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
+						break;
+					}
+
+					if ( !l_continue )
+					{
+						l_chunk.EndParse();
+					}
+				}
+
+				if ( l_continue )
+				{
+					Castor::Logger::LogInfo( cuT( "Import successful" ) );
+				}
+			}
+			else
+			{
+				Castor::Logger::LogWarning( cuT( "The given file is not a valid CBSN file: " ) + l_file.GetFileName() );
+			}
+
+			if ( !l_continue )
+			{
+				Castor::Logger::LogWarning( cuT( "Failed to read the binary scene file: " ) + l_file.GetFileName() );
+			}
+
+			return l_return;
+		}
+
+		Castor3D::RenderWindowSPtr DoLoadSceneFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
+		{
+			Castor3D::RenderWindowSPtr l_return;
+
+			if ( Castor::File::FileExists( p_fileName ) )
+			{
+				Castor::Logger::LogInfo( cuT( "Loading scene file : " ) + p_fileName );
+				bool l_initialised = false;
+
+				if ( p_fileName.GetExtension() == cuT( "cscn" ) || p_fileName.GetExtension() == cuT( "zip" ) )
+				{
+					try
+					{
+						l_return = DoLoadTextSceneFile( p_engine, p_fileName );
+					}
+					catch ( std::exception & exc )
+					{
+						Castor::Logger::LogError( cuT( "Failed to parse the scene file, with following error:" ) + Castor::string::string_cast< xchar >( exc.what() ) );
+					}
+				}
+				else
+				{
+					try
+					{
+						l_return = DoLoadBinarySceneFile( p_engine, p_fileName );
+					}
+					catch ( std::exception & exc )
+					{
+						Castor::Logger::LogError( cuT( "Failed to parse the binary scene file, with following error: " ) + Castor::string::string_cast< xchar >( exc.what() ) );
+					}
+				}
+			}
+			else
+			{
+				Castor::Logger::LogError( cuT( "Scene file doesn't exist: " ) + p_fileName );
+			}
+
+			return l_return;
+		}
+	}
+
 	static const Castor::String ERROR_UNINITIALISED_ENGINE = cuT( "The IEngine must be initialised" );
 	static const Castor::String ERROR_INITIALISED_ENGINE = cuT( "The IEngine has already been initialised" );
 
@@ -36,27 +254,18 @@ namespace CastorCom
 	{
 	}
 	
-	STDMETHODIMP CEngine::Create( /* [in] */ ILogger * logger )
+	STDMETHODIMP CEngine::Create()
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( !m_internal )
 		{
-			if ( logger )
-			{
-				m_internal = new Castor3D::Engine( Castor::Logger::GetSingletonPtr() );
-				hr = S_OK;
-			}
+			m_internal = new Castor3D::Engine;
+			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IEngine,						// This is the GUID of component throwing error
-					 cuT( "Initialise" ),				// This is generally displayed as the title
-					 ERROR_INITIALISED_ENGINE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Create" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -74,13 +283,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "Cleanup" ),						// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Destroy" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -90,20 +293,14 @@ namespace CastorCom
 	{
 		HRESULT hr = E_POINTER;
 
-		if ( !m_internal )
+		if ( m_internal )
 		{
 			m_internal->Initialise( fps );
 			hr = S_OK;
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IEngine,						// This is the GUID of component throwing error
-					 cuT( "Initialise" ),				// This is generally displayed as the title
-					 ERROR_INITIALISED_ENGINE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Initialise" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -120,13 +317,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "Cleanup" ),						// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Cleanup" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -150,13 +341,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateScene" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -173,13 +358,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "ClearScenes" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "ClearScenes" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -196,13 +375,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "LoadRenderer" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadRenderer" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -219,13 +392,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "RenderOneFrame" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RenderOneFrame" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -242,13 +409,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "LoadPlugin" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadPlugin" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -272,13 +433,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateMesh" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -294,13 +449,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateOverlay" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateOverlay" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -324,13 +473,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateRenderWindow" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -346,13 +489,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "RemoveWindow" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RemoveWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -376,13 +513,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateSampler" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateSampler" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -406,13 +537,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateBlendState" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateBlendState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -436,13 +561,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateDepthStencilState" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateDepthStencilState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -466,13 +585,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateRasteriserState" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -488,13 +601,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateRasteriserState" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RemoveScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -503,93 +610,55 @@ namespace CastorCom
 	STDMETHODIMP CEngine::LoadScene( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** window )
 	{
 		HRESULT hr = E_POINTER;
-		Castor::Logger::LogDebug( cuT( "CEngine::LoadScene - Coucou 1" ) );
 
 		if ( m_internal )
 		{
-			Castor::Logger::LogDebug( cuT( "CEngine::LoadScene - Coucou 2" ) );
 			if ( window )
 			{
-				Castor::Logger::LogDebug( cuT( "CEngine::LoadScene - Coucou 3" ) );
 				Castor::Path fileName = FromBstr( name );
-
-				if ( fileName.GetExtension() != cuT( "cbsn" ) )
-				{
-					Castor::Path l_meshFilePath = fileName;
-					Castor::str_utils::replace( l_meshFilePath, cuT( "cscn" ), cuT( "cmsh" ) );
-
-					if ( Castor::File::FileExists( l_meshFilePath ) )
-					{
-						Castor::BinaryFile l_fileMesh( l_meshFilePath, Castor::File::eOPEN_MODE_READ );
-						Castor::Logger::LogMessage( cuT( "Loading meshes file : " ) + l_meshFilePath );
-
-						if ( m_internal->LoadMeshes( l_fileMesh ) )
-						{
-							Castor::Logger::LogMessage( cuT( "Meshes read" ) );
-						}
-						else
-						{
-							hr = CComError::DispatchError(
-									 E_FAIL,								// This represents the error
-									 IID_IEngine,							// This is the GUID of component throwing error
-									 cuT( "LoadScene" ),					// This is generally displayed as the title
-									 cuT( "Can't read meshes" ),			// This is the description
-									 0,										// This is the context in the help file
-									 NULL );
-						}
-					}
-				}
+				Castor3D::RenderWindowSPtr l_return;
 
 				if ( Castor::File::FileExists( fileName ) )
 				{
-					Castor::Logger::LogMessage( cuT( "Loading scene file : " ) + fileName );
+					Castor::String l_strLowered = Castor::string::lower_case( fileName );
+					m_internal->Cleanup();
 
-					if ( fileName.GetExtension() == cuT( "cscn" ) )
+					bool l_continue = true;
+					Castor::Logger::LogDebug( cuT( "GuiCommon::LoadSceneFile - Engine cleared" ) );
+
+					if ( DoLoadMeshFile( *m_internal, fileName ) )
 					{
-						Castor3D::SceneFileParser l_parser( m_internal );
-
-						if ( l_parser.ParseFile( fileName ) )
+						try
 						{
 							m_internal->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
-							Castor3D::RenderWindowSPtr l_pRenderWindow = l_parser.GetRenderWindow();
-
-							if ( l_pRenderWindow )
-							{
-								hr = CRenderWindow::CreateInstance( window );
-
-								if ( hr == S_OK )
-								{
-									static_cast< CRenderWindow * >( *window )->SetInternal( l_pRenderWindow );
-								}
-							}
 						}
-						else
+						catch ( std::exception & exc )
 						{
-							Castor::Logger::LogWarning( cuT( "Can't read scene file" ) );
+							Castor::Logger::LogError( "Castor initialisation failed with following error: " + std::string( exc.what() ) );
+						}
+
+						l_return = DoLoadSceneFile( *m_internal, fileName );
+
+						if ( l_return )
+						{
+							hr = CRenderWindow::CreateInstance( window );
+
+							if ( hr == S_OK )
+							{
+								static_cast< CRenderWindow * >( *window )->SetInternal( l_return );
+							}
 						}
 					}
 				}
 				else
 				{
-					hr = CComError::DispatchError(
-							 E_FAIL,							// This represents the error
-							 IID_IEngine,						// This is the GUID of component throwing error
-							 cuT( "LoadScene" ),				// This is generally displayed as the title
-							 cuT( "Scene file doesn't exist" ),	// This is the description
-							 0,									// This is the context in the help file
-							 NULL );
+					hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), cuT( "Scene file doesn't exist" ), 0, NULL );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateRasteriserState" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;

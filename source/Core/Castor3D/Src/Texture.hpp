@@ -21,10 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include <PixelBufferBase.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -37,19 +34,20 @@ namespace Castor3D
 	\brief		Class de base d'une texture
 	*/
 	class C3D_API TextureBase
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_type			The texture type
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_type			Le type de texture
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 */
-		TextureBase( eTEXTURE_TYPE p_type, RenderSystem * p_pRenderSystem );
+		TextureBase( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -405,8 +403,6 @@ namespace Castor3D
 		Castor::ePIXEL_FORMAT m_ePixelFormat;
 		//!\~english The pixel buffer dimensions	\~french Les dimensions du buffer de pixels
 		Castor::Size m_size;
-		//!\~english The render system	\~french Le render system
-		RenderSystem * m_renderSystem;
 	};
 	/**
 	 *\~english
@@ -553,7 +549,5 @@ namespace Castor3D
 		return p_streamIn;
 	}
 }
-
-#pragma warning( pop )
 
 #endif

@@ -10,11 +10,11 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlDynamicTexture::GlDynamicTexture( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem )
-		:	DynamicTexture( p_pRenderSystem )
-		,	m_uiGlName( uint32_t( eGL_INVALID_INDEX ) )
-		,	m_pGlRenderSystem( p_pRenderSystem )
-		,	m_gl( p_gl )
+	GlDynamicTexture::GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
+		: DynamicTexture( p_renderSystem )
+		, m_uiGlName( uint32_t( eGL_INVALID_INDEX ) )
+		, m_pGlRenderSystem( &p_renderSystem )
+		, m_gl( p_gl )
 	{
 	}
 

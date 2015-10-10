@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <cstring>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -39,7 +35,7 @@ namespace Castor3D
 	\brief		Paramètres de configuration
 	\remark		Couple nom/données binaires
 	*/
-	class C3D_API Parameters
+	class Parameters
 	{
 	public:
 		/**
@@ -48,7 +44,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Parameters()
+		C3D_API Parameters()
 		{
 		}
 		/**
@@ -57,7 +53,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Parameters()
+		C3D_API virtual ~Parameters()
 		{
 		}
 		/**
@@ -276,7 +272,5 @@ namespace Castor3D
 		ParamNameMap m_mapParameters;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

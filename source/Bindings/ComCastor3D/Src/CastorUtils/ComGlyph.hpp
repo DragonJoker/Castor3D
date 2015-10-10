@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CGlyph();
+		CGlyph();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CGlyph();
+		virtual ~CGlyph();
 
 		void SetInternal( Castor::Glyph * p_glyph )
 		{

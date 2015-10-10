@@ -1,15 +1,16 @@
 ﻿#include "DynamicLibrary.hpp"
 #include "Assertion.hpp"
 #include "Logger.hpp"
+#include "Utils.hpp"
 
 #if defined( _WIN32 )
-#	if defined( _MSC_VER )
+#	if defined( _MSC_VER ) && _MSC_VER < 1900
 #		pragma warning( push )
 #		pragma warning( disable:4311 )
 #		pragma warning( disable:4312 )
 #	endif
 #	include <windows.h>
-#	if defined( _MSC_VER )
+#	if defined( _MSC_VER ) && _MSC_VER < 1900
 #		pragma warning( pop )
 #	endif
 #elif defined( __linux__ )
@@ -88,7 +89,7 @@ namespace Castor
 		{
 			std::string l_name( string::string_cast< char >( p_name ) );
 #if defined( _WIN32 )
-			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
+			//UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 			try
 			{
@@ -101,7 +102,14 @@ namespace Castor
 				m_pLibrary = NULL;
 			}
 
-			::SetErrorMode( l_uiOldMode );
+			if ( !m_pLibrary )
+			{
+				String l_strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
+				l_strError += System::GetLastErrorText();
+				Logger::LogError( l_strError );
+			}
+
+			//::SetErrorMode( l_uiOldMode );
 #else
 
 			try

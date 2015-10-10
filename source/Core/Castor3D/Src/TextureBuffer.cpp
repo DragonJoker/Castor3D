@@ -1,15 +1,17 @@
 ﻿#include "TextureBuffer.hpp"
+
+#include "Engine.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	TextureBuffer::TextureBuffer( RenderSystem * p_pRenderSystem )
-		:	CpuBuffer< uint8_t >( p_pRenderSystem )
-		,	m_pixelFormat( Castor::ePIXEL_FORMAT_A8R8G8B8 )
-		,	m_uiSize( 0 )
-		,	m_pBytes( NULL )
+	TextureBuffer::TextureBuffer( Engine & p_engine )
+		: CpuBuffer< uint8_t >( p_engine )
+		, m_pixelFormat( Castor::ePIXEL_FORMAT_A8R8G8B8 )
+		, m_uiSize( 0 )
+		, m_pBytes( NULL )
 	{
 	}
 
@@ -31,7 +33,7 @@ namespace Castor3D
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = m_renderSystem->CreateTextureBuffer( this );
+			m_pBuffer = GetOwner()->GetRenderSystem()->CreateTextureBuffer( this );
 		}
 
 		return m_pBuffer != nullptr;

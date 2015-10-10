@@ -26,7 +26,7 @@ namespace CastorCom
 		DWORD dwHelpContext,
 		LPCTSTR szHelpFileName )
 	{
-		Castor::Logger::LogError( cuT( "%s - %s" ), szSource, szDescription );
+		Castor::Logger::LogError( std::string( szSource ) + " - " + std::string( szDescription ) );
 		// This function uses ATL conversion macros
 		// (Hence we must use this MACRO provided by ATL)
 		USES_CONVERSION;

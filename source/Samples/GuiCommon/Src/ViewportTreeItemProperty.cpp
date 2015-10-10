@@ -30,7 +30,7 @@ namespace GuiCommon
 	}
 
 	ViewportTreeItemProperty::ViewportTreeItemProperty( bool p_editable, Castor3D::ViewportSPtr p_viewport )
-		: TreeItemProperty( p_viewport->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
+		: TreeItemProperty( p_viewport->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_VIEWPORT )
 		, m_viewport( p_viewport )
 	{
 		PROPERTY_CATEGORY_VIEWPORT = _( "Viewport" );
@@ -173,7 +173,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_viewport]()
 		{
-			l_viewport->SetTop( p_value );
+			l_viewport->SetTop( float( p_value ) );
 		} );
 	}
 
@@ -183,7 +183,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_viewport]()
 		{
-			l_viewport->SetBottom( p_value );
+			l_viewport->SetBottom( float( p_value ) );
 		} );
 	}
 
@@ -193,7 +193,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_viewport]()
 		{
-			l_viewport->SetLeft( p_value );
+			l_viewport->SetLeft( float( p_value ) );
 		} );
 	}
 
@@ -203,7 +203,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_viewport]()
 		{
-			l_viewport->SetRight( p_value );
+			l_viewport->SetRight( float( p_value ) );
 		} );
 	}
 
@@ -213,7 +213,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_viewport]()
 		{
-			l_viewport->SetNear( p_value );
+			l_viewport->SetNear( float( p_value ) );
 		} );
 	}
 
@@ -223,7 +223,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_viewport]()
 		{
-			l_viewport->SetFar( p_value );
+			l_viewport->SetFar( float( p_value ) );
 		} );
 	}
 
@@ -243,7 +243,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_viewport]()
 		{
-			l_viewport->SetRatio( p_value );
+			l_viewport->SetRatio( float( p_value ) );
 		} );
 	}
 }

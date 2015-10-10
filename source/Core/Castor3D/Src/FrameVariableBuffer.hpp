@@ -22,10 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Texture.hpp"
 #include "BinaryParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-#pragma warning( disable:4290 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -44,7 +41,8 @@ namespace Castor3D
 				<br />Il est aussi responsable de la création des variables
 				<br />Utilise les GPU buffers si supportés (OpenGL Uniform Buffer Objects, Direct3D Constants buffers)
 	*/
-	class C3D_API FrameVariableBuffer
+	class FrameVariableBuffer
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -52,21 +50,21 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_pProgram		The program
 		 *\param[in]	p_name		The buffer name
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_pProgram		Le programme
 		 *\param[in]	p_name		Le nom du tampon
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 */
-		FrameVariableBuffer( Castor::String const & p_name, RenderSystem * p_pRenderSystem );
+		C3D_API FrameVariableBuffer( Castor::String const & p_name, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FrameVariableBuffer();
+		C3D_API virtual ~FrameVariableBuffer();
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated
@@ -76,14 +74,14 @@ namespace Castor3D
 		 *\param[in]	p_pProgram	Le programme
 		 *\return		\p false if any problem occured
 		 */
-		bool Initialise( ShaderProgramBase & p_pProgram );
+		C3D_API bool Initialise( ShaderProgramBase & p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated
 		 *\~french
 		 *\brief		Nettoie toutes les variables et le tampon GPU associé
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)
@@ -94,7 +92,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index du tampon GPU
 		 *\return		\p false en cas de problème
 		 */
-		bool Bind( uint32_t p_index );
+		C3D_API bool Bind( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Unbinds all variables
@@ -103,7 +101,7 @@ namespace Castor3D
 		 *\brief		Désactive toutes les variables
 		 *\param[in]	p_pProgram	L'index du tampon GPU
 		 */
-		void Unbind( uint32_t p_index );
+		C3D_API void Unbind( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Creates a variable of the wanted type
@@ -118,7 +116,7 @@ namespace Castor3D
 		 *\param[in]	p_uiNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		FrameVariableSPtr CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 );
+		C3D_API FrameVariableSPtr CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 );
 		/**
 		 *\~english
 		 *\brief		Removes a variable from this buffer
@@ -127,7 +125,7 @@ namespace Castor3D
 		 *\brief		Supprime une variable de ce tampon
 		 *\param[in]	p_name	Le nom de la variable
 		 */
-		void RemoveVariable( Castor::String const & p_name );
+		C3D_API void RemoveVariable( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
@@ -140,7 +138,8 @@ namespace Castor3D
 		 *\param[out]	p_pVariable	Reçoit la variable récupérée, nullptr en cas d'échec
 		 *\return		\p false en cas d'échec
 		 */
-		template< typename T > bool GetVariable( Castor::String const & p_name, std::shared_ptr< OneFrameVariable< T > > & p_pVariable )const;
+		template< typename T >
+		bool GetVariable( Castor::String const & p_name, std::shared_ptr< OneFrameVariable< T > > & p_pVariable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
@@ -153,7 +152,8 @@ namespace Castor3D
 		 *\param[out]	p_pVariable	Reçoit la variable récupérée, nullptr en cas d'échec
 		 *\return		\p false en cas d'échec
 		 */
-		template< typename T, uint32_t Count > bool GetVariable( Castor::String const & p_name, std::shared_ptr< PointFrameVariable< T, Count > > & p_pVariable )const;
+		template< typename T, uint32_t Count >
+		bool GetVariable( Castor::String const & p_name, std::shared_ptr< PointFrameVariable< T, Count > > & p_pVariable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
@@ -166,7 +166,8 @@ namespace Castor3D
 		 *\param[out]	p_pVariable	Reçoit la variable récupérée, nullptr en cas d'échec
 		 *\return		\p false en cas d'échec
 		 */
-		template< typename T, uint32_t Rows, uint32_t Columns > bool GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const;
+		template< typename T, uint32_t Rows, uint32_t Columns >
+		bool GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_pVariable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the variables buffer name
@@ -243,7 +244,7 @@ namespace Castor3D
 		 *\param[in]	p_uiNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		virtual FrameVariableSPtr DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 ) = 0;
+		C3D_API virtual FrameVariableSPtr DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 ) = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated
@@ -253,14 +254,14 @@ namespace Castor3D
 		 *\param[in]	p_pProgram	Le programme
 		 *\return		\p false if any problem occured
 		 */
-		virtual bool DoInitialise( ShaderProgramBase * p_pProgram ) = 0;
+		C3D_API virtual bool DoInitialise( ShaderProgramBase * p_pProgram ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated
 		 *\~french
 		 *\brief		Nettoie toutes les variables et le tampon GPU associé
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)
@@ -271,7 +272,7 @@ namespace Castor3D
 		 *\param[in]	p_pProgram	L'index du tampon GPU
 		 *\return		\p false if any problem occured
 		 */
-		virtual bool DoBind( uint32_t p_index ) = 0;
+		C3D_API virtual bool DoBind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds all variables
@@ -280,7 +281,7 @@ namespace Castor3D
 		 *\brief		Désactive toutes les variables
 		 *\param[in]	p_pProgram	L'index du tampon GPU
 		 */
-		virtual void DoUnbind( uint32_t p_index ) = 0;
+		C3D_API virtual void DoUnbind( uint32_t p_index ) = 0;
 
 	protected:
 		//!\~english The buffers count	\~french Le compte des tampons
@@ -293,8 +294,6 @@ namespace Castor3D
 		FrameVariablePtrList m_listInitialised;
 		//!\~english The variables ordered by name	\~french Les variables, triées par nom
 		FrameVariablePtrStrMap m_mapVariables;
-		//!\~english The render system	\~french Le render system
-		RenderSystem * m_renderSystem;
 		//!\~english The buffer name	\~french Le nom du tampon
 		Castor::String m_strName;
 		//!\~english The data buffer	\~french Le tampon de données
@@ -303,7 +302,5 @@ namespace Castor3D
 }
 
 #include "FrameVariableBuffer.inl"
-
-#pragma warning( pop )
 
 #endif

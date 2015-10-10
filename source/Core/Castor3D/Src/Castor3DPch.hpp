@@ -79,18 +79,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <TransformationMatrix.hpp>
 #	include <Utils.hpp>
 #	include <Unique.hpp>
-
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-
 #	include <Rectangle.hpp>
 
 #	if defined( __linux__ )
 #		include <GL/glx.h>
 #	endif
-
-#	pragma warning( pop )
 #endif
 
 #endif

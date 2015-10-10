@@ -20,9 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "MovableObject.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -37,8 +35,9 @@ namespace Castor3D
 	\brief		Liste de billboards
 	\remarks	Tous les billboards de cette liste ont la meme texture
 	*/
-	class C3D_API BillboardList
-		:	public MovableObject
+	class BillboardList
+		: public MovableObject
+		, public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/*!
@@ -51,7 +50,7 @@ namespace Castor3D
 		\brief		Loader de Camera
 		*/
 		class C3D_API TextLoader
-			:	public MovableObject::TextLoader
+			: public MovableObject::TextLoader
 		{
 		public:
 			/**
@@ -76,7 +75,7 @@ namespace Castor3D
 		\brief		Loader de BillboardList
 		*/
 		class C3D_API BinaryParser
-			:	public MovableObject::BinaryParser
+			: public MovableObject::BinaryParser
 		{
 		public:
 			/**
@@ -120,20 +119,20 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_scene		The parent scene
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_renderSystem	The RenderSystem
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_scene		La scene parente
-		 *\param[in]	p_pRenderSystem	Le RenderSystem
+		 *\param[in]	p_renderSystem	Le RenderSystem
 		 */
-		BillboardList( SceneSPtr p_scene, RenderSystem * p_pRenderSystem );
+		C3D_API BillboardList( SceneSPtr p_scene, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BillboardList();
+		C3D_API virtual ~BillboardList();
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements
@@ -142,14 +141,14 @@ namespace Castor3D
 		 *\brief		Initialise les elements GPU
 		 *\return		\p true si tout s'est bien passe
 		 */
-		bool Initialise();
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans GPU side elements up
 		 *\~french
 		 *\brief		Nettoie les elements GPU
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Initialises shader program
@@ -160,7 +159,7 @@ namespace Castor3D
 		 *\param[in]	p_technique	La technique de rendu courante, utilisee pour recuperer les bons shaders
 		 *\return		\p true si tout s'est bien passe
 		 */
-		bool InitialiseShader( RenderTechniqueBase & p_technique );
+		C3D_API bool InitialiseShader( RenderTechniqueBase & p_technique );
 		/**
 		 *\~english
 		 *\brief		Gets a point from the list
@@ -187,6 +186,58 @@ namespace Castor3D
 		{
 			return uint32_t( m_arrayPositions.size() );
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the material
+		 *\param[in]	p_pMaterial	The new value
+		 *\~french
+		 *\brief		Definit le materiau
+		 *\param[in]	p_pMaterial	La nouvelle valeur
+		 */
+		C3D_API void SetMaterial( MaterialSPtr p_pMaterial );
+		/**
+		 *\~english
+		 *\brief		Removes a point from the list
+		 *\param[in]	p_index	The point index
+		 *\~french
+		 *\brief		Retire un point de la liste
+		 *\param[in]	p_index	L'index du point
+		 */
+		C3D_API void RemovePoint( uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Adds a point to the list
+		 *\param[in]	p_ptPosition	The point
+		 *\~french
+		 *\brief		Ajoute un point a la liste
+		 *\param[in]	p_ptPosition	Le point
+		 */
+		C3D_API void AddPoint( Castor::Point3r const & p_ptPosition );
+		/**
+		 *\~english
+		 *\brief		Adds a points list to the list
+		 *\param[in]	p_ptPositions	The points list
+		 *\~french
+		 *\brief		Ajoute une liste de points a la liste
+		 *\param[in]	p_ptPositions	La liste de points
+		 */
+		C3D_API void AddPoints( Castor::Point3rArray const & p_ptPositions );
+		/**
+		 *\~english
+		 *\brief		Renders the billboards
+		 *\~french
+		 *\brief		Rend les billboards
+		 */
+		C3D_API void Render();
+		/**
+		 *\~english
+		 *\brief		Sets the billboards dimensions
+		 *\param[in]	p_dimensions	The new value
+		 *\~french
+		 *\brief		Definit les dimensios des billboards
+		 *\param[in]	p_dimensions	La nouvelle valeur
+		 */
+		C3D_API void SetDimensions( Castor::Size const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Sets a point in the list
@@ -216,49 +267,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the material
-		 *\param[in]	p_pMaterial	The new value
-		 *\~french
-		 *\brief		Definit le materiau
-		 *\param[in]	p_pMaterial	La nouvelle valeur
-		 */
-		void SetMaterial( MaterialSPtr p_pMaterial );
-		/**
-		 *\~english
-		 *\brief		Removes a point from the list
-		 *\param[in]	p_index	The point index
-		 *\~french
-		 *\brief		Retire un point de la liste
-		 *\param[in]	p_index	L'index du point
-		 */
-		void RemovePoint( uint32_t p_index );
-		/**
-		 *\~english
-		 *\brief		Adds a point to the list
-		 *\param[in]	p_ptPosition	The point
-		 *\~french
-		 *\brief		Ajoute un point a la liste
-		 *\param[in]	p_ptPosition	Le point
-		 */
-		void AddPoint( Castor::Point3r const & p_ptPosition );
-		/**
-		 *\~english
-		 *\brief		Adds a points list to the list
-		 *\param[in]	p_ptPositions	The points list
-		 *\~french
-		 *\brief		Ajoute une liste de points a la liste
-		 *\param[in]	p_ptPositions	La liste de points
-		 */
-		void AddPoints( Castor::Point3rArray const & p_ptPositions );
-		/**
-		 *\~english
-		 *\brief		Renders the billboards
-		 *\~french
-		 *\brief		Rend les billboards
-		 */
-		void Render();
-		/**
-		 *\~english
 		 *\brief		Retrieves the billboards dimensions
 		 *\return		The value
 		 *\~french
@@ -269,15 +277,6 @@ namespace Castor3D
 		{
 			return m_dimensions;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the billboards dimensions
-		 *\param[in]	p_dimensions	The new value
-		 *\~french
-		 *\brief		Definit les dimensios des billboards
-		 *\param[in]	p_dimensions	La nouvelle valeur
-		 */
-		void SetDimensions( Castor::Size const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Gets an iterator to the beginning of the list
@@ -336,7 +335,7 @@ namespace Castor3D
 		 *\brief		Initialise le shader
 		 *\return		\p true si tout s'est bien passe
 		 */
-		virtual bool DoInitialise() = 0;
+		C3D_API virtual bool DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the appropriate shader program
@@ -349,11 +348,9 @@ namespace Castor3D
 		 *\param[in]	p_flags		Les indicateurs de canaux de textures, pour créer le bon programme
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual ShaderProgramBaseSPtr DoGetProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
+		C3D_API virtual ShaderProgramBaseSPtr DoGetProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
 
 	protected:
-		//!\~english  The RenderSystem	\~french La RenderSystem
-		RenderSystem * m_renderSystem;
 		//!\~english The positions list	\~french La liste des positions
 		Castor::Point3rArray m_arrayPositions;
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets
@@ -372,7 +369,5 @@ namespace Castor3D
 		Point2iFrameVariableSPtr m_pDimensionsUniform;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

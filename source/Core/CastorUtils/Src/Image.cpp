@@ -9,9 +9,6 @@ extern "C"
 #	include <FreeImage.h>
 }
 
-#pragma warning( push )
-#pragma warning( disable:4996 )
-
 namespace Castor
 {
 	namespace
@@ -534,5 +531,3 @@ namespace Castor
 		return * this;
 	}
 }
-
-#pragma warning( pop )

@@ -28,7 +28,7 @@ namespace Dx11Render
 		: public Castor3D::RenderWindow
 	{
 	public:
-		DxRenderWindow( DxRenderSystem * p_pRenderSystem );
+		DxRenderWindow( DxRenderSystem * p_renderSystem );
 		virtual ~DxRenderWindow();
 
 	private:

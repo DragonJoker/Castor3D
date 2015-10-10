@@ -55,7 +55,7 @@ namespace GlRender
 
 	void GlShaderObject::CreateProgram()
 	{
-		if ( m_pParent->GetRenderSystem()->UseShaders() && m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
+		if ( m_pParent->GetOwner()->UseShaders() && m_pParent->GetOwner()->HasShaderType( m_type ) )
 		{
 			m_shaderObject = m_gl.CreateShader( m_gl.Get( m_type ) );
 			glTrack( m_gl, GlShaderObject, this );
@@ -69,7 +69,7 @@ namespace GlRender
 
 		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && m_strLoadedSource.empty(); i-- )
 		{
-			if ( m_pParent->GetRenderSystem()->CheckSupport( eSHADER_MODEL( i ) ) )
+			if ( m_pParent->GetOwner()->CheckSupport( eSHADER_MODEL( i ) ) )
 			{
 				m_strLoadedSource = m_arraySources[i];
 
@@ -80,11 +80,11 @@ namespace GlRender
 			}
 		}
 
-		if ( m_pParent->GetRenderSystem()->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
+		if ( m_pParent->GetOwner()->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
 		{
 			l_return = true;
 
-			if ( m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
+			if ( m_pParent->GetOwner()->HasShaderType( m_type ) )
 			{
 				m_eStatus = eSHADER_STATUS_NOTCOMPILED;
 				int l_iCompiled = 0;
@@ -132,7 +132,7 @@ namespace GlRender
 
 	void GlShaderObject::Detach()
 	{
-		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pShaderProgram && m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
+		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pShaderProgram && m_pParent->GetOwner()->HasShaderType( m_type ) )
 		{
 			m_gl.DetachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
 			m_pShaderProgram = NULL;
@@ -145,7 +145,7 @@ namespace GlRender
 	{
 		Detach();
 
-		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pParent->GetRenderSystem()->HasShaderType( m_type ) )
+		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pParent->GetOwner()->HasShaderType( m_type ) )
 		{
 			m_pShaderProgram = &static_cast< GlShaderProgram & >( p_program );
 			m_gl.AttachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );

@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Texture.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -36,26 +32,26 @@ namespace Castor3D
 	\brief		Class de texture dynamique
 	\remark		Une texture statique peut mettre à jour son buffer
 	*/
-	class C3D_API DynamicTexture
-		:	public TextureBase
+	class DynamicTexture
+		: public TextureBase
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 */
-		DynamicTexture( RenderSystem * p_pRenderSystem );
+		C3D_API DynamicTexture( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DynamicTexture();
+		C3D_API virtual ~DynamicTexture();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -66,14 +62,14 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index de la texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( uint32_t p_index );
+		C3D_API virtual bool Initialise( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup();
+		C3D_API virtual void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -84,7 +80,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool BindAt( uint32_t p_index );
+		C3D_API virtual bool BindAt( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -93,7 +89,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		virtual void UnbindFrom( uint32_t p_index );
+		C3D_API virtual void UnbindFrom( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer
@@ -102,7 +98,7 @@ namespace Castor3D
 		 *\brief		Définit le buffer de la texture
 		 *\param[in]	p_pBuffer	The buffer
 		 */
-		void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
 		/**
 		 *\~english
 		 *\brief		Defines the 3D texture buffer
@@ -111,7 +107,7 @@ namespace Castor3D
 		 *\brief		Définit le buffer de la texture 3D
 		 *\param[in]	p_pBuffer	The buffer
 		 */
-		void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
 		/**
 		 *\~english
 		 *\brief		Resizes the texture buffer
@@ -120,7 +116,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		virtual void Resize( Castor::Size const & p_size );
+		C3D_API virtual void Resize( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Resizes the 3D texture buffer
@@ -129,7 +125,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture 3D
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		virtual void Resize( Castor::Point3ui const & p_size );
+		C3D_API virtual void Resize( Castor::Point3ui const & p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves the render target
@@ -204,7 +200,7 @@ namespace Castor3D
 		 *\param[in]	p_size		Les dimensions de l'image
 		 *\param[in]	p_eFormat	Le format des pixels de l'image
 		 */
-		virtual void Fill( uint8_t const * p_pBuffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_eFormat ) = 0;
+		C3D_API virtual void Fill( uint8_t const * p_pBuffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_eFormat ) = 0;
 
 		using TextureBase::SetImage;
 
@@ -215,7 +211,5 @@ namespace Castor3D
 		int m_iSamplesCount;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

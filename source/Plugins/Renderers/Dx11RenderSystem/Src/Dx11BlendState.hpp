@@ -29,7 +29,7 @@ namespace Dx11Render
 		: public Castor3D::BlendState
 	{
 	public:
-		DxBlendState( DxRenderSystem * p_pRenderSystem );
+		DxBlendState( DxRenderSystem * p_renderSystem );
 		virtual ~DxBlendState();
 		/**
 		 *\copydoc Castor3D::BlendState::Initialise

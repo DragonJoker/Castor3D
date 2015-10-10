@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CSpotLight();
+		CSpotLight();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CSpotLight();
+		virtual ~CSpotLight();
 
 		inline Castor3D::SpotLightSPtr GetInternal()const
 		{
@@ -75,91 +75,10 @@ namespace CastorCom
 		Castor3D::SpotLightSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( SpotLight ), CSpotLight )
+	OBJECT_ENTRY_AUTO( __uuidof( SpotLight ), CSpotLight );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::SpotLightSPtr >
-	{
-		typedef Castor3D::SpotLightSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ISpotLight ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CSpotLight::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CSpotLight * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ISpotLight,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::SpotLightSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::SpotLightSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ISpotLight * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CSpotLight * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ISpotLight,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( SpotLight, Castor3D, SpotLight );
+	DECLARE_VARIABLE_PTR_PUTTER( SpotLight, Castor3D, SpotLight );
 }
 
 #endif

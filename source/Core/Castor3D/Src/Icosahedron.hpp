@@ -18,11 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ICOSAHEDRON_H___
 #define ___C3D_ICOSAHEDRON_H___
 
-#include "MeshCategory.hpp"
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -39,7 +35,7 @@ namespace Castor3D
 				<br />Ce mesh est utilisé pour construire des sphères à faces triangulaires
 	*/
 	class C3D_API Icosahedron
-		:	public MeshCategory
+		:	public MeshGenerator
 	{
 	public:
 		/**
@@ -57,32 +53,13 @@ namespace Castor3D
 		 */
 		~Icosahedron();
 		/**
-		 *\~english
-		 *\brief		Create function, used by Factory
-		 *\return		An icosahedron
-		 *\~french
-		 *\brief		Fonction de création utilisée par Factory
-		 *\return		Un icosaèdre
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshCategorySPtr Create();
+		static MeshGeneratorSPtr Create();
 		/**
-		 *\~english
-		 *\brief		Generates the mesh points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du mesh
+		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces
@@ -120,7 +97,5 @@ namespace Castor3D
 		return o << "Icosahedron(" << c.m_nbFaces << "," << c.m_radius << ")";
 	}
 }
-
-#pragma warning( pop )
 
 #endif

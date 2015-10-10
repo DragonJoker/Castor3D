@@ -21,9 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -38,9 +36,10 @@ namespace Castor3D
 	\brief		Définition d'un matériau
 	\remark		Un matériau est composé d'une ou plusieurs passes
 	*/
-	class C3D_API Material
-		:	public Castor::Resource< Material >
-		,	public std::enable_shared_from_this< Material >
+	class Material
+		: public Castor::Resource< Material >
+		, public std::enable_shared_from_this< Material >
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -53,9 +52,9 @@ namespace Castor3D
 		\~french
 		\brief Loader de Material
 		*/
-		class C3D_API TextLoader
-			:	public Castor::Loader< Material, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< Material, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -64,7 +63,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a material into a text file
@@ -75,7 +74,7 @@ namespace Castor3D
 			 *\param[in]		p_material	Le matériau
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			virtual bool operator()( Material const & p_material, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Material const & p_material, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -86,8 +85,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Viewport
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< Material >
+		class BinaryParser
+			: public Castor3D::BinaryParser< Material >
 		{
 		public:
 			/**
@@ -100,7 +99,7 @@ namespace Castor3D
 			 *\param[in]	p_path		Le chemin d'accès au dossier courant
 			 *\param[in]	p_engine	Le moteur
 			 */
-			BinaryParser( Castor::Path const & p_path, Engine * p_engine );
+			C3D_API BinaryParser( Castor::Path const & p_path, Engine * p_engine );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -113,7 +112,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Material const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Material const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -126,10 +125,9 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Material & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Material & p_obj, BinaryChunk & p_chunk )const;
 
 		private:
-			//!\~english The engine	\~french Le moteur
 			Engine * m_engine;
 		};
 
@@ -137,56 +135,56 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_engine			The core engine
-		 *\param[in]	p_name			The material name
+		 *\param[in]	p_engine	The core engine
+		 *\param[in]	p_name		The material name
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_engine			Le moteur
-		 *\param[in]	p_name			Le nom du matériau
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_name		Le nom du matériau
 		 */
-		Material( Engine * p_engine, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Material( Engine & p_engine, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Material();
+		C3D_API virtual ~Material();
 		/**
 		 *\~english
 		 *\brief		Activates the material
 		 *\~french
 		 *\brief		Active le matériau
 		 */
-		void Render();
+		C3D_API void Render();
 		/**
 		 *\~english
 		 *\brief		Activates the material in 2D mode
 		 *\~french
 		 *\brief		Active le matériau en mode 2D
 		 */
-		void Render2D();
+		C3D_API void Render2D();
 		/**
 		 *\~english
 		 *\brief		Deactivates the material (to avoid it from interfering with other materials)
 		 *\~french
 		 *\brief		Désactive le matériau (pour qu'il n'interfère pas avec les autres)
 		 */
-		void EndRender();
+		C3D_API void EndRender();
 		/**
 		 *\~english
 		 *\brief		Initialises the material and all it's passes
 		 *\~french
 		 *\brief		Initialise le matériau et toutes ses passes
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes passes
 		 *\~french
 		 *\brief		Supprime les passes
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a pass
@@ -195,7 +193,7 @@ namespace Castor3D
 		 *\brief		Crée une passe
 		 *\return		La passe créée
 		 */
-		PassSPtr CreatePass();
+		C3D_API PassSPtr CreatePass();
 		/**
 		 *\~english
 		 *\brief		Retrieves a pass and returns it
@@ -206,7 +204,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de la passe voulue
 		 *\return		La passe récupére ou nullptr si non trouvés
 		 */
-		const PassSPtr GetPass( uint32_t p_index )const;
+		C3D_API const PassSPtr GetPass( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a pass and returns it
@@ -217,7 +215,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de la passe voulue
 		 *\return		La passe récupére ou nullptr si non trouvés
 		 */
-		PassSPtr GetPass( uint32_t p_index );
+		C3D_API PassSPtr GetPass( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Destroys the pass at the given index
@@ -226,7 +224,14 @@ namespace Castor3D
 		 *\brief		Destroys the pass at the given index
 		 *\param[in]	p_index	L'index de la passe
 		 */
-		void DestroyPass( uint32_t p_index );
+		C3D_API void DestroyPass( uint32_t p_index );
+		/**
+		*\~english
+		*\return		\p true if all passes needs alpha blending
+		*\~french
+		*\return		\p true si toutes les passes ont besoin d'alpha blending
+		*/
+		C3D_API bool HasAlphaBlending()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the passes count
@@ -287,25 +292,6 @@ namespace Castor3D
 		{
 			return m_passes.end();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the engine
-		 *\return		The engine
-		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		Le moteur
-		 */
-		inline Engine * GetEngine()const
-		{
-			return m_engine;
-		}
-		/**
-		 *\~english
-		 *\return		\p true if all passes needs alpha blending
-		 *\~french
-		 *\return		\p true si toutes les passes ont besoin d'alpha blending
-		 */
-		bool HasAlphaBlending()const;
 
 	public:
 		//!\~english The default material name	\~french Le nom du matériau par défaut
@@ -313,10 +299,7 @@ namespace Castor3D
 
 	private:
 		PassPtrArray m_passes;
-		Engine * m_engine;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

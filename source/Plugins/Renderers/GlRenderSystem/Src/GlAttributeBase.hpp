@@ -33,10 +33,10 @@ namespace GlRender
 	\date 03/01/2011
 	*/
 	class GlAttributeBase
-		:	public Castor::NonCopyable
+		: public Castor::NonCopyable
 	{
 	public:
-		GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor::String const & p_strAttribName, eGL_TYPE p_eGlType, int p_iCount );
+		GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_strAttribName, eGL_TYPE p_eGlType, int p_iCount );
 		virtual ~GlAttributeBase();
 
 		virtual void SetShader( Castor3D::ShaderProgramBaseSPtr p_pProgram );

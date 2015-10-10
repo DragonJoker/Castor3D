@@ -37,7 +37,7 @@ namespace Castor3D
 	\remark		Un évènement a un eEVENT_TYPE pour savoir quand il doit être traité.
 				<br />La fonction de traitement doit être implémentée par les classes filles.
 	*/
-	class C3D_API FrameEvent
+	class FrameEvent
 		: public Castor::Debug::Backtraced
 	{
 	public:
@@ -49,7 +49,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type	Le type d'évènement
 		 */
-		FrameEvent( eEVENT_TYPE p_type );
+		C3D_API FrameEvent( eEVENT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -58,7 +58,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_object	L'objet à copier
 		 */
-		FrameEvent( FrameEvent const & p_object );
+		C3D_API FrameEvent( FrameEvent const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -67,7 +67,7 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_object	L'objet à déplacer
 		 */
-		FrameEvent( FrameEvent && p_object );
+		C3D_API FrameEvent( FrameEvent && p_object );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		FrameEvent & operator =( FrameEvent const & p_object );
+		C3D_API FrameEvent & operator =( FrameEvent const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -89,14 +89,14 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		FrameEvent & operator =( FrameEvent && p_object );
+		C3D_API FrameEvent & operator =( FrameEvent && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FrameEvent();
+		C3D_API virtual ~FrameEvent();
 		/**
 		 *\~english
 		 *\brief		Applies the event
@@ -107,7 +107,7 @@ namespace Castor3D
 		 *\remark		Doit être implémentée dans les classes filles
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
-		virtual bool Apply() = 0;
+		C3D_API virtual bool Apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the event type

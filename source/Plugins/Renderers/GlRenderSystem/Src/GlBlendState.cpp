@@ -1,13 +1,16 @@
 #include "GlBlendState.hpp"
 
+#include "GlRenderSystem.hpp"
+
 using namespace Castor;
 using namespace Castor3D;
 
 namespace GlRender
 {
-	GlBlendState::GlBlendState( OpenGl & p_gl )
-		: BlendState()
+	GlBlendState::GlBlendState( GlRenderSystem * p_renderSystem, OpenGl & p_gl )
+		: BlendState( *p_renderSystem->GetOwner() )
 		, m_gl( p_gl )
+		, m_renderSystem( p_renderSystem )
 	{
 		CreateCurrent();
 	}
@@ -172,6 +175,6 @@ namespace GlRender
 
 	BlendStateSPtr GlBlendState::DoCreateCurrent()
 	{
-		return std::make_shared< GlBlendState >( m_gl );
+		return std::make_shared< GlBlendState >( m_renderSystem, m_gl );
 	}
 }

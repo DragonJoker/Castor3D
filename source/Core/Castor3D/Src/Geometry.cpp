@@ -106,7 +106,7 @@ namespace Castor3D
 		bool l_return = true;
 		String l_name;
 		uint32_t l_id = 0;
-		MaterialManager & l_mtlManager = p_obj.GetScene()->GetEngine()->GetMaterialManager();
+		MaterialManager & l_mtlManager = p_obj.GetScene()->GetOwner()->GetMaterialManager();
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
@@ -126,7 +126,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetMesh( p_obj.GetScene()->GetEngine()->GetMeshManager().find( l_name ) );
+						p_obj.SetMesh( p_obj.GetScene()->GetOwner()->GetMeshManager().find( l_name ) );
 					}
 
 					break;

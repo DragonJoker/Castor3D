@@ -29,7 +29,7 @@ if( OPENGL_FOUND )
 	
 	add_target(
 		${PROJECT_NAME}
-		plugin
+		api_plugin
 		"Castor3D"
 		"${CastorMinLibraries};${OpenGlLibraries}"
 		"GlRenderSystemPch.hpp"

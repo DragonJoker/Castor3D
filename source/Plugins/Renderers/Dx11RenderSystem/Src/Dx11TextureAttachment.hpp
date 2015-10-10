@@ -29,7 +29,7 @@ namespace Dx11Render
 		:	public Castor3D::TextureAttachment
 	{
 	public:
-		DxTextureAttachment( DxRenderSystem * p_pRenderSystem, Castor3D::DynamicTextureSPtr p_pTexture );
+		DxTextureAttachment( DxRenderSystem * p_renderSystem, Castor3D::DynamicTextureSPtr p_pTexture );
 		virtual ~DxTextureAttachment();
 
 		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );

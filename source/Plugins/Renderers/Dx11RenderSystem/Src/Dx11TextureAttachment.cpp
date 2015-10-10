@@ -8,11 +8,11 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxTextureAttachment::DxTextureAttachment( DxRenderSystem * p_pRenderSystem, DynamicTextureSPtr p_pTexture )
+	DxTextureAttachment::DxTextureAttachment( DxRenderSystem * p_renderSystem, DynamicTextureSPtr p_pTexture )
 		: TextureAttachment( p_pTexture )
 		, m_pOldSurface( NULL )
 		, m_dwAttachment( 0xFFFFFFFF )
-		, m_renderSystem( p_pRenderSystem )
+		, m_renderSystem( p_renderSystem )
 		, m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
 	{
 	}

@@ -67,7 +67,7 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_TEXTURE_DATA:
 					l_pPxBuffer = PxBufferBase::create( l_size, l_ePf, l_chunk.GetRemainingData(), l_ePf );
-					l_pTexture = p_unit.GetEngine()->GetRenderSystem()->CreateDynamicTexture();
+					l_pTexture = p_unit.GetOwner()->GetRenderSystem()->CreateDynamicTexture();
 					l_pTexture->SetImage( l_pPxBuffer );
 					p_unit.SetTexture( l_pTexture );
 					break;
@@ -456,8 +456,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	TextureUnit::TextureUnit( Engine * p_engine )
-		: m_engine( p_engine )
+	TextureUnit::TextureUnit( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
 		, m_uiIndex( 0 )
 		, m_clrBlend( Colour::from_rgba( 0xFFFFFFFF ) )
 		, m_eChannel( eTEXTURE_CHANNEL_DIFFUSE )
@@ -473,14 +473,14 @@ namespace Castor3D
 		m_eRgbArguments[1] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[0] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[1] = eBLEND_SOURCE_COUNT;
-		m_pSampler = m_engine->GetDefaultSampler();
+		m_pSampler = GetOwner()->GetDefaultSampler();
 	}
 
 	TextureUnit::~TextureUnit()
 	{
 		if ( !m_pRenderTarget.expired() )
 		{
-			m_engine->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
+			GetOwner()->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
 		}
 	}
 
@@ -536,7 +536,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetPipeline();
+			Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
 			if ( m_bChanged && m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC )
@@ -699,12 +699,12 @@ namespace Castor3D
 
 		if ( !p_pathFile.empty() && File::FileExists( p_pathFile ) )
 		{
-			l_pImage = m_engine->GetImageManager().find( p_pathFile.GetFileName() );
+			l_pImage = GetOwner()->GetImageManager().find( p_pathFile.GetFileName() );
 
 			if ( !l_pImage )
 			{
 				l_pImage = std::make_shared< Image >( p_pathFile.GetFileName(), p_pathFile );
-				m_engine->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
+				GetOwner()->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
 			}
 			else if ( !l_pImage->GetBuffer() )
 			{
@@ -715,7 +715,7 @@ namespace Castor3D
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 			l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			SetTexture( l_pStaTexture );

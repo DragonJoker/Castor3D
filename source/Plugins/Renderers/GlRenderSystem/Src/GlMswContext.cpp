@@ -39,7 +39,7 @@ namespace GlRender
 
 	bool GlContextImpl::Initialise( RenderWindow * p_window )
 	{
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
 		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		m_hDC = ::GetDC( p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd() );
 		bool l_bHasPF = false;
@@ -111,7 +111,7 @@ namespace GlRender
 			glTrack( m_gl, GlContextImpl, this );
 			SetCurrent();
 			l_renderSystem->Initialise();
-			p_window->GetEngine()->GetMaterialManager().Initialise();
+			p_window->GetOwner()->GetMaterialManager().Initialise();
 #if !defined( NDEBUG )
 
 			if ( m_gl.HasDebugOutput() )
@@ -183,7 +183,7 @@ namespace GlRender
 
 		try
 		{
-			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
 
 			if ( m_gl.HasCreateContextAttribs() )
 			{
@@ -290,7 +290,7 @@ namespace GlRender
 			l_pfd.cStencilBits = 1;
 		}
 
-		if ( p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->IsStereoAvailable() )
+		if ( p_window->IsUsingStereo() && p_window->GetOwner()->GetRenderSystem()->IsStereoAvailable() )
 		{
 			l_pfd.dwFlags	|= PFD_STEREO;
 		}
@@ -327,7 +327,7 @@ namespace GlRender
 	bool GlContextImpl::DoSelectStereoPixelFormat( RenderWindow * p_window )
 	{
 		bool l_return = false;
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
 		int l_iPixelFormat = ::DescribePixelFormat( m_hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &l_pfd );

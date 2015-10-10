@@ -7,8 +7,8 @@ using namespace Dx11Render;
 
 //*************************************************************************************************
 
-DxBillboardList::DxBillboardList( Castor3D::SceneSPtr p_scene, DxRenderSystem * p_pRenderSystem )
-	: BillboardList( p_scene, p_pRenderSystem )
+DxBillboardList::DxBillboardList( Castor3D::SceneSPtr p_scene, DxRenderSystem & p_renderSystem )
+	: BillboardList( p_scene, p_renderSystem )
 {
 }
 
@@ -37,7 +37,7 @@ ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const &
 		cuT( "polygon" ),//eTOPOLOGY_POLYGON
 	};
 
-	ShaderProgramBaseSPtr l_pProgram = m_renderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+	ShaderProgramBaseSPtr l_pProgram = GetOwner()->GetOwner()->GetShaderManager().GetNewProgram();
 
 	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapAmbient, eSHADER_TYPE_PIXEL );
 	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );

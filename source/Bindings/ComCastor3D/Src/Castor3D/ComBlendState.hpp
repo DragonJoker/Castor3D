@@ -24,33 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace CastorCom
 {
-	template< typename Value, typename Index >
-	struct IndexedVariablePutter< Castor3D::BlendState, Value, Index >
-	{
-		typedef void ( Castor3D::BlendState::*Function )( Value, Index );
-		IndexedVariablePutter( Castor3D::BlendState * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		template< typename _Index, typename _Value >
-		HRESULT operator()( _Index index, _Value value )
-		{
-			( m_instance->*m_function )( parameter_cast< Value >( value ), index );
-			return S_OK;
-		}
-
-	private:
-		Castor3D::BlendState * m_instance;
-		Function m_function;
-	};
-
-	template< typename Value, typename Index, typename _Class >
-	IndexedVariablePutter< Castor3D::BlendState, Value, Index >
-	make_indexed_putter( _Class * instance, void ( Castor3D::BlendState::*function )( Value, Index ) )
-	{
-		return IndexedVariablePutter< Castor3D::BlendState, Value, Index >( ( Castor3D::BlendState * )instance, function );
-	}
+	DECLARE_INDEXED_VAL_PUTTER_EVT( Castor3D, BlendState );
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -70,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CBlendState();
+		CBlendState();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CBlendState();
+		virtual ~CBlendState();
 
 		inline Castor3D::BlendStateSPtr GetInternal()const
 		{
@@ -89,19 +63,19 @@ namespace CastorCom
 			m_state = state;
 		}
 
-		COM_PROPERTY( AlphaToCoverageEnabled, boolean, make_getter( m_state.get(), &Castor3D::BlendState::IsAlphaToCoverageEnabled ), make_putter( m_state.get(), &Castor3D::BlendState::EnableAlphaToCoverage ) );
-		COM_PROPERTY( IndependantBlendEnabled, boolean, make_getter( m_state.get(), &Castor3D::BlendState::IsIndependantBlendEnabled ), make_putter( m_state.get(), &Castor3D::BlendState::EnableIndependantBlend ) );
-		COM_PROPERTY( BlendFactors, IColour *, make_getter( m_state.get(), &Castor3D::BlendState::GetBlendFactors ), make_putter( m_state.get(), &Castor3D::BlendState::SetBlendFactors ) );
-		COM_PROPERTY( SampleCoverageMask, unsigned int, make_getter( m_state.get(), &Castor3D::BlendState::GetSampleCoverageMask ), make_putter( m_state.get(), &Castor3D::BlendState::SetSampleCoverageMask ) );
+		COM_EVT_PROPERTY( AlphaToCoverageEnabled, boolean, make_getter( m_state.get(), &Castor3D::BlendState::IsAlphaToCoverageEnabled ), make_putter_evt( m_state.get(), &Castor3D::BlendState::EnableAlphaToCoverage ) );
+		COM_EVT_PROPERTY( IndependantBlendEnabled, boolean, make_getter( m_state.get(), &Castor3D::BlendState::IsIndependantBlendEnabled ), make_putter_evt( m_state.get(), &Castor3D::BlendState::EnableIndependantBlend ) );
+		COM_EVT_PROPERTY( BlendFactors, IColour *, make_getter( m_state.get(), &Castor3D::BlendState::GetBlendFactors ), make_putter_evt( m_state.get(), &Castor3D::BlendState::SetBlendFactors ) );
+		COM_EVT_PROPERTY( SampleCoverageMask, unsigned int, make_getter( m_state.get(), &Castor3D::BlendState::GetSampleCoverageMask ), make_putter_evt( m_state.get(), &Castor3D::BlendState::SetSampleCoverageMask ) );
 
-		COM_PROPERTY_INDEXED( BlendEnabled, unsigned int, boolean, make_indexed_getter( m_state.get(), &Castor3D::BlendState::IsBlendEnabled ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::EnableBlend ) );
-		COM_PROPERTY_INDEXED( RgbSrcBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetRgbSrcBlend ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::SetRgbSrcBlend ) );
-		COM_PROPERTY_INDEXED( RgbDstBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetRgbDstBlend ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::SetRgbDstBlend ) );
-		COM_PROPERTY_INDEXED( RgbBlendOp, unsigned int, eBLEND_OP, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetRgbBlendOp ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::SetRgbBlendOp ) );
-		COM_PROPERTY_INDEXED( AlphaSrcBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetAlphaSrcBlend ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::SetAlphaSrcBlend ) );
-		COM_PROPERTY_INDEXED( AlphaDstBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetAlphaDstBlend ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::SetAlphaDstBlend ) );
-		COM_PROPERTY_INDEXED( AlphaBlendOp, unsigned int, eBLEND_OP, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetAlphaBlendOp ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::SetAlphaBlendOp ) );
-		COM_PROPERTY_INDEXED( WriteMask, unsigned int, byte, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetWriteMask ), make_indexed_putter( m_state.get(), &Castor3D::BlendState::SetWriteMask ) );
+		COM_EVT_PROPERTY_INDEXED( BlendEnabled, unsigned int, boolean, make_indexed_getter( m_state.get(), &Castor3D::BlendState::IsBlendEnabled ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::EnableBlend ) );
+		COM_EVT_PROPERTY_INDEXED( RgbSrcBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetRgbSrcBlend ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::SetRgbSrcBlend ) );
+		COM_EVT_PROPERTY_INDEXED( RgbDstBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetRgbDstBlend ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::SetRgbDstBlend ) );
+		COM_EVT_PROPERTY_INDEXED( RgbBlendOp, unsigned int, eBLEND_OP, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetRgbBlendOp ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::SetRgbBlendOp ) );
+		COM_EVT_PROPERTY_INDEXED( AlphaSrcBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetAlphaSrcBlend ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::SetAlphaSrcBlend ) );
+		COM_EVT_PROPERTY_INDEXED( AlphaDstBlend, unsigned int, eBLEND, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetAlphaDstBlend ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::SetAlphaDstBlend ) );
+		COM_EVT_PROPERTY_INDEXED( AlphaBlendOp, unsigned int, eBLEND_OP, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetAlphaBlendOp ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::SetAlphaBlendOp ) );
+		COM_EVT_PROPERTY_INDEXED( WriteMask, unsigned int, byte, make_indexed_getter( m_state.get(), &Castor3D::BlendState::GetWriteMask ), make_indexed_putter_evt( m_state.get(), &Castor3D::BlendState::SetWriteMask ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
@@ -111,91 +85,10 @@ namespace CastorCom
 		Castor3D::BlendStateSPtr m_state;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( BlendState ), CBlendState )
+	OBJECT_ENTRY_AUTO( __uuidof( BlendState ), CBlendState );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::BlendStateSPtr >
-	{
-		typedef Castor3D::BlendStateSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IBlendState ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CBlendState::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CBlendState * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IBlendState,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::BlendStateSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::BlendStateSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IBlendState * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CBlendState * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IBlendState,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( BlendState, Castor3D, BlendState );
+	DECLARE_VARIABLE_PTR_PUTTER( BlendState, Castor3D, BlendState );
 }
 
 #endif

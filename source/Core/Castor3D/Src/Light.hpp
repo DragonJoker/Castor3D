@@ -21,9 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "MovableObject.hpp"
 #include "LightCategory.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -37,8 +35,9 @@ namespace Castor3D
 	\brief		Implémentation d'une source lumineuse
 	\remark
 	*/
-	class C3D_API Light
+	class Light
 		: public MovableObject
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -55,7 +54,7 @@ namespace Castor3D
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, Castor::String const & p_name );
+		C3D_API Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -68,14 +67,14 @@ namespace Castor3D
 		 *\param[in]	p_pFactory		La fabrique de LightCategory
 		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType );
+		C3D_API Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Light();
+		C3D_API ~Light();
 		/**
 		 *\~english
 		 *\brief		Renders the light
@@ -84,7 +83,7 @@ namespace Castor3D
 		 *\brief		Rend la lumière
 		 *\remark		Implémentation passant par le pipeline fixe
 		 */
-		void Render();
+		C3D_API void Render();
 		/**
 		 *\~english
 		 *\brief		Ends light rendering
@@ -93,7 +92,7 @@ namespace Castor3D
 		 *\brief		Fin du rendu de la lumière
 		 *\remark		Implémentation passant par le pipeline fixe
 		 */
-		void EndRender();
+		C3D_API void EndRender();
 		/**
 		 *\~english
 		 *\brief		Attaches this light to a Material
@@ -102,7 +101,7 @@ namespace Castor3D
 		 *\brief		Attache cette lumière au node donné
 		 *\param[in]	p_node	Le nouveau node parent de cette lumière
 		 */
-		virtual void AttachTo( SceneNodeSPtr p_node );
+		C3D_API virtual void AttachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the DirectionalLight category
@@ -111,7 +110,7 @@ namespace Castor3D
 		 *\brief		Récupère la DirectionalLight
 		 *\return		La valeur
 		 */
-		DirectionalLightSPtr GetDirectionalLight()const;
+		C3D_API DirectionalLightSPtr GetDirectionalLight()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the PointLight category
@@ -120,7 +119,7 @@ namespace Castor3D
 		 *\brief		Récupère la PointLight
 		 *\return		La valeur
 		 */
-		PointLightSPtr GetPointLight()const;
+		C3D_API PointLightSPtr GetPointLight()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the SpotLight category
@@ -129,7 +128,7 @@ namespace Castor3D
 		 *\brief		Récupère la SpotLight
 		 *\return		La valeur
 		 */
-		SpotLightSPtr GetSpotLight()const;
+		C3D_API SpotLightSPtr GetSpotLight()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the light type
@@ -444,20 +443,8 @@ namespace Castor3D
 		{
 			SetEnabled( false );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	protected:
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english Tells the light is enabled	\~french Dit si la lumière est active ou pas
 		bool m_enabled;
 		//!\~english The Light category that effectively holds light data	\~french la light category contenant les données de la lumière
@@ -466,7 +453,5 @@ namespace Castor3D
 		int m_iIndex;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

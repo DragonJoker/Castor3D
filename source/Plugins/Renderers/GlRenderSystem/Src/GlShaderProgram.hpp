@@ -29,7 +29,7 @@ namespace GlRender
 		, public Castor::NonCopyable
 	{
 	public:
-		GlShaderProgram( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
+		GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
 		virtual ~GlShaderProgram();
 		virtual void Initialise();
 		/**

@@ -23,13 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #if CASTOR_USE_PCH
 #	include "CastorUtilsPrerequisites.hpp"
 
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#		pragma warning( disable:4996 )
-#	endif
-
 #	include <algorithm>
 #	include <fstream>
 #	include <functional>
@@ -114,9 +107,6 @@ extern "C"
 #	include <FreeImage.h>
 }
 
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
 #endif
 
 #endif

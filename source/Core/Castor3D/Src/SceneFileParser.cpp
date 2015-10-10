@@ -239,9 +239,9 @@ void SceneFileContext::Initialise()
 
 //****************************************************************************************************
 
-SceneFileParser::SceneFileParser( Engine * p_engine )
-	: FileParser( eSECTION_ROOT )
-	, m_engine( p_engine )
+SceneFileParser::SceneFileParser( Engine & p_engine )
+	: OwnedBy< Engine >( p_engine )
+	, FileParser( eSECTION_ROOT )
 {
 }
 
@@ -519,7 +519,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
 
-	for ( auto && l_it : m_engine->GetAdditionalParsers() )
+	for ( auto && l_it : GetOwner()->GetAdditionalParsers() )
 	{
 		for ( auto && l_itSections : l_it.second )
 		{
@@ -530,9 +530,9 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 		}
 	}
 
-	if ( m_engine->GetRenderSystem() )
+	if ( GetOwner()->GetRenderSystem() )
 	{
-		l_pContext->eRendererType = m_engine->GetRenderSystem()->GetRendererType();
+		l_pContext->eRendererType = GetOwner()->GetRenderSystem()->GetRendererType();
 	}
 }
 

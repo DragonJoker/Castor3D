@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <TextureUnit.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 #if !defined( CALLBACK )
 #	if defined( _WIN32 )
 #		define CALLBACK __stdcall
@@ -2725,7 +2721,5 @@ namespace GlRender
 #		define glTrack( gl, type, object )
 #		define glUntrack( gl, object )
 #	endif
-
-#pragma warning( pop )
 
 #endif

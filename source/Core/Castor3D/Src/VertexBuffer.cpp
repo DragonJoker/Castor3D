@@ -1,13 +1,15 @@
 ﻿#include "VertexBuffer.hpp"
+
+#include "Engine.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	VertexBuffer::VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements )
-		:	CpuBuffer< uint8_t >( p_pRenderSystem )
-		,	m_bufferDeclaration( p_pElements, p_uiNbElements )
+	VertexBuffer::VertexBuffer( Engine & p_engine, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements )
+		: CpuBuffer< uint8_t >( p_engine )
+		, m_bufferDeclaration( p_pElements, p_uiNbElements )
 	{
 	}
 
@@ -19,7 +21,7 @@ namespace Castor3D
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = m_renderSystem->CreateVertexBuffer( m_bufferDeclaration, this );
+			m_pBuffer = GetOwner()->GetRenderSystem()->CreateVertexBuffer( m_bufferDeclaration, this );
 		}
 
 		return m_pBuffer != nullptr;

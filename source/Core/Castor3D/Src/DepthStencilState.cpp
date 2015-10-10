@@ -1,5 +1,7 @@
 ﻿#include "DepthStencilState.hpp"
 
+using namespace Castor;
+
 namespace Castor3D
 {
 	namespace
@@ -9,8 +11,9 @@ namespace Castor3D
 
 	DepthStencilStateWPtr DepthStencilState::m_wCurrentState;
 
-	DepthStencilState::DepthStencilState()
-		: m_bChanged( true )
+	DepthStencilState::DepthStencilState( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
+		, m_bChanged( true )
 		, m_eDepthFunc( eDEPTH_FUNC_LESS )
 		, m_bDepthTest( true )
 		, m_dDepthNear( 0 )

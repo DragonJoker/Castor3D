@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de plugin de subdivision
 	*/
-	class C3D_API DividerPlugin
+	class DividerPlugin
 		: public PluginBase
 	{
 	private:
@@ -56,14 +56,14 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		DividerPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API DividerPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DividerPlugin();
+		C3D_API virtual ~DividerPlugin();
 		/**
 		 *\~english
 		 *\brief		Creates the Subdivider
@@ -72,7 +72,7 @@ namespace Castor3D
 		 *\brief		Crée le Subdivider
 		 *\return		L'instance de Subdivider créée
 		 */
-		Subdivider * CreateDivider();
+		C3D_API Subdivider * CreateDivider();
 		/**
 		 *\~english
 		 *\brief		Destroys the given Subdivider
@@ -81,14 +81,14 @@ namespace Castor3D
 		 *\brief		Détruit le Subdivider donné
 		 *\param[in]	p_pDivider	Le Subdivider
 		 */
-		void DestroyDivider( Subdivider * p_pDivider );
+		C3D_API void DestroyDivider( Subdivider * p_pDivider );
 		/**
 		 *\~english
 		 *\brief		Tells the divider short name
 		 *\~french
 		 *\brief		Donne le nom court du diviseur
 		 */
-		Castor::String GetDividerType();
+		C3D_API Castor::String GetDividerType();
 
 	private:
 		PCreateDividerFunction m_pfnCreateDivider;

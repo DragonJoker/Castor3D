@@ -36,7 +36,7 @@ namespace Ase
 		AseFileParser * m_pFileParser;
 
 	public:
-		AseImporter( Castor3D::Engine * p_pEngine );
+		AseImporter( Castor3D::Engine & p_pEngine );
 		~AseImporter();
 
 	private:

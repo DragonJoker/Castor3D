@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Exception.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -37,8 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Exception de comparaison de versions
 	*/
-	class C3D_API VersionException
-		:	public Castor::Exception
+	class VersionException
+		: public Castor::Exception
 	{
 	public:
 		/**
@@ -57,19 +53,17 @@ namespace Castor3D
 		 *\param[in]	p_strFunction	La fonction
 		 *\param[in]	p_uiLine		La ligne dans le fichier
 		 */
-		VersionException( Version const & p_given, Version const & p_expected, char const * p_strFile, char const * p_strFunction, uint32_t p_uiLine );
+		C3D_API VersionException( Version const & p_given, Version const & p_expected, char const * p_strFile, char const * p_strFunction, uint32_t p_uiLine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~VersionException() throw() {}
+		C3D_API virtual ~VersionException() throw() {}
 	};
 
 #	define CASTOR_VERSION_EXCEPTION( p_given, p_expected ) throw Castor3D::VersionException( p_given, p_expected, __FILE__, __FUNCTION__, __LINE__ )
 }
-
-#pragma warning( pop )
 
 #endif

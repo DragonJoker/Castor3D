@@ -1,5 +1,7 @@
 #include "GlDepthStencilState.hpp"
 
+#include "GlRenderSystem.hpp"
+
 using namespace Castor;
 using namespace Castor3D;
 
@@ -10,9 +12,10 @@ namespace GlRender
 		bool g_creatingCurrent = false;
 	}
 
-	GlDepthStencilState::GlDepthStencilState( OpenGl & p_gl )
-		: DepthStencilState()
+	GlDepthStencilState::GlDepthStencilState( GlRenderSystem * p_renderSystem, OpenGl & p_gl )
+		: DepthStencilState( *p_renderSystem->GetOwner() )
 		, m_gl( p_gl )
+		, m_renderSystem( p_renderSystem )
 	{
 		CreateCurrent();
 	}
@@ -147,6 +150,6 @@ namespace GlRender
 
 	DepthStencilStateSPtr GlDepthStencilState::DoCreateCurrent()
 	{
-		return std::make_shared< GlDepthStencilState >( m_gl );
+		return std::make_shared< GlDepthStencilState >( m_renderSystem, m_gl );
 	}
 }

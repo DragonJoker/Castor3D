@@ -27,11 +27,11 @@ namespace Dx11Render
 {
 	template< typename T, class D3dBufferObject >
 	class DxBufferObject
-		:	public DxBufferObjectBase
-		,	public Castor3D::GpuBuffer< T >
+		: public DxBufferObjectBase
+		, public Castor3D::GpuBuffer< T >
 	{
 	public:
-		DxBufferObject( HardwareBufferPtr p_pBuffer );
+		DxBufferObject( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer );
 		virtual ~DxBufferObject();
 
 		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );

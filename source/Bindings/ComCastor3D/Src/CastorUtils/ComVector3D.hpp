@@ -46,14 +46,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CVector3D();
+		CVector3D();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CVector3D();
+		virtual ~CVector3D();
 
 		COM_PROPERTY( X, FLOAT, make_getter( this, &Castor::Point3r::operator[], 0 ), make_putter( this, &Castor::Point3r::operator[], 0 ) );
 		COM_PROPERTY( Y, FLOAT, make_getter( this, &Castor::Point3r::operator[], 1 ), make_putter( this, &Castor::Point3r::operator[], 1 ) );
@@ -66,135 +66,11 @@ namespace CastorCom
 		STDMETHOD( Length )( /* [out,retval] */ FLOAT * pVal );
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Vector3D ), CVector3D )
+	OBJECT_ENTRY_AUTO( __uuidof( Vector3D ), CVector3D );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor::Point3r >
-	{
-		typedef Castor::Point3r( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IVector3D ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CVector3D::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						*static_cast< Castor::Point3r * >( static_cast< CVector3D * >( *value ) ) = ( m_instance->*m_function )();
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IVector3D,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariableRefGetter< Class, Castor::Point3r >
-	{
-		typedef Castor::Point3r const & ( Class::*Function )()const;
-		VariableRefGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IVector3D ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CVector3D::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						*static_cast< Castor::Point3r * >( static_cast< CVector3D * >( *value ) ) = ( m_instance->*m_function )();
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IVector3D,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor::Point3r const & >
-	{
-		typedef void ( Class::*Function )( Castor::Point3r const & );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IVector3D * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( *static_cast< CVector3D * >( value ) );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IVector3D,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_VAL_GETTER( Vector3D, Castor, Point3r );
+	DECLARE_VARIABLE_REF_GETTER( Vector3D, Castor, Point3r );
+	DECLARE_VARIABLE_REF_PUTTER( Vector3D, Castor, Point3r );
 }
 
 #endif

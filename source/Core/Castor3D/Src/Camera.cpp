@@ -167,14 +167,14 @@ namespace Castor3D
 
 	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, ViewportSPtr p_viewport, eTOPOLOGY p_topology )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
-		, m_engine( p_scene->GetEngine() )
+		, OwnedBy< Engine >( *p_scene->GetOwner() )
 		, m_viewport( std::make_shared< Viewport >( *p_viewport ) )
 		, m_topology( eTOPOLOGY_TRIANGLES )
 	{
 	}
 
 	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, Size const & p_size, eVIEWPORT_TYPE p_type, eTOPOLOGY p_topology )
-		: Camera( p_scene, p_name, p_node, std::make_shared< Viewport >( p_scene->GetEngine(), p_size, p_type ), p_topology )
+		: Camera( p_scene, p_name, p_node, std::make_shared< Viewport >( *p_scene->GetOwner(), p_size, p_type ), p_topology )
 	{
 	}
 
@@ -226,15 +226,15 @@ namespace Castor3D
 				}
 			}
 
-			m_engine->GetRenderSystem()->GetPipeline().SetViewMatrix( m_view );
+			GetOwner()->GetRenderSystem()->GetPipeline().SetViewMatrix( m_view );
 		}
 
-		m_engine->GetRenderSystem()->SetCurrentCamera( this );
+		GetOwner()->GetRenderSystem()->SetCurrentCamera( this );
 	}
 
 	void Camera::EndRender()
 	{
-		m_engine->GetRenderSystem()->SetCurrentCamera( NULL );
+		GetOwner()->GetRenderSystem()->SetCurrentCamera( NULL );
 	}
 
 	void Camera::Resize( uint32_t p_width, uint32_t p_height )

@@ -1,8 +1,5 @@
 ﻿#include "Castor3DPch.hpp"
 
-#pragma warning( disable:4311 )
-#pragma warning( disable:4312 )
-
 #include <Point.hpp>
 #include <SquareMatrix.hpp>
 
@@ -13,3 +10,20 @@
 #	include <cstdlib>
 #	include <crtdbg.h>
 #endif
+
+namespace Castor
+{
+	OwnedBy< Castor3D::Engine >::OwnedBy( Castor3D::Engine & p_owner )
+		: m_owner( p_owner )
+	{
+	}
+
+	OwnedBy< Castor3D::Engine >::~OwnedBy()
+	{
+	}
+
+	Castor3D::Engine * OwnedBy< Castor3D::Engine >::GetOwner()const
+	{
+		return &m_owner;
+	}
+}

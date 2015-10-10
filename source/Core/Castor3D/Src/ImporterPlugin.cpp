@@ -39,7 +39,7 @@ namespace Castor3D
 #endif
 
 	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_pLibrary, p_engine )
+		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_pLibrary, *p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnCreateImporter, CreateImporterFunctionABIName ) )
 		{
@@ -64,10 +64,10 @@ namespace Castor3D
 
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( m_engine );
+			m_pfnOnLoad( GetOwner() );
 		}
 
-		m_pfnCreateImporter( p_engine, this );
+		m_pfnCreateImporter( GetOwner(), this );
 	}
 
 	ImporterPlugin::~ImporterPlugin()
@@ -76,7 +76,7 @@ namespace Castor3D
 
 		if ( m_pfnOnUnload )
 		{
-			m_pfnOnUnload( m_engine );
+			m_pfnOnUnload( GetOwner() );
 		}
 	}
 

@@ -7,8 +7,8 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxIndexBuffer::DxIndexBuffer( HardwareBufferPtr p_pBuffer )
-		: DxBufferObject< uint32_t, ID3D11Buffer >( p_pBuffer )
+	DxIndexBuffer::DxIndexBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer )
+		: DxBufferObject< uint32_t, ID3D11Buffer >( p_renderSystem, p_pBuffer )
 	{
 	}
 
@@ -37,7 +37,7 @@ namespace Dx11Render
 
 		if ( m_pBuffer )
 		{
-			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem *>( m_pBuffer->GetRenderSystem() );
+			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem *>( m_pBuffer->GetOwner()->GetRenderSystem() );
 			ID3D11Device * l_pDevice = l_renderSystem->GetDevice();
 			UINT l_uiSize = UINT( m_pBuffer->GetSize() );
 
@@ -104,7 +104,7 @@ namespace Dx11Render
 
 		if ( m_pBuffer && m_pBuffer->IsAssigned() )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 			l_pDeviceContext->IASetIndexBuffer( m_pBufferObject, DXGI_FORMAT_R32_UINT, 0 );
 		}
 

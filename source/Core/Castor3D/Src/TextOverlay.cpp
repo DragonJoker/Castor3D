@@ -151,17 +151,17 @@ namespace Castor3D
 	void TextOverlay::SetFont( String const & p_strFont )
 	{
 		// Récupération / Création de la police
-		Engine * l_engine = m_pOverlay->GetEngine();
+		Engine * l_engine = m_pOverlay->GetOwner();
 		FontManager & l_fontManager = l_engine->GetFontManager();
 		FontSPtr l_pFont = l_fontManager.get_font( p_strFont );
 
 		if ( l_pFont )
 		{
-			FontTextureSPtr l_fontTexture = m_pOverlay->GetEngine()->GetOverlayManager().GetFontTexture( l_pFont->GetName() );
+			FontTextureSPtr l_fontTexture = l_engine->GetOverlayManager().GetFontTexture( l_pFont->GetName() );
 
 			if ( !l_fontTexture )
 			{
-				l_fontTexture = m_pOverlay->GetEngine()->GetOverlayManager().CreateFontTexture( l_pFont );
+				l_fontTexture = l_engine->GetOverlayManager().CreateFontTexture( l_pFont );
 			}
 
 			m_fontTexture = l_fontTexture;
@@ -171,7 +171,7 @@ namespace Castor3D
 			CASTOR_EXCEPTION( "Font " + string::string_cast< char >( p_strFont ) + "not found" );
 		}
 
-		m_pOverlay->GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
+		l_engine->PostEvent( MakeInitialiseEvent( *this ) );
 		m_textChanged = true;
 	}
 

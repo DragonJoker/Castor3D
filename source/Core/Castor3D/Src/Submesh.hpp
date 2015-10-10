@@ -25,9 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "VertexBoneData.hpp"
 #include "VertexGroup.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -41,7 +39,8 @@ namespace Castor3D
 	\brief		Representation d'un submesh
 	\remark		Un submesh est sous partie d'un mesh. Il possede ses propres tampons (vertex, normales et texture coords) ses smoothgroups et ses combobox
 	*/
-	class C3D_API Submesh
+	class Submesh
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -52,7 +51,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader texte de Submesh
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 			, public Castor::NonCopyable
 		{
@@ -63,7 +62,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Function operator
@@ -76,7 +75,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier dans lequel le submesh est écrit
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( Submesh const & p_submesh, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Submesh const & p_submesh, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -86,7 +85,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public Castor3D::BinaryParser< Submesh >
 		{
 		public:
@@ -98,7 +97,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -111,7 +110,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Submesh const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Submesh const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -124,7 +123,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Submesh & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Submesh & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:
@@ -143,49 +142,49 @@ namespace Castor3D
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_uiID		L'ID du submesh
 		 */
-		Submesh( MeshRPtr p_pMesh, Engine * p_engine = nullptr, uint32_t p_uiID = 1 );
+		C3D_API Submesh( Engine & p_engine, MeshRPtr p_pMesh, uint32_t p_uiID = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Submesh();
+		C3D_API ~Submesh();
 		/**
 		 *\~english
 		 *\brief		Initialises the submesh
 		 *\~french
 		 *\brief		Initialise le submesh
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans the submesh
 		 *\~french
 		 *\brief		Nettoie le submesh
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Computes the containers (cube and sphere)
 		 *\~french
 		 *\brief		Calcule les conteneurs (cube et sphère)
 		 */
-		void ComputeContainers();
+		C3D_API void ComputeContainers();
 		/**
 		 *\~english
 		 *\return		The faces number
 		 *\~french
 		 *\return		Le nombre de faces de ce submesh
 		 */
-		uint32_t GetFaceCount()const;
+		C3D_API uint32_t GetFaceCount()const;
 		/**
 		 *\~english
 		 *\return		The points count
 		 *\~french
 		 *\return		Le nombre de vertices de ce submesh
 		 */
-		uint32_t GetPointsCount()const;
+		C3D_API uint32_t GetPointsCount()const;
 		/**
 		 *\~english
 		 *\brief		Tests if the given Point3r is in mine
@@ -198,7 +197,7 @@ namespace Castor3D
 		 *\param[in]	p_precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
+		C3D_API int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -213,7 +212,7 @@ namespace Castor3D
 		 *\param[in]	z	Coordonnée Y
 		 *\return		Le vertex créé
 		 */
-		BufferElementGroupSPtr AddPoint( real x, real y, real z );
+		C3D_API BufferElementGroupSPtr AddPoint( real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Adds a vertex to my list
@@ -224,7 +223,7 @@ namespace Castor3D
 		 *\param[in]	p_v	Le point
 		 *\return		Le vertex créé
 		 */
-		BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
+		C3D_API BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a vertex to my list
@@ -235,7 +234,7 @@ namespace Castor3D
 		 *\param[in]	p_v	Les coordonnées du point
 		 *\return		Le vertex créé
 		 */
-		BufferElementGroupSPtr AddPoint( real * p_v );
+		C3D_API BufferElementGroupSPtr AddPoint( real * p_v );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to my list
@@ -244,14 +243,14 @@ namespace Castor3D
 		 *\brief		Ajoute des points à la liste
 		 *\param[in]	p_vertices	Les vertices
 		 */
-		void AddPoints( stVERTEX_GROUP const & p_vertices );
+		C3D_API void AddPoints( stVERTEX_GROUP const & p_vertices );
 		/**
 		 *\~english
 		 *\brief		Clears this submesh's face array
 		 *\~french
 		 *\brief		Vide le tableau de faces
 		 */
-		void ClearFaces();
+		C3D_API void ClearFaces();
 		/**
 		 *\~english
 		 *\brief		Creates and adds a face to the submesh
@@ -266,7 +265,7 @@ namespace Castor3D
 		 *\param[in]	c			L'index du troisième vertex
 		 *\return		La face créée
 		 */
-		FaceSPtr AddFace( uint32_t a, uint32_t b, uint32_t c );
+		C3D_API FaceSPtr AddFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
@@ -277,7 +276,7 @@ namespace Castor3D
 		 *\param[in]	p_arrayFaces	Les faces
 		 *\param[in]	p_uiNbFaces		Le nombre de faces
 		 */
-		void AddFaceGroup( stFACE_INDICES * p_pFaces, uint32_t p_uiNbFaces );
+		C3D_API void AddFaceGroup( stFACE_INDICES * p_pFaces, uint32_t p_uiNbFaces );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a quad face to the submesh
@@ -298,14 +297,14 @@ namespace Castor3D
 		 *\param[in]	p_ptMaxUV	L'UV du coin haut droit
 		 *\return		La face créée
 		 */
-		void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_ptMinUV = Castor::Point3r(), Castor::Point3r const & p_ptMaxUV = Castor::Point3r( 1, 1, 1 ) );
+		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_ptMinUV = Castor::Point3r(), Castor::Point3r const & p_ptMaxUV = Castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
 		 *\brief		Generates the 3D buffers
 		 *\~french
 		 *\brief		Genère les buffers 3D
 		 */
-		void GenerateBuffers();
+		C3D_API void GenerateBuffers();
 		/**
 		 *\~english
 		 *\brief		Clones the submesh and returns the clone
@@ -314,14 +313,14 @@ namespace Castor3D
 		 *\brief		Clône le submesh
 		 *\return	Le clône
 		 */
-		SubmeshSPtr Clone();
+		C3D_API SubmeshSPtr Clone();
 		/**
 		 *\~english
 		 *\brief		Recreates the Vertex and Index buffers
 		 *\~french
 		 *\brief		Recrée les Vertex et Index buffers
 		 */
-		void ResetGpuBuffers();
+		C3D_API void ResetGpuBuffers();
 		/**
 		 *\~english
 		 *\brief		Draws the submesh
@@ -332,7 +331,7 @@ namespace Castor3D
 		 *\param[in]	p_mode	Le mode de rendu
 		 *\param[in]	p_pass	La Pass contenant les informations de matériau
 		 */
-		void Draw( eTOPOLOGY p_mode, Pass const & p_pass );
+		C3D_API void Draw( eTOPOLOGY p_mode, Pass const & p_pass );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points
@@ -341,14 +340,14 @@ namespace Castor3D
 		 *\brief		Crée les faces à partir des points
 		 *\remark		Cette fonction suppose que les points sont tirés à la manière triangles fan
 		 */
-		void ComputeFacesFromPolygonVertex();
+		C3D_API void ComputeFacesFromPolygonVertex();
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		void ComputeNormals( bool p_bReverted = false );
+		C3D_API void ComputeNormals( bool p_bReverted = false );
 		/**
 		 *\~english
 		 *\brief		Computes normal and tangent for each vertex of the given face
@@ -357,7 +356,7 @@ namespace Castor3D
 		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_pFace	La face
 		 */
-		void ComputeNormals( FaceSPtr p_pFace );
+		C3D_API void ComputeNormals( FaceSPtr p_pFace );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the given face
@@ -366,7 +365,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_pFace	La face
 		 */
-		void ComputeTangents( FaceSPtr p_pFace );
+		C3D_API void ComputeTangents( FaceSPtr p_pFace );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
@@ -375,7 +374,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex du submesh
 		 *\remark		Cette fonction suppose que les normales sont définies
 		 */
-		void ComputeTangentsFromNormals();
+		C3D_API void ComputeTangentsFromNormals();
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
@@ -384,7 +383,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex du submesh
 		 *\remark		Cette fonction suppose que les bitangentes et les normales sont définies
 		 */
-		void ComputeTangentsFromBitangents();
+		C3D_API void ComputeTangentsFromBitangents();
 		/**
 		 *\~english
 		 *\brief		Computes bitangent for each vertex of the submesh
@@ -393,7 +392,7 @@ namespace Castor3D
 		 *\brief		Calcule la bitangente pour chaque vertex du submesh
 		 *\remark		Cette fonction suppose que les tangentes et les normales sont définies
 		 */
-		void ComputeBitangents();
+		C3D_API void ComputeBitangents();
 		/**
 		 *\~english
 		 *\brief		Sorts the face from farthest to nearest from the camera
@@ -402,7 +401,7 @@ namespace Castor3D
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
 		 *\param[in]	p_ptCamera	La position de la caméra, relative au submesh
 		 */
-		void SortFaces( Castor::Point3r const & p_ptCamera );
+		C3D_API void SortFaces( Castor::Point3r const & p_ptCamera );
 		/**
 		 *\~english
 		 *\brief		Increments instance count
@@ -411,7 +410,7 @@ namespace Castor3D
 		 *\brief		Incrémente le compte d'instances
 		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
 		 */
-		void Ref( MaterialSPtr p_material );
+		C3D_API void Ref( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Decrements instance count
@@ -420,7 +419,7 @@ namespace Castor3D
 		 *\brief		Décrémente le compte d'instances
 		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
 		 */
-		void UnRef( MaterialSPtr p_material );
+		C3D_API void UnRef( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the instances count
@@ -431,7 +430,7 @@ namespace Castor3D
 		 *\param[in]	p_material	Le matériau pour lequel le compte est récupéré
 		 *\return		La valeur
 		 */
-		uint32_t GetRefCount( MaterialSPtr p_material )const;
+		C3D_API uint32_t GetRefCount( MaterialSPtr p_material )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the skeleton
@@ -681,16 +680,6 @@ namespace Castor3D
 		{
 			AddFaceGroup( p_pFaces, Count );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Engine
-		 *\~french
-		 *\brief		Récupère l'Engine
-		 */
-		virtual Engine * GetEngine()const
-		{
-			return m_engine;
-		}
 
 	private:
 		FaceSPtr DoAddFace( const FaceSPtr p_face );
@@ -703,8 +692,6 @@ namespace Castor3D
 		bool DoPrepareGeometryBuffers( Pass const & p_pass );
 
 	private:
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_engine;
 		//!\~english The submesh ID	\~french L'id du sbmesh
 		uint32_t m_uiID;
 		//!\~english The submesh instances count	\~french Le nombre d'instances du submesh
@@ -743,7 +730,5 @@ namespace Castor3D
 		bool m_bDirty;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

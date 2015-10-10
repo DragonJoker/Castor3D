@@ -20,11 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "FrameVariable.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-#pragma warning( disable:4290 )
-
 namespace Castor3D
 {
 	/*!
@@ -124,7 +119,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Un Coords contenant la valeur
 		 */
-		inline Castor::Coords< T, Count > GetValue()throw( std::out_of_range );
+		inline Castor::Coords< T, Count > GetValue();
 		/**
 		 *\~english
 		 *\brief		Retrieves the value
@@ -133,7 +128,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Un Point contenant la valeur
 		 */
-		inline Castor::Point< T, Count > GetValue()const throw( std::out_of_range );
+		inline Castor::Point< T, Count > GetValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -146,7 +141,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Un Coords contenant la valeur à l'index donné
 		 */
-		inline Castor::Coords< T, Count > GetValue( uint32_t p_index )throw( std::out_of_range );
+		inline Castor::Coords< T, Count > GetValue( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -159,7 +154,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Un Point contenant la valeur à l'index donné
 		 */
-		inline Castor::Point< T, Count > GetValue( uint32_t p_index )const throw( std::out_of_range );
+		inline Castor::Point< T, Count > GetValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
@@ -301,7 +296,5 @@ namespace Castor3D
 }
 
 #include "PointFrameVariable.inl"
-
-#pragma warning( pop )
 
 #endif

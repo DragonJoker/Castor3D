@@ -29,7 +29,7 @@ namespace GlRender
 		,	public Castor::NonCopyable
 	{
 	public:
-		GlTextureBufferObject( OpenGl & p_gl, HardwareBufferPtr p_pBuffer );
+		GlTextureBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer );
 		virtual ~GlTextureBufferObject();
 
 		virtual bool Create();

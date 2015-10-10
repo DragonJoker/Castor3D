@@ -193,7 +193,7 @@ namespace Ase
 	void AseFileParser::DoDiscardParser( String const & p_strLine )
 	{
 		StringStream strToLog( cuT( "Parser not found @ line #" ) );
-		Logger::LogWarning( strToLog << m_context->ui64Line << cuT( " : " ) << p_strLine );
+		Logger::LogWarning( strToLog << m_context->m_line << cuT( " : " ) << p_strLine );
 	}
 
 	void AseFileParser::DoValidate()
@@ -265,9 +265,9 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_RootScene )
 {
-	if ( !std::static_pointer_cast< AseFileContext >( p_pContext )->pScene )
+	if ( !std::static_pointer_cast< AseFileContext >( p_context )->pScene )
 	{
-		p_pParser->Ignore();
+		p_parser->Ignore();
 	}
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_SCENE )
@@ -279,11 +279,11 @@ END_ATTRIBUTE_PUSH( eASE_SECTION_MATERIALS )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_RootGeometry )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 
 	if ( ( !l_pContext->pScene && l_pContext->pMesh ) )
 	{
-		p_pParser->Ignore();
+		p_parser->Ignore();
 	}
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_GEOMETRY )
@@ -322,9 +322,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_SceneAmbientLight )
 {
 	Colour l_colour;
 	Point3f l_ptColour;
-	p_arrayParams[0]->Get( l_ptColour );
+	p_params[0]->Get( l_ptColour );
 	l_colour.from_rgb( l_ptColour );
-	std::static_pointer_cast< AseFileContext >( p_pContext )->pScene->SetAmbientLight( l_colour );
+	std::static_pointer_cast< AseFileContext >( p_context )->pScene->SetAmbientLight( l_colour );
 }
 END_ATTRIBUTE()
 
@@ -340,8 +340,8 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialsMat )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
-	p_arrayParams[0]->Get( l_pContext->uiUInt32 );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
+	p_params[0]->Get( l_pContext->uiUInt32 );
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_MATERIAL )
 
@@ -352,25 +352,25 @@ END_ATTRIBUTE_POP()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialSubmat )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->pPass = l_pContext->pMaterial->CreatePass();
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_SUBMAT )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialName )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
 	MaterialManager & l_manager = l_pEngine->GetMaterialManager();
 	MaterialSPtr l_pMaterial;
 	String l_strName;
-	p_arrayParams[0]->Get( l_strName );
+	p_params[0]->Get( l_strName );
 	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
 	l_pMaterial = l_manager.find( l_strName );
 
 	if ( !l_pMaterial )
 	{
-		l_pMaterial = std::make_shared< Material >( l_pEngine, l_strName );
+		l_pMaterial = std::make_shared< Material >( *l_pEngine, l_strName );
 		l_pMaterial->CreatePass();
 		l_manager.insert( l_strName, l_pMaterial );
 	}
@@ -389,10 +389,10 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialAmbient )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Colour l_colour;
 	Point3f l_ptColour;
-	p_arrayParams[0]->Get( l_ptColour );
+	p_params[0]->Get( l_ptColour );
 	l_colour.from_rgb( l_ptColour );
 	l_pContext->pPass->SetAmbient( l_colour );
 }
@@ -400,10 +400,10 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialDiffuse )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Colour l_colour;
 	Point3f l_ptColour;
-	p_arrayParams[0]->Get( l_ptColour );
+	p_params[0]->Get( l_ptColour );
 	l_colour.from_rgb( l_ptColour );
 	l_pContext->pPass->SetDiffuse( l_colour );
 }
@@ -411,10 +411,10 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialSpecular )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Colour l_colour;
 	Point3f l_ptColour;
-	p_arrayParams[0]->Get( l_ptColour );
+	p_params[0]->Get( l_ptColour );
 	l_colour.from_rgb( l_ptColour );
 	l_pContext->pPass->SetSpecular( l_colour );
 }
@@ -423,8 +423,8 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialShine )
 {
 	float l_fValue;
-	p_arrayParams[0]->Get( l_fValue );
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	p_params[0]->Get( l_fValue );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->pPass->SetShininess( l_fValue * 128.0f );
 }
 END_ATTRIBUTE()
@@ -476,7 +476,7 @@ END_ATTRIBUTE_PUSH( eASE_SECTION_MAPDIFFUSE )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialEnd )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->pMaterial.reset();
 	l_pContext->pPass.reset();
 }
@@ -489,7 +489,7 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_SubMaterialEnd )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->pPass = l_pContext->pMaterial->GetPass( 0 );
 }
 END_ATTRIBUTE_POP()
@@ -516,12 +516,12 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MapDiffuseBitmap )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
 	PassSPtr l_pPass = l_pContext->pPass;
-	Path l_filePath = p_pContext->pFile->GetFileFullPath().GetPath();
+	Path l_filePath = p_context->m_file->GetFileFullPath().GetPath();
 	String l_strName;
-	p_arrayParams[0]->Get( l_strName );
+	p_params[0]->Get( l_strName );
 	ImageSPtr l_pImage;
 	ImageCollection & l_imgCollection = l_pEngine->GetImageManager();
 	StaticTextureSPtr l_pTexture;
@@ -634,25 +634,25 @@ END_ATTRIBUTE_POP()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryNodeName )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
-	p_arrayParams[0]->Get( l_pContext->strName );
+	p_params[0]->Get( l_pContext->strName );
 	l_pContext->pMesh = l_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_pContext->strName );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryNodeTM )
 {
-	if ( !std::static_pointer_cast< AseFileContext >( p_pContext )->pScene )
+	if ( !std::static_pointer_cast< AseFileContext >( p_context )->pScene )
 	{
-		p_pParser->Ignore();
+		p_parser->Ignore();
 	}
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_GEONODE )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryMesh )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->pSubmesh = l_pContext->pMesh->CreateSubmesh();
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_GEOMESH )
@@ -675,8 +675,8 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryMaterialRef )
 {
 	uint32_t l_uiMaterialId;
-	p_arrayParams[0]->Get( l_uiMaterialId );
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	p_params[0]->Get( l_uiMaterialId );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	MaterialPtrUIntMap::const_iterator l_it = l_pContext->m_mapMaterials.find( l_uiMaterialId );
 
 	if ( l_it != l_pContext->m_mapMaterials.end() )
@@ -696,9 +696,9 @@ END_ATTRIBUTE_POP()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeName )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	String l_strValue;
-	p_arrayParams[0]->Get( l_strValue );
+	p_params[0]->Get( l_strValue );
 	l_pContext->pSceneNode = l_pContext->pScene->CreateSceneNode( l_strValue );
 }
 END_ATTRIBUTE()
@@ -741,17 +741,17 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodePos )
 {
 	Point3f l_position;
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
-	p_arrayParams[0]->Get( l_position );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
+	p_params[0]->Get( l_position );
 	l_pContext->pSceneNode->SetPosition( l_position );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeRotAxis )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Point3f l_value;
-	p_arrayParams[0]->Get( l_value );
+	p_params[0]->Get( l_value );
 	std::memcpy( l_pContext->fAxis, l_value.const_ptr(), sizeof( float ) * 3 );
 	l_pContext->bBool1 = true;
 
@@ -766,8 +766,8 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeRotAngle )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
-	p_arrayParams[0]->Get( l_pContext->fAngle );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
+	p_params[0]->Get( l_pContext->fAngle );
 	l_pContext->bBool2 = true;
 
 	if ( l_pContext->bBool1 )
@@ -782,8 +782,8 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeScale )
 {
 	Point3f l_scale;
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
-	p_arrayParams[0]->Get( l_scale );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
+	p_params[0]->Get( l_scale );
 	l_pContext->pSceneNode->SetScale( l_scale );
 }
 END_ATTRIBUTE()
@@ -825,7 +825,7 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoMeshFaceList )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_FACELIST )
 
@@ -884,9 +884,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_VertexListVertex )
 	uint32_t l_uiIndex;
 	float l_vertex[3];
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 	RetrieveVertex( l_uiIndex, l_vertex, l_strParams );
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->pSubmesh->AddPoint( l_vertex );
 }
 END_ATTRIBUTE()
@@ -900,9 +900,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_FaceListFace )
 {
 	int l_index[3];
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 	RetrieveFace( l_index, l_strParams );
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->pSubmesh->AddFace( l_index[0], l_index[1], l_index[2] );
 }
 END_ATTRIBUTE()
@@ -917,9 +917,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_TVertexListVertex )
 	uint32_t l_uiIndex;
 	float l_vertex[3];
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 	RetrieveVertex( l_uiIndex, l_vertex, l_strParams );
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	l_pContext->m_arrayTexCoords.push_back( std::make_shared< Point3r >( l_vertex[0], l_vertex[1], l_vertex[2] ) );
 }
 END_ATTRIBUTE()
@@ -931,11 +931,11 @@ END_ATTRIBUTE_POP()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_TFaceListFace )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	int l_index[4];
 	FaceSPtr l_pFace;
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 	Read4Ints( l_index, l_strParams );
 	l_pFace = l_pContext->pSubmesh->GetFace( l_index[0] );
 	Vertex::SetTexCoord( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 0 ) ), l_pContext->m_arrayTexCoords[ l_index[1] ]->at( 0 ), l_pContext->m_arrayTexCoords[ l_index[1] ]->at( 1 ) );
@@ -971,12 +971,12 @@ END_ATTRIBUTE_POP()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_NormalsListFaceNormal )
 {
-	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_pContext );
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	uint32_t l_uiIndex;
 	float l_vertex[3];
 	FaceSPtr l_pFace;
 	String l_strParams;
-	p_arrayParams[0]->Get( l_strParams );
+	p_params[0]->Get( l_strParams );
 	RetrieveVertex( l_uiIndex, l_vertex, l_strParams );
 	l_pFace = l_pContext->pSubmesh->GetFace( l_uiIndex );
 	Vertex::SetNormal( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 0 ) ), l_vertex[0], l_vertex[1], l_vertex[2] );

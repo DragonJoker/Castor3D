@@ -9,19 +9,19 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_pRenderSystem, DxColourRenderBufferSPtr p_pRenderBuffer )
+	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_pRenderBuffer )
 		: RenderBufferAttachment( p_pRenderBuffer )
 		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
 		, m_dwAttachment( 0xFFFFFFFF )
-		, m_renderSystem( p_pRenderSystem )
+		, m_renderSystem( p_renderSystem )
 	{
 	}
 
-	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_pRenderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer )
+	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer )
 		: RenderBufferAttachment( p_pRenderBuffer )
 		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
 		, m_dwAttachment( 0xFFFFFFFF )
-		, m_renderSystem( p_pRenderSystem )
+		, m_renderSystem( p_renderSystem )
 	{
 	}
 

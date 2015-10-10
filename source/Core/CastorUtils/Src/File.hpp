@@ -31,9 +31,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	undef CopyFile
 #endif
 
-#pragma warning( push)
-#pragma warning( disable : 4996)
-
 namespace Castor
 {
 	/**
@@ -421,7 +418,5 @@ namespace Castor
 		unsigned long long m_ullLength;
 	};
 }
-
-#pragma warning( pop)
 
 #endif

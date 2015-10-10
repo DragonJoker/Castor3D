@@ -37,7 +37,7 @@ namespace GlRender
 		/**
 		 * Constructor
 		 */
-		GlOverlayRenderer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
+		GlOverlayRenderer( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
 		/**
 		 * Destructor
 		 */

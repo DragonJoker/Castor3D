@@ -12,9 +12,9 @@ using namespace Castor;
 namespace GlRender
 {
 	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
-		:	GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
-		,	m_uiIndex( eGL_INVALID_INDEX )
-		,	m_gl( p_gl )
+		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
+		, m_uiIndex( eGL_INVALID_INDEX )
+		, m_gl( p_gl )
 	{
 	}
 

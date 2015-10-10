@@ -12,24 +12,8 @@ namespace Castor3D
 	{
 	}
 
-	ResizeWindowEvent::ResizeWindowEvent( ResizeWindowEvent const & p_copy )
-		:	FrameEvent( p_copy )
-		,	m_window( p_copy.m_window )
-	{
-	}
-
 	ResizeWindowEvent::~ResizeWindowEvent()
 	{
-	}
-
-	ResizeWindowEvent & ResizeWindowEvent::operator=( ResizeWindowEvent const & p_copy )
-	{
-		ResizeWindowEvent l_evt( p_copy );
-		RenderWindow & l_window = this->m_window;
-		this->m_window = l_evt.m_window;
-		l_evt.m_window = l_window;
-		std::swap( this->m_type, l_evt.m_type );
-		return *this;
 	}
 
 	bool ResizeWindowEvent::Apply()

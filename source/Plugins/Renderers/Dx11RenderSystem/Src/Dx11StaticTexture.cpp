@@ -12,10 +12,10 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxStaticTexture::DxStaticTexture( DxRenderSystem * p_pRenderSystem )
-		: StaticTexture( p_pRenderSystem )
+	DxStaticTexture::DxStaticTexture( DxRenderSystem & p_renderSystem )
+		: StaticTexture( p_renderSystem )
 		, m_pShaderResourceView( NULL )
-		, m_renderSystem( p_pRenderSystem )
+		, m_renderSystem( &p_renderSystem )
 	{
 	}
 

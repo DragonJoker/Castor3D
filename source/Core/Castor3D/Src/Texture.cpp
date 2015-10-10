@@ -6,14 +6,14 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureBase::TextureBase( eTEXTURE_TYPE p_type, RenderSystem * p_pRenderSystem )
-		: m_bInitialised( false )
+	TextureBase::TextureBase( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem )
+		: OwnedBy< RenderSystem >( p_renderSystem )
+		, m_bInitialised( false )
 		, m_type( p_type )
 		, m_eDimension( eTEXTURE_DIMENSION_2D )
 		, m_eMapMode( eTEXTURE_MAP_MODE_NONE )
 		, m_uiIndex( 0 )
-		, m_renderSystem( p_pRenderSystem )
-		, m_pSampler( p_pRenderSystem->GetEngine()->GetDefaultSampler() )
+		, m_pSampler( p_renderSystem.GetOwner()->GetDefaultSampler() )
 	{
 	}
 

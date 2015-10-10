@@ -23,13 +23,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IBlendState,					// This is the GUID of component throwing error
-					 cuT( "Initialise" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_STATE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IBlendState, cuT( "Initialise" ), ERROR_UNINITIALISED_STATE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -46,13 +40,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IBlendState,					// This is the GUID of component throwing error
-					 cuT( "Cleanup" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_STATE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IBlendState, cuT( "Cleanup" ), ERROR_UNINITIALISED_STATE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -69,13 +57,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IBlendState,					// This is the GUID of component throwing error
-					 cuT( "SetColourMask" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED_STATE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IBlendState, cuT( "SetColourMask" ), ERROR_UNINITIALISED_STATE.c_str(), 0, NULL );
 		}
 
 		return hr;

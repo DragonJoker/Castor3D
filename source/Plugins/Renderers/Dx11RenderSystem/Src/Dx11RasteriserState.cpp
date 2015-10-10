@@ -8,9 +8,9 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxRasteriserState::DxRasteriserState( DxRenderSystem * p_pRenderSystem )
-		: RasteriserState()
-		, m_renderSystem( p_pRenderSystem )
+	DxRasteriserState::DxRasteriserState( DxRenderSystem * p_renderSystem )
+		: RasteriserState( *p_renderSystem->GetOwner() )
+		, m_renderSystem( p_renderSystem )
 		, m_pRasteriserState( NULL )
 	{
 		CreateCurrent();

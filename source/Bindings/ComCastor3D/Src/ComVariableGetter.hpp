@@ -70,6 +70,39 @@ namespace CastorCom
 		return VariableGetter< Class, Value >( ( Class * )instance, function );
 	}
 
+	template< typename Value >
+	struct StaticGetter
+	{
+		typedef std::function< Value() > Function;
+		StaticGetter( Function function )
+			: m_function( function )
+		{
+		}
+		template< typename _Value >
+		HRESULT operator()( _Value * value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( value )
+			{
+				*value = parameter_cast< _Value >( m_function() );
+				hr = S_OK;
+			}
+
+			return hr;
+		}
+
+	private:
+		Function m_function;
+	};
+
+	template< typename Value >
+	StaticGetter< Value >
+	make_static_getter( Value ( *function )() )
+	{
+		return StaticGetter< Value >( function );
+	}
+
 	template< typename Class, typename Value >
 	struct VariableRefGetter
 	{
@@ -216,6 +249,152 @@ namespace CastorCom
 	make_getter( _Class * instance, Value const & ( Class::*function )( Index )const, _Index index )
 	{
 		return ParameteredRefVariableGetter< Class, Value, Index >( ( Class * )instance, function, Index( index ) );
+	}
+
+#define DECLARE_VARIABLE_VAL_GETTER( ctype, nmspc, type )\
+	template< typename Class >\
+	struct VariableGetter< Class, nmspc::type >\
+	{\
+		typedef nmspc::type( Class::*Function )()const;\
+		VariableGetter( Class * instance, Function function )\
+			: m_instance( instance )\
+			, m_function( function )\
+		{\
+		}\
+		HRESULT operator()( I##ctype ** value )\
+		{\
+			HRESULT hr = E_POINTER;\
+			if ( m_instance )\
+			{\
+				if ( value )\
+				{\
+					hr = C##ctype::CreateInstance( value );\
+					if ( hr == S_OK )\
+					{\
+						*static_cast< nmspc::type * >( static_cast< C##ctype * >( *value ) ) = ( m_instance->*m_function )();\
+					}\
+				}\
+			}\
+			else\
+			{\
+				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+			}\
+			return hr;\
+		}\
+	private:\
+		Class * m_instance;\
+		Function m_function;\
+	}
+
+#define DECLARE_VARIABLE_REF_GETTER( ctype, nmspc, type )\
+	template< typename Class >\
+	struct VariableRefGetter< Class, Castor::type >\
+	{\
+		typedef nmspc::type const & ( Class::*Function )( )const;\
+		VariableRefGetter( Class * instance, Function function )\
+			: m_instance( instance )\
+			, m_function( function )\
+		{\
+		}\
+		HRESULT operator()( I##ctype ** value )\
+		{\
+			HRESULT hr = E_POINTER;\
+			if ( m_instance )\
+			{\
+				if ( value )\
+				{\
+					hr = C##ctype::CreateInstance( value );\
+					if ( hr == S_OK )\
+					{\
+						*static_cast< nmspc::type * >( static_cast< C##ctype * >( *value ) ) = ( m_instance->*m_function )( );\
+					}\
+				}\
+			}\
+			else\
+			{\
+				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+			}\
+			return hr;\
+		}\
+	private:\
+		Class * m_instance;\
+		Function m_function;\
+	}
+
+#define DECLARE_VARIABLE_PTR_GETTER( ctype, nmspc, type )\
+	template< typename Class >\
+	struct VariableGetter< Class, nmspc::type##SPtr >\
+	{\
+		typedef nmspc::type##SPtr( Class::*Function )( )const;\
+		VariableGetter( Class * instance, Function function )\
+			: m_instance( instance )\
+			, m_function( function )\
+		{\
+		}\
+		HRESULT operator()( I##ctype ** value )\
+		{\
+			HRESULT hr = E_POINTER;\
+			if ( m_instance )\
+			{\
+				if ( value )\
+				{\
+					hr = C##ctype::CreateInstance( value );\
+					if ( hr == S_OK )\
+					{\
+						static_cast< C##ctype * >( *value )->SetInternal( ( m_instance->*m_function )( ) );\
+					}\
+				}\
+			}\
+			else\
+			{\
+				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+			}\
+			return hr;\
+		}\
+	private:\
+		Class * m_instance;\
+		Function m_function;\
+	}
+
+#define DECLARE_VARIABLE_REF_PARAM_GETTER( ctype, nmspc, type )\
+	template< typename Class >\
+	struct VariableParamGetter\
+	{\
+		typedef void ( Class::*Function )( nmspc::type & )const;\
+		VariableParamGetter( Class * instance, Function function )\
+			: m_instance( instance )\
+			, m_function( function )\
+		{\
+		}\
+		HRESULT operator()( I##ctype ** value )\
+		{\
+			HRESULT hr = E_POINTER;\
+			if ( m_instance )\
+			{\
+				if ( value )\
+				{\
+					hr = C##ctype::CreateInstance( value );\
+					if ( hr == S_OK )\
+					{\
+						( m_instance->*m_function )( *static_cast< C##ctype * >( *value ) );\
+					}\
+				}\
+			}\
+			else\
+			{\
+				hr = CComError::DispatchError( E_FAIL, IID_I##ctype, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );\
+			}\
+			return hr;\
+		}\
+	private:\
+		Class * m_instance;\
+		Function m_function;\
+	};\
+	template< typename Class, typename _Class >\
+	VariableParamGetter< Class >\
+	make_getter( _Class * instance, void ( Class::*function )( nmspc::type & )const )\
+	{\
+		return VariableParamGetter< Class >( ( Class * )instance, function );\
 	}
 }
 

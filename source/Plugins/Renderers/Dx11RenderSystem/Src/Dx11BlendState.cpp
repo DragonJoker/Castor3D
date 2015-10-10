@@ -8,9 +8,9 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxBlendState::DxBlendState( DxRenderSystem * p_pRenderSystem )
-		: BlendState()
-		, m_renderSystem( p_pRenderSystem )
+	DxBlendState::DxBlendState( DxRenderSystem * p_renderSystem )
+		: BlendState( *p_renderSystem->GetOwner() )
+		, m_renderSystem( p_renderSystem )
 		, m_pBlendState( NULL )
 	{
 		CreateCurrent();

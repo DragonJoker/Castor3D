@@ -38,12 +38,12 @@ namespace CastorCom
 
 				if ( !Castor::File::FileExists( l_pathImage ) )
 				{
-					l_pathImage = l_engine->GetDataPath() / l_path;
+					l_pathImage = l_engine->GetDataDirectory() / l_path;
 				}
 
 				if ( !Castor::File::FileExists( l_pathImage ) )
 				{
-					l_pathImage = l_engine->GetDataPath() / cuT( "Texture" ) / l_path;
+					l_pathImage = l_engine->GetDataDirectory() / cuT( "Texture" ) / l_path;
 				}
 
 				if ( Castor::File::FileExists( l_pathImage ) )

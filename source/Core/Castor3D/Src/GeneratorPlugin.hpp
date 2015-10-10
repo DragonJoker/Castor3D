@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de plugin de générateur procédural
 	*/
-	class C3D_API GeneratorPlugin
+	class GeneratorPlugin
 		: public PluginBase
 	{
 	private:
@@ -54,14 +54,14 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		GeneratorPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API GeneratorPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~GeneratorPlugin();
+		C3D_API virtual ~GeneratorPlugin();
 		/**
 		 *\~english
 		 *\brief		Creates the Importer
@@ -72,7 +72,7 @@ namespace Castor3D
 		 *\param[in]	p_pTexture	La texture modifiée par le générateur
 		 *\return		L'instance de ProceduralGenerator créée
 		 */
-		Subdivider * CreateGenerator( TextureUnit * p_pTexture );
+		C3D_API Subdivider * CreateGenerator( TextureUnit * p_pTexture );
 		/**
 		 *\~english
 		 *\brief		Destroys the given ProceduralGenerator
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\brief		Détruit le ProceduralGenerator donné
 		 *\param[in]	p_pGenerator	Le ProceduralGenerator
 		 */
-		void DestroyGenerator( Subdivider * p_pGenerator );
+		C3D_API void DestroyGenerator( Subdivider * p_pGenerator );
 
 	private:
 		PCreateGeneratorFunction m_pfnCreateGenerator;

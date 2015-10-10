@@ -21,10 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include <Colour.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -38,6 +35,7 @@ namespace Castor3D
 	\brief		Classe contenant le contexte de rendu
 	*/
 	class C3D_API Context
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -46,7 +44,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Context();
+		Context( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -121,6 +119,61 @@ namespace Castor3D
 		 */
 		void Clear( uint32_t p_uiTargets );
 		/**
+		*\~english
+		*\brief		Binds given system frame buffer to given mode
+		*\param[in]	p_eBuffer	The buffer
+		*\param[in]	p_eTarget	The target
+		*\~french
+		*\brief		Associe le tampon d'image système donné dans le mode donné
+		*\param[in]	p_eBuffer	Le tampon
+		*\param[in]	p_eTarget	La cible
+		*/
+		void Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget );
+		/**
+		*\~english
+		*\brief		Defines the alpha text function
+		*\param[in]	p_eFunc		The function
+		*\param[in]	p_byValue	The comparison value
+		*\~french
+		*\brief		Définit la fonction de test alpha
+		*\param[in]	p_eFunc		La fonction
+		*\param[in]	p_byValue	La valeur de comparaison
+		*/
+		void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
+		/**
+		*\~english
+		*\brief		Changes fullscreen status
+		*\param[in]	val	The new fullscreen status
+		*\~french
+		*\brief		Change le statut de plein écran
+		*\param[in]	val	Le nouveau statut de plein écran
+		*/
+		virtual void UpdateFullScreen( bool val ) = 0;
+		/**
+		*\~english
+		*\brief		Renders the given texture to the currently draw-bound frame buffer
+		*\param[in]	p_size			The render viewport size
+		*\param[in]	p_pTexture		The texture
+		*\param[in]	p_uiComponents	The render target components (bitwise combination of eBUFFER_COMPONENT)
+		*\~french
+		*\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin
+		*\param[in]	p_size			La taille du viewport de rendu
+		*\param[in]	p_pTexture		La texture
+		*\param[in]	p_uiComponents	Les composantes cibles du rendu (combinaison binaire de eBUFFER_COMPONENT)
+		*/
+		void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
+		/**
+		*\~english
+		*\brief		Retrieves the maximal supported size, given a wanted size
+		*\param[in]	p_size	The wanted size
+		*\return		The maximal supported size less than or equal to p_size
+		*\~french
+		*\brief		Récupère la taille maximale supportée, en fonction d'une taille données
+		*\param[in]	p_size	La taille voulue
+		*\return		La taille maximale supportée inférieure ou égale à p_size
+		*/
+		virtual Castor::Size GetMaxSize( Castor::Size const & p_size ) = 0;
+		/**
 		 *\~english
 		 *\brief		Tells the context is initialised
 		 *\~french
@@ -172,61 +225,6 @@ namespace Castor3D
 		{
 			return m_clearColour;
 		}
-		/**
-		 *\~english
-		 *\brief		Binds given system frame buffer to given mode
-		 *\param[in]	p_eBuffer	The buffer
-		 *\param[in]	p_eTarget	The target
-		 *\~french
-		 *\brief		Associe le tampon d'image système donné dans le mode donné
-		 *\param[in]	p_eBuffer	Le tampon
-		 *\param[in]	p_eTarget	La cible
-		 */
-		void Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget );
-		/**
-		 *\~english
-		 *\brief		Defines the alpha text function
-		 *\param[in]	p_eFunc		The function
-		 *\param[in]	p_byValue	The comparison value
-		 *\~french
-		 *\brief		Définit la fonction de test alpha
-		 *\param[in]	p_eFunc		La fonction
-		 *\param[in]	p_byValue	La valeur de comparaison
-		 */
-		void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
-		/**
-		 *\~english
-		 *\brief		Changes fullscreen status
-		 *\param[in]	val	The new fullscreen status
-		 *\~french
-		 *\brief		Change le statut de plein écran
-		 *\param[in]	val	Le nouveau statut de plein écran
-		 */
-		virtual void UpdateFullScreen( bool val ) = 0;
-		/**
-		 *\~english
-		 *\brief		Renders the given texture to the currently draw-bound frame buffer
-		 *\param[in]	p_size			The render viewport size
-		 *\param[in]	p_pTexture		The texture
-		 *\param[in]	p_uiComponents	The render target components (bitwise combination of eBUFFER_COMPONENT)
-		 *\~french
-		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin
-		 *\param[in]	p_size			La taille du viewport de rendu
-		 *\param[in]	p_pTexture		La texture
-		 *\param[in]	p_uiComponents	Les composantes cibles du rendu (combinaison binaire de eBUFFER_COMPONENT)
-		 */
-		void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
-		/**
-		 *\~english
-		 *\brief		Retrieves the maximal supported size, given a wanted size
-		 *\param[in]	p_size	The wanted size
-		 *\return		The maximal supported size less than or equal to p_size
-		 *\~french
-		 *\brief		Récupère la taille maximale supportée, en fonction d'une taille données
-		 *\param[in]	p_size	La taille voulue
-		 *\return		La taille maximale supportée inférieure ou égale à p_size
-		 */
-		virtual Castor::Size GetMaxSize( Castor::Size const & p_size ) = 0;
 
 	protected:
 		/**
@@ -321,8 +319,6 @@ namespace Castor3D
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
 		RenderWindow * m_pWindow;
-		//!\~english The render system	\~french Le render system
-		RenderSystem * m_renderSystem;
 		//!\~english Tells if the context is initialised	\~french Dit si le contexte est initialisé
 		bool m_bInitialised;
 		//!\~english Tells the context is currently set to use multisampling	\~french Dit si le contexte est actuellement configuré pour utiliser le multisampling
@@ -347,7 +343,5 @@ namespace Castor3D
 		Castor::Colour m_clearColour;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

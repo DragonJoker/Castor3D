@@ -18,9 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_RENDER_WINDOW_H__
 #define __COMC3D_COM_RENDER_WINDOW_H__
 
-#include "ComSize.hpp"
-#include "ComCamera.hpp"
-#include "ComScene.hpp"
+#include "ComRenderTarget.hpp"
 
 #include <RenderWindow.hpp>
 
@@ -45,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CRenderWindow();
+		CRenderWindow();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CRenderWindow();
+		virtual ~CRenderWindow();
 
 		inline Castor3D::RenderWindowSPtr GetInternal()const
 		{
@@ -64,12 +62,7 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
-		COM_PROPERTY( SamplesCount, unsigned int, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetSamplesCount ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetSamplesCount ) );
-		COM_PROPERTY( Camera, ICamera *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetCamera ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetCamera ) );
-		COM_PROPERTY( PrimitiveType, eTOPOLOGY, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetPrimitiveType ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetPrimitiveType ) );
-		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetViewportType ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetViewportType ) );
-		COM_PROPERTY( Scene, IScene *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetScene ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetScene ) );
-		COM_PROPERTY( PixelFormat, ePIXEL_FORMAT, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetPixelFormat ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetPixelFormat ) );
+		COM_PROPERTY( RenderTarget, IRenderTarget *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetRenderTarget ), make_putter( m_internal.get(), &Castor3D::RenderWindow::SetRenderTarget ) );
 
 		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetSize ) );
 		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetName ) );
@@ -77,95 +70,32 @@ namespace CastorCom
 		STDMETHOD( Initialise )( /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( Resize )( /* [in] */ ISize * size );
+		STDMETHOD( OnMouseMove )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseLButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseLButtonUp )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseMButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseMButtonUp )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseRButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos );
+
+	private:
+		Castor::real DoTransformX( int x );
+		Castor::real DoTransformY( int y );
+		int DoTransformX( Castor::real x );
+		int DoTransformY( Castor::real y );
+
 	private:
 		Castor3D::RenderWindowSPtr m_internal;
+		int m_oldX;
+		int m_oldY;
+		int m_newX;
+		int m_newY;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( RenderWindow ), CRenderWindow )
+	OBJECT_ENTRY_AUTO( __uuidof( RenderWindow ), CRenderWindow );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::RenderWindowSPtr >
-	{
-		typedef Castor3D::RenderWindowSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IRenderWindow ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CRenderWindow::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CRenderWindow * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IRenderWindow,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::RenderWindowSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::RenderWindowSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IRenderWindow * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CRenderWindow * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IRenderWindow,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( RenderWindow, Castor3D, RenderWindow );
+	DECLARE_VARIABLE_PTR_PUTTER( RenderWindow, Castor3D, RenderWindow );
 }
 
 #endif

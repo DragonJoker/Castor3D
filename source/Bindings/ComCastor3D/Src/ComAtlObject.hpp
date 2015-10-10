@@ -28,9 +28,9 @@ namespace CastorCom
 {
 	template< typename Class, const CLSID * ClsidClass, typename CObject, typename IObject, const CLSID * IidObject, UINT Resource >
 	class CComAtlObject
-		:	public ATL::CComObjectRootEx< ATL::CComSingleThreadModel >
-		,	public ATL::CComCoClass< CObject, ClsidClass >
-		,	public ATL::IDispatchImpl< IObject, IidObject, &LIBID_Castor3D, MAJOR_VERSION, MINOR_VERSION >
+		: public ATL::CComObjectRootEx< ATL::CComSingleThreadModel >
+		, public ATL::CComCoClass< CObject, ClsidClass >
+		, public ATL::IDispatchImpl< IObject, IidObject, &LIBID_Castor3D, MAJOR_VERSION, MINOR_VERSION >
 	{
 	public:
 		CComAtlObject()
@@ -74,9 +74,19 @@ namespace CastorCom
 		return Functor( val );\
 	}
 
+#define COM_EVT_PROPERTY_PUT( Name, Type, Functor )\
+	STDMETHODIMP CONCAT( put_, Name )( /* [in] */ Type val )\
+	{\
+		return Functor( val );\
+	}
+
 #define COM_PROPERTY( Name, Type, Getter, Putter )\
 	COM_PROPERTY_GET( Name, Type, Getter )\
 	COM_PROPERTY_PUT( Name, Type, Putter )
+
+#define COM_EVT_PROPERTY( Name, Type, Getter, Putter )\
+	COM_PROPERTY_GET( Name, Type, Getter )\
+	COM_EVT_PROPERTY_PUT( Name, Type, Putter )
 
 #define COM_PROPERTY_INDEXED_GET( Name, Index, Type, Functor )\
 	STDMETHODIMP CONCAT( get_, Name )( /* [in] */ Index index, /* [retval][out] */ Type * pVal )\
@@ -90,9 +100,19 @@ namespace CastorCom
 		return Functor( index, val );\
 	}
 
+#define COM_EVT_PROPERTY_INDEXED_PUT( Name, Index, Type, Functor )\
+	STDMETHODIMP CONCAT( put_, Name )( /* [in] */ Index index, /* [in] */ Type val )\
+	{\
+		return Functor( index, val );\
+	}
+
 #define COM_PROPERTY_INDEXED( Name, Index, Type, Getter, Putter )\
 	COM_PROPERTY_INDEXED_GET( Name, Index, Type, Getter )\
 	COM_PROPERTY_INDEXED_PUT( Name, Index, Type, Putter )
+
+#define COM_EVT_PROPERTY_INDEXED( Name, Index, Type, Getter, Putter )\
+	COM_PROPERTY_INDEXED_GET( Name, Index, Type, Getter )\
+	COM_EVT_PROPERTY_INDEXED_PUT( Name, Index, Type, Putter )
 }
 
 #endif

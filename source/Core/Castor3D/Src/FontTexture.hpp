@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -31,7 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Contient la polica et la texture associée.
 	*/
-	class C3D_API FontTexture
+	class FontTexture
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		DECLARE_MAP( char32_t, Castor::Position, GlyphPosition );
@@ -45,28 +48,28 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_font	La police.
 		 */
-		FontTexture( Engine * p_engine, Castor::FontSPtr p_font );
+		C3D_API FontTexture( Engine & p_engine, Castor::FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~FontTexture();
+		C3D_API virtual ~FontTexture();
 		/**
 		 *\~english
 		 *\brief		Initialises the texture.
 		 *\~french
 		 *\brief		Initialise la texture.
 		 */
-		virtual void Initialise();
+		C3D_API virtual void Initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes the teture.
 		 *\~french
 		 *\brief		Nettoie la texture.
 		 */
-		virtual void Cleanup();
+		C3D_API virtual void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -75,7 +78,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de la police.
 		 *\return		La valeur.
 		 */
-		Castor::String const & GetFontName()const;
+		C3D_API Castor::String const & GetFontName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted glyph position.
@@ -86,7 +89,7 @@ namespace Castor3D
 		 *\param[in]	p_char	L'indice de la glyphe.
 		 *\return		La position.
 		 */
-		Castor::Position const & GetGlyphPosition( char32_t p_char )const;
+		C3D_API Castor::Position const & GetGlyphPosition( char32_t p_char )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the font.
@@ -113,8 +116,6 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The engine.	\~french Le moteur.
-		Engine * m_engine;
 		//!\~english The font.	\~french La police.
 		Castor::FontWPtr m_font;
 		//!\~english The texture sampler.	\~french L'échantillonneur de la texture.

@@ -33,25 +33,26 @@ namespace Castor3D
 	\brief		Représentation d'un tampon de matrices
 	\remark		Contient les matrices d'une instance de submesh
 	*/
-	class C3D_API MatrixBuffer : public CpuBuffer< real >
+	class MatrixBuffer
+		: public CpuBuffer< real >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		Le moteur
 		 */
-		MatrixBuffer( RenderSystem * p_pRenderSystem );
+		C3D_API MatrixBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~MatrixBuffer();
+		C3D_API virtual ~MatrixBuffer();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -64,7 +65,7 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	Nombre d'instances
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind( uint32_t p_uiCount );
+		C3D_API virtual bool Bind( uint32_t p_uiCount );
 
 	private:
 		using CpuBuffer< real >::Bind;
@@ -74,7 +75,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 */
-		virtual bool DoCreateBuffer();
+		C3D_API virtual bool DoCreateBuffer();
 	};
 }
 

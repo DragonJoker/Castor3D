@@ -204,7 +204,7 @@ namespace Castor3D
 
 						if ( l_return )
 						{
-							SceneNodeSPtr l_node = p_obj.GetScene()->CreateSceneNode( l_name, p_obj.shared_from_this() );
+							SceneNodeSPtr l_node = p_obj.GetOwner()->CreateSceneNode( l_name, p_obj.shared_from_this() );
 							l_return = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
 						}
 					}
@@ -230,30 +230,18 @@ namespace Castor3D
 
 	uint64_t SceneNode::Count = 0;
 
-	SceneNode::SceneNode()
-		: m_bVisible( true )
-		, m_ptScale( 1.0, 1.0, 1.0 )
-		, m_ptPosition( 0.0, 0.0, 0.0 )
-		, m_bDisplayable( false )
-		, m_bMtxChanged( true )
-		, m_bDerivedMtxChanged( true )
+	SceneNode::SceneNode( Scene & p_scene )
+		: SceneNode( p_scene, String() )
 	{
-		if ( m_strName.empty() )
-		{
-			m_strName = cuT( "SceneNode_%d" );
-			m_strName += string::to_string( Count );
-		}
-
-		Count++;
 	}
 
-	SceneNode::SceneNode( SceneSPtr p_scene, String const & p_name )
-		: m_strName( p_name )
+	SceneNode::SceneNode( Scene & p_scene, String const & p_name )
+		: OwnedBy< Scene >( p_scene )
+		, m_strName( p_name )
 		, m_bVisible( true )
 		, m_ptScale( 1.0, 1.0, 1.0 )
 		, m_ptPosition( 0.0, 0.0, 0.0 )
 		, m_bDisplayable( p_name == cuT( "RootNode" ) )
-		, m_pScene( p_scene )
 		, m_bMtxChanged( true )
 	{
 		if ( m_strName.empty() )

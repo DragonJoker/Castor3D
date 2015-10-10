@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -128,7 +124,5 @@ namespace Castor3D
 		AnimationPtrStrMap m_mapAnimations;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

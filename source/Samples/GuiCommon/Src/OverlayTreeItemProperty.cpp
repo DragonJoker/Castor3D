@@ -44,7 +44,7 @@ namespace GuiCommon
 	}
 
 	OverlayTreeItemProperty::OverlayTreeItemProperty( bool p_editable, Castor3D::OverlayCategorySPtr p_overlay )
-		: TreeItemProperty( p_overlay->GetOverlay().GetEngine(), p_editable, ePROPERTY_DATA_TYPE_OVERLAY )
+		: TreeItemProperty( p_overlay->GetOverlay().GetOwner(), p_editable, ePROPERTY_DATA_TYPE_OVERLAY )
 		, m_overlay( p_overlay )
 	{
 		PROPERTY_CATEGORY_OVERLAY = _( "Overlay: " );
@@ -248,7 +248,7 @@ namespace GuiCommon
 			{
 				wxFont l_wxfont;
 				l_wxfont << l_property->GetValue();
-				FontSPtr l_font = make_Font( GetOverlay()->GetOverlay().GetEngine(), l_wxfont );
+				FontSPtr l_font = make_Font( GetOverlay()->GetOverlay().GetOwner(), l_wxfont );
 
 				if ( l_font )
 				{
@@ -268,7 +268,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_overlay]()
 		{
-			MaterialManager & l_manager = l_overlay->GetOverlay().GetEngine()->GetMaterialManager();
+			MaterialManager & l_manager = l_overlay->GetOverlay().GetOwner()->GetMaterialManager();
 			MaterialSPtr l_material = l_manager.find( p_name );
 
 			if ( l_material )
@@ -305,7 +305,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_name, l_overlay]()
 		{
-			MaterialManager & l_manager = l_overlay->GetOverlay().GetEngine()->GetMaterialManager();
+			MaterialManager & l_manager = l_overlay->GetOverlay().GetOwner()->GetMaterialManager();
 			MaterialSPtr l_material = l_manager.find( p_name );
 
 			if ( l_material )

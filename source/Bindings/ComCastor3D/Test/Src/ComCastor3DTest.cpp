@@ -17,17 +17,17 @@ int _tmain( int argc, TCHAR * argv[] )
 	{
 		try
 		{
-			Castor3D::ILoggerPtr logger = Castor3D::ILoggerPtr( __uuidof( Castor3D::logger ) );
+			Castor3D::ILoggerPtr logger = Castor3D::ILoggerPtr( __uuidof( Castor3D::Logger ) );
 			logger->Initialise( Castor3D::eLOG_TYPE_DEBUG );
 			logger->SetFileName( _T( "ComCastor3DTest.log" ), Castor3D::eLOG_TYPE_COUNT );
 
 			try
 			{
-				logger->LogMessage( _T( "ComCastor3DTest - Start" ) );
+				logger->LogInfo( _T( "ComCastor3DTest - Start" ) );
 				Castor3D::IEnginePtr engine = Castor3D::IEnginePtr( __uuidof( Castor3D::engine ) );
-				engine->Initialise( logger );
-				engine->Cleanup();
-				logger->LogMessage( _T( "ComCastor3DTest - Finish" ) );
+				engine->Create();
+				engine->Destroy();
+				logger->LogInfo( _T( "ComCastor3DTest - Finish" ) );
 			}
 			catch ( _com_error & exc )
 			{

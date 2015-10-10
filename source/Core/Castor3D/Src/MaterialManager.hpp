@@ -21,9 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -36,8 +34,9 @@ namespace Castor3D
 	\~french
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
-	class C3D_API MaterialManager
+	class MaterialManager
 		: public MaterialCollection
+		, public Castor::OwnedBy< Engine >
 	{
 	private:
 		DECLARE_VECTOR(	MaterialWPtr, MaterialWPtr );
@@ -49,34 +48,34 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MaterialManager( Engine * p_engine );
+		C3D_API MaterialManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~MaterialManager();
+		C3D_API virtual ~MaterialManager();
 		/**
 		 *\~english
 		 *\brief		Materials initialisation function
 		 *\remark		Intialises the default material, a renderer must have been loaded
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Sets all the materials to be cleaned up
 		 *\~french
 		 *\brief		Met tous les matériaux à nettoyer
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Deletes the default material, flush the collection
 		 *\~french
 		 *\brief		Supprime le matériau par défaut, vide la collection
 		 */
-		void DeleteAll();
+		C3D_API void DeleteAll();
 		/**
 		 *\~english
 		 *\brief		Puts all the materials names in the given array
@@ -85,7 +84,7 @@ namespace Castor3D
 		 *\brief		Remplit la liste des noms de tous les matériaux
 		 *\param[out]	p_names	La liste de noms
 		 */
-		void GetNames( Castor::StringArray & p_names );
+		C3D_API void GetNames( Castor::StringArray & p_names );
 		/**
 		 *\~english
 		 *\brief		Writes materials in a text file
@@ -96,7 +95,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Write( Castor::TextFile & p_file )const;
+		C3D_API virtual bool Write( Castor::TextFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads materials from a text file
@@ -107,7 +106,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Read( Castor::TextFile & p_file );
+		C3D_API virtual bool Read( Castor::TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Writes materials in a binary file
@@ -118,7 +117,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Save( Castor::BinaryFile & p_file )const;
+		C3D_API virtual bool Save( Castor::BinaryFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads materials from a binary file
@@ -129,7 +128,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Load( Castor::BinaryFile & p_file );
+		C3D_API virtual bool Load( Castor::BinaryFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material
@@ -144,11 +143,7 @@ namespace Castor3D
 	private:
 		//!\~english The default material	\~french Le matériau par défaut
 		MaterialSPtr m_defaultMaterial;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_engine;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

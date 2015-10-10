@@ -21,8 +21,8 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-RenderSystem::RenderSystem( Engine * p_engine, eRENDERER_TYPE p_eRendererType )
-	: m_engine( p_engine )
+RenderSystem::RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType )
+	: OwnedBy< Engine >( p_engine )
 	, m_useMultiTexturing( false )
 	, m_bInitialised( false )
 	, m_useShaders( false )

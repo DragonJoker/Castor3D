@@ -23,10 +23,49 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComVector3D.hpp"
 #include "ComQuaternion.hpp"
 
+#include <Scene.hpp>
 #include <SceneNode.hpp>
 
 namespace CastorCom
 {
+	template< typename Value >
+	struct VariablePutterEvt< Castor3D::SceneNode, Value >
+	{
+		typedef void ( Castor3D::SceneNode::*Function )( Value );
+		VariablePutterEvt( Castor3D::SceneNode * instance, Function function )
+			: m_instance( instance )
+			, m_function( function )
+		{
+		}
+		template< typename _Value >
+		HRESULT operator()( _Value value )
+		{
+			HRESULT hr = E_POINTER;
+
+			if ( m_instance )
+			{
+				if ( value )
+				{
+					m_instance->GetOwner()->GetOwner()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value]
+					{
+						( m_instance->*m_function )( parameter_cast< Value >( value ) );
+					} ) );
+					hr = S_OK;
+				}
+			}
+			else
+			{
+				hr = CComError::DispatchError( E_FAIL, IID_ISceneNode, cuT( "NULL instance" ), ERROR_UNINITIALISED_INSTANCE.c_str(), 0, NULL );
+			}
+
+			return hr;
+		}
+
+	private:
+		Castor3D::SceneNode * m_instance;
+		Function m_function;
+	};
+
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0
@@ -46,14 +85,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CSceneNode();
+		CSceneNode();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CSceneNode();
+		virtual ~CSceneNode();
 
 		inline Castor3D::SceneNodeSPtr GetInternal()const
 		{
@@ -65,9 +104,9 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Position, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetPosition ), make_putter( m_internal.get(), &Castor3D::SceneNode::SetPosition ) );
-		COM_PROPERTY( Orientation, IQuaternion *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetOrientation ), make_putter( m_internal.get(), &Castor3D::SceneNode::SetOrientation ) );
-		COM_PROPERTY( Scaling, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetScale ), make_putter( m_internal.get(), &Castor3D::SceneNode::SetScale ) );
+		COM_EVT_PROPERTY( Position, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetPosition ), make_putter_evt( m_internal.get(), &Castor3D::SceneNode::SetPosition ) );
+		COM_EVT_PROPERTY( Orientation, IQuaternion *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetOrientation ), make_putter_evt( m_internal.get(), &Castor3D::SceneNode::SetOrientation ) );
+		COM_EVT_PROPERTY( Scaling, IVector3D *, make_getter( m_internal.get(), &Castor3D::SceneNode::GetScale ), make_putter_evt( m_internal.get(), &Castor3D::SceneNode::SetScale ) );
 
 		STDMETHOD( AttachObject )( /* [in] */ IMovableObject * val );
 		STDMETHOD( DetachObject )( /* [in] */ IMovableObject * val );
@@ -83,91 +122,10 @@ namespace CastorCom
 		Castor3D::SceneNodeSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( SceneNode ), CSceneNode )
+	OBJECT_ENTRY_AUTO( __uuidof( SceneNode ), CSceneNode );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::SceneNodeSPtr >
-	{
-		typedef Castor3D::SceneNodeSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ISceneNode ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CSceneNode::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CSceneNode * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ISceneNode,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::SceneNodeSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::SceneNodeSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ISceneNode * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CSceneNode * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ISceneNode,						// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( SceneNode, Castor3D, SceneNode );
+	DECLARE_VARIABLE_PTR_PUTTER( SceneNode, Castor3D, SceneNode );
 }
 
 #endif

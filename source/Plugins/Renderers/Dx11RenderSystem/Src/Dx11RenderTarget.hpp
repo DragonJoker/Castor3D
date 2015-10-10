@@ -28,7 +28,7 @@ namespace Dx11Render
 		:	public Castor3D::RenderTarget
 	{
 	public:
-		DxRenderTarget( DxRenderSystem * p_pRenderSystem, Castor3D::eTARGET_TYPE p_type );
+		DxRenderTarget( DxRenderSystem * p_renderSystem, Castor3D::eTARGET_TYPE p_type );
 		virtual ~DxRenderTarget();
 
 		virtual void Clear();

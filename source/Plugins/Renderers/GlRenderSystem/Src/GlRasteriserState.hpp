@@ -29,7 +29,7 @@ namespace GlRender
 		, public Castor::NonCopyable
 	{
 	public:
-		GlRasteriserState( OpenGl & p_gl );
+		GlRasteriserState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
 		virtual ~GlRasteriserState();
 		/**
 		 *\copydoc Castor3D::RasteriserState::Initialise
@@ -57,6 +57,7 @@ namespace GlRender
 
 	private:
 		OpenGl & m_gl;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

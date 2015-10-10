@@ -23,14 +23,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace CastorCom
 {
 	class CComCastor3DModule
-		:    public ATL::CAtlDllModuleT< CComCastor3DModule >
+		: public ATL::CAtlDllModuleT< CComCastor3DModule >
 	{
 	public :
 		DECLARE_LIBID( LIBID_Castor3D )
 
 		static LPCOLESTR GetAppId() throw()
 		{
-			return m_appId;
+			USES_CONVERSION;
+			return T2W( m_appId );
 		}
 
 		static TCHAR * GetAppIdT() throw()

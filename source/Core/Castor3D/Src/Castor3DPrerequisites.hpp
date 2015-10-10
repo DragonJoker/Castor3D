@@ -213,7 +213,7 @@ namespace Castor3D
 	class Face;
 	class Graph;
 	class Mesh;
-	class MeshCategory;
+	class MeshGenerator;
 	class Submesh;
 	class Cone;
 	class Cylinder;
@@ -234,7 +234,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Face );
 	DECLARE_SMART_PTR( Graph );
 	DECLARE_SMART_PTR( Mesh );
-	DECLARE_SMART_PTR( MeshCategory );
+	DECLARE_SMART_PTR( MeshGenerator );
 	DECLARE_SMART_PTR( Submesh );
 	DECLARE_SMART_PTR( Cone );
 	DECLARE_SMART_PTR( Cylinder );
@@ -2012,6 +2012,21 @@ namespace Castor3D
 	typedef std::map< Castor::String, RenderWindowSPtr > WindowPtrStrMap;
 
 	//@}
+}
+
+namespace Castor
+{
+	template<>
+	class C3D_API OwnedBy< Castor3D::Engine >
+	{
+	public:
+		OwnedBy( Castor3D::Engine & p_owner );
+		virtual ~OwnedBy();
+		Castor3D::Engine * GetOwner()const;
+
+	private:
+		Castor3D::Engine & m_owner;
+	};
 }
 
 #if defined( _MSC_VER )

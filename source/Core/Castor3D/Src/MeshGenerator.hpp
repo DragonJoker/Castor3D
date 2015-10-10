@@ -15,14 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MESH_CATEGORY_H___
-#define ___C3D_MESH_CATEGORY_H___
+#ifndef ___C3D_MESH_GENERATOR_H___
+#define ___C3D_MESH_GENERATOR_H___
 
 #include "Castor3DPrerequisites.hpp"
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
 
 namespace Castor3D
 {
@@ -36,7 +32,7 @@ namespace Castor3D
 	\brief		La catégorie de maillage est utilisée afin de créer les sommets du maillage, c'est créé via la MeshFactory
 	\remark		La categorie de type Custom ne génère pas de points
 	*/
-	class MeshCategory
+	class MeshGenerator
 	{
 	public:
 		/**
@@ -47,14 +43,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_eMeshType	Le type de maillage
 		 */
-		MeshCategory( eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
+		MeshGenerator( eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~MeshCategory();
+		virtual ~MeshGenerator();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory
@@ -63,34 +59,29 @@ namespace Castor3D
 		 *\brief		Fonction de création, utilisée par la Factory
 		 *\return		Un cylindre
 		 */
-		static MeshCategorySPtr Create();
+		static MeshGeneratorSPtr Create();
 		/**
 		 *\~english
-		 *\brief		Generates the mesh (vertices and faces)
+		 *\brief		Generates the mesh.
+		 *\param[in]	p_mesh			The mesh.
+		 *\param[in]	p_faces			The faces counts.
+		 *\param[in]	p_dimensions	The mesh dimensions.
 		 *\~french
-		 *\brief		Génère le maillage
+		 *\brief		Génère le maillage.
+		 *\param[in]	p_mesh			Le maillage.
+		 *\param[in]	p_faces			Les nombres de faces.
+		 *\param[in]	p_dimensions	Les dimensions du maillage.
 		 */
-		virtual void Generate();
+		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
-		 *\brief		Initialises the mesh
-		 *\remark		Calls Generate
-		 *\param[in]	p_arrayFaces		The faces counts
-		 *\param[in]	p_arrayDimensions	The mesh dimensions
+		 *\brief		Generates normals and tangents.
+		 *\param[in]	p_mesh	The mesh.
 		 *\~french
-		 *\brief		Initialise le maillage
-		 *\remark		Appelle Generate
-		 *\param[in]	p_arrayFaces		Les nombres de faces
-		 *\param[in]	p_arrayDimensions	Les dimensions du maillage
+		 *\brief		Génère les normales et les tangentes.
+		 *\param[in]	p_mesh	Le maillage.
 		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
-		/**
-		 *\~english
-		 *\brief		Generates normals and tangents
-		 *\~french
-		 *\brief		Génère les normales et les tangentes
-		 */
-		virtual void ComputeNormals( bool p_bReverted = false );
+		virtual void ComputeNormals( Mesh & p_mesh, bool p_bReverted = false );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh type
@@ -103,39 +94,11 @@ namespace Castor3D
 		{
 			return m_eMeshType;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le maillage
-		 *\return		La valeur
-		 */
-		inline Mesh * GetMesh()const
-		{
-			return m_pMesh;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the mesh
-		 *\param[in]	The new value
-		 *\~french
-		 *\brief		Définit le maillage
-		 *\param[in]	La nouvelle valeur
-		 */
-		inline void SetMesh( Mesh * val )
-		{
-			m_pMesh = val;
-		}
 
 	private:
 		//!\~english The mesh type	\~french Le type de mesh
 		eMESH_TYPE m_eMeshType;
-		//!\~english The mesh	\~french Le mesh
-		Mesh * m_pMesh;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

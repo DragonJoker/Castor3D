@@ -32,7 +32,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlRenderSystem::GlRenderSystem( Engine * p_engine )
+	GlRenderSystem::GlRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, eRENDERER_TYPE_OPENGL )
 		, m_iOpenGlMajor( 0 )
 		, m_iOpenGlMinor( 0 )
@@ -146,7 +146,7 @@ namespace GlRender
 
 	ContextSPtr GlRenderSystem::CreateContext()
 	{
-		return std::make_shared< GlContext >( m_gl );
+		return std::make_shared< GlContext >( *this, m_gl );
 	}
 
 	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
@@ -156,27 +156,27 @@ namespace GlRender
 
 	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()
 	{
-		return std::make_shared< GlDepthStencilState >( m_gl );
+		return std::make_shared< GlDepthStencilState >( this, m_gl );
 	}
 
 	RasteriserStateSPtr GlRenderSystem::CreateRasteriserState()
 	{
-		return std::make_shared< GlRasteriserState >( m_gl );
+		return std::make_shared< GlRasteriserState >( this, m_gl );
 	}
 
 	BlendStateSPtr GlRenderSystem::CreateBlendState()
 	{
-		return std::make_shared< GlBlendState >( m_gl );
+		return std::make_shared< GlBlendState >( this, m_gl );
 	}
 
 	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )
 	{
-		return std::make_shared< GlFrameVariableBuffer >( m_gl, p_name, this );
+		return std::make_shared< GlFrameVariableBuffer >( m_gl, p_name, *this );
 	}
 
 	BillboardListSPtr GlRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_scene )
 	{
-		return std::make_shared< GlBillboardList >( p_scene, this, m_gl );
+		return std::make_shared< GlBillboardList >( p_scene, *this, m_gl );
 	}
 
 	SamplerSPtr GlRenderSystem::CreateSampler( Castor::String const & p_name )
@@ -196,17 +196,17 @@ namespace GlRender
 
 	ShaderProgramBaseSPtr GlRenderSystem::CreateGlslShaderProgram()
 	{
-		return std::make_shared< GlShaderProgram >( m_gl, this );
+		return std::make_shared< GlShaderProgram >( m_gl, *this );
 	}
 
 	ShaderProgramBaseSPtr GlRenderSystem::CreateShaderProgram()
 	{
-		return std::make_shared< GlShaderProgram >( m_gl, this );
+		return std::make_shared< GlShaderProgram >( m_gl, *this );
 	}
 
 	OverlayRendererSPtr GlRenderSystem::CreateOverlayRenderer()
 	{
-		return std::make_shared< GlOverlayRenderer >( m_gl, this );
+		return std::make_shared< GlOverlayRenderer >( m_gl, *this );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_pBuffer )
@@ -215,11 +215,11 @@ namespace GlRender
 
 		if ( m_iOpenGlMajor < 3 && !UseVertexBufferObjects() )
 		{
-			l_pReturn = std::make_shared< GlIndexArray >( m_gl, p_pBuffer );
+			l_pReturn = std::make_shared< GlIndexArray >( *this, m_gl, p_pBuffer );
 		}
 		else
 		{
-			l_pReturn = std::make_shared< GlIndexBufferObject >( m_gl, p_pBuffer );
+			l_pReturn = std::make_shared< GlIndexBufferObject >( *this, m_gl, p_pBuffer );
 		}
 
 		return l_pReturn;
@@ -233,16 +233,16 @@ namespace GlRender
 		{
 			if ( UseVertexBufferObjects() )
 			{
-				l_pReturn = std::make_shared< GlVertexBufferObject >( m_gl, p_declaration, p_pBuffer );
+				l_pReturn = std::make_shared< GlVertexBufferObject >( *this, m_gl, p_declaration, p_pBuffer );
 			}
 			else
 			{
-				l_pReturn = std::make_shared< GlVertexArray >( m_gl, p_declaration, p_pBuffer );
+				l_pReturn = std::make_shared< GlVertexArray >( *this, m_gl, p_declaration, p_pBuffer );
 			}
 		}
 		else
 		{
-			l_pReturn = std::make_shared< Gl3VertexBufferObject >( m_gl, p_declaration, p_pBuffer );
+			l_pReturn = std::make_shared< Gl3VertexBufferObject >( *this, m_gl, p_declaration, p_pBuffer );
 		}
 
 		return l_pReturn;
@@ -250,7 +250,7 @@ namespace GlRender
 
 	std::shared_ptr< Castor3D::GpuBuffer< real > > GlRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer )
 	{
-		return std::make_shared< GlMatrixBufferObject >( m_gl, p_pBuffer );
+		return std::make_shared< GlMatrixBufferObject >( *this, m_gl, p_pBuffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer )
@@ -259,7 +259,7 @@ namespace GlRender
 
 		if ( m_iOpenGlMajor >= 3 )
 		{
-			l_pReturn = std::make_shared< GlTextureBufferObject >( m_gl, p_pBuffer );
+			l_pReturn = std::make_shared< GlTextureBufferObject >( *this, m_gl, p_pBuffer );
 		}
 
 		return l_pReturn;
@@ -267,12 +267,12 @@ namespace GlRender
 
 	StaticTextureSPtr GlRenderSystem::CreateStaticTexture()
 	{
-		return std::make_shared< GlStaticTexture >( m_gl, this );
+		return std::make_shared< GlStaticTexture >( m_gl, *this );
 	}
 
 	DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture()
 	{
-		return std::make_shared< GlDynamicTexture >( m_gl, this );
+		return std::make_shared< GlDynamicTexture >( m_gl, *this );
 	}
 
 	void GlRenderSystem::DoInitialise()

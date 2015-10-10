@@ -18,11 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SPHERE_H___
 #define ___C3D_SPHERE_H___
 
-#include "MeshCategory.hpp"
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -37,7 +33,7 @@ namespace Castor3D
 	\remark		Cette sphère a des faces rectangulaires. Elle est construite à partir d'un rayon et d'un nombre de subdivisions
 	*/
 	class C3D_API Sphere
-		:	public MeshCategory
+		:	public MeshGenerator
 	{
 	public:
 		/**
@@ -55,32 +51,13 @@ namespace Castor3D
 		 */
 		~Sphere();
 		/**
-		 *\~english
-		 *\brief		Generates the mesh points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du mesh
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		virtual void Generate();
+		static MeshGeneratorSPtr Create();
 		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		A sphere
-		 *\~french
-		 *\brief		Fonction de création utilisée par Factory
-		 *\return		Une sphère
+		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		static MeshCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces
@@ -118,7 +95,5 @@ namespace Castor3D
 		return o << "Sphere(" << c.m_nbFaces << "," << c.m_radius << ")";
 	}
 }
-
-#pragma warning( pop )
 
 #endif

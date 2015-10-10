@@ -18,7 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_LIGHT_H__
 #define __COMC3D_COM_LIGHT_H__
 
-#include "ComLightCategory.hpp"
+#include "ComDirectionalLight.hpp"
+#include "ComPointLight.hpp"
+#include "ComSpotLight.hpp"
 
 #include <Light.hpp>
 
@@ -43,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CLight();
+		CLight();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CLight();
+		virtual ~CLight();
 
 		inline Castor3D::LightSPtr GetInternal()const
 		{
@@ -66,7 +68,9 @@ namespace CastorCom
 		COM_PROPERTY_GET( Type, eMOVABLE_TYPE, make_getter( m_internal.get(), &Castor3D::MovableObject::GetType ) );
 		COM_PROPERTY_GET( Scene, IScene *, make_getter( m_internal.get(), &Castor3D::MovableObject::GetScene ) );
 		COM_PROPERTY_GET( LightType, eLIGHT_TYPE, make_getter( m_internal.get(), &Castor3D::Light::GetLightType ) );
-		COM_PROPERTY_GET( Category, ILightCategory *, make_getter( m_internal.get(), &Castor3D::Light::GetLightCategory ) );
+		COM_PROPERTY_GET( DirectionalLight, IDirectionalLight *, make_getter( m_internal.get(), &Castor3D::Light::GetDirectionalLight ) );
+		COM_PROPERTY_GET( PointLight, IPointLight *, make_getter( m_internal.get(), &Castor3D::Light::GetPointLight ) );
+		COM_PROPERTY_GET( SpotLight, ISpotLight *, make_getter( m_internal.get(), &Castor3D::Light::GetSpotLight ) );
 
 		STDMETHOD( AttachTo )( /* [in] */ ISceneNode * val );
 		STDMETHOD( Detach )();
@@ -74,91 +78,10 @@ namespace CastorCom
 		Castor3D::LightSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Light ), CLight )
+	OBJECT_ENTRY_AUTO( __uuidof( Light ), CLight );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::LightSPtr >
-	{
-		typedef Castor3D::LightSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ILight ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CLight::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CLight * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ILight,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::LightSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::LightSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ILight * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CLight * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ILight,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( Light, Castor3D, Light );
+	DECLARE_VARIABLE_PTR_PUTTER( Light, Castor3D, Light );
 }
 
 #endif

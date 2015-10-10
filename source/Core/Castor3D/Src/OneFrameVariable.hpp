@@ -20,11 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "FrameVariable.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-#pragma warning( disable:4290 )
-
 namespace Castor3D
 {
 	/*!
@@ -125,7 +120,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence sur la valeur
 		 */
-		inline T & GetValue()throw( std::out_of_range );
+		inline T & GetValue();
 		/**
 		 *\~english
 		 *\brief		Retrieves the value
@@ -134,7 +129,7 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence constante sur la valeur
 		 */
-		inline T const & GetValue()const throw( std::out_of_range );
+		inline T const & GetValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -147,7 +142,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline T & GetValue( uint32_t p_index )throw( std::out_of_range );
+		inline T & GetValue( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
@@ -160,7 +155,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline T const & GetValue( uint32_t p_index )const throw( std::out_of_range );
+		inline T const & GetValue( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
@@ -305,7 +300,5 @@ namespace Castor3D
 }
 
 #include "OneFrameVariable.inl"
-
-#pragma warning( pop )
 
 #endif

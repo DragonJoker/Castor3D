@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define __COMC3D_COM_CAMERA_H__
 
 #include "ComAtlObject.hpp"
+#include "ComScene.hpp"
 
 #include <Camera.hpp>
 
@@ -43,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CCamera();
+		CCamera();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CCamera();
+		virtual ~CCamera();
 
 		inline Castor3D::CameraSPtr GetInternal()const
 		{
@@ -79,91 +80,10 @@ namespace CastorCom
 		Castor3D::CameraSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Camera ), CCamera )
+	OBJECT_ENTRY_AUTO( __uuidof( Camera ), CCamera );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::CameraSPtr >
-	{
-		typedef Castor3D::CameraSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ICamera ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CCamera::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CCamera * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ICamera,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::CameraSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::CameraSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ICamera * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CCamera * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_ICamera,							// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( Camera, Castor3D, Camera );
+	DECLARE_VARIABLE_PTR_PUTTER( Camera, Castor3D, Camera );
 }
 
 #endif

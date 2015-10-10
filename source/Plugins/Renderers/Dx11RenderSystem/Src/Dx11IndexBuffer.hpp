@@ -23,10 +23,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxIndexBuffer
-		:	public DxBufferObject< uint32_t, ID3D11Buffer >
+		: public DxBufferObject< uint32_t, ID3D11Buffer >
 	{
 	public:
-		DxIndexBuffer( HardwareBufferPtr p_pBuffer );
+		DxIndexBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer );
 		virtual ~DxIndexBuffer();
 
 		virtual bool Create();

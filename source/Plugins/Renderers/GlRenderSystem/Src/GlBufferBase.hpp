@@ -33,7 +33,7 @@ namespace GlRender
 	*/
 	template< typename T >
 	class GlBufferBase
-		:	public Castor::NonCopyable
+		: public Castor::NonCopyable
 	{
 	public:
 		GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget );

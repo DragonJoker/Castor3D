@@ -125,18 +125,15 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Mesh::Mesh( Engine * p_engine, eMESH_TYPE p_eMeshType, String const & p_name )
-		:	Resource< Mesh >( p_name )
-		,	m_modified( false )
-		,	m_factory( p_engine->GetMeshFactory() )
-		,	m_engine( p_engine )
+	Mesh::Mesh( Engine & p_engine, String const & p_name )
+		: Resource< Mesh >( p_name )
+		, OwnedBy< Engine >( p_engine )
+		, m_modified( false )
 	{
-		m_pMeshCategory = m_factory.Create( p_eMeshType );
-		m_pMeshCategory->SetMesh( this );
 	}
 
-	Mesh::Mesh( Engine * p_engine, eMESH_TYPE p_eMeshType )
-		:	Mesh( p_engine, p_eMeshType, cuEmptyString )
+	Mesh::Mesh( Engine & p_engine )
+		: Mesh( p_engine, cuEmptyString )
 	{
 	}
 
@@ -147,13 +144,13 @@ namespace Castor3D
 
 	void Mesh::Cleanup()
 	{
-		//	vector::deleteAll( m_submeshes);
+		//vector::deleteAll( m_submeshes);
 		m_submeshes.clear();
 	}
 
-	void Mesh::Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions )
+	void Mesh::Initialise( MeshGenerator & p_generator, UIntArray const & p_faces, RealArray const & p_dimensions )
 	{
-		m_pMeshCategory->Initialise( p_arrayFaces, p_arrayDimensions );
+		p_generator.Generate( *this, p_faces, p_dimensions );
 	}
 
 	void Mesh::ComputeContainers()
@@ -250,7 +247,7 @@ namespace Castor3D
 
 	SubmeshSPtr Mesh::CreateSubmesh()
 	{
-		SubmeshSPtr l_submesh = std::make_shared< Submesh >( this, m_engine, GetSubmeshCount() );
+		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetOwner(), this, GetSubmeshCount() );
 		m_submeshes.push_back( l_submesh );
 		return l_submesh;
 	}
@@ -269,7 +266,10 @@ namespace Castor3D
 
 	void Mesh::ComputeNormals( bool p_bReverted )
 	{
-		m_pMeshCategory->ComputeNormals( p_bReverted );
+		for ( auto && l_submesh : m_submeshes )
+		{
+			l_submesh->ComputeNormals( p_bReverted );
+		}
 	}
 
 	void Mesh::GenerateBuffers()
@@ -282,7 +282,7 @@ namespace Castor3D
 
 	MeshSPtr Mesh::Clone( String const & p_name )
 	{
-		MeshSPtr l_clone = std::make_shared< Mesh >( m_engine, GetMeshType(), p_name );
+		MeshSPtr l_clone = std::make_shared< Mesh >( *GetOwner(), p_name );
 
 		for ( auto && l_submesh : m_submeshes )
 		{

@@ -41,7 +41,7 @@ if( DIRECT3D11_FOUND AND DIRECT3D9_FOUND )
 
 	add_target(
 		${PROJECT_NAME}
-		plugin
+		api_plugin
 		"Castor3D"
 		"${CastorMinLibraries};${D3dLibraries}"
 		"Dx11RenderSystemPch.hpp"

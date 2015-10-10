@@ -29,7 +29,7 @@ namespace GlRender
 		,	public Castor::NonCopyable
 	{
 	public:
-		GlStaticTexture( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
+		GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
 		~GlStaticTexture();
 
 		virtual bool Create();

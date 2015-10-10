@@ -18,7 +18,7 @@ if ( MSVC )
 		"ComCastor3DTestPch.cpp"
 	)
 
-	set_property( TARGET ComCastor3DTest PROPERTY FOLDER "Bindings/Test" )
+	set_property( TARGET ComCastor3DTest PROPERTY FOLDER "Bindings/ComCastor3D" )
 	add_target_astyle( ComCastor3DTest ".hpp;.inl;.cpp" )
 	set( Build "yes (version ${CMCT_VERSION_MAJOR}.${CMCT_VERSION_MINOR}.${CMCT_VERSION_BUILD})" PARENT_SCOPE )
 endif ()

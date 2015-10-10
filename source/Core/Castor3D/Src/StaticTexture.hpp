@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Texture.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -43,12 +39,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 */
-		StaticTexture( RenderSystem * p_pRenderSystem );
+		StaticTexture( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -109,7 +105,5 @@ namespace Castor3D
 		using TextureBase::SetImage;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

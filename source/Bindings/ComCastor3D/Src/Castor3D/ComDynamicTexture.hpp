@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define __COMC3D_COM_DYNAMIC_TEXTURE_H__
 
 #include "ComTextureBase.hpp"
+#include "ComRenderTarget.hpp"
 
 #include <DynamicTexture.hpp>
 
@@ -43,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CDynamicTexture();
+		CDynamicTexture();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CDynamicTexture();
+		virtual ~CDynamicTexture();
 
 		inline Castor3D::DynamicTextureSPtr GetInternal()const
 		{
@@ -62,11 +63,11 @@ namespace CastorCom
 			m_internal = state;
 		}
 
+		COM_PROPERTY( RenderTarget, IRenderTarget *, make_getter( m_internal.get(), &Castor3D::DynamicTexture::GetRenderTarget ), make_putter( m_internal.get(), &Castor3D::DynamicTexture::SetRenderTarget ) );
 		COM_PROPERTY( Dimension, eTEXTURE_DIMENSION, make_getter( m_internal.get(), &Castor3D::TextureBase::GetDimension ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetDimension ) );
 		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &Castor3D::TextureBase::GetSampler ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetSampler ) );
 		COM_PROPERTY( MappingMode, eTEXTURE_MAP_MODE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetMappingMode ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetMappingMode ) );
 		COM_PROPERTY( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::TextureBase::GetBuffer ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetImage ) );
-		COM_PROPERTY( RenderTarget, boolean, make_getter( m_internal.get(), &Castor3D::DynamicTexture::IsRenderTarget ), make_putter( m_internal.get(), &Castor3D::DynamicTexture::SetRenderTarget ) );
 		COM_PROPERTY( SamplesCount, unsigned int, make_getter( m_internal.get(), &Castor3D::DynamicTexture::GetSamplesCount ), make_putter( m_internal.get(), &Castor3D::DynamicTexture::SetSamplesCount ) );
 
 		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetType ) );
@@ -82,91 +83,10 @@ namespace CastorCom
 		Castor3D::DynamicTextureSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( DynamicTexture ), CDynamicTexture )
+	OBJECT_ENTRY_AUTO( __uuidof( DynamicTexture ), CDynamicTexture );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::DynamicTextureSPtr >
-	{
-		typedef Castor3D::DynamicTextureSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IDynamicTexture ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CDynamicTexture::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CDynamicTexture * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IDynamicTexture,					// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::DynamicTextureSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::DynamicTextureSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IDynamicTexture * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CDynamicTexture * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IDynamicTexture,					// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( DynamicTexture, Castor3D, DynamicTexture );
+	DECLARE_VARIABLE_PTR_PUTTER( DynamicTexture, Castor3D, DynamicTexture );
 }
 
 #endif

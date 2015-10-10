@@ -19,11 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_BLEND_STATE_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include <Colour.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <Colour.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -36,50 +34,53 @@ namespace Castor3D
 	\~french
 	\brief		Classe regroupant les configurations de blend
 	*/
-	class C3D_API BlendState
+	class BlendState
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
 		 */
-		BlendState();
+		C3D_API BlendState( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BlendState();
+		C3D_API virtual ~BlendState();
 		/**
 		 *\~english
 		 *\brief		Initialises the states
 		 *\~french
-		 *\brief		Initialise les Ã¯Â¿Â½tats
+		 *\brief		Initialise les états
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the states
 		 *\~french
-		 *\brief		Nettoie les Ã¯Â¿Â½tats
+		 *\brief		Nettoie les états
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the states
 		 *\~french
-		 *\brief		Applique les Ã¯Â¿Â½tats
+		 *\brief		Applique les états
 		 */
-		virtual bool Apply() = 0;
+		C3D_API virtual bool Apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha to coverage activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le statut d'activation de l'alpha to coverage
+		 *\brief		Récupère le statut d'activation de l'alpha to coverage
 		 *\return		La valeur
 		 */
 		inline bool IsAlphaToCoverageEnabled()const
@@ -91,7 +92,7 @@ namespace Castor3D
 		 *\brief		Sets the alpha to coverage activation status
 		 *\param[in]	p_bEnable	The new value
 		 *\~french
-		 *\brief		DÃ©finit le statut d'activation de l'alpha to coverage
+		 *\brief		Définit le statut d'activation de l'alpha to coverage
 		 *\param[in]	p_bEnable	La nouvelle valeur
 		 */
 		inline void EnableAlphaToCoverage( bool p_bEnable )
@@ -104,7 +105,7 @@ namespace Castor3D
 		 *\brief		Retrieves the independant blending activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le statut d'activation du blending indÃ¯Â¿Â½pendant
+		 *\brief		Récupère le statut d'activation du blending indépendant
 		 *\return		La valeur
 		 */
 		inline bool IsIndependantBlendEnabled()const
@@ -116,7 +117,7 @@ namespace Castor3D
 		 *\brief		Sets the independant blending activation status
 		 *\param[in]	p_bEnable	The new value
 		 *\~french
-		 *\brief		DÃ©finit le statut d'activation du blending indÃ¯Â¿Â½pendant
+		 *\brief		Définit le statut d'activation du blending indépendant
 		 *\param[in]	p_bEnable	La nouvelle valeur
 		 */
 		inline void EnableIndependantBlend( bool p_bEnable )
@@ -129,7 +130,7 @@ namespace Castor3D
 		 *\brief		Retrieves the blend factors
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re les facteurs de blend
+		 *\brief		Récupère les facteurs de blend
 		 *\return		La valeur
 		 */
 		inline const Castor::Colour & GetBlendFactors()const
@@ -141,7 +142,7 @@ namespace Castor3D
 		 *\brief		Sets the blend factors
 		 *\param[in]	p_clFactors	The new value
 		 *\~french
-		 *\brief		DÃ©finit les facteurs de blend
+		 *\brief		Définit les facteurs de blend
 		 *\param[in]	p_clFactors	La nouvelle valeur
 		 */
 		inline void SetBlendFactors( const Castor::Colour & p_clFactors )
@@ -154,7 +155,7 @@ namespace Castor3D
 		 *\brief		Retrieves the sample coverage mask
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le masque de couverture de samples
+		 *\brief		Récupère le masque de couverture de samples
 		 *\return		La valeur
 		 */
 		inline uint32_t GetSampleCoverageMask()const
@@ -166,7 +167,7 @@ namespace Castor3D
 		 *\brief		Sets the sample coverage mask
 		 *\param[in]	p_uiMask	The new value
 		 *\~french
-		 *\brief		DÃ©finit le masque de couverture de samples
+		 *\brief		Définit le masque de couverture de samples
 		 *\param[in]	p_uiMask	La nouvelle valeur
 		 */
 		inline void SetSampleCoverageMask( uint32_t p_uiMask )
@@ -179,7 +180,7 @@ namespace Castor3D
 		 *\brief		Retrieves the blending activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le statut d'activation du blending
+		 *\brief		Récupère le statut d'activation du blending
 		 *\return		La valeur
 		 */
 		inline bool IsBlendEnabled( uint8_t p_index = 0 )const
@@ -191,7 +192,7 @@ namespace Castor3D
 		 *\brief		Sets the blending activation status
 		 *\param[in]	p_bEnable	The new value
 		 *\~french
-		 *\brief		DÃ©finit le statut d'activation du blending
+		 *\brief		Définit le statut d'activation du blending
 		 *\param[in]	p_bEnable	La nouvelle valeur
 		 */
 		inline void EnableBlend( bool p_bEnable, uint8_t p_index = 0 )
@@ -204,7 +205,7 @@ namespace Castor3D
 		 *\brief		Retrieves the RGB source blending factor
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur source RGB
+		 *\brief		Récupère le facteur source RGB
 		 *\return		La valeur
 		 */
 		inline eBLEND GetRgbSrcBlend( uint8_t p_index = 0 )const
@@ -216,7 +217,7 @@ namespace Castor3D
 		 *\brief		Sets the RGB source blending factor
 		 *\param[in]	p_eValue	The new value
 		 *\~french
-		 *\brief		DÃ©finit le facteur source RGB
+		 *\brief		Définit le facteur source RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
 		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
@@ -229,7 +230,7 @@ namespace Castor3D
 		 *\brief		Retrieves the RGB destination blending factor
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur destination RGB
+		 *\brief		Récupère le facteur destination RGB
 		 *\return		La valeur
 		 */
 		inline eBLEND GetRgbDstBlend( uint8_t p_index = 0 )const
@@ -241,7 +242,7 @@ namespace Castor3D
 		 *\brief		Sets the RGB destination blending factor
 		 *\param[in]	p_eValue	The new value
 		 *\~french
-		 *\brief		DÃ©finit le facteur destination RGB
+		 *\brief		Définit le facteur destination RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
 		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
@@ -254,7 +255,7 @@ namespace Castor3D
 		 *\brief		Retrieves the RGB blending operation
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re l'opÃ©ration de blend RGB
+		 *\brief		Récupère l'opération de blend RGB
 		 *\return		La valeur
 		 */
 		inline eBLEND_OP GetRgbBlendOp( uint8_t p_index = 0 )const
@@ -266,7 +267,7 @@ namespace Castor3D
 		 *\brief		Sets the RGB blending operation
 		 *\param[in]	p_eValue	The new value
 		 *\~french
-		 *\brief		DÃ©finit l'opÃ©ration de blend RGB
+		 *\brief		Définit l'opération de blend RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
 		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
@@ -279,7 +280,7 @@ namespace Castor3D
 		 *\brief		Retrieves the alpha source blending factor
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur source alpha
+		 *\brief		Récupère le facteur source alpha
 		 *\return		La valeur
 		 */
 		inline eBLEND GetAlphaSrcBlend( uint8_t p_index = 0 )const
@@ -291,7 +292,7 @@ namespace Castor3D
 		 *\brief		Sets the alpha source blending factor
 		 *\param[in]	p_eValue	The new value
 		 *\~french
-		 *\brief		DÃ©finit le facteur source alpha
+		 *\brief		Définit le facteur source alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
 		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
@@ -304,7 +305,7 @@ namespace Castor3D
 		 *\brief		Retrieves the alpha destination blending factor
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur destination alpha
+		 *\brief		Récupère le facteur destination alpha
 		 *\return		La valeur
 		 */
 		inline eBLEND GetAlphaDstBlend( uint8_t p_index = 0 )const
@@ -316,7 +317,7 @@ namespace Castor3D
 		 *\brief		Sets the alpha destination blending factor
 		 *\param[in]	p_eValue	The new value
 		 *\~french
-		 *\brief		DÃ©finit le facteur destination alpha
+		 *\brief		Définit le facteur destination alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
 		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
@@ -329,7 +330,7 @@ namespace Castor3D
 		 *\brief		Retrieves the RGB blending operation
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re l'opÃ©ration de blend RGB
+		 *\brief		Récupère l'opération de blend RGB
 		 *\return		La valeur
 		 */
 		inline eBLEND_OP GetAlphaBlendOp( uint8_t p_index = 0 )const
@@ -341,7 +342,7 @@ namespace Castor3D
 		 *\brief		Sets the RGB blending operation
 		 *\param[in]	p_eValue	The new value
 		 *\~french
-		 *\brief		DÃ©finit l'opÃ©ration de blend RGB
+		 *\brief		Définit l'opération de blend RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
 		 */
 		inline void SetAlphaBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
@@ -354,7 +355,7 @@ namespace Castor3D
 		 *\brief		Retrieves the render target write mask
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le masque d'Ã©criture de la cible de rendu
+		 *\brief		Récupère le masque d'écriture de la cible de rendu
 		 *\return		La valeur
 		 */
 		inline uint8_t GetWriteMask( uint8_t p_index = 0 )const
@@ -366,7 +367,7 @@ namespace Castor3D
 		 *\brief		Sets the render target write mask
 		 *\param[in]	p_byMask	The new value
 		 *\~french
-		 *\brief		DÃ©finit le masque d'Ã©criture de la cible de rendu
+		 *\brief		Définit le masque d'écriture de la cible de rendu
 		 *\param[in]	p_byMask	La nouvelle valeur
 		 */
 		inline void SetWriteMask( uint8_t p_byMask, uint8_t p_index = 0 )
@@ -445,14 +446,14 @@ namespace Castor3D
 	protected:
 		struct C3D_API stRT_BLEND_STATE
 		{
-			bool		m_bEnableBlend;
-			eBLEND		m_eRgbSrcBlend;
-			eBLEND		m_eRgbDstBlend;
-			eBLEND_OP	m_eRgbBlendOp;
-			eBLEND		m_eAlphaSrcBlend;
-			eBLEND		m_eAlphaDstBlend;
-			eBLEND_OP	m_eAlphaBlendOp;
-			uint8_t		m_uiWriteMask;
+			bool m_bEnableBlend;
+			eBLEND m_eRgbSrcBlend;
+			eBLEND m_eRgbDstBlend;
+			eBLEND_OP m_eRgbBlendOp;
+			eBLEND m_eAlphaSrcBlend;
+			eBLEND m_eAlphaDstBlend;
+			eBLEND_OP m_eAlphaBlendOp;
+			uint8_t m_uiWriteMask;
 		};
 		/**
 		 *\~english
@@ -460,34 +461,34 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée l'état utilisé pour stocker l'état courant
 		 */
-		void CreateCurrent();
+		C3D_API void CreateCurrent();
 		/**
 		 *\~english
 		 *\brief		Destroys the state used to save the current state
 		 *\~french
 		 *\brief		Détruit l'état utilisé pour stocker l'état courant
 		 */
-		void DestroyCurrent();
+		C3D_API void DestroyCurrent();
 		/**
 		 *\~english
 		 *\brief		Creates the state used to save the current state
 		 *\~french
 		 *\brief		Crée l'état utilisé pour stocker l'état courant
 		 */
-		virtual BlendStateSPtr DoCreateCurrent() = 0;
+		C3D_API virtual BlendStateSPtr DoCreateCurrent() = 0;
 
 	protected:
-		//!\~english Tells if the blend state has changed	\~french Dit que l'Ã©tat a changÃ©
+		//!\~english Tells if the blend state has changed	\~french Dit que l'état a changé
 		bool m_bChanged;
-		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activÃ©
+		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activé
 		bool m_bEnableAlphaToCoverage;
-		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les Ã©tats indÃ©pendants de mÃ©lange sont activÃ©s
+		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les états indépendants de mélange sont activés
 		bool m_bIndependantBlend;
-		//!\~english Le blend colour	\~french La couleur de mÃ©lange
+		//!\~english Le blend colour	\~french La couleur de mélange
 		Castor::Colour m_blendFactors;
-		//!\~english The sample mask	\~french Le masque d'Ã©chantillonage
+		//!\~english The sample mask	\~french Le masque d'échantillonage
 		uint32_t m_uiSampleMask;
-		//!\~english the blend states	\~french Les Ã©tats de mÃ©lange
+		//!\~english the blend states	\~french Les états de mélange
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
 		//!\~english	Colours writing mask	\~french	Masque d'écriture des couleurs
 		eWRITING_MASK m_eColourMask[4];
@@ -497,7 +498,5 @@ namespace Castor3D
 		BlendStateSPtr m_currentState;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

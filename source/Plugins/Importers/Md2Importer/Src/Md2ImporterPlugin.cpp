@@ -31,7 +31,7 @@ C3D_Md2_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Md2_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
-	p_pPlugin->AttachImporter( std::make_shared< Md2Importer >( p_pEngine ) );
+	p_pPlugin->AttachImporter( std::make_shared< Md2Importer >( *p_pEngine ) );
 }
 
 C3D_Md2_API void Destroy( ImporterPlugin * p_pPlugin )

@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CFont();
+		CFont();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CFont();
+		virtual ~CFont();
 
 		inline void SetInternal( Castor::FontSPtr p_font )
 		{
@@ -75,94 +75,10 @@ namespace CastorCom
 		std::map< WORD, IGlyph * > m_glyphs;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	__declspec( selectany ) ATL::_ATL_OBJMAP_CACHE __objCache__CFont = { NULL, 0 };
-	const ATL::_ATL_OBJMAP_ENTRY_EX __objMap_CFont = {&CLSID_Font, CFont::UpdateRegistry, CFont::_ClassFactoryCreatorClass::CreateInstance, CFont::_CreatorClass::CreateInstance, &__objCache__CFont, CFont::GetObjectDescription, CFont::GetCategoryMap, CFont::ObjectMain };
-	extern "C" __declspec( allocate( "ATL$__m" ) ) __declspec( selectany ) const ATL::_ATL_OBJMAP_ENTRY_EX * const __pobjMap_CFont = &__objMap_CFont;
-	__pragma( comment( linker, "/include:___pobjMap_CFont" ) );
+	OBJECT_ENTRY_AUTO( __uuidof( Font ), CFont );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor::FontSPtr >
-	{
-		typedef Castor::FontSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ICastorFont ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CFont::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CFont * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IFont,								// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor::FontSPtr >
-	{
-		typedef void ( Class::*Function )( Castor::FontSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( ICastorFont * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CFont * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IFont,								// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( Font, Castor, Font );
+	DECLARE_VARIABLE_PTR_PUTTER( Font, Castor, Font );
 }
 
 #endif

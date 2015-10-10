@@ -1,12 +1,5 @@
 #include "CastorUtilsPch.hpp"
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#	pragma warning( disable:4996 )
-#endif
-
 #if defined _WIN32
 #	include <Windows.h>
 #	include <tchar.h>
@@ -521,7 +514,3 @@ namespace Castor
 		m_console->Print( toLog, newLine );
 	}
 }
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif

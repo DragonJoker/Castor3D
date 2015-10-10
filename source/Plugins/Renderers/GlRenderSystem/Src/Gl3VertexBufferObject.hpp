@@ -23,10 +23,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class Gl3VertexBufferObject
-		:	public GlVertexBufferObject
+		: public GlVertexBufferObject
 	{
 	public:
-		Gl3VertexBufferObject( OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
+		Gl3VertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
 		virtual ~Gl3VertexBufferObject();
 
 		virtual bool Bind();

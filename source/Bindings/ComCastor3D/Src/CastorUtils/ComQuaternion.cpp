@@ -1,5 +1,5 @@
 #include "ComQuaternion.hpp"
-#include "ComMatrix.hpp"
+
 #include "ComVector3D.hpp"
 #include "ComAngle.hpp"
 
@@ -150,7 +150,7 @@ namespace CastorCom
 
 		if ( pVal )
 		{
-			*pVal = Castor::Quaternion::GetMagnitude();
+			*pVal = float( Castor::Quaternion::GetMagnitude() );
 		}
 
 		return hr;
@@ -162,7 +162,7 @@ namespace CastorCom
 		return S_OK;
 	}
 
-	STDMETHODIMP CQuaternion::Slerp( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [in] */ boolean shortest, /* [out, retval] */ IQuaternion ** pQuat )
+	STDMETHODIMP CQuaternion::Slerp( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -172,7 +172,24 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::Slerp( *static_cast< CQuaternion * >( quat ), percent, shortest == TRUE );
+				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::Slerp( *static_cast< CQuaternion * >( quat ), percent );
+			}
+		}
+
+		return hr;
+	}
+
+	STDMETHODIMP CQuaternion::Mix( /* [in] */ IQuaternion * quat, /* [in] */ float percent, /* [out, retval] */ IQuaternion ** pQuat )
+	{
+		HRESULT hr = E_POINTER;
+
+		if ( quat && pQuat )
+		{
+			hr = CQuaternion::CreateInstance( pQuat );
+
+			if ( hr == S_OK )
+			{
+				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::Mix( *static_cast< CQuaternion * >( quat ), percent );
 			}
 		}
 

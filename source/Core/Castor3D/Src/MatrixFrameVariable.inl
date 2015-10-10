@@ -452,19 +452,19 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline Castor::Matrix< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::GetValue()throw( std::out_of_range )
+	inline Castor::Matrix< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::GetValue()
 	{
 		return MatrixFrameVariable< T, Rows, Columns >::GetValue( 0 );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline Castor::Matrix< T, Rows, Columns > const & MatrixFrameVariable< T, Rows, Columns >::GetValue()const throw( std::out_of_range )
+	inline Castor::Matrix< T, Rows, Columns > const & MatrixFrameVariable< T, Rows, Columns >::GetValue()const
 	{
 		return MatrixFrameVariable< T, Rows, Columns >::GetValue( 0 );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline Castor::Matrix< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )throw( std::out_of_range )
+	inline Castor::Matrix< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )
 	{
 		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{
@@ -477,7 +477,7 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline Castor::Matrix< T, Rows, Columns > const & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )const throw( std::out_of_range )
+	inline Castor::Matrix< T, Rows, Columns > const & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )const
 	{
 		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{

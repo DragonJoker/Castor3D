@@ -28,7 +28,7 @@ namespace GlRender
 		: public Castor3D::RenderWindow
 	{
 	public:
-		GlRenderWindow( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem );
+		GlRenderWindow( OpenGl & p_gl, GlRenderSystem * p_renderSystem );
 		virtual ~GlRenderWindow();
 
 	private:

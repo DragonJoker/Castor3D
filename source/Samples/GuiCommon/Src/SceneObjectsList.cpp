@@ -158,7 +158,7 @@ namespace GuiCommon
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
 
-			for ( auto && l_it = p_scene->GetEngine()->RenderWindowsBegin(); l_it != p_scene->GetEngine()->RenderWindowsEnd(); ++l_it )
+			for ( auto && l_it = p_scene->GetOwner()->RenderWindowsBegin(); l_it != p_scene->GetOwner()->RenderWindowsEnd(); ++l_it )
 			{
 				DoAddRenderWindow( l_scene, l_it->second );
 			}

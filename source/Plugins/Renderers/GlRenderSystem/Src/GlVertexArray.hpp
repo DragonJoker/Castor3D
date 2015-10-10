@@ -25,11 +25,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlVertexArray
-		:	public Castor3D::GpuBuffer< uint8_t >
-		,	public Castor::NonCopyable
+		: public Castor3D::GpuBuffer< uint8_t >
+		, public Castor::NonCopyable
 	{
 	public:
-		GlVertexArray( OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
+		GlVertexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
 		virtual ~GlVertexArray();
 
 		virtual bool Create();

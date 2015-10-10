@@ -20,25 +20,20 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "WindowHandle.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 //*************************************************************************************************
 //
 // INCLUDE THIS FILE ONLY WHERE YOU NEED IT (for instance not in precompiled header file)
 //
 //*************************************************************************************************
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
 #if defined( _WIN32 )
+#	if defined( _MSC_VER ) && _MSC_VER< 1900
+#		pragma warning( push )
+#		pragma warning( disable:4311 )
+#		pragma warning( disable:4312 )
+#	endif
 #	include <windows.h>
-#	if defined( _MSC_VER )
+#	if defined( _MSC_VER ) && _MSC_VER< 1900
 #		pragma warning( pop )
 #	endif
 #elif defined( __linux__ )
@@ -46,9 +41,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #else
 #	error "Yet unsupported OS"
 #endif
+
 namespace Castor3D
 {
+
 #if defined( _WIN32 )
+
 	class IMswWindowHandle : public IWindowHandle
 	{
 	private:
@@ -56,17 +54,17 @@ namespace Castor3D
 
 	public:
 		IMswWindowHandle( HWND p_hWnd )
-			:	m_hWnd( p_hWnd )
+			: m_hWnd( p_hWnd )
 		{
 		}
 
 		IMswWindowHandle( IMswWindowHandle const & p_handle )
-			:	m_hWnd( p_handle.m_hWnd )
+			: m_hWnd( p_handle.m_hWnd )
 		{
 		}
 
 		IMswWindowHandle( IMswWindowHandle && p_handle )
-			:	m_hWnd( std::move( p_handle.m_hWnd ) )
+			: m_hWnd( std::move( p_handle.m_hWnd ) )
 		{
 			p_handle.m_hWnd = NULL;
 		}
@@ -102,7 +100,9 @@ namespace Castor3D
 			return m_hWnd;
 		}
 	};
+
 #elif defined( __linux__ )
+
 	class IXWindowHandle : public IWindowHandle
 	{
 	private:
@@ -111,20 +111,20 @@ namespace Castor3D
 
 	public:
 		IXWindowHandle( GLXDrawable p_drawable, Display * p_pDisplay )
-			:	m_drawable( p_drawable )
-			,	m_pDisplay( p_pDisplay )
+			: m_drawable( p_drawable )
+			, m_pDisplay( p_pDisplay )
 		{
 		}
 
 		IXWindowHandle( IXWindowHandle const & p_handle )
-			:	m_drawable( p_handle.m_drawable )
-			,	m_pDisplay( p_handle.m_pDisplay )
+			: m_drawable( p_handle.m_drawable )
+			, m_pDisplay( p_handle.m_pDisplay )
 		{
 		}
 
 		IXWindowHandle( IXWindowHandle && p_handle )
-			:	m_drawable( std::move( p_handle.m_drawable ) )
-			,	m_pDisplay( std::move( p_handle.m_pDisplay ) )
+			: m_drawable( std::move( p_handle.m_drawable ) )
+			, m_pDisplay( std::move( p_handle.m_pDisplay ) )
 		{
 			p_handle.m_drawable = None;
 			p_handle.m_pDisplay = NULL;
@@ -132,8 +132,8 @@ namespace Castor3D
 
 		IXWindowHandle & operator =( IXWindowHandle const & p_handle )
 		{
-			m_drawable	= p_handle.m_drawable;
-			m_pDisplay	= p_handle.m_pDisplay;
+			m_drawable = p_handle.m_drawable;
+			m_pDisplay = p_handle.m_pDisplay;
 			return * this;
 		}
 
@@ -141,8 +141,8 @@ namespace Castor3D
 		{
 			if ( this != & p_handle )
 			{
-				m_drawable	= std::move( p_handle.m_drawable );
-				m_pDisplay	= std::move( p_handle.m_pDisplay );
+				m_drawable = std::move( p_handle.m_drawable );
+				m_pDisplay = std::move( p_handle.m_pDisplay );
 				p_handle.m_drawable = None;
 				p_handle.m_pDisplay = NULL;
 			}
@@ -159,20 +159,18 @@ namespace Castor3D
 			return m_drawable != None && m_pDisplay != NULL;
 		}
 
-		inline GLXDrawable 	GetDrawable()const
+		inline GLXDrawable GetDrawable()const
 		{
 			return m_drawable;
 		}
-		inline Display  *	GetDisplay()const
+		inline Display * GetDisplay()const
 		{
 			return m_pDisplay;
 		}
 	};
-#endif
-}
 
-#if defined( _MSC_VER )
-#	pragma warning( pop )
 #endif
+
+}
 
 #endif

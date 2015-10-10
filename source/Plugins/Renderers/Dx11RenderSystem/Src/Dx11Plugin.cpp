@@ -28,12 +28,12 @@ C3D_Dx11_API String GetName()
 
 C3D_Dx11_API RenderSystem * CreateRenderSystem( Engine * p_engine )
 {
-	return new DxRenderSystem( p_engine );
+	return new DxRenderSystem( *p_engine );
 }
 
-C3D_Dx11_API void DestroyRenderSystem( RenderSystem * p_pRenderSystem )
+C3D_Dx11_API void DestroyRenderSystem( RenderSystem * p_renderSystem )
 {
-	delete p_pRenderSystem;
+	delete p_renderSystem;
 }
 
 C3D_Dx11_API void OnLoad( Castor3D::Engine * p_engine )

@@ -48,20 +48,21 @@ static const String GetTypeFunctionABIName = cuT( "_Z7GetTypev" );
 
 namespace Castor3D
 {
-	CASTOR_DECLARE_UNIQUE_INSTANCE( Engine );
+	static const char * C3D_NO_RENDERSYSTEM = "No RenderSystem loaded, call Castor3D::Engine::LoadRenderer before Castor3D::Engine::Initialise";
+	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
 	Engine::Engine()
 		: m_bEnded( false )
 		, m_uiWantedFPS( 100 )
 		, m_dFrameTime( 0.01 )
 		, m_renderSystem( NULL )
-		, m_pThreadMainLoop( nullptr )
+		, m_mainLoopThread( nullptr )
 		, m_bStarted( false )
 		, m_bCreateContext( false )
 		, m_bCreated( false )
 		, m_bCleaned( true )
-		, m_materialManager( this )
-		, m_overlayManager( this )
+		, m_materialManager( *this )
+		, m_overlayManager( *this )
 		, m_pMainWindow( NULL )
 		, m_bDefaultInitialised( false )
 		, m_debugOverlays( std::make_unique< DebugOverlays >() )
@@ -150,10 +151,16 @@ namespace Castor3D
 
 	void Engine::Initialise( uint32_t p_wantedFPS, bool p_bThreaded )
 	{
-		if ( m_pThreadMainLoop )
+		if ( !m_renderSystem )
 		{
 			CASTOR_ASSERT( false );
-			CASTOR_EXCEPTION( "Render loop is already started" );
+			CASTOR_EXCEPTION( C3D_NO_RENDERSYSTEM );
+		}
+
+		if ( m_mainLoopThread )
+		{
+			CASTOR_ASSERT( false );
+			CASTOR_EXCEPTION( C3D_MAIN_LOOP_EXISTS );
 		}
 		else if ( m_bCleaned )
 		{
@@ -165,7 +172,7 @@ namespace Castor3D
 
 			if ( m_bThreaded )
 			{
-				m_pThreadMainLoop.reset( new std::thread( std::bind( &Engine::DoMainLoop, this ) ) );
+				m_mainLoopThread.reset( new std::thread( std::bind( &Engine::DoMainLoop, this ) ) );
 			}
 		}
 	}
@@ -262,11 +269,11 @@ namespace Castor3D
 				PostEvent( MakeCleanupEvent( *m_pDefaultSampler ) );
 			}
 
-			if ( m_pThreadMainLoop )
+			if ( m_mainLoopThread )
 			{
 				// We wait for the main loop to end (it makes a final render to clean the render system)
-				m_pThreadMainLoop->join();
-				m_pThreadMainLoop.reset();
+				m_mainLoopThread->join();
+				m_mainLoopThread.reset();
 			}
 			else
 			{
@@ -320,7 +327,7 @@ namespace Castor3D
 	{
 		ContextSPtr l_pReturn;
 
-		if ( !m_pThreadMainLoop )
+		if ( !m_mainLoopThread )
 		{
 			l_pReturn = m_renderSystem->GetMainContext();
 
@@ -370,7 +377,7 @@ namespace Castor3D
 		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
 		m_bEnded = false;
 
-		if ( !m_pThreadMainLoop )
+		if ( !m_mainLoopThread )
 		{
 			CASTOR_ASSERT( false );
 			CASTOR_EXCEPTION( "Rendering is not threaded" );
@@ -386,7 +393,7 @@ namespace Castor3D
 		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
 		m_bEnded = true;
 
-		if ( !m_pThreadMainLoop )
+		if ( !m_mainLoopThread )
 		{
 			CASTOR_ASSERT( false );
 			CASTOR_EXCEPTION( "Rendering is not threaded" );
@@ -399,7 +406,7 @@ namespace Castor3D
 
 	void Engine::RenderOneFrame()
 	{
-		if ( m_pThreadMainLoop )
+		if ( m_mainLoopThread )
 		{
 			CASTOR_ASSERT( false );
 			CASTOR_EXCEPTION( "Can't call RenderOneFrame in threaded mode" );
@@ -416,7 +423,7 @@ namespace Castor3D
 
 		if ( ! l_pReturn )
 		{
-			l_pReturn = std::make_shared< Scene >( this, m_lightFactory, p_name );
+			l_pReturn = std::make_shared< Scene >( *this, m_lightFactory, p_name );
 			l_pReturn->Initialise();
 			m_sceneManager.insert( p_name, l_pReturn );
 		}
@@ -453,8 +460,8 @@ namespace Castor3D
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Mesh >( this, p_type, p_strMeshName );
-			l_pReturn->Initialise( p_arrayFaces, p_arraySizes );
+			l_pReturn = std::make_shared< Mesh >( *this, p_strMeshName );
+			l_pReturn->Initialise( *m_meshFactory.Create( p_type ), p_arrayFaces, p_arraySizes );
 			m_meshManager.insert( p_strMeshName, l_pReturn );
 			Logger::LogInfo( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
 		}
@@ -511,11 +518,11 @@ namespace Castor3D
 
 			if ( ! l_pMesh )
 			{
-				l_pMesh = std::make_shared< Mesh >( this, eMESH_TYPE_CUSTOM, cuEmptyString );
+				l_pMesh = std::make_shared< Mesh >( *this, cuEmptyString );
 				m_meshManager.insert( cuEmptyString, l_pMesh );
 			}
 
-			//l_return = Mesh::BinaryLoader()( * l_pMesh, p_file);
+			l_return = Mesh::BinaryParser( p_file.GetFilePath() ).Parse( *l_pMesh, p_file );
 		}
 
 		return l_return;
@@ -761,9 +768,7 @@ namespace Castor3D
 
 				if ( !l_pLibrary->Open( p_pathFile ) )
 				{
-					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "] : " );
-					l_strError += System::GetLastErrorText();
-					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
+					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( cuT( "Error encountered while loading file [" ) + p_pathFile + cuT( "]" ) ), true );
 				}
 
 				PluginBase::PGetTypeFunction l_pfnGetType;
@@ -1297,7 +1302,7 @@ namespace Castor3D
 
 		if ( File::FileExists( l_path / cuT( "Core.zip" ) ) )
 		{
-			SceneFileParser l_parser( this );
+			SceneFileParser l_parser( *this );
 
 			if ( !l_parser.ParseFile( l_path / cuT( "Core.zip" ) ) )
 			{

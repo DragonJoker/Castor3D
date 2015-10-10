@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CMesh();
+		CMesh();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CMesh();
+		virtual ~CMesh();
 
 		inline Castor3D::MeshSPtr GetInternal()const
 		{
@@ -62,7 +62,6 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY_GET( MeshType, eMESH_TYPE, make_getter( m_internal.get(), &Castor3D::Mesh::GetMeshType ) );
 		COM_PROPERTY_GET( SubmeshCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Mesh::GetSubmeshCount ) );
 		COM_PROPERTY_GET( FaceCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Mesh::GetFaceCount ) );
 		COM_PROPERTY_GET( VertexCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Mesh::GetVertexCount ) );
@@ -74,91 +73,10 @@ namespace CastorCom
 		Castor3D::MeshSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Mesh ), CMesh )
+	OBJECT_ENTRY_AUTO( __uuidof( Mesh ), CMesh );
 
-	template< typename Class >
-	struct VariableGetter< Class, Castor3D::MeshSPtr >
-	{
-		typedef Castor3D::MeshSPtr( Class::*Function )()const;
-		VariableGetter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IMesh ** value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					hr = CMesh::CreateInstance( value );
-
-					if ( hr == S_OK )
-					{
-						static_cast< CMesh * >( *value )->SetInternal( ( m_instance->*m_function )() );
-					}
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IMesh,								// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
-
-	template< typename Class >
-	struct VariablePutter< Class, Castor3D::MeshSPtr >
-	{
-		typedef void ( Class::*Function )( Castor3D::MeshSPtr );
-		VariablePutter( Class * instance, Function function )
-			:	m_instance( instance )
-			,	m_function( function )
-		{
-		}
-		HRESULT operator()( IMesh * value )
-		{
-			HRESULT hr = E_POINTER;
-
-			if ( m_instance )
-			{
-				if ( value )
-				{
-					( m_instance->*m_function )( static_cast< CMesh * >( value )->GetInternal() );
-					hr = S_OK;
-				}
-			}
-			else
-			{
-				hr = CComError::DispatchError(
-						 E_FAIL,								// This represents the error
-						 IID_IMesh,								// This is the GUID of component throwing error
-						 cuT( "NULL instance" ),				// This is generally displayed as the title
-						 ERROR_UNINITIALISED_INSTANCE.c_str(),	// This is the description
-						 0,										// This is the context in the help file
-						 NULL );
-			}
-
-			return hr;
-		}
-
-	private:
-		Class * m_instance;
-		Function m_function;
-	};
+	DECLARE_VARIABLE_PTR_GETTER( Mesh, Castor3D, Mesh );
+	DECLARE_VARIABLE_PTR_PUTTER( Mesh, Castor3D, Mesh );
 }
 
 #endif

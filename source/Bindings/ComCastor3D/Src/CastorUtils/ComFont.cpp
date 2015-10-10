@@ -24,15 +24,15 @@ namespace CastorCom
 		{
 			CEngine * l_engn = static_cast< CEngine * >( engine );
 			Castor3D::Engine * l_engine = l_engn->GetInternal();
-			Castor3D::FontCollection & l_mgr = l_engine->GetFontManager();
+			Castor::FontManager & l_mgr = l_engine->GetFontManager();
 			Castor::String l_name = FromBstr( name );
 			Castor::Path l_path = FromBstr( path );
-			m_font = l_mgr.find( l_name );
+			m_font = l_mgr.get_font( l_name );
 			Castor::Path l_pathFont = l_path;
 
 			if ( !Castor::File::FileExists( l_pathFont ) )
 			{
-				l_pathFont = l_engine->GetDataPath() / l_path;
+				l_pathFont = l_engine->GetDataDirectory() / l_path;
 			}
 
 			if ( Castor::File::FileExists( l_pathFont ) )

@@ -9,13 +9,10 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlVertexBufferObject::GlVertexBufferObject( OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
-		:	GlBuffer< uint8_t >( p_gl, eGL_BUFFER_TARGET_ARRAY, p_pBuffer )
-		,	m_bufferDeclaration( p_declaration )
+	GlVertexBufferObject::GlVertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
+		: GlBuffer< uint8_t >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_ARRAY, p_pBuffer )
+		, m_bufferDeclaration( p_declaration )
 	{
-		GlAttributeBaseSPtr l_pAttribute;
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pBuffer->GetRenderSystem() );
-
 		for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.Begin(); l_it != m_bufferDeclaration.End(); ++l_it )
 		{
 			String l_name;
@@ -58,48 +55,50 @@ namespace GlRender
 				break;
 			}
 
+			GlAttributeBaseSPtr l_attribute;
+
 			switch ( l_it->m_eDataType )
 			{
 			case eELEMENT_TYPE_1FLOAT:
-				l_pAttribute = std::make_shared< GlAttribute1r >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute1r >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_2FLOATS:
-				l_pAttribute = std::make_shared< GlAttribute2r >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute2r >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_3FLOATS:
-				l_pAttribute = std::make_shared< GlAttribute3r >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute3r >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_4FLOATS:
-				l_pAttribute = std::make_shared< GlAttribute4r >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute4r >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_COLOUR:
-				l_pAttribute = std::make_shared< GlAttribute1ui >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute1ui >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_1INT:
-				l_pAttribute = std::make_shared< GlAttribute1i >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute1i >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_2INTS:
-				l_pAttribute = std::make_shared< GlAttribute2i >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute2i >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_3INTS:
-				l_pAttribute = std::make_shared< GlAttribute3i >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute3i >( p_gl, &p_renderSystem, l_name );
 				break;
 
 			case eELEMENT_TYPE_4INTS:
-				l_pAttribute = std::make_shared< GlAttribute4i >( p_gl, l_renderSystem, l_name );
+				l_attribute = std::make_shared< GlAttribute4i >( p_gl, &p_renderSystem, l_name );
 				break;
 			}
 
-			l_pAttribute->SetOffset( l_it->m_uiOffset );
-			l_pAttribute->SetStride( m_bufferDeclaration.GetStride() );
-			m_arrayAttributes.push_back( l_pAttribute );
+			l_attribute->SetOffset( l_it->m_uiOffset );
+			l_attribute->SetStride( m_bufferDeclaration.GetStride() );
+			m_arrayAttributes.push_back( l_attribute );
 		}
 	}
 
@@ -165,7 +164,7 @@ namespace GlRender
 		{
 			l_return = GlBuffer< uint8_t >::DoBind();
 
-			if ( !l_pBuffer->GetRenderSystem()->UseShaders() || m_pProgram.expired() )
+			if ( !GetOwner()->UseShaders() || m_pProgram.expired() )
 			{
 				static const uint32_t s_arraySize[] = { 1, 2, 3, 4, 4, 1, 2, 3, 4 };
 				static const uint32_t s_arrayType[] = { eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_UNSIGNED_BYTE, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT };
@@ -250,7 +249,7 @@ namespace GlRender
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			if ( l_pBuffer->GetRenderSystem()->UseShaders() && ! m_pProgram.expired() )
+			if ( GetOwner()->UseShaders() && ! m_pProgram.expired() )
 			{
 				DoAttributesUnbind();
 			}

@@ -499,23 +499,23 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Scene::Scene( Engine * p_engine, LightFactory & p_lightFactory, String const & p_name )
-		: m_strName( p_name )
+	Scene::Scene( Engine & p_engine, LightFactory & p_lightFactory, String const & p_name )
+		: OwnedBy< Engine >( p_engine )
+		, m_strName( p_name )
 		, m_rootCameraNode()
 		, m_rootObjectNode()
 		, m_nbFaces( 0 )
 		, m_nbVertex( 0 )
 		, m_changed( false )
 		, m_lightFactory( p_lightFactory )
-		, m_engine( p_engine )
 		, m_pLightsTexture( std::make_shared< TextureUnit >( p_engine ) )
 		, m_bLightsChanged( true )
 	{
 		m_pLightsData = PxBufferBase::create( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
-		DynamicTextureSPtr l_pTexture = GetEngine()->GetRenderSystem()->CreateDynamicTexture();
+		DynamicTextureSPtr l_pTexture = GetOwner()->GetRenderSystem()->CreateDynamicTexture();
 		l_pTexture->SetDimension( eTEXTURE_DIMENSION_1D );
 		l_pTexture->SetImage( m_pLightsData );
-		SamplerSPtr l_pSampler = GetEngine()->GetLightsSampler();
+		SamplerSPtr l_pSampler = GetOwner()->GetLightsSampler();
 		m_pLightsTexture->SetAutoMipmaps( true );
 		m_pLightsTexture->SetSampler( l_pSampler );
 		m_pLightsTexture->SetTexture( l_pTexture );
@@ -534,17 +534,17 @@ namespace Castor3D
 
 	void Scene::Initialise()
 	{
-		m_rootNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "RootNode" ) );
-		m_rootCameraNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "CameraRootNode" ) );
-		m_rootObjectNode = std::make_shared< SceneNode >( shared_from_this(), cuT( "ObjectRootNode" ) );
-		m_alphaDepthState = m_engine->CreateDepthStencilState( m_strName + cuT( "_AlphaDepthState" ) );
+		m_rootNode = std::make_shared< SceneNode >( *this, cuT( "RootNode" ) );
+		m_rootCameraNode = std::make_shared< SceneNode >( *this, cuT( "CameraRootNode" ) );
+		m_rootObjectNode = std::make_shared< SceneNode >( *this, cuT( "ObjectRootNode" ) );
+		m_alphaDepthState = GetOwner()->CreateDepthStencilState( m_strName + cuT( "_AlphaDepthState" ) );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
 
 		m_alphaDepthState.lock()->SetDepthMask( eWRITING_MASK_ZERO );
 
-		m_engine->PostEvent( MakeInitialiseEvent( *m_pLightsTexture ) );
+		GetOwner()->PostEvent( MakeInitialiseEvent( *m_pLightsTexture ) );
 	}
 
 	void Scene::ClearScene()
@@ -558,7 +558,7 @@ namespace Castor3D
 
 		for ( auto && l_overlay : m_arrayOverlays )
 		{
-			m_engine->PostEvent( MakeCleanupEvent( *l_overlay ) );
+			GetOwner()->PostEvent( MakeCleanupEvent( *l_overlay ) );
 		}
 
 		m_arrayOverlays.clear();
@@ -577,7 +577,7 @@ namespace Castor3D
 
 		if ( m_pBackgroundImage )
 		{
-			m_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			GetOwner()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
 				m_pBackgroundImage->Cleanup();
 				m_pBackgroundImage->Destroy();
@@ -611,7 +611,7 @@ namespace Castor3D
 		m_mapLights.clear();
 		m_alphaDepthState.reset();
 
-		m_engine->PostEvent( MakeCleanupEvent( *m_pLightsTexture ) );
+		GetOwner()->PostEvent( MakeCleanupEvent( *m_pLightsTexture ) );
 	}
 
 	void Scene::RenderBackground( Camera const & p_camera )
@@ -620,11 +620,11 @@ namespace Castor3D
 		{
 			if ( m_pBackgroundImage->IsInitialised() )
 			{
-				RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+				RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 				ContextRPtr l_pContext = l_renderSystem->GetCurrentContext();
 				l_pContext->GetBackgroundDSState()->Apply();
 #if !defined( NDEBUG )
-				Colour l_save = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
+				Colour l_save = GetOwner()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
 				l_pContext->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
 #endif
 				l_pContext->BToBRender( Size( p_camera.GetWidth(), p_camera.GetHeight() ), m_pBackgroundImage, eBUFFER_COMPONENT_COLOUR );
@@ -637,7 +637,7 @@ namespace Castor3D
 
 	void Scene::Render( RenderTechniqueBase & p_technique, eTOPOLOGY p_eTopology, double CU_PARAM_UNUSED( p_dFrameTime ), Camera const & p_camera )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
 		ContextRPtr l_pContext = l_renderSystem->GetCurrentContext();
 		PassSPtr l_pPass;
@@ -715,22 +715,22 @@ namespace Castor3D
 
 		if ( !p_pathFile.empty() )
 		{
-			l_pImage = m_engine->GetImageManager().find( p_pathFile.GetFileName() );
+			l_pImage = GetOwner()->GetImageManager().find( p_pathFile.GetFileName() );
 
 			if ( !l_pImage && File::FileExists( p_pathFile ) )
 			{
 				l_pImage = std::make_shared< Image >( p_pathFile.GetFileName(), p_pathFile );
-				m_engine->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
+				GetOwner()->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
 			}
 		}
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_pStaTexture = m_engine->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 			l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			m_pBackgroundImage = l_pStaTexture;
-			m_engine->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			GetOwner()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
 				m_pBackgroundImage->Create();
 				m_pBackgroundImage->Initialise( 0 );
@@ -785,7 +785,7 @@ namespace Castor3D
 			if ( DoCheckObject( p_name, m_addedNodes, cuT( "SceneNode" ) ) )
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-				l_pReturn = std::make_shared< SceneNode >( shared_from_this(), p_name );
+				l_pReturn = std::make_shared< SceneNode >( *this, p_name );
 				Logger::LogInfo( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
 				l_pReturn->AttachTo( m_rootNode );
 				m_addedNodes[p_name] = l_pReturn;
@@ -813,7 +813,7 @@ namespace Castor3D
 			if ( DoCheckObject( p_name, m_addedNodes, cuT( "SceneNode" ) ) )
 			{
 				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-				l_pReturn = std::make_shared< SceneNode >( shared_from_this(), p_name );
+				l_pReturn = std::make_shared< SceneNode >( *this, p_name );
 				Logger::LogInfo( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
 
 				if ( p_parent )
@@ -848,7 +848,7 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			MeshSPtr l_pMesh = m_engine->CreateMesh( p_type, p_meshName, p_faces, p_size );
+			MeshSPtr l_pMesh = GetOwner()->CreateMesh( p_type, p_meshName, p_faces, p_size );
 
 			if ( l_pMesh )
 			{
@@ -1455,7 +1455,7 @@ namespace Castor3D
 
 	void Scene::DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_eTopology, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
 		for ( RenderNodeArrayConstIt l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
 		{
@@ -1478,7 +1478,7 @@ namespace Castor3D
 
 	void Scene::DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_eTopology, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
 		for ( SubmeshNodesByMaterialMapConstIt l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
 		{
@@ -1502,7 +1502,7 @@ namespace Castor3D
 
 	void Scene::DoRenderAlphaSortedSubmeshes( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, eTOPOLOGY p_eTopology, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
 		for ( RenderNodeByDistanceMMapConstIt l_it = p_begin; l_it != p_end; ++l_it )
 		{
@@ -1620,7 +1620,7 @@ namespace Castor3D
 					l_uiProgramFlags |= ePROGRAM_FLAG_INSTANCIATION;
 				}
 
-				l_pProgram = m_engine->GetShaderManager().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_uiProgramFlags );
+				l_pProgram = GetOwner()->GetShaderManager().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_uiProgramFlags );
 				l_pProgram->Initialise();
 				l_pass->BindToAutomaticProgram( l_pProgram );
 			}
@@ -1695,7 +1695,7 @@ namespace Castor3D
 
 	void Scene::DoRenderBillboards( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
 		for ( auto l_it = p_itBegin; l_it != p_itEnd; ++l_it )
 		{
@@ -1742,7 +1742,7 @@ namespace Castor3D
 
 	void Scene::DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 		l_renderSystem->RenderAmbientLight( GetAmbientLight(), p_sceneBuffer );
 
 		OneTextureFrameVariableSPtr l_lights = p_program.FindFrameVariable( ShaderProgramBase::Lights, eSHADER_TYPE_PIXEL );
@@ -1810,7 +1810,7 @@ namespace Castor3D
 
 	void Scene::DoBindCamera( FrameVariableBuffer & p_sceneBuffer )
 	{
-		RenderSystem * l_renderSystem = m_engine->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 		Camera * l_pCamera = l_renderSystem->GetCurrentCamera();
 
 		if ( l_pCamera )

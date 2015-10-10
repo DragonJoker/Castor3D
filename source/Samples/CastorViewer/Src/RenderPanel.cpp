@@ -149,7 +149,7 @@ namespace CastorViewer
 				}
 
 #if HAS_CASTORGUI
-				m_controlsManager = &static_cast< CastorGui::ControlsManager & >( p_pWindow->GetEngine()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
+				m_controlsManager = &static_cast< CastorGui::ControlsManager & >( p_pWindow->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 #endif
 			}
 		}
@@ -232,7 +232,7 @@ namespace CastorViewer
 
 	real RenderPanel::DoTransformX( int x )
 	{
-		real l_result = x;
+		real l_result = real( x );
 		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
 		if ( l_window )
@@ -245,7 +245,7 @@ namespace CastorViewer
 
 	real RenderPanel::DoTransformY( int y )
 	{
-		real l_result = y;
+		real l_result = real( y );
 		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
 		if ( l_window )
@@ -258,7 +258,7 @@ namespace CastorViewer
 
 	int RenderPanel::DoTransformX( real x )
 	{
-		int l_result = x;
+		int l_result = int( x );
 		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
 		if ( l_window )
@@ -271,12 +271,12 @@ namespace CastorViewer
 
 	int RenderPanel::DoTransformY( real y )
 	{
-		int l_result = y;
+		int l_result = int( y );
 		RenderWindowSPtr l_window = m_pRenderWindow.lock();
 
 		if ( l_window )
 		{
-			l_result = y * GetClientSize().y / real( l_window->GetCamera()->GetHeight() );
+			l_result = int( y * GetClientSize().y / real( l_window->GetCamera()->GetHeight() ) );
 		}
 
 		return l_result;
@@ -633,7 +633,7 @@ namespace CastorViewer
 		m_y = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
-		if ( m_controlsManager && m_controlsManager->FireMouseMove( Position( m_x, m_y ) ) )
+		if ( m_controlsManager && m_controlsManager->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
 			p_event.Skip();
 		}

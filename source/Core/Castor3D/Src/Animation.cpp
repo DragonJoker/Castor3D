@@ -1,4 +1,5 @@
 ﻿#include "Animation.hpp"
+
 #include "MovingObject.hpp"
 #include "MovingNode.hpp"
 #include "MovingBone.hpp"

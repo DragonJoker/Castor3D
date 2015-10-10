@@ -30,7 +30,7 @@ C3D_Ply_API ImporterPlugin::ExtensionArray GetExtensions()
 
 C3D_Ply_API void Create( Engine * p_pEngine, ImporterPlugin * p_pPlugin )
 {
-	p_pPlugin->AttachImporter( std::make_shared< C3dPly::PlyImporter >( p_pEngine ) );
+	p_pPlugin->AttachImporter( std::make_shared< C3dPly::PlyImporter >( *p_pEngine ) );
 }
 
 C3D_Ply_API void Destroy( ImporterPlugin * p_pPlugin )

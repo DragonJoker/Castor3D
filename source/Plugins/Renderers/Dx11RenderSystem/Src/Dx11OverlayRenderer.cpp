@@ -49,8 +49,8 @@ namespace
 
 //*************************************************************************************************
 
-DxOverlayRenderer::DxOverlayRenderer( DxRenderSystem * p_pRenderSystem )
-	: OverlayRenderer( p_pRenderSystem )
+DxOverlayRenderer::DxOverlayRenderer( DxRenderSystem & p_renderSystem )
+	: OverlayRenderer( p_renderSystem )
 {
 }
 
@@ -60,10 +60,10 @@ DxOverlayRenderer::~DxOverlayRenderer()
 
 ShaderProgramBaseSPtr DxOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 {
-	std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( static_cast< const DxRenderSystem & >( *m_renderSystem ) );
+	std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( static_cast< const DxRenderSystem & >( *GetOwner() ) );
 
 	// Shader program
-	ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
+	ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
 	ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 	l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 	l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );

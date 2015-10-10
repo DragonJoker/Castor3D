@@ -19,13 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_PROJECTION_H___
 #define ___C3D_PROJECTION_H___
 
-#include "MeshCategory.hpp"
+#include "MeshGenerator.hpp"
 
 #include <Point.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
 
 namespace Castor3D
 {
@@ -40,7 +36,7 @@ namespace Castor3D
 	\remark		Ce type de mesh est la projection d'un arc selon un axe sur une distance donnée
 	*/
 	class C3D_API Projection
-		:	public MeshCategory
+		:	public MeshGenerator
 	{
 	public:
 		/**
@@ -58,14 +54,13 @@ namespace Castor3D
 		 */
 		~Projection();
 		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		A projection
-		 *\~french
-		 *\brief		Fonction de création utilisée par Factory
-		 *\return		Une projection
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshCategorySPtr Create();
+		static MeshGeneratorSPtr Create();
+		/**
+		 *\copydoc		Castor3D::MeshGenerator::Generate
+		 */
+		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Defines the pattern used to build the projection
@@ -79,24 +74,6 @@ namespace Castor3D
 		 *\param[in]	p_bClosed	Dit si on doit fermer la projection
 		 */
 		void SetPoints( Point3rPatternSPtr p_pPattern, Castor::Point3r const & p_vAxis, bool p_bClosed );
-		/**
-		 *\~english
-		 *\brief		Generates the mesh points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du mesh
-		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces
@@ -127,7 +104,5 @@ namespace Castor3D
 		return o << "Projection( (" << c.m_vAxis[0] << "," << c.m_vAxis[1] << "," << c.m_vAxis[2] << ")," << c.m_fDepth << "," << c.m_bClosed << "," << c.m_uiNbFaces << ")";
 	}
 }
-
-#pragma warning( pop )
 
 #endif

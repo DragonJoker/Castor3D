@@ -29,7 +29,7 @@ namespace GuiCommon
 	}
 
 	PassTreeItemProperty::PassTreeItemProperty( bool p_editable, Castor3D::PassSPtr p_pass )
-		: TreeItemProperty( p_pass->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_PASS )
+		: TreeItemProperty( p_pass->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_PASS )
 		, m_pass( p_pass )
 	{
 		PROPERTY_CATEGORY_PASS = _( "Pass: " );
@@ -158,7 +158,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetShininess( p_value );
+			l_pass->SetShininess( float( p_value ) );
 		} );
 	}
 
@@ -178,14 +178,14 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_pass]()
 		{
-			l_pass->SetAlpha( p_value );
+			l_pass->SetAlpha( float( p_value ) );
 		} );
 	}
 
 	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
 	{
 		PassSPtr l_pass = GetPass();
-		ShaderDialog * l_editor = new ShaderDialog( l_pass->GetEngine(), IsEditable(), NULL, l_pass );
+		ShaderDialog * l_editor = new ShaderDialog( l_pass->GetOwner(), IsEditable(), NULL, l_pass );
 		l_editor->Show();
 		return false;
 	}

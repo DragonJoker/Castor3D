@@ -29,7 +29,7 @@ namespace GlRender
 		, public Castor::NonCopyable
 	{
 	public:
-		GlDepthStencilState( OpenGl & p_gl );
+		GlDepthStencilState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
 		virtual ~GlDepthStencilState();
 		/**
 		 *\copydoc Castor3D::DepthStencilState::Initialise
@@ -57,6 +57,7 @@ namespace GlRender
 
 	private:
 		OpenGl & m_gl;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

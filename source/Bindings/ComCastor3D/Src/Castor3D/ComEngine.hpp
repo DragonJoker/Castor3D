@@ -43,20 +43,25 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CEngine();
+		CEngine();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CEngine();
+		virtual ~CEngine();
+
 		inline Castor3D::Engine * GetInternal()const
 		{
 			return m_internal;
 		}
+
+		COM_PROPERTY_GET( PluginsDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetPluginsDirectory ) );
+		COM_PROPERTY_GET( EngineDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetEngineDirectory ) );
+		COM_PROPERTY_GET( DataDirectory, BSTR, make_static_getter( &Castor3D::Engine::GetDataDirectory ) );
 		
-		STDMETHOD( Create )( /* [in] */ ILogger * logger );
+		STDMETHOD( Create )();
 		STDMETHOD( Destroy )();
 		STDMETHOD( Initialise )( /* [in] */ int fps );
 		STDMETHOD( Cleanup )();

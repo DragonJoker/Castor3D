@@ -28,7 +28,7 @@ namespace Dx11Render
 		:	public Castor3D::StaticTexture
 	{
 	public:
-		DxStaticTexture( DxRenderSystem * p_pRenderSystem );
+		DxStaticTexture( DxRenderSystem & p_renderSystem );
 		virtual ~DxStaticTexture();
 
 		virtual bool Create();

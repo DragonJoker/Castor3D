@@ -1,12 +1,14 @@
 ﻿#include "MatrixBuffer.hpp"
+
+#include "Engine.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	MatrixBuffer::MatrixBuffer( RenderSystem * p_pRenderSystem )
-		:	CpuBuffer< real >( p_pRenderSystem )
+	MatrixBuffer::MatrixBuffer( Engine & p_engine )
+		: CpuBuffer< real >( p_engine )
 	{
 	}
 
@@ -31,7 +33,7 @@ namespace Castor3D
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = m_renderSystem->CreateMatrixBuffer( this );
+			m_pBuffer = GetOwner()->GetRenderSystem()->CreateMatrixBuffer( this );
 		}
 
 		return m_pBuffer != nullptr;

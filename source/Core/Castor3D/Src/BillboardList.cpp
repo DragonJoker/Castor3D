@@ -116,7 +116,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetMaterial( p_obj.GetScene()->GetEngine()->GetMaterialManager().find( l_name ) );
+						p_obj.SetMaterial( p_obj.GetScene()->GetOwner()->GetMaterialManager().find( l_name ) );
 					}
 
 					break;
@@ -148,10 +148,10 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	BillboardList::BillboardList( SceneSPtr p_scene, RenderSystem * p_pRenderSystem )
-		:	MovableObject( p_scene, eMOVABLE_TYPE_BILLBOARD )
-		,	m_renderSystem( p_pRenderSystem )
-		,	m_bNeedUpdate( false )
+	BillboardList::BillboardList( SceneSPtr p_scene, RenderSystem & p_renderSystem )
+		: MovableObject( p_scene, eMOVABLE_TYPE_BILLBOARD )
+		, OwnedBy< RenderSystem >( p_renderSystem )
+		, m_bNeedUpdate( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) };
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
@@ -164,7 +164,7 @@ namespace Castor3D
 	bool BillboardList::Initialise()
 	{
 		VertexBufferUPtr l_pVtxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( m_renderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
+		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		uint32_t l_uiStride = m_pDeclaration->GetStride();
 		l_pVtxBuffer->Resize( uint32_t( m_arrayPositions.size() * l_uiStride ) );
 		uint8_t * l_pBuffer = l_pVtxBuffer->data();
@@ -175,7 +175,7 @@ namespace Castor3D
 			l_pBuffer += l_uiStride;
 		}
 
-		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_pGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
 		return true;
 	}
 
@@ -247,7 +247,7 @@ namespace Castor3D
 	{
 		if ( !m_bNeedUpdate )
 		{
-			Pipeline & l_pipeline = m_renderSystem->GetPipeline();
+			Pipeline & l_pipeline = GetOwner()->GetPipeline();
 			ShaderProgramBaseSPtr l_pProgram = m_wpProgram.lock();
 			MaterialSPtr l_pMaterial = m_wpMaterial.lock();
 			VertexBuffer & l_vtxBuffer = m_pGeometryBuffers->GetVertexBuffer();

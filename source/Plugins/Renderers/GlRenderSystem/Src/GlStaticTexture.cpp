@@ -10,14 +10,14 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlStaticTexture::GlStaticTexture( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem )
-		:	StaticTexture( p_pRenderSystem )
-		,	m_uiGlName( uint32_t( eGL_INVALID_INDEX ) )
-		,	m_iCurrentPbo( 0 )
-		,	m_pGlRenderSystem( p_pRenderSystem )
-		,	m_pLockedIoBuffer( NULL )
-		,	m_pIoBuffer( NULL )
-		,	m_gl( p_gl )
+	GlStaticTexture::GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
+		: StaticTexture( p_renderSystem )
+		, m_uiGlName( uint32_t( eGL_INVALID_INDEX ) )
+		, m_iCurrentPbo( 0 )
+		, m_pGlRenderSystem( &p_renderSystem )
+		, m_pLockedIoBuffer( NULL )
+		, m_pIoBuffer( NULL )
+		, m_gl( p_gl )
 	{
 	}
 

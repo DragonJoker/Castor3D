@@ -9,8 +9,9 @@ namespace Castor3D
 
 	RasteriserStateWPtr RasteriserState::m_wCurrentState;
 
-	RasteriserState::RasteriserState()
-		: m_bChanged( true )
+	RasteriserState::RasteriserState( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
+		, m_bChanged( true )
 		, m_eFillMode( eFILL_MODE_SOLID )
 		, m_eCulledFaces( eFACE_BACK )
 		, m_bFrontCCW( true )

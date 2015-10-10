@@ -26,7 +26,7 @@ namespace GuiCommon
 	}
 
 	LightTreeItemProperty::LightTreeItemProperty( bool p_editable, LightSPtr p_light )
-		: TreeItemProperty( p_light->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
+		: TreeItemProperty( p_light->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_LIGHT )
 		, m_light( p_light )
 	{
 		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
@@ -190,7 +190,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->GetSpotLight()->SetCutOff( p_value );
+			GetLight()->GetSpotLight()->SetCutOff( float( p_value ) );
 		} );
 	}
 
@@ -198,7 +198,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->GetSpotLight()->SetExponent( p_value );
+			GetLight()->GetSpotLight()->SetExponent( float( p_value ) );
 		} );
 	}
 }

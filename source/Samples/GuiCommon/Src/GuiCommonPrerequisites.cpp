@@ -101,7 +101,7 @@ namespace GuiCommon
 		template< typename TObj >
 		std::shared_ptr< TObj > CreateObject( Engine & p_engine )
 		{
-			return std::make_shared< TObj >( &p_engine );
+			return std::make_shared< TObj >( p_engine );
 		}
 
 		template<>
@@ -113,7 +113,7 @@ namespace GuiCommon
 		template<>
 		std::shared_ptr< Scene > CreateObject< Scene >( Engine & p_engine )
 		{
-			return std::make_shared< Scene >( &p_engine, p_engine.GetLightFactory() );
+			return std::make_shared< Scene >( p_engine, p_engine.GetLightFactory() );
 		}
 
 		template< typename TObj >
@@ -191,7 +191,7 @@ namespace GuiCommon
 		RenderWindowSPtr DoLoadTextSceneFile( Engine & p_engine, Path const & p_fileName )
 		{
 			RenderWindowSPtr l_return;
-			SceneFileParser l_parser( &p_engine );
+			SceneFileParser l_parser( p_engine );
 
 			if ( l_parser.ParseFile( p_fileName ) )
 			{

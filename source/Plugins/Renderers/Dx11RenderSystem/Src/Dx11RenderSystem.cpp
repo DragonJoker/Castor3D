@@ -29,7 +29,7 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxRenderSystem::DxRenderSystem( Engine * p_engine )
+	DxRenderSystem::DxRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, eRENDERER_TYPE_DIRECT3D )
 		, m_pDevice( NULL )
 	{
@@ -153,7 +153,7 @@ namespace Dx11Render
 								}
 							}
 
-							int l_iWantedFPS = int( 1.0 / m_engine->GetFrameTime() );
+							int l_iWantedFPS = int( 1.0 / GetOwner()->GetFrameTime() );
 
 							for ( std::vector< DXGI_MODE_DESC >::iterator l_it = l_matchingDisplayModes.begin(); l_it != l_matchingDisplayModes.end() && !l_bFound; ++l_it )
 							{
@@ -207,7 +207,7 @@ namespace Dx11Render
 			if ( !IsInitialised() )
 			{
 				Initialise();
-				m_engine->GetMaterialManager().Initialise();
+				GetOwner()->GetMaterialManager().Initialise();
 			}
 
 			if ( m_pDevice )
@@ -251,7 +251,7 @@ namespace Dx11Render
 
 	ContextSPtr DxRenderSystem::CreateContext()
 	{
-		return std::make_shared< DxContext >();
+		return std::make_shared< DxContext >( *this );
 	}
 
 	GeometryBuffersSPtr DxRenderSystem::CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
@@ -276,12 +276,12 @@ namespace Dx11Render
 
 	FrameVariableBufferSPtr DxRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )
 	{
-		return std::make_shared< DxFrameVariableBuffer >( p_name, this );
+		return std::make_shared< DxFrameVariableBuffer >( p_name, *this );
 	}
 
 	BillboardListSPtr DxRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_scene )
 	{
-		return std::make_shared< DxBillboardList >( p_scene, this );
+		return std::make_shared< DxBillboardList >( p_scene, *this );
 	}
 
 	SamplerSPtr DxRenderSystem::CreateSampler( Castor::String const & p_name )
@@ -301,32 +301,32 @@ namespace Dx11Render
 
 	ShaderProgramBaseSPtr DxRenderSystem::CreateHlslShaderProgram()
 	{
-		return std::make_shared< DxShaderProgram >( this );
+		return std::make_shared< DxShaderProgram >( *this );
 	}
 
 	ShaderProgramBaseSPtr DxRenderSystem::CreateShaderProgram()
 	{
-		return std::make_shared< DxShaderProgram >( this );
+		return std::make_shared< DxShaderProgram >( *this );
 	}
 
 	OverlayRendererSPtr DxRenderSystem::CreateOverlayRenderer()
 	{
-		return std::make_shared< DxOverlayRenderer >( this );
+		return std::make_shared< DxOverlayRenderer >( *this );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > DxRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_pBuffer )
 	{
-		return std::make_shared< DxIndexBuffer >( p_pBuffer );
+		return std::make_shared< DxIndexBuffer >( *this, p_pBuffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > DxRenderSystem::CreateVertexBuffer( BufferDeclaration const & p_declaration, CpuBuffer< uint8_t > * p_pBuffer )
 	{
-		return std::make_shared< DxVertexBuffer >( p_declaration, p_pBuffer );
+		return std::make_shared< DxVertexBuffer >( *this, p_declaration, p_pBuffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< real > > DxRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer )
 	{
-		return std::make_shared< DxMatrixBuffer >( p_pBuffer );
+		return std::make_shared< DxMatrixBuffer >( *this, p_pBuffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > DxRenderSystem::CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer )
@@ -336,12 +336,12 @@ namespace Dx11Render
 
 	StaticTextureSPtr DxRenderSystem::CreateStaticTexture()
 	{
-		return std::make_shared< DxStaticTexture >( this );
+		return std::make_shared< DxStaticTexture >( *this );
 	}
 
 	DynamicTextureSPtr DxRenderSystem::CreateDynamicTexture()
 	{
-		return std::make_shared< DxDynamicTexture >( this );
+		return std::make_shared< DxDynamicTexture >( *this );
 	}
 
 	void DxRenderSystem::DoInitialise()

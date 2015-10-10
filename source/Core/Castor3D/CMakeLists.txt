@@ -265,8 +265,8 @@ file( GLOB ${PROJECT_NAME}_MeshCategory_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sphere*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Torus*.cpp
 )
-source_group( "Header Files\\Mesh\\Category" FILES ${${PROJECT_NAME}_MeshCategory_HEADER_FILES} )
-source_group( "Source Files\\Mesh\\Category" FILES ${${PROJECT_NAME}_MeshCategory_SOURCE_FILES} )
+source_group( "Header Files\\Mesh\\Generator" FILES ${${PROJECT_NAME}_MeshCategory_HEADER_FILES} )
+source_group( "Source Files\\Mesh\\Generator" FILES ${${PROJECT_NAME}_MeshCategory_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_Scene_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.hpp

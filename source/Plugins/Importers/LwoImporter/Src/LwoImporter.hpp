@@ -50,7 +50,7 @@ namespace Lwo
 		bool m_bIgnored;
 
 	public:
-		LwoImporter( Castor3D::Engine * p_pEngine );
+		LwoImporter( Castor3D::Engine & p_pEngine );
 		virtual ~LwoImporter();
 
 	private:

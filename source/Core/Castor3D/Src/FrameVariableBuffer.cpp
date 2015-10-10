@@ -8,10 +8,10 @@ namespace Castor3D
 {
 	uint32_t FrameVariableBuffer::sm_uiCount = 0;
 
-	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, RenderSystem * p_pRenderSystem )
-		:	m_renderSystem( p_pRenderSystem )
-		,	m_strName( p_name )
-		,	m_uiIndex( sm_uiCount++ )
+	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, RenderSystem & p_renderSystem )
+		: OwnedBy< RenderSystem >( p_renderSystem )
+		, m_strName( p_name )
+		, m_uiIndex( sm_uiCount++ )
 	{
 	}
 

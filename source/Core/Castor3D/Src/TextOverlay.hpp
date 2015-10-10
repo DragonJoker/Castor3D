@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "OverlayCategory.hpp"
 #include "FontTexture.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -35,8 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Une incrustation avec du texte
 	*/
-	class C3D_API TextOverlay
-		:	public OverlayCategory
+	class TextOverlay
+		: public OverlayCategory
 	{
 	public:
 		/*!
@@ -49,8 +45,8 @@ namespace Castor3D
 		\brief		TextOverlay loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class C3D_API TextLoader
-			:	public OverlayCategory::TextLoader
+		class TextLoader
+			: public OverlayCategory::TextLoader
 		{
 		public:
 			/**
@@ -65,7 +61,7 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( TextOverlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( TextOverlay const & p_overlay, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -75,8 +71,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de TextOverlay
 		*/
-		class C3D_API BinaryParser
-			:	public OverlayCategory::BinaryParser
+		class BinaryParser
+			: public OverlayCategory::BinaryParser
 		{
 		public:
 			/**
@@ -87,7 +83,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -100,7 +96,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( TextOverlay const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( TextOverlay const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -113,7 +109,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( TextOverlay & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( TextOverlay & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -126,14 +122,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TextOverlay();
+		C3D_API TextOverlay();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextOverlay();
+		C3D_API virtual ~TextOverlay();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by the factory
@@ -142,21 +138,21 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		Un overlay
 		 */
-		static OverlayCategorySPtr Create();
+		C3D_API static OverlayCategorySPtr Create();
 		/**
 		 *\~english
 		 *\brief		Initialises the overlay
 		 *\~french
 		 *\brief		Initialise l'incrustation
 		 */
-		virtual void Initialise();
+		C3D_API virtual void Initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes the overlay
 		 *\~french
 		 *\brief		Nettoie l'incrustation
 		 */
-		virtual void Cleanup();
+		C3D_API virtual void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Sets the text font
@@ -165,7 +161,7 @@ namespace Castor3D
 		 *\brief		Définit la police du texte
 		 *\param[in]	p_strFont	La nouvelle valeur
 		 */
-		void SetFont( Castor::String const & p_strFont );
+		C3D_API void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
 		 *\return		The FontTexture.
@@ -281,11 +277,11 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
-		virtual void DoRender( OverlayRendererSPtr p_renderer );
+		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
-		virtual void DoUpdateBuffer( Castor::Size const & p_size );
+		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Adds a word to the vertex buffer.
@@ -308,7 +304,7 @@ namespace Castor3D
 		 *\param[out]	p_lineVtx		La ligne.
 		 *\param[out]	p_linesVtx		Les lignes.
 		 */
-		void DoWriteWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		C3D_API void DoWriteWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
 		/**
 		 *\~english
 		 *\brief		Horizontally align a line.
@@ -323,7 +319,7 @@ namespace Castor3D
 		 *\param[out]	p_lineVtx	La ligne.
 		 *\param[out]	p_linesVtx	Les lignes.
 		 */
-		void DoAlignHorizontally( double p_width, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		C3D_API void DoAlignHorizontally( double p_width, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
 		/**
 		 *\~english
 		 *\brief		Vertically align text
@@ -336,7 +332,7 @@ namespace Castor3D
 		 *\param[out]	p_linesHeight	La hauteur des lignes.
 		 *\param[out]	p_linesVtx		Les lignes.
 		 */
-		void DoAlignVertically( double p_height, double p_linesHeight, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		C3D_API void DoAlignVertically( double p_height, double p_linesHeight, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
 
 	protected:
 		//!\~english The current overlay caption	\~french Le texte courant de l'incrustation
@@ -355,7 +351,5 @@ namespace Castor3D
 		bool m_textChanged;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

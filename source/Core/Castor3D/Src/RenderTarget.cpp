@@ -176,7 +176,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						l_scene = p_obj.GetEngine()->GetSceneManager().find( l_name );
+						l_scene = p_obj.GetOwner()->GetSceneManager().find( l_name );
 						p_obj.SetScene( l_scene );
 
 						if ( l_scene && !l_camName.empty() )
@@ -286,7 +286,7 @@ namespace Castor3D
 		m_pColorAttach = m_renderTarget.CreateAttachment( m_pColorTexture );
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
 		m_pDepthAttach = m_renderTarget.CreateAttachment( m_pDepthBuffer );
-		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->CreateSampler( RenderTarget::DefaultSamplerName );
+		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->CreateSampler( RenderTarget::DefaultSamplerName );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
 		m_pColorTexture->SetSampler( l_pSampler );
@@ -344,8 +344,8 @@ namespace Castor3D
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
-	RenderTarget::RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType )
-		: m_engine( p_pRoot )
+	RenderTarget::RenderTarget( Engine & p_engine, eTARGET_TYPE p_eTargetType )
+		: OwnedBy< Engine >( p_engine )
 		, m_eTargetType( p_eTargetType )
 		, m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
 		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
@@ -361,8 +361,8 @@ namespace Castor3D
 		, m_fbLeftEye( *this )
 		, m_fbRightEye( *this )
 	{
-		m_wpDepthStencilState = p_pRoot->CreateDepthStencilState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
-		m_wpRasteriserState = p_pRoot->CreateRasteriserState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
+		m_wpDepthStencilState = GetOwner()->CreateDepthStencilState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
+		m_wpRasteriserState = GetOwner()->CreateRasteriserState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -390,7 +390,7 @@ namespace Castor3D
 
 			try
 			{
-				m_pRenderTechnique = m_engine->CreateTechnique( m_strTechniqueName, *this, l_params );
+				m_pRenderTechnique = GetOwner()->CreateTechnique( m_strTechniqueName, *this, l_params );
 			}
 			catch( Exception & p_exc )
 			{
@@ -431,7 +431,7 @@ namespace Castor3D
 
 		if ( m_bInitialised && l_pScene )
 		{
-			if ( m_bStereo && m_rIntraOcularDistance > 0 && GetEngine()->GetRenderSystem()->IsStereoAvailable() )
+			if ( m_bStereo && m_rIntraOcularDistance > 0 && GetOwner()->GetRenderSystem()->IsStereoAvailable() )
 			{
 				if ( GetCameraLEye() && GetCameraREye() )
 				{
@@ -462,7 +462,7 @@ namespace Castor3D
 
 	DynamicTextureSPtr RenderTarget::CreateDynamicTexture()const
 	{
-		return m_engine->GetRenderSystem()->CreateDynamicTexture();
+		return GetOwner()->GetRenderSystem()->CreateDynamicTexture();
 	}
 
 	eTOPOLOGY RenderTarget::GetPrimitiveType()const
@@ -590,7 +590,7 @@ namespace Castor3D
 		if ( m_pRenderTechnique->BeginRender() )
 		{
 			SceneSPtr l_pScene = GetScene();
-			GetEngine()->GetRenderSystem()->GetCurrentContext()->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
+			GetOwner()->GetRenderSystem()->GetCurrentContext()->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
 			l_pScene->RenderBackground( *p_pCamera );
 			m_pRenderTechnique->Render( *l_pScene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
 			m_pRenderTechnique->EndRender();

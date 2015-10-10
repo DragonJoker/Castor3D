@@ -13,11 +13,11 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxDynamicTexture::DxDynamicTexture( DxRenderSystem * p_renderSystem )
+	DxDynamicTexture::DxDynamicTexture( DxRenderSystem & p_renderSystem )
 		: DynamicTexture( p_renderSystem )
 		, m_renderTargetView( NULL )
 		, m_shaderResourceView( NULL )
-		, m_renderSystem( p_renderSystem )
+		, m_renderSystem( &p_renderSystem )
 	{
 	}
 

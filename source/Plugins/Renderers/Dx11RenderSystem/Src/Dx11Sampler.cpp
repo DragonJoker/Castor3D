@@ -11,9 +11,9 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxSampler::DxSampler( DxRenderSystem * p_pRenderSystem, Castor::String const & p_name )
-		: Sampler( p_pRenderSystem->GetEngine(), p_name )
-		, m_pDxRenderSystem( p_pRenderSystem )
+	DxSampler::DxSampler( DxRenderSystem * p_renderSystem, Castor::String const & p_name )
+		: Sampler( *p_renderSystem->GetOwner(), p_name )
+		, m_pDxRenderSystem( p_renderSystem )
 		, m_pSamplerState( NULL )
 	{
 	}
@@ -100,7 +100,7 @@ namespace Dx11Render
 			}
 
 			l_hr = l_pDevice->CreateSamplerState( &m_tex2dSampler, &m_pSamplerState );
-			dxTrack( static_cast< DxRenderSystem * >( GetEngine()->GetRenderSystem() ), m_pSamplerState, SamplerState );
+			dxTrack( static_cast< DxRenderSystem * >( GetOwner()->GetRenderSystem() ), m_pSamplerState, SamplerState );
 		}
 
 		return l_hr == S_OK;
@@ -108,12 +108,12 @@ namespace Dx11Render
 
 	void DxSampler::Cleanup()
 	{
-		ReleaseTracked( GetEngine()->GetRenderSystem(), m_pSamplerState );
+		ReleaseTracked( GetOwner()->GetRenderSystem(), m_pSamplerState );
 	}
 
 	bool DxSampler::Bind( eTEXTURE_DIMENSION CU_PARAM_UNUSED( p_eDimension ), uint32_t p_index )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( GetEngine()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetSamplers( p_index, 1, &m_pSamplerState );
 		return true;
 	}

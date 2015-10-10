@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Classe de base d'un tampon de rendu
 	\remark		Un tampon de rendu est un tampon qui reçoit une composante spécifique d'un tampon d'image
 	*/
-	class C3D_API RenderBuffer
+	class RenderBuffer
 	{
 	public:
 		/**
@@ -48,14 +48,14 @@ namespace Castor3D
 		 *\param[in]	p_type			La composante du tampon
 		 *\param[in]	p_ePixelFormat	Le format des pixels du tampon
 		 */
-		RenderBuffer( eBUFFER_COMPONENT p_type, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API RenderBuffer( eBUFFER_COMPONENT p_type, Castor::ePIXEL_FORMAT p_ePixelFormat );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderBuffer();
+		C3D_API virtual ~RenderBuffer();
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -64,14 +64,14 @@ namespace Castor3D
 		 *\brief		Fonction de création
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Create() = 0;
+		C3D_API virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy() = 0;
+		C3D_API virtual void Destroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -82,14 +82,14 @@ namespace Castor3D
 		 *\param[in]	p_size	Les dimensions du tampon
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( Castor::Size const & p_size ) = 0;
+		C3D_API virtual bool Initialise( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -98,14 +98,14 @@ namespace Castor3D
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind() = 0;
+		C3D_API virtual bool Bind() = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 */
-		virtual void Unbind() = 0;
+		C3D_API virtual void Unbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Resizing function
@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\param[in]	p_size	Les dimensions du tampon
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Resize( Castor::Size const & p_size ) = 0;
+		C3D_API virtual bool Resize( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the buffer pixel format

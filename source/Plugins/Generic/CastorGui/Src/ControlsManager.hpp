@@ -28,10 +28,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace CastorGui
 {
 	/*!
-	 *\author		Sylvain DOREMU
-	 *\date		02/03/201
-	 *\version		0.1.
-	 *\brief		Class used to to manage the controls: events and all GUI related stuff
+	*\author	Sylvain DOREMUS
+	*\date		02/03/201
+	*\version	0.1.
+	*\brief		Class used to to manage the controls: events and all GUI related stuff
 	*/
 	class ControlsManager
 		: public std::enable_shared_from_this< ControlsManager >
@@ -69,14 +69,6 @@ namespace CastorGui
 		Castor::Position const & GetMousePosition()const
 		{
 			return m_mouse.m_position;
-		}
-
-		/** Retrieves the engine
-		 *\return		The engine
-		*/
-		Castor3D::Engine * GetEngine()const
-		{
-			return m_engine;
 		}
 
 		/** Retrieves the default font used by controls
@@ -229,6 +221,8 @@ namespace CastorGui
 		}
 
 	private:
+		//! The engine
+		Castor3D::Engine * m_engine;
 		//! The current mouse state
 		MouseState m_mouse;
 		//! The current keyboard state
@@ -245,8 +239,6 @@ namespace CastorGui
 		mutable std::vector< ControlSPtr > m_controlsByZIndex;
 		//! The controls map, sorted by ID
 		std::map< uint32_t, ControlWPtr > m_controlsById;
-		//! The engine
-		Castor3D::Engine * m_engine;
 		//! Tells the controls array has changed
 		bool m_changed;
 		//! Tells if the manager needs to be refreshed or not.

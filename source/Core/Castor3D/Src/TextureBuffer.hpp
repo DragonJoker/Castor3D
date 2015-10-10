@@ -33,26 +33,26 @@ namespace Castor3D
 	\brief		Représentation d'un tampon de texture
 	\remark		Contient l'image d'une texture
 	*/
-	class C3D_API TextureBuffer
-		:	public CpuBuffer< uint8_t >
+	class TextureBuffer
+		: public CpuBuffer< uint8_t >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		Le moteur
 		 */
-		TextureBuffer( RenderSystem * p_pRenderSystem );
+		C3D_API TextureBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~TextureBuffer();
+		C3D_API ~TextureBuffer();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -67,7 +67,7 @@ namespace Castor3D
 		 *\param[in]	p_pBytes	Les données du tampon
 		 *\param[in]	p_pProgram	Le programme shader
 		 */
-		virtual void Initialise( Castor::ePIXEL_FORMAT const & p_format, uint32_t p_uiSize, uint8_t const * p_pBytes, Castor3D::ShaderProgramBaseSPtr p_pProgram );
+		C3D_API virtual void Initialise( Castor::ePIXEL_FORMAT const & p_format, uint32_t p_uiSize, uint8_t const * p_pBytes, Castor3D::ShaderProgramBaseSPtr p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -109,7 +109,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 */
-		virtual bool DoCreateBuffer();
+		C3D_API virtual bool DoCreateBuffer();
 
 	protected:
 		//!\~english The texture pixel format	\~french Le format des pixels de la texture

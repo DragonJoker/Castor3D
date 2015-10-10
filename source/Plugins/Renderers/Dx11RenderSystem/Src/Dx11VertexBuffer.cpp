@@ -9,8 +9,8 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxVertexBuffer::DxVertexBuffer( BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
-		: DxBufferObject< uint8_t, ID3D11Buffer >( p_pBuffer )
+	DxVertexBuffer::DxVertexBuffer( DxRenderSystem & p_renderSystem, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
+		: DxBufferObject< uint8_t, ID3D11Buffer >( p_renderSystem, p_pBuffer )
 		, m_pDxDeclaration( NULL )
 		, m_declaration( p_declaration )
 	{
@@ -32,7 +32,7 @@ namespace Dx11Render
 
 	void DxVertexBuffer::Cleanup()
 	{
-		ReleaseTracked( m_pBuffer->GetRenderSystem(), m_pDxDeclaration );
+		ReleaseTracked( m_pBuffer->GetOwner()->GetRenderSystem(), m_pDxDeclaration );
 		DxBufferObject< uint8_t, ID3D11Buffer >::DoCleanup();
 	}
 
@@ -85,7 +85,7 @@ namespace Dx11Render
 
 		if ( l_return )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 			UINT l_uiStrides[1] = { m_declaration.GetStride() };
 			UINT l_uiOffsets[1] = { 0 };
 			ID3D11Buffer * l_pBuffers[1] = { m_pBufferObject };
@@ -246,7 +246,7 @@ namespace Dx11Render
 
 			if ( l_pBlob )
 			{
-				DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() );
+				DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetOwner()->GetRenderSystem() );
 				HRESULT l_hr = l_renderSystem->GetDevice()->CreateInputLayout( &l_arrayDxElements[0], UINT( l_arrayDxElements.size() ), reinterpret_cast< DWORD const * >( l_pBlob->GetBufferPointer() ), l_pBlob->GetBufferSize(), &m_pDxDeclaration );
 				dxTrack( l_renderSystem, m_pDxDeclaration, VtxInputLayout );
 				l_return = dxCheckError( l_hr, "ID3D11Device::CreateInputLayout" );
@@ -273,7 +273,7 @@ namespace Dx11Render
 			l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_eNature );
 			l_desc.MiscFlags = 0;
 			l_desc.StructureByteStride = 0;//m_declaration.GetStride();
-			DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetRenderSystem() );
+			DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetOwner()->GetRenderSystem() );
 
 			if ( p_type == eBUFFER_ACCESS_TYPE_STATIC )
 			{

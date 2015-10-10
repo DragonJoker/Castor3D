@@ -19,7 +19,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->AttachTo( static_cast< CSceneNode * >( val )->GetInternal().get() );
+			m_internal->AttachTo( static_cast< CSceneNode * >( val )->GetInternal() );
 			hr = S_OK;
 		}
 		else

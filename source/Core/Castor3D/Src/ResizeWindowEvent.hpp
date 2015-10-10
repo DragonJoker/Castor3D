@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "FrameEvent.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -47,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		ResizeWindowEvent( ResizeWindowEvent const & p_copy );
+		ResizeWindowEvent( ResizeWindowEvent const & p_copy ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -56,7 +52,7 @@ namespace Castor3D
 		 *\brief		Opérateur d'affectation par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		ResizeWindowEvent & operator=( ResizeWindowEvent const & p_copy );
+		ResizeWindowEvent & operator=( ResizeWindowEvent const & p_copy ) = delete;
 
 	public:
 		/**
@@ -90,7 +86,5 @@ namespace Castor3D
 		RenderWindow & m_window;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

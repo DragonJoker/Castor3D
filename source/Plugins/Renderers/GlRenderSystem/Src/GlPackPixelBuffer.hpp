@@ -26,8 +26,8 @@ namespace GlRender
 		:	public GlPixelBuffer
 	{
 	public:
-		GlPackPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize );
-		GlPackPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_pRenderSystem, Castor::PxBufferBaseSPtr p_pPixels );
+		GlPackPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize );
+		GlPackPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pPixels );
 		virtual ~GlPackPixelBuffer();
 
 		virtual void Initialise();

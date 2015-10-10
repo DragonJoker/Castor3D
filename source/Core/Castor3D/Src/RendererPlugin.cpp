@@ -33,7 +33,7 @@ namespace Castor3D
 #endif
 
 	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_RENDERER, p_pLibrary, p_engine )
+		: PluginBase( ePLUGIN_TYPE_RENDERER, p_pLibrary, *p_engine )
 	{
 		if ( !p_pLibrary->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
 		{
@@ -58,7 +58,7 @@ namespace Castor3D
 
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( m_engine );
+			m_pfnOnLoad( GetOwner() );
 		}
 	}
 
@@ -66,7 +66,7 @@ namespace Castor3D
 	{
 		if ( m_pfnOnUnload )
 		{
-			m_pfnOnUnload( m_engine );
+			m_pfnOnUnload( GetOwner() );
 		}
 	}
 
@@ -82,11 +82,11 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	void RendererPlugin::DestroyRenderSystem( RenderSystem * p_pRenderSystem )
+	void RendererPlugin::DestroyRenderSystem( RenderSystem * p_renderSystem )
 	{
 		if ( m_pfnDestroyRenderSystem )
 		{
-			m_pfnDestroyRenderSystem( p_pRenderSystem );
+			m_pfnDestroyRenderSystem( p_renderSystem );
 		}
 	}
 

@@ -17,8 +17,8 @@ using namespace GlRender;
 
 //*************************************************************************************************
 
-GlBillboardList::GlBillboardList( Castor3D::SceneSPtr p_scene, GlRenderSystem * p_pRenderSystem, OpenGl & p_gl )
-	: BillboardList( p_scene, p_pRenderSystem )
+GlBillboardList::GlBillboardList( Castor3D::SceneSPtr p_scene, GlRenderSystem & p_renderSystem, OpenGl & p_gl )
+	: BillboardList( p_scene, p_renderSystem )
 	, m_gl( p_gl )
 {
 }
@@ -45,13 +45,13 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 		cuT( "polygon" ),//eTOPOLOGY_POLYGON
 	};
 
-	ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
+	ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
 	ShaderProgramBaseSPtr l_pProgram = l_manager.GetNewProgram();
 	l_manager.CreateMatrixBuffer( *l_pProgram, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreateSceneBuffer( *l_pProgram, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreatePassBuffer( *l_pProgram, MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreateTextureVariables( *l_pProgram, p_flags );
-	FrameVariableBufferSPtr l_billboardUbo = m_renderSystem->CreateFrameVariableBuffer( cuT( "Billboard" ) );
+	FrameVariableBufferSPtr l_billboardUbo = GetOwner()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
 	l_pProgram->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 	ShaderObjectBaseSPtr l_pObject = l_pProgram->CreateObject( eSHADER_TYPE_GEOMETRY );

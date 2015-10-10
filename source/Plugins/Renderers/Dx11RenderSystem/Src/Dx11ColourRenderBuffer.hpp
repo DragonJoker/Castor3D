@@ -29,7 +29,7 @@ namespace Dx11Render
 		:	public Castor3D::ColourRenderBuffer
 	{
 	public:
-		DxColourRenderBuffer( DxRenderSystem * p_pRenderSystem, Castor::ePIXEL_FORMAT p_eFormat );
+		DxColourRenderBuffer( DxRenderSystem * p_renderSystem, Castor::ePIXEL_FORMAT p_eFormat );
 		virtual ~DxColourRenderBuffer();
 
 		virtual bool Create();

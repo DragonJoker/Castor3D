@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ChunkParser.hpp"
 #include "ChunkFiller.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -245,7 +241,5 @@ namespace Castor3D
 		Castor::Path m_path;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

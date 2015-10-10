@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Rectangle.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -38,8 +34,8 @@ namespace Castor3D
 	\brief		Une incrustation rectangulaire avec un bord
 	\remark		Utilise un matériau spécifique pour le bord
 	*/
-	class C3D_API BorderPanelOverlay
-		:	public OverlayCategory
+	class BorderPanelOverlay
+		: public OverlayCategory
 	{
 	public:
 		/*!
@@ -52,8 +48,8 @@ namespace Castor3D
 		\brief		BorderPanelOverlay loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class C3D_API TextLoader
-			:	public OverlayCategory::TextLoader
+		class TextLoader
+			: public OverlayCategory::TextLoader
 		{
 		public:
 			/**
@@ -68,7 +64,7 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( Castor3D::BorderPanelOverlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::BorderPanelOverlay const & p_overlay, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -78,8 +74,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de BorderPanelOverlay
 		*/
-		class C3D_API BinaryParser
-			:	public OverlayCategory::BinaryParser
+		class BinaryParser
+			: public OverlayCategory::BinaryParser
 		{
 		public:
 			/**
@@ -90,7 +86,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -103,7 +99,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( BorderPanelOverlay const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( BorderPanelOverlay const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -116,7 +112,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( BorderPanelOverlay & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( BorderPanelOverlay & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -126,14 +122,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		BorderPanelOverlay();
+		C3D_API BorderPanelOverlay();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BorderPanelOverlay();
+		C3D_API virtual ~BorderPanelOverlay();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by the factory
@@ -142,7 +138,7 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		Un overlay
 		 */
-		static OverlayCategorySPtr Create();
+		C3D_API static OverlayCategorySPtr Create();
 		/**
 		 *\~english
 		 *\brief		Sets the border material
@@ -151,7 +147,27 @@ namespace Castor3D
 		 *\brief		Définit le matériau des bords
 		 *\param[in]	p_pMaterial	La nouvelle valeur
 		 */
-		void SetBorderMaterial( MaterialSPtr p_pMaterial );
+		C3D_API void SetBorderMaterial( MaterialSPtr p_pMaterial );
+		/**
+		 *\~english
+		 *\brief		Retrieves the absolute overlay borders size, in pixels
+		 *\param[in]	p_size	The screen size
+		 *\return		The size
+		 *\~french
+		 *\brief		Récupère la taille absolue des bordures de l'incrustation
+		 *\param[in]	p_size	La taille de l'écran
+		 *\return		La taille
+		 */
+		C3D_API Castor::Rectangle GetAbsoluteBorderSize( Castor::Size const & p_size )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the absolute overlay borders size
+		 *\return		The size
+		 *\~french
+		 *\brief		Récupère la taille absolue des bordures de l'incrustation
+		 *\return		La taille
+		 */
+		C3D_API Castor::Point4d GetAbsoluteBorderSize()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the panel vertex buffer
@@ -490,26 +506,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the absolute overlay borders size, in pixels
-		 *\param[in]	p_size	The screen size
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille absolue des bordures de l'incrustation
-		 *\param[in]	p_size	La taille de l'écran
-		 *\return		La taille
-		 */
-		Castor::Rectangle GetAbsoluteBorderSize( Castor::Size const & p_size )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute overlay borders size
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille absolue des bordures de l'incrustation
-		 *\return		La taille
-		 */
-		Castor::Point4d GetAbsoluteBorderSize()const;
-		/**
-		 *\~english
 		 *\brief		Sets the borders outer part UV
 		 *\param[in]	val	The new value (left, top, right and bottom)
 		 *\~french
@@ -561,15 +557,15 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
-		virtual void DoRender( OverlayRendererSPtr p_renderer );
+		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
-		virtual void DoUpdateBuffer( Castor::Size const & p_size );
+		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoUpdateSize.
 		 */
-		virtual void DoUpdateSize();
+		C3D_API virtual void DoUpdateSize();
 
 	protected:
 		//!\~english The border material	\~french Le matériau des bords
@@ -592,7 +588,5 @@ namespace Castor3D
 		bool m_borderChanged;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

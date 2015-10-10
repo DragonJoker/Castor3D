@@ -117,19 +117,19 @@
 	}
 
 	template< typename T >
-	inline T & OneFrameVariable< T >::GetValue()throw( std::out_of_range )
+	inline T & OneFrameVariable< T >::GetValue()
 	{
 		return OneFrameVariable< T >::GetValue( 0 );
 	}
 
 	template< typename T >
-	inline T const & OneFrameVariable< T >::GetValue()const throw( std::out_of_range )
+	inline T const & OneFrameVariable< T >::GetValue()const
 	{
 		return OneFrameVariable< T >::GetValue( 0 );
 	}
 
 	template< typename T >
-	inline T & OneFrameVariable< T >::GetValue( uint32_t p_index )throw( std::out_of_range )
+	inline T & OneFrameVariable< T >::GetValue( uint32_t p_index )
 	{
 		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{
@@ -142,7 +142,7 @@
 	}
 
 	template< typename T >
-	inline T const & OneFrameVariable< T >::GetValue( uint32_t p_index )const throw( std::out_of_range )
+	inline T const & OneFrameVariable< T >::GetValue( uint32_t p_index )const
 	{
 		if ( p_index < TFrameVariable< T >::m_uiOcc )
 		{
