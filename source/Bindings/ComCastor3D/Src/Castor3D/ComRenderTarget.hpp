@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CRenderTarget();
+		CRenderTarget();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CRenderTarget();
+		virtual ~CRenderTarget();
 
 		inline Castor3D::RenderTargetSPtr GetInternal()const
 		{

@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CRenderWindow();
+		CRenderWindow();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CRenderWindow();
+		virtual ~CRenderWindow();
 
 		inline Castor3D::RenderWindowSPtr GetInternal()const
 		{
@@ -70,8 +70,26 @@ namespace CastorCom
 		STDMETHOD( Initialise )( /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( Resize )( /* [in] */ ISize * size );
+		STDMETHOD( OnMouseMove )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseLButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseLButtonUp )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseMButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseMButtonUp )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseRButtonDown )( /* [in] */ IPosition * pos );
+		STDMETHOD( OnMouseRButtonUp )( /* [in] */ IPosition * pos );
+
+	private:
+		Castor::real DoTransformX( int x );
+		Castor::real DoTransformY( int y );
+		int DoTransformX( Castor::real x );
+		int DoTransformY( Castor::real y );
+
 	private:
 		Castor3D::RenderWindowSPtr m_internal;
+		int m_oldX;
+		int m_oldY;
+		int m_newX;
+		int m_newY;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
 	OBJECT_ENTRY_AUTO( __uuidof( RenderWindow ), CRenderWindow );

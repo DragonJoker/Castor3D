@@ -34,7 +34,7 @@ namespace Castor3D
 	\brief		Classe de plugin générique.
 	\remarks	Permet des spécialisation générales pour Castor3D.
 	*/
-	class C3D_API GenericPlugin
+	class GenericPlugin
 		: public PluginBase
 	{
 	private:
@@ -55,14 +55,14 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		GenericPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API GenericPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~GenericPlugin();
+		C3D_API virtual ~GenericPlugin();
 
 	private:
 		PAddOptionalParsersFunction m_pfnAddOptionalParsers;

@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CDepthStencilState();
+		CDepthStencilState();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CDepthStencilState();
+		virtual ~CDepthStencilState();
 
 		inline Castor3D::DepthStencilStateSPtr GetInternal()const
 		{

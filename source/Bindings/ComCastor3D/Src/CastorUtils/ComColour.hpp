@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CColour();
+		CColour();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CColour();
+		virtual ~CColour();
 		/**
 		*\~english
 		*\brief		Implicit conversion operator, to Castor::Point4f.

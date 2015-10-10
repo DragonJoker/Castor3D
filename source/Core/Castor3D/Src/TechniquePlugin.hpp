@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de plugin de techniques de rendu
 	*/
-	class C3D_API TechniquePlugin
+	class TechniquePlugin
 		: public PluginBase
 	{
 	private:
@@ -48,14 +48,14 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		TechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API TechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TechniquePlugin();
+		C3D_API virtual ~TechniquePlugin();
 	};
 }
 

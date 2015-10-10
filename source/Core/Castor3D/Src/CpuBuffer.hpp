@@ -35,7 +35,7 @@ namespace Castor3D
 	\remark		A ne pas utiliser pour gérer des buffers de données, utiliser Castor::Buffer pour cela
 	*/
 	template< typename T >
-	class C3D_API CpuBuffer
+	class CpuBuffer
 		: public Castor::OwnedBy< Engine >
 	{
 	protected:

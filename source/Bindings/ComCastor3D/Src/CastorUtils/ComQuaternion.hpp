@@ -46,14 +46,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CQuaternion();
+		CQuaternion();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CQuaternion();
+		virtual ~CQuaternion();
 
 		typedef VariablePutter< Castor::Quaternion, Castor::Matrix4x4r const & > MtxPutter;
 		COM_PROPERTY( RotationMatrix, IMatrix4x4 *, make_getter( this, &Castor::Quaternion::ToRotationMatrix ), MtxPutter( this, &Castor::Quaternion::FromRotationMatrix ) );

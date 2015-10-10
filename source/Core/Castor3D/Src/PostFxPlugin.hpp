@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de plugin d'effets post rendu
 	*/
-	class C3D_API PostFxPlugin
+	class PostFxPlugin
 		: public PluginBase
 	{
 	private:
@@ -51,14 +51,14 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		PostFxPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API PostFxPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~PostFxPlugin();
+		C3D_API virtual ~PostFxPlugin();
 		/**
 		 *\~english
 		 *\brief		Creates a PostEffect object
@@ -69,7 +69,7 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	Le render system
 		 *\return		L'instance de PostEffect créée
 		 */
-		PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem );
+		C3D_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem );
 
 	private:
 		PCreateEffectFunction m_pfnCreateEffect;

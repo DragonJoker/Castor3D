@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CSize();
+		CSize();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CSize();
+		virtual ~CSize();
 
 		COM_PROPERTY( Width, UINT, make_getter( this, &Castor::Size::width ), make_putter( this, &Castor::Size::width ) );
 		COM_PROPERTY( Height, UINT, make_getter( this, &Castor::Size::height ), make_putter( this, &Castor::Size::height ) );

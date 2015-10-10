@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CSubmesh();
+		CSubmesh();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CSubmesh();
+		virtual ~CSubmesh();
 
 		inline Castor3D::SubmeshSPtr GetInternal()const
 		{

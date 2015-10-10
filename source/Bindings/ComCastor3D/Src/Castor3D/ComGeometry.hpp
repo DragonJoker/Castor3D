@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CGeometry();
+		CGeometry();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CGeometry();
+		virtual ~CGeometry();
 
 		inline Castor3D::GeometrySPtr GetInternal()const
 		{

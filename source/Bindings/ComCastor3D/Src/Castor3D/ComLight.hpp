@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CLight();
+		CLight();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CLight();
+		virtual ~CLight();
 
 		inline Castor3D::LightSPtr GetInternal()const
 		{

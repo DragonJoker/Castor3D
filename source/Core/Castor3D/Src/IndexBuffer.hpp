@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Représentation d'un tampon d'indices
 	\remark		Contient les indices des vertex d'un submesh
 	*/
-	class C3D_API IndexBuffer
+	class IndexBuffer
 		: public CpuBuffer< uint32_t >
 	{
 	public:
@@ -45,14 +45,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine		Le moteur
 		 */
-		IndexBuffer( Engine & p_engine );
+		C3D_API IndexBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~IndexBuffer();
+		C3D_API virtual ~IndexBuffer();
 
 	private:
 		/**
@@ -61,7 +61,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 */
-		virtual bool DoCreateBuffer();
+		C3D_API virtual bool DoCreateBuffer();
 	};
 }
 

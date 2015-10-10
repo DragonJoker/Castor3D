@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CRasteriserState();
+		CRasteriserState();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CRasteriserState();
+		virtual ~CRasteriserState();
 
 		inline Castor3D::RasteriserStateSPtr GetInternal()const
 		{

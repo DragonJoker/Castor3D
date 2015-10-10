@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CSpotLight();
+		CSpotLight();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CSpotLight();
+		virtual ~CSpotLight();
 
 		inline Castor3D::SpotLightSPtr GetInternal()const
 		{

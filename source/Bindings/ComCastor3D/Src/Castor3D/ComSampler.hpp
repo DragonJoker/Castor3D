@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CSampler();
+		CSampler();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CSampler();
+		virtual ~CSampler();
 
 		inline Castor3D::SamplerSPtr GetInternal()const
 		{

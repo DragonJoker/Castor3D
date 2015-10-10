@@ -50,12 +50,7 @@ namespace CastorCom
 		 *\param[in]	dwHelpContext	Le contexte, dans le fichier d'aide.
 		 *\param[in]	szHelpFileName	Le nom du fichier contenant l'aide.
 		*/
-		COMC3D_API static HRESULT DispatchWin32Error(
-			DWORD dwError,
-			REFCLSID clsid,
-			LPCTSTR szSource,
-			DWORD dwHelpContext,
-			LPCTSTR szHelpFileName );
+		static HRESULT DispatchWin32Error( DWORD dwError, REFCLSID clsid, LPCTSTR szSource, DWORD dwHelpContext, LPCTSTR szHelpFileName );
 
 		/**
 		 *\~english
@@ -77,13 +72,7 @@ namespace CastorCom
 		 *\param[in]	dwHelpContext	Le contexte, dans le fichier d'aide.
 		 *\param[in]	szHelpFileName	Le nom du fichier contenant l'aide.
 		*/
-		COMC3D_API static HRESULT DispatchError(
-			HRESULT hError,
-			REFCLSID clsid,
-			LPCTSTR szSource,
-			LPCTSTR szDescription,
-			DWORD dwHelpContext,
-			LPCTSTR szHelpFileName );
+		static HRESULT DispatchError( HRESULT hError, REFCLSID clsid, LPCTSTR szSource, LPCTSTR szDescription, DWORD dwHelpContext, LPCTSTR szHelpFileName );
 	};
 }
 

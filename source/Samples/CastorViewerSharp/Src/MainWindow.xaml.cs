@@ -9,8 +9,224 @@ namespace CastorViewerSharp
 	/// <summary>
 	/// Logique d'interaction pour MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : System.Windows.Window
+	public partial class MainWindow
+		: System.Windows.Window
 	{
+		/// <summary>
+		/// Default constructor
+		/// </summary>
+		public MainWindow()
+		{
+			InitializeComponent();
+		}
+
+		#region Private methods
+
+		/// <summary>
+		/// Loads the plug-ins alongside the executable
+		/// </summary>
+		private void LoadPlugins()
+		{
+
+			string path = m_engine.PluginsDirectory;
+			string[] files = Directory.GetFiles( path, "*.dll" );
+
+			foreach ( string file in files )
+			{
+				m_engine.LoadPlugin( file );
+			}
+
+			m_engine.LoadRenderer( eRENDERER_TYPE.eRENDERER_TYPE_OPENGL );
+		}
+
+		string DoSelectSceneFile()
+		{
+			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+			dlg.FileName = "";
+			dlg.DefaultExt = "*.cscn;*.cbsn;*.zip";
+			dlg.Filter = "All supported files|*.cscn;*.cbsn;*.zip|Castor3D Text Scene files|*.cscn|Castor3D Binary Scene files|*.cscn|Castor3D zip files|*.zip";
+			dlg.Title = "Select a scene file to load";
+			bool? result = dlg.ShowDialog();
+			string l_return;
+
+			if ( result == true )
+			{
+				l_return = dlg.FileName;
+			}
+			else
+			{
+				l_return = "";
+			}
+
+			return l_return;
+		}
+
+		/// <summary>
+		/// Loads a scene from a file selector
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnLoadScene( object sender, System.Windows.RoutedEventArgs e )
+		{
+			LoadScene( DoSelectSceneFile() );
+		}
+
+		/// <summary>
+		/// Loads the given scene file name
+		/// </summary>
+		/// <param name="filename">The scene file name</param>
+		private void LoadScene( string filename )
+		{
+			if ( filename.Length > 0 )
+			{
+				if ( m_scene != null )
+				{
+					m_scene.ClearScene();
+					m_engine.RemoveScene( m_scene.Name );
+					m_scene = null;
+				}
+
+				m_renderWindow = m_engine.LoadScene( filename );
+
+				if ( m_renderWindow != null )
+				{
+					var window = GetWindow( RenderPanel );
+
+					if ( m_renderWindow.Initialise( new WindowInteropHelper( window ).Handle ) )
+					{
+						m_scene = m_renderWindow.RenderTarget.Scene;
+						Size l_size = new Size();
+						l_size.Set( ( uint )window.Width, ( uint )window.Height );
+						m_renderWindow.Resize( l_size );
+					}
+
+					m_timer.Start();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Exports the current scene
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnExportScene( object sender, System.Windows.RoutedEventArgs e )
+		{
+		}
+
+		/// <summary>
+		/// Transforms given window coordinates to camera coordinates
+		/// </summary>
+		/// <param name="p_point">The window coordinates</param>
+		/// <returns>The camera coordinates</returns>
+		Position DoTransform( System.Windows.Point p_point )
+		{
+			Position l_return = new Position();
+			var window = GetWindow( RenderPanel );
+			double l_ww = window.Width;
+			double l_wh = window.Height;
+			int l_cw = ( int )m_renderWindow.RenderTarget.camera.Width;
+			int l_ch = ( int )m_renderWindow.RenderTarget.camera.Height;
+			l_return.Set( ( int )( ( p_point.X * l_cw ) / l_ww ), ( int )( ( p_point.Y * l_ch ) / l_wh ) );
+			return l_return;
+		}
+
+		#endregion
+
+		#region Overrides
+
+		/// <summary>
+		/// Initializes the engine, loads the plug-ins
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnInitialized( EventArgs e )
+		{
+			base.OnInitialized( e );
+			m_logger = new Logger();
+			m_engine = new engine();
+			m_engine.Create();
+			LoadPlugins();
+			m_timer = new DispatcherTimer();
+			m_timer.Tick += new EventHandler( OnTimer );
+			m_timer.Interval = new TimeSpan( 0, 0, 0, 0, 40 );
+		}
+
+		/// <summary>
+		/// Cleans up the engine
+		/// </summary>
+		/// <param name="e"></param>
+		protected override void OnClosed( EventArgs e )
+		{
+			m_timer.Stop();
+			m_scene = null;
+			m_renderWindow = null;
+			m_engine.Cleanup();
+			m_engine.Destroy();
+			m_engine = null;
+			base.OnClosed( e );
+		}
+
+		#endregion
+
+		#region Events
+
+		/// <summary>
+		/// Forwards the mouse position to the render window
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnMouseMove( object sender, System.Windows.Input.MouseEventArgs e )
+		{
+			if ( m_renderWindow != null )
+			{
+				m_oldPosition = DoTransform( e.GetPosition( RenderPanel ) );
+				m_renderWindow.OnMouseMove( m_oldPosition );
+			}
+		}
+
+		/// <summary>
+		/// Forwards the new size to the render window
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnSizeChanged( object sender, System.Windows.SizeChangedEventArgs e )
+		{
+			if ( m_renderWindow != null )
+			{
+				Size l_size = new Size();
+				l_size.Width = ( uint )e.NewSize.Width;
+				l_size.Height = ( uint )e.NewSize.Height;
+				m_renderWindow.Resize( l_size );
+			}
+		}
+
+		/// <summary>
+		/// Opens a files selector to select a file name, and to load it.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnLoaded( object sender, System.Windows.RoutedEventArgs e )
+		{
+			LoadScene( DoSelectSceneFile() );
+		}
+
+		/// <summary>
+		/// The timer function Renders one frame
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void OnTimer( object sender, EventArgs e )
+		{
+			if ( m_engine != null )
+			{
+				m_engine.RenderOneFrame();
+			}
+		}
+
+		#endregion
+
+		#region Members
+
 		/// <summary>
 		/// The Castor3D engine
 		/// </summary>
@@ -30,178 +246,12 @@ namespace CastorViewerSharp
 		/// <summary>
 		/// The render timer
 		/// </summary>
-		DispatcherTimer m_timer;
+		private DispatcherTimer m_timer;
 		/// <summary>
-		/// Default constructor
+		/// The previous mouse position
 		/// </summary>
-		public MainWindow()
-		{
-			InitializeComponent();
-		}
-		/// <summary>
-		/// Initializes the engine, loads the plug-ins
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnInitialized(EventArgs e)
-		{
-			base.OnInitialized(e);
-			m_logger = new Logger();
-			m_engine = new engine();
-			m_engine.Create();
-			LoadPlugins();
-			m_timer = new DispatcherTimer();
-			m_timer.Tick += new EventHandler( OnTimer );
-			m_timer.Interval = new TimeSpan(0, 0, 0, 0, 40);
-		}
-		/// <summary>
-		/// Cleans up the engine
-		/// </summary>
-		/// <param name="e"></param>
-		protected override void OnClosed(EventArgs e)
-		{
-			m_timer.Stop();
-			m_scene = null;
-			if (m_renderWindow != null)
-			{
-				m_renderWindow.Cleanup();
-			}
-			m_engine.Cleanup();
-			m_engine.Destroy();
-			base.OnClosed(e);
-		}
-		/// <summary>
-		/// Loads the plug-ins alongside the executable
-		/// </summary>
-		private void LoadPlugins()
-		{
+		private Position m_oldPosition;
 
-			string path = m_engine.PluginsDirectory;
-			string[] files = Directory.GetFiles(path, "*.dll");
-
-			foreach ( string file in files )
-			{
-				m_engine.LoadPlugin(file);
-			}
-
-			m_engine.LoadRenderer(eRENDERER_TYPE.eRENDERER_TYPE_OPENGL);
-		}
-		/// <summary>
-		/// Loads a scene from a file selector
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnLoadScene(object sender, System.Windows.RoutedEventArgs e)
-		{
-			LoadScene("J:\\Projets\\C++\\Castor3D\\data\\Scene\\Gui.zip");
-
-			//Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
-			//dlg.FileName = "Scene"; // Default file name
-			//dlg.DefaultExt = ".cscn"; // Default file extension
-			//dlg.Filter = "Castor3D Scene files (.cscn)|*.cscn"; // Filter files by extension
-			//dlg.Title = "Select a scene file to load";
-
-			//// Show open file dialog box
-			//Nullable< bool > result = dlg.ShowDialog();
-
-			//// Process open file dialog box results 
-			//if (result == true)
-			//{
-			//    // Open document 
-			//    string filename = dlg.FileName;
-			//    LoadScene( filename );
-			//}
-		}
-		/// <summary>
-		/// Loads the given scene file name
-		/// </summary>
-		/// <param name="filename">The scene file name</param>
-		private void LoadScene(string filename)
-		{
-			m_logger.LogDebug( "MainFrame::LoadScene - " + filename );
-
-			if ( filename.Length > 0 )
-			{
-				m_logger.LogDebug( "MainFrame::LoadScene - file path not empty" );
-
-				if ( m_scene != null )
-				{
-					m_scene.ClearScene();
-					m_engine.RemoveScene( m_scene.Name );
-					m_logger.LogDebug( "MainFrame::LoadScene - scene erased from manager" );
-					m_scene = null;
-					m_logger.LogDebug( "Scene cleared" );
-				}
-
-				m_engine.Cleanup();
-				m_logger.LogDebug( "MainFrame::LoadScene - Engine cleared" );
-
-				m_renderWindow = m_engine.LoadScene( filename );
-
-				if ( m_renderWindow != null )
-				{
-					System.Windows.Window window = System.Windows.Window.GetWindow(this.RenderPanel);
-					var wih = new WindowInteropHelper(window);
-					IntPtr hWnd = wih.Handle;
-
-					if ( m_renderWindow.Initialise( hWnd ) )
-					{
-						Size sizeScreen = new Size();
-						Size sizeWnd = m_renderWindow.RenderTarget.Size;
-						sizeScreen.Width = (uint)System.Windows.SystemParameters.PrimaryScreenWidth;
-						sizeScreen.Height = (uint)System.Windows.SystemParameters.PrimaryScreenHeight;
-
-						//m_listener = m_renderWindow.GetListener();
-						m_scene = m_renderWindow.RenderTarget.Scene;
-
-						if ( m_scene != null )
-						{
-							SceneNode camBaseNode = m_scene.CreateSceneNode( "CastorViewer_CamNode", m_scene.CameraRootNode );
-							camBaseNode.Position.X = 0;
-							camBaseNode.Position.Y = 0;
-							camBaseNode.Position.Z = -100;
-							SceneNode camYawNode = m_scene.CreateSceneNode( "CastorViewer_CamYawNode", camBaseNode );
-							SceneNode camPitchNode = m_scene.CreateSceneNode( "CastorViewer_CamPitchNode", camYawNode );
-							SceneNode camRollNode = m_scene.CreateSceneNode( "CastorViewer_CamRollNode", camPitchNode );
-							camera cam = m_scene.CreateCamera( "CastorViewer_Camera", (int)sizeScreen.Width, (int)sizeScreen.Height, camRollNode, eVIEWPORT_TYPE.eVIEWPORT_TYPE_3D );
-							m_renderWindow.RenderTarget.camera = cam;
-
-							if ( m_renderWindow.RenderTarget.camera != null )
-							{
-								//m_pFpRotateCamEvent = std::make_shared< FPCameraRotateEvent		>( l_pCamRollNode,	real( 0 ), real( 0 ) );
-								//m_pFpTranslateCamEvent = std::make_shared< FPCameraTranslateEvent	>( l_pCamRollNode,	real( 0 ), real( 0 ), real( 0 ) );
-								//m_ptOriginalPosition = l_pCamRollNode->GetPosition();
-								//m_qOriginalOrientation = l_pCamRollNode->GetOrientation();
-							}
-
-							//m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow, wxGetApp().GetMainFrame() );
-						}
-					}
-
-					m_scene = m_renderWindow.RenderTarget.Scene;
-					m_logger.LogInfo("Scene file read");
-					m_timer.Start();
-				}
-			}
-		}
-		/// <summary>
-		/// Exports the current scene
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnExportScene(object sender, System.Windows.RoutedEventArgs e)
-		{
-		}
-		/// <summary>
-		/// The timer function Renders one frame
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnTimer(object sender, EventArgs e)
-		{
-			if (m_engine != null)
-			{
-				m_engine.RenderOneFrame();
-			}
-		}
+		#endregion
 	}
 }

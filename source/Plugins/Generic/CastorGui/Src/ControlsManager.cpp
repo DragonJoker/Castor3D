@@ -86,6 +86,7 @@ namespace CastorGui
 		{
 			if ( l_last )
 			{
+		Castor::Logger::LogDebug( Castor::StringStream() << p_position.x() << "x" << p_position.y() );
 				l_last->PushEvent( MouseEvent( eMOUSE_EVENT_MOUSE_LEAVE, p_position ) );
 				l_last.reset();
 				m_lastMouseTarget.reset();

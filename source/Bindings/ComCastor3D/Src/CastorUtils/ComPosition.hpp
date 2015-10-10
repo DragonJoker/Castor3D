@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CPosition();
+		CPosition();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CPosition();
+		virtual ~CPosition();
 
 		COM_PROPERTY( X, INT, make_getter( this, &Castor::Position::x ), make_putter( this, &Castor::Position::x ) );
 		COM_PROPERTY( Y, INT, make_getter( this, &Castor::Position::y ), make_putter( this, &Castor::Position::y ) );

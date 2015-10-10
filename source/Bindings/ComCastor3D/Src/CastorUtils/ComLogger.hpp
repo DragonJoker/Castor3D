@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CLogger();
+		CLogger();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CLogger();
+		virtual ~CLogger();
 
 		STDMETHOD( Initialise )( /* [in] */ eLOG_TYPE level );
 		STDMETHOD( SetFileName )( /* [in] */ BSTR name, eLOG_TYPE target );

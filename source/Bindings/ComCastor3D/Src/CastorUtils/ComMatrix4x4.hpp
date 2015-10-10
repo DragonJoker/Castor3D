@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CMatrix4x4();
+		CMatrix4x4();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CMatrix4x4();
+		virtual ~CMatrix4x4();
 
 		STDMETHOD( Transpose )();
 		STDMETHOD( Invert )();

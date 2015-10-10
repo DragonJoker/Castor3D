@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CMovableObject();
+		CMovableObject();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CMovableObject();
+		virtual ~CMovableObject();
 
 		inline Castor3D::MovableObjectSPtr GetInternal()const
 		{

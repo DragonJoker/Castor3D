@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de plugin de rendu
 	*/
-	class C3D_API RendererPlugin
+	class RendererPlugin
 		: public PluginBase
 	{
 	private:
@@ -57,14 +57,14 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		RendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API RendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RendererPlugin();
+		C3D_API virtual ~RendererPlugin();
 		/**
 		 *\~english
 		 *\brief		Creates the RenderSystem
@@ -77,7 +77,7 @@ namespace Castor3D
 		 *\param[in]	p_pLogger	L'instance de logger
 		 *\return		L'instance de RenderSystem créée
 		 */
-		RenderSystem * CreateRenderSystem( Engine * p_engine );
+		C3D_API RenderSystem * CreateRenderSystem( Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destroys the given RenderSystem
@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\brief		Détruit le RenderSystem donné
 		 *\param[in]	p_renderSystem	Le RenderSystem
 		 */
-		void DestroyRenderSystem( RenderSystem * p_renderSystem );
+		C3D_API void DestroyRenderSystem( RenderSystem * p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Retrieves the renderer type
@@ -95,12 +95,12 @@ namespace Castor3D
 		 *\brief		Récupère le type de renderer
 		 *\return		Le type
 		 */
-		eRENDERER_TYPE GetRendererType();
+		C3D_API eRENDERER_TYPE GetRendererType();
 
 	private:
-		PCreateRenderSystemFunction		m_pfnCreateRenderSystem;
-		PDestroyRenderSystemFunction	m_pfnDestroyRenderSystem;
-		PGetRendererTypeFunction		m_pfnGetRendererType;
+		PCreateRenderSystemFunction m_pfnCreateRenderSystem;
+		PDestroyRenderSystemFunction m_pfnDestroyRenderSystem;
+		PGetRendererTypeFunction m_pfnGetRendererType;
 	};
 }
 

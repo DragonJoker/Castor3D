@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CRect();
+		CRect();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CRect();
+		virtual ~CRect();
 
 		COM_PROPERTY( Left, INT, make_getter( this, &Castor::Rectangle::left ), make_putter( this, &Castor::Rectangle::left ) );
 		COM_PROPERTY( Right, INT, make_getter( this, &Castor::Rectangle::right ), make_putter( this, &Castor::Rectangle::right ) );

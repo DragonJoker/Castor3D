@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CBlendState();
+		CBlendState();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CBlendState();
+		virtual ~CBlendState();
 
 		inline Castor3D::BlendStateSPtr GetInternal()const
 		{

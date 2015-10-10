@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CPixelBuffer();
+		CPixelBuffer();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CPixelBuffer();
+		virtual ~CPixelBuffer();
 
 		inline void SetInternal( Castor::PxBufferBaseSPtr p_buffer )
 		{

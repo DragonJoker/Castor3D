@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CDynamicTexture();
+		CDynamicTexture();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CDynamicTexture();
+		virtual ~CDynamicTexture();
 
 		inline Castor3D::DynamicTextureSPtr GetInternal()const
 		{

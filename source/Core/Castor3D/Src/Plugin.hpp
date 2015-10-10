@@ -37,7 +37,7 @@ namespace Castor3D
 	\brief		Classe de base des plugins
 	\remark		Gère les fonctions de base d'un plugin, permet aux plugins de faire des vérifications de version et  de s'enregistrer auprès du moteur
 	*/
-	class C3D_API PluginBase
+	class PluginBase
 		: public Castor::NonCopyable
 		, public Castor::OwnedBy< Engine >
 	{
@@ -73,7 +73,7 @@ namespace Castor3D
 		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
 		 *\param[in]	p_engine	Le moteur
 		 */
-		PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_pLibrary, Engine & p_engine );
+		C3D_API PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_pLibrary, Engine & p_engine );
 
 	public:
 		/**
@@ -82,7 +82,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~PluginBase() = 0;
+		C3D_API virtual ~PluginBase() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the required version for the plugin to work correctly
@@ -91,7 +91,7 @@ namespace Castor3D
 		 *\brief		Récupère la version nécessaire au bon fonctionnement du plugin
 		 *\return		La version
 		 */
-		void GetRequiredVersion( Version & p_version )const;
+		C3D_API void GetRequiredVersion( Version & p_version )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plugin name
@@ -100,7 +100,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom du plugin
 		 *\return		Le nom
 		 */
-		Castor::String GetName()const;
+		C3D_API Castor::String GetName()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the plugin type

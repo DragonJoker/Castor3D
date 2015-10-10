@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CMesh();
+		CMesh();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CMesh();
+		virtual ~CMesh();
 
 		inline Castor3D::MeshSPtr GetInternal()const
 		{

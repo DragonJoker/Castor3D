@@ -34,7 +34,7 @@ namespace CastorCom
 	\~french
 	\brief		Cette classe définit un CAngle accessible depuis COM
 	*/
-	class ATL_NO_VTABLE CAngle
+	class CAngle
 		:	COM_ATL_OBJECT( Angle )
 		,	public Castor::Angle
 	{
@@ -45,14 +45,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CAngle();
+		CAngle();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CAngle();
+		virtual ~CAngle();
 
 		COM_PROPERTY( Degrees, FLOAT, make_getter( this, &Castor::Angle::Degrees ), make_putter( this, &Castor::Angle::Degrees ) );
 		COM_PROPERTY( Radians, FLOAT, make_getter( this, &Castor::Angle::Radians ), make_putter( this, &Castor::Angle::Radians ) );

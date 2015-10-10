@@ -9,71 +9,79 @@
 namespace CastorCom
 {
 	TCHAR * CComCastor3DModule::m_appId = _T( "{AE7400FF-58CB-40F5-9D8B-3373BCC45E54}" );
-	CComCastor3DModule _AtlModule;
+	CComCastor3DModule g_module;
 }
 
-
-// Used to determine whether the DLL can be unloaded by OLE.
-STDAPI DllCanUnloadNow()
+#ifdef __cplusplus
+extern "C"
 {
-	return CastorCom::_AtlModule.DllCanUnloadNow();
-}
-
-// Returns a class factory to create an object of the requested type.
-STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID * ppv )
-{
-	return CastorCom::_AtlModule.DllGetClassObject( rclsid, riid, ppv );
-}
-
-// DllRegisterServer - Adds entries to the system registry.
-STDAPI DllRegisterServer()
-{
-	// registers object, typelib and all interfaces in typelib
-	HRESULT hr = CastorCom::_AtlModule.DllRegisterServer( TRUE );
-	return hr;
-}
-
-// DllUnregisterServer - Removes entries from the system registry.
-STDAPI DllUnregisterServer()
-{
-	HRESULT hr = CastorCom::_AtlModule.DllUnregisterServer();
-	return hr;
-}
-
-// DllInstall - Adds/Removes entries to the system registry per user per machine.
-STDAPI DllInstall( BOOL bInstall, LPCWSTR pszCmdLine )
-{
-	HRESULT hr = E_FAIL;
-	static const wchar_t szUserSwitch[] = L"user";
-
-	if ( pszCmdLine )
+#endif
+	
+	// Used to determine whether the DLL can be unloaded by OLE.
+	HRESULT STDAPICALLTYPE DllCanUnloadNow()
 	{
-		if ( _wcsnicmp( pszCmdLine, szUserSwitch, _countof( szUserSwitch ) ) == 0 )
+		return CastorCom::g_module.DllCanUnloadNow();
+	}
+
+	// Returns a class factory to create an object of the requested type.
+	HRESULT STDAPICALLTYPE DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID * ppv )
+	{
+		return CastorCom::g_module.DllGetClassObject( rclsid, riid, ppv );
+	}
+
+	// DllRegisterServer - Adds entries to the system registry.
+	HRESULT STDAPICALLTYPE DllRegisterServer()
+	{
+		// registers object, typelib and all interfaces in typelib
+		HRESULT hr = CastorCom::g_module.DllRegisterServer( TRUE );
+		return hr;
+	}
+
+	// DllUnregisterServer - Removes entries from the system registry.
+	HRESULT STDAPICALLTYPE DllUnregisterServer()
+	{
+		HRESULT hr = CastorCom::g_module.DllUnregisterServer();
+		return hr;
+	}
+
+	// DllInstall - Adds/Removes entries to the system registry per user per machine.
+	HRESULT STDAPICALLTYPE DllInstall( BOOL bInstall, LPCWSTR pszCmdLine )
+	{
+		HRESULT hr = E_FAIL;
+		static const wchar_t szUserSwitch[] = L"user";
+
+		if ( pszCmdLine )
 		{
-			ATL::AtlSetPerUserRegistration( true );
+			if ( _wcsnicmp( pszCmdLine, szUserSwitch, _countof( szUserSwitch ) ) == 0 )
+			{
+				ATL::AtlSetPerUserRegistration( true );
+			}
 		}
-	}
 
-	if ( bInstall )
-	{
-		hr = DllRegisterServer();
-
-		if ( FAILED( hr ) )
+		if ( bInstall )
 		{
-			DllUnregisterServer();
+			hr = DllRegisterServer();
+
+			if ( FAILED( hr ) )
+			{
+				DllUnregisterServer();
+			}
 		}
+		else
+		{
+			hr = DllUnregisterServer();
+		}
+
+		return hr;
 	}
-	else
+
+	// DLL Entry Point
+	BOOL STDAPICALLTYPE DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
 	{
-		hr = DllUnregisterServer();
+		hInstance;
+		return CastorCom::g_module.DllMain( dwReason, lpReserved );
 	}
 
-	return hr;
+#ifdef __cplusplus
 }
-
-// DLL Entry Point
-extern "C" BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved )
-{
-	hInstance;
-	return CastorCom::_AtlModule.DllMain( dwReason, lpReserved );
-}
+#endif

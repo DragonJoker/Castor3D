@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace CastorCom
 {
 	class CComCastor3DModule
-		:    public ATL::CAtlDllModuleT< CComCastor3DModule >
+		: public ATL::CAtlDllModuleT< CComCastor3DModule >
 	{
 	public :
 		DECLARE_LIBID( LIBID_Castor3D )

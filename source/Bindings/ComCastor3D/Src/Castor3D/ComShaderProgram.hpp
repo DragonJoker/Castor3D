@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CShaderProgram();
+		CShaderProgram();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CShaderProgram();
+		virtual ~CShaderProgram();
 
 		inline Castor3D::ShaderProgramBaseSPtr GetInternal()const
 		{

@@ -1227,6 +1227,13 @@ interface IRenderWindow
 	[id( 3 ), helpstring( "Initialises the render window" ), local] HRESULT Initialise( [in] LPVOID val, [out, retval] VARIANT_BOOL * pVal );
 	[id( 4 ), helpstring( "Cleans the render window up" )] HRESULT Cleanup();
 	[id( 5 ), helpstring( "Resizes the render window" )] HRESULT Resize( [in] ISize * size );
+	[id( 6 ), helpstring( "MouseMove event processing" )] HRESULT OnMouseMove( [in] IPosition * pos );
+	[id( 7 ), helpstring( "MouseMouseLButtonDown event processing" )] HRESULT OnMouseLButtonDown( [in] IPosition * pos );
+	[id( 8 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseLButtonUp( [in] IPosition * pos );
+	[id( 9 ), helpstring( "MouseMouseMButtonDown event processing" )] HRESULT OnMouseMButtonDown( [in] IPosition * pos );
+	[id( 10 ), helpstring( "MouseMouseLButtonUp event processing" )] HRESULT OnMouseMButtonUp( [in] IPosition * pos );
+	[id( 11 ), helpstring( "MouseMouseRButtonDown event processing" )] HRESULT OnMouseRButtonDown( [in] IPosition * pos );
+	[id( 12 ), helpstring( "MouseMouseRButtonUp event processing" )] HRESULT OnMouseRButtonUp( [in] IPosition * pos );
 };
 
 // IAnimation
@@ -1587,9 +1594,9 @@ interface IEngine
 	[propget, id( 1 ), helpstring( "Retrieves the plugins directory" )] HRESULT PluginsDirectory( [out, retval] BSTR * path );
 	[propget, id( 2 ), helpstring( "Retrieves engine directory" )] HRESULT EngineDirectory( [out, retval] BSTR * path );
 	[propget, id( 3 ), helpstring( "Retrieves data directory" )] HRESULT DataDirectory( [out, retval] BSTR * path );
-	[id( 11 ), helpstring( "Creates the endgine" )] HRESULT Create();
+	[id( 11 ), helpstring( "Creates the engine" )] HRESULT Create();
 	[id( 12 ), helpstring( "Destroys the engine" )] HRESULT Destroy();
-	[id( 13 ), helpstring( "Initialises the endgine" )] HRESULT Initialise( [in] int fps );
+	[id( 13 ), helpstring( "Initialises the engine" )] HRESULT Initialise( [in] int fps );
 	[id( 14 ), helpstring( "Cleans up the engine" )] HRESULT Cleanup();
 	[id( 15 ), helpstring( "Creates a scene" )] HRESULT CreateScene( [in] BSTR name, [out, retval] IScene ** pVal );
 	[id( 16 ), helpstring( "Cleans up the scenes" )] HRESULT ClearScenes();
@@ -1611,7 +1618,7 @@ interface IEngine
 // Castor3DLib
 [
 	uuid( AE7400FF-58CB-40F5-9D8B-3373BCC45E54 ),
-	version( 0.7 ),
+	version( 0.8 ),
 	helpstring( "Castor3D interfaces" )
 ]
 library Castor3D

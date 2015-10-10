@@ -85,14 +85,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CSceneNode();
+		CSceneNode();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CSceneNode();
+		virtual ~CSceneNode();
 
 		inline Castor3D::SceneNodeSPtr GetInternal()const
 		{

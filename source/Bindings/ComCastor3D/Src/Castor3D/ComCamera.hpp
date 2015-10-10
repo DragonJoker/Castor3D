@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CCamera();
+		CCamera();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CCamera();
+		virtual ~CCamera();
 
 		inline Castor3D::CameraSPtr GetInternal()const
 		{

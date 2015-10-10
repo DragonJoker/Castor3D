@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CStaticTexture();
+		CStaticTexture();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CStaticTexture();
+		virtual ~CStaticTexture();
 
 		inline Castor3D::StaticTextureSPtr GetInternal()const
 		{

@@ -34,7 +34,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe regroupant les configurations de blend
 	*/
-	class C3D_API BlendState
+	class BlendState
 		: public Castor::OwnedBy< Engine >
 	{
 	public:
@@ -46,35 +46,35 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		BlendState( Engine & p_engine );
+		C3D_API BlendState( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BlendState();
+		C3D_API virtual ~BlendState();
 		/**
 		 *\~english
 		 *\brief		Initialises the states
 		 *\~french
 		 *\brief		Initialise les états
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the states
 		 *\~french
 		 *\brief		Nettoie les états
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the states
 		 *\~french
 		 *\brief		Applique les états
 		 */
-		virtual bool Apply() = 0;
+		C3D_API virtual bool Apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha to coverage activation status
@@ -461,21 +461,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée l'état utilisé pour stocker l'état courant
 		 */
-		void CreateCurrent();
+		C3D_API void CreateCurrent();
 		/**
 		 *\~english
 		 *\brief		Destroys the state used to save the current state
 		 *\~french
 		 *\brief		Détruit l'état utilisé pour stocker l'état courant
 		 */
-		void DestroyCurrent();
+		C3D_API void DestroyCurrent();
 		/**
 		 *\~english
 		 *\brief		Creates the state used to save the current state
 		 *\~french
 		 *\brief		Crée l'état utilisé pour stocker l'état courant
 		 */
-		virtual BlendStateSPtr DoCreateCurrent() = 0;
+		C3D_API virtual BlendStateSPtr DoCreateCurrent() = 0;
 
 	protected:
 		//!\~english Tells if the blend state has changed	\~french Dit que l'état a changé

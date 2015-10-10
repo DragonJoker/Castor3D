@@ -163,7 +163,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class C3D_API SceneFileParser
+	class SceneFileParser
 		: public Castor::FileParser
 		, public Castor::OwnedBy< Engine >
 	{
@@ -171,27 +171,27 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		SceneFileParser( Engine & p_engine );
+		C3D_API SceneFileParser( Engine & p_engine );
 		/**
 		 * Destructor
 		 */
-		~SceneFileParser();
+		C3D_API ~SceneFileParser();
 		/**
 		 * Retrieves the render window defined by the scene
 		 */
-		RenderWindowSPtr GetRenderWindow();
+		C3D_API RenderWindowSPtr GetRenderWindow();
 		/**
 		 * Parses the given file (expecting it to be in ESCN file format)
 		 *\param[in,out]	p_file	The file
 		 *\return	the parsed scene
 		 */
-		bool ParseFile( Castor::TextFile & p_file );
+		C3D_API bool ParseFile( Castor::TextFile & p_file );
 		/**
 		 * Parses the given file (expecting it to be in ESCN file format)
 		 *\param[in]	p_pathFile	The file path
 		 *\return	true if successful, false if not
 		 */
-		bool ParseFile( Castor::Path const & p_pathFile );
+		C3D_API bool ParseFile( Castor::Path const & p_pathFile );
 
 		inline ScenePtrStrMap::iterator ScenesBegin()
 		{
@@ -207,14 +207,14 @@ namespace Castor3D
 		}
 
 	private:
-		virtual void DoInitialiseParser( Castor::TextFile & p_file );
-		virtual void DoCleanupParser();
-		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
+		C3D_API virtual void DoInitialiseParser( Castor::TextFile & p_file );
+		C3D_API virtual void DoCleanupParser();
+		C3D_API virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
 		{
 			return false;
 		}
-		virtual void DoDiscardParser( Castor::String const & p_strLine );
-		virtual void DoValidate();
+		C3D_API virtual void DoDiscardParser( Castor::String const & p_strLine );
+		C3D_API virtual void DoValidate();
 
 	private:
 		Castor::String m_strSceneFilePath;

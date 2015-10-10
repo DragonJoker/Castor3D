@@ -43,14 +43,15 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CEngine();
+		CEngine();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CEngine();
+		virtual ~CEngine();
+
 		inline Castor3D::Engine * GetInternal()const
 		{
 			return m_internal;

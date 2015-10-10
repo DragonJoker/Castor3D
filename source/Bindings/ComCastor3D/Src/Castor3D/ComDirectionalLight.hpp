@@ -44,14 +44,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CDirectionalLight();
+		CDirectionalLight();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CDirectionalLight();
+		virtual ~CDirectionalLight();
 
 		inline Castor3D::DirectionalLightSPtr GetInternal()const
 		{

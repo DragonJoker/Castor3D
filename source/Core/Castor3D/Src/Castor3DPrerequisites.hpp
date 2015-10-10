@@ -2014,6 +2014,21 @@ namespace Castor3D
 	//@}
 }
 
+namespace Castor
+{
+	template<>
+	class C3D_API OwnedBy< Castor3D::Engine >
+	{
+	public:
+		OwnedBy( Castor3D::Engine & p_owner );
+		virtual ~OwnedBy();
+		Castor3D::Engine * GetOwner()const;
+
+	private:
+		Castor3D::Engine & m_owner;
+	};
+}
+
 #if defined( _MSC_VER )
 #	pragma warning( pop )
 #endif

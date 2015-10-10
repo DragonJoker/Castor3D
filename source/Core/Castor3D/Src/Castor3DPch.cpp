@@ -10,3 +10,20 @@
 #	include <cstdlib>
 #	include <crtdbg.h>
 #endif
+
+namespace Castor
+{
+	OwnedBy< Castor3D::Engine >::OwnedBy( Castor3D::Engine & p_owner )
+		: m_owner( p_owner )
+	{
+	}
+
+	OwnedBy< Castor3D::Engine >::~OwnedBy()
+	{
+	}
+
+	Castor3D::Engine * OwnedBy< Castor3D::Engine >::GetOwner()const
+	{
+		return &m_owner;
+	}
+}

@@ -46,14 +46,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CVector2D();
+		CVector2D();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CVector2D();
+		virtual ~CVector2D();
 
 		COM_PROPERTY( X, FLOAT, make_getter( this, &Castor::Point2r::operator[], 0 ), make_putter( this, &Castor::Point2r::operator[], 0 ) );
 		COM_PROPERTY( Y, FLOAT, make_getter( this, &Castor::Point2r::operator[], 1 ), make_putter( this, &Castor::Point2r::operator[], 1 ) );

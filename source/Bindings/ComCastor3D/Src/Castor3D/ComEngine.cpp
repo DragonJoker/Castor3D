@@ -265,13 +265,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IEngine,						// This is the GUID of component throwing error
-					 cuT( "Initialise" ),				// This is generally displayed as the title
-					 ERROR_INITIALISED_ENGINE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Create" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -289,13 +283,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "Cleanup" ),						// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Destroy" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -312,13 +300,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IEngine,						// This is the GUID of component throwing error
-					 cuT( "Initialise" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Initialise" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -335,13 +317,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "Cleanup" ),						// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "Cleanup" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -365,13 +341,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateScene" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -388,13 +358,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "ClearScenes" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "ClearScenes" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -411,13 +375,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "LoadRenderer" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadRenderer" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -434,13 +392,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "RenderOneFrame" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RenderOneFrame" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -457,13 +409,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "LoadPlugin" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadPlugin" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -487,13 +433,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateMesh" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateMesh" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -509,13 +449,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateOverlay" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateOverlay" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -539,13 +473,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateRenderWindow" ),			// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRenderWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -561,13 +489,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "RemoveWindow" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RemoveWindow" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -591,13 +513,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateSampler" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateSampler" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -621,13 +537,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateBlendState" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateBlendState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -651,13 +561,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateDepthStencilState" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateDepthStencilState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -681,13 +585,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateRasteriserState" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "CreateRasteriserState" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -703,13 +601,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,								// This represents the error
-					 IID_IEngine,							// This is the GUID of component throwing error
-					 cuT( "CreateRasteriserState" ),		// This is generally displayed as the title
-					 ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-					 0,										// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "RemoveScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;
@@ -760,25 +652,13 @@ namespace CastorCom
 				}
 				else
 				{
-					hr = CComError::DispatchError(
-							 E_FAIL,							// This represents the error
-							 IID_IEngine,						// This is the GUID of component throwing error
-							 cuT( "LoadScene" ),				// This is generally displayed as the title
-							 cuT( "Scene file doesn't exist" ),	// This is the description
-							 0,									// This is the context in the help file
-							 NULL );
+					hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), cuT( "Scene file doesn't exist" ), 0, NULL );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-				E_FAIL,								// This represents the error
-				IID_IEngine,						// This is the GUID of component throwing error
-				cuT( "Engine is not initialised" ),	// This is generally displayed as the title
-				ERROR_UNINITIALISED_ENGINE.c_str(),	// This is the description
-				0,									// This is the context in the help file
-				NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IEngine, cuT( "LoadScene" ), ERROR_UNINITIALISED_ENGINE.c_str(), 0, NULL );
 		}
 
 		return hr;

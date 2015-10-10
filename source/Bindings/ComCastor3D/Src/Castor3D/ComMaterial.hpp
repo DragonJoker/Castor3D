@@ -43,14 +43,14 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		COMC3D_API CMaterial();
+		CMaterial();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		COMC3D_API virtual ~CMaterial();
+		virtual ~CMaterial();
 
 		inline Castor3D::MaterialSPtr GetInternal()const
 		{
