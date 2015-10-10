@@ -39,6 +39,10 @@ namespace CastorViewerSharp
 			m_engine.LoadRenderer( eRENDERER_TYPE.eRENDERER_TYPE_OPENGL );
 		}
 
+		/// <summary>
+		/// Opens a file selector dialog, to open a scene file.
+		/// </summary>
+		/// <returns>The scene file name</returns>
 		string DoSelectSceneFile()
 		{
 			Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
@@ -59,16 +63,6 @@ namespace CastorViewerSharp
 			}
 
 			return l_return;
-		}
-
-		/// <summary>
-		/// Loads a scene from a file selector
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnLoadScene( object sender, System.Windows.RoutedEventArgs e )
-		{
-			LoadScene( DoSelectSceneFile() );
 		}
 
 		/// <summary>
@@ -103,15 +97,6 @@ namespace CastorViewerSharp
 					m_timer.Start();
 				}
 			}
-		}
-
-		/// <summary>
-		/// Exports the current scene
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void OnExportScene( object sender, System.Windows.RoutedEventArgs e )
-		{
 		}
 
 		/// <summary>
@@ -207,7 +192,7 @@ namespace CastorViewerSharp
 		/// <param name="e"></param>
 		private void OnLoaded( object sender, System.Windows.RoutedEventArgs e )
 		{
-			LoadScene( DoSelectSceneFile() );
+			//LoadScene( DoSelectSceneFile() );
 		}
 
 		/// <summary>
