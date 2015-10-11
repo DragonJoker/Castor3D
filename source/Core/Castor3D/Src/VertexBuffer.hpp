@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Représentation d'un tampon de sommets
 	\remark		Contient les informations des sommets d'un submesh
 	*/
-	class C3D_API VertexBuffer
+	class VertexBuffer
 		: public CpuBuffer< uint8_t >
 	{
 	public:
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\param[in]	p_pElements		Les descriptions des éléments
 		 *\param[in]	p_uiNbElements	Le compte des descriptions des éléments
 		 */
-		VertexBuffer( Engine & p_engine, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		C3D_API VertexBuffer( Engine & p_engine, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
 		/**
 		*\~english
 		*\brief		Constructor
@@ -63,7 +63,7 @@ namespace Castor3D
 		*\param[in]	p_pElements		Les descriptions des éléments
 		*/
 		template< uint32_t N >
-		VertexBuffer( Engine & p_engine, BufferElementDeclaration const( &p_pElements )[N] )
+		inline VertexBuffer( Engine & p_engine, BufferElementDeclaration const( &p_pElements )[N] )
 			: VertexBuffer( p_engine, p_pElements, N )
 		{
 		}
@@ -73,7 +73,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~VertexBuffer();
+		C3D_API ~VertexBuffer();
+		/**
+		 *\~english
+		 *\brief		Creation function
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction de création
+		 *\return		\p true si tout s'est bien passé
+		 */
+		C3D_API bool Create();
 		/**
 		 *\~english
 		 *\brief		Gets buffer declaration
@@ -82,7 +91,7 @@ namespace Castor3D
 		 *\brief		Récupère la déclaration du tampon
 		 *\return		La déclaration du tampon
 		 */
-		BufferDeclaration const & GetDeclaration()const
+		inline BufferDeclaration const & GetDeclaration()const
 		{
 			return m_bufferDeclaration;
 		}
@@ -95,7 +104,7 @@ namespace Castor3D
 		 *\param[in]	p_begin, p_end	Les itérateurs du tableau d'éléments
 		 */
 		template< typename ItType >
-		void LinkCoords( ItType p_begin, ItType p_end )
+		inline void LinkCoords( ItType p_begin, ItType p_end )
 		{
 			size_t i = 0;
 			uint32_t l_stride = m_bufferDeclaration.GetStride();
@@ -105,15 +114,6 @@ namespace Castor3D
 				( *l_it )->LinkCoords( &CpuBuffer< uint8_t >::data()[i++ * l_stride], l_stride );
 			}
 		}
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 */
-		virtual bool DoCreateBuffer();
 
 	protected:
 		//!\~english Buffer elements description	\~french Description des élément du tampon

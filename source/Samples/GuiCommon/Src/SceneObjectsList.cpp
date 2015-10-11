@@ -230,7 +230,7 @@ namespace GuiCommon
 	{
 		CameraSPtr l_camera = std::static_pointer_cast< Camera >( p_camera );
 		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), l_camera ) );
-		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), l_camera->GetViewport() ) );
+		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *l_camera->GetOwner(), l_camera->GetViewport() ) );
 	}
 
 	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )

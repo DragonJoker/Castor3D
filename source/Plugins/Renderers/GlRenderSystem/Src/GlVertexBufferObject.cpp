@@ -13,11 +13,11 @@ namespace GlRender
 		: GlBuffer< uint8_t >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_ARRAY, p_pBuffer )
 		, m_bufferDeclaration( p_declaration )
 	{
-		for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.Begin(); l_it != m_bufferDeclaration.End(); ++l_it )
+		for ( auto l_element : m_bufferDeclaration )
 		{
 			String l_name;
 
-			switch ( l_it->m_eUsage )
+			switch ( l_element.m_eUsage )
 			{
 			case eELEMENT_USAGE_POSITION:
 				l_name = cuT( "vertex" );
@@ -57,7 +57,7 @@ namespace GlRender
 
 			GlAttributeBaseSPtr l_attribute;
 
-			switch ( l_it->m_eDataType )
+			switch ( l_element.m_eDataType )
 			{
 			case eELEMENT_TYPE_1FLOAT:
 				l_attribute = std::make_shared< GlAttribute1r >( p_gl, &p_renderSystem, l_name );
@@ -96,7 +96,7 @@ namespace GlRender
 				break;
 			}
 
-			l_attribute->SetOffset( l_it->m_uiOffset );
+			l_attribute->SetOffset( l_element.m_uiOffset );
 			l_attribute->SetStride( m_bufferDeclaration.GetStride() );
 			m_arrayAttributes.push_back( l_attribute );
 		}
@@ -169,7 +169,7 @@ namespace GlRender
 				static const uint32_t s_arraySize[] = { 1, 2, 3, 4, 4, 1, 2, 3, 4 };
 				static const uint32_t s_arrayType[] = { eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_UNSIGNED_BYTE, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT };
 
-				for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.Begin(); l_return && l_it != m_bufferDeclaration.End(); ++l_it )
+				for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.begin(); l_return && l_it != m_bufferDeclaration.end(); ++l_it )
 				{
 					switch ( l_it->m_eUsage )
 					{

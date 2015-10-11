@@ -30,7 +30,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 14/02/2010
 	*/
-	class C3D_API Ray
+	class Ray
 	{
 	private:
 		typedef Castor::Policy<real> policy;
@@ -41,20 +41,20 @@ namespace Castor3D
 		 *\param[in]	p_ptPoint	The mouse coordinates
 		 *\param[in]	p_camera	The camera from which to retrieve the ray
 		 */
-		Ray( Castor::Point2i const & p_ptPoint, Camera const & p_camera );
+		C3D_API Ray( Castor::Point2i const & p_ptPoint, Camera const & p_camera );
 		/**
 		 *\brief		Constructor from mouse coordinates and a viewport
 		 *\param[in]	p_x	The mouse x
 		 *\param[in]	p_y	The mouse y
 		 *\param[in]	p_camera	The camera from which to retrieve the ray
 		 */
-		Ray( int p_x, int p_y, Camera const & p_camera );
+		C3D_API Ray( int p_x, int p_y, Camera const & p_camera );
 		/**
 		 *\brief		Constructor from mouse coordinates and a viewport
 		 *\param[in]	p_ptOrigin	The origin of the ray
 		 *\param[in]	p_ptDirection	The The direction of the ray
 		 */
-		Ray( Castor::Point3r const & p_ptOrigin, Castor::Point3r const & p_ptDirection );
+		C3D_API Ray( Castor::Point3r const & p_ptOrigin, Castor::Point3r const & p_ptDirection );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		Ray( Ray const & p_copy );
+		C3D_API Ray( Ray const & p_copy );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -72,14 +72,14 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		Ray( Ray && p_copy );
+		C3D_API Ray( Ray && p_copy );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Ray();
+		C3D_API ~Ray();
 		/**
 		 *\brief		Tells if the ray intersects the given triangle of vertices
 		 *\param[in]	p_pt1	The first triangle vertex
@@ -87,32 +87,32 @@ namespace Castor3D
 		 *\param[in]	p_pt3	The third triangle vertex
 		 *\return		\p true if the ray intersects the triangle, false if not
 		 */
-		real Intersects( Castor::Point3r const & p_pt1, Castor::Point3r const & p_pt2, Castor::Point3r const & p_pt3 );
+		C3D_API real Intersects( Castor::Point3r const & p_pt1, Castor::Point3r const & p_pt2, Castor::Point3r const & p_pt3 );
 		/**
 		 *\brief		Tells if the ray intersects the given face
 		 *\param[in]	p_face		The face to test
 		 *\param[in]	p_submesh	The submesh holding the face
 		 *\return		\p true if the ray intersects the face, false if not
 		 */
-		real Intersects( Face const & p_face, Submesh const & p_submesh );
+		C3D_API real Intersects( Face const & p_face, Submesh const & p_submesh );
 		/**
 		 *\brief		Tells if the vertex is on the ray
 		 *\param[in]	p_point	The face to test
 		 *\return		\p true if vertex is on the ray, false if not
 		 */
-		real Intersects( Castor::Point3r const & p_point );
+		C3D_API real Intersects( Castor::Point3r const & p_point );
 		/**
 		 *\brief		Tells if the ray intersects the given Combo box
 		 *\param[in]	p_box	The box to test
 		 *\return		\p true if the ray intersects the face, false if not
 		 */
-		real Intersects( Castor::CubeBox const & p_box );
+		C3D_API real Intersects( Castor::CubeBox const & p_box );
 		/**
 		 *\brief		Tells if the ray intersects the given Sphere
 		 *\param[in]	p_sphere	The sphere to test
 		 *\return		\p true if the ray intersects the face, false if not
 		 */
-		real Intersects( Castor::SphereBox const & p_sphere );
+		C3D_API real Intersects( Castor::SphereBox const & p_sphere );
 		/**
 		 *\brief		Tells if the ray intersects the given Geometry
 		 *\param[in]	p_pGeometry	The sphere to test
@@ -120,14 +120,14 @@ namespace Castor3D
 		 *\param[out]	p_ppSubmesh	The intersected submesh
 		 *\return		\p true if the ray intersects the face, false if not
 		 */
-		real Intersects( GeometrySPtr p_pGeometry, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
+		C3D_API real Intersects( GeometrySPtr p_pGeometry, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
 		/**
 		 *\brief		Projects the given vertex on the ray
 		 *\param[in]	p_point	The vertex we want to project
 		 *\param[out]	p_result	The projecion result
 		 *\return		\p true if the vertex can be projected on the ray, false if not
 		 */
-		bool ProjectVertex( Castor::Point3r const & p_point, Castor::Point3r & p_result );
+		C3D_API bool ProjectVertex( Castor::Point3r const & p_point, Castor::Point3r & p_result );
 
 	public:
 		//!\~english The ray origin	\~french L'origine du rayon

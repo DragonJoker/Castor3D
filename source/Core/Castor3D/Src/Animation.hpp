@@ -35,8 +35,8 @@ namespace Castor3D
 	\brief		Classe d'animation
 	\remark		Classe gérant une Animation, sa durée, les key frames ...
 	*/
-	class C3D_API Animation
-		:	public Castor::Named
+	class Animation
+		: public Castor::Named
 	{
 	public:
 		/*!
@@ -65,21 +65,21 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		Animation( Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Animation( Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Animation();
+		C3D_API ~Animation();
 		/**
 		 *\~english
 		 *\brief		Creates and adds an animated node
 		 *\~french
 		 *\brief		Crée et ajoute un noeud animé
 		 */
-		MovingObjectBaseSPtr AddMovingObject();
+		C3D_API MovingObjectBaseSPtr AddMovingObject();
 		/**
 		 *\~english
 		 *\brief		Creates and adds an animated bone
@@ -88,7 +88,7 @@ namespace Castor3D
 		 *\brief		Crée et ajoute un os animé
 		 *\param[in]	p_pObject		L'os
 		 */
-		MovingObjectBaseSPtr AddMovingObject( BoneSPtr p_pObject );
+		C3D_API MovingObjectBaseSPtr AddMovingObject( BoneSPtr p_pObject );
 		/**
 		 *\~english
 		 *\brief		Creates and adds an animated object
@@ -97,7 +97,7 @@ namespace Castor3D
 		 *\brief		Crée et ajoute un objet animé
 		 *\param[in]	p_pObject		L'objet déplaçable
 		 */
-		MovingObjectBaseSPtr AddMovingObject( MovableObjectSPtr p_pObject );
+		C3D_API MovingObjectBaseSPtr AddMovingObject( MovableObjectSPtr p_pObject );
 		/**
 		 *\~english
 		 *\brief		Adds an animated object
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\brief		Ajoute un objet animé
 		 *\param[in]	p_pObject		L'objet animé
 		 */
-		void AddMovingObject( MovingObjectBaseSPtr p_pObject );
+		C3D_API void AddMovingObject( MovingObjectBaseSPtr p_pObject );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone
@@ -115,7 +115,7 @@ namespace Castor3D
 		 *\brief		Récupère un os animé
 		 *\param[in]	p_pObject		L'os
 		 */
-		MovingObjectBaseSPtr GetMovingObject( BoneSPtr p_pObject )const;
+		C3D_API MovingObjectBaseSPtr GetMovingObject( BoneSPtr p_pObject )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object
@@ -124,7 +124,7 @@ namespace Castor3D
 		 *\brief		Récupère un objet animé
 		 *\param[in]	p_pObject		L'objet déplaçable
 		 */
-		MovingObjectBaseSPtr GetMovingObject( MovableObjectSPtr p_pObject )const;
+		C3D_API MovingObjectBaseSPtr GetMovingObject( MovableObjectSPtr p_pObject )const;
 		/**
 		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index
@@ -133,28 +133,28 @@ namespace Castor3D
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps
 		 *\param[in]	p_rTslf	Le temps écoulé depuis la dernière frame
 		 */
-		void Update( real p_rTslf );
+		C3D_API void Update( real p_rTslf );
 		/**
 		 *\~english
 		 *\brief		Plays the animation
 		 *\~french
 		 *\brief		Démarre l'animation
 		 */
-		void Play();
+		C3D_API void Play();
 		/**
 		 *\~english
 		 *\brief		Pauses the animation
 		 *\~french
 		 *\brief		Met l'animation en pause
 		 */
-		void Pause();
+		C3D_API void Pause();
 		/**
 		 *\~english
 		 *\brief		Stops the animation
 		 *\~french
 		 *\brief		Stoppe l'animation
 		 */
-		void Stop();
+		C3D_API void Stop();
 		/**
 		 *\~english
 		 *\brief		Retrieves the animation state

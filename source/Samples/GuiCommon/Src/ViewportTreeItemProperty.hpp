@@ -39,13 +39,15 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_editable	Tells if the properties are modifiable
+		 *\param[in]	p_engine	The engine
 		 *\param[in]	p_viewport	The target viewport
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables
+		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_viewport	Le viewport cible
 		 */
-		ViewportTreeItemProperty( bool p_editable, Castor3D::ViewportSPtr p_viewport );
+		ViewportTreeItemProperty( bool p_editable, Castor3D::Engine & p_engine, Castor3D::Viewport & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -61,9 +63,21 @@ namespace GuiCommon
 		 *\brief		Récupère le viewport
 		 *\return		La valeur
 		 */
-		inline Castor3D::ViewportSPtr GetViewport()
+		inline Castor3D::Viewport & GetViewport()
 		{
-			return m_viewport.lock();
+			return m_viewport;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the viewport
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le viewport
+		 *\return		La valeur
+		 */
+		inline Castor3D::Viewport const & GetViewport()const
+		{
+			return m_viewport;
 		}
 
 	private:
@@ -89,7 +103,7 @@ namespace GuiCommon
 		void OnRatioChange( double p_value );
 
 	private:
-		Castor3D::ViewportWPtr m_viewport;
+		Castor3D::Viewport & m_viewport;
 	};
 }
 

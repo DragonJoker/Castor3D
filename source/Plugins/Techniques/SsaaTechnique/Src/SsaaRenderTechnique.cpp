@@ -245,11 +245,11 @@ namespace Ssaa
 
 				if ( l_bReturn )
 				{
-					l_bReturn = m_pSsColorAttach->Attach( eATTACHMENT_POINT_COLOUR0, m_pSsFrameBuffer );
+					l_bReturn = m_pSsFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pSsColorAttach );
 
 					if ( l_bReturn )
 					{
-						l_bReturn = m_pSsDepthAttach->Attach( eATTACHMENT_POINT_DEPTH, m_pSsFrameBuffer );
+						l_bReturn = m_pSsFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pSsDepthAttach );
 					}
 
 					m_pSsFrameBuffer->Unbind();
@@ -265,8 +265,7 @@ namespace Ssaa
 		if ( m_iSamplesCount )
 		{
 			m_pSsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-			m_pSsColorAttach->Detach();
-			m_pSsDepthAttach->Detach();
+			m_pSsFrameBuffer->DetachAll();
 			m_pSsFrameBuffer->Unbind();
 			m_pSsColorBuffer->Cleanup();
 			m_pSsDepthBuffer->Cleanup();

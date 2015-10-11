@@ -33,9 +33,9 @@ namespace Castor3D
 	\~french
 	\brief		Classe d'objet déplaçable
 	*/
-	class C3D_API MovableObject
-		:	public Animable
-		,	public std::enable_shared_from_this< MovableObject >
+	class MovableObject
+		: public Animable
+		, public std::enable_shared_from_this< MovableObject >
 	{
 	public:
 		/*!
@@ -46,9 +46,9 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
-		class C3D_API TextLoader
-			:	public Castor::Loader< MovableObject, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< MovableObject, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -57,7 +57,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a movable object into a text file
@@ -68,7 +68,7 @@ namespace Castor3D
 			 *\param[in]	p_scene	Le MovableObject
 			 *\param[in]	p_file	Le fichier
 			 */
-			virtual bool operator()( MovableObject const & p_object, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( MovableObject const & p_object, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -78,8 +78,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< MovableObject >
+		class BinaryParser
+			: public Castor3D::BinaryParser< MovableObject >
 		{
 		public:
 			/**
@@ -90,7 +90,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -103,7 +103,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( MovableObject const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( MovableObject const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -116,7 +116,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( MovableObject & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( MovableObject & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public :
@@ -126,7 +126,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type );
+		C3D_API MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -139,35 +139,35 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\param[in]	p_type	Le type de MovableObject
 		 */
-		MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, Castor::String const & p_name, eMOVABLE_TYPE p_type );
+		C3D_API MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, Castor::String const & p_name, eMOVABLE_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~MovableObject();
+		C3D_API virtual ~MovableObject();
 		/**
 		 *\~english
 		 *\brief		Cleans the pointers the object has created and that are not necessary (currently none)
 		 *\~french
 		 *\brief		Nettoie l'instance
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Detaches the movable object from it's parent
 		 *\~french
 		 *\brief		Détache l'objet de son parent
 		 */
-		void Detach();
+		C3D_API void Detach();
 		/**
 		 *\~english
 		 *\brief		Attaches the movable object to a node
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		void AttachTo( SceneNodeSPtr p_node );
+		C3D_API void AttachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name

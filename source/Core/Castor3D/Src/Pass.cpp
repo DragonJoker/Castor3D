@@ -527,8 +527,6 @@ namespace Castor3D
 			DoGetTextures();
 			DoGetBuffers();
 		}
-
-		DoFillShaderVariables();
 	}
 
 	void Pass::Cleanup()

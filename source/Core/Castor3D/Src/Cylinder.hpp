@@ -32,8 +32,8 @@ namespace Castor3D
 	\brief		Représentation d'un cylindre
 	\remark		Un cylindre est une primitive basique avec un nombre de faces paramétrable
 	*/
-	class C3D_API Cylinder
-		:	public MeshGenerator
+	class Cylinder
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -44,22 +44,22 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_factory	La fabrique utilisée pour cloner cette MeshGenerator
 		 */
-		Cylinder();
+		C3D_API Cylinder();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Cylinder();
+		C3D_API ~Cylinder();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces

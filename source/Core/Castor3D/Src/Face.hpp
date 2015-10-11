@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Implémentation d'un face
 	\remark		Une face est constituée de 3 vertices
 	*/
-	class C3D_API Face
+	class Face
 	{
 	public:
 		/*!
@@ -45,8 +45,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Face
 		*/
-		class C3D_API TextLoader
-			:	public Castor::Loader< Face, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< Face, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -55,7 +55,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a face into a text file
@@ -66,7 +66,7 @@ namespace Castor3D
 			 *\param[in]	p_face	La face à écrire
 			 *\param[out]	p_file	Le fichier où écrire la face
 			 */
-			virtual bool operator()( Face const & p_face, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Face const & p_face, Castor::TextFile & p_file );
 		};
 
 		/*!
@@ -77,8 +77,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< Face >
+		class BinaryParser
+			: public Castor3D::BinaryParser< Face >
 		{
 		public:
 			/**
@@ -89,7 +89,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -102,7 +102,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Face const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Face const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -115,8 +115,9 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Face & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Face & p_obj, BinaryChunk & p_chunk )const;
 		};
+
 	public:
 		/**
 		 *\~english
@@ -126,7 +127,7 @@ namespace Castor3D
 		 *\brief		Constructeur spécifié
 		 *\param[in]	a, b, c	Les indices des 3 vertices
 		 */
-		Face( uint32_t a, uint32_t b, uint32_t c );
+		C3D_API Face( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -135,7 +136,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_object	L'objet à copier
 		 */
-		Face( Face const & p_object );
+		C3D_API Face( Face const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -144,7 +145,7 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_object	L'objet à déplacer
 		 */
-		Face( Face && p_object );
+		C3D_API Face( Face && p_object );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -155,7 +156,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		Face & operator =( Face const & p_object );
+		C3D_API Face & operator=( Face const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -166,14 +167,14 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		Face & operator =( Face && p_object );
+		C3D_API Face & operator=( Face && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Face();
+		C3D_API ~Face();
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex index

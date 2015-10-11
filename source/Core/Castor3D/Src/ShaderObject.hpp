@@ -34,7 +34,7 @@ namespace Castor3D
 	\brief		Classe de base pour les shaders
 	\remark		Utilisée pour exposer les fonctions communes aux différents langages de shader
 	*/
-	class C3D_API ShaderObjectBase
+	class ShaderObjectBase
 	{
 	public:
 		/*!
@@ -46,7 +46,9 @@ namespace Castor3D
 		\~french
 		\brief Loader de ShaderObjectBase
 		*/
-		class C3D_API TextLoader : public Castor::Loader< ShaderObjectBase, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< ShaderObjectBase, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -55,7 +57,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a ShaderObject into a text file
@@ -66,7 +68,7 @@ namespace Castor3D
 			 *\param[in]		p_shaderObject	Le ShaderObject
 			 *\param[in,out]	p_file			Le fichier
 			 */
-			virtual bool operator()( ShaderObjectBase const & p_shaderObject, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( ShaderObjectBase const & p_shaderObject, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -77,8 +79,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de ShaderObjectBase
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< ShaderObjectBase >
+		class BinaryParser
+			: public Castor3D::BinaryParser< ShaderObjectBase >
 		{
 		public:
 			/**
@@ -89,7 +91,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -102,7 +104,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( ShaderObjectBase const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( ShaderObjectBase const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -115,7 +117,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( ShaderObjectBase & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( ShaderObjectBase & p_obj, BinaryChunk & p_chunk )const;
 		};
 	private:
 		static const std::array< Castor::String, eSHADER_TYPE_COUNT >	string_type;
@@ -131,28 +133,28 @@ namespace Castor3D
 		 *\param[in]	p_parent	programme parent
 		 *\param[in]	p_type		Type de shader
 		 */
-		ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type );
+		C3D_API ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~ShaderObjectBase();
+		C3D_API virtual ~ShaderObjectBase();
 		/**
 		 *\~english
 		 *\brief		Creates the program on GPU
 		 *\~french
 		 *\brief		Crée le programme sur le GPU
 		 */
-		virtual void CreateProgram() = 0;
+		C3D_API virtual void CreateProgram() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the program on GPU
 		 *\~french
 		 *\brief		Détruit le programme sur le GPU
 		 */
-		virtual void DestroyProgram() = 0;
+		C3D_API virtual void DestroyProgram() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines entry point for shader languages that need it
@@ -161,7 +163,7 @@ namespace Castor3D
 		 *\brief		Définit le point d'entrée pour ls langages en ayant besoin
 		 *\param[in]	p_name	Le point d'entrée
 		 */
-		virtual void SetEntryPoint( Castor::String const & p_name ) = 0;
+		C3D_API virtual void SetEntryPoint( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the entry point
@@ -170,14 +172,14 @@ namespace Castor3D
 		 *\brief		Récupère le point d'entrée
 		 *\return		Le point d'entrée
 		 */
-		virtual Castor::String	GetEntryPoint()const = 0;
+		C3D_API virtual Castor::String	GetEntryPoint()const = 0;
 		/**
 		 *\~english
 		 *\brief		Detaches this shader from it's program
 		 *\~french
 		 *\brief		Détache ce shader de son programme
 		 */
-		virtual void Detach() = 0;
+		C3D_API virtual void Detach() = 0;
 		/**
 		 *\~english
 		 *\brief		Attaches this shader to the given program
@@ -186,7 +188,7 @@ namespace Castor3D
 		 *\brief		Attache ce shader au programme donné
 		 *\param[in]	p_program	Le programme
 		 */
-		virtual void AttachTo( ShaderProgramBase & p_program ) = 0;
+		C3D_API virtual void AttachTo( ShaderProgramBase & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the shader file for given model
@@ -199,7 +201,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
-		void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file, whatever model it is
@@ -208,7 +210,7 @@ namespace Castor3D
 		 *\brief		Dit si le shader a un fichier source, quel que soit son modèle
 		 *\return		\p true si le shader a un fichier source
 		 */
-		bool HasFile()const;
+		C3D_API bool HasFile()const;
 		/**
 		 *\~english
 		 *\brief		Sets the shader source for given model
@@ -221,7 +223,7 @@ namespace Castor3D
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_strSource	Le code de la source
 		 */
-		void SetSource( eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
+		C3D_API void SetSource( eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
@@ -230,21 +232,21 @@ namespace Castor3D
 		 *\brief		Dit si le shader a un code source, quel que soit son modèle
 		 *\return		\p true si le shader a un code source
 		 */
-		bool HasSource()const;
+		C3D_API bool HasSource()const;
 		/**
 		 *\~english
 		 *\brief		Activates the shader
 		 *\~french
 		 *\brief		Active le shader
 		 */
-		void Bind();
+		C3D_API void Bind();
 		/**
 		 *\~english
 		 *\brief		Deactivates the shader
 		 *\~french
 		 *\brief		Désactive le shader
 		 */
-		void Unbind();
+		C3D_API void Unbind();
 		/**
 		 *\~english
 		 *\brief		Compiles the shader
@@ -253,7 +255,7 @@ namespace Castor3D
 		 *\brief		Compile le shader
 		 *\return		\p true en cas de succès
 		 */
-		virtual bool Compile();
+		C3D_API virtual bool Compile();
 		/**
 		 *\~english
 		 *\brief		Adds a uniform variable to pass to the shader objects
@@ -262,7 +264,7 @@ namespace Castor3D
 		 *\brief		Crée une variable uniform à donner aux ShaderObjects
 		 *\param[in]	p_pVariable	La variable à donner
 		 */
-		virtual void AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable );
+		C3D_API virtual void AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable );
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -271,14 +273,14 @@ namespace Castor3D
 		 *\brief		Trouve une variable
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_name )const;
+		C3D_API OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Removes all frame variables
 		 *\~french
 		 *\brief		Vide la liste de frame variables
 		 */
-		virtual void FlushFrameVariables();
+		C3D_API virtual void FlushFrameVariables();
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variables bound to this shader
@@ -520,14 +522,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Active le shader
 		 */
-		virtual void DoBind() = 0;
+		C3D_API virtual void DoBind() = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivates the shader
 		 *\~french
 		 *\brief		Désactive le shader
 		 */
-		virtual void DoUnbind() = 0;
+		C3D_API virtual void DoUnbind() = 0;
 
 	protected:
 		//!\~english The parent shader program	\~french Le programme parent

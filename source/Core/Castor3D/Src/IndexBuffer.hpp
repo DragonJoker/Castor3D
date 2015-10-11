@@ -52,16 +52,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~IndexBuffer();
-
-	private:
+		C3D_API ~IndexBuffer();
 		/**
 		 *\~english
-		 *\brief		Initialisation function
+		 *\brief		Creation function
+		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction d'initialisation
+		 *\brief		Fonction de création
+		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoCreateBuffer();
+		C3D_API bool Create();
 	};
 }
 

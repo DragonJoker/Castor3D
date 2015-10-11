@@ -49,27 +49,6 @@
 	}
 
 	template< typename T >
-	bool PlaneEquation< T >::operator ==( PlaneEquation< T > const & p_plane )const
-	{
-		bool l_return = false;
-
-		if ( IsParallel( p_plane ) )
-		{
-			T l_ratioA = m_normal[0] / p_plane.m_normal[0];
-			T l_ratioD = Castor::point::dot( m_normal, m_point ) / Castor::point::dot( p_plane.m_normal, p_plane.m_point );
-			l_return = policy::equals( l_ratioA, l_ratioD );
-		}
-
-		return l_return;
-	}
-
-	template< typename T >
-	bool PlaneEquation< T >::operator !=( PlaneEquation< T > const & p_plane )const
-	{
-		return ( !( *this == p_plane ) );
-	}
-
-	template< typename T >
 	T PlaneEquation< T >::Distance( Point< T, 3 > const & p_point )const
 	{
 		return Castor::point::dot( m_normal, p_point ) + Castor::point::dot( m_normal, m_point );
@@ -151,6 +130,27 @@
 	template< typename T >
 	bool PlaneEquation< T >::LineOn( Line3D< T > const & p_line )const
 	{
-		return std::abs( p_line[0] * m_normal[0] + p_line[1] * m_normal[1] + p_line[2] * m_normal[2] + Castor::point::dot( m_normal, m_point ) ) < std::numeric_limits< T >::epsilon();
+		return std::abs( p_line[0] * m_normal[0] + p_line[1] * m_normal[1] + p_line[2] * m_normal[2] + point::dot( m_normal, m_point ) ) < std::numeric_limits< T >::epsilon();
+	}
+
+	template< typename T >
+	bool operator==( PlaneEquation< T > const & p_a, PlaneEquation< T > const & p_b )
+	{
+		bool l_return = false;
+
+		if ( p_a.IsParallel( p_b ) )
+		{
+			T l_ratioA = p_a.m_normal[0] / p_b.m_normal[0];
+			T l_ratioD = point::dot( p_a.m_normal, p_a.m_point ) / point::dot( p_b.m_normal, p_b.m_point );
+			l_return = PlaneEquation< T >::policy::equals( l_ratioA, l_ratioD );
+		}
+
+		return l_return;
+	}
+
+	template< typename T >
+	bool operator!=( PlaneEquation< T > const & p_a, PlaneEquation< T > const & p_b )
+	{
+		return ( !( p_a == p_b ) );
 	}
 }

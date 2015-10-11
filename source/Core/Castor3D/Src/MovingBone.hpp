@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation de MovingObjectBase pour les Bones.
 	*/
-	class C3D_API MovingBone
+	class MovingBone
 		: public MovingObjectBase
 	{
 	public:
@@ -41,14 +41,23 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MovingBone();
+		C3D_API MovingBone();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~MovingBone();
+		C3D_API ~MovingBone();
+		/**
+		 *\~english
+		 *\brief		Retrieves the object name
+		 *\return		The name
+		 *\~french
+		 *\brief		Récupère le nom de l'objet
+		 *\return		Le nom
+		 */
+		C3D_API virtual Castor::String const & GetName()const;
 		/**
 		 *\~english
 		 *\brief		Defines the movable object
@@ -73,19 +82,10 @@ namespace Castor3D
 		{
 			return m_pBone.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the object name
-		 *\return		The name
-		 *\~french
-		 *\brief		Récupère le nom de l'objet
-		 *\return		Le nom
-		 */
-		virtual Castor::String const & GetName()const;
 
 	private:
-		virtual void DoApply();
-		virtual MovingObjectBaseSPtr DoClone();
+		C3D_API virtual void DoApply();
+		C3D_API virtual MovingObjectBaseSPtr DoClone();
 
 	private:
 		//!\~english The bone affected by the animations	\~french L'os affecté par les animations

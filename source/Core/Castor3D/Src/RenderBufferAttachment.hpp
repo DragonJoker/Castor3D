@@ -53,26 +53,6 @@ namespace Castor3D
 		C3D_API virtual ~RenderBufferAttachment();
 		/**
 		 *\~english
-		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_pFrameBuffer	The frame buffer
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
-		 *\param[in]	p_pFrameBuffer	Le tampon d'image
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer );
-		/**
-		 *\~english
-		 *\brief		Detaches the render buffer from the frame buffer
-		 *\~french
-		 *\brief		Détache le tampon de rendu du tampon d'image
-		 */
-		C3D_API void Detach();
-		/**
-		 *\~english
 		 *\brief		Retrieves the render buffer
 		 *\return		The render buffer
 		 *\~french

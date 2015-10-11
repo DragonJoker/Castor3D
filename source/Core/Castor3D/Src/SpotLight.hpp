@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Classe de représentation d'une PointLight
 	\remark		Une spot light est une source de lumière à un point donné qui illumine dans une direction donnée en suivant une forme cônique
 	*/
-	class C3D_API SpotLight
+	class SpotLight
 		: public LightCategory
 	{
 	public:
@@ -45,7 +45,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader de SpotLight
 		*/
-		class C3D_API TextLoader : public LightCategory::TextLoader
+		class TextLoader : public LightCategory::TextLoader
 		{
 		public:
 			/**
@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			virtual bool operator()( SpotLight const & p_light, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( SpotLight const & p_light, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -68,7 +68,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de SpotLight
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public LightCategory::BinaryParser
 		{
 		public:
@@ -80,7 +80,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -93,7 +93,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( SpotLight const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( SpotLight const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -106,7 +106,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( SpotLight & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( SpotLight & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:
@@ -121,14 +121,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\remark		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
 		 */
-		SpotLight();
+		C3D_API SpotLight();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~SpotLight();
+		C3D_API ~SpotLight();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory
@@ -137,7 +137,7 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par Factory
 		 *\return		Une source lumineuse
 		 */
-		static LightCategorySPtr Create();
+		C3D_API static LightCategorySPtr Create();
 		/**
 		 *\~english
 		 *\brief		Sets the light source position
@@ -146,7 +146,7 @@ namespace Castor3D
 		 *\brief		Définit la position de la source
 		 *\param[in]	p_position	La nouvelle valeur
 		 */
-		virtual void SetPosition( Castor::Point3r const & p_position );
+		C3D_API virtual void SetPosition( Castor::Point3r const & p_position );
 		/**
 		 *\~english
 		 *\brief		Retrieves the light source position
@@ -155,7 +155,7 @@ namespace Castor3D
 		 *\brief		Récupère la position de la source
 		 *\return		La valeur
 		 */
-		virtual Castor::Point3f GetPosition()const;
+		C3D_API virtual Castor::Point3f GetPosition()const;
 		/**
 		 *\~english
 		 *\brief		Sets attenuation components
@@ -164,19 +164,19 @@ namespace Castor3D
 		 *\brief		Définit les composantes d'atténuation
 		 *\param[in]	p_ptAttenuation	Les composantes d'attenuation
 		 */
-		void SetAttenuation( Castor::Point3f const & p_ptAttenuation );
+		C3D_API void SetAttenuation( Castor::Point3f const & p_ptAttenuation );
 		/**
 		*\~english
 		*\brief			Sets the light exponent
 		 *\param[in]	p_exponent	The new exponent value
 		 */
-		void SetExponent( float p_exponent );
+		C3D_API void SetExponent( float p_exponent );
 		/**
 		*\~english
 		*\brief			Sets the light cutoff
 		 *\param[in]	p_cutOff	The new cutoff value
 		 */
-		void SetCutOff( float p_cutOff );
+		C3D_API void SetCutOff( float p_cutOff );
 		/**
 		 *\~english
 		 *\brief		Retrieves the attenuation components

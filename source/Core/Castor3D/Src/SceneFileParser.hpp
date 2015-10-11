@@ -70,7 +70,7 @@ namespace Castor3D
 	\author Sylvain DOREMUS
 	\date 25/08/2010
 	*/
-	class C3D_API SceneFileContext
+	class SceneFileContext
 		: public Castor::FileParserContext
 	{
 	public:
@@ -151,11 +151,11 @@ namespace Castor3D
 		/**
 		 * Constructor
 		 */
-		SceneFileContext( SceneFileParser * p_pParser, Castor::TextFile * p_pFile );
+		C3D_API SceneFileContext( SceneFileParser * p_pParser, Castor::TextFile * p_pFile );
 		/**
 		 * Initialises all variables
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 	};
 	//! ESCN file parser
 	/*!

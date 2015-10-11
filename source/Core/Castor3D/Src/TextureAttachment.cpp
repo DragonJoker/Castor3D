@@ -5,9 +5,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureAttachment::TextureAttachment( DynamicTextureSPtr p_pTexture )
-		:	FrameBufferAttachment( )
-		,	m_pTexture( p_pTexture )
+	TextureAttachment::TextureAttachment( DynamicTextureSPtr p_texture )
+		: FrameBufferAttachment( eATTACHMENT_TYPE_TEXTURE )
+		, m_texture( p_texture )
+		, m_target( eTEXTURE_TARGET_COUNT )
+		, m_layer( 0 )
 	{
 	}
 
@@ -15,28 +17,22 @@ namespace Castor3D
 	{
 	}
 
-	bool TextureAttachment::Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer, eTEXTURE_TARGET p_eTarget, int p_iLayer )
+	bool TextureAttachment::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer )
 	{
-		m_eAttachedTarget = p_eTarget;
-		m_iAttachedLayer = p_iLayer;
-		bool l_return = FrameBufferAttachment::Attach( p_eAttachment, p_pFrameBuffer );
+		m_layer = p_layer;
+		m_target = p_target;
+		return FrameBufferAttachment::Attach( p_attachment, p_index, p_frameBuffer );
+	}
 
-		if ( l_return )
-		{
-			p_pFrameBuffer->Attach( this );
-		}
-
-		return l_return;
+	bool TextureAttachment::Attach( eATTACHMENT_POINT p_attachment, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer )
+	{
+		return Attach( p_attachment, 0, p_frameBuffer, p_target, p_layer );
 	}
 
 	void TextureAttachment::Detach()
 	{
-		FrameBufferSPtr l_pFrameBuffer = GetFrameBuffer();
-
-		if ( l_pFrameBuffer )
-		{
-			l_pFrameBuffer->Detach( this );
-			FrameBufferAttachment::Detach();
-		}
+		FrameBufferAttachment::Detach();
+		m_target = eTEXTURE_TARGET_COUNT;
+		m_layer = 0;
 	}
 }

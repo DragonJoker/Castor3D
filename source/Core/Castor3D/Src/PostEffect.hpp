@@ -35,7 +35,7 @@ namespace Castor3D
 	\remark		Une effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D
 				<br />Les effets post rendu sont appliqués de manière cumulative
 	*/
-	class C3D_API PostEffect
+	class PostEffect
 	{
 	public:
 		/**
@@ -46,14 +46,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_renderSystem	Le render system
 		 */
-		PostEffect( RenderSystem * p_renderSystem );
+		C3D_API PostEffect( RenderSystem * p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~PostEffect();
+		C3D_API virtual ~PostEffect();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -62,14 +62,14 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation
 		 *\return		\p true if ok
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Render function, applies the effect to a render target
@@ -80,7 +80,7 @@ namespace Castor3D
 		 *\param[in]	p_renderTarget	La render target pour cette technique
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Apply( RenderTarget * p_pRenderTarget ) = 0;
+		C3D_API virtual bool Apply( RenderTarget * p_pRenderTarget ) = 0;
 
 	protected:
 		//!\~english The	render system	\~french Le render system

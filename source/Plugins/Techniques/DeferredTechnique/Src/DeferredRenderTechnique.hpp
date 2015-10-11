@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 
 #include <RenderTechnique.hpp>
+#include <Viewport.hpp>
 
 #pragma warning( push )
 #pragma warning( disable:4251 )
@@ -53,7 +54,8 @@ namespace Deferred
 				<br />puis on fait un rendu de ces tampons en ajoutant les lumières (Light Pass)
 	*/
 	class RenderTechnique
-		:	public Castor3D::RenderTechniqueBase
+		: public Castor3D::RenderTechniqueBase
+		, public Castor::Aligned< CASTOR_ALIGN_OF( Castor3D::Viewport ) >
 	{
 	protected:
 		typedef enum eDS_TEXTURE CASTOR_TYPE( uint8_t )
@@ -288,7 +290,7 @@ namespace Deferred
 		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
 		Castor3D::GeometryBuffersSPtr m_pGeometryBuffers;
 		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)
-		Castor3D::ViewportSPtr m_viewport;
+		Castor3D::Viewport m_viewport;
 		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la caméra
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
 		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisé par la passe géométrique

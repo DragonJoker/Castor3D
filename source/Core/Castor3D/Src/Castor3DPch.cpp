@@ -13,17 +13,6 @@
 
 namespace Castor
 {
-	OwnedBy< Castor3D::Engine >::OwnedBy( Castor3D::Engine & p_owner )
-		: m_owner( p_owner )
-	{
-	}
-
-	OwnedBy< Castor3D::Engine >::~OwnedBy()
-	{
-	}
-
-	Castor3D::Engine * OwnedBy< Castor3D::Engine >::GetOwner()const
-	{
-		return &m_owner;
-	}
+	IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::Engine );
+	IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::RenderSystem );
 }

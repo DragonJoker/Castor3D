@@ -13,6 +13,7 @@
 #include "RenderSystem.hpp"
 #include "Scene.hpp"
 #include "Pipeline.hpp"
+#include "Viewport.hpp"
 
 using namespace Castor;
 
@@ -35,6 +36,7 @@ namespace Castor3D
 	OverlayManager::OverlayManager( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
 		, m_overlayCountPerLevel( 1000, 0 )
+		, m_viewport( Viewport::Ortho( p_engine, 0, 1, 1, 0, 0, 1000 ) )
 	{
 	}
 
@@ -228,29 +230,19 @@ namespace Castor3D
 
 	void OverlayManager::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
 	{
-		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
-		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
-
-		if ( m_size != p_size )
-		{
-			m_size = p_size;
-			l_pipeline.Ortho( real( 0.0 ), real( m_size.width() ), real( m_size.height() ), real( 0.0 ), real( 0.0 ), real( 1000.0 ) );
-			m_projection = l_pipeline.GetProjectionMatrix();
-		}
-		else
-		{
-			l_pipeline.SetProjectionMatrix( m_projection );
-		}
-
 		lock();
 		Update();
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 		Context * l_context = l_renderSystem->GetCurrentContext();
 
 		if ( l_context && m_pRenderer )
 		{
 			l_context->CullFace( eFACE_BACK );
-			l_pipeline.ApplyViewport( m_size.width(), m_size.height() );
-			m_pRenderer->BeginRender( m_size );
+			m_viewport.SetSize( p_size );
+			m_viewport.SetRight( real( p_size.width() ) );
+			m_viewport.SetBottom( real( p_size.height() ) );
+			m_viewport.Render( l_renderSystem->GetPipeline() );
+			m_pRenderer->BeginRender( p_size );
 
 			for ( auto l_category : m_overlays )
 			{

@@ -330,6 +330,7 @@ namespace Deferred
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 		: RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_pRenderSystem, p_params )
+		, m_viewport( Viewport::Ortho( *m_renderSystem->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_lightPassFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
@@ -404,19 +405,10 @@ namespace Deferred
 		}
 
 		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
-
-		m_viewport = std::make_shared< Viewport >( *m_renderSystem->GetOwner(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
-		m_viewport->SetLeft( real( 0.0 ) );
-		m_viewport->SetRight( real( 1.0 ) );
-		m_viewport->SetTop( real( 1.0 ) );
-		m_viewport->SetBottom( real( 0.0 ) );
-		m_viewport->SetNear( real( 0.0 ) );
-		m_viewport->SetFar( real( 1.0 ) );
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
-		m_viewport.reset();
 		m_pGeometryBuffers.reset();
 		m_lightPassShaderProgram.reset();
 		m_pDeclaration.reset();
@@ -507,10 +499,10 @@ namespace Deferred
 		{
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 			{
-				l_bReturn &= m_lightPassTexAttachs[i]->Attach( eATTACHMENT_POINT( eATTACHMENT_POINT_COLOUR0 + i ), m_lightPassFrameBuffer, eTEXTURE_TARGET_2D );
+				l_bReturn &= m_lightPassFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, i, m_lightPassTexAttachs[i], eTEXTURE_TARGET_2D );
 			}
 
-			l_bReturn &= m_lightPassDepthAttach->Attach( eATTACHMENT_POINT_DEPTH, m_lightPassFrameBuffer );
+			l_bReturn &= m_lightPassFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_lightPassDepthAttach );
 			m_lightPassFrameBuffer->Unbind();
 		}
 
@@ -570,62 +562,59 @@ namespace Deferred
 		ContextRPtr l_pContext = m_renderSystem->GetCurrentContext();
 		m_lightPassFrameBuffer->Unbind();
 
-		if ( m_viewport )
-		{
-			bool l_bReturn = true;
-			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-			m_lightPassDsState->Apply();
-			//m_pRenderTarget->GetDepthStencilState()->Apply();
-			m_pRenderTarget->GetRasteriserState()->Apply();
-			//m_pRenderTarget->GetRenderer()->BeginScene();
-			l_pContext->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
-			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-			m_viewport->SetSize( m_size );
-			m_viewport->Render();
-			l_pContext->CullFace( eFACE_BACK );
+		bool l_bReturn = true;
+		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		m_lightPassDsState->Apply();
+		//m_pRenderTarget->GetDepthStencilState()->Apply();
+		m_pRenderTarget->GetRasteriserState()->Apply();
+		//m_pRenderTarget->GetRenderer()->BeginScene();
+		l_pContext->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
+		l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
+		m_viewport.SetSize( m_size );
+		m_viewport.Render( l_pipeline );
+		l_pContext->CullFace( eFACE_BACK );
 
-			if ( m_pShaderCamera )
-			{
-				Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
-				m_pShaderCamera->SetValue( l_position );
-				m_lightPassShaderProgram->Bind( 0, 1 );
-				l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
+		if ( m_pShaderCamera )
+		{
+			Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
+			m_pShaderCamera->SetValue( l_position );
+			m_lightPassShaderProgram->Bind( 0, 1 );
+			l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 
 #if DEBUG_BUFFERS
 
-				int l_width = int( m_size.width() );
-				int l_height = int( m_size.height() );
-				int l_thirdWidth = int( l_width / 3.0f );
-				int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
-				int l_halfHeight = int( l_height / 2.0f );
-				m_lightPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, 0, l_thirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-				m_lightPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-				m_lightPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, 0, l_width, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-				m_lightPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, l_halfHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-				m_lightPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, l_halfHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-				m_lightPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, l_halfHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
+			int l_width = int( m_size.width() );
+			int l_height = int( m_size.height() );
+			int l_thirdWidth = int( l_width / 3.0f );
+			int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
+			int l_halfHeight = int( l_height / 2.0f );
+			m_lightPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, 0, l_thirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, 0, l_width, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, l_halfHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, l_halfHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, l_halfHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
 
 #else
 
-				for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
-				{
-					l_bReturn = m_lightPassTextures[i]->Bind();
-				}
+			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
+			{
+				l_bReturn = m_lightPassTextures[i]->Bind();
+			}
 
-				if ( l_bReturn )
-				{
-					m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
+			if ( l_bReturn )
+			{
+				m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
 
-					for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
-					{
-						m_lightPassTextures[i]->Unbind();
-					}
+				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
+				{
+					m_lightPassTextures[i]->Unbind();
 				}
+			}
 
 #endif
 
-				m_lightPassShaderProgram->Unbind();
-			}
+			m_lightPassShaderProgram->Unbind();
 
 			//m_pRenderTarget->EndScene();
 			m_pFrameBuffer->Unbind();

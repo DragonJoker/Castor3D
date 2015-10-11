@@ -42,7 +42,8 @@ namespace Castor3D
 	\brief		Variable point à type et dimensions variables
 	*/
 	template <typename T, uint32_t Count>
-	class PointFrameVariable : public TFrameVariable<T>
+	class PointFrameVariable
+		: public TFrameVariable<T>
 	{
 	protected:
 		typedef Castor::Policy<T> policy;

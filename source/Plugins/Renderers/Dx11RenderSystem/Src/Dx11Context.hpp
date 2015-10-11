@@ -41,6 +41,7 @@ namespace Dx11Render
 		virtual ~DxContext();
 
 		virtual void UpdateFullScreen( bool p_bVal );
+		virtual void BToBRender( Castor::Size const & p_size, Castor3D::TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
 		virtual Castor::Size GetMaxSize( Castor::Size const & p_size )
 		{
 			return Castor::Size( std::min( p_size.width(), m_size.width() ), std::min( p_size.height(), m_size.height() ) );

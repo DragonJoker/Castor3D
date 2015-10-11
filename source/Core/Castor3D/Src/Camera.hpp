@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "MovableObject.hpp"
 #include "BinaryParser.hpp"
+#include "Viewport.hpp"
 
 #include <PlaneEquation.hpp>
 #include <OwnedBy.hpp>
@@ -52,7 +53,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure contenant le résultat d'une sélection
 	*/
-	struct C3D_API stSELECT_RESULT
+	struct stSELECT_RESULT
 	{
 		//!\~english A selection can be a vertex	\~french Une sélection peut être un vertex
 		VertexWPtr m_pVertex;
@@ -158,38 +159,34 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_name			The camera name
-		 *\param[in]	p_pMaterial				The parent camera node
-		 *\param[in]	p_viewport			Viewport to copy
+		 *\param[in]	p_name		The camera name
+		 *\param[in]	p_node		The parent scene node
+		 *\param[in]	p_viewport	Viewport to copy
 		 *\param[in]	p_topology	The camera display mode
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_name			Le nom de la caméra
-		 *\param[in]	p_pMaterial				SceneNode parent
-		 *\param[in]	p_viewport			Viewport à copier
+		 *\param[in]	p_name		Le nom de la caméra
+		 *\param[in]	p_node		SceneNode parent
+		 *\param[in]	p_viewport	Viewport à copier
 		 *\param[in]	p_topology	Mode d'affichage de la caméra
 		 */
-		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, ViewportSPtr p_viewport, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
+		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node, Viewport const & p_viewport, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_name			The camera name
-		 *\param[in]	p_pMaterial				The parent camera node
-		 *\param[in]	p_size				The viewport render size
-		 *\param[in]	p_type				Projection type
+		 *\param[in]	p_name		The camera name
+		 *\param[in]	p_node		The parent scene node
 		 *\param[in]	p_topology	The camera display mode
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_name			Le nom de la caméra
-		 *\param[in]	p_pMaterial				SceneNode parent
-		 *\param[in]	p_size				Les dimensions de rendu du viewport
-		 *\param[in]	p_type				Type de projection
+		 *\param[in]	p_name		Le nom de la caméra
+		 *\param[in]	p_node		SceneNode parent
 		 *\param[in]	p_topology	Mode d'affichage de la caméra
 		 */
-		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_pMaterial, Castor::Size const & p_size, eVIEWPORT_TYPE p_type, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
+		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -324,14 +321,26 @@ namespace Castor3D
 		*/
 		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
 		/**
-		 *\~english
-		 *\brief		Retrieves the Viewport
-		 *\return		The Viewport
-		 *\~french
-		 *\brief		Récupère le Viewport
-		 *\return		Le Viewport
-		 */
-		inline ViewportSPtr	GetViewport()const
+		*\~english
+		*\brief		Retrieves the Viewport
+		*\return		The Viewport
+		*\~french
+		*\brief		Récupère le Viewport
+		*\return		Le Viewport
+		*/
+		inline Viewport const & GetViewport()const
+		{
+			return m_viewport;
+		}
+		/**
+		*\~english
+		*\brief		Retrieves the Viewport
+		*\return		The Viewport
+		*\~french
+		*\brief		Récupère le Viewport
+		*\return		Le Viewport
+		*/
+		inline Viewport & GetViewport()
 		{
 			return m_viewport;
 		}
@@ -374,7 +383,7 @@ namespace Castor3D
 		friend class Scene;
 		friend class CameraRenderer;
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
-		ViewportSPtr m_viewport;
+		Viewport m_viewport;
 		//!\~english Primitive display type	\~french Type des primitives d'affichage
 		eTOPOLOGY m_topology;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue

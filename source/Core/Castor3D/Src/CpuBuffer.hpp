@@ -44,7 +44,7 @@ namespace Castor3D
 		typedef typename std::weak_ptr< CpuBuffer< T > > CpuBufferWPtr;
 		DECLARE_TPL_VECTOR( T, T );
 
-	public:
+	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine		Le moteur
 		 */
-		CpuBuffer( Engine & p_engine )
+		inline CpuBuffer( Engine & p_engine )
 			: Castor::OwnedBy< Engine >( p_engine )
 			, m_bAssigned( false )
 			, m_bToDelete( false )
@@ -69,35 +69,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~CpuBuffer()
+		inline ~CpuBuffer()
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool Create()
-		{
-			bool l_return = DoCreateBuffer();
 
-			if ( l_return )
-			{
-				l_return = GetGpuBuffer()->Create();
-			}
-
-			return l_return;
-		}
+	public:
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy()
+		inline void Destroy()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -113,7 +96,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup()
+		inline void Cleanup()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -134,7 +117,7 @@ namespace Castor3D
 		 *\param[in]	p_eNature	Nature d'accès du tampon
 		 *\param[in]	p_pProgram	Le programme shader
 		 */
-		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr )
+		inline bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr )
 		{
 			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
@@ -162,7 +145,7 @@ namespace Castor3D
 		 *\param[in]	p_uiFlags	Les flags de lock
 		 *\return		L'adresse du tampon mappé
 		 */
-		virtual T * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+		inline T * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
 		{
 			T * l_pReturn = NULL;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
@@ -182,7 +165,7 @@ namespace Castor3D
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus
 		 *\remark		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU
 		 */
-		virtual void Unlock()
+		inline void Unlock()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -207,7 +190,7 @@ namespace Castor3D
 		 *\param[in]	p_eNature	Nature du transfert
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+		inline bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 		{
 			bool l_return = false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
@@ -227,7 +210,7 @@ namespace Castor3D
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind()
+		inline bool Bind()
 		{
 			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
@@ -247,7 +230,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual void Unbind()
+		inline void Unbind()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -266,7 +249,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index
 		 *\param[in]	p_value	La valeur
 		 */
-		virtual void SetElement( uint32_t p_index, T const & p_value )
+		inline void SetElement( uint32_t p_index, T const & p_value )
 		{
 			CASTOR_ASSERT( p_index < m_arrayData.size() );
 			m_arrayData[p_index] = p_value;
@@ -279,7 +262,7 @@ namespace Castor3D
 		 *\brief		Ajoute une valeur à la fin du tampon
 		 *\param[in]	p_value	La valeur
 		 */
-		virtual void AddElement( T const & p_value )
+		inline void AddElement( T const & p_value )
 		{
 			m_arrayData.push_back( p_value );
 		}
@@ -291,7 +274,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille remplie du tampon
 		 *\return		La taille
 		 */
-		virtual uint32_t GetSize()const
+		inline uint32_t GetSize()const
 		{
 			uint32_t l_uiReturn = m_uiSavedSize;
 
@@ -310,7 +293,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille allouée du tampon
 		 *\return		La taille
 		 */
-		virtual uint32_t GetCapacity()const
+		inline uint32_t GetCapacity()const
 		{
 			// Safe cast since I limit a buffer size to uint32_t
 			return uint32_t( m_arrayData.capacity() );
@@ -323,7 +306,7 @@ namespace Castor3D
 		 *\brief		Définit la taille allouée du tampon
 		 *\param[in]	p_uiNewSize	La nouvelle taille
 		 */
-		virtual void Resize( uint32_t p_uiNewSize )
+		inline void Resize( uint32_t p_uiNewSize )
 		{
 			m_arrayData.resize( p_uiNewSize, 0 );
 		}
@@ -335,7 +318,7 @@ namespace Castor3D
 		 *\brief		Augmente la taille allouée du tampon
 		 *\param[in]	p_uiIncrement	L'incrément de taille
 		 */
-		virtual void Reserve( uint32_t p_uiIncrement )
+		inline void Reserve( uint32_t p_uiIncrement )
 		{
 			if ( p_uiIncrement + GetCapacity() < p_uiIncrement )
 			{
@@ -352,7 +335,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide le tampon
 		 */
-		virtual void Clear()
+		inline void Clear()
 		{
 			m_uiSavedSize = uint32_t( m_arrayData.size() );
 			m_arrayData.clear();
@@ -365,7 +348,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de suppression du tampon
 		 *\return		Le statut de suppression
 		 */
-		virtual bool IsToDelete()const
+		inline bool IsToDelete()const
 		{
 			return m_bToDelete;
 		}
@@ -377,7 +360,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'affectation du tampon
 		 *\return		Le statut d'affectation
 		 */
-		virtual bool IsAssigned()const
+		inline bool IsAssigned()const
 		{
 			return m_bAssigned;
 		}
@@ -389,7 +372,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon GPU
 		 *\return		Le tampon GPU
 		 */
-		virtual GpuBufferSPtr GetGpuBuffer()const
+		inline GpuBufferSPtr GetGpuBuffer()const
 		{
 			return m_pBuffer;
 		}
@@ -399,7 +382,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Définit le status d'affectation à \p true
 		 */
-		virtual void Assign()
+		inline void Assign()
 		{
 			m_bAssigned = true;
 		}
@@ -409,7 +392,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Définit le status d'affectation à \p false
 		 */
-		virtual void Unassign()
+		inline void Unassign()
 		{
 			m_bAssigned = false;
 		}
@@ -421,7 +404,7 @@ namespace Castor3D
 		 *\brief		Récupère le pointeur sur les données
 		 *\return		Le pointeur sur les données
 		 */
-		virtual T const * data()const
+		inline T const * data()const
 		{
 			return ( m_arrayData.size() ? &m_arrayData[0] : NULL );
 		}
@@ -433,19 +416,10 @@ namespace Castor3D
 		 *\brief		Récupère le pointeur sur les données
 		 *\return		Le pointeur sur les données
 		 */
-		virtual T * data()
+		inline T * data()
 		{
 			return ( m_arrayData.size() ? &m_arrayData[0] : NULL );
 		}
-
-	protected:
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 */
-		virtual bool DoCreateBuffer() = 0;
 
 	protected:
 		//!\~english Tells the buffer is to be deleted at next render loop	\~french Dit que le tampon doit être détruit à la prochaîne boucle de rendu

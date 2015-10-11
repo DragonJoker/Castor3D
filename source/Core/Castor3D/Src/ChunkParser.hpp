@@ -36,7 +36,7 @@ namespace Castor3D
 	\~french
 	\brief		Videur de chunk
 	*/
-	struct C3D_API ChunkParserBase
+	struct ChunkParserBase
 	{
 		/**
 		 *\~english
@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( uint8_t * p_pValues, uint32_t p_uiSize, BinaryChunk & p_chunk )
+		inline bool operator()( uint8_t * p_pValues, uint32_t p_uiSize, BinaryChunk & p_chunk )
 		{
 			bool l_return = p_chunk.CheckAvailable( p_uiSize );
 
@@ -73,7 +73,7 @@ namespace Castor3D
 	\~french
 	\brief		Videur de chunk
 	*/
-	template< typename T > struct C3D_API ChunkParser
+	template< typename T > struct ChunkParser
 			:	public ChunkParserBase
 	{
 		/**
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )
+		inline bool operator()( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_pValues ), p_uiCount * sizeof( T ), p_chunk );
 		}
@@ -107,7 +107,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< uint32_t Count >
-		bool operator()( T( & p_value )[Count], BinaryChunk & p_chunk )
+		inline bool operator()( T( & p_value )[Count], BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value ), Count * sizeof( T ), p_chunk );
 		}
@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk		Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( T & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( &p_value ), sizeof( T ), p_chunk );
 		}
@@ -131,13 +131,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::String >
+	template<> struct ChunkParser< Castor::String >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::String & p_strValue, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::String & p_strValue, BinaryChunk & p_chunk )
 		{
 			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
@@ -159,13 +159,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Path >
+	template<> struct ChunkParser< Castor::Path >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Path & p_strValue, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Path & p_strValue, BinaryChunk & p_chunk )
 		{
 			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
@@ -187,13 +187,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2f >
+	template<> struct ChunkParser< Castor::Point2f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point2f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( float ), p_chunk );
 		}
@@ -201,13 +201,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3f >
+	template<> struct ChunkParser< Castor::Point3f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point3f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( float ), p_chunk );
 		}
@@ -215,13 +215,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4f >
+	template<> struct ChunkParser< Castor::Point4f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point4f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}
@@ -229,13 +229,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2d >
+	template<> struct ChunkParser< Castor::Point2d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point2d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( double ), p_chunk );
 		}
@@ -243,13 +243,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3d >
+	template<> struct ChunkParser< Castor::Point3d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point3d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( double ), p_chunk );
 		}
@@ -257,13 +257,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4d >
+	template<> struct ChunkParser< Castor::Point4d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point4d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( double ), p_chunk );
 		}
@@ -271,13 +271,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2i >
+	template<> struct ChunkParser< Castor::Point2i >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point2i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( int ), p_chunk );
 		}
@@ -285,13 +285,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3i >
+	template<> struct ChunkParser< Castor::Point3i >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point3i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( int ), p_chunk );
 		}
@@ -299,13 +299,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4i >
+	template<> struct ChunkParser< Castor::Point4i >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point4i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( int ), p_chunk );
 		}
@@ -313,13 +313,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2ui >
+	template<> struct ChunkParser< Castor::Point2ui >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point2ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( uint32_t ), p_chunk );
 		}
@@ -327,13 +327,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3ui >
+	template<> struct ChunkParser< Castor::Point3ui >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point3ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( uint32_t ), p_chunk );
 		}
@@ -341,13 +341,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4ui >
+	template<> struct ChunkParser< Castor::Point4ui >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Point4ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( uint32_t ), p_chunk );
 		}
@@ -355,13 +355,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2f >
+	template<> struct ChunkParser< Castor::Coords2f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords2f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( float ), p_chunk );
 		}
@@ -369,13 +369,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3f >
+	template<> struct ChunkParser< Castor::Coords3f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords3f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( float ), p_chunk );
 		}
@@ -383,13 +383,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4f >
+	template<> struct ChunkParser< Castor::Coords4f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords4f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}
@@ -397,13 +397,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2d >
+	template<> struct ChunkParser< Castor::Coords2d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords2d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( double ), p_chunk );
 		}
@@ -411,13 +411,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3d >
+	template<> struct ChunkParser< Castor::Coords3d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords3d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( double ), p_chunk );
 		}
@@ -425,13 +425,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4d >
+	template<> struct ChunkParser< Castor::Coords4d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords4d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( double ), p_chunk );
 		}
@@ -439,13 +439,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2i >
+	template<> struct ChunkParser< Castor::Coords2i >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords2i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( int ), p_chunk );
 		}
@@ -453,13 +453,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3i >
+	template<> struct ChunkParser< Castor::Coords3i >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords3i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( int ), p_chunk );
 		}
@@ -467,13 +467,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4i >
+	template<> struct ChunkParser< Castor::Coords4i >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords4i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( int ), p_chunk );
 		}
@@ -481,13 +481,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2ui >
+	template<> struct ChunkParser< Castor::Coords2ui >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords2ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( uint32_t ), p_chunk );
 		}
@@ -495,13 +495,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3ui >
+	template<> struct ChunkParser< Castor::Coords3ui >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords3ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( uint32_t ), p_chunk );
 		}
@@ -509,13 +509,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4ui >
+	template<> struct ChunkParser< Castor::Coords4ui >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Coords4ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( uint32_t ), p_chunk );
 		}
@@ -523,13 +523,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix2x2f >
+	template<> struct ChunkParser< Castor::Matrix2x2f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Matrix2x2f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix2x2f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}
@@ -537,13 +537,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix3x3f >
+	template<> struct ChunkParser< Castor::Matrix3x3f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Matrix3x3f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix3x3f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 9 * sizeof( float ), p_chunk );
 		}
@@ -551,13 +551,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix4x4f >
+	template<> struct ChunkParser< Castor::Matrix4x4f >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Matrix4x4f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix4x4f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 16 * sizeof( float ), p_chunk );
 		}
@@ -565,13 +565,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix2x2d >
+	template<> struct ChunkParser< Castor::Matrix2x2d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Matrix2x2d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix2x2d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( double ), p_chunk );
 		}
@@ -579,13 +579,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix3x3d >
+	template<> struct ChunkParser< Castor::Matrix3x3d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Matrix3x3d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix3x3d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 9 * sizeof( double ), p_chunk );
 		}
@@ -593,13 +593,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix4x4d >
+	template<> struct ChunkParser< Castor::Matrix4x4d >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Matrix4x4d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix4x4d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 16 * sizeof( double ), p_chunk );
 		}
@@ -607,13 +607,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Colour >
+	template<> struct ChunkParser< Castor::Colour >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Colour & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Colour & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), Castor::Colour::eCOMPONENT_COUNT * sizeof( float ), p_chunk );
 		}
@@ -621,13 +621,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Size >
+	template<> struct ChunkParser< Castor::Size >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Size & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Size & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( uint32_t ), p_chunk );
 		}
@@ -635,13 +635,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkParser
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Position >
+	template<> struct ChunkParser< Castor::Position >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		bool operator()( Castor::Position & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Position & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( int ), p_chunk );
 		}
@@ -649,13 +649,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Quaternion >
+	template<> struct ChunkParser< Castor::Quaternion >
 			:	public ChunkParserBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Quaternion & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Quaternion & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}

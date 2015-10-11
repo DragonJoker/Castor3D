@@ -10,20 +10,20 @@ namespace Castor3D
 	}
 
 	BufferDeclaration::BufferDeclaration( BufferDeclaration const & p_declaration )
-		:	m_arrayElements( p_declaration.m_arrayElements )
-		,	m_uiStride( p_declaration.m_uiStride )
+		: m_arrayElements( p_declaration.m_arrayElements )
+		, m_uiStride( p_declaration.m_uiStride )
 	{
 	}
 
 	BufferDeclaration::BufferDeclaration( BufferDeclaration && p_declaration )
-		:	m_arrayElements( std::move( p_declaration.m_arrayElements ) )
-		,	m_uiStride( std::move( p_declaration.m_uiStride ) )
+		: m_arrayElements( std::move( p_declaration.m_arrayElements ) )
+		, m_uiStride( std::move( p_declaration.m_uiStride ) )
 	{
 		p_declaration.m_arrayElements.clear();
 		p_declaration.m_uiStride = 0;
 	}
 
-	BufferDeclaration & BufferDeclaration::operator =( BufferDeclaration p_declaration )
+	BufferDeclaration & BufferDeclaration::operator=( BufferDeclaration p_declaration )
 	{
 		swap( *this, p_declaration );
 		return *this;
@@ -48,8 +48,7 @@ namespace Castor3D
 
 	void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 )
 	{
-		using std::swap;
-		swap( p_obj1.m_arrayElements, p_obj2.m_arrayElements );
-		swap( p_obj1.m_uiStride, p_obj2.m_uiStride );
+		std::swap( p_obj1.m_arrayElements, p_obj2.m_arrayElements );
+		std::swap( p_obj1.m_uiStride, p_obj2.m_uiStride );
 	}
 }

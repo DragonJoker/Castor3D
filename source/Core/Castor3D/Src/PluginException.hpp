@@ -32,7 +32,7 @@ namespace Castor3D
 	\~french
 	\brief		Exception de chargement de plugin
 	*/
-	class C3D_API PluginException
+	class PluginException
 		: public Castor::Exception
 	{
 	public:
@@ -52,14 +52,14 @@ namespace Castor3D
 		 *\param[in]	p_strFunction	La fonction
 		 *\param[in]	p_uiLine		La ligne dans le fichier
 		 */
-		PluginException( bool p_critical, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line );
+		C3D_API PluginException( bool p_critical, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~PluginException()throw();
+		C3D_API ~PluginException()throw();
 		/**
 		 *\~english
 		 *\brief		Tells if the exception is critical

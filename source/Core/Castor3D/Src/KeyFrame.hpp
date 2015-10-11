@@ -33,7 +33,8 @@ namespace Castor3D
 	\brief		Classe qui gère une key frame
 	\remark		Les key frames sont les frames auxquelles une animation est dans un état précis
 	*/
-	template< typename T > class C3D_API KeyFrame
+	template< typename T >
+	class KeyFrame
 	{
 	public:
 		/**
@@ -47,8 +48,8 @@ namespace Castor3D
 		 *\param[in]	p_value		La valeur voulue
 		 */
 		KeyFrame( real p_rTimeIndex = 0, T const & p_value = T() )
-			:	m_rTimeIndex( p_rTimeIndex )
-			,	m_tValue( p_value )
+			: m_rTimeIndex( p_rTimeIndex )
+			, m_tValue( p_value )
 		{
 		}
 		/**

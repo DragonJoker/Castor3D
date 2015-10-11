@@ -19,8 +19,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_OVERLAY_MANAGER_H___
 
 #include "Overlay.hpp"
+#include "Viewport.hpp"
 
 #include <OwnedBy.hpp>
+#include <Aligned.hpp>
 
 namespace Castor3D
 {
@@ -58,6 +60,7 @@ namespace Castor3D
 	class OverlayManager
 		: private Castor::Collection< Overlay, Castor::String >
 		, public Castor::OwnedBy< Engine >
+		, public Castor::Aligned< CASTOR_ALIGN_OF( Viewport ) >
 	{
 	public:
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
@@ -444,12 +447,12 @@ namespace Castor3D
 		OverlayCategorySet m_overlays;
 		//!\~english The overlay renderer	\~french le renderer d'incrustation
 		OverlayRendererSPtr m_pRenderer;
+		//!\~english The rendering viewport.	\~french Le viewport de rendu.
+		Viewport m_viewport;
 		//!\~english The overlay count, per level	\~french Le nombre d'incrustations par niveau
 		std::vector< int > m_overlayCountPerLevel;
 		//!\~english The pojection matrix.	\~french La matrice de projection.
 		Castor::Matrix4x4r m_projection;
-		//!\~english The last display size.	\~french Les dimensions du dernier affichage.
-		Castor::Size m_size;
 		//!\~english The FontTextures, sorted by font name.	\~french Les FontTexutrs, triées par nom de policce.
 		FontTextureStrMap m_fontTextures;
 	};

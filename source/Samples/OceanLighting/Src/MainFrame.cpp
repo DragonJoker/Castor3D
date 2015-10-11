@@ -4,6 +4,7 @@
 
 #include "MainFrame.hpp"
 
+#include <Camera.hpp>
 #include <Scene.hpp>
 #include <PlatformWindowHandle.hpp>
 #include <Parameter.hpp>
@@ -330,7 +331,8 @@ namespace OceanLighting
 		{
 			SceneSPtr l_pScene = m_pCastor3D->CreateScene( cuT( "DummyScene" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( cuT( "DummyCameraNode" ), l_pScene->GetCameraRootNode() );
-			CameraSPtr l_pCamera = l_pScene->CreateCamera( cuT( "DummyCamera" ), m_width, m_height, l_pNode, eVIEWPORT_TYPE_3D );
+			CameraSPtr l_pCamera = l_pScene->CreateCamera( cuT( "DummyCamera" ), m_width, m_height, l_pNode );
+			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
 			RenderTargetSPtr l_pTarget = m_pCastor3D->CreateRenderTarget( eTARGET_TYPE_WINDOW );
 			l_pTarget->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
 			l_pTarget->SetDepthFormat( ePIXEL_FORMAT_DEPTH24S8 );

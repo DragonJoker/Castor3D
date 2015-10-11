@@ -282,15 +282,13 @@ namespace Castor3D
 		 *\param[in]	p_name		The camera name
 		 *\param[in]	p_ww, p_wh	The window size
 		 *\param[in]	p_node		The camera's parent node
-		 *\param[in]	p_type		The viewport projection type
 		 *\~french
 		 *\brief		Crée une caméra
 		 *\param[in]	p_name		Le nom de la caméra
 		 *\param[in]	p_ww, p_wh	Les dimensions de la fenêtre
 		 *\param[in]	p_node		Le node auquel attacher la caméra
-		 *\param[in]	p_type		Le type de projection du viewport
 		 */
-		C3D_API CameraSPtr CreateCamera( Castor::String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node, eVIEWPORT_TYPE p_type );
+		C3D_API CameraSPtr CreateCamera( Castor::String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Creates a camera
@@ -303,7 +301,7 @@ namespace Castor3D
 		 *\param[in]	p_node		Le node auquel attacher la caméra
 		 *\param[in]	p_viewport	Le viewport
 		 */
-		C3D_API CameraSPtr CreateCamera( Castor::String const & p_name, SceneNodeSPtr p_node, ViewportSPtr p_viewport );
+		C3D_API CameraSPtr CreateCamera( Castor::String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Creates a light

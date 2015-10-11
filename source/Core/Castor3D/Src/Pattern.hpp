@@ -34,7 +34,7 @@ namespace Castor3D
 	\remark		Un chemin est une collection de points consécutifs
 	*/
 	template< typename T >
-	class C3D_API Pattern
+	class Pattern
 	{
 	public:
 		/**

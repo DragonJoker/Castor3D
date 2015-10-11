@@ -38,7 +38,7 @@ namespace Castor3D
 	\brief		Représentation d'un vertex
 	\remark		Encadre un BufferElementGroup pour récupérer facilement la position d'un vertex, sa normale, sa tangente, ses coordonnées de texture, un indice
 	*/
-	class C3D_API Vertex
+	class Vertex
 	{
 	public:
 		/*!
@@ -50,7 +50,7 @@ namespace Castor3D
 		\~french
 		\brief Loader de Vertex
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public Castor::Loader< Vertex, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
 		{
 		public:
@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Loads a Vertex object from a text file
@@ -73,7 +73,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( Castor3D::Vertex & p_object, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::Vertex & p_object, Castor::TextFile & p_file );
 			/**
 			 *\~english
 			 *\brief		Writes a Vertex object into a text file
@@ -86,7 +86,7 @@ namespace Castor3D
 			 *\param[out]	p_file		Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( Castor3D::Vertex const & p_object, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::Vertex const & p_object, Castor::TextFile & p_file );
 		};
 
 	public:
@@ -98,7 +98,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_group		Le groupe encadré
 		 */
-		Vertex( BufferElementGroup & p_group );
+		C3D_API Vertex( BufferElementGroup & p_group );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -107,7 +107,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_source		L'objet source
 		 */
-		Vertex( Vertex const & p_source );
+		C3D_API Vertex( Vertex const & p_source );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -118,14 +118,14 @@ namespace Castor3D
 		 *\param[in]	p_source		L'objet source
 		 *\return		Une référence sur cet objet
 		 */
-		Vertex & operator =( Vertex const & p_source );
+		C3D_API Vertex & operator=( Vertex const & p_source );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Vertex();
+		C3D_API virtual ~Vertex();
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position
@@ -676,7 +676,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetPosition( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetPosition( void * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
@@ -687,7 +687,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetPosition( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetPosition( void const * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
@@ -730,7 +730,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetNormal( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetNormal( void * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
@@ -741,7 +741,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetNormal( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetNormal( void const * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
@@ -784,7 +784,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetTangent( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetTangent( void * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
@@ -795,7 +795,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetTangent( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetTangent( void const * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
@@ -838,7 +838,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetBitangent( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetBitangent( void * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
@@ -849,7 +849,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetBitangent( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetBitangent( void const * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
@@ -892,7 +892,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetTexCoord( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetTexCoord( void * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
@@ -903,7 +903,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetTexCoord( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetTexCoord( void const * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
@@ -974,7 +974,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetPosition( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetPosition( void * p_pBuffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position in a buffer
@@ -985,7 +985,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetPosition( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetPosition( void * p_pBuffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex normal in a buffer
@@ -1024,7 +1024,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetNormal( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetNormal( void * p_pBuffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex normal in a buffer
@@ -1035,7 +1035,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetNormal( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetNormal( void * p_pBuffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent in a buffer
@@ -1074,7 +1074,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetTangent( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetTangent( void * p_pBuffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent in a buffer
@@ -1085,7 +1085,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetTangent( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetTangent( void * p_pBuffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent in a buffer
@@ -1124,7 +1124,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetBitangent( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetBitangent( void * p_pBuffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent in a buffer
@@ -1135,7 +1135,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetBitangent( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetBitangent( void * p_pBuffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates in a buffer
@@ -1174,7 +1174,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetTexCoord( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetTexCoord( void * p_pBuffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates in a buffer
@@ -1185,7 +1185,7 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetTexCoord( void * p_pBuffer, real x, real y, real z = 0 );
+		C3D_API static void SetTexCoord( void * p_pBuffer, real x, real y, real z = 0 );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group position

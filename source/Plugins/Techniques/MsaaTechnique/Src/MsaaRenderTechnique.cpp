@@ -252,11 +252,11 @@ namespace Msaa
 
 				if ( l_bReturn )
 				{
-					l_bReturn = m_pMsColorAttach->Attach( eATTACHMENT_POINT_COLOUR0,	m_pMsFrameBuffer );
+					l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pMsColorAttach );
 
 					if ( l_bReturn )
 					{
-						l_bReturn = m_pMsDepthAttach->Attach( eATTACHMENT_POINT_DEPTH,		m_pMsFrameBuffer );
+						l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pMsDepthAttach );
 					}
 
 					m_pMsFrameBuffer->Unbind();

@@ -32,7 +32,7 @@ namespace Castor3D
 	\brief		Tampon de rendu recevant une composante de couleur
 	*/
 	class ColourRenderBuffer
-		:	public RenderBuffer
+		: public RenderBuffer
 	{
 	public:
 		/**

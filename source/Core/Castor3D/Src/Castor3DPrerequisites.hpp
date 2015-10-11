@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_PREREQUISITES_H___
 
 #if defined( _MSC_VER )
+#	pragma warning( push )
 // disable: "<type > needs to have dll-interface to be used by clients'
 // Happens on STL member variables which are not public therefore is ok
 #	pragma warning( disable:4251 )
@@ -27,35 +28,33 @@ http://www.gnu.org/copyleft/lesser.txt.
 // template export
 #	pragma warning( disable:4275 )
 #	pragma warning( disable:4996 )
+// disable: "<symbol > no suitable definition provided for explicit instantiation request"
+// Happens when deriving from Manager
+#   pragma warning( disable : 4661 )
+// disable: "C++ exception specification ignored except to indicate a function is not __declspec(nothrow)"
+// Happens only on Visual Studio
+#	pragma warning (disable : 4290 )
+#	pragma warning( disable : 4311 )
+#	pragma warning( disable : 4312 )
 #endif
 
 #undef RGB
 
 #if defined( __linux__ )
-#	define C3D_API
 #	define CASTOR_X11
+#	define C3D_API
 #elif defined( _WIN32 )
 #	define CASTOR_MSW
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-// disable: "<symbol > no suitable definition provided for explicit instantiation request"
-// Happens when deriving from Manager
-#   	pragma warning( disable : 4661 )
-// disable: "C++ exception specification ignored except to indicate a function is not __declspec(nothrow)"
-// Happens only on Visual Studio
-#		pragma warning (disable : 4290 )
-#		pragma warning( disable : 4311 )
-#		pragma warning( disable : 4312 )
-#	endif
 #	if defined( Castor3D_EXPORTS )
-#		define C3D_API __declspec(dllexport)
+#		define C3D_API __declspec( dllexport )
 #	else
-#		define C3D_API __declspec(dllimport)
+#		define C3D_API __declspec( dllimport )
 #	endif
 #endif
 
 #include <CastorUtilsPrerequisites.hpp>
 #include <Collection.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -1779,26 +1778,27 @@ namespace Castor3D
 	CASTOR_TYPE( uint8_t )
 	{
 		eATTACHMENT_POINT_NONE,
-		eATTACHMENT_POINT_COLOUR0,
-		eATTACHMENT_POINT_COLOUR1,
-		eATTACHMENT_POINT_COLOUR2,
-		eATTACHMENT_POINT_COLOUR3,
-		eATTACHMENT_POINT_COLOUR4,
-		eATTACHMENT_POINT_COLOUR5,
-		eATTACHMENT_POINT_COLOUR6,
-		eATTACHMENT_POINT_COLOUR7,
-		eATTACHMENT_POINT_COLOUR8,
-		eATTACHMENT_POINT_COLOUR9,
-		eATTACHMENT_POINT_COLOUR10,
-		eATTACHMENT_POINT_COLOUR11,
-		eATTACHMENT_POINT_COLOUR12,
-		eATTACHMENT_POINT_COLOUR13,
-		eATTACHMENT_POINT_COLOUR14,
-		eATTACHMENT_POINT_COLOUR15,
+		eATTACHMENT_POINT_COLOUR,
 		eATTACHMENT_POINT_DEPTH,
 		eATTACHMENT_POINT_STENCIL,
 		eATTACHMENT_POINT_COUNT,
 	}	eATTACHMENT_POINT;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0.0
+	\date		11/10/2015
+	\~english
+	\brief		Frame buffer attachment types enumeration.
+	\~french
+	\brief		Enumération des types d'attache pour un tampon d'image.
+	*/
+	typedef enum eATTACHMENT_TYPE
+	CASTOR_TYPE( uint8_t )
+	{
+		eATTACHMENT_TYPE_TEXTURE,
+		eATTACHMENT_TYPE_BUFFER,
+		eATTACHMENT_TYPE_COUNT,
+	}	eATTACHMENT_TYPE;
 	/*!
 	\author		Sylvain DOREMUS
 	\~english
@@ -1827,8 +1827,9 @@ namespace Castor3D
 	typedef enum eVIEWPORT_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		eVIEWPORT_TYPE_3D,		//!< 3 Dimensions projection type
-		eVIEWPORT_TYPE_2D,		//!< 2 Dimensions projection type
+		eVIEWPORT_TYPE_ORTHO,
+		eVIEWPORT_TYPE_PERSPECTIVE,
+		eVIEWPORT_TYPE_FRUSTUM,
 		eVIEWPORT_TYPE_COUNT,
 	}	eVIEWPORT_TYPE;
 	/*!
@@ -2016,17 +2017,8 @@ namespace Castor3D
 
 namespace Castor
 {
-	template<>
-	class C3D_API OwnedBy< Castor3D::Engine >
-	{
-	public:
-		OwnedBy( Castor3D::Engine & p_owner );
-		virtual ~OwnedBy();
-		Castor3D::Engine * GetOwner()const;
-
-	private:
-		Castor3D::Engine & m_owner;
-	};
+	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine );
+	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::RenderSystem );
 }
 
 #if defined( _MSC_VER )

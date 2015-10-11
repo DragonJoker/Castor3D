@@ -29,55 +29,54 @@ namespace Dx11Render
 
 	void DxFrameBuffer::Destroy()
 	{
-		DoCleanupOld();
 	}
 
-	bool DxFrameBuffer::SetDrawBuffers( uint32_t CU_PARAM_UNUSED( p_uiSize ), eATTACHMENT_POINT const * CU_PARAM_UNUSED( p_eAttaches ) )
-	{
-		return SetDrawBuffers();
-	}
-
-	bool DxFrameBuffer::SetDrawBuffers()
+	bool DxFrameBuffer::SetDrawBuffers( BufAttachArray const & p_attaches )
 	{
 		bool l_return = false;
 
-		if ( m_mapRbo.size() || m_mapTex.size() )
+		if ( !p_attaches.empty() )
 		{
 			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 			D3D11RenderTargetViewArray l_arraySurfaces;
 			ID3D11DepthStencilView * l_pView = NULL;
-			l_arraySurfaces.reserve( m_mapTex.size() + m_mapRbo.size() );
+			l_arraySurfaces.reserve( p_attaches.size() );
 
-			for ( auto && l_it : m_mapTex )
+			for ( auto && l_attach : p_attaches )
 			{
-				if ( l_it.first != eATTACHMENT_POINT_DEPTH && l_it.first != eATTACHMENT_POINT_STENCIL && l_it.first != eATTACHMENT_POINT_NONE )
-				{
-					l_arraySurfaces.push_back( std::static_pointer_cast< DxDynamicTexture >( l_it.second )->GetRenderTargetView() );
-				}
-			}
+				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
 
-			for ( auto && l_it : m_mapRbo )
-			{
-				if ( l_it.first == eATTACHMENT_POINT_DEPTH || l_it.first == eATTACHMENT_POINT_STENCIL )
+				if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 				{
-					l_pView = reinterpret_cast< ID3D11DepthStencilView * >( std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_it.second )->GetDxRenderBuffer().GetSurface() );
+					TextureAttachmentSPtr l_texAttach = std::static_pointer_cast< TextureAttachment >( l_attach );
+
+					if ( l_eAttach = eATTACHMENT_POINT_COLOUR )
+					{
+						l_arraySurfaces.push_back( std::static_pointer_cast< DxDynamicTexture >( l_texAttach->GetTexture() )->GetRenderTargetView() );
+					}
 				}
-				else if ( l_it.first != eATTACHMENT_POINT_NONE )
+				else
 				{
-					l_arraySurfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_it.second )->GetDxRenderBuffer().GetSurface() ) );
+					RenderBufferAttachmentSPtr l_rboAttach = std::static_pointer_cast< RenderBufferAttachment >( l_attach );
+
+					if ( l_eAttach == eATTACHMENT_POINT_DEPTH || l_eAttach == eATTACHMENT_POINT_STENCIL )
+					{
+						l_pView = reinterpret_cast< ID3D11DepthStencilView * >( std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface() );
+					}
+					else if ( l_eAttach == eATTACHMENT_POINT_COLOUR )
+					{
+						l_arraySurfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface() ) );
+					}
 				}
 			}
 
 			if ( l_arraySurfaces.size() )
 			{
-				m_arrayOldRenderTargets.resize( l_arraySurfaces.size() );
-				l_pDeviceContext->OMGetRenderTargets( UINT( l_arraySurfaces.size() ), m_arrayOldRenderTargets.data(), &m_pOldDepthStencilView );
 				l_pDeviceContext->OMSetRenderTargets( UINT( l_arraySurfaces.size() ), &l_arraySurfaces[0], l_pView );
 				l_return = true;
 			}
 			else if ( l_pView )
 			{
-				l_pDeviceContext->OMGetRenderTargets( 0, NULL, &m_pOldDepthStencilView );
 				l_pDeviceContext->OMSetRenderTargets( 0, NULL, l_pView );
 			}
 		}
@@ -99,37 +98,32 @@ namespace Dx11Render
 	{
 		ID3D11View * l_pReturn = NULL;
 
-		if ( m_mapRbo.size() || m_mapTex.size() && p_eAttach != eATTACHMENT_POINT_NONE )
+		if ( !m_attaches.empty() && p_eAttach != eATTACHMENT_POINT_NONE )
 		{
-			if ( p_eAttach != eATTACHMENT_POINT_STENCIL && p_eAttach != eATTACHMENT_POINT_DEPTH )
+			auto && l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_eAttach]( FrameBufferAttachmentSPtr p_attach )
 			{
-				auto && l_it = std::find_if( m_mapTex.begin(), m_mapTex.end(), [&p_eAttach]( TexAttachMap::value_type const & p_pair )
-				{
-					return p_pair.first == p_eAttach;
-				} );
+				return p_attach->GetAttachmentPoint() == p_eAttach;
+			} );
 
-				if ( l_it != m_mapTex.end() )
+			if ( l_it != m_attaches.end() )
+			{
+				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 				{
-					l_pReturn = std::static_pointer_cast< DxDynamicTexture >( l_it->second )->GetRenderTargetView();
+					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
+					l_pReturn = std::static_pointer_cast< DxDynamicTexture >( l_attach->GetTexture() )->GetRenderTargetView();
 				}
-			}
-
-			if ( !l_pReturn )
-			{
-				auto && l_it = std::find_if( m_mapRbo.begin(), m_mapRbo.end(), [&p_eAttach]( RboAttachMap::value_type const & p_pair )
+				else
 				{
-					return p_pair.first == p_eAttach;
-				} );
+					RenderBufferAttachmentSPtr l_attach = std::static_pointer_cast< RenderBufferAttachment >( *l_it );
+					eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
 
-				if ( l_it != m_mapRbo.end() )
-				{
-					if ( l_it->first == eATTACHMENT_POINT_DEPTH || l_it->first == eATTACHMENT_POINT_STENCIL )
+					if ( l_eAttach == eATTACHMENT_POINT_DEPTH || l_eAttach == eATTACHMENT_POINT_STENCIL )
 					{
-						l_pReturn = std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface();
+						l_pReturn = std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_attach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface();
 					}
 					else
 					{
-						l_pReturn = std::static_pointer_cast< DxColourRenderBuffer >( l_it->second )->GetDxRenderBuffer().GetSurface();
+						l_pReturn = std::static_pointer_cast< DxColourRenderBuffer >( l_attach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface();
 					}
 				}
 			}
@@ -147,18 +141,21 @@ namespace Dx11Render
 	{
 #if DX_DEBUG_RT
 
-		if ( !m_mapTex.empty() )
+		if ( !m_attaches.empty() )
 		{
 			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
-			for ( auto && l_attachIt : m_mapTex )
+			for ( auto && l_attach : m_attaches )
 			{
-				if ( l_attachIt.first >= eATTACHMENT_POINT_COLOUR0 && l_attachIt.first <= eATTACHMENT_POINT_COLOUR15 )
+				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
+
+				if ( l_eAttach == eATTACHMENT_POINT_COLOUR )
 				{
 					ID3D11Resource * l_pResource = NULL;
-					std::static_pointer_cast< DxDynamicTexture >( l_attachIt.second )->GetRenderTargetView()->GetResource( &l_pResource );
+					TextureAttachmentSPtr l_texAttach = std::static_pointer_cast< TextureAttachment >( l_attach );
+					std::static_pointer_cast< DxDynamicTexture >( l_texAttach->GetTexture() )->GetRenderTargetView()->GetResource( &l_pResource );
 					StringStream l_name;
-					l_name << Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )l_attachIt.second.get() << cuT( "_FBA.png" );
+					l_name << Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )l_texAttach->GetTexture().get() << cuT( "_FBA.png" );
 					D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
 					l_pResource->Release();
 				}
@@ -166,50 +163,19 @@ namespace Dx11Render
 		}
 
 #endif
-
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		D3D11RenderTargetViewArray l_arraySurfaces;
-		ID3D11DepthStencilView * l_pView = m_pOldDepthStencilView;
-
-		for ( auto && l_old : m_arrayOldRenderTargets )
-		{
-			if ( l_old )
-			{
-				l_arraySurfaces.push_back( l_old );
-			}
-		}
-
-		if ( l_pView || !l_arraySurfaces.empty() )
-		{
-			l_pDeviceContext->OMSetRenderTargets( UINT( l_arraySurfaces.size() ), l_arraySurfaces.empty() ? NULL : l_arraySurfaces.data(), l_pView );
-		}
-
-		DoCleanupOld();
 	}
 
-	void DxFrameBuffer::DoAttachFba( Castor3D::FrameBufferAttachmentRPtr CU_PARAM_UNUSED( p_pAttach ) )
-	{
-	}
-
-	void DxFrameBuffer::DoDetachFba( Castor3D::FrameBufferAttachmentRPtr CU_PARAM_UNUSED( p_pAttach ) )
-	{
-	}
-
-	bool DxFrameBuffer::DoAttach( eATTACHMENT_POINT CU_PARAM_UNUSED( p_eAttachment ), DynamicTextureSPtr CU_PARAM_UNUSED( p_pTexture ), eTEXTURE_TARGET CU_PARAM_UNUSED( p_eTarget ), int CU_PARAM_UNUSED( p_iLayer ) )
+	bool DxFrameBuffer::DoAttach( eATTACHMENT_POINT CU_PARAM_UNUSED( p_attachment ), uint8_t CU_PARAM_UNUSED( p_index ), TextureAttachmentSPtr CU_PARAM_UNUSED( p_texture ), eTEXTURE_TARGET CU_PARAM_UNUSED( p_target ), int CU_PARAM_UNUSED( p_layer ) )
 	{
 		return true;
 	}
 
-	bool DxFrameBuffer::DoAttach( eATTACHMENT_POINT CU_PARAM_UNUSED( p_eAttachment ), RenderBufferSPtr CU_PARAM_UNUSED( p_pRenderBuffer ) )
+	bool DxFrameBuffer::DoAttach( eATTACHMENT_POINT CU_PARAM_UNUSED( p_attachment ), uint8_t CU_PARAM_UNUSED( p_index ), RenderBufferAttachmentSPtr CU_PARAM_UNUSED( p_renderBuffer ) )
 	{
 		return true;
 	}
 
-	void DxFrameBuffer::DoDetachAll()
-	{
-	}
-
-	bool DxFrameBuffer::DoStretchInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
+	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
 		SrcDstPairArray l_arrayPairs;
 		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
@@ -217,8 +183,10 @@ namespace Dx11Render
 		bool l_bStencil = ( p_uiComponents & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
 		bool l_bColour = ( p_uiComponents & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
 
-		for ( auto && l_eAttach : m_arrayAttaches )
+		for ( auto && l_attach : m_attaches )
 		{
+			eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
+
 			if ( ( l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) || m_renderSystem->GetFeatureLevel() > D3D_FEATURE_LEVEL_10_1 )
 			{
 				if ( ( l_bDepth && l_eAttach == eATTACHMENT_POINT_DEPTH ) || ( l_bStencil && l_eAttach == eATTACHMENT_POINT_STENCIL ) || ( l_bColour && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) )
@@ -251,10 +219,10 @@ namespace Dx11Render
 					D3D11_BOX l_box = { 0 };
 					l_box.front = 0;
 					l_box.back = 1;
-					l_box.left = p_rectSrc.left();
-					l_box.right = p_rectSrc.right();
-					l_box.top = p_rectSrc.top();
-					l_box.bottom = p_rectSrc.bottom();
+					l_box.left = p_rectDst.left();
+					l_box.right = p_rectDst.right();
+					l_box.top = p_rectDst.top();
+					l_box.bottom = p_rectDst.bottom();
 					l_pDeviceContext->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, NULL );//&l_box );
 				}
 
@@ -263,21 +231,11 @@ namespace Dx11Render
 			}
 			catch ( ... )
 			{
-				Logger::LogError( cuT( "Error while stretching src to dst frame buffer" ) );
+				Logger::LogError( cuT( "Error while blitting frame buffer" ) );
 				l_hr = E_FAIL;
 			}
 		}
 
 		return l_hr == S_OK;
-	}
-
-	void DxFrameBuffer::DoCleanupOld()
-	{
-		for ( auto && l_old : m_arrayOldRenderTargets )
-		{
-			SafeRelease( l_old );
-		}
-
-		SafeRelease( m_pOldDepthStencilView );
 	}
 }

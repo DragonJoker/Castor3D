@@ -32,8 +32,8 @@ namespace Castor3D
 	\brief		La primitive de sphère
 	\remark		Cette sphère a des faces rectangulaires. Elle est construite à partir d'un rayon et d'un nombre de subdivisions
 	*/
-	class C3D_API Sphere
-		:	public MeshGenerator
+	class Sphere
+		:public MeshGenerator
 	{
 	public:
 		/**
@@ -42,22 +42,22 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Sphere();
+		C3D_API Sphere();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Sphere();
+		C3D_API ~Sphere();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces

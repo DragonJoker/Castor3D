@@ -50,7 +50,7 @@ namespace Castor3D
 	*/
 	class Engine
 		: Castor::Unique< Engine >
-		, std::enable_shared_from_this< Engine >
+		, public Castor::Aligned< CASTOR_ALIGN_OF( Castor::Point3r ) >
 	{
 	public:
 		/**
@@ -1083,6 +1083,30 @@ namespace Castor3D
 			return m_blendStateManager;
 		}
 		/**
+		*\~english
+		*\brief		Retrieves the sampler collection
+		*\return		The sampler collection
+		*\~french
+		*\brief		Récupère la collection de samplers
+		*\return		La collection de samplers
+		*/
+		inline SamplerCollection const & GetSamplerManager()const
+		{
+			return m_samplerManager;
+		}
+		/**
+		*\~english
+		*\brief		Retrieves the sampler collection
+		*\return		The sampler collection
+		*\~french
+		*\brief		Récupère la collection de samplers
+		*\return		La collection de samplers
+		*/
+		inline SamplerCollection & GetSamplerManager()
+		{
+			return m_samplerManager;
+		}
+		/**
 		 *\~english
 		 *\brief		Retrieves the Mesh factory
 		 *\return		The factory
@@ -1168,30 +1192,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the sampler collection
-		 *\return		The sampler collection
-		 *\~french
-		 *\brief		Récupère la collection de samplers
-		 *\return		La collection de samplers
-		 */
-		inline SamplerCollection const & GetSamplerManager()const
-		{
-			return m_samplerManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the sampler collection
-		 *\return		The sampler collection
-		 *\~french
-		 *\brief		Récupère la collection de samplers
-		 *\return		La collection de samplers
-		 */
-		inline SamplerCollection & GetSamplerManager()
-		{
-			return m_samplerManager;
-		}
-		/**
-		 *\~english
 		 *\brief		Tells the engine the render may be threaded or not
 		 *\~french
 		 *\brief		Dit si le rendu peut être threadé
@@ -1255,8 +1255,6 @@ namespace Castor3D
 		void DoRender( bool p_bForce, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
 		void DoPostRender();
 		void DoUpdate( bool p_bForce );
-		void DoLock();
-		void DoUnlock();
 		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
 		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary );
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
@@ -1318,14 +1316,6 @@ namespace Castor3D
 		ShaderManager m_shaderManager;
 		//!\~english The materials collection	\~french La collection de matériaux
 		MaterialManager m_materialManager;
-		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
-		LightFactory m_lightFactory;
-		//!\~english The MeshGenerator factory	\~french La fabrique de MeshGenerator
-		MeshFactory m_meshFactory;
-		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
-		OverlayFactory m_overlayFactory;
-		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
-		TechniqueFactory m_techniqueFactory;
 		//!\~english The sampler states collection	\~french La collection de sampler states
 		SamplerCollection m_samplerManager;
 		//!\~english The DepthStencilState collection	\~french La collection de DepthStencilState
@@ -1334,6 +1324,14 @@ namespace Castor3D
 		RasteriserStateCollection m_rasteriserStateManager;
 		//!\~english The BlendState collection	\~french La collection de BlendState
 		BlendStateCollection m_blendStateManager;
+		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
+		LightFactory m_lightFactory;
+		//!\~english The MeshGenerator factory	\~french La fabrique de MeshGenerator
+		MeshFactory m_meshFactory;
+		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
+		OverlayFactory m_overlayFactory;
+		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
+		TechniqueFactory m_techniqueFactory;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
 		RenderSystem * m_renderSystem;
 		//!\~english  If \p false, the render can't be threaded	\~french Si \p false, le rendu ne peut pas être threadé

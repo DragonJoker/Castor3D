@@ -46,7 +46,6 @@ namespace Castor3D
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_previousPanelZIndex( 0 )
 		, m_previousBorderZIndex( 0 )
-		, m_sizeChanged( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{

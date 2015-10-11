@@ -36,8 +36,8 @@ namespace Castor3D
 	\brief		Représente un groupe d'objets animés
 	\remark		Un groupe d'objets animés est la liste d'objets partageant les mêmes animations et nécessitant des animations synchronisées
 	*/
-	class C3D_API AnimatedObjectGroup
-		:	public Castor::Named
+	class AnimatedObjectGroup
+		: public Castor::Named
 	{
 	public:
 		/*!
@@ -49,7 +49,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class C3D_API BinaryLoader
+		class BinaryLoader
 			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_BINARY, Castor::BinaryFile >
 			, public Castor::NonCopyable
 		{
@@ -60,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			BinaryLoader();
+			C3D_API BinaryLoader();
 			/**
 			 *\~english
 			 *\brief		Loads an AnimatedObjectGroup from a binary file
@@ -75,7 +75,7 @@ namespace Castor3D
 			 *\param[in]	p_scene	La scène qui contient le AnimatedObjectGroup
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file, Scene * p_scene );
+			C3D_API virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file, Scene * p_scene );
 
 		private:
 			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file );
@@ -92,7 +92,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 			, public Castor::NonCopyable
 		{
@@ -103,7 +103,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes an animated object group into a text file
@@ -114,7 +114,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier où écrire le AnimatedObjectGroup
 			 *\param[in]	p_group	Le AnimatedObjectGroup à écrire
 			 */
-			virtual bool operator()( AnimatedObjectGroup const & p_group, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( AnimatedObjectGroup const & p_group, Castor::TextFile & p_file );
 		};
 
 	private:
@@ -137,7 +137,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène
 		 *\param[in]	p_name	Le nom du groupe
 		 */
-		AnimatedObjectGroup( SceneSPtr p_scene, Castor::String const & p_name );
+		C3D_API AnimatedObjectGroup( SceneSPtr p_scene, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -146,14 +146,14 @@ namespace Castor3D
 		 *\brief		Constructeur par recopier
 		 *\param[in]	p_src	La source
 		 */
-		AnimatedObjectGroup( AnimatedObjectGroup const & src );
+		C3D_API AnimatedObjectGroup( AnimatedObjectGroup const & src );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~AnimatedObjectGroup();
+		C3D_API ~AnimatedObjectGroup();
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list
@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom
 		 *\return		L'AnimatedObject créé
 		 */
-		AnimatedObjectSPtr CreateObject( Castor::String const & p_name );
+		C3D_API AnimatedObjectSPtr CreateObject( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.
@@ -175,7 +175,7 @@ namespace Castor3D
 		 *\remark		Cette fonction considère que l'objet a préalablement été créé afin d'être intégré à ce groupe (avec donc les bonnes scène et map d'animations)
 		 *\param[in]	p_pObject	Le AnimatedObject à ajouter
 		 */
-		bool AddObject( AnimatedObjectSPtr p_pObject );
+		C3D_API bool AddObject( AnimatedObjectSPtr p_pObject );
 		/**
 		 *\~english
 		 *\brief		Adds the animation to the list
@@ -184,14 +184,14 @@ namespace Castor3D
 		 *\brief		Ajoute une animation à la liste
 		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		void AddAnimation( Castor::String const & p_name );
+		C3D_API void AddAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Updates all animated objects
 		 *\~french
 		 *\brief		Met à jour toutes les animations
 		 */
-		void Update();
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Sets the loop status of wanted animation
@@ -202,7 +202,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\param[in]	p_bLooped	Le statut
 		 */
-		void SetAnimationLooped( Castor::String const & p_name, bool p_bLooped );
+		C3D_API void SetAnimationLooped( Castor::String const & p_name, bool p_bLooped );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
@@ -211,7 +211,7 @@ namespace Castor3D
 		 *\brief		Démarre l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StartAnimation( Castor::String const & p_name );
+		C3D_API void StartAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
@@ -220,7 +220,7 @@ namespace Castor3D
 		 *\brief		Stoppe l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StopAnimation( Castor::String const & p_name );
+		C3D_API void StopAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
@@ -229,28 +229,28 @@ namespace Castor3D
 		 *\brief		Met en pause l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void PauseAnimation( Castor::String const & p_name );
+		C3D_API void PauseAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations
 		 *\~french
 		 *\brief		Démarre toutes les animations
 		 */
-		void StartAllAnimations();
+		C3D_API void StartAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Stops all animations
 		 *\~french
 		 *\brief		Stoppe toutes les animations
 		 */
-		void StopAllAnimations();
+		C3D_API void StopAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Pauses all animations
 		 *\~french
 		 *\brief		Met en pause toutes les animations
 		 */
-		void PauseAllAnimations();
+		C3D_API void PauseAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Retrieves the animations count

@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Remplisseur de chunk
 	*/
-	struct C3D_API ChunkFillerBase
+	struct ChunkFillerBase
 	{
 		/**
 		 *\~english
@@ -49,7 +49,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( uint8_t const * p_pValues, uint32_t p_uiSize, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( uint8_t const * p_pValues, uint32_t p_uiSize, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -76,8 +76,9 @@ namespace Castor3D
 	\~french
 	\brief		Remplisseur de chunk
 	*/
-	template< typename T > struct C3D_API ChunkFiller
-			:	public ChunkFillerBase
+	template< typename T >
+	struct ChunkFiller
+		: public ChunkFillerBase
 	{
 		/**
 		 *\~english
@@ -95,7 +96,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_pValues ), p_uiCount * sizeof( T ), p_eChunkType, p_chunk );
 		}
@@ -114,7 +115,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< uint32_t Count >
-		bool operator()( T const( & p_value )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( T const( & p_value )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value ), Count * sizeof( T ), p_eChunkType, p_chunk );
 		}
@@ -132,7 +133,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( T const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( &p_value ), sizeof( T ), p_eChunkType, p_chunk );
 		}
@@ -140,13 +141,14 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::String >
-			:	public ChunkFillerBase
+	template<>
+	struct ChunkFiller< Castor::String >
+			: public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::String const & p_strValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::String const & p_strValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -166,13 +168,14 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Path >
-			:	public ChunkFillerBase
+	template<>
+	struct ChunkFiller< Castor::Path >
+		: public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Path const & p_strValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Path const & p_strValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			bool l_return = true;
 
@@ -192,13 +195,14 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point2f >
-			:	public ChunkFillerBase
+	template<>
+	struct ChunkFiller< Castor::Point2f >
+		: public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point2f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -206,13 +210,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point3f >
+	template<> struct ChunkFiller< Castor::Point3f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point3f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -220,13 +224,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point4f >
+	template<> struct ChunkFiller< Castor::Point4f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point4f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -234,13 +238,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point2d >
+	template<> struct ChunkFiller< Castor::Point2d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point2d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -248,13 +252,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point3d >
+	template<> struct ChunkFiller< Castor::Point3d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point3d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -262,13 +266,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point4d >
+	template<> struct ChunkFiller< Castor::Point4d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point4d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -276,13 +280,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point2i >
+	template<> struct ChunkFiller< Castor::Point2i >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point2i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( int ), p_eChunkType, p_chunk );
 		}
@@ -290,13 +294,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point3i >
+	template<> struct ChunkFiller< Castor::Point3i >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point3i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( int ), p_eChunkType, p_chunk );
 		}
@@ -304,13 +308,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point4i >
+	template<> struct ChunkFiller< Castor::Point4i >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point4i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( int ), p_eChunkType, p_chunk );
 		}
@@ -318,13 +322,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point2ui >
+	template<> struct ChunkFiller< Castor::Point2ui >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point2ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( uint32_t ), p_eChunkType, p_chunk );
 		}
@@ -332,13 +336,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point3ui >
+	template<> struct ChunkFiller< Castor::Point3ui >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point3ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( uint32_t ), p_eChunkType, p_chunk );
 		}
@@ -346,13 +350,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Point4ui >
+	template<> struct ChunkFiller< Castor::Point4ui >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Point4ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( uint32_t ), p_eChunkType, p_chunk );
 		}
@@ -360,13 +364,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords2f >
+	template<> struct ChunkFiller< Castor::Coords2f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords2f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -374,13 +378,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords3f >
+	template<> struct ChunkFiller< Castor::Coords3f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords3f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -388,13 +392,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords4f >
+	template<> struct ChunkFiller< Castor::Coords4f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords4f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -402,13 +406,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords2d >
+	template<> struct ChunkFiller< Castor::Coords2d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords2d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -416,13 +420,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords3d >
+	template<> struct ChunkFiller< Castor::Coords3d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords3d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -430,13 +434,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords4d >
+	template<> struct ChunkFiller< Castor::Coords4d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords4d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -444,13 +448,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords2i >
+	template<> struct ChunkFiller< Castor::Coords2i >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords2i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( int ), p_eChunkType, p_chunk );
 		}
@@ -458,13 +462,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords3i >
+	template<> struct ChunkFiller< Castor::Coords3i >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords3i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( int ), p_eChunkType, p_chunk );
 		}
@@ -472,13 +476,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords4i >
+	template<> struct ChunkFiller< Castor::Coords4i >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords4i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4i const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( int ), p_eChunkType, p_chunk );
 		}
@@ -486,13 +490,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords2ui >
+	template<> struct ChunkFiller< Castor::Coords2ui >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords2ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( uint32_t ), p_eChunkType, p_chunk );
 		}
@@ -500,13 +504,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords3ui >
+	template<> struct ChunkFiller< Castor::Coords3ui >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords3ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 3 * sizeof( uint32_t ), p_eChunkType, p_chunk );
 		}
@@ -514,13 +518,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Coords4ui >
+	template<> struct ChunkFiller< Castor::Coords4ui >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Coords4ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4ui const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( uint32_t ), p_eChunkType, p_chunk );
 		}
@@ -528,13 +532,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Matrix2x2f >
+	template<> struct ChunkFiller< Castor::Matrix2x2f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Matrix2x2f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix2x2f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -542,13 +546,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Matrix3x3f >
+	template<> struct ChunkFiller< Castor::Matrix3x3f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Matrix3x3f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix3x3f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 9 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -556,13 +560,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Matrix4x4f >
+	template<> struct ChunkFiller< Castor::Matrix4x4f >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Matrix4x4f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix4x4f const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 16 * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -570,13 +574,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Matrix2x2d >
+	template<> struct ChunkFiller< Castor::Matrix2x2d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Matrix2x2d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix2x2d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -584,13 +588,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Matrix3x3d >
+	template<> struct ChunkFiller< Castor::Matrix3x3d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Matrix3x3d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix3x3d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 9 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -598,13 +602,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Matrix4x4d >
+	template<> struct ChunkFiller< Castor::Matrix4x4d >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Matrix4x4d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix4x4d const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 16 * sizeof( double ), p_eChunkType, p_chunk );
 		}
@@ -612,13 +616,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Colour >
+	template<> struct ChunkFiller< Castor::Colour >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Colour const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Colour const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), Castor::Colour::eCOMPONENT_COUNT * sizeof( float ), p_eChunkType, p_chunk );
 		}
@@ -626,13 +630,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Size >
+	template<> struct ChunkFiller< Castor::Size >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Size const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Size const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( uint32_t ), p_eChunkType, p_chunk );
 		}
@@ -640,13 +644,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Position >
+	template<> struct ChunkFiller< Castor::Position >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Position const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Position const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 2 * sizeof( int ), p_eChunkType, p_chunk );
 		}
@@ -654,13 +658,13 @@ namespace Castor3D
 	/*!
 	\copydoc 	Castor3D::ChunkFiller
 	*/
-	template<> struct C3D_API ChunkFiller< Castor::Quaternion >
+	template<> struct ChunkFiller< Castor::Quaternion >
 			:	public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
 		 */
-		bool operator()( Castor::Quaternion const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Quaternion const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
 			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_value.const_ptr() ), 4 * sizeof( float ), p_eChunkType, p_chunk );
 		}

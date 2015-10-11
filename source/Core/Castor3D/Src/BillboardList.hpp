@@ -49,7 +49,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Camera
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public MovableObject::TextLoader
 		{
 		public:
@@ -63,7 +63,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_obj	L'objet
 			 */
-			virtual bool operator()( BillboardList const & p_obj, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( BillboardList const & p_obj, Castor::TextFile & p_file );
 		};
 
 		/*!
@@ -74,7 +74,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de BillboardList
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public MovableObject::BinaryParser
 		{
 		public:
@@ -86,7 +86,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'acces au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -99,7 +99,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk a remplir
 			 *\return		\p false si une erreur quelconque est arrivee
 			 */
-			virtual bool Fill( BillboardList const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( BillboardList const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -112,7 +112,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les donnees
 			 *\return		\p false si une erreur quelconque est arrivee
 			 */
-			virtual bool Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const;
 		};
 	public:
 		/**

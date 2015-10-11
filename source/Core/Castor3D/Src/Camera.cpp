@@ -24,7 +24,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = Viewport::TextLoader()( * p_camera.GetViewport(), p_file );
+			l_return = Viewport::TextLoader()( p_camera.GetViewport(), p_file );
 		}
 
 		if ( l_return )
@@ -59,7 +59,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = Viewport::BinaryParser( m_path ).Fill( *p_obj.GetViewport(), l_chunk );
+			l_return = Viewport::BinaryParser( m_path ).Fill( p_obj.GetViewport(), l_chunk );
 		}
 
 		if ( l_return )
@@ -97,7 +97,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_VIEWPORT:
-					l_return = Viewport::BinaryParser( m_path ).Parse( *p_obj.GetViewport(), l_chunk );
+					l_return = Viewport::BinaryParser( m_path ).Parse( p_obj.GetViewport(), l_chunk );
 					break;
 
 				default:
@@ -165,16 +165,19 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, ViewportSPtr p_viewport, eTOPOLOGY p_topology )
+	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport, eTOPOLOGY p_topology )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
 		, OwnedBy< Engine >( *p_scene->GetOwner() )
-		, m_viewport( std::make_shared< Viewport >( *p_viewport ) )
+		, m_viewport( p_viewport )
 		, m_topology( eTOPOLOGY_TRIANGLES )
 	{
 	}
 
-	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, Size const & p_size, eVIEWPORT_TYPE p_type, eTOPOLOGY p_topology )
-		: Camera( p_scene, p_name, p_node, std::make_shared< Viewport >( *p_scene->GetOwner(), p_size, p_type ), p_topology )
+	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, eTOPOLOGY p_topology )
+		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
+		, OwnedBy< Engine >( *p_scene->GetOwner() )
+		, m_viewport( Viewport::Ortho( *p_scene->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
+		, m_topology( eTOPOLOGY_TRIANGLES )
 	{
 	}
 
@@ -204,7 +207,7 @@ namespace Castor3D
 
 	void Camera::Render()
 	{
-		bool l_modified = m_viewport->Render();
+		bool l_modified = m_viewport.Render( GetOwner()->GetRenderSystem()->GetPipeline() );
 		SceneNodeSPtr l_node = GetParent();
 
 		if ( l_node )
@@ -222,7 +225,7 @@ namespace Castor3D
 				// Express frustum in view coordinates
 				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
 				{
-					m_planes[i].Set( m_view * m_viewport->GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
+					m_planes[i].Set( m_view * m_viewport.GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
 				}
 			}
 
@@ -244,7 +247,7 @@ namespace Castor3D
 
 	void Camera::Resize( Size const & p_size )
 	{
-		m_viewport->SetSize( p_size );
+		m_viewport.SetSize( p_size );
 	}
 
 	bool Camera::Select( SceneSPtr p_scene, eSELECTION_MODE p_mode, int p_x, int p_y, stSELECT_RESULT & p_result )
@@ -256,22 +259,22 @@ namespace Castor3D
 
 	eVIEWPORT_TYPE Camera::GetViewportType()const
 	{
-		return m_viewport->GetType();
+		return m_viewport.GetType();
 	}
 
 	uint32_t Camera::GetWidth()const
 	{
-		return m_viewport->GetWidth();
+		return m_viewport.GetWidth();
 	}
 
 	uint32_t Camera::GetHeight()const
 	{
-		return m_viewport->GetHeight();
+		return m_viewport.GetHeight();
 	}
 
 	void Camera::SetViewportType( eVIEWPORT_TYPE val )
 	{
-		m_viewport->SetType( val );
+		m_viewport.SetType( val );
 	}
 
 	bool Camera::IsVisible( CubeBox const & p_box, Matrix4x4r const & p_transformations )const

@@ -31,8 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Evènement utilisé pour redimensionner une RenderWindow avant son rendu
 	*/
-	class C3D_API ResizeWindowEvent
-		:	public FrameEvent
+	class ResizeWindowEvent
+		: public FrameEvent
 	{
 	private:
 		/**
@@ -63,14 +63,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_window	La RenderWindow à redimensionner
 		 */
-		ResizeWindowEvent( RenderWindow & p_window );
+		C3D_API ResizeWindowEvent( RenderWindow & p_window );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~ResizeWindowEvent();
+		C3D_API ~ResizeWindowEvent();
 		/**
 		 *\~english
 		 *\brief		Applies the event : resizes the window
@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\brief		Traite l'évènement : redimensionne la fenêtre
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
-		virtual bool Apply();
+		C3D_API virtual bool Apply();
 
 	private:
 		//!\~english The RenderWindow to resize	\~french La RenderWindow à redimensionner

@@ -27,61 +27,92 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlFrameBuffer
-		:	public Castor3D::FrameBuffer
-		,	public Castor::NonCopyable
+		: public Castor3D::FrameBuffer
+		, public Castor::NonCopyable
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\para[in]		p_gl		The OpenGL APIs.
+		 *\para[in]		p_engine	The engine.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\para[in]		p_gl		Les APIs OpenGL.
+		 *\para[in]		p_engine	Le moteur.
+		 */
 		GlFrameBuffer( OpenGl & p_gl, Castor3D::Engine & p_engine );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
 		virtual ~GlFrameBuffer();
-
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
 		virtual bool Create( int p_iSamplesCount );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
 		virtual void Destroy();
-		virtual bool SetDrawBuffers( uint32_t p_uiSize, Castor3D::eATTACHMENT_POINT const * p_eAttaches );
-		virtual bool SetDrawBuffers();
-		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT p_eAttach );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
+		virtual bool SetDrawBuffers( BufAttachArray const & p_attaches );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
+		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT p_eAttach, uint8_t p_index );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
 		virtual bool IsComplete();
-
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
 		virtual Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
 		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );
-
+		/**
+		 *\~english
+		 *\return		The OpenGL handle for this framebuffer.
+		 *\~french
+		 *\return		L'identifiant OpenGL pour ce tampon d'image.
+		 */
 		inline uint32_t	GetGlName()const
 		{
 			return m_uiGlName;
 		}
 
 	private:
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
 		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
 		virtual void DoUnbind();
-		virtual void DoAttach( Castor3D::TextureAttachmentRPtr p_pAttach )
-		{
-			return DoAttachFba( p_pAttach );
-		}
-		virtual void DoDetach( Castor3D::TextureAttachmentRPtr p_pAttach )
-		{
-			return DoDetachFba( p_pAttach );
-		}
-		virtual void DoAttach( Castor3D::RenderBufferAttachmentRPtr p_pAttach )
-		{
-			return DoAttachFba( p_pAttach );
-		}
-		virtual void DoDetach( Castor3D::RenderBufferAttachmentRPtr p_pAttach )
-		{
-			return DoDetachFba( p_pAttach );
-		}
-		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_eAttachment, Castor3D::DynamicTextureSPtr p_pTexture, Castor3D::eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 );
-		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_eAttachment, Castor3D::RenderBufferSPtr p_pRenderBuffer );
-		virtual void DoDetachAll();
-		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolationMode );
-		virtual void DoGlAttach( Castor3D::eATTACHMENT_POINT p_eAttachment );
-		virtual void DoGlDetach( Castor3D::eATTACHMENT_POINT p_eAttachment );
-
-		void DoAttachFba( Castor3D::FrameBufferAttachmentRPtr p_pAttach );
-		void DoDetachFba( Castor3D::FrameBufferAttachmentRPtr p_pAttach );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoAttach
+		 */
+		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_attachment, uint8_t p_index, Castor3D::TextureAttachmentSPtr p_texture, Castor3D::eTEXTURE_TARGET p_target, int p_layer = 0 );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoAttach
+		 */
+		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_attachment, uint8_t p_index, Castor3D::RenderBufferAttachmentSPtr p_renderBuffer );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
+		 */
+		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolationMode );
 
 	private:
 		uint32_t m_uiGlName;
 		eGL_FRAMEBUFFER_MODE m_eGlBindingMode;
-		Castor3D::UIntArray m_arrayGlAttaches;
 		OpenGl & m_gl;
 	};
 }

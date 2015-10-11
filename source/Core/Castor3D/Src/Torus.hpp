@@ -34,8 +34,8 @@ namespace Castor3D
 	\remark		Un torre est une ellipse qui parcourt une ellipse
 				<br />L'ellipse originale sera appelée interne et possède son propre rayon et nombre de sections
 	*/
-	class C3D_API Torus
-		:	public MeshGenerator
+	class Torus
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -44,22 +44,22 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Torus();
+		C3D_API Torus();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Torus();
+		C3D_API ~Torus();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves the internal ellipse faces number

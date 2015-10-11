@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Classe de base de lecture/écriture d'un chunk de données binaires
 	*/
 	template< class TParsed >
-	class C3D_API BinaryParser
+	class BinaryParser
 	{
 	public:
 		/**
@@ -44,8 +44,8 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_path	Le chemin d'accès au dossier courant
 		 */
-		BinaryParser( Castor::Path const & p_path )
-			:	m_path( p_path )
+		C3D_API BinaryParser( Castor::Path const & p_path )
+			: m_path( p_path )
 		{
 		}
 		/**
@@ -60,7 +60,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		virtual bool Fill( TParsed const & p_obj, Castor::BinaryFile & p_file )const
+		C3D_API virtual bool Fill( TParsed const & p_obj, Castor::BinaryFile & p_file )const
 		{
 			BinaryChunk l_chunk;
 			bool l_return = Fill( p_obj, l_chunk );
@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier qui contient le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		virtual bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )const
+		C3D_API virtual bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )const
 		{
 			BinaryChunk l_chunk;
 			bool l_return = l_chunk.Read( p_file );
@@ -108,7 +108,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		virtual bool Fill( TParsed const & p_obj, BinaryChunk & p_chunk )const = 0;
+		C3D_API virtual bool Fill( TParsed const & p_obj, BinaryChunk & p_chunk )const = 0;
 		/**
 		 *\~english
 		 *\brief		From chunk reader function
@@ -121,7 +121,7 @@ namespace Castor3D
 		 *\param[in]	p_chunk	Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		virtual bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )const = 0;
+		C3D_API virtual bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )const = 0;
 
 	protected:
 		/**
@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		bool DoParseChunk( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )const
 		{
 			return ChunkParser< T >()( p_pValues, p_uiCount, p_chunk );
 		}
@@ -156,7 +156,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, uint32_t Count >
-		bool DoParseChunk( T( & p_value )[Count], BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T( & p_value )[Count], BinaryChunk & p_chunk )const
 		{
 			return ChunkParser< T >()( p_value, Count, p_chunk );
 		}
@@ -173,7 +173,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		bool DoParseChunk( T & p_value, BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T & p_value, BinaryChunk & p_chunk )const
 		{
 			return ChunkParser< T >()( p_value, p_chunk );
 		}
@@ -194,7 +194,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		bool DoFillChunk( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkFiller< T >()( p_pValues, p_uiCount, p_eChunkType, p_chunk );
 		}
@@ -213,7 +213,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, uint32_t Count >
-		bool DoFillChunk( T const( & p_value )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const( & p_value )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkFiller< T >()( p_value, Count, p_eChunkType, p_chunk );
 		}
@@ -232,7 +232,7 @@ namespace Castor3D
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		bool DoFillChunk( T const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
 		{
 			return ChunkFiller< T >()( p_value, p_eChunkType, p_chunk );
 		}

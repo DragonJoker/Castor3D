@@ -46,7 +46,7 @@ namespace GlRender
 		static const uint32_t s_arrayType[] = { eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_UNSIGNED_BYTE, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT };
 		uint8_t const * l_pData = &l_pBuffer->data()[0];
 
-		for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.Begin(); l_it != m_bufferDeclaration.End() && l_return; ++l_it )
+		for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.begin(); l_it != m_bufferDeclaration.end() && l_return; ++l_it )
 		{
 			switch ( l_it->m_eUsage )
 			{

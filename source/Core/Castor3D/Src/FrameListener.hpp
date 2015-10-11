@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Classe de synchronisation des évènements
 	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur eEVENT_TYPE)
 	*/
-	class C3D_API FrameListener
+	class FrameListener
 	{
 	public:
 		/**
@@ -42,21 +42,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		FrameListener();
+		C3D_API FrameListener();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~FrameListener();
+		C3D_API ~FrameListener();
 		/**
 		 *\~english
 		 *\brief		Empties the event lists.
 		 *\~french
 		 *\brief		Vide les listes d'évènements.
 		 */
-		void Flush();
+		C3D_API void Flush();
 		/**
 		 *\~english
 		 *\brief		Puts an event in the corresponding array
@@ -65,7 +65,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type
 		 *\param[in]	p_event	L'évènement à ajouter
 		 */
-		void PostEvent( FrameEventSPtr p_event );
+		C3D_API void PostEvent( FrameEventSPtr p_event );
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them
@@ -75,7 +75,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type des évènements à traiter
 		 *\return
 		 */
-		bool FireEvents( eEVENT_TYPE p_type );
+		C3D_API bool FireEvents( eEVENT_TYPE p_type );
 
 	protected:
 		/**
@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les listes d'évènements.
 		 */
-		virtual void DoFlush(){}
+		C3D_API virtual void DoFlush(){}
 
 	protected:
 		//!\~english The events arrays	\~french Les tableaux d'évènements

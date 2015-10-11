@@ -44,24 +44,22 @@ namespace GlRender
 		}
 	}
 
-	bool GlFrameBuffer::SetDrawBuffers( uint32_t p_uiSize, eATTACHMENT_POINT const * p_eAttaches )
+	bool GlFrameBuffer::SetDrawBuffers( BufAttachArray const & p_attaches )
 	{
 		bool l_return = false;
 
-		if ( m_arrayGlAttaches.size() )
-		{
-			l_return = SetDrawBuffers();
-		}
-		else if ( p_uiSize )
+		if ( !p_attaches.empty() )
 		{
 			UIntArray l_arrayAttaches;
-			l_arrayAttaches.reserve( p_uiSize );
+			l_arrayAttaches.reserve( p_attaches.size() );
 
-			for ( uint32_t i = 0; i < p_uiSize; i++ )
+			for ( auto && l_attach : p_attaches )
 			{
-				if ( p_eAttaches[i] >= eATTACHMENT_POINT_COLOUR0 && p_eAttaches[i] < eATTACHMENT_POINT_DEPTH )
+				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
+
+				if ( l_eAttach != eATTACHMENT_POINT_NONE )
 				{
-					l_arrayAttaches.push_back( m_gl.Get( p_eAttaches[i] ) );
+					l_arrayAttaches.push_back( m_gl.Get( l_eAttach ) );
 				}
 			}
 
@@ -71,27 +69,18 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlFrameBuffer::SetDrawBuffers()
+	bool GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
 	{
 		bool l_return = false;
 
-		if ( m_arrayGlAttaches.size() )
+		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_attach )
 		{
-			l_return = m_gl.DrawBuffers( int( m_arrayGlAttaches.size() ), &m_arrayGlAttaches[0] );
-		}
+			return p_attach->GetAttachmentPoint() == p_eAttach;
+		} );
 
-		return l_return;
-	}
-
-	bool GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach )
-	{
-		bool l_return = false;
-		eGL_BUFFER l_eAttach = m_gl.Get( m_gl.Get( p_eAttach ) );
-		UIntArrayIt l_it = std::find( m_arrayGlAttaches.begin(), m_arrayGlAttaches.end(), l_eAttach );
-
-		if ( l_it != m_arrayGlAttaches.end() )
+		if ( l_it != m_attaches.end() )
 		{
-			m_gl.ReadBuffer( l_eAttach );
+			l_return = m_gl.ReadBuffer( m_gl.Get( m_gl.Get( p_eAttach ) ) );
 		}
 
 		return l_return;
@@ -133,24 +122,14 @@ namespace GlRender
 		}
 	}
 
-	void GlFrameBuffer::DoAttachFba( FrameBufferAttachmentRPtr p_pAttach )
-	{
-		DoGlAttach( p_pAttach->GetAttachmentPoint() );
-	}
-
-	void GlFrameBuffer::DoDetachFba( FrameBufferAttachmentRPtr p_pAttach )
-	{
-		DoGlDetach( p_pAttach->GetAttachmentPoint() );
-	}
-
-	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_eAttachment, DynamicTextureSPtr p_pTexture, eTEXTURE_TARGET p_eTarget, int p_iLayer )
+	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_attachment, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_eTarget, int p_iLayer )
 	{
 		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
-			eGL_TEXTURE_ATTACHMENT l_eGlAttachmentPoint = m_gl.Get( p_eAttachment );
-			GlDynamicTextureSPtr l_pTexture = std::static_pointer_cast< GlDynamicTexture >( p_pTexture );
+			eGL_TEXTURE_ATTACHMENT l_eGlAttachmentPoint = eGL_TEXTURE_ATTACHMENT( m_gl.Get( p_attachment ) + p_index );
+			GlDynamicTextureSPtr l_pTexture = std::static_pointer_cast< GlDynamicTexture >( p_texture->GetTexture() );
 
 			switch ( p_eTarget )
 			{
@@ -199,35 +178,31 @@ namespace GlRender
 			}
 		}
 
-		if ( l_return )
-		{
-			DoGlAttach( p_eAttachment );
-		}
-
 		return l_return;
 	}
 
-	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_eAttachment, RenderBufferSPtr p_pRenderBuffer )
+	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_attachment, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
 		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
-			eGL_RENDERBUFFER_ATTACHMENT l_eGlAttachmentPoint = m_gl.GetRboAttachment( p_eAttachment );
+			eGL_RENDERBUFFER_ATTACHMENT l_eGlAttachmentPoint = m_gl.GetRboAttachment( p_attachment );
+			RenderBufferSPtr l_renderBuffer = p_renderBuffer->GetRenderBuffer();
 			uint32_t l_uiGlName;
 
-			switch ( p_pRenderBuffer->GetComponent() )
+			switch ( p_renderBuffer->GetRenderBuffer()->GetComponent() )
 			{
 			case eBUFFER_COMPONENT_COLOUR:
-				l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer			>( p_pRenderBuffer )->GetGlName();
+				l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( l_renderBuffer )->GetGlName();
 				break;
 
 			case eBUFFER_COMPONENT_DEPTH:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer	>( p_pRenderBuffer )->GetGlName();
+				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( l_renderBuffer )->GetGlName();
 				break;
 
 			case eBUFFER_COMPONENT_STENCIL:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer	>( p_pRenderBuffer )->GetGlName();
+				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( l_renderBuffer )->GetGlName();
 				break;
 
 			default:
@@ -241,42 +216,11 @@ namespace GlRender
 			}
 		}
 
-		if ( l_return )
-		{
-			DoGlAttach( p_eAttachment );
-		}
-
 		return l_return;
 	}
 
-	void GlFrameBuffer::DoDetachAll()
+	bool GlFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolationMode )
 	{
-		m_arrayGlAttaches.clear();
-	}
-
-	bool GlFrameBuffer::DoStretchInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolationMode )
-	{
-		return m_gl.BlitFramebuffer( p_rectSrc, p_rectDst, m_gl.GetComponents( p_uiComponents ), m_gl.Get( p_eInterpolationMode ) );
-	}
-
-	void GlFrameBuffer::DoGlAttach( eATTACHMENT_POINT p_eAttachment )
-	{
-		if ( p_eAttachment != eATTACHMENT_POINT_DEPTH && p_eAttachment != eATTACHMENT_POINT_STENCIL )
-		{
-			DoGlDetach( p_eAttachment );
-			uint32_t l_uiAttach = m_gl.Get( p_eAttachment );
-			m_arrayGlAttaches.push_back( l_uiAttach );
-		}
-	}
-
-	void GlFrameBuffer::DoGlDetach( eATTACHMENT_POINT p_eAttachment )
-	{
-		uint32_t l_uiAttach = m_gl.Get( p_eAttachment );
-		UIntArrayIt l_it = std::find( m_arrayGlAttaches.begin(), m_arrayGlAttaches.end(), l_uiAttach );
-
-		if ( l_it != m_arrayGlAttaches.end() )
-		{
-			m_arrayGlAttaches.erase( l_it );
-		}
+		return m_gl.BlitFramebuffer( p_rectDst, p_rectDst, m_gl.GetComponents( p_uiComponents ), m_gl.Get( p_eInterpolationMode ) );
 	}
 }

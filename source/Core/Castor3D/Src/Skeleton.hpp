@@ -31,8 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Le squelette, contient chaque bone
 	*/
-	class C3D_API Skeleton
-		:	public Animable
+	class Skeleton
+		: public Animable
 	{
 	public:
 		/**
@@ -43,14 +43,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_pMesh	Le maillage parent
 		 */
-		Skeleton( MeshSPtr p_pMesh );
+		C3D_API Skeleton( MeshSPtr p_pMesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Skeleton();
+		C3D_API virtual ~Skeleton();
 		/**
 		 *\~english
 		 *\brief		Adds a bone to the skeleton
@@ -60,7 +60,7 @@ namespace Castor3D
 		 *\brief		Ajoute un os au squelette
 		 *\param[in]	p_pBone		L'os
 		 */
-		void AddBone( BoneSPtr p_pBone );
+		C3D_API void AddBone( BoneSPtr p_pBone );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first bone

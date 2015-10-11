@@ -44,7 +44,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader de LightCategory
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public Castor::Loader< LightCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
@@ -54,7 +54,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
@@ -65,7 +65,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			virtual bool operator()( LightCategory const & p_light, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( LightCategory const & p_light, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -75,7 +75,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de LightCategory
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public Castor3D::BinaryParser< LightCategory >
 		{
 		public:
@@ -87,7 +87,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -100,7 +100,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( LightCategory const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( LightCategory const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -113,7 +113,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:

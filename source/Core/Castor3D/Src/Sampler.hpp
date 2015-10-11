@@ -80,7 +80,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de Sampler
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public Castor3D::BinaryParser< Sampler >
 		{
 		public:
@@ -92,7 +92,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -105,7 +105,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Sampler const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Sampler const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -118,7 +118,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Sampler & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Sampler & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:

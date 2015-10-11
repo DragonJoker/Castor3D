@@ -42,7 +42,8 @@ namespace Castor3D
 	\brief		Variable matrice à type et dimensions variables
 	*/
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	class MatrixFrameVariable : public TFrameVariable< T >
+	class MatrixFrameVariable
+		: public TFrameVariable< T >
 	{
 	public:
 		/**

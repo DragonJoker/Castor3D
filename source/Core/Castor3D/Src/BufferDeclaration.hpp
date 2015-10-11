@@ -32,7 +32,7 @@ namespace Castor3D
 	\~french
 	\brief		Description de tous les éléments dans un tampon de sommets
 	*/
-	class C3D_API BufferDeclaration
+	class BufferDeclaration
 	{
 	public:
 		DECLARE_VECTOR( BufferElementDeclaration, BufferElementDeclaration );
@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\param[in]	p_elements	Tableau des éléments
 		 */
 		template< uint32_t N >
-		BufferDeclaration( BufferElementDeclaration const( & p_elements )[N] )
+		inline BufferDeclaration( BufferElementDeclaration const( & p_elements )[N] )
 		{
 			DoInitialise( p_elements, N );
 		}
@@ -61,7 +61,7 @@ namespace Castor3D
 		 *\param[in]	p_pElements		Tableau d'éléments
 		 *\param[in]	p_uiNbElements	Taille du tableau d'éléments
 		 */
-		BufferDeclaration( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		C3D_API BufferDeclaration( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_declaration	L'objet BufferDeclaration à copier
 		 */
-		BufferDeclaration( BufferDeclaration const & p_declaration );
+		C3D_API BufferDeclaration( BufferDeclaration const & p_declaration );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_declaration	L'objet BufferDeclaration à déplacer
 		 */
-		BufferDeclaration( BufferDeclaration && p_declaration );
+		C3D_API BufferDeclaration( BufferDeclaration && p_declaration );
 		/**
 		 *\~english
 		 *\brief		Assignment operator
@@ -90,14 +90,14 @@ namespace Castor3D
 		 *\param[in]	p_declaration	L'objet BufferDeclaration à copier
 		 *\return		Une référence sur cet objet BufferDeclaration
 		 */
-		BufferDeclaration & operator =( BufferDeclaration p_declaration );
+		C3D_API BufferDeclaration & operator=( BufferDeclaration p_declaration );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BufferDeclaration();
+		C3D_API virtual ~BufferDeclaration();
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the elements array
@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début du tableau d'éléments
 		 *\return		Itérateur constant sur le début du tableau d'éléments
 		 */
-		inline BufferElementDeclarationArrayConstIt	Begin()const
+		inline BufferElementDeclarationArrayConstIt begin()const
 		{
 			return m_arrayElements.begin();
 		}
@@ -118,7 +118,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau d'éléments
 		 *\return		Itérateur constant sur la fin du tableau d'éléments
 		 */
-		inline BufferElementDeclarationArrayConstIt	End()const
+		inline BufferElementDeclarationArrayConstIt end()const
 		{
 			return m_arrayElements.end();
 		}
@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index
 		 *\return		L'élément à l'index donné
 		 */
-		inline BufferElementDeclaration const & operator []( uint32_t p_index )const
+		inline BufferElementDeclaration const & operator[]( uint32_t p_index )const
 		{
 			return m_arrayElements[p_index];
 		}
@@ -174,16 +174,16 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index
 		 *\return		L'élément à l'index donné
 		 */
-		inline BufferElementDeclaration & operator []( uint32_t p_index )
+		inline BufferElementDeclaration & operator[]( uint32_t p_index )
 		{
 			return m_arrayElements[p_index];
 		}
 
 	private:
-		void DoInitialise( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		C3D_API void DoInitialise( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
 
 	protected:
-		friend void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
+		friend C3D_API void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
 		//!\~english Element description array	\~french Tableau de descriptions d'éléments
 		BufferElementDeclarationArray m_arrayElements;
 		//!\~english Byte size of the element	\~french Taille de l'élément, en octets
@@ -197,7 +197,7 @@ namespace Castor3D
 	 *\brief		Fonction d'échange
 	 *\param[in]	p_obj1, p_obj2	Les 2 objets à échanger
 	 */
-	void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
+	C3D_API void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
 }
 
 #endif

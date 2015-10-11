@@ -51,7 +51,7 @@ namespace Castor3D
 		\brief		Overlay loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			: public Castor::Loader< Overlay, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
@@ -61,7 +61,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file
@@ -74,7 +74,7 @@ namespace Castor3D
 			 *\param[in]	p_overlay	L'incrustation à enregistrer
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( Overlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Overlay const & p_overlay, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -84,7 +84,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de Overlay
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			: public Castor3D::BinaryParser< Overlay >
 		{
 		public:
@@ -98,7 +98,7 @@ namespace Castor3D
 			 *\param[in]	p_path		Le chemin d'accès au dossier courant
 			 *\param[in]	p_engine	Le moteur
 			 */
-			BinaryParser( Castor::Path const & p_path, Engine * p_engine );
+			C3D_API BinaryParser( Castor::Path const & p_path, Engine * p_engine );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -111,7 +111,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Overlay const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Overlay const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -124,7 +124,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Overlay & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Overlay & p_obj, BinaryChunk & p_chunk )const;
 
 			//!\~english The engine	\~french Le moteur
 			Engine * m_engine;

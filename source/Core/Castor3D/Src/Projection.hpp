@@ -35,8 +35,8 @@ namespace Castor3D
 	\brief		Représentation d'une projection
 	\remark		Ce type de mesh est la projection d'un arc selon un axe sur une distance donnée
 	*/
-	class C3D_API Projection
-		:	public MeshGenerator
+	class Projection
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -45,22 +45,22 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Projection();
+		C3D_API Projection();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Projection();
+		C3D_API ~Projection();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Defines the pattern used to build the projection
@@ -73,7 +73,7 @@ namespace Castor3D
 		 *\param[in]	p_vAxis		L'axe de projection
 		 *\param[in]	p_bClosed	Dit si on doit fermer la projection
 		 */
-		void SetPoints( Point3rPatternSPtr p_pPattern, Castor::Point3r const & p_vAxis, bool p_bClosed );
+		C3D_API void SetPoints( Point3rPatternSPtr p_pPattern, Castor::Point3r const & p_vAxis, bool p_bClosed );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces

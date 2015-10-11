@@ -399,7 +399,7 @@ namespace Castor3D
 
 						if ( l_return )
 						{
-							CameraSPtr l_camera = p_obj.CreateCamera( l_name, 100, 100, nullptr, eVIEWPORT_TYPE_3D );
+							CameraSPtr l_camera = p_obj.CreateCamera( l_name, 10, 10, nullptr );
 							l_return = Camera::BinaryParser( m_path ).Parse( *l_camera, l_chunk );
 						}
 					}
@@ -890,20 +890,21 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	CameraSPtr Scene::CreateCamera( String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node, eVIEWPORT_TYPE p_type )
+	CameraSPtr Scene::CreateCamera( String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node )
 	{
 		CameraSPtr l_pReturn;
 
 		if ( DoCheckObject( p_name, m_addedCameras, cuT( "Camera" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, p_node, Size( p_ww, p_wh ), p_type );
+			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, p_node );
 
 			if ( p_node )
 			{
 				p_node->AttachObject( l_pReturn );
 			}
 
+			l_pReturn->GetViewport().SetSize( Size( p_ww, p_wh ) );
 			m_addedCameras[p_name] = l_pReturn;
 			Logger::LogInfo( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
 		}
@@ -911,7 +912,7 @@ namespace Castor3D
 		return l_pReturn;
 	}
 
-	CameraSPtr Scene::CreateCamera( String const & p_name, SceneNodeSPtr p_node, ViewportSPtr p_viewport )
+	CameraSPtr Scene::CreateCamera( String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport )
 	{
 		CameraSPtr l_pReturn;
 

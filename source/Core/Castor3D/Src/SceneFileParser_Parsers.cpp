@@ -3147,7 +3147,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraViewport )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->pViewport = std::make_shared< Viewport >( *l_pContext->m_pParser->GetOwner(), Size( 100, 100 ), eVIEWPORT_TYPE_3D );
+	l_pContext->pViewport = std::make_shared< Viewport >( Viewport::Perspective( *l_pContext->m_pParser->GetOwner(), Angle::FromDegrees( 0 ), 1, 0, 1 ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_VIEWPORT )
 
@@ -3165,7 +3165,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraEnd )
 
 	if ( l_pContext->pSceneNode && l_pContext->pViewport )
 	{
-		l_pContext->pScene->CreateCamera( l_pContext->strName, l_pContext->pSceneNode, l_pContext->pViewport )->SetPrimitiveType( l_pContext->ePrimitiveType );
+		l_pContext->pScene->CreateCamera( l_pContext->strName, l_pContext->pSceneNode, *l_pContext->pViewport )->SetPrimitiveType( l_pContext->ePrimitiveType );
 	}
 }
 END_ATTRIBUTE_POP()

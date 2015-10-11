@@ -32,8 +32,8 @@ namespace Castor3D
 	\brief		Représentation d'un cube
 	\remark		La dénomination "Cube" est un abus de langage car ses 3 dimensions sont paramétrables (largeur, hauteur et profondeur)
 	*/
-	class C3D_API Cube
-		:	public MeshGenerator
+	class Cube
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -42,22 +42,22 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Cube();
+		C3D_API Cube();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Cube();
+		C3D_API ~Cube();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves the cube height

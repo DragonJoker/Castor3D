@@ -38,7 +38,7 @@ namespace Dx11Render
 		ID3D11View * GetSurface()const;
 
 	private:
-		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_eAttachment, Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
 		virtual void DoDetach();
 
 	private:

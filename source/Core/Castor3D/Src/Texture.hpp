@@ -33,7 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		Class de base d'une texture
 	*/
-	class C3D_API TextureBase
+	class TextureBase
 		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
@@ -47,14 +47,14 @@ namespace Castor3D
 		 *\param[in]	p_type			Le type de texture
 		 *\param[in]	p_renderSystem	Le render system
 		 */
-		TextureBase( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem );
+		C3D_API TextureBase( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TextureBase();
+		C3D_API virtual ~TextureBase();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -63,14 +63,23 @@ namespace Castor3D
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Bind();
+		C3D_API bool Bind();
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 */
-		void Unbind();
+		C3D_API void Unbind();
+		/**
+		*\~english
+		*\brief		Defines the texture buffer
+		*\param[in]	p_pBuffer	The buffer
+		*\~french
+		*\brief		Définit le buffer de la texture
+		*\param[in]	p_pBuffer	Le buffer
+		*/
+		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Creation function
@@ -79,14 +88,14 @@ namespace Castor3D
 		 *\brief		Fonction de création
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Create() = 0;
+		C3D_API virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy() = 0;
+		C3D_API virtual void Destroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -97,14 +106,14 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index de la texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( uint32_t p_index ) = 0;
+		C3D_API virtual bool Initialise( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
@@ -115,7 +124,7 @@ namespace Castor3D
 		 *\param[in]	p_eLock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eLOCK_FLAG
 		 *\return		Le buffer de l'image
 		 */
-		virtual uint8_t * Lock( uint32_t p_uiLock ) = 0;
+		C3D_API virtual uint8_t * Lock( uint32_t p_uiLock ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU
@@ -124,7 +133,7 @@ namespace Castor3D
 		 *\brief		Délocke le buffer de l'image à partir du GPU
 		 *\param[in]	p_bModified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
 		 */
-		virtual void Unlock( bool p_bModified ) = 0;
+		C3D_API virtual void Unlock( bool p_bModified ) = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -135,7 +144,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool BindAt( uint32_t p_index ) = 0;
+		C3D_API virtual bool BindAt( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -144,14 +153,14 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		virtual void UnbindFrom( uint32_t p_index ) = 0;
+		C3D_API virtual void UnbindFrom( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
 		 */
-		virtual void GenerateMipmaps() = 0;
+		C3D_API virtual void GenerateMipmaps() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the initialisation status
@@ -286,15 +295,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the texture buffer
-		 *\param[in]	p_pBuffer	The buffer
-		 *\~french
-		 *\brief		Définit le buffer de la texture
-		 *\param[in]	p_pBuffer	Le buffer
-		 */
-		void SetImage( Castor::PxBufferBaseSPtr p_pBuffer );
-		/**
-		 *\~english
 		 *\brief		Retrieves the texture buffer
 		 *\return		The buffer
 		 *\~french
@@ -363,7 +363,7 @@ namespace Castor3D
 		 *\brief		Initialisation spécifique selon l'API
 		 *\return		\p si tout s'est bien passé
 		 */
-		virtual bool DoInitialise() = 0;
+		C3D_API virtual bool DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		API specific binding function
@@ -372,14 +372,14 @@ namespace Castor3D
 		 *\brief		Activation spécifique selon l'API
 		 *\return		\p si tout s'est bien passé
 		 */
-		virtual bool DoBind( uint32_t p_index ) = 0;
+		C3D_API virtual bool DoBind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		API specific unbinding function
 		 *\~french
 		 *\brief		Désactivation spécifique selon l'API
 		 */
-		virtual void DoUnbind( uint32_t p_index ) = 0;
+		C3D_API virtual void DoUnbind( uint32_t p_index ) = 0;
 
 	protected:
 		DECLARE_VECTOR( Castor::PxBufferBaseSPtr, PxBuffer );

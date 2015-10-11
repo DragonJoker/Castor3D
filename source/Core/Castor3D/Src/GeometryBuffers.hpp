@@ -39,7 +39,7 @@ namespace Castor3D
 	\remark		Permet aux implémentations d'utiliser les optimisations spécifiques aux API (comme les Vertex arrays objects OpenGL)
 				<br />Acquiert la responsabilité de ses buffers à la création
 	*/
-	class C3D_API GeometryBuffers
+	class GeometryBuffers
 	{
 	public:
 		/**
@@ -54,14 +54,14 @@ namespace Castor3D
 		 *\param[in]	p_pIndexBuffer	Le tampon d'indices
 		 *\param[in]	p_pMatrixBuffer	Le tampon de matrices
 		 */
-		GeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer );
+		C3D_API GeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~GeometryBuffers();
+		C3D_API virtual ~GeometryBuffers();
 		/**
 		 *\~english
 		 *\brief		Creates the buffers on GPU
@@ -70,14 +70,14 @@ namespace Castor3D
 		 *\brief		Crée les tampons au niveau GPU
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Create();
+		C3D_API bool Create();
 		/**
 		 *\~english
 		 *\brief		Destroys the buffers on GPU
 		 *\~french
 		 *\brief		Détruit les tampons au niveau GPU
 		 */
-		void Destroy();
+		C3D_API void Destroy();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -90,7 +90,7 @@ namespace Castor3D
 		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature );
+		C3D_API bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -105,7 +105,7 @@ namespace Castor3D
 		 *\param[in]	p_idxType, p_idxAccess	Indicateurs d'accès pour le tampon d'indices
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature );
+		C3D_API bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -122,14 +122,14 @@ namespace Castor3D
 		 *\param[in]	p_mtxType, p_mtxAccess	Indicateurs d'accès pour le tampon de matrices
 		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature, eBUFFER_ACCESS_TYPE p_mtxType, eBUFFER_ACCESS_NATURE p_mtxNature );
+		C3D_API bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature, eBUFFER_ACCESS_TYPE p_mtxType, eBUFFER_ACCESS_NATURE p_mtxNature );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
@@ -144,7 +144,7 @@ namespace Castor3D
 		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index ) = 0;
+		C3D_API virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
@@ -161,7 +161,7 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	Le nombre d'instances à dessiner
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount ) = 0;
+		C3D_API virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the geometry buffers
@@ -172,14 +172,14 @@ namespace Castor3D
 		 *\remark		Si ça échoue, les buffers seront correctement désactivés
 		 *\return		\p false si l'activation d'un tampon a échoué
 		 */
-		virtual bool Bind();
+		C3D_API virtual bool Bind();
 		/**
 		 *\~english
 		 *\brief		Unbinds the geometry buffers
 		 *\~french
 		 *\brief		Désactive les buffers de la géométrie
 		 */
-		virtual void Unbind();
+		C3D_API virtual void Unbind();
 		/**
 		 *\~english
 		 *\brief		Retrieves the indices buffer
@@ -250,14 +250,14 @@ namespace Castor3D
 		 *\brief		Crée les objets GPU
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoCreate() = 0;
+		C3D_API virtual bool DoCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the GPU related stuff
 		 *\~french
 		 *\brief		Détruit les objets GPU
 		 */
-		virtual void DoDestroy() = 0;
+		C3D_API virtual void DoDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -266,14 +266,14 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoInitialise() = 0;
+		C3D_API virtual bool DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 
 	protected:
 		//!\~english The vertex buffer	\~french Le tampon de sommets

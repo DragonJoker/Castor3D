@@ -212,7 +212,6 @@ namespace Direct
 
 	void RenderTechnique::DoEndRender()
 	{
-		m_pFrameBuffer->Unbind();
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const

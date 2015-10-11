@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Implémentation de MovingObjectBase pour des noeuds abstraits.
 	\remark		Utilisé afin de décomposer le modèle et ajouter des animatiobns intermédiaires
 	*/
-	class C3D_API MovingNode
+	class MovingNode
 		: public MovingObjectBase
 	{
 	public:
@@ -43,14 +43,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MovingNode();
+		C3D_API MovingNode();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~MovingNode();
+		C3D_API ~MovingNode();
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name
@@ -59,11 +59,11 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		virtual Castor::String const & GetName()const;
+		C3D_API virtual Castor::String const & GetName()const;
 
 	private:
-		virtual void DoApply();
-		virtual MovingObjectBaseSPtr DoClone();
+		C3D_API virtual void DoApply();
+		C3D_API virtual MovingObjectBaseSPtr DoClone();
 
 	private:
 		static const Castor::String StrVoidString;

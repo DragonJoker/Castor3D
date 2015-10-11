@@ -32,7 +32,7 @@ namespace Castor3D
 	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
 	*/
 	template< class Type, eINTERPOLATOR_MODE Mode >
-	class C3D_API Interpolator
+	class Interpolator
 	{
 	public:
 		/**
@@ -46,9 +46,9 @@ namespace Castor3D
 		 *\param[in]	p_tDest	L'arrivée
 		 */
 		Interpolator( Type const & p_tSrc, Type const & p_tDest )
-			:	m_tSrc( p_tSrc )
-			,	m_tCurrent( p_tSrc )
-			,	m_tDest( p_tDest )
+			: m_tSrc( p_tSrc )
+			, m_tCurrent( p_tSrc )
+			, m_tDest( p_tDest )
 		{
 		}
 		/**

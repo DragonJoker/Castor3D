@@ -88,27 +88,27 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlRenderBufferAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
+	bool GlRenderBufferAttachment::DoAttach( FrameBufferSPtr p_pFrameBuffer )
 	{
 		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
-			m_eGlAttachmentPoint = m_gl.GetRboAttachment( p_eAttachment );
+			m_eGlAttachmentPoint = eGL_RENDERBUFFER_ATTACHMENT( m_gl.GetRboAttachment( GetAttachmentPoint() ) + GetAttachmentIndex() );
 			uint32_t l_uiGlName;
 
 			switch ( GetRenderBuffer()->GetComponent() )
 			{
 			case eBUFFER_COMPONENT_COLOUR:
-				l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer			>( GetRenderBuffer() )->GetGlName();
+				l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( GetRenderBuffer() )->GetGlName();
 				break;
 
 			case eBUFFER_COMPONENT_DEPTH:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer	>( GetRenderBuffer() )->GetGlName();
+				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
 				break;
 
 			case eBUFFER_COMPONENT_STENCIL:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer	>( GetRenderBuffer() )->GetGlName();
+				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( GetRenderBuffer() )->GetGlName();
 				break;
 
 			default:

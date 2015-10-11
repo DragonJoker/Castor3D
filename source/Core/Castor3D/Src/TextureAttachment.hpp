@@ -32,18 +32,18 @@ namespace Castor3D
 	\brief		Description d'une liaison entre un tampon d'image et une texture
 	*/
 	class TextureAttachment
-		:	public FrameBufferAttachment
+		: public FrameBufferAttachment
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pTexture	The texture
+		 *\param[in]	p_texture	The texture
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pTexture	La texture
+		 *\param[in]	p_texture	La texture
 		 */
-		C3D_API TextureAttachment( DynamicTextureSPtr p_pTexture );
+		C3D_API TextureAttachment( DynamicTextureSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -54,20 +54,39 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_pFrameBuffer	The frame buffer
-		 *\param[in]	p_eTarget		The dimension to which the texture must be attached
-		 *\param[in]	p_iLayer		The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_attachment	The attachment point
+		 *\param[in]	p_index			The attachment index
+		 *\param[in]	p_frameBuffer	The frame buffer
+		 *\param[in]	p_target		The dimension to which the texture must be attached
+		 *\param[in]	p_layer			The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache la texture au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
-		 *\param[in]	p_pFrameBuffer	Le tampon d'image
-		 *\param[in]	p_eTarget		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_iLayer		La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_attachment	Le point d'attache
+		 *\param[in]	p_index			L'index d'attache
+		 *\param[in]	p_frameBuffer	Le tampon d'image
+		 *\param[in]	p_target		La dimension à laquelle la texture doit être attachée
+		 *\param[in]	p_layer			La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer, eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer = 0 );
+		/**
+		 *\~english
+		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
+		 *\param[in]	p_attachment	The attachment point
+		 *\param[in]	p_frameBuffer	The frame buffer
+		 *\param[in]	p_target		The dimension to which the texture must be attached
+		 *\param[in]	p_layer			The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Attache la texture au tampon d'image donné, au point d'attache voulu
+		 *\param[in]	p_attachment	Le point d'attache
+		 *\param[in]	p_frameBuffer	Le tampon d'image
+		 *\param[in]	p_target		La dimension à laquelle la texture doit être attachée
+		 *\param[in]	p_layer			La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\return		\p true si tout s'est bien passé
+		 */
+		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Detaches the render buffer from the frame buffer
@@ -85,7 +104,7 @@ namespace Castor3D
 		 */
 		inline DynamicTextureSPtr GetTexture()const
 		{
-			return m_pTexture.lock();
+			return m_texture.lock();
 		}
 		/**
 		 *\~english
@@ -97,7 +116,7 @@ namespace Castor3D
 		 */
 		inline eTEXTURE_TARGET GetAttachedTarget()const
 		{
-			return m_eAttachedTarget;
+			return m_target;
 		}
 		/**
 		 *\~english
@@ -109,16 +128,18 @@ namespace Castor3D
 		 */
 		inline int GetAttachedLayer()const
 		{
-			return m_iAttachedLayer;
+			return m_layer;
 		}
 
 	private:
+		using FrameBufferAttachment::Attach;
+
 		//!\~english The attached texture	\~french La texture attachée
-		DynamicTextureWPtr m_pTexture;
+		DynamicTextureWPtr m_texture;
 		//!\~english The texture target type	\~french Le type de cible de la texture
-		eTEXTURE_TARGET m_eAttachedTarget;
+		eTEXTURE_TARGET m_target;
 		//!\~english The attached layer	\~french La couche attachée
-		int m_iAttachedLayer;
+		int m_layer;
 	};
 }
 

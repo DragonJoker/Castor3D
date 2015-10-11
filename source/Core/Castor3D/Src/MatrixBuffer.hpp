@@ -52,7 +52,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~MatrixBuffer();
+		C3D_API ~MatrixBuffer();
+		/**
+		 *\~english
+		 *\brief		Creation function
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction de création
+		 *\return		\p true si tout s'est bien passé
+		 */
+		C3D_API bool Create();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -65,17 +74,10 @@ namespace Castor3D
 		 *\param[in]	p_uiCount	Nombre d'instances
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Bind( uint32_t p_uiCount );
+		C3D_API bool Bind( uint32_t p_uiCount );
 
 	private:
 		using CpuBuffer< real >::Bind;
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 */
-		C3D_API virtual bool DoCreateBuffer();
 	};
 }
 

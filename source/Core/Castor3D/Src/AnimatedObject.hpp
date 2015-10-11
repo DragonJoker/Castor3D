@@ -33,8 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Représente les objets animés
 	*/
-	class C3D_API AnimatedObject
-		:	public Castor::Named
+	class AnimatedObject
+		: public Castor::Named
 	{
 	public:
 		/**
@@ -45,14 +45,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom de l'objet
 		 */
-		AnimatedObject( Castor::String const & p_name );
+		C3D_API AnimatedObject( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~AnimatedObject();
+		C3D_API ~AnimatedObject();
 		/**
 		 *\~english
 		 *\brief		Updates the animations of the object, given the time since the last frame
@@ -61,7 +61,7 @@ namespace Castor3D
 		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
 		 *\param[in]	p_rTslf		Le temps écoulé depuis la dernière frame
 		 */
-		void Update( real p_rTslf );
+		C3D_API void Update( real p_rTslf );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
@@ -70,7 +70,7 @@ namespace Castor3D
 		 *\brief		Démarre l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StartAnimation( Castor::String const & p_name );
+		C3D_API void StartAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\brief		Stoppe l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StopAnimation( Castor::String const & p_name );
+		C3D_API void StopAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
@@ -88,28 +88,28 @@ namespace Castor3D
 		 *\brief		Met en pause l'animation identifiée par le nom donné
 		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void PauseAnimation( Castor::String const & p_name );
+		C3D_API void PauseAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations
 		 *\~french
 		 *\brief		Démarre toutes les animations
 		 */
-		void StartAllAnimations();
+		C3D_API void StartAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Stops all animations
 		 *\~french
 		 *\brief		Stoppe toutes les animations
 		 */
-		void StopAllAnimations();
+		C3D_API void StopAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Pauses all animations
 		 *\~french
 		 *\brief		Met en pause toutes les animations
 		 */
-		void PauseAllAnimations();
+		C3D_API void PauseAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Retrieves an animation
@@ -120,7 +120,34 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de l'animation
 		 *\return		L'animation
 		 */
-		AnimationSPtr GetAnimation( Castor::String const & p_name );
+		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Defines the geometry
+		 *\param[in]	p_pGeometry	The geometry
+		 *\~french
+		 *\brief		Définit la géométrie
+		 *\param[in]	p_pGeometry	La géométrie
+		 */
+		C3D_API void SetGeometry( GeometrySPtr p_pGeometry );
+		/**
+		 *\~english
+		 *\brief		Defines the mesh
+		 *\param[in]	p_pMesh	The mesh
+		 *\~french
+		 *\brief		Définit le maillage
+		 *\param[in]	p_pMesh	Le maillage
+		 */
+		C3D_API void SetMesh( MeshSPtr p_pMesh );
+		/**
+		 *\~english
+		 *\brief		Defines the skeleton
+		 *\param[in]	p_pSkeleton	The skeleton
+		 *\~french
+		 *\brief		Définit le squelette
+		 *\param[in]	p_pSkeleton	Le squelette
+		 */
+		C3D_API void SetSkeleton( SkeletonSPtr p_pSkeleton );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first animation
@@ -205,33 +232,6 @@ namespace Castor3D
 		{
 			return m_wpSkeleton.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the geometry
-		 *\param[in]	p_pGeometry	The geometry
-		 *\~french
-		 *\brief		Définit la géométrie
-		 *\param[in]	p_pGeometry	La géométrie
-		 */
-		void SetGeometry( GeometrySPtr p_pGeometry );
-		/**
-		 *\~english
-		 *\brief		Defines the mesh
-		 *\param[in]	p_pMesh	The mesh
-		 *\~french
-		 *\brief		Définit le maillage
-		 *\param[in]	p_pMesh	Le maillage
-		 */
-		void SetMesh( MeshSPtr p_pMesh );
-		/**
-		 *\~english
-		 *\brief		Defines the skeleton
-		 *\param[in]	p_pSkeleton	The skeleton
-		 *\~french
-		 *\brief		Définit le squelette
-		 *\param[in]	p_pSkeleton	Le squelette
-		 */
-		void SetSkeleton( SkeletonSPtr p_pSkeleton );
 
 	private:
 		void DoSetGeometry( GeometrySPtr p_pGeometry );

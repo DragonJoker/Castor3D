@@ -124,25 +124,35 @@ bool RenderSystem::DoTrack( void * p_object, std::string const & p_type, std::st
 
 	bool l_return = l_it == m_allocated.end();
 
+	std::stringstream l_ptr;
+	l_ptr.width( 16 );
+	l_ptr.fill( '0' );
+	l_ptr << std::hex << std::right << uint64_t( p_object );
+	std::stringstream l_type;
+	l_type.width( 20 );
+	l_type << std::left << p_type;
+	std::stringstream l_name;
+	l_name << "(" << m_id << ") " << l_type.str() << " [0x" << l_ptr.str() << "]";
+
 	if ( l_return )
 	{
 		StringStream l_stream;
 		Debug::ShowBacktrace( l_stream );
 		m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1, l_stream.str() } );
-		std::stringstream l_ptr;
-		l_ptr.width( 16 );
-		l_ptr.fill( '0' );
-		l_ptr << std::hex << std::right << uint64_t( p_object );
-		std::stringstream l_type;
-		l_type.width( 20 );
-		l_type << std::left << p_type;
-		std::stringstream l_name;
-		l_name << "(" << m_id << ") " << l_type.str() << " [0x" << l_ptr.str() << "]";
 		Castor::Logger::LogDebug( l_name );
 		p_name = l_name.str();
 	}
 	else
 	{
+		if ( l_it->m_ref > 0 )
+		{
+			Castor::Logger::LogDebug( std::stringstream() << "Rereferencing object: " << l_type.str() << " [0x" << l_ptr.str() << "] => " << l_it->m_ref );
+		}
+		else
+		{
+			Castor::Logger::LogDebug( l_name );
+		}
+
 		++l_it->m_ref;
 	}
 
@@ -170,15 +180,19 @@ bool RenderSystem::DoUntrack( void * p_object, ObjectDeclaration & p_declaration
 
 	if ( l_it != m_allocated.end() )
 	{
+		std::stringstream l_type;
+		l_type.width( 20 );
+		l_type << std::left << l_it->m_name;
+
 		if ( !--l_it->m_ref )
 		{
 			p_declaration = *l_it;
-			m_allocated.erase( l_it );
 			l_return = true;
-			std::stringstream l_type;
-			l_type.width( 20 );
-			l_type << std::left << p_declaration.m_name;
 			Castor::Logger::LogWarning( std::stringstream() << "Released " << l_type.str() << " [0x" << l_ptr.str() << "] => " << p_declaration.m_ref );
+		}
+		else if ( l_it->m_ref < 0 )
+		{
+			Castor::Logger::LogError( std::stringstream() << "Trying to release an already released object: " << l_type.str() << " [0x" << l_ptr.str() << "] => " << l_it->m_ref );
 		}
 	}
 	else
@@ -198,10 +212,13 @@ void RenderSystem::DoReportTracked()
 {
 	for ( auto && l_decl : m_allocated )
 	{
-		std::stringstream l_stream;
-		l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
-		l_stream << string::string_cast< char >( l_decl.m_stack ) << std::endl;
-		Castor::Logger::LogError( l_stream.str() );
+		if ( l_decl.m_ref > 0 )
+		{
+			std::stringstream l_stream;
+			l_stream << "Leaked 0x" << std::hex << l_decl.m_object << std::dec << " (" << l_decl.m_name << "), from file " << l_decl.m_file << ", line " << l_decl.m_line << std::endl;
+			l_stream << string::string_cast< char >( l_decl.m_stack ) << std::endl;
+			Castor::Logger::LogError( l_stream.str() );
+		}
 	}
 }
 

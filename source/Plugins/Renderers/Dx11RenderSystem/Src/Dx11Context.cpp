@@ -6,7 +6,11 @@
 #include <VertexBuffer.hpp>
 #include <RenderWindow.hpp>
 #include <PlatformWindowHandle.hpp>
+#include <OneFrameVariable.hpp>
+#include <Texture.hpp>
 #include <Logger.hpp>
+
+#include <d3dx10math.h>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -27,27 +31,149 @@ namespace ShaderModel1_2_3_4
 		cuT( "VtxOutput mainVx( VtxInput p_input )\n" )
 		cuT( "{\n" )
 		cuT( "	VtxOutput l_output;\n" )
-		cuT( "	l_output.Position = mul( float4( p_input.Position.xy, 0.0, 1.0 ), c3d_mtxProjection );\n" )
+		cuT( "	l_output.Position = mul( float4( p_input.Position, 0.0, 1.0 ), c3d_mtxProjection );\n" )
 		cuT( "	l_output.TextureUV = p_input.TextureUV;\n" )
 		cuT( "	return l_output;\n" )
 		cuT( "}\n" );
 
 	static const String PxlShader =
-		cuT( "Texture2D diffuseTexture: register( t0 );\n" )
-		cuT( "SamplerState DiffuseSampler: register( s0 );\n" )
 		cuT( "struct PxlInput\n" )
 		cuT( "{\n" )
 		cuT( "	float4 Position: SV_POSITION;\n" )
 		cuT( "	float2 TextureUV: TEXCOORD0;\n" )
 		cuT( "};\n" )
-		cuT( "float4 mainPx( PxlInput p_input ): SV_TARGET\n" )
+		cuT( "Texture2D diffuseTexture: register( t0 );\n" )
+		cuT( "SamplerState diffuseSampler: register( s0 );\n" )
+		cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
 		cuT( "{\n" )
-		cuT( "	return float4( p_input.TextureUV.xy, 0.0, 1.0 );//diffuseTexture.Sample( DiffuseSampler, p_input.TextureUV );\n" )
+		cuT( "	return float4( p_input.TextureUV.xy, 0.0, 1.0 );//diffuseTexture.Sample( diffuseSampler, p_input.TextureUV );\n" )
 		cuT( "}\n" );
 }
 
 namespace Dx11Render
 {
+	namespace
+	{
+		struct VertexType
+		{
+			D3DXVECTOR2 position;
+			D3DXVECTOR2 texture;
+		};
+
+		// Set the number of vertices in the vertex array.
+		const uint32_t g_vertexCount = 4;
+
+		// Set the number of indices in the index array.
+		const uint32_t g_indexCount = 6;
+
+		// Create the vertex array.
+		VertexType g_vertices[g_vertexCount];
+
+		// Create the index array.
+		unsigned long g_indices[g_indexCount];
+
+		ID3D11Buffer * g_vertexBuffer;
+		ID3D11Buffer * g_indexBuffer;
+
+		void DoInitialiseModel( ID3D11Device * p_device )
+		{
+			try
+			{
+				D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
+				D3D11_SUBRESOURCE_DATA vertexData, indexData;
+				HRESULT result;
+
+				// Load the vertex array with data.
+				g_vertices[0].position = D3DXVECTOR2( 0.25f, 0.25f );  // Bottom left.
+				g_vertices[0].texture = D3DXVECTOR2( 0.0f, 0.0f );
+
+				g_vertices[1].position = D3DXVECTOR2( 0.25f, 0.75f );  // Top left.
+				g_vertices[1].texture = D3DXVECTOR2( 0.0f, 1.0f );
+
+				g_vertices[2].position = D3DXVECTOR2( 0.75f, 0.75f );  // Top right.
+				g_vertices[2].texture = D3DXVECTOR2( 1.0f, 1.0f );
+
+				g_vertices[2].position = D3DXVECTOR2( 0.75f, 0.25f );  // Bottom right.
+				g_vertices[2].texture = D3DXVECTOR2( 1.0f, 0.0f );
+
+				// Load the index array with data.
+				g_indices[0] = 0;  // Bottom left.
+				g_indices[1] = 1;  // Top left.
+				g_indices[2] = 2;  // Top right.
+				g_indices[0] = 0;  // Bottom left.
+				g_indices[2] = 2;  // Top right.
+				g_indices[3] = 3;  // BottomRight.
+
+				// Set up the description of the static vertex buffer.
+				vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+				vertexBufferDesc.ByteWidth = sizeof( VertexType ) * g_vertexCount;
+				vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+				vertexBufferDesc.CPUAccessFlags = 0;
+				vertexBufferDesc.MiscFlags = 0;
+				vertexBufferDesc.StructureByteStride = 0;
+
+				// Give the subresource structure a pointer to the vertex data.
+				vertexData.pSysMem = g_vertices;
+				vertexData.SysMemPitch = 0;
+				vertexData.SysMemSlicePitch = 0;
+
+				// Now create the vertex buffer.
+				result = p_device->CreateBuffer( &vertexBufferDesc, &vertexData, &g_vertexBuffer );
+				if ( FAILED( result ) )
+				{
+					throw std::runtime_error( "CreateBuffer(m_vertexBuffer) failed" );
+				}
+
+				// Set up the description of the static index buffer.
+				indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+				indexBufferDesc.ByteWidth = sizeof( unsigned long ) * g_indexCount;
+				indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+				indexBufferDesc.CPUAccessFlags = 0;
+				indexBufferDesc.MiscFlags = 0;
+				indexBufferDesc.StructureByteStride = 0;
+
+				// Give the subresource structure a pointer to the index data.
+				indexData.pSysMem = g_indices;
+				indexData.SysMemPitch = 0;
+				indexData.SysMemSlicePitch = 0;
+
+				// Create the index buffer.
+				result = p_device->CreateBuffer( &indexBufferDesc, &indexData, &g_indexBuffer );
+
+				if ( FAILED( result ) )
+				{
+					throw std::runtime_error( "CreateBuffer(m_indexBuffer) failed" );
+				}
+			}
+			catch ( std::exception & )
+			{
+				throw;
+			}
+		}
+
+		void DoRenderModel( ID3D11DeviceContext * p_context )
+		{
+			// Set vertex buffer stride and offset.
+			unsigned int stride = sizeof( VertexType );
+			unsigned int offset = 0;
+
+			// Set the vertex buffer to active in the input assembler so it can be rendered.
+			p_context->IASetVertexBuffers( 0, 1, &g_vertexBuffer, &stride, &offset );
+
+			// Set the index buffer to active in the input assembler so it can be rendered.
+			p_context->IASetIndexBuffer( g_indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
+
+			// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
+			p_context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
+		}
+
+		void DoCleanupModel()
+		{
+			SafeRelease( g_vertexBuffer );
+			SafeRelease( g_indexBuffer );
+		}
+	}
+
 	DxContext::DxContext( DxRenderSystem & p_renderSystem )
 		: Context( p_renderSystem )
 		, m_pSwapChain( NULL )
@@ -71,6 +197,44 @@ namespace Dx11Render
 		{
 			m_pSwapChain->SetFullscreenState( FALSE, NULL );
 		}
+	}
+
+	void DxContext::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents )
+	{
+		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
+		m_viewport.SetSize( p_size );
+		Clear( p_uiComponents );
+		m_viewport.Render( GetOwner()->GetPipeline() );
+		CullFace( eFACE_NONE );
+		uint32_t l_id = p_pTexture->GetIndex();
+		p_pTexture->SetIndex( 0 );
+
+		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		{
+			m_mapDiffuse->SetValue( p_pTexture.get() );
+			FrameVariableBufferSPtr l_matrices = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
+
+			if ( l_matrices )
+			{
+				GetOwner()->GetPipeline().ApplyProjection( *l_matrices );
+			}
+
+			l_pProgram->Bind( 0, 1 );
+		}
+
+		if ( p_pTexture->BindAt( 0 ) )
+		{
+			m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, m_arrayVertex.size(), 0 );
+			DoRenderModel( m_pDeviceContext );
+			p_pTexture->UnbindFrom( 0 );
+		}
+
+		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		{
+			l_pProgram->Unbind();
+		}
+
+		p_pTexture->SetIndex( l_id );
 	}
 
 	bool DxContext::DoInitialise()
@@ -100,6 +264,8 @@ namespace Dx11Render
 				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, l_vtxShader.str() );
 				l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
 			}
+
+			DoInitialiseModel( l_renderSystem->GetDevice() );
 		}
 
 		return m_bInitialised;
@@ -107,19 +273,20 @@ namespace Dx11Render
 
 	void DxContext::DoCleanup()
 	{
-		SafeRelease( m_pDeviceContext );
+		DoCleanupModel();
 		DoFreeVolatileResources();
 	}
 
 	void DxContext::DoSetCurrent()
 	{
 		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
+		dxTrack( static_cast< DxRenderSystem * >( GetOwner() ), m_pDeviceContext, D3D11DeviceContext );
 		m_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
 	}
 
 	void DxContext::DoEndCurrent()
 	{
-		SafeRelease( m_pDeviceContext );
+		ReleaseTracked( static_cast< DxRenderSystem * >( GetOwner() ), m_pDeviceContext );
 	}
 
 	void DxContext::DoSwapBuffers()
@@ -191,8 +358,7 @@ namespace Dx11Render
 		{
 			if ( p_eBuffer == eBUFFER_BACK || p_eBuffer == eBUFFER_BACK_LEFT || p_eBuffer == eBUFFER_BACK_RIGHT )
 			{
-				ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
-				l_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
+				GetDeviceContext()->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
 			}
 		}
 		else if ( p_eTarget == eFRAMEBUFFER_TARGET_READ )

@@ -31,7 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Classe pour gérer les interpolations linéaires de Quaternion
 	*/
-	template<> class C3D_API Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
+	template<>
+	class Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
 	{
 	public:
 		/**
@@ -44,10 +45,10 @@ namespace Castor3D
 		 *\param[in]	p_qSrc	Le départ
 		 *\param[in]	p_qDest	L'arrivée
 		 */
-		Interpolator( Castor::Quaternion const & p_qSrc, Castor::Quaternion const & p_qDest )
-			:	m_tSrc( p_qSrc )
-			,	m_tCurrent( p_qSrc )
-			,	m_tDest( p_qDest )
+		C3D_API Interpolator( Castor::Quaternion const & p_qSrc, Castor::Quaternion const & p_qDest )
+			: m_tSrc( p_qSrc )
+			, m_tCurrent( p_qSrc )
+			, m_tDest( p_qDest )
 		{
 		}
 		/**
@@ -56,7 +57,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Interpolator()
+		C3D_API ~Interpolator()
 		{
 		}
 		/**
@@ -67,7 +68,7 @@ namespace Castor3D
 		 *\brief		Fonction d'interpolation
 		 *\param[in]	p_rPercent	Le pourcentage
 		 */
-		Castor::Quaternion const & operator()( real p_rPercent )
+		C3D_API Castor::Quaternion const & operator()( real p_rPercent )
 		{
 			m_tCurrent = m_tSrc.Slerp( m_tDest, p_rPercent, true );
 			//m_tCurrent = m_tCurrent * (m_tDest - m_tSrc).Slerp( Castor::Quaternion::Identity(), 1.0f - p_rPercent, true );

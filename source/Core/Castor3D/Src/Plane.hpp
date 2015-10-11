@@ -32,7 +32,7 @@ namespace Castor3D
 	\brief		Représentation d'un plan
 	\remark		Un plan peut être subdivisé en hauteur et en largeur
 	*/
-	class C3D_API Plane
+	class Plane
 		: public MeshGenerator
 	{
 	public:
@@ -42,22 +42,22 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Plane();
+		C3D_API Plane();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Plane();
+		C3D_API ~Plane();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves the plane height

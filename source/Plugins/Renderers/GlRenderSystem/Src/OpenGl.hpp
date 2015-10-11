@@ -677,21 +677,6 @@ namespace GlRender
 	{
 		eGL_TEXTURE_ATTACHMENT_NONE		= 0x0000,
 		eGL_TEXTURE_ATTACHMENT_COLOR0	= 0x8CE0,
-		eGL_TEXTURE_ATTACHMENT_COLOR1	= 0x8CE1,
-		eGL_TEXTURE_ATTACHMENT_COLOR2	= 0x8CE2,
-		eGL_TEXTURE_ATTACHMENT_COLOR3	= 0x8CE3,
-		eGL_TEXTURE_ATTACHMENT_COLOR4	= 0x8CE4,
-		eGL_TEXTURE_ATTACHMENT_COLOR5	= 0x8CE5,
-		eGL_TEXTURE_ATTACHMENT_COLOR6	= 0x8CE6,
-		eGL_TEXTURE_ATTACHMENT_COLOR7	= 0x8CE7,
-		eGL_TEXTURE_ATTACHMENT_COLOR8	= 0x8CE8,
-		eGL_TEXTURE_ATTACHMENT_COLOR9	= 0x8CE9,
-		eGL_TEXTURE_ATTACHMENT_COLOR10	= 0x8CEA,
-		eGL_TEXTURE_ATTACHMENT_COLOR11	= 0x8CEB,
-		eGL_TEXTURE_ATTACHMENT_COLOR12	= 0x8CEC,
-		eGL_TEXTURE_ATTACHMENT_COLOR13	= 0x8CED,
-		eGL_TEXTURE_ATTACHMENT_COLOR14	= 0x8CEE,
-		eGL_TEXTURE_ATTACHMENT_COLOR15	= 0x8CEF,
 		eGL_TEXTURE_ATTACHMENT_DEPTH	= 0x8D00,
 		eGL_TEXTURE_ATTACHMENT_STENCIL	= 0x8D20,
 	}	eGL_TEXTURE_ATTACHMENT;
@@ -1385,7 +1370,7 @@ namespace GlRender
 		std::function< void( uint32_t buffer, uint32_t pname, int * params ) > m_pfnGetNamedBufferParameteriv;
 	};
 
-	class C3D_Gl_API OpenGl
+	class OpenGl
 		: public Castor::NonCopyable
 	{
 	public:
@@ -1409,13 +1394,13 @@ namespace GlRender
 		typedef void ( CALLBACK * PFNGLDEBUGAMDPROC )( uint32_t id, uint32_t category, uint32_t severity, int length, const char * message, void * userParam );
 
 	public:
-		OpenGl( GlRenderSystem & p_renderSystem );
-		~OpenGl();
+		C3D_Gl_API OpenGl( GlRenderSystem & p_renderSystem );
+		C3D_Gl_API ~OpenGl();
 
-		bool PreInitialise( Castor::String const & p_strExtensions );
-		bool Initialise();
-		void Cleanup();
-		bool HasMultiTexturing()const;
+		C3D_Gl_API bool PreInitialise( Castor::String const & p_strExtensions );
+		C3D_Gl_API bool Initialise();
+		C3D_Gl_API void Cleanup();
+		C3D_Gl_API bool HasMultiTexturing()const;
 
 		inline bool HasVao()const
 		{
@@ -1485,84 +1470,84 @@ namespace GlRender
 		/**@name General Functions */
 		//@{
 
-		uint32_t GetError()const;
-		bool ClearColor( float red, float green, float blue, float alpha );
-		bool ClearColor( Castor::Colour const & p_colour );
-		bool ShadeModel( eGL_SHADE_MODEL mode );
-		bool Clear( uint32_t mask );
-		bool Enable( eGL_TWEAK mode );
-		bool Disable( eGL_TWEAK mode );
-		bool Enable( eGL_LIGHT_INDEX light );
-		bool Disable( eGL_LIGHT_INDEX light );
-		bool Enable( eGL_TEXDIM texture );
-		bool Disable( eGL_TEXDIM texture );
-		bool SelectBuffer( int size, uint32_t * buffer );
-		bool GetIntegerv( uint32_t pname, int * params );
-		bool GetIntegerv( uint32_t pname, uint64_t * params );
-		int RenderMode( eGL_RENDER_MODE mode );
-		bool DepthFunc( eGL_FUNC p_eFunc );
-		bool DepthMask( bool p_bFlag );
-		bool ColorMask( bool p_r, bool p_g, bool p_b, bool p_a );
-		bool DebugMessageCallback( PFNGLDEBUGPROC pfnProc, void * p_pThis );
-		bool DebugMessageCallback( PFNGLDEBUGAMDPROC pfnProc, void * p_pThis );
-		bool PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_mode );
-		bool StencilOp( eGL_STENCIL_OP p_eStencilFail, eGL_STENCIL_OP p_eDepthFail, eGL_STENCIL_OP p_eStencilPass );
-		bool StencilFunc( eGL_FUNC p_eFunc, int p_iRef, uint32_t p_uiMask );
-		bool StencilMask( uint32_t p_uiMask );
-		bool StencilOpSeparate( eGL_FACE p_eFacing, eGL_STENCIL_OP p_eStencilFail, eGL_STENCIL_OP p_eDepthFail, eGL_STENCIL_OP p_eStencilPass );
-		bool StencilFuncSeparate( eGL_FACE p_eFacing, eGL_FUNC p_eFunc, int p_iRef, uint32_t p_uiMask );
-		bool StencilMaskSeparate( eGL_FACE p_eFacing, uint32_t p_uiMask );
-		bool Hint( eGL_HINT p_eHint, eGL_HINT_VALUE p_eValue );
-		bool PolygonOffset( float p_fFactor, float p_fUnits );
-		bool BlendColor( Castor::Colour const & p_clrFactors );
-		bool SampleCoverage( float fValue, bool invert );
+		C3D_Gl_API uint32_t GetError()const;
+		C3D_Gl_API bool ClearColor( float red, float green, float blue, float alpha );
+		C3D_Gl_API bool ClearColor( Castor::Colour const & p_colour );
+		C3D_Gl_API bool ShadeModel( eGL_SHADE_MODEL mode );
+		C3D_Gl_API bool Clear( uint32_t mask );
+		C3D_Gl_API bool Enable( eGL_TWEAK mode );
+		C3D_Gl_API bool Disable( eGL_TWEAK mode );
+		C3D_Gl_API bool Enable( eGL_LIGHT_INDEX light );
+		C3D_Gl_API bool Disable( eGL_LIGHT_INDEX light );
+		C3D_Gl_API bool Enable( eGL_TEXDIM texture );
+		C3D_Gl_API bool Disable( eGL_TEXDIM texture );
+		C3D_Gl_API bool SelectBuffer( int size, uint32_t * buffer );
+		C3D_Gl_API bool GetIntegerv( uint32_t pname, int * params );
+		C3D_Gl_API bool GetIntegerv( uint32_t pname, uint64_t * params );
+		C3D_Gl_API int RenderMode( eGL_RENDER_MODE mode );
+		C3D_Gl_API bool DepthFunc( eGL_FUNC p_eFunc );
+		C3D_Gl_API bool DepthMask( bool p_bFlag );
+		C3D_Gl_API bool ColorMask( bool p_r, bool p_g, bool p_b, bool p_a );
+		C3D_Gl_API bool DebugMessageCallback( PFNGLDEBUGPROC pfnProc, void * p_pThis );
+		C3D_Gl_API bool DebugMessageCallback( PFNGLDEBUGAMDPROC pfnProc, void * p_pThis );
+		C3D_Gl_API bool PolygonMode( eGL_FACE p_eFacing, eGL_FILL_MODE p_mode );
+		C3D_Gl_API bool StencilOp( eGL_STENCIL_OP p_eStencilFail, eGL_STENCIL_OP p_eDepthFail, eGL_STENCIL_OP p_eStencilPass );
+		C3D_Gl_API bool StencilFunc( eGL_FUNC p_eFunc, int p_iRef, uint32_t p_uiMask );
+		C3D_Gl_API bool StencilMask( uint32_t p_uiMask );
+		C3D_Gl_API bool StencilOpSeparate( eGL_FACE p_eFacing, eGL_STENCIL_OP p_eStencilFail, eGL_STENCIL_OP p_eDepthFail, eGL_STENCIL_OP p_eStencilPass );
+		C3D_Gl_API bool StencilFuncSeparate( eGL_FACE p_eFacing, eGL_FUNC p_eFunc, int p_iRef, uint32_t p_uiMask );
+		C3D_Gl_API bool StencilMaskSeparate( eGL_FACE p_eFacing, uint32_t p_uiMask );
+		C3D_Gl_API bool Hint( eGL_HINT p_eHint, eGL_HINT_VALUE p_eValue );
+		C3D_Gl_API bool PolygonOffset( float p_fFactor, float p_fUnits );
+		C3D_Gl_API bool BlendColor( Castor::Colour const & p_clrFactors );
+		C3D_Gl_API bool SampleCoverage( float fValue, bool invert );
 
 		//@}
 		/**@name Draw Functions */
 		//@{
 
-		bool DrawArrays( eGL_PRIMITIVE mode, int first, int count );
-		bool DrawElements( eGL_PRIMITIVE mode, int count, eGL_TYPE type, const void * indices );
-		bool DrawArraysInstanced( eGL_PRIMITIVE mode, int first, int count, int primcount );
-		bool DrawElementsInstanced( eGL_PRIMITIVE mode, int count, eGL_TYPE type, const void * indices, int primcount );
+		C3D_Gl_API bool DrawArrays( eGL_PRIMITIVE mode, int first, int count );
+		C3D_Gl_API bool DrawElements( eGL_PRIMITIVE mode, int count, eGL_TYPE type, const void * indices );
+		C3D_Gl_API bool DrawArraysInstanced( eGL_PRIMITIVE mode, int first, int count, int primcount );
+		C3D_Gl_API bool DrawElementsInstanced( eGL_PRIMITIVE mode, int count, eGL_TYPE type, const void * indices, int primcount );
 
 		//@}
 		/**@name Instanciation Functions */
 		//@{
 
-		bool VertexAttribDivisor( uint32_t index, uint32_t divisor );
+		C3D_Gl_API bool VertexAttribDivisor( uint32_t index, uint32_t divisor );
 
 		//@}
 		/**@name Light Functions */
 		//@{
 
-		bool Light( eGL_LIGHT_INDEX light, uint32_t pname, float param );
-		bool Light( eGL_LIGHT_INDEX light, uint32_t pname, float const * param );
-		bool LightModel( uint32_t pname, int param );
-		bool LightModel( uint32_t pname, int const * param );
-		bool LightModel( uint32_t pname, float param );
-		bool LightModel( uint32_t pname, float const * param );
+		C3D_Gl_API bool Light( eGL_LIGHT_INDEX light, uint32_t pname, float param );
+		C3D_Gl_API bool Light( eGL_LIGHT_INDEX light, uint32_t pname, float const * param );
+		C3D_Gl_API bool LightModel( uint32_t pname, int param );
+		C3D_Gl_API bool LightModel( uint32_t pname, int const * param );
+		C3D_Gl_API bool LightModel( uint32_t pname, float param );
+		C3D_Gl_API bool LightModel( uint32_t pname, float const * param );
 
 		//@}
 		/**@name Context functions */
 		//@{
 
 #if defined( _WIN32 )
-		bool MakeCurrent( HDC hdc, HGLRC hglrc );
-		bool SwapBuffers( HDC hdc );
-		bool SwapInterval( int interval );
-		HGLRC CreateContext( HDC hdc );
-		HGLRC CreateContextAttribs( HDC hDC, HGLRC hShareContext, int const * attribList );
-		bool DeleteContext( HGLRC hContext );
-		bool HasCreateContextAttribs();
+		C3D_Gl_API bool MakeCurrent( HDC hdc, HGLRC hglrc );
+		C3D_Gl_API bool SwapBuffers( HDC hdc );
+		C3D_Gl_API bool SwapInterval( int interval );
+		C3D_Gl_API HGLRC CreateContext( HDC hdc );
+		C3D_Gl_API HGLRC CreateContextAttribs( HDC hDC, HGLRC hShareContext, int const * attribList );
+		C3D_Gl_API bool DeleteContext( HGLRC hContext );
+		C3D_Gl_API bool HasCreateContextAttribs();
 #elif defined( __linux__ )
-		bool MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context );
-		bool SwapBuffers( Display * pDisplay, GLXDrawable drawable );
-		bool SwapInterval( Display * pDisplay, GLXDrawable drawable, int interval );
-		GLXContext CreateContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct );
-		GLXContext CreateContextAttribs( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList );
-		bool DeleteContext( Display * pDisplay, GLXContext context );
-		bool HasCreateContextAttribs();
+		C3D_Gl_API bool MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context );
+		C3D_Gl_API bool SwapBuffers( Display * pDisplay, GLXDrawable drawable );
+		C3D_Gl_API bool SwapInterval( Display * pDisplay, GLXDrawable drawable, int interval );
+		C3D_Gl_API GLXContext CreateContext( Display * pDisplay, XVisualInfo * pVisualInfo, GLXContext shareList, Bool direct );
+		C3D_Gl_API GLXContext CreateContextAttribs( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList );
+		C3D_Gl_API bool DeleteContext( Display * pDisplay, GLXContext context );
+		C3D_Gl_API bool HasCreateContextAttribs();
 #else
 #	error "Yet unsupported OS"
 #endif
@@ -1571,298 +1556,298 @@ namespace GlRender
 		/**@name Matrix functions */
 		//@{
 
-		bool Viewport( int x, int y, int width, int height );
-		bool MatrixMode( eGL_MATRIX_TYPE mode );
-		bool LoadIdentity( );
-		bool Ortho( double left, double right, double bottom, double top, double zNear, double zFar );
-		bool Frustum( double left, double right, double bottom, double top, double zNear, double zFar );
-		bool PushMatrix( );
-		bool PopMatrix( );
-		bool Translate( real x, real y, real z );
-		bool Rotate( real angle, real x, real y, real z );
-		bool Scale( real x, real y, real z );
-		bool MultMatrix( real const * matrix );
+		C3D_Gl_API bool Viewport( int x, int y, int width, int height );
+		C3D_Gl_API bool MatrixMode( eGL_MATRIX_TYPE mode );
+		C3D_Gl_API bool LoadIdentity( );
+		C3D_Gl_API bool Ortho( double left, double right, double bottom, double top, double zNear, double zFar );
+		C3D_Gl_API bool Frustum( double left, double right, double bottom, double top, double zNear, double zFar );
+		C3D_Gl_API bool PushMatrix( );
+		C3D_Gl_API bool PopMatrix( );
+		C3D_Gl_API bool Translate( real x, real y, real z );
+		C3D_Gl_API bool Rotate( real angle, real x, real y, real z );
+		C3D_Gl_API bool Scale( real x, real y, real z );
+		C3D_Gl_API bool MultMatrix( real const * matrix );
 
 		//@}
 		/**@name Material functions */
 		//@{
 
-		bool CullFace( eGL_FACE face );
-		bool FrontFace( eGL_FRONT_FACE_DIRECTION face );
-		bool Material( eGL_DRAW_BUFFER_MODE face, eGL_MATERIAL_COMPONENT pname, float param );
-		bool Material( eGL_DRAW_BUFFER_MODE face, eGL_MATERIAL_COMPONENT pname, float const * param );
-		bool BlendFunc( eGL_BLEND_FACTOR sfactor, eGL_BLEND_FACTOR dfactor );
-		bool BlendFunc( eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst );
-		bool BlendFunc( uint32_t p_index, eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst );
-		bool BlendEquation( eGL_BLEND_OP p_eOp );
-		bool BlendEquation( uint32_t p_uiBuffer, eGL_BLEND_OP p_eOp );
-		bool AlphaFunc( eGL_FUNC func, float ref );
+		C3D_Gl_API bool CullFace( eGL_FACE face );
+		C3D_Gl_API bool FrontFace( eGL_FRONT_FACE_DIRECTION face );
+		C3D_Gl_API bool Material( eGL_DRAW_BUFFER_MODE face, eGL_MATERIAL_COMPONENT pname, float param );
+		C3D_Gl_API bool Material( eGL_DRAW_BUFFER_MODE face, eGL_MATERIAL_COMPONENT pname, float const * param );
+		C3D_Gl_API bool BlendFunc( eGL_BLEND_FACTOR sfactor, eGL_BLEND_FACTOR dfactor );
+		C3D_Gl_API bool BlendFunc( eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst );
+		C3D_Gl_API bool BlendFunc( uint32_t p_index, eGL_BLEND_FACTOR p_eRgbSrc, eGL_BLEND_FACTOR p_eRgbDst, eGL_BLEND_FACTOR p_eAlphaSrc, eGL_BLEND_FACTOR p_eAlphaDst );
+		C3D_Gl_API bool BlendEquation( eGL_BLEND_OP p_eOp );
+		C3D_Gl_API bool BlendEquation( uint32_t p_uiBuffer, eGL_BLEND_OP p_eOp );
+		C3D_Gl_API bool AlphaFunc( eGL_FUNC func, float ref );
 
 		//@}
 		/**@name Texture functions */
 		//@{
 
-		bool GenTextures( int n, uint32_t * textures );
-		bool DeleteTextures( int n, uint32_t const * textures );
-		bool ActiveTexture( eGL_TEXTURE_INDEX target );
-		bool ClientActiveTexture( eGL_TEXTURE_INDEX target );
-		bool BindTexture( eGL_TEXDIM p_eTarget, uint32_t texture );
-		bool EnableClientState( eGL_BUFFER_USAGE p_eArray );
-		bool DisableClientState( eGL_BUFFER_USAGE p_eArray );
-		bool GenerateMipmap( eGL_TEXDIM p_eTarget );
-		bool TexSubImage1D( eGL_TEXDIM p_eTarget, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		bool TexSubImage2D( eGL_TEXDIM p_eTarget, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		bool TexSubImage2D( eGL_TEXDIM p_eTarget, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		bool TexSubImage2D( eGL_TEXDIM p_eTarget, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		bool TexSubImage3D( eGL_TEXDIM p_eTarget, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		bool TexImage1D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		bool TexImage2D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		bool TexImage2D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		bool TexImage3D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data );
-		bool TexImage2DMultisample( eGL_TEXDIM p_eTarget, int p_iSamples, eGL_INTERNAL p_eInternalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations );
-		bool TexImage2DMultisample( eGL_TEXDIM p_eTarget, int p_iSamples, eGL_INTERNAL p_eInternalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations );
-		bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, int param );
-		bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, float param );
-		bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, const int * params );
-		bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, const float * params );
-		bool GetTexImage( eGL_TEXDIM p_eTarget, int level, eGL_FORMAT format, eGL_TYPE type, void * img );
-		bool TexEnvi( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, int param );
-		bool TexEnviv( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, int const * param );
-		bool TexEnvf( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, float param );
-		bool TexEnvfv( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, float const * param );
-		bool IsTexture( uint32_t texture );
-		bool TexGeni( eGL_TEXGEN_COORD coord, eGL_TEXGEN_PARAM param, eGL_TEXGEN_MODE mode );
-		bool ReadBuffer( eGL_BUFFER p_eBuffer );
-		bool ReadPixels( int x, int y, int width, int height, eGL_FORMAT format, eGL_TYPE type, void * pixels );
-		bool ReadPixels( Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void * pixels );
-		bool ReadPixels( Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void * pixels );
-		bool DrawBuffer( eGL_BUFFER p_eBuffer );
-		bool DrawPixels( int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data );
-		bool PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam );
-		bool PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam );
+		C3D_Gl_API bool GenTextures( int n, uint32_t * textures );
+		C3D_Gl_API bool DeleteTextures( int n, uint32_t const * textures );
+		C3D_Gl_API bool ActiveTexture( eGL_TEXTURE_INDEX target );
+		C3D_Gl_API bool ClientActiveTexture( eGL_TEXTURE_INDEX target );
+		C3D_Gl_API bool BindTexture( eGL_TEXDIM p_eTarget, uint32_t texture );
+		C3D_Gl_API bool EnableClientState( eGL_BUFFER_USAGE p_eArray );
+		C3D_Gl_API bool DisableClientState( eGL_BUFFER_USAGE p_eArray );
+		C3D_Gl_API bool GenerateMipmap( eGL_TEXDIM p_eTarget );
+		C3D_Gl_API bool TexSubImage1D( eGL_TEXDIM p_eTarget, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data );
+		C3D_Gl_API bool TexSubImage2D( eGL_TEXDIM p_eTarget, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data );
+		C3D_Gl_API bool TexSubImage2D( eGL_TEXDIM p_eTarget, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data );
+		C3D_Gl_API bool TexSubImage2D( eGL_TEXDIM p_eTarget, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data );
+		C3D_Gl_API bool TexSubImage3D( eGL_TEXDIM p_eTarget, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data );
+		C3D_Gl_API bool TexImage1D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		C3D_Gl_API bool TexImage2D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		C3D_Gl_API bool TexImage2D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		C3D_Gl_API bool TexImage3D( eGL_TEXDIM p_eTarget, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data );
+		C3D_Gl_API bool TexImage2DMultisample( eGL_TEXDIM p_eTarget, int p_iSamples, eGL_INTERNAL p_eInternalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations );
+		C3D_Gl_API bool TexImage2DMultisample( eGL_TEXDIM p_eTarget, int p_iSamples, eGL_INTERNAL p_eInternalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations );
+		C3D_Gl_API bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, int param );
+		C3D_Gl_API bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, float param );
+		C3D_Gl_API bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, const int * params );
+		C3D_Gl_API bool TexParameter( eGL_TEXDIM p_eTarget, eGL_TEXTURE_PARAMETER pname, const float * params );
+		C3D_Gl_API bool GetTexImage( eGL_TEXDIM p_eTarget, int level, eGL_FORMAT format, eGL_TYPE type, void * img );
+		C3D_Gl_API bool TexEnvi( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, int param );
+		C3D_Gl_API bool TexEnviv( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, int const * param );
+		C3D_Gl_API bool TexEnvf( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, float param );
+		C3D_Gl_API bool TexEnvfv( eGL_TEXENV_TARGET target, eGL_TEXENV_ARGNAME pname, float const * param );
+		C3D_Gl_API bool IsTexture( uint32_t texture );
+		C3D_Gl_API bool TexGeni( eGL_TEXGEN_COORD coord, eGL_TEXGEN_PARAM param, eGL_TEXGEN_MODE mode );
+		C3D_Gl_API bool ReadBuffer( eGL_BUFFER p_eBuffer );
+		C3D_Gl_API bool ReadPixels( int x, int y, int width, int height, eGL_FORMAT format, eGL_TYPE type, void * pixels );
+		C3D_Gl_API bool ReadPixels( Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void * pixels );
+		C3D_Gl_API bool ReadPixels( Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void * pixels );
+		C3D_Gl_API bool DrawBuffer( eGL_BUFFER p_eBuffer );
+		C3D_Gl_API bool DrawPixels( int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data );
+		C3D_Gl_API bool PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam );
+		C3D_Gl_API bool PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam );
 
 		//@}
 		/**@name Sampler functions */
 		//@{
 
-		bool BindSampler( uint32_t unit, uint32_t sampler );
-		bool DeleteSamplers( int count, const uint32_t * samplers );
-		bool GenSamplers( int count, uint32_t * samplers );
-		bool GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, uint32_t * params );
-		bool GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, float * params );
-		bool GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, int * params );
-		bool IsSampler( uint32_t sampler );
-		bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, float param );
-		bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const float * params );
-		bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, int param );
-		bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const int * params );
-		bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const uint32_t * params );
+		C3D_Gl_API bool BindSampler( uint32_t unit, uint32_t sampler );
+		C3D_Gl_API bool DeleteSamplers( int count, const uint32_t * samplers );
+		C3D_Gl_API bool GenSamplers( int count, uint32_t * samplers );
+		C3D_Gl_API bool GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, uint32_t * params );
+		C3D_Gl_API bool GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, float * params );
+		C3D_Gl_API bool GetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, int * params );
+		C3D_Gl_API bool IsSampler( uint32_t sampler );
+		C3D_Gl_API bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, float param );
+		C3D_Gl_API bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const float * params );
+		C3D_Gl_API bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, int param );
+		C3D_Gl_API bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const int * params );
+		C3D_Gl_API bool SetSamplerParameter( uint32_t sampler, eGL_SAMPLER_PARAMETER pname, const uint32_t * params );
 
 		//@}
 		/**@name Texture Buffer objects functions */
 		//@{
 
-		bool TexBuffer( eGL_TEXDIM p_eTarget, eGL_INTERNAL_FORMAT p_eInternalFormat, uint32_t buffer );
+		C3D_Gl_API bool TexBuffer( eGL_TEXDIM p_eTarget, eGL_INTERNAL_FORMAT p_eInternalFormat, uint32_t buffer );
 
 		//@}
 		/**@name Buffer objects functions */
 		//@{
 
-		bool GenBuffers( int n, uint32_t * buffers );
-		bool DeleteBuffers( int n, uint32_t const * buffers );
-		bool IsBuffer( uint32_t buffer );
-		bool BindBuffer( eGL_BUFFER_TARGET target, uint32_t buffer );
-		bool BufferData( eGL_BUFFER_TARGET target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage );
-		bool BufferSubData( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t size, void const * data );
-		void * MapBuffer( eGL_BUFFER_TARGET target, eGL_LOCK access );
-		bool UnmapBuffer( eGL_BUFFER_TARGET target );
-		void * MapBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length, uint32_t access );
-		bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, int * params );
-		bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, uint64_t * params );
-		bool FlushMappedBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length );
-		bool VertexPointer( int size, uint32_t type, uint32_t stride, void const * pointer );
-		bool NormalPointer( uint32_t type, uint32_t stride, void const * pointer );
-		bool TangentPointer( uint32_t type, uint32_t stride, void const * pointer );
-		bool BinormalPointer( uint32_t type, uint32_t stride, void const * pointer );
-		bool HasTangentPointer();
-		bool HasBinormalPointer();
-		bool ColorPointer( int size, uint32_t type, uint32_t stride, void const * pointer );
-		bool TexCoordPointer( int size, uint32_t type, uint32_t stride, void const * pointer );
-		bool BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length );
-		bool VertexFormat( int size, eGL_TYPE type, int stride );
-		bool NormalFormat( eGL_TYPE type, int stride );
-		bool ColorFormat( int size, eGL_TYPE type, int stride );
-		bool IndexFormat( eGL_TYPE type, int stride );
-		bool TexCoordFormat( int size, eGL_TYPE type, int stride );
-		bool EdgeFlagFormat( int stride );
-		bool SecondaryColorFormat( int size, eGL_TYPE type, int stride );
-		bool FogCoordFormat( uint32_t type, int stride );
-		bool VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride );
-		bool VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride );
-		bool MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access );
-		bool MakeBufferNonResident( eGL_BUFFER_TARGET target );
-		bool IsBufferResident( eGL_BUFFER_TARGET target );
-		bool MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access );
-		bool MakeNamedBufferNonResident( uint32_t buffer );
-		bool IsNamedBufferResident( uint32_t buffer );
-		bool GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params );
+		C3D_Gl_API bool GenBuffers( int n, uint32_t * buffers );
+		C3D_Gl_API bool DeleteBuffers( int n, uint32_t const * buffers );
+		C3D_Gl_API bool IsBuffer( uint32_t buffer );
+		C3D_Gl_API bool BindBuffer( eGL_BUFFER_TARGET target, uint32_t buffer );
+		C3D_Gl_API bool BufferData( eGL_BUFFER_TARGET target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage );
+		C3D_Gl_API bool BufferSubData( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t size, void const * data );
+		C3D_Gl_API void * MapBuffer( eGL_BUFFER_TARGET target, eGL_LOCK access );
+		C3D_Gl_API bool UnmapBuffer( eGL_BUFFER_TARGET target );
+		C3D_Gl_API void * MapBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length, uint32_t access );
+		C3D_Gl_API bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, int * params );
+		C3D_Gl_API bool GetBufferParameter( eGL_BUFFER_TARGET target, eGL_BUFFER_PARAMETER pname, uint64_t * params );
+		C3D_Gl_API bool FlushMappedBufferRange( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t length );
+		C3D_Gl_API bool VertexPointer( int size, uint32_t type, uint32_t stride, void const * pointer );
+		C3D_Gl_API bool NormalPointer( uint32_t type, uint32_t stride, void const * pointer );
+		C3D_Gl_API bool TangentPointer( uint32_t type, uint32_t stride, void const * pointer );
+		C3D_Gl_API bool BinormalPointer( uint32_t type, uint32_t stride, void const * pointer );
+		C3D_Gl_API bool HasTangentPointer();
+		C3D_Gl_API bool HasBinormalPointer();
+		C3D_Gl_API bool ColorPointer( int size, uint32_t type, uint32_t stride, void const * pointer );
+		C3D_Gl_API bool TexCoordPointer( int size, uint32_t type, uint32_t stride, void const * pointer );
+		C3D_Gl_API bool BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length );
+		C3D_Gl_API bool VertexFormat( int size, eGL_TYPE type, int stride );
+		C3D_Gl_API bool NormalFormat( eGL_TYPE type, int stride );
+		C3D_Gl_API bool ColorFormat( int size, eGL_TYPE type, int stride );
+		C3D_Gl_API bool IndexFormat( eGL_TYPE type, int stride );
+		C3D_Gl_API bool TexCoordFormat( int size, eGL_TYPE type, int stride );
+		C3D_Gl_API bool EdgeFlagFormat( int stride );
+		C3D_Gl_API bool SecondaryColorFormat( int size, eGL_TYPE type, int stride );
+		C3D_Gl_API bool FogCoordFormat( uint32_t type, int stride );
+		C3D_Gl_API bool VertexAttribFormat( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride );
+		C3D_Gl_API bool VertexAttribIFormat( uint32_t index, int size, eGL_TYPE type, int stride );
+		C3D_Gl_API bool MakeBufferResident( eGL_BUFFER_TARGET target, eGL_RESIDENT_BUFFER_ACCESS access );
+		C3D_Gl_API bool MakeBufferNonResident( eGL_BUFFER_TARGET target );
+		C3D_Gl_API bool IsBufferResident( eGL_BUFFER_TARGET target );
+		C3D_Gl_API bool MakeNamedBufferResident( uint32_t buffer, eGL_RESIDENT_BUFFER_ACCESS access );
+		C3D_Gl_API bool MakeNamedBufferNonResident( uint32_t buffer );
+		C3D_Gl_API bool IsNamedBufferResident( uint32_t buffer );
+		C3D_Gl_API bool GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname, uint64_t * params );
 
 		//@}
 		/**@name FBO functions */
 		//@{
 
-		bool GenFramebuffers( int n, uint32_t * framebuffers );
-		bool DeleteFramebuffers( int n, uint32_t const * framebuffers );
-		bool BindFramebuffer( eGL_FRAMEBUFFER_MODE p_eBindingMode, uint32_t framebuffer );
-		bool FramebufferTexture( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, uint32_t texture, int level );
-		bool FramebufferTexture1D( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, eGL_TEXDIM textarget, uint32_t texture, int level );
-		bool FramebufferTexture2D( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, eGL_TEXDIM textarget, uint32_t texture, int level );
-		bool FramebufferTexture3D( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, eGL_TEXDIM textarget, uint32_t texture, int level, int layer );
-		bool FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, uint32_t texture, int level, int layer );
-		bool FramebufferRenderbuffer( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_ATTACHMENT p_eAttachment, eGL_RENDERBUFFER_MODE p_eRboTarget, uint32_t renderbufferId );
-		uint32_t CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE p_eBindingMode );
-		bool GenRenderbuffers( int n, uint32_t * ids );
-		bool DeleteRenderbuffers( int n, uint32_t const * ids );
-		bool BindRenderbuffer( eGL_RENDERBUFFER_MODE p_eBindingMode, uint32_t id );
-		bool RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE internalFormat, int width, int height );
-		bool RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE internalFormat, int width, int height );
-		bool RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE internalFormat, Castor::Size const & size );
-		bool RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE internalFormat, Castor::Size const & size );
-		bool GetRenderbufferParameteriv( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_PARAMETER param, int * value );
-		bool BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, uint32_t filter );
-		bool BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, uint32_t mask, uint32_t filter );
-		bool DrawBuffers( int n, const uint32_t * bufs );
+		C3D_Gl_API bool GenFramebuffers( int n, uint32_t * framebuffers );
+		C3D_Gl_API bool DeleteFramebuffers( int n, uint32_t const * framebuffers );
+		C3D_Gl_API bool BindFramebuffer( eGL_FRAMEBUFFER_MODE p_eBindingMode, uint32_t framebuffer );
+		C3D_Gl_API bool FramebufferTexture( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, uint32_t texture, int level );
+		C3D_Gl_API bool FramebufferTexture1D( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, eGL_TEXDIM textarget, uint32_t texture, int level );
+		C3D_Gl_API bool FramebufferTexture2D( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, eGL_TEXDIM textarget, uint32_t texture, int level );
+		C3D_Gl_API bool FramebufferTexture3D( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, eGL_TEXDIM textarget, uint32_t texture, int level, int layer );
+		C3D_Gl_API bool FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_TEXTURE_ATTACHMENT p_eAttachment, uint32_t texture, int level, int layer );
+		C3D_Gl_API bool FramebufferRenderbuffer( eGL_FRAMEBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_ATTACHMENT p_eAttachment, eGL_RENDERBUFFER_MODE p_eRboTarget, uint32_t renderbufferId );
+		C3D_Gl_API uint32_t CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE p_eBindingMode );
+		C3D_Gl_API bool GenRenderbuffers( int n, uint32_t * ids );
+		C3D_Gl_API bool DeleteRenderbuffers( int n, uint32_t const * ids );
+		C3D_Gl_API bool BindRenderbuffer( eGL_RENDERBUFFER_MODE p_eBindingMode, uint32_t id );
+		C3D_Gl_API bool RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE internalFormat, int width, int height );
+		C3D_Gl_API bool RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE internalFormat, int width, int height );
+		C3D_Gl_API bool RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE internalFormat, Castor::Size const & size );
+		C3D_Gl_API bool RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE internalFormat, Castor::Size const & size );
+		C3D_Gl_API bool GetRenderbufferParameteriv( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_PARAMETER param, int * value );
+		C3D_Gl_API bool BlitFramebuffer( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, uint32_t filter );
+		C3D_Gl_API bool BlitFramebuffer( Castor::Rectangle const & rcSrc, Castor::Rectangle const & rcDst, uint32_t mask, uint32_t filter );
+		C3D_Gl_API bool DrawBuffers( int n, const uint32_t * bufs );
 
 		//@}
 		/**@name Uniform variable Functions */
 		//@{
 
-		int GetUniformLocation( uint32_t program, char const * name );
-		bool SetUniform( int location, int v0 );
-		bool SetUniform( int location, uint32_t v0 );
-		bool SetUniform( int location, float v0 );
-		bool SetUniform( int location, double v0 );
-		bool SetUniform( int location, int v0, int v1 );
-		bool SetUniform( int location, int v0, int v1, int v2 );
-		bool SetUniform( int location, int v0, int v1, int v2, int v3 );
-		bool SetUniform( int location, uint32_t v0, uint32_t v1 );
-		bool SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2 );
-		bool SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3 );
-		bool SetUniform( int location, float v0, float v1 );
-		bool SetUniform( int location, float v0, float v1, float v2 );
-		bool SetUniform( int location, float v0, float v1, float v2, float v3 );
-		bool SetUniform( int location, double v0, double v1 );
-		bool SetUniform( int location, double v0, double v1, double v2 );
-		bool SetUniform( int location, double v0, double v1, double v2, double v3 );
-		bool SetUniform1v( int location, int count, int const * params );
-		bool SetUniform2v( int location, int count, int const * params );
-		bool SetUniform3v( int location, int count, int const * params );
-		bool SetUniform4v( int location, int count, int const * params );
-		bool SetUniform1v( int location, int count, uint32_t const * params );
-		bool SetUniform2v( int location, int count, uint32_t const * params );
-		bool SetUniform3v( int location, int count, uint32_t const * params );
-		bool SetUniform4v( int location, int count, uint32_t const * params );
-		bool SetUniform1v( int location, int count, float const * params );
-		bool SetUniform2v( int location, int count, float const * params );
-		bool SetUniform3v( int location, int count, float const * params );
-		bool SetUniform4v( int location, int count, float const * params );
-		bool SetUniform1v( int location, int count, double const * params );
-		bool SetUniform2v( int location, int count, double const * params );
-		bool SetUniform3v( int location, int count, double const * params );
-		bool SetUniform4v( int location, int count, double const * params );
-		bool SetUniformMatrix2x2v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix2x3v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix2x4v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix3x3v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix3x2v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix3x4v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix4x4v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix4x2v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix4x3v( int location, int count, bool transpose, float const * value );
-		bool SetUniformMatrix2x2v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix2x3v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix2x4v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix3x3v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix3x2v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix3x4v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix4x4v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix4x2v( int location, int count, bool transpose, double const * value );
-		bool SetUniformMatrix4x3v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API int GetUniformLocation( uint32_t program, char const * name );
+		C3D_Gl_API bool SetUniform( int location, int v0 );
+		C3D_Gl_API bool SetUniform( int location, uint32_t v0 );
+		C3D_Gl_API bool SetUniform( int location, float v0 );
+		C3D_Gl_API bool SetUniform( int location, double v0 );
+		C3D_Gl_API bool SetUniform( int location, int v0, int v1 );
+		C3D_Gl_API bool SetUniform( int location, int v0, int v1, int v2 );
+		C3D_Gl_API bool SetUniform( int location, int v0, int v1, int v2, int v3 );
+		C3D_Gl_API bool SetUniform( int location, uint32_t v0, uint32_t v1 );
+		C3D_Gl_API bool SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2 );
+		C3D_Gl_API bool SetUniform( int location, uint32_t v0, uint32_t v1, uint32_t v2, uint32_t v3 );
+		C3D_Gl_API bool SetUniform( int location, float v0, float v1 );
+		C3D_Gl_API bool SetUniform( int location, float v0, float v1, float v2 );
+		C3D_Gl_API bool SetUniform( int location, float v0, float v1, float v2, float v3 );
+		C3D_Gl_API bool SetUniform( int location, double v0, double v1 );
+		C3D_Gl_API bool SetUniform( int location, double v0, double v1, double v2 );
+		C3D_Gl_API bool SetUniform( int location, double v0, double v1, double v2, double v3 );
+		C3D_Gl_API bool SetUniform1v( int location, int count, int const * params );
+		C3D_Gl_API bool SetUniform2v( int location, int count, int const * params );
+		C3D_Gl_API bool SetUniform3v( int location, int count, int const * params );
+		C3D_Gl_API bool SetUniform4v( int location, int count, int const * params );
+		C3D_Gl_API bool SetUniform1v( int location, int count, uint32_t const * params );
+		C3D_Gl_API bool SetUniform2v( int location, int count, uint32_t const * params );
+		C3D_Gl_API bool SetUniform3v( int location, int count, uint32_t const * params );
+		C3D_Gl_API bool SetUniform4v( int location, int count, uint32_t const * params );
+		C3D_Gl_API bool SetUniform1v( int location, int count, float const * params );
+		C3D_Gl_API bool SetUniform2v( int location, int count, float const * params );
+		C3D_Gl_API bool SetUniform3v( int location, int count, float const * params );
+		C3D_Gl_API bool SetUniform4v( int location, int count, float const * params );
+		C3D_Gl_API bool SetUniform1v( int location, int count, double const * params );
+		C3D_Gl_API bool SetUniform2v( int location, int count, double const * params );
+		C3D_Gl_API bool SetUniform3v( int location, int count, double const * params );
+		C3D_Gl_API bool SetUniform4v( int location, int count, double const * params );
+		C3D_Gl_API bool SetUniformMatrix2x2v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix2x3v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix2x4v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix3x3v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix3x2v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix3x4v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix4x4v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix4x2v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix4x3v( int location, int count, bool transpose, float const * value );
+		C3D_Gl_API bool SetUniformMatrix2x2v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix2x3v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix2x4v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix3x3v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix3x2v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix3x4v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix4x4v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix4x2v( int location, int count, bool transpose, double const * value );
+		C3D_Gl_API bool SetUniformMatrix4x3v( int location, int count, bool transpose, double const * value );
 
 		//@}
 		/**@name Uniform Buffer Objects Functions */
 		//@{
 
-		uint32_t GetUniformBlockIndex( uint32_t program, char const * uniformBlockName );
-		bool BindBufferBase( uint32_t target, uint32_t index, uint32_t buffer );
-		bool UniformBlockBinding( uint32_t program, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding );
-		bool GetUniformIndices( uint32_t program, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices );
-		bool GetActiveUniformsiv( uint32_t program, int uniformCount, uint32_t const * uniformIndices, eGL_UNIFORM_NAME pname, int * params );
-		bool GetActiveUniformBlockiv( uint32_t program, uint32_t uniformBlockIndex, eGL_UNIFORM_NAME pname, int * params );
+		C3D_Gl_API uint32_t GetUniformBlockIndex( uint32_t program, char const * uniformBlockName );
+		C3D_Gl_API bool BindBufferBase( uint32_t target, uint32_t index, uint32_t buffer );
+		C3D_Gl_API bool UniformBlockBinding( uint32_t program, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding );
+		C3D_Gl_API bool GetUniformIndices( uint32_t program, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices );
+		C3D_Gl_API bool GetActiveUniformsiv( uint32_t program, int uniformCount, uint32_t const * uniformIndices, eGL_UNIFORM_NAME pname, int * params );
+		C3D_Gl_API bool GetActiveUniformBlockiv( uint32_t program, uint32_t uniformBlockIndex, eGL_UNIFORM_NAME pname, int * params );
 
 		//@}
 		/**@name Shader object Functions */
 		//@{
 
-		uint32_t CreateShader( eGL_SHADER_TYPE type );
-		bool DeleteShader( uint32_t shader );
-		bool AttachShader( uint32_t program, uint32_t shader );
-		bool DetachShader( uint32_t program, uint32_t shader );
-		bool CompileShader( uint32_t shader );
-		bool GetShaderiv( uint32_t shader, uint32_t pname, int * param );
-		bool GetShaderInfoLog( uint32_t shader, int bufSize, int * length, char * infoLog );
-		bool ShaderSource( uint32_t shader, int count, char const ** strings, int const * lengths );
+		C3D_Gl_API uint32_t CreateShader( eGL_SHADER_TYPE type );
+		C3D_Gl_API bool DeleteShader( uint32_t shader );
+		C3D_Gl_API bool AttachShader( uint32_t program, uint32_t shader );
+		C3D_Gl_API bool DetachShader( uint32_t program, uint32_t shader );
+		C3D_Gl_API bool CompileShader( uint32_t shader );
+		C3D_Gl_API bool GetShaderiv( uint32_t shader, uint32_t pname, int * param );
+		C3D_Gl_API bool GetShaderInfoLog( uint32_t shader, int bufSize, int * length, char * infoLog );
+		C3D_Gl_API bool ShaderSource( uint32_t shader, int count, char const ** strings, int const * lengths );
 
 		//@}
 		/**@name Shader program Functions */
 		//@{
 
-		uint32_t CreateProgram();
-		bool DeleteProgram( uint32_t program );
-		bool LinkProgram( uint32_t program );
-		bool UseProgram( uint32_t program );
-		bool GetProgramiv( uint32_t program, uint32_t pname, int * param );
-		bool GetProgramInfoLog( uint32_t program, int bufSize, int * length, char * infoLog );
-		int GetAttribLocation( uint32_t program, char const * name );
-		bool IsProgram( uint32_t program );
-		bool ProgramParameteri( uint32_t program, uint32_t pname, int value );
+		C3D_Gl_API uint32_t CreateProgram();
+		C3D_Gl_API bool DeleteProgram( uint32_t program );
+		C3D_Gl_API bool LinkProgram( uint32_t program );
+		C3D_Gl_API bool UseProgram( uint32_t program );
+		C3D_Gl_API bool GetProgramiv( uint32_t program, uint32_t pname, int * param );
+		C3D_Gl_API bool GetProgramInfoLog( uint32_t program, int bufSize, int * length, char * infoLog );
+		C3D_Gl_API int GetAttribLocation( uint32_t program, char const * name );
+		C3D_Gl_API bool IsProgram( uint32_t program );
+		C3D_Gl_API bool ProgramParameteri( uint32_t program, uint32_t pname, int value );
 
 		//@}
 		/**@name Vertex Attribute Pointer functions */
 		//@{
 
-		bool EnableVertexAttribArray( uint32_t index );
-		bool VertexAttribPointer( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride, void const * pointer );
-		bool VertexAttribPointer( uint32_t index, int size, eGL_TYPE type, int stride, void const * pointer );
-		bool DisableVertexAttribArray( uint32_t index );
+		C3D_Gl_API bool EnableVertexAttribArray( uint32_t index );
+		C3D_Gl_API bool VertexAttribPointer( uint32_t index, int size, eGL_TYPE type, bool normalized, int stride, void const * pointer );
+		C3D_Gl_API bool VertexAttribPointer( uint32_t index, int size, eGL_TYPE type, int stride, void const * pointer );
+		C3D_Gl_API bool DisableVertexAttribArray( uint32_t index );
 
 		//@}
 		/**@name Vertex Array Objects */
 		//@{
 
-		bool GenVertexArrays( int n, uint32_t * arrays );
-		bool BindVertexArray( uint32_t array );
-		bool DeleteVertexArrays( int n, uint32_t * arrays );
+		C3D_Gl_API bool GenVertexArrays( int n, uint32_t * arrays );
+		C3D_Gl_API bool BindVertexArray( uint32_t array );
+		C3D_Gl_API bool DeleteVertexArrays( int n, uint32_t * arrays );
 
 		//@}
 		/**@name Tesselation functions */
 		//@{
 
-		bool PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue );
+		C3D_Gl_API bool PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue );
 
 		//@}
 		/**@name Other functions */
 		//@{
 
-		bool GlCheckError( std::string const & p_strText )const;
-		bool GlCheckError( std::wstring const & p_strText )const;
-		eGL_LOCK GetLockFlags( uint32_t p_uiFlags )const;
-		uint32_t GetBitfieldFlags( uint32_t p_uiFlags )const;
+		C3D_Gl_API bool GlCheckError( std::string const & p_strText )const;
+		C3D_Gl_API bool GlCheckError( std::wstring const & p_strText )const;
+		C3D_Gl_API eGL_LOCK GetLockFlags( uint32_t p_uiFlags )const;
+		C3D_Gl_API uint32_t GetBitfieldFlags( uint32_t p_uiFlags )const;
 
 #if !defined( NDEBUG )
 
-		void Track( void * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void UnTrack( void * p_object );
+		C3D_Gl_API void Track( void * p_object, std::string const & p_name, std::string const & p_file, int line );
+		C3D_Gl_API void UnTrack( void * p_object );
 
 #endif
 
@@ -2014,7 +1999,7 @@ namespace GlRender
 		{
 			return m_iGlslVersion;
 		}
-		bool HasExtension( Castor::String const & p_strExtName )const;
+		C3D_Gl_API bool HasExtension( Castor::String const & p_strExtName )const;
 		inline eGL_BUFFER_MODE GetBufferFlags( uint32_t p_uiFlags )const
 		{
 			eGL_BUFFER_MODE l_eReturn = eGL_BUFFER_MODE( 0 );
@@ -2069,8 +2054,8 @@ namespace GlRender
 		}
 		//@}
 
-		static void CALLBACK StDebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id, eGL_DEBUG_SEVERITY severity, int length, const char * message, void * userParam );
-		static void CALLBACK StDebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int length, const char * message, void * userParam );
+		C3D_Gl_API static void CALLBACK StDebugLog( eGL_DEBUG_SOURCE source, eGL_DEBUG_TYPE type, uint32_t id, eGL_DEBUG_SEVERITY severity, int length, const char * message, void * userParam );
+		C3D_Gl_API static void CALLBACK StDebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int length, const char * message, void * userParam );
 
 	private:
 		bool DoGlCheckError( Castor::String const & p_strText )const;

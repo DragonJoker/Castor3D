@@ -98,11 +98,11 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = m_pColorAttach->Attach( eATTACHMENT_POINT_COLOUR0, m_pFrameBuffer, eTEXTURE_TARGET_2D );
+				l_return = m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pColorAttach, eTEXTURE_TARGET_2D );
 
 				if ( l_return && m_pDepthAttach->GetRenderBuffer() == m_pDepthBuffer )
 				{
-					l_return = m_pDepthAttach->Attach( eATTACHMENT_POINT_DEPTH, m_pFrameBuffer );
+					l_return = m_pFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
 				}
 
 				m_pFrameBuffer->Unbind();
@@ -158,7 +158,7 @@ namespace Castor3D
 		}
 		else
 		{
-			return m_pRenderTarget->GetFrameBuffer()->Bind();
+			return m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 		}
 	}
 
@@ -173,22 +173,23 @@ namespace Castor3D
 		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
 		{
 			DoEndRender();
-			m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-			m_wp2DBlendState.lock()->Apply();
-			m_wp2DDepthStencilState.lock()->Apply();
-			GetOwner()->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
+		}
+
+		m_wp2DBlendState.lock()->Apply();
+		m_wp2DDepthStencilState.lock()->Apply();
+		GetOwner()->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
+
+		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
+		{
 			m_pFrameBuffer->Unbind();
-			m_renderSystem->PopScene();
 			m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
 		}
 		else
 		{
-			m_wp2DBlendState.lock()->Apply();
-			m_wp2DDepthStencilState.lock()->Apply();
-			GetOwner()->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
-			m_renderSystem->PopScene();
 			m_pRenderTarget->GetFrameBuffer()->Unbind();
 		}
+
+		m_renderSystem->PopScene();
 	}
 
 	String RenderTechniqueBase::GetPixelShaderSource( uint32_t p_uiFlags )const

@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		interface publique d'animable
 	*/
-	class C3D_API Animable
+	class Animable
 	{
 	public:
 		/**
@@ -40,14 +40,36 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Animable();
+		C3D_API Animable();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Animable();
+		C3D_API virtual ~Animable();
+		/**
+		*\~english
+		*\brief		Creates an animation
+		*\param[in]	p_name	The animation name
+		*\return		The animation
+		*\~french
+		*\brief		Crée une animation
+		*\param[in]	p_name	Le nom de l'animation
+		*\return		l'animation
+		*/
+		C3D_API AnimationSPtr CreateAnimation( Castor::String const & p_name );
+		/**
+		*\~english
+		*\brief		Retrieves an animation
+		*\param[in]	p_name	The animation name
+		*\return		The animation
+		*\~french
+		*\brief		Récupère une animation
+		*\param[in]	p_name	Le nom de l'animation
+		*\return		L'animation
+		*/
+		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first animation
@@ -96,28 +118,6 @@ namespace Castor3D
 		{
 			return m_mapAnimations.end();
 		}
-		/**
-		 *\~english
-		 *\brief		Creates an animation
-		 *\param[in]	p_name	The animation name
-		 *\return		The animation
-		 *\~french
-		 *\brief		Crée une animation
-		 *\param[in]	p_name	Le nom de l'animation
-		 *\return		l'animation
-		 */
-		AnimationSPtr CreateAnimation( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Retrieves an animation
-		 *\param[in]	p_name	The animation name
-		 *\return		The animation
-		 *\~french
-		 *\brief		Récupère une animation
-		 *\param[in]	p_name	Le nom de l'animation
-		 *\return		L'animation
-		 */
-		AnimationSPtr GetAnimation( Castor::String const & p_name );
 
 	protected:
 		//!\~english All animations	\~french Toutes les animations

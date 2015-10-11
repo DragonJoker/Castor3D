@@ -61,10 +61,10 @@ namespace Castor3D
 		, m_bCreateContext( false )
 		, m_bCreated( false )
 		, m_bCleaned( true )
-		, m_materialManager( *this )
-		, m_overlayManager( *this )
 		, m_pMainWindow( NULL )
 		, m_bDefaultInitialised( false )
+		, m_overlayManager( *this )
+		, m_materialManager( *this )
 		, m_debugOverlays( std::make_unique< DebugOverlays >() )
 	{
 		CASTOR_INIT_UNIQUE_INSTANCE();
@@ -295,7 +295,7 @@ namespace Castor3D
 			m_sceneManager.clear();
 			{
 				CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-				m_meshManager.clear();
+				m_blendStateManager.clear();
 			}
 			m_animationManager.clear();
 			m_fontManager.clear();
@@ -486,7 +486,7 @@ namespace Castor3D
 
 			while ( l_it != m_meshManager.end() && l_return )
 			{
-				//l_return = Mesh::BinaryLoader()( * l_it->second, p_file);
+				//l_return = Mesh::BinaryLoader()( * l_it.second, p_file);
 				++l_it;
 			}
 		}

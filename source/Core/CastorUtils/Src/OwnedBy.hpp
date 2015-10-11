@@ -70,6 +70,61 @@ namespace Castor
 	private:
 		Owner & m_owner;
 	};
+
+	/**
+	 *\~english
+	 *\brief		Helper macro to declare an exported OwnedBy specialisation.
+	 *\remarks		Must be used in namespace Castor.
+	 *\~french
+	 *\brief		Macro pour déclarer une spécialisation exportée de OwnedBy.
+	 *\remarks		Doit être utilisée dans le namespace Castor.
+	 */
+#	define DECLARED_EXPORTED_OWNED_BY( exp, owner )\
+	template<>\
+	class exp OwnedBy< owner >\
+	{\
+	private:\
+		OwnedBy & operator=( OwnedBy< owner > const & p_rhs ) = delete;\
+		OwnedBy & operator=( OwnedBy< owner > && p_rhs ) = delete;\
+	protected:\
+		OwnedBy( owner & p_owner );\
+		OwnedBy( OwnedBy< owner > const & p_rhs );\
+		OwnedBy( OwnedBy< owner > && p_rhs );\
+		~OwnedBy();\
+	public:\
+		owner * GetOwner()const;\
+	private:\
+		owner & m_owner;\
+	}
+
+	/**
+	 *\~english
+	 *\brief		Helper macro to implement an OwnedBy specialisation.
+	 *\remarks		Must be used in namespace Castor.
+	 *\~french
+	 *\brief		Macro pour implémenter une spécialisation de OwnedBy.
+	 *\remarks		Doit être utilisée dans le namespace Castor.
+	 */
+#	define IMPLEMENT_EXPORTED_OWNED_BY( owner )\
+	OwnedBy< owner >::OwnedBy( owner & p_owner )\
+		: m_owner( p_owner )\
+	{\
+	}\
+	OwnedBy< owner >::OwnedBy( OwnedBy< owner > const & p_rhs )\
+		: m_owner( p_rhs.m_owner )\
+	{\
+	}\
+	OwnedBy< owner >::OwnedBy( OwnedBy< owner > && p_rhs )\
+		: m_owner( std::move( p_rhs.m_owner ) )\
+	{\
+	}\
+	OwnedBy< owner >::~OwnedBy()\
+	{\
+	}\
+	owner * OwnedBy< owner >::GetOwner()const\
+	{\
+		return &m_owner;\
+	}
 }
 
 #endif

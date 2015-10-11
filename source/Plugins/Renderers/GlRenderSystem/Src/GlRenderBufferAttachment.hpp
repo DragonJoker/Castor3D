@@ -29,10 +29,31 @@ namespace GlRender
 		,	public Castor::NonCopyable
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\para[in]		p_gl			The OpenGL APIs.
+		 *\param[in]	p_pRenderBuffer	The render buffer.
+		 *\~french
+		 *\brief		Constructeur
+		 *\para[in]		p_gl			Les APIs OpenGL.
+		 *\param[in]	p_pRenderBuffer	Le tampon de rendu.
+		 */
 		GlRenderBufferAttachment( OpenGl & p_gl, Castor3D::RenderBufferSPtr p_pRenderBuffer );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
 		virtual ~GlRenderBufferAttachment();
-
+		/**
+		 *\copydoc		Castor3D::TextureAttachment::DownloadBuffer
+		 */
 		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );
+		/**
+		 *\copydoc		Castor3D::TextureAttachment::Blit
+		 */
 		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
 
 		inline eGL_FRAMEBUFFER_STATUS GetGlStatus()const
@@ -45,7 +66,13 @@ namespace GlRender
 		}
 
 	private:
-		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_eAttachment, Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
+		 */
+		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
+		 */
 		virtual void DoDetach();
 
 	private:

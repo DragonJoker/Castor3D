@@ -13,24 +13,24 @@ using namespace Castor;
 
 Ray::Ray( Point2i const & p_point, Camera const & p_camera )
 {
-	ViewportSPtr l_pViewport = p_camera.GetViewport();
+	Viewport const & l_viewport = p_camera.GetViewport();
 	m_ptOrigin = p_camera.GetParent()->GetPosition();
-	m_ptOrigin[2] += l_pViewport->GetNear();
+	m_ptOrigin[2] += l_viewport.GetNear();
 	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
 	m_ptOrigin *= l_camOrient;
-	l_pViewport->GetDirection( p_point, m_ptDirection );
+	//l_viewport.GetDirection( p_point, m_ptDirection );
 	point::normalise( m_ptDirection );
 }
 
 Ray::Ray( int p_x, int p_y, Camera const & p_camera )
 {
-	ViewportSPtr l_pViewport = p_camera.GetViewport();
+	Viewport const & l_viewport = p_camera.GetViewport();
 	m_ptOrigin = p_camera.GetParent()->GetPosition();
-	m_ptOrigin[2] += l_pViewport->GetNear();
+	m_ptOrigin[2] += l_viewport.GetNear();
 	Quaternion l_camOrient = p_camera.GetParent()->GetOrientation();
 	m_ptOrigin *= l_camOrient;
 	Point2i l_point( p_x, p_y );
-	l_pViewport->GetDirection( l_point, m_ptDirection );
+	//l_viewport.GetDirection( l_point, m_ptDirection );
 	point::normalise( m_ptDirection );
 }
 

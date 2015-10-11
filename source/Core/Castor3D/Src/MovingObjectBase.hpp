@@ -52,7 +52,7 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose
 	*/
-	class C3D_API MovingObjectBase
+	class MovingObjectBase
 	{
 	public:
 		/**
@@ -63,14 +63,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type	Le type du machin mouvant
 		 */
-		MovingObjectBase( eMOVING_OBJECT_TYPE p_type );
+		C3D_API MovingObjectBase( eMOVING_OBJECT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~MovingObjectBase();
+		C3D_API ~MovingObjectBase();
 		/**
 		 *\~english
 		 *\brief		Adds a child to this object
@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\remark		Les transformations de l'enfant sont affectées par celles de cet objet
 		 *\param[in]	p_pObject	L'enfant
 		 */
-		void AddChild( MovingObjectBaseSPtr p_pObject );
+		C3D_API void AddChild( MovingObjectBaseSPtr p_pObject );
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\param[in]	p_bLooped				Dit si l'animation est bouclée
 		 *\param[în]	p_mtxTransformations	La matrice de transformation courante
 		 */
-		void Update( real p_rTime, bool p_bLooped, Castor::Matrix4x4r const & p_mtxTransformations );
+		C3D_API void Update( real p_rTime, bool p_bLooped, Castor::Matrix4x4r const & p_mtxTransformations );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name
@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		virtual Castor::String const & GetName()const = 0;
+		C3D_API virtual Castor::String const & GetName()const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a key frame and adds it to the list
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
 		 *\param[in]	p_rFrom	L'index de temps de début
 		 */
-		ScaleKeyFrameSPtr AddScaleKeyFrame( real p_rFrom );
+		C3D_API ScaleKeyFrameSPtr AddScaleKeyFrame( real p_rFrom );
 		/**
 		 *\~english
 		 *\brief		Creates a key frame and adds it to the list
@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
 		 *\param[in]	p_rFrom	L'index de temps de début
 		 */
-		TranslateKeyFrameSPtr AddTranslateKeyFrame( real p_rFrom );
+		C3D_API TranslateKeyFrameSPtr AddTranslateKeyFrame( real p_rFrom );
 		/**
 		 *\~english
 		 *\brief		Creates a key frame and adds it to the list
@@ -136,7 +136,7 @@ namespace Castor3D
 		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
 		 *\param[in]	p_rFrom	L'index de temps de début
 		 */
-		RotateKeyFrameSPtr AddRotateKeyFrame( real p_rFrom );
+		C3D_API RotateKeyFrameSPtr AddRotateKeyFrame( real p_rFrom );
 		/**
 		 *\~english
 		 *\brief		Deletes the key frame at time index p_time
@@ -145,7 +145,7 @@ namespace Castor3D
 		 *\brief		Supprime la key frame à l'index de temps donné
 		 *\param[in]	p_rTime	L'index de temps
 		 */
-		void RemoveScaleKeyFrame( real p_rTime );
+		C3D_API void RemoveScaleKeyFrame( real p_rTime );
 		/**
 		 *\~english
 		 *\brief		Deletes the key frame at time index p_time
@@ -154,7 +154,7 @@ namespace Castor3D
 		 *\brief		Supprime la key frame à l'index de temps donné
 		 *\param[in]	p_rTime	L'index de temps
 		 */
-		void RemoveTranslateKeyFrame( real p_rTime );
+		C3D_API void RemoveTranslateKeyFrame( real p_rTime );
 		/**
 		 *\~english
 		 *\brief		Deletes the key frame at time index p_time
@@ -163,7 +163,7 @@ namespace Castor3D
 		 *\brief		Supprime la key frame à l'index de temps donné
 		 *\param[in]	p_rTime	L'index de temps
 		 */
-		void RemoveRotateKeyFrame( real p_rTime );
+		C3D_API void RemoveRotateKeyFrame( real p_rTime );
 		/**
 		 *\~english
 		 *\brief		Clones this moving thing
@@ -174,7 +174,7 @@ namespace Castor3D
 		 *\param[out]	p_map	Reçoit les enfants clonés en plus de l'objet cloné
 		 *\return		Le clone
 		 */
-		MovingObjectBaseSPtr Clone( MovingObjectPtrStrMap & p_map );
+		C3D_API MovingObjectBaseSPtr Clone( MovingObjectPtrStrMap & p_map );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the keyframes map
@@ -471,7 +471,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet
 		 */
-		virtual void DoApply() = 0;
+		C3D_API virtual void DoApply() = 0;
 		/**
 		 *\~english
 		 *\brief		Clones this moving thing
@@ -480,7 +480,7 @@ namespace Castor3D
 		 *\brief		Clone cet objet animable
 		 *\return		Le clone
 		 */
-		virtual MovingObjectBaseSPtr DoClone() = 0;
+		C3D_API virtual MovingObjectBaseSPtr DoClone() = 0;
 
 	private:
 		Castor::Matrix4x4r DoComputeTransform( real p_rTime );

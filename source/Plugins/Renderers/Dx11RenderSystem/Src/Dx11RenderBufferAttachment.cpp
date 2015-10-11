@@ -69,9 +69,9 @@ namespace Dx11Render
 		return m_dxRenderBuffer.GetSurface();
 	}
 
-	bool DxRenderBufferAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
+	bool DxRenderBufferAttachment::DoAttach( FrameBufferSPtr p_pFrameBuffer )
 	{
-		m_dwAttachment = DirectX11::Get( p_eAttachment );
+		m_dwAttachment = DirectX11::Get( GetAttachmentPoint() ) + GetAttachmentIndex();
 		m_pFrameBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pFrameBuffer );
 		return true;
 	}

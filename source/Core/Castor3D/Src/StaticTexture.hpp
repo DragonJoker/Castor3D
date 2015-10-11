@@ -32,8 +32,8 @@ namespace Castor3D
 	\brief		Class de texture statique
 	\remark		Une texture statique supprime son buffer de la ram quand elle est initialisée
 	*/
-	class C3D_API StaticTexture
-		:	public TextureBase
+	class StaticTexture
+		: public TextureBase
 	{
 	public:
 		/**
@@ -44,14 +44,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_renderSystem	Le render system
 		 */
-		StaticTexture( RenderSystem & p_renderSystem );
+		C3D_API StaticTexture( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~StaticTexture();
+		C3D_API virtual ~StaticTexture();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -62,7 +62,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index de la texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( uint32_t p_index );
+		C3D_API virtual bool Initialise( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array
@@ -73,14 +73,14 @@ namespace Castor3D
 		 *\param[in]	p_dimensions	Les dimensions de la texture
 		 *\param[in]	p_pBuffer		Le buffer
 		 */
-		void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer );
+		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup();
+		C3D_API virtual void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -91,7 +91,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool BindAt( uint32_t p_index );
+		C3D_API virtual bool BindAt( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -100,7 +100,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		virtual void UnbindFrom( uint32_t p_index );
+		C3D_API virtual void UnbindFrom( uint32_t p_index );
 
 		using TextureBase::SetImage;
 	};

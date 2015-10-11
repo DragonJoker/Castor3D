@@ -125,18 +125,18 @@ namespace Dx11Render
 			UINT l_uiColour = 0;
 			UINT l_uiOffset = 0;
 
-			for ( auto && l_it = m_declaration.Begin(); l_it != m_declaration.End(); ++l_it )
+			for ( auto && l_element : m_declaration )
 			{
 				bool l_bAdd = true;
 				D3D11_INPUT_ELEMENT_DESC l_d3dCurrentElement = { 0 };
 				l_d3dCurrentElement.Format;
-				l_d3dCurrentElement.InputSlot = l_it->m_uiStream;
+				l_d3dCurrentElement.InputSlot = l_element.m_uiStream;
 				l_d3dCurrentElement.AlignedByteOffset = l_uiOffset;//l_it->m_uiOffset;
 				l_d3dCurrentElement.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 				l_d3dCurrentElement.InstanceDataStepRate = 0;
 				l_uiOffset = D3D11_APPEND_ALIGNED_ELEMENT;
 
-				switch ( l_it->m_eUsage )
+				switch ( l_element.m_eUsage )
 				{
 				case eELEMENT_USAGE_POSITION:
 					l_d3dCurrentElement.SemanticName = "POSITION";
@@ -197,7 +197,7 @@ namespace Dx11Render
 					l_bAdd	= false;
 				}
 
-				switch ( l_it->m_eDataType )
+				switch ( l_element.m_eDataType )
 				{
 				case eELEMENT_TYPE_1FLOAT:
 					l_d3dCurrentElement.Format = DXGI_FORMAT_R32_FLOAT;

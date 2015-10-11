@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Contient les données d'un groupe d'éléments de tampon de sommets
 	*/
-	class C3D_API BufferElementGroup
+	class BufferElementGroup
 	{
 	public:
 		/**
@@ -44,21 +44,21 @@ namespace Castor3D
 		 *\param[in]	p_pBuffer		Le tampon de données
 		 *\param[in]	p_index		L'indice du groupe
 		 */
-		BufferElementGroup( uint8_t * p_pBuffer = NULL, uint32_t p_index = 0 );
+		C3D_API BufferElementGroup( uint8_t * p_pBuffer = NULL, uint32_t p_index = 0 );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BufferElementGroup();
+		C3D_API virtual ~BufferElementGroup();
 		/**
 		 *\~english
 		 *\brief		Links the element values to the ones in parameter.
 		 *\~french
 		 *\brief		Lie les valeurs de l'élément à celles données en paramètre.
 		 */
-		void LinkCoords( uint8_t * p_pBuffer );
+		C3D_API void LinkCoords( uint8_t * p_pBuffer );
 		/**
 		 *\~english
 		 *\brief		Links the element values to the ones in parameter.
@@ -69,7 +69,7 @@ namespace Castor3D
 		 *\remark		Remplace les valeurs du tampon par celles de l'élément
 		 *\param[in]	p_pBuffer	Le tampon de valeurs
 		 */
-		void LinkCoords( uint8_t * p_pBuffer, uint32_t p_uiSize );
+		C3D_API void LinkCoords( uint8_t * p_pBuffer, uint32_t p_uiSize );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pointer on the data buffer

@@ -25,10 +25,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	class C3D_API Generator
+	class Generator
 	{
 	protected:
-		class C3D_API Thread
+		class Thread
 		{
 		private:
 			bool m_bEnded;
@@ -47,14 +47,14 @@ namespace Castor3D
 			mutable std::recursive_mutex m_mutex;
 
 		public:
-			Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour );
-			virtual ~Thread();
+			C3D_API Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour );
+			C3D_API virtual ~Thread();
 
-			void Run();
-			void Wait();
-			virtual int Entry();
+			C3D_API void Run();
+			C3D_API void Wait();
+			C3D_API virtual int Entry();
 
-			virtual void Step() = 0;
+			C3D_API virtual void Step() = 0;
 
 			inline bool	IsEnded()const
 			{
@@ -107,22 +107,22 @@ namespace Castor3D
 		Engine * m_engine;
 
 	public:
-		Generator( Engine * p_engine, int p_width, int p_height );
-		virtual ~Generator();
+		C3D_API Generator( Engine * p_engine, int p_width, int p_height );
+		C3D_API virtual ~Generator();
 
-		virtual bool Step();
-		virtual void SetRed( uint8_t val );
-		virtual void SetGreen( uint8_t val );
-		virtual void SetBlue( uint8_t val );
-		virtual void SwapBuffers();
-		virtual void InitialiseStep();
-		virtual void ClearAllThreads();
+		C3D_API virtual bool Step();
+		C3D_API virtual void SetRed( uint8_t val );
+		C3D_API virtual void SetGreen( uint8_t val );
+		C3D_API virtual void SetBlue( uint8_t val );
+		C3D_API virtual void SwapBuffers();
+		C3D_API virtual void InitialiseStep();
+		C3D_API virtual void ClearAllThreads();
 
-		bool AllEnded();
-		void Suspend();
-		void SetSize( int p_iWidth, int p_iHeight );
-		void SetSize( Castor::Point2i const & p_size );
-		void SaveFrame();
+		C3D_API bool AllEnded();
+		C3D_API void Suspend();
+		C3D_API void SetSize( int p_iWidth, int p_iHeight );
+		C3D_API void SetSize( Castor::Point2i const & p_size );
+		C3D_API void SaveFrame();
 
 		template <class ThreadClass>
 		ThreadClass * CreateThread( int iWidth, int iTop, int iBottom, int iTotalHeight, Castor::UbPixel const & p_pxColour )
@@ -166,14 +166,14 @@ namespace Castor3D
 		}
 
 	protected:
-		void DoCleanup();
+		C3D_API void DoCleanup();
 		uint32_t DoGetThreadsCount()
 		{
 			return uint32_t( m_arraySlaveThreads.size() );
 		}
-		Castor::Point2i _loadImage( Castor::String const & p_strImagePath, Castor::Image & p_pImage );
-		void _subRender();
-		void _saveFrame();
+		C3D_API Castor::Point2i _loadImage( Castor::String const & p_strImagePath, Castor::Image & p_pImage );
+		C3D_API void _subRender();
+		C3D_API void _saveFrame();
 	};
 
 	extern int GetCPUCount();

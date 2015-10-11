@@ -154,7 +154,7 @@ namespace GlRender
 
 	namespace GLSL
 	{
-		class C3D_Gl_API KeywordsBase
+		class KeywordsBase
 		{
 		protected:
 			Castor::String m_strStdLayout;
@@ -183,7 +183,7 @@ namespace GlRender
 			Castor::String m_strGSOutEmissiveDecl;
 
 		public:
-			static std::unique_ptr< GLSL::KeywordsBase > Get( OpenGl const & p_gl );
+			C3D_Gl_API static std::unique_ptr< GLSL::KeywordsBase > Get( OpenGl const & p_gl );
 			inline Castor::String GetStdLayout( int p_index )const
 			{
 				return m_strStdLayout + cuT( "( std" ) + Castor::string::to_string( p_index ) + cuT( " ) " );
@@ -276,19 +276,20 @@ namespace GlRender
 			{
 				return m_strGSOutEmissiveDecl;
 			}
-			virtual Castor::String GetLayout( uint32_t p_index )const = 0;
-			virtual Castor::String GetAttribute( uint32_t p_index )const
+			C3D_Gl_API virtual Castor::String GetLayout( uint32_t p_index )const = 0;
+			C3D_Gl_API virtual Castor::String GetAttribute( uint32_t p_index )const
 			{
 				return GetLayout( p_index ) + m_strAttribute;
 			}
-			virtual bool HasNamedFragData()const = 0;
-			virtual Castor::String GetFragData( uint32_t p_index )const = 0;
+			C3D_Gl_API virtual bool HasNamedFragData()const = 0;
+			C3D_Gl_API virtual Castor::String GetFragData( uint32_t p_index )const = 0;
 		};
 
 		template< int Version, class Enable = void > class Keywords;
 
 		template< int Version >
-		class Keywords < Version, typename std::enable_if< ( Version <= 120 ) >::type > : public KeywordsBase
+		class Keywords < Version, typename std::enable_if< ( Version <= 120 ) >::type >
+			: public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -328,7 +329,8 @@ namespace GlRender
 		};
 
 		template< int Version >
-		class Keywords < Version, typename std::enable_if < ( Version > 120 ) && ( Version < 140 ) >::type > : public KeywordsBase
+		class Keywords < Version, typename std::enable_if < ( Version > 120 ) && ( Version < 140 ) >::type >
+			: public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -370,7 +372,8 @@ namespace GlRender
 		};
 
 		template< int Version >
-		class Keywords < Version, typename std::enable_if < ( Version >= 140 ) && ( Version < 330 ) >::type > : public KeywordsBase
+		class Keywords < Version, typename std::enable_if < ( Version >= 140 ) && ( Version < 330 ) >::type >
+			: public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -418,7 +421,8 @@ namespace GlRender
 		};
 
 		template< int Version >
-		class Keywords< Version, typename std::enable_if< ( Version >= 330 ) >::type > : public KeywordsBase
+		class Keywords< Version, typename std::enable_if< ( Version >= 330 ) >::type >
+			: public KeywordsBase
 		{
 		public:
 			Keywords()
@@ -465,98 +469,98 @@ namespace GlRender
 			}
 		};
 
-		class C3D_Gl_API ConstantsBase
+		class ConstantsBase
 		{
 		public:
-			static GLSL::ConstantsBase * Get( OpenGl const & p_gl );
-			virtual Castor::String Matrices() = 0;
-			virtual Castor::String Scene() = 0;
-			virtual Castor::String Pass() = 0;
-			virtual Castor::String Billboard() = 0;
+			C3D_Gl_API static GLSL::ConstantsBase * Get( OpenGl const & p_gl );
+			C3D_Gl_API virtual Castor::String Matrices() = 0;
+			C3D_Gl_API virtual Castor::String Scene() = 0;
+			C3D_Gl_API virtual Castor::String Pass() = 0;
+			C3D_Gl_API virtual Castor::String Billboard() = 0;
 		};
 
-		class C3D_Gl_API ConstantsStd : public ConstantsBase
+		class ConstantsStd : public ConstantsBase
 		{
 		public:
-			virtual Castor::String Matrices();
-			virtual Castor::String Scene();
-			virtual Castor::String Pass();
-			virtual Castor::String Billboard();
+			C3D_Gl_API virtual Castor::String Matrices();
+			C3D_Gl_API virtual Castor::String Scene();
+			C3D_Gl_API virtual Castor::String Pass();
+			C3D_Gl_API virtual Castor::String Billboard();
 		};
 
-		class C3D_Gl_API ConstantsUbo : public ConstantsBase
+		class ConstantsUbo : public ConstantsBase
 		{
 		public:
-			virtual Castor::String Matrices();
-			virtual Castor::String Scene();
-			virtual Castor::String Pass();
-			virtual Castor::String Billboard();
+			C3D_Gl_API virtual Castor::String Matrices();
+			C3D_Gl_API virtual Castor::String Scene();
+			C3D_Gl_API virtual Castor::String Pass();
+			C3D_Gl_API virtual Castor::String Billboard();
 		};
 
 		static ConstantsStd	constantsStd;
 		static ConstantsUbo	constantsUbo;
 
-		class C3D_Gl_API VariablesBase
+		class VariablesBase
 		{
 		public:
-			static GLSL::VariablesBase * Get( OpenGl const & p_gl );
-			virtual Castor::String GetVertexOutMatrices()const = 0;
-			virtual Castor::String GetVertexMatrixCopy()const = 0;
-			virtual Castor::String GetPixelInMatrices()const = 0;
-			virtual Castor::String GetPixelMtxModelView()const = 0;
+			C3D_Gl_API static GLSL::VariablesBase * Get( OpenGl const & p_gl );
+			C3D_Gl_API virtual Castor::String GetVertexOutMatrices()const = 0;
+			C3D_Gl_API virtual Castor::String GetVertexMatrixCopy()const = 0;
+			C3D_Gl_API virtual Castor::String GetPixelInMatrices()const = 0;
+			C3D_Gl_API virtual Castor::String GetPixelMtxModelView()const = 0;
 		};
 
-		class C3D_Gl_API VariablesUbo
+		class VariablesUbo
 			: public VariablesBase
 		{
 		public:
-			virtual Castor::String GetVertexOutMatrices()const
+			C3D_Gl_API virtual Castor::String GetVertexOutMatrices()const
 			{
 				return cuT( "" );
 			}
 
-			virtual Castor::String GetVertexMatrixCopy()const
+			C3D_Gl_API virtual Castor::String GetVertexMatrixCopy()const
 			{
 				return cuT( "" );
 			}
 
-			virtual Castor::String GetPixelInMatrices()const
+			C3D_Gl_API virtual Castor::String GetPixelInMatrices()const
 			{
 				return GlRender::GLSL::constantsUbo.Matrices();
 			}
 
-			virtual Castor::String GetPixelMtxModelView()const
+			C3D_Gl_API virtual Castor::String GetPixelMtxModelView()const
 			{
 				return cuT( "c3d_mtxModelView" );
 			}
 		};
 
-		class C3D_Gl_API VariablesStd
+		class VariablesStd
 			: public VariablesBase
 		{
 		public:
-			virtual Castor::String GetVertexOutMatrices()const
+			C3D_Gl_API virtual Castor::String GetVertexOutMatrices()const
 			{
 				return
 					cuT( "out mat4 vtx_mtxModelView;\n" )
 					cuT( "out mat4 vtx_mtxView;" );
 			}
 
-			virtual Castor::String GetVertexMatrixCopy()const
+			C3D_Gl_API virtual Castor::String GetVertexMatrixCopy()const
 			{
 				return
 					cuT( "	vtx_mtxModelView = c3d_mtxModelView;\n" )
 					cuT( "	vtx_mtxView = c3d_mtxView;" );
 			}
 
-			virtual Castor::String GetPixelInMatrices()const
+			C3D_Gl_API virtual Castor::String GetPixelInMatrices()const
 			{
 				return
 					cuT( "in mat4 vtx_mtxModelView;\n" )
 					cuT( "in mat4 vtx_mtxView;" );
 			}
 
-			virtual Castor::String GetPixelMtxModelView()const
+			C3D_Gl_API virtual Castor::String GetPixelMtxModelView()const
 			{
 				return cuT( "vtx_mtxModelView" );
 			}

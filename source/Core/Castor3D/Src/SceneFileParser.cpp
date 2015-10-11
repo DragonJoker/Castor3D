@@ -152,8 +152,8 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	m_mapModels[cuT( "sm_4" )] = eSHADER_MODEL_4;
 	m_mapModels[cuT( "sm_5" )] = eSHADER_MODEL_5;
 
-	m_mapViewportModes[cuT( "2d" )] = eVIEWPORT_TYPE_2D;
-	m_mapViewportModes[cuT( "3d" )] = eVIEWPORT_TYPE_3D;
+	m_mapViewportModes[cuT( "2d" )] = eVIEWPORT_TYPE_ORTHO;
+	m_mapViewportModes[cuT( "3d" )] = eVIEWPORT_TYPE_PERSPECTIVE;
 
 	m_mapInterpolationModes[cuT( "nearest" )] = eINTERPOLATION_MODE_NEAREST;
 	m_mapInterpolationModes[cuT( "linear" )] = eINTERPOLATION_MODE_LINEAR;

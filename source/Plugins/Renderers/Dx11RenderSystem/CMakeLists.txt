@@ -73,12 +73,15 @@ if( DIRECT3D11_FOUND AND DIRECT3D9_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Array*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.inl
 	)
 	file( GLOB ${PROJECT_NAME}_VBO_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BufferObject*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*GeometryBuffer*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Array*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.cpp
 	)
 	source_group( "Header Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_HEADER_FILES} )
 	source_group( "Source Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_SOURCE_FILES} )
@@ -161,16 +164,6 @@ if( DIRECT3D11_FOUND AND DIRECT3D9_FOUND )
 	)
 	source_group( "Header Files\\Scene" FILES ${${PROJECT_NAME}_Scene_HEADER_FILES} )
 	source_group( "Source Files\\Scene" FILES ${${PROJECT_NAME}_Scene_SOURCE_FILES} )
-
-	file( GLOB ${PROJECT_NAME}_Buffer_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.inl
-	)
-	file( GLOB ${PROJECT_NAME}_Buffer_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Buffer*.cpp
-	)
-	source_group( "Header Files\\Buffer" FILES ${${PROJECT_NAME}_Buffer_HEADER_FILES} )
-	source_group( "Source Files\\Buffer" FILES ${${PROJECT_NAME}_Buffer_SOURCE_FILES} )
 
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Plugins/Renderers" )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

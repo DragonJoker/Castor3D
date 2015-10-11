@@ -34,8 +34,8 @@ namespace Castor3D
 	\remark		Un icosaèdre est un polygône constitué de 20 triangles équilatéraux
 				<br />Ce mesh est utilisé pour construire des sphères à faces triangulaires
 	*/
-	class C3D_API Icosahedron
-		:	public MeshGenerator
+	class Icosahedron
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -44,22 +44,22 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Icosahedron();
+		C3D_API Icosahedron();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Icosahedron();
+		C3D_API ~Icosahedron();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshGeneratorSPtr Create();
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\copydoc		Castor3D::MeshGenerator::Generate
 		 */
-		virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
+		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces

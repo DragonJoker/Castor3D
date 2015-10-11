@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_CONTEXT_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Viewport.hpp"
 
 #include <Colour.hpp>
 #include <OwnedBy.hpp>
@@ -34,7 +35,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe contenant le contexte de rendu
 	*/
-	class C3D_API Context
+	class Context
 		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
@@ -44,14 +45,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Context( RenderSystem & p_renderSystem );
+		C3D_API Context( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Context();
+		C3D_API virtual ~Context();
 		/**
 		 *\~english
 		 *\brief		Initialises this context
@@ -62,28 +63,28 @@ namespace Castor3D
 		 *\param[in]	p_window	La RenderWindow
 		 *\return		\p true si initialisé correctement
 		 */
-		bool Initialise( RenderWindow * p_window );
+		C3D_API bool Initialise( RenderWindow * p_window );
 		/**
 		 *\~english
 		 *\brief		Cleans this context up
 		 *\~french
 		 *\brief		Nettoie le contexte
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Defines this context to be the current rendering context
 		 *\~french
 		 *\brief		Définit le contexte pour être celui de rendu actuel
 		 */
-		void SetCurrent();
+		C3D_API void SetCurrent();
 		/**
 		 *\~english
 		 *\brief		Defines this context not to be the current rendering context
 		 *\~french
 		 *\brief		Définit ce contexte pour ne pas être l'actuel
 		 */
-		void EndCurrent();
+		C3D_API void EndCurrent();
 		/**
 		 *\~english
 		 *\brief		Defines the culling option for current render
@@ -92,14 +93,14 @@ namespace Castor3D
 		 *\brief		Définit l'option de culling pour le rendu courant
 		 *\param[in]	p_eCullFace	L'option de culling
 		 */
-		void CullFace( eFACE p_eCullFace );
+		C3D_API void CullFace( eFACE p_eCullFace );
 		/**
 		 *\~english
 		 *\brief		Swaps render buffers
 		 *\~french
 		 *\brief		Echange les buffers de rendu
 		 */
-		void SwapBuffers();
+		C3D_API void SwapBuffers();
 		/**
 		 *\~english
 		 *\brief		Defines the colour used when Context::Clear is called on the color buffer
@@ -108,7 +109,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur
 		 *\param[in]	p_clrClear	La couleur
 		 */
-		void SetClearColour( Castor::Colour const & p_clrClear );
+		C3D_API void SetClearColour( Castor::Colour const & p_clrClear );
 		/**
 		 *\~english
 		 *\brief		Clears the wanted buffers
@@ -117,7 +118,7 @@ namespace Castor3D
 		 *\brief		Vide le(s) tampon(s) voulu(s)
 		 *\param[in]	p_uiTargets	Le(s) tampon(s)
 		 */
-		void Clear( uint32_t p_uiTargets );
+		C3D_API void Clear( uint32_t p_uiTargets );
 		/**
 		*\~english
 		*\brief		Binds given system frame buffer to given mode
@@ -128,7 +129,7 @@ namespace Castor3D
 		*\param[in]	p_eBuffer	Le tampon
 		*\param[in]	p_eTarget	La cible
 		*/
-		void Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget );
+		C3D_API void Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget );
 		/**
 		*\~english
 		*\brief		Defines the alpha text function
@@ -139,7 +140,7 @@ namespace Castor3D
 		*\param[in]	p_eFunc		La fonction
 		*\param[in]	p_byValue	La valeur de comparaison
 		*/
-		void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
+		C3D_API void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
 		/**
 		*\~english
 		*\brief		Changes fullscreen status
@@ -148,7 +149,7 @@ namespace Castor3D
 		*\brief		Change le statut de plein écran
 		*\param[in]	val	Le nouveau statut de plein écran
 		*/
-		virtual void UpdateFullScreen( bool val ) = 0;
+		C3D_API virtual void UpdateFullScreen( bool val ) = 0;
 		/**
 		*\~english
 		*\brief		Renders the given texture to the currently draw-bound frame buffer
@@ -161,7 +162,7 @@ namespace Castor3D
 		*\param[in]	p_pTexture		La texture
 		*\param[in]	p_uiComponents	Les composantes cibles du rendu (combinaison binaire de eBUFFER_COMPONENT)
 		*/
-		void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
+		C3D_API virtual void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
 		/**
 		*\~english
 		*\brief		Retrieves the maximal supported size, given a wanted size
@@ -172,7 +173,7 @@ namespace Castor3D
 		*\param[in]	p_size	La taille voulue
 		*\return		La taille maximale supportée inférieure ou égale à p_size
 		*/
-		virtual Castor::Size GetMaxSize( Castor::Size const & p_size ) = 0;
+		C3D_API virtual Castor::Size GetMaxSize( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells the context is initialised
@@ -235,14 +236,14 @@ namespace Castor3D
 		 *\brief		Initialise le contexte
 		 *\return		\p true si initialisé correctement
 		 */
-		virtual bool DoInitialise() = 0;
+		C3D_API virtual bool DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans this context up
 		 *\~french
 		 *\brief		Nettoie le contexte
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines this context to be the current rendering context
@@ -251,21 +252,21 @@ namespace Castor3D
 		 *\brief		Définit le contexte pour être celui de rendu actuel
 		 *\param[in]	p_window	La RenderWindow
 		 */
-		virtual void DoSetCurrent() = 0;
+		C3D_API virtual void DoSetCurrent() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines this context not to be the current rendering context
 		 *\~french
 		 *\brief		Définit ce contexte pour ne pas être l'actuel
 		 */
-		virtual void DoEndCurrent() = 0;
+		C3D_API virtual void DoEndCurrent() = 0;
 		/**
 		 *\~english
 		 *\brief		Swaps render buffers
 		 *\~french
 		 *\brief		Echange les buffers de rendu
 		 */
-		virtual void DoSwapBuffers() = 0;
+		C3D_API virtual void DoSwapBuffers() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the colour used when Context::Clear is called on the color buffer
@@ -274,7 +275,7 @@ namespace Castor3D
 		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur
 		 *\param[in]	p_clrClear	La couleur
 		 */
-		virtual void DoSetClearColour( Castor::Colour const & p_clrClear ) = 0;
+		C3D_API virtual void DoSetClearColour( Castor::Colour const & p_clrClear ) = 0;
 		/**
 		 *\~english
 		 *\brief		Clears the wanted buffers
@@ -283,7 +284,7 @@ namespace Castor3D
 		 *\brief		Vide le(s) buffer(s) voulu(s)
 		 *\param[in]	p_uiTargets	Le(s) tampon(s)
 		 */
-		virtual void DoClear( uint32_t p_uiTargets ) = 0;
+		C3D_API virtual void DoClear( uint32_t p_uiTargets ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds given system frame buffer to given mode
@@ -294,7 +295,7 @@ namespace Castor3D
 		 *\param[in]	p_eBuffer	Le tampon
 		 *\param[in]	p_eTarget	La cible
 		 */
-		virtual void DoBind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget ) = 0;
+		C3D_API virtual void DoBind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget ) = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the alpha text function
@@ -305,7 +306,7 @@ namespace Castor3D
 		 *\param[in]	p_eFunc		La fonction
 		 *\param[in]	p_byValue	La valeur de comparaison
 		 */
-		virtual void DoSetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue ) = 0;
+		C3D_API virtual void DoSetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue ) = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the culling option for current render
@@ -314,7 +315,7 @@ namespace Castor3D
 		 *\brief		Définit l'option de culling pour le rendu courant
 		 *\param[in]	p_eCullFace	L'option de culling
 		 */
-		virtual void DoCullFace( eFACE p_eCullFace ) = 0;
+		C3D_API virtual void DoCullFace( eFACE p_eCullFace ) = 0;
 
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
@@ -330,7 +331,7 @@ namespace Castor3D
 		//!\~english The GeometryBuffers used when rendering from a buffer to another one	\~french Le GeometryBuffers utilisé lors du rendu d'un tampon vers un autre
 		GeometryBuffersSPtr m_pGeometryBuffers;
 		//!\~english The Viewport used when rendering from a buffer to another one	\~french Le Viewport utilisé lors du rendu d'un tampon vers un autre
-		ViewportSPtr m_viewport;
+		Viewport m_viewport;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
 		Castor3D::BufferDeclarationSPtr m_pDeclaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)

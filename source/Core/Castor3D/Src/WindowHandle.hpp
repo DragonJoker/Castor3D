@@ -32,7 +32,7 @@ namespace Castor3D
 	\~english
 	\brief		Implémentation d'un handle de fenêtre, dépendant de l'OS
 	*/
-	class C3D_API IWindowHandle
+	class IWindowHandle
 	{
 	protected:
 		/**
@@ -41,7 +41,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		IWindowHandle() {}
+		C3D_API IWindowHandle() {}
 
 	public:
 		/**
@@ -52,7 +52,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		IWindowHandle( IWindowHandle const & CU_PARAM_UNUSED( p_copy ) ) {}
+		C3D_API IWindowHandle( IWindowHandle const & CU_PARAM_UNUSED( p_copy ) ) {}
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -61,7 +61,21 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_copy	L'objet à déplacer
 		 */
-		IWindowHandle( IWindowHandle && CU_PARAM_UNUSED( p_copy ) ) {}
+		C3D_API IWindowHandle( IWindowHandle && CU_PARAM_UNUSED( p_copy ) ) {}
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		C3D_API virtual ~IWindowHandle() {}
+		/**
+		 *\~english
+		 *\brief		bool cast operator
+		 *\~french
+		 *\brief		opérateur de conversion en bool
+		 */
+		C3D_API virtual operator bool() = 0;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -72,9 +86,9 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		IWindowHandle & operator =( IWindowHandle const & CU_PARAM_UNUSED( p_copy ) )
+		inline IWindowHandle & operator=( IWindowHandle const & CU_PARAM_UNUSED( p_copy ) )
 		{
-			return * this;
+			return *this;
 		}
 		/**
 		 *\~english
@@ -86,24 +100,10 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		IWindowHandle & operator =( IWindowHandle && CU_PARAM_UNUSED( p_copy ) )
+		inline IWindowHandle & operator=( IWindowHandle && CU_PARAM_UNUSED( p_copy ) )
 		{
-			return * this;
+			return *this;
 		}
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~IWindowHandle() {}
-		/**
-		 *\~english
-		 *\brief		bool cast operator
-		 *\~french
-		 *\brief		opérateur de conversion en bool
-		 */
-		virtual operator bool() = 0;
 	};
 	/*!
 	\author Sylvain DOREMUS
@@ -114,11 +114,8 @@ namespace Castor3D
 	\~english
 	\brief Implémentation d'un handle de fenêtre, indépendant de l'OS
 	*/
-	class C3D_API WindowHandle
+	class WindowHandle
 	{
-	private:
-		IWindowHandleSPtr m_pHandle;
-
 	public:
 		/**
 		 *\~english
@@ -126,7 +123,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		WindowHandle();
+		C3D_API WindowHandle();
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -135,7 +132,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_pHandle	Le handle alloué
 		 */
-		WindowHandle( IWindowHandleSPtr p_pHandle );
+		C3D_API WindowHandle( IWindowHandleSPtr p_pHandle );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -144,7 +141,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		WindowHandle( WindowHandle const & p_copy );
+		C3D_API WindowHandle( WindowHandle const & p_copy );
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -153,7 +150,7 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_copy	L'objet à déplacer
 		 */
-		WindowHandle( WindowHandle && p_copy );
+		C3D_API WindowHandle( WindowHandle && p_copy );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -164,7 +161,7 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		WindowHandle & operator=( WindowHandle const & p_copy );
+		C3D_API WindowHandle & operator=( WindowHandle const & p_copy );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -175,21 +172,21 @@ namespace Castor3D
 		 *\param[in]	p_copy	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		WindowHandle & operator=( WindowHandle && p_copy );
+		C3D_API WindowHandle & operator=( WindowHandle && p_copy );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~WindowHandle();
+		C3D_API virtual ~WindowHandle();
 		/**
 		 *\~english
 		 *\brief		bool cast operator
 		 *\~french
 		 *\brief		opérateur de conversion en bool
 		 */
-		operator bool();
+		C3D_API operator bool();
 		/**
 		 *\~english
 		 *\brief		Retrieves the window handle, casted in the wanted format (HWND, GLXDrawable, ...)
@@ -203,6 +200,9 @@ namespace Castor3D
 		{
 			return std::static_pointer_cast< T >( m_pHandle );
 		}
+
+	private:
+		IWindowHandleSPtr m_pHandle;
 	};
 }
 

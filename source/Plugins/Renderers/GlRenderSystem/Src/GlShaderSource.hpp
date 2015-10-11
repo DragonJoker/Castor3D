@@ -44,54 +44,54 @@ namespace GlRender
 
 		template< typename T > struct is_type : public std::false_type {};
 
-		struct C3D_Gl_API Expr
+		struct Expr
 		{
-			Expr();
-			Expr( int p_value );
-			Expr( float p_value );
-			Expr( double p_value );
-			Expr( GlslWriter * p_writer );
-			Expr( GlslWriter * p_writer, Castor::String const & p_init );
-			Expr( Expr const & p_rhs );
-			Expr & operator =( Expr const & p_rhs );
-			void UpdateWriter( Expr const & p_expr );
+			C3D_Gl_API Expr();
+			C3D_Gl_API Expr( int p_value );
+			C3D_Gl_API Expr( float p_value );
+			C3D_Gl_API Expr( double p_value );
+			C3D_Gl_API Expr( GlslWriter * p_writer );
+			C3D_Gl_API Expr( GlslWriter * p_writer, Castor::String const & p_init );
+			C3D_Gl_API Expr( Expr const & p_rhs );
+			C3D_Gl_API Expr & operator=( Expr const & p_rhs );
+			C3D_Gl_API void UpdateWriter( Expr const & p_expr );
 
 			GlslWriter * m_writer;
 			mutable Castor::StringStream m_value;
 		};
 
-		struct C3D_Gl_API Type: public Expr
+		struct Type: public Expr
 		{
-			Type( Castor::String const & p_type );
-			Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-			Type( Type const & p_rhs );
-			Type & operator =( Type const & p_rhs );
-			operator Castor::String()const;
-			Type & operator+=( Type const & p_type );
-			Type & operator-=( Type const & p_type );
-			Type & operator*=( Type const & p_type );
-			Type & operator/=( Type const & p_type );
-			Type & operator+=( float p_type );
-			Type & operator-=( float p_type );
-			Type & operator*=( float p_type );
-			Type & operator/=( float p_type );
-			Type & operator+=( int p_type );
-			Type & operator-=( int p_type );
-			Type & operator*=( int p_type );
-			Type & operator/=( int p_type );
+			C3D_Gl_API Type( Castor::String const & p_type );
+			C3D_Gl_API Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+			C3D_Gl_API Type( Type const & p_rhs );
+			C3D_Gl_API Type & operator=( Type const & p_rhs );
+			C3D_Gl_API operator Castor::String()const;
+			C3D_Gl_API Type & operator+=( Type const & p_type );
+			C3D_Gl_API Type & operator-=( Type const & p_type );
+			C3D_Gl_API Type & operator*=( Type const & p_type );
+			C3D_Gl_API Type & operator/=( Type const & p_type );
+			C3D_Gl_API Type & operator+=( float p_type );
+			C3D_Gl_API Type & operator-=( float p_type );
+			C3D_Gl_API Type & operator*=( float p_type );
+			C3D_Gl_API Type & operator/=( float p_type );
+			C3D_Gl_API Type & operator+=( int p_type );
+			C3D_Gl_API Type & operator-=( int p_type );
+			C3D_Gl_API Type & operator*=( int p_type );
+			C3D_Gl_API Type & operator/=( int p_type );
 
 			Castor::String m_type;
 			Castor::String m_name;
 		};
 
-		struct C3D_Gl_API GlslBool: public Type
+		struct GlslBool: public Type
 		{
-			GlslBool(): Type( cuT( "bool " ) ) {}
-			GlslBool( bool p_value ): Type( cuT( "bool " ) )
+			C3D_Gl_API GlslBool(): Type( cuT( "bool " ) ) {}
+			inline GlslBool( bool p_value ): Type( cuT( "bool " ) )
 			{
 				m_value << p_value;
 			}
-			GlslBool( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "bool " ), p_writer, p_name ) {}
+			C3D_Gl_API GlslBool( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "bool " ), p_writer, p_name ) {}
 			template< typename T > inline GlslBool & operator=( T const & p_rhs );
 			template< typename T > inline GlslBool & operator=( int p_rhs );
 			inline operator uint32_t()
@@ -143,18 +143,18 @@ namespace GlRender
 		//! Miscellaneous
 		struct Endl {};
 
-		struct C3D_Gl_API IndentBlock
+		struct IndentBlock
 		{
-			IndentBlock( GlslWriter & p_writter );
-			~IndentBlock();
+			C3D_Gl_API IndentBlock( GlslWriter & p_writter );
+			C3D_Gl_API ~IndentBlock();
 			Castor::StringStream & m_stream;
 			int m_indent;
 		};
 
-		struct C3D_Gl_API Ubo
+		struct Ubo
 		{
-			Ubo( GlslWriter & p_writer, Castor::String const & p_name );
-			void End();
+			C3D_Gl_API Ubo( GlslWriter & p_writer, Castor::String const & p_name );
+			C3D_Gl_API void End();
 			template< typename T > inline T GetUniform( Castor::String const & p_name );
 			template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
 			IndentBlock * m_block;
@@ -162,10 +162,10 @@ namespace GlRender
 			Castor::String m_name;
 		};
 
-		struct C3D_Gl_API Struct
+		struct Struct
 		{
-			Struct( GlslWriter & p_writer, Castor::String const & p_name );
-			void End();
+			C3D_Gl_API Struct( GlslWriter & p_writer, Castor::String const & p_name );
+			C3D_Gl_API void End();
 			template< typename T > inline T GetMember( Castor::String const & p_name );
 			template< typename T > inline Array< T > GetMember( Castor::String const & p_name, uint32_t p_dimension );
 			IndentBlock * m_block;
@@ -178,29 +178,29 @@ namespace GlRender
 		struct Sampler2D;
 		struct Sampler3D;
 
-		class C3D_Gl_API GlslWriter
+		class GlslWriter
 		{
 			friend struct IndentBlock;
 			friend struct Ubo;
 
 		public:
-			GlslWriter( OpenGl & p_gl, Castor3D::eSHADER_TYPE p_type );
+			C3D_Gl_API GlslWriter( OpenGl & p_gl, Castor3D::eSHADER_TYPE p_type );
 
-			Castor::String Finalise();
-			void WriteAssign( Type const & p_lhs, Type const & p_rhs );
-			void WriteAssign( Type const & p_lhs, int const & p_rhs );
-			void WriteAssign( Type const & p_lhs, float const & p_rhs );
-			void For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type ) > p_function );
-			GlslWriter & If( Expr const & p_cond, std::function< void() > p_function );
-			GlslWriter & ElseIf( Expr const & p_cond, std::function< void() > p_function );
-			void Else( std::function< void() > p_function );
-			Struct GetStruct( Castor::String const & p_name );
-			Ubo GetUbo( Castor::String const & p_name );
-			void EmitVertex();
-			void EndPrimitive();
-			Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
-			Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
-			Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
+			C3D_Gl_API Castor::String Finalise();
+			C3D_Gl_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
+			C3D_Gl_API void WriteAssign( Type const & p_lhs, int const & p_rhs );
+			C3D_Gl_API void WriteAssign( Type const & p_lhs, float const & p_rhs );
+			C3D_Gl_API void For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type ) > p_function );
+			C3D_Gl_API GlslWriter & If( Expr const & p_cond, std::function< void() > p_function );
+			C3D_Gl_API GlslWriter & ElseIf( Expr const & p_cond, std::function< void() > p_function );
+			C3D_Gl_API void Else( std::function< void() > p_function );
+			C3D_Gl_API Struct GetStruct( Castor::String const & p_name );
+			C3D_Gl_API Ubo GetUbo( Castor::String const & p_name );
+			C3D_Gl_API void EmitVertex();
+			C3D_Gl_API void EndPrimitive();
+			C3D_Gl_API Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
+			C3D_Gl_API Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
+			C3D_Gl_API Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
 
 			template< typename RetType, typename FuncType, typename ... Params > inline void Implement_Function( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 			template< typename RetType > void Return( RetType const & p_return );
@@ -226,21 +226,21 @@ namespace GlRender
 			template< typename T > inline Array< T > GetLayout( Castor::String const & p_name, uint32_t p_dimension );
 			template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
 
-			GlslWriter & operator<<( Version const & p_rhs );
-			GlslWriter & operator<<( Attribute const & p_rhs );
-			GlslWriter & operator<<( In const & p_rhs );
-			GlslWriter & operator<<( Out const & p_rhs );
-			GlslWriter & operator<<( StdLayout const & p_rhs );
-			GlslWriter & operator<<( Layout const & p_rhs );
-			GlslWriter & operator<<( Uniform const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Version const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Attribute const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( In const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Out const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( StdLayout const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Layout const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Uniform const & p_rhs );
 
-			GlslWriter & operator<<( Legacy_MatrixOut const & p_rhs );
-			GlslWriter & operator<<( Legacy_MatrixCopy const & p_rhs );
-			GlslWriter & operator<<( Legacy_PixelModelView const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Legacy_MatrixOut const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Legacy_MatrixCopy const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Legacy_PixelModelView const & p_rhs );
 
-			GlslWriter & operator<<( Endl const & p_rhs );
-			GlslWriter & operator<<( Castor::String const & p_rhs );
-			GlslWriter & operator<<( uint32_t const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Endl const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( Castor::String const & p_rhs );
+			C3D_Gl_API GlslWriter & operator<<( uint32_t const & p_rhs );
 
 		private:
 			Castor::String m_uniform;
@@ -255,10 +255,10 @@ namespace GlRender
 		};
 
 		//! Types
-		struct C3D_Gl_API Sampler1D: public Type
+		struct Sampler1D: public Type
 		{
-			Sampler1D(): Type( cuT( "sampler1D " ) ) {}
-			Sampler1D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler1D " ), p_writer, p_name ) {}
+			C3D_Gl_API Sampler1D(): Type( cuT( "sampler1D " ) ) {}
+			C3D_Gl_API Sampler1D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler1D " ), p_writer, p_name ) {}
 			template< typename T > inline Sampler1D & operator=( T const & p_rhs )
 			{
 				UpdateWriter( p_rhs );
@@ -271,10 +271,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Sampler2D: public Type
+		struct Sampler2D: public Type
 		{
-			Sampler2D(): Type( cuT( "sampler2D " ) ) {}
-			Sampler2D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler2D " ), p_writer, p_name ) {}
+			C3D_Gl_API Sampler2D(): Type( cuT( "sampler2D " ) ) {}
+			C3D_Gl_API Sampler2D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler2D " ), p_writer, p_name ) {}
 			template< typename T > inline Sampler2D & operator=( T const & p_rhs )
 			{
 				UpdateWriter( p_rhs );
@@ -287,10 +287,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Sampler3D: public Type
+		struct Sampler3D: public Type
 		{
-			Sampler3D(): Type( cuT( "sampler3D " ) ) {}
-			Sampler3D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler3D " ), p_writer, p_name ) {}
+			C3D_Gl_API Sampler3D(): Type( cuT( "sampler3D " ) ) {}
+			C3D_Gl_API Sampler3D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "sampler3D " ), p_writer, p_name ) {}
 			template< typename T > inline Sampler3D & operator=( T const & p_rhs )
 			{
 				UpdateWriter( p_rhs );
@@ -303,28 +303,28 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Void: public Type
+		struct Void: public Type
 		{
-			Void(): Type( cuT( "void " ) ) {}
-			Void( GlslWriter * p_writer ): Type( cuT( "void " ), p_writer, Castor::String() ) {}
+			C3D_Gl_API Void(): Type( cuT( "void " ) ) {}
+			C3D_Gl_API Void( GlslWriter * p_writer ): Type( cuT( "void " ), p_writer, Castor::String() ) {}
 		};
 
-		struct C3D_Gl_API Int: public Type
+		struct Int: public Type
 		{
-			Int(): Type( cuT( "int " ) ) {}
-			Int( Type const & p_value ): Type( cuT( "float " ) )
+			C3D_Gl_API Int(): Type( cuT( "int " ) ) {}
+			C3D_Gl_API Int( Type const & p_value ): Type( cuT( "float " ) )
 			{
 				m_value << Castor::String( p_value );
 			}
-			Int( int p_value ): Type( cuT( "int " ) )
+			C3D_Gl_API Int( int p_value ): Type( cuT( "int " ) )
 			{
 				m_value << p_value;
 			}
-			Int( float p_value ): Type( cuT( "int " ) )
+			C3D_Gl_API Int( float p_value ): Type( cuT( "int " ) )
 			{
 				m_value << p_value;
 			}
-			Int( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "int " ), p_writer, p_name ) {}
+			C3D_Gl_API Int( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "int " ), p_writer, p_name ) {}
 			inline Int & operator=( Int const & p_rhs )
 			{
 				if ( m_writer )
@@ -367,31 +367,31 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Float: public Type
+		struct Float: public Type
 		{
-			Float(): Type( cuT( "float " ) ) {}
-			Float( Type const & p_value ): Type( cuT( "float " ) )
+			C3D_Gl_API Float(): Type( cuT( "float " ) ) {}
+			C3D_Gl_API Float( Type const & p_value ): Type( cuT( "float " ) )
 			{
 				m_value << Castor::String( p_value );
 			}
-			Float( int p_value ): Type( cuT( "float " ) )
+			C3D_Gl_API Float( int p_value ): Type( cuT( "float " ) )
 			{
 				m_value << p_value;
 			}
-			Float( float p_value ): Type( cuT( "float " ) )
+			C3D_Gl_API Float( float p_value ): Type( cuT( "float " ) )
 			{
 				m_value << p_value;
 			}
-			Float( GlslWriter * p_writer, int p_value ): Type( cuT( "float " ), p_writer, Castor::String() )
+			C3D_Gl_API Float( GlslWriter * p_writer, int p_value ): Type( cuT( "float " ), p_writer, Castor::String() )
 			{
 				m_value << p_value;
 			}
-			Float( GlslWriter * p_writer, float p_value ): Type( cuT( "float " ), p_writer, Castor::String() )
+			C3D_Gl_API Float( GlslWriter * p_writer, float p_value ): Type( cuT( "float " ), p_writer, Castor::String() )
 			{
 				m_value << p_value;
 			}
-			Float( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "float " ), p_writer, p_name ) {}
-			Float & operator=( Float const & p_rhs )
+			C3D_Gl_API Float( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "float " ), p_writer, p_name ) {}
+			C3D_Gl_API Float & operator=( Float const & p_rhs )
 			{
 				if ( m_writer )
 				{
@@ -421,10 +421,10 @@ namespace GlRender
 				return 0.0f;
 			}
 		};
-		struct C3D_Gl_API Vec2: public Type
+		struct Vec2: public Type
 		{
-			Vec2(): Type( cuT( "vec2 " ) ) {}
-			Vec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec2 " ), p_writer, p_name ) {}
+			C3D_Gl_API Vec2(): Type( cuT( "vec2 " ) ) {}
+			C3D_Gl_API Vec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec2 " ), p_writer, p_name ) {}
 			inline Vec2 & operator=( Vec2 const & p_rhs )
 			{
 				if ( m_writer )
@@ -476,10 +476,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Vec3: public Type
+		struct Vec3: public Type
 		{
-			Vec3(): Type( cuT( "vec3 " ) ) {}
-			Vec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec3 " ), p_writer, p_name ) {}
+			C3D_Gl_API Vec3(): Type( cuT( "vec3 " ) ) {}
+			C3D_Gl_API Vec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec3 " ), p_writer, p_name ) {}
 			inline Vec3 & operator=( Vec3 const & p_rhs )
 			{
 				if ( m_writer )
@@ -693,10 +693,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Vec4: public Type
+		struct Vec4: public Type
 		{
-			Vec4(): Type( cuT( "vec4 " ) ) {}
-			Vec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec4 " ), p_writer, p_name ) {}
+			C3D_Gl_API Vec4(): Type( cuT( "vec4 " ) ) {}
+			C3D_Gl_API Vec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "vec4 " ), p_writer, p_name ) {}
 			inline Vec4 & operator=( Vec4 const & p_rhs )
 			{
 				if ( m_writer )
@@ -1492,10 +1492,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API IVec2: public Type
+		struct IVec2: public Type
 		{
-			IVec2(): Type( cuT( "ivec2 " ) ) {}
-			IVec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec2 " ), p_writer, p_name ) {}
+			C3D_Gl_API IVec2(): Type( cuT( "ivec2 " ) ) {}
+			C3D_Gl_API IVec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec2 " ), p_writer, p_name ) {}
 			inline IVec2 & operator=( IVec2 const & p_rhs )
 			{
 				if ( m_writer )
@@ -1547,10 +1547,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API IVec3: public Type
+		struct IVec3: public Type
 		{
-			IVec3(): Type( cuT( "ivec3 " ) ) {}
-			IVec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec3 " ), p_writer, p_name ) {}
+			C3D_Gl_API IVec3(): Type( cuT( "ivec3 " ) ) {}
+			C3D_Gl_API IVec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec3 " ), p_writer, p_name ) {}
 			inline IVec3 & operator=( IVec3 const & p_rhs )
 			{
 				if ( m_writer )
@@ -1764,10 +1764,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API IVec4: public Type
+		struct IVec4: public Type
 		{
-			IVec4(): Type( cuT( "ivec4 " ) ) {}
-			IVec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec4 " ), p_writer, p_name ) {}
+			C3D_Gl_API IVec4(): Type( cuT( "ivec4 " ) ) {}
+			C3D_Gl_API IVec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "ivec4 " ), p_writer, p_name ) {}
 			inline IVec4 & operator=( IVec4 const & p_rhs )
 			{
 				if ( m_writer )
@@ -2563,10 +2563,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Mat3: public Type
+		struct Mat3: public Type
 		{
-			Mat3(): Type( cuT( "mat3 " ) ) {}
-			Mat3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "mat3 " ), p_writer, p_name ) {}
+			C3D_Gl_API Mat3(): Type( cuT( "mat3 " ) ) {}
+			C3D_Gl_API Mat3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "mat3 " ), p_writer, p_name ) {}
 			inline Mat3 & operator=( Mat3 const & p_rhs )
 			{
 				if ( m_writer )
@@ -2594,10 +2594,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Mat4: public Type
+		struct Mat4: public Type
 		{
-			Mat4(): Type( cuT( "mat4 " ) ) {}
-			Mat4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "mat4 " ), p_writer, p_name ) {}
+			C3D_Gl_API Mat4(): Type( cuT( "mat4 " ) ) {}
+			C3D_Gl_API Mat4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "mat4 " ), p_writer, p_name ) {}
 			inline Mat4 & operator=( Mat4 const & p_rhs )
 			{
 				if ( m_writer )
@@ -2625,10 +2625,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API Light: public Type
+		struct Light: public Type
 		{
-			Light(): Type( cuT( "Light " ) ) {}
-			Light( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "Light " ), p_writer, p_name ) {}
+			C3D_Gl_API Light(): Type( cuT( "Light " ) ) {}
+			C3D_Gl_API Light( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "Light " ), p_writer, p_name ) {}
 			inline Light & operator=( Light const & p_rhs )
 			{
 				if ( m_writer )
@@ -2687,10 +2687,10 @@ namespace GlRender
 			}
 		};
 
-		struct C3D_Gl_API gl_PerVertex: public Type
+		struct gl_PerVertex: public Type
 		{
-			gl_PerVertex(): Type( cuT( "gl_PerVertex " ) ) {}
-			gl_PerVertex( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "gl_PerVertex " ), p_writer, p_name ) {}
+			C3D_Gl_API gl_PerVertex(): Type( cuT( "gl_PerVertex " ) ) {}
+			C3D_Gl_API gl_PerVertex( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "gl_PerVertex " ), p_writer, p_name ) {}
 			inline gl_PerVertex & operator=( gl_PerVertex const & p_rhs )
 			{
 				if ( m_writer )
@@ -2837,11 +2837,11 @@ namespace GlRender
 			template< typename ... Values > inline Float ComputeFresnel( Type const & p_value, Values const & ... p_values );
 		};
 
-		struct C3D_Gl_API BlinnPhongLightingModel
+		struct BlinnPhongLightingModel
 		{
-			static void Declare_ComputeLightDirection( GlslWriter & p_writer );
-			static void Declare_Bump( GlslWriter & p_writer );
-			static void Declare_ComputeFresnel( GlslWriter & p_writer );
+			C3D_Gl_API static void Declare_ComputeLightDirection( GlslWriter & p_writer );
+			C3D_Gl_API static void Declare_Bump( GlslWriter & p_writer );
+			C3D_Gl_API static void Declare_ComputeFresnel( GlslWriter & p_writer );
 		};
 	}
 

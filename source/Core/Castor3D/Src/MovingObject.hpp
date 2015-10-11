@@ -31,7 +31,7 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation de MovingObjectBase pour les MovableObject
 	*/
-	class C3D_API MovingObject
+	class MovingObject
 		: public MovingObjectBase
 	{
 	public:
@@ -41,14 +41,23 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MovingObject();
+		C3D_API MovingObject();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~MovingObject();
+		C3D_API ~MovingObject();
+		/**
+		 *\~english
+		 *\brief		Retrieves the object name
+		 *\return		The name
+		 *\~french
+		 *\brief		Récupère le nom de l'objet
+		 *\return		Le nom
+		 */
+		C3D_API virtual Castor::String const & GetName()const;
 		/**
 		 *\~english
 		 *\brief		Defines the movable object
@@ -73,19 +82,10 @@ namespace Castor3D
 		{
 			return m_pObject.lock();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the object name
-		 *\return		The name
-		 *\~french
-		 *\brief		Récupère le nom de l'objet
-		 *\return		Le nom
-		 */
-		virtual Castor::String const & GetName()const;
 
 	private:
-		virtual void DoApply();
-		virtual MovingObjectBaseSPtr DoClone();
+		C3D_API virtual void DoApply();
+		C3D_API virtual MovingObjectBaseSPtr DoClone();
 
 	private:
 		//!\~english The object affected by the animations	\~french L'objet affecté par les animations

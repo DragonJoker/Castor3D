@@ -29,13 +29,20 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool MatrixBuffer::DoCreateBuffer()
+	bool MatrixBuffer::Create()
 	{
 		if ( !m_pBuffer )
 		{
 			m_pBuffer = GetOwner()->GetRenderSystem()->CreateMatrixBuffer( this );
 		}
 
-		return m_pBuffer != nullptr;
+		bool l_return = m_pBuffer != nullptr;
+
+		if ( l_return )
+		{
+			l_return = GetGpuBuffer()->Create();
+		}
+
+		return l_return;
 	}
 }

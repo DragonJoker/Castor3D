@@ -115,6 +115,11 @@ namespace Castor
 	typedef float real;
 #endif
 
+	constexpr real operator "" _r( long double p_value )
+	{
+		return real( p_value );
+	}
+
 	// static size array
 #if CASTOR_HAS_STDARRAY
 	using std::array;
@@ -204,6 +209,10 @@ namespace Castor
 	\brief		Typedef sur un buffer de pixels au format A8R8G8B8
 	*/
 	typedef PxBuffer< ePIXEL_FORMAT_A8R8G8B8 > PixelBuffer;
+
+	template< typename T > using Point2 = Point< T, 2 >;
+	template< typename T > using Point3 = Point< T, 3 >;
+	template< typename T > using Point4 = Point< T, 4 >;
 
 	DECLARE_POINT( bool,		4, b	);
 	DECLARE_POINT( bool,		3, b	);

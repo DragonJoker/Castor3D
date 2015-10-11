@@ -9,10 +9,10 @@ using namespace Castor;
 namespace GlRender
 {
 	GlTextureAttachment::GlTextureAttachment( OpenGl & p_gl, DynamicTextureSPtr p_pTexture )
-		:	TextureAttachment( p_pTexture )
-		,	m_eGlAttachmentPoint( eGL_TEXTURE_ATTACHMENT_NONE )
-		,	m_eGlStatus( eGL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT )
-		,	m_gl( p_gl )
+		: TextureAttachment( p_pTexture )
+		, m_eGlAttachmentPoint( eGL_TEXTURE_ATTACHMENT_NONE )
+		, m_eGlStatus( eGL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT )
+		, m_gl( p_gl )
 	{
 	}
 
@@ -53,7 +53,7 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				l_return = m_gl.BindFramebuffer( eGL_FRAMEBUFFER_MODE_READ, m_pGlFrameBuffer.lock()->GetGlName() );
+				l_return = m_gl.BindFramebuffer( eGL_FRAMEBUFFER_MODE_READ, std::static_pointer_cast< GlFrameBuffer >( GetFrameBuffer() )->GetGlName() );
 			}
 
 			if ( l_return )
@@ -89,15 +89,14 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlTextureAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
+	bool GlTextureAttachment::DoAttach( FrameBufferSPtr p_frameBuffer )
 	{
 		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
-			m_eGlAttachmentPoint = m_gl.Get( p_eAttachment );
+			m_eGlAttachmentPoint = eGL_TEXTURE_ATTACHMENT( m_gl.Get( GetAttachmentPoint() ) + GetAttachmentIndex() );
 			GlDynamicTextureSPtr l_pTexture = std::static_pointer_cast< GlDynamicTexture >( GetTexture() );
-			m_pGlFrameBuffer = std::static_pointer_cast< GlFrameBuffer >( p_pFrameBuffer );
 
 			switch ( GetAttachedTarget() )
 			{

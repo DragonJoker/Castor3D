@@ -34,7 +34,7 @@ namespace Castor3D
 			l_return = DoFillChunk( double( p_obj.GetFar() ), eCHUNK_TYPE_VIEWPORT_FAR, l_chunk );
 		}
 
-		if ( p_obj.GetType() == eVIEWPORT_TYPE_2D )
+		if ( p_obj.GetType() != eVIEWPORT_TYPE_PERSPECTIVE )
 		{
 			if ( l_return )
 			{
@@ -190,9 +190,9 @@ namespace Castor3D
 			l_return = p_file.WriteText( cuT( "\t\t\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
 		}
 
-		if ( p_viewport.GetType() == eVIEWPORT_TYPE_2D )
+		if ( l_return )
 		{
-			if ( l_return )
+			if ( p_viewport.GetType() == eVIEWPORT_TYPE_ORTHO || p_viewport.GetType() == eVIEWPORT_TYPE_FRUSTUM )
 			{
 				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
 				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
@@ -201,10 +201,7 @@ namespace Castor3D
 				l_return = p_file.Print( 256, cuT( "\t\t\ttop %f\n" ), p_viewport.GetTop() ) > 0;
 				l_return = p_file.Print( 256, cuT( "\t\t\tbottom %f\n" ), p_viewport.GetBottom() ) > 0;
 			}
-		}
-		else
-		{
-			if ( l_return )
+			else
 			{
 				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
 				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
@@ -222,67 +219,78 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const String Viewport::string_type[eVIEWPORT_TYPE_COUNT] = { cuT( "3d" ), cuT( "2d" ) };
+	const String Viewport::string_type[eVIEWPORT_TYPE_COUNT] = { cuT( "ortho" ), cuT( "perspective" ), cuT( "frustum" ) };
 
-	Viewport::Viewport( Engine & p_engine, Size const & p_size, eVIEWPORT_TYPE p_type )
-		: OwnedBy< Engine >( p_engine )
-		, m_type( p_type )
-		, m_size( p_size )
-		, m_left( -1 )
-		, m_right( 1 )
-		, m_top( 1 )
-		, m_bottom( -1 )
-		, m_far( 20000 )
-		, m_near( real( 0.2 ) )
-		, m_fovY( Angle::FromDegrees( 45 ) )
-		, m_ratio( 1 )
+	Viewport::Viewport( Engine & p_engine, eVIEWPORT_TYPE p_type, Castor::Angle const & p_fovY, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+		: m_type( p_type )
+		, m_size()
+		, m_left( p_left )
+		, m_right( p_right )
+		, m_top( p_top )
+		, m_bottom( p_bottom )
+		, m_far( p_far )
+		, m_near( p_near )
+		, m_fovY( p_fovY )
+		, m_ratio( p_aspect )
 		, m_modified( true )
 	{
-		if ( m_type != eVIEWPORT_TYPE_2D )
+		if ( m_type != eVIEWPORT_TYPE_ORTHO && !m_near )
 		{
-			m_near = real( 0.1 ); // not zero or we have a Z fight (?????)
+			m_near = real( 0.1 ); // not zero or we have a Z fight (due to depth buffer precision)
 		}
+	}
 
-		m_ratio = real( p_size.width() ) / p_size.height();
+	Viewport::Viewport( Engine & p_engine, eVIEWPORT_TYPE p_type )
+		: Viewport( p_engine, p_type, Angle(), 1, 0, 1, 0, 1, 0, 1 )
+	{
+	}
+
+	Viewport Viewport::Perspective( Engine & p_engine, Angle const & p_fovY, real p_aspect, real p_near, real p_far )
+	{
+		return std::move( Viewport( p_engine, eVIEWPORT_TYPE_PERSPECTIVE, p_fovY, p_aspect, 0, 1, 0, 1, p_near, p_far ) );
+	}
+
+	Viewport Viewport::Frustum( Engine & p_engine, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	{
+		return std::move( Viewport( p_engine, eVIEWPORT_TYPE_FRUSTUM, Angle(), 0, p_left, p_right, p_bottom, p_top, p_near, p_far ) );
+	}
+
+	Viewport Viewport::Ortho( Engine & p_engine, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
+	{
+		return std::move( Viewport( p_engine, eVIEWPORT_TYPE_ORTHO, Angle(), 0, p_left, p_right, p_bottom, p_top, p_near, p_far ) );
 	}
 
 	Viewport::~Viewport()
 	{
 	}
 
-	bool Viewport::Render()
+	bool Viewport::Render( Pipeline & p_pipeline )
 	{
 		bool l_return = false;
-		Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 
 		if ( IsModified() )
 		{
-			if ( !GetOwner()->GetRenderSystem()->HasNonPowerOfTwoTextures() )
-			{
-				m_size.set( GetNext2Pow( m_size.width() ), GetNext2Pow( m_size.height() ) );
-			}
-
 			Point3r l_d( 0, 0, 1 );
 			real l_farHeight = 0;
 			real l_farWidth = 0;
 			real l_nearHeight = 0;
 			real l_nearWidth = 0;
 
-			if ( GetType() == eVIEWPORT_TYPE_3D )
-			{
-				real l_tan = real( tan( GetFovY().Radians() / 2 ) );
-				l_nearHeight = 2 * l_tan * GetNear();
-				l_nearWidth = l_nearHeight * GetRatio();
-				l_farHeight = 2 * l_tan * GetFar();
-				l_farWidth = l_farHeight * GetRatio();
-			}
-			else if ( GetType() == eVIEWPORT_TYPE_2D )
+			if ( GetType() == eVIEWPORT_TYPE_ORTHO )
 			{
 				l_nearHeight = GetBottom() - GetTop();
 				l_nearWidth = GetRight() - GetLeft();
 				l_farHeight = l_nearHeight;
 				l_farWidth = l_nearWidth;
 			}
+			else
+			{
+				real l_tan = real( tan( GetFovY().Radians() / 2 ) );
+				l_nearHeight = 2 * l_tan * GetNear();
+				l_nearWidth = l_nearHeight * GetRatio();
+				l_farHeight = 2 * l_tan * GetFar();
+				l_farWidth = l_farHeight * GetRatio();
+			} 
 
 			// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
 			Point3r l_ptNC( l_d * GetNear() );
@@ -302,31 +310,34 @@ namespace Castor3D
 			m_planes[eFRUSTUM_PLANE_TOP].Set( l_ptNTL, l_ptFTL, l_ptFTR );
 			m_planes[eFRUSTUM_PLANE_BOTTOM].Set( l_ptNBR, l_ptFBR, l_ptFBL );
 
-			if ( m_type == eVIEWPORT_TYPE_3D )
+			switch ( m_type )
 			{
-				l_pipeline.Perspective( m_fovY, m_ratio, m_near, m_far );
-			}
-			else if ( m_type == eVIEWPORT_TYPE_2D )
-			{
-				l_pipeline.Ortho( m_left, m_right, m_bottom, m_top, m_near, m_far );
+			case Castor3D::eVIEWPORT_TYPE_ORTHO:
+				p_pipeline.Ortho( m_left, m_right, m_bottom, m_top, m_near, m_far );
+				break;
+
+			case Castor3D::eVIEWPORT_TYPE_PERSPECTIVE:
+				p_pipeline.Perspective( m_fovY, m_ratio, m_near, m_far );
+				break;
+
+			case Castor3D::eVIEWPORT_TYPE_FRUSTUM:
+				p_pipeline.Frustum( m_left, m_right, m_bottom, m_top, m_near, m_far );
+				break;
+
+			default:
+				break;
 			}
 
-			m_projection = l_pipeline.GetProjectionMatrix();
+			m_projection = p_pipeline.GetProjectionMatrix();
 			m_modified = false;
 			l_return = true;
 		}
 		else
 		{
-			l_pipeline.SetProjectionMatrix( m_projection );
+			p_pipeline.SetProjectionMatrix( m_projection );
 		}
 
-		l_pipeline.ApplyViewport( m_size.width(), m_size.height() );
+		p_pipeline.ApplyViewport( m_size.width(), m_size.height() );
 		return l_return;
-	}
-
-	void Viewport::GetDirection( Point2i const & p_ptMouse, Point3r & p_ptResult )
-	{
-		Point4r l_viewport( real( 0 ), real( 0 ), real( m_size.width() ), real( m_size.height() ) );
-		GetOwner()->GetRenderSystem()->GetPipeline().UnProject( Point3i( p_ptMouse[0], p_ptMouse[1], 1 ), l_viewport, p_ptResult );
 	}
 }

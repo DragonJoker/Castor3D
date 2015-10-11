@@ -24,6 +24,7 @@ namespace Castor3D
 		, m_pWindow( NULL )
 		, m_bInitialised( false )
 		, m_bMultiSampling( false )
+		, m_viewport( Viewport::Ortho( *GetOwner()->GetOwner(), 0, 1, 0, 1, 0, 1000 ) )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
@@ -32,12 +33,12 @@ namespace Castor3D
 		};
 		real l_pBuffer[] =
 		{
-			0,  0, 0, 0,
-			1,  1, 1, 1,
-			0,  1, 0, 1,
-			0,  0, 0, 0,
-			1,  0, 1, 0,
-			1,  1, 1, 1,
+			0, 0, 0, 0,
+			1, 1, 1, 1,
+			0, 1, 0, 1,
+			0, 0, 0, 0,
+			1, 0, 1, 0,
+			1, 1, 1, 1,
 		};
 		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
@@ -72,13 +73,6 @@ namespace Castor3D
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_pGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
-		m_viewport = std::make_shared< Viewport >( *GetOwner()->GetOwner(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
-		m_viewport->SetLeft( real( 0.0 ) );
-		m_viewport->SetRight( real( 1.0 ) );
-		m_viewport->SetTop( real( 1.0 ) );
-		m_viewport->SetBottom( real( 0.0 ) );
-		m_viewport->SetNear( real( 0.0 ) );
-		m_viewport->SetFar( real( 1.0 ) );
 		m_pDsStateBackground = GetOwner()->GetOwner()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
 		m_pDsStateBackground->SetDepthTest( false );
 		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
@@ -112,7 +106,6 @@ namespace Castor3D
 		EndCurrent();
 		DoCleanup();
 		m_pDsStateBackground.reset();
-		m_viewport.reset();
 		m_pGeometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_pBtoBShaderProgram.reset();
@@ -165,9 +158,9 @@ namespace Castor3D
 	void Context::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents )
 	{
 		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-		m_viewport->SetSize( p_size );
+		m_viewport.SetSize( p_size );
 		Clear( p_uiComponents );
-		m_viewport->Render();
+		m_viewport.Render( GetOwner()->GetPipeline() );
 		CullFace( eFACE_NONE );
 		uint32_t l_id = p_pTexture->GetIndex();
 		p_pTexture->SetIndex( 0 );

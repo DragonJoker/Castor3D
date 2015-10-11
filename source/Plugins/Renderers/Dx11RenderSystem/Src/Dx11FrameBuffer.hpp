@@ -28,64 +28,91 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxFrameBuffer
-		:	public Castor3D::FrameBuffer
+		: public Castor3D::FrameBuffer
 	{
 	private:
 		typedef std::pair< ID3D11View *, ID3D11View * > SrcDstPair;
-		DECLARE_VECTOR( SrcDstPair, 										SrcDstPair	);
-		DECLARE_MAP( Castor3D::eATTACHMENT_POINT,	DxDynamicTextureSPtr,	DxTexturePtrAttach	);
-		DECLARE_MAP( Castor3D::eATTACHMENT_POINT,	DxRenderBufferSPtr,		DxBufferPtrAttach	);
-		DECLARE_MAP( DxFrameBufferSPtr,				SrcDstPairArray,		BlitScheme	);
-		DECLARE_VECTOR( ID3D11RenderTargetView *,							D3D11RenderTargetView	);
+		DECLARE_VECTOR( SrcDstPair, SrcDstPair );
+		DECLARE_MAP( Castor3D::eATTACHMENT_POINT, DxDynamicTextureSPtr, DxTexturePtrAttach );
+		DECLARE_MAP( Castor3D::eATTACHMENT_POINT, DxRenderBufferSPtr, DxBufferPtrAttach );
+		DECLARE_MAP( DxFrameBufferSPtr, SrcDstPairArray, BlitScheme );
+		DECLARE_VECTOR( ID3D11RenderTargetView *, D3D11RenderTargetView );
 
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\para[in]		p_renderSystem	The engine.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\para[in]		p_renderSystem	Le moteur.
+		 */
 		DxFrameBuffer( DxRenderSystem * p_renderSystem );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
 		virtual ~DxFrameBuffer();
-
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::Create
+		 */
 		virtual bool Create( int p_iSamplesCount );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::Destroy
+		 */
 		virtual void Destroy();
-		virtual bool SetDrawBuffers( uint32_t p_uiSize, Castor3D::eATTACHMENT_POINT const * p_eAttaches );
-		virtual bool SetDrawBuffers();
-		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT )
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 */
+		virtual bool SetDrawBuffers( BufAttachArray const & p_attaches );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
+		 */
+		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT, uint8_t )
 		{
 			return true;
 		}
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::IsComplete
+		 */
 		virtual bool IsComplete()
 		{
 			return true;
 		}
-
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
+		 */
 		virtual Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::CreateDepthStencilRenderBuffer
+		 */
 		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );
 
 		ID3D11View * GetSurface( Castor3D::eATTACHMENT_POINT );
 
 	private:
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoBind
+		 */
 		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
+		 */
 		virtual void DoUnbind();
-		virtual void DoAttach( Castor3D::TextureAttachmentRPtr p_pAttach )
-		{
-			return DoAttachFba( p_pAttach );
-		}
-		virtual void DoDetach( Castor3D::TextureAttachmentRPtr p_pAttach )
-		{
-			return DoDetachFba( p_pAttach );
-		}
-		virtual void DoAttach( Castor3D::RenderBufferAttachmentRPtr p_pAttach )
-		{
-			return DoAttachFba( p_pAttach );
-		}
-		virtual void DoDetach( Castor3D::RenderBufferAttachmentRPtr p_pAttach )
-		{
-			return DoDetachFba( p_pAttach );
-		}
-		virtual void DoAttachFba( Castor3D::FrameBufferAttachmentRPtr p_pAttach );
-		virtual void DoDetachFba( Castor3D::FrameBufferAttachmentRPtr p_pAttach );
-		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_eAttachment, Castor3D::DynamicTextureSPtr p_pTexture, Castor3D::eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 );
-		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_eAttachment, Castor3D::RenderBufferSPtr p_pRenderBuffer );
-		virtual void DoDetachAll();
-		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
-		void DoCleanupOld();
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoAttach
+		 */
+		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_attachment, uint8_t p_index, Castor3D::TextureAttachmentSPtr p_texture, Castor3D::eTEXTURE_TARGET p_target, int p_layer = 0 );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoAttach
+		 */
+		virtual bool DoAttach( Castor3D::eATTACHMENT_POINT p_attachment, uint8_t p_index, Castor3D::RenderBufferAttachmentSPtr p_renderBuffer );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
+		 */
+		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
 
 	private:
 		DxRenderSystem * m_renderSystem;

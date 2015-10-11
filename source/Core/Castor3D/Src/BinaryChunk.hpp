@@ -177,7 +177,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base d'un chunk de données binaires
 	*/
-	class C3D_API BinaryChunk
+	class BinaryChunk
 	{
 	public:
 		/**
@@ -186,7 +186,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		BinaryChunk();
+		C3D_API BinaryChunk();
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -195,14 +195,14 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_type		Le type du chunk
 		 */
-		BinaryChunk( eCHUNK_TYPE p_type );
+		C3D_API BinaryChunk( eCHUNK_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Computes the final data buffer from each one added until this call
 		 *\~french
 		 *\brief		Crée le tampon final à partir de tout ce qui a été ajouté jusqu'à cet appel
 		 */
-		void Finalise();
+		C3D_API void Finalise();
 		/**
 		 *\~english
 		 *\brief		Adds data to the chunk
@@ -213,7 +213,7 @@ namespace Castor3D
 		 *\param[in]	p_data	Le tampon de données
 		 *\param[in]	p_size	La taille du tampon
 		 */
-		void Add( uint8_t * p_data, uint32_t p_size );
+		C3D_API void Add( uint8_t * p_data, uint32_t p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves data from the chunk
@@ -224,7 +224,7 @@ namespace Castor3D
 		 *\param[in]	p_data	Le tampon de données à remplir
 		 *\param[in]	p_size	La taille du tampon
 		 */
-		void Get( uint8_t * p_data, uint32_t p_size );
+		C3D_API void Get( uint8_t * p_data, uint32_t p_size );
 		/**
 		 *\~english
 		 *\brief		Checks that the remaining place can hold the given size
@@ -233,7 +233,7 @@ namespace Castor3D
 		 *\brief		Vérifie que la place restante peut contenir la taille donnée
 		 *\param[in]	p_size	La taille
 		 */
-		bool CheckAvailable( uint32_t p_size = 0 )const;
+		C3D_API bool CheckAvailable( uint32_t p_size = 0 )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the remaining place
@@ -242,19 +242,7 @@ namespace Castor3D
 		 *\brief		Récupère la place restante
 		 *\return		La valeur
 		 */
-		uint32_t GetRemaining()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the remaining data
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le tampon restant
-		 *\return		La valeur
-		 */
-		uint8_t const * GetRemainingData()const
-		{
-			return &m_pData[m_uiIndex];
-		}
+		C3D_API uint32_t GetRemaining()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a subchunk
@@ -265,7 +253,7 @@ namespace Castor3D
 		 *\param[out]	p_subchunk	Reçoit le sous chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool GetSubChunk( BinaryChunk & p_subchunk );
+		C3D_API bool GetSubChunk( BinaryChunk & p_subchunk );
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk into a chunk
@@ -276,7 +264,45 @@ namespace Castor3D
 		 *\param[in]	p_subchunk	Le subchunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool AddSubChunk( BinaryChunk const & p_subchunk );
+		C3D_API bool AddSubChunk( BinaryChunk const & p_subchunk );
+		/**
+		*\~english
+		*\brief		To chunk writer function
+		*\param[in]	p_obj	The object to write
+		*\param[in]	p_file	The file
+		*\return		\p false if any error occured
+		*\~french
+		*\brief		Fonction d'écriture dans un fichier
+		*\param[in]	p_obj	L'objet à écrire
+		*\param[in]	p_file	Le fichier
+		*\return		\p false si une erreur quelconque est arrivée
+		*/
+		C3D_API bool Write( Castor::BinaryFile & p_file );
+		/**
+		*\~english
+		*\brief		From file reader function
+		*\param[out]	p_obj	The object to read
+		*\param[in]	p_file	The file containing the chunk
+		*\return		\p false if any error occured
+		*\~french
+		*\brief		Fonction de lecture à partir d'un fichier
+		*\param[out]	p_obj	L'objet à lire
+		*\param[in]	p_file	Le fichier qui contient le chunk
+		*\return		\p false si une erreur quelconque est arrivée
+		*/
+		C3D_API bool Read( Castor::BinaryFile & p_file );
+		/**
+		 *\~english
+		 *\brief		Retrieves the remaining data
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le tampon restant
+		 *\return		La valeur
+		 */
+		inline uint8_t const * GetRemainingData()const
+		{
+			return &m_pData[m_uiIndex];
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the chunk type
@@ -285,7 +311,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de chunk
 		 *\return		La valeur
 		 */
-		eCHUNK_TYPE GetChunkType()const
+		inline eCHUNK_TYPE GetChunkType()const
 		{
 			return m_eChunkType;
 		}
@@ -297,7 +323,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille des données du chunk
 		 *\return		La valeur
 		 */
-		uint32_t GetDataSize()const
+		inline uint32_t GetDataSize()const
 		{
 			return uint32_t( m_pData.size() );
 		}
@@ -309,7 +335,7 @@ namespace Castor3D
 		 *\brief		Récupère les données du chunk
 		 *\return		La valeur
 		 */
-		uint8_t const * GetData()const
+		inline uint8_t const * GetData()const
 		{
 			return m_pData.data();
 		}
@@ -336,36 +362,10 @@ namespace Castor3D
 		{
 			m_uiIndex = uint32_t( m_pData.size() );
 		}
-		/**
-		 *\~english
-		 *\brief		To chunk writer function
-		 *\param[in]	p_obj	The object to write
-		 *\param[in]	p_file	The file
-		 *\return		\p false if any error occured
-		 *\~french
-		 *\brief		Fonction d'écriture dans un fichier
-		 *\param[in]	p_obj	L'objet à écrire
-		 *\param[in]	p_file	Le fichier
-		 *\return		\p false si une erreur quelconque est arrivée
-		 */
-		bool Write( Castor::BinaryFile & p_file );
-		/**
-		 *\~english
-		 *\brief		From file reader function
-		 *\param[out]	p_obj	The object to read
-		 *\param[in]	p_file	The file containing the chunk
-		 *\return		\p false if any error occured
-		 *\~french
-		 *\brief		Fonction de lecture à partir d'un fichier
-		 *\param[out]	p_obj	L'objet à lire
-		 *\param[in]	p_file	Le fichier qui contient le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
-		 */
-		bool Read( Castor::BinaryFile & p_file );
 
 	private:
 		template< typename T >
-		bool DoRead( T * p_values, uint32_t p_count )
+		inline bool DoRead( T * p_values, uint32_t p_count )
 		{
 			uint32_t l_size = p_count * uint32_t( sizeof( T ) );
 			bool l_return = m_uiIndex + l_size < m_pData.size();

@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Classe de gestion de version
 	\remark		Classe utilisee pour gerer les versions et dependances de version pour les plugins
 	*/
-	class C3D_API Version
+	class Version
 	{
 	public:
 		/**
@@ -50,7 +50,7 @@ namespace Castor3D
 		 *\param[in]	p_iMinor	Le numéro mineur
 		 *\param[in]	p_iBuild	Le numéro de build
 		 */
-		Version( int p_iMajor = CASTOR_VERSION_MAJOR, int p_iMinor = CASTOR_VERSION_MINOR, int p_iBuild = CASTOR_VERSION_BUILD );
+		C3D_API Version( int p_iMajor = CASTOR_VERSION_MAJOR, int p_iMinor = CASTOR_VERSION_MINOR, int p_iBuild = CASTOR_VERSION_BUILD );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -59,7 +59,7 @@ namespace Castor3D
 		 *\brief		Constructeur par recopie
 		 *\param[in]	p_version	La source
 		 */
-		Version( Version const & p_version );
+		C3D_API Version( Version const & p_version );
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -68,14 +68,14 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_version	La source
 		 */
-		Version( Version && p_version );
+		C3D_API Version( Version && p_version );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Version();
+		C3D_API ~Version();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\param[in]	p_version	La source
 		 *\return		Une référence sur cet objet
 		 */
-		Version & operator=( Version const & p_version );
+		C3D_API Version & operator=( Version const & p_version );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -97,7 +97,7 @@ namespace Castor3D
 		 *\param[in]	p_version	La source
 		 *\return		Une référence sur cet objet
 		 */
-		Version & operator=( Version && p_version );
+		C3D_API Version & operator=( Version && p_version );
 
 	public:
 		//!~english The major version number	\~french Le numéro majeur

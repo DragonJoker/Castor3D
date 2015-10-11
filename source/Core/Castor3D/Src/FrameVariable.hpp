@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Représentation d'une variable de shader
 	\remark		Il s'agit d'une variable donnée à un shader au cours de son exécution
 	*/
-	class C3D_API FrameVariable
+	class FrameVariable
 	{
 	public:
 		/*!
@@ -47,7 +47,9 @@ namespace Castor3D
 		\~french
 		\brief		Loader de FrameVariable
 		*/
-		class C3D_API TextLoader : public Castor::Loader< FrameVariable, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< FrameVariable, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -56,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a FrameVariable into a text file
@@ -67,7 +69,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_variable	La FrameVariable
 			 */
-			virtual bool operator()( FrameVariable const & p_variable, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( FrameVariable const & p_variable, Castor::TextFile & p_file );
 		};
 
 	public:
@@ -77,7 +79,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		FrameVariable( ShaderProgramBase * p_pProgram );
+		C3D_API FrameVariable( ShaderProgramBase * p_pProgram );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -86,7 +88,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_uiOcc		Les dimensions du tableau
 		 */
-		FrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc );
+		C3D_API FrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -95,7 +97,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_object	L'objet à copier
 		 */
-		FrameVariable( FrameVariable const & p_object );
+		C3D_API FrameVariable( FrameVariable const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -104,7 +106,7 @@ namespace Castor3D
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_object	L'objet à déplacer
 		 */
-		FrameVariable( FrameVariable && p_object );
+		C3D_API FrameVariable( FrameVariable && p_object );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -115,7 +117,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		FrameVariable & operator =( FrameVariable const & p_object );
+		C3D_API FrameVariable & operator=( FrameVariable const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -126,14 +128,14 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		FrameVariable & operator =( FrameVariable && p_object );
+		C3D_API FrameVariable & operator=( FrameVariable && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FrameVariable();
+		C3D_API virtual ~FrameVariable();
 		/**
 		 *\~english
 		 *\brief		Initialises the variable
@@ -142,28 +144,28 @@ namespace Castor3D
 		 *\brief		Initialise la variable
 		 *\return		\p false if any problem occured
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans up the variable
 		 *\~french
 		 *\brief		Nettoie la variable
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Binds this variable to the shader
 		 *\~french
 		 *\brief		Lie cette variable au shader
 		 */
-		virtual void Bind() = 0;
+		C3D_API virtual void Bind() = 0;
 		/**
 		 *\~english
 		 *\brief		Unbinds this variable from the shader
 		 *\~french
 		 *\brief		Délie cette variable du shader
 		 */
-		virtual void Unbind() = 0;
+		C3D_API virtual void Unbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the variable full type
@@ -172,7 +174,7 @@ namespace Castor3D
 		 *\brief		Donne le type complet de la variable
 		 *\return		Le type
 		 */
-		virtual eFRAME_VARIABLE_TYPE GetFullType()const = 0;
+		C3D_API virtual eFRAME_VARIABLE_TYPE GetFullType()const = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the variable dimension
@@ -181,7 +183,7 @@ namespace Castor3D
 		 *\brief		Donne la dimension de la variable
 		 *\return		La dimension
 		 */
-		virtual eVARIABLE_TYPE GetType()const = 0;
+		C3D_API virtual eVARIABLE_TYPE GetType()const = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the variable full type name
@@ -190,7 +192,7 @@ namespace Castor3D
 		 *\brief		Donne le nom du type complet de la variable
 		 *\return		Le type
 		 */
-		virtual Castor::String GetFullTypeName()const = 0;
+		C3D_API virtual Castor::String GetFullTypeName()const = 0;
 		/**
 		 *\~english
 		 *\brief		Gives the variable data type name
@@ -199,7 +201,7 @@ namespace Castor3D
 		 *\brief		Donne le nom du type de données de la variable
 		 *\return		Le nom du type de données
 		 */
-		virtual Castor::String GetDataTypeName()const = 0;
+		C3D_API virtual Castor::String GetDataTypeName()const = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
@@ -208,7 +210,7 @@ namespace Castor3D
 		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
 		 *\param[in]	p_strValue	La chaîne contenant la valeur
 		 */
-		virtual void SetValueStr( Castor::String const & p_strValue );
+		C3D_API virtual void SetValueStr( Castor::String const & p_strValue );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
@@ -219,7 +221,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de la valeur
 		 *\param[in]	p_strValue	La chaîne contenant la valeur
 		 */
-		virtual void SetValueStr( Castor::String const & p_strValue, uint32_t p_index );
+		C3D_API virtual void SetValueStr( Castor::String const & p_strValue, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the name of the variable, as it appears in the shader program
@@ -336,7 +338,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de la valeur
 		 *\param[in]	p_strValue	La chaîne contenant la valeur
 		 */
-		virtual void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index ) = 0;
+		C3D_API virtual void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index ) = 0;
 
 	protected:
 		//!\~english The variable name as it appears in the shader program	\~french Le nom de la variable tel qu'il apparaît dans le shader
@@ -372,7 +374,7 @@ namespace Castor3D
 	*/
 	template< typename T >
 	class TFrameVariable
-		:	public FrameVariable
+		: public FrameVariable
 	{
 	public:
 		/**

@@ -37,7 +37,7 @@ namespace Castor3D
 	\remarks	Contient toutes les données et méthodes pour mettre à jour et afficher les incrustations de débogage.
 				<br />Si non affichés, toutes les méthodes seront désactivées.
 	*/
-	class C3D_API DebugOverlays
+	class DebugOverlays
 	{
 	public:
 		/**

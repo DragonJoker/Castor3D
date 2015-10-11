@@ -851,8 +851,8 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	if ( l_bReturn )
 	{
-		l_bReturn &= m_pColorAttach->Attach( eATTACHMENT_POINT_COLOUR0, m_pFrameBuffer, eTEXTURE_TARGET_2D );
-		l_bReturn &= m_pDepthAttach->Attach( eATTACHMENT_POINT_DEPTH, m_pFrameBuffer );
+		l_bReturn &= m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pColorAttach, eTEXTURE_TARGET_2D );
+		l_bReturn &= m_pFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
 		m_pFrameBuffer->Unbind();
 	}
 
@@ -960,7 +960,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	for ( int i = 0; i < 5; ++i )
 	{
 		m_arrayFftAttaches.push_back( m_pRenderTarget->CreateAttachment( m_pTexFFTA ) );
-		m_arrayFftAttaches[i]->Attach( eATTACHMENT_POINT( eATTACHMENT_POINT_COLOUR0 + i ), m_fftFbo1, eTEXTURE_TARGET_LAYER, i );
+		m_fftFbo1->Attach( eATTACHMENT_POINT_COLOUR, i, m_arrayFftAttaches[i], eTEXTURE_TARGET_LAYER, i );
 	}
 
 	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
@@ -968,8 +968,8 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	CASTOR_ASSERT( m_fftFbo1->IsComplete() );
 	m_fftFbo1->Unbind();
 	m_fftFbo2->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_pAttachFftA->Attach( eATTACHMENT_POINT_COLOUR0, m_fftFbo2, eTEXTURE_TARGET_2D );
-	m_pAttachFftB->Attach( eATTACHMENT_POINT_COLOUR1, m_fftFbo2, eTEXTURE_TARGET_2D );
+	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pAttachFftA, eTEXTURE_TARGET_2D );
+	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 1, m_pAttachFftB, eTEXTURE_TARGET_2D );
 	CASTOR_ASSERT( m_fftFbo2->IsComplete() );
 	m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo2->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
@@ -981,8 +981,8 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexWave->SetSampler( m_pSamplerNearestClamp );
 #endif
 	m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_fbo->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
-	m_pAttachSky->Attach( eATTACHMENT_POINT_COLOUR0, m_fbo, eTEXTURE_TARGET_2D );
+	//m_fbo->SetDrawBuffer( eATTACHMENT_POINT_COLOUR );
+	m_fbo->Attach( eATTACHMENT_POINT_COLOUR, m_pAttachSky, eTEXTURE_TARGET_2D );
 	CASTOR_ASSERT( m_fbo->IsComplete() );
 	m_fbo->Unbind();
 	generateMesh();
@@ -1004,7 +1004,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		TextureAttachmentSPtr l_pAttach = m_pRenderTarget->CreateAttachment( m_pTexSlopeVariance );
 		m_arrayVarianceAttaches.push_back( l_pAttach );
-		l_pAttach->Attach( eATTACHMENT_POINT_COLOUR0, m_variancesFbo, eTEXTURE_TARGET_3D, layer );
+		m_variancesFbo->Attach( eATTACHMENT_POINT_COLOUR, l_pAttach, eTEXTURE_TARGET_3D, layer );
 	}
 
 	CASTOR_ASSERT( m_variancesFbo->IsComplete() );

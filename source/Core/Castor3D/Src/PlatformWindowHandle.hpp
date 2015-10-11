@@ -47,7 +47,8 @@ namespace Castor3D
 
 #if defined( _WIN32 )
 
-	class IMswWindowHandle : public IWindowHandle
+	class IMswWindowHandle
+		: public IWindowHandle
 	{
 	private:
 		HWND m_hWnd;
@@ -103,7 +104,8 @@ namespace Castor3D
 
 #elif defined( __linux__ )
 
-	class IXWindowHandle : public IWindowHandle
+	class IXWindowHandle
+		: public IWindowHandle
 	{
 	private:
 		GLXDrawable m_drawable;

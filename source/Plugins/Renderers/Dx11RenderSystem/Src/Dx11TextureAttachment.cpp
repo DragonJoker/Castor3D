@@ -25,25 +25,17 @@ namespace Dx11Render
 	bool DxTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
 	{
 		bool l_return = false;
-		ID3D11RenderTargetView * l_pSurface = m_pDxTexture.lock()->GetRenderTargetView();
+		DxDynamicTextureSPtr l_texture = m_pDxTexture.lock();
 
-		if ( l_pSurface )
+		if ( l_texture )
 		{
-			ID3D11Resource * l_pResource = NULL;
-			l_pSurface->GetResource( &l_pResource );
+			uint8_t * l_buffer = l_texture->Lock( eLOCK_FLAG_READ_ONLY );
 
-			if ( l_pResource )
+			if( l_buffer )
 			{
-				ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-				D3D11_MAPPED_SUBRESOURCE l_mappedResource;
-				HRESULT l_hr = l_pDeviceContext->Map( l_pResource, 0, D3D11_MAP_READ, 0, &l_mappedResource );
-		
-				if( l_hr == S_OK && l_mappedResource.pData != NULL )
-				{
-					l_return = true;
-					std::memcpy( p_pBuffer->ptr(), l_mappedResource.pData, p_pBuffer->size() );
-					l_pDeviceContext->Unmap( l_pResource, 0 );
-				}
+				l_return = true;
+				std::memcpy( p_pBuffer->ptr(), l_buffer, p_pBuffer->size() );
+				l_texture->Unlock( false );
 			}
 		}
 
@@ -85,9 +77,9 @@ namespace Dx11Render
 		//	return m_pDxTexture.lock()->GetDxSurface();
 	}
 
-	bool DxTextureAttachment::DoAttach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
+	bool DxTextureAttachment::DoAttach( FrameBufferSPtr p_pFrameBuffer )
 	{
-		m_dwAttachment = DirectX11::Get( p_eAttachment );
+		m_dwAttachment = DirectX11::Get( GetAttachmentPoint() ) + GetAttachmentIndex();
 		m_pFrameBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pFrameBuffer );
 		return true;
 	}
