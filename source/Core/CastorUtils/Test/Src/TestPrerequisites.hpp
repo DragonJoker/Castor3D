@@ -19,11 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CUT_TestPrerequisites___
 
 #if defined( _WIN32 )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
 #	include <process.h>
-#	pragma warning( pop )
 #else
 #	include <sys/types.h>
 #	include <unistd.h>

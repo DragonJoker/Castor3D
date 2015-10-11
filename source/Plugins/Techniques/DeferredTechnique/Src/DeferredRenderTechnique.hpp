@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <RenderTechnique.hpp>
 #include <Viewport.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 #ifndef _WIN32
 #	define C3D_DeferredTechnique_API
 #else
@@ -299,7 +295,5 @@ namespace Deferred
 		Castor3D::DepthStencilStateSPtr m_lightPassDsState;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

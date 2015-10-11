@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-
 #	include <string>
 
 #	include <PreciseTimer.hpp>
@@ -88,8 +84,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 using Castor3D::real;
 
 #	include "Dx11RenderSystemPrerequisites.hpp"
-
-#	pragma warning( pop )
 #endif
 
 #endif

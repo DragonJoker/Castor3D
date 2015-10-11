@@ -141,10 +141,8 @@ namespace Castor3D
 		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
 		l_pBlendState->Cleanup();
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_pColorAttach->Detach();
-		m_pDepthAttach->Detach();
+		m_pFrameBuffer->DetachAll();
 		m_pFrameBuffer->Unbind();
-		//m_pFrameBuffer->DetachAll();
 		m_pColorBuffer->Cleanup();
 		m_pDepthBuffer->Cleanup();
 		m_sampler->Cleanup();

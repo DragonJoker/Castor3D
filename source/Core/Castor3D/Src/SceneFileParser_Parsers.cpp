@@ -46,11 +46,6 @@
 #include <Font.hpp>
 #include <Logger.hpp>
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4100 )
-#endif
-
 using namespace Castor3D;
 using namespace Castor;
 
@@ -3396,7 +3391,3 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 	}
 }
 END_ATTRIBUTE()
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif

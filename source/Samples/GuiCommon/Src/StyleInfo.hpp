@@ -18,9 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_STYLE_INFO_H___
 #define ___GUICOMMON_STYLE_INFO_H___
 
-#pragma warning( push )
-#pragma warning( disable:4996 )
-
 #include "GuiCommonPrerequisites.hpp"
 
 namespace GuiCommon

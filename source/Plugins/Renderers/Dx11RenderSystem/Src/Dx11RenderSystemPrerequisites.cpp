@@ -6,7 +6,7 @@ using namespace Castor3D;
 using namespace Castor;
 using namespace Dx11Render;
 
-#if defined __GNUG__
+#if !defined _MSC_VER
 #	ifdef DEFINE_GUID
 #		undef DEFINE_GUID
 #	endif

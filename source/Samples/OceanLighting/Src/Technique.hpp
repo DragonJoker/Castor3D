@@ -1,12 +1,6 @@
 #ifndef ___C3D_OCEAN_LIGHTING_TECHNIQUE_H___
 #define ___C3D_OCEAN_LIGHTING_TECHNIQUE_H___
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
 #include <Castor3DPrerequisites.hpp>
 #include <Buffer.hpp>
 #include <Context.hpp>
@@ -22,10 +16,6 @@
 #include <Texture.hpp>
 #include <Vertex.hpp>
 #include <BlendState.hpp>
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
 
 #define ENABLE_FFT	0
 

@@ -332,8 +332,7 @@ namespace Castor3D
 	void RenderTarget::stFRAME_BUFFER::Cleanup()
 	{
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_pColorAttach->Detach();
-		m_pDepthAttach->Detach();
+		m_pFrameBuffer->DetachAll();
 		m_pFrameBuffer->Unbind();
 		m_pColorTexture->Cleanup();
 		m_pDepthBuffer->Cleanup();

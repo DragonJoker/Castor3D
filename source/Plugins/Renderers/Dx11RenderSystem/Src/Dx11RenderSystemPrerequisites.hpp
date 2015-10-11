@@ -18,14 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___DX11_RENDER_SYSTEM_PREREQUISITES_H___
 #define ___DX11_RENDER_SYSTEM_PREREQUISITES_H___
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4005 )	// Redéfinition de macrao
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
-#if defined __GNUG__
+#if !defined _MSC_VER
 #   define __in
 #   define __inout
 #   define __out
@@ -73,6 +66,11 @@ typedef uint8_t UINT8;
 
 #include <Castor3DPrerequisites.hpp>
 
+#if defined( _MSC_VER )
+#	pragma warning( push )
+#	pragma warning( disable:4005 )	// macro redefinition
+#endif
+
 #include <Windows.h>
 #include <initguid.h>
 #include <D3Dcommon.h>
@@ -80,9 +78,13 @@ typedef uint8_t UINT8;
 #include <D3dx11.h>
 #include <DXGI.h>
 
+#if defined( _MSC_VER )
+#	pragma warning( pop )
+#endif
+
 #include <cstdint>
 
-#if defined __GNUG__
+#if !defined _MSC_VER
 
 #	ifndef __uuidof
 #		define __uuidof(x) IID_##x
@@ -145,8 +147,6 @@ DECLARE_GUID( IID_IDXGIFactory,					0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9
 #else
 #	define C3D_Dx11_API
 #endif
-
-#pragma warning( disable:4996 )
 
 #	if !defined( NDEBUG )
 #		define dxCheckError( hr, txt ) Dx11Render::DirectX11::CheckError( hr, cuT( txt ) )
@@ -432,9 +432,5 @@ namespace Dx11Render
 		}
 	}
 }
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
 
 #endif

@@ -46,134 +46,12 @@ namespace ShaderModel1_2_3_4
 		cuT( "SamplerState diffuseSampler: register( s0 );\n" )
 		cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
 		cuT( "{\n" )
-		cuT( "	return float4( p_input.TextureUV.xy, 0.0, 1.0 );//diffuseTexture.Sample( diffuseSampler, p_input.TextureUV );\n" )
+		cuT( "	return diffuseTexture.Sample( diffuseSampler, p_input.TextureUV );\n" )
 		cuT( "}\n" );
 }
 
 namespace Dx11Render
 {
-	namespace
-	{
-		struct VertexType
-		{
-			D3DXVECTOR2 position;
-			D3DXVECTOR2 texture;
-		};
-
-		// Set the number of vertices in the vertex array.
-		const uint32_t g_vertexCount = 4;
-
-		// Set the number of indices in the index array.
-		const uint32_t g_indexCount = 6;
-
-		// Create the vertex array.
-		VertexType g_vertices[g_vertexCount];
-
-		// Create the index array.
-		unsigned long g_indices[g_indexCount];
-
-		ID3D11Buffer * g_vertexBuffer;
-		ID3D11Buffer * g_indexBuffer;
-
-		void DoInitialiseModel( ID3D11Device * p_device )
-		{
-			try
-			{
-				D3D11_BUFFER_DESC vertexBufferDesc, indexBufferDesc;
-				D3D11_SUBRESOURCE_DATA vertexData, indexData;
-				HRESULT result;
-
-				// Load the vertex array with data.
-				g_vertices[0].position = D3DXVECTOR2( 0.25f, 0.25f );  // Bottom left.
-				g_vertices[0].texture = D3DXVECTOR2( 0.0f, 0.0f );
-
-				g_vertices[1].position = D3DXVECTOR2( 0.25f, 0.75f );  // Top left.
-				g_vertices[1].texture = D3DXVECTOR2( 0.0f, 1.0f );
-
-				g_vertices[2].position = D3DXVECTOR2( 0.75f, 0.75f );  // Top right.
-				g_vertices[2].texture = D3DXVECTOR2( 1.0f, 1.0f );
-
-				g_vertices[2].position = D3DXVECTOR2( 0.75f, 0.25f );  // Bottom right.
-				g_vertices[2].texture = D3DXVECTOR2( 1.0f, 0.0f );
-
-				// Load the index array with data.
-				g_indices[0] = 0;  // Bottom left.
-				g_indices[1] = 1;  // Top left.
-				g_indices[2] = 2;  // Top right.
-				g_indices[0] = 0;  // Bottom left.
-				g_indices[2] = 2;  // Top right.
-				g_indices[3] = 3;  // BottomRight.
-
-				// Set up the description of the static vertex buffer.
-				vertexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-				vertexBufferDesc.ByteWidth = sizeof( VertexType ) * g_vertexCount;
-				vertexBufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-				vertexBufferDesc.CPUAccessFlags = 0;
-				vertexBufferDesc.MiscFlags = 0;
-				vertexBufferDesc.StructureByteStride = 0;
-
-				// Give the subresource structure a pointer to the vertex data.
-				vertexData.pSysMem = g_vertices;
-				vertexData.SysMemPitch = 0;
-				vertexData.SysMemSlicePitch = 0;
-
-				// Now create the vertex buffer.
-				result = p_device->CreateBuffer( &vertexBufferDesc, &vertexData, &g_vertexBuffer );
-				if ( FAILED( result ) )
-				{
-					throw std::runtime_error( "CreateBuffer(m_vertexBuffer) failed" );
-				}
-
-				// Set up the description of the static index buffer.
-				indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-				indexBufferDesc.ByteWidth = sizeof( unsigned long ) * g_indexCount;
-				indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-				indexBufferDesc.CPUAccessFlags = 0;
-				indexBufferDesc.MiscFlags = 0;
-				indexBufferDesc.StructureByteStride = 0;
-
-				// Give the subresource structure a pointer to the index data.
-				indexData.pSysMem = g_indices;
-				indexData.SysMemPitch = 0;
-				indexData.SysMemSlicePitch = 0;
-
-				// Create the index buffer.
-				result = p_device->CreateBuffer( &indexBufferDesc, &indexData, &g_indexBuffer );
-
-				if ( FAILED( result ) )
-				{
-					throw std::runtime_error( "CreateBuffer(m_indexBuffer) failed" );
-				}
-			}
-			catch ( std::exception & )
-			{
-				throw;
-			}
-		}
-
-		void DoRenderModel( ID3D11DeviceContext * p_context )
-		{
-			// Set vertex buffer stride and offset.
-			unsigned int stride = sizeof( VertexType );
-			unsigned int offset = 0;
-
-			// Set the vertex buffer to active in the input assembler so it can be rendered.
-			p_context->IASetVertexBuffers( 0, 1, &g_vertexBuffer, &stride, &offset );
-
-			// Set the index buffer to active in the input assembler so it can be rendered.
-			p_context->IASetIndexBuffer( g_indexBuffer, DXGI_FORMAT_R32_UINT, 0 );
-
-			// Set the type of primitive that should be rendered from this vertex buffer, in this case triangles.
-			p_context->IASetPrimitiveTopology( D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST );
-		}
-
-		void DoCleanupModel()
-		{
-			SafeRelease( g_vertexBuffer );
-			SafeRelease( g_indexBuffer );
-		}
-	}
-
 	DxContext::DxContext( DxRenderSystem & p_renderSystem )
 		: Context( p_renderSystem )
 		, m_pSwapChain( NULL )
@@ -225,7 +103,6 @@ namespace Dx11Render
 		if ( p_pTexture->BindAt( 0 ) )
 		{
 			m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, m_arrayVertex.size(), 0 );
-			DoRenderModel( m_pDeviceContext );
 			p_pTexture->UnbindFrom( 0 );
 		}
 
@@ -264,8 +141,6 @@ namespace Dx11Render
 				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, l_vtxShader.str() );
 				l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
 			}
-
-			DoInitialiseModel( l_renderSystem->GetDevice() );
 		}
 
 		return m_bInitialised;
@@ -273,7 +148,6 @@ namespace Dx11Render
 
 	void DxContext::DoCleanup()
 	{
-		DoCleanupModel();
 		DoFreeVolatileResources();
 	}
 
@@ -281,7 +155,6 @@ namespace Dx11Render
 	{
 		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
 		dxTrack( static_cast< DxRenderSystem * >( GetOwner() ), m_pDeviceContext, D3D11DeviceContext );
-		m_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
 	}
 
 	void DxContext::DoEndCurrent()
@@ -302,19 +175,6 @@ namespace Dx11Render
 				m_pSwapChain->Present( 0, 0 );
 			}
 		}
-
-#if DX_DEBUG_RT
-
-		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
-		ID3D11Resource * l_pResource;
-		m_pRenderTargetView->GetResource( &l_pResource );
-		Castor::StringStream l_name;
-		l_name << Castor3D::Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )m_pRenderTargetView << cuT( "_SRV.png" );
-		D3DX11SaveTextureToFile( m_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
-		l_pResource->Release();
-		SafeRelease( m_pDeviceContext );
-
-#endif
 	}
 
 	void DxContext::DoSetClearColour( Colour const & p_clrClear )
@@ -386,19 +246,19 @@ namespace Dx11Render
 			HRESULT l_hr = l_factory->CreateSwapChain( l_renderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
 			dxTrack( l_renderSystem, m_pSwapChain, SwapChain );
 			l_factory->Release();
-			bool l_bContinue = dxCheckError( l_hr, "CreateSwapChain" );
+			bool l_bContinue = dxCheckError( l_hr, "IDXGIFactory::CreateSwapChain" );
 
 			if ( l_bContinue )
 			{
 				l_hr = m_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), reinterpret_cast< void ** >( &l_pRTTex ) );
-				l_bContinue = dxCheckError( l_hr, "SwapChain::GetBuffer" );
+				l_bContinue = dxCheckError( l_hr, "IDXGISwapChain::GetBuffer" );
 			}
 
 			if ( l_bContinue )
 			{
-				l_hr = l_renderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, NULL, &m_pRenderTargetView );
+				l_hr = l_renderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, nullptr, &m_pRenderTargetView );
 				dxTrack( l_renderSystem, m_pRenderTargetView, ContextRTView );
-				l_bContinue = dxCheckError( l_hr, "CreateRenderTargetView" );
+				l_bContinue = dxCheckError( l_hr, "ID3D11Device::CreateRenderTargetView" );
 				l_pRTTex->Release();
 			}
 
@@ -417,8 +277,8 @@ namespace Dx11Render
 				l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 				l_descDepth.CPUAccessFlags = 0;
 				l_descDepth.MiscFlags = 0;
-				l_hr = l_renderSystem->GetDevice()->CreateTexture2D( &l_descDepth, NULL, &l_pDSTex );
-				l_bContinue = dxCheckError( l_hr, "CreateTexture2D" );
+				l_hr = l_renderSystem->GetDevice()->CreateTexture2D( &l_descDepth, nullptr, &l_pDSTex );
+				l_bContinue = dxCheckError( l_hr, "ID3D11Device::CreateTexture2D" );
 			}
 
 			if ( l_bContinue )
@@ -430,7 +290,7 @@ namespace Dx11Render
 				l_descDSV.Texture2D.MipSlice = 0;
 				l_hr = l_renderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
 				dxTrack( l_renderSystem, m_pDepthStencilView, ContextDSView );
-				l_bContinue = dxCheckError( l_hr, "CreateDepthStencilView" );
+				l_bContinue = dxCheckError( l_hr, "ID3D11Device::CreateDepthStencilView" );
 				l_pDSTex->Release();
 			}
 
@@ -439,7 +299,7 @@ namespace Dx11Render
 				ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
 				l_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
 				l_pDeviceContext->Release();
-				dxCheckError( l_hr, "OMSetRenderTargets" );
+				dxCheckError( l_hr, "ID3D11DeviceContext::OMSetRenderTargets" );
 			}
 		}
 

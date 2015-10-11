@@ -526,13 +526,7 @@ namespace Deferred
 		m_pGeometryBuffers->Cleanup();
 		m_lightPassShaderProgram->Cleanup();
 		m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-
-		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
-		{
-			m_lightPassTexAttachs[i]->Detach();
-		}
-
-		m_lightPassDepthAttach->Detach();
+		m_lightPassFrameBuffer->DetachAll();
 		m_lightPassFrameBuffer->Unbind();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )

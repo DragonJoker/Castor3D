@@ -4,8 +4,6 @@
 #include <TransformationMatrix.hpp>
 #include <StreamIndentManipulators.hpp>
 
-#pragma warning( disable:4996 )
-
 #if defined( CASTOR_USE_GLM )
 #	define GLM_FORCE_RADIANS
 #	include <glm/glm.hpp>

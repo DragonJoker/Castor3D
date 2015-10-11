@@ -18,9 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_LANGUAGE_INFO_H___
 #define ___GUICOMMON_LANGUAGE_INFO_H___
 
-#pragma warning( push )
-#pragma warning( disable:4996 )
-
 #include "GuiCommonPrerequisites.hpp"
 
 #include <wx/stc/stc.h>

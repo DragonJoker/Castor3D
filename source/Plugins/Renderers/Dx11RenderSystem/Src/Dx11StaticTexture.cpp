@@ -7,9 +7,6 @@
 using namespace Castor;
 using namespace Castor3D;
 
-#pragma warning( push)
-#pragma warning( disable:4996)
-
 namespace Dx11Render
 {
 	DxStaticTexture::DxStaticTexture( DxRenderSystem & p_renderSystem )
@@ -145,5 +142,3 @@ namespace Dx11Render
 		p_tex2dData.SysMemPitch = UINT( m_pPixelBuffer->size() / m_pPixelBuffer->height() );
 	}
 }
-
-#pragma warning( pop)

@@ -272,8 +272,7 @@ namespace Msaa
 		if ( m_iSamplesCount )
 		{
 			m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-			m_pMsColorAttach->Detach();
-			m_pMsDepthAttach->Detach();
+			m_pMsFrameBuffer->DetachAll();
 			m_pMsFrameBuffer->Unbind();
 			m_pMsFrameBuffer->DetachAll();
 			m_pMsColorBuffer->Cleanup();

@@ -9,7 +9,7 @@
 #	else
 #		include <Windows.h>
 #		pragma warning( push )
-#		pragma warning( disable:4091 )
+#		pragma warning( disable:4091 ) //'typedef ': ignored on left of '' when no variable is declared
 #		include <Dbghelp.h>
 #		pragma warning( pop )
 #	endif

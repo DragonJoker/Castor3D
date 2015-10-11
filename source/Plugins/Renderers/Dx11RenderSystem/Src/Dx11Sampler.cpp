@@ -6,9 +6,6 @@
 using namespace Castor;
 using namespace Castor3D;
 
-#pragma warning( push)
-#pragma warning( disable:4996)
-
 namespace Dx11Render
 {
 	DxSampler::DxSampler( DxRenderSystem * p_renderSystem, Castor::String const & p_name )
@@ -122,5 +119,3 @@ namespace Dx11Render
 	{
 	}
 }
-
-#pragma warning( pop)

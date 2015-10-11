@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <RenderTechnique.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 #ifndef _WIN32
 #	define C3D_MsaaTechnique_API
 #else
@@ -217,7 +213,5 @@ namespace Msaa
 		Castor3D::RasteriserStateWPtr m_wpMsRasteriserState;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

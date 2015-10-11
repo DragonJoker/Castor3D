@@ -2,12 +2,6 @@
 #	include <vld.h>
 #endif
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
 #include <algorithm>
 #include <limits>
 #include <fstream>
@@ -43,10 +37,6 @@
 #	undef max
 #endif
 
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
-
 //*************************************************************************************************
 
 #define IRRADIANCE_UNIT 0
@@ -72,15 +62,7 @@ using namespace OceanLighting;
 //*************************************************************************************************
 
 #if defined( _WIN32 )
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#	endif
 #	include <windows.h>
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
 #else
 #	include <sys/time.h>
 #endif
@@ -1066,8 +1048,7 @@ void RenderTechnique::DoCleanup()
 	m_pSamplerAnisotropicClamp->Cleanup();
 	m_pSamplerAnisotropicRepeat->Cleanup();
 	m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_pColorAttach->Detach();
-	m_pDepthAttach->Detach();
+	m_pFrameBuffer->DetachAll();
 	m_pFrameBuffer->Unbind();
 }
 

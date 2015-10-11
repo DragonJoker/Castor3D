@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <RenderTechnique.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 #ifndef _WIN32
 #	define C3D_SsaaTechnique_API
 #else
@@ -219,7 +215,5 @@ namespace Ssaa
 		Castor::Rectangle m_rectSsaa;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

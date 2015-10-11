@@ -5,12 +5,6 @@
 #	define TW_CALL
 #endif
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
 #include <wx/app.h>
 #include <wx/button.h>
 #include <wx/bmpbuttn.h>
@@ -50,9 +44,6 @@
 #include <wx/treectrl.h>
 #include <wx/valtext.h>
 #include <wx/aui/framemanager.h>
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
 
 #include "Technique.hpp"
 

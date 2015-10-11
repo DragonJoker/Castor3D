@@ -12,7 +12,6 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#pragma warning( disable:4290 )
 #if defined( _MSC_VER)
 #	if defined( _WIN64 )
 	static const String RegisterTechniqueFunctionABIName = cuT( "?RegisterTechnique@@YAXAEAVTechniqueFactory@Castor3D@@@Z" );

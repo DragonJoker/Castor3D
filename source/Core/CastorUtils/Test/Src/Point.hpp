@@ -20,17 +20,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #if defined( CASTOR_USE_OCL )
 
-#pragma warning( push )
-#pragma warning( disable:4311 )
-#pragma warning( disable:4312 )
-
 #include <cmath>
 
 #define CL_HPP_ENABLE_EXCEPTIONS
 #define CL_HPP_TARGET_OPENCL_VERSION 120
 #include "cl.hpp"
-
-#pragma warning( pop )
 
 namespace Testing
 {

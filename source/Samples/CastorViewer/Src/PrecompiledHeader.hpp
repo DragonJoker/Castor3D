@@ -9,13 +9,6 @@
 #		define __WXMSW__
 #	endif
 
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#		pragma warning( disable:4996 )
-#	endif
-
 #	include <string>
 
 #	include <wx/app.h>
@@ -114,10 +107,6 @@
 #	include <RendererSelector.hpp>
 #	include <ShaderDialog.hpp>
 #	include <SplashScreen.hpp>
-
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
 #else
 #	include <GuiCommonPrerequisites.hpp>
 #endif

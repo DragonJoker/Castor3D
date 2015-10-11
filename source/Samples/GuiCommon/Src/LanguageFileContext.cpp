@@ -5,11 +5,6 @@
 
 using namespace Castor;
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4100 )
-#endif
-
 namespace GuiCommon
 {
 	LanguageFileContext::LanguageFileContext( TextFile * p_pFile )
@@ -149,7 +144,3 @@ namespace GuiCommon
 		mapFoldFlags[cuT( "preprocessor" )] = eSTC_FOLD_PREPROC;
 	}
 }
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif

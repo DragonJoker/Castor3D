@@ -35,6 +35,7 @@ namespace Castor3D
 	class FrameBufferAttachment
 	{
 	protected:
+		friend class FrameBuffer;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -51,8 +52,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~FrameBufferAttachment();
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
@@ -88,6 +87,8 @@ namespace Castor3D
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
 		C3D_API void Detach();
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Downloads the render buffer data

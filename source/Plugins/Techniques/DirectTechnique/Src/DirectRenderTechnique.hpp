@@ -30,10 +30,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	endif
 #endif
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Direct
 {
 	/*!
@@ -190,7 +186,5 @@ namespace Direct
 #endif
 	};
 }
-
-#pragma warning( pop )
 
 #endif

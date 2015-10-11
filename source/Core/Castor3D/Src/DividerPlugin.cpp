@@ -12,7 +12,6 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#pragma warning( disable:4290 )
 #if defined( _MSC_VER)
 #	if CASTOR_USE_UNICODE
 	static const String GetDividerTypeFunctionABIName = cuT( "?GetDividerType@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@XZ" );

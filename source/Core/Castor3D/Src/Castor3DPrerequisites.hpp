@@ -18,26 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_PREREQUISITES_H___
 #define ___C3D_PREREQUISITES_H___
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-// disable: "<type > needs to have dll-interface to be used by clients'
-// Happens on STL member variables which are not public therefore is ok
-#	pragma warning( disable:4251 )
-// disable: "non dll-interface class used as base for dll-interface class"
-// Happens when deriving from Singleton because bug in compiler ignores
-// template export
-#	pragma warning( disable:4275 )
-#	pragma warning( disable:4996 )
-// disable: "<symbol > no suitable definition provided for explicit instantiation request"
-// Happens when deriving from Manager
-#   pragma warning( disable : 4661 )
-// disable: "C++ exception specification ignored except to indicate a function is not __declspec(nothrow)"
-// Happens only on Visual Studio
-#	pragma warning (disable : 4290 )
-#	pragma warning( disable : 4311 )
-#	pragma warning( disable : 4312 )
-#endif
-
 #undef RGB
 
 #if defined( __linux__ )
@@ -2020,9 +2000,5 @@ namespace Castor
 	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine );
 	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::RenderSystem );
 }
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
 
 #endif

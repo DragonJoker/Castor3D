@@ -7,11 +7,6 @@
 
 using namespace Castor;
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4100 )
-#endif
-
 namespace GuiCommon
 {
 	LanguageFileParser::LanguageFileParser( StcContext * p_pStcContext )
@@ -271,7 +266,3 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Section_List )
 {
 }
 END_ATTRIBUTE_PUSH( eSECTION_LIST )
-
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif

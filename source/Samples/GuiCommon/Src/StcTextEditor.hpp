@@ -18,9 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_STC_TEXT_EDITOR_H___
 #define ___GUICOMMON_STC_TEXT_EDITOR_H___
 
-#pragma warning( push )
-#pragma warning( disable:4996 )
-
 #include <wx/stc/stc.h>
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
 #	include <wx/textcompleter.h>
@@ -182,7 +179,5 @@ namespace GuiCommon
 		bool m_bBackspaceUnindents;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

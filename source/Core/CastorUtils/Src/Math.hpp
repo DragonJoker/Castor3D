@@ -311,10 +311,7 @@ namespace Castor
 	template< typename T >
 	inline T abs( T const & p_val )
 	{
-#pragma warning( push )
-#pragma warning( disable:4146 )
 		return ( p_val >= 0 ? p_val : -p_val );
-#pragma warning( pop )
 	}
 	/**
 	 *\~english

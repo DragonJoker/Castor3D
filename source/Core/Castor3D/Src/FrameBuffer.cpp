@@ -57,16 +57,7 @@ namespace Castor3D
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
 	{
-		DoDetach( p_attachment );
-		bool l_return = DoAttach( p_attachment, 0, p_texture, p_target, p_layer );
-
-		if ( l_return )
-		{
-			p_texture->Attach( p_attachment, 0, p_target, p_layer );
-			m_attaches.push_back( p_texture );
-		}
-
-		return l_return;
+		return Attach( p_attachment, 0, p_texture, p_target, p_layer );
 	}
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
@@ -85,16 +76,7 @@ namespace Castor3D
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		DoDetach( p_attachment );
-		bool l_return = DoAttach( p_attachment, 0, p_renderBuffer );
-
-		if ( l_return )
-		{
-			p_renderBuffer->Attach( p_attachment, 0 );
-			m_attaches.push_back( p_renderBuffer );
-		}
-
-		return l_return;
+		return Attach( p_attachment, 0, p_renderBuffer );
 	}
 
 	void FrameBuffer::DetachAll()
