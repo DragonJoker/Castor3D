@@ -68,10 +68,6 @@ namespace Dx11Render
 
 	void DxShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		if ( !GetOwner()->UseShaders() )
-		{
-			strLog = DirectX11::GetHlslErrorString( 0 );
-		}
 	}
 
 	void DxShaderProgram::Initialise()

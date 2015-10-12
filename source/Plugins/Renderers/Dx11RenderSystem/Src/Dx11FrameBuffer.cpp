@@ -165,16 +165,6 @@ namespace Dx11Render
 #endif
 	}
 
-	bool DxFrameBuffer::DoAttach( eATTACHMENT_POINT CU_PARAM_UNUSED( p_attachment ), uint8_t CU_PARAM_UNUSED( p_index ), TextureAttachmentSPtr CU_PARAM_UNUSED( p_texture ), eTEXTURE_TARGET CU_PARAM_UNUSED( p_target ), int CU_PARAM_UNUSED( p_layer ) )
-	{
-		return true;
-	}
-
-	bool DxFrameBuffer::DoAttach( eATTACHMENT_POINT CU_PARAM_UNUSED( p_attachment ), uint8_t CU_PARAM_UNUSED( p_index ), RenderBufferAttachmentSPtr CU_PARAM_UNUSED( p_renderBuffer ) )
-	{
-		return true;
-	}
-
 	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
 		SrcDstPairArray l_arrayPairs;

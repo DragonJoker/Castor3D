@@ -308,40 +308,6 @@ namespace Castor3D
 		C3D_API virtual void DoUnbind() = 0;
 		/**
 		 *\~english
-		 *\brief		Attaches a texture to this frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
-		 *\param[in]	p_index			The attachment index
-		 *\param[in]	p_texture		The texture
-		 *\param[in]	p_target		The dimension to which the texture must be attached
-		 *\param[in]	p_layer			The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
-		 *\param[in]	p_index			L'index d'attache
-		 *\param[in]	p_texture		La texture
-		 *\param[in]	p_target		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer			La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoAttach( eATTACHMENT_POINT p_attachment, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer ) = 0;
-		/**
-		 *\~english
-		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
-		 *\param[in]	p_index			The attachment index
-		 *\param[in]	p_renderBuffer	The tampon de rendu
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache un tampon de rendu à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
-		 *\param[in]	p_index			L'index d'attache
-		 *\param[in]	p_renderBuffer	Le tampon de rendu
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoAttach( eATTACHMENT_POINT p_attachment, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer ) = 0;
-		/**
-		 *\~english
 		 *\brief		Blit this frame buffer into the given one
 		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
 		 *\param[in]	p_pBuffer			The buffer receiving this one

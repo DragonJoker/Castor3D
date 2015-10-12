@@ -104,7 +104,7 @@ namespace GuiCommon
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_TEXTURE ) );
 			p_grid->Append( new wxEnumProperty( PROPERTY_CHANNEL, PROPERTY_CHANNEL, l_choices ) )->SetValue( l_selected );
 
-			if ( l_unit->GetTexture()->GetType() == eTEXTURE_TYPE_STATIC )
+			if ( l_unit->GetTexture()->GetType() == eTEXTURE_BASE_TYPE_STATIC )
 			{
 				p_grid->Append( new wxImageFileProperty( PROPERTY_TEXTURE_IMAGE ) )->SetValue( l_unit->GetTexturePath() );
 			}

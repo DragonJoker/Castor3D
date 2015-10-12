@@ -921,7 +921,7 @@ namespace Lwo
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
 						l_pTexture = p_pPass->AddTextureUnit();
 						StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-						l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 						l_pStaTexture->SetImage( l_it->second->GetPixels() );
 						l_pTexture->SetTexture( l_pStaTexture );
 						DoSetChannel( l_pTexture, l_eChannel );

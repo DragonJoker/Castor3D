@@ -35,16 +35,11 @@ namespace Dx11Render
 		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );
 		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
 
-		ID3D11View * GetSurface()const;
-
 	private:
 		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
 		virtual void DoDetach();
 
 	private:
-		DWORD m_dwAttachment;
-		DxFrameBufferWPtr m_pFrameBuffer;
-		ID3D11RenderTargetView * m_pOldSurface;
 		DxRenderSystem * m_renderSystem;
 		DxDynamicTextureWPtr m_pDxTexture;
 	};

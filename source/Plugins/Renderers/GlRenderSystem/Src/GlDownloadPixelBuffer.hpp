@@ -15,22 +15,26 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_PACK_PIXEL_BUFFER_H___
-#define ___GL_PACK_PIXEL_BUFFER_H___
+#ifndef ___GL_DOWNLOAD_PIXEL_BUFFER_H___
+#define ___GL_DOWNLOAD_PIXEL_BUFFER_H___
 
-#include "GlPixelBuffer.hpp"
+#include "GlGpuIoBuffer.hpp"
 
 namespace GlRender
 {
-	class GlPackPixelBuffer
-		:	public GlPixelBuffer
+	/*!
+	\author		Sylvain DOREMUS
+	\brief		Pack (download to RAM) buffer implementation
+	*/
+	class GlDownloadPixelBuffer
+		: public GlGpuIoBuffer
 	{
 	public:
-		GlPackPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize );
-		GlPackPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pPixels );
-		virtual ~GlPackPixelBuffer();
+		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize );
+		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pPixels );
+		virtual ~GlDownloadPixelBuffer();
 
-		virtual void Initialise();
+		virtual bool Initialise();
 	};
 }
 

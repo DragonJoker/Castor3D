@@ -482,6 +482,21 @@ namespace GlRender
 			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture3D(), p_sampler, p_value );
 		}
 
+		Vec4 GlslWriter::TexelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch1D(), p_sampler, p_value , p_modif );
+		}
+
+		Vec4 GlslWriter::TexelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch2D(), p_sampler, p_value, p_modif );
+		}
+
+		Vec4 GlslWriter::TexelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch3D(), p_sampler, p_value, p_modif );
+		}
+
 		GlslWriter & GlslWriter::operator<<( Version const & p_rhs )
 		{
 			m_stream << m_keywords->GetVersion();
@@ -593,6 +608,21 @@ namespace GlRender
 		Vec4 texture3D( Sampler3D const & p_sampler, Type const & p_value )
 		{
 			return p_sampler.m_writer->Texture3D( p_sampler, p_value );
+		}
+
+		Vec4 texelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
+		}
+
+		Vec4 texelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
+		}
+
+		Vec4 texelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
 		}
 
 		Vec2 reflect( Vec2 const & p_a, Type const & p_b )

@@ -26,7 +26,7 @@ namespace Castor3D
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 		m_sampler = l_pSampler;
 		m_texture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-		m_texture->SetDimension( eTEXTURE_DIMENSION_2D );
+		m_texture->SetType( eTEXTURE_TYPE_2D );
 		m_texture->SetSampler( l_pSampler );
 	}
 

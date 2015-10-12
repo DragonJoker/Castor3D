@@ -70,9 +70,9 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	m_mapBlendFactors[cuT( "src1_alpha" )] = eBLEND_SRC1_ALPHA;
 	m_mapBlendFactors[cuT( "inv_src1_alpha" )] = eBLEND_INV_SRC1_ALPHA;
 
-	m_mapTypes[cuT( "1d" )] = eTEXTURE_DIMENSION_1D;
-	m_mapTypes[cuT( "2d" )] = eTEXTURE_DIMENSION_2D;
-	m_mapTypes[cuT( "3d" )] = eTEXTURE_DIMENSION_3D;
+	m_mapTypes[cuT( "1d" )] = eTEXTURE_TYPE_1D;
+	m_mapTypes[cuT( "2d" )] = eTEXTURE_TYPE_2D;
+	m_mapTypes[cuT( "3d" )] = eTEXTURE_TYPE_3D;
 
 	m_mapMapModes[cuT( "none" )] = eTEXTURE_MAP_MODE_NONE;
 	m_mapMapModes[cuT( "reflection" )] = eTEXTURE_MAP_MODE_REFLECTION;

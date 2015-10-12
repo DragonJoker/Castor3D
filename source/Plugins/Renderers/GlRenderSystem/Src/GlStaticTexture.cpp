@@ -1,6 +1,6 @@
 #include "GlStaticTexture.hpp"
+
 #include "GlRenderSystem.hpp"
-#include "GlUnpackPixelBuffer.hpp"
 #include "OpenGl.hpp"
 
 #include <Logger.hpp>
@@ -12,196 +12,57 @@ namespace GlRender
 {
 	GlStaticTexture::GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
 		: StaticTexture( p_renderSystem )
-		, m_uiGlName( uint32_t( eGL_INVALID_INDEX ) )
-		, m_iCurrentPbo( 0 )
-		, m_pGlRenderSystem( &p_renderSystem )
-		, m_pLockedIoBuffer( NULL )
-		, m_pIoBuffer( NULL )
-		, m_gl( p_gl )
+		, m_texture( p_gl, p_renderSystem )
 	{
 	}
 
 	GlStaticTexture::~GlStaticTexture()
 	{
-		DoDeletePbos();
 	}
 
 	bool GlStaticTexture::Create()
 	{
-		bool l_return = true;
-
-		if ( m_uiGlName == eGL_INVALID_INDEX )
-		{
-			l_return = m_gl.GenTextures( 1, &m_uiGlName );
-			glTrack( m_gl, GlStaticTexture, this );
-		}
-
-		return l_return;
+		return m_texture.Create();
 	}
 
 	void GlStaticTexture::Destroy()
 	{
-		if ( m_uiGlName != eGL_INVALID_INDEX )
-		{
-			glUntrack( m_gl, this );
-			m_gl.DeleteTextures( 1, &m_uiGlName );
-			m_uiGlName = uint32_t( eGL_INVALID_INDEX );
-		}
+		m_texture.Destroy();
 	}
 
 	void GlStaticTexture::Cleanup()
 	{
 		StaticTexture::Cleanup();
-		DoCleanupPbos();
-		DoDeletePbos();
+		m_texture.Cleanup();
 	}
 
-	uint8_t * GlStaticTexture::Lock( uint32_t p_uiMode )
+	uint8_t * GlStaticTexture::Lock( uint32_t p_mode )
 	{
-		uint8_t * l_pReturn = NULL;
-		eGL_LOCK l_eLock = m_gl.GetLockFlags( p_uiMode );
-
-		if ( !m_pLockedIoBuffer )
-		{
-			m_pLockedIoBuffer = m_pIoBuffer;
-
-			if ( m_pLockedIoBuffer )
-			{
-				m_pLockedIoBuffer->Activate();
-				m_pLockedIoBuffer->Fill( NULL, m_pPixelBuffer->size() );
-				l_pReturn = m_pLockedIoBuffer->Lock( l_eLock );
-			}
-		}
-		else
-		{
-			Logger::LogWarning( cuT( "Can't lock image : it is already locked" ) );
-		}
-
-		return l_pReturn;
+		return m_texture.Lock( p_mode );
 	}
 
-	void GlStaticTexture::Unlock( bool p_bModified )
+	void GlStaticTexture::Unlock( bool p_modified )
 	{
-		if ( m_pLockedIoBuffer )
-		{
-			m_pLockedIoBuffer->Unlock();
-
-			if ( p_bModified )
-			{
-				OpenGl::PixelFmt l_glPixelFmt = m_gl.Get( m_pPixelBuffer->format() );
-
-				switch ( m_eGlDimension )
-				{
-				case eGL_TEXDIM_1D:
-					m_gl.TexSubImage1D( m_eGlDimension, 0, 0, m_pPixelBuffer->width(), l_glPixelFmt.Format, l_glPixelFmt.Type, NULL );
-					break;
-
-				case eGL_TEXDIM_2D:
-					m_gl.TexSubImage2D( m_eGlDimension, 0, 0, 0, m_pPixelBuffer->width(), m_pPixelBuffer->height(), l_glPixelFmt.Format, l_glPixelFmt.Type, NULL );
-					break;
-
-				case eGL_TEXDIM_3D:
-					m_gl.TexSubImage3D( m_eGlDimension, 0, 0, 0, 0, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, l_glPixelFmt.Format, l_glPixelFmt.Type, NULL );
-					break;
-
-				case eGL_TEXDIM_2D_ARRAY:
-					m_gl.TexSubImage3D( m_eGlDimension, 0, 0, 0, 0, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, l_glPixelFmt.Format, l_glPixelFmt.Type, NULL );
-					break;
-				}
-			}
-
-			m_pLockedIoBuffer->Deactivate();
-			m_pLockedIoBuffer = NULL;
-		}
-		else
-		{
-			Logger::LogWarning( cuT( "Can't unlock image : it is not locked" ) );
-		}
+		m_texture.Unlock( p_modified );
 	}
 
 	void GlStaticTexture::GenerateMipmaps()
 	{
-		if ( m_uiGlName != eGL_INVALID_INDEX )
-		{
-			m_gl.GenerateMipmap( m_eGlDimension );
-		}
+		m_texture.GenerateMipmaps();
 	}
 
 	bool GlStaticTexture::DoBind( uint32_t p_index )
 	{
-		bool l_return = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
-
-		if ( l_return )
-		{
-			l_return = m_gl.BindTexture( m_eGlDimension, m_uiGlName );
-		}
-
-		return l_return;
+		return m_texture.Bind( p_index );
 	}
 
 	void GlStaticTexture::DoUnbind( uint32_t p_index )
 	{
-		m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
-		m_gl.BindTexture( m_eGlDimension, 0 );
+		m_texture.Unbind( p_index );
 	}
 
 	bool GlStaticTexture::DoInitialise()
 	{
-		OpenGl::PixelFmt l_glPixelFmt;
-		bool l_return;
-		DoInitialisePbos();
-		m_eIndex = eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + m_uiIndex );
-		m_eGlDimension = m_gl.Get( m_eDimension );
-		l_glPixelFmt = m_gl.Get( m_pPixelBuffer->format() );
-		l_return = DoBind( m_uiIndex );
-
-		switch ( m_eGlDimension )
-		{
-		case eGL_TEXDIM_1D:
-			l_return &= m_gl.TexImage1D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
-			break;
-
-		case eGL_TEXDIM_2D:
-			l_return &= m_gl.TexImage2D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
-			break;
-
-		case eGL_TEXDIM_3D:
-			l_return &= m_gl.TexImage3D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
-			break;
-
-		case eGL_TEXDIM_2D_ARRAY:
-			l_return &= m_gl.TexImage3D( m_eGlDimension, 0, l_glPixelFmt.Internal, m_pPixelBuffer->width(), m_pPixelBuffer->height() / m_uiDepth, m_uiDepth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, m_pPixelBuffer->const_ptr() );
-			break;
-		}
-
-		DoUnbind( m_uiIndex );
-		return l_return;
-	}
-
-	void GlStaticTexture::DoDeletePbos()
-	{
-		if ( m_pIoBuffer )
-		{
-			delete m_pIoBuffer;
-			m_pIoBuffer = NULL;
-		}
-
-		m_pLockedIoBuffer = NULL;
-	}
-
-	void GlStaticTexture::DoCleanupPbos()
-	{
-		if ( m_pIoBuffer )
-		{
-			m_pIoBuffer->Destroy();
-		}
-
-		m_pLockedIoBuffer = NULL;
-	}
-
-	void GlStaticTexture::DoInitialisePbos()
-	{
-		m_pIoBuffer = new GlUnpackPixelBuffer( m_gl, m_pGlRenderSystem, m_pPixelBuffer );
-		m_pIoBuffer->Initialise();
+		return m_texture.Initialise( m_pPixelBuffer, m_type, m_uiDepth );
 	}
 }

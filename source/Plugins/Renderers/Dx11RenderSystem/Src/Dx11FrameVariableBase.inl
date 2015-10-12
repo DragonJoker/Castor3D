@@ -56,7 +56,7 @@ namespace Dx11Render
 
 				if ( l_pTexture )
 				{
-					if ( l_pTexture->GetType() == Castor3D::eTEXTURE_TYPE_STATIC )
+					if ( l_pTexture->GetBaseType() == Castor3D::eTEXTURE_BASE_TYPE_STATIC )
 					{
 						l_pResourceView = static_cast< DxStaticTexture * >( l_pTexture )->GetShaderResourceView();
 					}

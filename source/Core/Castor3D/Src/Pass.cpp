@@ -445,7 +445,7 @@ namespace Castor3D
 			l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
 			l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
 			StaticTextureSPtr l_pTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-			l_pTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+			l_pTexture->SetType( eTEXTURE_TYPE_2D );
 			l_pTexture->SetImage( l_pImageOpa );
 			l_pTexture->SetSampler( l_pOpaSrc->GetTexture()->GetSampler() );
 			l_pOpacityMap->SetTexture( l_pTexture );

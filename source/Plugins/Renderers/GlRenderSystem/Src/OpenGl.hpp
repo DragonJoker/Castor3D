@@ -94,7 +94,7 @@ namespace GlRender
 		eGL_PRIMITIVE_PATCHES			= 0x000E,
 	}	eGL_PRIMITIVE;
 
-	typedef enum eGL_INTERNAL_FORMAT		//	Base Type	Components	Norm	0	1	2	3
+	typedef enum eGL_INTERNAL_FORMAT				//	Type	Comps	Norm	0	1	2	3
 	{
 		eGL_INTERNAL_FORMAT_RGBA8		= 0x8058,	//	uint		4	YES		R	G	B	A
 		eGL_INTERNAL_FORMAT_RGBA16		= 0x805B,	//	short		4	YES		R	G	B	A
@@ -110,13 +110,13 @@ namespace GlRender
 		eGL_INTERNAL_FORMAT_R8UI		= 0x8232,	//	ubyte		1	NO		R	0	0	1
 		eGL_INTERNAL_FORMAT_R16I		= 0x8233,	//	short		1	NO		R	0	0	1
 		eGL_INTERNAL_FORMAT_R16UI		= 0x8234,	//	ushort		1	NO		R	0	0	1
-		eGL_INTERNAL_FORMAT_R32I		= 0x8235,	//	int	1	NO		R	0	0	1
+		eGL_INTERNAL_FORMAT_R32I		= 0x8235,	//	int			1	NO		R	0	0	1
 		eGL_INTERNAL_FORMAT_R32UI		= 0x8236,	//	uint		1	NO		R	0	0	1
 		eGL_INTERNAL_FORMAT_RG8I		= 0x8237,	//	byte		2	NO		R	G	0	1
 		eGL_INTERNAL_FORMAT_RG8UI		= 0x8238,	//	ubyte		2	NO		R	G	0	1
 		eGL_INTERNAL_FORMAT_RG16I		= 0x8239,	//	short		2	NO		R	G	0	1
 		eGL_INTERNAL_FORMAT_RG16UI		= 0x823A,	//	ushort		2	NO		R	G	0	1
-		eGL_INTERNAL_FORMAT_RG32I		= 0x823B,	//	int	2	NO		R	G	0	1
+		eGL_INTERNAL_FORMAT_RG32I		= 0x823B,	//	int			2	NO		R	G	0	1
 		eGL_INTERNAL_FORMAT_RG32UI		= 0x823C,	//	uint		2	NO		R	G	0	1
 		eGL_INTERNAL_FORMAT_RGBA32F		= 0x8814,	//	float		4	NO		R	G	B	A
 		eGL_INTERNAL_FORMAT_RGBA16F		= 0x881A,	//	half		4	NO		R	G	B	A
@@ -124,18 +124,23 @@ namespace GlRender
 		eGL_INTERNAL_FORMAT_RGBA16UI	= 0x8D76,	//	ushort		4	NO		R	G	B	A
 		eGL_INTERNAL_FORMAT_RGB16UI		= 0x8D77,	//	ushort		3	NO		R	G	B	1
 		eGL_INTERNAL_FORMAT_RGBA8UI		= 0x8D7C,	//	ubyte		4	NO		R	G	B	A
-		eGL_INTERNAL_FORMAT_RGBA32I		= 0x8D82,	//	int	4	NO		R	G	B	A
+		eGL_INTERNAL_FORMAT_RGBA32I		= 0x8D82,	//	int			4	NO		R	G	B	A
 		eGL_INTERNAL_FORMAT_RGBA16I		= 0x8D88,	//	short		4	NO		R	G	B	A
 		eGL_INTERNAL_FORMAT_RGBA8I		= 0x8D8E,	//	byte		4	NO		R	G	B	A
 	}	eGL_INTERNAL_FORMAT;
 
 	typedef enum eGL_TEXDIM
 	{
-		eGL_TEXDIM_1D				= 0x0DE0,
-		eGL_TEXDIM_2D				= 0x0DE1,
-		eGL_TEXDIM_3D				= 0x806F,
-		eGL_TEXDIM_2D_ARRAY			= 0x8C1A,
-		eGL_TEXDIM_2D_MULTISAMPLE	= 0x9100,
+		eGL_TEXDIM_BUFFER = 0x8C2A,
+		eGL_TEXDIM_1D = 0x0DE0,
+		eGL_TEXDIM_1D_ARRAY = 0x8C18,
+		eGL_TEXDIM_2D = 0x0DE1,
+		eGL_TEXDIM_2D_ARRAY = 0x8C1A,
+		eGL_TEXDIM_2DMS = 0x9100,
+		eGL_TEXDIM_2DMS_ARRAY = 0x9102,
+		eGL_TEXDIM_3D = 0x806F,
+		eGL_TEXDIM_CUBE = 0x8513,
+		eGL_TEXDIM_CUBE_ARRAY = 0x9009,
 	}	eGL_TEXDIM;
 
 	typedef enum eGL_FUNC
@@ -1859,7 +1864,7 @@ namespace GlRender
 		{
 			return PrimitiveTypes[p_index];
 		}
-		inline eGL_TEXDIM Get( Castor3D::eTEXTURE_DIMENSION p_index )const
+		inline eGL_TEXDIM Get( Castor3D::eTEXTURE_TYPE p_index )const
 		{
 			return TextureDimensions[p_index];
 		}
@@ -2066,7 +2071,7 @@ namespace GlRender
 		Castor::String GlslStrings[8];
 		Castor::String GlslErrors[8];
 		eGL_PRIMITIVE PrimitiveTypes[Castor3D::eTOPOLOGY_COUNT];
-		eGL_TEXDIM TextureDimensions[Castor3D::eTEXTURE_DIMENSION_COUNT];
+		eGL_TEXDIM TextureDimensions[Castor3D::eTEXTURE_TYPE_COUNT];
 		eGL_FUNC AlphaFuncs[Castor3D::eALPHA_FUNC_COUNT];
 		eGL_WRAP_MODE TextureWrapMode[Castor3D::eWRAP_MODE_COUNT];
 		eGL_INTERPOLATION_MODE TextureInterpolation[Castor3D::eINTERPOLATION_MODE_COUNT];

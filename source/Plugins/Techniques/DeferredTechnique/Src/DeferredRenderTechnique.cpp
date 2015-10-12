@@ -172,7 +172,7 @@ namespace Deferred
 			m_strLSPixelProgram =
 				cuT( "uniform int c3d_iLightsCount;\n" )
 				cuT( "uniform float3 c3d_v3CameraPosition;\n" )
-				cuT( "Texture2D c3d_sLights;\n" )
+				cuT( "Texture1D c3d_sLights;\n" )
 				cuT( "SamplerState LightsSampler\n" )
 				cuT( "{\n" )
 				cuT( "	MagFilter = POINT;\n" )
@@ -209,16 +209,16 @@ namespace Deferred
 				cuT( "Light GetLight( int i )\n" )
 				cuT( "{\n" )
 				cuT( "	Light l_lightReturn;\n" )
-				cuT( "	l_lightReturn.m_v4Ambient = tex2D( LightsSampler, float2( (i * 0.1) + (0 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	l_lightReturn.m_v4Diffuse = tex2D( LightsSampler, float2( (i * 0.1) + (1 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	l_lightReturn.m_v4Specular = tex2D( LightsSampler, float2( (i * 0.1) + (2 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	l_lightReturn.m_v4Position = tex2D( LightsSampler, float2( (i * 0.1) + (3 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	l_lightReturn.m_v3Attenuation = tex2D( LightsSampler, float2( (i * 0.1) + (4 * 0.01) + 0.005, 0.0 ) ).xyz;\n" )
-				cuT( "	float4 l_v4A = tex2D( LightsSampler, float2( (i * 0.1) + (5 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	float4 l_v4B = tex2D( LightsSampler, float2( (i * 0.1) + (6 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	float4 l_v4C = tex2D( LightsSampler, float2( (i * 0.1) + (7 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	float4 l_v4D = tex2D( LightsSampler, float2( (i * 0.1) + (8 * 0.01) + 0.005, 0.0 ) );\n" )
-				cuT( "	float2 l_v2Spot = tex2D( LightsSampler, float2( (i * 0.1) + (9 * 0.01) + 0.005, 0.0 ) ).xy;\n" )
+				cuT( "	l_lightReturn.m_v4Ambient = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (0 * 0.001) + 0.0005 );\n" )
+				cuT( "	l_lightReturn.m_v4Diffuse = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (1 * 0.001) + 0.0005 );\n" )
+				cuT( "	l_lightReturn.m_v4Specular = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (2 * 0.001) + 0.0005 );\n" )
+				cuT( "	l_lightReturn.m_v4Position = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (3 * 0.001) + 0.0005 );\n" )
+				cuT( "	l_lightReturn.m_v3Attenuation = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (4 * 0.001) + 0.0005 ).xyz;\n" )
+				cuT( "	float4 l_v4A = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (5 * 0.001) + 0.0005 );\n" )
+				cuT( "	float4 l_v4B = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (6 * 0.001) + 0.0005 );\n" )
+				cuT( "	float4 l_v4C = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (7 * 0.001) + 0.0005 );\n" )
+				cuT( "	float4 l_v4D = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (8 * 0.001) + 0.0005 );\n" )
+				cuT( "	float2 l_v2Spot = c3d_sLights.Sample( LightsSampler, (i * 0.01) + (9 * 0.001) + 0.0005 ).xy;\n" )
 				cuT( "	l_lightReturn.m_iType = int( l_lightReturn.m_v4Position.w );\n" )
 				cuT( "	l_lightReturn.m_mtx4Orientation = float4x4( l_v4A, l_v4B, l_v4C, l_v4D );\n" )
 				cuT( "	l_lightReturn.m_fExponent = l_v2Spot.x;\n" )
@@ -479,7 +479,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 		{
-			m_lightPassTextures[i]->SetDimension( eTEXTURE_DIMENSION_2D );
+			m_lightPassTextures[i]->SetType( eTEXTURE_TYPE_2D );
 
 			if ( i != eDS_TEXTURE_POSITION )
 			{

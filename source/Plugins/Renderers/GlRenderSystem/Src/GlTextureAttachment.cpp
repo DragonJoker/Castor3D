@@ -102,9 +102,9 @@ namespace GlRender
 			{
 			case eTEXTURE_TARGET_1D:
 
-				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_1D )
+				if ( l_pTexture->GetType() == eTEXTURE_TYPE_1D )
 				{
-					l_return = m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
+					l_return = m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0 );
 				}
 				else
 				{
@@ -115,9 +115,9 @@ namespace GlRender
 
 			case eTEXTURE_TARGET_2D:
 
-				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_2D )
+				if ( l_pTexture->GetType() == eTEXTURE_TYPE_2D )
 				{
-					l_return = m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
+					l_return = m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0 );
 				}
 				else
 				{
@@ -128,9 +128,9 @@ namespace GlRender
 
 			case eTEXTURE_TARGET_3D:
 
-				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_3D )
+				if ( l_pTexture->GetType() == eTEXTURE_TYPE_3D )
 				{
-					l_return = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0, GetAttachedLayer() );
+					l_return = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0, GetAttachedLayer() );
 				}
 				else
 				{
@@ -173,15 +173,15 @@ namespace GlRender
 				switch ( GetAttachedTarget() )
 				{
 				case eTEXTURE_TARGET_1D:
-					m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), 0, 0 );
+					m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), 0, 0 );
 					break;
 
 				case eTEXTURE_TARGET_2D:
-					m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), 0, 0 );
+					m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), 0, 0 );
 					break;
 
 				case eTEXTURE_TARGET_3D:
-					m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), 0, 0, GetAttachedLayer() );
+					m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), 0, 0, GetAttachedLayer() );
 					break;
 
 				case eTEXTURE_TARGET_LAYER:

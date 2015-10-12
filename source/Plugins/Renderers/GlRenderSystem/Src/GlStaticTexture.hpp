@@ -19,14 +19,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_STATIC_TEXTURE_H___
 
 #include "GlRenderSystemPrerequisites.hpp"
+#include "GlTexture.hpp"
 
 #include <StaticTexture.hpp>
 
 namespace GlRender
 {
 	class GlStaticTexture
-		:	public Castor3D::StaticTexture
-		,	public Castor::NonCopyable
+		: public Castor3D::StaticTexture
+		, public Castor::NonCopyable
 	{
 	public:
 		GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
@@ -41,26 +42,16 @@ namespace GlRender
 
 		inline uint32_t GetGlName()const
 		{
-			return m_uiGlName;
+			return m_texture.GetGlName();
 		}
 
 	private:
 		virtual bool DoBind( uint32_t p_index );
 		virtual void DoUnbind( uint32_t p_index );
 		virtual bool DoInitialise();
-		void DoDeletePbos();
-		void DoCleanupPbos();
-		void DoInitialisePbos();
 
 	private:
-		uint32_t m_uiGlName;
-		GlPixelBuffer * m_pLockedIoBuffer;
-		GlPixelBuffer * m_pIoBuffer;
-		int m_iCurrentPbo;
-		GlRenderSystem * m_pGlRenderSystem;
-		eGL_TEXTURE_INDEX m_eIndex;
-		eGL_TEXDIM m_eGlDimension;
-		OpenGl & m_gl;
+		GlTexture m_texture;
 	};
 }
 

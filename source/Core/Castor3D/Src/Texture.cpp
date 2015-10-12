@@ -1,4 +1,5 @@
 ﻿#include "Texture.hpp"
+
 #include "RenderSystem.hpp"
 #include "Engine.hpp"
 
@@ -6,11 +7,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureBase::TextureBase( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem )
+	TextureBase::TextureBase( eTEXTURE_BASE_TYPE p_baseType, RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_bInitialised( false )
-		, m_type( p_type )
-		, m_eDimension( eTEXTURE_DIMENSION_2D )
+		, m_baseType( p_baseType )
+		, m_type( eTEXTURE_TYPE_2D )
 		, m_eMapMode( eTEXTURE_MAP_MODE_NONE )
 		, m_uiIndex( 0 )
 		, m_pSampler( p_renderSystem.GetOwner()->GetDefaultSampler() )

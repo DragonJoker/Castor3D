@@ -344,7 +344,7 @@ namespace Castor3D
 		{
 			TextureBaseSPtr l_texture = p_unit.GetTexture();
 
-			if ( l_texture->GetType() == eTEXTURE_TYPE_DYNAMIC || !p_unit.GetTexturePath().empty() )
+			if ( l_texture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC || !p_unit.GetTexturePath().empty() )
 			{
 				if ( l_return )
 				{
@@ -422,7 +422,7 @@ namespace Castor3D
 					l_return = p_file.WriteText( cuT( "\t\t\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
 				}
 
-				if ( l_texture->GetType() == eTEXTURE_TYPE_DYNAMIC )
+				if ( l_texture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC )
 				{
 					if ( l_return && p_unit.GetRenderTarget() )
 					{
@@ -539,11 +539,11 @@ namespace Castor3D
 			Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
-			if ( m_bChanged && m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC )
+			if ( m_bChanged && ( m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC ) )
 			{
 #if DEBUG_BUFFERS
 
-				if ( m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC )
+				if ( m_pTexture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC )
 				{
 					uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
 					std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
@@ -716,7 +716,7 @@ namespace Castor3D
 		if ( l_pImage )
 		{
 			StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-			l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+			l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			SetTexture( l_pStaTexture );
 			m_pathTexture = p_pathFile;
@@ -732,9 +732,9 @@ namespace Castor3D
 		return m_pTexture && m_pTexture->IsInitialised();
 	}
 
-	eTEXTURE_DIMENSION TextureUnit::GetDimension()const
+	eTEXTURE_TYPE TextureUnit::GetType()const
 	{
-		return m_pTexture->GetDimension();
+		return m_pTexture->GetType();
 	}
 
 	eTEXTURE_MAP_MODE TextureUnit::GetMappingMode()const

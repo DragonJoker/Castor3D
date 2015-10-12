@@ -168,7 +168,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index du sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Bind( eTEXTURE_DIMENSION p_eDimension, uint32_t p_index ) = 0;
+		C3D_API virtual bool Bind( eTEXTURE_TYPE p_eDimension, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler

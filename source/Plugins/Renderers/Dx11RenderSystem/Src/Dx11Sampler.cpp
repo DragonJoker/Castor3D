@@ -108,7 +108,7 @@ namespace Dx11Render
 		ReleaseTracked( GetOwner()->GetRenderSystem(), m_pSamplerState );
 	}
 
-	bool DxSampler::Bind( eTEXTURE_DIMENSION CU_PARAM_UNUSED( p_eDimension ), uint32_t p_index )
+	bool DxSampler::Bind( eTEXTURE_TYPE CU_PARAM_UNUSED( p_eDimension ), uint32_t p_index )
 	{
 		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 		l_pDeviceContext->PSSetSamplers( p_index, 1, &m_pSamplerState );

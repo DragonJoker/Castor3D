@@ -554,7 +554,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MapDiffuseBitmap )
 	if ( l_pImage )
 	{
 		l_pTexture = l_pEngine->GetRenderSystem()->CreateStaticTexture();
-		l_pTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+		l_pTexture->SetType( eTEXTURE_TYPE_2D );
 		l_pTexture->SetImage( l_pImage->GetPixels() );
 		l_pContext->pTextureUnit->SetTexture( l_pTexture );
 		l_pContext->pTextureUnit->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );

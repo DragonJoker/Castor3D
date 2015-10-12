@@ -329,11 +329,6 @@ namespace Dx11Render
 		return std::make_shared< DxMatrixBuffer >( *this, p_pBuffer );
 	}
 
-	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > DxRenderSystem::CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer )
-	{
-		return nullptr;
-	}
-
 	StaticTextureSPtr DxRenderSystem::CreateStaticTexture()
 	{
 		return std::make_shared< DxStaticTexture >( *this );
