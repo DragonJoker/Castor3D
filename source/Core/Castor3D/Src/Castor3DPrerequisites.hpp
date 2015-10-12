@@ -523,21 +523,21 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des dimensions de texture
 	*/
-	typedef enum eTEXTURE_DIMENSION
+	typedef enum eTEXTURE_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		eTEXTURE_DIMENSION_BUFFER,		//!< 1 dimension texture buffer, used to store data.
-		eTEXTURE_DIMENSION_1D,			//!< 1 dimension textures = > one coordinate = > U mapping
-		eTEXTURE_DIMENSION_1DARRAY,		//!< 1 dimension textures = > one coordinate = > U mapping
-		eTEXTURE_DIMENSION_2D,			//!< 2 dimensions textures = > two coordinates = > UV mapping
-		eTEXTURE_DIMENSION_2DARRAY,		//!< 2 dimensions textures array = > two coordinates = > UV mapping
-		eTEXTURE_DIMENSION_2DMS,		//!< 2 dimensions textures with multisample support = > two coordinates = > UV mapping
-		eTEXTURE_DIMENSION_2DMSARRAY,	//!< 2 dimensions textures array with multisample support = > two coordinates = > UV mapping
-		eTEXTURE_DIMENSION_3D,			//!< 3 dimensions textures = > three coordinates = > UVW mapping
-		eTEXTURE_DIMENSION_CUBE,		//!< Cube texture, for environment rendering.
-		eTEXTURE_DIMENSION_CUBEARRAY,	//!< Cube textures array, for environment rendering.
-		eTEXTURE_DIMENSION_COUNT,
-	}	eTEXTURE_DIMENSION;
+		eTEXTURE_TYPE_BUFFER,		//!< 1 dimension texture buffer, used to store data.
+		eTEXTURE_TYPE_1D,			//!< 1 dimension textures = > one coordinate = > U mapping
+		eTEXTURE_TYPE_1DARRAY,		//!< 1 dimension textures = > one coordinate = > U mapping
+		eTEXTURE_TYPE_2D,			//!< 2 dimensions textures = > two coordinates = > UV mapping
+		eTEXTURE_TYPE_2DARRAY,		//!< 2 dimensions textures array = > two coordinates = > UV mapping
+		eTEXTURE_TYPE_2DMS,			//!< 2 dimensions textures with multisample support = > two coordinates = > UV mapping
+		eTEXTURE_TYPE_2DMSARRAY,	//!< 2 dimensions textures array with multisample support = > two coordinates = > UV mapping
+		eTEXTURE_TYPE_3D,			//!< 3 dimensions textures = > three coordinates = > UVW mapping
+		eTEXTURE_TYPE_CUBE,			//!< Cube texture, for environment rendering.
+		eTEXTURE_TYPE_CUBEARRAY,	//!< Cube textures array, for environment rendering.
+		eTEXTURE_TYPE_COUNT,
+	}	eTEXTURE_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -561,12 +561,12 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de texture
 	*/
-	typedef enum eTEXTURE_TYPE
+	typedef enum eTEXTURE_BASE_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		eTEXTURE_TYPE_STATIC,
-		eTEXTURE_TYPE_DYNAMIC,
-	}	eTEXTURE_TYPE;
+		eTEXTURE_BASE_TYPE_STATIC,
+		eTEXTURE_BASE_TYPE_DYNAMIC,
+	}	eTEXTURE_BASE_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english

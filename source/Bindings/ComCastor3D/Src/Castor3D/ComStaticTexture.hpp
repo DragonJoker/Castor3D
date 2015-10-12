@@ -62,12 +62,12 @@ namespace CastorCom
 			m_internal = state;
 		}
 
-		COM_PROPERTY( Dimension, eTEXTURE_DIMENSION, make_getter( m_internal.get(), &Castor3D::TextureBase::GetDimension ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetDimension ) );
+		COM_PROPERTY( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetType ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetType ) );
 		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &Castor3D::TextureBase::GetSampler ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetSampler ) );
 		COM_PROPERTY( MappingMode, eTEXTURE_MAP_MODE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetMappingMode ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetMappingMode ) );
 		COM_PROPERTY( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::TextureBase::GetBuffer ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetImage ) );
 
-		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetType ) );
+		COM_PROPERTY_GET( BaseType, eTEXTURE_BASE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetBaseType ) );
 
 		STDMETHOD( Initialise )( /* [in] */ unsigned int index );
 		STDMETHOD( Cleanup )();

@@ -839,7 +839,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	}
 
 	FILE * f = NULL;
-	m_pTexIrradiance->SetDimension( eTEXTURE_DIMENSION_2D );
+	m_pTexIrradiance->SetType( eTEXTURE_TYPE_2D );
 	buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
@@ -856,7 +856,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	int nv = res * 2;
 	int nb = res / 2;
 	int na = 8;
-	m_pTexInscatter->SetDimension( eTEXTURE_DIMENSION_3D );
+	m_pTexInscatter->SetType( eTEXTURE_TYPE_3D );
 	buffer = PxBufferBase::create( Size( na * nb, nv * nr ), ePIXEL_FORMAT_RGB16F32F );
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
@@ -868,7 +868,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexInscatter->SetImage( Point3ui( na * nb, nv, nr ), buffer );
 	m_pTexInscatter->Initialise( INSCATTER_UNIT );
 	m_pTexInscatter->SetSampler( m_pSamplerLinearClamp );
-	m_pTexTransmittance->SetDimension( eTEXTURE_DIMENSION_2D );
+	m_pTexTransmittance->SetType( eTEXTURE_TYPE_2D );
 	buffer = PxBufferBase::create( Size( 256, 64 ), ePIXEL_FORMAT_RGB16F32F );
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
@@ -880,7 +880,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexTransmittance->SetImage( buffer );
 	m_pTexTransmittance->Initialise( TRANSMITTANCE_UNIT );
 	m_pTexTransmittance->SetSampler( m_pSamplerLinearClamp );
-	m_pTexNoise->SetDimension( eTEXTURE_DIMENSION_2D );
+	m_pTexNoise->SetType( eTEXTURE_TYPE_2D );
 	m_pTexNoise->SetImage( Size( 512, 512 ), ePIXEL_FORMAT_L8 );
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
@@ -897,7 +897,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexNoise->GenerateMipmaps();
 	m_pTexNoise->Unbind();
 	m_pTexNoise->SetSampler( m_pSamplerAnisotropicRepeat );
-	m_pTexSky->SetDimension( eTEXTURE_DIMENSION_2D );
+	m_pTexSky->SetType( eTEXTURE_TYPE_2D );
 	m_pTexSky->SetImage( Size( m_skyTexSize, m_skyTexSize ), ePIXEL_FORMAT_ARGB16F32F );
 	m_pTexSky->Initialise( SKY_UNIT );
 	m_pTexSky->Bind();
@@ -905,33 +905,33 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pTexSky->Unbind();
 	m_pTexSky->SetSampler( m_pSamplerAnisotropicClamp );
 #if ENABLE_FFT
-	m_pTexSpectrum_1_2->SetDimension( eTEXTURE_DIMENSION_2D );
+	m_pTexSpectrum_1_2->SetType( eTEXTURE_TYPE_2D );
 	m_pTexSpectrum_1_2->SetImage( Size( m_FFT_SIZE, m_FFT_SIZE ), ePIXEL_FORMAT_ARGB32F );
 	m_pTexSpectrum_1_2->Initialise( SPECTRUM_1_2_UNIT );
 	m_pTexSpectrum_1_2->SetSampler( m_pSamplerNearestRepeat );
-	m_pTexSpectrum_3_4->SetDimension( eTEXTURE_DIMENSION_2D );
+	m_pTexSpectrum_3_4->SetType( eTEXTURE_TYPE_2D );
 	m_pTexSpectrum_3_4->SetImage( Size( m_FFT_SIZE, m_FFT_SIZE ), ePIXEL_FORMAT_ARGB32F );
 	m_pTexSpectrum_3_4->Initialise( SPECTRUM_3_4_UNIT );
 	m_pTexSpectrum_3_4->SetSampler( m_pSamplerNearestRepeat );
-	m_pTexSlopeVariance->SetDimension( eTEXTURE_DIMENSION_3D );
+	m_pTexSlopeVariance->SetType( eTEXTURE_TYPE_3D );
 	m_pTexSlopeVariance->SetImage( Point3ui( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ), ePIXEL_FORMAT_AL16F32F );
 	m_pTexSlopeVariance->Initialise( SLOPE_VARIANCE_UNIT );
 	m_pTexSlopeVariance->SetSampler( m_pSamplerLinearClamp );
-	m_pTexFFTA->SetDimension( eTEXTURE_DIMENSION_2DARRAY );
+	m_pTexFFTA->SetType( eTEXTURE_TYPE_2DARRAY );
 	m_pTexFFTA->SetImage( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), ePIXEL_FORMAT_RGB32F );
 	m_pTexFFTA->Initialise( FFT_A_UNIT );
 	m_pTexFFTA->SetSampler( m_pSamplerLinearRepeat );
 	m_pTexFFTA->Bind();
 	m_pTexFFTA->GenerateMipmaps();
 	m_pTexFFTA->Unbind();
-	m_pTexFFTB->SetDimension( eTEXTURE_DIMENSION_2DARRAY );
+	m_pTexFFTB->SetType( eTEXTURE_TYPE_2DARRAY );
 	m_pTexFFTB->SetImage( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), ePIXEL_FORMAT_RGB32F );
 	m_pTexFFTB->Initialise( FFT_B_UNIT );
 	m_pTexFFTB->SetSampler( m_pSamplerLinearRepeat );
 	m_pTexFFTB->Bind();
 	m_pTexFFTB->GenerateMipmaps();
 	m_pTexFFTB->Unbind();
-	m_pTexButterfly->SetDimension( eTEXTURE_DIMENSION_2D );
+	m_pTexButterfly->SetType( eTEXTURE_TYPE_2D );
 	m_pTexButterfly->SetImage( Size( m_FFT_SIZE, m_PASSES ), ePIXEL_FORMAT_ARGB32F );
 	std::memcpy( m_pTexButterfly->GetBuffer()->ptr(), computeButterflyLookupTexture(), m_FFT_SIZE * m_PASSES * 4 * sizeof( float ) );
 	m_pTexButterfly->Initialise( BUTTERFLY_UNIT );
@@ -957,7 +957,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_fftFbo2->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo2->Unbind();
 #else
-	m_pTexWave->SetDimension( eTEXTURE_DIMENSION_1D );
+	m_pTexWave->SetType( eTEXTURE_TYPE_1D );
 	m_pTexWave->SetImage( Size( m_nbWaves, 1 ), ePIXEL_FORMAT_ARGB32F );
 	m_pTexWave->Initialise( WAVE_UNIT );
 	m_pTexWave->SetSampler( m_pSamplerNearestClamp );

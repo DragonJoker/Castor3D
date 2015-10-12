@@ -48,7 +48,7 @@ namespace Dx11Render
 
 	bool DxDynamicTexture::DoInitialise()
 	{
-		bool l_return = m_texture.Initialise( m_eDimension, m_pPixelBuffer, m_uiDepth, GetRenderTarget() != nullptr, GetSamplesCount() );
+		bool l_return = m_texture.Initialise( m_type, m_pPixelBuffer, m_uiDepth, GetRenderTarget() != nullptr, GetSamplesCount() );
 
 		if ( l_return )
 		{

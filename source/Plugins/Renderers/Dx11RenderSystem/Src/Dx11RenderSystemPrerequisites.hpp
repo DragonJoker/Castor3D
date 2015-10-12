@@ -236,7 +236,7 @@ namespace Dx11Render
 	class DirectX11
 	{
 	private:
-		static DWORD TextureDimensions[Castor3D::eTEXTURE_DIMENSION_COUNT];
+		static DWORD TextureDimensions[Castor3D::eTEXTURE_TYPE_COUNT];
 		static DWORD TextureInterpolation[Castor3D::eINTERPOLATION_MODE_COUNT];
 		static DWORD TextureArguments[Castor3D::eBLEND_SOURCE_COUNT];
 		static DWORD LightIndexes[Castor3D::eLIGHT_INDEXES_COUNT];

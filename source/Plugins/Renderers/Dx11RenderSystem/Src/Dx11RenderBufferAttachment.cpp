@@ -12,7 +12,6 @@ namespace Dx11Render
 	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_pRenderBuffer )
 		: RenderBufferAttachment( p_pRenderBuffer )
 		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
-		, m_dwAttachment( 0xFFFFFFFF )
 		, m_renderSystem( p_renderSystem )
 	{
 	}
@@ -20,7 +19,6 @@ namespace Dx11Render
 	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer )
 		: RenderBufferAttachment( p_pRenderBuffer )
 		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
-		, m_dwAttachment( 0xFFFFFFFF )
 		, m_renderSystem( p_renderSystem )
 	{
 	}
@@ -64,21 +62,12 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	ID3D11View * DxRenderBufferAttachment::GetSurface()const
-	{
-		return m_dxRenderBuffer.GetSurface();
-	}
-
 	bool DxRenderBufferAttachment::DoAttach( FrameBufferSPtr p_pFrameBuffer )
 	{
-		m_dwAttachment = DirectX11::Get( GetAttachmentPoint() ) + GetAttachmentIndex();
-		m_pFrameBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pFrameBuffer );
 		return true;
 	}
 
 	void DxRenderBufferAttachment::DoDetach()
 	{
-		m_pFrameBuffer.reset();
-		m_dwAttachment = 0;
 	}
 }

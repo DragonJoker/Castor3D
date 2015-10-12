@@ -66,7 +66,7 @@ namespace GuiCommon
 	{
 		wxPGProperty * l_property = NULL;
 
-		if ( p_texture->GetType() == eTEXTURE_TYPE_STATIC )
+		if ( p_texture->GetType() == eTEXTURE_BASE_TYPE_STATIC )
 		{
 			l_property = new wxImageFileProperty( PROPERTY_SCENE_BACKGROUND_IMAGE );
 		}

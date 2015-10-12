@@ -10,8 +10,6 @@ namespace Dx11Render
 {
 	DxTextureAttachment::DxTextureAttachment( DxRenderSystem * p_renderSystem, DynamicTextureSPtr p_pTexture )
 		: TextureAttachment( p_pTexture )
-		, m_pOldSurface( NULL )
-		, m_dwAttachment( 0xFFFFFFFF )
 		, m_renderSystem( p_renderSystem )
 		, m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
 	{
@@ -19,7 +17,6 @@ namespace Dx11Render
 
 	DxTextureAttachment::~DxTextureAttachment()
 	{
-		SafeRelease( m_pOldSurface );
 	}
 
 	bool DxTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
@@ -71,22 +68,12 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	ID3D11View * DxTextureAttachment::GetSurface()const
-	{
-		return NULL;
-		//	return m_pDxTexture.lock()->GetDxSurface();
-	}
-
 	bool DxTextureAttachment::DoAttach( FrameBufferSPtr p_pFrameBuffer )
 	{
-		m_dwAttachment = DirectX11::Get( GetAttachmentPoint() ) + GetAttachmentIndex();
-		m_pFrameBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pFrameBuffer );
 		return true;
 	}
 
 	void DxTextureAttachment::DoDetach()
 	{
-		m_pFrameBuffer.reset();
-		m_dwAttachment = 0;
 	}
 }

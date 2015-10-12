@@ -78,7 +78,7 @@ void RenderPanel::InitialiseRenderWindow()
 	SceneNodeSPtr l_pCamBaseNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
 
-	if ( m_renderType == eVIEWPORT_TYPE_3D )
+	if ( m_renderType == eVIEWPORT_TYPE_PERSPECTIVE )
 	{
 		SceneNodeSPtr l_pCamYawNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
 		SceneNodeSPtr l_pCamPitchNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
@@ -86,7 +86,7 @@ void RenderPanel::InitialiseRenderWindow()
 		l_pNode = l_pCamRollNode;
 	}
 
-	CameraSPtr l_pCamera = m_mainScene->CreateCamera( l_streamName.str() + cuT( "_Camera" ), GetClientSize().x, GetClientSize().y, l_pNode, m_renderType );
+	CameraSPtr l_pCamera = m_mainScene->CreateCamera( l_streamName.str() + cuT( "_Camera" ), GetClientSize().x, GetClientSize().y, l_pNode );
 	l_pRenderTarget->SetScene( m_mainScene );
 	l_pRenderTarget->SetCamera( l_pCamera );
 	l_pRenderTarget->SetSize( Size( GetClientSize().x, GetClientSize().y ) );
@@ -284,7 +284,7 @@ void RenderPanel::OnMouseMove( wxMouseEvent & event )
 
 		if ( m_mouseLeftDown )
 		{
-			if ( l_pRenderWindow->GetViewportType() == eVIEWPORT_TYPE_3D )
+			if ( l_pRenderWindow->GetViewportType() == eVIEWPORT_TYPE_PERSPECTIVE )
 			{
 				MouseCameraEvent::Add( m_pRotateCamEvent, m_listener, m_deltaX, m_deltaY, 0 );
 			}

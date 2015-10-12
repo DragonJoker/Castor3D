@@ -1,6 +1,8 @@
 #include "GlTexture.hpp"
 
+#include "GlPboTextureStorage.hpp"
 #include "GlRenderSystem.hpp"
+#include "GlTboTextureStorage.hpp"
 #include "GlTextureStorage.hpp"
 #include "OpenGl.hpp"
 
@@ -48,7 +50,7 @@ namespace GlRender
 		}
 	}
 
-	bool GlTexture::Initialise( PxBufferBaseSPtr p_buffer, eTEXTURE_DIMENSION p_dimension, uint32_t p_layer )
+	bool GlTexture::Initialise( PxBufferBaseSPtr p_buffer, eTEXTURE_TYPE p_dimension, uint32_t p_layer )
 	{
 		m_glDimension = m_gl.Get( p_dimension );
 
@@ -56,7 +58,6 @@ namespace GlRender
 		{
 			if ( m_gl.HasTbo() )
 			{
-				m_glDimension = eGL_TEXDIM_BUFFER;
 				m_storage = std::make_unique< GlTboTextureStorage >( m_gl, *m_glRenderSystem );
 			}
 			else

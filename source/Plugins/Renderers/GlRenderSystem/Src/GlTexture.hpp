@@ -57,10 +57,10 @@ namespace GlRender
 		 *\brief		Initialises the texture and IO buffers.
 		 *\param[in]	p_buffer	The texture image buffer.
 		 *\param[in]	p_dimension	The texture dimension.
-		 *\param[in]	p_depth		The texture depth, in case p_dimension is eTEXTURE_DIMENSION_3D or eTEXTURE_DIMENSION_2DARRAY.
+		 *\param[in]	p_depth		The texture depth, in case p_dimension is eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY.
 		 *\return		true on success.
 		 */
-		bool Initialise( Castor::PxBufferBaseSPtr p_buffer, Castor3D::eTEXTURE_DIMENSION p_dimension, uint32_t p_depth );
+		bool Initialise( Castor::PxBufferBaseSPtr p_buffer, Castor3D::eTEXTURE_TYPE p_dimension, uint32_t p_depth );
 		/**
 		 *\brief		Cleans the texture and IO buffers up.
 		 */

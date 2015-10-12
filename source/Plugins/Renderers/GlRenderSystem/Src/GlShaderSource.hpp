@@ -173,6 +173,7 @@ namespace GlRender
 			Castor::String m_name;
 		};
 
+		struct Int;
 		struct Vec4;
 		struct Sampler1D;
 		struct Sampler2D;
@@ -185,6 +186,11 @@ namespace GlRender
 
 		public:
 			C3D_Gl_API GlslWriter( OpenGl & p_gl, Castor3D::eSHADER_TYPE p_type );
+
+			inline bool HasTexelFetch()const
+			{
+				return m_gl.GetGlslVersion() >= 130;
+			}
 
 			C3D_Gl_API Castor::String Finalise();
 			C3D_Gl_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
@@ -201,6 +207,9 @@ namespace GlRender
 			C3D_Gl_API Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
 			C3D_Gl_API Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
 			C3D_Gl_API Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
+			C3D_Gl_API Vec4 TexelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
+			C3D_Gl_API Vec4 TexelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
+			C3D_Gl_API Vec4 TexelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );
 
 			template< typename RetType, typename FuncType, typename ... Params > inline void Implement_Function( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 			template< typename RetType > void Return( RetType const & p_return );
@@ -2810,6 +2819,9 @@ namespace GlRender
 		C3D_Gl_API Vec4 texture1D( Sampler1D const & p_sampler, Type const & p_value );
 		C3D_Gl_API Vec4 texture2D( Sampler2D const & p_sampler, Type const & p_value );
 		C3D_Gl_API Vec4 texture3D( Sampler3D const & p_sampler, Type const & p_value );
+		C3D_Gl_API Vec4 texelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
+		C3D_Gl_API Vec4 texelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
+		C3D_Gl_API Vec4 texelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );
 		C3D_Gl_API Vec2 reflect( Vec2 const & p_a, Type const & p_b );
 		C3D_Gl_API Vec3 reflect( Vec3 const & p_a, Type const & p_b );
 		C3D_Gl_API Vec4 reflect( Vec4 const & p_a, Type const & p_b );

@@ -162,6 +162,9 @@ namespace GlRender
 			Castor::String m_strTexture1D;
 			Castor::String m_strTexture2D;
 			Castor::String m_strTexture3D;
+			Castor::String m_strTexelFetch1D;
+			Castor::String m_strTexelFetch2D;
+			Castor::String m_strTexelFetch3D;
 			Castor::String m_strPixelOut;
 			Castor::String m_strPixelOutputName;
 			Castor::String m_strGSOutPositionName;
@@ -208,6 +211,18 @@ namespace GlRender
 			inline Castor::String const & GetTexture3D()const
 			{
 				return m_strTexture3D;
+			}
+			inline Castor::String const & GetTexelFetch1D()const
+			{
+				return m_strTexelFetch1D;
+			}
+			inline Castor::String const & GetTexelFetch2D()const
+			{
+				return m_strTexelFetch2D;
+			}
+			inline Castor::String const & GetTexelFetch3D()const
+			{
+				return m_strTexelFetch3D;
 			}
 			inline Castor::String const & GetPixelOut()const
 			{
@@ -297,6 +312,9 @@ namespace GlRender
 				m_strTexture1D = cuT( "texture1D" );
 				m_strTexture2D = cuT( "texture2D" );
 				m_strTexture3D = cuT( "texture3D" );
+				m_strTexelFetch1D = cuT( "texture1D" );
+				m_strTexelFetch2D = cuT( "texture2D" );
+				m_strTexelFetch3D = cuT( "texture3D" );
 				m_strPixelOutputName = cuT( "gl_FragColor" );
 				m_strGSOutPositionName = cuT( "gl_FragData[0]" );
 				m_strGSOutNormalName = cuT( "gl_FragData[1]" );
@@ -339,6 +357,9 @@ namespace GlRender
 				m_strTexture1D = cuT( "texture1D" );
 				m_strTexture2D = cuT( "texture2D" );
 				m_strTexture3D = cuT( "texture3D" );
+				m_strTexelFetch1D = cuT( "texelFetch" );
+				m_strTexelFetch2D = cuT( "texelFetch" );
+				m_strTexelFetch3D = cuT( "texelFetch" );
 				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;" );
 				m_strPixelOutputName = cuT( "pxl_v4FragColor" );
 				m_strGSOutPositionName = cuT( "gl_FragData[0]" );
@@ -383,6 +404,9 @@ namespace GlRender
 				m_strTexture1D = cuT( "texture" );
 				m_strTexture2D = cuT( "texture" );
 				m_strTexture3D = cuT( "texture" );
+				m_strTexelFetch1D = cuT( "texelFetch" );
+				m_strTexelFetch2D = cuT( "texelFetch" );
+				m_strTexelFetch3D = cuT( "texelFetch" );
 				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;" );
 				m_strPixelOutputName = cuT( "pxl_v4FragColor" );
 				m_strGSOutPositionName = cuT( "out_c3dPosition" );
@@ -432,6 +456,9 @@ namespace GlRender
 				m_strTexture1D = cuT( "texture" );
 				m_strTexture2D = cuT( "texture" );
 				m_strTexture3D = cuT( "texture" );
+				m_strTexelFetch1D = cuT( "texelFetch" );
+				m_strTexelFetch2D = cuT( "texelFetch" );
+				m_strTexelFetch3D = cuT( "texelFetch" );
 				m_strPixelOut = cuT( "out vec4 pxl_v4FragColor;" );
 				m_strPixelOutputName = cuT( "pxl_v4FragColor" );
 				m_strGSOutPositionName = cuT( "out_c3dPosition" );

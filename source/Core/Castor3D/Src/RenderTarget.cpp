@@ -309,7 +309,7 @@ namespace Castor3D
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
 	{
 		bool l_return = false;
-		m_pColorTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+		m_pColorTexture->SetType( eTEXTURE_TYPE_2D );
 		m_pColorTexture->SetImage( p_size, m_renderTarget.GetPixelFormat() );
 		Size l_size = m_pColorTexture->GetDimensions();
 		m_pFrameBuffer->Create( 0 );

@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\param[in]	p_type			Le type de texture
 		 *\param[in]	p_renderSystem	Le render system
 		 */
-		C3D_API TextureBase( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem );
+		C3D_API TextureBase( eTEXTURE_BASE_TYPE p_type, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -181,9 +181,9 @@ namespace Castor3D
 		 *\brief		Récupère le type de texture
 		 *\return		Le type de texture
 		 */
-		inline eTEXTURE_TYPE GetType()const
+		inline eTEXTURE_BASE_TYPE GetBaseType()const
 		{
-			return m_type;
+			return m_baseType;
 		}
 		/**
 		 *\~english
@@ -193,9 +193,9 @@ namespace Castor3D
 		 *\brief		Récupère la dimension de la texture
 		 *\return		La dimension de la texture
 		 */
-		inline eTEXTURE_DIMENSION GetDimension()const
+		inline eTEXTURE_TYPE GetType()const
 		{
-			return m_eDimension;
+			return m_type;
 		}
 		/**
 		 *\~english
@@ -205,9 +205,9 @@ namespace Castor3D
 		 *\brief		Définit la dimension de la texture
 		 *\param[in]	p_eDimension	La dimension de la texture
 		 */
-		inline void SetDimension( eTEXTURE_DIMENSION p_eDimension )
+		inline void SetType( eTEXTURE_TYPE p_eDimension )
 		{
-			m_eDimension = p_eDimension;
+			m_type = p_eDimension;
 		}
 		/**
 		 *\~english
@@ -385,10 +385,10 @@ namespace Castor3D
 		DECLARE_VECTOR( Castor::PxBufferBaseSPtr, PxBuffer );
 		//!\~english Initialisation status	\~french Statut d'initialisation
 		bool m_bInitialised;
-		//!\~english Texture type	\~french Type de texture
+		//!\~english Texture base type.	\~french La type de base de la texture.
+		eTEXTURE_BASE_TYPE m_baseType;
+		//!\~english Texture type.	\~french Type de texture.
 		eTEXTURE_TYPE m_type;
-		//!\~english Texture dimension count	\~french Compte des dimensions de la texture
-		eTEXTURE_DIMENSION m_eDimension;
 		//!\~english Texture mapping modes	\~french Modes de mappage de la texture
 		eTEXTURE_MAP_MODE m_eMapMode;
 		//!\~english Texture index	\~french Index de la texture

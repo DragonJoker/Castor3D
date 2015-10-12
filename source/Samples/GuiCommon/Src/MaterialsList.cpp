@@ -125,7 +125,7 @@ namespace GuiCommon
 		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new TextureTreeItemProperty( m_propertiesHolder->IsEditable(), p_texture ) );
 		TextureBaseSPtr l_texture = p_texture->GetTexture();
 
-		if ( l_texture->GetType() == eTEXTURE_TYPE_DYNAMIC )
+		if ( l_texture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC )
 		{
 			RenderTargetSPtr l_target = std::static_pointer_cast< DynamicTexture >( l_texture )->GetRenderTarget();
 

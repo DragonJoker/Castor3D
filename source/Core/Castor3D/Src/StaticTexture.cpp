@@ -11,7 +11,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	StaticTexture::StaticTexture( RenderSystem & p_renderSystem )
-		: TextureBase( eTEXTURE_TYPE_STATIC, p_renderSystem )
+		: TextureBase( eTEXTURE_BASE_TYPE_STATIC, p_renderSystem )
 	{
 	}
 
@@ -77,7 +77,7 @@ namespace Castor3D
 
 			if ( l_return && GetSampler() )
 			{
-				l_return = GetSampler()->Bind( m_eDimension, p_index );
+				l_return = GetSampler()->Bind( m_type, p_index );
 			}
 		}
 

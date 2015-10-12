@@ -19,9 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_TEXTURE_STORAGE_H___
 
 #include "GlRenderSystemPrerequisites.hpp"
-#include "GlBufferBase.hpp"
-
-#include <StaticTexture.hpp>
 
 namespace GlRender
 {
@@ -60,10 +57,10 @@ namespace GlRender
 		 *\brief		Initialises the texture and IO buffers.
 		 *\remarks		The texture must be bound before calling this method.
 		 *\param[in]	p_dimension	The texture dimension.
-		 *\param[in]	p_depth		The texture depth, in case p_dimension is eTEXTURE_DIMENSION_3D or eTEXTURE_DIMENSION_2DARRAY.
+		 *\param[in]	p_depth		The texture depth, in case p_dimension is eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY.
 		 *\return		true on success.
 		 */
-		bool Initialise( Castor3D::eTEXTURE_DIMENSION p_dimension, uint32_t p_depth );
+		bool Initialise( Castor3D::eTEXTURE_TYPE p_dimension, uint32_t p_depth );
 		/**
 		 *\brief		Cleans the texture and IO buffers up.
 		 */
@@ -121,7 +118,7 @@ namespace GlRender
 		/**
 		 *\brief		Initialises the texture and IO buffers.
 		 *\param[in]	p_dimension	The texture dimension.
-		 *\param[in]	p_layer		The texture layer, in case p_dimension is eTEXTURE_DIMENSION_3D or eTEXTURE_DIMENSION_2DARRAY.
+		 *\param[in]	p_layer		The texture layer, in case p_dimension is eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY.
 		 *\return		true on success.
 		 */
 		virtual bool DoInitialise() = 0;
@@ -148,21 +145,25 @@ namespace GlRender
 		 */
 		virtual void DoUnbind( uint32_t p_index ) = 0;
 		/**
-		 *\brief		Uploads the image pixels in asynchonous mode.
+		 *\~english
+		 *\brief		Locks image buffer from GPU, allowing modifications into it
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eLOCK_FLAG
+		 *\return		The image buffer
+		 *\~french
+		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eLOCK_FLAG
+		 *\return		Le buffer de l'image
 		 */
-		virtual void DoUploadAsync() = 0;
+		virtual uint8_t * DoLock( uint32_t p_lock ) = 0;
 		/**
-		 *\brief		Uploads the image pixels in synchonous mode.
+		 *\~english
+		 *\brief		Unlocks image buffer from GPU
+		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU
+		 *\~french
+		 *\brief		Délocke le buffer de l'image à partir du GPU
+		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
 		 */
-		virtual void DoUploadSync() = 0;
-		/**
-		 *\brief		Downloads the image pixels in asynchronous mode.
-		 */
-		virtual void DoDownloadAsync()=0;
-		/**
-		 *\brief		Downloads the image pixels in synchronous mode.
-		 */
-		virtual void DoDownloadSync() = 0;
+		virtual void DoUnlock( bool p_modified ) = 0;
 
 	protected:
 		//! The OpenGL APIs.
@@ -173,182 +174,8 @@ namespace GlRender
 		eGL_TEXDIM m_glDimension;
 		//! The texture image buffer.
 		Castor::PxBufferBaseWPtr m_buffer;
-		//! The texture depth, for eTEXTURE_DIMENSION_3D or eTEXTURE_DIMENSION_2DARRAY ones.
+		//! The texture depth, for eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY ones.
 		uint32_t m_depth;
-	};
-	/*!
-	\author		Sylvain Doremus.
-	\version	0.8.0
-	\date		12/10/2015
-	\brief		Class used to handle texture storage buffer, using pixel buffer objects.
-	*/
-	class GlPboTextureStorage
-		: public GlTextureStorage
-	{
-	public:
-		/**
-		*\brief		Constructor.
-		*\param[in]	p_gl			The OpenGL APIs.
-		*\param[in]	p_renderSystem	The RenderSystem.
-		*/
-		GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
-		/**
-		*\brief		Destructor.
-		*/
-		~GlPboTextureStorage();
-
-	private:
-		/**
-		*\brief		Creates the texture and IO buffers.
-		*\param[in]	p_buffer	The texture image buffer.
-		*\return		true on success.
-		*/
-		virtual bool DoCreate();
-		/**
-		*\brief		Destroys the texture and IO buffers.
-		*/
-		virtual void DoDestroy();
-		/**
-		*\brief		Initialises the texture and IO buffers.
-		*\param[in]	p_dimension	The texture dimension.
-		*\param[in]	p_layer		The texture layer, in case p_dimension is eTEXTURE_DIMENSION_3D or eTEXTURE_DIMENSION_2DARRAY.
-		*\return		true on success.
-		*/
-		virtual bool DoInitialise();
-		/**
-		*\brief		Cleans the texture and IO buffers up.
-		*/
-		virtual void DoCleanup();
-		/**
-		*\brief		Initialises the texture initial storage data.
-		*\param[in]	p_buffer	The texture pixel buffer.
-		*\param[in]	p_size		The pixel buffer dimensions.
-		*\param[in]	p_format	The pixel buffer format.
-		*/
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
-		*\brief		Binds this texture.
-		*\param[in]	p_index	The texture unit index.
-		*\return		true on success.
-		*/
-		virtual bool DoBind( uint32_t p_index );
-		/**
-		*\brief		Unbinds this texture.
-		*\param[in]	p_index	The texture unit index.
-		*/
-		virtual void DoUnbind( uint32_t p_index );
-		/**
-		*\brief		Uploads the image pixels in asynchonous mode.
-		*/
-		virtual void DoUploadAsync();
-		/**
-		*\brief		Uploads the image pixels in synchonous mode.
-		*/
-		virtual void DoUploadSync();
-		/**
-		*\brief		Downloads the image pixels in asynchronous mode.
-		*/
-		virtual void DoDownloadAsync();
-		/**
-		*\brief		Downloads the image pixels in synchronous mode.
-		*/
-		virtual void DoDownloadSync();
-
-		void DoUploadImage( uint32_t p_width, uint32_t p_height, OpenGl::PixelFmt const & p_format, uint8_t const * p_buffer );
-
-	private:
-		//! The pixel transfer buffers, used to upload the pixels.
-		std::array< GlUploadPixelBufferUPtr, 2 > m_uploadBuffers;
-		//! The currently active upload pixel buffer.
-		int m_currentUlPbo;
-		//! The pixel transfer buffers, used to download the pixels.
-		std::array< GlDownloadPixelBufferUPtr, 2 > m_downloadBuffers;
-		//! The currently active download pixel buffer.
-		int m_currentDlPbo;
-	};
-	/*!
-	\author		Sylvain Doremus.
-	\version	0.8.0
-	\date		12/10/2015
-	\brief		Class used to handle texture storage buffer, using texture buffer objects.
-	*/
-	class GlTboTextureStorage
-		: public GlTextureStorage
-	{
-	public:
-		/**
-		*\brief		Constructor.
-		*\param[in]	p_gl			The OpenGL APIs.
-		*\param[in]	p_renderSystem	The RenderSystem.
-		*/
-		GlTboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
-		/**
-		*\brief		Destructor.
-		*/
-		~GlTboTextureStorage();
-
-	private:
-		/**
-		*\brief		Creates the texture and IO buffers.
-		*\param[in]	p_buffer	The texture image buffer.
-		*\return		true on success.
-		*/
-		virtual bool DoCreate();
-		/**
-		*\brief		Destroys the texture and IO buffers.
-		*/
-		virtual void DoDestroy();
-		/**
-		*\brief		Initialises the texture and IO buffers.
-		*\param[in]	p_dimension	The texture dimension.
-		*\param[in]	p_layer		The texture layer, in case p_dimension is eTEXTURE_DIMENSION_3D or eTEXTURE_DIMENSION_2DARRAY.
-		*\return		true on success.
-		*/
-		virtual bool DoInitialise();
-		/**
-		*\brief		Cleans the texture and IO buffers up.
-		*/
-		virtual void DoCleanup();
-		/**
-		*\brief		Initialises the texture initial storage data.
-		*\param[in]	p_buffer	The texture pixel buffer.
-		*\param[in]	p_size		The pixel buffer dimensions.
-		*\param[in]	p_format	The pixel buffer format.
-		*/
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
-		*\brief		Binds this texture.
-		*\param[in]	p_index	The texture unit index.
-		*\return		true on success.
-		*/
-		virtual bool DoBind( uint32_t p_index );
-		/**
-		*\brief		Unbinds this texture.
-		*\param[in]	p_index	The texture unit index.
-		*/
-		virtual void DoUnbind( uint32_t p_index );
-		/**
-		*\brief		Uploads the image pixels in asynchonous mode.
-		*/
-		virtual void DoUploadAsync();
-		/**
-		*\brief		Uploads the image pixels in synchonous mode.
-		*/
-		virtual void DoUploadSync();
-		/**
-		*\brief		Downloads the image pixels in asynchronous mode.
-		*/
-		virtual void DoDownloadAsync();
-		/**
-		*\brief		Downloads the image pixels in synchronous mode.
-		*/
-		virtual void DoDownloadSync();
-
-	private:
-		//! The texture buffer, used to hold the texture pixels.
-		GlBufferBase< uint8_t > m_glBuffer;
-		//! The internal pixel format.
-		eGL_INTERNAL_FORMAT m_glInternal;
 	};
 }
 

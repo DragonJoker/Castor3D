@@ -4,6 +4,8 @@
 #include "ComLight.hpp"
 #include "ComTextureBase.hpp"
 
+#include <Viewport.hpp>
+
 namespace CastorCom
 {
 	static const Castor::String ERROR_UNINITIALISED = cuT( "The scene must be initialised" );
@@ -122,7 +124,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::CreateCamera( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [in] */ eVIEWPORT_TYPE type, /* [out, retval] */ ICamera ** pVal )
+	STDMETHODIMP CScene::CreateCamera( /* [in] */ BSTR name, /* [in] */ int ww, /* [in] */ int wh, /* [in] */ ISceneNode * node, /* [out, retval] */ ICamera ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -134,7 +136,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CCamera * >( *pVal )->SetInternal( m_internal->CreateCamera( FromBstr( name ), ww, wh, node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr, Castor3D::eVIEWPORT_TYPE( type ) ) );
+					static_cast< CCamera * >( *pVal )->SetInternal( m_internal->CreateCamera( FromBstr( name ), ww, wh, node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr ) );
 				}
 			}
 		}

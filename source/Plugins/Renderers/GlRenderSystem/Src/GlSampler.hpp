@@ -37,7 +37,7 @@ namespace GlRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Bind( Castor3D::eTEXTURE_DIMENSION p_eDimension, uint32_t p_index );
+		virtual bool Bind( Castor3D::eTEXTURE_TYPE p_eDimension, uint32_t p_index );
 		virtual void Unbind();
 
 	private:

@@ -35,31 +35,33 @@ typedef enum
 ]
 typedef enum
 {
-	ePIXEL_FORMAT_L8,
-	ePIXEL_FORMAT_L16F32F,
-	ePIXEL_FORMAT_L32F,
-	ePIXEL_FORMAT_A8L8,
-	ePIXEL_FORMAT_AL16F32F,
-	ePIXEL_FORMAT_AL32F,
-	ePIXEL_FORMAT_A1R5G5B5,
-	ePIXEL_FORMAT_A4R4G4B4,
-	ePIXEL_FORMAT_R5G6B5,
-	ePIXEL_FORMAT_R8G8B8,
-	ePIXEL_FORMAT_A8R8G8B8,
-	ePIXEL_FORMAT_RGB16F32F,
-	ePIXEL_FORMAT_ARGB16F32F,
-	ePIXEL_FORMAT_RGB32F,
-	ePIXEL_FORMAT_ARGB32F,
-	ePIXEL_FORMAT_DXTC1,
-	ePIXEL_FORMAT_DXTC3,
-	ePIXEL_FORMAT_DXTC5,
-	ePIXEL_FORMAT_YUY2,
-	ePIXEL_FORMAT_DEPTH16,
-	ePIXEL_FORMAT_DEPTH24,
-	ePIXEL_FORMAT_DEPTH24S8,
-	ePIXEL_FORMAT_DEPTH32,
-	ePIXEL_FORMAT_STENCIL1,
-	ePIXEL_FORMAT_STENCIL8,
+	ePIXEL_FORMAT_L8,			//!< 8 bits luminosity
+	ePIXEL_FORMAT_L16F32F,		//!< Half floats luminosity on GPU, floats luminosity on CPU
+	ePIXEL_FORMAT_L32F,			//!< Floats luminosity on CPU
+	ePIXEL_FORMAT_A8L8,			//!< 16 bits alpha and luminosity
+	ePIXEL_FORMAT_AL16F32F,		//!< Half floats alpha and luminosity on GPU, floats alpha and luminosity on CPU
+	ePIXEL_FORMAT_AL32F,		//!< Floats alpha and luminosity on CPU
+	ePIXEL_FORMAT_A1R5G5B5,		//!< 16 bits 5551 ARGB
+	ePIXEL_FORMAT_A4R4G4B4,		//!< 16 bits 4444 ARGB
+	ePIXEL_FORMAT_R5G6B5,		//!< 16 bits 565 RGB
+	ePIXEL_FORMAT_R8G8B8,		//!< 24 bits 888 RGB
+	ePIXEL_FORMAT_B8G8R8,		//!< 24 bits 888 BGR
+	ePIXEL_FORMAT_A8R8G8B8,		//!< 32 bits 8888 ARGB
+	ePIXEL_FORMAT_A8B8G8R8,		//!< 32 bits 8888 ABGR
+	ePIXEL_FORMAT_RGB16F32F,	//!< Half float RGB on GPU, Float RGB on CPU
+	ePIXEL_FORMAT_ARGB16F32F,	//!< Half float ARGB on GPU, Float ARGB on CPU
+	ePIXEL_FORMAT_RGB32F,		//!< Float RGB
+	ePIXEL_FORMAT_ARGB32F,		//!< Float ARGB
+	ePIXEL_FORMAT_DXTC1,		//!< DXT1 8 bits compressed format
+	ePIXEL_FORMAT_DXTC3,		//!< DXT3 16 bits compressed format
+	ePIXEL_FORMAT_DXTC5,		//!< DXT5 16 bits compressed format
+	ePIXEL_FORMAT_YUY2,			//!< YUY2 16 bits compressed format
+	ePIXEL_FORMAT_DEPTH16,		//!< Depth 16 bits
+	ePIXEL_FORMAT_DEPTH24,		//!< Depth 24 bits
+	ePIXEL_FORMAT_DEPTH24S8,	//!< Depth 24 bits, Stencil 8 bits
+	ePIXEL_FORMAT_DEPTH32,		//!< Depth 32 bits
+	ePIXEL_FORMAT_STENCIL1,		//!< Stencil 1 bit
+	ePIXEL_FORMAT_STENCIL8,		//!< Stencil 8 bits
 	ePIXEL_FORMAT_COUNT,
 }	ePIXEL_FORMAT;
 
@@ -70,9 +72,7 @@ typedef enum
 typedef enum
 {
 	eRENDERER_TYPE_OPENGL,
-	eRENDERER_TYPE_DIRECT3D9,
-	eRENDERER_TYPE_DIRECT3D10,
-	eRENDERER_TYPE_DIRECT3D11,
+	eRENDERER_TYPE_DIRECT3D,
 }	eRENDERER_TYPE;
 
 // eMESH_TYPE
@@ -126,14 +126,60 @@ typedef enum
 	eOVERLAY_TYPE_TEXT,
 }	eOVERLAY_TYPE;
 
+// eTEXT_WRAPPING_MODE
+[
+	uuid( 41DE0D68-CE43-4601-8B75-63D193E2A74C )
+]
+typedef enum
+{
+	eTEXT_WRAPPING_MODE_NONE,
+	eTEXT_WRAPPING_MODE_BREAK,
+	eTEXT_WRAPPING_MODE_BREAK_WORDS,
+}	eTEXT_WRAPPING_MODE;
+
+// eHALIGN
+[
+	uuid( CD545DC8-E7DC-4DBC-B32C-6368E9B83C21 )
+]
+typedef enum
+{
+	eHALIGN_LEFT,
+	eHALIGN_CENTER,
+	eHALIGN_RIGHT,
+}	eHALIGN;
+
+// eVALIGN
+[
+	uuid( 8C88E7EE-6D8F-4E30-9663-98BD86ED9DF9 )
+]
+typedef enum
+{
+	eVALIGN_TOP,
+	eVALIGN_CENTER,
+	eVALIGN_BOTTOM,
+}	eVALIGN;
+
+// eBORDER_POSITION
+[
+	uuid( B78BF8F8-8A36-4AB4-B8C8-3AE85D9FD3F0 )
+]
+typedef enum
+{
+	eBORDER_POSITION_INTERNAL,
+	eBORDER_POSITION_MIDDLE,
+	eBORDER_POSITION_EXTERNAL,
+}	eBORDER_POSITION;
+
 // eVIEWPORT_TYPE
 [
 	uuid( A4D87FE1-238D-4CE5-9458-6923F4196875 )
 ]
 typedef enum
 {
-	eVIEWPORT_TYPE_3D,
-	eVIEWPORT_TYPE_2D,
+	eVIEWPORT_TYPE_ORTHO,
+	eVIEWPORT_TYPE_PERSPECTIVE,
+	eVIEWPORT_TYPE_FRUSTUM,
+	eVIEWPORT_TYPE_COUNT,
 }	eVIEWPORT_TYPE;
 
 // eTOPOLOGY
@@ -174,15 +220,14 @@ typedef enum
 ]
 typedef enum
 {
-	eTEXTURE_CHANNEL_COLOUR,
-	eTEXTURE_CHANNEL_DIFFUSE,
-	eTEXTURE_CHANNEL_NORMAL,
-	eTEXTURE_CHANNEL_OPACITY,
-	eTEXTURE_CHANNEL_SPECULAR,
-	eTEXTURE_CHANNEL_HEIGHT,
-	eTEXTURE_CHANNEL_AMBIENT,
-	eTEXTURE_CHANNEL_GLOSS,
-	eTEXTURE_CHANNEL_LGHTPASS,
+	eTEXTURE_CHANNEL_COLOUR = 0x00000001,	//!< Colour map
+	eTEXTURE_CHANNEL_DIFFUSE = 0x00000002,	//!< Diffuse map
+	eTEXTURE_CHANNEL_NORMAL = 0x00000004,	//!< Normal map
+	eTEXTURE_CHANNEL_OPACITY = 0x00000008,	//!< Opacity map
+	eTEXTURE_CHANNEL_SPECULAR = 0x00000010,	//!< Specular map
+	eTEXTURE_CHANNEL_HEIGHT = 0x00000020,	//!< Height map
+	eTEXTURE_CHANNEL_AMBIENT = 0x00000040,	//!< Ambient map
+	eTEXTURE_CHANNEL_GLOSS = 0x00000080,	//!< Gloss map
 	eTEXTURE_CHANNEL_ALL,
 }	eTEXTURE_CHANNEL;
 
@@ -261,28 +306,34 @@ typedef enum
 	eALPHA_FUNC_NEVER,
 }	eALPHA_FUNC;
 
-// eTEXTURE_TYPE
+// eTEXTURE_BASE_TYPE
 [
 	uuid( 02A480E3-85BC-4757-AE81-118C2A805EFD )
 ]
 typedef enum
 {
-	eTEXTURE_TYPE_STATIC,
-	eTEXTURE_TYPE_DYNAMIC,
-}	eTEXTURE_TYPE;
+	eTEXTURE_BASE_TYPE_STATIC,
+	eTEXTURE_BASE_TYPE_DYNAMIC,
+}	eTEXTURE_BASE_TYPE;
 
-// eTEXTURE_DIMENSION
+// eTEXTURE_TYPE
 [
 	uuid( 7B89A147-BC55-40AC-B720-435B74348074 )
 ]
 typedef enum
 {
-	eTEXTURE_DIMENSION_1D,
-	eTEXTURE_DIMENSION_2D,
-	eTEXTURE_DIMENSION_3D,
-	eTEXTURE_DIMENSION_2DMS,
-	eTEXTURE_DIMENSION_2DARRAY,
-}	eTEXTURE_DIMENSION;
+	eTEXTURE_TYPE_BUFFER,
+	eTEXTURE_TYPE_1D,
+	eTEXTURE_TYPE_1DARRAY,
+	eTEXTURE_TYPE_2D,
+	eTEXTURE_TYPE_2DARRAY,
+	eTEXTURE_TYPE_2DMS,
+	eTEXTURE_TYPE_2DMSARRAY,
+	eTEXTURE_TYPE_3D,
+	eTEXTURE_TYPE_CUBE,
+	eTEXTURE_TYPE_CUBEARRAY,
+	eTEXTURE_TYPE_COUNT,
+}	eTEXTURE_TYPE;
 
 // eINTERPOLATION_MODE
 [
@@ -290,9 +341,11 @@ typedef enum
 ]
 typedef enum
 {
+	eINTERPOLATION_MODE_UNDEFINED,
 	eINTERPOLATION_MODE_NEAREST,
 	eINTERPOLATION_MODE_LINEAR,
 	eINTERPOLATION_MODE_ANISOTROPIC,
+	eINTERPOLATION_MODE_COUNT,
 }	eINTERPOLATION_MODE;
 
 // eWRAP_MODE
@@ -305,7 +358,20 @@ typedef enum
 	eWRAP_MODE_MIRRORED_REPEAT,
 	eWRAP_MODE_CLAMP_TO_BORDER,
 	eWRAP_MODE_CLAMP_TO_EDGE,
+	eWRAP_MODE_COUNT,
 }	eWRAP_MODE;
+
+// eINTERPOLATION_FILTER
+[
+	uuid( 3C873590-292E-4229-992A-95EAA46EC353 )
+]
+typedef enum
+{
+	eINTERPOLATION_FILTER_MIN,
+	eINTERPOLATION_FILTER_MAG,
+	eINTERPOLATION_FILTER_MIP,
+	eINTERPOLATION_FILTER_COUNT,
+}	eINTERPOLATION_FILTER;
 
 // eBLEND_OP
 [
@@ -983,9 +1049,9 @@ interface ISampler
 interface ITextureBase
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
-	[propget, id( 2 ), helpstring( "The texture dimension" )] HRESULT Dimension( [out, retval] eTEXTURE_DIMENSION * pVal );
-	[propput, id( 2 ), helpstring( "The texture dimension" )] HRESULT Dimension( [in] eTEXTURE_DIMENSION val );
+	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT BaseType( [out, retval] eTEXTURE_BASE_TYPE * pVal );
+	[propget, id( 2 ), helpstring( "The texture dimension" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
+	[propput, id( 2 ), helpstring( "The texture dimension" )] HRESULT Type( [in] eTEXTURE_TYPE val );
 	[propget, id( 3 ), helpstring( "The texture sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
 	[propput, id( 3 ), helpstring( "The texture sampler" )] HRESULT Sampler( [in] ISampler * val );
 	[propget, id( 4 ), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [out, retval] eTEXTURE_MAP_MODE * pVal );
@@ -1194,7 +1260,7 @@ interface IScene
 	[id( 12 ), helpstring( "Sets the background image" )] HRESULT SetBackgroundImage( [in] BSTR path );
 	[id( 13 ), helpstring( "Creates a new scene node" )] HRESULT CreateSceneNode( [in] BSTR name, [in] ISceneNode * parent, [out, retval] ISceneNode ** pVal );
 	[id( 14 ), helpstring( "Creates a new geometry" )] HRESULT CreateGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );
-	[id( 15 ), helpstring( "Creates a new camera" )] HRESULT CreateCamera( [in] BSTR name, [in] int ww, [in] int wh, [in] ISceneNode * node, [in] eVIEWPORT_TYPE type, [out, retval] ICamera ** pVal );
+	[id( 15 ), helpstring( "Creates a new camera" )] HRESULT CreateCamera( [in] BSTR name, [in] int ww, [in] int wh, [in] ISceneNode * node, [out, retval] ICamera ** pVal );
 	[id( 16 ), helpstring( "Creates a new light" )] HRESULT CreateLight( [in] BSTR name, [in] ISceneNode * node, [in] eLIGHT_TYPE type, [out, retval] ILight ** pVal );
 	[id( 17 ), helpstring( "Retrieves the scene node with the given name" )] HRESULT GetNode( [in] BSTR name, [out, retval] ISceneNode ** pVal );
 	[id( 18 ), helpstring( "Retrieves the geometry with the given name" )] HRESULT GetGeometry( [in] BSTR name, [out, retval] IGeometry ** pVal );

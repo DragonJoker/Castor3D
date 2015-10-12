@@ -63,6 +63,6 @@ namespace GlRender
 
 	bool GlStaticTexture::DoInitialise()
 	{
-		return m_texture.Initialise( m_pPixelBuffer, m_eDimension, m_uiDepth );
+		return m_texture.Initialise( m_pPixelBuffer, m_type, m_uiDepth );
 	}
 }

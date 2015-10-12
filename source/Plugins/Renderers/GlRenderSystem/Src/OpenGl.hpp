@@ -1864,7 +1864,7 @@ namespace GlRender
 		{
 			return PrimitiveTypes[p_index];
 		}
-		inline eGL_TEXDIM Get( Castor3D::eTEXTURE_DIMENSION p_index )const
+		inline eGL_TEXDIM Get( Castor3D::eTEXTURE_TYPE p_index )const
 		{
 			return TextureDimensions[p_index];
 		}
@@ -2071,7 +2071,7 @@ namespace GlRender
 		Castor::String GlslStrings[8];
 		Castor::String GlslErrors[8];
 		eGL_PRIMITIVE PrimitiveTypes[Castor3D::eTOPOLOGY_COUNT];
-		eGL_TEXDIM TextureDimensions[Castor3D::eTEXTURE_DIMENSION_COUNT];
+		eGL_TEXDIM TextureDimensions[Castor3D::eTEXTURE_TYPE_COUNT];
 		eGL_FUNC AlphaFuncs[Castor3D::eALPHA_FUNC_COUNT];
 		eGL_WRAP_MODE TextureWrapMode[Castor3D::eWRAP_MODE_COUNT];
 		eGL_INTERPOLATION_MODE TextureInterpolation[Castor3D::eINTERPOLATION_MODE_COUNT];

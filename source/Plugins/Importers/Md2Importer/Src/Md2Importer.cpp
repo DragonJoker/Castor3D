@@ -152,7 +152,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 			{
 				l_pTexture = p_pPass->AddTextureUnit();
 				StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-				l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+				l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 				l_pStaTexture->SetImage( l_pImage->GetPixels() );
 				l_pTexture->SetTexture( l_pStaTexture );
 				l_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );

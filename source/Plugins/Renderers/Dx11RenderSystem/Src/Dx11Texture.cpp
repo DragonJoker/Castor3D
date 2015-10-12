@@ -25,7 +25,7 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxTexture::Initialise( eTEXTURE_DIMENSION p_dimension, PxBufferBaseSPtr p_pixelBuffer, uint32_t p_depth, bool p_renderTarget, uint32_t p_samples )
+	bool DxTexture::Initialise( eTEXTURE_TYPE p_dimension, PxBufferBaseSPtr p_pixelBuffer, uint32_t p_depth, bool p_renderTarget, uint32_t p_samples )
 	{
 		m_pixelBuffer = p_pixelBuffer;
 		m_depth = p_depth;
@@ -35,43 +35,43 @@ namespace Dx11Render
 
 		switch ( p_dimension )
 		{
-		case eTEXTURE_DIMENSION_BUFFER:
+		case eTEXTURE_TYPE_BUFFER:
 			l_return = DoInitialise1D();
 			break;
 
-		case eTEXTURE_DIMENSION_1D:
+		case eTEXTURE_TYPE_1D:
 			l_return = DoInitialise1D();
 			break;
 
-		case eTEXTURE_DIMENSION_1DARRAY:
+		case eTEXTURE_TYPE_1DARRAY:
 			l_return = DoInitialise1DArray();
 			break;
 
-		case eTEXTURE_DIMENSION_2D:
+		case eTEXTURE_TYPE_2D:
 			l_return = DoInitialise2D();
 			break;
 
-		case eTEXTURE_DIMENSION_2DARRAY:
+		case eTEXTURE_TYPE_2DARRAY:
 			l_return = DoInitialise2DArray();
 			break;
 
-		case eTEXTURE_DIMENSION_2DMS:
+		case eTEXTURE_TYPE_2DMS:
 			l_return = DoInitialise2DMS();
 			break;
 
-		case eTEXTURE_DIMENSION_2DMSARRAY:
+		case eTEXTURE_TYPE_2DMSARRAY:
 			l_return = DoInitialise2DMSArray();
 			break;
 
-		case eTEXTURE_DIMENSION_3D:
+		case eTEXTURE_TYPE_3D:
 			l_return = DoInitialise3D();
 			break;
 
-		case eTEXTURE_DIMENSION_CUBE:
+		case eTEXTURE_TYPE_CUBE:
 			l_return = DoInitialiseCube();
 			break;
 
-		case eTEXTURE_DIMENSION_CUBEARRAY:
+		case eTEXTURE_TYPE_CUBEARRAY:
 			l_return = DoInitialiseCubeArray();
 			break;
 		}
@@ -123,7 +123,18 @@ namespace Dx11Render
 			ID3D11Resource * l_pResource;
 			m_shaderResourceView->GetResource( &l_pResource );
 			StringStream l_name;
-			l_name << Engine::GetEngineDirectory() << cuT( "\\Texture_" ) << ( void * )this << cuT( "_SRV.png" );
+			l_name << Engine::GetEngineDirectory() << cuT( "\\Texture" );
+
+			if ( m_static )
+			{
+				l_name << cuT( "(Static)" );
+			}
+			else
+			{
+				l_name << cuT( "(Dynamic)" );
+			}
+
+			l_name << cuT( "_" ) << ( void * )this << cuT( "_SRV.png" );
 			D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
 			l_pResource->Release();
 		}

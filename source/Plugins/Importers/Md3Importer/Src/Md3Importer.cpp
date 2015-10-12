@@ -187,7 +187,7 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 			{
 				l_pTexture = p_pPass->AddTextureUnit();
 				StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-				l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+				l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 				l_pStaTexture->SetImage( l_pImage->GetPixels() );
 				l_pTexture->SetTexture( l_pStaTexture );
 				l_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
@@ -339,7 +339,7 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 						}
 
 						StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-						l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 						l_pStaTexture->SetImage( l_pImage->GetPixels() );
 						l_unit->SetTexture( l_pStaTexture );
 					}
@@ -354,7 +354,7 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 						}
 
 						StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-						l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 						l_pStaTexture->SetImage( l_pImage->GetPixels() );
 						l_unit->SetTexture( l_pStaTexture );
 					}
@@ -421,7 +421,7 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 					}
 
 					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );
 					l_unit->SetTexture( l_pStaTexture );
 				}
@@ -436,7 +436,7 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 					}
 
 					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );
 					l_unit->SetTexture( l_pStaTexture );
 				}

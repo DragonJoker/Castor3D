@@ -205,103 +205,103 @@ namespace Castor3D
 		 */
 		C3D_API bool LoadTexture( Castor::Path const & p_pathFile );
 		/**
-		*\~english
-		*\brief		Retrieves the texture dimension
-		*\return		The texture dimension
-		*\~french
-		*\brief		Récupère la dimension de la texture
-		*\return		La dimension de la texture
-		*/
-		C3D_API eTEXTURE_DIMENSION GetDimension()const;
+		 *\~english
+		 *\brief		Retrieves the texture dimension
+		 *\return		The texture dimension
+		 *\~french
+		 *\brief		Récupère la dimension de la texture
+		 *\return		La dimension de la texture
+		 */
+		C3D_API eTEXTURE_TYPE GetType()const;
 		/**
-		*\~english
-		*\brief		Retrieves the texture mapping mode
-		*\return		The texture mapping mode
-		*\~french
-		*\brief		Récupère le mode mappage de la texture
-		*\return		Le mode mappage de la texture
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture mapping mode
+		 *\return		The texture mapping mode
+		 *\~french
+		 *\brief		Récupère le mode mappage de la texture
+		 *\return		Le mode mappage de la texture
+		 */
 		C3D_API eTEXTURE_MAP_MODE GetMappingMode()const;
 		/**
-		*\~english
-		*\brief		Defines the texture mapping mode
-		*\param[in]	p_mode	The texture mapping mode
-		*\~french
-		*\brief		Définit le mode de mappage de la texture
-		*\param[in]	p_mode	Le mode de mappage de la texture
-		*/
+		 *\~english
+		 *\brief		Defines the texture mapping mode
+		 *\param[in]	p_mode	The texture mapping mode
+		 *\~french
+		 *\brief		Définit le mode de mappage de la texture
+		 *\param[in]	p_mode	Le mode de mappage de la texture
+		 */
 		C3D_API void SetMappingMode( eTEXTURE_MAP_MODE p_mode );
 		/**
-		*\~english
-		*\brief		Retrieves the texture image buffer
-		*\return		The buffer
-		*\~french
-		*\brief		Récupère le buffer de l'image de la texture
-		*\return		Le buffer
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		Récupère le buffer de l'image de la texture
+		 *\return		Le buffer
+		 */
 		C3D_API uint8_t const * GetImageBuffer()const;
 		/**
-		*\~english
-		*\brief		Retrieves the texture image buffer
-		*\return		The buffer
-		*\~french
-		*\brief		Récupère le buffer de l'image de la texture
-		*\return		Le buffer
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		Récupère le buffer de l'image de la texture
+		 *\return		Le buffer
+		 */
 		C3D_API uint8_t * GetImageBuffer();
 		/**
-		*\~english
-		*\brief		Retrieves the texture image pixels
-		*\return		The pixels
-		*\~french
-		*\brief		Récupère les pixels de l'image de la texture
-		*\return		Les pixels
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image pixels
+		 *\return		The pixels
+		 *\~french
+		 *\brief		Récupère les pixels de l'image de la texture
+		 *\return		Les pixels
+		 */
 		C3D_API Castor::PxBufferBaseSPtr const GetImagePixels()const;
 		/**
-		*\~english
-		*\brief		Retrieves the texture image pixels
-		*\return		The pixels
-		*\~french
-		*\brief		Récupère les pixels de l'image de la texture
-		*\return		Les pixels
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image pixels
+		 *\return		The pixels
+		 *\~french
+		 *\brief		Récupère les pixels de l'image de la texture
+		 *\return		Les pixels
+		 */
 		C3D_API Castor::PxBufferBaseSPtr GetImagePixels();
 		/**
-		*\~english
-		*\brief		Retrieves the texture image size (in bytes)
-		*\return		The size
-		*\~french
-		*\brief		Récupère la taille de l'image de la texture (en octets)
-		*\return		La taille
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image size (in bytes)
+		 *\return		The size
+		 *\~french
+		 *\brief		Récupère la taille de l'image de la texture (en octets)
+		 *\return		La taille
+		 */
 		C3D_API uint32_t GetImageSize()const;
 		/**
-		*\~english
-		*\brief		Retrieves the texture image width
-		*\return		The width
-		*\~french
-		*\brief		Récupère la largeur de l'image de la texture
-		*\return		La largeur
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image width
+		 *\return		The width
+		 *\~french
+		 *\brief		Récupère la largeur de l'image de la texture
+		 *\return		La largeur
+		 */
 		C3D_API uint32_t GetWidth()const;
 		/**
-		*\~english
-		*\brief		Retrieves the texture image height
-		*\return		The height
-		*\~french
-		*\brief		Récupère la hauteur de l'image de la texture
-		*\return		La hauteur
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image height
+		 *\return		The height
+		 *\~french
+		 *\brief		Récupère la hauteur de l'image de la texture
+		 *\return		La hauteur
+		 */
 		C3D_API uint32_t GetHeight()const;
 		/**
-		*\~english
-		*\brief		Retrieves the texture image pixel format
-		*\return		The pixel format
-		*\~french
-		*\brief		Récupère le format des pixels de l'image de la texture
-		*\return		Le format des pixels
-		*/
+		 *\~english
+		 *\brief		Retrieves the texture image pixel format
+		 *\return		The pixel format
+		 *\~french
+		 *\brief		Récupère le format des pixels de l'image de la texture
+		 *\return		Le format des pixels
+		 */
 		C3D_API Castor::ePIXEL_FORMAT GetPixelFormat()const;
 		/**
 		 *\~english

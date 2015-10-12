@@ -345,7 +345,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 					}
 
 					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );
 					l_unit->SetTexture( l_pStaTexture );
 					l_unit->SetBlendColour( Colour::from_components( 1.0, 1.0, 1.0, 1.0 ) );
@@ -363,7 +363,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 					}
 
 					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetDimension( eTEXTURE_DIMENSION_2D );
+					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );
 					l_unit->SetTexture( l_pStaTexture );
 					l_unit->SetBlendColour( Colour::from_components( 1.0, 1.0, 1.0, 1.0 ) );

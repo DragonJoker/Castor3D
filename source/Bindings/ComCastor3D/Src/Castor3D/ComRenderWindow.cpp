@@ -97,7 +97,7 @@ namespace CastorCom
 				CastorGui::ControlsManager & l_controlsManager = static_cast< CastorGui::ControlsManager & >( m_internal->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseMove( Castor::Position( m_oldX, m_oldY ) );
 			}
-			catch ( Castor::Exception & p_exc )
+			catch ( Castor::Exception & )
 			{
 			}
 #endif
@@ -125,7 +125,7 @@ namespace CastorCom
 				CastorGui::ControlsManager & l_controlsManager = static_cast< CastorGui::ControlsManager & >( m_internal->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT );
 			}
-			catch ( Castor::Exception & p_exc )
+			catch ( Castor::Exception & )
 			{
 			}
 #endif
@@ -153,7 +153,7 @@ namespace CastorCom
 				CastorGui::ControlsManager & l_controlsManager = static_cast< CastorGui::ControlsManager & >( m_internal->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT );
 			}
-			catch ( Castor::Exception & p_exc )
+			catch ( Castor::Exception & )
 			{
 			}
 #endif
@@ -181,7 +181,7 @@ namespace CastorCom
 				CastorGui::ControlsManager & l_controlsManager = static_cast< CastorGui::ControlsManager & >( m_internal->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE );
 			}
-			catch ( Castor::Exception & p_exc )
+			catch ( Castor::Exception & )
 			{
 			}
 #endif
@@ -209,7 +209,7 @@ namespace CastorCom
 				CastorGui::ControlsManager & l_controlsManager = static_cast< CastorGui::ControlsManager & >( m_internal->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE );
 			}
-			catch ( Castor::Exception & p_exc )
+			catch ( Castor::Exception & )
 			{
 			}
 #endif
@@ -237,7 +237,7 @@ namespace CastorCom
 				CastorGui::ControlsManager & l_controlsManager = static_cast< CastorGui::ControlsManager & >( m_internal->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT );
 			}
-			catch ( Castor::Exception & p_exc )
+			catch ( Castor::Exception & )
 			{
 			}
 #endif
@@ -265,7 +265,7 @@ namespace CastorCom
 				CastorGui::ControlsManager & l_controlsManager = static_cast< CastorGui::ControlsManager & >( m_internal->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT );
 			}
-			catch ( Castor::Exception & p_exc )
+			catch ( Castor::Exception & )
 			{
 			}
 #endif

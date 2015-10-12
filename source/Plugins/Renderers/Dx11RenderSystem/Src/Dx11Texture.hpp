@@ -30,7 +30,7 @@ namespace Dx11Render
 		DxTexture( DxRenderSystem & p_renderSystem, bool p_static );
 		virtual ~DxTexture();
 
-		virtual bool Initialise( Castor3D::eTEXTURE_DIMENSION p_dimension, Castor::PxBufferBaseSPtr p_pixelBuffer, uint32_t p_depth, bool p_renderTarget, uint32_t p_samples );
+		virtual bool Initialise( Castor3D::eTEXTURE_TYPE p_dimension, Castor::PxBufferBaseSPtr p_pixelBuffer, uint32_t p_depth, bool p_renderTarget, uint32_t p_samples );
 		virtual void Cleanup();
 		virtual bool Bind( uint32_t p_index );
 		virtual void Unbind( uint32_t p_index );
