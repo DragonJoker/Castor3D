@@ -128,16 +128,21 @@ namespace GlRender
 	class GlRenderSystem;
 	DECLARE_SMART_PTR( GlContext );
 
+	class GlTexture;
+	class GlTextureStorage;
+	class GlTexturePboStorage;
+	class GlTextureTboStorage;
 	class GlDynamicTexture;
 	class GlStaticTexture;
-	class GlPixelBuffer;
-	class GlPackPixelBuffer;
-	class GlUnpackPixelBuffer;
+	class GlGpuIoBuffer;
+	class GlDownloadPixelBuffer;
+	class GlUploadPixelBuffer;
 	DECLARE_SMART_PTR( GlDynamicTexture );
 	DECLARE_SMART_PTR( GlStaticTexture );
-	DECLARE_SMART_PTR( GlPixelBuffer );
-	DECLARE_SMART_PTR( GlPackPixelBuffer );
-	DECLARE_SMART_PTR( GlUnpackPixelBuffer );
+	DECLARE_SMART_PTR( GlTextureStorage );
+	DECLARE_SMART_PTR( GlGpuIoBuffer );
+	DECLARE_SMART_PTR( GlDownloadPixelBuffer );
+	DECLARE_SMART_PTR( GlUploadPixelBuffer );
 
 	class GlOverlayRenderer;
 	class GlRenderTarget;

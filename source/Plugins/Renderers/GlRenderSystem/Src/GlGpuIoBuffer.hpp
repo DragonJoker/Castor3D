@@ -15,31 +15,33 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_TEXTURE_BUFFER_H___
-#define ___GL_TEXTURE_BUFFER_H___
+#ifndef ___GL_GPU_IO_BUFFER_H___
+#define ___GL_GPU_IO_BUFFER_H___
 
-#include "GlBuffer.hpp"
-
-#include <Buffer.hpp>
+#include "GlBufferBase.hpp"
 
 namespace GlRender
 {
-	class GlTextureBufferObject
-		:	public GlBuffer< uint8_t >
-		,	public Castor::NonCopyable
+	class GlGpuIoBuffer
+		: public GlBufferBase< uint8_t >
 	{
 	public:
-		GlTextureBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer );
-		virtual ~GlTextureBufferObject();
+		GlGpuIoBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize, eGL_BUFFER_TARGET p_ePackMode, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		virtual ~GlGpuIoBuffer();
 
-		virtual bool Create();
-		virtual void Destroy();
-		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram );
-		virtual void Cleanup();
-		virtual bool Bind();
-		virtual void Unbind();
-		virtual uint8_t * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags );
-		virtual void Unlock();
+		virtual bool Activate();
+		virtual void Deactivate();
+		bool Fill( uint8_t * p_pBuffer, ptrdiff_t p_iSize );
+
+		virtual bool Initialise() = 0;
+
+	protected:
+		eGL_BUFFER_TARGET m_ePackMode;
+		Castor3D::eBUFFER_ACCESS_TYPE m_eAccessType;
+		Castor3D::eBUFFER_ACCESS_NATURE m_eAccessNature;
+		uint8_t	* m_pPixels;
+		uint32_t m_uiPixelsSize;
+		GlRenderSystem * m_renderSystem;
 	};
 }
 

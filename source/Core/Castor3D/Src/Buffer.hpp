@@ -24,7 +24,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
 #include "MatrixBuffer.hpp"
-#include "TextureBuffer.hpp"
 #include "GeometryBuffers.hpp"
 
 #endif

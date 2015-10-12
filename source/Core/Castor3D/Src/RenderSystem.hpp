@@ -388,19 +388,6 @@ namespace Castor3D
 		C3D_API virtual std::shared_ptr< GpuBuffer< real > > CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture buffer
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_pBuffer	The hardware buffer to which the texture buffer will be linked
-		 *\return		The created texture buffer, dependant of current API
-		 *\~french
-		 *\brief		Crée un tampon detexture
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon de texture
-		 *\return		Le tampon de texture créé, dépendant de l'API actuelle
-		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer ) = 0;
-		/**
-		 *\~english
 		 *\return		A pipeline implementation, depending on loaded API
 		 *\~french
 		 *\return		Une implémentation de pipeline, en fonction de l'API chargée.

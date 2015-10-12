@@ -19,14 +19,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_DYNAMIC_TEXTURE_H___
 
 #include "GlRenderSystemPrerequisites.hpp"
+#include "GlTexture.hpp"
 
 #include <DynamicTexture.hpp>
 
 namespace GlRender
 {
 	class GlDynamicTexture
-		:	public Castor3D::DynamicTexture
-		,	public Castor::NonCopyable
+		: public Castor3D::DynamicTexture
+		, public Castor::NonCopyable
 	{
 	public:
 		GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
@@ -42,7 +43,7 @@ namespace GlRender
 
 		inline uint32_t GetGlName()const
 		{
-			return m_uiGlName;
+			return m_texture.GetGlName();
 		}
 
 	private:
@@ -51,11 +52,7 @@ namespace GlRender
 		virtual bool DoInitialise();
 
 	private:
-		uint32_t m_uiGlName;
-		GlRenderSystem * m_pGlRenderSystem;
-		eGL_TEXTURE_INDEX m_eIndex;
-		eGL_TEXDIM m_eGlDimension;
-		OpenGl & m_gl;
+		GlTexture m_texture;
 	};
 }
 

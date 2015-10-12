@@ -539,7 +539,7 @@ namespace Castor3D
 			Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
-			if ( m_bChanged && m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC )
+			if ( m_bChanged && ( m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_TYPE_DYNAMIC ) )
 			{
 #if DEBUG_BUFFERS
 

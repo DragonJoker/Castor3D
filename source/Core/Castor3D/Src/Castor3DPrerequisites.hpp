@@ -526,11 +526,16 @@ namespace Castor3D
 	typedef enum eTEXTURE_DIMENSION
 	CASTOR_TYPE( uint8_t )
 	{
-		eTEXTURE_DIMENSION_1D,		//!< 1 dimension textures = > one coordinate = > U mapping
-		eTEXTURE_DIMENSION_2D,		//!< 2 dimensions textures = > two coordinates = > UV mapping
-		eTEXTURE_DIMENSION_3D,		//!< 3 dimensions textures = > three coordinates = > UVW mapping
-		eTEXTURE_DIMENSION_2DMS,	//!< 2 dimensions textures with multisample support = > two coordinates = > UV mapping
-		eTEXTURE_DIMENSION_2DARRAY,	//!< 2 dimensions textures array = > two coordinates = > UV mapping
+		eTEXTURE_DIMENSION_BUFFER,		//!< 1 dimension texture buffer, used to store data.
+		eTEXTURE_DIMENSION_1D,			//!< 1 dimension textures = > one coordinate = > U mapping
+		eTEXTURE_DIMENSION_1DARRAY,		//!< 1 dimension textures = > one coordinate = > U mapping
+		eTEXTURE_DIMENSION_2D,			//!< 2 dimensions textures = > two coordinates = > UV mapping
+		eTEXTURE_DIMENSION_2DARRAY,		//!< 2 dimensions textures array = > two coordinates = > UV mapping
+		eTEXTURE_DIMENSION_2DMS,		//!< 2 dimensions textures with multisample support = > two coordinates = > UV mapping
+		eTEXTURE_DIMENSION_2DMSARRAY,	//!< 2 dimensions textures array with multisample support = > two coordinates = > UV mapping
+		eTEXTURE_DIMENSION_3D,			//!< 3 dimensions textures = > three coordinates = > UVW mapping
+		eTEXTURE_DIMENSION_CUBE,		//!< Cube texture, for environment rendering.
+		eTEXTURE_DIMENSION_CUBEARRAY,	//!< Cube textures array, for environment rendering.
 		eTEXTURE_DIMENSION_COUNT,
 	}	eTEXTURE_DIMENSION;
 	/*!

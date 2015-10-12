@@ -14,7 +14,6 @@
 #include "GlVertexBufferObject.hpp"
 #include "GlIndexBufferObject.hpp"
 #include "GlMatrixBufferObject.hpp"
-#include "GlTextureBuffer.hpp"
 #include "Gl3VertexBufferObject.hpp"
 #include "GlGeometryBuffers.hpp"
 #include "GlDynamicTexture.hpp"
@@ -251,18 +250,6 @@ namespace GlRender
 	std::shared_ptr< Castor3D::GpuBuffer< real > > GlRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer )
 	{
 		return std::make_shared< GlMatrixBufferObject >( *this, m_gl, p_pBuffer );
-	}
-
-	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateTextureBuffer( CpuBuffer< uint8_t > * p_pBuffer )
-	{
-		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > l_pReturn;
-
-		if ( m_iOpenGlMajor >= 3 )
-		{
-			l_pReturn = std::make_shared< GlTextureBufferObject >( *this, m_gl, p_pBuffer );
-		}
-
-		return l_pReturn;
 	}
 
 	StaticTextureSPtr GlRenderSystem::CreateStaticTexture()

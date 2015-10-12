@@ -323,7 +323,7 @@ namespace Castor3D
 			m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
 			m_pFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
 			m_pFrameBuffer->Unbind();
-			l_return = true;
+			l_return = m_pFrameBuffer->IsComplete();
 		}
 
 		return l_return;

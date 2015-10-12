@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Dx11RenderSystemPrerequisites.hpp"
 
+#include "Dx11Texture.hpp"
+
 #include <StaticTexture.hpp>
 
 namespace Dx11Render
@@ -40,7 +42,7 @@ namespace Dx11Render
 
 		inline ID3D11ShaderResourceView * GetShaderResourceView()const
 		{
-			return m_pShaderResourceView;
+			return m_texture.GetShaderResourceView();
 		}
 
 	private:
@@ -48,12 +50,9 @@ namespace Dx11Render
 		virtual bool DoBind( uint32_t p_index );
 		virtual void DoUnbind( uint32_t p_index );
 
-		void DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_tex2dDesc );
-		void DoInitTex2DData( D3D11_SUBRESOURCE_DATA & p_tex2dData );
-
 	private:
-		ID3D11ShaderResourceView * m_pShaderResourceView;
 		DxRenderSystem * m_renderSystem;
+		DxTexture m_texture;
 	};
 }
 

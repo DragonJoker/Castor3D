@@ -147,7 +147,7 @@ namespace Castor3D
 		 */
 		inline uint8_t GetAttachmentIndex()const
 		{
-			return m_type;
+			return m_index;
 		}
 
 	protected:

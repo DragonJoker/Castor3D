@@ -513,10 +513,10 @@ namespace Castor3D
 	{
 		m_pLightsData = PxBufferBase::create( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
 		DynamicTextureSPtr l_pTexture = GetOwner()->GetRenderSystem()->CreateDynamicTexture();
-		l_pTexture->SetDimension( eTEXTURE_DIMENSION_1D );
+		l_pTexture->SetDimension( eTEXTURE_DIMENSION_BUFFER );
 		l_pTexture->SetImage( m_pLightsData );
 		SamplerSPtr l_pSampler = GetOwner()->GetLightsSampler();
-		m_pLightsTexture->SetAutoMipmaps( true );
+		m_pLightsTexture->SetAutoMipmaps( false );
 		m_pLightsTexture->SetSampler( l_pSampler );
 		m_pLightsTexture->SetTexture( l_pTexture );
 

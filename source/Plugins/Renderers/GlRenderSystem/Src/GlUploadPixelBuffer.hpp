@@ -15,33 +15,31 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL_PIXEL_BUFFER_H___
-#define ___GL_PIXEL_BUFFER_H___
+#ifndef ___GL_UPLOAD_PIXEL_BUFFER_H___
+#define ___GL_UPLOAD_PIXEL_BUFFER_H___
 
-#include "GlBufferBase.hpp"
+#include "GlGpuIoBuffer.hpp"
+
+#include <Sampler.hpp>
+#include <Texture.hpp>
+#include <StaticTexture.hpp>
+#include <DynamicTexture.hpp>
 
 namespace GlRender
 {
-	class GlPixelBuffer
-		:	public GlBufferBase< uint8_t >
+	/*!
+	\author		Sylvain DOREMUS
+	\brief		Unpack (upload to VRAM) buffer implementation
+	*/
+	class GlUploadPixelBuffer
+		: public GlGpuIoBuffer
 	{
 	public:
-		GlPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize, eGL_BUFFER_TARGET p_ePackMode, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
-		virtual ~GlPixelBuffer();
+		GlUploadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize );
+		GlUploadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pPixels );
+		virtual ~GlUploadPixelBuffer();
 
-		virtual bool Activate();
-		virtual void Deactivate();
-		bool Fill( uint8_t * p_pBuffer, ptrdiff_t p_iSize );
-
-		virtual void Initialise() = 0;
-
-	protected:
-		eGL_BUFFER_TARGET m_ePackMode;
-		Castor3D::eBUFFER_ACCESS_TYPE m_eAccessType;
-		Castor3D::eBUFFER_ACCESS_NATURE m_eAccessNature;
-		uint8_t	* m_pPixels;
-		uint32_t m_uiPixelsSize;
-		GlRenderSystem * m_renderSystem;
+		virtual bool Initialise();
 	};
 }
 

@@ -236,8 +236,6 @@ namespace Dx11Render
 	class DirectX11
 	{
 	private:
-		static Castor::String HlslStrings[];
-		static Castor::String HlslErrors[];
 		static DWORD TextureDimensions[Castor3D::eTEXTURE_DIMENSION_COUNT];
 		static DWORD TextureInterpolation[Castor3D::eINTERPOLATION_MODE_COUNT];
 		static DWORD TextureArguments[Castor3D::eBLEND_SOURCE_COUNT];
@@ -291,10 +289,6 @@ namespace Dx11Render
 
 		static bool CheckError( HRESULT p_hResult, Castor::String const & p_strText );
 		static	DWORD GetLockFlags( uint32_t p_uiFlags );
-		static inline Castor::String GetHlslErrorString( int p_index )
-		{
-			return HlslStrings[p_index];
-		}
 		static inline DWORD Get( Castor3D::eTEXTURE_TYPE p_index )
 		{
 			return TextureDimensions[p_index];

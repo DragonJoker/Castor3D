@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Dx11RenderSystemPrerequisites.hpp"
 
+#include "Dx11Texture.hpp"
+
 #include <DynamicTexture.hpp>
 
 namespace Dx11Render
@@ -36,7 +38,9 @@ namespace Dx11Render
 		virtual void Cleanup();
 		virtual uint8_t * Lock( uint32_t p_lock );
 		virtual void Unlock( bool p_modified );
-		virtual void GenerateMipmaps() {}
+		virtual void GenerateMipmaps()
+		{
+		}
 		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
 		{
 			CASTOR_ASSERT( false );
@@ -44,11 +48,11 @@ namespace Dx11Render
 
 		inline ID3D11RenderTargetView * GetRenderTargetView()const
 		{
-			return m_renderTargetView;
+			return m_texture.GetRenderTargetView();
 		}
 		inline ID3D11ShaderResourceView * GetShaderResourceView()const
 		{
-			return m_shaderResourceView;
+			return m_texture.GetShaderResourceView();
 		}
 
 	private:
@@ -56,13 +60,9 @@ namespace Dx11Render
 		virtual bool DoBind( uint32_t p_index );
 		virtual void DoUnbind( uint32_t p_index );
 
-		void DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_desc );
-		void DoInitTex2DData( D3D11_SUBRESOURCE_DATA & p_data );
-
 	private:
 		DxRenderSystem * m_renderSystem;
-		ID3D11RenderTargetView * m_renderTargetView;
-		ID3D11ShaderResourceView * m_shaderResourceView;
+		DxTexture m_texture;
 	};
 }
 

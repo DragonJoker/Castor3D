@@ -50,7 +50,16 @@ namespace GlRender
 		if ( !l_return && Bind() )
 		{
 			m_size = p_size;
-			l_return = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
+
+			if ( m_renderBuffer.GetSamplesCount() > 1 )
+			{
+				l_return = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
+			}
+			else
+			{
+				l_return = m_gl.RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_eInternal, p_size );
+			}
+
 			Unbind();
 		}
 

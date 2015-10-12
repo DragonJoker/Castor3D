@@ -57,7 +57,7 @@ namespace GlRender
 			{
 				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
 
-				if ( l_eAttach != eATTACHMENT_POINT_NONE )
+				if ( l_eAttach != eATTACHMENT_POINT_NONE && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL )
 				{
 					l_arrayAttaches.push_back( m_gl.Get( l_eAttach ) );
 				}
@@ -120,103 +120,6 @@ namespace GlRender
 		{
 			m_gl.BindFramebuffer( m_eGlBindingMode, 0 );
 		}
-	}
-
-	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_attachment, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_eTarget, int p_iLayer )
-	{
-		bool l_return = false;
-
-		if ( m_gl.HasFbo() )
-		{
-			eGL_TEXTURE_ATTACHMENT l_eGlAttachmentPoint = eGL_TEXTURE_ATTACHMENT( m_gl.Get( p_attachment ) + p_index );
-			GlDynamicTextureSPtr l_pTexture = std::static_pointer_cast< GlDynamicTexture >( p_texture->GetTexture() );
-
-			switch ( p_eTarget )
-			{
-			case eTEXTURE_TARGET_1D:
-
-				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_1D )
-				{
-					l_return = m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
-				}
-				else
-				{
-					l_return = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
-				}
-
-				break;
-
-			case eTEXTURE_TARGET_2D:
-
-				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_2D )
-				{
-					l_return = m_gl.FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0 );
-				}
-				else
-				{
-					l_return = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
-				}
-
-				break;
-
-			case eTEXTURE_TARGET_3D:
-
-				if ( l_pTexture->GetDimension() == eTEXTURE_DIMENSION_3D )
-				{
-					l_return = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetDimension() ), l_pTexture->GetGlName(), 0, p_iLayer );
-				}
-				else
-				{
-					l_return = m_gl.FramebufferTexture( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0 );
-				}
-
-				break;
-
-			case eTEXTURE_TARGET_LAYER:
-				l_return = m_gl.FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, l_pTexture->GetGlName(), 0, p_iLayer );
-				break;
-			}
-		}
-
-		return l_return;
-	}
-
-	bool GlFrameBuffer::DoAttach( eATTACHMENT_POINT p_attachment, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
-	{
-		bool l_return = false;
-
-		if ( m_gl.HasFbo() )
-		{
-			eGL_RENDERBUFFER_ATTACHMENT l_eGlAttachmentPoint = m_gl.GetRboAttachment( p_attachment );
-			RenderBufferSPtr l_renderBuffer = p_renderBuffer->GetRenderBuffer();
-			uint32_t l_uiGlName;
-
-			switch ( p_renderBuffer->GetRenderBuffer()->GetComponent() )
-			{
-			case eBUFFER_COMPONENT_COLOUR:
-				l_uiGlName = std::static_pointer_cast< GlColourRenderBuffer >( l_renderBuffer )->GetGlName();
-				break;
-
-			case eBUFFER_COMPONENT_DEPTH:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( l_renderBuffer )->GetGlName();
-				break;
-
-			case eBUFFER_COMPONENT_STENCIL:
-				l_uiGlName = std::static_pointer_cast< GlDepthStencilRenderBuffer >( l_renderBuffer )->GetGlName();
-				break;
-
-			default:
-				l_uiGlName = eGL_INVALID_INDEX;
-				break;
-			}
-
-			if ( l_uiGlName != eGL_INVALID_INDEX )
-			{
-				l_return = m_gl.FramebufferRenderbuffer( eGL_FRAMEBUFFER_MODE_DEFAULT, l_eGlAttachmentPoint, eGL_RENDERBUFFER_MODE_DEFAULT, l_uiGlName );
-			}
-		}
-
-		return l_return;
 	}
 
 	bool GlFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolationMode )

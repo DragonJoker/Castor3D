@@ -46,55 +46,38 @@ DEFINE_GUID( IID_ID3D11Device,				0xdb6f6ddb, 0xac77, 0x4e88, 0x82, 0x53, 0x81, 
 DEFINE_GUID( IID_IDXGIFactory,				0x7b7166ec, 0x21c7, 0x44ae, 0xb2, 0x1a, 0xc9, 0xae, 0x32, 0x1a, 0xe3, 0x69 );
 #endif
 
-String DirectX11::HlslStrings[] =
-{
-	cuT( "[e00] HLSL is not available!" ),
-	cuT( "[e01] Not a valid program object!" ),
-	cuT( "[e02] Not a valid object!" ),
-	cuT( "[e03] Out of memory!" ),
-	cuT( "[e04] Unknown compiler error!" ),
-	cuT( "[e05] Linker log is not available!" ),
-	cuT( "[e06] Compiler log is not available!" ),
-	cuT( "[Empty]" ),
-};
-
-String DirectX11::HlslErrors[] =
-{
-	cuT( "[500] Invalid Enum !" ),
-	cuT( "[501] Invalid Value !" ),
-	cuT( "[502] Invalid Operation !" ),
-	cuT( "[503] Stack Overflow !" ),
-	cuT( "[504] Stack Underflow !" ),
-	cuT( "[505] Out of memory !" ),
-	cuT( "[506] Table too large" ),
-	cuT( "[Empty] Unknown Error" ),
-};
-
 DWORD DirectX11::TextureDimensions[eTEXTURE_DIMENSION_COUNT] =
 {
-	0,
-	0,
-	0,
+	0,	// eTEXTURE_DIMENSION_BUFFER,
+	0,	// eTEXTURE_DIMENSION_1D,
+	0,	// eTEXTURE_DIMENSION_1DARRAY,
+	0,	// eTEXTURE_DIMENSION_2D,
+	0,	// eTEXTURE_DIMENSION_2DARRAY,
+	0,	// eTEXTURE_DIMENSION_2DMS,
+	0,	// eTEXTURE_DIMENSION_2DMSARRAY,
+	0,	// eTEXTURE_DIMENSION_3D,
+	0,	// eTEXTURE_DIMENSION_CUBE,
+	0,	// eTEXTURE_DIMENSION_CUBEARRAY,
 };
 
 DWORD DirectX11::LightIndexes[eLIGHT_INDEXES_COUNT] =
 {
-	0,
-	1,
-	2,
-	3,
-	4,
-	5,
-	6,
-	7,
+	0, // eLIGHT_INDEXES_0,
+	1, // eLIGHT_INDEXES_1,
+	2, // eLIGHT_INDEXES_2,
+	3, // eLIGHT_INDEXES_3,
+	4, // eLIGHT_INDEXES_4,
+	5, // eLIGHT_INDEXES_5,
+	6, // eLIGHT_INDEXES_6,
+	7, // eLIGHT_INDEXES_7,
 };
 
 DWORD DirectX11::Index[eATTACHMENT_POINT_COUNT] =
 {
-	0xFFFFFFFF,
-	0,
-	0,
-	0,
+	0xFFFFFFFF,	// eATTACHMENT_POINT_NONE,
+	0,			// eATTACHMENT_POINT_COLOUR,
+	0,			// eATTACHMENT_POINT_DEPTH,
+	0,			// eATTACHMENT_POINT_STENCIL,
 };
 
 DXGI_FORMAT DirectX11::PixelFormats[ePIXEL_FORMAT_COUNT] =
