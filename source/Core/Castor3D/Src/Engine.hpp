@@ -21,11 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include "FrameEvent.hpp"
-#include "LightFactory.hpp"
-#include "MeshFactory.hpp"
-#include "OverlayFactory.hpp"
-#include "OverlayManager.hpp"
-#include "ShaderManager.hpp"
 #include "TechniqueFactory.hpp"
 #include "Version.hpp"
 
@@ -33,6 +28,19 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <FontManager.hpp>
 #include <Unique.hpp>
 #include <SquareMatrix.hpp>
+
+#define DECLARE_MANAGED_MEMBER( memberName, className )\
+	public:\
+		inline className##Manager & Get##className##Manager()\
+		{\
+			return *m_##memberName##Manager;\
+		}\
+		inline className##Manager const & Get##className##Manager()const\
+		{\
+			return *m_##memberName##Manager;\
+		}\
+	private:\
+		className##ManagerUPtr m_##memberName##Manager
 
 namespace Castor3D
 {
@@ -120,26 +128,6 @@ namespace Castor3D
 		 *\brief		Rend une image, uniquement hors de la boucle de rendu
 		 */
 		C3D_API void RenderOneFrame();
-		/**
-		 *\~english
-		 *\brief		Creates a scene with the given name.
-		 *\remark		If a scene with the given name already exists, it is returned and no scene is created
-		 *\param[in]	p_name	The scene name
-		 *\return		The created scene
-		 *\~french
-		 *\brief		Crée une scène avec le nom donné
-		 *\remark		Si une scène avec le nom voulu existe déjà, elle est retournée et aucune scène n'est créée
-		 *\param[in]	p_name	Le nom de la scène
-		 *\return		La scène
-		 */
-		C3D_API SceneSPtr CreateScene( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Empties each scene
-		 *\~french
-		 *\brief		Vide chaque scène
-		 */
-		C3D_API void ClearScenes();
 		/**
 		 *\~english
 		 *\brief		Loads a renderer plugin, given the renderer type
@@ -273,20 +261,6 @@ namespace Castor3D
 		C3D_API double GetFrameTime();
 		/**
 		 *\~english
-		 *\brief		Updates the overlays collection
-		 *\~french
-		 *\brief		Met à jour la collection d'overlays
-		 */
-		C3D_API void UpdateOverlayManager();
-		/**
-		 *\~english
-		 *\brief		Updates the shaders collection
-		 *\~french
-		 *\brief		Met à jour la collection de shaders
-		 */
-		C3D_API void UpdateShaderManager();
-		/**
-		 *\~english
 		 *\brief		Creates an RenderTechnique from a technique name
 		 *\param[in]	p_name		The technique name
 		 *\param[in]	p_renderTarget	The technique render target
@@ -320,26 +294,6 @@ namespace Castor3D
 		 *\return		Le statut du support
 		 */
 		C3D_API bool SupportsDepthBuffer()const;
-		/**
-		 *\~english
-		 *\brief		Creates a render target of given type
-		 *\param[in]	p_type	The render target type
-		 *\return		The render target
-		 *\~french
-		 *\brief		Crée une cible de rendu du type voulu
-		 *\param[in]	p_type	Le type de cible de rendu
-		 *\return		La cible de rendu
-		 */
-		C3D_API RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type );
-		/**
-		 *\~english
-		 *\brief		Removes a render target from the render loop
-		 *\param[in]	p_pRenderTarget	The render target
-		 *\~french
-		 *\brief		Enlève une cible de rendu de la boucle de rendu
-		 *\param[in]	p_pRenderTarget	La cible de rendu
-		 */
-		C3D_API void RemoveRenderTarget( RenderTargetSPtr && p_pRenderTarget );
 		/**
 		 *\~english
 		 *\brief		Creates a FrameListener.
@@ -386,58 +340,6 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du FrameListener.
 		 */
 		C3D_API void DestroyFrameListener( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a Sampler, given a name
-		 *\remark		If a Sampler with the same name exists, none is created
-		 *\param[in]	p_name	The Sampler name
-		 *\return		The created or existing Sampler
-		 *\~french
-		 *\brief		Crée et renvoie un Sampler, avec le nom donné
-		 *\remark		Si un Sampler avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_name	Le nom du Sampler
-		 *\return		Le Sampler créé ou existant
-		 */
-		C3D_API SamplerSPtr CreateSampler( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a DepthStencilState, given a name
-		 *\remark		If a DepthStencilState with the same name exists, none is created
-		 *\param[in]	p_name	The DepthStencilState name
-		 *\return		The created or existing DepthStencilState
-		 *\~french
-		 *\brief		Crée et renvoie un DepthStencilState, avec le nom donné
-		 *\remark		Si un DepthStencilState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_name	Le nom du DepthStencilState
-		 *\return		Le DepthStencilState créé ou existant
-		 */
-		C3D_API DepthStencilStateSPtr CreateDepthStencilState( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a RasteriserState, given a name
-		 *\remark		If a RasteriserState with the same name exists, none is created
-		 *\param[in]	p_name	The RasteriserState name
-		 *\return		The created or existing RasteriserState
-		 *\~french
-		 *\brief		Crée et renvoie un RasteriserState, avec le nom donné
-		 *\remark		Si un RasteriserState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_name	Le nom du RasteriserState
-		 *\return		Le RasteriserState créé ou existant
-		 */
-		C3D_API RasteriserStateSPtr CreateRasteriserState( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Creates and returns a BlendState, given a name
-		 *\remark		If a BlendState with the same name exists, none is created
-		 *\param[in]	p_name	The BlendState name
-		 *\return		The created or existing BlendState
-		 *\~french
-		 *\brief		Crée et renvoie un BlendState, avec le nom donné
-		 *\remark		Si un BlendState avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_name	Le nom du BlendState
-		 *\return		Le BlendState créé ou existant
-		 */
-		C3D_API BlendStateSPtr CreateBlendState( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays
@@ -520,142 +422,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The render windows manager.
-		 *\~french
-		 *\return		Le gestionnaire de fenêtres de rendu.
-		 */
-		inline PluginManager const & GetPluginManager()const
-		{
-			return *m_pluginManager;
-		}
-		/**
-		 *\~english
-		 *\return		The render windows manager.
-		 *\~french
-		 *\return		Le gestionnaire de fenêtres de rendu.
-		 */
-		inline PluginManager & GetPluginManager()
-		{
-			return *m_pluginManager;
-		}
-		/**
-		 *\~english
-		 *\return		The render windows manager.
-		 *\~french
-		 *\return		Le gestionnaire de fenêtres de rendu.
-		 */
-		inline WindowManager const & GetWindowManager()const
-		{
-			return *m_windowManager;
-		}
-		/**
-		 *\~english
-		 *\return		The render windows manager.
-		 *\~french
-		 *\return		Le gestionnaire de fenêtres de rendu.
-		 */
-		inline WindowManager & GetWindowManager()
-		{
-			return *m_windowManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the materials collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de matériaux
-		 *\return		La collection
-		 */
-		inline MaterialManager const & GetMaterialManager()const
-		{
-			return *m_materialManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the materials collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de matériaux
-		 *\return		La collection
-		 */
-		inline MaterialManager & GetMaterialManager()
-		{
-			return *m_materialManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlays collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection d'overlays
-		 *\return		La collection
-		 */
-		inline OverlayManager const & GetOverlayManager()const
-		{
-			return m_overlayManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlays collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection d'overlays
-		 *\return		La collection
-		 */
-		inline OverlayManager & GetOverlayManager()
-		{
-			return m_overlayManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the shaders collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de shaders
-		 *\return		La collection
-		 */
-		inline ShaderManager const & GetShaderManager()const
-		{
-			return m_shaderManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the shaders collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de shaders
-		 *\return		La collection
-		 */
-		inline ShaderManager & GetShaderManager()
-		{
-			return m_shaderManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the scene collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de scènes
-		 *\return		La collection
-		 */
-		inline SceneCollection const & GetSceneManager()const
-		{
-			return m_sceneManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the scene collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de scènes
-		 *\return		La collection
-		 */
-		inline SceneCollection & GetSceneManager()
-		{
-			return m_sceneManager;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the images collection
 		 *\return		The collection
 		 *\~french
@@ -701,198 +467,6 @@ namespace Castor3D
 		inline Castor::FontManager & GetFontManager()
 		{
 			return m_fontManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animations collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection d'animations
-		 *\return		La collection
-		 */
-		inline AnimationCollection const & GetAnimationManager()const
-		{
-			return m_animationManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the animations collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection d'animations
-		 *\return		La collection
-		 */
-		inline AnimationCollection & GetAnimationManager()
-		{
-			return m_animationManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the meshes collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de maillages
-		 *\return		La collection
-		 */
-		inline MeshManager const & GetMeshManager()const
-		{
-			return *m_meshManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the meshes collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de maillages
-		 *\return		La collection
-		 */
-		inline MeshManager & GetMeshManager()
-		{
-			return *m_meshManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the DepthStencilState collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de DepthStencilState
-		 *\return		La collection
-		 */
-		inline DepthStencilStateCollection const & GetDepthStencilStateManager()const
-		{
-			return m_depthStencilStateManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the DepthStencilState collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de DepthStencilState
-		 *\return		La collection
-		 */
-		inline DepthStencilStateCollection & GetDepthStencilStateManager()
-		{
-			return m_depthStencilStateManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RasteriserState collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de RasteriserState
-		 *\return		La collection
-		 */
-		inline RasteriserStateCollection const & GetRasteriserStateManager()const
-		{
-			return m_rasteriserStateManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RasteriserState collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de RasteriserState
-		 *\return		La collection
-		 */
-		inline RasteriserStateCollection & GetRasteriserStateManager()
-		{
-			return m_rasteriserStateManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the BlendState collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de BlendState
-		 *\return		La collection
-		 */
-		inline BlendStateCollection const & GetBlendStateManager()const
-		{
-			return m_blendStateManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the BlendState collection
-		 *\return		The collection
-		 *\~french
-		 *\brief		Récupère la collection de BlendState
-		 *\return		La collection
-		 */
-		inline BlendStateCollection & GetBlendStateManager()
-		{
-			return m_blendStateManager;
-		}
-		/**
-		*\~english
-		*\brief		Retrieves the sampler collection
-		*\return		The sampler collection
-		*\~french
-		*\brief		Récupère la collection de samplers
-		*\return		La collection de samplers
-		*/
-		inline SamplerCollection const & GetSamplerManager()const
-		{
-			return m_samplerManager;
-		}
-		/**
-		*\~english
-		*\brief		Retrieves the sampler collection
-		*\return		The sampler collection
-		*\~french
-		*\brief		Récupère la collection de samplers
-		*\return		La collection de samplers
-		*/
-		inline SamplerCollection & GetSamplerManager()
-		{
-			return m_samplerManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Light factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique de Light
-		 *\return		La fabrique
-		 */
-		inline LightFactory const & GetLightFactory()const
-		{
-			return m_lightFactory;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Light factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique de Light
-		 *\return		La fabrique
-		 */
-		inline LightFactory & GetLightFactory()
-		{
-			return m_lightFactory;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Overlay factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique d'Overlay
-		 *\return		La fabrique
-		 */
-		inline OverlayFactory const & GetOverlayFactory()const
-		{
-			return m_overlayFactory;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Overlay factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique d'Overlay
-		 *\return		La fabrique
-		 */
-		inline OverlayFactory & GetOverlayFactory()
-		{
-			return m_overlayFactory;
 		}
 		/**
 		 *\~english
@@ -986,7 +560,6 @@ namespace Castor3D
 		void DoLoadCoreData();
 
 	private:
-		DECLARE_MULTIMAP( eTARGET_TYPE, RenderTargetSPtr, RenderTarget );
 		//!\~english The mutex, to make the engine resources access thread-safe	\~french Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe
 		std::recursive_mutex m_mutexResources;
 		//!\~english The mutex, to make the main loop thread-safe	\~french Le mutex utilisé pour que la boucle principale soit thread-safe
@@ -1001,42 +574,8 @@ namespace Castor3D
 		double m_dFrameTime;
 		//!\~english The engine version	\~french La version du moteur
 		Version m_version;
-		//!\~english The frame listeners array	\~french Le tableau de frame listeners
-		FrameListenerPtrStrMap m_listeners;
 		//!\~english The default frame listener.	\~french Le frame listener par défaut.
 		FrameListenerWPtr m_defaultListener;
-		//!\~english The animations collection	\~french La collection d'animations
-		AnimationCollection m_animationManager;
-		//!\~english The fonts collection	\~french La collection de polices
-		Castor::FontManager m_fontManager;
-		//!\~english The images collection	\~french La collection d'images
-		ImageCollection m_imageManager;
-		//!\~english The scenes collection	\~french La collection de scènes
-		SceneCollection m_sceneManager;
-		//!\~english The overlays collection	\~french La collection d'overlays
-		OverlayManager m_overlayManager;
-		//!\~english The shaders collection	\~french La collection de shaders
-		ShaderManager m_shaderManager;
-		//!\~english The materials manager.	\~french Le gestionnaire de matériaux.
-		MaterialManagerUPtr m_materialManager;
-		//!\~english The materials manager.	\~french Le gestionnaire de fenêtres.
-		WindowManagerUPtr m_windowManager;
-		//!\~english The meshes manager.	\~french Le gestionnaire de maillages.
-		MeshManagerUPtr m_meshManager;
-		//!\~english The plug-ins manager.	\~french Le gestionnaire de plug-ins.
-		PluginManagerUPtr m_pluginManager;
-		//!\~english The sampler states collection	\~french La collection de sampler states
-		SamplerCollection m_samplerManager;
-		//!\~english The DepthStencilState collection	\~french La collection de DepthStencilState
-		DepthStencilStateCollection m_depthStencilStateManager;
-		//!\~english The RasteriserState collection	\~french La collection de RasteriserState
-		RasteriserStateCollection m_rasteriserStateManager;
-		//!\~english The BlendState collection	\~french La collection de BlendState
-		BlendStateCollection m_blendStateManager;
-		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
-		LightFactory m_lightFactory;
-		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
-		OverlayFactory m_overlayFactory;
 		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
 		TechniqueFactory m_techniqueFactory;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
@@ -1053,8 +592,6 @@ namespace Castor3D
 		bool m_bCleaned;
 		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindow * m_pMainWindow;
-		//!\~english The render targets map	\~french La map des cibles de rendu
-		RenderTargetMMap m_mapRenderTargets;
 		//!\~english Default blend states (no blend)	\~french Etats de blend par défaut (pas de blend)
 		BlendStateSPtr m_pDefaultBlendState;
 		//!\~english Default sampler	\~french Le sampler par défaut
@@ -1065,9 +602,43 @@ namespace Castor3D
 		bool m_bDefaultInitialised;
 		//!\~english The debug overlays are shown.	\~french Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
+		//!\~english The animations collection.	\~french La collection d'animations.
+		DECLARE_MANAGED_MEMBER( animation, Animation );
+		//!\~english The shaders collection.	\~french La collection de shaders.
+		DECLARE_MANAGED_MEMBER( shader, Shader );
+		//!\~english The sampler states collection.	\~french La collection de sampler states.
+		DECLARE_MANAGED_MEMBER( sampler, Sampler );
+		//!\~english The DepthStencilState collection.	\~french La collection de DepthStencilState.
+		DECLARE_MANAGED_MEMBER( depthStencilState, DepthStencilState );
+		//!\~english The RasteriserState collection.	\~french La collection de RasteriserState.
+		DECLARE_MANAGED_MEMBER( rasteriserState, RasteriserState );
+		//!\~english The BlendState collection.	\~french La collection de BlendState.
+		DECLARE_MANAGED_MEMBER( blendState, BlendState );
+		//!\~english The materials manager.	\~french Le gestionnaire de matériaux.
+		DECLARE_MANAGED_MEMBER( material, Material );
+		//!\~english The materials manager.	\~french Le gestionnaire de fenêtres.
+		DECLARE_MANAGED_MEMBER( window, Window );
+		//!\~english The meshes manager.	\~french Le gestionnaire de maillages.
+		DECLARE_MANAGED_MEMBER( mesh, Mesh );
+		//!\~english The plug-ins manager.	\~french Le gestionnaire de plug-ins.
+		DECLARE_MANAGED_MEMBER( plugin, Plugin );
+		//!\~english The overlays collection.	\~french La collection d'overlays.
+		DECLARE_MANAGED_MEMBER( overlay, Overlay );
+		//!\~english The scenes collection.	\~french La collection de scènes.
+		DECLARE_MANAGED_MEMBER( scene, Scene );
+		//!\~english The render targets map.	\~french La map des cibles de rendu.
+		DECLARE_MANAGED_MEMBER( target, Target );
+		//!\~english The frame listeners array	\~french Le tableau de frame listeners
+		FrameListenerPtrStrMap m_listeners;
+		//!\~english The fonts collection	\~french La collection de polices
+		Castor::FontManager m_fontManager;
+		//!\~english The images collection	\~french La collection d'images
+		ImageCollection m_imageManager;
 		//!\~english The map holding the parsers, sorted by section, and plugin name	\~french La map de parseurs, triés par section, et nom de plugin
 		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
 	};
 }
+
+#undef DECLARE_MANAGED_MEMBER
 
 #endif

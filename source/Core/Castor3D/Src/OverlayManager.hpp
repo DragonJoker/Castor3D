@@ -18,7 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_OVERLAY_MANAGER_H___
 #define ___C3D_OVERLAY_MANAGER_H___
 
+#include "Manager.hpp"
 #include "Overlay.hpp"
+#include "OverlayFactory.hpp"
 #include "Viewport.hpp"
 
 #include <OwnedBy.hpp>
@@ -58,8 +60,7 @@ namespace Castor3D
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	class OverlayManager
-		: private Castor::Collection< Overlay, Castor::String >
-		, public Castor::OwnedBy< Engine >
+		: public Manager< Castor::String, Overlay >
 		, public Castor::Aligned< CASTOR_ALIGN_OF( Viewport ) >
 	{
 	public:
@@ -89,14 +90,42 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les listes d'incrustations
 		 */
-		C3D_API void Clear();
+		C3D_API virtual void Clear();
 		/**
 		 *\~english
 		 *\brief		Cleans all overlays up.
 		 *\~french
 		 *\brief		Nettoie les incrustations.
 		 */
-		C3D_API void Cleanup();
+		C3D_API virtual void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Removes an overlay from the lists.
+		 *\param[in]	p_name		The overlay name.
+		 *\~french
+		 *\brief		Enlève une incrustation des listes.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 */
+		C3D_API virtual void Remove( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Creates an overlay, given a type and the overlay definitions
+		 *\remark		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
+		 *\param[in]	p_type		The overlay type (panel, text ...)
+		 *\param[in]	p_name	The overlay name
+		 *\param[in]	p_parent	The parent overlay, NULL if none
+		 *\param[in]	p_scene	The scene that holds the overlay
+		 *\return		The created overlay
+		 *\~french
+		 *\brief		Crée un overlay
+		 *\remark		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
+		 *\param[in]	p_type		Le type d'overlay
+		 *\param[in]	p_name	Le nom voulu pour l'overlay
+		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun
+		 *\param[in]	p_scene	La scène contenant l'overlay
+		 *\return		L'overlay
+		 */
+		C3D_API OverlaySPtr Create( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Creates a panel overlay.
@@ -234,69 +263,6 @@ namespace Castor3D
 		 *\return		L'incrustation ainsi créée.
 		 */
 		C3D_API TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
-		/**
-		 *\~english
-		 *\brief		Creates an overlay, given a type and the overlay definitions
-		 *\remark		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
-		 *\param[in]	p_type		The overlay type (panel, text ...)
-		 *\param[in]	p_name	The overlay name
-		 *\param[in]	p_parent	The parent overlay, NULL if none
-		 *\param[in]	p_scene	The scene that holds the overlay
-		 *\return		The created overlay
-		 *\~french
-		 *\brief		Crée un overlay
-		 *\remark		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
-		 *\param[in]	p_type		Le type d'overlay
-		 *\param[in]	p_name	Le nom voulu pour l'overlay
-		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun
-		 *\param[in]	p_scene	La scène contenant l'overlay
-		 *\return		L'overlay
-		 */
-		C3D_API OverlaySPtr CreateOverlay( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
-		/**
-		 *\~english
-		 *\brief		Add an overlay to the lists, given it's name
-		 *\param[in]	p_name		The overlay name
-		 *\param[in]	p_overlay	The overlay
-		 *\param[in]	p_parent	The parent overlay
-		 *\~french
-		 *\brief		Ajoute une incrustation aux listes, selon son nom
-		 *\param[in]	p_name		Le nom
-		 *\param[in]	p_overlay	L'incrustation
-		 *\param[in]	p_parent	L'incrustation parente
-		 */
-		C3D_API void AddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
-		/**
-		 *\~english
-		 *\brief		Removes an overlay from the lists.
-		 *\param[in]	p_name		The overlay name.
-		 *\~french
-		 *\brief		Enlève une incrustation des listes.
-		 *\param[in]	p_name		Le nom de l'incrustation.
-		 */
-		C3D_API void RemoveOverlay( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Retrieves the overlay with the given name
-		 *\param[in]	p_name	The name
-		 *\return		The overlay, \p nullptr if not found
-		 *\~french
-		 *\brief		Récupère l'incrustation avec le nom donné
-		 *\param[in]	p_name	Le nom
-		 *\return		L'incrustation, \p nullptr si non trouvée
-		 */
-		C3D_API OverlaySPtr GetOverlay( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Checks if an overlay with the given name exists
-		 *\param[in]	p_name	The name
-		 *\return		\p true if an overlay is defined with given name
-		 *\~french
-		 *\brief		Vérifie si une incrustation avec le nom donné existe
-		 *\param[in]	p_name	Le nom
-		 *\return		\p true Si une incrustation est défini avec le nom donné
-		 */
-		C3D_API bool HasOverlay( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
@@ -441,8 +407,49 @@ namespace Castor3D
 		{
 			return m_overlays.end();
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Overlay factory
+		 *\return		The factory
+		 *\~french
+		 *\brief		Récupère la fabrique d'Overlay
+		 *\return		La fabrique
+		 */
+		inline OverlayFactory const & GetOverlayFactory()const
+		{
+			return m_overlayFactory;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Overlay factory
+		 *\return		The factory
+		 *\~french
+		 *\brief		Récupère la fabrique d'Overlay
+		 *\return		La fabrique
+		 */
+		inline OverlayFactory & GetFactory()
+		{
+			return m_overlayFactory;
+		}
 
 	private:
+		/**
+		 *\~english
+		 *\brief		Add an overlay to the lists, given it's name
+		 *\param[in]	p_name		The overlay name
+		 *\param[in]	p_overlay	The overlay
+		 *\param[in]	p_parent	The parent overlay
+		 *\~french
+		 *\brief		Ajoute une incrustation aux listes, selon son nom
+		 *\param[in]	p_name		Le nom
+		 *\param[in]	p_overlay	L'incrustation
+		 *\param[in]	p_parent	L'incrustation parente
+		 */
+		C3D_API void DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
+
+	private:
+		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
+		OverlayFactory m_overlayFactory;
 		//!\~english The overlays, in rendering order.	\~french Les incrustations, dans l'ordre de rendu.
 		OverlayCategorySet m_overlays;
 		//!\~english The overlay renderer	\~french le renderer d'incrustation

@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_CLEANUP_EVENT_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Version.hpp"
 #include "FrameEvent.hpp"
 
 #include <Logger.hpp>

@@ -2,7 +2,7 @@
 #include "Material.hpp"
 #include "Pass.hpp"
 #include "SceneFileParser.hpp"
-#include "Sampler.hpp"
+#include "SamplerManager.hpp"
 #include "InitialiseEvent.hpp"
 #include "CleanupEvent.hpp"
 #include "Engine.hpp"
@@ -62,14 +62,14 @@ namespace Castor3D
 
 	bool MaterialManager::Write( TextFile & p_file )const
 	{
-		GetOwner()->GetSamplerManager().lock();
+		GetOwner()->GetSamplerManager().Lock();
 
 		for ( auto l_it : GetOwner()->GetSamplerManager() )
 		{
 			Sampler::TextLoader()( *l_it.second, p_file );
 		}
 
-		GetOwner()->GetSamplerManager().unlock();
+		GetOwner()->GetSamplerManager().Unlock();
 
 		m_elements.lock();
 		bool l_return = true;

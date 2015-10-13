@@ -18,6 +18,7 @@ namespace Castor3D
 
 	RenderWindowSPtr WindowManager::Create()
 	{
+		m_elements.lock();
 		RenderWindowSPtr l_return = m_renderSystem->CreateRenderWindow();
 
 		if ( l_return )
@@ -25,6 +26,7 @@ namespace Castor3D
 			m_elements.insert( l_return->GetIndex(), l_return );
 		}
 
+		m_elements.unlock();
 		return l_return;
 	}
 

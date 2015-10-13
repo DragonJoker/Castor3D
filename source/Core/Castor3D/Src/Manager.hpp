@@ -26,21 +26,34 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
+#include <Logger.hpp>
 
 namespace Castor3D
 {
-	static const std::string ERROR_DUPLICATE_OBJECT = "Duplicate object asked to a manager: ";
+	static const Castor::String ERROR_DUPLICATE_OBJECT = cuT( "Duplicate object asked to a manager: " );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		Helper structure to enable cleanup if a type supports it.
+	\brief		Helper structure to enable initialisation if a type supports it.
 	\~french
-	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\brief		Structure permettant d'initialiser les éléments qui le supportent.
 	*/
-	template< typename Elem, typename Enable = void >
-	struct ElementInitialiser
+	template< typename Elem, typename Enable = void > struct ElementInitialiser;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable initialisation if a type supports it.
+	\remarks	Specialisation for types that support initialisation.
+	\~french
+	\brief		Structure permettant d'initialiser les éléments qui le supportent.
+	\remarks	Spécialisation pour les types qui ne supportent pas l'initialisation.
+	*/
+	template< typename Elem >
+	struct ElementInitialiser< Elem, typename std::enable_if< !is_initialisable< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -58,7 +71,26 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementInitialiser< Elem, is_initialisable< Elem > >
+	struct ElementInitialiser< Elem, typename std::enable_if< is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
+	{
+		void operator()( Engine & p_engine, Elem & p_element )
+		{
+			p_element.Initialise();
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for types that support cleanup.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour les types qui supportent le cleanup.
+	*/
+	template< typename Elem >
+	struct ElementInitialiser< Elem, typename std::enable_if< is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -74,8 +106,20 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de nettoyer les éléments qui le supportent.
 	*/
-	template< typename Elem, typename Enable=void >
-	struct ElementCleaner
+	template< typename Elem, typename Enable=void > struct ElementCleaner;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for types that don't support cleanup.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour les types qui ne supportent le cleanup.
+	*/
+	template< typename Elem >
+	struct ElementCleaner< Elem, typename std::enable_if< !is_cleanable< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -93,7 +137,26 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementCleaner< Elem, is_cleanable< Elem > >
+	struct ElementCleaner< Elem, typename std::enable_if< is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
+	{
+		void operator()( Engine & p_engine, Elem & p_element )
+		{
+			p_element.Cleanup();
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to enable cleanup if a type supports it.
+	\remarks	Specialisation for types that support cleanup.
+	\~french
+	\brief		Structure permettant de nettoyer les éléments qui le supportent.
+	\remarks	Spécialisation pour les types qui supportent le cleanup.
+	*/
+	template< typename Elem >
+	struct ElementCleaner< Elem, typename std::enable_if< is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -335,7 +398,7 @@ namespace Castor3D
 			}
 			else
 			{
-				CASTOR_EXCEPTION( ERROR_DUPLICATE_OBJECT + Castor::string::string_cast< char >( p_name ) );
+				Castor::Logger::LogWarning( ERROR_DUPLICATE_OBJECT + p_name );
 			}
 
 			m_elements.unlock();

@@ -5,6 +5,7 @@
 #include <MaterialManager.hpp>
 #include <Bone.hpp>
 #include <MeshManager.hpp>
+#include <SceneManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -206,7 +207,7 @@ SceneSPtr AssimpImporter::DoImportScene()
 	if ( m_pMesh )
 	{
 		m_pMesh->GenerateBuffers();
-		l_pScene = GetOwner()->CreateScene( cuT( "Scene_ASSIMP" ) );
+		l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetOwner(), cuT( "Scene_ASSIMP" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( m_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( m_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );

@@ -17,7 +17,8 @@
 #include <MeshManager.hpp>
 #include <PlatformWindowHandle.hpp>
 #include <PluginManager.hpp>
-#include <Sampler.hpp>
+#include <SamplerManager.hpp>
+#include <SceneManager.hpp>
 #include <WindowManager.hpp>
 
 #include <wx/window.h>
@@ -111,13 +112,19 @@ namespace GuiCommon
 		template<>
 		std::shared_ptr< Sampler > CreateObject< Sampler >( Engine & p_engine )
 		{
-			return p_engine.CreateSampler( Castor::String() );
+			return p_engine.GetSamplerManager().Create( Castor::String() );
+		}
+
+		template< typename TObj, typename TMgr >
+		std::shared_ptr< TObj > CreateObject( Engine & p_engine, TMgr & p_manager )
+		{
+			return p_manager.Create( String(), p_engine );
 		}
 
 		template<>
-		std::shared_ptr< Scene > CreateObject< Scene >( Engine & p_engine )
+		std::shared_ptr< Sampler > CreateObject< Sampler, SamplerManager >( Engine & p_engine, SamplerManager & p_manager )
 		{
-			return std::make_shared< Scene >( p_engine, p_engine.GetLightFactory() );
+			return p_manager.Create( String() );
 		}
 
 		template< typename TObj >
@@ -166,7 +173,7 @@ namespace GuiCommon
 		template< typename TObj, typename TKey >
 		bool DoFillManager( Engine & p_engine, Manager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
-			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine );
+			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine, p_manager );
 			bool l_return = p_parser.Parse( *l_obj, p_chunk );
 
 			if ( l_return )
@@ -252,7 +259,7 @@ namespace GuiCommon
 					switch ( l_chunk.GetChunkType() )
 					{
 					case eCHUNK_TYPE_SAMPLER:
-						l_continue = DoFillCollection( p_engine, p_engine.GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_path ) );
 						break;
 
 					case eCHUNK_TYPE_MATERIAL:
@@ -264,7 +271,7 @@ namespace GuiCommon
 						break;
 
 					case eCHUNK_TYPE_SCENE:
-						l_continue = DoFillCollection( p_engine, p_engine.GetSceneManager(), l_chunk, Scene::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetSceneManager(), l_chunk, Scene::BinaryParser( l_path ) );
 						break;
 
 					case eCHUNK_TYPE_WINDOW:

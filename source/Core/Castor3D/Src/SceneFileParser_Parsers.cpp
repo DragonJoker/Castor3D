@@ -4,7 +4,7 @@
 #include "AnimatedObject.hpp"
 #include "Animation.hpp"
 #include "BillboardList.hpp"
-#include "BlendState.hpp"
+#include "BlendStateManager.hpp"
 #include "BorderPanelOverlay.hpp"
 #include "Camera.hpp"
 #include "DirectionalLight.hpp"
@@ -24,21 +24,22 @@
 #include "MeshManager.hpp"
 #include "OneFrameVariable.hpp"
 #include "Overlay.hpp"
+#include "OverlayManager.hpp"
 #include "PanelOverlay.hpp"
 #include "Pass.hpp"
 #include "PluginManager.hpp"
 #include "PointLight.hpp"
 #include "RenderSystem.hpp"
-#include "RenderTarget.hpp"
 #include "RenderWindow.hpp"
-#include "Sampler.hpp"
-#include "Scene.hpp"
+#include "SamplerManager.hpp"
+#include "SceneManager.hpp"
 #include "SceneNode.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
 #include "SpotLight.hpp"
 #include "Subdivider.hpp"
 #include "Submesh.hpp"
+#include "TargetManager.hpp"
 #include "TextOverlay.hpp"
 #include "Texture.hpp"
 #include "TextureUnit.hpp"
@@ -79,7 +80,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootScene )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pScene = l_pContext->m_pParser->GetOwner()->CreateScene( p_params[0]->Get( l_name ) );
+	p_params[0]->Get( l_name );
+	l_pContext->pScene = l_pContext->m_pParser->GetOwner()->GetSceneManager().Create( l_name, *l_pContext->m_pParser->GetOwner(), l_name );
 	l_pContext->mapScenes.insert( std::make_pair( l_name, l_pContext->pScene ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SCENE )
@@ -120,7 +122,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_PANEL_OVERLAY )
@@ -129,7 +131,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootBorderPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_BORDER_PANEL_OVERLAY )
@@ -138,7 +140,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootTextOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, nullptr );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXT_OVERLAY )
@@ -147,7 +149,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootSamplerState )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pSampler = l_pContext->m_pParser->GetOwner()->CreateSampler( p_params[0]->Get( l_name ) );
+	l_pContext->pSampler = l_pContext->m_pParser->GetOwner()->GetSamplerManager().Create( p_params[0]->Get( l_name ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SAMPLER )
 
@@ -165,7 +167,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_WindowRenderTarget )
 
 	if ( l_pContext->pWindow )
 	{
-		l_pContext->pRenderTarget = l_pContext->m_pParser->GetOwner()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
+		l_pContext->pRenderTarget = l_pContext->m_pParser->GetOwner()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 	}
 	else
 	{
@@ -860,7 +862,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ScenePanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_name;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -877,7 +879,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBorderPanelOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_name;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -894,7 +896,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneTextOverlay )
 	if ( l_pContext->pScene )
 	{
 		String l_name;
-		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
+		l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pScene );
 		l_pContext->pOverlay->SetVisible( false );
 	}
 	else
@@ -2249,7 +2251,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitRenderTarget )
 
 	if ( l_pContext->pTextureUnit )
 	{
-		l_pContext->pRenderTarget = l_pContext->m_pParser->GetOwner()->CreateRenderTarget( eTARGET_TYPE_TEXTURE );
+		l_pContext->pRenderTarget = l_pContext->m_pParser->GetOwner()->GetTargetManager().Create( eTARGET_TYPE_TEXTURE );
 	}
 	else
 	{
@@ -2354,7 +2356,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitSampler )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	SamplerSPtr l_pSampler = l_pContext->m_pParser->GetOwner()->GetSamplerManager().find( p_params[0]->Get( l_name ) );
+	SamplerSPtr l_pSampler = l_pContext->m_pParser->GetOwner()->GetSamplerManager().Find( p_params[0]->Get( l_name ) );
 
 	if ( l_pSampler )
 	{
@@ -2870,7 +2872,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_PANEL_OVERLAY )
@@ -2879,7 +2881,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayBorderPanelOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_BORDER_PANEL, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_BORDER_PANEL_OVERLAY )
@@ -2888,7 +2890,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayTextOverlay )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
+	l_pContext->pOverlay = l_pContext->m_pParser->GetOwner()->GetOverlayManager().Create( eOVERLAY_TYPE_TEXT, p_params[0]->Get( l_name ), l_pContext->pOverlay, l_pContext->pOverlay->GetScene() );
 	l_pContext->pOverlay->SetVisible( false );
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXT_OVERLAY )

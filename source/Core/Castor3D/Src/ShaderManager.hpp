@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SHADER_MANAGER_H___
 #define ___C3D_SHADER_MANAGER_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "ShaderProgram.hpp"
 
 namespace Castor3D
 {
@@ -31,6 +31,7 @@ namespace Castor3D
 	\brief		Manager utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
 	*/
 	class ShaderManager
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -39,7 +40,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API ShaderManager();
+		C3D_API ShaderManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -53,23 +54,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Détruit tous les shaders du tableau de shaders à détruire
 		 */
-		C3D_API void Update();
-		/**
-		 *\~english
-		 *\brief		Flushes the active shaders list and adds all it's shaders to the array of shaders to destroy
-		 *\remarks		Calls Update
-		 *\~french
-		 *\brief		Vide la liste des shaders actifs dans celle des shaders à détruire
-		 *\remarks		Appelle Update
-		 */
 		C3D_API void Clear();
 		/**
 		 *\~english
-		 *\brief		Flushes the active shaders list and adds all it's shaders to the array of shaders to destroy
+		 *\brief		Cleans up all the shaders.
 		 *\~french
-		 *\brief		Vide la liste des shaders actifs dans celle des shaders à détruire
+		 *\brief		Nettoie tous les shaders.
 		 */
-		C3D_API void ClearShaders();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a new program
@@ -149,6 +141,26 @@ namespace Castor3D
 		C3D_API void CreateTextureVariables( ShaderProgramBase & p_program, uint32_t p_uiTextureFlags );
 		/**
 		 *\~english
+		 *\brief		Locks the collection mutex
+		 *\~french
+		 *\brief		Locke le mutex de la collection
+		 */
+		inline void lock()const
+		{
+			m_mutex.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Unlocks the collection mutex
+		 *\~french
+		 *\brief		Délocke le mutex de la collection
+		 */
+		inline void unlock()const
+		{
+			m_mutex.unlock();
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the RenderSystem
 		 *\param[in]	p_renderSystem	The new value
 		 *\~french
@@ -210,6 +222,7 @@ namespace Castor3D
 
 	private:
 		DECLARE_MAP( uint64_t, ShaderProgramBaseWPtr, ShaderProgramWPtrUInt64 );
+		mutable std::recursive_mutex m_mutex;
 		//!\~english The loaded shader programs	\~french Les programmes chargés
 		ShaderProgramPtrArray m_arrayPrograms;
 		//!\~english Automatically generated shader programs, sorted by texture flags	\~french Programmes auto-générés, triés par flags de texture

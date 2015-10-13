@@ -15,11 +15,11 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_WINDOW_MANAGER_H___
-#define ___C3D_WINDOW_MANAGER_H___
+#ifndef ___C3D_BLEND_STATE_MANAGER_H___
+#define ___C3D_BLEND_STATE_MANAGER_H___
 
 #include "Manager.hpp"
-#include "RenderWindow.hpp"
+#include "BlendState.hpp"
 
 namespace Castor3D
 {
@@ -28,12 +28,12 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		Render windows manager.
+	\brief		BlendState manager.
 	\~french
-	\brief		Gestionnaire de fenêtres de rendu.
+	\brief		Gestionnaire de BlendState.
 	*/
-	class WindowManager
-		: public Manager< uint32_t, RenderWindow >
+	class BlendStateManager
+		: public Manager< Castor::String, BlendState >
 	{
 	public:
 		/**
@@ -44,29 +44,27 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API WindowManager( Engine & p_engine );
+		C3D_API BlendStateManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~WindowManager();
-		/**
-		*\copydoc		Castor3D::Manager::Create
-		*/
-		C3D_API RenderWindowSPtr Create();
+		C3D_API virtual ~BlendStateManager();
 		/**
 		 *\~english
-		 *\brief		Renders one frame for each window.
-		 *\param[in]	p_force		Forces the rendering.
-		 *\~english
-		 *\brief		Dessine une image de chaque fenêtre.
-		 *\param[in]	p_force		Dit si on force le rendu.
+		 *\brief		Creates and returns a BlendState, given a name
+		 *\remark		If a BlendState with the same name exists, none is created
+		 *\param[in]	p_name	The BlendState name
+		 *\return		The created or existing BlendState
+		 *\~french
+		 *\brief		Crée et renvoie un BlendState, avec le nom donné
+		 *\remark		Si un BlendState avec le même nom existe, aucun n'est créé
+		 *\param[in]	p_name	Le nom du BlendState
+		 *\return		Le BlendState créé ou existant
 		 */
-		C3D_API void Render( bool p_force );
-
-	private:
+		C3D_API BlendStateSPtr Create( Castor::String const & p_name );
 	};
 }
 

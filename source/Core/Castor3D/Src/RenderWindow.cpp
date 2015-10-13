@@ -5,16 +5,16 @@
 #include "Camera.hpp"
 #include "CleanupEvent.hpp"
 #include "Context.hpp"
-#include "DepthStencilState.hpp"
+#include "DepthStencilStateManager.hpp"
 #include "DynamicTexture.hpp"
 #include "Engine.hpp"
 #include "FrameListener.hpp"
 #include "FrameVariable.hpp"
 #include "InitialiseEvent.hpp"
 #include "Pipeline.hpp"
-#include "RasteriserState.hpp"
+#include "RasteriserStateManager.hpp"
 #include "RenderSystem.hpp"
-#include "RenderTarget.hpp"
+#include "TargetManager.hpp"
 #include "ResizeWindowEvent.hpp"
 #include "Scene.hpp"
 #include "ShaderProgram.hpp"
@@ -130,7 +130,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TARGET:
-					l_target = p_obj.GetOwner()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
+					l_target = p_obj.GetOwner()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 					l_return = RenderTarget::BinaryParser( m_path ).Parse( *l_target, l_chunk );
 					break;
 
@@ -163,8 +163,8 @@ namespace Castor3D
 		, m_bFullscreen( false )
 		, m_bResized( true )
 	{
-		m_wpDepthStencilState = GetOwner()->CreateDepthStencilState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
-		m_wpRasteriserState = GetOwner()->CreateRasteriserState( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetOwner()->GetRasteriserStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}
 
@@ -175,7 +175,7 @@ namespace Castor3D
 
 		if ( !m_pRenderTarget.expired() )
 		{
-			GetOwner()->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
+			GetOwner()->GetTargetManager().Remove( std::move( m_pRenderTarget.lock() ) );
 		}
 	}
 

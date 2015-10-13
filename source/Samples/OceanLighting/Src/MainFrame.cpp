@@ -7,8 +7,12 @@
 #include <Camera.hpp>
 #include <Scene.hpp>
 #include <PlatformWindowHandle.hpp>
+#include <PluginManager.hpp>
 #include <Parameter.hpp>
+#include <SceneManager.hpp>
+#include <TargetManager.hpp>
 #include <TechniqueFactory.hpp>
+#include <WindowManager.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -36,7 +40,7 @@ namespace OceanLighting
 		}
 		void operator()( Engine * p_engine, Path const & p_pathFile )
 		{
-			PluginBaseSPtr l_pPlugin = p_engine->LoadPlugin( p_pathFile );
+			PluginBaseSPtr l_pPlugin = p_engine->GetPluginManager().LoadPlugin( p_pathFile );
 
 			if ( !l_pPlugin )
 			{
@@ -329,11 +333,11 @@ namespace OceanLighting
 
 		if ( l_bReturn )
 		{
-			SceneSPtr l_pScene = m_pCastor3D->CreateScene( cuT( "DummyScene" ) );
+			SceneSPtr l_pScene = m_pCastor3D->GetSceneManager().Create( cuT( "DummyScene" ), *m_pCastor3D, cuT( "DummyScene" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( cuT( "DummyCameraNode" ), l_pScene->GetCameraRootNode() );
 			CameraSPtr l_pCamera = l_pScene->CreateCamera( cuT( "DummyCamera" ), m_width, m_height, l_pNode );
 			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
-			RenderTargetSPtr l_pTarget = m_pCastor3D->CreateRenderTarget( eTARGET_TYPE_WINDOW );
+			RenderTargetSPtr l_pTarget = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 			l_pTarget->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
 			l_pTarget->SetDepthFormat( ePIXEL_FORMAT_DEPTH24S8 );
 			l_pTarget->SetSize( Size( m_width, m_height ) );
@@ -344,7 +348,7 @@ namespace OceanLighting
 			m_pTechnique->SetWidth( m_width );
 			m_pTechnique->SetHeight( m_height );
 			l_pTarget->SetTechnique( m_pTechnique );
-			m_pWindow = m_pCastor3D->CreateRenderWindow();
+			m_pWindow = m_pCastor3D->GetWindowManager().Create();
 			m_pWindow->SetRenderTarget( l_pTarget );
 #if defined( _WIN32 )
 			WindowHandle l_handle( std::make_shared< IMswWindowHandle >( p_parent->GetHandle() ) );

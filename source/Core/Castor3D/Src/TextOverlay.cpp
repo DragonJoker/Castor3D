@@ -4,6 +4,7 @@
 #include "FontTexture.hpp"
 #include "InitialiseEvent.hpp"
 #include "Overlay.hpp"
+#include "OverlayManager.hpp"
 #include "OverlayRenderer.hpp"
 #include "RenderSystem.hpp"
 #include "Sampler.hpp"

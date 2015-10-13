@@ -20,8 +20,69 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Manager.hpp"
 
+#include "LightFactory.hpp"
+#include "Scene.hpp"
+
 namespace Castor3D
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		13/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Scene manager.
+	\~french
+	\brief		Gestionnaire de Scene.
+	*/
+	class SceneManager
+		: public Manager< Castor::String, Scene >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_engine	Le moteur.
+		 */
+		C3D_API SceneManager( Engine & p_engine );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		C3D_API virtual ~SceneManager();
+		/**
+		 *\~english
+		 *\brief		Retrieves the Light factory.
+		 *\return		The factory.
+		 *\~french
+		 *\brief		Récupère la fabrique de Light.
+		 *\return		La fabrique.
+		 */
+		inline LightFactory const & GetFactory()const
+		{
+			return m_factory;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Light factory.
+		 *\return		The factory.
+		 *\~french
+		 *\brief		Récupère la fabrique de Light.
+		 *\return		La fabrique.
+		 */
+		inline LightFactory & GetFactory()
+		{
+			return m_factory;
+		}
+
+	private:
+		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
+		LightFactory m_factory;
+	};
 }
 
 #endif

@@ -709,8 +709,6 @@ namespace Castor3D
 		OverlayCategorySPtr m_category;
 		//!\~english The parent scene	\~french La scène parente
 		SceneWPtr m_pScene;
-		//!\~english The factory	\~french La fabrique
-		OverlayFactory & m_factory;
 		//!\~english The render system	\~french Le système de rendu
 		RenderSystem * m_renderSystem;
 	};

@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_MATERIAL_MANAGER_H___
 
 #include "Manager.hpp"
+#include "Material.hpp"
 
 namespace Castor3D
 {

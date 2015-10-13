@@ -6,6 +6,7 @@
 #include <FunctorEvent.hpp>
 #include <InitialiseEvent.hpp>
 #include <Material.hpp>
+#include <Overlay.hpp>
 #include <OverlayManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
@@ -36,7 +37,7 @@ namespace CastorGui
 			l_parentOv = l_parent->GetBackground()->GetOverlay().shared_from_this();
 		}
 
-		OverlaySPtr l_overlay = GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_BORDER_PANEL, cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), l_parentOv, nullptr );
+		OverlaySPtr l_overlay = GetEngine()->GetOverlayManager().Create( eOVERLAY_TYPE_BORDER_PANEL, cuT( "BP_CtrlControl_" ) + string::to_string( GetId() ), l_parentOv, nullptr );
 		l_overlay->SetPixelPosition( GetPosition() );
 		l_overlay->SetPixelSize( GetSize() );
 		BorderPanelOverlaySPtr l_panel = l_overlay->GetBorderPanelOverlay();

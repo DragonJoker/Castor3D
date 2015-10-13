@@ -15,11 +15,11 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_WINDOW_MANAGER_H___
-#define ___C3D_WINDOW_MANAGER_H___
+#ifndef ___C3D_DEPTH_STENCIL_STATE_MANAGER_H___
+#define ___C3D_DEPTH_STENCIL_STATE_MANAGER_H___
 
 #include "Manager.hpp"
-#include "RenderWindow.hpp"
+#include "DepthStencilState.hpp"
 
 namespace Castor3D
 {
@@ -28,12 +28,12 @@ namespace Castor3D
 	\date 		13/10/2015
 	\version	0.8.0
 	\~english
-	\brief		Render windows manager.
+	\brief		DepthStencilState manager.
 	\~french
-	\brief		Gestionnaire de fenêtres de rendu.
+	\brief		Gestionnaire de DepthStencilState.
 	*/
-	class WindowManager
-		: public Manager< uint32_t, RenderWindow >
+	class DepthStencilStateManager
+		: public Manager< Castor::String, DepthStencilState >
 	{
 	public:
 		/**
@@ -44,29 +44,27 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API WindowManager( Engine & p_engine );
+		C3D_API DepthStencilStateManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~WindowManager();
-		/**
-		*\copydoc		Castor3D::Manager::Create
-		*/
-		C3D_API RenderWindowSPtr Create();
+		C3D_API virtual ~DepthStencilStateManager();
 		/**
 		 *\~english
-		 *\brief		Renders one frame for each window.
-		 *\param[in]	p_force		Forces the rendering.
-		 *\~english
-		 *\brief		Dessine une image de chaque fenêtre.
-		 *\param[in]	p_force		Dit si on force le rendu.
+		 *\brief		Creates and returns a DepthStencilState, given a name
+		 *\remark		If a DepthStencilState with the same name exists, none is created
+		 *\param[in]	p_name	The DepthStencilState name
+		 *\return		The created or existing DepthStencilState
+		 *\~french
+		 *\brief		Crée et renvoie un DepthStencilState, avec le nom donné
+		 *\remark		Si un DepthStencilState avec le même nom existe, aucun n'est créé
+		 *\param[in]	p_name	Le nom du DepthStencilState
+		 *\return		Le DepthStencilState créé ou existant
 		 */
-		C3D_API void Render( bool p_force );
-
-	private:
+		C3D_API DepthStencilStateSPtr Create( Castor::String const & p_name );
 	};
 }
 

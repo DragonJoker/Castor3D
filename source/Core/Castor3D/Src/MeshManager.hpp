@@ -19,6 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_MESH_MANAGER_H___
 
 #include "Manager.hpp"
+#include "Mesh.hpp"
+#include "MeshFactory.hpp"
 
 #include <OwnedBy.hpp>
 

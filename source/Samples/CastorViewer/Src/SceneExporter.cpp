@@ -314,7 +314,7 @@ namespace CastorViewer
 		Path l_filePath = l_folder / p_fileName.GetFileName();
 		bool l_result = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_CBSN_FILE );
-		ParseCollection( p_castor3d, p_castor3d->GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_folder ) );
+		ParseManager( p_castor3d, p_castor3d->GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_folder ) );
 		ParseManager( p_castor3d, p_castor3d->GetMaterialManager(), l_chunk, Material::BinaryParser( l_folder, p_castor3d ) );
 		ParseManager( p_castor3d, p_castor3d->GetMeshManager(), l_chunk, Mesh::BinaryParser( l_folder ) );
 
@@ -330,7 +330,7 @@ namespace CastorViewer
 			l_result &= RenderWindow::BinaryParser( l_folder ).Fill( *l_it.second, l_chunk );
 		}
 
-		p_castor3d->GetWindowManager().Unock();
+		p_castor3d->GetWindowManager().Unlock();
 
 		if ( l_result )
 		{

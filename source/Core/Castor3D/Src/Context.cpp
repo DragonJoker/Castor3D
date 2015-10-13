@@ -1,7 +1,8 @@
 ﻿#include "Context.hpp"
 
+#include "BlendStateManager.hpp"
 #include "Buffer.hpp"
-#include "DepthStencilState.hpp"
+#include "DepthStencilStateManager.hpp"
 #include "Engine.hpp"
 #include "FrameVariableBuffer.hpp"
 #include "MatrixFrameVariable.hpp"
@@ -73,7 +74,7 @@ namespace Castor3D
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_pGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
-		m_pDsStateBackground = GetOwner()->GetOwner()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
+		m_pDsStateBackground = GetOwner()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "ContextBackgroundDSState" ) );
 		m_pDsStateBackground->SetDepthTest( false );
 		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();

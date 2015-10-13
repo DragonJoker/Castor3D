@@ -1,46 +1,46 @@
-﻿#include "Scene.hpp"
+﻿#include "SceneManager.hpp"
 
-#include "Engine.hpp"
+#include "AnimatedObject.hpp"
+#include "AnimatedObjectGroup.hpp"
+#include "Animation.hpp"
+#include "Buffer.hpp"
+#include "Camera.hpp"
+#include "BillboardList.hpp"
+#include "BlendState.hpp"
 #include "CleanupEvent.hpp"
-#include "DepthStencilState.hpp"
+#include "DepthStencilStateManager.hpp"
+#include "DirectionalLight.hpp"
+#include "DynamicTexture.hpp"
+#include "Engine.hpp"
+#include "Face.hpp"
+#include "FrameVariable.hpp"
 #include "FrameVariableBuffer.hpp"
 #include "FunctorEvent.hpp"
-#include "MatrixFrameVariable.hpp"
-#include "Buffer.hpp"
-#include "Animation.hpp"
-#include "AnimatedObjectGroup.hpp"
-#include "AnimatedObject.hpp"
-#include "Light.hpp"
-#include "SceneNode.hpp"
-#include "Mesh.hpp"
 #include "Geometry.hpp"
-#include "Engine.hpp"
-#include "Material.hpp"
-#include "MeshManager.hpp"
-#include "Pass.hpp"
-#include "Submesh.hpp"
-#include "Pipeline.hpp"
-#include "Camera.hpp"
-#include "Ray.hpp"
 #include "Importer.hpp"
 #include "InitialiseEvent.hpp"
-#include "Face.hpp"
-#include "Vertex.hpp"
-#include "PointLight.hpp"
-#include "SpotLight.hpp"
-#include "Skeleton.hpp"
-#include "DirectionalLight.hpp"
-#include "FrameVariable.hpp"
-#include "ShaderProgram.hpp"
-#include "BlendState.hpp"
-#include "BillboardList.hpp"
-#include "ShaderManager.hpp"
-#include "StaticTexture.hpp"
-#include "DynamicTexture.hpp"
-#include "TextureUnit.hpp"
+#include "Light.hpp"
+#include "Material.hpp"
+#include "MatrixFrameVariable.hpp"
+#include "Mesh.hpp"
+#include "MeshManager.hpp"
 #include "OneFrameVariable.hpp"
+#include "Overlay.hpp"
+#include "Pass.hpp"
+#include "Pipeline.hpp"
 #include "PointFrameVariable.hpp"
+#include "PointLight.hpp"
+#include "Ray.hpp"
 #include "RenderSystem.hpp"
+#include "SceneNode.hpp"
+#include "ShaderManager.hpp"
+#include "ShaderProgram.hpp"
+#include "Skeleton.hpp"
+#include "SpotLight.hpp"
+#include "StaticTexture.hpp"
+#include "Submesh.hpp"
+#include "TextureUnit.hpp"
+#include "Vertex.hpp"
 
 #include <Image.hpp>
 #include <Logger.hpp>
@@ -500,7 +500,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Scene::Scene( Engine & p_engine, LightFactory & p_lightFactory, String const & p_name )
+	Scene::Scene( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >( p_engine )
 		, m_strName( p_name )
 		, m_rootCameraNode()
@@ -508,7 +508,7 @@ namespace Castor3D
 		, m_nbFaces( 0 )
 		, m_nbVertex( 0 )
 		, m_changed( false )
-		, m_lightFactory( p_lightFactory )
+		, m_lightFactory( p_engine.GetSceneManager().GetFactory() )
 		, m_pLightsTexture( std::make_shared< TextureUnit >( p_engine ) )
 		, m_bLightsChanged( true )
 	{
@@ -538,7 +538,7 @@ namespace Castor3D
 		m_rootNode = std::make_shared< SceneNode >( *this, cuT( "RootNode" ) );
 		m_rootCameraNode = std::make_shared< SceneNode >( *this, cuT( "CameraRootNode" ) );
 		m_rootObjectNode = std::make_shared< SceneNode >( *this, cuT( "ObjectRootNode" ) );
-		m_alphaDepthState = GetOwner()->CreateDepthStencilState( m_strName + cuT( "_AlphaDepthState" ) );
+		m_alphaDepthState = GetOwner()->GetDepthStencilStateManager().Create( m_strName + cuT( "_AlphaDepthState" ) );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
@@ -548,7 +548,7 @@ namespace Castor3D
 		GetOwner()->PostEvent( MakeInitialiseEvent( *m_pLightsTexture ) );
 	}
 
-	void Scene::ClearScene()
+	void Scene::Cleanup()
 	{
 		m_mapSubmeshesAlpha.clear();
 		m_arraySubmeshesNoAlpha.clear();
@@ -1200,7 +1200,7 @@ namespace Castor3D
 			m_changed = true;
 			m_clAmbientLight = p_scene->GetAmbientLight();
 		}
-		p_scene->ClearScene();
+		p_scene->Cleanup();
 	}
 
 	bool Scene::ImportExternal( String const & p_fileName, Importer & p_importer )

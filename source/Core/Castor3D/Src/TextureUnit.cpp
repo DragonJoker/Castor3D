@@ -4,7 +4,7 @@
 #include "Engine.hpp"
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
-#include "RenderTarget.hpp"
+#include "TargetManager.hpp"
 #include "RenderTechnique.hpp"
 #include "Sampler.hpp"
 #include "StaticTexture.hpp"
@@ -480,7 +480,7 @@ namespace Castor3D
 	{
 		if ( !m_pRenderTarget.expired() )
 		{
-			GetOwner()->RemoveRenderTarget( std::move( m_pRenderTarget.lock() ) );
+			GetOwner()->GetTargetManager().Remove( std::move( m_pRenderTarget.lock() ) );
 		}
 	}
 
