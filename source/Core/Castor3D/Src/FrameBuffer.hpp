@@ -327,7 +327,8 @@ namespace Castor3D
 		C3D_API virtual bool DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolation ) = 0;
 
 	private:
-		C3D_API void DoDetach( eATTACHMENT_POINT p_eAttach );
+		C3D_API bool DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );
+		C3D_API void DoDetach( eATTACHMENT_POINT p_point );
 
 	protected:
 		//!\~english All attchments.	\~french Toutes les attaches.

@@ -162,7 +162,6 @@ namespace Castor3D
 		m_viewport.SetSize( p_size );
 		Clear( p_uiComponents );
 		m_viewport.Render( GetOwner()->GetPipeline() );
-		CullFace( eFACE_NONE );
 		uint32_t l_id = p_pTexture->GetIndex();
 		p_pTexture->SetIndex( 0 );
 
