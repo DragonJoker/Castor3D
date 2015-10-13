@@ -18,10 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MATERIAL_MANAGER_H___
 #define ___C3D_MATERIAL_MANAGER_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "BinaryParser.hpp"
-
-#include <OwnedBy.hpp>
+#include "Manager.hpp"
 
 namespace Castor3D
 {
@@ -35,8 +32,7 @@ namespace Castor3D
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
 	class MaterialManager
-		: public MaterialCollection
-		, public Castor::OwnedBy< Engine >
+		: public Manager< Castor::String, Material >
 	{
 	private:
 		DECLARE_VECTOR(	MaterialWPtr, MaterialWPtr );
@@ -44,9 +40,11 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_engine	Le moteur.
 		 */
 		C3D_API MaterialManager( Engine & p_engine );
 		/**
@@ -58,24 +56,17 @@ namespace Castor3D
 		C3D_API virtual ~MaterialManager();
 		/**
 		 *\~english
-		 *\brief		Materials initialisation function
-		 *\remark		Intialises the default material, a renderer must have been loaded
+		 *\brief		Materials initialisation function.
+		 *\remark		Intialises the default material, a renderer must have been loaded.
 		 */
-		C3D_API void Initialise();
-		/**
-		 *\~english
-		 *\brief		Sets all the materials to be cleaned up
-		 *\~french
-		 *\brief		Met tous les matériaux à nettoyer
-		 */
-		C3D_API void Cleanup();
+		C3D_API virtual void Initialise();
 		/**
 		 *\~english
 		 *\brief		Deletes the default material, flush the collection
 		 *\~french
 		 *\brief		Supprime le matériau par défaut, vide la collection
 		 */
-		C3D_API void DeleteAll();
+		C3D_API void Clear();
 		/**
 		 *\~english
 		 *\brief		Puts all the materials names in the given array

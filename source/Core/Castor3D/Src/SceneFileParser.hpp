@@ -213,7 +213,7 @@ namespace Castor3D
 		{
 			return false;
 		}
-		C3D_API virtual void DoDiscardParser( Castor::String const & p_strLine );
+		C3D_API virtual bool DoDiscardParser( Castor::String const & p_strLine );
 		C3D_API virtual void DoValidate();
 
 	private:

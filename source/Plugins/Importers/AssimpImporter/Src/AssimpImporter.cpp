@@ -4,6 +4,7 @@
 #include <ImporterPlugin.hpp>
 #include <MaterialManager.hpp>
 #include <Bone.hpp>
+#include <MeshManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -220,7 +221,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 {
 	String l_name = m_fileName.GetFileName();
 	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-	m_pMesh = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, UIntArray(), RealArray() );
+	m_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 
 	if ( !m_pMesh->GetSubmeshCount() )
 	{
@@ -284,7 +285,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 			}
 			else
 			{
-				GetOwner()->GetMeshManager().erase( l_meshName );
+				GetOwner()->GetMeshManager().Remove( l_meshName );
 				m_pMesh.reset();
 			}
 
@@ -294,7 +295,7 @@ MeshSPtr AssimpImporter::DoImportMesh()
 		{
 			// The import failed, report it
 			Logger::LogError( std::stringstream() << "Scene import failed : " << importer.GetErrorString() );
-			GetOwner()->GetMeshManager().erase( l_meshName );
+			GetOwner()->GetMeshManager().Remove( l_meshName );
 			m_pMesh.reset();
 		}
 	}
@@ -467,7 +468,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		l_name = m_fileName.GetFileName() + string::to_string( m_anonymous++ );
 	}
 
-	l_pReturn = l_mtlManager.find( l_name );
+	l_pReturn = l_mtlManager.Find( l_name );
 
 	if ( !l_pReturn )
 	{
@@ -475,7 +476,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		float l_fShininess = 0.5f;
 		float l_fShininessStrength = 1.0f;
 		int l_iTwoSided = 0;
-		l_pReturn = std::make_shared< Material >( *GetOwner(), l_name );
+		l_pReturn = l_mtlManager.Create( l_name, *GetOwner(), l_name );
 		l_pReturn->CreatePass();
 		l_pPass = l_pReturn->GetPass( 0 );
 		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_clrAmbient );
@@ -568,9 +569,6 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 				DoAddTexture( string::string_cast< xchar >( l_hgtTexName.C_Str() ), l_pPass, eTEXTURE_CHANNEL_NORMAL	);
 			}
 		}
-
-		l_mtlManager.insert( l_name, l_pReturn );
-		GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
 	}
 
 	return l_pReturn;

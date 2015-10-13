@@ -269,7 +269,7 @@ namespace GuiCommon
 		DoApplyChange( [p_name, l_overlay]()
 		{
 			MaterialManager & l_manager = l_overlay->GetOverlay().GetOwner()->GetMaterialManager();
-			MaterialSPtr l_material = l_manager.find( p_name );
+			MaterialSPtr l_material = l_manager.Find( p_name );
 
 			if ( l_material )
 			{
@@ -306,7 +306,7 @@ namespace GuiCommon
 		DoApplyChange( [p_name, l_overlay]()
 		{
 			MaterialManager & l_manager = l_overlay->GetOverlay().GetOwner()->GetMaterialManager();
-			MaterialSPtr l_material = l_manager.find( p_name );
+			MaterialSPtr l_material = l_manager.Find( p_name );
 
 			if ( l_material )
 			{

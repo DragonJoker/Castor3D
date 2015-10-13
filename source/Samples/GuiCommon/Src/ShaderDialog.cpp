@@ -16,6 +16,7 @@
 #include <RenderTarget.hpp>
 #include <ShaderManager.hpp>
 #include <ShaderProgram.hpp>
+#include <WindowManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -74,9 +75,10 @@ namespace GuiCommon
 		{
 			PassSPtr l_pass = m_pPass.lock();
 			Engine * l_engine = l_pass->GetOwner();
-			auto && l_it = l_engine->RenderWindowsBegin();
+			l_engine->GetWindowManager().Lock();
+			auto && l_it = l_engine->GetWindowManager().begin();
 
-			if ( l_it != l_engine->RenderWindowsEnd() && l_it->second->GetRenderTarget() )
+			if ( l_it != l_engine->GetWindowManager().end() && l_it->second->GetRenderTarget() )
 			{
 				RenderTechniqueBaseSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
 
@@ -86,6 +88,8 @@ namespace GuiCommon
 					m_bOwnShader = true;
 				}
 			}
+
+			l_engine->GetWindowManager().Unlock();
 		}
 
 		PathArray l_arrayFiles;

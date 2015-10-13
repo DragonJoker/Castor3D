@@ -11,7 +11,7 @@ namespace GuiCommon
 {
 	LanguageFileParser::LanguageFileParser( StcContext * p_pStcContext )
 		: FileParser( eSECTION_ROOT )
-		, m_pStcContext( p_pStcContext )
+, m_pStcContext( p_pStcContext )
 	{
 	}
 
@@ -23,21 +23,21 @@ namespace GuiCommon
 	{
 		LanguageFileContextPtr l_pContext = std::make_shared< LanguageFileContext >( &p_file );
 		m_context = l_pContext;
-		AddParser( eSECTION_ROOT,		cuT( "language"	),	Root_Language		, 1,	ePARAMETER_TYPE_NAME	);
-		AddParser( eSECTION_LANGUAGE,	cuT( "pattern"	),	Language_Pattern	, 1,	ePARAMETER_TYPE_TEXT	);
-		AddParser( eSECTION_LANGUAGE,	cuT( "lexer"	),	Language_Lexer		, 1,	ePARAMETER_TYPE_CHECKED_TEXT,	&l_pContext->mapLexers	);
-		AddParser( eSECTION_LANGUAGE,	cuT( "fold_flags"	),	Language_FoldFlags	, 1,	ePARAMETER_TYPE_TEXT	);
-		AddParser( eSECTION_LANGUAGE,	cuT( "section"	),	Language_Section	);
-		AddParser( eSECTION_LANGUAGE,	cuT( "style"	),	Language_Style	);
-		AddParser( eSECTION_STYLE,		cuT( "type"	),	Style_Type			, 1,	ePARAMETER_TYPE_CHECKED_TEXT,	&l_pContext->mapTypes	);
-		AddParser( eSECTION_STYLE,		cuT( "fg_colour"	),	Style_FgColour		, 1,	ePARAMETER_TYPE_NAME	);
-		AddParser( eSECTION_STYLE,		cuT( "bg_colour"	),	Style_BgColour		, 1,	ePARAMETER_TYPE_NAME	);
-		AddParser( eSECTION_STYLE,		cuT( "font_name"	),	Style_FontName		, 1,	ePARAMETER_TYPE_TEXT	);
-		AddParser( eSECTION_STYLE,		cuT( "font_style"	),	Style_FontStyle		, 1,	ePARAMETER_TYPE_TEXT	);
-		AddParser( eSECTION_STYLE,		cuT( "font_size"	),	Style_FontSize		, 1,	ePARAMETER_TYPE_INT32	);
-		AddParser( eSECTION_SECTION,	cuT( "type"	),	Section_Type		, 1,	ePARAMETER_TYPE_CHECKED_TEXT,	&l_pContext->mapTypes	);
-		AddParser( eSECTION_SECTION,	cuT( "list"	),	Section_List	);
-		AddParser( eSECTION_SECTION,	cuT( "}"	),	Section_End	);
+		AddParser( eSECTION_ROOT, cuT( "language" ), Root_Language, 1, ePARAMETER_TYPE_NAME );
+		AddParser( eSECTION_LANGUAGE, cuT( "pattern" ), Language_Pattern, 1, ePARAMETER_TYPE_TEXT );
+		AddParser( eSECTION_LANGUAGE, cuT( "lexer" ), Language_Lexer, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->mapLexers );
+		AddParser( eSECTION_LANGUAGE, cuT( "fold_flags" ), Language_FoldFlags, 1, ePARAMETER_TYPE_TEXT );
+		AddParser( eSECTION_LANGUAGE, cuT( "section" ), Language_Section );
+		AddParser( eSECTION_LANGUAGE, cuT( "style" ), Language_Style );
+		AddParser( eSECTION_STYLE, cuT( "type" ), Style_Type, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->mapTypes );
+		AddParser( eSECTION_STYLE, cuT( "fg_colour" ), Style_FgColour, 1, ePARAMETER_TYPE_NAME );
+		AddParser( eSECTION_STYLE, cuT( "bg_colour" ), Style_BgColour, 1, ePARAMETER_TYPE_NAME );
+		AddParser( eSECTION_STYLE, cuT( "font_name" ), Style_FontName, 1, ePARAMETER_TYPE_TEXT );
+		AddParser( eSECTION_STYLE, cuT( "font_style" ), Style_FontStyle, 1, ePARAMETER_TYPE_TEXT );
+		AddParser( eSECTION_STYLE, cuT( "font_size" ), Style_FontSize, 1, ePARAMETER_TYPE_INT32 );
+		AddParser( eSECTION_SECTION, cuT( "type" ), Section_Type, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->mapTypes );
+		AddParser( eSECTION_SECTION, cuT( "list" ), Section_List );
+		AddParser( eSECTION_SECTION, cuT( "}" ), Section_End );
 		l_pContext->pCurrentLanguage.reset( new LanguageInfo );
 	}
 
@@ -46,8 +46,10 @@ namespace GuiCommon
 		std::static_pointer_cast< LanguageFileContext >( m_context )->pCurrentLanguage.reset();
 	}
 
-	void LanguageFileParser::DoDiscardParser( String const & p_strLine )
+	bool LanguageFileParser::DoDiscardParser( String const & p_strLine )
 	{
+		bool l_return = false;
+
 		if ( m_context->m_sections.top() == eSECTION_LIST )
 		{
 			String l_strWords( p_strLine );
@@ -55,11 +57,14 @@ namespace GuiCommon
 			StringArray l_arrayWords = string::split( string::trim( l_strWords ), cuT( "\t " ), 1000, false );
 			LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( m_context );
 			l_pContext->arrayWords.insert( l_pContext->arrayWords.end(), l_arrayWords.begin(), l_arrayWords.end() );
+			l_return = true;
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine );
 		}
+
+		return l_return;
 	}
 
 	void LanguageFileParser::DoValidate()

@@ -16,6 +16,7 @@
 #include "Geometry.hpp"
 #include "Engine.hpp"
 #include "Material.hpp"
+#include "MeshManager.hpp"
 #include "Pass.hpp"
 #include "Submesh.hpp"
 #include "Pipeline.hpp"
@@ -848,7 +849,7 @@ namespace Castor3D
 		if ( DoCheckObject( p_name, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
 			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			MeshSPtr l_pMesh = GetOwner()->CreateMesh( p_type, p_meshName, p_faces, p_size );
+			MeshSPtr l_pMesh = GetOwner()->GetMeshManager().Create( p_meshName, p_type, p_faces, p_size );
 
 			if ( l_pMesh )
 			{

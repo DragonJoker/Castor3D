@@ -13,8 +13,12 @@
 
 #include <FunctorEvent.hpp>
 #include <InitialiseEvent.hpp>
+#include <MaterialManager.hpp>
+#include <MeshManager.hpp>
 #include <PlatformWindowHandle.hpp>
+#include <PluginManager.hpp>
 #include <Sampler.hpp>
+#include <WindowManager.hpp>
 
 #include <wx/window.h>
 
@@ -159,6 +163,29 @@ namespace GuiCommon
 			return l_return;
 		}
 
+		template< typename TObj, typename TKey >
+		bool DoFillManager( Engine & p_engine, Manager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		{
+			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine );
+			bool l_return = p_parser.Parse( *l_obj, p_chunk );
+
+			if ( l_return )
+			{
+				if ( !p_manager.Has( l_obj->GetName() ) )
+				{
+					p_manager.Insert( l_obj->GetName(), l_obj );
+					InitialiseObject( l_obj, p_engine );
+				}
+				else
+				{
+					Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
+					l_return = false;
+				}
+			}
+
+			return l_return;
+		}
+
 		bool DoLoadMeshFile( Engine & p_engine, Path const & p_fileName )
 		{
 			bool l_return = true;
@@ -173,7 +200,7 @@ namespace GuiCommon
 					BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
 					Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
 
-					if ( p_engine.LoadMeshes( l_fileMesh ) )
+					if ( p_engine.GetMeshManager().Load( l_fileMesh ) )
 					{
 						Logger::LogInfo( cuT( "Meshes read" ) );
 					}
@@ -229,11 +256,11 @@ namespace GuiCommon
 						break;
 
 					case eCHUNK_TYPE_MATERIAL:
-						l_continue = DoFillCollection( p_engine, p_engine.GetMaterialManager(), l_chunk, Material::BinaryParser( l_path, &p_engine ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetMaterialManager(), l_chunk, Material::BinaryParser( l_path, &p_engine ) );
 						break;
 
 					case eCHUNK_TYPE_MESH:
-						l_continue = DoFillCollection( p_engine, p_engine.GetMeshManager(), l_chunk, Mesh::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetMeshManager(), l_chunk, Mesh::BinaryParser( l_path ) );
 						break;
 
 					case eCHUNK_TYPE_SCENE:
@@ -241,7 +268,7 @@ namespace GuiCommon
 						break;
 
 					case eCHUNK_TYPE_WINDOW:
-						l_return = p_engine.CreateRenderWindow();
+						l_return = p_engine.GetWindowManager().Create();
 						l_continue = RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
 						break;
 					}
@@ -454,7 +481,7 @@ namespace GuiCommon
 					{
 						l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
 						{
-							if ( !p_engine.LoadPlugin( p_path ) )
+							if ( !p_engine.GetPluginManager().LoadPlugin( p_path ) )
 							{
 								std::unique_lock< std::mutex > l_lock( l_mutex );
 								l_arrayFailed.push_back( p_path );
@@ -482,7 +509,7 @@ namespace GuiCommon
 
 				l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
 				{
-					if ( !p_engine.LoadPlugin( p_path ) )
+					if ( !p_engine.GetPluginManager().LoadPlugin( p_path ) )
 					{
 						std::unique_lock< std::mutex > l_lock( l_mutex );
 						l_arrayFailed.push_back( p_path );

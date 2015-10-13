@@ -83,14 +83,14 @@ namespace GuiCommon
 	{
 		m_engine = p_engine;
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		m_engine->GetMaterialManager().lock();
+		m_engine->GetMaterialManager().Lock();
 
 		for ( auto && l_pair : m_engine->GetMaterialManager() )
 		{
 			DoAddMaterial( l_root, l_pair.second );
 		}
 
-		m_engine->GetMaterialManager().unlock();
+		m_engine->GetMaterialManager().Unlock();
 	}
 
 	void MaterialsList::UnloadMaterials()

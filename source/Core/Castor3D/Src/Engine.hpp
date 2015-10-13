@@ -22,7 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "FrameEvent.hpp"
 #include "LightFactory.hpp"
-#include "MaterialManager.hpp"
 #include "MeshFactory.hpp"
 #include "OverlayFactory.hpp"
 #include "OverlayManager.hpp"
@@ -143,152 +142,6 @@ namespace Castor3D
 		C3D_API void ClearScenes();
 		/**
 		 *\~english
-		 *\brief		Creates a mesh with the given informations
-		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created
-		 *\param[in]	p_type			Mesh type
-		 *\param[in]	p_name		The wanted name
-		 *\return		The created mesh
-		 *\~french
-		 *\brief		Crée un mesh avec les informations données
-		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé
-		 *\param[in]	p_type			Le type de mesh
-		 *\param[in]	p_name		Le nom du mesh
-		 *\return		Le mesh créé
-		 */
-		C3D_API MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Creates a mesh with the given informations
-		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created
-		 *\param[in]	p_type			Mesh type
-		 *\param[in]	p_name		The wanted name
-		 *\param[in]	p_arrayFaces	The array of faces (for non custom meshes)
-		 *\return		The created mesh
-		 *\~french
-		 *\brief		Crée un mesh avec les informations données
-		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé
-		 *\param[in]	p_type			Le type de mesh
-		 *\param[in]	p_name		Le nom du mesh
-		 *\param[in]	p_arrayFaces	Le tableau de faces (pour les mesh non custom)
-		 *\return		Le mesh créé
-		 */
-		C3D_API MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces );
-		/**
-		 *\~english
-		 *\brief		Creates a mesh with the given informations
-		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created
-		 *\param[in]	p_type			Mesh type
-		 *\param[in]	p_name		The wanted name
-		 *\param[in]	p_arrayFaces	The array of faces (for non custom meshes)
-		 *\param[in]	p_arraySizes	The array of dimensions (for non custom meshes)
-		 *\return		The created mesh
-		 *\~french
-		 *\brief		Crée un mesh avec les informations données
-		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé
-		 *\param[in]	p_type			Le type de mesh
-		 *\param[in]	p_name		Le nom du mesh
-		 *\param[in]	p_arrayFaces	Le tableau de faces (pour les mesh non custom)
-		 *\param[in]	p_arraySizes	Le tableau de dimensions (pour les mesh non custom)
-		 *\return		Le mesh créé
-		 */
-		C3D_API MeshSPtr CreateMesh( eMESH_TYPE p_type, Castor::String const & p_name, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes );
-		/**
-		 *\~english
-		 *\brief		Saves in a file all currently loaded meshes
-		 *\param[out]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Enregistre tous les meshes chargés dans un fichier
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool SaveMeshes( Castor::BinaryFile & p_file );
-		/**
-		 *\~english
-		 *\brief		Loads all meshes contained in the given file
-		 *\param[in]	p_file	The file
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Charge tous les meshes contenus dans un fichier
-		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool LoadMeshes( Castor::BinaryFile & p_file );
-		/**
-		 *\~english
-		 *\brief		Creates a render window
-		 *\return		The created render window
-		 *\~french
-		 *\brief		Crée une fenêtre de rendu
-		 *\return		La fenêtre de rendu créée
-		 */
-		C3D_API RenderWindowSPtr CreateRenderWindow();
-		/**
-		 *\~english
-		 *\brief		Removes a render window, by index
-		 *\param[in]	p_index	The window index
-		 *\return		\p false if the render window was not found
-		 *\~french
-		 *\brief		Supprime une fenêtre de rendu, par index
-		 *\param[in]	p_index	L'index de la fenêtre
-		 *\return		\p false si la fenêtre n'a pas été trouvée
-		 */
-		C3D_API bool RemoveRenderWindow( uint32_t p_index );
-		/**
-		 *\~english
-		 *\brief		Removes a render window, by pointer
-		 *\param[in]	p_window	The render window pointer
-		 *\return		\p false if the render window was not found
-		 *\~french
-		 *\brief		Supprime une fenêtre de rendu, par pointeur
-		 *\param[in]	p_window	Le pointeur sur la fenêtre de rendu
-		 *\return		\p false si la fenêtre n'a pas été trouvée
-		 */
-		C3D_API bool RemoveRenderWindow( RenderWindowSPtr p_window );
-		/**
-		 *\~english
-		 *\brief		Removes all render windows
-		 *\~french
-		 *\brief		Supprime toutes les fenêtres de rendu
-		 */
-		C3D_API void RemoveAllRenderWindows();
-		/**
-		 *\~english
-		 *\brief		Loads a plugin, given the plugin name (ex: libGlRenderSystem.dll => GlRenderSystem)
-		 *\param[in]	p_strPluginName	The plugin name
-		 *\param[in]	p_pathFolder	Optional path where the plugin may be looked for
-		 *\return		The loaded plugin, \p nullptr if name was incorrect or path was not valid
-		 *\~french
-		 *\brief		Charge un plugin, selon son nom (ex : libGlRenderSystem.dll => GlRenderSystem)
-		 *\param[in]	p_strPluginName	Le nom du plugin
-		 *\param[in]	p_pathFolder	Un chemin optionnel, pour y trouver le plugin
-		 *\return		Le plugin chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
-		 */
-		C3D_API PluginBaseSPtr LoadPlugin( Castor::String const & p_strPluginName, Castor::Path const & p_pathFolder )throw();
-		/**
-		 *\~english
-		 *\brief		Loads a plugin, given the plugin file's full path
-		 *\param[in]	p_filePath	The plugin file path
-		 *\return		The loaded plugin, \p nullptr if path was incorrect or if it wasn't a valid plugin
-		 *\~french
-		 *\brief		Charge un plugin dont le chemin est donné
-		 *\param[in]	p_filePath	Le chemin du plugin
-		 *\return		Le plugin chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plugin valide
-		 */
-		C3D_API PluginBaseSPtr LoadPlugin( Castor::Path const & p_fileFullPath )throw();
-		/**
-		 *\~english
-		 *\brief		Retrieves a shader plugin for given shader language
-		 *\param[in]	p_eLanguage	The shader language
-		 *\return		\p NULL if not found
-		 *\~french
-		 *\brief		Récupère un ShaderPlugin pour le langage donné
-		 *\param[in]	p_eLanguage	Le langage
-		 *\return		\p NULL si non trouvé
-		 */
-		C3D_API PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
-		/**
-		 *\~english
 		 *\brief		Loads a renderer plugin, given the renderer type
 		 *\param[in]	p_type	The renderer type
 		 *\return		\p true if ok
@@ -298,15 +151,6 @@ namespace Castor3D
 		 *\return		\p true si tout s'est bien passé
 		 */
 		C3D_API bool LoadRenderer( eRENDERER_TYPE p_type );
-		/**
-		 *\~english
-		 *\brief		Loads all the plugins located in working folder
-		 *\param[in]	p_strFolder	The plugins' folder
-		 *\~french
-		 *\brief		Charge tous les plugins d'un dossier donné
-		 *\param[in]	p_strFolder	Le dossier
-		 */
-		C3D_API void LoadAllPlugins( Castor::Path const & p_strFolder );
 		/**
 		 *\~english
 		 *\brief		Posts a frame event to the default frame listener
@@ -676,147 +520,43 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator on the plugins map
-		 *\return		The iterator
+		 *\return		The render windows manager.
 		 *\~french
-		 *\brief		Récupère un itérateur sur la map des plugins
-		 *\return		L'itérateur
+		 *\return		Le gestionnaire de fenêtres de rendu.
 		 */
-		inline PluginStrMapIt PluginsBegin( ePLUGIN_TYPE p_type )
+		inline PluginManager const & GetPluginManager()const
 		{
-			return m_arrayLoadedPlugins[p_type].begin();
+			return *m_pluginManager;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator on the plugins map end
-		 *\return		The iterator
+		 *\return		The render windows manager.
 		 *\~french
-		 *\brief		Récupère un itérateur sur la find de la map des plugins
-		 *\return		L'itérateur
+		 *\return		Le gestionnaire de fenêtres de rendu.
 		 */
-		inline PluginStrMapIt PluginsEnd( ePLUGIN_TYPE p_type )
+		inline PluginManager & GetPluginManager()
 		{
-			return m_arrayLoadedPlugins[p_type].end();
+			return *m_pluginManager;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves a constant iterator on the plugins map
-		 *\return		The iterator
+		 *\return		The render windows manager.
 		 *\~french
-		 *\brief		Récupère un itérateur constant sur la map des plugins
-		 *\return		L'itérateur
+		 *\return		Le gestionnaire de fenêtres de rendu.
 		 */
-		inline PluginStrMapConstIt PluginsBegin( ePLUGIN_TYPE p_type )const
+		inline WindowManager const & GetWindowManager()const
 		{
-			return m_arrayLoadedPlugins[p_type].begin();
+			return *m_windowManager;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves a constant iterator on the plugins map end
-		 *\return		The iterator
+		 *\return		The render windows manager.
 		 *\~french
-		 *\brief		Récupère un itérateur constant sur la find de la map des plugins
-		 *\return		L'itérateur
+		 *\return		Le gestionnaire de fenêtres de rendu.
 		 */
-		inline PluginStrMapConstIt PluginsEnd( ePLUGIN_TYPE p_type )const
+		inline WindowManager & GetWindowManager()
 		{
-			return m_arrayLoadedPlugins[p_type].end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the renderer plugins array
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le tableau des plugins de rendu
-		 *\return		L'itérateur
-		 */
-		inline RendererPtrArrayIt RenderersBegin()
-		{
-			return m_arrayRenderers.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the renderer plugins array
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur le tableau des plugins de rendu
-		 *\return		L'itérateur
-		 */
-		inline RendererPtrArrayConstIt RenderersBegin()const
-		{
-			return m_arrayRenderers.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator on the renderer plugins array end
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin du tableau des plugins de rendu
-		 *\return		L'itérateur
-		 */
-		inline RendererPtrArrayIt RenderersEnd()
-		{
-			return m_arrayRenderers.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant iterator on the renderer plugins array end
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin du tableau des plugins de rendu
-		 *\return		L'itérateur
-		 */
-		inline RendererPtrArrayConstIt RenderersEnd()const
-		{
-			return m_arrayRenderers.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the render windows map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la map de fenêtres de rendu
-		 *\return		L'itérateur
-		 */
-		inline RenderWindowMapIt RenderWindowsBegin()
-		{
-			return m_mapWindows.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the render windows map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la map de fenêtres de rendu
-		 *\return		L'itérateur
-		 */
-		inline RenderWindowMapConstIt RenderWindowsBegin()const
-		{
-			return m_mapWindows.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the render windows map end
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map de fenêtres de rendu
-		 *\return		L'itérateur
-		 */
-		inline RenderWindowMapIt RenderWindowsEnd()
-		{
-			return m_mapWindows.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator on the render windows map end
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map de fenêtres de rendu
-		 *\return		L'itérateur
-		 */
-		inline RenderWindowMapConstIt RenderWindowsEnd()const
-		{
-			return m_mapWindows.end();
+			return *m_windowManager;
 		}
 		/**
 		 *\~english
@@ -828,7 +568,7 @@ namespace Castor3D
 		 */
 		inline MaterialManager const & GetMaterialManager()const
 		{
-			return m_materialManager;
+			return *m_materialManager;
 		}
 		/**
 		 *\~english
@@ -840,7 +580,7 @@ namespace Castor3D
 		 */
 		inline MaterialManager & GetMaterialManager()
 		{
-			return m_materialManager;
+			return *m_materialManager;
 		}
 		/**
 		 *\~english
@@ -994,9 +734,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection de maillages
 		 *\return		La collection
 		 */
-		inline MeshCollection const & GetMeshManager()const
+		inline MeshManager const & GetMeshManager()const
 		{
-			return m_meshManager;
+			return *m_meshManager;
 		}
 		/**
 		 *\~english
@@ -1006,9 +746,9 @@ namespace Castor3D
 		 *\brief		Récupère la collection de maillages
 		 *\return		La collection
 		 */
-		inline MeshCollection & GetMeshManager()
+		inline MeshManager & GetMeshManager()
 		{
-			return m_meshManager;
+			return *m_meshManager;
 		}
 		/**
 		 *\~english
@@ -1105,30 +845,6 @@ namespace Castor3D
 		inline SamplerCollection & GetSamplerManager()
 		{
 			return m_samplerManager;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Mesh factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique de Mesh
-		 *\return		La fabrique
-		 */
-		inline MeshFactory const & GetMeshFactory()const
-		{
-			return m_meshFactory;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Mesh factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique de Mesh
-		 *\return		La fabrique
-		 */
-		inline MeshFactory  & GetMeshFactory()
-		{
-			return m_meshFactory;
 		}
 		/**
 		 *\~english
@@ -1248,6 +964,16 @@ namespace Castor3D
 		{
 			return m_additionalParsers;
 		}
+		/**
+		 *\~english
+		 *\return		The engine version.
+		 *\~french
+		 *\return		La version du moteur.
+		 */
+		inline Version const & GetVersion()const
+		{
+			return m_version;
+		}
 
 	private:
 		uint32_t DoMainLoop();
@@ -1255,9 +981,6 @@ namespace Castor3D
 		void DoRender( bool p_bForce, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
 		void DoPostRender();
 		void DoUpdate( bool p_bForce );
-		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
-		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary );
-		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
 		void DoRenderOneFrame();
 		void DoRenderFlushFrame();
 		void DoLoadCoreData();
@@ -1270,24 +993,6 @@ namespace Castor3D
 		std::mutex m_mutexMainLoop;
 		//!\~english The main loop, in case of threaded rendering	\~french La boucle principale, au cas où on fait du rendu threadé
 		std::unique_ptr< std::thread > m_mainLoopThread;
-		//!\~english The loaded shared libraries map	\~french La map des shared libraries chargées
-		DynamicLibraryPtrPathMapArray m_librariesMap;
-		//!\~english The mutex protecting the loaded shared libraries map	\~french Le mutex protégeant la map des shared libraries chargées
-		std::recursive_mutex m_mutexLibraries;
-		//!\~english The loaded plugins map	\~french La map des plugins chargés
-		PluginStrMapArray m_arrayLoadedPlugins;
-		//!\~english The mutex protecting the loaded plugins map	\~french Le mutex protégeant la map des plugins chargés
-		std::recursive_mutex m_mutexLoadedPlugins;
-		//!\~english The loaded plugins map, sorted by plugin type	\~french La map des plugins chargés, triés par type de plugin
-		PluginTypePathMap m_mapLoadedPluginTypes;
-		//!\~english The mutex protecting the loaded plugins map sorted by type	\~french Le mutex protégeant la map de plugins chargés triés par type
-		std::recursive_mutex m_mutexLoadedPluginTypes;
-		//!\~english The renderer plugins array	\~french Le tableau des plugins de rendu
-		RendererPtrArray m_arrayRenderers;
-		//!\~english The mutex protecting the renderer plugins array	\~french Le mutex protégeant le tableau des plugins de rendu
-		std::recursive_mutex m_mutexRenderers;
-		//!\~english The render windows map, sorted by ID	\~french La map des fenêtre de rendu, triées par ID
-		RenderWindowMap m_mapWindows;
 		//!\~english Tells if render has ended, by any reason	\~french Dit si le rendu est terminé
 		bool m_bEnded;
 		//!\~english The wanted FPS, used in threaded render mode	\~french Le nombre de FPS souhaité, utilisé en rendu threadé
@@ -1302,8 +1007,6 @@ namespace Castor3D
 		FrameListenerWPtr m_defaultListener;
 		//!\~english The animations collection	\~french La collection d'animations
 		AnimationCollection m_animationManager;
-		//!\~english The meshes collection	\~french La collection de maillages
-		MeshCollection m_meshManager;
 		//!\~english The fonts collection	\~french La collection de polices
 		Castor::FontManager m_fontManager;
 		//!\~english The images collection	\~french La collection d'images
@@ -1314,8 +1017,14 @@ namespace Castor3D
 		OverlayManager m_overlayManager;
 		//!\~english The shaders collection	\~french La collection de shaders
 		ShaderManager m_shaderManager;
-		//!\~english The materials collection	\~french La collection de matériaux
-		MaterialManager m_materialManager;
+		//!\~english The materials manager.	\~french Le gestionnaire de matériaux.
+		MaterialManagerUPtr m_materialManager;
+		//!\~english The materials manager.	\~french Le gestionnaire de fenêtres.
+		WindowManagerUPtr m_windowManager;
+		//!\~english The meshes manager.	\~french Le gestionnaire de maillages.
+		MeshManagerUPtr m_meshManager;
+		//!\~english The plug-ins manager.	\~french Le gestionnaire de plug-ins.
+		PluginManagerUPtr m_pluginManager;
 		//!\~english The sampler states collection	\~french La collection de sampler states
 		SamplerCollection m_samplerManager;
 		//!\~english The DepthStencilState collection	\~french La collection de DepthStencilState
@@ -1326,8 +1035,6 @@ namespace Castor3D
 		BlendStateCollection m_blendStateManager;
 		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
 		LightFactory m_lightFactory;
-		//!\~english The MeshGenerator factory	\~french La fabrique de MeshGenerator
-		MeshFactory m_meshFactory;
 		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
 		OverlayFactory m_overlayFactory;
 		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique

@@ -647,7 +647,6 @@ namespace Castor3D
 	class Material;
 	//! The material pass class (for multipass materials)
 	class Pass;
-	class MaterialManager;
 	class Sampler;
 
 	DECLARE_SMART_PTR( TextureBase );
@@ -656,7 +655,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TextureUnit );
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );
-	DECLARE_SMART_PTR( MaterialManager );
 	DECLARE_SMART_PTR( Sampler );
 
 	//! Material pointer array
@@ -776,13 +774,11 @@ namespace Castor3D
 	class PanelOverlay;
 	class BorderPanelOverlay;
 	class TextOverlay;
-	class OverlayManager;
 	class OverlayFactory;
 	class OverlayRenderer;
 	class FontTexture;
 
 	DECLARE_SMART_PTR( OverlayFactory );
-	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( OverlayRenderer );
 	DECLARE_SMART_PTR( FontTexture );
 
@@ -1409,7 +1405,6 @@ namespace Castor3D
 #	define eFRAME_VARIABLE_TYPE_MAT4X4R	eFRAME_VARIABLE_TYPE_MAT4X4F
 #endif
 
-	class ShaderManager;
 	class ShaderProgramBase;
 	class ShaderObjectBase;
 	class FrameVariable;
@@ -1582,7 +1577,6 @@ namespace Castor3D
 
 	DECLARE_SMART_PTR( FrameVariableLink );
 	DECLARE_SMART_PTR( ProgramLinks );
-	DECLARE_SMART_PTR( ShaderManager );
 	DECLARE_SMART_PTR( FrameVariableBuffer );
 	DECLARE_SMART_PTR( FrameVariable );
 	DECLARE_SMART_PTR( ShaderObjectBase );
@@ -1961,6 +1955,20 @@ namespace Castor3D
 	DECLARE_SMART_PTR( IWindowHandle );
 	DECLARE_SMART_PTR( BillboardList );
 
+	class OverlayManager;
+	class ShaderManager;
+	class MaterialManager;
+	class WindowManager;
+	class MeshManager;
+	class PluginManager;
+
+	DECLARE_SMART_PTR( OverlayManager );
+	DECLARE_SMART_PTR( ShaderManager );
+	DECLARE_SMART_PTR( MaterialManager );
+	DECLARE_SMART_PTR( WindowManager );
+	DECLARE_SMART_PTR( MeshManager );
+	DECLARE_SMART_PTR( PluginManager );
+
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );
 
@@ -1996,6 +2004,16 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
 
 	typedef std::map< Castor::String, RenderWindowSPtr > WindowPtrStrMap;
+
+	template< typename T > struct is_cleanable : std::false_type {};
+	template<> struct is_cleanable< Material > : std::true_type {};
+	template<> struct is_cleanable< Mesh > : std::true_type {};
+	template<> struct is_cleanable< Overlay > : std::true_type {};
+	template<> struct is_cleanable< RenderWindow > : std::true_type {};
+
+	template< typename T > struct is_initialisable : std::false_type {};
+	template<> struct is_initialisable< Material > : std::true_type {};
+	template<> struct is_initialisable< Overlay > : std::true_type {};
 
 	//@}
 }

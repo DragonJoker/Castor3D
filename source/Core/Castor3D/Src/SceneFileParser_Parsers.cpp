@@ -21,10 +21,12 @@
 #include "Material.hpp"
 #include "MaterialManager.hpp"
 #include "Mesh.hpp"
+#include "MeshManager.hpp"
 #include "OneFrameVariable.hpp"
 #include "Overlay.hpp"
 #include "PanelOverlay.hpp"
 #include "Pass.hpp"
+#include "PluginManager.hpp"
 #include "PointLight.hpp"
 #include "RenderSystem.hpp"
 #include "RenderTarget.hpp"
@@ -42,6 +44,7 @@
 #include "TextureUnit.hpp"
 #include "Vertex.hpp"
 #include "Viewport.hpp"
+#include "WindowManager.hpp"
 
 #include <Font.hpp>
 #include <Logger.hpp>
@@ -93,13 +96,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootMaterial )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
-	l_pContext->pMaterial = l_pContext->m_pParser->GetOwner()->GetMaterialManager().find( p_params[0]->Get( l_name ) );
-
-	if ( !l_pContext->pMaterial )
-	{
-		l_pContext->pMaterial = std::make_shared< Material >( *l_pContext->m_pParser->GetOwner(), l_name );
-		l_pContext->m_pParser->GetOwner()->GetMaterialManager().insert( l_name, l_pContext->pMaterial );
-	}
+	p_params[0]->Get( l_name );
+	l_pContext->pMaterial = l_pContext->m_pParser->GetOwner()->GetMaterialManager().Create( l_name, *l_pContext->m_pParser->GetOwner(), l_name );
 }
 END_ATTRIBUTE_PUSH( eSECTION_MATERIAL )
 
@@ -113,7 +111,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootWindow )
 	}
 	else
 	{
-		l_pContext->pWindow = l_pContext->m_pParser->GetOwner()->CreateRenderWindow();
+		l_pContext->pWindow = l_pContext->m_pParser->GetOwner()->GetWindowManager().Create();
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_WINDOW )
@@ -785,17 +783,17 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneImport )
 		ImporterSPtr l_pImporter;
 		ImporterPlugin::ExtensionArray l_arrayExtensions;
 
-		for ( PluginStrMap::iterator l_it = l_pEngine->PluginsBegin( ePLUGIN_TYPE_IMPORTER ); l_it != l_pEngine->PluginsEnd( ePLUGIN_TYPE_IMPORTER ) && !l_pImporter; ++l_it )
+		for ( auto l_it : l_pEngine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_IMPORTER ) )
 		{
-			l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it->second );
+			l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
 
-			if ( l_pPlugin )
+			if ( !l_pImporter && l_pPlugin )
 			{
 				l_arrayExtensions = l_pPlugin->GetExtensions();
 
-				for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
+				for ( auto l_itExt : l_arrayExtensions )
 				{
-					if ( string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt->first ) )
+					if ( !l_pImporter && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
 					{
 						l_pImporter = l_pPlugin->GetImporter();
 					}
@@ -1180,7 +1178,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMesh )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_pContext->bBool1 = false;
 	p_params[0]->Get( l_pContext->strName2 );
-	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->GetMeshManager().find( l_pContext->strName2 );
+	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->GetMeshManager().Find( l_pContext->strName2 );
 }
 END_ATTRIBUTE_PUSH( eSECTION_MESH )
 
@@ -1196,11 +1194,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterial )
 			String l_name;
 			p_params[0]->Get( l_name );
 
-			if ( l_manager.has( l_name ) )
+			if ( l_manager.Has( l_name ) )
 			{
 				for ( auto && l_submesh : *l_pContext->pGeometry->GetMesh() )
 				{
-					MaterialSPtr l_material = l_manager.find( l_name );
+					MaterialSPtr l_material = l_manager.Find( l_name );
 					l_pContext->pGeometry->SetMaterial( l_submesh, l_material );
 					l_submesh->Ref( l_material );
 				}
@@ -1248,10 +1246,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterialsMaterial )
 			p_params[0]->Get( l_index );
 			p_params[1]->Get( l_name );
 
-			if ( l_manager.has( l_name ) )
+			if ( l_manager.Has( l_name ) )
 			{
 				SubmeshSPtr l_submesh = l_pContext->pGeometry->GetMesh()->GetSubmesh( l_index );
-				MaterialSPtr l_material = l_manager.find( l_name );
+				MaterialSPtr l_material = l_manager.Find( l_name );
 				l_pContext->pGeometry->SetMaterial( l_submesh, l_material );
 				l_submesh->Ref( l_material );
 			}
@@ -1349,7 +1347,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 			}
 		}
 
-		l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->CreateMesh( l_type, l_pContext->strName2, l_arrayFaces, l_arraySizes );
+		l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->GetMeshManager().Create( l_pContext->strName2, l_type, l_arrayFaces, l_arraySizes );
 	}
 	else
 	{
@@ -1371,7 +1369,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshFile )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, cuEmptyString, UIntArray(), RealArray() );
+	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->GetMeshManager().Create( cuEmptyString, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 	Path l_path;
 	p_params[0]->Get( l_path );
 
@@ -1465,17 +1463,17 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		ImporterSPtr l_pImporter;
 		ImporterPlugin::ExtensionArray l_arrayExtensions;
 
-		for ( PluginStrMap::iterator l_it = l_pEngine->PluginsBegin( ePLUGIN_TYPE_IMPORTER ); l_it != l_pEngine->PluginsEnd( ePLUGIN_TYPE_IMPORTER ) && !l_pImporter; ++l_it )
+		for ( auto l_it : l_pEngine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_IMPORTER ) )
 		{
-			l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it->second );
+			l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
 
-			if ( l_pPlugin )
+			if ( !l_pImporter && l_pPlugin )
 			{
 				l_arrayExtensions = l_pPlugin->GetExtensions();
 
-				for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
+				for ( auto l_itExt : l_arrayExtensions )
 				{
-					if ( string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt->first ) )
+					if ( !l_pImporter && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
 					{
 						l_pImporter = l_pPlugin->GetImporter();
 					}
@@ -1509,11 +1507,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 		p_params[0]->Get( l_name );
 		p_params[1]->Get( l_count );
 
-		for ( PluginStrMap::iterator l_it = l_pEngine->PluginsBegin( ePLUGIN_TYPE_DIVIDER ); l_it != l_pEngine->PluginsEnd( ePLUGIN_TYPE_DIVIDER ) && !l_pDivider; ++l_it )
+		for ( auto l_it : l_pEngine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_DIVIDER ) )
 		{
-			l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it->second );
+			l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it.second );
 
-			if ( string::lower_case( l_pPlugin->GetDividerType() ) == string::lower_case( l_name ) )
+			if ( !l_pDivider && string::lower_case( l_pPlugin->GetDividerType() ) == string::lower_case( l_name ) )
 			{
 				l_pDivider = l_pPlugin->CreateDivider();
 			}
@@ -2859,7 +2857,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_pContext->m_pParser->GetOwner()->GetMaterialManager();
-		l_pContext->pOverlay->SetMaterial( l_manager.find( l_name ) );
+		l_pContext->pOverlay->SetMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -2967,7 +2965,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_pContext->m_pParser->GetOwner()->GetMaterialManager();
-		l_overlay->GetBorderPanelOverlay()->SetBorderMaterial( l_manager.find( l_name ) );
+		l_overlay->GetBorderPanelOverlay()->SetBorderMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -3295,9 +3293,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 
-		if ( l_manager.has( l_name ) )
+		if ( l_manager.Has( l_name ) )
 		{
-			l_pContext->pBillboards->SetMaterial( l_manager.find( l_name ) );
+			l_pContext->pBillboards->SetMaterial( l_manager.Find( l_name ) );
 		}
 		else
 		{

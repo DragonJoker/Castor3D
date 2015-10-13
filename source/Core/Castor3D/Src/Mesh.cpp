@@ -54,7 +54,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Mesh::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< Mesh >( p_path )
+		: Castor3D::BinaryParser< Mesh >( p_path )
 	{
 	}
 
@@ -144,13 +144,7 @@ namespace Castor3D
 
 	void Mesh::Cleanup()
 	{
-		//vector::deleteAll( m_submeshes);
 		m_submeshes.clear();
-	}
-
-	void Mesh::Initialise( MeshGenerator & p_generator, UIntArray const & p_faces, RealArray const & p_dimensions )
-	{
-		p_generator.Generate( *this, p_faces, p_dimensions );
 	}
 
 	void Mesh::ComputeContainers()
