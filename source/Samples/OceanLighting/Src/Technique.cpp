@@ -1027,7 +1027,7 @@ void RenderTechnique::DoCleanup()
 	m_fftFbo2->Unbind();
 #endif
 	m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_pAttachSky->Detach();
+	m_fbo->DetachAll();
 	m_fbo->Unbind();
 	m_pTexIrradiance->Cleanup();
 	m_pTexInscatter->Cleanup();

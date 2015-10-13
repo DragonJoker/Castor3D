@@ -43,15 +43,9 @@ namespace Castor3D
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
 	{
-		DoDetach( p_attachment );
-		bool l_return = p_texture->Attach( p_attachment, p_index, shared_from_this(), p_target, p_layer );
-
-		if ( l_return )
-		{
-			m_attaches.push_back( p_texture );
-		}
-
-		return l_return;
+		p_texture->SetTarget( p_target );
+		p_texture->SetLayer( p_layer );
+		return DoAttach( p_attachment, p_index, p_texture );
 	}
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
@@ -61,15 +55,7 @@ namespace Castor3D
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		DoDetach( p_attachment );
-		bool l_return = p_renderBuffer->Attach( p_attachment, p_index, shared_from_this() );
-
-		if ( l_return )
-		{
-			m_attaches.push_back( p_renderBuffer );
-		}
-
-		return l_return;
+		return DoAttach( p_attachment, p_index, p_renderBuffer );
 	}
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, RenderBufferAttachmentSPtr p_renderBuffer )
@@ -176,11 +162,24 @@ namespace Castor3D
 		}
 	}
 
-	void FrameBuffer::DoDetach( eATTACHMENT_POINT p_eAttach )
+	bool FrameBuffer::DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
 	{
-		BufAttachArrayIt l_itAtt = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_att )
+		DoDetach( p_point );
+		bool l_return = p_attach->Attach( p_point, p_index, shared_from_this() );
+
+		if ( l_return )
 		{
-			return p_att->GetAttachmentPoint() == p_eAttach;
+			m_attaches.push_back( p_attach );
+		}
+
+		return l_return;
+	}
+
+	void FrameBuffer::DoDetach( eATTACHMENT_POINT p_point )
+	{
+		auto l_itAtt = std::find_if( m_attaches.begin(), m_attaches.end(), [p_point]( FrameBufferAttachmentSPtr p_att )
+		{
+			return p_att->GetAttachmentPoint() == p_point;
 		} );
 
 		if ( l_itAtt != m_attaches.end() )

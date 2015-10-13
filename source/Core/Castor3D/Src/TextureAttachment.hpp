@@ -53,49 +53,6 @@ namespace Castor3D
 		C3D_API virtual ~TextureAttachment();
 		/**
 		 *\~english
-		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
-		 *\param[in]	p_index			The attachment index
-		 *\param[in]	p_frameBuffer	The frame buffer
-		 *\param[in]	p_target		The dimension to which the texture must be attached
-		 *\param[in]	p_layer			The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache la texture au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
-		 *\param[in]	p_index			L'index d'attache
-		 *\param[in]	p_frameBuffer	Le tampon d'image
-		 *\param[in]	p_target		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer			La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer = 0 );
-		/**
-		 *\~english
-		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
-		 *\param[in]	p_frameBuffer	The frame buffer
-		 *\param[in]	p_target		The dimension to which the texture must be attached
-		 *\param[in]	p_layer			The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache la texture au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
-		 *\param[in]	p_frameBuffer	Le tampon d'image
-		 *\param[in]	p_target		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer			La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer = 0 );
-		/**
-		 *\~english
-		 *\brief		Detaches the render buffer from the frame buffer
-		 *\~french
-		 *\brief		Détache la texture du tampon d'image
-		 */
-		C3D_API void Detach();
-		/**
-		 *\~english
 		 *\brief		Retrieves the texture
 		 *\return		The texture
 		 *\~french
@@ -108,27 +65,51 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the attached dimension
-		 *\return		The attached dimension
+		 *\brief		Retrieves the attached target dimension
+		 *\return		The target dimension
 		 *\~french
-		 *\brief		Récupère la dimension attachée
-		 *\return		La dimension attachée
+		 *\brief		Récupère la dimension cible attachée
+		 *\return		La dimension cible
 		 */
-		inline eTEXTURE_TARGET GetAttachedTarget()const
+		inline eTEXTURE_TARGET GetTarget()const
 		{
 			return m_target;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the attached layer
-		 *\return		The attached layer
+		 *\return		The layer
 		 *\~french
 		 *\brief		Récupère la couche associée
-		 *\return		La couche associée
+		 *\return		La couche
 		 */
-		inline int GetAttachedLayer()const
+		inline int GetLayer()const
 		{
 			return m_layer;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the attached target dimension.
+		 *\param[in]	p_target	The target dimension.
+		 *\~french
+		 *\brief		Récupère la dimension cible attachée.
+		 *\param[in]	p_target	La dimension cible.
+		 */
+		inline void SetTarget( eTEXTURE_TARGET p_target )
+		{
+			m_target = p_target;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the attached layer.
+		 *\param[in]	p_layer	The layer.
+		 *\~french
+		 *\brief		Définit la couche associée.
+		 *\param[in]	p_layer	La couche.
+		 */
+		inline void SetLayer( int p_layer )
+		{
+			m_layer = p_layer;
 		}
 
 	private:

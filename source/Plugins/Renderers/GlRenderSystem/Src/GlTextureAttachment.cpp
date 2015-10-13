@@ -98,7 +98,7 @@ namespace GlRender
 			m_eGlAttachmentPoint = eGL_TEXTURE_ATTACHMENT( m_gl.Get( GetAttachmentPoint() ) + GetAttachmentIndex() );
 			GlDynamicTextureSPtr l_pTexture = std::static_pointer_cast< GlDynamicTexture >( GetTexture() );
 
-			switch ( GetAttachedTarget() )
+			switch ( GetTarget() )
 			{
 			case eTEXTURE_TARGET_1D:
 
@@ -130,7 +130,7 @@ namespace GlRender
 
 				if ( l_pTexture->GetType() == eTEXTURE_TYPE_3D )
 				{
-					l_return = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0, GetAttachedLayer() );
+					l_return = m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), l_pTexture->GetGlName(), 0, GetLayer() );
 				}
 				else
 				{
@@ -140,7 +140,7 @@ namespace GlRender
 				break;
 
 			case eTEXTURE_TARGET_LAYER:
-				l_return = m_gl.FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, l_pTexture->GetGlName(), 0, GetAttachedLayer() );
+				l_return = m_gl.FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
 				break;
 			}
 
@@ -170,7 +170,7 @@ namespace GlRender
 
 			if ( m_eGlStatus != eGL_FRAMEBUFFER_UNSUPPORTED )
 			{
-				switch ( GetAttachedTarget() )
+				switch ( GetTarget() )
 				{
 				case eTEXTURE_TARGET_1D:
 					m_gl.FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), 0, 0 );
@@ -181,11 +181,11 @@ namespace GlRender
 					break;
 
 				case eTEXTURE_TARGET_3D:
-					m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), 0, 0, GetAttachedLayer() );
+					m_gl.FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, m_gl.Get( l_pTexture->GetType() ), 0, 0, GetLayer() );
 					break;
 
 				case eTEXTURE_TARGET_LAYER:
-					m_gl.FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, 0, 0, GetAttachedLayer() );
+					m_gl.FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_eGlAttachmentPoint, 0, 0, GetLayer() );
 					break;
 				}
 			}

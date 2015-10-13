@@ -140,6 +140,7 @@ namespace Castor3D
 
 	void RenderTechniqueBase::Cleanup()
 	{
+		DoCleanup();
 		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
 		l_pBlendState->Cleanup();
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
