@@ -27,7 +27,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <FileParser.hpp>
 #include <FontManager.hpp>
 #include <Unique.hpp>
-#include <SquareMatrix.hpp>
 
 #define DECLARE_MANAGED_MEMBER( memberName, className )\
 	public:\
@@ -96,40 +95,6 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Asks for render context creation
-		 *\param[in]	p_pRenderWindow	The render window used to initialise the render context
-		 *\return		The created context, or the existing one
-		 *\~french
-		 *\brief		Demande la création du contexte de rendu
-		 *\param[in]	p_pRenderWindow	La render window utilisée pour initialiser le contexte de rendu
-		 *\return		Le contexte créé, ou l'existant
-		 */
-		C3D_API ContextSPtr CreateContext( RenderWindow * p_pRenderWindow );
-		/**
-		 *\~english
-		 *\brief		Starts threaded render loop
-		 *\~french
-		 *\brief		Commence le rendu threadé
-		 */
-		C3D_API void StartRendering();
-		/**
-		 *\~english
-		 *\brief		Ends the render, cleans up engine
-		 *\remark		Ends the threaded render loop, if any
-		 *\~french
-		 *\brief		Termine le rendu, nettoie le moteur
-		 *\remark		Arrête la boucle de rendu threadé, si elle existe
-		 */
-		C3D_API void EndRendering();
-		/**
-		 *\~english
-		 *\brief		Renders one frame, only if not in render loop
-		 *\~french
-		 *\brief		Rend une image, uniquement hors de la boucle de rendu
-		 */
-		C3D_API void RenderOneFrame();
-		/**
-		 *\~english
 		 *\brief		Loads a renderer plugin, given the renderer type
 		 *\param[in]	p_type	The renderer type
 		 *\return		\p true if ok
@@ -150,86 +115,6 @@ namespace Castor3D
 		C3D_API void PostEvent( FrameEventSPtr p_pEvent );
 		/**
 		 *\~english
-		 *\brief		Retrieves the end status
-		 *\remark		Thread-safe
-		 *\return		\p true if ended
-		 *\~french
-		 *\brief		Récupère le statut de fin
-		 *\remark		Thread-safe
-		 *\return		\p true si arrêté
-		 */
-		C3D_API bool IsEnded();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render is ended
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le rendu est stoppé
-		 *\remark		Thread-safe
-		 */
-		C3D_API void SetEnded();
-		/**
-		 *\~english
-		 *\brief		Retrieves the render start status
-		 *\remark		Thread-safe
-		 *\return		\p true if started
-		 *\~french
-		 *\brief		Récupère le statut de début de rendu
-		 *\remark		Thread-safe
-		 *\return		\p true si démarré
-		 */
-		C3D_API bool IsStarted();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render is started
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le rendu est démarré
-		 *\remark		Thread-safe
-		 */
-		C3D_API void SetStarted();
-		/**
-		 *\~english
-		 *\brief		Retrieves the context creation status
-		 *\remark		Thread-safe
-		 *\return		\p true if created
-		 *\~french
-		 *\brief		Récupère le statut de création du contexte de rendu
-		 *\remark		Thread-safe
-		 *\return		\p true si créé
-		 */
-		C3D_API bool IsCreated();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render context is created
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le contexte de rendu est créé
-		 *\remark		Thread-safe
-		 */
-		C3D_API void SetCreated();
-		/**
-		 *\~english
-		 *\brief		Retrieves the render to-create status
-		 *\remark		Thread-safe
-		 *\return		\p true if the render context is to create
-		 *\~french
-		 *\brief		Récupère le statut de demande de création du contexte
-		 *\remark		Thread-safe
-		 *\return		\p true si à créer
-		 */
-		C3D_API bool IsToCreate();
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render context is to create
-		 *\remark		Thread-safe
-		 *\~french
-		 *\brief		Dit que le contexte de rendu est à créer
-		 *\remark		Thread-safe
-		 */
-		C3D_API void SetToCreate();
-		/**
-		 *\~english
 		 *\brief		Retrieves the cleanup status
 		 *\remark		Thread-safe
 		 *\return		\p true if cleaned up
@@ -248,17 +133,6 @@ namespace Castor3D
 		 *\remark		Thread-safe
 		 */
 		C3D_API void SetCleaned();
-		/**
-		 *\~english
-		 *\brief		Retrieves the wanted frame time
-		 *\remark		Thread-safe
-		 *\return		The time, in seconds
-		 *\~french
-		 *\brief		Récupère le temps voulu pour une frame
-		 *\remark		Thread-safe
-		 *\return		Le temps, en secondes
-		 */
-		C3D_API double GetFrameTime();
 		/**
 		 *\~english
 		 *\brief		Creates an RenderTechnique from a technique name
@@ -340,15 +214,6 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du FrameListener.
 		 */
 		C3D_API void DestroyFrameListener( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Show or hide debug overlays
-		 *\param[in]	p_show	The status
-		 *\~french
-		 *\brief		Affiche ou cache les incrustations de débogage
-		 *\param[in]	p_show	Le statut
-		 */
-		C3D_API void ShowDebugOverlays( bool p_show );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
@@ -482,16 +347,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Tells the engine the render may be threaded or not
-		 *\~french
-		 *\brief		Dit si le rendu peut être threadé
-		 */
-		inline bool IsThreaded()const
-		{
-			return m_bThreaded;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the default BlendState (no blend)
 		 *\return		The value
 		 *\~french
@@ -500,7 +355,7 @@ namespace Castor3D
 		 */
 		inline BlendStateSPtr GetDefaultBlendState()const
 		{
-			return m_pDefaultBlendState;
+			return m_defaultBlendState;
 		}
 		/**
 		 *\~english
@@ -512,19 +367,19 @@ namespace Castor3D
 		 */
 		inline SamplerSPtr GetDefaultSampler()const
 		{
-			return m_pDefaultSampler;
+			return m_defaultSampler;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the lights Sampler
-		 *\return		The Sampler
+		 *\brief		Retrieves the lighting Sampler.
+		 *\return		The Sampler.
 		 *\~french
-		 *\brief		Récupère le Sampler pour les textures de lumières
-		 *\return		Le Sampler
+		 *\brief		Récupère le Sampler pour les éclairages.
+		 *\return		Le Sampler.
 		 */
 		inline SamplerSPtr GetLightsSampler()const
 		{
-			return m_pLightsSampler;
+			return m_lightsSampler;
 		}
 		/**
 		 *\~english
@@ -548,30 +403,55 @@ namespace Castor3D
 		{
 			return m_version;
 		}
+		/**
+		 *\~english
+		 *\return		The frame listeners.
+		 *\~french
+		 *\return		Les frame listeners.
+		 */
+		inline FrameListenerPtrStrMap const & GetFrameListeners()const
+		{
+			return m_listeners;
+		}
+		/**
+		 *\~english
+		 *\return		The frame listeners.
+		 *\~french
+		 *\return		Les frame listeners.
+		 */
+		inline FrameListenerPtrStrMap & GetFrameListeners()
+		{
+			return m_listeners;
+		}
+		/**
+		 *\~english
+		 *\return		The render loop.
+		 *\~french
+		 *\return		La boucle de rendu.
+		 */
+		inline RenderLoop const & GetRenderLoop()const
+		{
+			return *m_renderLoop;
+		}
+		/**
+		 *\~english
+		 *\return		The render loop.
+		 *\~french
+		 *\return		La boucle de rendu.
+		 */
+		inline RenderLoop & GetRenderLoop()
+		{
+			return *m_renderLoop;
+		}
 
 	private:
-		uint32_t DoMainLoop();
-		void DoPreRender();
-		void DoRender( bool p_bForce, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
-		void DoPostRender();
-		void DoUpdate( bool p_bForce );
-		void DoRenderOneFrame();
-		void DoRenderFlushFrame();
 		void DoLoadCoreData();
 
 	private:
 		//!\~english The mutex, to make the engine resources access thread-safe	\~french Le mutex utilisé pour que l'accès aux ressources du moteur soit thread-safe
 		std::recursive_mutex m_mutexResources;
-		//!\~english The mutex, to make the main loop thread-safe	\~french Le mutex utilisé pour que la boucle principale soit thread-safe
-		std::mutex m_mutexMainLoop;
-		//!\~english The main loop, in case of threaded rendering	\~french La boucle principale, au cas où on fait du rendu threadé
-		std::unique_ptr< std::thread > m_mainLoopThread;
-		//!\~english Tells if render has ended, by any reason	\~french Dit si le rendu est terminé
-		bool m_bEnded;
-		//!\~english The wanted FPS, used in threaded render mode	\~french Le nombre de FPS souhaité, utilisé en rendu threadé
-		uint32_t m_uiWantedFPS;
-		//!\~english The wanted time for a frame	\~french Le temps voulu pour une frame
-		double m_dFrameTime;
+		//!\~english The render loop.	\~french La boucle de rendu.
+		RenderLoopUPtr m_renderLoop;
 		//!\~english The engine version	\~french La version du moteur
 		Version m_version;
 		//!\~english The default frame listener.	\~french Le frame listener par défaut.
@@ -580,28 +460,14 @@ namespace Castor3D
 		TechniqueFactory m_techniqueFactory;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
 		RenderSystem * m_renderSystem;
-		//!\~english  If \p false, the render can't be threaded	\~french Si \p false, le rendu ne peut pas être threadé
-		bool m_bThreaded;
-		//!\~english Tells if render is running	\~french Dit si le rendu est en cours
-		bool m_bStarted;
-		//!\~english Tells if render context is to be create	\~french Dit si le contexte de rendu est à créer
-		bool m_bCreateContext;
-		//!\~english Tells if render context is created	\~french Dit si le contexte de rendu est créé
-		bool m_bCreated;
 		//!\~english Tells if engine is cleaned up	\~french Dit si le moteur est nettoyé
 		bool m_bCleaned;
-		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
-		RenderWindow * m_pMainWindow;
-		//!\~english Default blend states (no blend)	\~french Etats de blend par défaut (pas de blend)
-		BlendStateSPtr m_pDefaultBlendState;
-		//!\~english Default sampler	\~french Le sampler par défaut
-		SamplerSPtr m_pDefaultSampler;
-		//!\~english Lights textures sampler	\~french Le sampler utilisé pour les textures de lumières
-		SamplerSPtr m_pLightsSampler;
-		//!\~english Tells default sampler and default blend state are initialised	\~french Dit si le sampler et le blend state par défaut sont initialisés
-		bool m_bDefaultInitialised;
-		//!\~english The debug overlays are shown.	\~french Les incrustations de débogage.
-		std::unique_ptr< DebugOverlays > m_debugOverlays;
+		//!\~english Default blend states (no blend).	\~french Etats de blend par défaut (pas de blend).
+		BlendStateSPtr m_defaultBlendState;
+		//!\~english Default sampler.	\~french Le sampler par défaut.
+		SamplerSPtr m_defaultSampler;
+		//!\~english Lights textures sampler.	\~french L'échantillonneur utilisé pour les textures de lumières.
+		SamplerSPtr m_lightsSampler;
 		//!\~english The animations collection.	\~french La collection d'animations.
 		DECLARE_MANAGED_MEMBER( animation, Animation );
 		//!\~english The shaders collection.	\~french La collection de shaders.

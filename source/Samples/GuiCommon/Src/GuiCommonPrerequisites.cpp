@@ -170,27 +170,21 @@ namespace GuiCommon
 			return l_return;
 		}
 
+		template< typename TObj >
+		bool DoParse( TObj & p_obj, BinaryChunk & p_chunk, typename TObj::BinaryParser & p_parser )
+		{
+			return p_parser.Parse( p_obj, p_chunk );
+		}
+
 		template< typename TObj, typename TKey >
 		bool DoFillManager( Engine & p_engine, Manager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
-			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine, p_manager );
-			bool l_return = p_parser.Parse( *l_obj, p_chunk );
+			return DoParse( *CreateObject< TObj >( p_engine, p_manager ), p_chunk, p_parser );
+		}
 
-			if ( l_return )
-			{
-				if ( !p_manager.Has( l_obj->GetName() ) )
-				{
-					p_manager.Insert( l_obj->GetName(), l_obj );
-					InitialiseObject( l_obj, p_engine );
-				}
-				else
-				{
-					Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
-					l_return = false;
-				}
-			}
-
-			return l_return;
+		bool DoFillManager( Engine & p_engine, SamplerManager & p_manager, BinaryChunk & p_chunk, Sampler::BinaryParser p_parser )
+		{
+			return DoParse< Sampler >( *CreateObject< Sampler >( p_engine, p_manager ), p_chunk, p_parser );
 		}
 
 		bool DoLoadMeshFile( Engine & p_engine, Path const & p_fileName )

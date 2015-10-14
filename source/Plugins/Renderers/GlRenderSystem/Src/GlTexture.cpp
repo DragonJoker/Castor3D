@@ -1,5 +1,6 @@
 #include "GlTexture.hpp"
 
+#include "GlDirectTextureStorage.hpp"
 #include "GlPboTextureStorage.hpp"
 #include "GlRenderSystem.hpp"
 #include "GlTboTextureStorage.hpp"
@@ -13,11 +14,12 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
+	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, bool p_static )
 		: m_glName( uint32_t( eGL_INVALID_INDEX ) )
 		, m_gl( p_gl )
 		, m_glRenderSystem( &p_renderSystem )
 		, m_glDimension( eGL_TEXDIM_2D )
+		, m_static( p_static )
 	{
 	}
 
@@ -63,12 +65,19 @@ namespace GlRender
 			else
 			{
 				m_glDimension = eGL_TEXDIM_1D;
-				m_storage = std::make_unique< GlPboTextureStorage >( m_gl, *m_glRenderSystem );
 			}
 		}
-		else
+
+		if ( !m_storage )
 		{
-			m_storage = std::make_unique< GlPboTextureStorage >( m_gl, *m_glRenderSystem );
+			if ( m_static )
+			{
+				m_storage = std::make_unique< GlDirectTextureStorage >( m_gl, *m_glRenderSystem );
+			}
+			else
+			{
+				m_storage = std::make_unique< GlPboTextureStorage >( m_gl, *m_glRenderSystem );
+			}
 		}
 
 		bool l_return = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );

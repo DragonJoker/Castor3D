@@ -19,6 +19,7 @@
 #include "RenderTechnique.hpp"
 #include "SamplerManager.hpp"
 #include "SceneManager.hpp"
+#include "TargetManager.hpp"
 #include "TextureAttachment.hpp"
 
 #include <Logger.hpp>

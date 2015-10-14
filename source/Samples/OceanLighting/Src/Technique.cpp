@@ -27,7 +27,7 @@
 #include <OneFrameVariable.hpp>
 #include <PointFrameVariable.hpp>
 #include <MatrixFrameVariable.hpp>
-#include <RasteriserManager.hpp>
+#include <RasteriserStateManager.hpp>
 #include <SamplerManager.hpp>
 #include <StaticTexture.hpp>
 #include <DynamicTexture.hpp>
@@ -303,7 +303,7 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
 	m_pRasteriserState = l_pRasteriser;
-	DepthStencilStateSPtr l_pDepthStencil = GetOwner()->GetRenderSystem()->GetOwner()->GetRasteriserStateManager().Create( cuT( "OceanLighting" ) );
+	DepthStencilStateSPtr l_pDepthStencil = GetOwner()->GetRenderSystem()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "OceanLighting" ) );
 	l_pDepthStencil->SetDepthTest( false );
 	m_pDepthStencilState = l_pDepthStencil;
 	l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->GetRasteriserStateManager().Create( cuT( "OceanLighting_Render" ) );

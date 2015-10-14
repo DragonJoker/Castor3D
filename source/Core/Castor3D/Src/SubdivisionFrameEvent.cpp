@@ -6,8 +6,8 @@ using namespace Castor;
 namespace Castor3D
 {
 	SubdivisionFrameEvent::SubdivisionFrameEvent( SubmeshSPtr p_pSubmesh )
-		:	FrameEvent( eEVENT_TYPE_QUEUE_RENDER )
-		,	m_pSubmesh( p_pSubmesh )
+		: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+		, m_pSubmesh( p_pSubmesh )
 	{
 	}
 

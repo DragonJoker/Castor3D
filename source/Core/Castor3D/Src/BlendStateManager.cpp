@@ -20,11 +20,16 @@ namespace Castor3D
 		m_elements.lock();
 		BlendStateSPtr l_pReturn = m_elements.find( p_name );
 
-		if ( m_renderSystem && !l_pReturn )
+		if ( !l_pReturn )
 		{
 			l_pReturn = m_renderSystem->CreateBlendState();
 			m_elements.insert( p_name, l_pReturn );
 			GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+			Logger::LogInfo( cuT( "BlendStateManager::Create - Created BlendState: " ) + p_name + cuT( "" ) );
+		}
+		else
+		{
+			Logger::LogWarning( cuT( "BlendStateManager::Create - Duplicate BlendState: " ) + p_name );
 		}
 
 		m_elements.unlock();

@@ -15,31 +15,31 @@ namespace Castor3D
 	{
 	}
 
-	MeshSPtr MeshManager::Create( String const & p_strMeshName, eMESH_TYPE p_type )
+	MeshSPtr MeshManager::Create( String const & p_name, eMESH_TYPE p_type )
 	{
-		return Create( p_strMeshName, p_type, UIntArray(), RealArray() );
+		return Create( p_name, p_type, UIntArray(), RealArray() );
 	}
 
-	MeshSPtr MeshManager::Create( String const & p_strMeshName, eMESH_TYPE p_type, UIntArray const & p_arrayFaces )
+	MeshSPtr MeshManager::Create( String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces )
 	{
-		return Create( p_strMeshName, p_type, p_arrayFaces, RealArray() );
+		return Create( p_name, p_type, p_arrayFaces, RealArray() );
 	}
 
-	MeshSPtr MeshManager::Create( String const & p_strMeshName, eMESH_TYPE p_type, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
+	MeshSPtr MeshManager::Create( String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
 	{
 		m_elements.lock();
-		MeshSPtr l_pReturn = m_elements.find( p_strMeshName );
+		MeshSPtr l_pReturn = m_elements.find( p_name );
 
 		if ( !l_pReturn )
 		{
-			l_pReturn = std::make_shared< Mesh >( *GetOwner(), p_strMeshName );
+			l_pReturn = std::make_shared< Mesh >( *GetOwner(), p_name );
 			m_factory.Create( p_type )->Generate( *l_pReturn, p_arrayFaces, p_arraySizes );
-			m_elements.insert( p_strMeshName, l_pReturn );
-			Logger::LogInfo( cuT( "Engine::CreateMesh - Mesh [" ) + p_strMeshName + cuT( "] - Created" ) );
+			m_elements.insert( p_name, l_pReturn );
+			Logger::LogInfo( cuT( "MeshManager::Create - Created Mesh: " ) + p_name + cuT( "" ) );
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "Engine::CreateMesh - Can't create Mesh [" ) + p_strMeshName + cuT( "] - Another mesh with the same name already exists" ) );
+			Logger::LogWarning( cuT( "MeshManager::Create - Duplicate Mesh: " ) + p_name );
 		}
 
 		m_elements.unlock();

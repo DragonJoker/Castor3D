@@ -19,10 +19,12 @@
 #include "Dx11VertexBuffer.hpp"
 #include "Dx11Sampler.hpp"
 
-#include <Logger.hpp>
 #include <Material.hpp>
 #include <MaterialManager.hpp>
+#include <RenderLoop.hpp>
+
 #include <Debug.hpp>
+#include <Logger.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -153,7 +155,7 @@ namespace Dx11Render
 								}
 							}
 
-							int l_iWantedFPS = int( 1.0 / GetOwner()->GetFrameTime() );
+							int l_iWantedFPS = int( 1.0 / GetOwner()->GetRenderLoop().GetFrameTime() );
 
 							for ( std::vector< DXGI_MODE_DESC >::iterator l_it = l_matchingDisplayModes.begin(); l_it != l_matchingDisplayModes.end() && !l_bFound; ++l_it )
 							{

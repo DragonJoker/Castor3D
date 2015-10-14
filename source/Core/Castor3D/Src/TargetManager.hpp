@@ -19,7 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_TARGET_MANAGER_H___
 
 #include "Manager.hpp"
+
 #include "RenderTarget.hpp"
+#include "TechniqueFactory.hpp"
 
 namespace Castor3D
 {

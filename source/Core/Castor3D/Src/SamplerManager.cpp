@@ -33,6 +33,11 @@ namespace Castor3D
 				l_pReturn = m_renderSystem->CreateSampler( p_name );
 				m_elements.insert( p_name, l_pReturn );
 				GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+				Logger::LogInfo( cuT( "SamplerManager::Create - Created Sampler: " ) + p_name + cuT( "" ) );
+			}
+			else
+			{
+				Logger::LogWarning( cuT( "SamplerManager::Create - Duplicate Sampler: " ) + p_name );
 			}
 		}
 

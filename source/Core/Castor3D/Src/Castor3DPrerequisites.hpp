@@ -35,6 +35,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <CastorUtilsPrerequisites.hpp>
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
+#include <Aligned.hpp>
 
 namespace Castor3D
 {
@@ -1830,7 +1831,6 @@ namespace Castor3D
 	CASTOR_TYPE( uint8_t )
 	{
 		eEVENT_TYPE_PRE_RENDER,		//!<\~english This kind of event happens before any render, device context is active (so be fast !!)	\~french Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
-		eEVENT_TYPE_QUEUE_RENDER,	//!<\~english This kind of event happens after the render, before buffers' swap, device context is active (so be fast !!)	\~french Ce type d'évènement est traité après le rendu, avant l'échange des buffers, le contexte de rendu est actif (donc soyez rapide !!)
 		eEVENT_TYPE_POST_RENDER,	//!<\~english This kind of event happens after the buffer' swap	\~french Ce type d'évènement est traité après l'échange des tampons
 		eEVENT_TYPE_COUNT,
 	}	eEVENT_TYPE;
@@ -1920,6 +1920,9 @@ namespace Castor3D
 	class PostEffect;
 	class Parameters;
 	class BillboardList;
+	class RenderLoop;
+	class RenderLoopAsync;
+	class RenderLoopSync;
 
 	DECLARE_SMART_PTR( RenderWindow );
 	DECLARE_SMART_PTR( RenderBuffer );
@@ -1942,6 +1945,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );
 	DECLARE_SMART_PTR( BillboardList );
+	DECLARE_SMART_PTR( RenderLoop );
 
 	class OverlayManager;
 	class ShaderManager;

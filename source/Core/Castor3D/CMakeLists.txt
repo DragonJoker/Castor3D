@@ -35,10 +35,13 @@ file( GLOB ${PROJECT_NAME}_Main_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderLoop*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderLoop*.inl
 )
 file( GLOB ${PROJECT_NAME}_Main_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderLoop*.cpp
 )
 source_group( "Header Files\\Main" FILES ${${PROJECT_NAME}_Main_HEADER_FILES} )
 source_group( "Source Files\\Main" FILES ${${PROJECT_NAME}_Main_SOURCE_FILES} )

@@ -9,6 +9,7 @@
 #include <PlatformWindowHandle.hpp>
 #include <PluginManager.hpp>
 #include <Parameter.hpp>
+#include <RenderLoop.hpp>
 #include <SceneManager.hpp>
 #include <TargetManager.hpp>
 #include <TechniqueFactory.hpp>
@@ -443,7 +444,7 @@ namespace OceanLighting
 	{
 		if ( m_pCastor3D )
 		{
-			m_pCastor3D->RenderOneFrame();
+			m_pCastor3D->GetRenderLoop().RenderSyncFrame();
 		}
 
 		//TwDraw();

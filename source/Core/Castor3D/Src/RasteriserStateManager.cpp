@@ -25,6 +25,11 @@ namespace Castor3D
 			l_pReturn = m_renderSystem->CreateRasteriserState();
 			m_elements.insert( p_name, l_pReturn );
 			GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+			Logger::LogInfo( cuT( "RasteriserStateManager::Create - Created RasteriserState: " ) + p_name + cuT( "" ) );
+		}
+		else
+		{
+			Logger::LogWarning( cuT( "RasteriserStateManager::Create - Duplicate RasteriserState: " ) + p_name );
 		}
 
 		m_elements.unlock();

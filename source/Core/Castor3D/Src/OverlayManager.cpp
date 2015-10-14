@@ -146,11 +146,11 @@ namespace Castor3D
 			}
 
 			DoAddOverlay( p_name, l_pReturn, p_parent );
-			Logger::LogInfo( cuT( "Scene::CreateOverlay - Overlay [" ) + p_name + cuT( "] - Created" ) );
+			Logger::LogInfo( cuT( "OverlayManager::Create - Created Overlay: " ) + p_name + cuT( "" ) );
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "Scene::CreateOverlay - Can't create Overlay [" ) + p_name + cuT( "] - Another overlay with the same name already exists" ) );
+			Logger::LogWarning( cuT( "OverlayManager::Create - Duplicate Overlay: " ) + p_name );
 		}
 
 		return  l_pReturn;

@@ -14,6 +14,8 @@
 #include "PostFxPlugin.hpp"
 #include "PluginManager.hpp"
 #include "RasteriserStateManager.hpp"
+#include "RenderLoopAsync.hpp"
+#include "RenderLoopSync.hpp"
 #include "RendererPlugin.hpp"
 #include "RenderSystem.hpp"
 #include "RenderTechnique.hpp"
@@ -45,18 +47,8 @@ namespace Castor3D
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
 	Engine::Engine()
-		: m_bEnded( false )
-		, m_uiWantedFPS( 100 )
-		, m_dFrameTime( 0.01 )
-		, m_renderSystem( NULL )
-		, m_mainLoopThread( nullptr )
-		, m_bStarted( false )
-		, m_bCreateContext( false )
-		, m_bCreated( false )
+		: m_renderSystem( NULL )
 		, m_bCleaned( true )
-		, m_pMainWindow( NULL )
-		, m_bDefaultInitialised( false )
-		, m_debugOverlays( std::make_unique< DebugOverlays >() )
 	{
 		m_animationManager = std::make_unique< AnimationManager >( *this );
 		m_shaderManager = std::make_unique< ShaderManager >( *this );
@@ -88,10 +80,9 @@ namespace Castor3D
 
 	Engine::~Engine()
 	{
-		m_debugOverlays.reset();
-		m_pDefaultBlendState.reset();
-		m_pLightsSampler.reset();
-		m_pDefaultSampler.reset();
+		m_defaultBlendState.reset();
+		m_lightsSampler.reset();
+		m_defaultSampler.reset();
 
 		// To destroy before RenderSystem, since it contain elements instantiated in Renderer plug-in
 		m_samplerManager->Clear();
@@ -129,32 +120,25 @@ namespace Castor3D
 		CASTOR_CLEANUP_UNIQUE_INSTANCE();
 	}
 
-	void Engine::Initialise( uint32_t p_wantedFPS, bool p_bThreaded )
+	void Engine::Initialise( uint32_t p_wanted, bool p_threaded )
 	{
+		CASTOR_ASSERT( m_renderSystem && "Did you forget to call LoadRenderer?" );
+
 		if ( !m_renderSystem )
 		{
-			CASTOR_ASSERT( false );
 			CASTOR_EXCEPTION( C3D_NO_RENDERSYSTEM );
 		}
 
-		if ( m_mainLoopThread )
+		if ( p_threaded )
 		{
-			CASTOR_ASSERT( false );
-			CASTOR_EXCEPTION( C3D_MAIN_LOOP_EXISTS );
+			m_renderLoop = std::make_unique< RenderLoopAsync >( *this, m_renderSystem, p_wanted );
 		}
-		else if ( m_bCleaned )
+		else
 		{
-			m_bCleaned = false;
-			m_uiWantedFPS = p_wantedFPS;
-			m_bThreaded = p_bThreaded;
-			m_dFrameTime = 1.0 / m_uiWantedFPS;
-			DoLoadCoreData();
+			m_renderLoop = std::make_unique< RenderLoopSync >( *this, m_renderSystem, p_wanted );
+		}
 
-			if ( m_bThreaded )
-			{
-				m_mainLoopThread.reset( new std::thread( std::bind( &Engine::DoMainLoop, this ) ) );
-			}
-		}
+		m_bCleaned = false;
 	}
 
 	void Engine::Cleanup()
@@ -179,39 +163,22 @@ namespace Castor3D
 			m_windowManager->Cleanup();
 			m_shaderManager->Cleanup();
 
-			if ( m_pDefaultBlendState )
+			if ( m_defaultBlendState )
 			{
-				PostEvent( MakeCleanupEvent( *m_pDefaultBlendState ) );
+				PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
 			}
 
-			if ( m_pLightsSampler )
+			if ( m_lightsSampler )
 			{
-				PostEvent( MakeCleanupEvent( *m_pLightsSampler ) );
+				PostEvent( MakeCleanupEvent( *m_lightsSampler ) );
 			}
 
-			if ( m_pDefaultSampler )
+			if ( m_defaultSampler )
 			{
-				PostEvent( MakeCleanupEvent( *m_pDefaultSampler ) );
+				PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
 			}
 
-			if ( m_mainLoopThread )
-			{
-				// We wait for the main loop to end (it makes a final render to clean the render system)
-				m_mainLoopThread->join();
-				m_mainLoopThread.reset();
-			}
-			else
-			{
-				// No render loop so we clean the render system ourselves with that single call
-				DoRenderFlushFrame();
-
-				if ( GetRenderSystem()->GetMainContext() )
-				{
-					GetRenderSystem()->GetMainContext()->Cleanup();
-				}
-
-				GetRenderSystem()->Cleanup();
-			}
+			m_renderLoop.reset();
 
 			m_targetManager->Clear();
 			m_samplerManager->Clear();
@@ -229,114 +196,20 @@ namespace Castor3D
 			m_blendStateManager->Clear();
 			m_windowManager->Clear();
 
-			if ( m_pDefaultBlendState )
+			if ( m_defaultBlendState )
 			{
-				PostEvent( MakeInitialiseEvent( *m_pDefaultBlendState ) );
+				PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
 			}
 
-			if ( m_pDefaultSampler )
+			if ( m_lightsSampler )
 			{
-				PostEvent( MakeInitialiseEvent( *m_pDefaultSampler ) );
+				PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
 			}
 
-			if ( m_pLightsSampler )
+			if ( m_defaultSampler )
 			{
-				PostEvent( MakeInitialiseEvent( *m_pLightsSampler ) );
+				PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
 			}
-		}
-	}
-
-	ContextSPtr Engine::CreateContext( RenderWindow * p_pRenderWindow )
-	{
-		ContextSPtr l_pReturn;
-
-		if ( !m_mainLoopThread )
-		{
-			l_pReturn = m_renderSystem->GetMainContext();
-
-			if ( !l_pReturn )
-			{
-				l_pReturn = m_renderSystem->CreateContext();
-
-				if ( l_pReturn->Initialise( p_pRenderWindow ) )
-				{
-					m_renderSystem->SetMainContext( l_pReturn );
-				}
-			}
-			else if ( !l_pReturn->IsInitialised() )
-			{
-				l_pReturn->Initialise( p_pRenderWindow );
-			}
-		}
-		else
-		{
-			if ( !IsToCreate() )
-			{
-				{
-					CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-					m_pMainWindow = p_pRenderWindow;
-				}
-				SetToCreate();
-
-				while ( !IsCreated() )
-				{
-					System::Sleep( 1 );
-				}
-
-				{
-					CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-					m_bCreateContext = false;
-				}
-
-				l_pReturn = m_renderSystem->GetMainContext();
-			}
-		}
-
-		return l_pReturn;
-	}
-
-	void Engine::StartRendering()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		m_bEnded = false;
-
-		if ( !m_mainLoopThread )
-		{
-			CASTOR_ASSERT( false );
-			CASTOR_EXCEPTION( "Rendering is not threaded" );
-		}
-		else
-		{
-			m_bStarted = true;
-		}
-	}
-
-	void Engine::EndRendering()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		m_bEnded = true;
-
-		if ( !m_mainLoopThread )
-		{
-			CASTOR_ASSERT( false );
-			CASTOR_EXCEPTION( "Rendering is not threaded" );
-		}
-		else
-		{
-			m_bStarted = false;
-		}
-	}
-
-	void Engine::RenderOneFrame()
-	{
-		if ( m_mainLoopThread )
-		{
-			CASTOR_ASSERT( false );
-			CASTOR_EXCEPTION( "Can't call RenderOneFrame in threaded mode" );
-		}
-		else
-		{
-			DoRenderOneFrame();
 		}
 	}
 
@@ -361,14 +234,16 @@ namespace Castor3D
 			m_blendStateManager->SetRenderSystem( m_renderSystem );
 			m_windowManager->SetRenderSystem( m_renderSystem );
 
-			m_pDefaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
-			m_pDefaultSampler = m_samplerManager->Create( cuT( "Default" ) );
-			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-			m_pDefaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
-			m_pLightsSampler = m_samplerManager->Create( cuT( "LightsSampler" ) );
-			m_pLightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
-			m_pLightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
+			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
+			m_defaultSampler = m_samplerManager->Create( cuT( "Default" ) );
+			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
+			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
+			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
+			m_lightsSampler = m_samplerManager->Create( cuT( "LightsSampler" ) );
+			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
+			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
+
+			DoLoadCoreData();
 			l_return = true;
 		}
 
@@ -389,7 +264,7 @@ namespace Castor3D
 	Path Engine::GetPluginsDirectory()
 	{
 		Path l_pathReturn;
-		Path l_pathBin = File::DirectoryGetCurrent();
+		Path l_pathBin = File::GetWorkingDirectory();
 		Path l_pathUsr = l_pathBin.GetPath();
 		l_pathReturn = l_pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
 		return l_pathReturn;
@@ -403,7 +278,7 @@ namespace Castor3D
 	Path Engine::GetDataDirectory()
 	{
 		Path l_pathReturn;
-		Path l_pathBin = File::DirectoryGetCurrent();
+		Path l_pathBin = File::GetWorkingDirectory();
 		Path l_pathUsr = l_pathBin.GetPath();
 		l_pathReturn = l_pathUsr / cuT( "share" );
 		return l_pathReturn;
@@ -414,70 +289,14 @@ namespace Castor3D
 		return m_techniqueFactory.Create( p_name, p_renderTarget, m_renderSystem, p_params );
 	}
 
-	bool Engine::IsEnded()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		return m_bEnded;
-	}
-
-	void Engine::SetEnded()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		m_bEnded = true;
-	}
-
 	bool Engine::IsCleaned()
 	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
 		return m_bCleaned;
 	}
 
 	void Engine::SetCleaned()
 	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
 		m_bCleaned = true;
-	}
-
-	bool Engine::IsToCreate()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		return m_bCreateContext;
-	}
-
-	void Engine::SetToCreate()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		m_bCreateContext = true;
-	}
-
-	bool Engine::IsCreated()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		return m_bCreated;
-	}
-
-	void Engine::SetCreated()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		m_bCreated = true;
-	}
-
-	bool Engine::IsStarted()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		return m_bStarted;
-	}
-
-	void Engine::SetStarted()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		m_bStarted = true;
-	}
-
-	double Engine::GetFrameTime()
-	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexMainLoop );
-		return m_dFrameTime;
 	}
 
 	bool Engine::SupportsShaderModel( eSHADER_MODEL p_eShaderModel )
@@ -549,11 +368,6 @@ namespace Castor3D
 		}
 	}
 
-	void Engine::ShowDebugOverlays( bool p_show )
-	{
-		m_debugOverlays->Show( p_show );
-	}
-
 	void Engine::RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers )
 	{
 		auto && l_it = m_additionalParsers.find( p_name );
@@ -578,136 +392,6 @@ namespace Castor3D
 		m_additionalParsers.erase( l_it );
 	}
 
-	void Engine::DoPreRender()
-	{
-		PreciseTimer l_timer;
-		m_renderSystem->GetMainContext()->SetCurrent();
-		m_debugOverlays->EndGpuTask();
-
-		for ( auto && l_listener : m_listeners )
-		{
-			l_listener.second->FireEvents( eEVENT_TYPE_PRE_RENDER );
-		}
-
-		m_overlayManager->Update();
-
-		m_debugOverlays->EndCpuTask();
-		m_renderSystem->GetMainContext()->EndCurrent();
-	}
-
-	void Engine::DoRender( bool p_force, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
-	{
-		m_renderSystem->GetMainContext()->SetCurrent();
-		m_targetManager->Render( m_dFrameTime, p_vtxCount, p_fceCount, p_objCount );
-		m_debugOverlays->EndGpuTask();
-
-		for ( auto && l_listener : m_listeners )
-		{
-			l_listener.second->FireEvents( eEVENT_TYPE_QUEUE_RENDER );
-		}
-
-		m_debugOverlays->EndCpuTask();
-		m_renderSystem->GetMainContext()->EndCurrent();
-		m_windowManager->Render( p_force );
-		m_debugOverlays->EndGpuTask();
-	}
-
-	void Engine::DoPostRender()
-	{
-		m_debugOverlays->EndGpuTask();
-
-		for ( auto && l_listener : m_listeners )
-		{
-			l_listener.second->FireEvents( eEVENT_TYPE_POST_RENDER );
-		}
-
-		m_debugOverlays->EndCpuTask();
-	}
-
-	void Engine::DoUpdate( bool p_bForce )
-	{
-		if ( m_renderSystem->GetMainContext() )
-		{
-			uint32_t l_vertices = 0;
-			uint32_t l_faces = 0;
-			uint32_t l_objects = 0;
-			m_debugOverlays->StartFrame();
-			DoPreRender();
-			DoRender( p_bForce, l_vertices, l_faces, l_objects );
-			DoPostRender();
-			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
-		}
-	}
-
-	uint32_t Engine::DoMainLoop()
-	{
-		uint32_t l_uiReturn = 0;
-		PreciseTimer l_timer;
-		ContextSPtr l_pContext;
-
-		// Tant qu'on n'est pas nettoyé, on continue
-		while ( !IsCleaned() )
-		{
-			// Tant qu'on n'a pas de contexte et qu'on ne nous a pas demandé de le créer, on attend.
-			while ( !IsCleaned() && !IsToCreate() && !IsCreated() )
-			{
-				System::Sleep( 10 );
-			}
-
-			if ( !IsCleaned() && !IsCreated() )
-			{
-				// On nous a demandé de le créer, on le crée
-				l_pContext = m_renderSystem->CreateContext();
-				l_pContext->Initialise( m_pMainWindow );
-				m_renderSystem->SetMainContext( l_pContext );
-				SetCreated();
-			}
-
-			// Tant qu'on n'a pas demandé le début du rendu, on attend.
-			while ( !IsCleaned() && !IsStarted() )
-			{
-				System::Sleep( 10 );
-			}
-
-			l_pContext.reset();
-
-			// Le rendu est en cours
-			while ( !IsCleaned() && !IsEnded() )
-			{
-				double l_dFrameTime = GetFrameTime();
-				l_timer.TimeS();
-				DoRenderOneFrame();
-				double l_dTimeDiff = l_timer.TimeS();
-
-				if ( l_dTimeDiff < l_dFrameTime )
-				{
-					System::Sleep( uint32_t( ( l_dFrameTime - l_dTimeDiff ) * 1000 ) );
-				}
-				else
-				{
-					// In order to let the CPU work, we sleep at least 1ms
-					System::Sleep( 1 );
-				}
-			}
-		}
-
-		// A final render to clean the renderers
-		DoRenderFlushFrame();
-		return l_uiReturn;
-	}
-
-	void Engine::DoRenderOneFrame()
-	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-		DoUpdate( true );
-	}
-
-	void Engine::DoRenderFlushFrame()
-	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-		DoUpdate( true );
-	}
-
 	void Engine::DoLoadCoreData()
 	{
 		Path l_path = Engine::GetDataDirectory() / cuT( "Castor3D" );
@@ -719,10 +403,6 @@ namespace Castor3D
 			if ( !l_parser.ParseFile( l_path / cuT( "Core.zip" ) ) )
 			{
 				Logger::LogError( cuT( "Can't read Core.zip data file" ) );
-			}
-			else
-			{
-				m_debugOverlays->Initialise( *m_overlayManager );
 			}
 		}
 	}

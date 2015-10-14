@@ -13,6 +13,7 @@
 #include "InitialiseEvent.hpp"
 #include "Pipeline.hpp"
 #include "RasteriserStateManager.hpp"
+#include "RenderLoop.hpp"
 #include "RenderSystem.hpp"
 #include "TargetManager.hpp"
 #include "ResizeWindowEvent.hpp"
@@ -185,7 +186,7 @@ namespace Castor3D
 
 		if ( m_handle )
 		{
-			m_pContext = GetOwner()->CreateContext( this );
+			GetOwner()->GetRenderLoop().CreateContext( *this );
 			m_bInitialised = m_pContext && m_pContext->IsInitialised();
 			m_pContext->SetCurrent();
 			SceneSPtr l_pScene = GetScene();

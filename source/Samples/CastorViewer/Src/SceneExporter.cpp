@@ -3,6 +3,7 @@
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <WindowManager.hpp>
+#include <SamplerManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

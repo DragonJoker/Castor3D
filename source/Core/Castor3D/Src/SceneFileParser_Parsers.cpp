@@ -29,6 +29,7 @@
 #include "Pass.hpp"
 #include "PluginManager.hpp"
 #include "PointLight.hpp"
+#include "RenderLoop.hpp"
 #include "RenderSystem.hpp"
 #include "RenderWindow.hpp"
 #include "SamplerManager.hpp"
@@ -157,7 +158,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootDebugOverlays )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	bool l_value;
-	l_pContext->m_pParser->GetOwner()->ShowDebugOverlays( p_params[0]->Get( l_value ) );
+	l_pContext->m_pParser->GetOwner()->GetRenderLoop().ShowDebugOverlays( p_params[0]->Get( l_value ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_SCENE )
 

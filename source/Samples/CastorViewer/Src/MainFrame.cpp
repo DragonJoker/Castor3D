@@ -26,6 +26,7 @@
 #include <MaterialManager.hpp>
 #include <Mesh.hpp>
 #include <Pass.hpp>
+#include <RenderLoop.hpp>
 #include <RenderWindow.hpp>
 #include <Sampler.hpp>
 #include <Scene.hpp>
@@ -48,7 +49,7 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const bool CASTOR3D_THREADED = false;
+		static const bool CASTOR3D_THREADED = true;
 #if defined( NDEBUG )
 		static const int CASTOR_WANTED_FPS = 120;
 #else
@@ -174,7 +175,7 @@ namespace CastorViewer
 
 					if ( CASTOR3D_THREADED )
 					{
-						wxGetApp().GetCastor()->StartRendering();
+						wxGetApp().GetCastor()->GetRenderLoop().StartRendering();
 					}
 
 					m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), m_pMainScene.lock() );
@@ -407,7 +408,7 @@ namespace CastorViewer
 		{
 			if ( wxGetApp().GetCastor() )
 			{
-				wxGetApp().GetCastor()->RenderOneFrame();
+				wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
 			}
 		}
 		else if ( p_event.GetId() == eID_MSGLOG_TIMER && m_messageLog )

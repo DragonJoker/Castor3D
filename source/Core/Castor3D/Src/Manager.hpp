@@ -30,7 +30,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	static const Castor::String ERROR_DUPLICATE_OBJECT = cuT( "Duplicate object asked to a manager: " );
+	static const xchar * INFO_CREATED_OBJECT = cuT( "Manager::Create - Created object: " );
+	static const xchar * WARNING_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate object: " );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -395,10 +396,11 @@ namespace Castor3D
 				l_return = std::make_shared< Elem >( std::forward< Parameters >( p_params )... );
 				m_elements.insert( p_name, l_return );
 				ElementInitialiser< Elem >()( *GetOwner(), *l_return );
+				Castor::Logger::LogInfo( INFO_CREATED_OBJECT + p_name );
 			}
 			else
 			{
-				Castor::Logger::LogWarning( ERROR_DUPLICATE_OBJECT + p_name );
+				Castor::Logger::LogWarning( WARNING_DUPLICATE_OBJECT + p_name );
 			}
 
 			m_elements.unlock();
