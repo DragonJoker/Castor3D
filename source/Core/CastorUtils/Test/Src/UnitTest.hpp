@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "TestPrerequisites.hpp"
 
+#include <cmath>
+
 namespace Testing
 {
 	template< typename T >
@@ -48,28 +50,28 @@ namespace Testing
 	inline bool compare< float, float >( float const & p_a, float const & p_b )
 	{
 		float l_epsilon = float( 0.0001 );
-		return std::abs( p_a - p_b ) < l_epsilon;
+		return std::abs( float( p_a - p_b ) ) < l_epsilon;
 	}
 
 	template<>
 	inline bool compare< float, double >( float const & p_a, double const & p_b )
 	{
 		float l_epsilon = float( 0.0001 );
-		return std::abs( p_a - p_b ) < l_epsilon;
+		return std::abs( float( p_a - p_b ) ) < l_epsilon;
 	}
 
 	template<>
 	inline bool compare< double, double >( double const & p_a, double const & p_b )
 	{
 		double l_epsilon = double( 0.0001 );
-		return std::abs( p_a - p_b ) < l_epsilon;
+		return std::abs( double( p_a - p_b ) ) < l_epsilon;
 	}
 
 	template<>
 	inline bool compare< double, float >( double const & p_a, float const & p_b )
 	{
 		double l_epsilon = double( 0.0001 );
-		return std::abs( p_a - p_b ) < l_epsilon;
+		return std::abs( double( p_a - p_b ) ) < l_epsilon;
 	}
 
 	class TestCase

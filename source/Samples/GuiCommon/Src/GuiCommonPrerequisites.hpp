@@ -30,7 +30,7 @@ namespace GuiCommon
 	\~english
 	\brief Word and symbol type enumeration
 	\~french
-	\brief Enum�ration des diff�rents types de mots et symboles
+	\brief Enumération des différents types de mots et symboles
 	*/
 	typedef enum eSTC_TYPE
 	{

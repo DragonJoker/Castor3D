@@ -202,8 +202,8 @@ namespace Castor
 	private:
 		point m_normal;
 		point m_point;
-		friend bool operator==( PlaneEquation const & p_a, PlaneEquation const & p_b );
-		friend bool operator!=( PlaneEquation const & p_a, PlaneEquation const & p_b );
+		template< typename U > friend bool operator==( PlaneEquation< U > const & p_a, PlaneEquation< U > const & p_b );
+		template< typename U > friend bool operator!=( PlaneEquation< U > const & p_a, PlaneEquation< U > const & p_b );
 	};
 	/**
 	 *\~english

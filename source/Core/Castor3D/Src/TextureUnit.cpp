@@ -344,7 +344,7 @@ namespace Castor3D
 		{
 			TextureBaseSPtr l_texture = p_unit.GetTexture();
 
-			if ( l_texture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC || !p_unit.GetTexturePath().empty() )
+			if ( l_texture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC || !p_unit.GetTexturePath().empty() )
 			{
 				if ( l_return )
 				{
@@ -422,7 +422,7 @@ namespace Castor3D
 					l_return = p_file.WriteText( cuT( "\t\t\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
 				}
 
-				if ( l_texture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC )
+				if ( l_texture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC )
 				{
 					if ( l_return && p_unit.GetRenderTarget() )
 					{
@@ -539,11 +539,11 @@ namespace Castor3D
 			Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
-			if ( m_bChanged && ( m_bAutoMipmaps || m_pTexture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC ) )
+			if ( m_bChanged && ( m_bAutoMipmaps || m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC ) )
 			{
 #if DEBUG_BUFFERS
 
-				if ( m_pTexture->GetType() == eTEXTURE_BASE_TYPE_DYNAMIC )
+				if ( m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC )
 				{
 					uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
 					std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );

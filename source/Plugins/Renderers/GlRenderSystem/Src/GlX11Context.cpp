@@ -25,21 +25,21 @@ using namespace GlRender;
 typedef GLXFBConfig * ( FnGlXChooseFBConfigProc	)( Display *, int, int const *, int * );
 typedef XVisualInfo * ( FnGlXGetVisualFromFBConfigProc	)( Display *, GLXFBConfig );
 
-typedef FnGlXChooseFBConfigProc 	*		PFnGlXChooseFBConfigProc;
-typedef FnGlXGetVisualFromFBConfigProc *	PFnGlXGetVisualFromFBConfigProc;
+typedef FnGlXChooseFBConfigProc * PFnGlXChooseFBConfigProc;
+typedef FnGlXGetVisualFromFBConfigProc * PFnGlXGetVisualFromFBConfigProc;
 
-PFnGlXChooseFBConfigProc		g_pfnGlXChooseFBConfig			= NULL;
-PFnGlXGetVisualFromFBConfigProc g_pfnGlXGetVisualFromFBConfig	= NULL;
+PFnGlXChooseFBConfigProc g_pfnGlXChooseFBConfig = NULL;
+PFnGlXGetVisualFromFBConfigProc g_pfnGlXGetVisualFromFBConfig = NULL;
 
 GlContextImpl::GlContextImpl( OpenGl & p_gl, GlContext * p_pContext )
-	:	m_pDisplay( NULL	)
-	,	m_iGlXVersion( 10	)
-	,	m_glXContext( NULL	)
-	,	m_drawable( None	)
-	,	m_pFbConfig( NULL	)
-	,	m_pContext( p_pContext	)
-	,	m_bInitialised( false	)
-	,	m_gl( p_gl	)
+	: m_pDisplay( NULL )
+	, m_iGlXVersion( 10 )
+	, m_glXContext( NULL )
+	, m_drawable( None )
+	, m_pFbConfig( NULL )
+	, m_pContext( p_pContext )
+	, m_bInitialised( false )
+	, m_gl( p_gl )
 {
 }
 
@@ -53,8 +53,8 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 {
 	if ( !g_pfnGlXChooseFBConfig )
 	{
-		g_pfnGlXChooseFBConfig			= PFnGlXChooseFBConfigProc(	glXGetProcAddress( ( uint8_t const * )"glXChooseFBConfig"	) );
-		g_pfnGlXGetVisualFromFBConfig	= PFnGlXGetVisualFromFBConfigProc(	glXGetProcAddress( ( uint8_t const * )"glXGetVisualFromFBConfig"	) );
+		g_pfnGlXChooseFBConfig = PFnGlXChooseFBConfigProc( glXGetProcAddress( ( uint8_t const * )"glXChooseFBConfig" ) );
+		g_pfnGlXGetVisualFromFBConfig = PFnGlXGetVisualFromFBConfigProc( glXGetProcAddress( ( uint8_t const * )"glXGetVisualFromFBConfig" ) );
 	}
 
 	if ( m_drawable == None )
@@ -65,7 +65,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 
 	try
 	{
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetEngine()->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetOwner()->GetRenderSystem() );
 		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		int l_iScreen = DefaultScreen( m_pDisplay );
 		int l_iMajor, l_iMinor;
@@ -176,7 +176,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_pWindow )
 				{
 					glXMakeCurrent( m_pDisplay, m_drawable, m_glXContext );
 					l_renderSystem->Initialise();
-					p_pWindow->GetEngine()->GetMaterialManager().Initialise();
+					p_pWindow->GetOwner()->GetMaterialManager().Initialise();
 					glXMakeCurrent( m_pDisplay, None, NULL );
 				}
 			}
@@ -267,7 +267,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 		if ( p_pWindow->IsUsingStereo() )
 		{
 			// Maybe because of stereo ? We try in mono
-			p_pWindow->GetEngine()->GetRenderSystem()->SetStereoAvailable( false );
+			p_pWindow->GetOwner()->GetRenderSystem()->SetStereoAvailable( false );
 			Logger::LogWarning( cuT( "GlXContext::Create - Stereo glXChooseFBConfig failed, using mono FB config" ) );
 			p_arrayAttribs.clear();
 			p_arrayAttribs.push_back( GLX_RENDER_TYPE	);
@@ -329,7 +329,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 	{
 		if ( p_pWindow->IsUsingStereo() )
 		{
-			p_pWindow->GetEngine()->GetRenderSystem()->SetStereoAvailable( true );
+			p_pWindow->GetOwner()->GetRenderSystem()->SetStereoAvailable( true );
 			Logger::LogDebug( cuT( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
 		}
 		else
@@ -372,7 +372,7 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )
 {
 	bool l_return = false;
 #if !C3DGL_LIMIT_TO_2_1
-	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetEngine()->GetRenderSystem() );
+	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_pWindow->GetOwner()->GetRenderSystem() );
 	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
 	if ( m_gl.HasCreateContextAttribs() )

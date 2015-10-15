@@ -4,7 +4,7 @@ namespace GlRender
 {
 	template< typename T >
 	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_pBuffer )
-		: GpuBuffer< T >( p_renderSystem )
+		: Castor3D::GpuBuffer< T >( p_renderSystem )
 		, m_pBuffer( p_pBuffer )
 		, m_glBuffer( p_gl, p_eTarget )
 		, m_gl( p_gl )

@@ -1,4 +1,6 @@
-﻿namespace Castor
+﻿#include "Logger.hpp"
+
+namespace Castor
 {
 	namespace
 	{
@@ -118,5 +120,4 @@
 		}
 
 		return l_ret;
-	}
-}
+	}}

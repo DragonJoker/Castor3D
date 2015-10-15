@@ -115,7 +115,7 @@ namespace Castor
 	{\
 	}\
 	OwnedBy< owner >::OwnedBy( OwnedBy< owner > && p_rhs )\
-		: m_owner( std::move( p_rhs.m_owner ) )\
+		: m_owner( p_rhs.m_owner )\
 	{\
 	}\
 	OwnedBy< owner >::~OwnedBy()\

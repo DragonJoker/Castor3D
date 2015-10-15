@@ -27,7 +27,7 @@ namespace cpy
 	{
 		Castor3D::WindowHandle operator()( wxWindow * p_window )
 		{
-			return GuiCommon::wxMakeWindowHandle( p_window );
+			return GuiCommon::make_WindowHandle( p_window );
 		}
 	};
 		
@@ -35,7 +35,7 @@ namespace cpy
 	{
 		Castor3D::WindowHandle operator()( wxFrame * p_window )
 		{
-			return GuiCommon::wxMakeWindowHandle( p_window );
+			return GuiCommon::make_WindowHandle( p_window );
 		}
 	};
 }
