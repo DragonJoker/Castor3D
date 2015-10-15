@@ -161,15 +161,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_engine		The core engine
-		 *\param[in]	p_lightFactory	The factory used to create the lights
 		 *\param[in]	p_name			The scene name
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_engine		Le moteur
-		 *\param[in]	p_lightFactory	La fabrique utilisée pour créer les lumières
 		 *\param[in]	p_name			Le nom de la scène
 		 */
-		C3D_API Scene( Engine & p_engine, LightFactory & p_lightFactory, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API Scene( Engine & p_engine, Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -190,7 +188,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les maps, laisse les noeuds pères
 		 */
-		C3D_API void ClearScene();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the scene background

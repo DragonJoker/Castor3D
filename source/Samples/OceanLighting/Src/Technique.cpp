@@ -16,9 +16,10 @@
 
 #include "Technique.hpp"
 
+#include <BlendStateManager.hpp>
 #include <RenderSystem.hpp>
 #include <RasteriserState.hpp>
-#include <DepthStencilState.hpp>
+#include <DepthStencilStateManager.hpp>
 #include <DepthStencilRenderBuffer.hpp>
 #include <TextureAttachment.hpp>
 #include <RenderBufferAttachment.hpp>
@@ -26,6 +27,8 @@
 #include <OneFrameVariable.hpp>
 #include <PointFrameVariable.hpp>
 #include <MatrixFrameVariable.hpp>
+#include <RasteriserStateManager.hpp>
+#include <SamplerManager.hpp>
 #include <StaticTexture.hpp>
 #include <DynamicTexture.hpp>
 
@@ -179,12 +182,12 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
 	};
 	Engine * l_pEngine = GetOwner();
-	m_pSamplerNearestClamp = l_pEngine->CreateSampler( cuT( "NearestClamp" ) );
-	m_pSamplerNearestRepeat = l_pEngine->CreateSampler( cuT( "NearestRepeat" ) );
-	m_pSamplerLinearClamp = l_pEngine->CreateSampler( cuT( "LinearClamp" ) );
-	m_pSamplerLinearRepeat = l_pEngine->CreateSampler( cuT( "LinearRepeat" ) );
-	m_pSamplerAnisotropicClamp = l_pEngine->CreateSampler( cuT( "AnisotropicClamp" ) );
-	m_pSamplerAnisotropicRepeat = l_pEngine->CreateSampler( cuT( "AnisotropicRepeat" ) );
+	m_pSamplerNearestClamp = l_pEngine->GetSamplerManager().Create( cuT( "NearestClamp" ) );
+	m_pSamplerNearestRepeat = l_pEngine->GetSamplerManager().Create( cuT( "NearestRepeat" ) );
+	m_pSamplerLinearClamp = l_pEngine->GetSamplerManager().Create( cuT( "LinearClamp" ) );
+	m_pSamplerLinearRepeat = l_pEngine->GetSamplerManager().Create( cuT( "LinearRepeat" ) );
+	m_pSamplerAnisotropicClamp = l_pEngine->GetSamplerManager().Create( cuT( "AnisotropicClamp" ) );
+	m_pSamplerAnisotropicRepeat = l_pEngine->GetSamplerManager().Create( cuT( "AnisotropicRepeat" ) );
 	m_pTexIrradiance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 	m_pTexInscatter = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 	m_pTexTransmittance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
@@ -296,14 +299,14 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_skyGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr );
 	m_skymapGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr );
 	m_cloudsGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr );
-	RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->CreateRasteriserState( cuT( "OceanLighting" ) );
+	RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->GetRasteriserStateManager().Create( cuT( "OceanLighting" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
 	m_pRasteriserState = l_pRasteriser;
-	DepthStencilStateSPtr l_pDepthStencil = GetOwner()->GetRenderSystem()->GetOwner()->CreateDepthStencilState( cuT( "OceanLighting" ) );
+	DepthStencilStateSPtr l_pDepthStencil = GetOwner()->GetRenderSystem()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "OceanLighting" ) );
 	l_pDepthStencil->SetDepthTest( false );
 	m_pDepthStencilState = l_pDepthStencil;
-	l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->CreateRasteriserState( cuT( "OceanLighting_Render" ) );
+	l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->GetRasteriserStateManager().Create( cuT( "OceanLighting_Render" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
 	m_renderRasteriserState = l_pRasteriser;
@@ -760,14 +763,14 @@ bool RenderTechnique::DoCreate()
 #else
 	m_pTexWave->Create();
 #endif
-	BlendStateSPtr l_pBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Clouds" ) );
+	BlendStateSPtr l_pBlendState = GetOwner()->GetRenderSystem()->GetOwner()->GetBlendStateManager().Create( cuT( "OL_Clouds" ) );
 	l_pBlendState->EnableBlend( true );
 	l_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
 	l_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
 	m_cloudsBlendState = l_pBlendState;
-	m_renderBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Render" ) );
-	m_skyBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Sky" ) );
-	m_skymapBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Skymap" ) );
+	m_renderBlendState = GetOwner()->GetRenderSystem()->GetOwner()->GetBlendStateManager().Create( cuT( "OL_Render" ) );
+	m_skyBlendState = GetOwner()->GetRenderSystem()->GetOwner()->GetBlendStateManager().Create( cuT( "OL_Sky" ) );
+	m_skymapBlendState = GetOwner()->GetRenderSystem()->GetOwner()->GetBlendStateManager().Create( cuT( "OL_Skymap" ) );
 #if ENABLE_FFT
 	m_initBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Init" ) );
 	m_variancesBlendState = GetOwner()->GetRenderSystem()->GetOwner()->CreateBlendState( cuT( "OL_Variances" ) );

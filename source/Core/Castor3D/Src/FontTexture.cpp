@@ -4,7 +4,7 @@
 #include "Engine.hpp"
 #include "InitialiseEvent.hpp"
 #include "RenderSystem.hpp"
-#include "Sampler.hpp"
+#include "SamplerManager.hpp"
 
 #include <Font.hpp>
 #include <Image.hpp>
@@ -19,7 +19,7 @@ namespace Castor3D
 	{
 		// Récupération / Création de la police
 		FontManager & l_fontManager = GetOwner()->GetFontManager();
-		SamplerSPtr l_pSampler = GetOwner()->CreateSampler( p_font->GetName() );
+		SamplerSPtr l_pSampler = GetOwner()->GetSamplerManager().Create( p_font->GetName() );
 		l_pSampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
 		l_pSampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );

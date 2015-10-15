@@ -250,14 +250,14 @@ namespace CastorGui
 
 		if ( !l_material )
 		{
-			SetSelectedItemBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "DarkBlue" ) ) );
+			SetSelectedItemBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "DarkBlue" ) ) );
 		}
 
 		l_material = GetSelectedItemForegroundMaterial();
 
 		if ( !l_material )
 		{
-			SetSelectedItemForegroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "White" ) ) );
+			SetSelectedItemForegroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "White" ) ) );
 		}
 
 		l_material = GetHighlightedItemBackgroundMaterial();

@@ -136,7 +136,7 @@ namespace CastorViewer
 		Castor::real m_rFpCamSpeed;
 
 #if HAS_CASTORGUI
-		CastorGui::ControlsManagerRPtr m_controlsManager;
+		CastorGui::ControlsManagerSPtr m_controlsManager;
 #endif
 	};
 }

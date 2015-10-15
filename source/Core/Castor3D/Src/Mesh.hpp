@@ -168,19 +168,6 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Creates mesh's vertex and faces.
-		 *\param[in]	p_generator		The mesh generator.
-		 *\param[in]	p_faces			The faces counts.
-		 *\param[in]	p_dimensions	The mesh dimensions.
-		 *\~french
-		 *\brief		Crée les sommets et faces du maillage.
-		 *\param[in]	p_generator		Le générateur de maillage.
-		 *\param[in]	p_faces			The faces counts.
-		 *\param[in]	p_dimensions	The mesh dimensions.
-		 */
-		C3D_API void Initialise( MeshGenerator & p_generator, UIntArray const & p_faces, RealArray const & p_dimensions );
-		/**
-		 *\~english
 		 *\brief		Computes the collision box and sphere.
 		 *\~french
 		 *\brief		Calcule la boîte et la sphère de collision.

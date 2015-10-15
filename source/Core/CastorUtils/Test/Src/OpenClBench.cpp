@@ -180,7 +180,7 @@ namespace Testing
 
 		if ( l_bContinue )
 		{
-			Castor::Path l_filePath = Castor::File::DirectoryGetCurrent();
+			Castor::Path l_filePath = Castor::File::GetWorkingDirectory();
 			std::string l_path = Castor::string::string_cast< char >( l_filePath / cuT( "mtx_ope.cl" ) );
 			std::ifstream l_file( l_path );
 			l_bContinue = CheckErr( l_file ? CL_SUCCESS : -1, l_path.c_str() );

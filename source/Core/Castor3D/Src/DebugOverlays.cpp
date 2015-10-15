@@ -15,7 +15,7 @@ namespace Castor3D
 		TextOverlaySPtr GetTextOverlay( OverlayManager & p_manager, String const & p_name )
 		{
 			TextOverlaySPtr l_return;
-			OverlaySPtr l_overlay = p_manager.GetOverlay( p_name );
+			OverlaySPtr l_overlay = p_manager.Find( p_name );
 			
 			if ( l_overlay )
 			{
@@ -40,7 +40,7 @@ namespace Castor3D
 
 	void DebugOverlays::Initialise( OverlayManager & p_manager )
 	{
-		OverlaySPtr l_panel = p_manager.GetOverlay( cuT( "DebugPanel" ) );
+		OverlaySPtr l_panel = p_manager.Find( cuT( "DebugPanel" ) );
 		m_debugPanel = l_panel;
 		m_debugCpuTime = GetTextOverlay( p_manager, cuT( "DebugPanel-CpuTime-Value" ) );
 		m_debugGpuTime = GetTextOverlay( p_manager, cuT( "DebugPanel-GpuTime-Value" ) );

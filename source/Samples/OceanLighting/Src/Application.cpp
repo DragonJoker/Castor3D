@@ -10,7 +10,7 @@ namespace OceanLighting
 	bool Application::OnInit()
 	{
 		long 		l_lLanguage		= wxLANGUAGE_DEFAULT;
-		Path		l_pathCurrent	= File::DirectoryGetCurrent().GetPath();
+		Path		l_pathCurrent	= File::GetWorkingDirectory().GetPath();
 
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( l_lLanguage ) )
@@ -76,7 +76,7 @@ namespace OceanLighting
 				}
 
 				Logger::Initialise( l_eLogLevel );
-				Logger::SetFileName( File::DirectoryGetCurrent() / cuT( "OceanLighting.log" ) );
+				Logger::SetFileName( File::GetWorkingDirectory() / cuT( "OceanLighting.log" ) );
 				Logger::LogInfo( cuT( "OceanLighting - Start" ) );
 				wxInitAllImageHandlers();
 				m_pMainFrame = new MainFrame();

@@ -1,8 +1,8 @@
 ﻿#include "ObjImporter.hpp"
 #include "ObjGroup.hpp"
 
-#include <Material.hpp>
 #include <MaterialManager.hpp>
+#include <MeshManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <Mesh.hpp>
@@ -12,7 +12,7 @@
 #include <Geometry.hpp>
 #include <Face.hpp>
 #include <RenderSystem.hpp>
-#include <Scene.hpp>
+#include <SceneManager.hpp>
 #include <SceneNode.hpp>
 #include <Version.hpp>
 #include <Plugin.hpp>
@@ -43,7 +43,7 @@ namespace Obj
 		if ( l_pMesh )
 		{
 			l_pMesh->GenerateBuffers();
-			l_pScene = std::make_shared< Scene >( *GetOwner(), GetOwner()->GetLightFactory(), cuT( "Scene_OBJ" ) );
+			l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetOwner(), cuT( "Scene_OBJ" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 			l_pGeometry->AttachTo( l_pNode );
@@ -137,7 +137,7 @@ namespace Obj
 	{
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr l_pReturn = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName );
+		MeshSPtr l_pReturn = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
 		String l_strSection;
 		String l_strValue;
 		String l_strLine;
@@ -194,7 +194,7 @@ namespace Obj
 					else if ( l_strSection == cuT( "usemtl" ) )
 					{
 						// Material
-						l_pMaterial = l_mtlManager.find( l_strValue );
+						l_pMaterial = l_mtlManager.Find( l_strValue );
 
 						if ( l_pGroup && l_pMaterial )
 						{
@@ -686,14 +686,12 @@ namespace Obj
 							l_fAlpha = 1.0f;
 						}
 
-						l_pMaterial = l_mtlManager.find( l_strValue );
+						l_pMaterial = l_mtlManager.Find( l_strValue );
 
 						if ( !l_pMaterial )
 						{
-							l_pMaterial = std::make_shared< Material >( *GetOwner(), l_strValue );
+							l_pMaterial = l_mtlManager.Create( l_strValue, *GetOwner(), l_strValue );
 							m_arrayLoadedMaterials.push_back( l_pMaterial );
-							l_mtlManager.insert( l_strValue, l_pMaterial );
-							GetOwner()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 						}
 
 						l_pPass = l_pMaterial->CreatePass();

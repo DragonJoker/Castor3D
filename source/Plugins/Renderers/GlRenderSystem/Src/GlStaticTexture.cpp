@@ -12,7 +12,7 @@ namespace GlRender
 {
 	GlStaticTexture::GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
 		: StaticTexture( p_renderSystem )
-		, m_texture( p_gl, p_renderSystem )
+		, m_texture( p_gl, p_renderSystem, true )
 	{
 	}
 

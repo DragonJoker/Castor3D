@@ -497,8 +497,10 @@ namespace Castor
 		{
 			if ( l_iter == p_parsers.end() )
 			{
-				Ignore();
-				DoDiscardParser( p_strLine );
+				if ( !DoDiscardParser( p_strLine ) )
+				{
+					Ignore();
+				}
 			}
 			else
 			{

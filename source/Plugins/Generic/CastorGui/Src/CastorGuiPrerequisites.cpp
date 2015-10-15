@@ -18,14 +18,12 @@ namespace CastorGui
 	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, Colour const & p_colour )
 	{
 		MaterialManager & l_manager = p_engine->GetMaterialManager();
-		MaterialSPtr l_return = l_manager.find( p_name );
+		MaterialSPtr l_return = l_manager.Find( p_name );
 
 		if ( !l_return )
 		{
-			l_return = std::make_shared< Material >( *p_engine, p_name );
+			l_return = l_manager.Create( p_name, *p_engine, p_name );
 			l_return->CreatePass();
-			p_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
-			l_manager.insert( p_name, l_return );
 		}
 
 		l_return->GetPass( 0 )->SetAmbient( p_colour );
@@ -35,14 +33,12 @@ namespace CastorGui
 	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureBaseSPtr p_texture )
 	{
 		MaterialManager & l_manager = p_engine->GetMaterialManager();
-		MaterialSPtr l_return = l_manager.find( p_name );
+		MaterialSPtr l_return = l_manager.Find( p_name );
 
 		if ( !l_return )
 		{
-			l_return = std::make_shared< Material >( *p_engine, p_name );
+			l_return = l_manager.Create( p_name, *p_engine, p_name );
 			l_return->CreatePass();
-			p_engine->PostEvent( MakeInitialiseEvent( *l_return ) );
-			l_manager.insert( p_name, l_return );
 		}
 
 		PassSPtr l_pass = l_return->GetPass( 0 );

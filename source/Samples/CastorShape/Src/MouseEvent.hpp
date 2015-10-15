@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "RenderPanel.hpp"
 
+#include <FrameEvent.hpp>
+
 namespace CastorShape
 {
 	class MouseCameraEvent

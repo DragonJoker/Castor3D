@@ -38,8 +38,9 @@ namespace GlRender
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_static		Tells if this texture is a static one.
 		 */
-		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
+		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, bool p_static );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -126,6 +127,8 @@ namespace GlRender
 		eGL_TEXDIM m_glDimension;
 		//! The OpenGL APIs.
 		OpenGl & m_gl;
+		//! Tells if this texture is a static one.
+		bool m_static;
 	};
 }
 

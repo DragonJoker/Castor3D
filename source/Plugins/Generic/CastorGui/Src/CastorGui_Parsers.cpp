@@ -9,6 +9,8 @@
 #include "CtrlStatic.hpp"
 
 #include <SceneFileParser.hpp>
+#include <ListenerManager.hpp>
+#include <MaterialManager.hpp>
 
 using namespace CastorGui;
 using namespace Castor3D;
@@ -87,7 +89,7 @@ namespace CastorGui
 
 	ControlsManager & GetControlsManager( FileParserContextSPtr p_context )
 	{
-		return static_cast< ControlsManager & >( std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetOwner()->GetFrameListener( PLUGIN_NAME ) );
+		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetOwner()->GetListenerManager().Find( PLUGIN_NAME ) );
 	}
 
 	ParserContext & GetParserContext( FileParserContextSPtr p_context )
@@ -203,7 +205,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonTextMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetTextMaterial( l_manager.find( l_name ) );
+		l_button->SetTextMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -222,7 +224,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedBackgroundMateria
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetHighlightedBackgroundMaterial( l_manager.find( l_name ) );
+		l_button->SetHighlightedBackgroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -241,7 +243,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedForegroundMateria
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetHighlightedForegroundMaterial( l_manager.find( l_name ) );
+		l_button->SetHighlightedForegroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -260,7 +262,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedTextMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetHighlightedTextMaterial( l_manager.find( l_name ) );
+		l_button->SetHighlightedTextMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -279,7 +281,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedBackgroundMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetPushedBackgroundMaterial( l_manager.find( l_name ) );
+		l_button->SetPushedBackgroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -298,7 +300,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedForegroundMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetPushedForegroundMaterial( l_manager.find( l_name ) );
+		l_button->SetPushedForegroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -317,7 +319,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedTextMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_button->SetPushedTextMaterial( l_manager.find( l_name ) );
+		l_button->SetPushedTextMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -388,7 +390,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemBackgroundMate
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_combo->SetSelectedItemBackgroundMaterial( l_manager.find( l_name ) );
+		l_combo->SetSelectedItemBackgroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -407,7 +409,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemForegroundMate
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_combo->SetSelectedItemForegroundMaterial( l_manager.find( l_name ) );
+		l_combo->SetSelectedItemForegroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -426,7 +428,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxHighlightedItemBackgroundM
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_combo->SetHighlightedItemBackgroundMaterial( l_manager.find( l_name ) );
+		l_combo->SetHighlightedItemBackgroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -567,7 +569,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemBackgroundMater
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_listbox->SetSelectedItemBackgroundMaterial( l_manager.find( l_name ) );
+		l_listbox->SetSelectedItemBackgroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -586,7 +588,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxHighlightedItemBackgroundMa
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_listbox->SetHighlightedItemBackgroundMaterial( l_manager.find( l_name ) );
+		l_listbox->SetHighlightedItemBackgroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -605,7 +607,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemForegroundMater
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_listbox->SetSelectedItemForegroundMaterial( l_manager.find( l_name ) );
+		l_listbox->SetSelectedItemForegroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -753,7 +755,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBackgroundMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_control->SetBackgroundMaterial( l_manager.find( l_name ) );
+		l_control->SetBackgroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{
@@ -772,7 +774,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBorderMaterial )
 		String l_name;
 		p_params[0]->Get( l_name );
 		MaterialManager & l_manager = l_context.m_engine->GetMaterialManager();
-		l_control->SetForegroundMaterial( l_manager.find( l_name ) );
+		l_control->SetForegroundMaterial( l_manager.Find( l_name ) );
 	}
 	else
 	{

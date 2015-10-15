@@ -153,11 +153,21 @@ namespace GlRender
 
 	bool GlSampler::Bind( eTEXTURE_TYPE p_eDimension, uint32_t p_index )
 	{
-		return m_pfnBind( m_gl.Get( p_eDimension ), p_index );
+		bool l_return = false;
+
+		if ( m_pfnBind )
+		{
+			l_return = m_pfnBind( m_gl.Get( p_eDimension ), p_index );
+		}
+
+		return l_return;
 	}
 
 	void GlSampler::Unbind()
 	{
-		m_pfnUnbind();
+		if ( m_pfnUnbind )
+		{
+			m_pfnUnbind();
+		}
 	}
 }

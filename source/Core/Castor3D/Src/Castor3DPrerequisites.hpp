@@ -35,6 +35,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <CastorUtilsPrerequisites.hpp>
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
+#include <Aligned.hpp>
 
 namespace Castor3D
 {
@@ -647,7 +648,6 @@ namespace Castor3D
 	class Material;
 	//! The material pass class (for multipass materials)
 	class Pass;
-	class MaterialManager;
 	class Sampler;
 
 	DECLARE_SMART_PTR( TextureBase );
@@ -656,7 +656,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TextureUnit );
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );
-	DECLARE_SMART_PTR( MaterialManager );
 	DECLARE_SMART_PTR( Sampler );
 
 	//! Material pointer array
@@ -675,10 +674,6 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, MaterialSPtr, MaterialPtrStr );
 	//! Material pointer map
 	DECLARE_MAP( uint32_t, MaterialSPtr, MaterialPtrUInt );
-	//! Sampler collection
-	DECLARE_COLLECTION( Sampler, Castor::String, Sampler );
-
-	DECLARE_SMART_PTR( SamplerCollection );
 
 	//@}
 	/**@name Overlay */
@@ -776,13 +771,11 @@ namespace Castor3D
 	class PanelOverlay;
 	class BorderPanelOverlay;
 	class TextOverlay;
-	class OverlayManager;
 	class OverlayFactory;
 	class OverlayRenderer;
 	class FontTexture;
 
 	DECLARE_SMART_PTR( OverlayFactory );
-	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( OverlayRenderer );
 	DECLARE_SMART_PTR( FontTexture );
 
@@ -1122,14 +1115,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( BlendState );
 	DECLARE_SMART_PTR( IPipelineImpl );
 
-	DECLARE_COLLECTION( DepthStencilState, Castor::String, DepthStencilState );
-	DECLARE_COLLECTION( RasteriserState, Castor::String, RasteriserState );
-	DECLARE_COLLECTION( BlendState, Castor::String, BlendState );
-
-	DECLARE_SMART_PTR( DepthStencilStateCollection );
-	DECLARE_SMART_PTR( RasteriserStateCollection );
-	DECLARE_SMART_PTR( BlendStateCollection );
-
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 
@@ -1409,7 +1394,6 @@ namespace Castor3D
 #	define eFRAME_VARIABLE_TYPE_MAT4X4R	eFRAME_VARIABLE_TYPE_MAT4X4F
 #endif
 
-	class ShaderManager;
 	class ShaderProgramBase;
 	class ShaderObjectBase;
 	class FrameVariable;
@@ -1582,7 +1566,6 @@ namespace Castor3D
 
 	DECLARE_SMART_PTR( FrameVariableLink );
 	DECLARE_SMART_PTR( ProgramLinks );
-	DECLARE_SMART_PTR( ShaderManager );
 	DECLARE_SMART_PTR( FrameVariableBuffer );
 	DECLARE_SMART_PTR( FrameVariable );
 	DECLARE_SMART_PTR( ShaderObjectBase );
@@ -1848,7 +1831,6 @@ namespace Castor3D
 	CASTOR_TYPE( uint8_t )
 	{
 		eEVENT_TYPE_PRE_RENDER,		//!<\~english This kind of event happens before any render, device context is active (so be fast !!)	\~french Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
-		eEVENT_TYPE_QUEUE_RENDER,	//!<\~english This kind of event happens after the render, before buffers' swap, device context is active (so be fast !!)	\~french Ce type d'évènement est traité après le rendu, avant l'échange des buffers, le contexte de rendu est actif (donc soyez rapide !!)
 		eEVENT_TYPE_POST_RENDER,	//!<\~english This kind of event happens after the buffer' swap	\~french Ce type d'évènement est traité après l'échange des tampons
 		eEVENT_TYPE_COUNT,
 	}	eEVENT_TYPE;
@@ -1938,6 +1920,9 @@ namespace Castor3D
 	class PostEffect;
 	class Parameters;
 	class BillboardList;
+	class RenderLoop;
+	class RenderLoopAsync;
+	class RenderLoopSync;
 
 	DECLARE_SMART_PTR( RenderWindow );
 	DECLARE_SMART_PTR( RenderBuffer );
@@ -1960,6 +1945,39 @@ namespace Castor3D
 	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );
 	DECLARE_SMART_PTR( BillboardList );
+	DECLARE_SMART_PTR( RenderLoop );
+
+	class OverlayManager;
+	class ShaderManager;
+	class MaterialManager;
+	class WindowManager;
+	class MeshManager;
+	class PluginManager;
+	class SceneManager;
+	class SamplerManager;
+	class DepthStencilStateManager;
+	class RasteriserStateManager;
+	class BlendStateManager;
+	class AnimationManager;
+	class TargetManager;
+	class ListenerManager;
+
+	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
+
+	DECLARE_SMART_PTR( OverlayManager );
+	DECLARE_SMART_PTR( ShaderManager );
+	DECLARE_SMART_PTR( MaterialManager );
+	DECLARE_SMART_PTR( WindowManager );
+	DECLARE_SMART_PTR( MeshManager );
+	DECLARE_SMART_PTR( PluginManager );
+	DECLARE_SMART_PTR( SceneManager );
+	DECLARE_SMART_PTR( SamplerManager );
+	DECLARE_SMART_PTR( DepthStencilStateManager );
+	DECLARE_SMART_PTR( RasteriserStateManager );
+	DECLARE_SMART_PTR( BlendStateManager );
+	DECLARE_SMART_PTR( AnimationManager );
+	DECLARE_SMART_PTR( TargetManager );
+	DECLARE_SMART_PTR( ListenerManager );
 
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );
@@ -1982,12 +2000,6 @@ namespace Castor3D
 	DECLARE_VECTOR( PostEffectSPtr, PostEffectPtr );
 	DECLARE_VECTOR( BillboardListSPtr, BillboardList );
 
-	DECLARE_COLLECTION( Scene, Castor::String, Scene );
-	DECLARE_COLLECTION( Animation, Castor::String, Animation );
-	DECLARE_COLLECTION( Mesh, Castor::String, Mesh );
-	DECLARE_COLLECTION( Material, Castor::String, Material );
-	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
-
 	DECLARE_ARRAY( RendererPluginSPtr, eRENDERER_TYPE_COUNT, RendererPtr );
 	DECLARE_ARRAY( PluginStrMap, ePLUGIN_TYPE_COUNT, PluginStrMap );
 	DECLARE_MAP( Castor::Path, Castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
@@ -1996,6 +2008,53 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, BillboardListSPtr, BillboardListStr );
 
 	typedef std::map< Castor::String, RenderWindowSPtr > WindowPtrStrMap;
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		13/10/2015
+	\~english
+	\brief		Helper class, telling if the template parameter has a Cleanup(void) method.
+	\~french
+	\brief		Classe d'aide, dit si le paramètre template possède une méthode Cleanup(void).
+	*/
+	template< typename T > struct is_cleanable : std::false_type {};
+	template<> struct is_cleanable< Material > : std::true_type {};
+	template<> struct is_cleanable< Mesh > : std::true_type {};
+	template<> struct is_cleanable< Overlay > : std::true_type {};
+	template<> struct is_cleanable< RenderWindow > : std::true_type {};
+	template<> struct is_cleanable< Scene > : std::true_type {};
+	template<> struct is_cleanable< Sampler > : std::true_type {};
+	template<> struct is_cleanable< BlendState > : std::true_type {};
+	template<> struct is_cleanable< RasteriserState > : std::true_type {};
+	template<> struct is_cleanable< DepthStencilState > : std::true_type {};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		13/10/2015
+	\~english
+	\brief		Helper class, telling if the template parameter has an Initialise(void) method.
+	\~french
+	\brief		Classe d'aide, dit si le paramètre template possède une méthode Initialise(void).
+	*/
+	template< typename T > struct is_initialisable : std::false_type {};
+	template<> struct is_initialisable< Material > : std::true_type {};
+	template<> struct is_initialisable< Overlay > : std::true_type {};
+	template<> struct is_initialisable< Scene > : std::true_type {};
+	template<> struct is_initialisable< Sampler > : std::true_type {};
+	template<> struct is_initialisable< BlendState > : std::true_type {};
+	template<> struct is_initialisable< RasteriserState > : std::true_type {};
+	template<> struct is_initialisable< DepthStencilState > : std::true_type {};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		13/10/2015
+	\~english
+	\brief		Helper class, telling if the template parameter Initialise() and Cleanup() methods must be called instantly.
+	\~french
+	\brief		Classe d'aide, dit si les méthodes Initialise() et Cleanup() du paramètre template doivent s'exécuter immédiatement.
+	*/
+	template< typename T > struct is_instant : std::false_type {};
+	template<> struct is_instant< Scene > : std::true_type {};
 
 	//@}
 }

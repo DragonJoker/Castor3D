@@ -190,7 +190,7 @@ namespace GuiCommon
 	{
 		p_splashScreen.Step( _( "Loading language" ), 1 );
 		long l_lLanguage = wxLANGUAGE_DEFAULT;
-		Path l_pathCurrent = File::DirectoryGetCurrent().GetPath();
+		Path l_pathCurrent = File::GetWorkingDirectory().GetPath();
 
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( l_lLanguage ) )

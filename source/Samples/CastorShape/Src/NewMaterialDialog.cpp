@@ -379,7 +379,7 @@ namespace CastorShape
 
 	void NewMaterialDialog::OnOk( wxCommandEvent & WXUNUSED( p_event ) )
 	{
-		m_engine->GetMaterialManager().insert( m_material->GetName(), m_material );
+		m_engine->GetMaterialManager().Insert( m_material->GetName(), m_material );
 		m_engine->PostEvent( MakeInitialiseEvent( *m_material ) );
 		EndModal( wxID_OK );
 	}

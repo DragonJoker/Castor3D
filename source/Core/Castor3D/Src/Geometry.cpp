@@ -1,15 +1,17 @@
 ﻿#include "Geometry.hpp"
-#include "Mesh.hpp"
-#include "Submesh.hpp"
-#include "Scene.hpp"
-#include "SceneNode.hpp"
+
 #include "Engine.hpp"
 #include "Material.hpp"
 #include "MaterialManager.hpp"
+#include "Mesh.hpp"
+#include "MeshManager.hpp"
 #include "Pass.hpp"
+#include "RenderSystem.hpp"
+#include "Scene.hpp"
+#include "SceneNode.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
-#include "RenderSystem.hpp"
+#include "Submesh.hpp"
 
 #include <Logger.hpp>
 
@@ -126,7 +128,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetMesh( p_obj.GetScene()->GetOwner()->GetMeshManager().find( l_name ) );
+						p_obj.SetMesh( p_obj.GetScene()->GetOwner()->GetMeshManager().Find( l_name ) );
 					}
 
 					break;
@@ -140,7 +142,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetMaterial( p_obj.GetMesh()->GetSubmesh( l_id ), l_mtlManager.find( l_name ) );
+						p_obj.SetMaterial( p_obj.GetMesh()->GetSubmesh( l_id ), l_mtlManager.Find( l_name ) );
 					}
 
 					break;

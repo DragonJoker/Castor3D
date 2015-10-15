@@ -460,6 +460,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the Context
+		 *\param[in]	p_context	The new Context
+		 *\~french
+		 *\brief		Définit le Context
+		 *\param[in]	p_context	Le nouveau Context
+		 */
+		inline void SetContext( ContextSPtr p_context )
+		{
+			m_pContext = p_context;
+		}
+		/**
+		 *\~english
 		 *\brief		Tells the context is using vsync
 		 *\~french
 		 *\brief		Dit si le contexte utilise la vsync

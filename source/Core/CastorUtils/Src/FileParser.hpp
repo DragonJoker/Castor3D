@@ -353,13 +353,15 @@ namespace Castor
 		CU_API virtual bool DoDelegateParser( String const & p_strLine ) = 0;
 		/**
 		 *\~english
-		 *\brief		Function called when no parser is found for the line
-		 *\param[in]	p_strLine	The current line
+		 *\brief		Function called when no parser is found for the line.
+		 *\param[in]	p_strLine	The current line.
+		 *\return		false if the line must be ignored.
 		 *\~french
-		 *\brief		Fonction appelée si aucun analyseur n'est trouvé pour traiter la ligne
-		 *\param[in]	p_strLine	La ligne en cours d'analyse
+		 *\brief		Fonction appelée si aucun analyseur n'est trouvé pour traiter la ligne.
+		 *\param[in]	p_strLine	La ligne en cours d'analyse.
+		 *\return		false si la ligne doit être ignorée.
 		 */
-		CU_API virtual void DoDiscardParser( String const & p_strLine ) = 0;
+		CU_API virtual bool DoDiscardParser( String const & p_strLine ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when file parsing is completed with no error

@@ -1,19 +1,21 @@
 ﻿#include "RenderTechnique.hpp"
-#include "FrameBuffer.hpp"
-#include "ColourRenderBuffer.hpp"
-#include "DepthStencilRenderBuffer.hpp"
-#include "RenderBufferAttachment.hpp"
-#include "TextureAttachment.hpp"
-#include "RenderTarget.hpp"
-#include "BlendState.hpp"
-#include "DepthStencilState.hpp"
-#include "RasteriserState.hpp"
-#include "Engine.hpp"
-#include "RenderSystem.hpp"
+
+#include "BlendStateManager.hpp"
 #include "Camera.hpp"
 #include "DynamicTexture.hpp"
+#include "Engine.hpp"
+#include "ColourRenderBuffer.hpp"
+#include "DepthStencilRenderBuffer.hpp"
+#include "DepthStencilStateManager.hpp"
+#include "FrameBuffer.hpp"
+#include "OverlayManager.hpp"
+#include "RasteriserState.hpp"
+#include "RenderBufferAttachment.hpp"
+#include "RenderSystem.hpp"
+#include "RenderTarget.hpp"
+#include "SamplerManager.hpp"
 #include "Scene.hpp"
-#include "Sampler.hpp"
+#include "TextureAttachment.hpp"
 
 using namespace Castor;
 
@@ -25,15 +27,15 @@ namespace Castor3D
 		, m_renderSystem( p_renderSystem )
 		, m_name( p_name )
 	{
-		m_sampler = GetOwner()->CreateSampler( cuT( "RENDER_TECHNIQUE_SAMPLER" ) );
+		m_sampler = GetOwner()->GetSamplerManager().Create( cuT( "RENDER_TECHNIQUE_SAMPLER" ) );
 		m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
 		m_pColorBuffer = m_renderSystem->CreateDynamicTexture();
-		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer(	ePIXEL_FORMAT_DEPTH24S8 );
+		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
 		m_pColorBuffer->SetRenderTarget( p_renderTarget.shared_from_this() );
 		m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
 		m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
-		m_wp2DBlendState = GetOwner()->CreateBlendState( cuT( "RT_OVERLAY_BLEND" ) );
-		m_wp2DDepthStencilState = GetOwner()->CreateDepthStencilState( cuT( "RT_OVERLAY_DS" ) );
+		m_wp2DBlendState = GetOwner()->GetBlendStateManager().Create( cuT( "RT_OVERLAY_BLEND" ) );
+		m_wp2DDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RT_OVERLAY_DS" ) );
 
 		m_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
 		m_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );

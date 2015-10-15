@@ -26,7 +26,7 @@ int main( int argc, char const * argv[] )
 	Castor::Logger::Initialise( Castor::ELogType_DEBUG );
 #endif
 
-	Castor::Logger::SetFileName( Castor::File::DirectoryGetCurrent() / cuT( "Tests.log" ) );
+	Castor::Logger::SetFileName( Castor::File::GetWorkingDirectory() / cuT( "Tests.log" ) );
 #if defined( CASTOR_USE_OCL )
 	Testing::Register( std::make_shared< Testing::OpenCLBench >() );
 #endif

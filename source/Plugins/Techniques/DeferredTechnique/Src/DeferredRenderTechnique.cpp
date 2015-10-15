@@ -3,7 +3,7 @@
 #include <FrameBuffer.hpp>
 #include <ColourRenderBuffer.hpp>
 #include <DepthStencilRenderBuffer.hpp>
-#include <DepthStencilState.hpp>
+#include <DepthStencilStateManager.hpp>
 #include <RenderBufferAttachment.hpp>
 #include <TextureAttachment.hpp>
 #include <RenderTarget.hpp>
@@ -346,7 +346,7 @@ namespace Deferred
 		m_lightPassDepthAttach = m_pRenderTarget->CreateAttachment( m_lightPassBufDepth );
 		m_lightPassShaderProgram = GetOwner()->GetShaderManager().GetNewProgram();
 
-		m_geometryPassDsState = GetOwner()->CreateDepthStencilState( cuT( "GeometricPassState" ) );
+		m_geometryPassDsState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "GeometricPassState" ) );
 		m_geometryPassDsState->SetStencilTest( true );
 		m_geometryPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_geometryPassDsState->SetStencilWriteMask( 0xFFFFFFFF );
@@ -363,7 +363,7 @@ namespace Deferred
 		m_geometryPassDsState->SetDepthTest( true );
 		m_geometryPassDsState->SetDepthMask( eWRITING_MASK_ALL );
 
-		m_lightPassDsState = GetOwner()->CreateDepthStencilState( cuT( "LightPassState" ) );
+		m_lightPassDsState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "LightPassState" ) );
 		m_lightPassDsState->SetStencilTest( true );
 		m_lightPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_lightPassDsState->SetStencilWriteMask( 0 );

@@ -24,6 +24,10 @@
 #include <Importer.hpp>
 #include <DividerPlugin.hpp>
 #include <MaterialManager.hpp>
+#include <MeshManager.hpp>
+#include <PluginManager.hpp>
+#include <RenderLoop.hpp>
+#include <SceneManager.hpp>
 
 #include <xpms/castor_dark.xpm>
 
@@ -234,23 +238,25 @@ namespace CastorShape
 			}
 			else
 			{
-				ImporterPluginSPtr l_pPlugin;
 				ImporterSPtr l_pImporter;
 				ImporterPlugin::ExtensionArray l_arrayExtensions;
 
-				for ( auto && l_it = wxGetApp().GetCastor()->PluginsBegin( ePLUGIN_TYPE_IMPORTER ); l_it != wxGetApp().GetCastor()->PluginsEnd( ePLUGIN_TYPE_IMPORTER ) && !l_pImporter; ++l_it )
+				for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 				{
-					l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it->second );
-
-					if ( l_pPlugin )
+					if ( !l_pImporter )
 					{
-						l_arrayExtensions = l_pPlugin->GetExtensions();
+						ImporterPluginSPtr l_plugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
 
-						for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
+						if ( l_plugin )
 						{
-							if ( string::lower_case( m_strFilePath.GetExtension() ) == string::lower_case( l_itExt->first ) )
+							l_arrayExtensions = l_plugin->GetExtensions();
+
+							for ( ImporterPlugin::ExtensionArrayIt l_itExt = l_arrayExtensions.begin(); l_itExt != l_arrayExtensions.end() && !l_pImporter; ++l_itExt )
 							{
-								l_pImporter = l_pPlugin->GetImporter();
+								if ( string::lower_case( m_strFilePath.GetExtension() ) == string::lower_case( l_itExt->first ) )
+								{
+									l_pImporter = l_plugin->GetImporter();
+								}
 							}
 						}
 					}
@@ -384,7 +390,7 @@ namespace CastorShape
 
 			if ( l_return )
 			{
-				SceneSPtr l_scene = wxGetApp().GetCastor()->CreateScene( cuT( "MainScene" ) );
+				SceneSPtr l_scene = wxGetApp().GetCastor()->GetSceneManager().Create( cuT( "MainScene" ), *wxGetApp().GetCastor(), cuT( "MainScene" ) );
 				m_mainScene = l_scene;
 				l_scene->SetBackgroundColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
 				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
@@ -563,7 +569,7 @@ namespace CastorShape
 
 				for ( auto && l_submesh : *l_mesh )
 				{
-					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialManager().find( l_materialName ) );
+					l_geometry->SetMaterial( l_submesh, wxGetApp().GetCastor()->GetMaterialManager().Find( l_materialName ) );
 				}
 
 				l_sceneNode->SetVisible( true );
@@ -647,13 +653,13 @@ namespace CastorShape
 	void MainFrame::OnPaint( wxPaintEvent & p_event )
 	{
 		wxPaintDC l_dc( this );
-		wxGetApp().GetCastor()->RenderOneFrame();
+		wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
 		p_event.Skip();
 	}
 
 	void MainFrame::OnTimer( wxTimerEvent & p_event )
 	{
-		wxGetApp().GetCastor()->RenderOneFrame();
+		wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
 		p_event.Skip();
 	}
 
@@ -903,7 +909,7 @@ namespace CastorShape
 				return;
 			}
 
-			if ( wxGetApp().GetCastor()->SaveMeshes( l_file ) )
+			if ( wxGetApp().GetCastor()->GetMeshManager().Save( l_file ) )
 			{
 				Logger::LogInfo( cuT( "Meshes written" ) );
 			}
@@ -912,15 +918,6 @@ namespace CastorShape
 				Logger::LogInfo( cuT( "Can't write meshes" ) );
 				return;
 			}
-
-			//if (Scene::BinaryLoader()( *l_scnManager.find( cuT( "MainScene")), l_file ) )
-			//{
-			//	Logger::LogInfo( cuT( "Save Successfull"));
-			//}
-			//else
-			//{
-			//	Logger::LogInfo( cuT( "Save Failed"));
-			//}
 		}
 
 		p_event.Skip();
@@ -938,9 +935,9 @@ namespace CastorShape
 		l_wildcard << ZIP_WILDCARD;
 		l_wildcard << wxT( "|" );
 
-		for ( auto && l_it = wxGetApp().GetCastor()->PluginsBegin( ePLUGIN_TYPE_IMPORTER ); l_it != wxGetApp().GetCastor()->PluginsEnd( ePLUGIN_TYPE_IMPORTER ); ++l_it )
+		for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 		{
-			for ( auto && l_itExt : std::static_pointer_cast< ImporterPlugin >( l_it->second )->GetExtensions() )
+			for ( auto l_itExt : std::static_pointer_cast< ImporterPlugin >( l_it.second )->GetExtensions() )
 			{
 				String l_strExt = string::lower_case( l_itExt.first );
 				l_wildcard << wxT( "|" ) << l_itExt.second << wxT( " (*." ) << l_strExt << wxT( ")|*." ) << l_strExt;
@@ -1302,27 +1299,30 @@ namespace CastorShape
 	{
 		if ( m_selectedGeometry )
 		{
-			Subdivider 	*	l_pDivider = NULL;
-			DividerPluginSPtr	l_pPlugin;
+			Subdivider * l_divider = NULL;
+			DividerPluginSPtr l_plugin;
 
-			for ( PluginStrMap::iterator l_it = wxGetApp().GetCastor()->PluginsBegin( ePLUGIN_TYPE_DIVIDER ); l_it != wxGetApp().GetCastor()->PluginsEnd( ePLUGIN_TYPE_DIVIDER ) && !l_pDivider; ++l_it )
+			for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
 			{
-				l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it->second );
-
-				if ( string::lower_case( l_pPlugin->GetDividerType() ) == cuT( "pn_tri" ) )
+				if ( !l_divider )
 				{
-					l_pDivider = l_pPlugin->CreateDivider();
+					l_plugin = std::static_pointer_cast< DividerPlugin >( l_it.second );
+
+					if ( string::lower_case( l_plugin->GetDividerType() ) == cuT( "pn_tri" ) )
+					{
+						l_divider = l_plugin->CreateDivider();
+					}
 				}
 			}
 
-			if ( l_pDivider )
+			if ( l_divider )
 			{
 				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
 				{
-					l_pDivider->Subdivide( l_submesh, 1, true );
+					l_divider->Subdivide( l_submesh, 1, true );
 				}
 
-				l_pPlugin->DestroyDivider( l_pDivider );
+				l_plugin->DestroyDivider( l_divider );
 			}
 		}
 
@@ -1333,27 +1333,30 @@ namespace CastorShape
 	{
 		if ( m_selectedGeometry )
 		{
-			Subdivider 	*	l_pDivider = NULL;
-			DividerPluginSPtr	l_pPlugin;
+			Subdivider * l_divider = NULL;
+			DividerPluginSPtr l_plugin;
 
-			for ( PluginStrMap::iterator l_it = wxGetApp().GetCastor()->PluginsBegin( ePLUGIN_TYPE_DIVIDER ); l_it != wxGetApp().GetCastor()->PluginsEnd( ePLUGIN_TYPE_DIVIDER ) && !l_pDivider; ++l_it )
+			for ( auto l_it : wxGetApp().GetCastor()->GetPluginManager().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
 			{
-				l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it->second );
-
-				if ( string::lower_case( l_pPlugin->GetDividerType() ) == cuT( "pn_tri" ) )
+				if ( !l_divider )
 				{
-					l_pDivider = l_pPlugin->CreateDivider();
+					l_plugin = std::static_pointer_cast< DividerPlugin >( l_it.second );
+
+					if ( string::lower_case( l_plugin->GetDividerType() ) == cuT( "pn_tri" ) )
+					{
+						l_divider = l_plugin->CreateDivider();
+					}
 				}
 			}
 
-			if ( l_pDivider )
+			if ( l_divider )
 			{
 				for ( auto l_submesh : *m_selectedGeometry->GetMesh() )
 				{
-					l_pDivider->Subdivide( l_submesh, 1, true );
+					l_divider->Subdivide( l_submesh, 1, true );
 				}
 
-				l_pPlugin->DestroyDivider( l_pDivider );
+				l_plugin->DestroyDivider( l_divider );
 			}
 		}
 

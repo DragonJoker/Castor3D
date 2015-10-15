@@ -1,15 +1,14 @@
-#include <Material.hpp>
 #include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <RenderSystem.hpp>
-#include <Mesh.hpp>
+#include <MeshManager.hpp>
 #include <Submesh.hpp>
 #include <Face.hpp>
 #include <Geometry.hpp>
 #include <Version.hpp>
 #include <Engine.hpp>
-#include <Scene.hpp>
+#include <SceneManager.hpp>
 #include <SceneNode.hpp>
 #include <Plugin.hpp>
 #include <StaticTexture.hpp>
@@ -45,7 +44,7 @@ SceneSPtr Md2Importer::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = GetOwner()->CreateScene( cuT( "Scene_MD2" ) );
+		l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_MD2" ), *GetOwner(), cuT( "Scene_MD2" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -70,7 +69,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 	l_meshName = m_fileName.GetFileName();
 	l_materialName = m_fileName.GetFileName();
-	l_pMesh = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+	l_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 
 	if ( m_header.m_version != 8 )
@@ -79,13 +78,12 @@ MeshSPtr Md2Importer::DoImportMesh()
 	}
 	else
 	{
-		l_material = GetOwner()->GetMaterialManager().find( l_materialName );
+		l_material = GetOwner()->GetMaterialManager().Find( l_materialName );
 
 		if ( !l_material )
 		{
-			l_material = std::make_shared< Material >( *GetOwner(), l_materialName );
+			l_material = GetOwner()->GetMaterialManager().Create( l_materialName, *GetOwner(), l_materialName );
 			l_material->CreatePass();
-			GetOwner()->GetMaterialManager().insert( l_materialName, l_material );
 		}
 
 		l_pass = l_material->GetPass( 0 );

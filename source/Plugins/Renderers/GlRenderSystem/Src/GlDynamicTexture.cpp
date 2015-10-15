@@ -12,7 +12,7 @@ namespace GlRender
 {
 	GlDynamicTexture::GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
 		: DynamicTexture( p_renderSystem )
-		, m_texture( p_gl, p_renderSystem )
+		, m_texture( p_gl, p_renderSystem, false )
 	{
 	}
 

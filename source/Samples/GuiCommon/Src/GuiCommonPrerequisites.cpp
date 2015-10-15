@@ -13,8 +13,13 @@
 
 #include <FunctorEvent.hpp>
 #include <InitialiseEvent.hpp>
+#include <MaterialManager.hpp>
+#include <MeshManager.hpp>
 #include <PlatformWindowHandle.hpp>
-#include <Sampler.hpp>
+#include <PluginManager.hpp>
+#include <SamplerManager.hpp>
+#include <SceneManager.hpp>
+#include <WindowManager.hpp>
 
 #include <wx/window.h>
 
@@ -107,13 +112,19 @@ namespace GuiCommon
 		template<>
 		std::shared_ptr< Sampler > CreateObject< Sampler >( Engine & p_engine )
 		{
-			return p_engine.CreateSampler( Castor::String() );
+			return p_engine.GetSamplerManager().Create( Castor::String() );
+		}
+
+		template< typename TObj, typename TMgr >
+		std::shared_ptr< TObj > CreateObject( Engine & p_engine, TMgr & p_manager )
+		{
+			return p_manager.Create( String(), p_engine );
 		}
 
 		template<>
-		std::shared_ptr< Scene > CreateObject< Scene >( Engine & p_engine )
+		std::shared_ptr< Sampler > CreateObject< Sampler, SamplerManager >( Engine & p_engine, SamplerManager & p_manager )
 		{
-			return std::make_shared< Scene >( p_engine, p_engine.GetLightFactory() );
+			return p_manager.Create( String() );
 		}
 
 		template< typename TObj >
@@ -159,6 +170,23 @@ namespace GuiCommon
 			return l_return;
 		}
 
+		template< typename TObj >
+		bool DoParse( TObj & p_obj, BinaryChunk & p_chunk, typename TObj::BinaryParser & p_parser )
+		{
+			return p_parser.Parse( p_obj, p_chunk );
+		}
+
+		template< typename TObj, typename TKey >
+		bool DoFillManager( Engine & p_engine, Manager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		{
+			return DoParse( *CreateObject< TObj >( p_engine, p_manager ), p_chunk, p_parser );
+		}
+
+		bool DoFillManager( Engine & p_engine, SamplerManager & p_manager, BinaryChunk & p_chunk, Sampler::BinaryParser p_parser )
+		{
+			return DoParse< Sampler >( *CreateObject< Sampler >( p_engine, p_manager ), p_chunk, p_parser );
+		}
+
 		bool DoLoadMeshFile( Engine & p_engine, Path const & p_fileName )
 		{
 			bool l_return = true;
@@ -173,7 +201,7 @@ namespace GuiCommon
 					BinaryFile l_fileMesh( l_meshFilePath, File::eOPEN_MODE_READ );
 					Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
 
-					if ( p_engine.LoadMeshes( l_fileMesh ) )
+					if ( p_engine.GetMeshManager().Load( l_fileMesh ) )
 					{
 						Logger::LogInfo( cuT( "Meshes read" ) );
 					}
@@ -225,23 +253,23 @@ namespace GuiCommon
 					switch ( l_chunk.GetChunkType() )
 					{
 					case eCHUNK_TYPE_SAMPLER:
-						l_continue = DoFillCollection( p_engine, p_engine.GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetSamplerManager(), l_chunk, Sampler::BinaryParser( l_path ) );
 						break;
 
 					case eCHUNK_TYPE_MATERIAL:
-						l_continue = DoFillCollection( p_engine, p_engine.GetMaterialManager(), l_chunk, Material::BinaryParser( l_path, &p_engine ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetMaterialManager(), l_chunk, Material::BinaryParser( l_path, &p_engine ) );
 						break;
 
 					case eCHUNK_TYPE_MESH:
-						l_continue = DoFillCollection( p_engine, p_engine.GetMeshManager(), l_chunk, Mesh::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetMeshManager(), l_chunk, Mesh::BinaryParser( l_path ) );
 						break;
 
 					case eCHUNK_TYPE_SCENE:
-						l_continue = DoFillCollection( p_engine, p_engine.GetSceneManager(), l_chunk, Scene::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetSceneManager(), l_chunk, Scene::BinaryParser( l_path ) );
 						break;
 
 					case eCHUNK_TYPE_WINDOW:
-						l_return = p_engine.CreateRenderWindow();
+						l_return = p_engine.GetWindowManager().Create();
 						l_continue = RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
 						break;
 					}
@@ -454,7 +482,7 @@ namespace GuiCommon
 					{
 						l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
 						{
-							if ( !p_engine.LoadPlugin( p_path ) )
+							if ( !p_engine.GetPluginManager().LoadPlugin( p_path ) )
 							{
 								std::unique_lock< std::mutex > l_lock( l_mutex );
 								l_arrayFailed.push_back( p_path );
@@ -482,7 +510,7 @@ namespace GuiCommon
 
 				l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
 				{
-					if ( !p_engine.LoadPlugin( p_path ) )
+					if ( !p_engine.GetPluginManager().LoadPlugin( p_path ) )
 					{
 						std::unique_lock< std::mutex > l_lock( l_mutex );
 						l_arrayFailed.push_back( p_path );

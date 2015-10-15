@@ -543,6 +543,7 @@ namespace Castor3D
 		if ( m_bMtxChanged )
 		{
 			m_bDerivedMtxChanged = true;
+			point::normalise( m_qOrientation );
 			matrix::set_transform( m_mtxMatrix, m_ptPosition, m_ptScale, m_qOrientation );
 			m_bMtxChanged = false;
 		}

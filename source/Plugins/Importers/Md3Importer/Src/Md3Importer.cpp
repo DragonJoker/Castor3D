@@ -1,14 +1,13 @@
-#include <Material.hpp>
 #include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <RenderSystem.hpp>
-#include <Mesh.hpp>
+#include <MeshManager.hpp>
 #include <Submesh.hpp>
 #include <Face.hpp>
 #include <Geometry.hpp>
 #include <Version.hpp>
-#include <Scene.hpp>
+#include <SceneManager.hpp>
 #include <SceneNode.hpp>
 #include <Plugin.hpp>
 #include <Engine.hpp>
@@ -56,7 +55,7 @@ SceneSPtr Md3Importer::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = GetOwner()->CreateScene( cuT( "Scene_MD3" ) );
+		l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetOwner(), cuT( "Scene_MD3" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -69,14 +68,14 @@ SceneSPtr Md3Importer::DoImportScene()
 MeshSPtr Md3Importer::DoImportMesh()
 {
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
-	SceneSPtr l_pScene = GetOwner()->CreateScene( cuT( "Scene_MD3" ) );
+	SceneSPtr l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetOwner(), cuT( "Scene_MD3" ) );
 	UIntArray l_faces;
 	RealArray l_sizes;
 	MaterialSPtr		l_material;
 	PassSPtr			l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName	= m_fileName.GetFileName();
-	MeshSPtr l_pMesh = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+	MeshSPtr l_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 
@@ -85,13 +84,12 @@ MeshSPtr Md3Importer::DoImportMesh()
 	}
 	else
 	{
-		l_material = GetOwner()->GetMaterialManager().find( l_materialName );
+		l_material = GetOwner()->GetMaterialManager().Find( l_materialName );
 
 		if ( !l_material )
 		{
-			l_material = std::make_shared< Material >( *GetOwner(), l_materialName );
+			l_material = GetOwner()->GetMaterialManager().Create( l_materialName, *GetOwner(), l_materialName );
 			l_material->CreatePass();
-			GetOwner()->GetMaterialManager().insert( l_materialName, l_material );
 		}
 
 		l_pass = l_material->GetPass( 0 );
@@ -106,7 +104,6 @@ MeshSPtr Md3Importer::DoImportMesh()
 		}
 
 		l_pMesh->ComputeNormals();
-		GetOwner()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 		DoCleanUp();
 	}
 
@@ -310,13 +307,12 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 			{
 				l_strImage = l_strLine.substr( l_strLine.find_last_of( ',' ) + 1 );
 				l_strImage = l_strImage.substr( l_strImage.find_last_of( '/' ) + 1 );
-				MaterialSPtr l_material = GetOwner()->GetMaterialManager().find( l_strSection );
+				MaterialSPtr l_material = GetOwner()->GetMaterialManager().Find( l_strSection );
 
 				if ( ! l_material )
 				{
-					l_material = std::make_shared< Material >( *GetOwner(), l_strSection );
+					l_material = GetOwner()->GetMaterialManager().Create( l_strSection, *GetOwner(), l_strSection );
 					l_material->CreatePass();
-					GetOwner()->GetMaterialManager().insert( l_strSection, l_material );
 				}
 
 				PassSPtr l_pass = l_material->GetPass( 0 );
@@ -392,13 +388,12 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 			l_fileIO.ReadLine( l_strLine, 255 );
 			StringStream l_strMatName( l_strName );
 			l_strMatName << "_" << l_uiIndex;
-			MaterialSPtr l_material = GetOwner()->GetMaterialManager().find( l_strMatName.str() );
+			MaterialSPtr l_material = GetOwner()->GetMaterialManager().Find( l_strMatName.str() );
 
 			if ( ! l_material )
 			{
-				l_material = std::make_shared< Material >( *GetOwner(), l_strMatName.str() );
+				l_material = GetOwner()->GetMaterialManager().Create( l_strMatName.str(), *GetOwner(), l_strMatName.str() );
 				l_material->CreatePass();
-				GetOwner()->GetMaterialManager().insert( l_strMatName.str(), l_material );
 			}
 
 			PassSPtr l_pass = l_material->GetPass( 0 );

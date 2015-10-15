@@ -2,7 +2,7 @@
 #include "AseFileParser.hpp"
 
 #include <Engine.hpp>
-#include <Mesh.hpp>
+#include <SceneManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -20,7 +20,7 @@ namespace Ase
 
 	SceneSPtr AseImporter::DoImportScene()
 	{
-		SceneSPtr l_pScene = GetOwner()->CreateScene( cuT( "Scene_ASE" ) );
+		SceneSPtr l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_ASE" ), *GetOwner(), cuT( "Scene_ASE" ) );
 		m_pFileParser = new AseFileParser( GetOwner() );
 		m_pFileParser->ParseFile( m_fileName, l_pScene );
 		MeshSPtr l_pMesh;

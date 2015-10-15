@@ -2,7 +2,7 @@
 #include "Material.hpp"
 #include "Pass.hpp"
 #include "SceneFileParser.hpp"
-#include "Sampler.hpp"
+#include "SamplerManager.hpp"
 #include "InitialiseEvent.hpp"
 #include "CleanupEvent.hpp"
 #include "Engine.hpp"
@@ -14,7 +14,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MaterialManager::MaterialManager( Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+		: Manager< Castor::String, Material >( p_engine )
 	{
 	}
 
@@ -25,68 +25,58 @@ namespace Castor3D
 
 	void MaterialManager::Initialise()
 	{
-		m_defaultMaterial = MaterialCollection::find( Material::DefaultMaterialName );
+		std::unique_lock< Collection > l_lock( m_elements );
 
-		if ( !m_defaultMaterial )
+		if ( !m_elements.has( Material::DefaultMaterialName ) )
 		{
-			m_defaultMaterial = std::make_shared< Material >( *GetOwner(), Material::DefaultMaterialName );
+			m_defaultMaterial = Create( Material::DefaultMaterialName, *GetOwner(), Material::DefaultMaterialName );
 			m_defaultMaterial->CreatePass();
 			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
-			MaterialCollection::insert( Material::DefaultMaterialName, m_defaultMaterial );
 		}
-
-		GetOwner()->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
-	}
-
-	void MaterialManager::Cleanup()
-	{
-		MaterialCollection::lock();
-
-		std::for_each( begin(), end(), [&]( std::pair< String, MaterialSPtr > p_pair )
+		else
 		{
-			GetOwner()->PostEvent( MakeCleanupEvent( *p_pair.second ) );
-		} );
-
-		MaterialCollection::unlock();
+			m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
+			GetOwner()->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
+		}
 	}
 
-	void MaterialManager::DeleteAll()
+	void MaterialManager::Clear()
 	{
+		std::unique_lock< Collection > l_lock( m_elements );
 		m_defaultMaterial.reset();
-		MaterialCollection::clear();
+		Manager< Castor::String, Material >::Clear();
 	}
 
 	void MaterialManager::GetNames( StringArray & l_names )
 	{
-		MaterialCollection::lock();
+		std::unique_lock< Collection > l_lock( m_elements );
 		l_names.clear();
-		MaterialCollectionConstIt l_it = begin();
+		auto l_it = m_elements.begin();
 
-		while ( l_it != end() )
+		while ( l_it != m_elements.end() )
 		{
 			l_names.push_back( l_it->first );
 			l_it++;
 		}
-
-		MaterialCollection::unlock();
 	}
 
 	bool MaterialManager::Write( TextFile & p_file )const
 	{
-		GetOwner()->GetSamplerManager().lock();
+		std::unique_lock< Collection > l_lock( m_elements );
+		GetOwner()->GetSamplerManager().Lock();
 
-		for ( SamplerCollection::TObjPtrMapIt l_it = GetOwner()->GetSamplerManager().begin(); l_it != GetOwner()->GetSamplerManager().end(); ++l_it )
+		for ( auto l_it : GetOwner()->GetSamplerManager() )
 		{
-			Sampler::TextLoader()( *l_it->second, p_file );
+			Sampler::TextLoader()( *l_it.second, p_file );
 		}
 
-		GetOwner()->GetSamplerManager().unlock();
-		MaterialCollection::lock();
+		GetOwner()->GetSamplerManager().Unlock();
+
 		bool l_return = true;
-		MaterialCollectionConstIt l_it = begin();
+		auto l_it = m_elements.begin();
 		bool l_first = true;
 
-		while ( l_return && l_it != end() )
+		while ( l_return && l_it != m_elements.end() )
 		{
 			if ( l_first )
 			{
@@ -101,12 +91,12 @@ namespace Castor3D
 			++l_it;
 		}
 
-		MaterialCollection::unlock();
 		return l_return;
 	}
 
 	bool MaterialManager::Read( TextFile & p_file )
 	{
+		std::unique_lock< Collection > l_lock( m_elements );
 		SceneFileParser l_parser( *GetOwner() );
 		l_parser.ParseFile( p_file );
 		return true;

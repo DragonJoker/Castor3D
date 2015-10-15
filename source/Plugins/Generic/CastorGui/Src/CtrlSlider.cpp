@@ -4,6 +4,7 @@
 #include "CtrlStatic.hpp"
 
 #include <BorderPanelOverlay.hpp>
+#include <MaterialManager.hpp>
 #include <OverlayManager.hpp>
 
 using namespace Castor;
@@ -113,12 +114,12 @@ namespace CastorGui
 	void SliderCtrl::DoCreate()
 	{
 		StaticCtrlSPtr l_line = m_line.lock();
-		l_line->SetBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "Gray" ) ) );
+		l_line->SetBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "Gray" ) ) );
 		l_line->SetForegroundMaterial( GetForegroundMaterial() );
 		GetControlsManager()->Create( l_line );
 
 		StaticCtrlSPtr l_tick = m_tick.lock();
-		l_tick->SetBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "White" ) ) );
+		l_tick->SetBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "White" ) ) );
 		l_tick->SetForegroundMaterial( GetForegroundMaterial() );
 		GetControlsManager()->Create( l_tick );
 		DoUpdateLineAndTick();

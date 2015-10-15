@@ -20,37 +20,37 @@ struct LexerStylesAssoc
 		{
 			int iStyles[eSTC_TYPE_COUNT] =
 			{
-				wxSTC_C_DEFAULT			//eSTC_TYPE_DEFAULT
-				, wxSTC_C_WORD			//eSTC_TYPE_WORD1
-				, wxSTC_C_WORD2			//eSTC_TYPE_WORD2
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_WORD3
-				, wxSTC_C_GLOBALCLASS		//eSTC_TYPE_WORD4
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_WORD5
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_WORD6
-				, wxSTC_C_COMMENT			//eSTC_TYPE_COMMENT
-				, wxSTC_C_COMMENTDOC		//eSTC_TYPE_COMMENT_DOC
-				, wxSTC_C_COMMENTLINE		//eSTC_TYPE_COMMENT_LINE
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_COMMENT_SPECIAL
-				, wxSTC_C_CHARACTER		//eSTC_TYPE_CHARACTER
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_CHARACTER_EOL
-				, wxSTC_C_STRING			//eSTC_TYPE_STRING
-				, wxSTC_C_STRINGEOL		//eSTC_TYPE_STRING_EOL
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_DELIMITER
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_PUNCTUATION
-				, wxSTC_C_OPERATOR		//eSTC_TYPE_OPERATOR
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_BRACE
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_COMMAND
-				, wxSTC_C_IDENTIFIER		//eSTC_TYPE_IDENTIFIER
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_LABEL
-				, wxSTC_C_NUMBER			//eSTC_TYPE_NUMBER
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_PARAMETER
-				, wxSTC_C_REGEX			//eSTC_TYPE_REGEX
-				, wxSTC_C_UUID			//eSTC_TYPE_UUID
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_VALUE
-				, wxSTC_C_PREPROCESSOR	//eSTC_TYPE_PREPROCESSOR
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_SCRIPT
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_ERROR
-				, wxSTC_C_DEFAULT			//eSTC_TYPE_UNDEFINED
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_DEFAULT
+				wxSTC_C_WORD,			//eSTC_TYPE_WORD1
+				wxSTC_C_WORD2,			//eSTC_TYPE_WORD2
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_WORD3
+				wxSTC_C_GLOBALCLASS,	//eSTC_TYPE_WORD4
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_WORD5
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_WORD6
+				wxSTC_C_COMMENT,		//eSTC_TYPE_COMMENT
+				wxSTC_C_COMMENTDOC,		//eSTC_TYPE_COMMENT_DOC
+				wxSTC_C_COMMENTLINE,	//eSTC_TYPE_COMMENT_LINE
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_COMMENT_SPECIAL
+				wxSTC_C_CHARACTER,		//eSTC_TYPE_CHARACTER
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_CHARACTER_EOL
+				wxSTC_C_STRING,			//eSTC_TYPE_STRING
+				wxSTC_C_STRINGEOL,		//eSTC_TYPE_STRING_EOL
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_DELIMITER
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_PUNCTUATION
+				wxSTC_C_OPERATOR,		//eSTC_TYPE_OPERATOR
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_BRACE
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_COMMAND
+				wxSTC_C_IDENTIFIER,		//eSTC_TYPE_IDENTIFIER
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_LABEL
+				wxSTC_C_NUMBER,			//eSTC_TYPE_NUMBER
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_PARAMETER
+				wxSTC_C_REGEX,			//eSTC_TYPE_REGEX
+				wxSTC_C_UUID,			//eSTC_TYPE_UUID
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_VALUE
+				wxSTC_C_PREPROCESSOR,	//eSTC_TYPE_PREPROCESSOR
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_SCRIPT
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_ERROR
+				wxSTC_C_DEFAULT,		//eSTC_TYPE_UNDEFINED
 			};
 			memcpy( m_iStyles, iStyles, sizeof( iStyles ) );
 		}
@@ -347,6 +347,20 @@ bool StcTextEditor::InitializePrefs( wxString const & p_name )
 		StyleSetBackground( wxSTC_STYLE_INDENTGUIDE, l_defaultBgColour );
 		StyleSetBackground( wxSTC_STYLE_CALLTIP, l_defaultBgColour );
 		StyleSetBackground( wxSTC_STYLE_LASTPREDEFINED, l_defaultBgColour );
+		MarkerSetBackground( wxSTC_MARKNUM_FOLDER, l_defaultBgColour );
+		MarkerSetForeground( wxSTC_MARKNUM_FOLDER, l_defaultFgColour );
+		MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPEN, l_defaultBgColour );
+		MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPEN, l_defaultFgColour );
+		MarkerSetBackground( wxSTC_MARKNUM_FOLDERSUB, l_defaultBgColour );
+		MarkerSetForeground( wxSTC_MARKNUM_FOLDERSUB, l_defaultFgColour );
+		MarkerSetBackground( wxSTC_MARKNUM_FOLDEREND, l_defaultBgColour );
+		MarkerSetForeground( wxSTC_MARKNUM_FOLDEREND, l_defaultFgColour );
+		MarkerSetBackground( wxSTC_MARKNUM_FOLDEROPENMID, l_defaultBgColour );
+		MarkerSetForeground( wxSTC_MARKNUM_FOLDEROPENMID, l_defaultFgColour );
+		MarkerSetBackground( wxSTC_MARKNUM_FOLDERMIDTAIL, l_defaultBgColour );
+		MarkerSetForeground( wxSTC_MARKNUM_FOLDERMIDTAIL, l_defaultFgColour );
+		MarkerSetBackground( wxSTC_MARKNUM_FOLDERTAIL, l_defaultBgColour );
+		MarkerSetForeground( wxSTC_MARKNUM_FOLDERTAIL, l_defaultFgColour );
 		wxArrayString l_keywords;
 
 		// initialize settings

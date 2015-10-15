@@ -100,7 +100,9 @@ namespace Castor
 				m_registered.erase( p_key );
 			}
 		}
+
 #if CASTOR_HAS_VARIADIC_TEMPLATES
+
 		/**
 		 *\~english
 		 *\brief		Creates an object from a key
@@ -130,6 +132,7 @@ namespace Castor
 
 			return l_return;
 		}
+
 #endif
 
 	protected:

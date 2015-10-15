@@ -4,6 +4,7 @@
 #include "GradientButton.hpp"
 
 #include <Engine.hpp>
+#include <PluginManager.hpp>
 #include <RendererPlugin.hpp>
 
 using namespace Castor3D;
@@ -42,11 +43,11 @@ namespace GuiCommon
 		GradientButton * l_cancel = new GradientButton( this, wxID_CANCEL, l_strCancel );
 		l_pTitle->SetFont( l_font );
 
-		for ( RendererPtrArrayIt l_it = m_engine->RenderersBegin(); l_it != m_engine->RenderersEnd(); ++l_it )
+		for ( auto l_renderer : m_engine->GetPluginManager().GetRenderersList() )
 		{
-			if ( * l_it )
+			if ( l_renderer )
 			{
-				m_pListRenderers->Insert( ( * l_it )->GetName(), l_iCount++, ( * l_it ).get() );
+				m_pListRenderers->Insert( l_renderer->GetName(), l_iCount++, l_renderer.get() );
 			}
 		}
 

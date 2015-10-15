@@ -35,12 +35,11 @@ namespace GuiCommon
 	*/
 	typedef enum eSECTION
 	{
-		eSECTION_ROOT,
-		eSECTION_LANGUAGE,
-		eSECTION_SECTION,
-		eSECTION_STYLE,
-		eSECTION_LIST,
-		eSECTION_COUNT,
+		eSECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
+		eSECTION_LANGUAGE = MAKE_SECTION_NAME( 'L', 'A', 'N', 'G' ),
+		eSECTION_SECTION = MAKE_SECTION_NAME( 'S', 'E', 'C', 'T' ),
+		eSECTION_STYLE = MAKE_SECTION_NAME( 'S', 'T', 'Y', 'L' ),
+		eSECTION_LIST = MAKE_SECTION_NAME( 'L', 'I', 'S', 'T' ),
 	}	eSECTION;
 	/*!
 	\author Sylvain DOREMUS
@@ -67,7 +66,7 @@ namespace GuiCommon
 	private:
 		virtual void DoInitialiseParser( Castor::TextFile & p_file );
 		virtual void DoCleanupParser();
-		virtual void DoDiscardParser( Castor::String const & p_strLine );
+		virtual bool DoDiscardParser( Castor::String const & p_strLine );
 		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
 		{
 			return false;

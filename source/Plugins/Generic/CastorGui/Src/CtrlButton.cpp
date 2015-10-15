@@ -5,6 +5,8 @@
 #include <BorderPanelOverlay.hpp>
 #include <InitialiseEvent.hpp>
 #include <Material.hpp>
+#include <MaterialManager.hpp>
+#include <Overlay.hpp>
 #include <OverlayManager.hpp>
 #include <Pass.hpp>
 #include <TextOverlay.hpp>
@@ -31,7 +33,7 @@ namespace CastorGui
 		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &ButtonCtrl::OnMouseButtonDown, this, std::placeholders::_1 ) );
 		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ButtonCtrl::OnMouseButtonUp, this, std::placeholders::_1 ) );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( eOVERLAY_TYPE_TEXT, cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		l_text->SetHAlign( eHALIGN_CENTER );
 		l_text->SetVAlign( eVALIGN_CENTER );
@@ -106,7 +108,7 @@ namespace CastorGui
 
 		if ( !GetBackgroundMaterial() )
 		{
-			SetBackgroundMaterial( GetEngine()->GetMaterialManager().find( cuT( "Black" ) ) );
+			SetBackgroundMaterial( GetEngine()->GetMaterialManager().Find( cuT( "Black" ) ) );
 		}
 
 		if ( m_textMaterial.expired() )

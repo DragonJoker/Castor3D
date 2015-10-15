@@ -71,7 +71,7 @@ namespace GuiCommon
 		DoApplyChange( [p_name, l_geometry, l_submesh]()
 		{
 			MaterialManager & l_manager = l_submesh->GetOwner()->GetMaterialManager();
-			MaterialSPtr l_material = l_manager.find( p_name );
+			MaterialSPtr l_material = l_manager.Find( p_name );
 
 			if ( l_material )
 			{

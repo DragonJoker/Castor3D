@@ -2,6 +2,7 @@
 
 #include "ControlsManager.hpp"
 
+#include <Overlay.hpp>
 #include <BorderPanelOverlay.hpp>
 #include <TextOverlay.hpp>
 
@@ -25,7 +26,7 @@ namespace CastorGui
 	{
 		SetBackgroundBorders( Rectangle() );
 
-		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().CreateOverlay( eOVERLAY_TYPE_TEXT, cuT( "T_CtrlStatic_" ) + string::to_string( GetId() ), GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
+		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( eOVERLAY_TYPE_TEXT, cuT( "T_CtrlStatic_" ) + string::to_string( GetId() ), GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
 		m_text = l_text;
 		l_text->SetCaption( m_caption );

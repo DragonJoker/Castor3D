@@ -3,18 +3,17 @@
 #include "LwoSubChunk.hpp"
 
 #include <Colour.hpp>
-#include <Material.hpp>
+#include <MeshManager.hpp>
 #include <MaterialManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
-#include <Mesh.hpp>
 #include <Submesh.hpp>
 #include <Vertex.hpp>
 #include <Buffer.hpp>
 #include <Geometry.hpp>
 #include <Face.hpp>
 #include <RenderSystem.hpp>
-#include <Scene.hpp>
+#include <SceneManager.hpp>
 #include <SceneNode.hpp>
 #include <Version.hpp>
 #include <Plugin.hpp>
@@ -51,7 +50,7 @@ namespace Lwo
 		if ( l_pMesh )
 		{
 			l_pMesh->GenerateBuffers();
-			l_pScene = GetOwner()->CreateScene( cuT( "Scene_LWO" ) );
+			l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetOwner(), cuT( "Scene_LWO" ) );
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 			l_pGeometry->AttachTo( l_pNode );
@@ -76,7 +75,7 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_pReturn = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+			l_pReturn = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4	) );
@@ -220,11 +219,10 @@ namespace Lwo
 
 		for ( std::vector< SubmeshPtrStrPair >::iterator l_it = m_arraySubmeshByMatName.begin() ; l_it != m_arraySubmeshByMatName.end() ; ++l_it )
 		{
-			l_pMaterial = GetOwner()->GetMaterialManager().find( string::string_cast< xchar >( l_it->first ) );
+			l_pMaterial = GetOwner()->GetMaterialManager().Find( string::string_cast< xchar >( l_it->first ) );
 
 			if ( l_pMaterial )
 			{
-				GetOwner()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 				l_it->second->SetDefaultMaterial( l_pMaterial );
 			}
 		}
@@ -1032,9 +1030,9 @@ namespace Lwo
 		if ( l_bContinue )
 		{
 			p_pChunk->m_uiRead += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
-			Logger::LogDebug( cuT( "	Name : "	) + string::string_cast< xchar >( m_strName 	) );
-			Logger::LogDebug( cuT( "	Source : " 	) + string::string_cast< xchar >( m_strSource 	) );
-			l_pMaterial = std::make_shared< Material >( *GetOwner(), string::string_cast< xchar >( m_strName ) );
+			Logger::LogDebug( cuT( "	Name : " ) + string::string_cast< xchar >( m_strName ) );
+			Logger::LogDebug( cuT( "	Source : " ) + string::string_cast< xchar >( m_strSource ) );
+			l_pMaterial = GetOwner()->GetMaterialManager().Create( string::string_cast< xchar >( m_strName ), *GetOwner(), string::string_cast< xchar >( m_strName ) );
 			l_pPass = l_pMaterial->GetPass( 0 );
 		}
 
@@ -1105,12 +1103,10 @@ namespace Lwo
 
 		if ( l_bContinue )
 		{
-			l_pPass->SetDiffuse(	l_clrBase * l_fDiff 					);
-			l_pPass->SetSpecular(	l_clrBase * l_fSpec 					);
-			l_pPass->SetShininess(	float( 2 ^ int( ( 10 * l_fGlos ) + 2 ) )	);
-			l_pPass->SetTwoSided(	l_usSide == 3 							);
-			GetOwner()->GetMaterialManager().insert( string::string_cast< xchar >( m_strName ), l_pMaterial );
-			GetOwner()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
+			l_pPass->SetDiffuse( l_clrBase * l_fDiff );
+			l_pPass->SetSpecular( l_clrBase * l_fSpec );
+			l_pPass->SetShininess( float( 2 ^ int( ( 10 * l_fGlos ) + 2 ) ) );
+			l_pPass->SetTwoSided( l_usSide == 3 );
 		}
 		else
 		{

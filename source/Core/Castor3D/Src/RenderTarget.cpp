@@ -1,26 +1,26 @@
 ﻿#include "RenderTarget.hpp"
 
-#include "Engine.hpp"
-#include "RenderTechnique.hpp"
-#include "DynamicTexture.hpp"
-#include "FrameBuffer.hpp"
+#include "BlendState.hpp"
+#include "Camera.hpp"
 #include "ColourRenderBuffer.hpp"
 #include "DepthStencilRenderBuffer.hpp"
-#include "RenderBufferAttachment.hpp"
-#include "TextureAttachment.hpp"
-#include "Engine.hpp"
-#include "Scene.hpp"
-#include "Camera.hpp"
-#include "Material.hpp"
-#include "Pipeline.hpp"
+#include "DepthStencilStateManager.hpp"
+#include "DynamicTexture.hpp"
 #include "Buffer.hpp"
 #include "Context.hpp"
-#include "Sampler.hpp"
-#include "DepthStencilState.hpp"
-#include "RasteriserState.hpp"
-#include "BlendState.hpp"
+#include "Engine.hpp"
+#include "FrameBuffer.hpp"
+#include "Material.hpp"
 #include "Parameter.hpp"
+#include "Pipeline.hpp"
 #include "RenderSystem.hpp"
+#include "RasteriserStateManager.hpp"
+#include "RenderBufferAttachment.hpp"
+#include "RenderTechnique.hpp"
+#include "SamplerManager.hpp"
+#include "SceneManager.hpp"
+#include "TargetManager.hpp"
+#include "TextureAttachment.hpp"
 
 #include <Logger.hpp>
 #include <Image.hpp>
@@ -176,7 +176,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						l_scene = p_obj.GetOwner()->GetSceneManager().find( l_name );
+						l_scene = p_obj.GetOwner()->GetSceneManager().Find( l_name );
 						p_obj.SetScene( l_scene );
 
 						if ( l_scene && !l_camName.empty() )
@@ -286,7 +286,7 @@ namespace Castor3D
 		m_pColorAttach = m_renderTarget.CreateAttachment( m_pColorTexture );
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
 		m_pDepthAttach = m_renderTarget.CreateAttachment( m_pDepthBuffer );
-		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->CreateSampler( RenderTarget::DefaultSamplerName );
+		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
 		m_pColorTexture->SetSampler( l_pSampler );
@@ -360,8 +360,8 @@ namespace Castor3D
 		, m_fbLeftEye( *this )
 		, m_fbRightEye( *this )
 	{
-		m_wpDepthStencilState = GetOwner()->CreateDepthStencilState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
-		m_wpRasteriserState = GetOwner()->CreateRasteriserState( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
+		m_wpDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
+		m_wpRasteriserState = GetOwner()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
 	}
 
 	RenderTarget::~RenderTarget()

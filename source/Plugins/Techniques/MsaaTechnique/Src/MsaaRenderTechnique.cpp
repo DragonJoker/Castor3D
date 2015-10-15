@@ -7,8 +7,8 @@
 #include <DepthStencilRenderBuffer.hpp>
 #include <RenderBufferAttachment.hpp>
 #include <TextureAttachment.hpp>
-#include <DepthStencilState.hpp>
-#include <RasteriserState.hpp>
+#include <DepthStencilStateManager.hpp>
+#include <RasteriserStateManager.hpp>
 #include <Engine.hpp>
 #include <Parameter.hpp>
 #include <DynamicTexture.hpp>
@@ -181,7 +181,7 @@ namespace Msaa
 			m_pMsDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
 			m_pMsColorAttach = m_pRenderTarget->CreateAttachment( m_pMsColorBuffer );
 			m_pMsDepthAttach = m_pRenderTarget->CreateAttachment( m_pMsDepthBuffer );
-			RasteriserStateSPtr l_pRasteriser = GetOwner()->CreateRasteriserState( cuT( "MSAA_RT" ) );
+			RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
 			l_pRasteriser->SetMultisample( true );
 			m_wpMsRasteriserState = l_pRasteriser;
 			m_pBoundFrameBuffer = m_pMsFrameBuffer;

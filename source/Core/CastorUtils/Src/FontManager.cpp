@@ -32,10 +32,11 @@ namespace Castor
 	FontSPtr FontManager::create_font( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height )
 	{
 		Collection< Font, String >::lock();
-		FontSPtr l_return = Collection< Font, String >::find( p_name );
+		FontSPtr l_return;
 
-		if ( l_return )
+		if ( Collection< Font, String >::has( p_name ) )
 		{
+			l_return = Collection< Font, String >::find( p_name );
 			Logger::LogWarning( cuT( "Trying to create an already existing font : " ) + p_name );
 		}
 		else

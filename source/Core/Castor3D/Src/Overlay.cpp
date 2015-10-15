@@ -88,7 +88,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						l_overlay = m_engine->GetOverlayManager().CreateOverlay( l_type, cuT( "" ), p_obj.shared_from_this(), p_obj.GetScene() );
+						l_overlay = m_engine->GetOverlayManager().Create( l_type, cuT( "" ), p_obj.shared_from_this(), p_obj.GetScene() );
 						l_return = Overlay::BinaryParser( m_path, m_engine ).Parse( *l_overlay, l_chunk );
 					}
 
@@ -126,9 +126,8 @@ namespace Castor3D
 		, m_manager( p_engine.GetOverlayManager() )
 		, m_pParent()
 		, m_pScene()
-		, m_factory( p_engine.GetOverlayFactory() )
 		, m_renderSystem( p_engine.GetRenderSystem() )
-		, m_category( p_engine.GetOverlayFactory().Create( p_type ) )
+		, m_category( p_engine.GetOverlayManager().GetFactory().Create( p_type ) )
 	{
 		m_category->SetOverlay( this );
 	}
@@ -138,9 +137,8 @@ namespace Castor3D
 		, m_manager( p_engine.GetOverlayManager() )
 		, m_pParent( p_parent )
 		, m_pScene( p_scene )
-		, m_factory( p_engine.GetOverlayFactory() )
 		, m_renderSystem( p_engine.GetRenderSystem() )
-		, m_category( p_engine.GetOverlayFactory().Create( p_type ) )
+		, m_category( p_engine.GetOverlayManager().GetFactory().Create( p_type ) )
 	{
 		m_category->SetOverlay( this );
 	}

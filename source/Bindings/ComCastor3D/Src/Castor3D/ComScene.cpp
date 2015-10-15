@@ -24,7 +24,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->ClearScene();
+			m_internal->Cleanup();
 			hr = S_OK;
 		}
 		else
