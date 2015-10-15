@@ -12,10 +12,19 @@
 #undef min
 #undef abs
 
-#include <SceneFileParser.hpp>
-#include <InitialiseEvent.hpp>
+#include <BlendStateManager.hpp>
+#include <DepthStencilStateManager.hpp>
 #include <FunctorEvent.hpp>
-#include <Material.hpp>
+#include <InitialiseEvent.hpp>
+#include <MaterialManager.hpp>
+#include <MeshManager.hpp>
+#include <PluginManager.hpp>
+#include <RasteriserStateManager.hpp>
+#include <RenderLoop.hpp>
+#include <SamplerManager.hpp>
+#include <SceneFileParser.hpp>
+#include <SceneManager.hpp>
+#include <WindowManager.hpp>
 
 #define CASTOR3D_THREADED 0
 
@@ -29,65 +38,33 @@ namespace CastorCom
 {
 	namespace
 	{
-		template< typename TObj >
-		std::shared_ptr< TObj > CreateObject( Castor3D::Engine & p_engine )
+		template< typename TObj, typename TMgr >
+		std::shared_ptr< TObj > CreateObject( Castor3D::Engine & p_engine, TMgr & p_manager )
 		{
-			return std::make_shared< TObj >( p_engine );
+			return p_manager.Create( Castor::String(), p_engine );
 		}
 
 		template<>
-		std::shared_ptr< Castor3D::Sampler > CreateObject< Castor3D::Sampler >( Castor3D::Engine & p_engine )
+		std::shared_ptr< Castor3D::Sampler > CreateObject< Castor3D::Sampler, Castor3D::SamplerManager >( Castor3D::Engine & p_engine, Castor3D::SamplerManager & p_manager )
 		{
-			return p_engine.CreateSampler( Castor::String() );
-		}
-
-		template<>
-		std::shared_ptr< Castor3D::Scene > CreateObject< Castor3D::Scene >( Castor3D::Engine & p_engine )
-		{
-			return std::make_shared< Castor3D::Scene >( p_engine, p_engine.GetLightFactory() );
+			return p_manager.Create( Castor::String() );
 		}
 
 		template< typename TObj >
-		void InitialiseObject( std::shared_ptr< TObj > p_object, Castor3D::Engine & p_engine )
+		bool DoParse( TObj & p_obj, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser & p_parser )
 		{
-			p_engine.PostEvent( Castor3D::MakeInitialiseEvent( *p_object ) );
-		}
-
-		template<>
-		void InitialiseObject< Castor3D::Mesh >( std::shared_ptr< Castor3D::Mesh > p_object, Castor3D::Engine & p_engine )
-		{
-			p_engine.PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [&p_object]()
-			{
-				p_object->GenerateBuffers();
-			} ) );
-		}
-
-		template<>
-		void InitialiseObject< Castor3D::Scene >( std::shared_ptr< Castor3D::Scene > p_object, Castor3D::Engine & p_engine )
-		{
+			return p_parser.Parse( p_obj, p_chunk );
 		}
 
 		template< typename TObj, typename TKey >
-		bool DoFillCollection( Castor3D::Engine & p_engine, Castor::Collection< TObj, TKey > & p_collection, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::Manager< TKey, TObj > & p_manager, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
-			std::shared_ptr< TObj > l_obj = CreateObject< TObj >( p_engine );
-			bool l_return = p_parser.Parse( *l_obj, p_chunk );
+			return DoParse( *CreateObject< TObj >( p_engine, p_manager ), p_chunk, p_parser );
+		}
 
-			if ( l_return )
-			{
-				if ( !p_collection.has( l_obj->GetName() ) )
-				{
-					p_collection.insert( l_obj->GetName(), l_obj );
-					InitialiseObject( l_obj, p_engine );
-				}
-				else
-				{
-					Castor::Logger::LogWarning( cuT( "Duplicate object found with name " ) + l_obj->GetName() );
-					l_return = false;
-				}
-			}
-
-			return l_return;
+		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::SamplerManager & p_manager, Castor3D::BinaryChunk & p_chunk, Castor3D::Sampler::BinaryParser p_parser )
+		{
+			return DoParse< Castor3D::Sampler >( *CreateObject< Castor3D::Sampler >( p_engine, p_manager ), p_chunk, p_parser );
 		}
 
 		bool DoLoadMeshFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
@@ -104,7 +81,7 @@ namespace CastorCom
 					Castor::BinaryFile l_fileMesh( l_meshFilePath, Castor::File::eOPEN_MODE_READ );
 					Castor::Logger::LogInfo( cuT( "Loading meshes file : " ) + l_meshFilePath );
 
-					if ( p_engine.LoadMeshes( l_fileMesh ) )
+					if ( p_engine.GetMeshManager().Load( l_fileMesh ) )
 					{
 						Castor::Logger::LogInfo( cuT( "Meshes read" ) );
 					}
@@ -156,23 +133,23 @@ namespace CastorCom
 					switch ( l_chunk.GetChunkType() )
 					{
 					case Castor3D::eCHUNK_TYPE_SAMPLER:
-						l_continue = DoFillCollection( p_engine, p_engine.GetSamplerManager(), l_chunk, Castor3D::Sampler::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetSamplerManager(), l_chunk, Castor3D::Sampler::BinaryParser( l_path ) );
 						break;
 
 					case Castor3D::eCHUNK_TYPE_MATERIAL:
-						l_continue = DoFillCollection( p_engine, p_engine.GetMaterialManager(), l_chunk, Castor3D::Material::BinaryParser( l_path, &p_engine ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetMaterialManager(), l_chunk, Castor3D::Material::BinaryParser( l_path, &p_engine ) );
 						break;
 
 					case Castor3D::eCHUNK_TYPE_MESH:
-						l_continue = DoFillCollection( p_engine, p_engine.GetMeshManager(), l_chunk, Castor3D::Mesh::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetMeshManager(), l_chunk, Castor3D::Mesh::BinaryParser( l_path ) );
 						break;
 
 					case Castor3D::eCHUNK_TYPE_SCENE:
-						l_continue = DoFillCollection( p_engine, p_engine.GetSceneManager(), l_chunk, Castor3D::Scene::BinaryParser( l_path ) );
+						l_continue = DoFillManager( p_engine, p_engine.GetSceneManager(), l_chunk, Castor3D::Scene::BinaryParser( l_path ) );
 						break;
 
 					case Castor3D::eCHUNK_TYPE_WINDOW:
-						l_return = p_engine.CreateRenderWindow();
+						l_return = p_engine.GetWindowManager().Create();
 						l_continue = Castor3D::RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
 						break;
 					}
@@ -335,7 +312,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CScene * >( *pVal )->SetInternal( m_internal->CreateScene( FromBstr( name ) ) );
+					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneManager().Create( FromBstr( name ), *m_internal, FromBstr( name ) ) );
 				}
 			}
 		}
@@ -353,7 +330,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->ClearScenes();
+			m_internal->GetSceneManager().Clear();
 			hr = S_OK;
 		}
 		else
@@ -387,7 +364,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->RenderOneFrame();
+			m_internal->GetRenderLoop().RenderSyncFrame();
 			hr = S_OK;
 		}
 		else
@@ -404,7 +381,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->LoadPlugin( FromBstr( path ) );
+			m_internal->GetPluginManager().LoadPlugin( FromBstr( path ) );
 			hr = S_OK;
 		}
 		else
@@ -427,7 +404,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CMesh * >( *pVal )->SetInternal( m_internal->CreateMesh( Castor3D::eMESH_TYPE( type ), FromBstr( name ) ) );
+					static_cast< CMesh * >( *pVal )->SetInternal( m_internal->GetMeshManager().Create( FromBstr( name ), Castor3D::eMESH_TYPE( type ) ) );
 				}
 			}
 		}
@@ -467,7 +444,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->CreateRenderWindow() );
+					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetWindowManager().Create() );
 				}
 			}
 		}
@@ -507,7 +484,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSampler * >( *pVal )->SetInternal( m_internal->CreateSampler( FromBstr( name ) ) );
+					static_cast< CSampler * >( *pVal )->SetInternal( m_internal->GetSamplerManager().Create( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -531,7 +508,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->CreateBlendState( FromBstr( name ) ) );
+					static_cast< CBlendState * >( *pVal )->SetInternal( m_internal->GetBlendStateManager().Create( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -555,7 +532,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->CreateDepthStencilState( FromBstr( name ) ) );
+					static_cast< CDepthStencilState * >( *pVal )->SetInternal( m_internal->GetDepthStencilStateManager().Create( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -579,7 +556,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->CreateRasteriserState( FromBstr( name ) ) );
+					static_cast< CRasteriserState * >( *pVal )->SetInternal( m_internal->GetRasteriserStateManager().Create( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -597,7 +574,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->GetSceneManager().erase( FromBstr( name ) );
+			m_internal->GetSceneManager().Remove( FromBstr( name ) );
 		}
 		else
 		{

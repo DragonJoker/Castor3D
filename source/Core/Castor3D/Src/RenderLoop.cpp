@@ -3,6 +3,7 @@
 #include "BlendStateManager.hpp"
 #include "DebugOverlays.hpp"
 #include "Engine.hpp"
+#include "ListenerManager.hpp"
 #include "OverlayManager.hpp"
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
@@ -72,12 +73,7 @@ namespace Castor3D
 	{
 		PreciseTimer l_timer;
 		m_renderSystem->GetMainContext()->SetCurrent();
-
-		for ( auto && l_listener : GetOwner()->GetFrameListeners() )
-		{
-			l_listener.second->FireEvents( eEVENT_TYPE_PRE_RENDER );
-		}
-
+		GetOwner()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
 		GetOwner()->GetOverlayManager().Update();
 		GetOwner()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		m_renderSystem->GetMainContext()->EndCurrent();
@@ -86,10 +82,7 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
-		for ( auto && l_listener : GetOwner()->GetFrameListeners() )
-		{
-			l_listener.second->FireEvents( eEVENT_TYPE_POST_RENDER );
-		}
+		GetOwner()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
 	}
 
 	void RenderLoop::DoRenderOneFrame()

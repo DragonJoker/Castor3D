@@ -125,7 +125,7 @@ namespace Ase
 		{
 			return false;
 		}
-		virtual void DoDiscardParser( Castor::String const & p_strLine );
+		virtual bool DoDiscardParser( Castor::String const & p_strLine );
 		virtual void DoValidate();
 
 	private:

@@ -18,7 +18,7 @@ namespace Castor3D
 
 	RenderWindowSPtr WindowManager::Create()
 	{
-		m_elements.lock();
+		std::unique_lock< Collection > l_lock( m_elements );
 		RenderWindowSPtr l_return = m_renderSystem->CreateRenderWindow();
 
 		if ( l_return )
@@ -26,19 +26,16 @@ namespace Castor3D
 			m_elements.insert( l_return->GetIndex(), l_return );
 		}
 
-		m_elements.unlock();
 		return l_return;
 	}
 
 	void WindowManager::Render( bool p_force )
 	{
-		m_elements.lock();
+		std::unique_lock< Collection > l_lock( m_elements );
 
 		for ( auto && l_it : m_elements )
 		{
 			l_it.second->RenderOneFrame( p_force );
 		}
-
-		m_elements.unlock();
 	}
 }

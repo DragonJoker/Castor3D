@@ -180,12 +180,12 @@ namespace Castor
 		inline TObjSPtr erase( key_param_type p_key );
 
 	private:
-		TObjPtrMap 						m_objectMap;
-		mutable std::recursive_mutex 	m_mutex;
-		mutable bool 					m_bLocked;
+		TObjPtrMap m_objects;
+		mutable std::recursive_mutex m_mutex;
+		mutable bool m_locked;
 	};
+}
 
 #include "Collection.inl"
-}
 
 #endif

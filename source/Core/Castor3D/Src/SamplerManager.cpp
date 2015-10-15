@@ -17,31 +17,29 @@ namespace Castor3D
 
 	SamplerSPtr SamplerManager::Create( String const & p_name )
 	{
-		m_elements.lock();
-		SamplerSPtr l_pReturn;
+		std::unique_lock< Collection > l_lock( m_elements );
+		SamplerSPtr l_return;
 
 		if ( p_name.empty() )
 		{
-			l_pReturn = m_renderSystem->CreateSampler( p_name );
+			l_return = m_renderSystem->CreateSampler( p_name );
 		}
 		else
 		{
-			l_pReturn = m_elements.find( p_name );
-
-			if ( !l_pReturn )
+			if ( !m_elements.has( p_name ) )
 			{
-				l_pReturn = m_renderSystem->CreateSampler( p_name );
-				m_elements.insert( p_name, l_pReturn );
-				GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+				l_return = m_renderSystem->CreateSampler( p_name );
+				m_elements.insert( p_name, l_return );
+				GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
 				Logger::LogInfo( cuT( "SamplerManager::Create - Created Sampler: " ) + p_name + cuT( "" ) );
 			}
 			else
 			{
+				l_return = m_elements.find( p_name );
 				Logger::LogWarning( cuT( "SamplerManager::Create - Duplicate Sampler: " ) + p_name );
 			}
 		}
 
-		m_elements.unlock();
-		return l_pReturn;
+		return l_return;
 	}
 }

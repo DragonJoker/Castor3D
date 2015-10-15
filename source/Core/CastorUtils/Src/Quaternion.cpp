@@ -11,10 +11,12 @@ namespace Castor
 		template< typename T >
 		void QuaternionToRotationMatrix( Quaternion const & p_quat, T * p_matrix )
 		{
-			double const x = double( p_quat.x() );
-			double const y = double( p_quat.y() );
-			double const z = double( p_quat.z() );
-			double const w = double( p_quat.w() );
+			Quaternion l_quat( p_quat );
+			point::normalise( l_quat );
+			double const x = double( l_quat.x() );
+			double const y = double( l_quat.y() );
+			double const z = double( l_quat.z() );
+			double const w = double( l_quat.w() );
 			double fTx  = x + x;
 			double fTy  = y + y;
 			double fTz  = z + z;

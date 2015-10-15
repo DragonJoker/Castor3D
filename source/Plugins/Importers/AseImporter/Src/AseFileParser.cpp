@@ -7,8 +7,8 @@
 #include <Scene.hpp>
 #include <Camera.hpp>
 #include <Viewport.hpp>
-#include <Material.hpp>
 #include <MaterialManager.hpp>
+#include <MeshManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <Version.hpp>
@@ -190,10 +190,11 @@ namespace Ase
 	{
 	}
 
-	void AseFileParser::DoDiscardParser( String const & p_strLine )
+	bool AseFileParser::DoDiscardParser( String const & p_strLine )
 	{
 		StringStream strToLog( cuT( "Parser not found @ line #" ) );
 		Logger::LogWarning( strToLog << m_context->m_line << cuT( " : " ) << p_strLine );
+		return false;
 	}
 
 	void AseFileParser::DoValidate()
@@ -366,13 +367,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialName )
 	String l_strName;
 	p_params[0]->Get( l_strName );
 	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
-	l_pMaterial = l_manager.find( l_strName );
+	l_pMaterial = l_manager.Find( l_strName );
 
 	if ( !l_pMaterial )
 	{
-		l_pMaterial = std::make_shared< Material >( *l_pEngine, l_strName );
+		l_pMaterial = l_manager.Create( l_strName, *l_pEngine, l_strName );
 		l_pMaterial->CreatePass();
-		l_manager.insert( l_strName, l_pMaterial );
 	}
 
 	l_pContext->pMaterial = l_pMaterial;
@@ -637,7 +637,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryNodeName )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
 	p_params[0]->Get( l_pContext->strName );
-	l_pContext->pMesh = l_pEngine->CreateMesh( eMESH_TYPE_CUSTOM, l_pContext->strName );
+	l_pContext->pMesh = l_pEngine->GetMeshManager().Create( l_pContext->strName, eMESH_TYPE_CUSTOM );
 }
 END_ATTRIBUTE()
 

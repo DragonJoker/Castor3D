@@ -10,6 +10,7 @@
 #include <wx/display.h>
 
 #include <Camera.hpp>
+#include <ListenerManager.hpp>
 #include <RenderWindow.hpp>
 #include <Scene.hpp>
 #include <SceneNode.hpp>
@@ -149,7 +150,7 @@ namespace CastorViewer
 				}
 
 #if HAS_CASTORGUI
-				m_controlsManager = &static_cast< CastorGui::ControlsManager & >( p_pWindow->GetOwner()->GetFrameListener( CastorGui::PLUGIN_NAME ) );
+				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_pWindow->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 #endif
 			}
 		}

@@ -1960,6 +1960,7 @@ namespace Castor3D
 	class BlendStateManager;
 	class AnimationManager;
 	class TargetManager;
+	class ListenerManager;
 
 	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
 
@@ -1976,6 +1977,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( BlendStateManager );
 	DECLARE_SMART_PTR( AnimationManager );
 	DECLARE_SMART_PTR( TargetManager );
+	DECLARE_SMART_PTR( ListenerManager );
 
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );

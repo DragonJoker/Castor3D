@@ -13,7 +13,9 @@
 #	include <Windows.h>
 #endif
 
+#include <TargetManager.hpp>
 #include <WindowHandle.hpp>
+#include <WindowManager.hpp>
 
 using namespace Castor3D;
 using namespace CastorShape;
@@ -73,8 +75,8 @@ void RenderPanel::InitialiseRenderWindow()
 	StringStream l_streamName;
 	l_streamName << cuT( "RenderPanel_" ) << GetId();
 	SceneNodeSPtr l_pNode;
-	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->CreateRenderWindow();
-	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->CreateRenderTarget( eTARGET_TYPE_WINDOW );
+	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->GetWindowManager().Create();
+	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 	SceneNodeSPtr l_pCamBaseNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
 

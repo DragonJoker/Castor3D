@@ -27,28 +27,28 @@ namespace Castor3D
 
 	MeshSPtr MeshManager::Create( String const & p_name, eMESH_TYPE p_type, UIntArray const & p_arrayFaces, RealArray const & p_arraySizes )
 	{
-		m_elements.lock();
-		MeshSPtr l_pReturn = m_elements.find( p_name );
+		std::unique_lock< Collection > l_lock( m_elements );
+		MeshSPtr l_return;
 
-		if ( !l_pReturn )
+		if ( !m_elements.has( p_name ) )
 		{
-			l_pReturn = std::make_shared< Mesh >( *GetOwner(), p_name );
-			m_factory.Create( p_type )->Generate( *l_pReturn, p_arrayFaces, p_arraySizes );
-			m_elements.insert( p_name, l_pReturn );
+			l_return = std::make_shared< Mesh >( *GetOwner(), p_name );
+			m_factory.Create( p_type )->Generate( *l_return, p_arrayFaces, p_arraySizes );
+			m_elements.insert( p_name, l_return );
 			Logger::LogInfo( cuT( "MeshManager::Create - Created Mesh: " ) + p_name + cuT( "" ) );
 		}
 		else
 		{
+			l_return = m_elements.find( p_name );
 			Logger::LogWarning( cuT( "MeshManager::Create - Duplicate Mesh: " ) + p_name );
 		}
 
-		m_elements.unlock();
-		return  l_pReturn;
+		return  l_return;
 	}
 
 	bool MeshManager::Save( BinaryFile & p_file )
 	{
-		m_elements.lock();
+		std::unique_lock< Collection > l_lock( m_elements );
 		Path l_path = p_file.GetFileFullPath();
 		bool l_return = true;
 
@@ -79,12 +79,12 @@ namespace Castor3D
 			}
 		}
 
-		m_elements.unlock();
 		return l_return;
 	}
 
 	bool MeshManager::Load( BinaryFile & p_file )
 	{
+		std::unique_lock< Collection > l_lock( m_elements );
 		uint32_t l_uiSize;
 		bool l_return = p_file.Read( l_uiSize ) == sizeof( uint32_t );
 

@@ -20,9 +20,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorShapePrerequisites.hpp"
 
+#include <FrameEvent.hpp>
+
 namespace CastorShape
 {
-	class SelectObjectFrameEvent : public Castor3D::FrameEvent
+	class SelectObjectFrameEvent
+		: public Castor3D::FrameEvent
 	{
 	private:
 		Castor3D::SceneWPtr m_scene;

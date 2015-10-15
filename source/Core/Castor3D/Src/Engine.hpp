@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "FrameEvent.hpp"
 #include "TechniqueFactory.hpp"
 #include "Version.hpp"
 
@@ -28,7 +27,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <FontManager.hpp>
 #include <Unique.hpp>
 
-#define DECLARE_MANAGED_MEMBER( memberName, className )\
+#define DECLARE_MANAGER_MEMBER( memberName, className )\
 	public:\
 		inline className##Manager & Get##className##Manager()\
 		{\
@@ -168,52 +167,6 @@ namespace Castor3D
 		 *\return		Le statut du support
 		 */
 		C3D_API bool SupportsDepthBuffer()const;
-		/**
-		 *\~english
-		 *\brief		Creates a FrameListener.
-		 *\param[in]	p_name	The FrameListener's name.
-		 *\return		The created FrameListener.
-		 *\~french
-		 *\brief		Crée un FrameListener.
-		 *\param[in]	p_name	Le nom du FrameListener.
-		 *\return		Le FrameListener créé.
-		 */
-		C3D_API FrameListenerWPtr CreateFrameListener( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Creates a FrameListener.
-		 *\param[in]	p_name		The listener's name.
-		 *\param[in]	p_listener	The listener.
-		 *\~french
-		 *\brief		Crée un FrameListener.
-		 *\param[in]	p_name		Le nom du listener.
-		 *\param[in]	p_listener	Le listener.
-		 */
-		C3D_API void AddFrameListener( Castor::String const & p_name, FrameListenerSPtr && p_listener );
-		/**
-		 *\~english
-		 *\brief		Retrieves a FrameListener.
-		 *\remarks		If the listener is not found, a CastorException is thrown.
-						Never keep this reference more than your needs, since the pointer referenced by it can be destroyed.
-		 *\param[in]	p_name	The FrameListener's name.
-		 *\return		The reference to the wanted listener.
-		 *\~french
-		 *\brief		Récupère un FrameListener.
-		 *\remarks		Si le listener n'a pas été trouvé, une CastorException est levée.
-						Ne gardez pas la référence plus que de besoin, le pointeur référencé peut être détruit.
-		 *\param[in]	p_name	Le nom du FrameListener.
-		 *\return		Une référence sur le listener.
-		 */
-		C3D_API FrameListener & GetFrameListener( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Destroys a FrameListener.
-		 *\param[in]	p_name	The FrameListener's name.
-		 *\~french
-		 *\brief		Détruit un FrameListener.
-		 *\param[in]	p_name	Le nom du FrameListener.
-		 */
-		C3D_API void DestroyFrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
@@ -405,26 +358,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The frame listeners.
-		 *\~french
-		 *\return		Les frame listeners.
-		 */
-		inline FrameListenerPtrStrMap const & GetFrameListeners()const
-		{
-			return m_listeners;
-		}
-		/**
-		 *\~english
-		 *\return		The frame listeners.
-		 *\~french
-		 *\return		Les frame listeners.
-		 */
-		inline FrameListenerPtrStrMap & GetFrameListeners()
-		{
-			return m_listeners;
-		}
-		/**
-		 *\~english
 		 *\return		The render loop.
 		 *\~french
 		 *\return		La boucle de rendu.
@@ -454,8 +387,6 @@ namespace Castor3D
 		RenderLoopUPtr m_renderLoop;
 		//!\~english The engine version	\~french La version du moteur
 		Version m_version;
-		//!\~english The default frame listener.	\~french Le frame listener par défaut.
-		FrameListenerWPtr m_defaultListener;
 		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
 		TechniqueFactory m_techniqueFactory;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
@@ -469,33 +400,33 @@ namespace Castor3D
 		//!\~english Lights textures sampler.	\~french L'échantillonneur utilisé pour les textures de lumières.
 		SamplerSPtr m_lightsSampler;
 		//!\~english The animations collection.	\~french La collection d'animations.
-		DECLARE_MANAGED_MEMBER( animation, Animation );
+		DECLARE_MANAGER_MEMBER( animation, Animation );
 		//!\~english The shaders collection.	\~french La collection de shaders.
-		DECLARE_MANAGED_MEMBER( shader, Shader );
+		DECLARE_MANAGER_MEMBER( shader, Shader );
 		//!\~english The sampler states collection.	\~french La collection de sampler states.
-		DECLARE_MANAGED_MEMBER( sampler, Sampler );
+		DECLARE_MANAGER_MEMBER( sampler, Sampler );
 		//!\~english The DepthStencilState collection.	\~french La collection de DepthStencilState.
-		DECLARE_MANAGED_MEMBER( depthStencilState, DepthStencilState );
+		DECLARE_MANAGER_MEMBER( depthStencilState, DepthStencilState );
 		//!\~english The RasteriserState collection.	\~french La collection de RasteriserState.
-		DECLARE_MANAGED_MEMBER( rasteriserState, RasteriserState );
+		DECLARE_MANAGER_MEMBER( rasteriserState, RasteriserState );
 		//!\~english The BlendState collection.	\~french La collection de BlendState.
-		DECLARE_MANAGED_MEMBER( blendState, BlendState );
+		DECLARE_MANAGER_MEMBER( blendState, BlendState );
 		//!\~english The materials manager.	\~french Le gestionnaire de matériaux.
-		DECLARE_MANAGED_MEMBER( material, Material );
+		DECLARE_MANAGER_MEMBER( material, Material );
 		//!\~english The materials manager.	\~french Le gestionnaire de fenêtres.
-		DECLARE_MANAGED_MEMBER( window, Window );
+		DECLARE_MANAGER_MEMBER( window, Window );
 		//!\~english The meshes manager.	\~french Le gestionnaire de maillages.
-		DECLARE_MANAGED_MEMBER( mesh, Mesh );
+		DECLARE_MANAGER_MEMBER( mesh, Mesh );
 		//!\~english The plug-ins manager.	\~french Le gestionnaire de plug-ins.
-		DECLARE_MANAGED_MEMBER( plugin, Plugin );
+		DECLARE_MANAGER_MEMBER( plugin, Plugin );
 		//!\~english The overlays collection.	\~french La collection d'overlays.
-		DECLARE_MANAGED_MEMBER( overlay, Overlay );
+		DECLARE_MANAGER_MEMBER( overlay, Overlay );
 		//!\~english The scenes collection.	\~french La collection de scènes.
-		DECLARE_MANAGED_MEMBER( scene, Scene );
+		DECLARE_MANAGER_MEMBER( scene, Scene );
 		//!\~english The render targets map.	\~french La map des cibles de rendu.
-		DECLARE_MANAGED_MEMBER( target, Target );
+		DECLARE_MANAGER_MEMBER( target, Target );
 		//!\~english The frame listeners array	\~french Le tableau de frame listeners
-		FrameListenerPtrStrMap m_listeners;
+		DECLARE_MANAGER_MEMBER( listener, Listener );
 		//!\~english The fonts collection	\~french La collection de polices
 		Castor::FontManager m_fontManager;
 		//!\~english The images collection	\~french La collection d'images
@@ -505,6 +436,6 @@ namespace Castor3D
 	};
 }
 
-#undef DECLARE_MANAGED_MEMBER
+#undef DECLARE_MANAGER_MEMBER
 
 #endif

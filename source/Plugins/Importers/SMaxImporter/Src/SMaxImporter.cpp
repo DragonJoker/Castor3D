@@ -1,11 +1,11 @@
 #include <RenderSystem.hpp>
 #include <Buffer.hpp>
 #include <SceneNode.hpp>
-#include <Scene.hpp>
+#include <SceneManager.hpp>
 #include <Camera.hpp>
 #include <Viewport.hpp>
-#include <Material.hpp>
 #include <MaterialManager.hpp>
+#include <MeshManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
 #include <Geometry.hpp>
@@ -44,7 +44,7 @@ SceneSPtr SMaxImporter::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = GetOwner()->CreateScene( cuT( "Scene_3DS" ) );
+		l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetOwner(), cuT( "Scene_3DS" ) );
 		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
 		l_pGeometry->AttachTo( l_pNode );
@@ -67,7 +67,7 @@ MeshSPtr SMaxImporter::DoImportMesh()
 
 	if ( m_pFile->IsOk() )
 	{
-		l_pMesh = GetOwner()->CreateMesh( eMESH_TYPE_CUSTOM, l_meshName, l_faces, l_sizes );
+		l_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		DoReadChunk( &l_currentChunk );
 
 		if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
@@ -311,13 +311,12 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 	if ( !l_strMatName.empty() )
 	{
 		MaterialManager * l_pMtlManager = &GetOwner()->GetMaterialManager();
-		l_pMaterial = l_pMtlManager->find( l_strMatName );
+		l_pMaterial = l_pMtlManager->Find( l_strMatName );
 
 		if ( ! l_pMaterial )
 		{
-			l_pMaterial = std::make_shared< Material >( *GetOwner(), l_strMatName );
+			l_pMaterial = l_pMtlManager->Create( l_strMatName, *GetOwner(), l_strMatName );
 			l_pMaterial->CreatePass();
-			l_pMtlManager->insert( l_strMatName, l_pMaterial );
 		}
 
 		PassSPtr l_pPass = l_pMaterial->GetPass( 0 );
@@ -758,7 +757,7 @@ void SMaxImporter::DoReadObjectMaterial( SMaxChunk * p_pChunk, SubmeshSPtr p_pSu
 	MaterialManager * l_pMtlManager;
 	p_pChunk->m_ulBytesRead += DoGetString( l_materialName );
 	l_pMtlManager = &GetOwner()->GetMaterialManager();
-	l_pMaterial = l_pMtlManager->find( l_materialName );
+	l_pMaterial = l_pMtlManager->Find( l_materialName );
 
 	if ( l_pMaterial && !p_pSubmesh->GetDefaultMaterial() )
 	{

@@ -30,8 +30,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	static const xchar * INFO_CREATED_OBJECT = cuT( "Manager::Create - Created object: " );
-	static const xchar * WARNING_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate object: " );
+	static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created object: " );
+	static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate object: " );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -211,14 +211,12 @@ namespace Castor3D
 		 */
 		virtual void Cleanup()
 		{
-			this->m_elements.lock();
+			std::unique_lock< Collection > l_lock( m_elements );
 
 			for ( auto && l_it : this->m_elements )
 			{
 				ElementCleaner< Elem >()( *GetOwner(), *l_it.second );
 			}
-
-			this->m_elements.unlock();
 		}
 		/**
 		 *\~english
@@ -242,6 +240,13 @@ namespace Castor3D
 		 */
 		virtual void Insert( Key const & p_name, std::shared_ptr< Elem > p_element )
 		{
+			std::unique_lock< Collection > l_lock( m_elements );
+
+			if ( m_elements.has( p_name ) )
+			{
+				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+			}
+
 			m_elements.insert( p_name, p_element );
 		}
 		/**
@@ -388,22 +393,22 @@ namespace Castor3D
 		template< typename ... Parameters >
 		inline std::shared_ptr< Elem > Create( Key const & p_name, Parameters && ... p_params )
 		{
-			m_elements.lock();
-			std::shared_ptr< Elem > l_return = m_elements.find( p_name );
+			std::unique_lock< Collection > l_lock( m_elements );
+			std::shared_ptr< Elem > l_return;
 
-			if ( !l_return )
+			if ( !m_elements.has( p_name ) )
 			{
 				l_return = std::make_shared< Elem >( std::forward< Parameters >( p_params )... );
 				m_elements.insert( p_name, l_return );
 				ElementInitialiser< Elem >()( *GetOwner(), *l_return );
-				Castor::Logger::LogInfo( INFO_CREATED_OBJECT + p_name );
+				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
 			}
 			else
 			{
-				Castor::Logger::LogWarning( WARNING_DUPLICATE_OBJECT + p_name );
+				l_return = m_elements.find( p_name );
+				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
 			}
 
-			m_elements.unlock();
 			return l_return;
 		}
 
@@ -413,7 +418,7 @@ namespace Castor3D
 		//!\~english The RenderSystem.	\~french Le RenderSystem.
 		RenderSystem * m_renderSystem;
 		//!\~english The elements collection.	\~french La collection d'éléments.
-		Collection m_elements;
+		mutable Collection m_elements;
 	};
 }
 

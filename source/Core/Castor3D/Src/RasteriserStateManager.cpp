@@ -17,22 +17,22 @@ namespace Castor3D
 
 	RasteriserStateSPtr RasteriserStateManager::Create( String const & p_name )
 	{
-		m_elements.lock();
-		RasteriserStateSPtr l_pReturn = m_elements.find( p_name );
+		std::unique_lock< Collection > l_lock( m_elements );
+		RasteriserStateSPtr l_return;
 
-		if ( m_renderSystem && !l_pReturn )
+		if ( !m_elements.has( p_name ) )
 		{
-			l_pReturn = m_renderSystem->CreateRasteriserState();
-			m_elements.insert( p_name, l_pReturn );
-			GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+			l_return = m_renderSystem->CreateRasteriserState();
+			m_elements.insert( p_name, l_return );
+			GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
 			Logger::LogInfo( cuT( "RasteriserStateManager::Create - Created RasteriserState: " ) + p_name + cuT( "" ) );
 		}
 		else
 		{
+			l_return = m_elements.find( p_name );
 			Logger::LogWarning( cuT( "RasteriserStateManager::Create - Duplicate RasteriserState: " ) + p_name );
 		}
 
-		m_elements.unlock();
-		return l_pReturn;
+		return l_return;
 	}
 }

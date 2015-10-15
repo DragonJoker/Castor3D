@@ -5,8 +5,8 @@
 #include "CleanupEvent.hpp"
 #include "DebugOverlays.hpp"
 #include "DepthStencilStateManager.hpp"
-#include "FrameListener.hpp"
 #include "InitialiseEvent.hpp"
+#include "ListenerManager.hpp"
 #include "MaterialManager.hpp"
 #include "MeshManager.hpp"
 #include "OverlayManager.hpp"
@@ -50,6 +50,9 @@ namespace Castor3D
 		: m_renderSystem( NULL )
 		, m_bCleaned( true )
 	{
+		std::locale::global( std::locale() );
+		CASTOR_INIT_UNIQUE_INSTANCE();
+
 		m_animationManager = std::make_unique< AnimationManager >( *this );
 		m_shaderManager = std::make_unique< ShaderManager >( *this );
 		m_samplerManager = std::make_unique< SamplerManager >( *this );
@@ -63,19 +66,16 @@ namespace Castor3D
 		m_overlayManager = std::make_unique< OverlayManager >( *this );
 		m_sceneManager = std::make_unique< SceneManager >( *this );
 		m_targetManager = std::make_unique< TargetManager >( *this );
-		CASTOR_INIT_UNIQUE_INSTANCE();
+		m_listenerManager = std::make_unique< ListenerManager >( *this );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
 			File::DirectoryCreate( GetEngineDirectory() );
 		}
 
-		m_defaultListener = CreateFrameListener( cuT( "Default" ) );
-
 		Version l_version;
 		String l_strVersion;
 		Logger::LogInfo( StringStream() << cuT( "Castor3D - Core engine version : " ) << l_version );
-		std::locale::global( std::locale() );
 	}
 
 	Engine::~Engine()
@@ -98,7 +98,7 @@ namespace Castor3D
 		m_sceneManager->Clear();
 		m_materialManager->Clear();
 		m_windowManager->Clear();
-		m_listeners.clear();
+		m_listenerManager->Clear();
 
 		// Destroy the RenderSystem
 		if ( m_renderSystem )
@@ -146,12 +146,7 @@ namespace Castor3D
 		if ( !IsCleaned() )
 		{
 			SetCleaned();
-
-			for ( auto && l_listener : m_listeners )
-			{
-				l_listener.second->Flush();
-			}
-
+			m_listenerManager->Cleanup();
 			m_sceneManager->Cleanup();
 			m_depthStencilStateManager->Cleanup();
 			m_rasteriserStateManager->Cleanup();
@@ -165,17 +160,17 @@ namespace Castor3D
 
 			if ( m_defaultBlendState )
 			{
-				PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
+				m_listenerManager->PostEvent( MakeCleanupEvent( *m_defaultBlendState ) );
 			}
 
 			if ( m_lightsSampler )
 			{
-				PostEvent( MakeCleanupEvent( *m_lightsSampler ) );
+				m_listenerManager->PostEvent( MakeCleanupEvent( *m_lightsSampler ) );
 			}
 
 			if ( m_defaultSampler )
 			{
-				PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
+				m_listenerManager->PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
 			}
 
 			m_renderLoop.reset();
@@ -198,17 +193,17 @@ namespace Castor3D
 
 			if ( m_defaultBlendState )
 			{
-				PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
+				m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
 			}
 
 			if ( m_lightsSampler )
 			{
-				PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
+				m_listenerManager->PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
 			}
 
 			if ( m_defaultSampler )
 			{
-				PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
+				m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
 			}
 		}
 	}
@@ -250,15 +245,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Engine::PostEvent( FrameEventSPtr p_pEvent )
+	void Engine::PostEvent( FrameEventSPtr p_event )
 	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexResources );
-		FrameListenerSPtr l_listener = m_defaultListener.lock();
-
-		if ( l_listener )
-		{
-			l_listener->PostEvent( p_pEvent );
-		}
+		m_listenerManager->PostEvent( p_event );
 	}
 
 	Path Engine::GetPluginsDirectory()
@@ -321,51 +310,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	FrameListenerWPtr Engine::CreateFrameListener( String const & p_name )
-	{
-		FrameListenerSPtr l_return;
-		auto l_it = m_listeners.find( p_name );
-
-		if ( l_it == m_listeners.end() )
-		{
-			l_it = m_listeners.insert( std::make_pair( p_name, std::make_shared< FrameListener >() ) ).first;
-		}
-
-		return l_it->second;
-	}
-
-	void Engine::AddFrameListener( String const & p_name, FrameListenerSPtr && p_listener )
-	{
-		if ( m_listeners.find( p_name ) != m_listeners.end() )
-		{
-			CASTOR_EXCEPTION( "A listener with this name already exists: " + string::string_cast< char >( p_name ) );
-		}
-
-		m_listeners.insert( std::make_pair( p_name, std::move( p_listener ) ) );
-	}
-
-	FrameListener & Engine::GetFrameListener( String const & p_name )
-	{
-		auto l_it = m_listeners.find( p_name );
-
-		if ( l_it == m_listeners.end() )
-		{
-			CASTOR_EXCEPTION( "No listener with this name: " + string::string_cast< char >( p_name ) );
-		}
-
-		return *l_it->second;
-	}
-
-	void Engine::DestroyFrameListener( String const & p_name )
-	{
-		auto l_it = m_listeners.find( p_name );
-
-		if ( l_it != m_listeners.end() )
-		{
-			m_listeners.erase( l_it );
-		}
 	}
 
 	void Engine::RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers )

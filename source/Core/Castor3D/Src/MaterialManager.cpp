@@ -25,9 +25,9 @@ namespace Castor3D
 
 	void MaterialManager::Initialise()
 	{
-		m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
+		std::unique_lock< Collection > l_lock( m_elements );
 
-		if ( !m_defaultMaterial )
+		if ( !m_elements.has( Material::DefaultMaterialName ) )
 		{
 			m_defaultMaterial = Create( Material::DefaultMaterialName, *GetOwner(), Material::DefaultMaterialName );
 			m_defaultMaterial->CreatePass();
@@ -35,19 +35,21 @@ namespace Castor3D
 		}
 		else
 		{
+			m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
 			GetOwner()->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
 		}
 	}
 
 	void MaterialManager::Clear()
 	{
+		std::unique_lock< Collection > l_lock( m_elements );
 		m_defaultMaterial.reset();
 		Manager< Castor::String, Material >::Clear();
 	}
 
 	void MaterialManager::GetNames( StringArray & l_names )
 	{
-		m_elements.lock();
+		std::unique_lock< Collection > l_lock( m_elements );
 		l_names.clear();
 		auto l_it = m_elements.begin();
 
@@ -56,12 +58,11 @@ namespace Castor3D
 			l_names.push_back( l_it->first );
 			l_it++;
 		}
-
-		m_elements.unlock();
 	}
 
 	bool MaterialManager::Write( TextFile & p_file )const
 	{
+		std::unique_lock< Collection > l_lock( m_elements );
 		GetOwner()->GetSamplerManager().Lock();
 
 		for ( auto l_it : GetOwner()->GetSamplerManager() )
@@ -71,7 +72,6 @@ namespace Castor3D
 
 		GetOwner()->GetSamplerManager().Unlock();
 
-		m_elements.lock();
 		bool l_return = true;
 		auto l_it = m_elements.begin();
 		bool l_first = true;
@@ -91,12 +91,12 @@ namespace Castor3D
 			++l_it;
 		}
 
-		m_elements.unlock();
 		return l_return;
 	}
 
 	bool MaterialManager::Read( TextFile & p_file )
 	{
+		std::unique_lock< Collection > l_lock( m_elements );
 		SceneFileParser l_parser( *GetOwner() );
 		l_parser.ParseFile( p_file );
 		return true;

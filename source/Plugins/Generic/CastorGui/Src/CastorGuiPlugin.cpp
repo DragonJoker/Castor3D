@@ -1,4 +1,5 @@
 #include <Engine.hpp>
+#include <ListenerManager.hpp>
 #include <RenderSystem.hpp>
 #include <SceneFileParser.hpp>
 
@@ -265,11 +266,11 @@ C3D_CGui_API String GetName()
 C3D_CGui_API void OnLoad( Castor3D::Engine * p_engine )
 {
 	p_engine->RegisterParsers( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateParsers( p_engine ) ) );
-	p_engine->AddFrameListener( CastorGui::PLUGIN_NAME, std::make_shared< CastorGui::ControlsManager >( p_engine ) );
+	p_engine->GetListenerManager().Insert( CastorGui::PLUGIN_NAME, std::make_shared< CastorGui::ControlsManager >( p_engine ) );
 }
 
 C3D_CGui_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->DestroyFrameListener( CastorGui::PLUGIN_NAME );
+	p_engine->GetListenerManager().Remove( CastorGui::PLUGIN_NAME );
 	p_engine->UnregisterParsers( CastorGui::PLUGIN_NAME );
 }

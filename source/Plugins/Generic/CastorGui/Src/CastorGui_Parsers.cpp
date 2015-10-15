@@ -9,6 +9,7 @@
 #include "CtrlStatic.hpp"
 
 #include <SceneFileParser.hpp>
+#include <ListenerManager.hpp>
 #include <MaterialManager.hpp>
 
 using namespace CastorGui;
@@ -88,7 +89,7 @@ namespace CastorGui
 
 	ControlsManager & GetControlsManager( FileParserContextSPtr p_context )
 	{
-		return static_cast< ControlsManager & >( std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetOwner()->GetFrameListener( PLUGIN_NAME ) );
+		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetOwner()->GetListenerManager().Find( PLUGIN_NAME ) );
 	}
 
 	ParserContext & GetParserContext( FileParserContextSPtr p_context )

@@ -17,22 +17,22 @@ namespace Castor3D
 
 	DepthStencilStateSPtr DepthStencilStateManager::Create( String const & p_name )
 	{
-		m_elements.lock();
-		DepthStencilStateSPtr l_pReturn = m_elements.find( p_name );
+		std::unique_lock< Collection > l_lock( m_elements );
+		DepthStencilStateSPtr l_return;
 
-		if ( !l_pReturn )
+		if ( !m_elements.has( p_name ) )
 		{
-			l_pReturn = m_renderSystem->CreateDepthStencilState();
-			m_elements.insert( p_name, l_pReturn );
-			GetOwner()->PostEvent( MakeInitialiseEvent( *l_pReturn ) );
+			l_return = m_renderSystem->CreateDepthStencilState();
+			m_elements.insert( p_name, l_return );
+			GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
 			Logger::LogInfo( cuT( "DepthStencilStateManager::Create - Created DepthStencilState: " ) + p_name + cuT( "" ) );
 		}
 		else
 		{
+			l_return = m_elements.find( p_name );
 			Logger::LogWarning( cuT( "DepthStencilStateManager::Create - Duplicate DepthStencilState: " ) + p_name );
 		}
 
-		m_elements.unlock();
-		return l_pReturn;
+		return l_return;
 	}
 }
