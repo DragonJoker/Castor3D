@@ -5,7 +5,7 @@ namespace Castor
 {
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::BinaryLoader::BinaryLoader()
-		:	Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
+		: Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 
@@ -35,11 +35,11 @@ namespace Castor
 		return l_return;
 	}
 
-//*************************************************************************************************
+	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -88,28 +88,28 @@ namespace Castor
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords()
-		:	m_coords( NULL	)
+		: m_coords( NULL )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( T * p_pValues )
-		:	m_coords( p_pValues	)
+		: m_coords( p_pValues )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( Coords< T, Count > const & p_pt )
-		:	m_coords( p_pt.m_coords )
+		: m_coords( p_pt.m_coords )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( Coords< T, Count > && p_pt )
-		:	m_coords( NULL	)
+		: m_coords( NULL )
 	{
-		m_coords		= std::move( p_pt.m_coords );
-		p_pt.m_coords	= NULL;
+		m_coords = std::move( p_pt.m_coords );
+		p_pt.m_coords = NULL;
 	}
 
 	template< typename T, uint32_t Count >
@@ -121,33 +121,33 @@ namespace Castor
 	inline Coords< T, Count > & Coords< T, Count >::operator=( Coords< T, Count > const & p_pt )
 	{
 		m_coords = p_pt.m_coords;
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline Coords< T, Count > & Coords< T, Count >::operator=( Coords< T, Count > && p_pt )
 	{
-		if ( this != & p_pt )
+		if ( this != &p_pt )
 		{
-			m_coords		= std::move( p_pt.m_coords );
-			p_pt.m_coords	= NULL;
+			m_coords = std::move( p_pt.m_coords );
+			p_pt.m_coords = NULL;
 		}
 
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline Coords< T, Count > & Coords< T, Count >::operator=( Point< T, Count > const & p_pt )
 	{
 		memcpy( m_coords, p_pt.const_ptr(), binary_size );
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline Coords< T, Count > & Coords< T, Count >::operator=( T * p_pValues )
 	{
 		m_coords = p_pValues;
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
@@ -380,10 +380,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
+			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			);
 	}
 
 	namespace point
@@ -472,23 +472,19 @@ namespace Castor
 		{
 			T l_tLength = T( distance( p_ptPoint ) );
 
-			if ( ! Policy< T >::is_null( l_tLength ) )
+			if ( !Policy< T >::is_null( l_tLength ) )
 			{
-				p_ptPoint /= l_tLength;
+				std::transform( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, p_ptPoint.ptr(), [l_tLength]( T const & p_value )
+				{
+					return p_value / l_tLength;
+				} );
 			}
 		}
 
 		template< typename T, uint32_t Count >
 		double distance_squared( Coords< T, Count > const & p_ptPoint )
 		{
-			double l_dReturn = 0.0;
-
-			for ( uint32_t i = 0; i < Count; i++ )
-			{
-				l_dReturn += p_ptPoint[i] * p_ptPoint[i];
-			}
-
-			return l_dReturn;
+			return std::accumulate( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, 0.0, std::multiplies< double >() );
 		}
 
 		template< typename T, uint32_t Count >

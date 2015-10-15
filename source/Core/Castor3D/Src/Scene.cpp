@@ -1459,7 +1459,7 @@ namespace Castor3D
 	{
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
-		for ( RenderNodeArrayConstIt l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
+		for ( auto l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
 		{
 			if ( l_itNodes->m_pNode && l_itNodes->m_pNode->IsDisplayable() && l_itNodes->m_pNode->IsVisible() )
 			{
@@ -1482,21 +1482,21 @@ namespace Castor3D
 	{
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
-		for ( SubmeshNodesByMaterialMapConstIt l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
+		for ( auto l_itNodes = p_begin; l_itNodes != p_end; ++l_itNodes )
 		{
 			MaterialSPtr l_pMaterial = l_itNodes->first;
 
-			for ( SubmeshNodesMapConstIt l_itSubmeshes = l_itNodes->second.begin(); l_itSubmeshes != l_itNodes->second.end(); ++l_itSubmeshes )
+			for ( auto l_itSubmeshes : l_itNodes->second )
 			{
-				SubmeshSPtr l_submesh = l_itSubmeshes->first;
+				SubmeshSPtr l_submesh = l_itSubmeshes.first;
 
 				if ( l_renderSystem->HasInstancing() && l_submesh->GetRefCount( l_pMaterial ) > 1 )
 				{
-					DoRenderSubmeshInstancedMultiple( p_technique, p_pipeline, l_itSubmeshes->second, p_eTopology );
+					DoRenderSubmeshInstancedMultiple( p_technique, p_pipeline, l_itSubmeshes.second, p_eTopology );
 				}
 				else
 				{
-					DoRenderSubmeshNonInstanced( p_technique, p_pipeline, l_itSubmeshes->second[0], p_eTopology );
+					DoRenderSubmeshNonInstanced( p_technique, p_pipeline, l_itSubmeshes.second[0], p_eTopology );
 				}
 			}
 		}
@@ -1506,7 +1506,7 @@ namespace Castor3D
 	{
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
-		for ( RenderNodeByDistanceMMapConstIt l_it = p_begin; l_it != p_end; ++l_it )
+		for ( auto l_it = p_begin; l_it != p_end; ++l_it )
 		{
 			stRENDER_NODE const & l_renderNode = l_it->second;
 			SubmeshSPtr l_submesh = l_renderNode.m_pSubmesh;
@@ -1527,7 +1527,7 @@ namespace Castor3D
 	{
 		p_map.clear();
 
-		for ( RenderNodeArrayIt l_it = p_begin; l_it != p_end; ++l_it )
+		for ( auto l_it = p_begin; l_it != p_end; ++l_it )
 		{
 			if ( l_it->m_pNode && l_it->m_pNode->IsDisplayable() && l_it->m_pNode->IsVisible() )
 			{
