@@ -151,7 +151,7 @@ namespace Castor3D
 
 		if ( l_renderer )
 		{
-			if ( IsSizeChanged() || l_renderer->IsSizeChanged() )
+			if ( IsSizeChanged() || IsChanged() || l_renderer->IsSizeChanged() )
 			{
 				OverlaySPtr l_parent = GetOverlay().GetParent();
 				Size l_sz = l_renderer->GetSize();

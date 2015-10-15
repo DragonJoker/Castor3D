@@ -170,6 +170,16 @@ namespace Castor3D
 		C3D_API Castor::Point4d GetAbsoluteBorderSize()const;
 		/**
 		 *\~english
+		 *\return		\p true if this overlay's has changed.
+		 *\~french
+		 *\return		\p true si cette incrustation a changé.
+		 */
+		C3D_API virtual bool IsChanged()const
+		{
+			return m_borderChanged;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the panel vertex buffer
 		 *\return		The buffer
 		 *\~french

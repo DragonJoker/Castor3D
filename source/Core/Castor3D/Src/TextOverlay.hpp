@@ -164,6 +164,16 @@ namespace Castor3D
 		C3D_API void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
+		 *\return		\p true if this overlay's has changed.
+		 *\~french
+		 *\return		\p true si cette incrustation a changé.
+		 */
+		C3D_API virtual bool IsChanged()const
+		{
+			return m_textChanged;
+		}
+		/**
+		 *\~english
 		 *\return		The FontTexture.
 		 *\~french
 		 *\return		La FontTexture.

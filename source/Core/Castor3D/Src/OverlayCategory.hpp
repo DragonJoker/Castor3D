@@ -246,6 +246,16 @@ namespace Castor3D
 		C3D_API bool IsPositionChanged()const;
 		/**
 		 *\~english
+		 *\return		\p true if this overlay's has changed.
+		 *\~french
+		 *\return		\p true si cette incrustation a changé.
+		 */
+		C3D_API virtual bool IsChanged()const
+		{
+			return false;
+		}
+		/**
+		 *\~english
 		 *\brief		Sets the overlay position
 		 *\param[in]	p_ptPosition	The new value
 		 *\~french
