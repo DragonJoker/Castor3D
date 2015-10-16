@@ -48,10 +48,6 @@ namespace GlRender
 		 */
 		virtual ~GlTextureAttachment();
 		/**
-		 *\copydoc		Castor3D::TextureAttachment::DownloadBuffer
-		 */
-		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );
-		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
 		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );

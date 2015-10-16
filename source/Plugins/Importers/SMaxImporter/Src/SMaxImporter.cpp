@@ -332,35 +332,18 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 
 			if ( !l_strTexture.empty() )
 			{
-				if ( File::FileExists( m_pFile->GetFilePath() / l_strTexture ) )
+				String l_strPath = m_pFile->GetFilePath() / l_strTexture;
+
+				if ( !File::FileExists( l_strPath ) )
 				{
-					TextureUnitSPtr l_unit = l_pPass->AddTextureUnit();
-					ImageSPtr l_pImage = GetOwner()->GetImageManager().find( m_pFile->GetFilePath() / l_strTexture );
-
-					if ( !l_pImage )
-					{
-						l_pImage = std::make_shared< Image >( m_pFile->GetFilePath() / l_strTexture, m_pFile->GetFilePath() / l_strTexture );
-						GetOwner()->GetImageManager().insert( m_pFile->GetFilePath() / l_strTexture, l_pImage );
-					}
-
-					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-					l_pStaTexture->SetImage( l_pImage->GetPixels() );
-					l_unit->SetTexture( l_pStaTexture );
-					l_unit->SetBlendColour( Colour::from_components( 1.0, 1.0, 1.0, 1.0 ) );
-					l_unit->SetChannel( eTEXTURE_CHANNEL( i ) );
+					l_strPath = m_pFile->GetFilePath() / string::lower_case( l_strTexture );
 				}
-				else if ( File::FileExists( m_pFile->GetFilePath() / string::lower_case( l_strTexture ) ) )
+
+				ImageSPtr l_pImage = GetOwner()->GetImageManager().create( l_strPath, l_strPath );
+
+				if ( l_pImage )
 				{
 					TextureUnitSPtr l_unit = l_pPass->AddTextureUnit();
-					ImageSPtr l_pImage = GetOwner()->GetImageManager().find( m_pFile->GetFilePath() / string::lower_case( l_strTexture ) );
-
-					if ( !l_pImage )
-					{
-						l_pImage = std::make_shared< Image >( m_pFile->GetFilePath() / string::lower_case( l_strTexture ), m_pFile->GetFilePath() / string::lower_case( l_strTexture ) );
-						GetOwner()->GetImageManager().insert( m_pFile->GetFilePath() / string::lower_case( l_strTexture ), l_pImage );
-					}
-
 					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );

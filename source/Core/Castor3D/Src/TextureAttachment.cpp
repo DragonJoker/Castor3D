@@ -1,4 +1,6 @@
 ﻿#include "TextureAttachment.hpp"
+
+#include "DynamicTexture.hpp"
 #include "FrameBuffer.hpp"
 
 using namespace Castor;
@@ -15,5 +17,10 @@ namespace Castor3D
 
 	TextureAttachment::~TextureAttachment()
 	{
+	}
+
+	PxBufferBaseSPtr TextureAttachment::GetBuffer()const
+	{
+		return GetTexture()->GetBuffer();
 	}
 }

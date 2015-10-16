@@ -214,7 +214,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_ASSERT( false );
+			CASTOR_ASSERT( false, "FrameVariable subscript out of range" );
 		}
 	}
 }

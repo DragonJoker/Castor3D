@@ -1,32 +1,32 @@
 ﻿template< class T >
 Resource< T >::Resource( String const & p_name )
-	:	NamedBase< String >	( p_name	)
+	: Named( p_name )
 {
 }
 
 template< class T >
 Resource< T >::Resource( Resource const & p_resource )
-	:	NamedBase< String >	( p_resource	)
+	: Named( p_resource )
 {
 }
 
 template< class T >
 Resource< T >::Resource( Resource && p_resource )
-	:	NamedBase< String >	( std::move( p_resource )	)
+	: Named( std::move( p_resource ) )
 {
 }
 
 template< class T >
-Resource< T > & Resource< T >::operator =( Resource const & p_resource )
+Resource< T > & Resource< T >::operator=( Resource const & p_resource )
 {
-	NamedBase< String >::operator =( p_resource );
+	Named::operator=( p_resource );
 	return * this;
 }
 
 template< class T >
-Resource< T > & Resource< T >::operator =( Resource && p_resource )
+Resource< T > & Resource< T >::operator=( Resource && p_resource )
 {
-	NamedBase< String >::operator =( std::move( p_resource ) );
+	Named::operator=( std::move( p_resource ) );
 	return * this;
 }
 

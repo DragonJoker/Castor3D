@@ -7,10 +7,10 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_WRONG_FILE_NAME = cuT( "The given file doesn't exist" );
-	static const Castor::String ERROR_IMAGE_EXISTS = cuT( "The given image name already exists" );
-	static const Castor::String ERROR_UNINITIALISED_IMAGE = cuT( "The image must be initialised" );
-	static const Castor::String ERROR_INITIALISED_IMAGE = cuT( "The image is already initialised" );
+	static const TCHAR * ERROR_WRONG_FILE_NAME = _T( "The given file doesn't exist" );
+	static const TCHAR * ERROR_IMAGE_EXISTS = _T( "The given image name already exists" );
+	static const TCHAR * ERROR_UNINITIALISED_IMAGE = _T( "The image must be initialised" );
+	static const TCHAR * ERROR_INITIALISED_IMAGE = _T( "The image is already initialised" );
 
 	CImage::CImage()
 	{
@@ -30,10 +30,8 @@ namespace CastorCom
 			{
 				CEngine * l_engn = static_cast< CEngine * >( engine );
 				Castor3D::Engine * l_engine = l_engn->GetInternal();
-				Castor3D::ImageCollection & l_mgr = l_engine->GetImageManager();
 				Castor::String l_name = FromBstr( name );
 				Castor::Path l_path = FromBstr( val );
-				m_image = l_mgr.find( l_name );
 				Castor::Path l_pathImage = l_path;
 
 				if ( !Castor::File::FileExists( l_pathImage ) )
@@ -46,40 +44,17 @@ namespace CastorCom
 					l_pathImage = l_engine->GetDataDirectory() / cuT( "Texture" ) / l_path;
 				}
 
-				if ( Castor::File::FileExists( l_pathImage ) )
-				{
-					if ( !m_image )
-					{
-						m_image = std::make_shared< Castor::Image >( l_name, l_pathImage );
-					}
-					else
-					{
-						Castor::Image::BinaryLoader()( *m_image, l_pathImage );
-					}
+				m_image = l_engine->GetImageManager().create( l_name, l_pathImage );
 
-					hr = S_OK;
-				}
-				else
+				if ( !m_image )
 				{
-					hr = CComError::DispatchError(
-							 E_FAIL,						// This represents the error
-							 IID_IImage,					// This is the GUID of component throwing error
-							 cuT( "LoadFromFile" ),			// This is generally displayed as the title
-							 ERROR_WRONG_FILE_NAME.c_str(),	// This is the description
-							 0,								// This is the context in the help file
-							 NULL );
+					hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFile" ), ERROR_WRONG_FILE_NAME, 0, NULL );
 				}
 			}
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IImage,						// This is the GUID of component throwing error
-					 cuT( "LoadFromFile" ),				// This is generally displayed as the title
-					 ERROR_INITIALISED_IMAGE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFile" ), ERROR_IMAGE_EXISTS, 0, NULL );
 		}
 
 		return hr;
@@ -93,24 +68,16 @@ namespace CastorCom
 		{
 			CEngine * l_engn = static_cast< CEngine * >( engine );
 			Castor3D::Engine * l_engine = l_engn->GetInternal();
-			Castor3D::ImageCollection & l_mgr = l_engine->GetImageManager();
 			Castor::String l_name = FromBstr( name );
-			m_image = l_mgr.find( l_name );
 
 			if ( !m_image )
 			{
 				hr = S_OK;
-				m_image = std::make_shared< Castor::Image >( l_name, *static_cast< CSize * >( size ), Castor::ePIXEL_FORMAT( fmt ) );
+				m_image = l_engine->GetImageManager().create( l_name, *static_cast< CSize * >( size ), Castor::ePIXEL_FORMAT( fmt ) );
 			}
 			else
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,						// This represents the error
-						 IID_IImage,					// This is the GUID of component throwing error
-						 cuT( "LoadFromFormat" ),		// This is generally displayed as the title
-						 ERROR_IMAGE_EXISTS.c_str(),	// This is the description
-						 0,								// This is the context in the help file
-						 NULL );
+				hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "LoadFromFormat" ), ERROR_IMAGE_EXISTS, 0, NULL );
 			}
 		}
 
@@ -128,13 +95,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IImage,						// This is the GUID of component throwing error
-					 cuT( "Resample" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_IMAGE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Resample" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
@@ -151,13 +112,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IImage,						// This is the GUID of component throwing error
-					 cuT( "Fill" ),						// This is generally displayed as the title
-					 ERROR_UNINITIALISED_IMAGE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Fill" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
@@ -174,13 +129,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IImage,						// This is the GUID of component throwing error
-					 cuT( "CopyImage" ),				// This is generally displayed as the title
-					 ERROR_UNINITIALISED_IMAGE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "CopyImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
@@ -202,13 +151,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IImage,						// This is the GUID of component throwing error
-					 cuT( "SubImage" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_IMAGE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "SubImage" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
@@ -230,13 +173,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IImage,						// This is the GUID of component throwing error
-					 cuT( "Flip" ),						// This is generally displayed as the title
-					 ERROR_UNINITIALISED_IMAGE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Flip" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;
@@ -258,13 +195,7 @@ namespace CastorCom
 		}
 		else
 		{
-			hr = CComError::DispatchError(
-					 E_FAIL,							// This represents the error
-					 IID_IImage,						// This is the GUID of component throwing error
-					 cuT( "Mirror" ),					// This is generally displayed as the title
-					 ERROR_UNINITIALISED_IMAGE.c_str(),	// This is the description
-					 0,									// This is the context in the help file
-					 NULL );
+			hr = CComError::DispatchError( E_FAIL, IID_IImage, cuT( "Mirror" ), ERROR_UNINITIALISED_IMAGE, 0, NULL );
 		}
 
 		return hr;

@@ -1,5 +1,7 @@
 ﻿#include "RenderBufferAttachment.hpp"
+
 #include "FrameBuffer.hpp"
+#include "RenderBuffer.hpp"
 
 using namespace Castor;
 
@@ -13,5 +15,11 @@ namespace Castor3D
 
 	RenderBufferAttachment::~RenderBufferAttachment()
 	{
+	}
+
+	PxBufferBaseSPtr RenderBufferAttachment::GetBuffer()const
+	{
+		RenderBufferSPtr l_renderBuffer = this->GetRenderBuffer();
+		return PxBufferBase::create( l_renderBuffer->GetDimensions(), l_renderBuffer->GetPixelFormat() );
 	}
 }

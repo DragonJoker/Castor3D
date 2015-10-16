@@ -968,7 +968,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	//m_fbo->SetDrawBuffer( eATTACHMENT_POINT_COLOUR );
 	m_fbo->Attach( eATTACHMENT_POINT_COLOUR, m_pAttachSky, eTEXTURE_TARGET_2D );
-	CASTOR_ASSERT( m_fbo->IsComplete() );
+	ENSURE( m_fbo->IsComplete() );
 	m_fbo->Unbind();
 	generateMesh();
 	loadPrograms( true );
@@ -1121,8 +1121,7 @@ bool RenderTechnique::Render( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_PA
 	m_pTexSky->Bind();
 	m_pTexSky->GenerateMipmaps();
 	m_pTexSky->Unbind();
-	m_pAttachSky->DownloadBuffer( m_pTexSky->GetBuffer() );
-	Image l_image( cuT( "Skymap" ), *m_pTexSky->GetBuffer() );
+	Image l_image( cuT( "Skymap" ), *m_pAttachSky->DownloadBuffer() );
 	Image::BinaryLoader()( const_cast< const Image & >( l_image ), cuT( "Skymap.bmp" ) );
 	return true;
 }

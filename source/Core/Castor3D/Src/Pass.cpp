@@ -598,7 +598,7 @@ namespace Castor3D
 
 	bool Pass::DestroyTextureUnit( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size() );
+		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size(), "Pass subscript out of range" );
 		bool l_return = false;
 		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << p_index );
 		TextureUnitPtrArray::iterator l_it = m_arrayTextureUnits.begin();
@@ -616,13 +616,13 @@ namespace Castor3D
 
 	TextureUnitSPtr Pass::GetTextureUnit( uint32_t p_index )const
 	{
-		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size() );
+		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size(), "Pass subscript out of range" );
 		return m_arrayTextureUnits[p_index];
 	}
 
 	String Pass::GetTexturePath( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size() );
+		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size(), "Pass subscript out of range" );
 		return m_arrayTextureUnits[p_index]->GetTexturePath();
 	}
 

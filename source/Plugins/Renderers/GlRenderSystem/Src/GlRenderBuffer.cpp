@@ -9,13 +9,13 @@ using namespace Castor;
 namespace GlRender
 {
 	GlRenderBuffer::GlRenderBuffer( OpenGl & p_gl, eGL_RENDERBUFFER_STORAGE p_eInternal, RenderBuffer & p_renderBuffer )
-		:	m_uiGlName( eGL_INVALID_INDEX )
-		,	m_eInternal( p_eInternal )
-		,	m_size( 0, 0 )
-		,	m_renderBuffer( p_renderBuffer )
-		,	m_gl( p_gl )
+		: m_uiGlName( eGL_INVALID_INDEX )
+		, m_eInternal( p_eInternal )
+		, m_size( 0, 0 )
+		, m_renderBuffer( p_renderBuffer )
+		, m_gl( p_gl )
 	{
-		CASTOR_ASSERT( m_eInternal != 0 );
+		ENSURE( m_eInternal != 0 );
 	}
 
 	GlRenderBuffer::~GlRenderBuffer()

@@ -25,6 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <FileParser.hpp>
 #include <FontManager.hpp>
+#include <ImageManager.hpp>
 #include <Unique.hpp>
 
 #define DECLARE_MANAGER_MEMBER( memberName, className )\
@@ -246,7 +247,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline ImageCollection const & GetImageManager()const
+		inline Castor::ImageManager const & GetImageManager()const
 		{
 			return m_imageManager;
 		}
@@ -258,7 +259,7 @@ namespace Castor3D
 		 *\brief		Récupère la collection d'images
 		 *\return		La collection
 		 */
-		inline ImageCollection & GetImageManager()
+		inline Castor::ImageManager & GetImageManager()
 		{
 			return m_imageManager;
 		}
@@ -430,7 +431,7 @@ namespace Castor3D
 		//!\~english The fonts collection	\~french La collection de polices
 		Castor::FontManager m_fontManager;
 		//!\~english The images collection	\~french La collection d'images
-		ImageCollection m_imageManager;
+		Castor::ImageManager m_imageManager;
 		//!\~english The map holding the parsers, sorted by section, and plugin name	\~french La map de parseurs, triés par section, et nom de plugin
 		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
 	};

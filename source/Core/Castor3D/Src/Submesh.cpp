@@ -449,7 +449,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_ASSERT( false );
+			CASTOR_ASSERT( false, "Submesh Face subscript out of range" );
 			throw ( std::range_error( "Submesh::AddFace - One or more index out of bound" ) );
 		}
 

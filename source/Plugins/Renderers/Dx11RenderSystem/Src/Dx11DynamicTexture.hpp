@@ -43,7 +43,7 @@ namespace Dx11Render
 		}
 		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
 		{
-			CASTOR_ASSERT( false );
+			CASTOR_EXCEPTION( "Not implemented." );
 		}
 
 		inline ID3D11RenderTargetView * GetRenderTargetView()const

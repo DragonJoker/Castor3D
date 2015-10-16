@@ -148,8 +148,8 @@ namespace Castor
 		 */
 		template< ePIXEL_FORMAT PFSrc, ePIXEL_FORMAT PFDst >
 		Image( String const & p_name, Size const & p_ptSize, uint8_t const * p_pBuffer = NULL )
-			:	Resource< Image >	( p_name	)
-			,	m_pBuffer( new PxBuffer< PFDst >( p_ptSize, p_pBuffer, PFSrc )	)
+			: Resource< Image > ( p_name )
+			, m_pBuffer( std::make_shared< PxBuffer< PFDst > >( p_ptSize, p_pBuffer, PFSrc ) )
 		{
 			CHECK_INVARIANTS();
 		}
@@ -192,7 +192,7 @@ namespace Castor
 		 *\param[in]	p_image	L'objet Image à copier
 		 *\return		Une référence sur cet objet Image
 		 */
-		CU_API Image & operator =( Image const & p_image );
+		CU_API Image & operator=( Image const & p_image );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -203,14 +203,14 @@ namespace Castor
 		 *\param[in]	p_image	L'objet Image à déplacer
 		 *\return		Une référence sur cet objet Image
 		 */
-		CU_API Image & operator =( Image && p_image );
+		CU_API Image & operator=( Image && p_image );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API virtual ~Image();
+		CU_API ~Image();
 		/**
 		 *\~english
 		 *\brief		Resizes the image to the given resolution

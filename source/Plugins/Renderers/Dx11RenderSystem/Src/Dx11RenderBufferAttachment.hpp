@@ -23,22 +23,56 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <RenderBufferAttachment.hpp>
 
 #if defined( _WIN32 )
+
 namespace Dx11Render
 {
 	class DxRenderBufferAttachment
-		:	public Castor3D::RenderBufferAttachment
-		,	public Castor::NonCopyable
+		: public Castor3D::RenderBufferAttachment
+		, public Castor::NonCopyable
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\para[in]		p_renderSystem	The RenderSystem.
+		 *\param[in]	p_pRenderBuffer	The render buffer.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\para[in]		p_renderSystem	Le RenderSystem.
+		 *\param[in]	p_pRenderBuffer	Le tampon de rendu.
+		 */
 		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_pRenderBuffer );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\para[in]		p_renderSystem	The RenderSystem.
+		 *\param[in]	p_pRenderBuffer	The render buffer.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\para[in]		p_renderSystem	Le RenderSystem.
+		 *\param[in]	p_pRenderBuffer	Le tampon de rendu.
+		 */
 		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
 		virtual ~DxRenderBufferAttachment();
-
-		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );
+		/**
+		 *\copydoc		Castor3D::TextureAttachment::Blit
+		 */
 		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
 
 	private:
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
+		 */
 		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
+		 */
 		virtual void DoDetach();
 
 	private:
@@ -46,6 +80,7 @@ namespace Dx11Render
 		DxRenderSystem * m_renderSystem;
 	};
 }
+
 #endif
 
 #endif

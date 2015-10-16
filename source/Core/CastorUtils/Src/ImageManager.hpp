@@ -15,31 +15,27 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___CASTOR_FONT_MANAGER_H___
-#define ___CASTOR_FONT_MANAGER_H___
+#ifndef ___CASTOR_IMAGE_MANAGER_H___
+#define ___CASTOR_IMAGE_MANAGER_H___
 
 #include "Collection.hpp"
 #include "Loader.hpp"
-
-#if defined( CreateFont )
-#	undef CreateFont
-#endif
 
 namespace Castor
 {
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
-	\date		29/09/2015
+	\date		15/10/2015
 	\~english
-	\brief		Font manager.
-	\remark		Holds the loaded fonts, and also the paths to font files.
+	\brief		Image manager.
+	\remark		Holds the loaded images, and helps their loading.
 	\~french
-	\brief		Gestionnaire de polices.
-	\remark		Détient les polices, et aussi les chemins d'accès aux fichiers des polices.
+	\brief		Gestionnaire d'images.
+	\remark		Détient les images, et simplifie leur création.
 	*/
-	class FontManager
-		: private Collection< Font, String >
+	class ImageManager
+		: private Collection< Image, String >
 	{
 	public:
 		/*!
@@ -47,12 +43,12 @@ namespace Castor
 		\version	0.8.0
 		\date		29/09/2015
 		\~english
-		\brief		FontManager loader.
+		\brief		ImageManager loader.
 		\~french
-		\brief		Loader de FontManager.
+		\brief		Loader de ImageManager.
 		*/
 		class BinaryLoader
-			: public Loader< FontManager, eFILE_TYPE_BINARY, BinaryFile >
+			: public Loader< ImageManager, eFILE_TYPE_BINARY, BinaryFile >
 		{
 		public:
 			/**
@@ -72,12 +68,10 @@ namespace Castor
 			 *\param[in,out]	p_font		Le gestionnaire à charger.
 			 *\param[in]		p_file		Le fichier source.
 			 */
-			CU_API virtual bool operator()( FontManager & p_manager, BinaryFile & p_file );
+			CU_API virtual bool operator()( ImageManager & p_manager, BinaryFile & p_file );
 
 		private:
 		};
-
-		DECLARE_MAP( Castor::String, Castor::Path, PathName );
 
 	public:
 		/**
@@ -86,53 +80,57 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur.
 		 */
-		CU_API FontManager();
+		CU_API ImageManager();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_API ~FontManager();
+		CU_API ~ImageManager();
 		/**
 		 *\~english
-		 *\brief		Creates a font.
-		 *\remarks		If the font already exists, it is returned.
-		 *\param[in]	p_path		The full access path to the file.
+		 *\brief		Creates an image.
+		 *\remarks		If the image already exists, it is returned.
 		 *\param[in]	p_name		The font name.
-		 *\param[in]	p_height	The font precision.
-		 *\return		The created (or retrieved) font.
+		 *\param[in]	p_path		The full access path to the image file.
+		 *\return		The created (or retrieved) image.
 		 *\~french
-		 *\brief		Crée une police.
+		 *\brief		Crée une image.
 		 *\remarks		Si la police existe déjà, elle est retournée.
-		 *\param[in]	p_path		Le chemin complet d'accès au fichier.
 		 *\param[in]	p_name		Le nom de la police.
-		 *\param[in]	p_height	La précision de la police.
-		 *\return		La police créée (ou récupérée).
+		 *\param[in]	p_path		Le chemin complet d'accès au fichier de l'image.
+		 *\return		L'image créée (ou récupérée).
 		 */
-		CU_API FontSPtr create( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height );
+		CU_API ImageSPtr create( String const & p_name, Path const & p_path );
 		/**
 		 *\~english
-		 *\brief		Retrieves a font.
-		 *\param[in]	p_name	The font name.
-		 *\return		The font, nullptr if not found.
+		 *\brief		Creates the image with given params.
+		 *\remarks		If the image already exists, it is returned.
+		 *\param[in]	p_name		The image name.
+		 *\param[in]	p_size		The wanted image dimensions.
+		 *\param[in]	p_format	The wanted image pixel format.
 		 *\~french
-		 *\brief		Récupère une police.
-		 *\param[in]	p_name	Le nom de la police.
-		 *\return		La police, nullptr si non trouvée.
+		 *\brief		Crée l'image avec les paramètres donnés.
+		 *\param[in]	p_name		Le nom de l'image.
+		 *\param[in]	p_size		Les dimensions voulues pour l'image.
+		 *\param[in]	p_format	Le format de pixel voulu pour l'image.
 		 */
-		CU_API FontSPtr get( Castor::String const & p_name );
+		CU_API ImageSPtr create( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
-		 *\brief		Clears the collection and file paths.
+		 *\brief		Retrieves a image.
+		 *\param[in]	p_name	The image name.
+		 *\return		The image, nullptr if not found.
 		 *\~french
-		 *\brief		Nettoie la collection et les chemins d'accès aux fichiers.
+		 *\brief		Récupère une image.
+		 *\param[in]	p_name	Le nom de l'image.
+		 *\return		L'image, nullptr si non trouvée.
 		 */
-		CU_API void clear();
+		CU_API ImageSPtr get( String const & p_name );
 
-	protected:
-		//!\~english The font files paths sorted by <file_name>.<file_extension>	\~french Les fichiers des polices, triés par <file_name>.<file_extension>
-		PathNameMap m_paths;
+	public:
+		using Collection< Image, String >::clear;
 	};
 }
 

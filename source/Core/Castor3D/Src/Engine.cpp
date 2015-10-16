@@ -122,7 +122,7 @@ namespace Castor3D
 
 	void Engine::Initialise( uint32_t p_wanted, bool p_threaded )
 	{
-		CASTOR_ASSERT( m_renderSystem && "Did you forget to call LoadRenderer?" );
+		CASTOR_ASSERT( m_renderSystem, "Did you forget to call LoadRenderer?" );
 
 		if ( !m_renderSystem )
 		{

@@ -73,6 +73,7 @@ namespace GlRender
 
 	uint8_t * GlDirectTextureStorage::DoLock( uint32_t p_lock )
 	{
+		CASTOR_ASSERT( !m_buffer.expired(), "No buffer" );
 		return m_buffer.lock()->ptr();
 	}
 

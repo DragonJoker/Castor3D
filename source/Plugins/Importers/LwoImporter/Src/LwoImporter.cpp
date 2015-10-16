@@ -1137,35 +1137,25 @@ namespace Lwo
 				switch ( l_currentSubchunk.m_eId )
 				{
 				case eID_TAG_CLIP_STIL:
-					DoRead( l_strName );
-					l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
-					Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
-					l_pathImage = string::string_cast< xchar >( l_strName );
-					l_pImage = GetOwner()->GetImageManager().find( l_pathImage );
-
-					if ( !l_pImage )
 					{
-						if ( File::FileExists( l_pathImage ) )
+						DoRead( l_strName );
+						l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
+						Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
+						l_pathImage = string::string_cast< xchar >( l_strName );
+
+						if ( !File::FileExists( l_pathImage ) )
 						{
-							l_pImage = std::make_shared< Image >( l_pathImage, l_pathImage );
-						}
-						else if ( File::FileExists( m_pFile->GetFilePath() / l_pathImage ) )
-						{
-							l_pImage = std::make_shared< Image >( l_pathImage, m_pFile->GetFilePath() / l_pathImage );
-						}
-						else if ( File::FileExists( m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage ) )
-						{
-							l_pImage = std::make_shared< Image >( l_pathImage, m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage );
+							l_pathImage = m_pFile->GetFilePath() / l_pathImage;
 						}
 
-						if ( l_pImage )
+						if ( !File::FileExists( l_pathImage ) )
 						{
-							GetOwner()->GetImageManager().insert( l_pathImage, l_pImage );
+							l_pathImage = m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage;
 						}
+
+						ImageSPtr l_pImage = GetOwner()->GetImageManager().create( string::string_cast< xchar >( l_strName ), l_pathImage );
+						break;
 					}
-
-					m_mapImages.insert( std::make_pair( l_uiIndex, l_pImage ) );
-					break;
 
 				case eID_TAG_CLIP_ANIM:
 				case eID_TAG_CLIP_XREF:

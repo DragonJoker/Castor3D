@@ -37,7 +37,7 @@ namespace Castor
 
 	void PxBufferBase::init( uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
 	{
-		CASTOR_ASSERT( m_pBuffer == NULL );
+		CASTOR_ASSERT( m_pBuffer == NULL, "PxBufferBase - No buffer" );
 		uint8_t l_uiBpp = PF::GetBytesPerPixel( format() );
 		uint32_t l_uiSize = count() * l_uiBpp;
 		m_pBuffer = new uint8_t[l_uiSize];

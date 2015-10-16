@@ -84,6 +84,24 @@ namespace Dx11Render
 		return l_return;
 	}
 
+	bool DxFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	{
+		bool l_return = false;
+
+		//if ( m_gl.HasFbo() )
+		//{
+		//	if ( Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ ) )
+		//	{
+		//		m_gl.ReadBuffer( m_gl.Get( eGL_TEXTURE_ATTACHMENT( m_gl.Get( p_point ) + p_index ) ) );
+		//		OpenGl::PixelFmt l_pxFmt = m_gl.Get( p_buffer->format() );
+		//		l_return = m_gl.ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
+		//		Unbind();
+		//	}
+		//}
+
+		return l_return;
+	}
+
 	ColourRenderBufferSPtr DxFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
 	{
 		return std::make_shared< DxColourRenderBuffer >( m_renderSystem, p_ePixelFormat );
@@ -139,30 +157,6 @@ namespace Dx11Render
 
 	void DxFrameBuffer::DoUnbind()
 	{
-#if DX_DEBUG_RT
-
-		if ( !m_attaches.empty() )
-		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-
-			for ( auto && l_attach : m_attaches )
-			{
-				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
-
-				if ( l_eAttach == eATTACHMENT_POINT_COLOUR )
-				{
-					ID3D11Resource * l_pResource = NULL;
-					TextureAttachmentSPtr l_texAttach = std::static_pointer_cast< TextureAttachment >( l_attach );
-					std::static_pointer_cast< DxDynamicTexture >( l_texAttach->GetTexture() )->GetRenderTargetView()->GetResource( &l_pResource );
-					StringStream l_name;
-					l_name << Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )l_texAttach->GetTexture().get() << cuT( "_FBA.png" );
-					D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
-					l_pResource->Release();
-				}
-			}
-		}
-
-#endif
 	}
 
 	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )

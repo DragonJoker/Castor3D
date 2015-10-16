@@ -150,6 +150,7 @@ namespace Castor
 	class FontManager;
 	class Glyph;
 	class Image;
+	class ImageManager;
 	class Colour;
 	template< typename T >
 	class Line2D;

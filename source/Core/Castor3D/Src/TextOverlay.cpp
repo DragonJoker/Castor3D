@@ -154,7 +154,7 @@ namespace Castor3D
 		// Récupération / Création de la police
 		Engine * l_engine = m_pOverlay->GetOwner();
 		FontManager & l_fontManager = l_engine->GetFontManager();
-		FontSPtr l_pFont = l_fontManager.get_font( p_strFont );
+		FontSPtr l_pFont = l_fontManager.get( p_strFont );
 
 		if ( l_pFont )
 		{

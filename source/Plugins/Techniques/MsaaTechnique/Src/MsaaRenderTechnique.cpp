@@ -13,6 +13,7 @@
 #include <Parameter.hpp>
 #include <DynamicTexture.hpp>
 
+#include <Image.hpp>
 #include <Logger.hpp>
 
 #if C3D_HAS_GL_RENDERER
@@ -311,8 +312,8 @@ namespace Msaa
 
 #	if DEBUG_BUFFERS
 
-			m_pColorAttach->DownloadBuffer( m_pColorBuffer->GetBuffer() );
-			const Image l_image( cuT( "Tmp" ), *m_pColorBuffer->GetBuffer() );
+			auto l_buffer = m_pColorAttach->DownloadBuffer();
+			const Image l_image( cuT( "Tmp" ), *l_buffer );
 			Image::BinaryLoader()( l_image, Engine::GetEngineDirectory() / cuT( "MsaaImage.bmp" ) );
 
 #	endif

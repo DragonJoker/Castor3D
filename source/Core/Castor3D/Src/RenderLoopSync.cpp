@@ -15,23 +15,21 @@ namespace Castor3D
 	RenderLoopSync::~RenderLoopSync()
 	{
 		// No render loop so we clean the render system ourselves with that single call.
-		DoRenderOneFrame();
+		DoRenderFrame();
 	}
 
 	void RenderLoopSync::DoStartRendering()
 	{
-		CASTOR_ASSERT( false );
 		CASTOR_EXCEPTION( CALL_START_RENDERING );
 	}
 
 	void RenderLoopSync::DoRenderSyncFrame()
 	{
-		DoRenderOneFrame();
+		DoRenderFrame();
 	}
 
 	void RenderLoopSync::DoEndRendering()
 	{
-		CASTOR_ASSERT( false );
 		CASTOR_EXCEPTION( CALL_END_RENDERING );
 	}
 

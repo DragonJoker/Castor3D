@@ -17,7 +17,6 @@ namespace Castor3D
 
 	FrameVariableBuffer::~FrameVariableBuffer()
 	{
-		CASTOR_ASSERT( m_mapVariables.size() == 0 && m_listVariables.size() == 0 );
 	}
 
 	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, String const & p_name, uint32_t p_uiNbOcc )

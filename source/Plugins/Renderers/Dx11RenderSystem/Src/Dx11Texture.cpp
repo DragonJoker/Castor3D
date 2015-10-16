@@ -174,7 +174,7 @@ namespace Dx11Render
 			l_texture->Release();
 		}
 
-		CASTOR_ASSERT( l_hr == S_OK );
+		ENSURE( l_hr == S_OK );
 		return l_hr == S_OK;
 	}
 
@@ -199,7 +199,7 @@ namespace Dx11Render
 			l_texture->Release();
 		}
 
-		CASTOR_ASSERT( l_hr == S_OK );
+		ENSURE( l_hr == S_OK );
 		return l_hr == S_OK;
 	}
 
@@ -224,7 +224,7 @@ namespace Dx11Render
 			l_texture->Release();
 		}
 
-		CASTOR_ASSERT( l_hr == S_OK );
+		ENSURE( l_hr == S_OK );
 		return l_hr == S_OK;
 	}
 
@@ -249,7 +249,7 @@ namespace Dx11Render
 			l_texture->Release();
 		}
 
-		CASTOR_ASSERT( l_hr == S_OK );
+		ENSURE( l_hr == S_OK );
 		return l_hr == S_OK;
 	}
 
@@ -274,7 +274,7 @@ namespace Dx11Render
 			l_texture->Release();
 		}
 
-		CASTOR_ASSERT( l_hr == S_OK );
+		ENSURE( l_hr == S_OK );
 		return l_hr == S_OK;
 	}
 
@@ -299,7 +299,7 @@ namespace Dx11Render
 			l_texture->Release();
 		}
 
-		CASTOR_ASSERT( l_hr == S_OK );
+		ENSURE( l_hr == S_OK );
 		return l_hr == S_OK;
 	}
 
@@ -324,7 +324,7 @@ namespace Dx11Render
 			l_texture->Release();
 		}
 
-		CASTOR_ASSERT( l_hr == S_OK );
+		ENSURE( l_hr == S_OK );
 		return l_hr == S_OK;
 	}
 

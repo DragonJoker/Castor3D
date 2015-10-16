@@ -66,7 +66,7 @@ namespace Castor3D
 
 	FaceSPtr Subdivider::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		CASTOR_ASSERT( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount() );
+		CASTOR_ASSERT( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount(), "Subdivider Face subscript out of range" );
 		FaceSPtr l_pReturn = std::make_shared< Face >( a, b, c );
 		m_arrayFaces.push_back( l_pReturn );
 		return l_pReturn;
