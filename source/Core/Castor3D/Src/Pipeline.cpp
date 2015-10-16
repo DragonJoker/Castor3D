@@ -153,7 +153,7 @@ namespace Castor3D
 
 	void Pipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer & p_matrixBuffer )
 	{
-		CASTOR_ASSERT( p_index < C3D_MAX_TEXTURE_MATRICES );
+		CASTOR_ASSERT( p_index < C3D_MAX_TEXTURE_MATRICES, "Pipeline TextureMatrix subscript out of range" );
 		DoApplyMatrix( m_mtxTexture[p_index], MtxTexture[p_index], p_matrixBuffer );
 	}
 

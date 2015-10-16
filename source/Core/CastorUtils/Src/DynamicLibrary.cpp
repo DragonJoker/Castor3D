@@ -124,7 +124,6 @@ namespace Castor
 	void * DynamicLibrary::DoGetFunction( String const & p_name )throw()
 	{
 		void * l_pReturn = NULL;
-		REQUIRE( m_pLibrary );
 
 		if ( m_pLibrary )
 		{

@@ -92,24 +92,24 @@
 	template< TPL_PIXEL_FORMAT FT >
 	uint8_t * PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
-		CASTOR_ASSERT( x < width() && y < height() );
+		CASTOR_ASSERT( x < width() && y < height(), "PxBuffer subscript out of range" );
 		return &m_pBuffer[( x * height() + y ) * pixel_definitions< FT >::Size];
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	uint8_t const * PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
-		CASTOR_ASSERT( x < width() && y < height() );
+		CASTOR_ASSERT( x < width() && y < height(), "PxBuffer subscript out of range" );
 		return &m_pBuffer[( x * height() + y ) * pixel_definitions< FT >::Size];
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::flip()
 	{
-		uint32_t 	l_uiWidth		= width() * pixel_definitions< FT >::Size;
-		uint32_t	l_uiHeight		= height();
-		uint8_t  *	l_pBufferTop	= &m_pBuffer[0];
-		uint8_t  *	l_pBufferBottom	= &m_pBuffer[( l_uiHeight - 1 ) * l_uiWidth - 1];
+		uint32_t l_uiWidth = width() * pixel_definitions< FT >::Size;
+		uint32_t l_uiHeight = height();
+		uint8_t * l_pBufferTop = &m_pBuffer[0];
+		uint8_t * l_pBufferBottom = &m_pBuffer[( l_uiHeight - 1 ) * l_uiWidth - 1];
 
 		for ( uint32_t i = 0; i < l_uiHeight / 2; i++ )
 		{
@@ -126,9 +126,9 @@
 	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::mirror()
 	{
-		uint32_t 	l_uiWidth		= width() * pixel_definitions< FT >::Size;
-		uint32_t	l_uiHeight		= height();
-		uint8_t		*	l_pxA, *l_pxB;
+		uint32_t l_uiWidth = width() * pixel_definitions< FT >::Size;
+		uint32_t l_uiHeight = height();
+		uint8_t * l_pxA, *l_pxB;
 
 		for ( uint32_t i = 0; i < l_uiHeight; i++ )
 		{

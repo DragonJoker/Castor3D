@@ -70,7 +70,7 @@ namespace detail
 
 		real l_rDeltaTime = p_itNxt->first - p_itPrv->first;
 		real l_rReturn = ( p_itCur->first - p_itPrv->first ) / l_rDeltaTime;
-		CASTOR_ASSERT( l_rReturn >= 0.0f && l_rReturn <= 1.0f );
+		ENSURE( l_rReturn >= 0.0f && l_rReturn <= 1.0f );
 		return l_rReturn;
 	}
 

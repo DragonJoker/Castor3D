@@ -27,11 +27,6 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxRenderBufferAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
-	{
-		return false;
-	}
-
 	bool DxRenderBufferAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
 		bool l_return = false;

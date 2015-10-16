@@ -24,7 +24,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <OwnedBy.hpp>
 
 #if !defined( NDEBUG )
-#	define DEBUG_BUFFERS 0
+#	define DEBUG_BUFFERS 1
 #else
 #	define DEBUG_BUFFERS 0
 #endif

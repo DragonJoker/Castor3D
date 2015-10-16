@@ -163,21 +163,13 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 			if ( !l_strValue.empty() )
 			{
 				String l_strPath = m_filePath / l_strValue;
-				l_pImage = GetOwner()->GetImageManager().find( l_strValue );
 
-				if ( !l_pImage )
+				if ( !File::FileExists( l_strPath ) )
 				{
-					if ( !File::FileExists( l_strPath ) )
-					{
-						l_strPath = m_filePath / cuT( "Texture" ) / l_strValue;
-					}
-
-					if ( File::FileExists( l_strPath ) )
-					{
-						l_pImage = std::make_shared< Image >( l_strValue, l_strPath );
-						GetOwner()->GetImageManager().insert( l_strValue, l_pImage );
-					}
+					l_strPath = m_filePath / cuT( "Texture" ) / l_strValue;
 				}
+
+				l_pImage = GetOwner()->GetImageManager().create( l_strValue, l_strPath );
 			}
 
 			if ( l_pImage && p_pPass )
@@ -323,32 +315,15 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 				{
 					TextureUnitSPtr l_unit = l_pass->AddTextureUnit();
 
-					if ( File::FileExists( l_strImage ) )
+					if ( !File::FileExists( l_strImage ) )
 					{
-						Collection<Image, String> l_imgCollection;
-						ImageSPtr l_pImage = l_imgCollection.find( l_strImage );
-
-						if ( ! l_pImage )
-						{
-							l_pImage = std::make_shared< Image >( l_strImage, l_strImage );
-							l_imgCollection.insert( l_strImage, l_pImage );
-						}
-
-						StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-						l_pStaTexture->SetImage( l_pImage->GetPixels() );
-						l_unit->SetTexture( l_pStaTexture );
+						l_strImage = l_fileIO.GetFilePath() / l_strImage;
 					}
-					else if ( File::FileExists( l_fileIO.GetFilePath() / l_strImage ) )
+
+					ImageSPtr l_pImage = GetOwner()->GetImageManager().create( l_strImage, l_strImage );
+
+					if ( l_pImage )
 					{
-						ImageSPtr l_pImage = GetOwner()->GetImageManager().find( l_fileIO.GetFilePath() / l_strImage );
-
-						if ( ! l_pImage )
-						{
-							l_pImage = std::make_shared< Image >( l_fileIO.GetFilePath() / l_strImage, l_fileIO.GetFilePath() / l_strImage );
-							GetOwner()->GetImageManager().insert( l_fileIO.GetFilePath() / l_strImage, l_pImage );
-						}
-
 						StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 						l_pStaTexture->SetImage( l_pImage->GetPixels() );
@@ -405,31 +380,15 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 			{
 				TextureUnitSPtr l_unit = l_pass->AddTextureUnit();
 
-				if ( File::FileExists( l_strLine ) )
+				if ( !File::FileExists( l_strLine ) )
 				{
-					ImageSPtr l_pImage = GetOwner()->GetImageManager().find( l_strLine );
-
-					if ( !l_pImage )
-					{
-						l_pImage = std::make_shared< Image >( l_strLine, l_strLine );
-						GetOwner()->GetImageManager().insert( l_strLine, l_pImage );
-					}
-
-					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-					l_pStaTexture->SetImage( l_pImage->GetPixels() );
-					l_unit->SetTexture( l_pStaTexture );
+					l_strLine = l_fileIO.GetFilePath() / l_strLine;
 				}
-				else if ( File::FileExists( l_fileIO.GetFilePath() / l_strLine ) )
+
+				ImageSPtr l_pImage = GetOwner()->GetImageManager().create( l_strLine, l_strLine );
+
+				if ( l_pImage )
 				{
-					ImageSPtr l_pImage = GetOwner()->GetImageManager().find( l_fileIO.GetFilePath() / l_strLine );
-
-					if ( !l_pImage )
-					{
-						l_pImage = std::make_shared< Image >( l_fileIO.GetFilePath() / l_strLine, l_fileIO.GetFilePath() / l_strLine );
-						GetOwner()->GetImageManager().insert( l_fileIO.GetFilePath() / l_strLine, l_pImage );
-					}
-
 					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );

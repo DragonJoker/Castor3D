@@ -393,7 +393,6 @@ namespace Deferred
 			1, 1, 1, 1,
 		};
 		uint32_t l_stride = m_pDeclaration->GetStride();
-		CASTOR_ASSERT( sizeof( l_pBuffer ) == 6 * l_stride );
 		l_pVtxBuffer->Resize( sizeof( l_pBuffer ) );
 		uint8_t * l_buffer = l_pVtxBuffer->data();
 		std::memcpy( l_buffer, l_pBuffer, sizeof( l_pBuffer ) );
@@ -582,12 +581,12 @@ namespace Deferred
 			int l_thirdWidth = int( l_width / 3.0f );
 			int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
 			int l_halfHeight = int( l_height / 2.0f );
-			m_lightPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, 0, l_thirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, 0, l_width, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( 0, l_halfHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_thirdWidth, l_halfHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pFrameBuffer, Rectangle( 0, 0, l_width, l_height ), Rectangle( l_twoThirdWidth, l_halfHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, 0, l_thirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_halfHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_halfHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+			m_lightPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_halfHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
 
 #else
 

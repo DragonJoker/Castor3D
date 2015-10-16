@@ -130,7 +130,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::get_row( uint32_t p_index, Point< T, Columns > & p_result )const
 	{
-		CASTOR_ASSERT( p_index < Rows );
+		CASTOR_ASSERT( p_index < Columns, "Matrix Rows subscript out of range" );
 
 		for ( uint32_t i = 0; i < Columns; i++ )
 		{
@@ -140,6 +140,8 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::set_column( uint32_t p_index, T const * p_col )
 	{
+		CASTOR_ASSERT( p_index < Columns, "Matrix Columns subscript out of range" );
+
 		if ( Rows >= 1 && p_index < Columns )
 		{
 			std::memcpy( m_columns[p_index].ptr(), p_col, Rows * sizeof( T ) );
@@ -158,32 +160,32 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Point< T, Rows > Matrix< T, Columns, Rows >::get_column( uint32_t p_index )const
 	{
-		CASTOR_ASSERT( p_index < Columns );
+		CASTOR_ASSERT( p_index < Columns, "Matrix Columns subscript out of range" );
 		return Point< T, Rows >( m_columns[p_index] );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Coords< T, Rows > Matrix< T, Columns, Rows >::get_column( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_index < Columns );
+		CASTOR_ASSERT( p_index < Columns, "Matrix Columns subscript out of range" );
 		return m_columns[p_index];
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::get_column( uint32_t p_index, Point< T, Rows > & p_result )const
 	{
-		CASTOR_ASSERT( p_index < Columns );
+		CASTOR_ASSERT( p_index < Columns, "Matrix Columns subscript out of range" );
 		p_result = Point< T, Rows >( m_columns[p_index] );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::get_column( uint32_t p_index, Coords< T, Rows > & p_result )
 	{
-		CASTOR_ASSERT( p_index < Columns );
+		CASTOR_ASSERT( p_index < Columns, "Matrix Columns subscript out of range" );
 		p_result = m_columns[p_index];
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline T Matrix< T, Columns, Rows >::value_at( uint32_t p_column, uint32_t p_row )
 	{
-		CASTOR_ASSERT( p_row < Rows );
-		CASTOR_ASSERT( p_column < Columns );
+		CASTOR_ASSERT( p_row < Rows, "Matrix Rows subscript out of range" );
+		CASTOR_ASSERT( p_column < Columns, "Matrix Columns subscript out of range" );
 		return m_columns[p_column][p_row];
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -397,13 +399,13 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Point< T, Rows > Matrix< T, Columns, Rows >::operator[]( uint32_t i )const
 	{
-		CASTOR_ASSERT( i < Columns );
+		CASTOR_ASSERT( i < Columns, "Matrix Columns subscript out of range" );
 		return Point< T, Rows >( m_columns[i] );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Coords< T, Rows > & Matrix< T, Columns, Rows >::operator[]( uint32_t i )
 	{
-		CASTOR_ASSERT( i < Columns );
+		CASTOR_ASSERT( i < Columns, "Matrix Columns subscript out of range" );
 		return m_columns[i];
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >

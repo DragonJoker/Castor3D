@@ -89,7 +89,6 @@ namespace Castor3D
 
 	void RenderLoopAsync::DoRenderSyncFrame()
 	{
-		CASTOR_ASSERT( false );
 		CASTOR_EXCEPTION( CALL_RENDER_SYNC_FRAME );
 	}
 
@@ -159,7 +158,7 @@ namespace Castor3D
 				{
 					double l_dFrameTime = GetFrameTime();
 					l_timer.TimeS();
-					DoRenderOneFrame();
+					DoRenderFrame();
 					double l_dTimeDiff = l_timer.TimeS();
 
 					if ( l_dTimeDiff < l_dFrameTime )
@@ -184,7 +183,7 @@ namespace Castor3D
 		}
 
 		// A final render to clean the renderers
-		DoRenderOneFrame();
+		DoRenderFrame();
 	}
 
 	void RenderLoopAsync::DoSetWindow( RenderWindow * p_window )

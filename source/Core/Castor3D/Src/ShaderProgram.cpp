@@ -286,7 +286,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_ASSERT( false );
+			CASTOR_ASSERT( false, "Shader Type subscript out of range" );
 		}
 
 		return l_pReturn;

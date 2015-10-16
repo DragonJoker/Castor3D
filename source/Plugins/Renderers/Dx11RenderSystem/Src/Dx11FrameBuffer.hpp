@@ -82,6 +82,10 @@ namespace Dx11Render
 			return true;
 		}
 		/**
+		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
+		 */
+		virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
+		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
 		virtual Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );

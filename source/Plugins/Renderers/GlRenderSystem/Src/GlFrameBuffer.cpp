@@ -91,6 +91,32 @@ namespace GlRender
 		return eGL_FRAMEBUFFER_STATUS( m_gl.CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE_DEFAULT ) ) == eGL_FRAMEBUFFER_COMPLETE;
 	}
 
+	bool GlFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	{
+		bool l_return = m_gl.HasFbo();
+		auto l_mode = m_gl.Get( eFRAMEBUFFER_TARGET_READ );
+
+		if ( l_return )
+		{
+			l_return = m_gl.BindFramebuffer( l_mode, m_uiGlName );
+		}
+
+		if ( l_return )
+		{
+			l_return = m_gl.ReadBuffer( m_gl.Get( eGL_TEXTURE_ATTACHMENT( m_gl.Get( p_point ) + p_index ) ) );
+
+			if ( l_return )
+			{
+				OpenGl::PixelFmt l_pxFmt = m_gl.Get( p_buffer->format() );
+				l_return = m_gl.ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
+			}
+
+			m_gl.BindFramebuffer( l_mode, 0 );
+		}
+
+		return l_return;
+	}
+
 	ColourRenderBufferSPtr GlFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
 	{
 		return std::make_shared< GlColourRenderBuffer >( m_gl, p_ePixelFormat );

@@ -286,6 +286,19 @@ namespace Castor3D
 		 *\return		\p false si le tampon est en erreur ou s'il manque une attache.
 		 */
 		C3D_API virtual bool IsComplete() = 0;
+		/**
+		 *\~english
+		 *\brief		Downloads the render buffer data.
+		 *\param[in]	p_attachment	The attachment point
+		 *\param[in]	p_index			The attachment index
+		 *\param[in]	p_buffer		Receives the data.
+		 *\~french
+		 *\brief		Récupère les données du tampon de rendu.
+		 *\param[in]	p_attachment	Le point d'attache
+		 *\param[in]	p_index			L'index d'attache
+		 *\param[in]	p_buffer		Reçoit les données.
+		 */
+		C3D_API virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer ) = 0;
 
 	protected:
 		/**

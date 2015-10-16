@@ -1962,8 +1962,6 @@ namespace Castor3D
 	class TargetManager;
 	class ListenerManager;
 
-	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
-
 	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( ShaderManager );
 	DECLARE_SMART_PTR( MaterialManager );

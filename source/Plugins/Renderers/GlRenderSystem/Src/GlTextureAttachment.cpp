@@ -20,35 +20,13 @@ namespace GlRender
 	{
 	}
 
-	bool GlTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
-	{
-		bool l_return = false;
-
-		if ( m_gl.HasFbo() )
-		{
-			FrameBufferSPtr l_pFrameBuffer = GetFrameBuffer();
-			DynamicTextureSPtr l_pTexture = GetTexture();
-			l_return = l_pFrameBuffer != nullptr && l_pTexture != nullptr;
-
-			if ( l_return && l_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ ) )
-			{
-				m_gl.ReadBuffer( m_gl.Get( m_eGlAttachmentPoint ) );
-				OpenGl::PixelFmt l_pxFmt = m_gl.Get( p_pBuffer->format() );
-				l_return = m_gl.ReadPixels( Position(), l_pTexture->GetDimensions(), l_pxFmt.Format, l_pxFmt.Type, p_pBuffer->ptr() );
-				l_pFrameBuffer->Unbind();
-			}
-		}
-
-		return l_return;
-	}
-
 	bool GlTextureAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_eInterpolation )
 	{
 		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
-			l_return = m_eGlStatus == eGL_FRAMEBUFFER_COMPLETE;
+			l_return = GetFrameBuffer()->IsComplete();
 			GlFrameBufferSPtr l_pBuffer = std::static_pointer_cast< GlFrameBuffer >( p_pBuffer );
 
 			if ( l_return )

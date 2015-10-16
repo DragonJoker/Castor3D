@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorUtils.hpp"
 
+#include "Exception.hpp"
+
 #ifndef CASTOR_USE_ASSERT
 #	ifndef NDEBUG
 #		define CASTOR_USE_ASSERT 1
@@ -33,7 +35,55 @@ http://www.gnu.org/copyleft/lesser.txt.
 #		undef CASTOR_ASSERT
 #	endif
 #	include <cassert>
-#	define CASTOR_ASSERT( X ) assert( X )
+
+namespace Castor
+{
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/10/2015
+	\~english
+	\brief		Exception class thrown on Debug builds, when an assertion fails.
+	\~french
+	\brief		Classe d'exception levée en Debug, lorsqu'une assertion échoue.
+	*/
+	class AssertException
+		: public Exception
+	{
+	public:
+		/**
+		*\~english
+		*\brief		Specified constructor
+		*\param[in]	p_description	The exception description
+		*\param[in]	p_file			The file name
+		*\param[in]	p_function		The function name
+		*\param[in]	p_line			The line number
+		*\~french
+		*\brief		Constructeur spécifié
+		*\param[in]	p_description	La description de l'exception
+		*\param[in]	p_file			Le nom du fichier
+		*\param[in]	p_function		Le nom de la fonction
+		*\param[in]	p_line			Le numéro de ligne
+		*/
+		AssertException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+			: Exception( "Assertion failed: " + p_description, p_file, p_function, p_line )
+		{
+		}
+		/**
+		*\~english
+		*\brief		Destructor
+		*\~french
+		*\brief		Destructeur
+		*/
+		virtual ~AssertException() throw( )
+		{
+		}
+	};
+}
+
+#	define CASTOR_ASSERT( pred, text )\
+		assert( pred );\
+		throw Castor::AssertException( text, __FILE__, __FUNCTION__, __LINE__ );
 #else
 #	define CASTOR_ASSERT( X )
 #endif

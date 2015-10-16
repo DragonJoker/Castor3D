@@ -25,8 +25,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlRenderBufferAttachment
-		:	public Castor3D::RenderBufferAttachment
-		,	public Castor::NonCopyable
+		: public Castor3D::RenderBufferAttachment
+		, public Castor::NonCopyable
 	{
 	public:
 		/**
@@ -47,10 +47,6 @@ namespace GlRender
 		 *\brief		Destructeur.
 		 */
 		virtual ~GlRenderBufferAttachment();
-		/**
-		 *\copydoc		Castor3D::TextureAttachment::DownloadBuffer
-		 */
-		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */

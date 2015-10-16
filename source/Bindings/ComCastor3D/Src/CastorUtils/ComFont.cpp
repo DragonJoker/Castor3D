@@ -5,8 +5,9 @@
 
 namespace CastorCom
 {
-	static const Castor::String ERROR_WRONG_FILE_NAME = cuT( "The given file doesn't exist" );
-	static const Castor::String ERROR_IMAGE_EXISTS = cuT( "The given font name already exists" );
+	static const TCHAR * ERROR_WRONG_FILE_NAME = _T( "The given file doesn't exist" );
+	static const TCHAR * ERROR_FONT_EXISTS = _T( "The given font name already exists" );
+	static const TCHAR * ERROR_UNINITIALISED_FONT = _T( "The font must be initialised" );
 
 	CFont::CFont()
 	{
@@ -24,10 +25,8 @@ namespace CastorCom
 		{
 			CEngine * l_engn = static_cast< CEngine * >( engine );
 			Castor3D::Engine * l_engine = l_engn->GetInternal();
-			Castor::FontManager & l_mgr = l_engine->GetFontManager();
 			Castor::String l_name = FromBstr( name );
 			Castor::Path l_path = FromBstr( path );
-			m_font = l_mgr.get_font( l_name );
 			Castor::Path l_pathFont = l_path;
 
 			if ( !Castor::File::FileExists( l_pathFont ) )
@@ -35,29 +34,16 @@ namespace CastorCom
 				l_pathFont = l_engine->GetDataDirectory() / l_path;
 			}
 
-			if ( Castor::File::FileExists( l_pathFont ) )
-			{
-				if ( !m_font )
-				{
-					m_font = std::make_shared< Castor::Font >( l_pathFont, l_name, height );
-				}
-				else
-				{
-					Castor::Font::BinaryLoader()( *m_font, l_pathFont, height );
-				}
+			m_font = l_engine->GetFontManager().create( l_pathFont, l_name, height );
 
-				hr = S_OK;
-			}
-			else
+			if ( !m_font )
 			{
-				hr = CComError::DispatchError(
-						 E_FAIL,						// This represents the error
-						 IID_IFont,						// This is the GUID of component throwing error
-						 cuT( "LoadFromFile" ),			// This is generally displayed as the title
-						 ERROR_WRONG_FILE_NAME.c_str(),	// This is the description
-						 0,								// This is the context in the help file
-						 NULL );
+				hr = CComError::DispatchError( E_FAIL, IID_IFont, cuT( "LoadFromFile" ), ERROR_WRONG_FILE_NAME, 0, NULL );
 			}
+		}
+		else
+		{
+			hr = CComError::DispatchError( E_FAIL, IID_IFont, cuT( "LoadFromFile" ), ERROR_FONT_EXISTS, 0, NULL );
 		}
 
 		return hr;
@@ -80,6 +66,10 @@ namespace CastorCom
 			{
 				*pGlyph = l_it->second;
 			}
+		}
+		else
+		{
+			hr = CComError::DispatchError( E_FAIL, IID_IFont, cuT( "GetGlyph" ), ERROR_UNINITIALISED_FONT, 0, NULL );
 		}
 
 		return hr;

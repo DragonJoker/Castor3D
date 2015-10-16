@@ -142,7 +142,7 @@ namespace Castor
 			break;
 
 		default:
-			CASTOR_ASSERT( false );
+			CASTOR_ASSERT( false, "Unsupported file opening mode" );
 			break;
 		}
 

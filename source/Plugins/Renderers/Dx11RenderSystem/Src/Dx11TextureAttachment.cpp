@@ -19,26 +19,6 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxTextureAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
-	{
-		bool l_return = false;
-		DxDynamicTextureSPtr l_texture = m_pDxTexture.lock();
-
-		if ( l_texture )
-		{
-			uint8_t * l_buffer = l_texture->Lock( eLOCK_FLAG_READ_ONLY );
-
-			if( l_buffer )
-			{
-				l_return = true;
-				std::memcpy( p_pBuffer->ptr(), l_buffer, p_pBuffer->size() );
-				l_texture->Unlock( false );
-			}
-		}
-
-		return l_return;
-	}
-
 	bool DxTextureAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
 		bool l_return = true;

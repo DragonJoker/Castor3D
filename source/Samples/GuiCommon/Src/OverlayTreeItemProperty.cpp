@@ -301,7 +301,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderMaterialChange( Castor::String const & p_name )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
 
 		DoApplyChange( [p_name, l_overlay]()
 		{
@@ -318,7 +318,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderSizeChange( Castor::Rectangle const & p_size )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
 
 		DoApplyChange( [p_size, l_overlay]()
 		{
@@ -329,7 +329,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderInnerUVChange( Castor::Point4d const & p_value )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
 		double x = p_value[0];
 		double y = p_value[1];
 		double z = p_value[2];
@@ -344,7 +344,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderOuterUVChange( Castor::Point4d const & p_value )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
 		double x = p_value[0];
 		double y = p_value[1];
 		double z = p_value[2];
@@ -359,7 +359,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnBorderPositionChange( Castor3D::eBORDER_POSITION p_position )
 	{
 		BorderPanelOverlaySPtr l_overlay = std::static_pointer_cast< BorderPanelOverlay >( GetOverlay() );
-		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
+		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_BORDER_PANEL );
 
 		DoApplyChange( [p_position, l_overlay]()
 		{
@@ -370,7 +370,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnCaptionChange( Castor::String const & p_caption )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
 
 		DoApplyChange( [p_caption, l_overlay]()
 		{
@@ -381,7 +381,7 @@ namespace GuiCommon
 	void OverlayTreeItemProperty::OnFontChange( Castor::FontSPtr p_font )
 	{
 		TextOverlaySPtr l_overlay = std::static_pointer_cast< TextOverlay >( GetOverlay() );
-		CASTOR_ASSERT( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
+		REQUIRE( l_overlay->GetType() == eOVERLAY_TYPE_TEXT );
 
 		DoApplyChange( [p_font, l_overlay]()
 		{

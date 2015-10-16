@@ -109,15 +109,6 @@ namespace Castor3D
 		C3D_API void CreateContext( RenderWindow & p_window );
 		/**
 		 *\~english
-		 *\brief		Initialises the debug overlays.
-		 *\param[in]	p_show	The status.
-		 *\~french
-		 *\brief		Initialise les incrustations de débogage.
-		 *\param[in]	p_show	Le statut.
-		 */
-		C3D_API void InitialiseDebugOverlays( OverlayManager & p_manager );
-		/**
-		 *\~english
 		 *\brief		Show or hide debug overlays.
 		 *\param[in]	p_show	The status.
 		 *\~french
@@ -144,7 +135,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Commence le rendu threadé.
 		 */
-		C3D_API void DoRenderOneFrame();
+		C3D_API void DoRenderFrame();
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop.

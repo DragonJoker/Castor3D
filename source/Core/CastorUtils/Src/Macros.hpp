@@ -53,11 +53,11 @@ typedef wchar_t ychar;
 //@{
 
 //!\~english Precondition\~french Précondition
-#define REQUIRE( cond ) CASTOR_ASSERT( cond )
+#define REQUIRE( cond ) CASTOR_ASSERT( cond, "Required condition failed: "#cond )
 //!\~english Postcondition\~french Postcondition
-#define ENSURE( cond ) CASTOR_ASSERT( cond )
+#define ENSURE( cond ) CASTOR_ASSERT( cond, "Ensured condition failed: "#cond )
 //!\~english Checks an invariant condition\~french Vérifie une condition invariante
-#define CHECK_INVARIANT( cond ) CASTOR_ASSERT( cond )
+#define CHECK_INVARIANT( cond ) CASTOR_ASSERT( cond, "Invariant check failed: "#cond )
 //!\~english Declares the invariant checking function\~french Déclare la fonction de vérification des invariants de classe
 #define DECLARE_INVARIANT_BLOCK() void DoContractCheckInvariants()const;
 //!\~english Begins invariant checking function implementation\~french Commence l'implémentation de la fonction de vérification des invariants de classe

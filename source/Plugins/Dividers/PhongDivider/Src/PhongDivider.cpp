@@ -10,7 +10,7 @@ namespace Phong
 		Point3d Barycenter( double u, double v, Point3d const & p1, Point3d const & p2, Point3d const & p3 )
 		{
 			double w = 1 - u - v;
-			CASTOR_ASSERT( u + v + w == 1 );
+			ENSURE( u + v + w == 1 );
 			return ( p1 * u + p2 * v + p3 * w );
 		}
 	}

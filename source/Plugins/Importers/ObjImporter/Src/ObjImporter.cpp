@@ -104,21 +104,13 @@ namespace Obj
 		if ( !l_strValue.empty() )
 		{
 			String l_strPath = m_filePath / l_strValue;
-			l_pImage = m_collImages.find( l_strValue );
 
-			if ( !l_pImage )
+			if ( !File::FileExists( l_strPath ) )
 			{
-				if ( !File::FileExists( l_strPath ) )
-				{
-					l_strPath = m_filePath / cuT( "Texture" ) / l_strValue;
-				}
-
-				if ( File::FileExists( l_strPath ) )
-				{
-					l_pImage = std::make_shared< Image >( l_strValue, l_strPath );
-					m_collImages.insert( l_strValue, l_pImage );
-				}
+				l_strPath = m_filePath / cuT( "Texture" ) / l_strValue;
 			}
+
+			l_pImage = m_collImages.create( l_strValue, l_strPath );
 		}
 
 		if ( l_pImage && p_pPass )

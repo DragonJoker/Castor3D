@@ -251,7 +251,7 @@ namespace Castor3D
 		 */
 		inline void SetElement( uint32_t p_index, T const & p_value )
 		{
-			CASTOR_ASSERT( p_index < m_arrayData.size() );
+			CASTOR_ASSERT( p_index < m_arrayData.size(), "CpuBuffer subscript out of range" );
 			m_arrayData[p_index] = p_value;
 		}
 		/**

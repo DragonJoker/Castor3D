@@ -251,7 +251,6 @@ bool DirectX11::CheckError( HRESULT p_hResult, String const & p_text )
 {
 	if ( p_hResult != S_OK )
 	{
-		CASTOR_ASSERT( false );
 		String l_strWinError = p_text + cuT( " :" );
 		LPTSTR l_szError = 0;
 		auto && l_it = MapErrors.find( p_hResult );

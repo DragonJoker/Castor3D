@@ -26,17 +26,40 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxTextureAttachment
-		:	public Castor3D::TextureAttachment
+		: public Castor3D::TextureAttachment
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\para[in]		p_renderSystem	The RenderSystem.
+		 *\param[in]	p_pTexture		The texture.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\para[in]		p_renderSystem	Le RenderSystem.
+		 *\param[in]	p_pTexture		La texture.
+		 */
 		DxTextureAttachment( DxRenderSystem * p_renderSystem, Castor3D::DynamicTextureSPtr p_pTexture );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
 		virtual ~DxTextureAttachment();
-
-		virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer );
+		/**
+		 *\copydoc		Castor3D::TextureAttachment::Blit
+		 */
 		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
 
 	private:
+		/**
+		 *\copydoc		Castor3D::TextureAttachment::DoAttach
+		 */
 		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		/**
+		 *\copydoc		Castor3D::TextureAttachment::DoDetach
+		 */
 		virtual void DoDetach();
 
 	private:

@@ -52,6 +52,10 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~TextureAttachment();
 		/**
+		 *\copydoc		Castor3D::FrameBufferAttachment::GetBuffer
+		 */
+		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const;
+		/**
 		 *\~english
 		 *\brief		Retrieves the texture
 		 *\return		The texture

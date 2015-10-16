@@ -32,13 +32,13 @@ namespace Castor
 	template< typename T, typename U >
 	inline typename Collection< T, U >::TObjPtrMapIt Collection< T, U >::begin()
 	{
-		CASTOR_ASSERT( m_locked );
+		CASTOR_ASSERT( m_locked, "Collection is not locked" );
 		return m_objects.begin();
 	}
 	template< typename T, typename U >
 	inline typename Collection< T, U >::TObjPtrMapConstIt Collection< T, U >::begin()const
 	{
-		CASTOR_ASSERT( m_locked );
+		CASTOR_ASSERT( m_locked, "Collection is not locked" );
 		return m_objects.begin();
 	}
 	template< typename T, typename U >

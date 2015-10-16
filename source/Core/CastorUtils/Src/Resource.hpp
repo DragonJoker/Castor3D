@@ -36,7 +36,7 @@ namespace Castor
 	*/
 	template< class ResType >
 	class Resource
-		: public NamedBase< String >
+		: public Named
 	{
 	protected:
 		typedef Collection< ResType, String > collection;
@@ -49,6 +49,13 @@ namespace Castor
 		 *\param[in]	p_name	Le nom
 		 */
 		Resource( String const & p_name );
+		/**
+		*\~english
+		*\brief		Destructor
+		*\~french
+		*\brief		Destructeur
+		*/
+		~Resource();
 
 	public:
 		/**
@@ -79,7 +86,7 @@ namespace Castor
 		 *\param[in]	p_other	La Resource à copier
 		 *\return		Une référence sur ce Resource
 		 */
-		Resource & operator =( Resource const & p_other );
+		Resource & operator=( Resource const & p_other );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -90,14 +97,7 @@ namespace Castor
 		 *\param[in]	p_other	La Resource à déplacer
 		 *\return		Une référence sur ce Resource
 		 */
-		Resource & operator =( Resource && p_other );
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~Resource();
+		Resource & operator=( Resource && p_other );
 		/**
 		 *\~english
 		 *\brief		Defines the resource name

@@ -66,7 +66,7 @@ namespace Castor3D
 
 					for ( uint32_t i = 0; i < l_size.height(); ++i )
 					{
-						CASTOR_ASSERT( l_dstLineIndex + l_size.width() <= l_bufsize );
+						CASTOR_ASSERT( l_dstLineIndex + l_size.width() <= l_bufsize, "FontTexture - Not enough room in buffer for this character" );
 						std::memcpy( l_dstLineBuffer, &l_buffer[i * l_size.width()], l_size.width() );
 						l_dstLineBuffer += l_uiTotalWidth;
 					}

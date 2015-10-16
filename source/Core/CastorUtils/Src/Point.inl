@@ -409,8 +409,7 @@ namespace Castor
 	{
 		if ( p_pos >= Count )
 		{
-			CASTOR_ASSERT( false );
-			throw std::range_error( "Point subscript out of range" );
+			CASTOR_ASSERT( false, "Coords subscript out of range" );
 		}
 
 		return m_coords[p_pos];
@@ -421,8 +420,7 @@ namespace Castor
 	{
 		if ( p_pos >= Count )
 		{
-			CASTOR_ASSERT( false );
-			throw std::range_error( "Point subscript out of range" );
+			CASTOR_ASSERT( false, "Coords subscript out of range" );
 		}
 
 		return m_coords[p_pos];

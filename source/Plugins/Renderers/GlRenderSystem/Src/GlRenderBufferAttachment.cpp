@@ -12,36 +12,15 @@ using namespace Castor;
 namespace GlRender
 {
 	GlRenderBufferAttachment::GlRenderBufferAttachment( OpenGl & p_gl, RenderBufferSPtr p_pRenderBuffer )
-		:	RenderBufferAttachment( p_pRenderBuffer )
-		,	m_eGlAttachmentPoint( eGL_RENDERBUFFER_ATTACHMENT_NONE )
-		,	m_eGlStatus( eGL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT )
-		,	m_gl( p_gl )
+		: RenderBufferAttachment( p_pRenderBuffer )
+		, m_eGlAttachmentPoint( eGL_RENDERBUFFER_ATTACHMENT_NONE )
+		, m_eGlStatus( eGL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT )
+		, m_gl( p_gl )
 	{
 	}
 
 	GlRenderBufferAttachment::~GlRenderBufferAttachment()
 	{
-	}
-
-	bool GlRenderBufferAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
-	{
-		bool l_return = false;
-
-		if ( m_gl.HasFbo() )
-		{
-			FrameBufferSPtr l_pFrameBuffer = GetFrameBuffer();
-			RenderBufferSPtr l_pRenderBuffer = GetRenderBuffer();
-			l_return = l_pFrameBuffer != nullptr && l_pRenderBuffer != nullptr;
-
-			if ( l_return && l_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ ) )
-			{
-				OpenGl::PixelFmt l_pxFmt = m_gl.Get( p_pBuffer->format() );
-				l_return = m_gl.ReadPixels( 0, 0, l_pRenderBuffer->GetWidth(), l_pRenderBuffer->GetHeight(), l_pxFmt.Format, l_pxFmt.Type, p_pBuffer->ptr() );
-				l_pFrameBuffer->Unbind();
-			}
-		}
-
-		return l_return;
 	}
 
 	bool GlRenderBufferAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_eInterpolation )

@@ -716,13 +716,7 @@ namespace Castor3D
 
 		if ( !p_pathFile.empty() )
 		{
-			l_pImage = GetOwner()->GetImageManager().find( p_pathFile.GetFileName() );
-
-			if ( !l_pImage && File::FileExists( p_pathFile ) )
-			{
-				l_pImage = std::make_shared< Image >( p_pathFile.GetFileName(), p_pathFile );
-				GetOwner()->GetImageManager().insert( p_pathFile.GetFileName(), l_pImage );
-			}
+			l_pImage = GetOwner()->GetImageManager().create( p_pathFile.GetFileName(), p_pathFile );
 		}
 
 		if ( l_pImage )
