@@ -229,14 +229,14 @@ namespace Castor3D
 
 	SubmeshSPtr Mesh::GetSubmesh( uint32_t p_index )const
 	{
-		SubmeshSPtr l_pReturn;
+		SubmeshSPtr l_return;
 
 		if ( p_index < m_submeshes.size() )
 		{
-			l_pReturn = m_submeshes[p_index];
+			l_return = m_submeshes[p_index];
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	SubmeshSPtr Mesh::CreateSubmesh()

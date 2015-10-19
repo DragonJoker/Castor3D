@@ -288,25 +288,25 @@ namespace Castor3D
 	ShaderProgramBaseSPtr OverlayRenderer::DoGetProgram( uint32_t p_uiFlags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs )
 	{
 		auto && l_it = p_programs.find( p_uiFlags );
-		ShaderProgramBaseSPtr l_pReturn;
+		ShaderProgramBaseSPtr l_return;
 
 		if ( l_it != p_programs.end() )
 		{
-			l_pReturn = l_it->second;
+			l_return = l_it->second;
 		}
 		else
 		{
 			// Since it does not exist yet, create it and initialise it
-			l_pReturn = DoCreateProgram( p_uiFlags );
+			l_return = DoCreateProgram( p_uiFlags );
 
-			if ( l_pReturn )
+			if ( l_return )
 			{
-				l_pReturn->Initialise();
-				p_programs.insert( std::make_pair( p_uiFlags, l_pReturn ) );
+				l_return->Initialise();
+				p_programs.insert( std::make_pair( p_uiFlags, l_return ) );
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	GeometryBuffersSPtr OverlayRenderer::DoCreateTextGeometryBuffers()

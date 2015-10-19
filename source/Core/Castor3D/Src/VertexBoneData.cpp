@@ -27,6 +27,6 @@ namespace Castor3D
 			}
 		}
 
-		CASTOR_ASSERT( l_bDone, "VertexBoneData - No more slot available" );
+		ENSURE( l_bDone );
 	}
 }

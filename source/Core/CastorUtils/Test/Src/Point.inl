@@ -1087,7 +1087,6 @@ namespace Testing
 	{
 		if ( p_pos >= Count )
 		{
-			CASTOR_ASSERT( false );
 			throw std::range_error( "Coords subscript out of range" );
 		}
 
@@ -1099,7 +1098,6 @@ namespace Testing
 	{
 		if ( p_pos >= Count )
 		{
-			CASTOR_ASSERT( false );
 			throw std::range_error( "Coords subscript out of range" );
 		}
 
@@ -1483,7 +1481,6 @@ namespace Testing
 	{
 		if ( p_pos >= Count )
 		{
-			CASTOR_ASSERT( false );
 			throw std::range_error( "Point subscript out of range" );
 		}
 
@@ -1495,7 +1492,6 @@ namespace Testing
 	{
 		if ( p_pos >= Count )
 		{
-			CASTOR_ASSERT( false );
 			throw std::range_error( "Point subscript out of range" );
 		}
 

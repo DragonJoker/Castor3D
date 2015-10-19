@@ -241,6 +241,11 @@ namespace Ssaa
 
 			if ( l_bReturn )
 			{
+				l_bReturn = m_pSsFrameBuffer->Initialise( m_size );
+			}
+
+			if ( l_bReturn )
+			{
 				l_bReturn = m_pSsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
 				if ( l_bReturn )
@@ -267,6 +272,7 @@ namespace Ssaa
 			m_pSsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 			m_pSsFrameBuffer->DetachAll();
 			m_pSsFrameBuffer->Unbind();
+			m_pSsFrameBuffer->Cleanup();
 			m_pSsColorBuffer->Cleanup();
 			m_pSsDepthBuffer->Cleanup();
 		}

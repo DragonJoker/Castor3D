@@ -476,7 +476,7 @@ namespace Castor3D
 
 	GeometrySPtr SceneNode::GetNearestGeometry( Ray * p_pRay, real & p_fDistance, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh )
 	{
-		GeometrySPtr l_pReturn = nullptr;
+		GeometrySPtr l_return = nullptr;
 		real l_fDistance;
 
 		for ( auto && l_it : m_mapAttachedObjects )
@@ -490,7 +490,7 @@ namespace Castor3D
 				if ( ( l_fDistance = p_pRay->Intersects( l_geometry, p_ppFace, p_ppSubmesh ) ) >= 0.0 && l_fDistance < p_fDistance )
 				{
 					p_fDistance = l_fDistance;
-					l_pReturn = l_geometry;
+					l_return = l_geometry;
 				}
 			}
 		}
@@ -507,12 +507,12 @@ namespace Castor3D
 
 				if ( l_pTmp )
 				{
-					l_pReturn = l_pTmp;
+					l_return = l_pTmp;
 				}
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	Point3r SceneNode::GetDerivedPosition()

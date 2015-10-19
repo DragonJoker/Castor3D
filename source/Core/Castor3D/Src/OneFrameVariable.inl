@@ -1,5 +1,22 @@
 ﻿namespace Castor3D
 {
+	namespace
+	{
+		template< typename T >
+		void Parse( Castor::String const & p_strValue, T & p_value )
+		{
+			Castor::string::parse( p_strValue, p_value );
+		}
+
+		template<>
+		void Parse< TextureBase * >( Castor::String const & p_strValue, TextureBase *& p_value )
+		{
+			uint32_t p_index;
+			Castor::string::parse( p_strValue, p_index );
+			p_value->Initialise( p_index );
+		}
+	}
+
 	template<> struct OneFrameVariableDefinitions< bool >
 		: public FrameVariableDataTyper< bool >
 	{
@@ -175,6 +192,6 @@
 	template< typename T >
 	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index )
 	{
-		Castor::string::parse( p_strValue, this->m_pValues[p_index] );
+		Parse( p_strValue, this->m_pValues[p_index] );
 	}
 }

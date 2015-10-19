@@ -1,67 +1,38 @@
 project( PyCastor3D )
 
-find_package( PythonLibs )
-
 set( PYC_VERSION_MAJOR 0 )
 set( PYC_VERSION_MINOR 7 )
 set( PYC_VERSION_BUILD 0 )
 
-if ( PYTHONLIBS_FOUND )
-	find_package( Boost OPTIONAL_COMPONENTS python )
+include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
+include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
+include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${Boost_INCLUDE_DIR} )
+include_directories( ${PYTHON_INCLUDE_DIR} )
 
-	if ( Boost_PYTHON_FOUND )
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
-        include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
-		include_directories( ${Boost_INCLUDE_DIR} )
-		include_directories( ${PYTHON_INCLUDE_DIR} )
-		
-		link_directories( ${Boost_LIBRARY_DIR} )
-		
-		#Python Libs
-		set( PythonLibraries "" )
-		FOREACH( Lib ${Boost_PYTHON_LIBRARY} )
-			if ( PythonLibraries )
-				set( PythonLibraries "${PythonLibraries}|${Lib}" )
-			else ()
-				set( PythonLibraries "${Lib}" )
-			endif ()
-		ENDFOREACH()
-		FOREACH( Lib ${PYTHON_LIBRARY} )
-			if ( PythonLibraries )
-				set( PythonLibraries "${PythonLibraries}|${Lib}" )
-			else ()
-				set( PythonLibraries "${Lib}" )
-			endif ()
-		ENDFOREACH()
+link_directories( ${Boost_LIBRARY_DIR} )
 
-		add_target( 
-			PyCastor3D
-			dll
-			"CastorUtils;Castor3D"
-			"CastorUtils;Castor3D;${PythonLibraries}"
-			"PyCastor3DPch.hpp"
-			"PyCastor3DPch.cpp"
-		)
+add_target( 
+	PyCastor3D
+	dll
+	"CastorUtils;Castor3D"
+	"CastorUtils;Castor3D;${PythonLibraries}"
+	"PyCastor3DPch.hpp"
+	"PyCastor3DPch.cpp"
+)
 
-    set_target_properties( PyCastor3D
-      PROPERTIES
-        PREFIX ""
-        POSTFIX ""
-        LIBRARY_OUTPUT_NAME_DEBUG castor
-        RUNTIME_OUTPUT_NAME_DEBUG castor
-        ARCHIVE_OUTPUT_NAME_DEBUG castor
-        LIBRARY_OUTPUT_NAME_RELEASE castor
-        RUNTIME_OUTPUT_NAME_RELEASE castor
-        ARCHIVE_OUTPUT_NAME_RELEASE castor
-        FOLDER "Bindings"
-    )
+set_target_properties( PyCastor3D
+	PROPERTIES
+		PREFIX ""
+		POSTFIX ""
+		LIBRARY_OUTPUT_NAME_DEBUG castor
+		RUNTIME_OUTPUT_NAME_DEBUG castor
+		ARCHIVE_OUTPUT_NAME_DEBUG castor
+		LIBRARY_OUTPUT_NAME_RELEASE castor
+		RUNTIME_OUTPUT_NAME_RELEASE castor
+		ARCHIVE_OUTPUT_NAME_RELEASE castor
+		FOLDER "Bindings"
+)
 
-		add_target_astyle( PyCastor3D ".h;.hpp;.inl;.cpp" )
-		set( Build "yes (version ${PYC_VERSION_MAJOR}.${PYC_VERSION_MINOR}.${PYC_VERSION_BUILD})" PARENT_SCOPE )
-	else ()
-		set( Build "no (missing Boost.Python library" PARENT_SCOPE )
-	endif ()
-else ()
-	set( Build "no (missing Python library)" PARENT_SCOPE )
-endif ()
+add_target_astyle( PyCastor3D ".h;.hpp;.inl;.cpp" )
+set( Build "yes (version ${PYC_VERSION_MAJOR}.${PYC_VERSION_MINOR}.${PYC_VERSION_BUILD})" PARENT_SCOPE )

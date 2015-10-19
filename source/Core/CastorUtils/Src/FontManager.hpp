@@ -73,8 +73,6 @@ namespace Castor
 			 *\param[in]		p_file		Le fichier source.
 			 */
 			CU_API virtual bool operator()( FontManager & p_manager, BinaryFile & p_file );
-
-		private:
 		};
 
 		DECLARE_MAP( Castor::String, Castor::Path, PathName );
@@ -129,6 +127,12 @@ namespace Castor
 		 *\brief		Nettoie la collection et les chemins d'accès aux fichiers.
 		 */
 		CU_API void clear();
+
+	public:
+		using Collection< Font, String >::begin;
+		using Collection< Font, String >::end;
+		using Collection< Font, String >::lock;
+		using Collection< Font, String >::unlock;
 
 	protected:
 		//!\~english The font files paths sorted by <file_name>.<file_extension>	\~french Les fichiers des polices, triés par <file_name>.<file_extension>

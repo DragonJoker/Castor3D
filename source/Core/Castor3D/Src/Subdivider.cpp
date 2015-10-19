@@ -66,10 +66,10 @@ namespace Castor3D
 
 	FaceSPtr Subdivider::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		CASTOR_ASSERT( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount(), "Subdivider Face subscript out of range" );
-		FaceSPtr l_pReturn = std::make_shared< Face >( a, b, c );
-		m_arrayFaces.push_back( l_pReturn );
-		return l_pReturn;
+		REQUIRE( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount() );
+		FaceSPtr l_return = std::make_shared< Face >( a, b, c );
+		m_arrayFaces.push_back( l_return );
+		return l_return;
 	}
 
 	int Subdivider::IsInMyPoints( Point3r const & p_vertex, double p_precision )
@@ -165,7 +165,7 @@ namespace Castor3D
 
 	uint32_t Subdivider::DoSubdivideThreaded()
 	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutex );
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		DoSubdivide();
 		DoSwapBuffers();
 

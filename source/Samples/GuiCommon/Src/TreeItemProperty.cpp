@@ -50,7 +50,7 @@ namespace GuiCommon
 		wxEnumProperty * l_material = new wxEnumProperty( p_name );
 		MaterialManager & l_manager = m_engine->GetMaterialManager();
 		wxPGChoices l_choices;
-		l_manager.Lock();
+		std::unique_lock< MaterialManager > l_lock( l_manager );
 
 		for ( auto && l_pair : l_manager )
 		{
@@ -58,7 +58,6 @@ namespace GuiCommon
 		}
 
 		l_material->SetChoices( l_choices );
-		l_manager.Unlock();
 		return l_material;
 	}
 

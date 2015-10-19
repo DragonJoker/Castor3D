@@ -70,14 +70,14 @@ void ExportCastorUtils()
 	.value( "OUT", eINTERSECTION_OUT )
 	.value( "INTERSECT", eINTERSECTION_INTERSECT );
 	//@}
-	/**@group_name eLOG_TYPE	*/
+	/**@group_name ELogType	*/
 	//@{
-	py::enum_< eLOG_TYPE >( "LogType" )
-	.value( "DEBUG", eLOG_TYPE_DEBUG )
-	.value( "MESSAGE", eLOG_TYPE_MESSAGE )
-	.value( "WARNING", eLOG_TYPE_WARNING )
-	.value( "ERROR", eLOG_TYPE_ERROR )
-	.value( "ALL", eLOG_TYPE_COUNT );
+	py::enum_< ELogType >( "LogType" )
+	.value( "DEBUG", ELogType_DEBUG )
+	.value( "INFO", ELogType_INFO )
+	.value( "WARNING", ELogType_WARNING )
+	.value( "ERROR", ELogType_ERROR )
+	.value( "ALL", ELogType_COUNT );
 	//@}
 	/**@group_name Colour	*/
 	//@{
@@ -163,24 +163,24 @@ void ExportCastorUtils()
 	//@{
 	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::ToRotationMatrix;
 	void ( Quaternion::*quaternionFromMatrix )( Matrix4x4r const & ) = &Quaternion::FromRotationMatrix;
-	py::class_< Quaternion >( "Quaternion", py::init< Point3r const &, Angle const & >() )
-	.add_property( "rotation_matrix", quaternionToMatrix, quaternionFromMatrix, "The quaternion's rotation matrix" )
-	.def( "transform", py::make_function( &Quaternion::Transform, py::return_value_policy< py::reference_existing_object >() ) )
-	.def( "to_axis_angle", &Quaternion::ToAxisAngle )
-	.def( "from_axis_angle", &Quaternion::FromAxisAngle )
-	.def( "to_axes", &Quaternion::ToAxes )
-	.def( "from_axes", &Quaternion::FromAxes )
-	.def( "yaw", &Quaternion::GetYaw )
-	.def( "pitch", &Quaternion::GetPitch )
-	.def( "roll", &Quaternion::GetYaw )
-	.def( "magnitude", &Quaternion::GetMagnitude )
-	.def( "conjugate", &Quaternion::Conjugate )
-	.def( "slerp", &Quaternion::Slerp )
-	.def( py::self += py::other< Quaternion >() )
-	.def( py::self -= py::other< Quaternion >() )
-	.def( py::self *= py::other< Quaternion >() )
-	.def( py::self == py::other< Quaternion >() )
-	.def( py::self != py::other< Quaternion >() );
+	py::class_< Quaternion >( "Quaternion", py::init< Point3r const &, Angle const & >() );
+	//.add_property( "rotation_matrix", quaternionToMatrix, quaternionFromMatrix, "The quaternion's rotation matrix" )
+	//.def( "transform", py::make_function( &Quaternion::Transform, py::return_value_policy< py::reference_existing_object >() ) )
+	//.def( "to_axis_angle", &Quaternion::ToAxisAngle )
+	//.def( "from_axis_angle", &Quaternion::FromAxisAngle )
+	//.def( "to_axes", &Quaternion::ToAxes )
+	//.def( "from_axes", &Quaternion::FromAxes )
+	//.def( "yaw", &Quaternion::GetYaw )
+	//.def( "pitch", &Quaternion::GetPitch )
+	//.def( "roll", &Quaternion::GetYaw )
+	//.def( "magnitude", &Quaternion::GetMagnitude )
+	//.def( "conjugate", &Quaternion::Conjugate )
+	//.def( "slerp", &Quaternion::Slerp )
+	//.def( py::self += py::other< Quaternion >() )
+	//.def( py::self -= py::other< Quaternion >() )
+	//.def( py::self *= py::other< Quaternion >() )
+	//.def( py::self == py::other< Quaternion >() )
+	//.def( py::self != py::other< Quaternion >() );
 	//@}
 	/**@group_name Matrix	*/
 	//@{
@@ -238,7 +238,7 @@ void ExportCastorUtils()
 	.add_property( "height", &Font::GetHeight, "The font height" )
 	.add_property( "max_height", &Font::GetMaxHeight, "The glyphs maximum height" )
 	.add_property( "max_width", &Font::GetMaxWidth, "The glyphs maximum width" )
-	.add_property( "glyphs", py::range< GlyphsItFunc, GlyphsItFunc >( &Font::Begin, &Font::End ), "The glyphs" );
+	.add_property( "glyphs", py::range< GlyphsItFunc, GlyphsItFunc >( &Font::begin, &Font::end ), "The glyphs" );
 	//@}
 	/**@group_name PixelBuffer	*/
 	//@{
@@ -264,11 +264,11 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Logger	*/
 	//@{
-	void( *LoggerInitialiser )( eLOG_TYPE ) = &Logger::Initialise;
+	void( *LoggerInitialiser )( ELogType ) = &Logger::Initialise;
 	void( *LoggerCleaner )() = &Logger::Cleanup;
-	void( *LoggerFileNameSetter )( String const &, eLOG_TYPE ) = &Logger::SetFileName;
+	void( *LoggerFileNameSetter )( String const &, ELogType ) = &Logger::SetFileName;
 	void( *DebugLogger )( String const & ) = &Logger::LogDebug;
-	void( *MessageLogger )( String const & ) = &Logger::LogMessage;
+	void( *InfoLogger )( String const & ) = &Logger::LogInfo;
 	void( *WarningLogger )( String const & ) = &Logger::LogWarning;
 	void( *ErrorLogger )( String const & ) = &Logger::LogError;
 	py::class_< Logger, boost::noncopyable >( "Logger", py::no_init )
@@ -276,7 +276,7 @@ void ExportCastorUtils()
 	.def( "cleanup", LoggerCleaner )
 	.def( "set_file_name", LoggerFileNameSetter )
 	.def( "log_debug", DebugLogger )
-	.def( "log_message", MessageLogger )
+	.def( "log_info", InfoLogger )
 	.def( "low_warning", WarningLogger )
 	.def( "log_error", ErrorLogger )
 	.staticmethod( "initialise" )

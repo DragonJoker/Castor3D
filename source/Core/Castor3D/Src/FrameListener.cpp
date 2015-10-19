@@ -29,7 +29,7 @@ namespace Castor3D
 
 	void FrameListener::PostEvent( FrameEventSPtr p_event )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		m_events[p_event->GetType()].push_back( p_event );
 	}
 

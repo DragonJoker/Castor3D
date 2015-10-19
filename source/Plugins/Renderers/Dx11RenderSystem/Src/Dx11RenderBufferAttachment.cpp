@@ -36,7 +36,7 @@ namespace Dx11Render
 		ID3D11Resource * l_pDstSurface;
 		ID3D11Resource * l_pSrcSurface;
 		l_pBuffer->GetSurface( GetAttachmentPoint() )->GetResource( &l_pDstSurface );
-		m_dxRenderBuffer.GetSurface()->GetResource( &l_pSrcSurface );
+		m_dxRenderBuffer.GetResourceView()->GetResource( &l_pSrcSurface );
 
 		if ( l_pDstSurface && l_pSrcSurface )
 		{

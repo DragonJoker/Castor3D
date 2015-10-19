@@ -53,32 +53,32 @@ namespace Castor3D
 	{
 		void ApplyLightComponent( float p_exp, float p_cut, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			float * l_pDst = reinterpret_cast< float * >( p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+			float * l_pDst = reinterpret_cast< float * >( &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) ) );
 			*l_pDst++ = p_exp;
 			*l_pDst++ = p_cut;
 		}
 
 		void ApplyLightComponent( Point3f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
 			memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
 		}
 
 		void ApplyLightComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
 			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 		}
 
 		void ApplyLightComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
 			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 		}
 
 		void ApplyLightMtxComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			uint8_t * l_pDst = p_data.get_at( p_index * 10 + p_offset++, 0 );
+			uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
 			memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 		}
 
@@ -97,7 +97,7 @@ namespace Castor3D
 
 		void ApplyLightColourIntensity( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )
 		{
-			float * l_pDst = reinterpret_cast< float * >( p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+			float * l_pDst = reinterpret_cast< float * >( &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) ) );
 			*l_pDst++ = p_component[2];// R
 			*l_pDst++ = p_component[1];// G
 			*l_pDst++ = p_component[0];// B
@@ -555,7 +555,7 @@ namespace Castor3D
 		m_mapSubmeshesAlphaSorted.clear();
 		m_arraySubmeshesAlpha.clear();
 		m_mapSubmeshesNoAlpha.clear();
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 
 		for ( auto && l_overlay : m_arrayOverlays )
 		{
@@ -644,7 +644,7 @@ namespace Castor3D
 		PassSPtr l_pPass;
 		MaterialSPtr l_pMaterial;
 		DoDeleteToDelete();
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		DoUpdateAnimations();
 
 		if ( !m_arraySubmeshesNoAlpha.empty() || !m_arraySubmeshesAlpha.empty() || !m_mapBillboardsLists.empty() )
@@ -741,7 +741,7 @@ namespace Castor3D
 
 	void Scene::InitialiseGeometries()
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		m_nbFaces = 0;
 		m_nbVertex = 0;
 
@@ -773,84 +773,84 @@ namespace Castor3D
 
 	SceneNodeSPtr Scene::CreateSceneNode( String const & p_name )
 	{
-		SceneNodeSPtr l_pReturn;
+		SceneNodeSPtr l_return;
 
 		if ( p_name != cuT( "RootNode" ) )
 		{
 			if ( DoCheckObject( p_name, m_addedNodes, cuT( "SceneNode" ) ) )
 			{
-				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-				l_pReturn = std::make_shared< SceneNode >( *this, p_name );
+				auto l_lock = Castor::make_unique_lock( m_mutex );
+				l_return = std::make_shared< SceneNode >( *this, p_name );
 				Logger::LogInfo( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
-				l_pReturn->AttachTo( m_rootNode );
-				m_addedNodes[p_name] = l_pReturn;
+				l_return->AttachTo( m_rootNode );
+				m_addedNodes[p_name] = l_return;
 			}
 			else
 			{
-				l_pReturn = m_addedNodes.find( p_name )->second;
+				l_return = m_addedNodes.find( p_name )->second;
 			}
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "Scene::CreateSceneNode - Can't create scene node [RootNode] - Another scene node with the same name already exists" ) );
-			l_pReturn = m_addedNodes.find( p_name )->second;
+			l_return = m_addedNodes.find( p_name )->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	SceneNodeSPtr Scene::CreateSceneNode( String const & p_name, SceneNodeSPtr p_parent )
 	{
-		SceneNodeSPtr l_pReturn;
+		SceneNodeSPtr l_return;
 
 		if ( p_name != cuT( "RootNode" ) )
 		{
 			if ( DoCheckObject( p_name, m_addedNodes, cuT( "SceneNode" ) ) )
 			{
-				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-				l_pReturn = std::make_shared< SceneNode >( *this, p_name );
+				auto l_lock = Castor::make_unique_lock( m_mutex );
+				l_return = std::make_shared< SceneNode >( *this, p_name );
 				Logger::LogInfo( cuT( "Scene::CreateSceneNode - SceneNode [" ) + p_name + cuT( "] - Created" ) );
 
 				if ( p_parent )
 				{
-					l_pReturn->AttachTo( p_parent );
+					l_return->AttachTo( p_parent );
 				}
 				else
 				{
-					l_pReturn->AttachTo( m_rootNode );
+					l_return->AttachTo( m_rootNode );
 				}
 
-				m_addedNodes[p_name] = l_pReturn;
+				m_addedNodes[p_name] = l_return;
 			}
 			else
 			{
-				l_pReturn = m_addedNodes.find( p_name )->second;
+				l_return = m_addedNodes.find( p_name )->second;
 			}
 		}
 		else
 		{
 			Logger::LogWarning( cuT( "Scene::CreateSceneNode - Can't create scene node [RootNode] - Another scene node with the same name already exists" ) );
-			l_pReturn = m_addedNodes.find( p_name )->second;
+			l_return = m_addedNodes.find( p_name )->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	GeometrySPtr Scene::CreateGeometry( String const & p_name, eMESH_TYPE p_type, String const & p_meshName, UIntArray p_faces, RealArray p_size )
 	{
-		GeometrySPtr l_pReturn;
+		GeometrySPtr l_return;
 
 		if ( DoCheckObject( p_name, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			MeshSPtr l_pMesh = GetOwner()->GetMeshManager().Create( p_meshName, p_type, p_faces, p_size );
 
 			if ( l_pMesh )
 			{
-				l_pReturn = std::make_shared< Geometry >( shared_from_this(), l_pMesh, nullptr, p_name );
+				l_return = std::make_shared< Geometry >( shared_from_this(), l_pMesh, nullptr, p_name );
 				Logger::LogInfo( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
-				m_addedPrimitives[p_name] = l_pReturn;
-				m_newlyAddedPrimitives[p_name] = l_pReturn;
+				m_addedPrimitives[p_name] = l_return;
+				m_newlyAddedPrimitives[p_name] = l_return;
 				m_changed = true;
 			}
 			else
@@ -860,116 +860,116 @@ namespace Castor3D
 		}
 		else
 		{
-			l_pReturn = m_addedPrimitives.find( p_name )->second;
+			l_return = m_addedPrimitives.find( p_name )->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	GeometrySPtr Scene::CreateGeometry( String const & p_name )
 	{
-		GeometrySPtr l_pReturn;
+		GeometrySPtr l_return;
 
 		if ( DoCheckObject( p_name, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Geometry >( shared_from_this(), nullptr, m_rootObjectNode, p_name );
-			m_rootObjectNode->AttachObject( l_pReturn );
+			auto l_lock = Castor::make_unique_lock( m_mutex ); 
+			l_return = std::make_shared< Geometry >( shared_from_this(), nullptr, m_rootObjectNode, p_name );
+			m_rootObjectNode->AttachObject( l_return );
 			Logger::LogInfo( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
 		}
 		else
 		{
-			l_pReturn = m_addedPrimitives.find( p_name )->second;
+			l_return = m_addedPrimitives.find( p_name )->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	CameraSPtr Scene::CreateCamera( String const & p_name, int p_ww, int p_wh, SceneNodeSPtr p_node )
 	{
-		CameraSPtr l_pReturn;
+		CameraSPtr l_return;
 
 		if ( DoCheckObject( p_name, m_addedCameras, cuT( "Camera" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, p_node );
+			auto l_lock = Castor::make_unique_lock( m_mutex );
+			l_return = std::make_shared< Camera >( shared_from_this(), p_name, p_node );
 
 			if ( p_node )
 			{
-				p_node->AttachObject( l_pReturn );
+				p_node->AttachObject( l_return );
 			}
 
-			l_pReturn->GetViewport().SetSize( Size( p_ww, p_wh ) );
-			m_addedCameras[p_name] = l_pReturn;
+			l_return->GetViewport().SetSize( Size( p_ww, p_wh ) );
+			m_addedCameras[p_name] = l_return;
 			Logger::LogInfo( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	CameraSPtr Scene::CreateCamera( String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport )
 	{
-		CameraSPtr l_pReturn;
+		CameraSPtr l_return;
 
 		if ( DoCheckObject( p_name, m_addedCameras, cuT( "Camera" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Camera >( shared_from_this(), p_name, p_node, p_viewport );
+			auto l_lock = Castor::make_unique_lock( m_mutex );
+			l_return = std::make_shared< Camera >( shared_from_this(), p_name, p_node, p_viewport );
 
 			if ( p_node )
 			{
-				p_node->AttachObject( l_pReturn );
+				p_node->AttachObject( l_return );
 			}
 
-			m_addedCameras[p_name] = l_pReturn;
+			m_addedCameras[p_name] = l_return;
 			Logger::LogInfo( cuT( "Scene::CreateCamera - Camera [" ) + p_name + cuT( "] created" ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	LightSPtr Scene::CreateLight( String const & p_name, SceneNodeSPtr p_node, eLIGHT_TYPE p_eLightType )
 	{
-		LightSPtr l_pReturn;
+		LightSPtr l_return;
 
 		if ( DoCheckObject( p_name, m_addedLights, cuT( "Light" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< Light >( m_lightFactory, shared_from_this(), p_eLightType, p_node, p_name );
+			auto l_lock = Castor::make_unique_lock( m_mutex );
+			l_return = std::make_shared< Light >( m_lightFactory, shared_from_this(), p_eLightType, p_node, p_name );
 
 			if ( p_node )
 			{
-				p_node->AttachObject( l_pReturn );
+				p_node->AttachObject( l_return );
 			}
 
-			AddLight( l_pReturn );
+			AddLight( l_return );
 			Logger::LogInfo( cuT( "Scene::CreateLight - Light [" ) + p_name + cuT( "] created" ) );
 		}
 		else
 		{
-			l_pReturn = m_addedLights.find( p_name )->second;
+			l_return = m_addedLights.find( p_name )->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	AnimatedObjectGroupSPtr Scene::CreateAnimatedObjectGroup( String const & p_name )
 	{
-		AnimatedObjectGroupSPtr l_pReturn;
+		AnimatedObjectGroupSPtr l_return;
 
 		if ( DoCheckObject( p_name, m_addedGroups, cuT( "AnimatedObjectGroup" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = std::make_shared< AnimatedObjectGroup >( shared_from_this(), p_name );
-			AddAnimatedObjectGroup( l_pReturn );
+			auto l_lock = Castor::make_unique_lock( m_mutex );
+			l_return = std::make_shared< AnimatedObjectGroup >( shared_from_this(), p_name );
+			AddAnimatedObjectGroup( l_return );
 			Logger::LogInfo( cuT( "Scene::CreateAnimatedObjectGroup - AnimatedObjectGroup [" ) + p_name + cuT( "] created" ) );
 		}
 		else
 		{
-			l_pReturn = m_addedGroups.find( p_name )->second;
+			l_return = m_addedGroups.find( p_name )->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void Scene::AddNode( SceneNodeSPtr p_node )
@@ -981,7 +981,7 @@ namespace Castor3D
 	{
 		if ( DoAddObject( p_light, m_addedLights, cuT( "Light" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			int l_iIndex = 0;
 			bool l_bFound = false;
 			LightPtrIntMapIt l_itMap = m_mapLights.begin();
@@ -1008,7 +1008,7 @@ namespace Castor3D
 	{
 		if ( DoAddObject( p_geometry, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			m_newlyAddedPrimitives[p_geometry->GetName()] = p_geometry;
 			m_changed = true;
 		}
@@ -1018,7 +1018,7 @@ namespace Castor3D
 	{
 		if ( DoAddObject( p_pList, m_mapBillboardsLists, cuT( "Billboard" ) ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			m_changed = true;
 		}
 	}
@@ -1030,19 +1030,19 @@ namespace Castor3D
 
 	SceneNodeSPtr Scene::GetNode( String const & p_name )const
 	{
-		SceneNodeSPtr l_pReturn;
+		SceneNodeSPtr l_return;
 
 		if ( p_name == cuT( "RootNode" ) )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			l_pReturn = m_rootNode;
+			auto l_lock = Castor::make_unique_lock( m_mutex );
+			l_return = m_rootNode;
 		}
 		else
 		{
-			l_pReturn = DoGetObject( m_addedNodes, p_name );
+			l_return = DoGetObject( m_addedNodes, p_name );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	GeometrySPtr Scene::GetGeometry( String const & p_name )const
@@ -1099,7 +1099,7 @@ namespace Castor3D
 		if ( p_pLight )
 		{
 			DoRemoveObject( p_pLight, m_addedLights, m_arrayLightsToDelete );
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			LightPtrIntMapIt l_itMap = m_mapLights.find( p_pLight->GetIndex() );
 
 			if ( l_itMap != m_mapLights.end() )
@@ -1164,8 +1164,8 @@ namespace Castor3D
 	void Scene::Merge( SceneSPtr p_scene )
 	{
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_scene->m_mutex );
+			auto l_lock = Castor::make_unique_lock( m_mutex );
+			auto l_lockOther = Castor::make_unique_lock( p_scene->m_mutex );
 			DoMerge( p_scene, p_scene->m_addedNodes, m_addedNodes );
 			DoMerge( p_scene, p_scene->m_addedLights, m_addedLights );
 			DoMerge( p_scene, p_scene->m_addedCameras, m_addedCameras );
@@ -1191,15 +1191,16 @@ namespace Castor3D
 			//}
 
 			//p_scene->m_mapBillboardsLists.clear();
-			m_changed = true;
 			m_clAmbientLight = p_scene->GetAmbientLight();
+			m_changed = true;
 		}
+
 		p_scene->Cleanup();
 	}
 
 	bool Scene::ImportExternal( String const & p_fileName, Importer & p_importer )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		bool l_return = true;
 		SceneSPtr l_pScene = p_importer.ImportScene( p_fileName, Parameters() );
 
@@ -1215,7 +1216,7 @@ namespace Castor3D
 
 	void Scene::Select( Ray * p_ray, GeometrySPtr & p_geo, SubmeshSPtr & p_submesh, FaceSPtr * p_face, Vertex * p_vertex )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		Point3r l_min;
 		Point3r l_max;
 		GeometrySPtr l_geo, l_selectedGeo;
@@ -1327,7 +1328,7 @@ namespace Castor3D
 
 	void Scene::AddOverlay( OverlaySPtr p_overlay )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		m_arrayOverlays.push_back( p_overlay );
 	}
 
@@ -1357,7 +1358,7 @@ namespace Castor3D
 
 	void Scene::DoDeleteToDelete()
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 
 		for ( auto l_geometry : m_arrayPrimitivesToDelete )
 		{

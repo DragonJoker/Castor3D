@@ -62,7 +62,7 @@ namespace Dx11Render
 
 					if ( l_uiSize )
 					{
-						uint8_t * l_pBuffer = Lock( 0, l_uiSize, eLOCK_FLAG_WRITE_ONLY );
+						uint8_t * l_pBuffer = Lock( 0, l_uiSize, eACCESS_TYPE_WRITE );
 
 						if ( l_pBuffer )
 						{
@@ -129,7 +129,6 @@ namespace Dx11Render
 			{
 				bool l_bAdd = true;
 				D3D11_INPUT_ELEMENT_DESC l_d3dCurrentElement = { 0 };
-				l_d3dCurrentElement.Format;
 				l_d3dCurrentElement.InputSlot = l_element.m_uiStream;
 				l_d3dCurrentElement.AlignedByteOffset = l_uiOffset;//l_it->m_uiOffset;
 				l_d3dCurrentElement.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;

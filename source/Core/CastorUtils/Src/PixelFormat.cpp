@@ -337,25 +337,25 @@ namespace Castor
 
 		PxBufferBaseSPtr ExtractAlpha( PxBufferBaseSPtr & p_pSrc )
 		{
-			PxBufferBaseSPtr l_pReturn;
+			PxBufferBaseSPtr l_return;
 
 			if ( HasAlpha( p_pSrc->format() ) )
 			{
-				l_pReturn = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_A8L8, p_pSrc->const_ptr(), p_pSrc->format() );
-				uint8_t * l_pBuffer = l_pReturn->ptr();
+				l_return = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_A8L8, p_pSrc->const_ptr(), p_pSrc->format() );
+				uint8_t * l_pBuffer = l_return->ptr();
 
-				for ( uint32_t i = 0; i < l_pReturn->size(); i += 2 )
+				for ( uint32_t i = 0; i < l_return->size(); i += 2 )
 				{
 					l_pBuffer[0] = l_pBuffer[1];
 					l_pBuffer++;
 					l_pBuffer++;
 				}
 
-				l_pReturn = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_L8, l_pReturn->const_ptr(), l_pReturn->format() );
+				l_return = PxBufferBase::create( p_pSrc->dimensions(), ePIXEL_FORMAT_L8, l_return->const_ptr(), l_return->format() );
 				p_pSrc = PxBufferBase::create( p_pSrc->dimensions(), GetPFWithoutAlpha( p_pSrc->format() ), p_pSrc->const_ptr(), p_pSrc->format() );
 			}
 
-			return l_pReturn;
+			return l_return;
 		}
 
 		void ReduceToAlpha( PxBufferBaseSPtr & p_pSrc )

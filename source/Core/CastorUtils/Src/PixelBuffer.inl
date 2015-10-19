@@ -2,7 +2,7 @@
 {
 	template< TPL_PIXEL_FORMAT FT >
 	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
-		: PxBufferBase( p_size, ePIXEL_FORMAT( FT ), p_pBuffer, p_eBufferFormat )
+		: PxBufferBase( p_size, ePIXEL_FORMAT( FT ) )
 		, m_column( p_size.width() )
 	{
 		init( p_pBuffer, p_eBufferFormat );
@@ -31,19 +31,33 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	PxBuffer< FT > & PxBuffer< FT >::operator =( PxBuffer< FT > const & p_pixelBuffer )
+	PxBuffer< FT > & PxBuffer< FT >::operator=( PxBuffer< FT > const & p_pixelBuffer )
 	{
 		PxBufferBase::operator=( p_pixelBuffer );
 		return * this;
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	PxBuffer< FT > & PxBuffer< FT >::operator =( PxBuffer< FT > && p_pixelBuffer )
+	PxBuffer< FT > & PxBuffer< FT >::operator=( PxBuffer< FT > && p_pixelBuffer )
 	{
 		PxBufferBase::operator=( p_pixelBuffer );
 		m_column = std::move( p_pixelBuffer.m_column );
 		p_pixelBuffer.m_column.clear();
 		return * this;
+	}
+
+	template< TPL_PIXEL_FORMAT FT >
+	typename PxBuffer< FT >::column const & PxBuffer< FT >::operator[]( uint32_t p_index )const
+	{
+		do_init_column( p_index );
+		return m_column;
+	}
+
+	template< TPL_PIXEL_FORMAT FT >
+	typename PxBuffer< FT >::column & PxBuffer< FT >::operator[]( uint32_t p_index )
+	{
+		do_init_column( p_index );
+		return m_column;
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
@@ -61,20 +75,20 @@
 
 		if ( p_pBuffer.size() > 0 && l_uiSrcMax == l_uiDstMax )
 		{
-			PF::ConvertBuffer( p_eBufferFormat, p_pBuffer.data(), uint32_t( p_pBuffer.size() ), format(), m_pBuffer, size() );
+			PF::ConvertBuffer( p_eBufferFormat, p_pBuffer.data(), uint32_t( p_pBuffer.size() ), format(), m_pBuffer.data(), size() );
 		}
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	uint8_t const * PxBuffer< FT >::const_ptr()const
 	{
-		return m_pBuffer;
+		return m_pBuffer.data();
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	uint8_t * PxBuffer< FT >::ptr()
 	{
-		return m_pBuffer;
+		return m_pBuffer.data();
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
@@ -90,17 +104,17 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	uint8_t * PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
+	typename PxBuffer< FT >::iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
-		CASTOR_ASSERT( x < width() && y < height(), "PxBuffer subscript out of range" );
-		return &m_pBuffer[( x * height() + y ) * pixel_definitions< FT >::Size];
+		REQUIRE( x < width() && y < height() );
+		return m_pBuffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	uint8_t const * PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
+	typename PxBuffer< FT >::const_iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
-		CASTOR_ASSERT( x < width() && y < height(), "PxBuffer subscript out of range" );
-		return &m_pBuffer[( x * height() + y ) * pixel_definitions< FT >::Size];
+		REQUIRE( x < width() && y < height() );
+		return m_pBuffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
@@ -150,6 +164,22 @@
 
 	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::do_init_column( uint32_t p_column )const
+	{
+		if ( p_column < width() )
+		{
+			uint8_t const * l_pBuffer = &m_pBuffer[p_column * width() * pixel_definitions< FT >::Size];
+			m_column = column( height() );
+
+			for ( uint32_t j = 0; j < height(); j++ )
+			{
+				m_column[j].template set< FT >( l_pBuffer );
+				l_pBuffer += pixel_definitions< FT >::Size;
+			}
+		}
+	}
+
+	template< TPL_PIXEL_FORMAT FT >
+	void PxBuffer< FT >::do_init_column( uint32_t p_column )
 	{
 		if ( p_column < width() )
 		{

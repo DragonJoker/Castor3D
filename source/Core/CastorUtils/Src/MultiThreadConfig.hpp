@@ -40,10 +40,13 @@ namespace std
 }
 #endif
 
-#define CASTOR_MUTEX_AUTO_SCOPED_LOCK() std::unique_lock< std::mutex > l_mutexAutoLock( m_mutex );
-#define CASTOR_MUTEX_SCOPED_LOCK( p_mutex ) std::unique_lock< std::mutex > l_mutexLock( p_mutex );
-
-#define CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK() std::unique_lock< std::recursive_mutex > l_recMutexAutoLock( m_mutex );
-#define CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_mutex ) std::unique_lock< std::recursive_mutex > l_recMutexLock( p_mutex );
+namespace Castor
+{
+	template< typename Lockable >
+	std::unique_lock< Lockable > make_unique_lock( Lockable & p_lockable )
+	{
+		return std::unique_lock< Lockable >( p_lockable );
+	}
+}
 
 #endif

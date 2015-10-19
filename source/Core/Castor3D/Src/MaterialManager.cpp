@@ -63,14 +63,14 @@ namespace Castor3D
 	bool MaterialManager::Write( TextFile & p_file )const
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		GetOwner()->GetSamplerManager().Lock();
+		GetOwner()->GetSamplerManager().lock();
 
 		for ( auto l_it : GetOwner()->GetSamplerManager() )
 		{
 			Sampler::TextLoader()( *l_it.second, p_file );
 		}
 
-		GetOwner()->GetSamplerManager().Unlock();
+		GetOwner()->GetSamplerManager().unlock();
 
 		bool l_return = true;
 		auto l_it = m_elements.begin();

@@ -57,7 +57,7 @@ namespace Obj
 
 	MeshSPtr ObjImporter::DoImportMesh()
 	{
-		MeshSPtr l_pReturn;
+		MeshSPtr l_return;
 
 		try
 		{
@@ -66,7 +66,7 @@ namespace Obj
 			if ( l_file.IsOk() )
 			{
 				m_pFile = &l_file;
-				l_pReturn = DoReadObjFile();
+				l_return = DoReadObjFile();
 				m_arrayLoadedMaterials.clear();
 				m_arrayTextures.clear();
 			}
@@ -82,7 +82,7 @@ namespace Obj
 			Logger::LogWarning( std::stringstream() << "Encountered exception while importing mesh: " << exc.what() );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void ObjImporter::DoAddTexture( String const & p_strValue, PassSPtr p_pPass, eTEXTURE_CHANNEL p_eChannel )
@@ -129,7 +129,7 @@ namespace Obj
 	{
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr l_pReturn = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
+		MeshSPtr l_return = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
 		String l_strSection;
 		String l_strValue;
 		String l_strLine;
@@ -192,7 +192,7 @@ namespace Obj
 						{
 							if ( !l_pGroup->m_mapVtxIndex.empty() )
 							{
-								DoCreateSubmesh( l_pReturn, l_pGroup );
+								DoCreateSubmesh( l_return, l_pGroup );
 								delete l_pGroup;
 								l_pGroup = new stGROUP;
 								l_pGroup->m_strName = cuT( "" );
@@ -213,7 +213,7 @@ namespace Obj
 
 						if ( l_pGroup )
 						{
-							DoCreateSubmesh( l_pReturn, l_pGroup );
+							DoCreateSubmesh( l_return, l_pGroup );
 							delete l_pGroup;
 							l_pGroup = NULL;
 						}
@@ -309,7 +309,7 @@ namespace Obj
 
 		if ( l_pGroup )
 		{
-			DoCreateSubmesh( l_pReturn, l_pGroup );
+			DoCreateSubmesh( l_return, l_pGroup );
 			delete l_pGroup;
 			l_pGroup = NULL;
 		}
@@ -318,7 +318,7 @@ namespace Obj
 		clear_container( l_arrayAllNml );
 		clear_container( l_arrayAllTex );
 		Logger::LogDebug( cuT( "LastLine : " ) + l_strSection + cuT( " " ) + l_strValue );
-		return l_pReturn;
+		return l_return;
 	}
 
 	uint32_t ObjImporter::DoRetrieveIndex( String & p_strIndex, uint32_t p_uiSize )
@@ -341,7 +341,7 @@ namespace Obj
 
 	uint32_t ObjImporter::DoTreatFace( stFACE_INDICES & p_face, std::size_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
 	{
-		//	VertexSPtr l_pReturn;
+		//	VertexSPtr l_return;
 		String l_strFace( p_strFace );
 		StringArray l_arrayIndex;
 		uint32_t l_uiIndex = 0;
@@ -365,7 +365,7 @@ namespace Obj
 
 			p_face.m_uiVertexIndex[p_uiIndex] = l_it->second;
 			p_pGroup->m_arraySubVtx.push_back( p_arrayVtx[l_uiIndex] );
-			//l_pReturn = m_pSubmesh->AddPoint( p_arrayVtx[l_uiIndex].m_val[0], p_arrayVtx[l_uiIndex].m_val[1], p_arrayVtx[l_uiIndex].m_val[2] );
+			//l_return = m_pSubmesh->AddPoint( p_arrayVtx[l_uiIndex].m_val[0], p_arrayVtx[l_uiIndex].m_val[1], p_arrayVtx[l_uiIndex].m_val[2] );
 
 			if ( l_arrayIndex.size() >= 2 )
 			{
@@ -377,7 +377,7 @@ namespace Obj
 					// We treat texture coordinates
 					l_uiIndex = DoRetrieveIndex( l_arrayIndex[1], uint32_t( p_arrayTex.size() ) );
 					p_pGroup->m_arrayTex.push_back( p_arrayTex[l_uiIndex] );
-					//l_pReturn->SetTexCoord( p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1] );
+					//l_return->SetTexCoord( p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1] );
 					stUVW l_uvw = { p_arrayTex[l_uiIndex].m_val[0], p_arrayTex[l_uiIndex].m_val[1], 0.0 };
 					p_pGroup->m_arraySubTex.push_back( l_uvw );
 				}
@@ -393,7 +393,7 @@ namespace Obj
 						// We treat the found normal
 						l_uiIndex = DoRetrieveIndex( l_arrayIndex[2], uint32_t( p_arrayNml.size() ) );
 						p_pGroup->m_arrayNml.push_back( p_arrayNml[l_uiIndex] );
-						//l_pReturn->SetNormal( p_arrayNml[l_uiIndex].m_val[0], p_arrayNml[l_uiIndex].m_val[1], p_arrayNml[l_uiIndex].m_val[2] );
+						//l_return->SetNormal( p_arrayNml[l_uiIndex].m_val[0], p_arrayNml[l_uiIndex].m_val[1], p_arrayNml[l_uiIndex].m_val[2] );
 						p_pGroup->m_arraySubNml.push_back( p_arrayNml[l_uiIndex] );
 					}
 				}
@@ -402,7 +402,7 @@ namespace Obj
 			l_uiIndex = uint32_t( p_pGroup->m_arraySubVtx.size() ) - 1;
 		}
 
-		//	return l_pReturn;
+		//	return l_return;
 		return l_uiIndex;
 	}
 

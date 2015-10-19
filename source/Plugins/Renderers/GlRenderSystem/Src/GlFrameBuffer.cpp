@@ -44,7 +44,7 @@ namespace GlRender
 		}
 	}
 
-	bool GlFrameBuffer::SetDrawBuffers( BufAttachArray const & p_attaches )
+	bool GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
 	{
 		bool l_return = false;
 

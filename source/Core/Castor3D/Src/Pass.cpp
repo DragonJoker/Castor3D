@@ -569,23 +569,23 @@ namespace Castor3D
 
 	TextureUnitSPtr Pass::AddTextureUnit()
 	{
-		TextureUnitSPtr l_pReturn = std::make_shared< TextureUnit >( *GetOwner() );
+		TextureUnitSPtr l_return = std::make_shared< TextureUnit >( *GetOwner() );
 		uint32_t l_uiID = uint32_t( m_arrayTextureUnits.size() + 1 );
-		l_pReturn->SetIndex( l_uiID );
-		m_arrayTextureUnits.push_back( l_pReturn );
-		return l_pReturn;
+		l_return->SetIndex( l_uiID );
+		m_arrayTextureUnits.push_back( l_return );
+		return l_return;
 	}
 
 	TextureUnitSPtr Pass::GetTextureUnit( eTEXTURE_CHANNEL p_eChannel )
 	{
-		TextureUnitSPtr l_pReturn;
+		TextureUnitSPtr l_return;
 		auto && l_it = m_arrayTextureUnits.begin();
 
-		while ( l_it != m_arrayTextureUnits.end() && !l_pReturn )
+		while ( l_it != m_arrayTextureUnits.end() && !l_return )
 		{
 			if ( ( *l_it )->GetChannel() == p_eChannel )
 			{
-				l_pReturn = *l_it;
+				l_return = *l_it;
 			}
 			else
 			{
@@ -593,12 +593,12 @@ namespace Castor3D
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	bool Pass::DestroyTextureUnit( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size(), "Pass subscript out of range" );
+		REQUIRE( p_index < m_arrayTextureUnits.size() );
 		bool l_return = false;
 		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << p_index );
 		TextureUnitPtrArray::iterator l_it = m_arrayTextureUnits.begin();
@@ -616,13 +616,13 @@ namespace Castor3D
 
 	TextureUnitSPtr Pass::GetTextureUnit( uint32_t p_index )const
 	{
-		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size(), "Pass subscript out of range" );
+		REQUIRE( p_index < m_arrayTextureUnits.size() );
 		return m_arrayTextureUnits[p_index];
 	}
 
 	String Pass::GetTexturePath( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_index < m_arrayTextureUnits.size(), "Pass subscript out of range" );
+		REQUIRE( p_index < m_arrayTextureUnits.size() );
 		return m_arrayTextureUnits[p_index]->GetTexturePath();
 	}
 

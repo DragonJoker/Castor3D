@@ -270,7 +270,7 @@ namespace Castor3D
 		 */
 		inline Castor::String GetStrValue( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < m_uiOcc, "FrameVariable subscript out of range" );
+			REQUIRE( p_index < m_uiOcc );
 			return m_strValue[p_index];
 		}
 		/**

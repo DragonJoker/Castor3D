@@ -54,7 +54,7 @@ int Generator::Thread::Entry()
 	{
 		if ( m_bEnded && m_bLaunched && !IsStopped() )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			m_bEnded = false;
 			Step();
 			m_bEnded = true;

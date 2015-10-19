@@ -37,7 +37,7 @@ namespace Loop
 
 	VertexSPtr Edge::Divide( Subdivider * p_pDivider, real p_value )
 	{
-		VertexSPtr l_pReturn;
+		VertexSPtr l_return;
 
 		if ( m_toDivide )
 		{
@@ -53,10 +53,10 @@ namespace Loop
 				m_divided = true;
 			}
 
-			l_pReturn = m_createdVertex;
+			l_return = m_createdVertex;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 }
 

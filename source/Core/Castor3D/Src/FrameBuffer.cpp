@@ -24,6 +24,16 @@ namespace Castor3D
 	{
 	}
 
+	bool FrameBuffer::Initialise( Castor::Size const & p_size )
+	{
+		return DoInitialise( p_size );
+	}
+
+	void FrameBuffer::Cleanup()
+	{
+		DoCleanup();
+	}
+
 	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_mode, eFRAMEBUFFER_TARGET p_eTarget )
 	{
 		bool l_return = DoBind( p_eTarget );
@@ -39,27 +49,6 @@ namespace Castor3D
 	void FrameBuffer::Unbind()
 	{
 		DoUnbind();
-#if DEBUG_BUFFERS
-
-		if ( !m_attaches.empty() )
-		{
-			for ( auto && l_attach : m_attaches )
-			{
-				if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
-				{
-					PxBufferBaseSPtr l_buffer = l_attach->DownloadBuffer();
-
-					if ( l_buffer )
-					{
-						StringStream l_name;
-						l_name << Engine::GetEngineDirectory() << cuT( "\\RenderBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA.png" );
-						Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
-					}
-				}
-			}
-		}
-
-#endif
 	}
 
 	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
@@ -107,6 +96,8 @@ namespace Castor3D
 				std::static_pointer_cast< RenderBufferAttachment >( l_attach )->GetRenderBuffer()->Resize( p_size );
 			}
 		}
+
+		DoResize( p_size );
 	}
 
 	bool FrameBuffer::BlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_uiComponents )
@@ -134,12 +125,12 @@ namespace Castor3D
 
 	bool FrameBuffer::SetDrawBuffer( TextureAttachmentSPtr p_attach )
 	{
-		return SetDrawBuffers( BufAttachArray( 1, p_attach ) );
+		return SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
 	bool FrameBuffer::SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )
 	{
-		return SetDrawBuffers( BufAttachArray( 1, p_attach ) );
+		return SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
 	void FrameBuffer::RenderToBuffer( FrameBufferSPtr p_pBuffer, Size const & p_sizeDst, uint32_t p_uiComponents, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState )
@@ -164,15 +155,33 @@ namespace Castor3D
 
 					if ( !p_pBuffer->m_attaches.empty() )
 					{
-						l_it = std::find_if( p_pBuffer->m_attaches.begin(), p_pBuffer->m_attaches.end(), []( FrameBufferAttachmentSPtr p_attach )
+						for ( auto && l_attach : p_pBuffer->m_attaches )
 						{
-							return p_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE;
-						} );
+							if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+							{
+								l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
+								l_texture->Bind();
+								l_texture->GenerateMipmaps();
+								l_texture->Unbind();
+							}
 
-						l_texture = std::static_pointer_cast< TextureAttachment >( *l_it )->GetTexture();
-						l_texture->Bind();
-						l_texture->GenerateMipmaps();
-						l_texture->Unbind();
+#if DEBUG_BUFFERS
+
+							if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
+							{
+								PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
+
+								if ( l_buffer && DownloadBuffer( l_attach->GetAttachmentPoint(), l_attach->GetAttachmentIndex(), l_buffer ) )
+								{
+									StringStream l_name;
+									l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA.png" );
+									Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
+								}
+							}
+						}
+
+#endif
+
 					}
 				}
 			}

@@ -406,7 +406,7 @@ namespace CastorViewer
 	{
 		if ( p_event.GetId() == eID_RENDER_TIMER )
 		{
-			if ( wxGetApp().GetCastor() )
+			if ( wxGetApp().GetCastor() && !wxGetApp().GetCastor()->IsCleaned() )
 			{
 				wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
 			}

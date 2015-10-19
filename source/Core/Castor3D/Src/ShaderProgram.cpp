@@ -268,12 +268,13 @@ namespace Castor3D
 
 	ShaderObjectBaseSPtr ShaderProgramBase::CreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_pReturn;
+		ShaderObjectBaseSPtr l_return;
+		REQUIRE( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT );
 
 		if ( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT )
 		{
-			l_pReturn = DoCreateObject( p_type );
-			m_pShaders[p_type] = l_pReturn;
+			l_return = DoCreateObject( p_type );
+			m_pShaders[p_type] = l_return;
 			int i = eSHADER_MODEL_1;
 
 			for ( auto && l_file : m_arrayFiles )
@@ -284,12 +285,8 @@ namespace Castor3D
 				}
 			}
 		}
-		else
-		{
-			CASTOR_ASSERT( false, "Shader Type subscript out of range" );
-		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	bool ShaderProgramBase::Link()
@@ -533,32 +530,32 @@ namespace Castor3D
 
 	OneTextureFrameVariableSPtr ShaderProgramBase::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
 	{
-		OneTextureFrameVariableSPtr l_pReturn = FindFrameVariable( p_name, p_type );
+		OneTextureFrameVariableSPtr l_return = FindFrameVariable( p_name, p_type );
 
-		if ( !l_pReturn )
+		if ( !l_return )
 		{
-			l_pReturn = DoCreateTextureVariable( p_iNbOcc );
-			l_pReturn->SetName( p_name );
+			l_return = DoCreateTextureVariable( p_iNbOcc );
+			l_return->SetName( p_name );
 
 			if ( m_pShaders[p_type] )
 			{
-				m_pShaders[p_type]->AddFrameVariable( l_pReturn );
+				m_pShaders[p_type]->AddFrameVariable( l_return );
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	OneTextureFrameVariableSPtr ShaderProgramBase::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
 	{
-		OneTextureFrameVariableSPtr l_pReturn;
+		OneTextureFrameVariableSPtr l_return;
 
 		if ( m_pShaders[p_type] )
 		{
-			l_pReturn = m_pShaders[p_type]->FindFrameVariable( p_name );
+			l_return = m_pShaders[p_type]->FindFrameVariable( p_name );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void ShaderProgramBase::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask )

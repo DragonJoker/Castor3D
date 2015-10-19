@@ -59,11 +59,11 @@ namespace Castor3D
 	PluginBaseSPtr PluginManager::LoadPlugin( String const & p_strPluginName, Path const & p_pathFolder )throw( )
 	{
 		Path l_strFilePath = CASTOR_DLL_PREFIX + p_strPluginName + cuT( "." ) + CASTOR_DLL_EXT;
-		PluginBaseSPtr l_pReturn;
+		PluginBaseSPtr l_return;
 
 		try
 		{
-			l_pReturn = InternalLoadPlugin( l_strFilePath );
+			l_return = InternalLoadPlugin( l_strFilePath );
 		}
 		catch ( VersionException & p_exc )
 		{
@@ -73,7 +73,7 @@ namespace Castor3D
 		{
 			if ( !p_pathFolder.empty() )
 			{
-				l_pReturn = LoadPlugin( p_pathFolder / l_strFilePath );
+				l_return = LoadPlugin( p_pathFolder / l_strFilePath );
 			}
 			else
 			{
@@ -89,16 +89,16 @@ namespace Castor3D
 			Logger::LogWarning( cuT( "LoadPlugin - Fail - Unknown error" ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	PluginBaseSPtr PluginManager::LoadPlugin( Path const & p_fileFullPath )throw( )
 	{
-		PluginBaseSPtr l_pReturn;
+		PluginBaseSPtr l_return;
 
 		try
 		{
-			l_pReturn = InternalLoadPlugin( p_fileFullPath );
+			l_return = InternalLoadPlugin( p_fileFullPath );
 		}
 		catch ( VersionException & p_exc )
 		{
@@ -117,12 +117,12 @@ namespace Castor3D
 			Logger::LogWarning( cuT( "LoadPlugin - Fail - Unknown error" ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	PluginStrMap PluginManager::GetPlugins( ePLUGIN_TYPE p_type )
 	{
-		CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( m_mutexLoadedPlugins );
+		auto l_lock = Castor::make_unique_lock( m_mutexLoadedPlugins );
 		return m_loadedPlugins[p_type];
 	}
 
@@ -170,12 +170,12 @@ namespace Castor3D
 	PluginBaseSPtr PluginManager::LoadRendererPlugin( DynamicLibrarySPtr p_pLibrary )
 	{
 		RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( p_pLibrary, GetOwner() );
-		PluginBaseSPtr l_pReturn = std::static_pointer_cast<PluginBase, RendererPlugin>( l_pRenderer );
+		PluginBaseSPtr l_return = std::static_pointer_cast<PluginBase, RendererPlugin>( l_pRenderer );
 		eRENDERER_TYPE l_eRendererType = l_pRenderer->GetRendererType();
 
 		if ( l_eRendererType == eRENDERER_TYPE_UNDEFINED )
 		{
-			l_pReturn.reset();
+			l_return.reset();
 		}
 		else
 		{
@@ -184,7 +184,7 @@ namespace Castor3D
 			m_mutexRenderers.unlock();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	PluginBaseSPtr PluginManager::LoadTechniquePlugin( DynamicLibrarySPtr p_pLibrary )
@@ -194,7 +194,7 @@ namespace Castor3D
 
 	PluginBaseSPtr PluginManager::InternalLoadPlugin( Path const & p_pathFile )
 	{
-		PluginBaseSPtr l_pReturn;
+		PluginBaseSPtr l_return;
 		m_mutexLoadedPluginTypes.lock();
 		auto l_it = m_loadedPluginTypes.find( p_pathFile );
 
@@ -224,39 +224,39 @@ namespace Castor3D
 				switch ( l_type )
 				{
 				case ePLUGIN_TYPE_DIVIDER:
-					l_pReturn = std::make_shared< DividerPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< DividerPlugin >( l_pLibrary, GetOwner() );
 					break;
 
 				case ePLUGIN_TYPE_IMPORTER:
-					l_pReturn = std::make_shared< ImporterPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< ImporterPlugin >( l_pLibrary, GetOwner() );
 					break;
 
 				case ePLUGIN_TYPE_RENDERER:
-					l_pReturn = LoadRendererPlugin( l_pLibrary );
+					l_return = LoadRendererPlugin( l_pLibrary );
 					break;
 
 				case ePLUGIN_TYPE_GENERIC:
-					l_pReturn = std::make_shared< GenericPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< GenericPlugin >( l_pLibrary, GetOwner() );
 					break;
 
 				case ePLUGIN_TYPE_TECHNIQUE:
-					l_pReturn = LoadTechniquePlugin( l_pLibrary );
+					l_return = LoadTechniquePlugin( l_pLibrary );
 					break;
 
 				case ePLUGIN_TYPE_POSTFX:
-					l_pReturn = std::make_shared< PostFxPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< PostFxPlugin >( l_pLibrary, GetOwner() );
 					break;
 
 				default:
 					break;
 				}
 
-				if ( l_pReturn )
+				if ( l_return )
 				{
 					Version l_toCheck( 0, 0 );
-					l_pReturn->GetRequiredVersion( l_toCheck );
+					l_return->GetRequiredVersion( l_toCheck );
 					String l_strToLog( cuT( "LoadPlugin - Plugin [" ) );
-					Logger::LogInfo( StringStream() << l_strToLog << l_pReturn->GetName() << cuT( "] - Required engine version : " ) << l_toCheck );
+					Logger::LogInfo( StringStream() << l_strToLog << l_return->GetName() << cuT( "] - Required engine version : " ) << l_toCheck );
 					Version l_version = GetOwner()->GetVersion();
 
 					if ( l_toCheck <= l_version )
@@ -265,13 +265,13 @@ namespace Castor3D
 						m_loadedPluginTypes.insert( std::make_pair( p_pathFile, l_type ) );
 						m_mutexLoadedPluginTypes.unlock();
 						m_mutexLoadedPlugins.lock();
-						m_loadedPlugins[l_type].insert( std::make_pair( p_pathFile, l_pReturn ) );
+						m_loadedPlugins[l_type].insert( std::make_pair( p_pathFile, l_return ) );
 						m_mutexLoadedPlugins.unlock();
 						m_mutexLibraries.lock();
 						m_libraries[l_type].insert( std::make_pair( p_pathFile, l_pLibrary ) );
 						m_mutexLibraries.unlock();
 						l_strToLog = cuT( "LoadPlugin - Plugin [" );
-						Logger::LogInfo( l_strToLog + l_pReturn->GetName() + cuT( "] loaded" ) );
+						Logger::LogInfo( l_strToLog + l_return->GetName() + cuT( "] loaded" ) );
 					}
 					else
 					{
@@ -293,10 +293,10 @@ namespace Castor3D
 			ePLUGIN_TYPE l_type = l_it->second;
 			m_mutexLoadedPluginTypes.unlock();
 			m_mutexLoadedPlugins.lock();
-			l_pReturn = m_loadedPlugins[l_type].find( p_pathFile )->second;
+			l_return = m_loadedPlugins[l_type].find( p_pathFile )->second;
 			m_mutexLoadedPlugins.unlock();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 }

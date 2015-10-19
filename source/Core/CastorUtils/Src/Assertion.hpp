@@ -81,11 +81,9 @@ namespace Castor
 	};
 }
 
-#	define CASTOR_ASSERT( pred, text )\
-		assert( pred );\
-		throw Castor::AssertException( text, __FILE__, __FUNCTION__, __LINE__ );
+#	define CASTOR_ASSERT( pred, text ) assert( pred )
 #else
-#	define CASTOR_ASSERT( X )
+#	define CASTOR_ASSERT( pred, text )
 #endif
 
 #endif

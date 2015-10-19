@@ -78,27 +78,27 @@ namespace GlRender
 	template< typename T >
 	T * GlBufferBase< T >::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
 	{
-		T * l_pReturn = NULL;
+		T * l_return = NULL;
 
 		if ( m_uiGlIndex != eGL_INVALID_INDEX )
 		{
-			l_pReturn = reinterpret_cast< T * >( m_gl.MapBufferRange( m_eTarget, p_uiOffset * sizeof( T ), p_uiCount * sizeof( T ), m_gl.GetBitfieldFlags( p_uiFlags ) ) );
+			l_return = reinterpret_cast< T * >( m_gl.MapBufferRange( m_eTarget, p_uiOffset * sizeof( T ), p_uiCount * sizeof( T ), m_gl.GetBitfieldFlags( p_uiFlags ) ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	template< typename T >
 	T * GlBufferBase< T >::Lock( eGL_LOCK p_access )
 	{
-		T * l_pReturn = NULL;
+		T * l_return = NULL;
 
 		if ( m_uiGlIndex != eGL_INVALID_INDEX )
 		{
-			l_pReturn = reinterpret_cast< T * >( m_gl.MapBuffer( m_eTarget, p_access ) );
+			l_return = reinterpret_cast< T * >( m_gl.MapBuffer( m_eTarget, p_access ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	template< typename T >

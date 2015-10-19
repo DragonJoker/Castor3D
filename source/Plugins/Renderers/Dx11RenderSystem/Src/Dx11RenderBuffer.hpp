@@ -40,9 +40,14 @@ namespace Dx11Render
 
 		bool Resize( Castor::Size const & p_size );
 
-		inline ID3D11View * GetSurface()const
+		inline ID3D11View * GetResourceView()const
 		{
 			return m_pSurface;
+		}
+
+		inline ID3D11Texture2D * GetResource()const
+		{
+			return m_pTexture;
 		}
 
 	private:

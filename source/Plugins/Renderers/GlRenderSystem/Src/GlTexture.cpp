@@ -34,7 +34,7 @@ namespace GlRender
 		if ( m_glName == eGL_INVALID_INDEX )
 		{
 			l_return = m_gl.GenTextures( 1, &m_glName );
-			glTrack( m_gl, GlStaticTexture, this );
+			glTrack( m_gl, GlTexture, this );
 		}
 
 		return l_return;
@@ -42,8 +42,6 @@ namespace GlRender
 
 	void GlTexture::Destroy()
 	{
-		m_storage.reset();
-
 		if ( m_glName != eGL_INVALID_INDEX )
 		{
 			glUntrack( m_gl, this );
@@ -52,8 +50,9 @@ namespace GlRender
 		}
 	}
 
-	bool GlTexture::Initialise( PxBufferBaseSPtr p_buffer, eTEXTURE_TYPE p_dimension, uint32_t p_layer )
+	bool GlTexture::Initialise( PxBufferBaseSPtr p_buffer, eTEXTURE_TYPE p_dimension, uint32_t p_layer, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
+		REQUIRE( !m_storage );
 		m_glDimension = m_gl.Get( p_dimension );
 
 		if ( m_glDimension == eGL_TEXDIM_BUFFER )
@@ -104,17 +103,21 @@ namespace GlRender
 
 	void GlTexture::Cleanup()
 	{
+		REQUIRE( m_storage );
 		m_storage->Cleanup();
 		m_storage->Destroy();
+		m_storage.reset();
 	}
 
 	void GlTexture::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
 	{
+		REQUIRE( m_storage );
 		m_storage->Fill( p_buffer, p_size, p_format );
 	}
 
 	bool GlTexture::Bind( uint32_t p_index )
 	{
+		REQUIRE( m_storage );
 		bool l_return = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 
 		if ( l_return )
@@ -132,6 +135,7 @@ namespace GlRender
 
 	void GlTexture::Unbind( uint32_t p_index )
 	{
+		REQUIRE( m_storage );
 		m_storage->Unbind( p_index );
 		m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 		m_gl.BindTexture( m_glDimension, 0 );
@@ -139,11 +143,13 @@ namespace GlRender
 
 	uint8_t * GlTexture::Lock( uint32_t p_lock )
 	{
+		REQUIRE( m_storage );
 		return m_storage->Lock( p_lock );
 	}
 
 	void GlTexture::Unlock( bool p_modified )
 	{
+		REQUIRE( m_storage );
 		m_storage->Unlock( p_modified );
 	}
 

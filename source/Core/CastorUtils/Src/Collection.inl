@@ -8,89 +8,92 @@ namespace Castor
 		static const xchar * WARNING_COLLECTION_DUPLICATE_OBJECT = cuT( "Collection::Create - Duplicate object: " );
 	}
 
-	template< typename T, typename U >
-	Collection< T, U >::Collection()
+	template< typename TObj, typename TKey >
+	Collection< TObj, TKey >::Collection()
 		: m_locked( false )
 	{
 	}
-	template< typename T, typename U >
-	Collection< T, U >::~Collection()
+	template< typename TObj, typename TKey >
+	Collection< TObj, TKey >::~Collection()
 	{
 	}
-	template< typename T, typename U >
-	inline void Collection< T, U >::lock()const
+	template< typename TObj, typename TKey >
+	inline void Collection< TObj, TKey >::lock()const
 	{
 		m_mutex.lock();
 		m_locked = true;
 	}
-	template< typename T, typename U >
-	inline void Collection< T, U >::unlock()const
+	template< typename TObj, typename TKey >
+	inline void Collection< TObj, TKey >::unlock()const
 	{
 		m_locked = false;
 		m_mutex.unlock();
 	}
-	template< typename T, typename U >
-	inline typename Collection< T, U >::TObjPtrMapIt Collection< T, U >::begin()
+	template< typename TObj, typename TKey >
+	inline typename Collection< TObj, TKey >::TObjPtrMapIt Collection< TObj, TKey >::begin()
 	{
-		CASTOR_ASSERT( m_locked, "Collection is not locked" );
+		REQUIRE( m_locked );
 		return m_objects.begin();
 	}
-	template< typename T, typename U >
-	inline typename Collection< T, U >::TObjPtrMapConstIt Collection< T, U >::begin()const
+	template< typename TObj, typename TKey >
+	inline typename Collection< TObj, TKey >::TObjPtrMapConstIt Collection< TObj, TKey >::begin()const
 	{
-		CASTOR_ASSERT( m_locked, "Collection is not locked" );
+		REQUIRE( m_locked );
 		return m_objects.begin();
 	}
-	template< typename T, typename U >
-	inline typename Collection< T, U >::TObjPtrMapIt Collection< T, U >::end()
+	template< typename TObj, typename TKey >
+	inline typename Collection< TObj, TKey >::TObjPtrMapIt Collection< TObj, TKey >::end()
 	{
 		return m_objects.end();
 	}
-	template< typename T, typename U >
-	inline typename Collection< T, U >::TObjPtrMapConstIt Collection< T, U >::end()const
+	template< typename TObj, typename TKey >
+	inline typename Collection< TObj, TKey >::TObjPtrMapConstIt Collection< TObj, TKey >::end()const
 	{
 		return m_objects.end();
 	}
-	template< typename T, typename U >
-	inline void Collection< T, U >::clear() throw( )
+	template< typename TObj, typename TKey >
+	inline void Collection< TObj, TKey >::clear() throw( )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-		clear_pair_container( m_objects );
+		auto l_lock( make_unique_lock( m_mutex ) );
+		m_objects.clear();
+		m_last.m_key = std::move( TKey() );
 	}
-	template< typename T, typename U >
-	inline typename Collection< T, U >::TObjSPtr Collection< T, U >::find( key_param_type p_key )const
+	template< typename TObj, typename TKey >
+	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::find( key_param_type p_key )const
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-		TObjSPtr l_pReturn;
-		TObjPtrMapConstIt l_it = m_objects.find( p_key );
+		auto l_lock( make_unique_lock( m_mutex ) );
+		TObjSPtr l_return;
+		do_update_last( p_key );
 
-		if ( l_it != m_objects.end() )
+		if ( m_last.m_result != m_objects.end() )
 		{
-			l_pReturn = l_it->second;
+			l_return = m_last.m_result->second;
 		}
 		else
 		{
 			Logger::LogWarning( WARNING_COLLECTION_UNKNOWN_OBJECT + string::to_string( p_key ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
-	template< typename T, typename U >
-	inline std::size_t Collection< T, U >::size()const
+	template< typename TObj, typename TKey >
+	inline std::size_t Collection< TObj, TKey >::size()const
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock( make_unique_lock( m_mutex ) );
 		return m_objects.size();
 	}
-	template< typename T, typename U >
-	inline bool Collection< T, U >::insert( key_param_type p_key, TObjSPtr p_element )
+	template< typename TObj, typename TKey >
+	inline bool Collection< TObj, TKey >::insert( key_param_type p_key, TObjSPtr p_element )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock( make_unique_lock( m_mutex ) );
 		TObjPtrMapIt l_it = m_objects.find( p_key );
 		bool l_return = false;
 
 		if ( l_it == m_objects.end() )
 		{
+			m_last.m_key = std::move( TKey() );
 			m_objects.insert( value_type( p_key, p_element ) );
+			do_init_last();
 			l_return = true;
 		}
 		else
@@ -100,24 +103,44 @@ namespace Castor
 
 		return l_return;
 	}
-	template< typename T, typename U >
-	inline bool Collection< T, U >::has( key_param_type p_key )const
+	template< typename TObj, typename TKey >
+	inline bool Collection< TObj, TKey >::has( key_param_type p_key )const
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-		return m_objects.find( p_key ) != m_objects.end();
+		auto l_lock( make_unique_lock( m_mutex ) );
+		do_update_last( p_key );
+		return m_last.m_result != m_objects.end();
 	}
-	template< typename T, typename U >
-	inline typename Collection< T, U >::TObjSPtr Collection< T, U >::erase( key_param_type p_key )
+	template< typename TObj, typename TKey >
+	inline typename Collection< TObj, TKey >::TObjSPtr Collection< TObj, TKey >::erase( key_param_type p_key )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock( make_unique_lock( m_mutex ) );
 		TObjSPtr l_ret;
 		TObjPtrMapIt ifind = m_objects.find( p_key );
 
 		if ( ifind != m_objects.end() )
 		{
+			do_init_last();
 			l_ret = ifind->second;
 			m_objects.erase( p_key );
 		}
 
 		return l_ret;
-	}}
+	}
+
+	template< typename TObj, typename TKey >
+	void Collection< TObj, TKey >::do_init_last()const
+	{
+		m_last.m_key = std::move( TKey() );
+		m_last.m_result = m_objects.end();
+	}
+
+	template< typename TObj, typename TKey >
+	void Collection< TObj, TKey >::do_update_last( key_param_type p_key )const
+	{
+		if ( m_last.m_key != p_key )
+		{
+			m_last.m_key = p_key;
+			m_last.m_result = m_objects.find( p_key );
+		}
+	}
+}
