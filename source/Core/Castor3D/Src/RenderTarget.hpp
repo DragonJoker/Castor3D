@@ -183,15 +183,6 @@ namespace Castor3D
 		C3D_API virtual ~RenderTarget();
 		/**
 		 *\~english
-		 *\brief		Main render function
-		 *\param[in]	p_displayMode	Information about the draw type (triangles, lines, ...)
-		 *\~french
-		 *\brief		Fonction de rendu
-		 *\param[in]	p_displayMode	Mode de rendu
-		 */
-		C3D_API virtual void Render() {}
-		/**
-		 *\~english
 		 *\brief		Renders one frame
 		 *\param[in]	p_dFrameTime		The time elapsed since the last frame was rendered
 		 *\~english

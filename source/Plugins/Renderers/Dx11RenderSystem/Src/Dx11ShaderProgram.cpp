@@ -92,45 +92,45 @@ namespace Dx11Render
 
 	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_type )
 	{
-		ID3DBlob * l_pReturn = NULL;
+		ID3DBlob * l_return = NULL;
 		ShaderObjectBaseSPtr l_pObject = m_pShaders[p_type];
 
 		if ( l_pObject && l_pObject->GetStatus() == eSHADER_STATUS_COMPILED )
 		{
-			l_pReturn = std::static_pointer_cast< DxShaderObject >( l_pObject )->GetCompiled();
+			l_return = std::static_pointer_cast< DxShaderObject >( l_pObject )->GetCompiled();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	ShaderObjectBaseSPtr DxShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_pReturn;
+		ShaderObjectBaseSPtr l_return;
 
 		switch ( p_type )
 		{
 		case eSHADER_TYPE_VERTEX:
-			l_pReturn = std::make_shared< DxVertexShader >( this );
+			l_return = std::make_shared< DxVertexShader >( this );
 			break;
 
 		case eSHADER_TYPE_PIXEL:
-			l_pReturn = std::make_shared< DxFragmentShader >( this );
+			l_return = std::make_shared< DxFragmentShader >( this );
 			break;
 
 		case eSHADER_TYPE_GEOMETRY:
-			l_pReturn = std::make_shared< DxGeometryShader >( this );
+			l_return = std::make_shared< DxGeometryShader >( this );
 			break;
 
 		case eSHADER_TYPE_HULL:
-			l_pReturn = std::make_shared< DxHullShader >( this );
+			l_return = std::make_shared< DxHullShader >( this );
 			break;
 
 		case eSHADER_TYPE_DOMAIN:
-			l_pReturn = std::make_shared< DxDomainShader >( this );
+			l_return = std::make_shared< DxDomainShader >( this );
 			break;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	std::shared_ptr< OneTextureFrameVariable > DxShaderProgram::DoCreateTextureVariable( int p_iNbOcc )

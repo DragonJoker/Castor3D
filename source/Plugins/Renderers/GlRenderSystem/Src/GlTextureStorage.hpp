@@ -86,11 +86,11 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eLOCK_FLAG
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE
 		 *\return		The image buffer
 		 *\~french
 		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eLOCK_FLAG
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
 		 *\return		Le buffer de l'image
 		 */
 		uint8_t * Lock( uint32_t p_lock );
@@ -147,11 +147,11 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eLOCK_FLAG
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE
 		 *\return		The image buffer
 		 *\~french
 		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eLOCK_FLAG
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
 		 *\return		Le buffer de l'image
 		 */
 		virtual uint8_t * DoLock( uint32_t p_lock ) = 0;

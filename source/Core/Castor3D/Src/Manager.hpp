@@ -289,7 +289,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'objet.
 		 *\return		\p true Si un élément avec le nom donné existe.
 		 */
-		inline bool Has( Key const & p_name )
+		inline bool Has( Key const & p_name )const
 		{
 			return m_elements.has( p_name );
 		}
@@ -303,7 +303,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
-		inline std::shared_ptr< Elem > Find( Key const & p_name )
+		inline std::shared_ptr< Elem > Find( Key const & p_name )const
 		{
 			return m_elements.find( p_name );
 		}
@@ -313,7 +313,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Locke le mutex de la collection
 		 */
-		inline void Lock()const
+		inline void lock()const
 		{
 			m_elements.lock();
 		}
@@ -323,7 +323,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Délocke le mutex de la collection
 		 */
-		inline void Unlock()const
+		inline void unlock()const
 		{
 			m_elements.unlock();
 		}

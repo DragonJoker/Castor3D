@@ -94,7 +94,6 @@ void SMaxImporter::DoProcessNextChunk( SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
 
 		if ( !DoIsValidChunk( &l_currentChunk, p_pChunk ) )
 		{
-//			CASTOR_ASSERT( false );
 			l_bContinue = false;
 		}
 		else
@@ -169,7 +168,6 @@ void SMaxImporter::DoProcessNextObjectChunk( SMaxChunk * p_pChunk, MeshSPtr p_pM
 
 		if ( !DoIsValidChunk( &l_currentChunk, p_pChunk ) )
 		{
-//			CASTOR_ASSERT( false );
 			l_bContinue = false;
 		}
 		else
@@ -237,7 +235,6 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 
 		if ( !DoIsValidChunk( &l_currentChunk, p_pChunk ) )
 		{
-//			CASTOR_ASSERT( false );
 			l_bContinue = false;
 		}
 		else
@@ -369,7 +366,6 @@ void SMaxImporter::DoProcessMaterialMapChunk( SMaxChunk * p_pChunk, String & p_s
 
 		if ( !DoIsValidChunk( &l_currentChunk, p_pChunk ) )
 		{
-//			CASTOR_ASSERT( false );
 			l_bContinue = false;
 		}
 		else

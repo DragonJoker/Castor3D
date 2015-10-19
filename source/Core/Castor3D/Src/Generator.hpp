@@ -62,7 +62,7 @@ namespace Castor3D
 			}
 			inline bool IsStopped()const
 			{
-				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+				auto l_lock = Castor::make_unique_lock( m_mutex );
 				return m_bStopped;
 			}
 
@@ -72,7 +72,7 @@ namespace Castor3D
 			}
 			inline void Stop()
 			{
-				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+				auto l_lock = Castor::make_unique_lock( m_mutex );
 				m_bStopped = true;
 			}
 			inline void SetRed( uint8_t val )

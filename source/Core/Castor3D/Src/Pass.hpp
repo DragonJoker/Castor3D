@@ -293,14 +293,14 @@ namespace Castor3D
 		template< typename T >
 		std::shared_ptr<T> GetShader()const
 		{
-			std::shared_ptr<T> l_pReturn;
+			std::shared_ptr<T> l_return;
 
 			if ( ! m_pShaderProgram.expired() )
 			{
-				l_pReturn = std::static_pointer_cast<T, ShaderProgramBase>( m_pShaderProgram.lock() );
+				l_return = std::static_pointer_cast<T, ShaderProgramBase>( m_pShaderProgram.lock() );
 			}
 
-			return l_pReturn;
+			return l_return;
 		}
 		/**
 		 *\~english

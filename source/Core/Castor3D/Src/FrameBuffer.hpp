@@ -40,7 +40,7 @@ namespace Castor3D
 		, public std::enable_shared_from_this< FrameBuffer >
 	{
 	public:
-		DECLARE_VECTOR( FrameBufferAttachmentSPtr, BufAttach );
+		DECLARE_VECTOR( FrameBufferAttachmentSPtr, Attach );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -75,6 +75,24 @@ namespace Castor3D
 		 *\brief		Fonction de destruction
 		 */
 		C3D_API virtual void Destroy() = 0;
+		/**
+		 *\~english
+		 *\brief		Initialises color and depth cache buffers.
+		 *\param[in]	p_size	The frame buffer size.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Initialise les tampons de cache de couleur de profondeur.
+		 *\param[in]	p_size	La taille du tampon d'image.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API bool Initialise( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Cleans up cache buffers.
+		 *\~french
+		 *\brief		Nettoie les tampons de cache.
+		 */
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -153,7 +171,7 @@ namespace Castor3D
 		 *\param[in]	p_texs	Les attaches.
 		 *\return		true si tout s'est bien passé (toutes les attaches utilisées).
 		 */
-		C3D_API virtual bool SetDrawBuffers( BufAttachArray const & p_attaches ) = 0;
+		C3D_API virtual bool SetDrawBuffers( AttachArray const & p_attaches ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders this buffer into another buffer's selected components
@@ -276,7 +294,7 @@ namespace Castor3D
 		 *\brief		Redimensionne tous les tampons attachés
 		 *\param[in]	p_size	Les nouvelles dimensions
 		 */
-		C3D_API virtual void Resize( Castor::Size const & p_size );
+		C3D_API void Resize( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Checks if the FBO is complete
@@ -303,6 +321,24 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
+		 *\brief		Initialises color and depth cache buffers.
+		 *\param[in]	p_size	The frame buffer size.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Initialise les tampons de cache de couleur de profondeur.
+		 *\param[in]	p_size	La taille du tampon d'image.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
+		/**
+		 *\~english
+		 *\brief		Cleans up cache buffers.
+		 *\~french
+		 *\brief		Nettoie les tampons de cache.
+		 */
+		C3D_API virtual void DoCleanup() = 0;
+		/**
+		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\param[in]	p_eTarget	The frame buffer binding target
 		 *\return		\p true if successful
@@ -319,6 +355,15 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 */
 		C3D_API virtual void DoUnbind() = 0;
+		/**
+		 *\~english
+		 *\brief		Resizes each attached buffer
+		 *\param[in]	p_size	The new dimensions
+		 *\~french
+		 *\brief		Redimensionne tous les tampons attachés
+		 *\param[in]	p_size	Les nouvelles dimensions
+		 */
+		C3D_API virtual void DoResize( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one
@@ -344,8 +389,8 @@ namespace Castor3D
 		C3D_API void DoDetach( eATTACHMENT_POINT p_point );
 
 	protected:
-		//!\~english All attchments.	\~french Toutes les attaches.
-		BufAttachArray m_attaches;
+		//!\~english All attachments.	\~french Toutes les attaches.
+		AttachArray m_attaches;
 	};
 }
 

@@ -130,6 +130,10 @@ namespace Castor
 		CU_API ImageSPtr get( String const & p_name );
 
 	public:
+		using Collection< Image, String >::begin;
+		using Collection< Image, String >::end;
+		using Collection< Image, String >::lock;
+		using Collection< Image, String >::unlock;
 		using Collection< Image, String >::clear;
 	};
 }

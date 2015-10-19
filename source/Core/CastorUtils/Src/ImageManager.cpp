@@ -31,7 +31,7 @@ namespace Castor
 
 	ImageSPtr ImageManager::create( String const & p_name, Path const & p_path )
 	{
-		std::unique_lock< Collection< Image, String > > l_lock( *this );
+		auto l_lock = make_unique_lock( *this );
 		ImageSPtr l_return;
 
 		if ( Collection< Image, String >::has( p_name ) )
@@ -67,7 +67,7 @@ namespace Castor
 
 	ImageSPtr ImageManager::create( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format )
 	{
-		std::unique_lock< Collection< Image, String > > l_lock( *this );
+		auto l_lock = make_unique_lock( *this );
 		ImageSPtr l_return;
 
 		if ( Collection< Image, String >::has( p_name ) )
@@ -94,7 +94,7 @@ namespace Castor
 
 	ImageSPtr ImageManager::get( String const & p_name )
 	{
-		std::unique_lock< Collection< Image, String > > l_lock( *this );
+		auto l_lock = make_unique_lock( *this );
 		ImageSPtr l_return = Collection< Image, String >::find( p_name );
 
 		if ( !l_return )

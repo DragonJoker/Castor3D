@@ -249,6 +249,11 @@ namespace Msaa
 
 			if ( l_bReturn )
 			{
+				l_bReturn = m_pMsFrameBuffer->Initialise( m_size );
+			}
+
+			if ( l_bReturn )
+			{
 				l_bReturn = m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
 				if ( l_bReturn )
@@ -275,7 +280,7 @@ namespace Msaa
 			m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 			m_pMsFrameBuffer->DetachAll();
 			m_pMsFrameBuffer->Unbind();
-			m_pMsFrameBuffer->DetachAll();
+			m_pMsFrameBuffer->Cleanup();
 			m_pMsColorBuffer->Cleanup();
 			m_pMsDepthBuffer->Cleanup();
 		}

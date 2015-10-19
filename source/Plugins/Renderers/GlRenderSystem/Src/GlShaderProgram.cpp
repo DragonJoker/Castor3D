@@ -160,8 +160,8 @@ namespace GlRender
 
 	ShaderObjectBaseSPtr GlShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_pReturn = std::make_shared< GlShaderObject >( m_gl, this, p_type );
-		return l_pReturn;
+		ShaderObjectBaseSPtr l_return = std::make_shared< GlShaderObject >( m_gl, this, p_type );
+		return l_return;
 	}
 
 	std::shared_ptr< OneTextureFrameVariable > GlShaderProgram::DoCreateTextureVariable( int p_iNbOcc )

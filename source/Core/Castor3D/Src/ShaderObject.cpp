@@ -409,7 +409,7 @@ namespace Castor3D
 
 	OneTextureFrameVariableSPtr ShaderObjectBase::FindFrameVariable( Castor::String const & p_name )const
 	{
-		OneTextureFrameVariableSPtr l_pReturn;
+		OneTextureFrameVariableSPtr l_return;
 		FrameVariablePtrStrMapConstIt l_it = m_mapFrameVariables.find( p_name );
 
 		if ( l_it != m_mapFrameVariables.end() )
@@ -418,11 +418,11 @@ namespace Castor3D
 
 			if ( l_pFound && l_pFound->GetFullType() == OneTextureFrameVariable::GetFrameVariableType() )
 			{
-				l_pReturn = std::static_pointer_cast< OneTextureFrameVariable >( l_pFound );
+				l_return = std::static_pointer_cast< OneTextureFrameVariable >( l_pFound );
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void ShaderObjectBase::FlushFrameVariables()

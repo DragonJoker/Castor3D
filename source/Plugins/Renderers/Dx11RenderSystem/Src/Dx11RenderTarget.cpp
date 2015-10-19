@@ -47,18 +47,18 @@ void DxRenderTarget::Clear()
 
 RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
 {
-	RenderBufferAttachmentSPtr l_pReturn;
+	RenderBufferAttachmentSPtr l_return;
 
 	if ( p_pRenderBuffer->GetComponent() == eBUFFER_COMPONENT_COLOUR )
 	{
-		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_pRenderBuffer ) );
+		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_pRenderBuffer ) );
 	}
 	else
 	{
-		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_pRenderBuffer ) );
+		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_pRenderBuffer ) );
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const

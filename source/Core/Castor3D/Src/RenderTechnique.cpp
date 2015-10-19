@@ -96,6 +96,11 @@ namespace Castor3D
 
 		if ( l_return )
 		{
+			l_return = m_pFrameBuffer->Initialise( m_size );
+		}
+
+		if ( l_return )
+		{
 			l_return = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
 			if ( l_return )
@@ -146,6 +151,7 @@ namespace Castor3D
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 		m_pFrameBuffer->DetachAll();
 		m_pFrameBuffer->Unbind();
+		m_pFrameBuffer->Cleanup();
 		m_pColorBuffer->Cleanup();
 		m_pDepthBuffer->Cleanup();
 		m_sampler->Cleanup();
@@ -153,13 +159,13 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::BeginRender()
 	{
-		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
+		if ( false )//m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
 		{
 			return DoBeginRender();
 		}
 		else
 		{
-			return m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+			return true;// m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 		}
 	}
 
@@ -171,7 +177,7 @@ namespace Castor3D
 
 	void RenderTechniqueBase::EndRender()
 	{
-		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
+		if ( false )//m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
 		{
 			DoEndRender();
 		}
@@ -180,14 +186,14 @@ namespace Castor3D
 		m_wp2DDepthStencilState.lock()->Apply();
 		GetOwner()->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
 
-		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
+		if ( false )//m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
 		{
 			m_pFrameBuffer->Unbind();
 			m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
 		}
 		else
 		{
-			m_pRenderTarget->GetFrameBuffer()->Unbind();
+			//m_pRenderTarget->GetFrameBuffer()->Unbind();
 		}
 
 		m_renderSystem->PopScene();

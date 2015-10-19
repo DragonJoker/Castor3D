@@ -210,41 +210,41 @@ namespace GlRender
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_pBuffer )
 	{
-		std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > l_pReturn;
+		std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > l_return;
 
 		if ( m_iOpenGlMajor < 3 && !UseVertexBufferObjects() )
 		{
-			l_pReturn = std::make_shared< GlIndexArray >( *this, m_gl, p_pBuffer );
+			l_return = std::make_shared< GlIndexArray >( *this, m_gl, p_pBuffer );
 		}
 		else
 		{
-			l_pReturn = std::make_shared< GlIndexBufferObject >( *this, m_gl, p_pBuffer );
+			l_return = std::make_shared< GlIndexBufferObject >( *this, m_gl, p_pBuffer );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateVertexBuffer( BufferDeclaration const & p_declaration, CpuBuffer< uint8_t > * p_pBuffer )
 	{
-		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > l_pReturn;
+		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > l_return;
 
 		if ( m_iOpenGlMajor < 3 )
 		{
 			if ( UseVertexBufferObjects() )
 			{
-				l_pReturn = std::make_shared< GlVertexBufferObject >( *this, m_gl, p_declaration, p_pBuffer );
+				l_return = std::make_shared< GlVertexBufferObject >( *this, m_gl, p_declaration, p_pBuffer );
 			}
 			else
 			{
-				l_pReturn = std::make_shared< GlVertexArray >( *this, m_gl, p_declaration, p_pBuffer );
+				l_return = std::make_shared< GlVertexArray >( *this, m_gl, p_declaration, p_pBuffer );
 			}
 		}
 		else
 		{
-			l_pReturn = std::make_shared< Gl3VertexBufferObject >( *this, m_gl, p_declaration, p_pBuffer );
+			l_return = std::make_shared< Gl3VertexBufferObject >( *this, m_gl, p_declaration, p_pBuffer );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< real > > GlRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer )

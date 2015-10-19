@@ -90,7 +90,7 @@ namespace Castor
 		 *\param[in]	p_pixelBuffer	L'objet PxBuffer à copier
 		 *\return		Une référence sur cet objet PxBuffer
 		 */
-		PxBuffer & operator =( PxBuffer const & p_pixelBuffer );
+		PxBuffer & operator=( PxBuffer const & p_pixelBuffer );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -101,7 +101,7 @@ namespace Castor
 		 *\param[in]	p_pixelBuffer	L'objet PxBuffer à déplacer
 		 *\return		Une référence sur cet objet PxBuffer
 		 */
-		PxBuffer & operator =( PxBuffer && p_pixelBuffer );
+		PxBuffer & operator=( PxBuffer && p_pixelBuffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves the column at given index
@@ -114,11 +114,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index
 		 *\return		Une référence constante sur la colonne à l'index voulu
 		 */
-		inline column const & operator []( uint32_t p_index )const
-		{
-			do_init_column( p_index );
-			return m_column;
-		}
+		inline column const & operator[]( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the column at given index
@@ -131,11 +127,7 @@ namespace Castor
 		 *\param[in]	p_index	L'index
 		 *\return		Une référence sur la colonne à l'index voulu
 		 */
-		inline column & operator []( uint32_t p_index )
-		{
-			do_init_column( p_index );
-			return m_column;
-		}
+		inline column & operator[]( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Swaps this buffer's data with the given one's
@@ -204,7 +196,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données du pixel
 		 */
-		virtual uint8_t * get_at( uint32_t x, uint32_t y );
+		virtual iterator get_at( uint32_t x, uint32_t y );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel data at given position
@@ -215,7 +207,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données constantes du pixel
 		 */
-		virtual uint8_t const * get_at( uint32_t x, uint32_t y )const;
+		virtual const_iterator get_at( uint32_t x, uint32_t y )const;
 		/**
 		 *\~english
 		 *\brief		Makes a vertical swap of pixels
@@ -233,6 +225,7 @@ namespace Castor
 
 	private:
 		virtual void do_init_column( uint32_t p_column )const;
+		virtual void do_init_column( uint32_t p_column );
 
 	private:
 		pixel m_pixel;

@@ -55,14 +55,14 @@ namespace Castor3D
 
 	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_pTexture )
 	{
-		Subdivider * l_pReturn = nullptr;
+		Subdivider * l_return = nullptr;
 
 		if ( m_pfnCreateGenerator )
 		{
-			l_pReturn = m_pfnCreateGenerator( p_pTexture );
+			l_return = m_pfnCreateGenerator( p_pTexture );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void GeneratorPlugin::DestroyGenerator( Subdivider * p_pGenerator )

@@ -494,6 +494,11 @@ namespace Deferred
 
 		m_lightPassBufDepth->Initialise( m_size );
 
+		if ( l_bReturn )
+		{
+			l_bReturn = m_lightPassFrameBuffer->Initialise( m_size );
+		}
+
 		if ( m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
@@ -527,6 +532,8 @@ namespace Deferred
 		m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 		m_lightPassFrameBuffer->DetachAll();
 		m_lightPassFrameBuffer->Unbind();
+		m_lightPassFrameBuffer->Cleanup();
+
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{

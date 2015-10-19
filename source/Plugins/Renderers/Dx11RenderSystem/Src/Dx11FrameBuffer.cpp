@@ -31,7 +31,7 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxFrameBuffer::SetDrawBuffers( BufAttachArray const & p_attaches )
+	bool DxFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
 	{
 		bool l_return = false;
 
@@ -61,11 +61,11 @@ namespace Dx11Render
 
 					if ( l_eAttach == eATTACHMENT_POINT_DEPTH || l_eAttach == eATTACHMENT_POINT_STENCIL )
 					{
-						l_pView = reinterpret_cast< ID3D11DepthStencilView * >( std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface() );
+						l_pView = reinterpret_cast< ID3D11DepthStencilView * >( std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetResourceView() );
 					}
 					else if ( l_eAttach == eATTACHMENT_POINT_COLOUR )
 					{
-						l_arraySurfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface() ) );
+						l_arraySurfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetResourceView() ) );
 					}
 				}
 			}
@@ -84,24 +84,6 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	bool DxFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
-	{
-		bool l_return = false;
-
-		//if ( m_gl.HasFbo() )
-		//{
-		//	if ( Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ ) )
-		//	{
-		//		m_gl.ReadBuffer( m_gl.Get( eGL_TEXTURE_ATTACHMENT( m_gl.Get( p_point ) + p_index ) ) );
-		//		OpenGl::PixelFmt l_pxFmt = m_gl.Get( p_buffer->format() );
-		//		l_return = m_gl.ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
-		//		Unbind();
-		//	}
-		//}
-
-		return l_return;
-	}
-
 	ColourRenderBufferSPtr DxFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
 	{
 		return std::make_shared< DxColourRenderBuffer >( m_renderSystem, p_ePixelFormat );
@@ -112,9 +94,66 @@ namespace Dx11Render
 		return std::make_shared< DxDepthStencilRenderBuffer >( m_renderSystem, p_ePixelFormat );
 	}
 
+	bool DxFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	{
+		DxDynamicTextureSPtr l_texture;
+
+		if ( p_point == eATTACHMENT_POINT_COLOUR )
+		{
+			l_texture = m_colorBuffer;
+		}
+		else
+		{
+			l_texture = m_depthBuffer;
+		}
+
+		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point, &p_index]( FrameBufferAttachmentSPtr p_attach )
+		{
+			return p_attach->GetAttachmentPoint() == p_point && p_attach->GetAttachmentIndex() == p_index;
+		} );
+
+		bool l_return = l_it != m_attaches.end();
+
+		if ( l_return )
+		{
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+			FrameBufferAttachmentSPtr l_attach = *l_it;
+			ID3D11Resource * l_src = NULL;
+
+			switch ( l_attach->GetAttachmentType() )
+			{
+			case eATTACHMENT_TYPE_TEXTURE:
+				l_src = std::static_pointer_cast< DxDynamicTexture >( std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture() )->GetTexture2D();
+				break;
+
+			case eATTACHMENT_TYPE_BUFFER:
+				if ( p_point != eATTACHMENT_POINT_COLOUR )
+				{
+					l_src = std::static_pointer_cast< DxDepthStencilRenderBuffer >( std::static_pointer_cast< RenderBufferAttachment >( l_attach )->GetRenderBuffer() )->GetDxRenderBuffer().GetResource();
+				}
+				else
+				{
+					l_src = std::static_pointer_cast< DxColourRenderBuffer >( std::static_pointer_cast< RenderBufferAttachment >( l_attach )->GetRenderBuffer() )->GetDxRenderBuffer().GetResource();
+				}
+				break;
+			}
+
+			l_deviceContext->CopyResource( l_texture->GetTexture2D(), l_src );
+			uint8_t * l_buffer = l_texture->Lock( eACCESS_TYPE_READ );
+
+			if ( l_buffer )
+			{
+				p_buffer->assign( std::vector< uint8_t >( l_buffer, l_buffer + l_texture->GetBuffer()->size() ), l_texture->GetPixelFormat() );
+				l_texture->Unlock( false );
+			}
+		}
+
+		return l_return;
+	}
+
 	ID3D11View * DxFrameBuffer::GetSurface( Castor3D::eATTACHMENT_POINT p_eAttach )
 	{
-		ID3D11View * l_pReturn = NULL;
+		ID3D11View * l_return = NULL;
 
 		if ( !m_attaches.empty() && p_eAttach != eATTACHMENT_POINT_NONE )
 		{
@@ -128,7 +167,7 @@ namespace Dx11Render
 				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 				{
 					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
-					l_pReturn = std::static_pointer_cast< DxDynamicTexture >( l_attach->GetTexture() )->GetRenderTargetView();
+					l_return = std::static_pointer_cast< DxDynamicTexture >( l_attach->GetTexture() )->GetRenderTargetView();
 				}
 				else
 				{
@@ -137,17 +176,63 @@ namespace Dx11Render
 
 					if ( l_eAttach == eATTACHMENT_POINT_DEPTH || l_eAttach == eATTACHMENT_POINT_STENCIL )
 					{
-						l_pReturn = std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_attach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface();
+						l_return = std::static_pointer_cast< DxDepthStencilRenderBuffer >( l_attach->GetRenderBuffer() )->GetDxRenderBuffer().GetResourceView();
 					}
 					else
 					{
-						l_pReturn = std::static_pointer_cast< DxColourRenderBuffer >( l_attach->GetRenderBuffer() )->GetDxRenderBuffer().GetSurface();
+						l_return = std::static_pointer_cast< DxColourRenderBuffer >( l_attach->GetRenderBuffer() )->GetDxRenderBuffer().GetResourceView();
 					}
 				}
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
+	}
+
+	bool DxFrameBuffer::DoInitialise( Castor::Size const & p_size )
+	{
+		m_colorBuffer = std::static_pointer_cast< DxDynamicTexture >( GetOwner()->GetRenderSystem()->CreateDynamicTexture() );
+		bool l_return = m_colorBuffer != nullptr;
+
+		if ( l_return )
+		{
+			m_colorBuffer->SetType( eTEXTURE_TYPE_2D );
+			m_colorBuffer->SetImage( p_size, ePIXEL_FORMAT_A8B8G8R8 );
+			l_return = m_colorBuffer->Create();
+		}
+
+		if ( l_return )
+		{
+			m_colorBuffer->Initialise( 0, eACCESS_TYPE_READ, eACCESS_TYPE_WRITE );
+		}
+
+		m_depthBuffer = std::static_pointer_cast< DxDynamicTexture >( GetOwner()->GetRenderSystem()->CreateDynamicTexture() );
+		l_return = m_depthBuffer != nullptr;
+
+		if ( l_return )
+		{
+			m_depthBuffer->SetType( eTEXTURE_TYPE_2D );
+			m_depthBuffer->SetImage( p_size, ePIXEL_FORMAT_DEPTH24S8 );
+			l_return = m_depthBuffer->Create();
+		}
+
+		if ( l_return )
+		{
+			l_return = m_depthBuffer->Initialise( 0, eACCESS_TYPE_READ, eACCESS_TYPE_WRITE );
+		}
+
+		return l_return;
+	}
+
+	void DxFrameBuffer::DoCleanup()
+	{
+		m_depthBuffer->Cleanup();
+		m_depthBuffer->Destroy();
+		m_depthBuffer.reset();
+
+		m_colorBuffer->Cleanup();
+		m_colorBuffer->Destroy();
+		m_colorBuffer.reset();
 	}
 
 	bool DxFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_eTarget )
@@ -157,6 +242,12 @@ namespace Dx11Render
 
 	void DxFrameBuffer::DoUnbind()
 	{
+	}
+
+	void DxFrameBuffer::DoResize( Castor::Size const & p_size )
+	{
+		m_colorBuffer->Resize( p_size );
+		m_depthBuffer->Resize( p_size );
 	}
 
 	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )

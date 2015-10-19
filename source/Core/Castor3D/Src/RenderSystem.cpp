@@ -86,19 +86,19 @@ void RenderSystem::PopScene()
 
 Scene * RenderSystem::GetTopScene()
 {
-	Scene * l_pReturn = NULL;
+	Scene * l_return = NULL;
 
 	if ( m_stackScenes.size() )
 	{
-		l_pReturn = m_stackScenes.top();
+		l_return = m_stackScenes.top();
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 ShaderProgramBaseSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage )
 {
-	CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+	auto l_lock = Castor::make_unique_lock( m_mutex );
 
 	return CreateShaderProgram();
 }

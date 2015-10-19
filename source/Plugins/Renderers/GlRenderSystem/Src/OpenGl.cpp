@@ -616,14 +616,14 @@ bool BufFunctions::GetBufferParameter( eGL_BUFFER_TARGET p_eTarget, eGL_BUFFER_P
 
 void * BufFunctions::MapBuffer( eGL_BUFFER_TARGET p_eTarget, eGL_LOCK access )
 {
-	void * l_pReturn = m_pfnMapBuffer( p_eTarget, access );
+	void * l_return = m_pfnMapBuffer( p_eTarget, access );
 
 	if ( !glCheckError( m_gl, cuT( "glMapBuffer" ) ) )
 	{
-		l_pReturn = NULL;
+		l_return = NULL;
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 bool BufFunctions::UnmapBuffer( eGL_BUFFER_TARGET p_eTarget )
@@ -634,17 +634,17 @@ bool BufFunctions::UnmapBuffer( eGL_BUFFER_TARGET p_eTarget )
 
 void * BufFunctions::MapBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
 {
-	void * l_pReturn = NULL;
+	void * l_return = NULL;
 //	if( length + offset < GL_BUFFER_SIZE )
 	{
-		l_pReturn = m_pfnMapBufferRange( p_eTarget, offset, length, access );
+		l_return = m_pfnMapBufferRange( p_eTarget, offset, length, access );
 
 		if ( !glCheckError( m_gl, cuT( "glMapBufferRange" ) ) )
 		{
-			l_pReturn = NULL;
+			l_return = NULL;
 		}
 	}
-	return l_pReturn;
+	return l_return;
 }
 
 bool BufFunctions::FlushMappedBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdiff_t offset, ptrdiff_t length )
@@ -681,14 +681,14 @@ bool BufFunctionsDSA::GetBufferParameter( eGL_BUFFER_TARGET p_eTarget, eGL_BUFFE
 
 void * BufFunctionsDSA::MapBuffer( eGL_BUFFER_TARGET p_eTarget, eGL_LOCK access )
 {
-	void * l_pReturn = m_pfnMapNamedBuffer( m_uiBuffer, access );
+	void * l_return = m_pfnMapNamedBuffer( m_uiBuffer, access );
 
 	if ( !glCheckError( m_gl, cuT( "glMapBuffer" ) ) )
 	{
-		l_pReturn = NULL;
+		l_return = NULL;
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 bool BufFunctionsDSA::UnmapBuffer( eGL_BUFFER_TARGET p_eTarget )
@@ -699,17 +699,17 @@ bool BufFunctionsDSA::UnmapBuffer( eGL_BUFFER_TARGET p_eTarget )
 
 void * BufFunctionsDSA::MapBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
 {
-	void * l_pReturn = NULL;
+	void * l_return = NULL;
 //	if( length + offset < GL_BUFFER_SIZE )
 	{
-		l_pReturn = m_pfnMapNamedBufferRange( m_uiBuffer, offset, length, access );
+		l_return = m_pfnMapNamedBufferRange( m_uiBuffer, offset, length, access );
 
 		if ( !glCheckError( m_gl, cuT( "glMapBufferRange" ) ) )
 		{
-			l_pReturn = NULL;
+			l_return = NULL;
 		}
 	}
-	return l_pReturn;
+	return l_return;
 }
 
 bool BufFunctionsDSA::FlushMappedBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdiff_t offset, ptrdiff_t length )
@@ -3576,9 +3576,9 @@ eGL_LOCK OpenGl::GetLockFlags( uint32_t p_uiFlags )const
 {
 	eGL_LOCK l_eLockFlags = eGL_LOCK_READ_WRITE;
 
-	if ( p_uiFlags & eLOCK_FLAG_READ_ONLY )
+	if ( p_uiFlags & eACCESS_TYPE_READ )
 	{
-		if ( p_uiFlags & eLOCK_FLAG_WRITE_ONLY )
+		if ( p_uiFlags & eACCESS_TYPE_WRITE )
 		{
 			l_eLockFlags = eGL_LOCK_READ_WRITE;
 		}
@@ -3587,7 +3587,7 @@ eGL_LOCK OpenGl::GetLockFlags( uint32_t p_uiFlags )const
 			l_eLockFlags = eGL_LOCK_READ_ONLY;
 		}
 	}
-	else if ( p_uiFlags & eLOCK_FLAG_WRITE_ONLY )
+	else if ( p_uiFlags & eACCESS_TYPE_WRITE )
 	{
 		l_eLockFlags = eGL_LOCK_WRITE_ONLY;
 	}
@@ -3599,16 +3599,16 @@ uint32_t OpenGl::GetBitfieldFlags( uint32_t p_uiFlags )const
 {
 	uint32_t l_uiFlags = 0;
 
-	if ( p_uiFlags & eLOCK_FLAG_READ_ONLY )
+	if ( p_uiFlags & eACCESS_TYPE_READ )
 	{
 		l_uiFlags = eGL_BUFFER_MAPPING_BIT_READ;
 
-		if ( p_uiFlags & eLOCK_FLAG_WRITE_ONLY )
+		if ( p_uiFlags & eACCESS_TYPE_WRITE )
 		{
 			l_uiFlags |= eGL_BUFFER_MAPPING_BIT_WRITE;
 		}
 	}
-	else if ( p_uiFlags & eLOCK_FLAG_WRITE_ONLY )
+	else if ( p_uiFlags & eACCESS_TYPE_WRITE )
 	{
 		l_uiFlags = ( eGL_BUFFER_MAPPING_BIT_WRITE | eGL_BUFFER_MAPPING_BIT_INVALIDATE_RANGE );
 	}

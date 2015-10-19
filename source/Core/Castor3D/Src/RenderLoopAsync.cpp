@@ -188,13 +188,13 @@ namespace Castor3D
 
 	void RenderLoopAsync::DoSetWindow( RenderWindow * p_window )
 	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexWindow );
+		auto l_lock = make_unique_lock( m_mutexWindow );
 		m_window = p_window;
 	}
 
 	RenderWindow * RenderLoopAsync::DoGetWindow()const
 	{
-		CASTOR_MUTEX_SCOPED_LOCK( m_mutexWindow );
+		auto l_lock = make_unique_lock( m_mutexWindow );
 		return m_window;
 	}
 }

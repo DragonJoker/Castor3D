@@ -33,7 +33,7 @@ namespace GuiCommon
 
 	wxImage * ImagesLoader::GetBitmap( uint32_t p_uiID )
 	{
-		wxImage * l_pReturn = NULL;
+		wxImage * l_return = NULL;
 		m_mutex.lock();
 		ImageIdMapIt l_it = m_mapImages.find( p_uiID );
 		ImageIdMapConstIt l_itEnd = m_mapImages.end();
@@ -41,10 +41,10 @@ namespace GuiCommon
 
 		if ( l_it != l_itEnd )
 		{
-			l_pReturn = l_it->second;
+			l_return = l_it->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void ImagesLoader::AddBitmap( uint32_t p_uiID, char const * const * p_pBits )

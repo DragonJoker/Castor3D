@@ -276,22 +276,14 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	T const & Coords< T, Count >::at( uint32_t p_pos )const
 	{
-		if ( p_pos >= Count )
-		{
-			CASTOR_ASSERT( false, "Coords subscript out of range" );
-		}
-
+		REQUIRE( p_pos < Count );
 		return m_coords[p_pos];
 	}
 
 	template< typename T, uint32_t Count >
 	T & Coords< T, Count >::at( uint32_t p_pos )
 	{
-		if ( p_pos >= Count )
-		{
-			CASTOR_ASSERT( false, "Coords subscript out of range" );
-		}
-
+		REQUIRE( p_pos < Count );
 		return m_coords[p_pos];
 	}
 

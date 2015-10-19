@@ -541,17 +541,6 @@ namespace Castor3D
 
 			if ( m_bChanged && ( m_bAutoMipmaps || m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC ) )
 			{
-#if DEBUG_BUFFERS
-
-				if ( m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC )
-				{
-					uint8_t * l_buffer = m_pTexture->Lock( eLOCK_FLAG_READ_ONLY );
-					std::memcpy( m_pTexture->GetBuffer()->ptr(), l_buffer, m_pTexture->GetBuffer()->size() );
-					const Image l_tmp( cuT( "tmp" ), *m_pTexture->GetBuffer() );
-					Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "TextureUnitTexture_" ) + string::to_string( ptrdiff_t( m_pTexture.get() ) ) + cuT( ".bmp" ) );
-				}
-
-#endif
 				m_pTexture->GenerateMipmaps();
 				m_bChanged = false;
 			}
@@ -570,26 +559,26 @@ namespace Castor3D
 
 	uint8_t const * TextureUnit::GetImageBuffer()const
 	{
-		uint8_t const * l_pReturn = nullptr;
+		uint8_t const * l_return = nullptr;
 
 		if ( m_pTexture && m_pTexture->GetBuffer() )
 		{
-			l_pReturn = m_pTexture->GetBuffer()->const_ptr();
+			l_return = m_pTexture->GetBuffer()->const_ptr();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	uint8_t * TextureUnit::GetImageBuffer()
 	{
-		uint8_t * l_pReturn = nullptr;
+		uint8_t * l_return = nullptr;
 
 		if ( m_pTexture && m_pTexture->GetBuffer() )
 		{
-			l_pReturn = m_pTexture->GetBuffer()->ptr();
+			l_return = m_pTexture->GetBuffer()->ptr();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	PxBufferBaseSPtr const TextureUnit::GetImagePixels()const
@@ -604,14 +593,14 @@ namespace Castor3D
 
 	PxBufferBaseSPtr TextureUnit::GetImagePixels()
 	{
-		PxBufferBaseSPtr l_pReturn;
+		PxBufferBaseSPtr l_return;
 
 		if ( m_pTexture )
 		{
-			l_pReturn = m_pTexture->GetBuffer();
+			l_return = m_pTexture->GetBuffer();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	uint32_t TextureUnit::GetImageSize()const
@@ -666,7 +655,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture )
 		{
-			uint8_t * l_pImage = m_pTexture->Lock( eLOCK_FLAG_WRITE_ONLY );
+			uint8_t * l_pImage = m_pTexture->Lock( eACCESS_TYPE_WRITE );
 
 			if ( l_pImage && m_pTexture->GetBuffer() )
 			{
@@ -681,7 +670,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture )
 		{
-			uint8_t * l_pImage = m_pTexture->Lock( eLOCK_FLAG_WRITE_ONLY );
+			uint8_t * l_pImage = m_pTexture->Lock( eACCESS_TYPE_WRITE );
 
 			if ( l_pImage && m_pTexture->GetBuffer() )
 			{

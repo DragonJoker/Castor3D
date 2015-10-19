@@ -21,12 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Point.hpp"
 #include "PixelFormat.hpp"
 
-#if defined( _MSC_VER )
-#	define TPL_PIXEL_FORMAT	uint32_t
-#else
-#	define TPL_PIXEL_FORMAT	ePIXEL_FORMAT
-#endif
-
 namespace Castor
 {
 	/*!

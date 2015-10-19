@@ -27,7 +27,14 @@ namespace Dx11Render
 
 	bool DxColourRenderBuffer::Initialise( Castor::Size const & p_size )
 	{
-		return m_dxRenderBuffer.Initialise( p_size );
+		bool l_return = m_dxRenderBuffer.Initialise( p_size );
+
+		if ( l_return )
+		{
+			m_size = p_size;
+		}
+
+		return l_return;
 	}
 
 	void DxColourRenderBuffer::Cleanup()

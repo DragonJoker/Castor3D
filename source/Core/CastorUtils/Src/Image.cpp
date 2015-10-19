@@ -398,7 +398,7 @@ namespace Castor
 		Point4ub l_ptComponents;
 		p_clrColour.to_bgra( l_ptComponents );
 		uint8_t const * l_pSrc = l_ptComponents.const_ptr();
-		uint8_t * l_pDst = m_pBuffer->get_at( x, y );
+		uint8_t * l_pDst = &( *m_pBuffer->get_at( x, y ) );
 		PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, GetPixelFormat(), l_pDst );
 		CHECK_INVARIANTS();
 		return * this;
@@ -408,7 +408,7 @@ namespace Castor
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() && p_pPixel );
-		uint8_t const * l_pSrc = m_pBuffer->get_at( x, y );
+		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( x, y ) );
 		uint8_t * l_pDst = p_pPixel;
 		PF::ConvertPixel( GetPixelFormat(), l_pSrc, p_eFormat, l_pDst );
 		CHECK_INVARIANTS();
@@ -419,7 +419,7 @@ namespace Castor
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() );
 		Point4ub l_ptComponents;
-		uint8_t const * l_pSrc = m_pBuffer->get_at( x, y );
+		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( x, y ) );
 		uint8_t * l_pDst = l_ptComponents.ptr();
 		PF::ConvertPixel( GetPixelFormat(), l_pSrc, ePIXEL_FORMAT_A8R8G8B8, l_pDst );
 		CHECK_INVARIANTS();
@@ -442,8 +442,8 @@ namespace Castor
 				{
 					for ( uint32_t j = 0; j < GetHeight(); ++j )
 					{
-						uint8_t const * l_pSrc = p_src.m_pBuffer->get_at( i, j );
-						uint8_t * l_pDst = m_pBuffer->get_at( i, j );
+						uint8_t const * l_pSrc = &( *p_src.m_pBuffer->get_at( i, j ) );
+						uint8_t * l_pDst = &( *m_pBuffer->get_at( i, j ) );
 						PF::ConvertPixel( GetPixelFormat(), l_pSrc, GetPixelFormat(), l_pDst );
 					}
 				}
@@ -498,8 +498,8 @@ namespace Castor
 		// Création de la sous-image à remplir
 		Image l_img( m_name + cuT( "_Sub" ) + string::to_string( l_rcRect[0] ) + cuT( "x" ) + string::to_string( l_rcRect[1] ) + cuT( ":" ) + string::to_string( l_ptSize.width() ) + cuT( "x" ) + string::to_string( l_ptSize.height() ), l_ptSize, GetPixelFormat() );
 		// Calcul de variables temporaires
-		uint8_t const * l_pSrc = m_pBuffer->get_at( l_rcRect.left(), l_rcRect.top() );
-		uint8_t * l_pDest = l_img.m_pBuffer->get_at( 0, 0 );
+		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( l_rcRect.left(), l_rcRect.top() ) );
+		uint8_t * l_pDest = &( *l_img.m_pBuffer->get_at( 0, 0 ) );
 		uint32_t l_uiSrcPitch = GetWidth() * PF::GetBytesPerPixel( GetPixelFormat() );
 		uint32_t l_uiDestPitch = l_img.GetWidth() * PF::GetBytesPerPixel( l_img.GetPixelFormat() );
 

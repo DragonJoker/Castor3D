@@ -27,7 +27,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxDynamicTexture
-		:	public Castor3D::DynamicTexture
+		: public Castor3D::DynamicTexture
 	{
 	public:
 		DxDynamicTexture( DxRenderSystem & p_renderSystem );
@@ -53,6 +53,21 @@ namespace Dx11Render
 		inline ID3D11ShaderResourceView * GetShaderResourceView()const
 		{
 			return m_texture.GetShaderResourceView();
+		}
+
+		inline ID3D11Texture1D * GetTexture1D()const
+		{
+			return m_texture.GetTexture1D();
+		}
+
+		inline ID3D11Texture2D * GetTexture2D()const
+		{
+			return m_texture.GetTexture2D();
+		}
+
+		inline ID3D11Texture3D * GetTexture3D()const
+		{
+			return m_texture.GetTexture3D();
 		}
 
 	private:

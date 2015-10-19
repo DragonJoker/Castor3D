@@ -36,19 +36,19 @@ namespace detail
 
 	const aiNodeAnim * FindNodeAnim( const aiAnimation * p_pAnimation, const String p_strNodeName )
 	{
-		const aiNodeAnim * l_pReturn = NULL;
+		const aiNodeAnim * l_return = NULL;
 
-		for ( uint32_t i = 0; i < p_pAnimation->mNumChannels && !l_pReturn; ++i )
+		for ( uint32_t i = 0; i < p_pAnimation->mNumChannels && !l_return; ++i )
 		{
 			const aiNodeAnim * l_pNodeAnim = p_pAnimation->mChannels[i];
 
 			if ( string::string_cast< xchar >( l_pNodeAnim->mNodeName.data ) == p_strNodeName )
 			{
-				l_pReturn = l_pNodeAnim;
+				l_return = l_pNodeAnim;
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	real FindFactor( NodeTimeMap const & p_mapNodes, NodeTimeMap::const_iterator p_itCur, NodeTimeMap::const_iterator & p_itPrv, NodeTimeMap::const_iterator & p_itNxt )
@@ -301,9 +301,9 @@ MeshSPtr AssimpImporter::DoImportMesh()
 		}
 	}
 
-	MeshSPtr l_pReturn( m_pMesh );
+	MeshSPtr l_return( m_pMesh );
 	m_pMesh.reset();
-	return l_pReturn;
+	return l_return;
 }
 
 
@@ -446,7 +446,7 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 
 MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial )
 {
-	MaterialSPtr l_pReturn;
+	MaterialSPtr l_return;
 	PassSPtr l_pPass;
 	MaterialManager & l_mtlManager = GetOwner()->GetMaterialManager();
 	aiString l_mtlname;
@@ -469,17 +469,17 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		l_name = m_fileName.GetFileName() + string::to_string( m_anonymous++ );
 	}
 
-	l_pReturn = l_mtlManager.Find( l_name );
+	l_return = l_mtlManager.Find( l_name );
 
-	if ( !l_pReturn )
+	if ( !l_return )
 	{
 		float l_fOpacity = 1;
 		float l_fShininess = 0.5f;
 		float l_fShininessStrength = 1.0f;
 		int l_iTwoSided = 0;
-		l_pReturn = l_mtlManager.Create( l_name, *GetOwner(), l_name );
-		l_pReturn->CreatePass();
-		l_pPass = l_pReturn->GetPass( 0 );
+		l_return = l_mtlManager.Create( l_name, *GetOwner(), l_name );
+		l_return->CreatePass();
+		l_pPass = l_return->GetPass( 0 );
 		p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_clrAmbient );
 		p_pAiMaterial->Get( AI_MATKEY_COLOR_DIFFUSE, l_clrDiffuse );
 		p_pAiMaterial->Get( AI_MATKEY_COLOR_SPECULAR, l_clrSpecular );
@@ -572,7 +572,7 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		}
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBones, uint32_t p_uiCount, std::vector< stVERTEX_BONE_DATA > & p_arrayVertices )

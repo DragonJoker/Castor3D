@@ -73,14 +73,14 @@ namespace Castor3D
 
 	Subdivider * DividerPlugin::CreateDivider()
 	{
-		Subdivider * l_pReturn = nullptr;
+		Subdivider * l_return = nullptr;
 
 		if ( m_pfnCreateDivider )
 		{
-			l_pReturn = m_pfnCreateDivider();
+			l_return = m_pfnCreateDivider();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void DividerPlugin::DestroyDivider( Subdivider * p_pDivider )

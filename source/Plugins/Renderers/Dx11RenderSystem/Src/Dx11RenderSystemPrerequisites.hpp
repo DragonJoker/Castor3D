@@ -242,6 +242,7 @@ namespace Dx11Render
 		static DWORD LightIndexes[Castor3D::eLIGHT_INDEXES_COUNT];
 		static DWORD Index[Castor3D::eATTACHMENT_POINT_COUNT];
 		static DXGI_FORMAT PixelFormats[Castor::ePIXEL_FORMAT_COUNT];
+		static DXGI_FORMAT BoundPixelFormats[Castor::ePIXEL_FORMAT_COUNT];
 		static D3D11_TEXTURE_ADDRESS_MODE TextureWrapMode[Castor3D::eWRAP_MODE_COUNT];
 		static D3D11_BLEND BlendFactors[Castor3D::eBLEND_COUNT];
 		static D3D11_BLEND_OP BlendOps[Castor3D::eBLEND_OP_COUNT];
@@ -312,6 +313,10 @@ namespace Dx11Render
 		static inline DXGI_FORMAT Get( Castor::ePIXEL_FORMAT p_pixelFormat )
 		{
 			return PixelFormats[p_pixelFormat];
+		}
+		static inline DXGI_FORMAT GetBound( Castor::ePIXEL_FORMAT p_pixelFormat )
+		{
+			return BoundPixelFormats[p_pixelFormat];
 		}
 		static inline D3D11_TEXTURE_ADDRESS_MODE Get( Castor3D::eWRAP_MODE p_eWrapMode )
 		{

@@ -950,12 +950,12 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo1->SetDrawBuffers();
-	CASTOR_ASSERT( m_fftFbo1->IsComplete() );
+	ENSURE( m_fftFbo1->IsComplete() );
 	m_fftFbo1->Unbind();
 	m_fftFbo2->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pAttachFftA, eTEXTURE_TARGET_2D );
 	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 1, m_pAttachFftB, eTEXTURE_TARGET_2D );
-	CASTOR_ASSERT( m_fftFbo2->IsComplete() );
+	ENSURE( m_fftFbo2->IsComplete() );
 	m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo2->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo2->Unbind();
@@ -992,7 +992,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 		m_variancesFbo->Attach( eATTACHMENT_POINT_COLOUR, l_pAttach, eTEXTURE_TARGET_3D, layer );
 	}
 
-	CASTOR_ASSERT( m_variancesFbo->IsComplete() );
+	ENSURE( m_variancesFbo->IsComplete() );
 	m_variancesFbo->Unbind();
 #else
 	generateWaves();
@@ -1623,12 +1623,12 @@ void RenderTechnique::generateWavesSpectrum()
 	}
 
 	m_pTexSpectrum_1_2->Bind();
-	uint8_t * l_pData = m_pTexSpectrum_1_2->Lock( eLOCK_FLAG_WRITE_ONLY );
+	uint8_t * l_pData = m_pTexSpectrum_1_2->Lock( eACCESS_TYPE_WRITE );
 	std::memcpy( l_pData, m_spectrum12, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 	m_pTexSpectrum_1_2->Unlock( true );
 	m_pTexSpectrum_1_2->Unbind();
 	m_pTexSpectrum_3_4->Bind();
-	l_pData = m_pTexSpectrum_3_4->Lock( eLOCK_FLAG_WRITE_ONLY );
+	l_pData = m_pTexSpectrum_3_4->Lock( eACCESS_TYPE_WRITE );
 	std::memcpy( l_pData, m_spectrum34, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 	m_pTexSpectrum_3_4->Unlock( true );
 	m_pTexSpectrum_3_4->Unbind();
@@ -1947,7 +1947,7 @@ void RenderTechnique::generateWaves()
 	float var = 4.0f;
 	m_amplitudeMax = 2.0f * var * sqrt( m_heightVariance );
 	m_pTexWave->Bind();
-	uint8_t * l_pData = m_pTexWave->Lock( eLOCK_FLAG_WRITE_ONLY );
+	uint8_t * l_pData = m_pTexWave->Lock( eACCESS_TYPE_WRITE );
 	std::memcpy( l_pData, m_pWaves, m_nbWaves * 4 * sizeof( float ) );
 	m_pTexWave->Unlock( true );
 	m_pTexWave->Unbind();

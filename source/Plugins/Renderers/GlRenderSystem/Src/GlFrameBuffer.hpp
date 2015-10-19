@@ -60,7 +60,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual bool SetDrawBuffers( BufAttachArray const & p_attaches );
+		virtual bool SetDrawBuffers( AttachArray const & p_attaches );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
@@ -94,17 +94,36 @@ namespace GlRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
 		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */
 		virtual void DoUnbind();
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
 		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolationMode );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoInitialise
+		 */
+		virtual bool DoInitialise( Castor::Size const & p_size )
+		{
+			return true;
+		}
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoCleanup
+		 */
+		virtual void DoCleanup()
+		{
+		}
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoResize
+		 */
+		virtual void DoResize( Castor::Size const & p_size )
+		{
+		}
 
 	private:
 		uint32_t m_uiGlName;

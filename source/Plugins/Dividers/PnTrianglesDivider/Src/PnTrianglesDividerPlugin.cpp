@@ -23,8 +23,8 @@ C3D_PnTriangles_API String GetName()
 
 C3D_PnTriangles_API Castor3D::Subdivider * CreateDivider()
 {
-	Castor3D::Subdivider * l_pReturn( new Subdivider() );
-	return l_pReturn;
+	Castor3D::Subdivider * l_return( new Subdivider() );
+	return l_return;
 }
 
 C3D_PnTriangles_API void DestroyDivider( Castor3D::Subdivider * p_pDivider )

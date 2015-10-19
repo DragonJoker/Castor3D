@@ -83,14 +83,12 @@ namespace GuiCommon
 	{
 		m_engine = p_engine;
 		wxTreeItemId l_root = AddRoot( _( "Root" ), eBMP_SCENE, eBMP_SCENE_SEL );
-		m_engine->GetMaterialManager().Lock();
+		auto l_lock = Castor::make_unique_lock( m_engine->GetMaterialManager() );
 
 		for ( auto && l_pair : m_engine->GetMaterialManager() )
 		{
 			DoAddMaterial( l_root, l_pair.second );
 		}
-
-		m_engine->GetMaterialManager().Unlock();
 	}
 
 	void MaterialsList::UnloadMaterials()
@@ -211,7 +209,7 @@ namespace GuiCommon
 	//
 	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_pReturn = NULL;
+	//	wxImage * l_return = NULL;
 	//
 	//	if ( p_pPass )
 	//	{
@@ -304,15 +302,15 @@ namespace GuiCommon
 	//		wxBitmap l_bmpMask( *l_pMask );
 	//		delete l_pMask;
 	//		l_dcReturn.DrawBitmap( l_bmpMask, 0, 0, true );
-	//		l_pReturn = new wxImage( l_bmpReturn.ConvertToImage() );
+	//		l_return = new wxImage( l_bmpReturn.ConvertToImage() );
 	//	}
 	//
-	//	return l_pReturn;
+	//	return l_return;
 	//}
 	//
 	//wxImage * MaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_pReturn = NULL;
+	//	wxImage * l_return = NULL;
 	//
 	//	if ( p_pUnit )
 	//	{
@@ -323,8 +321,8 @@ namespace GuiCommon
 	//		{
 	//			if ( l_bmp.IsOk() )
 	//			{
-	//				l_pReturn = new wxImage( l_bmp.ConvertToImage() );
-	//				l_pReturn->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
+	//				l_return = new wxImage( l_bmp.ConvertToImage() );
+	//				l_return->Rescale( p_width, p_height, wxIMAGE_QUALITY_HIGHEST );
 	//			}
 	//		}
 	//		catch ( ... )
@@ -333,6 +331,6 @@ namespace GuiCommon
 	//		}
 	//	}
 	//
-	//	return l_pReturn;
+	//	return l_return;
 	//}
 }

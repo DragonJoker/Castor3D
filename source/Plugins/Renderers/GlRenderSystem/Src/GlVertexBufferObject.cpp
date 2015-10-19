@@ -282,15 +282,15 @@ namespace GlRender
 
 	uint8_t * GlVertexBufferObject::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
 	{
-		uint8_t * l_pReturn = NULL;
+		uint8_t * l_return = NULL;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			l_pReturn = GlBuffer< uint8_t >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+			l_return = GlBuffer< uint8_t >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void GlVertexBufferObject::Unlock()

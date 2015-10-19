@@ -256,7 +256,7 @@ void GlContextImpl::UpdateVSync( bool p_bEnable )
 XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pWindow, IntArray & p_arrayAttribs, int p_iScreen )
 {
 	Logger::LogDebug( cuT( "GlXContext::Create - Using FBConfig" ) );
-	XVisualInfo *	l_pReturn = NULL;
+	XVisualInfo *	l_return = NULL;
 	int				l_iData = 0;
 	int				l_iResult;
 	m_pFbConfig = g_pfnGlXChooseFBConfig( m_pDisplay, p_iScreen, &p_arrayAttribs[0], &l_iResult );
@@ -295,7 +295,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 				{
 					// Last FBConfig try failed
 					Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-					l_pReturn = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
+					l_return = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
 				}
 				else
 				{
@@ -317,7 +317,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 			{
 				// Last FBConfig try failed, we try from XVisualInfo
 				Logger::LogWarning( cuT( "GlXContext::Create - Default glXChooseFBConfig failed" ) );
-				l_pReturn = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
+				l_return = DoCreateVisualInfoWithoutFBConfig( p_arrayAttribs, p_iScreen );
 			}
 			else
 			{
@@ -340,9 +340,9 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 
 	if ( m_pFbConfig )
 	{
-		l_pReturn = g_pfnGlXGetVisualFromFBConfig( m_pDisplay, m_pFbConfig[0] );
+		l_return = g_pfnGlXGetVisualFromFBConfig( m_pDisplay, m_pFbConfig[0] );
 
-		if ( !l_pReturn )
+		if ( !l_return )
 		{
 			Logger::LogError( cuT( "GlXContext::Create - glXGetVisualFromFBConfig failed" ) );
 		}
@@ -352,20 +352,20 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_pW
 		}
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray & p_arrayAttribs, int p_iScreen )
 {
 	Logger::LogInfo( cuT( "GlXContext::Create - Not using FBConfig" ) );
-	XVisualInfo	* l_pReturn = glXChooseVisual( m_pDisplay, p_iScreen, &p_arrayAttribs[0] );
+	XVisualInfo	* l_return = glXChooseVisual( m_pDisplay, p_iScreen, &p_arrayAttribs[0] );
 
-	if ( !l_pReturn )
+	if ( !l_return )
 	{
 		Logger::LogError( cuT( "GlXContext::Create - glXChooseVisual failed" ) );
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow )

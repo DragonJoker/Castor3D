@@ -136,6 +136,18 @@ namespace Dx11Render
 
 	bool DxRenderBuffer::Resize( Size const & p_size )
 	{
-		return Initialise( p_size );
+		bool l_return = false;
+
+		if ( p_size != m_size )
+		{
+			Cleanup();
+			l_return = Initialise( p_size );
+		}
+		else
+		{
+			l_return = true;
+		}
+
+		return l_return;
 	}
 }

@@ -187,7 +187,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetVertexIndex( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < 3, "Face subscript out of range" );
+			REQUIRE( p_index < 3 );
 			return m_pIndex[p_index];
 		}
 

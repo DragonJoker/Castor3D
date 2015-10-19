@@ -1090,7 +1090,7 @@ namespace Castor3D
 		template< class MapType, class ArrayType >
 		void DoRemoveAll( MapType & p_map, ArrayType & p_array )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			typename MapType::iterator l_it = p_map.begin();
 
 			while ( p_map.size() > 0 )
@@ -1109,7 +1109,7 @@ namespace Castor3D
 
 			if ( !p_key.empty() )
 			{
-				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+				auto l_lock = Castor::make_unique_lock( m_mutex );
 				typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_key );
 
 				if ( l_it == p_map.end() )
@@ -1136,7 +1136,7 @@ namespace Castor3D
 
 			if ( p_pObject )
 			{
-				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+				auto l_lock = Castor::make_unique_lock( m_mutex );
 				typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_pObject->GetName() );
 
 				if ( l_it == p_map.end() )
@@ -1160,23 +1160,23 @@ namespace Castor3D
 		template< class ObjectType, typename KeyType >
 		std::shared_ptr< ObjectType > DoGetObject( std::map< KeyType, std::shared_ptr< ObjectType > > const & p_map, KeyType const & p_key )const
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
-			typename std::shared_ptr< ObjectType > l_pReturn;
+			auto l_lock = Castor::make_unique_lock( m_mutex );
+			typename std::shared_ptr< ObjectType > l_return;
 			typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_key );
 
 			if ( l_it != p_map.end() )
 			{
-				l_pReturn = l_it->second;
+				l_return = l_it->second;
 			}
 
-			return l_pReturn;
+			return l_return;
 		}
 		template< class ObjectType, typename KeyType >
 		void DoRemoveObject( std::shared_ptr< ObjectType > p_pObject, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, std::vector< std::shared_ptr< ObjectType > > & p_array )
 		{
 			if ( p_pObject )
 			{
-				CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+				auto l_lock = Castor::make_unique_lock( m_mutex );
 				typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_pObject->GetName() );
 
 				if ( l_it != p_map.end() )

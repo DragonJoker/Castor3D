@@ -20,8 +20,8 @@ C3D_Loop_API Castor::String GetName()
 
 C3D_Loop_API Castor3D::Subdivider * CreateDivider()
 {
-	Castor3D::Subdivider * l_pReturn( new Loop::Subdivider() );
-	return l_pReturn;
+	Castor3D::Subdivider * l_return( new Loop::Subdivider() );
+	return l_return;
 }
 
 C3D_Loop_API void DestroyDivider( Castor3D::Subdivider * p_pDivider )

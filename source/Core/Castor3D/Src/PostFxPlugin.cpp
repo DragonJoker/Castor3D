@@ -58,13 +58,13 @@ namespace Castor3D
 
 	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_renderSystem )
 	{
-		PostEffectSPtr l_pReturn;
+		PostEffectSPtr l_return;
 
 		if ( m_pfnCreateEffect )
 		{
-			l_pReturn = m_pfnCreateEffect( p_renderSystem );
+			l_return = m_pfnCreateEffect( p_renderSystem );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 }

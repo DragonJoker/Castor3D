@@ -31,7 +31,7 @@ namespace Castor
 
 	FontSPtr FontManager::create( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height )
 	{
-		std::unique_lock< Collection< Font, String > > l_lock( *this );
+		auto l_lock = make_unique_lock( *this );
 		FontSPtr l_return;
 
 		if ( Collection< Font, String >::has( p_name ) )
@@ -74,7 +74,7 @@ namespace Castor
 
 	FontSPtr FontManager::get( Castor::String const & p_name )
 	{
-		std::unique_lock< Collection< Font, String > > l_lock( *this );
+		auto l_lock = make_unique_lock( *this );
 		FontSPtr l_return = Collection< Font, String >::find( p_name );
 
 		if ( !l_return )

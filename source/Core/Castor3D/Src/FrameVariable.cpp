@@ -206,15 +206,13 @@ namespace Castor3D
 
 	void FrameVariable::SetValueStr( String const & p_strValue, uint32_t p_index )
 	{
+		REQUIRE( p_index < m_uiOcc );
+
 		if ( p_index < m_uiOcc )
 		{
 			m_strValue[p_index] = p_strValue;
 			m_bChanged = true;
 			DoSetValueStr( p_strValue, p_index );
-		}
-		else
-		{
-			CASTOR_ASSERT( false, "FrameVariable subscript out of range" );
 		}
 	}
 }

@@ -467,7 +467,7 @@ namespace Castor3D
 		 */
 		inline BufferElementGroupSPtr operator[]( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < m_points.size(), "Submesh Point subscript out of range" );
+			REQUIRE( p_index < m_points.size() );
 			return m_points[p_index];
 		}
 		/**
@@ -482,7 +482,7 @@ namespace Castor3D
 		 */
 		inline BufferElementGroupSPtr GetPoint( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < m_points.size(), "Submesh Point subscript out of range" );
+			REQUIRE( p_index < m_points.size() );
 			return m_points[p_index];
 		}
 		/**
@@ -581,7 +581,7 @@ namespace Castor3D
 		 */
 		inline FaceSPtr GetFace( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < m_arrayFaces.size(), "Submesh Face subscript out of range" );
+			REQUIRE( p_index < m_arrayFaces.size() );
 			return m_arrayFaces[p_index];
 		}
 		/**

@@ -142,7 +142,7 @@ namespace Castor
 			break;
 
 		default:
-			CASTOR_ASSERT( false, "Unsupported file opening mode" );
+			FAILURE( "Unsupported file opening mode" );
 			break;
 		}
 
@@ -309,7 +309,7 @@ namespace Castor
 
 	bool File::ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool CU_PARAM_UNUSED( p_recursive ) )
 	{
-		REQUIRE( ! p_folderPath.empty() );
+		REQUIRE( !p_folderPath.empty() );
 		bool l_return = false;
 #if defined( _WIN32 )
 		WIN32_FIND_DATA l_findData;

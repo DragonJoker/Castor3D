@@ -30,7 +30,7 @@ namespace Dx11Render
 		DxTexture( DxRenderSystem & p_renderSystem, bool p_static );
 		virtual ~DxTexture();
 
-		virtual bool Initialise( Castor3D::eTEXTURE_TYPE p_dimension, Castor::PxBufferBaseSPtr p_pixelBuffer, uint32_t p_depth, bool p_renderTarget, uint32_t p_samples );
+		virtual bool Initialise( Castor3D::eTEXTURE_TYPE p_dimension, Castor::PxBufferBaseSPtr p_pixelBuffer, uint32_t p_depth, uint8_t p_cpuAccess, uint8_t p_gpuAccess, bool p_renderTarget, uint32_t p_samples );
 		virtual void Cleanup();
 		virtual bool Bind( uint32_t p_index );
 		virtual void Unbind( uint32_t p_index );
@@ -52,27 +52,63 @@ namespace Dx11Render
 			return m_pixelBuffer;
 		}
 
+		inline ID3D11Texture1D * GetTexture1D()const
+		{
+			REQUIRE( m_type == Castor3D::eTEXTURE_TYPE_1D
+					 || m_type == Castor3D::eTEXTURE_TYPE_1DARRAY );
+			return m_texture.m_texture1D;
+		}
+
+		inline ID3D11Texture2D * GetTexture2D()const
+		{
+			REQUIRE( m_type == Castor3D::eTEXTURE_TYPE_2D
+					 || m_type == Castor3D::eTEXTURE_TYPE_2DARRAY
+					 || m_type == Castor3D::eTEXTURE_TYPE_2DMS
+					 || m_type == Castor3D::eTEXTURE_TYPE_2DMSARRAY );
+			return m_texture.m_texture2D;
+		}
+
+		inline ID3D11Texture3D * GetTexture3D()const
+		{
+			REQUIRE( m_type == Castor3D::eTEXTURE_TYPE_3D );
+			return m_texture.m_texture3D;
+		}
+
 	private:
 
-		bool DoInitialiseBuffer();
-		bool DoInitialise1D();
-		bool DoInitialise1DArray();
-		bool DoInitialise2D();
-		bool DoInitialise2DArray();
-		bool DoInitialise2DMS();
-		bool DoInitialise2DMSArray();
-		bool DoInitialise3D();
-		bool DoInitialiseCube();
-		bool DoInitialiseCubeArray();
-		void DoInitTex1DDesc( D3D11_TEXTURE1D_DESC & p_desc );
-		void DoInitTex1DData( D3D11_SUBRESOURCE_DATA & p_data );
-		void DoInitTex2DDesc( D3D11_TEXTURE2D_DESC & p_desc );
-		void DoInitTex2DData( D3D11_SUBRESOURCE_DATA & p_data );
-		void DoInitTex3DDesc( D3D11_TEXTURE3D_DESC & p_desc );
-		void DoInitTex3DData( D3D11_SUBRESOURCE_DATA & p_data );
+		bool DoInitialiseBuffer( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialise1D( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialise1DArray( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialise2D( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialise2DArray( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialise2DMS( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialise2DMSArray( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialise3D( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialiseCube( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		bool DoInitialiseCubeArray( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		D3D11_TEXTURE1D_DESC DoInitTex1DDesc( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		D3D11_SUBRESOURCE_DATA DoInitTex1DData();
+		D3D11_TEXTURE2D_DESC DoInitTex2DDesc( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		D3D11_SUBRESOURCE_DATA DoInitTex2DData();
+		D3D11_TEXTURE3D_DESC DoInitTex3DDesc( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		D3D11_SUBRESOURCE_DATA DoInitTex3DData();
 		bool DoCreateRenderTargetView( D3D11_RTV_DIMENSION p_dimension, ID3D11Resource * p_texture );
 		bool DoCreateShaderResourceView( D3D11_SRV_DIMENSION p_dimension, ID3D11Resource * p_texture );
 		DXGI_FORMAT DoCheckPixelFormat( DXGI_FORMAT p_format );
+
+		template< typename TextureType >
+		void DoCreateResources( TextureType * p_texture, bool p_sr, D3D11_SRV_DIMENSION p_srv, bool p_rt, D3D11_RTV_DIMENSION p_rtv )
+		{
+			if ( p_sr )
+			{
+				DoCreateShaderResourceView( p_srv, p_texture );
+			}
+
+			if ( p_rt )
+			{
+				DoCreateRenderTargetView( p_rtv, p_texture );
+			}
+		}
 
 	private:
 		Castor::PxBufferBaseSPtr m_pixelBuffer;
@@ -83,6 +119,13 @@ namespace Dx11Render
 		bool m_renderTarget;
 		bool m_static;
 		uint32_t m_samples;
+		Castor3D::eTEXTURE_TYPE m_type;
+		union
+		{
+			ID3D11Texture1D * m_texture1D;
+			ID3D11Texture2D * m_texture2D;
+			ID3D11Texture3D * m_texture3D;
+		} m_texture;
 	};
 }
 

@@ -1181,7 +1181,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMesh )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_pContext->bBool1 = false;
 	p_params[0]->Get( l_pContext->strName2 );
-	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->GetMeshManager().Find( l_pContext->strName2 );
+	auto const & l_manager = l_pContext->m_pParser->GetOwner()->GetMeshManager();
+
+	if ( l_manager.Has( l_pContext->strName2 ) )
+	{
+		l_pContext->pMesh = l_manager.Find( l_pContext->strName2 );
+	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_MESH )
 

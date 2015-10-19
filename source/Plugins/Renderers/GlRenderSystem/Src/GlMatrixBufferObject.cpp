@@ -95,15 +95,15 @@ namespace GlRender
 
 	real * GlMatrixBufferObject::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
 	{
-		real * l_pReturn = NULL;
+		real * l_return = NULL;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			l_pReturn = GlBuffer< real >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+			l_return = GlBuffer< real >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void GlMatrixBufferObject::Unlock()

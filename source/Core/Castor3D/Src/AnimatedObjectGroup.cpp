@@ -104,15 +104,15 @@ namespace Castor3D
 
 	AnimatedObjectSPtr AnimatedObjectGroup::CreateObject( String const & p_name )
 	{
-		AnimatedObjectSPtr l_pReturn;
+		AnimatedObjectSPtr l_return;
 
 		if ( m_mapObjects.find( p_name ) == m_mapObjects.end() )
 		{
-			l_pReturn = std::make_shared< AnimatedObject >( p_name );
-			m_mapObjects.insert( std::make_pair( p_name, l_pReturn ) );
+			l_return = std::make_shared< AnimatedObject >( p_name );
+			m_mapObjects.insert( std::make_pair( p_name, l_return ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_pObject )

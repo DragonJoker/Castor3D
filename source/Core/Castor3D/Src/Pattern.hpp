@@ -66,14 +66,14 @@ namespace Castor3D
 		 */
 		Pointer GetReversed()const
 		{
-			Pointer l_pReturn = std::make_shared< Pattern< T > >();
+			Pointer l_return = std::make_shared< Pattern< T > >();
 
 			for ( typename TObjList::iterator l_it = m_listElements.begin(); l_it != m_listElements.end(); l_it++ )
 			{
-				l_pReturn->m_listElements.push_front( *l_it );
+				l_return->m_listElements.push_front( *l_it );
 			}
 
-			return l_pReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -137,9 +137,9 @@ namespace Castor3D
 		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence modifiable sur l'élément
 		 */
-		TObjRef operator []( uint32_t p_index )
+		TObjRef operator[]( uint32_t p_index )
 		{
-			CASTOR_ASSERT( p_index < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::iterator l_it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
@@ -159,9 +159,9 @@ namespace Castor3D
 		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence constante sur l'élément
 		 */
-		TObjConstRef operator []( uint32_t p_index )const
+		TObjConstRef operator[]( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::const_iterator l_it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
@@ -183,7 +183,7 @@ namespace Castor3D
 		 */
 		TObjRef GetElement( uint32_t p_index )
 		{
-			CASTOR_ASSERT( p_index < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::iterator l_it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )
@@ -205,7 +205,7 @@ namespace Castor3D
 		 */
 		TObjConstRef GetElement( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::const_iterator l_it = m_listElements.begin();
 
 			for ( uint32_t i = 0; i < p_index; i++ )

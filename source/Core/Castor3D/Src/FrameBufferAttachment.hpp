@@ -87,15 +87,15 @@ namespace Castor3D
 		 *\brief		Détache le tampon de rendu du tampon d'image
 		 */
 		C3D_API void Detach();
-		/**
-		 *\~english
-		 *\return		The data buffer.
-		 *\~french
-		 *\return		Le tampon de pixels.
-		 */
-		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const = 0;
 
 	public:
+		/**
+		*\~english
+		*\return		The data buffer.
+		*\~french
+		*\return		Le tampon de pixels.
+		*/
+		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const = 0;
 		/**
 		 *\~english
 		 *\brief		Downloads the render buffer data.

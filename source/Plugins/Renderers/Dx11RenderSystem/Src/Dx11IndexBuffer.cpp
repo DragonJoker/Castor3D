@@ -80,7 +80,7 @@ namespace Dx11Render
 
 					if ( l_uiSize )
 					{
-						uint32_t * l_pBuffer = Lock( 0, l_uiSize, eLOCK_FLAG_WRITE_ONLY );
+						uint32_t * l_pBuffer = Lock( 0, l_uiSize, eACCESS_TYPE_WRITE );
 
 						if ( l_pBuffer )
 						{
