@@ -267,4 +267,21 @@ namespace Castor3D
 
 		return l_return;
 	}
+	
+	uint32_t Geometry::GetProgramFlags( Submesh & p_submesh )
+	{
+		uint32_t l_return = p_submesh.GetProgramFlags();
+
+		if ( ( l_return & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+		{
+			auto l_animated = GetAnimatedObject();
+
+			if ( !l_animated || !l_animated->IsPlayingAnimation() )
+			{
+				l_return &= ~ePROGRAM_FLAG_SKINNING;
+			}
+		}
+
+		return l_return;
+	}
 }

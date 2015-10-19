@@ -117,18 +117,6 @@ namespace Castor3D
 		C3D_API void LoadAllPlugins( Castor::Path const & p_strFolder );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator on the plugins map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la map des plugins
-		 *\return		L'itérateur
-		 */
-		inline PluginStrMap const & GetPluginsList( ePLUGIN_TYPE p_type )const
-		{
-			return m_loadedPlugins[p_type];
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves an iterator on the renderer plugins array
 		 *\return		The iterator
 		 *\~french

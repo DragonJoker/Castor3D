@@ -4,6 +4,7 @@
 /doc/x86
 /doc/x64
 /source/Samples/CastorViewerSharp/Src/obj
+/source/CMake
 /.gitattributes
 /data/Ignored
 /data/Scene/Tests
@@ -14,11 +15,7 @@
 /data/Scene/Parc
 /source/Core/Castor3D/Src/Data/Core
 *.csproj
+*.user
 *.suo
 *.gch
-/data/Scene/Alpha
-/data/Scene/Anim
-/data/Scene/Billboards
-/data/Scene/Lighting
-/data/Scene/Parc
-/source/Core/Castor3D/Src/Data/Core
+*.*~

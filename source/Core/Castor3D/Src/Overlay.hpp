@@ -130,7 +130,7 @@ namespace Castor3D
 			Engine * m_engine;
 		};
 
-	protected:
+	public:
 		typedef OverlayPtrArray::iterator iterator;
 		typedef OverlayPtrArray::const_iterator const_iterator;
 

@@ -27,9 +27,9 @@ Colour * CreateColourFromComponents( float p_r, float p_g, float p_b, float p_a 
 
 void ExportCastorUtils()
 {
-	// Make "from castor.gfx import <whatever>" work
+	// Make "from castor.utils import <whatever>" work
 	py::object l_module( py::handle<>( py::borrowed( PyImport_AddModule( "castor.utils" ) ) ) );
-	// Make "from castor import gfx" work
+	// Make "from castor import utils" work
 	py::scope().attr( "utils" ) = l_module;
 	// Set the current scope to the new sub-module
 	py::scope l_scope = l_module;
@@ -70,7 +70,7 @@ void ExportCastorUtils()
 	.value( "OUT", eINTERSECTION_OUT )
 	.value( "INTERSECT", eINTERSECTION_INTERSECT );
 	//@}
-	/**@group_name ELogType	*/
+	/**@group_name eLOG_TYPE	*/
 	//@{
 	py::enum_< ELogType >( "LogType" )
 	.value( "DEBUG", ELogType_DEBUG )
@@ -99,7 +99,7 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Vector2D	*/
 	//@{
-	py::class_< Point2r >( "Vector2D", py::init< real, real >() )
+	py::class_< Point2r, std::shared_ptr< Point2r >, boost::noncopyable >( "Vector2D", py::init< real, real >() )
 	.add_property( "x", cpy::make_getter( &Point2r::operator[], 0u ), cpy::make_setter( &Point2r::operator[], 0u ), "The X coordinate" )
 	.add_property( "y", cpy::make_getter( &Point2r::operator[], 1u ), cpy::make_setter( &Point2r::operator[], 1u ), "The Y coordinate" )
 	.def( "normalise", cpy::VectorNormaliser() )
@@ -117,7 +117,7 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Vector3D	*/
 	//@{
-	py::class_< Point3r >( "Vector3D", py::init< real, real, real >() )
+	py::class_< Point3r, std::shared_ptr< Point3r >, boost::noncopyable >( "Vector3D", py::init< real, real, real >() )
 	.add_property( "x", cpy::make_getter( &Point3r::operator[], 0u ), cpy::make_setter( &Point3r::operator[], 0u ), "The X coordinate" )
 	.add_property( "y", cpy::make_getter( &Point3r::operator[], 1u ), cpy::make_setter( &Point3r::operator[], 1u ), "The Y coordinate" )
 	.add_property( "z", cpy::make_getter( &Point3r::operator[], 2u ), cpy::make_setter( &Point3r::operator[], 2u ), "The Z coordinate" )
@@ -161,26 +161,36 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Quaternion	*/
 	//@{
+	void ( Quaternion::*quaternionFromAxisAngle )( Point3f const &, Angle const & ) = &Quaternion::from_axis_angle;
+	void ( Quaternion::*quaternionToAxisAngle )( Point3f &, Angle & )const = &Quaternion::to_axis_angle;
+	void ( Quaternion::*quaternionFromAxes )( Point3f const &, Point3f const &, Point3f const & ) = &Quaternion::from_axes;
+	void ( Quaternion::*quaternionToAxes )( Point3f &, Point3f &, Point3f & )const = &Quaternion::to_axes;
+	Point3f & ( Quaternion::*quaternionTransform )( Point3f const &, Point3f & )const = &Quaternion::transform;
 	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::to_matrix;
 	void ( Quaternion::*quaternionFromMatrix )( Matrix4x4r const & ) = &Quaternion::from_matrix;
-	py::class_< Quaternion >( "Quaternion", py::init< Point3r const &, Angle const & >() );
-	//.add_property( "rotation_matrix", quaternionToMatrix, quaternionFromMatrix, "The quaternion's rotation matrix" )
-	//.def( "transform", py::make_function( &Quaternion::Transform, py::return_value_policy< py::reference_existing_object >() ) )
-	//.def( "to_axis_angle", &Quaternion::ToAxisAngle )
-	//.def( "from_axis_angle", &Quaternion::FromAxisAngle )
-	//.def( "to_axes", &Quaternion::ToAxes )
-	//.def( "from_axes", &Quaternion::FromAxes )
-	//.def( "yaw", &Quaternion::GetYaw )
-	//.def( "pitch", &Quaternion::GetPitch )
-	//.def( "roll", &Quaternion::GetYaw )
-	//.def( "magnitude", &Quaternion::GetMagnitude )
-	//.def( "conjugate", &Quaternion::Conjugate )
-	//.def( "slerp", &Quaternion::Slerp )
-	//.def( py::self += py::other< Quaternion >() )
-	//.def( py::self -= py::other< Quaternion >() )
-	//.def( py::self *= py::other< Quaternion >() )
-	//.def( py::self == py::other< Quaternion >() )
-	//.def( py::self != py::other< Quaternion >() );
+	Quaternion ( Quaternion::*quaternionLerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::lerp;
+	Quaternion ( Quaternion::*quaternionMix )( Quaternion const & p_target, float p_factor )const = &Quaternion::mix;
+	Quaternion ( Quaternion::*quaternionSlerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::slerp;
+	py::class_< Quaternion >( "Quaternion", py::init< Point3r const &, Angle const & >() )
+	.add_property( "rotation_matrix", quaternionToMatrix, quaternionFromMatrix, "The quaternion's rotation matrix" )
+	.def( "transform", py::make_function( quaternionTransform, py::return_value_policy< py::reference_existing_object >() ) )
+	.def( "to_axis_angle", quaternionToAxisAngle )
+	.def( "from_axis_angle", quaternionFromAxisAngle )
+	.def( "to_axes", quaternionToAxes )
+	.def( "from_axes", quaternionFromAxes )
+	.def( "yaw", &Quaternion::get_yaw )
+	.def( "pitch", &Quaternion::get_pitch )
+	.def( "roll", &Quaternion::get_roll )
+	.def( "magnitude", &Quaternion::get_magnitude )
+	.def( "conjugate", &Quaternion::conjugate )
+	.def( "lerp", quaternionLerp )
+	.def( "slerp", quaternionMix )
+	.def( "slerp", quaternionSlerp )
+	.def( py::self += py::other< Quaternion >() )
+	.def( py::self -= py::other< Quaternion >() )
+	.def( py::self *= py::other< Quaternion >() )
+	.def( py::self == py::other< Quaternion >() )
+	.def( py::self != py::other< Quaternion >() );
 	//@}
 	/**@group_name Matrix	*/
 	//@{
@@ -277,14 +287,14 @@ void ExportCastorUtils()
 	.def( "set_file_name", LoggerFileNameSetter )
 	.def( "log_debug", DebugLogger )
 	.def( "log_info", InfoLogger )
-	.def( "low_warning", WarningLogger )
+	.def( "log_warning", WarningLogger )
 	.def( "log_error", ErrorLogger )
 	.staticmethod( "initialise" )
 	.staticmethod( "cleanup" )
 	.staticmethod( "set_file_name" )
 	.staticmethod( "log_debug" )
 	.staticmethod( "log_message" )
-	.staticmethod( "low_warning" )
+	.staticmethod( "log_warning" )
 	.staticmethod( "log_error" );
 	//@}
 }

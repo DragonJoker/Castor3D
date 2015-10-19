@@ -201,6 +201,17 @@ namespace Castor3D
 		C3D_API void SetMaterial( SubmeshSPtr p_submesh, MaterialSPtr p_material );
 		/**
 		 *\~english
+		 *\brief		Gets this instance shader program flags.
+		 *\param[in]	p_submesh	The submesh.
+		 *\return		The program flags.
+		 *\~french
+		 *\brief		Récupère les indicateurs de programme shader pour cette instance.
+		 *\param[in]	p_submesh	Le sous-maillage.
+		 *\return		Les indicateurs de programme.
+		 */
+		C3D_API uint32_t GetProgramFlags( Submesh & p_submesh );
+		/**
+		 *\~english
 		 *\brief		Retrieves the mesh
 		 *\return		The mesh
 		 *\~french
