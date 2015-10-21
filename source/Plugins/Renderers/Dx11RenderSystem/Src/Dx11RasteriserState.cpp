@@ -58,11 +58,11 @@ namespace Dx11Render
 
 		if ( l_return && m_pRasteriserState )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
-			if ( l_pDeviceContext )
+			if ( l_deviceContext )
 			{
-				l_pDeviceContext->RSSetState( m_pRasteriserState );
+				l_deviceContext->RSSetState( m_pRasteriserState );
 			}
 		}
 

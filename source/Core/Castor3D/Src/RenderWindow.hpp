@@ -516,16 +516,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Tells the RenderWindow is initialised
-		 *\~french
-		 *\brief		Dit que la RenderWindow est initialisée
-		 */
-		void SetInitialised()
-		{
-			m_bInitialised = true;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the window name
 		 *\return		The name
 		 *\~french
@@ -536,8 +526,44 @@ namespace Castor3D
 		{
 			return m_strName;
 		}
+		/**
+		 *\~english
+		 *\return		The window's back buffers.
+		 *\~french
+		 *\return		Les tampons de rendu de la fenêtre.
+		 */
+		BackBuffersSPtr GetBackBuffers()const
+		{
+			return m_backBuffers;
+		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Sets the window's back buffers.
+		 *\param[in]	p_backBuffers	The window's back buffers.
+		 *\~french
+		 *\brief		Définit les tampons de rendu de la fenêtre.
+		 *\param[in]	p_backBuffers	Les tampons de rendu de la fenêtre.
+		 */
+		inline void DoSetBackBuffers( BackBuffersSPtr p_backBuffers )
+		{
+			m_backBuffers = p_backBuffers;
+		}
+		/**
+		 *\~english
+		 *\brief		Initialises the back buffers.
+		 *\~french
+		 *\brief		Initialise les tampons de rendu de la fenêtre.
+		 */
+		C3D_API virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Cleans the back buffers up.
+		 *\~french
+		 *\brief		Nettoie les tampons de rendu de la fenêtre.
+		 */
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Begins the scene on GPU side
@@ -579,12 +605,12 @@ namespace Castor3D
 		bool m_bVSync;
 		//!\~english Tells fullscreen is activated	\~french Dit si le rendu est en plein écran
 		bool m_bFullscreen;
-		//!\~english Tells the window has been resized and needs size update	\~french Dit que la fenêtre a été redimensionnée et nécessite une mise à jour de taille
-		bool m_bResized;
 		//!\~english Depth and stencil buffers states	\~french Etats des tampons de profondeur et stencil
 		DepthStencilStateWPtr m_wpDepthStencilState;
 		//!\~english Rasteriser states	\~french Etats du rasteriser
 		RasteriserStateWPtr m_wpRasteriserState;
+		//!\~english The window 's back buffers.	\~french Les tampons de rendu de la fenêtre.
+		BackBuffersSPtr m_backBuffers;
 	};
 }
 

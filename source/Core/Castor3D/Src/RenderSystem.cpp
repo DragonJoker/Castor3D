@@ -23,17 +23,14 @@ using namespace Castor;
 
 RenderSystem::RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType )
 	: OwnedBy< Engine >( p_engine )
-	, m_useMultiTexturing( false )
-	, m_bInitialised( false )
-	, m_useShaders( false )
-	, m_forceShaders( false )
 	, m_eRendererType( p_eRendererType )
+	, m_bInitialised( false )
 	, m_bStereoAvailable( false )
-	, m_pCurrentContext( NULL )
-	, m_pCurrentCamera( NULL )
 	, m_bInstancing( false )
 	, m_bAccumBuffer( false )
 	, m_bNonPowerOfTwoTextures( false )
+	, m_pCurrentContext( nullptr )
+	, m_pCurrentCamera( nullptr )
 {
 	m_useShader[eSHADER_TYPE_VERTEX] = false;
 	m_useShader[eSHADER_TYPE_PIXEL] = false;

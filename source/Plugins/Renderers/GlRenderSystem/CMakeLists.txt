@@ -39,6 +39,8 @@ if( OPENGL_FOUND )
 	file( GLOB ${PROJECT_NAME}_FBO_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BackBuffers*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BackBuffers*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.hpp
@@ -46,6 +48,7 @@ if( OPENGL_FOUND )
 	)
 	file( GLOB ${PROJECT_NAME}_FBO_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BackBuffers*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.cpp
 	)
@@ -57,15 +60,12 @@ if( OPENGL_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BufferObject*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*GeometryBuffer*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*GeometryBuffer*.inl
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Array*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Array*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.inl
 	)
 	file( GLOB ${PROJECT_NAME}_VBO_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*BufferObject*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*GeometryBuffer*.cpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Array*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attribute*.cpp
 	)
 	source_group( "Header Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_HEADER_FILES} )

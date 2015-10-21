@@ -74,7 +74,7 @@ namespace Dx11Render
 			}
 		}
 
-		if ( m_renderSystem->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
+		if ( m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
 		{
 			l_strSource = string::string_cast< char >( m_strLoadedSource );
 			m_eStatus = eSHADER_STATUS_NOTCOMPILED;

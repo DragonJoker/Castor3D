@@ -41,34 +41,48 @@ namespace Dx11Render
 		virtual ~DxContext();
 
 		virtual void UpdateFullScreen( bool p_bVal );
-		virtual void BToBRender( Castor::Size const & p_size, Castor3D::TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
+		virtual void BToBRender( Castor::Size const & p_size, Castor3D::TextureBaseSPtr p_pTexture );
 		virtual Castor::Size GetMaxSize( Castor::Size const & p_size )
 		{
 			return Castor::Size( std::min( p_size.width(), m_size.width() ), std::min( p_size.height(), m_size.height() ) );
-		}
-		ID3D11RenderTargetView * GetRenderTargetView()const
-		{
-			return m_pRenderTargetView;
-		}
-		ID3D11DepthStencilView * GetDepthStencilView()const
-		{
-			return m_pDepthStencilView;
 		}
 		ID3D11DeviceContext * GetDeviceContext()const
 		{
 			return m_pDeviceContext;
 		}
+		IDXGISwapChain * GetSwapChain()const
+		{
+			return m_swapChain;
+		}
 
 	private:
+		/**
+		 *\copydoc		Castor3D::Context::DoInitialise
+		 */
 		virtual bool DoInitialise();
+		/**
+		 *\copydoc		Castor3D::Context::DoCleanup
+		 */
 		virtual void DoCleanup();
+		/**
+		 *\copydoc		Castor3D::Context::DoSetCurrent
+		 */
 		virtual void DoSetCurrent();
+		/**
+		 *\copydoc		Castor3D::Context::DoEndCurrent
+		 */
 		virtual void DoEndCurrent();
+		/**
+		 *\copydoc		Castor3D::Context::DoSwapBuffers
+		 */
 		virtual void DoSwapBuffers();
-		virtual void DoSetClearColour( Castor::Colour const & p_clrClear );
-		virtual void DoClear( uint32_t p_uiTargets );
-		virtual void DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
+		/**
+		 *\copydoc		Castor3D::Context::DoSetAlphaFunc
+		 */
 		virtual void DoSetAlphaFunc( Castor3D::eALPHA_FUNC p_eFunc, uint8_t p_byValue );
+		/**
+		 *\copydoc		Castor3D::Context::DoCullFace
+		 */
 		virtual void DoCullFace( Castor3D::eFACE p_eCullFace );
 
 		void DoInitVolatileResources();
@@ -76,14 +90,11 @@ namespace Dx11Render
 		HRESULT DoInitPresentParameters();
 
 	private:
-		IDXGISwapChain * m_pSwapChain;
-		ID3D11RenderTargetView * m_pRenderTargetView;
-		ID3D11DepthStencilView * m_pDepthStencilView;
+		IDXGISwapChain * m_swapChain;
 		ID3D11DeviceContext * m_pDeviceContext;
 		HWND m_hWnd;
 		Castor::Size m_size;
 		DXGI_SWAP_CHAIN_DESC m_deviceParams;
-		FLOAT m_fClearColour[4];
 	};
 }
 #endif

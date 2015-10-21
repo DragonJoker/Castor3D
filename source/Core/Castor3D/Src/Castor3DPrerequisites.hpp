@@ -1905,6 +1905,7 @@ namespace Castor3D
 	class RenderBufferAttachment;
 	class TextureAttachment;
 	class FrameBuffer;
+	class BackBuffers;
 	class RenderTechniqueBase;
 	class RenderWindow;		//!< The render window handler class
 	class IWindowHandle;
@@ -1934,6 +1935,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderBufferAttachment );
 	DECLARE_SMART_PTR( TextureAttachment );
 	DECLARE_SMART_PTR( FrameBuffer );
+	DECLARE_SMART_PTR( BackBuffers );
 	DECLARE_SMART_PTR( RenderTechniqueBase );
 	DECLARE_SMART_PTR( PostEffect );
 	DECLARE_SMART_PTR( Engine );

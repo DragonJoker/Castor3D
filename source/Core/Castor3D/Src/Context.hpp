@@ -103,76 +103,45 @@ namespace Castor3D
 		C3D_API void SwapBuffers();
 		/**
 		 *\~english
-		 *\brief		Defines the colour used when Context::Clear is called on the color buffer
-		 *\param[in]	p_clrClear	The colour
+		 *\brief		Defines the alpha text function
+		 *\param[in]	p_eFunc		The function
+		 *\param[in]	p_byValue	The comparison value
 		 *\~french
-		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur
-		 *\param[in]	p_clrClear	La couleur
+		 *\brief		Définit la fonction de test alpha
+		 *\param[in]	p_eFunc		La fonction
+		 *\param[in]	p_byValue	La valeur de comparaison
 		 */
-		C3D_API void SetClearColour( Castor::Colour const & p_clrClear );
-		/**
-		 *\~english
-		 *\brief		Clears the wanted buffers
-		 *\param[in]	p_uiTargets	The buffers
-		 *\~french
-		 *\brief		Vide le(s) tampon(s) voulu(s)
-		 *\param[in]	p_uiTargets	Le(s) tampon(s)
-		 */
-		C3D_API void Clear( uint32_t p_uiTargets );
-		/**
-		*\~english
-		*\brief		Binds given system frame buffer to given mode
-		*\param[in]	p_eBuffer	The buffer
-		*\param[in]	p_eTarget	The target
-		*\~french
-		*\brief		Associe le tampon d'image système donné dans le mode donné
-		*\param[in]	p_eBuffer	Le tampon
-		*\param[in]	p_eTarget	La cible
-		*/
-		C3D_API void Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget );
-		/**
-		*\~english
-		*\brief		Defines the alpha text function
-		*\param[in]	p_eFunc		The function
-		*\param[in]	p_byValue	The comparison value
-		*\~french
-		*\brief		Définit la fonction de test alpha
-		*\param[in]	p_eFunc		La fonction
-		*\param[in]	p_byValue	La valeur de comparaison
-		*/
 		C3D_API void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
 		/**
-		*\~english
-		*\brief		Changes fullscreen status
-		*\param[in]	val	The new fullscreen status
-		*\~french
-		*\brief		Change le statut de plein écran
-		*\param[in]	val	Le nouveau statut de plein écran
-		*/
+		 *\~english
+		 *\brief		Changes fullscreen status
+		 *\param[in]	val	The new fullscreen status
+		 *\~french
+		 *\brief		Change le statut de plein écran
+		 *\param[in]	val	Le nouveau statut de plein écran
+		 */
 		C3D_API virtual void UpdateFullScreen( bool val ) = 0;
 		/**
-		*\~english
-		*\brief		Renders the given texture to the currently draw-bound frame buffer
-		*\param[in]	p_size			The render viewport size
-		*\param[in]	p_pTexture		The texture
-		*\param[in]	p_uiComponents	The render target components (bitwise combination of eBUFFER_COMPONENT)
-		*\~french
-		*\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin
-		*\param[in]	p_size			La taille du viewport de rendu
-		*\param[in]	p_pTexture		La texture
-		*\param[in]	p_uiComponents	Les composantes cibles du rendu (combinaison binaire de eBUFFER_COMPONENT)
-		*/
-		C3D_API virtual void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
+		 *\~english
+		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_size			The render viewport size.
+		 *\param[in]	p_pTexture		The texture.
+		 *\~french
+		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size			La taille du viewport de rendu.
+		 *\param[in]	p_pTexture		La texture.
+		 */
+		C3D_API virtual void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture );
 		/**
-		*\~english
-		*\brief		Retrieves the maximal supported size, given a wanted size
-		*\param[in]	p_size	The wanted size
-		*\return		The maximal supported size less than or equal to p_size
-		*\~french
-		*\brief		Récupère la taille maximale supportée, en fonction d'une taille données
-		*\param[in]	p_size	La taille voulue
-		*\return		La taille maximale supportée inférieure ou égale à p_size
-		*/
+		 *\~english
+		 *\brief		Retrieves the maximal supported size, given a wanted size
+		 *\param[in]	p_size	The wanted size
+		 *\return		The maximal supported size less than or equal to p_size
+		 *\~french
+		 *\brief		Récupère la taille maximale supportée, en fonction d'une taille données
+		 *\param[in]	p_size	La taille voulue
+		 *\return		La taille maximale supportée inférieure ou égale à p_size
+		 */
 		C3D_API virtual Castor::Size GetMaxSize( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
@@ -215,16 +184,6 @@ namespace Castor3D
 		inline DepthStencilStateSPtr GetBackgroundDSState()const
 		{
 			return m_pDsStateBackground;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the background colour
-		 *\~french
-		 *\brief		Récupère la couleur de fond
-		 */
-		inline Castor::Colour GetClearColour()const
-		{
-			return m_clearColour;
 		}
 
 	protected:
@@ -269,35 +228,6 @@ namespace Castor3D
 		C3D_API virtual void DoSwapBuffers() = 0;
 		/**
 		 *\~english
-		 *\brief		Defines the colour used when Context::Clear is called on the color buffer
-		 *\param[in]	p_clrClear	The colour
-		 *\~french
-		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur
-		 *\param[in]	p_clrClear	La couleur
-		 */
-		C3D_API virtual void DoSetClearColour( Castor::Colour const & p_clrClear ) = 0;
-		/**
-		 *\~english
-		 *\brief		Clears the wanted buffers
-		 *\param[in]	p_uiTargets	The buffers
-		 *\~french
-		 *\brief		Vide le(s) buffer(s) voulu(s)
-		 *\param[in]	p_uiTargets	Le(s) tampon(s)
-		 */
-		C3D_API virtual void DoClear( uint32_t p_uiTargets ) = 0;
-		/**
-		 *\~english
-		 *\brief		Binds given system frame buffer to given mode
-		 *\param[in]	p_eBuffer	The buffer
-		 *\param[in]	p_eTarget	The target
-		 *\~french
-		 *\brief		Associe le tampon d'image système donné dans le mode donné
-		 *\param[in]	p_eBuffer	Le tampon
-		 *\param[in]	p_eTarget	La cible
-		 */
-		C3D_API virtual void DoBind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget ) = 0;
-		/**
-		 *\~english
 		 *\brief		Defines the alpha text function
 		 *\param[in]	p_eFunc		The function
 		 *\param[in]	p_byValue	The comparison value
@@ -340,8 +270,6 @@ namespace Castor3D
 		Castor::real m_pBuffer[24];
 		//!\~english DepthStencilState used while rendering background image	\~french DepthStencilState utilisé pour le rendu de l'image de fond
 		DepthStencilStateSPtr m_pDsStateBackground;
-		//!\~english The background colour	\french La couleur de fond
-		Castor::Colour m_clearColour;
 	};
 }
 

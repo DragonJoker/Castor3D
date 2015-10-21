@@ -162,82 +162,9 @@ namespace GlRender
 
 		if ( l_return )
 		{
+			REQUIRE( !m_pProgram.expired() );
 			l_return = GlBuffer< uint8_t >::DoBind();
-
-			if ( !GetOwner()->UseShaders() || m_pProgram.expired() )
-			{
-				static const uint32_t s_arraySize[] = { 1, 2, 3, 4, 4, 1, 2, 3, 4 };
-				static const uint32_t s_arrayType[] = { eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_REAL, eGL_TYPE_UNSIGNED_BYTE, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT, eGL_TYPE_UNSIGNED_INT };
-
-				for ( BufferDeclaration::BufferElementDeclarationArrayConstIt l_it = m_bufferDeclaration.begin(); l_return && l_it != m_bufferDeclaration.end(); ++l_it )
-				{
-					switch ( l_it->m_eUsage )
-					{
-					case eELEMENT_USAGE_POSITION:
-						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_VERTEX_ARRAY );
-						l_return &= m_gl.VertexPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						break;
-
-					case eELEMENT_USAGE_NORMAL:
-						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_NORMAL_ARRAY );
-						l_return &= m_gl.NormalPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						break;
-
-					case eELEMENT_USAGE_TANGENT:
-
-						if ( m_gl.HasTangentPointer() )
-						{
-							l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TANGENT_ARRAY );
-							l_return &= m_gl.TangentPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						}
-
-						break;
-
-					case eELEMENT_USAGE_BITANGENT:
-
-						if ( m_gl.HasBinormalPointer() )
-						{
-							l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_BINORMAL_ARRAY );
-							l_return &= m_gl.BinormalPointer( s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						}
-
-						break;
-
-					case eELEMENT_USAGE_DIFFUSE:
-						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_COLOR_ARRAY );
-						l_return &= m_gl.ColorPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						break;
-
-					case eELEMENT_USAGE_TEXCOORDS0:
-						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_0 );
-						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						break;
-
-					case eELEMENT_USAGE_TEXCOORDS1:
-						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_1 );
-						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						break;
-
-					case eELEMENT_USAGE_TEXCOORDS2:
-						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_2 );
-						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						break;
-
-					case eELEMENT_USAGE_TEXCOORDS3:
-						l_return &= m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX_3 );
-						l_return &= m_gl.EnableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-						l_return &= m_gl.TexCoordPointer( s_arraySize[l_it->m_eDataType], s_arrayType[l_it->m_eDataType], m_bufferDeclaration.GetStride(), BUFFER_OFFSET( l_it->m_uiOffset ) );
-						break;
-					}
-				}
-			}
-			else
-			{
-				DoAttributesBind();
-			}
+			DoAttributesBind();
 		}
 
 		return l_return;
@@ -249,33 +176,8 @@ namespace GlRender
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			if ( GetOwner()->UseShaders() && ! m_pProgram.expired() )
-			{
-				DoAttributesUnbind();
-			}
-			else
-			{
-				m_gl.DisableClientState( eGL_BUFFER_USAGE_VERTEX_ARRAY );
-				m_gl.DisableClientState( eGL_BUFFER_USAGE_NORMAL_ARRAY );
-				m_gl.DisableClientState( eGL_BUFFER_USAGE_COLOR_ARRAY );
-
-				if ( m_gl.HasBinormalPointer() )
-				{
-					m_gl.DisableClientState( eGL_BUFFER_USAGE_BINORMAL_ARRAY );
-				}
-
-				if ( m_gl.HasTangentPointer() )
-				{
-					m_gl.DisableClientState( eGL_BUFFER_USAGE_TANGENT_ARRAY );
-				}
-
-				for ( int i = 0; i < 4; ++i )
-				{
-					m_gl.ClientActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + i ) );
-					m_gl.DisableClientState( eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY );
-				}
-			}
-
+			REQUIRE( !m_pProgram.expired() );
+			DoAttributesUnbind();
 			GlBuffer< uint8_t >::DoUnbind();
 		}
 	}

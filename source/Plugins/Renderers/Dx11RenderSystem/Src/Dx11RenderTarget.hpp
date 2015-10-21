@@ -31,7 +31,6 @@ namespace Dx11Render
 		DxRenderTarget( DxRenderSystem * p_renderSystem, Castor3D::eTARGET_TYPE p_type );
 		virtual ~DxRenderTarget();
 
-		virtual void Clear();
 		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_pRenderBuffer )const;
 		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_pTexture )const;
 		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer()const;

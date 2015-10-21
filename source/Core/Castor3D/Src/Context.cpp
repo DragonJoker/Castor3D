@@ -135,32 +135,15 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::SetClearColour( Castor::Colour const & p_clrClear )
-	{
-		m_clearColour = p_clrClear;
-		DoSetClearColour( p_clrClear );
-	}
-
-	void Context::Clear( uint32_t p_uiTargets )
-	{
-		DoClear( p_uiTargets );
-	}
-
-	void Context::Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget )
-	{
-		DoBind( p_eBuffer, p_eTarget );
-	}
-
 	void Context::SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue )
 	{
 		DoSetAlphaFunc( p_eFunc, p_byValue );
 	}
 
-	void Context::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents )
+	void Context::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture )
 	{
 		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
 		m_viewport.SetSize( p_size );
-		Clear( p_uiComponents );
 		m_viewport.Render( GetOwner()->GetPipeline() );
 		uint32_t l_id = p_pTexture->GetIndex();
 		p_pTexture->SetIndex( 0 );

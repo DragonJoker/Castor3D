@@ -399,14 +399,14 @@ namespace Dx11Render
 
 		if ( !l_return )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pDxRenderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_pDxRenderSystem->GetCurrentContext() )->GetDeviceContext();
 			D3D11_MAPPED_SUBRESOURCE l_mapped = { 0 };
-			HRESULT l_hr = l_pDeviceContext->Map( m_pDxBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped );
+			HRESULT l_hr = l_deviceContext->Map( m_pDxBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &l_mapped );
 
 			if ( l_hr == S_OK )
 			{
 				memcpy( l_mapped.pData, &m_buffer[0], m_buffer.size() );
-				l_pDeviceContext->Unmap( m_pDxBuffer, 0 );
+				l_deviceContext->Unmap( m_pDxBuffer, 0 );
 				l_return = true;
 			}
 		}

@@ -624,14 +624,7 @@ namespace Castor3D
 				RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 				ContextRPtr l_pContext = l_renderSystem->GetCurrentContext();
 				l_pContext->GetBackgroundDSState()->Apply();
-#if !defined( NDEBUG )
-				Colour l_save = GetOwner()->GetRenderSystem()->GetCurrentContext()->GetClearColour();
-				l_pContext->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
-#endif
-				l_pContext->BToBRender( Size( p_camera.GetWidth(), p_camera.GetHeight() ), m_pBackgroundImage, eBUFFER_COMPONENT_COLOUR );
-#if !defined( NDEBUG )
-				l_pContext->SetClearColour( l_save );
-#endif
+				l_pContext->BToBRender( Size( p_camera.GetWidth(), p_camera.GetHeight() ), m_pBackgroundImage );
 			}
 		}
 	}

@@ -17,7 +17,7 @@ namespace GlRender
 {
 	GlShaderProgram::GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
 		: ShaderProgramBase( p_renderSystem, eSHADER_LANGUAGE_GLSL )
-		, m_programObject( 0 )
+		, m_programObject( eGL_INVALID_INDEX )
 		, m_gl( p_gl )
 	{
 		CreateObject( eSHADER_TYPE_VERTEX );
@@ -32,14 +32,11 @@ namespace GlRender
 	{
 		ShaderProgramBase::Cleanup();
 
-		if ( GetOwner()->UseShaders() )
+		if ( m_programObject != eGL_INVALID_INDEX )
 		{
-			if ( m_programObject )
-			{
-				glUntrack( m_gl, this );
-				m_gl.DeleteProgram( m_programObject );
-				m_programObject = 0;
-			}
+			glUntrack( m_gl, this );
+			m_gl.DeleteProgram( m_programObject );
+			m_programObject = eGL_INVALID_INDEX;
 		}
 	}
 
@@ -47,7 +44,7 @@ namespace GlRender
 	{
 		if ( m_eStatus != ePROGRAM_STATUS_LINKED )
 		{
-			if ( GetOwner()->UseShaders() && !m_programObject )
+			if ( m_programObject == eGL_INVALID_INDEX )
 			{
 				m_programObject = m_gl.CreateProgram();
 				glTrack( m_gl, GlShaderProgram, this );
@@ -62,7 +59,7 @@ namespace GlRender
 		bool l_return = false;
 		int l_iLinked = 0;
 
-		if ( GetOwner()->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
+		if ( m_eStatus != ePROGRAM_STATUS_ERROR )
 		{
 			l_return = true;
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
@@ -93,37 +90,30 @@ namespace GlRender
 
 	void GlShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		if ( !GetOwner()->UseShaders() )
+		int l_iLength = 0;
+		int l_iLength2 = 0;
+
+		if ( m_programObject == eGL_INVALID_INDEX )
 		{
-			strLog = m_gl.GetGlslErrorString( 0 );
+			strLog = m_gl.GetGlslErrorString( 2 );
 		}
 		else
 		{
-			int l_iLength = 0;
-			int l_iLength2 = 0;
+			m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_INFO_LOG_LENGTH , &l_iLength );
 
-			if ( m_programObject == 0 )
+			if ( l_iLength > 1 )
 			{
-				strLog = m_gl.GetGlslErrorString( 2 );
-			}
-			else
-			{
-				m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_INFO_LOG_LENGTH , &l_iLength );
-
-				if ( l_iLength > 1 )
-				{
-					char * l_pTmp = new char[l_iLength];
-					m_gl.GetProgramInfoLog( m_programObject, l_iLength, &l_iLength2, l_pTmp );
-					strLog = string::string_cast< xchar >( l_pTmp );
-					delete [] l_pTmp;
-				}
+				char * l_pTmp = new char[l_iLength];
+				m_gl.GetProgramInfoLog( m_programObject, l_iLength, &l_iLength2, l_pTmp );
+				strLog = string::string_cast< xchar >( l_pTmp );
+				delete [] l_pTmp;
 			}
 		}
 	}
 
 	void GlShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
 	{
-		if ( GetOwner()->UseShaders() && m_programObject != 0 && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_programObject != eGL_INVALID_INDEX && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			m_gl.UseProgram( m_programObject );
 			ShaderProgramBase::Bind( p_byIndex, p_byCount );
@@ -132,7 +122,7 @@ namespace GlRender
 
 	void GlShaderProgram::Unbind()
 	{
-		if ( GetOwner()->UseShaders() && m_programObject != 0 && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_programObject != eGL_INVALID_INDEX && m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			uint32_t l_index = 0;
 

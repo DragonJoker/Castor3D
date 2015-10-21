@@ -34,6 +34,35 @@ namespace Castor3D
 		DoCleanup();
 	}
 
+	void FrameBuffer::SetClearColour( Castor::Colour const & p_clrClear )
+	{
+		m_clearColour = p_clrClear;
+		DoUpdateClearColour();
+	}
+
+	void FrameBuffer::Clear()
+	{
+		uint32_t l_targets = 0;
+
+		for ( auto && l_attach : m_attaches )
+		{
+			if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
+			{
+				l_targets |= eBUFFER_COMPONENT_COLOUR;
+			}
+			else if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_DEPTH )
+			{
+				l_targets |= eBUFFER_COMPONENT_DEPTH;
+			}
+			else if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_STENCIL )
+			{
+				l_targets |= eBUFFER_COMPONENT_STENCIL;
+			}
+		}
+
+		DoClear( l_targets );
+	}
+
 	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_mode, eFRAMEBUFFER_TARGET p_eTarget )
 	{
 		bool l_return = DoBind( p_eTarget );
@@ -133,7 +162,7 @@ namespace Castor3D
 		return SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
-	void FrameBuffer::RenderToBuffer( FrameBufferSPtr p_pBuffer, Size const & p_sizeDst, uint32_t p_uiComponents, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState )
+	void FrameBuffer::RenderToBuffer( FrameBufferSPtr p_pBuffer, Size const & p_sizeDst, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState )
 	{
 		if ( !m_attaches.empty() )
 		{
@@ -150,7 +179,8 @@ namespace Castor3D
 				{
 					p_pDepthStencilState->Apply();
 					p_pRasteriserState->Apply();
-					GetOwner()->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_texture, p_uiComponents );
+					Clear();
+					GetOwner()->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_texture );
 					p_pBuffer->Unbind();
 
 					if ( !p_pBuffer->m_attaches.empty() )
