@@ -564,12 +564,12 @@ namespace Deferred
 
 		bool l_bReturn = true;
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		m_pFrameBuffer->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
+		m_pFrameBuffer->Clear();
 		m_lightPassDsState->Apply();
 		//m_pRenderTarget->GetDepthStencilState()->Apply();
 		m_pRenderTarget->GetRasteriserState()->Apply();
 		//m_pRenderTarget->GetRenderer()->BeginScene();
-		l_pContext->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
-		l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
 		m_viewport.SetSize( m_size );
 		m_viewport.Render( l_pipeline );
 		l_pContext->CullFace( eFACE_BACK );

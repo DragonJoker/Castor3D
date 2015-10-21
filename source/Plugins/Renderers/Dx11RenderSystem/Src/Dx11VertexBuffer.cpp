@@ -85,12 +85,12 @@ namespace Dx11Render
 
 		if ( l_return )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 			UINT l_uiStrides[1] = { m_declaration.GetStride() };
 			UINT l_uiOffsets[1] = { 0 };
 			ID3D11Buffer * l_pBuffers[1] = { m_pBufferObject };
-			l_pDeviceContext->IASetVertexBuffers( 0, 1, l_pBuffers, l_uiStrides, l_uiOffsets );
-			l_pDeviceContext->IASetInputLayout( m_pDxDeclaration );
+			l_deviceContext->IASetVertexBuffers( 0, 1, l_pBuffers, l_uiStrides, l_uiOffsets );
+			l_deviceContext->IASetInputLayout( m_pDxDeclaration );
 		}
 
 		return l_return;

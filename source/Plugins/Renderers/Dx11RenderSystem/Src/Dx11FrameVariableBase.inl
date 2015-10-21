@@ -52,7 +52,7 @@ namespace Dx11Render
 				Castor3D::TextureBaseRPtr l_pTexture = ( *p_pValue );
 				ID3D11ShaderResourceView * l_pResourceView = NULL;
 				DxContext * l_pDxContext = static_cast< DxContext * >( p_program.GetOwner()->GetCurrentContext() );
-				ID3D11DeviceContext * l_pDeviceContext = l_pDxContext->GetDeviceContext();
+				ID3D11DeviceContext * l_deviceContext = l_pDxContext->GetDeviceContext();
 
 				if ( l_pTexture )
 				{
@@ -66,7 +66,7 @@ namespace Dx11Render
 					}
 				}
 
-				l_pDeviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
+				l_deviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
 				l_hr = S_OK;
 			}
 			else if ( !( *p_pValue ) )
@@ -85,8 +85,8 @@ namespace Dx11Render
 			{
 				Castor3D::TextureBaseRPtr l_pTexture = ( *p_pValue );
 				ID3D11ShaderResourceView * l_pResourceView = NULL;
-				ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( p_program.GetOwner()->GetCurrentContext() )->GetDeviceContext();
-				l_pDeviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
+				ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( p_program.GetOwner()->GetCurrentContext() )->GetDeviceContext();
+				l_deviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
 				l_hr = S_OK;
 			}
 			else if ( !( *p_pValue ) )

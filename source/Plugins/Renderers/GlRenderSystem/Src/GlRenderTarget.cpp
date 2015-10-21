@@ -24,20 +24,6 @@ GlRenderTarget::~GlRenderTarget()
 {
 }
 
-void GlRenderTarget::Clear()
-{
-	SceneSPtr l_scene = GetScene();
-
-	if ( l_scene )
-	{
-		m_gl.ClearColor( l_scene->GetBackgroundColour() );
-	}
-	else
-	{
-		m_gl.ClearColor( 0.5f, 0.5f, 0.5f, 1.0f );
-	}
-}
-
 RenderBufferAttachmentSPtr GlRenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
 {
 	return std::make_shared< GlRenderBufferAttachment >( m_gl, p_pRenderBuffer );

@@ -1,6 +1,7 @@
 ﻿#include "GlRenderWindow.hpp"
 
 #include "GlRenderSystem.hpp"
+#include "GlBackBuffers.hpp"
 
 using namespace Castor3D;
 
@@ -11,9 +12,19 @@ namespace GlRender
 		, m_gl( p_gl )
 		, m_renderSystem( p_renderSystem )
 	{
+		DoSetBackBuffers( std::make_shared< GlBackBuffers >( p_gl, *p_renderSystem->GetOwner() ) );
 	}
 
 	GlRenderWindow::~GlRenderWindow()
+	{
+	}
+
+	bool GlRenderWindow::DoInitialise()
+	{
+		return true;
+	}
+
+	void GlRenderWindow::DoCleanup()
 	{
 	}
 

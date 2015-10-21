@@ -395,36 +395,6 @@ namespace Castor3D
 		C3D_API virtual IPipelineImplSPtr GetPipelineImpl() = 0;
 		/**
 		 *\~english
-		 *\brief		Tells if multi-texturing is available
-		 *\~french
-		 *\brief		Dit si le multi-texturing est disponible
-		 */
-		inline bool UseMultiTexturing()const
-		{
-			return m_useMultiTexturing;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells if shaders are available
-		 *\~french
-		 *\brief		Dit si les shaders sont disponibles
-		 */
-		inline bool UseShaders()const
-		{
-			return m_useShaders;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells if shaders are forced (OpenGL 3.x/4.x)
-		 *\~french
-		 *\brief		Dit si les shaders sont obligatoires (OpenGL 3.x/4.x)
-		 */
-		inline bool ForceShaders()const
-		{
-			return m_forceShaders;
-		}
-		/**
-		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type
 		 *\param[in]	p_type	The shader type
 		 *\~french
@@ -611,14 +581,6 @@ namespace Castor3D
 	protected:
 		//!\~english Mutex used to make this class thread safe	\~french Mutex pour rendre cette classe thread safe
 		std::recursive_mutex m_mutex;
-		//!\~english Tells if multi-texturing is supported	\~french Dit si le multi-texturing est supporté
-		bool m_useMultiTexturing;
-		//!\~english Tells if shaders are supported	\~french Dit si les shaders sont supportés
-		bool m_useShaders;
-		//!\~english Tells if shaders are forced (OpenGl 3.x/4.x)	\~french Dit si les shaders sont forcés (OpenGl 3.x/4.x)
-		bool m_forceShaders;
-		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
-		bool m_useShader[eSHADER_TYPE_COUNT];
 		//!\~english Tells whether or not it is initialised	\~french Dit si le render system est initialisé
 		bool m_bInitialised;
 		//!\~english Tells whether or not the selected render API supports instanced draw calls	\~french Dit si l'API de rendu choisie supporte le dessin instancié
@@ -627,6 +589,10 @@ namespace Castor3D
 		bool m_bAccumBuffer;
 		//!\~english Tells whether or not the selected render API supports non power of two textures	\~french Dit si l'API de rendu choisie supporte les textures non puissance de 2
 		bool m_bNonPowerOfTwoTextures;
+		//!\~english Tells the RenderSystem supports stereo	\~french Dit si le RenderSystem supporte la stéréo
+		bool m_bStereoAvailable;
+		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
+		bool m_useShader[eSHADER_TYPE_COUNT];
 		//!\~english The overlay renderer	\~french Le renderer d'overlays
 		OverlayRendererSPtr m_overlayRenderer;
 		//!\~english The main render context	\~french Le contexte de rendu principal
@@ -639,12 +605,8 @@ namespace Castor3D
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée
 		eRENDERER_TYPE m_eRendererType;
-		//!\~english Tells the RenderSystem supports stereo	\~french Dit si le RenderSystem supporte la stéréo
-		bool m_bStereoAvailable;
 		//!\~english The currently active camera	\~french La caméra actuellement active
 		CameraRPtr m_pCurrentCamera;
-		//!\~english The matrix mode before call to BeginOverlaysRendering	\~french Le mode de matrice avant l'appel à BeginOverlaysRendering
-		eMTXMODE m_ePreviousMtxMode;
 
 #if !defined( NDEBUG )
 

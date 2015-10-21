@@ -24,27 +24,6 @@ DxRenderTarget::~DxRenderTarget()
 {
 }
 
-void DxRenderTarget::Clear()
-{
-	DxContextRPtr l_pContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() );
-	ID3D11DeviceContext * l_pDeviceContext = l_pContext->GetDeviceContext();
-	SceneSPtr l_scene = GetScene();
-
-	// Clear the back buffer.
-	if ( l_scene )
-	{
-		l_pDeviceContext->ClearRenderTargetView( l_pContext->GetRenderTargetView(), l_scene->GetBackgroundColour().const_ptr() );
-	}
-	else
-	{
-		float l_fColour[4] = { 0.5, 0.5, 0.5, 1.0 };
-		l_pDeviceContext->ClearRenderTargetView( l_pContext->GetRenderTargetView(), l_fColour );
-	}
-
-	// Clear the depth buffer.
-	l_pDeviceContext->ClearDepthStencilView( l_pContext->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f,  0 );
-}
-
 RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
 {
 	RenderBufferAttachmentSPtr l_return;

@@ -55,7 +55,7 @@ namespace GlRender
 
 	void GlShaderObject::CreateProgram()
 	{
-		if ( m_pParent->GetOwner()->UseShaders() && m_pParent->GetOwner()->HasShaderType( m_type ) )
+		if ( m_pParent->GetOwner()->HasShaderType( m_type ) )
 		{
 			m_shaderObject = m_gl.CreateShader( m_gl.Get( m_type ) );
 			glTrack( m_gl, GlShaderObject, this );
@@ -80,7 +80,7 @@ namespace GlRender
 			}
 		}
 
-		if ( m_pParent->GetOwner()->UseShaders() && m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
+		if ( m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
 		{
 			l_return = true;
 

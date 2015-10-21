@@ -586,15 +586,27 @@ namespace Castor3D
 	{
 		m_pCurrentFrameBuffer = p_fb.m_pFrameBuffer;
 		m_pCurrentCamera = p_pCamera;
-		Clear();
+		SceneSPtr l_scene = GetScene();
 
-		if ( m_pRenderTechnique->BeginRender() )
+		if ( l_scene )
 		{
-			SceneSPtr l_pScene = GetScene();
-			GetOwner()->GetRenderSystem()->GetCurrentContext()->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-			l_pScene->RenderBackground( *p_pCamera );
-			m_pRenderTechnique->Render( *l_pScene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
-			m_pRenderTechnique->EndRender();
+			m_fbLeftEye.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
+			m_fbRightEye.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
+
+			if ( m_pRenderTechnique->BeginRender() )
+			{
+				p_fb.m_pFrameBuffer->Clear();
+#if !defined( NDEBUG )
+				Colour l_save = p_fb.m_pFrameBuffer->GetClearColour();
+				p_fb.m_pFrameBuffer->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
+#endif
+				l_scene->RenderBackground( *p_pCamera );
+#if !defined( NDEBUG )
+				p_fb.m_pFrameBuffer->SetClearColour( l_save );
+#endif
+				m_pRenderTechnique->Render( *l_scene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
+				m_pRenderTechnique->EndRender();
+			}
 		}
 
 		m_pCurrentFrameBuffer.reset();

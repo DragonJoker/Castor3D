@@ -62,7 +62,6 @@ namespace Dx11Render
 	bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc )
 	{
 	    bool l_return = true;
-		static std::map< D3D_FEATURE_LEVEL, String > StrFeatureLevel;
 
 		IDXGIFactory * l_factory = NULL;
 		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
@@ -70,17 +69,6 @@ namespace Dx11Render
 		if ( l_hr != S_OK )
 		{
 			CASTOR_EXCEPTION( "Can't create Factory object" );
-		}
-
-		if ( StrFeatureLevel.empty() )
-		{
-			//StrFeatureLevel[D3D_FEATURE_LEVEL_11_1] = cuT( "Direct3D 11.1" );
-			StrFeatureLevel[D3D_FEATURE_LEVEL_11_0] = cuT( "Direct3D 11.0" );
-			StrFeatureLevel[D3D_FEATURE_LEVEL_10_1] = cuT( "Direct3D 10.1" );
-			StrFeatureLevel[D3D_FEATURE_LEVEL_10_0] = cuT( "Direct3D 10.0" );
-			StrFeatureLevel[D3D_FEATURE_LEVEL_9_3] = cuT( "Direct3D 9.3" );
-			StrFeatureLevel[D3D_FEATURE_LEVEL_9_2] = cuT( "Direct3D 9.2" );
-			StrFeatureLevel[D3D_FEATURE_LEVEL_9_1] = cuT( "Direct3D 9.1" );
 		}
 
 		if ( !m_pDevice )
@@ -206,32 +194,26 @@ namespace Dx11Render
 
 #endif
 
-			if ( !IsInitialised() )
+			if ( !m_pDevice )
+			{
+				Logger::LogWarning( StringStream() << cuT( "Dx11Context ::InitialiseDevice - Error creating device : 0x" ) << std::hex << uint32_t( l_hr ) );
+				l_return = false;
+			}
+			else if ( !IsInitialised() )
 			{
 				Initialise();
 				GetOwner()->GetMaterialManager().Initialise();
 			}
 
-			if ( m_pDevice )
-			{
-				m_useShaders = true;
-				Logger::LogInfo( cuT( "Dx11Context::InitialiseDevice - Loaded " ) + StrFeatureLevel[m_featureLevel] + cuT( " compliant device" ) );
-			}
-			else
-			{
-				Logger::LogWarning( StringStream() << cuT( "Dx11Context ::InitialiseDevice - Error creating device : 0x" ) << std::hex << uint32_t( l_hr ) );
-	    		l_return = false;
-			}
-
 			l_factory->Release();
 		}
 
-    	return l_return;
+		return l_return;
 	}
 
 	bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
 	{
-    	bool l_return = false;
+		bool l_return = false;
 
 		switch ( p_eProfile )
 		{
@@ -240,15 +222,15 @@ namespace Dx11Render
 		case eSHADER_MODEL_3:
 		case eSHADER_MODEL_4:
 		case eSHADER_MODEL_5:
-    		l_return = true;
+			l_return = true;
 			break;
 
 		default:
-    		l_return = false;
+			l_return = false;
 			break;
 		}
 
-    	return l_return;
+		return l_return;
 	}
 
 	ContextSPtr DxRenderSystem::CreateContext()
@@ -343,20 +325,29 @@ namespace Dx11Render
 
 	void DxRenderSystem::DoInitialise()
 	{
+		static std::map< D3D_FEATURE_LEVEL, String > StrFeatureLevel;
+
+		if ( StrFeatureLevel.empty() )
+		{
+			//StrFeatureLevel[D3D_FEATURE_LEVEL_11_1] = cuT( "Direct3D 11.1" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_11_0] = cuT( "Direct3D 11.0" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_10_1] = cuT( "Direct3D 10.1" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_10_0] = cuT( "Direct3D 10.0" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_9_3] = cuT( "Direct3D 9.3" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_9_2] = cuT( "Direct3D 9.2" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_9_1] = cuT( "Direct3D 9.1" );
+		}
+
 		if ( !m_bInitialised )
 		{
 			Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
 			Logger::LogInfo( cuT( "Initialising Direct3D" ) );
-			m_useMultiTexturing = true;
-			m_bInitialised = true;
+			Logger::LogInfo( cuT( "Dx11Context::InitialiseDevice - Loaded " ) + StrFeatureLevel[m_featureLevel] + cuT( " compliant device" ) );
 			CheckShaderSupport();
-			// Store the dedicated video card memory in megabytes.
-			int l_videoCardMemory = int( m_adapterDesc.DedicatedVideoMemory / 1024 ) / 1024;
-			// Convert the name of the video card to a character array and store it.
-	    	String l_strVideoCardDescription = string::string_cast< xchar >( m_adapterDesc.Description );
-			Logger::LogInfo( cuT( "Video card name: " ) + l_strVideoCardDescription );
-			Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << l_videoCardMemory << cuT( "MB" ) );
 			m_pipeline->Initialise();
+			m_bInitialised = true;
+			Logger::LogInfo( cuT( "Video card name: " ) + string::string_cast< xchar >( m_adapterDesc.Description ) );
+			Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << ( int( m_adapterDesc.DedicatedVideoMemory / 1024 ) / 1024 ) << cuT( "mB" ) );
 			Logger::LogInfo( cuT( "Direct3D Initialisation Ended" ) );
 			Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
 		}

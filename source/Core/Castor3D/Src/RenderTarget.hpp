@@ -300,13 +300,6 @@ namespace Castor3D
 		C3D_API void SetIntraOcularDistance( real p_rIod );
 		/**
 		 *\~english
-		 *\brief		Clears the scene buffers
-		 *\~french
-		 *\brief		Nettoie les buffers de scène
-		 */
-		C3D_API virtual void Clear() = 0;
-		/**
-		 *\~english
 		 *\brief		Creates an attachment to a render buffer
 		 *\param[in]	p_pRenderBuffer	The render buffer
 		 *\return		The created attachment

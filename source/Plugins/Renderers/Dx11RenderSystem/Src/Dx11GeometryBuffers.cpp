@@ -20,8 +20,8 @@ namespace Dx11Render
 
 	bool DxGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		l_pDeviceContext->IASetPrimitiveTopology( DirectX11::Get( p_topology ) );
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		l_deviceContext->IASetPrimitiveTopology( DirectX11::Get( p_topology ) );
 		bool l_return = m_pVertexBuffer->Bind();
 
 		if ( l_return )
@@ -32,13 +32,13 @@ namespace Dx11Render
 
 				if ( l_return )
 				{
-					l_pDeviceContext->DrawIndexed( p_uiSize, p_index, 0 );
+					l_deviceContext->DrawIndexed( p_uiSize, p_index, 0 );
 					m_pIndexBuffer->Unbind();
 				}
 			}
 			else
 			{
-				l_pDeviceContext->Draw( p_uiSize, p_index );
+				l_deviceContext->Draw( p_uiSize, p_index );
 			}
 
 			m_pVertexBuffer->Unbind();
@@ -49,8 +49,8 @@ namespace Dx11Render
 
 	bool DxGeometryBuffers::DrawInstanced( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount )
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		l_pDeviceContext->IASetPrimitiveTopology( DirectX11::Get( p_topology ) );
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		l_deviceContext->IASetPrimitiveTopology( DirectX11::Get( p_topology ) );
 		bool l_return = m_pVertexBuffer->Bind();
 
 		if ( l_return )
@@ -68,13 +68,13 @@ namespace Dx11Render
 
 					if ( l_return )
 					{
-						l_pDeviceContext->DrawIndexedInstanced( p_uiSize, p_uiCount, p_index, 0, 0 );
+						l_deviceContext->DrawIndexedInstanced( p_uiSize, p_uiCount, p_index, 0, 0 );
 						m_pIndexBuffer->Unbind();
 					}
 				}
 				else
 				{
-					l_pDeviceContext->DrawInstanced( p_uiSize, p_uiCount, p_index, 0 );
+					l_deviceContext->DrawInstanced( p_uiSize, p_uiCount, p_index, 0 );
 				}
 			}
 

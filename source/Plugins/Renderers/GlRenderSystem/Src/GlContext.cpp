@@ -128,17 +128,6 @@ namespace GlRender
 		GetImpl()->SwapBuffers();
 	}
 
-	void GlContext::DoSetClearColour( Colour const & p_clrClear )
-	{
-		uint8_t l_r, l_g, l_b, l_a;
-		m_gl.ClearColor( p_clrClear.red().convert_to( l_r ), p_clrClear.green().convert_to( l_g ), p_clrClear.blue().convert_to( l_b ), p_clrClear.alpha().convert_to( l_a ) );
-	}
-
-	void GlContext::DoClear( uint32_t p_uiTargets )
-	{
-		m_gl.Clear( m_gl.GetComponents( p_uiTargets ) );
-	}
-
 	void GlContext::DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget )
 	{
 		if ( m_gl.HasFbo() )

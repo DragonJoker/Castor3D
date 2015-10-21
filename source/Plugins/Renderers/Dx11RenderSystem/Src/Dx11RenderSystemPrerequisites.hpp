@@ -274,12 +274,12 @@ namespace Dx11Render
 		static void LockBuffer( T *& p_pReturn, ID3D11Buffer * p_pBuffer, uint32_t CU_PARAM_UNUSED( p_uiOffset ), uint32_t CU_PARAM_UNUSED( p_uiSize ), uint32_t p_uiFlags )
 		{
 			ID3D11Device * l_pDevice;
-			ID3D11DeviceContext * l_pDeviceContext;
+			ID3D11DeviceContext * l_deviceContext;
 			D3D11_MAPPED_SUBRESOURCE l_mappedResource;
 			p_pBuffer->GetDevice( &l_pDevice );
-			l_pDevice->GetImmediateContext( &l_pDeviceContext );
-			HRESULT l_hr = l_pDeviceContext->Map( p_pBuffer, 0, D3D11_MAP( DirectX11::GetLockFlags( p_uiFlags ) ), 0, &l_mappedResource );
-			l_pDeviceContext->Release();
+			l_pDevice->GetImmediateContext( &l_deviceContext );
+			HRESULT l_hr = l_deviceContext->Map( p_pBuffer, 0, D3D11_MAP( DirectX11::GetLockFlags( p_uiFlags ) ), 0, &l_mappedResource );
+			l_deviceContext->Release();
 			l_pDevice->Release();
 
 			if ( dxCheckError( l_hr, "ID3D11Buffer::Lock" ) )

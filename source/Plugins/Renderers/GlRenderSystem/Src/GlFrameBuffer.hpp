@@ -68,7 +68,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual bool IsComplete();
+		virtual bool IsComplete()const;
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
@@ -105,6 +105,14 @@ namespace GlRender
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
 		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolationMode );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoUpdateClearColour
+		 */
+		virtual void DoUpdateClearColour();
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoClear
+		 */
+		virtual void DoClear( uint32_t p_targets );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoInitialise
 		 */
