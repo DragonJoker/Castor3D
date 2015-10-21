@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #if CASTOR_HAS_ALIGNAS
 #	define CASTOR_ALIGNED( a ) alignas( a )
 #	define CASTOR_ALIGN_OF( t ) alignof( t )
-#	define CASTOR_ALIGNED_VAR( a, t, n ) t CASTOR_ALIGNED( a ) n
+#	define CASTOR_ALIGNED_VAR( a, t, n ) t n CASTOR_ALIGNED( a )
 #	if defined( _MSC_VER )
 #		define CASTOR_ALIGNED_DECL( a ) CASTOR_ALIGNED( a )
 #	else
