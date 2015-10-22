@@ -152,12 +152,10 @@ namespace Dx11Render
 	void DxContext::DoSetCurrent()
 	{
 		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
-		dxTrack( static_cast< DxRenderSystem * >( GetOwner() ), m_pDeviceContext, D3D11DeviceContext );
 	}
 
 	void DxContext::DoEndCurrent()
 	{
-		ReleaseTracked( static_cast< DxRenderSystem * >( GetOwner() ), m_pDeviceContext );
 	}
 
 	void DxContext::DoSwapBuffers()

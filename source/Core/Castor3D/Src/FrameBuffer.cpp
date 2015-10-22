@@ -77,6 +77,28 @@ namespace Castor3D
 
 	void FrameBuffer::Unbind()
 	{
+#if DEBUG_BUFFERS
+
+		if ( !m_attaches.empty() )
+		{
+			for ( auto && l_attach : m_attaches )
+			{
+				if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
+				{
+					PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
+
+					if ( l_buffer && DownloadBuffer( l_attach->GetAttachmentPoint(), l_attach->GetAttachmentIndex(), l_buffer ) )
+					{
+						StringStream l_name;
+						l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA_Unbind.png" );
+						Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
+					}
+				}
+			}
+		}
+
+#endif
+
 		DoUnbind();
 	}
 
@@ -177,41 +199,48 @@ namespace Castor3D
 
 				if ( l_texture && p_pBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 				{
-					p_pDepthStencilState->Apply();
-					p_pRasteriserState->Apply();
-					Clear();
-					GetOwner()->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_texture );
-					p_pBuffer->Unbind();
-
-					if ( !p_pBuffer->m_attaches.empty() )
+					if ( GetOwner()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 					{
-						for ( auto && l_attach : p_pBuffer->m_attaches )
+						BlitInto( p_pBuffer, Castor::Rectangle( Position(), p_sizeDst ), eATTACHMENT_POINT_COLOUR );
+					}
+					else
+					{
+						p_pDepthStencilState->Apply();
+						p_pRasteriserState->Apply();
+						Clear();
+						GetOwner()->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_texture );
+						p_pBuffer->Unbind();
+
+						if ( !p_pBuffer->m_attaches.empty() )
 						{
-							if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+							for ( auto && l_attach : p_pBuffer->m_attaches )
 							{
-								l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
-								l_texture->Bind();
-								l_texture->GenerateMipmaps();
-								l_texture->Unbind();
-							}
+								if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+								{
+									l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
+									l_texture->Bind();
+									l_texture->GenerateMipmaps();
+									l_texture->Unbind();
+								}
 
 #if DEBUG_BUFFERS
 
-							if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
-							{
-								PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
-
-								if ( l_buffer && DownloadBuffer( l_attach->GetAttachmentPoint(), l_attach->GetAttachmentIndex(), l_buffer ) )
+								if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
 								{
-									StringStream l_name;
-									l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA.png" );
-									Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
+									PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
+
+									if ( l_buffer && DownloadBuffer( l_attach->GetAttachmentPoint(), l_attach->GetAttachmentIndex(), l_buffer ) )
+									{
+										StringStream l_name;
+										l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA.png" );
+										Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
+									}
 								}
-							}
-						}
 
 #endif
+							}
 
+						}
 					}
 				}
 			}

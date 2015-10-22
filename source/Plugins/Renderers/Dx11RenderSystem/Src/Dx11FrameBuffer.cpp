@@ -326,6 +326,8 @@ namespace Dx11Render
 
 	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
+		typedef std::pair< ID3D11View *, ID3D11View * > SrcDstPair;
+		DECLARE_VECTOR( SrcDstPair, SrcDstPair );
 		SrcDstPairArray l_arrayPairs;
 		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
 		bool l_bDepth = ( p_uiComponents & eBUFFER_COMPONENT_DEPTH ) == eBUFFER_COMPONENT_DEPTH;
@@ -360,8 +362,8 @@ namespace Dx11Render
 			{
 				ID3D11Resource * l_pDstSurface;
 				ID3D11Resource * l_pSrcSurface;
-				l_itArray.first->GetResource( &l_pDstSurface );
-				l_itArray.second->GetResource( &l_pSrcSurface );
+				l_itArray.first->GetResource( &l_pSrcSurface );
+				l_itArray.second->GetResource( &l_pDstSurface );
 
 				if ( l_pDstSurface && l_pSrcSurface )
 				{
@@ -372,7 +374,7 @@ namespace Dx11Render
 					l_box.right = p_rectDst.right();
 					l_box.top = p_rectDst.top();
 					l_box.bottom = p_rectDst.bottom();
-					l_deviceContext->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, NULL );//&l_box );
+					l_deviceContext->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, &l_box );
 				}
 
 				SafeRelease( l_pSrcSurface );

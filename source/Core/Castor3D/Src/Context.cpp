@@ -32,6 +32,7 @@ namespace Castor3D
 			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
 			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
 		};
+
 		real l_pBuffer[] =
 		{
 			0, 0, 0, 0,
@@ -41,6 +42,7 @@ namespace Castor3D
 			1, 0, 1, 0,
 			1, 1, 1, 1,
 		};
+
 		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 		uint32_t i = 0;

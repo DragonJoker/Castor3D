@@ -165,7 +165,9 @@ namespace Castor3D
 		, m_bVSync( false )
 		, m_bFullscreen( false )
 	{
-		m_wpDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		auto l_dsstate = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		l_dsstate->SetDepthTest( false );
+		m_wpDepthStencilState = l_dsstate;
 		m_wpRasteriserState = GetOwner()->GetRasteriserStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}

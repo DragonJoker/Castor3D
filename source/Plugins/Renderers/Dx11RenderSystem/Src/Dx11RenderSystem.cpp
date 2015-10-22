@@ -31,6 +31,8 @@ using namespace Castor;
 
 namespace Dx11Render
 {
+	static const D3D_FEATURE_LEVEL D3D_FEATURE_LEVEL_11_1 = D3D_FEATURE_LEVEL( 0xb100 );
+
 	DxRenderSystem::DxRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, eRENDERER_TYPE_DIRECT3D )
 		, m_pDevice( NULL )
@@ -74,7 +76,7 @@ namespace Dx11Render
 		if ( !m_pDevice )
 		{
 			std::vector< D3D_FEATURE_LEVEL > arrayD3dFeatureLevelsRequested;
-			//arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_11_1 );
+			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_11_1 );
 			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_11_0 );
 			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_10_1 );
 			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_10_0 );
@@ -329,7 +331,7 @@ namespace Dx11Render
 
 		if ( StrFeatureLevel.empty() )
 		{
-			//StrFeatureLevel[D3D_FEATURE_LEVEL_11_1] = cuT( "Direct3D 11.1" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_11_1] = cuT( "Direct3D 11.1" );
 			StrFeatureLevel[D3D_FEATURE_LEVEL_11_0] = cuT( "Direct3D 11.0" );
 			StrFeatureLevel[D3D_FEATURE_LEVEL_10_1] = cuT( "Direct3D 10.1" );
 			StrFeatureLevel[D3D_FEATURE_LEVEL_10_0] = cuT( "Direct3D 10.0" );

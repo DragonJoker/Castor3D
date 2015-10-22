@@ -48,8 +48,8 @@ namespace Dx11Render
 
 			if ( !m_pSurface )
 			{
-				DWORD l_dwMsType	= 1;
-				DWORD l_dwMsQuality	= 0;
+				DWORD l_dwMsType = 1;
+				DWORD l_dwMsQuality = 0;
 
 				if ( m_renderBuffer.GetSamplesCount() > 1 )
 				{
@@ -64,8 +64,8 @@ namespace Dx11Render
 					}
 					else
 					{
-						l_dwMsType		= 1;
-						l_dwMsQuality	= 0;
+						l_dwMsType = 1;
+						l_dwMsQuality = 0;
 					}
 				}
 

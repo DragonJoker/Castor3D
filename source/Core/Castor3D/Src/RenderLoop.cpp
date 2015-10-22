@@ -78,7 +78,6 @@ namespace Castor3D
 		GetOwner()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		m_renderSystem->GetMainContext()->EndCurrent();
 		GetOwner()->GetWindowManager().Render( true );
-
 	}
 
 	void RenderLoop::DoCpuStep()
