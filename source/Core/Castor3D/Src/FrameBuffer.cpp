@@ -199,7 +199,7 @@ namespace Castor3D
 
 				if ( l_texture && p_pBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 				{
-					if ( GetOwner()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+					if ( false )//GetOwner()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 					{
 						BlitInto( p_pBuffer, Castor::Rectangle( Position(), p_sizeDst ), eATTACHMENT_POINT_COLOUR );
 					}

@@ -447,11 +447,8 @@ namespace GuiCommon
 	void LoadPlugins( Castor3D::Engine & p_engine )
 	{
 		PathArray l_arrayFiles;
-		PathArray l_arrayKept;
-		PathArray l_arrayFailed;
-		std::mutex l_mutex;
-		ThreadPtrArray l_arrayThreads;
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
+		PathArray l_arrayKept;
 
 		// Exclude debug plugin in release builds, and release plugins in debug builds
 		for ( auto && l_file : l_arrayFiles )
@@ -468,25 +465,20 @@ namespace GuiCommon
 
 		if ( !l_arrayKept.empty() )
 		{
-			// Since techniques depend on renderers, we load them first
+			PathArray l_arrayFailed;
 			PathArray l_otherPlugins;
 
 			for ( auto && l_file : l_arrayKept )
 			{
-				Path l_path( l_file );
-
-				if ( l_path.GetExtension() == CASTOR_DLL_EXT )
+				if ( l_file.GetExtension() == CASTOR_DLL_EXT )
 				{
-					if ( l_path.find( cuT( "RenderSystem" ) ) != String::npos )
+					// Since techniques depend on renderers, we load these first
+					if ( l_file.find( cuT( "RenderSystem" ) ) != String::npos )
 					{
-						l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
+						if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
 						{
-							if ( !p_engine.GetPluginManager().LoadPlugin( p_path ) )
-							{
-								std::unique_lock< std::mutex > l_lock( l_mutex );
-								l_arrayFailed.push_back( p_path );
-							}
-						}, l_path ) );
+							l_arrayFailed.push_back( l_file );
+						}
 					}
 					else
 					{
@@ -495,46 +487,26 @@ namespace GuiCommon
 				}
 			}
 
-			for ( auto && l_thread : l_arrayThreads )
-			{
-				l_thread->join();
-			}
-
-			l_arrayThreads.clear();
-
 			// Then we load other plugins
 			for ( auto && l_file : l_otherPlugins )
 			{
-				Path l_path( l_file );
-
-				l_arrayThreads.push_back( std::make_shared< std::thread >( [&l_arrayFailed, &l_mutex, &p_engine]( Path const & p_path )
+				if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
 				{
-					if ( !p_engine.GetPluginManager().LoadPlugin( p_path ) )
-					{
-						std::unique_lock< std::mutex > l_lock( l_mutex );
-						l_arrayFailed.push_back( p_path );
-					}
-				}, l_path ) );
+					l_arrayFailed.push_back( l_file );
+				}
 			}
 
-			for ( auto && l_thread : l_arrayThreads )
+			if ( !l_arrayFailed.empty() )
 			{
-				l_thread->join();
+				Logger::LogWarning( cuT( "Some plugins couldn't be loaded :" ) );
+
+				for ( auto && l_file : l_arrayFailed )
+				{
+					Logger::LogWarning( Path( l_file ).GetFileName() );
+				}
+
+				l_arrayFailed.clear();
 			}
-
-			l_arrayThreads.clear();
-		}
-
-		if ( !l_arrayFailed.empty() )
-		{
-			Logger::LogWarning( cuT( "Some plugins couldn't be loaded :" ) );
-
-			for ( auto && l_file : l_arrayFailed )
-			{
-				Logger::LogWarning( Path( l_file ).GetFileName() );
-			}
-
-			l_arrayFailed.clear();
 		}
 
 		Logger::LogInfo( cuT( "Plugins loaded" ) );
