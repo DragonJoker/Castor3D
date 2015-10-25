@@ -240,6 +240,8 @@ namespace Castor3D
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique
 		Castor::String m_name;
+		//!\~english The technique intialisation status.	\~french Le statut d'initialisation de la technique.
+		bool m_initialised;
 		//!\~english The parent render target	\~french La render target parente
 		RenderTarget * m_pRenderTarget;
 		//!\~english The	render system	\~french Le render system

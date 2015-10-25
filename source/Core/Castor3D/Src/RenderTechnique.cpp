@@ -26,6 +26,7 @@ namespace Castor3D
 		, m_pRenderTarget( &p_renderTarget )
 		, m_renderSystem( p_renderSystem )
 		, m_name( p_name )
+		, m_initialised( false )
 	{
 		m_wp2DBlendState = GetOwner()->GetBlendStateManager().Create( cuT( "RT_OVERLAY_BLEND" ) );
 		m_wp2DDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RT_OVERLAY_DS" ) );
@@ -54,32 +55,36 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::Initialise( uint32_t & p_index )
 	{
-		BlendStateSPtr l_pState = m_wp2DBlendState.lock();
-		l_pState->EnableAlphaToCoverage( false );
-		l_pState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-		l_pState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-		l_pState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-		l_pState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
-		l_pState->EnableBlend( true );
-		bool l_return = l_pState->Initialise();
-
-		if ( l_return )
+		if ( !m_initialised )
 		{
-			DepthStencilStateSPtr l_pState = m_wp2DDepthStencilState.lock();
-			l_pState->SetDepthTest( false );
-			l_return = l_pState->Initialise();
+			BlendStateSPtr l_pState = m_wp2DBlendState.lock();
+			l_pState->EnableAlphaToCoverage( false );
+			l_pState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
+			l_pState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+			l_pState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
+			l_pState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+			l_pState->EnableBlend( true );
+			m_initialised = l_pState->Initialise();
+
+			if ( m_initialised )
+			{
+				DepthStencilStateSPtr l_pState = m_wp2DDepthStencilState.lock();
+				l_pState->SetDepthTest( false );
+				m_initialised = l_pState->Initialise();
+			}
+
+			if ( m_initialised )
+			{
+				m_initialised = DoInitialise( p_index );
+			}
 		}
 
-		if ( l_return )
-		{
-			l_return = DoInitialise( p_index );
-		}
-
-		return l_return;
+		return m_initialised;
 	}
 
 	void RenderTechniqueBase::Cleanup()
 	{
+		m_initialised = false;
 		DoCleanup();
 		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
 		l_pBlendState->Cleanup();

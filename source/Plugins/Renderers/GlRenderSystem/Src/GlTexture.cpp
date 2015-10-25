@@ -103,10 +103,12 @@ namespace GlRender
 
 	void GlTexture::Cleanup()
 	{
-		REQUIRE( m_storage );
-		m_storage->Cleanup();
-		m_storage->Destroy();
-		m_storage.reset();
+		if ( m_storage )
+		{
+			m_storage->Cleanup();
+			m_storage->Destroy();
+			m_storage.reset();
+		}
 	}
 
 	void GlTexture::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )

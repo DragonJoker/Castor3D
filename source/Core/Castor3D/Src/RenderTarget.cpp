@@ -372,53 +372,59 @@ namespace Castor3D
 
 	void RenderTarget::Initialise( uint32_t p_index )
 	{
-		m_fbLeftEye.Create();
-		m_fbRightEye.Create();
-
-		if ( !m_pRenderTechnique )
+		if ( !m_bInitialised )
 		{
-			Parameters l_params;
+			m_fbLeftEye.Create();
+			m_fbRightEye.Create();
 
-			if ( m_strTechniqueName == cuT( "msaa" ) )
+			if ( !m_pRenderTechnique )
 			{
-				m_bMultisampling = true;
-				l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
-			}
-			else if ( m_strTechniqueName == cuT( "ssaa" ) )
-			{
-				l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
+				Parameters l_params;
+
+				if ( m_strTechniqueName == cuT( "msaa" ) )
+				{
+					m_bMultisampling = true;
+					l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
+				}
+				else if ( m_strTechniqueName == cuT( "ssaa" ) )
+				{
+					l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
+				}
+
+				try
+				{
+					m_pRenderTechnique = GetOwner()->CreateTechnique( m_strTechniqueName, *this, l_params );
+				}
+				catch ( Exception & p_exc )
+				{
+					Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+					throw;
+				}
 			}
 
-			try
-			{
-				m_pRenderTechnique = GetOwner()->CreateTechnique( m_strTechniqueName, *this, l_params );
-			}
-			catch( Exception & p_exc )
-			{
-				Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
-				throw;
-			}
+			m_fbLeftEye.Initialise( p_index, m_size );
+			m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
+			m_fbRightEye.Initialise( p_index, m_size );
+			m_pRenderTechnique->Create();
+			uint32_t l_index = p_index;
+			m_pRenderTechnique->Initialise( l_index );
+			m_bInitialised = true;
 		}
-
-		m_fbLeftEye.Initialise( p_index, m_size );
-		m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
-		m_fbRightEye.Initialise( p_index, m_size );
-		m_pRenderTechnique->Create();
-		uint32_t l_index = p_index;
-		m_pRenderTechnique->Initialise( l_index );
-		m_bInitialised = true;
 	}
 
 	void RenderTarget::Cleanup()
 	{
-		m_bInitialised = false;
-		m_pRenderTechnique->Cleanup();
-		m_fbLeftEye.Cleanup();
-		m_fbRightEye.Cleanup();
-		m_pRenderTechnique->Destroy();
-		m_fbLeftEye.Destroy();
-		m_fbRightEye.Destroy();
-		m_pRenderTechnique.reset();
+		if ( m_bInitialised )
+		{
+			m_bInitialised = false;
+			m_pRenderTechnique->Cleanup();
+			m_fbLeftEye.Cleanup();
+			m_fbRightEye.Cleanup();
+			m_pRenderTechnique->Destroy();
+			m_fbLeftEye.Destroy();
+			m_fbRightEye.Destroy();
+			m_pRenderTechnique.reset();
+		}
 	}
 
 	void RenderTarget::Render( double p_dFrameTime )
