@@ -184,6 +184,64 @@ namespace Castor3D
 		SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
+	uint32_t FrameBuffer::DoGetSamplesCount( eATTACHMENT_POINT p_point, uint8_t p_index )
+	{
+		uint32_t l_return = 0;
+
+		if ( !m_attaches.empty() && p_point != eATTACHMENT_POINT_NONE )
+		{
+			auto && l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
+			{
+				return p_attach->GetAttachmentPoint() == p_point;
+			} );
+			
+			if ( l_it != m_attaches.end() )
+			{
+				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+				{
+					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
+					l_return = l_attach->GetTexture()->GetSamplesCount();
+				}
+				else
+				{
+					RenderBufferAttachmentSPtr l_attach = std::static_pointer_cast< RenderBufferAttachment >( *l_it );
+					l_return = l_attach->GetRenderBuffer()->GetSamplesCount();
+				}
+			}
+		}
+
+		return l_return;
+	}
+
+	ePIXEL_FORMAT FrameBuffer::DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index )
+	{
+		ePIXEL_FORMAT l_return = ePIXEL_FORMAT_COUNT;
+
+		if ( !m_attaches.empty() && p_point != eATTACHMENT_POINT_NONE )
+		{
+			auto && l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
+			{
+				return p_attach->GetAttachmentPoint() == p_point;
+			} );
+
+			if ( l_it != m_attaches.end() )
+			{
+				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+				{
+					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
+					l_return = l_attach->GetTexture()->GetPixelFormat();
+				}
+				else
+				{
+					RenderBufferAttachmentSPtr l_attach = std::static_pointer_cast< RenderBufferAttachment >( *l_it );
+					l_return = l_attach->GetRenderBuffer()->GetPixelFormat();
+				}
+			}
+		}
+
+		return l_return;
+	}
+
 	bool FrameBuffer::DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
 	{
 		DoDetach( p_point );

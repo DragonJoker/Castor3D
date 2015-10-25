@@ -196,11 +196,13 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render begin function
-		 *\return		\p true if ok
+		 *\brief		Render begin function.
+		 *\remakrs		At the end of this method, the frame buffer that will receive draw calls must be bound.
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de début de rendu.
+		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
+		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API virtual bool DoBeginRender() = 0;
 		/**
@@ -223,8 +225,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render end function
+		 *\remakrs		At the end of this method, the render target frame buffer must be bound.
 		 *\~french
 		 *\brief		Fonction de fin de rendu
+		 *\remarks		A la sortie de cette méthode, le tampon d'image de la cible de rendu doit être activé.
 		 */
 		C3D_API virtual void DoEndRender() = 0;
 		/**
@@ -246,10 +250,6 @@ namespace Castor3D
 		RenderTarget * m_pRenderTarget;
 		//!\~english The	render system	\~french Le render system
 		RenderSystem * m_renderSystem;
-		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays
-		BlendStateWPtr m_wp2DBlendState;
-		//!\~english The	overlays depth stencil state	\~french L'état de profoundeur et stenxil pour les overlays
-		DepthStencilStateWPtr m_wp2DDepthStencilState;
 	};
 }
 

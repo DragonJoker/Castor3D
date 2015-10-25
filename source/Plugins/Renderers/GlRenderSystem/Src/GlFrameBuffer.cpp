@@ -123,8 +123,7 @@ namespace GlRender
 
 	void GlFrameBuffer::DoUpdateClearColour()
 	{
-		uint8_t l_r, l_g, l_b, l_a;
-		m_gl.ClearColor( GetClearColour().red().convert_to( l_r ), GetClearColour().green().convert_to( l_g ), GetClearColour().blue().convert_to( l_b ), GetClearColour().alpha().convert_to( l_a ) );
+		m_gl.ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
 	}
 
 	void GlFrameBuffer::DoClear( uint32_t p_uiTargets )

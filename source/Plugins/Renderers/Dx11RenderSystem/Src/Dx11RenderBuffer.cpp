@@ -104,8 +104,8 @@ namespace Dx11Render
 					l_descDepth.MipLevels = 1;
 					l_descDepth.ArraySize = 1;
 					l_descDepth.Format = m_eFormat;
-					l_descDepth.SampleDesc.Count = 1;
-					l_descDepth.SampleDesc.Quality = 0;
+					l_descDepth.SampleDesc.Count = l_dwMsType;
+					l_descDepth.SampleDesc.Quality = l_dwMsQuality;
 					l_descDepth.Usage = D3D11_USAGE_DEFAULT;
 					l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 					l_descDepth.CPUAccessFlags = 0;

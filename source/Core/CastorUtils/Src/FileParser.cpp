@@ -392,11 +392,32 @@ namespace Castor
 		}
 	}
 
+	String DoStripComments( String const & p_strLine )
+	{
+		String l_return = p_strLine;
+		auto l_index = l_return.find( "//" );
+
+		if ( l_index != String::npos )
+		{
+			l_return = l_return.substr( 0, l_index );
+		}
+
+		l_index = l_return.find( "/*" );
+
+		if ( l_index != String::npos )
+		{
+			l_return = l_return.substr( l_index, l_return.find( "*/", l_index ) - l_index );
+		}
+
+		return l_return;
+	}
+
 	bool FileParser::DoParseScriptLine( String & p_strLine )
 	{
 		bool l_bContinue = true;
 		bool l_return = false;
 		std::size_t l_uiBlockEndIndex = p_strLine.find( cuT( "}" ) );
+		p_strLine = DoStripComments( p_strLine );
 
 		if ( l_uiBlockEndIndex != String::npos )
 		{

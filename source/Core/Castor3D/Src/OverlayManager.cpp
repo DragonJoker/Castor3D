@@ -218,7 +218,7 @@ namespace Castor3D
 		}
 	}
 
-	void OverlayManager::RenderOverlays( Scene const & p_scene, Castor::Size const & p_size )
+	void OverlayManager::Render( Scene const & p_scene, Castor::Size const & p_size )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		Update();
@@ -248,7 +248,7 @@ namespace Castor3D
 		}
 	}
 
-	bool OverlayManager::WriteOverlays( Castor::TextFile & p_file )const
+	bool OverlayManager::Write( Castor::TextFile & p_file )const
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		bool l_return = true;
@@ -292,14 +292,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool OverlayManager::ReadOverlays( Castor::TextFile & p_file )
+	bool OverlayManager::Read( Castor::TextFile & p_file )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		SceneFileParser l_parser( *GetOwner() );
 		return l_parser.ParseFile( p_file );
 	}
 
-	bool OverlayManager::SaveOverlays( Castor::BinaryFile & p_file )const
+	bool OverlayManager::Save( Castor::BinaryFile & p_file )const
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		bool l_return = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
@@ -314,7 +314,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool OverlayManager::LoadOverlays( Castor::BinaryFile & p_file )
+	bool OverlayManager::Load( Castor::BinaryFile & p_file )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		uint32_t l_size;

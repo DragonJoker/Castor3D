@@ -323,48 +323,20 @@ namespace Dx11Render
 		m_depthBuffer->Resize( p_size );
 	}
 
-	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
+	HRESULT DoBlit( ID3D11DeviceContext * p_context, Castor::Rectangle const & p_rectDst, ID3D11View * p_srcView, UINT p_srcSamples, ID3D11View * p_dstView, UINT p_dstSamples, DXGI_FORMAT p_format )
 	{
-		typedef std::pair< ID3D11View *, ID3D11View * > SrcDstPair;
-		DECLARE_VECTOR( SrcDstPair, SrcDstPair );
-		SrcDstPairArray l_arrayPairs;
-		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
-		bool l_bDepth = ( p_uiComponents & eBUFFER_COMPONENT_DEPTH ) == eBUFFER_COMPONENT_DEPTH;
-		bool l_bStencil = ( p_uiComponents & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
-		bool l_bColour = ( p_uiComponents & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
-
-		for ( auto && l_attach : m_attaches )
-		{
-			eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
-
-			if ( ( l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) || m_renderSystem->GetFeatureLevel() > D3D_FEATURE_LEVEL_10_1 )
-			{
-				if ( ( l_bDepth && l_eAttach == eATTACHMENT_POINT_DEPTH ) || ( l_bStencil && l_eAttach == eATTACHMENT_POINT_STENCIL ) || ( l_bColour && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) )
-				{
-					ID3D11View * l_pSrc = GetSurface( l_eAttach );
-					ID3D11View * l_pDst = l_pBuffer->GetSurface( l_eAttach );
-
-					if ( l_pSrc && l_pDst )
-					{
-						l_arrayPairs.push_back( std::make_pair( l_pSrc, l_pDst ) );
-					}
-				}
-			}
-		}
-
 		HRESULT l_hr = S_OK;
-		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
-		for ( auto l_itArray : l_arrayPairs )
+		try
 		{
-			try
-			{
-				ID3D11Resource * l_pDstSurface;
-				ID3D11Resource * l_pSrcSurface;
-				l_itArray.first->GetResource( &l_pSrcSurface );
-				l_itArray.second->GetResource( &l_pDstSurface );
+			ID3D11Resource * l_pDstSurface;
+			ID3D11Resource * l_pSrcSurface;
+			p_srcView->GetResource( &l_pSrcSurface );
+			p_dstView->GetResource( &l_pDstSurface );
 
-				if ( l_pDstSurface && l_pSrcSurface )
+			if ( l_pDstSurface && l_pSrcSurface )
+			{
+				if ( !p_srcSamples && !p_dstSamples )
 				{
 					D3D11_BOX l_box = { 0 };
 					l_box.front = 0;
@@ -373,16 +345,65 @@ namespace Dx11Render
 					l_box.right = p_rectDst.right();
 					l_box.top = p_rectDst.top();
 					l_box.bottom = p_rectDst.bottom();
-					l_deviceContext->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, &l_box );
+					p_context->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, &l_box );
 				}
-
-				SafeRelease( l_pSrcSurface );
-				SafeRelease( l_pDstSurface );
+				else if ( p_srcSamples == p_dstSamples )
+				{
+					p_context->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, NULL );
+				}
+				else if ( !p_dstSamples )
+				{
+					if ( p_format != DXGI_FORMAT_D24_UNORM_S8_UINT )
+					{
+						p_context->ResolveSubresource( l_pDstSurface, 0, l_pSrcSurface, 0, p_format );
+					}
+				}
+				else
+				{
+					Logger::LogError( StringStream() << cuT( "Unsupported blit between two multisampled buffers with different samples count. Src: " ) << p_srcSamples << cuT( ", Dst: " ) << p_dstSamples );
+				}
 			}
-			catch ( ... )
+
+			SafeRelease( l_pSrcSurface );
+			SafeRelease( l_pDstSurface );
+		}
+		catch ( ... )
+		{
+			Logger::LogError( cuT( "Error while blitting frame buffer" ) );
+			l_hr = E_FAIL;
+		}
+
+		return l_hr;
+	}
+
+	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
+	{
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
+		bool l_bDepth = ( p_uiComponents & eBUFFER_COMPONENT_DEPTH ) == eBUFFER_COMPONENT_DEPTH;
+		bool l_bStencil = ( p_uiComponents & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
+		bool l_bColour = ( p_uiComponents & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
+		HRESULT l_hr = S_OK;
+
+		for ( auto && l_attach : m_attaches )
+		{
+			eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
+
+			if ( l_hr == S_OK && ( l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) || m_renderSystem->GetFeatureLevel() > D3D_FEATURE_LEVEL_10_1 )
 			{
-				Logger::LogError( cuT( "Error while blitting frame buffer" ) );
-				l_hr = E_FAIL;
+				if ( ( l_bDepth && l_eAttach == eATTACHMENT_POINT_DEPTH ) || ( l_bStencil && l_eAttach == eATTACHMENT_POINT_STENCIL ) || ( l_bColour && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL ) )
+				{
+					ID3D11View * l_srcView = GetSurface( l_eAttach );
+					ID3D11View * l_dstView = l_pBuffer->GetSurface( l_eAttach );
+					UINT l_srcSamples = DoGetSamplesCount( l_eAttach, l_attach->GetAttachmentIndex() );
+					UINT l_dstSamples = l_pBuffer->DoGetSamplesCount( l_eAttach, l_attach->GetAttachmentIndex() );
+					ePIXEL_FORMAT l_format = l_pBuffer->DoGetPixelFormat( l_eAttach, l_attach->GetAttachmentIndex() );
+
+					if ( l_srcView && l_dstView )
+					{
+						l_hr = DoBlit( l_deviceContext, p_rectDst, l_srcView, l_srcSamples, l_dstView, l_dstSamples, DirectX11::Get( l_format ) );
+					}
+				}
 			}
 		}
 

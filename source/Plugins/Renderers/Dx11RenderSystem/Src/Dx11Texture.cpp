@@ -505,6 +505,13 @@ namespace Dx11Render
 				p_format = DirectX11::Get( l_pxBuffer->format() );
 				m_pixelBuffer = l_pxBuffer;
 			}
+			else if ( l_pxBuffer->format() == ePIXEL_FORMAT_B8G8R8 )
+			{
+				// f****ing Direct3D that doesn't support RGB24...
+				l_pxBuffer = PxBufferBase::create( l_pxBuffer->dimensions(), ePIXEL_FORMAT_A8B8G8R8, l_pxBuffer->const_ptr(), l_pxBuffer->format() );
+				p_format = DirectX11::Get( l_pxBuffer->format() );
+				m_pixelBuffer = l_pxBuffer;
+			}
 			else if ( l_pxBuffer->format() == ePIXEL_FORMAT_A4R4G4B4 )
 			{
 				l_pxBuffer = PxBufferBase::create( l_pxBuffer->dimensions(), ePIXEL_FORMAT_A8B8G8R8, l_pxBuffer->const_ptr(), l_pxBuffer->format() );

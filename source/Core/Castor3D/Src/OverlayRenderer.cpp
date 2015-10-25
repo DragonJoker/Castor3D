@@ -1,25 +1,25 @@
 ﻿#include "OverlayRenderer.hpp"
 
+#include "BlendStateManager.hpp"
+#include "BorderPanelOverlay.hpp"
+#include "Buffer.hpp"
+#include "DepthStencilStateManager.hpp"
+#include "DynamicTexture.hpp"
 #include "Engine.hpp"
 #include "FrameVariableBuffer.hpp"
+#include "Material.hpp"
 #include "MatrixFrameVariable.hpp"
+#include "OneFrameVariable.hpp"
 #include "Overlay.hpp"
 #include "PanelOverlay.hpp"
-#include "BorderPanelOverlay.hpp"
-#include "TextOverlay.hpp"
-#include "ShaderProgram.hpp"
-#include "ShaderManager.hpp"
-#include "Material.hpp"
-#include "Buffer.hpp"
-#include "Viewport.hpp"
 #include "Pass.hpp"
-#include "RenderSystem.hpp"
 #include "Pipeline.hpp"
-#include "BlendState.hpp"
-#include "OneFrameVariable.hpp"
 #include "PointFrameVariable.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "DynamicTexture.hpp"
+#include "RenderSystem.hpp"
+#include "ShaderManager.hpp"
+#include "ShaderProgram.hpp"
+#include "TextOverlay.hpp"
+#include "Viewport.hpp"
 
 #include <Font.hpp>
 
@@ -54,6 +54,8 @@ namespace Castor3D
 		};
 
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
+		m_wp2DBlendState = GetOwner()->GetOwner()->GetBlendStateManager().Create( cuT( "OVERLAY_BLEND" ) );
+		m_wp2DDepthStencilState = GetOwner()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "OVERLAY_DS" ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -114,6 +116,19 @@ namespace Castor3D
 		// Create one text overlays buffer
 		DoCreateTextGeometryBuffers();
 
+		BlendStateSPtr l_blendState = m_wp2DBlendState.lock();
+		l_blendState->EnableAlphaToCoverage( false );
+		l_blendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
+		l_blendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+		l_blendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
+		l_blendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+		l_blendState->EnableBlend( true );
+		l_blendState->Initialise();
+
+		DepthStencilStateSPtr l_dsState = m_wp2DDepthStencilState.lock();
+		l_dsState->SetDepthTest( false );
+		l_dsState->Initialise();
+
 		// Driver specific
 		DoInitialise();
 	}
@@ -121,6 +136,12 @@ namespace Castor3D
 	void OverlayRenderer::Cleanup()
 	{
 		DoCleanup();
+
+		BlendStateSPtr l_blendState = m_wp2DBlendState.lock();
+		l_blendState->Cleanup();
+
+		DepthStencilStateSPtr l_dsState = m_wp2DDepthStencilState.lock();
+		l_dsState->Cleanup();
 
 		for ( auto && l_vertex : m_borderVertex )
 		{
@@ -249,6 +270,9 @@ namespace Castor3D
 			m_sizeChanged = true;
 			m_size = p_size;
 		}
+
+		m_wp2DBlendState.lock()->Apply();
+		m_wp2DDepthStencilState.lock()->Apply();
 	}
 
 	void OverlayRenderer::EndRender()

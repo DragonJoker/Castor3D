@@ -1,12 +1,10 @@
 ﻿#include "RenderTechnique.hpp"
 
-#include "BlendStateManager.hpp"
 #include "Camera.hpp"
 #include "DynamicTexture.hpp"
 #include "Engine.hpp"
 #include "ColourRenderBuffer.hpp"
 #include "DepthStencilRenderBuffer.hpp"
-#include "DepthStencilStateManager.hpp"
 #include "FrameBuffer.hpp"
 #include "OverlayManager.hpp"
 #include "RasteriserState.hpp"
@@ -28,8 +26,6 @@ namespace Castor3D
 		, m_name( p_name )
 		, m_initialised( false )
 	{
-		m_wp2DBlendState = GetOwner()->GetBlendStateManager().Create( cuT( "RT_OVERLAY_BLEND" ) );
-		m_wp2DDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RT_OVERLAY_DS" ) );
 	}
 
 	RenderTechniqueBase::~RenderTechniqueBase()
@@ -57,26 +53,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			BlendStateSPtr l_pState = m_wp2DBlendState.lock();
-			l_pState->EnableAlphaToCoverage( false );
-			l_pState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-			l_pState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-			l_pState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-			l_pState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
-			l_pState->EnableBlend( true );
-			m_initialised = l_pState->Initialise();
-
-			if ( m_initialised )
-			{
-				DepthStencilStateSPtr l_pState = m_wp2DDepthStencilState.lock();
-				l_pState->SetDepthTest( false );
-				m_initialised = l_pState->Initialise();
-			}
-
-			if ( m_initialised )
-			{
-				m_initialised = DoInitialise( p_index );
-			}
+			m_initialised = DoInitialise( p_index );
 		}
 
 		return m_initialised;
@@ -86,8 +63,6 @@ namespace Castor3D
 	{
 		m_initialised = false;
 		DoCleanup();
-		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
-		l_pBlendState->Cleanup();
 	}
 
 	bool RenderTechniqueBase::BeginRender()
@@ -104,9 +79,7 @@ namespace Castor3D
 	void RenderTechniqueBase::EndRender()
 	{
 		DoEndRender();
-		m_wp2DBlendState.lock()->Apply();
-		m_wp2DDepthStencilState.lock()->Apply();
-		GetOwner()->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_pRenderTarget->GetSize() );
+		GetOwner()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_pRenderTarget->GetSize() );
 		m_pRenderTarget->GetFrameBuffer()->Unbind();
 		m_renderSystem->PopScene();
 	}
@@ -118,9 +91,9 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
-		p_camera.Render();
-		p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
-		p_camera.EndRender();
+		//p_camera.Render();
+		//p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
+		//p_camera.EndRender();
 		return true;
 	}
 }

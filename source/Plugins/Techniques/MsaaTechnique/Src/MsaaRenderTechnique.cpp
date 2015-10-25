@@ -288,17 +288,7 @@ namespace Msaa
 	void RenderTechnique::DoEndRender()
 	{
 		m_pMsFrameBuffer->Unbind();
-
 		m_pMsFrameBuffer->BlitInto( m_pRenderTarget->GetFrameBuffer(), m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
-
-#	if DEBUG_BUFFERS
-
-		auto l_buffer = m_pColorAttach->DownloadBuffer();
-		const Image l_image( cuT( "Tmp" ), *l_buffer );
-		Image::BinaryLoader()( l_image, Engine::GetEngineDirectory() / cuT( "MsaaImage.bmp" ) );
-
-#	endif
-
 		m_pRenderTarget->GetFrameBuffer()->Bind();
 	}
 

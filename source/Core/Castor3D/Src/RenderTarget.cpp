@@ -590,8 +590,7 @@ namespace Castor3D
 
 		if ( l_scene )
 		{
-			m_fbLeftEye.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
-			m_fbRightEye.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
+			p_fb.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
 
 			if ( m_pRenderTechnique->BeginRender() )
 			{

@@ -280,7 +280,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène rendue, pour afficher ses overlays en plus des globaux
 		 *\param[in]	p_size	Les dimensions de la cible du rendu
 		 */
-		C3D_API void RenderOverlays( Scene const & p_scene, Castor::Size const & p_size );
+		C3D_API void Render( Scene const & p_scene, Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a text file
@@ -291,7 +291,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool WriteOverlays( Castor::TextFile & p_file )const;
+		C3D_API bool Write( Castor::TextFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads overlays from a text file
@@ -302,7 +302,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool ReadOverlays( Castor::TextFile & p_file );
+		C3D_API bool Read( Castor::TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a binary file
@@ -313,7 +313,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool SaveOverlays( Castor::BinaryFile & p_file )const;
+		C3D_API bool Save( Castor::BinaryFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads overlays from a binary file
@@ -324,7 +324,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool LoadOverlays( Castor::BinaryFile & p_file );
+		C3D_API bool Load( Castor::BinaryFile & p_file );
 		/**
 		*\~english
 		*\brief		Retrieves a FontTexture given a font name.

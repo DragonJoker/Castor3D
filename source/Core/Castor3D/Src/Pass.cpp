@@ -753,7 +753,7 @@ namespace Castor3D
 
 		if ( p_unit && ( p_unit->GetImagePixels() || p_unit->GetRenderTarget() ) )
 		{
-			if ( p_unit->GetImagePixels() )
+			if ( p_unit->GetImagePixels() && !p_unit->GetRenderTarget() )
 			{
 				if ( PF::HasAlpha( p_unit->GetPixelFormat() ) )
 				{

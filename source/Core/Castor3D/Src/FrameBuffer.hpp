@@ -291,26 +291,26 @@ namespace Castor3D
 		 */
 		C3D_API virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat ) = 0;
 		/**
-		*\~english
-		*\brief		Checks if the FBO is complete
-		*\return		\p false if the buffer is in error if there is an attachment missing
-		*\~french
-		*\brief		Vérifies i le FBO est complet
-		*\return		\p false si le tampon est en erreur ou s'il manque une attache.
-		*/
+		 *\~english
+		 *\brief		Checks if the FBO is complete
+		 *\return		\p false if the buffer is in error if there is an attachment missing
+		 *\~french
+		 *\brief		Vérifies i le FBO est complet
+		 *\return		\p false si le tampon est en erreur ou s'il manque une attache.
+		 */
 		C3D_API virtual bool IsComplete()const = 0;
 		/**
-		*\~english
-		*\brief		Downloads the render buffer data.
-		*\param[in]	p_attachment	The attachment point
-		*\param[in]	p_index			The attachment index
-		*\param[in]	p_buffer		Receives the data.
-		*\~french
-		*\brief		Récupère les données du tampon de rendu.
-		*\param[in]	p_attachment	Le point d'attache
-		*\param[in]	p_index			L'index d'attache
-		*\param[in]	p_buffer		Reçoit les données.
-		*/
+		 *\~english
+		 *\brief		Downloads the render buffer data.
+		 *\param[in]	p_attachment	The attachment point.
+		 *\param[in]	p_index			The attachment index.
+		 *\param[in]	p_buffer		Receives the data.
+		 *\~french
+		 *\brief		Récupère les données du tampon de rendu.
+		 *\param[in]	p_attachment	Le point d'attache.
+		 *\param[in]	p_index			L'index d'attache.
+		 *\param[in]	p_buffer		Reçoit les données.
+		 */
 		C3D_API virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer ) = 0;
 		/**
 		 *\~english
@@ -324,6 +324,28 @@ namespace Castor3D
 		}
 
 	protected:
+		/**
+		 *\~english
+		 *\param[in]	p_attachment	The attachment point.
+		 *\param[in]	p_index			The attachment index.
+		 *\return		The samples count for attachment.
+		 *\~french
+		 *\param[in]	p_attachment	Le point d'attache.
+		 *\param[in]	p_index			L'index d'attache.
+		 *\return		Le nombre d'échantillons pour l'attache.
+		 */
+		C3D_API uint32_t DoGetSamplesCount( eATTACHMENT_POINT p_point, uint8_t p_index );
+		/**
+		 *\~english
+		 *\param[in]	p_attachment	The attachment point.
+		 *\param[in]	p_index			The attachment index.
+		 *\return		The pixel format for attachment.
+		 *\~french
+		 *\param[in]	p_attachment	Le point d'attache.
+		 *\param[in]	p_index			L'index d'attache.
+		 *\return		Le format des pixels pour l'attache.
+		 */
+		C3D_API Castor::ePIXEL_FORMAT DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index );
 		/**
 		 *\~english
 		 *\brief		Initialises color and depth cache buffers.
