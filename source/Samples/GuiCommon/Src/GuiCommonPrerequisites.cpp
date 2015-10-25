@@ -567,4 +567,14 @@ namespace GuiCommon
 	{
 		return wxString( p_value.c_str(), wxConvUTF8 );
 	}
+
+	Castor::Size make_Size( wxSize const & p_value )
+	{
+		return Castor::Size( p_value.x, p_value.y );
+	}
+
+	wxSize make_wxSize( Castor::Size const & p_value )
+	{
+		return wxSize( p_value.width(), p_value.height() );
+	}
 }

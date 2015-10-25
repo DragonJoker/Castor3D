@@ -132,35 +132,29 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Specifies the buffers to be drawn into
 		 *\remark		All buffers attached are selected
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Définit les buffers dans lesquels le dessin doit être effectué
 		 *\remark		Tous les buffers attachés sont sélectionnés
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool SetDrawBuffers();
+		C3D_API void SetDrawBuffers();
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer to be drawn into
 		 *\param[in]	p_attach	The color buffer
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Définit le tampon de couleur dans lequel le dessin doit être effectué
 		 *\param[in]	p_attach	Le tampon de couleur
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool SetDrawBuffer( TextureAttachmentSPtr p_attach );
+		C3D_API void SetDrawBuffer( TextureAttachmentSPtr p_attach );
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer to be drawn into
 		 *\param[in]	p_attach	The color buffer
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Définit le tampon de couleur dans lequel le dessin doit être effectué
 		 *\param[in]	p_attach	Le tampon de couleur
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool SetDrawBuffer( RenderBufferAttachmentSPtr p_attach );
+		C3D_API void SetDrawBuffer( RenderBufferAttachmentSPtr p_attach );
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point
@@ -242,17 +236,6 @@ namespace Castor3D
 		C3D_API void Resize( Castor::Size const & p_size );
 		/**
 		 *\~english
-		 *\brief		Renders this buffer into another buffer's selected components
-		 *\param[in]	p_pBuffer		The buffer receiving the render
-		 *\param[in]	p_sizeDst		The destination dimensions
-		 *\~french
-		 *\brief		Rend ce tampon dans les composantes choisies d'un autre tampon
-		 *\param[in]	p_pBuffer		Le tampon recevant le rendu
-		 *\param[in]	p_sizeDst		Les dimensions de la destination
-		 */
-		C3D_API virtual void RenderToBuffer( FrameBufferSPtr p_pBuffer, Castor::Size const & p_sizeDst, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState );
-		/**
-		 *\~english
 		 *\brief		Creation function
 		 *\param[in]	p_iSamplesCount	Samples count, if the frame buffer must support multisampling
 		 *\return		\p true if OK
@@ -273,26 +256,22 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Uses given attachments to this framebuffer for next draw call.
 		 *\param[in]	p_texs	The attachments.
-		 *\return		true if everything went well (all attchments bound).
 		 *\~french
 		 *\brief		Utilise les attaches données pour ce framebuffer, lors du prochain dessin.
 		 *\param[in]	p_texs	Les attaches.
-		 *\return		true si tout s'est bien passé (toutes les attaches utilisées).
 		 */
-		C3D_API virtual bool SetDrawBuffers( AttachArray const & p_attaches ) = 0;
+		C3D_API virtual void SetDrawBuffers( AttachArray const & p_attaches ) = 0;
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer source for pixels
 		 *\param[in]	p_attach	The color buffer
 		 *\param[in]	p_index		The attachment index
-		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Définit le tampon de couleur source pour la lecture de pixels
 		 *\param[in]	p_attach	Le tampon de couleur
 		 *\param[in]	p_index		L'index d'attache
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool SetReadBuffer( eATTACHMENT_POINT p_attach, uint8_t p_index ) = 0;
+		C3D_API virtual void SetReadBuffer( eATTACHMENT_POINT p_attach, uint8_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a colour render buffer

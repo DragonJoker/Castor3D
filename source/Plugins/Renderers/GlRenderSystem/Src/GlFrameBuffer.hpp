@@ -60,11 +60,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual bool SetDrawBuffers( AttachArray const & p_attaches );
+		virtual void SetDrawBuffers( AttachArray const & p_attaches );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT p_eAttach, uint8_t p_index );
+		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT p_eAttach, uint8_t p_index );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */

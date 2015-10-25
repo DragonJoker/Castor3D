@@ -30,8 +30,8 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		:	Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-		,	m_tabs( p_tabs )
+		: Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		, m_tabs( p_tabs )
 	{
 	}
 
@@ -92,7 +92,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	RenderTarget::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< RenderTarget >( p_path )
+		: Castor3D::BinaryParser< RenderTarget >( p_path )
 	{
 	}
 
@@ -568,12 +568,6 @@ namespace Castor3D
 	void RenderTarget::SetSize( Size const & p_size )
 	{
 		m_size = p_size;
-	}
-
-	void RenderTarget::Resize()
-	{
-		m_fbLeftEye.m_pFrameBuffer->Resize( m_size );
-		m_fbRightEye.m_pFrameBuffer->Resize( m_size );
 	}
 
 	void RenderTarget::SetTechnique( Castor::String const & p_name )

@@ -44,7 +44,7 @@ namespace GlRender
 		}
 	}
 
-	bool GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
+	void GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
 	{
 		bool l_return = false;
 
@@ -63,16 +63,12 @@ namespace GlRender
 				}
 			}
 
-			l_return = m_gl.DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
+			m_gl.DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
 		}
-
-		return l_return;
 	}
 
-	bool GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
 	{
-		bool l_return = false;
-
 		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_attach )
 		{
 			return p_attach->GetAttachmentPoint() == p_eAttach;
@@ -80,10 +76,8 @@ namespace GlRender
 
 		if ( l_it != m_attaches.end() )
 		{
-			l_return = m_gl.ReadBuffer( m_gl.Get( m_gl.Get( p_eAttach ) ) );
+			m_gl.ReadBuffer( m_gl.Get( m_gl.Get( p_eAttach ) ) );
 		}
-
-		return l_return;
 	}
 
 	bool GlFrameBuffer::IsComplete()const

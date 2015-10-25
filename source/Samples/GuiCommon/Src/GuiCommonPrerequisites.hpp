@@ -267,6 +267,28 @@ namespace GuiCommon
 	 *\return		Le wxString
 	 */
 	wxString make_wxString( Castor::String const & p_value );
+	/**
+	 *\~english
+	 *\brief		Creates a Castor::Size from a wxSize
+	 *\param[in]	p_value	The wxSize
+	 *\return		The Castor::Size
+	 *\~french
+	 *\brief		Cree un Castor::Size a partir d'un wxSize
+	 *\param[in]	p_value	Le wxSize
+	 *\return		Le Castor::Size
+	 */
+	Castor::Size make_Size( wxSize const & p_value );
+	/**
+	 *\~english
+	 *\brief		Creates a wxSize from a Castor::Size
+	 *\param[in]	p_value	The Castor::Size
+	 *\return		The wxSize
+	 *\~french
+	 *\brief		Cree wxString a partir d'un Castor::Size
+	 *\param[in]	p_value	Le Castor::Size
+	 *\return		Le wxSize
+	 */
+	wxSize make_wxSize( Castor::Size const & p_value );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

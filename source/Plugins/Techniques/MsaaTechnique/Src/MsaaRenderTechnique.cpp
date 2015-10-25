@@ -174,25 +174,17 @@ namespace Msaa
 		: RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_pRenderSystem, p_params )
 		, m_iSamplesCount( 0 )
 	{
-		if ( p_params.Get( cuT( "samples_count" ), m_iSamplesCount ) && m_iSamplesCount > 1 )
-		{
-			Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_iSamplesCount << cuT( " samples" ) );
-			m_pMsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-			m_pMsColorBuffer = m_pFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_A8R8G8B8 );
-			m_pMsDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
-			m_pMsColorAttach = m_pRenderTarget->CreateAttachment( m_pMsColorBuffer );
-			m_pMsDepthAttach = m_pRenderTarget->CreateAttachment( m_pMsDepthBuffer );
-			RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
-			l_pRasteriser->SetMultisample( true );
-			m_wpMsRasteriserState = l_pRasteriser;
-			m_pBoundFrameBuffer = m_pMsFrameBuffer;
-		}
-		else
-		{
-			Logger::LogWarning( "Using classic rendering through MSAA Render Technique" );
-			m_iSamplesCount = 0;
-			m_pBoundFrameBuffer = m_pFrameBuffer;
-		}
+		p_params.Get( cuT( "samples_count" ), m_iSamplesCount );
+
+		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_iSamplesCount << cuT( " samples" ) );
+		m_pMsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+		m_pMsColorBuffer = m_pMsFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_A8R8G8B8 );
+		m_pMsDepthBuffer = m_pMsFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
+		m_pMsColorAttach = m_pRenderTarget->CreateAttachment( m_pMsColorBuffer );
+		m_pMsDepthAttach = m_pRenderTarget->CreateAttachment( m_pMsDepthBuffer );
+		RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
+		l_pRasteriser->SetMultisample( true );
+		m_wpMsRasteriserState = l_pRasteriser;
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -207,66 +199,55 @@ namespace Msaa
 
 	bool RenderTechnique::DoCreate()
 	{
-		bool l_bReturn = true;
-
-		if ( m_iSamplesCount )
-		{
-			l_bReturn &= m_pMsFrameBuffer->Create( m_iSamplesCount );
-			m_pMsColorBuffer->SetSamplesCount( m_iSamplesCount );
-			m_pMsDepthBuffer->SetSamplesCount( m_iSamplesCount );
-			l_bReturn &= m_pMsColorBuffer->Create();
-			l_bReturn &= m_pMsDepthBuffer->Create();
-		}
-
+		bool l_bReturn = m_pMsFrameBuffer->Create( m_iSamplesCount );
+		m_pMsColorBuffer->SetSamplesCount( m_iSamplesCount );
+		m_pMsDepthBuffer->SetSamplesCount( m_iSamplesCount );
+		l_bReturn &= m_pMsColorBuffer->Create();
+		l_bReturn &= m_pMsDepthBuffer->Create();
 		return l_bReturn;
 	}
 
 	void RenderTechnique::DoDestroy()
 	{
-		if ( m_iSamplesCount )
-		{
-			m_pMsColorBuffer->Destroy();
-			m_pMsDepthBuffer->Destroy();
-			m_pMsFrameBuffer->Destroy();
-		}
+		m_pMsColorBuffer->Destroy();
+		m_pMsDepthBuffer->Destroy();
+		m_pMsFrameBuffer->Destroy();
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		bool l_bReturn = true;
+		m_rect = Castor::Rectangle( Position(), m_pRenderTarget->GetSize() );
 
-		if ( m_iSamplesCount )
+		if ( l_bReturn )
 		{
-			if ( l_bReturn )
-			{
-				l_bReturn = m_pMsColorBuffer->Initialise( m_size );
-			}
+			l_bReturn = m_pMsColorBuffer->Initialise( m_pRenderTarget->GetSize() );
+		}
+
+		if ( l_bReturn )
+		{
+			l_bReturn = m_pMsDepthBuffer->Initialise( m_pRenderTarget->GetSize() );
+		}
+
+		if ( l_bReturn )
+		{
+			l_bReturn = m_pMsFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
+		}
+
+		if ( l_bReturn )
+		{
+			l_bReturn = m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
 			if ( l_bReturn )
 			{
-				l_bReturn = m_pMsDepthBuffer->Initialise( m_size );
-			}
-
-			if ( l_bReturn )
-			{
-				l_bReturn = m_pMsFrameBuffer->Initialise( m_size );
-			}
-
-			if ( l_bReturn )
-			{
-				l_bReturn = m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+				l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pMsColorAttach );
 
 				if ( l_bReturn )
 				{
-					l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pMsColorAttach );
-
-					if ( l_bReturn )
-					{
-						l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pMsDepthAttach );
-					}
-
-					m_pMsFrameBuffer->Unbind();
+					l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pMsDepthAttach );
 				}
+
+				m_pMsFrameBuffer->Unbind();
 			}
 		}
 
@@ -275,20 +256,17 @@ namespace Msaa
 
 	void RenderTechnique::DoCleanup()
 	{
-		if ( m_iSamplesCount )
-		{
-			m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-			m_pMsFrameBuffer->DetachAll();
-			m_pMsFrameBuffer->Unbind();
-			m_pMsFrameBuffer->Cleanup();
-			m_pMsColorBuffer->Cleanup();
-			m_pMsDepthBuffer->Cleanup();
-		}
+		m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_pMsFrameBuffer->DetachAll();
+		m_pMsFrameBuffer->Unbind();
+		m_pMsFrameBuffer->Cleanup();
+		m_pMsColorBuffer->Cleanup();
+		m_pMsDepthBuffer->Cleanup();
 	}
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		return m_pBoundFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		return m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 	}
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
@@ -309,20 +287,19 @@ namespace Msaa
 
 	void RenderTechnique::DoEndRender()
 	{
-		m_pBoundFrameBuffer->Unbind();
+		m_pMsFrameBuffer->Unbind();
 
-		if ( m_iSamplesCount )
-		{
-			m_pMsFrameBuffer->BlitInto( m_pFrameBuffer, m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
+		m_pMsFrameBuffer->BlitInto( m_pRenderTarget->GetFrameBuffer(), m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
 
 #	if DEBUG_BUFFERS
 
-			auto l_buffer = m_pColorAttach->DownloadBuffer();
-			const Image l_image( cuT( "Tmp" ), *l_buffer );
-			Image::BinaryLoader()( l_image, Engine::GetEngineDirectory() / cuT( "MsaaImage.bmp" ) );
+		auto l_buffer = m_pColorAttach->DownloadBuffer();
+		const Image l_image( cuT( "Tmp" ), *l_buffer );
+		Image::BinaryLoader()( l_image, Engine::GetEngineDirectory() / cuT( "MsaaImage.bmp" ) );
 
 #	endif
-		}
+
+		m_pRenderTarget->GetFrameBuffer()->Bind();
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
@@ -522,7 +499,7 @@ namespace Msaa
 			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
 			pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
 		};
-		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 

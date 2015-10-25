@@ -243,7 +243,7 @@ namespace GlRender
 			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * l_v4Vertex;
 		};
 
-		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 

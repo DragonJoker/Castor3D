@@ -169,86 +169,19 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool FrameBuffer::SetDrawBuffers()
+	void FrameBuffer::SetDrawBuffers()
 	{
-		return SetDrawBuffers( m_attaches );
+		SetDrawBuffers( m_attaches );
 	}
 
-	bool FrameBuffer::SetDrawBuffer( TextureAttachmentSPtr p_attach )
+	void FrameBuffer::SetDrawBuffer( TextureAttachmentSPtr p_attach )
 	{
-		return SetDrawBuffers( AttachArray( 1, p_attach ) );
+		SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
-	bool FrameBuffer::SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )
+	void FrameBuffer::SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )
 	{
-		return SetDrawBuffers( AttachArray( 1, p_attach ) );
-	}
-
-	void FrameBuffer::RenderToBuffer( FrameBufferSPtr p_pBuffer, Size const & p_sizeDst, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState )
-	{
-		if ( !m_attaches.empty() )
-		{
-			auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), []( FrameBufferAttachmentSPtr p_attach )
-			{
-				return p_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE;
-			} );
-
-			if ( l_it != m_attaches.end() )
-			{
-				DynamicTextureSPtr l_texture = std::static_pointer_cast< TextureAttachment >( *l_it )->GetTexture();
-
-				if ( l_texture && p_pBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
-				{
-					if ( false )//GetOwner()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
-					{
-						BlitInto( p_pBuffer, Castor::Rectangle( Position(), p_sizeDst ), eATTACHMENT_POINT_COLOUR );
-					}
-					else
-					{
-						p_pDepthStencilState->Apply();
-						p_pRasteriserState->Apply();
-						Clear();
-						GetOwner()->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_texture );
-						p_pBuffer->Unbind();
-
-						if ( !p_pBuffer->m_attaches.empty() )
-						{
-							for ( auto && l_attach : p_pBuffer->m_attaches )
-							{
-								if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
-								{
-									l_texture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
-									l_texture->Bind();
-									l_texture->GenerateMipmaps();
-									l_texture->Unbind();
-								}
-
-#if DEBUG_BUFFERS
-
-								if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
-								{
-									PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
-
-									if ( l_buffer && DownloadBuffer( l_attach->GetAttachmentPoint(), l_attach->GetAttachmentIndex(), l_buffer ) )
-									{
-										StringStream l_name;
-										l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA.png" );
-										Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
-									}
-								}
-
-#endif
-							}
-
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			Logger::LogWarning( cuT( "Can't render a frame buffer that has no texture to bind" ) );
-		}
+		SetDrawBuffers( AttachArray( 1, p_attach ) );
 	}
 
 	bool FrameBuffer::DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )

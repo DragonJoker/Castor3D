@@ -142,15 +142,17 @@ namespace Castor3D
 		C3D_API virtual ~RenderWindow();
 		/**
 		 *\~english
-		 *\brief		Sets the handle, initialises the renderer
-		 *\param[in]	p_handle	The handle
+		 *\brief		Sets the handle, initialises the window.
+		 *\param[in]	p_size		The window size.
+		 *\param[in]	p_handle	The handle.
 		 *\return		\p false if any problem occured
 		 *\~french
-		 *\brief		Définit le handle, initialise le renderer
-		 *\param[in]	p_handle	Le handle
-		 *\return		\p false si un problème quelconque a été rencontré
+		 *\brief		Définit l'identifiant de la fenêtre, initialise la fenêtre.
+		 *\param[in]	p_size		Les dimensions de la fenêtre.
+		 *\param[in]	p_handle	Le handle.
+		 *\return		\p false si un problème quelconque a été rencontré.
 		 */
-		C3D_API bool Initialise( WindowHandle const & p_handle );
+		C3D_API bool Initialise( Castor::Size const & p_size, WindowHandle const & p_handle );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance
@@ -611,6 +613,8 @@ namespace Castor3D
 		RasteriserStateWPtr m_wpRasteriserState;
 		//!\~english The window 's back buffers.	\~french Les tampons de rendu de la fenêtre.
 		BackBuffersSPtr m_backBuffers;
+		//!\~english The window size.	\~french Les dimensions de la fenêtre.
+		Castor::Size m_size;
 	};
 }
 

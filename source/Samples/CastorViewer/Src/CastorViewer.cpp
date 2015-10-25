@@ -54,6 +54,7 @@ namespace CastorViewer
 #endif
 
 		m_mainFrame = new MainFrame( p_splashScreen, make_wxString( m_internalName ) );
+		m_mainFrame->Maximize();
 		bool l_return = m_mainFrame->Initialise();
 
 		if ( l_return )

@@ -63,7 +63,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual bool SetDrawBuffers( AttachArray const & p_attaches );
+		virtual void SetDrawBuffers( AttachArray const & p_attaches );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
@@ -79,10 +79,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
-		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT, uint8_t )
-		{
-			return true;
-		}
+		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::IsComplete
 		 */

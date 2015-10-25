@@ -68,9 +68,8 @@ namespace Dx11Render
 		return true;
 	}
 
-	bool DxBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )
+	void DxBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )
 	{
-		return false;
 	}
 
 	bool DxBackBuffers::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )

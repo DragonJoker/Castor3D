@@ -200,7 +200,7 @@ namespace Direct
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		return m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		return m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 	}
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
@@ -416,7 +416,7 @@ namespace Direct
 			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
 			pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
 		};
-		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 

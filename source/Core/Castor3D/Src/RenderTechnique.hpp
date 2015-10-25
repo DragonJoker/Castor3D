@@ -248,22 +248,6 @@ namespace Castor3D
 		BlendStateWPtr m_wp2DBlendState;
 		//!\~english The	overlays depth stencil state	\~french L'état de profoundeur et stenxil pour les overlays
 		DepthStencilStateWPtr m_wp2DDepthStencilState;
-		//!\~english The	technique buffers size	\~french Les dimensions des tampons de la technique
-		Castor::Size m_size;
-		//!\~english The	technique blit rectangle	\~french Le rectangle de blit de la technique
-		Castor::Rectangle m_rect;
-		//!\~english The sampler used by the textures	\~french L'échantillonneur utilisé par les textures
-		SamplerSPtr m_sampler;
-		//!\~english The frame buffer	\~french Le tampon d'image
-		FrameBufferSPtr m_pFrameBuffer;
-		//!\~english The buffer receiving the color render	\~french Le tampon recevant le rendu couleur
-		DynamicTextureSPtr m_pColorBuffer;
-		//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
-		DepthStencilRenderBufferSPtr m_pDepthBuffer;
-		//!\~english The attach between colour buffer and frame buffer	\~french L'attache entre le tampon couleur et le tampon d'image
-		TextureAttachmentSPtr m_pColorAttach;
-		//!\~english The attach between depth buffer and frame buffer	\~french L'attache entre le tampon profondeur et le tampon d'image
-		RenderBufferAttachmentSPtr m_pDepthAttach;
 	};
 }
 

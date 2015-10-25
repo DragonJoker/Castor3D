@@ -41,11 +41,15 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_invertFinal	Tells if the final render is to be inverted.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	p_invertFinal	Dit si on inverse l'image du rendu final.
 		 */
-		C3D_API Context( RenderSystem & p_renderSystem );
+		C3D_API Context( RenderSystem & p_renderSystem, bool p_invertFinal );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -114,15 +118,6 @@ namespace Castor3D
 		C3D_API void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
 		/**
 		 *\~english
-		 *\brief		Changes fullscreen status
-		 *\param[in]	val	The new fullscreen status
-		 *\~french
-		 *\brief		Change le statut de plein écran
-		 *\param[in]	val	Le nouveau statut de plein écran
-		 */
-		C3D_API virtual void UpdateFullScreen( bool val ) = 0;
-		/**
-		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
 		 *\param[in]	p_size			The render viewport size.
 		 *\param[in]	p_pTexture		The texture.
@@ -131,7 +126,27 @@ namespace Castor3D
 		 *\param[in]	p_size			La taille du viewport de rendu.
 		 *\param[in]	p_pTexture		La texture.
 		 */
-		C3D_API virtual void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture );
+		C3D_API void RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_pTexture );
+		/**
+		 *\~english
+		 *\brief		Renders the given texture to the back buffers.
+		 *\param[in]	p_size			The render viewport size.
+		 *\param[in]	p_pTexture		The texture.
+		 *\~french
+		 *\brief		Rend la texture donnée dans le tampon e la fenêtre.
+		 *\param[in]	p_size			La taille du viewport de rendu.
+		 *\param[in]	p_pTexture		La texture.
+		 */
+		C3D_API void RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_pTexture );
+		/**
+		 *\~english
+		 *\brief		Changes fullscreen status
+		 *\param[in]	val	The new fullscreen status
+		 *\~french
+		 *\brief		Change le statut de plein écran
+		 *\param[in]	val	Le nouveau statut de plein écran
+		 */
+		C3D_API virtual void UpdateFullScreen( bool val ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the maximal supported size, given a wanted size
@@ -247,6 +262,21 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoCullFace( eFACE p_eCullFace ) = 0;
 
+	private:
+		/**
+		 *\~english
+		 *\brief		Renders the given texture.
+		 *\param[in]	p_size				The render viewport size.
+		 *\param[in]	p_texture			The texture.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\~french
+		 *\brief		Dessine la texture donnée.
+		 *\param[in]	p_size				La taille du viewport de rendu.
+		 *\param[in]	p_texture			La texture.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 */
+		void DoRenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, GeometryBuffersSPtr p_geometryBuffers );
+
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
 		RenderWindow * m_pWindow;
@@ -258,16 +288,22 @@ namespace Castor3D
 		ShaderProgramBaseWPtr m_pBtoBShaderProgram;
 		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
 		OneTextureFrameVariableSPtr m_mapDiffuse;
-		//!\~english The GeometryBuffers used when rendering from a buffer to another one	\~french Le GeometryBuffers utilisé lors du rendu d'un tampon vers un autre
+		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
 		GeometryBuffersSPtr m_pGeometryBuffers;
-		//!\~english The Viewport used when rendering from a buffer to another one	\~french Le Viewport utilisé lors du rendu d'un tampon vers un autre
+		//!\~english The GeometryBuffers used when rendering a texture to the back buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon de fenêtre.
+		GeometryBuffersSPtr m_finalGeometryBuffers;
+		//!\~english The Viewport used when rendering a texture into to a frame buffer.	\~french Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
 		Castor3D::BufferDeclarationSPtr m_pDeclaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
+		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
+		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_finalVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
 		Castor::real m_pBuffer[24];
+		//!	6 * [2(vertex position) 2(texture coordinates)]
+		Castor::real m_finalBuffer[24];
 		//!\~english DepthStencilState used while rendering background image	\~french DepthStencilState utilisé pour le rendu de l'image de fond
 		DepthStencilStateSPtr m_pDsStateBackground;
 	};

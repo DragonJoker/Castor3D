@@ -183,8 +183,9 @@ namespace Castor3D
 		}
 	}
 
-	bool RenderWindow::Initialise( WindowHandle const & p_handle )
+	bool RenderWindow::Initialise( Size const & p_size, WindowHandle const & p_handle )
 	{
+		m_size = p_size;
 		m_handle = p_handle;
 
 		if ( m_handle )
@@ -275,18 +276,22 @@ namespace Castor3D
 
 	void RenderWindow::Resize( Size const & p_size )
 	{
-		RenderTargetSPtr l_pTarget = GetRenderTarget();
-		Size l_size = m_pContext->GetMaxSize( p_size );
-
-		if ( l_pTarget )
+		if ( m_pContext )
 		{
-			l_pTarget->SetSize( l_size );
+			m_size = m_pContext->GetMaxSize( p_size );
+		}
+		else
+		{
+			m_size = p_size;
 		}
 
-		m_wpListener.lock()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+		if ( m_bInitialised )
 		{
-			DoUpdateSize();
-		} ) );
+			m_wpListener.lock()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				DoUpdateSize();
+			} ) );
+		}
 	}
 
 	void RenderWindow::SetCamera( CameraSPtr p_pCamera )
@@ -522,15 +527,7 @@ namespace Castor3D
 
 	Size RenderWindow::GetSize()const
 	{
-		Size l_return;
-		RenderTargetSPtr l_pTarget = GetRenderTarget();
-
-		if ( l_pTarget )
-		{
-			l_return = l_pTarget->GetSize();
-		}
-
-		return l_return;
+		return m_size;
 	}
 
 	String RenderWindow::DoGetName()
@@ -555,7 +552,7 @@ namespace Castor3D
 
 			m_wpDepthStencilState.lock()->Apply();
 			m_wpRasteriserState.lock()->Apply();
-			m_pContext->BToBRender( GetRenderTarget()->GetSize(), p_pTexture );
+			m_pContext->RenderTextureToBackBuffer( m_size, p_pTexture );
 			m_backBuffers->Unbind();
 		}
 	}
@@ -563,11 +560,5 @@ namespace Castor3D
 	void RenderWindow::DoUpdateSize()
 	{
 		m_backBuffers->Resize( GetSize() );
-		RenderTargetSPtr l_pTarget = GetRenderTarget();
-
-		if ( l_pTarget )
-		{
-			l_pTarget->Resize();
-		}
 	}
 }

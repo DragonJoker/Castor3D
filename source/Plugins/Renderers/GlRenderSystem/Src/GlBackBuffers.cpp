@@ -50,14 +50,13 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )
+	void GlBackBuffers::SetDrawBuffers( FrameBuffer::AttachArray const & p_attaches )
 	{
-		return false;
 	}
 
-	bool GlBackBuffers::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void GlBackBuffers::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
 	{
-		return m_gl.ReadBuffer( eGL_BUFFER( m_gl.Get( m_gl.Get( p_eAttach ) ) + p_index ) );
+		m_gl.ReadBuffer( eGL_BUFFER( m_gl.Get( m_gl.Get( p_eAttach ) ) + p_index ) );
 	}
 
 	bool GlBackBuffers::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )

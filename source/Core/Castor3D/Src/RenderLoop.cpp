@@ -52,6 +52,11 @@ namespace Castor3D
 		return m_frameTime;
 	}
 
+	uint32_t RenderLoop::GetWantedFps()
+	{
+		return m_wantedFPS;
+	}
+
 	void RenderLoop::CreateContext( RenderWindow & p_window )
 	{
 		if ( !m_renderSystem->GetMainContext() )

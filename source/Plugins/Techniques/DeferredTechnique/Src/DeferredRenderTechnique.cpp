@@ -426,7 +426,7 @@ namespace Deferred
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
 		{
 			l_bReturn = m_lightPassTextures[i]->Create();
-			m_lightPassTextures[i]->SetSampler( m_sampler );
+			m_lightPassTextures[i]->SetSampler( GetOwner()->GetLightsSampler() );
 		}
 
 		l_bReturn &= m_lightPassBufDepth->Create();
@@ -482,21 +482,21 @@ namespace Deferred
 
 			if ( i != eDS_TEXTURE_POSITION )
 			{
-				m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_A8R8G8B8 );
+				m_lightPassTextures[i]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_A8R8G8B8 );
 			}
 			else
 			{
-				m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
+				m_lightPassTextures[i]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_ARGB32F );
 			}
 
 			m_lightPassTextures[i]->Initialise( p_index++ );
 		}
 
-		m_lightPassBufDepth->Initialise( m_size );
+		m_lightPassBufDepth->Initialise( m_pRenderTarget->GetSize() );
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_lightPassFrameBuffer->Initialise( m_size );
+			l_bReturn = m_lightPassFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
 		}
 
 		if ( m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
@@ -563,14 +563,14 @@ namespace Deferred
 		m_lightPassFrameBuffer->Unbind();
 
 		bool l_bReturn = true;
-		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		m_pFrameBuffer->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
-		m_pFrameBuffer->Clear();
+		m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		m_pRenderTarget->GetFrameBuffer()->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
+		m_pRenderTarget->GetFrameBuffer()->Clear();
 		m_lightPassDsState->Apply();
 		//m_pRenderTarget->GetDepthStencilState()->Apply();
 		m_pRenderTarget->GetRasteriserState()->Apply();
 		//m_pRenderTarget->GetRenderer()->BeginScene();
-		m_viewport.SetSize( m_size );
+		m_viewport.SetSize( m_pRenderTarget->GetSize() );
 		m_viewport.Render( l_pipeline );
 		l_pContext->CullFace( eFACE_BACK );
 
@@ -615,9 +615,6 @@ namespace Deferred
 #endif
 
 			m_lightPassShaderProgram->Unbind();
-
-			//m_pRenderTarget->EndScene();
-			m_pFrameBuffer->Unbind();
 		}
 	}
 
@@ -862,7 +859,7 @@ namespace Deferred
 			out_c3dEmissive = vec4( l_v3Emissive );
 		};
 
-		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 
@@ -892,7 +889,7 @@ namespace Deferred
 			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( position.x(), position.y(), position.z(), position.w() );
 		};
 
-		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 
@@ -969,7 +966,7 @@ namespace Deferred
 			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Diffuse + l_v3Specular, 1 );
 		};
 
-		l_writer.Implement_Function< void >( cuT( "main" ), l_main );
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 

@@ -86,14 +86,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted frame time.
-		 *\remark		Thread-safe.
 		 *\return		The time, in seconds.
 		 *\~french
 		 *\brief		Récupère le temps voulu pour une frame.
-		 *\remark		Thread-safe.
 		 *\return		Le temps, en secondes.
 		 */
 		C3D_API double GetFrameTime();
+		/**
+		 *\~english
+		 *\return		The wanted refresh rate.
+		 *\~french
+		 *\return		La vitesse de rafraichissement.
+		 */
+		C3D_API uint32_t GetWantedFps();
 		/**
 		 *\~english
 		 *\brief		Creates a render context.

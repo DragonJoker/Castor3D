@@ -105,16 +105,14 @@ namespace Dx11Render
 		}
 	}
 
-	bool DxFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
+	void DxFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
 	{
-		bool l_return = false;
-
 		if ( !p_attaches.empty() )
 		{
 			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-			D3D11RenderTargetViewArray l_arraySurfaces;
+			D3D11RenderTargetViewArray l_surfaces;
 			ID3D11DepthStencilView * l_pView = NULL;
-			l_arraySurfaces.reserve( p_attaches.size() );
+			l_surfaces.reserve( p_attaches.size() );
 
 			for ( auto && l_attach : p_attaches )
 			{
@@ -126,7 +124,7 @@ namespace Dx11Render
 
 					if ( l_eAttach = eATTACHMENT_POINT_COLOUR )
 					{
-						l_arraySurfaces.push_back( std::static_pointer_cast< DxDynamicTexture >( l_texAttach->GetTexture() )->GetRenderTargetView() );
+						l_surfaces.push_back( std::static_pointer_cast< DxDynamicTexture >( l_texAttach->GetTexture() )->GetRenderTargetView() );
 					}
 				}
 				else
@@ -139,23 +137,24 @@ namespace Dx11Render
 					}
 					else if ( l_eAttach == eATTACHMENT_POINT_COLOUR )
 					{
-						l_arraySurfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetResourceView() ) );
+						l_surfaces.push_back( reinterpret_cast< ID3D11RenderTargetView * >( std::static_pointer_cast< DxColourRenderBuffer >( l_rboAttach->GetRenderBuffer() )->GetDxRenderBuffer().GetResourceView() ) );
 					}
 				}
 			}
 
-			if ( l_arraySurfaces.size() )
+			if ( !l_surfaces.empty() )
 			{
-				l_deviceContext->OMSetRenderTargets( UINT( l_arraySurfaces.size() ), &l_arraySurfaces[0], l_pView );
-				l_return = true;
+				l_deviceContext->OMSetRenderTargets( UINT( l_surfaces.size() ), &l_surfaces[0], l_pView );
 			}
 			else if ( l_pView )
 			{
 				l_deviceContext->OMSetRenderTargets( 0, NULL, l_pView );
 			}
 		}
+	}
 
-		return l_return;
+	void DxFrameBuffer::SetReadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index )
+	{
 	}
 
 	ColourRenderBufferSPtr DxFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )

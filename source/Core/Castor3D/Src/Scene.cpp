@@ -624,7 +624,7 @@ namespace Castor3D
 				RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 				ContextRPtr l_pContext = l_renderSystem->GetCurrentContext();
 				l_pContext->GetBackgroundDSState()->Apply();
-				l_pContext->BToBRender( Size( p_camera.GetWidth(), p_camera.GetHeight() ), m_pBackgroundImage );
+				l_pContext->RenderTextureToCurrentBuffer( Size( p_camera.GetWidth(), p_camera.GetHeight() ), m_pBackgroundImage );
 			}
 		}
 	}

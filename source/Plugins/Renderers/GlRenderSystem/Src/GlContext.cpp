@@ -22,7 +22,7 @@ using namespace Castor3D;
 namespace GlRender
 {
 	GlContext::GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl )
-		: Context( p_renderSystem )
+		: Context( p_renderSystem, false )
 		, m_pGlRenderSystem( &p_renderSystem )
 		, m_gl( p_gl )
 	{
@@ -69,7 +69,7 @@ namespace GlRender
 				// Shader outputs
 				OUT( l_writer, Vec2, vtx_texture );
 
-				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
 					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
@@ -89,9 +89,9 @@ namespace GlRender
 				// Shader outputs
 				LAYOUT( l_writer, Vec4, plx_v4FragColor );
 
-				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					plx_v4FragColor = texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) );
+					plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
 				} );
 				l_strPxlShader = l_writer.Finalise();
 			}

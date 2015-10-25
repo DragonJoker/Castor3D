@@ -171,6 +171,9 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_vboBuffer[1] = 0.0f;
 	m_vboBuffer[2] = 0.0f;
 	m_vboBuffer[3] = 0.0f;
+	m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+	m_pColorBuffer = m_renderSystem->CreateDynamicTexture();
+	m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
 	m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
 	m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
 	BufferElementDeclaration l_skymapDeclaration[] =
@@ -730,6 +733,9 @@ bool RenderTechnique::DoCreate()
 	m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 	m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 	m_pSamplerAnisotropicRepeat->SetMaxAnisotropy( real( 0.1 ) );
+	m_pFrameBuffer->Create( 0 );
+	m_pColorBuffer->Create();
+	m_pDepthBuffer->Create();
 	m_pTexIrradiance->Create();
 	m_pTexInscatter->Create();
 	m_pTexTransmittance->Create();
@@ -820,6 +826,9 @@ void RenderTechnique::DoDestroy()
 #else
 	m_pTexWave->Destroy();
 #endif
+	m_pColorBuffer->Destroy();
+	m_pDepthBuffer->Destroy();
+	m_pFrameBuffer->Destroy();
 }
 
 bool RenderTechnique::DoInitialise( uint32_t & p_index )
@@ -831,8 +840,11 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pSamplerAnisotropicClamp->Initialise();
 	m_pSamplerAnisotropicRepeat->Initialise();
 
+	m_pColorBuffer->SetType( eTEXTURE_TYPE_2D );
+	m_pColorBuffer->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_A8R8G8B8 );
+	m_pDepthBuffer->Initialise( m_pRenderTarget->GetSize() );
+	m_pFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
 	bool l_bReturn = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	PxBufferBaseSPtr buffer;
 
 	if ( l_bReturn )
 	{
@@ -843,7 +855,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	FILE * f = NULL;
 	m_pTexIrradiance->SetType( eTEXTURE_TYPE_2D );
-	buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
+	PxBufferBaseSPtr buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
 	{
@@ -1053,6 +1065,9 @@ void RenderTechnique::DoCleanup()
 	m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	m_pFrameBuffer->DetachAll();
 	m_pFrameBuffer->Unbind();
+	m_pFrameBuffer->Cleanup();
+	m_pColorBuffer->Cleanup();
+	m_pDepthBuffer->Cleanup();
 }
 
 bool RenderTechnique::DoBeginRender()

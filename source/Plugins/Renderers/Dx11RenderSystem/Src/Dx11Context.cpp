@@ -5,11 +5,13 @@
 
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
-#include <VertexBuffer.hpp>
-#include <RenderWindow.hpp>
-#include <PlatformWindowHandle.hpp>
 #include <OneFrameVariable.hpp>
+#include <PlatformWindowHandle.hpp>
+#include <RenderLoop.hpp>
+#include <RenderWindow.hpp>
 #include <Texture.hpp>
+#include <VertexBuffer.hpp>
+
 #include <Logger.hpp>
 
 #include <d3dx10math.h>
@@ -48,14 +50,14 @@ namespace ShaderModel1_2_3_4
 		cuT( "SamplerState diffuseSampler: register( s0 );\n" )
 		cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
 		cuT( "{\n" )
-		cuT( "	return diffuseTexture.Sample( diffuseSampler, p_input.TextureUV );\n" )
+		cuT( "	return float4( diffuseTexture.Sample( diffuseSampler, p_input.TextureUV ).xyz, 1.0 );\n" )
 		cuT( "}\n" );
 }
 
 namespace Dx11Render
 {
 	DxContext::DxContext( DxRenderSystem & p_renderSystem )
-		: Context( p_renderSystem )
+		: Context( p_renderSystem, true )
 		, m_swapChain( NULL )
 		, m_pDeviceContext( NULL )
 	{
@@ -77,41 +79,6 @@ namespace Dx11Render
 		}
 	}
 
-	void DxContext::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture )
-	{
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-		m_viewport.SetSize( p_size );
-		m_viewport.Render( GetOwner()->GetPipeline() );
-		uint32_t l_id = p_pTexture->GetIndex();
-		p_pTexture->SetIndex( 0 );
-
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
-		{
-			m_mapDiffuse->SetValue( p_pTexture.get() );
-			FrameVariableBufferSPtr l_matrices = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
-
-			if ( l_matrices )
-			{
-				GetOwner()->GetPipeline().ApplyProjection( *l_matrices );
-			}
-
-			l_pProgram->Bind( 0, 1 );
-		}
-
-		if ( p_pTexture->BindAt( 0 ) )
-		{
-			m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, m_arrayVertex.size(), 0 );
-			p_pTexture->UnbindFrom( 0 );
-		}
-
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
-		{
-			l_pProgram->Unbind();
-		}
-
-		p_pTexture->SetIndex( l_id );
-	}
-
 	bool DxContext::DoInitialise()
 	{
 		if ( !m_bInitialised )
@@ -122,6 +89,8 @@ namespace Dx11Render
 
 			if ( DoInitPresentParameters() == S_OK &&  l_renderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
+				m_pWindow->Resize( m_deviceParams.BufferDesc.Width, m_deviceParams.BufferDesc.Height );
+				m_size = m_pWindow->GetSize();
 				DoInitVolatileResources();
 				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" ) );
 				m_bInitialised = true;
@@ -214,10 +183,10 @@ namespace Dx11Render
 		std::memset( &m_deviceParams, 0, sizeof( m_deviceParams ) );
 		m_deviceParams.Windowed = TRUE;
 		m_deviceParams.BufferCount = 1;
-		m_deviceParams.BufferDesc.Width = ::GetSystemMetrics( SM_CXFULLSCREEN );
-		m_deviceParams.BufferDesc.Height = ::GetSystemMetrics( SM_CYFULLSCREEN );
-		m_deviceParams.BufferDesc.Format = DirectX11::Get( m_pWindow->GetPixelFormat() );// DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_deviceParams.BufferDesc.RefreshRate.Numerator = 60;
+		m_deviceParams.BufferDesc.Width = m_pWindow->GetSize().width();
+		m_deviceParams.BufferDesc.Height = m_pWindow->GetSize().height();
+		m_deviceParams.BufferDesc.Format = DirectX11::Get( m_pWindow->GetRenderTarget()->GetPixelFormat() );
+		m_deviceParams.BufferDesc.RefreshRate.Numerator = GetOwner()->GetOwner()->GetRenderLoop().GetWantedFps();
 		m_deviceParams.BufferDesc.RefreshRate.Denominator = 1;
 		m_deviceParams.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 		m_deviceParams.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;

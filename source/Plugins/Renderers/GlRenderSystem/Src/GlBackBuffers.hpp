@@ -57,7 +57,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual bool SetDrawBuffers( Castor3D::FrameBuffer::AttachArray const & p_attaches );
+		virtual void SetDrawBuffers( Castor3D::FrameBuffer::AttachArray const & p_attaches );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
@@ -69,7 +69,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
-		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT, uint8_t );
+		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT, uint8_t );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */

@@ -741,7 +741,7 @@ namespace GlRender
 
 		void BlinnPhongLightingModel::Declare_ComputeLightDirection( GlslWriter & p_writer )
 		{
-			p_writer.Implement_Function< Vec4 >( cuT( "ComputeLightDirection" ), &BlinnPhong::ComputeLightDirection,
+			p_writer.ImplementFunction< Vec4 >( cuT( "ComputeLightDirection" ), &BlinnPhong::ComputeLightDirection,
 												 InParam< Light >( &p_writer, cuT( "p_light" ) ),
 												 InParam< Vec3 >( &p_writer, cuT( "p_position" ) ),
 												 InParam< Mat4 >( &p_writer, cuT( "p_mtxModelView" ) ) );
@@ -751,7 +751,7 @@ namespace GlRender
 		{
 			InOutParam< Vec3 > p_lightDir( &p_writer, cuT( "p_lightDir" ) );
 			InOutParam< Float > p_fAttenuation( &p_writer, cuT( "p_fAttenuation" ) );
-			p_writer.Implement_Function< Void >( cuT( "Bump" ), &BlinnPhong::Bump,
+			p_writer.ImplementFunction< Void >( cuT( "Bump" ), &BlinnPhong::Bump,
 												 InParam< Vec3 >( &p_writer, cuT( "p_v3T" ) ),
 												 InParam< Vec3 >( &p_writer, cuT( "p_v3B" ) ),
 												 InParam< Vec3 >( &p_writer, cuT( "p_v3N" ) ),
@@ -762,7 +762,7 @@ namespace GlRender
 		void BlinnPhongLightingModel::Declare_ComputeFresnel( GlslWriter & p_writer )
 		{
 			InOutParam< Vec3 > p_specular( &p_writer, cuT( "p_specular" ) );
-			p_writer.Implement_Function< Float >( cuT( "ComputeFresnel" ), &BlinnPhong::ComputeFresnel,
+			p_writer.ImplementFunction< Float >( cuT( "ComputeFresnel" ), &BlinnPhong::ComputeFresnel,
 												  InParam< Float >( &p_writer, cuT( "p_lambert" ) ),
 												  InParam< Vec3 >( &p_writer, cuT( "p_direction" ) ),
 												  InParam< Vec3 >( &p_writer, cuT( "p_normal" ) ),

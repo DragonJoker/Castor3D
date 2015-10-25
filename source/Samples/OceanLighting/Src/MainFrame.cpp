@@ -373,7 +373,8 @@ namespace OceanLighting
 #else
 #	error "Yet unsupported OS"
 #endif
-			l_bReturn = m_pWindow->Initialise( l_handle );
+			Castor::Size l_sizeWnd( GetClientSize().x, GetClientSize().y );
+			l_bReturn = m_pWindow->Initialise( l_sizeWnd,  l_handle );
 		}
 
 		if ( l_bReturn )
