@@ -49,7 +49,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 		// Shader outputs
 		OUT( l_writer, Vec2, vtx_texture );
 
-		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			vtx_texture = texture;
 			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
@@ -76,7 +76,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 		// Shader outputs
 		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
 
-		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
 			LOCALE_ASSIGN( l_writer, Float,  l_fAlpha, c3d_fMatOpacity );

@@ -61,7 +61,7 @@ namespace Castor
 	static bool FreeImageInitialised = false;
 
 	Image::BinaryLoader::BinaryLoader()
-		:	Loader< Image, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
+		: Loader< Image, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 		if ( !FreeImageInitialised )
 		{
@@ -229,68 +229,68 @@ namespace Castor
 	}
 
 	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
-		:	Resource< Image >	( p_name	)
-		,	m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, &p_buffer[0], p_eBufferFormat )	)
+		: Resource< Image >( p_name )
+		, m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, &p_buffer[0], p_eBufferFormat ) )
 	{
 		CHECK_INVARIANTS();
 	}
 
 	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
-		:	Resource< Image >	( p_name	)
-		,	m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, p_pBuffer, p_eBufferFormat )	)
+		: Resource< Image >( p_name )
+		, m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, p_pBuffer, p_eBufferFormat ) )
 	{
 		CHECK_INVARIANTS();
 	}
 
 	Image::Image( String const & p_name, PxBufferBase const & p_buffer )
-		:	Resource< Image >	( p_name	)
-		,	m_pBuffer( p_buffer.clone()	)
+		: Resource< Image >( p_name )
+		, m_pBuffer( p_buffer.clone() )
 	{
 		CHECK_INVARIANTS();
 	}
 
 	Image::Image( String const & p_name, Path const & p_pathFile )
-		:	Resource< Image >	( p_name	)
-		,	m_pathFile( p_pathFile	)
+		: Resource< Image >( p_name )
+		, m_pathFile( p_pathFile )
 	{
 		Image::BinaryLoader()( *this, p_pathFile );
 	}
 
 	Image::Image( Image const & p_image )
-		:	Resource< Image >	( p_image	)
-		,	m_pathFile( p_image.m_pathFile	)
-		,	m_pBuffer( p_image.m_pBuffer->clone()	)
+		: Resource< Image >( p_image )
+		, m_pathFile( p_image.m_pathFile )
+		, m_pBuffer( p_image.m_pBuffer->clone() )
 	{
 		CHECK_INVARIANTS();
 	}
 
 	Image::Image( Image && p_image )
-		:	Resource< Image >	( std::move( p_image	) )
-		,	m_pathFile( std::move( p_image.m_pathFile	) )
-		,	m_pBuffer( std::move( p_image.m_pBuffer	) )
+		: Resource< Image >( std::move( p_image ) )
+		, m_pathFile( std::move( p_image.m_pathFile ) )
+		, m_pBuffer( std::move( p_image.m_pBuffer ) )
 	{
 		p_image.m_pathFile.clear();
 		p_image.m_pBuffer.reset();
 		CHECK_INVARIANTS();
 	}
 
-	Image & Image::operator =( Image const & p_image )
+	Image & Image::operator=( Image const & p_image )
 	{
-		Resource< Image >::operator =( p_image );
-		m_pathFile		= p_image.m_pathFile;
-		m_pBuffer		= p_image.m_pBuffer->clone();
+		Resource< Image >::operator=( p_image );
+		m_pathFile = p_image.m_pathFile;
+		m_pBuffer = p_image.m_pBuffer->clone();
 		CHECK_INVARIANTS();
 		return * this;
 	}
 
 	Image & Image::operator =( Image && p_image )
 	{
-		Resource< Image >::operator =( std::move( p_image ) );
+		Resource< Image >::operator=( std::move( p_image ) );
 
 		if ( this != & p_image )
 		{
-			m_pathFile		= std::move( p_image.m_pathFile	);
-			m_pBuffer		= std::move( p_image.m_pBuffer	);
+			m_pathFile = std::move( p_image.m_pathFile );
+			m_pBuffer = std::move( p_image.m_pBuffer );
 			p_image.m_pathFile.clear();
 			p_image.m_pBuffer.reset();
 			CHECK_INVARIANTS();
@@ -333,9 +333,9 @@ namespace Castor
 			if ( l_pImage )
 			{
 				memcpy( FreeImage_GetBits( l_pImage ), m_pBuffer->const_ptr(), m_pBuffer->size() );
-				uint32_t				l_width		= p_size.width();
-				uint32_t				l_height	= p_size.height();
-				FREE_IMAGE_COLOR_TYPE	l_type		= FreeImage_GetColorType( l_pImage );
+				uint32_t l_width = p_size.width();
+				uint32_t l_height = p_size.height();
+				FREE_IMAGE_COLOR_TYPE l_type = FreeImage_GetColorType( l_pImage );
 				FIBITMAP * l_pRescaled = FreeImage_Rescale( l_pImage, l_width, l_height, FILTER_BICUBIC );
 
 				if ( l_pRescaled )
@@ -398,7 +398,7 @@ namespace Castor
 		Point4ub l_ptComponents;
 		p_clrColour.to_bgra( l_ptComponents );
 		uint8_t const * l_pSrc = l_ptComponents.const_ptr();
-		uint8_t * l_pDst = m_pBuffer->get_at( x, y );
+		uint8_t * l_pDst = &( *m_pBuffer->get_at( x, y ) );
 		PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, GetPixelFormat(), l_pDst );
 		CHECK_INVARIANTS();
 		return * this;
@@ -408,7 +408,7 @@ namespace Castor
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() && p_pPixel );
-		uint8_t const * l_pSrc = m_pBuffer->get_at( x, y );
+		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( x, y ) );
 		uint8_t * l_pDst = p_pPixel;
 		PF::ConvertPixel( GetPixelFormat(), l_pSrc, p_eFormat, l_pDst );
 		CHECK_INVARIANTS();
@@ -419,7 +419,7 @@ namespace Castor
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() );
 		Point4ub l_ptComponents;
-		uint8_t const * l_pSrc = m_pBuffer->get_at( x, y );
+		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( x, y ) );
 		uint8_t * l_pDst = l_ptComponents.ptr();
 		PF::ConvertPixel( GetPixelFormat(), l_pSrc, ePIXEL_FORMAT_A8R8G8B8, l_pDst );
 		CHECK_INVARIANTS();
@@ -442,8 +442,8 @@ namespace Castor
 				{
 					for ( uint32_t j = 0; j < GetHeight(); ++j )
 					{
-						uint8_t const * l_pSrc = p_src.m_pBuffer->get_at( i, j );
-						uint8_t * l_pDst = m_pBuffer->get_at( i, j );
+						uint8_t const * l_pSrc = &( *p_src.m_pBuffer->get_at( i, j ) );
+						uint8_t * l_pDst = &( *m_pBuffer->get_at( i, j ) );
 						PF::ConvertPixel( GetPixelFormat(), l_pSrc, GetPixelFormat(), l_pDst );
 					}
 				}
@@ -498,10 +498,10 @@ namespace Castor
 		// Création de la sous-image à remplir
 		Image l_img( m_name + cuT( "_Sub" ) + string::to_string( l_rcRect[0] ) + cuT( "x" ) + string::to_string( l_rcRect[1] ) + cuT( ":" ) + string::to_string( l_ptSize.width() ) + cuT( "x" ) + string::to_string( l_ptSize.height() ), l_ptSize, GetPixelFormat() );
 		// Calcul de variables temporaires
-		uint8_t const *	l_pSrc			= m_pBuffer->get_at( l_rcRect.left(), l_rcRect.top() );
-		uint8_t 	*	l_pDest			= l_img.m_pBuffer->get_at( 0, 0 );
-		uint32_t 		l_uiSrcPitch	= GetWidth() * PF::GetBytesPerPixel( GetPixelFormat() );
-		uint32_t		l_uiDestPitch	= l_img.GetWidth() * PF::GetBytesPerPixel( l_img.GetPixelFormat() );
+		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( l_rcRect.left(), l_rcRect.top() ) );
+		uint8_t * l_pDest = &( *l_img.m_pBuffer->get_at( 0, 0 ) );
+		uint32_t l_uiSrcPitch = GetWidth() * PF::GetBytesPerPixel( GetPixelFormat() );
+		uint32_t l_uiDestPitch = l_img.GetWidth() * PF::GetBytesPerPixel( l_img.GetPixelFormat() );
 
 		// Copie des pixels de l'image originale dans la sous-image
 		for ( int i = l_rcRect.left(); i < l_rcRect.right(); ++i )

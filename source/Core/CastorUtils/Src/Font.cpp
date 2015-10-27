@@ -172,7 +172,6 @@ namespace Castor
 				uint32_t l_uiSize = l_size.width() * l_size.height();
 				ByteArray l_bitmap( l_uiSize );
 				uint32_t l_uiIndex = 0;
-				CASTOR_ASSERT( l_uiSize == l_size.width() * l_size.height() );
 
 				if ( l_ftBitmap.pitch < 0 )
 				{

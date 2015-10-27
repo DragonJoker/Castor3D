@@ -68,11 +68,11 @@ namespace Dx11Render
 
 		if ( l_return && m_pBlendState )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 
-			if ( l_pDeviceContext )
+			if ( l_deviceContext )
 			{
-				l_pDeviceContext->OMSetBlendState( m_pBlendState, m_blendFactors.const_ptr(), m_uiSampleMask );
+				l_deviceContext->OMSetBlendState( m_pBlendState, m_blendFactors.const_ptr(), m_uiSampleMask );
 			}
 		}
 

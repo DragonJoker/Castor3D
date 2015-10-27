@@ -1,4 +1,4 @@
-material Gold
+material "Gold"
 {
 	pass
 	{

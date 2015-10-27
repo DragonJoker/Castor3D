@@ -52,7 +52,7 @@ namespace Dx11Render
 				Castor3D::TextureBaseRPtr l_pTexture = ( *p_pValue );
 				ID3D11ShaderResourceView * l_pResourceView = NULL;
 				DxContext * l_pDxContext = static_cast< DxContext * >( p_program.GetOwner()->GetCurrentContext() );
-				ID3D11DeviceContext * l_pDeviceContext = l_pDxContext->GetDeviceContext();
+				ID3D11DeviceContext * l_deviceContext = l_pDxContext->GetDeviceContext();
 
 				if ( l_pTexture )
 				{
@@ -63,22 +63,10 @@ namespace Dx11Render
 					else
 					{
 						l_pResourceView = static_cast< DxDynamicTexture * >( l_pTexture )->GetShaderResourceView();
-
-#if DX_DEBUG_RT
-
-						ID3D11Resource * l_pResource;
-						l_pResourceView->GetResource( &l_pResource );
-						Castor::StringStream l_name;
-						l_name << Castor3D::Engine::GetEngineDirectory() << cuT( "\\DynamicTexture_" ) << ( void * )*p_pValue << cuT( "_SRV.png" );
-						D3DX11SaveTextureToFile( l_pDeviceContext, l_pResource, D3DX11_IFF_PNG, l_name.str().c_str() );
-						l_pResource->Release();
-
-#endif
-
 					}
 				}
 
-				l_pDeviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
+				l_deviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
 				l_hr = S_OK;
 			}
 			else if ( !( *p_pValue ) )
@@ -97,8 +85,8 @@ namespace Dx11Render
 			{
 				Castor3D::TextureBaseRPtr l_pTexture = ( *p_pValue );
 				ID3D11ShaderResourceView * l_pResourceView = NULL;
-				ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( p_program.GetOwner()->GetCurrentContext() )->GetDeviceContext();
-				l_pDeviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
+				ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( p_program.GetOwner()->GetCurrentContext() )->GetDeviceContext();
+				l_deviceContext->PSSetShaderResources( l_pTexture->GetIndex(), 1, &l_pResourceView );
 				l_hr = S_OK;
 			}
 			else if ( !( *p_pValue ) )

@@ -112,6 +112,8 @@ source_group( "Source Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_SOURCE_FI
 file( GLOB ${PROJECT_NAME}_FBO_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*BackBuffers*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*BackBuffers*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.hpp
@@ -119,6 +121,7 @@ file( GLOB ${PROJECT_NAME}_FBO_HEADER_FILES
 )
 file( GLOB ${PROJECT_NAME}_FBO_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/*BackBuffers*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*Attachment*.cpp
 )

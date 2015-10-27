@@ -21,12 +21,12 @@ namespace Castor3D
 		{
 			if ( m_weights[i] == 0.0 )
 			{
-				m_ids[i]     = p_uiBoneId;
+				m_ids[i] = p_uiBoneId;
 				m_weights[i] = p_rWeight;
 				l_bDone = true;
 			}
 		}
 
-		CASTOR_ASSERT( l_bDone );
+		ENSURE( l_bDone );
 	}
 }

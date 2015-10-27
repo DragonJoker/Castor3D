@@ -40,7 +40,6 @@ namespace Castor
 
 			virtual ~ZipImpl()
 			{
-				CASTOR_ASSERT( !m_zip );
 			}
 
 			virtual void Open( Path const & p_path, File::eOPEN_MODE p_mode )

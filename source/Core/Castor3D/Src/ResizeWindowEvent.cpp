@@ -18,13 +18,6 @@ namespace Castor3D
 
 	bool ResizeWindowEvent::Apply()
 	{
-		RenderTargetSPtr l_pTarget = m_window.GetRenderTarget();
-
-		if ( l_pTarget )
-		{
-			l_pTarget->Resize();
-		}
-
 		return true;
 	}
 }

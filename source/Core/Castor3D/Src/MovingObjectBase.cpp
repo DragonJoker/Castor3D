@@ -67,15 +67,15 @@ namespace Castor3D
 
 	MovingObjectBaseSPtr MovingObjectBase::Clone( MovingObjectPtrStrMap & p_map )
 	{
-		MovingObjectBaseSPtr l_pReturn = DoClone();
-		p_map.insert( std::make_pair( l_pReturn->GetName(), l_pReturn ) );
-		l_pReturn->m_mtxNodeTransform = m_mtxNodeTransform;
-		l_pReturn->m_arrayChildren.clear();
+		MovingObjectBaseSPtr l_return = DoClone();
+		p_map.insert( std::make_pair( l_return->GetName(), l_return ) );
+		l_return->m_mtxNodeTransform = m_mtxNodeTransform;
+		l_return->m_arrayChildren.clear();
 		std::for_each( m_arrayChildren.begin(), m_arrayChildren.end(), [&]( MovingObjectBaseSPtr p_pObject )
 		{
-			l_pReturn->m_arrayChildren.push_back( p_pObject->Clone( p_map ) );
+			l_return->m_arrayChildren.push_back( p_pObject->Clone( p_map ) );
 		} );
-		return l_pReturn;
+		return l_return;
 	}
 
 	Matrix4x4r MovingObjectBase::DoComputeTransform( real p_rTime )

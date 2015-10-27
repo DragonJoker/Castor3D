@@ -196,11 +196,13 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render begin function
-		 *\return		\p true if ok
+		 *\brief		Render begin function.
+		 *\remakrs		At the end of this method, the frame buffer that will receive draw calls must be bound.
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de début de rendu.
+		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
+		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API virtual bool DoBeginRender() = 0;
 		/**
@@ -223,8 +225,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render end function
+		 *\remakrs		At the end of this method, the render target frame buffer must be bound.
 		 *\~french
 		 *\brief		Fonction de fin de rendu
+		 *\remarks		A la sortie de cette méthode, le tampon d'image de la cible de rendu doit être activé.
 		 */
 		C3D_API virtual void DoEndRender() = 0;
 		/**
@@ -240,30 +244,12 @@ namespace Castor3D
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique
 		Castor::String m_name;
+		//!\~english The technique intialisation status.	\~french Le statut d'initialisation de la technique.
+		bool m_initialised;
 		//!\~english The parent render target	\~french La render target parente
 		RenderTarget * m_pRenderTarget;
 		//!\~english The	render system	\~french Le render system
 		RenderSystem * m_renderSystem;
-		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays
-		BlendStateWPtr m_wp2DBlendState;
-		//!\~english The	overlays depth stencil state	\~french L'état de profoundeur et stenxil pour les overlays
-		DepthStencilStateWPtr m_wp2DDepthStencilState;
-		//!\~english The	technique buffers size	\~french Les dimensions des tampons de la technique
-		Castor::Size m_size;
-		//!\~english The	technique blit rectangle	\~french Le rectangle de blit de la technique
-		Castor::Rectangle m_rect;
-		//!\~english The sampler used by the textures	\~french L'échantillonneur utilisé par les textures
-		SamplerSPtr m_sampler;
-		//!\~english The frame buffer	\~french Le tampon d'image
-		FrameBufferSPtr m_pFrameBuffer;
-		//!\~english The buffer receiving the color render	\~french Le tampon recevant le rendu couleur
-		DynamicTextureSPtr m_pColorBuffer;
-		//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
-		DepthStencilRenderBufferSPtr m_pDepthBuffer;
-		//!\~english The attach between colour buffer and frame buffer	\~french L'attache entre le tampon couleur et le tampon d'image
-		TextureAttachmentSPtr m_pColorAttach;
-		//!\~english The attach between depth buffer and frame buffer	\~french L'attache entre le tampon profondeur et le tampon d'image
-		RenderBufferAttachmentSPtr m_pDepthAttach;
 	};
 }
 

@@ -261,6 +261,10 @@ namespace Castor3D
 		std::array< Castor3D::BufferElementGroupSPtr, 8 * 6 > m_borderVertex;
 		//!\~english Tells if the render size has changed.	\~french Dit si les dimension du rendu ont changé.
 		bool m_sizeChanged;
+		//!\~english The	overlays blend state	\~french L'état de mélange pour les overlays
+		BlendStateWPtr m_wp2DBlendState;
+		//!\~english The	overlays depth stencil state	\~french L'état de profoundeur et stenxil pour les overlays
+		DepthStencilStateWPtr m_wp2DDepthStencilState;
 	};
 }
 

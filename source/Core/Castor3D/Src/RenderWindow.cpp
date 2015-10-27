@@ -1,5 +1,6 @@
 ﻿#include "RenderWindow.hpp"
 
+#include "BackBuffers.hpp"
 #include "BlendState.hpp"
 #include "Buffer.hpp"
 #include "Camera.hpp"
@@ -9,6 +10,7 @@
 #include "DynamicTexture.hpp"
 #include "Engine.hpp"
 #include "FrameVariable.hpp"
+#include "FunctorEvent.hpp"
 #include "InitialiseEvent.hpp"
 #include "ListenerManager.hpp"
 #include "Pipeline.hpp"
@@ -162,9 +164,10 @@ namespace Castor3D
 		, m_bInitialised( false )
 		, m_bVSync( false )
 		, m_bFullscreen( false )
-		, m_bResized( true )
 	{
-		m_wpDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		auto l_dsstate = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		l_dsstate->SetDepthTest( false );
+		m_wpDepthStencilState = l_dsstate;
 		m_wpRasteriserState = GetOwner()->GetRasteriserStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}
@@ -180,34 +183,44 @@ namespace Castor3D
 		}
 	}
 
-	bool RenderWindow::Initialise( WindowHandle const & p_handle )
+	bool RenderWindow::Initialise( Size const & p_size, WindowHandle const & p_handle )
 	{
+		m_size = p_size;
 		m_handle = p_handle;
 
 		if ( m_handle )
 		{
 			GetOwner()->GetRenderLoop().CreateContext( *this );
 			m_bInitialised = m_pContext && m_pContext->IsInitialised();
-			m_pContext->SetCurrent();
-			SceneSPtr l_pScene = GetScene();
-			RenderTargetSPtr l_pTarget = GetRenderTarget();
 
-			if ( l_pScene )
+			if ( m_bInitialised )
 			{
-				m_pContext->SetClearColour( l_pScene->GetBackgroundColour() );
-			}
-			else
-			{
-				m_pContext->SetClearColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
-			}
+				m_pContext->SetCurrent();
+				m_bInitialised = DoInitialise();
+				m_backBuffers->Initialise( GetSize(), GetPixelFormat() );
 
-			if ( l_pTarget )
-			{
-				l_pTarget->Initialise( 1 );
-			}
+				if ( m_bInitialised )
+				{
+					SceneSPtr l_pScene = GetScene();
+					RenderTargetSPtr l_pTarget = GetRenderTarget();
 
-			SetInitialised();
-			m_pContext->EndCurrent();
+					if ( l_pScene )
+					{
+						m_backBuffers->SetClearColour( l_pScene->GetBackgroundColour() );
+					}
+					else
+					{
+						m_backBuffers->SetClearColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
+					}
+
+					if ( l_pTarget )
+					{
+						l_pTarget->Initialise( 1 );
+					}
+				}
+
+				m_pContext->EndCurrent();
+			}
 		}
 
 		return m_bInitialised;
@@ -263,15 +276,22 @@ namespace Castor3D
 
 	void RenderWindow::Resize( Size const & p_size )
 	{
-		RenderTargetSPtr l_pTarget = GetRenderTarget();
-
-		if ( l_pTarget )
+		if ( m_pContext )
 		{
-			l_pTarget->SetSize( m_pContext->GetMaxSize( p_size ) );
+			m_size = m_pContext->GetMaxSize( p_size );
+		}
+		else
+		{
+			m_size = p_size;
 		}
 
-		m_bResized = true;
-		m_wpListener.lock()->PostEvent( std::make_shared< ResizeWindowEvent >( *this ) );
+		if ( m_bInitialised )
+		{
+			m_wpListener.lock()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				DoUpdateSize();
+			} ) );
+		}
 	}
 
 	void RenderWindow::SetCamera( CameraSPtr p_pCamera )
@@ -507,15 +527,7 @@ namespace Castor3D
 
 	Size RenderWindow::GetSize()const
 	{
-		Size l_return;
-		RenderTargetSPtr l_pTarget = GetRenderTarget();
-
-		if ( l_pTarget )
-		{
-			l_return = l_pTarget->GetSize();
-		}
-
-		return l_return;
+		return m_size;
 	}
 
 	String RenderWindow::DoGetName()
@@ -527,27 +539,34 @@ namespace Castor3D
 
 	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_pTexture )
 	{
-		m_pContext->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW );
-		m_wpDepthStencilState.lock()->Apply();
-		m_wpRasteriserState.lock()->Apply();
+		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
+		{
+#if !defined( NDEBUG )
+			Colour l_save = m_backBuffers->GetClearColour();
+			m_backBuffers->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_RED ) );
+#endif
+			m_backBuffers->Clear();
+#if !defined( NDEBUG )
+			m_backBuffers->SetClearColour( l_save );
+#endif
 
-#if !defined( NDEBUG )
-		Colour l_save = m_pContext->GetClearColour();
-		m_pContext->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_RED ) );
-#endif
-		m_pContext->BToBRender( GetRenderTarget()->GetSize(), p_pTexture, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-#if !defined( NDEBUG )
-		m_pContext->SetClearColour( l_save );
-#endif
+			m_wpDepthStencilState.lock()->Apply();
+			m_wpRasteriserState.lock()->Apply();
+
+			if ( m_backBuffers->HasFixedSize() )
+			{
+				m_pContext->RenderTextureToBackBuffer( m_backBuffers->GetSize(), p_pTexture );
+			}
+			else
+			{
+				m_pContext->RenderTextureToBackBuffer( m_size, p_pTexture );
+			}
+			m_backBuffers->Unbind();
+		}
 	}
 
 	void RenderWindow::DoUpdateSize()
 	{
-		RenderTargetSPtr l_pTarget = GetRenderTarget();
-
-		if ( l_pTarget )
-		{
-			l_pTarget->Resize();
-		}
+		m_backBuffers->Resize( GetSize() );
 	}
 }

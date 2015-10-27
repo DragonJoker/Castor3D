@@ -456,7 +456,7 @@ namespace Castor3D
 		 */
 		inline void SetTextureMatrix( uint32_t p_index, Castor::Matrix4x4r const & p_mtx )
 		{
-			CASTOR_ASSERT( p_index < C3D_MAX_TEXTURE_MATRICES );
+			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 			m_mtxTexture[p_index] = p_mtx;
 		}
 		/**
@@ -507,7 +507,7 @@ namespace Castor3D
 		 */
 		inline Castor::Matrix4x4r const & GetTextureMatrix( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_index < C3D_MAX_TEXTURE_MATRICES );
+			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 			return m_mtxTexture[p_index];
 		}
 

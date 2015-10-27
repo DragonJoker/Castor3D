@@ -80,7 +80,7 @@ namespace Dx11Render
 
 					if ( l_uiSize )
 					{
-						uint32_t * l_pBuffer = Lock( 0, l_uiSize, eLOCK_FLAG_WRITE_ONLY );
+						uint32_t * l_pBuffer = Lock( 0, l_uiSize, eACCESS_TYPE_WRITE );
 
 						if ( l_pBuffer )
 						{
@@ -104,8 +104,8 @@ namespace Dx11Render
 
 		if ( m_pBuffer && m_pBuffer->IsAssigned() )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
-			l_pDeviceContext->IASetIndexBuffer( m_pBufferObject, DXGI_FORMAT_R32_UINT, 0 );
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+			l_deviceContext->IASetIndexBuffer( m_pBufferObject, DXGI_FORMAT_R32_UINT, 0 );
 		}
 
 		return l_return;

@@ -167,7 +167,6 @@ namespace Castor3D
 	ShaderProgramBase::ShaderProgramBase( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_eStatus( ePROGRAM_STATUS_NOTLINKED )
-		, m_bEnabled( true )
 		, m_eLanguage( p_eLanguage )
 	{
 	}
@@ -210,57 +209,54 @@ namespace Castor3D
 		{
 			m_activeShaders.clear();
 
-			if ( GetOwner()->UseShaders() )
+			bool l_bResult = true;
+
+			for ( auto l_shader : m_pShaders )
 			{
-				bool l_bResult = true;
-
-				for ( auto l_shader : m_pShaders )
+				if ( l_shader && l_shader->HasSource() )
 				{
-					if ( l_shader && l_shader->HasSource() )
+					l_shader->DestroyProgram();
+					l_shader->CreateProgram();
+
+					if ( !l_shader->Compile() && l_shader->GetStatus() == eSHADER_STATUS_ERROR )
 					{
+						Logger::LogError( cuT( "ShaderProgram::Initialise - " ) + l_shader->GetCurrentFile() + cuT( " - COMPILER ERROR" ) );
 						l_shader->DestroyProgram();
-						l_shader->CreateProgram();
-
-						if ( !l_shader->Compile() && l_shader->GetStatus() == eSHADER_STATUS_ERROR )
-						{
-							Logger::LogError( cuT( "ShaderProgram::Initialise - " ) + l_shader->GetCurrentFile() + cuT( " - COMPILER ERROR" ) );
-							l_shader->DestroyProgram();
-							m_eStatus = ePROGRAM_STATUS_ERROR;
-							l_bResult = false;
-						}
-						else
-						{
-							l_shader->AttachTo( *this );
-							m_activeShaders.push_back( l_shader );
-						}
-					}
-				}
-
-				if ( l_bResult )
-				{
-					if ( !Link() )
-					{
-						Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
-
-						for ( auto l_shader : m_pShaders )
-						{
-							if ( l_shader )
-							{
-								l_shader->DestroyProgram();
-							}
-						}
-
 						m_eStatus = ePROGRAM_STATUS_ERROR;
+						l_bResult = false;
 					}
 					else
 					{
-						for ( auto && l_buffer : m_listFrameVariableBuffers )
-						{
-							l_buffer->Initialise( *this );
-						}
-
-						Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+						l_shader->AttachTo( *this );
+						m_activeShaders.push_back( l_shader );
 					}
+				}
+			}
+
+			if ( l_bResult )
+			{
+				if ( !Link() )
+				{
+					Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
+
+					for ( auto l_shader : m_pShaders )
+					{
+						if ( l_shader )
+						{
+							l_shader->DestroyProgram();
+						}
+					}
+
+					m_eStatus = ePROGRAM_STATUS_ERROR;
+				}
+				else
+				{
+					for ( auto && l_buffer : m_listFrameVariableBuffers )
+					{
+						l_buffer->Initialise( *this );
+					}
+
+					Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
 				}
 			}
 		}
@@ -268,12 +264,13 @@ namespace Castor3D
 
 	ShaderObjectBaseSPtr ShaderProgramBase::CreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_pReturn;
+		ShaderObjectBaseSPtr l_return;
+		REQUIRE( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT );
 
 		if ( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT )
 		{
-			l_pReturn = DoCreateObject( p_type );
-			m_pShaders[p_type] = l_pReturn;
+			l_return = DoCreateObject( p_type );
+			m_pShaders[p_type] = l_return;
 			int i = eSHADER_MODEL_1;
 
 			for ( auto && l_file : m_arrayFiles )
@@ -284,19 +281,15 @@ namespace Castor3D
 				}
 			}
 		}
-		else
-		{
-			CASTOR_ASSERT( false );
-		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	bool ShaderProgramBase::Link()
 	{
 		bool l_return = false;
 
-		if ( GetOwner()->UseShaders() && m_eStatus != ePROGRAM_STATUS_ERROR )
+		if ( m_eStatus != ePROGRAM_STATUS_ERROR )
 		{
 			if ( m_eStatus != ePROGRAM_STATUS_LINKED )
 			{
@@ -319,7 +312,7 @@ namespace Castor3D
 
 	void ShaderProgramBase::Bind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )
 	{
-		if ( GetOwner()->UseShaders() && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			for ( auto && l_shader : m_activeShaders )
 			{
@@ -337,7 +330,7 @@ namespace Castor3D
 
 	void ShaderProgramBase::Unbind()
 	{
-		if ( GetOwner()->UseShaders() && m_bEnabled && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_eStatus == ePROGRAM_STATUS_LINKED )
 		{
 			uint32_t l_index = 0;
 
@@ -533,32 +526,32 @@ namespace Castor3D
 
 	OneTextureFrameVariableSPtr ShaderProgramBase::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
 	{
-		OneTextureFrameVariableSPtr l_pReturn = FindFrameVariable( p_name, p_type );
+		OneTextureFrameVariableSPtr l_return = FindFrameVariable( p_name, p_type );
 
-		if ( !l_pReturn )
+		if ( !l_return )
 		{
-			l_pReturn = DoCreateTextureVariable( p_iNbOcc );
-			l_pReturn->SetName( p_name );
+			l_return = DoCreateTextureVariable( p_iNbOcc );
+			l_return->SetName( p_name );
 
 			if ( m_pShaders[p_type] )
 			{
-				m_pShaders[p_type]->AddFrameVariable( l_pReturn );
+				m_pShaders[p_type]->AddFrameVariable( l_return );
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	OneTextureFrameVariableSPtr ShaderProgramBase::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
 	{
-		OneTextureFrameVariableSPtr l_pReturn;
+		OneTextureFrameVariableSPtr l_return;
 
 		if ( m_pShaders[p_type] )
 		{
-			l_pReturn = m_pShaders[p_type]->FindFrameVariable( p_name );
+			l_return = m_pShaders[p_type]->FindFrameVariable( p_name );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void ShaderProgramBase::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask )

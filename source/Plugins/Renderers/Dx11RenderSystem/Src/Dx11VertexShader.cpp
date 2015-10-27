@@ -22,8 +22,8 @@ namespace Dx11Render
 
 	void DxVertexShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		l_pDeviceContext->VSSetShader( m_pVertexShader, NULL, 0 );
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		l_deviceContext->VSSetShader( m_pVertexShader, NULL, 0 );
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_VERTEX );
 
 		if ( !l_ubos.empty() )
@@ -38,14 +38,14 @@ namespace Dx11Render
 
 			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_VERTEX ) )
 			{
-				l_pDeviceContext->VSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
+				l_deviceContext->VSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
 			}
 		}
 	}
 
 	void DxVertexShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_VERTEX );
 
 		if ( !l_ubos.empty() )
@@ -53,11 +53,11 @@ namespace Dx11Render
 			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_VERTEX ) )
 			{
 				ID3D11Buffer * l_buffer = NULL;
-				l_pDeviceContext->VSSetConstantBuffers( 0, 1, &l_buffer );
+				l_deviceContext->VSSetConstantBuffers( 0, 1, &l_buffer );
 			}
 		}
 
-		l_pDeviceContext->VSSetShader( NULL, NULL, 0 );
+		l_deviceContext->VSSetShader( NULL, NULL, 0 );
 	}
 
 	void DxVertexShader::AttachTo( ShaderProgramBase & p_program )

@@ -61,7 +61,7 @@ namespace GlRender
 		 *\param[in]	p_depth		The texture depth, in case p_dimension is eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY.
 		 *\return		true on success.
 		 */
-		bool Initialise( Castor::PxBufferBaseSPtr p_buffer, Castor3D::eTEXTURE_TYPE p_dimension, uint32_t p_depth );
+		bool Initialise( Castor::PxBufferBaseSPtr p_buffer, Castor3D::eTEXTURE_TYPE p_dimension, uint32_t p_depth, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Cleans the texture and IO buffers up.
 		 */
@@ -87,11 +87,11 @@ namespace GlRender
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eLOCK_FLAG
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE
 		 *\return		The image buffer
 		 *\~french
 		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eLOCK_FLAG
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
 		 *\return		Le buffer de l'image
 		 */
 		uint8_t * Lock( uint32_t p_lock );

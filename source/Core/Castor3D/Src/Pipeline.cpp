@@ -68,48 +68,34 @@ namespace Castor3D
 
 	bool Pipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_ptResult )
 	{
-		bool l_bReturn = false;
-
-		if ( GetOwner()->UseShaders() )
-		{
-			Point4r l_ptTmp( p_ptObj[0], p_ptObj[1], p_ptObj[2], real( 1 ) );
-			l_ptTmp = GetViewMatrix() * l_ptTmp;
-			l_ptTmp = GetModelMatrix() * l_ptTmp;
-			l_ptTmp = GetProjectionMatrix() * l_ptTmp;
-			l_ptTmp /= Point4r( l_ptTmp[3], l_ptTmp[3], l_ptTmp[3], l_ptTmp[3] );
-			Point4r l_ptHalf = Point4r( 0.5, 0.5, 0.5, 0.5 );
-			l_ptTmp *= real( 0.5 );
-			l_ptTmp += l_ptHalf;
-			l_ptTmp[0] = l_ptTmp[0] * p_ptViewport[2] + p_ptViewport[0];
-			l_ptTmp[1] = l_ptTmp[1] * p_ptViewport[3] + p_ptViewport[1];
-			p_ptResult = Point3r( l_ptTmp.const_ptr() );
-			l_bReturn = true;
-		}
-
-		return l_bReturn;
+		Point4r l_ptTmp( p_ptObj[0], p_ptObj[1], p_ptObj[2], real( 1 ) );
+		l_ptTmp = GetViewMatrix() * l_ptTmp;
+		l_ptTmp = GetModelMatrix() * l_ptTmp;
+		l_ptTmp = GetProjectionMatrix() * l_ptTmp;
+		l_ptTmp /= Point4r( l_ptTmp[3], l_ptTmp[3], l_ptTmp[3], l_ptTmp[3] );
+		Point4r l_ptHalf = Point4r( 0.5, 0.5, 0.5, 0.5 );
+		l_ptTmp *= real( 0.5 );
+		l_ptTmp += l_ptHalf;
+		l_ptTmp[0] = l_ptTmp[0] * p_ptViewport[2] + p_ptViewport[0];
+		l_ptTmp[1] = l_ptTmp[1] * p_ptViewport[3] + p_ptViewport[1];
+		p_ptResult = Point3r( l_ptTmp.const_ptr() );
+		return true;
 	}
 
 	bool Pipeline::UnProject( Point3i const & p_ptWin, Point4r const & p_ptViewport, Point3r & p_ptResult )
 	{
-		bool l_bReturn = false;
-
-		if ( GetOwner()->UseShaders() )
-		{
-			Matrix4x4r l_mInverse = ( GetProjectionMatrix() * GetModelMatrix() * GetViewMatrix() ).get_inverse();
-			Point4r l_ptTmp( ( real )p_ptWin[0], ( real )p_ptWin[1], ( real )p_ptWin[2], real( 1 ) );
-			Point4r l_ptUnit( 1, 1, 1, 1 );
-			l_ptTmp[0] = ( l_ptTmp[0] - p_ptViewport[0] ) / p_ptViewport[2];
-			l_ptTmp[1] = ( l_ptTmp[1] - p_ptViewport[1] ) / p_ptViewport[3];
-			l_ptTmp *= real( 2.0 );
-			l_ptTmp -= l_ptUnit;
-			Point4r l_ptObj;
-			l_ptObj = l_mInverse.get_inverse() * l_ptTmp;
-			l_ptObj /= l_ptObj[3];
-			p_ptResult = Point3r( l_ptObj.const_ptr() );
-			l_bReturn = true;
-		}
-
-		return l_bReturn;
+		Matrix4x4r l_mInverse = ( GetProjectionMatrix() * GetModelMatrix() * GetViewMatrix() ).get_inverse();
+		Point4r l_ptTmp( ( real )p_ptWin[0], ( real )p_ptWin[1], ( real )p_ptWin[2], real( 1 ) );
+		Point4r l_ptUnit( 1, 1, 1, 1 );
+		l_ptTmp[0] = ( l_ptTmp[0] - p_ptViewport[0] ) / p_ptViewport[2];
+		l_ptTmp[1] = ( l_ptTmp[1] - p_ptViewport[1] ) / p_ptViewport[3];
+		l_ptTmp *= real( 2.0 );
+		l_ptTmp -= l_ptUnit;
+		Point4r l_ptObj;
+		l_ptObj = l_mInverse.get_inverse() * l_ptTmp;
+		l_ptObj /= l_ptObj[3];
+		p_ptResult = Point3r( l_ptObj.const_ptr() );
+		return true;
 	}
 
 	void Pipeline::ApplyProjection( FrameVariableBuffer & p_matrixBuffer )
@@ -153,7 +139,7 @@ namespace Castor3D
 
 	void Pipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer & p_matrixBuffer )
 	{
-		CASTOR_ASSERT( p_index < C3D_MAX_TEXTURE_MATRICES );
+		REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 		DoApplyMatrix( m_mtxTexture[p_index], MtxTexture[p_index], p_matrixBuffer );
 	}
 

@@ -1181,7 +1181,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMesh )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_pContext->bBool1 = false;
 	p_params[0]->Get( l_pContext->strName2 );
-	l_pContext->pMesh = l_pContext->m_pParser->GetOwner()->GetMeshManager().Find( l_pContext->strName2 );
+	auto const & l_manager = l_pContext->m_pParser->GetOwner()->GetMeshManager();
+
+	if ( l_manager.Has( l_pContext->strName2 ) )
+	{
+		l_pContext->pMesh = l_manager.Find( l_pContext->strName2 );
+	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_MESH )
 
@@ -2214,14 +2219,10 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	Engine * l_pEngine = l_pContext->m_pParser->GetOwner();
-	ImageCollection & l_imgCollection	= l_pEngine->GetImageManager();
-	ImageSPtr l_pImage;
-	StaticTextureSPtr l_pTexture;
-	Path l_path;
 
 	if ( l_pContext->pTextureUnit )
 	{
+		Path l_path;
 		p_params[0]->Get( l_path );
 
 		if ( File::FileExists( p_context->m_file->GetFilePath() / l_path ) )
@@ -2778,7 +2779,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_FontEnd )
 	if ( !l_pContext->strName.empty() && !l_pContext->path.empty() )
 	{
 		FontManager & l_fontCollection = l_pContext->m_pParser->GetOwner()->GetFontManager();
-		l_fontCollection.create_font( p_context->m_file->GetFilePath() / l_pContext->path, l_pContext->strName, l_pContext->iInt16 );
+		l_fontCollection.create( p_context->m_file->GetFilePath() / l_pContext->path, l_pContext->strName, l_pContext->iInt16 );
 	}
 }
 END_ATTRIBUTE_POP()
@@ -3060,7 +3061,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayFont )
 		String l_name;
 		p_params[0]->Get( l_name );
 
-		if ( l_fontManager.get_font( l_name ) )
+		if ( l_fontManager.get( l_name ) )
 		{
 			l_overlay->GetTextOverlay()->SetFont( l_name );
 		}

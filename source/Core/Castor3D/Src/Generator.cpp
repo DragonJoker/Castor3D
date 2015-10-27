@@ -54,7 +54,7 @@ int Generator::Thread::Entry()
 	{
 		if ( m_bEnded && m_bLaunched && !IsStopped() )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			m_bEnded = false;
 			Step();
 			m_bEnded = true;
@@ -214,15 +214,7 @@ void Generator::DoCleanup()
 
 Point2i Generator::_loadImage( String const & p_strImagePath, Image & CU_PARAM_UNUSED( p_image ) )
 {
-	ImageCollection & l_imgCollection = m_engine->GetImageManager();
-	ImageSPtr l_pImage = l_imgCollection.find( p_strImagePath );
-
-	if ( !l_pImage )
-	{
-		l_pImage = std::make_shared< Image >( p_strImagePath, p_strImagePath );
-		l_imgCollection.insert( p_strImagePath, l_pImage );
-	}
-
+	ImageSPtr l_pImage = m_engine->GetImageManager().create( p_strImagePath, p_strImagePath );
 	return Point2i( l_pImage->GetWidth(), l_pImage->GetHeight() );
 }
 

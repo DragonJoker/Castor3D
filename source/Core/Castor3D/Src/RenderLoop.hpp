@@ -86,14 +86,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted frame time.
-		 *\remark		Thread-safe.
 		 *\return		The time, in seconds.
 		 *\~french
 		 *\brief		Récupère le temps voulu pour une frame.
-		 *\remark		Thread-safe.
 		 *\return		Le temps, en secondes.
 		 */
 		C3D_API double GetFrameTime();
+		/**
+		 *\~english
+		 *\return		The wanted refresh rate.
+		 *\~french
+		 *\return		La vitesse de rafraichissement.
+		 */
+		C3D_API uint32_t GetWantedFps();
 		/**
 		 *\~english
 		 *\brief		Creates a render context.
@@ -107,15 +112,6 @@ namespace Castor3D
 		 *\param[in]	p_window	La fenêtre de rendu utilisée pour initialiser le contexte de rendu, recevra le contexte.
 		 */
 		C3D_API void CreateContext( RenderWindow & p_window );
-		/**
-		 *\~english
-		 *\brief		Initialises the debug overlays.
-		 *\param[in]	p_show	The status.
-		 *\~french
-		 *\brief		Initialise les incrustations de débogage.
-		 *\param[in]	p_show	Le statut.
-		 */
-		C3D_API void InitialiseDebugOverlays( OverlayManager & p_manager );
 		/**
 		 *\~english
 		 *\brief		Show or hide debug overlays.
@@ -144,7 +140,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Commence le rendu threadé.
 		 */
-		C3D_API void DoRenderOneFrame();
+		C3D_API void DoRenderFrame();
 		/**
 		 *\~english
 		 *\brief		Starts threaded render loop.

@@ -1,13 +1,17 @@
 #include "Dx11Context.hpp"
+
 #include "Dx11RenderSystem.hpp"
+#include "Dx11BackBuffers.hpp"
 
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
-#include <VertexBuffer.hpp>
-#include <RenderWindow.hpp>
-#include <PlatformWindowHandle.hpp>
 #include <OneFrameVariable.hpp>
+#include <PlatformWindowHandle.hpp>
+#include <RenderLoop.hpp>
+#include <RenderWindow.hpp>
 #include <Texture.hpp>
+#include <VertexBuffer.hpp>
+
 #include <Logger.hpp>
 
 #include <d3dx10math.h>
@@ -46,17 +50,15 @@ namespace ShaderModel1_2_3_4
 		cuT( "SamplerState diffuseSampler: register( s0 );\n" )
 		cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
 		cuT( "{\n" )
-		cuT( "	return diffuseTexture.Sample( diffuseSampler, p_input.TextureUV );\n" )
+		cuT( "	return float4( diffuseTexture.Sample( diffuseSampler, p_input.TextureUV ).xyz, 1.0 );\n" )
 		cuT( "}\n" );
 }
 
 namespace Dx11Render
 {
 	DxContext::DxContext( DxRenderSystem & p_renderSystem )
-		: Context( p_renderSystem )
-		, m_pSwapChain( NULL )
-		, m_pRenderTargetView( NULL )
-		, m_pDepthStencilView( NULL )
+		: Context( p_renderSystem, true )
+		, m_swapChain( NULL )
 		, m_pDeviceContext( NULL )
 	{
 	}
@@ -69,49 +71,12 @@ namespace Dx11Render
 	{
 		if ( p_bVal )
 		{
-			m_pSwapChain->SetFullscreenState( TRUE, NULL );
+			m_swapChain->SetFullscreenState( TRUE, NULL );
 		}
 		else
 		{
-			m_pSwapChain->SetFullscreenState( FALSE, NULL );
+			m_swapChain->SetFullscreenState( FALSE, NULL );
 		}
-	}
-
-	void DxContext::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents )
-	{
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-		m_viewport.SetSize( p_size );
-		Clear( p_uiComponents );
-		m_viewport.Render( GetOwner()->GetPipeline() );
-		CullFace( eFACE_NONE );
-		uint32_t l_id = p_pTexture->GetIndex();
-		p_pTexture->SetIndex( 0 );
-
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
-		{
-			m_mapDiffuse->SetValue( p_pTexture.get() );
-			FrameVariableBufferSPtr l_matrices = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
-
-			if ( l_matrices )
-			{
-				GetOwner()->GetPipeline().ApplyProjection( *l_matrices );
-			}
-
-			l_pProgram->Bind( 0, 1 );
-		}
-
-		if ( p_pTexture->BindAt( 0 ) )
-		{
-			m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, m_arrayVertex.size(), 0 );
-			p_pTexture->UnbindFrom( 0 );
-		}
-
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
-		{
-			l_pProgram->Unbind();
-		}
-
-		p_pTexture->SetIndex( l_id );
 	}
 
 	bool DxContext::DoInitialise()
@@ -124,6 +89,8 @@ namespace Dx11Render
 
 			if ( DoInitPresentParameters() == S_OK &&  l_renderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
+				m_pWindow->Resize( m_deviceParams.BufferDesc.Width, m_deviceParams.BufferDesc.Height );
+				m_size = m_pWindow->GetSize();
 				DoInitVolatileResources();
 				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" ) );
 				m_bInitialised = true;
@@ -154,75 +121,24 @@ namespace Dx11Render
 	void DxContext::DoSetCurrent()
 	{
 		static_cast< DxRenderSystem * >( GetOwner() )->GetDevice()->GetImmediateContext( &m_pDeviceContext );
-		dxTrack( static_cast< DxRenderSystem * >( GetOwner() ), m_pDeviceContext, D3D11DeviceContext );
 	}
 
 	void DxContext::DoEndCurrent()
 	{
-		ReleaseTracked( static_cast< DxRenderSystem * >( GetOwner() ), m_pDeviceContext );
 	}
 
 	void DxContext::DoSwapBuffers()
 	{
-		if ( m_pSwapChain )
+		if ( m_swapChain )
 		{
 			if ( m_pWindow->GetVSync() )
 			{
-				m_pSwapChain->Present( 1, 0 );
+				m_swapChain->Present( 1, 0 );
 			}
 			else
 			{
-				m_pSwapChain->Present( 0, 0 );
+				m_swapChain->Present( 0, 0 );
 			}
-		}
-	}
-
-	void DxContext::DoSetClearColour( Colour const & p_clrClear )
-	{
-		m_fClearColour[0] = p_clrClear.red().value();
-		m_fClearColour[1] = p_clrClear.green().value();
-		m_fClearColour[2] = p_clrClear.blue().value();
-		m_fClearColour[3] = p_clrClear.alpha().value();
-	}
-
-	void DxContext::DoClear( uint32_t p_uiTargets )
-	{
-		ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
-
-		if ( p_uiTargets & eBUFFER_COMPONENT_COLOUR )
-		{
-			l_pDeviceContext->ClearRenderTargetView( m_pRenderTargetView, m_fClearColour );
-		}
-
-		UINT l_uiFlags = 0;
-
-		if ( p_uiTargets & eBUFFER_COMPONENT_DEPTH )
-		{
-			l_uiFlags |= D3D11_CLEAR_DEPTH;
-		}
-
-		if ( p_uiTargets & eBUFFER_COMPONENT_STENCIL )
-		{
-			l_uiFlags |= D3D11_CLEAR_STENCIL;
-		}
-
-		if ( l_uiFlags )
-		{
-			l_pDeviceContext->ClearDepthStencilView( m_pDepthStencilView, l_uiFlags, 0, 0 );
-		}
-	}
-
-	void DxContext::DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget )
-	{
-		if ( p_eTarget == eFRAMEBUFFER_TARGET_DRAW )
-		{
-			if ( p_eBuffer == eBUFFER_BACK || p_eBuffer == eBUFFER_BACK_LEFT || p_eBuffer == eBUFFER_BACK_RIGHT )
-			{
-				GetDeviceContext()->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
-			}
-		}
-		else if ( p_eTarget == eFRAMEBUFFER_TARGET_READ )
-		{
 		}
 	}
 
@@ -235,71 +151,17 @@ namespace Dx11Render
 	{
 		DoSetCurrent();
 		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( GetOwner() );
-		DxContextSPtr l_pMainContext = std::static_pointer_cast< DxContext >( GetOwner()->GetMainContext() );
 		IDXGIFactory * l_factory = NULL;
-		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
-		ID3D11Texture2D * l_pDSTex = NULL;
-		ID3D11Texture2D * l_pRTTex = NULL;
+		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ), reinterpret_cast< void ** >( &l_factory ) );
 
-		if ( l_factory )
+		if ( dxCheckError( l_hr, "CreateDXGIFactory" ) && l_factory )
 		{
-			HRESULT l_hr = l_factory->CreateSwapChain( l_renderSystem->GetDevice(), &m_deviceParams, &m_pSwapChain );
-			dxTrack( l_renderSystem, m_pSwapChain, SwapChain );
+			HRESULT l_hr = l_factory->CreateSwapChain( l_renderSystem->GetDevice(), &m_deviceParams, &m_swapChain );
 			l_factory->Release();
-			bool l_bContinue = dxCheckError( l_hr, "IDXGIFactory::CreateSwapChain" );
 
-			if ( l_bContinue )
+			if ( dxCheckError( l_hr, "IDXGIFactory::CreateSwapChain" ) && m_swapChain )
 			{
-				l_hr = m_pSwapChain->GetBuffer( 0, __uuidof( ID3D11Texture2D ), reinterpret_cast< void ** >( &l_pRTTex ) );
-				l_bContinue = dxCheckError( l_hr, "IDXGISwapChain::GetBuffer" );
-			}
-
-			if ( l_bContinue )
-			{
-				l_hr = l_renderSystem->GetDevice()->CreateRenderTargetView( l_pRTTex, nullptr, &m_pRenderTargetView );
-				dxTrack( l_renderSystem, m_pRenderTargetView, ContextRTView );
-				l_bContinue = dxCheckError( l_hr, "ID3D11Device::CreateRenderTargetView" );
-				l_pRTTex->Release();
-			}
-
-			if ( l_bContinue )
-			{
-				// Create depth stencil texture
-				D3D11_TEXTURE2D_DESC l_descDepth = { 0 };
-				l_descDepth.Width = m_deviceParams.BufferDesc.Width;
-				l_descDepth.Height = m_deviceParams.BufferDesc.Height;
-				l_descDepth.MipLevels = 1;
-				l_descDepth.ArraySize = 1;
-				l_descDepth.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-				l_descDepth.SampleDesc.Count = 1;
-				l_descDepth.SampleDesc.Quality = 0;
-				l_descDepth.Usage = D3D11_USAGE_DEFAULT;
-				l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-				l_descDepth.CPUAccessFlags = 0;
-				l_descDepth.MiscFlags = 0;
-				l_hr = l_renderSystem->GetDevice()->CreateTexture2D( &l_descDepth, nullptr, &l_pDSTex );
-				l_bContinue = dxCheckError( l_hr, "ID3D11Device::CreateTexture2D" );
-			}
-
-			if ( l_bContinue )
-			{
-				// Create the depth stencil view
-				D3D11_DEPTH_STENCIL_VIEW_DESC l_descDSV = D3D11_DEPTH_STENCIL_VIEW_DESC();
-				l_descDSV.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-				l_descDSV.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
-				l_descDSV.Texture2D.MipSlice = 0;
-				l_hr = l_renderSystem->GetDevice()->CreateDepthStencilView( l_pDSTex, &l_descDSV, &m_pDepthStencilView );
-				dxTrack( l_renderSystem, m_pDepthStencilView, ContextDSView );
-				l_bContinue = dxCheckError( l_hr, "ID3D11Device::CreateDepthStencilView" );
-				l_pDSTex->Release();
-			}
-
-			if ( l_bContinue )
-			{
-				ID3D11DeviceContext * l_pDeviceContext = GetDeviceContext();
-				l_pDeviceContext->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthStencilView );
-				l_pDeviceContext->Release();
-				dxCheckError( l_hr, "ID3D11DeviceContext::OMSetRenderTargets" );
+				dxTrack( l_renderSystem, m_swapChain, SwapChain );
 			}
 		}
 
@@ -308,26 +170,23 @@ namespace Dx11Render
 
 	void DxContext::DoFreeVolatileResources()
 	{
-		if ( m_pSwapChain )
+		if ( m_swapChain )
 		{
-			m_pSwapChain->SetFullscreenState( false, NULL );
+			m_swapChain->SetFullscreenState( false, NULL );
 		}
 
-		ReleaseTracked( GetOwner(), m_pDepthStencilView );
-		ReleaseTracked( GetOwner(), m_pRenderTargetView );
-		ReleaseTracked( GetOwner(), m_pSwapChain );
+		ReleaseTracked( GetOwner(), m_swapChain );
 	}
 
 	HRESULT DxContext::DoInitPresentParameters()
 	{
-		HRESULT l_hr = E_FAIL;
 		std::memset( &m_deviceParams, 0, sizeof( m_deviceParams ) );
 		m_deviceParams.Windowed = TRUE;
 		m_deviceParams.BufferCount = 1;
-		m_deviceParams.BufferDesc.Width = ::GetSystemMetrics( SM_CXFULLSCREEN );
-		m_deviceParams.BufferDesc.Height = ::GetSystemMetrics( SM_CYFULLSCREEN );
-		m_deviceParams.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
-		m_deviceParams.BufferDesc.RefreshRate.Numerator = 60;
+		m_deviceParams.BufferDesc.Width = m_pWindow->GetSize().width();
+		m_deviceParams.BufferDesc.Height = m_pWindow->GetSize().height();
+		m_deviceParams.BufferDesc.Format = DirectX11::Get( m_pWindow->GetRenderTarget()->GetPixelFormat() );
+		m_deviceParams.BufferDesc.RefreshRate.Numerator = GetOwner()->GetOwner()->GetRenderLoop().GetWantedFps();
 		m_deviceParams.BufferDesc.RefreshRate.Denominator = 1;
 		m_deviceParams.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 		m_deviceParams.BufferDesc.Scaling = DXGI_MODE_SCALING_UNSPECIFIED;
@@ -346,8 +205,7 @@ namespace Dx11Render
 			m_deviceParams.Windowed = TRUE;
 		}
 
-		l_hr = S_OK;
-		return l_hr;
+		return S_OK;
 	}
 
 	void DxContext::DoCullFace( eFACE CU_PARAM_UNUSED( p_eCullFace ) )

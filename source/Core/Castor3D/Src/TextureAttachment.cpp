@@ -1,4 +1,6 @@
 ﻿#include "TextureAttachment.hpp"
+
+#include "DynamicTexture.hpp"
 #include "FrameBuffer.hpp"
 
 using namespace Castor;
@@ -17,22 +19,8 @@ namespace Castor3D
 	{
 	}
 
-	bool TextureAttachment::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer )
+	PxBufferBaseSPtr TextureAttachment::GetBuffer()const
 	{
-		m_layer = p_layer;
-		m_target = p_target;
-		return FrameBufferAttachment::Attach( p_attachment, p_index, p_frameBuffer );
-	}
-
-	bool TextureAttachment::Attach( eATTACHMENT_POINT p_attachment, FrameBufferSPtr p_frameBuffer, eTEXTURE_TARGET p_target, int p_layer )
-	{
-		return Attach( p_attachment, 0, p_frameBuffer, p_target, p_layer );
-	}
-
-	void TextureAttachment::Detach()
-	{
-		FrameBufferAttachment::Detach();
-		m_target = eTEXTURE_TARGET_COUNT;
-		m_layer = 0;
+		return GetTexture()->GetBuffer();
 	}
 }

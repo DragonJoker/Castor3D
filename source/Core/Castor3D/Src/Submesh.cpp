@@ -319,13 +319,13 @@ namespace Castor3D
 	BufferElementGroupSPtr Submesh::AddPoint( real x, real y, real z )
 	{
 		DoUpdateDeclaration();
-		BufferElementGroupSPtr l_pReturn;
+		BufferElementGroupSPtr l_return;
 		m_pointsData.push_back( ByteArray( m_pDeclaration->GetStride() ) );
 		uint8_t * l_pData = &( *m_pointsData.rbegin() )[0];
-		l_pReturn = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
-		Vertex::SetPosition( l_pReturn, x, y, z );
-		m_points.push_back( l_pReturn );
-		return l_pReturn;
+		l_return = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+		Vertex::SetPosition( l_return, x, y, z );
+		m_points.push_back( l_return );
+		return l_return;
 	}
 
 	BufferElementGroupSPtr Submesh::AddPoint( Point3r const & p_v )
@@ -439,21 +439,20 @@ namespace Castor3D
 
 	FaceSPtr Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
-		FaceSPtr l_pReturn;
+		FaceSPtr l_return;
 
 		if ( a < m_points.size() && b < m_points.size() && c < m_points.size() )
 		{
-			l_pReturn = std::make_shared< Face >( a, b, c );
-			m_arrayFaces.push_back( l_pReturn );
+			l_return = std::make_shared< Face >( a, b, c );
+			m_arrayFaces.push_back( l_return );
 			m_bHasNormals = false;
 		}
 		else
 		{
-			CASTOR_ASSERT( false );
 			throw ( std::range_error( "Submesh::AddFace - One or more index out of bound" ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void Submesh::AddFaceGroup( stFACE_INDICES * p_pFaces, uint32_t p_uiNbFaces )
@@ -844,7 +843,7 @@ namespace Castor3D
 			{
 				m_ptCameraPosition = p_ptCameraPosition;
 				uint32_t l_uiIdxSize = l_indices.GetSize();
-				uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, eLOCK_FLAG_WRITE_ONLY | eLOCK_FLAG_READ_ONLY );
+				uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, eACCESS_TYPE_WRITE | eACCESS_TYPE_READ );
 
 				if ( l_pIdx )
 				{

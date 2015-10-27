@@ -147,15 +147,15 @@ namespace Castor3D
 		 */
 		inline T * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
 		{
-			T * l_pReturn = NULL;
+			T * l_return = NULL;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_pReturn = l_pBuffer->Lock( p_uiOffset, p_uiCount, p_uiFlags );
+				l_return = l_pBuffer->Lock( p_uiOffset, p_uiCount, p_uiFlags );
 			}
 
-			return l_pReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -251,7 +251,7 @@ namespace Castor3D
 		 */
 		inline void SetElement( uint32_t p_index, T const & p_value )
 		{
-			CASTOR_ASSERT( p_index < m_arrayData.size() );
+			REQUIRE( p_index < m_arrayData.size() );
 			m_arrayData[p_index] = p_value;
 		}
 		/**

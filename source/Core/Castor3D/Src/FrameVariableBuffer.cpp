@@ -17,30 +17,29 @@ namespace Castor3D
 
 	FrameVariableBuffer::~FrameVariableBuffer()
 	{
-		CASTOR_ASSERT( m_mapVariables.size() == 0 && m_listVariables.size() == 0 );
 	}
 
 	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, String const & p_name, uint32_t p_uiNbOcc )
 	{
-		FrameVariableSPtr l_pReturn;
+		FrameVariableSPtr l_return;
 		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it == m_mapVariables.end() )
 		{
-			l_pReturn = DoCreateVariable( &p_program, p_type, p_name, p_uiNbOcc );
+			l_return = DoCreateVariable( &p_program, p_type, p_name, p_uiNbOcc );
 
-			if ( l_pReturn )
+			if ( l_return )
 			{
-				m_mapVariables.insert( std::make_pair( p_name, l_pReturn ) );
-				m_listVariables.push_back( l_pReturn );
+				m_mapVariables.insert( std::make_pair( p_name, l_return ) );
+				m_listVariables.push_back( l_return );
 			}
 		}
 		else
 		{
-			l_pReturn = l_it->second.lock();
+			l_return = l_it->second.lock();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void FrameVariableBuffer::RemoveVariable( String const & p_name )

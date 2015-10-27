@@ -171,6 +171,9 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_vboBuffer[1] = 0.0f;
 	m_vboBuffer[2] = 0.0f;
 	m_vboBuffer[3] = 0.0f;
+	m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+	m_pColorBuffer = m_renderSystem->CreateDynamicTexture();
+	m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
 	m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
 	m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
 	BufferElementDeclaration l_skymapDeclaration[] =
@@ -730,6 +733,9 @@ bool RenderTechnique::DoCreate()
 	m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 	m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 	m_pSamplerAnisotropicRepeat->SetMaxAnisotropy( real( 0.1 ) );
+	m_pFrameBuffer->Create( 0 );
+	m_pColorBuffer->Create();
+	m_pDepthBuffer->Create();
 	m_pTexIrradiance->Create();
 	m_pTexInscatter->Create();
 	m_pTexTransmittance->Create();
@@ -820,6 +826,9 @@ void RenderTechnique::DoDestroy()
 #else
 	m_pTexWave->Destroy();
 #endif
+	m_pColorBuffer->Destroy();
+	m_pDepthBuffer->Destroy();
+	m_pFrameBuffer->Destroy();
 }
 
 bool RenderTechnique::DoInitialise( uint32_t & p_index )
@@ -831,8 +840,11 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pSamplerAnisotropicClamp->Initialise();
 	m_pSamplerAnisotropicRepeat->Initialise();
 
+	m_pColorBuffer->SetType( eTEXTURE_TYPE_2D );
+	m_pColorBuffer->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_A8R8G8B8 );
+	m_pDepthBuffer->Initialise( m_pRenderTarget->GetSize() );
+	m_pFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
 	bool l_bReturn = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	PxBufferBaseSPtr buffer;
 
 	if ( l_bReturn )
 	{
@@ -843,7 +855,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	FILE * f = NULL;
 	m_pTexIrradiance->SetType( eTEXTURE_TYPE_2D );
-	buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
+	PxBufferBaseSPtr buffer = PxBufferBase::create( Size( 64, 16 ), ePIXEL_FORMAT_RGB16F32F );
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
 	{
@@ -950,12 +962,12 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo1->SetDrawBuffers();
-	CASTOR_ASSERT( m_fftFbo1->IsComplete() );
+	ENSURE( m_fftFbo1->IsComplete() );
 	m_fftFbo1->Unbind();
 	m_fftFbo2->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pAttachFftA, eTEXTURE_TARGET_2D );
 	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 1, m_pAttachFftB, eTEXTURE_TARGET_2D );
-	CASTOR_ASSERT( m_fftFbo2->IsComplete() );
+	ENSURE( m_fftFbo2->IsComplete() );
 	m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo2->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
 	m_fftFbo2->Unbind();
@@ -968,7 +980,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	//m_fbo->SetDrawBuffer( eATTACHMENT_POINT_COLOUR );
 	m_fbo->Attach( eATTACHMENT_POINT_COLOUR, m_pAttachSky, eTEXTURE_TARGET_2D );
-	CASTOR_ASSERT( m_fbo->IsComplete() );
+	ENSURE( m_fbo->IsComplete() );
 	m_fbo->Unbind();
 	generateMesh();
 	loadPrograms( true );
@@ -992,7 +1004,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 		m_variancesFbo->Attach( eATTACHMENT_POINT_COLOUR, l_pAttach, eTEXTURE_TARGET_3D, layer );
 	}
 
-	CASTOR_ASSERT( m_variancesFbo->IsComplete() );
+	ENSURE( m_variancesFbo->IsComplete() );
 	m_variancesFbo->Unbind();
 #else
 	generateWaves();
@@ -1027,7 +1039,7 @@ void RenderTechnique::DoCleanup()
 	m_fftFbo2->Unbind();
 #endif
 	m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_pAttachSky->Detach();
+	m_fbo->DetachAll();
 	m_fbo->Unbind();
 	m_pTexIrradiance->Cleanup();
 	m_pTexInscatter->Cleanup();
@@ -1053,6 +1065,9 @@ void RenderTechnique::DoCleanup()
 	m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	m_pFrameBuffer->DetachAll();
 	m_pFrameBuffer->Unbind();
+	m_pFrameBuffer->Cleanup();
+	m_pColorBuffer->Cleanup();
+	m_pDepthBuffer->Cleanup();
 }
 
 bool RenderTechnique::DoBeginRender()
@@ -1121,8 +1136,7 @@ bool RenderTechnique::Render( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_PA
 	m_pTexSky->Bind();
 	m_pTexSky->GenerateMipmaps();
 	m_pTexSky->Unbind();
-	m_pAttachSky->DownloadBuffer( m_pTexSky->GetBuffer() );
-	Image l_image( cuT( "Skymap" ), *m_pTexSky->GetBuffer() );
+	Image l_image( cuT( "Skymap" ), *m_pAttachSky->DownloadBuffer() );
 	Image::BinaryLoader()( const_cast< const Image & >( l_image ), cuT( "Skymap.bmp" ) );
 	return true;
 }
@@ -1624,12 +1638,12 @@ void RenderTechnique::generateWavesSpectrum()
 	}
 
 	m_pTexSpectrum_1_2->Bind();
-	uint8_t * l_pData = m_pTexSpectrum_1_2->Lock( eLOCK_FLAG_WRITE_ONLY );
+	uint8_t * l_pData = m_pTexSpectrum_1_2->Lock( eACCESS_TYPE_WRITE );
 	std::memcpy( l_pData, m_spectrum12, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 	m_pTexSpectrum_1_2->Unlock( true );
 	m_pTexSpectrum_1_2->Unbind();
 	m_pTexSpectrum_3_4->Bind();
-	l_pData = m_pTexSpectrum_3_4->Lock( eLOCK_FLAG_WRITE_ONLY );
+	l_pData = m_pTexSpectrum_3_4->Lock( eACCESS_TYPE_WRITE );
 	std::memcpy( l_pData, m_spectrum34, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 	m_pTexSpectrum_3_4->Unlock( true );
 	m_pTexSpectrum_3_4->Unbind();
@@ -1948,7 +1962,7 @@ void RenderTechnique::generateWaves()
 	float var = 4.0f;
 	m_amplitudeMax = 2.0f * var * sqrt( m_heightVariance );
 	m_pTexWave->Bind();
-	uint8_t * l_pData = m_pTexWave->Lock( eLOCK_FLAG_WRITE_ONLY );
+	uint8_t * l_pData = m_pTexWave->Lock( eACCESS_TYPE_WRITE );
 	std::memcpy( l_pData, m_pWaves, m_nbWaves * 4 * sizeof( float ) );
 	m_pTexWave->Unlock( true );
 	m_pTexWave->Unbind();

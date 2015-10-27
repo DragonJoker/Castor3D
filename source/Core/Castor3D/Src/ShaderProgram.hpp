@@ -635,8 +635,6 @@ namespace Castor3D
 		ePROGRAM_STATUS m_eStatus;
 		//!<\~english The program language	\~french Le langage du programme
 		eSHADER_LANGUAGE m_eLanguage;
-		//!<\~english Tells whether the shader is enabled or not	\~french Dit si le shader est activé ou pas
-		bool m_bEnabled;
 		//!\~english The shaders array	\~french Le tableau de shaders
 		std::array< ShaderObjectBaseSPtr, eSHADER_TYPE_COUNT > m_pShaders;
 		//!\~english The active shaders array	\~french Le tableau de shaders actifs

@@ -1,5 +1,7 @@
 ﻿#include "FrameBufferAttachment.hpp"
 
+#include "FrameBuffer.hpp"
+
 using namespace Castor;
 
 namespace Castor3D
@@ -34,5 +36,21 @@ namespace Castor3D
 		m_point = eATTACHMENT_POINT_NONE;
 		m_index = 0;
 		m_frameBuffer.reset();
+	}
+
+	PxBufferBaseSPtr FrameBufferAttachment::DownloadBuffer()
+	{
+		PxBufferBaseSPtr l_return = GetBuffer();
+		FrameBufferSPtr l_frameBuffer = GetFrameBuffer();
+
+		if ( l_return && l_frameBuffer )
+		{
+			if ( !l_frameBuffer->DownloadBuffer( GetAttachmentPoint(), GetAttachmentIndex(), l_return ) )
+			{
+				l_return.reset();
+			}
+		}
+
+		return l_return;
 	}
 }

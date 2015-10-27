@@ -522,34 +522,16 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MapDiffuseBitmap )
 	Path l_filePath = p_context->m_file->GetFileFullPath().GetPath();
 	String l_strName;
 	p_params[0]->Get( l_strName );
-	ImageSPtr l_pImage;
-	ImageCollection & l_imgCollection = l_pEngine->GetImageManager();
 	StaticTextureSPtr l_pTexture;
 	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
+	String l_strPath = l_strName;
 
-	if ( File::FileExists( l_strName ) )
+	if ( !File::FileExists( l_strPath ) )
 	{
-		l_pContext->pTextureUnit = l_pPass->AddTextureUnit();
-		l_pImage = l_imgCollection.find( l_strName );
-
-		if ( !l_pImage )
-		{
-			l_pImage = std::make_shared< Image >( l_strName, l_strName );
-			l_imgCollection.insert( l_strName, l_pImage );
-		}
+		l_strPath = l_filePath / l_strName;
 	}
-	else if ( File::FileExists( l_filePath / l_strName ) )
-	{
-		l_pContext->pTextureUnit = l_pPass->AddTextureUnit();
-		l_strName = l_filePath / l_strName;
-		l_pImage = l_imgCollection.find( l_strName );
 
-		if ( !l_pImage )
-		{
-			l_pImage = std::make_shared< Image >( l_strName, l_strName );
-			l_imgCollection.insert( l_strName, l_pImage );
-		}
-	}
+	ImageSPtr l_pImage = l_pEngine->GetImageManager().create( l_strName, l_strPath );
 
 	if ( l_pImage )
 	{

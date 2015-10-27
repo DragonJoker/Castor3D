@@ -27,11 +27,6 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxRenderBufferAttachment::DownloadBuffer( PxBufferBaseSPtr p_pBuffer )
-	{
-		return false;
-	}
-
 	bool DxRenderBufferAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
 	{
 		bool l_return = false;
@@ -41,7 +36,7 @@ namespace Dx11Render
 		ID3D11Resource * l_pDstSurface;
 		ID3D11Resource * l_pSrcSurface;
 		l_pBuffer->GetSurface( GetAttachmentPoint() )->GetResource( &l_pDstSurface );
-		m_dxRenderBuffer.GetSurface()->GetResource( &l_pSrcSurface );
+		m_dxRenderBuffer.GetResourceView()->GetResource( &l_pSrcSurface );
 
 		if ( l_pDstSurface && l_pSrcSurface )
 		{
@@ -52,8 +47,8 @@ namespace Dx11Render
 			l_box.right = l_rcSrc.right;
 			l_box.top = l_rcSrc.top;
 			l_box.bottom = l_rcSrc.bottom;
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-			l_pDeviceContext->CopySubresourceRegion( l_pDstSurface, 0, l_rcDst.left, l_rcDst.top, 0, l_pSrcSurface, 0, &l_box );
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+			l_deviceContext->CopySubresourceRegion( l_pDstSurface, 0, l_rcDst.left, l_rcDst.top, 0, l_pSrcSurface, 0, &l_box );
 			l_pDstSurface->Release();
 		}
 

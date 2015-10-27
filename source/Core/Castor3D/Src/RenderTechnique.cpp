@@ -1,12 +1,10 @@
 ﻿#include "RenderTechnique.hpp"
 
-#include "BlendStateManager.hpp"
 #include "Camera.hpp"
 #include "DynamicTexture.hpp"
 #include "Engine.hpp"
 #include "ColourRenderBuffer.hpp"
 #include "DepthStencilRenderBuffer.hpp"
-#include "DepthStencilStateManager.hpp"
 #include "FrameBuffer.hpp"
 #include "OverlayManager.hpp"
 #include "RasteriserState.hpp"
@@ -26,21 +24,8 @@ namespace Castor3D
 		, m_pRenderTarget( &p_renderTarget )
 		, m_renderSystem( p_renderSystem )
 		, m_name( p_name )
+		, m_initialised( false )
 	{
-		m_sampler = GetOwner()->GetSamplerManager().Create( cuT( "RENDER_TECHNIQUE_SAMPLER" ) );
-		m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-		m_pColorBuffer = m_renderSystem->CreateDynamicTexture();
-		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
-		m_pColorBuffer->SetRenderTarget( p_renderTarget.shared_from_this() );
-		m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
-		m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
-		m_wp2DBlendState = GetOwner()->GetBlendStateManager().Create( cuT( "RT_OVERLAY_BLEND" ) );
-		m_wp2DDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RT_OVERLAY_DS" ) );
-
-		m_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
-		m_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
-		m_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
 	}
 
 	RenderTechniqueBase::~RenderTechniqueBase()
@@ -50,9 +35,6 @@ namespace Castor3D
 	bool RenderTechniqueBase::Create()
 	{
 		bool l_return = true;
-		l_return &= m_pFrameBuffer->Create( 0 );
-		l_return &= m_pColorBuffer->Create();
-		l_return &= m_pDepthBuffer->Create();
 
 		if ( l_return )
 		{
@@ -65,101 +47,27 @@ namespace Castor3D
 	void RenderTechniqueBase::Destroy()
 	{
 		DoDestroy();
-		m_pColorBuffer->Destroy();
-		m_pDepthBuffer->Destroy();
-		m_pFrameBuffer->Destroy();
 	}
 
 	bool RenderTechniqueBase::Initialise( uint32_t & p_index )
 	{
-		bool l_return = m_sampler->Initialise();
-
-		if ( l_return )
+		if ( !m_initialised )
 		{
-			if ( m_pRenderTarget->GetCamera() )
-			{
-				m_size.set( m_pRenderTarget->GetCamera()->GetWidth(), m_pRenderTarget->GetCamera()->GetHeight() );
-			}
-
-			m_pColorBuffer->SetType( eTEXTURE_TYPE_2D );
-			m_pColorBuffer->SetImage( m_size, ePIXEL_FORMAT_A8R8G8B8 );
-			m_pColorBuffer->SetSampler( m_sampler );
-			m_size = m_pColorBuffer->GetDimensions();
-			m_rect.set( 0, 0, m_size.width(), m_size.height() );
-			l_return = m_pColorBuffer->Initialise( p_index++ );
+			m_initialised = DoInitialise( p_index );
 		}
 
-		if ( l_return )
-		{
-			l_return = m_pDepthBuffer->Initialise( m_size );
-		}
-
-		if ( l_return )
-		{
-			l_return = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-
-			if ( l_return )
-			{
-				l_return = m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pColorAttach, eTEXTURE_TARGET_2D );
-
-				if ( l_return && m_pDepthAttach->GetRenderBuffer() == m_pDepthBuffer )
-				{
-					l_return = m_pFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
-				}
-
-				m_pFrameBuffer->Unbind();
-			}
-		}
-
-		if ( l_return )
-		{
-			BlendStateSPtr l_pState = m_wp2DBlendState.lock();
-			l_pState->EnableAlphaToCoverage( false );
-			l_pState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
-			l_pState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
-			l_pState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-			l_pState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
-			l_pState->EnableBlend( true );
-			l_return = l_pState->Initialise();
-		}
-
-		if ( l_return )
-		{
-			DepthStencilStateSPtr l_pState = m_wp2DDepthStencilState.lock();
-			l_pState->SetDepthTest( false );
-			l_return = l_pState->Initialise();
-		}
-
-		if ( l_return )
-		{
-			l_return = DoInitialise( p_index );
-		}
-
-		return l_return;
+		return m_initialised;
 	}
 
 	void RenderTechniqueBase::Cleanup()
 	{
-		BlendStateSPtr l_pBlendState = m_wp2DBlendState.lock();
-		l_pBlendState->Cleanup();
-		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_pFrameBuffer->DetachAll();
-		m_pFrameBuffer->Unbind();
-		m_pColorBuffer->Cleanup();
-		m_pDepthBuffer->Cleanup();
-		m_sampler->Cleanup();
+		m_initialised = false;
+		DoCleanup();
 	}
 
 	bool RenderTechniqueBase::BeginRender()
 	{
-		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
-		{
-			return DoBeginRender();
-		}
-		else
-		{
-			return m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		}
+		return DoBeginRender();
 	}
 
 	bool RenderTechniqueBase::Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
@@ -170,25 +78,9 @@ namespace Castor3D
 
 	void RenderTechniqueBase::EndRender()
 	{
-		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
-		{
-			DoEndRender();
-		}
-
-		m_wp2DBlendState.lock()->Apply();
-		m_wp2DDepthStencilState.lock()->Apply();
-		GetOwner()->GetOverlayManager().RenderOverlays( *m_renderSystem->GetTopScene(), m_size );
-
-		if ( m_renderSystem->GetRendererType() != eRENDERER_TYPE_DIRECT3D )
-		{
-			m_pFrameBuffer->Unbind();
-			m_pFrameBuffer->RenderToBuffer( m_pRenderTarget->GetFrameBuffer(), m_pRenderTarget->GetSize(), eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH, m_pRenderTarget->GetDepthStencilState(), m_pRenderTarget->GetRasteriserState() );
-		}
-		else
-		{
-			m_pRenderTarget->GetFrameBuffer()->Unbind();
-		}
-
+		DoEndRender();
+		GetOwner()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_pRenderTarget->GetSize() );
+		m_pRenderTarget->GetFrameBuffer()->Unbind();
 		m_renderSystem->PopScene();
 	}
 
@@ -199,6 +91,7 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
+		p_camera.GetViewport().SetSize( m_pRenderTarget->GetSize() );
 		p_camera.Render();
 		p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
 		p_camera.EndRender();

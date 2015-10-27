@@ -66,7 +66,7 @@ namespace Castor3D
 
 					for ( uint32_t i = 0; i < l_size.height(); ++i )
 					{
-						CASTOR_ASSERT( l_dstLineIndex + l_size.width() <= l_bufsize );
+						ENSURE( l_dstLineIndex + l_size.width() <= l_bufsize );
 						std::memcpy( l_dstLineBuffer, &l_buffer[i * l_size.width()], l_size.width() );
 						l_dstLineBuffer += l_uiTotalWidth;
 					}
@@ -85,15 +85,6 @@ namespace Castor3D
 		m_texture->Bind();
 		m_texture->GenerateMipmaps();
 		m_texture->Unbind();
-
-#if DEBUG_BUFFERS
-
-		uint8_t * l_buffer = m_texture->Lock( eLOCK_FLAG_READ_ONLY );
-		std::memcpy( m_texture->GetBuffer()->ptr(), l_buffer, m_texture->GetBuffer()->size() );
-		const Image l_tmp( cuT( "tmp" ), *m_texture->GetBuffer() );
-		Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "Font_" ) + l_font->GetName() + cuT( ".bmp" ) );
-
-#endif
 	}
 
 	void FontTexture::Cleanup()

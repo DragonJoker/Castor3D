@@ -32,7 +32,21 @@ namespace GlRender
 		virtual ~GlRenderWindow();
 
 	private:
+		/**
+		 *\copydoc		Castor3D::RenderWindow::DoInitialise
+		 */
+		virtual bool DoInitialise();
+		/**
+		 *\copydoc		Castor3D::RenderWindow::DoCleanup
+		 */
+		virtual void DoCleanup();
+		/**
+		 *\copydoc		Castor3D::RenderWindow::DoBeginScene
+		 */
 		virtual void DoBeginScene();
+		/**
+		 *\copydoc		Castor3D::RenderWindow::DoEndScene
+		 */
 		virtual void DoEndScene();
 
 	protected:

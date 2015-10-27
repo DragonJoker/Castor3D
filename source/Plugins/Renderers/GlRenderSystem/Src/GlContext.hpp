@@ -45,8 +45,6 @@ namespace GlRender
 		virtual void DoSetCurrent();
 		virtual void DoEndCurrent();
 		virtual void DoSwapBuffers();
-		virtual void DoSetClearColour( Castor::Colour const & p_clrClear );
-		virtual void DoClear( uint32_t p_uiTargets );
 		virtual void DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
 		virtual void DoSetAlphaFunc( Castor3D::eALPHA_FUNC p_eFunc, uint8_t p_byValue );
 		virtual void DoCullFace( Castor3D::eFACE p_eCullFace );

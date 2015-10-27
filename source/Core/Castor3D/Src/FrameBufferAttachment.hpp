@@ -90,16 +90,21 @@ namespace Castor3D
 
 	public:
 		/**
+		*\~english
+		*\return		The data buffer.
+		*\~french
+		*\return		Le tampon de pixels.
+		*/
+		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const = 0;
+		/**
 		 *\~english
-		 *\brief		Downloads the render buffer data
-		 *\param[out]	p_pBuffer	Receives the buffer
-		 *\return		\p true if OK
+		 *\brief		Downloads the render buffer data.
+		 *\return		The data buffer.
 		 *\~french
-		 *\brief		Récupère les données du tampon
-		 *\param[out]	p_pBuffer	Reçoit les données
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Récupère les données du tampon de rendu.
+		 *\return		Le tampon de pixels contenant les données.
 		 */
-		C3D_API virtual bool DownloadBuffer( Castor::PxBufferBaseSPtr p_pBuffer ) = 0;
+		C3D_API Castor::PxBufferBaseSPtr DownloadBuffer();
 		/**
 		 *\~english
 		 *\brief		Blit this attachment's buffer into the given one

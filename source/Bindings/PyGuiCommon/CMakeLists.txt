@@ -1,117 +1,88 @@
 project( PyGuiCommon )
 
-find_package( PythonLibs )
-
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 7 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
-if ( PYTHONLIBS_FOUND )
-	find_package( Boost OPTIONAL_COMPONENTS python )
-	if( NOT WIN32 )
-		find_package( GTK2 )
-	else()
-		set( GTK2_FOUND TRUE )
-	endif()
-
-	#we look for wxWidgets
-	if (WIN32)
-		find_package( wxWidgets COMPONENTS stc scintilla core base aui )
-	else ()
-		find_package( wxWidgets COMPONENTS core base stc aui )
-	endif()
-
-	if ( Boost_PYTHON_FOUND AND wxWidgets_FOUND AND GTK2_FOUND )
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
-		include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
-		include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
-		include_directories( ${CMAKE_SOURCE_DIR}/Samples/GuiCommon/Src )
-		include_directories( ${Boost_INCLUDE_DIR} )
-		include_directories( ${PYTHON_INCLUDE_DIR} )
-		include_directories( ${GTK2_INCLUDE_DIRS} )
-		include_directories( ${wxWidgets_INCLUDE_DIR} )
-		
-		#Python Libs
-		set( PythonLibraries "" )
-		FOREACH( Lib ${Boost_PYTHON_LIBRARY} )
-			if ( PythonLibraries )
-				set( PythonLibraries "${PythonLibraries}|${Lib}" )
-			else ()
-				set( PythonLibraries "${Lib}" )
-			endif ()
-		ENDFOREACH()
-		FOREACH( Lib ${PYTHON_LIBRARY} )
-			if ( PythonLibraries )
-				set( PythonLibraries "${PythonLibraries}|${Lib}" )
-			else ()
-				set( PythonLibraries "${Lib}" )
-			endif ()
-		ENDFOREACH()
-		
-		#wxWidgets Libs
-		set( wxWidgetsLibraries "" )
-		foreach( Lib ${wxWidgets_LIBRARIES} )
-			if( wxWidgetsLibraries )
-				set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
-			else()
-				set( wxWidgetsLibraries "${Lib}" )
-			endif()
-		endforeach()
-
-		foreach( Lib ${GTK2_LIBRARIES} )
-			if( wxWidgetsLibraries )
-				set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
-			else()
-				set( wxWidgetsLibraries "${Lib}" )
-			endif()
-		endforeach()
-
-		#Few more configuration for wxWidgets
-		string( COMPARE EQUAL "${wxWidgets_USE_DEBUG}" "ON" IsWxDebug )
-		add_definitions(
-			-D_FILE_OFFSET_BITS=64
-			-D_LARGE_FILES
-		)
-
-		if( NOT WIN32 )
-			add_definitions(
-				-D__WXGTK__
-			)
-		endif()
-
-		if( IsWxDebug )
-			add_definitions(
-				-D__WXDEBUG__
-			)
-		endif()
-		
-		link_directories( ${Boost_LIBRARY_DIR} )
-
-		add_target( 
-			${PROJECT_NAME}
-			dll
-			"CastorUtils;Castor3D;GuiCommon"
-			"CastorUtils;Castor3D;GuiCommon;${PythonLibraries};${wxWidgetsLibraries}"
-		)
-
-    set_target_properties( ${PROJECT_NAME}
-      PROPERTIES
-        PREFIX ""
-        POSTFIX ""
-        LIBRARY_OUTPUT_NAME_DEBUG castor_wx
-        RUNTIME_OUTPUT_NAME_DEBUG castor_wx
-        ARCHIVE_OUTPUT_NAME_DEBUG castor_wx
-        LIBRARY_OUTPUT_NAME_RELEASE castor_wx
-        RUNTIME_OUTPUT_NAME_RELEASE castor_wx
-        ARCHIVE_OUTPUT_NAME_RELEASE castor_wx
-        FOLDER "Bindings"
-    )
-
-		add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
-		set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
-	else ()
-		set( Build "no (missing Boost.Python library" PARENT_SCOPE )
-	endif ()
+#we look for wxWidgets
+if (WIN32)
+	find_package( wxWidgets COMPONENTS stc scintilla core base aui )
+	set( GTK2_FOUND TRUE )
 else ()
-	set( Build "no (missing Python library)" PARENT_SCOPE )
+	find_package( wxWidgets COMPONENTS core base stc aui )
+	find_package( GTK2 )
+endif()
+
+if ( wxWidgets_FOUND AND GTK2_FOUND )
+	include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D )
+	include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils )
+	include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+	include_directories( ${CMAKE_SOURCE_DIR}/Samples/GuiCommon/Src )
+	include_directories( ${Boost_INCLUDE_DIR} )
+	include_directories( ${PYTHON_INCLUDE_DIR} )
+	include_directories( ${GTK2_INCLUDE_DIRS} )
+	include_directories( ${wxWidgets_INCLUDE_DIR} )
+
+	#wxWidgets Libs
+	set( wxWidgetsLibraries "" )
+	foreach( Lib ${wxWidgets_LIBRARIES} )
+		if( wxWidgetsLibraries )
+			set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
+		else()
+			set( wxWidgetsLibraries "${Lib}" )
+		endif()
+	endforeach()
+	foreach( Lib ${GTK2_LIBRARIES} )
+		if( wxWidgetsLibraries )
+			set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
+		else()
+			set( wxWidgetsLibraries "${Lib}" )
+		endif()
+	endforeach()
+
+	#Few more configuration for wxWidgets
+	string( COMPARE EQUAL "${wxWidgets_USE_DEBUG}" "ON" IsWxDebug )
+	add_definitions(
+		-D_FILE_OFFSET_BITS=64
+		-D_LARGE_FILES
+	)
+
+	if( NOT WIN32 )
+		add_definitions(
+			-D__WXGTK__
+		)
+	endif()
+
+	if( IsWxDebug )
+		add_definitions(
+			-D__WXDEBUG__
+		)
+	endif()
+	
+	link_directories( ${Boost_LIBRARY_DIR} )
+
+	add_target( 
+		${PROJECT_NAME}
+		dll
+		"CastorUtils;Castor3D;GuiCommon"
+		"CastorUtils;Castor3D;GuiCommon;${PythonLibraries};${wxWidgetsLibraries}"
+	)
+
+	set_target_properties( ${PROJECT_NAME}
+		PROPERTIES
+			PREFIX ""
+			POSTFIX ""
+			LIBRARY_OUTPUT_NAME_DEBUG castor_wx
+			RUNTIME_OUTPUT_NAME_DEBUG castor_wx
+			ARCHIVE_OUTPUT_NAME_DEBUG castor_wx
+			LIBRARY_OUTPUT_NAME_RELEASE castor_wx
+			RUNTIME_OUTPUT_NAME_RELEASE castor_wx
+			ARCHIVE_OUTPUT_NAME_RELEASE castor_wx
+			FOLDER "Bindings"
+	)
+
+	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
+	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+else ()
+	set( Build "no (missing Boost.Python library" PARENT_SCOPE )
 endif ()

@@ -48,9 +48,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #endif
 
 #if defined( _MSC_VER )
-#	define TPL_PIXEL_FORMAT	uint32_t
+#	if ( _MSC_VER < 1900 )
+#		define TPL_PIXEL_FORMAT	uint32_t
+#	else
+#		define TPL_PIXEL_FORMAT	Castor::ePIXEL_FORMAT
+#	endif
 #else
-#	define TPL_PIXEL_FORMAT	ePIXEL_FORMAT
+#	define TPL_PIXEL_FORMAT	Castor::ePIXEL_FORMAT
 #endif
 
 namespace Castor
@@ -150,6 +154,7 @@ namespace Castor
 	class FontManager;
 	class Glyph;
 	class Image;
+	class ImageManager;
 	class Colour;
 	template< typename T >
 	class Line2D;

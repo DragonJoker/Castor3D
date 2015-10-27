@@ -126,13 +126,14 @@ namespace CastorViewer
 
 		if ( p_pWindow )
 		{
-			if ( p_pWindow->Initialise( GuiCommon::make_WindowHandle( this ) ) )
+			Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
+
+			if ( p_pWindow->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 			{
 				Castor::Size l_sizeScreen;
-				Castor::Size l_sizeWnd = p_pWindow->GetSize();
 				Castor::System::GetScreenSize( 0, l_sizeScreen );
 				GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
-				GetParent()->SetPosition( wxPoint( std::max< int >( 0, ( l_sizeScreen.width() - l_sizeWnd.width() ) / 2 ), std::max< int >( 0, ( l_sizeScreen.height() - l_sizeWnd.height() ) / 2 ) ) );
+				GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
 				m_pListener = p_pWindow->GetListener();
 				SceneSPtr l_pScene = p_pWindow->GetScene();
 				wxDisplay l_wxDisplay;

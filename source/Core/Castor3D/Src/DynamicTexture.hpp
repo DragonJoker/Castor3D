@@ -53,41 +53,19 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~DynamicTexture();
 		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_index		The texture index
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_index		L'index de la texture
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */
-		C3D_API virtual bool Initialise( uint32_t p_index );
+		C3D_API virtual bool Initialise( uint32_t p_index, uint8_t p_cpuAccess = 0xFF, uint8_t p_gpuAccess = 0xFF );
 		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */
 		C3D_API virtual void Cleanup();
 		/**
-		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_index	The texture index
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_index	L'index de texture
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */
 		C3D_API virtual bool BindAt( uint32_t p_index );
 		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	p_index	The texture index
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 *\param[in]	p_index	L'index de texture
+		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */
 		C3D_API virtual void UnbindFrom( uint32_t p_index );
 		/**

@@ -41,8 +41,8 @@ namespace Dx11Render
 		m_viewport.MaxDepth = 1.0f;
 		m_viewport.TopLeftX = 0.0f;
 		m_viewport.TopLeftY = 0.0f;
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pipeline.GetOwner()->GetCurrentContext() )->GetDeviceContext();
-		l_pDeviceContext->RSSetViewports( 1, &m_viewport );
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_pipeline.GetOwner()->GetCurrentContext() )->GetDeviceContext();
+		l_deviceContext->RSSetViewports( 1, &m_viewport );
 	}
 
 	void DxPipelineImpl::Perspective( Matrix4x4r & p_result, Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )

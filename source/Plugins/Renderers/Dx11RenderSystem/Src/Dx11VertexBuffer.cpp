@@ -62,7 +62,7 @@ namespace Dx11Render
 
 					if ( l_uiSize )
 					{
-						uint8_t * l_pBuffer = Lock( 0, l_uiSize, eLOCK_FLAG_WRITE_ONLY );
+						uint8_t * l_pBuffer = Lock( 0, l_uiSize, eACCESS_TYPE_WRITE );
 
 						if ( l_pBuffer )
 						{
@@ -85,12 +85,12 @@ namespace Dx11Render
 
 		if ( l_return )
 		{
-			ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
+			ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_pBuffer->GetOwner()->GetRenderSystem()->GetCurrentContext() )->GetDeviceContext();
 			UINT l_uiStrides[1] = { m_declaration.GetStride() };
 			UINT l_uiOffsets[1] = { 0 };
 			ID3D11Buffer * l_pBuffers[1] = { m_pBufferObject };
-			l_pDeviceContext->IASetVertexBuffers( 0, 1, l_pBuffers, l_uiStrides, l_uiOffsets );
-			l_pDeviceContext->IASetInputLayout( m_pDxDeclaration );
+			l_deviceContext->IASetVertexBuffers( 0, 1, l_pBuffers, l_uiStrides, l_uiOffsets );
+			l_deviceContext->IASetInputLayout( m_pDxDeclaration );
 		}
 
 		return l_return;
@@ -129,7 +129,6 @@ namespace Dx11Render
 			{
 				bool l_bAdd = true;
 				D3D11_INPUT_ELEMENT_DESC l_d3dCurrentElement = { 0 };
-				l_d3dCurrentElement.Format;
 				l_d3dCurrentElement.InputSlot = l_element.m_uiStream;
 				l_d3dCurrentElement.AlignedByteOffset = l_uiOffset;//l_it->m_uiOffset;
 				l_d3dCurrentElement.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;

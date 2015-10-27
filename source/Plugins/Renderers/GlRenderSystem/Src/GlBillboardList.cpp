@@ -67,7 +67,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 		// Shader inputs
 		ATTRIBUTE( l_writer, IVec4, vertex );
 
-		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( vertex.xyz(), 1.0 );
 		} );
@@ -96,7 +96,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 		BUILTIN( l_writer, Vec4, gl_Position );
 		BUILTIN_ARRAY( l_writer, gl_PerVertex, gl_in, 8 );
 
-		l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec3, l_position, ( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).xyz() );
 			l_position.y() = c3d_v3CameraPosition.y();

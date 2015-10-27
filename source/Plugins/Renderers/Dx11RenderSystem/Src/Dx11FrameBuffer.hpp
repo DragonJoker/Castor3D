@@ -31,11 +31,8 @@ namespace Dx11Render
 		: public Castor3D::FrameBuffer
 	{
 	private:
-		typedef std::pair< ID3D11View *, ID3D11View * > SrcDstPair;
-		DECLARE_VECTOR( SrcDstPair, SrcDstPair );
 		DECLARE_MAP( Castor3D::eATTACHMENT_POINT, DxDynamicTextureSPtr, DxTexturePtrAttach );
 		DECLARE_MAP( Castor3D::eATTACHMENT_POINT, DxRenderBufferSPtr, DxBufferPtrAttach );
-		DECLARE_MAP( DxFrameBufferSPtr, SrcDstPairArray, BlitScheme );
 		DECLARE_VECTOR( ID3D11RenderTargetView *, D3D11RenderTargetView );
 
 	public:
@@ -66,21 +63,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
-		virtual bool SetDrawBuffers( BufAttachArray const & p_attaches );
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
-		 */
-		virtual bool SetReadBuffer( Castor3D::eATTACHMENT_POINT, uint8_t )
-		{
-			return true;
-		}
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::IsComplete
-		 */
-		virtual bool IsComplete()
-		{
-			return true;
-		}
+		virtual void SetDrawBuffers( AttachArray const & p_attaches );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
@@ -89,10 +72,41 @@ namespace Dx11Render
 		 *\copydoc		Castor3D::FrameBuffer::CreateDepthStencilRenderBuffer
 		 */
 		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
+		 */
+		virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
+		 */
+		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::IsComplete
+		 */
+		virtual bool IsComplete()const
+		{
+			return true;
+		}
 
 		ID3D11View * GetSurface( Castor3D::eATTACHMENT_POINT );
 
 	private:
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoInitialise
+		 */
+		virtual bool DoInitialise( Castor::Size const & p_size );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoCleanup
+		 */
+		virtual void DoCleanup();
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoUpdateClearColour
+		 */
+		virtual void DoUpdateClearColour();
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoClear
+		 */
+		virtual void DoClear( uint32_t p_targets );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
@@ -102,6 +116,10 @@ namespace Dx11Render
 		 */
 		virtual void DoUnbind();
 		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoResize
+		 */
+		virtual void DoResize( Castor::Size const & p_size );
+		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
 		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
@@ -110,6 +128,11 @@ namespace Dx11Render
 		DxRenderSystem * m_renderSystem;
 		D3D11RenderTargetViewArray m_arrayOldRenderTargets;
 		ID3D11DepthStencilView * m_pOldDepthStencilView;
+		//!\~english The texture used to retrieve color buffers.	\~french La texture utilisée pour récupérer les tampons de couleur.
+		DxDynamicTextureSPtr m_colorBuffer;
+		//!\~english The texture used to retrieve depth buffers.	\~french La texture utilisée pour récupérer les tampons de profondeur.
+		DxDynamicTextureSPtr m_depthBuffer;
+		FLOAT m_fClearColour[4];
 	};
 }
 #endif

@@ -62,7 +62,7 @@ namespace Lwo
 
 	MeshSPtr LwoImporter::DoImportMesh()
 	{
-		MeshSPtr l_pReturn;
+		MeshSPtr l_return;
 		UIntArray l_faces;
 		RealArray l_sizes;
 		String l_nodeName = m_fileName.GetFileName();
@@ -75,21 +75,21 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_pReturn = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+			l_return = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4	) );
 
 			if ( l_currentChunk.m_eId == eID_TAG_FORM && l_currentChunk.m_uiSize == m_pFile->GetLength() - 8 && std::string( l_szName ) == "LWO2" )
 			{
-				DoProcess( &l_currentChunk, l_pReturn );
-				l_pReturn->ComputeNormals();
+				DoProcess( &l_currentChunk, l_return );
+				l_return->ComputeNormals();
 			}
 
 			Logger::LogDebug( cuT( "**************************************************" ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	bool LwoImporter::DoRead( stLWO_CHUNK * p_pChunk )
@@ -1137,35 +1137,25 @@ namespace Lwo
 				switch ( l_currentSubchunk.m_eId )
 				{
 				case eID_TAG_CLIP_STIL:
-					DoRead( l_strName );
-					l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
-					Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
-					l_pathImage = string::string_cast< xchar >( l_strName );
-					l_pImage = GetOwner()->GetImageManager().find( l_pathImage );
-
-					if ( !l_pImage )
 					{
-						if ( File::FileExists( l_pathImage ) )
+						DoRead( l_strName );
+						l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
+						Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
+						l_pathImage = string::string_cast< xchar >( l_strName );
+
+						if ( !File::FileExists( l_pathImage ) )
 						{
-							l_pImage = std::make_shared< Image >( l_pathImage, l_pathImage );
-						}
-						else if ( File::FileExists( m_pFile->GetFilePath() / l_pathImage ) )
-						{
-							l_pImage = std::make_shared< Image >( l_pathImage, m_pFile->GetFilePath() / l_pathImage );
-						}
-						else if ( File::FileExists( m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage ) )
-						{
-							l_pImage = std::make_shared< Image >( l_pathImage, m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage );
+							l_pathImage = m_pFile->GetFilePath() / l_pathImage;
 						}
 
-						if ( l_pImage )
+						if ( !File::FileExists( l_pathImage ) )
 						{
-							GetOwner()->GetImageManager().insert( l_pathImage, l_pImage );
+							l_pathImage = m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage;
 						}
+
+						ImageSPtr l_pImage = GetOwner()->GetImageManager().create( string::string_cast< xchar >( l_strName ), l_pathImage );
+						break;
 					}
-
-					m_mapImages.insert( std::make_pair( l_uiIndex, l_pImage ) );
-					break;
 
 				case eID_TAG_CLIP_ANIM:
 				case eID_TAG_CLIP_XREF:

@@ -393,6 +393,12 @@ namespace OceanLighting
 #endif
 
 	private:
+		//!\~english The frame buffer	\~french Le tampon d'image
+		Castor3D::FrameBufferSPtr m_pFrameBuffer;
+		//!\~english The buffer receiving the color render	\~french Le tampon recevant le rendu couleur
+		Castor3D::DynamicTextureSPtr m_pColorBuffer;
+		//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
+		Castor3D::DepthStencilRenderBufferSPtr m_pDepthBuffer;
 		//!\~english The attach between colour buffer and frame buffer	\~french L'attache entre le buffer couleur et le frame buffer
 		Castor3D::TextureAttachmentSPtr m_pColorAttach;
 		//!\~english The attach between depth buffer and frame buffer	\~french L'attache entre le buffer profondeur et le frame buffer

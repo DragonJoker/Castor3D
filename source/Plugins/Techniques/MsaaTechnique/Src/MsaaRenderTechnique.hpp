@@ -207,10 +207,10 @@ namespace Msaa
 		Castor3D::RenderBufferAttachmentSPtr m_pMsDepthAttach;
 		//!\~english The samples count	\~french Le nombre de samples
 		int m_iSamplesCount;
-		//!\~english The bound frame buffer, depends on m_iSamplesCount	\~french Le tampon d'image lié, dépend de m_iSamplesCount
-		Castor3D::FrameBufferSPtr m_pBoundFrameBuffer;
 		//!\~english Multisampled rasteriser states	\~french Etats du rasteriser pour le multisample
 		Castor3D::RasteriserStateWPtr m_wpMsRasteriserState;
+		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique
+		Castor::Rectangle m_rect;
 	};
 }
 

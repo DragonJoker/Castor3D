@@ -198,19 +198,19 @@ namespace Castor3D
 
 	const PassSPtr Material::GetPass( uint32_t p_index )const
 	{
-		CASTOR_ASSERT( p_index < m_passes.size() );
+		REQUIRE( p_index < m_passes.size() );
 		return m_passes[p_index];
 	}
 
 	PassSPtr Material::GetPass( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_index < m_passes.size() );
+		REQUIRE( p_index < m_passes.size() );
 		return m_passes[p_index];
 	}
 
 	void Material::DestroyPass( uint32_t p_index )
 	{
-		CASTOR_ASSERT( p_index < m_passes.size() );
+		REQUIRE( p_index < m_passes.size() );
 		m_passes.erase( m_passes.begin() + p_index );
 	}
 

@@ -31,9 +31,9 @@ namespace GlRender
 
 	bool GlAttributeBase::Initialise()
 	{
-		bool l_return = !m_renderSystem->UseShaders();
+		bool l_return = false;
 
-		if ( !m_pProgram.expired() && m_pProgram.lock()->GetStatus() == ePROGRAM_STATUS_LINKED && !l_return )
+		if ( !m_pProgram.expired() && m_pProgram.lock()->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
 			m_uiAttribLocation = m_pProgram.lock()->GetAttributeLocation( m_strAttribName );
 

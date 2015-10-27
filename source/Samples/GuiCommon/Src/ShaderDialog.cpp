@@ -75,7 +75,7 @@ namespace GuiCommon
 		{
 			PassSPtr l_pass = m_pPass.lock();
 			Engine * l_engine = l_pass->GetOwner();
-			l_engine->GetWindowManager().Lock();
+			auto l_lock = Castor::make_unique_lock( l_engine->GetWindowManager() );
 			auto && l_it = l_engine->GetWindowManager().begin();
 
 			if ( l_it != l_engine->GetWindowManager().end() && l_it->second->GetRenderTarget() )
@@ -88,8 +88,6 @@ namespace GuiCommon
 					m_bOwnShader = true;
 				}
 			}
-
-			l_engine->GetWindowManager().Unlock();
 		}
 
 		PathArray l_arrayFiles;

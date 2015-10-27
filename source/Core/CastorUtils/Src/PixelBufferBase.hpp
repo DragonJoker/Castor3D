@@ -38,21 +38,22 @@ namespace Castor
 	class PxBufferBase
 	{
 	public:
+		typedef std::vector< uint8_t > px_array;
+		typedef px_array::iterator iterator;
+		typedef px_array::const_iterator const_iterator;
+
+	public:
 		/**
 		 *\~english
-		 *\brief		Constructor from another buffer
-		 *\param[in]	p_size			Buffer dimensions
-		 *\param[in]	p_ePixelFormat	Pixels format
-		 *\param[in]	p_pBuffer		Data buffer
-		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
+		 *\brief		Constructor.
+		 *\param[in]	p_size			Buffer dimensions.
+		 *\param[in]	p_ePixelFormat	Pixels format.
 		 *\~french
-		 *\brief		Constructeur à partir d'un autre buffer
-		 *\param[in]	p_size			Dimensions du buffer
-		 *\param[in]	p_ePixelFormat	Format des pixels du buffer
-		 *\param[in]	p_pBuffer		Buffer de données
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
+		 *\brief		Constructeur.
+		 *\param[in]	p_size			Dimensions du buffer.
+		 *\param[in]	p_ePixelFormat	Format des pixels du buffer.
 		 */
-		CU_API PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_ePixelFormat, uint8_t const * p_pBuffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_ePixelFormat );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -79,7 +80,7 @@ namespace Castor
 		 *\param[in]	p_pixelBuffer	L'objet PxBufferBase à copier
 		 *\return		Une référence sur cet objet PxBufferBase
 		 */
-		CU_API PxBufferBase & operator =( PxBufferBase const & p_pixelBuffer );
+		CU_API PxBufferBase & operator=( PxBufferBase const & p_pixelBuffer );
 		/**
 		 *\brief		Deletes the data buffer
 		 *\~french
@@ -178,7 +179,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données du pixel
 		 */
-		CU_API virtual uint8_t * get_at( uint32_t x, uint32_t y ) = 0;
+		CU_API virtual iterator get_at( uint32_t x, uint32_t y ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel data at given position
@@ -189,7 +190,7 @@ namespace Castor
 		 *\param[in]	x, y	The pixel position
 		 *\return		Les données constantes du pixel
 		 */
-		CU_API virtual uint8_t const * get_at( uint32_t x, uint32_t y )const = 0;
+		CU_API virtual const_iterator get_at( uint32_t x, uint32_t y )const = 0;
 		/**
 		 *\~english
 		 *\brief		Makes a vertical swap of pixels
@@ -274,7 +275,7 @@ namespace Castor
 		 *\param[in]	p_position	The pixel position
 		 *\return		Les données du pixel
 		 */
-		inline uint8_t * get_at( Position const & p_position )
+		inline iterator get_at( Position const & p_position )
 		{
 			return get_at( p_position.x(), p_position.y() );
 		}
@@ -288,7 +289,7 @@ namespace Castor
 		 *\param[in]	p_position	The pixel position
 		 *\return		Les données constantes du pixel
 		 */
-		inline uint8_t const * get_at( Position const & p_position )const
+		inline const_iterator get_at( Position const & p_position )const
 		{
 			return get_at( p_position.x(), p_position.y() );
 		}
@@ -317,7 +318,7 @@ namespace Castor
 		//!\~english Buffer dimensions	\~french Dimensions du buffer
 		Size m_size;
 		//!\~english Buffer data	\~french Données du buffer
-		uint8_t * m_pBuffer;
+		px_array m_pBuffer;
 	};
 }
 

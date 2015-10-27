@@ -73,8 +73,6 @@ namespace Castor
 			 *\param[in]		p_file		Le fichier source.
 			 */
 			CU_API virtual bool operator()( FontManager & p_manager, BinaryFile & p_file );
-
-		private:
 		};
 
 		DECLARE_MAP( Castor::String, Castor::Path, PathName );
@@ -93,7 +91,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		CU_API virtual ~FontManager();
+		CU_API ~FontManager();
 		/**
 		 *\~english
 		 *\brief		Creates a font.
@@ -110,7 +108,7 @@ namespace Castor
 		 *\param[in]	p_height	La précision de la police.
 		 *\return		La police créée (ou récupérée).
 		 */
-		CU_API FontSPtr create_font( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height );
+		CU_API FontSPtr create( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Retrieves a font.
@@ -121,7 +119,7 @@ namespace Castor
 		 *\param[in]	p_name	Le nom de la police.
 		 *\return		La police, nullptr si non trouvée.
 		 */
-		CU_API FontSPtr get_font( Castor::String const & p_name );
+		CU_API FontSPtr get( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Clears the collection and file paths.
@@ -129,6 +127,12 @@ namespace Castor
 		 *\brief		Nettoie la collection et les chemins d'accès aux fichiers.
 		 */
 		CU_API void clear();
+
+	public:
+		using Collection< Font, String >::begin;
+		using Collection< Font, String >::end;
+		using Collection< Font, String >::lock;
+		using Collection< Font, String >::unlock;
 
 	protected:
 		//!\~english The font files paths sorted by <file_name>.<file_extension>	\~french Les fichiers des polices, triés par <file_name>.<file_extension>

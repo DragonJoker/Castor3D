@@ -885,17 +885,19 @@ namespace Castor3D
 
 	/*!
 	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/10/2015
 	\~english
-	\brief		Buffer lock modes enumeration
+	\brief		Access types enumeration.
 	\~french
-	\brief		Enumération des modes de lock de buffer
+	\brief		Enumération des types d'accès.
 	*/
-	typedef enum eLOCK_FLAG
-	CASTOR_TYPE( uint32_t )
+	typedef enum eACCESS_TYPE
+	CASTOR_TYPE( uint8_t )
 	{
-		eLOCK_FLAG_READ_ONLY = 1 << 0,
-		   eLOCK_FLAG_WRITE_ONLY = 1 << 1,
-	}	eLOCK_FLAG;
+		eACCESS_TYPE_READ = 1 << 0,		//!< Read access type.
+		eACCESS_TYPE_WRITE = 1 << 1,	//!< Write access type.
+	}	eACCESS_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
 	\see		eBUFFER_ACCESS_NATURE
@@ -1903,6 +1905,7 @@ namespace Castor3D
 	class RenderBufferAttachment;
 	class TextureAttachment;
 	class FrameBuffer;
+	class BackBuffers;
 	class RenderTechniqueBase;
 	class RenderWindow;		//!< The render window handler class
 	class IWindowHandle;
@@ -1932,6 +1935,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( RenderBufferAttachment );
 	DECLARE_SMART_PTR( TextureAttachment );
 	DECLARE_SMART_PTR( FrameBuffer );
+	DECLARE_SMART_PTR( BackBuffers );
 	DECLARE_SMART_PTR( RenderTechniqueBase );
 	DECLARE_SMART_PTR( PostEffect );
 	DECLARE_SMART_PTR( Engine );
@@ -1961,8 +1965,6 @@ namespace Castor3D
 	class AnimationManager;
 	class TargetManager;
 	class ListenerManager;
-
-	DECLARE_COLLECTION( Castor::Image, Castor::String, Image );
 
 	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( ShaderManager );

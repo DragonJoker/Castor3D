@@ -282,7 +282,7 @@ namespace GlRender
 		//***********************************************************************************************
 
 		template< typename RetType, typename FuncType, typename ... Params >
-		inline void GlslWriter::Implement_Function( Castor::String const & p_name, FuncType p_function, Params && ... p_params )
+		inline void GlslWriter::ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params )
 		{
 			WriteFunctionHeader< RetType >( *this, p_name, p_params... );
 			{
@@ -666,7 +666,7 @@ namespace GlRender
 		template< typename LightingModel >
 		void Lighting< LightingModel >::Declare_GetLight( GlslWriter & p_writer )
 		{
-			p_writer.Implement_Function< Light >( cuT( "GetLight" ), &GLSL::GetLight, Int( &p_writer, cuT( "p_iIndex" ) ) );
+			p_writer.ImplementFunction< Light >( cuT( "GetLight" ), &GLSL::GetLight, Int( &p_writer, cuT( "p_iIndex" ) ) );
 		}
 
 		template< typename LightingModel >

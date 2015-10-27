@@ -22,7 +22,7 @@ using namespace Castor3D;
 namespace GlRender
 {
 	GlContext::GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl )
-		: Context( p_renderSystem )
+		: Context( p_renderSystem, false )
 		, m_pGlRenderSystem( &p_renderSystem )
 		, m_gl( p_gl )
 	{
@@ -69,7 +69,7 @@ namespace GlRender
 				// Shader outputs
 				OUT( l_writer, Vec2, vtx_texture );
 
-				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
 					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
@@ -89,9 +89,9 @@ namespace GlRender
 				// Shader outputs
 				LAYOUT( l_writer, Vec4, plx_v4FragColor );
 
-				l_writer.Implement_Function< void >( cuT( "main" ), [&]()
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					plx_v4FragColor = texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) );
+					plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
 				} );
 				l_strPxlShader = l_writer.Finalise();
 			}
@@ -126,17 +126,6 @@ namespace GlRender
 	void GlContext::DoSwapBuffers()
 	{
 		GetImpl()->SwapBuffers();
-	}
-
-	void GlContext::DoSetClearColour( Colour const & p_clrClear )
-	{
-		uint8_t l_r, l_g, l_b, l_a;
-		m_gl.ClearColor( p_clrClear.red().convert_to( l_r ), p_clrClear.green().convert_to( l_g ), p_clrClear.blue().convert_to( l_b ), p_clrClear.alpha().convert_to( l_a ) );
-	}
-
-	void GlContext::DoClear( uint32_t p_uiTargets )
-	{
-		m_gl.Clear( m_gl.GetComponents( p_uiTargets ) );
 	}
 
 	void GlContext::DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget )

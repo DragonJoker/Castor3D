@@ -29,9 +29,9 @@ namespace Castor
 	{
 	}
 
-	FontSPtr FontManager::create_font( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height )
+	FontSPtr FontManager::create( Castor::Path const & p_path, Castor::String const & p_name, uint32_t p_height )
 	{
-		Collection< Font, String >::lock();
+		auto l_lock = make_unique_lock( *this );
 		FontSPtr l_return;
 
 		if ( Collection< Font, String >::has( p_name ) )
@@ -69,13 +69,12 @@ namespace Castor
 			}
 		}
 
-		Collection< Font, String >::unlock();
 		return l_return;
 	}
 
-	FontSPtr FontManager::get_font( Castor::String const & p_name )
+	FontSPtr FontManager::get( Castor::String const & p_name )
 	{
-		Collection< Font, String >::lock();
+		auto l_lock = make_unique_lock( *this );
 		FontSPtr l_return = Collection< Font, String >::find( p_name );
 
 		if ( !l_return )
@@ -83,7 +82,6 @@ namespace Castor
 			Logger::LogWarning( cuT( "Trying to retrieve a non existing font : " ) + p_name );
 		}
 
-		Collection< Font, String >::unlock();
 		return l_return;
 	}
 

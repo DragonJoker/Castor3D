@@ -183,15 +183,6 @@ namespace Castor3D
 		C3D_API virtual ~RenderTarget();
 		/**
 		 *\~english
-		 *\brief		Main render function
-		 *\param[in]	p_displayMode	Information about the draw type (triangles, lines, ...)
-		 *\~french
-		 *\brief		Fonction de rendu
-		 *\param[in]	p_displayMode	Mode de rendu
-		 */
-		C3D_API virtual void Render() {}
-		/**
-		 *\~english
 		 *\brief		Renders one frame
 		 *\param[in]	p_dFrameTime		The time elapsed since the last frame was rendered
 		 *\~english
@@ -219,20 +210,15 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Sets the target dimensions
-		 *\param[in]	p_size	The new dimensions
+		 *\brief		Sets the target dimensions.
+		 *\remarks		This method must be called before initialisation, otherwise it will have no effect.
+		 *\param[in]	p_size	The new dimensions.
 		 *\~english
-		 *\brief		Définit les dimensions la cible
-		 *\param[in]	p_size	Les nouvelles dimensions
+		 *\brief		Définit les dimensions la cible.
+		 *\remarks		Cette méthode doit être appelée avant l'initialisation, sinon elle n'aura aucun effet.
+		 *\param[in]	p_size	Les nouvelles dimensions.
 		 */
 		C3D_API void SetSize( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Updates the target dimensions on GPU side
-		 *\~french
-		 *\brief		Met à jour les dimensions de la cible du côté GPU
-		 */
-		C3D_API void Resize();
 		/**
 		 *\~english
 		 *\brief		Creates a dynamic texture
@@ -307,13 +293,6 @@ namespace Castor3D
 		 *\param[in]	p_rIod	La distance inter oculaire
 		 */
 		C3D_API void SetIntraOcularDistance( real p_rIod );
-		/**
-		 *\~english
-		 *\brief		Clears the scene buffers
-		 *\~french
-		 *\brief		Nettoie les buffers de scène
-		 */
-		C3D_API virtual void Clear() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer

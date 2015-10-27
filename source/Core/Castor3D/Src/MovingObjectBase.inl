@@ -3,27 +3,27 @@
 	template< class KeyFrameType >
 	std::shared_ptr< KeyFrameType > MovingObjectBase::DoAddKeyFrame( real p_from, std::map< real, std::shared_ptr< KeyFrameType > > & p_map )
 	{
-		std::shared_ptr< KeyFrameType > l_pReturn;
+		std::shared_ptr< KeyFrameType > l_return;
 		typename std::map< real, std::shared_ptr< KeyFrameType > >::iterator l_it = p_map.find( p_from );
 
 		if ( l_it != p_map.end() )
 		{
-			l_pReturn = l_it->second;
+			l_return = l_it->second;
 		}
 
-		if ( !l_pReturn )
+		if ( !l_return )
 		{
 			if ( p_from > m_rLength )
 			{
 				m_rLength = p_from;
 			}
 
-			l_pReturn = std::make_shared< KeyFrameType >();
-			l_pReturn->SetTimeIndex( p_from );
-			p_map.insert( std::make_pair( p_from, l_pReturn ) );
+			l_return = std::make_shared< KeyFrameType >();
+			l_return->SetTimeIndex( p_from );
+			p_map.insert( std::make_pair( p_from, l_return ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	template< class KeyFrameType >

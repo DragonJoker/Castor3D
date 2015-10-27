@@ -23,8 +23,8 @@ namespace Dx11Render
 
 	void DxFragmentShader::DoBind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		l_pDeviceContext->PSSetShader( m_pPixelShader, NULL, 0 );
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		l_deviceContext->PSSetShader( m_pPixelShader, NULL, 0 );
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
 
 		if ( !l_ubos.empty() )
@@ -39,14 +39,14 @@ namespace Dx11Render
 
 			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_PIXEL ) )
 			{
-				l_pDeviceContext->PSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
+				l_deviceContext->PSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
 			}
 		}
 	}
 
 	void DxFragmentShader::DoUnbind()
 	{
-		ID3D11DeviceContext * l_pDeviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
+		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_PIXEL );
 
 		if ( !l_ubos.empty() )
@@ -54,11 +54,11 @@ namespace Dx11Render
 			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_PIXEL ) )
 			{
 				ID3D11Buffer * l_buffer = NULL;
-				l_pDeviceContext->PSSetConstantBuffers( 0, 1, &l_buffer );
+				l_deviceContext->PSSetConstantBuffers( 0, 1, &l_buffer );
 			}
 		}
 
-		l_pDeviceContext->PSSetShader( NULL, NULL, 0 );
+		l_deviceContext->PSSetShader( NULL, NULL, 0 );
 	}
 
 	void DxFragmentShader::AttachTo( ShaderProgramBase & p_program )

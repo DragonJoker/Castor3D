@@ -30,8 +30,8 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		:	Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-		,	m_tabs( p_tabs )
+		: Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		, m_tabs( p_tabs )
 	{
 	}
 
@@ -92,7 +92,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	RenderTarget::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< RenderTarget >( p_path )
+		: Castor3D::BinaryParser< RenderTarget >( p_path )
 	{
 	}
 
@@ -286,7 +286,7 @@ namespace Castor3D
 		m_pColorAttach = m_renderTarget.CreateAttachment( m_pColorTexture );
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
 		m_pDepthAttach = m_renderTarget.CreateAttachment( m_pDepthBuffer );
-		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName );
+		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_uiIndex ) );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
 		m_pColorTexture->SetSampler( l_pSampler );
@@ -317,7 +317,8 @@ namespace Castor3D
 		m_pColorTexture->Initialise( p_index );
 		m_pDepthBuffer->Create();
 		m_pDepthBuffer->Initialise( l_size );
-
+		m_pFrameBuffer->Initialise( l_size );
+		
 		if ( m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
 			m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
@@ -334,6 +335,7 @@ namespace Castor3D
 		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 		m_pFrameBuffer->DetachAll();
 		m_pFrameBuffer->Unbind();
+		m_pFrameBuffer->Cleanup();
 		m_pColorTexture->Cleanup();
 		m_pDepthBuffer->Cleanup();
 	}
@@ -370,53 +372,59 @@ namespace Castor3D
 
 	void RenderTarget::Initialise( uint32_t p_index )
 	{
-		m_fbLeftEye.Create();
-		m_fbRightEye.Create();
-
-		if ( !m_pRenderTechnique )
+		if ( !m_bInitialised )
 		{
-			Parameters l_params;
+			m_fbLeftEye.Create();
+			m_fbRightEye.Create();
 
-			if ( m_strTechniqueName == cuT( "msaa" ) )
+			if ( !m_pRenderTechnique )
 			{
-				m_bMultisampling = true;
-				l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
-			}
-			else if ( m_strTechniqueName == cuT( "ssaa" ) )
-			{
-				l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
+				Parameters l_params;
+
+				if ( m_strTechniqueName == cuT( "msaa" ) )
+				{
+					m_bMultisampling = true;
+					l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
+				}
+				else if ( m_strTechniqueName == cuT( "ssaa" ) )
+				{
+					l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
+				}
+
+				try
+				{
+					m_pRenderTechnique = GetOwner()->CreateTechnique( m_strTechniqueName, *this, l_params );
+				}
+				catch ( Exception & p_exc )
+				{
+					Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+					throw;
+				}
 			}
 
-			try
-			{
-				m_pRenderTechnique = GetOwner()->CreateTechnique( m_strTechniqueName, *this, l_params );
-			}
-			catch( Exception & p_exc )
-			{
-				Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
-				throw;
-			}
+			m_fbLeftEye.Initialise( p_index, m_size );
+			m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
+			m_fbRightEye.Initialise( p_index, m_size );
+			m_pRenderTechnique->Create();
+			uint32_t l_index = p_index;
+			m_pRenderTechnique->Initialise( l_index );
+			m_bInitialised = true;
 		}
-
-		m_fbLeftEye.Initialise( p_index, m_size );
-		m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
-		m_fbRightEye.Initialise( p_index, m_size );
-		m_pRenderTechnique->Create();
-		uint32_t l_index = p_index;
-		m_pRenderTechnique->Initialise( l_index );
-		m_bInitialised = true;
 	}
 
 	void RenderTarget::Cleanup()
 	{
-		m_bInitialised = false;
-		m_pRenderTechnique->Cleanup();
-		m_fbLeftEye.Cleanup();
-		m_fbRightEye.Cleanup();
-		m_pRenderTechnique->Destroy();
-		m_fbLeftEye.Destroy();
-		m_fbRightEye.Destroy();
-		m_pRenderTechnique.reset();
+		if ( m_bInitialised )
+		{
+			m_bInitialised = false;
+			m_pRenderTechnique->Cleanup();
+			m_fbLeftEye.Cleanup();
+			m_fbRightEye.Cleanup();
+			m_pRenderTechnique->Destroy();
+			m_fbLeftEye.Destroy();
+			m_fbRightEye.Destroy();
+			m_pRenderTechnique.reset();
+		}
 	}
 
 	void RenderTarget::Render( double p_dFrameTime )
@@ -568,12 +576,6 @@ namespace Castor3D
 		m_size = p_size;
 	}
 
-	void RenderTarget::Resize()
-	{
-		m_fbLeftEye.m_pFrameBuffer->Resize( m_size );
-		m_fbRightEye.m_pFrameBuffer->Resize( m_size );
-	}
-
 	void RenderTarget::SetTechnique( Castor::String const & p_name )
 	{
 		m_strTechniqueName = p_name;
@@ -584,15 +586,26 @@ namespace Castor3D
 	{
 		m_pCurrentFrameBuffer = p_fb.m_pFrameBuffer;
 		m_pCurrentCamera = p_pCamera;
-		Clear();
+		SceneSPtr l_scene = GetScene();
 
-		if ( m_pRenderTechnique->BeginRender() )
+		if ( l_scene )
 		{
-			SceneSPtr l_pScene = GetScene();
-			GetOwner()->GetRenderSystem()->GetCurrentContext()->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-			l_pScene->RenderBackground( *p_pCamera );
-			m_pRenderTechnique->Render( *l_pScene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
-			m_pRenderTechnique->EndRender();
+			p_fb.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
+
+			if ( m_pRenderTechnique->BeginRender() )
+			{
+				p_fb.m_pFrameBuffer->Clear();
+#if !defined( NDEBUG )
+				Colour l_save = p_fb.m_pFrameBuffer->GetClearColour();
+				p_fb.m_pFrameBuffer->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
+#endif
+				l_scene->RenderBackground( m_size );
+#if !defined( NDEBUG )
+				p_fb.m_pFrameBuffer->SetClearColour( l_save );
+#endif
+				m_pRenderTechnique->Render( *l_scene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
+				m_pRenderTechnique->EndRender();
+			}
 		}
 
 		m_pCurrentFrameBuffer.reset();
@@ -600,9 +613,9 @@ namespace Castor3D
 
 #if DEBUG_BUFFERS
 
-		p_fb.m_pColorAttach->DownloadBuffer( p_fb.m_pColorTexture->GetBuffer() );
+		p_fb.m_pColorAttach->DownloadBuffer();
 		const Image l_tmp( cuT( "tmp" ), *p_fb.m_pColorTexture->GetBuffer() );
-		Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".bmp" ) );
+		Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".png" ) );
 
 #endif
 

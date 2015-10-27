@@ -24,41 +24,20 @@ DxRenderTarget::~DxRenderTarget()
 {
 }
 
-void DxRenderTarget::Clear()
-{
-	DxContextRPtr l_pContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() );
-	ID3D11DeviceContext * l_pDeviceContext = l_pContext->GetDeviceContext();
-	SceneSPtr l_scene = GetScene();
-
-	// Clear the back buffer.
-	if ( l_scene )
-	{
-		l_pDeviceContext->ClearRenderTargetView( l_pContext->GetRenderTargetView(), l_scene->GetBackgroundColour().const_ptr() );
-	}
-	else
-	{
-		float l_fColour[4] = { 0.5, 0.5, 0.5, 1.0 };
-		l_pDeviceContext->ClearRenderTargetView( l_pContext->GetRenderTargetView(), l_fColour );
-	}
-
-	// Clear the depth buffer.
-	l_pDeviceContext->ClearDepthStencilView( l_pContext->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f,  0 );
-}
-
 RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
 {
-	RenderBufferAttachmentSPtr l_pReturn;
+	RenderBufferAttachmentSPtr l_return;
 
 	if ( p_pRenderBuffer->GetComponent() == eBUFFER_COMPONENT_COLOUR )
 	{
-		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_pRenderBuffer ) );
+		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_pRenderBuffer ) );
 	}
 	else
 	{
-		l_pReturn = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_pRenderBuffer ) );
+		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_pRenderBuffer ) );
 	}
 
-	return l_pReturn;
+	return l_return;
 }
 
 TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const

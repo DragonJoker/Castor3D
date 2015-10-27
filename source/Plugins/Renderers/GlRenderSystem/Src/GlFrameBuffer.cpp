@@ -44,7 +44,7 @@ namespace GlRender
 		}
 	}
 
-	bool GlFrameBuffer::SetDrawBuffers( BufAttachArray const & p_attaches )
+	void GlFrameBuffer::SetDrawBuffers( AttachArray const & p_attaches )
 	{
 		bool l_return = false;
 
@@ -63,16 +63,12 @@ namespace GlRender
 				}
 			}
 
-			l_return = m_gl.DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
+			m_gl.DrawBuffers( int( l_arrayAttaches.size() ), &l_arrayAttaches[0] );
 		}
-
-		return l_return;
 	}
 
-	bool GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
+	void GlFrameBuffer::SetReadBuffer( eATTACHMENT_POINT p_eAttach, uint8_t p_index )
 	{
-		bool l_return = false;
-
 		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [p_eAttach]( FrameBufferAttachmentSPtr p_attach )
 		{
 			return p_attach->GetAttachmentPoint() == p_eAttach;
@@ -80,15 +76,39 @@ namespace GlRender
 
 		if ( l_it != m_attaches.end() )
 		{
-			l_return = m_gl.ReadBuffer( m_gl.Get( m_gl.Get( p_eAttach ) ) );
+			m_gl.ReadBuffer( m_gl.Get( m_gl.Get( p_eAttach ) ) );
+		}
+	}
+
+	bool GlFrameBuffer::IsComplete()const
+	{
+		return eGL_FRAMEBUFFER_STATUS( m_gl.CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE_DEFAULT ) ) == eGL_FRAMEBUFFER_COMPLETE;
+	}
+
+	bool GlFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
+	{
+		bool l_return = m_gl.HasFbo();
+		auto l_mode = m_gl.Get( eFRAMEBUFFER_TARGET_READ );
+
+		if ( l_return )
+		{
+			l_return = m_gl.BindFramebuffer( l_mode, m_uiGlName );
+		}
+
+		if ( l_return )
+		{
+			l_return = m_gl.ReadBuffer( m_gl.Get( eGL_TEXTURE_ATTACHMENT( m_gl.Get( p_point ) + p_index ) ) );
+
+			if ( l_return )
+			{
+				OpenGl::PixelFmt l_pxFmt = m_gl.Get( p_buffer->format() );
+				l_return = m_gl.ReadPixels( Position(), p_buffer->dimensions(), l_pxFmt.Format, l_pxFmt.Type, p_buffer->ptr() );
+			}
+
+			m_gl.BindFramebuffer( l_mode, 0 );
 		}
 
 		return l_return;
-	}
-
-	bool GlFrameBuffer::IsComplete()
-	{
-		return eGL_FRAMEBUFFER_STATUS( m_gl.CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE_DEFAULT ) ) == eGL_FRAMEBUFFER_COMPLETE;
 	}
 
 	ColourRenderBufferSPtr GlFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
@@ -99,6 +119,16 @@ namespace GlRender
 	DepthStencilRenderBufferSPtr GlFrameBuffer::CreateDepthStencilRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
 	{
 		return std::make_shared< GlDepthStencilRenderBuffer >( m_gl, p_ePixelFormat );
+	}
+
+	void GlFrameBuffer::DoUpdateClearColour()
+	{
+		m_gl.ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
+	}
+
+	void GlFrameBuffer::DoClear( uint32_t p_uiTargets )
+	{
+		m_gl.Clear( m_gl.GetComponents( p_uiTargets ) );
 	}
 
 	bool GlFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_eTarget )

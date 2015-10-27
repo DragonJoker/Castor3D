@@ -211,7 +211,7 @@ namespace GlRender
 			C3D_Gl_API Vec4 TexelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
 			C3D_Gl_API Vec4 TexelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );
 
-			template< typename RetType, typename FuncType, typename ... Params > inline void Implement_Function( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
+			template< typename RetType, typename FuncType, typename ... Params > inline void ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params );
 			template< typename RetType > void Return( RetType const & p_return );
 			template< typename ExprType > ExprType Paren( ExprType const p_expr );
 			template< typename T > inline T Cast( Type const & p_from );

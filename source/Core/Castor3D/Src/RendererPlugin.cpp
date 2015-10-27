@@ -71,14 +71,14 @@ namespace Castor3D
 
 	RenderSystem * RendererPlugin::CreateRenderSystem( Engine * p_engine )
 	{
-		RenderSystem * l_pReturn = NULL;
+		RenderSystem * l_return = NULL;
 
 		if ( m_pfnCreateRenderSystem )
 		{
-			l_pReturn = m_pfnCreateRenderSystem( p_engine );
+			l_return = m_pfnCreateRenderSystem( p_engine );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void RendererPlugin::DestroyRenderSystem( RenderSystem * p_renderSystem )

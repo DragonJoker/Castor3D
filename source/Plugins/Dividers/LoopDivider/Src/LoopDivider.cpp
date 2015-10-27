@@ -57,23 +57,23 @@ namespace Loop
 
 	VertexSPtr Subdivider::AddPoint( real x, real y, real z )
 	{
-		VertexSPtr l_pReturn = std::make_shared< Vertex >( Castor3D::Subdivider::AddPoint( x, y, z ) );
-		m_mapVertex.insert( std::make_pair( l_pReturn->GetIndex(), l_pReturn ) );
-		return l_pReturn;
+		VertexSPtr l_return = std::make_shared< Vertex >( Castor3D::Subdivider::AddPoint( x, y, z ) );
+		m_mapVertex.insert( std::make_pair( l_return->GetIndex(), l_return ) );
+		return l_return;
 	}
 
 	VertexSPtr Subdivider::AddPoint( Point3r const & p_v )
 	{
-		VertexSPtr l_pReturn = std::make_shared< Vertex >( Castor3D::Subdivider::AddPoint( p_v ) );
-		m_mapVertex.insert( std::make_pair( l_pReturn->GetIndex(), l_pReturn ) );
-		return l_pReturn;
+		VertexSPtr l_return = std::make_shared< Vertex >( Castor3D::Subdivider::AddPoint( p_v ) );
+		m_mapVertex.insert( std::make_pair( l_return->GetIndex(), l_return ) );
+		return l_return;
 	}
 
 	VertexSPtr Subdivider::AddPoint( real * p_v )
 	{
-		VertexSPtr l_pReturn = std::make_shared< Vertex >( Castor3D::Subdivider::AddPoint( p_v ) );
-		m_mapVertex.insert( std::make_pair( l_pReturn->GetIndex(), l_pReturn ) );
-		return l_pReturn;
+		VertexSPtr l_return = std::make_shared< Vertex >( Castor3D::Subdivider::AddPoint( p_v ) );
+		m_mapVertex.insert( std::make_pair( l_return->GetIndex(), l_return ) );
+		return l_return;
 	}
 
 	void Subdivider::DoSubdivide()

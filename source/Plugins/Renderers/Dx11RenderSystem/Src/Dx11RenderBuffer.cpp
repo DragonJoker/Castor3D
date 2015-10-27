@@ -48,8 +48,8 @@ namespace Dx11Render
 
 			if ( !m_pSurface )
 			{
-				DWORD l_dwMsType	= 1;
-				DWORD l_dwMsQuality	= 0;
+				DWORD l_dwMsType = 1;
+				DWORD l_dwMsQuality = 0;
 
 				if ( m_renderBuffer.GetSamplesCount() > 1 )
 				{
@@ -64,8 +64,8 @@ namespace Dx11Render
 					}
 					else
 					{
-						l_dwMsType		= 1;
-						l_dwMsQuality	= 0;
+						l_dwMsType = 1;
+						l_dwMsQuality = 0;
 					}
 				}
 
@@ -104,8 +104,8 @@ namespace Dx11Render
 					l_descDepth.MipLevels = 1;
 					l_descDepth.ArraySize = 1;
 					l_descDepth.Format = m_eFormat;
-					l_descDepth.SampleDesc.Count = 1;
-					l_descDepth.SampleDesc.Quality = 0;
+					l_descDepth.SampleDesc.Count = l_dwMsType;
+					l_descDepth.SampleDesc.Quality = l_dwMsQuality;
 					l_descDepth.Usage = D3D11_USAGE_DEFAULT;
 					l_descDepth.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 					l_descDepth.CPUAccessFlags = 0;
@@ -136,6 +136,18 @@ namespace Dx11Render
 
 	bool DxRenderBuffer::Resize( Size const & p_size )
 	{
-		return Initialise( p_size );
+		bool l_return = false;
+
+		if ( p_size != m_size )
+		{
+			Cleanup();
+			l_return = Initialise( p_size );
+		}
+		else
+		{
+			l_return = true;
+		}
+
+		return l_return;
 	}
 }

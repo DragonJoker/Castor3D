@@ -47,7 +47,7 @@ namespace Dx11Render
 
 	bool DxStaticTexture::DoInitialise()
 	{
-		bool l_return = m_texture.Initialise( GetType(), m_pPixelBuffer, m_uiDepth, false, 0 );
+		bool l_return = m_texture.Initialise( GetType(), m_pPixelBuffer, m_uiDepth, m_cpuAccess, m_gpuAccess, false, 0 );
 
 		if ( l_return )
 		{

@@ -59,15 +59,15 @@ namespace GlRender
 
 	uint32_t * GlIndexBufferObject::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
 	{
-		uint32_t * l_pReturn = NULL;
+		uint32_t * l_return = NULL;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			l_pReturn = GlBuffer< uint32_t >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+			l_return = GlBuffer< uint32_t >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void GlIndexBufferObject::Unlock()
