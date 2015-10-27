@@ -91,9 +91,10 @@ namespace Castor3D
 
 	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
-		//p_camera.Render();
-		//p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
-		//p_camera.EndRender();
+		p_camera.GetViewport().SetSize( m_pRenderTarget->GetSize() );
+		p_camera.Render();
+		p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
+		p_camera.EndRender();
 		return true;
 	}
 }

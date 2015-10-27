@@ -191,13 +191,13 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Renders the scene background
-		 *\param[in]	p_camera	The camera from which the render is made
+		 *\brief		Renders the scene background.
+		 *\param[in]	p_size	The target dimensions.
 		 *\~french
-		 *\brief		Rend le fond de la scène
-		 *\param[in]	p_camera	La caméra utilisée pour le rendu
+		 *\brief		Rend le fond de la scène.
+		 *\param[in]	p_size	Les dimensions de la cible.
 		 */
-		C3D_API void RenderBackground( Camera const & p_camera );
+		C3D_API void RenderBackground( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Renders the scene in a given display mode

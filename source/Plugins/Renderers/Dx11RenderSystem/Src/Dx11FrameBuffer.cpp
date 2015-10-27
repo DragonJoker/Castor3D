@@ -11,6 +11,62 @@ using namespace Castor;
 
 namespace Dx11Render
 {
+	namespace
+	{
+		HRESULT DoBlit( ID3D11DeviceContext * p_context, Castor::Rectangle const & p_rectDst, ID3D11View * p_srcView, UINT p_srcSamples, ID3D11View * p_dstView, UINT p_dstSamples, DXGI_FORMAT p_format )
+		{
+			HRESULT l_hr = S_OK;
+
+			try
+			{
+				ID3D11Resource * l_pDstSurface;
+				ID3D11Resource * l_pSrcSurface;
+				p_srcView->GetResource( &l_pSrcSurface );
+				p_dstView->GetResource( &l_pDstSurface );
+
+				if ( l_pDstSurface && l_pSrcSurface )
+				{
+					if ( !p_srcSamples && !p_dstSamples )
+					{
+						D3D11_BOX l_box = { 0 };
+						l_box.front = 0;
+						l_box.back = 1;
+						l_box.left = p_rectDst.left();
+						l_box.right = p_rectDst.right();
+						l_box.top = p_rectDst.top();
+						l_box.bottom = p_rectDst.bottom();
+						p_context->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, &l_box );
+					}
+					else if ( p_srcSamples == p_dstSamples )
+					{
+						p_context->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, NULL );
+					}
+					else if ( !p_dstSamples )
+					{
+						if ( p_format != DXGI_FORMAT_D24_UNORM_S8_UINT )
+						{
+							p_context->ResolveSubresource( l_pDstSurface, 0, l_pSrcSurface, 0, p_format );
+						}
+					}
+					else
+					{
+						Logger::LogError( StringStream() << cuT( "Unsupported blit between two multisampled buffers with different samples count. Src: " ) << p_srcSamples << cuT( ", Dst: " ) << p_dstSamples );
+					}
+				}
+
+				SafeRelease( l_pSrcSurface );
+				SafeRelease( l_pDstSurface );
+			}
+			catch ( ... )
+			{
+				Logger::LogError( cuT( "Error while blitting frame buffer" ) );
+				l_hr = E_FAIL;
+			}
+
+			return l_hr;
+		}
+	}
+
 	DxFrameBuffer::DxFrameBuffer( DxRenderSystem * p_renderSystem )
 		: FrameBuffer( *p_renderSystem->GetOwner() )
 		, m_renderSystem( p_renderSystem )
@@ -321,59 +377,6 @@ namespace Dx11Render
 	{
 		m_colorBuffer->Resize( p_size );
 		m_depthBuffer->Resize( p_size );
-	}
-
-	HRESULT DoBlit( ID3D11DeviceContext * p_context, Castor::Rectangle const & p_rectDst, ID3D11View * p_srcView, UINT p_srcSamples, ID3D11View * p_dstView, UINT p_dstSamples, DXGI_FORMAT p_format )
-	{
-		HRESULT l_hr = S_OK;
-
-		try
-		{
-			ID3D11Resource * l_pDstSurface;
-			ID3D11Resource * l_pSrcSurface;
-			p_srcView->GetResource( &l_pSrcSurface );
-			p_dstView->GetResource( &l_pDstSurface );
-
-			if ( l_pDstSurface && l_pSrcSurface )
-			{
-				if ( !p_srcSamples && !p_dstSamples )
-				{
-					D3D11_BOX l_box = { 0 };
-					l_box.front = 0;
-					l_box.back = 1;
-					l_box.left = p_rectDst.left();
-					l_box.right = p_rectDst.right();
-					l_box.top = p_rectDst.top();
-					l_box.bottom = p_rectDst.bottom();
-					p_context->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, &l_box );
-				}
-				else if ( p_srcSamples == p_dstSamples )
-				{
-					p_context->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, NULL );
-				}
-				else if ( !p_dstSamples )
-				{
-					if ( p_format != DXGI_FORMAT_D24_UNORM_S8_UINT )
-					{
-						p_context->ResolveSubresource( l_pDstSurface, 0, l_pSrcSurface, 0, p_format );
-					}
-				}
-				else
-				{
-					Logger::LogError( StringStream() << cuT( "Unsupported blit between two multisampled buffers with different samples count. Src: " ) << p_srcSamples << cuT( ", Dst: " ) << p_dstSamples );
-				}
-			}
-
-			SafeRelease( l_pSrcSurface );
-			SafeRelease( l_pDstSurface );
-		}
-		catch ( ... )
-		{
-			Logger::LogError( cuT( "Error while blitting frame buffer" ) );
-			l_hr = E_FAIL;
-		}
-
-		return l_hr;
 	}
 
 	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )

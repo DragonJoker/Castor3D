@@ -93,6 +93,20 @@ namespace Dx11Render
 			return true;
 		}
 		/**
+		 *\copydoc		Castor3D::FrameBuffer::HasFixedSize
+		 */
+		virtual bool HasFixedSize()const
+		{
+			return true;
+		}
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::GetSize
+		 */
+		virtual Castor::Size GetSize()const
+		{
+			return m_size;
+		}
+		/**
 		 *\~english
 		 *\return		The color buffer.
 		 *\~french
@@ -148,6 +162,8 @@ namespace Dx11Render
 		DxDynamicTextureSPtr m_colorBuffer;
 		//!\~english The texture used to retrieve depth buffers.	\~french La texture utilisée pour récupérer les tampons de profondeur.
 		DxDynamicTextureSPtr m_depthBuffer;
+		//!\~english The back buffer fixed size.	\~french La taille fixe du tampon de fenêtre.
+		Castor::Size m_size;
 	};
 }
 #endif

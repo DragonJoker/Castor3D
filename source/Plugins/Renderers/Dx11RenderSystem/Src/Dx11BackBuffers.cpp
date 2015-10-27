@@ -108,6 +108,7 @@ namespace Dx11Render
 
 	bool DxBackBuffers::DoInitialise( Castor::Size const & p_size )
 	{
+		m_size = p_size;
 		IDXGISwapChain * l_swapChain = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetSwapChain();
 		REQUIRE( l_swapChain );
 

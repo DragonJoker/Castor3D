@@ -599,7 +599,7 @@ namespace Castor3D
 				Colour l_save = p_fb.m_pFrameBuffer->GetClearColour();
 				p_fb.m_pFrameBuffer->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
 #endif
-				l_scene->RenderBackground( *p_pCamera );
+				l_scene->RenderBackground( m_size );
 #if !defined( NDEBUG )
 				p_fb.m_pFrameBuffer->SetClearColour( l_save );
 #endif

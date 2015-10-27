@@ -82,10 +82,24 @@ namespace Castor3D
 		C3D_API virtual bool Bind( eBUFFER p_buffer, eFRAMEBUFFER_TARGET p_target ) = 0;
 		/**
 		 *\~english
+		 *\brief		Tells if the back buffer has a fixed size.
+		 *\~french
+		 *\brief		Dit si le tampon de fenêtre a une taille fixe
+		 */
+		C3D_API virtual bool HasFixedSize()const = 0;
+		/**
+		 *\~english
+		 *\return		The back buffer fixed size.
+		 *\~french
+		 *\return		La taille fixe du tampon de fenêtre.
+		 */
+		C3D_API virtual Castor::Size GetSize()const = 0;
+		/**
+		 *\~english
 		 *\brief		Checks if the FBO is complete
 		 *\return		\p false if the buffer is in error if there is an attachment missing
 		 *\~french
-		 *\brief		Vérifies i le FBO est complet
+		 *\brief		Vérifie si le FBO est complet
 		 *\return		\p false si le tampon est en erreur ou s'il manque une attache.
 		 */
 		C3D_API virtual bool IsComplete()const

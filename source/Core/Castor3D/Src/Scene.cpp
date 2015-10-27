@@ -615,7 +615,7 @@ namespace Castor3D
 		GetOwner()->PostEvent( MakeCleanupEvent( *m_pLightsTexture ) );
 	}
 
-	void Scene::RenderBackground( Camera const & p_camera )
+	void Scene::RenderBackground( Size const & p_size )
 	{
 		if ( m_pBackgroundImage )
 		{
@@ -624,7 +624,7 @@ namespace Castor3D
 				RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 				ContextRPtr l_pContext = l_renderSystem->GetCurrentContext();
 				l_pContext->GetBackgroundDSState()->Apply();
-				l_pContext->RenderTextureToCurrentBuffer( Size( p_camera.GetWidth(), p_camera.GetHeight() ), m_pBackgroundImage );
+				l_pContext->RenderTextureToCurrentBuffer( p_size, m_pBackgroundImage );
 			}
 		}
 	}
