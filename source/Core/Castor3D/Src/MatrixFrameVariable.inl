@@ -496,17 +496,17 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	void MatrixFrameVariable< T, Rows, Columns >::link( uint8_t * p_pBuffer )
+	void MatrixFrameVariable< T, Rows, Columns >::link( uint8_t * p_buffer )
 	{
-		memcpy( p_pBuffer, this->m_pValues, size() );
-		T * l_pBuffer = reinterpret_cast< T * >( p_pBuffer );
+		memcpy( p_buffer, this->m_pValues, size() );
+		T * l_pBuffer = reinterpret_cast< T * >( p_buffer );
 
 		for ( uint32_t i = 0; i < this->m_uiOcc; i++ )
 		{
 			m_mtxValue[i].link( &l_pBuffer[i * Rows * Columns] );
 		}
 
-		TFrameVariable< T >::link( p_pBuffer );
+		TFrameVariable< T >::link( p_buffer );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >

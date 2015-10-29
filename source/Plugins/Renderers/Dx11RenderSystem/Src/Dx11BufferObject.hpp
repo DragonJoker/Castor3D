@@ -31,10 +31,10 @@ namespace Dx11Render
 		, public Castor3D::GpuBuffer< T >
 	{
 	public:
-		DxBufferObject( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer );
+		DxBufferObject( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_buffer );
 		virtual ~DxBufferObject();
 
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		virtual bool Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
 
 		HardwareBufferPtr GetCpuBuffer()const
 		{

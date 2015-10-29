@@ -689,7 +689,7 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 	}
 }
 
-void AssimpImporter::DoAddTexture( String const & p_strPath, PassSPtr p_pPass, eTEXTURE_CHANNEL p_eChannel )
+void AssimpImporter::DoAddTexture( String const & p_strPath, PassSPtr p_pPass, eTEXTURE_CHANNEL p_channel )
 {
 	if ( p_pPass )
 	{
@@ -716,7 +716,7 @@ void AssimpImporter::DoAddTexture( String const & p_strPath, PassSPtr p_pPass, e
 				}
 				else
 				{
-					l_pTexture->SetChannel( p_eChannel );
+					l_pTexture->SetChannel( p_channel );
 				}
 			}
 			catch ( ... )

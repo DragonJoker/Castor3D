@@ -26,7 +26,7 @@ namespace Dx11Render
 		:	public DxBufferObject< real, ID3D11Buffer >
 	{
 	public:
-		DxMatrixBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer );
+		DxMatrixBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_buffer );
 		virtual ~DxMatrixBuffer();
 
 		virtual bool Create();

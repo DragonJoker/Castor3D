@@ -30,7 +30,7 @@ namespace GlRender
 		, public Castor::NonCopyable
 	{
 	public:
-		GlIndexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer );
+		GlIndexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_buffer );
 		virtual ~GlIndexArray();
 
 		virtual bool Create();
@@ -44,7 +44,7 @@ namespace GlRender
 		virtual void Unlock() {}
 		virtual bool Bind();
 		virtual void Unbind();
-		virtual bool Fill( uint32_t const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+		virtual bool Fill( uint32_t const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 		{
 			return false;
 		}

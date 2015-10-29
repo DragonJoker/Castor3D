@@ -398,8 +398,8 @@ namespace Castor
 
 	protected:
 		DECLARE_INVARIANT_BLOCK()
-		CU_API uint64_t DoWrite( uint8_t const * p_pBuffer, uint64_t p_uiSize );
-		CU_API uint64_t DoRead( uint8_t * p_pBuffer, uint64_t p_uiSize );
+		CU_API uint64_t DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize );
+		CU_API uint64_t DoRead( uint8_t * p_buffer, uint64_t p_uiSize );
 
 	protected:
 		//!\~english The opening mode	\~french Le mode d'ouverture

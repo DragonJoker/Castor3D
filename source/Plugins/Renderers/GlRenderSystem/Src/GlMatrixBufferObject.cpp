@@ -9,8 +9,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlMatrixBufferObject::GlMatrixBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
-		: GlBuffer< real >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_ARRAY, p_pBuffer )
+	GlMatrixBufferObject::GlMatrixBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_buffer )
+		: GlBuffer< real >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_ARRAY, p_buffer )
 		, m_pAttribute( std::make_shared< GlAttribute< real, 16 > >( p_gl, &p_renderSystem, cuT( "transform" ) ) )
 	{
 	}

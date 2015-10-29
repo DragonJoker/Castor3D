@@ -31,8 +31,8 @@ namespace GlRender
 		GlBufferBase::Unbind();
 	}
 
-	bool GlGpuIoBuffer::Fill( uint8_t * p_pBuffer, ptrdiff_t p_iSize )
+	bool GlGpuIoBuffer::Fill( uint8_t * p_buffer, ptrdiff_t p_iSize )
 	{
-		return GlBufferBase::Fill( p_pBuffer, p_iSize, m_eAccessType, m_eAccessNature );
+		return GlBufferBase::Fill( p_buffer, p_iSize, m_eAccessType, m_eAccessNature );
 	}
 }

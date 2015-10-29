@@ -39,7 +39,7 @@ namespace GlRender
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
 		 */
-		GlTextureAttachment( OpenGl & p_gl, Castor3D::DynamicTextureSPtr p_pTexture );
+		GlTextureAttachment( OpenGl & p_gl, Castor3D::DynamicTextureSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -50,7 +50,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
-		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
+		virtual bool Blit( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_interpolation );
 
 		inline eGL_FRAMEBUFFER_STATUS GetGlStatus()const
 		{

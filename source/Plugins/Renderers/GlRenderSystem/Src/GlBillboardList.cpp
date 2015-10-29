@@ -46,15 +46,15 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 	};
 
 	ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
-	ShaderProgramBaseSPtr l_pProgram = l_manager.GetNewProgram();
-	l_manager.CreateMatrixBuffer( *l_pProgram, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-	l_manager.CreateSceneBuffer( *l_pProgram, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-	l_manager.CreatePassBuffer( *l_pProgram, MASK_SHADER_TYPE_PIXEL );
-	l_manager.CreateTextureVariables( *l_pProgram, p_flags );
+	ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
+	l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateTextureVariables( *l_program, p_flags );
 	FrameVariableBufferSPtr l_billboardUbo = GetOwner()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
-	l_pProgram->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
+	l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
-	ShaderObjectBaseSPtr l_pObject = l_pProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
+	ShaderObjectBaseSPtr l_pObject = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
 	l_pObject->SetInputType( eTOPOLOGY_POINTS );
 	l_pObject->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
 	l_pObject->SetOutputVtxCount( 4 );
@@ -176,15 +176,15 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 	String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
 
-	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_pProgram.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
-	l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-	l_pProgram->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
-	l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-	l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-	l_pProgram->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
-	l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
+	l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
+	l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
+	l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
+	l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
+	l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
+	l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
 
-	return l_pProgram;
+	return l_program;
 }
 
 bool GlBillboardList::DoInitialise()

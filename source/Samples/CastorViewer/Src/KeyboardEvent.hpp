@@ -17,7 +17,7 @@ namespace CastorViewer
 		virtual bool Apply();
 
 	private:
-		Castor3D::RenderWindowWPtr m_pWindow;
+		Castor3D::RenderWindowWPtr m_window;
 	};
 }
 

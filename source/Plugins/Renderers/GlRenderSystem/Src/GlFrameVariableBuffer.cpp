@@ -679,182 +679,182 @@ namespace GlRender
 	{
 		FrameVariableSPtr l_return;
 		GlVariableApplyerBaseSPtr l_pApplyer;
-		GlShaderProgram * l_pProgram = static_cast< GlShaderProgram * >( p_pProgram );
+		GlShaderProgram * l_program = static_cast< GlShaderProgram * >( p_pProgram );
 
 		switch ( p_type )
 		{
 		case eFRAME_VARIABLE_TYPE_INT:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_INT >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_UINT:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_UINT >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_FLOAT:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_FLOAT >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_DOUBLE:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_DOUBLE >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_SAMPLER:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_SAMPLER >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2I:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2I >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3I:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3I >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4I:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4I >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2UI:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2UI >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3UI:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3UI >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4UI:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4UI >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( m_gl, l_pProgram, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( m_gl, l_program, p_uiNbOcc );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >();
 			break;
 		}
@@ -871,7 +871,7 @@ namespace GlRender
 	{
 		uint32_t l_uiIndex = m_glBuffer.GetGlIndex();
 		bool l_return = false;
-		GlShaderProgram * l_pProgram = static_cast< GlShaderProgram * >( p_pProgram );
+		GlShaderProgram * l_program = static_cast< GlShaderProgram * >( p_pProgram );
 		int l_max = 0;
 		m_gl.GetIntegerv( eGL_MAX_UNIFORM_BUFFER_BINDINGS, &l_max );
 
@@ -879,18 +879,18 @@ namespace GlRender
 		{
 			if ( m_gl.HasUbo() && l_uiIndex == eGL_INVALID_INDEX )
 			{
-				m_gl.UseProgram( l_pProgram->GetGlProgram() );
-				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_pProgram->GetGlProgram(), string::string_cast< char >( m_strName ).c_str() );
+				m_gl.UseProgram( l_program->GetGlProgram() );
+				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_program->GetGlProgram(), string::string_cast< char >( m_strName ).c_str() );
 				uint32_t l_uiTotalSize = 0;
 
 				if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )
 				{
-					m_gl.GetActiveUniformBlockiv( l_pProgram->GetGlProgram(), m_iUniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_iUniformBlockSize );
+					m_gl.GetActiveUniformBlockiv( l_program->GetGlProgram(), m_iUniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_iUniformBlockSize );
 					m_glBuffer.Create();
 					m_glBuffer.Fill( NULL, m_iUniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 					m_glBuffer.Bind();
 					m_gl.BindBufferBase( eGL_BUFFER_TARGET_UNIFORM, m_uiIndex, m_glBuffer.GetGlIndex() );
-					m_gl.UniformBlockBinding( l_pProgram->GetGlProgram(), m_iUniformBlockIndex, m_uiIndex );
+					m_gl.UniformBlockBinding( l_program->GetGlProgram(), m_iUniformBlockIndex, m_uiIndex );
 					m_buffer.resize( m_iUniformBlockSize );
 					std::vector< const char * > l_arrayNames;
 
@@ -907,7 +907,7 @@ namespace GlRender
 					}
 
 					UIntArray l_arrayIndices( l_arrayNames.size() );
-					m_gl.GetUniformIndices( l_pProgram->GetGlProgram(), int( l_arrayNames.size() ), &l_arrayNames[0], &l_arrayIndices[0] );
+					m_gl.GetUniformIndices( l_program->GetGlProgram(), int( l_arrayNames.size() ), &l_arrayNames[0], &l_arrayIndices[0] );
 					clear_container( l_arrayNames );
 					int i = 0;
 
@@ -918,8 +918,8 @@ namespace GlRender
 
 						if ( l_uiIndex != eGL_INVALID_INDEX )
 						{
-							m_gl.GetActiveUniformsiv( l_pProgram->GetGlProgram(), 1, &l_uiIndex, eGL_UNIFORM_OFFSET, &l_iOffset	);
-							m_gl.GetActiveUniformsiv( l_pProgram->GetGlProgram(), 1, &l_uiIndex, eGL_UNIFORM_SIZE, &l_iSize	);
+							m_gl.GetActiveUniformsiv( l_program->GetGlProgram(), 1, &l_uiIndex, eGL_UNIFORM_OFFSET, &l_iOffset	);
+							m_gl.GetActiveUniformsiv( l_program->GetGlProgram(), 1, &l_uiIndex, eGL_UNIFORM_SIZE, &l_iSize	);
 
 							if ( l_iSize == 1 )
 							{

@@ -22,7 +22,7 @@ namespace Castor3D
 {
 	Context::Context( RenderSystem & p_renderSystem, bool p_invertFinal )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_pWindow( NULL )
+		, m_window( NULL )
 		, m_bInitialised( false )
 		, m_bMultiSampling( false )
 		, m_viewport( Viewport::Ortho( *GetOwner()->GetOwner(), 0, 1, 0, 1, 0, 1000 ) )
@@ -94,10 +94,10 @@ namespace Castor3D
 
 	bool Context::Initialise( RenderWindow * p_window )
 	{
-		m_pWindow = p_window;
+		m_window = p_window;
 		ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
-		m_pBtoBShaderProgram = l_program;
+		m_renderTextureProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
@@ -136,11 +136,11 @@ namespace Castor3D
 		m_pGeometryBuffers->Destroy();
 		m_finalGeometryBuffers->Cleanup();
 		m_finalGeometryBuffers->Destroy();
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
+		ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
 
-		if ( l_pProgram )
+		if ( l_program )
 		{
-			l_pProgram->Cleanup();
+			l_program->Cleanup();
 		}
 
 		EndCurrent();
@@ -149,8 +149,8 @@ namespace Castor3D
 		m_finalGeometryBuffers.reset();
 		m_pGeometryBuffers.reset();
 		m_bMultiSampling = false;
-		m_pBtoBShaderProgram.reset();
-		m_pWindow = NULL;
+		m_renderTextureProgram.reset();
+		m_window = NULL;
 	}
 
 	void Context::SetCurrent()
@@ -180,48 +180,48 @@ namespace Castor3D
 		DoSetAlphaFunc( p_eFunc, p_byValue );
 	}
 
-	void Context::RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_pTexture )
+	void Context::RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture )
 	{
-		DoRenderTexture( p_size, p_pTexture, m_pGeometryBuffers );
+		DoRenderTexture( p_size, p_texture, m_pGeometryBuffers );
 	}
 
-	void Context::RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_pTexture )
+	void Context::RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture )
 	{
-		DoRenderTexture( p_size, p_pTexture, m_finalGeometryBuffers );
+		DoRenderTexture( p_size, p_texture, m_finalGeometryBuffers );
 	}
 
-	void Context::DoRenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, GeometryBuffersSPtr p_geometryBuffers )
+	void Context::DoRenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, GeometryBuffersSPtr p_geometryBuffers )
 	{
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
+		ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
 		m_viewport.SetSize( p_size );
 		m_viewport.Render( GetOwner()->GetPipeline() );
-		uint32_t l_id = p_pTexture->GetIndex();
-		p_pTexture->SetIndex( 0 );
+		uint32_t l_id = p_texture->GetIndex();
+		p_texture->SetIndex( 0 );
 
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			m_mapDiffuse->SetValue( p_pTexture.get() );
-			FrameVariableBufferSPtr l_matrices = l_pProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
+			m_mapDiffuse->SetValue( p_texture.get() );
+			FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
 
 			if ( l_matrices )
 			{
 				GetOwner()->GetPipeline().ApplyProjection( *l_matrices );
 			}
 
-			l_pProgram->Bind( 0, 1 );
+			l_program->Bind( 0, 1 );
 		}
 
-		if ( p_pTexture->BindAt( 0 ) )
+		if ( p_texture->BindAt( 0 ) )
 		{
-			p_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, m_arrayVertex.size(), 0 );
-			p_pTexture->UnbindFrom( 0 );
+			p_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_program, m_arrayVertex.size(), 0 );
+			p_texture->UnbindFrom( 0 );
 		}
 
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			l_pProgram->Unbind();
+			l_program->Unbind();
 		}
 
-		p_pTexture->SetIndex( l_id );
+		p_texture->SetIndex( l_id );
 	}
 }

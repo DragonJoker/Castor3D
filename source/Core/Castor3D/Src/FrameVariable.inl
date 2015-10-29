@@ -131,11 +131,11 @@
 	}
 
 	template< typename T >
-	void TFrameVariable< T >::link( uint8_t * p_pBuffer )
+	void TFrameVariable< T >::link( uint8_t * p_buffer )
 	{
-		memcpy( p_pBuffer, m_pValues, size() );
+		memcpy( p_buffer, m_pValues, size() );
 		DoCleanupBuffer();
-		m_pValues = reinterpret_cast< T * >( p_pBuffer );
+		m_pValues = reinterpret_cast< T * >( p_buffer );
 		m_bOwnBuffer = false;
 	}
 

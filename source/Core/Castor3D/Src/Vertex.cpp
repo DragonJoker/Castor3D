@@ -115,66 +115,66 @@ namespace Castor3D
 		return Point3r( &reinterpret_cast< real const * >( p_pElement )[sm_uiOffsetTex / sizeof( real )] );
 	}
 
-	void Vertex::SetPosition( void * p_pBuffer, real const * p_coord )
+	void Vertex::SetPosition( void * p_buffer, real const * p_coord )
 	{
-		std::memcpy( GetPosition( p_pBuffer ).ptr(), p_coord, sm_uiSizePos );
+		std::memcpy( GetPosition( p_buffer ).ptr(), p_coord, sm_uiSizePos );
 	}
 
-	void Vertex::SetPosition( void * p_pBuffer, real x, real y, real z )
+	void Vertex::SetPosition( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetPosition( p_pBuffer );
+		Coords3r l_pData = GetPosition( p_buffer );
 		l_pData[0] = x;
 		l_pData[1] = y;
 		l_pData[2] = z;
 	}
 
-	void Vertex::SetNormal( void * p_pBuffer, real const * p_coord )
+	void Vertex::SetNormal( void * p_buffer, real const * p_coord )
 	{
-		std::memcpy( GetNormal( p_pBuffer ).ptr(), p_coord, sm_uiSizeNml );
+		std::memcpy( GetNormal( p_buffer ).ptr(), p_coord, sm_uiSizeNml );
 	}
 
-	void Vertex::SetNormal( void * p_pBuffer, real x, real y, real z )
+	void Vertex::SetNormal( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetNormal( p_pBuffer );
+		Coords3r l_pData = GetNormal( p_buffer );
 		l_pData[0] = x;
 		l_pData[1] = y;
 		l_pData[2] = z;
 	}
 
-	void Vertex::SetTangent( void * p_pBuffer, real const * p_coord )
+	void Vertex::SetTangent( void * p_buffer, real const * p_coord )
 	{
-		std::memcpy( GetTangent( p_pBuffer ).ptr(), p_coord, sm_uiSizeTan );
+		std::memcpy( GetTangent( p_buffer ).ptr(), p_coord, sm_uiSizeTan );
 	}
 
-	void Vertex::SetTangent( void * p_pBuffer, real x, real y, real z )
+	void Vertex::SetTangent( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetTangent( p_pBuffer );
+		Coords3r l_pData = GetTangent( p_buffer );
 		l_pData[0] = x;
 		l_pData[1] = y;
 		l_pData[2] = z;
 	}
 
-	void Vertex::SetBitangent( void * p_pBuffer, real const * p_coord )
+	void Vertex::SetBitangent( void * p_buffer, real const * p_coord )
 	{
-		std::memcpy( GetBitangent( p_pBuffer ).ptr(), p_coord, sm_uiSizeBin );
+		std::memcpy( GetBitangent( p_buffer ).ptr(), p_coord, sm_uiSizeBin );
 	}
 
-	void Vertex::SetBitangent( void * p_pBuffer, real x, real y, real z )
+	void Vertex::SetBitangent( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetBitangent( p_pBuffer );
+		Coords3r l_pData = GetBitangent( p_buffer );
 		l_pData[0] = x;
 		l_pData[1] = y;
 		l_pData[2] = z;
 	}
 
-	void Vertex::SetTexCoord( void * p_pBuffer, real const * p_coord )
+	void Vertex::SetTexCoord( void * p_buffer, real const * p_coord )
 	{
-		std::memcpy( GetTexCoord( p_pBuffer ).ptr(), p_coord, sm_uiSizeTex );
+		std::memcpy( GetTexCoord( p_buffer ).ptr(), p_coord, sm_uiSizeTex );
 	}
 
-	void Vertex::SetTexCoord( void * p_pBuffer, real x, real y, real z )
+	void Vertex::SetTexCoord( void * p_buffer, real x, real y, real z )
 	{
-		Coords3r l_pData = GetTexCoord( p_pBuffer );
+		Coords3r l_pData = GetTexCoord( p_buffer );
 		l_pData[0] = x;
 		l_pData[1] = y;
 		l_pData[2] = z;

@@ -165,20 +165,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Transmits data to the GPU buffer from RAM
-		 *\param[in]	p_pBuffer	The data
+		 *\param[in]	p_buffer	The data
 		 *\param[in]	p_iSize		Data buffer size
 		 *\param[in]	p_type		Transfer type
 		 *\param[in]	p_eNature	Transfer nature
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la ram
-		 *\param[in]	p_pBuffer	Les données
+		 *\param[in]	p_buffer	Les données
 		 *\param[in]	p_iSize		Taille du tampon de données
 		 *\param[in]	p_type		Type de transfert
 		 *\param[in]	p_eNature	Nature du transfert
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature ) = 0;
+		virtual bool Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature ) = 0;
 	};
 }
 

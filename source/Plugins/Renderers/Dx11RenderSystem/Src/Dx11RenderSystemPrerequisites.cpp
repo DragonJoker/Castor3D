@@ -323,13 +323,13 @@ DWORD DirectX11::GetLockFlags( uint32_t p_uiFlags )
 	return l_ulLockFlags;
 }
 
-bool DirectX11::UnlockBuffer( ID3D11Buffer * p_pBuffer )
+bool DirectX11::UnlockBuffer( ID3D11Buffer * p_buffer )
 {
 	ID3D11Device * l_pDevice;
 	ID3D11DeviceContext * l_deviceContext;
-	p_pBuffer->GetDevice( &l_pDevice );
+	p_buffer->GetDevice( &l_pDevice );
 	l_pDevice->GetImmediateContext( &l_deviceContext );
-	l_deviceContext->Unmap( p_pBuffer, 0 );
+	l_deviceContext->Unmap( p_buffer, 0 );
 	l_deviceContext->Release();
 	l_pDevice->Release();
 	return true;

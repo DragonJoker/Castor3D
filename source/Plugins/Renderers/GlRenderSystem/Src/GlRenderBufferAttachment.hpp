@@ -50,7 +50,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
-		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
+		virtual bool Blit( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_interpolation );
 
 		inline eGL_FRAMEBUFFER_STATUS GetGlStatus()const
 		{

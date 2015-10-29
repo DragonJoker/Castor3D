@@ -12,7 +12,7 @@ namespace GlRender
 	GlShaderObject::GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, eSHADER_TYPE p_type )
 		:	ShaderObjectBase( p_parent, p_type )
 		,	m_shaderObject( 0 )
-		,	m_pShaderProgram( NULL )
+		,	m_shaderProgram( NULL )
 		,	m_gl( p_gl )
 	{
 	}
@@ -132,10 +132,10 @@ namespace GlRender
 
 	void GlShaderObject::Detach()
 	{
-		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pShaderProgram && m_pParent->GetOwner()->HasShaderType( m_type ) )
+		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_shaderProgram && m_pParent->GetOwner()->HasShaderType( m_type ) )
 		{
-			m_gl.DetachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
-			m_pShaderProgram = NULL;
+			m_gl.DetachShader( m_shaderProgram->GetGlProgram(), m_shaderObject );
+			m_shaderProgram = NULL;
 			// if you get an error here, you deleted the Program object first and then
 			// the ShaderObject! Always delete ShaderPrograms last!
 		}
@@ -147,16 +147,16 @@ namespace GlRender
 
 		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pParent->GetOwner()->HasShaderType( m_type ) )
 		{
-			m_pShaderProgram = &static_cast< GlShaderProgram & >( p_program );
-			m_gl.AttachShader( m_pShaderProgram->GetGlProgram(), m_shaderObject );
+			m_shaderProgram = &static_cast< GlShaderProgram & >( p_program );
+			m_gl.AttachShader( m_shaderProgram->GetGlProgram(), m_shaderObject );
 
 			//if( m_type == eSHADER_TYPE_GEOMETRY )
 			//{
 			//	int l_iTmp;
 			//	m_gl.GetIntegerv( eGL_GETINTEGER_PARAM_MAX_GEOMETRY_OUTPUT_VERTICES,	&l_iTmp );
-			//	m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_INPUT_TYPE,	m_gl.Get( m_eInputType )						);
-			//	m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_OUTPUT_TYPE,	m_gl.Get( m_eOutputType )						);
-			//	m_gl.ProgramParameteri( m_pShaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_VERTICES_OUT,	std::min< int >( m_uiOutputVtxCount, l_iTmp )	);
+			//	m_gl.ProgramParameteri( m_shaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_INPUT_TYPE,	m_gl.Get( m_eInputType )						);
+			//	m_gl.ProgramParameteri( m_shaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_OUTPUT_TYPE,	m_gl.Get( m_eOutputType )						);
+			//	m_gl.ProgramParameteri( m_shaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_VERTICES_OUT,	std::min< int >( m_uiOutputVtxCount, l_iTmp )	);
 			//}
 		}
 	}
@@ -176,7 +176,7 @@ namespace GlRender
 
 			if ( l_it == m_mapParamsByName.end() )
 			{
-				uint32_t l_uiProgram = m_pShaderProgram->GetGlProgram();
+				uint32_t l_uiProgram = m_shaderProgram->GetGlProgram();
 				m_mapParamsByName.insert( std::make_pair( p_name, m_gl.GetUniformLocation( l_uiProgram, string::string_cast< char >( p_name ).c_str() ) ) );
 				l_it = m_mapParamsByName.find( p_name );
 			}

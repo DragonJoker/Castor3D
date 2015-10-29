@@ -120,24 +120,24 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
 		 *\param[in]	p_size			The render viewport size.
-		 *\param[in]	p_pTexture		The texture.
+		 *\param[in]	p_texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
 		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_pTexture		La texture.
+		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_pTexture );
+		C3D_API void RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the back buffers.
 		 *\param[in]	p_size			The render viewport size.
-		 *\param[in]	p_pTexture		The texture.
+		 *\param[in]	p_texture		The texture.
 		 *\~french
 		 *\brief		Rend la texture donnée dans le tampon e la fenêtre.
 		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_pTexture		La texture.
+		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_pTexture );
+		C3D_API void RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Changes fullscreen status
@@ -279,13 +279,13 @@ namespace Castor3D
 
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
-		RenderWindow * m_pWindow;
+		RenderWindow * m_window;
 		//!\~english Tells if the context is initialised	\~french Dit si le contexte est initialisé
 		bool m_bInitialised;
 		//!\~english Tells the context is currently set to use multisampling	\~french Dit si le contexte est actuellement configuré pour utiliser le multisampling
 		bool m_bMultiSampling;
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre
-		ShaderProgramBaseWPtr m_pBtoBShaderProgram;
+		ShaderProgramBaseWPtr m_renderTextureProgram;
 		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
 		OneTextureFrameVariableSPtr m_mapDiffuse;
 		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.

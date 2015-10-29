@@ -186,13 +186,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the buffer holding the frame variable.
 		 *\remark		The variable no longer owns it's buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\~french
 		 *\brief		Définit le buffer de cette variable
 		 *\remark		La variable perd la responsabilité de son buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 */
-		virtual void link( uint8_t * p_pBuffer );
+		virtual void link( uint8_t * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Gives the full type of the variable

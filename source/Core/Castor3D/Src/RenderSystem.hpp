@@ -350,42 +350,42 @@ namespace Castor3D
 		 *\brief		Creates a vertex buffer, given a buffer declaration
 		 *\remarks		Only the render system can do that
 		 *\param[in]	p_elements	The buffer declaration
-		 *\param[in]	p_pBuffer	The hardware buffer to which the vertex buffer will be linked
+		 *\param[in]	p_buffer	The hardware buffer to which the vertex buffer will be linked
 		 *\return		The created vertex buffer, dependant of current API
 		 *\~french
 		 *\brief		Crée un tampon de sommets, selon une déclaration de tampon
 		 *\remarks		Seul le render system peut faire ça
 		 *\param[in]	p_elements	La déclaration de tampon
-		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon de sommets
+		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon de sommets
 		 *\return		Le tampon de sommets créé, dépendant de l'API actuelle
 		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer( BufferDeclaration const & p_elements, CpuBuffer< uint8_t > * p_pBuffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer( BufferDeclaration const & p_elements, CpuBuffer< uint8_t > * p_buffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an index buffer
 		 *\remarks		Only the render system can do that
-		 *\param[in]	p_pBuffer	The hardware buffer to which the index buffer will be linked
+		 *\param[in]	p_buffer	The hardware buffer to which the index buffer will be linked
 		 *\return		The created index buffer, dependant of current API
 		 *\~french
 		 *\brief		Crée un tampon d'indices
 		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon d'indices
+		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon d'indices
 		 *\return		Le tampon d'indices créé, dépendant de l'API actuelle
 		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_pBuffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a matrix buffer
 		 *\remarks		Only the render system can do that
-		 *\param[in]	p_pBuffer	The hardware buffer to which the buffer will be linked
+		 *\param[in]	p_buffer	The hardware buffer to which the buffer will be linked
 		 *\return		The created buffer, dependant of current API
 		 *\~french
 		 *\brief		Crée un tampon de matrices
 		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_pBuffer	Le tampon hardware auquel sera lié le tampon
+		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon
 		 *\return		Le tampon créé, dépendant de l'API actuelle
 		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< real > > CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< real > > CreateMatrixBuffer( CpuBuffer< real > * p_buffer ) = 0;
 		/**
 		 *\~english
 		 *\return		A pipeline implementation, depending on loaded API

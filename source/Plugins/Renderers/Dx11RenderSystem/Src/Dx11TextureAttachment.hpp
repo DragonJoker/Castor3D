@@ -33,13 +33,13 @@ namespace Dx11Render
 		 *\~english
 		 *\brief		Constructor.
 		 *\para[in]		p_renderSystem	The RenderSystem.
-		 *\param[in]	p_pTexture		The texture.
+		 *\param[in]	p_texture		The texture.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\para[in]		p_renderSystem	Le RenderSystem.
-		 *\param[in]	p_pTexture		La texture.
+		 *\param[in]	p_texture		La texture.
 		 */
-		DxTextureAttachment( DxRenderSystem * p_renderSystem, Castor3D::DynamicTextureSPtr p_pTexture );
+		DxTextureAttachment( DxRenderSystem * p_renderSystem, Castor3D::DynamicTextureSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -50,7 +50,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
-		virtual bool Blit( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_eInterpolation );
+		virtual bool Blit( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_interpolation );
 
 	private:
 		/**

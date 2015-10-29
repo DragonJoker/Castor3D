@@ -26,7 +26,7 @@ namespace Dx11Render
 		: public DxBufferObject< uint32_t, ID3D11Buffer >
 	{
 	public:
-		DxIndexBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer );
+		DxIndexBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_buffer );
 		virtual ~DxIndexBuffer();
 
 		virtual bool Create();

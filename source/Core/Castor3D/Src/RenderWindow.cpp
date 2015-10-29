@@ -537,7 +537,7 @@ namespace Castor3D
 		return l_strReturn;
 	}
 
-	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_pTexture )
+	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_texture )
 	{
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
@@ -555,11 +555,11 @@ namespace Castor3D
 
 			if ( m_backBuffers->HasFixedSize() )
 			{
-				m_pContext->RenderTextureToBackBuffer( m_backBuffers->GetSize(), p_pTexture );
+				m_pContext->RenderTextureToBackBuffer( m_backBuffers->GetSize(), p_texture );
 			}
 			else
 			{
-				m_pContext->RenderTextureToBackBuffer( m_size, p_pTexture );
+				m_pContext->RenderTextureToBackBuffer( m_size, p_texture );
 			}
 			m_backBuffers->Unbind();
 		}

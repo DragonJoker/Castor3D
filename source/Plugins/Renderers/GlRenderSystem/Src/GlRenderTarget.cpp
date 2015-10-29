@@ -29,9 +29,9 @@ RenderBufferAttachmentSPtr GlRenderTarget::CreateAttachment( RenderBufferSPtr p_
 	return std::make_shared< GlRenderBufferAttachment >( m_gl, p_pRenderBuffer );
 }
 
-TextureAttachmentSPtr GlRenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const
+TextureAttachmentSPtr GlRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )const
 {
-	return std::make_shared< GlTextureAttachment >( m_gl, p_pTexture );
+	return std::make_shared< GlTextureAttachment >( m_gl, p_texture );
 }
 
 FrameBufferSPtr GlRenderTarget::CreateFrameBuffer()const

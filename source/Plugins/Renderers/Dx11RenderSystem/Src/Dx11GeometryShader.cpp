@@ -25,19 +25,19 @@ namespace Dx11Render
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_deviceContext->GSSetShader( m_pGeometryShader, NULL, 0 );
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY );
+		auto l_ubos = m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY );
 
 		if ( !l_ubos.empty() )
 		{
 			std::vector< ID3D11Buffer * > l_buffers;
 			l_buffers.reserve( l_ubos.size() );
 
-			for ( auto l_variableBuffer : m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY ) )
+			for ( auto l_variableBuffer : m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY ) )
 			{
 				l_buffers.push_back( std::static_pointer_cast< DxFrameVariableBuffer >( l_variableBuffer )->GetDxBuffer() );
 			}
 
-			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_GEOMETRY ) )
+			if ( m_shaderProgram->HasObject( eSHADER_TYPE_GEOMETRY ) )
 			{
 				l_deviceContext->GSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
 			}
@@ -47,11 +47,11 @@ namespace Dx11Render
 	void DxGeometryShader::DoUnbind()
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY );
+		auto l_ubos = m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_GEOMETRY );
 
 		if ( !l_ubos.empty() )
 		{
-			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_GEOMETRY ) )
+			if ( m_shaderProgram->HasObject( eSHADER_TYPE_GEOMETRY ) )
 			{
 				ID3D11Buffer * l_buffer = NULL;
 				l_deviceContext->GSSetConstantBuffers( 0, 1, &l_buffer );

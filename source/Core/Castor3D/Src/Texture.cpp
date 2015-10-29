@@ -22,10 +22,10 @@ namespace Castor3D
 	{
 	}
 
-	void TextureBase::SetImage( Castor::PxBufferBaseSPtr p_pBuffer )
+	void TextureBase::SetImage( Castor::PxBufferBaseSPtr p_buffer )
 	{
 		m_uiDepth = 1;
-		m_pPixelBuffer = p_pBuffer;
+		m_pPixelBuffer = p_buffer;
 	}
 
 	bool TextureBase::Bind()

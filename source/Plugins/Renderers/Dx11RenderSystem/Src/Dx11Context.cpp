@@ -84,13 +84,13 @@ namespace Dx11Render
 		if ( !m_bInitialised )
 		{
 			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( GetOwner() );
-			m_hWnd = m_pWindow->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
-			m_size = m_pWindow->GetSize();
+			m_hWnd = m_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
+			m_size = m_window->GetSize();
 
 			if ( DoInitPresentParameters() == S_OK &&  l_renderSystem->InitialiseDevice( m_hWnd, m_deviceParams ) )
 			{
-				m_pWindow->Resize( m_deviceParams.BufferDesc.Width, m_deviceParams.BufferDesc.Height );
-				m_size = m_pWindow->GetSize();
+				m_window->Resize( m_deviceParams.BufferDesc.Width, m_deviceParams.BufferDesc.Height );
+				m_size = m_window->GetSize();
 				DoInitVolatileResources();
 				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" ) );
 				m_bInitialised = true;
@@ -102,11 +102,11 @@ namespace Dx11Render
 				StringStream l_vtxShader;
 				l_vtxShader << l_uniforms->GetVertexInMatrices( 0 ) << std::endl;
 				l_vtxShader << ShaderModel1_2_3_4::VtxShader;
-				ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-				l_pProgram->SetEntryPoint( eSHADER_TYPE_VERTEX, cuT( "mainVx" ) );
-				l_pProgram->SetEntryPoint( eSHADER_TYPE_PIXEL, cuT( "mainPx" ) );
-				l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, l_vtxShader.str() );
-				l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
+				ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
+				l_program->SetEntryPoint( eSHADER_TYPE_VERTEX, cuT( "mainVx" ) );
+				l_program->SetEntryPoint( eSHADER_TYPE_PIXEL, cuT( "mainPx" ) );
+				l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_5, l_vtxShader.str() );
+				l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_5, ShaderModel1_2_3_4::PxlShader );
 			}
 		}
 
@@ -131,7 +131,7 @@ namespace Dx11Render
 	{
 		if ( m_swapChain )
 		{
-			if ( m_pWindow->GetVSync() )
+			if ( m_window->GetVSync() )
 			{
 				m_swapChain->Present( 1, 0 );
 			}
@@ -183,9 +183,9 @@ namespace Dx11Render
 		std::memset( &m_deviceParams, 0, sizeof( m_deviceParams ) );
 		m_deviceParams.Windowed = TRUE;
 		m_deviceParams.BufferCount = 1;
-		m_deviceParams.BufferDesc.Width = m_pWindow->GetSize().width();
-		m_deviceParams.BufferDesc.Height = m_pWindow->GetSize().height();
-		m_deviceParams.BufferDesc.Format = DirectX11::Get( m_pWindow->GetRenderTarget()->GetPixelFormat() );
+		m_deviceParams.BufferDesc.Width = m_window->GetSize().width();
+		m_deviceParams.BufferDesc.Height = m_window->GetSize().height();
+		m_deviceParams.BufferDesc.Format = DirectX11::Get( m_window->GetRenderTarget()->GetPixelFormat() );
 		m_deviceParams.BufferDesc.RefreshRate.Numerator = GetOwner()->GetOwner()->GetRenderLoop().GetWantedFps();
 		m_deviceParams.BufferDesc.RefreshRate.Denominator = 1;
 		m_deviceParams.BufferDesc.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
@@ -196,7 +196,7 @@ namespace Dx11Render
 		m_deviceParams.OutputWindow = m_hWnd;
 		m_deviceParams.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 
-		if ( m_pWindow->IsFullscreen() )
+		if ( m_window->IsFullscreen() )
 		{
 			m_deviceParams.Windowed = FALSE;
 		}

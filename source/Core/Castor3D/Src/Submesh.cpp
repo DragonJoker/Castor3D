@@ -533,7 +533,7 @@ namespace Castor3D
 
 		if ( DoPrepareGeometryBuffers( p_pass ) )
 		{
-			ShaderProgramBaseSPtr l_pProgram = p_pass.GetShader< ShaderProgramBase >();
+			ShaderProgramBaseSPtr l_program = p_pass.GetShader< ShaderProgramBase >();
 			uint32_t l_uiSize = m_pGeometryBuffers->GetVertexBuffer().GetSize() / m_pGeometryBuffers->GetVertexBuffer().GetDeclaration().GetStride();
 
 			if ( m_pGeometryBuffers->HasIndexBuffer() )
@@ -547,16 +547,16 @@ namespace Castor3D
 			{
 				if ( GetOwner()->GetRenderSystem()->HasInstancing() )
 				{
-					m_pGeometryBuffers->DrawInstanced( m_eCurDrawType, l_pProgram, l_uiSize, 0, l_count );
+					m_pGeometryBuffers->DrawInstanced( m_eCurDrawType, l_program, l_uiSize, 0, l_count );
 				}
 				else
 				{
-					m_pGeometryBuffers->Draw( m_eCurDrawType, l_pProgram, l_uiSize, 0 );
+					m_pGeometryBuffers->Draw( m_eCurDrawType, l_program, l_uiSize, 0 );
 				}
 			}
 			else
 			{
-				m_pGeometryBuffers->Draw( m_eCurDrawType, l_pProgram, l_uiSize, 0 );
+				m_pGeometryBuffers->Draw( m_eCurDrawType, l_program, l_uiSize, 0 );
 			}
 		}
 	}
@@ -1102,21 +1102,21 @@ namespace Castor3D
 
 	bool Submesh::DoPrepareGeometryBuffers( Pass const & p_pass )
 	{
-		ShaderProgramBaseSPtr l_pProgram = p_pass.GetShader< ShaderProgramBase >();
+		ShaderProgramBaseSPtr l_program = p_pass.GetShader< ShaderProgramBase >();
 
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
 			if ( m_pGeometryBuffers && ( m_eCurDrawType != m_ePrvDrawType || m_bDirty ) )
 			{
 				m_ePrvDrawType = m_eCurDrawType;
 				m_bDirty = false;
 				m_pGeometryBuffers->Cleanup();
-				m_pGeometryBuffers->Initialise( l_pProgram, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+				m_pGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 
 			auto l_matrixBuffer = p_pass.GetMatrixBuffer();
 
-			if ( l_pProgram && l_matrixBuffer )
+			if ( l_program && l_matrixBuffer )
 			{
 				GetOwner()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 			}

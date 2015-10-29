@@ -109,21 +109,21 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Blit this attachment's buffer into the given one
 		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			The destination buffer
-		 *\param[in]	p_rectSrc			The source rectangle
-		 *\param[in]	p_rectDst			The destination rectangle
-		 *\param[in]	p_eInterpolation	The interpolation to apply if the image is stretched
+		 *\param[in]	p_buffer		The destination buffer
+		 *\param[in]	p_rectSrc		The source rectangle
+		 *\param[in]	p_rectDst		The destination rectangle
+		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Blitte le tampon de cette attache dans celui donné
 		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			Le tampon destination
-		 *\param[in]	p_rectSrc			Le rectangle source
-		 *\param[in]	p_rectDst			Le rectangle destination
-		 *\param[in]	p_eInterpolation	L'interpolation à appliquer si l'image est redimensionnée
+		 *\param[in]	p_buffer		Le tampon destination
+		 *\param[in]	p_rectSrc		Le rectangle source
+		 *\param[in]	p_rectDst		Le rectangle destination
+		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_eInterpolation ) = 0;
+		C3D_API virtual bool Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_interpolation ) = 0;
 		/**
 		 *\~english
 		 *\return		The attachment point

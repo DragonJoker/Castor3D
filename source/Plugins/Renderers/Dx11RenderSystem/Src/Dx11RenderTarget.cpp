@@ -40,9 +40,9 @@ RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_
 	return l_return;
 }
 
-TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const
+TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )const
 {
-	return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), p_pTexture );
+	return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), p_texture );
 }
 
 FrameBufferSPtr DxRenderTarget::CreateFrameBuffer()const

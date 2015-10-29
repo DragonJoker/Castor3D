@@ -1,10 +1,10 @@
 namespace Dx11Render
 {
 	template< typename T, class D3dBufferObject >
-	DxBufferObject< T, D3dBufferObject >::DxBufferObject( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer )
+	DxBufferObject< T, D3dBufferObject >::DxBufferObject( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_buffer )
 		: GpuBuffer< T >( p_renderSystem )
 		, m_uiIndex( BuffersCount )
-		, m_pBuffer( p_pBuffer )
+		, m_pBuffer( p_buffer )
 		, m_pBufferObject( NULL )
 	{
 	}
@@ -15,7 +15,7 @@ namespace Dx11Render
 	}
 
 	template< typename T, class D3dBufferObject >
-	bool DxBufferObject< T, D3dBufferObject >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool DxBufferObject< T, D3dBufferObject >::Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
 		bool l_return = false;
 		T * l_buffer;
@@ -23,7 +23,7 @@ namespace Dx11Render
 
 		if ( l_buffer )
 		{
-			std::memcpy( l_buffer, p_pBuffer, p_iSize );
+			std::memcpy( l_buffer, p_buffer, p_iSize );
 			DirectX11::UnlockBuffer( m_pBufferObject );
 			l_return = true;
 		}

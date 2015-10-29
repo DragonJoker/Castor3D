@@ -37,18 +37,18 @@ ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const &
 		cuT( "polygon" ),//eTOPOLOGY_POLYGON
 	};
 
-	ShaderProgramBaseSPtr l_pProgram = GetOwner()->GetOwner()->GetShaderManager().GetNewProgram();
+	ShaderProgramBaseSPtr l_program = GetOwner()->GetOwner()->GetShaderManager().GetNewProgram();
 
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapAmbient, eSHADER_TYPE_PIXEL );
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapNormal, eSHADER_TYPE_PIXEL );
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapSpecular, eSHADER_TYPE_PIXEL );
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapGloss, eSHADER_TYPE_PIXEL );
-	//l_pProgram->CreateFrameVariable( ShaderProgramBase::MapHeight, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapAmbient, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapNormal, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapSpecular, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapGloss, eSHADER_TYPE_PIXEL );
+	//l_program->CreateFrameVariable( ShaderProgramBase::MapHeight, eSHADER_TYPE_PIXEL );
 
-	//ShaderObjectBaseSPtr l_pObject = l_pProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
+	//ShaderObjectBaseSPtr l_pObject = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
 	//l_pObject->SetInputType( eTOPOLOGY_POINTS );
 	//l_pObject->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
 	//l_pObject->SetOutputVtxCount( 4 );
@@ -87,17 +87,17 @@ ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const &
 	//string::replace( l_strGeoShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	//GLSL::ConstantsBase::Replace( l_strGeoShader );
 
-	//String l_strPxlShader = l_pProgram->GetPixelShaderSource( p_flags );
+	//String l_strPxlShader = l_program->GetPixelShaderSource( p_flags );
 
-	//m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_pProgram->GetUserBuffer()->CreateVariable( *l_pProgram.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
-	//l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-	//l_pProgram->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
-	//l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-	//l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-	//l_pProgram->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
-	//l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+	//m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_program->GetUserBuffer()->CreateVariable( *l_program.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
+	//l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
+	//l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
+	//l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
+	//l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
+	//l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
+	//l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
 
-	return l_pProgram;
+	return l_program;
 }
 
 //*************************************************************************************************

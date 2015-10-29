@@ -34,7 +34,7 @@ namespace GlRender
 	protected:
 		uint32_t m_shaderObject;
 		Castor::String m_compilerLog;
-		GlShaderProgram * m_pShaderProgram;
+		GlShaderProgram * m_shaderProgram;
 		UIntStrMap m_mapParamsByName;
 		OpenGl & m_gl;
 

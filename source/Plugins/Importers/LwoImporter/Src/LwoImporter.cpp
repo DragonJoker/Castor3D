@@ -634,7 +634,7 @@ namespace Lwo
 		}
 	}
 
-	UI2 LwoImporter::DoReadBlockHeader( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_eChannel )
+	UI2 LwoImporter::DoReadBlockHeader( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel )
 	{
 		std::string	l_strOrdinal;
 		stLWO_SUBCHUNK	l_currentSubchunk;
@@ -664,9 +664,9 @@ namespace Lwo
 					break;
 
 				case eID_TAG_BLOK_CHAN:
-					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( p_eChannel ) );
-					SwitchEndianness( p_eChannel );
-					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_eChannel );
+					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( p_channel ) );
+					SwitchEndianness( p_channel );
+					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_channel );
 					break;
 				}
 
@@ -716,7 +716,7 @@ namespace Lwo
 		}
 	}
 
-	void LwoImporter::DoReadIMap( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_eChannel )
+	void LwoImporter::DoReadIMap( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel )
 	{
 		stLWO_SUBCHUNK	l_currentSubchunk;
 		bool 		l_bContinue			= true;
@@ -732,9 +732,9 @@ namespace Lwo
 					break;
 
 				case eID_TAG_BLOK_CHAN:
-					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( p_eChannel ) );
-					SwitchEndianness( p_eChannel );
-					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_eChannel );
+					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( p_channel ) );
+					SwitchEndianness( p_channel );
+					Logger::LogDebug( StringStream() << cuT( "				Channel: " ) << p_channel );
 					break;
 				}
 
@@ -839,11 +839,11 @@ namespace Lwo
 		}
 	}
 
-	void LwoImporter::DoSetChannel( TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_eChannel )
+	void LwoImporter::DoSetChannel( TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel )
 	{
 		if ( p_pTexture )
 		{
-			switch ( p_eChannel )
+			switch ( p_channel )
 			{
 			case eTEX_CHANNEL_COLR:
 				p_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE	);

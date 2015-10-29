@@ -27,10 +27,10 @@ namespace Castor
 			return l_uiReturn;
 		}
 
-		uint32_t DLL_CALLCONV ReadProc( void * p_pBuffer, uint32_t p_uiSize, uint32_t p_uiCount, fi_handle p_fiHandle )
+		uint32_t DLL_CALLCONV ReadProc( void * p_buffer, uint32_t p_uiSize, uint32_t p_uiCount, fi_handle p_fiHandle )
 		{
 			BinaryFile * l_pFile = reinterpret_cast< BinaryFile * >( p_fiHandle );
-			return uint32_t( l_pFile->ReadArray( reinterpret_cast< uint8_t * >( p_pBuffer ), p_uiSize * p_uiCount ) );
+			return uint32_t( l_pFile->ReadArray( reinterpret_cast< uint8_t * >( p_buffer ), p_uiSize * p_uiCount ) );
 		}
 
 		int DLL_CALLCONV SeekProc( fi_handle p_fiHandle, long p_lOffset, int p_iOrigin )
@@ -235,9 +235,9 @@ namespace Castor
 		CHECK_INVARIANTS();
 	}
 
-	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
+	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 		: Resource< Image >( p_name )
-		, m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, p_pBuffer, p_eBufferFormat ) )
+		, m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, p_buffer, p_eBufferFormat ) )
 	{
 		CHECK_INVARIANTS();
 	}
