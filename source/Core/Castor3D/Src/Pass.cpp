@@ -749,26 +749,29 @@ namespace Castor3D
 
 	bool Pass::DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index, TextureUnitSPtr & p_opacitySource, PxBufferBaseSPtr & p_opacity )
 	{
-		bool l_return = false;
+		PxBufferBaseSPtr l_opacity = DoPrepareTexture( p_channel, p_unit, p_index );
+		bool l_return = l_opacity != nullptr;
+
+		if ( l_return && !p_opacity )
+		{
+			p_opacity = l_opacity;
+			p_opacitySource = p_unit;
+		}
+
+		return l_return;
+	}
+
+	PxBufferBaseSPtr Pass::DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index )
+	{
+		PxBufferBaseSPtr l_return;
 
 		if ( p_unit && ( p_unit->GetImagePixels() || p_unit->GetRenderTarget() ) )
 		{
-			if ( p_unit->GetImagePixels() && !p_unit->GetRenderTarget() )
+			if ( p_unit->GetImagePixels() )
 			{
-				if ( PF::HasAlpha( p_unit->GetPixelFormat() ) )
-				{
-					PxBufferBaseSPtr l_pExtracted = p_unit->GetImagePixels();
-					PxBufferBaseSPtr l_pTmp = PF::ExtractAlpha( l_pExtracted );
-					p_unit->GetTexture()->SetImage( l_pExtracted );
-
-					if ( !p_opacity )
-					{
-						p_opacity = l_pTmp;
-						p_opacitySource = p_unit;
-					}
-
-					l_return = true;
-				}
+				PxBufferBaseSPtr l_pExtracted = p_unit->GetImagePixels();
+				l_return = PF::ExtractAlpha( l_pExtracted );
+				p_unit->GetTexture()->SetImage( l_pExtracted );
 			}
 
 			p_unit->SetIndex( p_index++ );
@@ -778,24 +781,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	void Pass::DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index )
-	{
-		if ( p_unit && ( p_unit->GetImagePixels() || p_unit->GetRenderTarget() ) )
-		{
-			if ( p_unit->GetImagePixels() )
-			{
-				PxBufferBaseSPtr l_pExtracted = p_unit->GetImagePixels();
-				PF::ExtractAlpha( l_pExtracted );
-				p_unit->GetTexture()->SetImage( l_pExtracted );
-			}
-
-			p_unit->SetIndex( p_index++ );
-			Logger::LogDebug( cuT( "	" ) + TEXTURE_CHANNEL_NAME[p_channel] + cuT( " map at index " ) + string::to_string( p_unit->GetIndex() ) );
-			m_uiTextureFlags |= p_channel;
-			p_unit->Initialise();
-		}
 	}
 
 	void Pass::DoRender( uint8_t p_index, uint8_t p_count )

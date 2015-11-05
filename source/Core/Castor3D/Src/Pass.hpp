@@ -772,14 +772,16 @@ namespace Castor3D
 		 *\param[in]	p_channel		The texture channel
 		 *\param[in]	p_unit			The texture unit
 		 *\param[in,out]p_index			The texture index
+		 *\return		The original texture's alpha channel.
 		 *\~french
 		 *\brief		Prépare une texture à être intégrée à la passe.
 		 *\remarks		Enlève le canal alpha s'il y en avait un.
 		 *\param[in]	p_channel		Le canal de texture
 		 *\param[in]	p_unit			L'unité de texture
 		 *\param[in,out]p_index			L'index de la texture
+		 *\return		Le canal alpha de la texture originale.
 		 */
-		C3D_API void DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
+		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Applies the pass

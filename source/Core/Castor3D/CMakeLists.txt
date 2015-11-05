@@ -35,13 +35,10 @@ file( GLOB ${PROJECT_NAME}_Main_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderLoop*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderLoop*.inl
 )
 file( GLOB ${PROJECT_NAME}_Main_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderLoop*.cpp
 )
 source_group( "Header Files\\Main" FILES ${${PROJECT_NAME}_Main_HEADER_FILES} )
 source_group( "Source Files\\Main" FILES ${${PROJECT_NAME}_Main_SOURCE_FILES} )
@@ -141,24 +138,15 @@ source_group( "Header Files\\Overlay" FILES ${${PROJECT_NAME}_Overlay_HEADER_FIL
 source_group( "Source Files\\Overlay" FILES ${${PROJECT_NAME}_Overlay_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_Render_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderable*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderable*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderSystem*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderSystem*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderTarget*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderTarget*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderWindow*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderWindow*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Render*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Render*.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Viewport*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pipeline*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Context*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Ray*.hpp
 )
 file( GLOB ${PROJECT_NAME}_Render_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Renderable*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderSystem*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderTarget*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*RenderWindow*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Render*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Viewport*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pipeline*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Context*.cpp
