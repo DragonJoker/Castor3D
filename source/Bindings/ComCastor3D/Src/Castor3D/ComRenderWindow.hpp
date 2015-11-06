@@ -67,7 +67,7 @@ namespace CastorCom
 		COM_PROPERTY_GET( Size, ISize *, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetSize ) );
 		COM_PROPERTY_GET( Name, BSTR, make_getter( m_internal.get(), &Castor3D::RenderWindow::GetName ) );
 
-		STDMETHOD( Initialise )( /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal );
+		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal );
 		STDMETHOD( Cleanup )();
 		STDMETHOD( Resize )( /* [in] */ ISize * size );
 		STDMETHOD( OnMouseMove )( /* [in] */ IPosition * pos );

@@ -25,7 +25,7 @@ namespace Castor3D
 		, m_window( NULL )
 		, m_bInitialised( false )
 		, m_bMultiSampling( false )
-		, m_viewport( Viewport::Ortho( *GetOwner()->GetOwner(), 0, 1, 0, 1, 0, 1000 ) )
+		, m_viewport( Viewport::Ortho( *GetOwner()->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{

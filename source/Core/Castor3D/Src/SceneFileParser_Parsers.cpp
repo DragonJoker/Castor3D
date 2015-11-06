@@ -1187,6 +1187,10 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMesh )
 	{
 		l_pContext->pMesh = l_manager.Find( l_pContext->strName2 );
 	}
+	else
+	{
+		l_pContext->pMesh.reset();
+	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_MESH )
 

@@ -487,7 +487,7 @@ namespace GlRender
 		template< typename Value, typename ... Values >
 		inline Value cross( Value const & p_value, Values const & ... p_values )
 		{
-			return WriteFunctionCall< Value >( p_value.m_writer, cuT( "dot" ), p_value, p_values... );
+			return WriteFunctionCall< Value >( p_value.m_writer, cuT( "cross" ), p_value, p_values... );
 		}
 
 		template< typename Value, typename ... Values >

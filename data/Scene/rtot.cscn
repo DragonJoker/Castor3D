@@ -57,12 +57,11 @@ scene "TextureScene"
 		primitive triangles
 		viewport
 		{
-			type			3d
-			fov_y			45.0
-			near			0.2
-			far				20000
-			size			1024 1024
-			aspect_ratio	1
+			type 3d
+			fov_y 45.0
+			aspect_ratio 1
+			near 0.2
+			far 20000
 		}
 	}
 
@@ -94,8 +93,8 @@ material "RToTMaterial"
 {
 	pass
 	{
-		ambient 0.0	0.0	0.0 1.0
-		diffuse 1.0	1.0	1.0 1.0
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 1.0 1.0 1.0 1.0
 		emissive 0.0 0.0 0.0 1.0
 		specular 0.0 0.0 0.0 1.0
 		shininess 51.2
@@ -105,15 +104,15 @@ material "RToTMaterial"
 		{
 			render_target
 			{
-				format		rgb24
-				size		1024 1024
-				msaa 		8
-				scene		"TextureScene"
-				camera		"TextureCamera"
+				format rgb24
+				size 1024 1024
+				msaa 8
+				scene "TextureScene"
+				camera "TextureCamera"
 			}
 			colour 1.0 1.0 1.0 1.0
 			channel diffuse
-			sampler	"Linear"
+			sampler "Linear"
 		}
 	}
 }
@@ -173,10 +172,11 @@ scene "FinalScene"
 		primitive triangles
 		viewport "MainViewport"
 		{
-			type			3d
-			size			screen_size
-			fov_y			45.0
-			aspect_ratio	1.778
+			type 3d
+			fov_y 45.0
+			aspect_ratio 1.778
+			near 0.1
+			far 20000.0
 		}
 	}
 }
@@ -185,13 +185,13 @@ window "MyWindow"
 {
 	render_target
 	{
-		format		argb32
-		depth		depth24s8
-		size		1125 600
-//		msaa 		8
-		scene		"FinalScene"
-		camera		"MainCamera"
+		format argb32
+		depth depth24s8
+		size 1125 600
+		//msaa 8
+		scene "FinalScene"
+		camera "MainCamera"
 	}
-//	fullscreen	true
-//	vsync		true
+	//fullscreen true
+	//vsync true
 }

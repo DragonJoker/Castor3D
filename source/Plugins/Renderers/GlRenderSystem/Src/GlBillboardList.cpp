@@ -77,17 +77,18 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 	String l_strGeoShader;
 	{
-		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+		GlslWriter l_writer( m_gl, eSHADER_TYPE_GEOMETRY );
 		l_writer << Version() << Endl();
 
-		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetInputType()] << cuT( " ) in;" );
-		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetOutputType()] << cuT( " ) out;" );
-		l_writer << cuT( "layout( max_vertices = " ) << PRIMITIVES[l_pObject->GetOutputVtxCount()] << cuT( " ) out;" );
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetInputType()] << cuT( " ) in;" ) << Endl();
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetOutputType()] << cuT( " ) out;" ) << Endl();
+		l_writer << cuT( "layout( max_vertices = " ) << l_pObject->GetOutputVtxCount() << cuT( " ) out;" ) << Endl();
 
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_BILLBOARD( l_writer );
 
+		OUT( l_writer, Vec3, vtx_vertex );
 		OUT( l_writer, Vec3, vtx_normal );
 		OUT( l_writer, Vec3, vtx_tangent );
 		OUT( l_writer, Vec3, vtx_bitangent );
@@ -98,13 +99,13 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec3, l_position, ( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).xyz() );
 			l_position.y() = c3d_v3CameraPosition.y();
 			LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, c3d_v3CameraPosition - l_position );
 			LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0.0f ), 1.0, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, ( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).xyz() );
-			l_v3Normal = ( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz();
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).xyz() );
+			l_v3Normal = l_writer.Paren( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz();
 
 			LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );
@@ -126,6 +127,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
 				gl_Position = vec4( l_position0, 1.0 );
+				vtx_vertex = l_position0;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -138,6 +140,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
 				gl_Position = vec4( l_position1, 1.0 );
+				vtx_vertex = l_position1;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -150,6 +153,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
 				gl_Position = vec4( l_position2, 1.0 );
+				vtx_vertex = l_position2;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -159,8 +163,10 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 			l_writer << Endl();
 
 			{
-				gl_Position = vec4( l_position3, 1.0 );
+				IndentBlock l_block( l_writer );
 				l_writer << Endl();
+				gl_Position = vec4( l_position3, 1.0 );
+				vtx_vertex = l_position3;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -171,7 +177,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 			l_writer.EndPrimitive();
 		} );
 
-		l_strVtxShader = l_writer.Finalise();
+		l_strGeoShader = l_writer.Finalise();
 	}
 
 	String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );

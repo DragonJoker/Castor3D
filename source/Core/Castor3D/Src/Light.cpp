@@ -113,7 +113,7 @@ namespace Castor3D
 	{
 		PointLightSPtr l_return;
 
-		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_POINT )
 		{
 			l_return = std::static_pointer_cast< PointLight >( m_pCategory );
 		}
@@ -125,7 +125,7 @@ namespace Castor3D
 	{
 		SpotLightSPtr l_return;
 
-		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_SPOT )
 		{
 			l_return = std::static_pointer_cast< SpotLight >( m_pCategory );
 		}

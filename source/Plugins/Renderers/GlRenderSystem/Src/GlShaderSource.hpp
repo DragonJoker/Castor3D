@@ -2722,15 +2722,15 @@ namespace GlRender
 			}
 			Vec4 gl_Position()const
 			{
-				return Vec4( m_writer, m_name + cuT( ".gl_Position" ) );
+				return Vec4( m_writer, m_value.str() + cuT( ".gl_Position" ) );
 			}
 			Float gl_PointSize()const
 			{
-				return Float( m_writer, m_name + cuT( ".gl_PointSize" ) );
+				return Float( m_writer, m_value.str() + cuT( ".gl_PointSize" ) );
 			}
 			Float gl_ClipDistance()const
 			{
-				return Array< Float >( m_writer, m_name + cuT( ".gl_ClipDistance" ), 8 );
+				return Array< Float >( m_writer, m_value.str() + cuT( ".gl_ClipDistance" ), 8 );
 			}
 		};
 

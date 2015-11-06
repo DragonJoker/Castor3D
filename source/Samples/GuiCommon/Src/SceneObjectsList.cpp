@@ -221,11 +221,14 @@ namespace GuiCommon
 		wxTreeItemId l_id = AppendItem( p_id, l_geometry->GetName(), eBMP_GEOMETRY, eBMP_GEOMETRY_SEL, new GeometryTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry ) );
 		int l_count = 0;
 
-		for ( auto l_submesh : *l_geometry->GetMesh() )
+		if ( l_geometry->GetMesh() )
 		{
-			wxString l_name = _( "Submesh " );
-			l_name << l_count++;
-			wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry, l_submesh ) );
+			for ( auto l_submesh : *l_geometry->GetMesh() )
+			{
+				wxString l_name = _( "Submesh " );
+				l_name << l_count++;
+				wxTreeItemId l_idSubmesh = AppendItem( l_id, l_name, eBMP_SUBMESH, eBMP_SUBMESH_SEL, new SubmeshTreeItemProperty( m_propertiesHolder->IsEditable(), l_geometry, l_submesh ) );
+			}
 		}
 	}
 
