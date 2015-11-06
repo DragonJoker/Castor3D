@@ -37,19 +37,19 @@ namespace Castor3D
 	}
 
 
-	void StaticTexture::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer )
+	void StaticTexture::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer )
 	{
 		if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 		{
 			m_uiDepth = GetNext2Pow( p_dimensions[2] );
 			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_uiDepth );
-			Castor::Image l_img( cuT( "Tmp" ), *p_pBuffer );
+			Castor::Image l_img( cuT( "Tmp" ), *p_buffer );
 			m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
 		}
 		else
 		{
 			m_uiDepth = p_dimensions[2];
-			m_pPixelBuffer = p_pBuffer;
+			m_pPixelBuffer = p_buffer;
 		}
 	}
 

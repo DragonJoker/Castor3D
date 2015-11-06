@@ -349,8 +349,8 @@ namespace OceanLighting
 			m_pTechnique->SetWidth( m_width );
 			m_pTechnique->SetHeight( m_height );
 			l_pTarget->SetTechnique( m_pTechnique );
-			m_pWindow = m_pCastor3D->GetWindowManager().Create();
-			m_pWindow->SetRenderTarget( l_pTarget );
+			m_window = m_pCastor3D->GetWindowManager().Create();
+			m_window->SetRenderTarget( l_pTarget );
 #if defined( _WIN32 )
 			WindowHandle l_handle( std::make_shared< IMswWindowHandle >( p_parent->GetHandle() ) );
 #elif defined( __linux__ )
@@ -374,7 +374,7 @@ namespace OceanLighting
 #	error "Yet unsupported OS"
 #endif
 			Castor::Size l_sizeWnd( GetClientSize().x, GetClientSize().y );
-			l_bReturn = m_pWindow->Initialise( l_sizeWnd,  l_handle );
+			l_bReturn = m_window->Initialise( l_sizeWnd,  l_handle );
 		}
 
 		if ( l_bReturn )
@@ -405,7 +405,7 @@ namespace OceanLighting
 	{
 		wxPaintDC l_dc( this );
 
-		if ( !m_pWindow )
+		if ( !m_window )
 		{
 			l_dc.SetBrush( wxBrush( *wxWHITE ) );
 			l_dc.SetPen( wxPen( *wxWHITE ) );
@@ -430,7 +430,7 @@ namespace OceanLighting
 		}
 
 		m_pTechnique.reset();
-		m_pWindow.reset();
+		m_window.reset();
 
 		if ( m_pCastor3D )
 		{

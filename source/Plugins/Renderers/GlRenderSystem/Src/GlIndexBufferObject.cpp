@@ -5,8 +5,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlIndexBufferObject::GlIndexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
-		: GlBuffer< uint32_t >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_ELEMENT_ARRAY, p_pBuffer )
+	GlIndexBufferObject::GlIndexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_buffer )
+		: GlBuffer< uint32_t >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_ELEMENT_ARRAY, p_buffer )
 	{
 	}
 

@@ -23,14 +23,14 @@ namespace GlRender
 	{
 	}
 
-	bool GlRenderBufferAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_eInterpolation )
+	bool GlRenderBufferAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE p_interpolation )
 	{
 		bool l_return = false;
 
 		if ( m_gl.HasFbo() )
 		{
 			l_return = m_eGlStatus == eGL_FRAMEBUFFER_COMPLETE;
-			GlFrameBufferSPtr l_pBuffer = std::static_pointer_cast< GlFrameBuffer >( p_pBuffer );
+			GlFrameBufferSPtr l_pBuffer = std::static_pointer_cast< GlFrameBuffer >( p_buffer );
 
 			if ( l_return )
 			{
@@ -59,7 +59,7 @@ namespace GlRender
 				}
 				else
 				{
-					l_return = m_gl.BlitFramebuffer( p_rectSrc, p_rectDst, eGL_COMPONENT_COLOR, m_gl.Get( p_eInterpolation ) );
+					l_return = m_gl.BlitFramebuffer( p_rectSrc, p_rectDst, eGL_COMPONENT_COLOR, m_gl.Get( p_interpolation ) );
 				}
 			}
 		}

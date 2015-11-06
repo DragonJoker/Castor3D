@@ -46,15 +46,15 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 	};
 
 	ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
-	ShaderProgramBaseSPtr l_pProgram = l_manager.GetNewProgram();
-	l_manager.CreateMatrixBuffer( *l_pProgram, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-	l_manager.CreateSceneBuffer( *l_pProgram, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
-	l_manager.CreatePassBuffer( *l_pProgram, MASK_SHADER_TYPE_PIXEL );
-	l_manager.CreateTextureVariables( *l_pProgram, p_flags );
+	ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
+	l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+	l_manager.CreateTextureVariables( *l_program, p_flags );
 	FrameVariableBufferSPtr l_billboardUbo = GetOwner()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
-	l_pProgram->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
+	l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
-	ShaderObjectBaseSPtr l_pObject = l_pProgram->CreateObject( eSHADER_TYPE_GEOMETRY );
+	ShaderObjectBaseSPtr l_pObject = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
 	l_pObject->SetInputType( eTOPOLOGY_POINTS );
 	l_pObject->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
 	l_pObject->SetOutputVtxCount( 4 );
@@ -77,17 +77,18 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 	String l_strGeoShader;
 	{
-		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+		GlslWriter l_writer( m_gl, eSHADER_TYPE_GEOMETRY );
 		l_writer << Version() << Endl();
 
-		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetInputType()] << cuT( " ) in;" );
-		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetOutputType()] << cuT( " ) out;" );
-		l_writer << cuT( "layout( max_vertices = " ) << PRIMITIVES[l_pObject->GetOutputVtxCount()] << cuT( " ) out;" );
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetInputType()] << cuT( " ) in;" ) << Endl();
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetOutputType()] << cuT( " ) out;" ) << Endl();
+		l_writer << cuT( "layout( max_vertices = " ) << l_pObject->GetOutputVtxCount() << cuT( " ) out;" ) << Endl();
 
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_BILLBOARD( l_writer );
 
+		OUT( l_writer, Vec3, vtx_vertex );
 		OUT( l_writer, Vec3, vtx_normal );
 		OUT( l_writer, Vec3, vtx_tangent );
 		OUT( l_writer, Vec3, vtx_bitangent );
@@ -98,13 +99,13 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec3, l_position, ( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).xyz() );
 			l_position.y() = c3d_v3CameraPosition.y();
 			LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, c3d_v3CameraPosition - l_position );
 			LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0.0f ), 1.0, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, ( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).xyz() );
-			l_v3Normal = ( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz();
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).xyz() );
+			l_v3Normal = l_writer.Paren( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz();
 
 			LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );
@@ -126,6 +127,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
 				gl_Position = vec4( l_position0, 1.0 );
+				vtx_vertex = l_position0;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -138,6 +140,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
 				gl_Position = vec4( l_position1, 1.0 );
+				vtx_vertex = l_position1;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -150,6 +153,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 				IndentBlock l_block( l_writer );
 				l_writer << Endl();
 				gl_Position = vec4( l_position2, 1.0 );
+				vtx_vertex = l_position2;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -159,8 +163,10 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 			l_writer << Endl();
 
 			{
-				gl_Position = vec4( l_position3, 1.0 );
+				IndentBlock l_block( l_writer );
 				l_writer << Endl();
+				gl_Position = vec4( l_position3, 1.0 );
+				vtx_vertex = l_position3;
 				vtx_normal = l_v3Normal;
 				vtx_tangent = l_v3Tangent;
 				vtx_bitangent = l_v3Bitangent;
@@ -171,20 +177,20 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 			l_writer.EndPrimitive();
 		} );
 
-		l_strVtxShader = l_writer.Finalise();
+		l_strGeoShader = l_writer.Finalise();
 	}
 
 	String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
 
-	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_pProgram.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
-	l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-	l_pProgram->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
-	l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-	l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-	l_pProgram->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
-	l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+	m_pDimensionsUniform = std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
+	l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
+	l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
+	l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
+	l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
+	l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
+	l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
 
-	return l_pProgram;
+	return l_program;
 }
 
 bool GlBillboardList::DoInitialise()

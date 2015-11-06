@@ -300,19 +300,19 @@ namespace Dx11Render
 		return std::make_shared< DxOverlayRenderer >( *this );
 	}
 
-	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > DxRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_pBuffer )
+	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > DxRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer )
 	{
-		return std::make_shared< DxIndexBuffer >( *this, p_pBuffer );
+		return std::make_shared< DxIndexBuffer >( *this, p_buffer );
 	}
 
-	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > DxRenderSystem::CreateVertexBuffer( BufferDeclaration const & p_declaration, CpuBuffer< uint8_t > * p_pBuffer )
+	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > DxRenderSystem::CreateVertexBuffer( BufferDeclaration const & p_declaration, CpuBuffer< uint8_t > * p_buffer )
 	{
-		return std::make_shared< DxVertexBuffer >( *this, p_declaration, p_pBuffer );
+		return std::make_shared< DxVertexBuffer >( *this, p_declaration, p_buffer );
 	}
 
-	std::shared_ptr< Castor3D::GpuBuffer< real > > DxRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_pBuffer )
+	std::shared_ptr< Castor3D::GpuBuffer< real > > DxRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_buffer )
 	{
-		return std::make_shared< DxMatrixBuffer >( *this, p_pBuffer );
+		return std::make_shared< DxMatrixBuffer >( *this, p_buffer );
 	}
 
 	StaticTextureSPtr DxRenderSystem::CreateStaticTexture()

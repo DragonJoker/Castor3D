@@ -41,7 +41,7 @@ namespace GlRender
 
 	void GlContext::UpdateFullScreen( bool p_bVal )
 	{
-		if ( Context::m_pWindow->GetVSync() )
+		if ( Context::m_window->GetVSync() )
 		{
 			GetImpl()->UpdateVSync( p_bVal );
 		}
@@ -50,7 +50,7 @@ namespace GlRender
 	bool GlContext::DoInitialise()
 	{
 		using namespace GLSL;
-		m_bInitialised = m_pImplementation->Initialise( m_pWindow );
+		m_bInitialised = m_pImplementation->Initialise( m_window );
 
 		if ( m_bInitialised )
 		{
@@ -96,13 +96,13 @@ namespace GlRender
 				l_strPxlShader = l_writer.Finalise();
 			}
 
-			ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_2, l_strVtxShader );
-			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_2, l_strPxlShader );
-			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-			l_pProgram->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-			l_pProgram->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+			ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
+			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_2, l_strVtxShader );
+			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_2, l_strPxlShader );
+			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
+			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
+			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
+			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
 		}
 
 		return m_bInitialised;

@@ -46,7 +46,7 @@ namespace Dx11Render
 	private:
 		DxRenderSystem * m_pDxRenderSystem;
 		ID3D11Buffer * m_pDxBuffer;
-		DxShaderProgram * m_pShaderProgram;
+		DxShaderProgram * m_shaderProgram;
 	};
 }
 

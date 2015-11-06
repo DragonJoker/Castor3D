@@ -91,15 +91,15 @@ namespace Castor
 		 *\~english
 		 *\brief		Initialises the data buffer to the given one
 		 *\remark		Conversions are made if needed
-		 *\param[in]	p_pBuffer		Data buffer
+		 *\param[in]	p_buffer		Data buffer
 		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
 		 *\~french
 		 *\brief		Initialise le buffer de données à celui donné
 		 *\remark		Des conversions sont faites si besoin est
-		 *\param[in]	p_pBuffer		Buffer de données
+		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
 		 */
-		CU_API virtual void init( uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat );
+		CU_API virtual void init( uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer at the given size
@@ -123,16 +123,16 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Converts and assigns a data buffer to this buffer
-		 *\param[in]	p_pBuffer		Data buffer
+		 *\param[in]	p_buffer		Data buffer
 		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
 		 *\return
 		 *\~french
 		 *\brief		Convertit et assigne les données du buffer donné à ce buffer
-		 *\param[in]	p_pBuffer		Buffer de données
+		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
 		 *\return
 		 */
-		CU_API virtual void assign( std::vector< uint8_t > const & p_pBuffer, ePIXEL_FORMAT p_eBufferFormat ) = 0;
+		CU_API virtual void assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_eBufferFormat ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on constant datas
@@ -298,18 +298,18 @@ namespace Castor
 		 *\brief		Creates a buffer with the given data
 		 *\param[in]	p_size			Buffer dimensions
 		 *\param[in]	p_eWantedFormat	Pixels format
-		 *\param[in]	p_pBuffer		Data buffer
+		 *\param[in]	p_buffer		Data buffer
 		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
 		 *\return		The created buffer
 		 *\~french
 		 *\brief		Crée un buffer avec les données voulues
 		 *\param[in]	p_size			Dimensions du buffer
 		 *\param[in]	p_eWantedFormat	Format des pixels du buffer
-		 *\param[in]	p_pBuffer		Buffer de données
+		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
 		 *\return		Le buffer créé
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & p_size, ePIXEL_FORMAT p_eWantedFormat, uint8_t const * p_pBuffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API static PxBufferBaseSPtr create( Size const & p_size, ePIXEL_FORMAT p_eWantedFormat, uint8_t const * p_buffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
 
 	private:
 		ePIXEL_FORMAT m_ePixelFormat;

@@ -135,21 +135,21 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Adds a MBCS C string to the current path. Adds the separator if needed
-		 *\param[in]	p_pBuffer	The path to add
+		 *\param[in]	p_buffer	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères C MBCS à ce chemin. Ajoute le séparateur si besoin est
-		 *\param[in]	p_pBuffer	La chaîne de caractères C à concaténer
+		 *\param[in]	p_buffer	La chaîne de caractères C à concaténer
 		 */
-		CU_API Path & operator /=( char const * p_pBuffer );
+		CU_API Path & operator /=( char const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Adds a Unicode C string to the current path. Adds the separator if needed
-		 *\param[in]	p_pBuffer	The path to add
+		 *\param[in]	p_buffer	The path to add
 		 *\~french
 		 *\brief		Concatène une chaîne de caractères C Unicode à ce chemin. Ajoute le séparateur si besoin est
-		 *\param[in]	p_pBuffer	La chaîne de caractères C à concaténer
+		 *\param[in]	p_buffer	La chaîne de caractères C à concaténer
 		 */
-		CU_API Path & operator /=( wchar_t const * p_pBuffer );
+		CU_API Path & operator /=( wchar_t const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves the parent path
@@ -216,24 +216,24 @@ namespace Castor
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_path		The first path to add
-	 *\param[in]	p_pBuffer	The path to add
+	 *\param[in]	p_buffer	The path to add
 	 *\~french
 	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
 	 *\param[in]	p_path		The first path to add
-	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
+	 *\param[in]	p_buffer	La chaîne de caractères à concaténer
 	 */
-	CU_API Path operator /( Path const & p_path, char const * p_pBuffer	);
+	CU_API Path operator /( Path const & p_path, char const * p_buffer	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
 	 *\param[in]	p_path		The first path to add
-	 *\param[in]	p_pBuffer	The path to add
+	 *\param[in]	p_buffer	The path to add
 	 *\~french
 	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
 	 *\param[in]	p_path		The first path to add
-	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
+	 *\param[in]	p_buffer	La chaîne de caractères à concaténer
 	 */
-	CU_API Path operator /( Path const & p_path, wchar_t const * p_pBuffer	);
+	CU_API Path operator /( Path const & p_path, wchar_t const * p_buffer	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
@@ -248,25 +248,25 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
-	 *\param[in]	p_pBuffer	The path to add
+	 *\param[in]	p_buffer	The path to add
 	 *\param[in]	p_path		The first path to add
 	 *\~french
 	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
+	 *\param[in]	p_buffer	La chaîne de caractères à concaténer
 	 *\param[in]	p_path		The first path to add
 	 */
-	CU_API Path operator /( char const * p_pBuffer, Path const & p_path	);
+	CU_API Path operator /( char const * p_buffer, Path const & p_path	);
 	/**
 	 *\~english
 	 *\brief		Adds a string to a path. Adds the separator if needed
-	 *\param[in]	p_pBuffer	The path to add
+	 *\param[in]	p_buffer	The path to add
 	 *\param[in]	p_path		The first path to add
 	 *\~french
 	 *\brief		Concatène une chaîne de caractères à un chemin. Ajoute le séparateur si besoin est
-	 *\param[in]	p_pBuffer	La chaîne de caractères à concaténer
+	 *\param[in]	p_buffer	La chaîne de caractères à concaténer
 	 *\param[in]	p_path		The first path to add
 	 */
-	CU_API Path operator /( wchar_t const * p_pBuffer, Path const & p_path	);
+	CU_API Path operator /( wchar_t const * p_buffer, Path const & p_path	);
 }
 
 #endif

@@ -60,13 +60,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array
 		 *\param[in]	p_dimensions	The texture dimensions
-		 *\param[in]	p_pBuffer		The buffer
+		 *\param[in]	p_buffer		The buffer
 		 *\~french
 		 *\brief		Définit le buffer de la texture, ainsi que ses dimensions, dans le cas de texture 2D ou tableau de textures
 		 *\param[in]	p_dimensions	Les dimensions de la texture
-		 *\param[in]	p_pBuffer		Le buffer
+		 *\param[in]	p_buffer		Le buffer
 		 */
-		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer );
+		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */

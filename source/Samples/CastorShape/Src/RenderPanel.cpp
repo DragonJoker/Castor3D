@@ -94,8 +94,9 @@ void RenderPanel::InitialiseRenderWindow()
 	l_pRenderTarget->SetSize( Size( GetClientSize().x, GetClientSize().y ) );
 	l_pRenderTarget->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
 	l_pRenderWindow->SetRenderTarget( l_pRenderTarget );
+	Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
 
-	if ( l_pRenderWindow->Initialise( GuiCommon::make_WindowHandle( this ) ) )
+	if ( l_pRenderWindow->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 	{
 		m_listener = l_pRenderWindow->GetListener();
 		m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_pRenderWindow->GetScene()->GetObjectRootNode(), real( 0 ), real( 0 ), real( 0 ) );

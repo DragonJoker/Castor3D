@@ -53,13 +53,13 @@ namespace Castor3D
 		}
 	}
 
-	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_pTexture )
+	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_texture )
 	{
 		Subdivider * l_return = nullptr;
 
 		if ( m_pfnCreateGenerator )
 		{
-			l_return = m_pfnCreateGenerator( p_pTexture );
+			l_return = m_pfnCreateGenerator( p_texture );
 		}
 
 		return l_return;

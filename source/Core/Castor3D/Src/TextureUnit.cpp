@@ -484,9 +484,9 @@ namespace Castor3D
 		}
 	}
 
-	void TextureUnit::SetTexture( TextureBaseSPtr p_pTexture )
+	void TextureUnit::SetTexture( TextureBaseSPtr p_texture )
 	{
-		m_pTexture = p_pTexture;
+		m_pTexture = p_texture;
 		m_bChanged = true;
 	}
 

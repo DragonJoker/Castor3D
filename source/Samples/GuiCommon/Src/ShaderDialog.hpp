@@ -58,7 +58,7 @@ namespace GuiCommon
 		wxAuiNotebook * m_pNotebookEditors;
 		std::unique_ptr< StcContext > m_pStcContext;
 		ShaderEditorPage * m_pEditorPages[Castor3D::eSHADER_TYPE_COUNT];
-		Castor3D::ShaderProgramBaseWPtr m_pShaderProgram;
+		Castor3D::ShaderProgramBaseWPtr m_shaderProgram;
 		Castor3D::PassWPtr m_pPass;
 		bool m_bCompiled;
 		bool m_bOwnShader;

@@ -74,12 +74,12 @@ namespace Castor3D
 		/**
 		*\~english
 		*\brief		Defines the texture buffer
-		*\param[in]	p_pBuffer	The buffer
+		*\param[in]	p_buffer	The buffer
 		*\~french
 		*\brief		Définit le buffer de la texture
-		*\param[in]	p_pBuffer	Le buffer
+		*\param[in]	p_buffer	Le buffer
 		*/
-		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_pBuffer );
+		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
 		 *\brief		Creation function

@@ -268,17 +268,17 @@ namespace Dx11Render
 		static bool SetVertexLayout( ID3D11Device * pDevice, ID3D11InputLayout * pDecl );
 		static bool SetStreamSource( ID3D11Device * pDevice, UINT StreamNumber, ID3D11Buffer * pStreamData, UINT OffsetInBytes, UINT Stride );
 		static bool SetIndices( ID3D11Device * pDevice, ID3D11Buffer * pIndexData );
-		static bool UnlockBuffer( ID3D11Buffer * p_pBuffer );
+		static bool UnlockBuffer( ID3D11Buffer * p_buffer );
 		static bool DrawIndexedPrimitives();
 		template< typename T >
-		static void LockBuffer( T *& p_pReturn, ID3D11Buffer * p_pBuffer, uint32_t CU_PARAM_UNUSED( p_uiOffset ), uint32_t CU_PARAM_UNUSED( p_uiSize ), uint32_t p_uiFlags )
+		static void LockBuffer( T *& p_pReturn, ID3D11Buffer * p_buffer, uint32_t CU_PARAM_UNUSED( p_uiOffset ), uint32_t CU_PARAM_UNUSED( p_uiSize ), uint32_t p_uiFlags )
 		{
 			ID3D11Device * l_pDevice;
 			ID3D11DeviceContext * l_deviceContext;
 			D3D11_MAPPED_SUBRESOURCE l_mappedResource;
-			p_pBuffer->GetDevice( &l_pDevice );
+			p_buffer->GetDevice( &l_pDevice );
 			l_pDevice->GetImmediateContext( &l_deviceContext );
-			HRESULT l_hr = l_deviceContext->Map( p_pBuffer, 0, D3D11_MAP( DirectX11::GetLockFlags( p_uiFlags ) ), 0, &l_mappedResource );
+			HRESULT l_hr = l_deviceContext->Map( p_buffer, 0, D3D11_MAP( DirectX11::GetLockFlags( p_uiFlags ) ), 0, &l_mappedResource );
 			l_deviceContext->Release();
 			l_pDevice->Release();
 

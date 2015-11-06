@@ -131,7 +131,7 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "OBJ" ), cuT( "Wavefront Object" ) ) );
-	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );
+	//l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) ); // Crashes on big meshes.
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "MD2" ), cuT( "Quake II" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "MD3" ), cuT( "Quake III" ) ) );
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "LWO" ), cuT( "LightWave Model" ) ) );
@@ -689,7 +689,7 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 	}
 }
 
-void AssimpImporter::DoAddTexture( String const & p_strPath, PassSPtr p_pPass, eTEXTURE_CHANNEL p_eChannel )
+void AssimpImporter::DoAddTexture( String const & p_strPath, PassSPtr p_pPass, eTEXTURE_CHANNEL p_channel )
 {
 	if ( p_pPass )
 	{
@@ -716,7 +716,7 @@ void AssimpImporter::DoAddTexture( String const & p_strPath, PassSPtr p_pPass, e
 				}
 				else
 				{
-					l_pTexture->SetChannel( p_eChannel );
+					l_pTexture->SetChannel( p_channel );
 				}
 			}
 			catch ( ... )

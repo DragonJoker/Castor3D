@@ -85,7 +85,7 @@ namespace Obj
 		return l_return;
 	}
 
-	void ObjImporter::DoAddTexture( String const & p_strValue, PassSPtr p_pPass, eTEXTURE_CHANNEL p_eChannel )
+	void ObjImporter::DoAddTexture( String const & p_strValue, PassSPtr p_pPass, eTEXTURE_CHANNEL p_channel )
 	{
 		Point3f l_offset( 0, 0, 0 );
 		Point3f l_scale( 1, 1, 1 );
@@ -120,7 +120,7 @@ namespace Obj
 			l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			l_pTexture->SetTexture( l_pStaTexture );
-			l_pTexture->SetChannel( p_eChannel );
+			l_pTexture->SetChannel( p_channel );
 			m_arrayTextures.push_back( l_pStaTexture );
 		}
 	}

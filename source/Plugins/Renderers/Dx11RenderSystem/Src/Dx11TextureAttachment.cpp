@@ -8,10 +8,10 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxTextureAttachment::DxTextureAttachment( DxRenderSystem * p_renderSystem, DynamicTextureSPtr p_pTexture )
-		: TextureAttachment( p_pTexture )
+	DxTextureAttachment::DxTextureAttachment( DxRenderSystem * p_renderSystem, DynamicTextureSPtr p_texture )
+		: TextureAttachment( p_texture )
 		, m_renderSystem( p_renderSystem )
-		, m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_pTexture ) )
+		, m_pDxTexture( std::static_pointer_cast< DxDynamicTexture >( p_texture ) )
 	{
 	}
 
@@ -19,10 +19,10 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxTextureAttachment::Blit( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_eInterpolation ) )
+	bool DxTextureAttachment::Blit( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_interpolation ) )
 	{
 		bool l_return = true;
-		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_pBuffer );
+		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_buffer );
 		RECT l_rcSrc = { p_rectSrc.left(), p_rectSrc.top(), p_rectSrc.right(), p_rectSrc.bottom() };
 		RECT l_rcDst = { p_rectDst.left(), p_rectDst.top(), p_rectDst.right(), p_rectDst.bottom() };
 		ID3D11Resource * l_pDstSurface;

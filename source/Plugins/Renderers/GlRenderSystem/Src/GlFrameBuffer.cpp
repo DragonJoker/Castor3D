@@ -152,7 +152,7 @@ namespace GlRender
 		}
 	}
 
-	bool GlFrameBuffer::DoBlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolationMode )
+	bool GlFrameBuffer::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolationMode )
 	{
 		return m_gl.BlitFramebuffer( p_rectDst, p_rectDst, m_gl.GetComponents( p_uiComponents ), m_gl.Get( p_eInterpolationMode ) );
 	}

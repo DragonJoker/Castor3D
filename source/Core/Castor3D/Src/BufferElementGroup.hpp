@@ -37,14 +37,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pBuffer		The data buffer
+		 *\param[in]	p_buffer		The data buffer
 		 *\param[in]	p_index		The group index
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pBuffer		Le tampon de données
+		 *\param[in]	p_buffer		Le tampon de données
 		 *\param[in]	p_index		L'indice du groupe
 		 */
-		C3D_API BufferElementGroup( uint8_t * p_pBuffer = NULL, uint32_t p_index = 0 );
+		C3D_API BufferElementGroup( uint8_t * p_buffer = NULL, uint32_t p_index = 0 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -58,18 +58,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Lie les valeurs de l'élément à celles données en paramètre.
 		 */
-		C3D_API void LinkCoords( uint8_t * p_pBuffer );
+		C3D_API void LinkCoords( uint8_t * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Links the element values to the ones in parameter.
 		 *\remark		Replace buffer values by element values
-		 *\param[in]	p_pBuffer	The values buffer
+		 *\param[in]	p_buffer	The values buffer
 		 *\~french
 		 *\brief		Lie les valeurs de l'élément à celles données en paramètre.
 		 *\remark		Remplace les valeurs du tampon par celles de l'élément
-		 *\param[in]	p_pBuffer	Le tampon de valeurs
+		 *\param[in]	p_buffer	Le tampon de valeurs
 		 */
-		C3D_API void LinkCoords( uint8_t * p_pBuffer, uint32_t p_uiSize );
+		C3D_API void LinkCoords( uint8_t * p_buffer, uint32_t p_uiSize );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pointer on the data buffer

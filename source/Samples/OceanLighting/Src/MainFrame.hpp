@@ -61,7 +61,7 @@ namespace OceanLighting
 		int							m_height;
 		wxTimer  		*			m_timer;
 		Castor3D::Engine 	*		m_pCastor3D;
-		Castor3D::RenderWindowSPtr	m_pWindow;
+		Castor3D::RenderWindowSPtr	m_window;
 		RenderTechniqueSPtr			m_pTechnique;
 
 	public:

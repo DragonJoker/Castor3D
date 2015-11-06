@@ -85,13 +85,12 @@ namespace CastorViewerSharp
 				if ( m_renderWindow != null )
 				{
 					var window = GetWindow( RenderPanel );
+					Size l_size = new Size();
+					l_size.Set( ( uint )window.Width, ( uint )window.Height );
 
-					if ( m_renderWindow.Initialise( new WindowInteropHelper( window ).Handle ) )
+					if ( m_renderWindow.Initialise( l_size, new WindowInteropHelper( window ).Handle ) )
 					{
 						m_scene = m_renderWindow.RenderTarget.Scene;
-						Size l_size = new Size();
-						l_size.Set( ( uint )window.Width, ( uint )window.Height );
-						m_renderWindow.Resize( l_size );
 					}
 
 					m_timer.Start();

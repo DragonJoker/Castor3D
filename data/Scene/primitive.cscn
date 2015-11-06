@@ -52,10 +52,11 @@ scene "Scene"
 		primitive triangles
 		viewport "MainViewport"
 		{
-			type			3d
-			size			1024 768
-			fov_y			45.0
-			aspect_ratio	1.778
+			type 3d
+			fov_y 45.0
+			aspect_ratio 1.778
+			near 0.1
+			far 20000.0
 		}
 	}
 }
@@ -64,12 +65,12 @@ window "Window"
 {
 	render_target
 	{
-		format		argb32
-		depth		depth24s8
-		size		1024 768
-		scene		"Scene"
-		camera		"MainCamera"
+		format argb32
+		depth depth24s8
+		size 1024 768
+		scene "Scene"
+		camera "MainCamera"
 	}
-	fullscreen	false
-	vsync		true
+	fullscreen false
+	vsync true
 }

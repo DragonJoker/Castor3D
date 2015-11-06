@@ -267,7 +267,7 @@ namespace Castor
 	CHECK_INVARIANT( m_pFile );
 	END_INVARIANT_BLOCK()
 
-	uint64_t File::DoWrite( uint8_t const * p_pBuffer, uint64_t p_uiSize )
+	uint64_t File::DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_WRITE ) );
@@ -275,7 +275,7 @@ namespace Castor
 
 		if ( IsOk() )
 		{
-			l_uiReturn = fwrite( p_pBuffer, 1, std::size_t( p_uiSize ), m_pFile );
+			l_uiReturn = fwrite( p_buffer, 1, std::size_t( p_uiSize ), m_pFile );
 			m_ullCursor += l_uiReturn;
 			ENSURE( l_uiReturn <= p_uiSize );
 		}
@@ -284,7 +284,7 @@ namespace Castor
 		return l_uiReturn;
 	}
 
-	uint64_t File::DoRead( uint8_t * p_pBuffer, uint64_t p_uiSize )
+	uint64_t File::DoRead( uint8_t * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_READ ) );
@@ -296,7 +296,7 @@ namespace Castor
 			while ( l_uiReturn < p_uiSize && l_uiPrev != l_uiReturn )
 			{
 				l_uiPrev = l_uiReturn;
-				l_uiReturn += fread( p_pBuffer, 1, std::size_t( p_uiSize - l_uiReturn ), m_pFile );
+				l_uiReturn += fread( p_buffer, 1, std::size_t( p_uiSize - l_uiReturn ), m_pFile );
 			}
 
 			m_ullCursor += l_uiReturn;

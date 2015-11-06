@@ -5,8 +5,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	Gl3VertexBufferObject::Gl3VertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
-		: GlVertexBufferObject( p_renderSystem, p_gl, p_declaration, p_pBuffer )
+	Gl3VertexBufferObject::Gl3VertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer )
+		: GlVertexBufferObject( p_renderSystem, p_gl, p_declaration, p_buffer )
 	{
 	}
 

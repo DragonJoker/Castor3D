@@ -29,7 +29,7 @@ namespace GlRender
 		, public Castor::NonCopyable
 	{
 	public:
-		GlVertexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
+		GlVertexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer );
 		virtual ~GlVertexArray();
 
 		virtual bool Create();
@@ -43,7 +43,7 @@ namespace GlRender
 		virtual void Unlock() {}
 		virtual bool Bind();
 		virtual void Unbind();
-		virtual bool Fill( uint8_t const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+		virtual bool Fill( uint8_t const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 		{
 			return false;
 		}

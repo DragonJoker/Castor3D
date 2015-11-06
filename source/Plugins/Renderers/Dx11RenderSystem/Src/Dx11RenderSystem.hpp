@@ -49,9 +49,9 @@ namespace Dx11Render
 		virtual Castor3D::ShaderProgramBaseSPtr CreateHlslShaderProgram();
 		virtual Castor3D::ShaderProgramBaseSPtr CreateShaderProgram();
 		virtual Castor3D::OverlayRendererSPtr CreateOverlayRenderer();
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer<uint32_t> * p_pBuffer );
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, Castor3D::CpuBuffer< uint8_t > * p_pBuffer );
-		virtual std::shared_ptr< Castor3D::GpuBuffer< real > > CreateMatrixBuffer( Castor3D::CpuBuffer< real > * p_pBuffer );
+		virtual std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer<uint32_t> * p_buffer );
+		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, Castor3D::CpuBuffer< uint8_t > * p_buffer );
+		virtual std::shared_ptr< Castor3D::GpuBuffer< real > > CreateMatrixBuffer( Castor3D::CpuBuffer< real > * p_buffer );
 		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
 		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture();
 		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name );

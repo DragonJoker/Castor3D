@@ -73,7 +73,7 @@ namespace Dx11Render
 
 	protected:
 		Castor::String m_strEntryPoint;
-		DxShaderProgram * m_pShaderProgram;
+		DxShaderProgram * m_shaderProgram;
 		Castor::String m_strProfile;
 		HandleStrMap m_mapParamsByName;
 		ID3DBlob * m_pCompiled;

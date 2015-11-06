@@ -39,10 +39,10 @@ namespace GlRender
 		typedef typename Castor3D::GpuBuffer< T >::HardwareBufferPtr HardwareBufferPtr;
 
 	public:
-		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_pBuffer );
+		GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_buffer );
 		virtual ~GlBuffer();
 
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		virtual bool Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
 
 		inline uint32_t GetGlIndex()const
 		{
@@ -60,7 +60,7 @@ namespace GlRender
 		virtual void DoCleanup();
 		virtual bool DoBind();
 		virtual void DoUnbind();
-		virtual bool DoFill( T * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		virtual bool DoFill( T * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
 		virtual T * DoLock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags );
 		virtual T * DoLock( eGL_LOCK p_access );
 		virtual void DoUnlock();

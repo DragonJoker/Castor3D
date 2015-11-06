@@ -72,13 +72,13 @@ namespace Lwo
 		bool DoIsTagId( eID_TAG p_eId );
 		void DoParsePTag( stLWO_CHUNK * p_pChunk );
 		void DoReadBlock( stLWO_SUBCHUNK * p_pSubchunk, Castor3D::PassSPtr p_pPass );
-		void DoSetChannel( Castor3D::TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_eChannel );
+		void DoSetChannel( Castor3D::TextureUnitSPtr p_pTexture, eTEX_CHANNEL p_channel );
 		void DoReadShdr( stLWO_SUBCHUNK * p_pSubchunk );
 		void DoReadGrad( stLWO_SUBCHUNK * p_pSubchunk );
 		void DoReadProc( stLWO_SUBCHUNK * p_pSubchunk );
-		void DoReadIMap( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_eChannel );
+		void DoReadIMap( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel );
 		void DoReadTMap( stLWO_SUBCHUNK * p_pSubchunk );
-		UI2 DoReadBlockHeader( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_eChannel );
+		UI2 DoReadBlockHeader( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel );
 		void DoParseTags( stLWO_CHUNK * p_pChunk );
 		void DoParseSurf( stLWO_CHUNK * p_pChunk );
 		void DoParseClip( stLWO_CHUNK * p_pChunk );

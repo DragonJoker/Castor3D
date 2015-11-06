@@ -13,7 +13,7 @@ namespace CastorViewer
 {
 	KeyboardEvent::KeyboardEvent( RenderWindowSPtr p_pWindow )
 		: FrameEvent( eEVENT_TYPE_PRE_RENDER )
-		, m_pWindow( p_pWindow )
+		, m_window( p_pWindow )
 	{
 	}
 
@@ -23,7 +23,7 @@ namespace CastorViewer
 
 	bool KeyboardEvent::Apply()
 	{
-		RenderWindowSPtr l_pWindow = m_pWindow.lock();
+		RenderWindowSPtr l_pWindow = m_window.lock();
 
 		if ( l_pWindow )
 		{

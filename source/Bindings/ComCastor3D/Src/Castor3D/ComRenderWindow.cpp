@@ -19,7 +19,7 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CRenderWindow::Initialise( /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal )
+	STDMETHODIMP CRenderWindow::Initialise( /* [in] */ ISize * size, /* [in] */ LPVOID val, /* [out, retval] */ VARIANT_BOOL * pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -29,7 +29,7 @@ namespace CastorCom
 			{
 				try
 				{
-					*pVal = m_internal->Initialise( Castor3D::WindowHandle( std::make_shared< Castor3D::IMswWindowHandle >( HWND( val ) ) ) ) ? VARIANT_TRUE : VARIANT_FALSE;
+					*pVal = m_internal->Initialise( *static_cast< CSize * >( size ), Castor3D::WindowHandle( std::make_shared< Castor3D::IMswWindowHandle >( HWND( val ) ) ) ) ? VARIANT_TRUE : VARIANT_FALSE;
 					hr = S_OK;
 				}
 				catch ( Castor::Exception & p_exc )

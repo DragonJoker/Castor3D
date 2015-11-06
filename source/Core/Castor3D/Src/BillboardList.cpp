@@ -187,11 +187,11 @@ namespace Castor3D
 		if ( l_pMaterial && l_pMaterial->GetPassCount() )
 		{
 			l_pMaterial->Cleanup();
-			ShaderProgramBaseSPtr l_pProgram = DoGetProgram( p_technique, l_pMaterial->GetPass( 0 )->GetTextureFlags() );
+			ShaderProgramBaseSPtr l_program = DoGetProgram( p_technique, l_pMaterial->GetPass( 0 )->GetTextureFlags() );
 
-			if ( m_wpProgram.expired() || m_wpProgram.lock() != l_pProgram )
+			if ( m_wpProgram.expired() || m_wpProgram.lock() != l_program )
 			{
-				m_wpProgram = l_pProgram;
+				m_wpProgram = l_program;
 				l_return = DoInitialise();
 
 				if ( l_return )
@@ -199,7 +199,7 @@ namespace Castor3D
 					l_pMaterial->Initialise();
 					m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
 					m_pGeometryBuffers->Create();
-					m_pGeometryBuffers->Initialise( l_pProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+					m_pGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 					m_bNeedUpdate = false;
 				}
 			}
@@ -215,8 +215,8 @@ namespace Castor3D
 	void BillboardList::Cleanup()
 	{
 		m_pDimensionsUniform.reset();
-		ShaderProgramBaseSPtr l_pProgram = m_wpProgram.lock();
-		l_pProgram->Cleanup();
+		ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
+		l_program->Cleanup();
 		m_pGeometryBuffers->Cleanup();
 		m_pGeometryBuffers->Destroy();
 		m_pGeometryBuffers.reset();
@@ -248,19 +248,19 @@ namespace Castor3D
 		if ( !m_bNeedUpdate )
 		{
 			Pipeline & l_pipeline = GetOwner()->GetPipeline();
-			ShaderProgramBaseSPtr l_pProgram = m_wpProgram.lock();
+			ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
 			MaterialSPtr l_pMaterial = m_wpMaterial.lock();
 			VertexBuffer & l_vtxBuffer = m_pGeometryBuffers->GetVertexBuffer();
 			uint32_t l_uiSize = l_vtxBuffer.GetSize() / l_vtxBuffer.GetDeclaration().GetStride();
 
-			if ( l_pProgram && l_pMaterial )
+			if ( l_program && l_pMaterial )
 			{
 				uint8_t l_index = 0;
 				uint8_t l_count = l_pMaterial->GetPassCount();
 
 				for ( auto && l_pass : *l_pMaterial )
 				{
-					l_pass->BindToAutomaticProgram( l_pProgram );
+					l_pass->BindToAutomaticProgram( l_program );
 					auto l_matrixBuffer = l_pass->GetMatrixBuffer();
 
 					if ( l_matrixBuffer )
@@ -269,7 +269,7 @@ namespace Castor3D
 					}
 
 					l_pass->Render( l_index++, l_count );
-					m_pGeometryBuffers->Draw( eTOPOLOGY_POINTS, l_pProgram, l_uiSize, 0 );
+					m_pGeometryBuffers->Draw( eTOPOLOGY_POINTS, l_program, l_uiSize, 0 );
 					l_pass->EndRender();
 				}
 			}

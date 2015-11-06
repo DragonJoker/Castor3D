@@ -9,8 +9,8 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxVertexBuffer::DxVertexBuffer( DxRenderSystem & p_renderSystem, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
-		: DxBufferObject< uint8_t, ID3D11Buffer >( p_renderSystem, p_pBuffer )
+	DxVertexBuffer::DxVertexBuffer( DxRenderSystem & p_renderSystem, BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer )
+		: DxBufferObject< uint8_t, ID3D11Buffer >( p_renderSystem, p_buffer )
 		, m_pDxDeclaration( NULL )
 		, m_declaration( p_declaration )
 	{
@@ -112,10 +112,10 @@ namespace Dx11Render
 
 	bool DxVertexBuffer::DoCreateLayout()
 	{
-		DxShaderProgramSPtr l_pProgram = m_pProgram.lock();
+		DxShaderProgramSPtr l_program = m_pProgram.lock();
 		bool l_return = false;
 
-		if ( l_pProgram )
+		if ( l_program )
 		{
 			std::vector< D3D11_INPUT_ELEMENT_DESC >	l_arrayDxElements;
 			UINT l_uiPosition = 0;
@@ -241,7 +241,7 @@ namespace Dx11Render
 				}
 			}
 
-			ID3DBlob * l_pBlob = l_pProgram->GetCompiled( eSHADER_TYPE_VERTEX );
+			ID3DBlob * l_pBlob = l_program->GetCompiled( eSHADER_TYPE_VERTEX );
 
 			if ( l_pBlob )
 			{

@@ -25,7 +25,7 @@ namespace Dx11Render
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_deviceContext->DSSetShader( m_pDomainShader, NULL, 0 );
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_DOMAIN );
+		auto l_ubos = m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_DOMAIN );
 
 		if ( !l_ubos.empty() )
 		{
@@ -37,7 +37,7 @@ namespace Dx11Render
 				l_buffers.push_back( std::static_pointer_cast< DxFrameVariableBuffer >( l_variableBuffer )->GetDxBuffer() );
 			}
 
-			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_DOMAIN ) )
+			if ( m_shaderProgram->HasObject( eSHADER_TYPE_DOMAIN ) )
 			{
 				l_deviceContext->DSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
 			}
@@ -47,11 +47,11 @@ namespace Dx11Render
 	void DxDomainShader::DoUnbind()
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_DOMAIN );
+		auto l_ubos = m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_DOMAIN );
 
 		if ( !l_ubos.empty() )
 		{
-			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_DOMAIN ) )
+			if ( m_shaderProgram->HasObject( eSHADER_TYPE_DOMAIN ) )
 			{
 				ID3D11Buffer * l_buffer = NULL;
 				l_deviceContext->DSSetConstantBuffers( 0, 1, &l_buffer );

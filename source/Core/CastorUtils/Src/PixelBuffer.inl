@@ -1,11 +1,11 @@
 ﻿namespace Castor
 {
 	template< TPL_PIXEL_FORMAT FT >
-	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
+	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 		: PxBufferBase( p_size, ePIXEL_FORMAT( FT ) )
 		, m_column( p_size.width() )
 	{
-		init( p_pBuffer, p_eBufferFormat );
+		init( p_buffer, p_eBufferFormat );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
@@ -67,15 +67,15 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_pBuffer, ePIXEL_FORMAT p_eBufferFormat )
+	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 	{
 		uint8_t l_uiSize = PF::GetBytesPerPixel( p_eBufferFormat );
 		uint32_t l_uiDstMax = count();
-		uint32_t l_uiSrcMax = uint32_t( p_pBuffer.size() / l_uiSize );
+		uint32_t l_uiSrcMax = uint32_t( p_buffer.size() / l_uiSize );
 
-		if ( p_pBuffer.size() > 0 && l_uiSrcMax == l_uiDstMax )
+		if ( p_buffer.size() > 0 && l_uiSrcMax == l_uiDstMax )
 		{
-			PF::ConvertBuffer( p_eBufferFormat, p_pBuffer.data(), uint32_t( p_pBuffer.size() ), format(), m_pBuffer.data(), size() );
+			PF::ConvertBuffer( p_eBufferFormat, p_buffer.data(), uint32_t( p_buffer.size() ), format(), m_pBuffer.data(), size() );
 		}
 	}
 

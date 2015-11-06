@@ -3,9 +3,9 @@
 namespace GlRender
 {
 	template< typename T >
-	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_pBuffer )
+	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_buffer )
 		: Castor3D::GpuBuffer< T >( p_renderSystem )
-		, m_pBuffer( p_pBuffer )
+		, m_pBuffer( p_buffer )
 		, m_glBuffer( p_gl, p_eTarget )
 		, m_gl( p_gl )
 	{
@@ -17,9 +17,9 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		return m_glBuffer.Fill( p_pBuffer, p_iSize, p_type, p_eNature );
+		return m_glBuffer.Fill( p_buffer, p_iSize, p_type, p_eNature );
 	}
 
 	template< typename T >
@@ -81,9 +81,9 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::DoFill( T * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::DoFill( T * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
 	{
-		return m_glBuffer.Fill( p_pBuffer, p_iSize, p_type, p_eNature );
+		return m_glBuffer.Fill( p_buffer, p_iSize, p_type, p_eNature );
 	}
 
 	template< typename T >

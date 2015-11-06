@@ -1595,7 +1595,7 @@ namespace Castor3D
 
 	void Scene::DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
 	{
-		ShaderProgramBaseSPtr l_pProgram;
+		ShaderProgramBaseSPtr l_program;
 		uint32_t l_count = 0;
 		uint32_t l_uiSize = p_node.m_pMaterial->GetPassCount();
 
@@ -1610,13 +1610,13 @@ namespace Castor3D
 					l_uiProgramFlags |= ePROGRAM_FLAG_INSTANCIATION;
 				}
 
-				l_pProgram = GetOwner()->GetShaderManager().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_uiProgramFlags );
-				l_pProgram->Initialise();
-				l_pass->BindToAutomaticProgram( l_pProgram );
+				l_program = GetOwner()->GetShaderManager().GetAutomaticProgram( p_technique, l_pass->GetTextureFlags(), l_uiProgramFlags );
+				l_program->Initialise();
+				l_pass->BindToAutomaticProgram( l_program );
 			}
 			else
 			{
-				l_pProgram = l_pass->GetShader< ShaderProgramBase >();
+				l_program = l_pass->GetShader< ShaderProgramBase >();
 			}
 
 			FrameVariableBufferSPtr l_frameBuffer = l_pass->GetMatrixBuffer();
@@ -1631,7 +1631,7 @@ namespace Castor3D
 
 			if ( l_sceneBuffer )
 			{
-				DoBindLights( *l_pProgram, *l_sceneBuffer );
+				DoBindLights( *l_program, *l_sceneBuffer );
 				DoBindCamera( *l_sceneBuffer );
 			}
 
@@ -1641,7 +1641,7 @@ namespace Castor3D
 
 			if ( l_sceneBuffer )
 			{
-				DoUnbindLights( *l_pProgram, *l_sceneBuffer );
+				DoUnbindLights( *l_program, *l_sceneBuffer );
 			}
 		}
 	}

@@ -7,8 +7,8 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxIndexBuffer::DxIndexBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_pBuffer )
-		: DxBufferObject< uint32_t, ID3D11Buffer >( p_renderSystem, p_pBuffer )
+	DxIndexBuffer::DxIndexBuffer( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_buffer )
+		: DxBufferObject< uint32_t, ID3D11Buffer >( p_renderSystem, p_buffer )
 	{
 	}
 

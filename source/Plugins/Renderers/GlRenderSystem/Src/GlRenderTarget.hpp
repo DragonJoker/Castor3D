@@ -41,7 +41,7 @@ namespace GlRender
 		virtual ~GlRenderTarget();
 
 		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_pRenderBuffer )const;
-		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_pTexture )const;
+		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_texture )const;
 		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer()const;
 
 	protected:

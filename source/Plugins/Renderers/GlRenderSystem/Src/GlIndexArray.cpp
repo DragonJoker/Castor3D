@@ -7,9 +7,9 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlIndexArray::GlIndexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer )
+	GlIndexArray::GlIndexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_buffer )
 		: GpuBuffer( p_renderSystem )
-		, m_pBuffer( p_pBuffer )
+		, m_pBuffer( p_buffer )
 		, m_gl( p_gl )
 	{
 	}

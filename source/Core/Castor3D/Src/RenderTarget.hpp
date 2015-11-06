@@ -307,14 +307,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a texture
-		 *\param[in]	p_pTexture	The texture
+		 *\param[in]	p_texture	The texture
 		 *\return		The created attachment
 		 *\~french
 		 *\brief		Crée une attache à une texture
-		 *\param[in]	p_pTexture	La texture
+		 *\param[in]	p_texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_pTexture )const = 0;
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture )const = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a frame buffer

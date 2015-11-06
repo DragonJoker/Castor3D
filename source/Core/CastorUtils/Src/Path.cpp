@@ -70,18 +70,18 @@ namespace Castor
 		return *this;
 	}
 
-	Path & Path::operator /=( char const * p_pBuffer )
+	Path & Path::operator /=( char const * p_buffer )
 	{
 		push_back( Separator );
-		String::operator+=( string::string_cast< xchar >( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_buffer ) );
 		DoNormalise();
 		return *this;
 	}
 
-	Path & Path::operator /=( wchar_t const * p_pBuffer )
+	Path & Path::operator /=( wchar_t const * p_buffer )
 	{
 		push_back( Separator );
-		String::operator+=( string::string_cast< xchar >( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_buffer ) );
 		DoNormalise();
 		return *this;
 	}
@@ -231,17 +231,17 @@ namespace Castor
 		return l_path;
 	}
 
-	Path operator /( Path const & p_path, char const * p_pBuffer )
+	Path operator /( Path const & p_path, char const * p_buffer )
 	{
 		Path l_path( p_path );
-		l_path /= p_pBuffer;
+		l_path /= p_buffer;
 		return l_path;
 	}
 
-	Path operator /( Path const & p_path, wchar_t const * p_pBuffer )
+	Path operator /( Path const & p_path, wchar_t const * p_buffer )
 	{
 		Path l_path( p_path );
-		l_path /= p_pBuffer;
+		l_path /= p_buffer;
 		return l_path;
 	}
 
@@ -252,16 +252,16 @@ namespace Castor
 		return l_path;
 	}
 
-	Path operator /( char const * p_pBuffer, Path const & p_path )
+	Path operator /( char const * p_buffer, Path const & p_path )
 	{
-		Path l_path( p_pBuffer );
+		Path l_path( p_buffer );
 		l_path /= p_path;
 		return l_path;
 	}
 
-	Path operator /( wchar_t const * p_pBuffer, Path const & p_path )
+	Path operator /( wchar_t const * p_buffer, Path const & p_path )
 	{
-		Path l_path( p_pBuffer );
+		Path l_path( p_buffer );
 		l_path /= p_path;
 		return l_path;
 	}

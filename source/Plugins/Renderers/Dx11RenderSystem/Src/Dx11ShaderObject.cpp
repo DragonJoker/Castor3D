@@ -12,7 +12,7 @@ namespace Dx11Render
 {
 	DxShaderObject::DxShaderObject( DxShaderProgram * p_parent, eSHADER_TYPE p_type )
 		: ShaderObjectBase( p_parent, p_type )
-		, m_pShaderProgram( p_parent )
+		, m_shaderProgram( p_parent )
 		, m_pCompiled( NULL )
 		, m_renderSystem( static_cast< DxRenderSystem * >( p_parent->GetOwner() ) )
 	{

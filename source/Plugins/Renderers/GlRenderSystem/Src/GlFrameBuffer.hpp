@@ -104,7 +104,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolationMode );
+		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_eInterpolationMode );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUpdateClearColour
 		 */

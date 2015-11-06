@@ -25,19 +25,19 @@ namespace Dx11Render
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		l_deviceContext->HSSetShader( m_pHullShader, NULL, 0 );
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL );
+		auto l_ubos = m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL );
 
 		if ( !l_ubos.empty() )
 		{
 			std::vector< ID3D11Buffer * > l_buffers;
 			l_buffers.reserve( l_ubos.size() );
 
-			for ( auto l_variableBuffer : m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL ) )
+			for ( auto l_variableBuffer : m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL ) )
 			{
 				l_buffers.push_back( std::static_pointer_cast< DxFrameVariableBuffer >( l_variableBuffer )->GetDxBuffer() );
 			}
 
-			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_HULL ) )
+			if ( m_shaderProgram->HasObject( eSHADER_TYPE_HULL ) )
 			{
 				l_deviceContext->HSSetConstantBuffers( 0, l_buffers.size(), l_buffers.data() );
 			}
@@ -47,11 +47,11 @@ namespace Dx11Render
 	void DxHullShader::DoUnbind()
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		auto l_ubos = m_pShaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL );
+		auto l_ubos = m_shaderProgram->GetFrameVariableBuffers( eSHADER_TYPE_HULL );
 
 		if ( !l_ubos.empty() )
 		{
-			if ( m_pShaderProgram->HasObject( eSHADER_TYPE_HULL ) )
+			if ( m_shaderProgram->HasObject( eSHADER_TYPE_HULL ) )
 			{
 				ID3D11Buffer * l_buffer = NULL;
 				l_deviceContext->HSSetConstantBuffers( 0, 1, &l_buffer );

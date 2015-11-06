@@ -37,7 +37,7 @@ namespace Castor3D
 	private:
 		friend class PluginBase;
 		friend class Engine;
-		typedef Subdivider * CreateGeneratorFunction( TextureUnit * p_pTexture );
+		typedef Subdivider * CreateGeneratorFunction( TextureUnit * p_texture );
 		typedef Subdivider * DestroyGeneratorFunction( Subdivider * p_pGenerator );
 
 		typedef CreateGeneratorFunction * PCreateGeneratorFunction;
@@ -65,14 +65,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates the Importer
-		 *\param[in]	p_pTexture	The texture modified by the generator
+		 *\param[in]	p_texture	The texture modified by the generator
 		 *\return		The created ProceduralGenerator instance
 		 *\~french
 		 *\brief		Crée l'Importer
-		 *\param[in]	p_pTexture	La texture modifiée par le générateur
+		 *\param[in]	p_texture	La texture modifiée par le générateur
 		 *\return		L'instance de ProceduralGenerator créée
 		 */
-		C3D_API Subdivider * CreateGenerator( TextureUnit * p_pTexture );
+		C3D_API Subdivider * CreateGenerator( TextureUnit * p_texture );
 		/**
 		 *\~english
 		 *\brief		Destroys the given ProceduralGenerator

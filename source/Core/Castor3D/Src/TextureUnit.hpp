@@ -155,12 +155,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the texture
-		 *\param[in]	p_pTexture	The texture
+		 *\param[in]	p_texture	The texture
 		 *\~french
 		 *\brief		Definit la texture
-		 *\param[in]	p_pTexture	La texture
+		 *\param[in]	p_texture	La texture
 		 */
-		C3D_API void SetTexture( TextureBaseSPtr p_pTexture );
+		C3D_API void SetTexture( TextureBaseSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit
@@ -438,14 +438,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the texture channel
-		 *\param[in]	p_eChannel	The new value
+		 *\param[in]	p_channel	The new value
 		 *\~french
 		 *\brief		Définit le canal de la texture
-		 *\param[in]	p_eChannel	La nouvelle valeur
+		 *\param[in]	p_channel	La nouvelle valeur
 		 */
-		inline void SetChannel( Castor3D::eTEXTURE_CHANNEL p_eChannel )
+		inline void SetChannel( Castor3D::eTEXTURE_CHANNEL p_channel )
 		{
-			m_eChannel = p_eChannel;
+			m_eChannel = p_channel;
 		}
 		/**
 		 *\~english

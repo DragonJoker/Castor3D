@@ -171,148 +171,148 @@ namespace Dx11Render
 	FrameVariableSPtr DxFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc )
 	{
 		FrameVariableSPtr l_return;
-		DxShaderProgram * l_pProgram = static_cast< DxShaderProgram * >( p_pProgram );
+		DxShaderProgram * l_program = static_cast< DxShaderProgram * >( p_pProgram );
 
 		switch ( p_type )
 		{
 		case eFRAME_VARIABLE_TYPE_INT:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_UINT:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_FLOAT:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_DOUBLE:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_SAMPLER:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2I:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3I:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4I:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2UI:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3UI:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4UI:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X2F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X3F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X4F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X2F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X3F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X4F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X2F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X3F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X4F:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X2D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X3D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X4D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X2D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X3D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X4D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X2D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X3D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X4D:
-			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( m_pDxRenderSystem, l_pProgram, p_uiNbOcc );
+			l_return = DxFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( m_pDxRenderSystem, l_program, p_uiNbOcc );
 			break;
 		}
 
@@ -340,7 +340,7 @@ namespace Dx11Render
 	bool DxFrameVariableBuffer::DoInitialise( ShaderProgramBase * p_pProgram )
 	{
 		HRESULT l_hr = S_OK;
-		m_pShaderProgram = reinterpret_cast< DxShaderProgram * >( p_pProgram );
+		m_shaderProgram = reinterpret_cast< DxShaderProgram * >( p_pProgram );
 
 		if ( !m_listVariables.empty() )
 		{

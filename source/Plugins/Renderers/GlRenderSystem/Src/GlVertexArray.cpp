@@ -8,10 +8,10 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlVertexArray::GlVertexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer )
+	GlVertexArray::GlVertexArray( GlRenderSystem & p_renderSystem, OpenGl & p_gl, BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer )
 		: GpuBuffer< uint8_t >( p_renderSystem )
 		, m_bufferDeclaration( p_declaration )
-		, m_pBuffer( p_pBuffer )
+		, m_pBuffer( p_buffer )
 		, m_gl( p_gl )
 	{
 	}

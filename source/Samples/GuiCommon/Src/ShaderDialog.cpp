@@ -65,9 +65,9 @@ namespace GuiCommon
 
 	void ShaderDialog::DoInitialiseShaderLanguage()
 	{
-		m_pShaderProgram = m_pPass.lock()->GetShader< ShaderProgramBase >();
+		m_shaderProgram = m_pPass.lock()->GetShader< ShaderProgramBase >();
 
-		if ( m_pShaderProgram.lock() )
+		if ( m_shaderProgram.lock() )
 		{
 			m_bOwnShader = false;
 		}
@@ -84,7 +84,7 @@ namespace GuiCommon
 
 				if ( l_technique )
 				{
-					m_pShaderProgram = m_engine->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
+					m_shaderProgram = m_engine->GetShaderManager().GetAutomaticProgram( *l_technique, l_pass->GetTextureFlags(), 0 );
 					m_bOwnShader = true;
 				}
 			}
@@ -115,7 +115,7 @@ namespace GuiCommon
 
 	void ShaderDialog::DoLoadPages()
 	{
-		ShaderProgramBaseSPtr l_program = m_pShaderProgram.lock();
+		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
 		wxArrayString l_arrayTexts;
 		l_arrayTexts.push_back( _( "Vertex" ) );
 		l_arrayTexts.push_back( _( "Hull" ) );
@@ -165,11 +165,11 @@ namespace GuiCommon
 	{
 		m_auiManager.DetachPane( m_pNotebookEditors );
 
-		if ( m_bOwnShader && !m_pShaderProgram.expired() )
+		if ( m_bOwnShader && !m_shaderProgram.expired() )
 		{
 			m_pPass.lock()->SetShader( nullptr );
-			//m_engine->GetShaderManager().RemoveProgram( m_pShaderProgram.lock() );
-			m_pShaderProgram.reset();
+			//m_engine->GetShaderManager().RemoveProgram( m_shaderProgram.lock() );
+			m_shaderProgram.reset();
 		}
 	}
 
@@ -191,9 +191,9 @@ namespace GuiCommon
 
 		if ( l_continue )
 		{
-			if ( m_pShaderProgram.expired() )
+			if ( m_shaderProgram.expired() )
 			{
-				m_pShaderProgram = m_engine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
+				m_shaderProgram = m_engine->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_GLSL );
 			}
 
 			for ( int i = eSHADER_TYPE_VERTEX; i < eSHADER_TYPE_COUNT; i++ )
@@ -203,12 +203,12 @@ namespace GuiCommon
 				if ( l_file.empty() )
 				{
 					m_pEditorPages[i]->SaveFile( false );
-					m_pShaderProgram.lock()->CreateObject( eSHADER_TYPE( i ) );
-					m_pShaderProgram.lock()->SetFile( eSHADER_TYPE( i ), m_pEditorPages[i]->GetShaderModel(), ( wxChar const * )l_file.c_str() );
+					m_shaderProgram.lock()->CreateObject( eSHADER_TYPE( i ) );
+					m_shaderProgram.lock()->SetFile( eSHADER_TYPE( i ), m_pEditorPages[i]->GetShaderModel(), ( wxChar const * )l_file.c_str() );
 				}
 			}
 
-			m_pPass.lock()->SetShader( m_pShaderProgram.lock() );
+			m_pPass.lock()->SetShader( m_shaderProgram.lock() );
 			m_bCompiled = true;
 		}
 	}

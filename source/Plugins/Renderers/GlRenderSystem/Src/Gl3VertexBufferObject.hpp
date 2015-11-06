@@ -26,7 +26,7 @@ namespace GlRender
 		: public GlVertexBufferObject
 	{
 	public:
-		Gl3VertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_pBuffer );
+		Gl3VertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer );
 		virtual ~Gl3VertexBufferObject();
 
 		virtual bool Bind();

@@ -213,15 +213,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at wanted channel
 		 *\remark		If more than one TextureUnits are found at given channel, the first one is returned
-		 *\param[in]	p_eChannel	The channel
+		 *\param[in]	p_channel	The channel
 		 *\return		\p nullptr if no TextureUnit at wanted channel
 		 *\~french
 		 *\brief		Récupère la TextureUnit au canal demandé
 		 *\remark		Si plus d'une TextureUnit est trouvée pour le canal demandé, la première est retournée
-		 *\param[in]	p_eChannel	Le canal
+		 *\param[in]	p_channel	Le canal
 		 *\return		\p nullptr si pas de TextureUnit au canal voulu
 		 */
-		C3D_API TextureUnitSPtr GetTextureUnit( eTEXTURE_CHANNEL p_eChannel );
+		C3D_API TextureUnitSPtr GetTextureUnit( eTEXTURE_CHANNEL p_channel );
 		/**
 		 *\~english
 		 *\brief		Destroys a TextureUnit at the given index
@@ -295,9 +295,9 @@ namespace Castor3D
 		{
 			std::shared_ptr<T> l_return;
 
-			if ( ! m_pShaderProgram.expired() )
+			if ( ! m_shaderProgram.expired() )
 			{
-				l_return = std::static_pointer_cast<T, ShaderProgramBase>( m_pShaderProgram.lock() );
+				l_return = std::static_pointer_cast<T, ShaderProgramBase>( m_shaderProgram.lock() );
 			}
 
 			return l_return;
@@ -772,14 +772,16 @@ namespace Castor3D
 		 *\param[in]	p_channel		The texture channel
 		 *\param[in]	p_unit			The texture unit
 		 *\param[in,out]p_index			The texture index
+		 *\return		The original texture's alpha channel.
 		 *\~french
 		 *\brief		Prépare une texture à être intégrée à la passe.
 		 *\remarks		Enlève le canal alpha s'il y en avait un.
 		 *\param[in]	p_channel		Le canal de texture
 		 *\param[in]	p_unit			L'unité de texture
 		 *\param[in,out]p_index			L'index de la texture
+		 *\return		Le canal alpha de la texture originale.
 		 */
-		C3D_API void DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
+		C3D_API Castor::PxBufferBaseSPtr DoPrepareTexture( eTEXTURE_CHANNEL p_channel, TextureUnitSPtr p_unit, uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -818,7 +820,7 @@ namespace Castor3D
 		//!\~english Tells if the pass is two sided	\~french Dit si la passe est sur 2 faces
 		bool m_bDoubleFace;
 		//!\~english The shader program, if any	\~french Le programme de shader
-		ShaderProgramBaseWPtr m_pShaderProgram;
+		ShaderProgramBaseWPtr m_shaderProgram;
 		//!\~english Texture units	\~french Les textures
 		TextureUnitPtrArray m_arrayTextureUnits;
 		//!\~english The parent material	\~french Le materiau parent

@@ -29,7 +29,7 @@ namespace GlRender
 		, public Castor::NonCopyable
 	{
 	public:
-		GlMatrixBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_pBuffer );
+		GlMatrixBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_buffer );
 		virtual ~GlMatrixBufferObject();
 
 		virtual bool Create();

@@ -31,7 +31,7 @@ namespace GlRender
 
 		virtual bool Activate();
 		virtual void Deactivate();
-		bool Fill( uint8_t * p_pBuffer, ptrdiff_t p_iSize );
+		bool Fill( uint8_t * p_buffer, ptrdiff_t p_iSize );
 
 		virtual bool Initialise() = 0;
 

@@ -339,7 +339,7 @@ namespace GuiCommon
 		}
 	}
 
-	void CreateBitmapFromBuffer( uint8_t const * p_pBuffer, uint32_t p_width, uint32_t p_height, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, wxBitmap & p_bitmap )
 	{
 		p_bitmap.Create( p_width, p_height, 24 );
 		wxNativePixelData l_data( p_bitmap );
@@ -347,7 +347,7 @@ namespace GuiCommon
 		if ( p_bitmap.IsOk() && uint32_t( l_data.GetWidth() ) == p_width && uint32_t( l_data.GetHeight() ) == p_height )
 		{
 			wxNativePixelData::Iterator l_it( l_data );
-			uint8_t const * l_pBuffer = p_pBuffer;
+			uint8_t const * l_pBuffer = p_buffer;
 
 			try
 			{
