@@ -880,7 +880,7 @@ namespace GlRender
 			if ( m_gl.HasUbo() && l_uiIndex == eGL_INVALID_INDEX )
 			{
 				m_gl.UseProgram( l_program->GetGlProgram() );
-				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_program->GetGlProgram(), string::string_cast< char >( m_strName ).c_str() );
+				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_program->GetGlProgram(), string::string_cast< char >( m_name ).c_str() );
 				uint32_t l_uiTotalSize = 0;
 
 				if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )

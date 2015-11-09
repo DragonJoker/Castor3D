@@ -149,7 +149,7 @@ namespace GuiCommon
 		typedef std::array< Castor::String, eSTC_TYPE_COUNT > WordArray;
 
 	private:
-		Castor::String m_strName;
+		Castor::String m_name;
 		Castor::String m_strFilePattern;
 		WordArray m_arrayWords;
 		eSTC_LEX m_eLexerID;
@@ -179,7 +179,7 @@ namespace GuiCommon
 
 		inline Castor::String const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 
 		inline eSTC_LEX GetLexerID()const
@@ -204,7 +204,7 @@ namespace GuiCommon
 
 		inline void SetName( Castor::String const & p_strVal )
 		{
-			m_strName = p_strVal;
+			m_name = p_strVal;
 		}
 
 		inline void SetFilePattern( Castor::String const & p_strVal )

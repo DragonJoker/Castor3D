@@ -7,7 +7,7 @@ using namespace Castor;
 namespace GuiCommon
 {
 	LanguageInfo::LanguageInfo()
-		:m_strName( DEFAULT_LANGUAGE )
+		:m_name( DEFAULT_LANGUAGE )
 		,m_strFilePattern( cuEmptyString )
 		,m_eLexerID( eSTC_LEX_COUNT )
 		,m_iFoldFlags( 0 )

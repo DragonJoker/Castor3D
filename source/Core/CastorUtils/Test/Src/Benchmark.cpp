@@ -5,7 +5,7 @@ using namespace Castor;
 namespace Testing
 {
 	BenchCase::BenchCase( std::string const & p_name )
-		: m_strName( p_name )
+		: m_name( p_name )
 		, m_dCumulativeTimes( 0.0 )
 		, m_uiTotalExecutions( 0 )
 	{

@@ -5,9 +5,9 @@ namespace Castor
 	const double	Angle::Pi				= 3.1415926535897932384626433832795028841968;
 	const double	Angle::PiDiv2			= Angle::Pi / 2;
 	const double	Angle::PiMult2			= Angle::Pi * 2;
-	const double	Angle::RadianToDegree	= 180 / Angle::Pi;
+	const double	Angle::RadianToDegree	= 57.295779513082320876798154814105;
 	const double	Angle::RadianToGrad		= 200 / Angle::Pi;
-	const double	Angle::DegreeToRadian	= Angle::Pi / 180;
+	const double	Angle::DegreeToRadian	= 0.01745329251994329576923690768489;
 	const double	Angle::DegreeToGrad		= 200.0 / 180.0;
 	const double	Angle::GradToRadian		= Angle::Pi / 200;
 	const double	Angle::GradToDegree		= 180.0 / 200.0;

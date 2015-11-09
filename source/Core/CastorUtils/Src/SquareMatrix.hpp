@@ -74,7 +74,7 @@ namespace Castor
 		 *\brief		Constructeur.
 		 *\remarks		Le tampon de la matrice ne sera pas initialisé.
 		 */
-		SquareMatrix( mtx_noinit const & );
+		SquareMatrix( NoInit const & );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -609,6 +609,32 @@ namespace Castor
 	 *\return		Le résultat de la négation
 	 */
 	template< typename T, uint32_t Count > SquareMatrix< T, Count > operator-( SquareMatrix< T, Count > const & p_matrix );
+	/**
+	 *\~english
+	 *\brief			Stream operator
+	 *\param[in,out]	p_streamOut	The stream receiving matrix's data
+	 *\param[in]		p_matrix	The input matrix
+	 *\return			A reference to the stream
+	 *\~french
+	 *\brief			Opérateur de flux
+	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
+	 *\param[in]		p_matrix	La matrice entré
+	 *\return			Une référence sur le flux
+	 */
+	template< typename CharT, typename T, uint32_t Count > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::SquareMatrix< T, Count > const & p_matrix );
+	/**
+	 *\~english
+	 *\brief			Stream operator
+	 *\param[in,out]	p_streamIn	The stream holding matrix's data
+	 *\param[in,out]	p_matrix	The output matrix
+	 *\return			A reference to the stream
+	 *\~french
+	 *\brief			Opérateur de flux
+	 *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
+	 *\param[in,out]	p_matrix	La matrice sortie
+	 *\return			Une référence sur le flux
+	 */
+	template< typename CharT, typename T, uint32_t Count > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::SquareMatrix< T, Count > & p_matrix );
 }
 
 #include "SquareMatrix.inl"

@@ -217,10 +217,9 @@ namespace Castor3D
 				Point3r l_position = l_node->GetDerivedPosition();
 				Matrix4x4r l_rotate;
 				Matrix4x4r l_translate;
-				matrix::set_rotate( l_rotate, l_node->GetDerivedOrientation() );
+				matrix::set_rotate( l_rotate, l_node->GetOrientation() );
 				matrix::set_translate( l_translate, l_position );
-				m_view = l_rotate * l_translate;
-				//matrix::set_transform( m_view, l_position, Point3r( 1, 1, 1 ), l_node->GetDerivedOrientation() );
+				m_view = l_translate * l_rotate;
 
 				// Express frustum in view coordinates
 				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )

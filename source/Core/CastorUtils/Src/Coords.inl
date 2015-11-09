@@ -1,5 +1,6 @@
 ﻿#include "PointOperators.hpp"
 #include <cstring>
+#include <numeric>
 
 namespace Castor
 {

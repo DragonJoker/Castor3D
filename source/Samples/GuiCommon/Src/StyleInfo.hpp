@@ -82,7 +82,7 @@ namespace GuiCommon
 	class StyleInfo
 	{
 	private:
-		wxString m_strName;
+		wxString m_name;
 		wxString m_strForeground;
 		wxString m_strBackground;
 		wxString m_strFontName;
@@ -128,12 +128,12 @@ namespace GuiCommon
 
 		inline wxString	const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 
 		inline void SetName( wxString const & val )
 		{
-			m_strName = val;
+			m_name = val;
 		}
 
 		inline void SetForeground( wxString const & val )

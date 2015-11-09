@@ -39,7 +39,7 @@ namespace Castor3D
 	{
 	private:
 		//!\~english The bone name	\~french Le nom du bone
-		Castor::String m_strName;
+		Castor::String m_name;
 		//!\~english The matrix from mesh to bone space	\~french La matrice de transformation de l'espace mesh vers l'espace bone
 		Castor::Matrix4x4r m_mtxOffset;
 		//!\~english The parent skeleton	\~french Le squelette parent
@@ -72,7 +72,7 @@ namespace Castor3D
 		 */
 		inline Castor::String const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -84,7 +84,7 @@ namespace Castor3D
 		 */
 		inline void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_name;
+			m_name = p_name;
 		}
 		/**
 		 *\~english

@@ -83,48 +83,48 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and adds an animated bone
-		 *\param[in]	p_pObject		The bone to add
+		 *\param[in]	p_object		The bone to add
 		 *\~french
 		 *\brief		Crée et ajoute un os animé
-		 *\param[in]	p_pObject		L'os
+		 *\param[in]	p_object		L'os
 		 */
-		C3D_API MovingObjectBaseSPtr AddMovingObject( BoneSPtr p_pObject );
+		C3D_API MovingObjectBaseSPtr AddMovingObject( BoneSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Creates and adds an animated object
-		 *\param[in]	p_pObject		The movable object to add
+		 *\param[in]	p_object		The movable object to add
 		 *\~french
 		 *\brief		Crée et ajoute un objet animé
-		 *\param[in]	p_pObject		L'objet déplaçable
+		 *\param[in]	p_object		L'objet déplaçable
 		 */
-		C3D_API MovingObjectBaseSPtr AddMovingObject( MovableObjectSPtr p_pObject );
+		C3D_API MovingObjectBaseSPtr AddMovingObject( MovableObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Adds an animated object
-		 *\param[in]	p_pObject		The animated object to add
+		 *\param[in]	p_object		The animated object to add
 		 *\~french
 		 *\brief		Ajoute un objet animé
-		 *\param[in]	p_pObject		L'objet animé
+		 *\param[in]	p_object		L'objet animé
 		 */
-		C3D_API void AddMovingObject( MovingObjectBaseSPtr p_pObject );
+		C3D_API void AddMovingObject( MovingObjectBaseSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone
-		 *\param[in]	p_pObject		The bone to add
+		 *\param[in]	p_object		The bone to add
 		 *\~french
 		 *\brief		Récupère un os animé
-		 *\param[in]	p_pObject		L'os
+		 *\param[in]	p_object		L'os
 		 */
-		C3D_API MovingObjectBaseSPtr GetMovingObject( BoneSPtr p_pObject )const;
+		C3D_API MovingObjectBaseSPtr GetMovingObject( BoneSPtr p_object )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object
-		 *\param[in]	p_pObject		The movable object to add
+		 *\param[in]	p_object		The movable object to add
 		 *\~french
 		 *\brief		Récupère un objet animé
-		 *\param[in]	p_pObject		L'objet déplaçable
+		 *\param[in]	p_object		L'objet déplaçable
 		 */
-		C3D_API MovingObjectBaseSPtr GetMovingObject( MovableObjectSPtr p_pObject )const;
+		C3D_API MovingObjectBaseSPtr GetMovingObject( MovableObjectSPtr p_object )const;
 		/**
 		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index

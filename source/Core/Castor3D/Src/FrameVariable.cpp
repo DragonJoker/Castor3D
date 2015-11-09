@@ -150,7 +150,7 @@ namespace Castor3D
 	}
 
 	FrameVariable::FrameVariable( FrameVariable const & p_object )
-		: m_strName( p_object.m_strName )
+		: m_name( p_object.m_name )
 		, m_uiOcc( p_object.m_uiOcc )
 		, m_strValue( p_object.m_strValue )
 		, m_pProgram( p_object.m_pProgram )
@@ -158,12 +158,12 @@ namespace Castor3D
 	}
 
 	FrameVariable::FrameVariable( FrameVariable && p_object )
-		: m_strName( std::move( p_object.m_strName ) )
+		: m_name( std::move( p_object.m_name ) )
 		, m_uiOcc( std::move( p_object.m_uiOcc ) )
 		, m_strValue( std::move( p_object.m_strValue ) )
 		, m_pProgram( std::move( p_object.m_pProgram ) )
 	{
-		p_object.m_strName.clear();
+		p_object.m_name.clear();
 		p_object.m_uiOcc = 0;
 		p_object.m_strValue.clear();
 		p_object.m_pProgram = NULL;
@@ -171,7 +171,7 @@ namespace Castor3D
 
 	FrameVariable & FrameVariable::operator =( FrameVariable const & p_object )
 	{
-		m_strName = p_object.m_strName;
+		m_name = p_object.m_name;
 		m_uiOcc = p_object.m_uiOcc;
 		m_strValue = p_object.m_strValue;
 		m_pProgram = p_object.m_pProgram;
@@ -182,11 +182,11 @@ namespace Castor3D
 	{
 		if ( this != &p_object )
 		{
-			m_strName = std::move( p_object.m_strName );
+			m_name = std::move( p_object.m_name );
 			m_uiOcc = std::move( p_object.m_uiOcc );
 			m_strValue = std::move( p_object.m_strValue );
 			m_pProgram = std::move( p_object.m_pProgram );
-			p_object.m_strName.clear();
+			p_object.m_name.clear();
 			p_object.m_uiOcc = 0;
 			p_object.m_strValue.clear();
 			p_object.m_pProgram = NULL;

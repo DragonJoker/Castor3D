@@ -3,50 +3,113 @@ namespace Castor
 	template< typename T, typename U >
 	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
 	{
-		SquareMatrix< T, 4 > l_rotate;
-		return p_matrix *= matrix::set_rotate( l_rotate, p_angle, p_axis );
+		return p_matrix *= matrix::set_rotate( p_matrix, p_angle, p_axis );
 	}
 
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
-		Point3r l_axis;
-		Angle l_angle;
-		p_quat.ToAxisAngle( l_axis, l_angle );
-		return matrix::rotate( p_matrix, l_angle, l_axis );
+		return p_matrix *= matrix::set_rotate( l_rotate, p_quat );
 	}
 
 	template< typename T, typename U >
 	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
 	{
-		T l_cos = T( p_angle.Cos() );
-		T l_sin = T( p_angle.Sin() );
-		Point< U, 3 > l_axis( point::get_normalised( p_axis ) );
-		Point< T, 3 > l_temp( ( T( 1 ) - l_cos ) * l_axis );
-		p_matrix[0][0] = l_cos + l_temp[0] * l_axis[0];
-		p_matrix[0][1] =     0 + l_temp[0] * l_axis[1] + l_sin * l_axis[2];
-		p_matrix[0][2] =     0 + l_temp[0] * l_axis[2] - l_sin * l_axis[1];
+		return matrix::set_rotate( p_matrix, Quaternion( p_axis, p_angle ) );
+		//T l_cos = T( p_angle.Cos() );
+		//T l_sin = T( p_angle.Sin() );
+		//Point< U, 3 > l_axis( point::get_normalised( p_axis ) );
+		//Point< T, 3 > l_temp( ( T( 1 ) - l_cos ) * l_axis );
+		//p_matrix[0][0] = l_cos + l_temp[0] * l_axis[0];
+		//p_matrix[0][1] =     0 + l_temp[0] * l_axis[1] + l_sin * l_axis[2];
+		//p_matrix[0][2] =     0 + l_temp[0] * l_axis[2] - l_sin * l_axis[1];
+		//p_matrix[0][3] = 0;
 
-		p_matrix[1][0] =     0 + l_temp[1] * l_axis[0] - l_sin * l_axis[2];
-		p_matrix[1][1] = l_cos + l_temp[1] * l_axis[1];
-		p_matrix[1][2] =     0 + l_temp[1] * l_axis[2] + l_sin * l_axis[0];
+		//p_matrix[1][0] =     0 + l_temp[1] * l_axis[0] - l_sin * l_axis[2];
+		//p_matrix[1][1] = l_cos + l_temp[1] * l_axis[1];
+		//p_matrix[1][2] =     0 + l_temp[1] * l_axis[2] + l_sin * l_axis[0];
+		//p_matrix[1][3] = 0;
 
-		p_matrix[2][0] =     0 + l_temp[2] * l_axis[0] + l_sin * l_axis[1];
-		p_matrix[2][1] =     0 + l_temp[2] * l_axis[1] - l_sin * l_axis[0];
-		p_matrix[2][2] = l_cos + l_temp[2] * l_axis[2];
-		p_matrix[3][3] = 1;
-		return p_matrix;
+		//p_matrix[2][0] =     0 + l_temp[2] * l_axis[0] + l_sin * l_axis[1];
+		//p_matrix[2][1] =     0 + l_temp[2] * l_axis[1] - l_sin * l_axis[0];
+		//p_matrix[2][2] = l_cos + l_temp[2] * l_axis[2];
+		//p_matrix[3][3] = 0;
+
+		//p_matrix[3][0] = 0;
+		//p_matrix[3][1] = 0;
+		//p_matrix[3][2] = 0;
+		//p_matrix[3][3] = 1;
+		//return p_matrix;
 	}
 
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
-		Point3r l_axis;
-		Angle l_angle;
-		p_quat.ToAxisAngle( l_axis, l_angle );
-		return matrix::set_rotate( p_matrix, l_angle, l_axis );
-		p_quat.ToRotationMatrix( p_matrix );
+		//Angle l_angle;
+		//Point3r l_axis;
+		//p_quat.ToAxisAngle( l_axis, l_angle );
+		//return matrix::set_rotate( p_matrix, l_angle, l_axis );
+
+
+		//p_quat.ToRotationMatrix( p_matrix );
+		//return p_matrix;
+
+		p_matrix[0][0] = T( 1.0 - 2.0f * p_quat.y * p_quat.y - 2.0 * p_quat.z * p_quat.z );
+		p_matrix[0][1] = T( 2.0 * p_quat.x * p_quat.y - 2.0 * p_quat.z * p_quat.w );
+		p_matrix[0][2] = T( 2.0 * p_quat.x * p_quat.z + 2.0 * p_quat.y * p_quat.w );
+		p_matrix[0][3] = T( 0.0 );
+
+		p_matrix[1][0] = T( 2.0 * p_quat.x * p_quat.y + 2.0 * p_quat.z * p_quat.w );
+		p_matrix[1][1] = T( 1.0 - 2.0f * p_quat.x * p_quat.x - 2.0 * p_quat.z * p_quat.z );
+		p_matrix[1][2] = T( 2.0 * p_quat.y * p_quat.z - 2.0 * p_quat.x * p_quat.w );
+		p_matrix[1][3] = T( 0.0 );
+
+		p_matrix[2][0] = T( 2.0 * p_quat.x * p_quat.z - 2.0 * p_quat.y * p_quat.w );
+		p_matrix[2][1] = T( 2.0 * p_quat.y * p_quat.z + 2.0 * p_quat.x * p_quat.w );
+		p_matrix[2][2] = T( 1.0 - 2.0 * p_quat.x * p_quat.x - 2.0 * p_quat.y * p_quat.y );
+		p_matrix[3][3] = T( 0.0 );
+
+		p_matrix[3][0] = T( 0.0 );
+		p_matrix[3][1] = T( 0.0 );
+		p_matrix[3][2] = T( 0.0 );
+		p_matrix[3][3] = T( 1.0 );
+
 		return p_matrix;
+
+
+		//double l_sqx = p_quat.x * p_quat.x;
+		//double l_sqy = p_quat.y * p_quat.y;
+		//double l_sqz = p_quat.z * p_quat.z;
+		//double l_sqw = p_quat.w * p_quat.w;
+
+		//// l_invs (inverse square length) is only required if quaternion is not already normalised
+		//double l_invs = 1 / ( l_sqx + l_sqy + l_sqz + l_sqw );
+		//p_matrix[0][0] = T( ( l_sqx - l_sqy - l_sqz + l_sqw ) * l_invs ); // since l_sqw + l_sqx + l_sqy + l_sqz = 1 / ( invs * invs )
+		//p_matrix[1][1] = T( ( -l_sqx + l_sqy - l_sqz + l_sqw ) * l_invs );
+		//p_matrix[2][2] = T( ( -l_sqx - l_sqy + l_sqz + l_sqw ) * l_invs );
+
+		//double l_tmp1 = p_quat.x * p_quat.y;
+		//double l_tmp2 = p_quat.z * p_quat.w;
+		//p_matrix[1][0] = T( 2.0 * ( l_tmp1 + l_tmp2 ) * l_invs );
+		//p_matrix[0][1] = T( 2.0 * ( l_tmp1 - l_tmp2 ) * l_invs );
+
+		//l_tmp1 = p_quat.x * p_quat.z;
+		//l_tmp2 = p_quat.y * p_quat.w;
+		//p_matrix[2][0] = T( 2.0 * ( l_tmp1 - l_tmp2 ) * l_invs );
+		//p_matrix[0][2] = T( 2.0 * ( l_tmp1 + l_tmp2 ) * l_invs );
+		//l_tmp1 = p_quat.y * p_quat.z;
+		//l_tmp2 = p_quat.x * p_quat.w;
+		//p_matrix[2][1] = T( 2.0 * ( l_tmp1 + l_tmp2 ) * l_invs );
+		//p_matrix[1][2] = T( 2.0 * ( l_tmp1 - l_tmp2 ) * l_invs );
+
+		//p_matrix[0][3] = 0;
+		//p_matrix[1][3] = 0;
+		//p_matrix[2][3] = 0;
+		//p_matrix[3][0] = 0;
+		//p_matrix[3][1] = 0;
+		//p_matrix[3][2] = 0;
+		//p_matrix[3][3] = 1;
+		//return p_matrix;
 	}
 
 	template< typename T >
@@ -166,7 +229,7 @@ namespace Castor
 		matrix::set_scale( l_scale, p_ptScale );
 		matrix::set_rotate( l_rotate, p_qOrientation );
 		matrix::set_translate( l_translate, p_ptPosition );
-		p_matrix = l_translate * l_rotate * l_scale;
+		p_matrix = l_rotate * l_translate * l_scale;
 		return p_matrix;
 	}
 
@@ -179,7 +242,7 @@ namespace Castor
 		matrix::set_scale( l_scale, p_ptScale );
 		matrix::set_rotate( l_rotate, p_qOrientation );
 		matrix::set_translate( l_translate, p_ptPosition );
-		p_matrix *= l_translate * l_rotate * l_scale;
+		p_matrix *= l_rotate * l_translate * l_scale;
 		return p_matrix;
 	}
 

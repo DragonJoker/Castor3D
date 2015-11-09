@@ -502,7 +502,7 @@ namespace Castor3D
 
 	Scene::Scene( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >( p_engine )
-		, m_strName( p_name )
+		, m_name( p_name )
 		, m_rootCameraNode()
 		, m_rootObjectNode()
 		, m_nbFaces( 0 )
@@ -538,7 +538,7 @@ namespace Castor3D
 		m_rootNode = std::make_shared< SceneNode >( *this, cuT( "RootNode" ) );
 		m_rootCameraNode = std::make_shared< SceneNode >( *this, cuT( "CameraRootNode" ) );
 		m_rootObjectNode = std::make_shared< SceneNode >( *this, cuT( "ObjectRootNode" ) );
-		m_alphaDepthState = GetOwner()->GetDepthStencilStateManager().Create( m_strName + cuT( "_AlphaDepthState" ) );
+		m_alphaDepthState = GetOwner()->GetDepthStencilStateManager().Create( m_name + cuT( "_AlphaDepthState" ) );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
@@ -752,7 +752,7 @@ namespace Castor3D
 			m_rootNode->CreateBuffers( m_nbFaces, m_nbVertex );
 		}
 
-		Logger::LogInfo( StringStream() << cuT( "Scene::CreateList - [" ) << m_strName << cuT( "] - NbVertex : " ) << m_nbVertex << cuT( " - NbFaces : " ) << m_nbFaces );
+		Logger::LogInfo( StringStream() << cuT( "Scene::CreateList - [" ) << m_name << cuT( "] - NbVertex : " ) << m_nbVertex << cuT( " - NbFaces : " ) << m_nbFaces );
 		DoSortByAlpha();
 		DepthStencilStateSPtr state = m_alphaDepthState.lock();
 
