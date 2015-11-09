@@ -237,7 +237,7 @@ namespace Castor3D
 		void DoSetGeometry( GeometrySPtr p_pGeometry );
 		void DoSetMesh( MeshSPtr p_pMesh );
 		void DoSetSkeleton( SkeletonSPtr p_pSkeleton );
-		void DoCopyAnimations( AnimableSPtr p_pObject );
+		void DoCopyAnimations( AnimableSPtr p_object );
 
 	protected:
 		//!\~english All animations	\~french Toutes les animations

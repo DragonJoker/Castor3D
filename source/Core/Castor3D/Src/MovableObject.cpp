@@ -86,7 +86,7 @@ namespace Castor3D
 	}
 
 	MovableObject::MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, String const & p_name, eMOVABLE_TYPE p_type )
-		:	m_strName( p_name )
+		:	m_name( p_name )
 		,	m_pSceneNode( p_sn )
 		,	m_type( p_type )
 		,	m_pScene( p_scene )

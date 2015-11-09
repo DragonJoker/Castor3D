@@ -116,11 +116,11 @@ namespace Castor3D
 		/**
 		 *\brief		Tells if the ray intersects the given Geometry
 		 *\param[in]	p_pGeometry	The sphere to test
-		 *\param[out]	p_ppFace	The intersected face
-		 *\param[out]	p_ppSubmesh	The intersected submesh
+		 *\param[out]	p_nearestFace	The intersected face
+		 *\param[out]	p_nearestSubmesh	The intersected submesh
 		 *\return		\p true if the ray intersects the face, false if not
 		 */
-		C3D_API real Intersects( GeometrySPtr p_pGeometry, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
+		C3D_API real Intersects( GeometrySPtr p_pGeometry, FaceSPtr * p_nearestFace, SubmeshSPtr * p_nearestSubmesh );
 		/**
 		 *\brief		Projects the given vertex on the ray
 		 *\param[in]	p_point	The vertex we want to project

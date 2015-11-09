@@ -266,9 +266,9 @@ namespace Castor3D
 		 *\brief		Définit l'instance animée du squelette
 		 *\param[in]	p_pSkeleton	La nouvelle valeur
 		 */
-		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_pObject )
+		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
 		{
-			m_pAnimatedObject = p_pObject;
+			m_pAnimatedObject = p_object;
 		}
 
 	protected:

@@ -611,8 +611,8 @@ namespace GlRender
 				{
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Int, l_offset, p_iIndex * Int( 10 ) );
 					l_lightReturn.m_v4Ambient() = texelFetch( c3d_sLights, l_offset++, 0 );
-					l_lightReturn.m_v4Diffuse() = texelFetch( c3d_sLights, l_offset++, 0 );
-					l_lightReturn.m_v4Specular() = texelFetch( c3d_sLights, l_offset++, 0 );
+					l_lightReturn.m_v4Diffuse() = vec4( Float( p_iIndex.m_writer, 1.0f ), 1.0, 1.0, 1.0 );// texelFetch( c3d_sLights, l_offset++, 0 );
+					l_lightReturn.m_v4Specular() = vec4( Float( p_iIndex.m_writer, 1.0f ), 1.0, 1.0, 1.0 );// texelFetch( c3d_sLights, l_offset++, 0 );
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++, 0 ) );
 					l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++, 0 ).xyz();
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4A, texelFetch( c3d_sLights, l_offset++, 0 ) );
@@ -620,10 +620,10 @@ namespace GlRender
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4C, texelFetch( c3d_sLights, l_offset++, 0 ) );
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4D, texelFetch( c3d_sLights, l_offset++, 0 ) );
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec2, l_v2Spot, texelFetch( c3d_sLights, l_offset++, 0 ).xy() );
-					l_lightReturn.m_v4Position() = vec4( l_v4Position.z(), l_v4Position.y(), l_v4Position.x(), 0.0 );
+					l_lightReturn.m_v4Position() = vec4( Float( p_iIndex.m_writer, 0.0f ), -1.0, -1.0, 0.0 );// vec4( l_v4Position.z(), l_v4Position.y(), l_v4Position.x(), 0.0 );
 					l_lightReturn.m_iType() = CAST( *p_iIndex.m_writer, Int, l_v4Position.w() );
 					l_lightReturn.m_mtx4Orientation() = mat4( l_v4A, l_v4B, l_v4C, l_v4D );
-					l_lightReturn.m_fExponent() = l_v2Spot.x();
+					l_lightReturn.m_fExponent() = 50.0f;// l_v2Spot.x();
 					l_lightReturn.m_fCutOff() = l_v2Spot.y();
 				}
 				else

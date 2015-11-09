@@ -20,18 +20,18 @@ namespace Castor3D
 	{
 	}
 
-	void MovingObjectBase::AddChild( MovingObjectBaseSPtr p_pObject )
+	void MovingObjectBase::AddChild( MovingObjectBaseSPtr p_object )
 	{
-		m_arrayChildren.push_back( p_pObject );
+		m_arrayChildren.push_back( p_object );
 	}
 
 	void MovingObjectBase::Update( real p_rTime, bool p_bLooped, Matrix4x4r const & p_mtxTransformations )
 	{
 		m_mtxTransformations = p_mtxTransformations * DoComputeTransform( p_rTime );
 		DoApply();
-		std::for_each( m_arrayChildren.begin(), m_arrayChildren.end(), [&]( MovingObjectBaseSPtr p_pObject )
+		std::for_each( m_arrayChildren.begin(), m_arrayChildren.end(), [&]( MovingObjectBaseSPtr p_object )
 		{
-			p_pObject->Update( p_rTime, p_bLooped, m_mtxTransformations );
+			p_object->Update( p_rTime, p_bLooped, m_mtxTransformations );
 		} );
 	}
 
@@ -71,9 +71,9 @@ namespace Castor3D
 		p_map.insert( std::make_pair( l_return->GetName(), l_return ) );
 		l_return->m_mtxNodeTransform = m_mtxNodeTransform;
 		l_return->m_arrayChildren.clear();
-		std::for_each( m_arrayChildren.begin(), m_arrayChildren.end(), [&]( MovingObjectBaseSPtr p_pObject )
+		std::for_each( m_arrayChildren.begin(), m_arrayChildren.end(), [&]( MovingObjectBaseSPtr p_object )
 		{
-			l_return->m_arrayChildren.push_back( p_pObject->Clone( p_map ) );
+			l_return->m_arrayChildren.push_back( p_object->Clone( p_map ) );
 		} );
 		return l_return;
 	}

@@ -61,14 +61,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the movable object
-		 *\param[in]	p_pObject	The object
+		 *\param[in]	p_object	The object
 		 *\~french
 		 *\brief		Définit l'objet mouvant
-		 *\param[in]	p_pObject	L'objet
+		 *\param[in]	p_object	L'objet
 		 */
-		inline void SetObject( MovableObjectSPtr p_pObject )
+		inline void SetObject( MovableObjectSPtr p_object )
 		{
-			m_pObject = p_pObject;
+			m_pObject = p_object;
 		}
 		/**
 		 *\~english

@@ -233,27 +233,27 @@ real Ray::Intersects( SphereBox const & p_sphere )
 	return l_fReturn;
 }
 
-real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_ppFace ), SubmeshSPtr * p_ppSubmesh )
+real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_nearestFace ), SubmeshSPtr * p_nearestSubmesh )
 {
 	Point3r l_vCenter( p_pGeometry->GetParent()->GetPosition() );
 	MeshSPtr l_pMesh = p_pGeometry->GetMesh();
 	SphereBox l_sphere( l_vCenter, l_pMesh->GetCollisionSphere().GetRadius() );
-	real l_fDistance = Intersects( l_sphere );
+	real l_distance = Intersects( l_sphere );
 	//real l_faceDist = 10e6, l_vertexDist = 10e6;
 	//real l_curfaceDist, l_curvertexDist;
 
-	if ( l_fDistance >= 0.0f )
+	if ( l_distance >= 0.0f )
 	{
-		l_fDistance = -1.0f;
+		l_distance = -1.0f;
 
 		for ( auto && l_submesh : *l_pMesh )
 		{
 			Point3r l_submeshCenter = l_vCenter + l_submesh->GetSphere().GetCenter();
 			l_sphere.Load( l_submeshCenter, l_submesh->GetSphere().GetRadius() );
 
-			if ( p_ppSubmesh )
+			if ( p_nearestSubmesh )
 			{
-				*p_ppSubmesh = l_submesh;
+				*p_nearestSubmesh = l_submesh;
 			}
 
 			//if (Intersects( l_sphere) >= 0.0f)
@@ -264,32 +264,32 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 
 			//		if ((l_curfaceDist = Intersects( * l_pFace)) >= 0.0 && l_curfaceDist < l_faceDist)
 			//		{
-			//			if (p_ppFace)
+			//			if (p_nearestFace)
 			//			{
-			//				*p_ppFace = l_pFace;
+			//				*p_nearestFace = l_pFace;
 			//			}
 
-			//			if (p_ppSubmesh)
+			//			if (p_nearestSubmesh)
 			//			{
-			//				*p_ppSubmesh = l_submesh;
+			//				*p_nearestSubmesh = l_submesh;
 			//			}
 
 			//			l_faceDist = l_curfaceDist;
-			//			l_fDistance = l_curfaceDist;
+			//			l_distance = l_curfaceDist;
 
-			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex1)) >= 0.0 && l_curvertexDist < l_fDistance)
+			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex1)) >= 0.0 && l_curvertexDist < l_distance)
 			//			{
-			//				l_fDistance = l_curvertexDist;
+			//				l_distance = l_curvertexDist;
 			//			}
 
-			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_fDistance)
+			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_distance)
 			//			{
-			//				l_fDistance = l_curvertexDist;
+			//				l_distance = l_curvertexDist;
 			//			}
 
-			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_fDistance)
+			//			if ((l_curvertexDist = Intersects( * l_pFace->m_vertex2)) >= 0.0 && l_curvertexDist < l_distance)
 			//			{
-			//				l_fDistance = l_curvertexDist;
+			//				l_distance = l_curvertexDist;
 			//			}
 			//		}
 			//	}
@@ -297,7 +297,7 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_pp
 		}
 	}
 
-	return l_fDistance;
+	return l_distance;
 }
 
 bool Ray::ProjectVertex( Point3r const & p_point, Point3r & p_result )

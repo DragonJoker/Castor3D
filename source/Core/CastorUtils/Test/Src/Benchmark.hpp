@@ -59,7 +59,7 @@ namespace Testing
 		void DoBench( std::string p_name, CallbackBench p_bench, uint64_t p_ui64Calls );
 
 	private:
-		std::string m_strName;
+		std::string m_name;
 		double m_dCumulativeTimes;
 		Castor::PreciseTimer m_preciseTimer;
 		uint64_t m_uiTotalExecutions;

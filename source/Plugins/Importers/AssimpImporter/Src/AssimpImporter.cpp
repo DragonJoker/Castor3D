@@ -622,7 +622,7 @@ AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNo
 	return l_pAnimation;
 }
 
-void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p_rTicksPerSecond, SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_paiAnimation, MovingObjectBaseSPtr p_pObject )
+void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p_rTicksPerSecond, SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_paiAnimation, MovingObjectBaseSPtr p_object )
 {
 	String l_name = string::string_cast< xchar >( p_node->mName.data );
 	const aiNodeAnim * l_pNodeAnim = ::detail::FindNodeAnim( p_paiAnimation, l_name );
@@ -673,9 +673,9 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 		l_pObject = p_pAnimation->AddMovingObject();
 	}
 
-	if ( p_pObject )
+	if ( p_object )
 	{
-		p_pObject->AddChild( l_pObject );
+		p_object->AddChild( l_pObject );
 	}
 
 	if ( !l_pObject->HasKeyFrames() )

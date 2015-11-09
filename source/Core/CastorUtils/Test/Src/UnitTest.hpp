@@ -82,14 +82,14 @@ namespace Testing
 		virtual void Execute( uint32_t & p_errCount, uint32_t & p_testCount ) = 0;
 		inline std::string const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 
 	protected:
 		void DoExecuteTest( std::function< void( uint32_t &, uint32_t & ) > p_test, uint32_t & p_errCount, uint32_t & p_testCount, std::string const & p_name );
 
 	private:
-		std::string	m_strName;
+		std::string	m_name;
 	};
 
 	DECLARE_SMART_PTR( TestCase );

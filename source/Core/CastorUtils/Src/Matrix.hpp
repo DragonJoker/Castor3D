@@ -26,16 +26,6 @@ namespace Castor
 {
 	/*!
 	\author		Sylvain DOREMUS
-	\version	0.8.0
-	\date		18/09/2015
-	\~english
-	\brief		Used to construct a matrix without initialising it's buffer.
-	\~french
-	\brief		Utilisé pour construicre une matrice sans initialiser son tampon.
-	*/
-	struct mtx_noinit {};
-	/*!
-	\author		Sylvain DOREMUS
 	\version	0.1.0.0
 	\date		09/02/2010
 	\~english
@@ -82,13 +72,11 @@ namespace Castor
 		Matrix();
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\remarks		The matrix buffer won't be initialised.
+		 *\brief		Constructor, without data initialisation.
 		 *\~french
-		 *\brief		Constructeur.
-		 *\remarks		Le tampon de la matrice ne sera pas initialisé.
+		 *\brief		Constructeur, sans initialisation des données.
 		 */
-		Matrix( mtx_noinit const & );
+		Matrix( NoInit const & );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -116,6 +104,15 @@ namespace Castor
 		 *\param[in]	p_value	La matrice est initialisée comme une Jordan avec cette valeur
 		 */
 		Matrix( T const & p_value );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_matrix	Data buffer to copy in the matrix
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
+		 */
+		Matrix( T * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -740,59 +737,59 @@ namespace Castor
 	 *\return		Le résultat de la négation
 	 */
 	template< typename T, uint32_t Columns, uint32_t Rows > Matrix< T, Columns, Rows > operator-( Matrix< T, Columns, Rows > const & p_matrix );
+	/**
+	 *\~english
+	 *\brief			Stream operator
+	 *\param[in,out]	p_streamOut	The stream receiving matrix's data
+	 *\param[in]		p_matrix	The input matrix
+	 *\return			A reference to the stream
+	 *\~french
+	 *\brief			Opérateur de flux
+	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
+	 *\param[in]		p_matrix	La matrice entré
+	 *\return			Une référence sur le flux
+	 */
+	template< typename T, uint32_t Columns, uint32_t Rows > Castor::String & operator<<( Castor::String & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix );
+	/**
+	 *\~english
+	 *\brief			Stream operator
+	 *\param[in,out]	p_streamIn	The stream holding matrix's data
+	 *\param[in,out]	p_matrix	The output matrix
+	 *\return			A reference to the stream
+	 *\~french
+	 *\brief			Opérateur de flux
+	 *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
+	 *\param[in,out]	p_matrix	La matrice sortie
+	 *\return			Une référence sur le flux
+	 */
+	template< typename T, uint32_t Columns, uint32_t Rows > Castor::String & operator>>( Castor::String & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix );
+	/**
+	 *\~english
+	 *\brief			Stream operator
+	 *\param[in,out]	p_streamOut	The stream receiving matrix's data
+	 *\param[in]		p_matrix	The input matrix
+	 *\return			A reference to the stream
+	 *\~french
+	 *\brief			Opérateur de flux
+	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
+	 *\param[in]		p_matrix	La matrice entré
+	 *\return			Une référence sur le flux
+	 */
+	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix );
+	/**
+	 *\~english
+	 *\brief			Stream operator
+	 *\param[in,out]	p_streamIn	The stream holding matrix's data
+	 *\param[in,out]	p_matrix	The output matrix
+	 *\return			A reference to the stream
+	 *\~french
+	 *\brief			Opérateur de flux
+	 *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
+	 *\param[in,out]	p_matrix	La matrice sortie
+	 *\return			Une référence sur le flux
+	 */
+	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix );
 }
-/**
- *\~english
- *\brief			Stream operator
- *\param[in,out]	p_streamOut	The stream receiving matrix's data
- *\param[in]		p_matrix	The input matrix
- *\return			A reference to the stream
- *\~french
- *\brief			Opérateur de flux
- *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
- *\param[in]		p_matrix	La matrice entré
- *\return			Une référence sur le flux
- */
-template< typename T, uint32_t Columns, uint32_t Rows > Castor::String & operator<<( Castor::String & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix );
-/**
- *\~english
- *\brief			Stream operator
- *\param[in,out]	p_streamIn	The stream holding matrix's data
- *\param[in,out]	p_matrix	The output matrix
- *\return			A reference to the stream
- *\~french
- *\brief			Opérateur de flux
- *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
- *\param[in,out]	p_matrix	La matrice sortie
- *\return			Une référence sur le flux
- */
-template< typename T, uint32_t Columns, uint32_t Rows > Castor::String & operator>>( Castor::String & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix );
-/**
- *\~english
- *\brief			Stream operator
- *\param[in,out]	p_streamOut	The stream receiving matrix's data
- *\param[in]		p_matrix	The input matrix
- *\return			A reference to the stream
- *\~french
- *\brief			Opérateur de flux
- *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la matrice
- *\param[in]		p_matrix	La matrice entré
- *\return			Une référence sur le flux
- */
-template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix );
-/**
- *\~english
- *\brief			Stream operator
- *\param[in,out]	p_streamIn	The stream holding matrix's data
- *\param[in,out]	p_matrix	The output matrix
- *\return			A reference to the stream
- *\~french
- *\brief			Opérateur de flux
- *\param[in,out]	p_streamIn	Le flux qui contient les données de la matrice
- *\param[in,out]	p_matrix	La matrice sortie
- *\return			Une référence sur le flux
- */
-template< typename CharT, typename T, uint32_t Columns, uint32_t Rows > std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix );
 
 #include "Matrix.inl"
 

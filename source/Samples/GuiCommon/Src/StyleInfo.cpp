@@ -6,7 +6,7 @@ using namespace Castor;
 namespace GuiCommon
 {
 	StyleInfo::StyleInfo( wxString const & p_name, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontSize, int p_iFontStyle, int p_iLetterCase )
-		:	m_strName( p_name	)
+		:	m_name( p_name	)
 		,	m_strForeground( p_strForeground	)
 		,	m_strBackground( p_strBackground	)
 		,	m_strFontName( p_strFontName	)
@@ -17,7 +17,7 @@ namespace GuiCommon
 	}
 
 	StyleInfo::StyleInfo( StyleInfo const & p_infos )
-		:	m_strName( p_infos.m_strName	)
+		:	m_name( p_infos.m_name	)
 		,	m_strForeground( p_infos.m_strForeground	)
 		,	m_strBackground( p_infos.m_strBackground	)
 		,	m_strFontName( p_infos.m_strFontName	)
@@ -29,7 +29,7 @@ namespace GuiCommon
 
 	StyleInfo & StyleInfo::operator =( StyleInfo const & p_infos )
 	{
-		m_strName		= p_infos.m_strName			;
+		m_name		= p_infos.m_name			;
 		m_strForeground	= p_infos.m_strForeground	;
 		m_strBackground	= p_infos.m_strBackground	;
 		m_strFontName	= p_infos.m_strFontName		;

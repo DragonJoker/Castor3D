@@ -69,17 +69,17 @@ namespace Castor3D
 		return l_pObj;
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( MovableObjectSPtr p_pObject )
+	MovingObjectBaseSPtr Animation::AddMovingObject( MovableObjectSPtr p_object )
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pObject->GetName() );
+		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_object->GetName() );
 
 		if ( l_it == m_mapToMove.end() )
 		{
 			std::shared_ptr< MovingObject > l_pObj = std::make_shared< MovingObject >();
-			l_pObj->SetObject( p_pObject );
+			l_pObj->SetObject( p_object );
 			l_return = l_pObj;
-			m_mapToMove.insert( std::make_pair( p_pObject->GetName(), l_return ) );
+			m_mapToMove.insert( std::make_pair( p_object->GetName(), l_return ) );
 		}
 		else
 		{
@@ -109,13 +109,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Animation::AddMovingObject( MovingObjectBaseSPtr p_pObject )
+	void Animation::AddMovingObject( MovingObjectBaseSPtr p_object )
 	{
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pObject->GetName() );
+		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_object->GetName() );
 
 		if ( l_it == m_mapToMove.end() )
 		{
-			m_mapToMove.insert( std::make_pair( p_pObject->GetName(), p_pObject ) );
+			m_mapToMove.insert( std::make_pair( p_object->GetName(), p_object ) );
 		}
 		else
 		{
@@ -136,10 +136,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	MovingObjectBaseSPtr Animation::GetMovingObject( MovableObjectSPtr p_pObject )const
+	MovingObjectBaseSPtr Animation::GetMovingObject( MovableObjectSPtr p_object )const
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_mapToMove.find( p_pObject->GetName() );
+		MovingObjectPtrStrMapConstIt l_it = m_mapToMove.find( p_object->GetName() );
 
 		if ( l_it == m_mapToMove.end() )
 		{

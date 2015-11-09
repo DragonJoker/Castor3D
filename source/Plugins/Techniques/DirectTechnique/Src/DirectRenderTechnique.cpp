@@ -413,8 +413,8 @@ namespace Direct
 				}
 			}
 
-			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
-			pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
+			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
+			//pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
 		};
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();

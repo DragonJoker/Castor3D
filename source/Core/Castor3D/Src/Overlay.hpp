@@ -343,7 +343,7 @@ namespace Castor3D
 		 */
 		inline Castor::String const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -693,14 +693,14 @@ namespace Castor3D
 		 */
 		inline void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_name;
+			m_name = p_name;
 		}
 
 	protected:
 		//!\~english The overlay manager	\~french Le gestionnaire d'inscrustations
 		OverlayManager & m_manager;
 		//!\~english The overlay name	\~french Le nom de l'incrustation
-		Castor::String m_strName;
+		Castor::String m_name;
 		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a
 		OverlayWPtr m_pParent;
 		//!\~english The childs	\~french Les enfants

@@ -8,6 +8,14 @@ namespace Castor
 //*************************************************************************************************
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
+	inline Matrix< T, Columns, Rows >::Matrix( NoInit const & )
+		: m_data( AlignedAlloc< T >( 16, size ) )
+		, m_ownCoords( true )
+	{
+		do_update_columns();
+	}
+
+	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix()
 		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
@@ -16,19 +24,19 @@ namespace Castor
 		initialise();
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	inline Matrix< T, Columns, Rows >::Matrix( mtx_noinit const & )
-		: m_data( AlignedAlloc< T >( 16, size ) )
-		, m_ownCoords( true )
-	{
-		do_update_columns();
-	}
-	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( T const & p_value )
 		: m_data( AlignedAlloc< T >( 16, size ) )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
 		initialise( p_value );
+	}
+	template< typename T, uint32_t Columns, uint32_t Rows >
+	inline Matrix< T, Columns, Rows >::Matrix( T * p_matrix )
+		: m_data( p_matrix )
+		, m_ownCoords( false )
+	{
+		do_update_columns();
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	template< typename Type >
@@ -624,77 +632,77 @@ namespace Castor
 	}
 
 //*************************************************************************************************
-}
 
-template< typename T, uint32_t Columns, uint32_t Rows >
-inline Castor::String & operator<<( Castor::String & p_strOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
-{
-	Castor::StringStream l_streamOut;
-	l_streamOut.precision( 10 );
-
-	for ( uint32_t i = 0; i < Columns; i++ )
+	template< typename T, uint32_t Columns, uint32_t Rows >
+	inline Castor::String & operator<<( Castor::String & p_strOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		for ( uint32_t j = 0; j < Rows; j++ )
+		Castor::StringStream l_streamOut;
+		l_streamOut.precision( 10 );
+
+		for ( uint32_t i = 0; i < Columns; i++ )
 		{
-			l_streamOut.width( 15 );
-			l_streamOut << std::right << p_matrix[i][j];
+			for ( uint32_t j = 0; j < Rows; j++ )
+			{
+				l_streamOut.width( 15 );
+				l_streamOut << std::right << p_matrix[i][j];
+			}
+
+			l_streamOut << std::endl;
 		}
 
-		l_streamOut << std::endl;
+		p_strOut += l_streamOut.str();
+		return p_strOut;
 	}
-
-	p_strOut += l_streamOut.str();
-	return p_strOut;
-}
-template< typename T, uint32_t Columns, uint32_t Rows >
-inline Castor::String & operator>>( Castor::String & p_strIn, Castor::Matrix <T, Columns, Rows> & p_matrix )
-{
-	Castor::StringStream l_streamIn( p_strIn );
-
-	for ( uint32_t i = 0; i < Columns; i++ )
+	template< typename T, uint32_t Columns, uint32_t Rows >
+	inline Castor::String & operator>>( Castor::String & p_strIn, Castor::Matrix <T, Columns, Rows> & p_matrix )
 	{
-		for ( uint32_t j = 0; j < Rows; j++ )
+		Castor::StringStream l_streamIn( p_strIn );
+
+		for ( uint32_t i = 0; i < Columns; i++ )
 		{
-			l_streamIn >> p_matrix[i][j];
+			for ( uint32_t j = 0; j < Rows; j++ )
+			{
+				l_streamIn >> p_matrix[i][j];
+			}
+
+			l_streamIn.ignore();
 		}
 
-		l_streamIn.ignore();
+		p_strIn = l_streamIn.str();
+		return p_strIn;
 	}
-
-	p_strIn = l_streamIn.str();
-	return p_strIn;
-}
-template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
-{
-	auto l_precision = p_streamOut.precision( 10 );
-
-	for ( uint32_t i = 0; i < Columns; i++ )
+	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		for ( uint32_t j = 0; j < Rows; j++ )
+		auto l_precision = p_streamOut.precision( 10 );
+
+		for ( uint32_t i = 0; i < Columns; i++ )
 		{
-			p_streamOut.width( 15 );
-			p_streamOut << std::right << p_matrix[i][j];
+			for ( uint32_t j = 0; j < Rows; j++ )
+			{
+				p_streamOut.width( 15 );
+				p_streamOut << std::right << p_matrix[i][j];
+			}
+
+			p_streamOut << std::endl;
 		}
 
-		p_streamOut << std::endl;
+		p_streamOut.precision( l_precision );
+		return p_streamOut;
 	}
-
-	p_streamOut.precision( l_precision );
-	return p_streamOut;
-}
-template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
-inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix )
-{
-	for ( uint32_t i = 0; i < Columns; i++ )
+	template< typename CharT, typename T, uint32_t Columns, uint32_t Rows >
+	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::Matrix< T, Columns, Rows > & p_matrix )
 	{
-		for ( uint32_t j = 0; j < Rows; j++ )
+		for ( uint32_t i = 0; i < Columns; i++ )
 		{
-			p_streamIn >> p_matrix[i][j];
+			for ( uint32_t j = 0; j < Rows; j++ )
+			{
+				p_streamIn >> p_matrix[i][j];
+			}
+
+			p_streamIn.ignore();
 		}
 
-		p_streamIn.ignore();
+		return p_streamIn;
 	}
-
-	return p_streamIn;
 }

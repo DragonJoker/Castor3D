@@ -79,9 +79,9 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ajoute un objet enfant à celui-ci
 		 *\remark		Les transformations de l'enfant sont affectées par celles de cet objet
-		 *\param[in]	p_pObject	L'enfant
+		 *\param[in]	p_object	L'enfant
 		 */
-		C3D_API void AddChild( MovingObjectBaseSPtr p_pObject );
+		C3D_API void AddChild( MovingObjectBaseSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time

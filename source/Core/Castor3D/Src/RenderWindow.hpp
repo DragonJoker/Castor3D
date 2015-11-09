@@ -526,7 +526,7 @@ namespace Castor3D
 		 */
 		Castor::String const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -600,7 +600,7 @@ namespace Castor3D
 		//!\~english Tells if the window is initalised	\~french Dit si la fenêtre est initialisée
 		bool m_bInitialised;
 		//!\~english The name	\~french Nom de cette RenderTarget
-		Castor::String m_strName;
+		Castor::String m_name;
 		//!\~english The rendering context	\~french Le contexte de rendu
 		ContextSPtr m_pContext;
 		//!\~english Tells VSync is activated	\~french Dit si la VSync est activée
