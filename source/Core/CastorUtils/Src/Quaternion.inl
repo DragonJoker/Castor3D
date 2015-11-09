@@ -9,42 +9,6 @@ namespace Castor
 		template< typename T, typename U >
 		inline void QuaternionToRotationMatrix( QuaternionT< T > const & p_quat, SquareMatrix< U, 4 > & p_matrix )
 		{
-			//QuaternionT< T > l_quat( p_quat );
-			//point::normalise( l_quat );
-			//double const x = double( l_quat.x );
-			//double const y = double( l_quat.y );
-			//double const z = double( l_quat.z );
-			//double const w = double( l_quat.w );
-			//double fTx = x + x;
-			//double fTy = y + y;
-			//double fTz = z + z;
-			//double fTwx = fTx * w;
-			//double fTwy = fTy * w;
-			//double fTwz = fTz * w;
-			//double fTxx = fTx * x;
-			//double fTxy = fTy * x;
-			//double fTxz = fTz * x;
-			//double fTyy = fTy * y;
-			//double fTyz = fTz * y;
-			//double fTzz = fTz * z;
-			//p_matrix[0] = U( 1 - ( fTyy + fTzz ) );
-			//p_matrix[1] = U( fTxy + fTwz );
-			//p_matrix[2] = U( fTxz - fTwy );
-			//p_matrix[3] = U( 0 );
-			//p_matrix[4] = U( fTxy - fTwz );
-			//p_matrix[5] = U( 1 - ( fTxx + fTzz ) );
-			//p_matrix[6] = U( fTyz + fTwx );
-			//p_matrix[7] = U( 0 );
-			//p_matrix[8] = U( fTxz + fTwy );
-			//p_matrix[9] = U( fTyz - fTwx );
-			//p_matrix[10] = U( 1 - ( fTxx + fTyy ) );
-			//p_matrix[11] = U( 0 );
-			//p_matrix[12] = 0;
-			//p_matrix[13] = 0;
-			//p_matrix[14] = 0;
-			//p_matrix[15] = 1;
-			//return p_matrix;
-
 			matrix::set_rotate( p_matrix, p_quat );
 		}
 		template< typename T, typename U >
