@@ -865,7 +865,7 @@ namespace Castor3D
 
 		if ( DoCheckObject( p_name, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutex ); 
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			l_return = std::make_shared< Geometry >( shared_from_this(), nullptr, m_rootObjectNode, p_name );
 			m_rootObjectNode->AttachObject( l_return );
 			Logger::LogInfo( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
@@ -1763,13 +1763,13 @@ namespace Castor3D
 			}
 		}
 
-		m_pLightsTexture->Bind();
-
 		if ( m_bLightsChanged )
 		{
 			m_pLightsTexture->UploadImage( false );
 			m_bLightsChanged = false;
 		}
+
+		m_pLightsTexture->Bind();
 	}
 
 	void Scene::DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )

@@ -1,7 +1,7 @@
 ﻿namespace Castor3D
 {
 	template<> struct PntFrameVariableDefinitions< bool, 2 >
-		: public FrameVariableDataTyper< bool >
+			: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
@@ -9,7 +9,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 2 >
-		: public FrameVariableDataTyper< int >
+			: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
@@ -17,7 +17,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 2 >
-		: public FrameVariableDataTyper< uint32_t >
+			: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
@@ -25,7 +25,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 2 >
-		: public FrameVariableDataTyper< float >
+			: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
@@ -33,7 +33,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 2 >
-		: public FrameVariableDataTyper< double >
+			: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC2;
@@ -41,7 +41,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< bool, 3 >
-		: public FrameVariableDataTyper< bool >
+			: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
@@ -49,7 +49,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 3 >
-		: public FrameVariableDataTyper< int >
+			: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
@@ -57,7 +57,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 3 >
-		: public FrameVariableDataTyper< uint32_t >
+			: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
@@ -65,7 +65,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 3 >
-		: public FrameVariableDataTyper< float >
+			: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
@@ -73,7 +73,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 3 >
-		: public FrameVariableDataTyper< double >
+			: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC3;
@@ -81,7 +81,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< bool, 4 >
-		: public FrameVariableDataTyper< bool >
+			: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
@@ -89,7 +89,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< int, 4 >
-		: public FrameVariableDataTyper< int >
+			: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
@@ -97,7 +97,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< uint32_t, 4 >
-		: public FrameVariableDataTyper< uint32_t >
+			: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
@@ -105,7 +105,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< float, 4 >
-		: public FrameVariableDataTyper< float >
+			: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;
@@ -113,7 +113,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct PntFrameVariableDefinitions< double, 4 >
-		: public FrameVariableDataTyper< double >
+			: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_VEC4;

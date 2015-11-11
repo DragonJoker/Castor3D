@@ -21,9 +21,9 @@ namespace Testing
 				InChar const * l_pEndIn = NULL;
 				OutChar * l_pEndOut = NULL;
 				l_result = std::use_facet< facet_type >( p_locale ).in( l_state,
-							p_strIn.data(),		p_strIn.data() + p_strIn.length(),		l_pEndIn,
-							&l_buffer.front(),	&l_buffer.front() + l_buffer.size(),	l_pEndOut
-																		);
+						   p_strIn.data(),		p_strIn.data() + p_strIn.length(),		l_pEndIn,
+						   &l_buffer.front(),	&l_buffer.front() + l_buffer.size(),	l_pEndOut
+																	  );
 				p_strOut = std::basic_string< OutChar >( &l_buffer.front(), l_pEndOut );
 			}
 			else

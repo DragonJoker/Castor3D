@@ -318,7 +318,7 @@ namespace Castor3D
 		m_pDepthBuffer->Create();
 		m_pDepthBuffer->Initialise( l_size );
 		m_pFrameBuffer->Initialise( l_size );
-		
+
 		if ( m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
 			m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );

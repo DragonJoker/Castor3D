@@ -11,7 +11,7 @@ namespace GuiCommon
 {
 	LanguageFileParser::LanguageFileParser( StcContext * p_pStcContext )
 		: FileParser( eSECTION_ROOT )
-, m_pStcContext( p_pStcContext )
+		, m_pStcContext( p_pStcContext )
 	{
 	}
 

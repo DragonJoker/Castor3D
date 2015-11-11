@@ -39,7 +39,7 @@ namespace GuiCommon
 
 	public:
 		MatrixProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
-		MatrixProperty( wxString const ( & p_rowNames )[Count], wxString const ( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
+		MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::SquareMatrix< T, Count > const & value = Castor::SquareMatrix< T, Count >() );
 		virtual ~MatrixProperty();
 
 		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;

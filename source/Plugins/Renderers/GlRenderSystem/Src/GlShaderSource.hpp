@@ -333,6 +333,14 @@ namespace GlRender
 			{
 				m_value << p_value;
 			}
+			C3D_Gl_API Int( GlslWriter * p_writer, int p_value ) : Type( cuT( "int " ), p_writer, Castor::String() )
+			{
+				m_value << p_value;
+			}
+			C3D_Gl_API Int( GlslWriter * p_writer, float p_value ) : Type( cuT( "int " ), p_writer, Castor::String() )
+			{
+				m_value << p_value;
+			}
 			C3D_Gl_API Int( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() ): Type( cuT( "int " ), p_writer, p_name ) {}
 			inline Int & operator=( Int const & p_rhs )
 			{

@@ -95,8 +95,8 @@ namespace GlRender
 				}
 
 				if ( GetStencilReadMask() != m_currentState->GetStencilReadMask()
-					|| GetStencilBackRef() != m_currentState->GetStencilBackRef()
-					|| GetStencilBackFunc() != m_currentState->GetStencilBackFunc() )
+						|| GetStencilBackRef() != m_currentState->GetStencilBackRef()
+						|| GetStencilBackFunc() != m_currentState->GetStencilBackFunc() )
 				{
 					l_return &= m_gl.StencilFuncSeparate( eGL_FACE_BACK, m_gl.Get( GetStencilBackFunc() ), GetStencilBackRef(), GetStencilReadMask() );
 					m_currentState->SetStencilBackRef( GetStencilBackRef() );
@@ -104,8 +104,8 @@ namespace GlRender
 				}
 
 				if ( GetStencilReadMask() != m_currentState->GetStencilReadMask()
-					|| GetStencilFrontRef() != m_currentState->GetStencilFrontRef()
-					|| GetStencilFrontFunc() != m_currentState->GetStencilFrontFunc() )
+						|| GetStencilFrontRef() != m_currentState->GetStencilFrontRef()
+						|| GetStencilFrontFunc() != m_currentState->GetStencilFrontFunc() )
 				{
 					l_return &= m_gl.StencilFuncSeparate( eGL_FACE_FRONT, m_gl.Get( GetStencilFrontFunc() ), GetStencilFrontRef(), GetStencilReadMask() );
 					m_currentState->SetStencilFrontRef( GetStencilFrontRef() );
@@ -115,8 +115,8 @@ namespace GlRender
 				m_currentState->SetStencilReadMask( GetStencilReadMask() );
 
 				if ( GetStencilBackFailOp() != m_currentState->GetStencilBackFailOp()
-					|| GetStencilBackDepthFailOp() != m_currentState->GetStencilBackDepthFailOp()
-					|| GetStencilBackPassOp() != m_currentState->GetStencilBackPassOp() )
+						|| GetStencilBackDepthFailOp() != m_currentState->GetStencilBackDepthFailOp()
+						|| GetStencilBackPassOp() != m_currentState->GetStencilBackPassOp() )
 				{
 					l_return &= m_gl.StencilOpSeparate( eGL_FACE_BACK, m_gl.Get( GetStencilBackFailOp() ), m_gl.Get( GetStencilBackDepthFailOp() ), m_gl.Get( GetStencilBackPassOp() ) );
 					m_currentState->SetStencilBackFailOp( GetStencilBackFailOp() );
@@ -125,8 +125,8 @@ namespace GlRender
 				}
 
 				if ( GetStencilFrontFailOp() != m_currentState->GetStencilFrontFailOp()
-					|| GetStencilFrontDepthFailOp() != m_currentState->GetStencilFrontDepthFailOp()
-					|| GetStencilFrontPassOp() != m_currentState->GetStencilFrontPassOp() )
+						|| GetStencilFrontDepthFailOp() != m_currentState->GetStencilFrontDepthFailOp()
+						|| GetStencilFrontPassOp() != m_currentState->GetStencilFrontPassOp() )
 				{
 					l_return &= m_gl.StencilOpSeparate( eGL_FACE_FRONT, m_gl.Get( GetStencilFrontFailOp() ), m_gl.Get( GetStencilFrontDepthFailOp() ), m_gl.Get( GetStencilFrontPassOp() ) );
 					m_currentState->SetStencilFrontFailOp( GetStencilFrontFailOp() );

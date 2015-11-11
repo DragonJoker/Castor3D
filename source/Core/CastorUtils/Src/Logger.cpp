@@ -252,8 +252,9 @@ namespace Castor
 
 	void Logger::LogDebug( std::ostream const & p_msg )
 	{
+		auto l_sbuf = p_msg.rdbuf();
 		std::stringstream l_ss;
-		l_ss << p_msg.rdbuf();
+		l_ss << l_sbuf;
 		LogDebug( l_ss.str() );
 	}
 

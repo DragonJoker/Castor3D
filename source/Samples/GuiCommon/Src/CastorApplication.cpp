@@ -222,7 +222,7 @@ namespace GuiCommon
 		else
 		{
 			std::cerr << "The selected language is not supported by your system."
-						<< "Try installing support for this language." << std::endl;
+					  << "Try installing support for this language." << std::endl;
 			l_lLanguage = wxLANGUAGE_ENGLISH;
 			m_locale = std::make_unique< wxLocale >( l_lLanguage );
 		}

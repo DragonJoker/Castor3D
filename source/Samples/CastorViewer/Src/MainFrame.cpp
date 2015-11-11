@@ -360,19 +360,19 @@ namespace CastorViewer
 		{
 		case Castor::ELogType_DEBUG:
 		case Castor::ELogType_INFO:
-			{
-				std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
-				m_msgLogList.push_back( p_strLog );
-			}
-			break;
+		{
+			std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
+			m_msgLogList.push_back( p_strLog );
+		}
+		break;
 
 		case Castor::ELogType_WARNING:
 		case Castor::ELogType_ERROR:
-			{
-				std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
-				m_errLogList.push_back( p_strLog );
-			}
-			break;
+		{
+			std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
+			m_errLogList.push_back( p_strLog );
+		}
+		break;
 
 		default:
 			break;
@@ -418,6 +418,7 @@ namespace CastorViewer
 				std::lock_guard< std::mutex > l_lock( m_msgLogListMtx );
 				std::swap( l_flush, m_msgLogList );
 			}
+
 			if ( !l_flush.empty() )
 			{
 				m_messageLog->Insert( l_flush, 0 );
@@ -430,6 +431,7 @@ namespace CastorViewer
 				std::lock_guard< std::mutex > l_lock( m_errLogListMtx );
 				std::swap( l_flush, m_errLogList );
 			}
+
 			if ( !l_flush.empty() )
 			{
 				m_errorLog->Insert( l_flush, 0 );

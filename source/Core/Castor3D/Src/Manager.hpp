@@ -54,7 +54,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui ne supportent pas l'initialisation.
 	*/
 	template< typename Elem >
-	struct ElementInitialiser< Elem, typename std::enable_if< !is_initialisable< Elem >::value >::type >
+	struct ElementInitialiser < Elem, typename std::enable_if < !is_initialisable< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -72,7 +72,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementInitialiser< Elem, typename std::enable_if< is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
+	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -91,7 +91,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementInitialiser< Elem, typename std::enable_if< is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
+	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -107,7 +107,7 @@ namespace Castor3D
 	\~french
 	\brief		Structure permettant de nettoyer les éléments qui le supportent.
 	*/
-	template< typename Elem, typename Enable=void > struct ElementCleaner;
+	template< typename Elem, typename Enable = void > struct ElementCleaner;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -120,7 +120,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui ne supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementCleaner< Elem, typename std::enable_if< !is_cleanable< Elem >::value >::type >
+	struct ElementCleaner < Elem, typename std::enable_if < !is_cleanable< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -138,7 +138,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementCleaner< Elem, typename std::enable_if< is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
+	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{
@@ -157,7 +157,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementCleaner< Elem, typename std::enable_if< is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
+	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
 		void operator()( Engine & p_engine, Elem & p_element )
 		{

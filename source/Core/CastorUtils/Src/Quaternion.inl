@@ -535,10 +535,10 @@ namespace Castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mix( x, p_target.x, T( p_factor ) ),
-				mix( y, p_target.y, T( p_factor ) ),
-				mix( z, p_target.z, T( p_factor ) ),
-				mix( w, p_target.w, T( p_factor ) ) );
+					   mix( x, p_target.x, T( p_factor ) ),
+					   mix( y, p_target.y, T( p_factor ) ),
+					   mix( z, p_target.z, T( p_factor ) ),
+					   mix( w, p_target.w, T( p_factor ) ) );
 		}
 		else
 		{
@@ -558,10 +558,10 @@ namespace Castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mix( x, p_target.x, T( p_factor ) ),
-				mix( y, p_target.y, T( p_factor ) ),
-				mix( z, p_target.z, T( p_factor ) ),
-				mix( w, p_target.w, T( p_factor ) ) );
+					   mix( x, p_target.x, T( p_factor ) ),
+					   mix( y, p_target.y, T( p_factor ) ),
+					   mix( z, p_target.z, T( p_factor ) ),
+					   mix( w, p_target.w, T( p_factor ) ) );
 		}
 		else
 		{
@@ -610,10 +610,10 @@ namespace Castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mix( x, p_target.x, T( p_factor ) ),
-				mix( y, p_target.y, T( p_factor ) ),
-				mix( z, p_target.z, T( p_factor ) ),
-				mix( w, p_target.w, T( p_factor ) ) );
+					   mix( x, p_target.x, T( p_factor ) ),
+					   mix( y, p_target.y, T( p_factor ) ),
+					   mix( z, p_target.z, T( p_factor ) ),
+					   mix( w, p_target.w, T( p_factor ) ) );
 		}
 		else
 		{
@@ -642,10 +642,10 @@ namespace Castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mix( x, p_target.x, T( p_factor ) ),
-				mix( y, p_target.y, T( p_factor ) ),
-				mix( z, p_target.z, T( p_factor ) ),
-				mix( w, p_target.w, T( p_factor ) ) );
+					   mix( x, p_target.x, T( p_factor ) ),
+					   mix( y, p_target.y, T( p_factor ) ),
+					   mix( z, p_target.z, T( p_factor ) ),
+					   mix( w, p_target.w, T( p_factor ) ) );
 		}
 		else
 		{

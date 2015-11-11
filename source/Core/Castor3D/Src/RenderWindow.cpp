@@ -561,6 +561,7 @@ namespace Castor3D
 			{
 				m_pContext->RenderTextureToBackBuffer( m_size, p_texture );
 			}
+
 			m_backBuffers->Unbind();
 		}
 	}

@@ -219,9 +219,9 @@ namespace GuiCommon
 			}
 
 			dc.DrawLine( border_points[0].x + 1,
-							border_points[0].y,
-							border_points[5].x,
-							border_points[5].y );
+						 border_points[0].y,
+						 border_points[5].x,
+						 border_points[5].y );
 		}
 
 
@@ -300,9 +300,9 @@ namespace GuiCommon
 			}
 
 			wxRect rect( tab_x + tab_width - close_button_width - 1,
-							offsetY + ( tab_height / 2 ) - ( bmp.GetHeight() / 2 ),
-							close_button_width,
-							tab_height );
+						 offsetY + ( tab_height / 2 ) - ( bmp.GetHeight() / 2 ),
+						 close_button_width,
+						 tab_height );
 
 			IndentPressedBitmap( &rect, close_button_state );
 			dc.DrawBitmap( bmp, rect.x, rect.y, true );

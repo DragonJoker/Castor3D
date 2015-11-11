@@ -3,6 +3,7 @@
 #include "OpenGl.hpp"
 
 #include <Logger.hpp>
+#include <StreamPrefixManipulators.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -114,12 +115,18 @@ namespace GlRender
 
 				if ( m_compilerLog.size() > 0 )
 				{
-					Logger::LogInfo( m_compilerLog );
-
 					if ( m_eStatus == eSHADER_STATUS_ERROR )
 					{
-						Logger::LogInfo( m_strLoadedSource );
+						Logger::LogError( m_compilerLog );
+						StringStream l_source;
+						l_source << format::line_prefix();
+						l_source << m_strLoadedSource;
+						Logger::LogDebug( l_source.str() );
 						m_strLoadedSource.clear();
+					}
+					else
+					{
+						Logger::LogInfo( m_compilerLog );
 					}
 				}
 

@@ -214,17 +214,12 @@ namespace Castor3D
 		{
 			if ( l_modified || l_node->IsModified() )
 			{
-				Point3r l_position = l_node->GetDerivedPosition();
-				Matrix4x4r l_rotate;
-				Matrix4x4r l_translate;
-				matrix::set_rotate( l_rotate, l_node->GetOrientation() );
-				matrix::set_translate( l_translate, l_position );
-				m_view = l_translate * l_rotate;
+				m_view = l_node->GetDerivedTransformationMatrix();
 
 				// Express frustum in view coordinates
 				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )
 				{
-					m_planes[i].Set( m_view * m_viewport.GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_position );
+					m_planes[i].Set( m_view * m_viewport.GetFrustumPlane( eFRUSTUM_PLANE( i ) ).GetNormal(), l_node->GetDerivedPosition() );
 				}
 			}
 

@@ -96,35 +96,35 @@ namespace GlRender
 
 	bool GlRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
 	{
-	    bool l_return = false;
+		bool l_return = false;
 
 		switch ( p_eProfile )
 		{
 		case eSHADER_MODEL_1:
-	    	l_return = m_gl.HasVSh();
+			l_return = m_gl.HasVSh();
 			break;
 
 		case eSHADER_MODEL_2:
-	    	l_return = m_gl.HasPSh();
+			l_return = m_gl.HasPSh();
 			break;
 
 		case eSHADER_MODEL_3:
-	    	l_return = m_gl.HasGSh();
+			l_return = m_gl.HasGSh();
 			break;
 
 		case eSHADER_MODEL_4:
-	    	l_return = m_gl.HasTSh();
+			l_return = m_gl.HasTSh();
 			break;
 
 		case eSHADER_MODEL_5:
-	    	l_return = m_gl.HasCSh();
+			l_return = m_gl.HasCSh();
 			break;
 
 		default:
-	    	l_return = false;
+			l_return = false;
 		}
 
-	    return l_return;
+		return l_return;
 	}
 
 	ContextSPtr GlRenderSystem::CreateContext()

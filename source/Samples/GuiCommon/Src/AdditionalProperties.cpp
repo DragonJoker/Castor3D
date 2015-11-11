@@ -33,17 +33,17 @@ namespace GuiCommon
 
 	// since the editor does not need to change the primary control (the button)
 	// to reflect changes, UpdateControl is just a no-op
-	void ButtonEventEditor::UpdateControl(wxPGProperty* property, wxWindow* ctrl) const
+	void ButtonEventEditor::UpdateControl( wxPGProperty * property, wxWindow * ctrl ) const
 	{
 	}
 
 	bool ButtonEventEditor::OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const
 	{
 		// handle the button event
-		if( p_event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
+		if ( p_event.GetEventType() == wxEVT_COMMAND_BUTTON_CLICKED )
 		{
 			// extract the client data from the property
-			if( ButtonData * btn = dynamic_cast< ButtonData * >( p_property->GetClientObject() ) )
+			if ( ButtonData * btn = dynamic_cast< ButtonData * >( p_property->GetClientObject() ) )
 			{
 				// call the method
 				return btn->Call( p_property );

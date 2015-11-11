@@ -43,11 +43,11 @@ namespace GuiCommon
 	static const wxString GC_POINT_XY[2] = { wxT( "X" ), wxT( "Y" ) };
 	static const wxString GC_POINT_XYZ[3] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ) };
 	static const wxString GC_POINT_XYZW[4] = { wxT( "X" ), wxT( "Y" ), wxT( "Z" ), wxT( "W" ) };
-	
+
 	static const wxString GC_POINT_12[2] = { wxT( "1" ), wxT( "2" ) };
 	static const wxString GC_POINT_123[3] = { wxT( "1" ), wxT( "2" ), wxT( "3" ) };
 	static const wxString GC_POINT_1234[4] = { wxT( "1" ), wxT( "2" ), wxT( "3" ), wxT( "4" ) };
-	
+
 	static const wxString GC_POINT_SIZE[2] = { _( "Width" ), _( "Height" ) };
 	static const wxString GC_POINT_POSITION[2] = { _( "Left" ), _( "Top" ) };
 	static const wxString GC_POINT_RECTANGLE[4] = { _( "Left" ), _( "TOP" ), _( "Right" ), _( "Bottom" ) };
@@ -60,7 +60,7 @@ namespace GuiCommon
 
 	public:
 		PointProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
-		PointProperty( wxString const ( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
+		PointProperty( wxString const( & p_names )[Count], wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, Castor::Point< T, Count > const & value = Castor::Point< T, Count >() );
 		virtual ~PointProperty();
 
 		virtual wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue ) const;
@@ -74,7 +74,7 @@ namespace GuiCommon
 	template< typename Type, size_t Count > Castor::Point< Type, Count > const & PointRefFromVariant( wxVariant const & p_variant );
 	template< typename Type, size_t Count > Castor::Point< Type, Count > & PointRefFromVariant( wxVariant & p_variant );
 	template< typename Type, size_t Count > void SetVariantFromPoint( wxVariant & p_variant, Castor::Point< Type, Count > const & p_value );
-	
+
 	template< size_t Count > using BoolPointProperty = PointProperty< bool, Count >;
 	template< size_t Count > using IntPointProperty = PointProperty< int, Count >;
 	template< size_t Count > using UIntPointProperty = PointProperty< uint32_t, Count >;
