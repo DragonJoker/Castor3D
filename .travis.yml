@@ -1,0 +1,12 @@
+language: C++
+compiler:
+ - gcc
+before_script:
+  - sudo apt-get install -y libfreeimage-dev libassimp-dev libfreetype-dev libz-dev libzip-dev cmake
+script:
+  - mkdir -p build/release
+  - cd build/release
+  - cmake -DCMAKE_BUILD_TYPE=Release ../../source
+  - make
+  - make test
+install: true
