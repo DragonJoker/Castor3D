@@ -2,11 +2,11 @@ language: C++
 compiler:
  - gcc
 before_script:
-  - sudo apt-get install -y libfreeimage-dev libassimp-dev libfreetype6-dev zlib1g-dev libzip-dev cmake
+  - sudo apt-get install -y libfreeimage-dev libassimp-dev libfreetype6-dev libzip-dev zlib1g-dev libgtk-3-dev libwxgtk3.0-dev cmake
 script:
   - mkdir -p build/release
   - cd build/release
-  - cmake -DCMAKE_BUILD_TYPE=Release ../../source
+  - cmake -DCMAKE_BUILD_TYPE=Release ../../source -DCASTOR_BUILD_BINDING_PYCASTOR3D=OFF -DCASTOR_BUILD_BINDING_COM=OFF -DCASTOR_BUILD_BINDING_PYGUICOMMON=OFF -DCASTOR_BUILD_SAMPLE_GUICOMMON=ON -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=ON -DCASTOR_BUILD_SAMPLE_OCEAN_LIGHTING=ON -DCASTOR_BUILD_SAMPLE_CASTOR_SHAPE=ON
   - make
   - make test
 install: true
