@@ -18,4 +18,3 @@ script:
   - make -j4
   - make test
 install: true
-sudo: false
