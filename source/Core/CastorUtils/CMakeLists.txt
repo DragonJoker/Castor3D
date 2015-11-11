@@ -5,7 +5,11 @@ project( CastorUtils )
 include( Doxygen )
 
 find_package( Freetype )
-find_package( ZLIB 1.2.7 )
+if ( MSW )
+	find_package( ZLIB 1.2.7 )
+else ()
+	find_package( ZLIB )
+endif ()
 find_package( FreeImage )
 find_package( LibZip )
 
