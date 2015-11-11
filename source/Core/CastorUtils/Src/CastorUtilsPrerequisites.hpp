@@ -146,7 +146,7 @@ namespace Castor
 	\~french
 	\brief		Structure utilisée pour les constructeurs d'objets à ne pas initialiser.
 	*/
-	struct NoInit{};
+	struct NoInit {};
 
 	class Angle;
 	class BinaryFile;
@@ -206,7 +206,7 @@ namespace Castor
 	class TextLoader;
 	template< class Obj,
 			  class Key,
-			  class PtrType=std::shared_ptr< Obj >,
+			  class PtrType = std::shared_ptr< Obj >,
 			  typename PFNCreate = std::function< std::shared_ptr< Obj >() >,
 			  class Predicate = std::less< Key > >
 	class Factory;

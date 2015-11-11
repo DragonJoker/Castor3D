@@ -58,7 +58,7 @@ namespace Castor
 		bool l_return = false;\
 		Castor::FileParserContextSPtr p_context = p_parser->GetContext();\
 		try\
-
+ 
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_PUSH( section )\
 		DO_WRITE_PARSER_END( true )\

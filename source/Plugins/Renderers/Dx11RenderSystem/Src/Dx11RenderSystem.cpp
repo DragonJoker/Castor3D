@@ -63,7 +63,7 @@ namespace Dx11Render
 
 	bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc )
 	{
-	    bool l_return = true;
+		bool l_return = true;
 
 		IDXGIFactory * l_factory = NULL;
 		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );

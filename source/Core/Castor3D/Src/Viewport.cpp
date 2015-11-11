@@ -290,7 +290,7 @@ namespace Castor3D
 				l_nearWidth = l_nearHeight * GetRatio();
 				l_farHeight = 2 * l_tan * GetFar();
 				l_farWidth = l_farHeight * GetRatio();
-			} 
+			}
 
 			// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
 			Point3r l_ptNC( l_d * GetNear() );

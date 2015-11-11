@@ -9,10 +9,10 @@ using namespace Castor3D;
 
 namespace GuiCommon
 {
-		typedef enum
-		{
-			eID_DELETE = 1
-		}	eID;
+	typedef enum
+	{
+		eID_DELETE = 1
+	}	eID;
 
 	TreeItemProperty::TreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, ePROPERTY_DATA_TYPE p_type )
 		: wxTreeItemData()

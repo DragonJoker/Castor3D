@@ -7,7 +7,7 @@ namespace GuiCommon
 	{
 		return Point2bRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< bool, 3 > const & PointRefFromVariant< bool, 3 >( wxVariant const & p_variant )
 	{
@@ -25,7 +25,7 @@ namespace GuiCommon
 	{
 		return Point2iRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< int, 3 > const & PointRefFromVariant< int, 3 >( wxVariant const & p_variant )
 	{
@@ -49,7 +49,7 @@ namespace GuiCommon
 	{
 		return Point3uiRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< uint32_t, 4 > const & PointRefFromVariant< uint32_t, 4 >( wxVariant const & p_variant )
 	{
@@ -67,7 +67,7 @@ namespace GuiCommon
 	{
 		return Point3fRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< float, 4 > const & PointRefFromVariant< float, 4 >( wxVariant const & p_variant )
 	{
@@ -79,7 +79,7 @@ namespace GuiCommon
 	{
 		return Point2dRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< double, 3 > const & PointRefFromVariant< double, 3 >( wxVariant const & p_variant )
 	{
@@ -99,7 +99,7 @@ namespace GuiCommon
 	{
 		return Point2bRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< bool, 3 > & PointRefFromVariant< bool, 3 >( wxVariant & p_variant )
 	{
@@ -117,7 +117,7 @@ namespace GuiCommon
 	{
 		return Point2iRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< int, 3 > & PointRefFromVariant< int, 3 >( wxVariant & p_variant )
 	{
@@ -141,7 +141,7 @@ namespace GuiCommon
 	{
 		return Point3uiRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< uint32_t, 4 > & PointRefFromVariant< uint32_t, 4 >( wxVariant & p_variant )
 	{
@@ -159,7 +159,7 @@ namespace GuiCommon
 	{
 		return Point3fRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< float, 4 > & PointRefFromVariant< float, 4 >( wxVariant & p_variant )
 	{
@@ -171,7 +171,7 @@ namespace GuiCommon
 	{
 		return Point2dRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::Point< double, 3 > & PointRefFromVariant< double, 3 >( wxVariant & p_variant )
 	{
@@ -192,7 +192,7 @@ namespace GuiCommon
 	}
 
 	//************************************************************************************************
-	
+
 	template< size_t Count > wxString const * GetPointDefaultNames();
 
 	template<>
@@ -214,7 +214,7 @@ namespace GuiCommon
 	}
 
 	//************************************************************************************************
-	
+
 	template< typename T, size_t Count > struct PointPropertyHelper
 	{
 		static void AddChildren( PointProperty< T, Count > * p_prop, wxString const * p_names, Castor::Point< T, Count > const & p_value )
@@ -264,7 +264,7 @@ namespace GuiCommon
 	};
 
 	//************************************************************************************************
-	
+
 	template< typename T, size_t Count >
 	PointProperty< T, Count >::PointProperty( wxString const & label, wxString const & name, Castor::Point< T, Count > const & value )
 		: wxPGProperty( label, name )
@@ -272,9 +272,9 @@ namespace GuiCommon
 		SetValueI( value );
 		PointPropertyHelper< T, Count >::AddChildren( this, GetPointDefaultNames< Count >(), value );
 	}
-	
+
 	template< typename T, size_t Count >
-	PointProperty< T, Count >::PointProperty( wxString const ( & p_names )[Count], wxString const & label, wxString const & name, Castor::Point< T, Count > const & value )
+	PointProperty< T, Count >::PointProperty( wxString const( & p_names )[Count], wxString const & label, wxString const & name, Castor::Point< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );

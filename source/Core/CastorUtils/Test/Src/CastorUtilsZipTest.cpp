@@ -28,7 +28,7 @@ namespace Testing
 	{
 		Path l_folder1 = cuT( "test1" );
 		Path l_folder2 = l_folder1 / cuT( "test2" );
-		
+
 		Logger::LogInfo( "	First folder creation" );
 
 		if ( File::DirectoryExists( l_folder1 ) || File::DirectoryCreate( l_folder1 ) )

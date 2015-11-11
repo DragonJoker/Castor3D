@@ -111,8 +111,8 @@ namespace Castor
 			 *\brief		Initialise le flux afin de pouvoir l'indenter
 			 *\param[in]	stream	Le flux
 			 */
-			template< typename CharType, typename BufferType = basic_indent_buffer< CharType >, typename BufferManagerType = basic_buffer_manager< CharType > >
-			inline BufferType * install_buffer( std::basic_ostream< CharType > & stream )
+			template< typename CharType, typename BufferType = basic_indent_buffer< CharType >, typename BufferManagerType = basic_indent_buffer_manager< CharType > >
+			inline BufferType * install_indent_buffer( std::basic_ostream< CharType > & stream )
 			{
 				BufferType * sbuf( new BufferType( stream.rdbuf() ) );
 				BufferManagerType::instance()->insert( stream, sbuf );
@@ -129,11 +129,11 @@ namespace Castor
 			template< typename CharType >
 			inline void callback( std::ios_base::event ev, std::ios_base & ios, int x )
 			{
-				if ( basic_buffer_manager< CharType >::instances() )
+				if ( basic_indent_buffer_manager< CharType >::instances() )
 				{
 					if ( ev == std::ios_base::erase_event )
 					{
-						basic_buffer_manager< CharType >::instance()->erase( ios );
+						basic_indent_buffer_manager< CharType >::instance()->erase( ios );
 					}
 					else if ( ev == std::ios_base::copyfmt_event )
 					{
@@ -173,7 +173,7 @@ namespace Castor
 
 		if ( !sbuf )
 		{
-			sbuf = format::install_buffer( stream );
+			sbuf = format::install_indent_buffer( stream );
 			stream.register_callback( format::callback< CharType >, 0 );
 		}
 

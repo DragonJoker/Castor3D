@@ -70,7 +70,7 @@ namespace GlRender
 
 			if ( m_linkerLog.size() > 0 )
 			{
-				Logger::LogDebug( cuT( "GlShaderProgram::Link - Log : " ) + m_linkerLog );
+				Logger::LogDebug( cuT( "GlShaderProgram::Link - Log: " ) + m_linkerLog );
 			}
 
 			if ( l_iLinked && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
@@ -79,6 +79,7 @@ namespace GlRender
 			}
 			else
 			{
+				Logger::LogError( cuT( "GlShaderProgram::Link - Error: " ) + m_linkerLog );
 				m_eStatus = ePROGRAM_STATUS_ERROR;
 			}
 

@@ -128,7 +128,7 @@ namespace
 			__m128 l_colB;
 			__m128 l_colR;
 
-			for (int i = 0; i < 4; ++i )
+			for ( int i = 0; i < 4; ++i )
 			{
 				l_colA = _mm_load_ps( p_mtxA[0].const_ptr() );					// l_colA = p_mtxA[0]
 				l_colB = _mm_set_ps1( p_mtxB[i][0] );							// l_colB = { p_mtxB[i][0], p_mtxB[i][0], p_mtxB[i][0], p_mtxB[i][0] }

@@ -26,7 +26,7 @@ namespace Castor3D
 	const xchar * OneFrameVariableDefinitions< TextureBase * >::FullTypeName = cuT( "sampler" );
 
 	//*************************************************************************************************
-	
+
 	const xchar * PntFrameVariableDefinitions< bool, 2 >::FullTypeName = cuT( "bvec2" );
 	const xchar * PntFrameVariableDefinitions< bool, 3 >::FullTypeName = cuT( "bvec3" );
 	const xchar * PntFrameVariableDefinitions< bool, 4 >::FullTypeName = cuT( "bvec4" );

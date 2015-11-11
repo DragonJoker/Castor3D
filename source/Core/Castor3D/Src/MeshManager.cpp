@@ -74,7 +74,7 @@ namespace Castor3D
 			{
 				if ( l_return )
 				{
-					l_return = Mesh::BinaryParser( l_path ).Fill( *l_it.second, p_file);
+					l_return = Mesh::BinaryParser( l_path ).Fill( *l_it.second, p_file );
 				}
 			}
 		}

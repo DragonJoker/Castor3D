@@ -43,7 +43,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 	{\
 		return wxPGEditor_##EDITOR;\
 	}
-	
+
 // common part of the macros below
 #define GC_IMPLEMENT_CLASS_COMMON( name, basename, baseclsinfo2, func )\
 	template<>\
@@ -175,7 +175,7 @@ namespace GuiCommon
 	{
 	protected:
 		virtual wxPGWindowList CreateControls( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxPoint const & p_pos, wxSize const & p_size )const;
-		virtual void UpdateControl(wxPGProperty* property, wxWindow* ctrl) const;
+		virtual void UpdateControl( wxPGProperty * property, wxWindow * ctrl ) const;
 		virtual bool OnEvent( wxPropertyGrid * p_propgrid, wxPGProperty * p_property, wxWindow * p_wnd_primary, wxEvent & p_event )const;
 	};
 

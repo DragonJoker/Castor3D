@@ -830,7 +830,7 @@ namespace Castor
 	\remarks	spécialisation de min_value pour A <= B.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct min_value< A, B, typename std::enable_if< ( A <= B ) >::type >
+	struct min_value < A, B, typename std::enable_if< ( A <= B ) >::type >
 	{
 		static const uint32_t value = A;
 	};
@@ -846,7 +846,7 @@ namespace Castor
 	\remarks	spécialisation de min_value pour B < A.
 	*/
 	template< uint32_t A, uint32_t B >
-	struct min_value< A, B, typename std::enable_if< ( B < A ) >::type >
+	struct min_value < A, B, typename std::enable_if< ( B < A ) >::type >
 	{
 		static const uint32_t value = A;
 	};

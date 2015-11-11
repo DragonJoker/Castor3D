@@ -103,45 +103,45 @@ namespace Castor
 	struct CASTOR_ALIGNED_DECL( A ) Aligned
 	{
 		static const size_t align_value = A;
-		
+
 		void * operator new( size_t p_size )
+	{
+		void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+
+		if ( !l_storage )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
-
-			if ( !l_storage )
-			{
-				throw std::bad_alloc();
-			}
-
-			return l_storage;
+			throw std::bad_alloc();
 		}
 
-		void * operator new[]( size_t p_size )
+		return l_storage;
+	}
+
+	void * operator new[]( size_t p_size )
+	{
+		void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+
+		if ( !l_storage )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
-
-			if ( !l_storage )
-			{
-				throw std::bad_alloc();
-			}
-
-			return l_storage;
+			throw std::bad_alloc();
 		}
 
-		void * operator new( size_t p_size, std::nothrow_t )
-		{
-			return Castor::AlignedAlloc( align_value, p_size );
-		}
+		return l_storage;
+	}
 
-		void operator delete( void * p_memory )
-		{
-			Castor::AlignedFree( p_memory );
-		}
+	void * operator new( size_t p_size, std::nothrow_t )
+	{
+		return Castor::AlignedAlloc( align_value, p_size );
+	}
 
-		void operator delete[]( void * p_memory )
-		{
-			Castor::AlignedFree( p_memory );
-		}
+	void operator delete( void * p_memory )
+	{
+		Castor::AlignedFree( p_memory );
+	}
+
+	void operator delete[]( void * p_memory )
+	{
+		Castor::AlignedFree( p_memory );
+	}
 	}
 	CASTOR_ALIGNED_ATTRIBUTE( A );
 	/*!
@@ -157,45 +157,45 @@ namespace Castor
 	struct CASTOR_ALIGNED_DECL( CASTOR_ALIGN_OF( T ) ) AlignedFrom
 	{
 		static const size_t align_value = CASTOR_ALIGN_OF( T );
-		
+
 		void * operator new( size_t p_size )
+	{
+		void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+
+		if ( !l_storage )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
-
-			if ( !l_storage )
-			{
-				throw std::bad_alloc();
-			}
-
-			return l_storage;
+			throw std::bad_alloc();
 		}
 
-		void * operator new[]( size_t p_size )
+		return l_storage;
+	}
+
+	void * operator new[]( size_t p_size )
+	{
+		void * l_storage = Castor::AlignedAlloc( align_value, p_size );
+
+		if ( !l_storage )
 		{
-			void * l_storage = Castor::AlignedAlloc( align_value, p_size );
-
-			if ( !l_storage )
-			{
-				throw std::bad_alloc();
-			}
-
-			return l_storage;
+			throw std::bad_alloc();
 		}
 
-		void * operator new( size_t p_size, std::nothrow_t )
-		{
-			return Castor::AlignedAlloc( align_value, p_size );
-		}
+		return l_storage;
+	}
 
-		void operator delete( void * p_memory )
-		{
-			Castor::AlignedFree( p_memory );
-		}
+	void * operator new( size_t p_size, std::nothrow_t )
+	{
+		return Castor::AlignedAlloc( align_value, p_size );
+	}
 
-		void operator delete[]( void * p_memory )
-		{
-			Castor::AlignedFree( p_memory );
-		}
+	void operator delete( void * p_memory )
+	{
+		Castor::AlignedFree( p_memory );
+	}
+
+	void operator delete[]( void * p_memory )
+	{
+		Castor::AlignedFree( p_memory );
+	}
 	}
 	CASTOR_ALIGNED_ATTRIBUTE( CASTOR_ALIGN_OF( T ) );
 }

@@ -23,7 +23,7 @@ namespace Castor3D
 	const String Pipeline::MtxProjectionModelView = cuT( "c3d_mtxProjectionModelView" );
 	const String Pipeline::MtxNormal = cuT( "c3d_mtxNormal" );
 	const String Pipeline::MtxBones = cuT( "c3d_mtxBones" );
-	const String Pipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] = 
+	const String Pipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
 	{
 		cuT( "c3d_mtxTexture0" ),
 		cuT( "c3d_mtxTexture1" ),

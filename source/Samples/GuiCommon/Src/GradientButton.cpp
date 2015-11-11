@@ -30,7 +30,7 @@ namespace GuiCommon
 	}
 
 	BEGIN_EVENT_TABLE( GradientButton, wxButton )
-	EVT_PAINT( GradientButton::OnPaint )
+		EVT_PAINT( GradientButton::OnPaint )
 	END_EVENT_TABLE()
 
 	void GradientButton::OnPaint( wxPaintEvent & p_event )
@@ -64,7 +64,7 @@ namespace GuiCommon
 			l_dc.SetBrush( wxBrush( m_pressedColourBottom ) );
 			l_dc.DrawRectangle( l_gradientRect );
 		}
- 
+
 		l_dc.SetPen( wxPen( GetBackgroundColour() ) );
 		l_dc.SetBrush( *wxTRANSPARENT_BRUSH );
 		l_dc.DrawRectangle( 0, 0, l_clientRect.GetWidth(), l_clientRect.GetHeight() );

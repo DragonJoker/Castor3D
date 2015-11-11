@@ -722,7 +722,7 @@ bool BufFunctionsDSA::FlushMappedBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdi
 
 #define CASTOR_DBG_WIN32 0
 
-OpenGl::OpenGl(  GlRenderSystem & p_renderSystem  )
+OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
 	: m_bHasAnisotropic( false )
 	, m_bHasInstancedDraw( false )
 	, m_bHasInstancedArrays( false )

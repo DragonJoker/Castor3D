@@ -46,7 +46,7 @@ namespace Castor3D
 		{
 			m_pVertexBuffer->Destroy();
 		}
-		
+
 		if ( m_pIndexBuffer )
 		{
 			m_pIndexBuffer->Destroy();
@@ -134,7 +134,7 @@ namespace Castor3D
 		{
 			m_pVertexBuffer->Cleanup();
 		}
-		
+
 		if ( m_pIndexBuffer )
 		{
 			m_pIndexBuffer->Cleanup();

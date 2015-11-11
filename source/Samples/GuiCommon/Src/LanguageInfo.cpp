@@ -7,10 +7,10 @@ using namespace Castor;
 namespace GuiCommon
 {
 	LanguageInfo::LanguageInfo()
-		:m_name( DEFAULT_LANGUAGE )
-		,m_strFilePattern( cuEmptyString )
-		,m_eLexerID( eSTC_LEX_COUNT )
-		,m_iFoldFlags( 0 )
+		: m_name( DEFAULT_LANGUAGE )
+		, m_strFilePattern( cuEmptyString )
+		, m_eLexerID( eSTC_LEX_COUNT )
+		, m_iFoldFlags( 0 )
 	{
 		m_arrayStyles[eSTC_TYPE_DEFAULT].reset( new StyleInfo( wxT( "Default" ), wxT( "BLACK" ), wxT( "WHITE" ), wxT( "" ), 10, 0, 0 ) );
 		m_arrayStyles[eSTC_TYPE_WORD1].reset( new StyleInfo( wxT( "Keyword1" ), wxT( "BLUE" ), wxT( "WHITE" ), wxT( "" ), 10, eSTC_STYLE_BOLD, 0 ) );

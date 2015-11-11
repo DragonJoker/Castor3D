@@ -172,6 +172,7 @@
 
 			for ( uint32_t j = 0; j < height(); j++ )
 			{
+				m_column[j].unlink();
 				m_column[j].template set< FT >( l_pBuffer );
 				l_pBuffer += pixel_definitions< FT >::Size;
 			}

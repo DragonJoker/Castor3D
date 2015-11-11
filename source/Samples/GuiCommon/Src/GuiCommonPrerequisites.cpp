@@ -459,6 +459,7 @@ namespace GuiCommon
 		for ( auto && l_file : l_arrayFiles )
 		{
 #if defined( NDEBUG )
+
 			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) == String::npos )
 #else
 			if ( l_file.find( String( cuT( "d." ) ) + CASTOR_DLL_EXT ) != String::npos )

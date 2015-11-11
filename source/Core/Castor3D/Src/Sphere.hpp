@@ -33,7 +33,7 @@ namespace Castor3D
 	\remark		Cette sphère a des faces rectangulaires. Elle est construite à partir d'un rayon et d'un nombre de subdivisions
 	*/
 	class Sphere
-		:public MeshGenerator
+		: public MeshGenerator
 	{
 	public:
 		/**

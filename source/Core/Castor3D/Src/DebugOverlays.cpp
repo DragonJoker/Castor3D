@@ -16,7 +16,7 @@ namespace Castor3D
 		{
 			TextOverlaySPtr l_return;
 			OverlaySPtr l_overlay = p_manager.Find( p_name );
-			
+
 			if ( l_overlay )
 			{
 				l_return = l_overlay->GetTextOverlay();
@@ -74,7 +74,6 @@ namespace Castor3D
 		{
 			m_gpuTime = 0;
 			m_cpuTime = 0;
-			m_frameTimer.TimeMs();
 			m_taskTimer.TimeMs();
 		}
 	}
