@@ -859,7 +859,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/irradiance.raw" ) ).c_str(), "rb" ) )
 	{
-		fread( buffer->ptr(), 1, 16 * 64 * 3 * sizeof( float ), f );
+		ENSURE( fread( buffer->ptr(), 1, 16 * 64 * 3 * sizeof( float ), f ) <= 16 * 64 * 3 * sizeof( float ) );
 		fclose( f );
 	}
 
@@ -876,7 +876,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/inscatter.raw" ) ).c_str(), "rb" ) )
 	{
-		fread( buffer->ptr(), 1, nr * nv * nb * na * 4 * sizeof( float ), f );
+		ENSURE( fread( buffer->ptr(), 1, nr * nv * nb * na * 4 * sizeof( float ), f ) <= nr * nv * nb * na * 4 * sizeof( float ) );
 		fclose( f );
 	}
 
@@ -888,7 +888,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/transmittance.raw" ) ).c_str(), "rb" ) )
 	{
-		fread( buffer->ptr(), 1, 256 * 64 * 3 * sizeof( float ), f );
+		ENSURE( fread( buffer->ptr(), 1, 256 * 64 * 3 * sizeof( float ), f ) <= 256 * 64 * 3 * sizeof( float ) );
 		fclose( f );
 	}
 
@@ -901,7 +901,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
 	{
 		unsigned char * img = new unsigned char[512 * 512 + 38];
-		fread( img, 1, 512 * 512 + 38, f );
+		ENSURE( fread( img, 1, 512 * 512 + 38, f ) <= 512 * 512 + 38, f );
 		fclose( f );
 		std::memcpy( m_pTexNoise->GetBuffer()->ptr(), &img[38], 512 * 512 );
 		delete [] img;
