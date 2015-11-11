@@ -35,7 +35,6 @@ namespace Castor3D
 	*/
 	class BackBuffers
 		: protected FrameBuffer
-		, public std::enable_shared_from_this< BackBuffers >
 	{
 	public:
 		/**

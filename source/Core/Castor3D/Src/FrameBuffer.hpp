@@ -39,7 +39,6 @@ namespace Castor3D
 	*/
 	class FrameBuffer
 		: public Castor::OwnedBy< Engine >
-		, public std::enable_shared_from_this< FrameBuffer >
 	{
 	public:
 		DECLARE_VECTOR( FrameBufferAttachmentSPtr, Attach );
