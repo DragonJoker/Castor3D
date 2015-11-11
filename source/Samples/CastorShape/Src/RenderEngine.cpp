@@ -1,5 +1,16 @@
 #include "RenderEngine.hpp"
 
+#include <Geometry.hpp>
+#include <Light.hpp>
+#include <Material.hpp>
+#include <Pass.hpp>
+#include <Ray.hpp>
+#include <Scene.hpp>
+#include <SceneNode.hpp>
+#include <Submesh.hpp>
+
+#include <Colour.hpp>
+
 #pragma warning( push )
 #pragma warning( disable:4996 )
 

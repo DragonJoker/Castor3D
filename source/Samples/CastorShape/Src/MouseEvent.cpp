@@ -1,5 +1,10 @@
 #include "MouseEvent.hpp"
 
+#include <FrameListener.hpp>
+#include <SceneNode.hpp>
+
+#include <Angle.hpp>
+
 using namespace CastorShape;
 using namespace Castor3D;
 using namespace Castor;

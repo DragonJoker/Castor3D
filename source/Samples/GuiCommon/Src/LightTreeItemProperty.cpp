@@ -1,8 +1,11 @@
 #include "LightTreeItemProperty.hpp"
 
+#include <DirectionalLight.hpp>
 #include <Engine.hpp>
 #include <FunctorEvent.hpp>
+#include <SpotLight.hpp>
 #include <Light.hpp>
+#include <PointLight.hpp>
 
 #include "PointProperties.hpp"
 #include <wx/propgrid/advprops.h>

@@ -1,5 +1,6 @@
 #include "NodeTreeItemProperty.hpp"
 
+#include <Scene.hpp>
 #include <SceneNode.hpp>
 #include <Engine.hpp>
 #include <FunctorEvent.hpp>

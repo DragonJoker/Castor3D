@@ -1,6 +1,7 @@
 #include "GeometryTreeItemProperty.hpp"
 
 #include <Geometry.hpp>
+#include <Scene.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

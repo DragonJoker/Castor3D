@@ -9,6 +9,7 @@
 #include "CtrlStatic.hpp"
 
 #include <BorderPanelOverlay.hpp>
+#include <InitialiseEvent.hpp>
 #include <FunctorEvent.hpp>
 
 using namespace Castor;

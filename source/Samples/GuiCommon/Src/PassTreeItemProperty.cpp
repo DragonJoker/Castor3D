@@ -4,6 +4,7 @@
 
 #include <Engine.hpp>
 #include <FunctorEvent.hpp>
+#include <Material.hpp>
 #include <Pass.hpp>
 
 #include "AdditionalProperties.hpp"

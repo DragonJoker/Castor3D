@@ -13,23 +13,33 @@
 #include "NewMaterialDialog.hpp"
 #include "RenderEngine.hpp"
 
+#include <ImagesLoader.hpp>
 #include <MaterialsList.hpp>
 #include <PropertiesHolder.hpp>
 #include <SceneObjectsList.hpp>
 #include <AuiDockArt.hpp>
 #include <AuiTabArt.hpp>
 #include <AuiToolBarArt.hpp>
+#include <SplashScreen.hpp>
 
+#include <DirectionalLight.hpp>
+#include <DividerPlugin.hpp>
+#include <Geometry.hpp>
 #include <ImporterPlugin.hpp>
 #include <Importer.hpp>
-#include <DividerPlugin.hpp>
+#include <Light.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
+#include <Pass.hpp>
 #include <PluginManager.hpp>
 #include <RenderLoop.hpp>
+#include <RenderWindow.hpp>
 #include <SceneManager.hpp>
+#include <Subdivider.hpp>
 
 #include <xpms/castor_dark.xpm>
+
+#include <wx/display.h>
 
 #define ID_NEW_WINDOW 10000
 

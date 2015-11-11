@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CS_RENDER_ENGINE_H___
 #define ___CS_RENDER_ENGINE_H___
 
+#include <Castor3DPrerequisites.hpp>
+
 namespace CastorShape
 {
 	//! The render engine

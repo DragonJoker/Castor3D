@@ -2,6 +2,8 @@
 #include "GlShaderProgram.hpp"
 #include "OpenGl.hpp"
 
+#include <RenderSystem.hpp>
+
 #include <Logger.hpp>
 
 using namespace Castor3D;

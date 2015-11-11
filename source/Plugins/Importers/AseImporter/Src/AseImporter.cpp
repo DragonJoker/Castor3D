@@ -2,7 +2,10 @@
 #include "AseFileParser.hpp"
 
 #include <Engine.hpp>
+#include <Geometry.hpp>
+#include <Mesh.hpp>
 #include <SceneManager.hpp>
+#include <Submesh.cpp>
 
 using namespace Castor3D;
 using namespace Castor;

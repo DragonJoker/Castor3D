@@ -1,5 +1,7 @@
 #include "GradientButton.hpp"
 
+#include <wx/dcbuffer.h>
+
 namespace GuiCommon
 {
 	GradientButton::GradientButton()

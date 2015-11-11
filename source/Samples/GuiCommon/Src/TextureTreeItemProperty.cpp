@@ -1,5 +1,6 @@
 #include "TextureTreeItemProperty.hpp"
 
+#include <Texture.hpp>
 #include <TextureUnit.hpp>
 #include <FunctorEvent.hpp>
 

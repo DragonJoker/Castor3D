@@ -1,9 +1,17 @@
 #include "SceneExporter.hpp"
 
+#include <GeometryBuffers.hpp>
+#include <IndexBuffer.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
-#include <WindowManager.hpp>
+#include <Pass.hpp>
+#include <Submesh.hpp>
 #include <SamplerManager.hpp>
+#include <Scene.hpp>
+#include <TextureUnit.hpp>
+#include <Vertex.hpp>
+#include <VertexBuffer.hpp>
+#include <WindowManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

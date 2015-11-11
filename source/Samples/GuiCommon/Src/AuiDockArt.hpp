@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GuiCommonPrerequisites.hpp"
 
+#include <wx/aui/aui.h>
 #include <wx/aui/dockart.h>
 
 namespace GuiCommon

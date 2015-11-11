@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CS_NEW_GEOMETRY_DIALOG_H___
 #define ___CS_NEW_GEOMETRY_DIALOG_H___
 
-#include "CastorUtilsPrerequisites.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <wx/dialog.h>
 #include <wx/propgrid/propgrid.h>

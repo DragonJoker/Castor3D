@@ -7,6 +7,7 @@
 #include <Engine.hpp>
 #include <FunctorEvent.hpp>
 #include <MaterialManager.hpp>
+#include <Pass.hpp>
 #include <OverlayManager.hpp>
 #include <TextOverlay.hpp>
 

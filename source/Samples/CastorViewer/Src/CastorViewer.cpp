@@ -3,8 +3,14 @@
 
 #include <wx/cmdline.h>
 
+#include <Pass.hpp>
+#include <Submesh.hpp>
+#include <TextureUnit.hpp>
+
 #include <File.hpp>
 #include <Exception.hpp>
+
+#include <ImagesLoader.hpp>
 
 #include <xpms/castor_transparent.xpm>
 #include <xpms/export.xpm>
@@ -33,7 +39,7 @@ namespace CastorViewer
 
 	void CastorViewerApp::DoLoadAppImages()
 	{
-		ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
+		//ImagesLoader::AddBitmap( CV_IMG_CASTOR, castor_transparent_xpm );
 		ImagesLoader::AddBitmap( eBMP_SCENES, scene_blanc_xpm );
 		ImagesLoader::AddBitmap( eBMP_MATERIALS, mat_blanc_xpm );
 		ImagesLoader::AddBitmap( eBMP_EXPORT, export_xpm );
