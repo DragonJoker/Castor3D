@@ -32,6 +32,7 @@
 #include <StaticTexture.hpp>
 #include <DynamicTexture.hpp>
 
+#include <Assertion.hpp>
 #include <Image.hpp>
 #include <TransformationMatrix.hpp>
 
@@ -901,7 +902,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	if ( Castor::FOpen( f, string::string_cast< char >( Engine::GetDataDirectory() / cuT( "OceanLighting/data/noise.pgm" ) ).c_str(), "rb" ) )
 	{
 		unsigned char * img = new unsigned char[512 * 512 + 38];
-		ENSURE( fread( img, 1, 512 * 512 + 38, f ) <= 512 * 512 + 38, f );
+		ENSURE( fread( img, 1, 512 * 512 + 38, f ) <= 512 * 512 + 38 );
 		fclose( f );
 		std::memcpy( m_pTexNoise->GetBuffer()->ptr(), &img[38], 512 * 512 );
 		delete [] img;
