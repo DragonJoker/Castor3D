@@ -7,6 +7,8 @@
 #include "StringUtils.hpp"
 #include "Exception.hpp"
 
+#include <iostream>
+
 namespace Castor
 {
 #if defined( _MSC_VER )

@@ -24,6 +24,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <OwnedBy.hpp>
 #include <Rectangle.hpp>
 
+#include <memory>
+
 namespace Castor3D
 {
 	/*!

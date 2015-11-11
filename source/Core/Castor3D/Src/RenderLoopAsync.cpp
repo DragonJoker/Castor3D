@@ -3,6 +3,8 @@
 #include "Engine.hpp"
 #include "RenderSystem.hpp"
 
+#include <PreciseTimer.hpp>
+
 using namespace Castor;
 
 //*************************************************************************************************

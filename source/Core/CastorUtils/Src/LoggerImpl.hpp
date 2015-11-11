@@ -23,6 +23,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ELogType.hpp"
 #include "StringUtils.hpp"
 
+#include <mutex>
+
 namespace Castor
 {
 	/** Base class for a message representation

@@ -5,6 +5,7 @@
 #include "GlShaderSource.hpp"
 #include "OpenGl.hpp"
 
+#include <Engine.hpp>
 #include <ShaderManager.hpp>
 #include <ShaderProgram.hpp>
 

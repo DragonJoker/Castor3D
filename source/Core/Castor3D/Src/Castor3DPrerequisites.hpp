@@ -36,6 +36,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
 #include <Aligned.hpp>
+#include <Point.hpp>
+#include <SquareMatrix.hpp>
 
 namespace Castor3D
 {

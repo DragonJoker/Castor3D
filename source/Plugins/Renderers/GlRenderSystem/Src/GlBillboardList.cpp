@@ -4,12 +4,13 @@
 #include "GlShaderObject.hpp"
 #include "GlShaderSource.hpp"
 
+#include <Engine.hpp>
 #include <FrameVariableBuffer.hpp>
 #include <OneFrameVariable.hpp>
 #include <PointFrameVariable.hpp>
 #include <MatrixFrameVariable.hpp>
 #include <RenderTechnique.hpp>
-#include <ShaderProgram.hpp>
+#include <ShaderManager.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

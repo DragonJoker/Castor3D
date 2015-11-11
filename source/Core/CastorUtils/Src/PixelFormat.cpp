@@ -3,6 +3,9 @@
 
 namespace Castor
 {
+
+#if defined( _X64 )
+
 	namespace detail
 	{
 		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_R8G8B8 >::umask	= _mm_set1_epi32( 0x0000FF00 );
@@ -30,6 +33,8 @@ namespace Castor
 		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::facbu	= _mm_set1_epi32( 0x00590059 );// 1.402 * 64
 		const __m128i buffer_converter< ePIXEL_FORMAT_YUY2, ePIXEL_FORMAT_A8R8G8B8 >::zero	= _mm_set1_epi32( 0x00000000 );
 	}
+
+#endif
 
 	namespace PF
 	{

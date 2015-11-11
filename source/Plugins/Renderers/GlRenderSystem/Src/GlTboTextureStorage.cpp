@@ -3,6 +3,7 @@
 #include "OpenGl.hpp"
 
 #include <Logger.hpp>
+#include <PixelBufferBase.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
