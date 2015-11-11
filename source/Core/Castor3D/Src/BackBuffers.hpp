@@ -34,7 +34,7 @@ namespace Castor3D
 	\remark		Tampons de rendu d'une fenêtre.
 	*/
 	class BackBuffers
-		: protected FrameBuffer
+		: public FrameBuffer
 	{
 	public:
 		/**
@@ -107,12 +107,19 @@ namespace Castor3D
 		}
 
 	public:
-		using FrameBuffer::Cleanup;
-		using FrameBuffer::Unbind;
-		using FrameBuffer::Clear;
-		using FrameBuffer::SetClearColour;
-		using FrameBuffer::GetClearColour;
-		using FrameBuffer::Resize;
+		using FrameBuffer::Initialise;
+		using FrameBuffer::Bind;
+		using FrameBuffer::BlitInto;
+		using FrameBuffer::SetDrawBuffers;
+		using FrameBuffer::SetDrawBuffer;
+		using FrameBuffer::Attach;
+		using FrameBuffer::DetachAll;
+		using FrameBuffer::Create;
+		using FrameBuffer::SetReadBuffer;
+		using FrameBuffer::CreateColourRenderBuffer;
+		using FrameBuffer::CreateDepthStencilRenderBuffer;
+		using FrameBuffer::IsComplete;
+		using FrameBuffer::DownloadBuffer;
 
 	private:
 		/**
