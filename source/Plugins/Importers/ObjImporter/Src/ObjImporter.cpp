@@ -339,7 +339,7 @@ namespace Obj
 		return l_uiReturn;
 	}
 
-	uint32_t ObjImporter::DoTreatFace( stFACE_INDICES & p_face, std::size_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
+	uint32_t ObjImporter::DoTreatFace( stFACE_INDICES & p_face, uint32_t p_uiIndex, String const & p_strFace, stGROUP * p_pGroup, Obj::VertexArray const & p_arrayVtx, NormalArray const & p_arrayNml, UvArray const & p_arrayTex )
 	{
 		//	VertexSPtr l_return;
 		String l_strFace( p_strFace );
