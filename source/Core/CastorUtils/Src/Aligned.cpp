@@ -2,12 +2,19 @@
 
 #if defined( _MSC_VER )
 #	include <malloc.h>
-#	define CU_ALIGNED_FREE( m ) _aligned_free( m )
-#	define CU_ALIGNED_ALLOC( m, a, s ) m = _aligned_malloc( s, a )
+#	define CU_ALIGNED_FREE( m )\
+	_aligned_free( m )
+#	define CU_ALIGNED_ALLOC( m, a, s )\
+	m = _aligned_malloc( s, a )
 #else
 #	include <stdlib.h>
-#	define CU_ALIGNED_FREE( m ) free( m )
-#	define CU_ALIGNED_ALLOC( m, a, s ) posix_memalign( &m, a, s )
+#	define CU_ALIGNED_FREE( m )\
+	free( m )
+#	define CU_ALIGNED_ALLOC( m, a, s )\
+	if ( posix_memalign( &m, a, s ) )\
+	{\
+		\m = nullptr;
+	}
 #	if defined( __GNUG__ )
 #		include <sys/time.h>
 #		include <errno.h>
