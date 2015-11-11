@@ -2,7 +2,11 @@ language: C++
 compiler:
  - gcc
 before_script:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -qq
   - sudo apt-get install -y libfreeimage-dev libassimp-dev libfreetype6-dev libzip-dev zlib1g-dev libgtk-3-dev libwxgtk3.0-dev cmake
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
 script:
   - mkdir -p build/release
   - cd build/release
