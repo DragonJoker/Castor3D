@@ -44,7 +44,7 @@ namespace Testing
 		void MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
 		void MatrixMultiplicationComparison( uint32_t & p_errCount, uint32_t & p_testCount );
 		void TransformationMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
-		void ProjectionMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+                void ProjectionMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
 
 #if GLM_VERSION >= 95
 

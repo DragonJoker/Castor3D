@@ -251,7 +251,7 @@ namespace Testing
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversionComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixMultiplicationComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, TransformationMatrixComparison, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
+                EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
 
 #if GLM_VERSION >= 95
 
@@ -442,6 +442,9 @@ namespace Testing
 			l_mat = glm::lookAt( glm::vec3( 0, 0, 0 ), glm::vec3( 0, 0, 1 ), glm::vec3( 0, 1, 0 ) );
 			TEST_EQUAL( l_mtx, l_mat );
 		}
+
+#if GLM_VERSION >= 95
+
 		Logger::LogInfo( cuT( "	Transform" ) );
 		{
 			Matrix4x4r l_mtx( 1 );
@@ -457,6 +460,9 @@ namespace Testing
 			}
 			TEST_EQUAL( l_mtx, l_mat );
 		}
+
+#endif
+
 	}
 
 #if GLM_VERSION >= 95
