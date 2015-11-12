@@ -245,12 +245,19 @@ namespace Testing
 	void CastorUtilsMatrixTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversion, p_errCount, p_testCount );
+
 #if defined( CASTOR_USE_GLM )
+
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversionComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixMultiplicationComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, TransformationMatrixComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
+
+#if GLM_VERSION >= 95
+
 		EXECUTE_TEST( CastorUtilsMatrixTest, QuaternionComparison, p_errCount, p_testCount );
+#endif
+
 #endif
 	}
 
@@ -452,6 +459,8 @@ namespace Testing
 		}
 	}
 
+#if GLM_VERSION >= 95
+
 	void CastorUtilsMatrixTest::QuaternionComparison( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		Logger::LogInfo( cuT( "	Rotate on X" ) );
@@ -546,6 +555,8 @@ namespace Testing
 			}
 		}
 	}
+
+#endif
 
 #endif
 

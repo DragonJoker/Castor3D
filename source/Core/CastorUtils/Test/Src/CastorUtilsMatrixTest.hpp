@@ -38,13 +38,22 @@ namespace Testing
 
 	private:
 		void MatrixInversion( uint32_t & p_errCount, uint32_t & p_testCount );
+
 #if defined( CASTOR_USE_GLM )
+
 		void MatrixInversionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
 		void MatrixMultiplicationComparison( uint32_t & p_errCount, uint32_t & p_testCount );
 		void TransformationMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
 		void ProjectionMatrixComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+
+#if GLM_VERSION >= 95
+
 		void QuaternionComparison( uint32_t & p_errCount, uint32_t & p_testCount );
+
 #endif
+
+#endif
+
 	};
 
 	class CastorUtilsMatrixBench
@@ -66,10 +75,14 @@ namespace Testing
 	private:
 		Castor::Matrix4x4r m_mtx1;
 		Castor::Matrix4x4r m_mtx2;
+
 #if defined( CASTOR_USE_GLM )
+
 		glm::mat4 m_mtx1glm;
 		glm::mat4 m_mtx2glm;
+
 #endif
+
 	};
 }
 
