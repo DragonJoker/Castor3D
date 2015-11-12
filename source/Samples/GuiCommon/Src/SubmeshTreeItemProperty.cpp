@@ -4,6 +4,7 @@
 #include <Geometry.hpp>
 #include <Material.hpp>
 #include <MaterialManager.hpp>
+#include <Scene.hpp>
 #include <Submesh.hpp>
 
 #include "AdditionalProperties.hpp"

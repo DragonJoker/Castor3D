@@ -8,6 +8,7 @@
 
 #include <GradientButton.hpp>
 #include <AdditionalProperties.hpp>
+#include <ShaderDialog.hpp>
 
 #include <wx/propgrid/advprops.h>
 

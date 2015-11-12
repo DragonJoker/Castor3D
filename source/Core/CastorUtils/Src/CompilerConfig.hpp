@@ -171,7 +171,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #			define CASTOR_HAS_STDFUNCTIONAL			1
 #			define CASTOR_HAS_TR1FUNCTIONAL			1
 #			define CASTOR_HAS_VARIADIC_TEMPLATES	1
-#			define CASTOR_HAS_MAKE_UNIQUE			1
+#			define CASTOR_HAS_MAKE_UNIQUE			0
 #		elif GCC_VERSION >= 40600
 #			define CASTOR_HAS_ALIGNAS				0
 #			define CASTOR_TYPE( x )					: x

@@ -3,6 +3,8 @@
 #include "FrameBuffer.hpp"
 #include "RenderBuffer.hpp"
 
+#include <PixelBufferBase.hpp>
+
 using namespace Castor;
 
 namespace Castor3D

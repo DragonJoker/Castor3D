@@ -1,0 +1,21 @@
+language: C++
+compiler:
+ - gcc
+before_script:
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo add-apt-repository ppa:openrave/release -y
+  - sudo apt-get update -qq
+  - sudo apt-get install -y cmake
+  - sudo apt-get install -y libfreeimage-dev libfreetype6-dev libzip-dev zlib1g-dev
+  - sudo apt-get install -y libgtk2.0-dev libwxgtk3.0-dev cmake
+  - sudo apt-get install -y libassimp3.0-r1264-dev libassimp3.0-r1264
+  - sudo apt-get install -y libglm-dev
+  - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.9; fi
+  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.9" CC="gcc-4.9"; fi
+script:
+  - mkdir -p build/release
+  - cd build/release
+  - cmake -DCMAKE_BUILD_TYPE=Release ../../source -DPROJECTS_USE_PRECOMPILED_HEADERS=OFF -DCASTOR_BUILD_TEST=ON -DCASTOR_BUILD_BINDING_PYCASTOR3D=OFF -DCASTOR_BUILD_BINDING_COM=OFF -DCASTOR_BUILD_BINDING_PYGUICOMMON=OFF -DCASTOR_BUILD_SAMPLE_GUICOMMON=ON -DCASTOR_BUILD_SAMPLE_CASTOR_VIEWER=OFF -DCASTOR_BUILD_SAMPLE_OCEAN_LIGHTING=OFF -DCASTOR_BUILD_SAMPLE_CASTOR_SHAPE=OFF -DCASTOR_FORCE_ALL_IMPORTERS=ON
+  - make -j2
+  - make test
+install: true

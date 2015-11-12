@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CS_CASTOR_SHAPE_PREREQUISITES_H___
 #define ___CS_CASTOR_SHAPE_PREREQUISITES_H___
 
+#include <GuiCommonPrerequisites.hpp>
+
 namespace CastorShape
 {
 	typedef enum eBMP

@@ -47,12 +47,14 @@
 #include <wx/aui/framemanager.h>
 #include <wx/artprov.h>
 
+#include <Camera.hpp>
 #include <Geometry.hpp>
 #include <Engine.hpp>
+#include <Light.hpp>
 #include <Material.hpp>
 #include <MaterialManager.hpp>
-#include <OverlayManager.hpp>
 #include <Mesh.hpp>
+#include <OverlayManager.hpp>
 #include <Scene.hpp>
 #include <WindowManager.hpp>
 

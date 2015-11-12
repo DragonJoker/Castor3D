@@ -2235,6 +2235,9 @@ namespace Castor
 				}
 			}
 		};
+
+#if defined( _X64 )
+
 		/*!
 		\author 	Sylvain DOREMUS
 		\date 		08/09/2013
@@ -2434,6 +2437,9 @@ namespace Castor
 				}
 			}
 		};
+
+#endif
+
 		/**
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format

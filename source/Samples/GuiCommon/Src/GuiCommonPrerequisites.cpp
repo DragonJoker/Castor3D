@@ -19,9 +19,14 @@
 #include <PluginManager.hpp>
 #include <SamplerManager.hpp>
 #include <SceneManager.hpp>
+#include <SceneFileParser.hpp>
+#include <TextureUnit.hpp>
 #include <WindowManager.hpp>
 
+#include <PixelBufferBase.hpp>
+
 #include <wx/window.h>
+#include <wx/rawbmp.h>
 
 using namespace Castor;
 using namespace Castor3D;

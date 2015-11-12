@@ -1,5 +1,6 @@
 #include "GlPipeline.hpp"
 
+#include <Angle.hpp>
 #include <Logger.hpp>
 
 using namespace Castor3D;

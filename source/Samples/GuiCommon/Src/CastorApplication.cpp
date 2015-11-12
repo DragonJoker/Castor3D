@@ -7,6 +7,8 @@
 #include <wx/cmdline.h>
 #include <wx/display.h>
 
+#include <Engine.hpp>
+
 #include <File.hpp>
 #include <Exception.hpp>
 

@@ -6,7 +6,9 @@
 #include <MaterialManager.hpp>
 #include <Overlay.hpp>
 #include <PanelOverlay.hpp>
+#include <Pass.hpp>
 #include <TextOverlay.hpp>
+#include <TextureUnit.hpp>
 
 #include <Font.hpp>
 

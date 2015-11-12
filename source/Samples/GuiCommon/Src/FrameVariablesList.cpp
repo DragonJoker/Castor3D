@@ -8,6 +8,7 @@
 #include <Engine.hpp>
 #include <FrameVariable.hpp>
 #include <FrameVariableBuffer.hpp>
+#include <RenderSystem.hpp>
 #include <ShaderProgram.hpp>
 
 #include <wx/imaglist.h>

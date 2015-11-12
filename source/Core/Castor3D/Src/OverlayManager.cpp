@@ -14,6 +14,8 @@
 #include "SceneFileParser.hpp"
 #include "TextOverlay.hpp"
 
+#include <Font.hpp>
+
 using namespace Castor;
 
 #if defined( DrawText )

@@ -3,6 +3,9 @@
 #include <Point.hpp>
 #include <SquareMatrix.hpp>
 
+#include <Engine.hpp>
+#include <RenderSystem.hpp>
+
 #if defined( VLD_AVAILABLE )
 #	include <vld.h>
 #elif defined( _MSC_VER )

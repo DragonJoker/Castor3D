@@ -245,12 +245,19 @@ namespace Testing
 	void CastorUtilsMatrixTest::Execute( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversion, p_errCount, p_testCount );
+
 #if defined( CASTOR_USE_GLM )
+
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversionComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixMultiplicationComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, TransformationMatrixComparison, p_errCount, p_testCount );
-		EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
+                EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
+
+#if GLM_VERSION >= 95
+
 		EXECUTE_TEST( CastorUtilsMatrixTest, QuaternionComparison, p_errCount, p_testCount );
+#endif
+
 #endif
 	}
 
@@ -435,6 +442,9 @@ namespace Testing
 			l_mat = glm::lookAt( glm::vec3( 0, 0, 0 ), glm::vec3( 0, 0, 1 ), glm::vec3( 0, 1, 0 ) );
 			TEST_EQUAL( l_mtx, l_mat );
 		}
+
+#if GLM_VERSION >= 95
+
 		Logger::LogInfo( cuT( "	Transform" ) );
 		{
 			Matrix4x4r l_mtx( 1 );
@@ -450,7 +460,12 @@ namespace Testing
 			}
 			TEST_EQUAL( l_mtx, l_mat );
 		}
+
+#endif
+
 	}
+
+#if GLM_VERSION >= 95
 
 	void CastorUtilsMatrixTest::QuaternionComparison( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
@@ -546,6 +561,8 @@ namespace Testing
 			}
 		}
 	}
+
+#endif
 
 #endif
 

@@ -8,6 +8,8 @@
 #include "TechniquePlugin.hpp"
 #include "VersionException.hpp"
 
+#include <DynamicLibrary.hpp>
+
 using namespace Castor;
 
 namespace Castor3D

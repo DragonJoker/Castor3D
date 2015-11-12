@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "CastorShapePrerequisites.hpp"
 
 #include <wx/frame.h>
+#include <wx/aui/aui.h>
 #include <wx/aui/auibar.h>
 
 namespace CastorShape

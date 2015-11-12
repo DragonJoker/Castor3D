@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GuiCommonPrerequisites.hpp"
 
-#include <wx/listctrl.h>
+#include <wx/treectrl.h>
 
 namespace GuiCommon
 {

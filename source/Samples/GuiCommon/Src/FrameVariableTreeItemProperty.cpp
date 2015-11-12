@@ -4,6 +4,8 @@
 #include <MatrixFrameVariable.hpp>
 #include <OneFrameVariable.hpp>
 #include <PointFrameVariable.hpp>
+#include <RenderSystem.hpp>
+#include <ShaderProgram.hpp>
 
 #include "PointProperties.hpp"
 #include "MatrixProperties.hpp"

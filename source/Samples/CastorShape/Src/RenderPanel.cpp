@@ -13,6 +13,10 @@
 #	include <Windows.h>
 #endif
 
+#include <Camera.hpp>
+#include <Geometry.hpp>
+#include <Scene.hpp>
+#include <SceneNode.hpp>
 #include <TargetManager.hpp>
 #include <WindowHandle.hpp>
 #include <WindowManager.hpp>

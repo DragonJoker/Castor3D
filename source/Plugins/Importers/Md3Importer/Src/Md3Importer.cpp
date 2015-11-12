@@ -42,7 +42,7 @@ Md3Importer::Md3Importer( Engine & p_pEngine )
 	, m_links( NULL )
 	, m_vertices( NULL )
 	, m_tags( NULL )
-	, m_numOfTags( NULL )
+	, m_numOfTags( 0 )
 {
 	memset( &m_header, 0, sizeof( Md3Header ) );
 }

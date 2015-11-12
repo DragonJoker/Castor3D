@@ -2,6 +2,8 @@
 
 #include "Engine.hpp"
 
+#include <PixelBufferBase.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
