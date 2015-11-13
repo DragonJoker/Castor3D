@@ -18,10 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_TRANSFORMATION_MATRIX_H___
 #define ___CASTOR_TRANSFORMATION_MATRIX_H___
 
-#include "Matrix.hpp"
-#include "Point.hpp"
-#include "Angle.hpp"
-#include "Quaternion.hpp"
+#include "SquareMatrix.hpp"
 
 namespace Castor
 {

@@ -1,6 +1,5 @@
 #include "CastorUtilsMatrixTest.hpp"
 
-#include <Matrix.hpp>
 #include <TransformationMatrix.hpp>
 #include <StreamIndentManipulators.hpp>
 

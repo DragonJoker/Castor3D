@@ -1,5 +1,3 @@
-#include "Point.hpp"
-#include "Angle.hpp"
 #include "TransformationMatrix.hpp"
 
 namespace Castor
@@ -506,9 +504,9 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::Conjugate()
 	{
-		T w = m_data.quaternion.w;
+		T w = this->w;
 		point::negate( *this );
-		m_data.quaternion.w = w;
+		this->w = w;
 	}
 
 	template< typename T >

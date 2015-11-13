@@ -1,3 +1,5 @@
+#include "Quaternion.hpp"
+
 namespace Castor
 {
 	template< typename T, typename U >
@@ -9,6 +11,7 @@ namespace Castor
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
+		SquareMatrix< T, 4 > l_rotate;
 		return p_matrix *= matrix::set_rotate( l_rotate, p_quat );
 	}
 

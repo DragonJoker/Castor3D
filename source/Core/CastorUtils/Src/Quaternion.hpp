@@ -18,6 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_QUATERNION_H___
 #define ___CASTOR_QUATERNION_H___
 
+#include "Angle.hpp"
 #include "Point.hpp"
 #include "SquareMatrix.hpp"
 #include "Loader.hpp"
