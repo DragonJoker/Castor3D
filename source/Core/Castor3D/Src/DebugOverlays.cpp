@@ -1,7 +1,9 @@
 #include "DebugOverlays.hpp"
 
+#include "Engine.hpp"
 #include "Overlay.hpp"
 #include "OverlayManager.hpp"
+#include "RenderSystem.hpp"
 #include "TextOverlay.hpp"
 
 #include <algorithm>
@@ -26,8 +28,9 @@ namespace Castor3D
 		}
 	}
 
-	DebugOverlays::DebugOverlays()
-		: m_visible( false )
+	DebugOverlays::DebugOverlays( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
+		, m_visible( false )
 		, m_frameIndex( 0 )
 		, m_gpuTime( 0 )
 		, m_cpuTime( 0 )
@@ -95,7 +98,9 @@ namespace Castor3D
 
 			if ( l_txt )
 			{
-				l_txt->SetCaption( string::to_string( int( m_gpuTime ) ) + cuT( " ms" ) );
+				double l_time = GetOwner()->GetRenderSystem()->GetGpuTime().count() / 1000.0;
+				GetOwner()->GetRenderSystem()->ResetGpuTime();
+				l_txt->SetCaption( string::to_string( int( l_time ) ) + cuT( " ms" ) );
 			}
 
 			l_txt = m_debugTotalTime.lock();

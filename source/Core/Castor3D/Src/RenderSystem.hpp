@@ -561,6 +561,41 @@ namespace Castor3D
 		{
 			return m_overlayRenderer;
 		}
+		/**
+		 *\~english
+		 *\brief		Increments the GPU time.
+		 *\param[in]	p_time	The increment value.
+		 *\~french
+		 *\brief		Incrémente le temps CPU.
+		 *\param[in]	p_time	La valeur d'incrément.
+		 */
+		template< class Rep, class Period >
+		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
+		{
+			m_gpuTime = std::chrono::duration_cast< std::chrono::milliseconds >( p_time );
+		}
+		/**
+		 *\~english
+		 *\brief		Resets the GPU time.
+		 *\~french
+		 *\brief		Réinitialise le temps CPU.
+		 */
+		inline void ResetGpuTime()
+		{
+			m_gpuTime = std::chrono::milliseconds( 0 );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the GPU time.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère le temps CPU.
+		 *\return		La valeur.
+		 */
+		inline std::chrono::milliseconds GetGpuTime()const
+		{
+			return m_gpuTime;
+		}
 
 	protected:
 		/**
@@ -607,6 +642,8 @@ namespace Castor3D
 		eRENDERER_TYPE m_eRendererType;
 		//!\~english The currently active camera	\~french La caméra actuellement active
 		CameraRPtr m_pCurrentCamera;
+		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
+		std::chrono::milliseconds m_gpuTime;
 
 #if !defined( NDEBUG )
 

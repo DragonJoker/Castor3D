@@ -22,7 +22,7 @@ namespace Castor3D
 		, m_wantedFPS( p_wantedFPS )
 		, m_frameTime( 1.0 / p_wantedFPS )
 		, m_renderSystem( p_renderSystem )
-		, m_debugOverlays( std::make_unique< DebugOverlays >() )
+		, m_debugOverlays( std::make_unique< DebugOverlays >( p_engine ) )
 	{
 		m_debugOverlays->Initialise( GetOwner()->GetOverlayManager() );
 	}

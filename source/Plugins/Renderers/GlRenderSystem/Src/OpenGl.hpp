@@ -81,17 +81,17 @@ namespace GlRender
 
 	typedef enum eGL_PRIMITIVE CASTOR_TYPE( uint32_t )
 	{
-		eGL_PRIMITIVE_POINTS			= 0x0000,
-				 eGL_PRIMITIVE_LINES				= 0x0001,
-						  eGL_PRIMITIVE_LINE_LOOP			= 0x0002,
-								eGL_PRIMITIVE_LINE_STRIP		= 0x0003,
-									  eGL_PRIMITIVE_TRIANGLES			= 0x0004,
-											eGL_PRIMITIVE_TRIANGLE_STRIP	= 0x0005,
-											   eGL_PRIMITIVE_TRIANGLE_FAN		= 0x0006,
-												   eGL_PRIMITIVE_QUADS				= 0x0007,
-															eGL_PRIMITIVE_QUAD_STRIP		= 0x0008,
-																  eGL_PRIMITIVE_POLYGON			= 0x0009,
-																		  eGL_PRIMITIVE_PATCHES			= 0x000E,
+		eGL_PRIMITIVE_POINTS = 0x0000,
+		eGL_PRIMITIVE_LINES = 0x0001,
+		eGL_PRIMITIVE_LINE_LOOP = 0x0002,
+		eGL_PRIMITIVE_LINE_STRIP = 0x0003,
+		eGL_PRIMITIVE_TRIANGLES = 0x0004,
+		eGL_PRIMITIVE_TRIANGLE_STRIP = 0x0005,
+		eGL_PRIMITIVE_TRIANGLE_FAN = 0x0006,
+		eGL_PRIMITIVE_QUADS = 0x0007,
+		eGL_PRIMITIVE_QUAD_STRIP = 0x0008,
+		eGL_PRIMITIVE_POLYGON = 0x0009,
+		eGL_PRIMITIVE_PATCHES = 0x000E,
 	}	eGL_PRIMITIVE;
 
 	typedef enum eGL_INTERNAL_FORMAT				//	Type	Comps	Norm	0	1	2	3
@@ -968,29 +968,29 @@ namespace GlRender
 
 	typedef enum eGL_STORAGE_MODE CASTOR_TYPE( uint32_t )
 	{
-		eGL_STORAGE_MODE_UNPACK_SWAP_BYTES		= 0x0CF0,
-			eGL_STORAGE_MODE_UNPACK_LSB_FIRST		= 0x0CF1,
-				 eGL_STORAGE_MODE_UNPACK_ROW_LENGTH		= 0x0CF2,
-					 eGL_STORAGE_MODE_UNPACK_SKIP_ROWS		= 0x0CF3,
-						  eGL_STORAGE_MODE_UNPACK_SKIP_PIXELS		= 0x0CF4,
-							 eGL_STORAGE_MODE_UNPACK_ALIGNMENT		= 0x0CF5,
-								  eGL_STORAGE_MODE_PACK_SWAP_BYTES		= 0x0D00,
-										eGL_STORAGE_MODE_PACK_LSB_FIRST			= 0x0D01,
-											  eGL_STORAGE_MODE_PACK_ROW_LENGTH		= 0x0D02,
-													eGL_STORAGE_MODE_PACK_SKIP_ROWS			= 0x0D03,
-														  eGL_STORAGE_MODE_PACK_SKIP_PIXELS		= 0x0D04,
-															   eGL_STORAGE_MODE_PACK_ALIGNMENT			= 0x0D05,
-																	 eGL_STORAGE_MODE_PACK_IMAGE_HEIGHT		= 0x806C,
-																		 eGL_STORAGE_MODE_UNPACK_IMAGE_HEIGHT	= 0x806E,
+		eGL_STORAGE_MODE_UNPACK_SWAP_BYTES = 0x0CF0,
+		eGL_STORAGE_MODE_UNPACK_LSB_FIRST = 0x0CF1,
+		eGL_STORAGE_MODE_UNPACK_ROW_LENGTH = 0x0CF2,
+		eGL_STORAGE_MODE_UNPACK_SKIP_ROWS = 0x0CF3,
+		eGL_STORAGE_MODE_UNPACK_SKIP_PIXELS = 0x0CF4,
+		eGL_STORAGE_MODE_UNPACK_ALIGNMENT = 0x0CF5,
+		eGL_STORAGE_MODE_PACK_SWAP_BYTES = 0x0D00,
+		eGL_STORAGE_MODE_PACK_LSB_FIRST = 0x0D01,
+		eGL_STORAGE_MODE_PACK_ROW_LENGTH = 0x0D02,
+		eGL_STORAGE_MODE_PACK_SKIP_ROWS = 0x0D03,
+		eGL_STORAGE_MODE_PACK_SKIP_PIXELS = 0x0D04,
+		eGL_STORAGE_MODE_PACK_ALIGNMENT = 0x0D05,
+		eGL_STORAGE_MODE_PACK_IMAGE_HEIGHT = 0x806C,
+		eGL_STORAGE_MODE_UNPACK_IMAGE_HEIGHT = 0x806E,
 	}	eGL_STORAGE_MODE;
 
 	typedef enum eGL_BUFFER_PARAMETER CASTOR_TYPE( uint32_t )
 	{
-		eGL_BUFFER_PARAMETER_SIZE			= 0x8764,
-				eGL_BUFFER_PARAMETER_USAGE			= 0x8765,
-					   eGL_BUFFER_PARAMETER_ACCESS			= 0x88BB,
-							 eGL_BUFFER_PARAMETER_MAPPED			= 0x88BD,
-								   eGL_BUFFER_PARAMETER_GPU_ADDRESS	= 0x8F1D,
+		eGL_BUFFER_PARAMETER_SIZE = 0x8764,
+		eGL_BUFFER_PARAMETER_USAGE = 0x8765,
+		eGL_BUFFER_PARAMETER_ACCESS = 0x88BB,
+		eGL_BUFFER_PARAMETER_MAPPED = 0x88BD,
+		eGL_BUFFER_PARAMETER_GPU_ADDRESS = 0x8F1D,
 	}	eGL_BUFFER_PARAMETER;
 
 	typedef enum eGL_RESIDENT_BUFFER_ACCESS CASTOR_TYPE( uint32_t )
@@ -1000,17 +1000,35 @@ namespace GlRender
 
 	typedef enum eGL_ADDRESS CASTOR_TYPE( uint32_t )
 	{
-		eGL_ADDRESS_VERTEX_ATTRIB_ARRAY		= 0x8F20,
-		   eGL_ADDRESS_TEXTURE_COORD_ARRAY		= 0x8F25,
-			  eGL_ADDRESS_VERTEX_ARRAY			= 0x8F21,
-					   eGL_ADDRESS_NORMAL_ARRAY			= 0x8F22,
-								eGL_ADDRESS_COLOR_ARRAY				= 0x8F23,
-										 eGL_ADDRESS_INDEX_ARRAY				= 0x8F24,
-												  eGL_ADDRESS_EDGE_FLAG_ARRAY			= 0x8F26,
-														eGL_ADDRESS_SECONDARY_COLOR_ARRAY	= 0x8F27,
-														  eGL_ADDRESS_FOG_COORD_ARRAY			= 0x8F28,
-																eGL_ADDRESS_ELEMENT_ARRAY			= 0x8F29,
+		eGL_ADDRESS_VERTEX_ATTRIB_ARRAY = 0x8F20,
+		eGL_ADDRESS_TEXTURE_COORD_ARRAY = 0x8F25,
+		eGL_ADDRESS_VERTEX_ARRAY = 0x8F21,
+		eGL_ADDRESS_NORMAL_ARRAY = 0x8F22,
+		eGL_ADDRESS_COLOR_ARRAY = 0x8F23,
+		eGL_ADDRESS_INDEX_ARRAY = 0x8F24,
+		eGL_ADDRESS_EDGE_FLAG_ARRAY = 0x8F26,
+		eGL_ADDRESS_SECONDARY_COLOR_ARRAY = 0x8F27,
+		eGL_ADDRESS_FOG_COORD_ARRAY = 0x8F28,
+		eGL_ADDRESS_ELEMENT_ARRAY = 0x8F29,
 	}	eGL_ADDRESS;
+
+	typedef enum eGL_QUERY CASTOR_TYPE( uint32_t )
+	{
+		eGL_QUERY_TIME_ELAPSED = 0x88BF,
+		eGL_QUERY_SAMPLES_PASSED = 0x8914,
+		eGL_QUERY_ANY_SAMPLES_PASSED = 0x8C2F,
+		eGL_QUERY_PRIMITIVES_GENERATED = 0x8C87,
+		eGL_QUERY_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN = 0x8C88,
+		eGL_QUERY_ANY_SAMPLES_PASSED_CONSERVATIVE = 0x8D6A,
+		eGL_QUERY_TIMESTAMP = 0x8E28,
+	}	eGL_QUERY;
+
+	typedef enum eGL_QUERY_INFO CASTOR_TYPE( uint32_t )
+	{
+		eGL_QUERY_INFO_RESULT = 0x8866,
+		eGL_QUERY_INFO_RESULT_AVAILABLE = 0x8867,
+		eGL_QUERY_INFO_RESULT_NO_WAIT = 0x9194,
+	}	eGL_QUERY_INFO;
 
 	class OpenGl;
 
@@ -1826,6 +1844,21 @@ namespace GlRender
 		C3D_Gl_API bool PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue );
 
 		//@}
+		/**@name Query functions */
+		//@{
+
+		C3D_Gl_API bool GenQueries( int p_n, uint32_t * p_queries );
+		C3D_Gl_API bool DeleteQueries( int p_n, uint32_t const * p_queries );
+		C3D_Gl_API bool IsQuery( uint32_t p_query );
+		C3D_Gl_API bool BeginQuery( eGL_QUERY p_target, uint32_t p_query );
+		C3D_Gl_API bool EndQuery( eGL_QUERY p_target );
+		C3D_Gl_API bool QueryCounter( uint32_t p_id, eGL_QUERY p_target );
+		C3D_Gl_API bool GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, int32_t * p_params );
+		C3D_Gl_API bool GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, uint32_t * p_params );
+		C3D_Gl_API bool GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, int64_t * p_params );
+		C3D_Gl_API bool GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, uint64_t * p_params );
+
+		//@}
 		/**@name Other functions */
 		//@{
 
@@ -2452,6 +2485,23 @@ namespace GlRender
 
 		//@}
 
+		//@}
+		/*@name Queries */
+		//@{
+
+		std::function< void( int n, uint32_t * queries ) > m_pfnGenQueries;
+		std::function< void( int n, uint32_t const * queries ) > m_pfnDeleteQueries;
+		std::function< uint8_t( uint32_t query ) > m_pfnIsQuery;
+		std::function< void( uint32_t target, uint32_t query ) > m_pfnBeginQuery;
+		std::function< void( uint32_t target ) > m_pfnEndQuery;
+		std::function< void( uint32_t id, uint32_t target ) > m_pfnQueryCounter;
+		std::function< void( uint32_t id, uint32_t pname, int32_t * params ) > m_pfnGetQueryObjectiv;
+		std::function< void( uint32_t id, uint32_t pname, uint32_t * params ) > m_pfnGetQueryObjectuiv;
+		std::function< void( uint32_t id, uint32_t pname, int64_t * params ) > m_pfnGetQueryObjecti64v;
+		std::function< void( uint32_t id, uint32_t pname, uint64_t * params ) > m_pfnGetQueryObjectui64v;
+
+		//@}
+
 		std::function< void( uint32_t p_param, int p_value ) > m_pfnPatchParameteri;
 	};
 
@@ -2643,45 +2693,46 @@ namespace GlRender
 #	define MAKE_WGL_EXTENSION( x )	static const Castor::String x = cuT( "WGL_" ) cuT( #x );
 #	define MAKE_GLX_EXTENSION( x )	static const Castor::String x = cuT( "GLX_" ) cuT( #x );
 
-	MAKE_GL_EXTENSION( ARB_draw_buffers_blend	)
-	MAKE_GL_EXTENSION( AMD_draw_buffers_blend	)
-	MAKE_GL_EXTENSION( EXT_clip_volume_hint	)
-	MAKE_GL_EXTENSION( ARB_texture_multisample	)
-	MAKE_GL_EXTENSION( ARB_imaging	)
-	MAKE_GL_EXTENSION( ARB_debug_output	)
-	MAKE_GL_EXTENSION( AMDX_debug_output	)
-	MAKE_GL_EXTENSION( ARB_vertex_buffer_object	)
-	MAKE_GL_EXTENSION( EXT_coordinate_frame	)
-	MAKE_GL_EXTENSION( ARB_pixel_buffer_object	)
-	MAKE_GL_EXTENSION( ARB_vertex_array_object	)
-	MAKE_GL_EXTENSION( ARB_texture_buffer_object	)
-	MAKE_GL_EXTENSION( EXT_framebuffer_object	)
-	MAKE_GL_EXTENSION( ARB_framebuffer_object	)
-	MAKE_GL_EXTENSION( ARB_sampler_objects	)
-	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic	)
-	MAKE_GL_EXTENSION( ARB_vertex_program	)
-	MAKE_GL_EXTENSION( ARB_fragment_program	)
-	MAKE_GL_EXTENSION( ARB_uniform_buffer_object	)
-	MAKE_GL_EXTENSION( ARB_geometry_shader4	)
-	MAKE_GL_EXTENSION( EXT_geometry_shader4	)
-	MAKE_GL_EXTENSION( ARB_tessellation_shader	)
-	MAKE_GL_EXTENSION( ARB_compute_shader	)
-	MAKE_GL_EXTENSION( ARB_draw_instanced	)
-	MAKE_GL_EXTENSION( ARB_instanced_arrays	)
-	MAKE_GL_EXTENSION( EXT_draw_instanced	)
-	MAKE_GL_EXTENSION( EXT_instanced_arrays	)
-	MAKE_GL_EXTENSION( EXT_direct_state_access	)
-	MAKE_GL_EXTENSION( ARB_texture_non_power_of_two	)
-	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory	)
-	MAKE_GL_EXTENSION( NV_shader_buffer_load	)
+	MAKE_GL_EXTENSION( ARB_draw_buffers_blend )
+	MAKE_GL_EXTENSION( AMD_draw_buffers_blend )
+	MAKE_GL_EXTENSION( EXT_clip_volume_hint )
+	MAKE_GL_EXTENSION( ARB_texture_multisample )
+	MAKE_GL_EXTENSION( ARB_imaging )
+	MAKE_GL_EXTENSION( ARB_debug_output )
+	MAKE_GL_EXTENSION( AMDX_debug_output )
+	MAKE_GL_EXTENSION( ARB_vertex_buffer_object )
+	MAKE_GL_EXTENSION( EXT_coordinate_frame )
+	MAKE_GL_EXTENSION( ARB_pixel_buffer_object )
+	MAKE_GL_EXTENSION( ARB_vertex_array_object )
+	MAKE_GL_EXTENSION( ARB_texture_buffer_object )
+	MAKE_GL_EXTENSION( EXT_framebuffer_object )
+	MAKE_GL_EXTENSION( ARB_framebuffer_object )
+	MAKE_GL_EXTENSION( ARB_sampler_objects )
+	MAKE_GL_EXTENSION( EXT_texture_filter_anisotropic )
+	MAKE_GL_EXTENSION( ARB_vertex_program )
+	MAKE_GL_EXTENSION( ARB_fragment_program )
+	MAKE_GL_EXTENSION( ARB_uniform_buffer_object )
+	MAKE_GL_EXTENSION( ARB_geometry_shader4 )
+	MAKE_GL_EXTENSION( EXT_geometry_shader4 )
+	MAKE_GL_EXTENSION( ARB_tessellation_shader )
+	MAKE_GL_EXTENSION( ARB_compute_shader )
+	MAKE_GL_EXTENSION( ARB_draw_instanced )
+	MAKE_GL_EXTENSION( ARB_instanced_arrays )
+	MAKE_GL_EXTENSION( EXT_draw_instanced )
+	MAKE_GL_EXTENSION( EXT_instanced_arrays )
+	MAKE_GL_EXTENSION( EXT_direct_state_access )
+	MAKE_GL_EXTENSION( ARB_texture_non_power_of_two )
+	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory )
+	MAKE_GL_EXTENSION( NV_shader_buffer_load )
+	MAKE_GL_EXTENSION( ARB_timer_query )
 
 #	if defined( _WIN32 )
-	MAKE_WGL_EXTENSION( ARB_create_context	)
-	MAKE_WGL_EXTENSION( ARB_pixel_format	)
-	MAKE_WGL_EXTENSION( EXT_swap_control	)
+	MAKE_WGL_EXTENSION( ARB_create_context )
+	MAKE_WGL_EXTENSION( ARB_pixel_format )
+	MAKE_WGL_EXTENSION( EXT_swap_control )
 #	elif defined( __linux__ )
-	MAKE_GLX_EXTENSION( ARB_create_context	)
-	MAKE_GLX_EXTENSION( EXT_swap_control	)
+	MAKE_GLX_EXTENSION( ARB_create_context )
+	MAKE_GLX_EXTENSION( EXT_swap_control )
 #	else
 #		error "Yet unsupported OS"
 #	endif

@@ -31,7 +31,7 @@ scene "Scene"
 
 	scene_node "FinalNode"
 	{
-		position 0.0 0.0 -100.0
+		position 0.0 0.0 100.0
 	}
 	object "FinalPrimitive"
 	{
