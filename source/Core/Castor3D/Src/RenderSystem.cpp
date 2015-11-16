@@ -14,8 +14,6 @@
 #include "OverlayRenderer.hpp"
 #include "Viewport.hpp"
 
-#include <Debug.hpp>
-
 using namespace Castor;
 
 namespace Castor3D
@@ -109,100 +107,7 @@ namespace Castor3D
 		m_pCurrentCamera = p_pCamera;
 	}
 
-#if !defined( NDEBUG )
-
-	bool RenderSystem::DoTrack( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
-	{
-		auto && l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & l_object )
-		{
-			return p_object == l_object.m_object;
-		} );
-
-		bool l_return = l_it == m_allocated.end();
-
-		std::stringstream l_ptr;
-		l_ptr.width( 16 );
-		l_ptr.fill( '0' );
-		l_ptr << std::hex << std::right << uint64_t( p_object );
-		std::stringstream l_type;
-		l_type.width( 20 );
-		l_type << std::left << p_type;
-		std::stringstream l_name;
-		l_name << "(" << m_id << ") " << l_type.str() << " [0x" << l_ptr.str() << "]";
-
-		if ( l_return )
-		{
-			StringStream l_stream;
-			Debug::ShowBacktrace( l_stream );
-			m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1, l_stream.str() } );
-			Castor::Logger::LogDebug( l_name );
-			p_name = l_name.str();
-		}
-		else
-		{
-			if ( l_it->m_ref > 0 )
-			{
-				Castor::Logger::LogDebug( std::stringstream() << "Rereferencing object: " << l_type.str() << " [0x" << l_ptr.str() << "] => " << l_it->m_ref );
-			}
-			else
-			{
-				Castor::Logger::LogDebug( l_name );
-			}
-
-			++l_it->m_ref;
-		}
-
-		return l_return;
-	}
-
-	bool RenderSystem::DoTrack( Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
-	{
-		return DoTrack( reinterpret_cast< void * >( p_object ), p_type + ": " + string::string_cast< char >( p_object->GetName() ), p_file, p_line, p_name );
-	}
-
-	bool RenderSystem::DoUntrack( void * p_object, ObjectDeclaration & p_declaration )
-	{
-		auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
-		{
-			return p_object == p_decl.m_object;
-		} );
-
-		bool l_return = false;
-		char l_szName[1024] = { 0 };
-		std::stringstream l_ptr;
-		l_ptr.width( 16 );
-		l_ptr.fill( '0' );
-		l_ptr << std::hex << std::right << uint64_t( p_object );
-
-		if ( l_it != m_allocated.end() )
-		{
-			std::stringstream l_type;
-			l_type.width( 20 );
-			l_type << std::left << l_it->m_name;
-
-			if ( !--l_it->m_ref )
-			{
-				p_declaration = *l_it;
-				l_return = true;
-				Castor::Logger::LogWarning( std::stringstream() << "Released " << l_type.str() << " [0x" << l_ptr.str() << "] => " << p_declaration.m_ref );
-			}
-			else if ( l_it->m_ref < 0 )
-			{
-				Castor::Logger::LogError( std::stringstream() << "Trying to release an already released object: " << l_type.str() << " [0x" << l_ptr.str() << "] => " << l_it->m_ref );
-			}
-		}
-		else
-		{
-			Castor::Logger::LogWarning( std::stringstream() << "Untracked [0x" << l_ptr.str() << cuT( "]" ) );
-		}
-
-		return l_return;
-	}
-
-	bool RenderSystem::DoUntrack( Named * p_object, ObjectDeclaration & p_declaration )
-	{
-		return DoUntrack( reinterpret_cast< void * >( p_object ), p_declaration );
-	}
+#if C3D_TRACE_OBJECTS
 
 	void RenderSystem::DoReportTracked()
 	{

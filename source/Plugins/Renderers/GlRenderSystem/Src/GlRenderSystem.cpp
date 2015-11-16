@@ -276,7 +276,7 @@ namespace GlRender
 		m_gl.Cleanup();
 	}
 
-#if !defined( NDEBUG )
+#if C3D_TRACE_OBJECTS
 
 	void GlRenderSystem::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )
 	{
@@ -287,7 +287,7 @@ namespace GlRender
 		}
 	}
 
-	void GlRenderSystem::UnTrack( void * p_object )
+	void GlRenderSystem::Untrack( void * p_object )
 	{
 		ObjectDeclaration l_decl;
 

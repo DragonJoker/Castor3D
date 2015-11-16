@@ -120,7 +120,8 @@ namespace Castor
 		 *\brief		Constructeur par copie convertie
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
-		template< typename Type > SquareMatrix( SquareMatrix< Type, Count > const & p_matrix );
+		template< typename Type >
+		SquareMatrix( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy Constructor
@@ -129,7 +130,8 @@ namespace Castor
 		 *\brief		Constructeur par copie convertie
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
-		template< typename Type > SquareMatrix( Matrix< Type, Count, Count > const & p_matrix );
+		template< typename Type >
+		SquareMatrix( Matrix< Type, Count, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -138,7 +140,8 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
 		 */
-		template< typename Type > SquareMatrix( Type const * p_matrix );
+		template< typename Type >
+		SquareMatrix( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -2,23 +2,11 @@
 
 namespace Castor
 {
-	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
-	{
-		return p_matrix *= matrix::set_rotate( p_matrix, p_angle, p_axis );
-	}
-
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
 		SquareMatrix< T, 4 > l_rotate;
 		return p_matrix *= matrix::set_rotate( l_rotate, p_quat );
-	}
-
-	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
-	{
-		return matrix::set_rotate( p_matrix, Quaternion( p_axis, p_angle ) );
 	}
 
 	template< typename T >
@@ -50,7 +38,47 @@ namespace Castor
 	template< typename T >
 	void matrix::get_rotate( SquareMatrix< T, 4 > const & p_matrix, Quaternion & p_quat )
 	{
-		p_quat.FromRotationMatrix( p_matrix );
+		double l_dTrace = double( p_matrix[0][0] + p_matrix[1][1] + p_matrix[2][2] );
+		double l_dRoot;
+
+		if ( l_dTrace > 0 )
+		{
+			// |w| > 1/2, may as well choose w > 1/2
+			l_dRoot = std::sqrt( l_dTrace + 1 );  // 2w
+			p_quat.w = T( 0.5 * l_dRoot );
+			l_dRoot = 0.5 / l_dRoot;  // 1/(4w)
+			p_quat.x = T( ( p_matrix[2][1] - p_matrix[1][2] ) * l_dRoot );
+			p_quat.y = T( ( p_matrix[0][2] - p_matrix[2][0] ) * l_dRoot );
+			p_quat.z = T( ( p_matrix[1][0] - p_matrix[0][1] ) * l_dRoot );
+		}
+		else
+		{
+			// |w| <= 1/2
+			static uint32_t s_iNext[3] = { 1, 2, 0 };
+			uint32_t i = 0;
+
+			if ( p_matrix[1][1] > p_matrix[0][0] )
+			{
+				i = 1;
+			}
+
+			if ( p_matrix[2][2] > p_matrix[i][i] )
+			{
+				i = 2;
+			}
+
+			uint32_t j = s_iNext[i];
+			uint32_t k = s_iNext[j];
+			l_dRoot = std::sqrt( double( p_matrix[i][i] - p_matrix[j][j] - p_matrix[k][k] + 1 ) );
+			double * l_apkQuat[3] = { &p_quat.x, &p_quat.y, &p_quat.z };
+			*l_apkQuat[i] = T( 0.5 * l_dRoot );
+			l_dRoot = 0.5 / l_dRoot;
+			*l_apkQuat[j] = T( double( p_matrix[j][i] + p_matrix[i][j] ) * l_dRoot );
+			*l_apkQuat[k] = T( double( p_matrix[k][i] + p_matrix[i][k] ) * l_dRoot );
+			p_quat.w = T( double( p_matrix[k][j] - p_matrix[j][k] ) * l_dRoot );
+		}
+
+		point::normalise( p_quat );
 	}
 
 	template< typename T >

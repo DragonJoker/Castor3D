@@ -429,7 +429,7 @@ namespace Castor3D
 		 */
 		inline void GetAxisAngle( Castor::Point3r & p_axis, Castor::Angle & p_angle )
 		{
-			m_orientation.ToAxisAngle( p_axis, p_angle );
+			m_orientation.to_axis_angle( p_axis, p_angle );
 		}
 		/**
 		 *\~english

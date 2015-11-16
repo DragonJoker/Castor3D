@@ -24,10 +24,10 @@ namespace CastorViewer
 		if ( l_node )
 		{
 			StringStream l_stream;
-			l_stream << cuT( "Rotate - Yaw Before: " ) << l_node->GetOrientation().GetYaw().Degrees() << cuT( ", Offset: " ) << m_dy;
+			l_stream << cuT( "Rotate - Yaw Before: " ) << l_node->GetOrientation().get_yaw().Degrees() << cuT( ", Offset: " ) << m_dy;
 			l_node->Rotate( Quaternion( Angle::FromDegrees( m_dx ), Angle::FromDegrees( m_dy ), Angle::FromDegrees( m_dz ) ) );
 			//l_node->Rotate( Quaternion( Point3r( 0, 1, 0 ), Angle::FromDegrees( m_dy ) ) );
-			l_stream << cuT( ", Yaw After: " ) << l_node->GetOrientation().GetYaw().Degrees() << std::endl;
+			l_stream << cuT( ", Yaw After: " ) << l_node->GetOrientation().get_yaw().Degrees() << std::endl;
 			l_stream << cuT( ", Quaternion: " ) << l_node->GetOrientation();
 			Logger::LogDebug( l_stream );
 		}

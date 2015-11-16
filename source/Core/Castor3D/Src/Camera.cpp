@@ -191,7 +191,7 @@ namespace Castor3D
 
 		if ( l_node )
 		{
-			l_node->SetOrientation( Quaternion::Identity() );
+			l_node->SetOrientation( Quaternion::identity() );
 		}
 	}
 
@@ -215,6 +215,7 @@ namespace Castor3D
 			if ( l_modified || l_node->IsModified() )
 			{
 				m_view = l_node->GetDerivedTransformationMatrix();
+				//matrix::set_transform( m_view, l_node->GetDerivedPosition() * Point3r( 1, 1, 1 ), Point3r( 1, 1, 1 ), l_node->GetDerivedOrientation() );
 
 				// Express frustum in view coordinates
 				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )

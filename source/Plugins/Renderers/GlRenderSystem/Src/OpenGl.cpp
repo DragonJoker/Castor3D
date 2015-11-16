@@ -3607,7 +3607,7 @@ void OpenGl::Track( void * p_object, std::string const & p_name, std::string con
 
 void OpenGl::UnTrack( void * p_object )
 {
-	m_renderSystem.UnTrack( p_object );
+	m_renderSystem.Untrack( p_object );
 }
 
 #endif

@@ -1719,7 +1719,7 @@ namespace Castor3D
 			SpotLightSPtr l_light = p_light->GetSpotLight();
 			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
 			Matrix4x4r l_orientation;
-			p_light->GetParent()->GetOrientation().ToRotationMatrix( l_orientation );
+			p_light->GetParent()->GetOrientation().to_matrix( l_orientation );
 			ApplyLightComponent( l_orientation, p_index, l_offset, *m_pLightsData );
 			ApplyLightComponent( l_light->GetAttenuation(), p_index, l_offset, *m_pLightsData );
 			ApplyLightComponent( l_light->GetExponent(), l_light->GetCutOff(), p_index, l_offset, *m_pLightsData );

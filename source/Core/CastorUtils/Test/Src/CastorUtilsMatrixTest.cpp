@@ -359,7 +359,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 1, 0, 0 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 1, 0, 0 ), Angle::FromDegrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 1, 0, 0 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -370,7 +370,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 0, 1, 0 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 0, 1, 0 ), Angle::FromDegrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 0, 1, 0 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -381,7 +381,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 0, 0, 1 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 0, 0, 1 ), Angle::FromDegrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 0, 0, 1 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -392,7 +392,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 1, 1, 1 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 1, 1, 1 ), Angle::FromDegrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 1, 1, 1 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -519,9 +519,9 @@ namespace Testing
 					TEST_EQUAL( l_quaternion.y, l_quat.y );
 					TEST_EQUAL( l_quaternion.z, l_quat.z );
 					TEST_EQUAL( l_quaternion.w, l_quat.w );
-					TEST_EQUAL( l_quaternion.GetPitch().Radians(), glm::pitch( l_quat ) );
-					TEST_EQUAL( l_quaternion.GetYaw().Radians(), glm::yaw( l_quat ) );
-					TEST_EQUAL( l_quaternion.GetRoll().Radians(), glm::roll( l_quat ) );
+					TEST_EQUAL( l_quaternion.get_pitch().Radians(), glm::pitch( l_quat ) );
+					TEST_EQUAL( l_quaternion.get_yaw().Radians(), glm::yaw( l_quat ) );
+					TEST_EQUAL( l_quaternion.get_roll().Radians(), glm::roll( l_quat ) );
 				}
 			}
 		}
@@ -535,7 +535,7 @@ namespace Testing
 		{
 			for ( double r = 0; r < 100; r += 1 )
 			{
-				Quaternion l_quaternion = l_quaternionSrc.Mix( l_quaternionDst, r / 100 );
+				Quaternion l_quaternion = l_quaternionSrc.mix( l_quaternionDst, r / 100 );
 				glm::quat l_quat = glm::mix( l_quatSrc, l_quatDst, float( r / 100 ) );
 			}
 		}
@@ -545,7 +545,7 @@ namespace Testing
 
 			for ( double r = 0; r < 100; r += 1 )
 			{
-				Quaternion l_quaternion = l_quaternionSrc.Lerp( l_quaternionDst, r / 100 );
+				Quaternion l_quaternion = l_quaternionSrc.lerp( l_quaternionDst, r / 100 );
 				glm::quat l_quat = glm::lerp( l_quatSrc, l_quatDst, float( r / 100 ) );
 			}
 		}
@@ -554,7 +554,7 @@ namespace Testing
 		{
 			for ( double r = 0; r < 100; r += 1 )
 			{
-				Quaternion l_quaternion = l_quaternionSrc.Slerp( l_quaternionDst, r / 100 );
+				Quaternion l_quaternion = l_quaternionSrc.slerp( l_quaternionDst, r / 100 );
 				glm::quat l_quat = glm::slerp( l_quatSrc, l_quatDst, float( r / 100 ) );
 			}
 		}

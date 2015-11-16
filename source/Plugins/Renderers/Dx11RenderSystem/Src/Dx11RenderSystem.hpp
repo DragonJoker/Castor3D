@@ -101,18 +101,43 @@ namespace Dx11Render
 
 		ID3D11Debug * m_pDebug;
 
+#endif
+#if C3D_TRACE_OBJECTS
+
 	public:
-		inline ID3D11Debug * GetDebug()
+		template< typename T >
+		void Track( T * p_object, std::string const & p_type, std::string const & p_file, int p_line )
 		{
-			return m_pDebug;
+			std::string l_name;
+
+			if ( DoTrack( p_object, p_type, p_file, p_line, l_name ) )
+			{
+				p_object->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( l_name.size() - 1 ), l_name.c_str() );
+			}
 		}
 
-		void Track( ID3D11Device * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void Track( ID3D11DeviceChild * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void Track( IDXGIDeviceSubObject * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void Untrack( ID3D11Device * p_object );
-		void Untrack( ID3D11DeviceChild * p_object );
-		void Untrack( IDXGIDeviceSubObject * p_object );
+		template< typename T >
+		void Untrack( T * p_object )
+		{
+			ObjectDeclaration l_declaration;
+
+			if ( DoUntrack( p_object, l_declaration ) )
+			{
+			}
+		}
+
+#else
+
+	public:
+		template< typename T >
+		void Track( T * p_object, std::string const & p_name, std::string const & p_file, int line )
+		{
+		}
+
+		template< typename T >
+		void Untrack( T * p_object )
+		{
+		}
 
 #endif
 	};

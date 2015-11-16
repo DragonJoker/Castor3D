@@ -32,7 +32,16 @@ namespace Castor
 		 *\brief		Transmet la pile d'appels dans un flux
 		 *\param[in,out]	p_stream	Le flux
 		 */
-		CU_API void ShowBacktrace( StringStream & p_stream );
+		CU_API void ShowBacktrace( std::wstringstream & p_stream );
+		/**
+		 *\~english
+		 *\brief		Puts the backtrace into a stream
+		 *\param[in,out]	p_stream	The stream
+		 *\~french
+		 *\brief		Transmet la pile d'appels dans un flux
+		 *\param[in,out]	p_stream	Le flux
+		 */
+		CU_API void ShowBacktrace( std::stringstream & p_stream );
 
 		/*!
 		\author 	Sylvain DOREMUS
@@ -49,7 +58,7 @@ namespace Castor
 		protected:
 			Backtraced()
 			{
-				StringStream l_backtrace;
+				std::stringstream l_backtrace;
 				Castor::Debug::ShowBacktrace( l_backtrace );
 				m_callStack = l_backtrace.str();
 			}
@@ -59,7 +68,7 @@ namespace Castor
 			}
 
 		private:
-			String m_callStack;
+			std::string m_callStack;
 #else
 #endif
 

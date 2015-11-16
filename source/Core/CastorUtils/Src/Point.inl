@@ -260,12 +260,6 @@ namespace Castor
 	inline Point< T, Count > & Point< T, Count >::operator=( Point< T, Count > const & p_pt )
 	{
 		std::memcpy( m_coords, p_pt.m_coords, binary_size );
-		/*
-				for( uint32_t i = 0; i < Count; i++ )
-				{
-					m_coords[i] = p_pt.m_coords[i];
-				}
-		*/
 		return * this;
 	}
 

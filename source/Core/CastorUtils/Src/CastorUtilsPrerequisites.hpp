@@ -374,4 +374,6 @@ namespace Castor
 	typedef std::function< void ( String const & p_strLog, ELogType p_eLogType ) > LogCallback;
 }
 
+#include "Debug.hpp"
+
 #endif
