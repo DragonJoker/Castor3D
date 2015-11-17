@@ -191,7 +191,7 @@ namespace Castor3D
 
 		if ( l_node )
 		{
-			l_node->SetOrientation( Quaternion::Identity() );
+			l_node->SetOrientation( Quaternion::identity() );
 		}
 	}
 

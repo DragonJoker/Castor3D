@@ -17,18 +17,14 @@ namespace Castor
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix()
-		: m_data( AlignedAlloc< T >( 16, size ) )
-		, m_ownCoords( true )
+		: Matrix( NoInit() )
 	{
-		do_update_columns();
 		initialise();
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( T const & p_value )
-		: m_data( AlignedAlloc< T >( 16, size ) )
-		, m_ownCoords( true )
+		: Matrix( NoInit() )
 	{
-		do_update_columns();
 		initialise( p_value );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -41,11 +37,8 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	template< typename Type >
 	inline Matrix< T, Columns, Rows >::Matrix( Type const * p_matrix )
-		: m_data( AlignedAlloc< T >( 16, size ) )
-		, m_ownCoords( true )
+		: Matrix( NoInit() )
 	{
-		do_update_columns();
-		initialise();
 		uint64_t l_count = Rows * Columns;
 
 		for ( uint64_t i = 0; i < l_count; i++ )
@@ -55,11 +48,8 @@ namespace Castor
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > const & p_matrix )
-		: m_data( AlignedAlloc< T >( 16, size ) )
-		, m_ownCoords( true )
+		: Matrix( NoInit() )
 	{
-		do_update_columns();
-		initialise();
 		std::memcpy( m_data, p_matrix.const_ptr(), my_type::size );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -74,11 +64,8 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	template< typename Type >
 	inline Matrix< T, Columns, Rows >::Matrix( Matrix< Type, Columns, Rows > const & p_matrix )
-		: m_data( AlignedAlloc< T >( 16, size ) )
-		, m_ownCoords( true )
+		: Matrix( NoInit() )
 	{
-		do_update_columns();
-		initialise();
 		uint64_t l_count = Rows * Columns;
 
 		for ( uint64_t i = 0; i < l_count; i++ )

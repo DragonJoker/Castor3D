@@ -50,7 +50,47 @@ namespace Castor
 	template< typename T >
 	void matrix::get_rotate( SquareMatrix< T, 4 > const & p_matrix, Quaternion & p_quat )
 	{
-		p_quat.FromRotationMatrix( p_matrix );
+		double l_trace = double( p_matrix[0][0] + p_matrix[1][1] + p_matrix[2][2] );
+		double l_root;
+
+		if ( l_trace > 0 )
+		{
+			// |w| > 1/2, may as well choose w > 1/2
+			l_root = std::sqrt( l_trace + 1 );  // 2w
+			p_quat.w = T( 0.5 * l_root );
+			l_root = 0.5 / l_root;  // 1/(4w)
+			p_quat.x = ( p_matrix[2][1] - p_matrix[1][2] ) * l_root;
+			p_quat.y = ( p_matrix[0][2] - p_matrix[2][0] ) * l_root;
+			p_quat.z = ( p_matrix[1][0] - p_matrix[0][1] ) * l_root;
+		}
+		else
+		{
+			// |w| <= 1/2
+			static uint32_t s_next[3] = { 1, 2, 0 };
+			uint32_t i = 0;
+
+			if ( p_matrix[1][1] > p_matrix[0][0] )
+			{
+				i = 1;
+			}
+
+			if ( p_matrix[2][2] > p_matrix[i][i] )
+			{
+				i = 2;
+			}
+
+			uint32_t j = s_next[i];
+			uint32_t k = s_next[j];
+			l_root = std::sqrt( double( p_matrix[i][i] - p_matrix[j][j] - p_matrix[k][k] + 1 ) );
+			double * l_apkQuat[3] = { &p_quat.x, &p_quat.y, &p_quat.z };
+			*l_apkQuat[i] = 0.5 * l_root;
+			l_root = 0.5 / l_root;
+			*l_apkQuat[j] = double( p_matrix[j][i] + p_matrix[i][j] ) * l_root;
+			*l_apkQuat[k] = double( p_matrix[k][i] + p_matrix[i][k] ) * l_root;
+			p_quat.w = double( p_matrix[k][j] - p_matrix[j][k] ) * l_root;
+		}
+
+		point::normalise( p_quat );
 	}
 
 	template< typename T >
@@ -185,7 +225,7 @@ namespace Castor
 	SquareMatrix< T, 4 > & matrix::perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_aFOVY, U p_aspect, U p_near, U p_far )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-		T l_range = T( ( 1 / tan( p_aFOVY.Radians() * 0.5 ) ) );
+		T l_range = T( ( 1 / tan( p_aFOVY.radians() * 0.5 ) ) );
 		p_matrix.initialise();
 		p_matrix[0][0] = T( l_range / p_aspect );
 		p_matrix[1][1] = T( l_range );

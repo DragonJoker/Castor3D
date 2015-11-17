@@ -1174,10 +1174,10 @@ void RenderTechnique::DoEndRender()
 	Matrix4x4r invProj;
 	Matrix4x4r invView;
 	Matrix4x4r yaw, roll;
-	matrix::perspective( proj, Angle::FromDegrees( 90.0 ), double( m_width ) / double( m_height ), 0.1 * ch, 1000000.0 * ch );
-	matrix::roll( roll, Angle::FromRadians( m_cameraTheta ) );
+	matrix::perspective( proj, Angle::from_degrees( 90.0 ), double( m_width ) / double( m_height ), 0.1 * ch, 1000000.0 * ch );
+	matrix::roll( roll, Angle::from_radians( m_cameraTheta ) );
 #if ENABLE_FFT
-	matrix::yaw( yaw, Angle::FromDegrees( m_cameraPhi ) );
+	matrix::yaw( yaw, Angle::from_degrees( m_cameraPhi ) );
 	view = yaw * view;
 #endif
 	view = roll * view;

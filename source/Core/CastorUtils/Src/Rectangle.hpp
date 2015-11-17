@@ -147,12 +147,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the rectangle size
-		 *\param[out]	p_ptResult	The rectangle size
+		 *\param[out]	p_result	The rectangle size
 		 *\~french
 		 *\brief		Récupère les dimensions du rectangle
-		 *\param[out]	p_ptResult	Les dimensions du rectangle
+		 *\param[out]	p_result	Les dimensions du rectangle
 		 */
-		CU_API void size( Size & p_ptResult )const;
+		CU_API void size( Size & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the left coordinate
