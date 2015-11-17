@@ -96,7 +96,7 @@ namespace Castor
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::roll( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle )
 	{
-		return matrix::rotate( p_matrix, p_angle, Point< T, 3 >( 1, 0, 0 ) );
+		return matrix::rotate( p_matrix, Quaternion( Point< T, 3 >( 1, 0, 0 ),p_angle ) );
 	}
 
 	template< typename T, typename U >

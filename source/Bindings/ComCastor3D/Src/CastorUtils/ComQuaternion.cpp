@@ -23,7 +23,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Quaternion::Transform( *static_cast< CVector3D * >( val ), *static_cast< CVector3D * >( *pVal ) );
+				Castor::Quaternion::transform( *static_cast< CVector3D * >( val ), *static_cast< CVector3D * >( *pVal ) );
 			}
 		}
 
@@ -41,7 +41,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Quaternion::ToAxisAngle( *static_cast< CVector3D * >( *pAxis ), *static_cast< CAngle * >( *pAngle ) );
+				Castor::Quaternion::to_axis_angle( *static_cast< CVector3D * >( *pAxis ), *static_cast< CAngle * >( *pAngle ) );
 			}
 		}
 
@@ -54,7 +54,7 @@ namespace CastorCom
 
 		if ( axis && angle )
 		{
-			Castor::Quaternion::FromAxisAngle( *static_cast< CVector3D * >( axis ), *static_cast< CAngle * >( angle ) );
+			Castor::Quaternion::from_axis_angle( *static_cast< CVector3D * >( axis ), *static_cast< CAngle * >( angle ) );
 			hr = S_OK;
 		}
 
@@ -73,7 +73,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				Castor::Quaternion::ToAxes( *static_cast< CVector3D * >( *pX ), *static_cast< CVector3D * >( *pY ), *static_cast< CVector3D * >( *pZ ) );
+				Castor::Quaternion::to_axes( *static_cast< CVector3D * >( *pX ), *static_cast< CVector3D * >( *pY ), *static_cast< CVector3D * >( *pZ ) );
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace CastorCom
 
 		if ( x && y && z )
 		{
-			Castor::Quaternion::FromAxes( *static_cast< CVector3D * >( x ), *static_cast< CVector3D * >( y ), *static_cast< CVector3D * >( z ) );
+			Castor::Quaternion::from_axes( *static_cast< CVector3D * >( x ), *static_cast< CVector3D * >( y ), *static_cast< CVector3D * >( z ) );
 			hr = S_OK;
 		}
 
@@ -103,7 +103,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::GetYaw();
+				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_yaw();
 			}
 		}
 
@@ -120,7 +120,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::GetPitch();
+				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_pitch();
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::GetRoll();
+				static_cast< Castor::Angle >( *static_cast< CAngle * >( *pVal ) ) = Castor::Quaternion::get_roll();
 			}
 		}
 
@@ -150,7 +150,7 @@ namespace CastorCom
 
 		if ( pVal )
 		{
-			*pVal = float( Castor::Quaternion::GetMagnitude() );
+			*pVal = float( Castor::Quaternion::get_magnitude() );
 		}
 
 		return hr;
@@ -158,7 +158,7 @@ namespace CastorCom
 
 	STDMETHODIMP CQuaternion::Conjugate()
 	{
-		Castor::Quaternion::Conjugate();
+		Castor::Quaternion::conjugate();
 		return S_OK;
 	}
 
@@ -172,7 +172,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::Slerp( *static_cast< CQuaternion * >( quat ), percent );
+				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::slerp( *static_cast< CQuaternion * >( quat ), percent );
 			}
 		}
 
@@ -189,7 +189,7 @@ namespace CastorCom
 
 			if ( hr == S_OK )
 			{
-				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::Mix( *static_cast< CQuaternion * >( quat ), percent );
+				static_cast< Castor::Quaternion >( *static_cast< CQuaternion * >( *pQuat ) ) = Castor::Quaternion::mix( *static_cast< CQuaternion * >( quat ), percent );
 			}
 		}
 
