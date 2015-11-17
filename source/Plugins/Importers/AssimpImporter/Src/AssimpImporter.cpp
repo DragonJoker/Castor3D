@@ -101,7 +101,7 @@ namespace detail
 		real l_rFactor = FindFactor( p_mapNodes, p_itCur, l_itPrv, l_itNxt );
 		const Quaternion & l_qStart = l_itPrv->second.qRotate;
 		const Quaternion & l_qEnd = l_itNxt->second.qRotate;
-		return l_qStart.Slerp( l_qEnd, l_rFactor );
+		return l_qStart.slerp( l_qEnd, l_rFactor );
 	}
 }
 
@@ -663,7 +663,7 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 		for ( uint32_t i = 0; i < l_pNodeAnim->mNumRotationKeys; ++i )
 		{
 			Quaternion l_qRotate;
-			l_qRotate.FromRotationMatrix( Matrix3x3r( &l_pNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 ) );
+			l_qRotate.from_matrix( Matrix3x3r( &l_pNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 ) );
 			l_pObject->AddRotateKeyFrame( real( l_pNodeAnim->mRotationKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_qRotate );
 		}
 	}

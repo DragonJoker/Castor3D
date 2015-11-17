@@ -79,8 +79,8 @@ namespace Castor
 		m_data.rect.bottom	= p_iBottom;
 	}
 
-	void Rectangle::size( Size & p_ptResult )const
+	void Rectangle::size( Size & p_result )const
 	{
-		p_ptResult.set( width(), height() );
+		p_result.set( width(), height() );
 	}
 }

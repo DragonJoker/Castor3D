@@ -39,7 +39,6 @@ namespace Castor
 	inline Matrix< T, Columns, Rows >::Matrix( Type const * p_matrix )
 		: Matrix( NoInit() )
 	{
-		initialise();
 		uint64_t l_count = Rows * Columns;
 
 		for ( uint64_t i = 0; i < l_count; i++ )

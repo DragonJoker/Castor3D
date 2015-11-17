@@ -82,7 +82,7 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static Angle FromDegrees( T p_degrees )
+		static Angle from_degrees( T p_degrees )
 		{
 			return Angle( p_degrees * DegreeToRadian );
 		}
@@ -97,7 +97,7 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static Angle FromRadians( T p_radians )
+		static Angle from_radians( T p_radians )
 		{
 			return Angle( p_radians * 1.0 );
 		}
@@ -112,7 +112,7 @@ namespace Castor
 		 *\return		L'angle construit
 		 */
 		template< typename T >
-		static Angle FromGrads( T p_grads )
+		static Angle from_grads( T p_grads )
 		{
 			return Angle( p_grads * GradToRadian );
 		}
@@ -151,25 +151,25 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	p_rhs	The object to copy
 		 *\return		A reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	p_rhs	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Angle & operator =( Angle const & p_angle );
+		CU_API Angle & operator=( Angle const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_copy	The object to move
+		 *\param[in]	p_rhs	The object to move
 		 *\return		A reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_copy	L'objet à déplacer
+		 *\param[in]	p_rhs	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Angle & operator =( Angle && p_angle );
+		CU_API Angle & operator=( Angle && p_rhs );
 		/**
 		 *\~english
 		 *\brief		Conversion to degrees
@@ -178,7 +178,7 @@ namespace Castor
 		 *\brief		Conversion en degrés
 		 *\return		La valeur de l'angle, en degrés
 		 */
-		CU_API double Degrees()const;
+		CU_API double degrees()const;
 		/**
 		 *\~english
 		 *\brief		Conversion to radians
@@ -187,7 +187,7 @@ namespace Castor
 		 *\brief		Conversion en radians
 		 *\return		La valeur de l'angle, en radians
 		 */
-		CU_API double Radians()const;
+		CU_API double radians()const;
 		/**
 		 *\~english
 		 *\brief		Conversion to gradients
@@ -196,7 +196,7 @@ namespace Castor
 		 *\brief		Conversion en gradients
 		 *\return		La valeur de l'angle, en gradients
 		 */
-		CU_API double Grads()const;
+		CU_API double grads()const;
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from degrees
@@ -205,7 +205,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de degrés
 		 *\param[in]	p_rAngle	L'angle exprimé en degrés
 		 */
-		CU_API void Degrees( double p_rAngle );
+		CU_API void degrees( double p_rAngle );
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from radians
@@ -214,7 +214,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de radians
 		 *\param[in]	p_rAngle	L'angle exprimé en radians
 		 */
-		CU_API void Radians( double p_rAngle );
+		CU_API void radians( double p_rAngle );
 		/**
 		 *\~english
 		 *\brief		Sets this angle value from gradients
@@ -223,7 +223,7 @@ namespace Castor
 		 *\brief		Définit la valeur de cet angle à partir de gradients
 		 *\param[in]	p_rAngle	L'angle exprimé en gradients
 		 */
-		CU_API void Grads( double p_rAngle );
+		CU_API void grads( double p_rAngle );
 		/**
 		 *\~english
 		 *\brief		Trigonometric cosine
@@ -232,7 +232,7 @@ namespace Castor
 		 *\brief		Cosinus trigonométrique
 		 *\return		Le cosinus de cet angle
 		 */
-		CU_API double Cos()const;
+		CU_API double cos()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric sine
@@ -241,7 +241,7 @@ namespace Castor
 		 *\brief		Sinus trigonométrique
 		 *\return		Le sinus de cet angle
 		 */
-		CU_API double Sin()const;
+		CU_API double sin()const;
 		/**
 		 *\~english
 		 *\brief		Trigonometric tangent
@@ -250,7 +250,7 @@ namespace Castor
 		 *\brief		Tangente trigonométrique
 		 *\return		La tangente de cet angle
 		 */
-		CU_API double Tan()const;
+		CU_API double tan()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic cosine
@@ -259,7 +259,7 @@ namespace Castor
 		 *\brief		Cosinus hyperbolique
 		 *\return		Le cosinus hyperbolique de cet angle
 		 */
-		CU_API double Cosh()const;
+		CU_API double cosh()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic sine
@@ -268,7 +268,7 @@ namespace Castor
 		 *\brief		Sinus hyperbolique
 		 *\return		Le sinus hyperbolique de cet angle
 		 */
-		CU_API double Sinh()const;
+		CU_API double sinh()const;
 		/**
 		 *\~english
 		 *\brief		Hyperbolic tangent
@@ -277,7 +277,7 @@ namespace Castor
 		 *\brief		Tangente hyperbolique
 		 *\return		La tangente hyperbolique de cet angle
 		 */
-		CU_API double Tanh()const;
+		CU_API double tanh()const;
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given cosine value
@@ -286,7 +286,7 @@ namespace Castor
 		 *\brief		Calcule la valeur de cet angle à partir du cosinus donné
 		 *\param[in]	p_rValue	Le cosinus
 		 */
-		CU_API void ACos( double p_rValue );
+		CU_API void acos( double p_rValue );
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given sine value
@@ -295,7 +295,7 @@ namespace Castor
 		 *\brief		Calcule la valeur de cet angle à partir du sinus donné
 		 *\param[in]	p_rValue	Le sinus
 		 */
-		CU_API void ASin( double p_rValue );
+		CU_API void asin( double p_rValue );
 		/**
 		 *\~english
 		 *\brief		Computes this angle's value from the given tangent value
@@ -304,179 +304,183 @@ namespace Castor
 		 *\brief		Calcule la valeur de cet angle à partir de la tangente donné
 		 *\param[in]	p_rValue	La tangente
 		 */
-		CU_API void ATan( double p_rValue );
+		CU_API void atan( double p_rValue );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
-		 *\param[in]	p_angle	Angle to add to this one
+		 *\param[in]	p_rhs	Angle to add to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par addition
-		 *\param[in]	p_angle	L'angle à ajouter à celui-ci
+		 *\param[in]	p_rhs	L'angle à ajouter à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator +=( Angle const & p_angle );
+		CU_API Angle & operator+=( Angle const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
-		 *\param[in]	p_angle	Angle to substract to this one
+		 *\param[in]	p_rhs	Angle to substract to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par soustraction
-		 *\param[in]	p_angle	L'angle à soustraire de celui-ci
+		 *\param[in]	p_rhs	L'angle à soustraire de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator -=( Angle const & p_angle );
+		CU_API Angle & operator-=( Angle const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_angle	Angle to multiply to this one
+		 *\param[in]	p_rhs	Angle to multiply to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par multiplication
-		 *\param[in]	p_angle	L'angle à multiplier à celui-ci
+		 *\param[in]	p_rhs	L'angle à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator *=( Angle const & p_angle );
+		CU_API Angle & operator*=( Angle const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
-		 *\param[in]	p_angle	Angle divider of this one
+		 *\param[in]	p_rhs	Angle divider of this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par division
-		 *\param[in]	p_angle	L'angle diviseur de celui-ci
+		 *\param[in]	p_rhs	L'angle diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator /=( Angle const & p_angle );
+		CU_API Angle & operator/=( Angle const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
-		 *\param[in]	p_scalar	Scalar to multiply to this one
+		 *\param[in]	p_rhs	Scalar to multiply to this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par multiplication
-		 *\param[in]	p_scalar	Le scalaire à multiplier à celui-ci
+		 *\param[in]	p_rhs	Le scalaire à multiplier à celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator *=( double p_scalar );
+		CU_API Angle & operator*=( double p_rhs );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
-		 *\param[in]	p_scalar	Scalar divider of this one
+		 *\param[in]	p_rhs	Scalar divider of this one
 		 *\return		A reference to this angle
 		 *\~french
 		 *\brief		Opérateur d'affection par division
-		 *\param[in]	p_scalar	Le scalaire diviseur de celui-ci
+		 *\param[in]	p_rhs	Le scalaire diviseur de celui-ci
 		 *\return		Une référence sur cet angle
 		 */
-		CU_API Angle & operator /=( double p_scalar );
+		CU_API Angle & operator/=( double p_rhs );
 
 	private:
 		//!\~english The angle value	\~french La valeur de l'angle
 		double m_radians;
-		friend CU_API bool operator ==( Angle const & p_angleA, Angle const & p_angleB );
+		friend CU_API bool operator==( Angle const & p_lhs, Angle const & p_rhs );
 	};
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_angleA, p_angleB	Angles to test
-	 *\return		\p true if p_angleA is equal to p_angle
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
+	 *\return		\p true if p_lhs is equal to p_rhs
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_angleA, p_angleB	Les angles à tester
-	 *\return		\p true si p_angleA est égal à p_angleB
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
+	 *\return		\p true si p_lhs est égal à p_rhs
 	 */
-	CU_API bool operator ==( Angle const & p_angleA, Angle const & p_angleB );
+	CU_API bool operator==( Angle const & p_lhs, Angle const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Difference operator
-	 *\param[in]	p_angleA, p_angleB	Angles to test
-	 *\return		\p true if p_angleA is different from p_angle
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
+	 *\return		\p true if p_lhs is different from p_rhs
 	 *\~french
 	 *\brief		Opérateur de différence
-	 *\param[in]	p_angleA, p_angleB	Les angles à tester
-	 *\return		\p true si p_angleA est différent de p_angleB
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
+	 *\return		\p true si p_lhs est différent de p_rhs
 	 */
-	CU_API bool operator !=( Angle const & p_angleA, Angle const & p_angleB );
+	CU_API bool operator!=( Angle const & p_lhs, Angle const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Addition operator
-	 *\param[in]	p_angleA	First operand
-	 *\param[in]	p_angleB	Second operand
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
 	 *\return		Result of addition
 	 *\~french
 	 *\brief		Opérateur d'addition
-	 *\param[in]	p_angleA	Premier opérande
-	 *\param[in]	p_angleB	Second opérande
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
 	 *\return		Le résultat de l'addition
 	 */
-	CU_API Angle operator +( Angle const & p_angleA, Angle const & p_angleB );
+	CU_API Angle operator+( Angle const & p_lhs, Angle const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Substraction operator
-	 *\param[in]	p_angleA	First operand
-	 *\param[in]	p_angleB	Second operand
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
 	 *\return		Result of substraction
 	 *\~french
 	 *\brief		Opérateur de soustraction
-	 *\param[in]	p_angleA	Premier opérande
-	 *\param[in]	p_angleB	Second opérande
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
 	 *\return		Le résultat de la soustraction
 	 */
-	CU_API Angle operator -( Angle const & p_angleA, Angle const & p_angleB );
+	CU_API Angle operator-( Angle const & p_lhs, Angle const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_angleA	First operand
-	 *\param[in]	p_angleB	Second operand
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
 	 *\return		Result of multiplication
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_angleA	Premier opérande
-	 *\param[in]	p_angleB	Second opérande
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
 	 *\return		Le résultat de la multiplication
 	 */
-	CU_API Angle operator *( Angle const & p_angleA, Angle const & p_angleB );
+	CU_API Angle operator*( Angle const & p_lhs, Angle const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_angleA	First operand
-	 *\param[in]	p_angleB	Second operand
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
 	 *\return		Result of division
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_angleA	Premier opérande
-	 *\param[in]	p_angleB	Second opérande
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
 	 *\return		Le résultat de la division
 	 */
-	CU_API Angle operator /( Angle const & p_angleA, Angle const & p_angleB );
+	CU_API Angle operator/( Angle const & p_lhs, Angle const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Multiplication operator
-	 *\param[in]	p_angle		First operand
-	 *\param[in]	p_scalar	Second operand
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
 	 *\return		Result of multiplication
 	 *\~french
 	 *\brief		Opérateur de multiplication
-	 *\param[in]	p_angle		Premier opérande
-	 *\param[in]	p_scalar	Second opérande
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
 	 *\return		Le résultat de la multiplication
 	 */
-	CU_API Angle operator *( Angle const & p_angle, double p_scalar );
+	CU_API Angle operator*( Angle const & p_lhs, double p_rhs );
 	/**
 	 *\~english
 	 *\brief		Division operator
-	 *\param[in]	p_angle		First operand
-	 *\param[in]	p_scalar	Second operand
+	 *\param[in]	p_lhs	First operand
+	 *\param[in]	p_rhs	Second operand
 	 *\return		Result of division
 	 *\~french
 	 *\brief		Opérateur de division
-	 *\param[in]	p_angle		Premier opérande
-	 *\param[in]	p_scalar	Second opérande
+	 *\param[in]	p_lhs	Premier opérande
+	 *\param[in]	p_rhs	Second opérande
 	 *\return		Le résultat de la division
 	 */
-	CU_API Angle operator /( Angle const & p_angle, double p_scalar );
+	CU_API Angle operator/( Angle const & p_lhs, double p_rhs );
 }
 
 #endif

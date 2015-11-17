@@ -140,10 +140,14 @@ namespace Castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator*=( QuaternionT< T > const & p_rhs )
 	{
-		x = w * p_rhs.x + x * p_rhs.w + y * p_rhs.z - z * p_rhs.y;
-		y = w * p_rhs.y + y * p_rhs.w + z * p_rhs.x - x * p_rhs.z;
-		z = w * p_rhs.z + z * p_rhs.w + x * p_rhs.y - y * p_rhs.x;
-		w = w * p_rhs.w - x * p_rhs.x - y * p_rhs.y - z * p_rhs.z;
+		double const l_x = x;
+		double const l_y = y;
+		double const l_z = z;
+		double const l_w = w;
+		x = T( l_w * p_rhs.x + l_x * p_rhs.w + l_y *  p_rhs.z - l_z * p_rhs.y );
+		y = T( l_w * p_rhs.y + l_y * p_rhs.w + l_z *  p_rhs.x - l_x * p_rhs.z );
+		z = T( l_w * p_rhs.z + l_z * p_rhs.w + l_x *  p_rhs.y - l_y * p_rhs.x );
+		w = T( l_w * p_rhs.w - l_x * p_rhs.x - l_y *  p_rhs.y - l_z * p_rhs.z );
 		point::normalise( *this );
 		return *this;
 	}
@@ -171,33 +175,41 @@ namespace Castor
 	}
 
 	template< typename T >
-	Point3f & QuaternionT< T >::transform( Point3f const & p_vector, Point3f & p_ptResult )const
+	Point3f & QuaternionT< T >::transform( Point3f const & p_vector, Point3f & p_result )const
 	{
-		Point3< T > l_u( x, y, z );
-		Point3< T > l_uv( l_u ^ p_vector );
-		Point3< T > l_uuv( l_u ^ l_uv );
-		l_uv *= 2 * w;
-		l_uuv *= 2;
-		p_ptResult = p_vector + l_uv + l_uuv;
-		return p_ptResult;
-	}
-
-	template< typename T >
-	Point3d & QuaternionT< T >::transform( Point3d const & p_vector, Point3d & p_ptResult )const
-	{
-		Point3d l_u( x, y, z );
-		Point3d l_uv( l_u ^ p_vector );
-		Point3d l_uuv( l_u ^ l_uv );
-		l_uv *= 2 * w;
+		Point3d u( x, y, z );
+		Point3d uv( u ^ p_vector );
+		Point3d uuv( u ^ uv );
+		uv *= 2 * w;
 		uuv *= 2;
-		p_ptResult = p_vector + l_uv + l_uuv;
-		return p_ptResult;
+		p_result = p_vector + uv + uuv;
+		return p_result;
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_matrix( Matrix4x4f & p_matrix )const
+	Point3d & QuaternionT< T >::transform( Point3d const & p_vector, Point3d & p_result )const
 	{
-		matrix::set_rotate( p_matrix, *this );
+		Point3d u( x, y, z );
+		Point3d uv( u ^ p_vector );
+		Point3d uuv( u ^ uv );
+		uv *= 2 * w;
+		uuv *= 2;
+		p_result = p_vector + uv + uuv;
+		return p_result;
+	}
+
+	template< typename T >
+	void QuaternionT< T >::to_matrix( double * p_matrix )const
+	{
+		Matrix4x4d l_mtx = Matrix4x4d( p_matrix );
+		to_matrix( l_mtx );
+	}
+
+	template< typename T >
+	void QuaternionT< T >::to_matrix( float * p_matrix )const
+	{
+		Matrix4x4f l_mtx = Matrix4x4f( p_matrix );
+		to_matrix( l_mtx );
 	}
 
 	template< typename T >
@@ -207,29 +219,9 @@ namespace Castor
 	}
 
 	template< typename T >
-	void QuaternionT< T >::to_matrix( float * p_matrix )const
+	void QuaternionT< T >::to_matrix( Matrix4x4f & p_matrix )const
 	{
-		Matrix4x4f l_matrix( p_matrix );
-		to_matrix( l_matrix );
-	}
-
-	template< typename T >
-	void QuaternionT< T >::to_matrix( double * p_matrix )const
-	{
-		Matrix4x4d l_matrix( p_matrix );
-		to_matrix( l_matrix );
-	}
-
-	template< typename T >
-	void QuaternionT< T >::from_matrix( Matrix4x4f const & p_matrix )
-	{
-		matrix::get_rotate( p_matrix, *this );
-	}
-
-	template< typename T >
-	void QuaternionT< T >::from_matrix( Matrix4x4d const & p_matrix )
-	{
-		matrix::get_rotate( p_matrix, *this );
+		matrix::set_rotate( p_matrix, *this );
 	}
 
 	template< typename T >
@@ -245,14 +237,26 @@ namespace Castor
 	}
 
 	template< typename T >
+	void QuaternionT< T >::from_matrix( Matrix4x4f const & p_matrix )
+	{
+		matrix::get_rotate( p_matrix, *this );
+	}
+
+	template< typename T >
+	void QuaternionT< T >::from_matrix( Matrix4x4d const & p_matrix )
+	{
+		matrix::get_rotate( p_matrix, *this );
+	}
+
+	template< typename T >
 	void QuaternionT< T >::from_axis_angle( Point3f const & p_vector, Angle const & p_angle )
 	{
 		Angle l_halfAngle = p_angle * 0.5f;
-		Point3f l_norm = point::get_normalised( p_vector ) * l_halfAngle.Sin();
+		Point3f l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
 		x = T( l_norm[0] );
 		y = T( l_norm[1] );
 		z = T( l_norm[2] );
-		w = T( l_halfAngle.Cos() );
+		w = T( l_halfAngle.cos() );
 		point::normalise( *this );
 	}
 
@@ -260,23 +264,27 @@ namespace Castor
 	void QuaternionT< T >::from_axis_angle( Point3d const & p_vector, Angle const & p_angle )
 	{
 		Angle l_halfAngle = p_angle * 0.5;
-		Point3d l_norm = point::get_normalised( p_vector ) * l_halfAngle.Sin();
+		Point3d l_norm = point::get_normalised( p_vector ) * l_halfAngle.sin();
 		x = T( l_norm[0] );
 		y = T( l_norm[1] );
 		z = T( l_norm[2] );
-		w = T( l_halfAngle.Cos() );
+		w = T( l_halfAngle.cos() );
 		point::normalise( *this );
 	}
 
 	template< typename T >
 	void QuaternionT< T >::to_axis_angle( Point3f & p_vector, Angle & p_angle )const
 	{
+		double const x = this->x;
+		double const y = this->y;
+		double const z = this->z;
+		double const w = this->w;
 		double l_rSqrLength = x * x + y * y + z * z;
 
 		if ( l_rSqrLength > 0.0 )
 		{
-			p_angle = Angle::FromRadians( 2.0 * acos( w ) );
-			double l_rSin = p_angle.Sin();
+			p_angle = Angle::from_radians( 2.0 * acos( w ) );
+			double l_rSin = p_angle.sin();
 			p_vector[0] = float( x / l_rSin );
 			p_vector[1] = float( y / l_rSin );
 			p_vector[2] = float( z / l_rSin );
@@ -284,7 +292,7 @@ namespace Castor
 		else
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = Angle::FromRadians( 0.0 );
+			p_angle = Angle::from_radians( 0.0 );
 			p_vector[0] = 1.0f;
 			p_vector[1] = 0.0f;
 			p_vector[2] = 0.0f;
@@ -304,8 +312,8 @@ namespace Castor
 
 		if ( l_rSqrLength > 0.0 )
 		{
-			p_angle = Angle::FromRadians( 2.0 * acos( w ) );
-			double l_rSin = p_angle.Sin();
+			p_angle = Angle::from_radians( 2.0 * acos( w ) );
+			double l_rSin = p_angle.sin();
 			p_vector[0] = x / l_rSin;
 			p_vector[1] = y / l_rSin;
 			p_vector[2] = z / l_rSin;
@@ -313,7 +321,7 @@ namespace Castor
 		else
 		{
 			// angle is 0 (mod 2*pi), so any axis will do
-			p_angle = Angle::FromRadians( 0.0 );
+			p_angle = Angle::from_radians( 0.0 );
 			p_vector[0] = 1.0;
 			p_vector[1] = 0.0;
 			p_vector[2] = 0.0;
@@ -335,7 +343,7 @@ namespace Castor
 		l_mtxRot[0][2] = p_z[0];
 		l_mtxRot[1][2] = p_z[1];
 		l_mtxRot[2][2] = p_z[2];
-		FromRotationMatrix( l_mtxRot );
+		from_matrix( l_mtxRot );
 	}
 
 	template< typename T >
@@ -351,14 +359,14 @@ namespace Castor
 		l_mtxRot[0][2] = p_z[0];
 		l_mtxRot[1][2] = p_z[1];
 		l_mtxRot[2][2] = p_z[2];
-		FromRotationMatrix( l_mtxRot );
+		from_matrix( l_mtxRot );
 	}
 
 	template< typename T >
 	void QuaternionT< T >::to_axes( Point3f & p_x, Point3f & p_y, Point3f & p_z )const
 	{
 		Matrix4x4f l_mtxRot;
-		ToRotationMatrix( l_mtxRot );
+		to_matrix( l_mtxRot );
 		p_x[0] = l_mtxRot[0][0];
 		p_x[1] = l_mtxRot[1][0];
 		p_x[2] = l_mtxRot[2][0];
@@ -374,7 +382,7 @@ namespace Castor
 	void QuaternionT< T >::to_axes( Point3d & p_x, Point3d & p_y, Point3d & p_z )const
 	{
 		Matrix4x4d l_mtxRot;
-		ToRotationMatrix( l_mtxRot );
+		to_matrix( l_mtxRot );
 		p_x[0] = l_mtxRot[0][0];
 		p_x[1] = l_mtxRot[1][0];
 		p_x[2] = l_mtxRot[2][0];
@@ -389,12 +397,12 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::from_euler( Angle const & p_pitch, Angle const & p_yaw, Angle const & p_roll )
 	{
-		T l_c2 = cos( T( p_yaw.Radians() * 0.5 ) );
-		T l_s2 = sin( T( p_yaw.Radians() * 0.5 ) );
-		T l_c3 = cos( T( p_roll.Radians() * 0.5 ) );
-		T l_s3 = sin( T( p_roll.Radians() * 0.5 ) );
-		T l_c1 = cos( T( p_pitch.Radians() * 0.5 ) );
-		T l_s1 = sin( T( p_pitch.Radians() * 0.5 ) );
+		T l_c2 = cos( T( p_yaw.radians() * 0.5 ) );
+		T l_s2 = sin( T( p_yaw.radians() * 0.5 ) );
+		T l_c3 = cos( T( p_roll.radians() * 0.5 ) );
+		T l_s3 = sin( T( p_roll.radians() * 0.5 ) );
+		T l_c1 = cos( T( p_pitch.radians() * 0.5 ) );
+		T l_s1 = sin( T( p_pitch.radians() * 0.5 ) );
 		x = T( l_s2 * l_s3 * l_c1 ) + T( l_c2 * l_c3 * l_s1 );
 		y = T( l_s2 * l_c3 * l_c1 ) + T( l_c2 * l_s3 * l_s1 );
 		z = T( l_c2 * l_s3 * l_c1 ) - T( l_s2 * l_c3 * l_s1 );
@@ -405,15 +413,15 @@ namespace Castor
 	template< typename T >
 	void QuaternionT< T >::to_euler( Angle & p_pitch, Angle & p_yaw, Angle & p_roll )
 	{
-		p_yaw = GetYaw();
-		p_pitch = GetPitch();
-		p_roll = GetRoll();
+		p_yaw = get_yaw();
+		p_pitch = get_pitch();
+		p_roll = get_roll();
 	}
 
 	template< typename T >
 	Angle QuaternionT< T >::get_yaw()const
 	{
-		return Angle::FromRadians( 2 * acos( w ) );// Angle::FromRadians( asin( T( -2.0 ) * ( x * z - w * y ) ) );
+		return Angle::from_radians( 2 * acos( w ) );
 	}
 
 	template< typename T >
@@ -421,7 +429,7 @@ namespace Castor
 	{
 		T l_res1 = T( 2.0 ) * ( y * z + w * x );
 		T l_res2 = w * w - x * x - y * y + z * z;
-		return Angle::FromRadians( atan2( l_res1, l_res2 ) );
+		return Angle::from_radians( atan2( l_res1, l_res2 ) );
 	}
 
 	template< typename T >
@@ -429,22 +437,22 @@ namespace Castor
 	{
 		T l_res1 = T( 2.0 ) * ( x * y + w * z );
 		T l_res2 = w * w + x * x - y * y - z * z;
-		return Angle::FromRadians( atan2( l_res1, l_res2 ) );
+		return Angle::from_radians( atan2( l_res1, l_res2 ) );
 	}
 
 	template< typename T >
 	void QuaternionT< T >::conjugate()
 	{
-		T l_w = w;
+		T w = this->w;
 		point::negate( *this );
-		w = l_w;
+		this->w = w;
 	}
 
 	template< typename T >
 	QuaternionT< T > QuaternionT< T >::get_conjugate()const
 	{
 		QuaternionT< T > l_return( *this );
-		l_return.Conjugate();
+		l_return.conjugate();
 		return l_return;
 	}
 
