@@ -158,7 +158,7 @@ namespace Castor3D
 
 	RenderWindow::RenderWindow( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
-		, m_strName( DoGetName() )
+		, m_name( DoGetName() )
 		, m_index( s_nbRenderWindows )
 		, m_wpListener( p_engine.GetListenerManager().Create( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
 		, m_bInitialised( false )
@@ -561,6 +561,7 @@ namespace Castor3D
 			{
 				m_pContext->RenderTextureToBackBuffer( m_size, p_texture );
 			}
+
 			m_backBuffers->Unbind();
 		}
 	}

@@ -1,5 +1,6 @@
 ﻿#include "PointOperators.hpp"
 #include <cstring>
+#include <numeric>
 
 namespace Castor
 {
@@ -370,10 +371,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			);
+				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			   );
 	}
 
 	namespace point

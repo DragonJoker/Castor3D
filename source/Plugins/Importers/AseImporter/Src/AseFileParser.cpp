@@ -740,7 +740,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeRotAxis )
 	if ( l_pContext->bBool2 )
 	{
 		Quaternion l_quat;
-		l_quat.FromAxisAngle( Point3r( l_pContext->fAxis[0], l_pContext->fAxis[1], l_pContext->fAxis[2] ), Angle::FromRadians( l_pContext->fAngle ) );
+		l_quat.from_axis_angle( Point3r( l_pContext->fAxis[0], l_pContext->fAxis[1], l_pContext->fAxis[2] ), Angle::from_radians( l_pContext->fAngle ) );
 		l_pContext->pSceneNode->SetOrientation( l_quat );
 	}
 }
@@ -755,7 +755,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeRotAngle )
 	if ( l_pContext->bBool1 )
 	{
 		Quaternion l_quat;
-		l_quat.FromAxisAngle( Point3r( l_pContext->fAxis[0], l_pContext->fAxis[1], l_pContext->fAxis[2] ), Angle::FromRadians( l_pContext->fAngle ) );
+		l_quat.from_axis_angle( Point3r( l_pContext->fAxis[0], l_pContext->fAxis[1], l_pContext->fAxis[2] ), Angle::from_radians( l_pContext->fAngle ) );
 		l_pContext->pSceneNode->SetOrientation( l_quat );
 	}
 }

@@ -43,7 +43,7 @@ namespace
 			Type l_tCoef20 = l_tS20 * l_tS31 - l_tS30 * l_tS21;
 			Type l_tCoef22 = l_tS10 * l_tS31 - l_tS30 * l_tS11;
 			Type l_tCoef23 = l_tS10 * l_tS21 - l_tS20 * l_tS11;
-			Castor::SquareMatrix< Type, 4 > l_mtxInverse = Castor::SquareMatrix< Type, 4 >( Castor::mtx_noinit() );
+			Castor::SquareMatrix< Type, 4 > l_mtxInverse = Castor::SquareMatrix< Type, 4 >( Castor::NoInit() );
 			l_mtxInverse[0][0] = +1 * ( l_tS11 * l_tCoef00 - l_tS12 * l_tCoef04 + l_tS13 * l_tCoef08 );
 			l_mtxInverse[0][1] = -1 * ( l_tS01 * l_tCoef00 - l_tS02 * l_tCoef04 + l_tS03 * l_tCoef08 );
 			l_mtxInverse[0][2] = +1 * ( l_tS01 * l_tCoef02 - l_tS02 * l_tCoef06 + l_tS03 * l_tCoef10 );
@@ -81,7 +81,7 @@ namespace
 			Type l_tS20 = p_mtx[2][0];
 			Type l_tS21 = p_mtx[2][1];
 			Type l_tS22 = p_mtx[2][2];
-			Castor::SquareMatrix< Type, 3 > l_mtxInverse = Castor::SquareMatrix< Type, 3 >( Castor::mtx_noinit() );
+			Castor::SquareMatrix< Type, 3 > l_mtxInverse = Castor::SquareMatrix< Type, 3 >( Castor::NoInit() );
 			l_mtxInverse[0][0] = l_tS11 * l_tS22 - l_tS21 * l_tS12;
 			l_mtxInverse[0][1] = l_tS12 * l_tS20 - l_tS22 * l_tS10;
 			l_mtxInverse[0][2] = l_tS10 * l_tS21 - l_tS20 * l_tS11;
@@ -105,7 +105,7 @@ namespace
 		static inline Castor::SquareMatrix< Type, 2 > inverse( Castor::SquareMatrix< Type, 2 > const & p_mtx )
 		{
 			Type l_tDeterminant = p_mtx[0][0] * p_mtx[1][1] - p_mtx[1][0] * p_mtx[0][1];
-			Castor::SquareMatrix< Type, 2 > l_mtxInverse = Castor::SquareMatrix< Type, 2 >( Castor::mtx_noinit() );
+			Castor::SquareMatrix< Type, 2 > l_mtxInverse = Castor::SquareMatrix< Type, 2 >( Castor::NoInit() );
 			l_mtxInverse[1][1] = + p_mtx[1][1] / l_tDeterminant;
 			l_mtxInverse[0][1] = - p_mtx[0][1] / l_tDeterminant;
 			l_mtxInverse[1][0] = - p_mtx[1][0] / l_tDeterminant;
@@ -123,12 +123,12 @@ namespace
 
 		static inline void mul( Castor::SquareMatrix< float, 4 > & p_mtxA, Castor::SquareMatrix< float, 4 > const & p_mtxB )
 		{
-			Castor::SquareMatrix< float, 4 > l_result = Castor::SquareMatrix< float, 4 >( Castor::mtx_noinit() );
+			Castor::SquareMatrix< float, 4 > l_result = Castor::SquareMatrix< float, 4 >( Castor::NoInit() );
 			__m128 l_colA;
 			__m128 l_colB;
 			__m128 l_colR;
 
-			for (int i = 0; i < 4; ++i )
+			for ( int i = 0; i < 4; ++i )
 			{
 				l_colA = _mm_load_ps( p_mtxA[0].const_ptr() );					// l_colA = p_mtxA[0]
 				l_colB = _mm_set_ps1( p_mtxB[i][0] );							// l_colB = { p_mtxB[i][0], p_mtxB[i][0], p_mtxB[i][0], p_mtxB[i][0] }
@@ -303,7 +303,7 @@ namespace Castor
 	{
 	}
 	template< typename T, uint32_t Count >
-	inline SquareMatrix< T, Count >::SquareMatrix( mtx_noinit const & p_noinit )
+	inline SquareMatrix< T, Count >::SquareMatrix( NoInit const & p_noinit )
 		: my_matrix_type( p_noinit )
 	{
 	}
@@ -707,6 +707,44 @@ namespace Castor
 		}
 
 		return l_return;
+	}
+
+//*************************************************************************************************
+
+	template< typename CharT, typename T, uint32_t Count >
+	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_streamOut, Castor::SquareMatrix< T, Count > const & p_matrix )
+	{
+		auto l_precision = p_streamOut.precision( 10 );
+
+		for ( uint32_t i = 0; i < Count; i++ )
+		{
+			for ( uint32_t j = 0; j < Count; j++ )
+			{
+				p_streamOut.width( 15 );
+				p_streamOut << std::right << p_matrix[i][j];
+			}
+
+			p_streamOut << std::endl;
+		}
+
+		p_streamOut.precision( l_precision );
+		return p_streamOut;
+	}
+
+	template< typename CharT, typename T, uint32_t Count >
+	inline std::basic_istream< CharT > & operator>>( std::basic_istream< CharT > & p_streamIn, Castor::SquareMatrix< T, Count > & p_matrix )
+	{
+		for ( uint32_t i = 0; i < Count; i++ )
+		{
+			for ( uint32_t j = 0; j < Count; j++ )
+			{
+				p_streamIn >> p_matrix[i][j];
+			}
+
+			p_streamIn.ignore();
+		}
+
+		return p_streamIn;
 	}
 
 //*************************************************************************************************

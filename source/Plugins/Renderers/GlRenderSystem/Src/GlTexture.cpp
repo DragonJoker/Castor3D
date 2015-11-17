@@ -98,6 +98,7 @@ namespace GlRender
 			m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
 			m_gl.BindTexture( m_glDimension, 0 );
 		}
+
 		return l_return;
 	}
 

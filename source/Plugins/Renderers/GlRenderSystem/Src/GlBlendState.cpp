@@ -26,9 +26,9 @@ namespace GlRender
 		bool l_bEnabled = false;
 
 		if ( GetColourMaskR() != m_currentState->GetColourMaskR()
-			|| GetColourMaskG() != m_currentState->GetColourMaskG()
-			|| GetColourMaskB() != m_currentState->GetColourMaskB()
-			|| GetColourMaskA() != m_currentState->GetColourMaskA() )
+				|| GetColourMaskG() != m_currentState->GetColourMaskG()
+				|| GetColourMaskB() != m_currentState->GetColourMaskB()
+				|| GetColourMaskA() != m_currentState->GetColourMaskA() )
 		{
 			m_gl.ColorMask( m_gl.Get( GetColourMaskR() ), m_gl.Get( GetColourMaskG() ), m_gl.Get( GetColourMaskB() ), m_gl.Get( GetColourMaskA() ) );
 			m_currentState->SetColourMask( GetColourMaskR(), GetColourMaskG(), GetColourMaskB(), GetColourMaskA() );
@@ -80,9 +80,9 @@ namespace GlRender
 					else
 					{
 						if ( GetRgbSrcBlend( i ) != m_currentState->GetRgbSrcBlend( i )
-							|| GetRgbDstBlend( i ) != m_currentState->GetRgbDstBlend( i )
-							|| GetAlphaSrcBlend( i ) != m_currentState->GetAlphaSrcBlend( i )
-							|| GetAlphaDstBlend( i ) != m_currentState->GetAlphaDstBlend( i ) )
+								|| GetRgbDstBlend( i ) != m_currentState->GetRgbDstBlend( i )
+								|| GetAlphaSrcBlend( i ) != m_currentState->GetAlphaSrcBlend( i )
+								|| GetAlphaDstBlend( i ) != m_currentState->GetAlphaDstBlend( i ) )
 						{
 							l_return &= m_gl.BlendFunc( i, m_gl.Get( GetRgbSrcBlend( i ) ), m_gl.Get( GetRgbDstBlend( i ) ), m_gl.Get( GetAlphaSrcBlend( i ) ), m_gl.Get( GetAlphaDstBlend( i ) ) );
 							m_currentState->SetRgbSrcBlend( GetRgbSrcBlend( i ), i );
@@ -128,9 +128,9 @@ namespace GlRender
 				else
 				{
 					if ( GetRgbSrcBlend() != m_currentState->GetRgbSrcBlend()
-						|| GetRgbDstBlend() != m_currentState->GetRgbDstBlend()
-						|| GetAlphaSrcBlend() != m_currentState->GetAlphaSrcBlend()
-						|| GetAlphaDstBlend() != m_currentState->GetAlphaDstBlend() )
+							|| GetRgbDstBlend() != m_currentState->GetRgbDstBlend()
+							|| GetAlphaSrcBlend() != m_currentState->GetAlphaSrcBlend()
+							|| GetAlphaDstBlend() != m_currentState->GetAlphaDstBlend() )
 					{
 						l_return &= m_gl.BlendFunc( m_gl.Get( GetRgbSrcBlend() ), m_gl.Get( GetRgbDstBlend() ), m_gl.Get( GetAlphaSrcBlend() ), m_gl.Get( GetAlphaDstBlend() ) );
 						m_currentState->SetRgbSrcBlend( GetRgbSrcBlend() );

@@ -232,7 +232,7 @@ namespace Castor3D
 		 */
 		virtual void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_name;
+			m_name = p_name;
 		}
 		/**
 		 *\~english
@@ -244,7 +244,7 @@ namespace Castor3D
 		 */
 		inline Castor::String GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -342,7 +342,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The variable name as it appears in the shader program	\~french Le nom de la variable tel qu'il apparaît dans le shader
-		Castor::String m_strName;
+		Castor::String m_name;
 		//!\~english Tells if the variable has changed since last execution of the shader	\~french Dit si la valeur de la variable a changé depuis la dernière exécution du shader
 		bool m_bChanged;
 		//!\~english The array dimension if the variable represents an array	\~french Les dimensions du tableau si la variable représente un tableau

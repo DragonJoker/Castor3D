@@ -1124,7 +1124,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodeOrientation )
 		float l_fAngle;
 		p_params[0]->Get( l_ptVector );
 		p_params[1]->Get( l_fAngle );
-		l_pContext->pSceneNode->SetOrientation( Quaternion( l_ptVector, Angle::FromDegrees( l_fAngle ) ) );
+		l_pContext->pSceneNode->SetOrientation( Quaternion( l_ptVector, Angle::from_degrees( l_fAngle ) ) );
 	}
 	else
 	{
@@ -3148,7 +3148,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraViewport )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->pViewport = std::make_shared< Viewport >( Viewport::Perspective( *l_pContext->m_pParser->GetOwner(), Angle::FromDegrees( 0 ), 1, 0, 1 ) );
+	l_pContext->pViewport = std::make_shared< Viewport >( Viewport::Perspective( *l_pContext->m_pParser->GetOwner(), Angle::from_degrees( 0 ), 1, 0, 1 ) );
 }
 END_ATTRIBUTE_PUSH( eSECTION_VIEWPORT )
 
@@ -3247,7 +3247,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportFovY )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	float l_fFovY;
 	p_params[0]->Get( l_fFovY );
-	l_pContext->pViewport->SetFovY( Angle::FromDegrees( l_fFovY ) );
+	l_pContext->pViewport->SetFovY( Angle::from_degrees( l_fFovY ) );
 }
 END_ATTRIBUTE()
 

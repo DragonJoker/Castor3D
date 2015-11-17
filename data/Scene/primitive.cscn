@@ -31,6 +31,7 @@ scene "Scene"
 
 	scene_node "FinalNode"
 	{
+		position 0.0 0.0 -100.0
 	}
 	object "FinalPrimitive"
 	{
@@ -44,7 +45,7 @@ scene "Scene"
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 0.0 -100.0
+		position 0.0 0.0 100.0
 	}
 	camera "MainCamera"
 	{
@@ -67,7 +68,7 @@ window "Window"
 	{
 		format argb32
 		depth depth24s8
-		size 1024 768
+		size screen_size
 		scene "Scene"
 		camera "MainCamera"
 	}

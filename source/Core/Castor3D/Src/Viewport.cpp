@@ -60,7 +60,7 @@ namespace Castor3D
 		{
 			if ( l_return )
 			{
-				l_return = DoFillChunk( double( p_obj.GetFovY().Degrees() ), eCHUNK_TYPE_VIEWPORT_FOVY, l_chunk );
+				l_return = DoFillChunk( double( p_obj.GetFovY().degrees() ), eCHUNK_TYPE_VIEWPORT_FOVY, l_chunk );
 			}
 		}
 
@@ -158,7 +158,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetFovY( Angle::FromDegrees( l_value ) );
+						p_obj.SetFovY( Angle::from_degrees( l_value ) );
 					}
 
 					break;
@@ -205,7 +205,7 @@ namespace Castor3D
 			{
 				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
 				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tfov_y %f\n" ), p_viewport.GetFovY().Degrees() ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tfov_y %f\n" ), p_viewport.GetFovY().degrees() ) > 0;
 			}
 		}
 
@@ -285,12 +285,12 @@ namespace Castor3D
 			}
 			else
 			{
-				real l_tan = real( tan( GetFovY().Radians() / 2 ) );
+				real l_tan = real( tan( GetFovY().radians() / 2 ) );
 				l_nearHeight = 2 * l_tan * GetNear();
 				l_nearWidth = l_nearHeight * GetRatio();
 				l_farHeight = 2 * l_tan * GetFar();
 				l_farWidth = l_farHeight * GetRatio();
-			} 
+			}
 
 			// N => Near, F => Far, C => Center, T => Top, L => Left, R => Right, B => Bottom
 			Point3r l_ptNC( l_d * GetNear() );

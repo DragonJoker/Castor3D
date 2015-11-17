@@ -488,7 +488,7 @@ namespace Castor3D
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
 
-		if( GetOwner()->GetRenderSystem()->HasInstancing() )
+		if ( GetOwner()->GetRenderSystem()->HasInstancing() )
 		{
 			DoGenerateMatrixBuffer();
 		}

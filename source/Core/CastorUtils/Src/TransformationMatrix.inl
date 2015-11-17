@@ -1,58 +1,84 @@
+#include "Quaternion.hpp"
+
 namespace Castor
 {
-	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
-	{
-		SquareMatrix< T, 4 > l_rotate;
-		return p_matrix *= matrix::set_rotate( l_rotate, p_angle, p_axis );
-	}
-
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
-		Point3r l_axis;
-		Angle l_angle;
-		p_quat.ToAxisAngle( l_axis, l_angle );
-		return matrix::rotate( p_matrix, l_angle, l_axis );
-	}
-
-	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis )
-	{
-		T l_cos = T( p_angle.Cos() );
-		T l_sin = T( p_angle.Sin() );
-		Point< U, 3 > l_axis( point::get_normalised( p_axis ) );
-		Point< T, 3 > l_temp( ( T( 1 ) - l_cos ) * l_axis );
-		p_matrix[0][0] = l_cos + l_temp[0] * l_axis[0];
-		p_matrix[0][1] =     0 + l_temp[0] * l_axis[1] + l_sin * l_axis[2];
-		p_matrix[0][2] =     0 + l_temp[0] * l_axis[2] - l_sin * l_axis[1];
-
-		p_matrix[1][0] =     0 + l_temp[1] * l_axis[0] - l_sin * l_axis[2];
-		p_matrix[1][1] = l_cos + l_temp[1] * l_axis[1];
-		p_matrix[1][2] =     0 + l_temp[1] * l_axis[2] + l_sin * l_axis[0];
-
-		p_matrix[2][0] =     0 + l_temp[2] * l_axis[0] + l_sin * l_axis[1];
-		p_matrix[2][1] =     0 + l_temp[2] * l_axis[1] - l_sin * l_axis[0];
-		p_matrix[2][2] = l_cos + l_temp[2] * l_axis[2];
-		p_matrix[3][3] = 1;
-		return p_matrix;
+		SquareMatrix< T, 4 > l_rotate;
+		return p_matrix *= matrix::set_rotate( l_rotate, p_quat );
 	}
 
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::set_rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat )
 	{
-		Point3r l_axis;
-		Angle l_angle;
-		p_quat.ToAxisAngle( l_axis, l_angle );
-		return matrix::set_rotate( p_matrix, l_angle, l_axis );
-		p_quat.ToRotationMatrix( p_matrix );
+		p_matrix[0][0] = T( 1.0 - 2.0f * p_quat.y * p_quat.y - 2.0 * p_quat.z * p_quat.z );
+		p_matrix[0][1] = T( 2.0 * p_quat.x * p_quat.y - 2.0 * p_quat.z * p_quat.w );
+		p_matrix[0][2] = T( 2.0 * p_quat.x * p_quat.z + 2.0 * p_quat.y * p_quat.w );
+		p_matrix[0][3] = T( 0.0 );
+
+		p_matrix[1][0] = T( 2.0 * p_quat.x * p_quat.y + 2.0 * p_quat.z * p_quat.w );
+		p_matrix[1][1] = T( 1.0 - 2.0f * p_quat.x * p_quat.x - 2.0 * p_quat.z * p_quat.z );
+		p_matrix[1][2] = T( 2.0 * p_quat.y * p_quat.z - 2.0 * p_quat.x * p_quat.w );
+		p_matrix[1][3] = T( 0.0 );
+
+		p_matrix[2][0] = T( 2.0 * p_quat.x * p_quat.z - 2.0 * p_quat.y * p_quat.w );
+		p_matrix[2][1] = T( 2.0 * p_quat.y * p_quat.z + 2.0 * p_quat.x * p_quat.w );
+		p_matrix[2][2] = T( 1.0 - 2.0 * p_quat.x * p_quat.x - 2.0 * p_quat.y * p_quat.y );
+		p_matrix[3][3] = T( 0.0 );
+
+		p_matrix[3][0] = T( 0.0 );
+		p_matrix[3][1] = T( 0.0 );
+		p_matrix[3][2] = T( 0.0 );
+		p_matrix[3][3] = T( 1.0 );
+
 		return p_matrix;
 	}
 
 	template< typename T >
 	void matrix::get_rotate( SquareMatrix< T, 4 > const & p_matrix, Quaternion & p_quat )
 	{
-		p_quat.FromRotationMatrix( p_matrix );
+		double l_trace = double( p_matrix[0][0] + p_matrix[1][1] + p_matrix[2][2] );
+		double l_root;
+
+		if ( l_trace > 0 )
+		{
+			// |w| > 1/2, may as well choose w > 1/2
+			l_root = std::sqrt( l_trace + 1 );  // 2w
+			p_quat.w = T( 0.5 * l_root );
+			l_root = 0.5 / l_root;  // 1/(4w)
+			p_quat.x = ( p_matrix[2][1] - p_matrix[1][2] ) * l_root;
+			p_quat.y = ( p_matrix[0][2] - p_matrix[2][0] ) * l_root;
+			p_quat.z = ( p_matrix[1][0] - p_matrix[0][1] ) * l_root;
+		}
+		else
+		{
+			// |w| <= 1/2
+			static uint32_t s_next[3] = { 1, 2, 0 };
+			uint32_t i = 0;
+
+			if ( p_matrix[1][1] > p_matrix[0][0] )
+			{
+				i = 1;
+			}
+
+			if ( p_matrix[2][2] > p_matrix[i][i] )
+			{
+				i = 2;
+			}
+
+			uint32_t j = s_next[i];
+			uint32_t k = s_next[j];
+			l_root = std::sqrt( double( p_matrix[i][i] - p_matrix[j][j] - p_matrix[k][k] + 1 ) );
+			double * l_apkQuat[3] = { &p_quat.x, &p_quat.y, &p_quat.z };
+			*l_apkQuat[i] = 0.5 * l_root;
+			l_root = 0.5 / l_root;
+			*l_apkQuat[j] = double( p_matrix[j][i] + p_matrix[i][j] ) * l_root;
+			*l_apkQuat[k] = double( p_matrix[k][i] + p_matrix[i][k] ) * l_root;
+			p_quat.w = double( p_matrix[k][j] - p_matrix[j][k] ) * l_root;
+		}
+
+		point::normalise( p_quat );
 	}
 
 	template< typename T >
@@ -70,7 +96,7 @@ namespace Castor
 	template< typename T >
 	SquareMatrix< T, 4 > & matrix::roll( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle )
 	{
-		return matrix::rotate( p_matrix, p_angle, Point< T, 3 >( 1, 0, 0 ) );
+		return matrix::rotate( p_matrix, Quaternion( Point< T, 3 >( 1, 0, 0 ),p_angle ) );
 	}
 
 	template< typename T, typename U >
@@ -166,7 +192,7 @@ namespace Castor
 		matrix::set_scale( l_scale, p_ptScale );
 		matrix::set_rotate( l_rotate, p_qOrientation );
 		matrix::set_translate( l_translate, p_ptPosition );
-		p_matrix = l_translate * l_rotate * l_scale;
+		p_matrix = l_scale * l_rotate * l_translate;
 		return p_matrix;
 	}
 
@@ -179,7 +205,7 @@ namespace Castor
 		matrix::set_scale( l_scale, p_ptScale );
 		matrix::set_rotate( l_rotate, p_qOrientation );
 		matrix::set_translate( l_translate, p_ptPosition );
-		p_matrix *= l_translate * l_rotate * l_scale;
+		p_matrix *= l_rotate * l_translate * l_scale;
 		return p_matrix;
 	}
 
@@ -187,7 +213,7 @@ namespace Castor
 	SquareMatrix< T, 4 > & matrix::perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_aFOVY, U p_aspect, U p_near, U p_far )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-		T l_range = T( ( 1 / tan( p_aFOVY.Radians() * 0.5 ) ) );
+		T l_range = T( ( 1 / tan( p_aFOVY.radians() * 0.5 ) ) );
 		p_matrix.initialise();
 		p_matrix[0][0] = T( l_range / p_aspect );
 		p_matrix[1][1] = T( l_range );

@@ -264,7 +264,7 @@ namespace Castor3D
 		 */
 		inline void SetPosition( Castor::Point2d const & p_ptPosition )
 		{
-			m_ptPosition = p_ptPosition;
+			m_position = p_ptPosition;
 			m_positionChanged = true;
 		}
 		/**
@@ -304,7 +304,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point2d const & GetPosition()const
 		{
-			return m_ptPosition;
+			return m_position;
 		}
 		/**
 		 *\~english
@@ -328,7 +328,7 @@ namespace Castor3D
 		 */
 		inline Castor::Position const & GetPixelPosition()const
 		{
-			return m_position;
+			return m_pxPosition;
 		}
 		/**
 		 *\~english
@@ -352,7 +352,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point2d & GetPosition()
 		{
-			return m_ptPosition;
+			return m_position;
 		}
 		/**
 		 *\~english
@@ -376,7 +376,7 @@ namespace Castor3D
 		 */
 		inline Castor::Position & GetPixelPosition()
 		{
-			return m_position;
+			return m_pxPosition;
 		}
 		/**
 		 *\~english
@@ -400,7 +400,7 @@ namespace Castor3D
 		 */
 		inline bool IsVisible()const
 		{
-			return m_bVisible;
+			return m_visible;
 		}
 		/**
 		 *\~english
@@ -484,7 +484,7 @@ namespace Castor3D
 		 */
 		inline void SetVisible( bool val )
 		{
-			m_bVisible = val;
+			m_visible = val;
 		}
 		/**
 		 *\~english
@@ -496,7 +496,7 @@ namespace Castor3D
 		 */
 		inline void SetPixelPosition( Castor::Position const & val )
 		{
-			m_position = val;
+			m_pxPosition = val;
 			m_positionChanged = true;
 		}
 		/**
@@ -597,15 +597,15 @@ namespace Castor3D
 		//!\~english The overlay	\~french L'incrustation
 		Overlay * m_pOverlay;
 		//!\~english The relative position (to parent or screen)	\~french La position relative (au parent ou à l'écran)
-		Castor::Point2d m_ptPosition;
+		Castor::Point2d m_position;
 		//!\~english The relative size (to parent or screen)	\~french La taille relative (à l'écran ou au parent)
 		Castor::Point2d m_ptSize;
 		//!\~english The relative position (to parent or screen), in pixels	\~french La position relative (à l'écran ou au parent), en pixels
-		Castor::Position m_position;
+		Castor::Position m_pxPosition;
 		//!\~english The absolute size in pixels	\~french La taille absolue en pixels
 		Castor::Size m_size;
 		//!\~english The visibility	\~french La visibilité
-		bool m_bVisible;
+		bool m_visible;
 		//!\~english The material used by the overlay	\~french Le matériau utilisé par l'incrustation
 		MaterialWPtr m_pMaterial;
 		//!\~english The overlay index	\~french L'index de l'overlay

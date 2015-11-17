@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace
 {
-	template< TPL_PIXEL_FORMAT PF, typename Enable=void > struct PixelStreamer;
-	
+	template< TPL_PIXEL_FORMAT PF, typename Enable = void > struct PixelStreamer;
+
 	template< TPL_PIXEL_FORMAT PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
@@ -52,7 +52,7 @@ namespace
 			return p_stream;
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PF >
 	struct PixelStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
@@ -83,15 +83,15 @@ namespace
 			return p_stream;
 		}
 	};
-	
+
 	template< typename CharType, TPL_PIXEL_FORMAT PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, Pixel< PF > const & p_pixel )
 	{
 		return PixelStreamer< PF >()( p_stream, p_pixel );
 	}
-	
-	template< TPL_PIXEL_FORMAT PF, typename Enable=void > struct BufferStreamer;
-	
+
+	template< TPL_PIXEL_FORMAT PF, typename Enable = void > struct BufferStreamer;
+
 	template< TPL_PIXEL_FORMAT PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_colour_format< PF >::value >::type >
 	{
@@ -102,11 +102,11 @@ namespace
 			uint32_t l_width = p_buffer.dimensions().width();
 			uint32_t l_height = p_buffer.dimensions().height();
 			CharType l_fill = p_stream.fill( '0' );
-			
+
 			for ( uint32_t x = 0; x < l_width; ++x )
 			{
 				typename PxBuffer< PF >::column const & l_column = p_buffer[x];
-				
+
 				for ( uint32_t y = 0; y < l_height; ++y )
 				{
 					typename PxBuffer< PF >::pixel const & l_pixel = l_column[y];
@@ -120,15 +120,15 @@ namespace
 					p_stream.width( 2 );
 					p_stream << std::hex << int( PF::GetByteBlue( l_pixel ) ) << " ";
 				}
-				
+
 				p_stream << std::endl;
 			}
-			
+
 			p_stream.fill( l_fill );
 			return p_stream;
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PF >
 	struct BufferStreamer< PF, typename std::enable_if< is_depth_stencil_format< PF >::value >::type >
 	{
@@ -139,11 +139,11 @@ namespace
 			uint32_t l_width = p_buffer.dimensions().width();
 			uint32_t l_height = p_buffer.dimensions().height();
 			CharType l_fill = p_stream.fill( '0' );
-			
+
 			for ( uint32_t x = 0; x < l_width; ++x )
 			{
 				typename PxBuffer< PF >::column const & l_column = p_buffer[x];
-				
+
 				for ( uint32_t y = 0; y < l_height; ++y )
 				{
 					typename PxBuffer< PF >::pixel const & l_pixel = l_column[y];
@@ -153,15 +153,15 @@ namespace
 					p_stream.width( 2 );
 					p_stream << std::hex << int( PF::GetByteStencil( l_pixel ) ) << " ";
 				}
-				
+
 				p_stream << std::endl;
 			}
-			
+
 			p_stream.fill( l_fill );
 			return p_stream;
 		}
 	};
-	
+
 	template< typename CharType >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBufferBase const & p_buffer )
 	{
@@ -173,14 +173,14 @@ namespace
 		p_stream << string::string_cast< CharType >( PF::GetFormatName( p_buffer.format() ) );
 		return p_stream;
 	}
-	
+
 	template< typename CharType, TPL_PIXEL_FORMAT PF >
 	std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_stream, PxBuffer< PF > const & p_buffer )
 	{
 		p_stream << static_cast< PxBufferBase const & >( p_buffer );
 		return BufferStreamer< PF >()( p_stream, p_buffer );
 	}
-	
+
 	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
 	struct PixelConverter
 	{
@@ -193,7 +193,7 @@ namespace
 			Logger::LogDebug( l_stream );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFSrc >
 	struct PixelConverter< PFSrc, PFSrc >
 	{
@@ -201,15 +201,15 @@ namespace
 		{
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
 	void ConvertPixel( Pixel< PFSrc > const & p_source )
 	{
 		PixelConverter< PFDst, PFSrc >()( p_source );
 	}
-	
-	template< TPL_PIXEL_FORMAT PFSrc, typename Enable=void > struct PixelConversionChecker;
-	
+
+	template< TPL_PIXEL_FORMAT PFSrc, typename Enable = void > struct PixelConversionChecker;
+
 	template< TPL_PIXEL_FORMAT PFSrc >
 	struct PixelConversionChecker< PFSrc, typename std::enable_if< is_colour_format< PFSrc >::value >::type >
 	{
@@ -238,7 +238,7 @@ namespace
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFSrc >
 	struct PixelConversionChecker< PFSrc, typename std::enable_if< is_depth_stencil_format< PFSrc >::value >::type >
 	{
@@ -259,13 +259,13 @@ namespace
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PF >
 	void CheckPixelConversions()
 	{
 		PixelConversionChecker< PF >()();
 	}
-	
+
 	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
 	struct BufferConverter
 	{
@@ -278,7 +278,7 @@ namespace
 			Logger::LogDebug( l_stream );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFSrc >
 	struct BufferConverter< PFSrc, PFSrc >
 	{
@@ -286,15 +286,15 @@ namespace
 		{
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFDst, TPL_PIXEL_FORMAT PFSrc >
 	void ConvertBuffer( std::shared_ptr< PxBuffer< PFSrc > > p_source )
 	{
 		BufferConverter< PFDst, PFSrc >()( p_source );
 	}
-	
-	template< TPL_PIXEL_FORMAT PFSrc, typename Enable=void > struct BufferConversionChecker;
-	
+
+	template< TPL_PIXEL_FORMAT PFSrc, typename Enable = void > struct BufferConversionChecker;
+
 	template< TPL_PIXEL_FORMAT PFSrc >
 	struct BufferConversionChecker< PFSrc, typename std::enable_if< is_colour_format< PFSrc >::value >::type >
 	{
@@ -306,7 +306,7 @@ namespace
 			l_buffer.resize( l_count );
 			uint8_t l_value = 0;
 			Pixel< PFSrc > l_pixel;
-			
+
 			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
 			{
 				l_pixel.link( l_buffer.data() + i );
@@ -315,7 +315,7 @@ namespace
 				PF::SetByteGreen( l_pixel, l_value++ );
 				PF::SetByteBlue( l_pixel, l_value++ );
 			}
-			
+
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
@@ -335,9 +335,9 @@ namespace
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker< PFSrc, typename std::enable_if< is_depth_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_depth_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
 	{
 		void operator()()
 		{
@@ -348,7 +348,7 @@ namespace
 			uint32_t l_depth = 0;
 			uint8_t l_stencil = 0;
 			Pixel< PFSrc > l_pixel;
-			
+
 			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
 			{
 				l_pixel.link( l_buffer.data() + i );
@@ -357,7 +357,7 @@ namespace
 				l_depth += 0x02468ACE;
 				l_stencil++;
 			}
-			
+
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
@@ -370,7 +370,7 @@ namespace
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFSrc >
 	struct BufferConversionChecker< PFSrc, typename std::enable_if< PFSrc == ePIXEL_FORMAT_DEPTH24S8 >::type >
 	{
@@ -383,7 +383,7 @@ namespace
 			uint32_t l_depth = 0;
 			uint8_t l_stencil = 0;
 			Pixel< PFSrc > l_pixel;
-			
+
 			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
 			{
 				l_pixel.link( l_buffer.data() + i );
@@ -392,7 +392,7 @@ namespace
 				l_depth += 0x02468ACE;
 				l_stencil++;
 			}
-			
+
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
@@ -406,9 +406,9 @@ namespace
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PFSrc >
-	struct BufferConversionChecker< PFSrc, typename std::enable_if< is_stencil_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
+	struct BufferConversionChecker < PFSrc, typename std::enable_if < is_stencil_format< PFSrc >::value && PFSrc != ePIXEL_FORMAT_DEPTH24S8 >::type >
 	{
 		void operator()()
 		{
@@ -418,14 +418,14 @@ namespace
 			l_buffer.resize( l_count );
 			uint8_t l_value = 0;
 			Pixel< PFSrc > l_pixel;
-			
+
 			for ( size_t i = 0; i < l_count; i += pixel_definitions< PFSrc >::Size )
 			{
 				l_pixel.link( l_buffer.data() + i );
 				PF::SetUInt32Depth( l_pixel, l_value++ );
 				PF::SetByteStencil( l_pixel, l_value++ );
 			}
-			
+
 			std::shared_ptr< PxBuffer< PFSrc > > l_source = std::static_pointer_cast< PxBuffer< PFSrc > >( PxBufferBase::create( l_size, ePIXEL_FORMAT( PFSrc ), l_buffer.data(), ePIXEL_FORMAT( PFSrc ) ) );
 			StringStream l_stream;
 			l_stream.width( 20 );
@@ -436,7 +436,7 @@ namespace
 			Logger::LogDebug( StringStream() << std::endl );
 		}
 	};
-	
+
 	template< TPL_PIXEL_FORMAT PF >
 	void CheckBufferConversions()
 	{

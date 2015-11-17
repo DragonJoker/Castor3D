@@ -38,6 +38,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Aligned.hpp>
 #include <Point.hpp>
 #include <SquareMatrix.hpp>
+#include <StringUtils.hpp>
 
 namespace Castor3D
 {
@@ -1226,13 +1227,13 @@ namespace Castor3D
 	CASTOR_TYPE( int8_t )
 	{
 		eSHADER_TYPE_NONE = -1,
-			 eSHADER_TYPE_VERTEX,
-			 eSHADER_TYPE_HULL,
-			 eSHADER_TYPE_DOMAIN,
-			 eSHADER_TYPE_GEOMETRY,
-			 eSHADER_TYPE_PIXEL,
-			 eSHADER_TYPE_COMPUTE,
-			 eSHADER_TYPE_COUNT,
+		eSHADER_TYPE_VERTEX,
+		eSHADER_TYPE_HULL,
+		eSHADER_TYPE_DOMAIN,
+		eSHADER_TYPE_GEOMETRY,
+		eSHADER_TYPE_PIXEL,
+		eSHADER_TYPE_COMPUTE,
+		eSHADER_TYPE_COUNT,
 	}	eSHADER_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS

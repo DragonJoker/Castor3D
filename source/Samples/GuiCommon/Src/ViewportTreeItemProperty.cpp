@@ -88,7 +88,7 @@ namespace GuiCommon
 		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_RIGHT ) )->SetValue( m_viewport.GetRight() );
 		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_NEAR ) )->SetValue( m_viewport.GetNear() );
 		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_FAR ) )->SetValue( m_viewport.GetFar() );
-		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_FOVY ) )->SetValue( m_viewport.GetFovY().Degrees() );
+		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_FOVY ) )->SetValue( m_viewport.GetFovY().degrees() );
 		p_grid->Append( new wxFloatProperty( PROPERTY_VIEWPORT_RATIO ) )->SetValue( m_viewport.GetRatio() );
 	}
 
@@ -220,7 +220,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetFovY( Angle::FromDegrees( p_value ) );
+			m_viewport.SetFovY( Angle::from_degrees( p_value ) );
 		} );
 	}
 

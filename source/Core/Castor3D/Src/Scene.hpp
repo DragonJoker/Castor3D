@@ -644,7 +644,7 @@ namespace Castor3D
 		 */
 		inline Castor::String const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -656,7 +656,7 @@ namespace Castor3D
 		 */
 		inline void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_name;
+			m_name = p_name;
 		}
 		/**
 		 *\~english
@@ -1130,23 +1130,23 @@ namespace Castor3D
 			return l_return;
 		}
 		template< class ObjectType, typename KeyType >
-		bool DoAddObject( std::shared_ptr< ObjectType > p_pObject, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
+		bool DoAddObject( std::shared_ptr< ObjectType > p_object, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
 		{
 			bool l_return = false;
 
-			if ( p_pObject )
+			if ( p_object )
 			{
 				auto l_lock = Castor::make_unique_lock( m_mutex );
-				typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_pObject->GetName() );
+				typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_object->GetName() );
 
 				if ( l_it == p_map.end() )
 				{
-					p_map.insert( std::make_pair( p_pObject->GetName(), p_pObject ) );
+					p_map.insert( std::make_pair( p_object->GetName(), p_object ) );
 					l_return = true;
 				}
 				else
 				{
-					Castor::String l_strLog = cuT( "Scene::AddObject - Can't add " ) + p_strType + cuT( " [" ) + p_pObject->GetName() + cuT( "] - A " ) + p_strType + cuT( " with that name already exists" );
+					Castor::String l_strLog = cuT( "Scene::AddObject - Can't add " ) + p_strType + cuT( " [" ) + p_object->GetName() + cuT( "] - A " ) + p_strType + cuT( " with that name already exists" );
 					Castor::Logger::LogWarning( l_strLog );
 				}
 			}
@@ -1172,19 +1172,19 @@ namespace Castor3D
 			return l_return;
 		}
 		template< class ObjectType, typename KeyType >
-		void DoRemoveObject( std::shared_ptr< ObjectType > p_pObject, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, std::vector< std::shared_ptr< ObjectType > > & p_array )
+		void DoRemoveObject( std::shared_ptr< ObjectType > p_object, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, std::vector< std::shared_ptr< ObjectType > > & p_array )
 		{
-			if ( p_pObject )
+			if ( p_object )
 			{
 				auto l_lock = Castor::make_unique_lock( m_mutex );
-				typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_pObject->GetName() );
+				typename std::map< KeyType, std::shared_ptr< ObjectType > >::const_iterator l_it = p_map.find( p_object->GetName() );
 
 				if ( l_it != p_map.end() )
 				{
 					p_map.erase( l_it );
 				}
 
-				p_array.push_back( p_pObject );
+				p_array.push_back( p_object );
 			}
 			else
 			{
@@ -1194,7 +1194,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The scene name	\~french Le nom de la scène
-		Castor::String m_strName;
+		Castor::String m_name;
 		//!\~english The root node	\~french Le noeud père de tous les noeuds de la scène
 		SceneNodeSPtr m_rootNode;
 		//!\~english The root node used only for cameras (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds de caméra

@@ -119,11 +119,24 @@ namespace GlRender
 		int m_iOpenGlMinor;
 		OpenGl m_gl;
 
-#if !defined( NDEBUG )
+#if C3D_TRACE_OBJECTS
 
 	public:
 		void Track( void * p_object, std::string const & p_name, std::string const & p_file, int line );
-		void UnTrack( void * p_object );
+		void Untrack( void * p_object );
+
+#else
+
+	public:
+		template< typename T >
+		void Track( T * p_object, std::string const & p_name, std::string const & p_file, int line )
+		{
+		}
+
+		template< typename T >
+		void Untrack( T * p_object )
+		{
+		}
 
 #endif
 	};

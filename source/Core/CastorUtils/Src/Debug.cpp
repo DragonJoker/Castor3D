@@ -30,21 +30,23 @@ namespace Castor
 	{
 #if defined( NDEBUG )
 
-		void ShowBacktrace( StringStream & p_stream )
+		template< typename CharT >
+		void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
 		{
 		}
 
 #else
 		namespace
 		{
-			const int NumOfFnCallsToCapture( 20 );
-			const int NumOfFnCallsToSkip( 2 );
+			const int CALLS_TO_CAPTURE( 20 );
+			const int CALLS_TO_SKIP( 2 );
 
 #	if defined( __GNUG__ )
 
-			String Demangle( const std::string & p_name )
+			template< typename CharU, typename CharT >
+			std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
-				std::string l_ret( p_name );
+				std::string l_ret = string::string_cast< char >( p_name );
 				size_t l_lindex = p_name.find( "(" );
 				size_t l_rindex = p_name.find( "+" );
 
@@ -65,103 +67,112 @@ namespace Castor
 					l_ret = p_name;
 				}
 
-				return string::string_cast< xchar >( l_ret );
+				return string::string_cast< CharU >( l_ret );
 			}
 
 #	elif defined( _MSC_VER )
 
-			String Demangle( const std::string & p_name )
+			template< typename CharU, typename CharT >
+			std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
 				char l_real[1024] = { 0 };
-				std::string l_ret;
+				std::string l_ret = string::string_cast< char >( p_name );
 
-				if ( UnDecorateSymbolName( p_name.c_str(), l_real, sizeof( l_real ), UNDNAME_COMPLETE ) )
+				if ( ::UnDecorateSymbolName( l_ret.c_str(), l_real, sizeof( l_real ), UNDNAME_COMPLETE ) )
 				{
 					l_ret = l_real;
 				}
-				else
-				{
-					l_ret = p_name;
-				}
 
-				return string::string_cast< xchar >( l_ret );
+				return string::string_cast< CharU >( l_ret );
 			}
 
 #	else
 
-			String Demangle( const std::string & p_name )
+			template< typename CharU, typename CharT >
+			std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
-				return string::string_cast< xchar >( p_name );
+				return string::string_cast< CharU >( p_name );
 			}
 
 #	endif
-
-		}
-
 #	if !defined( _WIN32 )
 
-		void ShowBacktrace( StringStream & p_stream )
-		{
-			p_stream << cuT( "CALL STACK:" ) << std::endl;
-			void * l_backTrace[NumOfFnCallsToCapture];
-			unsigned int l_num( ::backtrace( l_backTrace, NumOfFnCallsToCapture ) );
-			char ** l_fnStrings( ::backtrace_symbols( l_backTrace, l_num ) );
-
-			for ( unsigned i = NumOfFnCallsToSkip; i < l_num; ++i )
+			template< typename CharT >
+			void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
 			{
-				p_stream << cuT( "== " ) << Demangle( l_fnStrings[i] ) << std::endl;
-			}
+				p_stream << "CALL STACK:" << std::endl;
+				void * l_backTrace[CALLS_TO_CAPTURE];
+				unsigned int l_num( ::backtrace( l_backTrace, CALLS_TO_CAPTURE ) );
+				char ** l_fnStrings( ::backtrace_symbols( l_backTrace, l_num ) );
 
-			free( l_fnStrings );
-		}
+				for ( unsigned i = CALLS_TO_SKIP; i < l_num; ++i )
+				{
+					p_stream << "== " << Demangle< CharT >( l_fnStrings[i] ) << std::endl;
+				}
+
+				free( l_fnStrings );
+			}
 
 #	else
 
-		void ShowBacktrace( StringStream & p_stream )
-		{
-			static bool SymbolsInitialised = false;
-			const int MaxFnNameLen( 255 );
-
-			void * l_backTrace[NumOfFnCallsToCapture - NumOfFnCallsToSkip];
-			unsigned int l_num( ::CaptureStackBackTrace( NumOfFnCallsToSkip, NumOfFnCallsToCapture - NumOfFnCallsToSkip, l_backTrace, NULL ) );
-
-			::HANDLE l_process( ::GetCurrentProcess() );
-			p_stream << cuT( "CALL STACK:" ) << std::endl;
-
-			// symbol->Name type is char [1] so there is space for \0 already
-			SYMBOL_INFO * l_symbol( ( SYMBOL_INFO * ) malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
-
-			if ( l_symbol )
+			template< typename CharT >
+			void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
 			{
-				l_symbol->MaxNameLen = MaxFnNameLen;
-				l_symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+				static bool SymbolsInitialised = false;
+				const int MaxFnNameLen( 255 );
 
-				if ( !SymbolsInitialised )
-				{
-					SymbolsInitialised = SymInitialize( l_process, NULL, TRUE ) == TRUE;
-				}
+				void * l_backTrace[CALLS_TO_CAPTURE - CALLS_TO_SKIP];
+				unsigned int l_num( ::RtlCaptureStackBackTrace( CALLS_TO_SKIP, CALLS_TO_CAPTURE - CALLS_TO_SKIP, l_backTrace, NULL ) );
 
-				if ( SymbolsInitialised )
+				::HANDLE l_process( ::GetCurrentProcess() );
+				p_stream << "CALL STACK:" << std::endl;
+
+				// symbol->Name type is char [1] so there is space for \0 already
+				SYMBOL_INFO * l_symbol( ( SYMBOL_INFO * )malloc( sizeof( SYMBOL_INFO ) + ( MaxFnNameLen * sizeof( char ) ) ) );
+
+				if ( l_symbol )
 				{
-					for ( unsigned int i = 0; i < l_num; ++i )
+					l_symbol->MaxNameLen = MaxFnNameLen;
+					l_symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+
+					if ( !SymbolsInitialised )
 					{
-						if ( SymFromAddr( l_process, reinterpret_cast< DWORD64 >( l_backTrace[i] ), 0, l_symbol ) )
+						SymbolsInitialised = SymInitialize( l_process, NULL, TRUE ) == TRUE;
+					}
+
+					if ( SymbolsInitialised )
+					{
+						for ( unsigned int i = 0; i < l_num; ++i )
 						{
-							p_stream << cuT( "== " ) << Demangle( std::string( l_symbol->Name, l_symbol->Name + l_symbol->NameLen ) ) << std::endl;
+							if ( SymFromAddr( l_process, reinterpret_cast< DWORD64 >( l_backTrace[i] ), 0, l_symbol ) )
+							{
+								p_stream << "== " << Demangle< CharT >( std::string( l_symbol->Name, l_symbol->Name + l_symbol->NameLen ) ) << std::endl;
+							}
 						}
 					}
-				}
-				else
-				{
-					p_stream << "== Unable to retrieve the call stack" << std::endl;
-				}
+					else
+					{
+						p_stream << "== Unable to retrieve the call stack" << std::endl;
+					}
 
-				free( l_symbol );
+					free( l_symbol );
+				}
 			}
-		}
 
 #	endif
+
+		}
 #endif
+
+		void ShowBacktrace( std::wstringstream & p_stream )
+		{
+			DoShowBacktrace( p_stream );
+		}
+
+		void ShowBacktrace( std::stringstream & p_stream )
+		{
+			DoShowBacktrace( p_stream );
+		}
 
 	}
 }

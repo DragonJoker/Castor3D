@@ -169,13 +169,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.
 		 *\remark		This function assumes the object has already been created in order to be put in this group (with the good scene and animations map)
-		 *\param[in]	p_pObject	The AnimatedObject to add
+		 *\param[in]	p_object	The AnimatedObject to add
 		 *\~french
 		 *\brief		Ajoute un AnimatedObject à ce groupe.
 		 *\remark		Cette fonction considère que l'objet a préalablement été créé afin d'être intégré à ce groupe (avec donc les bonnes scène et map d'animations)
-		 *\param[in]	p_pObject	Le AnimatedObject à ajouter
+		 *\param[in]	p_object	Le AnimatedObject à ajouter
 		 */
-		C3D_API bool AddObject( AnimatedObjectSPtr p_pObject );
+		C3D_API bool AddObject( AnimatedObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Adds the animation to the list

@@ -412,9 +412,14 @@ namespace Direct
 					l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
 				}
 			}
+			else
+			{
+				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( Int( &l_writer, 0 ) ) );
+				l_v3Diffuse = l_light.m_v4Ambient().xyz();
+			}
 
 			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
-			pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
+			pxl_v4FragColor = vec4( l_v3Diffuse, 1.0 );
 		};
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();

@@ -63,7 +63,7 @@ namespace Dx11Render
 
 	bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc )
 	{
-	    bool l_return = true;
+		bool l_return = true;
 
 		IDXGIFactory * l_factory = NULL;
 		HRESULT l_hr = CreateDXGIFactory( __uuidof( IDXGIFactory ) , reinterpret_cast< void ** >( &l_factory ) );
@@ -365,66 +365,5 @@ namespace Dx11Render
 
 		SafeRelease( m_pDevice );
 	}
-
-#if !defined( NDEBUG )
-
-	void DxRenderSystem::Track( ID3D11Device * p_object, std::string const & p_type, std::string const & p_file, int p_line )
-	{
-		std::string l_name;
-
-		if ( DoTrack( p_object, p_type, p_file, p_line, l_name ) )
-		{
-			p_object->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( l_name.size() - 1 ), l_name.c_str() );
-		}
-	}
-
-	void DxRenderSystem::Track( ID3D11DeviceChild * p_object, std::string const & p_type, std::string const & p_file, int p_line )
-	{
-		std::string l_name;
-
-		if ( DoTrack( p_object, p_type, p_file, p_line, l_name ) )
-		{
-			p_object->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( l_name.size() - 1 ), l_name.c_str() );
-		}
-	}
-
-	void DxRenderSystem::Track( IDXGIDeviceSubObject * p_object, std::string const & p_type, std::string const & p_file, int p_line )
-	{
-		std::string l_name;
-
-		if ( DoTrack( p_object, p_type, p_file, p_line, l_name ) )
-		{
-			p_object->SetPrivateData( WKPDID_D3DDebugObjectName, UINT( l_name.size() - 1 ), l_name.c_str() );
-		}
-	}
-
-	void DxRenderSystem::Untrack( ID3D11Device * p_object )
-	{
-		ObjectDeclaration l_declaration;
-
-		if ( DoUntrack( p_object, l_declaration ) )
-		{
-		}
-	}
-
-	void DxRenderSystem::Untrack( ID3D11DeviceChild * p_object )
-	{
-		ObjectDeclaration l_declaration;
-
-		if ( DoUntrack( p_object, l_declaration ) )
-		{
-		}
-	}
-
-	void DxRenderSystem::Untrack( IDXGIDeviceSubObject * p_object )
-	{
-		ObjectDeclaration l_declaration;
-
-		if ( DoUntrack( p_object, l_declaration ) )
-		{
-		}
-	}
-
-#endif
 
 }

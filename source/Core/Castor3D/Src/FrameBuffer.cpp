@@ -194,7 +194,7 @@ namespace Castor3D
 			{
 				return p_attach->GetAttachmentPoint() == p_point;
 			} );
-			
+
 			if ( l_it != m_attaches.end() )
 			{
 				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )

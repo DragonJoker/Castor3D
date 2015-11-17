@@ -53,6 +53,8 @@ namespace GlRender
 		OpenGl & m_gl;
 		GlContextImpl * m_pImplementation;
 		GlRenderSystem * m_pGlRenderSystem;
+		uint32_t m_timerQueryId[2];
+		uint32_t m_queryIndex = 0;
 	};
 }
 

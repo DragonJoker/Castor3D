@@ -39,6 +39,7 @@ namespace Castor3D
 	class SceneNode
 		: public std::enable_shared_from_this< SceneNode >
 		, public Castor::OwnedBy< Scene >
+		, public Castor::Named
 	{
 	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
@@ -170,21 +171,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Attaches a MovableObject to the node
-		 *\param[in]	p_pObject	The object to attach
+		 *\param[in]	p_object	The object to attach
 		 *\~french
 		 *\brief		Attache un MovableObject au noeud
-		 *\param[in]	p_pObject	L'objet à attacher
+		 *\param[in]	p_object	L'objet à attacher
 		 */
-		C3D_API void AttachObject( MovableObjectSPtr p_pObject );
+		C3D_API void AttachObject( MovableObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Detaches a MovableObject from the node
-		 *\param[in]	p_pObject	The object to detach
+		 *\param[in]	p_object	The object to detach
 		 *\~french
 		 *\brief		Détache un MovableObject fu noeud
-		 *\param[in]	p_pObject	L'objet à détacher
+		 *\param[in]	p_object	L'objet à détacher
 		 */
-		C3D_API void DetachObject( MovableObjectSPtr p_pObject );
+		C3D_API void DetachObject( MovableObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Sets the parent node
@@ -339,20 +340,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Gets the nearest geometry held by this node or it's children nodes, which is hit by the ray
-		 *\param[in]	p_pRay		The ray
-		 *\param[out]	p_fDistance	Receives the distance of the met geometry
-		 *\param[out]	p_ppFace	Receives the face of the met geometry
-		 *\param[out]	p_ppSubmesh	Receives the submesh of the met geometry
+		 *\param[in]	p_ray		The ray
+		 *\param[out]	p_distance	Receives the distance of the met geometry
+		 *\param[out]	p_nearestFace	Receives the face of the met geometry
+		 *\param[out]	p_nearestSubmesh	Receives the submesh of the met geometry
 		 *\return		The geometry, NULL if none
 		 *\~french
 		 *\brief		Récupère la géométrie la plus proche de ce noeud et de ses enfants, qui sera touchée par le rayon
-		 *\param[in]	p_pRay		Le rayon
-		 *\param[out]	p_fDistance	Reçoit la distance de la géométrie rencontrée
-		 *\param[out]	p_ppFace	Reçoit la face dans la géométrie rencontrée
-		 *\param[out]	p_ppSubmesh	Reçoit le submesh de la géométrie rencontrée
+		 *\param[in]	p_ray		Le rayon
+		 *\param[out]	p_distance	Reçoit la distance de la géométrie rencontrée
+		 *\param[out]	p_nearestFace	Reçoit la face dans la géométrie rencontrée
+		 *\param[out]	p_nearestSubmesh	Reçoit le submesh de la géométrie rencontrée
 		 *\return		La géométrie, NULL si aucune
 		 */
-		C3D_API GeometrySPtr GetNearestGeometry( Ray * p_pRay, real & p_fDistance, FaceSPtr * p_ppFace, SubmeshSPtr * p_ppSubmesh );
+		C3D_API GeometrySPtr GetNearestGeometry( Ray * p_ray, real & p_distance, FaceSPtr * p_nearestFace, SubmeshSPtr * p_nearestSubmesh );
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute position
@@ -390,7 +391,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point3r const & GetPosition()const
 		{
-			return m_ptPosition;
+			return m_position;
 		}
 		/**
 		 *\~english
@@ -402,7 +403,7 @@ namespace Castor3D
 		 */
 		inline Castor::Quaternion const & GetOrientation()const
 		{
-			return m_qOrientation;
+			return m_orientation;
 		}
 		/**
 		 *\~english
@@ -414,7 +415,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point3r const & GetScale()const
 		{
-			return m_ptScale;
+			return m_scale;
 		}
 		/**
 		 *\~english
@@ -428,7 +429,7 @@ namespace Castor3D
 		 */
 		inline void GetAxisAngle( Castor::Point3r & p_axis, Castor::Angle & p_angle )
 		{
-			m_qOrientation.ToAxisAngle( p_axis, p_angle );
+			m_orientation.to_axis_angle( p_axis, p_angle );
 		}
 		/**
 		 *\~english
@@ -440,7 +441,7 @@ namespace Castor3D
 		 */
 		inline bool IsVisible()const
 		{
-			return m_bVisible;
+			return m_visible;
 		}
 		/**
 		 *\~english
@@ -452,7 +453,7 @@ namespace Castor3D
 		 */
 		inline bool IsDisplayable()const
 		{
-			return m_bDisplayable;
+			return m_displayable;
 		}
 		/**
 		 *\~english
@@ -468,18 +469,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the node name
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nom du noeud
-		 *\return		La valeur
-		 */
-		inline Castor::String GetName()const
-		{
-			return m_strName;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the childs map
 		 *\return		The value
 		 *\~french
@@ -488,7 +477,7 @@ namespace Castor3D
 		 */
 		inline SceneNodePtrStrMap const & GetChilds()const
 		{
-			return m_mapChilds;
+			return m_childs;
 		}
 		/**
 		 *\~english
@@ -500,7 +489,7 @@ namespace Castor3D
 		 */
 		inline node_iterator ChildsBegin()
 		{
-			return m_mapChilds.begin();
+			return m_childs.begin();
 		}
 		/**
 		 *\~english
@@ -512,7 +501,7 @@ namespace Castor3D
 		 */
 		inline node_const_iterator ChildsBegin()const
 		{
-			return m_mapChilds.begin();
+			return m_childs.begin();
 		}
 		/**
 		 *\~english
@@ -524,7 +513,7 @@ namespace Castor3D
 		 */
 		inline node_iterator ChildsEnd()
 		{
-			return m_mapChilds.end();
+			return m_childs.end();
 		}
 		/**
 		 *\~english
@@ -536,7 +525,7 @@ namespace Castor3D
 		 */
 		inline node_const_iterator ChildsEnd()const
 		{
-			return m_mapChilds.end();
+			return m_childs.end();
 		}
 		/**
 		 *\~english
@@ -548,7 +537,7 @@ namespace Castor3D
 		 */
 		inline MovableObjectPtrStrMap const & GetObjects()const
 		{
-			return m_mapAttachedObjects;
+			return m_objects;
 		}
 		/**
 		 *\~english
@@ -560,7 +549,7 @@ namespace Castor3D
 		 */
 		inline object_iterator ObjectsBegin()
 		{
-			return m_mapAttachedObjects.begin();
+			return m_objects.begin();
 		}
 		/**
 		 *\~english
@@ -572,7 +561,7 @@ namespace Castor3D
 		 */
 		inline object_const_iterator ObjectsBegin()const
 		{
-			return m_mapAttachedObjects.begin();
+			return m_objects.begin();
 		}
 		/**
 		 *\~english
@@ -584,7 +573,7 @@ namespace Castor3D
 		 */
 		inline object_iterator ObjectsEnd()
 		{
-			return m_mapAttachedObjects.end();
+			return m_objects.end();
 		}
 		/**
 		 *\~english
@@ -596,7 +585,7 @@ namespace Castor3D
 		 */
 		inline object_const_iterator ObjectsEnd()const
 		{
-			return m_mapAttachedObjects.end();
+			return m_objects.end();
 		}
 		/**
 		 *\~english
@@ -610,7 +599,7 @@ namespace Castor3D
 		 */
 		inline SceneNodeSPtr GetChild( Castor::String const & p_name )
 		{
-			return ( m_mapChilds.find( p_name ) != m_mapChilds.end() ? m_mapChilds.find( p_name )->second.lock() : nullptr );
+			return ( m_childs.find( p_name ) != m_childs.end() ? m_childs.find( p_name )->second.lock() : nullptr );
 		}
 		/**
 		 *\~english
@@ -623,7 +612,7 @@ namespace Castor3D
 		inline Castor::Matrix4x4r const & GetTransformationMatrix()
 		{
 			DoComputeMatrix();
-			return m_mtxMatrix;
+			return m_transform;
 		}
 		/**
 		 *\~english
@@ -636,7 +625,7 @@ namespace Castor3D
 		inline Castor::Matrix4x4r const & GetDerivedTransformationMatrix()
 		{
 			DoComputeMatrix();
-			return m_mtxDerivedMatrix;
+			return m_derivedTransform;
 		}
 		/**
 		 *\~english
@@ -648,7 +637,7 @@ namespace Castor3D
 		 */
 		inline bool IsModified()const
 		{
-			return m_bMtxChanged || m_bDerivedMtxChanged;
+			return m_mtxChanged || m_derivedMtxChanged;
 		}
 		/**
 		 *\~english
@@ -660,19 +649,7 @@ namespace Castor3D
 		 */
 		inline void SetVisible( bool p_visible )
 		{
-			m_bVisible = p_visible;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the node name
-		 *\param[in]	p_name	The new value
-		 *\~french
-		 *\brief		Définit le nom du noeud
-		 *\param[in]	p_name	La nouvelle valeur
-		 */
-		inline void SetName( Castor::String const & p_name )
-		{
-			m_strName = p_name;
+			m_visible = p_visible;
 		}
 
 	private:
@@ -686,32 +663,30 @@ namespace Castor3D
 		void DoUpdateChildsDerivedTransform();
 
 	protected:
-		//!\~english The node's name	\~french Le nom du noeud
-		Castor::String m_strName;
 		//!\~english Tells if it is displayable. A node is displayable if his parent is either displayable or the root node	\~french Dit si le noeud est affichable. Il est affichable si son parent est le noeud racine ou s'il est affichable.
-		bool m_bDisplayable;
+		bool m_displayable;
 		//!\~english The visible status. If a node is hidden, all objects attached to it are hidden	\~french Le statut de visibilité. Si un noeud est caché, tous les objets qui y sont attachés sont cachés aussi.
-		bool m_bVisible;
+		bool m_visible;
 		//!\~english  The relative orientation of the node	\~french L'orientation du noeud, relative au parent
-		Castor::Quaternion m_qOrientation;
+		Castor::Quaternion m_orientation;
 		//!\~english  The relative position of the node	\~french La position du noeud, relative au parent
-		Castor::Point3r m_ptPosition;
+		Castor::Point3r m_position;
 		//!\~english  The relative scale transform value of the node	\~french La mise à l'échelle du noeud, relative au parent
-		Castor::Point3r m_ptScale;
+		Castor::Point3r m_scale;
 		//!\~english  The reative transformation matrix	\~french La matrice de transformation, relative au parent
-		Castor::Matrix4x4r m_mtxMatrix;
+		Castor::Matrix4x4r m_transform;
 		//!\~english Tells the relative transformation matrix needs recomputation	\~french Dit si la matrice de transformation relative doit être recalculée
-		bool m_bMtxChanged;
+		bool m_mtxChanged;
 		//!\~english  The absolute transformation matrix	\~french la matrice de transformation absolue
-		Castor::Matrix4x4r m_mtxDerivedMatrix;
+		Castor::Matrix4x4r m_derivedTransform;
 		//!\~english Tells the absolute transformation matrix needs recomputation	\~french Dit si la matrice de transformation absolue doit être recalculée
-		bool m_bDerivedMtxChanged;
+		bool m_derivedMtxChanged;
 		//!\~english  This node's parent	\~french Le noeud parent
 		SceneNodeWPtr m_pParent;
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
-		SceneNodePtrStrMap m_mapChilds;
+		SceneNodePtrStrMap m_childs;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
-		MovableObjectPtrStrMap m_mapAttachedObjects;
+		MovableObjectPtrStrMap m_objects;
 	};
 }
 

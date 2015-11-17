@@ -41,12 +41,12 @@ void MouseCameraEvent::Add( FrameEventSPtr p_pThis, FrameListenerSPtr p_pListene
 //********************************************************************************************
 
 CameraRotateEvent::CameraRotateEvent( SceneNodeSPtr p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	:	MouseCameraEvent( p_node.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+	: MouseCameraEvent( p_node.get(), p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 {
 }
 
 CameraRotateEvent::CameraRotateEvent( SceneNode * p_node, real p_rDeltaX, real p_rDeltaY, real p_rDeltaZ )
-	:	MouseCameraEvent( p_node, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
+	: MouseCameraEvent( p_node, p_rDeltaX, p_rDeltaY, p_rDeltaZ )
 {
 }
 
@@ -56,9 +56,11 @@ CameraRotateEvent::~CameraRotateEvent()
 
 bool CameraRotateEvent::Apply()
 {
-	m_pNode->Yaw(	Angle::FromDegrees( m_rDeltaX ) );
-	m_pNode->Roll(	Angle::FromDegrees( m_rDeltaY ) );
-	m_pNode->Pitch(	Angle::FromDegrees( m_rDeltaZ ) );
+	if ( m_pNode )
+	{
+		m_pNode->Rotate( Quaternion( Angle::from_degrees( m_rDeltaZ ), Angle::from_degrees( m_rDeltaX ), Angle::from_degrees( m_rDeltaY ) ) );
+	}
+
 	m_rDeltaX = 0;
 	m_rDeltaY = 0;
 	m_rDeltaZ = 0;

@@ -93,7 +93,7 @@ namespace GuiCommon
 		PathArray l_arrayFiles;
 		File::ListDirectoryFiles( Engine::GetDataDirectory() / cuT( "Castor3D" ), l_arrayFiles, true );
 
-		for( auto && l_pathFile : l_arrayFiles )
+		for ( auto && l_pathFile : l_arrayFiles )
 		{
 			if ( l_pathFile.GetFileName()[0] != cuT( '.' ) && l_pathFile.GetExtension() == cuT( "lang" ) )
 			{

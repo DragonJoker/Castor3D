@@ -33,6 +33,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <string>
 #include <cstdint>
 #include <deque>
+#include <sstream>
 
 #include "SmartPtr.hpp"
 #include "ELogType.hpp"
@@ -136,6 +137,18 @@ namespace Castor
 	typedef std::basic_stringstream< xchar > StringStream;
 	typedef std::basic_ostream< xchar > OutputStream;
 
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		09/11/2015
+	\see		QuaternionT
+	\~english
+	\brief		Structure used to construct objects but without initialisation.
+	\~french
+	\brief		Structure utilisée pour les constructeurs d'objets à ne pas initialiser.
+	*/
+	struct NoInit {};
+
 	class Angle;
 	class BinaryFile;
 	template< class T >
@@ -179,7 +192,8 @@ namespace Castor
 	class PxBufferBase;
 	template< TPL_PIXEL_FORMAT FT >
 	class PxBuffer;
-	class Quaternion;
+	template< typename T >
+	class QuaternionT;
 	class Rectangle;
 	template< typename T >
 	class Resource;
@@ -193,7 +207,7 @@ namespace Castor
 	class TextLoader;
 	template< class Obj,
 			  class Key,
-			  class PtrType=std::shared_ptr< Obj >,
+			  class PtrType = std::shared_ptr< Obj >,
 			  typename PFNCreate = std::function< std::shared_ptr< Obj >() >,
 			  class Predicate = std::less< Key > >
 	class Factory;
@@ -207,7 +221,7 @@ namespace Castor
 	class ProgramConsole;
 
 	/*!
-	\author 	Sylvain DOREMUS
+	\author		Sylvain DOREMUS
 	\~english
 	\brief		Typedef over a buffer of pixels in format A8R8G8B8
 	\~french
@@ -218,6 +232,12 @@ namespace Castor
 	template< typename T > using Point2 = Point< T, 2 >;
 	template< typename T > using Point3 = Point< T, 3 >;
 	template< typename T > using Point4 = Point< T, 4 >;
+
+	template< typename T > using Coords2 = Coords< T, 2 >;
+	template< typename T > using Coords3 = Coords< T, 3 >;
+	template< typename T > using Coords4 = Coords< T, 4 >;
+
+	using Quaternion = QuaternionT< double >;
 
 	DECLARE_POINT( bool,		4, b	);
 	DECLARE_POINT( bool,		3, b	);
@@ -353,5 +373,7 @@ namespace Castor
 	 */
 	typedef std::function< void ( String const & p_strLog, ELogType p_eLogType ) > LogCallback;
 }
+
+#include "Debug.hpp"
 
 #endif

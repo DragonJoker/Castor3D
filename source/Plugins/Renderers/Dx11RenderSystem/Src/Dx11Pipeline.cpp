@@ -48,7 +48,7 @@ namespace Dx11Render
 	void DxPipelineImpl::Perspective( Matrix4x4r & p_result, Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )
 	{
 		// DirectX left handed (cf. https://msdn.microsoft.com/en-us/library/windows/desktop/bb205350%28v=vs.85%29.aspx)
-		real l_range = real( ( 1 / tan( p_aFOVY.Radians() * 0.5 ) ) );
+		real l_range = real( ( 1 / tan( p_aFOVY.radians() * 0.5 ) ) );
 		p_result.initialise();
 		p_result[0][0] = real( l_range / p_aspect );
 		p_result[1][1] = real( l_range );

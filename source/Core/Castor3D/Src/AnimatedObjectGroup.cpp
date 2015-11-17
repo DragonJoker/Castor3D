@@ -115,13 +115,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_pObject )
+	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_object )
 	{
-		bool l_return = p_pObject && m_mapObjects.find( p_pObject->GetName() ) == m_mapObjects.end();
+		bool l_return = p_object && m_mapObjects.find( p_object->GetName() ) == m_mapObjects.end();
 
 		if ( l_return )
 		{
-			m_mapObjects.insert( std::make_pair( p_pObject->GetName(), p_pObject ) );
+			m_mapObjects.insert( std::make_pair( p_object->GetName(), p_object ) );
 		}
 
 		return l_return;

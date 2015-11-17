@@ -264,6 +264,7 @@ namespace Dx11Render
 				{
 					l_src = std::static_pointer_cast< DxColourRenderBuffer >( std::static_pointer_cast< RenderBufferAttachment >( l_attach )->GetRenderBuffer() )->GetDxRenderBuffer().GetResource();
 				}
+
 				break;
 			}
 

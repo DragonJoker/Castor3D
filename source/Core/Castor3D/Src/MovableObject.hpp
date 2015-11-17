@@ -178,7 +178,7 @@ namespace Castor3D
 		 */
 		inline Castor::String const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -226,14 +226,14 @@ namespace Castor3D
 		 */
 		inline void SetName( Castor::String const & p_name )
 		{
-			m_strName = p_name;
+			m_name = p_name;
 		}
 
 	protected:
 		//!\~english Movable object type	\~french Le type d'objet déplaçable
 		eMOVABLE_TYPE m_type;
 		//!\~english The object name	\~french Le nom de l'objet
-		Castor::String m_strName;
+		Castor::String m_name;
 		//!\~english The parent node name	\~french Le nom du noeud parent
 		Castor::String m_strNodeName;
 		//!\~english The parent scene node	\~french Le noeud parent

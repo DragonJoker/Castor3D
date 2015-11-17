@@ -120,23 +120,23 @@ namespace Castor
 
 	namespace
 	{
-		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values > void construct( Point< T, Count > & p_ptResult, U p_current, Values ... );
-		template< typename T, uint32_t Count, uint32_t Index > void construct( Point< T, Count > & p_ptResult )
+		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values > void construct( Point< T, Count > & p_result, U p_current, Values ... );
+		template< typename T, uint32_t Count, uint32_t Index > void construct( Point< T, Count > & p_result )
 		{
 		}
-		template< typename T, uint32_t Count, uint32_t Index, typename U > void construct( Point< T, Count > & p_ptResult, U p_last )
+		template< typename T, uint32_t Count, uint32_t Index, typename U > void construct( Point< T, Count > & p_result, U p_last )
 		{
 			if ( Index < Count )
 			{
-				p_ptResult[Index] = T( p_last );
+				p_result[Index] = T( p_last );
 			}
 		}
-		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values > void construct( Point< T, Count > & p_ptResult, U p_current, Values ... p_values )
+		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values > void construct( Point< T, Count > & p_result, U p_current, Values ... p_values )
 		{
 			if ( Index < Count )
 			{
-				p_ptResult[Index] = T( p_current );
-				construct < T, Count, Index + 1, Values... > ( p_ptResult, p_values... );
+				p_result[Index] = T( p_current );
+				construct < T, Count, Index + 1, Values... > ( p_result, p_values... );
 			}
 		}
 	}
@@ -260,12 +260,6 @@ namespace Castor
 	inline Point< T, Count > & Point< T, Count >::operator=( Point< T, Count > const & p_pt )
 	{
 		std::memcpy( m_coords, p_pt.m_coords, binary_size );
-		/*
-				for( uint32_t i = 0; i < Count; i++ )
-				{
-					m_coords[i] = p_pt.m_coords[i];
-				}
-		*/
 		return * this;
 	}
 

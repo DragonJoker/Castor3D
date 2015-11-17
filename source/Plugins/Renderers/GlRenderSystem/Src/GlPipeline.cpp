@@ -26,7 +26,7 @@ namespace GlRender
 	void GlPipelineImpl::Perspective( Matrix4x4r & p_result, Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-		real l_range = real( ( 1 / tan( p_aFOVY.Radians() * 0.5 ) ) );
+		real l_range = real( ( 1 / tan( p_aFOVY.radians() * 0.5 ) ) );
 		p_result.initialise();
 		p_result[0][0] = real( l_range / p_aspect );
 		p_result[1][1] = real( l_range );

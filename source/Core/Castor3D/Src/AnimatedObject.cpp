@@ -100,10 +100,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void AnimatedObject::SetGeometry( GeometrySPtr p_pObject )
+	void AnimatedObject::SetGeometry( GeometrySPtr p_object )
 	{
 		m_mapAnimations.clear();
-		DoSetGeometry( p_pObject );
+		DoSetGeometry( p_object );
 	}
 
 	void AnimatedObject::SetMesh( MeshSPtr p_pMesh )
@@ -118,15 +118,15 @@ namespace Castor3D
 		DoSetSkeleton( p_pSkeleton );
 	}
 
-	void AnimatedObject::DoSetGeometry( GeometrySPtr p_pObject )
+	void AnimatedObject::DoSetGeometry( GeometrySPtr p_object )
 	{
-		if ( p_pObject )
+		if ( p_object )
 		{
-			DoCopyAnimations( p_pObject );
-			DoSetMesh( p_pObject->GetMesh() );
+			DoCopyAnimations( p_object );
+			DoSetMesh( p_object->GetMesh() );
 		}
 
-		m_wpGeometry = p_pObject;
+		m_wpGeometry = p_object;
 	}
 
 	void AnimatedObject::DoSetMesh( MeshSPtr p_pMesh )
@@ -150,9 +150,9 @@ namespace Castor3D
 		m_wpSkeleton = p_pSkeleton;
 	}
 
-	void AnimatedObject::DoCopyAnimations( AnimableSPtr p_pObject )
+	void AnimatedObject::DoCopyAnimations( AnimableSPtr p_object )
 	{
-		std::for_each( p_pObject->AnimationsBegin(), p_pObject->AnimationsEnd(), [&]( std::pair< String, AnimationSPtr > p_pair )
+		std::for_each( p_object->AnimationsBegin(), p_object->AnimationsEnd(), [&]( std::pair< String, AnimationSPtr > p_pair )
 		{
 			AnimationSPtr l_pAnimation = p_pair.second;
 			MovingObjectPtrStrMap l_mapToMove;

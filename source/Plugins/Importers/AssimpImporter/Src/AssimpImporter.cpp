@@ -101,7 +101,7 @@ namespace detail
 		real l_rFactor = FindFactor( p_mapNodes, p_itCur, l_itPrv, l_itNxt );
 		const Quaternion & l_qStart = l_itPrv->second.qRotate;
 		const Quaternion & l_qEnd = l_itNxt->second.qRotate;
-		return l_qStart.Slerp( l_qEnd, l_rFactor );
+		return l_qStart.slerp( l_qEnd, l_rFactor );
 	}
 }
 
@@ -622,7 +622,7 @@ AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNo
 	return l_pAnimation;
 }
 
-void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p_rTicksPerSecond, SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_paiAnimation, MovingObjectBaseSPtr p_pObject )
+void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p_rTicksPerSecond, SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_paiAnimation, MovingObjectBaseSPtr p_object )
 {
 	String l_name = string::string_cast< xchar >( p_node->mName.data );
 	const aiNodeAnim * l_pNodeAnim = ::detail::FindNodeAnim( p_paiAnimation, l_name );
@@ -663,7 +663,7 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 		for ( uint32_t i = 0; i < l_pNodeAnim->mNumRotationKeys; ++i )
 		{
 			Quaternion l_qRotate;
-			l_qRotate.FromRotationMatrix( Matrix3x3r( &l_pNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 ) );
+			l_qRotate.from_matrix( Matrix3x3r( &l_pNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 ) );
 			l_pObject->AddRotateKeyFrame( real( l_pNodeAnim->mRotationKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_qRotate );
 		}
 	}
@@ -673,9 +673,9 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 		l_pObject = p_pAnimation->AddMovingObject();
 	}
 
-	if ( p_pObject )
+	if ( p_object )
 	{
-		p_pObject->AddChild( l_pObject );
+		p_object->AddChild( l_pObject );
 	}
 
 	if ( !l_pObject->HasKeyFrames() )

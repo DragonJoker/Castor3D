@@ -78,7 +78,7 @@ namespace Castor3D
 	*/
 	template< typename T >
 	struct ChunkFiller
-		: public ChunkFillerBase
+			: public ChunkFillerBase
 	{
 		/**
 		 *\~english
@@ -170,7 +170,7 @@ namespace Castor3D
 	*/
 	template<>
 	struct ChunkFiller< Castor::Path >
-		: public ChunkFillerBase
+			: public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()
@@ -197,7 +197,7 @@ namespace Castor3D
 	*/
 	template<>
 	struct ChunkFiller< Castor::Point2f >
-		: public ChunkFillerBase
+			: public ChunkFillerBase
 	{
 		/**
 		 *\copydoc		Castor3D::ChunkFiller::operator()

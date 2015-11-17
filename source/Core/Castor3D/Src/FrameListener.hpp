@@ -84,7 +84,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide les listes d'évènements.
 		 */
-		C3D_API virtual void DoFlush(){}
+		C3D_API virtual void DoFlush() {}
 
 	protected:
 		//!\~english The events arrays	\~french Les tableaux d'évènements

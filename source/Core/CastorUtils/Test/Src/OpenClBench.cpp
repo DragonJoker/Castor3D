@@ -244,7 +244,7 @@ namespace Testing
 
 			m_bClInitialised = l_bContinue;
 		}
-		catch( cl::Error & p_exc )
+		catch ( cl::Error & p_exc )
 		{
 			l_bContinue = CheckErr( p_exc.err(), "Kernel::enqueueNDRangeKernel() - m_kernel" );
 		}

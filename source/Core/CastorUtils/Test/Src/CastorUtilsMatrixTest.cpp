@@ -1,6 +1,5 @@
 #include "CastorUtilsMatrixTest.hpp"
 
-#include <Matrix.hpp>
 #include <TransformationMatrix.hpp>
 #include <StreamIndentManipulators.hpp>
 
@@ -157,7 +156,7 @@ namespace Testing
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		::operator<<( l_stream, p_value );
+		Castor::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -166,7 +165,7 @@ namespace Testing
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		::operator<<( l_stream, p_value );
+		Castor::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -175,7 +174,7 @@ namespace Testing
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		::operator<<( l_stream, p_value );
+		Castor::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -184,7 +183,7 @@ namespace Testing
 	{
 		std::stringstream l_stream;
 		l_stream << std::endl;
-		::operator<<( l_stream, p_value );
+		Castor::operator<<( l_stream, p_value );
 		return l_stream.str();
 	}
 
@@ -251,7 +250,7 @@ namespace Testing
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixInversionComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, MatrixMultiplicationComparison, p_errCount, p_testCount );
 		EXECUTE_TEST( CastorUtilsMatrixTest, TransformationMatrixComparison, p_errCount, p_testCount );
-                EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
+		EXECUTE_TEST( CastorUtilsMatrixTest, ProjectionMatrixComparison, p_errCount, p_testCount );
 
 #if GLM_VERSION >= 95
 
@@ -360,7 +359,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 1, 0, 0 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 1, 0, 0 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 1, 0, 0 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -371,7 +370,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 0, 1, 0 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 0, 1, 0 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 0, 1, 0 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -382,7 +381,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 0, 0, 1 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 0, 0, 1 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 0, 0, 1 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -393,7 +392,7 @@ namespace Testing
 		for ( real r = 0; r < 360; r += 1 )
 		{
 			Matrix4x4r l_mtx( 1 );
-			matrix::rotate( l_mtx, Angle::FromDegrees( r ), Point3r( 1, 1, 1 ) );
+			matrix::rotate( l_mtx, Quaternion( Point3r( 1, 1, 1 ), Angle::from_degrees( r ) ) );
 			glm::mat4 l_mat;
 			l_mat = glm::rotate( l_mat, glm::radians( r ), glm::vec3( 1, 1, 1 ) );
 			TEST_EQUAL( l_mtx, l_mat );
@@ -426,12 +425,12 @@ namespace Testing
 		}
 		Logger::LogInfo( cuT( "	Perspective" ) );
 		{
-			Angle l_fov( Angle::FromDegrees( 90.0 ) );
+			Angle l_fov( Angle::from_degrees( 90.0 ) );
 			double l_aspect = 4.0 / 3.0;
 			Matrix4x4r l_mtx( 1 );
 			matrix::perspective( l_mtx, l_fov, l_aspect, l_near, l_far );
 			glm::mat4 l_mat;
-			l_mat = glm::perspective( l_fov.Radians(), l_aspect, l_near, l_far );
+			l_mat = glm::perspective( l_fov.radians(), l_aspect, l_near, l_far );
 			TEST_EQUAL( l_mtx, l_mat );
 		}
 		Logger::LogInfo( cuT( "	Look at" ) );
@@ -448,12 +447,12 @@ namespace Testing
 		Logger::LogInfo( cuT( "	Transform" ) );
 		{
 			Matrix4x4r l_mtx( 1 );
-			Angle l_angle( Angle::FromDegrees( 45 ) );
+			Angle l_angle( Angle::from_degrees( 45 ) );
 			matrix::set_transform( l_mtx, Point3d( 0, 0, -100 ), Point3d( 0.3, 0.6, 1.0 ), Quaternion( Point3d( 0.0, 1.0, 0.0 ), l_angle ) );
 			glm::mat4 l_mat( 1 );
 			{
 				// Compute transformation matrix with glm
-				glm::mat4 l_rotation = glm::mat4_cast( glm::angleAxis( float( l_angle.Radians() ), glm::vec3( 0.0f, 1.0f, 0.0f ) ) );
+				glm::mat4 l_rotation = glm::mat4_cast( glm::angleAxis( float( l_angle.radians() ), glm::vec3( 0.0f, 1.0f, 0.0f ) ) );
 				glm::mat4 l_translation = glm::translate( glm::mat4( 1.0f ), glm::vec3( 0.0f, 0.0f, -100.0f ) );
 				glm::mat4 l_scale = glm::scale( glm::mat4( 1.0f ), glm::vec3( 0.3f, 0.6f, 1.0f ) );
 				l_mat = l_translation * l_rotation * l_scale;
@@ -470,54 +469,65 @@ namespace Testing
 	void CastorUtilsMatrixTest::QuaternionComparison( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		Logger::LogInfo( cuT( "	Rotate on X" ) );
+
 		for ( double r = 0; r < 360; r += 1 )
 		{
-			Quaternion l_quaternion( Point3d( 1, 0, 0 ), Angle::FromDegrees( r ) );
+			Quaternion l_quaternion( Angle::from_degrees( r ), Angle::from_degrees( 0 ), Angle::from_degrees( 0 ) );
 			glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 1, 0, 0 ) );
-			Matrix4x4d l_matrix;
-			l_quaternion.ToRotationMatrix( l_matrix );
-			glm::mat4 l_mat = glm::mat4_cast( l_quat );
-			TEST_EQUAL( l_matrix, l_mat );
+			TEST_EQUAL( l_quaternion.x, l_quat.x );
+			TEST_EQUAL( l_quaternion.y, l_quat.y );
+			TEST_EQUAL( l_quaternion.z, l_quat.z );
+			TEST_EQUAL( l_quaternion.w, l_quat.w );
 		}
 
 		Logger::LogInfo( cuT( "	Rotate on Y" ) );
+
 		for ( double r = 0; r < 360; r += 1 )
 		{
-				Quaternion l_quaternion( Point3r( 0, 1, 0 ), Angle::FromDegrees( r ) );
-				glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 0, 1, 0 ) );
-				Matrix4x4d l_matrix;
-				l_quaternion.ToRotationMatrix( l_matrix );
-				glm::mat4 l_mat = glm::mat4_cast( l_quat );
-				TEST_EQUAL( l_matrix, l_mat );
+			Quaternion l_quaternion( Angle::from_degrees( 0 ), Angle::from_degrees( r ), Angle::from_degrees( 0 ) );
+			glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 0, 1, 0 ) );
+			TEST_EQUAL( l_quaternion.x, l_quat.x );
+			TEST_EQUAL( l_quaternion.y, l_quat.y );
+			TEST_EQUAL( l_quaternion.z, l_quat.z );
+			TEST_EQUAL( l_quaternion.w, l_quat.w );
 		}
 
 		Logger::LogInfo( cuT( "	Rotate on Z" ) );
+
 		for ( double r = 0; r < 360; r += 1 )
 		{
-				Quaternion l_quaternion( Point3r( 0, 0, 1 ), Angle::FromDegrees( r ) );
-				glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 0, 0, 1 ) );
-				Matrix4x4d l_matrix;
-				l_quaternion.ToRotationMatrix( l_matrix );
-				glm::mat4 l_mat = glm::mat4_cast( l_quat );
-				TEST_EQUAL( l_matrix, l_mat );
+			Quaternion l_quaternion( Angle::from_degrees( 0 ), Angle::from_degrees( 0 ), Angle::from_degrees( r ) );
+			glm::quat l_quat = glm::angleAxis( glm::radians( float( r ) ), glm::vec3( 0, 0, 1 ) );
+			TEST_EQUAL( l_quaternion.x, l_quat.x );
+			TEST_EQUAL( l_quaternion.y, l_quat.y );
+			TEST_EQUAL( l_quaternion.z, l_quat.z );
+			TEST_EQUAL( l_quaternion.w, l_quat.w );
 		}
 
 		Logger::LogInfo( cuT( "	Rotate on all" ) );
-		for ( double r = 0; r < 360; r += 1 )
+
+		for ( double x = 0; x < 360; x += 1 )
 		{
-				Quaternion l_quaternion( Angle::FromDegrees( r ), Angle::FromDegrees( r ), Angle::FromDegrees( r ) );
-				glm::quat l_quat( glm::vec3( glm::radians( float( r ) ), glm::radians( float( r ) ), glm::radians( float( r ) ) ) );
-				Matrix4x4d l_matrix;
-				l_quaternion.ToRotationMatrix( l_matrix );
-				glm::mat4 l_mat = glm::mat4_cast( l_quat );
-				TEST_EQUAL( l_matrix, l_mat );
-				TEST_EQUAL( l_quaternion.GetPitch().Radians(), glm::pitch( l_quat ) );
-				TEST_EQUAL( l_quaternion.GetYaw().Radians(), glm::yaw( l_quat ) );
-				TEST_EQUAL( l_quaternion.GetRoll().Radians(), glm::roll( l_quat ) );
+			for ( double y = 0; y < 360; y += 1 )
+			{
+				for ( double z = 0; z < 360; z += 1 )
+				{
+					//Logger::LogDebug( StringStream() << cuT( "Pitch: " ) << x << cuT( ", Yaw: " ) << y << cuT( ", Roll: " ) << z );
+					Quaternion l_quaternion( Angle::from_degrees( x ), Angle::from_degrees( y ), Angle::from_degrees( z ) );
+					glm::quat l_quat( glm::vec3( glm::radians( float( x ) ), glm::radians( float( y ) ), glm::radians( float( z ) ) ) );
+					TEST_EQUAL( l_quaternion.x, l_quat.x );
+					TEST_EQUAL( l_quaternion.y, l_quat.y );
+					TEST_EQUAL( l_quaternion.z, l_quat.z );
+					TEST_EQUAL( l_quaternion.w, l_quat.w );
+					TEST_EQUAL( l_quaternion.get_pitch().radians(), glm::pitch( l_quat ) );
+					TEST_EQUAL( l_quaternion.get_yaw().radians(), glm::yaw( l_quat ) );
+					TEST_EQUAL( l_quaternion.get_roll().radians(), glm::roll( l_quat ) );
+				}
+			}
 		}
 
-		Quaternion l_quaternionSrc( Point3r( 1, 1, 1 ), Angle::FromDegrees( 0 ) );
-		Quaternion l_quaternionDst( Point3r( 1, 1, 1 ), Angle::FromDegrees( 100 ) );
+		Quaternion l_quaternionSrc( Point3r( 1, 1, 1 ), Angle::from_degrees( 0 ) );
+		Quaternion l_quaternionDst( Point3r( 1, 1, 1 ), Angle::from_degrees( 100 ) );
 		glm::quat l_quatSrc = glm::angleAxis( glm::radians( 0.0f ), glm::normalize( glm::vec3( 1, 1, 1 ) ) );
 		glm::quat l_quatDst = glm::angleAxis( glm::radians( 100.0f ), glm::normalize( glm::vec3( 1, 1, 1 ) ) );
 
@@ -525,12 +535,8 @@ namespace Testing
 		{
 			for ( double r = 0; r < 100; r += 1 )
 			{
-				Quaternion l_quaternion = l_quaternionSrc.Mix( l_quaternionDst, r / 100 );
+				Quaternion l_quaternion = l_quaternionSrc.mix( l_quaternionDst, r / 100 );
 				glm::quat l_quat = glm::mix( l_quatSrc, l_quatDst, float( r / 100 ) );
-				Matrix4x4d l_matrix;
-				l_quaternion.ToRotationMatrix( l_matrix );
-				glm::mat4 l_mat = glm::mat4_cast( l_quat );
-				TEST_EQUAL( l_matrix, l_mat );
 			}
 		}
 
@@ -539,12 +545,8 @@ namespace Testing
 
 			for ( double r = 0; r < 100; r += 1 )
 			{
-				Quaternion l_quaternion = l_quaternionSrc.Lerp( l_quaternionDst, r / 100 );
+				Quaternion l_quaternion = l_quaternionSrc.lerp( l_quaternionDst, r / 100 );
 				glm::quat l_quat = glm::lerp( l_quatSrc, l_quatDst, float( r / 100 ) );
-				Matrix4x4d l_matrix;
-				l_quaternion.ToRotationMatrix( l_matrix );
-				glm::mat4 l_mat = glm::mat4_cast( l_quat );
-				TEST_EQUAL( l_matrix, l_mat );
 			}
 		}
 
@@ -552,12 +554,8 @@ namespace Testing
 		{
 			for ( double r = 0; r < 100; r += 1 )
 			{
-				Quaternion l_quaternion = l_quaternionSrc.Slerp( l_quaternionDst, r / 100 );
+				Quaternion l_quaternion = l_quaternionSrc.slerp( l_quaternionDst, r / 100 );
 				glm::quat l_quat = glm::slerp( l_quatSrc, l_quatDst, float( r / 100 ) );
-				Matrix4x4d l_matrix;
-				l_quaternion.ToRotationMatrix( l_matrix );
-				glm::mat4 l_mat = glm::mat4_cast( l_quat );
-				TEST_EQUAL( l_matrix, l_mat );
 			}
 		}
 	}

@@ -502,7 +502,7 @@ namespace Castor3D
 
 	Scene::Scene( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >( p_engine )
-		, m_strName( p_name )
+		, m_name( p_name )
 		, m_rootCameraNode()
 		, m_rootObjectNode()
 		, m_nbFaces( 0 )
@@ -538,7 +538,7 @@ namespace Castor3D
 		m_rootNode = std::make_shared< SceneNode >( *this, cuT( "RootNode" ) );
 		m_rootCameraNode = std::make_shared< SceneNode >( *this, cuT( "CameraRootNode" ) );
 		m_rootObjectNode = std::make_shared< SceneNode >( *this, cuT( "ObjectRootNode" ) );
-		m_alphaDepthState = GetOwner()->GetDepthStencilStateManager().Create( m_strName + cuT( "_AlphaDepthState" ) );
+		m_alphaDepthState = GetOwner()->GetDepthStencilStateManager().Create( m_name + cuT( "_AlphaDepthState" ) );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
@@ -752,7 +752,7 @@ namespace Castor3D
 			m_rootNode->CreateBuffers( m_nbFaces, m_nbVertex );
 		}
 
-		Logger::LogInfo( StringStream() << cuT( "Scene::CreateList - [" ) << m_strName << cuT( "] - NbVertex : " ) << m_nbVertex << cuT( " - NbFaces : " ) << m_nbFaces );
+		Logger::LogInfo( StringStream() << cuT( "Scene::CreateList - [" ) << m_name << cuT( "] - NbVertex : " ) << m_nbVertex << cuT( " - NbFaces : " ) << m_nbFaces );
 		DoSortByAlpha();
 		DepthStencilStateSPtr state = m_alphaDepthState.lock();
 
@@ -865,7 +865,7 @@ namespace Castor3D
 
 		if ( DoCheckObject( p_name, m_addedPrimitives, cuT( "Geometry" ) ) )
 		{
-			auto l_lock = Castor::make_unique_lock( m_mutex ); 
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			l_return = std::make_shared< Geometry >( shared_from_this(), nullptr, m_rootObjectNode, p_name );
 			m_rootObjectNode->AttachObject( l_return );
 			Logger::LogInfo( cuT( "Scene::CreatePrimitive - Geometry [" ) + p_name + cuT( "] - Created" ) );
@@ -1719,7 +1719,7 @@ namespace Castor3D
 			SpotLightSPtr l_light = p_light->GetSpotLight();
 			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
 			Matrix4x4r l_orientation;
-			p_light->GetParent()->GetOrientation().ToRotationMatrix( l_orientation );
+			p_light->GetParent()->GetOrientation().to_matrix( l_orientation );
 			ApplyLightComponent( l_orientation, p_index, l_offset, *m_pLightsData );
 			ApplyLightComponent( l_light->GetAttenuation(), p_index, l_offset, *m_pLightsData );
 			ApplyLightComponent( l_light->GetExponent(), l_light->GetCutOff(), p_index, l_offset, *m_pLightsData );
@@ -1763,13 +1763,13 @@ namespace Castor3D
 			}
 		}
 
-		m_pLightsTexture->Bind();
-
 		if ( m_bLightsChanged )
 		{
 			m_pLightsTexture->UploadImage( false );
 			m_bLightsChanged = false;
 		}
+
+		m_pLightsTexture->Bind();
 	}
 
 	void Scene::DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )

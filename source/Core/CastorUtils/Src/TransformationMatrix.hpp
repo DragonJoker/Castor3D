@@ -18,10 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_TRANSFORMATION_MATRIX_H___
 #define ___CASTOR_TRANSFORMATION_MATRIX_H___
 
-#include "Matrix.hpp"
-#include "Point.hpp"
-#include "Angle.hpp"
-#include "Quaternion.hpp"
+#include "SquareMatrix.hpp"
 
 namespace Castor
 {
@@ -43,20 +40,6 @@ namespace Castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Rotation function, builds a rotation matrix from the angle and the axis in parameter.
-		 *\param[out]	p_matrix	The matrix that will receive the rotation matrix
-		 *\param[in]	p_angle		The rotation angle
-		 *\param[in]	p_axis		The axis around which the angle is set
-		 *\~french
-		 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un angle et d'un axe
-		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
-		 *\param[in]	p_angle		L'angle de rotation
-		 *\param[in]	p_axis		L'axe autour duquel l'angle est défini
-		 */
-		template< typename T, typename U >
-		static SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis );
-		/**
-		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
 		 *\param[out]	p_matrix	The matrix that will receive the rotation matrix
 		 *\param[in]	p_quat		The quaterion used to compute the matrix
@@ -67,20 +50,6 @@ namespace Castor
 		 */
 		template< typename T >
 		static SquareMatrix< T, 4 > & rotate( SquareMatrix< T, 4 > & p_matrix, Quaternion const & p_quat );
-		/**
-		 *\~english
-		 *\brief		Rotation function, builds a rotation matrix from the angle and the axis in parameter.
-		 *\param[out]	p_matrix	The matrix that will receive the rotation matrix
-		 *\param[in]	p_angle		The rotation angle
-		 *\param[in]	p_axis		The axis around which the angle is set
-		 *\~french
-		 *\brief		Fonction de rotation, construit une matrice de rotation à partir d'un angle et d'un axe
-		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
-		 *\param[in]	p_angle		L'angle de rotation
-		 *\param[in]	p_axis		L'axe autour duquel l'angle est défini
-		 */
-		template< typename T, typename U >
-		static SquareMatrix< T, 4 > & set_rotate( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle, Point< U, 3 > const & p_axis );
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.

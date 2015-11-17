@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include <PreciseTimer.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -38,15 +39,18 @@ namespace Castor3D
 				<br />Si non affichés, toutes les méthodes seront désactivées.
 	*/
 	class DebugOverlays
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
 		 */
-		DebugOverlays();
+		DebugOverlays( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor.

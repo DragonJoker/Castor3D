@@ -23,7 +23,7 @@ namespace Castor3D
 	const String Pipeline::MtxProjectionModelView = cuT( "c3d_mtxProjectionModelView" );
 	const String Pipeline::MtxNormal = cuT( "c3d_mtxNormal" );
 	const String Pipeline::MtxBones = cuT( "c3d_mtxBones" );
-	const String Pipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] = 
+	const String Pipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
 	{
 		cuT( "c3d_mtxTexture0" ),
 		cuT( "c3d_mtxTexture1" ),
@@ -66,7 +66,7 @@ namespace Castor3D
 		m_impl = GetOwner()->GetPipelineImpl();
 	}
 
-	bool Pipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_ptResult )
+	bool Pipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_result )
 	{
 		Point4r l_ptTmp( p_ptObj[0], p_ptObj[1], p_ptObj[2], real( 1 ) );
 		l_ptTmp = GetViewMatrix() * l_ptTmp;
@@ -78,11 +78,11 @@ namespace Castor3D
 		l_ptTmp += l_ptHalf;
 		l_ptTmp[0] = l_ptTmp[0] * p_ptViewport[2] + p_ptViewport[0];
 		l_ptTmp[1] = l_ptTmp[1] * p_ptViewport[3] + p_ptViewport[1];
-		p_ptResult = Point3r( l_ptTmp.const_ptr() );
+		p_result = Point3r( l_ptTmp.const_ptr() );
 		return true;
 	}
 
-	bool Pipeline::UnProject( Point3i const & p_ptWin, Point4r const & p_ptViewport, Point3r & p_ptResult )
+	bool Pipeline::UnProject( Point3i const & p_ptWin, Point4r const & p_ptViewport, Point3r & p_result )
 	{
 		Matrix4x4r l_mInverse = ( GetProjectionMatrix() * GetModelMatrix() * GetViewMatrix() ).get_inverse();
 		Point4r l_ptTmp( ( real )p_ptWin[0], ( real )p_ptWin[1], ( real )p_ptWin[2], real( 1 ) );
@@ -94,7 +94,7 @@ namespace Castor3D
 		Point4r l_ptObj;
 		l_ptObj = l_mInverse.get_inverse() * l_ptTmp;
 		l_ptObj /= l_ptObj[3];
-		p_ptResult = Point3r( l_ptObj.const_ptr() );
+		p_result = Point3r( l_ptObj.const_ptr() );
 		return true;
 	}
 

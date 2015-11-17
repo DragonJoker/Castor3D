@@ -428,6 +428,7 @@ namespace CastorViewer
 	void RenderPanel::OnKeyDown( wxKeyEvent & p_event )
 	{
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireKeyDown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 #endif
 		{
@@ -469,6 +470,7 @@ namespace CastorViewer
 	void RenderPanel::OnKeyUp( wxKeyEvent & p_event )
 	{
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 #endif
 		{
@@ -518,6 +520,7 @@ namespace CastorViewer
 	void RenderPanel::OnChar( wxKeyEvent & p_event )
 	{
 #if HAS_CASTORGUI
+
 		if ( m_controlsManager )
 		{
 			wxChar l_key = p_event.GetUnicodeKey();
@@ -525,6 +528,7 @@ namespace CastorViewer
 			l_tmp << l_key;
 			m_controlsManager->FireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( l_tmp.mb_str( wxConvUTF8 ) ) );
 		}
+
 #endif
 
 		p_event.Skip();
@@ -547,6 +551,7 @@ namespace CastorViewer
 		m_oldY = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT ) )
 #endif
 		{
@@ -561,6 +566,7 @@ namespace CastorViewer
 		m_mouseLeftDown = false;
 
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT ) )
 #endif
 		{
@@ -577,8 +583,9 @@ namespace CastorViewer
 		m_oldY = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
-		
+
 #endif
 		{
 		}
@@ -591,6 +598,7 @@ namespace CastorViewer
 		m_mouseMiddleDown = false;
 
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
 #endif
 		{
@@ -606,6 +614,7 @@ namespace CastorViewer
 		m_oldY = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT ) )
 #endif
 		{
@@ -620,6 +629,7 @@ namespace CastorViewer
 		m_mouseRightDown = false;
 
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT ) )
 #endif
 		{
@@ -635,6 +645,7 @@ namespace CastorViewer
 		m_y = DoTransformY( p_event.GetY() );
 
 #if HAS_CASTORGUI
+
 		if ( m_controlsManager && m_controlsManager->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
 			p_event.Skip();
@@ -681,6 +692,7 @@ namespace CastorViewer
 		int l_wheelRotation = p_event.GetWheelRotation();
 
 #if HAS_CASTORGUI
+
 		if ( !m_controlsManager || !m_controlsManager->FireMouseWheel( Position( 0, l_wheelRotation ) ) )
 #endif
 		{

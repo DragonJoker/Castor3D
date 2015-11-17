@@ -5,7 +5,7 @@
 #include <Geometry.hpp>
 #include <Mesh.hpp>
 #include <SceneManager.hpp>
-#include <Submesh.cpp>
+#include <Submesh.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

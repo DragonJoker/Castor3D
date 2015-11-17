@@ -26,6 +26,8 @@ namespace GlRender
 		, m_pGlRenderSystem( &p_renderSystem )
 		, m_gl( p_gl )
 	{
+		m_timerQueryId[0] = eGL_INVALID_INDEX;
+		m_timerQueryId[1] = eGL_INVALID_INDEX;
 		m_pImplementation = new GlContextImpl( m_gl, this );
 	}
 
@@ -103,6 +105,10 @@ namespace GlRender
 			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
 			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+
+			m_pImplementation->SetCurrent();
+			m_gl.GenQueries( 2, m_timerQueryId );
+			m_pImplementation->EndCurrent();
 		}
 
 		return m_bInitialised;
@@ -110,16 +116,23 @@ namespace GlRender
 
 	void GlContext::DoCleanup()
 	{
+		m_gl.DeleteQueries( 2, m_timerQueryId );
 		m_pImplementation->Cleanup();
 	}
 
 	void GlContext::DoSetCurrent()
 	{
 		GetImpl()->SetCurrent();
+		m_gl.BeginQuery( eGL_QUERY_TIME_ELAPSED, m_timerQueryId[m_queryIndex] );
 	}
 
 	void GlContext::DoEndCurrent()
 	{
+		m_gl.EndQuery( eGL_QUERY_TIME_ELAPSED );
+		uint64_t l_time = 0;
+		m_queryIndex = 1 - m_queryIndex;
+		m_gl.GetQueryObjectInfos( m_timerQueryId[m_queryIndex], eGL_QUERY_INFO_RESULT, &l_time );
+		GetOwner()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
 		GetImpl()->EndCurrent();
 	}
 

@@ -15,7 +15,7 @@ namespace GuiCommon
 	{
 		return Matrix3x3fRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::SquareMatrix< float, 4 > const & MatrixRefFromVariant< float, 4 >( wxVariant const & p_variant )
 	{
@@ -27,7 +27,7 @@ namespace GuiCommon
 	{
 		return Matrix2x2dRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::SquareMatrix< double, 3 > const & MatrixRefFromVariant< double, 3 >( wxVariant const & p_variant )
 	{
@@ -53,7 +53,7 @@ namespace GuiCommon
 	{
 		return Matrix3x3fRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::SquareMatrix< float, 4 > & MatrixRefFromVariant< float, 4 >( wxVariant & p_variant )
 	{
@@ -65,7 +65,7 @@ namespace GuiCommon
 	{
 		return Matrix2x2dRefFromVariant( p_variant );
 	}
-	
+
 	template<>
 	inline Castor::SquareMatrix< double, 3 > & MatrixRefFromVariant< double, 3 >( wxVariant & p_variant )
 	{
@@ -86,7 +86,7 @@ namespace GuiCommon
 	}
 
 	//************************************************************************************************
-	
+
 	template< typename T, size_t Count > struct MatrixPropertyHelper
 	{
 		static void AddChildren( MatrixProperty< T, Count > * p_prop, wxString const * p_rowNames, wxString const * p_colNames, Castor::SquareMatrix< T, Count > const & p_value )
@@ -128,7 +128,7 @@ namespace GuiCommon
 	};
 
 	//************************************************************************************************
-	
+
 	template< size_t Count > wxString const * GetMatrixRowDefaultNames();
 
 	template<>
@@ -150,7 +150,7 @@ namespace GuiCommon
 	}
 
 	//************************************************************************************************
-	
+
 	template< size_t Count > wxString const * GetMatrixColDefaultNames();
 
 	template<>
@@ -172,7 +172,7 @@ namespace GuiCommon
 	}
 
 	//************************************************************************************************
-	
+
 	template< typename T, size_t Count >
 	MatrixProperty< T, Count >::MatrixProperty( wxString const & label, wxString const & name, Castor::SquareMatrix< T, Count > const & value )
 		: wxPGProperty( label, name )
@@ -180,9 +180,9 @@ namespace GuiCommon
 		SetValueI( value );
 		MatrixPropertyHelper< T, Count >::AddChildren( this, GetMatrixRowDefaultNames< Count >(), GetMatrixColDefaultNames< Count >(), value );
 	}
-	
+
 	template< typename T, size_t Count >
-	MatrixProperty< T, Count >::MatrixProperty( wxString const ( & p_rowNames )[Count], wxString const ( & p_colNames )[Count], wxString const & label, wxString const & name, Castor::SquareMatrix< T, Count > const & value )
+	MatrixProperty< T, Count >::MatrixProperty( wxString const( & p_rowNames )[Count], wxString const( & p_colNames )[Count], wxString const & label, wxString const & name, Castor::SquareMatrix< T, Count > const & value )
 		: wxPGProperty( label, name )
 	{
 		SetValueI( value );

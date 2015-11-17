@@ -10,7 +10,7 @@ namespace Castor3D
 
 	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_strName( p_name )
+		, m_name( p_name )
 		, m_uiIndex( sm_uiCount++ )
 	{
 	}

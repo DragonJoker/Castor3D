@@ -16,7 +16,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = float( Castor::Angle::Cos() );
+			*pVal = float( Castor::Angle::cos() );
 			hr = S_OK;
 		}
 
@@ -29,7 +29,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = float( Castor::Angle::Sin() );
+			*pVal = float( Castor::Angle::sin() );
 			hr = S_OK;
 		}
 
@@ -42,7 +42,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = float( Castor::Angle::Tan() );
+			*pVal = float( Castor::Angle::tan() );
 			hr = S_OK;
 		}
 
@@ -51,19 +51,19 @@ namespace CastorCom
 
 	STDMETHODIMP CAngle::ACos( /* [in] */ float val )
 	{
-		Castor::Angle::ACos( val );
+		Castor::Angle::acos( val );
 		return S_OK;
 	}
 
 	STDMETHODIMP CAngle::ASin( /* [in] */ float val )
 	{
-		Castor::Angle::ASin( val );
+		Castor::Angle::asin( val );
 		return S_OK;
 	}
 
 	STDMETHODIMP CAngle::ATan( /* [in] */ float val )
 	{
-		Castor::Angle::ATan( val );
+		Castor::Angle::atan( val );
 		return S_OK;
 	}
 
@@ -73,7 +73,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = float( Castor::Angle::Cosh() );
+			*pVal = float( Castor::Angle::cosh() );
 			hr = S_OK;
 		}
 
@@ -86,7 +86,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = float( Castor::Angle::Sinh() );
+			*pVal = float( Castor::Angle::sinh() );
 			hr = S_OK;
 		}
 
@@ -99,7 +99,7 @@ namespace CastorCom
 
 		if ( *pVal )
 		{
-			*pVal = float( Castor::Angle::Tanh() );
+			*pVal = float( Castor::Angle::tanh() );
 			hr = S_OK;
 		}
 

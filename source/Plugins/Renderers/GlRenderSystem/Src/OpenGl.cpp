@@ -722,7 +722,7 @@ bool BufFunctionsDSA::FlushMappedBufferRange( eGL_BUFFER_TARGET p_eTarget, ptrdi
 
 #define CASTOR_DBG_WIN32 0
 
-OpenGl::OpenGl(  GlRenderSystem & p_renderSystem  )
+OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
 	: m_bHasAnisotropic( false )
 	, m_bHasInstancedDraw( false )
 	, m_bHasInstancedArrays( false )
@@ -1632,6 +1632,19 @@ bool OpenGl::Initialise()
 			}
 		}
 	}
+
+	HasExtension( ARB_timer_query );
+
+	GL_GET_FUNC( this, GenQueries, ARB );
+	GL_GET_FUNC( this, DeleteQueries, ARB );
+	GL_GET_FUNC( this, IsQuery, ARB );
+	GL_GET_FUNC( this, BeginQuery, ARB );
+	GL_GET_FUNC( this, EndQuery, ARB );
+	GL_GET_FUNC( this, QueryCounter, ARB );
+	GL_GET_FUNC( this, GetQueryObjectiv, ARB );
+	GL_GET_FUNC( this, GetQueryObjectuiv, ARB );
+	GL_GET_FUNC( this, GetQueryObjecti64v, ARB );
+	GL_GET_FUNC( this, GetQueryObjectui64v, ARB );
 
 #undef GL_GET_FUNC
 	return true;
@@ -3460,8 +3473,8 @@ int OpenGl::GetAttribLocation( uint32_t program, char const * name )
 
 bool OpenGl::IsProgram( uint32_t program )
 {
-	m_pfnIsProgram( program );
-	return glCheckError( *this, "glIsProgram" );
+	uint8_t l_return = m_pfnIsProgram( program );
+	return glCheckError( *this, "glIsProgram" ) && l_return == eGL_TRUE;
 }
 
 bool OpenGl::ProgramParameteri( uint32_t program, uint32_t pname, int value )
@@ -3525,6 +3538,66 @@ bool OpenGl::PatchParameter( eGL_PATCH_PARAMETER p_eParam, int p_iValue )
 	return l_return;
 }
 
+bool OpenGl::GenQueries( int p_n, uint32_t * p_queries )
+{
+	m_pfnGenQueries( p_n, p_queries );
+	return glCheckError( *this, "glGenQueries" );
+}
+
+bool OpenGl::DeleteQueries( int p_n, uint32_t const * p_queries )
+{
+	m_pfnDeleteQueries( p_n, p_queries );
+	return glCheckError( *this, "glDeleteQueries" );
+}
+
+bool OpenGl::IsQuery( uint32_t p_query )
+{
+	uint8_t l_return = m_pfnIsQuery( p_query );
+	return glCheckError( *this, "glIsQuery" ) && l_return == eGL_TRUE;
+}
+
+bool OpenGl::BeginQuery( eGL_QUERY p_target, uint32_t p_query )
+{
+	m_pfnBeginQuery( p_target, p_query );
+	return glCheckError( *this, "glBeginQuery" );
+}
+
+bool OpenGl::EndQuery( eGL_QUERY p_target )
+{
+	m_pfnEndQuery( p_target );
+	return glCheckError( *this, "glEndQuery" );
+}
+
+bool OpenGl::QueryCounter( uint32_t p_id, eGL_QUERY p_target )
+{
+	m_pfnQueryCounter( p_id, p_target );
+	return glCheckError( *this, "glQueryCounter" );
+}
+
+bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, int32_t * p_params )
+{
+	m_pfnGetQueryObjectiv( p_id, p_name, p_params );
+	return glCheckError( *this, "glGetQueryObjectiv" );
+}
+
+bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, uint32_t * p_params )
+{
+	m_pfnGetQueryObjectuiv( p_id, p_name, p_params );
+	return glCheckError( *this, "glGetQueryObjectuiv" );
+}
+
+bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, int64_t * p_params )
+{
+	m_pfnGetQueryObjecti64v( p_id, p_name, p_params );
+	return glCheckError( *this, "glGetQueryObjecti64v" );
+}
+
+bool OpenGl::GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, uint64_t * p_params )
+{
+	m_pfnGetQueryObjectui64v( p_id, p_name, p_params );
+	return glCheckError( *this, "glGetQueryObjectui64v" );
+}
+
 #if !defined( NDEBUG )
 
 void OpenGl::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )
@@ -3534,7 +3607,7 @@ void OpenGl::Track( void * p_object, std::string const & p_name, std::string con
 
 void OpenGl::UnTrack( void * p_object )
 {
-	m_renderSystem.UnTrack( p_object );
+	m_renderSystem.Untrack( p_object );
 }
 
 #endif

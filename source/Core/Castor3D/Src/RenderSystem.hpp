@@ -26,6 +26,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Colour.hpp>
 #include <OwnedBy.hpp>
 
+#ifndef C3D_TRACE_OBJECTS
+#	define C3D_TRACE_OBJECTS 1
+#endif
+
 namespace Castor3D
 {
 	/*!
@@ -561,6 +565,41 @@ namespace Castor3D
 		{
 			return m_overlayRenderer;
 		}
+		/**
+		 *\~english
+		 *\brief		Increments the GPU time.
+		 *\param[in]	p_time	The increment value.
+		 *\~french
+		 *\brief		Incrémente le temps CPU.
+		 *\param[in]	p_time	La valeur d'incrément.
+		 */
+		template< class Rep, class Period >
+		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
+		{
+			m_gpuTime = std::chrono::duration_cast< std::chrono::milliseconds >( p_time );
+		}
+		/**
+		 *\~english
+		 *\brief		Resets the GPU time.
+		 *\~french
+		 *\brief		Réinitialise le temps CPU.
+		 */
+		inline void ResetGpuTime()
+		{
+			m_gpuTime = std::chrono::milliseconds( 0 );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the GPU time.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère le temps CPU.
+		 *\return		La valeur.
+		 */
+		inline std::chrono::milliseconds GetGpuTime()const
+		{
+			return m_gpuTime;
+		}
 
 	protected:
 		/**
@@ -607,8 +646,10 @@ namespace Castor3D
 		eRENDERER_TYPE m_eRendererType;
 		//!\~english The currently active camera	\~french La caméra actuellement active
 		CameraRPtr m_pCurrentCamera;
+		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
+		std::chrono::milliseconds m_gpuTime;
 
-#if !defined( NDEBUG )
+#if C3D_TRACE_OBJECTS
 
 		struct ObjectDeclaration
 		{
@@ -618,17 +659,109 @@ namespace Castor3D
 			std::string m_file;
 			int m_line;
 			int m_ref;
-			Castor::String m_stack;
+			std::string m_stack;
 		};
 
 		uint32_t m_id = 0;
 		std::list< ObjectDeclaration > m_allocated;
 
-		C3D_API bool DoTrack( void * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		C3D_API bool DoTrack( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name );
-		C3D_API bool DoUntrack( void * p_object, ObjectDeclaration & p_declaration );
-		C3D_API bool DoUntrack( Castor::Named * p_object, ObjectDeclaration & p_declaration );
+		template< typename T >
+		bool DoTrack( T * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
+		{
+			auto && l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [p_object]( ObjectDeclaration const & l_object )
+			{
+				return p_object == l_object.m_object;
+			} );
+
+			bool l_return = l_it == m_allocated.end();
+
+			std::stringstream l_ptr;
+			l_ptr.width( 16 );
+			l_ptr.fill( '0' );
+			l_ptr << std::hex << std::right << uint64_t( p_object );
+			std::stringstream l_type;
+			l_type.width( 20 );
+			l_type << std::left << p_type;
+			std::stringstream l_name;
+			l_name << "(" << m_id << ") " << l_type.str() << " [0x" << l_ptr.str() << "]";
+
+			if ( l_return )
+			{
+				std::stringstream l_stream;
+				Castor::Debug::ShowBacktrace( l_stream );
+				m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1, l_stream.str() } );
+				Castor::Logger::LogDebug( l_name );
+				p_name = l_name.str();
+			}
+			else
+			{
+				if ( l_it->m_ref > 0 )
+				{
+					Castor::Logger::LogDebug( std::stringstream() << "Rereferencing object: " << l_type.str() << " [0x" << l_ptr.str() << "] => " << l_it->m_ref );
+				}
+				else
+				{
+					Castor::Logger::LogDebug( l_name );
+				}
+
+				++l_it->m_ref;
+			}
+
+			return l_return;
+		}
+
+		inline bool DoTrack( Castor::Named * p_object, std::string const & p_type, std::string const & p_file, int p_line, std::string & p_name )
+		{
+			return DoTrack( reinterpret_cast< void * >( p_object ), p_type + ": " + Castor::string::string_cast< char >( p_object->GetName() ), p_file, p_line, p_name );
+		}
+
+		template< typename T >
+		bool DoUntrack( T * p_object, ObjectDeclaration & p_declaration )
+		{
+			auto l_it = std::find_if( m_allocated.begin(), m_allocated.end(), [&p_object]( ObjectDeclaration p_decl )
+			{
+				return p_object == p_decl.m_object;
+			} );
+
+			bool l_return = false;
+			char l_szName[1024] = { 0 };
+			std::stringstream l_ptr;
+			l_ptr.width( 16 );
+			l_ptr.fill( '0' );
+			l_ptr << std::hex << std::right << uint64_t( p_object );
+
+			if ( l_it != m_allocated.end() )
+			{
+				std::stringstream l_type;
+				l_type.width( 20 );
+				l_type << std::left << l_it->m_name;
+
+				if ( !--l_it->m_ref )
+				{
+					p_declaration = *l_it;
+					l_return = true;
+					Castor::Logger::LogWarning( std::stringstream() << "Released " << l_type.str() << " [0x" << l_ptr.str() << "] => " << p_declaration.m_ref );
+				}
+				else if ( l_it->m_ref < 0 )
+				{
+					Castor::Logger::LogError( std::stringstream() << "Trying to release an already released object: " << l_type.str() << " [0x" << l_ptr.str() << "] => " << l_it->m_ref );
+				}
+			}
+			else
+			{
+				Castor::Logger::LogWarning( std::stringstream() << "Untracked [0x" << l_ptr.str() << cuT( "]" ) );
+			}
+
+			return l_return;
+		}
+
 		C3D_API void DoReportTracked();
+
+#else
+
+		inline void DoReportTracked()
+		{
+		}
 
 #endif
 	};

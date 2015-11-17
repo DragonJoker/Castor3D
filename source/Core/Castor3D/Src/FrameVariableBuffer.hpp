@@ -178,7 +178,7 @@ namespace Castor3D
 		 */
 		inline Castor::String const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 		/**
 		 *\~english
@@ -295,7 +295,7 @@ namespace Castor3D
 		//!\~english The variables ordered by name	\~french Les variables, triées par nom
 		FrameVariablePtrStrMap m_mapVariables;
 		//!\~english The buffer name	\~french Le nom du tampon
-		Castor::String m_strName;
+		Castor::String m_name;
 		//!\~english The data buffer	\~french Le tampon de données
 		Castor::ByteArray m_buffer;
 	};

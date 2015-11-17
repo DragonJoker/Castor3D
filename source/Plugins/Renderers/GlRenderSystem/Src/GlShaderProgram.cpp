@@ -70,7 +70,7 @@ namespace GlRender
 
 			if ( m_linkerLog.size() > 0 )
 			{
-				Logger::LogDebug( cuT( "GlShaderProgram::Link - Log : " ) + m_linkerLog );
+				Logger::LogDebug( cuT( "GlShaderProgram::Link - Log: " ) + m_linkerLog );
 			}
 
 			if ( l_iLinked && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
@@ -79,6 +79,7 @@ namespace GlRender
 			}
 			else
 			{
+				Logger::LogError( cuT( "GlShaderProgram::Link - Error: " ) + m_linkerLog );
 				m_eStatus = ePROGRAM_STATUS_ERROR;
 			}
 
@@ -90,23 +91,22 @@ namespace GlRender
 
 	void GlShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		int l_iLength = 0;
-		int l_iLength2 = 0;
-
 		if ( m_programObject == eGL_INVALID_INDEX )
 		{
 			strLog = m_gl.GetGlslErrorString( 2 );
 		}
 		else
 		{
-			m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_INFO_LOG_LENGTH , &l_iLength );
+			int l_length = 0;
+			m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_INFO_LOG_LENGTH , &l_length );
 
-			if ( l_iLength > 1 )
+			if ( l_length > 1 )
 			{
-				char * l_pTmp = new char[l_iLength];
-				m_gl.GetProgramInfoLog( m_programObject, l_iLength, &l_iLength2, l_pTmp );
-				strLog = string::string_cast< xchar >( l_pTmp );
-				delete [] l_pTmp;
+				char * l_buffer = new char[l_length];
+				int l_written = 0;
+				m_gl.GetProgramInfoLog( m_programObject, l_length, &l_written, l_buffer );
+				strLog = string::string_cast< xchar >( l_buffer );
+				delete [] l_buffer;
 			}
 		}
 	}

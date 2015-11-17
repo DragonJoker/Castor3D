@@ -138,18 +138,18 @@ void ExportCastorUtils()
 	/**@group_name Angle	*/
 	//@{
 	py::class_< Angle >( "Angle" )
-	.add_property( "degrees", cpy::make_getter( &Angle::Degrees ), cpy::make_setter( &Angle::Degrees ), "The degrees value for the angle" )
-	.add_property( "radians", cpy::make_getter( &Angle::Radians ), cpy::make_setter( &Angle::Radians ), "The radians value for the angle" )
-	.add_property( "grads", cpy::make_getter( &Angle::Grads ), cpy::make_setter( &Angle::Grads ), "The grads value for the angle" )
-	.def( "cos", &Angle::Cos )
-	.def( "sin", &Angle::Sin )
-	.def( "tan", &Angle::Tan )
-	.def( "cos", &Angle::ACos )
-	.def( "sin", &Angle::ASin )
-	.def( "tan", &Angle::ATan )
-	.def( "cosh", &Angle::Cosh )
-	.def( "sinh", &Angle::Sinh )
-	.def( "tanh", &Angle::Tanh )
+	.add_property( "degrees", cpy::make_getter( &Angle::degrees ), cpy::make_setter( &Angle::degrees ), "The degrees value for the angle" )
+	.add_property( "radians", cpy::make_getter( &Angle::radians ), cpy::make_setter( &Angle::radians ), "The radians value for the angle" )
+	.add_property( "grads", cpy::make_getter( &Angle::grads ), cpy::make_setter( &Angle::grads ), "The grads value for the angle" )
+	.def( "cos", &Angle::cos )
+	.def( "sin", &Angle::sin )
+	.def( "tan", &Angle::tan )
+	.def( "cos", &Angle::acos )
+	.def( "sin", &Angle::asin )
+	.def( "tan", &Angle::atan )
+	.def( "cosh", &Angle::cosh )
+	.def( "sinh", &Angle::sinh )
+	.def( "tanh", &Angle::tanh )
 	.def( py::self += py::other< Angle >() )
 	.def( py::self -= py::other< Angle >() )
 	.def( py::self *= py::other< Angle >() )
@@ -161,8 +161,8 @@ void ExportCastorUtils()
 	//@}
 	/**@group_name Quaternion	*/
 	//@{
-	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::ToRotationMatrix;
-	void ( Quaternion::*quaternionFromMatrix )( Matrix4x4r const & ) = &Quaternion::FromRotationMatrix;
+	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::to_matrix;
+	void ( Quaternion::*quaternionFromMatrix )( Matrix4x4r const & ) = &Quaternion::from_matrix;
 	py::class_< Quaternion >( "Quaternion", py::init< Point3r const &, Angle const & >() );
 	//.add_property( "rotation_matrix", quaternionToMatrix, quaternionFromMatrix, "The quaternion's rotation matrix" )
 	//.def( "transform", py::make_function( &Quaternion::Transform, py::return_value_policy< py::reference_existing_object >() ) )

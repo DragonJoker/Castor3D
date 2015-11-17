@@ -156,6 +156,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		"${CastorMinLibraries};${x11Libraries}"
 		"CastorUtilsPch.hpp"
 		"CastorUtilsPch.cpp"
+		"${FreeImage_FLAGS}"
 	)
 	
 	if ( WIN32 )

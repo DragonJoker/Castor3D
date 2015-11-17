@@ -56,7 +56,7 @@ namespace CastorCom
 		virtual ~CQuaternion();
 
 		typedef VariablePutter< Castor::Quaternion, Castor::Matrix4x4r const & > MtxPutter;
-		COM_PROPERTY( RotationMatrix, IMatrix4x4 *, make_getter( this, &Castor::Quaternion::ToRotationMatrix ), MtxPutter( this, &Castor::Quaternion::FromRotationMatrix ) );
+		COM_PROPERTY( RotationMatrix, IMatrix4x4 *, make_getter( this, &Castor::Quaternion::to_matrix ), MtxPutter( this, &Castor::Quaternion::from_matrix ) );
 
 		STDMETHOD( Transform )( /* [in] */ IVector3D * val, /* [out, retval] */ IVector3D ** pVal );
 		STDMETHOD( ToAxisAngle )( /* [out] */ IVector3D ** pAxis, /* [out] */ IAngle ** pAngle );
