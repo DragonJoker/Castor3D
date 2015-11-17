@@ -30,7 +30,8 @@ namespace Castor
 	{
 #if defined( NDEBUG )
 
-		void ShowBacktrace( StringStream & p_stream )
+		template< typename CharT >
+		void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
 		{
 		}
 
