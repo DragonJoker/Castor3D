@@ -52,8 +52,8 @@ void Plane::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const 
 		for ( uint32_t j = 0; j < l_nbVertexH; j++ )
 		{
 			l_vertex = l_submesh->AddPoint( ( i * l_gapW ), ( j * l_gapH ), 0.0 );
-			Vertex::SetTexCoord(	l_vertex, ( i * l_gapW / m_width ), ( j * l_gapH / m_depth ) );
-			Vertex::SetNormal(	l_vertex, 0.0, 0.0, 1.0 );
+			Vertex::SetTexCoord( l_vertex, ( i * l_gapW / m_width ), ( j * l_gapH / m_depth ) );
+			Vertex::SetNormal( l_vertex, 0.0, 0.0, 1.0 );
 		}
 	}
 
@@ -61,8 +61,8 @@ void Plane::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const 
 	{
 		for ( uint32_t j = i * ( m_subDivisionsD + 1 ); j < ( i + 1 ) * ( m_subDivisionsD + 1 ); j++ )
 		{
-			l_submesh->AddFace( j + i,							j + m_subDivisionsW + 2 + i,	j + m_subDivisionsW + 3 + i	);
-			l_submesh->AddFace( j + m_subDivisionsW + 3 + i,	j + i + 1,						j + i	);
+			l_submesh->AddFace( j + i, j + m_subDivisionsW + 2 + i, j + m_subDivisionsW + 3 + i );
+			l_submesh->AddFace( j + m_subDivisionsW + 3 + i, j + i + 1, j + i );
 		}
 	}
 

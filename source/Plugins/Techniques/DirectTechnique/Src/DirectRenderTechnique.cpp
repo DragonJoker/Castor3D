@@ -415,7 +415,7 @@ namespace Direct
 			else
 			{
 				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( Int( &l_writer, 0 ) ) );
-				l_v3Diffuse = l_light.m_v4Ambient().xyz();
+				l_v3Diffuse = texture1D( c3d_sLights, vtx_texture.x() ).xyz();
 			}
 
 			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
