@@ -36,10 +36,10 @@ namespace Dx11Render
 		DxBufferObject< uint8_t, ID3D11Buffer >::DoCleanup();
 	}
 
-	bool DxVertexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool DxVertexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, ShaderProgramBaseSPtr p_program )
 	{
 		bool l_return = ( m_pBuffer != NULL );
-		m_pProgram = std::static_pointer_cast< DxShaderProgram >( p_pProgram );
+		m_program = std::static_pointer_cast< DxShaderProgram >( p_program );
 
 		if ( l_return )
 		{
@@ -50,7 +50,7 @@ namespace Dx11Render
 			// Création du vertex buffer
 			if ( l_return )
 			{
-				l_return = DoCreateBuffer( p_type, p_eNature );
+				l_return = DoCreateBuffer( p_type, p_nature );
 			}
 
 			// Remplissage du buffer si besoin est
@@ -100,9 +100,9 @@ namespace Dx11Render
 	{
 	}
 
-	uint8_t * DxVertexBuffer::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+	uint8_t * DxVertexBuffer::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
-		return DxBufferObject< uint8_t, ID3D11Buffer >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+		return DxBufferObject< uint8_t, ID3D11Buffer >::DoLock( p_offset, p_count, p_flags );
 	}
 
 	void DxVertexBuffer::Unlock()
@@ -112,7 +112,7 @@ namespace Dx11Render
 
 	bool DxVertexBuffer::DoCreateLayout()
 	{
-		DxShaderProgramSPtr l_program = m_pProgram.lock();
+		DxShaderProgramSPtr l_program = m_program.lock();
 		bool l_return = false;
 
 		if ( l_program )
@@ -130,7 +130,7 @@ namespace Dx11Render
 				bool l_bAdd = true;
 				D3D11_INPUT_ELEMENT_DESC l_d3dCurrentElement = { 0 };
 				l_d3dCurrentElement.InputSlot = l_element.m_uiStream;
-				l_d3dCurrentElement.AlignedByteOffset = l_uiOffset;//l_it->m_uiOffset;
+				l_d3dCurrentElement.AlignedByteOffset = l_uiOffset;//l_it->m_offset;
 				l_d3dCurrentElement.InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
 				l_d3dCurrentElement.InstanceDataStepRate = 0;
 				l_uiOffset = D3D11_APPEND_ALIGNED_ELEMENT;
@@ -255,12 +255,12 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	bool DxVertexBuffer::DoCreateBuffer( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature )
+	bool DxVertexBuffer::DoCreateBuffer( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
 	{
 		bool l_return = true;
 		UINT l_uiSize = UINT( m_pBuffer->GetSize() );
 		m_type = p_type;
-		m_eNature = p_eNature;
+		m_eNature = p_nature;
 
 		if ( l_uiSize )
 		{
@@ -269,7 +269,7 @@ namespace Dx11Render
 			l_desc.ByteWidth = l_uiSize * sizeof( uint8_t );
 			l_desc.Usage = DirectX11::Get( p_type );
 			l_desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-			l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_eNature );
+			l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_nature );
 			l_desc.MiscFlags = 0;
 			l_desc.StructureByteStride = 0;//m_declaration.GetStride();
 			DxRenderSystem * l_renderSystem = reinterpret_cast< DxRenderSystem * >( m_pBuffer->GetOwner()->GetRenderSystem() );

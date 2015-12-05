@@ -101,33 +101,33 @@ namespace Castor3D
 	{
 	private:
 		GLXDrawable m_drawable;
-		Display * m_pDisplay;
+		Display * m_display;
 
 	public:
 		IXWindowHandle( GLXDrawable p_drawable, Display * p_pDisplay )
 			: m_drawable( p_drawable )
-			, m_pDisplay( p_pDisplay )
+			, m_display( p_pDisplay )
 		{
 		}
 
 		IXWindowHandle( IXWindowHandle const & p_handle )
 			: m_drawable( p_handle.m_drawable )
-			, m_pDisplay( p_handle.m_pDisplay )
+			, m_display( p_handle.m_display )
 		{
 		}
 
 		IXWindowHandle( IXWindowHandle && p_handle )
 			: m_drawable( std::move( p_handle.m_drawable ) )
-			, m_pDisplay( std::move( p_handle.m_pDisplay ) )
+			, m_display( std::move( p_handle.m_display ) )
 		{
 			p_handle.m_drawable = None;
-			p_handle.m_pDisplay = NULL;
+			p_handle.m_display = NULL;
 		}
 
 		IXWindowHandle & operator =( IXWindowHandle const & p_handle )
 		{
 			m_drawable = p_handle.m_drawable;
-			m_pDisplay = p_handle.m_pDisplay;
+			m_display = p_handle.m_display;
 			return * this;
 		}
 
@@ -136,9 +136,9 @@ namespace Castor3D
 			if ( this != & p_handle )
 			{
 				m_drawable = std::move( p_handle.m_drawable );
-				m_pDisplay = std::move( p_handle.m_pDisplay );
+				m_display = std::move( p_handle.m_display );
 				p_handle.m_drawable = None;
-				p_handle.m_pDisplay = NULL;
+				p_handle.m_display = NULL;
 			}
 
 			return * this;
@@ -150,7 +150,7 @@ namespace Castor3D
 
 		virtual operator bool()
 		{
-			return m_drawable != None && m_pDisplay != NULL;
+			return m_drawable != None && m_display != NULL;
 		}
 
 		inline GLXDrawable GetDrawable()const
@@ -159,7 +159,7 @@ namespace Castor3D
 		}
 		inline Display * GetDisplay()const
 		{
-			return m_pDisplay;
+			return m_display;
 		}
 	};
 

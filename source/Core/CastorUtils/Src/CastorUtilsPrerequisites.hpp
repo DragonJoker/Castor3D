@@ -34,6 +34,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <cstdint>
 #include <deque>
 #include <sstream>
+#include <iostream>
 
 #include "SmartPtr.hpp"
 #include "ELogType.hpp"

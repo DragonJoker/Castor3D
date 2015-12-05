@@ -34,7 +34,7 @@ namespace GlRender
 	{
 		PxBufferBaseSPtr l_buffer = m_buffer.lock();
 		m_glDimension = eGL_TEXDIM_BUFFER;
-		m_glInternal = m_gl.GetInternal( l_buffer->format() );
+		m_glInternal = GetOpenGl().GetInternal( l_buffer->format() );
 		return m_glBuffer.Initialise( l_buffer->const_ptr(), l_buffer->size(), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 	}
 
@@ -50,18 +50,18 @@ namespace GlRender
 
 	bool GlTboTextureStorage::DoBind( uint32_t p_index )
 	{
-		return m_gl.TexBuffer( m_glDimension, m_glInternal, m_glBuffer.GetGlIndex() );
+		return GetOpenGl().TexBuffer( m_glDimension, m_glInternal, m_glBuffer.GetGlName() );
 	}
 
 	void GlTboTextureStorage::DoUnbind( uint32_t p_index )
 	{
-		m_gl.TexBuffer( m_glDimension, m_glInternal, 0 );
+		GetOpenGl().TexBuffer( m_glDimension, m_glInternal, 0 );
 	}
 
 	uint8_t * GlTboTextureStorage::DoLock( uint32_t p_lock )
 	{
 		m_glBuffer.Bind();
-		return m_glBuffer.Lock( m_gl.GetLockFlags( p_lock ) );
+		return m_glBuffer.Lock( GetOpenGl().GetLockFlags( p_lock ) );
 	}
 
 	void GlTboTextureStorage::DoUnlock( bool p_modified )

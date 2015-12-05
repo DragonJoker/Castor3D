@@ -13,13 +13,13 @@ namespace Castor
 		 *\brief		Parses a vector from a line
 		 *\param[in]	p_strParams	The line containing the vector
 		 *\param[out]	p_vResult	Receives the result
-		 *\param[in]	p_pContext	The current parsing context
+		 *\param[in]	p_context	The current parsing context
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Extrait un vecteur à partir d'une ligne
 		 *\param[in]	p_strParams	La ligne contenant le vecteur
 		 *\param[out]	p_vResult	Reàoit le ràsultat
-		 *\param[in]	p_pContext	Le context d'analyse
+		 *\param[in]	p_context	Le context d'analyse
 		 *\return		\p true si tout s'est bien passà
 		 */
 		inline bool ParseSize( String & p_strParams, Size & p_vResult )
@@ -61,13 +61,13 @@ namespace Castor
 		 *\brief		Parses a vector from a line
 		 *\param[in]	p_strParams	The line containing the vector
 		 *\param[out]	p_vResult	Receives the result
-		 *\param[in]	p_pContext	The current parsing context
+		 *\param[in]	p_context	The current parsing context
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Extrait un vecteur à partir d'une ligne
 		 *\param[in]	p_strParams	La ligne contenant le vecteur
 		 *\param[out]	p_vResult	Reàoit le ràsultat
-		 *\param[in]	p_pContext	Le context d'analyse
+		 *\param[in]	p_context	Le context d'analyse
 		 *\return		\p true si tout s'est bien passà
 		 */
 		inline bool ParsePosition( String & p_strParams, Position & p_vResult )
@@ -102,13 +102,13 @@ namespace Castor
 		 *\brief		Parses a vector from a line
 		 *\param[in]	p_strParams	The line containing the vector
 		 *\param[out]	p_vResult	Receives the result
-		 *\param[in]	p_pContext	The current parsing context
+		 *\param[in]	p_context	The current parsing context
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Extrait un vecteur à partir d'une ligne
 		 *\param[in]	p_strParams	La ligne contenant le vecteur
 		 *\param[out]	p_vResult	Reàoit le ràsultat
-		 *\param[in]	p_pContext	Le context d'analyse
+		 *\param[in]	p_context	Le context d'analyse
 		 *\return		\p true si tout s'est bien passà
 		 */
 		inline bool ParseRectangle( String & p_strParams, Rectangle & p_vResult )
@@ -151,13 +151,13 @@ namespace Castor
 		 *\brief		Parses a vector from a line
 		 *\param[in]	p_strParams	The line containing the vector
 		 *\param[out]	p_vResult	Receives the result
-		 *\param[in]	p_pContext	The current parsing context
+		 *\param[in]	p_context	The current parsing context
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Extrait un vecteur à partir d'une ligne
 		 *\param[in]	p_strParams	La ligne contenant le vecteur
 		 *\param[out]	p_vResult	Reàoit le ràsultat
-		 *\param[in]	p_pContext	Le context d'analyse
+		 *\param[in]	p_context	Le context d'analyse
 		 *\return		\p true si tout s'est bien passà
 		 */
 		template< typename T, uint32_t Count >
@@ -191,13 +191,13 @@ namespace Castor
 		 *\brief		Parses a colour from a line
 		 *\param[in]	p_strParams	The line containing the vector
 		 *\param[out]	p_colour	Receives the result
-		 *\param[in]	p_pContext	The current parsing context
+		 *\param[in]	p_context	The current parsing context
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Extrait une couleur à partir d'une ligne
 		 *\param[in]	p_strParams	La ligne contenant le vecteur
 		 *\param[out]	p_colour	Reàoit le ràsultat
-		 *\param[in]	p_pContext	Le context d'analyse
+		 *\param[in]	p_context	Le context d'analyse
 		 *\return		\p true si tout s'est bien passà
 		 */
 		inline bool ParseColour( String & p_strParams, Colour & p_colour )
@@ -451,16 +451,16 @@ namespace Castor
 
 					if ( !m_value.empty() )
 					{
-						std::size_t l_uiIndex = m_value.find( cuT( '\"' ) );
+						std::size_t l_index = m_value.find( cuT( '\"' ) );
 
-						if ( l_uiIndex != String::npos )
+						if ( l_index != String::npos )
 						{
-							if ( l_uiIndex != m_value.size() - 1 )
+							if ( l_index != m_value.size() - 1 )
 							{
-								l_array[1] = m_value.substr( l_uiIndex + 1 ) + l_array[1];
+								l_array[1] = m_value.substr( l_index + 1 ) + l_array[1];
 							}
 
-							m_value = m_value.substr( 0, l_uiIndex );
+							m_value = m_value.substr( 0, l_index );
 						}
 					}
 				}
@@ -505,17 +505,17 @@ namespace Castor
 
 				if ( !m_value.empty() )
 				{
-					std::size_t l_uiIndex = m_value.find( cuT( '\"' ) );
+					std::size_t l_index = m_value.find( cuT( '\"' ) );
 
-					if ( l_uiIndex != String::npos )
+					if ( l_index != String::npos )
 					{
-						if ( l_uiIndex != m_value.size() - 1 )
+						if ( l_index != m_value.size() - 1 )
 						{
-							p_strParams = m_value.substr( l_uiIndex + 1 );
+							p_strParams = m_value.substr( l_index + 1 );
 							string::trim( p_strParams );
 						}
 
-						m_value = m_value.substr( 0, l_uiIndex );
+						m_value = m_value.substr( 0, l_index );
 					}
 				}
 			}

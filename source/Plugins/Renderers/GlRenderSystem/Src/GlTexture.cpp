@@ -15,8 +15,12 @@ using namespace Castor;
 namespace GlRender
 {
 	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, bool p_static )
-		: m_glName( uint32_t( eGL_INVALID_INDEX ) )
-		, m_gl( p_gl )
+		: Object( p_gl,
+				  "GlTexture",
+				  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+				  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+				  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
+				  )
 		, m_glRenderSystem( &p_renderSystem )
 		, m_glDimension( eGL_TEXDIM_2D )
 		, m_static( p_static )
@@ -27,39 +31,16 @@ namespace GlRender
 	{
 	}
 
-	bool GlTexture::Create()
-	{
-		bool l_return = true;
-
-		if ( m_glName == eGL_INVALID_INDEX )
-		{
-			l_return = m_gl.GenTextures( 1, &m_glName );
-			glTrack( m_gl, GlTexture, this );
-		}
-
-		return l_return;
-	}
-
-	void GlTexture::Destroy()
-	{
-		if ( m_glName != eGL_INVALID_INDEX )
-		{
-			glUntrack( m_gl, this );
-			m_gl.DeleteTextures( 1, &m_glName );
-			m_glName = uint32_t( eGL_INVALID_INDEX );
-		}
-	}
-
 	bool GlTexture::Initialise( PxBufferBaseSPtr p_buffer, eTEXTURE_TYPE p_dimension, uint32_t p_layer, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
 		REQUIRE( !m_storage );
-		m_glDimension = m_gl.Get( p_dimension );
+		m_glDimension = GetOpenGl().Get( p_dimension );
 
 		if ( m_glDimension == eGL_TEXDIM_BUFFER )
 		{
-			if ( m_gl.HasTbo() )
+			if ( GetOpenGl().HasTbo() )
 			{
-				m_storage = std::make_unique< GlTboTextureStorage >( m_gl, *m_glRenderSystem );
+				m_storage = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *m_glRenderSystem );
 			}
 			else
 			{
@@ -71,19 +52,19 @@ namespace GlRender
 		{
 			if ( m_static )
 			{
-				m_storage = std::make_unique< GlDirectTextureStorage >( m_gl, *m_glRenderSystem );
+				m_storage = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *m_glRenderSystem );
 			}
 			else
 			{
-				m_storage = std::make_unique< GlPboTextureStorage >( m_gl, *m_glRenderSystem );
+				m_storage = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *m_glRenderSystem );
 			}
 		}
 
-		bool l_return = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
+		bool l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
 
 		if ( l_return )
 		{
-			l_return = m_gl.BindTexture( m_glDimension, m_glName );
+			l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
 		}
 
 		if ( l_return )
@@ -95,8 +76,8 @@ namespace GlRender
 				l_return = m_storage->Initialise( p_dimension, p_layer );
 			}
 
-			m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
-			m_gl.BindTexture( m_glDimension, 0 );
+			GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
+			GetOpenGl().BindTexture( m_glDimension, 0 );
 		}
 
 		return l_return;
@@ -121,11 +102,11 @@ namespace GlRender
 	bool GlTexture::Bind( uint32_t p_index )
 	{
 		REQUIRE( m_storage );
-		bool l_return = m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
+		bool l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 
 		if ( l_return )
 		{
-			l_return = m_gl.BindTexture( m_glDimension, m_glName );
+			l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
 		}
 
 		if ( l_return )
@@ -140,8 +121,8 @@ namespace GlRender
 	{
 		REQUIRE( m_storage );
 		m_storage->Unbind( p_index );
-		m_gl.ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
-		m_gl.BindTexture( m_glDimension, 0 );
+		GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
+		GetOpenGl().BindTexture( m_glDimension, 0 );
 	}
 
 	uint8_t * GlTexture::Lock( uint32_t p_lock )
@@ -158,9 +139,9 @@ namespace GlRender
 
 	void GlTexture::GenerateMipmaps()
 	{
-		if ( m_glName != eGL_INVALID_INDEX && m_glDimension != eGL_TEXDIM_2DMS && m_glDimension != eGL_TEXDIM_BUFFER )
+		if ( GetGlName() != eGL_INVALID_INDEX && m_glDimension != eGL_TEXDIM_2DMS && m_glDimension != eGL_TEXDIM_BUFFER )
 		{
-			m_gl.GenerateMipmap( m_glDimension );
+			GetOpenGl().GenerateMipmap( m_glDimension );
 		}
 	}
 }

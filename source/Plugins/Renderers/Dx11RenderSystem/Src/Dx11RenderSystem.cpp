@@ -340,14 +340,14 @@ namespace Dx11Render
 			StrFeatureLevel[D3D_FEATURE_LEVEL_9_1] = cuT( "Direct3D 9.1" );
 		}
 
-		if ( !m_bInitialised )
+		if ( !m_initialised )
 		{
 			Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
 			Logger::LogInfo( cuT( "Initialising Direct3D" ) );
 			Logger::LogInfo( cuT( "Dx11Context::InitialiseDevice - Loaded " ) + StrFeatureLevel[m_featureLevel] + cuT( " compliant device" ) );
 			CheckShaderSupport();
 			m_pipeline->Initialise();
-			m_bInitialised = true;
+			m_initialised = true;
 			Logger::LogInfo( cuT( "Video card name: " ) + string::string_cast< xchar >( m_adapterDesc.Description ) );
 			Logger::LogInfo( StringStream() << cuT( "Video card memory: " ) << ( int( m_adapterDesc.DedicatedVideoMemory / 1024 ) / 1024 ) << cuT( "mB" ) );
 			Logger::LogInfo( cuT( "Direct3D Initialisation Ended" ) );

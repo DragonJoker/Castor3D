@@ -22,7 +22,7 @@ namespace Castor3D
 
 	bool DynamicTexture::Initialise( uint32_t p_index, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		if ( !m_bInitialised )
+		if ( !m_initialised )
 		{
 			if ( !GetOwner()->HasNonPowerOfTwoTextures() )
 			{
@@ -34,8 +34,8 @@ namespace Castor3D
 
 			m_cpuAccess = p_cpuAccess;
 			m_gpuAccess = p_gpuAccess;
-			m_uiIndex = p_index;
-			m_bInitialised = DoInitialise();
+			m_index = p_index;
+			m_initialised = DoInitialise();
 
 			if ( GetSampler() )
 			{
@@ -43,14 +43,14 @@ namespace Castor3D
 			}
 		}
 
-		return m_bInitialised;
+		return m_initialised;
 	}
 
 	void DynamicTexture::Cleanup()
 	{
-		if ( m_bInitialised )
+		if ( m_initialised )
 		{
-			m_bInitialised = false;
+			m_initialised = false;
 		}
 	}
 
@@ -58,7 +58,7 @@ namespace Castor3D
 	{
 		bool l_return = false;
 
-		if ( m_bInitialised )
+		if ( m_initialised )
 		{
 			l_return = DoBind( p_index );
 
@@ -96,7 +96,7 @@ namespace Castor3D
 
 			m_pPixelBuffer = PxBufferBase::create( l_size, m_pPixelBuffer->format() );
 			Cleanup();
-			m_bInitialised = DoInitialise();
+			m_initialised = DoInitialise();
 		}
 	}
 
@@ -119,7 +119,7 @@ namespace Castor3D
 		{
 			m_pPixelBuffer = PxBufferBase::create( l_size, m_pPixelBuffer->format() );
 			Cleanup();
-			m_bInitialised = DoInitialise();
+			m_initialised = DoInitialise();
 		}
 	}
 

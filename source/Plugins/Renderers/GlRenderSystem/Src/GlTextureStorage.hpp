@@ -31,6 +31,7 @@ namespace GlRender
 	*/
 	class GlTextureStorage
 		: public Castor::NonCopyable
+		, public Holder
 	{
 	public:
 		/**
@@ -166,8 +167,6 @@ namespace GlRender
 		virtual void DoUnlock( bool p_modified ) = 0;
 
 	protected:
-		//! The OpenGL APIs.
-		OpenGl & m_gl;
 		//! The RenderSystem.
 		GlRenderSystem * m_glRenderSystem;
 		//! The OpenGL texture dimension.

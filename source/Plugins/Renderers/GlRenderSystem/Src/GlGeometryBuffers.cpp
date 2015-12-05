@@ -11,10 +11,118 @@ using namespace Castor;
 
 namespace GlRender
 {
+	//************************************************************************************************
+
+	GlGeometryBuffersImpl::GlGeometryBuffersImpl( GlGeometryBuffers & p_buffers )
+		: OwnedBy< GlGeometryBuffers >( p_buffers )
+	{
+	}
+
+	GlGeometryBuffersImpl::~GlGeometryBuffersImpl()
+	{
+	}
+
+	//************************************************************************************************
+
+	class GlGeometryBuffersStd
+		: public GlGeometryBuffersImpl
+		, public Holder
+	{
+	public:
+		GlGeometryBuffersStd( GlGeometryBuffers & p_buffers, OpenGl & p_gl )
+			: GlGeometryBuffersImpl( p_buffers )
+			, Holder( p_gl )
+		{
+		}
+
+		~GlGeometryBuffersStd()
+		{
+		}
+
+		virtual bool Bind()
+		{
+			return static_cast< GeometryBuffers * >( GetOwner() )->Bind();
+		}
+
+		virtual void Unbind()
+		{
+			static_cast< GeometryBuffers * >( GetOwner() )->Unbind();
+		}
+	};
+
+	//************************************************************************************************
+
+	class GlGeometryBuffersVao
+		: public GlGeometryBuffersImpl
+		, public Bindable<
+			std::function< bool( int, uint32_t * ) >,
+			std::function< bool( int, uint32_t const * ) >,
+			std::function< bool( uint32_t ) >
+			>
+	{
+		using ObjectType = Bindable<
+			std::function< bool( int, uint32_t * ) >,
+			std::function< bool( int, uint32_t const * ) >,
+			std::function< bool( uint32_t ) >
+			>;
+
+	public:
+		GlGeometryBuffersVao( GlGeometryBuffers & p_buffers, OpenGl & p_gl )
+			: GlGeometryBuffersImpl( p_buffers )
+			, ObjectType( p_gl,
+						  "GlVertexArrayObjects",
+						  std::bind( &OpenGl::GenVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+						  std::bind( &OpenGl::DeleteVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+						  std::bind( &OpenGl::IsVertexArray, std::ref( p_gl ), std::placeholders::_1 ),
+						  std::bind( &OpenGl::BindVertexArray, std::ref( p_gl ), std::placeholders::_1 )
+						  )
+		{
+			bool l_return = ObjectType::Create();
+
+			if ( l_return )
+			{
+				l_return = GetOpenGl().BindVertexArray( GetGlName() );
+			}
+
+			if ( l_return )
+			{
+				p_buffers.GetVertexBuffer().Bind();
+
+				if ( p_buffers.HasIndexBuffer() )
+				{
+					p_buffers.GetIndexBuffer().Bind();
+				}
+
+				if ( p_buffers.HasMatrixBuffer() )
+				{
+					p_buffers.GetMatrixBuffer().Bind( 2 );
+				}
+
+				GetOpenGl().BindVertexArray( 0 );
+			}
+		}
+
+		~GlGeometryBuffersVao()
+		{
+			ObjectType::Destroy();
+		}
+
+		virtual bool Bind()
+		{
+			return ObjectType::Bind();
+		}
+
+		virtual void Unbind()
+		{
+			ObjectType::Unbind();
+		}
+	};
+
+	//************************************************************************************************
+
 	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
 		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
-		, m_uiIndex( eGL_INVALID_INDEX )
-		, m_gl( p_gl )
+		, Holder( p_gl )
 	{
 	}
 
@@ -22,25 +130,25 @@ namespace GlRender
 	{
 	}
 
-	bool GlGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index )
+	bool GlGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index )
 	{
-		eGL_PRIMITIVE l_eMode = m_gl.Get( p_topology );
+		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( p_topology );
 
-		if ( p_pProgram && p_pProgram->HasObject( eSHADER_TYPE_HULL ) )
+		if ( p_program && p_program->HasObject( eSHADER_TYPE_HULL ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
-			m_gl.PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
+			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
 		}
 
 		if ( Bind() )
 		{
 			if ( m_pIndexBuffer )
 			{
-				m_gl.DrawElements( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
+				GetOpenGl().DrawElements( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
-				m_gl.DrawArrays( l_eMode, int( p_index ), int( p_uiSize ) );
+				GetOpenGl().DrawArrays( l_eMode, int( p_index ), int( p_uiSize ) );
 			}
 
 			Unbind();
@@ -49,14 +157,14 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount )
+	bool GlGeometryBuffers::DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
 	{
-		eGL_PRIMITIVE l_eMode = m_gl.Get( p_eTopology );
+		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( p_eTopology );
 
-		if ( p_pProgram->HasObject( eSHADER_TYPE_HULL ) )
+		if ( p_program->HasObject( eSHADER_TYPE_HULL ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
-			m_gl.PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
+			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
 		}
 
 		if ( m_pMatrixBuffer )
@@ -68,11 +176,11 @@ namespace GlRender
 		{
 			if ( m_pIndexBuffer )
 			{
-				m_gl.DrawElementsInstanced( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_uiCount ) );
+				GetOpenGl().DrawElementsInstanced( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
 			}
 			else
 			{
-				m_gl.DrawArraysInstanced( l_eMode, int( p_index ), int( p_uiSize ), int( p_uiCount ) );
+				GetOpenGl().DrawArraysInstanced( l_eMode, int( p_index ), int( p_uiSize ), int( p_count ) );
 			}
 
 			Unbind();
@@ -83,107 +191,40 @@ namespace GlRender
 
 	bool GlGeometryBuffers::Bind()
 	{
-		return m_pfnBind();
+		REQUIRE( m_impl );
+		return m_impl->Bind();
 	}
 
 	void GlGeometryBuffers::Unbind()
 	{
-		m_pfnUnbind();
+		REQUIRE( m_impl );
+		m_impl->Unbind();
 	}
 
 	bool GlGeometryBuffers::DoCreate()
 	{
-		bool l_return = false;
-
-#if !C3DGL_LIMIT_TO_2_1
-
-		if ( m_gl.HasVao() )
-		{
-			m_pfnBind = PFnBind( [&]()
-			{
-				bool l_return = m_uiIndex != eGL_INVALID_INDEX;
-
-				if ( l_return )
-				{
-					l_return = m_gl.BindVertexArray( m_uiIndex );
-				}
-
-				return l_return;
-			} );
-			m_pfnUnbind = PFnUnbind( [&]()
-			{
-				m_gl.BindVertexArray( 0 );
-			} );
-
-			if ( m_uiIndex == eGL_INVALID_INDEX )
-			{
-				m_gl.GenVertexArrays( 1, &m_uiIndex );
-				glTrack( m_gl, GlGeometryBuffers, this );
-			}
-
-			l_return = m_uiIndex != eGL_INVALID_INDEX;
-		}
-		else
-
-#endif
-
-		{
-			m_pfnBind = PFnBind( [&]()
-			{
-				return GeometryBuffers::Bind();
-			} );
-			m_pfnUnbind = PFnUnbind( [&]()
-			{
-				GeometryBuffers::Unbind();
-			} );
-			m_uiIndex = 0;
-			l_return = true;
-		}
-
-		return l_return;
+		return true;
 	}
 
 	void GlGeometryBuffers::DoDestroy()
 	{
-		if ( m_uiIndex && m_uiIndex != eGL_INVALID_INDEX )
-		{
-			glUntrack( m_gl, this );
-			m_gl.DeleteVertexArrays( 1, &m_uiIndex );
-		}
-
-		m_uiIndex = eGL_INVALID_INDEX;
 	}
 
 	bool GlGeometryBuffers::DoInitialise()
 	{
-		bool l_return = false;
+		bool l_return = m_program.expired();
 
-		if ( m_uiIndex != 0 && m_uiIndex != eGL_INVALID_INDEX )
+		if ( !l_return )
 		{
-			if ( m_pVertexBuffer )
+			if ( GetOpenGl().HasVao() )
 			{
-				l_return = m_gl.BindVertexArray( m_uiIndex );
-
-				if ( l_return )
-				{
-					m_pVertexBuffer->Bind();
-
-					if ( m_pIndexBuffer )
-					{
-						m_pIndexBuffer->Bind();
-					}
-
-					if ( m_pMatrixBuffer )
-					{
-						m_pMatrixBuffer->Bind( 2 );
-					}
-
-					m_gl.BindVertexArray( 0 );
-				}
+				m_impl = std::make_unique< GlGeometryBuffersVao >( *this, GetOpenGl() );
 			}
-		}
-		else
-		{
+			else
+			{
+				m_impl = std::make_unique< GlGeometryBuffersStd >( *this, GetOpenGl() );
+			}
+
 			l_return = true;
 		}
 
@@ -192,5 +233,6 @@ namespace GlRender
 
 	void GlGeometryBuffers::DoCleanup()
 	{
+		m_impl.reset();
 	}
 }

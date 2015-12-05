@@ -25,16 +25,20 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef CASTOR_USE_ASSERT
 #	ifndef NDEBUG
 #		define CASTOR_USE_ASSERT 1
+#		define CASTOR_EXCEPT_ASSERT 1
 #	else
 #		define CASTOR_USE_ASSERT 0
+#		define CASTOR_EXCEPT_ASSERT 0
 #	endif
 #endif
 
 #if CASTOR_USE_ASSERT
+
 #	if defined( CASTOR_ASSERT )
 #		undef CASTOR_ASSERT
 #	endif
-#	include <cassert>
+
+#	if CASTOR_EXCEPT_ASSERT
 
 namespace Castor
 {
@@ -48,7 +52,8 @@ namespace Castor
 	\brief		Classe d'exception levée en Debug, lorsqu'une assertion échoue.
 	*/
 	class AssertException
-		: public Exception
+		: public Debug::Backtraced
+		, public Exception
 	{
 	public:
 		/**
@@ -66,7 +71,8 @@ namespace Castor
 		*\param[in]	p_line			Le numéro de ligne
 		*/
 		AssertException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
-			: Exception( "Assertion failed: " + p_description, p_file, p_function, p_line )
+			: Debug::Backtraced()
+			, Exception( "Assertion failed: " + p_description + "\n" + m_callStack, p_file, p_function, p_line )
 		{
 		}
 		/**
@@ -75,15 +81,27 @@ namespace Castor
 		*\~french
 		*\brief		Destructeur
 		*/
-		virtual ~AssertException() throw( )
+		virtual ~AssertException() throw()
 		{
 		}
 	};
 }
 
-#	define CASTOR_ASSERT( pred, text ) assert( pred )
+#		define CASTOR_ASSERT( pred, text )\
+	if ( !( pred ) )\
+	{\
+		throw Castor::AssertException( ( text ), __FILE__, __FUNCTION__, __LINE__ );\
+	}
+
+#	else
+
+#		define CASTOR_ASSERT( pred, text ) assert( pred )
+
+#	endif
 #else
+
 #	define CASTOR_ASSERT( pred, text )
+
 #endif
 
 //!\~english Checks a pre-condition.	\~french Vérifie une pré-condition.

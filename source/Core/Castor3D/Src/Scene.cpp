@@ -1655,10 +1655,10 @@ namespace Castor3D
 			if ( l_pSkeleton )
 			{
 				int i = 0;
-				Matrix4x4rFrameVariableSPtr l_pVariable;
-				p_matrixBuffer.GetVariable( Pipeline::MtxBones, l_pVariable );
+				Matrix4x4rFrameVariableSPtr l_variable;
+				p_matrixBuffer.GetVariable( Pipeline::MtxBones, l_variable );
 
-				if ( l_pVariable )
+				if ( l_variable )
 				{
 					Matrix4x4r l_mtxFinal;
 
@@ -1676,7 +1676,7 @@ namespace Castor3D
 							}
 						}
 
-						l_pVariable->SetValue( l_mtxFinal.const_ptr(), i++ );
+						l_variable->SetValue( l_mtxFinal.const_ptr(), i++ );
 					}
 				}
 			}

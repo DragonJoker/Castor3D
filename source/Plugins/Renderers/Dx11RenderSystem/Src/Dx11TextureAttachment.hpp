@@ -56,7 +56,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::DoAttach
 		 */
-		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_frameBuffer );
 		/**
 		 *\copydoc		Castor3D::TextureAttachment::DoDetach
 		 */

@@ -365,7 +365,7 @@ namespace Dx11Render
 		m_colorBuffer.reset();
 	}
 
-	bool DxFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_eTarget )
+	bool DxFrameBuffer::DoBind( eFRAMEBUFFER_TARGET p_target )
 	{
 		return true;
 	}

@@ -296,14 +296,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
-		 *\param[in]	p_pRenderBuffer	The render buffer
+		 *\param[in]	p_renderBuffer	The render buffer
 		 *\return		The created attachment
 		 *\~french
 		 *\brief		Crée une attache à un tampon de rendu
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const = 0;
+		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a texture
@@ -314,7 +314,7 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture )const = 0;
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a frame buffer
@@ -323,7 +323,7 @@ namespace Castor3D
 		 *\brief		Crée un tampon d'image
 		 *\return		Le tampon d'image créé
 		 */
-		C3D_API virtual FrameBufferSPtr CreateFrameBuffer()const = 0;
+		C3D_API virtual FrameBufferSPtr CreateFrameBuffer() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status
@@ -334,7 +334,7 @@ namespace Castor3D
 		 */
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
 		/**
 		 *\~english
@@ -672,7 +672,7 @@ namespace Castor3D
 		//!\~english The render target type	\~french Type de RenderTarget
 		eTARGET_TYPE m_eTargetType;
 		//!\~english Tells if the target is initalised	\~french Dit si la cible est initialisée
-		bool m_bInitialised;
+		bool m_initialised;
 		//!\~english The target size	\~french Les dimensions de la cible
 		Castor::Size m_size;
 		//!\~english The technique used to render this target	\~french La technique utilisée pour rendre cette cible
@@ -708,7 +708,7 @@ namespace Castor3D
 		//!\~english The number of actually created render targets	\~french Le compte de render target actuellement créées
 		static uint32_t sm_uiCount;
 		//!\~english This render target's index	\~french L'index de cette render target
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 		//!\~english This render target's render technique name	\~french Le nom de la technique de rendu de cette render target
 		Castor::String m_strTechniqueName;
 		//!\~english Depth and stencil buffers states	\~french Etats des buffers de profondeur et stencil

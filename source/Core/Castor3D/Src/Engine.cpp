@@ -48,7 +48,7 @@ namespace Castor3D
 
 	Engine::Engine()
 		: m_renderSystem( NULL )
-		, m_bCleaned( true )
+		, m_cleaned( true )
 	{
 		std::locale::global( std::locale() );
 		CASTOR_INIT_UNIQUE_INSTANCE();
@@ -138,7 +138,7 @@ namespace Castor3D
 			m_renderLoop = std::make_unique< RenderLoopSync >( *this, m_renderSystem, p_wanted );
 		}
 
-		m_bCleaned = false;
+		m_cleaned = false;
 	}
 
 	void Engine::Cleanup()
@@ -174,6 +174,7 @@ namespace Castor3D
 			}
 
 			m_renderLoop.reset();
+			m_renderSystem->Cleanup();
 
 			m_targetManager->Clear();
 			m_samplerManager->Clear();
@@ -280,12 +281,12 @@ namespace Castor3D
 
 	bool Engine::IsCleaned()
 	{
-		return m_bCleaned;
+		return m_cleaned;
 	}
 
 	void Engine::SetCleaned()
 	{
-		m_bCleaned = true;
+		m_cleaned = true;
 	}
 
 	bool Engine::SupportsShaderModel( eSHADER_MODEL p_eShaderModel )

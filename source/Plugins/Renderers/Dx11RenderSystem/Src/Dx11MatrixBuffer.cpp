@@ -34,17 +34,17 @@ namespace Dx11Render
 		DxBufferObject< real, ID3D11Buffer >::DoCleanup();
 	}
 
-	bool DxMatrixBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool DxMatrixBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, ShaderProgramBaseSPtr p_program )
 	{
 #if 1
 		return true;
 #else
 		bool l_return = false;
-		m_pProgram = std::static_pointer_cast< DxShaderProgram >( p_pProgram );
+		m_program = std::static_pointer_cast< DxShaderProgram >( p_program );
 
 		if ( m_pBuffer )
 		{
-			DxShaderProgramSPtr l_program = m_pProgram.lock();
+			DxShaderProgramSPtr l_program = m_program.lock();
 			bool l_return = false;
 
 			if ( l_program )
@@ -85,7 +85,7 @@ namespace Dx11Render
 				l_desc.ByteWidth = l_uiSize * UINT( sizeof( uint32_t ) );
 				l_desc.Usage = DirectX11::Get( p_type );
 				l_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_eNature );
+				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_nature );
 				l_desc.MiscFlags = 0;
 				l_desc.StructureByteStride = 0;//sizeof( uint32_t );
 
@@ -136,7 +136,7 @@ namespace Dx11Render
 #endif
 	}
 
-	bool DxMatrixBuffer::Bind( uint32_t p_uiCount )
+	bool DxMatrixBuffer::Bind( uint32_t p_count )
 	{
 		return true;
 		bool l_return = true;
@@ -152,10 +152,10 @@ namespace Dx11Render
 	{
 	}
 
-	real * DxMatrixBuffer::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+	real * DxMatrixBuffer::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
 		return NULL;
-		return DxBufferObject< real, ID3D11Buffer >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+		return DxBufferObject< real, ID3D11Buffer >::DoLock( p_offset, p_count, p_flags );
 	}
 
 	void DxMatrixBuffer::Unlock()

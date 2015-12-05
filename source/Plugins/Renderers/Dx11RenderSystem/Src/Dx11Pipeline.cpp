@@ -24,19 +24,19 @@ namespace Dx11Render
 
 	void DxPipelineImpl::ApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer )
 	{
-		Matrix4x4rFrameVariableSPtr l_pVariable;
-		p_matrixBuffer.GetVariable( p_name, l_pVariable );
+		Matrix4x4rFrameVariableSPtr l_variable;
+		p_matrixBuffer.GetVariable( p_name, l_variable );
 
-		if ( l_pVariable )
+		if ( l_variable )
 		{
-			l_pVariable->SetValue( p_matrix );
+			l_variable->SetValue( p_matrix );
 		}
 	}
 
-	void DxPipelineImpl::ApplyViewport( int p_iWindowWidth, int p_iWindowHeight )
+	void DxPipelineImpl::ApplyViewport( int p_windowWidth, int p_windowHeight )
 	{
-		m_viewport.Width = FLOAT( p_iWindowWidth );
-		m_viewport.Height = FLOAT( p_iWindowHeight );
+		m_viewport.Width = FLOAT( p_windowWidth );
+		m_viewport.Height = FLOAT( p_windowHeight );
 		m_viewport.MinDepth = 0.0f;
 		m_viewport.MaxDepth = 1.0f;
 		m_viewport.TopLeftX = 0.0f;
@@ -45,10 +45,10 @@ namespace Dx11Render
 		l_deviceContext->RSSetViewports( 1, &m_viewport );
 	}
 
-	void DxPipelineImpl::Perspective( Matrix4x4r & p_result, Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )
+	void DxPipelineImpl::Perspective( Matrix4x4r & p_result, Angle const & p_fovy, real p_aspect, real p_near, real p_far )
 	{
 		// DirectX left handed (cf. https://msdn.microsoft.com/en-us/library/windows/desktop/bb205350%28v=vs.85%29.aspx)
-		real l_range = real( ( 1 / tan( p_aFOVY.radians() * 0.5 ) ) );
+		real l_range = real( ( 1 / tan( p_fovy.radians() * 0.5 ) ) );
 		p_result.initialise();
 		p_result[0][0] = real( l_range / p_aspect );
 		p_result[1][1] = real( l_range );

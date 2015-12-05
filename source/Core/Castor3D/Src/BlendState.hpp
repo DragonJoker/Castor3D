@@ -90,15 +90,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the alpha to coverage activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation de l'alpha to coverage
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void EnableAlphaToCoverage( bool p_bEnable )
+		inline void EnableAlphaToCoverage( bool p_enable )
 		{
-			m_bChanged |= m_bEnableAlphaToCoverage != p_bEnable;
-			m_bEnableAlphaToCoverage = p_bEnable;
+			m_changed |= m_bEnableAlphaToCoverage != p_enable;
+			m_bEnableAlphaToCoverage = p_enable;
 		}
 		/**
 		 *\~english
@@ -115,15 +115,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the independant blending activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation du blending indépendant
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void EnableIndependantBlend( bool p_bEnable )
+		inline void EnableIndependantBlend( bool p_enable )
 		{
-			m_bChanged |= m_bIndependantBlend != p_bEnable;
-			m_bIndependantBlend = p_bEnable;
+			m_changed |= m_bIndependantBlend != p_enable;
+			m_bIndependantBlend = p_enable;
 		}
 		/**
 		 *\~english
@@ -147,7 +147,7 @@ namespace Castor3D
 		 */
 		inline void SetBlendFactors( const Castor::Colour & p_clFactors )
 		{
-			m_bChanged |= m_blendFactors != p_clFactors;
+			m_changed |= m_blendFactors != p_clFactors;
 			m_blendFactors = p_clFactors;
 		}
 		/**
@@ -172,7 +172,7 @@ namespace Castor3D
 		 */
 		inline void SetSampleCoverageMask( uint32_t p_uiMask )
 		{
-			m_bChanged |= m_uiSampleMask != p_uiMask;
+			m_changed |= m_uiSampleMask != p_uiMask;
 			m_uiSampleMask = p_uiMask;
 		}
 		/**
@@ -190,15 +190,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the blending activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'activation du blending
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void EnableBlend( bool p_bEnable, uint8_t p_index = 0 )
+		inline void EnableBlend( bool p_enable, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_bEnableBlend != p_bEnable;
-			m_rtStates[p_index].m_bEnableBlend = p_bEnable;
+			m_changed |= m_rtStates[p_index].m_bEnableBlend != p_enable;
+			m_rtStates[p_index].m_bEnableBlend = p_enable;
 		}
 		/**
 		 *\~english
@@ -222,7 +222,7 @@ namespace Castor3D
 		 */
 		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_eRgbSrcBlend != p_eValue;
+			m_changed |= m_rtStates[p_index].m_eRgbSrcBlend != p_eValue;
 			m_rtStates[p_index].m_eRgbSrcBlend = p_eValue;
 		}
 		/**
@@ -247,7 +247,7 @@ namespace Castor3D
 		 */
 		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_eRgbDstBlend != p_eValue;
+			m_changed |= m_rtStates[p_index].m_eRgbDstBlend != p_eValue;
 			m_rtStates[p_index].m_eRgbDstBlend = p_eValue;
 		}
 		/**
@@ -272,7 +272,7 @@ namespace Castor3D
 		 */
 		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_eRgbBlendOp != p_eValue;
+			m_changed |= m_rtStates[p_index].m_eRgbBlendOp != p_eValue;
 			m_rtStates[p_index].m_eRgbBlendOp = p_eValue;
 		}
 		/**
@@ -297,7 +297,7 @@ namespace Castor3D
 		 */
 		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_eAlphaSrcBlend != p_eValue;
+			m_changed |= m_rtStates[p_index].m_eAlphaSrcBlend != p_eValue;
 			m_rtStates[p_index].m_eAlphaSrcBlend = p_eValue;
 		}
 		/**
@@ -322,7 +322,7 @@ namespace Castor3D
 		 */
 		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_eAlphaDstBlend != p_eValue;
+			m_changed |= m_rtStates[p_index].m_eAlphaDstBlend != p_eValue;
 			m_rtStates[p_index].m_eAlphaDstBlend = p_eValue;
 		}
 		/**
@@ -347,7 +347,7 @@ namespace Castor3D
 		 */
 		inline void SetAlphaBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_eAlphaBlendOp != p_eValue;
+			m_changed |= m_rtStates[p_index].m_eAlphaBlendOp != p_eValue;
 			m_rtStates[p_index].m_eAlphaBlendOp = p_eValue;
 		}
 		/**
@@ -372,7 +372,7 @@ namespace Castor3D
 		 */
 		inline void SetWriteMask( uint8_t p_byMask, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_index].m_uiWriteMask != p_byMask;
+			m_changed |= m_rtStates[p_index].m_uiWriteMask != p_byMask;
 			m_rtStates[p_index].m_uiWriteMask = p_byMask;
 		}
 		/**
@@ -385,10 +385,10 @@ namespace Castor3D
 		 */
 		inline void SetColourMask( eWRITING_MASK p_r, eWRITING_MASK p_g, eWRITING_MASK p_b, eWRITING_MASK p_a )
 		{
-			m_bChanged |= m_eColourMask[0] != p_r;
-			m_bChanged |= m_eColourMask[1] != p_g;
-			m_bChanged |= m_eColourMask[2] != p_b;
-			m_bChanged |= m_eColourMask[3] != p_a;
+			m_changed |= m_eColourMask[0] != p_r;
+			m_changed |= m_eColourMask[1] != p_g;
+			m_changed |= m_eColourMask[2] != p_b;
+			m_changed |= m_eColourMask[3] != p_a;
 			m_eColourMask[0] = p_r;
 			m_eColourMask[1] = p_g;
 			m_eColourMask[2] = p_b;
@@ -479,7 +479,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english Tells if the blend state has changed	\~french Dit que l'état a changé
-		bool m_bChanged;
+		bool m_changed;
 		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activé
 		bool m_bEnableAlphaToCoverage;
 		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les états indépendants de mélange sont activés

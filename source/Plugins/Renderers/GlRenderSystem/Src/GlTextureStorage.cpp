@@ -11,7 +11,7 @@ namespace GlRender
 {
 	GlTextureStorage::GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
 		: m_glRenderSystem( &p_renderSystem )
-		, m_gl( p_gl )
+		, Holder( p_gl )
 		, m_depth( 0 )
 	{
 	}
@@ -35,7 +35,7 @@ namespace GlRender
 	bool GlTextureStorage::Initialise( eTEXTURE_TYPE p_dimension, uint32_t p_depth )
 	{
 		m_depth = p_depth;
-		m_glDimension = m_gl.Get( p_dimension );
+		m_glDimension = GetOpenGl().Get( p_dimension );
 		return DoInitialise();
 	}
 

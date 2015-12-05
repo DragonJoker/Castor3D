@@ -1437,8 +1437,8 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 
 	if ( p_params.size() > 1 )
 	{
-		String l_strTmp;
-		StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_strTmp ), cuT( "-" ), 20, false );
+		String l_tmp;
+		StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
 
 		if ( l_arrayStrParams.size() )
 		{
@@ -3355,12 +3355,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimatedObject )
 
 		if ( l_pGeometry )
 		{
-			AnimatedObjectSPtr l_pObject = l_pContext->pGroup->CreateObject( l_name );
+			AnimatedObjectSPtr l_object = l_pContext->pGroup->CreateObject( l_name );
 
-			if ( l_pObject )
+			if ( l_object )
 			{
-				l_pObject->SetGeometry( l_pGeometry );
-				l_pGeometry->SetAnimatedObject( l_pObject );
+				l_object->SetGeometry( l_pGeometry );
+				l_pGeometry->SetAnimatedObject( l_object );
 			}
 			else
 			{

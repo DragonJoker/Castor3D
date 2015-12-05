@@ -36,8 +36,8 @@ namespace GlRender
 	};
 
 	template <typename T, uint32_t Count>
-	GlAttribute<T, Count>::GlAttribute( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_strAttribName )
-		: GlAttributeBase( p_gl, p_renderSystem, p_strAttribName, eGL_TYPE( GlTyper< T >::Value ), Count )
+	GlAttribute<T, Count>::GlAttribute( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_attributeName )
+		: GlAttributeBase( p_gl, p_renderSystem, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Count )
 	{
 	}
 

@@ -133,48 +133,48 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::FrameVariable( ShaderProgramBase * p_pProgram )
-		: m_bChanged( true )
-		, m_uiOcc( 1 )
+	FrameVariable::FrameVariable( ShaderProgramBase * p_program )
+		: m_changed( true )
+		, m_occurences( 1 )
 		, m_strValue( 1 )
-		, m_pProgram( p_pProgram )
+		, m_program( p_program )
 	{
 	}
 
-	FrameVariable::FrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc )
-		: m_bChanged( true )
-		, m_uiOcc( p_uiOcc )
-		, m_strValue( m_uiOcc )
-		, m_pProgram( p_pProgram )
+	FrameVariable::FrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences )
+		: m_changed( true )
+		, m_occurences( p_occurences )
+		, m_strValue( m_occurences )
+		, m_program( p_program )
 	{
 	}
 
 	FrameVariable::FrameVariable( FrameVariable const & p_object )
 		: m_name( p_object.m_name )
-		, m_uiOcc( p_object.m_uiOcc )
+		, m_occurences( p_object.m_occurences )
 		, m_strValue( p_object.m_strValue )
-		, m_pProgram( p_object.m_pProgram )
+		, m_program( p_object.m_program )
 	{
 	}
 
 	FrameVariable::FrameVariable( FrameVariable && p_object )
 		: m_name( std::move( p_object.m_name ) )
-		, m_uiOcc( std::move( p_object.m_uiOcc ) )
+		, m_occurences( std::move( p_object.m_occurences ) )
 		, m_strValue( std::move( p_object.m_strValue ) )
-		, m_pProgram( std::move( p_object.m_pProgram ) )
+		, m_program( std::move( p_object.m_program ) )
 	{
 		p_object.m_name.clear();
-		p_object.m_uiOcc = 0;
+		p_object.m_occurences = 0;
 		p_object.m_strValue.clear();
-		p_object.m_pProgram = NULL;
+		p_object.m_program = NULL;
 	}
 
 	FrameVariable & FrameVariable::operator =( FrameVariable const & p_object )
 	{
 		m_name = p_object.m_name;
-		m_uiOcc = p_object.m_uiOcc;
+		m_occurences = p_object.m_occurences;
 		m_strValue = p_object.m_strValue;
-		m_pProgram = p_object.m_pProgram;
+		m_program = p_object.m_program;
 		return *this;
 	}
 
@@ -183,13 +183,13 @@ namespace Castor3D
 		if ( this != &p_object )
 		{
 			m_name = std::move( p_object.m_name );
-			m_uiOcc = std::move( p_object.m_uiOcc );
+			m_occurences = std::move( p_object.m_occurences );
 			m_strValue = std::move( p_object.m_strValue );
-			m_pProgram = std::move( p_object.m_pProgram );
+			m_program = std::move( p_object.m_program );
 			p_object.m_name.clear();
-			p_object.m_uiOcc = 0;
+			p_object.m_occurences = 0;
 			p_object.m_strValue.clear();
-			p_object.m_pProgram = NULL;
+			p_object.m_program = NULL;
 		}
 
 		return *this;
@@ -206,12 +206,12 @@ namespace Castor3D
 
 	void FrameVariable::SetValueStr( String const & p_strValue, uint32_t p_index )
 	{
-		REQUIRE( p_index < m_uiOcc );
+		REQUIRE( p_index < m_occurences );
 
-		if ( p_index < m_uiOcc )
+		if ( p_index < m_occurences )
 		{
 			m_strValue[p_index] = p_strValue;
-			m_bChanged = true;
+			m_changed = true;
 			DoSetValueStr( p_strValue, p_index );
 		}
 	}

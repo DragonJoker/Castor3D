@@ -74,7 +74,7 @@ namespace Dx11Render
 
 				if ( l_hr == S_OK )
 				{
-					m_eStatus = eSHADER_STATUS_COMPILED;
+					m_status = eSHADER_STATUS_COMPILED;
 				}
 			}
 		}

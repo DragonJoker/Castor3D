@@ -25,15 +25,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlContext
-		:	public Castor3D::Context
-		,	public Castor::NonCopyable
+		: public Castor3D::Context
+		, public Castor::NonCopyable
+		, public Holder
 	{
 	public:
 		GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl );
 		virtual ~GlContext();
 
 		GlContextImpl * GetImpl();
-		virtual void UpdateFullScreen( bool p_bVal );
+		virtual void UpdateFullScreen( bool p_value );
 		virtual Castor::Size GetMaxSize( Castor::Size const & p_size )
 		{
 			return p_size;
@@ -45,14 +46,12 @@ namespace GlRender
 		virtual void DoSetCurrent();
 		virtual void DoEndCurrent();
 		virtual void DoSwapBuffers();
-		virtual void DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
-		virtual void DoSetAlphaFunc( Castor3D::eALPHA_FUNC p_eFunc, uint8_t p_byValue );
+		virtual void DoSetAlphaFunc( Castor3D::eALPHA_FUNC p_func, uint8_t p_value );
 		virtual void DoCullFace( Castor3D::eFACE p_eCullFace );
 
 	private:
-		OpenGl & m_gl;
-		GlContextImpl * m_pImplementation;
-		GlRenderSystem * m_pGlRenderSystem;
+		GlContextImpl * m_implementation;
+		GlRenderSystem * m_glRenderSystem;
 		uint32_t m_timerQueryId[2];
 		uint32_t m_queryIndex = 0;
 	};

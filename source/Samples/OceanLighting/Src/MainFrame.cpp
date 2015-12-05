@@ -338,19 +338,19 @@ namespace OceanLighting
 			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( cuT( "DummyCameraNode" ), l_pScene->GetCameraRootNode() );
 			CameraSPtr l_pCamera = l_pScene->CreateCamera( cuT( "DummyCamera" ), m_width, m_height, l_pNode );
 			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
-			RenderTargetSPtr l_pTarget = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
-			l_pTarget->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
-			l_pTarget->SetDepthFormat( ePIXEL_FORMAT_DEPTH24S8 );
-			l_pTarget->SetSize( Size( m_width, m_height ) );
-			l_pTarget->SetScene( l_pScene );
-			l_pTarget->SetCamera( l_pCamera );
+			RenderTargetSPtr l_target = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
+			l_target->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
+			l_target->SetDepthFormat( ePIXEL_FORMAT_DEPTH24S8 );
+			l_target->SetSize( Size( m_width, m_height ) );
+			l_target->SetScene( l_pScene );
+			l_target->SetCamera( l_pCamera );
 			Parameters l_params;
-			m_pTechnique = std::static_pointer_cast< RenderTechnique >( m_pCastor3D->CreateTechnique( cuT( "ocean lighting" ), *l_pTarget, l_params ) );
+			m_pTechnique = std::static_pointer_cast< RenderTechnique >( m_pCastor3D->CreateTechnique( cuT( "ocean lighting" ), *l_target, l_params ) );
 			m_pTechnique->SetWidth( m_width );
 			m_pTechnique->SetHeight( m_height );
-			l_pTarget->SetTechnique( m_pTechnique );
+			l_target->SetTechnique( m_pTechnique );
 			m_window = m_pCastor3D->GetWindowManager().Create();
-			m_window->SetRenderTarget( l_pTarget );
+			m_window->SetRenderTarget( l_target );
 #if defined( _WIN32 )
 			WindowHandle l_handle( std::make_shared< IMswWindowHandle >( p_parent->GetHandle() ) );
 #elif defined( __linux__ )

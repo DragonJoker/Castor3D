@@ -16,6 +16,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
+	static const char * C3D_UNKNOWN_EXCEPTION = "Unknown exception";
 
 	RenderLoop::RenderLoop( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS )
 		: OwnedBy< Engine >( p_engine )
@@ -92,17 +93,36 @@ namespace Castor3D
 
 	void RenderLoop::DoRenderFrame()
 	{
-		if ( m_renderSystem->GetMainContext() )
+		try
 		{
-			uint32_t l_vertices = 0;
-			uint32_t l_faces = 0;
-			uint32_t l_objects = 0;
-			m_debugOverlays->StartFrame();
-			DoGpuStep( l_vertices, l_faces, l_objects );
-			m_debugOverlays->EndGpuTask();
-			DoCpuStep();
-			m_debugOverlays->EndCpuTask();
-			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
+			if ( m_renderSystem->GetMainContext() )
+			{
+				uint32_t l_vertices = 0;
+				uint32_t l_faces = 0;
+				uint32_t l_objects = 0;
+				m_debugOverlays->StartFrame();
+				DoGpuStep( l_vertices, l_faces, l_objects );
+				m_debugOverlays->EndGpuTask();
+				DoCpuStep();
+				m_debugOverlays->EndCpuTask();
+				m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
+			}
+		}
+		catch ( AssertException & p_exc )
+		{
+			Logger::LogError( p_exc.GetFullDescription() );
+		}
+		catch ( Exception & p_exc )
+		{
+			Logger::LogError( p_exc.GetFullDescription() );
+		}
+		catch ( std::exception & p_exc )
+		{
+			Logger::LogError( p_exc.what() );
+		}
+		catch ( ... )
+		{
+			Logger::LogError( C3D_UNKNOWN_EXCEPTION );
 		}
 	}
 

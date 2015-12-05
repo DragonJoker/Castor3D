@@ -29,6 +29,7 @@ namespace GlRender
 	class GlRenderTarget
 		: public Castor3D::RenderTarget
 		, public Castor::NonCopyable
+		, public Holder
 	{
 	private:
 		typedef bool ( GlRenderTarget:: * BeginSceneFunction )();
@@ -40,13 +41,12 @@ namespace GlRender
 		GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor3D::eTARGET_TYPE p_type );
 		virtual ~GlRenderTarget();
 
-		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_pRenderBuffer )const;
-		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_texture )const;
-		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer()const;
+		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_renderBuffer );
+		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_texture );
+		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer();
 
 	protected:
-		bool m_bCleaned;
-		OpenGl & m_gl;
+		bool m_cleaned;
 		GlRenderSystem * m_renderSystem;
 	};
 }

@@ -259,12 +259,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a uniform variable to pass to the shader objects
-		 *\param[in]	p_pVariable	The variable to pass
+		 *\param[in]	p_variable	The variable to pass
 		 *\~french
 		 *\brief		Crée une variable uniform à donner aux ShaderObjects
-		 *\param[in]	p_pVariable	La variable à donner
+		 *\param[in]	p_variable	La variable à donner
 		 */
-		C3D_API virtual void AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable );
+		C3D_API virtual void AddFrameVariable( OneTextureFrameVariableSPtr p_variable );
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -324,24 +324,24 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the given parameter value
 		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_mtxValue	The parameter value
+		 *\param[in]	p_value	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
 		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_mtxValue	La valeur du paramètre
+		 *\param[in]	p_value	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix4x4r const & CU_PARAM_UNUSED( p_mtxValue ) ) {}
+		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix4x4r const & CU_PARAM_UNUSED( p_value ) ) {}
 		/**
 		 *\~english
 		 *\brief		Defines the given parameter value
 		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_mtxValue	The parameter value
+		 *\param[in]	p_value	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
 		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_mtxValue	La valeur du paramètre
+		 *\param[in]	p_value	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix3x3r const & CU_PARAM_UNUSED( p_mtxValue ) ) {}
+		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix3x3r const & CU_PARAM_UNUSED( p_value ) ) {}
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source for given model
@@ -366,7 +366,7 @@ namespace Castor3D
 		 */
 		inline Castor::String const & GetLoadedSource()const
 		{
-			return m_strLoadedSource;
+			return m_loadedSource;
 		}
 		/**
 		 *\~english
@@ -469,14 +469,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the output vertex count
-		 *\param[in]	p_uiCount	The count
+		 *\param[in]	p_count	The count
 		 *\~french
 		 *\brief		Définit le nombre de vertices générés
-		 *\param[in]	p_uiCount	Le compte
+		 *\param[in]	p_count	Le compte
 		 */
-		void SetOutputVtxCount( uint8_t p_uiCount )
+		void SetOutputVtxCount( uint8_t p_count )
 		{
-			m_uiOutputVtxCount = p_uiCount;
+			m_uiOutputVtxCount = p_count;
 		}
 		/**
 		 *\~english
@@ -500,7 +500,7 @@ namespace Castor3D
 		 */
 		inline eSHADER_STATUS GetStatus()const
 		{
-			return m_eStatus;
+			return m_status;
 		}
 		/**
 		 *\~english
@@ -512,7 +512,7 @@ namespace Castor3D
 		 */
 		inline ShaderProgramBase * GetParent()const
 		{
-			return m_pParent;
+			return m_parent;
 		}
 
 	protected:
@@ -533,7 +533,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The parent shader program	\~french Le programme parent
-		ShaderProgramBase * m_pParent;
+		ShaderProgramBase * m_parent;
 		//!<\~english The shader type	\~french Le type de shader
 		eSHADER_TYPE m_type;
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
@@ -541,11 +541,11 @@ namespace Castor3D
 		//!\~english Array of source codes, sorted by shader model	\~french Tableau des codes sources, triés par modèle de shader
 		std::array< Castor::String, eSHADER_MODEL_COUNT > m_arraySources;
 		//!<\~english Actually loaded ASCII Source-Code	\~french Le texte ASCII du shader chargé
-		Castor::String m_strLoadedSource;
+		Castor::String m_loadedSource;
 		//!<\~english Actually loaded file path	\~french Le chemin d'accès au fichier contenant le source du shader
 		Castor::Path m_pathLoadedFile;
 		//!<\~english The shader compile status	\~french Le statut de compilation du shader
-		eSHADER_STATUS m_eStatus;
+		eSHADER_STATUS m_status;
 		//!\~english The frame variables map, ordered by name	\~french La liste des variables de frame
 		FrameVariablePtrStrMap m_mapFrameVariables;
 		//!\~english The frame variables map	\~french La liste des variables de frame

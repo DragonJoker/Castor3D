@@ -266,20 +266,20 @@ namespace Castor
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
 		 *\param[out]	p_matrix	The matrix that will receive the perspective matrix
-		 *\param[in]	p_aFOVY		Y Field of View
+		 *\param[in]	p_fovy		Y Field of View
 		 *\param[in]	aspect		Width / Height ratio
 		 *\param[in]	zNear		Near clipping plane value
 		 *\param[in]	zFar		Far clipping plane value
 		 *\~french
 		 *\brief		Construit une matrice de projection en perspective centrée
 		 *\param[out]	p_matrix	La matrice qui contiendra le résultat
-		 *\param[in]	p_aFOVY		Angle de vision Y
+		 *\param[in]	p_fovy		Angle de vision Y
 		 *\param[in]	aspect		Ratio Largeur / Hauteur
 		 *\param[in]	zNear		Position du plan proche
 		 *\param[in]	zFar		Position du plan lointain
 		 */
 		template< typename T, typename U >
-		static SquareMatrix< T, 4 > & perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_aFOVY, U aspect, U zNear, U zFar );
+		static SquareMatrix< T, 4 > & perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_fovy, U aspect, U zNear, U zFar );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters

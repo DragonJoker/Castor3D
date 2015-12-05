@@ -34,7 +34,7 @@ namespace GlRender
 		: public GlAttributeBase
 	{
 	public:
-		GlAttribute( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_strAttribName );
+		GlAttribute( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_attributeName );
 		virtual ~GlAttribute();
 	};
 }

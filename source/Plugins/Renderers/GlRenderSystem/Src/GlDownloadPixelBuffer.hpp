@@ -30,8 +30,8 @@ namespace GlRender
 		: public GlGpuIoBuffer
 	{
 	public:
-		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pPixels, uint32_t p_uiPixelsSize );
-		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pPixels );
+		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, uint8_t * p_pixels, uint32_t p_pixelsSize );
+		GlDownloadPixelBuffer( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::PxBufferBaseSPtr p_pixels );
 		virtual ~GlDownloadPixelBuffer();
 
 		virtual bool Initialise();

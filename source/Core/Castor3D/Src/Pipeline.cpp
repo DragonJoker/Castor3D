@@ -191,23 +191,23 @@ namespace Castor3D
 		}
 	}
 
-	void Pipeline::ApplyViewport( int p_iWindowWidth, int p_iWindowHeight )
+	void Pipeline::ApplyViewport( int p_windowWidth, int p_windowHeight )
 	{
 		IPipelineImplSPtr l_impl = DoGetImpl();
 
 		if ( l_impl )
 		{
-			l_impl->ApplyViewport( p_iWindowWidth, p_iWindowHeight );
+			l_impl->ApplyViewport( p_windowWidth, p_windowHeight );
 		}
 	}
 
-	void Pipeline::Perspective( Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )
+	void Pipeline::Perspective( Angle const & p_fovy, real p_aspect, real p_near, real p_far )
 	{
 		IPipelineImplSPtr l_impl = DoGetImpl();
 
 		if ( l_impl )
 		{
-			l_impl->Perspective( m_mtxProjection, p_aFOVY, p_aspect, p_near, p_far );
+			l_impl->Perspective( m_mtxProjection, p_fovy, p_aspect, p_near, p_far );
 		}
 	}
 
@@ -265,12 +265,12 @@ namespace Castor3D
 
 	void IPipelineImpl::ApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer )
 	{
-		Matrix4x4rFrameVariableSPtr l_pVariable;
-		p_matrixBuffer.GetVariable( p_name, l_pVariable );
+		Matrix4x4rFrameVariableSPtr l_variable;
+		p_matrixBuffer.GetVariable( p_name, l_variable );
 
-		if ( l_pVariable )
+		if ( l_variable )
 		{
-			l_pVariable->SetValue( p_matrix );
+			l_variable->SetValue( p_matrix );
 		}
 	}
 

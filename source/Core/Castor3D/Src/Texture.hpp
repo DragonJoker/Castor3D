@@ -175,7 +175,7 @@ namespace Castor3D
 		 */
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
 		/**
 		 *\~english
@@ -204,14 +204,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the texture dimension
-		 *\param[in]	p_eDimension	The texture dimension
+		 *\param[in]	p_dimension	The texture dimension
 		 *\~french
 		 *\brief		Définit la dimension de la texture
-		 *\param[in]	p_eDimension	La dimension de la texture
+		 *\param[in]	p_dimension	La dimension de la texture
 		 */
-		inline void SetType( eTEXTURE_TYPE p_eDimension )
+		inline void SetType( eTEXTURE_TYPE p_dimension )
 		{
-			m_type = p_eDimension;
+			m_type = p_dimension;
 		}
 		/**
 		 *\~english
@@ -319,7 +319,7 @@ namespace Castor3D
 		 */
 		inline uint32_t const & GetIndex()const
 		{
-			return m_uiIndex;
+			return m_index;
 		}
 		/**
 		 *\~english
@@ -331,7 +331,7 @@ namespace Castor3D
 		 */
 		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_index;
+			m_index = p_index;
 		}
 		/**
 		 *\~english
@@ -388,7 +388,7 @@ namespace Castor3D
 	protected:
 		DECLARE_VECTOR( Castor::PxBufferBaseSPtr, PxBuffer );
 		//!\~english Initialisation status	\~french Statut d'initialisation
-		bool m_bInitialised;
+		bool m_initialised;
 		//!\~english Texture base type.	\~french La type de base de la texture.
 		eTEXTURE_BASE_TYPE m_baseType;
 		//!\~english Texture type.	\~french Type de texture.
@@ -396,7 +396,7 @@ namespace Castor3D
 		//!\~english Texture mapping modes	\~french Modes de mappage de la texture
 		eTEXTURE_MAP_MODE m_eMapMode;
 		//!\~english Texture index	\~french Index de la texture
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 		//!\~english 3D Texture depth	\~french Profondeur de la texture 3D
 		uint32_t m_uiDepth;
 		//!\~english Texture pixels, at least at initialisation	\~french Pixels de la texture, au moins au moment de l'initialisation

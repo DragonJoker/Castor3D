@@ -1,12 +1,13 @@
 #include "GlShaderProgram.hpp"
 
 #include "GlShaderObject.hpp"
-#include "GlShaderSource.hpp"
 #include "GlBuffer.hpp"
 #include "GlRenderSystem.hpp"
 #include "GlOneFrameVariable.hpp"
 #include "GlFrameVariableBuffer.hpp"
 #include "OpenGl.hpp"
+
+#include "GlslSource.hpp"
 
 #include <Logger.hpp>
 
@@ -17,8 +18,12 @@ namespace GlRender
 {
 	GlShaderProgram::GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
 		: ShaderProgramBase( p_renderSystem, eSHADER_LANGUAGE_GLSL )
-		, m_programObject( eGL_INVALID_INDEX )
-		, m_gl( p_gl )
+		, Object( p_gl,
+				  "GlShaderProgram",
+				  std::bind( &OpenGl::CreateProgram, std::ref( p_gl ) ),
+				  std::bind( &OpenGl::DeleteProgram, std::ref( p_gl ), std::placeholders::_1 ),
+				  std::bind( &OpenGl::IsProgram, std::ref( p_gl ), std::placeholders::_1 )
+				  )
 	{
 		CreateObject( eSHADER_TYPE_VERTEX );
 		CreateObject( eSHADER_TYPE_PIXEL );
@@ -31,25 +36,14 @@ namespace GlRender
 	void GlShaderProgram::Cleanup()
 	{
 		ShaderProgramBase::Cleanup();
-
-		if ( m_programObject != eGL_INVALID_INDEX )
-		{
-			glUntrack( m_gl, this );
-			m_gl.DeleteProgram( m_programObject );
-			m_programObject = eGL_INVALID_INDEX;
-		}
+		ObjectType::Destroy();
 	}
 
 	void GlShaderProgram::Initialise()
 	{
-		if ( m_eStatus != ePROGRAM_STATUS_LINKED )
+		if ( m_status != ePROGRAM_STATUS_LINKED )
 		{
-			if ( m_programObject == eGL_INVALID_INDEX )
-			{
-				m_programObject = m_gl.CreateProgram();
-				glTrack( m_gl, GlShaderProgram, this );
-			}
-
+			ObjectType::Create();
 			ShaderProgramBase::Initialise();
 		}
 	}
@@ -59,12 +53,12 @@ namespace GlRender
 		bool l_return = false;
 		int l_iLinked = 0;
 
-		if ( m_eStatus != ePROGRAM_STATUS_ERROR )
+		if ( m_status != ePROGRAM_STATUS_ERROR )
 		{
 			l_return = true;
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
-			l_return &= m_gl.LinkProgram( m_programObject );
-			l_return &= m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_LINK, &l_iLinked );
+			l_return &= GetOpenGl().LinkProgram( GetGlName() );
+			l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_iLinked );
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );
 			RetrieveLinkerLog( m_linkerLog );
 
@@ -80,10 +74,10 @@ namespace GlRender
 			else
 			{
 				Logger::LogError( cuT( "GlShaderProgram::Link - Error: " ) + m_linkerLog );
-				m_eStatus = ePROGRAM_STATUS_ERROR;
+				m_status = ePROGRAM_STATUS_ERROR;
 			}
 
-			l_return = m_eStatus == ePROGRAM_STATUS_LINKED;
+			l_return = m_status == ePROGRAM_STATUS_LINKED;
 		}
 
 		return l_return;
@@ -91,38 +85,38 @@ namespace GlRender
 
 	void GlShaderProgram::RetrieveLinkerLog( String & strLog )
 	{
-		if ( m_programObject == eGL_INVALID_INDEX )
+		if ( GetGlName() == eGL_INVALID_INDEX )
 		{
-			strLog = m_gl.GetGlslErrorString( 2 );
+			strLog = GetOpenGl().GetGlslErrorString( 2 );
 		}
 		else
 		{
 			int l_length = 0;
-			m_gl.GetProgramiv( m_programObject, eGL_SHADER_STATUS_INFO_LOG_LENGTH , &l_length );
+			GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH , &l_length );
 
 			if ( l_length > 1 )
 			{
 				char * l_buffer = new char[l_length];
 				int l_written = 0;
-				m_gl.GetProgramInfoLog( m_programObject, l_length, &l_written, l_buffer );
+				GetOpenGl().GetProgramInfoLog( GetGlName(), l_length, &l_written, l_buffer );
 				strLog = string::string_cast< xchar >( l_buffer );
 				delete [] l_buffer;
 			}
 		}
 	}
 
-	void GlShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
+	void GlShaderProgram::Bind( uint8_t p_index, uint8_t p_count )
 	{
-		if ( m_programObject != eGL_INVALID_INDEX && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
 		{
-			m_gl.UseProgram( m_programObject );
-			ShaderProgramBase::Bind( p_byIndex, p_byCount );
+			GetOpenGl().UseProgram( GetGlName() );
+			ShaderProgramBase::Bind( p_index, p_count );
 		}
 	}
 
 	void GlShaderProgram::Unbind()
 	{
-		if ( m_programObject != eGL_INVALID_INDEX && m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
 		{
 			uint32_t l_index = 0;
 
@@ -132,7 +126,7 @@ namespace GlRender
 			}
 
 			ShaderProgramBase::Unbind();
-			m_gl.UseProgram( 0 );
+			GetOpenGl().UseProgram( 0 );
 		}
 	}
 
@@ -140,9 +134,9 @@ namespace GlRender
 	{
 		int l_iReturn = eGL_INVALID_INDEX;
 
-		if ( m_programObject != eGL_INVALID_INDEX && m_gl.IsProgram( m_programObject ) )
+		if ( GetGlName() != eGL_INVALID_INDEX && GetOpenGl().IsProgram( GetGlName() ) )
 		{
-			l_iReturn = m_gl.GetAttribLocation( m_programObject, string::string_cast< char >( p_name ).c_str() );
+			l_iReturn = GetOpenGl().GetAttribLocation( GetGlName(), string::string_cast< char >( p_name ).c_str() );
 		}
 
 		return l_iReturn;
@@ -150,16 +144,16 @@ namespace GlRender
 
 	ShaderObjectBaseSPtr GlShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_return = std::make_shared< GlShaderObject >( m_gl, this, p_type );
+		ShaderObjectBaseSPtr l_return = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
 		return l_return;
 	}
 
-	std::shared_ptr< OneTextureFrameVariable > GlShaderProgram::DoCreateTextureVariable( int p_iNbOcc )
+	std::shared_ptr< OneTextureFrameVariable > GlShaderProgram::DoCreateTextureVariable( int p_occurences )
 	{
-		return std::make_shared< GlOneFrameVariable< TextureBaseRPtr > >( m_gl, p_iNbOcc, this );
+		return std::make_shared< GlOneFrameVariable< TextureBaseRPtr > >( GetOpenGl(), p_occurences, this );
 	}
 
-	String GlShaderProgram::DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
+	String GlShaderProgram::DoGetVertexShaderSource( uint32_t p_programFlags )const
 	{
 		using namespace GLSL;
 
@@ -175,13 +169,13 @@ namespace GlRender
 		Vec4 weights;
 		Mat4 transform;
 
-		if ( ( p_uiProgramFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+		if ( ( p_programFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 		{
 			bone_ids = l_writer.GetAttribute< IVec4 >( cuT( "bone_ids" ) );
 			weights = l_writer.GetAttribute< Vec4 >( cuT( "weights" ) );
 		}
 
-		if ( ( p_uiProgramFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
+		if ( ( p_programFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
 		{
 			transform = l_writer.GetAttribute< Mat4 >( cuT( "transform" ) );
 		}
@@ -199,12 +193,12 @@ namespace GlRender
 		std::function< void() > l_main = [&]()
 		{
 			l_writer << Legacy_MatrixCopy();
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( vertex.xyz(), 1.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( vertex.XYZ, 1.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
 
-			if ( ( p_uiProgramFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+			if ( ( p_programFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 			{
 				LOCALE( l_writer, Mat4, l_mtxBoneTransform );
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 0 )]] * weights[Int( 0 )];
@@ -218,7 +212,7 @@ namespace GlRender
 				l_v4Bitangent = l_mtxBoneTransform * l_v4Bitangent;
 			}
 
-			if ( ( p_uiProgramFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
+			if ( ( p_programFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, c3d_mtxView * transform );
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
@@ -236,10 +230,10 @@ namespace GlRender
 			}
 
 			vtx_texture = texture;
-			vtx_vertex = l_v4Vertex.xyz();
-			vtx_normal = normalize( l_v4Normal.xyz() );
-			vtx_tangent = normalize( l_v4Tangent.xyz() );
-			vtx_bitangent = normalize( l_v4Bitangent.xyz() );
+			vtx_vertex = l_v4Vertex.XYZ;
+			vtx_normal = normalize( l_v4Normal.XYZ );
+			vtx_tangent = normalize( l_v4Tangent.XYZ );
+			vtx_bitangent = normalize( l_v4Bitangent.XYZ );
 			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * l_v4Vertex;
 		};
 

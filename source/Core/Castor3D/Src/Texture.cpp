@@ -9,11 +9,11 @@ namespace Castor3D
 {
 	TextureBase::TextureBase( eTEXTURE_BASE_TYPE p_baseType, RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_bInitialised( false )
+		, m_initialised( false )
 		, m_baseType( p_baseType )
 		, m_type( eTEXTURE_TYPE_2D )
 		, m_eMapMode( eTEXTURE_MAP_MODE_NONE )
-		, m_uiIndex( 0 )
+		, m_index( 0 )
 		, m_pSampler( p_renderSystem.GetOwner()->GetDefaultSampler() )
 	{
 	}
@@ -30,11 +30,11 @@ namespace Castor3D
 
 	bool TextureBase::Bind()
 	{
-		return BindAt( m_uiIndex );
+		return BindAt( m_index );
 	}
 
 	void TextureBase::Unbind()
 	{
-		UnbindFrom( m_uiIndex );
+		UnbindFrom( m_index );
 	}
 }

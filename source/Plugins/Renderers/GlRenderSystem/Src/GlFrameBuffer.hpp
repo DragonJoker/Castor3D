@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlRenderSystemPrerequisites.hpp"
 
+#include "GlBindable.hpp"
+
 #include <FrameBuffer.hpp>
 #include <TextureAttachment.hpp>
 #include <RenderBufferAttachment.hpp>
@@ -29,7 +31,12 @@ namespace GlRender
 	class GlFrameBuffer
 		: public Castor3D::FrameBuffer
 		, public Castor::NonCopyable
+		, private Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
+						   std::function< bool( uint32_t ) > >
 	{
+		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
+			std::function< bool( uint32_t ) > >;
+
 	public:
 		/**
 		 *\~english
@@ -81,22 +88,17 @@ namespace GlRender
 		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
 		 */
 		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );
-		/**
-		 *\~english
-		 *\return		The OpenGL handle for this framebuffer.
-		 *\~french
-		 *\return		L'identifiant OpenGL pour ce tampon d'image.
-		 */
-		inline uint32_t	GetGlName()const
-		{
-			return m_uiGlName;
-		}
+
+	public:
+		using BindableType::GetGlName;
+		using BindableType::GetOpenGl;
+		using BindableType::IsValid;
 
 	private:
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
-		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
+		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_target );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */
@@ -134,9 +136,7 @@ namespace GlRender
 		}
 
 	private:
-		uint32_t m_uiGlName;
-		eGL_FRAMEBUFFER_MODE m_eGlBindingMode;
-		OpenGl & m_gl;
+		eGL_FRAMEBUFFER_MODE m_bindingMode;
 	};
 }
 

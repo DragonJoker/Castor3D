@@ -36,7 +36,7 @@
 
 #if C3D_HAS_GL_RENDERER
 
-#	include <GlShaderSource.hpp>
+#	include <GlslSource.hpp>
 #	include <GlRenderSystem.hpp>
 using namespace GlRender;
 
@@ -618,7 +618,7 @@ namespace Deferred
 		}
 	}
 
-	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
 	{
 		if ( !m_renderSystem )
 		{
@@ -629,14 +629,14 @@ namespace Deferred
 
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
-			return DoGetGlPixelShaderSource( p_uiFlags );
+			return DoGetGlPixelShaderSource( p_flags );
 		}
 #endif
 #if C3D_HAS_D3D11_RENDERER
 
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
-			return DoGetD3D11PixelShaderSource( p_uiFlags );
+			return DoGetD3D11PixelShaderSource( p_flags );
 		}
 
 #endif
@@ -671,7 +671,7 @@ namespace Deferred
 		CASTOR_EXCEPTION( "No renderer selected" );
 	}
 
-	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_flags )const
 	{
 		if ( !m_renderSystem )
 		{
@@ -682,7 +682,7 @@ namespace Deferred
 
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
-			return DoGetGlLightPassPixelShaderSource( p_uiFlags );
+			return DoGetGlLightPassPixelShaderSource( p_flags );
 		}
 
 #endif
@@ -690,7 +690,7 @@ namespace Deferred
 
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
-			return DoGetD3D11LightPassPixelShaderSource( p_uiFlags );
+			return DoGetD3D11LightPassPixelShaderSource( p_flags );
 		}
 
 #endif
@@ -700,7 +700,7 @@ namespace Deferred
 
 #if C3D_HAS_GL_RENDERER
 
-	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_flags )const
 	{
 		using namespace GLSL;
 
@@ -735,49 +735,49 @@ namespace Deferred
 		l_lighting.Declare_ComputeLightDirection( l_writer );
 		l_lighting.Declare_ComputeFresnel( l_writer );
 
-		if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+		if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 		{
 			l_lighting.Declare_Bump( l_writer );
 		}
 
-		if ( p_uiFlags != 0 )
+		if ( p_flags != 0 )
 		{
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 			{
 				c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+			if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 			{
 				c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+			if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 			{
 				c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+			if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 			{
 				c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 			{
 				c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+			if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 			{
 				c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
+			if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 			{
 				c3d_mapHeight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+			if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 			{
 				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
 			}
@@ -794,60 +794,60 @@ namespace Deferred
 
 		std::function< void() > l_main = [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v3Position, vtx_vertex.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vec3( vtx_tangent.x(), vtx_tangent.y(), vtx_tangent.z() ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, normalize( vec3( vtx_bitangent.x(), vtx_bitangent.y(), vtx_bitangent.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v3Position, vtx_vertex.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vtx_normal.XYZ ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent.XYZ ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, normalize( vtx_bitangent.XYZ ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, vec4( Float( 0.0f ), 0, 0, 0 ) );
-			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
+			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vtx_vertex.XYZ ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vtx_vertex.XYZ ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
 			l_v3Diffuse = c3d_v4MatDiffuse;
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapColour, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+				l_v3Diffuse *= texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+			if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapAmbient, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+				l_v3Diffuse *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+			if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+			if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 			{
-				l_v3Normal += normalize( texture2D( c3d_mapNormal, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() * 2.0 - 1.0 );
+				l_v3Normal += normalize( texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ * 2.0f - 1.0f );
 				l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
 				l_v3Bitangent = cross( l_v3Normal, l_v3Tangent );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 			{
-				l_fAlpha = texture2D( c3d_mapOpacity, vec2( vtx_texture.x(), vtx_texture.y() ) ).r() * c3d_fMatOpacity;
+				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+			if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 			{
-				l_v4Specular.xyz() *= texture2D( c3d_mapSpecular, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz();
+				l_v4Specular.XYZ *= texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ;
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
+			if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapHeight, texture2D( c3d_mapHeight, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapHeight, texture2D( c3d_mapHeight, vtx_texture.XY ).XYZ );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+			if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 			{
-				l_v4Specular.w() *= texture2D( c3d_mapGloss, vec2( vtx_texture.x(), vtx_texture.y() ) ).x();
+				l_v4Specular.W *= texture2D( c3d_mapGloss, vtx_texture.XY ).X;
 			}
 
 			out_c3dPosition = vec4( l_v3Position, 1 );
@@ -886,14 +886,14 @@ namespace Deferred
 			l_writer << Legacy_MatrixCopy();
 			vtx_texture = texture;
 			LOCALE_ASSIGN( l_writer, Vec4, position, c3d_mtxProjectionModelView * vertex );
-			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( position.x(), position.y(), position.z(), position.w() );
+			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( position.X, position.Y, position.Z, position.W );
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetGlLightPassPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetGlLightPassPixelShaderSource( uint32_t p_flags )const
 	{
 		using namespace GLSL;
 
@@ -934,14 +934,14 @@ namespace Deferred
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangents, texture2D( c3d_mapBitangent, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Speculars, texture2D( c3d_mapSpecular, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissives, texture2D( c3d_mapEmissive, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Float, l_fShininess, l_v4Speculars.w() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Positions.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normals.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_v4Bitangents.xyz() );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangents.xyz() );
+			LOCALE_ASSIGN( l_writer, Float, l_fShininess, l_v4Speculars.W );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Positions.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normals.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_v4Bitangents.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangents.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissives.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissives.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpVec, neg( l_v3Position ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, vec3( dot( l_v3TmpVec, l_v3Tangent ), dot( l_v3TmpVec, l_v3Bitangent ), dot( l_v3TmpVec, l_v3Normal ) ) );
 			l_v3EyeVec = normalize( l_v3EyeVec );
@@ -950,14 +950,14 @@ namespace Deferred
 			{
 				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( i ) );
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4LightDir, l_lighting.ComputeLightDirection( l_light, l_v3Position, c3d_mtxModelView ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.xyz() );
-				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.w() );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.XYZ );
+				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.W );
 				l_lighting.Bump( l_v3Tangent, l_v3Bitangent, l_v3Normal, l_v3LightDir, l_fAttenuation );
 				LOCALE_ASSIGN( l_writer, Float, l_fLambert, max( Float( &l_writer, 0 ), dot( l_v3Normal, l_v3LightDir ) ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v3MatSpecular, l_v4Speculars.xyz() );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v3MatSpecular, l_v4Speculars.XYZ );
 				LOCALE_ASSIGN( l_writer, Float, l_fFresnel, l_lighting.ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v3MatSpecular ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, l_light.m_v4Diffuse().xyz() * l_v4Diffuses.xyz() * l_fLambert );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, l_light.m_v4Specular().xyz() * l_v3MatSpecular * l_fFresnel );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, l_light.m_v4Diffuse().XYZ * l_v4Diffuses.XYZ * l_fLambert );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, l_light.m_v4Specular().XYZ * l_v3MatSpecular * l_fFresnel );
 				l_v3Diffuse += l_v3TmpDiffuse * l_fAttenuation;
 				l_v3Specular += l_v3TmpSpecular * l_fAttenuation;
 			}
@@ -973,7 +973,7 @@ namespace Deferred
 #endif
 #if C3D_HAS_D3D11_RENDERER
 
-	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_flags )const
 	{
 		String l_strReturn;
 		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
@@ -988,11 +988,11 @@ namespace Deferred
 			String l_strPixelMainEnd = g_ds.GetGSPixelMainEnd();
 			String l_strPixelMainLightsLoopEnd;
 
-			if ( p_uiFlags != 0 )
+			if ( p_flags != 0 )
 			{
 				int l_iIndex = 1;
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+				if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1001,7 +1001,7 @@ namespace Deferred
 					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapColour;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+				if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1010,7 +1010,7 @@ namespace Deferred
 					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapAmbient;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+				if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1019,7 +1019,7 @@ namespace Deferred
 					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapDiffuse;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1028,7 +1028,7 @@ namespace Deferred
 					l_strPixelMainDeclarations += cuT( "	l_v4Normal += float4( normalize( (l_v4MapNormal.xyz * 2.0 - 1.0) ), 0 );\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+				if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1037,7 +1037,7 @@ namespace Deferred
 					l_strPixelMainLightsLoopEnd += cuT( "	l_fAlpha = l_v4MapOpacity.r * l_v4MapOpacity.a;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1046,7 +1046,7 @@ namespace Deferred
 					l_strPixelMainLightsLoopEnd += cuT( "	l_v4Specular *= l_v4MapSpecular;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
+				if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1054,7 +1054,7 @@ namespace Deferred
 					l_strPixelMainDeclarations += cuT( "	float4 l_v4MapHeight = tex2D( DefaultSampler, p_input.TextureUV.xy );\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+				if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -1086,7 +1086,7 @@ namespace Deferred
 		return g_ds.GetLSVertexProgram();
 	}
 
-	String RenderTechnique::DoGetD3D11LightPassPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetD3D11LightPassPixelShaderSource( uint32_t p_flags )const
 	{
 		return g_ds.GetLSPixelProgram();
 	}

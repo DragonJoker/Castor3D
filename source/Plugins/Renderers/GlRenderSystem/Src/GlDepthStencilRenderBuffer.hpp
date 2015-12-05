@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlDepthStencilRenderBuffer
-		:	public Castor3D::DepthStencilRenderBuffer
+		: public Castor3D::DepthStencilRenderBuffer
 	{
 	public:
 		GlDepthStencilRenderBuffer( OpenGl & p_gl, Castor::ePIXEL_FORMAT p_eFormat );

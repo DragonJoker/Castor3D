@@ -410,7 +410,7 @@ namespace Castor3D
 		 */
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
 		/**
 		 *\~english
@@ -434,7 +434,7 @@ namespace Castor3D
 		 */
 		inline ContextSPtr GetContext()const
 		{
-			return m_pContext;
+			return m_context;
 		}
 		/**
 		 *\~english
@@ -470,7 +470,7 @@ namespace Castor3D
 		 */
 		inline void SetContext( ContextSPtr p_context )
 		{
-			m_pContext = p_context;
+			m_context = p_context;
 		}
 		/**
 		 *\~english
@@ -485,14 +485,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the vsync usage
-		 *\param[in]	p_bVal	The usage
+		 *\param[in]	p_value	The usage
 		 *\~french
 		 *\brief		Définit l'utilisation de la vsync
-		 *\param[in]	p_bVal	L'utilisation
+		 *\param[in]	p_value	L'utilisation
 		 */
-		inline void SetVSync( bool p_bVal )
+		inline void SetVSync( bool p_value )
 		{
-			m_bVSync = p_bVal;
+			m_bVSync = p_value;
 		}
 		/**
 		 *\~english
@@ -507,14 +507,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the fullscreen rendering status
-		 *\param[in]	p_bVal	The status
+		 *\param[in]	p_value	The status
 		 *\~french
 		 *\brief		Définit le statut du rendu plein écran
-		 *\param[in]	p_bVal	Le statut
+		 *\param[in]	p_value	Le statut
 		 */
-		inline void SetFullscreen( bool p_bVal )
+		inline void SetFullscreen( bool p_value )
 		{
-			m_bFullscreen = p_bVal;
+			m_bFullscreen = p_value;
 		}
 		/**
 		 *\~english
@@ -598,11 +598,11 @@ namespace Castor3D
 		//!\~english The events listener	\~french Gestionnaire d'évènements
 		FrameListenerWPtr m_wpListener;
 		//!\~english Tells if the window is initalised	\~french Dit si la fenêtre est initialisée
-		bool m_bInitialised;
+		bool m_initialised;
 		//!\~english The name	\~french Nom de cette RenderTarget
 		Castor::String m_name;
 		//!\~english The rendering context	\~french Le contexte de rendu
-		ContextSPtr m_pContext;
+		ContextSPtr m_context;
 		//!\~english Tells VSync is activated	\~french Dit si la VSync est activée
 		bool m_bVSync;
 		//!\~english Tells fullscreen is activated	\~french Dit si le rendu est en plein écran

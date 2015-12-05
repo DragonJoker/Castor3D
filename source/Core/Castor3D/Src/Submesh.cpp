@@ -209,7 +209,7 @@ namespace Castor3D
 		, m_uiProgramFlags( 0 )
 		, m_eCurDrawType( eTOPOLOGY( -1 ) )
 		, m_ePrvDrawType( eTOPOLOGY( -1 ) )
-		, m_bInitialised( false )
+		, m_initialised( false )
 	{
 	}
 
@@ -222,13 +222,13 @@ namespace Castor3D
 	{
 		if ( m_pGeometryBuffers->Create() )
 		{
-			m_bInitialised = m_pGeometryBuffers->Initialise( nullptr, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			m_initialised = m_pGeometryBuffers->Initialise( nullptr, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 		}
 	}
 
 	void Submesh::Cleanup()
 	{
-		m_bInitialised = false;
+		m_initialised = false;
 		DoCleanupGeometryBuffers();
 		m_arrayFaces.clear();
 		m_points.clear();
@@ -988,7 +988,7 @@ namespace Castor3D
 		if ( GetGeometryBuffers() && GetGeometryBuffers()->HasIndexBuffer() )
 		{
 			FaceSPtr l_pFace;
-			uint32_t l_uiIndex = 0;
+			uint32_t l_index = 0;
 			IndexBuffer & l_indexBuffer = GetGeometryBuffers()->GetIndexBuffer();
 			uint32_t l_uiSize = uint32_t( m_arrayFaces.size() * 3 );
 
@@ -1004,9 +1004,9 @@ namespace Castor3D
 					if ( *l_it )
 					{
 						l_pFace = *l_it;
-						l_indexBuffer.SetElement( l_uiIndex++, l_pFace->GetVertexIndex( 0 ) );
-						l_indexBuffer.SetElement( l_uiIndex++, l_pFace->GetVertexIndex( 1 ) );
-						l_indexBuffer.SetElement( l_uiIndex++, l_pFace->GetVertexIndex( 2 ) );
+						l_indexBuffer.SetElement( l_index++, l_pFace->GetVertexIndex( 0 ) );
+						l_indexBuffer.SetElement( l_index++, l_pFace->GetVertexIndex( 1 ) );
+						l_indexBuffer.SetElement( l_index++, l_pFace->GetVertexIndex( 2 ) );
 					}
 				}
 
@@ -1062,7 +1062,7 @@ namespace Castor3D
 
 	void Submesh::DoCleanupGeometryBuffers()
 	{
-		m_bInitialised = false;
+		m_initialised = false;
 
 		if ( m_pGeometryBuffers )
 		{

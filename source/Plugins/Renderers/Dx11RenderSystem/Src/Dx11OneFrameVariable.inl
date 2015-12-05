@@ -1,16 +1,16 @@
 namespace Dx11Render
 {
 	template< typename T >
-	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_renderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc )
+	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_renderSystem, DxShaderProgram * p_program, uint32_t p_occurences )
 		:	DxFrameVariableBase( p_renderSystem )
-		,	Castor3D::OneFrameVariable< T >	( p_pProgram, p_uiOcc )
+		,	Castor3D::OneFrameVariable< T >	( p_program, p_occurences )
 	{
 	}
 
 	template< typename T >
-	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_renderSystem, Castor3D::OneFrameVariable< T > * p_pVariable )
+	DxOneFrameVariable< T >::DxOneFrameVariable( DxRenderSystem * p_renderSystem, Castor3D::OneFrameVariable< T > * p_variable )
 		:	DxFrameVariableBase( p_renderSystem )
-		,	Castor3D::OneFrameVariable< T >( *p_pVariable )
+		,	Castor3D::OneFrameVariable< T >( *p_variable )
 	{
 	}
 
@@ -22,13 +22,13 @@ namespace Dx11Render
 	template< typename T >
 	void DxOneFrameVariable< T >::Bind()
 	{
-		DxFrameVariableBase::DoBind< T >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::OneFrameVariable< T >::m_pValues );
-		Castor3D::FrameVariable::m_bChanged = false;
+		DxFrameVariableBase::DoBind< T >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::OneFrameVariable< T >::m_values );
+		Castor3D::FrameVariable::m_changed = false;
 	}
 
 	template< typename T >
 	void DxOneFrameVariable< T >::Unbind()
 	{
-		DxFrameVariableBase::DoUnbind< T >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::OneFrameVariable< T >::m_pValues );
+		DxFrameVariableBase::DoUnbind< T >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::OneFrameVariable< T >::m_values );
 	}
 }

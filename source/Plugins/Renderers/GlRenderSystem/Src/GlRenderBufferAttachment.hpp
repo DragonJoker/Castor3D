@@ -27,19 +27,20 @@ namespace GlRender
 	class GlRenderBufferAttachment
 		: public Castor3D::RenderBufferAttachment
 		, public Castor::NonCopyable
+		, public Holder
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\para[in]		p_gl			The OpenGL APIs.
-		 *\param[in]	p_pRenderBuffer	The render buffer.
+		 *\param[in]	p_renderBuffer	The render buffer.
 		 *\~french
 		 *\brief		Constructeur
 		 *\para[in]		p_gl			Les APIs OpenGL.
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu.
+		 *\param[in]	p_renderBuffer	Le tampon de rendu.
 		 */
-		GlRenderBufferAttachment( OpenGl & p_gl, Castor3D::RenderBufferSPtr p_pRenderBuffer );
+		GlRenderBufferAttachment( OpenGl & p_gl, Castor3D::RenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -54,28 +55,28 @@ namespace GlRender
 
 		inline eGL_FRAMEBUFFER_STATUS GetGlStatus()const
 		{
-			return m_eGlStatus;
+			return m_glStatus;
 		}
+
 		inline eGL_RENDERBUFFER_ATTACHMENT GetGlAttachmentPoint()const
 		{
-			return m_eGlAttachmentPoint;
+			return m_glAttachmentPoint;
 		}
 
 	private:
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
 		 */
-		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_frameBuffer );
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
 		 */
 		virtual void DoDetach();
 
 	private:
-		eGL_RENDERBUFFER_ATTACHMENT m_eGlAttachmentPoint;
-		eGL_FRAMEBUFFER_STATUS m_eGlStatus;
-		GlFrameBufferWPtr m_pGlFrameBuffer;
-		OpenGl & m_gl;
+		eGL_RENDERBUFFER_ATTACHMENT m_glAttachmentPoint;
+		eGL_FRAMEBUFFER_STATUS m_glStatus;
+		GlFrameBufferWPtr m_glFrameBuffer;
 	};
 }
 

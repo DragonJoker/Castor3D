@@ -7,7 +7,7 @@
 #endif
 
 #include "GlRenderSystem.hpp"
-#include "GlShaderSource.hpp"
+#include "GlslSource.hpp"
 
 #include <RenderWindow.hpp>
 #include <ShaderProgram.hpp>
@@ -23,43 +23,43 @@ namespace GlRender
 {
 	GlContext::GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl )
 		: Context( p_renderSystem, false )
-		, m_pGlRenderSystem( &p_renderSystem )
-		, m_gl( p_gl )
+		, m_glRenderSystem( &p_renderSystem )
+		, Holder( p_gl )
 	{
 		m_timerQueryId[0] = eGL_INVALID_INDEX;
 		m_timerQueryId[1] = eGL_INVALID_INDEX;
-		m_pImplementation = new GlContextImpl( m_gl, this );
+		m_implementation = new GlContextImpl( GetOpenGl(), this );
 	}
 
 	GlContext::~GlContext()
 	{
-		delete m_pImplementation;
+		delete m_implementation;
 	}
 
 	GlContextImpl * GlContext::GetImpl()
 	{
-		return m_pImplementation;
+		return m_implementation;
 	}
 
-	void GlContext::UpdateFullScreen( bool p_bVal )
+	void GlContext::UpdateFullScreen( bool p_value )
 	{
 		if ( Context::m_window->GetVSync() )
 		{
-			GetImpl()->UpdateVSync( p_bVal );
+			GetImpl()->UpdateVSync( p_value );
 		}
 	}
 
 	bool GlContext::DoInitialise()
 	{
 		using namespace GLSL;
-		m_bInitialised = m_pImplementation->Initialise( m_window );
+		m_initialised = m_implementation->Initialise( m_window );
 
-		if ( m_bInitialised )
+		if ( m_initialised )
 		{
 			String l_strVtxShader;
 			{
 				// Vertex shader
-				GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+				GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
 				l_writer << Version() << Endl();
 
 				UBO_MATRIX( l_writer );
@@ -74,14 +74,14 @@ namespace GlRender
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
-					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.x(), vertex.y(), 0.0, 1.0 );
+					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.X, vertex.Y, 0.0, 1.0 );
 				} );
 				l_strVtxShader = l_writer.Finalise();
 			}
 
 			String l_strPxlShader;
 			{
-				GlslWriter l_writer( m_gl, eSHADER_TYPE_PIXEL );
+				GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_PIXEL );
 				l_writer << Version() << Endl();
 
 				// Shader inputs
@@ -93,7 +93,7 @@ namespace GlRender
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.x(), vtx_texture.y() ) ).xyz(), 1.0 );
+					plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.X, vtx_texture.Y ) ).XYZ, 1.0 );
 				} );
 				l_strPxlShader = l_writer.Finalise();
 			}
@@ -106,32 +106,34 @@ namespace GlRender
 			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
 
-			m_pImplementation->SetCurrent();
-			m_gl.GenQueries( 2, m_timerQueryId );
-			m_pImplementation->EndCurrent();
+			m_implementation->SetCurrent();
+			GetOpenGl().GenQueries( 2, m_timerQueryId );
+			GetOpenGl().BeginQuery( eGL_QUERY_TIME_ELAPSED, m_timerQueryId[1 - m_queryIndex] );
+			GetOpenGl().EndQuery( eGL_QUERY_TIME_ELAPSED );
+			m_implementation->EndCurrent();
 		}
 
-		return m_bInitialised;
+		return m_initialised;
 	}
 
 	void GlContext::DoCleanup()
 	{
-		m_gl.DeleteQueries( 2, m_timerQueryId );
-		m_pImplementation->Cleanup();
+		GetOpenGl().DeleteQueries( 2, m_timerQueryId );
+		m_implementation->Cleanup();
 	}
 
 	void GlContext::DoSetCurrent()
 	{
 		GetImpl()->SetCurrent();
-		m_gl.BeginQuery( eGL_QUERY_TIME_ELAPSED, m_timerQueryId[m_queryIndex] );
+		GetOpenGl().BeginQuery( eGL_QUERY_TIME_ELAPSED, m_timerQueryId[m_queryIndex] );
 	}
 
 	void GlContext::DoEndCurrent()
 	{
-		m_gl.EndQuery( eGL_QUERY_TIME_ELAPSED );
+		GetOpenGl().EndQuery( eGL_QUERY_TIME_ELAPSED );
 		uint64_t l_time = 0;
 		m_queryIndex = 1 - m_queryIndex;
-		m_gl.GetQueryObjectInfos( m_timerQueryId[m_queryIndex], eGL_QUERY_INFO_RESULT, &l_time );
+		GetOpenGl().GetQueryObjectInfos( m_timerQueryId[m_queryIndex], eGL_QUERY_INFO_RESULT, &l_time );
 		GetOwner()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
 		GetImpl()->EndCurrent();
 	}
@@ -141,38 +143,21 @@ namespace GlRender
 		GetImpl()->SwapBuffers();
 	}
 
-	void GlContext::DoBind( Castor3D::eBUFFER p_eBuffer, Castor3D::eFRAMEBUFFER_TARGET p_eTarget )
+	void GlContext::DoSetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value )
 	{
-		if ( m_gl.HasFbo() )
-		{
-			m_gl.BindFramebuffer( m_gl.Get( p_eTarget ), 0 );
-		}
-
-		if ( p_eTarget == eFRAMEBUFFER_TARGET_DRAW )
-		{
-			m_gl.DrawBuffer( m_gl.Get( p_eBuffer ) );
-		}
-		else if ( p_eTarget == eFRAMEBUFFER_TARGET_READ )
-		{
-			m_gl.ReadBuffer( m_gl.Get( p_eBuffer ) );
-		}
-	}
-
-	void GlContext::DoSetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue )
-	{
-		m_gl.AlphaFunc( m_gl.Get( p_eFunc ), p_byValue / 255.0f );
+		GetOpenGl().AlphaFunc( GetOpenGl().Get( p_func ), p_value / 255.0f );
 	}
 
 	void GlContext::DoCullFace( eFACE p_eCullFace )
 	{
 		if ( p_eCullFace == eFACE_NONE )
 		{
-			m_gl.Disable( eGL_TWEAK_CULL_FACE );
+			GetOpenGl().Disable( eGL_TWEAK_CULL_FACE );
 		}
 		else
 		{
-			m_gl.Enable( eGL_TWEAK_CULL_FACE );
-			m_gl.CullFace( m_gl.Get( p_eCullFace ) );
+			GetOpenGl().Enable( eGL_TWEAK_CULL_FACE );
+			GetOpenGl().CullFace( GetOpenGl().Get( p_eCullFace ) );
 		}
 	}
 }

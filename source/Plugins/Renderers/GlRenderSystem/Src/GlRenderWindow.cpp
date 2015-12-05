@@ -9,10 +9,10 @@ namespace GlRender
 {
 	GlRenderWindow::GlRenderWindow( OpenGl & p_gl, GlRenderSystem * p_renderSystem )
 		: RenderWindow( *p_renderSystem->GetOwner() )
-		, m_gl( p_gl )
+		, Holder( p_gl )
 		, m_renderSystem( p_renderSystem )
 	{
-		DoSetBackBuffers( std::make_shared< GlBackBuffers >( p_gl, *p_renderSystem->GetOwner() ) );
+		DoSetBackBuffers( std::make_shared< GlBackBuffers >( GetOpenGl(), *p_renderSystem->GetOwner() ) );
 	}
 
 	GlRenderWindow::~GlRenderWindow()

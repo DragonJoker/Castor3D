@@ -88,23 +88,23 @@ namespace GlRender
 
 		inline int GetOpenGlMajor()
 		{
-			return m_iOpenGlMajor;
+			return m_openGlMajor;
 		}
 
 		inline int GetOpenGlMinor()
 		{
-			return m_iOpenGlMinor;
+			return m_openGlMinor;
 		}
 
 		inline void SetOpenGlVersion( int p_iMajor, int p_iMinor )
 		{
-			m_iOpenGlMajor = p_iMajor;
-			m_iOpenGlMinor = p_iMinor;
+			m_openGlMajor = p_iMajor;
+			m_openGlMinor = p_iMinor;
 		}
 
 		inline OpenGl & GetOpenGl()
 		{
-			return m_gl;
+			return m_openGl;
 		}
 
 	private:
@@ -115,9 +115,9 @@ namespace GlRender
 		std::shared_ptr< GlPipelineImpl > m_pipelineImpl;
 		bool m_useVertexBufferObjects;
 		bool m_extensionsInit;
-		int m_iOpenGlMajor;
-		int m_iOpenGlMinor;
-		OpenGl m_gl;
+		int m_openGlMajor;
+		int m_openGlMinor;
+		OpenGl m_openGl;
 
 #if C3D_TRACE_OBJECTS
 

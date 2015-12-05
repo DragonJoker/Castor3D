@@ -369,7 +369,7 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_fShininess( 50.0 )
 		, m_bDoubleFace( false )
-		, m_pParent( p_parent )
+		, m_parent( p_parent )
 		, m_clrDiffuse( Colour::from_rgba( 0xFFFFFFFF ) )
 		, m_clrAmbient( Colour::from_rgba( 0x000000FF ) )
 		, m_clrSpecular( Colour::from_rgba( 0xFFFFFFFF ) )
@@ -412,7 +412,7 @@ namespace Castor3D
 		}
 
 		// Lights texture is at index 0, so start at index 1
-		uint32_t l_uiIndex = 1;
+		uint32_t l_index = 1;
 		TextureUnitSPtr l_pAmbientMap = GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT );
 		TextureUnitSPtr l_pColourMap = GetTextureUnit( eTEXTURE_CHANNEL_COLOUR );
 		TextureUnitSPtr l_pDiffuseMap = GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE );
@@ -422,14 +422,14 @@ namespace Castor3D
 		TextureUnitSPtr l_pGlossMap = GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
 		TextureUnitSPtr l_pHeightMap = GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
 
-		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_AMBIENT, l_pAmbientMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
-		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_COLOUR, l_pColourMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
-		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_DIFFUSE, l_pDiffuseMap, l_uiIndex, l_pOpaSrc, l_pImageOpa );
+		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_AMBIENT, l_pAmbientMap, l_index, l_pOpaSrc, l_pImageOpa );
+		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_COLOUR, l_pColourMap, l_index, l_pOpaSrc, l_pImageOpa );
+		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_DIFFUSE, l_pDiffuseMap, l_index, l_pOpaSrc, l_pImageOpa );
 
-		DoPrepareTexture( eTEXTURE_CHANNEL_NORMAL, l_pNormalMap, l_uiIndex );
-		DoPrepareTexture( eTEXTURE_CHANNEL_SPECULAR, l_pSpecularMap, l_uiIndex );
-		DoPrepareTexture( eTEXTURE_CHANNEL_GLOSS, l_pGlossMap, l_uiIndex );
-		DoPrepareTexture( eTEXTURE_CHANNEL_HEIGHT, l_pHeightMap, l_uiIndex );
+		DoPrepareTexture( eTEXTURE_CHANNEL_NORMAL, l_pNormalMap, l_index );
+		DoPrepareTexture( eTEXTURE_CHANNEL_SPECULAR, l_pSpecularMap, l_index );
+		DoPrepareTexture( eTEXTURE_CHANNEL_GLOSS, l_pGlossMap, l_index );
+		DoPrepareTexture( eTEXTURE_CHANNEL_HEIGHT, l_pHeightMap, l_index );
 
 		if ( l_pOpacityMap && l_pOpacityMap->GetImagePixels() )
 		{
@@ -454,7 +454,7 @@ namespace Castor3D
 
 		if ( l_pOpacityMap )
 		{
-			l_pOpacityMap->SetIndex( l_uiIndex++ );
+			l_pOpacityMap->SetIndex( l_index++ );
 			Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << l_pOpacityMap->GetIndex() );
 			m_uiTextureFlags |= eTEXTURE_CHANNEL_OPACITY;
 			l_pOpacityMap->Initialise();
@@ -502,7 +502,7 @@ namespace Castor3D
 		{
 			if ( l_unit->GetIndex() == 0 )
 			{
-				l_unit->SetIndex( l_uiIndex++ );
+				l_unit->SetIndex( l_index++ );
 				l_unit->Initialise();
 			}
 		}
@@ -516,14 +516,14 @@ namespace Castor3D
 		}
 	}
 
-	void Pass::BindToAutomaticProgram( ShaderProgramBaseSPtr p_pProgram )
+	void Pass::BindToAutomaticProgram( ShaderProgramBaseSPtr p_program )
 	{
 		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
 		m_bAutomaticShader = true;
 
-		if ( l_program != p_pProgram && p_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		if ( l_program != p_program && p_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			m_shaderProgram = p_pProgram;
+			m_shaderProgram = p_program;
 			DoGetTextures();
 			DoGetBuffers();
 		}
@@ -541,15 +541,15 @@ namespace Castor3D
 		m_mapUnits.clear();
 	}
 
-	void Pass::Render( uint8_t p_index, uint8_t p_uiCount )
+	void Pass::Render( uint8_t p_index, uint8_t p_count )
 	{
 		m_pBlendState->Apply();
-		DoRender( p_index, p_uiCount );
+		DoRender( p_index, p_count );
 	}
 
-	void Pass::Render2D( uint8_t p_index, uint8_t p_uiCount )
+	void Pass::Render2D( uint8_t p_index, uint8_t p_count )
 	{
-		DoRender( p_index, p_uiCount );
+		DoRender( p_index, p_count );
 	}
 
 	void Pass::EndRender()
@@ -626,10 +626,10 @@ namespace Castor3D
 		return m_arrayTextureUnits[p_index]->GetTexturePath();
 	}
 
-	void Pass::SetShader( ShaderProgramBaseSPtr p_pProgram )
+	void Pass::SetShader( ShaderProgramBaseSPtr p_program )
 	{
 		m_mapUnits.clear();
-		m_shaderProgram = p_pProgram;
+		m_shaderProgram = p_program;
 		m_bAutomaticShader = false;
 		DoGetBuffers();
 	}

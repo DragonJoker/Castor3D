@@ -14,7 +14,7 @@ namespace GlRender
 
 	GlRasteriserState::GlRasteriserState( GlRenderSystem * p_renderSystem, OpenGl & p_gl )
 		: RasteriserState( *p_renderSystem->GetOwner() )
-		, m_gl( p_gl )
+		, Holder( p_gl )
 		, m_renderSystem( p_renderSystem )
 	{
 		CreateCurrent();
@@ -31,7 +31,7 @@ namespace GlRender
 
 		if ( GetFillMode() != m_currentState->GetFillMode() )
 		{
-			l_return &= m_gl.PolygonMode( eGL_FACE_FRONT_AND_BACK, m_gl.Get( GetFillMode() ) );
+			l_return &= GetOpenGl().PolygonMode( eGL_FACE_FRONT_AND_BACK, GetOpenGl().Get( GetFillMode() ) );
 			m_currentState->SetFillMode( GetFillMode() );
 		}
 
@@ -39,17 +39,17 @@ namespace GlRender
 		{
 			if ( m_currentState->GetCulledFaces() == eFACE_NONE )
 			{
-				l_return &= m_gl.Enable( eGL_TWEAK_CULL_FACE );
-				l_return &= m_gl.CullFace( m_gl.Get( GetCulledFaces() ) );
+				l_return &= GetOpenGl().Enable( eGL_TWEAK_CULL_FACE );
+				l_return &= GetOpenGl().CullFace( GetOpenGl().Get( GetCulledFaces() ) );
 				m_currentState->SetCulledFaces( GetCulledFaces() );
 
 				if ( GetFrontCCW() )
 				{
-					l_return &= m_gl.FrontFace( eGL_FRONT_FACE_DIRECTION_CCW );
+					l_return &= GetOpenGl().FrontFace( eGL_FRONT_FACE_DIRECTION_CCW );
 				}
 				else
 				{
-					l_return &= m_gl.FrontFace( eGL_FRONT_FACE_DIRECTION_CW );
+					l_return &= GetOpenGl().FrontFace( eGL_FRONT_FACE_DIRECTION_CW );
 				}
 
 				m_currentState->SetFrontCCW( GetFrontCCW() );
@@ -58,7 +58,7 @@ namespace GlRender
 			{
 				if ( m_currentState->GetCulledFaces() != GetCulledFaces() )
 				{
-					l_return &= m_gl.CullFace( m_gl.Get( GetCulledFaces() ) );
+					l_return &= GetOpenGl().CullFace( GetOpenGl().Get( GetCulledFaces() ) );
 					m_currentState->SetCulledFaces( GetCulledFaces() );
 				}
 
@@ -66,11 +66,11 @@ namespace GlRender
 				{
 					if ( m_bFrontCCW )
 					{
-						l_return &= m_gl.FrontFace( eGL_FRONT_FACE_DIRECTION_CCW );
+						l_return &= GetOpenGl().FrontFace( eGL_FRONT_FACE_DIRECTION_CCW );
 					}
 					else
 					{
-						l_return &= m_gl.FrontFace( eGL_FRONT_FACE_DIRECTION_CW );
+						l_return &= GetOpenGl().FrontFace( eGL_FRONT_FACE_DIRECTION_CW );
 					}
 
 					m_currentState->SetFrontCCW( GetFrontCCW() );
@@ -79,7 +79,7 @@ namespace GlRender
 		}
 		else if ( m_currentState->GetCulledFaces() != GetCulledFaces() )
 		{
-			l_return &= m_gl.Disable( eGL_TWEAK_CULL_FACE );
+			l_return &= GetOpenGl().Disable( eGL_TWEAK_CULL_FACE );
 			m_currentState->SetCulledFaces( GetCulledFaces() );
 		}
 
@@ -87,13 +87,13 @@ namespace GlRender
 		{
 			if ( GetAntialiasedLines() )
 			{
-				l_return &= m_gl.Enable( eGL_TWEAK_LINE_SMOOTH );
-				l_return &= m_gl.Hint( eGL_HINT_LINE_SMOOTH, eGL_HINT_VALUE_NICEST );
+				l_return &= GetOpenGl().Enable( eGL_TWEAK_LINE_SMOOTH );
+				l_return &= GetOpenGl().Hint( eGL_HINT_LINE_SMOOTH, eGL_HINT_VALUE_NICEST );
 			}
 			else
 			{
-				l_return &= m_gl.Disable( eGL_TWEAK_LINE_SMOOTH );
-				l_return &= m_gl.Hint( eGL_HINT_LINE_SMOOTH, eGL_HINT_VALUE_DONTCARE );
+				l_return &= GetOpenGl().Disable( eGL_TWEAK_LINE_SMOOTH );
+				l_return &= GetOpenGl().Hint( eGL_HINT_LINE_SMOOTH, eGL_HINT_VALUE_DONTCARE );
 			}
 
 			m_currentState->SetAntialiasedLines( GetAntialiasedLines() );
@@ -103,11 +103,11 @@ namespace GlRender
 		{
 			if ( GetScissor() )
 			{
-				l_return &= m_gl.Enable( eGL_TWEAK_SCISSOR_TEST );
+				l_return &= GetOpenGl().Enable( eGL_TWEAK_SCISSOR_TEST );
 			}
 			else
 			{
-				l_return &= m_gl.Disable( eGL_TWEAK_SCISSOR_TEST );
+				l_return &= GetOpenGl().Disable( eGL_TWEAK_SCISSOR_TEST );
 			}
 
 			m_currentState->SetScissor( GetScissor() );
@@ -117,11 +117,11 @@ namespace GlRender
 		{
 			if ( GetMultisample() )
 			{
-				l_return &= m_gl.Enable( eGL_TWEAK_MULTISAMPLE );
+				l_return &= GetOpenGl().Enable( eGL_TWEAK_MULTISAMPLE );
 			}
 			else
 			{
-				l_return &= m_gl.Disable( eGL_TWEAK_MULTISAMPLE );
+				l_return &= GetOpenGl().Disable( eGL_TWEAK_MULTISAMPLE );
 			}
 
 			m_currentState->SetMultisample( GetMultisample() );
@@ -131,11 +131,11 @@ namespace GlRender
 		{
 			if ( GetDepthClipping() )
 			{
-				l_return &= m_gl.Disable( eGL_TWEAK_DEPTH_CLAMP );
+				l_return &= GetOpenGl().Disable( eGL_TWEAK_DEPTH_CLAMP );
 			}
 			else
 			{
-				l_return &= m_gl.Enable( eGL_TWEAK_DEPTH_CLAMP );
+				l_return &= GetOpenGl().Enable( eGL_TWEAK_DEPTH_CLAMP );
 			}
 
 			m_currentState->SetDepthClipping( GetDepthClipping() );
@@ -143,16 +143,16 @@ namespace GlRender
 
 		if ( m_currentState->GetDepthBias() != GetDepthBias() )
 		{
-			l_return &= m_gl.PolygonOffset( GetDepthBias(), 4096.0 );
+			l_return &= GetOpenGl().PolygonOffset( GetDepthBias(), 4096.0 );
 			m_currentState->SetDepthBias( GetDepthBias() );
 		}
 
-		m_bChanged = false;
+		m_changed = false;
 		return l_return;
 	}
 
 	RasteriserStateSPtr GlRasteriserState::DoCreateCurrent()
 	{
-		return std::make_shared< GlRasteriserState >( m_renderSystem, m_gl );
+		return std::make_shared< GlRasteriserState >( m_renderSystem, GetOpenGl() );
 	}
 }

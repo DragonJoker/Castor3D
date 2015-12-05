@@ -164,15 +164,15 @@ namespace Castor3D
 		 *\brief		Binds this pass to given program
 		 *\remark		Retrieves uniform variables, sets their values.
 						<br />Does nothing if the given program is the same as the currently bound one
-		 *\param[in]	p_pProgram	The program
+		 *\param[in]	p_program	The program
 		 *\~french
 		 *\brief		Lie cette passe au programme donné
 		 *\remark		Récupère les variables uniformes, définit leur valeur.
 						<br />Ne fait rien si le programme donné ets le même que celui actuellement lié
-		 *\param[in]	p_pProgram	Le programme
+		 *\param[in]	p_program	Le programme
 		 *\return
 		 */
-		C3D_API void BindToAutomaticProgram( ShaderProgramBaseSPtr p_pProgram );
+		C3D_API void BindToAutomaticProgram( ShaderProgramBaseSPtr p_program );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -258,12 +258,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the shader program
-		 *\param[in]	p_pProgram	The shader program
+		 *\param[in]	p_program	The shader program
 		 *\~french
 		 *\brief		Définit le shader
-		 *\param[in]	p_pProgram	Le programme
+		 *\param[in]	p_program	Le programme
 		 */
-		C3D_API void SetShader( ShaderProgramBaseSPtr p_pProgram );
+		C3D_API void SetShader( ShaderProgramBaseSPtr p_program );
 		/**
 		 *\~english
 		 *\brief		Tells if the pass needs alpha blending
@@ -495,7 +495,7 @@ namespace Castor3D
 		 */
 		inline MaterialSPtr GetParent()const
 		{
-			return m_pParent.lock();
+			return m_parent.lock();
 		}
 		/**
 		 *\~english
@@ -824,7 +824,7 @@ namespace Castor3D
 		//!\~english Texture units	\~french Les textures
 		TextureUnitPtrArray m_arrayTextureUnits;
 		//!\~english The parent material	\~french Le materiau parent
-		MaterialWPtr m_pParent;
+		MaterialWPtr m_parent;
 		//!\~english The current shader variables and associated texture units, ordered by channel	\~french Les variables de shader avec les unités de texture associées, triées par canal
 		UnitVariableChannelMap m_mapUnits;
 		//!\~english Blend states	\~french Etats de blend

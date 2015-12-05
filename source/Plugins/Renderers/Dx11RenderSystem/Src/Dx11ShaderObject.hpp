@@ -46,7 +46,7 @@ namespace Dx11Render
 		/**
 		 * Get compiler messages
 		 */
-		void RetrieveCompilerLog( Castor::String & p_strCompilerLog );
+		void RetrieveCompilerLog( Castor::String & p_compilerLog );
 		/**
 		 *\~english
 		 *\brief		Destroys the program on GPU

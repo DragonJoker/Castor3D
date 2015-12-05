@@ -286,7 +286,7 @@ namespace Castor3D
 		m_pColorAttach = m_renderTarget.CreateAttachment( m_pColorTexture );
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
 		m_pDepthAttach = m_renderTarget.CreateAttachment( m_pDepthBuffer );
-		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_uiIndex ) );
+		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
 		m_pColorTexture->SetSampler( l_pSampler );
@@ -350,20 +350,20 @@ namespace Castor3D
 		, m_eTargetType( p_eTargetType )
 		, m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
 		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
-		, m_bInitialised( false )
+		, m_initialised( false )
 		, m_size( Size( 100, 100 ) )
 		, m_pRenderTechnique( )
 		, m_bMultisampling( false )
 		, m_iSamplesCount( 0 )
 		, m_bStereo( false )
 		, m_rIntraOcularDistance( 0 )
-		, m_uiIndex( ++sm_uiCount )
+		, m_index( ++sm_uiCount )
 		, m_strTechniqueName( cuT( "direct" ) )
 		, m_fbLeftEye( *this )
 		, m_fbRightEye( *this )
 	{
-		m_wpDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
-		m_wpRasteriserState = GetOwner()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_uiIndex ) );
+		m_wpDepthStencilState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetOwner()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -372,7 +372,7 @@ namespace Castor3D
 
 	void RenderTarget::Initialise( uint32_t p_index )
 	{
-		if ( !m_bInitialised )
+		if ( !m_initialised )
 		{
 			m_fbLeftEye.Create();
 			m_fbRightEye.Create();
@@ -408,15 +408,15 @@ namespace Castor3D
 			m_pRenderTechnique->Create();
 			uint32_t l_index = p_index;
 			m_pRenderTechnique->Initialise( l_index );
-			m_bInitialised = true;
+			m_initialised = true;
 		}
 	}
 
 	void RenderTarget::Cleanup()
 	{
-		if ( m_bInitialised )
+		if ( m_initialised )
 		{
-			m_bInitialised = false;
+			m_initialised = false;
 			m_pRenderTechnique->Cleanup();
 			m_fbLeftEye.Cleanup();
 			m_fbRightEye.Cleanup();
@@ -436,7 +436,7 @@ namespace Castor3D
 			l_pScene->InitialiseGeometries();
 		}
 
-		if ( m_bInitialised && l_pScene )
+		if ( m_initialised && l_pScene )
 		{
 			if ( m_bStereo && m_rIntraOcularDistance > 0 && GetOwner()->GetRenderSystem()->IsStereoAvailable() )
 			{
@@ -505,7 +505,7 @@ namespace Castor3D
 		SceneNodeSPtr l_pRECamNode;
 		String l_strLENodeName;
 		String l_strRENodeName;
-		String l_strIndex = cuT( "_RT" ) + string::to_string( m_uiIndex );
+		String l_strIndex = cuT( "_RT" ) + string::to_string( m_index );
 		SceneSPtr l_pScene = GetScene();
 
 		if ( l_pScene )

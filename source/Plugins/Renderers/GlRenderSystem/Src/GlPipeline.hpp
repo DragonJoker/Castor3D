@@ -26,19 +26,17 @@ namespace GlRender
 {
 	class GlPipelineImpl
 		: public Castor3D::IPipelineImpl
+		, public Holder
 	{
 	public:
 		GlPipelineImpl( OpenGl & p_gl, Castor3D::Pipeline & p_pipeline );
 		virtual ~GlPipelineImpl();
 
-		virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
-		virtual void Perspective( Castor::Matrix4x4r  & p_result, Castor::Angle const & p_aFOVY, real p_aspect, real p_near, real p_far );
-		virtual void Frustum( Castor::Matrix4x4r  & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
-		virtual void Ortho( Castor::Matrix4x4r  & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		virtual void ApplyViewport( int p_windowWidth, int p_windowHeight );
+		virtual void Perspective( Castor::Matrix4x4r & p_result, Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		virtual void Frustum( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		virtual void Ortho( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		virtual void LookAt( Castor::Matrix4x4r & p_result, Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
-
-	protected:
-		OpenGl & m_gl;
 	};
 }
 

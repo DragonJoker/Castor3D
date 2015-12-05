@@ -48,7 +48,7 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	bool DxTextureAttachment::DoAttach( FrameBufferSPtr p_pFrameBuffer )
+	bool DxTextureAttachment::DoAttach( FrameBufferSPtr p_frameBuffer )
 	{
 		return true;
 	}

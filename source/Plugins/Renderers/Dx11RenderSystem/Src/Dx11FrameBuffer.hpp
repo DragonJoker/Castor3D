@@ -110,7 +110,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
-		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
+		virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_target );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */

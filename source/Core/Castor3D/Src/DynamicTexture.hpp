@@ -148,9 +148,9 @@ namespace Castor3D
 		 *\brief		Définit le nombre de samples
 		 *\param[in]	val	Le nombre de samples
 		 */
-		inline void SetSamplesCount( int p_iCount )
+		inline void SetSamplesCount( int p_count )
 		{
-			m_iSamplesCount = p_iCount;
+			m_iSamplesCount = p_count;
 		}
 		/**
 		 *\~english
@@ -162,7 +162,7 @@ namespace Castor3D
 		 */
 		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_index;
+			m_index = p_index;
 		}
 		/**
 		 *\~english
