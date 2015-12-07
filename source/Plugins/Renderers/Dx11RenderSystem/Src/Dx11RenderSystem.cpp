@@ -320,9 +320,9 @@ namespace Dx11Render
 		return std::make_shared< DxStaticTexture >( *this );
 	}
 
-	DynamicTextureSPtr DxRenderSystem::CreateDynamicTexture()
+	DynamicTextureSPtr DxRenderSystem::CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		return std::make_shared< DxDynamicTexture >( *this );
+		return std::make_shared< DxDynamicTexture >( *this, p_cpuAccess, p_gpuAccess );
 	}
 
 	void DxRenderSystem::DoInitialise()

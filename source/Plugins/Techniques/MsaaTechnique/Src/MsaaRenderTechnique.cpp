@@ -410,13 +410,13 @@ namespace Msaa
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
 			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
+			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
 			if ( p_flags != 0 )
 			{
 				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
-					l_v3Normal = normalize( l_v3MapNormal.XYZ * 2.0f - 1.0f );
 				}
 
 				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
@@ -433,9 +433,9 @@ namespace Msaa
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
 			{
 				l_lighting.WriteCompute( p_flags, l_writer, i,
-										 l_v3MapSpecular, c3d_mtxModelView,
+										 l_v3MapSpecular, c3d_mtxModelView, l_v3MapNormal,
 										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
-										 l_v3Normal, l_v3EyeVec, l_fShininess,
+										 vtx_vertex, l_v3Normal, c3d_v3CameraPosition, l_fShininess,
 										 vtx_vertex, vtx_tangent, vtx_bitangent, vtx_normal,
 										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
 			}

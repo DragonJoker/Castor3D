@@ -27,7 +27,7 @@ namespace GlRender
 		}
 
 		Int::Int( Type const & p_value )
-			: Type( cuT( "int " ) )
+			: Type( cuT( "int " ), p_value.m_writer )
 		{
 			m_value << Castor::String( p_value );
 		}

@@ -27,21 +27,27 @@ namespace GlRender
 		bool l_return = true;
 		PxBufferBaseSPtr l_pxbuffer = m_buffer.lock();
 
-		for ( auto && l_buffer : m_uploadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			if ( l_return )
+			for ( auto && l_buffer : m_uploadBuffers )
 			{
-				l_buffer = std::make_unique< GlUploadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
-				l_return = l_buffer->Create();
+				if ( l_return )
+				{
+					l_buffer = std::make_unique< GlUploadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
+					l_return = l_buffer->Create();
+				}
 			}
 		}
 
-		for ( auto && l_buffer : m_downloadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			if ( l_return )
+			for ( auto && l_buffer : m_downloadBuffers )
 			{
-				l_buffer = std::make_unique< GlDownloadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
-				l_return = l_buffer->Create();
+				if ( l_return )
+				{
+					l_buffer = std::make_unique< GlDownloadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
+					l_return = l_buffer->Create();
+				}
 			}
 		}
 
@@ -50,16 +56,22 @@ namespace GlRender
 
 	void GlPboTextureStorage::DoDestroy()
 	{
-		for ( auto && l_buffer : m_uploadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			l_buffer->Destroy();
-			l_buffer.reset();
+			for ( auto && l_buffer : m_uploadBuffers )
+			{
+				l_buffer->Destroy();
+				l_buffer.reset();
+			}
 		}
 
-		for ( auto && l_buffer : m_downloadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			l_buffer->Destroy();
-			l_buffer.reset();
+			for ( auto && l_buffer : m_downloadBuffers )
+			{
+				l_buffer->Destroy();
+				l_buffer.reset();
+			}
 		}
 	}
 
@@ -67,19 +79,25 @@ namespace GlRender
 	{
 		bool l_return = true;
 
-		for ( auto && l_buffer : m_uploadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			if ( l_return )
+			for ( auto && l_buffer : m_uploadBuffers )
 			{
-				l_return = l_buffer->Initialise();
+				if ( l_return )
+				{
+					l_return = l_buffer->Initialise();
+				}
 			}
 		}
 
-		for ( auto && l_buffer : m_downloadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			if ( l_return )
+			for ( auto && l_buffer : m_downloadBuffers )
 			{
-				l_return = l_buffer->Initialise();
+				if ( l_return )
+				{
+					l_return = l_buffer->Initialise();
+				}
 			}
 		}
 
@@ -94,14 +112,20 @@ namespace GlRender
 
 	void GlPboTextureStorage::DoCleanup()
 	{
-		for ( auto && l_buffer : m_uploadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			l_buffer->Cleanup();
+			for ( auto && l_buffer : m_uploadBuffers )
+			{
+				l_buffer->Cleanup();
+			}
 		}
 
-		for ( auto && l_buffer : m_downloadBuffers )
+		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			l_buffer->Cleanup();
+			for ( auto && l_buffer : m_downloadBuffers )
+			{
+				l_buffer->Cleanup();
+			}
 		}
 	}
 
@@ -153,61 +177,73 @@ namespace GlRender
 
 	void GlPboTextureStorage::DoUploadAsync()
 	{
-		m_currentUlPbo = ( m_currentUlPbo + 1 ) % 2;
-		int l_nextUlPbo = ( m_currentUlPbo + 1 ) % 2;
-		GlUploadPixelBuffer & l_bufferOut = *m_uploadBuffers[m_currentUlPbo];
-		GlUploadPixelBuffer & l_bufferIn = *m_uploadBuffers[l_nextUlPbo];
-
-		if ( l_bufferOut.Bind() )
+		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			PxBufferBaseSPtr l_buffer = m_buffer.lock();
-			DoUploadImage( l_buffer->width(), l_buffer->height(), GetOpenGl().Get( l_buffer->format() ), nullptr );
-			l_bufferIn.Fill( l_buffer->ptr(), l_buffer->size() );
-			l_bufferOut.Unbind();
+			m_currentUlPbo = ( m_currentUlPbo + 1 ) % 2;
+			int l_nextUlPbo = ( m_currentUlPbo + 1 ) % 2;
+			GlUploadPixelBuffer & l_bufferOut = *m_uploadBuffers[m_currentUlPbo];
+			GlUploadPixelBuffer & l_bufferIn = *m_uploadBuffers[l_nextUlPbo];
+
+			if ( l_bufferOut.Bind() )
+			{
+				PxBufferBaseSPtr l_buffer = m_buffer.lock();
+				DoUploadImage( l_buffer->width(), l_buffer->height(), GetOpenGl().Get( l_buffer->format() ), nullptr );
+				l_bufferIn.Fill( l_buffer->ptr(), l_buffer->size() );
+				l_bufferOut.Unbind();
+			}
 		}
 	}
 
 	void GlPboTextureStorage::DoUploadSync()
 	{
-		PxBufferBaseSPtr l_buffer = m_buffer.lock();
-		DoUploadImage( l_buffer->width(), l_buffer->height(), GetOpenGl().Get( l_buffer->format() ), l_buffer->const_ptr() );
+		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		{
+			PxBufferBaseSPtr l_buffer = m_buffer.lock();
+			DoUploadImage( l_buffer->width(), l_buffer->height(), GetOpenGl().Get( l_buffer->format() ), l_buffer->const_ptr() );
+		}
 	}
 
 	void GlPboTextureStorage::DoDownloadAsync()
 	{
-		PxBufferBaseSPtr l_buffer = m_buffer.lock();
-		OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
-		m_currentDlPbo = ( m_currentDlPbo + 1 ) % 2;
-		int l_nextDlPbo = ( m_currentDlPbo + 1 ) % 2;
-		GlDownloadPixelBuffer & l_bufferOut = *m_downloadBuffers[m_currentDlPbo];
-		GlDownloadPixelBuffer & l_bufferIn = *m_downloadBuffers[l_nextDlPbo];
-
-		if ( l_bufferOut.Bind() )
+		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			GetOpenGl().GetTexImage( m_glDimension, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, 0 );
+			PxBufferBaseSPtr l_buffer = m_buffer.lock();
+			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
+			m_currentDlPbo = ( m_currentDlPbo + 1 ) % 2;
+			int l_nextDlPbo = ( m_currentDlPbo + 1 ) % 2;
+			GlDownloadPixelBuffer & l_bufferOut = *m_downloadBuffers[m_currentDlPbo];
+			GlDownloadPixelBuffer & l_bufferIn = *m_downloadBuffers[l_nextDlPbo];
 
-			if ( l_bufferIn.Bind() )
+			if ( l_bufferOut.Bind() )
 			{
-				void * pData = l_bufferIn.Lock( eGL_LOCK_READ_ONLY );
+				GetOpenGl().GetTexImage( m_glDimension, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, 0 );
 
-				if ( pData )
+				if ( l_bufferIn.Bind() )
 				{
-					memcpy( l_buffer->ptr(), pData, l_buffer->size() );
-					l_bufferIn.Unlock();
+					void * pData = l_bufferIn.Lock( eGL_LOCK_READ_ONLY );
+
+					if ( pData )
+					{
+						memcpy( l_buffer->ptr(), pData, l_buffer->size() );
+						l_bufferIn.Unlock();
+					}
+
+					l_bufferIn.Unbind();
 				}
 
-				l_bufferIn.Unbind();
+				l_bufferOut.Unbind();
 			}
-
-			l_bufferOut.Unbind();
 		}
 	}
 
 	void GlPboTextureStorage::DoDownloadSync()
 	{
-		PxBufferBaseSPtr l_buffer = m_buffer.lock();
-		OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
-		GetOpenGl().GetTexImage( m_glDimension, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
+		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
+		{
+			PxBufferBaseSPtr l_buffer = m_buffer.lock();
+			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
+			GetOpenGl().GetTexImage( m_glDimension, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
+		}
 	}
 
 	void GlPboTextureStorage::DoUploadImage( uint32_t p_width, uint32_t p_height, OpenGl::PixelFmt const & p_format, uint8_t const * p_buffer )

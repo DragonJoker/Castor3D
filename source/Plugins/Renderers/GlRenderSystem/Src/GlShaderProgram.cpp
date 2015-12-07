@@ -214,7 +214,7 @@ namespace GlRender
 
 			if ( ( p_programFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
 			{
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, c3d_mtxView * transform );
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, transform );
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
 				l_v4Vertex = l_mtxMV * l_v4Vertex;
 				l_v4Normal = l_mtxN * l_v4Normal;
@@ -223,10 +223,13 @@ namespace GlRender
 			}
 			else
 			{
-				l_v4Vertex = c3d_mtxModelView * l_v4Vertex;
-				l_v4Normal = c3d_mtxNormal * l_v4Normal;
-				l_v4Tangent = c3d_mtxNormal * l_v4Tangent;
-				l_v4Bitangent = c3d_mtxNormal * l_v4Bitangent;
+				l_v4Vertex = c3d_mtxModel * l_v4Vertex;
+				l_v4Normal = c3d_mtxModel * l_v4Normal;
+				l_v4Tangent = c3d_mtxModel * l_v4Tangent;
+				l_v4Bitangent = c3d_mtxModel * l_v4Bitangent;
+				//l_v4Normal = c3d_mtxNormal * l_v4Normal;
+				//l_v4Tangent = c3d_mtxNormal * l_v4Tangent;
+				//l_v4Bitangent = c3d_mtxNormal * l_v4Bitangent;
 			}
 
 			vtx_texture = texture;
@@ -234,7 +237,7 @@ namespace GlRender
 			vtx_normal = normalize( l_v4Normal.XYZ );
 			vtx_tangent = normalize( l_v4Tangent.XYZ );
 			vtx_bitangent = normalize( l_v4Bitangent.XYZ );
-			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * l_v4Vertex;
+			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * c3d_mtxView * l_v4Vertex;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );

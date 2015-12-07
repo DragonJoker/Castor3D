@@ -151,6 +151,12 @@ namespace GlRender
 			return WriteFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "max" ), p_value, p_values... );
 		}
 
+		template< typename Value, typename ... Values >
+		inline Value reflect( Type const & p_value, Values const & ... p_values )
+		{
+			return WriteFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "reflect" ), p_value, p_values... );
+		}
+
 		template< typename Value >
 		Value normalize( Value const & p_value )
 		{

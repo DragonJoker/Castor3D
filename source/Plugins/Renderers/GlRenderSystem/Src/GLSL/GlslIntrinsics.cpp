@@ -18,6 +18,69 @@ namespace GlRender
 			return l_return;
 		}
 
+		Vec3 operator*( Mat3 const & p_a, Vec3 const & p_b )
+		{
+			Vec3 l_return( p_a.m_writer );
+			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Float operator+( float p_a, Float const & p_b )
+		{
+			Float l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " + " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Float operator-( float p_a, Float const & p_b )
+		{
+			Float l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " - " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Float operator*( float p_a, Float const & p_b )
+		{
+			Float l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " * " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Float operator/( float p_a, Float const & p_b )
+		{
+			Float l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " / " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Int operator+( int p_a, Int const & p_b )
+		{
+			Int l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " + " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Int operator-( int p_a, Int const & p_b )
+		{
+			Int l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " - " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Int operator*( int p_a, Int const & p_b )
+		{
+			Int l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " * " ) << Castor::String( p_b );
+			return l_return;
+		}
+
+		Int operator/( int p_a, Int const & p_b )
+		{
+			Int l_return( p_b.m_writer );
+			l_return.m_value << Castor::string::to_string( p_a ) << cuT( " / " ) << Castor::String( p_b );
+			return l_return;
+		}
+
 		Vec4 texture1D( Sampler1D const & p_sampler, Type const & p_value )
 		{
 			return p_sampler.m_writer->Texture1D( p_sampler, p_value );

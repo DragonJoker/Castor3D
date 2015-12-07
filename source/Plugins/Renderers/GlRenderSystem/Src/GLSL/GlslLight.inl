@@ -82,9 +82,9 @@ namespace GlRender
 			return Vec3( m_writer, m_name + cuT( ".m_v3Attenuation" ) );
 		}
 		
-		Mat4 Light::m_mtx4Orientation()const
+		Mat4 Light::m_v3Direction()const
 		{
-			return Mat4( m_writer, m_name + cuT( ".m_mtx4Orientation" ) );
+			return Mat4( m_writer, m_name + cuT( ".m_v3Direction" ) );
 		}
 		
 		Float Light::m_fExponent()const

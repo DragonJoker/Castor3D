@@ -46,8 +46,17 @@ namespace GlRender
 		template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<=( TypeA const & p_a, TypeB const & p_b );
 		template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>( TypeA const & p_a, TypeB const & p_b );
 		template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>=( TypeA const & p_a, TypeB const & p_b );
-
+        
 		C3D_Gl_API Vec4 operator*( Mat4 const & p_a, Vec4 const & p_b );
+		C3D_Gl_API Vec3 operator*( Mat3 const & p_a, Vec3 const & p_b );
+		C3D_Gl_API Float operator+( float p_a, Float const & p_b );
+		C3D_Gl_API Float operator-( float p_a, Float const & p_b );
+		C3D_Gl_API Float operator*( float p_a, Float const & p_b );
+		C3D_Gl_API Float operator/( float p_a, Float const & p_b );
+		C3D_Gl_API Int operator+( int p_a, Int const & p_b );
+		C3D_Gl_API Int operator-( int p_a, Int const & p_b );
+		C3D_Gl_API Int operator*( int p_a, Int const & p_b );
+		C3D_Gl_API Int operator/( int p_a, Int const & p_b );
 
 		template< typename ... Values > inline Vec2 vec2( Type const & p_value, Values const & ... p_values );
 		template< typename ... Values > inline Vec3 vec3( Type const & p_value, Values const & ... p_values );
@@ -65,6 +74,7 @@ namespace GlRender
 		template< typename Value, typename ... Values > inline Value clamp( Value const & p_value, Values const & ... p_values );
 		template< typename Value, typename ... Values > inline Value min( Value const & p_value, Values const & ... p_values );
 		template< typename Value, typename ... Values > inline Value max( Value const & p_value, Values const & ... p_values );
+		template< typename Value, typename ... Values > inline Value reflect( Type const & p_value, Values const & ... p_values );
 		template< typename Value > inline Value neg( Value const & p_value );
 		template< typename Input, typename Output > inline Output neg( Swizzle< Input, Output > const & p_value );
 		template< typename Value > inline Value normalize( Value const & p_value );

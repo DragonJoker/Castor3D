@@ -168,7 +168,7 @@ namespace Dx11Render
 
 		if ( l_continue )
 		{
-			m_colorBuffer = std::static_pointer_cast< DxDynamicTexture >( GetOwner()->GetRenderSystem()->CreateDynamicTexture() );
+			m_colorBuffer = std::static_pointer_cast< DxDynamicTexture >( GetOwner()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_WRITE ) );
 			l_continue = m_colorBuffer != nullptr;
 		}
 
@@ -181,12 +181,12 @@ namespace Dx11Render
 
 		if ( l_continue )
 		{
-			m_colorBuffer->Initialise( 0, eACCESS_TYPE_READ, eACCESS_TYPE_WRITE );
+			m_colorBuffer->Initialise( 0 );
 		}
 
 		if ( l_continue )
 		{
-			m_depthBuffer = std::static_pointer_cast< DxDynamicTexture >( GetOwner()->GetRenderSystem()->CreateDynamicTexture() );
+			m_depthBuffer = std::static_pointer_cast< DxDynamicTexture >( GetOwner()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_WRITE ) );
 			l_continue = m_depthBuffer != nullptr;
 		}
 
@@ -199,7 +199,7 @@ namespace Dx11Render
 
 		if ( l_continue )
 		{
-			l_continue = m_depthBuffer->Initialise( 0, eACCESS_TYPE_READ, eACCESS_TYPE_WRITE );
+			l_continue = m_depthBuffer->Initialise( 0 );
 		}
 
 		return l_continue;

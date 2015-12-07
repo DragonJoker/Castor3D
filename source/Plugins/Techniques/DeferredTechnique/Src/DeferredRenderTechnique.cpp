@@ -941,9 +941,9 @@ namespace Deferred
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
 			{
 				l_lighting.WriteCompute( p_flags, l_writer, i,
-										 l_v3MapSpecular, c3d_mtxModelView,
+										 l_v3MapSpecular, c3d_mtxModelView, l_v3Normal,
 										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
-										 l_v3Normal, l_v3EyeVec, l_fShininess,
+										 l_v3Position, l_v3Normal, c3d_v3CameraPosition, l_fShininess,
 										 l_v3Position, l_v3Tangent, l_v3Bitangent, l_v3Normal,
 										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
 			}

@@ -80,7 +80,7 @@ namespace GlRender
 			C3D_Gl_API void WriteAssign( Type const & p_lhs, Type const & p_rhs );
 			C3D_Gl_API void WriteAssign( Type const & p_lhs, int const & p_rhs );
 			C3D_Gl_API void WriteAssign( Type const & p_lhs, float const & p_rhs );
-			C3D_Gl_API void For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type ) > p_function );
+			C3D_Gl_API void For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type const & ) > p_function );
 			C3D_Gl_API GlslWriter & If( Expr const & p_cond, std::function< void() > p_function );
 			C3D_Gl_API GlslWriter & ElseIf( Expr const & p_cond, std::function< void() > p_function );
 			C3D_Gl_API void Else( std::function< void() > p_function );
@@ -150,7 +150,7 @@ namespace GlRender
 #define FOR( Writer, Type, Name, Init, Cond, Incr )\
 	Type Name( &Writer, cuT( #Name ) );\
 	Name.m_value << Type().m_type << cuT( #Name ) << cuT( " = " ) << cuT( #Init );\
-	( Writer ).For( Name, Expr( &( Writer ), Castor::String( Cond ) ), Expr( &( Writer ), Castor::String( Incr ) ), [&]( Type i )
+	( Writer ).For( Name, Expr( &( Writer ), Castor::String( Cond ) ), Expr( &( Writer ), Castor::String( Incr ) ), [&]( Type const & i )
 
 #define ROF\
 	);

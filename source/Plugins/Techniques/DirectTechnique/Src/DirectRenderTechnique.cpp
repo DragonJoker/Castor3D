@@ -325,20 +325,18 @@ namespace Direct
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
-			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vec3( vtx_vertex.X, vtx_vertex.Y, vtx_vertex.Z ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vec3( vtx_vertex.X, vtx_vertex.Y, vtx_vertex.Z ) ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
 			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
+			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
 			if ( p_flags != 0 )
 			{
 				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
-					l_v3Normal = normalize( ( l_v3MapNormal.XYZ * 2.0f ) - 1.0f );
 				}
 
 				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
@@ -355,9 +353,9 @@ namespace Direct
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
 			{
 				l_lighting.WriteCompute( p_flags, l_writer, i,
-										 l_v3MapSpecular, c3d_mtxModelView,
+										 l_v3MapSpecular, c3d_mtxModelView, l_v3MapNormal,
 										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
-										 l_v3Normal, l_v3EyeVec, l_fShininess,
+										 vtx_vertex, l_v3Normal, c3d_v3CameraPosition, l_fShininess,
 										 vtx_vertex, vtx_tangent, vtx_bitangent, vtx_normal,
 										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
 			}
@@ -385,15 +383,9 @@ namespace Direct
 					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
 				}
 			}
-			else
-			{
-				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( Int( &l_writer, 0 ) ) );
-				l_v3Diffuse = texture1D( c3d_sLights, vtx_texture.X ).XYZ;
-			}
 
 			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
 			//pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
-			//pxl_v4FragColor = vec4( Float( &l_writer, 1.0f ), 1.0, 1.0, l_fAlpha );
 		};
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();

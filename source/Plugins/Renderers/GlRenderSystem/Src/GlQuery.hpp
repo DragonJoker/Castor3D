@@ -15,35 +15,38 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GLSL_LIGHT_H___
-#define ___GLSL_LIGHT_H___
+#ifndef ___GL_QUERY_H___
+#define ___GL_QUERY_H___
 
-#include "GlslMat.hpp"
+#include "GlObject.hpp"
 
 namespace GlRender
 {
-	namespace GLSL
+	/*!
+	\author		Sylvain DOREMUS
+	\brief		glQuery implementation
+	*/
+	class GlQuery
+		: public Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >
 	{
-		struct Light
-			: public Type
-		{
-			inline Light();
-			inline Light( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
-			inline Light & operator=( Light const & p_rhs );
-			template< typename T > inline Light & operator=( T const & p_rhs );
-			inline Vec4 m_v4Ambient()const;
-			inline Vec4 m_v4Diffuse()const;
-			inline Vec4 m_v4Specular()const;
-			inline Vec4 m_v4Position()const;
-			inline Int m_iType()const;
-			inline Vec3 m_v3Attenuation()const;
-			inline Mat4 m_v3Direction()const;
-			inline Float m_fExponent()const;
-			inline Float m_fCutOff()const;
-		};
-	}
-}
+		using ObjectType = Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >;
 
-#include "GlslLight.inl"
+	public:
+		GlQuery( OpenGl & p_gl, eGL_QUERY p_query );
+		virtual ~GlQuery();
+
+		bool Begin();
+		void End();
+
+		template< typename T >
+		inline bool GetInfos( eGL_QUERY_INFO p_infos, T & p_param )
+		{
+			return GetOpenGl().GetQueryObjectInfos( GetGlName(), p_infos, &p_param );
+		}
+
+	private:
+		eGL_QUERY m_target;
+	};
+}
 
 #endif

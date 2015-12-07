@@ -27,10 +27,10 @@ namespace GlRender
 		class LightingModel
 		{
 		public:
-			virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int & i,
-									   Vec3 & p_v3MapSpecular, Mat4 c3d_mtxModelView,
+			virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int const & i,
+									   Vec3 & p_v3MapSpecular, Mat4 & c3d_mtxModelView, Vec3 & p_v3MapMormal,
 									   Vec4 & c3d_v4MatAmbient, Vec4 & c3d_v4MatDiffuse, Vec4 & c3d_v4MatSpecular,
-									   Vec3 & p_v3Normal, Vec3 & p_v3EyeVec, Float & p_fShininess,
+									   Vec3 & p_v3Position, Vec3 & p_v3Normal, Vec3 & p_v3Eye, Float & p_fShininess,
 									   Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
 									   Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular ) = 0;
 			// Common ones
@@ -45,17 +45,12 @@ namespace GlRender
 			: public LightingModel
 		{
 		public:
-			C3D_Gl_API virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int & i,
-												  Vec3 & p_v3MapSpecular, Mat4 c3d_mtxModelView,
+			C3D_Gl_API virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int const & i,
+												  Vec3 & p_v3MapSpecular, Mat4 & c3d_mtxModelView, Vec3 & p_v3MapMormal,
 												  Vec4 & c3d_v4MatAmbient, Vec4 & c3d_v4MatDiffuse, Vec4 & c3d_v4MatSpecular,
-												  Vec3 & p_v3Normal, Vec3 & p_v3EyeVec, Float & p_fShininess,
+												  Vec3 & p_v3Position, Vec3 & p_v3Normal, Vec3 & p_v3Eye, Float & p_fShininess,
 												  Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
 												  Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular );
-
-		private:
-			Vec4 DoComputeLightDirection( Light & p_light, Vec3 & p_position, Mat4 & p_mtxModelView );
-			Void DoBump( Vec3 & p_v3T, Vec3 & p_v3B, Vec3 & p_v3N, Vec3 & p_lightDir, Float & p_fAttenuation );
-			Float DoComputeFresnel( Float & p_lambert, Vec3 & p_direction, Vec3 & p_normal, Vec3 & p_eye, Float & p_shininess, Vec3 & p_specular );
 		};
 	}
 }
