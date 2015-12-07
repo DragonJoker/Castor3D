@@ -25,9 +25,8 @@ namespace GlRender
 		: Context( p_renderSystem, false )
 		, m_glRenderSystem( &p_renderSystem )
 		, Holder( p_gl )
+		, m_timerQuery { GlQuery( p_gl, eGL_QUERY_TIME_ELAPSED ), GlQuery( p_gl, eGL_QUERY_TIME_ELAPSED ) }
 	{
-		m_timerQueryId[0] = eGL_INVALID_INDEX;
-		m_timerQueryId[1] = eGL_INVALID_INDEX;
 		m_implementation = new GlContextImpl( GetOpenGl(), this );
 	}
 
@@ -107,9 +106,10 @@ namespace GlRender
 			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
 
 			m_implementation->SetCurrent();
-			GetOpenGl().GenQueries( 2, m_timerQueryId );
-			GetOpenGl().BeginQuery( eGL_QUERY_TIME_ELAPSED, m_timerQueryId[1 - m_queryIndex] );
-			GetOpenGl().EndQuery( eGL_QUERY_TIME_ELAPSED );
+			m_timerQuery[0].Create();
+			m_timerQuery[1].Create();
+			m_timerQuery[1 - m_queryIndex].Begin();
+			m_timerQuery[1 - m_queryIndex].End();
 			m_implementation->EndCurrent();
 		}
 
@@ -118,22 +118,25 @@ namespace GlRender
 
 	void GlContext::DoCleanup()
 	{
-		GetOpenGl().DeleteQueries( 2, m_timerQueryId );
+		m_implementation->SetCurrent();
+		m_timerQuery[0].Destroy();
+		m_timerQuery[1].Destroy();
+		m_implementation->EndCurrent();
 		m_implementation->Cleanup();
 	}
 
 	void GlContext::DoSetCurrent()
 	{
 		GetImpl()->SetCurrent();
-		GetOpenGl().BeginQuery( eGL_QUERY_TIME_ELAPSED, m_timerQueryId[m_queryIndex] );
+		m_timerQuery[m_queryIndex].Begin();
 	}
 
 	void GlContext::DoEndCurrent()
 	{
-		GetOpenGl().EndQuery( eGL_QUERY_TIME_ELAPSED );
+		m_timerQuery[m_queryIndex].End();
 		uint64_t l_time = 0;
 		m_queryIndex = 1 - m_queryIndex;
-		GetOpenGl().GetQueryObjectInfos( m_timerQueryId[m_queryIndex], eGL_QUERY_INFO_RESULT, &l_time );
+		m_timerQuery[m_queryIndex].GetInfos( eGL_QUERY_INFO_RESULT, l_time );
 		GetOwner()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
 		GetImpl()->EndCurrent();
 	}

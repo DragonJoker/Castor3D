@@ -181,7 +181,7 @@ namespace Ssaa
 
 		Logger::LogInfo( std::stringstream() << "Using SSAA, " << m_iSamplesCount << " samples" );
 		m_pSsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-		m_pSsColorBuffer = m_pRenderTarget->CreateDynamicTexture();
+		m_pSsColorBuffer = m_pRenderTarget->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pSsColorAttach = m_pRenderTarget->CreateAttachment( m_pSsColorBuffer );
 		m_pSsDepthBuffer = m_pSsFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
 		m_pSsDepthAttach = m_pRenderTarget->CreateAttachment( m_pSsDepthBuffer );
@@ -383,11 +383,9 @@ namespace Ssaa
 			}
 		}
 
-		Lighting< BlinnPhongLightingModel > l_lighting;
+		BlinnPhongLightingModel l_lighting;
 		l_lighting.Declare_Light( l_writer );
 		l_lighting.Declare_GetLight( l_writer );
-		l_lighting.Declare_ComputeLightDirection( l_writer );
-		l_lighting.Declare_ComputeFresnel( l_writer );
 
 		std::function< void() > l_main = [&]()
 		{
@@ -424,32 +422,12 @@ namespace Ssaa
 
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
 			{
-				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( i ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4LightDir, l_lighting.ComputeLightDirection( l_light, vtx_vertex, c3d_mtxModelView ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.XYZ );
-				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.W );
-
-				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-				{
-					l_lighting.Bump( vtx_tangent, vtx_bitangent, vtx_normal, l_v3LightDir, l_fAttenuation );
-				}
-
-				LOCALE_ASSIGN( l_writer, Float, l_fLambert, max( dot( l_v3Normal, l_v3LightDir ), 0.0 ) );
-				//l_fLambert = dot( l_v3Normal, -l_v3LightDir );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MatSpecular, c3d_v4MatSpecular.XYZ );
-				LOCALE_ASSIGN( l_writer, Float, l_fFresnel, l_lighting.ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v3MatSpecular ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpAmbient, ( l_light.m_v4Ambient().XYZ * l_light.m_v4Ambient().W * c3d_v4MatAmbient.XYZ ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, ( l_light.m_v4Diffuse().XYZ * l_light.m_v4Diffuse().W * c3d_v4MatDiffuse.XYZ * l_fLambert ) / l_fAttenuation );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, ( l_light.m_v4Specular().XYZ * l_light.m_v4Specular().W * l_v3MatSpecular * l_fFresnel ) / l_fAttenuation );
-
-				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-				{
-					l_v3TmpSpecular = l_fAttenuation * l_light.m_v4Specular().XYZ * l_v3MapSpecular * l_v3TmpSpecular;
-				}
-
-				l_v3Ambient += l_v3TmpAmbient;
-				l_v3Diffuse += l_v3TmpDiffuse;
-				l_v3Specular += l_v3TmpSpecular;
+				l_lighting.WriteCompute( p_flags, l_writer, i,
+										 l_v3MapSpecular, c3d_mtxModelView,
+										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
+										 l_v3Normal, l_v3EyeVec, l_fShininess,
+										 vtx_vertex, vtx_tangent, vtx_bitangent, vtx_normal,
+										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
 			}
 			ROF
 

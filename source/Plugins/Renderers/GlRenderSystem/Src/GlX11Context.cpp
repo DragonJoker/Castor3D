@@ -63,10 +63,17 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 		m_display = p_window->GetHandle().GetInternal< IXWindowHandle >()->GetDisplay();
 	}
 
+	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
+	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+
+	if ( l_pMainContext )
+	{
+		Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+		Logger::LogInfo( cuT( "Initialising OpenGL" ) );
+	}
+
 	try
 	{
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
-		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		int l_screen = DefaultScreen( m_display );
 		int l_major, l_minor;
 		bool l_ok = glXQueryVersion( m_display, &l_major, &l_minor );
@@ -205,6 +212,12 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 
 #endif
 		UpdateVSync( p_window->GetVSync() );
+
+		if ( l_pMainContext )
+		{
+			Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
+			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+		}
 	}
 
 	return m_initialised;

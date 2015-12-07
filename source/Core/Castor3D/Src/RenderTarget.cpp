@@ -282,7 +282,7 @@ namespace Castor3D
 	bool RenderTarget::stFRAME_BUFFER::Create()
 	{
 		m_pFrameBuffer = m_renderTarget.CreateFrameBuffer();
-		m_pColorTexture = m_renderTarget.CreateDynamicTexture();
+		m_pColorTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pColorAttach = m_renderTarget.CreateAttachment( m_pColorTexture );
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
 		m_pDepthAttach = m_renderTarget.CreateAttachment( m_pDepthBuffer );
@@ -467,9 +467,9 @@ namespace Castor3D
 		}
 	}
 
-	DynamicTextureSPtr RenderTarget::CreateDynamicTexture()const
+	DynamicTextureSPtr RenderTarget::CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )const
 	{
-		return GetOwner()->GetRenderSystem()->CreateDynamicTexture();
+		return GetOwner()->GetRenderSystem()->CreateDynamicTexture( p_cpuAccess, p_gpuAccess );
 	}
 
 	eTOPOLOGY RenderTarget::GetPrimitiveType()const

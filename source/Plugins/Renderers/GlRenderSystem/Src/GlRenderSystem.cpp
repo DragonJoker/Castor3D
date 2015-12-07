@@ -84,7 +84,7 @@ namespace GlRender
 				m_useShader[eSHADER_TYPE_PIXEL] = GetOpenGl().HasPSh();
 				m_useShader[eSHADER_TYPE_VERTEX] = GetOpenGl().HasVSh();
 				m_bNonPowerOfTwoTextures = GetOpenGl().HasNonPowerOfTwoTextures();
-				REQUIRE( m_useShader[eSHADER_TYPE_VERTEX] && m_useShader[eSHADER_TYPE_PIXEL] && m_useShader[eSHADER_TYPE_GEOMETRY] );
+				REQUIRE( m_useShader[eSHADER_TYPE_VERTEX] && m_useShader[eSHADER_TYPE_PIXEL]/* && m_useShader[eSHADER_TYPE_GEOMETRY]*/ );
 			}
 		}
 
@@ -209,31 +209,21 @@ namespace GlRender
 		return std::make_shared< GlStaticTexture >( GetOpenGl(), *this );
 	}
 
-	DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture()
+	DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		return std::make_shared< GlDynamicTexture >( GetOpenGl(), *this );
+		return std::make_shared< GlDynamicTexture >( GetOpenGl(), *this, p_cpuAccess, p_gpuAccess );
 	}
 
 	void GlRenderSystem::DoInitialise()
 	{
 		if ( !m_initialised )
 		{
-			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
-			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
 			InitOpenGlExtensions();
 
 			m_useVertexBufferObjects = GetOpenGl().HasVbo();
-
-			if ( m_useVertexBufferObjects )
-			{
-				Logger::LogInfo( cuT( "Using Vertex Buffer Objects" ) );
-			}
-
 			m_initialised = true;
 			CheckShaderSupport();
 			m_pipeline->Initialise();
-			Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
-			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 		}
 	}
 

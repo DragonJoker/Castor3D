@@ -11,7 +11,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	StaticTexture::StaticTexture( RenderSystem & p_renderSystem )
-		: TextureBase( eTEXTURE_BASE_TYPE_STATIC, p_renderSystem )
+		: TextureBase( eTEXTURE_BASE_TYPE_STATIC, p_renderSystem, eACCESS_TYPE_READ, eACCESS_TYPE_READ )
 	{
 	}
 
@@ -19,12 +19,10 @@ namespace Castor3D
 	{
 	}
 
-	bool StaticTexture::Initialise( uint32_t p_index, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	bool StaticTexture::Initialise( uint32_t p_index )
 	{
 		if ( !m_initialised )
 		{
-			m_cpuAccess = p_cpuAccess;
-			m_gpuAccess = p_gpuAccess;
 			m_index = p_index;
 			m_initialised = DoInitialise();
 		}

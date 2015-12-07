@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlDirectTextureStorage::GlDirectTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: GlTextureStorage( p_gl, p_renderSystem )
+	GlDirectTextureStorage::GlDirectTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: GlTextureStorage( p_gl, p_renderSystem, p_cpuAccess, p_gpuAccess )
 	{
 	}
 
@@ -75,12 +75,20 @@ namespace GlRender
 	uint8_t * GlDirectTextureStorage::DoLock( uint32_t p_lock )
 	{
 		REQUIRE( !m_buffer.expired() );
-		return m_buffer.lock()->ptr();
+		uint8_t * l_return = NULL;
+
+		if ( ( m_cpuAccess && p_lock & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ
+			 || ( m_cpuAccess & p_lock & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+		{
+			l_return = m_buffer.lock()->ptr();
+		}
+
+		return l_return;
 	}
 
 	void GlDirectTextureStorage::DoUnlock( bool p_modified )
 	{
-		if ( p_modified )
+		if ( p_modified && ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
 			PxBufferBaseSPtr l_buffer = m_buffer.lock();
 			OpenGl::PixelFmt l_format = GetOpenGl().Get( l_buffer->format() );

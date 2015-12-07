@@ -1975,8 +1975,6 @@ END_ATTRIBUTE_PUSH( eSECTION_PASS )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MaterialEnd )
 {
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->m_pParser->GetOwner()->PostEvent( MakeInitialiseEvent( *l_pContext->pMaterial ) );
 }
 END_ATTRIBUTE_POP()
 

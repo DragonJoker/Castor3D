@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlDynamicTexture::GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: DynamicTexture( p_renderSystem )
+	GlDynamicTexture::GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: DynamicTexture( p_renderSystem, p_cpuAccess, p_gpuAccess )
 		, m_texture( p_gl, p_renderSystem, false )
 	{
 	}

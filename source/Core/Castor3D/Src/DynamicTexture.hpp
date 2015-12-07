@@ -38,13 +38,17 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The render system
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le render system
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API DynamicTexture( RenderSystem & p_renderSystem );
+		C3D_API DynamicTexture( RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -55,7 +59,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */
-		C3D_API virtual bool Initialise( uint32_t p_index, uint8_t p_cpuAccess = 0xFF, uint8_t p_gpuAccess = 0xFF );
+		C3D_API virtual bool Initialise( uint32_t p_index );
 		/**
 		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */

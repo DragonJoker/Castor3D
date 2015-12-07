@@ -272,16 +272,9 @@ namespace Direct
 		Sampler2D c3d_mapHeight;
 		Sampler2D c3d_mapGloss;
 
-		Lighting< BlinnPhongLightingModel > l_lighting;
+		BlinnPhongLightingModel l_lighting;
 		l_lighting.Declare_Light( l_writer );
 		l_lighting.Declare_GetLight( l_writer );
-		l_lighting.Declare_ComputeLightDirection( l_writer );
-		l_lighting.Declare_ComputeFresnel( l_writer );
-
-		if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-		{
-			l_lighting.Declare_Bump( l_writer );
-		}
 
 		if ( p_flags != 0 )
 		{
@@ -361,36 +354,21 @@ namespace Direct
 
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
 			{
-				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( i ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4LightDir, l_lighting.ComputeLightDirection( l_light, vtx_vertex, c3d_mtxModelView ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.XYZ );
-				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.W );
-
-				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-				{
-					l_lighting.Bump( vtx_tangent, vtx_bitangent, vtx_normal, l_v3LightDir, l_fAttenuation );
-				}
-
-				LOCALE_ASSIGN( l_writer, Float, l_fLambert, max( dot( l_v3Normal, l_v3LightDir ), 0.0 ) );
-				//l_fLambert = dot( l_v3Normal, -l_v3LightDir );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MatSpecular, c3d_v4MatSpecular.XYZ );
-				LOCALE_ASSIGN( l_writer, Float, l_fFresnel, l_lighting.ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v3MatSpecular ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpAmbient, ( ( l_light.m_v4Ambient().XYZ * l_light.m_v4Ambient().W ) * c3d_v4MatAmbient.XYZ ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, ( l_light.m_v4Diffuse().XYZ * l_light.m_v4Diffuse().W * c3d_v4MatDiffuse.XYZ * l_fLambert ) / l_fAttenuation );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, ( l_light.m_v4Specular().XYZ * l_light.m_v4Specular().W * l_v3MatSpecular * l_fFresnel ) / l_fAttenuation );
-
-				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-				{
-					l_v3TmpSpecular = l_fAttenuation * l_light.m_v4Specular().XYZ * l_v3MapSpecular * l_v3TmpSpecular;
-				}
-
-				l_v3Ambient += l_v3TmpAmbient;
-				l_v3Diffuse += l_v3TmpDiffuse;
-				l_v3Specular += l_v3TmpSpecular;
+				l_lighting.WriteCompute( p_flags, l_writer, i,
+										 l_v3MapSpecular, c3d_mtxModelView,
+										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
+										 l_v3Normal, l_v3EyeVec, l_fShininess,
+										 vtx_vertex, vtx_tangent, vtx_bitangent, vtx_normal,
+										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
 			}
 			ROF
 
-			if ( p_flags != 0 )
+			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			{
+				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
+			}
+
+			if ( p_flags && p_flags != eTEXTURE_CHANNEL_OPACITY )
 			{
 				if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
@@ -406,11 +384,6 @@ namespace Direct
 				{
 					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
 				}
-
-				if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-				{
-					l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
-				}
 			}
 			else
 			{
@@ -418,8 +391,9 @@ namespace Direct
 				l_v3Diffuse = texture1D( c3d_sLights, vtx_texture.X ).XYZ;
 			}
 
-			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
-			pxl_v4FragColor = vec4( l_v3Diffuse, 1.0 );
+			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
+			//pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
+			//pxl_v4FragColor = vec4( Float( &l_writer, 1.0f ), 1.0, 1.0, l_fAlpha );
 		};
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();

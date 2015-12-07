@@ -79,9 +79,30 @@ namespace Castor3D
 	{
 		PreciseTimer l_timer;
 		m_renderSystem->GetMainContext()->SetCurrent();
-		GetOwner()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
-		GetOwner()->GetOverlayManager().Update();
-		GetOwner()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
+
+		try
+		{
+			GetOwner()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
+			GetOwner()->GetOverlayManager().Update();
+			GetOwner()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
+		}
+		catch ( AssertException & p_exc )
+		{
+			Logger::LogError( p_exc.GetFullDescription() );
+		}
+		catch ( Exception & p_exc )
+		{
+			Logger::LogError( p_exc.GetFullDescription() );
+		}
+		catch ( std::exception & p_exc )
+		{
+			Logger::LogError( p_exc.what() );
+		}
+		catch ( ... )
+		{
+			Logger::LogError( C3D_UNKNOWN_EXCEPTION );
+		}
+
 		m_renderSystem->GetMainContext()->EndCurrent();
 		GetOwner()->GetWindowManager().Render( true );
 	}

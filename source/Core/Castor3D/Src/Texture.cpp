@@ -7,7 +7,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureBase::TextureBase( eTEXTURE_BASE_TYPE p_baseType, RenderSystem & p_renderSystem )
+	TextureBase::TextureBase( eTEXTURE_BASE_TYPE p_baseType, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_initialised( false )
 		, m_baseType( p_baseType )
@@ -15,6 +15,8 @@ namespace Castor3D
 		, m_eMapMode( eTEXTURE_MAP_MODE_NONE )
 		, m_index( 0 )
 		, m_pSampler( p_renderSystem.GetOwner()->GetDefaultSampler() )
+		, m_cpuAccess( p_cpuAccess )
+		, m_gpuAccess( p_gpuAccess )
 	{
 	}
 

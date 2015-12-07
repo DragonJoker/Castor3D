@@ -24,29 +24,38 @@ namespace GlRender
 {
 	namespace GLSL
 	{
-		template< typename LightingModel >
-		class Lighting
+		class LightingModel
 		{
 		public:
+			virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int & i,
+									   Vec3 & p_v3MapSpecular, Mat4 c3d_mtxModelView,
+									   Vec4 & c3d_v4MatAmbient, Vec4 & c3d_v4MatDiffuse, Vec4 & c3d_v4MatSpecular,
+									   Vec3 & p_v3Normal, Vec3 & p_v3EyeVec, Float & p_fShininess,
+									   Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
+									   Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular ) = 0;
 			// Common ones
-			inline void Declare_Light( GlslWriter & p_writer );
-			inline void Declare_GetLight( GlslWriter & p_writer );
-			// LightingModel specifics
-			inline void Declare_ComputeLightDirection( GlslWriter & p_writer );
-			inline void Declare_Bump( GlslWriter & p_writer );
-			inline void Declare_ComputeFresnel( GlslWriter & p_writer );
+			C3D_Gl_API void Declare_Light( GlslWriter & p_writer );
+			C3D_Gl_API void Declare_GetLight( GlslWriter & p_writer );
 			// Calls
-			inline Light GetLight( Type const & p_value );
-			template< typename ... Values > inline Vec4 ComputeLightDirection( Type const & p_value, Values const & ... p_values );
-			template< typename ... Values > inline void Bump( Type const & p_value, Values const & ... p_values );
-			template< typename ... Values > inline Float ComputeFresnel( Type const & p_value, Values const & ... p_values );
+			C3D_Gl_API Light GetLight( Type const & p_value );
+			// Main Computation
 		};
 
-		struct BlinnPhongLightingModel
+		class BlinnPhongLightingModel
+			: public LightingModel
 		{
-			C3D_Gl_API static void Declare_ComputeLightDirection( GlslWriter & p_writer );
-			C3D_Gl_API static void Declare_Bump( GlslWriter & p_writer );
-			C3D_Gl_API static void Declare_ComputeFresnel( GlslWriter & p_writer );
+		public:
+			C3D_Gl_API virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int & i,
+												  Vec3 & p_v3MapSpecular, Mat4 c3d_mtxModelView,
+												  Vec4 & c3d_v4MatAmbient, Vec4 & c3d_v4MatDiffuse, Vec4 & c3d_v4MatSpecular,
+												  Vec3 & p_v3Normal, Vec3 & p_v3EyeVec, Float & p_fShininess,
+												  Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
+												  Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular );
+
+		private:
+			Vec4 DoComputeLightDirection( Light & p_light, Vec3 & p_position, Mat4 & p_mtxModelView );
+			Void DoBump( Vec3 & p_v3T, Vec3 & p_v3B, Vec3 & p_v3N, Vec3 & p_lightDir, Float & p_fAttenuation );
+			Float DoComputeFresnel( Float & p_lambert, Vec3 & p_direction, Vec3 & p_normal, Vec3 & p_eye, Float & p_shininess, Vec3 & p_specular );
 		};
 	}
 }

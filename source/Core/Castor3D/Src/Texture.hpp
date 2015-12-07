@@ -39,15 +39,19 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_type			The texture type
-		 *\param[in]	p_renderSystem	The render system
+		 *\brief		Constructor.
+		 *\param[in]	p_type			The texture type.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_type			Le type de texture
-		 *\param[in]	p_renderSystem	Le render system
+		 *\brief		Constructeur.
+		 *\param[in]	p_type			Le type de texture.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API TextureBase( eTEXTURE_BASE_TYPE p_type, RenderSystem & p_renderSystem );
+		C3D_API TextureBase( eTEXTURE_BASE_TYPE p_type, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -100,17 +104,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialisation function.
 		 *\param[in]	p_index		The texture index.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
 		 *\param[in]	p_index		L'index de la texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Initialise( uint32_t p_index, uint8_t p_cpuAccess = 0xFF, uint8_t p_gpuAccess = 0xFF ) = 0;
+		C3D_API virtual bool Initialise( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function

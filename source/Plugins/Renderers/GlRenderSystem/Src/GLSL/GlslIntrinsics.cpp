@@ -63,27 +63,27 @@ namespace GlRender
 			return WriteFunctionCall< Vec4 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
 		}
 
-		inline Float length( Type const & p_value )
+		Float length( Type const & p_value )
 		{
 			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "length" ), p_value );
 		}
 
-		inline Float radians( Type const & p_value )
+		Float radians( Type const & p_value )
 		{
 			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "radians" ), p_value );
 		}
 
-		inline Float cos( Type const & p_value )
+		Float cos( Type const & p_value )
 		{
 			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "cos" ), p_value );
 		}
 
-		inline Float sin( Type const & p_value )
+		Float sin( Type const & p_value )
 		{
 			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "sin" ), p_value );
 		}
 
-		inline Float tan( Type const & p_value )
+		Float tan( Type const & p_value )
 		{
 			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
 		}

@@ -221,13 +221,17 @@ namespace Castor3D
 		C3D_API void SetSize( Castor::Size const & p_size );
 		/**
 		 *\~english
-		 *\brief		Creates a dynamic texture
-		 *\return		The texture
+		 *\brief		Creates a dynamic texture.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
+		 *\return		The texture.
 		 *\~french
-		 *\brief		Crée une texture dynamique
-		 *\return		La texture
+		 *\brief		Crée une texture dynamique.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\return		La texture.
 		 */
-		C3D_API DynamicTextureSPtr CreateDynamicTexture()const;
+		C3D_API DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )const;
 		/**
 		 *\~english
 		 *\brief		Defines the RenderTechnique

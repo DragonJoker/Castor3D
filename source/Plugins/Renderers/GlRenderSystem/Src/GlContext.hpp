@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_CONTEXT_H___
 #define ___GL_CONTEXT_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlQuery.hpp"
 
 #include <Context.hpp>
 
@@ -52,7 +52,7 @@ namespace GlRender
 	private:
 		GlContextImpl * m_implementation;
 		GlRenderSystem * m_glRenderSystem;
-		uint32_t m_timerQueryId[2];
+		GlQuery m_timerQuery[2];
 		uint32_t m_queryIndex = 0;
 	};
 }

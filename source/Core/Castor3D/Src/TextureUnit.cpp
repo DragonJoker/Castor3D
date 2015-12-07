@@ -67,7 +67,7 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_TEXTURE_DATA:
 					l_pPxBuffer = PxBufferBase::create( l_size, l_ePf, l_chunk.GetRemainingData(), l_ePf );
-					l_pTexture = p_unit.GetOwner()->GetRenderSystem()->CreateDynamicTexture();
+					l_pTexture = p_unit.GetOwner()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 					l_pTexture->SetImage( l_pPxBuffer );
 					p_unit.SetTexture( l_pTexture );
 					break;

@@ -826,6 +826,14 @@ namespace GlRender
 		}
 		inline eGL_TEXDIM Get( Castor3D::eTEXTURE_TYPE p_index )const
 		{
+			if ( p_index == Castor3D::eTEXTURE_TYPE_BUFFER )
+			{
+				if ( true )//!HasTbo() )
+				{
+					p_index = Castor3D::eTEXTURE_TYPE_1D;
+				}
+			}
+
 			return TextureDimensions[p_index];
 		}
 		inline eGL_FUNC Get( Castor3D::eALPHA_FUNC p_eAlphaFunc )const

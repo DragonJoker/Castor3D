@@ -241,7 +241,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderWindow::RenderOneFrame( bool p_bForce )
+	void RenderWindow::Render( bool p_bForce )
 	{
 		if ( m_initialised )
 		{

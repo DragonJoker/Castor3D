@@ -11,8 +11,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlPboTextureStorage::GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: GlTextureStorage( p_gl, p_renderSystem )
+	GlPboTextureStorage::GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: GlTextureStorage( p_gl, p_renderSystem, p_cpuAccess, p_gpuAccess )
 		, m_currentDlPbo( 0 )
 		, m_currentUlPbo( 0 )
 	{
@@ -162,21 +162,7 @@ namespace GlRender
 		{
 			PxBufferBaseSPtr l_buffer = m_buffer.lock();
 			DoUploadImage( l_buffer->width(), l_buffer->height(), GetOpenGl().Get( l_buffer->format() ), nullptr );
-
-			if ( l_bufferIn.Bind() )
-			{
-				l_bufferIn.Fill( NULL, l_buffer->size() );
-				void * pData = l_bufferIn.Lock( eGL_LOCK_WRITE_ONLY );
-
-				if ( pData )
-				{
-					memcpy( pData, l_buffer->const_ptr(), l_buffer->size() );
-					l_bufferIn.Unlock();
-				}
-
-				l_bufferIn.Unbind();
-			}
-
+			l_bufferIn.Fill( l_buffer->ptr(), l_buffer->size() );
 			l_bufferOut.Unbind();
 		}
 	}
@@ -202,7 +188,6 @@ namespace GlRender
 
 			if ( l_bufferIn.Bind() )
 			{
-				l_bufferIn.Fill( NULL, l_buffer->size() );
 				void * pData = l_bufferIn.Lock( eGL_LOCK_READ_ONLY );
 
 				if ( pData )

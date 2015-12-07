@@ -9,10 +9,12 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTextureStorage::GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: m_glRenderSystem( &p_renderSystem )
-		, Holder( p_gl )
+	GlTextureStorage::GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: Holder( p_gl )
+		, m_glRenderSystem( &p_renderSystem )
 		, m_depth( 0 )
+		, m_cpuAccess( p_cpuAccess )
+		, m_gpuAccess( p_gpuAccess )
 	{
 	}
 

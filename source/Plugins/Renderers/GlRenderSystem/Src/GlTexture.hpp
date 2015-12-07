@@ -103,6 +103,9 @@ namespace GlRender
 		 */
 		void GenerateMipmaps();
 
+	private:
+		bool DoCreateStorage( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+
 	public:
 		using ObjectType::Create;
 		using ObjectType::Destroy;

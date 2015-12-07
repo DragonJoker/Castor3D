@@ -325,30 +325,26 @@ namespace Castor3D
 		C3D_API virtual OverlayRendererSPtr CreateOverlayRenderer() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_type	The texture type
-		 *\return		The created texture, dependant of current API
+		 *\brief		Creates a texture.
+		 *\return		The created texture, dependant of current API.
 		 *\~french
-		 *\brief		Crée une texture
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_type	Le type de texture
-		 *\return		La texture créée, dépendante de l'API actuelle
+		 *\brief		Crée une texture.
+		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
 		C3D_API virtual StaticTextureSPtr CreateStaticTexture() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_type	The texture type
-		 *\return		The created texture, dependant of current API
+		 *\brief		Creates a texture.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
+		 *\return		The created texture, dependant of current API.
 		 *\~french
-		 *\brief		Crée une texture
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_type	Le type de texture
-		 *\return		La texture créée, dépendante de l'API actuelle
+		 *\brief		Crée une texture.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture() = 0;
+		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer, given a buffer declaration

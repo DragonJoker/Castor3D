@@ -44,6 +44,12 @@ namespace GlRender
 		m_hDC = ::GetDC( p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd() );
 		bool l_bHasPF = false;
 
+		if ( l_pMainContext )
+		{
+			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
+		}
+
 		if ( !l_renderSystem->IsInitialised() )
 		{
 			m_hContext = DoCreateDummyContext( p_window );
@@ -124,6 +130,12 @@ namespace GlRender
 #endif
 			EndCurrent();
 			UpdateVSync( p_window->GetVSync() );
+
+			if ( l_pMainContext )
+			{
+				Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
+				Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+			}
 		}
 
 		return m_initialised;

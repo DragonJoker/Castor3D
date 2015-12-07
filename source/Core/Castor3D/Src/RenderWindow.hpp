@@ -168,7 +168,7 @@ namespace Castor3D
 		 *\brief		Renders one frame
 		 *\param[in]	p_bForce		Dit si on force le rendu
 		 */
-		C3D_API virtual void RenderOneFrame( bool p_bForce );
+		C3D_API virtual void Render( bool p_bForce );
 		/**
 		 *\~english
 		 *\brief		Resizes the window

@@ -865,7 +865,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	}
 
 	m_pTexIrradiance->SetImage( buffer );
-	m_pTexIrradiance->Initialise( IRRADIANCE_UNIT );
+	m_pTexIrradiance->Initialise( IRRADIANCE_UNIT, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexIrradiance->SetSampler( m_pSamplerLinearClamp );
 	int res = 64;
 	int nr = res / 2;
@@ -882,7 +882,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	}
 
 	m_pTexInscatter->SetImage( Point3ui( na * nb, nv, nr ), buffer );
-	m_pTexInscatter->Initialise( INSCATTER_UNIT );
+	m_pTexInscatter->Initialise( INSCATTER_UNIT, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexInscatter->SetSampler( m_pSamplerLinearClamp );
 	m_pTexTransmittance->SetType( eTEXTURE_TYPE_2D );
 	buffer = PxBufferBase::create( Size( 256, 64 ), ePIXEL_FORMAT_RGB16F32F );
@@ -894,7 +894,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	}
 
 	m_pTexTransmittance->SetImage( buffer );
-	m_pTexTransmittance->Initialise( TRANSMITTANCE_UNIT );
+	m_pTexTransmittance->Initialise( TRANSMITTANCE_UNIT, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexTransmittance->SetSampler( m_pSamplerLinearClamp );
 	m_pTexNoise->SetType( eTEXTURE_TYPE_2D );
 	m_pTexNoise->SetImage( Size( 512, 512 ), ePIXEL_FORMAT_L8 );
@@ -908,14 +908,14 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 		delete [] img;
 	}
 
-	m_pTexNoise->Initialise( NOISE_UNIT );
+	m_pTexNoise->Initialise( NOISE_UNIT, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexNoise->Bind();
 	m_pTexNoise->GenerateMipmaps();
 	m_pTexNoise->Unbind();
 	m_pTexNoise->SetSampler( m_pSamplerAnisotropicRepeat );
 	m_pTexSky->SetType( eTEXTURE_TYPE_2D );
 	m_pTexSky->SetImage( Size( m_skyTexSize, m_skyTexSize ), ePIXEL_FORMAT_ARGB16F32F );
-	m_pTexSky->Initialise( SKY_UNIT );
+	m_pTexSky->Initialise( SKY_UNIT, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexSky->Bind();
 	m_pTexSky->GenerateMipmaps();
 	m_pTexSky->Unbind();
@@ -975,7 +975,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 #else
 	m_pTexWave->SetType( eTEXTURE_TYPE_1D );
 	m_pTexWave->SetImage( Size( m_nbWaves, 1 ), ePIXEL_FORMAT_ARGB32F );
-	m_pTexWave->Initialise( WAVE_UNIT );
+	m_pTexWave->Initialise( WAVE_UNIT, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexWave->SetSampler( m_pSamplerNearestClamp );
 #endif
 	m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );

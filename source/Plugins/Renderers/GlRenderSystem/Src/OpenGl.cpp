@@ -879,12 +879,6 @@ bool OpenGl::PreInitialise( String const & p_strExtensions )
 	m_renderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
 	m_version = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
 	String l_strExtensions = m_extensions;
-	StringArray l_arrayExtensions = string::split( l_strExtensions, cuT( " " ), 10000, false );
-	Logger::LogDebug( cuT( "Available extensions :" ) );
-	std::for_each( l_arrayExtensions.begin(), l_arrayExtensions.end(), [&]( String const & p_strExtension )
-	{
-		Logger::LogDebug( p_strExtension );
-	} );
 	double l_version;
 	StringStream l_stream( m_version );
 	l_stream >> l_version;

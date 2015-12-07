@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTboTextureStorage::GlTboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: GlTextureStorage( p_gl, p_renderSystem )
+	GlTboTextureStorage::GlTboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: GlTextureStorage( p_gl, p_renderSystem, p_cpuAccess, p_gpuAccess )
 		, m_glBuffer( p_gl, eGL_BUFFER_TARGET_TEXTURE )
 	{
 	}

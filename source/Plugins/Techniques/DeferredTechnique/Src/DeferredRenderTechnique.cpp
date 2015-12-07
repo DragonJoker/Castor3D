@@ -337,7 +337,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			m_lightPassTextures[i] = m_renderSystem->CreateDynamicTexture();
+			m_lightPassTextures[i] = m_renderSystem->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 			m_lightPassTextures[i]->SetRenderTarget( p_renderTarget.shared_from_this() );
 			m_lightPassTexAttachs[i] = m_pRenderTarget->CreateAttachment( m_lightPassTextures[i] );
 		}
@@ -729,16 +729,9 @@ namespace Deferred
 		Sampler2D c3d_mapHeight;
 		Sampler2D c3d_mapGloss;
 
-		Lighting< BlinnPhongLightingModel > l_lighting;
+		BlinnPhongLightingModel l_lighting;
 		l_lighting.Declare_Light( l_writer );
 		l_lighting.Declare_GetLight( l_writer );
-		l_lighting.Declare_ComputeLightDirection( l_writer );
-		l_lighting.Declare_ComputeFresnel( l_writer );
-
-		if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-		{
-			l_lighting.Declare_Bump( l_writer );
-		}
 
 		if ( p_flags != 0 )
 		{
@@ -782,7 +775,7 @@ namespace Deferred
 				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
 			}
 		}
-		
+
 		uint32_t l_index = 0;
 		FRAG_OUTPUT( l_writer, Vec4, out_c3dPosition, l_index++ );
 		FRAG_OUTPUT( l_writer, Vec4, out_c3dDiffuse, l_index++ );
@@ -918,12 +911,9 @@ namespace Deferred
 
 		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
 
-		Lighting< BlinnPhongLightingModel > l_lighting;
+		BlinnPhongLightingModel l_lighting;
 		l_lighting.Declare_Light( l_writer );
 		l_lighting.Declare_GetLight( l_writer );
-		l_lighting.Declare_ComputeLightDirection( l_writer );
-		l_lighting.Declare_ComputeFresnel( l_writer );
-		l_lighting.Declare_Bump( l_writer );
 
 		std::function< void() > l_main = [&]()
 		{
@@ -935,12 +925,14 @@ namespace Deferred
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Speculars, texture2D( c3d_mapSpecular, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissives, texture2D( c3d_mapEmissive, vtx_texture ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fShininess, l_v4Speculars.W );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Speculars.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Positions.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normals.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_v4Bitangents.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangents.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
+			LOCALE( l_writer, Vec3, l_v3Ambient );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissives.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpVec, neg( l_v3Position ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, vec3( dot( l_v3TmpVec, l_v3Tangent ), dot( l_v3TmpVec, l_v3Bitangent ), dot( l_v3TmpVec, l_v3Normal ) ) );
@@ -948,18 +940,12 @@ namespace Deferred
 
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
 			{
-				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( i ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4LightDir, l_lighting.ComputeLightDirection( l_light, l_v3Position, c3d_mtxModelView ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.XYZ );
-				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.W );
-				l_lighting.Bump( l_v3Tangent, l_v3Bitangent, l_v3Normal, l_v3LightDir, l_fAttenuation );
-				LOCALE_ASSIGN( l_writer, Float, l_fLambert, max( Float( &l_writer, 0 ), dot( l_v3Normal, l_v3LightDir ) ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v3MatSpecular, l_v4Speculars.XYZ );
-				LOCALE_ASSIGN( l_writer, Float, l_fFresnel, l_lighting.ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v3MatSpecular ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, l_light.m_v4Diffuse().XYZ * l_v4Diffuses.XYZ * l_fLambert );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, l_light.m_v4Specular().XYZ * l_v3MatSpecular * l_fFresnel );
-				l_v3Diffuse += l_v3TmpDiffuse * l_fAttenuation;
-				l_v3Specular += l_v3TmpSpecular * l_fAttenuation;
+				l_lighting.WriteCompute( p_flags, l_writer, i,
+										 l_v3MapSpecular, c3d_mtxModelView,
+										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
+										 l_v3Normal, l_v3EyeVec, l_fShininess,
+										 l_v3Position, l_v3Tangent, l_v3Bitangent, l_v3Normal,
+										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
 			}
 			ROF
 

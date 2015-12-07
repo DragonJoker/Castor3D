@@ -33,51 +33,30 @@ namespace GlRender
 
 	bool GlTexture::Initialise( PxBufferBaseSPtr p_buffer, eTEXTURE_TYPE p_dimension, uint32_t p_layer, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		REQUIRE( !m_storage );
 		m_glDimension = GetOpenGl().Get( p_dimension );
 
-		if ( m_glDimension == eGL_TEXDIM_BUFFER )
-		{
-			if ( GetOpenGl().HasTbo() )
-			{
-				m_storage = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *m_glRenderSystem );
-			}
-			else
-			{
-				m_glDimension = eGL_TEXDIM_1D;
-			}
-		}
-
-		if ( !m_storage )
-		{
-			if ( m_static )
-			{
-				m_storage = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *m_glRenderSystem );
-			}
-			else
-			{
-				m_storage = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *m_glRenderSystem );
-			}
-		}
-
-		bool l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
+		bool l_return = DoCreateStorage( p_cpuAccess, p_gpuAccess );
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
-		}
-
-		if ( l_return )
-		{
-			m_storage->Create( p_buffer );
+			l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
 
 			if ( l_return )
 			{
-				l_return = m_storage->Initialise( p_dimension, p_layer );
-			}
+				l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
 
-			GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
-			GetOpenGl().BindTexture( m_glDimension, 0 );
+				if ( l_return )
+				{
+					m_storage->Create( p_buffer );
+
+					if ( l_return )
+					{
+						l_return = m_storage->Initialise( p_dimension, p_layer );
+					}
+
+					GetOpenGl().BindTexture( m_glDimension, 0 );
+				}
+			}
 		}
 
 		return l_return;
@@ -128,6 +107,7 @@ namespace GlRender
 	uint8_t * GlTexture::Lock( uint32_t p_lock )
 	{
 		REQUIRE( m_storage );
+		GetOpenGl().BindTexture( m_glDimension, GetGlName() );
 		return m_storage->Lock( p_lock );
 	}
 
@@ -135,6 +115,7 @@ namespace GlRender
 	{
 		REQUIRE( m_storage );
 		m_storage->Unlock( p_modified );
+		GetOpenGl().BindTexture( m_glDimension, 0 );
 	}
 
 	void GlTexture::GenerateMipmaps()
@@ -143,5 +124,29 @@ namespace GlRender
 		{
 			GetOpenGl().GenerateMipmap( m_glDimension );
 		}
+	}
+
+	bool GlTexture::DoCreateStorage( uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	{
+		REQUIRE( !m_storage );
+
+		if ( m_glDimension == eGL_TEXDIM_BUFFER )
+		{
+			m_storage = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
+		}
+
+		if ( !m_storage )
+		{
+			if ( true )//m_static )
+			{
+				m_storage = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
+			}
+			else
+			{
+				m_storage = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
+			}
+		}
+
+		return m_storage != nullptr;
 	}
 }

@@ -38,8 +38,10 @@ namespace GlRender
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_cpuAccess		The required CPU access.
+		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
+		GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -175,6 +177,10 @@ namespace GlRender
 		Castor::PxBufferBaseWPtr m_buffer;
 		//! The texture depth, for eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY ones.
 		uint32_t m_depth;
+		//! The required CPU access.
+		uint8_t m_cpuAccess;
+		//! The required GPU access.
+		uint8_t m_gpuAccess;
 	};
 }
 
