@@ -86,10 +86,6 @@ namespace Castor3D
 			GetOwner()->GetOverlayManager().Update();
 			GetOwner()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		}
-		catch ( AssertException & p_exc )
-		{
-			Logger::LogError( p_exc.GetFullDescription() );
-		}
 		catch ( Exception & p_exc )
 		{
 			Logger::LogError( p_exc.GetFullDescription() );
@@ -128,10 +124,6 @@ namespace Castor3D
 				m_debugOverlays->EndCpuTask();
 				m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
 			}
-		}
-		catch ( AssertException & p_exc )
-		{
-			Logger::LogError( p_exc.GetFullDescription() );
 		}
 		catch ( Exception & p_exc )
 		{

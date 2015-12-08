@@ -15,12 +15,12 @@ using namespace Castor;
 namespace GlRender
 {
 	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, bool p_static )
-		: Object( p_gl,
-				  "GlTexture",
-				  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-				  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
-				  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
-				  )
+		: ObjectType( p_gl,
+					  "GlTexture",
+					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
+					  )
 		, m_glRenderSystem( &p_renderSystem )
 		, m_glDimension( eGL_TEXDIM_2D )
 		, m_static( p_static )
@@ -51,7 +51,7 @@ namespace GlRender
 
 					if ( l_return )
 					{
-						l_return = m_storage->Initialise( p_dimension, p_layer );
+						l_return = m_storage->Initialise( p_layer );
 					}
 
 					GetOpenGl().BindTexture( m_glDimension, 0 );
@@ -107,7 +107,6 @@ namespace GlRender
 	uint8_t * GlTexture::Lock( uint32_t p_lock )
 	{
 		REQUIRE( m_storage );
-		GetOpenGl().BindTexture( m_glDimension, GetGlName() );
 		return m_storage->Lock( p_lock );
 	}
 
@@ -132,18 +131,18 @@ namespace GlRender
 
 		if ( m_glDimension == eGL_TEXDIM_BUFFER )
 		{
-			m_storage = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
+			m_storage = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *this, *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
 		}
 
 		if ( !m_storage )
 		{
-			if ( true )//m_static )
+			if ( m_static )
 			{
-				m_storage = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
+				m_storage = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
 			}
 			else
 			{
-				m_storage = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
+				m_storage = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *this, *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
 			}
 		}
 

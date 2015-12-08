@@ -1,6 +1,7 @@
 #include "GlPboTextureStorage.hpp"
 
 #include "GlDownloadPixelBuffer.hpp"
+#include "GlTexture.hpp"
 #include "GlUploadPixelBuffer.hpp"
 #include "OpenGl.hpp"
 
@@ -11,10 +12,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlPboTextureStorage::GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
-		: GlTextureStorage( p_gl, p_renderSystem, p_cpuAccess, p_gpuAccess )
-		, m_currentDlPbo( 0 )
-		, m_currentUlPbo( 0 )
+	GlPboTextureStorage::GlPboTextureStorage( OpenGl & p_gl, GlTexture & p_texture, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: GlTextureStorage( p_gl, p_texture, p_renderSystem, p_cpuAccess, p_gpuAccess )
 	{
 	}
 
@@ -29,26 +28,14 @@ namespace GlRender
 
 		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			for ( auto && l_buffer : m_uploadBuffers )
-			{
-				if ( l_return )
-				{
-					l_buffer = std::make_unique< GlUploadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
-					l_return = l_buffer->Create();
-				}
-			}
+			m_uploadBuffer = std::make_unique< GlUploadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
+			l_return = m_uploadBuffer->Create();
 		}
 
 		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			for ( auto && l_buffer : m_downloadBuffers )
-			{
-				if ( l_return )
-				{
-					l_buffer = std::make_unique< GlDownloadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
-					l_return = l_buffer->Create();
-				}
-			}
+			m_downloadBuffer  = std::make_unique< GlDownloadPixelBuffer >( GetOpenGl(), m_glRenderSystem, l_pxbuffer );
+			l_return = m_downloadBuffer->Create();
 		}
 
 		return l_return;
@@ -58,19 +45,19 @@ namespace GlRender
 	{
 		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			for ( auto && l_buffer : m_uploadBuffers )
+			if ( m_uploadBuffer )
 			{
-				l_buffer->Destroy();
-				l_buffer.reset();
+				m_uploadBuffer->Destroy();
+				m_uploadBuffer.reset();
 			}
 		}
 
 		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			for ( auto && l_buffer : m_downloadBuffers )
+			if ( m_downloadBuffer )
 			{
-				l_buffer->Destroy();
-				l_buffer.reset();
+				m_downloadBuffer->Destroy();
+				m_downloadBuffer.reset();
 			}
 		}
 	}
@@ -81,23 +68,17 @@ namespace GlRender
 
 		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			for ( auto && l_buffer : m_uploadBuffers )
+			if ( l_return && m_uploadBuffer )
 			{
-				if ( l_return )
-				{
-					l_return = l_buffer->Initialise();
-				}
+				l_return = m_uploadBuffer->Initialise();
 			}
 		}
 
 		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			for ( auto && l_buffer : m_downloadBuffers )
+			if ( l_return && m_downloadBuffer )
 			{
-				if ( l_return )
-				{
-					l_return = l_buffer->Initialise();
-				}
+				l_return = m_downloadBuffer->Initialise();
 			}
 		}
 
@@ -114,17 +95,17 @@ namespace GlRender
 	{
 		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			for ( auto && l_buffer : m_uploadBuffers )
+			if ( m_uploadBuffer )
 			{
-				l_buffer->Cleanup();
+				m_uploadBuffer->Cleanup();
 			}
 		}
 
 		if ( ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
 		{
-			for ( auto && l_buffer : m_downloadBuffers )
+			if ( m_downloadBuffer )
 			{
-				l_buffer->Cleanup();
+				m_downloadBuffer->Cleanup();
 			}
 		}
 	}
@@ -133,22 +114,22 @@ namespace GlRender
 	{
 		OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( p_format );
 
-		switch ( m_glDimension )
+		switch ( GetOwner()->GetGlDimension() )
 		{
 		case eGL_TEXDIM_1D:
-			GetOpenGl().TexImage1D( m_glDimension, 0, l_glPixelFmt.Internal, p_size.width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			GetOpenGl().TexImage1D( eGL_TEXDIM_1D, 0, l_glPixelFmt.Internal, p_size.width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
 			break;
 
 		case eGL_TEXDIM_2D:
-			GetOpenGl().TexImage2D( m_glDimension, 0, l_glPixelFmt.Internal, p_size, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			GetOpenGl().TexImage2D( eGL_TEXDIM_2D, 0, l_glPixelFmt.Internal, p_size, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
 			break;
 
 		case eGL_TEXDIM_3D:
-			GetOpenGl().TexImage3D( m_glDimension, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / m_depth, m_depth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			GetOpenGl().TexImage3D( eGL_TEXDIM_3D, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / m_depth, m_depth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
 			break;
 
 		case eGL_TEXDIM_2D_ARRAY:
-			GetOpenGl().TexImage3D( m_glDimension, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / m_depth, m_depth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			GetOpenGl().TexImage3D( eGL_TEXDIM_2D_ARRAY, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / m_depth, m_depth, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
 			break;
 		}
 	}
@@ -179,17 +160,15 @@ namespace GlRender
 	{
 		if ( ( m_cpuAccess & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
-			m_currentUlPbo = ( m_currentUlPbo + 1 ) % 2;
-			int l_nextUlPbo = ( m_currentUlPbo + 1 ) % 2;
-			GlUploadPixelBuffer & l_bufferOut = *m_uploadBuffers[m_currentUlPbo];
-			GlUploadPixelBuffer & l_bufferIn = *m_uploadBuffers[l_nextUlPbo];
+			PxBufferBaseSPtr l_buffer = m_buffer.lock();
 
-			if ( l_bufferOut.Bind() )
+			if ( m_uploadBuffer->Fill( l_buffer->ptr(), l_buffer->size() ) )
 			{
-				PxBufferBaseSPtr l_buffer = m_buffer.lock();
-				DoUploadImage( l_buffer->width(), l_buffer->height(), GetOpenGl().Get( l_buffer->format() ), nullptr );
-				l_bufferIn.Fill( l_buffer->ptr(), l_buffer->size() );
-				l_bufferOut.Unbind();
+				if ( m_uploadBuffer->Bind() )
+				{
+					DoUploadImage( l_buffer->width(), l_buffer->height(), GetOpenGl().Get( l_buffer->format() ), nullptr );
+					m_uploadBuffer->Unbind();
+				}
 			}
 		}
 	}
@@ -209,29 +188,20 @@ namespace GlRender
 		{
 			PxBufferBaseSPtr l_buffer = m_buffer.lock();
 			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
-			m_currentDlPbo = ( m_currentDlPbo + 1 ) % 2;
-			int l_nextDlPbo = ( m_currentDlPbo + 1 ) % 2;
-			GlDownloadPixelBuffer & l_bufferOut = *m_downloadBuffers[m_currentDlPbo];
-			GlDownloadPixelBuffer & l_bufferIn = *m_downloadBuffers[l_nextDlPbo];
+			GetOpenGl().BindTexture( GetOwner()->GetGlDimension(), GetOwner()->GetGlName() );
 
-			if ( l_bufferOut.Bind() )
+			if ( m_downloadBuffer->Bind() )
 			{
-				GetOpenGl().GetTexImage( m_glDimension, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, 0 );
+				GetOpenGl().GetTexImage( GetOwner()->GetGlDimension(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, 0 );
+				uint8_t * l_data = m_downloadBuffer->Lock( eGL_LOCK_READ_ONLY );
 
-				if ( l_bufferIn.Bind() )
+				if ( l_data )
 				{
-					void * pData = l_bufferIn.Lock( eGL_LOCK_READ_ONLY );
-
-					if ( pData )
-					{
-						memcpy( l_buffer->ptr(), pData, l_buffer->size() );
-						l_bufferIn.Unlock();
-					}
-
-					l_bufferIn.Unbind();
+					memcpy( l_buffer->ptr(), l_data, l_buffer->size() );
+					m_downloadBuffer->Unlock();
 				}
 
-				l_bufferOut.Unbind();
+				m_downloadBuffer->Unbind();
 			}
 		}
 	}
@@ -242,28 +212,31 @@ namespace GlRender
 		{
 			PxBufferBaseSPtr l_buffer = m_buffer.lock();
 			OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( l_buffer->format() );
-			GetOpenGl().GetTexImage( m_glDimension, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
+			GetOpenGl().BindTexture( GetOwner()->GetGlDimension(), GetOwner()->GetGlName() );
+			GetOpenGl().GetTexImage( GetOwner()->GetGlDimension(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, l_buffer->ptr() );
 		}
 	}
 
 	void GlPboTextureStorage::DoUploadImage( uint32_t p_width, uint32_t p_height, OpenGl::PixelFmt const & p_format, uint8_t const * p_buffer )
 	{
-		switch ( m_glDimension )
+		GetOpenGl().BindTexture( GetOwner()->GetGlDimension(), GetOwner()->GetGlName() );
+
+		switch ( GetOwner()->GetGlDimension() )
 		{
 		case eGL_TEXDIM_1D:
-			GetOpenGl().TexSubImage1D( m_glDimension, 0, 0, p_width, p_format.Format, p_format.Type, p_buffer );
+			GetOpenGl().TexSubImage1D( eGL_TEXDIM_1D, 0, 0, p_width, p_format.Format, p_format.Type, p_buffer );
 			break;
 
 		case eGL_TEXDIM_2D:
-			GetOpenGl().TexSubImage2D( m_glDimension, 0, 0, 0, p_width, p_height, p_format.Format, p_format.Type, p_buffer );
+			GetOpenGl().TexSubImage2D( eGL_TEXDIM_2D, 0, 0, 0, p_width, p_height, p_format.Format, p_format.Type, p_buffer );
 			break;
 
 		case eGL_TEXDIM_3D:
-			GetOpenGl().TexSubImage3D( m_glDimension, 0, 0, 0, 0, p_width, p_height / m_depth, m_depth, p_format.Format, p_format.Type, p_buffer );
+			GetOpenGl().TexSubImage3D( eGL_TEXDIM_3D, 0, 0, 0, 0, p_width, p_height / m_depth, m_depth, p_format.Format, p_format.Type, p_buffer );
 			break;
 
 		case eGL_TEXDIM_2D_ARRAY:
-			GetOpenGl().TexSubImage3D( m_glDimension, 0, 0, 0, 0, p_width, p_height / m_depth, m_depth, p_format.Format, p_format.Type, p_buffer );
+			GetOpenGl().TexSubImage3D( eGL_TEXDIM_2D_ARRAY, 0, 0, 0, 0, p_width, p_height / m_depth, m_depth, p_format.Format, p_format.Type, p_buffer );
 			break;
 		}
 	}

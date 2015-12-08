@@ -10,8 +10,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTboTextureStorage::GlTboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
-		: GlTextureStorage( p_gl, p_renderSystem, p_cpuAccess, p_gpuAccess )
+	GlTboTextureStorage::GlTboTextureStorage( OpenGl & p_gl, GlTexture & p_texture, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: GlTextureStorage( p_gl, p_texture, p_renderSystem, p_cpuAccess, p_gpuAccess )
 		, m_glBuffer( p_gl, eGL_BUFFER_TARGET_TEXTURE )
 	{
 	}
@@ -33,7 +33,6 @@ namespace GlRender
 	bool GlTboTextureStorage::DoInitialise()
 	{
 		PxBufferBaseSPtr l_buffer = m_buffer.lock();
-		m_glDimension = eGL_TEXDIM_BUFFER;
 		m_glInternal = GetOpenGl().GetInternal( l_buffer->format() );
 		return m_glBuffer.Initialise( l_buffer->const_ptr(), l_buffer->size(), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 	}
@@ -50,12 +49,12 @@ namespace GlRender
 
 	bool GlTboTextureStorage::DoBind( uint32_t p_index )
 	{
-		return GetOpenGl().TexBuffer( m_glDimension, m_glInternal, m_glBuffer.GetGlName() );
+		return GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, m_glBuffer.GetGlName() );
 	}
 
 	void GlTboTextureStorage::DoUnbind( uint32_t p_index )
 	{
-		GetOpenGl().TexBuffer( m_glDimension, m_glInternal, 0 );
+		GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, 0 );
 	}
 
 	uint8_t * GlTboTextureStorage::DoLock( uint32_t p_lock )

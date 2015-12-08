@@ -340,7 +340,7 @@ namespace GlRender
 		}
 		inline bool HasTbo()const
 		{
-			return m_bHasTbo;
+		  return false;//m_bHasTbo;
 		}
 		inline bool HasFbo()const
 		{
@@ -828,7 +828,7 @@ namespace GlRender
 		{
 			if ( p_index == Castor3D::eTEXTURE_TYPE_BUFFER )
 			{
-				if ( true )//!HasTbo() )
+				if ( !HasTbo() )
 				{
 					p_index = Castor3D::eTEXTURE_TYPE_1D;
 				}

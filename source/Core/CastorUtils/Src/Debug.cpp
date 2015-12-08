@@ -31,11 +31,12 @@ namespace Castor
 #if defined( NDEBUG )
 
 		template< typename CharT >
-		inline void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
+		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream )
 		{
 		}
 
 #else
+	  
 		namespace
 		{
 			const int CALLS_TO_CAPTURE( 20 );
@@ -144,14 +145,6 @@ namespace Castor
 
 					free( l_symbol );
 				}
-			}
-
-#	else
-
-			template< typename CharU, typename CharT >
-			std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
-			{
-				return string::string_cast< CharU >( p_name );
 			}
 
 #	endif

@@ -98,9 +98,16 @@ namespace GlRender
 		 */
 		void Unlock( bool p_modified );
 		/**
-		 *\brief		Forces mipmaps generation.
-		 */
+		*\brief		Forces mipmaps generation.
+		*/
 		void GenerateMipmaps();
+		/**
+		*\return	The OpenGL texture dimension.
+		*/
+		eGL_TEXDIM GetGlDimension()const
+		{
+			return m_glDimension;
+		}
 
 	private:
 		bool DoCreateStorage( uint8_t p_cpuAccess, uint8_t p_gpuAccess );

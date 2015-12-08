@@ -35,11 +35,12 @@ namespace GlRender
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
+		 *\param[in]	p_texture		The parent teexture.
 		 *\param[in]	p_renderSystem	The RenderSystem.
 		 *\param[in]	p_cpuAccess		The required CPU access.
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		GlPboTextureStorage( OpenGl & p_gl, GlTexture & p_texture, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -104,14 +105,10 @@ namespace GlRender
 		void DoUploadImage( uint32_t p_width, uint32_t p_height, OpenGl::PixelFmt const & p_format, uint8_t const * p_buffer );
 
 	private:
-		//! The pixel transfer buffers, used to upload the pixels.
-		std::array< GlUploadPixelBufferUPtr, 2 > m_uploadBuffers;
-		//! The currently active upload pixel buffer.
-		int m_currentUlPbo;
-		//! The pixel transfer buffers, used to download the pixels.
-		std::array< GlDownloadPixelBufferUPtr, 2 > m_downloadBuffers;
-		//! The currently active download pixel buffer.
-		int m_currentDlPbo;
+		//! The pixel transfer buffer, used to upload the pixels.
+		GlUploadPixelBufferUPtr m_uploadBuffer;
+		//! The pixel transfer buffer, used to download the pixels.
+		GlDownloadPixelBufferUPtr m_downloadBuffer;
 	};
 }
 

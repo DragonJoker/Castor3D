@@ -13,7 +13,7 @@ namespace GlRender
 				BUILTIN( *p_iIndex.m_writer, Sampler1D, c3d_sLights );
 				LOCALE( *p_iIndex.m_writer, Light, l_lightReturn );
 
-				if ( false )//p_iIndex.m_writer->HasTexelFetch() )
+				if ( p_iIndex.m_writer->HasTexelFetch() )
 				{
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Int, l_offset, p_iIndex * Int( 10 ) );
 					l_lightReturn.m_v4Ambient() = texelFetch( c3d_sLights, l_offset++, 0 );
