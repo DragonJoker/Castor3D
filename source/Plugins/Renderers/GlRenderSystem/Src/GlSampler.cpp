@@ -1,4 +1,5 @@
 #include "GlSampler.hpp"
+
 #include "GlRenderSystem.hpp"
 #include "OpenGl.hpp"
 

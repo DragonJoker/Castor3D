@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_X11_CONTEXT_H___
 #define ___GL_X11_CONTEXT_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #if defined( __linux__ )
 namespace GlRender

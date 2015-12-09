@@ -1,5 +1,7 @@
 #include "GlslKeywords.hpp"
 
+#include "OpenGl.hpp"
+
 using namespace Castor;
 using namespace Castor3D;
 

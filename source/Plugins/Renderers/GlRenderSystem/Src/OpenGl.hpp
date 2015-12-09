@@ -18,8 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3DGL_GlObjects___
 #define ___C3DGL_GlObjects___
 
-#include "GlRenderSystemPrerequisites.hpp"
-
 #include "GlObject.hpp"
 
 #include <TextureUnit.hpp>
@@ -808,8 +806,8 @@ namespace GlRender
 		C3D_Gl_API void Track( void * p_object, std::string const & p_name, std::string const & p_file, int line )const;
 		C3D_Gl_API void UnTrack( void * p_object )const;
 
-		template< typename CreaionFunction, typename DestructionFunction >
-		void Track( Object< CreaionFunction, DestructionFunction > * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
+		template< typename CreationFunction, typename DestructionFunction >
+		void Track( Object< CreationFunction, DestructionFunction > * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
 		{
 			Track( reinterpret_cast< void * >( p_object ), p_name + cuT( " (OpenGL Name: " ) + Castor::string::to_string( p_object->GetGlName() ) + cuT( ")" ), p_file, p_line );
 		}

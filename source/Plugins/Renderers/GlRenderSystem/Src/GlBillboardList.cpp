@@ -11,7 +11,7 @@
 #include <MatrixFrameVariable.hpp>
 #include <RenderTechnique.hpp>
 #include <ShaderManager.hpp>
-#include <ShaderProgram.hpp>
+#include <ShaderObject.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

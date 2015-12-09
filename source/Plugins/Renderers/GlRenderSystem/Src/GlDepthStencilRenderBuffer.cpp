@@ -1,5 +1,7 @@
 #include "GlDepthStencilRenderBuffer.hpp"
 
+#include "OpenGl.hpp"
+
 using namespace Castor3D;
 using namespace Castor;
 

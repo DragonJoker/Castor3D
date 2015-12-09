@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_RASTERISER_STATE_H___
 #define ___GL_RASTERISER_STATE_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #include <RasteriserState.hpp>
 
@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlRasteriserState
 		: public Castor3D::RasteriserState
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	public:

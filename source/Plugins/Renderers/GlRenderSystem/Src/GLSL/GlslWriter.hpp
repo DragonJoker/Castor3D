@@ -20,6 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlslArray.hpp"
 
+#include "GlHolder.hpp"
+#include "OpenGl.hpp"
+
 namespace GlRender
 {
 	namespace GLSL

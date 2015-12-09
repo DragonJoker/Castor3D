@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_DEPTH_STENCIL_STATE_H___
 #define ___GL_DEPTH_STENCIL_STATE_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #include <DepthStencilState.hpp>
 
@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlDepthStencilState
 		: public Castor3D::DepthStencilState
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	public:

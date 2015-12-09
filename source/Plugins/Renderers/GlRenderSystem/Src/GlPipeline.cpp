@@ -1,5 +1,7 @@
 #include "GlPipeline.hpp"
 
+#include "OpenGl.hpp"
+
 #include <Angle.hpp>
 #include <Logger.hpp>
 

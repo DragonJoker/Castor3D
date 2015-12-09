@@ -179,7 +179,7 @@ namespace GlRender
 			{
 				l_return = DoCreate();
 			}
-			
+
 			if ( l_return )
 			{
 				glTrack( Holder::GetOpenGl(), m_typeName, this );

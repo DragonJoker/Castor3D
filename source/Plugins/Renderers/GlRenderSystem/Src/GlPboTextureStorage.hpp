@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlTextureStorage.hpp"
 
+#include "OpenGl.hpp"
+
 namespace GlRender
 {
 	/*!

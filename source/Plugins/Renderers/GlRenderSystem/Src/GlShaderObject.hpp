@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_SHADER_OBJECT_H___
 #define ___GL_SHADER_OBJECT_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlObject.hpp"
 
 #include <ShaderObject.hpp>
 
@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlShaderObject
 		: public Castor3D::ShaderObjectBase
-		, public Castor::NonCopyable
 		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
 	{
 		friend class GlShaderProgram;

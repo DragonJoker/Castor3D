@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_BLEND_STATE_H___
 #define ___GL_BLEND_STATE_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #include <BlendState.hpp>
 
@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlBlendState
 		: public Castor3D::BlendState
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	public:

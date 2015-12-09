@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
+	class OpenGl;
 	/*!
 	@author
 		Sylvain DOREMUS

@@ -1,3 +1,5 @@
+#include "OpenGl.hpp"
+
 namespace GlRender
 {
 	template< typename T >

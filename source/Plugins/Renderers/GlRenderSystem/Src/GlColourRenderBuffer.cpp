@@ -1,5 +1,7 @@
 #include "GlColourRenderBuffer.hpp"
 
+#include "OpenGl.hpp"
+
 using namespace Castor3D;
 using namespace Castor;
 

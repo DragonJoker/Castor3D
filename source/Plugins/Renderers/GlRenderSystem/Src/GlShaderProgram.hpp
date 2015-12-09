@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_SHADER_PROGRAM_H___
 #define ___GL_SHADER_PROGRAM_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlObject.hpp"
 
 #include <ShaderProgram.hpp>
 

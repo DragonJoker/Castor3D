@@ -18,7 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_BILLBOARD_LIST_H___
 #define ___GL_BILLBOARD_LIST_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
+
 #include <BillboardList.hpp>
 
 namespace GlRender

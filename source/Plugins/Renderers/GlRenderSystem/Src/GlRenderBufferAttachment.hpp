@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_RENDER_BUFFER_ATTACHMENT_H___
 #define ___GL_RENDER_BUFFER_ATTACHMENT_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #include <RenderBufferAttachment.hpp>
 
@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlRenderBufferAttachment
 		: public Castor3D::RenderBufferAttachment
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	public:

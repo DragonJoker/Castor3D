@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_TEXTURE_STORAGE_H___
 #define ___GL_TEXTURE_STORAGE_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 namespace GlRender
 {

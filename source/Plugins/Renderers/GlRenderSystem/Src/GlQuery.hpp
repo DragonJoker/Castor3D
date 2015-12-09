@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlObject.hpp"
 
+#include "OpenGl.hpp"
+
 namespace GlRender
 {
 	/*!

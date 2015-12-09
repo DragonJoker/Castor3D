@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_TEXTURE_ATTACHMENT_H___
 #define ___GL_TEXTURE_ATTACHMENT_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #include <TextureAttachment.hpp>
 
@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlTextureAttachment
 		: public Castor3D::TextureAttachment
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	public:

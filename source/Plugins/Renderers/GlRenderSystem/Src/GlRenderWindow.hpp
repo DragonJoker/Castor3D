@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_WINDOW_RENDERER_H___
 #define ___GL_WINDOW_RENDERER_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #include <RenderWindow.hpp>
 

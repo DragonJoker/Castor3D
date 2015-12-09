@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_RENDER_BUFFER_H___
 #define ___GL_RENDER_BUFFER_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
-
 #include "GlBindable.hpp"
+
+#include <Size.hpp>
 
 namespace GlRender
 {
