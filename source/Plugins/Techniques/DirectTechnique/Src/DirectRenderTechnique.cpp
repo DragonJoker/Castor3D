@@ -104,7 +104,7 @@ namespace Direct
 				cuT( "	float3 l_v3EyeVec = normalize( p_input.Eye );\n" )
 				cuT( "	float l_fAlpha = c3d_fMatOpacity;\n" );
 			m_strMainLightsLoop =
-				cuT( "	for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
+				cuT( "	for( int i = 0; i < c3d_iLightsCount.x; i++ )\n" )
 				cuT( "	{\n" )
 				cuT( "		l_light = GetLight( i );\n" )
 				cuT( "		l_v3LightDir = normalize( mul( l_light.m_v4Position, c3d_mtxModelView ).xyz - p_input.Vertex );\n" );
@@ -350,7 +350,7 @@ namespace Direct
 				}
 			}
 
-			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
+			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
 			{
 				l_lighting.WriteCompute( p_flags, l_writer, i,
 										 l_v3MapSpecular, c3d_mtxModelView, l_v3MapNormal,
@@ -385,7 +385,7 @@ namespace Direct
 			}
 
 			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
-			//pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
+			//pxl_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ, l_fAlpha );
 		};
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();

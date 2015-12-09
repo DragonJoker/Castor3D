@@ -41,9 +41,9 @@ namespace GlRender
 		String ConstantsStd::Scene()
 		{
 			return
-				cuT( "uniform int c3d_iLightsCount;\n" )
 				cuT( "uniform vec4 c3d_v4AmbientLight;\n" )
 				cuT( "uniform vec4 c3d_v4BackgroundColour;\n" )
+				cuT( "uniform ivec4 c3d_iLightsCount;\n" )
 				cuT( "uniform <vec3> c3d_v3CameraPosition;\n" );
 		}
 
@@ -91,9 +91,9 @@ namespace GlRender
 			return
 				cuT( "<layout>uniform Scene\n" )
 				cuT( "{\n" )
-				cuT( "	int c3d_iLightsCount;\n" )
 				cuT( "	vec4 c3d_v4AmbientLight;\n" )
 				cuT( "	vec4 c3d_v4BackgroundColour;\n" )
+				cuT( "	ivec4 c3d_iLightsCount;\n" )
 				cuT( "	<vec3> c3d_v3CameraPosition;\n" )
 				cuT( "};\n" );
 		}

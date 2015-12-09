@@ -119,78 +119,78 @@ namespace GlRender
 													Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
 													Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular )
 		{
-				if ( ( p_flags & Castor3D::eTEXTURE_CHANNEL_NORMAL ) == Castor3D::eTEXTURE_CHANNEL_NORMAL )
-				{
-					p_v3Normal = Bump( p_vtxTangent, p_vtxBitangent, p_vtxNormal, p_v3MapMormal );
-				}
+			if ( ( p_flags & Castor3D::eTEXTURE_CHANNEL_NORMAL ) == Castor3D::eTEXTURE_CHANNEL_NORMAL )
+			{
+				p_v3Normal = Bump( p_vtxTangent, p_vtxBitangent, p_vtxNormal, p_v3MapMormal );
+			}
 
-				LOCALE_ASSIGN( p_writer, GLSL::Light, l_light, GetLight( i ) );
-				LOCALE_ASSIGN( p_writer, Vec3, l_lightDirection, l_light.m_v4Position().XYZ );
-				LOCALE_ASSIGN( p_writer, Float, l_distance, Float( 0.0f ) );
-				LOCALE_ASSIGN( p_writer, Float, l_spotFactor, Float( 1.0f ) );
-				LOCALE_ASSIGN( p_writer, Float, l_cutoff, Float( 0.0f ) );
+			LOCALE_ASSIGN( p_writer, GLSL::Light, l_light, GetLight( i ) );
+			LOCALE_ASSIGN( p_writer, Vec3, l_lightDirection, l_light.m_v4Position().XYZ );
+			LOCALE_ASSIGN( p_writer, Float, l_distance, Float( 0.0f ) );
+			LOCALE_ASSIGN( p_writer, Float, l_spotFactor, Float( 1.0f ) );
+			LOCALE_ASSIGN( p_writer, Float, l_cutoff, Float( 0.0f ) );
+
+			IF ( p_writer, l_light.m_v4Position ().W != Float( 0.0f ) )
+			{
+				IF ( p_writer, l_light.m_v4Position ().W == Float( 2.0f ) )
+				{
+					LOCALE_ASSIGN( p_writer, Vec3, l_lightToPixel, p_v3Position - l_light.m_v4Position().XYZ );
+					l_spotFactor = dot( l_lightToPixel, l_light.m_v3Direction() );
+					l_cutoff = l_light.m_fCutOff();
+				}
+				FI
+
+				l_lightDirection = p_v3Position - l_lightDirection;
+				l_distance = length( l_lightDirection );
+			}
+			FI
+
+			IF ( p_writer, l_spotFactor > l_cutoff )
+			{
+				LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpAmbient, c3d_v4MatAmbient.XYZ * ( l_light.m_v4Ambient().XYZ * l_light.m_v4Ambient().W ) );
+				LOCALE_ASSIGN( p_writer, Float, l_diffuseFactor, dot( p_v3Normal, neg( l_lightDirection ) ) );
+				LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpDiffuse, vec3( Float( &p_writer, 0.0f ), 0.0f, 0.0f ) );
+				LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpSpecular, vec3( Float( &p_writer, 0.0f ), 0.0f, 0.0f ) );
+
+				IF( p_writer, l_diffuseFactor > Float( 0.0f ) )
+				{
+					l_v3TmpDiffuse = vec3( l_light.m_v4Diffuse().XYZ * l_light.m_v4Diffuse().W * l_diffuseFactor );
+					LOCALE_ASSIGN( p_writer, Vec3, l_vertexToEye, normalize( p_v3Eye - p_v3Position ) );
+					LOCALE_ASSIGN( p_writer, Vec3, l_lightReflect, normalize( reflect( l_light.m_v4Position().XYZ, p_v3Normal ) ) );
+					LOCALE_ASSIGN( p_writer, Float, l_specularFactor, dot( l_vertexToEye, l_lightReflect ) );
+
+					IF( p_writer, l_specularFactor > Float( 0.0f ) )
+					{
+						l_specularFactor = pow( l_specularFactor, p_fShininess );
+						l_v3TmpSpecular = l_light.m_v4Specular().XYZ * l_light.m_v4Specular().W * l_specularFactor;
+					}
+					FI
+				}
+				FI
 
 				IF ( p_writer, l_light.m_v4Position ().W != Float( 0.0f ) )
 				{
+					LOCALE_ASSIGN( p_writer, Float, l_attenuation, l_light.m_v3Attenuation().X + l_light.m_v3Attenuation().Y * l_distance + l_light.m_v3Attenuation().Z * l_distance * l_distance );
+					l_v3TmpAmbient /= l_attenuation;
+					l_v3TmpDiffuse /= l_attenuation;
+					l_v3TmpSpecular /= l_attenuation;
+
 					IF ( p_writer, l_light.m_v4Position ().W == Float( 2.0f ) )
 					{
-						LOCALE_ASSIGN( p_writer, Vec3, l_lightToPixel, p_v3Position - l_light.m_v4Position().XYZ );
-						l_spotFactor = dot( l_lightToPixel, l_light.m_v3Direction() );
-						l_cutoff = l_light.m_fCutOff();
+						l_spotFactor = ( 1.0f - p_writer.Paren( 1.0f - l_spotFactor ) * 1.0f / p_writer.Paren( 1.0f - l_cutoff ) );
+						l_v3TmpAmbient *= l_spotFactor;
+						l_v3TmpDiffuse *= l_spotFactor;
+						l_v3TmpSpecular *= l_spotFactor;
 					}
 					FI
-
-					l_lightDirection = p_v3Position - l_lightDirection;
-					l_distance = length( l_lightDirection );
 				}
 				FI
 
-				IF ( p_writer, l_spotFactor > l_cutoff )
-				{
-					LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpAmbient, c3d_v4MatAmbient.XYZ * ( l_light.m_v4Ambient().XYZ * l_light.m_v4Ambient().W ) );
-					LOCALE_ASSIGN( p_writer, Float, l_diffuseFactor, dot( p_v3Normal, neg( l_lightDirection ) ) );
-					LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpDiffuse, vec3( Float( &p_writer, 0.0f ), 0.0f, 0.0f ) );
-					LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpSpecular, vec3( Float( &p_writer, 0.0f ), 0.0f, 0.0f ) );
-
-					IF( p_writer, l_diffuseFactor > Float( 0.0f ) )
-					{
-						l_v3TmpDiffuse = vec3( l_light.m_v4Diffuse().XYZ * l_light.m_v4Diffuse().W * l_diffuseFactor );
-						LOCALE_ASSIGN( p_writer, Vec3, l_vertexToEye, normalize( p_v3Eye - p_v3Position ) );
-						LOCALE_ASSIGN( p_writer, Vec3, l_lightReflect, normalize( reflect( l_light.m_v4Position().XYZ, p_v3Normal ) ) );
-						LOCALE_ASSIGN( p_writer, Float, l_specularFactor, dot( l_vertexToEye, l_lightReflect ) );
-
-						IF( p_writer, l_specularFactor > Float( 0.0f ) )
-						{
-							l_specularFactor = pow( l_specularFactor, p_fShininess );
-							l_v3TmpSpecular = l_light.m_v4Specular().XYZ * l_light.m_v4Specular().W * l_specularFactor;
-						}
-						FI
-					}
-					FI
-
-					IF ( p_writer, l_light.m_v4Position ().W != Float( 0.0f ) )
-					{
-						LOCALE_ASSIGN( p_writer, Float, l_attenuation, l_light.m_v3Attenuation().X + l_light.m_v3Attenuation().Y * l_distance + l_light.m_v3Attenuation().Z * l_distance * l_distance );
-						l_v3TmpAmbient /= l_attenuation;
-						l_v3TmpDiffuse /= l_attenuation;
-						l_v3TmpSpecular /= l_attenuation;
-
-						IF ( p_writer, l_light.m_v4Position ().W == Float( 2.0f ) )
-						{
-							l_spotFactor = ( 1.0f - p_writer.Paren( 1.0f - l_spotFactor ) * 1.0f / p_writer.Paren( 1.0f - l_cutoff ) );
-							l_v3TmpAmbient *= l_spotFactor;
-							l_v3TmpDiffuse *= l_spotFactor;
-							l_v3TmpSpecular *= l_spotFactor;
-						}
-						FI
-					}
-					FI
-
-					p_v3Ambient += l_v3TmpAmbient;
-					p_v3Diffuse += l_v3TmpDiffuse;
-					p_v3Specular += l_v3TmpSpecular;
-				}
-				FI
+				p_v3Ambient += l_v3TmpAmbient;
+				p_v3Diffuse += l_v3TmpDiffuse;
+				p_v3Specular += l_v3TmpSpecular;
+			}
+			FI
 		}
 
 		//***********************************************************************************************

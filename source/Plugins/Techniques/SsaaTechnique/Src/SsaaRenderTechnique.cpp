@@ -108,7 +108,7 @@ namespace Ssaa
 				cuT( "	float3 l_v3EyeVec = normalize( p_input.Eye );\n" )
 				cuT( "	float l_fAlpha = c3d_fMatOpacity;\n" );
 			m_strMainLightsLoop =
-				cuT( "	for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
+				cuT( "	for( int i = 0; i < c3d_iLightsCount.x; i++ )\n" )
 				cuT( "	{\n" )
 				cuT( "		l_light = GetLight( i );\n" )
 				cuT( "		l_v3LightDir = normalize( mul( l_light.m_v4Position, c3d_mtxModelView ).xyz - p_input.Vertex );\n" );
@@ -420,7 +420,7 @@ namespace Ssaa
 				}
 			}
 
-			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
+			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
 			{
 				l_lighting.WriteCompute( p_flags, l_writer, i,
 										 l_v3MapSpecular, c3d_mtxModelView, l_v3MapNormal,

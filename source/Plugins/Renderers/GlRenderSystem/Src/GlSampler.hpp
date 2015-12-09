@@ -59,6 +59,7 @@ namespace GlRender
 
 	private:
 		std::unique_ptr< GlSamplerImpl > m_impl;
+		eGL_TEXDIM m_glDimension;
 	};
 }
 

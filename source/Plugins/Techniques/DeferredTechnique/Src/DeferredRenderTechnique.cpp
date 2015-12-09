@@ -170,7 +170,7 @@ namespace Deferred
 				cuT( "	return l_out;\n" )
 				cuT( "}\n" );
 			m_strLSPixelProgram =
-				cuT( "uniform int c3d_iLightsCount;\n" )
+				cuT( "uniform int4 c3d_iLightsCount;\n" )
 				cuT( "uniform float3 c3d_v3CameraPosition;\n" )
 				cuT( "Texture1D c3d_sLights;\n" )
 				cuT( "SamplerState LightsSampler\n" )
@@ -264,7 +264,7 @@ namespace Deferred
 				cuT( "	l_v3EyeVec.y = dot( l_v3TmpVec, l_v3Binormal );\n" )
 				cuT( "	l_v3EyeVec.z = dot( l_v3TmpVec, l_v4Normals.xyz );\n" )
 				cuT( "	l_v3EyeVec = normalize( l_v3EyeVec );\n" )
-				cuT( "	for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
+				cuT( "	for( int i = 0; i < c3d_iLightsCount.x; i++ )\n" )
 				cuT( "	{\n" )
 				cuT( "		l_light = GetLight( i );\n" )
 				cuT( "		l_v3LightDir = normalize( l_light.m_v4Position.xyz - l_v4Positions.xyz );\n" )
@@ -938,7 +938,7 @@ namespace Deferred
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, vec3( dot( l_v3TmpVec, l_v3Tangent ), dot( l_v3TmpVec, l_v3Bitangent ), dot( l_v3TmpVec, l_v3Normal ) ) );
 			l_v3EyeVec = normalize( l_v3EyeVec );
 
-			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
+			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
 			{
 				l_lighting.WriteCompute( p_flags, l_writer, i,
 										 l_v3MapSpecular, c3d_mtxModelView, l_v3Normal,

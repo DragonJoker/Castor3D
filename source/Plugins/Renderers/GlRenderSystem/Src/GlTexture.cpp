@@ -81,6 +81,7 @@ namespace GlRender
 	bool GlTexture::Bind( uint32_t p_index )
 	{
 		REQUIRE( m_storage );
+
 		bool l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 
 		if ( l_return )

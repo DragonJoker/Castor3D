@@ -36,13 +36,10 @@ void Torus::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const 
 	if ( m_uiInternalNbFaces >= 3 && m_uiExternalNbFaces >= 3 )
 	{
 		Submesh & l_submesh = *( p_mesh.CreateSubmesh() );
-		BufferElementGroupSPtr l_vertex;
 		uint32_t l_uiCur = 0;
 		uint32_t l_uiPrv = 0;
 		uint32_t l_uiPCr = 0;
 		uint32_t l_uiPPr = 0;
-		real l_rStepAngleIn = real( Angle::PiMult2 ) / m_uiInternalNbFaces;
-		real l_rStepAngleEx = real( Angle::PiMult2 ) / m_uiExternalNbFaces;
 		real l_rAngleIn = 0.0;
 		real l_rAngleEx = 0.0;
 		uint32_t l_uiExtMax = m_uiExternalNbFaces;
@@ -52,24 +49,29 @@ void Torus::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const 
 		Coords3r l_ptTangent0;
 		Coords3r l_ptTangent1;
 
-		for ( uint32_t j = 0; j < l_uiIntMax; j++ )
+		// Build the internal circle that will be rotated to build the torus
+		real l_step = real( Angle::PiMult2 ) / m_uiInternalNbFaces;
+
+		for ( uint32_t j = 0; j <= l_uiIntMax; j++ )
 		{
-			l_vertex = l_submesh.AddPoint( m_rInternalRadius * cos( l_rAngleIn ) + m_rExternalRadius, m_rInternalRadius * sin( l_rAngleIn ), 0.0 );
+			BufferElementGroupSPtr l_vertex = l_submesh.AddPoint( m_rInternalRadius * cos( l_rAngleIn ) + m_rExternalRadius, m_rInternalRadius * sin( l_rAngleIn ), 0.0 );
 			Vertex::SetTexCoord( l_vertex, real( 0.0 ), real( j ) / m_uiInternalNbFaces );
 			Vertex::SetNormal( l_vertex, point::get_normalised( Point3r( real( cos( l_rAngleIn ) ), real( sin( l_rAngleIn ) ), real( 0.0 ) ) ) );
 			l_uiCur++;
-			l_rAngleIn += l_rStepAngleIn;
+			l_rAngleIn += l_step;
 		}
 
-		for ( uint32_t i = 1; i < l_uiExtMax; i++ )
+		// Build the torus
+		l_step = real( Angle::PiMult2 ) / m_uiExternalNbFaces;
+		for ( uint32_t i = 1; i <= l_uiExtMax; i++ )
 		{
 			l_uiPCr = l_uiCur;
 			l_uiPPr = l_uiPrv;
-			l_rAngleEx += l_rStepAngleEx;
+			l_rAngleEx += l_step;
 
-			for ( uint32_t j = 0; j < l_uiIntMax; j++ )
+			for ( uint32_t j = 0; j <= l_uiIntMax; j++ )
 			{
-				l_vertex = l_submesh[j];
+				BufferElementGroupSPtr l_vertex = l_submesh[j];
 				Vertex::GetPosition( l_vertex, l_ptPos );
 				Vertex::GetNormal( l_vertex, l_ptNml );
 				l_vertex = l_submesh.AddPoint( l_ptPos[0] * cos( l_rAngleEx ), l_ptPos[1], l_ptPos[0] * sin( l_rAngleEx ) );
@@ -77,7 +79,7 @@ void Torus::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const 
 				Vertex::SetNormal( l_vertex, point::get_normalised( Point3r( real( l_ptNml[0] * cos( l_rAngleEx ) ), real( l_ptNml[1] ), real( l_ptNml[0] * sin( l_rAngleEx ) ) ) ) );
 			}
 
-			for ( uint32_t j = 0; j < l_uiIntMax - 1; j++ )
+			for ( uint32_t j = 0; j <= l_uiIntMax - 1; j++ )
 			{
 				l_submesh.AddFace( l_uiCur + 1, l_uiPrv + 0, l_uiPrv + 1 );
 				l_submesh.AddFace( l_uiCur + 0, l_uiPrv + 0, l_uiCur + 1 );
@@ -95,7 +97,7 @@ void Torus::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const 
 		l_uiPCr = l_uiCur;
 		l_uiPPr = l_uiPrv;
 
-		for ( uint32_t j = 0; j < l_uiIntMax - 1; j++ )
+		for ( uint32_t j = 0; j <= l_uiIntMax - 1; j++ )
 		{
 			l_submesh.AddFace( l_uiCur + 1, l_uiPrv + 0, l_uiPrv + 1 );
 			l_submesh.AddFace( l_uiCur + 0, l_uiPrv + 0, l_uiCur + 1 );

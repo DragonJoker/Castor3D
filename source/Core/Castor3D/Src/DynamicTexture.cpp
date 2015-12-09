@@ -60,7 +60,7 @@ namespace Castor3D
 		{
 			l_return = DoBind( p_index );
 
-			if ( l_return && GetSampler() )
+			if ( l_return && GetSampler() && m_type != eTEXTURE_TYPE_BUFFER )
 			{
 				l_return = GetSampler()->Bind( m_type, p_index );
 			}
@@ -71,7 +71,7 @@ namespace Castor3D
 
 	void DynamicTexture::UnbindFrom( uint32_t p_index )
 	{
-		if ( GetSampler() )
+		if ( GetSampler() && m_type != eTEXTURE_TYPE_BUFFER )
 		{
 			GetSampler()->Unbind();
 		}

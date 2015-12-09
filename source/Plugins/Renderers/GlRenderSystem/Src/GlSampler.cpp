@@ -177,13 +177,24 @@ namespace GlRender
 
 	bool GlSampler::Bind( eTEXTURE_TYPE p_dimension, uint32_t p_index )
 	{
-		REQUIRE( m_impl );
-		return m_impl->Bind( GetOpenGl().Get( p_dimension ), p_index );
+		m_glDimension = GetOpenGl().Get( p_dimension );
+		bool l_return = true;
+
+		if ( m_glDimension != eGL_TEXDIM_BUFFER )
+		{
+			REQUIRE( m_impl );
+			l_return = m_impl->Bind( GetOpenGl().Get( p_dimension ), p_index );
+		}
+
+		return l_return;
 	}
 
 	void GlSampler::Unbind()
 	{
-		REQUIRE( m_impl );
-		m_impl->Unbind();
+		if ( m_glDimension != eGL_TEXDIM_BUFFER )
+		{
+			REQUIRE( m_impl );
+			m_impl->Unbind();
+		}
 	}
 }

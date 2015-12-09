@@ -252,9 +252,9 @@ namespace GlRender
 
 #define UBO_SCENE( Writer )\
 	Ubo l_scene = l_writer.GetUbo( cuT( "Scene" ) );\
-	UNIFORM( l_scene, Int, c3d_iLightsCount );\
 	UNIFORM( l_scene, Vec4, c3d_v4AmbientLight );\
 	UNIFORM( l_scene, Vec4, c3d_v4BackgroundColour );\
+	UNIFORM( l_scene, IVec4, c3d_iLightsCount );\
 	UNIFORM( l_scene, Vec3, c3d_v3CameraPosition );\
 	l_scene.End();
 

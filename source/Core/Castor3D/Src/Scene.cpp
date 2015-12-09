@@ -1742,8 +1742,8 @@ namespace Castor3D
 			l_lights->SetValue( m_pLightsTexture->GetTexture().get() );
 		}
 
-		OneIntFrameVariableSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable< int >( ShaderProgramBase::LightsCount, l_lightsCount );
+		Point4iFrameVariableSPtr l_lightsCount;
+		p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
 
 		if ( l_lightsCount )
 		{
@@ -1752,7 +1752,7 @@ namespace Castor3D
 			for ( auto && l_it : m_addedLights )
 			{
 				DoBindLight( l_it.second, l_index, p_program );
-				l_lightsCount->GetValue( 0 )++;
+				l_lightsCount->GetValue( 0 )[l_it.second->GetLightType()]++;
 			}
 		}
 		else
@@ -1776,8 +1776,8 @@ namespace Castor3D
 	{
 		m_pLightsTexture->Unbind();
 
-		OneIntFrameVariableSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable< int >( ShaderProgramBase::LightsCount, l_lightsCount );
+		Point4iFrameVariableSPtr l_lightsCount;
+		p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
 
 		if ( l_lightsCount )
 		{
@@ -1786,7 +1786,7 @@ namespace Castor3D
 			for ( auto && l_it : m_addedLights )
 			{
 				DoUnbindLight( l_it.second, l_index, p_program );
-				l_lightsCount->GetValue( 0 )--;
+				l_lightsCount->GetValue( 0 )[l_it.second->GetLightType()]--;
 			}
 		}
 		else
