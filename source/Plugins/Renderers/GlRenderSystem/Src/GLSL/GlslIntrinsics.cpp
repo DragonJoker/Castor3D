@@ -96,6 +96,11 @@ namespace GlRender
 			return p_sampler.m_writer->Texture3D( p_sampler, p_value );
 		}
 
+		Vec4 texelFetch( SamplerBuffer const & p_sampler, Type const & p_value )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value );
+		}
+
 		Vec4 texelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif )
 		{
 			return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );

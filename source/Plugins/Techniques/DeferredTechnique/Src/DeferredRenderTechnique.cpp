@@ -719,7 +719,15 @@ namespace Deferred
 		IN( l_writer, Vec3, vtx_bitangent );
 		IN( l_writer, Vec3, vtx_texture );
 
-		UNIFORM( l_writer, Sampler1D, c3d_sLights );
+		if ( l_writer.GetOpenGl().HasTbo() )
+		{
+			UNIFORM( l_writer, SamplerBuffer, c3d_sLights );
+		}
+		else
+		{
+			UNIFORM( l_writer, Sampler1D, c3d_sLights );
+		}
+
 		Sampler2D c3d_mapColour;
 		Sampler2D c3d_mapAmbient;
 		Sampler2D c3d_mapDiffuse;

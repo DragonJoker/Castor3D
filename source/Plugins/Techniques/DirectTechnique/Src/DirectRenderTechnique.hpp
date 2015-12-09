@@ -42,7 +42,7 @@ namespace Direct
 	\brief		Classe de technique de rendu basique
 	*/
 	class RenderTechnique
-		:	public Castor3D::RenderTechniqueBase
+		: public Castor3D::RenderTechniqueBase
 	{
 	protected:
 		/**

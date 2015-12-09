@@ -30,6 +30,10 @@ namespace GlRender
 		{
 			return m_strTexture3D;
 		}
+		inline Castor::String const & KeywordsBase::GetTexelFetchBuffer()const
+		{
+			return m_strTexelFetchBuffer;
+		}
 		inline Castor::String const & KeywordsBase::GetTexelFetch1D()const
 		{
 			return m_strTexelFetch1D;
@@ -165,6 +169,7 @@ namespace GlRender
 				m_strTexture1D = cuT( "texture1D" );
 				m_strTexture2D = cuT( "texture2D" );
 				m_strTexture3D = cuT( "texture3D" );
+				m_strTexelFetchBuffer = cuT( "texelFetch" );
 				m_strTexelFetch1D = cuT( "texelFetch" );
 				m_strTexelFetch2D = cuT( "texelFetch" );
 				m_strTexelFetch3D = cuT( "texelFetch" );
@@ -212,6 +217,7 @@ namespace GlRender
 				m_strTexture1D = cuT( "texture" );
 				m_strTexture2D = cuT( "texture" );
 				m_strTexture3D = cuT( "texture" );
+				m_strTexelFetchBuffer = cuT( "texelFetch" );
 				m_strTexelFetch1D = cuT( "texelFetch" );
 				m_strTexelFetch2D = cuT( "texelFetch" );
 				m_strTexelFetch3D = cuT( "texelFetch" );
@@ -264,6 +270,7 @@ namespace GlRender
 				m_strTexture1D = cuT( "texture" );
 				m_strTexture2D = cuT( "texture" );
 				m_strTexture3D = cuT( "texture" );
+				m_strTexelFetchBuffer = cuT( "texelFetch" );
 				m_strTexelFetch1D = cuT( "texelFetch" );
 				m_strTexelFetch2D = cuT( "texelFetch" );
 				m_strTexelFetch3D = cuT( "texelFetch" );

@@ -29,6 +29,7 @@ namespace GlRender
 	{
 		struct Int;
 		struct Vec4;
+		struct SamplerBuffer;
 		struct Sampler1D;
 		struct Sampler2D;
 		struct Sampler3D;
@@ -94,6 +95,7 @@ namespace GlRender
 			C3D_Gl_API Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
 			C3D_Gl_API Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
 			C3D_Gl_API Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
+			C3D_Gl_API Vec4 TexelFetch( SamplerBuffer const & p_sampler, Type const & p_value );
 			C3D_Gl_API Vec4 TexelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
 			C3D_Gl_API Vec4 TexelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
 			C3D_Gl_API Vec4 TexelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );

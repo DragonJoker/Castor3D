@@ -24,6 +24,15 @@ namespace GlRender
 {
 	namespace GLSL
 	{
+		struct SamplerBuffer
+			: public Type
+		{
+			inline SamplerBuffer();
+			inline SamplerBuffer( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+			template< typename T > inline SamplerBuffer & operator=( T const & p_rhs );
+			inline operator uint32_t();
+		};
+
 		struct Sampler1D
 			: public Type
 		{

@@ -338,7 +338,7 @@ namespace GlRender
 		}
 		inline bool HasTbo()const
 		{
-			return false;// m_bHasTbo;
+			return m_bHasTbo;
 		}
 		inline bool HasFbo()const
 		{

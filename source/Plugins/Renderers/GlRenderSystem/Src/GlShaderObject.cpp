@@ -67,24 +67,25 @@ namespace GlRender
 	bool GlShaderObject::Compile()
 	{
 		bool l_return = false;
-		m_loadedSource.clear();
+		String l_loadedSource;
 
-		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && m_loadedSource.empty(); i-- )
+		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && l_loadedSource.empty(); i-- )
 		{
 			if ( m_parent->GetOwner()->CheckSupport( eSHADER_MODEL( i ) ) )
 			{
-				m_loadedSource = m_arraySources[i];
+				l_loadedSource = m_arraySources[i];
 
-				if ( !m_loadedSource.empty() )
+				if ( !l_loadedSource.empty() )
 				{
 					m_eShaderModel = eSHADER_MODEL( i );
 				}
 			}
 		}
 
-		if ( m_status != eSHADER_STATUS_ERROR && !m_loadedSource.empty() )
+		if ( m_status != eSHADER_STATUS_ERROR && !l_loadedSource.empty() && l_loadedSource != m_loadedSource )
 		{
 			l_return = true;
+			m_loadedSource = l_loadedSource;
 
 			if ( m_parent->GetOwner()->HasShaderType( m_type ) )
 			{
@@ -99,11 +100,37 @@ namespace GlRender
 #else
 				strncpy( l_buffer, l_tmp.c_str(), l_tmp.size() );
 #endif
-				l_return &= GetOpenGl().ShaderSource( GetGlName(), 1, const_cast< const char ** >( &l_buffer ), & l_iLength );
-				l_return &= GetOpenGl().CompileShader( GetGlName() );
-				l_return &= GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_COMPILE, & l_compiled );
+				l_return = GetOpenGl().ShaderSource( GetGlName(), 1, const_cast< const char ** >( &l_buffer ), &l_iLength );
 
-				if ( l_compiled != 0 )
+				if ( l_return )
+				{
+					l_return = GetOpenGl().CompileShader( GetGlName() );
+
+					if ( !l_return )
+					{
+						Logger::LogError( cuT( "GlShaderObject:: Compile - Shader source was not compiled." ) );
+					}
+				}
+				else
+				{
+					Logger::LogError( cuT( "GlShaderObject:: Compile - Shader source was not loaded." ) );
+				}
+
+				if ( l_return )
+				{
+					l_return = GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_COMPILE, &l_compiled );
+
+					if ( !l_return )
+					{
+						Logger::LogError( cuT( "GlShaderObject:: Compile - Shader compilation status retrieval failed." ) );
+					}
+					else
+					{
+						Logger::LogDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << l_compiled );
+					}
+				}
+
+				if ( l_return && l_compiled != 0 )
 				{
 					m_status = eSHADER_STATUS_COMPILED;
 				}
@@ -114,25 +141,47 @@ namespace GlRender
 
 				RetrieveCompilerLog( m_compilerLog );
 
-				if ( m_compilerLog.size() > 0 )
+				if ( !m_compilerLog.empty() )
 				{
 					if ( m_status == eSHADER_STATUS_ERROR )
 					{
 						Logger::LogError( m_compilerLog );
-						StringStream l_source;
-						l_source << format::line_prefix();
-						l_source << m_loadedSource;
-						Logger::LogDebug( l_source.str() );
-						m_loadedSource.clear();
 					}
 					else
 					{
 						Logger::LogInfo( m_compilerLog );
 					}
+
+					StringStream l_source;
+					l_source << format::line_prefix();
+					l_source << m_loadedSource;
+					Logger::LogDebug( l_source.str() );
+					m_loadedSource.clear();
+				}
+				else if ( m_status == eSHADER_STATUS_ERROR )
+				{
+					Logger::LogError( cuT( "GlShaderObject:: Compile - Compilaton failed with an unknown error." ) );
+					StringStream l_source;
+					l_source << format::line_prefix();
+					l_source << m_loadedSource;
+					Logger::LogDebug( l_source.str() );
+					m_loadedSource.clear();
 				}
 
 				l_return = m_status == eSHADER_STATUS_COMPILED;
 			}
+			else
+			{
+				Logger::LogError( "GlShaderObject::Compile - Shader type not supported by currently loaded API." );
+			}
+		}
+		else if ( m_loadedSource.empty() )
+		{
+			Logger::LogError( "GlShaderObject::Compile - No shader source." );
+		}
+		else
+		{
+			Logger::LogWarning( "GlShaderObject::Compile - Shader is already compiled." );
 		}
 
 		return l_return;

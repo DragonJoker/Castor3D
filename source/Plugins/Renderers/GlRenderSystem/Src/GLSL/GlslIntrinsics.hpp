@@ -46,7 +46,7 @@ namespace GlRender
 		template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator<=( TypeA const & p_a, TypeB const & p_b );
 		template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>( TypeA const & p_a, TypeB const & p_b );
 		template< typename TypeA, typename TypeB, typename Enable = typename std::enable_if< is_arithmetic_type< TypeA >::value >::type >GlslBool operator>=( TypeA const & p_a, TypeB const & p_b );
-        
+
 		C3D_Gl_API Vec4 operator*( Mat4 const & p_a, Vec4 const & p_b );
 		C3D_Gl_API Vec3 operator*( Mat3 const & p_a, Vec3 const & p_b );
 		C3D_Gl_API Float operator+( float p_a, Float const & p_b );
@@ -84,6 +84,7 @@ namespace GlRender
 		C3D_Gl_API Vec4 texture1D( Sampler1D const & p_sampler, Type const & p_value );
 		C3D_Gl_API Vec4 texture2D( Sampler2D const & p_sampler, Type const & p_value );
 		C3D_Gl_API Vec4 texture3D( Sampler3D const & p_sampler, Type const & p_value );
+		C3D_Gl_API Vec4 texelFetch( SamplerBuffer const & p_sampler, Type const & p_value );
 		C3D_Gl_API Vec4 texelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
 		C3D_Gl_API Vec4 texelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
 		C3D_Gl_API Vec4 texelFetch( Sampler3D const & p_sampler, Type const & p_value, Int const & p_modif );

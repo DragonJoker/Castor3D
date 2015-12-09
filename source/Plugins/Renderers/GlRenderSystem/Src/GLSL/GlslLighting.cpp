@@ -10,34 +10,54 @@ namespace GlRender
 		{
 			Light GetLight( Int p_iIndex )
 			{
-				BUILTIN( *p_iIndex.m_writer, Sampler1D, c3d_sLights );
 				LOCALE( *p_iIndex.m_writer, Light, l_lightReturn );
 
 				if ( p_iIndex.m_writer->HasTexelFetch() )
 				{
-					LOCALE_ASSIGN( *p_iIndex.m_writer, Int, l_offset, p_iIndex * Int( 10 ) );
-					l_lightReturn.m_v4Ambient() = texelFetch( c3d_sLights, l_offset++, 0 );
-					//l_lightReturn.m_v4Diffuse() = vec4( Float( p_iIndex.m_writer, 1.0f ), 1.0, 1.0, 1.0 );
-					l_lightReturn.m_v4Diffuse() = texelFetch( c3d_sLights, l_offset++, 0 );
-					//l_lightReturn.m_v4Specular() = vec4( Float( p_iIndex.m_writer, 1.0f ), 1.0, 1.0, 1.0 );
-					l_lightReturn.m_v4Specular() = texelFetch( c3d_sLights, l_offset++, 0 );
-					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++, 0 ) );
-					l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++, 0 ).XYZ;
-					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4A, texelFetch( c3d_sLights, l_offset++, 0 ) );
-					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4B, texelFetch( c3d_sLights, l_offset++, 0 ) );
-					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4C, texelFetch( c3d_sLights, l_offset++, 0 ) );
-					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4D, texelFetch( c3d_sLights, l_offset++, 0 ) );
-					LOCALE_ASSIGN( *p_iIndex.m_writer, Vec2, l_v2Spot, texelFetch( c3d_sLights, l_offset++, 0 ).XY );
-					//l_lightReturn.m_v4Position() = vec4( Float( p_iIndex.m_writer, 0.0f ), -1.0, -1.0, 0.0 );
-					l_lightReturn.m_v4Position() = vec4( l_v4Position.Z, l_v4Position.Y, l_v4Position.X, 0.0 );
-					l_lightReturn.m_iType() = CAST( *p_iIndex.m_writer, Int, l_v4Position.W );
-					l_lightReturn.m_v3Direction() = p_iIndex.m_writer->Paren( mat4( l_v4A, l_v4B, l_v4C, l_v4D ) * vec4( Float( p_iIndex.m_writer, 0.0f ), 0.0f, 1.0f, 0.0f ) ).XYZ;
-					//l_lightReturn.m_fExponent() = 50.0f;
-					l_lightReturn.m_fExponent() = l_v2Spot.X;
-					l_lightReturn.m_fCutOff() = l_v2Spot.Y;
+					if ( p_iIndex.m_writer->GetOpenGl().HasTbo() )
+					{
+						BUILTIN( *p_iIndex.m_writer, SamplerBuffer, c3d_sLights );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Int, l_offset, p_iIndex * Int( 10 ) );
+						l_lightReturn.m_v4Ambient() = texelFetch( c3d_sLights, l_offset++ );
+						l_lightReturn.m_v4Diffuse() = texelFetch( c3d_sLights, l_offset++ );
+						l_lightReturn.m_v4Specular() = texelFetch( c3d_sLights, l_offset++ );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++ ) );
+						l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).XYZ;
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4A, texelFetch( c3d_sLights, l_offset++ ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4B, texelFetch( c3d_sLights, l_offset++ ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4C, texelFetch( c3d_sLights, l_offset++ ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4D, texelFetch( c3d_sLights, l_offset++ ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec2, l_v2Spot, texelFetch( c3d_sLights, l_offset++ ).XY );
+						l_lightReturn.m_v4Position() = vec4( l_v4Position.Z, l_v4Position.Y, l_v4Position.X, 0.0 );
+						l_lightReturn.m_iType() = CAST( *p_iIndex.m_writer, Int, l_v4Position.W );
+						l_lightReturn.m_v3Direction() = p_iIndex.m_writer->Paren( mat4( l_v4A, l_v4B, l_v4C, l_v4D ) * vec4( Float( p_iIndex.m_writer, 0.0f ), 0.0f, 1.0f, 0.0f ) ).XYZ;
+						l_lightReturn.m_fExponent() = l_v2Spot.X;
+						l_lightReturn.m_fCutOff() = l_v2Spot.Y;
+					}
+					else
+					{
+						BUILTIN( *p_iIndex.m_writer, Sampler1D, c3d_sLights );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Int, l_offset, p_iIndex * Int( 10 ) );
+						l_lightReturn.m_v4Ambient() = texelFetch( c3d_sLights, l_offset++, 0 );
+						l_lightReturn.m_v4Diffuse() = texelFetch( c3d_sLights, l_offset++, 0 );
+						l_lightReturn.m_v4Specular() = texelFetch( c3d_sLights, l_offset++, 0 );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++, 0 ) );
+						l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++, 0 ).XYZ;
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4A, texelFetch( c3d_sLights, l_offset++, 0 ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4B, texelFetch( c3d_sLights, l_offset++, 0 ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4C, texelFetch( c3d_sLights, l_offset++, 0 ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec4, l_v4D, texelFetch( c3d_sLights, l_offset++, 0 ) );
+						LOCALE_ASSIGN( *p_iIndex.m_writer, Vec2, l_v2Spot, texelFetch( c3d_sLights, l_offset++, 0 ).XY );
+						l_lightReturn.m_v4Position() = vec4( l_v4Position.Z, l_v4Position.Y, l_v4Position.X, 0.0 );
+						l_lightReturn.m_iType() = CAST( *p_iIndex.m_writer, Int, l_v4Position.W );
+						l_lightReturn.m_v3Direction() = p_iIndex.m_writer->Paren( mat4( l_v4A, l_v4B, l_v4C, l_v4D ) * vec4( Float( p_iIndex.m_writer, 0.0f ), 0.0f, 1.0f, 0.0f ) ).XYZ;
+						l_lightReturn.m_fExponent() = l_v2Spot.X;
+						l_lightReturn.m_fCutOff() = l_v2Spot.Y;
+					}
 				}
 				else
 				{
+					BUILTIN( *p_iIndex.m_writer, Sampler1D, c3d_sLights );
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Float, l_fFactor, p_iIndex * Float( 0.01f ) );
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Float, l_fOffset, Float( 0 ) );
 					LOCALE_ASSIGN( *p_iIndex.m_writer, Float, l_fDecal, Float( 0.0005f ) );

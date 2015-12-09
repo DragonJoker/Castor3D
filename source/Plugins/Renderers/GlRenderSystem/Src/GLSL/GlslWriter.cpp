@@ -183,6 +183,11 @@ namespace GlRender
 			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture3D(), p_sampler, p_value );
 		}
 
+		Vec4 GlslWriter::TexelFetch( SamplerBuffer const & p_sampler, Type const & p_value )
+		{
+			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetchBuffer(), p_sampler, p_value );
+		}
+
 		Vec4 GlslWriter::TexelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif )
 		{
 			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch1D(), p_sampler, p_value, p_modif );

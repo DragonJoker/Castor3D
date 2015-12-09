@@ -21,6 +21,31 @@ namespace GlRender
 	{
 		//*****************************************************************************************
 
+		SamplerBuffer::SamplerBuffer()
+			: Type( cuT( "samplerBuffer " ) )
+		{
+		}
+
+		SamplerBuffer::SamplerBuffer( GlslWriter * p_writer, Castor::String const & p_name )
+			: Type( cuT( "samplerBuffer " ), p_writer, p_name )
+		{
+		}
+
+		template< typename T >
+		SamplerBuffer & SamplerBuffer::operator=( T const & p_rhs )
+		{
+			UpdateWriter( p_rhs );
+			m_writer->WriteAssign( *this, p_rhs );
+			return *this;
+		}
+
+		SamplerBuffer::operator uint32_t()
+		{
+			return 0u;
+		}
+
+		//*****************************************************************************************
+
 		Sampler1D::Sampler1D()
 			: Type( cuT( "sampler1D " ) )
 		{

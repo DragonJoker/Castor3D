@@ -220,7 +220,7 @@ namespace Castor3D
 
 					if ( !l_shader->Compile() && l_shader->GetStatus() == eSHADER_STATUS_ERROR )
 					{
-						Logger::LogError( cuT( "ShaderProgram::Initialise - " ) + l_shader->GetCurrentFile() + cuT( " - COMPILER ERROR" ) );
+						Logger::LogError( cuT( "ShaderProgram::Initialise - COMPILER ERROR" ) );
 						l_shader->DestroyProgram();
 						m_status = ePROGRAM_STATUS_ERROR;
 						l_bResult = false;
