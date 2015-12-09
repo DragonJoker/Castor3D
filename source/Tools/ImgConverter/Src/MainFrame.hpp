@@ -1,9 +1,14 @@
 #ifndef ___IX_MainFrame___
 #define ___IX_MainFrame___
 
+#include <wx/frame.h>
+#include <wx/listbox.h>
+#include <wx/button.h>
+
 namespace ImgToIco
 {
-	class MainFrame : public wxFrame
+	class MainFrame
+		: public wxFrame
 	{
 	private:
 		enum eIDs

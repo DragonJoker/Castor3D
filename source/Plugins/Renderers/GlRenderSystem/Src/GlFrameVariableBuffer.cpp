@@ -16,13 +16,13 @@ namespace GlRender
 	{
 		typedef TextureBaseRPtr	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			std::shared_ptr< GlOneFrameVariable< value_type > > l_pVariable = std::static_pointer_cast< GlOneFrameVariable< value_type > >( p_pVariable );
+			std::shared_ptr< GlOneFrameVariable< value_type > > l_variable = std::static_pointer_cast< GlOneFrameVariable< value_type > >( p_variable );
 
-			if ( l_pVariable->GetOccCount() <= 1 && l_pVariable->GetValue() )
+			if ( l_variable->GetOccCount() <= 1 && l_variable->GetValue() )
 			{
-				p_gl.SetUniform1v( p_index, l_pVariable->GetOccCount(), ( int * )&l_pVariable->GetValue()->GetIndex() );
+				p_gl.SetUniform1v( p_index, l_variable->GetOccCount(), ( int * )&l_variable->GetValue()->GetIndex() );
 			}
 		}
 	};
@@ -31,9 +31,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -41,9 +41,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -51,9 +51,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -61,9 +61,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform1v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform1v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -71,9 +71,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -81,9 +81,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -91,9 +91,9 @@ namespace GlRender
 	{
 		typedef int	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -101,9 +101,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -111,9 +111,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -121,9 +121,9 @@ namespace GlRender
 	{
 		typedef uint32_t	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -131,9 +131,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -141,9 +141,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -151,9 +151,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -161,9 +161,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform2v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform2v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -171,9 +171,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform3v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform3v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -181,9 +181,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniform4v( p_index, p_pVariable->GetOccCount(), ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniform4v( p_index, p_variable->GetOccCount(), ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -191,9 +191,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix2x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x2v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -201,9 +201,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix2x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x3v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -211,9 +211,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix2x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x4v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -221,9 +221,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix3x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x2v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -231,9 +231,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix3x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x3v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -241,9 +241,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix3x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x4v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -251,9 +251,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix4x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x2v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -261,9 +261,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix4x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x3v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -271,9 +271,9 @@ namespace GlRender
 	{
 		typedef float	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix4x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x4v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -281,9 +281,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix2x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x2v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -291,9 +291,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix2x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x3v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -301,9 +301,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix2x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix2x4v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -311,9 +311,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix3x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x2v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -321,9 +321,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix3x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x3v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -331,9 +331,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix3x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix3x4v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -341,9 +341,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix4x2v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x2v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -351,9 +351,9 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix4x3v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x3v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
@@ -361,15 +361,15 @@ namespace GlRender
 	{
 		typedef double	value_type;
 
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
-			p_gl.SetUniformMatrix4x4v( p_index, p_pVariable->GetOccCount(), false, ( value_type const * )p_pVariable->const_ptr() );
+			p_gl.SetUniformMatrix4x4v( p_index, p_variable->GetOccCount(), false, ( value_type const * )p_variable->const_ptr() );
 		}
 	};
 
 	template< eFRAME_VARIABLE_TYPE Type > struct GlVariableApplyer
 	{
-		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_pVariable )
+		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
 			CASTOR_EXCEPTION( "VariableApplyer - Unsupported arguments" );
 		}
@@ -377,146 +377,146 @@ namespace GlRender
 
 	namespace
 	{
-		template< eFRAME_VARIABLE_TYPE Type > FrameVariableSPtr GlFrameVariableCreator( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc );
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template< eFRAME_VARIABLE_TYPE Type > FrameVariableSPtr GlFrameVariableCreator( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences );
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlOneFrameVariable< int > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< int > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlOneFrameVariable< uint32_t > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< uint32_t > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlOneFrameVariable< float > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< float > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlOneFrameVariable< double > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< double > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlOneFrameVariable< TextureBaseRPtr > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlOneFrameVariable< TextureBaseRPtr > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< int, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< int, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< int, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< int, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< int, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< int, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< uint32_t, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< uint32_t, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< uint32_t, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< uint32_t, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< uint32_t, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< uint32_t, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< float, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< float, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< float, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< float, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< float, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< float, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< double, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< double, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< double, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< double, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlPointFrameVariable< double, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlPointFrameVariable< double, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 2, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 2, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 2, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 2, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 3, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 3, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 3, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 3, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 4, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 4, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< float, 4, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< float, 4, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 2, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 2, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 2, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 2, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 3, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 3, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 3, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 3, 4 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 4, 2 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 2 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 4, 3 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 3 > >( p_gl, p_occurences, p_program );
 		}
-		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( OpenGl & p_gl, GlShaderProgram * p_pProgram, uint32_t p_uiNbOcc )
+		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlMatrixFrameVariable< double, 4, 4 > >( p_gl, p_uiNbOcc, p_pProgram );
+			return std::make_shared< GlMatrixFrameVariable< double, 4, 4 > >( p_gl, p_occurences, p_program );
 		}
 
 		template< eFRAME_VARIABLE_TYPE Type > GlVariableApplyerBaseSPtr GlApplyerCreator();
@@ -664,10 +664,10 @@ namespace GlRender
 
 	GlFrameVariableBuffer::GlFrameVariableBuffer( OpenGl & p_gl, String const & p_name, GlRenderSystem & p_renderSystem )
 		: FrameVariableBuffer( p_name, p_renderSystem )
+		, Holder( p_gl )
 		, m_glBuffer( p_gl, eGL_BUFFER_TARGET_UNIFORM )
-		, m_iUniformBlockIndex( eGL_INVALID_INDEX )
-		, m_iUniformBlockSize( 0 )
-		, m_gl( p_gl )
+		, m_uniformBlockIndex( eGL_INVALID_INDEX )
+		, m_uniformBlockSize( 0 )
 	{
 	}
 
@@ -675,186 +675,186 @@ namespace GlRender
 	{
 	}
 
-	FrameVariableSPtr GlFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_pProgram, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc )
+	FrameVariableSPtr GlFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences )
 	{
 		FrameVariableSPtr l_return;
 		GlVariableApplyerBaseSPtr l_pApplyer;
-		GlShaderProgram * l_program = static_cast< GlShaderProgram * >( p_pProgram );
+		GlShaderProgram * l_program = static_cast< GlShaderProgram * >( p_program );
 
 		switch ( p_type )
 		{
 		case eFRAME_VARIABLE_TYPE_INT:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_INT >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_INT >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_UINT:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_UINT >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_UINT >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_FLOAT:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_FLOAT >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_FLOAT >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_DOUBLE:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_DOUBLE >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_DOUBLE >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_SAMPLER:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_SAMPLER >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2I:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2I >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3I:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3I >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3I >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4I:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4I >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4I >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2UI:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2UI >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2UI >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3UI:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3UI >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3UI >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4UI:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4UI >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4UI >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC3D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_VEC4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC4D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_VEC4D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X2F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X2F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X3F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X3F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X4F:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X4F >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT2X4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT2X4D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT3X4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT3X4D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X2D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X2D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X3D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X3D >();
 			break;
 
 		case eFRAME_VARIABLE_TYPE_MAT4X4D:
-			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( m_gl, l_program, p_uiNbOcc );
+			l_return = GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >( GetOpenGl(), l_program, p_occurences );
 			l_pApplyer = GlApplyerCreator< eFRAME_VARIABLE_TYPE_MAT4X4D >();
 			break;
 		}
@@ -867,67 +867,67 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlFrameVariableBuffer::DoInitialise( ShaderProgramBase * p_pProgram )
+	bool GlFrameVariableBuffer::DoInitialise( ShaderProgramBase * p_program )
 	{
-		uint32_t l_uiIndex = m_glBuffer.GetGlIndex();
+		uint32_t l_index = m_glBuffer.GetGlName();
 		bool l_return = false;
-		GlShaderProgram * l_program = static_cast< GlShaderProgram * >( p_pProgram );
+		GlShaderProgram * l_program = static_cast< GlShaderProgram * >( p_program );
 		int l_max = 0;
-		m_gl.GetIntegerv( eGL_MAX_UNIFORM_BUFFER_BINDINGS, &l_max );
+		GetOpenGl().GetIntegerv( eGL_MAX_UNIFORM_BUFFER_BINDINGS, &l_max );
 
-		if ( int( m_uiIndex ) < l_max )
+		if ( int( m_index ) < l_max )
 		{
-			if ( m_gl.HasUbo() && l_uiIndex == eGL_INVALID_INDEX )
+			if ( GetOpenGl().HasUbo() && l_index == eGL_INVALID_INDEX )
 			{
-				m_gl.UseProgram( l_program->GetGlProgram() );
-				m_iUniformBlockIndex = m_gl.GetUniformBlockIndex( l_program->GetGlProgram(), string::string_cast< char >( m_name ).c_str() );
-				uint32_t l_uiTotalSize = 0;
+				GetOpenGl().UseProgram( l_program->GetGlName() );
+				m_uniformBlockIndex = GetOpenGl().GetUniformBlockIndex( l_program->GetGlName(), string::string_cast< char >( m_name ).c_str() );
+				uint32_t l_totalSize = 0;
 
-				if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )
+				if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
 				{
-					m_gl.GetActiveUniformBlockiv( l_program->GetGlProgram(), m_iUniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_iUniformBlockSize );
+					GetOpenGl().GetActiveUniformBlockiv( l_program->GetGlName(), m_uniformBlockIndex, eGL_UNIFORM_BLOCK_DATA_SIZE, &m_uniformBlockSize );
 					m_glBuffer.Create();
-					m_glBuffer.Fill( NULL, m_iUniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+					m_glBuffer.Fill( NULL, m_uniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 					m_glBuffer.Bind();
-					m_gl.BindBufferBase( eGL_BUFFER_TARGET_UNIFORM, m_uiIndex, m_glBuffer.GetGlIndex() );
-					m_gl.UniformBlockBinding( l_program->GetGlProgram(), m_iUniformBlockIndex, m_uiIndex );
-					m_buffer.resize( m_iUniformBlockSize );
+					GetOpenGl().BindBufferBase( eGL_BUFFER_TARGET_UNIFORM, m_index, m_glBuffer.GetGlName() );
+					GetOpenGl().UniformBlockBinding( l_program->GetGlName(), m_uniformBlockIndex, m_index );
+					m_buffer.resize( m_uniformBlockSize );
 					std::vector< const char * > l_arrayNames;
 
-					for ( auto && l_pVariable : m_listVariables )
+					for ( auto && l_variable : m_listVariables )
 					{
-						char * l_szChar = new char[l_pVariable->GetName().size() + 1];
-						l_szChar[l_pVariable->GetName().size()] = 0;
+						char * l_szChar = new char[l_variable->GetName().size() + 1];
+						l_szChar[l_variable->GetName().size()] = 0;
 #if defined( _MSC_VER )
-						strncpy_s( l_szChar, l_pVariable->GetName().size() + 1, string::string_cast< char >( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
+						strncpy_s( l_szChar, l_variable->GetName().size() + 1, string::string_cast< char >( l_variable->GetName() ).c_str(), l_variable->GetName().size() );
 #else
-						strncpy( l_szChar, string::string_cast< char >( l_pVariable->GetName() ).c_str(), l_pVariable->GetName().size() );
+						strncpy( l_szChar, string::string_cast< char >( l_variable->GetName() ).c_str(), l_variable->GetName().size() );
 #endif
 						l_arrayNames.push_back( l_szChar );
 					}
 
 					UIntArray l_arrayIndices( l_arrayNames.size() );
-					m_gl.GetUniformIndices( l_program->GetGlProgram(), int( l_arrayNames.size() ), &l_arrayNames[0], &l_arrayIndices[0] );
+					GetOpenGl().GetUniformIndices( l_program->GetGlName(), int( l_arrayNames.size() ), &l_arrayNames[0], &l_arrayIndices[0] );
 					clear_container( l_arrayNames );
 					int i = 0;
 
-					for ( auto && l_pVariable : m_listVariables )
+					for ( auto && l_variable : m_listVariables )
 					{
-						uint32_t l_uiIndex = l_arrayIndices[i++];
-						int l_iOffset, l_iSize;
+						uint32_t l_index = l_arrayIndices[i++];
+						int l_offset, l_size;
 
-						if ( l_uiIndex != eGL_INVALID_INDEX )
+						if ( l_index != eGL_INVALID_INDEX )
 						{
-							m_gl.GetActiveUniformsiv( l_program->GetGlProgram(), 1, &l_uiIndex, eGL_UNIFORM_OFFSET, &l_iOffset	);
-							m_gl.GetActiveUniformsiv( l_program->GetGlProgram(), 1, &l_uiIndex, eGL_UNIFORM_SIZE, &l_iSize	);
+							GetOpenGl().GetActiveUniformsiv( l_program->GetGlName(), 1, &l_index, eGL_UNIFORM_OFFSET, &l_offset	);
+							GetOpenGl().GetActiveUniformsiv( l_program->GetGlName(), 1, &l_index, eGL_UNIFORM_SIZE, &l_size	);
 
-							if ( l_iSize == 1 )
+							if ( l_size == 1 )
 							{
-								l_iSize = int( l_pVariable->size() );
+								l_size = int( l_variable->size() );
 							}
 
-							l_uiTotalSize += l_iSize;
-							l_pVariable->link( &m_buffer[l_iOffset] );
+							l_totalSize += l_size;
+							l_variable->link( &m_buffer[l_offset] );
 						}
 					}
 
@@ -951,18 +951,18 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoCleanup()
 	{
-		m_iUniformBlockIndex = eGL_INVALID_INDEX;
-		m_iUniformBlockSize = 0;
+		m_uniformBlockIndex = eGL_INVALID_INDEX;
+		m_uniformBlockSize = 0;
 		m_glBuffer.Cleanup();
 		m_glBuffer.Destroy();
 	}
 
 	bool GlFrameVariableBuffer::DoBind( uint32_t p_index )
 	{
-		if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )
+		if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
 		{
 			m_glBuffer.Bind();
-			m_glBuffer.Fill( &m_buffer[0], m_iUniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}
 		else
 		{
@@ -977,7 +977,7 @@ namespace GlRender
 
 	void GlFrameVariableBuffer::DoUnbind( uint32_t p_index )
 	{
-		if ( m_iUniformBlockIndex != eGL_INVALID_INDEX )
+		if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
 		{
 			//m_glBuffer.Unbind();
 		}

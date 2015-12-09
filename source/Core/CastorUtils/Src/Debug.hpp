@@ -24,24 +24,27 @@ namespace Castor
 {
 	namespace Debug
 	{
+		struct Backtrace
+		{
+		};
 		/**
 		 *\~english
-		 *\brief		Puts the backtrace into a stream
+		 *\brief			Puts the backtrace into a stream
 		 *\param[in,out]	p_stream	The stream
 		 *\~french
-		 *\brief		Transmet la pile d'appels dans un flux
+		 *\brief			Transmet la pile d'appels dans un flux
 		 *\param[in,out]	p_stream	Le flux
 		 */
-		CU_API void ShowBacktrace( std::wstringstream & p_stream );
+		CU_API std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace );
 		/**
 		 *\~english
-		 *\brief		Puts the backtrace into a stream
+		 *\brief			Puts the backtrace into a stream
 		 *\param[in,out]	p_stream	The stream
 		 *\~french
-		 *\brief		Transmet la pile d'appels dans un flux
+		 *\brief			Transmet la pile d'appels dans un flux
 		 *\param[in,out]	p_stream	Le flux
 		 */
-		CU_API void ShowBacktrace( std::stringstream & p_stream );
+		CU_API std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace );
 
 		/*!
 		\author 	Sylvain DOREMUS
@@ -55,24 +58,34 @@ namespace Castor
 		class Backtraced
 		{
 #if !defined( NDEBUG )
+
 		protected:
 			Backtraced()
 			{
-				std::stringstream l_backtrace;
-				Castor::Debug::ShowBacktrace( l_backtrace );
-				m_callStack = l_backtrace.str();
+				std::stringstream l_callStack;
+				l_callStack << Castor::Debug::Backtrace();
+				m_callStack = l_callStack.str();
 			}
 
-			virtual ~Backtraced()
+			~Backtraced()
 			{
 			}
 
-		private:
+		protected:
 			std::string m_callStack;
-#else
-#endif
+			friend std::ostream & operator<<( std::ostream & p_stream, Backtraced const & p_traced );
 
+#endif
 		};
+
+		inline std::ostream & operator<<( std::ostream & p_stream, Backtraced const & p_traced )
+		{
+#if !defined( NDEBUG )
+
+			p_stream << p_traced.m_callStack;
+
+#endif
+		}
 	}
 }
 

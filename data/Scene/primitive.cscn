@@ -31,21 +31,22 @@ scene "Scene"
 
 	scene_node "FinalNode"
 	{
-		position 0.0 0.0 -100.0
+		position 0.0 0.0 0.0
 	}
 	object "FinalPrimitive"
 	{
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type torus 40 40 25 50
+			type plane 0 0 40 40
+			//type torus 40 40 25 50
 		}
 		material "Silver"
 	}
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 0.0 100.0
+		position 0.0 0.0 -100.0
 	}
 	camera "MainCamera"
 	{

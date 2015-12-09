@@ -10,13 +10,13 @@ namespace Castor3D
 {
 	BinaryChunk::BinaryChunk()
 		:	m_eChunkType( eCHUNK_TYPE_UNKNOWN )
-		,	m_uiIndex( 0 )
+		,	m_index( 0 )
 	{
 	}
 
 	BinaryChunk::BinaryChunk( eCHUNK_TYPE p_type )
 		:	m_eChunkType( p_type )
-		,	m_uiIndex( 0 )
+		,	m_index( 0 )
 	{
 	}
 
@@ -43,18 +43,18 @@ namespace Castor3D
 
 	void BinaryChunk::Get( uint8_t * p_data, uint32_t p_size )
 	{
-		std::memcpy( p_data, &m_pData[m_uiIndex], p_size );
-		m_uiIndex += p_size;
+		std::memcpy( p_data, &m_pData[m_index], p_size );
+		m_index += p_size;
 	}
 
 	bool BinaryChunk::CheckAvailable( uint32_t p_size )const
 	{
-		return m_uiIndex + p_size <= m_pData.size();
+		return m_index + p_size <= m_pData.size();
 	}
 
 	uint32_t BinaryChunk::GetRemaining()const
 	{
-		return uint32_t( m_pData.size() - m_uiIndex );
+		return uint32_t( m_pData.size() - m_index );
 	}
 
 	bool BinaryChunk::GetSubChunk( BinaryChunk & p_chunkDst )
@@ -71,15 +71,15 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = m_uiIndex + l_uiDataSize <= m_pData.size();
+			l_return = m_index + l_uiDataSize <= m_pData.size();
 		}
 
 		if ( l_return )
 		{
 			// Eventually we retrieve the chunk data
-			p_chunkDst.m_pData.insert( p_chunkDst.m_pData.end(), m_pData.begin() + m_uiIndex, m_pData.begin() + m_uiIndex + l_uiDataSize );
-			p_chunkDst.m_uiIndex = 0;
-			m_uiIndex += l_uiDataSize;
+			p_chunkDst.m_pData.insert( p_chunkDst.m_pData.end(), m_pData.begin() + m_index, m_pData.begin() + m_index + l_uiDataSize );
+			p_chunkDst.m_index = 0;
+			m_index += l_uiDataSize;
 		}
 
 		return l_return;

@@ -1,16 +1,16 @@
 namespace Dx11Render
 {
 	template< typename T, uint32_t Count >
-	DxPointFrameVariable< T, Count >::DxPointFrameVariable( DxRenderSystem * p_renderSystem, DxShaderProgram * p_pProgram, uint32_t p_uiOcc )
+	DxPointFrameVariable< T, Count >::DxPointFrameVariable( DxRenderSystem * p_renderSystem, DxShaderProgram * p_program, uint32_t p_occurences )
 		:	DxFrameVariableBase( p_renderSystem )
-		,	Castor3D::PointFrameVariable< T, Count >( p_pProgram, p_uiOcc )
+		,	Castor3D::PointFrameVariable< T, Count >( p_program, p_occurences )
 	{
 	}
 
 	template< typename T, uint32_t Count >
-	DxPointFrameVariable< T, Count >::DxPointFrameVariable( DxRenderSystem * p_renderSystem, Castor3D::PointFrameVariable<T, Count> * p_pVariable )
+	DxPointFrameVariable< T, Count >::DxPointFrameVariable( DxRenderSystem * p_renderSystem, Castor3D::PointFrameVariable<T, Count> * p_variable )
 		:	DxFrameVariableBase( p_renderSystem )
-		,	Castor3D::PointFrameVariable< T, Count >( *p_pVariable )
+		,	Castor3D::PointFrameVariable< T, Count >( *p_variable )
 	{
 	}
 
@@ -22,13 +22,13 @@ namespace Dx11Render
 	template< typename T, uint32_t Count >
 	void DxPointFrameVariable< T, Count >::Bind()
 	{
-		DxFrameVariableBase::DoBind< T, Count >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::PointFrameVariable< T, Count >::m_pValues );
-		Castor3D::FrameVariable::m_bChanged = false;
+		DxFrameVariableBase::DoBind< T, Count >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::PointFrameVariable< T, Count >::m_values );
+		Castor3D::FrameVariable::m_changed = false;
 	}
 
 	template< typename T, uint32_t Count >
 	void DxPointFrameVariable< T, Count >::Unbind()
 	{
-		DxFrameVariableBase::DoUnbind< T, Count >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::PointFrameVariable< T, Count >::m_pValues );
+		DxFrameVariableBase::DoUnbind< T, Count >( *static_cast< DxShaderProgram * >( Castor3D::FrameVariable::GetProgram() ), Castor3D::PointFrameVariable< T, Count >::m_values );
 	}
 }

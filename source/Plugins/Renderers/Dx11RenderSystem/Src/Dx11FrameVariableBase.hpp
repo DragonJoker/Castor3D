@@ -33,16 +33,16 @@ namespace Dx11Render
 		virtual ~DxFrameVariableBase();
 
 	protected:
-		template< typename Type > void DoBind( DxShaderProgram & p_program, Type * p_pValue );
-		template< typename Type, uint32_t Count > void DoBind( DxShaderProgram & p_program, Type * p_pValue );
-		template< typename Type, uint32_t Rows, uint32_t Columns > void DoBind( DxShaderProgram & p_program, Type * p_pValue );
-		template< typename Type > void DoUnbind( DxShaderProgram & p_program, Type * p_pValue );
-		template< typename Type, uint32_t Count > void DoUnbind( DxShaderProgram & p_program, Type * p_pValue );
-		template< typename Type, uint32_t Rows, uint32_t Columns > void DoUnbind( DxShaderProgram & p_program, Type * p_pValue );
+		template< typename Type > void DoBind( DxShaderProgram & p_program, Type * p_value );
+		template< typename Type, uint32_t Count > void DoBind( DxShaderProgram & p_program, Type * p_value );
+		template< typename Type, uint32_t Rows, uint32_t Columns > void DoBind( DxShaderProgram & p_program, Type * p_value );
+		template< typename Type > void DoUnbind( DxShaderProgram & p_program, Type * p_value );
+		template< typename Type, uint32_t Count > void DoUnbind( DxShaderProgram & p_program, Type * p_value );
+		template< typename Type, uint32_t Rows, uint32_t Columns > void DoUnbind( DxShaderProgram & p_program, Type * p_value );
 
 	protected:
 		std::string m_stdstrName;
-		bool m_bPresentInProgram;
+		bool m_presentInProgram;
 		DxRenderSystem * m_renderSystem;
 	};
 }

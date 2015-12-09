@@ -108,14 +108,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the alpha text function
-		 *\param[in]	p_eFunc		The function
-		 *\param[in]	p_byValue	The comparison value
+		 *\param[in]	p_func		The function
+		 *\param[in]	p_value	The comparison value
 		 *\~french
 		 *\brief		Définit la fonction de test alpha
-		 *\param[in]	p_eFunc		La fonction
-		 *\param[in]	p_byValue	La valeur de comparaison
+		 *\param[in]	p_func		La fonction
+		 *\param[in]	p_value	La valeur de comparaison
 		 */
-		C3D_API void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
+		C3D_API void SetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
@@ -166,7 +166,7 @@ namespace Castor3D
 		 */
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
 		/**
 		 *\~english
@@ -181,14 +181,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the multisampling status
-		 *\param[in]	p_bVal	The status
+		 *\param[in]	p_value	The status
 		 *\~french
 		 *\brief		Définit le statut du multisampling
-		 *\param[in]	p_bVal	Le statut
+		 *\param[in]	p_value	Le statut
 		 */
-		inline void SetMultiSampling( bool p_bVal )
+		inline void SetMultiSampling( bool p_value )
 		{
-			m_bMultiSampling = p_bVal;
+			m_bMultiSampling = p_value;
 		}
 		/**
 		 *\~english
@@ -244,14 +244,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the alpha text function
-		 *\param[in]	p_eFunc		The function
-		 *\param[in]	p_byValue	The comparison value
+		 *\param[in]	p_func		The function
+		 *\param[in]	p_value	The comparison value
 		 *\~french
 		 *\brief		Définit la fonction de test alpha
-		 *\param[in]	p_eFunc		La fonction
-		 *\param[in]	p_byValue	La valeur de comparaison
+		 *\param[in]	p_func		La fonction
+		 *\param[in]	p_value	La valeur de comparaison
 		 */
-		C3D_API virtual void DoSetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue ) = 0;
+		C3D_API virtual void DoSetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value ) = 0;
 		/**
 		 *\~english
 		 *\brief		Defines the culling option for current render
@@ -281,7 +281,7 @@ namespace Castor3D
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
 		RenderWindow * m_window;
 		//!\~english Tells if the context is initialised	\~french Dit si le contexte est initialisé
-		bool m_bInitialised;
+		bool m_initialised;
 		//!\~english Tells the context is currently set to use multisampling	\~french Dit si le contexte est actuellement configuré pour utiliser le multisampling
 		bool m_bMultiSampling;
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre

@@ -96,7 +96,7 @@ namespace Castor3D
 		 */
 		inline void SetFillMode( Castor3D::eFILL_MODE p_mode )
 		{
-			m_bChanged |= m_eFillMode != p_mode;
+			m_changed |= m_eFillMode != p_mode;
 			m_eFillMode = p_mode;
 		}
 		/**
@@ -121,7 +121,7 @@ namespace Castor3D
 		 */
 		inline void SetCulledFaces( Castor3D::eFACE p_eFace )
 		{
-			m_bChanged |= m_eCulledFaces != p_eFace;
+			m_changed |= m_eCulledFaces != p_eFace;
 			m_eCulledFaces = p_eFace;
 		}
 		/**
@@ -146,7 +146,7 @@ namespace Castor3D
 		 */
 		inline void SetFrontCCW( bool p_bCCW )
 		{
-			m_bChanged |= m_bFrontCCW != p_bCCW;
+			m_changed |= m_bFrontCCW != p_bCCW;
 			m_bFrontCCW = p_bCCW;
 		}
 		/**
@@ -171,7 +171,7 @@ namespace Castor3D
 		 */
 		inline void SetAntialiasedLines( bool p_bAA )
 		{
-			m_bChanged |= m_bAntialiasedLines != p_bAA;
+			m_changed |= m_bAntialiasedLines != p_bAA;
 			m_bAntialiasedLines = p_bAA;
 		}
 		/**
@@ -196,7 +196,7 @@ namespace Castor3D
 		 */
 		inline void SetDepthBias( float p_fBias )
 		{
-			m_bChanged |= m_fDepthBias != p_fBias;
+			m_changed |= m_fDepthBias != p_fBias;
 			m_fDepthBias = p_fBias;
 		}
 		/**
@@ -214,15 +214,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the depth clipping status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut de depth clipping
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void SetDepthClipping( bool p_bEnable )
+		inline void SetDepthClipping( bool p_enable )
 		{
-			m_bChanged |= m_bDepthClipping != p_bEnable;
-			m_bDepthClipping = p_bEnable;
+			m_changed |= m_bDepthClipping != p_enable;
+			m_bDepthClipping = p_enable;
 		}
 		/**
 		 *\~english
@@ -239,15 +239,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the multisample activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'acitvation du multisample
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void SetMultisample( bool p_bEnable )
+		inline void SetMultisample( bool p_enable )
 		{
-			m_bChanged |= m_bMultisampled != p_bEnable;
-			m_bMultisampled = p_bEnable;
+			m_changed |= m_bMultisampled != p_enable;
+			m_bMultisampled = p_enable;
 		}
 		/**
 		 *\~english
@@ -264,15 +264,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the scissor test activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
 		 *\brief		Définit le statut d'acitvation du scissor test
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void SetScissor( bool p_bEnable )
+		inline void SetScissor( bool p_enable )
 		{
-			m_bChanged |= m_bScissor != p_bEnable;
-			m_bScissor = p_bEnable;
+			m_changed |= m_bScissor != p_enable;
+			m_bScissor = p_enable;
 		}
 
 	protected:
@@ -300,7 +300,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english Tells it has changed.	\~french Dit que l'état a changé.
-		bool m_bChanged;
+		bool m_changed;
 		//!\~english The fill mode.	\~french Définit le mode de remplissage.
 		eFILL_MODE m_eFillMode;
 		//!\~english The culled faces.	\~french Les faces cachées.

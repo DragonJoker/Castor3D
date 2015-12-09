@@ -52,16 +52,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MatrixFrameVariable( ShaderProgramBase * p_pProgram );
+		MatrixFrameVariable( ShaderProgramBase * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_uiOcc		The array dimension
+		 *\param[in]	p_occurences		The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_uiOcc		Les dimensions du tableau
+		 *\param[in]	p_occurences		Les dimensions du tableau
 		 */
-		MatrixFrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc );
+		MatrixFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -156,23 +156,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
-		 *\param[in]	p_mtxValue	The new value
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_mtxValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetValue( Castor::Matrix< T, Rows, Columns > const & p_mtxValue );
+		inline void SetValue( Castor::Matrix< T, Rows, Columns > const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable
-		 *\param[in]	p_mtxValue	The new value
+		 *\param[in]	p_value	The new value
 		 *\param[in]	p_index	The index of the value
 		 *\~french
 		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_mtxValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 *\param[in]	p_index	L'index de la valeur à modifier
 		 */
-		inline void SetValue( Castor::Matrix< T, Rows, Columns > const & p_mtxValue, uint32_t p_index );
+		inline void SetValue( Castor::Matrix< T, Rows, Columns > const & p_value, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the byte size of the variable

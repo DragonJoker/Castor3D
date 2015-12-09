@@ -40,7 +40,7 @@ namespace Dx11Render
 		DxContext( DxRenderSystem & p_renderSystem );
 		virtual ~DxContext();
 
-		virtual void UpdateFullScreen( bool p_bVal );
+		virtual void UpdateFullScreen( bool p_value );
 		virtual Castor::Size GetMaxSize( Castor::Size const & p_size )
 		{
 			return Castor::Size( std::min( p_size.width(), m_size.width() ), std::min( p_size.height(), m_size.height() ) );
@@ -78,7 +78,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::Context::DoSetAlphaFunc
 		 */
-		virtual void DoSetAlphaFunc( Castor3D::eALPHA_FUNC p_eFunc, uint8_t p_byValue );
+		virtual void DoSetAlphaFunc( Castor3D::eALPHA_FUNC p_func, uint8_t p_value );
 		/**
 		 *\copydoc		Castor3D::Context::DoCullFace
 		 */

@@ -48,14 +48,14 @@ ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const &
 	//l_program->CreateFrameVariable( ShaderProgramBase::MapGloss, eSHADER_TYPE_PIXEL );
 	//l_program->CreateFrameVariable( ShaderProgramBase::MapHeight, eSHADER_TYPE_PIXEL );
 
-	//ShaderObjectBaseSPtr l_pObject = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
-	//l_pObject->SetInputType( eTOPOLOGY_POINTS );
-	//l_pObject->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
-	//l_pObject->SetOutputVtxCount( 4 );
+	//ShaderObjectBaseSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
+	//l_object->SetInputType( eTOPOLOGY_POINTS );
+	//l_object->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
+	//l_object->SetOutputVtxCount( 4 );
 	//
-	//GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( m_gl );
-	//GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( m_gl );
-	//std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( m_gl );
+	//GLSL::VariablesBase * l_pVariables = GLSL::GetVariables( GetOpenGl() );
+	//GLSL::ConstantsBase * l_pConstants = GLSL::GetConstants( GetOpenGl() );
+	//std::unique_ptr< GLSL::KeywordsBase > l_pKeywords = GLSL::GetKeywords( GetOpenGl() );
 	//String l_strVersion = l_pKeywords->GetVersion();
 	//String l_strAttribute0 = l_pKeywords->GetAttribute( 0 );
 	//String l_strAttribute1 = l_pKeywords->GetAttribute( 1 );
@@ -81,9 +81,9 @@ ShaderProgramBaseSPtr DxBillboardList::DoGetProgram( RenderTechniqueBase const &
 	//string::replace( l_strGeoShader, cuT( "<matrix_buffer>" ), l_pConstants->Matrices() );
 	//string::replace( l_strGeoShader, cuT( "<scene_buffer>" ), l_pConstants->Scene() );
 	//string::replace( l_strGeoShader, cuT( "<user_buffer>" ), l_pConstants->User() );
-	//string::replace( l_strGeoShader, cuT( "<in_primitives>" ), PRIMITIVES[l_pObject->GetInputType()] );
-	//string::replace( l_strGeoShader, cuT( "<out_primitives>" ), PRIMITIVES[l_pObject->GetOutputType()] );
-	//string::replace( l_strGeoShader, cuT( "<max_vertices>" ), string::to_string( l_pObject->GetOutputVtxCount() ) );
+	//string::replace( l_strGeoShader, cuT( "<in_primitives>" ), PRIMITIVES[l_object->GetInputType()] );
+	//string::replace( l_strGeoShader, cuT( "<out_primitives>" ), PRIMITIVES[l_object->GetOutputType()] );
+	//string::replace( l_strGeoShader, cuT( "<max_vertices>" ), string::to_string( l_object->GetOutputVtxCount() ) );
 	//string::replace( l_strGeoShader, cuT( "<layout>" ), l_pKeywords->GetLayout() );
 	//GLSL::ConstantsBase::Replace( l_strGeoShader );
 

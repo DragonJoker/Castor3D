@@ -23,7 +23,7 @@ namespace Castor3D
 	Context::Context( RenderSystem & p_renderSystem, bool p_invertFinal )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_window( NULL )
-		, m_bInitialised( false )
+		, m_initialised( false )
 		, m_bMultiSampling( false )
 		, m_viewport( Viewport::Ortho( *GetOwner()->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
 	{
@@ -130,7 +130,7 @@ namespace Castor3D
 
 	void Context::Cleanup()
 	{
-		m_bInitialised = false;
+		m_initialised = false;
 		SetCurrent();
 		m_pGeometryBuffers->Cleanup();
 		m_pGeometryBuffers->Destroy();
@@ -175,9 +175,9 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue )
+	void Context::SetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value )
 	{
-		DoSetAlphaFunc( p_eFunc, p_byValue );
+		DoSetAlphaFunc( p_func, p_value );
 	}
 
 	void Context::RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture )

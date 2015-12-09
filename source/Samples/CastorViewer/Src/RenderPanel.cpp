@@ -120,38 +120,38 @@ namespace CastorViewer
 		wxClientDC l_dc( this );
 	}
 
-	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_pWindow )
+	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
 	{
 		m_pRenderWindow.reset();
 
-		if ( p_pWindow )
+		if ( p_window )
 		{
 			Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
 
-			if ( p_pWindow->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
+			if ( p_window->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 			{
 				Castor::Size l_sizeScreen;
 				Castor::System::GetScreenSize( 0, l_sizeScreen );
 				GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
 				GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
-				m_pListener = p_pWindow->GetListener();
-				SceneSPtr l_pScene = p_pWindow->GetScene();
+				m_pListener = p_window->GetListener();
+				SceneSPtr l_pScene = p_window->GetScene();
 				wxDisplay l_wxDisplay;
 				wxRect l_rect( 0, 0, l_sizeScreen.width(), l_sizeScreen.height() );
 
 				if ( l_pScene )
 				{
-					SceneNodeSPtr l_cameraNode = p_pWindow->GetCamera()->GetParent();
+					SceneNodeSPtr l_cameraNode = p_window->GetCamera()->GetParent();
 					m_ptOriginalPosition = l_cameraNode->GetPosition();
 					m_qOriginalOrientation = l_cameraNode->GetOrientation();
 					m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
 					m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
-					m_pRenderWindow = p_pWindow;
-					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow );
+					m_pRenderWindow = p_window;
+					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_window );
 				}
 
 #if HAS_CASTORGUI
-				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_pWindow->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_window->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 #endif
 			}
 		}

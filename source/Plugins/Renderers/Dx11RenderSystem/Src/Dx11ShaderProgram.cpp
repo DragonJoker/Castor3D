@@ -93,11 +93,11 @@ namespace Dx11Render
 	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_type )
 	{
 		ID3DBlob * l_return = NULL;
-		ShaderObjectBaseSPtr l_pObject = m_pShaders[p_type];
+		ShaderObjectBaseSPtr l_object = m_pShaders[p_type];
 
-		if ( l_pObject && l_pObject->GetStatus() == eSHADER_STATUS_COMPILED )
+		if ( l_object && l_object->GetStatus() == eSHADER_STATUS_COMPILED )
 		{
-			l_return = std::static_pointer_cast< DxShaderObject >( l_pObject )->GetCompiled();
+			l_return = std::static_pointer_cast< DxShaderObject >( l_object )->GetCompiled();
 		}
 
 		return l_return;

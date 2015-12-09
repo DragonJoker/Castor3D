@@ -9,16 +9,16 @@ using namespace Castor;
 
 namespace Dx11Render
 {
-	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_pRenderBuffer )
-		: RenderBufferAttachment( p_pRenderBuffer )
-		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
+	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_renderBuffer )
+		: RenderBufferAttachment( p_renderBuffer )
+		, m_dxRenderBuffer( p_renderBuffer->GetDxRenderBuffer() )
 		, m_renderSystem( p_renderSystem )
 	{
 	}
 
-	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer )
-		: RenderBufferAttachment( p_pRenderBuffer )
-		, m_dxRenderBuffer( p_pRenderBuffer->GetDxRenderBuffer() )
+	DxRenderBufferAttachment::DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_renderBuffer )
+		: RenderBufferAttachment( p_renderBuffer )
+		, m_dxRenderBuffer( p_renderBuffer->GetDxRenderBuffer() )
 		, m_renderSystem( p_renderSystem )
 	{
 	}
@@ -57,7 +57,7 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	bool DxRenderBufferAttachment::DoAttach( FrameBufferSPtr p_pFrameBuffer )
+	bool DxRenderBufferAttachment::DoAttach( FrameBufferSPtr p_frameBuffer )
 	{
 		return true;
 	}

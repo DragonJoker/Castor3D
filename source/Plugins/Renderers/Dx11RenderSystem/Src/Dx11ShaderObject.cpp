@@ -25,28 +25,28 @@ namespace Dx11Render
 
 	void DxShaderObject::DestroyProgram()
 	{
-		if ( m_eStatus == eSHADER_STATUS_COMPILED )
+		if ( m_status == eSHADER_STATUS_COMPILED )
 		{
-			m_eStatus = eSHADER_STATUS_NOTCOMPILED;
+			m_status = eSHADER_STATUS_NOTCOMPILED;
 		}
 
 		SafeRelease( m_pCompiled );
 	}
 
-	void DxShaderObject::RetrieveCompilerLog( String & p_strCompilerLog )
+	void DxShaderObject::RetrieveCompilerLog( String & p_compilerLog )
 	{
 		int infologLength = 0;
 
 		if ( infologLength > 0 )
 		{
 			char * infoLog = new char[infologLength];
-			p_strCompilerLog = string::string_cast< xchar >( infoLog );
+			p_compilerLog = string::string_cast< xchar >( infoLog );
 			delete [] infoLog;
 		}
 
-		if ( p_strCompilerLog.size() > 0 )
+		if ( p_compilerLog.size() > 0 )
 		{
-			p_strCompilerLog = p_strCompilerLog.substr( 0, p_strCompilerLog.size() - 1 );
+			p_compilerLog = p_compilerLog.substr( 0, p_compilerLog.size() - 1 );
 		}
 	}
 
@@ -65,19 +65,19 @@ namespace Dx11Render
 		std::string l_strSource;
 		std::string l_strProfile;
 
-		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && m_strLoadedSource.empty(); i-- )
+		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && m_loadedSource.empty(); i-- )
 		{
 			if ( m_renderSystem->CheckSupport( eSHADER_MODEL( i ) ) )
 			{
-				m_strLoadedSource = m_arraySources[i];
+				m_loadedSource = m_arraySources[i];
 				l_strProfile = l_strProfiles[m_type][i];
 			}
 		}
 
-		if ( m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
+		if ( m_status != eSHADER_STATUS_ERROR && !m_loadedSource.empty() )
 		{
-			l_strSource = string::string_cast< char >( m_strLoadedSource );
-			m_eStatus = eSHADER_STATUS_NOTCOMPILED;
+			l_strSource = string::string_cast< char >( m_loadedSource );
+			m_status = eSHADER_STATUS_NOTCOMPILED;
 			ID3DBlob * l_pErrors = NULL;
 			UINT l_uiFlags = 0;
 #if !defined( NDEBUG )
@@ -92,13 +92,13 @@ namespace Dx11Render
 			else if ( l_pErrors )
 			{
 				Logger::LogInfo( string::string_cast< xchar >( reinterpret_cast< char * >( l_pErrors->GetBufferPointer() ) ) );
-				Logger::LogInfo( m_strLoadedSource );
-				m_eStatus = eSHADER_STATUS_ERROR;
-				m_strLoadedSource.clear();
+				Logger::LogInfo( m_loadedSource );
+				m_status = eSHADER_STATUS_ERROR;
+				m_loadedSource.clear();
 			}
 
 			SafeRelease( l_pErrors );
-			l_return = m_eStatus == eSHADER_STATUS_COMPILED;
+			l_return = m_status == eSHADER_STATUS_COMPILED;
 		}
 
 		return l_return;

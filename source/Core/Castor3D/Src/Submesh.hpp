@@ -642,7 +642,7 @@ namespace Castor3D
 		 */
 		inline bool	IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
 		/**
 		 *\~english
@@ -721,7 +721,7 @@ namespace Castor3D
 		//!\~english Pointer over geometry buffers	\~french Pointeur sur les buffers de la géométrie
 		GeometryBuffersSPtr	m_pGeometryBuffers;
 		//!\~english Tells the renderer has been initialised	\~french Dit que le renderer a été initialisé
-		bool m_bInitialised;
+		bool m_initialised;
 		//!\~english The actual draw type	\~french Le type de dessin actuel
 		eTOPOLOGY m_eCurDrawType;
 		//!\~english The previous call draw type	\~french Le type de dessin lors du précédent appel

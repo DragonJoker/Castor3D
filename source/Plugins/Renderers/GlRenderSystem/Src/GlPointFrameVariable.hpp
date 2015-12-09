@@ -30,8 +30,8 @@ namespace GlRender
 		, public GlFrameVariableBase
 	{
 	public:
-		GlPointFrameVariable( OpenGl & p_gl, uint32_t p_uiOcc, GlShaderProgram * p_pProgram = NULL );
-		GlPointFrameVariable( OpenGl & p_gl, Castor3D::PointFrameVariable<T, Count> * p_pVariable );
+		GlPointFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program = NULL );
+		GlPointFrameVariable( OpenGl & p_gl, Castor3D::PointFrameVariable<T, Count> * p_variable );
 		virtual ~GlPointFrameVariable();
 
 		virtual bool Initialise();

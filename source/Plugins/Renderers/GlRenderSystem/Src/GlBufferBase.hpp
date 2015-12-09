@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_BUFFER_BASE_H___
 
 #include "GlRenderSystemPrerequisites.hpp"
+#include "GlBindable.hpp"
 
 namespace GlRender
 {
@@ -34,33 +35,25 @@ namespace GlRender
 	template< typename T >
 	class GlBufferBase
 		: public Castor::NonCopyable
+		, public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
+						   std::function< bool( uint32_t ) > >
 	{
+		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
+									   std::function< bool( uint32_t ) > >;
+
 	public:
-		GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget );
+		GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_target );
 		virtual ~GlBufferBase();
 
-		bool Create();
-		void Destroy();
-		bool Initialise( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		bool Initialise( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
 		void Cleanup();
-		bool Bind();
-		void Unbind();
-		bool Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
-		T  * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags );
+		bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
+		T  * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
 		T  * Lock( eGL_LOCK p_access );
 		bool Unlock();
 
-		inline uint32_t GetGlIndex()const
-		{
-			return m_uiGlIndex;
-		}
-
 	private:
-		uint32_t m_uiGlIndex;
-		eGL_BUFFER_TARGET m_eTarget;
-
-	protected:
-		OpenGl & m_gl;
+		eGL_BUFFER_TARGET m_target;
 	};
 }
 

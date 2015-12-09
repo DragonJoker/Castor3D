@@ -63,9 +63,9 @@ namespace Castor3D
 		DoClear( l_targets );
 	}
 
-	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_mode, eFRAMEBUFFER_TARGET p_eTarget )
+	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_mode, eFRAMEBUFFER_TARGET p_target )
 	{
-		bool l_return = DoBind( p_eTarget );
+		bool l_return = DoBind( p_target );
 
 		if ( l_return && !m_attaches.empty() && p_mode == eFRAMEBUFFER_MODE_AUTOMATIC )
 		{

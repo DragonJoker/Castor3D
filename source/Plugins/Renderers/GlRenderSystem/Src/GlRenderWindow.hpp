@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_WINDOW_RENDERER_H___
 #define ___GL_WINDOW_RENDERER_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
 #include <RenderWindow.hpp>
 
@@ -26,6 +26,7 @@ namespace GlRender
 {
 	class GlRenderWindow
 		: public Castor3D::RenderWindow
+		, public Holder
 	{
 	public:
 		GlRenderWindow( OpenGl & p_gl, GlRenderSystem * p_renderSystem );
@@ -50,7 +51,6 @@ namespace GlRender
 		virtual void DoEndScene();
 
 	protected:
-		OpenGl & m_gl;
 		GlRenderSystem * m_renderSystem;
 	};
 }

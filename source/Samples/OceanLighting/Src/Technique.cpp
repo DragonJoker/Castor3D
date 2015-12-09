@@ -173,7 +173,7 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_vboBuffer[2] = 0.0f;
 	m_vboBuffer[3] = 0.0f;
 	m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-	m_pColorBuffer = m_renderSystem->CreateDynamicTexture();
+	m_pColorBuffer = m_renderSystem->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
 	m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
 	m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
@@ -195,19 +195,19 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_pTexIrradiance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 	m_pTexInscatter = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 	m_pTexTransmittance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-	m_pTexSky = m_pRenderTarget->CreateDynamicTexture();
-	m_pTexNoise = m_pRenderTarget->CreateDynamicTexture();
+	m_pTexSky = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexNoise = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 #if ENABLE_FFT
 	BufferElementDeclaration l_quadVertexDeclarationElements[] =
 	{
 		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_4FLOATS )
 	};
-	m_pTexSpectrum_1_2 = m_pRenderTarget->CreateDynamicTexture();
-	m_pTexSpectrum_3_4 = m_pRenderTarget->CreateDynamicTexture();
-	m_pTexSlopeVariance = m_pRenderTarget->CreateDynamicTexture();
-	m_pTexFFTA = m_pRenderTarget->CreateDynamicTexture();
-	m_pTexFFTB = m_pRenderTarget->CreateDynamicTexture();
-	m_pTexButterfly = m_pRenderTarget->CreateDynamicTexture();
+	m_pTexSpectrum_1_2 = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexSpectrum_3_4 = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexSlopeVariance = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexFFTA = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexFFTB = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexButterfly = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_variancesFbo = m_pRenderTarget->CreateFrameBuffer();
 	m_fftFbo1 = m_pRenderTarget->CreateFrameBuffer();
 	m_fftFbo2 = m_pRenderTarget->CreateFrameBuffer();
@@ -254,7 +254,7 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	std::memcpy( l_pIdxBufferFtx->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
 	std::memcpy( l_pIdxBufferFty->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
 #else
-	m_pTexWave = m_pRenderTarget->CreateDynamicTexture();
+	m_pTexWave = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 #endif
 	m_fbo = m_pRenderTarget->CreateFrameBuffer();
 	m_pAttachSky = m_pRenderTarget->CreateAttachment( m_pTexSky );
