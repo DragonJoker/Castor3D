@@ -280,38 +280,38 @@ namespace Castor3D
 		m_sizeChanged = false;
 	}
 
-	ShaderProgramBaseSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_uiFlags )
+	ShaderProgramBaseSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_flags )
 	{
 		// Remove unwanted flags
-		p_uiFlags &= ~eTEXTURE_CHANNEL_AMBIENT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_DIFFUSE;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_NORMAL;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_SPECULAR;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_GLOSS;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_HEIGHT;
+		p_flags &= ~eTEXTURE_CHANNEL_AMBIENT;
+		p_flags &= ~eTEXTURE_CHANNEL_DIFFUSE;
+		p_flags &= ~eTEXTURE_CHANNEL_NORMAL;
+		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
+		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
+		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
 
 		// Get shader
-		return DoGetProgram( p_uiFlags, m_mapPanelPrograms );
+		return DoGetProgram( p_flags, m_mapPanelPrograms );
 	}
 
-	ShaderProgramBaseSPtr OverlayRenderer::DoGetTextProgram( uint32_t p_uiFlags )
+	ShaderProgramBaseSPtr OverlayRenderer::DoGetTextProgram( uint32_t p_flags )
 	{
 		// Remove unwanted flags
-		p_uiFlags &= ~eTEXTURE_CHANNEL_AMBIENT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_DIFFUSE;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_NORMAL;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_SPECULAR;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_GLOSS;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_HEIGHT;
-		p_uiFlags |= eTEXTURE_CHANNEL_TEXT;
+		p_flags &= ~eTEXTURE_CHANNEL_AMBIENT;
+		p_flags &= ~eTEXTURE_CHANNEL_DIFFUSE;
+		p_flags &= ~eTEXTURE_CHANNEL_NORMAL;
+		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
+		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
+		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
+		p_flags |= eTEXTURE_CHANNEL_TEXT;
 
 		// Get shader
-		return DoGetProgram( p_uiFlags, m_mapTextPrograms );
+		return DoGetProgram( p_flags, m_mapTextPrograms );
 	}
 
-	ShaderProgramBaseSPtr OverlayRenderer::DoGetProgram( uint32_t p_uiFlags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs )
+	ShaderProgramBaseSPtr OverlayRenderer::DoGetProgram( uint32_t p_flags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs )
 	{
-		auto && l_it = p_programs.find( p_uiFlags );
+		auto && l_it = p_programs.find( p_flags );
 		ShaderProgramBaseSPtr l_return;
 
 		if ( l_it != p_programs.end() )
@@ -321,12 +321,12 @@ namespace Castor3D
 		else
 		{
 			// Since it does not exist yet, create it and initialise it
-			l_return = DoCreateProgram( p_uiFlags );
+			l_return = DoCreateProgram( p_flags );
 
 			if ( l_return )
 			{
 				l_return->Initialise();
-				p_programs.insert( std::make_pair( p_uiFlags, l_return ) );
+				p_programs.insert( std::make_pair( p_flags, l_return ) );
 			}
 		}
 

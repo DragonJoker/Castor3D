@@ -13,10 +13,14 @@ using namespace Castor;
 namespace GlRender
 {
 	GlShaderObject::GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, eSHADER_TYPE p_type )
-		:	ShaderObjectBase( p_parent, p_type )
-		,	m_shaderObject( 0 )
-		,	m_shaderProgram( NULL )
-		,	m_gl( p_gl )
+		: ShaderObjectBase( p_parent, p_type )
+		, Object( p_gl,
+				  "GlShaderObject",
+				  std::bind( &OpenGl::CreateShader, std::ref( p_gl ), p_gl.Get( p_type ) ),
+				  std::bind( &OpenGl::DeleteShader, std::ref( p_gl ), std::placeholders::_1 ),
+				  std::bind( &OpenGl::IsShader, std::ref( p_gl ), std::placeholders::_1 )
+				  )
+		, m_shaderProgram( NULL )
 	{
 	}
 
@@ -24,116 +28,160 @@ namespace GlRender
 	{
 	}
 
+	void GlShaderObject::CreateProgram()
+	{
+		ObjectType::Create();
+	}
+
 	void GlShaderObject::DestroyProgram()
 	{
 		Detach();
 
-		if ( m_eStatus == eSHADER_STATUS_COMPILED )
+		if ( m_status == eSHADER_STATUS_COMPILED )
 		{
-			glUntrack( m_gl, this );
-			m_gl.DeleteShader( m_shaderObject );
-			m_eStatus = eSHADER_STATUS_NOTCOMPILED;
+			ObjectType::Destroy();
+			m_status = eSHADER_STATUS_NOTCOMPILED;
 		}
 	}
 
-	void GlShaderObject::RetrieveCompilerLog( String & p_strCompilerLog )
+	void GlShaderObject::RetrieveCompilerLog( String & p_compilerLog )
 	{
-		int infologLength = 0;
-		int charsWritten  = 0;
-		m_gl.GetShaderiv( m_shaderObject, eGL_SHADER_STATUS_INFO_LOG_LENGTH, & infologLength );
+		int l_infologLength = 0;
+		int l_charsWritten  = 0;
+		GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_charsWritten );
 
-		if ( infologLength > 0 )
+		if ( l_infologLength > 0 )
 		{
-			char * infoLog = new char[infologLength];
-			m_gl.GetShaderInfoLog( m_shaderObject, infologLength, & charsWritten, infoLog );
-			p_strCompilerLog = string::string_cast< xchar >( infoLog );
+			char * infoLog = new char[l_infologLength];
+			GetOpenGl().GetShaderInfoLog( GetGlName(), l_infologLength, &l_charsWritten, infoLog );
+			p_compilerLog = string::string_cast< xchar >( infoLog );
 			delete [] infoLog;
 		}
 
-		if ( p_strCompilerLog.size() > 0 )
+		if ( p_compilerLog.size() > 0 )
 		{
-			p_strCompilerLog = p_strCompilerLog.substr( 0, p_strCompilerLog.size() - 1 );
-		}
-	}
-
-	void GlShaderObject::CreateProgram()
-	{
-		if ( m_pParent->GetOwner()->HasShaderType( m_type ) )
-		{
-			m_shaderObject = m_gl.CreateShader( m_gl.Get( m_type ) );
-			glTrack( m_gl, GlShaderObject, this );
+			p_compilerLog = p_compilerLog.substr( 0, p_compilerLog.size() - 1 );
 		}
 	}
 
 	bool GlShaderObject::Compile()
 	{
 		bool l_return = false;
-		m_strLoadedSource.clear();
+		String l_loadedSource;
 
-		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && m_strLoadedSource.empty(); i-- )
+		for ( int i = eSHADER_MODEL_5; i >= eSHADER_MODEL_1 && l_loadedSource.empty(); i-- )
 		{
-			if ( m_pParent->GetOwner()->CheckSupport( eSHADER_MODEL( i ) ) )
+			if ( m_parent->GetOwner()->CheckSupport( eSHADER_MODEL( i ) ) )
 			{
-				m_strLoadedSource = m_arraySources[i];
+				l_loadedSource = m_arraySources[i];
 
-				if ( !m_strLoadedSource.empty() )
+				if ( !l_loadedSource.empty() )
 				{
 					m_eShaderModel = eSHADER_MODEL( i );
 				}
 			}
 		}
 
-		if ( m_eStatus != eSHADER_STATUS_ERROR && !m_strLoadedSource.empty() )
+		if ( m_status != eSHADER_STATUS_ERROR && !l_loadedSource.empty() && l_loadedSource != m_loadedSource )
 		{
 			l_return = true;
+			m_loadedSource = l_loadedSource;
 
-			if ( m_pParent->GetOwner()->HasShaderType( m_type ) )
+			if ( m_parent->GetOwner()->HasShaderType( m_type ) )
 			{
-				m_eStatus = eSHADER_STATUS_NOTCOMPILED;
-				int l_iCompiled = 0;
-				int l_iLength = int( m_strLoadedSource.size() );
-				std::string l_strTmp = string::string_cast< char >( m_strLoadedSource );
-				std::vector< char > l_pszTmp( m_strLoadedSource.size() + 1 );
+				m_status = eSHADER_STATUS_NOTCOMPILED;
+				int l_compiled = 0;
+				int l_iLength = int( m_loadedSource.size() );
+				std::string l_tmp = string::string_cast< char >( m_loadedSource );
+				std::vector< char > l_pszTmp( m_loadedSource.size() + 1 );
 				char * l_buffer = l_pszTmp.data();
 #if defined( _MSC_VER )
-				strncpy_s( l_buffer, m_strLoadedSource.size() + 1, l_strTmp.c_str(), l_strTmp.size() );
+				strncpy_s( l_buffer, m_loadedSource.size() + 1, l_tmp.c_str(), l_tmp.size() );
 #else
-				strncpy( l_buffer, l_strTmp.c_str(), l_strTmp.size() );
+				strncpy( l_buffer, l_tmp.c_str(), l_tmp.size() );
 #endif
-				l_return &= m_gl.ShaderSource( m_shaderObject, 1, const_cast< const char ** >( &l_buffer ), & l_iLength );
-				l_return &= m_gl.CompileShader( m_shaderObject );
-				l_return &= m_gl.GetShaderiv( m_shaderObject, eGL_SHADER_STATUS_COMPILE, & l_iCompiled );
+				l_return = GetOpenGl().ShaderSource( GetGlName(), 1, const_cast< const char ** >( &l_buffer ), &l_iLength );
 
-				if ( l_iCompiled != 0 )
+				if ( l_return )
 				{
-					m_eStatus = eSHADER_STATUS_COMPILED;
+					l_return = GetOpenGl().CompileShader( GetGlName() );
+
+					if ( !l_return )
+					{
+						Logger::LogError( cuT( "GlShaderObject:: Compile - Shader source was not compiled." ) );
+					}
 				}
 				else
 				{
-					m_eStatus = eSHADER_STATUS_ERROR;
+					Logger::LogError( cuT( "GlShaderObject:: Compile - Shader source was not loaded." ) );
+				}
+
+				if ( l_return )
+				{
+					l_return = GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_COMPILE, &l_compiled );
+
+					if ( !l_return )
+					{
+						Logger::LogError( cuT( "GlShaderObject:: Compile - Shader compilation status retrieval failed." ) );
+					}
+					else
+					{
+						Logger::LogDebug( StringStream() << cuT( "GlShaderObject:: Compile - Shader compilation status : " ) << l_compiled );
+					}
+				}
+
+				if ( l_return && l_compiled != 0 )
+				{
+					m_status = eSHADER_STATUS_COMPILED;
+				}
+				else
+				{
+					m_status = eSHADER_STATUS_ERROR;
 				}
 
 				RetrieveCompilerLog( m_compilerLog );
 
-				if ( m_compilerLog.size() > 0 )
+				if ( !m_compilerLog.empty() )
 				{
-					if ( m_eStatus == eSHADER_STATUS_ERROR )
+					if ( m_status == eSHADER_STATUS_ERROR )
 					{
 						Logger::LogError( m_compilerLog );
-						StringStream l_source;
-						l_source << format::line_prefix();
-						l_source << m_strLoadedSource;
-						Logger::LogDebug( l_source.str() );
-						m_strLoadedSource.clear();
 					}
 					else
 					{
 						Logger::LogInfo( m_compilerLog );
 					}
+
+					StringStream l_source;
+					l_source << format::line_prefix();
+					l_source << m_loadedSource;
+					Logger::LogDebug( l_source.str() );
+					m_loadedSource.clear();
+				}
+				else if ( m_status == eSHADER_STATUS_ERROR )
+				{
+					Logger::LogError( cuT( "GlShaderObject:: Compile - Compilaton failed with an unknown error." ) );
+					StringStream l_source;
+					l_source << format::line_prefix();
+					l_source << m_loadedSource;
+					Logger::LogDebug( l_source.str() );
+					m_loadedSource.clear();
 				}
 
-				l_return = m_eStatus == eSHADER_STATUS_COMPILED;
+				l_return = m_status == eSHADER_STATUS_COMPILED;
 			}
+			else
+			{
+				Logger::LogError( "GlShaderObject::Compile - Shader type not supported by currently loaded API." );
+			}
+		}
+		else if ( m_loadedSource.empty() )
+		{
+			Logger::LogError( "GlShaderObject::Compile - No shader source." );
+		}
+		else
+		{
+			Logger::LogWarning( "GlShaderObject::Compile - Shader is already compiled." );
 		}
 
 		return l_return;
@@ -141,9 +189,9 @@ namespace GlRender
 
 	void GlShaderObject::Detach()
 	{
-		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_shaderProgram && m_pParent->GetOwner()->HasShaderType( m_type ) )
+		if ( m_status == eSHADER_STATUS_COMPILED && m_shaderProgram && m_parent->GetOwner()->HasShaderType( m_type ) )
 		{
-			m_gl.DetachShader( m_shaderProgram->GetGlProgram(), m_shaderObject );
+			GetOpenGl().DetachShader( m_shaderProgram->GetGlName(), GetGlName() );
 			m_shaderProgram = NULL;
 			// if you get an error here, you deleted the Program object first and then
 			// the ShaderObject! Always delete ShaderPrograms last!
@@ -154,18 +202,18 @@ namespace GlRender
 	{
 		Detach();
 
-		if ( m_eStatus == eSHADER_STATUS_COMPILED && m_pParent->GetOwner()->HasShaderType( m_type ) )
+		if ( m_status == eSHADER_STATUS_COMPILED && m_parent->GetOwner()->HasShaderType( m_type ) )
 		{
 			m_shaderProgram = &static_cast< GlShaderProgram & >( p_program );
-			m_gl.AttachShader( m_shaderProgram->GetGlProgram(), m_shaderObject );
+			GetOpenGl().AttachShader( m_shaderProgram->GetGlName(), GetGlName() );
 
 			//if( m_type == eSHADER_TYPE_GEOMETRY )
 			//{
 			//	int l_iTmp;
-			//	m_gl.GetIntegerv( eGL_GETINTEGER_PARAM_MAX_GEOMETRY_OUTPUT_VERTICES,	&l_iTmp );
-			//	m_gl.ProgramParameteri( m_shaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_INPUT_TYPE,	m_gl.Get( m_eInputType )						);
-			//	m_gl.ProgramParameteri( m_shaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_OUTPUT_TYPE,	m_gl.Get( m_eOutputType )						);
-			//	m_gl.ProgramParameteri( m_shaderProgram->GetGlProgram(), eGL_PROGRAM_PARAM_GEOMETRY_VERTICES_OUT,	std::min< int >( m_uiOutputVtxCount, l_iTmp )	);
+			//	GetOpenGl().GetIntegerv( eGL_GETINTEGER_PARAM_MAX_GEOMETRY_OUTPUT_VERTICES,	&l_iTmp );
+			//	GetOpenGl().ProgramParameteri( m_shaderProgram->GetGlName(), eGL_PROGRAM_PARAM_GEOMETRY_INPUT_TYPE, GetOpenGl().Get( m_eInputType ) );
+			//	GetOpenGl().ProgramParameteri( m_shaderProgram->GetGlName(), eGL_PROGRAM_PARAM_GEOMETRY_OUTPUT_TYPE, GetOpenGl().Get( m_eOutputType ) );
+			//	GetOpenGl().ProgramParameteri( m_shaderProgram->GetGlName(), eGL_PROGRAM_PARAM_GEOMETRY_VERTICES_OUT, std::min< int >( m_uiOutputVtxCount, l_iTmp ) );
 			//}
 		}
 	}
@@ -179,14 +227,14 @@ namespace GlRender
 	{
 		uint32_t l_uiReturn = uint32_t( eGL_INVALID_INDEX );
 
-		if ( m_eStatus == eSHADER_STATUS_COMPILED )
+		if ( m_status == eSHADER_STATUS_COMPILED )
 		{
 			UIntStrMap::iterator l_it = m_mapParamsByName.find( p_name );
 
 			if ( l_it == m_mapParamsByName.end() )
 			{
-				uint32_t l_uiProgram = m_shaderProgram->GetGlProgram();
-				m_mapParamsByName.insert( std::make_pair( p_name, m_gl.GetUniformLocation( l_uiProgram, string::string_cast< char >( p_name ).c_str() ) ) );
+				uint32_t l_program = m_shaderProgram->GetGlName();
+				m_mapParamsByName.insert( std::make_pair( p_name, GetOpenGl().GetUniformLocation( l_program, string::string_cast< char >( p_name ).c_str() ) ) );
 				l_it = m_mapParamsByName.find( p_name );
 			}
 
@@ -196,23 +244,23 @@ namespace GlRender
 		return l_uiReturn;
 	}
 
-	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_mtxValue )
+	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value )
 	{
-		uint32_t l_uiParam = GetParameter( p_name );
+		uint32_t l_param = GetParameter( p_name );
 
-		if ( l_uiParam != eGL_INVALID_INDEX )
+		if ( l_param != eGL_INVALID_INDEX )
 		{
-			m_gl.SetUniformMatrix4x4v( l_uiParam, 1, false, p_mtxValue.const_ptr() );
+			GetOpenGl().SetUniformMatrix4x4v( l_param, 1, false, p_value.const_ptr() );
 		}
 	}
 
-	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_mtxValue )
+	void GlShaderObject::SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value )
 	{
-		uint32_t l_uiParam = GetParameter( p_name );
+		uint32_t l_param = GetParameter( p_name );
 
-		if ( l_uiParam != eGL_INVALID_INDEX )
+		if ( l_param != eGL_INVALID_INDEX )
 		{
-			m_gl.SetUniformMatrix3x3v( l_uiParam, 1, false, p_mtxValue.const_ptr() );
+			GetOpenGl().SetUniformMatrix3x3v( l_param, 1, false, p_value.const_ptr() );
 		}
 	}
 }

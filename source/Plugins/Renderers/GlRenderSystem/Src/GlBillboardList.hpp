@@ -18,13 +18,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_BILLBOARD_LIST_H___
 #define ___GL_BILLBOARD_LIST_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
+
 #include <BillboardList.hpp>
 
 namespace GlRender
 {
 	class GlBillboardList
-		:	public Castor3D::BillboardList
+		: public Castor3D::BillboardList
+		, public Holder
 	{
 	public:
 		GlBillboardList( Castor3D::SceneSPtr p_scene, GlRenderSystem & p_renderSystem, OpenGl & p_gl );
@@ -33,9 +35,6 @@ namespace GlRender
 	private:
 		virtual bool DoInitialise();
 		virtual Castor3D::ShaderProgramBaseSPtr DoGetProgram( Castor3D::RenderTechniqueBase const & p_technique, uint32_t p_flags );
-
-	private:
-		OpenGl & m_gl;
 	};
 }
 

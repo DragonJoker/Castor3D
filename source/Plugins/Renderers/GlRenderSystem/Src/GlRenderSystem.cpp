@@ -9,12 +9,9 @@
 #include "GlPipeline.hpp"
 #include "GlContext.hpp"
 #include "GlBillboardList.hpp"
-#include "GlVertexArray.hpp"
-#include "GlIndexArray.hpp"
 #include "GlVertexBufferObject.hpp"
 #include "GlIndexBufferObject.hpp"
 #include "GlMatrixBufferObject.hpp"
-#include "Gl3VertexBufferObject.hpp"
 #include "GlGeometryBuffers.hpp"
 #include "GlDynamicTexture.hpp"
 #include "GlStaticTexture.hpp"
@@ -33,15 +30,15 @@ namespace GlRender
 {
 	GlRenderSystem::GlRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, eRENDERER_TYPE_OPENGL )
-		, m_iOpenGlMajor( 0 )
-		, m_iOpenGlMinor( 0 )
+		, m_openGlMajor( 0 )
+		, m_openGlMinor( 0 )
 		, m_useVertexBufferObjects( false )
 		, m_extensionsInit( false )
-		, m_gl( *this )
+		, m_openGl( *this )
 	{
 		Logger::LogInfo( cuT( "GlRenderSystem::GlRenderSystem" ) );
 		m_bAccumBuffer = true;
-		m_pipelineImpl = std::make_shared< GlPipelineImpl >( m_gl, *m_pipeline );
+		m_pipelineImpl = std::make_shared< GlPipelineImpl >( GetOpenGl(), *m_pipeline );
 		m_pipeline->UpdateImpl();
 	}
 
@@ -52,42 +49,42 @@ namespace GlRender
 
 	void GlRenderSystem::CheckShaderSupport()
 	{
-		m_useShader[eSHADER_TYPE_COMPUTE] = m_gl.HasCSh();
-		m_useShader[eSHADER_TYPE_HULL] = m_gl.HasTSh();
-		m_useShader[eSHADER_TYPE_DOMAIN] = m_gl.HasTSh();
-		m_useShader[eSHADER_TYPE_GEOMETRY] = m_gl.HasGSh();
-		m_useShader[eSHADER_TYPE_PIXEL] = m_gl.HasPSh();
-		m_useShader[eSHADER_TYPE_VERTEX] = m_gl.HasVSh();
+		m_useShader[eSHADER_TYPE_COMPUTE] = GetOpenGl().HasCSh();
+		m_useShader[eSHADER_TYPE_HULL] = GetOpenGl().HasTSh();
+		m_useShader[eSHADER_TYPE_DOMAIN] = GetOpenGl().HasTSh();
+		m_useShader[eSHADER_TYPE_GEOMETRY] = GetOpenGl().HasGSh();
+		m_useShader[eSHADER_TYPE_PIXEL] = GetOpenGl().HasPSh();
+		m_useShader[eSHADER_TYPE_VERTEX] = GetOpenGl().HasVSh();
 	}
 
 	bool GlRenderSystem::InitOpenGlExtensions()
 	{
 		if ( !m_extensionsInit )
 		{
-			if ( !m_gl.Initialise() )
+			if ( !GetOpenGl().Initialise() )
 			{
 				m_extensionsInit = false;
 			}
 			else
 			{
-				Logger::LogInfo( cuT( "Vendor : " ) + m_gl.GetVendor()	);
-				Logger::LogInfo( cuT( "Renderer : " ) + m_gl.GetRenderer()	);
-				Logger::LogInfo( cuT( "OpenGL Version : " ) + m_gl.GetStrVersion()	);
+				Logger::LogInfo( cuT( "Vendor : " ) + GetOpenGl().GetVendor()	);
+				Logger::LogInfo( cuT( "Renderer : " ) + GetOpenGl().GetRenderer()	);
+				Logger::LogInfo( cuT( "OpenGL Version : " ) + GetOpenGl().GetStrVersion()	);
 				m_extensionsInit = true;
-				m_bInstancing = m_gl.HasInstancing();
+				m_bInstancing = GetOpenGl().HasInstancing();
 
-				m_iOpenGlMajor = m_gl.GetVersion() / 10;
-				m_iOpenGlMinor = m_gl.GetVersion() % 10;
+				m_openGlMajor = GetOpenGl().GetVersion() / 10;
+				m_openGlMinor = GetOpenGl().GetVersion() % 10;
 
-				Logger::LogInfo( StringStream() << cuT( "Using version " ) << m_iOpenGlMajor << cuT( "." ) << m_iOpenGlMinor << cuT( " core functions" ) );
-				m_useShader[eSHADER_TYPE_COMPUTE] = m_gl.HasCSh();
-				m_useShader[eSHADER_TYPE_HULL] = m_gl.HasTSh();
-				m_useShader[eSHADER_TYPE_DOMAIN] = m_gl.HasTSh();
-				m_useShader[eSHADER_TYPE_GEOMETRY] = m_gl.HasGSh();
-				m_useShader[eSHADER_TYPE_PIXEL] = m_gl.HasPSh();
-				m_useShader[eSHADER_TYPE_VERTEX] = m_gl.HasVSh();
-				m_bNonPowerOfTwoTextures = m_gl.HasNonPowerOfTwoTextures();
-				REQUIRE( m_useShader[eSHADER_TYPE_VERTEX] && m_useShader[eSHADER_TYPE_PIXEL] && m_useShader[eSHADER_TYPE_GEOMETRY] );
+				Logger::LogInfo( StringStream() << cuT( "Using version " ) << m_openGlMajor << cuT( "." ) << m_openGlMinor << cuT( " core functions" ) );
+				m_useShader[eSHADER_TYPE_COMPUTE] = GetOpenGl().HasCSh();
+				m_useShader[eSHADER_TYPE_HULL] = GetOpenGl().HasTSh();
+				m_useShader[eSHADER_TYPE_DOMAIN] = GetOpenGl().HasTSh();
+				m_useShader[eSHADER_TYPE_GEOMETRY] = GetOpenGl().HasGSh();
+				m_useShader[eSHADER_TYPE_PIXEL] = GetOpenGl().HasPSh();
+				m_useShader[eSHADER_TYPE_VERTEX] = GetOpenGl().HasVSh();
+				m_bNonPowerOfTwoTextures = GetOpenGl().HasNonPowerOfTwoTextures();
+				REQUIRE( m_useShader[eSHADER_TYPE_VERTEX] && m_useShader[eSHADER_TYPE_PIXEL]/* && m_useShader[eSHADER_TYPE_GEOMETRY]*/ );
 			}
 		}
 
@@ -101,23 +98,23 @@ namespace GlRender
 		switch ( p_eProfile )
 		{
 		case eSHADER_MODEL_1:
-			l_return = m_gl.HasVSh();
+			l_return = GetOpenGl().HasVSh();
 			break;
 
 		case eSHADER_MODEL_2:
-			l_return = m_gl.HasPSh();
+			l_return = GetOpenGl().HasPSh();
 			break;
 
 		case eSHADER_MODEL_3:
-			l_return = m_gl.HasGSh();
+			l_return = GetOpenGl().HasGSh();
 			break;
 
 		case eSHADER_MODEL_4:
-			l_return = m_gl.HasTSh();
+			l_return = GetOpenGl().HasTSh();
 			break;
 
 		case eSHADER_MODEL_5:
-			l_return = m_gl.HasCSh();
+			l_return = GetOpenGl().HasCSh();
 			break;
 
 		default:
@@ -129,151 +126,112 @@ namespace GlRender
 
 	ContextSPtr GlRenderSystem::CreateContext()
 	{
-		return std::make_shared< GlContext >( *this, m_gl );
+		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
 	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
 	{
-		return std::make_shared< GlGeometryBuffers >( m_gl, std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) );
+		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) );
 	}
 
 	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()
 	{
-		return std::make_shared< GlDepthStencilState >( this, m_gl );
+		return std::make_shared< GlDepthStencilState >( this, GetOpenGl() );
 	}
 
 	RasteriserStateSPtr GlRenderSystem::CreateRasteriserState()
 	{
-		return std::make_shared< GlRasteriserState >( this, m_gl );
+		return std::make_shared< GlRasteriserState >( this, GetOpenGl() );
 	}
 
 	BlendStateSPtr GlRenderSystem::CreateBlendState()
 	{
-		return std::make_shared< GlBlendState >( this, m_gl );
+		return std::make_shared< GlBlendState >( this, GetOpenGl() );
 	}
 
 	FrameVariableBufferSPtr GlRenderSystem::CreateFrameVariableBuffer( Castor::String const & p_name )
 	{
-		return std::make_shared< GlFrameVariableBuffer >( m_gl, p_name, *this );
+		return std::make_shared< GlFrameVariableBuffer >( GetOpenGl(), p_name, *this );
 	}
 
 	BillboardListSPtr GlRenderSystem::CreateBillboardsList( Castor3D::SceneSPtr p_scene )
 	{
-		return std::make_shared< GlBillboardList >( p_scene, *this, m_gl );
+		return std::make_shared< GlBillboardList >( p_scene, *this, GetOpenGl() );
 	}
 
 	SamplerSPtr GlRenderSystem::CreateSampler( Castor::String const & p_name )
 	{
-		return std::make_shared< GlSampler >( m_gl, this, p_name );
+		return std::make_shared< GlSampler >( GetOpenGl(), this, p_name );
 	}
 
 	RenderTargetSPtr GlRenderSystem::CreateRenderTarget( eTARGET_TYPE p_type )
 	{
-		return std::make_shared< GlRenderTarget >( m_gl, this, p_type );
+		return std::make_shared< GlRenderTarget >( GetOpenGl(), this, p_type );
 	}
 
 	RenderWindowSPtr GlRenderSystem::CreateRenderWindow()
 	{
-		return std::make_shared< GlRenderWindow >( m_gl, this );
+		return std::make_shared< GlRenderWindow >( GetOpenGl(), this );
 	}
 
 	ShaderProgramBaseSPtr GlRenderSystem::CreateGlslShaderProgram()
 	{
-		return std::make_shared< GlShaderProgram >( m_gl, *this );
+		return std::make_shared< GlShaderProgram >( GetOpenGl(), *this );
 	}
 
 	ShaderProgramBaseSPtr GlRenderSystem::CreateShaderProgram()
 	{
-		return std::make_shared< GlShaderProgram >( m_gl, *this );
+		return std::make_shared< GlShaderProgram >( GetOpenGl(), *this );
 	}
 
 	OverlayRendererSPtr GlRenderSystem::CreateOverlayRenderer()
 	{
-		return std::make_shared< GlOverlayRenderer >( m_gl, *this );
+		return std::make_shared< GlOverlayRenderer >( GetOpenGl(), *this );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > GlRenderSystem::CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer )
 	{
-		std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > l_return;
-
-		if ( m_iOpenGlMajor < 3 && !UseVertexBufferObjects() )
-		{
-			l_return = std::make_shared< GlIndexArray >( *this, m_gl, p_buffer );
-		}
-		else
-		{
-			l_return = std::make_shared< GlIndexBufferObject >( *this, m_gl, p_buffer );
-		}
-
-		return l_return;
+		return std::make_shared< GlIndexBufferObject >( *this, GetOpenGl(), p_buffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateVertexBuffer( BufferDeclaration const & p_declaration, CpuBuffer< uint8_t > * p_buffer )
 	{
-		std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > l_return;
-
-		if ( m_iOpenGlMajor < 3 )
-		{
-			if ( UseVertexBufferObjects() )
-			{
-				l_return = std::make_shared< GlVertexBufferObject >( *this, m_gl, p_declaration, p_buffer );
-			}
-			else
-			{
-				l_return = std::make_shared< GlVertexArray >( *this, m_gl, p_declaration, p_buffer );
-			}
-		}
-		else
-		{
-			l_return = std::make_shared< Gl3VertexBufferObject >( *this, m_gl, p_declaration, p_buffer );
-		}
-
-		return l_return;
+		return std::make_shared< GlVertexBufferObject >( *this, GetOpenGl(), p_declaration, p_buffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< real > > GlRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_buffer )
 	{
-		return std::make_shared< GlMatrixBufferObject >( *this, m_gl, p_buffer );
+		return std::make_shared< GlMatrixBufferObject >( *this, GetOpenGl(), p_buffer );
 	}
 
 	StaticTextureSPtr GlRenderSystem::CreateStaticTexture()
 	{
-		return std::make_shared< GlStaticTexture >( m_gl, *this );
+		return std::make_shared< GlStaticTexture >( GetOpenGl(), *this );
 	}
 
-	DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture()
+	DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		return std::make_shared< GlDynamicTexture >( m_gl, *this );
+		return std::make_shared< GlDynamicTexture >( GetOpenGl(), *this, p_cpuAccess, p_gpuAccess );
 	}
 
 	void GlRenderSystem::DoInitialise()
 	{
-		if ( !m_bInitialised )
+		if ( !m_initialised )
 		{
-			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
-			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
 			InitOpenGlExtensions();
 
-			m_useVertexBufferObjects = m_gl.HasVbo();
-
-			if ( m_useVertexBufferObjects )
-			{
-				Logger::LogInfo( cuT( "Using Vertex Buffer Objects" ) );
-			}
-
-			m_bInitialised = true;
+			m_useVertexBufferObjects = GetOpenGl().HasVbo();
+			m_initialised = true;
 			CheckShaderSupport();
 			m_pipeline->Initialise();
-			Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
-			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 		}
 	}
 
 	void GlRenderSystem::DoCleanup()
 	{
 		m_extensionsInit = false;
-		m_bInitialised = false;
-		m_gl.Cleanup();
+		m_initialised = false;
+		GetOpenGl().Cleanup();
 	}
 
 #if C3D_TRACE_OBJECTS

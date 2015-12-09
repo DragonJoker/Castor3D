@@ -325,30 +325,26 @@ namespace Castor3D
 		C3D_API virtual OverlayRendererSPtr CreateOverlayRenderer() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_type	The texture type
-		 *\return		The created texture, dependant of current API
+		 *\brief		Creates a texture.
+		 *\return		The created texture, dependant of current API.
 		 *\~french
-		 *\brief		Crée une texture
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_type	Le type de texture
-		 *\return		La texture créée, dépendante de l'API actuelle
+		 *\brief		Crée une texture.
+		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
 		C3D_API virtual StaticTextureSPtr CreateStaticTexture() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_type	The texture type
-		 *\return		The created texture, dependant of current API
+		 *\brief		Creates a texture.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
+		 *\return		The created texture, dependant of current API.
 		 *\~french
-		 *\brief		Crée une texture
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_type	Le type de texture
-		 *\return		La texture créée, dépendante de l'API actuelle
+		 *\brief		Crée une texture.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture() = 0;
+		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer, given a buffer declaration
@@ -417,7 +413,7 @@ namespace Castor3D
 		 */
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
 		/**
 		 *\~english
@@ -508,14 +504,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the main render context
-		 *\param[in]	p_pContext	The context
+		 *\param[in]	p_context	The context
 		 *\~french
 		 *\brief		Définit le contexte de rendu principal
-		 *\param[in]	p_pContext	Le contexte
+		 *\param[in]	p_context	Le contexte
 		 */
-		inline void SetMainContext( ContextSPtr p_pContext )
+		inline void SetMainContext( ContextSPtr p_context )
 		{
-			m_wpMainContext = p_pContext;
+			m_mainContext = p_context;
 		}
 		/**
 		 *\~english
@@ -527,19 +523,19 @@ namespace Castor3D
 		 */
 		inline ContextSPtr GetMainContext()
 		{
-			return m_wpMainContext.lock();
+			return m_mainContext;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the currently active render context
-		 *\param[in]	p_pContext	The context
+		 *\param[in]	p_context	The context
 		 *\~french
 		 *\brief		Définit le contexte de rendu actuellement actif
-		 *\param[in]	p_pContext	Le contexte
+		 *\param[in]	p_context	Le contexte
 		 */
-		inline void SetCurrentContext( Context * p_pContext )
+		inline void SetCurrentContext( Context * p_context )
 		{
-			m_pCurrentContext = p_pContext;
+			m_currentContext = p_context;
 		}
 		/**
 		 *\~english
@@ -551,7 +547,7 @@ namespace Castor3D
 		 */
 		inline Context * GetCurrentContext()
 		{
-			return m_pCurrentContext;
+			return m_currentContext;
 		}
 		/**
 		 *\~english
@@ -621,7 +617,7 @@ namespace Castor3D
 		//!\~english Mutex used to make this class thread safe	\~french Mutex pour rendre cette classe thread safe
 		std::recursive_mutex m_mutex;
 		//!\~english Tells whether or not it is initialised	\~french Dit si le render system est initialisé
-		bool m_bInitialised;
+		bool m_initialised;
 		//!\~english Tells whether or not the selected render API supports instanced draw calls	\~french Dit si l'API de rendu choisie supporte le dessin instancié
 		bool m_bInstancing;
 		//!\~english Tells whether or not the selected render API supports accumulation buffers	\~french Dit si l'API de rendu choisie supporte le buffer d'accumulation
@@ -635,9 +631,9 @@ namespace Castor3D
 		//!\~english The overlay renderer	\~french Le renderer d'overlays
 		OverlayRendererSPtr m_overlayRenderer;
 		//!\~english The main render context	\~french Le contexte de rendu principal
-		ContextWPtr m_wpMainContext;
+		ContextSPtr m_mainContext;
 		//!\~english The currently active render context	\~french Le contexte de rendu actuellement actif
-		ContextRPtr m_pCurrentContext;
+		ContextRPtr m_currentContext;
 		//!\~english The matrix pipeline	\~french Le pipeline contenant les matrices
 		std::unique_ptr< Pipeline > m_pipeline;
 		//!\~english Scene stack	\~french Pile des scènes
@@ -688,7 +684,7 @@ namespace Castor3D
 			if ( l_return )
 			{
 				std::stringstream l_stream;
-				Castor::Debug::ShowBacktrace( l_stream );
+				l_stream << Castor::Debug::Backtrace();
 				m_allocated.push_back( { ++m_id, p_type, p_object, p_file, p_line, 1, l_stream.str() } );
 				Castor::Logger::LogDebug( l_name );
 				p_name = l_name.str();

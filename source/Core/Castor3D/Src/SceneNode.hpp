@@ -465,7 +465,7 @@ namespace Castor3D
 		 */
 		inline SceneNodeSPtr GetParent()const
 		{
-			return m_pParent.lock();
+			return m_parent.lock();
 		}
 		/**
 		 *\~english
@@ -682,7 +682,7 @@ namespace Castor3D
 		//!\~english Tells the absolute transformation matrix needs recomputation	\~french Dit si la matrice de transformation absolue doit être recalculée
 		bool m_derivedMtxChanged;
 		//!\~english  This node's parent	\~french Le noeud parent
-		SceneNodeWPtr m_pParent;
+		SceneNodeWPtr m_parent;
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
 		SceneNodePtrStrMap m_childs;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud

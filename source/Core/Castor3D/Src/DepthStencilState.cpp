@@ -13,7 +13,7 @@ namespace Castor3D
 
 	DepthStencilState::DepthStencilState( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
-		, m_bChanged( true )
+		, m_changed( true )
 		, m_eDepthFunc( eDEPTH_FUNC_LESS )
 		, m_bDepthTest( true )
 		, m_dDepthNear( 0 )

@@ -58,7 +58,7 @@ DxOverlayRenderer::~DxOverlayRenderer()
 {
 }
 
-ShaderProgramBaseSPtr DxOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
+ShaderProgramBaseSPtr DxOverlayRenderer::DoCreateProgram( uint32_t p_flags )
 {
 	std::unique_ptr< UniformsBase > l_pUniforms = UniformsBase::Get( static_cast< const DxRenderSystem & >( *GetOwner() ) );
 
@@ -79,7 +79,7 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 	l_strPs += l_pUniforms->GetPixelPass( 0 );
 	l_strPsMain += PanelPSMain;
 
-	if ( ( p_uiFlags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
+	if ( ( p_flags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
 	{
 		l_strPs += cuT( "Texture2D c3d_mapText: register( t0 );\n" );
 		l_strPs += cuT( "SamplerState textSampler: register( s0 );\n" );
@@ -90,7 +90,7 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 	// Since a pass can be shared between objects and overlays (who knows?) we reserve index 0 to light or text textures
 	uint16_t l_index = 1;
 
-	if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+	if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 	{
 		l_strPs += cuT( "Texture2D c3d_mapColour: register( t" ) + string::to_string( l_index ) + cuT( " );\n" );
 		l_strPs += cuT( "SamplerState colourSampler: register( s" ) + string::to_string( l_index ) + cuT( " );\n" );
@@ -99,7 +99,7 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoCreateProgram( uint32_t p_uiFlags )
 		l_index++;
 	}
 
-	if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+	if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 	{
 		l_strPs += cuT( "Texture2D c3d_mapOpacity: register( t" ) + string::to_string( l_index ) + cuT( " );\n" );
 		l_strPs += cuT( "SamplerState opacitySampler: register( s" ) + string::to_string( l_index ) + cuT( " );\n" );

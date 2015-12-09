@@ -41,7 +41,7 @@ namespace Castor3D
 		for ( uint32_t i = 0; i < p_uiNbElements; i++ )
 		{
 			m_arrayElements.push_back( p_pElements[i] );
-			m_arrayElements[i].m_uiOffset = m_uiStride;
+			m_arrayElements[i].m_offset = m_uiStride;
 			m_uiStride += s_uiSize[m_arrayElements[i].m_eDataType];
 		}
 	}

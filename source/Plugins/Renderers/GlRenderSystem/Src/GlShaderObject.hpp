@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_SHADER_OBJECT_H___
 #define ___GL_SHADER_OBJECT_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlObject.hpp"
 
 #include <ShaderObject.hpp>
 
@@ -26,17 +26,12 @@ namespace GlRender
 {
 	class GlShaderObject
 		: public Castor3D::ShaderObjectBase
-		, public Castor::NonCopyable
+		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
 	{
 		friend class GlShaderProgram;
-		typedef std::map< Castor::String, uint32_t > UIntStrMap;
 
-	protected:
-		uint32_t m_shaderObject;
-		Castor::String m_compilerLog;
-		GlShaderProgram * m_shaderProgram;
-		UIntStrMap m_mapParamsByName;
-		OpenGl & m_gl;
+		using ObjectType = Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >;
+		using UIntStrMap = std::map< Castor::String, uint32_t >;
 
 	public:
 		/**
@@ -52,13 +47,17 @@ namespace GlRender
 		 */
 		virtual void CreateProgram();
 		/**
+		 * Destroys the GL Shader Program
+		 */
+		virtual void DestroyProgram();
+		/**
 		 * Compiles program
 		 */
 		virtual bool Compile();
 		/**
 		 * Get compiler messages
 		 */
-		void RetrieveCompilerLog( Castor::String & p_strCompilerLog );
+		void RetrieveCompilerLog( Castor::String & p_compilerLog );
 		/**
 		 * Detaches this shader from it's program
 		 */
@@ -67,13 +66,12 @@ namespace GlRender
 		 * Attaches this shader to the given program
 		 */
 		virtual void AttachTo( Castor3D::ShaderProgramBase & p_program );
-		/**
-		 * Destroys the GL Shader Program
-		 */
-		virtual void DestroyProgram();
 
-		virtual void SetEntryPoint( Castor::String const & CU_PARAM_UNUSED( p_name ) )	{}
-		virtual Castor::String	GetEntryPoint()const
+		virtual void SetEntryPoint( Castor::String const & CU_PARAM_UNUSED( p_name ) )
+		{
+		}
+
+		virtual Castor::String GetEntryPoint()const
 		{
 			return cuT( "" );
 		}
@@ -103,24 +101,24 @@ namespace GlRender
 		 *\~english
 		 *\brief		Defines the given parameter value
 		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_mtxValue	The parameter value
+		 *\param[in]	p_value	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
 		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_mtxValue	La valeur du paramètre
+		 *\param[in]	p_value	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_mtxValue );
+		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the given parameter value
 		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_mtxValue	The parameter value
+		 *\param[in]	p_value	The parameter value
 		 *\~french
 		 *\brief		Définit la valeur du paramètre
 		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_mtxValue	La valeur du paramètre
+		 *\param[in]	p_value	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_mtxValue );
+		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value );
 
 	private:
 		/**
@@ -131,6 +129,11 @@ namespace GlRender
 		 * Compiles program
 		 */
 		virtual void DoUnbind() {}
+
+	protected:
+		Castor::String m_compilerLog;
+		GlShaderProgram * m_shaderProgram;
+		UIntStrMap m_mapParamsByName;
 	};
 }
 

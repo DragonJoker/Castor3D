@@ -34,14 +34,17 @@ namespace GlRender
 	{
 	public:
 		/**
-		*\brief		Constructor.
-		*\param[in]	p_gl			The OpenGL APIs.
-		*\param[in]	p_renderSystem	The RenderSystem.
-		*/
-		GlTboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
+		 *\brief		Constructor.
+		 *\param[in]	p_gl			The OpenGL APIs.
+		 *\param[in]	p_texture		The parent teexture.
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_cpuAccess		The required CPU access.
+		 *\param[in]	p_gpuAccess		The required GPU access.
+		 */
+		GlTboTextureStorage( OpenGl & p_gl, GlTexture & p_texture, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
-		*\brief		Destructor.
-		*/
+		 *\brief		Destructor.
+		 */
 		~GlTboTextureStorage();
 
 	private:

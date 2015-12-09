@@ -301,7 +301,7 @@ namespace Castor3D
 		 */
 		inline uint8_t const * GetRemainingData()const
 		{
-			return &m_pData[m_uiIndex];
+			return &m_pData[m_index];
 		}
 		/**
 		 *\~english
@@ -360,7 +360,7 @@ namespace Castor3D
 		 */
 		void EndParse()
 		{
-			m_uiIndex = uint32_t( m_pData.size() );
+			m_index = uint32_t( m_pData.size() );
 		}
 
 	private:
@@ -368,12 +368,12 @@ namespace Castor3D
 		inline bool DoRead( T * p_values, uint32_t p_count )
 		{
 			uint32_t l_size = p_count * uint32_t( sizeof( T ) );
-			bool l_return = m_uiIndex + l_size < m_pData.size();
+			bool l_return = m_index + l_size < m_pData.size();
 
 			if ( l_return )
 			{
-				std::memcpy( p_values, &m_pData[m_uiIndex], l_size );
-				m_uiIndex += l_size;
+				std::memcpy( p_values, &m_pData[m_index], l_size );
+				m_index += l_size;
 			}
 
 			return l_return;
@@ -384,7 +384,7 @@ namespace Castor3D
 		//!\~english The chunk data	\~french Les données du chunk
 		Castor::ByteArray m_pData;
 		//!\~english The current index in the chunk data	\~french L'index courant dans les données du chunk
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 		//!\~english The chunk data	\~french Les données du chunk
 		std::list< Castor::ByteArray > m_addedData;
 	};

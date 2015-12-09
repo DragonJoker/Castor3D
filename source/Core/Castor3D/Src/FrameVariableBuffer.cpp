@@ -11,7 +11,7 @@ namespace Castor3D
 	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, RenderSystem & p_renderSystem )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_name( p_name )
-		, m_uiIndex( sm_uiCount++ )
+		, m_index( sm_uiCount++ )
 	{
 	}
 
@@ -19,14 +19,14 @@ namespace Castor3D
 	{
 	}
 
-	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, String const & p_name, uint32_t p_uiNbOcc )
+	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, String const & p_name, uint32_t p_occurences )
 	{
 		FrameVariableSPtr l_return;
 		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it == m_mapVariables.end() )
 		{
-			l_return = DoCreateVariable( &p_program, p_type, p_name, p_uiNbOcc );
+			l_return = DoCreateVariable( &p_program, p_type, p_name, p_occurences );
 
 			if ( l_return )
 			{
@@ -68,18 +68,18 @@ namespace Castor3D
 
 		if ( !DoInitialise( &p_program ) )
 		{
-			uint32_t l_uiTotalSize = 0;
+			uint32_t l_totalSize = 0;
 
 			for ( auto && l_variable : m_listVariables )
 			{
 				if ( l_variable->Initialise() )
 				{
-					l_uiTotalSize += l_variable->size();
+					l_totalSize += l_variable->size();
 					m_listInitialised.push_back( l_variable );
 				}
 			}
 
-			m_buffer.resize( l_uiTotalSize );
+			m_buffer.resize( l_totalSize );
 			uint8_t * l_buffer = m_buffer.data();
 
 			for ( auto && l_variable : m_listInitialised )

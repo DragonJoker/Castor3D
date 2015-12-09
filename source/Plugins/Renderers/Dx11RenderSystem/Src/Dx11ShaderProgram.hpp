@@ -117,9 +117,9 @@ namespace Dx11Render
 			m_strPixelScene =
 				cuT( "cbuffer Scene : register( cb%d )\n" )
 				cuT( "{\n" )
-				cuT( "	int c3d_iLightsCount;\n" )
 				cuT( "	float4 c3d_v4AmbientLight;\n" )
 				cuT( "	float4 c3d_v4BackgroundColour;\n" )
+				cuT( "	int4 c3d_iLightsCount;\n" )
 				cuT( "	float3 c3d_v3CameraPosition;\n" )
 				cuT( "};\n" );
 			m_strPixelPass =
@@ -166,9 +166,9 @@ namespace Dx11Render
 				cuT( "uniform float4x4 c3d_mtxTexture2;\n" )
 				cuT( "uniform float4x4 c3d_mtxTexture3;\n" );
 			m_strPixelScene =
-				cuT( "uniform int c3d_iLightsCount;\n" )
 				cuT( "uniform float4 c3d_v4AmbientLight;\n" )
 				cuT( "uniform float4 c3d_v4BackgroundColour;\n" )
+				cuT( "uniform int4 c3d_iLightsCount;\n" )
 				cuT( "uniform float3 c3d_v3CameraPosition;\n" );
 			m_strPixelPass =
 				cuT( "uniform float4 c3d_v4MatAmbient;\n" )

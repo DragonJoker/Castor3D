@@ -1,13 +1,15 @@
 #include "GlDepthStencilRenderBuffer.hpp"
 
+#include "OpenGl.hpp"
+
 using namespace Castor3D;
 using namespace Castor;
 
 namespace GlRender
 {
 	GlDepthStencilRenderBuffer::GlDepthStencilRenderBuffer( OpenGl & p_gl, ePIXEL_FORMAT p_eFormat )
-		:	DepthStencilRenderBuffer( p_eFormat )
-		,	m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_eFormat ), *this )
+		: DepthStencilRenderBuffer( p_eFormat )
+		, m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_eFormat ), *this )
 	{
 	}
 

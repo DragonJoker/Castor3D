@@ -24,9 +24,9 @@ namespace GlRender
 		GlBuffer< uint32_t >::DoDestroy();
 	}
 
-	bool GlIndexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram )
+	bool GlIndexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, Castor3D::ShaderProgramBaseSPtr p_program )
 	{
-		bool l_return = GlBuffer< uint32_t >::DoInitialise( p_type, p_eNature );
+		bool l_return = GlBuffer< uint32_t >::DoInitialise( p_type, p_nature );
 		//if( l_return )
 		//{
 		//	m_pBuffer->Clear();
@@ -57,14 +57,14 @@ namespace GlRender
 		GlBuffer< uint32_t >::DoUnbind();
 	}
 
-	uint32_t * GlIndexBufferObject::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+	uint32_t * GlIndexBufferObject::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
 		uint32_t * l_return = NULL;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			l_return = GlBuffer< uint32_t >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+			l_return = GlBuffer< uint32_t >::DoLock( p_offset, p_count, p_flags );
 		}
 
 		return l_return;

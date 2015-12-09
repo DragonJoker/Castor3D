@@ -139,7 +139,6 @@ typedef wchar_t ychar;
 	typedef std::shared_ptr< class_name > class_name##SPtr;\
 	typedef std::weak_ptr< class_name > class_name##WPtr;\
 	typedef std::unique_ptr< class_name > class_name##UPtr;\
-	typedef std::auto_ptr< class_name > class_name##APtr;\
 	typedef class_name * class_name##RPtr
 
 #define DECLARE_MAP( key, value, name )\

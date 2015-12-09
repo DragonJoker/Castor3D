@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlColourRenderBuffer
-		:	public Castor3D::ColourRenderBuffer
+		: public Castor3D::ColourRenderBuffer
 	{
 	public:
 		GlColourRenderBuffer( OpenGl & p_gl, Castor::ePIXEL_FORMAT p_eFormat );

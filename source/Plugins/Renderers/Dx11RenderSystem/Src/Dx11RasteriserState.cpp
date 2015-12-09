@@ -37,7 +37,7 @@ namespace Dx11Render
 		l_rasterDesc.ScissorEnable = m_bScissor;
 		HRESULT l_hr = m_renderSystem->GetDevice()->CreateRasterizerState( &l_rasterDesc, &m_pRasteriserState );
 		dxTrack( m_renderSystem, m_pRasteriserState, RasteriserState );
-		m_bChanged = false;
+		m_changed = false;
 		return dxCheckError( l_hr, "CreateRasterizerState" );
 	}
 
@@ -50,7 +50,7 @@ namespace Dx11Render
 	{
 		bool l_return = true;
 
-		if ( m_bChanged )
+		if ( m_changed )
 		{
 			Cleanup();
 			l_return = Initialise();

@@ -15,23 +15,26 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___GL3_VERTEX_BUFFER_OBJECT_H___
-#define ___GL3_VERTEX_BUFFER_OBJECT_H___
+#ifndef ___GLSL_ARRAY_H___
+#define ___GLSL_ARRAY_H___
 
-#include "GlVertexBufferObject.hpp"
+#include "GlslBool.hpp"
 
 namespace GlRender
 {
-	class Gl3VertexBufferObject
-		: public GlVertexBufferObject
+	namespace GLSL
 	{
-	public:
-		Gl3VertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer );
-		virtual ~Gl3VertexBufferObject();
-
-		virtual bool Bind();
-		virtual void Unbind();
-	};
+		template< typename T >
+		struct Array
+			: public T
+		{
+			Array( GlslWriter * p_writer, const Castor::String & p_name, uint32_t p_dimension );
+			template< typename U > T & operator[]( U const & p_offset );
+			uint32_t m_dimension;
+		};
+	}
 }
+
+#include "GlslArray.inl"
 
 #endif

@@ -364,26 +364,26 @@
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgramBase * p_pProgram )
-		:	TFrameVariable< T >( p_pProgram )
+	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgramBase * p_program )
+		:	TFrameVariable< T >( p_program )
 	{
-		this->m_pValues = new T[Rows * Columns];
-		memset( this->m_pValues, 0, sizeof( T ) * Rows * Columns );
+		this->m_values = new T[Rows * Columns];
+		memset( this->m_values, 0, sizeof( T ) * Rows * Columns );
 		m_mtxValue = new Castor::Matrix< T, Rows, Columns >[1];
-		m_mtxValue[0].link( &this->m_pValues[0] );
+		m_mtxValue[0].link( &this->m_values[0] );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc )
-		:	TFrameVariable< T >( p_pProgram, p_uiOcc )
+	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences )
+		:	TFrameVariable< T >( p_program, p_occurences )
 	{
-		this->m_pValues = new T[Rows * Columns * p_uiOcc];
-		memset( this->m_pValues, 0, sizeof( T ) * p_uiOcc * Rows * Columns );
-		m_mtxValue = new Castor::Matrix <T, Rows, Columns>[p_uiOcc];
+		this->m_values = new T[Rows * Columns * p_occurences];
+		memset( this->m_values, 0, sizeof( T ) * p_occurences * Rows * Columns );
+		m_mtxValue = new Castor::Matrix <T, Rows, Columns>[p_occurences];
 
-		for ( uint32_t i = 0; i < p_uiOcc; i++ )
+		for ( uint32_t i = 0; i < p_occurences; i++ )
 		{
-			m_mtxValue[i].link( &this->m_pValues[i * Rows * Columns] );
+			m_mtxValue[i].link( &this->m_values[i * Rows * Columns] );
 		}
 	}
 
@@ -391,11 +391,11 @@
 	MatrixFrameVariable< T, Rows, Columns >::MatrixFrameVariable( MatrixFrameVariable< T, Rows, Columns > const & p_rVariable )
 		:	TFrameVariable< T >( p_rVariable )
 	{
-		m_mtxValue = new Castor::Matrix <T, Rows, Columns>[p_rVariable.m_uiOcc];
+		m_mtxValue = new Castor::Matrix <T, Rows, Columns>[p_rVariable.m_occurences];
 
-		for ( uint32_t i = 0; i < p_rVariable.m_uiOcc; i++ )
+		for ( uint32_t i = 0; i < p_rVariable.m_occurences; i++ )
 		{
-			m_mtxValue[i].link( &this->m_pValues[i * Rows * Columns] );
+			m_mtxValue[i].link( &this->m_values[i * Rows * Columns] );
 		}
 	}
 
@@ -404,7 +404,7 @@
 		:	TFrameVariable< T >( std::move( p_rVariable ) )
 		,	m_mtxValue( std::move( p_rVariable.m_mtxValue ) )
 	{
-		p_rVariable.m_pValues = NULL;
+		p_rVariable.m_values = NULL;
 		p_rVariable.m_mtxValue = NULL;
 	}
 
@@ -425,7 +425,7 @@
 		{
 			delete [] m_mtxValue;
 			m_mtxValue	= std::move( p_rVariable.m_mtxValue );
-			p_rVariable.m_pValues = NULL;
+			p_rVariable.m_values = NULL;
 			p_rVariable.m_mtxValue = NULL;
 		}
 
@@ -439,16 +439,16 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline void MatrixFrameVariable< T, Rows, Columns >::SetValue( Castor::Matrix< T, Rows, Columns > const & p_mtxValue )
+	inline void MatrixFrameVariable< T, Rows, Columns >::SetValue( Castor::Matrix< T, Rows, Columns > const & p_value )
 	{
-		MatrixFrameVariable< T, Rows, Columns >::SetValue( p_mtxValue, 0 );
+		MatrixFrameVariable< T, Rows, Columns >::SetValue( p_value, 0 );
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline void MatrixFrameVariable< T, Rows, Columns >::SetValue( Castor::Matrix< T, Rows, Columns > const & p_mtxValue, uint32_t p_index )
+	inline void MatrixFrameVariable< T, Rows, Columns >::SetValue( Castor::Matrix< T, Rows, Columns > const & p_value, uint32_t p_index )
 	{
-		m_mtxValue[p_index] = p_mtxValue;
-		TFrameVariable< T >::m_bChanged = true;
+		m_mtxValue[p_index] = p_value;
+		TFrameVariable< T >::m_changed = true;
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -466,7 +466,7 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Castor::Matrix< T, Rows, Columns > & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )
 	{
-		if ( p_index < TFrameVariable< T >::m_uiOcc )
+		if ( p_index < TFrameVariable< T >::m_occurences )
 		{
 			return m_mtxValue[p_index];
 		}
@@ -479,7 +479,7 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	inline Castor::Matrix< T, Rows, Columns > const & MatrixFrameVariable< T, Rows, Columns >::GetValue( uint32_t p_index )const
 	{
-		if ( p_index < TFrameVariable< T >::m_uiOcc )
+		if ( p_index < TFrameVariable< T >::m_occurences )
 		{
 			return m_mtxValue[p_index];
 		}
@@ -492,16 +492,16 @@
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	uint32_t MatrixFrameVariable< T, Rows, Columns >::size()const
 	{
-		return MtxFrameVariableDefinitions< T, Rows, Columns >::Size * this->m_uiOcc;
+		return MtxFrameVariableDefinitions< T, Rows, Columns >::Size * this->m_occurences;
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
 	void MatrixFrameVariable< T, Rows, Columns >::link( uint8_t * p_buffer )
 	{
-		memcpy( p_buffer, this->m_pValues, size() );
+		memcpy( p_buffer, this->m_values, size() );
 		T * l_pBuffer = reinterpret_cast< T * >( p_buffer );
 
-		for ( uint32_t i = 0; i < this->m_uiOcc; i++ )
+		for ( uint32_t i = 0; i < this->m_occurences; i++ )
 		{
 			m_mtxValue[i].link( &l_pBuffer[i * Rows * Columns] );
 		}

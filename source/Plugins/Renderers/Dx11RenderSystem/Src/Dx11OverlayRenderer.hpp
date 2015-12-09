@@ -43,7 +43,7 @@ namespace Dx11Render
 		virtual ~DxOverlayRenderer();
 
 	private:
-		virtual Castor3D::ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_uiFlags );
+		virtual Castor3D::ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_flags );
 		virtual void DoInitialise();
 		virtual void DoCleanup();
 	};

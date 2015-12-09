@@ -393,6 +393,20 @@ namespace Castor
 		std::basic_string< T > string_cast( U const * p_src );
 		/**
 		 *\~english
+		 *\brief		Casts a string value in another string type.
+		 *\param[in]	p_begin	The source value.
+		 *\param[in]	p_end	The source end.
+		 *\return		The cast string.
+		 *\~french
+		 *\brief		Convertit une chaîne dans un autre type de chaîne.
+		 *\param[in]	p_begin	La valeur source.
+		 *\param[in]	p_end	La fin de la source.
+		 *\return		La chaîne convertie.
+		 */
+		template< typename T, typename U >
+		std::basic_string< T > string_cast( U const * p_begin, U const * p_end );
+		/**
+		 *\~english
 		 *\brief		Casts a string value in another string type
 		 *\param[in]	p_src	The source value
 		 *\return		The cast string

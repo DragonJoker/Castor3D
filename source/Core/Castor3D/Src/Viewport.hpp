@@ -132,7 +132,7 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The core engine.
 		 *\param[in]	p_type		Projection type.
-		 *\param[in]	p_aFOVY		Y Field of View.
+		 *\param[in]	p_fovy		Y Field of View.
 		 *\param[in]	p_aspect	Width / Height ratio.
 		 *\param[in]	p_left		Left clipping plane value.
 		 *\param[in]	p_right		Right clipping plane value.
@@ -144,7 +144,7 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_type		Type de projection.
-		 *\param[in]	p_aFOVY		Angle de vision Y.
+		 *\param[in]	p_fovy		Angle de vision Y.
 		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
 		 *\param[in]	p_left		Position du plan gauche.
 		 *\param[in]	p_right		Position du plan droit.
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_near		Position du plan proche.
 		 *\param[in]	p_far		Position du plan éloigné.
 		 */
-		C3D_API Viewport( Engine & p_engine, eVIEWPORT_TYPE p_type, Castor::Angle const & p_aFOVY, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API Viewport( Engine & p_engine, eVIEWPORT_TYPE p_type, Castor::Angle const & p_fovy, real p_aspect, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 
 	public:
 		/**
@@ -171,7 +171,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Builds a centered perspective viewport.
 		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_aFOVY		Y Field of View.
+		 *\param[in]	p_fovy		Y Field of View.
 		 *\param[in]	p_aspect	Width / Height ratio.
 		 *\param[in]	p_near		Near clipping plane value.
 		 *\param[in]	p_far		Far clipping plane value.
@@ -179,13 +179,13 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Construit vioewport en perspective centrée.
 		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_aFOVY		Angle de vision Y.
+		 *\param[in]	p_fovy		Angle de vision Y.
 		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
 		 *\param[in]	p_near		Position du plan proche.
 		 *\param[in]	p_far		Position du plan éloigné.
 		 *\return		Le viewport.
 		 */
-		C3D_API static Viewport Perspective( Engine & p_engine, Castor::Angle const & p_aFOVY, real p_aspect, real p_near, real p_far );
+		C3D_API static Viewport Perspective( Engine & p_engine, Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.

@@ -125,7 +125,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBind
 		 */
-		C3D_API virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_eTarget );
+		C3D_API virtual bool DoBind( Castor3D::eFRAMEBUFFER_TARGET p_target );
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoUnbind
 		 */

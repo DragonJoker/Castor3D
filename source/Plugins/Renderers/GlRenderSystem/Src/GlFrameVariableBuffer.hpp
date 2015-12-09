@@ -27,16 +27,16 @@ namespace GlRender
 {
 	struct GlVariableApplyerBase
 	{
-		virtual void operator()( OpenGl & p_gl, uint32_t p_index, Castor3D::FrameVariableSPtr p_pVariable ) = 0;
+		virtual void operator()( OpenGl & p_gl, uint32_t p_index, Castor3D::FrameVariableSPtr p_variable ) = 0;
 	};
 
 	class UboVariableInfos
 	{
 	public:
 		UboVariableInfos()
-			: m_uiIndex( 0 )
-			, m_iOffset( 0 )
-			, m_iSize( 0 )
+			: m_index( 0 )
+			, m_offset( 0 )
+			, m_size( 0 )
 		{
 		}
 
@@ -44,9 +44,9 @@ namespace GlRender
 		{
 		}
 
-		uint32_t m_uiIndex;
-		int m_iOffset;
-		int m_iSize;
+		uint32_t m_index;
+		int m_offset;
+		int m_size;
 	};
 
 	DECLARE_SMART_PTR( UboVariableInfos );
@@ -55,23 +55,23 @@ namespace GlRender
 
 	class GlFrameVariableBuffer
 		: public Castor3D::FrameVariableBuffer
+		, public Holder
 	{
 	public:
 		GlFrameVariableBuffer( OpenGl & p_gl, Castor::String const & p_name, GlRenderSystem & p_renderSystem );
 		virtual ~GlFrameVariableBuffer();
 
 	private:
-		virtual Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::ShaderProgramBase * p_pProgram, Castor3D::eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_uiNbOcc = 1 );
-		virtual bool DoInitialise( Castor3D::ShaderProgramBase * p_pProgram );
+		virtual Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::ShaderProgramBase * p_program, Castor3D::eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
+		virtual bool DoInitialise( Castor3D::ShaderProgramBase * p_program );
 		virtual void DoCleanup();
 		virtual bool DoBind( uint32_t p_index );
 		virtual void DoUnbind( uint32_t p_index );
 
 	private:
 		GlBufferBase< uint8_t > m_glBuffer;
-		int m_iUniformBlockIndex;
-		int m_iUniformBlockSize;
-		OpenGl & m_gl;
+		int m_uniformBlockIndex;
+		int m_uniformBlockSize;
 	};
 }
 

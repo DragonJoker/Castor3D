@@ -18,43 +18,38 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_RENDER_BUFFER_H___
 #define ___GL_RENDER_BUFFER_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlBindable.hpp"
+
+#include <Size.hpp>
 
 namespace GlRender
 {
 	class GlRenderBuffer
-		:	public Castor::NonCopyable
+		: public Castor::NonCopyable
+		, public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
+						   std::function< bool( uint32_t ) > >
 	{
-	public:
-		GlRenderBuffer( OpenGl & p_gl, eGL_RENDERBUFFER_STORAGE p_eInternal, Castor3D::RenderBuffer & p_renderBuffer );
-		~GlRenderBuffer();
+		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
+									   std::function< bool( uint32_t ) > >;
 
-		bool Create();
-		void Destroy();
+	public:
+		GlRenderBuffer( OpenGl & p_gl, eGL_RENDERBUFFER_STORAGE p_internal, Castor3D::RenderBuffer & p_renderBuffer );
+		~GlRenderBuffer();
 
 		bool Initialise( Castor::Size const & p_size );
 		void Cleanup();
 
-		bool Bind();
-		void Unbind();
-
 		bool Resize( Castor::Size const & p_size );
 
-		inline uint32_t GetGlName()const
-		{
-			return m_uiGlName;
-		}
 		inline uint32_t GetInternal()const
 		{
-			return m_eInternal;
+			return m_internal;
 		}
 
 	private:
-		uint32_t m_uiGlName;
-		eGL_RENDERBUFFER_STORAGE m_eInternal;
+		eGL_RENDERBUFFER_STORAGE m_internal;
 		Castor::Size m_size;
 		Castor3D::RenderBuffer & m_renderBuffer;
-		OpenGl & m_gl;
 	};
 }
 

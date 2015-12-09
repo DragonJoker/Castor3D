@@ -116,8 +116,9 @@ namespace Castor3D
 	FrameVariableBufferSPtr ShaderManager::CreateSceneBuffer( ShaderProgramBase & p_shader, uint32_t p_shaderMask )
 	{
 		auto l_pSceneBuffer = m_renderSystem->CreateFrameVariableBuffer( ShaderProgramBase::BufferScene );
-		l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_INT, ShaderProgramBase::LightsCount, 1 );
 		l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC4F, ShaderProgramBase::AmbientLight, 1 );
+		l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC4F, ShaderProgramBase::BackgroundColour, 1 );
+		l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC4I, ShaderProgramBase::LightsCount, 1 );
 		l_pSceneBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_VEC3R, ShaderProgramBase::CameraPos, 1 );
 		p_shader.AddFrameVariableBuffer( l_pSceneBuffer, p_shaderMask );
 		return l_pSceneBuffer;

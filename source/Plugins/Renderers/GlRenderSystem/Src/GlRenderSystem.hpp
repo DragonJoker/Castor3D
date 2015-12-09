@@ -52,7 +52,7 @@ namespace GlRender
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, Castor3D::CpuBuffer< uint8_t > * p_buffer );
 		virtual std::shared_ptr< Castor3D::GpuBuffer< real > > CreateMatrixBuffer( Castor3D::CpuBuffer< real > * p_buffer );
 		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
-		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture();
+		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name );
 		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_scene );
 
@@ -88,23 +88,23 @@ namespace GlRender
 
 		inline int GetOpenGlMajor()
 		{
-			return m_iOpenGlMajor;
+			return m_openGlMajor;
 		}
 
 		inline int GetOpenGlMinor()
 		{
-			return m_iOpenGlMinor;
+			return m_openGlMinor;
 		}
 
 		inline void SetOpenGlVersion( int p_iMajor, int p_iMinor )
 		{
-			m_iOpenGlMajor = p_iMajor;
-			m_iOpenGlMinor = p_iMinor;
+			m_openGlMajor = p_iMajor;
+			m_openGlMinor = p_iMinor;
 		}
 
 		inline OpenGl & GetOpenGl()
 		{
-			return m_gl;
+			return m_openGl;
 		}
 
 	private:
@@ -115,9 +115,9 @@ namespace GlRender
 		std::shared_ptr< GlPipelineImpl > m_pipelineImpl;
 		bool m_useVertexBufferObjects;
 		bool m_extensionsInit;
-		int m_iOpenGlMajor;
-		int m_iOpenGlMinor;
-		OpenGl m_gl;
+		int m_openGlMajor;
+		int m_openGlMinor;
+		OpenGl m_openGl;
 
 #if C3D_TRACE_OBJECTS
 

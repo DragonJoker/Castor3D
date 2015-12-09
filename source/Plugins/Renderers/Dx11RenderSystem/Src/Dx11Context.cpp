@@ -67,9 +67,9 @@ namespace Dx11Render
 	{
 	}
 
-	void DxContext::UpdateFullScreen( bool p_bVal )
+	void DxContext::UpdateFullScreen( bool p_value )
 	{
-		if ( p_bVal )
+		if ( p_value )
 		{
 			m_swapChain->SetFullscreenState( TRUE, NULL );
 		}
@@ -81,7 +81,7 @@ namespace Dx11Render
 
 	bool DxContext::DoInitialise()
 	{
-		if ( !m_bInitialised )
+		if ( !m_initialised )
 		{
 			DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( GetOwner() );
 			m_hWnd = m_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
@@ -93,10 +93,10 @@ namespace Dx11Render
 				m_size = m_window->GetSize();
 				DoInitVolatileResources();
 				Logger::LogInfo( StringStream() << cuT( "Dx11Context::DoInitialise - Context for window 0x" ) << std::hex << m_hWnd << cuT( " initialised" ) );
-				m_bInitialised = true;
+				m_initialised = true;
 			}
 
-			if ( m_bInitialised )
+			if ( m_initialised )
 			{
 				auto l_uniforms = UniformsBase::Get( *l_renderSystem );
 				StringStream l_vtxShader;
@@ -110,7 +110,7 @@ namespace Dx11Render
 			}
 		}
 
-		return m_bInitialised;
+		return m_initialised;
 	}
 
 	void DxContext::DoCleanup()
@@ -142,7 +142,7 @@ namespace Dx11Render
 		}
 	}
 
-	void DxContext::DoSetAlphaFunc( eALPHA_FUNC CU_PARAM_UNUSED( p_eFunc ), uint8_t CU_PARAM_UNUSED( p_byValue ) )
+	void DxContext::DoSetAlphaFunc( eALPHA_FUNC CU_PARAM_UNUSED( p_func ), uint8_t CU_PARAM_UNUSED( p_value ) )
 	{
 		// Dropped out.
 	}

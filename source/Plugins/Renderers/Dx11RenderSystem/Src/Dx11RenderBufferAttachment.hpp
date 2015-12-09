@@ -35,24 +35,24 @@ namespace Dx11Render
 		 *\~english
 		 *\brief		Constructor.
 		 *\para[in]		p_renderSystem	The RenderSystem.
-		 *\param[in]	p_pRenderBuffer	The render buffer.
+		 *\param[in]	p_renderBuffer	The render buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\para[in]		p_renderSystem	Le RenderSystem.
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu.
+		 *\param[in]	p_renderBuffer	Le tampon de rendu.
 		 */
-		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_pRenderBuffer );
+		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxColourRenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\para[in]		p_renderSystem	The RenderSystem.
-		 *\param[in]	p_pRenderBuffer	The render buffer.
+		 *\param[in]	p_renderBuffer	The render buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\para[in]		p_renderSystem	Le RenderSystem.
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu.
+		 *\param[in]	p_renderBuffer	Le tampon de rendu.
 		 */
-		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_pRenderBuffer );
+		DxRenderBufferAttachment( DxRenderSystem * p_renderSystem, DxDepthStencilRenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -69,7 +69,7 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoAttach
 		 */
-		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_pFrameBuffer );
+		virtual bool DoAttach( Castor3D::FrameBufferSPtr p_frameBuffer );
 		/**
 		 *\copydoc		Castor3D::FrameBufferAttachment::DoDetach
 		 */

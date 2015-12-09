@@ -3,11 +3,11 @@
 namespace GlRender
 {
 	template< typename T >
-	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget, HardwareBufferPtr p_buffer )
+	GlBuffer< T >::GlBuffer( GlRenderSystem & p_renderSystem, OpenGl & p_gl, eGL_BUFFER_TARGET p_target, HardwareBufferPtr p_buffer )
 		: Castor3D::GpuBuffer< T >( p_renderSystem )
+		, Holder( p_gl )
 		, m_pBuffer( p_buffer )
-		, m_glBuffer( p_gl, p_eTarget )
-		, m_gl( p_gl )
+		, m_glBuffer( p_gl, p_target )
 	{
 	}
 
@@ -17,9 +17,9 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 	{
-		return m_glBuffer.Fill( p_buffer, p_iSize, p_type, p_eNature );
+		return m_glBuffer.Fill( p_buffer, p_size, p_type, p_nature );
 	}
 
 	template< typename T >
@@ -35,14 +35,14 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::DoInitialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::DoInitialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 	{
 		bool l_return = true;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->GetSize() )
 		{
-			l_return = m_glBuffer.Initialise( &l_pBuffer->data()[0], l_pBuffer->GetSize(), p_type, p_eNature );
+			l_return = m_glBuffer.Initialise( &l_pBuffer->data()[0], l_pBuffer->GetSize(), p_type, p_nature );
 		}
 
 		if ( l_return )
@@ -81,15 +81,15 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBuffer< T >::DoFill( T * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBuffer< T >::DoFill( T * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 	{
-		return m_glBuffer.Fill( p_buffer, p_iSize, p_type, p_eNature );
+		return m_glBuffer.Fill( p_buffer, p_size, p_type, p_nature );
 	}
 
 	template< typename T >
-	T * GlBuffer< T >::DoLock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+	T * GlBuffer< T >::DoLock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
-		return m_glBuffer.Lock( p_uiOffset, p_uiCount, p_uiFlags );
+		return m_glBuffer.Lock( p_offset, p_count, p_flags );
 	}
 
 	template< typename T >

@@ -11,7 +11,7 @@ namespace Castor3D
 
 	BlendState::BlendState( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
-		, m_bChanged( true )
+		, m_changed( true )
 		, m_bEnableAlphaToCoverage( false )
 		, m_bIndependantBlend( false )
 	{

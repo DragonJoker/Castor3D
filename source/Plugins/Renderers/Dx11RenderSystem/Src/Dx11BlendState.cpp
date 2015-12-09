@@ -47,7 +47,7 @@ namespace Dx11Render
 
 		HRESULT l_hr = m_renderSystem->GetDevice()->CreateBlendState( &l_blendDesc, &m_pBlendState );
 		dxTrack( m_renderSystem, m_pBlendState, BlendState );
-		m_bChanged = false;
+		m_changed = false;
 		return dxCheckError( l_hr, "CreateBlendState" );
 	}
 
@@ -60,7 +60,7 @@ namespace Dx11Render
 	{
 		bool l_return = true;
 
-		if ( m_bChanged )
+		if ( m_changed )
 		{
 			Cleanup();
 			l_return = Initialise();

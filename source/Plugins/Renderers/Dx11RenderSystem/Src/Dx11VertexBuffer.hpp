@@ -31,21 +31,21 @@ namespace Dx11Render
 
 		virtual bool Create();
 		virtual void Destroy();
-		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram );
+		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature, Castor3D::ShaderProgramBaseSPtr p_program );
 		virtual void Cleanup();
 		virtual bool Bind();
 		virtual void Unbind();
-		virtual uint8_t * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags );
+		virtual uint8_t * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
 		virtual void Unlock();
 
 	private:
 		bool DoCreateLayout();
-		bool DoCreateBuffer( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		bool DoCreateBuffer( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
 
 	private:
 		ID3D11InputLayout * m_pDxDeclaration;
 		Castor3D::BufferDeclaration const & m_declaration;
-		DxShaderProgramWPtr m_pProgram;
+		DxShaderProgramWPtr m_program;
 		Castor3D::eBUFFER_ACCESS_TYPE m_type;
 		Castor3D::eBUFFER_ACCESS_NATURE m_eNature;
 	};

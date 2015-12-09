@@ -84,9 +84,9 @@ namespace Castor3D
 		m_renderSystem->PopScene();
 	}
 
-	String RenderTechniqueBase::GetPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechniqueBase::GetPixelShaderSource( uint32_t p_flags )const
 	{
-		return DoGetPixelShaderSource( p_uiFlags );
+		return DoGetPixelShaderSource( p_flags );
 	}
 
 	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )

@@ -38,11 +38,11 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The render system
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The render system.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le render system
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le render system.
 		 */
 		C3D_API StaticTexture( RenderSystem & p_renderSystem );
 		/**
@@ -55,7 +55,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::TextureBase::Initialise
 		 */
-		C3D_API virtual bool Initialise( uint32_t p_index, uint8_t p_cpuAccess = 0xFF, uint8_t p_gpuAccess = 0xFF );
+		C3D_API virtual bool Initialise( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array
