@@ -36,13 +36,13 @@ namespace Castor3D
 			bool m_bStopped;
 
 		protected:
-			Generator * m_pParent;
+			Generator * m_parent;
 			int m_iWidth;
 			int m_iTop;
 			int m_iBottom;
 			int m_iHeight;
 			Castor::UbPixel m_pxColour;
-			uint32_t m_uiIndex;
+			uint32_t m_index;
 			std::shared_ptr< std::thread > m_pThread;
 			mutable std::recursive_mutex m_mutex;
 
@@ -102,7 +102,7 @@ namespace Castor3D
 		uint32_t m_uiThreadCount;
 		bool m_bEnded;
 		std::vector <Thread *> m_arraySlaveThreads;
-		bool m_bInitialised;
+		bool m_initialised;
 		TextureUnit * m_pTexture;
 		Engine * m_engine;
 
@@ -146,7 +146,7 @@ namespace Castor3D
 		}
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
 		inline Castor::PixelBuffer const * GetPixelsBuffer()const
 		{

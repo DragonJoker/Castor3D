@@ -96,7 +96,7 @@ namespace GlRender
 				break;
 			}
 
-			l_attribute->SetOffset( l_element.m_uiOffset );
+			l_attribute->SetOffset( l_element.m_offset );
 			l_attribute->SetStride( m_bufferDeclaration.GetStride() );
 			m_arrayAttributes.push_back( l_attribute );
 		}
@@ -116,11 +116,11 @@ namespace GlRender
 		GlBuffer< uint8_t >::DoDestroy();
 	}
 
-	bool GlVertexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool GlVertexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, ShaderProgramBaseSPtr p_program )
 	{
 		bool l_return = true;
-		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_pProgram );
-		GlShaderProgramSPtr l_pOldProgram = m_pProgram.lock();
+		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_program );
+		GlShaderProgramSPtr l_pOldProgram = m_program.lock();
 
 		if ( l_pOldProgram != l_pNewProgram )
 		{
@@ -129,7 +129,7 @@ namespace GlRender
 				l_attribute->SetShader( l_pNewProgram );
 			}
 
-			m_pProgram = l_pNewProgram;
+			m_program = l_pNewProgram;
 
 			if ( l_pNewProgram )
 			{
@@ -138,12 +138,12 @@ namespace GlRender
 
 			if ( l_return )
 			{
-				l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_eNature );
+				l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_nature );
 			}
 		}
 		else if ( !l_pOldProgram )
 		{
-			l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_eNature );
+			l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_nature );
 		}
 
 		return l_return;
@@ -162,9 +162,13 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			REQUIRE( !m_pProgram.expired() );
-			l_return = GlBuffer< uint8_t >::DoBind();
-			DoAttributesBind();
+			l_return = DoBind();
+		}
+
+		if ( l_return )
+		{
+			REQUIRE( !m_program.expired() );
+			l_return = DoAttributesBind();
 		}
 
 		return l_return;
@@ -176,20 +180,19 @@ namespace GlRender
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			REQUIRE( !m_pProgram.expired() );
+			REQUIRE( !m_program.expired() );
 			DoAttributesUnbind();
-			GlBuffer< uint8_t >::DoUnbind();
 		}
 	}
 
-	uint8_t * GlVertexBufferObject::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+	uint8_t * GlVertexBufferObject::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
 		uint8_t * l_return = NULL;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )
 		{
-			l_return = GlBuffer< uint8_t >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+			l_return = GlBuffer< uint8_t >::DoLock( p_offset, p_count, p_flags );
 		}
 
 		return l_return;
@@ -215,14 +218,14 @@ namespace GlRender
 
 	bool GlVertexBufferObject::DoAttributesInitialise()
 	{
-		m_uiValid = 0;
+		m_valid = 0;
 
 		for ( auto && l_attribute : m_arrayAttributes )
 		{
-			m_uiValid += ( l_attribute->Initialise() ? 1 : 0 );
+			m_valid += ( l_attribute->Initialise() ? 1 : 0 );
 		}
 
-		return m_uiValid > 0;
+		return m_valid > 0;
 	}
 
 	bool GlVertexBufferObject::DoAttributesBind()

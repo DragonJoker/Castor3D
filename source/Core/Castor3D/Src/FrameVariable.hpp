@@ -79,16 +79,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API FrameVariable( ShaderProgramBase * p_pProgram );
+		C3D_API FrameVariable( ShaderProgramBase * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_uiOcc		The array dimension
+		 *\param[in]	p_occurences		The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_uiOcc		Les dimensions du tableau
+		 *\param[in]	p_occurences		Les dimensions du tableau
 		 */
-		C3D_API FrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc );
+		C3D_API FrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -270,7 +270,7 @@ namespace Castor3D
 		 */
 		inline Castor::String GetStrValue( uint32_t p_index )const
 		{
-			REQUIRE( p_index < m_uiOcc );
+			REQUIRE( p_index < m_occurences );
 			return m_strValue[p_index];
 		}
 		/**
@@ -312,7 +312,7 @@ namespace Castor3D
 		*/
 		inline const uint32_t & GetOccCount()const
 		{
-			return m_uiOcc;
+			return m_occurences;
 		}
 		/**
 		*\~english
@@ -324,7 +324,7 @@ namespace Castor3D
 		*/
 		inline ShaderProgramBase * GetProgram()const
 		{
-			return m_pProgram;
+			return m_program;
 		}
 
 	protected:
@@ -344,13 +344,13 @@ namespace Castor3D
 		//!\~english The variable name as it appears in the shader program	\~french Le nom de la variable tel qu'il apparaît dans le shader
 		Castor::String m_name;
 		//!\~english Tells if the variable has changed since last execution of the shader	\~french Dit si la valeur de la variable a changé depuis la dernière exécution du shader
-		bool m_bChanged;
+		bool m_changed;
 		//!\~english The array dimension if the variable represents an array	\~french Les dimensions du tableau si la variable représente un tableau
-		uint32_t m_uiOcc;
+		uint32_t m_occurences;
 		//!\~english The value of the variable	\~french La valeur de la variable
 		Castor::StringArray m_strValue;
 		//!\~english The parent shader program	\~french Le programme parent
-		ShaderProgramBase * m_pProgram;
+		ShaderProgramBase * m_program;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -383,16 +383,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TFrameVariable( ShaderProgramBase * p_pProgram );
+		TFrameVariable( ShaderProgramBase * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_uiOcc		The array dimension
+		 *\param[in]	p_occurences		The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_uiOcc		Les dimensions du tableau
+		 *\param[in]	p_occurences		Les dimensions du tableau
 		 */
-		TFrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc );
+		TFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -478,7 +478,7 @@ namespace Castor3D
 		//!\~english Tells the variable owns it's buffer	\~french Dit si la variable est responsable de son buffer
 		bool m_bOwnBuffer;
 		//!\~english The buffer containing all values	\~french Le buffer contenant toutes les valeurs
-		T * m_pValues;
+		T * m_values;
 	};
 }
 

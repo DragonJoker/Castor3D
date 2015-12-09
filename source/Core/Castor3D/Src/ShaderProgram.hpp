@@ -304,147 +304,147 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the input primitives type
-		 *\param[in]	p_eTarget			The shader object concerned
+		 *\param[in]	p_target			The shader object concerned
 		 *\param[in]	p_topology	The input primitives type
 		 *\~french
 		 *\brief		Définit le type des primitives en entrée
-		 *\param[in]	p_eTarget			Le shader object concerné
+		 *\param[in]	p_target			Le shader object concerné
 		 *\param[in]	p_topology	Le type des primitives en entrée
 		 */
-		C3D_API void SetInputType( eSHADER_TYPE p_eTarget, eTOPOLOGY p_topology );
+		C3D_API void SetInputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology );
 		/**
 		 *\~english
 		 *\brief		Sets the output primitives type
-		 *\param[in]	p_eTarget			The shader object concerned
+		 *\param[in]	p_target			The shader object concerned
 		 *\param[in]	p_topology	The output primitives type
 		 *\~french
 		 *\brief		Définit le type des primitives en sortie
-		 *\param[in]	p_eTarget			Le shader object concerné
+		 *\param[in]	p_target			Le shader object concerné
 		 *\param[in]	p_topology	Le type des primitives en sortie
 		 */
-		C3D_API void SetOutputType( eSHADER_TYPE p_eTarget, eTOPOLOGY p_topology );
+		C3D_API void SetOutputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology );
 		/**
 		 *\~english
 		 *\brief		Sets the output vertex count
-		 *\param[in]	p_eTarget	The shader object concerned
-		 *\param[in]	p_uiCount	The count
+		 *\param[in]	p_target	The shader object concerned
+		 *\param[in]	p_count	The count
 		 *\~french
 		 *\brief		Définit le nombre de vertices générés
-		 *\param[in]	p_eTarget	Le shader object concerné
-		 *\param[in]	p_uiCount	Le compte
+		 *\param[in]	p_target	Le shader object concerné
+		 *\param[in]	p_count	Le compte
 		 */
-		C3D_API void SetOutputVtxCount( eSHADER_TYPE p_eTarget, uint8_t p_uiCount );
+		C3D_API void SetOutputVtxCount( eSHADER_TYPE p_target, uint8_t p_count );
 		/**
 		 *\~english
 		 *\brief		Sets the shader file for given model
 		 *\remarks		The loaded file will be the one of the highest supported profile
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\param[in]	p_eModel	The shader model
 		 *\param[in]	p_pathFile	The file name
 		 *\~french
 		 *\brief		Définit le fichier du shader pour le modèle donné
 		 *\remarks		Le fichier chargé sera celui du plus haut profil supporté
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
-		C3D_API void SetFile( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
+		C3D_API void SetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader file for given model
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\param[in]	p_eModel	The shader model
 		 *\return		The file name
 		 *\~french
 		 *\brief		Récupère le fichier du shader pour le modèle donné
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le nom du fichier
 		 */
-		C3D_API Castor::Path GetFile( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel )const;
+		C3D_API Castor::Path GetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source file, whatever model it is
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\return		\p true if the shader object has a source file
 		 *\~french
 		 *\brief		Dit si le shader a un fichier source, quel que soit son modèle
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\return		\p true si le shader a un fichier source
 		 */
-		C3D_API bool HasFile( eSHADER_TYPE p_eTarget )const;
+		C3D_API bool HasFile( eSHADER_TYPE p_target )const;
 		/**
 		 *\~english
 		 *\brief		Sets the shader source for given model
 		 *\remarks		The loaded source will be the one of the highest supported profile
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\param[in]	p_eModel	The shader model
 		 *\param[in]	p_strSource	The source code
 		 *\~french
 		 *\brief		Définit la source du shader pour le modèle donné
 		 *\remarks		La source chargée sera celle du plus haut profil supporté
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_strSource	Le code de la source
 		 */
-		C3D_API void SetSource( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
+		C3D_API void SetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Castor::String const & p_strSource );
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source for given model
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\param[in]	p_eModel	The shader model
 		 *\return		The source code
 		 *\~french
 		 *\brief		Récupère la source du shader pour le modèle donné
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\return		Le code de la source
 		 */
-		C3D_API Castor::String GetSource( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel )const;
+		C3D_API Castor::String GetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const;
 		/**
 		 *\~english
 		 *\brief		Tells if the shader object has a source code, whatever model it is
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\return		\p true if the shader object has a source code
 		 *\~french
 		 *\brief		Dit si le shader a un code source, quel que soit son modèle
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\return		\p true si le shader a un code source
 		 */
-		C3D_API bool HasSource( eSHADER_TYPE p_eTarget )const;
+		C3D_API bool HasSource( eSHADER_TYPE p_target )const;
 		/**
 		 *\~english
 		 *\brief		Defines entry point for shader languages that need it
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\param[in]	p_name	The entry point
 		 *\~french
 		 *\brief		Définit le point d'entrée pour ls langages en ayant besoin
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\param[in]	p_name	Le point d'entrée
 		 */
-		C3D_API void SetEntryPoint( eSHADER_TYPE p_eTarget, Castor::String const & p_name );
+		C3D_API void SetEntryPoint( eSHADER_TYPE p_target, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves the entry point of the wanted shader object
-		 *\param[in]	p_eTarget	The shader object concerned
+		 *\param[in]	p_target	The shader object concerned
 		 *\return		The entry point
 		 *\~french
 		 *\brief		Récupère le point d'entrée du shader voulu
-		 *\param[in]	p_eTarget	Le shader object concerné
+		 *\param[in]	p_target	Le shader object concerné
 		 *\return		Le point d'entrée
 		 */
-		C3D_API Castor::String GetEntryPoint( eSHADER_TYPE p_eTarget )const;
+		C3D_API Castor::String GetEntryPoint( eSHADER_TYPE p_target )const;
 		/**
 		 *\~english
 		 *\brief		Tests if the program has an object for given type
-		 *\param[in]	p_eTarget	The shader object type
+		 *\param[in]	p_target	The shader object type
 		 *\return		\p true if the shader object exists
 		 *\~french
 		 *\brief		Dit si le programme a un shader du type donné
-		 *\param[in]	p_eTarget	Le type du shader object
+		 *\param[in]	p_target	Le type du shader object
 		 *\return		\p true si le shader object existe
 		 */
-		C3D_API bool HasObject( eSHADER_TYPE p_eTarget )const;
+		C3D_API bool HasObject( eSHADER_TYPE p_target )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the given object type status
@@ -453,7 +453,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut du type d'objet donné
 		 *\return		Le statut
 		 */
-		C3D_API eSHADER_STATUS GetObjectStatus( eSHADER_TYPE p_eTarget )const;
+		C3D_API eSHADER_STATUS GetObjectStatus( eSHADER_TYPE p_target )const;
 		/**
 		 *\~english
 		 *\brief		Creates a variable
@@ -584,7 +584,7 @@ namespace Castor3D
 		 */
 		inline ePROGRAM_STATUS GetStatus()const
 		{
-			return m_eStatus;
+			return m_status;
 		}
 		/**
 		 *\~english
@@ -632,7 +632,7 @@ namespace Castor3D
 
 	protected:
 		//!<\~english The program status	\~french Le statut du programme
-		ePROGRAM_STATUS m_eStatus;
+		ePROGRAM_STATUS m_status;
 		//!<\~english The program language	\~french Le langage du programme
 		eSHADER_LANGUAGE m_eLanguage;
 		//!\~english The shaders array	\~french Le tableau de shaders

@@ -34,7 +34,7 @@ namespace Dx11Render
 		DxBufferObject( DxRenderSystem & p_renderSystem, HardwareBufferPtr p_buffer );
 		virtual ~DxBufferObject();
 
-		virtual bool Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature );
+		virtual bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature );
 
 		HardwareBufferPtr GetCpuBuffer()const
 		{
@@ -44,13 +44,13 @@ namespace Dx11Render
 	protected:
 		void DoDestroy();
 		void DoCleanup();
-		T * DoLock( uint32_t p_uiOffset, uint32_t p_uiSize, uint32_t p_uiFlags );
+		T * DoLock( uint32_t p_offset, uint32_t p_uiSize, uint32_t p_flags );
 		void DoUnlock();
 
 	protected:
 		D3dBufferObject	* m_pBufferObject;
 		HardwareBufferPtr m_pBuffer;
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 	};
 }
 

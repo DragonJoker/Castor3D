@@ -45,7 +45,7 @@ namespace CastorShape
 		void SelectGeometry( Castor3D::GeometrySPtr p_geometry );
 		void SelectVertex( Castor3D::Vertex * p_vertex );
 		void ShowPanels();
-		void SetCurrentPanel( RenderPanel * p_pCheck, RenderPanel * p_pValue );
+		void SetCurrentPanel( RenderPanel * p_pCheck, RenderPanel * p_value );
 		void LoadScene( wxString const & p_strFileName );
 
 	private:

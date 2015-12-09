@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_SHADER_PROGRAM_H___
 #define ___GL_SHADER_PROGRAM_H___
 
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlObject.hpp"
 
 #include <ShaderProgram.hpp>
 
@@ -27,7 +27,10 @@ namespace GlRender
 	class GlShaderProgram
 		: public Castor3D::ShaderProgramBase
 		, public Castor::NonCopyable
+		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
 	{
+		using ObjectType = Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >;
+
 	public:
 		GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
 		virtual ~GlShaderProgram();
@@ -48,36 +51,26 @@ namespace GlRender
 		 *\~english
 		 *\brief		Get Linker Messages
 		 */
-		virtual void RetrieveLinkerLog( Castor::String & strLog );
+		virtual void RetrieveLinkerLog( Castor::String & p_log );
 		/**
 		 *\~english
 		 *\brief		Use Shader. OpenGL calls will go through vertex, geometry and/or fragment shaders.
 		 */
-		virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount );
+		virtual void Bind( uint8_t p_index, uint8_t p_count );
 		/**
 		 *\~english
 		 *\brief		Stop using this shader. OpenGL calls will go through regular pipeline.
 		 */
 		virtual void Unbind();
 		virtual int GetAttributeLocation( Castor::String const & p_name )const;
-		inline uint32_t & GetGlProgram()
-		{
-			return m_programObject;
-		}
-		inline uint32_t const & GetGlProgram()const
-		{
-			return m_programObject;
-		}
 
 	private:
 		virtual Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
-		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_iNbOcc );
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const;
+		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_occurences );
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_programFlags )const;
 
 	private:
-		uint32_t m_programObject;
 		Castor::String m_linkerLog;
-		OpenGl & m_gl;
 	};
 }
 

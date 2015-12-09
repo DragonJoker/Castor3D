@@ -24,28 +24,28 @@ DxRenderTarget::~DxRenderTarget()
 {
 }
 
-RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
+RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_renderBuffer )
 {
 	RenderBufferAttachmentSPtr l_return;
 
-	if ( p_pRenderBuffer->GetComponent() == eBUFFER_COMPONENT_COLOUR )
+	if ( p_renderBuffer->GetComponent() == eBUFFER_COMPONENT_COLOUR )
 	{
-		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_pRenderBuffer ) );
+		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_renderBuffer ) );
 	}
 	else
 	{
-		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_pRenderBuffer ) );
+		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_renderBuffer ) );
 	}
 
 	return l_return;
 }
 
-TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )const
+TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )
 {
 	return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), p_texture );
 }
 
-FrameBufferSPtr DxRenderTarget::CreateFrameBuffer()const
+FrameBufferSPtr DxRenderTarget::CreateFrameBuffer()
 {
 	return std::make_shared< DxFrameBuffer >( static_cast< DxRenderSystem * >( m_renderSystem ) );
 }

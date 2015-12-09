@@ -337,7 +337,7 @@ namespace OceanLighting
 
 		/** \copydoc Castor3D::RenderTechniqueBase::DoGetPixelShaderSource
 		 */
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const { return Castor::String(); }
+		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const { return Castor::String(); }
 
 	private:
 		void DoCleanupPrograms( bool all );

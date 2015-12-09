@@ -237,9 +237,9 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FontSize )
 {
 	LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( p_context );
-	int32_t l_iSize;
-	p_params[0]->Get( l_iSize );
-	l_pContext->pCurrentStyle->SetFontSize( l_iSize );
+	int32_t l_size;
+	p_params[0]->Get( l_size );
+	l_pContext->pCurrentStyle->SetFontSize( l_size );
 }
 END_ATTRIBUTE()
 

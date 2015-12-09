@@ -124,19 +124,19 @@
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgramBase * p_pProgram )
-		:	TFrameVariable< T >( p_pProgram )
+	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgramBase * p_program )
+		:	TFrameVariable< T >( p_program )
 	{
-		this->m_pValues = new T[Count];
-		memset( this->m_pValues, 0, size() );
+		this->m_values = new T[Count];
+		memset( this->m_values, 0, size() );
 	}
 
 	template< typename T, uint32_t Count >
-	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc )
-		:	TFrameVariable< T >( p_pProgram, p_uiOcc )
+	PointFrameVariable< T, Count >::PointFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences )
+		:	TFrameVariable< T >( p_program, p_occurences )
 	{
-		this->m_pValues = new T[p_uiOcc * Count];
-		memset( this->m_pValues, 0, size() );
+		this->m_values = new T[p_occurences * Count];
+		memset( this->m_values, 0, size() );
 	}
 
 	template< typename T, uint32_t Count >
@@ -187,7 +187,7 @@
 	{
 		Castor::Coords< T, Count > l_ptValue( GetValue( p_index ) );
 		memcpy( l_ptValue.ptr(), p_ptValue.const_ptr(), l_ptValue.size() );
-		TFrameVariable< T >::m_bChanged = true;
+		TFrameVariable< T >::m_changed = true;
 	}
 
 	template< typename T, uint32_t Count >
@@ -205,9 +205,9 @@
 	template< typename T, uint32_t Count >
 	inline Castor::Coords< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )
 	{
-		if ( p_index < this->m_uiOcc )
+		if ( p_index < this->m_occurences )
 		{
-			return Castor::Coords< T, Count >( &this->m_pValues[p_index * Count] );
+			return Castor::Coords< T, Count >( &this->m_values[p_index * Count] );
 		}
 		else
 		{
@@ -218,9 +218,9 @@
 	template< typename T, uint32_t Count >
 	inline Castor::Point< T, Count > PointFrameVariable< T, Count >::GetValue( uint32_t p_index )const
 	{
-		if ( p_index < this->m_uiOcc )
+		if ( p_index < this->m_occurences )
 		{
-			return Castor::Point< T, Count >( &this->m_pValues[p_index * Count] );
+			return Castor::Point< T, Count >( &this->m_values[p_index * Count] );
 		}
 		else
 		{
@@ -231,7 +231,7 @@
 	template< typename T, uint32_t Count >
 	uint32_t PointFrameVariable< T, Count >::size()const
 	{
-		return PntFrameVariableDefinitions< T, Count >::Size * this->m_uiOcc;
+		return PntFrameVariableDefinitions< T, Count >::Size * this->m_occurences;
 	}
 
 	template< typename T, uint32_t Count >

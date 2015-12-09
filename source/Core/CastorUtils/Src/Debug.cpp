@@ -31,11 +31,12 @@ namespace Castor
 #if defined( NDEBUG )
 
 		template< typename CharT >
-		void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
+		inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream )
 		{
 		}
 
 #else
+	  
 		namespace
 		{
 			const int CALLS_TO_CAPTURE( 20 );
@@ -44,7 +45,7 @@ namespace Castor
 #	if defined( __GNUG__ )
 
 			template< typename CharU, typename CharT >
-			std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
+			inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
 				std::string l_ret = string::string_cast< char >( p_name );
 				size_t l_lindex = p_name.find( "(" );
@@ -70,10 +71,26 @@ namespace Castor
 				return string::string_cast< CharU >( l_ret );
 			}
 
-#	elif defined( _MSC_VER )
+			template< typename CharT >
+			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream )
+			{
+				p_stream << "CALL STACK:" << std::endl;
+				void * l_backTrace[CALLS_TO_CAPTURE];
+				unsigned int l_num( ::backtrace( l_backTrace, CALLS_TO_CAPTURE ) );
+				char ** l_fnStrings( ::backtrace_symbols( l_backTrace, l_num ) );
+
+				for ( unsigned i = CALLS_TO_SKIP; i < l_num; ++i )
+				{
+					p_stream << "== " << Demangle< CharT >( string::string_cast< char >( l_fnStrings[i] ) ) << std::endl;
+				}
+
+				free( l_fnStrings );
+			}
+
+#	elif defined( _WIN32 )
 
 			template< typename CharU, typename CharT >
-			std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
+			inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
 				char l_real[1024] = { 0 };
 				std::string l_ret = string::string_cast< char >( p_name );
@@ -86,37 +103,8 @@ namespace Castor
 				return string::string_cast< CharU >( l_ret );
 			}
 
-#	else
-
-			template< typename CharU, typename CharT >
-			std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
-			{
-				return string::string_cast< CharU >( p_name );
-			}
-
-#	endif
-#	if !defined( _WIN32 )
-
 			template< typename CharT >
-			void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
-			{
-				p_stream << "CALL STACK:" << std::endl;
-				void * l_backTrace[CALLS_TO_CAPTURE];
-				unsigned int l_num( ::backtrace( l_backTrace, CALLS_TO_CAPTURE ) );
-				char ** l_fnStrings( ::backtrace_symbols( l_backTrace, l_num ) );
-
-				for ( unsigned i = CALLS_TO_SKIP; i < l_num; ++i )
-				{
-					p_stream << "== " << Demangle< CharT >( l_fnStrings[i] ) << std::endl;
-				}
-
-				free( l_fnStrings );
-			}
-
-#	else
-
-			template< typename CharT >
-			void DoShowBacktrace( std::basic_stringstream< CharT > & p_stream )
+			inline void DoShowBacktrace( std::basic_ostream< CharT > & p_stream )
 			{
 				static bool SymbolsInitialised = false;
 				const int MaxFnNameLen( 255 );
@@ -137,16 +125,16 @@ namespace Castor
 
 					if ( !SymbolsInitialised )
 					{
-						SymbolsInitialised = SymInitialize( l_process, NULL, TRUE ) == TRUE;
+						SymbolsInitialised = ::SymInitialize( l_process, NULL, TRUE ) == TRUE;
 					}
 
 					if ( SymbolsInitialised )
 					{
 						for ( unsigned int i = 0; i < l_num; ++i )
 						{
-							if ( SymFromAddr( l_process, reinterpret_cast< DWORD64 >( l_backTrace[i] ), 0, l_symbol ) )
+							if ( ::SymFromAddr( l_process, reinterpret_cast< DWORD64 >( l_backTrace[i] ), 0, l_symbol ) )
 							{
-								p_stream << "== " << Demangle< CharT >( std::string( l_symbol->Name, l_symbol->Name + l_symbol->NameLen ) ) << std::endl;
+								p_stream << "== " << Demangle< CharT >( string::string_cast< char >( l_symbol->Name, l_symbol->Name + l_symbol->NameLen ) ) << std::endl;
 							}
 						}
 					}
@@ -162,16 +150,19 @@ namespace Castor
 #	endif
 
 		}
+
 #endif
 
-		void ShowBacktrace( std::wstringstream & p_stream )
+		std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace )
 		{
 			DoShowBacktrace( p_stream );
+			return p_stream;
 		}
 
-		void ShowBacktrace( std::stringstream & p_stream )
+		std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace )
 		{
 			DoShowBacktrace( p_stream );
+			return p_stream;
 		}
 
 	}

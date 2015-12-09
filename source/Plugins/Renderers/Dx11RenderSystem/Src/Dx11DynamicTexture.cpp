@@ -10,8 +10,8 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxDynamicTexture::DxDynamicTexture( DxRenderSystem & p_renderSystem )
-		: DynamicTexture( p_renderSystem )
+	DxDynamicTexture::DxDynamicTexture( DxRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: DynamicTexture( p_renderSystem, p_cpuAccess, p_gpuAccess )
 		, m_texture( p_renderSystem, false )
 		, m_renderSystem( &p_renderSystem )
 	{

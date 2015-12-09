@@ -20,12 +20,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlRenderSystemPrerequisites.hpp"
 
+#include "GlHolder.hpp"
+
 #include <BackBuffers.hpp>
 
 namespace GlRender
 {
 	class GlBackBuffers
 		: public Castor3D::BackBuffers
+		, public Holder
 	{
 	public:
 		/**
@@ -133,8 +136,7 @@ namespace GlRender
 		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_interpolation );
 
 	private:
-		eGL_FRAMEBUFFER_MODE m_eGlBindingMode;
-		OpenGl & m_gl;
+		eGL_FRAMEBUFFER_MODE m_glBindingMode;
 	};
 }
 

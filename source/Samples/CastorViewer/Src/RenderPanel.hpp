@@ -62,7 +62,7 @@ namespace CastorViewer
 		virtual void UnFocus();
 
 		virtual void DrawOneFrame();
-		void SetRenderWindow( Castor3D::RenderWindowSPtr p_pWindow );
+		void SetRenderWindow( Castor3D::RenderWindowSPtr p_window );
 
 		inline Castor3D::RenderWindowSPtr GetRenderWindow()const
 		{

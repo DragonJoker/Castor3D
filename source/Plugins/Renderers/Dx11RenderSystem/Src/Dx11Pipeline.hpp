@@ -32,8 +32,8 @@ namespace Dx11Render
 		virtual ~DxPipelineImpl();
 
 		virtual void ApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, Castor3D::FrameVariableBuffer & p_matrixBuffer );
-		virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
-		virtual void Perspective( Castor::Matrix4x4r  & p_result, Castor::Angle const & p_aFOVY, real p_aspect, real p_near, real p_far );
+		virtual void ApplyViewport( int p_windowWidth, int p_windowHeight );
+		virtual void Perspective( Castor::Matrix4x4r  & p_result, Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
 		virtual void Frustum( Castor::Matrix4x4r  & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		virtual void Ortho( Castor::Matrix4x4r  & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		virtual void LookAt( Castor::Matrix4x4r & p_result, Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );

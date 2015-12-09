@@ -27,10 +27,10 @@ namespace Castor
 			return l_uiReturn;
 		}
 
-		uint32_t DLL_CALLCONV ReadProc( void * p_buffer, uint32_t p_uiSize, uint32_t p_uiCount, fi_handle p_fiHandle )
+		uint32_t DLL_CALLCONV ReadProc( void * p_buffer, uint32_t p_uiSize, uint32_t p_count, fi_handle p_fiHandle )
 		{
 			BinaryFile * l_pFile = reinterpret_cast< BinaryFile * >( p_fiHandle );
-			return uint32_t( l_pFile->ReadArray( reinterpret_cast< uint8_t * >( p_buffer ), p_uiSize * p_uiCount ) );
+			return uint32_t( l_pFile->ReadArray( reinterpret_cast< uint8_t * >( p_buffer ), p_uiSize * p_count ) );
 		}
 
 		int DLL_CALLCONV SeekProc( fi_handle p_fiHandle, long p_lOffset, int p_iOrigin )

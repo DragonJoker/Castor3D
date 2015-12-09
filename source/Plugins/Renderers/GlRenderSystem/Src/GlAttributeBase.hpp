@@ -34,41 +34,41 @@ namespace GlRender
 	*/
 	class GlAttributeBase
 		: public Castor::NonCopyable
+		, public Holder
 	{
 	public:
-		GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_strAttribName, eGL_TYPE p_eGlType, int p_iCount );
+		GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_attributeName, eGL_TYPE p_glType, int p_count );
 		virtual ~GlAttributeBase();
 
-		virtual void SetShader( Castor3D::ShaderProgramBaseSPtr p_pProgram );
+		virtual void SetShader( Castor3D::ShaderProgramBaseSPtr p_program );
 		virtual void Cleanup();
 		virtual bool Initialise();
 		virtual bool Bind( bool p_bNormalised = false );
 		virtual void Unbind();
 
-		inline void SetOffset( uint32_t p_uiOffset )
+		inline void SetOffset( uint32_t p_offset )
 		{
-			m_uiOffset = p_uiOffset;
+			m_offset = p_offset;
 		}
 		inline void SetStride( int p_iStride )
 		{
-			m_iStride = p_iStride;
+			m_stride = p_iStride;
 		}
 
 		inline uint32_t GetLocation()const
 		{
-			return m_uiAttribLocation;
+			return m_attributeLocation;
 		}
 
 	protected:
-		Castor3D::ShaderProgramBaseWPtr m_pProgram;
-		Castor::String m_strAttribName;
-		uint32_t m_uiAttribLocation;
-		int m_iCount;
-		uint32_t m_uiOffset;
-		int m_iStride;
-		eGL_TYPE m_eGlType;
+		Castor3D::ShaderProgramBaseWPtr m_program;
+		Castor::String m_attributeName;
+		uint32_t m_attributeLocation;
+		int m_count;
+		uint32_t m_offset;
+		int m_stride;
+		eGL_TYPE m_glType;
 		GlRenderSystem * m_renderSystem;
-		OpenGl & m_gl;
 	};
 }
 

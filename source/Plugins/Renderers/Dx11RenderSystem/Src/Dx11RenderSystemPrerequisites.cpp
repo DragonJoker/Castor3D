@@ -306,16 +306,16 @@ bool DirectX11::CheckError( HRESULT p_hResult, String const & p_text )
 	return true;
 }
 
-DWORD DirectX11::GetLockFlags( uint32_t p_uiFlags )
+DWORD DirectX11::GetLockFlags( uint32_t p_flags )
 {
 	DWORD l_ulLockFlags = 0;
 
-	if ( p_uiFlags & eACCESS_TYPE_READ )
+	if ( p_flags & eACCESS_TYPE_READ )
 	{
 		l_ulLockFlags |= D3D11_MAP_READ;
 	}
 
-	if ( p_uiFlags & eACCESS_TYPE_WRITE )
+	if ( p_flags & eACCESS_TYPE_WRITE )
 	{
 		l_ulLockFlags |= D3D11_MAP_WRITE_DISCARD;
 	}

@@ -165,6 +165,19 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		target_link_libraries( ${PROJECT_NAME} dl )
 	endif ()
 	
+	file( GLOB CASTOR_Pool_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.inl
+	)
+	file( GLOB CASTOR_Pool_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.cpp
+	)
+	source_group( "Header Files\\Pool" FILES ${CASTOR_Pool_HEADER_FILES} )
+	source_group( "Source Files\\Pool" FILES ${CASTOR_Pool_SOURCE_FILES} )
+	
 	file( GLOB CASTOR_Math_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.inl

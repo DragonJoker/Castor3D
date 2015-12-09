@@ -128,20 +128,20 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
 		 *\param[out]	p_pValues	Receives the parsed values
-		 *\param[out]	p_uiCount	The values count
+		 *\param[out]	p_count	The values count
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
 		 *\param[out]	p_pValues	Reçoit les valeurs
-		 *\param[out]	p_uiCount	Le compte des valeurs
+		 *\param[out]	p_count	Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoParseChunk( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T * p_pValues, uint32_t p_count, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >()( p_pValues, p_uiCount, p_chunk );
+			return ChunkParser< T >()( p_pValues, p_count, p_chunk );
 		}
 		/**
 		 *\~english
@@ -181,22 +181,22 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
 		 *\param[in]	p_value		The values
-		 *\param[in]	p_uiCount		The values count
+		 *\param[in]	p_count		The values count
 		 *\param[in]	p_eChunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
 		 *\param[in]	p_value		Les valeurs
-		 *\param[in]	p_uiCount		Le nombre de valeurs
+		 *\param[in]	p_count		Le nombre de valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoFillChunk( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const * p_pValues, uint32_t p_count, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_pValues, p_uiCount, p_eChunkType, p_chunk );
+			return ChunkFiller< T >()( p_pValues, p_count, p_eChunkType, p_chunk );
 		}
 		/**
 		 *\~english

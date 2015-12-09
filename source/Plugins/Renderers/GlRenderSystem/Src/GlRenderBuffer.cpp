@@ -8,39 +8,25 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlRenderBuffer::GlRenderBuffer( OpenGl & p_gl, eGL_RENDERBUFFER_STORAGE p_eInternal, RenderBuffer & p_renderBuffer )
-		: m_uiGlName( eGL_INVALID_INDEX )
-		, m_eInternal( p_eInternal )
+	GlRenderBuffer::GlRenderBuffer( OpenGl & p_gl, eGL_RENDERBUFFER_STORAGE p_internal, RenderBuffer & p_renderBuffer )
+		: BindableType( p_gl,
+						"GlRenderBuffer",
+						std::bind( &OpenGl::GenRenderbuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+						std::bind( &OpenGl::DeleteRenderbuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+						std::bind( &OpenGl::IsRenderbuffer, std::ref( p_gl ), std::placeholders::_1 ),
+						[&p_gl]( uint32_t p_glName )
+						{
+							return p_gl.BindRenderbuffer( eGL_RENDERBUFFER_MODE_DEFAULT, p_glName );
+						} )
+		, m_internal( p_internal )
 		, m_size( 0, 0 )
 		, m_renderBuffer( p_renderBuffer )
-		, m_gl( p_gl )
 	{
-		ENSURE( m_eInternal != 0 );
+		REQUIRE( p_internal != 0 );
 	}
 
 	GlRenderBuffer::~GlRenderBuffer()
 	{
-	}
-
-	bool GlRenderBuffer::Create()
-	{
-		if ( m_gl.HasFbo() )
-		{
-			m_gl.GenRenderbuffers( 1, &m_uiGlName );
-			glTrack( m_gl, GlRenderBuffer, this );
-		}
-
-		return m_uiGlName != eGL_INVALID_INDEX;
-	}
-
-	void GlRenderBuffer::Destroy()
-	{
-		if ( m_uiGlName != eGL_INVALID_INDEX )
-		{
-			glUntrack( m_gl, this );
-			m_gl.DeleteRenderbuffers( 1, &m_uiGlName );
-			m_uiGlName = uint32_t( eGL_INVALID_INDEX );
-		}
 	}
 
 	bool GlRenderBuffer::Initialise( Size const & p_size )
@@ -53,11 +39,11 @@ namespace GlRender
 
 			if ( m_renderBuffer.GetSamplesCount() > 1 )
 			{
-				l_return = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
+				l_return = GetOpenGl().RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				l_return = m_gl.RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_eInternal, p_size );
+				l_return = GetOpenGl().RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_internal, p_size );
 			}
 
 			Unbind();
@@ -70,16 +56,6 @@ namespace GlRender
 	{
 	}
 
-	bool GlRenderBuffer::Bind()
-	{
-		return m_uiGlName != eGL_INVALID_INDEX && m_gl.BindRenderbuffer( eGL_RENDERBUFFER_MODE_DEFAULT, m_uiGlName );
-	}
-
-	void GlRenderBuffer::Unbind()
-	{
-		m_uiGlName != eGL_INVALID_INDEX && m_gl.BindRenderbuffer( eGL_RENDERBUFFER_MODE_DEFAULT, 0 );
-	}
-
 	bool GlRenderBuffer::Resize( Size const & p_size )
 	{
 		bool l_return = m_size == p_size;
@@ -90,11 +66,11 @@ namespace GlRender
 
 			if ( m_renderBuffer.GetSamplesCount() > 1 )
 			{
-				l_return = m_gl.RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_eInternal, p_size );
+				l_return = GetOpenGl().RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE_DEFAULT, m_renderBuffer.GetSamplesCount(), m_internal, p_size );
 			}
 			else
 			{
-				l_return = m_gl.RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_eInternal, p_size );
+				l_return = GetOpenGl().RenderbufferStorage( eGL_RENDERBUFFER_MODE_DEFAULT, m_internal, p_size );
 			}
 
 			Unbind();

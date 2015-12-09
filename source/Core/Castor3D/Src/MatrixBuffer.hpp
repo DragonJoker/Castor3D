@@ -66,15 +66,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\remark		Used for instanciation
-		 *\param[in]	p_uiCount	Instances count
+		 *\param[in]	p_count	Instances count
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\remark		Utilisé pour l'instanciation
-		 *\param[in]	p_uiCount	Nombre d'instances
+		 *\param[in]	p_count	Nombre d'instances
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Bind( uint32_t p_uiCount );
+		C3D_API bool Bind( uint32_t p_count );
 
 	private:
 		using CpuBuffer< real >::Bind;

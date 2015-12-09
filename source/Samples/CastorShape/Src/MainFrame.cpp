@@ -147,11 +147,11 @@ namespace CastorShape
 			if ( m_selectedGeometry )
 			{
 				MeshSPtr l_mesh = m_selectedGeometry->GetMesh();
-				uint32_t l_uiIndex = 0;
+				uint32_t l_index = 0;
 
 				for ( auto && l_submesh : *l_mesh )
 				{
-					MaterialInfos * l_infos = m_selectedGeometryMaterials[l_uiIndex++];
+					MaterialInfos * l_infos = m_selectedGeometryMaterials[l_index++];
 					m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->SetAmbient( Colour::from_rgb( l_infos->m_ambient ) );
 					m_selectedGeometry->GetMaterial( l_submesh )->GetPass( 0 )->SetEmissive( Colour::from_rgb( l_infos->m_emissive ) );
 				}
@@ -201,9 +201,9 @@ namespace CastorShape
 		}
 	}
 
-	void MainFrame::SetCurrentPanel( RenderPanel * p_pCheck, RenderPanel * p_pValue )
+	void MainFrame::SetCurrentPanel( RenderPanel * p_pCheck, RenderPanel * p_value )
 	{
-		if ( p_pValue == NULL )
+		if ( p_value == NULL )
 		{
 			if ( m_selectedFrame == p_pCheck )
 			{
@@ -212,7 +212,7 @@ namespace CastorShape
 		}
 		else
 		{
-			m_selectedFrame = p_pValue;
+			m_selectedFrame = p_value;
 		}
 	}
 

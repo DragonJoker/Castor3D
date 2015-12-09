@@ -300,7 +300,7 @@ namespace Castor3D
 			l_parent.reset();
 		}
 
-		m_pParent = p_parent;
+		m_parent = p_parent;
 
 		if ( p_parent )
 		{
@@ -317,7 +317,7 @@ namespace Castor3D
 		if ( l_parent )
 		{
 			m_displayable = false;
-			m_pParent.reset();
+			m_parent.reset();
 			l_parent->DetachChild( shared_from_this() );
 			m_mtxChanged = true;
 		}

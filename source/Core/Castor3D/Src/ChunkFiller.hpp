@@ -84,21 +84,21 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
 		 *\param[in]	p_value		The values
-		 *\param[in]	p_uiCount		The values count
+		 *\param[in]	p_count		The values count
 		 *\param[in]	p_eChunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
 		 *\param[in]	p_value		Les valeurs
-		 *\param[in]	p_uiCount		Le nombre de valeurs
+		 *\param[in]	p_count		Le nombre de valeurs
 		 *\param[in]	p_eChunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool operator()( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
+		inline bool operator()( T const * p_pValues, uint32_t p_count, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )
 		{
-			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_pValues ), p_uiCount * sizeof( T ), p_eChunkType, p_chunk );
+			return ChunkFillerBase::operator()( reinterpret_cast< uint8_t const * >( p_pValues ), p_count * sizeof( T ), p_eChunkType, p_chunk );
 		}
 		/**
 		 *\~english

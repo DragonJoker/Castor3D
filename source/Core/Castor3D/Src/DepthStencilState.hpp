@@ -101,15 +101,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the depth test status
-		 *\param[in]	p_bEnable The new status
+		 *\param[in]	p_enable The new status
 		 *\~french
 		 *\brief		Définit le statut du test de profondeur
-		 *\param[in]	p_bEnable	Le nouveau statut
+		 *\param[in]	p_enable	Le nouveau statut
 		 */
-		inline void SetDepthTest( bool p_bEnable )
+		inline void SetDepthTest( bool p_enable )
 		{
-			m_bChanged |= m_bDepthTest != p_bEnable;
-			m_bDepthTest = p_bEnable;
+			m_changed |= m_bDepthTest != p_enable;
+			m_bDepthTest = p_enable;
 		}
 		/**
 		 *\~english
@@ -126,15 +126,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the depth function
-		 *\param[in]	p_eFunc The function
+		 *\param[in]	p_func The function
 		 *\~french
 		 *\brief		Définit la fonction de profondeur
-		 *\param[in]	p_eFunc	La fonction
+		 *\param[in]	p_func	La fonction
 		 */
-		inline void SetDepthFunc( eDEPTH_FUNC p_eFunc )
+		inline void SetDepthFunc( eDEPTH_FUNC p_func )
 		{
-			m_bChanged |= m_eDepthFunc != p_eFunc;
-			m_eDepthFunc = p_eFunc;
+			m_changed |= m_eDepthFunc != p_func;
+			m_eDepthFunc = p_func;
 		}
 		/**
 		 *\~english
@@ -151,14 +151,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the depth function
-		 *\param[in]	p_eFunc The function
+		 *\param[in]	p_func The function
 		 *\~french
 		 *\brief		Définit la fonction de profondeur
-		 *\param[in]	p_eFunc	La fonction
+		 *\param[in]	p_func	La fonction
 		 */
 		inline void SetDepthRange( double p_dNear, double p_dFar )
 		{
-			m_bChanged |= p_dNear != m_dDepthNear || p_dFar != m_dDepthFar;
+			m_changed |= p_dNear != m_dDepthNear || p_dFar != m_dDepthFar;
 			m_dDepthNear = p_dNear;
 			m_dDepthFar = p_dFar;
 		}
@@ -196,7 +196,7 @@ namespace Castor3D
 		 */
 		inline void SetDepthMask( eWRITING_MASK p_eMask )
 		{
-			m_bChanged |= m_eDepthMask != p_eMask;
+			m_changed |= m_eDepthMask != p_eMask;
 			m_eDepthMask = p_eMask;
 		}
 		/**
@@ -214,15 +214,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the stencil test status
-		 *\param[in]	p_bEnable The new status
+		 *\param[in]	p_enable The new status
 		 *\~french
 		 *\brief		Définit le statut du test de stencil
-		 *\param[in]	p_bEnable	Le nouveau statut
+		 *\param[in]	p_enable	Le nouveau statut
 		 */
-		inline void SetStencilTest( bool p_bEnable )
+		inline void SetStencilTest( bool p_enable )
 		{
-			m_bChanged |= true;
-			m_bStencilTest = p_bEnable;
+			m_changed |= true;
+			m_bStencilTest = p_enable;
 		}
 		/**
 		 *\~english
@@ -246,7 +246,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilReadMask( uint32_t p_uiMask )
 		{
-			m_bChanged |= m_uiStencilReadMask != p_uiMask;
+			m_changed |= m_uiStencilReadMask != p_uiMask;
 			m_uiStencilReadMask = p_uiMask;
 		}
 		/**
@@ -271,7 +271,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilWriteMask( uint32_t p_uiMask )
 		{
-			m_bChanged |= m_uiStencilWriteMask != p_uiMask;
+			m_changed |= m_uiStencilWriteMask != p_uiMask;
 			m_uiStencilWriteMask = p_uiMask;
 		}
 		/**
@@ -296,7 +296,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontRef( uint32_t p_ref )
 		{
-			m_bChanged |= m_stStencilFront.m_ref != p_ref;
+			m_changed |= m_stStencilFront.m_ref != p_ref;
 			m_stStencilFront.m_ref = p_ref;
 		}
 		/**
@@ -314,15 +314,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the stencil function for front faces
-		 *\param[in]	p_eFunc The function
+		 *\param[in]	p_func The function
 		 *\~french
 		 *\brief		Définit la fonction de stencil pour les faces avant
-		 *\param[in]	p_eFunc	La fonction
+		 *\param[in]	p_func	La fonction
 		 */
-		inline void SetStencilFrontFunc( eSTENCIL_FUNC p_eFunc )
+		inline void SetStencilFrontFunc( eSTENCIL_FUNC p_func )
 		{
-			m_bChanged |= m_stStencilFront.m_eFunc != p_eFunc;
-			m_stStencilFront.m_eFunc = p_eFunc;
+			m_changed |= m_stStencilFront.m_eFunc != p_func;
+			m_stStencilFront.m_eFunc = p_func;
 		}
 		/**
 		 *\~english
@@ -346,7 +346,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_bChanged |= m_stStencilFront.m_eFailOp != p_eOp;
+			m_changed |= m_stStencilFront.m_eFailOp != p_eOp;
 			m_stStencilFront.m_eFailOp = p_eOp;
 		}
 		/**
@@ -371,7 +371,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontDepthFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_bChanged |= m_stStencilFront.m_eDepthFailOp != p_eOp;
+			m_changed |= m_stStencilFront.m_eDepthFailOp != p_eOp;
 			m_stStencilFront.m_eDepthFailOp = p_eOp;
 		}
 		/**
@@ -396,7 +396,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilFrontPassOp( eSTENCIL_OP p_eOp )
 		{
-			m_bChanged |= m_stStencilFront.m_ePassOp != p_eOp;
+			m_changed |= m_stStencilFront.m_ePassOp != p_eOp;
 			m_stStencilFront.m_ePassOp = p_eOp;
 		}
 		/**
@@ -421,7 +421,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackRef( uint32_t p_ref )
 		{
-			m_bChanged |= m_stStencilBack.m_ref != p_ref;
+			m_changed |= m_stStencilBack.m_ref != p_ref;
 			m_stStencilBack.m_ref = p_ref;
 		}
 		/**
@@ -439,15 +439,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the stencil function for front back
-		 *\param[in]	p_eFunc The function
+		 *\param[in]	p_func The function
 		 *\~french
 		 *\brief		Définit la fonction de stencil pour les faces arrières
-		 *\param[in]	p_eFunc	La fonction
+		 *\param[in]	p_func	La fonction
 		 */
-		inline void SetStencilBackFunc( eSTENCIL_FUNC p_eFunc )
+		inline void SetStencilBackFunc( eSTENCIL_FUNC p_func )
 		{
-			m_bChanged |= m_stStencilBack.m_eFunc != p_eFunc;
-			m_stStencilBack.m_eFunc = p_eFunc;
+			m_changed |= m_stStencilBack.m_eFunc != p_func;
+			m_stStencilBack.m_eFunc = p_func;
 		}
 		/**
 		 *\~english
@@ -471,7 +471,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_bChanged |= m_stStencilBack.m_eFailOp != p_eOp;
+			m_changed |= m_stStencilBack.m_eFailOp != p_eOp;
 			m_stStencilBack.m_eFailOp = p_eOp;
 		}
 		/**
@@ -496,7 +496,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackDepthFailOp( eSTENCIL_OP p_eOp )
 		{
-			m_bChanged |= m_stStencilBack.m_eDepthFailOp != p_eOp;
+			m_changed |= m_stStencilBack.m_eDepthFailOp != p_eOp;
 			m_stStencilBack.m_eDepthFailOp = p_eOp;
 		}
 		/**
@@ -521,7 +521,7 @@ namespace Castor3D
 		 */
 		inline void SetStencilBackPassOp( eSTENCIL_OP p_eOp )
 		{
-			m_bChanged |= m_stStencilBack.m_ePassOp != p_eOp;
+			m_changed |= m_stStencilBack.m_ePassOp != p_eOp;
 			m_stStencilBack.m_ePassOp = p_eOp;
 		}
 		/**
@@ -562,7 +562,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english Tells it has changed	\~french Dit que l'état a changé
-		bool m_bChanged;
+		bool m_changed;
 		//!\~english Tells whether the depth test is activated or not	\~french Dit si oui on non le test de profondeur est activé
 		bool m_bDepthTest;
 		//!\~english The depth test function	\~french La fonction du test de profondeur

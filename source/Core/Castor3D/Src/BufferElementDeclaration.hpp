@@ -45,7 +45,7 @@ namespace Castor3D
 			:	m_uiStream()
 			,	m_eUsage()
 			,	m_eDataType()
-			,	m_uiOffset()
+			,	m_offset()
 		{
 		}
 		/**
@@ -54,19 +54,19 @@ namespace Castor3D
 		 *\param[in]	p_uiStream	Stream index
 		 *\param[in]	p_eUsage	Element usage
 		 *\param[in]	p_type		Element type
-		 *\param[in]	p_uiOffset	Offset in the stream
+		 *\param[in]	p_offset	Offset in the stream
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_uiStream	Index du flux
 		 *\param[in]	p_eUsage	Utilisation de l'élément
 		 *\param[in]	p_type		Type de l'élément
-		 *\param[in]	p_uiOffset	Offset dans le tampon
+		 *\param[in]	p_offset	Offset dans le tampon
 		 */
-		BufferElementDeclaration( uint32_t p_uiStream, eELEMENT_USAGE p_eUsage, eELEMENT_TYPE p_type, uint32_t p_uiOffset = 0 )
+		BufferElementDeclaration( uint32_t p_uiStream, eELEMENT_USAGE p_eUsage, eELEMENT_TYPE p_type, uint32_t p_offset = 0 )
 			:	m_uiStream( p_uiStream )
 			,	m_eUsage( p_eUsage )
 			,	m_eDataType( p_type )
-			,	m_uiOffset( p_uiOffset )
+			,	m_offset( p_offset )
 		{
 		}
 		//!\~english Stream index	\~french Index du flux
@@ -76,7 +76,7 @@ namespace Castor3D
 		//!\~english Element type	\~french Type de l'élément
 		eELEMENT_TYPE m_eDataType;
 		//!\~english Offset in stream	\~french Offset dans le tampon
-		uint32_t m_uiOffset;
+		uint32_t m_offset;
 	};
 }
 

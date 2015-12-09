@@ -1,6 +1,9 @@
 #ifndef ___ImgToIcoApp___
 #define ___ImgToIcoApp___
 
+#include <wx/app.h>
+#include "MainFrame.hpp"
+
 namespace ImgToIco
 {
 	class MainFrame;

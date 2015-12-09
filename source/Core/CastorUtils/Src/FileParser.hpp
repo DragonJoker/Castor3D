@@ -227,22 +227,22 @@ namespace Castor
 		 *\~english
 		 *\brief		Logs an error in the log file
 		 *\param[in]	p_strError	The error text
-		 *\param[in]	p_pContext	The current parsing context
+		 *\param[in]	p_context	The current parsing context
 		 *\~french
 		 *\brief		Log une erreur dans le fichier de log
 		 *\param[in]	p_strError	Le texte de l'erreur
-		 *\param[in]	p_pContext	Le context d'analyse
+		 *\param[in]	p_context	Le context d'analyse
 		 */
 		CU_API void ParseError( String const & p_strError );
 		/**
 		 *\~english
 		 *\brief		Logs a warning in the log file
 		 *\param[in]	p_strWarning	The warning text
-		 *\param[in]	p_pContext		The current parsing context
+		 *\param[in]	p_context		The current parsing context
 		 *\~french
 		 *\brief		Log un avertissement dans le fichier de log
 		 *\param[in]	p_strWarning	Le texte de l'avertissement
-		 *\param[in]	p_pContext		Le context d'analyse
+		 *\param[in]	p_context		Le context d'analyse
 		 */
 		CU_API void ParseWarning( String const & p_strWarning );
 		/**

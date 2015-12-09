@@ -144,24 +144,24 @@ namespace Castor3D
 		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index ) = 0;
+		C3D_API virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
 		 *\param[in]	p_eTopology	The wanted topology
 		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
 		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
-		 *\param[in]	p_uiCount	The instances count
+		 *\param[in]	p_count	The instances count
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Dessine la géométrie contenue dans les buffers
 		 *\param[in]	p_eTopology	La topologie voulue
 		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
 		 *\param[in]	p_index	Spécifie l'indice du premier vertice
-		 *\param[in]	p_uiCount	Le nombre d'instances à dessiner
+		 *\param[in]	p_count	Le nombre d'instances à dessiner
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount ) = 0;
+		C3D_API virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count ) = 0;
 		/**
 		 *\~english
 		 *\brief		Binds the geometry buffers
@@ -282,6 +282,8 @@ namespace Castor3D
 		IndexBufferUPtr m_pIndexBuffer;
 		//!\~english The matrix buffer	\~french Le tampon de matrices
 		MatrixBufferUPtr m_pMatrixBuffer;
+		//!\~english The shader program.	\~french Le programme de rendu.
+		ShaderProgramBaseWPtr m_program;
 	};
 }
 

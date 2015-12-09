@@ -9,10 +9,13 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTextureStorage::GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: m_glRenderSystem( &p_renderSystem )
-		, m_gl( p_gl )
+	GlTextureStorage::GlTextureStorage( OpenGl & p_gl, GlTexture & p_texture, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: OwnedBy< GlTexture >( p_texture )
+		, Holder( p_gl )
+		, m_glRenderSystem( &p_renderSystem )
 		, m_depth( 0 )
+		, m_cpuAccess( p_cpuAccess )
+		, m_gpuAccess( p_gpuAccess )
 	{
 	}
 
@@ -32,10 +35,9 @@ namespace GlRender
 		m_buffer.reset();
 	}
 
-	bool GlTextureStorage::Initialise( eTEXTURE_TYPE p_dimension, uint32_t p_depth )
+	bool GlTextureStorage::Initialise( uint32_t p_depth )
 	{
 		m_depth = p_depth;
-		m_glDimension = m_gl.Get( p_dimension );
 		return DoInitialise();
 	}
 

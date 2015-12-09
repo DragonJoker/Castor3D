@@ -63,6 +63,7 @@ namespace Castor3D
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature )
 	{
 		bool l_return = true;
+		m_program = p_shader;
 
 		if ( l_return && m_pVertexBuffer )
 		{
@@ -80,6 +81,7 @@ namespace Castor3D
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature )
 	{
 		bool l_return = true;
+		m_program = p_shader;
 
 		if ( l_return && m_pVertexBuffer )
 		{
@@ -102,6 +104,7 @@ namespace Castor3D
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature, eBUFFER_ACCESS_TYPE p_mtxType, eBUFFER_ACCESS_NATURE p_mtxNature )
 	{
 		bool l_return = true;
+		m_program = p_shader;
 
 		if ( l_return && m_pVertexBuffer )
 		{
@@ -128,6 +131,7 @@ namespace Castor3D
 
 	void GeometryBuffers::Cleanup()
 	{
+		m_program.reset();
 		DoCleanup();
 
 		if ( m_pVertexBuffer )
