@@ -25,6 +25,19 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
+	class GlGeometryBuffers;
+
+	class GlGeometryBuffersImpl
+		: public Castor::OwnedBy< GlGeometryBuffers >
+	{
+	public:
+		GlGeometryBuffersImpl( GlGeometryBuffers & p_buffers );
+		virtual ~GlGeometryBuffersImpl();
+
+		virtual bool Bind() = 0;
+		virtual void Unbind() = 0;
+	};
+
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
@@ -39,24 +52,16 @@ namespace GlRender
 	class GlGeometryBuffers
 		: public Castor3D::GeometryBuffers
 		, public Castor::NonCopyable
+		, public Holder
 	{
-	private:
-		typedef std::function< bool() >	PFnBind;
-		typedef std::function< void() >	PFnUnbind;
-
 	public:
 		GlGeometryBuffers( OpenGl & p_gl, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
 		virtual ~GlGeometryBuffers();
 
-		virtual bool Draw( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index );
-		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_index, uint32_t p_uiCount );
+		virtual bool Draw( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index );
+		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count );
 		virtual bool Bind();
 		virtual void Unbind();
-
-		inline uint32_t	GetIndex()const
-		{
-			return m_uiIndex;
-		}
 
 	private:
 		virtual bool DoCreate();
@@ -65,10 +70,7 @@ namespace GlRender
 		virtual void DoCleanup();
 
 	private:
-		uint32_t m_uiIndex;
-		PFnBind m_pfnBind;
-		PFnUnbind m_pfnUnbind;
-		OpenGl & m_gl;
+		std::unique_ptr< GlGeometryBuffersImpl > m_impl;
 	};
 }
 

@@ -55,16 +55,16 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		OneFrameVariable( ShaderProgramBase * p_pProgram );
+		OneFrameVariable( ShaderProgramBase * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_uiOcc		The array dimension
+		 *\param[in]	p_occurences		The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_uiOcc		Les dimensions du tableau
+		 *\param[in]	p_occurences		Les dimensions du tableau
 		 */
-		OneFrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc );
+		OneFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -217,7 +217,7 @@ namespace Castor3D
 		 */
 		inline T & operator[]( uint32_t p_index )
 		{
-			return this->m_pValues[p_index];
+			return this->m_values[p_index];
 		}
 		/**
 		 *\~english
@@ -233,7 +233,7 @@ namespace Castor3D
 		 */
 		inline T const & operator[]( uint32_t p_index )const
 		{
-			return this->m_pValues[p_index];
+			return this->m_values[p_index];
 		}
 		/**
 		 *\~english

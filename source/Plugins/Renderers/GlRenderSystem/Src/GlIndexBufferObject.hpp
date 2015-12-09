@@ -34,9 +34,9 @@ namespace GlRender
 
 		virtual bool Create();
 		virtual void Destroy();
-		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram );
+		virtual bool Initialise( Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature, Castor3D::ShaderProgramBaseSPtr p_program );
 		virtual void Cleanup();
-		virtual uint32_t * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags );
+		virtual uint32_t * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
 		virtual void Unlock();
 		virtual bool Bind();
 		virtual void Unbind();

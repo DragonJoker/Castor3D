@@ -26,28 +26,28 @@ namespace GlRender
 {
 	class GlFrameVariableBase
 		: public Castor::NonCopyable
+		, public Holder
 	{
 	public:
-		GlFrameVariableBase( OpenGl & p_gl, uint32_t * p_uiProgram );
+		GlFrameVariableBase( OpenGl & p_gl, uint32_t * p_programId );
 		virtual ~GlFrameVariableBase();
 		virtual void Bind() = 0;
 
-		inline uint32_t GetGlIndex() const
+		inline uint32_t GetGlName() const
 		{
-			return m_iGlIndex;
+			return m_glName;
 		}
 
 	protected:
-		void GetVariableLocation( char const * p_pVarName );
-		template <typename Type> void DoBind( Type const * p_pValue, uint32_t p_uiOcc );
-		template <typename Type, int Count> void DoBind( Type const * p_pValue, uint32_t p_uiOcc );
-		template <typename Type, int Rows, int Columns> void DoBind( Type const * p_pValue, uint32_t p_uiOcc );
+		void GetVariableLocation( char const * p_varName );
+		template <typename Type> void DoBind( Type const * p_value, uint32_t p_occurences );
+		template <typename Type, int Count> void DoBind( Type const * p_value, uint32_t p_occurences );
+		template <typename Type, int Rows, int Columns> void DoBind( Type const * p_value, uint32_t p_occurences );
 
 	protected:
-		uint32_t m_iGlIndex;
-		uint32_t * m_uiParentProgram;
-		bool m_bPresentInProgram;
-		OpenGl & m_gl;
+		uint32_t m_glName;
+		uint32_t * m_parentProgramId;
+		bool m_presentInProgram;
 	};
 }
 

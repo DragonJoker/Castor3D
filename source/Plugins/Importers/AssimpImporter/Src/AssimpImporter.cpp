@@ -419,9 +419,9 @@ bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_pSkeleton, aiMesh const * p_p
 
 		p_pSubmesh->AddPoints( l_stVertices );
 
-		for ( uint32_t l_uiIndex = 0; l_uiIndex < p_pAiMesh->mNumFaces; l_uiIndex++ )
+		for ( uint32_t l_index = 0; l_index < p_pAiMesh->mNumFaces; l_index++ )
 		{
-			aiFace const & l_face = p_pAiMesh->mFaces[l_uiIndex];
+			aiFace const & l_face = p_pAiMesh->mFaces[l_index];
 
 			if ( l_face.mNumIndices == 3 )
 			{
@@ -575,34 +575,34 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 	return l_return;
 }
 
-void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBones, uint32_t p_uiCount, std::vector< stVERTEX_BONE_DATA > & p_arrayVertices )
+void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< stVERTEX_BONE_DATA > & p_arrayVertices )
 {
-	for ( uint32_t i = 0; i < p_uiCount; ++i )
+	for ( uint32_t i = 0; i < p_count; ++i )
 	{
 		aiBone * l_pAiBone = p_pBones[i];
 		String l_name = string::string_cast< xchar >( l_pAiBone->mName.C_Str() );
-		uint32_t l_uiIndex;
+		uint32_t l_index;
 
 		if ( m_mapBoneByID.find( l_name ) == m_mapBoneByID.end() )
 		{
 			BoneSPtr l_pBone = std::make_shared< Bone >( *p_pSkeleton );
 			l_pBone->SetName( l_name );
 			l_pBone->SetOffsetMatrix( Matrix4x4r( &l_pAiBone->mOffsetMatrix.Transpose().a1 ) );
-			l_uiIndex = uint32_t( m_arrayBones.size() );
+			l_index = uint32_t( m_arrayBones.size() );
 			m_arrayBones.push_back( l_pBone );
-			m_mapBoneByID[l_name] = l_uiIndex;
+			m_mapBoneByID[l_name] = l_index;
 			p_pSkeleton->AddBone( l_pBone );
 		}
 		else
 		{
-			l_uiIndex = m_mapBoneByID[l_name];
+			l_index = m_mapBoneByID[l_name];
 		}
 
 		for ( uint32_t j = 0; j < l_pAiBone->mNumWeights; ++j )
 		{
 			uint32_t l_uiVertexId = l_pAiBone->mWeights[j].mVertexId;
 			real l_rWeight = real( l_pAiBone->mWeights[j].mWeight );
-			p_arrayVertices[l_uiVertexId].AddBoneData( l_uiIndex, l_rWeight );
+			p_arrayVertices[l_uiVertexId].AddBoneData( l_index, l_rWeight );
 		}
 	}
 }
@@ -627,7 +627,7 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 	String l_name = string::string_cast< xchar >( p_node->mName.data );
 	const aiNodeAnim * l_pNodeAnim = ::detail::FindNodeAnim( p_paiAnimation, l_name );
 	Matrix4x4r l_mtxNode( &p_node->mTransformation/*.Transpose()*/.a1 );
-	MovingObjectBaseSPtr l_pObject;
+	MovingObjectBaseSPtr l_object;
 
 	if ( l_pNodeAnim )
 	{
@@ -638,25 +638,25 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 
 		if ( l_itBone != p_pSkeleton->End() )
 		{
-			l_pObject = p_pAnimation->AddMovingObject( *l_itBone );
+			l_object = p_pAnimation->AddMovingObject( *l_itBone );
 		}
 		else
 		{
-			l_pObject = p_pAnimation->AddMovingObject();
+			l_object = p_pAnimation->AddMovingObject();
 		}
 
 		// We treat translations
 		for ( uint32_t i = 0; i < l_pNodeAnim->mNumPositionKeys; ++i )
 		{
 			Point3r l_ptTranslate( l_pNodeAnim->mPositionKeys[i].mValue.x, l_pNodeAnim->mPositionKeys[i].mValue.y, l_pNodeAnim->mPositionKeys[i].mValue.z );
-			l_pObject->AddTranslateKeyFrame( real( l_pNodeAnim->mPositionKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_ptTranslate );
+			l_object->AddTranslateKeyFrame( real( l_pNodeAnim->mPositionKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_ptTranslate );
 		}
 
 		// Then we treat scalings
 		for ( uint32_t i = 0; i < l_pNodeAnim->mNumScalingKeys; ++i )
 		{
 			Point3r l_ptScale( l_pNodeAnim->mScalingKeys[i].mValue.x, l_pNodeAnim->mScalingKeys[i].mValue.y, l_pNodeAnim->mScalingKeys[i].mValue.z );
-			l_pObject->AddScaleKeyFrame( real( l_pNodeAnim->mScalingKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_ptScale );
+			l_object->AddScaleKeyFrame( real( l_pNodeAnim->mScalingKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_ptScale );
 		}
 
 		// And eventually the rotations
@@ -664,28 +664,28 @@ void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_pAnimation, real p
 		{
 			Quaternion l_qRotate;
 			l_qRotate.from_matrix( Matrix3x3r( &l_pNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 ) );
-			l_pObject->AddRotateKeyFrame( real( l_pNodeAnim->mRotationKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_qRotate );
+			l_object->AddRotateKeyFrame( real( l_pNodeAnim->mRotationKeys[i].mTime ) / p_rTicksPerSecond )->SetValue( l_qRotate );
 		}
 	}
 
-	if ( !l_pObject )
+	if ( !l_object )
 	{
-		l_pObject = p_pAnimation->AddMovingObject();
+		l_object = p_pAnimation->AddMovingObject();
 	}
 
 	if ( p_object )
 	{
-		p_object->AddChild( l_pObject );
+		p_object->AddChild( l_object );
 	}
 
-	if ( !l_pObject->HasKeyFrames() )
+	if ( !l_object->HasKeyFrames() )
 	{
-		l_pObject->SetNodeTransform( l_mtxNode );
+		l_object->SetNodeTransform( l_mtxNode );
 	}
 
 	for ( uint32_t i = 0 ; i < p_node->mNumChildren ; i++ )
 	{
-		DoProcessAnimationNodes( p_pAnimation, p_rTicksPerSecond, p_pSkeleton, p_node->mChildren[i], p_paiAnimation, l_pObject );
+		DoProcessAnimationNodes( p_pAnimation, p_rTicksPerSecond, p_pSkeleton, p_node->mChildren[i], p_paiAnimation, l_object );
 	}
 }
 

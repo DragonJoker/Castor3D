@@ -17,7 +17,7 @@
 #include <Logger.hpp>
 
 #if C3D_HAS_GL_RENDERER
-#	include <GlShaderSource.hpp>
+#	include <GlslSource.hpp>
 #	include <GlRenderSystem.hpp>
 using namespace GlRender;
 #endif
@@ -110,7 +110,7 @@ namespace Msaa
 				cuT( "	float3 l_v3EyeVec = normalize( p_input.Eye );\n" )
 				cuT( "	float l_fAlpha = c3d_fMatOpacity;\n" );
 			m_strMainLightsLoop =
-				cuT( "	for( int i = 0; i < c3d_iLightsCount; i++ )\n" )
+				cuT( "	for( int i = 0; i < c3d_iLightsCount.x; i++ )\n" )
 				cuT( "	{\n" )
 				cuT( "		l_light = GetLight( i );\n" )
 				cuT( "		l_v3LightDir = normalize( mul( l_light.m_v4Position, c3d_mtxModelView ).xyz - p_input.Vertex );\n" );
@@ -292,7 +292,7 @@ namespace Msaa
 		m_pRenderTarget->GetFrameBuffer()->Bind();
 	}
 
-	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
 	{
 		if ( !m_renderSystem )
 		{
@@ -303,7 +303,7 @@ namespace Msaa
 
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
-			return DoGetGlPixelShaderSource( p_uiFlags );
+			return DoGetGlPixelShaderSource( p_flags );
 		}
 
 #endif
@@ -311,7 +311,7 @@ namespace Msaa
 
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
 		{
-			return DoGetD3D11PixelShaderSource( p_uiFlags );
+			return DoGetD3D11PixelShaderSource( p_flags );
 		}
 
 #endif
@@ -321,7 +321,7 @@ namespace Msaa
 
 #if C3D_HAS_GL_RENDERER
 
-	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_flags )const
 	{
 		using namespace GLSL;
 
@@ -350,139 +350,117 @@ namespace Msaa
 		Sampler2D c3d_mapHeight;
 		Sampler2D c3d_mapGloss;
 
-		if ( p_uiFlags != 0 )
+		if ( p_flags != 0 )
 		{
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 			{
 				c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+			if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 			{
 				c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+			if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 			{
 				c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+			if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 			{
 				c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 			{
 				c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+			if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 			{
 				c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
+			if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 			{
 				c3d_mapHeight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ) );
 			}
 
-			if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+			if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 			{
 				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
 			}
 		}
 
-		Lighting< BlinnPhongLightingModel > l_lighting;
+		BlinnPhongLightingModel l_lighting;
 		l_lighting.Declare_Light( l_writer );
 		l_lighting.Declare_GetLight( l_writer );
-		l_lighting.Declare_ComputeLightDirection( l_writer );
-		l_lighting.Declare_ComputeFresnel( l_writer );
 
 		std::function< void() > l_main = [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.x(), vtx_normal.y(), vtx_normal.z() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.X, vtx_normal.Y, vtx_normal.Z ) ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
-			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vec3( vtx_vertex.x(), vtx_vertex.y(), vtx_vertex.z() ) ) );
+			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vec3( vtx_vertex.X, vtx_vertex.Y, vtx_vertex.Z ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vec3( vtx_vertex.X, vtx_vertex.Y, vtx_vertex.Z ) ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.xyz() );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
 			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
+			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
-			if ( p_uiFlags != 0 )
+			if ( p_flags != 0 )
 			{
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
-					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.xy() ).xyz() );
-					l_v3Normal = normalize( l_v3MapNormal.xyz() * Float( 2.0f ) - Float( 1.0f ) );
+					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
-					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, texture2D( c3d_mapSpecular, vtx_texture.xy() ).xyz() );
+					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+				if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
-					l_fShininess = texture2D( c3d_mapGloss, vtx_texture.xy() ).r();
+					l_fShininess = texture2D( c3d_mapGloss, vtx_texture.XY ).R;
 				}
 			}
 
-			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount" ), cuT( "++i" ) )
+			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
 			{
-				LOCALE_ASSIGN( l_writer, GLSL::Light, l_light, l_lighting.GetLight( i ) );
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4LightDir, l_lighting.ComputeLightDirection( l_light, vtx_vertex, c3d_mtxModelView ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3LightDir, l_v4LightDir.xyz() );
-				LOCALE_ASSIGN( l_writer, Float, l_fAttenuation, l_v4LightDir.w() );
-
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-				{
-					l_lighting.Bump( vtx_tangent, vtx_bitangent, vtx_normal, l_v3LightDir, l_fAttenuation );
-				}
-
-				LOCALE_ASSIGN( l_writer, Float, l_fLambert, max( dot( l_v3Normal, l_v3LightDir ), 0.0 ) );
-				//l_fLambert = dot( l_v3Normal, -l_v3LightDir );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MatSpecular, c3d_v4MatSpecular.xyz() );
-				LOCALE_ASSIGN( l_writer, Float, l_fFresnel, l_lighting.ComputeFresnel( l_fLambert, l_v3LightDir, l_v3Normal, l_v3EyeVec, l_fShininess, l_v3MatSpecular ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpAmbient, ( l_light.m_v4Ambient().xyz() * l_light.m_v4Ambient().w() * c3d_v4MatAmbient.xyz() ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpDiffuse, ( l_light.m_v4Diffuse().xyz() * l_light.m_v4Diffuse().w() * c3d_v4MatDiffuse.xyz() * l_fLambert ) / l_fAttenuation );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpSpecular, ( l_light.m_v4Specular().xyz() * l_light.m_v4Specular().w() * l_v3MatSpecular * l_fFresnel ) / l_fAttenuation );
-
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-				{
-					l_v3TmpSpecular = l_fAttenuation * l_light.m_v4Specular().xyz() * l_v3MapSpecular * l_v3TmpSpecular;
-				}
-
-				l_v3Ambient += l_v3TmpAmbient;
-				l_v3Diffuse += l_v3TmpDiffuse;
-				l_v3Specular += l_v3TmpSpecular;
+				l_lighting.WriteCompute( p_flags, l_writer, i,
+										 l_v3MapSpecular, c3d_mtxModelView, l_v3MapNormal,
+										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
+										 vtx_vertex, l_v3Normal, c3d_v3CameraPosition, l_fShininess,
+										 vtx_vertex, vtx_tangent, vtx_bitangent, vtx_normal,
+										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
 			}
 			ROF
 
-			if ( p_uiFlags != 0 )
+			if ( p_flags != 0 )
 			{
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+				if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
-					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.xy() ).xyz();
+					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+				if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
-					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.xy() ).xyz();
+					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+				if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
-					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.xy() ).xyz();
+					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+				if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
-					l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.xy() ).r() * c3d_fMatOpacity;
+					l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
 				}
 			}
 
@@ -496,7 +474,7 @@ namespace Msaa
 #endif
 #if C3D_HAS_D3D11_RENDERER
 
-	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_uiFlags )const
+	String RenderTechnique::DoGetD3D11PixelShaderSource( uint32_t p_flags )const
 	{
 		String l_strReturn;
 		DxRenderSystem * l_renderSystem = static_cast< DxRenderSystem * >( m_renderSystem );
@@ -519,11 +497,11 @@ namespace Msaa
 			l_strDeclarations += l_pInputs->GetPxlInput();
 			l_strMainDeclarations = string::replace( l_strMainDeclarations, cuT( "[PxlOutput]" ), l_pInputs->GetPxlOutput() );
 
-			if ( p_uiFlags )
+			if ( p_flags )
 			{
 				int l_iIndex = 1;
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+				if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -532,7 +510,7 @@ namespace Msaa
 					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapColour;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+				if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -541,7 +519,7 @@ namespace Msaa
 					l_strMainLightsLoopEnd += cuT( "	l_v4Ambient *= l_v4MapAmbient;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+				if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -551,7 +529,7 @@ namespace Msaa
 					l_strMainLightsLoopEnd += cuT( "	l_v4Diffuse *= l_v4MapDiffuse;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -571,7 +549,7 @@ namespace Msaa
 					l_strMainLightsLoopAfterLightDir += cuT( "		l_v4Specular *= l_fAttenuation;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+				if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -580,7 +558,7 @@ namespace Msaa
 					l_strMainLightsLoopEnd += cuT( "	l_fAlpha = l_v4MapOpacity.r * c3d_fMatOpacity;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -589,7 +567,7 @@ namespace Msaa
 					l_strMainLightsLoopEnd += cuT( "	l_v4Specular *= l_v4MapSpecular;\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
+				if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;
@@ -597,7 +575,7 @@ namespace Msaa
 					l_strMainDeclarations += cuT( "	float4 l_v4MapHeight = c3d_mapHeight.Sample( DefaultSampler, p_input.TextureUV.xy );\n" );
 				}
 
-				if ( ( p_uiFlags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+				if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
 				{
 					StringStream l_strIndex;
 					l_strIndex << l_iIndex++;

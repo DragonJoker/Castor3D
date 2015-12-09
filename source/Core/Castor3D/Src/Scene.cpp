@@ -513,7 +513,7 @@ namespace Castor3D
 		, m_bLightsChanged( true )
 	{
 		m_pLightsData = PxBufferBase::create( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
-		DynamicTextureSPtr l_pTexture = GetOwner()->GetRenderSystem()->CreateDynamicTexture();
+		DynamicTextureSPtr l_pTexture = GetOwner()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
 		l_pTexture->SetType( eTEXTURE_TYPE_BUFFER );
 		l_pTexture->SetImage( m_pLightsData );
 		SamplerSPtr l_pSampler = GetOwner()->GetLightsSampler();
@@ -1655,10 +1655,10 @@ namespace Castor3D
 			if ( l_pSkeleton )
 			{
 				int i = 0;
-				Matrix4x4rFrameVariableSPtr l_pVariable;
-				p_matrixBuffer.GetVariable( Pipeline::MtxBones, l_pVariable );
+				Matrix4x4rFrameVariableSPtr l_variable;
+				p_matrixBuffer.GetVariable( Pipeline::MtxBones, l_variable );
 
-				if ( l_pVariable )
+				if ( l_variable )
 				{
 					Matrix4x4r l_mtxFinal;
 
@@ -1676,7 +1676,7 @@ namespace Castor3D
 							}
 						}
 
-						l_pVariable->SetValue( l_mtxFinal.const_ptr(), i++ );
+						l_variable->SetValue( l_mtxFinal.const_ptr(), i++ );
 					}
 				}
 			}
@@ -1742,8 +1742,8 @@ namespace Castor3D
 			l_lights->SetValue( m_pLightsTexture->GetTexture().get() );
 		}
 
-		OneIntFrameVariableSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable< int >( ShaderProgramBase::LightsCount, l_lightsCount );
+		Point4iFrameVariableSPtr l_lightsCount;
+		p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
 
 		if ( l_lightsCount )
 		{
@@ -1752,7 +1752,7 @@ namespace Castor3D
 			for ( auto && l_it : m_addedLights )
 			{
 				DoBindLight( l_it.second, l_index, p_program );
-				l_lightsCount->GetValue( 0 )++;
+				l_lightsCount->GetValue( 0 )[l_it.second->GetLightType()]++;
 			}
 		}
 		else
@@ -1776,8 +1776,8 @@ namespace Castor3D
 	{
 		m_pLightsTexture->Unbind();
 
-		OneIntFrameVariableSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable< int >( ShaderProgramBase::LightsCount, l_lightsCount );
+		Point4iFrameVariableSPtr l_lightsCount;
+		p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
 
 		if ( l_lightsCount )
 		{
@@ -1786,7 +1786,7 @@ namespace Castor3D
 			for ( auto && l_it : m_addedLights )
 			{
 				DoUnbindLight( l_it.second, l_index, p_program );
-				l_lightsCount->GetValue( 0 )--;
+				l_lightsCount->GetValue( 0 )[l_it.second->GetLightType()]--;
 			}
 		}
 		else

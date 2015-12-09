@@ -10,8 +10,8 @@ using namespace Castor;
 //*************************************************************************************************
 
 Generator::Thread::Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
-	: m_pParent( p_parent )
-	, m_uiIndex( p_index )
+	: m_parent( p_parent )
+	, m_index( p_index )
 	, m_iWidth( iWidth )
 	, m_iBottom( iBottom )
 	, m_iTop( iTop )
@@ -73,7 +73,7 @@ Generator::Generator( Engine * p_engine, int p_width, int p_height )
 	: m_iWidth( p_width )
 	, m_iHeight( p_height )
 	, m_ullStep( 0 )
-	, m_bInitialised( false )
+	, m_initialised( false )
 	, m_bEnded( true )
 	, m_frontBuffer( Size( p_width, p_height ) )
 	, m_backBuffer( Size( p_width, p_height ) )
@@ -93,7 +93,7 @@ bool Generator::Step()
 {
 	bool l_return = false;
 
-	if ( m_bInitialised )
+	if ( m_initialised )
 	{
 		if ( m_arraySlaveThreads.size() > 0 )
 		{
@@ -201,7 +201,7 @@ bool Generator::AllEnded()
 
 void Generator::Suspend()
 {
-	m_bInitialised = false;
+	m_initialised = false;
 	ClearAllThreads();
 }
 

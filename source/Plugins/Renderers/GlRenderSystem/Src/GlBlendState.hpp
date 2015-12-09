@@ -27,6 +27,7 @@ namespace GlRender
 	class GlBlendState
 		: public Castor3D::BlendState
 		, public Castor::NonCopyable
+		, public Holder
 	{
 	public:
 		GlBlendState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
@@ -56,7 +57,6 @@ namespace GlRender
 		virtual Castor3D::BlendStateSPtr DoCreateCurrent();
 
 	private:
-		OpenGl & m_gl;
 		GlRenderSystem * m_renderSystem;
 	};
 }

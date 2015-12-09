@@ -210,10 +210,10 @@ namespace Castor
 	}
 
 	template< typename T, typename U >
-	SquareMatrix< T, 4 > & matrix::perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_aFOVY, U p_aspect, U p_near, U p_far )
+	SquareMatrix< T, 4 > & matrix::perspective( SquareMatrix< T, 4 > & p_matrix, Angle const & p_fovy, U p_aspect, U p_near, U p_far )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-		T l_range = T( ( 1 / tan( p_aFOVY.radians() * 0.5 ) ) );
+		T l_range = T( ( 1 / tan( p_fovy.radians() * 0.5 ) ) );
 		p_matrix.initialise();
 		p_matrix[0][0] = T( l_range / p_aspect );
 		p_matrix[1][1] = T( l_range );

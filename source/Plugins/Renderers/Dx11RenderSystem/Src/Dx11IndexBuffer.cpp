@@ -31,7 +31,7 @@ namespace Dx11Render
 		DxBufferObject< uint32_t, ID3D11Buffer >::DoCleanup();
 	}
 
-	bool DxIndexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, ShaderProgramBaseSPtr p_pProgram )
+	bool DxIndexBuffer::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, ShaderProgramBaseSPtr p_program )
 	{
 		bool l_return = false;
 
@@ -48,7 +48,7 @@ namespace Dx11Render
 				l_desc.ByteWidth = l_uiSize * UINT( sizeof( uint32_t ) );
 				l_desc.Usage = DirectX11::Get( p_type );
 				l_desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_eNature );
+				l_desc.CPUAccessFlags = DirectX11::GetCpuAccessFlags( p_type | p_nature );
 				l_desc.MiscFlags = 0;
 				l_desc.StructureByteStride = 0;
 
@@ -115,9 +115,9 @@ namespace Dx11Render
 	{
 	}
 
-	uint32_t * DxIndexBuffer::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+	uint32_t * DxIndexBuffer::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
-		return DxBufferObject< uint32_t, ID3D11Buffer >::DoLock( p_uiOffset, p_uiCount, p_uiFlags );
+		return DxBufferObject< uint32_t, ID3D11Buffer >::DoLock( p_offset, p_count, p_flags );
 	}
 
 	void DxIndexBuffer::Unlock()

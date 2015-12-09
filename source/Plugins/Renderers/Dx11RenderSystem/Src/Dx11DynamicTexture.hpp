@@ -30,7 +30,7 @@ namespace Dx11Render
 		: public Castor3D::DynamicTexture
 	{
 	public:
-		DxDynamicTexture( DxRenderSystem & p_renderSystem );
+		DxDynamicTexture( DxRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		virtual ~DxDynamicTexture();
 
 		virtual bool Create();

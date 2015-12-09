@@ -342,14 +342,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the alpha blending function
-		 *\param[in]	p_eFunc	The new value
+		 *\param[in]	p_func	The new value
 		 *\~french
 		 *\brief		Définit la fonction de mélange d'alpha
-		 *\param[in]	p_eFunc	La nouvelle valeur
+		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetAlpFunction( Castor3D::eALPHA_BLEND_FUNC p_eFunc )
+		inline void SetAlpFunction( Castor3D::eALPHA_BLEND_FUNC p_func )
 		{
-			m_eAlpFunction = p_eFunc;
+			m_eAlpFunction = p_func;
 		}
 		/**
 		 *\~english
@@ -366,14 +366,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets RGB blending function
-		 *\param[in]	p_eFunc	The new value
+		 *\param[in]	p_func	The new value
 		 *\~french
 		 *\brief		Définit fonction de mélange RGB
-		 *\param[in]	p_eFunc	La nouvelle valeur
+		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetRgbFunction( Castor3D::eRGB_BLEND_FUNC p_eFunc )
+		inline void SetRgbFunction( Castor3D::eRGB_BLEND_FUNC p_func )
 		{
-			m_eRgbFunction = p_eFunc;
+			m_eRgbFunction = p_func;
 		}
 		/**
 		 *\~english
@@ -390,14 +390,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the alpha function
-		 *\param[in]	p_eFunc	The new value
+		 *\param[in]	p_func	The new value
 		 *\~french
 		 *\brief		Définit la fonction d'alpha
-		 *\param[in]	p_eFunc	La nouvelle valeur
+		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetAlphaFunc( Castor3D::eALPHA_FUNC p_eFunc )
+		inline void SetAlphaFunc( Castor3D::eALPHA_FUNC p_func )
 		{
-			m_eAlphaFunc = p_eFunc;
+			m_eAlphaFunc = p_func;
 		}
 		/**
 		 *\~english
@@ -457,7 +457,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetIndex()const
 		{
-			return m_uiIndex;
+			return m_index;
 		}
 		/**
 		 *\~english
@@ -469,7 +469,7 @@ namespace Castor3D
 		 */
 		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_index;
+			m_index = p_index;
 		}
 		/**
 		 *\~english
@@ -599,14 +599,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the auto mipmaps generation status
-		 *\param[in]	p_bVal		The new value
+		 *\param[in]	p_value		The new value
 		 *\~french
 		 *\brief		Définit le statut d'auto génération des mipmaps
-		 *\param[in]	p_bVal		La nouvelle valeur
+		 *\param[in]	p_value		La nouvelle valeur
 		 */
-		inline void SetAutoMipmaps( bool p_bVal )
+		inline void SetAutoMipmaps( bool p_value )
 		{
-			m_bAutoMipmaps = p_bVal;
+			m_bAutoMipmaps = p_value;
 		}
 		/**
 		 *\~english
@@ -636,7 +636,7 @@ namespace Castor3D
 	private:
 		friend class TextureRenderer;
 		//!\~english The unit index inside it's pass	\~french L'index de l'unité dans sa passe
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 		//!\see eTEXTURE_CHANNEL	\~english The unit channel inside it's pass	\~french Le canal de l'unité dans sa passe
 		eTEXTURE_CHANNEL m_eChannel;
 		//!\~english The reference alpha value for alpha comparison	\~french La valeur d'alpha de référence pour la comparaison d'alpha
@@ -668,7 +668,7 @@ namespace Castor3D
 		//!\~english Tells mipmaps must be regenerated after each texture data change	\~french Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture
 		bool m_bAutoMipmaps;
 		//!\~english Tells the texture data has changed	\~french Dit que les données de la texture ont changé
-		bool m_bChanged;
+		bool m_changed;
 	};
 	/**
 	 *\~english
@@ -701,9 +701,9 @@ namespace Castor3D
 	 */
 	inline std::istream & operator >>( std::istream & p_streamIn, TextureUnitSPtr & p_texture )
 	{
-		uint32_t l_uiIndex = 0;
-		p_streamIn >> l_uiIndex;
-		p_texture->SetIndex( l_uiIndex );
+		uint32_t l_index = 0;
+		p_streamIn >> l_index;
+		p_texture->SetIndex( l_index );
 		return p_streamIn;
 	}
 	/**
@@ -737,9 +737,9 @@ namespace Castor3D
 	 */
 	inline std::wistream & operator >>( std::wistream & p_streamIn, TextureUnitSPtr & p_texture )
 	{
-		uint32_t l_uiIndex = 0;
-		p_streamIn >> l_uiIndex;
-		p_texture->SetIndex( l_uiIndex );
+		uint32_t l_index = 0;
+		p_streamIn >> l_index;
+		p_texture->SetIndex( l_index );
 		return p_streamIn;
 	}
 }

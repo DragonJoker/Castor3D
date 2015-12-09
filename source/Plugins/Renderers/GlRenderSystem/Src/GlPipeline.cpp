@@ -10,7 +10,7 @@ namespace GlRender
 {
 	GlPipelineImpl::GlPipelineImpl( OpenGl & p_gl, Pipeline & p_pipeline )
 		: IPipelineImpl( p_pipeline, true )
-		, m_gl( p_gl )
+		, Holder( p_gl )
 	{
 	}
 
@@ -18,15 +18,15 @@ namespace GlRender
 	{
 	}
 
-	void GlPipelineImpl::ApplyViewport( int p_iWindowWidth, int p_iWindowHeight )
+	void GlPipelineImpl::ApplyViewport( int p_windowWidth, int p_windowHeight )
 	{
-		m_gl.Viewport( 0, 0, p_iWindowWidth, p_iWindowHeight );
+		GetOpenGl().Viewport( 0, 0, p_windowWidth, p_windowHeight );
 	}
 
-	void GlPipelineImpl::Perspective( Matrix4x4r & p_result, Angle const & p_aFOVY, real p_aspect, real p_near, real p_far )
+	void GlPipelineImpl::Perspective( Matrix4x4r & p_result, Angle const & p_fovy, real p_aspect, real p_near, real p_far )
 	{
 		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-		real l_range = real( ( 1 / tan( p_aFOVY.radians() * 0.5 ) ) );
+		real l_range = real( ( 1 / tan( p_fovy.radians() * 0.5 ) ) );
 		p_result.initialise();
 		p_result[0][0] = real( l_range / p_aspect );
 		p_result[1][1] = real( l_range );

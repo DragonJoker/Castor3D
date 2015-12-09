@@ -104,7 +104,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetIndex()const
 		{
-			return m_uiIndex;
+			return m_index;
 		}
 		/**
 		 *\~english
@@ -116,14 +116,14 @@ namespace Castor3D
 		 */
 		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_index;
+			m_index = p_index;
 		}
 
 	protected:
 		//!\~english The elements values	\~french Les valeurs des éléments
 		uint8_t * m_pBuffer;
 		//!\~english The group index	\~french L'indice du groupe
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 	};
 }
 

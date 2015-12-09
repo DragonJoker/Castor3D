@@ -415,7 +415,7 @@ namespace Castor3D
 		 */
 		inline OverlaySPtr GetParent()const
 		{
-			return m_pParent.lock();
+			return m_parent.lock();
 		}
 		/**
 		 *\~english
@@ -702,7 +702,7 @@ namespace Castor3D
 		//!\~english The overlay name	\~french Le nom de l'incrustation
 		Castor::String m_name;
 		//!\~english The parent overlay, if any	\~french L'incrustation parente, s'il y en a
-		OverlayWPtr m_pParent;
+		OverlayWPtr m_parent;
 		//!\~english The childs	\~french Les enfants
 		OverlayPtrArray m_overlays;
 		//!\~english The overlay category	\~french La catégorie de l'incrustation

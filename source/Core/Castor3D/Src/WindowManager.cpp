@@ -35,7 +35,7 @@ namespace Castor3D
 
 		for ( auto && l_it : m_elements )
 		{
-			l_it.second->RenderOneFrame( p_force );
+			l_it.second->Render( p_force );
 		}
 	}
 }

@@ -21,12 +21,12 @@ namespace Castor3D
 	RenderSystem::RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType )
 		: OwnedBy< Engine >( p_engine )
 		, m_eRendererType( p_eRendererType )
-		, m_bInitialised( false )
+		, m_initialised( false )
 		, m_bStereoAvailable( false )
 		, m_bInstancing( false )
 		, m_bAccumBuffer( false )
 		, m_bNonPowerOfTwoTextures( false )
-		, m_pCurrentContext( nullptr )
+		, m_currentContext( nullptr )
 		, m_pCurrentCamera( nullptr )
 	{
 		m_useShader[eSHADER_TYPE_VERTEX] = false;
@@ -41,6 +41,7 @@ namespace Castor3D
 	RenderSystem::~RenderSystem()
 	{
 		m_pipeline.reset();
+		m_mainContext.reset();
 	}
 
 	void RenderSystem::Initialise()
@@ -52,6 +53,11 @@ namespace Castor3D
 	{
 		DoCleanup();
 
+		if ( m_mainContext )
+		{
+			m_mainContext->Cleanup();
+		}
+
 #if !defined( NDEBUG )
 
 		DoReportTracked();
@@ -61,11 +67,11 @@ namespace Castor3D
 
 	void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer & p_variableBuffer )
 	{
-		Point4fFrameVariableSPtr l_pVariable;
-		p_variableBuffer.GetVariable( ShaderProgramBase::AmbientLight, l_pVariable );
+		Point4fFrameVariableSPtr l_variable;
+		p_variableBuffer.GetVariable( ShaderProgramBase::AmbientLight, l_variable );
 		Point4f l_ptColour;
 		p_clColour.to_rgba( l_ptColour );
-		l_pVariable->SetValue( l_ptColour );
+		l_variable->SetValue( l_ptColour );
 	}
 
 	void RenderSystem::PushScene( Scene * p_scene )

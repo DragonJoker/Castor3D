@@ -2,9 +2,9 @@
 template< typename T >
 Castor::TextFile & Castor::operator <<( Castor::TextFile & p_file, T const & p_toWrite )
 {
-	String l_strTmp;
-	l_strTmp << p_toWrite;
-	p_file.WriteText( l_strTmp );
+	String l_tmp;
+	l_tmp << p_toWrite;
+	p_file.WriteText( l_tmp );
 	return p_file;
 }
 

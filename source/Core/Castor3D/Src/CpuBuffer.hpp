@@ -109,22 +109,22 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialisation function, initialises GPU buffer
 		 *\param[in]	p_type		Buffer access type
-		 *\param[in]	p_eNature	Buffer access nature
-		 *\param[in]	p_pProgram	The shader program
+		 *\param[in]	p_nature	Buffer access nature
+		 *\param[in]	p_program	The shader program
 		 *\~french
 		 *\brief		Fonction d'initialisation, initialise le GPU tampon
 		 *\param[in]	p_type		Type d'accès du tampon
-		 *\param[in]	p_eNature	Nature d'accès du tampon
-		 *\param[in]	p_pProgram	Le programme shader
+		 *\param[in]	p_nature	Nature d'accès du tampon
+		 *\param[in]	p_program	Le programme shader
 		 */
-		inline bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr )
+		inline bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, Castor3D::ShaderProgramBaseSPtr p_program = nullptr )
 		{
 			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_return = l_pBuffer->Initialise( p_type, p_eNature, p_pProgram );
+				l_return = l_pBuffer->Initialise( p_type, p_nature, p_program );
 			}
 
 			return l_return;
@@ -132,27 +132,27 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
-		 *\remark		Maps from buffer[p_uiOffset*sizeof( T )] to buffer[(p_uiOffset+p_uiSize-1)*sizeof( T )]
-		 *\param[in]	p_uiOffset	The start offset in the buffer
-		 *\param[in]	p_uiCount	The mapped elements count
-		 *\param[in]	p_uiFlags	The lock flags
+		 *\remark		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )]
+		 *\param[in]	p_offset	The start offset in the buffer
+		 *\param[in]	p_count	The mapped elements count
+		 *\param[in]	p_flags	The lock flags
 		 *\return		The mapped buffer address
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications
-		 *\remark		Mappe de tampon[p_uiOffset*sizeof( T )] à tampon[(p_uiOffset+p_uiSize-1) * sizeof( T )]
-		 *\param[in]	p_uiOffset	L'offset de départ
-		 *\param[in]	p_uiCount	Le nombre d'éléments à mapper
-		 *\param[in]	p_uiFlags	Les flags de lock
+		 *\remark		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )]
+		 *\param[in]	p_offset	L'offset de départ
+		 *\param[in]	p_count	Le nombre d'éléments à mapper
+		 *\param[in]	p_flags	Les flags de lock
 		 *\return		L'adresse du tampon mappé
 		 */
-		inline T * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+		inline T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 		{
 			T * l_return = NULL;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_return = l_pBuffer->Lock( p_uiOffset, p_uiCount, p_uiFlags );
+				l_return = l_pBuffer->Lock( p_offset, p_count, p_flags );
 			}
 
 			return l_return;
@@ -178,26 +178,26 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Transmits data to the GPU buffer from RAM
 		 *\param[in]	p_buffer	The data
-		 *\param[in]	p_iSize		Data buffer size
+		 *\param[in]	p_size		Data buffer size
 		 *\param[in]	p_type		Transfer type
-		 *\param[in]	p_eNature	Transfer nature
+		 *\param[in]	p_nature	Transfer nature
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la ram
 		 *\param[in]	p_buffer	Les données
-		 *\param[in]	p_iSize		Taille du tampon de données
+		 *\param[in]	p_size		Taille du tampon de données
 		 *\param[in]	p_type		Type de transfert
-		 *\param[in]	p_eNature	Nature du transfert
+		 *\param[in]	p_nature	Nature du transfert
 		 *\return		\p true si tout s'est bien passé
 		 */
-		inline bool Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+		inline bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 		{
 			bool l_return = false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_return = l_pBuffer->Fill( p_buffer, p_iSize, p_type, p_eNature );
+				l_return = l_pBuffer->Fill( p_buffer, p_size, p_type, p_nature );
 			}
 
 			return l_return;

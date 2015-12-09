@@ -48,7 +48,7 @@ namespace Dx11Render
 			HRESULT l_hr = m_renderSystem->GetDevice()->CreateDepthStencilState( &l_depthStencilDesc, &m_pDepthStencilState );
 			dxTrack( m_renderSystem, m_pDepthStencilState, DepthStencilState );
 			l_return = dxCheckError( l_hr, "CreateDepthStencilState" );
-			m_bChanged = false;
+			m_changed = false;
 		}
 
 		return l_return;
@@ -63,7 +63,7 @@ namespace Dx11Render
 	{
 		bool l_return = true;
 
-		if ( m_bChanged )
+		if ( m_changed )
 		{
 			Cleanup();
 			l_return = Initialise();

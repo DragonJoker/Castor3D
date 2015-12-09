@@ -271,14 +271,14 @@ namespace Dx11Render
 		static bool UnlockBuffer( ID3D11Buffer * p_buffer );
 		static bool DrawIndexedPrimitives();
 		template< typename T >
-		static void LockBuffer( T *& p_pReturn, ID3D11Buffer * p_buffer, uint32_t CU_PARAM_UNUSED( p_uiOffset ), uint32_t CU_PARAM_UNUSED( p_uiSize ), uint32_t p_uiFlags )
+		static void LockBuffer( T *& p_pReturn, ID3D11Buffer * p_buffer, uint32_t CU_PARAM_UNUSED( p_offset ), uint32_t CU_PARAM_UNUSED( p_uiSize ), uint32_t p_flags )
 		{
 			ID3D11Device * l_pDevice;
 			ID3D11DeviceContext * l_deviceContext;
 			D3D11_MAPPED_SUBRESOURCE l_mappedResource;
 			p_buffer->GetDevice( &l_pDevice );
 			l_pDevice->GetImmediateContext( &l_deviceContext );
-			HRESULT l_hr = l_deviceContext->Map( p_buffer, 0, D3D11_MAP( DirectX11::GetLockFlags( p_uiFlags ) ), 0, &l_mappedResource );
+			HRESULT l_hr = l_deviceContext->Map( p_buffer, 0, D3D11_MAP( DirectX11::GetLockFlags( p_flags ) ), 0, &l_mappedResource );
 			l_deviceContext->Release();
 			l_pDevice->Release();
 
@@ -289,7 +289,7 @@ namespace Dx11Render
 		}
 
 		static bool CheckError( HRESULT p_hResult, Castor::String const & p_strText );
-		static	DWORD GetLockFlags( uint32_t p_uiFlags );
+		static	DWORD GetLockFlags( uint32_t p_flags );
 		static inline DWORD Get( Castor3D::eTEXTURE_TYPE p_index )
 		{
 			return TextureDimensions[p_index];
@@ -342,13 +342,13 @@ namespace Dx11Render
 		{
 			return DepthMasks[p_eMask];
 		}
-		static inline D3D11_COMPARISON_FUNC Get( Castor3D::eDEPTH_FUNC p_eFunc )
+		static inline D3D11_COMPARISON_FUNC Get( Castor3D::eDEPTH_FUNC p_func )
 		{
-			return DepthFuncs[p_eFunc];
+			return DepthFuncs[p_func];
 		}
-		static inline D3D11_COMPARISON_FUNC Get( Castor3D::eSTENCIL_FUNC p_eFunc )
+		static inline D3D11_COMPARISON_FUNC Get( Castor3D::eSTENCIL_FUNC p_func )
 		{
-			return StencilFuncs[p_eFunc];
+			return StencilFuncs[p_func];
 		}
 		static inline D3D11_STENCIL_OP Get( Castor3D::eSTENCIL_OP p_eOp )
 		{

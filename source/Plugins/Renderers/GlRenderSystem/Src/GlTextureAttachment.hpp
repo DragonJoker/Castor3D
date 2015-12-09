@@ -27,6 +27,7 @@ namespace GlRender
 	class GlTextureAttachment
 		: public Castor3D::TextureAttachment
 		, public Castor::NonCopyable
+		, public Holder
 	{
 	public:
 		/**
@@ -54,11 +55,11 @@ namespace GlRender
 
 		inline eGL_FRAMEBUFFER_STATUS GetGlStatus()const
 		{
-			return m_eGlStatus;
+			return m_glStatus;
 		}
 		inline eGL_TEXTURE_ATTACHMENT GetGlAttachmentPoint()const
 		{
-			return m_eGlAttachmentPoint;
+			return m_glAttachmentPoint;
 		}
 
 	private:
@@ -72,9 +73,8 @@ namespace GlRender
 		virtual void DoDetach();
 
 	private:
-		eGL_TEXTURE_ATTACHMENT m_eGlAttachmentPoint;
-		eGL_FRAMEBUFFER_STATUS m_eGlStatus;
-		OpenGl & m_gl;
+		eGL_TEXTURE_ATTACHMENT m_glAttachmentPoint;
+		eGL_FRAMEBUFFER_STATUS m_glStatus;
 	};
 }
 

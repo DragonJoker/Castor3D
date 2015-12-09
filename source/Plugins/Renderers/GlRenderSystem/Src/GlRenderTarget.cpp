@@ -15,7 +15,7 @@ using namespace Castor;
 
 GlRenderTarget::GlRenderTarget( OpenGl & p_gl, GlRenderSystem * p_renderSystem, eTARGET_TYPE p_type )
 	: RenderTarget( *p_renderSystem->GetOwner(), p_type )
-	, m_gl( p_gl )
+	, Holder( p_gl )
 	, m_renderSystem( p_renderSystem )
 {
 }
@@ -24,17 +24,17 @@ GlRenderTarget::~GlRenderTarget()
 {
 }
 
-RenderBufferAttachmentSPtr GlRenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
+RenderBufferAttachmentSPtr GlRenderTarget::CreateAttachment( RenderBufferSPtr p_renderBuffer )
 {
-	return std::make_shared< GlRenderBufferAttachment >( m_gl, p_pRenderBuffer );
+	return std::make_shared< GlRenderBufferAttachment >( GetOpenGl(), p_renderBuffer );
 }
 
-TextureAttachmentSPtr GlRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )const
+TextureAttachmentSPtr GlRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )
 {
-	return std::make_shared< GlTextureAttachment >( m_gl, p_texture );
+	return std::make_shared< GlTextureAttachment >( GetOpenGl(), p_texture );
 }
 
-FrameBufferSPtr GlRenderTarget::CreateFrameBuffer()const
+FrameBufferSPtr GlRenderTarget::CreateFrameBuffer()
 {
-	return std::make_shared< GlFrameBuffer >( m_gl, *m_renderSystem->GetOwner() );
+	return std::make_shared< GlFrameBuffer >( GetOpenGl(), *m_renderSystem->GetOwner() );
 }

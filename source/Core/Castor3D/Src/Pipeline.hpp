@@ -79,29 +79,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the given viewport dimension.
-		 *\param[in]	p_iWindowWidth, p_iWindowHeight	The dimensions.
+		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
 		 *\~french
 		 *\brief		Applique les dimensions de viewport données.
-		 *\param[in]	p_iWindowWidth, p_iWindowHeight	Les dimensions.
+		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
 		 */
-		C3D_API virtual void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight ) = 0;
+		C3D_API virtual void ApplyViewport( int p_windowWidth, int p_windowHeight ) = 0;
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters.
 		 *\param[out]	p_result	The matrix that will receive the result.
-		 *\param[in]	p_aFOVY		Y Field of View.
+		 *\param[in]	p_fovy		Y Field of View.
 		 *\param[in]	p_aspect	Width / Height ratio.
 		 *\param[in]	p_near		Near clipping plane value.
 		 *\param[in]	p_far		Far clipping plane value.
 		 *\~french
 		 *\brief		Construit une matrice de projection en perspective centrée.
 		 *\param[out]	p_result	La matrice qui contiendra le résultat.
-		 *\param[in]	p_aFOVY		Angle de vision Y.
+		 *\param[in]	p_fovy		Angle de vision Y.
 		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
 		 *\param[in]	p_near		Position du plan proche.
 		 *\param[in]	p_far		Position du plan éloigné.
 		 */
-		C3D_API virtual void Perspective( Castor::Matrix4x4r & p_result, Castor::Angle const & p_aFOVY, real p_aspect, real p_near, real p_far ) = 0;
+		C3D_API virtual void Perspective( Castor::Matrix4x4r & p_result, Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far ) = 0;
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
@@ -329,27 +329,27 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the given viewport dimension.
-		 *\param[in]	p_iWindowWidth, p_iWindowHeight	The dimensions.
+		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
 		 *\~french
 		 *\brief		Applique les dimensions de viewport données.
-		 *\param[in]	p_iWindowWidth, p_iWindowHeight	Les dimensions.
+		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
 		 */
-		C3D_API void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
+		C3D_API void ApplyViewport( int p_windowWidth, int p_windowHeight );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
-		 *\param[in]	p_aFOVY		Y Field of View
+		 *\param[in]	p_fovy		Y Field of View
 		 *\param[in]	p_aspect	Width / Height ratio
 		 *\param[in]	p_near		Near clipping plane value
 		 *\param[in]	p_far		Far clipping plane value
 		 *\~french
 		 *\brief		Construit une matrice de projection en perspective centrée
-		 *\param[in]	p_aFOVY		Angle de vision Y
+		 *\param[in]	p_fovy		Angle de vision Y
 		 *\param[in]	p_aspect	Ratio Largeur / Hauteur
 		 *\param[in]	p_near		Position du plan proche
 		 *\param[in]	p_far		Position du plan lointain
 		 */
-		C3D_API void Perspective( Castor::Angle const & p_aFOVY, real p_aspect, real p_near, real p_far );
+		C3D_API void Perspective( Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters

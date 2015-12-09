@@ -107,6 +107,14 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
+		std::basic_string< T > string_cast( U const * p_begin, U const * p_end )
+		{
+			std::basic_string< T > l_return;
+			StringConverter< U, T >::Convert( std::basic_string< U >( p_begin, p_end ), l_return );
+			return l_return;
+		}
+
+		template< typename T, typename U >
 		std::basic_string< T > string_cast( std::initializer_list< U > const & p_src )
 		{
 			std::basic_string< T > l_return;

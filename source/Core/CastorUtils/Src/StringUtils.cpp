@@ -248,17 +248,17 @@ namespace Castor
 		{
 			if ( p_str.size() > 0 )
 			{
-				std::size_t l_uiIndex;
+				std::size_t l_index;
 
 				if ( p_bLeft )
 				{
-					l_uiIndex = p_str.find_first_not_of( cuT( ' ' ) );
+					l_index = p_str.find_first_not_of( cuT( ' ' ) );
 
-					if ( l_uiIndex > 0 )
+					if ( l_index > 0 )
 					{
-						if ( l_uiIndex != String::npos )
+						if ( l_index != String::npos )
 						{
-							p_str = p_str.substr( l_uiIndex, String::npos );
+							p_str = p_str.substr( l_index, String::npos );
 						}
 						else
 						{
@@ -266,13 +266,13 @@ namespace Castor
 						}
 					}
 
-					l_uiIndex = p_str.find_first_not_of( cuT( '\t' ) );
+					l_index = p_str.find_first_not_of( cuT( '\t' ) );
 
-					if ( l_uiIndex > 0 )
+					if ( l_index > 0 )
 					{
-						if ( l_uiIndex != String::npos )
+						if ( l_index != String::npos )
 						{
-							p_str = p_str.substr( l_uiIndex, String::npos );
+							p_str = p_str.substr( l_index, String::npos );
 						}
 						else
 						{
@@ -283,13 +283,13 @@ namespace Castor
 
 				if ( p_bRight && p_str.size() > 0 )
 				{
-					l_uiIndex = p_str.find_last_not_of( cuT( ' ' ) );
+					l_index = p_str.find_last_not_of( cuT( ' ' ) );
 
-					if ( l_uiIndex < p_str.size() - 1 )
+					if ( l_index < p_str.size() - 1 )
 					{
-						if ( l_uiIndex != String::npos )
+						if ( l_index != String::npos )
 						{
-							p_str = p_str.substr( 0, l_uiIndex + 1 );
+							p_str = p_str.substr( 0, l_index + 1 );
 						}
 						else
 						{
@@ -299,11 +299,11 @@ namespace Castor
 
 					if ( p_str.size() > 0 )
 					{
-						l_uiIndex = p_str.find_last_not_of( cuT( '\t' ) );
+						l_index = p_str.find_last_not_of( cuT( '\t' ) );
 
-						if ( l_uiIndex != String::npos )
+						if ( l_index != String::npos )
 						{
-							p_str = p_str.substr( 0, l_uiIndex + 1 );
+							p_str = p_str.substr( 0, l_index + 1 );
 						}
 						else
 						{

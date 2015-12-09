@@ -27,6 +27,7 @@ namespace GlRender
 	class GlRasteriserState
 		: public Castor3D::RasteriserState
 		, public Castor::NonCopyable
+		, public Holder
 	{
 	public:
 		GlRasteriserState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
@@ -56,7 +57,6 @@ namespace GlRender
 		virtual Castor3D::RasteriserStateSPtr DoCreateCurrent();
 
 	private:
-		OpenGl & m_gl;
 		GlRenderSystem * m_renderSystem;
 	};
 }

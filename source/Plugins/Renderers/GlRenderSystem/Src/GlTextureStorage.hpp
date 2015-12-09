@@ -30,15 +30,19 @@ namespace GlRender
 	\remarks	Will use texture buffer objects if available, or pixel buffer objects if not.
 	*/
 	class GlTextureStorage
-		: public Castor::NonCopyable
+		: public Castor::OwnedBy< GlTexture >
+		, public Holder
 	{
 	public:
 		/**
 		 *\brief		Constructor.
 		 *\param[in]	p_gl			The OpenGL APIs.
+		 *\param[in]	p_texture		The parent teexture.
 		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_cpuAccess		The required CPU access.
+		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		GlTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
+		GlTextureStorage( OpenGl & p_gl, GlTexture & p_texture, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -60,7 +64,7 @@ namespace GlRender
 		 *\param[in]	p_depth		The texture depth, in case p_dimension is eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY.
 		 *\return		true on success.
 		 */
-		bool Initialise( Castor3D::eTEXTURE_TYPE p_dimension, uint32_t p_depth );
+		bool Initialise( uint32_t p_depth );
 		/**
 		 *\brief		Cleans the texture and IO buffers up.
 		 */
@@ -166,16 +170,16 @@ namespace GlRender
 		virtual void DoUnlock( bool p_modified ) = 0;
 
 	protected:
-		//! The OpenGL APIs.
-		OpenGl & m_gl;
 		//! The RenderSystem.
 		GlRenderSystem * m_glRenderSystem;
-		//! The OpenGL texture dimension.
-		eGL_TEXDIM m_glDimension;
 		//! The texture image buffer.
 		Castor::PxBufferBaseWPtr m_buffer;
 		//! The texture depth, for eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY ones.
 		uint32_t m_depth;
+		//! The required CPU access.
+		uint8_t m_cpuAccess;
+		//! The required GPU access.
+		uint8_t m_gpuAccess;
 	};
 }
 

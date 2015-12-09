@@ -80,19 +80,19 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
 		 *\param[out]	p_pValues	Receives the parsed values
-		 *\param[out]	p_uiCount	The values count
+		 *\param[out]	p_count	The values count
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
 		 *\param[out]	p_pValues	Reçoit les valeurs
-		 *\param[out]	p_uiCount	Le compte des valeurs
+		 *\param[out]	p_count	Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool operator()( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )
+		inline bool operator()( T * p_pValues, uint32_t p_count, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_pValues ), p_uiCount * sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_pValues ), p_count * sizeof( T ), p_chunk );
 		}
 		/**
 		 *\~english

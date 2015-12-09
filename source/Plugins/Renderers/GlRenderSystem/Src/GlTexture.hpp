@@ -31,8 +31,10 @@ namespace GlRender
 	\brief		Class used to handle texture, and texture storage.
 	*/
 	class GlTexture
-		: public Castor::NonCopyable
+		: private Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >
 	{
+		using ObjectType = Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >;
+
 	public:
 		/**
 		 *\brief		Constructor.
@@ -45,15 +47,6 @@ namespace GlRender
 		 *\brief		Destructor.
 		 */
 		~GlTexture();
-		/**
-		 *\brief		Creates the texture and IO buffers.
-		 *\return		true on success.
-		 */
-		bool Create();
-		/**
-		 *\brief		Destroys the texture and IO buffers.
-		 */
-		void Destroy();
 		/**
 		 *\brief		Initialises the texture and IO buffers.
 		 *\param[in]	p_buffer	The texture image buffer.
@@ -105,28 +98,34 @@ namespace GlRender
 		 */
 		void Unlock( bool p_modified );
 		/**
-		 *\brief		Forces mipmaps generation.
-		 */
+		*\brief		Forces mipmaps generation.
+		*/
 		void GenerateMipmaps();
 		/**
-		 *\return		The OpenGL handle for this texture.
-		 */
-		inline uint32_t GetGlName()const
+		*\return	The OpenGL texture dimension.
+		*/
+		eGL_TEXDIM GetGlDimension()const
 		{
-			return m_glName;
+			return m_glDimension;
 		}
 
 	private:
-		//! The OpenGL handle for this texture.
-		uint32_t m_glName;
+		bool DoCreateStorage( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+
+	public:
+		using ObjectType::Create;
+		using ObjectType::Destroy;
+		using ObjectType::IsValid;
+		using ObjectType::GetGlName;
+		using ObjectType::GetOpenGl;
+
+	private:
 		//! The RenderSystem.
 		GlRenderSystem * m_glRenderSystem;
 		//! The texture sstorage, to handle IO operations,
 		GlTextureStorageUPtr m_storage;
 		//! The OpenGL texture dimension.
 		eGL_TEXDIM m_glDimension;
-		//! The OpenGL APIs.
-		OpenGl & m_gl;
 		//! Tells if this texture is a static one.
 		bool m_static;
 	};

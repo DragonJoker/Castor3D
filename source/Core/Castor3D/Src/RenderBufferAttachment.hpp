@@ -38,12 +38,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderBuffer	The render buffer
+		 *\param[in]	p_renderBuffer	The render buffer
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 */
-		C3D_API RenderBufferAttachment( RenderBufferSPtr p_pRenderBuffer );
+		C3D_API RenderBufferAttachment( RenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor

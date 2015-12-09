@@ -1,10 +1,17 @@
 namespace GlRender
 {
 	template< typename T >
-	GlBufferBase< T >::GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_eTarget )
-		: m_uiGlIndex( uint32_t( eGL_INVALID_INDEX ) )
-		, m_eTarget( p_eTarget )
-		, m_gl( p_gl )
+	GlBufferBase< T >::GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_target )
+		: BindableType( p_gl,
+						"GlBufferBase",
+						std::bind( &OpenGl::GenBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+						std::bind( &OpenGl::DeleteBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
+						std::bind( &OpenGl::IsBuffer, std::ref( p_gl ), std::placeholders::_1 ),
+						[&p_gl, p_target]( uint32_t p_glName )
+						{
+							return p_gl.BindBuffer( p_target, p_glName );
+						} )
+		, m_target( p_target )
 	{
 	}
 
@@ -14,34 +21,9 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBufferBase< T >::Create()
+	bool GlBufferBase< T >::Initialise( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 	{
-		bool l_return = true;
-
-		if ( m_uiGlIndex == eGL_INVALID_INDEX )
-		{
-			l_return = m_gl.GenBuffers( 1, &m_uiGlIndex );
-			glTrack( m_gl, GlBufferBase, this );
-		}
-
-		return l_return;
-	}
-
-	template< typename T >
-	void GlBufferBase< T >::Destroy()
-	{
-		if ( m_uiGlIndex != eGL_INVALID_INDEX )
-		{
-			glUntrack( m_gl, this );
-			m_gl.DeleteBuffers( 1, &m_uiGlIndex );
-			m_uiGlIndex = uint32_t( eGL_INVALID_INDEX );
-		}
-	}
-
-	template< typename T >
-	bool GlBufferBase< T >::Initialise( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
-	{
-		return Fill( p_buffer, p_iSize, p_type, p_eNature );
+		return Fill( p_buffer, p_size, p_type, p_nature );
 	}
 
 	template< typename T >
@@ -50,25 +32,13 @@ namespace GlRender
 	}
 
 	template< typename T >
-	bool GlBufferBase< T >::Bind()
-	{
-		return m_gl.BindBuffer( m_eTarget, m_uiGlIndex );
-	}
-
-	template< typename T >
-	void GlBufferBase< T >::Unbind()
-	{
-		m_gl.BindBuffer( m_eTarget, 0 );
-	}
-
-	template< typename T >
-	bool GlBufferBase< T >::Fill( T const * p_buffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+	bool GlBufferBase< T >::Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 	{
 		bool l_bResult = Bind();
 
 		if ( l_bResult )
 		{
-			l_bResult = m_gl.BufferData( m_eTarget, p_iSize * sizeof( T ), p_buffer, m_gl.GetBufferFlags( p_eNature | p_type ) );
+			l_bResult = BindableType::GetOpenGl().BufferData( m_target, p_size * sizeof( T ), p_buffer, BindableType::GetOpenGl().GetBufferFlags( p_nature | p_type ) );
 			Unbind();
 		}
 
@@ -76,13 +46,13 @@ namespace GlRender
 	}
 
 	template< typename T >
-	T * GlBufferBase< T >::Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+	T * GlBufferBase< T >::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
 		T * l_return = NULL;
 
-		if ( m_uiGlIndex != eGL_INVALID_INDEX )
+		if ( this->GetGlName() != eGL_INVALID_INDEX )
 		{
-			l_return = reinterpret_cast< T * >( m_gl.MapBufferRange( m_eTarget, p_uiOffset * sizeof( T ), p_uiCount * sizeof( T ), m_gl.GetBitfieldFlags( p_uiFlags ) ) );
+			l_return = reinterpret_cast< T * >( BindableType::GetOpenGl().MapBufferRange( m_target, p_offset * sizeof( T ), p_count * sizeof( T ), BindableType::GetOpenGl().GetBitfieldFlags( p_flags ) ) );
 		}
 
 		return l_return;
@@ -93,9 +63,9 @@ namespace GlRender
 	{
 		T * l_return = NULL;
 
-		if ( m_uiGlIndex != eGL_INVALID_INDEX )
+		if ( this->GetGlName() != eGL_INVALID_INDEX )
 		{
-			l_return = reinterpret_cast< T * >( m_gl.MapBuffer( m_eTarget, p_access ) );
+			l_return = reinterpret_cast< T * >( BindableType::GetOpenGl().MapBuffer( m_target, p_access ) );
 		}
 
 		return l_return;
@@ -104,8 +74,8 @@ namespace GlRender
 	template< typename T >
 	bool GlBufferBase< T >::Unlock()
 	{
-		bool l_return = m_uiGlIndex != eGL_INVALID_INDEX;
-		l_return &= m_gl.UnmapBuffer( m_eTarget );
+		bool l_return = this->GetGlName() != eGL_INVALID_INDEX;
+		l_return &= BindableType::GetOpenGl().UnmapBuffer( m_target );
 		return l_return;
 	}
 }

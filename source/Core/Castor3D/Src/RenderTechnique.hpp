@@ -140,12 +140,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
 		 *\~french
 		 *\brief		Récupère le source du pixel shader qui correspond aux flags donnés
-		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
 		 */
-		C3D_API Castor::String GetPixelShaderSource( uint32_t p_uiFlags )const;
+		C3D_API Castor::String GetPixelShaderSource( uint32_t p_flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the technique name
@@ -234,12 +234,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_uiFlags	A combination of eTEXTURE_CHANNEL
+		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
 		 *\~french
 		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_uiFlags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
 		 */
-		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_uiFlags )const = 0;
+		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const = 0;
 
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique

@@ -30,10 +30,11 @@ namespace GlRender
 	class GlContext;
 
 	class GlContextImpl
-		:	public Castor::NonCopyable
+		: public Castor::NonCopyable
+		, public Holder
 	{
 	public:
-		GlContextImpl( OpenGl & p_gl, GlContext * p_pContext );
+		GlContextImpl( OpenGl & p_gl, GlContext * p_context );
 		virtual ~GlContextImpl();
 
 		bool Initialise( Castor3D::RenderWindow * p_window );
@@ -41,7 +42,7 @@ namespace GlRender
 		void SetCurrent();
 		void EndCurrent();
 		void SwapBuffers();
-		void UpdateVSync( bool p_bEnable );
+		void UpdateVSync( bool p_enable );
 
 		inline HDC GetHDC()const
 		{
@@ -62,9 +63,8 @@ namespace GlRender
 		HDC m_hDC;
 		HGLRC m_hContext;
 		HWND m_hWnd;
-		GlContext * m_pContext;
-		bool m_bInitialised;
-		OpenGl & m_gl;
+		GlContext * m_context;
+		bool m_initialised;
 	};
 }
 #endif

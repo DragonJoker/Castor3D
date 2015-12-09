@@ -81,7 +81,7 @@ namespace Castor3D
 		if ( l_hasFile )
 		{
 			String l_strTabs = cuT( "\t\t" );
-			ShaderObjectBaseSPtr l_pObject;
+			ShaderObjectBaseSPtr l_object;
 
 			switch ( p_shaderProgram.GetLanguage() )
 			{
@@ -105,11 +105,11 @@ namespace Castor3D
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; i++ )
 			{
-				l_pObject = p_shaderProgram.m_pShaders[i];
+				l_object = p_shaderProgram.m_pShaders[i];
 
-				if ( l_pObject )
+				if ( l_object )
 				{
-					l_return = ShaderObjectBase::TextLoader()( *l_pObject, p_file );
+					l_return = ShaderObjectBase::TextLoader()( *l_object, p_file );
 				}
 			}
 
@@ -166,7 +166,7 @@ namespace Castor3D
 
 	ShaderProgramBase::ShaderProgramBase( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_eStatus( ePROGRAM_STATUS_NOTLINKED )
+		, m_status( ePROGRAM_STATUS_NOTLINKED )
 		, m_eLanguage( p_eLanguage )
 	{
 	}
@@ -205,7 +205,7 @@ namespace Castor3D
 
 	void ShaderProgramBase::Initialise()
 	{
-		if ( m_eStatus == ePROGRAM_STATUS_NOTLINKED )
+		if ( m_status == ePROGRAM_STATUS_NOTLINKED )
 		{
 			m_activeShaders.clear();
 
@@ -222,7 +222,7 @@ namespace Castor3D
 					{
 						Logger::LogError( cuT( "ShaderProgram::Initialise - " ) + l_shader->GetCurrentFile() + cuT( " - COMPILER ERROR" ) );
 						l_shader->DestroyProgram();
-						m_eStatus = ePROGRAM_STATUS_ERROR;
+						m_status = ePROGRAM_STATUS_ERROR;
 						l_bResult = false;
 					}
 					else
@@ -247,7 +247,7 @@ namespace Castor3D
 						}
 					}
 
-					m_eStatus = ePROGRAM_STATUS_ERROR;
+					m_status = ePROGRAM_STATUS_ERROR;
 				}
 				else
 				{
@@ -289,9 +289,9 @@ namespace Castor3D
 	{
 		bool l_return = false;
 
-		if ( m_eStatus != ePROGRAM_STATUS_ERROR )
+		if ( m_status != ePROGRAM_STATUS_ERROR )
 		{
-			if ( m_eStatus != ePROGRAM_STATUS_LINKED )
+			if ( m_status != ePROGRAM_STATUS_LINKED )
 			{
 				for ( auto && l_shader : m_activeShaders )
 				{
@@ -301,10 +301,10 @@ namespace Castor3D
 					}
 				}
 
-				m_eStatus = ePROGRAM_STATUS_LINKED;
+				m_status = ePROGRAM_STATUS_LINKED;
 			}
 
-			l_return = m_eStatus == ePROGRAM_STATUS_LINKED;
+			l_return = m_status == ePROGRAM_STATUS_LINKED;
 		}
 
 		return l_return;
@@ -312,7 +312,7 @@ namespace Castor3D
 
 	void ShaderProgramBase::Bind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )
 	{
-		if ( m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
 			for ( auto && l_shader : m_activeShaders )
 			{
@@ -330,7 +330,7 @@ namespace Castor3D
 
 	void ShaderProgramBase::Unbind()
 	{
-		if ( m_eStatus == ePROGRAM_STATUS_LINKED )
+		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
 			uint32_t l_index = 0;
 
@@ -364,36 +364,36 @@ namespace Castor3D
 
 	void ShaderProgramBase::ResetToCompile()
 	{
-		m_eStatus = ePROGRAM_STATUS_NOTLINKED;
+		m_status = ePROGRAM_STATUS_NOTLINKED;
 	}
 
-	void ShaderProgramBase::SetInputType( eSHADER_TYPE p_eTarget, eTOPOLOGY p_topology )
+	void ShaderProgramBase::SetInputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
 	{
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			m_pShaders[p_eTarget]->SetInputType( p_topology );
+			m_pShaders[p_target]->SetInputType( p_topology );
 		}
 	}
 
-	void ShaderProgramBase::SetOutputType( eSHADER_TYPE p_eTarget, eTOPOLOGY p_topology )
+	void ShaderProgramBase::SetOutputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
 	{
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			m_pShaders[p_eTarget]->SetOutputType( p_topology );
+			m_pShaders[p_target]->SetOutputType( p_topology );
 		}
 	}
 
-	void ShaderProgramBase::SetOutputVtxCount( eSHADER_TYPE p_eTarget, uint8_t p_uiCount )
+	void ShaderProgramBase::SetOutputVtxCount( eSHADER_TYPE p_target, uint8_t p_count )
 	{
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			m_pShaders[p_eTarget]->SetOutputVtxCount( p_uiCount );
+			m_pShaders[p_target]->SetOutputVtxCount( p_count );
 		}
 	}
 
-	void ShaderProgramBase::SetFile( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel, Path const & p_pathFile )
+	void ShaderProgramBase::SetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Path const & p_pathFile )
 	{
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
 			if ( p_eModel == eSHADER_MODEL_COUNT )
 			{
@@ -401,46 +401,46 @@ namespace Castor3D
 				{
 					if ( GetOwner()->CheckSupport( eSHADER_MODEL( i ) ) )
 					{
-						m_pShaders[p_eTarget]->SetFile( eSHADER_MODEL( i ), p_pathFile );
+						m_pShaders[p_target]->SetFile( eSHADER_MODEL( i ), p_pathFile );
 					}
 				}
 			}
 			else
 			{
-				m_pShaders[p_eTarget]->SetFile( p_eModel, p_pathFile );
+				m_pShaders[p_target]->SetFile( p_eModel, p_pathFile );
 			}
 		}
 
 		ResetToCompile();
 	}
 
-	Path ShaderProgramBase::GetFile( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel )const
+	Path ShaderProgramBase::GetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
 	{
 		Path l_pathReturn;
 
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			l_pathReturn = m_pShaders[p_eTarget]->GetFile( p_eModel );
+			l_pathReturn = m_pShaders[p_target]->GetFile( p_eModel );
 		}
 
 		return l_pathReturn;
 	}
 
-	bool ShaderProgramBase::HasFile( eSHADER_TYPE p_eTarget )const
+	bool ShaderProgramBase::HasFile( eSHADER_TYPE p_target )const
 	{
 		bool l_return = false;
 
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			l_return = m_pShaders[p_eTarget]->HasFile();
+			l_return = m_pShaders[p_target]->HasFile();
 		}
 
 		return l_return;
 	}
 
-	void ShaderProgramBase::SetSource( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel, String const & p_strSource )
+	void ShaderProgramBase::SetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
 			if ( p_eModel == eSHADER_MODEL_COUNT )
 			{
@@ -448,77 +448,77 @@ namespace Castor3D
 				{
 					if ( GetOwner()->CheckSupport( eSHADER_MODEL( i ) ) )
 					{
-						m_pShaders[p_eTarget]->SetSource( eSHADER_MODEL( i ), p_strSource );
+						m_pShaders[p_target]->SetSource( eSHADER_MODEL( i ), p_strSource );
 					}
 				}
 			}
 			else
 			{
-				m_pShaders[p_eTarget]->SetSource( p_eModel, p_strSource );
+				m_pShaders[p_target]->SetSource( p_eModel, p_strSource );
 			}
 		}
 
 		ResetToCompile();
 	}
 
-	String ShaderProgramBase::GetSource( eSHADER_TYPE p_eTarget, eSHADER_MODEL p_eModel )const
+	String ShaderProgramBase::GetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
 	{
 		String l_strReturn;
 
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			l_strReturn = m_pShaders[p_eTarget]->GetSource( p_eModel );
+			l_strReturn = m_pShaders[p_target]->GetSource( p_eModel );
 		}
 
 		return l_strReturn;
 	}
 
-	bool ShaderProgramBase::HasSource( eSHADER_TYPE p_eTarget )const
+	bool ShaderProgramBase::HasSource( eSHADER_TYPE p_target )const
 	{
 		bool l_return = false;
 
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			l_return = m_pShaders[p_eTarget]->HasSource();
+			l_return = m_pShaders[p_target]->HasSource();
 		}
 
 		return l_return;
 	}
 
-	void ShaderProgramBase::SetEntryPoint( eSHADER_TYPE p_eTarget, String const & p_name )
+	void ShaderProgramBase::SetEntryPoint( eSHADER_TYPE p_target, String const & p_name )
 	{
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			m_pShaders[p_eTarget]->SetEntryPoint( p_name );
+			m_pShaders[p_target]->SetEntryPoint( p_name );
 		}
 
 		ResetToCompile();
 	}
 
-	String ShaderProgramBase::GetEntryPoint( eSHADER_TYPE p_eTarget )const
+	String ShaderProgramBase::GetEntryPoint( eSHADER_TYPE p_target )const
 	{
 		String l_strReturn;
 
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			l_strReturn = m_pShaders[p_eTarget]->GetEntryPoint();
+			l_strReturn = m_pShaders[p_target]->GetEntryPoint();
 		}
 
 		return l_strReturn;
 	}
 
-	bool ShaderProgramBase::HasObject( eSHADER_TYPE p_eTarget )const
+	bool ShaderProgramBase::HasObject( eSHADER_TYPE p_target )const
 	{
-		return m_pShaders[p_eTarget] && m_pShaders[p_eTarget]->HasSource() && m_pShaders[p_eTarget]->GetStatus() == eSHADER_STATUS_COMPILED;
+		return m_pShaders[p_target] && m_pShaders[p_target]->HasSource() && m_pShaders[p_target]->GetStatus() == eSHADER_STATUS_COMPILED;
 	}
 
-	eSHADER_STATUS ShaderProgramBase::GetObjectStatus( eSHADER_TYPE p_eTarget )const
+	eSHADER_STATUS ShaderProgramBase::GetObjectStatus( eSHADER_TYPE p_target )const
 	{
 		eSHADER_STATUS l_return = eSHADER_STATUS_DONTEXIST;
 
-		if ( m_pShaders[p_eTarget] )
+		if ( m_pShaders[p_target] )
 		{
-			l_return = m_pShaders[p_eTarget]->GetStatus();
+			l_return = m_pShaders[p_target]->GetStatus();
 		}
 
 		return l_return;

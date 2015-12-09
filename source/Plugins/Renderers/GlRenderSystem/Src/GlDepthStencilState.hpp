@@ -27,6 +27,7 @@ namespace GlRender
 	class GlDepthStencilState
 		: public Castor3D::DepthStencilState
 		, public Castor::NonCopyable
+		, public Holder
 	{
 	public:
 		GlDepthStencilState( GlRenderSystem * p_renderSystem, OpenGl & p_gl );
@@ -56,7 +57,6 @@ namespace GlRender
 		virtual Castor3D::DepthStencilStateSPtr DoCreateCurrent();
 
 	private:
-		OpenGl & m_gl;
 		GlRenderSystem * m_renderSystem;
 	};
 }

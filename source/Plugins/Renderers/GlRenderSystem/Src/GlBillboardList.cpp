@@ -1,8 +1,8 @@
 #include "GlBillboardList.hpp"
 
 #include "GlRenderSystem.hpp"
-#include "GlShaderObject.hpp"
-#include "GlShaderSource.hpp"
+
+#include "GlslSource.hpp"
 
 #include <Engine.hpp>
 #include <FrameVariableBuffer.hpp>
@@ -20,7 +20,7 @@ using namespace GlRender;
 
 GlBillboardList::GlBillboardList( Castor3D::SceneSPtr p_scene, GlRenderSystem & p_renderSystem, OpenGl & p_gl )
 	: BillboardList( p_scene, p_renderSystem )
-	, m_gl( p_gl )
+	, Holder( p_gl )
 {
 }
 
@@ -55,14 +55,14 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 	FrameVariableBufferSPtr l_billboardUbo = GetOwner()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
 	l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
-	ShaderObjectBaseSPtr l_pObject = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
-	l_pObject->SetInputType( eTOPOLOGY_POINTS );
-	l_pObject->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
-	l_pObject->SetOutputVtxCount( 4 );
+	ShaderObjectBaseSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
+	l_object->SetInputType( eTOPOLOGY_POINTS );
+	l_object->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
+	l_object->SetOutputVtxCount( 4 );
 
 	String l_strVtxShader;
 	{
-		GlslWriter l_writer( m_gl, eSHADER_TYPE_VERTEX );
+		GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
 		l_writer << Version() << Endl();
 
 		// Shader inputs
@@ -70,7 +70,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( vertex.xyz(), 1.0 );
+			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( vertex.XYZ, 1.0 );
 		} );
 
 		l_strVtxShader = l_writer.Finalise();
@@ -78,12 +78,12 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 	String l_strGeoShader;
 	{
-		GlslWriter l_writer( m_gl, eSHADER_TYPE_GEOMETRY );
+		GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_GEOMETRY );
 		l_writer << Version() << Endl();
 
-		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetInputType()] << cuT( " ) in;" ) << Endl();
-		l_writer << cuT( "layout( " ) << PRIMITIVES[l_pObject->GetOutputType()] << cuT( " ) out;" ) << Endl();
-		l_writer << cuT( "layout( max_vertices = " ) << l_pObject->GetOutputVtxCount() << cuT( " ) out;" ) << Endl();
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetInputType()] << cuT( " ) in;" ) << Endl();
+		l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetOutputType()] << cuT( " ) out;" ) << Endl();
+		l_writer << cuT( "layout( max_vertices = " ) << l_object->GetOutputVtxCount() << cuT( " ) out;" ) << Endl();
 
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
@@ -100,28 +100,28 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).xyz() );
-			l_position.y() = c3d_v3CameraPosition.y();
+			LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).XYZ );
+			l_position.Y = c3d_v3CameraPosition.Y;
 			LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, c3d_v3CameraPosition - l_position );
 			LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0.0f ), 1.0, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).xyz() );
-			l_v3Normal = l_writer.Paren( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).xyz();
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).XYZ );
+			l_v3Normal = l_writer.Paren( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).XYZ;
 
 			LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_position1, l_position0 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.y() ), 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_position1, l_position0 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.Y ), 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture1, vec3( Float( 0.0f ), 1.0, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_position2, l_position0 + l_right );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture2, vec3( Float( 1.0f ), 0.0, 0.0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_position3, l_position2 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.y() ), 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_position3, l_position2 + vec3( Float( 0.0f ), CAST( l_writer, Float, c3d_v2iDimensions.Y ), 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture3, vec3( Float( 1.0f ), 1.0, 0.0 ) );
 
 			LOCALE_ASSIGN( l_writer, Vec3, l_vec2m1, l_position1 - l_position0 );
 			LOCALE_ASSIGN( l_writer, Vec3, l_vec3m1, l_position2 - l_position0 );
 			LOCALE_ASSIGN( l_writer, Vec3, l_tex2m1, l_v2Texture1 - l_v2Texture0 );
 			LOCALE_ASSIGN( l_writer, Vec3, l_tex3m1, l_v2Texture2 - l_v2Texture0 );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( ( l_vec2m1 * l_tex3m1.x() ) - ( l_vec3m1 * l_tex2m1.y() ) ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( ( l_vec2m1 * l_tex3m1.X ) - ( l_vec3m1 * l_tex2m1.Y ) ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent, l_v3Normal ) );
 
 			{

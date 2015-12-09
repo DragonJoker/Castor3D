@@ -31,7 +31,8 @@ namespace GlRender
 	\date 09/02/2010
 	*/
 	class GlOverlayRenderer
-		:	public Castor3D::OverlayRenderer
+		: public Castor3D::OverlayRenderer
+		, public Holder
 	{
 	public:
 		/**
@@ -44,12 +45,9 @@ namespace GlRender
 		virtual ~GlOverlayRenderer();
 
 	private:
-		virtual Castor3D::ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_uiFlags );
+		virtual Castor3D::ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_flags );
 		virtual void DoInitialise();
 		virtual void DoCleanup();
-
-	private:
-		OpenGl & m_gl;
 	};
 }
 

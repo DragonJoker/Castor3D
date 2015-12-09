@@ -393,7 +393,7 @@ namespace Castor3D
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
 		RenderSystem * m_renderSystem;
 		//!\~english Tells if engine is cleaned up	\~french Dit si le moteur est nettoyé
-		bool m_bCleaned;
+		bool m_cleaned;
 		//!\~english Default blend states (no blend).	\~french Etats de blend par défaut (pas de blend).
 		BlendStateSPtr m_defaultBlendState;
 		//!\~english Default sampler.	\~french Le sampler par défaut.

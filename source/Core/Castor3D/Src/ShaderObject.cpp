@@ -61,27 +61,27 @@ namespace Castor3D
 
 		for ( auto && l_it : p_object.GetFrameVariables() )
 		{
-			FrameVariableSPtr l_pVariable = l_it;
+			FrameVariableSPtr l_variable = l_it;
 			BinaryChunk l_chunkVariable( eCHUNK_TYPE_PROGRAM_VARIABLE );
 
 			if ( l_return )
 			{
-				l_return = DoFillChunk( l_pVariable->GetOccCount(), eCHUNK_TYPE_VARIABLE_COUNT, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetOccCount(), eCHUNK_TYPE_VARIABLE_COUNT, l_chunkVariable );
 			}
 
 			if ( l_return )
 			{
-				l_return = DoFillChunk( l_pVariable->GetFullType(), eCHUNK_TYPE_VARIABLE_TYPE, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetFullType(), eCHUNK_TYPE_VARIABLE_TYPE, l_chunkVariable );
 			}
 
 			if ( l_return )
 			{
-				l_return = DoFillChunk( l_pVariable->GetName(), eCHUNK_TYPE_NAME, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetName(), eCHUNK_TYPE_NAME, l_chunkVariable );
 			}
 
 			if ( l_return )
 			{
-				l_return = DoFillChunk( l_pVariable->GetStrValue(), eCHUNK_TYPE_VARIABLE_VALUE, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetStrValue(), eCHUNK_TYPE_VARIABLE_VALUE, l_chunkVariable );
 			}
 
 			if ( l_return )
@@ -106,7 +106,7 @@ namespace Castor3D
 		String l_strText;
 		eTOPOLOGY l_ePrimType;
 		eFRAME_VARIABLE_TYPE l_type;
-		FrameVariableSPtr l_pVariable;
+		FrameVariableSPtr l_variable;
 		uint8_t l_count;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
@@ -144,7 +144,7 @@ namespace Castor3D
 				l_count = 0;
 				l_type = eFRAME_VARIABLE_TYPE( -1 );
 				l_strText.clear();
-				l_pVariable.reset();
+				l_variable.reset();
 
 				while ( l_chunk.CheckAvailable( 1 ) )
 				{
@@ -170,18 +170,18 @@ namespace Castor3D
 
 						if ( l_return )
 						{
-							l_pVariable->SetValueStr( l_strText );
+							l_variable->SetValueStr( l_strText );
 						}
 
 						break;
 					}
 
-					//if ( l_return && !l_pVariable )
+					//if ( l_return && !l_variable )
 					//{
 					//	if ( l_count && l_type != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
 					//	{
 					//		FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
-					//		l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_type, l_strText, l_count );
+					//		l_variable = l_buffer->CreateVariable( *p_object.GetParent(), l_type, l_strText, l_count );
 					//	}
 					//}
 
@@ -309,9 +309,9 @@ namespace Castor3D
 	};
 
 	ShaderObjectBase::ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type )
-		:	m_eStatus( eSHADER_STATUS_NOTCOMPILED )
+		:	m_status( eSHADER_STATUS_NOTCOMPILED )
 		,	m_type( p_type )
-		,	m_pParent( p_parent )
+		,	m_parent( p_parent )
 		,	m_eInputType( eTOPOLOGY_TRIANGLES )
 		,	m_eOutputType( eTOPOLOGY_TRIANGLES )
 		,	m_eShaderModel( eSHADER_MODEL_1 )
@@ -349,7 +349,7 @@ namespace Castor3D
 
 	void ShaderObjectBase::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )
 	{
-		m_eStatus = eSHADER_STATUS_NOTCOMPILED;
+		m_status = eSHADER_STATUS_NOTCOMPILED;
 		m_arrayFiles[p_eModel].clear();
 		m_arraySources[p_eModel].clear();
 
@@ -382,7 +382,7 @@ namespace Castor3D
 
 	void ShaderObjectBase::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
-		m_eStatus = eSHADER_STATUS_NOTCOMPILED;
+		m_status = eSHADER_STATUS_NOTCOMPILED;
 		m_arraySources[p_eModel] = p_strSource;
 	}
 
@@ -398,12 +398,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObjectBase::AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable )
+	void ShaderObjectBase::AddFrameVariable( OneTextureFrameVariableSPtr p_variable )
 	{
-		if ( p_pVariable )
+		if ( p_variable )
 		{
-			m_listFrameVariables.push_back( p_pVariable );
-			m_mapFrameVariables.insert( std::make_pair( p_pVariable->GetName(), p_pVariable ) );
+			m_listFrameVariables.push_back( p_variable );
+			m_mapFrameVariables.insert( std::make_pair( p_variable->GetName(), p_variable ) );
 		}
 	}
 

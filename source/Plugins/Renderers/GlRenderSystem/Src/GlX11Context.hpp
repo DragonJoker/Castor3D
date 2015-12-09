@@ -26,37 +26,37 @@ namespace GlRender
 	class GlContext;
 
 	class GlContextImpl
+		: public Holder
 	{
 	public:
-		GlContextImpl( OpenGl & p_gl, GlContext * p_pContext );
+		GlContextImpl( OpenGl & p_gl, GlContext * p_context );
 		virtual ~GlContextImpl();
 
-		bool Initialise( Castor3D::RenderWindow * p_pWindow );
+		bool Initialise( Castor3D::RenderWindow * p_window );
 		void Cleanup();
 		void SetCurrent();
 		void EndCurrent();
 		void SwapBuffers();
-		void UpdateVSync( bool p_bEnable );
+		void UpdateVSync( bool p_enable );
 
 		inline GLXContext GetContext()
 		{
-			return m_glXContext;
+			return m_glxContext;
 		}
 
 	private:
-		XVisualInfo * DoCreateVisualInfoWithFBConfig( Castor3D::RenderWindow * p_pWindow, Castor::IntArray & p_arrayAttribs, int p_iScreen );
-		XVisualInfo * DoCreateVisualInfoWithoutFBConfig( Castor::IntArray & p_arrayAttribs, int p_iScreen );
-		bool DoCreateGl3Context( Castor3D::RenderWindow * p_pWindow );
+		XVisualInfo * DoCreateVisualInfoWithFBConfig( Castor3D::RenderWindow * p_window, Castor::IntArray & p_arrayAttribs, int p_screen );
+		XVisualInfo * DoCreateVisualInfoWithoutFBConfig( Castor::IntArray & p_arrayAttribs, int p_screen );
+		bool DoCreateGl3Context( Castor3D::RenderWindow * p_window );
 
 	protected:
-		GLXContext m_glXContext;
-		int m_iGlXVersion;
-		Display * m_pDisplay;
+		GLXContext m_glxContext;
+		int m_glxVersion;
+		Display * m_display;
 		GLXDrawable m_drawable;
-		GLXFBConfig	* m_pFbConfig;
-		GlContext * m_pContext;
-		bool m_bInitialised;
-		OpenGl & m_gl;
+		GLXFBConfig	* m_fbConfig;
+		GlContext * m_context;
+		bool m_initialised;
 	};
 }
 #endif
