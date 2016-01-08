@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlContext
 		: public Castor3D::Context
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	public:

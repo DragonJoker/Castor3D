@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_BLOCK_TIMER___
 
 #include "PreciseTimer.hpp"
-#include "NonCopyable.hpp"
 #include "CastorUtils.hpp"
 
 namespace Castor
@@ -36,7 +35,6 @@ namespace Castor
 	\remark		Appelez la macro CASTOR_TIME() au début d'un bloc pour avoir une entrée dans la console en sortie du bloc
 	*/
 	class BlockTimer
-		: public Castor::NonCopyable
 	{
 	public:
 		/**

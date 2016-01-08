@@ -1,13 +1,16 @@
 ﻿#include "Skeleton.hpp"
+
 #include "Animation.hpp"
+#include "Mesh.hpp"
 
 using namespace Castor;
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-Skeleton::Skeleton( MeshSPtr p_pMesh )
-	:	m_wpMesh( p_pMesh )
+Skeleton::Skeleton( MeshSPtr p_mesh )
+	: Animable( *p_mesh->GetOwner() )
+	, m_wpMesh( p_mesh )
 {
 	m_mtxGlobalInverse.set_identity();
 }

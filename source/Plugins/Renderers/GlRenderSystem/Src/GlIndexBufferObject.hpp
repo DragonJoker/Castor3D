@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlIndexBufferObject
 		: public GlBuffer< uint32_t >
-		, public Castor::NonCopyable
 	{
 	public:
 		GlIndexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_buffer );

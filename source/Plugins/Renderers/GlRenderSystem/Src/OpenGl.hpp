@@ -632,7 +632,7 @@ namespace GlRender
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glCheckFramebufferStatus.xml
 		*/
-		C3D_Gl_API uint32_t CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE p_eBindingMode )const;
+		C3D_Gl_API eGL_FRAMEBUFFER_STATUS CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE p_eBindingMode )const;
 
 		/** see https://www.opengl.org/sdk/docs/man/docbook4/xhtml/glGenRenderbuffers.xml
 		*/

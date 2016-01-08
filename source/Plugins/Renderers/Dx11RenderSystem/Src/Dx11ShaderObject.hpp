@@ -40,27 +40,27 @@ namespace Dx11Render
 		 */
 		virtual ~DxShaderObject();
 		/**
-		 * Compiles program
+		 *\copydoc		Castor3D::ShaderObjectBase::Create
+		 */
+		virtual void Create() {}
+		/**
+		 *\copydoc		Castor3D::ShaderObjectBase::Destroy
+		 */
+		virtual void Destroy();
+		/**
+		 *\copydoc		Castor3D::ShaderObjectBase::Compile
 		 */
 		virtual bool Compile();
 		/**
-		 * Get compiler messages
-		 */
-		void RetrieveCompilerLog( Castor::String & p_compilerLog );
-		/**
-		 *\~english
-		 *\brief		Destroys the program on GPU
-		 *\~french
-		 *\brief		Détruit le programme sur le GPU
-		 */
-		virtual void DestroyProgram();
-
-		virtual void CreateProgram() {}
-
+		*\copydoc		Castor3D::ShaderObjectBase::SetEntryPoint
+		*/
 		virtual	void SetEntryPoint( Castor::String const & p_name )
 		{
 			m_strEntryPoint = p_name;
 		}
+		/**
+		*\copydoc		Castor3D::ShaderObjectBase::GetEntryPoint
+		*/
 		virtual	Castor::String GetEntryPoint()const
 		{
 			return m_strEntryPoint;
@@ -68,15 +68,22 @@ namespace Dx11Render
 
 		inline ID3DBlob * GetCompiled()const
 		{
-			return m_pCompiled;
+			return m_compiledShader;
 		}
+
+	private:
+		/**
+		*\copydoc		Castor3D::ShaderObjectBase::DoRetrieveCompilerLog
+		 */
+		virtual Castor::String DoRetrieveCompilerLog();
 
 	protected:
 		Castor::String m_strEntryPoint;
 		DxShaderProgram * m_shaderProgram;
 		Castor::String m_strProfile;
 		HandleStrMap m_mapParamsByName;
-		ID3DBlob * m_pCompiled;
+		ID3DBlob * m_compiledShader;
+		ID3DBlob * m_errors;
 		DxRenderSystem * m_renderSystem;
 	};
 }

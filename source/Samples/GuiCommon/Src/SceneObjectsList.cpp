@@ -265,7 +265,7 @@ namespace GuiCommon
 	{
 		for ( auto && l_pair : p_node->GetObjects() )
 		{
-			MovableObjectSPtr l_object = l_pair.second.lock();
+			MovableObjectSPtr l_object = l_pair.lock();
 
 			switch ( l_object->GetType() )
 			{

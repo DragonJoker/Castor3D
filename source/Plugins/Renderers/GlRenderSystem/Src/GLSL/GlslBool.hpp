@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GLSL_BOOL_H___
 #define ___GLSL_BOOL_H___
 
-#include "GlslVoid.hpp"
+#include "GlslOptional.hpp"
 
 namespace GlRender
 {

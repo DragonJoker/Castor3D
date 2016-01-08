@@ -55,7 +55,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< ShaderProgramBase, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -215,20 +214,6 @@ namespace Castor3D
 		C3D_API virtual ~ShaderProgramBase();
 		/**
 		 *\~english
-		 *\brief		Cleans the program up
-		 *\~french
-		 *\brief		Nettoie le programme
-		 */
-		C3D_API virtual void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Initialises the program
-		 *\~french
-		 *\brief		Initialise le programme
-		 */
-		C3D_API virtual void Initialise();
-		/**
-		 *\~english
 		 *\brief		Creates the wanted shader object
 		 *\param[in]	p_type		The shader object concerned
 		 *\~french
@@ -236,24 +221,6 @@ namespace Castor3D
 		 *\param[in]	p_type		Le shader object concerné
 		 */
 		C3D_API ShaderObjectBaseSPtr CreateObject( eSHADER_TYPE p_type );
-		/**
-		 *\~english
-		 *\brief		Activates the program
-		 *\param[in]	p_byIndex	The current pass index
-		 *\param[in]	p_byCount	The material passes count
-		 *\~french
-		 *\brief		Active le programme
-		 *\param[in]	p_byIndex	L'index de la passe courante
-		 *\param[in]	p_byCount	Le compte des passes du material
-		 */
-		C3D_API virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount );
-		/**
-		 *\~english
-		 *\brief		Deactivates the program
-		 *\~french
-		 *\brief		Désactive le programme
-		 */
-		C3D_API virtual void Unbind();
 		/**
 		 *\~english
 		 *\brief		Sets all objects file
@@ -267,13 +234,6 @@ namespace Castor3D
 		C3D_API virtual void SetFile( eSHADER_MODEL p_eModel, Castor::Path const & p_pathFile );
 		/**
 		 *\~english
-		 *\brief		Links all shader objects held by the program
-		 *\~french
-		 *\brief		Link tous les objets du programme
-		 */
-		C3D_API virtual bool Link();
-		/**
-		 *\~english
 		 *\brief		Adds a variable buffer to add
 		 *\param[in]	p_pVariableBuffer	The GPU variables buffer
 		 *\param[in]	p_shaderMask		MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
@@ -282,7 +242,7 @@ namespace Castor3D
 		 *\param[in]	p_pVariableBuffer	Le tampon de variables GPU
 		 *\param[in]	p_shaderMask		Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 */
-		C3D_API void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask );
+		C3D_API void AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint64_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Resets compilation variables to be able to compile again
@@ -290,17 +250,6 @@ namespace Castor3D
 		 *\brief		Réinitialise les variables de compilation afin de pouvoir compiler le shader à nouveau
 		 */
 		C3D_API void ResetToCompile();
-		/**
-		 *\~english
-		 *\brief		Retrieves a Vertex Attribute index from the program
-		 *\param[in]	p_name	The attribute name
-		 *\return		The index, -1 if unavailable
-		 *\~french
-		 *\brief		Récupère l'index d'un attribut de vertex dans le programme
-		 *\param[in]	p_name	Le nom de l'attribut
-		 *\return		L'index, -1 si indisponible
-		 */
-		C3D_API virtual int GetAttributeLocation( Castor::String const & p_name )const = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the input primitives type
@@ -598,8 +547,88 @@ namespace Castor3D
 		{
 			return m_eLanguage;
 		}
+		/**
+		 *\~english
+		 *\brief		Cleans the program up
+		 *\~french
+		 *\brief		Nettoie le programme
+		 */
+		C3D_API virtual void Cleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Initialises the program
+		 *\~french
+		 *\brief		Initialise le programme
+		 */
+		C3D_API virtual void Initialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Activates the program
+		 *\param[in]	p_byIndex	The current pass index
+		 *\param[in]	p_byCount	The material passes count
+		 *\~french
+		 *\brief		Active le programme
+		 *\param[in]	p_byIndex	L'index de la passe courante
+		 *\param[in]	p_byCount	Le compte des passes du material
+		 */
+		C3D_API virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount ) = 0;
+		/**
+		 *\~english
+		 *\brief		Deactivates the program
+		 *\~french
+		 *\brief		Désactive le programme
+		 */
+		C3D_API virtual void Unbind() = 0;
+		/**
+		 *\~english
+		 *\brief		Links all shader objects held by the program
+		 *\~french
+		 *\brief		Link tous les objets du programme
+		 */
+		C3D_API virtual bool Link() = 0;
 
 	protected:
+		/**
+		*\~english
+		*\brief		Cleans the program up
+		*\~french
+		*\brief		Nettoie le programme
+		*/
+		C3D_API void DoCleanup();
+		/**
+		*\~english
+		*\brief		Initialises the program
+		*\~french
+		*\brief		Initialise le programme
+		*/
+		C3D_API void DoInitialise();
+		/**
+		*\~english
+		*\brief		Activates the program
+		*\param[in]	p_byIndex	The current pass index
+		*\param[in]	p_byCount	The material passes count
+		*\~french
+		*\brief		Active le programme
+		*\param[in]	p_byIndex	L'index de la passe courante
+		*\param[in]	p_byCount	Le compte des passes du material
+		*/
+		C3D_API void DoBind( uint8_t p_byIndex, uint8_t p_byCount );
+		/**
+		*\~english
+		*\brief		Deactivates the program
+		*\~french
+		*\brief		Désactive le programme
+		*/
+		C3D_API void DoUnbind();
+		/**
+		*\~english
+		*\brief		Links all shader objects held by the program
+		*\~french
+		*\brief		Link tous les objets du programme
+		*/
+		C3D_API bool DoLink();
+
+	private:
 		/**
 		 *\~english
 		 *\brief		Creates the wanted shader object
@@ -608,7 +637,7 @@ namespace Castor3D
 		 *\brief		Crée le shader object voulu
 		 *\param[in]	p_type		Le shader object concerné
 		 */
-		C3D_API virtual ShaderObjectBaseSPtr DoCreateObject( eSHADER_TYPE p_type ) = 0;
+		virtual ShaderObjectBaseSPtr DoCreateObject( eSHADER_TYPE p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable
@@ -619,7 +648,7 @@ namespace Castor3D
 		 *\param[in]	p_iNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		C3D_API virtual OneTextureFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
+		virtual OneTextureFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
@@ -628,7 +657,7 @@ namespace Castor3D
 		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
 		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
 		 */
-		C3D_API virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const = 0;
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const = 0;
 
 	protected:
 		//!<\~english The program status	\~french Le statut du programme

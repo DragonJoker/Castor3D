@@ -7,6 +7,7 @@
 #include "DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer.hpp"
 #include "OverlayManager.hpp"
+#include "PostEffect.hpp"
 #include "RasteriserState.hpp"
 #include "RenderBufferAttachment.hpp"
 #include "RenderSystem.hpp"
@@ -79,6 +80,12 @@ namespace Castor3D
 	void RenderTechniqueBase::EndRender()
 	{
 		DoEndRender();
+
+		for ( auto && l_effect : m_pRenderTarget->GetPostEffects() )
+		{
+			l_effect->Apply();
+		}
+
 		GetOwner()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_pRenderTarget->GetSize() );
 		m_pRenderTarget->GetFrameBuffer()->Unbind();
 		m_renderSystem->PopScene();

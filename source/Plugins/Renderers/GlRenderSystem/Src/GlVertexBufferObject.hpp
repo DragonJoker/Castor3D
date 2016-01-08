@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlVertexBufferObject
 		: public GlBuffer< uint8_t >
-		, public Castor::NonCopyable
 	{
 	public:
 		GlVertexBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer );

@@ -1,5 +1,7 @@
 ﻿#include "SsaaRenderTechnique.hpp"
 
+#include <BlendState.hpp>
+#include <Camera.hpp>
 #include <ColourRenderBuffer.hpp>
 #include <DepthStencilRenderBuffer.hpp>
 #include <DepthStencilState.hpp>
@@ -10,6 +12,7 @@
 #include <RasteriserState.hpp>
 #include <RenderBufferAttachment.hpp>
 #include <RenderTarget.hpp>
+#include <Scene.hpp>
 #include <TextureAttachment.hpp>
 
 #include <Logger.hpp>
@@ -272,13 +275,19 @@ namespace Ssaa
 	{
 		m_pRenderTarget->GetDepthStencilState()->Apply();
 		m_pRenderTarget->GetRasteriserState()->Apply();
-		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
+		p_camera.GetViewport().SetSize( m_sizeSsaa );
+		p_camera.Render();
+		p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
+		p_camera.EndRender();
+		return true;
 	}
 
 	void RenderTechnique::DoEndRender()
 	{
 		m_pSsFrameBuffer->Unbind();
-		m_pRenderTarget->GetFrameBuffer()->Bind();
+		m_pRenderTarget->GetDepthStencilState()->Apply();
+		m_pRenderTarget->GetRasteriserState()->Apply();
+		GetOwner()->GetDefaultBlendState()->Apply();
 		GetOwner()->GetRenderSystem()->GetCurrentContext()->RenderTextureToCurrentBuffer( m_pRenderTarget->GetSize(), m_pSsColorBuffer );
 	}
 
@@ -313,23 +322,26 @@ namespace Ssaa
 
 	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_flags )const
 	{
+#define CHECK_FLAG( channel ) ( ( p_flags & ( channel ) ) == ( channel ) )
+
 		using namespace GLSL;
 
 		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
 		l_writer << GLSL::Version() << Endl();
 
+		// UBOs
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
 
-		// Pixel inputs
+		// Fragment Intputs
 		IN( l_writer, Vec3, vtx_vertex );
 		IN( l_writer, Vec3, vtx_normal );
 		IN( l_writer, Vec3, vtx_tangent );
 		IN( l_writer, Vec3, vtx_bitangent );
 		IN( l_writer, Vec3, vtx_texture );
 
-		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
+		FRAG_OUTPUT( l_writer, Vec4, pxl_v4FragColor, 0 );
 
 		if ( l_writer.GetOpenGl().HasTbo() )
 		{
@@ -340,61 +352,16 @@ namespace Ssaa
 			UNIFORM( l_writer, Sampler1D, c3d_sLights );
 		}
 
-		Sampler2D c3d_mapColour;
-		Sampler2D c3d_mapAmbient;
-		Sampler2D c3d_mapDiffuse;
-		Sampler2D c3d_mapNormal;
-		Sampler2D c3d_mapOpacity;
-		Sampler2D c3d_mapSpecular;
-		Sampler2D c3d_mapHeight;
-		Sampler2D c3d_mapGloss;
+		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
+		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ), CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
+		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ), CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
+		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ), CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
+		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ), CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
+		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ), CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
+		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ), CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
+		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ), CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
 
-		if ( p_flags != 0 )
-		{
-			if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
-			{
-				c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
-			{
-				c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
-			{
-				c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-			{
-				c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-			{
-				c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-			{
-				c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
-			{
-				c3d_mapHeight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
-			{
-				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
-			}
-		}
-
-		BlinnPhongLightingModel l_lighting;
-		l_lighting.Declare_Light( l_writer );
-		l_lighting.Declare_GetLight( l_writer );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
 		std::function< void() > l_main = [&]()
 		{
@@ -402,10 +369,8 @@ namespace Ssaa
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
-			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vec3( vtx_vertex.X, vtx_vertex.Y, vtx_vertex.Z ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vec3( vtx_vertex.X, vtx_vertex.Y, vtx_vertex.Z ) ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
-			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
+			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
 			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
@@ -413,61 +378,90 @@ namespace Ssaa
 
 			if ( p_flags != 0 )
 			{
-				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
+					l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ );
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) )
 				{
-					l_fShininess = texture2D( c3d_mapGloss, vtx_texture.XY ).R;
+					l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.XY ).R;
 				}
 			}
 
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
 			{
-				l_lighting.WriteCompute( p_flags, l_writer, i,
-										 l_v3MapSpecular, c3d_mtxModelView, l_v3MapNormal,
-										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
-										 vtx_vertex, l_v3Normal, c3d_v3CameraPosition, l_fShininess,
-										 vtx_vertex, vtx_tangent, vtx_bitangent, vtx_normal,
-										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputeDirectionalLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+													 FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+													 l_output );
 			}
 			ROF
 
-			if ( p_flags != 0 )
+			FOR( l_writer, Int, i, c3d_iLightsCount.x, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y" ), cuT( "++i" ) )
 			{
-				if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputePointLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+											   FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+											   l_output );
+			}
+			ROF
+
+			FOR( l_writer, Int, i, c3d_iLightsCount.x + c3d_iLightsCount.y, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y + c3d_iLightsCount.z" ), cuT( "++i" ) )
+			{
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputeSpotLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+											  FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+											  l_output );
+			}
+			ROF
+
+			if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
+			{
+				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
+			}
+
+			if ( p_flags && p_flags != eTEXTURE_CHANNEL_OPACITY )
+			{
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
 				{
 					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) )
 				{
 					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) )
 				{
 					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) )
 				{
-					l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
+					l_v3Specular *= l_v3MapSpecular;
 				}
 			}
 
-			//pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
-			pxl_v4FragColor = vec4( l_v3Diffuse, l_fAlpha );
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
+									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.XYZ ) +
+									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ), l_fAlpha );
+
+			pxl_v4FragColor.XYZ = vec3( min( l_v3Emissive.X, pxl_v4FragColor.X ),
+										min( l_v3Emissive.Y, pxl_v4FragColor.Y ),
+										min( l_v3Emissive.Z, pxl_v4FragColor.Z ) );
 		};
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
+
+#undef CHECK_FLAG
 	}
 
 #endif

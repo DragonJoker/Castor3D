@@ -7,13 +7,31 @@
 
 #include <Logger.hpp>
 #include <TransformationMatrix.hpp>
+#include <StreamPrefixManipulators.hpp>
 
 using namespace Castor;
 
 namespace Castor3D
 {
+	namespace
+	{
+		template< typename CharType, typename PrefixType >
+		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::base_prefixer< CharType, PrefixType > const & prefix )
+		{
+			format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * sbuf = dynamic_cast< format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+
+			if ( !sbuf )
+			{
+				sbuf = format::install_prefix_buffer< PrefixType >( stream );
+				stream.register_callback( format::callback< PrefixType, CharType >, 0 );
+			}
+
+			return stream;
+		}
+	}
+
 	ShaderProgramBase::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< ShaderProgramBase >( p_path )
+		: Castor3D::BinaryParser< ShaderProgramBase >( p_path )
 	{
 	}
 
@@ -56,7 +74,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	ShaderProgramBase::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< ShaderProgramBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< ShaderProgramBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -175,93 +193,6 @@ namespace Castor3D
 	{
 	}
 
-	void ShaderProgramBase::Cleanup()
-	{
-		for ( auto l_shader : m_activeShaders )
-		{
-			if ( l_shader )
-			{
-				l_shader->Detach();
-				l_shader->FlushFrameVariables();
-				l_shader->DestroyProgram();
-			}
-		}
-
-		m_activeShaders.clear();
-		clear_container( m_arrayFiles );
-
-		m_frameVariableBuffersByName.clear();
-
-		for ( auto && l_list : m_frameVariableBuffers )
-		{
-			l_list.clear();
-		}
-
-		for ( auto l_buffer : m_listFrameVariableBuffers )
-		{
-			l_buffer->Cleanup();
-		}
-	}
-
-	void ShaderProgramBase::Initialise()
-	{
-		if ( m_status == ePROGRAM_STATUS_NOTLINKED )
-		{
-			m_activeShaders.clear();
-
-			bool l_bResult = true;
-
-			for ( auto l_shader : m_pShaders )
-			{
-				if ( l_shader && l_shader->HasSource() )
-				{
-					l_shader->DestroyProgram();
-					l_shader->CreateProgram();
-
-					if ( !l_shader->Compile() && l_shader->GetStatus() == eSHADER_STATUS_ERROR )
-					{
-						Logger::LogError( cuT( "ShaderProgram::Initialise - COMPILER ERROR" ) );
-						l_shader->DestroyProgram();
-						m_status = ePROGRAM_STATUS_ERROR;
-						l_bResult = false;
-					}
-					else
-					{
-						l_shader->AttachTo( *this );
-						m_activeShaders.push_back( l_shader );
-					}
-				}
-			}
-
-			if ( l_bResult )
-			{
-				if ( !Link() )
-				{
-					Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
-
-					for ( auto l_shader : m_pShaders )
-					{
-						if ( l_shader )
-						{
-							l_shader->DestroyProgram();
-						}
-					}
-
-					m_status = ePROGRAM_STATUS_ERROR;
-				}
-				else
-				{
-					for ( auto && l_buffer : m_listFrameVariableBuffers )
-					{
-						l_buffer->Initialise( *this );
-					}
-
-					Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
-				}
-			}
-		}
-	}
-
 	ShaderObjectBaseSPtr ShaderProgramBase::CreateObject( eSHADER_TYPE p_type )
 	{
 		ShaderObjectBaseSPtr l_return;
@@ -285,64 +216,31 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool ShaderProgramBase::Link()
+	void ShaderProgramBase::DoCleanup()
 	{
-		bool l_return = false;
-
-		if ( m_status != ePROGRAM_STATUS_ERROR )
+		for ( auto l_shader : m_activeShaders )
 		{
-			if ( m_status != ePROGRAM_STATUS_LINKED )
+			if ( l_shader )
 			{
-				for ( auto && l_shader : m_activeShaders )
-				{
-					for ( auto && l_it : l_shader->GetFrameVariables() )
-					{
-						l_it->Initialise();
-					}
-				}
-
-				m_status = ePROGRAM_STATUS_LINKED;
+				l_shader->Detach();
+				l_shader->FlushFrameVariables();
+				l_shader->Destroy();
 			}
-
-			l_return = m_status == ePROGRAM_STATUS_LINKED;
 		}
 
-		return l_return;
-	}
+		m_activeShaders.clear();
+		clear_container( m_arrayFiles );
 
-	void ShaderProgramBase::Bind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )
-	{
-		if ( m_status == ePROGRAM_STATUS_LINKED )
+		m_frameVariableBuffersByName.clear();
+
+		for ( auto && l_list : m_frameVariableBuffers )
 		{
-			for ( auto && l_shader : m_activeShaders )
-			{
-				l_shader->Bind();
-			}
-
-			uint32_t l_index = 0;
-
-			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
-			{
-				l_variableBuffer->Bind( l_index++ );
-			}
+			l_list.clear();
 		}
-	}
 
-	void ShaderProgramBase::Unbind()
-	{
-		if ( m_status == ePROGRAM_STATUS_LINKED )
+		for ( auto l_buffer : m_listFrameVariableBuffers )
 		{
-			uint32_t l_index = 0;
-
-			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
-			{
-				l_variableBuffer->Unbind( l_index++ );
-			}
-
-			for ( auto && l_shader : m_activeShaders )
-			{
-				l_shader->Unbind();
-			}
+			l_buffer->Cleanup();
 		}
 	}
 
@@ -554,7 +452,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgramBase::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint32_t p_shaderMask )
+	void ShaderProgramBase::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint64_t p_shaderMask )
 	{
 		auto l_it = m_frameVariableBuffersByName.find( p_pVariableBuffer->GetName() );
 
@@ -565,7 +463,7 @@ namespace Castor3D
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT; ++i )
 			{
-				if ( p_shaderMask & ( 0x1 << i ) )
+				if ( p_shaderMask & uint64_t( 0x1 << i ) )
 				{
 					m_frameVariableBuffers[i].push_back( p_pVariableBuffer );
 				}
@@ -599,5 +497,122 @@ namespace Castor3D
 	String ShaderProgramBase::GetVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
 		return DoGetVertexShaderSource( p_uiProgramFlags );
+	}
+
+	void ShaderProgramBase::DoInitialise()
+	{
+		if ( m_status == ePROGRAM_STATUS_NOTLINKED )
+		{
+			m_activeShaders.clear();
+
+			bool l_bResult = true;
+
+			for ( auto l_shader : m_pShaders )
+			{
+				if ( l_shader && l_shader->HasSource() )
+				{
+					l_shader->Destroy();
+					l_shader->Create();
+
+					if ( !l_shader->Compile() && l_shader->GetStatus() == eSHADER_STATUS_ERROR )
+					{
+						Logger::LogError( cuT( "ShaderProgram::Initialise - COMPILER ERROR" ) );
+						l_shader->Destroy();
+						m_status = ePROGRAM_STATUS_ERROR;
+						l_bResult = false;
+					}
+					else
+					{
+						l_shader->AttachTo( *this );
+						m_activeShaders.push_back( l_shader );
+					}
+				}
+			}
+
+			if ( l_bResult )
+			{
+				if ( !Link() )
+				{
+					Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
+
+					for ( auto l_shader : m_activeShaders )
+					{
+						StringStream l_source;
+						l_source << format::line_prefix();
+						l_source << l_shader->GetLoadedSource();
+						Logger::LogDebug( l_source.str() );
+						l_shader->Destroy();
+					}
+
+					m_status = ePROGRAM_STATUS_ERROR;
+				}
+				else
+				{
+					for ( auto && l_buffer : m_listFrameVariableBuffers )
+					{
+						l_buffer->Initialise( *this );
+					}
+
+					Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+				}
+			}
+		}
+	}
+
+	void ShaderProgramBase::DoBind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )
+	{
+		if ( m_status == ePROGRAM_STATUS_LINKED )
+		{
+			for ( auto && l_shader : m_activeShaders )
+			{
+				l_shader->Bind();
+			}
+
+			uint32_t l_index = 0;
+
+			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+			{
+				l_variableBuffer->Bind( l_index++ );
+			}
+		}
+	}
+
+	void ShaderProgramBase::DoUnbind()
+	{
+		if ( m_status == ePROGRAM_STATUS_LINKED )
+		{
+			uint32_t l_index = 0;
+
+			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+			{
+				l_variableBuffer->Unbind( l_index++ );
+			}
+
+			for ( auto && l_shader : m_activeShaders )
+			{
+				l_shader->Unbind();
+			}
+		}
+	}
+
+	bool ShaderProgramBase::DoLink()
+	{
+		if ( m_status != ePROGRAM_STATUS_ERROR )
+		{
+			if ( m_status != ePROGRAM_STATUS_LINKED )
+			{
+				for ( auto && l_shader : m_activeShaders )
+				{
+					for ( auto && l_it : l_shader->GetFrameVariables() )
+					{
+						l_it->Initialise();
+					}
+				}
+
+				m_status = ePROGRAM_STATUS_LINKED;
+			}
+		}
+
+		return m_status == ePROGRAM_STATUS_LINKED;
 	}
 }

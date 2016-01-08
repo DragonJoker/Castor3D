@@ -49,6 +49,7 @@ namespace Castor3D
 	Engine::Engine()
 		: m_renderSystem( NULL )
 		, m_cleaned( true )
+		, m_perObjectLighting( true )
 	{
 		std::locale::global( std::locale() );
 		CASTOR_INIT_UNIQUE_INSTANCE();

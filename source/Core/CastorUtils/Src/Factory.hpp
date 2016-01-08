@@ -116,7 +116,7 @@ namespace Castor
 		 *\return		L'objet créé
 		 */
 		template< typename ... Parameters >
-		ObjPtr Create( Key const & p_key, Parameters && ... p_params )
+		ObjPtr Create( Key const & p_key, Parameters && ... p_params )const
 		{
 			ObjPtr l_return;
 			auto l_it = m_registered.find( p_key );

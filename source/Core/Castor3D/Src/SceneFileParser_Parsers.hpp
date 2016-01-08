@@ -50,6 +50,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetSsaa )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetStereo )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetDeferred )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetPostEffect )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 
 	// Sampler parsers

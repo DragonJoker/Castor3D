@@ -2618,16 +2618,16 @@ bool OpenGl::DrawBuffers( int n, const uint32_t * bufs )const
 	return glCheckError( *this, "glDrawBuffers" );
 }
 
-uint32_t OpenGl::CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE p_target )const
+eGL_FRAMEBUFFER_STATUS OpenGl::CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE p_target )const
 {
-	uint32_t l_eReturn = m_pfnCheckFramebufferStatus( p_target );
+	eGL_FRAMEBUFFER_STATUS l_return = eGL_FRAMEBUFFER_STATUS( m_pfnCheckFramebufferStatus( p_target ) );
 
-	if ( ! glCheckError( *this, "glCheckFramebufferStatus" ) )
+	if ( !glCheckError( *this, "glCheckFramebufferStatus" ) )
 	{
-		l_eReturn = eGL_INVALID_INDEX;
+		l_return = eGL_FRAMEBUFFER_INVALID;
 	}
 
-	return l_eReturn;
+	return l_return;
 }
 
 bool OpenGl::TexImage2DMultisample( eGL_TEXDIM p_target, int p_iSamples, eGL_INTERNAL p_eInternalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations )const

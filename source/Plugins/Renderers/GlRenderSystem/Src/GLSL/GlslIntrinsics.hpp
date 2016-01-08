@@ -96,6 +96,21 @@ namespace GlRender
 		C3D_Gl_API Float cos( Type const & p_value );
 		C3D_Gl_API Float sin( Type const & p_value );
 		C3D_Gl_API Float tan( Type const & p_value );
+		C3D_Gl_API Optional< Vec4 > texture1D( Optional< Sampler1D > const & p_sampler, Type const & p_value );
+		C3D_Gl_API Optional< Vec4 > texture2D( Optional< Sampler2D > const & p_sampler, Type const & p_value );
+		C3D_Gl_API Optional< Vec4 > texture3D( Optional< Sampler3D > const & p_sampler, Type const & p_value );
+		C3D_Gl_API Optional< Vec4 > texelFetch( Optional< SamplerBuffer > const & p_sampler, Type const & p_value );
+		C3D_Gl_API Optional< Vec4 > texelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif );
+		C3D_Gl_API Optional< Vec4 > texelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif );
+		C3D_Gl_API Optional< Vec4 > texelFetch( Optional< Sampler3D > const & p_sampler, Type const & p_value, Int const & p_modif );
+		C3D_Gl_API Optional< Vec2 > reflect( Optional< Vec2 > const & p_a, Type const & p_b );
+		C3D_Gl_API Optional< Vec3 > reflect( Optional< Vec3 > const & p_a, Type const & p_b );
+		C3D_Gl_API Optional< Vec4 > reflect( Optional< Vec4 > const & p_a, Type const & p_b );
+		C3D_Gl_API Optional< Float > length( Optional< Type > const & p_value );
+		C3D_Gl_API Optional< Float > radians( Optional< Type > const & p_value );
+		C3D_Gl_API Optional< Float > cos( Optional< Type > const & p_value );
+		C3D_Gl_API Optional< Float > sin( Optional< Type > const & p_value );
+		C3D_Gl_API Optional< Float > tan( Optional< Type > const & p_value );
 	}
 }
 

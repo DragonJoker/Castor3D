@@ -36,14 +36,13 @@ namespace Castor3D
 		:	public PostEffect
 	{
 	public:
-		SsaoPostEffect( RenderSystem * p_pRenderSystem );
+		SsaoPostEffect( RenderSystem * p_pRenderSystem, RenderTarget & p_renderTarget, Parameters const & p_param );
 		virtual ~SsaoPostEffect();
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Apply( RenderTarget * p_pRenderTarget );
+		virtual bool Apply();
 	};
 }
-
 
 #endif

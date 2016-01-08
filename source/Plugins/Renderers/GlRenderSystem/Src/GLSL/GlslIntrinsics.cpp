@@ -155,5 +155,80 @@ namespace GlRender
 		{
 			return WriteFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
 		}
+
+		Optional< Vec4 > texture1D( Optional< Sampler1D > const & p_sampler, Type const & p_value )
+		{
+			return p_sampler.m_writer->Texture1D( p_sampler, p_value );
+		}
+
+		Optional< Vec4 > texture2D( Optional< Sampler2D > const & p_sampler, Type const & p_value )
+		{
+			return p_sampler.m_writer->Texture2D( p_sampler, p_value );
+		}
+
+		Optional< Vec4 > texture3D( Optional< Sampler3D > const & p_sampler, Type const & p_value )
+		{
+			return p_sampler.m_writer->Texture3D( p_sampler, p_value );
+		}
+
+		Optional< Vec4 > texelFetch( Optional< SamplerBuffer > const & p_sampler, Type const & p_value )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value );
+		}
+
+		Optional< Vec4 > texelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
+		}
+
+		Optional< Vec4 > texelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
+		}
+
+		Optional< Vec4 > texelFetch( Optional< Sampler3D > const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return p_sampler.m_writer->TexelFetch( p_sampler, p_value, p_modif );
+		}
+
+		Optional< Vec2 > reflect( Optional< Vec2 > const & p_a, Type const & p_b )
+		{
+			return WriteOptionalFunctionCall< Vec2 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		}
+
+		Optional< Vec3 > reflect( Optional< Vec3 > const & p_a, Type const & p_b )
+		{
+			return WriteOptionalFunctionCall< Vec3 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		}
+
+		Optional< Vec4 > reflect( Optional< Vec4 > const & p_a, Type const & p_b )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( p_a.m_writer, cuT( "reflect" ), p_a, p_b );
+		}
+
+		Optional< Float > length( Optional< Type > const & p_value )
+		{
+			return WriteOptionalFunctionCall< Float >( p_value.m_writer, cuT( "length" ), p_value );
+		}
+
+		Optional< Float > radians( Optional< Type > const & p_value )
+		{
+			return WriteOptionalFunctionCall< Float >( p_value.m_writer, cuT( "radians" ), p_value );
+		}
+
+		Optional< Float > cos( Optional< Type > const & p_value )
+		{
+			return WriteOptionalFunctionCall< Float >( p_value.m_writer, cuT( "cos" ), p_value );
+		}
+
+		Optional< Float > sin( Optional< Type > const & p_value )
+		{
+			return WriteOptionalFunctionCall< Float >( p_value.m_writer, cuT( "sin" ), p_value );
+		}
+
+		Optional< Float > tan( Optional< Type > const & p_value )
+		{
+			return WriteOptionalFunctionCall< Float >( p_value.m_writer, cuT( "tan" ), p_value );
+		}
 	}
 }

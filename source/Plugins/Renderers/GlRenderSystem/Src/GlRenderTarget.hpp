@@ -28,7 +28,6 @@ namespace GlRender
 {
 	class GlRenderTarget
 		: public Castor3D::RenderTarget
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	private:

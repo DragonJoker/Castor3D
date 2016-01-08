@@ -88,7 +88,7 @@ namespace GlRender
 				IN( l_writer, Vec2, vtx_texture );
 
 				// Shader outputs
-				LAYOUT( l_writer, Vec4, plx_v4FragColor );
+				FRAG_OUTPUT( l_writer, Vec4, plx_v4FragColor, 0 );
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
@@ -97,13 +97,10 @@ namespace GlRender
 				l_strPxlShader = l_writer.Finalise();
 			}
 
+			eSHADER_MODEL l_model = m_glRenderSystem->GetMaxShaderModel();
 			ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
-			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_2, l_strVtxShader );
-			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_2, l_strPxlShader );
-			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
-			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
-			l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
-			l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVtxShader );
+			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPxlShader );
 
 			m_implementation->SetCurrent();
 			m_timerQuery[0].Create();

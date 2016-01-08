@@ -48,7 +48,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< MovableObject, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -167,7 +166,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Attache l'object à un noeud
 		 */
-		C3D_API void AttachTo( SceneNodeSPtr p_node );
+		C3D_API virtual void AttachTo( SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name
@@ -240,6 +239,8 @@ namespace Castor3D
 		SceneNodeWPtr m_pSceneNode;
 		//!\~english The parent scene	\~french La scène parente
 		SceneWPtr m_pScene;
+		//!\~english The node change notification index.	\~french L'indice de notifcation des changements du noeud.
+		uint32_t m_notifyIndex = 0;
 	};
 }
 

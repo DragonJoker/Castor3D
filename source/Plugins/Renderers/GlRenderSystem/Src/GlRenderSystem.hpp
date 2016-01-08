@@ -36,7 +36,6 @@ namespace GlRender
 		void CheckShaderSupport();	//!< Checks the different shader types support.
 		bool InitOpenGlExtensions();	//!< Initialize OpenGL Extensions
 
-		virtual bool CheckSupport( Castor3D::eSHADER_MODEL p_eProfile );
 		virtual Castor3D::ContextSPtr CreateContext();
 		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
 		virtual Castor3D::DepthStencilStateSPtr CreateDepthStencilState();

@@ -306,26 +306,41 @@ namespace Dx11Render
 	public:
 		DxShaderProgram( DxRenderSystem & p_renderSystem );
 		virtual ~DxShaderProgram();
-
 		/**
-		 * Get Linker Messages
+		 *\copydoc		Castor3D::ShaderProgramBase::Initialise
 		 */
-		virtual void RetrieveLinkerLog( Castor::String & strLog );
-
 		virtual void Initialise();
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::Cleanup
+		 */
 		virtual void Cleanup();
-		virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount );
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::Bind
+		 */
+		virtual void Bind( uint8_t p_index, uint8_t p_count );
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::Unbind
+		 */
 		virtual void Unbind();
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::Link
+		 */
+		virtual bool Link();
 
-		int GetAttributeLocation( Castor::String const & CU_PARAM_UNUSED( p_name ) )const
-		{
-			return 0;
-		}
 		ID3DBlob * GetCompiled( Castor3D::eSHADER_TYPE p_type );
 
 	private:
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::DoCreateObject
+		 */
 		Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::DoCreateTextureVariable
+		 */
 		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_iNbOcc );
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::DoGetVertexShaderSource
+		 */
 		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const;
 
 	protected:

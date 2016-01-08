@@ -24,6 +24,8 @@ namespace GlRender
 {
 	namespace GLSL
 	{
+		template< typename TypeT > struct Optional;
+
 		template< typename T > struct is_type : public std::false_type {};
 
 		struct Type
@@ -39,6 +41,10 @@ namespace GlRender
 			C3D_Gl_API Type & operator-=( Type const & p_type );
 			C3D_Gl_API Type & operator*=( Type const & p_type );
 			C3D_Gl_API Type & operator/=( Type const & p_type );
+			C3D_Gl_API Type & operator+=( Optional< Type > const & p_type );
+			C3D_Gl_API Type & operator-=( Optional< Type > const & p_type );
+			C3D_Gl_API Type & operator*=( Optional< Type > const & p_type );
+			C3D_Gl_API Type & operator/=( Optional< Type > const & p_type );
 			C3D_Gl_API Type & operator+=( float p_type );
 			C3D_Gl_API Type & operator-=( float p_type );
 			C3D_Gl_API Type & operator*=( float p_type );
@@ -52,6 +58,14 @@ namespace GlRender
 			Castor::String m_name;
 		};
 
+		template< typename T >
+		T operator-( T const & p_value )
+		{
+			T l_return( p_value.m_writer );
+			l_return.m_value << cuT( "-( " ) + Castor::String( p_value ) << cuT( " )" );
+			return l_return;
+		}
+
 		C3D_Gl_API Type operator+( Type const & p_a, Type const & p_b );
 		C3D_Gl_API Type operator-( Type const & p_a, Type const & p_b );
 		C3D_Gl_API Type operator*( Type const & p_a, Type const & p_b );
@@ -64,8 +78,22 @@ namespace GlRender
 		C3D_Gl_API Type operator-( Type const & p_a, int p_b );
 		C3D_Gl_API Type operator*( Type const & p_a, int p_b );
 		C3D_Gl_API Type operator/( Type const & p_a, int p_b );
+		C3D_Gl_API Optional< Type > operator-( Optional< Type > const & p_value );
+		C3D_Gl_API Optional< Type > operator+( Type const & p_a, Optional< Type > const & p_b );
+		C3D_Gl_API Optional< Type > operator-( Type const & p_a, Optional< Type > const & p_b );
+		C3D_Gl_API Optional< Type > operator*( Type const & p_a, Optional< Type > const & p_b );
+		C3D_Gl_API Optional< Type > operator/( Type const & p_a, Optional< Type > const & p_b );
+		C3D_Gl_API Optional< Type > operator+( Optional< Type > const & p_a, Type const & p_b );
+		C3D_Gl_API Optional< Type > operator-( Optional< Type > const & p_a, Type const & p_b );
+		C3D_Gl_API Optional< Type > operator*( Optional< Type > const & p_a, Type const & p_b );
+		C3D_Gl_API Optional< Type > operator/( Optional< Type > const & p_a, Type const & p_b );
+		C3D_Gl_API Optional< Type > operator+( Optional< Type > const & p_a, Optional< Type > const & p_b );
+		C3D_Gl_API Optional< Type > operator-( Optional< Type > const & p_a, Optional< Type > const & p_b );
+		C3D_Gl_API Optional< Type > operator*( Optional< Type > const & p_a, Optional< Type > const & p_b );
+		C3D_Gl_API Optional< Type > operator/( Optional< Type > const & p_a, Optional< Type > const & p_b );
 
 		C3D_Gl_API Castor::String ToString( Type const & p_value );
+		C3D_Gl_API Castor::String ParamToString( Castor::String & p_sep, Type const & p_value );
 	}
 }
 

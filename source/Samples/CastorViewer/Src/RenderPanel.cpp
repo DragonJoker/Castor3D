@@ -11,6 +11,7 @@
 
 #include <Camera.hpp>
 #include <ListenerManager.hpp>
+#include <FunctorEvent.hpp>
 #include <RenderWindow.hpp>
 #include <Scene.hpp>
 #include <SceneNode.hpp>
@@ -29,6 +30,7 @@ using namespace Castor;
 namespace CastorViewer
 {
 #if HAS_CASTORGUI
+
 	namespace
 	{
 		CastorGui::eKEYBOARD_KEY ConvertKeyCode( int p_code )
@@ -64,6 +66,7 @@ namespace CastorViewer
 			return l_return;
 		}
 	}
+
 #endif
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
@@ -78,6 +81,7 @@ namespace CastorViewer
 		, m_oldY( 0.0 )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
 		, m_rFpCamSpeed( 2.0 )
+
 #if HAS_CASTORGUI
 
 		, m_controlsManager( nullptr )
@@ -148,10 +152,18 @@ namespace CastorViewer
 					m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
 					m_pRenderWindow = p_window;
 					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_window );
+					m_pointlightsNode = l_pScene->GetNode( cuT( "PointLightsNode" ) );
+
+					if ( m_pointlightsNode )
+					{
+						DoStartTimer( eTIMER_ID_ROTATE_LIGHT );
+					}
 				}
 
 #if HAS_CASTORGUI
+
 				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_window->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+
 #endif
 			}
 		}
@@ -170,7 +182,7 @@ namespace CastorViewer
 		}
 		else
 		{
-			for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
+			for ( int i = 0; i < eTIMER_ID_ROTATE_LIGHT; i++ )
 			{
 				m_pTimer[i]->Stop();
 			}
@@ -224,6 +236,7 @@ namespace CastorViewer
 	void RenderPanel::DoReloadScene()
 	{
 		DoStopTimer( eTIMER_ID_COUNT );
+		DoStopTimer( eTIMER_ID_ROTATE_LIGHT );
 		wxGetApp().GetMainFrame()->LoadScene();
 		m_rZoom = 1.0;
 		m_x = 0.0;
@@ -291,6 +304,7 @@ namespace CastorViewer
 		EVT_TIMER( eTIMER_ID_RIGHT, RenderPanel::OnTimerRgt )
 		EVT_TIMER( eTIMER_ID_UP, RenderPanel::OnTimerUp )
 		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::OnTimerDwn )
+		EVT_TIMER( eTIMER_ID_ROTATE_LIGHT, RenderPanel::OnTimerRotateLights )
 		EVT_SIZE( RenderPanel::OnSize )
 		EVT_MOVE( RenderPanel::OnMove )
 		EVT_PAINT( RenderPanel::OnPaint )
@@ -317,6 +331,16 @@ namespace CastorViewer
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
 		MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, real( 0 ), real( 0 ), m_rFpCamSpeed );
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnTimerRotateLights( wxTimerEvent & p_event )
+	{
+		m_pListener->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this]()
+		{
+			m_pointlightsNode->Yaw( 1.0_degrees );
+		} ) );
+
 		p_event.Skip();
 	}
 
@@ -430,6 +454,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireKeyDown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+
 #endif
 		{
 			switch ( p_event.GetKeyCode() )
@@ -472,6 +497,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+
 #endif
 		{
 			switch ( p_event.GetKeyCode() )
@@ -489,18 +515,22 @@ namespace CastorViewer
 				break;
 
 			case WXK_LEFT:
+			case 'Q':
 				DoStopTimer( eTIMER_ID_LEFT );
 				break;
 
 			case WXK_RIGHT:
+			case 'D':
 				DoStopTimer( eTIMER_ID_RIGHT );
 				break;
 
 			case WXK_UP:
+			case 'Z':
 				DoStopTimer( eTIMER_ID_FORWARD );
 				break;
 
 			case WXK_DOWN:
+			case 'S':
 				DoStopTimer( eTIMER_ID_BACK );
 				break;
 
@@ -553,6 +583,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT ) )
+
 #endif
 		{
 			SetCursor( *m_pCursorNone );
@@ -568,6 +599,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT ) )
+
 #endif
 		{
 			SetCursor( *m_pCursorArrow );
@@ -586,6 +618,7 @@ namespace CastorViewer
 
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
 
+
 #endif
 		{
 		}
@@ -600,6 +633,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
+
 #endif
 		{
 		}
@@ -616,6 +650,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT ) )
+
 #endif
 		{
 			SetCursor( *m_pCursorNone );
@@ -631,6 +666,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT ) )
+
 #endif
 		{
 			SetCursor( *m_pCursorArrow );
@@ -651,11 +687,12 @@ namespace CastorViewer
 			p_event.Skip();
 		}
 		else
+
 #endif
 		{
 			RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-			real l_deltaX = ( m_oldX - m_x ) / 2.0f;
-			real l_deltaY = ( m_oldY - m_y ) / 2.0f;
+			real l_deltaX = std::min( 1.0_r, m_rFpCamSpeed ) * ( m_oldX - m_x ) / 2.0_r;
+			real l_deltaY = std::min( 1.0_r, m_rFpCamSpeed ) * ( m_oldY - m_y ) / 2.0_r;
 
 			if ( l_pWindow )
 			{
@@ -694,6 +731,7 @@ namespace CastorViewer
 #if HAS_CASTORGUI
 
 		if ( !m_controlsManager || !m_controlsManager->FireMouseWheel( Position( 0, l_wheelRotation ) ) )
+
 #endif
 		{
 			if ( l_wheelRotation < 0 )

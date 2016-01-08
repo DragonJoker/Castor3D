@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlShaderProgram
 		: public Castor3D::ShaderProgramBase
-		, public Castor::NonCopyable
 		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
 	{
 		using ObjectType = Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >;
@@ -34,40 +33,53 @@ namespace GlRender
 	public:
 		GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
 		virtual ~GlShaderProgram();
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::Initialise
+		 */
 		virtual void Initialise();
 		/**
-		 *\~english
-		 *\brief		Cleans the program up
-		 *\~french
-		 *\brief		Nettoie le programme
+		 *\copydoc		Castor3D::ShaderProgramBase::Cleanup
 		 */
 		virtual void Cleanup();
 		/**
-		 *\~english
-		 *\brief		Link all Shaders
+		 *\copydoc		Castor3D::ShaderProgramBase::Bind
+		 */
+		virtual void Bind( uint8_t p_index, uint8_t p_count );
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::Unbind
+		 */
+		virtual void Unbind();
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::Link
 		 */
 		virtual bool Link();
 		/**
 		 *\~english
-		 *\brief		Get Linker Messages
+		 *\param[in]	p_name	The attribute name.
+		 *\return		The given attribute location in program.
+		 *\french
+		 *\param[in]	p_name	Le nom de l'attribut.
+		 *\return		La position de l'attribut dans le programme.
 		 */
-		virtual void RetrieveLinkerLog( Castor::String & p_log );
-		/**
-		 *\~english
-		 *\brief		Use Shader. OpenGL calls will go through vertex, geometry and/or fragment shaders.
-		 */
-		virtual void Bind( uint8_t p_index, uint8_t p_count );
-		/**
-		 *\~english
-		 *\brief		Stop using this shader. OpenGL calls will go through regular pipeline.
-		 */
-		virtual void Unbind();
-		virtual int GetAttributeLocation( Castor::String const & p_name )const;
+		int GetAttributeLocation( Castor::String const & p_name )const;
 
 	private:
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::DoCreateObject
+		 */
 		virtual Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::DoCreateTextureVariable
+		 */
 		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_occurences );
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::DoGetVertexShaderSource
+		 */
 		virtual Castor::String DoGetVertexShaderSource( uint32_t p_programFlags )const;
+		/**
+		 *\copydoc		Castor3D::ShaderProgramBase::DoGetVertexShaderSource
+		 */
+		virtual Castor::String DoRetrieveLinkerLog();
 
 	private:
 		Castor::String m_linkerLog;

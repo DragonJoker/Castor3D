@@ -140,6 +140,19 @@ namespace Castor3D
 		C3D_API void RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture );
 		/**
 		 *\~english
+		 *\brief		Renders the given texture.
+		 *\param[in]	p_size				The render viewport size.
+		 *\param[in]	p_texture			The texture.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\~french
+		 *\brief		Dessine la texture donnée.
+		 *\param[in]	p_size				La taille du viewport de rendu.
+		 *\param[in]	p_texture			La texture.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 */
+		C3D_API void RenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, ShaderProgramBaseSPtr p_program );
+		/**
+		 *\~english
 		 *\brief		Changes fullscreen status
 		 *\param[in]	val	The new fullscreen status
 		 *\~french
@@ -192,13 +205,43 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieve the background DepthStencilState
+		 *\brief		Retrieve the DepthStencilState with no depth write and test.
 		 *\~french
-		 *\brief		Récupère le DepthStencilState de fond d'écran
+		 *\brief		Récupère le DepthStencilState sans test de profondeur ni écriture dans le tampon de profondeur.
 		 */
-		inline DepthStencilStateSPtr GetBackgroundDSState()const
+		inline DepthStencilStateSPtr GetNoDepthState()const
 		{
-			return m_pDsStateBackground;
+			return m_pDsStateNoDepth;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieve the DepthStencilState without depth write.
+		 *\~french
+		 *\brief		Récupère le DepthStencilState sans écriture dans le tampon de profondeur.
+		 */
+		inline DepthStencilStateSPtr GetNoDepthWriteState()const
+		{
+			return m_pDsStateNoDepthWrite;
+		}
+		/**
+		 *\~english
+		 *\return		The render window.
+		 *\~french
+		 *\return		La fenêtre de rendu.
+		 */
+		inline RenderWindow const & GetWindow()const
+		{
+			return *m_window;
+		}
+		/**
+		 *\~english
+		 *\return		The render window.
+		 *\~french
+		 *\return		La fenêtre de rendu.
+		 */
+		inline RenderWindow & GetWindow()
+		{
+			return *m_window;
 		}
 
 	protected:
@@ -261,8 +304,6 @@ namespace Castor3D
 		 *\param[in]	p_eCullFace	L'option de culling
 		 */
 		C3D_API virtual void DoCullFace( eFACE p_eCullFace ) = 0;
-
-	private:
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
@@ -275,7 +316,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		void DoRenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, GeometryBuffersSPtr p_geometryBuffers );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramBaseSPtr p_program );
 
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
@@ -304,8 +345,10 @@ namespace Castor3D
 		Castor::real m_pBuffer[24];
 		//!	6 * [2(vertex position) 2(texture coordinates)]
 		Castor::real m_finalBuffer[24];
-		//!\~english DepthStencilState used while rendering background image	\~french DepthStencilState utilisé pour le rendu de l'image de fond
-		DepthStencilStateSPtr m_pDsStateBackground;
+		//!\~english The DepthStencilState without depth write and test.	\~french Le DepthStencilState sans test ni écriture de profondeur.
+		DepthStencilStateSPtr m_pDsStateNoDepth;
+		//!\~english The DepthStencilState without depth write.	\~french Le DepthStencilState sans écriture de profondeur.
+		DepthStencilStateSPtr m_pDsStateNoDepthWrite;
 	};
 }
 

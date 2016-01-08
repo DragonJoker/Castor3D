@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 #include "PluginException.hpp"
-#include <NonCopyable.hpp>
 
 #include <OwnedBy.hpp>
 
@@ -38,8 +37,7 @@ namespace Castor3D
 	\remark		Gère les fonctions de base d'un plugin, permet aux plugins de faire des vérifications de version et  de s'enregistrer auprès du moteur
 	*/
 	class PluginBase
-		: public Castor::NonCopyable
-		, public Castor::OwnedBy< Engine >
+		: public Castor::OwnedBy< Engine >
 	{
 	private:
 		//!< Signature for the plugin's loading function

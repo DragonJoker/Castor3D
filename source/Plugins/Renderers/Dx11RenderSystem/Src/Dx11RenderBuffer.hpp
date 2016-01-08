@@ -26,7 +26,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxRenderBuffer
-		:	public Castor::NonCopyable
 	{
 	public:
 		DxRenderBuffer( DxRenderSystem * p_renderSystem, DXGI_FORMAT p_eFormat, Castor3D::eBUFFER_COMPONENT p_eComponent, Castor3D::RenderBuffer & p_renderBuffer );

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: CastorViewer 0.7.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-11 20:04+0100\n"
-"PO-Revision-Date: 2015-09-11 20:17+0100\n"
+"PO-Revision-Date: 2015-12-16 19:01+0000\n"
 "Last-Translator: dragonjoker <dragonjoker59@hotmail.com>\n"
 "Language-Team: Sylvain Doremus <dragonjoker59@hotmail.com>\n"
 "Language: fr\n"
@@ -101,7 +101,7 @@ msgstr "Dimensions bordure"
 #: ..\GuiCommon\Src\RectangleProperties.cpp:21
 #: ..\GuiCommon\Src\ViewportTreeItemProperty.cpp:23
 msgid "Bottom"
-msgstr "Bqs"
+msgstr "Bas"
 
 #: ..\GuiCommon\Src\CameraTreeItemProperty.cpp:16
 msgid "Camera: "
@@ -413,7 +413,7 @@ msgstr "Logs"
 #: ..\GuiCommon\Src\OverlayTreeItemProperty.cpp:33
 #: ..\GuiCommon\Src\SubmeshTreeItemProperty.cpp:21
 msgid "Material"
-msgstr "Matériaux"
+msgstr "Matériau"
 
 #: ..\GuiCommon\Src\MaterialTreeItemProperty.cpp:15
 msgid "Material: "
@@ -529,11 +529,11 @@ msgstr "Propriétés"
 
 #: ..\GuiCommon\Src\CameraTreeItemProperty.cpp:27
 msgid "Quad Strip"
-msgstr "Auqd Strip"
+msgstr "Quad Strip"
 
 #: ..\GuiCommon\Src\CameraTreeItemProperty.cpp:26
 msgid "Quads"
-msgstr "Auqds"
+msgstr "Quads"
 
 #: ..\GuiCommon\Src\ViewportTreeItemProperty.cpp:29
 msgid "Ratio"
@@ -564,7 +564,7 @@ msgstr "Racine"
 
 #: ..\GuiCommon\Src\ShaderDialog.cpp:150
 msgid "Save &all files\tCTRL+SHIFT+S"
-msgstr "Xauver &tous\tCTRL+SHIFT+S"
+msgstr "Sauver &tous\tCTRL+SHIFT+S"
 
 #: ..\GuiCommon\Src\ShaderDialog.cpp:149
 msgid "Save &current file\tCTRL+S"
@@ -588,7 +588,7 @@ msgstr "Noeud de scène"
 
 #: ..\CastorViewer\Src\MainFrame.cpp:514
 msgid "Scene file doesn't exist :"
-msgstr "Le noeu de scène n'existe pasLe fichier de scène n'existe pas :"
+msgstr "Le fichier de scène n'existe pas :"
 
 #: ..\GuiCommon\Src\SceneTreeItemProperty.cpp:16
 msgid "Scene: "

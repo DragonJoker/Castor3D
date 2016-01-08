@@ -30,7 +30,6 @@ namespace GlRender
 {
 	class GlFrameBuffer
 		: public Castor3D::FrameBuffer
-		, public Castor::NonCopyable
 		, private Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
 						   std::function< bool( uint32_t ) > >
 	{

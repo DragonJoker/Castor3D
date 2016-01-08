@@ -27,7 +27,6 @@ namespace GlRender
 {
 	class GlStaticTexture
 		: public Castor3D::StaticTexture
-		, public Castor::NonCopyable
 	{
 	public:
 		GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem );

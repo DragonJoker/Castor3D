@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BinaryParser.hpp"
 
 #include <OwnedBy.hpp>
+#include <Signal.hpp>
 
 namespace Castor3D
 {
@@ -41,6 +42,8 @@ namespace Castor3D
 		, public Castor::OwnedBy< Scene >
 		, public Castor::Named
 	{
+		typedef std::function< void() > NodeChangedNotifyFunction;
+
 	public:
 		//!\~english The total number of scene nodes	\~french Le nombre total de noeuds de scène
 		static uint64_t Count;
@@ -57,7 +60,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< SceneNode, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -131,14 +133,14 @@ namespace Castor3D
 		};
 
 	protected:
-		typedef std::map< Castor::String, SceneNodeWPtr > SceneNodePtrStrMap;
-		typedef std::map< Castor::String, MovableObjectWPtr > MovableObjectPtrStrMap;
+		using SceneNodePtrStrMap = std::map< Castor::String, SceneNodeWPtr >;
+		using MovableObjectPtrArray = std::list< MovableObjectWPtr >;
 
 	public:
 		typedef SceneNodePtrStrMap::iterator node_iterator;
 		typedef SceneNodePtrStrMap::const_iterator node_const_iterator;
-		typedef MovableObjectPtrStrMap::iterator object_iterator;
-		typedef MovableObjectPtrStrMap::const_iterator object_const_iterator;
+		typedef MovableObjectPtrArray::iterator object_iterator;
+		typedef MovableObjectPtrArray::const_iterator object_const_iterator;
 
 	public:
 		/**
@@ -383,6 +385,24 @@ namespace Castor3D
 		C3D_API Castor::Point3r GetDerivedScale();
 		/**
 		 *\~english
+		 *\brief		Retrieves the relative transformation matrix
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la matrice de transformation relative
+		 *\return		La valeur
+		 */
+		C3D_API Castor::Matrix4x4r const & GetTransformationMatrix();
+		/**
+		 *\~english
+		 *\brief		Retrieves the absolute transformation matrix
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la matrice de transformation absolue
+		 *\return		La valeur
+		 */
+		C3D_API Castor::Matrix4x4r const & GetDerivedTransformationMatrix();
+		/**
+		 *\~english
 		 *\brief		Retrieves the relative position
 		 *\return		The value
 		 *\~french
@@ -535,7 +555,7 @@ namespace Castor3D
 		 *\brief		Récupère la map des objets
 		 *\return		La valeur
 		 */
-		inline MovableObjectPtrStrMap const & GetObjects()const
+		inline MovableObjectPtrArray const & GetObjects()const
 		{
 			return m_objects;
 		}
@@ -603,32 +623,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the relative transformation matrix
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la matrice de transformation relative
-		 *\return		La valeur
-		 */
-		inline Castor::Matrix4x4r const & GetTransformationMatrix()
-		{
-			DoComputeMatrix();
-			return m_transform;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the absolute transformation matrix
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la matrice de transformation absolue
-		 *\return		La valeur
-		 */
-		inline Castor::Matrix4x4r const & GetDerivedTransformationMatrix()
-		{
-			DoComputeMatrix();
-			return m_derivedTransform;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the transformations matrices modify status
 		 *\return		The value
 		 *\~french
@@ -650,6 +644,32 @@ namespace Castor3D
 		inline void SetVisible( bool p_visible )
 		{
 			m_visible = p_visible;
+		}
+		/**
+		 *\~english
+		 *\brief		Registers an object to be notified on changes.
+		 *\param[in]	p_function	The object notification function.
+		 *\return		The connection index.
+		 *\~french
+		 *\brief		Enregistre un objet à notifier des changements.
+		 *\param[in]	p_function	La fonction de notification de l'objet.
+		 *\return		L'indice de connexion.
+		 */
+		inline uint32_t RegisterObject( NodeChangedNotifyFunction p_function )
+		{
+			return m_signalChanged.connect( p_function );
+		}
+		/**
+		 *\~english
+		 *\brief		Unregisters an object from the changes notification.
+		 *\param[in]	p_function	The connection index.
+		 *\~french
+		 *\brief		Désnregistre un objet de la notification des changements.
+		 *\param[in]	p_index	L'indice de connexion.
+		 */
+		inline void UnregisterObject( uint32_t p_index )
+		{
+			m_signalChanged.disconnect( p_index );
 		}
 
 	private:
@@ -686,7 +706,9 @@ namespace Castor3D
 		//!\~english  This node's childs	\~french Les enfants de ce noeud
 		SceneNodePtrStrMap m_childs;
 		//!\~english  This node's attached objects	\~french Les objets attachés à ce noeud
-		MovableObjectPtrStrMap m_objects;
+		MovableObjectPtrArray m_objects;
+		//!\~english  Signal used to notify attached objects that the node has changed.	\~french Signal utilisé pour notifier aux objets attachés que le noeud a changé.
+		Castor::Signal< NodeChangedNotifyFunction > m_signalChanged;
 	};
 }
 

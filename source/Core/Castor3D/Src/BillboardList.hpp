@@ -37,7 +37,6 @@ namespace Castor3D
 	*/
 	class BillboardList
 		: public MovableObject
-		, public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/*!

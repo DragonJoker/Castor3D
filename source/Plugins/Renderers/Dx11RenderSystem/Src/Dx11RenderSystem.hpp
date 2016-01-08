@@ -37,7 +37,6 @@ namespace Dx11Render
 		void CheckShaderSupport();
 		bool InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc );
 
-		virtual bool CheckSupport( Castor3D::eSHADER_MODEL p_eProfile );
 		virtual Castor3D::ContextSPtr CreateContext();
 		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
 		virtual Castor3D::DepthStencilStateSPtr CreateDepthStencilState();

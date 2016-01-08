@@ -51,7 +51,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -664,13 +663,45 @@ namespace Castor3D
 		{
 			return m_eTargetType;
 		}
+		/**
+		 *\~english
+		 *\brief		Adds a post effect to the list.
+		 *\param[in]	p_effect	The effect.
+		 *\~french
+		 *\brief		Ajoute un effet post rendu à la liste.
+		 *\param[in]	p_effect	L'effet.
+		 */
+		inline void AddPostEffect( PostEffectSPtr p_effect )
+		{
+			m_postEffects.push_back( p_effect );
+		}
+		/**
+		 *\~english
+		 *\return		The target index.
+		 *\~french
+		 *\return		L'indice de la cible.
+		 */
+		inline uint32_t GetIndex()const
+		{
+			return m_index;
+		}
+		/**
+		 *\~english
+		 *\return		The post effects array.
+		 *\~french
+		 *\return		Le tableau d'effets de post rendu.
+		 */
+		inline PostEffectPtrArray const & GetPostEffects()const
+		{
+			return m_postEffects;
+		}
 
 	private:
 		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
-		static const Castor::String DefaultSamplerName;
+		C3D_API static const Castor::String DefaultSamplerName;
 
 	protected:
 		//!\~english The render target type	\~french Type de RenderTarget
@@ -719,6 +750,8 @@ namespace Castor3D
 		DepthStencilStateWPtr m_wpDepthStencilState;
 		//!\~english Rasteriser states	\~french Etats du rasteriser
 		RasteriserStateWPtr m_wpRasteriserState;
+		//!\~english The post effects.	\~french Les effets post rendu.
+		PostEffectPtrArray m_postEffects;
 	};
 }
 

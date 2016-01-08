@@ -377,6 +377,28 @@ namespace Castor3D
 		{
 			return *m_renderLoop;
 		}
+		/**
+		 *\~english
+		 *\brief		Sets the need for per object lighting.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le besoin d'un éclairage par objet.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		inline void SetPerObjectLighting( bool p_value )
+		{
+			m_perObjectLighting = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The need for per object lighting.
+		 *\~french
+		 *\return		Le besoin d'un éclairage par objet.
+		 */
+		inline bool GetPerObjectLighting()
+		{
+			return m_perObjectLighting;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -434,6 +456,8 @@ namespace Castor3D
 		Castor::ImageManager m_imageManager;
 		//!\~english The map holding the parsers, sorted by section, and plugin name	\~french La map de parseurs, triés par section, et nom de plugin
 		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
+		//!\~english The need for per object lighting.	\~french Le besoin d'un éclairage par objet.
+		bool m_perObjectLighting;
 	};
 }
 

@@ -28,9 +28,7 @@ namespace CastorViewer
 		if ( l_pWindow )
 		{
 			wxGetApp().GetMainFrame()->ToggleFullScreen( !l_pWindow->IsFullscreen() );
-			Logger::LogDebug( cuT( "Main frame switched fullscreen" ) );
 			l_pWindow->UpdateFullScreen( !l_pWindow->IsFullscreen() );
-			Logger::LogDebug( cuT( "Render window switched fullscreen" ) );
 		}
 
 		return true;

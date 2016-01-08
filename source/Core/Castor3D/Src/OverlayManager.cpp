@@ -73,6 +73,7 @@ namespace Castor3D
 		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_PANEL, p_name, p_parent, nullptr );
 		l_overlay->SetPosition( p_position );
 		l_overlay->SetSize( p_size );
+		l_overlay->SetMaterial( p_material );
 		return l_overlay->GetPanelOverlay();
 	}
 
@@ -81,6 +82,7 @@ namespace Castor3D
 		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_PANEL, p_name, p_parent, nullptr );
 		l_overlay->SetPixelPosition( p_position );
 		l_overlay->SetPixelSize( p_size );
+		l_overlay->SetMaterial( p_material );
 		return l_overlay->GetPanelOverlay();
 	}
 

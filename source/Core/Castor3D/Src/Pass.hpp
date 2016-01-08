@@ -52,7 +52,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< Pass, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -793,6 +792,13 @@ namespace Castor3D
 		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
 		C3D_API void DoRender( uint8_t p_byIndex, uint8_t p_byCount );
+		/**
+		 *\~english
+		 *\brief		Unapplies the pass.
+		 *\~french
+		 *\brief		Désapplique la passe.
+		 */
+		C3D_API void DoEndRender();
 		/**
 		 *\~english
 		 *\brief		Fills shader variables

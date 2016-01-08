@@ -1,36 +1,34 @@
 ﻿#include "DeferredRenderTechnique.hpp"
 
-#include <FrameBuffer.hpp>
+#include <BlendStateManager.hpp>
+#include <BufferDeclaration.hpp>
+#include <BufferElementDeclaration.hpp>
+#include <BufferElementGroup.hpp>
+#include <Camera.hpp>
 #include <ColourRenderBuffer.hpp>
+#include <Context.hpp>
 #include <DepthStencilRenderBuffer.hpp>
 #include <DepthStencilStateManager.hpp>
-#include <RenderBufferAttachment.hpp>
-#include <TextureAttachment.hpp>
-#include <RenderTarget.hpp>
-#include <DepthStencilState.hpp>
-#include <RasteriserState.hpp>
+#include <DynamicTexture.hpp>
 #include <Engine.hpp>
-#include <RenderSystem.hpp>
-#include <BufferElementDeclaration.hpp>
-#include <BufferDeclaration.hpp>
-#include <BufferElementGroup.hpp>
-#include <VertexBuffer.hpp>
-#include <GeometryBuffers.hpp>
-#include <Viewport.hpp>
-#include <Context.hpp>
-#include <ShaderProgram.hpp>
-#include <OneFrameVariable.hpp>
-#include <PointFrameVariable.hpp>
+#include <FrameBuffer.hpp>
 #include <FrameVariableBuffer.hpp>
+#include <GeometryBuffers.hpp>
+#include <IndexBuffer.hpp>
+#include <MatrixBuffer.hpp>
+#include <OneFrameVariable.hpp>
 #include <Pipeline.hpp>
+#include <PointFrameVariable.hpp>
+#include <RasteriserState.hpp>
+#include <RenderBufferAttachment.hpp>
+#include <RenderSystem.hpp>
+#include <RenderTarget.hpp>
 #include <Scene.hpp>
 #include <SceneNode.hpp>
 #include <ShaderManager.hpp>
-#include <Camera.hpp>
-#include <DynamicTexture.hpp>
-#include <IndexBuffer.hpp>
-#include <MatrixBuffer.hpp>
+#include <TextureAttachment.hpp>
 #include <VertexBuffer.hpp>
+#include <Viewport.hpp>
 
 #include <Logger.hpp>
 
@@ -48,6 +46,8 @@ using namespace GlRender;
 using namespace Dx11Render;
 
 #endif
+
+#define DEBUG_BUFFERS 0
 
 using namespace Castor;
 using namespace Castor3D;
@@ -318,14 +318,17 @@ namespace Deferred
 
 #endif
 
-	String g_strNames[] =
+	String DS_TEXTURE_NAME[] =
 	{
 		cuT( "c3d_mapPosition" ),
+		cuT( "c3d_mapAmbient" ),
 		cuT( "c3d_mapDiffuse" ),
 		cuT( "c3d_mapNormals" ),
 		cuT( "c3d_mapTangent" ),
 		cuT( "c3d_mapBitangent" ),
 		cuT( "c3d_mapSpecular" ),
+		cuT( "c3d_mapEmissive" ),
+		cuT( "c3d_mapDepth" ),
 	};
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
@@ -333,17 +336,15 @@ namespace Deferred
 		, m_viewport( Viewport::Ortho( *m_renderSystem->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
-		m_lightPassFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+		m_geometryPassFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
 			m_lightPassTextures[i] = m_renderSystem->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 			m_lightPassTextures[i]->SetRenderTarget( p_renderTarget.shared_from_this() );
-			m_lightPassTexAttachs[i] = m_pRenderTarget->CreateAttachment( m_lightPassTextures[i] );
+			m_geometryPassTexAttachs[i] = m_pRenderTarget->CreateAttachment( m_lightPassTextures[i] );
 		}
 
-		m_lightPassBufDepth = m_lightPassFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
-		m_lightPassDepthAttach = m_pRenderTarget->CreateAttachment( m_lightPassBufDepth );
 		m_lightPassShaderProgram = GetOwner()->GetShaderManager().GetNewProgram();
 
 		m_geometryPassDsState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "GeometricPassState" ) );
@@ -373,6 +374,8 @@ namespace Deferred
 		m_lightPassDsState->SetStencilBackFunc( eSTENCIL_FUNC_EQUAL );
 		m_lightPassDsState->SetDepthTest( true );
 		m_lightPassDsState->SetDepthMask( eWRITING_MASK_ZERO );
+
+		m_lightPassBlendState = GetOwner()->GetBlendStateManager().Create( cuT( "LightPassState" ) );
 
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
@@ -404,6 +407,7 @@ namespace Deferred
 		}
 
 		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		GetOwner()->SetPerObjectLighting( false );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -421,21 +425,21 @@ namespace Deferred
 
 	bool RenderTechnique::DoCreate()
 	{
-		bool l_bReturn = m_lightPassFrameBuffer->Create( 0 );
+		bool l_return = m_geometryPassFrameBuffer->Create( 0 );
 
-		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
+		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 		{
-			l_bReturn = m_lightPassTextures[i]->Create();
+			l_return = m_lightPassTextures[i]->Create();
 			m_lightPassTextures[i]->SetSampler( GetOwner()->GetLightsSampler() );
 		}
 
-		l_bReturn &= m_lightPassBufDepth->Create();
-
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
+			m_lightPassShaderProgram->CreateFrameVariable( ShaderProgramBase::Lights, eSHADER_TYPE_PIXEL );
+
+			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				m_lightPassShaderProgram->CreateFrameVariable( g_strNames[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
+				m_lightPassShaderProgram->CreateFrameVariable( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
 			}
 
 			m_lightPassMatrices = GetOwner()->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
@@ -443,75 +447,77 @@ namespace Deferred
 			m_lightPassScene = l_scene;
 
 			m_pGeometryBuffers->Create();
-
-			for ( int i = 0; i < eSHADER_MODEL_COUNT; i++ )
-			{
-				eSHADER_MODEL l_eModel = eSHADER_MODEL( i );
-
-				if ( m_renderSystem->CheckSupport( l_eModel ) )
-				{
-					m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX,	l_eModel, DoGetLightPassVertexShaderSource( 0 ) );
-					m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL,	l_eModel, DoGetLightPassPixelShaderSource( 0 ) );
-				}
-			}
+			eSHADER_MODEL l_model = GetOwner()->GetRenderSystem()->GetMaxShaderModel();
+			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX, l_model, DoGetLightPassVertexShaderSource( 0 ) );
+			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL, l_model, DoGetLightPassPixelShaderSource( 0 ) );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void RenderTechnique::DoDestroy()
 	{
 		m_pGeometryBuffers->Destroy();
 
-		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
+		for ( int i = 0; i < eDS_TEXTURE_DEPTH; i++ )
 		{
 			m_lightPassTextures[i]->Destroy();
 		}
 
-		m_lightPassBufDepth->Destroy();
-		m_lightPassFrameBuffer->Destroy();
+		m_geometryPassFrameBuffer->Destroy();
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
+		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
 			m_lightPassTextures[i]->SetType( eTEXTURE_TYPE_2D );
-
-			if ( i != eDS_TEXTURE_POSITION )
-			{
-				m_lightPassTextures[i]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_A8R8G8B8 );
-			}
-			else
-			{
-				m_lightPassTextures[i]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_ARGB32F );
-			}
-
-			m_lightPassTextures[i]->Initialise( p_index++ );
+			m_lightPassTextures[i]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_ARGB32F );
+			l_return = m_lightPassTextures[i]->Initialise( p_index++ );
 		}
 
-		m_lightPassBufDepth->Initialise( m_pRenderTarget->GetSize() );
-
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_lightPassFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
+			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetType( eTEXTURE_TYPE_2D );
+			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_DEPTH32 );
+			l_return = m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise( p_index++ );
 		}
 
-		if ( m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
+		if ( l_return )
 		{
-			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
+			l_return = m_geometryPassFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
+		}
+
+		if ( l_return )
+		{
+			l_return = m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		}
+
+		if ( l_return )
+		{
+			for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 			{
-				l_bReturn &= m_lightPassFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, i, m_lightPassTexAttachs[i], eTEXTURE_TARGET_2D );
+				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, i, m_geometryPassTexAttachs[i], eTEXTURE_TARGET_2D );
 			}
 
-			l_bReturn &= m_lightPassFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_lightPassDepthAttach );
-			m_lightPassFrameBuffer->Unbind();
+			if ( l_return )
+			{
+				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_geometryPassTexAttachs[eDS_TEXTURE_DEPTH], eTEXTURE_TARGET_2D );
+			}
+
+			if ( l_return )
+			{
+				l_return = m_geometryPassFrameBuffer->IsComplete();
+			}
+
+			m_geometryPassFrameBuffer->Unbind();
 		}
 
 		m_geometryPassDsState->Initialise();
 		m_lightPassDsState->Initialise();
+		m_lightPassBlendState->Initialise();
 
 		m_lightPassShaderProgram->Initialise();
 		m_lightPassMatrices = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
@@ -519,7 +525,7 @@ namespace Deferred
 		l_scene->GetVariable( ShaderProgramBase::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
 		m_pGeometryBuffers->Initialise( m_lightPassShaderProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		return l_bReturn;
+		return l_return;
 	}
 
 	void RenderTechnique::DoCleanup()
@@ -527,82 +533,91 @@ namespace Deferred
 		m_pShaderCamera.reset();
 		m_geometryPassDsState->Cleanup();
 		m_lightPassDsState->Cleanup();
+		m_lightPassBlendState->Cleanup();
 		m_pGeometryBuffers->Cleanup();
 		m_lightPassShaderProgram->Cleanup();
-		m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_lightPassFrameBuffer->DetachAll();
-		m_lightPassFrameBuffer->Unbind();
-		m_lightPassFrameBuffer->Cleanup();
+		m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_geometryPassFrameBuffer->DetachAll();
+		m_geometryPassFrameBuffer->Unbind();
+		m_geometryPassFrameBuffer->Cleanup();
 
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
 			m_lightPassTextures[i]->Cleanup();
 		}
-
-		m_lightPassBufDepth->Cleanup();
 	}
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		return m_lightPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
+		return m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
 	}
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
 	{
-		m_geometryPassDsState->Apply();
+		m_pRenderTarget->GetDepthStencilState()->Apply();
+		m_pRenderTarget->GetRasteriserState()->Apply();
+		//m_geometryPassDsState->Apply();
 		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
 	{
+		m_geometryPassFrameBuffer->Unbind();
+
+#if DEBUG_BUFFERS
+
 		Size const & l_size = m_pRenderTarget->GetSize();
-		Size l_halfSize( l_size.width() / 2, l_size.height() / 2 );
+		int l_width = int( l_size.width() );
+		int l_height = int( l_size.height() );
+		int l_thirdWidth = int( l_width / 3.0f );
+		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
+		int l_thirdHeight = int( l_height / 3.0f );
+		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
+		m_geometryPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, 0, l_thirdWidth, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_AMBIENT]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_thirdHeight, l_width, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_EMISSIVE]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_DEPTH]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_twothirdHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
+
+#else
+
 		Pipeline & l_pipeline = m_renderSystem->GetPipeline();
 		ContextRPtr l_pContext = m_renderSystem->GetCurrentContext();
-		m_lightPassFrameBuffer->Unbind();
 
-		bool l_bReturn = true;
 		m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 		m_pRenderTarget->GetFrameBuffer()->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
 		m_pRenderTarget->GetFrameBuffer()->Clear();
-		m_lightPassDsState->Apply();
-		//m_pRenderTarget->GetDepthStencilState()->Apply();
+
+		m_pRenderTarget->GetDepthStencilState()->Apply();
 		m_pRenderTarget->GetRasteriserState()->Apply();
-		//m_pRenderTarget->GetRenderer()->BeginScene();
+		m_lightPassBlendState->Apply();
+
 		m_viewport.SetSize( m_pRenderTarget->GetSize() );
 		m_viewport.Render( l_pipeline );
 		l_pContext->CullFace( eFACE_BACK );
 
 		if ( m_pShaderCamera )
 		{
-			Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
-			m_pShaderCamera->SetValue( l_position );
-			m_lightPassShaderProgram->Bind( 0, 1 );
+			bool l_return = true;
+			//Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
+			//m_pShaderCamera->SetValue( l_position );
 			l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
+			auto & l_sceneBuffer = *m_lightPassScene.lock();
+			m_renderSystem->GetTopScene()->BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
+			m_renderSystem->GetTopScene()->BindCamera( l_sceneBuffer );
+			m_lightPassShaderProgram->Bind( 0, 1 );
 
-#if DEBUG_BUFFERS
-
-			int l_width = int( m_size.width() );
-			int l_height = int( m_size.height() );
-			int l_thirdWidth = int( l_width / 3.0f );
-			int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
-			int l_halfHeight = int( l_height / 2.0f );
-			m_lightPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, 0, l_thirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_halfHeight ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_halfHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_halfHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-			m_lightPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pFrameBuffer, Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_halfHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
-
-#else
-
-			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_bReturn; i++ )
+			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				l_bReturn = m_lightPassTextures[i]->Bind();
+				l_return = m_lightPassTextures[i]->Bind();
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
 
@@ -612,10 +627,11 @@ namespace Deferred
 				}
 			}
 
-#endif
-
 			m_lightPassShaderProgram->Unbind();
+			m_renderSystem->GetTopScene()->UnbindLights( *m_lightPassShaderProgram, *m_lightPassScene.lock() );
 		}
+
+#endif
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
@@ -702,6 +718,8 @@ namespace Deferred
 
 	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_flags )const
 	{
+#define CHECK_FLAG( channel ) ( ( p_flags & ( channel ) ) == ( channel ) )
+
 		using namespace GLSL;
 
 		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
@@ -719,73 +737,18 @@ namespace Deferred
 		IN( l_writer, Vec3, vtx_bitangent );
 		IN( l_writer, Vec3, vtx_texture );
 
-		if ( l_writer.GetOpenGl().HasTbo() )
-		{
-			UNIFORM( l_writer, SamplerBuffer, c3d_sLights );
-		}
-		else
-		{
-			UNIFORM( l_writer, Sampler1D, c3d_sLights );
-		}
-
-		Sampler2D c3d_mapColour;
-		Sampler2D c3d_mapAmbient;
-		Sampler2D c3d_mapDiffuse;
-		Sampler2D c3d_mapNormal;
-		Sampler2D c3d_mapOpacity;
-		Sampler2D c3d_mapSpecular;
-		Sampler2D c3d_mapHeight;
-		Sampler2D c3d_mapGloss;
-
-		BlinnPhongLightingModel l_lighting;
-		l_lighting.Declare_Light( l_writer );
-		l_lighting.Declare_GetLight( l_writer );
-
-		if ( p_flags != 0 )
-		{
-			if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
-			{
-				c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
-			{
-				c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
-			{
-				c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-			{
-				c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-			{
-				c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-			{
-				c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
-			{
-				c3d_mapHeight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
-			{
-				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
-			}
-		}
+		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
+		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ), CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
+		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ), CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
+		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ), CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
+		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ), CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
+		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ), CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
+		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ), CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
+		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ), CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
 
 		uint32_t l_index = 0;
 		FRAG_OUTPUT( l_writer, Vec4, out_c3dPosition, l_index++ );
+		FRAG_OUTPUT( l_writer, Vec4, out_c3dAmbient, l_index++ );
 		FRAG_OUTPUT( l_writer, Vec4, out_c3dDiffuse, l_index++ );
 		FRAG_OUTPUT( l_writer, Vec4, out_c3dNormal, l_index++ );
 		FRAG_OUTPUT( l_writer, Vec4, out_c3dTangent, l_index++ );
@@ -795,73 +758,91 @@ namespace Deferred
 
 		std::function< void() > l_main = [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v3Position, vtx_vertex.XYZ );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vtx_normal.XYZ ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent.XYZ ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, normalize( vtx_bitangent.XYZ ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, vec4( Float( 0.0f ), 0, 0, 0 ) );
-			//LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( vtx_vertex.XYZ ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, normalize( c3d_v3CameraPosition - vtx_vertex.XYZ ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
-			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
-			l_v3Diffuse = c3d_v4MatDiffuse;
 
-			if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
+				l_fAlpha *= texture2D( c3d_mapOpacity, vtx_texture.XY ).R;
 			}
 
-			if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+			IF( l_writer, cuT( "l_fAlpha > 0" ) )
 			{
-				l_v3Diffuse *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
-			}
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, vtx_vertex );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vtx_normal ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( vtx_tangent ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, normalize( vtx_bitangent ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, c3d_v4MatDiffuse.XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, c3d_v4MatAmbient.XYZ );
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, vec4( c3d_v4MatSpecular.XYZ, 0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
 
-			if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+				{
+					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) )
+				{
+					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) )
+				{
+					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) )
+				{
+					l_v3Normal += normalize( texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ * 2.0f - 1.0f );
+					l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
+					l_v3Bitangent = cross( l_v3Normal, l_v3Tangent );
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) )
+				{
+					if ( CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) )
+					{
+						l_v4Specular = vec4( c3d_v4MatSpecular.XYZ * texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ, texture2D( c3d_mapGloss, vtx_texture.XY ).X );
+					}
+					else
+					{
+						l_v4Specular = vec4( c3d_v4MatSpecular.XYZ * texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ, c3d_fMatShininess );
+					}
+				}
+				else if ( CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) )
+				{
+					l_v4Specular = vec4( c3d_v4MatSpecular.XYZ, texture2D( c3d_mapGloss, vtx_texture.XY ).X );
+				}
+				else
+				{
+					l_v4Specular = vec4( c3d_v4MatSpecular.XYZ, c3d_fMatShininess );
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) )
+				{
+					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapHeight, texture2D( c3d_mapHeight, vtx_texture.XY ).XYZ );
+				}
+
+				out_c3dPosition = vec4( l_v3Position, 1 );
+				out_c3dAmbient = vec4( l_v3Ambient, 1 );
+				out_c3dDiffuse = vec4( l_v3Diffuse, l_fAlpha );
+				out_c3dNormal = vec4( l_v3Normal, 1 );
+				out_c3dTangent = vec4( l_v3Tangent, 1 );
+				out_c3dBitangent = vec4( l_v3Bitangent, 1 );
+				out_c3dSpecular = vec4( l_v4Specular );
+				out_c3dEmissive = vec4( l_v3Emissive, 0 );
+			}
+			ELSE
 			{
-				l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
+				l_writer.Discard();
 			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-			{
-				l_v3Normal += normalize( texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ * 2.0f - 1.0f );
-				l_v3Tangent -= l_v3Normal * dot( l_v3Tangent, l_v3Normal );
-				l_v3Bitangent = cross( l_v3Normal, l_v3Tangent );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-			{
-				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-			{
-				l_v4Specular.XYZ *= texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ;
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
-			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3MapHeight, texture2D( c3d_mapHeight, vtx_texture.XY ).XYZ );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
-			{
-				l_v4Specular.W *= texture2D( c3d_mapGloss, vtx_texture.XY ).X;
-			}
-
-			out_c3dPosition = vec4( l_v3Position, 1 );
-			out_c3dDiffuse = vec4( l_v3Diffuse, 1 );
-			out_c3dNormal = vec4( l_v3Normal, 1 );
-			out_c3dTangent = vec4( l_v3Tangent, 1 );
-			out_c3dBitangent = vec4( l_v3Bitangent, 1 );
-			out_c3dSpecular = vec4( l_v4Specular );
-			out_c3dEmissive = vec4( l_v3Emissive );
+			FI
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
+
+#undef CHECK_FLAG
 	}
 
 	String RenderTechnique::DoGetGlLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
@@ -871,26 +852,20 @@ namespace Deferred
 		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
 		l_writer << GLSL::Version() << Endl();
 
-		// Vertex inputs
-		ATTRIBUTE( l_writer, Vec4, vertex );
-		ATTRIBUTE( l_writer, Vec3, texture );
-
-		// UBOs
+		// Shader inputs
+		ATTRIBUTE( l_writer, Vec2, vertex );
+		ATTRIBUTE( l_writer, Vec2, texture );
 		UBO_MATRIX( l_writer );
 
-		// Outputs
-		OUT( l_writer, Vec3, vtx_texture );
-		l_writer << Legacy_MatrixOut();
+		// Shader outputs
+		OUT( l_writer, Vec2, vtx_texture );
 
-		std::function< void() > l_main = [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			l_writer << Legacy_MatrixCopy();
 			vtx_texture = texture;
-			LOCALE_ASSIGN( l_writer, Vec4, position, c3d_mtxProjectionModelView * vertex );
-			BUILTIN( l_writer, Vec4, gl_Position ) = vec4( position.X, position.Y, position.Z, position.W );
-		};
+			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.X, vertex.Y, 0.0, 1.0 );
+		} );
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 	}
 
@@ -898,69 +873,93 @@ namespace Deferred
 	{
 		using namespace GLSL;
 
-		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
+		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
 		l_writer << GLSL::Version() << Endl();
 
-		// UBOs
-		UBO_MATRIX( l_writer );
-		UBO_SCENE( l_writer );
-		UBO_PASS( l_writer );
+		IN( l_writer, Vec2, vtx_texture );
 
-		UNIFORM( l_writer, Sampler1D, c3d_sLights );
+		if ( l_writer.GetOpenGl().HasTbo() )
+		{
+			UNIFORM( l_writer, SamplerBuffer, c3d_sLights );
+		}
+		else
+		{
+			UNIFORM( l_writer, Sampler1D, c3d_sLights );
+		}
+
 		UNIFORM( l_writer, Sampler2D, c3d_mapPosition );
+		UNIFORM( l_writer, Sampler2D, c3d_mapAmbient );
 		UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
 		UNIFORM( l_writer, Sampler2D, c3d_mapNormals );
 		UNIFORM( l_writer, Sampler2D, c3d_mapTangent );
 		UNIFORM( l_writer, Sampler2D, c3d_mapBitangent );
 		UNIFORM( l_writer, Sampler2D, c3d_mapSpecular );
 		UNIFORM( l_writer, Sampler2D, c3d_mapEmissive );
+		UNIFORM( l_writer, Sampler2D, c3d_mapDepth );
+		UBO_SCENE( l_writer );
 
-		IN( l_writer, Vec2, vtx_texture );
+		FRAG_OUTPUT( l_writer, Vec4, pxl_v4FragColor, 0 );
 
-		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
-		BlinnPhongLightingModel l_lighting;
-		l_lighting.Declare_Light( l_writer );
-		l_lighting.Declare_GetLight( l_writer );
-
-		std::function< void() > l_main = [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Positions, texture2D( c3d_mapPosition, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuses, texture2D( c3d_mapDiffuse, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normals, texture2D( c3d_mapNormals, vtx_texture ) / 2.0 );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangents, texture2D( c3d_mapTangent, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangents, texture2D( c3d_mapBitangent, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Speculars, texture2D( c3d_mapSpecular, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissives, texture2D( c3d_mapEmissive, vtx_texture ) );
-			LOCALE_ASSIGN( l_writer, Float, l_fShininess, l_v4Speculars.W );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Speculars.XYZ );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Positions.XYZ );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normals.XYZ );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_v4Bitangents.XYZ );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangents.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Position, texture2D( c3d_mapPosition, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, texture2D( c3d_mapAmbient, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Diffuse, texture2D( c3d_mapDiffuse, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, texture2D( c3d_mapNormals, vtx_texture ) / 2.0 );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, texture2D( c3d_mapTangent, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, texture2D( c3d_mapBitangent, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Specular, texture2D( c3d_mapSpecular, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Emissive, texture2D( c3d_mapEmissive, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Depth, texture2D( c3d_mapDepth, vtx_texture ) );
+			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, l_v4Specular.W );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, l_v4Specular.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Position, l_v4Position.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_v4Normal.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_v4Bitangent.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_v4Tangent.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( &l_writer, 0 ), 0, 0 ) );
-			LOCALE( l_writer, Vec3, l_v3Ambient );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissives.XYZ );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3TmpVec, neg( l_v3Position ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3EyeVec, vec3( dot( l_v3TmpVec, l_v3Tangent ), dot( l_v3TmpVec, l_v3Bitangent ), dot( l_v3TmpVec, l_v3Normal ) ) );
-			l_v3EyeVec = normalize( l_v3EyeVec );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0 ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissive.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_eye, l_v3Position - c3d_v3CameraPosition );
 
 			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
 			{
-				l_lighting.WriteCompute( p_flags, l_writer, i,
-										 l_v3MapSpecular, c3d_mtxModelView, l_v3Normal,
-										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
-										 l_v3Position, l_v3Normal, c3d_v3CameraPosition, l_fShininess,
-										 l_v3Position, l_v3Tangent, l_v3Bitangent, l_v3Normal,
-										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputeDirectionalLight( l_lighting->GetLight( i ), l_eye, l_fMatShininess,
+													 FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+													 l_output );
 			}
 			ROF
 
-			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Diffuse + l_v3Specular, 1 );
-		};
+			FOR( l_writer, Int, i, c3d_iLightsCount.x, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y" ), cuT( "++i" ) )
+			{
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputePointLight( l_lighting->GetLight( i ), l_eye, l_fMatShininess,
+											   FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+											   l_output );
+			}
+			ROF
 
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
+			FOR( l_writer, Int, i, c3d_iLightsCount.x + c3d_iLightsCount.y, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y + c3d_iLightsCount.z" ), cuT( "++i" ) )
+			{
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputeSpotLight( l_lighting->GetLight( i ), l_eye, l_fMatShininess,
+											  FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+											  l_output );
+			}
+			ROF
+
+			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( Int( &l_writer, 1 ) - l_v4Emissive.W ) *
+													l_writer.Paren( l_v3Emissive +
+																	l_writer.Paren( l_v3Ambient * l_v4Ambient.XYZ ) +
+																	l_writer.Paren( l_v3Diffuse * l_v4Diffuse.XYZ ) +
+																	l_writer.Paren( l_v3Specular * l_v4Specular.XYZ ) ) ) +
+									l_writer.Paren( l_v4Emissive.W * l_v4Diffuse.XYZ ), 1 );
+		} );
+
 		return l_writer.Finalise();
 	}
 
@@ -1069,7 +1068,6 @@ namespace Deferred
 			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.z = pack2Floats(l_v4Bitangent.x,l_v4Bitangent.y);\n" );
 			l_strPixelMainLightsLoopEnd	+= cuT( "	l_output.TanBitangent.w = pack2Floats(l_v4Bitangent.z,l_v4Bitangent.w);\n" );
 			l_strReturn = l_strPixelDeclarations + l_strPixelMainDeclarations + l_strPixelMainLightsLoopAfterLightDir + l_strPixelMainLightsLoopEnd + l_strPixelMainEnd;
-			//Logger::LogDebug( l_strReturn );
 		}
 
 		return l_strReturn;

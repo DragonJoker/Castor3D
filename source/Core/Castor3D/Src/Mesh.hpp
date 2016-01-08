@@ -25,7 +25,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <CubeBox.hpp>
 #include <SphereBox.hpp>
-#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -42,8 +41,6 @@ namespace Castor3D
 	class Mesh
 		: public Castor::Resource< Mesh >
 		, public Animable
-		, public Castor::NonCopyable
-		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -57,7 +54,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			:	public Castor::Loader< Mesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
 		{
 		public:
 			/**

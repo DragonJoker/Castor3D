@@ -50,7 +50,6 @@ namespace C3dPly
 	*/
 	class PlyImporter
 		: public Castor3D::Importer
-		, private Castor::NonCopyable
 	{
 	private:
 		friend class Scene;

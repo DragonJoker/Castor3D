@@ -162,6 +162,7 @@ namespace Direct
 		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
 
 #if C3D_HAS_GL_RENDERER
+
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -171,9 +172,10 @@ namespace Direct
 		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
 		 */
 		Castor::String DoGetGlPixelShaderSource( uint32_t p_flags )const;
-#endif
 
+#endif
 #if C3D_HAS_D3D11_RENDERER
+
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -183,7 +185,16 @@ namespace Direct
 		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
 		 */
 		Castor::String DoGetD3D11PixelShaderSource( uint32_t p_flags )const;
+
 #endif
+#if !defined( NDEBUG )
+
+
+	private:
+		Castor3D::TextOverlaySPtr m_debugOverlay;
+
+#endif
+
 	};
 }
 

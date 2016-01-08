@@ -125,6 +125,7 @@ namespace GlRender
 		};
 		struct Layout
 		{
+			int m_index;
 		};
 		struct Uniform
 		{

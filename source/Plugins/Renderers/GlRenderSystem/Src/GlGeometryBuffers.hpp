@@ -51,7 +51,6 @@ namespace GlRender
 	*/
 	class GlGeometryBuffers
 		: public Castor3D::GeometryBuffers
-		, public Castor::NonCopyable
 		, public Holder
 	{
 	public:

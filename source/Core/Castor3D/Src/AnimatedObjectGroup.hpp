@@ -51,7 +51,6 @@ namespace Castor3D
 		*/
 		class BinaryLoader
 			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_BINARY, Castor::BinaryFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -94,7 +93,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**

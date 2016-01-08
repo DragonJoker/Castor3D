@@ -32,10 +32,11 @@ namespace GlRender
 	bool GlAttributeBase::Initialise()
 	{
 		bool l_return = false;
+		ShaderProgramBaseSPtr l_program = m_program.lock();
 
-		if ( !m_program.expired() && m_program.lock()->GetStatus() == ePROGRAM_STATUS_LINKED )
+		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			m_attributeLocation = m_program.lock()->GetAttributeLocation( m_attributeName );
+			m_attributeLocation = std::static_pointer_cast< GlShaderProgram >( l_program )->GetAttributeLocation( m_attributeName );
 
 			if ( m_attributeLocation != eGL_INVALID_INDEX )
 			{

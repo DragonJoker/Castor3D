@@ -760,7 +760,7 @@ namespace Castor
 
 		if ( !l_array.empty() )
 		{
-			UIntStrMapIt l_it = m_mapValues.find( l_array[0] );
+			auto l_it = m_mapValues.find( l_array[0] );
 
 			if ( l_it != m_mapValues.end() )
 			{
@@ -797,7 +797,7 @@ namespace Castor
 
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::GetStrType()
 	{
-		return cuT( "bitwise ORed checked texts" );
+		return cuT( "32bits bitwise ORed checked texts" );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_strParams )
@@ -813,7 +813,7 @@ namespace Castor
 
 			for ( auto && l_value : l_values )
 			{
-				UIntStrMapIt l_it = m_mapValues.find( l_value );
+				auto l_it = m_mapValues.find( l_value );
 
 				if ( l_it != m_mapValues.end() )
 				{
@@ -852,6 +852,60 @@ namespace Castor
 	{
 		bool l_return = false;
 		l_return = ParseInteger( p_strParams, m_value );
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
+	inline ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::ParserParameter( String const & p_functionName, UInt64StrMap const & p_mapValues )
+		: ParserParameter< ePARAMETER_TYPE_UINT64 >( p_functionName )
+		, m_mapValues( p_mapValues )
+	{
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::GetType()
+	{
+		return ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT;
+	}
+
+	inline ePARAMETER_TYPE ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::GetBaseType()
+	{
+		return ePARAMETER_TYPE_UINT64;
+	}
+
+	inline xchar const * ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::GetStrType()
+	{
+		return cuT( "64 bits bitwise ORed checked texts" );
+	}
+
+	inline bool ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_strParams )
+	{
+		bool l_return = false;
+		m_value = 0;
+		StringArray l_array = string::split( p_strParams, cuT( " \t,;" ), 1, false );
+		p_strParams.clear();
+
+		if ( !l_array.empty() )
+		{
+			StringArray l_values = string::split( l_array[0], cuT( "|" ), std::count( l_array[0].begin(), l_array[0].end(), cuT( '|' ) ) + 1, false );
+
+			for ( auto && l_value : l_values )
+			{
+				auto l_it = m_mapValues.find( l_value );
+
+				if ( l_it != m_mapValues.end() )
+				{
+					m_value |= l_it->second;
+					l_return = true;
+				}
+			}
+
+			if ( l_array.size() > 1 )
+			{
+				p_strParams = l_array[1];
+			}
+		}
+
 		return l_return;
 	}
 

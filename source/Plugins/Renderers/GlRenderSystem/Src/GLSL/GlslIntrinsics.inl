@@ -21,84 +21,162 @@ namespace GlRender
 	{
 		//***********************************************************************************************
 
+		namespace
+		{
+			template< typename TypeR, typename TypeA, typename TypeB >
+			struct Operator
+			{
+				using Ret = TypeR;
+				using T = TypeA;
+				using U = TypeB;
+
+				static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
+				{
+					Ret l_return( p_a.m_writer );
+					l_return.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+					return l_return;
+				}
+			};
+
+			template< typename TypeR, typename TypeA, typename TypeB >
+			struct Operator< Optional< TypeR >, Optional< TypeA >, TypeB >
+			{
+				using Ret = Optional< TypeR >;
+				using T = Optional< TypeA >;
+				using U = TypeB;
+
+				static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
+				{
+					Ret l_return( p_a.m_writer, Castor::String(), p_a.IsEnabled() );
+					l_return.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+					return l_return;
+				}
+			};
+
+			template< typename TypeR, typename TypeA, typename TypeB >
+			struct Operator< Optional< TypeR >, TypeA, Optional< TypeB > >
+			{
+				using Ret = Optional< TypeR >;
+				using T = TypeA;
+				using U = Optional< TypeB >;
+
+				static Ret Write( char const * const p_operator, T const & p_a, U const & p_b )
+				{
+					Ret l_return( p_a.m_writer, Castor::String(), p_b.IsEnabled() );
+					l_return.m_value << Castor::String( p_a ) << ' ' << p_operator << ' ' << ToString( p_b );
+					return l_return;
+				}
+			};
+
+			template< typename TypeA, typename TypeB >
+			struct ArithmeticOperator
+				: public Operator< TypeA, TypeA, TypeB >
+			{
+				using OperatorType = Operator< TypeA, TypeA, TypeB >;
+				using Ret = typename OperatorType::Ret;
+				using T = typename OperatorType::T;
+				using U = typename OperatorType::U;
+			};
+
+			template< typename TypeA, typename TypeB >
+			struct ArithmeticOperator< Optional< TypeA >, TypeB >
+				: public Operator< Optional< TypeA >, Optional< TypeA >, TypeB >
+			{
+				using OperatorType = Operator< Optional< TypeA >, Optional< TypeA >, TypeB >;
+				using Ret = typename OperatorType::Ret;
+				using T = typename OperatorType::T;
+				using U = typename OperatorType::U;
+			};
+
+			template< typename TypeA, typename TypeB >
+			struct ArithmeticOperator< TypeA, Optional< TypeB > >
+				: public Operator< Optional< TypeA >, TypeA, Optional< TypeB > >
+			{
+				using OperatorType = Operator< Optional< TypeA >, TypeA, Optional< TypeB > >;
+				using Ret = typename OperatorType::Ret;
+				using T = typename OperatorType::T;
+				using U = typename OperatorType::U;
+			};
+
+			template< typename TypeA, typename TypeB >
+			struct ArithmeticOperator< Optional< TypeA >, Optional< TypeB > >
+				: public Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >
+			{
+				using OperatorType = Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >;
+				using Ret = typename OperatorType::Ret;
+				using T = typename OperatorType::T;
+				using U = typename  OperatorType::U;
+			};
+
+			template< typename TypeA, typename TypeB >
+			struct BooleanOperator
+				: public Operator< GlslBool, TypeA, TypeB >
+			{
+				using OperatorType = Operator< GlslBool, TypeA, TypeB >;
+				using Ret = typename OperatorType::Ret;
+				using T = typename OperatorType::T;
+				using U = typename  OperatorType::U;
+			};
+		}
+
 		template< typename TypeA, typename TypeB, typename Enable >
 		TypeA operator+( TypeA const & p_a, TypeB const & p_b )
 		{
-			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " + " ) << ToString( p_b );
-			return l_return;
+			return ArithmeticOperator< TypeA, TypeB >::Write( "+", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		TypeA operator-( TypeA const & p_a, TypeB const & p_b )
 		{
-			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " - " ) << ToString( p_b );
-			return l_return;
+			return ArithmeticOperator< TypeA, TypeB >::Write( "-", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		TypeA operator*( TypeA const & p_a, TypeB const & p_b )
 		{
-			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " * " ) << ToString( p_b );
-			return l_return;
+			return ArithmeticOperator< TypeA, TypeB >::Write( "*", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		TypeA operator/( TypeA const & p_a, TypeB const & p_b )
 		{
-			TypeA l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " / " ) << ToString( p_b );
-			return l_return;
+			return ArithmeticOperator< TypeA, TypeB >::Write( "/", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		GlslBool operator==( TypeA const & p_a, TypeB const & p_b )
 		{
-			GlslBool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " == " ) << ToString( p_b );
-			return l_return;
+			return BooleanOperator< TypeA, TypeB >::Write( "==", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		GlslBool operator!=( TypeA const & p_a, TypeB const & p_b )
 		{
-			GlslBool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " != " ) << ToString( p_b );
-			return l_return;
+			return BooleanOperator< TypeA, TypeB >::Write( "!=", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		GlslBool operator<( TypeA const & p_a, TypeB const & p_b )
 		{
-			GlslBool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " < " ) << ToString( p_b );
-			return l_return;
+			return BooleanOperator< TypeA, TypeB >::Write( "<", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		GlslBool operator<=( TypeA const & p_a, TypeB const & p_b )
 		{
-			GlslBool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " <= " ) << ToString( p_b );
-			return l_return;
+			return BooleanOperator< TypeA, TypeB >::Write( "<=", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		GlslBool operator>( TypeA const & p_a, TypeB const & p_b )
 		{
-			GlslBool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " > " ) << ToString( p_b );
-			return l_return;
+			return BooleanOperator< TypeA, TypeB >::Write( ">", p_a, p_b );
 		}
 
 		template< typename TypeA, typename TypeB, typename Enable >
 		GlslBool operator>=( TypeA const & p_a, TypeB const & p_b )
 		{
-			GlslBool l_return( p_a.m_writer );
-			l_return.m_value << Castor::String( p_a ) << cuT( " >= " ) << ToString( p_b );
-			return l_return;
+			return BooleanOperator< TypeA, TypeB >::Write( ">=", p_a, p_b );
 		}
 
 		//***********************************************************************************************

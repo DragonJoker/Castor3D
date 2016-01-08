@@ -36,7 +36,6 @@ namespace GlRender
 		, m_extensionsInit( false )
 		, m_openGl( *this )
 	{
-		Logger::LogInfo( cuT( "GlRenderSystem::GlRenderSystem" ) );
 		m_bAccumBuffer = true;
 		m_pipelineImpl = std::make_shared< GlPipelineImpl >( GetOpenGl(), *m_pipeline );
 		m_pipeline->UpdateImpl();
@@ -83,45 +82,34 @@ namespace GlRender
 				m_useShader[eSHADER_TYPE_GEOMETRY] = GetOpenGl().HasGSh();
 				m_useShader[eSHADER_TYPE_PIXEL] = GetOpenGl().HasPSh();
 				m_useShader[eSHADER_TYPE_VERTEX] = GetOpenGl().HasVSh();
+
+				if ( m_useShader[eSHADER_TYPE_COMPUTE] )
+				{
+					m_maxShaderModel = eSHADER_MODEL_5;
+				}
+				else if ( m_useShader[eSHADER_TYPE_HULL] )
+				{
+					m_maxShaderModel = eSHADER_MODEL_4;
+				}
+				else if ( m_useShader[eSHADER_TYPE_GEOMETRY] )
+				{
+					m_maxShaderModel = eSHADER_MODEL_3;
+				}
+				else if ( m_useShader[eSHADER_TYPE_PIXEL] )
+				{
+					m_maxShaderModel = eSHADER_MODEL_2;
+				}
+				else
+				{
+					m_maxShaderModel = eSHADER_MODEL_1;
+				}
+
 				m_bNonPowerOfTwoTextures = GetOpenGl().HasNonPowerOfTwoTextures();
-				REQUIRE( m_useShader[eSHADER_TYPE_VERTEX] && m_useShader[eSHADER_TYPE_PIXEL]/* && m_useShader[eSHADER_TYPE_GEOMETRY]*/ );
+				REQUIRE( m_maxShaderModel >= eSHADER_MODEL_2 );
 			}
 		}
 
 		return m_extensionsInit;
-	}
-
-	bool GlRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
-	{
-		bool l_return = false;
-
-		switch ( p_eProfile )
-		{
-		case eSHADER_MODEL_1:
-			l_return = GetOpenGl().HasVSh();
-			break;
-
-		case eSHADER_MODEL_2:
-			l_return = GetOpenGl().HasPSh();
-			break;
-
-		case eSHADER_MODEL_3:
-			l_return = GetOpenGl().HasGSh();
-			break;
-
-		case eSHADER_MODEL_4:
-			l_return = GetOpenGl().HasTSh();
-			break;
-
-		case eSHADER_MODEL_5:
-			l_return = GetOpenGl().HasCSh();
-			break;
-
-		default:
-			l_return = false;
-		}
-
-		return l_return;
 	}
 
 	ContextSPtr GlRenderSystem::CreateContext()

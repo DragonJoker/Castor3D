@@ -63,13 +63,13 @@ namespace Dx11Render
 
 	void DxDomainShader::AttachTo( ShaderProgramBase & p_program )
 	{
-		if ( m_pCompiled )
+		if ( m_compiledShader )
 		{
 			ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 
 			if ( l_pDevice )
 			{
-				HRESULT l_hr = l_pDevice->CreateDomainShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pDomainShader );
+				HRESULT l_hr = l_pDevice->CreateDomainShader( reinterpret_cast< DWORD * >( m_compiledShader->GetBufferPointer() ), m_compiledShader->GetBufferSize(), NULL, &m_pDomainShader );
 				dxTrack( m_renderSystem, m_pDomainShader, DSShader );
 
 				if ( l_hr == S_OK )

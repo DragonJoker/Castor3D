@@ -25,8 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlFrameVariableBase
-		: public Castor::NonCopyable
-		, public Holder
+		: public Holder
 	{
 	public:
 		GlFrameVariableBase( OpenGl & p_gl, uint32_t * p_programId );

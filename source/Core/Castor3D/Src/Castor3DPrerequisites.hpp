@@ -82,6 +82,7 @@ namespace Castor3D
 
 	typedef std::pair< uint32_t, real > VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
 	using Castor::UIntStrMap;
+	using Castor::UInt64StrMap;
 
 	DECLARE_SMART_PTR( ScaleKeyFrame );
 	DECLARE_SMART_PTR( TranslateKeyFrame );
@@ -1910,19 +1911,20 @@ namespace Castor3D
 	class FrameBuffer;
 	class BackBuffers;
 	class RenderTechniqueBase;
-	class RenderWindow;		//!< The render window handler class
+	class RenderWindow;
 	class IWindowHandle;
 	class DebugOverlays;
-	class Engine;			//!< The Castor3D core system
-	class RendererServer;	//!< Manages graphics related stuff
-	class PluginBase;		//!< The base plugin handler class
-	class RendererPlugin;	//!< The base plugin handler class
-	class ImporterPlugin;	//!< The base plugin handler class
-	class DividerPlugin;	//!< The base plugin handler class
-	class GenericPlugin;		//!< The base plugin handler class
-	class FrameEvent;		//!< The frame event representation
-	class FrameListener;	//!< The frame event listener
-	class Version;			//!< Castor3D Version
+	class Engine;
+	class RendererServer;
+	class PluginBase;
+	class RendererPlugin;
+	class ImporterPlugin;
+	class DividerPlugin;
+	class GenericPlugin;
+	class PostFxPlugin;
+	class FrameEvent;
+	class FrameListener;
+	class Version;
 	class PostEffect;
 	class Parameters;
 	class BillboardList;
@@ -1948,6 +1950,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( ImporterPlugin );
 	DECLARE_SMART_PTR( DividerPlugin );
 	DECLARE_SMART_PTR( GenericPlugin );
+	DECLARE_SMART_PTR( PostFxPlugin );
 	DECLARE_SMART_PTR( FrameEvent );
 	DECLARE_SMART_PTR( FrameListener );
 	DECLARE_SMART_PTR( IWindowHandle );

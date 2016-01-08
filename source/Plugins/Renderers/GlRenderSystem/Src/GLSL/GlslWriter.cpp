@@ -1,11 +1,19 @@
 #include "GlslWriter.hpp"
 
 #include "GlslVeci.hpp"
+#include "GlslLighting.hpp"
 
 namespace GlRender
 {
 	namespace GLSL
 	{
+		//*****************************************************************************************
+
+		void LightingModelFactory::Initialise()
+		{
+			Register( PhongLightingModel::Name, &PhongLightingModel::Create );
+		}
+
 		//*****************************************************************************************
 
 		IndentBlock::IndentBlock( GlslWriter & p_writter )
@@ -34,6 +42,7 @@ namespace GlRender
 		{
 			if ( m_writer.GetOpenGl().HasUbo() )
 			{
+				m_writer << Endl();
 				m_writer << StdLayout{ 140 } << Uniform() << p_name << Endl();
 				m_writer.m_uniform.clear();
 				m_block = new IndentBlock( m_writer );
@@ -61,6 +70,7 @@ namespace GlRender
 			, m_name( p_name )
 			, m_block( NULL )
 		{
+			m_writer << Endl();
 			m_writer << cuT( "struct " ) << p_name << Endl();
 			m_block = new IndentBlock( m_writer );
 		}
@@ -84,6 +94,14 @@ namespace GlRender
 			, m_type( p_type )
 			, m_uniform( cuT( "uniform " ) )
 		{
+			m_lightingFactory.Initialise();
+		}
+
+		std::unique_ptr< LightingModel > GlslWriter::CreateLightingModel( Castor::String const & p_name, uint32_t p_flags )
+		{
+			std::unique_ptr< LightingModel > l_lighting = m_lightingFactory.Create( p_name, p_flags, *this );
+			l_lighting->DeclareModel();
+			return l_lighting;
 		}
 
 		Castor::String GlslWriter::Finalise()
@@ -108,6 +126,7 @@ namespace GlRender
 
 		void GlslWriter::For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type const &) > p_function )
 		{
+			m_stream << std::endl;
 			m_stream << cuT( "for( " ) << Castor::String( p_init ) << cuT( "; " ) << p_cond.m_value.rdbuf() << cuT( "; " ) << p_incr.m_value.rdbuf() << cuT( " )" ) << std::endl;
 			{
 				IndentBlock l_block( *this );
@@ -118,6 +137,7 @@ namespace GlRender
 
 		GlslWriter & GlslWriter::If( Expr const & p_cond, std::function< void() > p_function )
 		{
+			m_stream << std::endl;
 			m_stream << cuT( "if( " ) << p_cond.m_value.rdbuf() << cuT( " )" ) << std::endl;
 			{
 				IndentBlock l_block( *this );
@@ -168,6 +188,11 @@ namespace GlRender
 			m_stream << cuT( "EndPrimitive();" ) << std::endl;
 		}
 
+		void GlslWriter::Discard()
+		{
+			m_stream << cuT( "discard;" ) << std::endl;
+		}
+
 		Vec4 GlslWriter::Texture1D( Sampler1D const & p_sampler, Type const & p_value )
 		{
 			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1D(), p_sampler, p_value );
@@ -203,6 +228,41 @@ namespace GlRender
 			return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch3D(), p_sampler, p_value, p_modif );
 		}
 
+		Optional< Vec4 > GlslWriter::Texture1D( Optional< Sampler1D > const & p_sampler, Type const & p_value )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture1D(), p_sampler, p_value );
+		}
+
+		Optional< Vec4 > GlslWriter::Texture2D( Optional< Sampler2D > const & p_sampler, Type const & p_value )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture2D(), p_sampler, p_value );
+		}
+
+		Optional< Vec4 > GlslWriter::Texture3D( Optional< Sampler3D > const & p_sampler, Type const & p_value )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture3D(), p_sampler, p_value );
+		}
+
+		Optional< Vec4 > GlslWriter::TexelFetch( Optional< SamplerBuffer > const & p_sampler, Type const & p_value )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexelFetchBuffer(), p_sampler, p_value );
+		}
+
+		Optional< Vec4 > GlslWriter::TexelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch1D(), p_sampler, p_value, p_modif );
+		}
+
+		Optional< Vec4 > GlslWriter::TexelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch2D(), p_sampler, p_value, p_modif );
+		}
+
+		Optional< Vec4 > GlslWriter::TexelFetch( Optional< Sampler3D > const & p_sampler, Type const & p_value, Int const & p_modif )
+		{
+			return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexelFetch3D(), p_sampler, p_value, p_modif );
+		}
+
 		GlslWriter & GlslWriter::operator<<( Version const & p_rhs )
 		{
 			m_stream << m_keywords->GetVersion();
@@ -235,7 +295,7 @@ namespace GlRender
 
 		GlslWriter & GlslWriter::operator<<( Layout const & p_rhs )
 		{
-			m_stream << m_keywords->GetLayout( m_layoutIndex );
+			m_stream << m_keywords->GetLayout( p_rhs.m_index );
 			return *this;
 		}
 
@@ -270,6 +330,12 @@ namespace GlRender
 		GlslWriter & GlslWriter::operator<<( Endl const & p_rhs )
 		{
 			m_stream << std::endl;
+			return *this;
+		}
+
+		GlslWriter & GlslWriter::operator<<( Endi const & p_rhs )
+		{
+			m_stream << ";" << std::endl;
 			return *this;
 		}
 

@@ -4,8 +4,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SsaoPostEffect::SsaoPostEffect( RenderSystem * p_renderSystem )
-		: PostEffect( p_renderSystem )
+	SsaoPostEffect::SsaoPostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
+		: PostEffect( p_renderSystem, p_renderTarget, p_param )
 	{
 	}
 
@@ -22,7 +22,7 @@ namespace Castor3D
 	{
 	}
 
-	bool SsaoPostEffect::Apply( RenderTarget * p_pRenderTarget )
+	bool SsaoPostEffect::Apply()
 	{
 		return false;
 	}

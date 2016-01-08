@@ -154,17 +154,17 @@ namespace Castor
 	}
 
 	/**
-	 *\~english
-	 *\brief		Stream operator
-	 *\remarks		Initializes the stream in order to indent it
-	 *\param[in]	stream	The stream
-	 *\param[in]	inf		The indent
-	 *\~french
-	 *\brief		Opérateur de flux
-	 *\remarks		Initialise le flux afin de pouvoir l'indenter
-	 *\param[in]	stream	Le flux
-	 *\param[in]	inf		La valeur d'indentation
-	 */
+	*\~english
+	*\brief		Stream operator.
+	*\remarks		Initializes the stream in order to prefix it.
+	*\param[in]	stream	The stream.
+	*\param[in]	prefix	The prefix.
+	*\~french
+	*\brief		Opérateur de flux.
+	*\remarks		Initialise le flux afin de pouvoir le préfixer.
+	*\param[in]	stream	Le flux.
+	*\param[in]	prefix	Le préfixe.
+	*/
 	template< typename CharType, typename PrefixType >
 	inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::base_prefixer< CharType, PrefixType > const & prefix )
 	{

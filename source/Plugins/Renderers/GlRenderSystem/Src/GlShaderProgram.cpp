@@ -35,7 +35,7 @@ namespace GlRender
 
 	void GlShaderProgram::Cleanup()
 	{
-		ShaderProgramBase::Cleanup();
+		DoCleanup();
 		ObjectType::Destroy();
 	}
 
@@ -44,7 +44,7 @@ namespace GlRender
 		if ( m_status != ePROGRAM_STATUS_LINKED )
 		{
 			ObjectType::Create();
-			ShaderProgramBase::Initialise();
+			DoInitialise();
 		}
 	}
 
@@ -60,49 +60,26 @@ namespace GlRender
 			l_return &= GetOpenGl().LinkProgram( GetGlName() );
 			l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_iLinked );
 			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );
-			RetrieveLinkerLog( m_linkerLog );
-
-			if ( m_linkerLog.size() > 0 )
-			{
-				Logger::LogDebug( cuT( "GlShaderProgram::Link - Log: " ) + m_linkerLog );
-			}
+			m_linkerLog = DoRetrieveLinkerLog();
 
 			if ( l_iLinked && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
 			{
-				ShaderProgramBase::Link();
+				if ( !m_linkerLog.empty() )
+				{
+					Logger::LogWarning( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+				}
+
+				l_return = DoLink();
 			}
 			else
 			{
-				Logger::LogError( cuT( "GlShaderProgram::Link - Error: " ) + m_linkerLog );
+				Logger::LogError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
 				m_status = ePROGRAM_STATUS_ERROR;
+				l_return = false;
 			}
-
-			l_return = m_status == ePROGRAM_STATUS_LINKED;
 		}
 
 		return l_return;
-	}
-
-	void GlShaderProgram::RetrieveLinkerLog( String & strLog )
-	{
-		if ( GetGlName() == eGL_INVALID_INDEX )
-		{
-			strLog = GetOpenGl().GetGlslErrorString( 2 );
-		}
-		else
-		{
-			int l_length = 0;
-			GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH , &l_length );
-
-			if ( l_length > 1 )
-			{
-				char * l_buffer = new char[l_length];
-				int l_written = 0;
-				GetOpenGl().GetProgramInfoLog( GetGlName(), l_length, &l_written, l_buffer );
-				strLog = string::string_cast< xchar >( l_buffer );
-				delete [] l_buffer;
-			}
-		}
 	}
 
 	void GlShaderProgram::Bind( uint8_t p_index, uint8_t p_count )
@@ -110,7 +87,7 @@ namespace GlRender
 		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
 		{
 			GetOpenGl().UseProgram( GetGlName() );
-			ShaderProgramBase::Bind( p_index, p_count );
+			DoBind( p_index, p_count );
 		}
 	}
 
@@ -125,7 +102,7 @@ namespace GlRender
 				l_variableBuffer->Unbind( l_index++ );
 			}
 
-			ShaderProgramBase::Unbind();
+			DoUnbind();
 			GetOpenGl().UseProgram( 0 );
 		}
 	}
@@ -244,4 +221,32 @@ namespace GlRender
 		return l_writer.Finalise();
 	}
 
+	String GlShaderProgram::DoRetrieveLinkerLog()
+	{
+		String l_log;
+
+		if ( GetGlName() == eGL_INVALID_INDEX )
+		{
+			l_log = GetOpenGl().GetGlslErrorString( 2 );
+		}
+		else
+		{
+			int l_length = 0;
+			GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_length );
+
+			if ( l_length > 1 )
+			{
+				std::vector< char > l_buffer( l_length );
+				int l_written = 0;
+				GetOpenGl().GetProgramInfoLog( GetGlName(), l_length, &l_written, l_buffer.data() );
+
+				if ( l_written > 0 )
+				{
+					l_log = string::string_cast< xchar >( l_buffer.data(), l_buffer.data() + l_written );
+				}
+			}
+		}
+
+		return l_log;
+	}
 }

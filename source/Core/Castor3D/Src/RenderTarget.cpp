@@ -13,6 +13,7 @@
 #include "Material.hpp"
 #include "Parameter.hpp"
 #include "Pipeline.hpp"
+#include "PostEffect.hpp"
 #include "RenderSystem.hpp"
 #include "RasteriserStateManager.hpp"
 #include "RenderBufferAttachment.hpp"
@@ -323,8 +324,8 @@ namespace Castor3D
 		{
 			m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
 			m_pFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
-			m_pFrameBuffer->Unbind();
 			l_return = m_pFrameBuffer->IsComplete();
+			m_pFrameBuffer->Unbind();
 		}
 
 		return l_return;
@@ -408,6 +409,12 @@ namespace Castor3D
 			m_pRenderTechnique->Create();
 			uint32_t l_index = p_index;
 			m_pRenderTechnique->Initialise( l_index );
+
+			for ( auto && l_effect : m_postEffects )
+			{
+				l_effect->Initialise();
+			}
+
 			m_initialised = true;
 		}
 	}

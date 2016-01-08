@@ -47,13 +47,13 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 		cuT( "polygon" ),//eTOPOLOGY_POLYGON
 	};
 
-	ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
+	ShaderManager & l_manager = GetOwner()->GetShaderManager();
 	ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 	l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 	l_manager.CreateTextureVariables( *l_program, p_flags );
-	FrameVariableBufferSPtr l_billboardUbo = GetOwner()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
+	FrameVariableBufferSPtr l_billboardUbo = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
 	l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 	ShaderObjectBaseSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
@@ -97,7 +97,7 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 		OUT( l_writer, Vec3, vtx_texture );
 
 		BUILTIN( l_writer, Vec4, gl_Position );
-		BUILTIN_ARRAY( l_writer, gl_PerVertex, gl_in, 8 );
+		BUILTIN_ARRAY( l_writer, gl_PerVertex, gl_in, 8u );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{

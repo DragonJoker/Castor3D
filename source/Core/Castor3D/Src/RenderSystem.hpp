@@ -182,7 +182,24 @@ namespace Castor3D
 		 *\param[in]	p_eProfile	Le modèle de shaders
 		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle
 		 */
-		C3D_API virtual	bool CheckSupport( eSHADER_MODEL p_eProfile ) = 0;
+		inline bool CheckSupport( eSHADER_MODEL p_model )
+		{
+			return p_model <= m_maxShaderModel;
+		}
+		/**
+		 *\~english
+		 *\brief		Checks support for given shader model
+		 *\param[in]	p_eProfile	The shader model
+		 *\return		\p false if the given model is not supported by current API
+		 *\~french
+		 *\brief		Vérifie le support d'un modèle de shaders
+		 *\param[in]	p_eProfile	Le modèle de shaders
+		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle
+		 */
+		inline eSHADER_MODEL GetMaxShaderModel()
+		{
+			return m_maxShaderModel;
+		}
 		/**
 		 *\~english
 		 *\brief		Checks if the loaded render API needs matrix transposition for shader variables
@@ -628,6 +645,8 @@ namespace Castor3D
 		bool m_bStereoAvailable;
 		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
 		bool m_useShader[eSHADER_TYPE_COUNT];
+		//!\~english The maximum supported shader model.	\~french Le modèle de shader maximum supporté.
+		eSHADER_MODEL m_maxShaderModel;
 		//!\~english The overlay renderer	\~french Le renderer d'overlays
 		OverlayRendererSPtr m_overlayRenderer;
 		//!\~english The main render context	\~french Le contexte de rendu principal

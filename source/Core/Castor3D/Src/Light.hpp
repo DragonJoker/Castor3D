@@ -37,7 +37,6 @@ namespace Castor3D
 	*/
 	class Light
 		: public MovableObject
-		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -443,6 +442,9 @@ namespace Castor3D
 		{
 			SetEnabled( false );
 		}
+
+	protected:
+		void OnNodeChanged();
 
 	protected:
 		//!\~english Tells the light is enabled	\~french Dit si la lumière est active ou pas

@@ -55,7 +55,7 @@ namespace GlRender
 
 				if ( l_eAttach != eATTACHMENT_POINT_NONE && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL )
 				{
-					l_arrayAttaches.push_back( GetOpenGl().Get( l_eAttach ) );
+					l_arrayAttaches.push_back( GetOpenGl().Get( l_eAttach ) + l_attach->GetAttachmentIndex() );
 				}
 			}
 
@@ -78,7 +78,7 @@ namespace GlRender
 
 	bool GlFrameBuffer::IsComplete()const
 	{
-		return eGL_FRAMEBUFFER_STATUS( GetOpenGl().CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE_DEFAULT ) ) == eGL_FRAMEBUFFER_COMPLETE;
+		return GetOpenGl().CheckFramebufferStatus( eGL_FRAMEBUFFER_MODE_DEFAULT ) == eGL_FRAMEBUFFER_COMPLETE;
 	}
 
 	bool GlFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
@@ -87,7 +87,7 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = GetOpenGl().ReadBuffer( GetOpenGl().Get( eGL_TEXTURE_ATTACHMENT( GetOpenGl().Get( p_point ) + p_index ) ) );
+			l_return = GetOpenGl().ReadBuffer( eGL_BUFFER( GetOpenGl().Get( GetOpenGl().Get( p_point ) ) + p_index ) );
 
 			if ( l_return )
 			{

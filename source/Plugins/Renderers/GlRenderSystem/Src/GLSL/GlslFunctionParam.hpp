@@ -29,6 +29,7 @@ namespace GlRender
 			: public TypeT
 		{
 			InParam( GlslWriter * p_writer, Castor::String const & p_name );
+			InParam( TypeT const & p_other );
 		};
 
 		template< typename TypeT >
@@ -36,6 +37,7 @@ namespace GlRender
 			: public TypeT
 		{
 			OutParam( GlslWriter * p_writer, Castor::String const & p_name );
+			OutParam( TypeT const & p_other );
 			template< typename T > inline OutParam< TypeT > operator=( T const & p_rhs );
 		};
 
@@ -44,6 +46,7 @@ namespace GlRender
 			: public TypeT
 		{
 			InOutParam( GlslWriter * p_writer, Castor::String const & p_name );
+			InOutParam( TypeT const & p_other );
 			template< typename T > inline InOutParam< TypeT > operator=( T const & p_rhs );
 		};
 	}
