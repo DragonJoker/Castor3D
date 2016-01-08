@@ -13,7 +13,7 @@
 
 	template< typename T >
 	PlaneEquation< T >::PlaneEquation( Point< T, 3 > const & p_ptNormal, Point< T, 3 > const & p_ptPoint )
-		:	m_normal( p_ptNormal	)
+		: m_normal( p_ptNormal	)
 	{
 		Set( p_ptNormal, p_ptPoint );
 	}

@@ -35,7 +35,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <CastorUtilsPrerequisites.hpp>
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
-#include <Aligned.hpp>
 #include <Point.hpp>
 #include <SquareMatrix.hpp>
 #include <StringUtils.hpp>

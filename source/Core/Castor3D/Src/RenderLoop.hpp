@@ -33,7 +33,6 @@ namespace Castor3D
 	*/
 	class RenderLoop
 		: public Castor::OwnedBy< Engine >
-		, public Castor::Aligned< CASTOR_ALIGN_OF( Castor::Point3r ) >
 	{
 	public:
 		/**

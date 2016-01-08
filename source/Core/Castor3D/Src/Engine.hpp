@@ -56,7 +56,6 @@ namespace Castor3D
 	*/
 	class Engine
 		: Castor::Unique< Engine >
-		, public Castor::Aligned< CASTOR_ALIGN_OF( Castor::Point3r ) >
 	{
 	public:
 		/**

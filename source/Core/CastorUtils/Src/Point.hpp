@@ -38,7 +38,6 @@ namespace Castor
 	*/
 	template< typename T, uint32_t Count >
 	class Point
-		: public Aligned< 16 >
 	{
 	public:
 		/*!
@@ -639,7 +638,7 @@ namespace Castor
 		}
 
 	private:
-		CASTOR_ALIGNED_VAR( 16, T, m_coords[Count] );
+		T m_coords[Count];
 	};
 	/**
 	 *\~english
