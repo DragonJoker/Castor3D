@@ -61,7 +61,7 @@ namespace Castor3D
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
 		class TextLoader
-			: public Castor::Loader< OverlayCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< OverlayCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**

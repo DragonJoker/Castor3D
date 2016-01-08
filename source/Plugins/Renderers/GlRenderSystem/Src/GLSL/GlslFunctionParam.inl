@@ -28,6 +28,13 @@ namespace GlRender
 			TypeT::m_type = cuT( "in " ) + TypeT::m_type;
 		}
 
+		template< typename TypeT >
+		InParam< TypeT >::InParam( TypeT const & p_other )
+			: TypeT( p_other.m_writer, ToString( p_other ) )
+		{
+			TypeT::m_type = cuT( "in " ) + TypeT::m_type;
+		}
+
 		//*****************************************************************************************
 
 		template< typename TypeT >
@@ -35,6 +42,13 @@ namespace GlRender
 			: TypeT( p_writer, p_name )
 		{
 			TypeT::m_type = cuT( "out " ) + TypeT::m_type;
+		}
+
+		template< typename TypeT >
+		OutParam< TypeT >::OutParam( TypeT const & p_other )
+			: TypeT( p_other.m_writer, ToString( p_other ) )
+		{
+			TypeT::m_type = cuT( "in " ) + TypeT::m_type;
 		}
 
 		template< typename TypeT >
@@ -52,6 +66,13 @@ namespace GlRender
 			: TypeT( p_writer, p_name )
 		{
 			TypeT::m_type = cuT( "inout " ) + TypeT::m_type;
+		}
+
+		template< typename TypeT >
+		InOutParam< TypeT >::InOutParam( TypeT const & p_other )
+			: TypeT( p_other.m_writer, ToString( p_other ) )
+		{
+			TypeT::m_type = cuT( "in " ) + TypeT::m_type;
 		}
 
 		template< typename TypeT >

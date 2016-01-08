@@ -64,8 +64,8 @@ bool RenderEngine::Draw()
 				int level = 0;
 				// lancer de rayon
 				Ray l_viewRay( Point3r( real( x - 128 ), real( y - 128 ), real( -10000.0 ) ), Point3r( 0, 0, 1 ) );
-				SceneNodePtrStrMap::const_iterator l_itNodesEnd = m_pScene->NodesEnd();
-				LightPtrIntMap::const_iterator l_itLightsEnd = m_pScene->LightsEnd();
+				auto l_itNodesEnd = m_pScene->NodesEnd();
+				auto l_itLightsEnd = m_pScene->LightsEnd();
 				GeometrySPtr l_pNearestGeometry = nullptr;
 				SubmeshSPtr l_pNearestSubmesh;
 
@@ -99,38 +99,40 @@ bool RenderEngine::Draw()
 						MaterialSPtr l_pCurrentMat = l_pNearestGeometry->GetMaterial( l_pNearestSubmesh );
 
 						// calcul de la valeur d'éclairement au point
-						for ( LightPtrIntMap::iterator l_it = m_pScene->LightsBegin(); l_it != l_itLightsEnd; ++l_it )
+						for ( auto l_it = m_pScene->LightsBegin(); l_it != l_itLightsEnd; ++l_it )
 						{
-							LightSPtr l_pCurrent = l_it->second;
-							Point3r l_vDist( l_pCurrent->GetParent()->GetPosition() - l_vNewStart );
-
-							if ( point::dot( l_vNormal, l_vDist ) > 0 )
+							for ( auto l_pCurrent : l_it->second )
 							{
-								real l_fT = real( point::distance( l_vDist ) );
+								Point3r l_vDist( l_pCurrent->GetParent()->GetPosition() - l_vNewStart );
 
-								if ( l_fT > 0.0f )
+								if ( point::dot( l_vNormal, l_vDist ) > 0 )
 								{
-									Ray l_lightRay( l_vNewStart, l_vDist * ( 1 / l_fT ) );
-									// calcul des ombres
-									bool l_bInShadow = false;
+									real l_fT = real( point::distance( l_vDist ) );
 
-									for ( SceneNodePtrStrMap::iterator l_it = m_pScene->NodesBegin(); ! l_bInShadow && l_it != l_itNodesEnd; ++l_it )
+									if ( l_fT > 0.0f )
 									{
-										l_pNearestGeometry = l_it->second->GetNearestGeometry( & l_lightRay, l_fT, nullptr, nullptr );
+										Ray l_lightRay( l_vNewStart, l_vDist * ( 1 / l_fT ) );
+										// calcul des ombres
+										bool l_bInShadow = false;
 
-										if ( l_pNearestGeometry )
+										for ( SceneNodePtrStrMap::iterator l_it = m_pScene->NodesBegin(); !l_bInShadow && l_it != l_itNodesEnd; ++l_it )
 										{
-											l_bInShadow = true;
-										}
-									}
+											l_pNearestGeometry = l_it->second->GetNearestGeometry( &l_lightRay, l_fT, nullptr, nullptr );
 
-									if ( ! l_bInShadow )
-									{
-										// lambert
-										float l_fLambert = float( point::dot( l_lightRay.m_ptDirection, l_vNormal ) * coef );
-										l_clrColour.red()	+= l_pCurrent->GetDiffuse()[0] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().red() * l_fLambert;
-										l_clrColour.green()	+= l_pCurrent->GetDiffuse()[1] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().green() * l_fLambert;
-										l_clrColour.blue()	+= l_pCurrent->GetDiffuse()[2] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().blue() * l_fLambert;
+											if ( l_pNearestGeometry )
+											{
+												l_bInShadow = true;
+											}
+										}
+
+										if ( !l_bInShadow )
+										{
+											// lambert
+											float l_fLambert = float( point::dot( l_lightRay.m_ptDirection, l_vNormal ) * coef );
+											l_clrColour.red() += l_pCurrent->GetDiffuse()[0] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().red() * l_fLambert;
+											l_clrColour.green() += l_pCurrent->GetDiffuse()[1] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().green() * l_fLambert;
+											l_clrColour.blue() += l_pCurrent->GetDiffuse()[2] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().blue() * l_fLambert;
+										}
 									}
 								}
 							}

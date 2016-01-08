@@ -431,7 +431,7 @@ namespace Castor3D
 
 	private:
 		C3D_API bool DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );
-		C3D_API void DoDetach( eATTACHMENT_POINT p_point );
+		C3D_API void DoDetach( eATTACHMENT_POINT p_point, uint8_t p_index );
 
 	protected:
 		//!\~english All attachments.	\~french Toutes les attaches.

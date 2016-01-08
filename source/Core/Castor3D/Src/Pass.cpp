@@ -554,17 +554,7 @@ namespace Castor3D
 
 	void Pass::EndRender()
 	{
-		ShaderProgramBaseSPtr l_pShader = m_shaderProgram.lock();
-
-		for ( auto && l_rit = m_arrayTextureUnits.rbegin(); l_rit != m_arrayTextureUnits.rend(); ++l_rit )
-		{
-			( *l_rit )->Unbind();
-		}
-
-		if ( l_pShader )
-		{
-			l_pShader->Unbind();
-		}
+		DoEndRender();
 	}
 
 	TextureUnitSPtr Pass::AddTextureUnit()
@@ -796,6 +786,21 @@ namespace Castor3D
 		for ( auto && l_it : m_arrayTextureUnits )
 		{
 			l_it->Bind();
+		}
+	}
+
+	void Pass::DoEndRender()
+	{
+		ShaderProgramBaseSPtr l_pShader = m_shaderProgram.lock();
+
+		for ( auto && l_rit = m_arrayTextureUnits.rbegin(); l_rit != m_arrayTextureUnits.rend(); ++l_rit )
+		{
+			( *l_rit )->Unbind();
+		}
+
+		if ( l_pShader )
+		{
+			l_pShader->Unbind();
 		}
 	}
 }

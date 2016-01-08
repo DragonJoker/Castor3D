@@ -28,7 +28,6 @@ namespace Dx11Render
 {
 	class DxRenderBufferAttachment
 		: public Castor3D::RenderBufferAttachment
-		, public Castor::NonCopyable
 	{
 	public:
 		/**

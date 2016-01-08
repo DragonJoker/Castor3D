@@ -50,7 +50,7 @@ namespace Castor
 		\brief		Loader de Colour à partir de données binaires
 		*/
 		class BinaryLoader
-			: public Castor::Loader< Colour, eFILE_TYPE_BINARY, BinaryFile >, public Castor::NonCopyable
+			: public Castor::Loader< Colour, eFILE_TYPE_BINARY, BinaryFile >
 		{
 		public:
 			/**
@@ -92,7 +92,7 @@ namespace Castor
 		\brief		Loader de Colour à partir d'un texte
 		*/
 		class TextLoader
-			: public Castor::Loader< Colour, eFILE_TYPE_TEXT, TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< Colour, eFILE_TYPE_TEXT, TextFile >
 		{
 		public:
 			/**

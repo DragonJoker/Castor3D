@@ -36,9 +36,11 @@ namespace Castor3D
 	{
 	private:
 		friend class PluginBase;
-		typedef PostEffectSPtr	CreateEffectFunction( RenderSystem * p_renderSystem );
+		typedef PostEffectSPtr CreateEffectFunction( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
+		typedef Castor::String GetPostEffectTypeFunction();
 
 		typedef CreateEffectFunction * PCreateEffectFunction;
+		typedef GetPostEffectTypeFunction * PGetPostEffectTypeFunction;
 
 	public:
 		/**
@@ -69,10 +71,18 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	Le render system
 		 *\return		L'instance de PostEffect créée
 		 */
-		C3D_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem );
+		C3D_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
+		/**
+		 *\~english
+		 *\brief		Tells the effect short name
+		 *\~french
+		 *\brief		Donne le nom court de l'effet
+		 */
+		C3D_API Castor::String GetPostEffectType();
 
 	private:
 		PCreateEffectFunction m_pfnCreateEffect;
+		PGetPostEffectTypeFunction m_pfnGetPostEffectType;
 	};
 }
 

@@ -34,7 +34,6 @@ namespace Castor
 	template< class T >
 	class BinaryLoader
 		: public Loader< T, eFILE_TYPE_BINARY, BinaryFile >
-		, public Castor::NonCopyable
 	{
 	public:
 		/**

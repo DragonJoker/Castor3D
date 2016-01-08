@@ -25,8 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlRenderBuffer
-		: public Castor::NonCopyable
-		, public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
+		: public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
 						   std::function< bool( uint32_t ) > >
 	{
 		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,

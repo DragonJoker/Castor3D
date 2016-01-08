@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_POINT_H___
 
 #include "File.hpp"
-#include "NonCopyable.hpp"
 #include "Aligned.hpp"
 
 #include <cmath>
@@ -52,7 +51,7 @@ namespace Castor
 		\brief		Loader de Point< T, Count >
 		*/
 		class BinaryLoader
-			: public Castor::Loader< Point< T, Count >, eFILE_TYPE_BINARY, BinaryFile >, public Castor::NonCopyable
+			: public Castor::Loader< Point< T, Count >, eFILE_TYPE_BINARY, BinaryFile >
 		{
 		public:
 			/**
@@ -95,7 +94,7 @@ namespace Castor
 		\brief Loader de Coords< T, Count >
 		*/
 		class TextLoader
-			: public Castor::Loader< Point< T, Count >, eFILE_TYPE_TEXT, TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< Point< T, Count >, eFILE_TYPE_TEXT, TextFile >
 		{
 		public:
 			/**

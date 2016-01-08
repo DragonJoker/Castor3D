@@ -48,7 +48,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< ShaderObjectBase, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -147,14 +146,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée le programme sur le GPU
 		 */
-		C3D_API virtual void CreateProgram() = 0;
+		C3D_API virtual void Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the program on GPU
 		 *\~french
 		 *\brief		Détruit le programme sur le GPU
 		 */
-		C3D_API virtual void DestroyProgram() = 0;
+		C3D_API virtual void Destroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines entry point for shader languages that need it
@@ -320,28 +319,6 @@ namespace Castor3D
 		{
 			return false;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the given parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
-		 *\~french
-		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
-		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix4x4r const & CU_PARAM_UNUSED( p_value ) ) {}
-		/**
-		 *\~english
-		 *\brief		Defines the given parameter value
-		 *\param[in]	p_name	The parameter name
-		 *\param[in]	p_value	The parameter value
-		 *\~french
-		 *\brief		Définit la valeur du paramètre
-		 *\param[in]	p_name	Le nom du paramètre
-		 *\param[in]	p_value	La valeur du paramètre
-		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix3x3r const & CU_PARAM_UNUSED( p_value ) ) {}
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source for given model
@@ -514,22 +491,60 @@ namespace Castor3D
 		{
 			return m_parent;
 		}
+		/**
+		 *\~english
+		 *\brief		Defines the given parameter value
+		 *\param[in]	p_name	The parameter name
+		 *\param[in]	p_value	The parameter value
+		 *\~french
+		 *\brief		Définit la valeur du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
+		 *\param[in]	p_value	La valeur du paramètre
+		 */
+		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix4x4r const & CU_PARAM_UNUSED( p_value ) ) {}
+		/**
+		 *\~english
+		 *\brief		Defines the given parameter value
+		 *\param[in]	p_name	The parameter name
+		 *\param[in]	p_value	The parameter value
+		 *\~french
+		 *\brief		Définit la valeur du paramètre
+		 *\param[in]	p_name	Le nom du paramètre
+		 *\param[in]	p_value	La valeur du paramètre
+		 */
+		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix3x3r const & CU_PARAM_UNUSED( p_value ) ) {}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Checks for compiler errors.
+		 *\return		\p true if no error.
+		 *\~french
+		 *\brief		Vérifie les erreurs de compilation.
+		 *\return		\p true s'il n'y a pas d'erreurs.
+		 */
+		C3D_API bool DoCheckErrors();
 		/**
 		 *\~english
 		 *\brief		Activates the shader
 		 *\~french
 		 *\brief		Active le shader
 		 */
-		C3D_API virtual void DoBind() = 0;
+		virtual void DoBind() = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivates the shader
 		 *\~french
 		 *\brief		Désactive le shader
 		 */
-		C3D_API virtual void DoUnbind() = 0;
+		virtual void DoUnbind() = 0;
+		/**
+		 *\~english
+		 *\return		Retrieve compiler messages.
+		 *\~english
+		 *\return		Les messages du compilateur.
+		 */
+		virtual Castor::String DoRetrieveCompilerLog() = 0;
 
 	protected:
 		//!\~english The parent shader program	\~french Le programme parent

@@ -167,7 +167,6 @@ namespace Castor3D
 
 	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport, eTOPOLOGY p_topology )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
-		, OwnedBy< Engine >( *p_scene->GetOwner() )
 		, m_viewport( p_viewport )
 		, m_topology( eTOPOLOGY_TRIANGLES )
 	{
@@ -175,7 +174,6 @@ namespace Castor3D
 
 	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, eTOPOLOGY p_topology )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
-		, OwnedBy< Engine >( *p_scene->GetOwner() )
 		, m_viewport( Viewport::Ortho( *p_scene->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
 		, m_topology( eTOPOLOGY_TRIANGLES )
 	{

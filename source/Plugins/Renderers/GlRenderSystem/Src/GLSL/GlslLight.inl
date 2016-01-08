@@ -59,42 +59,42 @@ namespace GlRender
 		
 		Vec4 Light::m_v4Diffuse()const
 		{
-			return Vec4( m_writer, m_name + cuT( ".m_v4Diffuse" ) );
+			return Vec4( m_writer, Castor::String( *this ) + cuT( ".m_v4Diffuse" ) );
 		}
 		
 		Vec4 Light::m_v4Specular()const
 		{
-			return Vec4( m_writer, m_name + cuT( ".m_v4Specular" ) );
+			return Vec4( m_writer, Castor::String( *this ) + cuT( ".m_v4Specular" ) );
 		}
 		
 		Vec4 Light::m_v4Position()const
 		{
-			return Vec4( m_writer, m_name + cuT( ".m_v4Position" ) );
+			return Vec4( m_writer, Castor::String( *this ) + cuT( ".m_v4Position" ) );
 		}
 		
 		Int Light::m_iType()const
 		{
-			return Int( m_writer, m_name + cuT( ".m_iType" ) );
+			return Int( m_writer, Castor::String( *this ) + cuT( ".m_iType" ) );
 		}
 		
 		Vec3 Light::m_v3Attenuation()const
 		{
-			return Vec3( m_writer, m_name + cuT( ".m_v3Attenuation" ) );
+			return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
 		}
 		
 		Mat4 Light::m_v3Direction()const
 		{
-			return Mat4( m_writer, m_name + cuT( ".m_v3Direction" ) );
+			return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_v3Direction" ) );
 		}
 		
 		Float Light::m_fExponent()const
 		{
-			return Float( m_writer, m_name + cuT( ".m_fExponent" ) );
+			return Float( m_writer, Castor::String( *this ) + cuT( ".m_fExponent" ) );
 		}
 		
 		Float Light::m_fCutOff()const
 		{
-			return Float( m_writer, m_name + cuT( ".m_fCutOff" ) );
+			return Float( m_writer, Castor::String( *this ) + cuT( ".m_fCutOff" ) );
 		}
 	}
 }

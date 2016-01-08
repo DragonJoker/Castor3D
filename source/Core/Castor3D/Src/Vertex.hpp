@@ -51,7 +51,7 @@ namespace Castor3D
 		\brief Loader de Vertex
 		*/
 		class TextLoader
-			: public Castor::Loader< Vertex, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< Vertex, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**

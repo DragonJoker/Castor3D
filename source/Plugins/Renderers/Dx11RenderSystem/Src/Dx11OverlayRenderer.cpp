@@ -110,12 +110,9 @@ ShaderProgramBaseSPtr DxOverlayRenderer::DoCreateProgram( uint32_t p_flags )
 
 	l_strPs += l_strPsMain;
 	l_strPs += PanelPSEnd;
-
-	for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
-	{
-		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL( i ), l_strVs );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL( i ), l_strPs );
-	}
+	eSHADER_MODEL l_model = GetOwner()->GetMaxShaderModel();
+	l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVs );
+	l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
 
 	return l_program;
 }

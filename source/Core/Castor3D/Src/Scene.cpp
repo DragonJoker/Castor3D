@@ -154,22 +154,31 @@ namespace Castor3D
 		if ( l_return )
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Lights" ) );
-			LightPtrIntMapConstIt l_it = p_scene.LightsBegin();
+			auto l_it = p_scene.LightsBegin();
 
 			while ( l_return && l_it != p_scene.LightsEnd() )
 			{
-				switch ( l_it->second->GetLightType() )
+				switch ( l_it->first )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					l_return = DirectionalLight::TextLoader()( *l_it->second->GetDirectionalLight(), p_file );
+					for ( auto l_light : l_it->second )
+					{
+						l_return = DirectionalLight::TextLoader()( *l_light->GetDirectionalLight(), p_file );
+					}
 					break;
 
 				case eLIGHT_TYPE_POINT:
-					l_return = PointLight::TextLoader()( *l_it->second->GetPointLight(), p_file );
+					for ( auto l_light : l_it->second )
+					{
+						l_return = PointLight::TextLoader()( *l_light->GetPointLight(), p_file );
+					}
 					break;
 
 				case eLIGHT_TYPE_SPOT:
-					l_return = SpotLight::TextLoader()( *l_it->second->GetSpotLight(), p_file );
+					for ( auto l_light : l_it->second )
+					{
+						l_return = SpotLight::TextLoader()( *l_light->GetSpotLight(), p_file );
+					}
 					break;
 
 				default:
@@ -242,22 +251,31 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			LightPtrIntMapConstIt l_it = p_obj.LightsBegin();
+			auto l_it = p_obj.LightsBegin();
 
 			while ( l_return && l_it != p_obj.LightsEnd() )
 			{
-				switch ( l_it->second->GetLightType() )
+				switch ( l_it->first )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					l_return = DirectionalLight::BinaryParser( m_path ).Fill( *l_it->second->GetDirectionalLight(), l_chunk );
+					for ( auto l_light : l_it->second )
+					{
+						l_return = DirectionalLight::BinaryParser( m_path ).Fill( *l_light->GetDirectionalLight(), l_chunk );
+					}
 					break;
 
 				case eLIGHT_TYPE_POINT:
-					l_return = PointLight::BinaryParser( m_path ).Fill( *l_it->second->GetPointLight(), l_chunk );
+					for ( auto l_light : l_it->second )
+					{
+						l_return = PointLight::BinaryParser( m_path ).Fill( *l_light->GetPointLight(), l_chunk );
+					}
 					break;
 
 				case eLIGHT_TYPE_SPOT:
-					l_return = SpotLight::BinaryParser( m_path ).Fill( *l_it->second->GetSpotLight(), l_chunk );
+					for ( auto l_light : l_it->second )
+					{
+						l_return = SpotLight::BinaryParser( m_path ).Fill( *l_light->GetSpotLight(), l_chunk );
+					}
 					break;
 
 				default:
@@ -538,12 +556,10 @@ namespace Castor3D
 		m_rootNode = std::make_shared< SceneNode >( *this, cuT( "RootNode" ) );
 		m_rootCameraNode = std::make_shared< SceneNode >( *this, cuT( "CameraRootNode" ) );
 		m_rootObjectNode = std::make_shared< SceneNode >( *this, cuT( "ObjectRootNode" ) );
-		m_alphaDepthState = GetOwner()->GetDepthStencilStateManager().Create( m_name + cuT( "_AlphaDepthState" ) );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 		m_addedNodes.insert( std::make_pair( cuT( "ObjectRootNode" ), m_rootObjectNode ) );
 
-		m_alphaDepthState.lock()->SetDepthMask( eWRITING_MASK_ZERO );
 
 		GetOwner()->PostEvent( MakeInitialiseEvent( *m_pLightsTexture ) );
 	}
@@ -563,18 +579,11 @@ namespace Castor3D
 		}
 
 		m_arrayOverlays.clear();
-		DoRemoveAll( m_addedLights, m_arrayLightsToDelete );
+		RemoveAllLights();
 		DoRemoveAll( m_addedPrimitives, m_arrayPrimitivesToDelete );
 		DoRemoveAll( m_mapBillboardsLists, m_arrayBillboardsToDelete );
 		DoRemoveAll( m_addedCameras, m_arrayCamerasToDelete );
 		DoRemoveAll( m_addedNodes, m_arrayNodesToDelete );
-
-		DepthStencilStateSPtr state = m_alphaDepthState.lock();
-
-		if ( state )
-		{
-			state->Cleanup();
-		}
 
 		if ( m_pBackgroundImage )
 		{
@@ -609,8 +618,6 @@ namespace Castor3D
 		}
 
 		m_rootNode.reset();
-		m_mapLights.clear();
-		m_alphaDepthState.reset();
 
 		GetOwner()->PostEvent( MakeCleanupEvent( *m_pLightsTexture ) );
 	}
@@ -623,7 +630,7 @@ namespace Castor3D
 			{
 				RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 				ContextRPtr l_pContext = l_renderSystem->GetCurrentContext();
-				l_pContext->GetBackgroundDSState()->Apply();
+				l_pContext->GetNoDepthState()->Apply();
 				l_pContext->RenderTextureToCurrentBuffer( p_size, m_pBackgroundImage );
 			}
 		}
@@ -640,65 +647,56 @@ namespace Castor3D
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 		DoUpdateAnimations();
 
-		if ( !m_arraySubmeshesNoAlpha.empty() || !m_arraySubmeshesAlpha.empty() || !m_mapBillboardsLists.empty() )
+		if ( !m_arraySubmeshesNoAlpha.empty() )
 		{
-			if ( !m_arraySubmeshesNoAlpha.empty() )
-			{
-				l_pContext->CullFace( eFACE_BACK );
+			l_pContext->CullFace( eFACE_BACK );
 
+			if ( l_renderSystem->HasInstancing() )
+			{
+				DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesNoAlpha.begin(), m_mapSubmeshesNoAlpha.end() );
+			}
+			else
+			{
+				DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesNoAlpha.begin(), m_arraySubmeshesNoAlpha.end() );
+			}
+		}
+
+		if ( !m_mapSubmeshesAlpha.empty() || !m_arraySubmeshesAlpha.empty() )
+		{
+			if ( l_pContext->IsMultiSampling() )
+			{
 				if ( l_renderSystem->HasInstancing() )
 				{
-					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesNoAlpha.begin(), m_mapSubmeshesNoAlpha.end() );
-				}
-				else
-				{
-					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesNoAlpha.begin(), m_arraySubmeshesNoAlpha.end() );
-				}
-			}
-
-			if ( !m_mapSubmeshesAlpha.empty() || !m_arraySubmeshesAlpha.empty() )
-			{
-				if ( l_pContext->IsMultiSampling() )
-				{
-					if ( l_renderSystem->HasInstancing() )
-					{
-						l_pContext->CullFace( eFACE_FRONT );
-						DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
-						l_pContext->CullFace( eFACE_BACK );
-						DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
-					}
-					else
-					{
-						l_pContext->CullFace( eFACE_FRONT );
-						DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
-						l_pContext->CullFace( eFACE_BACK );
-						DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
-					}
-				}
-				else
-				{
-					DepthStencilStateSPtr state = m_alphaDepthState.lock();
-
-					if ( state )
-					{
-						state->Apply();
-					}
-
-					DoResortAlpha( p_camera, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end(), m_mapSubmeshesAlphaSorted, 1 );
 					l_pContext->CullFace( eFACE_FRONT );
-					DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
+					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
 					l_pContext->CullFace( eFACE_BACK );
-					DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
+					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
+				}
+				else
+				{
+					l_pContext->CullFace( eFACE_FRONT );
+					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
+					l_pContext->CullFace( eFACE_BACK );
+					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
 				}
 			}
-
-			if ( !m_mapBillboardsLists.empty() )
+			else
 			{
+				l_pContext->GetNoDepthWriteState()->Apply();
+				DoResortAlpha( p_camera, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end(), m_mapSubmeshesAlphaSorted, 1 );
 				l_pContext->CullFace( eFACE_FRONT );
-				DoRenderBillboards( p_technique, l_pipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
+				DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
 				l_pContext->CullFace( eFACE_BACK );
-				DoRenderBillboards( p_technique, l_pipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
+				DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
 			}
+		}
+
+		if ( !m_mapBillboardsLists.empty() )
+		{
+			l_pContext->CullFace( eFACE_FRONT );
+			DoRenderBillboards( p_technique, l_pipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
+			l_pContext->CullFace( eFACE_BACK );
+			DoRenderBillboards( p_technique, l_pipeline, m_mapBillboardsLists.begin(), m_mapBillboardsLists.end() );
 		}
 	}
 
@@ -754,12 +752,6 @@ namespace Castor3D
 
 		Logger::LogInfo( StringStream() << cuT( "Scene::CreateList - [" ) << m_name << cuT( "] - NbVertex : " ) << m_nbVertex << cuT( " - NbFaces : " ) << m_nbFaces );
 		DoSortByAlpha();
-		DepthStencilStateSPtr state = m_alphaDepthState.lock();
-
-		if ( state )
-		{
-			state->Initialise();
-		}
 
 		m_changed = false;
 	}
@@ -975,25 +967,13 @@ namespace Castor3D
 		if ( DoAddObject( p_light, m_addedLights, cuT( "Light" ) ) )
 		{
 			auto l_lock = Castor::make_unique_lock( m_mutex );
-			int l_iIndex = 0;
-			bool l_bFound = false;
-			LightPtrIntMapIt l_itMap = m_mapLights.begin();
+			auto l_itMap = m_mapLights.insert( std::make_pair( p_light->GetLightType(), LightsArray() ) ).first;
+			bool l_found = std::binary_search( l_itMap->second.begin(), l_itMap->second.end(), p_light );
 
-			while ( l_itMap != m_mapLights.end() && !l_bFound )
+			if ( !l_found )
 			{
-				if ( l_itMap->first != l_iIndex )
-				{
-					l_bFound = true;
-				}
-				else
-				{
-					l_iIndex++;
-					l_itMap++;
-				}
+				l_itMap->second.push_back( p_light );
 			}
-
-			p_light->SetIndex( l_iIndex );
-			m_mapLights.insert( std::make_pair( l_iIndex, p_light ) );
 		}
 	}
 
@@ -1087,17 +1067,22 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::RemoveLight( LightSPtr p_pLight )
+	void Scene::RemoveLight( LightSPtr p_light )
 	{
-		if ( p_pLight )
+		if ( p_light )
 		{
-			DoRemoveObject( p_pLight, m_addedLights, m_arrayLightsToDelete );
+			DoRemoveObject( p_light, m_addedLights, m_arrayLightsToDelete );
 			auto l_lock = Castor::make_unique_lock( m_mutex );
-			LightPtrIntMapIt l_itMap = m_mapLights.find( p_pLight->GetIndex() );
+			auto l_itMap = m_mapLights.find( p_light->GetLightType() );
 
 			if ( l_itMap != m_mapLights.end() )
 			{
-				m_mapLights.erase( l_itMap );
+				auto l_it = std::find( l_itMap->second.begin(), l_itMap->second.end(), p_light );
+
+				if ( l_it != l_itMap->second.end() )
+				{
+					l_itMap->second.erase( l_it );
+				}
 			}
 		}
 	}
@@ -1347,6 +1332,81 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	void Scene::BindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
+	{
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
+		l_renderSystem->RenderAmbientLight( GetAmbientLight(), p_sceneBuffer );
+
+		OneTextureFrameVariableSPtr l_lights = p_program.FindFrameVariable( ShaderProgramBase::Lights, eSHADER_TYPE_PIXEL );
+
+		if ( l_lights )
+		{
+			l_lights->SetValue( m_pLightsTexture->GetTexture().get() );
+			Point4iFrameVariableSPtr l_lightsCount;
+			p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
+
+			if ( l_lightsCount )
+			{
+				int l_index = 0;
+
+				for ( auto && l_it : m_mapLights )
+				{
+					l_lightsCount->GetValue( 0 )[l_it.first] += l_it.second.size();
+
+					for ( auto l_light : l_it.second )
+					{
+						DoBindLight( l_light, l_index++, p_program );
+					}
+
+					m_bLightsChanged = true;
+				}
+
+				if ( m_bLightsChanged )
+				{
+					m_pLightsTexture->UploadImage( false );
+					m_bLightsChanged = false;
+				}
+
+				m_pLightsTexture->Bind();
+			}
+		}
+	}
+
+	void Scene::UnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
+	{
+		Point4iFrameVariableSPtr l_lightsCount;
+		p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
+
+		if ( l_lightsCount )
+		{
+			m_pLightsTexture->Unbind();
+			int l_index = 0;
+
+			for ( auto && l_it : m_mapLights )
+			{
+				l_lightsCount->GetValue( 0 )[l_it.first] -= l_it.second.size();
+			}
+		}
+	}
+
+	void Scene::BindCamera( FrameVariableBuffer & p_sceneBuffer )
+	{
+		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
+		Camera * l_pCamera = l_renderSystem->GetCurrentCamera();
+
+		if ( l_pCamera )
+		{
+			Point3r l_position = l_pCamera->GetParent()->GetDerivedPosition();
+			Point3rFrameVariableSPtr l_cameraPos;
+			p_sceneBuffer.GetVariable( ShaderProgramBase::CameraPos, l_cameraPos );
+
+			if ( l_cameraPos )
+			{
+				l_cameraPos->SetValue( l_position );
+			}
+		}
 	}
 
 	void Scene::DoDeleteToDelete()
@@ -1629,19 +1689,19 @@ namespace Castor3D
 
 			FrameVariableBufferSPtr l_sceneBuffer = l_pass->GetSceneBuffer();
 
-			if ( l_sceneBuffer )
+			if ( l_sceneBuffer && GetOwner()->GetPerObjectLighting() )
 			{
-				DoBindLights( *l_program, *l_sceneBuffer );
-				DoBindCamera( *l_sceneBuffer );
+				BindLights( *l_program, *l_sceneBuffer );
+				BindCamera( *l_sceneBuffer );
 			}
 
 			l_pass->Render( l_count++, l_uiSize );
 			p_node.m_pSubmesh->Draw( p_eTopology, *l_pass );
 			l_pass->EndRender();
 
-			if ( l_sceneBuffer )
+			if ( l_sceneBuffer && GetOwner()->GetPerObjectLighting() )
 			{
-				DoUnbindLights( *l_program, *l_sceneBuffer );
+				UnbindLights( *l_program, *l_sceneBuffer );
 			}
 		}
 	}
@@ -1702,117 +1762,22 @@ namespace Castor3D
 		ApplyLightColourIntensity( p_light->GetDiffuse(), p_index, l_offset, *m_pLightsData );
 		ApplyLightColourIntensity( p_light->GetSpecular(), p_index, l_offset, *m_pLightsData );
 
-		if ( p_light->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
-		{
-			ApplyLightComponent( p_light->GetDirectionalLight()->GetPositionType(), p_index, l_offset, *m_pLightsData );
-			l_offset += 4;
-		}
-		else if ( p_light->GetLightType() == eLIGHT_TYPE_POINT )
+		ApplyLightComponent( p_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
+
+		if ( p_light->GetLightType() == eLIGHT_TYPE_POINT )
 		{
 			PointLightSPtr l_light = p_light->GetPointLight();
-			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
 			l_offset += 4; // To match the matrix for spot lights
 			ApplyLightComponent( l_light->GetAttenuation(), p_index, l_offset, *m_pLightsData );
 		}
-		else
+		else if ( p_light->GetLightType() == eLIGHT_TYPE_SPOT )
 		{
 			SpotLightSPtr l_light = p_light->GetSpotLight();
-			ApplyLightComponent( l_light->GetPositionType(), p_index, l_offset, *m_pLightsData );
 			Matrix4x4r l_orientation;
 			p_light->GetParent()->GetOrientation().to_matrix( l_orientation );
 			ApplyLightComponent( l_orientation, p_index, l_offset, *m_pLightsData );
 			ApplyLightComponent( l_light->GetAttenuation(), p_index, l_offset, *m_pLightsData );
 			ApplyLightComponent( l_light->GetExponent(), l_light->GetCutOff(), p_index, l_offset, *m_pLightsData );
-		}
-	}
-
-	void Scene::DoUnbindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program )
-	{
-	}
-
-	void Scene::DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
-	{
-		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
-		l_renderSystem->RenderAmbientLight( GetAmbientLight(), p_sceneBuffer );
-
-		OneTextureFrameVariableSPtr l_lights = p_program.FindFrameVariable( ShaderProgramBase::Lights, eSHADER_TYPE_PIXEL );
-
-		if ( l_lights )
-		{
-			l_lights->SetValue( m_pLightsTexture->GetTexture().get() );
-		}
-
-		Point4iFrameVariableSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
-
-		if ( l_lightsCount )
-		{
-			int l_index = 0;
-
-			for ( auto && l_it : m_addedLights )
-			{
-				DoBindLight( l_it.second, l_index, p_program );
-				l_lightsCount->GetValue( 0 )[l_it.second->GetLightType()]++;
-			}
-		}
-		else
-		{
-			for ( auto && l_it : m_addedLights )
-			{
-				l_it.second->Render();
-			}
-		}
-
-		if ( m_bLightsChanged )
-		{
-			m_pLightsTexture->UploadImage( false );
-			m_bLightsChanged = false;
-		}
-
-		m_pLightsTexture->Bind();
-	}
-
-	void Scene::DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer )
-	{
-		m_pLightsTexture->Unbind();
-
-		Point4iFrameVariableSPtr l_lightsCount;
-		p_sceneBuffer.GetVariable( ShaderProgramBase::LightsCount, l_lightsCount );
-
-		if ( l_lightsCount )
-		{
-			int l_index = 0;
-
-			for ( auto && l_it : m_addedLights )
-			{
-				DoUnbindLight( l_it.second, l_index, p_program );
-				l_lightsCount->GetValue( 0 )[l_it.second->GetLightType()]--;
-			}
-		}
-		else
-		{
-			for ( auto && l_it : m_addedLights )
-			{
-				l_it.second->EndRender();
-			}
-		}
-	}
-
-	void Scene::DoBindCamera( FrameVariableBuffer & p_sceneBuffer )
-	{
-		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
-		Camera * l_pCamera = l_renderSystem->GetCurrentCamera();
-
-		if ( l_pCamera )
-		{
-			Point3r l_position = l_pCamera->GetParent()->GetDerivedPosition();
-			Point3rFrameVariableSPtr l_cameraPos;
-			p_sceneBuffer.GetVariable( ShaderProgramBase::CameraPos, l_cameraPos );
-
-			if ( l_cameraPos )
-			{
-				l_cameraPos->SetValue( l_position );
-			}
 		}
 	}
 }

@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Dx11Render
 {
 	class DxVertexBuffer
-		:	public DxBufferObject< uint8_t, ID3D11Buffer >, public Castor::NonCopyable
+		:	public DxBufferObject< uint8_t, ID3D11Buffer >
 	{
 	public:
 		DxVertexBuffer( DxRenderSystem & p_renderSystem, Castor3D::BufferDeclaration const & p_declaration, HardwareBufferPtr p_buffer );

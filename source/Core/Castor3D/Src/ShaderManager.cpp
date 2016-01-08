@@ -75,11 +75,9 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
-				{
-					l_return->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL( i ), l_return->GetVertexShaderSource( p_uiProgramFlags ) );
-					l_return->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL( i ), p_technique.GetPixelShaderSource( p_uiTextureFlags ) );
-				}
+				eSHADER_MODEL l_model = GetOwner()->GetRenderSystem()->GetMaxShaderModel();
+				l_return->SetSource( eSHADER_TYPE_VERTEX, l_model, l_return->GetVertexShaderSource( p_uiProgramFlags ) );
+				l_return->SetSource( eSHADER_TYPE_PIXEL, l_model, p_technique.GetPixelShaderSource( p_uiTextureFlags ) );
 
 				CreateTextureVariables( *l_return, p_uiTextureFlags );
 				auto l_matrixBuffer = CreateMatrixBuffer( *l_return, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_PIXEL );

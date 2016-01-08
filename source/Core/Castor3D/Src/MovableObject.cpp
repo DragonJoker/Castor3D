@@ -8,7 +8,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MovableObject::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< MovableObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< MovableObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -21,7 +21,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	MovableObject::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< MovableObject >( p_path )
+		: Castor3D::BinaryParser< MovableObject >( p_path )
 	{
 	}
 
@@ -80,16 +80,18 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	MovableObject::MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type )
-		:	m_type( p_type )
-		,	m_pScene( p_scene )
+		: Animable( *p_scene->GetOwner() )
+		, m_type( p_type )
+		, m_pScene( p_scene )
 	{
 	}
 
 	MovableObject::MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, String const & p_name, eMOVABLE_TYPE p_type )
-		:	m_name( p_name )
-		,	m_pSceneNode( p_sn )
-		,	m_type( p_type )
-		,	m_pScene( p_scene )
+		: Animable( *p_scene->GetOwner() )
+		, m_name( p_name )
+		, m_pSceneNode( p_sn )
+		, m_type( p_type )
+		, m_pScene( p_scene )
 	{
 	}
 
@@ -108,6 +110,12 @@ namespace Castor3D
 
 		if ( l_node )
 		{
+			if ( m_notifyIndex )
+			{
+				l_node->UnregisterObject( m_notifyIndex );
+				m_notifyIndex = 0;
+			}
+
 			l_node->DetachObject( shared_from_this() );
 			m_pSceneNode.reset();
 		}

@@ -24,33 +24,76 @@ namespace GlRender
 {
 	namespace GLSL
 	{
+		struct FragmentInput
+		{
+			InParam< Vec3 > m_v3Vertex;
+			InParam< Vec3 > m_v3Normal;
+			InParam< Vec3 > m_v3Tangent;
+			InParam< Vec3 > m_v3Bitangent;
+		};
+
+		struct OutputComponents
+		{
+			InOutParam< Vec3 > m_v3Ambient;
+			InOutParam< Vec3 > m_v3Diffuse;
+			InOutParam< Vec3 > m_v3Specular;
+		};
+
+		C3D_Gl_API Castor::String ParamToString( Castor::String & p_sep, FragmentInput const & p_value );
+		C3D_Gl_API Castor::String ParamToString( Castor::String & p_sep, OutputComponents const & p_value );
+
+		C3D_Gl_API Castor::String ToString( FragmentInput const & p_value );
+		C3D_Gl_API Castor::String ToString( OutputComponents const & p_value );
+
 		class LightingModel
 		{
 		public:
-			virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int const & i,
-									   Vec3 & p_v3MapSpecular, Mat4 & c3d_mtxModelView, Vec3 & p_v3MapMormal,
-									   Vec4 & c3d_v4MatAmbient, Vec4 & c3d_v4MatDiffuse, Vec4 & c3d_v4MatSpecular,
-									   Vec3 & p_v3Position, Vec3 & p_v3Normal, Vec3 & p_v3Eye, Float & p_fShininess,
-									   Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
-									   Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular ) = 0;
-			// Common ones
-			C3D_Gl_API void Declare_Light( GlslWriter & p_writer );
-			C3D_Gl_API void Declare_GetLight( GlslWriter & p_writer );
+			C3D_Gl_API LightingModel( uint32_t p_flags, GlslWriter & p_writer );
+			C3D_Gl_API void DeclareModel();
 			// Calls
 			C3D_Gl_API Light GetLight( Type const & p_value );
-			// Main Computation
+			C3D_Gl_API void ComputeDirectionalLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+													 FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+
+			C3D_Gl_API void ComputePointLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+											   FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+
+			C3D_Gl_API void ComputeSpotLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+											  FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+
+		protected:
+			C3D_Gl_API void Declare_Light();
+			C3D_Gl_API void Declare_GetLight();
+
+			virtual void DoDeclareModel() = 0;
+			virtual void Declare_ComputeDirectionalLight() = 0;
+			virtual void Declare_ComputePointLight() = 0;
+			virtual void Declare_ComputeSpotLight() = 0;
+
+		protected:
+			uint32_t m_flags;
+			GlslWriter & m_writer;
 		};
 
-		class BlinnPhongLightingModel
+		class PhongLightingModel
 			: public LightingModel
 		{
 		public:
-			C3D_Gl_API virtual void WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int const & i,
-												  Vec3 & p_v3MapSpecular, Mat4 & c3d_mtxModelView, Vec3 & p_v3MapMormal,
-												  Vec4 & c3d_v4MatAmbient, Vec4 & c3d_v4MatDiffuse, Vec4 & c3d_v4MatSpecular,
-												  Vec3 & p_v3Position, Vec3 & p_v3Normal, Vec3 & p_v3Eye, Float & p_fShininess,
-												  Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
-												  Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular );
+			C3D_Gl_API PhongLightingModel( uint32_t p_flags, GlslWriter & p_writer );
+			C3D_Gl_API static std::unique_ptr< LightingModel > Create( uint32_t p_flags, GlslWriter & p_writer );
+
+		protected:
+			virtual void DoDeclareModel();
+			virtual void Declare_ComputeDirectionalLight();
+			virtual void Declare_ComputePointLight();
+			virtual void Declare_ComputeSpotLight();
+
+			void DoComputeLight( Light const & p_light, Vec3 const & p_worldEye, Vec3 const & p_direction, Float const & p_shininess,
+								 FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+			void DoDeclare_ComputeLight();
+
+		public:
+			C3D_Gl_API static const Castor::String Name;
 		};
 	}
 }

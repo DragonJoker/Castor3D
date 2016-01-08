@@ -227,7 +227,7 @@ namespace Castor3D
 			{
 				if ( sizeof( T ) * N >= l_it->second.size() )
 				{
-					std::memcpy( &p_tParam, &l_it->second[0], l_it->second.size() );
+					std::memcpy( p_tParam, &l_it->second[0], l_it->second.size() );
 					l_return = true;
 				}
 			}
@@ -248,7 +248,7 @@ namespace Castor3D
 		 *\param[in]	p_count	La nombre disponible de valeurs
 		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
 		 */
-		template< typename T, uint32_t N >
+		template< typename T >
 		inline bool Get( Castor::String const & p_name, T * p_tParam, uint32_t p_count )const
 		{
 			bool l_return = false;
@@ -258,7 +258,7 @@ namespace Castor3D
 			{
 				if ( sizeof( T ) * p_count >= l_it->second.size() )
 				{
-					std::memcpy( &p_tParam, &l_it->second[0], l_it->second.size() );
+					std::memcpy( p_tParam, &l_it->second[0], l_it->second.size() );
 					l_return = true;
 				}
 			}

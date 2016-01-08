@@ -355,6 +355,7 @@ namespace Castor
 	DECLARE_VECTOR( Path, Path );
 	DECLARE_VECTOR( ParserParameterBaseSPtr, ParserParameter );
 	DECLARE_MAP( String, uint32_t, UIntStr );
+	DECLARE_MAP( String, uint64_t, UInt64Str );
 	DECLARE_MAP( String, bool, BoolStr );
 	DECLARE_MAP( String, String, StrStr );
 	DECLARE_SET( String, Str );

@@ -271,7 +271,7 @@ namespace Castor3D
 		if ( p_object )
 		{
 			p_object->Detach();
-			m_objects[p_object->GetName()] = p_object;
+			m_objects.push_back( p_object );
 			p_object->AttachTo( shared_from_this() );
 		}
 	}
@@ -280,7 +280,10 @@ namespace Castor3D
 	{
 		if ( p_object )
 		{
-			auto l_it = m_objects.find( p_object->GetName() );
+			auto l_it = std::find_if( m_objects.begin(), m_objects.end(), [&p_object]( MovableObjectWPtr l_obj )
+			{
+				return l_obj.lock()->GetName() == p_object->GetName();
+			} );
 
 			if ( l_it != m_objects.end() )
 			{
@@ -461,7 +464,7 @@ namespace Castor3D
 	{
 		for ( auto && l_it : m_objects )
 		{
-			MovableObjectSPtr l_current = l_it.second.lock();
+			MovableObjectSPtr l_current = l_it.lock();
 
 			if ( l_current && l_current->GetType() == eMOVABLE_TYPE_GEOMETRY )
 			{
@@ -487,7 +490,7 @@ namespace Castor3D
 
 		for ( auto && l_it : m_objects )
 		{
-			MovableObjectSPtr l_current = l_it.second.lock();
+			MovableObjectSPtr l_current = l_it.lock();
 
 			if ( l_current && l_current->GetType() == eMOVABLE_TYPE_GEOMETRY )
 			{
@@ -542,6 +545,18 @@ namespace Castor3D
 		return l_return;
 	}
 
+	Matrix4x4r const & SceneNode::GetTransformationMatrix()
+	{
+		DoComputeMatrix();
+		return m_transform;
+	}
+
+	Matrix4x4r const & SceneNode::GetDerivedTransformationMatrix()
+	{
+		DoComputeMatrix();
+		return m_derivedTransform;
+	}
+
 	void SceneNode::DoComputeMatrix()
 	{
 		if ( m_mtxChanged )
@@ -558,7 +573,7 @@ namespace Castor3D
 
 			if ( l_parent )
 			{
-				m_derivedTransform = m_transform * l_parent->GetDerivedTransformationMatrix();
+				m_derivedTransform = l_parent->GetDerivedTransformationMatrix() * m_transform;
 			}
 			else
 			{
@@ -566,6 +581,7 @@ namespace Castor3D
 			}
 
 			m_derivedMtxChanged = false;
+			m_signalChanged();
 		}
 	}
 

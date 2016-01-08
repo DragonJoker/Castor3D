@@ -268,6 +268,10 @@ namespace Castor
 				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT > >( p_name, *reinterpret_cast< UIntStrMap * >( va_arg( l_valist, void * ) ) ) );
 				break;
 
+			case ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT:
+				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT > >( p_name, *reinterpret_cast< UInt64StrMap * >( va_arg( l_valist, void * ) ) ) );
+				break;
+
 			case ePARAMETER_TYPE_BOOL:
 				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_BOOL > >( p_name ) );
 				break;
@@ -370,6 +374,10 @@ namespace Castor
 
 			case ePARAMETER_TYPE_COLOUR:
 				l_params.push_back( std::make_shared< ParserParameter< ePARAMETER_TYPE_COLOUR > >( p_name ) );
+				break;
+
+			default:
+				CASTOR_EXCEPTION( "Unsupported parameter type" );
 				break;
 			}
 		}

@@ -15,19 +15,25 @@ namespace Castor3D
 #if defined( _MSC_VER)
 #	if defined( _WIN64 )
 #		if ( _MSC_VER < 1700 )
-	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@EAVRenderTarget@4@ABVParameters@4@@Z" );
 #		else
-	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@EAVRenderTarget@4@ABVParameters@4@@Z" );
 #		endif
 #	else
 #		if ( _MSC_VER < 1700 )
-	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PAVRenderSystem@Castor3D@@AAVRenderTarget@4@ABVParameters@4@@Z" );
 #		else
-	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PAVRenderSystem@Castor3D@@AAVRenderTarget@4@ABVParameters@4@@Z" );
 #		endif
 #	endif
+#	if CASTOR_USE_UNICODE
+	static const String GetPostEffectTypeFunctionABIName = cuT( "?GetPostEffectType@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@XZ" );
+#	else
+	static const String GetPostEffectTypeFunctionABIName = cuT( "?GetPostEffectType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
+#	endif
 #elif defined( __GNUG__)
-	static const String CreateEffectFunctionABIName = cuT( "_Z12CreateEffectPN8Castor3D12RenderSystemE" );
+	static const String CreateEffectFunctionABIName = cuT( "_Z12CreateEffectPN8Castor3D12RenderSystemEPN8Castor3D14RenderTargetE" );
+	static const String GetPostEffectTypeFunctionABIName = cuT( "_Z17GetPostEffectTypev" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
@@ -38,6 +44,13 @@ namespace Castor3D
 		if ( !p_pLibrary->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
 		{
 			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateEffect plugin function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
+		}
+
+		if ( !p_pLibrary->GetFunction( m_pfnGetPostEffectType, GetPostEffectTypeFunctionABIName ) )
+		{
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetPostEffectType plugin function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
@@ -56,15 +69,27 @@ namespace Castor3D
 		}
 	}
 
-	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_renderSystem )
+	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params )
 	{
 		PostEffectSPtr l_return;
 
 		if ( m_pfnCreateEffect )
 		{
-			l_return = m_pfnCreateEffect( p_renderSystem );
+			l_return = m_pfnCreateEffect( p_renderSystem, p_renderTarget, p_params );
 		}
 
 		return l_return;
+	}
+
+	String PostFxPlugin::GetPostEffectType()
+	{
+		String l_strReturn;
+
+		if ( m_pfnGetPostEffectType )
+		{
+			l_strReturn = m_pfnGetPostEffectType();
+		}
+
+		return l_strReturn;
 	}
 }

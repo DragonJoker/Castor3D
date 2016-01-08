@@ -79,7 +79,6 @@ namespace Castor3D
 	*/
 	class Camera
 		: public MovableObject
-		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!

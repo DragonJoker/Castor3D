@@ -32,6 +32,8 @@ using namespace Castor;
 namespace Dx11Render
 {
 	static const D3D_FEATURE_LEVEL D3D_FEATURE_LEVEL_11_1 = D3D_FEATURE_LEVEL( 0xb100 );
+	static const D3D_FEATURE_LEVEL D3D_FEATURE_LEVEL_12_0 = D3D_FEATURE_LEVEL( 0xc000 );
+	static const D3D_FEATURE_LEVEL D3D_FEATURE_LEVEL_12_1 = D3D_FEATURE_LEVEL( 0xc100 );
 
 	DxRenderSystem::DxRenderSystem( Engine & p_engine )
 		: RenderSystem( p_engine, eRENDERER_TYPE_DIRECT3D )
@@ -53,12 +55,12 @@ namespace Dx11Render
 
 	void DxRenderSystem::CheckShaderSupport()
 	{
-		m_useShader[eSHADER_TYPE_VERTEX] = true;
-		m_useShader[eSHADER_TYPE_PIXEL] = true;
-		m_useShader[eSHADER_TYPE_GEOMETRY] = true;
-		m_useShader[eSHADER_TYPE_HULL] = true;
-		m_useShader[eSHADER_TYPE_DOMAIN] = true;
-		m_useShader[eSHADER_TYPE_COMPUTE] = false;
+		m_useShader[eSHADER_TYPE_VERTEX] = m_featureLevel >= D3D_FEATURE_LEVEL_9_1;
+		m_useShader[eSHADER_TYPE_PIXEL] = m_featureLevel >= D3D_FEATURE_LEVEL_9_1;
+		m_useShader[eSHADER_TYPE_GEOMETRY] = m_featureLevel >= D3D_FEATURE_LEVEL_10_0;
+		m_useShader[eSHADER_TYPE_HULL] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
+		m_useShader[eSHADER_TYPE_DOMAIN] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
+		m_useShader[eSHADER_TYPE_COMPUTE] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
 	}
 
 	bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc )
@@ -76,6 +78,8 @@ namespace Dx11Render
 		if ( !m_pDevice )
 		{
 			std::vector< D3D_FEATURE_LEVEL > arrayD3dFeatureLevelsRequested;
+			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_12_1 );
+			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_12_0 );
 			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_11_1 );
 			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_11_0 );
 			arrayD3dFeatureLevelsRequested.push_back( D3D_FEATURE_LEVEL_10_1 );
@@ -203,33 +207,31 @@ namespace Dx11Render
 			}
 			else if ( !IsInitialised() )
 			{
+				switch ( m_featureLevel )
+				{
+				case D3D_FEATURE_LEVEL_9_1:
+				case D3D_FEATURE_LEVEL_9_2:
+				case D3D_FEATURE_LEVEL_9_3:
+					m_maxShaderModel = eSHADER_MODEL_2;
+					break;
+				case D3D_FEATURE_LEVEL_10_0:
+				case D3D_FEATURE_LEVEL_10_1:
+					m_maxShaderModel = eSHADER_MODEL_3;
+					break;
+				case D3D_FEATURE_LEVEL_11_0:
+					m_maxShaderModel = eSHADER_MODEL_4;
+					break;
+				case D3D_FEATURE_LEVEL_11_1:
+					m_maxShaderModel = eSHADER_MODEL_5;
+				default:
+					break;
+				}
+
 				Initialise();
 				GetOwner()->GetMaterialManager().Initialise();
 			}
 
 			l_factory->Release();
-		}
-
-		return l_return;
-	}
-
-	bool DxRenderSystem::CheckSupport( eSHADER_MODEL p_eProfile )
-	{
-		bool l_return = false;
-
-		switch ( p_eProfile )
-		{
-		case eSHADER_MODEL_1:
-		case eSHADER_MODEL_2:
-		case eSHADER_MODEL_3:
-		case eSHADER_MODEL_4:
-		case eSHADER_MODEL_5:
-			l_return = true;
-			break;
-
-		default:
-			l_return = false;
-			break;
 		}
 
 		return l_return;
@@ -331,6 +333,8 @@ namespace Dx11Render
 
 		if ( StrFeatureLevel.empty() )
 		{
+			StrFeatureLevel[D3D_FEATURE_LEVEL_12_1] = cuT( "Direct3D 12.1" );
+			StrFeatureLevel[D3D_FEATURE_LEVEL_12_0] = cuT( "Direct3D 12.0" );
 			StrFeatureLevel[D3D_FEATURE_LEVEL_11_1] = cuT( "Direct3D 11.1" );
 			StrFeatureLevel[D3D_FEATURE_LEVEL_11_0] = cuT( "Direct3D 11.0" );
 			StrFeatureLevel[D3D_FEATURE_LEVEL_10_1] = cuT( "Direct3D 10.1" );

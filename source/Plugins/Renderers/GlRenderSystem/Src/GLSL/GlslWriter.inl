@@ -56,6 +56,12 @@ namespace GlRender
 				return l_return;
 			}
 
+			template< typename Return, typename OptType, typename ... Params >
+			inline Optional< Return > WriteOptionalFunctionCall( GlslWriter * p_writer, Castor::String const & p_name, Optional< OptType > const & p_param, Params const & ... p_params )
+			{
+				return Optional< Return >( WriteFunctionCall< Return >( p_writer, p_name, p_param, p_params... ), p_param.IsEnabled() );
+			}
+
 			//***********************************************************************************************
 
 			template< typename Return, typename Param, typename ... Params >
@@ -70,14 +76,13 @@ namespace GlRender
 			template< typename Return, typename Param >
 			inline void WriteFunctionHeaderRec( Castor::String & p_separator, Return & p_return, Param && p_last )
 			{
-				p_return.m_value << p_separator << p_last.m_type << p_last.m_name << cuT( " )" );
+				p_return.m_value << ParamToString( p_separator, p_last ) << cuT( " )" );
 			}
 
 			template< typename Return, typename Param, typename ... Params >
 			inline void WriteFunctionHeaderRec( Castor::String & p_separator, Return & p_return, Param && p_current, Params && ... p_params )
 			{
-				p_return.m_value << p_separator << p_current.m_type << p_current.m_name;
-				p_separator = cuT( ", " );
+				p_return.m_value << ParamToString( p_separator, p_current );
 				WriteFunctionHeaderRec( p_separator, p_return, std::forward< Params >( p_params )... );
 			}
 
@@ -148,9 +153,19 @@ namespace GlRender
 
 		//***********************************************************************************************
 
+		template< typename T >
+		void GlslWriter::WriteAssign( Type const & p_lhs, Optional< T > const & p_rhs )
+		{
+			if ( p_rhs.IsEnabled() )
+			{
+				m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			}
+		}
+
 		template< typename RetType, typename FuncType, typename ... Params >
 		inline void GlslWriter::ImplementFunction( Castor::String const & p_name, FuncType p_function, Params && ... p_params )
 		{
+			m_stream << std::endl;
 			WriteFunctionHeader< RetType >( *this, p_name, p_params... );
 			{
 				IndentBlock l_block( *this );
@@ -168,8 +183,16 @@ namespace GlRender
 		template< typename ExprType >
 		ExprType GlslWriter::Paren( ExprType const p_expr )
 		{
-			ExprType l_return( p_expr.m_writer );
+			ExprType l_return( this );
 			l_return.m_value << cuT( "( " ) << Castor::String( p_expr ) << cuT( " )" );
+			return l_return;
+		}
+
+		template< typename ExprType >
+		ExprType GlslWriter::Ternary( Type const & p_condition, Type const & p_left, Type const & p_right )
+		{
+			ExprType l_return( this );
+			l_return.m_value << ToString( p_condition ) << cuT( " ? " ) << ToString( p_left ) << cuT( " : " ) << ToString( p_right );
 			return l_return;
 		}
 
@@ -232,13 +255,6 @@ namespace GlRender
 		}
 
 		template< typename T >
-		inline T GlslWriter::GetLayout( Castor::String const & p_name )
-		{
-			*this << Layout() << Out() << T().m_type << p_name << cuT( ";" ) << Endl();
-			return T( this, p_name );
-		}
-
-		template< typename T >
 		inline T GlslWriter::GetUniform( Castor::String const & p_name )
 		{
 			*this << Uniform() << T().m_type << p_name << cuT( ";" ) << Endl();
@@ -252,7 +268,7 @@ namespace GlRender
 
 			if ( m_keywords->HasNamedFragData() )
 			{
-				*this << T().m_type << p_name << cuT( ";" ) << Endl();
+				*this << Layout{ int( p_index ) } << Out() << T().m_type << p_name << cuT( ";" ) << Endl();
 				l_name = p_name;
 			}
 			else
@@ -280,7 +296,7 @@ namespace GlRender
 		template< typename T >
 		inline Array< T > GlslWriter::GetIn( Castor::String const & p_name, uint32_t p_dimension )
 		{
-			*this << Out() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
+			*this << In() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 			return Array< T >( this, p_name, p_dimension );
 		}
 
@@ -312,17 +328,93 @@ namespace GlRender
 		}
 
 		template< typename T >
-		inline Array< T > GlslWriter::GetLayout( Castor::String const & p_name, uint32_t p_dimension )
-		{
-			*this << Layout() << Out() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
-			return Array< T >( this, p_name, p_dimension );
-		}
-
-		template< typename T >
 		inline Array< T > GlslWriter::GetUniform( Castor::String const & p_name, uint32_t p_dimension )
 		{
 			*this << Uniform() << T().m_type << p_name << cuT( "[" ) << p_dimension << cuT( "];" ) << Endl();
 			return Array< T >( this, p_name, p_dimension );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetAttribute( Castor::String const & p_name, bool p_enabled )
+		{
+			if ( p_enabled )
+			{
+				*this << Attribute() << T().m_type << p_name << cuT( ";" ) << Endl();
+			}
+
+			return Optional< T >( this, p_name, p_enabled );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetOut( Castor::String const & p_name, bool p_enabled )
+		{
+			if ( p_enabled )
+			{
+				*this << Out() << T().m_type << p_name << cuT( ";" ) << Endl();
+			}
+
+			return Optional< T >( this, p_name, p_enabled );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetIn( Castor::String const & p_name, bool p_enabled )
+		{
+			if ( p_enabled )
+			{
+				*this << In() << T().m_type << p_name << cuT( ";" ) << Endl();
+			}
+
+			return Optional< T >( this, p_name, p_enabled );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetLocale( Castor::String const & p_name, bool p_enabled )
+		{
+			if ( p_enabled )
+			{
+				*this << T().m_type << p_name << cuT( ";" ) << Endl();
+			}
+
+			return Optional< T >( this, p_name, p_enabled );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetLocale( Castor::String const & p_name, bool p_enabled, Expr const & p_rhs )
+		{
+			if ( p_enabled )
+			{
+				m_stream << T().m_type << p_name << cuT( " = " ) << p_rhs.m_value.rdbuf() << cuT( ";" ) << std::endl;
+			}
+
+			return Optional< T >( this, p_name, p_enabled );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetLocale( Castor::String const & p_name, bool p_enabled, Type const & p_rhs )
+		{
+			if ( p_enabled )
+			{
+				m_stream << T().m_type << p_name << cuT( " = " ) << Castor::String( p_rhs ) << cuT( ";" ) << std::endl;
+			}
+
+			return Optional< T >( this, p_name, p_enabled );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetBuiltin( Castor::String const & p_name, bool p_enabled )
+		{
+			return Optional< T >( this, p_name, p_enabled );
+		}
+
+		template< typename T >
+		inline Optional< T > GlslWriter::GetUniform( Castor::String const & p_name, bool p_enabled )
+		{
+			if ( p_enabled )
+			{
+				*this << Uniform() << T().m_type << p_name << cuT( ";" ) << Endl();
+			}
+
+			return Optional< T >( this, p_name, p_enabled );
 		}
 	}
 }

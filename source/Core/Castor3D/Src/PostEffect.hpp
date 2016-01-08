@@ -27,64 +27,66 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date		20/11/2012
 	\~english
-	\brief		Post render effect base class
-	\remark		A post render effect is an effect applied after 3D rendering and before 2D rendering
-				<br />Post render effects are applied in a cumulative way
+	\brief		Post render effect base class.
+	\remark		A post render effect is an effect applied after 3D rendering and before 2D rendering.
+				<br />Post render effects are applied in a cumulative way.
 	\~french
-	\brief		Classe de base d'effet post rendu
-	\remark		Une effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D
-				<br />Les effets post rendu sont appliqués de manière cumulative
+	\brief		Classe de base d'effet post rendu.
+	\remark		Une effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D.
+				<br />Les effets post rendu sont appliqués de manière cumulative.
 	*/
 	class PostEffect
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The render system
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_renderTarget	The render target to which is attached this effect.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	Le render system
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_renderTarget	La cible de rendu à laquelle est affectée cet effet.
 		 */
-		C3D_API PostEffect( RenderSystem * p_renderSystem );
+		C3D_API PostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~PostEffect();
 		/**
 		 *\~english
-		 *\brief		Initialisation function
-		 *\return		\p true if ok
+		 *\brief		Initialisation function.
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\return		\p true if ok
+		 *\brief		Fonction d'initialisation.
+		 *\return		\p true if ok.
 		 */
 		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
-		 *\brief		Cleanup function
+		 *\brief		Cleanup function.
 		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\brief		Fonction de nettoyage.
 		 */
 		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render function, applies the effect to a render target
-		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\return		\p true if ok
+		 *\brief		Render function, applies the effect to its render target.
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction de rendu, applique l'effet sur une render target
-		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de rendu, applique l'effet sur sa render target.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Apply( RenderTarget * p_pRenderTarget ) = 0;
+		C3D_API virtual bool Apply() = 0;
 
 	protected:
-		//!\~english The	render system	\~french Le render system
-		RenderSystem *	m_renderSystem;
+		//!\~english The render system.	\~french Le render system.
+		RenderSystem * m_renderSystem;
+		//!\~english The render target to which this effect is attached.	\~french La cible de rendu à laquelle est attachée cet effet.
+		RenderTarget & m_renderTarget;
 	};
 }
 

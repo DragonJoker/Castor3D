@@ -39,6 +39,7 @@ namespace Castor
 	*/
 	template< class T, eFILE_TYPE FT, class TFile >
 	class Loader
+		: public Castor::NonCopyable
 	{
 	public:
 		/**

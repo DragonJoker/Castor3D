@@ -94,6 +94,30 @@ namespace GlRender
 			return *this;
 		}
 
+		Type & Type::operator+=( Optional< Type > const & p_type )
+		{
+			*m_writer << m_name << cuT( " += " ) << String( p_type ) << cuT( ";" ) << Endl();
+			return *this;
+		}
+
+		Type & Type::operator-=( Optional< Type > const & p_type )
+		{
+			*m_writer << m_name << cuT( " -= " ) << String( p_type ) << cuT( ";" ) << Endl();
+			return *this;
+		}
+
+		Type & Type::operator*=( Optional< Type > const & p_type )
+		{
+			*m_writer << m_name << cuT( " *= " ) << String( p_type ) << cuT( ";" ) << Endl();
+			return *this;
+		}
+
+		Type & Type::operator/=( Optional< Type > const & p_type )
+		{
+			*m_writer << m_name << cuT( " /= " ) << String( p_type ) << cuT( ";" ) << Endl();
+			return *this;
+		}
+
 		Type & Type::operator+=( float p_type )
 		{
 			*m_writer << m_name << cuT( " += " ) << string::to_string( p_type ) << cuT( ";" ) << Endl();
@@ -172,6 +196,97 @@ namespace GlRender
 			return l_return;
 		}
 
+		Optional< Type > operator-( Optional< Type > const & p_value )
+		{
+			Type l_return( p_value.m_type, p_value.m_writer );
+			l_return.m_value << cuT( "-( " ) + String( p_value ) << cuT( " )" );
+			return Optional< Type >( l_return, p_value.IsEnabled() );
+		}
+
+		Optional< Type > operator+( Optional< Type > const & p_a, Type const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " + " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() );
+		}
+
+		Optional< Type > operator-( Optional< Type > const & p_a, Type const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " - " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() );
+		}
+
+		Optional< Type > operator*( Optional< Type > const & p_a, Type const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() );
+		}
+
+		Optional< Type > operator/( Optional< Type > const & p_a, Type const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " / " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() );
+		}
+
+		Optional< Type > operator+( Type const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " + " ) << String( p_b );
+			return Optional< Type >( l_return, p_b.IsEnabled() );
+		}
+
+		Optional< Type > operator-( Type const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " - " ) << String( p_b );
+			return Optional< Type >( l_return, p_b.IsEnabled() );
+		}
+
+		Optional< Type > operator*( Type const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
+			return Optional< Type >( l_return, p_b.IsEnabled() );
+		}
+
+		Optional< Type > operator/( Type const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " / " ) << String( p_b );
+			return Optional< Type >( l_return, p_b.IsEnabled() );
+		}
+
+		Optional< Type > operator+( Optional< Type > const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " + " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() && p_b.IsEnabled() );
+		}
+
+		Optional< Type > operator-( Optional< Type > const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " - " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() && p_b.IsEnabled() );
+		}
+
+		Optional< Type > operator*( Optional< Type > const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " * " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() && p_b.IsEnabled() );
+		}
+
+		Optional< Type > operator/( Optional< Type > const & p_a, Optional< Type > const & p_b )
+		{
+			Type l_return( p_a.m_type, p_a.m_writer );
+			l_return.m_value << String( p_a ) << cuT( " / " ) << String( p_b );
+			return Optional< Type >( l_return, p_a.IsEnabled() && p_b.IsEnabled() );
+		}
+
 		Type operator+( Type const & p_a, float p_b )
 		{
 			Type l_return( p_a.m_type, p_a.m_writer );
@@ -231,6 +346,14 @@ namespace GlRender
 		String ToString( Type const & p_value )
 		{
 			return String( p_value );
+		}
+
+		String ParamToString( Castor::String & p_sep, Type const & p_value )
+		{
+			StringStream l_stream;
+			l_stream << p_sep << p_value.m_type << p_value.m_name;
+			p_sep = cuT( ",\n\t" );
+			return String( l_stream.str() );
 		}
 
 		//*****************************************************************************************

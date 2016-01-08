@@ -5,7 +5,6 @@
 #include <RenderSystem.hpp>
 
 #include <Logger.hpp>
-#include <StreamPrefixManipulators.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
@@ -28,12 +27,12 @@ namespace GlRender
 	{
 	}
 
-	void GlShaderObject::CreateProgram()
+	void GlShaderObject::Create()
 	{
 		ObjectType::Create();
 	}
 
-	void GlShaderObject::DestroyProgram()
+	void GlShaderObject::Destroy()
 	{
 		Detach();
 
@@ -41,26 +40,6 @@ namespace GlRender
 		{
 			ObjectType::Destroy();
 			m_status = eSHADER_STATUS_NOTCOMPILED;
-		}
-	}
-
-	void GlShaderObject::RetrieveCompilerLog( String & p_compilerLog )
-	{
-		int l_infologLength = 0;
-		int l_charsWritten  = 0;
-		GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_charsWritten );
-
-		if ( l_infologLength > 0 )
-		{
-			char * infoLog = new char[l_infologLength];
-			GetOpenGl().GetShaderInfoLog( GetGlName(), l_infologLength, &l_charsWritten, infoLog );
-			p_compilerLog = string::string_cast< xchar >( infoLog );
-			delete [] infoLog;
-		}
-
-		if ( p_compilerLog.size() > 0 )
-		{
-			p_compilerLog = p_compilerLog.substr( 0, p_compilerLog.size() - 1 );
 		}
 	}
 
@@ -130,7 +109,7 @@ namespace GlRender
 					}
 				}
 
-				if ( l_return && l_compiled != 0 )
+				if ( l_return && l_compiled )
 				{
 					m_status = eSHADER_STATUS_COMPILED;
 				}
@@ -139,36 +118,7 @@ namespace GlRender
 					m_status = eSHADER_STATUS_ERROR;
 				}
 
-				RetrieveCompilerLog( m_compilerLog );
-
-				if ( !m_compilerLog.empty() )
-				{
-					if ( m_status == eSHADER_STATUS_ERROR )
-					{
-						Logger::LogError( m_compilerLog );
-					}
-					else
-					{
-						Logger::LogInfo( m_compilerLog );
-					}
-
-					StringStream l_source;
-					l_source << format::line_prefix();
-					l_source << m_loadedSource;
-					Logger::LogDebug( l_source.str() );
-					m_loadedSource.clear();
-				}
-				else if ( m_status == eSHADER_STATUS_ERROR )
-				{
-					Logger::LogError( cuT( "GlShaderObject:: Compile - Compilaton failed with an unknown error." ) );
-					StringStream l_source;
-					l_source << format::line_prefix();
-					l_source << m_loadedSource;
-					Logger::LogDebug( l_source.str() );
-					m_loadedSource.clear();
-				}
-
-				l_return = m_status == eSHADER_STATUS_COMPILED;
+				l_return = DoCheckErrors();
 			}
 			else
 			{
@@ -193,8 +143,6 @@ namespace GlRender
 		{
 			GetOpenGl().DetachShader( m_shaderProgram->GetGlName(), GetGlName() );
 			m_shaderProgram = NULL;
-			// if you get an error here, you deleted the Program object first and then
-			// the ShaderObject! Always delete ShaderPrograms last!
 		}
 	}
 
@@ -206,15 +154,6 @@ namespace GlRender
 		{
 			m_shaderProgram = &static_cast< GlShaderProgram & >( p_program );
 			GetOpenGl().AttachShader( m_shaderProgram->GetGlName(), GetGlName() );
-
-			//if( m_type == eSHADER_TYPE_GEOMETRY )
-			//{
-			//	int l_iTmp;
-			//	GetOpenGl().GetIntegerv( eGL_GETINTEGER_PARAM_MAX_GEOMETRY_OUTPUT_VERTICES,	&l_iTmp );
-			//	GetOpenGl().ProgramParameteri( m_shaderProgram->GetGlName(), eGL_PROGRAM_PARAM_GEOMETRY_INPUT_TYPE, GetOpenGl().Get( m_eInputType ) );
-			//	GetOpenGl().ProgramParameteri( m_shaderProgram->GetGlName(), eGL_PROGRAM_PARAM_GEOMETRY_OUTPUT_TYPE, GetOpenGl().Get( m_eOutputType ) );
-			//	GetOpenGl().ProgramParameteri( m_shaderProgram->GetGlName(), eGL_PROGRAM_PARAM_GEOMETRY_VERTICES_OUT, std::min< int >( m_uiOutputVtxCount, l_iTmp ) );
-			//}
 		}
 	}
 
@@ -262,5 +201,28 @@ namespace GlRender
 		{
 			GetOpenGl().SetUniformMatrix3x3v( l_param, 1, false, p_value.const_ptr() );
 		}
+	}
+
+	String GlShaderObject::DoRetrieveCompilerLog()
+	{
+		String l_log;
+		int l_infologLength = 0;
+		int l_charsWritten = 0;
+		GetOpenGl().GetShaderiv( GetGlName(), eGL_SHADER_STATUS_INFO_LOG_LENGTH, &l_charsWritten );
+
+		if ( l_infologLength > 0 )
+		{
+			char * infoLog = new char[l_infologLength];
+			GetOpenGl().GetShaderInfoLog( GetGlName(), l_infologLength, &l_charsWritten, infoLog );
+			l_log = string::string_cast< xchar >( infoLog );
+			delete[] infoLog;
+		}
+
+		if ( !l_log.empty() )
+		{
+			l_log = l_log.substr( 0, l_log.size() - 1 );
+		}
+
+		return l_log;
 	}
 }

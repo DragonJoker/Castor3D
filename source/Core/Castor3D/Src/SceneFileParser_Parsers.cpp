@@ -29,6 +29,8 @@
 #include "Pass.hpp"
 #include "PluginManager.hpp"
 #include "PointLight.hpp"
+#include "PostEffect.hpp"
+#include "PostFxPlugin.hpp"
 #include "RenderLoop.hpp"
 #include "RenderSystem.hpp"
 #include "RenderWindow.hpp"
@@ -231,7 +233,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetScene )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::scene> : No window initialised." ) );
+		PARSING_ERROR( cuT( "Directive <render_target::scene> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -254,7 +256,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetCamera )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::camera> : No window initialised." ) );
+		PARSING_ERROR( cuT( "Directive <render_target::camera> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -270,7 +272,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetSize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::size> : No window initialised." ) );
+		PARSING_ERROR( cuT( "Directive <render_target::size> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -295,6 +297,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetFormat )
 	}
 	else
 	{
+		PARSING_ERROR( cuT( "Directive <render_target::format> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -319,6 +322,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetDepth )
 	}
 	else
 	{
+		PARSING_ERROR( cuT( "Directive <render_target::depth> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -340,7 +344,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetMsaa )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::msaa> : No window initialised." ) );
+		PARSING_ERROR( cuT( "Directive <render_target::msaa> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -362,7 +366,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetSsaa )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::msaa> : No window initialised." ) );
+		PARSING_ERROR( cuT( "Directive <render_target::msaa> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -384,7 +388,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetStereo )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::stereo> : No window initialised." ) );
+		PARSING_ERROR( cuT( "Directive <render_target::stereo> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -405,7 +409,62 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetDeferred )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::deferred> : No window initialised." ) );
+		PARSING_ERROR( cuT( "Directive <render_target::deferred> : No target initialised." ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_pContext->pRenderTarget )
+	{
+		Engine * l_engine = l_pContext->m_pParser->GetOwner();
+		PostFxPluginSPtr l_plugin;
+		PostEffectSPtr l_effect;
+		String l_name;
+		p_params[0]->Get( l_name );
+		Parameters l_parameters;
+
+		if ( p_params.size() > 1 )
+		{
+			String l_tmp;
+			StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
+
+			for ( auto l_value : l_arrayStrParams )
+			{
+				StringArray l_param = string::split( l_value, cuT( "= " ), 2, false );
+
+				if ( l_param.size() > 1 )
+				{
+					l_parameters.Add( l_param[0], l_param[1].c_str(), l_param[1].size() );
+				}
+			}
+		}
+
+		for ( auto l_it : l_engine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_POSTFX ) )
+		{
+			l_plugin = std::static_pointer_cast< PostFxPlugin, PluginBase >( l_it.second );
+
+			if ( !l_effect && string::lower_case( l_plugin->GetPostEffectType() ) == string::lower_case( l_name ) )
+			{
+				l_effect = l_plugin->CreateEffect( l_engine->GetRenderSystem(), *l_pContext->pRenderTarget, l_parameters );
+			}
+		}
+
+		if ( !l_effect )
+		{
+			PARSING_ERROR( cuT( "Directive <render_target::postfx> : PostEffect [" ) + l_name + cuT( "] not found, make sure the corresponding plugin is installed" ) );
+		}
+		else
+		{
+			l_pContext->pRenderTarget->AddPostEffect( l_effect );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <render_target::postfx> : No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1241,6 +1300,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_pContext->pScene->AddGeometry( l_pContext->pGeometry );
+	l_pContext->pGeometry.reset();
 }
 END_ATTRIBUTE_POP()
 
@@ -1561,6 +1621,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshEnd )
 	{
 		l_pContext->pMesh->GenerateBuffers();
 		l_pContext->pGeometry->SetMesh( l_pContext->pMesh );
+		l_pContext->pMesh.reset();
 	}
 }
 END_ATTRIBUTE_POP()
@@ -2577,7 +2638,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboShaders )
 	}
 	else
 	{
-		uint32_t l_value;
+		uint64_t l_value;
 		p_params[0]->Get( l_value );
 
 		if ( l_value )

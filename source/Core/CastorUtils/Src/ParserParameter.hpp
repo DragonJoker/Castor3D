@@ -376,6 +376,30 @@ namespace Castor
 
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		10/12/2015
+	\version	0.8.0
+	\~english
+	\brief		ParserParameter specialisation for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT
+	\~french
+	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT
+	\remark
+	*/
+	template<> class ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >
+		: public ParserParameter< ePARAMETER_TYPE_UINT64 >
+	{
+	public:
+		inline ParserParameter( String const & p_functionName, UInt64StrMap const & p_mapValues );
+		inline ePARAMETER_TYPE GetType();
+		inline ePARAMETER_TYPE GetBaseType();
+		inline xchar const * GetStrType();
+		inline bool Parse( String & p_strParams );
+
+	public:
+		UInt64StrMap m_mapValues;
+	};
+
+	/*!
+	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english

@@ -127,7 +127,7 @@ namespace Castor3D
 
 	Mesh::Mesh( Engine & p_engine, String const & p_name )
 		: Resource< Mesh >( p_name )
-		, OwnedBy< Engine >( p_engine )
+		, Animable( p_engine )
 		, m_modified( false )
 	{
 	}

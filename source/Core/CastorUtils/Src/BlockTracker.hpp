@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_BLOCK_TRACKER_H___
 
 #include "CastorUtilsPrerequisites.hpp"
-#include "NonCopyable.hpp"
 
 namespace Castor
 {
@@ -35,7 +34,6 @@ namespace Castor
 	\remark		Appelez la macro CASTOR_TRACK() au début d'un bloc pour avoir une entrée dans la console en entrée et en sortie du bloc
 	*/
 	class BlockTracker
-		: public Castor::NonCopyable
 	{
 	public:
 		/**

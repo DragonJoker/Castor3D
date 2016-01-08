@@ -18,7 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_PRECISE_TIMER_H___
 #define ___CASTOR_PRECISE_TIMER_H___
 
-#include "NonCopyable.hpp"
 #include "PlatformConfig.hpp"
 #include <cstdint>
 #include <chrono>
@@ -35,7 +34,6 @@ namespace Castor
 	\brief		Représentation d'un timer précis à la milliseconde
 	*/
 	class PreciseTimer
-		: public Castor::NonCopyable
 	{
 		typedef std::chrono::high_resolution_clock clock;
 

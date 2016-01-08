@@ -43,6 +43,9 @@ namespace Castor3D
 		: public std::enable_shared_from_this< Scene >
 		, public Castor::OwnedBy< Engine >
 	{
+		using LightsArray = std::vector< LightSPtr >;
+		using LightsMap = std::map< eLIGHT_TYPE, LightsArray >;
+
 	public:
 		/*!
 		\author		Sylvain DOREMUS
@@ -54,7 +57,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< Scene, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -577,13 +579,6 @@ namespace Castor3D
 		C3D_API void Merge( SceneSPtr p_scene );
 		/**
 		 *\~english
-		 *\brief		Clears the overlay list
-		 *\~french
-		 *\brief		Vide la liste des overlays contenus dans la scène
-		 */
-		C3D_API void ClearOverlays();
-		/**
-		 *\~english
 		 *\brief		Adds an overlay to the list
 		 *\param[in]	p_overlay	The overlay to add
 		 *\~french
@@ -610,6 +605,37 @@ namespace Castor3D
 		 *\return		La valeur
 		 */
 		C3D_API uint32_t GetFaceCount()const;
+		/**
+		 *\~english
+		 *\brief		Binds the scene lights.
+		 *\param[in]	p_program		The shader program.
+		 *\param[in]	p_sceneBuffer	The constants buffer.
+		 *\~french
+		 *\brief		Attache les sources lumineuses
+		 *\param[in]	p_program		Le programme shader.
+		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
+		 */
+		C3D_API void BindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		/**
+		 *\~english
+		 *\brief		Unbinds the scene lights.
+		 *\param[in]	p_program		The shader program.
+		 *\param[in]	p_sceneBuffer	The constants buffer.
+		 *\~french
+		 *\brief		Détache les sources lumineuses
+		 *\param[in]	p_program		Le programme shader.
+		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
+		 */
+		C3D_API void UnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		/**
+		 *\~english
+		 *\brief		Bind the camera.
+		 *\param[in]	p_sceneBuffer	The constants buffer.
+		 *\~french
+		 *\brief		Attache la caméra.
+		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
+		 */
+		C3D_API void BindCamera( FrameVariableBuffer & p_sceneBuffer );
 		/**
 		 *\~english
 		 *\brief		Sets the background colour
@@ -810,7 +836,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début de la map des lumières
 		 *\return		La valeur
 		 */
-		inline LightPtrIntMap::iterator LightsBegin()
+		inline LightsMap::iterator LightsBegin()
 		{
 			return m_mapLights.begin();
 		}
@@ -822,7 +848,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début de la map des lumières
 		 *\return		La valeur
 		 */
-		inline LightPtrIntMap::const_iterator LightsBegin()const
+		inline LightsMap::const_iterator LightsBegin()const
 		{
 			return m_mapLights.begin();
 		}
@@ -834,7 +860,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin de la map des lumières
 		 *\return		La valeur
 		 */
-		inline LightPtrIntMap::iterator LightsEnd()
+		inline LightsMap::iterator LightsEnd()
 		{
 			return m_mapLights.end();
 		}
@@ -846,7 +872,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin de la map des lumières
 		 *\return		La valeur
 		 */
-		inline LightPtrIntMap::const_iterator LightsEnd()const
+		inline LightsMap::const_iterator LightsEnd()const
 		{
 			return m_mapLights.end();
 		}
@@ -1010,11 +1036,7 @@ namespace Castor3D
 		void DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
 		void DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object );
 		void DoRenderBillboards( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
-		void DoBindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
 		void DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
-		void DoUnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
-		void DoUnbindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
-		void DoBindCamera( FrameVariableBuffer & p_sceneBuffer );
 
 		template< typename MapType >
 		void DoMerge( SceneSPtr p_scene, MapType & p_map, MapType & p_myMap )
@@ -1236,7 +1258,7 @@ namespace Castor3D
 		//!\~english The overlays array	\~french Le tableau d'overlays
 		OverlayPtrArray m_arrayOverlays;
 		//!\~english Lights map, ordered by index	\~french Map de lumières, triées par index
-		std::map< int, LightSPtr > m_mapLights;
+		LightsMap m_mapLights;
 		//!\~english The geometries with no alpha blending, sorted by material	\~french Les géométries n'ayant pas d'alpha blend, triées par matériau
 		SubmeshNodesByMaterialMap m_mapSubmeshesNoAlpha;
 		//!\~english The geometries without alpha blending, unsorted	\~french Les géométries sans alpha blend, non triées
@@ -1255,8 +1277,6 @@ namespace Castor3D
 		BillboardListArray m_arrayBillboardsToDelete;
 		//!\~english The background image	\~french L'image de fond
 		TextureBaseSPtr m_pBackgroundImage;
-		//!\~english The DepthStencilState for alpha render	\~french Le DepthStencilState utilisé pour le rendu de la transparence
-		DepthStencilStateWPtr m_alphaDepthState;
 		//!\~english Tells if at least one light has changed since last frame	\~french Dit si une lumière au moins a changé depuis la dernière frame
 		bool m_bLightsChanged;
 		//!\~english The image containing lights data	\~french L'image contenant les données des lumières

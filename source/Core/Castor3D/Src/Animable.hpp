@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -32,6 +34,7 @@ namespace Castor3D
 	\brief		interface publique d'animable
 	*/
 	class Animable
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
@@ -40,7 +43,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API Animable();
+		C3D_API Animable( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

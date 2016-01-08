@@ -16,6 +16,18 @@
 
 namespace CastorViewer
 {
+	typedef enum eTIMER_ID
+	{
+		eTIMER_ID_FORWARD = 1,
+		eTIMER_ID_BACK,
+		eTIMER_ID_LEFT,
+		eTIMER_ID_RIGHT,
+		eTIMER_ID_UP,
+		eTIMER_ID_DOWN,
+		eTIMER_ID_ROTATE_LIGHT,
+		eTIMER_ID_COUNT,
+	}	eTIMER_ID;
+
 	class MouseCameraEvent;
 	class CameraRotateEvent;
 	class CameraTranslateEvent;
@@ -41,19 +53,6 @@ namespace CastorViewer
 		: public wxPanel
 		, public Castor::AlignedFrom< Castor::Point3r >
 	{
-	private:
-		typedef enum eTIMER_ID :
-		int
-		{
-			eTIMER_ID_FORWARD,
-			eTIMER_ID_BACK,
-			eTIMER_ID_LEFT,
-			eTIMER_ID_RIGHT,
-			eTIMER_ID_UP,
-			eTIMER_ID_DOWN,
-			eTIMER_ID_COUNT,
-		}	eTIMER_ID;
-
 	public:
 		RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos = wxDefaultPosition, wxSize const & size = wxDefaultSize, long style = wxDEFAULT_FRAME_STYLE );
 		virtual ~RenderPanel();
@@ -87,6 +86,7 @@ namespace CastorViewer
 		void OnTimerRgt( wxTimerEvent & p_event );
 		void OnTimerUp( wxTimerEvent & p_event );
 		void OnTimerDwn( wxTimerEvent &	p_event );
+		void OnTimerRotateLights( wxTimerEvent & p_event );
 		void OnSize( wxSizeEvent & p_event );
 		void OnMove( wxMoveEvent & p_event );
 		void OnPaint( wxPaintEvent & p_event );
@@ -124,6 +124,7 @@ namespace CastorViewer
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_pRenderWindow;
 		Castor3D::FrameListenerSPtr m_pListener;
+		Castor3D::SceneNodeSPtr m_pointlightsNode;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;

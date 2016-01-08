@@ -53,7 +53,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< Submesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**

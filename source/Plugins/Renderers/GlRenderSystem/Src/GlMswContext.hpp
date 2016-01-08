@@ -19,9 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_MSW_CONTEXT_H___
 
 #ifdef _WIN32
-#include "GlRenderSystemPrerequisites.hpp"
+#include "GlHolder.hpp"
 
-#include <NonCopyable.hpp>
 #include <Castor3DPrerequisites.hpp>
 #include <Windows.h>
 
@@ -30,8 +29,7 @@ namespace GlRender
 	class GlContext;
 
 	class GlContextImpl
-		: public Castor::NonCopyable
-		, public Holder
+		: public Holder
 	{
 	public:
 		GlContextImpl( OpenGl & p_gl, GlContext * p_context );

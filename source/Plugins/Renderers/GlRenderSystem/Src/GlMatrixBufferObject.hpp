@@ -26,7 +26,6 @@ namespace GlRender
 {
 	class GlMatrixBufferObject
 		: public GlBuffer< real >
-		, public Castor::NonCopyable
 	{
 	public:
 		GlMatrixBufferObject( GlRenderSystem & p_renderSystem, OpenGl & p_gl, HardwareBufferPtr p_buffer );

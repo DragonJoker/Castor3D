@@ -10,12 +10,31 @@
 #	include <sys/stat.h>
 #endif
 
+#include <StreamPrefixManipulators.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
 {
+	namespace
+	{
+		template< typename CharType, typename PrefixType >
+		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::base_prefixer< CharType, PrefixType > const & prefix )
+		{
+			format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * sbuf = dynamic_cast< format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+
+			if ( !sbuf )
+			{
+				sbuf = format::install_prefix_buffer< PrefixType >( stream );
+				stream.register_callback( format::callback< PrefixType, CharType >, 0 );
+			}
+
+			return stream;
+		}
+	}
+
 	ShaderObjectBase::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< ShaderObjectBase >( p_path )
+		: Castor3D::BinaryParser< ShaderObjectBase >( p_path )
 	{
 	}
 
@@ -242,7 +261,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	ShaderObjectBase::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< ShaderObjectBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< ShaderObjectBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -299,7 +318,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const std::array< String, eSHADER_TYPE_COUNT >	ShaderObjectBase::string_type =
+	const std::array< String, eSHADER_TYPE_COUNT > ShaderObjectBase::string_type =
 	{
 		cuT( "vertex_program" ),
 		cuT( "hull_program" ),
@@ -309,12 +328,12 @@ namespace Castor3D
 	};
 
 	ShaderObjectBase::ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type )
-		:	m_status( eSHADER_STATUS_NOTCOMPILED )
-		,	m_type( p_type )
-		,	m_parent( p_parent )
-		,	m_eInputType( eTOPOLOGY_TRIANGLES )
-		,	m_eOutputType( eTOPOLOGY_TRIANGLES )
-		,	m_eShaderModel( eSHADER_MODEL_1 )
+		: m_status( eSHADER_STATUS_NOTCOMPILED )
+		, m_type( p_type )
+		, m_parent( p_parent )
+		, m_eInputType( eTOPOLOGY_TRIANGLES )
+		, m_eOutputType( eTOPOLOGY_TRIANGLES )
+		, m_eShaderModel( eSHADER_MODEL_1 )
 	{
 	}
 
@@ -429,5 +448,40 @@ namespace Castor3D
 	{
 		clear_container( m_mapFrameVariables );
 		clear_container( m_listFrameVariables );
+	}
+
+	bool ShaderObjectBase::DoCheckErrors()
+	{
+		String l_compilerLog = DoRetrieveCompilerLog();
+
+		if ( !l_compilerLog.empty() )
+		{
+			if ( m_status == eSHADER_STATUS_ERROR )
+			{
+				Logger::LogError( l_compilerLog );
+			}
+			else
+			{
+				Logger::LogWarning( l_compilerLog );
+			}
+
+			StringStream l_source;
+			l_source << format::line_prefix();
+			l_source << m_loadedSource;
+			Logger::LogDebug( l_source.str() );
+			m_loadedSource.clear();
+		}
+		else if ( m_status == eSHADER_STATUS_ERROR )
+		{
+			Logger::LogError( cuT( "ShaderObject::Compile - Compilaton failed with an unknown error." ) );
+			StringStream l_source;
+			l_source << format::line_prefix();
+			l_source << m_loadedSource;
+			Logger::LogDebug( l_source.str() );
+			m_loadedSource.clear();
+			m_status = eSHADER_STATUS_NOTCOMPILED;
+		}
+
+		return m_status != eSHADER_STATUS_ERROR;
 	}
 }

@@ -34,7 +34,6 @@ namespace Castor
 	template< class T >
 	class TextLoader
 		: public Loader< T, eFILE_TYPE_TEXT, TextFile >
-		, public Castor::NonCopyable
 	{
 	public:
 		/**

@@ -33,8 +33,7 @@ namespace GlRender
 	\date 03/01/2011
 	*/
 	class GlAttributeBase
-		: public Castor::NonCopyable
-		, public Holder
+		: public Holder
 	{
 	public:
 		GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_attributeName, eGL_TYPE p_glType, int p_count );

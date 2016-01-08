@@ -46,7 +46,7 @@ namespace Castor3D
 		\brief		Loader de Face
 		*/
 		class TextLoader
-			: public Castor::Loader< Face, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< Face, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**

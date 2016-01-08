@@ -63,13 +63,13 @@ namespace Dx11Render
 
 	void DxFragmentShader::AttachTo( ShaderProgramBase & p_program )
 	{
-		if ( m_pCompiled )
+		if ( m_compiledShader )
 		{
 			ID3D11Device * l_pDevice = m_renderSystem->GetDevice();
 
 			if ( l_pDevice )
 			{
-				HRESULT l_hr = l_pDevice->CreatePixelShader( reinterpret_cast< DWORD * >( m_pCompiled->GetBufferPointer() ), m_pCompiled->GetBufferSize(), NULL, &m_pPixelShader );
+				HRESULT l_hr = l_pDevice->CreatePixelShader( reinterpret_cast< DWORD * >( m_compiledShader->GetBufferPointer() ), m_compiledShader->GetBufferSize(), NULL, &m_pPixelShader );
 				dxTrack( m_renderSystem, m_pPixelShader, PSShader );
 
 				if ( l_hr == S_OK )

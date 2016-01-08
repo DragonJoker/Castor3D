@@ -76,7 +76,7 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoCreateProgram( uint32_t p_flags )
 		UNIFORM( l_writer, Sampler2D, c3d_mapOpacity );
 
 		// Shader outputs
-		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
+		FRAG_OUTPUT( l_writer, Vec4, pxl_v4FragColor, 0 );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
@@ -119,11 +119,9 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoCreateProgram( uint32_t p_flags )
 		l_program->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
 	}
 
-	for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
-	{
-		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL( i ), l_strVs );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL( i ), l_strPs );
-	}
+	eSHADER_MODEL l_model = GetOwner()->GetMaxShaderModel();
+	l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVs );
+	l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
 
 	return l_program;
 }

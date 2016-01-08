@@ -43,34 +43,34 @@ namespace GlRender
 		 */
 		virtual ~GlShaderObject();
 		/**
-		 * Creates the GL Shader program
+		 *\copydoc		Castor3D::ShaderObjectBase::Create
 		 */
-		virtual void CreateProgram();
+		virtual void Create();
 		/**
-		 * Destroys the GL Shader Program
+		 *\copydoc		Castor3D::ShaderObjectBase::Destroy
 		 */
-		virtual void DestroyProgram();
+		virtual void Destroy();
 		/**
-		 * Compiles program
+		 *\copydoc		Castor3D::ShaderObjectBase::Compile
 		 */
 		virtual bool Compile();
 		/**
-		 * Get compiler messages
-		 */
-		void RetrieveCompilerLog( Castor::String & p_compilerLog );
-		/**
-		 * Detaches this shader from it's program
+		 *\copydoc		Castor3D::ShaderObjectBase::Detach
 		 */
 		virtual void Detach();
 		/**
-		 * Attaches this shader to the given program
+		 *\copydoc		Castor3D::ShaderObjectBase::AttachTo
 		 */
 		virtual void AttachTo( Castor3D::ShaderProgramBase & p_program );
-
+		/**
+		 *\copydoc		Castor3D::ShaderObjectBase::SetEntryPoint
+		 */
 		virtual void SetEntryPoint( Castor::String const & CU_PARAM_UNUSED( p_name ) )
 		{
 		}
-
+		/**
+		 *\copydoc		Castor3D::ShaderObjectBase::GetEntryPoint
+		 */
 		virtual Castor::String GetEntryPoint()const
 		{
 			return cuT( "" );
@@ -122,16 +122,19 @@ namespace GlRender
 
 	private:
 		/**
-		 * Compiles program
+		 *\copydoc		Castor3D::ShaderObjectBase::DoBind
 		 */
 		virtual void DoBind() {}
 		/**
-		 * Compiles program
+		 *\copydoc		Castor3D::ShaderObjectBase::DoUnbind
 		 */
 		virtual void DoUnbind() {}
+		/**
+		 *\copydoc		Castor3D::ShaderObjectBase::DoRetrieveCompilerLog
+		 */
+		virtual Castor::String DoRetrieveCompilerLog();
 
 	protected:
-		Castor::String m_compilerLog;
 		GlShaderProgram * m_shaderProgram;
 		UIntStrMap m_mapParamsByName;
 	};

@@ -164,12 +164,12 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	m_mapWrappingModes[cuT( "clamp_to_border" )] = eWRAP_MODE_CLAMP_TO_BORDER;
 	m_mapWrappingModes[cuT( "clamp_to_edge" )] = eWRAP_MODE_CLAMP_TO_EDGE;
 
-	m_mapShaderTypes[cuT( "vertex" )] = eSHADER_TYPE_VERTEX;
-	m_mapShaderTypes[cuT( "hull" )] = eSHADER_TYPE_HULL;
-	m_mapShaderTypes[cuT( "domain" )] = eSHADER_TYPE_DOMAIN;
-	m_mapShaderTypes[cuT( "geometry" )] = eSHADER_TYPE_GEOMETRY;
-	m_mapShaderTypes[cuT( "pixel" )] = eSHADER_TYPE_PIXEL;
-	m_mapShaderTypes[cuT( "compute" )] = eSHADER_TYPE_COMPUTE;
+	m_mapShaderTypes[cuT( "vertex" )] = MASK_SHADER_TYPE_VERTEX;
+	m_mapShaderTypes[cuT( "hull" )] = MASK_SHADER_TYPE_HULL;
+	m_mapShaderTypes[cuT( "domain" )] = MASK_SHADER_TYPE_DOMAIN;
+	m_mapShaderTypes[cuT( "geometry" )] = MASK_SHADER_TYPE_GEOMETRY;
+	m_mapShaderTypes[cuT( "pixel" )] = MASK_SHADER_TYPE_PIXEL;
+	m_mapShaderTypes[cuT( "compute" )] = MASK_SHADER_TYPE_COMPUTE;
 
 	m_mapVariableTypes[cuT( "int" )] = eFRAME_VARIABLE_TYPE_INT;
 	m_mapVariableTypes[cuT( "uint" )] = eFRAME_VARIABLE_TYPE_UINT;
@@ -318,6 +318,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_RENDER_TARGET, cuT( "ssaa" ), Parser_RenderTargetSsaa, 1, ePARAMETER_TYPE_UINT16 );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "stereo" ), Parser_RenderTargetStereo, 1, ePARAMETER_TYPE_FLOAT );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "deferred" ), Parser_RenderTargetDeferred, 1, ePARAMETER_TYPE_BOOL );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "postfx" ), Parser_RenderTargetPostEffect, 2, ePARAMETER_TYPE_NAME, ePARAMETER_TYPE_TEXT );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "}" ), Parser_RenderTargetEnd );
 
 	AddParser( eSECTION_SAMPLER, cuT( "min_filter" ), Parser_SamplerMinFilter, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapInterpolationModes );
@@ -438,7 +439,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_type" ), Parser_GeometryOutputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveOutputTypes );
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, 1, ePARAMETER_TYPE_UINT8 );
 
-	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, 1, ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT, &l_pContext->m_mapShaderTypes );
+	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, 1, ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT, &l_pContext->m_mapShaderTypes );
 	AddParser( eSECTION_SHADER_UBO, cuT( "variable" ), Parser_ShaderUboVariable, 1, ePARAMETER_TYPE_NAME );
 
 	AddParser( eSECTION_SHADER_SAMPLER, cuT( "value" ), Parser_ShaderSamplerValue, 1, ePARAMETER_TYPE_INT32 );

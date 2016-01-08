@@ -244,7 +244,7 @@ namespace Castor3D
 
 	bool FrameBuffer::DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
 	{
-		DoDetach( p_point );
+		DoDetach( p_point, p_index );
 		bool l_return = p_attach->Attach( p_point, p_index, shared_from_this() );
 
 		if ( l_return )
@@ -255,11 +255,11 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void FrameBuffer::DoDetach( eATTACHMENT_POINT p_point )
+	void FrameBuffer::DoDetach( eATTACHMENT_POINT p_point, uint8_t p_index )
 	{
-		auto l_itAtt = std::find_if( m_attaches.begin(), m_attaches.end(), [p_point]( FrameBufferAttachmentSPtr p_att )
+		auto l_itAtt = std::find_if( m_attaches.begin(), m_attaches.end(), [p_point, p_index]( FrameBufferAttachmentSPtr p_att )
 		{
-			return p_att->GetAttachmentPoint() == p_point;
+			return p_att->GetAttachmentPoint() == p_point && p_att->GetAttachmentIndex() == p_index;
 		} );
 
 		if ( l_itAtt != m_attaches.end() )

@@ -95,9 +95,65 @@ namespace GlRender
 
 		//***********************************************************************************************
 
-		void LightingModel::Declare_Light( GlslWriter & p_writer )
+		Castor::String ParamToString( Castor::String & p_sep, FragmentInput const & p_value )
 		{
-			Struct l_lightDecl = p_writer.GetStruct( cuT( "Light" ) );
+			Castor::StringStream l_return;
+			l_return << ParamToString( p_sep, p_value.m_v3Vertex );
+			l_return << ParamToString( p_sep, p_value.m_v3Normal );
+			l_return << ParamToString( p_sep, p_value.m_v3Tangent );
+			l_return << ParamToString( p_sep, p_value.m_v3Bitangent );
+			return l_return.str();
+		}
+
+		Castor::String ParamToString( Castor::String & p_sep, OutputComponents const & p_value )
+		{
+			Castor::StringStream l_return;
+			l_return << ParamToString( p_sep, p_value.m_v3Ambient );
+			l_return << ParamToString( p_sep, p_value.m_v3Diffuse );
+			l_return << ParamToString( p_sep, p_value.m_v3Specular );
+			return l_return.str();
+		}
+
+		Castor::String ToString( FragmentInput const & p_value )
+		{
+			Castor::StringStream l_return;
+			l_return << ToString( p_value.m_v3Vertex ) << ", ";
+			l_return << ToString( p_value.m_v3Normal ) << ", ";
+			l_return << ToString( p_value.m_v3Tangent ) << ", ";
+			l_return << ToString( p_value.m_v3Bitangent );
+			return l_return.str();
+		}
+
+		Castor::String ToString( OutputComponents const & p_value )
+		{
+			Castor::StringStream l_return;
+			l_return << ToString( p_value.m_v3Ambient ) << ", ";
+			l_return << ToString( p_value.m_v3Diffuse ) << ", ";
+			l_return << ToString( p_value.m_v3Specular );
+			return l_return.str();
+		}
+
+		//***********************************************************************************************
+
+		LightingModel::LightingModel( uint32_t p_flags, GlslWriter & p_writer )
+			: m_flags( p_flags )
+			, m_writer( p_writer )
+		{
+		}
+
+		void LightingModel::DeclareModel()
+		{
+			Declare_Light();
+			Declare_GetLight();
+			DoDeclareModel();
+			Declare_ComputeDirectionalLight();
+			Declare_ComputePointLight();
+			Declare_ComputeSpotLight();
+		}
+
+		void LightingModel::Declare_Light()
+		{
+			Struct l_lightDecl = m_writer.GetStruct( cuT( "Light" ) );
 			l_lightDecl.GetMember< Vec4 >( cuT( "m_v4Ambient" ) );
 			l_lightDecl.GetMember< Vec4 >( cuT( "m_v4Diffuse" ) );
 			l_lightDecl.GetMember< Vec4 >( cuT( "m_v4Specular" ) );
@@ -110,107 +166,147 @@ namespace GlRender
 			l_lightDecl.End();
 		}
 
-		void LightingModel::Declare_GetLight( GlslWriter & p_writer )
+		void LightingModel::Declare_GetLight()
 		{
-			p_writer.ImplementFunction< Light >( cuT( "GetLight" ), &GLSL::GetLight, Int( &p_writer, cuT( "p_iIndex" ) ) );
+			m_writer.ImplementFunction< Light >( cuT( "GetLight" ), &GLSL::GetLight, Int( &m_writer, cuT( "p_iIndex" ) ) );
 		}
 
 		Light LightingModel::GetLight( Type const & p_value )
 		{
-			return WriteFunctionCall< Light >( p_value.m_writer, cuT( "GetLight" ), p_value );
+			return WriteFunctionCall< Light >( &m_writer, cuT( "GetLight" ), p_value );
+		}
+
+		void LightingModel::ComputeDirectionalLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+													 FragmentInput const & p_fragmentIn, OutputComponents & p_output )
+		{
+			m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputeDirectionalLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
+		}
+
+		void LightingModel::ComputePointLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+											   FragmentInput const & p_fragmentIn, OutputComponents & p_output )
+		{
+			m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputePointLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
+		}
+
+		void LightingModel::ComputeSpotLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+											  FragmentInput const & p_fragmentIn, OutputComponents & p_output )
+		{
+			m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputeSpotLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
 		}
 
 		//***********************************************************************************************
 
-		namespace
+		const Castor::String PhongLightingModel::Name = cuT( "phong" );
+
+		PhongLightingModel::PhongLightingModel( uint32_t p_flags, GlslWriter & p_writer )
+			: LightingModel( p_flags, p_writer )
 		{
-			Vec3 Bump( Vec3 & p_v3T, Vec3 & p_v3B, Vec3 & p_v3N, Vec3 & p_v3MapMormal )
-			{
-				GlslWriter * l_pWriter = p_v3T.m_writer;
-				GlslWriter & l_writer = *l_pWriter;
-				return normalize( mat3( p_v3T, p_v3B, p_v3N ) * p_v3MapMormal );
-			}
 		}
 
-		void BlinnPhongLightingModel::WriteCompute( uint64_t p_flags, GlslWriter & p_writer, Int const & i,
-													Vec3 & p_v3MapSpecular, Mat4 & c3d_mtxModelView, Vec3 & p_v3MapMormal,
-													Vec4 & c3d_v4MatAmbient, Vec4 & c3d_v4MatDiffuse, Vec4 & c3d_v4MatSpecular,
-													Vec3 & p_v3Position, Vec3 & p_v3Normal, Vec3 & p_v3Eye, Float & p_fShininess,
-													Vec3 & p_vtxVertex, Vec3 & p_vtxTangent, Vec3 & p_vtxBitangent, Vec3 & p_vtxNormal,
-													Vec3 & p_v3Ambient, Vec3 & p_v3Diffuse, Vec3 & p_v3Specular )
+		std::unique_ptr< LightingModel > PhongLightingModel::Create( uint32_t p_flags, GlslWriter & p_writer )
 		{
-			if ( ( p_flags & Castor3D::eTEXTURE_CHANNEL_NORMAL ) == Castor3D::eTEXTURE_CHANNEL_NORMAL )
-			{
-				p_v3Normal = Bump( p_vtxTangent, p_vtxBitangent, p_vtxNormal, p_v3MapMormal );
-			}
+			return std::make_unique< PhongLightingModel >( p_flags, p_writer );
+		}
 
-			LOCALE_ASSIGN( p_writer, GLSL::Light, l_light, GetLight( i ) );
-			LOCALE_ASSIGN( p_writer, Vec3, l_lightDirection, l_light.m_v4Position().XYZ );
-			LOCALE_ASSIGN( p_writer, Float, l_distance, Float( 0.0f ) );
-			LOCALE_ASSIGN( p_writer, Float, l_spotFactor, Float( 1.0f ) );
-			LOCALE_ASSIGN( p_writer, Float, l_cutoff, Float( 0.0f ) );
+		void PhongLightingModel::DoDeclareModel()
+		{
+			DoDeclare_ComputeLight();
+		}
 
-			IF ( p_writer, l_light.m_v4Position ().W != Float( 0.0f ) )
+		void PhongLightingModel::Declare_ComputeDirectionalLight()
+		{
+			OutputComponents l_output{ InOutParam< Vec3 >( &m_writer, cuT( "p_v3Ambient" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Diffuse" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Specular" ) ) };
+			m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+																						  FragmentInput const & p_fragmentIn, OutputComponents & p_output )
 			{
-				IF ( p_writer, l_light.m_v4Position ().W == Float( 2.0f ) )
+				DoComputeLight( p_light, p_worldEye, normalize( -p_light.m_v4Position().ZYX ), p_shininess, p_fragmentIn, p_output );
+
+			}, Light( &m_writer, cuT( "p_light" ) ), InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) ), InParam< Float >( &m_writer, cuT( "p_shininess" ) ),
+				FragmentInput{ InParam< Vec3 >( &m_writer, cuT( "p_v3Vertex" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Normal" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Tangent" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Bitangent" ) ) },
+				l_output );
+		}
+
+		void PhongLightingModel::Declare_ComputePointLight()
+		{
+			OutputComponents l_output{ InOutParam< Vec3 >( &m_writer, cuT( "p_v3Ambient" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Diffuse" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Specular" ) ) };
+			m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+																					FragmentInput const & p_fragmentIn, OutputComponents & p_output )
+			{
+				LOCALE_ASSIGN( m_writer, Vec3, l_lightDirection, p_fragmentIn.m_v3Vertex - p_light.m_v4Position().XYZ );
+				LOCALE_ASSIGN( m_writer, Float, l_distance, length( l_lightDirection ) );
+				l_lightDirection = normalize( l_lightDirection );
+				DoComputeLight( p_light, p_worldEye, l_lightDirection, p_shininess, p_fragmentIn, p_output );
+
+				LOCALE_ASSIGN( m_writer, Float, l_attenuation, p_light.m_v3Attenuation().X + p_light.m_v3Attenuation().Y * l_distance + p_light.m_v3Attenuation().Z * l_distance * l_distance );
+				p_output.m_v3Ambient /= l_attenuation;
+				p_output.m_v3Diffuse /= l_attenuation;
+				p_output.m_v3Specular /= l_attenuation;
+
+			}, Light( &m_writer, cuT( "p_light" ) ), InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) ), InParam< Float >( &m_writer, cuT( "p_shininess" ) ),
+				FragmentInput{ InParam< Vec3 >( &m_writer, cuT( "p_v3Vertex" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Normal" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Tangent" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Bitangent" ) ) },
+				l_output );
+		}
+
+		void PhongLightingModel::Declare_ComputeSpotLight()
+		{
+			OutputComponents l_output{ InOutParam< Vec3 >( &m_writer, cuT( "p_v3Ambient" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Diffuse" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Specular" ) ) };
+			m_writer.ImplementFunction< Void >( cuT( "ComputeSpotLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
+																				   FragmentInput const & p_fragmentIn, OutputComponents & p_output )
+			{
+				LOCALE_ASSIGN( m_writer, Vec3, l_lightToPixel, p_fragmentIn.m_v3Vertex - p_light.m_v4Position().XYZ );
+				LOCALE_ASSIGN( m_writer, Float, l_spotFactor, dot( l_lightToPixel, p_light.m_v3Direction() ) );
+
+				IF( m_writer, l_spotFactor > p_light.m_fCutOff() )
 				{
-					LOCALE_ASSIGN( p_writer, Vec3, l_lightToPixel, p_v3Position - l_light.m_v4Position().XYZ );
-					l_spotFactor = dot( l_lightToPixel, l_light.m_v3Direction() );
-					l_cutoff = l_light.m_fCutOff();
+					ComputePointLight( p_light, p_worldEye, p_shininess, p_fragmentIn, p_output );
+					l_spotFactor = m_writer.Paren( Float( 1 ) - m_writer.Paren( Float( 1 ) - l_spotFactor ) * Float( 1 ) / m_writer.Paren( Float( 1 ) - p_light.m_fCutOff() ) );
+					p_output.m_v3Ambient *= l_spotFactor;
+					p_output.m_v3Diffuse *= l_spotFactor;
+					p_output.m_v3Specular *= l_spotFactor;
 				}
-				FI
+				FI;
 
-				l_lightDirection = p_v3Position - l_lightDirection;
-				l_distance = length( l_lightDirection );
-			}
-			FI
+			}, Light( &m_writer, cuT( "p_light" ) ), InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) ), InParam< Float >( &m_writer, cuT( "p_shininess" ) ),
+					FragmentInput{ InParam< Vec3 >( &m_writer, cuT( "p_v3Vertex" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Normal" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Tangent" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Bitangent" ) ) },
+				l_output );
+		}
 
-			IF ( p_writer, l_spotFactor > l_cutoff )
+		void PhongLightingModel::DoDeclare_ComputeLight()
+		{
+			OutputComponents l_output{ InOutParam< Vec3 >( &m_writer, cuT( "p_v3Ambient" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Diffuse" ) ), InOutParam< Vec3 >( &m_writer, cuT( "p_v3Specular" ) ) };
+			m_writer.ImplementFunction< Void >( cuT( "DoComputeLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Vec3 const & p_direction, Float const & p_shininess,
+																			   FragmentInput const & p_fragmentIn, OutputComponents & p_output )
 			{
-				LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpAmbient, c3d_v4MatAmbient.XYZ * ( l_light.m_v4Ambient().XYZ * l_light.m_v4Ambient().W ) );
-				LOCALE_ASSIGN( p_writer, Float, l_diffuseFactor, dot( p_v3Normal, neg( l_lightDirection ) ) );
-				LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpDiffuse, vec3( Float( &p_writer, 0.0f ), 0.0f, 0.0f ) );
-				LOCALE_ASSIGN( p_writer, Vec3, l_v3TmpSpecular, vec3( Float( &p_writer, 0.0f ), 0.0f, 0.0f ) );
+				p_output.m_v3Ambient = p_light.m_v4Ambient().XYZ * p_light.m_v4Ambient().W;
 
-				IF( p_writer, l_diffuseFactor > Float( 0.0f ) )
+				LOCALE_ASSIGN( m_writer, Float, l_diffuseFactor, dot( p_fragmentIn.m_v3Normal, -p_direction ) );
+
+				IF( m_writer, l_diffuseFactor > Float( 0 ) )
 				{
-					l_v3TmpDiffuse = vec3( l_light.m_v4Diffuse().XYZ * l_light.m_v4Diffuse().W * l_diffuseFactor );
-					LOCALE_ASSIGN( p_writer, Vec3, l_vertexToEye, normalize( p_v3Eye - p_v3Position ) );
-					LOCALE_ASSIGN( p_writer, Vec3, l_lightReflect, normalize( reflect( l_light.m_v4Position().XYZ, p_v3Normal ) ) );
-					LOCALE_ASSIGN( p_writer, Float, l_specularFactor, dot( l_vertexToEye, l_lightReflect ) );
+					p_output.m_v3Diffuse = p_light.m_v4Diffuse().XYZ * p_light.m_v4Diffuse().W * l_diffuseFactor;
 
-					IF( p_writer, l_specularFactor > Float( 0.0f ) )
+					LOCALE_ASSIGN( m_writer, Vec3, l_vertexToEye, normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) );
+					LOCALE_ASSIGN( m_writer, Vec3, l_lightReflect, normalize( reflect( p_direction, p_fragmentIn.m_v3Normal ) ) );
+					LOCALE_ASSIGN( m_writer, Float, l_specularFactor, dot( l_vertexToEye, l_lightReflect ) );
+
+					IF( m_writer, l_specularFactor > Float( 0 ) )
 					{
-						l_specularFactor = pow( l_specularFactor, p_fShininess );
-						l_v3TmpSpecular = l_light.m_v4Specular().XYZ * l_light.m_v4Specular().W * l_specularFactor;
+						l_specularFactor = pow( l_specularFactor, p_shininess );
+						p_output.m_v3Specular = p_light.m_v4Specular().XYZ * p_light.m_v4Specular().W * l_specularFactor;
 					}
-					FI
+					FI;
 				}
-				FI
+				FI;
 
-				IF ( p_writer, l_light.m_v4Position ().W != Float( 0.0f ) )
-				{
-					LOCALE_ASSIGN( p_writer, Float, l_attenuation, l_light.m_v3Attenuation().X + l_light.m_v3Attenuation().Y * l_distance + l_light.m_v3Attenuation().Z * l_distance * l_distance );
-					l_v3TmpAmbient /= l_attenuation;
-					l_v3TmpDiffuse /= l_attenuation;
-					l_v3TmpSpecular /= l_attenuation;
+			}, InParam< Light >( &m_writer, cuT( "p_light" ) ), InParam< Vec3 >( &m_writer, cuT( "p_worldEye" ) ), InParam< Vec3 >( &m_writer, cuT( "p_direction" ) ), InParam< Float >( &m_writer, cuT( "p_shininess" ) ),
+				FragmentInput{ InParam< Vec3 >( &m_writer, cuT( "p_v3Vertex" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Normal" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Tangent" ) ), InParam< Vec3 >( &m_writer, cuT( "p_v3Bitangent" ) ) },
+				l_output );
+		}
 
-					IF ( p_writer, l_light.m_v4Position ().W == Float( 2.0f ) )
-					{
-						l_spotFactor = ( 1.0f - p_writer.Paren( 1.0f - l_spotFactor ) * 1.0f / p_writer.Paren( 1.0f - l_cutoff ) );
-						l_v3TmpAmbient *= l_spotFactor;
-						l_v3TmpDiffuse *= l_spotFactor;
-						l_v3TmpSpecular *= l_spotFactor;
-					}
-					FI
-				}
-				FI
-
-				p_v3Ambient += l_v3TmpAmbient;
-				p_v3Diffuse += l_v3TmpDiffuse;
-				p_v3Specular += l_v3TmpSpecular;
-			}
-			FI
+		void PhongLightingModel::DoComputeLight( Light const & p_light, Vec3 const & p_worldEye, Vec3 const & p_direction, Float const & p_shininess,
+												 FragmentInput const & p_fragmentIn, OutputComponents & p_output )
+		{
+			m_writer << WriteFunctionCall< Vec3 >( &m_writer, cuT( "DoComputeLight" ), p_light, p_worldEye, p_direction, p_shininess, p_fragmentIn, p_output ) << Endi();
 		}
 
 		//***********************************************************************************************

@@ -49,7 +49,7 @@ namespace Castor3D
 		\brief		Loader de TextureUnit
 		*/
 		class TextLoader
-			: public Castor::Loader< TextureUnit, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< TextureUnit, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**

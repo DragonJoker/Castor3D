@@ -52,7 +52,6 @@ namespace Castor3D
 		*/
 		class TextLoader
 			: public Castor::Loader< RenderWindow, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			, public Castor::NonCopyable
 		{
 		public:
 			/**

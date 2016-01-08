@@ -1,13 +1,20 @@
 ﻿#include "DirectRenderTechnique.hpp"
 
-#include <RenderTarget.hpp>
-#include <FrameBuffer.hpp>
-#include <DepthStencilState.hpp>
-#include <RasteriserState.hpp>
-#include <RenderSystem.hpp>
-#include <RenderTarget.hpp>
+#include <Camera.hpp>
 #include <DepthStencilRenderBuffer.hpp>
+#include <DepthStencilState.hpp>
+#include <FrameBuffer.hpp>
+#include <Light.hpp>
+#include <MaterialManager.hpp>
+#include <OverlayManager.hpp>
+#include <PanelOverlay.hpp>
+#include <RasteriserState.hpp>
+#include <RenderTarget.hpp>
+#include <RenderSystem.hpp>
+#include <Scene.hpp>
+#include <TextOverlay.hpp>
 
+#include <FontManager.hpp>
 #include <Logger.hpp>
 
 #if C3D_HAS_GL_RENDERER
@@ -191,6 +198,17 @@ namespace Direct
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
+#if !defined( NDEBUG )
+
+		auto l_background = GetOwner()->GetMaterialManager().Find( cuT( "Gray" ) );
+		auto l_foreground = GetOwner()->GetMaterialManager().Find( cuT( "DarkRed" ) );
+		auto l_font = GetOwner()->GetFontManager().get( cuT( "Arial20" ) );
+		auto l_panel = GetOwner()->GetOverlayManager().CreatePanel( cuT( "DirectRenderTechnique_DebugPanel" ), Position( 0, 200 ), Size( 350, 600 ), l_background );
+		m_debugOverlay = GetOwner()->GetOverlayManager().CreateText( cuT( "DirectRenderTechnique_DebugText" ), Position( 5, 5 ), Size( 340, 590 ), l_foreground, l_font, l_panel->GetOverlay().shared_from_this() );
+		m_debugOverlay->SetVAlign( eVALIGN_TOP );
+
+#endif
+
 		return true;
 	}
 
@@ -212,6 +230,62 @@ namespace Direct
 
 	void RenderTechnique::DoEndRender()
 	{
+#if !defined( NDEBUG )
+
+		auto l_scene = GetOwner()->GetRenderSystem()->GetTopScene();
+		auto l_node = l_scene->GetNode( cuT( "FinalNode" ) );
+		auto l_light = l_scene->GetLight( cuT( "PointLight" ) );
+
+		if ( l_node && l_light )
+		{
+			auto reflect = []( Point3f const & p_incident, Point3f const & p_normal )
+			{
+				return p_incident - 2.0_r * point::dot( p_normal, p_incident ) * p_normal;
+			};
+
+			Castor::StringStream l_stream;
+			auto l_camera = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
+			l_stream << cuT( "Camera position:\n  " ) << l_camera[0] << cuT( "\n  " ) << l_camera[1] << cuT( "\n  " ) << l_camera[2] << "\n\n";
+
+			SceneNodeSPtr l_node = l_scene->GetNode( cuT( "FinalNode" ) );
+			Point3f l_normal( 0, 0, -1 );
+			Point3f l_vertex = l_node->GetDerivedPosition();
+			l_normal = l_node->GetDerivedTransformationMatrix() * l_normal;
+			l_stream << cuT( "Object position:\n  " ) << l_vertex[0] << cuT( "\n  " ) << l_vertex[1] << cuT( "\n  " ) << l_vertex[2] << "\n";
+			l_stream << cuT( "Object normal:\n  " ) << l_normal[0] << cuT( "\n  " ) << l_normal[1] << cuT( "\n  " ) << l_normal[2] << "\n\n";
+
+			auto l_positionType = l_light->GetPositionType();
+			Point3f l_direction( l_positionType[0], l_positionType[1], l_positionType[2] );
+			point::normalise( l_direction );
+			l_stream << cuT( "Light direction:\n  " ) << l_direction[0] << cuT( "\n  " ) << l_direction[1] << cuT( "\n  " ) << l_direction[2] << "\n";
+
+			float l_diffuseFactor = point::dot( l_normal, -l_direction );
+
+			if ( l_diffuseFactor > 0 )
+			{
+				Point3f l_diffuse = Point3f( 0.8, 0.8, 0.8 ) * l_diffuseFactor;
+				l_stream << cuT( "Light diffuse:\n  " ) << l_diffuse[0] << cuT( "\n  " ) << l_diffuse[1] << cuT( "\n  " ) << l_diffuse[2] << "\n";
+
+				Point3f l_vertexToEye = point::get_normalised( l_camera - l_vertex );
+				Point3f l_lightReflect = point::get_normalised( reflect( l_direction, l_normal ) );
+				float l_specularFactor = point::dot( l_vertexToEye, l_lightReflect );
+
+				if ( l_specularFactor > 0 )
+				{
+					l_specularFactor = pow( l_specularFactor, 51.2f );
+					Point3f l_specular = Point3f( 1, 1, 1 ) * l_specularFactor;
+					l_stream << cuT( "Light specular:\n  " ) << l_specular[0] << cuT( "\n  " ) << l_specular[1] << cuT( "\n  " ) << l_specular[2] << "\n";
+				}
+			}
+
+			m_debugOverlay->SetCaption( l_stream.str() );
+		}
+		else
+		{
+			m_debugOverlay->GetOverlay().GetParent()->SetVisible( false );
+		}
+
+#endif
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
@@ -245,23 +319,26 @@ namespace Direct
 
 	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_flags )const
 	{
-		using namespace GlRender::GLSL;
+#define CHECK_FLAG( channel ) ( ( p_flags & ( channel ) ) == ( channel ) )
+
+		using namespace GLSL;
 
 		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
 		l_writer << GLSL::Version() << Endl();
 
+		// UBOs
 		UBO_MATRIX( l_writer );
 		UBO_SCENE( l_writer );
 		UBO_PASS( l_writer );
 
-		// Pixel inputs
-		IN( l_writer, Vec3, vtx_vertex );
-		IN( l_writer, Vec3, vtx_normal );
-		IN( l_writer, Vec3, vtx_tangent );
-		IN( l_writer, Vec3, vtx_bitangent );
-		IN( l_writer, Vec3, vtx_texture );
+		// Fragment Intputs
+		Vec3 vtx_vertex( l_writer.GetIn< Vec3 >( cuT( "vtx_vertex" ) ) );
+		Vec3 vtx_normal( l_writer.GetIn< Vec3 >( cuT( "vtx_normal" ) ) );
+		Vec3 vtx_tangent( l_writer.GetIn< Vec3 >( cuT( "vtx_tangent" ) ) );
+		Vec3 vtx_bitangent( l_writer.GetIn< Vec3 >( cuT( "vtx_bitangent" ) ) );
+		Vec3 vtx_texture( l_writer.GetIn< Vec3 >( cuT( "vtx_texture" ) ) );
 
-		LAYOUT( l_writer, Vec4, pxl_v4FragColor );
+		Vec4 pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
 		if ( l_writer.GetOpenGl().HasTbo() )
 		{
@@ -272,132 +349,123 @@ namespace Direct
 			UNIFORM( l_writer, Sampler1D, c3d_sLights );
 		}
 
-		Sampler2D c3d_mapColour;
-		Sampler2D c3d_mapAmbient;
-		Sampler2D c3d_mapDiffuse;
-		Sampler2D c3d_mapNormal;
-		Sampler2D c3d_mapOpacity;
-		Sampler2D c3d_mapSpecular;
-		Sampler2D c3d_mapHeight;
-		Sampler2D c3d_mapGloss;
+		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
+		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ), CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
+		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ), CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
+		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ), CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
+		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ), CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
+		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ), CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
+		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ), CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
+		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ), CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
 
-		BlinnPhongLightingModel l_lighting;
-		l_lighting.Declare_Light( l_writer );
-		l_lighting.Declare_GetLight( l_writer );
-
-		if ( p_flags != 0 )
-		{
-			if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
-			{
-				c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
-			{
-				c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
-			{
-				c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
-			{
-				c3d_mapNormal = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-			{
-				c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
-			{
-				c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_HEIGHT ) == eTEXTURE_CHANNEL_HEIGHT )
-			{
-				c3d_mapHeight = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ) );
-			}
-
-			if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
-			{
-				c3d_mapGloss = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ) );
-			}
-		}
+		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
 		std::function< void() > l_main = [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.X, vtx_normal.Y, vtx_normal.Z ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
-			LOCALE_ASSIGN( l_writer, Float, l_fShininess, c3d_fMatShininess );
+			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
-			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
+			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
 			if ( p_flags != 0 )
 			{
-				if ( ( p_flags & eTEXTURE_CHANNEL_NORMAL ) == eTEXTURE_CHANNEL_NORMAL )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
+					l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_SPECULAR ) == eTEXTURE_CHANNEL_SPECULAR )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ );
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_GLOSS ) == eTEXTURE_CHANNEL_GLOSS )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) )
 				{
-					l_fShininess = texture2D( c3d_mapGloss, vtx_texture.XY ).R;
+					l_fMatShininess = texture2D( c3d_mapGloss, vtx_texture.XY ).R;
 				}
 			}
 
-			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
-			{
-				l_lighting.WriteCompute( p_flags, l_writer, i,
-										 l_v3MapSpecular, c3d_mtxModelView, l_v3MapNormal,
-										 c3d_v4MatAmbient, c3d_v4MatDiffuse, c3d_v4MatSpecular,
-										 vtx_vertex, l_v3Normal, c3d_v3CameraPosition, l_fShininess,
-										 vtx_vertex, vtx_tangent, vtx_bitangent, vtx_normal,
-										 l_v3Ambient, l_v3Diffuse, l_v3Specular );
-			}
-			ROF
+			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
+			LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.X );
 
-			if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+			{
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputeDirectionalLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+													 FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+													 l_output );
+			}
+			ROF;
+
+			l_begin = l_end;
+			l_end += c3d_iLightsCount.Y;
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+			{
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputePointLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+											   FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+											   l_output );
+			}
+			ROF;
+
+			l_begin = l_end;
+			l_end += c3d_iLightsCount.Z;
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
+			{
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				l_lighting->ComputeSpotLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+											  FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+											  l_output );
+			}
+			ROF;
+
+			if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
 			{
 				l_fAlpha = texture2D( c3d_mapOpacity, vtx_texture.XY ).R * c3d_fMatOpacity;
 			}
 
 			if ( p_flags && p_flags != eTEXTURE_CHANNEL_OPACITY )
 			{
-				if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
 				{
 					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_AMBIENT ) == eTEXTURE_CHANNEL_AMBIENT )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) )
 				{
 					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_DIFFUSE ) == eTEXTURE_CHANNEL_DIFFUSE )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) )
 				{
 					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
 				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) )
+				{
+					l_v3Specular *= l_v3MapSpecular;
+				}
 			}
 
-			pxl_v4FragColor = vec4( l_v3Emissive + l_v3Ambient + l_v3Diffuse + l_v3Specular, l_fAlpha );
-			//pxl_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ, l_fAlpha );
+			pxl_v4FragColor = vec4( l_v3Emissive +
+									l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
+									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.XYZ ) +
+									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ) +
+									c3d_v4MatEmissive.XYZ, l_fAlpha );
 		};
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
+
+#undef CHECK_FLAG
 	}
 
 #endif

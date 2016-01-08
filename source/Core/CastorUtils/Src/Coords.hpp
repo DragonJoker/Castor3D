@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "BinaryFile.hpp"
 #include "TextFile.hpp"
-#include "NonCopyable.hpp"
 #include "BinaryLoader.hpp"
 #include "TextLoader.hpp"
 
@@ -53,7 +52,7 @@ namespace Castor
 		\brief		Loader de Coords< T, Count >
 		*/
 		class BinaryLoader
-			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >, public Castor::NonCopyable
+			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >
 		{
 		public:
 			/**
@@ -96,7 +95,7 @@ namespace Castor
 		\brief Loader de Coords< T, Count >
 		*/
 		class TextLoader
-			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >
 		{
 		public:
 			/**

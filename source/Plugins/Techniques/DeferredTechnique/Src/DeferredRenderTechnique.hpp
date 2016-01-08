@@ -57,11 +57,14 @@ namespace Deferred
 		typedef enum eDS_TEXTURE CASTOR_TYPE( uint8_t )
 		{
 			eDS_TEXTURE_POSITION,
+			eDS_TEXTURE_AMBIENT,
 			eDS_TEXTURE_DIFFUSE,
 			eDS_TEXTURE_NORMALS,
 			eDS_TEXTURE_TANGENT,
 			eDS_TEXTURE_BITANGENT,
 			eDS_TEXTURE_SPECULAR,
+			eDS_TEXTURE_EMISSIVE,
+			eDS_TEXTURE_DEPTH,
 			eDS_TEXTURE_COUNT,
 		}	eDS_TEXTURE;
 
@@ -265,14 +268,10 @@ namespace Deferred
 	protected:
 		//!\~english The various textures	\~french Les diverses textures
 		Castor3D::DynamicTextureSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];
-		//!\~english The buffer receiving the depth colour	\~french Le tampon recevant la couleur de la profondeur
-		Castor3D::DepthStencilRenderBufferSPtr m_lightPassBufDepth;
 		//!\~english The deferred shading frame buffer	\~french Le tampon d'image pour le deferred shading
-		Castor3D::FrameBufferSPtr m_lightPassFrameBuffer;
+		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english The attachments between textures and deferred shading frame buffer	\~french Les attaches entre les texture et le tampon deferred shading
-		Castor3D::TextureAttachmentSPtr m_lightPassTexAttachs[eDS_TEXTURE_COUNT];
-		//!\~english The attach between depth texture and deferred shading frame buffer	\~french L'attache entre la texture profondeur et le tampon deferred shading
-		Castor3D::RenderBufferAttachmentSPtr m_lightPassDepthAttach;
+		Castor3D::TextureAttachmentSPtr m_geometryPassTexAttachs[eDS_TEXTURE_COUNT];
 		//!\~english The shader program used to render lights	\~french Le shader utilisé pour rendre les lumières
 		Castor3D::ShaderProgramBaseSPtr m_lightPassShaderProgram;
 		//!\~english The framve variable buffer used to apply matrices	\~french Le tampon de variables shader utilisé pour appliquer les matrices
@@ -291,8 +290,10 @@ namespace Deferred
 		Castor3D::Point3rFrameVariableSPtr m_pShaderCamera;
 		//!\~english The depth stencil state used by the geometric pass	\~french Le DepthStencilState utilisé par la passe géométrique
 		Castor3D::DepthStencilStateSPtr m_geometryPassDsState;
-		//!\~english The depth stencil state used byt he lights pass	\~french Le DepthStencilState utilisé par la passe lumières
+		//!\~english The depth stencil state used by the lights pass	\~french Le DepthStencilState utilisé par la passe lumières
 		Castor3D::DepthStencilStateSPtr m_lightPassDsState;
+		//!\~english The blend state used by the lights pass	\~french Le BlendState utilisé par la passe lumières
+		Castor3D::BlendStateSPtr m_lightPassBlendState;
 	};
 }
 

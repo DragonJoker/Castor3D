@@ -66,28 +66,29 @@ namespace Dx11Render
 		Cleanup();
 	}
 
-	void DxShaderProgram::RetrieveLinkerLog( String & strLog )
-	{
-	}
-
 	void DxShaderProgram::Initialise()
 	{
-		ShaderProgramBase::Initialise();
+		DoInitialise();
 	}
 
 	void DxShaderProgram::Cleanup()
 	{
-		ShaderProgramBase::Cleanup();
+		DoCleanup();
 	}
 
 	void DxShaderProgram::Bind( uint8_t p_byIndex, uint8_t p_byCount )
 	{
-		ShaderProgramBase::Bind( p_byIndex, p_byCount );
+		DoBind( p_byIndex, p_byCount );
 	}
 
 	void DxShaderProgram::Unbind()
 	{
-		ShaderProgramBase::Unbind();
+		DoUnbind();
+	}
+
+	bool DxShaderProgram::Link()
+	{
+		return DoLink();
 	}
 
 	ID3DBlob * DxShaderProgram::GetCompiled( Castor3D::eSHADER_TYPE p_type )

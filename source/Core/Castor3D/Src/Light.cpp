@@ -18,7 +18,6 @@ namespace Castor3D
 {
 	Light::Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, String const & p_name )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_LIGHT )
-		, OwnedBy< Engine >( *p_scene->GetOwner() )
 		, m_enabled( false )
 	{
 		m_pCategory = p_factory.Create( p_eLightType );
@@ -68,7 +67,7 @@ namespace Castor3D
 	{
 	}
 
-	void Light::AttachTo( SceneNodeSPtr p_pMaterial )
+	void Light::AttachTo( SceneNodeSPtr p_node )
 	{
 		Point4f l_ptPosType = GetPositionType();
 		SceneNodeSPtr l_node = GetParent();
@@ -78,23 +77,21 @@ namespace Castor3D
 			l_node->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
 		}
 
-		MovableObject::AttachTo( p_pMaterial );
+		MovableObject::AttachTo( p_node );
 		l_node = GetParent();
 
 		if ( l_node )
 		{
-			l_ptPosType[0] = float( l_node->GetPosition()[0] );
-			l_ptPosType[1] = float( l_node->GetPosition()[1] );
-			l_ptPosType[2] = float( l_node->GetPosition()[2] );
+			m_notifyIndex = l_node->RegisterObject( std::bind( &Light::OnNodeChanged, this ) );
+			OnNodeChanged();
 		}
 		else
 		{
 			l_ptPosType[0] = 0;
 			l_ptPosType[1] = 0;
 			l_ptPosType[2] = 0;
+			m_pCategory->SetPositionType( l_ptPosType );
 		}
-
-		m_pCategory->SetPositionType( l_ptPosType );
 	}
 
 	DirectionalLightSPtr Light::GetDirectionalLight()const
@@ -131,5 +128,15 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	void Light::OnNodeChanged()
+	{
+		SceneNodeSPtr l_node = GetParent();
+		Point4f l_ptPosType = GetPositionType();
+		l_ptPosType[0] = float( l_node->GetDerivedPosition()[0] );
+		l_ptPosType[1] = float( l_node->GetDerivedPosition()[1] );
+		l_ptPosType[2] = float( l_node->GetDerivedPosition()[2] );
+		m_pCategory->SetPositionType( l_ptPosType );
 	}
 }
