@@ -274,6 +274,8 @@ namespace Castor
 	template<>
 	struct PtOperators< float, float, 4, 4 >
 	{
+#if C3D_USE_POINT_SIMD_OPERATIONS
+
 		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_ptA, float const & p_scalar )
 		{
 			__m128 l_value = _mm_load_ps( p_ptA.const_ptr() );	// l_value = p_ptA
@@ -393,6 +395,130 @@ namespace Castor
 			_mm_store_ps( l_result.ptr(), l_valueA );
 			return l_result;
 		}
+
+#else
+
+		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_ptA, float const & p_scalar )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] += p_scalar;
+			l_result[1] += p_scalar;
+			l_result[2] += p_scalar;
+			l_result[3] += p_scalar;
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_ptA, float const & p_scalar )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] -= p_scalar;
+			l_result[1] -= p_scalar;
+			l_result[2] -= p_scalar;
+			l_result[3] -= p_scalar;
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_ptA, float const & p_scalar )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] *= p_scalar;
+			l_result[1] *= p_scalar;
+			l_result[2] *= p_scalar;
+			l_result[3] *= p_scalar;
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_ptA, float const & p_scalar )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] /= p_scalar;
+			l_result[1] /= p_scalar;
+			l_result[2] /= p_scalar;
+			l_result[3] /= p_scalar;
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_ptA, float const * p_buffer )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] += p_buffer[0];
+			l_result[1] += p_buffer[1];
+			l_result[2] += p_buffer[2];
+			l_result[3] += p_buffer[3];
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_ptA, float const * p_buffer )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] -= p_buffer[0];
+			l_result[1] -= p_buffer[1];
+			l_result[2] -= p_buffer[2];
+			l_result[3] -= p_buffer[3];
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_ptA, float const * p_buffer )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] *= p_buffer[0];
+			l_result[1] *= p_buffer[1];
+			l_result[2] *= p_buffer[2];
+			l_result[3] *= p_buffer[3];
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_ptA, float const * p_buffer )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] /= p_buffer[0];
+			l_result[1] /= p_buffer[1];
+			l_result[2] /= p_buffer[2];
+			l_result[3] /= p_buffer[3];
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > add( Castor::Point< float, 4 > const & p_ptA, Castor::Point< float, 4 > const & p_ptB )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] += p_ptB[0];
+			l_result[1] += p_ptB[1];
+			l_result[2] += p_ptB[2];
+			l_result[3] += p_ptB[3];
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > sub( Castor::Point< float, 4 > const & p_ptA, Castor::Point< float, 4 > const & p_ptB )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] -= p_ptB[0];
+			l_result[1] -= p_ptB[1];
+			l_result[2] -= p_ptB[2];
+			l_result[3] -= p_ptB[3];
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > mul( Castor::Point< float, 4 > const & p_ptA, Castor::Point< float, 4 > const & p_ptB )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] *= p_ptB[0];
+			l_result[1] *= p_ptB[1];
+			l_result[2] *= p_ptB[2];
+			l_result[3] *= p_ptB[3];
+			return l_result;
+		}
+
+		static inline Castor::Point< float, 4 > div( Castor::Point< float, 4 > const & p_ptA, Castor::Point< float, 4 > const & p_ptB )
+		{
+			Castor::Point< float, 4 > l_result( p_ptA );
+			l_result[0] /= p_ptB[0];
+			l_result[1] /= p_ptB[1];
+			l_result[2] /= p_ptB[2];
+			l_result[3] /= p_ptB[3];
+			return l_result;
+		}
+
+#endif
 
 		template< typename PtType1 >
 		static inline Castor::Point< float, 4 > add( PtType1 const & p_ptA, float const & p_scalar )

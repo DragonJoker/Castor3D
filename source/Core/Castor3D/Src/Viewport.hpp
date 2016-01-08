@@ -39,7 +39,6 @@ namespace Castor3D
 	\remark		Donne le type de projection FOV, ...
 	*/
 	class Viewport
-		: public Castor::Aligned< CASTOR_ALIGN_OF( Castor::PlaneEquation< real > ) >
 	{
 	public:
 		C3D_API static const Castor::String string_type[eVIEWPORT_TYPE_COUNT];

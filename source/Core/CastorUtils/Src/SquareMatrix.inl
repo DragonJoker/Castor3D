@@ -116,6 +116,8 @@ namespace
 
 	template< typename Type, uint32_t Count > struct SqrMtxOperators;
 
+#if C3D_USE_POINT_SIMD_OPERATIONS
+
 	template<>
 	struct SqrMtxOperators< float, 4 >
 	{
@@ -148,6 +150,8 @@ namespace
 			p_mtxA = l_result;
 		}
 	};
+
+#endif
 
 	template< typename Type >
 	struct SqrMtxOperators< Type, 4 >

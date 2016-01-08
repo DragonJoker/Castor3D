@@ -34,7 +34,6 @@ namespace Castor
 	*/
 	template< typename T >
 	class PlaneEquation
-		: Aligned< CASTOR_ALIGN_OF( Point3<T> ) >
 	{
 	private:
 		typedef Castor::Policy< T > policy;

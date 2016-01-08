@@ -24,7 +24,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Viewport.hpp"
 
 #include <OwnedBy.hpp>
-#include <Aligned.hpp>
 
 namespace Castor3D
 {
@@ -61,7 +60,6 @@ namespace Castor3D
 	*/
 	class OverlayManager
 		: public Manager< Castor::String, Overlay >
-		, public Castor::Aligned< CASTOR_ALIGN_OF( Viewport ) >
 	{
 	public:
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;

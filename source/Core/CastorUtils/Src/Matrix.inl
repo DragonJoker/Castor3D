@@ -1,7 +1,6 @@
 ﻿#include "Templates.hpp"
 
 #include "Utils.hpp"
-#include "Aligned.hpp"
 
 namespace Castor
 {
@@ -9,7 +8,7 @@ namespace Castor
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( NoInit const & )
-		: m_data( AlignedAlloc< T >( 16, size ) )
+		: m_data( new T[16] )
 		, m_ownCoords( true )
 	{
 		do_update_columns();
@@ -78,7 +77,7 @@ namespace Castor
 	{
 		if ( m_ownCoords )
 		{
-			AlignedFree( m_data );
+			delete [] m_data;
 		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -275,7 +274,7 @@ namespace Castor
 		{
 			if ( m_ownCoords )
 			{
-				AlignedFree( m_data );
+				delete [] m_data;
 			}
 
 			m_data = std::move( p_matrix.m_data );
@@ -427,7 +426,7 @@ namespace Castor
 	{
 		if ( m_ownCoords )
 		{
-			AlignedFree( m_data );
+			delete [] m_data;
 			m_data = NULL;
 		}
 
