@@ -90,7 +90,7 @@ namespace Bloom
 		Castor::real m_buffer[24];
 		SurfaceArray m_hiPassSurfaces;
 		SurfaceArray m_blurSurfaces;
-		std::array< float, KERNEL_SIZE > m_kernel = { 5, 6, 5 };
+		std::array< float, KERNEL_SIZE > m_kernel;
 		float m_offsetX;
 		float m_offsetY;
 	};

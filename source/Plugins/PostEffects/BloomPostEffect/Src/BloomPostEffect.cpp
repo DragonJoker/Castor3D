@@ -165,6 +165,9 @@ namespace Bloom
 
 	bool BloomPostEffect::BloomPostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, bool p_linear )
 	{
+		bool l_return = false;
+		m_size = p_size;
+
 		String l_name = cuT( "BloomSampler_" );
 		eINTERPOLATION_MODE l_mode;
 
@@ -191,9 +194,6 @@ namespace Bloom
 		{
 			l_sampler = p_renderTarget.GetOwner()->GetSamplerManager().Find( l_name );
 		}
-
-		bool l_return = false;
-		m_size = p_size;
 
 		m_fbo = p_renderTarget.CreateFrameBuffer();
 		m_colourTexture = p_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
@@ -244,6 +244,10 @@ namespace Bloom
 		, m_offsetX( 1.2f )
 		, m_offsetY( 1.2f )
 	{
+		m_kernel[0] = 5;
+		m_kernel[1] = 6;
+		m_kernel[2] = 5;
+
 		std::vector< xchar > l_buffer( 100 );
 
 		if ( p_param.Get( cuT( "OffsetX" ), l_buffer.data(), l_buffer.size() ) )
