@@ -209,7 +209,7 @@ namespace GlRender
 		*/
 		inline bool IsValid()const
 		{
-			return m_glName != eGL_INVALID_INDEX && m_validator( m_glName );
+			return m_glName != eGL_INVALID_INDEX;
 		}
 
 		/** Retrieves the OpenGl instance

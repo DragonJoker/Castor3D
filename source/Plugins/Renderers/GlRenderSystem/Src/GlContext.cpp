@@ -42,10 +42,6 @@ namespace GlRender
 
 	void GlContext::UpdateFullScreen( bool p_value )
 	{
-		if ( Context::m_window->GetVSync() )
-		{
-			GetImpl()->UpdateVSync( p_value );
-		}
 	}
 
 	bool GlContext::DoInitialise()

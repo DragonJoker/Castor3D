@@ -175,7 +175,6 @@ namespace GlRender
 	void GlContextImpl::UpdateVSync( bool p_enable )
 	{
 		SetCurrent();
-		Logger::LogDebug( cuT( "GlContextImpl::UpdateVSync" ) );
 
 		if ( p_enable )
 		{

@@ -115,7 +115,7 @@ namespace GlRender
 						m_unbinder( 0u );
 					}
 
-					l_return = IsValid();
+					l_return = IsValid() && m_validator( GetGlName() );
 
 					if ( !l_return )
 					{
