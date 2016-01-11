@@ -97,7 +97,7 @@ namespace GlRender
 		*/
 		inline bool Create( bool p_prebind = true )
 		{
-			bool l_return = ObjectType::IsValid();
+			bool l_return = IsValid();
 
 			if ( !l_return )
 			{
@@ -107,15 +107,15 @@ namespace GlRender
 				{
 					if ( l_return )
 					{
-						l_return = m_binder( GetGlName() );
+						l_return = Bind();
 					}
 
 					if ( l_return )
 					{
-						m_unbinder( 0u );
+						Unbind();
 					}
 
-					l_return = IsValid() && m_validator( GetGlName() );
+					l_return = IsValid() && Validate();
 
 					if ( !l_return )
 					{
@@ -126,7 +126,7 @@ namespace GlRender
 			
 			if ( l_return )
 			{
-				glTrack( Holder::GetOpenGl(), ObjectType::m_typeName, this );
+				glTrack( GetOpenGl(), GetGlTypeName(), this );
 			}
 
 			return l_return;
@@ -153,6 +153,8 @@ namespace GlRender
 		using ObjectType::Destroy;
 		using ObjectType::IsValid;
 		using ObjectType::GetGlName;
+		using ObjectType::Validate;
+		using ObjectType::GetGlTypeName;
 		using Holder::GetOpenGl;
 
 	private:
