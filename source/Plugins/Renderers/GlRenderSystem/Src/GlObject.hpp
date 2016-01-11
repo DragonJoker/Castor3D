@@ -209,7 +209,16 @@ namespace GlRender
 		*/
 		inline bool IsValid()const
 		{
-			return m_glName != eGL_INVALID_INDEX && m_validator( m_glName );
+			return m_glName != eGL_INVALID_INDEX;
+		}
+
+		/** Tells if the object is a valid OpenGL object.
+		@return
+			The status.
+		*/
+		inline bool Validate()const
+		{
+			return IsValid() && m_validator( m_glName );
 		}
 
 		/** Retrieves the OpenGl instance
@@ -228,6 +237,15 @@ namespace GlRender
 		inline uint32_t & GetGlName()
 		{
 			return m_glName;
+		}
+
+		/** Retrieves the OpenGl type name.
+		@return
+			The name.
+		*/
+		inline const char * GetGlTypeName()
+		{
+			return m_typeName;
 		}
 
 	protected:

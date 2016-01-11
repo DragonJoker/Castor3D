@@ -334,9 +334,7 @@ namespace Castor3D
 	{
 		if ( m_bFullscreen != val )
 		{
-			Logger::LogDebug( cuT( "RenderWindow::UpdateFullScreen" ) );
 			m_context->UpdateFullScreen( val );
-			Logger::LogDebug( cuT( "Context switched fullscreen" ) );
 			m_bFullscreen = val;
 		}
 	}
