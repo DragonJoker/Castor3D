@@ -375,29 +375,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	eTOPOLOGY RenderWindow::GetPrimitiveType()const
-	{
-		eTOPOLOGY l_return = eTOPOLOGY( -1 );
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_return = l_target->GetPrimitiveType();
-		}
-
-		return l_return;
-	}
-
-	void RenderWindow::SetPrimitiveType( eTOPOLOGY val )
-	{
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_target->SetPrimitiveType( val );
-		}
-	}
-
 	eVIEWPORT_TYPE RenderWindow::GetViewportType()const
 	{
 		eVIEWPORT_TYPE l_return = eVIEWPORT_TYPE( -1 );

@@ -174,7 +174,7 @@ namespace Castor3D
 			l_pBuffer += l_uiStride;
 		}
 
-		m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_POINTS );
 		return true;
 	}
 
@@ -268,7 +268,7 @@ namespace Castor3D
 					}
 
 					l_pass->Render( l_index++, l_count );
-					m_pGeometryBuffers->Draw( eTOPOLOGY_POINTS, l_program, l_uiSize, 0 );
+					m_pGeometryBuffers->Draw( l_program, l_uiSize, 0 );
 					l_pass->EndRender();
 				}
 			}

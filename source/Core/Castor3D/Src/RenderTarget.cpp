@@ -484,22 +484,9 @@ namespace Castor3D
 		return GetOwner()->GetRenderSystem()->CreateDynamicTexture( p_cpuAccess, p_gpuAccess );
 	}
 
-	eTOPOLOGY RenderTarget::GetPrimitiveType()const
-	{
-		return ( GetCamera() ? GetCamera()->GetPrimitiveType() : eTOPOLOGY_COUNT );
-	}
-
 	eVIEWPORT_TYPE RenderTarget::GetViewportType()const
 	{
 		return ( GetCamera() ? GetCamera()->GetViewportType() : eVIEWPORT_TYPE_COUNT );
-	}
-
-	void RenderTarget::SetPrimitiveType( eTOPOLOGY val )
-	{
-		if ( GetCamera() )
-		{
-			GetCamera()->SetPrimitiveType( val );
-		}
 	}
 
 	void RenderTarget::SetViewportType( eVIEWPORT_TYPE val )
@@ -615,7 +602,7 @@ namespace Castor3D
 #if !defined( NDEBUG )
 				p_fb.m_pFrameBuffer->SetClearColour( l_save );
 #endif
-				m_pRenderTechnique->Render( *l_scene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
+				m_pRenderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
 				m_pRenderTechnique->EndRender();
 			}
 		}

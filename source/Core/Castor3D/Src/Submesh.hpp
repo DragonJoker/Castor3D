@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -323,14 +323,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Draws the submesh
-		 *\param[in]	p_mode	The render mode
 		 *\param[in]	p_pass	The Pass containing material informations
 		 *\~french
 		 *\brief		Dessine le submesh
-		 *\param[in]	p_mode	Le mode de rendu
 		 *\param[in]	p_pass	La Pass contenant les informations de matériau
 		 */
-		C3D_API void Draw( eTOPOLOGY p_mode, Pass const & p_pass );
+		C3D_API void Draw( Pass const & p_pass );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points
@@ -430,6 +428,22 @@ namespace Castor3D
 		 *\return		La valeur
 		 */
 		C3D_API uint32_t GetRefCount( MaterialSPtr p_material )const;
+		/**
+		 *\~english
+		 *\return		The topology.
+		 *\~french
+		 *\return		La topologie.
+		 */
+		C3D_API eTOPOLOGY GetTopology()const;
+		/**
+		 *\~english
+		 *\brief		Sets the topology.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit la topologie.
+		 *\param[in]	p_value	La nouvelle valeur.
+		 */
+		C3D_API void SetTopology( eTOPOLOGY p_value );
 		/**
 		 *\~english
 		 *\brief		Retrieves the skeleton
@@ -718,13 +732,9 @@ namespace Castor3D
 		//!\~english The shader program flags	\~french Les indicateurs pour le shader
 		uint32_t m_uiProgramFlags;
 		//!\~english Pointer over geometry buffers	\~french Pointeur sur les buffers de la géométrie
-		GeometryBuffersSPtr	m_pGeometryBuffers;
+		GeometryBuffersSPtr m_pGeometryBuffers;
 		//!\~english Tells the renderer has been initialised	\~french Dit que le renderer a été initialisé
 		bool m_initialised;
-		//!\~english The actual draw type	\~french Le type de dessin actuel
-		eTOPOLOGY m_eCurDrawType;
-		//!\~english The previous call draw type	\~french Le type de dessin lors du précédent appel
-		eTOPOLOGY m_ePrvDrawType;
 		//!\~english Tells the VAO needs reininitialisation	\~french Dit que le VAO a besoin d'être réinitialisé
 		bool m_bDirty;
 	};

@@ -72,7 +72,6 @@ namespace CastorViewer
 		void DoStartTimer( int p_iId );
 		void DoStopTimer( int p_iId );
 		void DoResetCamera();
-		void DoSwitchPrimitiveType();
 		void DoReloadScene();
 		Castor::real DoTransformX( int x );
 		Castor::real DoTransformY( int y );

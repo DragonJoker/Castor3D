@@ -213,19 +213,21 @@ namespace Castor3D
 		C3D_API virtual	bool NeedsMatrixTransposition()const = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a geometries buffer holder
-		 *\param[in]	p_pVertexBuffer	The vertex buffer
-		 *\param[in]	p_pIndexBuffer	The index buffer
-		 *\param[in]	p_pMatrixBuffer	The matrix buffer
-		 *\return		The created geometries buffer holder
+		 *\brief		Creates a geometries buffer holder.
+		 *\param[in]	p_pVertexBuffer	The vertex buffer.
+		 *\param[in]	p_pIndexBuffer	The index buffer.
+		 *\param[in]	p_pMatrixBuffer	The matrix buffer.
+		 *\param[in]	p_topology		The buffers topology.
+		 *\return		The created geometries buffer holder.
 		 *\~french
-		 *\brief		Crée un conteneur de buffers de géométrie
-		 *\param[in]	p_pVertexBuffer	Le tampon de sommets
-		 *\param[in]	p_pIndexBuffer	Le tampon d'indices
-		 *\param[in]	p_pMatrixBuffer	Le tampon de matrices
-		 *\return		Le conteneur de buffers de géométrie
+		 *\brief		Crée un conteneur de buffers de géométrie.
+		 *\param[in]	p_pVertexBuffer	Le tampon de sommets.
+		 *\param[in]	p_pIndexBuffer	Le tampon d'indices.
+		 *\param[in]	p_pMatrixBuffer	Le tampon de matrices.
+		 *\param[in]	p_topology		La topologie des tampons.
+		 *\return		Le conteneur de buffers de géométrie.
 		 */
-		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer ) = 0;
+		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context

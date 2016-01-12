@@ -89,7 +89,7 @@ namespace Castor3D
 				l_buffer += l_uiStride;
 			}
 
-			m_pPanelGeometryBuffer = GetOwner()->CreateGeometryBuffers( std::move( l_pPanelVtxBuffer ), nullptr, nullptr );
+			m_pPanelGeometryBuffer = GetOwner()->CreateGeometryBuffers( std::move( l_pPanelVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 			m_pPanelGeometryBuffer->Create();
 			m_pPanelGeometryBuffer->Initialise( DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}
@@ -108,7 +108,7 @@ namespace Castor3D
 				l_buffer += l_uiStride;
 			}
 
-			m_pBorderGeometryBuffer = GetOwner()->CreateGeometryBuffers( std::move( l_pBorderVtxBuffer ), nullptr, nullptr );
+			m_pBorderGeometryBuffer = GetOwner()->CreateGeometryBuffers( std::move( l_pBorderVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 			m_pBorderGeometryBuffer->Create();
 			m_pBorderGeometryBuffer->Initialise( DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}
@@ -338,7 +338,7 @@ namespace Castor3D
 		VertexBufferUPtr l_pTextVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		l_pTextVtxBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_pDeclaration->GetStride() );
 
-		GeometryBuffersSPtr l_geometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pTextVtxBuffer ), nullptr, nullptr );
+		GeometryBuffersSPtr l_geometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pTextVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		l_geometryBuffers->Create();
 		l_geometryBuffers->Initialise( DoGetTextProgram( eTEXTURE_CHANNEL_COLOUR ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 
@@ -386,13 +386,13 @@ namespace Castor3D
 
 					l_pass->Render2D( l_byIndex++, l_byCount );
 					p_texture->BindAt( 0 );
-					p_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_program, p_count, 0 );
+					p_geometryBuffers->Draw( l_program, p_count, 0 );
 					p_texture->UnbindFrom( 0 );
 				}
 				else
 				{
 					l_pass->Render2D( l_byIndex++, l_byCount );
-					p_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_program, p_count, 0 );
+					p_geometryBuffers->Draw( l_program, p_count, 0 );
 				}
 
 				l_pass->EndRender();

@@ -300,9 +300,9 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	std::memcpy( l_pIdxBufferSky->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
 	std::memcpy( l_pIdxBufferMap->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
 	std::memcpy( l_pIdxBufferClo->data(), &l_cloudsIndices[0], sizeof( l_cloudsIndices ) );
-	m_skyGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr );
-	m_skymapGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr );
-	m_cloudsGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr );
+	m_skyGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr, eTOPOLOGY_TRIANGLES );
+	m_skymapGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr, eTOPOLOGY_TRIANGLES );
+	m_cloudsGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr, eTOPOLOGY_TRIANGLES );
 	RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRenderSystem()->GetOwner()->GetRasteriserStateManager().Create( cuT( "OceanLighting" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
@@ -695,7 +695,7 @@ void RenderTechnique::generateMesh()
 	IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetOwner() );
 	l_pIdxBuffer->Resize( n );
 	std::memcpy( l_pIdxBuffer->data(), &indices[0], n * sizeof( uint32_t ) );
-	m_renderGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr );
+	m_renderGBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
 	m_renderGBuffers->Create();
 	m_renderGBuffers->Initialise( m_render, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 }
@@ -1131,7 +1131,7 @@ bool RenderTechnique::Render( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_PA
 	m_skymapCloudsColor->SetValue( l_colour );
 	m_skymapBlendState.lock()->Apply();
 	m_skymap->Bind( 0, 1 );
-	m_skymapGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_skymap, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_skymapGBuffers->Draw( m_skymap, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_skymap->Unbind();
 	m_fbo->Unbind();
 	m_pTexSky->Bind();
@@ -1191,7 +1191,7 @@ void RenderTechnique::DoEndRender()
 	m_skyHdrExposure->SetValue( m_hdrExposure );
 	m_skyBlendState.lock()->Apply();
 	m_sky->Bind( 0, 1 );
-	m_skyGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_sky, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_skyGBuffers->Draw( m_sky, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_sky->Unbind();
 
 	if ( m_cloudLayer && ch < 3000.0 )
@@ -1256,7 +1256,7 @@ void RenderTechnique::DoEndRender()
 	m_renderRasteriserState.lock()->Apply();
 	m_renderBlendState.lock()->Apply();
 	m_render->Bind( 0, 1 );
-	m_renderGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_render, m_renderGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_renderGBuffers->Draw( m_render, m_renderGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_render->Unbind();
 	m_pRenderTarget->GetRasteriserState()->Apply();
 
@@ -1537,7 +1537,7 @@ void RenderTechnique::drawClouds( const Point3f & sun, const Matrix4x4f & mat )
 	m_cloudsCloudsColor->SetValue( l_colour );
 	m_cloudsBlendState.lock()->Apply();
 	m_clouds->Bind( 0, 1 );
-	m_cloudsGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_clouds, m_cloudsGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_cloudsGBuffers->Draw( m_clouds, m_cloudsGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_clouds->Unbind();
 }
 

@@ -92,6 +92,7 @@ namespace GuiCommon
 
 	private:
 		void OnMaterialChange( Castor::String const & p_name );
+		void OnTopologyChange( Castor3D::eTOPOLOGY p_value );
 
 	private:
 		Castor3D::GeometryWPtr m_pGeometry;

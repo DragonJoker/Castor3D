@@ -1,4 +1,4 @@
-﻿#include "Submesh.hpp"
+#include "Submesh.hpp"
 
 #include "BonedVertex.hpp"
 #include "Buffer.hpp"
@@ -207,8 +207,6 @@ namespace Castor3D
 		, m_uiID( p_uiId )
 		, m_pParentMesh( p_pMesh )
 		, m_uiProgramFlags( 0 )
-		, m_eCurDrawType( eTOPOLOGY( -1 ) )
-		, m_ePrvDrawType( eTOPOLOGY( -1 ) )
 		, m_initialised( false )
 	{
 	}
@@ -524,13 +522,8 @@ namespace Castor3D
 		DoCreateGeometryBuffers();
 	}
 
-	void Submesh::Draw( eTOPOLOGY p_mode, Pass const & p_pass )
+	void Submesh::Draw( Pass const & p_pass )
 	{
-		if ( p_mode != m_eCurDrawType )
-		{
-			m_eCurDrawType = p_mode;
-		}
-
 		if ( DoPrepareGeometryBuffers( p_pass ) )
 		{
 			ShaderProgramBaseSPtr l_program = p_pass.GetShader< ShaderProgramBase >();
@@ -547,16 +540,16 @@ namespace Castor3D
 			{
 				if ( GetOwner()->GetRenderSystem()->HasInstancing() )
 				{
-					m_pGeometryBuffers->DrawInstanced( m_eCurDrawType, l_program, l_uiSize, 0, l_count );
+					m_pGeometryBuffers->DrawInstanced( l_program, l_uiSize, 0, l_count );
 				}
 				else
 				{
-					m_pGeometryBuffers->Draw( m_eCurDrawType, l_program, l_uiSize, 0 );
+					m_pGeometryBuffers->Draw( l_program, l_uiSize, 0 );
 				}
 			}
 			else
 			{
-				m_pGeometryBuffers->Draw( m_eCurDrawType, l_program, l_uiSize, 0 );
+				m_pGeometryBuffers->Draw( l_program, l_uiSize, 0 );
 			}
 		}
 	}
@@ -944,6 +937,26 @@ namespace Castor3D
 		return l_return;
 	}
 
+	eTOPOLOGY Submesh::GetTopology()const
+	{
+		eTOPOLOGY l_return = eTOPOLOGY_COUNT;
+
+		if ( m_pGeometryBuffers )
+		{
+			l_return = m_pGeometryBuffers->GetTopology();
+		}
+
+		return l_return;
+	}
+
+	void Submesh::SetTopology( eTOPOLOGY p_value )
+	{
+		if ( m_pGeometryBuffers )
+		{
+			m_pGeometryBuffers->SetTopology( p_value );
+		}
+	}
+
 	void Submesh::DoGenerateVertexBuffer()
 	{
 		if ( GetGeometryBuffers() )
@@ -1092,11 +1105,11 @@ namespace Castor3D
 		if ( GetOwner()->GetRenderSystem()->HasInstancing() )
 		{
 			MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( *GetOwner() );
-			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ) );
+			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ), eTOPOLOGY_TRIANGLES );
 		}
 		else
 		{
-			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr );
+			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
 		}
 	}
 
@@ -1106,9 +1119,8 @@ namespace Castor3D
 
 		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			if ( m_pGeometryBuffers && ( m_eCurDrawType != m_ePrvDrawType || m_bDirty ) )
+			if ( m_pGeometryBuffers && m_bDirty )
 			{
-				m_ePrvDrawType = m_eCurDrawType;
 				m_bDirty = false;
 				m_pGeometryBuffers->Cleanup();
 				m_pGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );

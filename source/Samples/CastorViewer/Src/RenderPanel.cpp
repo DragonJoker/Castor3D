@@ -212,27 +212,6 @@ namespace CastorViewer
 		}
 	}
 
-	void RenderPanel::DoSwitchPrimitiveType()
-	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-		DoStopTimer( eTIMER_ID_COUNT );
-
-		switch ( l_pWindow->GetPrimitiveType() )
-		{
-		case eTOPOLOGY_TRIANGLES:
-			l_pWindow->SetPrimitiveType( eTOPOLOGY_LINES );
-			break;
-
-		case eTOPOLOGY_LINES:
-			l_pWindow->SetPrimitiveType( eTOPOLOGY_POINTS );
-			break;
-
-		case eTOPOLOGY_POINTS:
-			l_pWindow->SetPrimitiveType( eTOPOLOGY_TRIANGLES );
-			break;
-		}
-	}
-
 	void RenderPanel::DoReloadScene()
 	{
 		DoStopTimer( eTIMER_ID_COUNT );
@@ -504,10 +483,6 @@ namespace CastorViewer
 			{
 			case 'R':
 				DoResetCamera();
-				break;
-
-			case 'W':
-				DoSwitchPrimitiveType();
 				break;
 
 			case WXK_F5:

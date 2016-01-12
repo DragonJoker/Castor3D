@@ -990,8 +990,6 @@ interface IRenderTarget
 	[propput, id( 1 ), helpstring( "The samples count, when multisampling" )] HRESULT SamplesCount( [in] unsigned int val );
 	[propget, id( 2 ), helpstring( "The target camera" )] HRESULT Camera( [out, retval] ICamera ** pVal );
 	[propput, id( 2 ), helpstring( "The target camera" )] HRESULT Camera( [in] ICamera * camera );
-	[propget, id( 3 ), helpstring( "The rendering primitive type" )] HRESULT PrimitiveType( [out, retval] eTOPOLOGY * pVal );
-	[propput, id( 3 ), helpstring( "The rendering primitive type" )] HRESULT PrimitiveType( [in] eTOPOLOGY val );
 	[propget, id( 4 ), helpstring( "The viewport type" )] HRESULT ViewportType( [out, retval] eVIEWPORT_TYPE * pVal );
 	[propput, id( 4 ), helpstring( "The viewport type" )] HRESULT ViewportType( [in] eVIEWPORT_TYPE val );
 	[propget, id( 5 ), helpstring( "The rendered scene" )] HRESULT Scene( [out, retval] IScene ** pVal );
@@ -1211,8 +1209,10 @@ interface ISubmesh
 {
 	[propget, id( 1 ), helpstring( "The faces count" )] HRESULT FaceCount( [out, retval] unsigned int * pVal );
 	[propget, id( 2 ), helpstring( "The points count" )] HRESULT PointsCount( [out, retval] unsigned int * pVal );
-	[id( 3 ), helpstring( "Adds a point to the submesh" )] HRESULT AddPoint( [in] IVector3D * val );
-	[id( 4 ), helpstring( "Adds a face to the submesh, defined by its vertex indices" )] HRESULT AddFace( [in] unsigned int x, [in] unsigned int y, [in] unsigned int z );
+	[propget, id( 3 ), helpstring( "The rendering topology" )] HRESULT Topology( [out, retval] eTOPOLOGY * pVal );
+	[propput, id( 3 ), helpstring( "The rendering topology" )] HRESULT Topology( [in] eTOPOLOGY val );
+	[id( 4 ), helpstring( "Adds a point to the submesh" )] HRESULT AddPoint( [in] IVector3D * val );
+	[id( 5 ), helpstring( "Adds a face to the submesh, defined by its vertex indices" )] HRESULT AddFace( [in] unsigned int x, [in] unsigned int y, [in] unsigned int z );
 };
 
 // IMesh
@@ -1421,8 +1421,6 @@ interface ISpotLight
 interface ICamera
 	: IMovableObject
 {
-	[propget, id( 11 ), helpstring( "The camera rendering primitive type" )] HRESULT PrimitiveType( [out, retval] eTOPOLOGY * pVal );
-	[propput, id( 11 ), helpstring( "The camera rendering primitive type" )] HRESULT PrimitiveType( [in] eTOPOLOGY val );
 	[propget, id( 12 ), helpstring( "The camera viewport type" )] HRESULT ViewportType( [out, retval] eVIEWPORT_TYPE * pVal );
 	[propput, id( 12 ), helpstring( "The camera viewport type" )] HRESULT ViewportType( [in] eVIEWPORT_TYPE val );
 	[propget, id( 13 ), helpstring( "The camera horizontal resolution" )] HRESULT Width( [out, retval] unsigned int * pVal );

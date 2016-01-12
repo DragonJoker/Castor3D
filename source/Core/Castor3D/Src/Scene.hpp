@@ -204,17 +204,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Renders the scene in a given display mode
 		 *\param[in]	p_technique		The current rendering technique, used to select appropriate shaders
-		 *\param[in]	p_displayMode	The mode in which the display must be made
 		 *\param[in]	p_dFrameTime	The time elapsed since the last frame was rendered
 		 *\param[in]	p_camera		The camera from which the render is made
 		 *\~french
 		 *\brief		Rend la scène dans un mode d'affichage donné
 		 *\param[in]	p_technique		La technique de rendu courante, utilisee pour recuperer les bons shaders
-		 *\param[in]	p_displayMode	Le mode d'affichage
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la frame précédente
 		 *\param[in]	p_camera		La caméra utilisée pour le rendu
 		 */
-		C3D_API void Render( RenderTechniqueBase & p_technique, eTOPOLOGY p_displayMode, double p_dFrameTime, Camera const & p_camera );
+		C3D_API void Render( RenderTechniqueBase & p_technique, double p_dFrameTime, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Sets the background image for the scene
@@ -1026,14 +1024,14 @@ namespace Castor3D
 		void DoDeleteToDelete();
 		void DoUpdateAnimations();
 		void DoSortByAlpha();
-		void DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
-		void DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
-		void DoRenderAlphaSortedSubmeshes( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, eTOPOLOGY p_displayMode, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
+		void DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end );
+		void DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end );
+		void DoRenderAlphaSortedSubmeshes( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end );
 		void DoResortAlpha( Camera const & p_camera, RenderNodeArrayIt p_begin, RenderNodeArrayIt p_end, RenderNodeByDistanceMMap & p_map, int p_sign );
-		void DoRenderSubmeshInstancedMultiple( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology );
-		void DoRenderSubmeshInstancedSingle( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
-		void DoRenderSubmeshNonInstanced( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
-		void DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology );
+		void DoRenderSubmeshInstancedMultiple( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeArray const & p_nodes );
+		void DoRenderSubmeshInstancedSingle( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node );
+		void DoRenderSubmeshNonInstanced( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node );
+		void DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node );
 		void DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object );
 		void DoRenderBillboards( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
 		void DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );

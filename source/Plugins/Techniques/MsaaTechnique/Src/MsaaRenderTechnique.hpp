@@ -149,7 +149,7 @@ namespace Msaa
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, Castor3D::eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		virtual bool DoRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function

@@ -3225,7 +3225,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraEnd )
 
 	if ( l_pContext->pSceneNode && l_pContext->pViewport )
 	{
-		l_pContext->pScene->CreateCamera( l_pContext->strName, l_pContext->pSceneNode, *l_pContext->pViewport )->SetPrimitiveType( l_pContext->ePrimitiveType );
+		l_pContext->pScene->CreateCamera( l_pContext->strName, l_pContext->pSceneNode, *l_pContext->pViewport );
 	}
 }
 END_ATTRIBUTE_POP()

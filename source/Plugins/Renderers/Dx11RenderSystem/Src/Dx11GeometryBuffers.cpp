@@ -8,8 +8,8 @@ using namespace Castor3D;
 
 namespace Dx11Render
 {
-	DxGeometryBuffers::DxGeometryBuffers( DxRenderSystem * p_renderSystem, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
-		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
+	DxGeometryBuffers::DxGeometryBuffers( DxRenderSystem * p_renderSystem, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology )
+		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ), p_topology )
 		, m_renderSystem( p_renderSystem )
 	{
 	}
@@ -18,10 +18,10 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index )
+	bool DxGeometryBuffers::Draw( ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index )
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		l_deviceContext->IASetPrimitiveTopology( DirectX11::Get( p_topology ) );
+		l_deviceContext->IASetPrimitiveTopology( DirectX11::Get( m_topology ) );
 		bool l_return = m_pVertexBuffer->Bind();
 
 		if ( l_return )
@@ -47,10 +47,10 @@ namespace Dx11Render
 		return l_return;
 	}
 
-	bool DxGeometryBuffers::DrawInstanced( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
+	bool DxGeometryBuffers::DrawInstanced( ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
-		l_deviceContext->IASetPrimitiveTopology( DirectX11::Get( p_topology ) );
+		l_deviceContext->IASetPrimitiveTopology( DirectX11::Get( m_topology ) );
 		bool l_return = m_pVertexBuffer->Bind();
 
 		if ( l_return )

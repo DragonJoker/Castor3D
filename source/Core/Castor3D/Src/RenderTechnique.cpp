@@ -71,10 +71,10 @@ namespace Castor3D
 		return DoBeginRender();
 	}
 
-	bool RenderTechniqueBase::Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
+	bool RenderTechniqueBase::Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
 		m_renderSystem->PushScene( &p_scene );
-		return DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
+		return DoRender( p_scene, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechniqueBase::EndRender()
@@ -96,11 +96,11 @@ namespace Castor3D
 		return DoGetPixelShaderSource( p_flags );
 	}
 
-	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
+	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
 		p_camera.GetViewport().SetSize( m_pRenderTarget->GetSize() );
 		p_camera.Render();
-		p_scene.Render( *this, p_ePrimitives, p_dFrameTime, p_camera );
+		p_scene.Render( *this, p_dFrameTime, p_camera );
 		p_camera.EndRender();
 		return true;
 	}

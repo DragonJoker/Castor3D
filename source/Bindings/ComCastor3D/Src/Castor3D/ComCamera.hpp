@@ -63,7 +63,6 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( PrimitiveType, eTOPOLOGY, make_getter( m_internal.get(), &Castor3D::Camera::GetPrimitiveType ), make_putter( m_internal.get(), &Castor3D::Camera::SetPrimitiveType ) );
 		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, make_getter( m_internal.get(), &Castor3D::Camera::GetViewportType ), make_putter( m_internal.get(), &Castor3D::Camera::SetViewportType ) );
 
 		COM_PROPERTY_GET( Width, unsigned int, make_getter( m_internal.get(), &Castor3D::Camera::GetWidth ) );
