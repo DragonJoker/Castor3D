@@ -118,18 +118,16 @@ namespace Castor3D
 		 *\brief		Render function
 		 *\param[in]	p_scene			The scene to render
 		 *\param[in]	p_camera		The camera through which the scene is viewed
-		 *\param[in]	p_ePrimitives	The display mode
 		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
 		 *\param[in]	p_scene			La scène à rendre
 		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
-		 *\param[in]	p_ePrimitives	Le mode d'affichage
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		C3D_API bool Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function
@@ -210,18 +208,16 @@ namespace Castor3D
 		 *\brief		Render function
 		 *\param[in]	p_scene			The scene to render
 		 *\param[in]	p_camera		The camera through which the scene is viewed
-		 *\param[in]	p_ePrimitives	The display mode
 		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
 		 *\param[in]	p_scene			La scène à rendre
 		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
-		 *\param[in]	p_ePrimitives	Le mode d'affichage
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		C3D_API virtual bool DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function

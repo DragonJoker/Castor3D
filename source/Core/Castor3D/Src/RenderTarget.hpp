@@ -242,15 +242,6 @@ namespace Castor3D
 		C3D_API void SetTechnique( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Retrieves the eTOPOLOGY
-		 *\return		The eTOPOLOGY
-		 *\~french
-		 *\brief		Récupère le eTOPOLOGY
-		 *\return		Le eTOPOLOGY
-		 */
-		C3D_API eTOPOLOGY GetPrimitiveType()const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the eVIEWPORT_TYPE
 		 *\return		The eVIEWPORT_TYPE
 		 *\~french
@@ -258,15 +249,6 @@ namespace Castor3D
 		 *\return		Le eVIEWPORT_TYPE
 		 */
 		C3D_API eVIEWPORT_TYPE GetViewportType()const;
-		/**
-		 *\~english
-		 *\brief		Sets the eTOPOLOGY
-		 *\param[in]	val	The new eTOPOLOGY
-		 *\~french
-		 *\brief		Définit le eTOPOLOGY
-		 *\param[in]	val	Le nouveau eTOPOLOGY
-		 */
-		C3D_API void SetPrimitiveType( eTOPOLOGY val );
 		/**
 		 *\~english
 		 *\brief		Sets the eVIEWPORT_TYPE

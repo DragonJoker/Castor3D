@@ -636,7 +636,7 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::Render( RenderTechniqueBase & p_technique, eTOPOLOGY p_eTopology, double CU_PARAM_UNUSED( p_dFrameTime ), Camera const & p_camera )
+	void Scene::Render( RenderTechniqueBase & p_technique, double CU_PARAM_UNUSED( p_dFrameTime ), Camera const & p_camera )
 	{
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
@@ -653,11 +653,11 @@ namespace Castor3D
 
 			if ( l_renderSystem->HasInstancing() )
 			{
-				DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesNoAlpha.begin(), m_mapSubmeshesNoAlpha.end() );
+				DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, m_mapSubmeshesNoAlpha.begin(), m_mapSubmeshesNoAlpha.end() );
 			}
 			else
 			{
-				DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesNoAlpha.begin(), m_arraySubmeshesNoAlpha.end() );
+				DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, m_arraySubmeshesNoAlpha.begin(), m_arraySubmeshesNoAlpha.end() );
 			}
 		}
 
@@ -668,16 +668,16 @@ namespace Castor3D
 				if ( l_renderSystem->HasInstancing() )
 				{
 					l_pContext->CullFace( eFACE_FRONT );
-					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
+					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
 					l_pContext->CullFace( eFACE_BACK );
-					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
+					DoRenderSubmeshesInstanced( p_technique, p_camera, l_pipeline, m_mapSubmeshesAlpha.begin(), m_mapSubmeshesAlpha.end() );
 				}
 				else
 				{
 					l_pContext->CullFace( eFACE_FRONT );
-					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
+					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
 					l_pContext->CullFace( eFACE_BACK );
-					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, p_eTopology, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
+					DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end() );
 				}
 			}
 			else
@@ -685,9 +685,9 @@ namespace Castor3D
 				l_pContext->GetNoDepthWriteState()->Apply();
 				DoResortAlpha( p_camera, m_arraySubmeshesAlpha.begin(), m_arraySubmeshesAlpha.end(), m_mapSubmeshesAlphaSorted, 1 );
 				l_pContext->CullFace( eFACE_FRONT );
-				DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
+				DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
 				l_pContext->CullFace( eFACE_BACK );
-				DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, p_eTopology, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
+				DoRenderAlphaSortedSubmeshes( p_technique, l_pipeline, m_mapSubmeshesAlphaSorted.begin(), m_mapSubmeshesAlphaSorted.end() );
 			}
 		}
 
@@ -1503,7 +1503,7 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_eTopology, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end )
+	void Scene::DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, RenderNodeArrayConstIt p_begin, RenderNodeArrayConstIt p_end )
 	{
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
@@ -1515,18 +1515,18 @@ namespace Castor3D
 				{
 					if ( l_renderSystem->HasInstancing() && l_itNodes->m_pSubmesh->GetRefCount( l_itNodes->m_pMaterial ) > 1 )
 					{
-						DoRenderSubmeshInstancedSingle( p_technique, p_pipeline, *l_itNodes, p_eTopology );
+						DoRenderSubmeshInstancedSingle( p_technique, p_pipeline, *l_itNodes );
 					}
 					else
 					{
-						DoRenderSubmeshNonInstanced( p_technique, p_pipeline, *l_itNodes, p_eTopology );
+						DoRenderSubmeshNonInstanced( p_technique, p_pipeline, *l_itNodes );
 					}
 				}
 			}
 		}
 	}
 
-	void Scene::DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, eTOPOLOGY p_eTopology, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end )
+	void Scene::DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, SubmeshNodesByMaterialMapConstIt p_begin, SubmeshNodesByMaterialMapConstIt p_end )
 	{
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
@@ -1540,17 +1540,17 @@ namespace Castor3D
 
 				if ( l_renderSystem->HasInstancing() && l_submesh->GetRefCount( l_pMaterial ) > 1 )
 				{
-					DoRenderSubmeshInstancedMultiple( p_technique, p_pipeline, l_itSubmeshes.second, p_eTopology );
+					DoRenderSubmeshInstancedMultiple( p_technique, p_pipeline, l_itSubmeshes.second );
 				}
 				else
 				{
-					DoRenderSubmeshNonInstanced( p_technique, p_pipeline, l_itSubmeshes.second[0], p_eTopology );
+					DoRenderSubmeshNonInstanced( p_technique, p_pipeline, l_itSubmeshes.second[0] );
 				}
 			}
 		}
 	}
 
-	void Scene::DoRenderAlphaSortedSubmeshes( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, eTOPOLOGY p_eTopology, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end )
+	void Scene::DoRenderAlphaSortedSubmeshes( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeByDistanceMMapConstIt p_begin, RenderNodeByDistanceMMapConstIt p_end )
 	{
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 
@@ -1562,11 +1562,11 @@ namespace Castor3D
 
 			if ( l_renderSystem->HasInstancing() && l_submesh->GetRefCount( l_renderNode.m_pMaterial ) > 1 )
 			{
-				DoRenderSubmeshInstancedSingle( p_technique, p_pipeline, l_renderNode, p_eTopology );
+				DoRenderSubmeshInstancedSingle( p_technique, p_pipeline, l_renderNode );
 			}
 			else
 			{
-				DoRenderSubmeshNonInstanced( p_technique, p_pipeline, l_renderNode, p_eTopology );
+				DoRenderSubmeshNonInstanced( p_technique, p_pipeline, l_renderNode );
 			}
 		}
 	}
@@ -1592,7 +1592,7 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::DoRenderSubmeshInstancedMultiple( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeArray const & p_nodes, eTOPOLOGY p_eTopology )
+	void Scene::DoRenderSubmeshInstancedMultiple( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, RenderNodeArray const & p_nodes )
 	{
 		SubmeshSPtr l_submesh = p_nodes[0].m_pSubmesh;
 		SceneNodeSPtr l_pNode = p_nodes[0].m_pNode;
@@ -1619,11 +1619,11 @@ namespace Castor3D
 				l_pBuffer += 16;
 			}
 
-			DoRenderSubmesh( p_technique, p_pipeline, p_nodes[0], p_eTopology );
+			DoRenderSubmesh( p_technique, p_pipeline, p_nodes[0] );
 		}
 	}
 
-	void Scene::DoRenderSubmeshInstancedSingle( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
+	void Scene::DoRenderSubmeshInstancedSingle( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node )
 	{
 		SubmeshSPtr l_submesh = p_node.m_pSubmesh;
 		SceneNodeSPtr l_pNode = p_node.m_pNode;
@@ -1644,16 +1644,16 @@ namespace Castor3D
 			}
 		}
 
-		DoRenderSubmesh( p_technique, p_pipeline, p_node, p_eTopology );
+		DoRenderSubmesh( p_technique, p_pipeline, p_node );
 	}
 
-	void Scene::DoRenderSubmeshNonInstanced( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
+	void Scene::DoRenderSubmeshNonInstanced( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node )
 	{
 		p_pipeline.SetModelMatrix( p_node.m_pNode->GetDerivedTransformationMatrix() );
-		DoRenderSubmesh( p_technique, p_pipeline, p_node, p_eTopology );
+		DoRenderSubmesh( p_technique, p_pipeline, p_node );
 	}
 
-	void Scene::DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node, eTOPOLOGY p_eTopology )
+	void Scene::DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node )
 	{
 		ShaderProgramBaseSPtr l_program;
 		uint32_t l_count = 0;
@@ -1696,7 +1696,7 @@ namespace Castor3D
 			}
 
 			l_pass->Render( l_count++, l_uiSize );
-			p_node.m_pSubmesh->Draw( p_eTopology, *l_pass );
+			p_node.m_pSubmesh->Draw( *l_pass );
 			l_pass->EndRender();
 
 			if ( l_sceneBuffer && GetOwner()->GetPerObjectLighting() )

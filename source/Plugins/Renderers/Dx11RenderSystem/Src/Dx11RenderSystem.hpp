@@ -38,7 +38,7 @@ namespace Dx11Render
 		bool InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc );
 
 		virtual Castor3D::ContextSPtr CreateContext();
-		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
+		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer, Castor3D::eTOPOLOGY p_topology );
 		virtual Castor3D::DepthStencilStateSPtr CreateDepthStencilState();
 		virtual Castor3D::RasteriserStateSPtr CreateRasteriserState();
 		virtual Castor3D::BlendStateSPtr CreateBlendState();

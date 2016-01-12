@@ -374,7 +374,7 @@ namespace Bloom
 			VertexBufferUPtr l_vtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetOwner(), &( *m_declaration )[0], m_declaration->Size() );
 			l_vtxBuffer->Resize( m_vertices.size() * m_declaration->GetStride() );
 			l_vtxBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
-			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_vtxBuffer ), nullptr, nullptr );
+			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_vtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 			m_geometryBuffers->Create();
 			m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}
@@ -548,7 +548,7 @@ namespace Bloom
 			m_hiPassSurfaces[3].m_colourTexture->BindAt( 3 );
 			m_renderTarget.GetTexture()->BindAt( 4 );
 	
-			m_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_program, m_vertices.size(), 0 );
+			m_geometryBuffers->Draw( l_program, m_vertices.size(), 0 );
 	
 			m_hiPassSurfaces[0].m_colourTexture->UnbindFrom( 0 );
 			m_hiPassSurfaces[1].m_colourTexture->UnbindFrom( 1 );

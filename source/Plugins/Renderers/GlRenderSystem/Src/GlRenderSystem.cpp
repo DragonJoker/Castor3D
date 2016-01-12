@@ -117,9 +117,9 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology )
 	{
-		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) );
+		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ), p_topology );
 	}
 
 	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()

@@ -120,8 +120,8 @@ namespace GlRender
 
 	//************************************************************************************************
 
-	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
-		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ) )
+	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology )
+		: GeometryBuffers( std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ), p_topology )
 		, Holder( p_gl )
 	{
 	}
@@ -130,9 +130,9 @@ namespace GlRender
 	{
 	}
 
-	bool GlGeometryBuffers::Draw( eTOPOLOGY p_topology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index )
+	bool GlGeometryBuffers::Draw( ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index )
 	{
-		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( p_topology );
+		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
 		if ( p_program && p_program->HasObject( eSHADER_TYPE_HULL ) )
 		{
@@ -157,9 +157,9 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
+	bool GlGeometryBuffers::DrawInstanced( ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
 	{
-		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( p_eTopology );
+		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
 		if ( p_program->HasObject( eSHADER_TYPE_HULL ) )
 		{

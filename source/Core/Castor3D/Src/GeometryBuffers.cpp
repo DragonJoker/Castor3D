@@ -7,10 +7,11 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	GeometryBuffers::GeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer )
+	GeometryBuffers::GeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology )
 		: m_pVertexBuffer( std::move( p_pVertexBuffer ) )
 		, m_pIndexBuffer( std::move( p_pIndexBuffer ) )
 		, m_pMatrixBuffer( std::move( p_pMatrixBuffer ) )
+		, m_topology( p_topology )
 	{
 	}
 

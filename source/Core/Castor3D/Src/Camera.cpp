@@ -54,11 +54,6 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( uint8_t( p_obj.GetPrimitiveType() ), eCHUNK_TYPE_CAMERA_PRIMITIVES, l_chunk );
-		}
-
-		if ( l_return )
-		{
 			l_return = Viewport::BinaryParser( m_path ).Fill( p_obj.GetViewport(), l_chunk );
 		}
 
@@ -74,7 +69,6 @@ namespace Castor3D
 	bool Camera::BinaryParser::Parse( Camera & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
-		uint8_t l_type;
 		String l_name;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
@@ -86,16 +80,6 @@ namespace Castor3D
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
-				case eCHUNK_TYPE_CAMERA_PRIMITIVES:
-					l_return = DoParseChunk( l_type, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetPrimitiveType( eTOPOLOGY( l_type ) );
-					}
-
-					break;
-
 				case eCHUNK_TYPE_VIEWPORT:
 					l_return = Viewport::BinaryParser( m_path ).Parse( p_obj.GetViewport(), l_chunk );
 					break;
@@ -165,17 +149,15 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport, eTOPOLOGY p_topology )
+	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
 		, m_viewport( p_viewport )
-		, m_topology( eTOPOLOGY_TRIANGLES )
 	{
 	}
 
-	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, eTOPOLOGY p_topology )
+	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node )
 		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
 		, m_viewport( Viewport::Ortho( *p_scene->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
-		, m_topology( eTOPOLOGY_TRIANGLES )
 	{
 	}
 

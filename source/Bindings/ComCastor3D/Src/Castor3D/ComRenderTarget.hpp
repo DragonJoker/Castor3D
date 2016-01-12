@@ -66,7 +66,6 @@ namespace CastorCom
 
 		COM_PROPERTY( SamplesCount, unsigned int, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetSamplesCount ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetSamplesCount ) );
 		COM_PROPERTY( Camera, ICamera *, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetCamera ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetCamera ) );
-		COM_PROPERTY( PrimitiveType, eTOPOLOGY, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetPrimitiveType ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetPrimitiveType ) );
 		COM_PROPERTY( ViewportType, eVIEWPORT_TYPE, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetViewportType ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetViewportType ) );
 		COM_PROPERTY( Scene, IScene *, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetScene ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetScene ) );
 		COM_PROPERTY( PixelFormat, ePIXEL_FORMAT, make_getter( m_internal.get(), &Castor3D::RenderTarget::GetPixelFormat ), make_putter( m_internal.get(), &Castor3D::RenderTarget::SetPixelFormat ) );

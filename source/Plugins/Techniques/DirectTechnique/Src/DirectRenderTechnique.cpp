@@ -221,11 +221,11 @@ namespace Direct
 		return m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 	}
 
-	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime )
+	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
 		m_pRenderTarget->GetDepthStencilState()->Apply();
 		m_pRenderTarget->GetRasteriserState()->Apply();
-		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_ePrimitives, p_dFrameTime );
+		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()

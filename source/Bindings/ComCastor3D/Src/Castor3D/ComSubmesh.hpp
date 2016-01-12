@@ -63,6 +63,7 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
+		COM_PROPERTY( Topology, eTOPOLOGY, make_getter( m_internal.get(), &Castor3D::Submesh::GetTopology ), make_putter( m_internal.get(), &Castor3D::Submesh::SetTopology ) );
 		COM_PROPERTY_GET( FaceCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Submesh::GetFaceCount ) );
 		COM_PROPERTY_GET( PointsCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Submesh::GetPointsCount ) );
 

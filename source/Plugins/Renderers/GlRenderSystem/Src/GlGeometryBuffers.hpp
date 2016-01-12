@@ -54,11 +54,11 @@ namespace GlRender
 		, public Holder
 	{
 	public:
-		GlGeometryBuffers( OpenGl & p_gl, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer );
+		GlGeometryBuffers( OpenGl & p_gl, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer, Castor3D::eTOPOLOGY p_topology );
 		virtual ~GlGeometryBuffers();
 
-		virtual bool Draw( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index );
-		virtual bool DrawInstanced( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count );
+		virtual bool Draw( Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index );
+		virtual bool DrawInstanced( Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count );
 		virtual bool Bind();
 		virtual void Unbind();
 

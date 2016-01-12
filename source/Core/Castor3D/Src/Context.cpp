@@ -104,11 +104,11 @@ namespace Castor3D
 		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		m_pGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_pGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		l_pVtxBuffer->Resize( m_finalVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_finalVertex.begin(), m_finalVertex.end() );
-		m_finalGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr );
+		m_finalGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		m_pDsStateNoDepth = GetOwner()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
 		m_pDsStateNoDepth->SetDepthTest( false );
 		m_pDsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
@@ -226,7 +226,7 @@ namespace Castor3D
 
 		if ( p_texture->BindAt( 0 ) )
 		{
-			p_geometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_program, m_arrayVertex.size(), 0 );
+			p_geometryBuffers->Draw( l_program, m_arrayVertex.size(), 0 );
 			p_texture->UnbindFrom( 0 );
 		}
 

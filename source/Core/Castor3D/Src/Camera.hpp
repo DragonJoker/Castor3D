@@ -161,31 +161,27 @@ namespace Castor3D
 		 *\param[in]	p_name		The camera name
 		 *\param[in]	p_node		The parent scene node
 		 *\param[in]	p_viewport	Viewport to copy
-		 *\param[in]	p_topology	The camera display mode
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
 		 *\param[in]	p_name		Le nom de la caméra
 		 *\param[in]	p_node		SceneNode parent
 		 *\param[in]	p_viewport	Viewport à copier
-		 *\param[in]	p_topology	Mode d'affichage de la caméra
 		 */
-		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node, Viewport const & p_viewport, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
+		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node, Viewport const & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
 		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_name		The camera name
-		 *\param[in]	p_node		The parent scene node
-		 *\param[in]	p_topology	The camera display mode
+		 *\param[in]	p_name	The camera name
+		 *\param[in]	p_node	The parent scene node
 		 *\~french
 		 *\brief		Constructeur
 		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_name		Le nom de la caméra
-		 *\param[in]	p_node		SceneNode parent
-		 *\param[in]	p_topology	Mode d'affichage de la caméra
+		 *\param[in]	p_name	Le nom de la caméra
+		 *\param[in]	p_node	SceneNode parent
 		 */
-		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node, eTOPOLOGY p_topology = eTOPOLOGY_TRIANGLES );
+		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -345,30 +341,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the display mode
-		 *\return		The display mode
-		 *\~french
-		 *\brief		Récupère le mode d'affichage
-		 *\return		Le mode d'affichage
-		 */
-		inline eTOPOLOGY GetPrimitiveType()const
-		{
-			return m_topology;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the display mode
-		 *\param[in]	val	The display mode
-		 *\~french
-		 *\brief		Définit le mode d'affichage
-		 *\param[in]	val	Le mode d'affichage
-		 */
-		inline void SetPrimitiveType( eTOPOLOGY val )
-		{
-			m_topology = val;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the view matrix
 		 *\~french
 		 *\brief		Récupère la matrice de vue
@@ -383,8 +355,6 @@ namespace Castor3D
 		friend class CameraRenderer;
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
 		Viewport m_viewport;
-		//!\~english Primitive display type	\~french Type des primitives d'affichage
-		eTOPOLOGY m_topology;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
 		Castor::PlaneEquation< real > m_planes[eFRUSTUM_PLANE_COUNT];
 		//!\~english The view matrix	\~french La matrice vue
