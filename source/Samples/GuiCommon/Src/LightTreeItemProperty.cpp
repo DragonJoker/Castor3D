@@ -20,9 +20,8 @@ namespace GuiCommon
 		static wxString PROPERTY_CATEGORY_LIGHT = _( "Light: " );
 		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
 		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
-		static wxString PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
-		static wxString PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
-		static wxString PROPERTY_LIGHT_SPECULAR = _( "Specular" );
+		static wxString PROPERTY_LIGHT_COLOUR = _( "Colour" );
+		static wxString PROPERTY_LIGHT_INTENSITY = _( "Intensity" );
 		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 		static wxString PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
@@ -35,9 +34,8 @@ namespace GuiCommon
 		PROPERTY_CATEGORY_LIGHT = _( "Light: " );
 		PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
 		PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
-		PROPERTY_LIGHT_AMBIENT = _( "Ambient" );
-		PROPERTY_LIGHT_DIFFUSE = _( "Diffuse" );
-		PROPERTY_LIGHT_SPECULAR = _( "Specular" );
+		PROPERTY_LIGHT_COLOUR = _( "Colour" );
+		PROPERTY_LIGHT_INTENSITY = _( "Intensity" );
 		PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
 		PROPERTY_LIGHT_CUT_OFF = _( "Cut off" );
 		PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
@@ -56,12 +54,9 @@ namespace GuiCommon
 		if ( l_light )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( l_light->GetName() ) ) );
-			Colour l_colour = Colour::from_rgba( l_light->GetAmbient() );
-			p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_AMBIENT ) )->SetValue( wxVariant( wxColour( l_colour.to_bgr() ) ) );
-			l_colour = Colour::from_rgba( l_light->GetDiffuse() );
-			p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_DIFFUSE ) )->SetValue( wxVariant( wxColour( l_colour.to_bgr() ) ) );
-			l_colour = Colour::from_rgba( l_light->GetSpecular() );
-			p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_SPECULAR ) )->SetValue( wxVariant( wxColour( l_colour.to_bgr() ) ) );
+			Colour l_colour = Colour::from_rgb( l_light->GetColour() );
+			p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( l_colour.to_bgr() ) ) );
+			p_grid->Append( new Point3fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( wxVariant( l_light->GetIntensity() ) );
 
 			switch ( l_light->GetLightType() )
 			{
@@ -89,20 +84,14 @@ namespace GuiCommon
 		{
 			wxColour l_colour;
 
-			if ( l_property->GetName() == PROPERTY_LIGHT_AMBIENT )
+			if ( l_property->GetName() == PROPERTY_LIGHT_COLOUR )
 			{
 				l_colour << l_property->GetValue();
-				OnAmbientColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+				OnColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
 			}
-			else if ( l_property->GetName() == PROPERTY_LIGHT_DIFFUSE )
+			else if ( l_property->GetName() == PROPERTY_LIGHT_INTENSITY )
 			{
-				l_colour << l_property->GetValue();
-				OnDiffuseColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
-			}
-			else if ( l_property->GetName() == PROPERTY_LIGHT_SPECULAR )
-			{
-				l_colour << l_property->GetValue();
-				OnSpecularColourChange( Colour::from_bgr( l_colour.GetRGB() ) );
+				OnIntensityChange( Point3fRefFromVariant( l_property->GetValue() ) );
 			}
 			else if ( l_light->GetLightType() != eLIGHT_TYPE_DIRECTIONAL )
 			{
@@ -143,27 +132,23 @@ namespace GuiCommon
 		p_grid->Append( new wxFloatProperty( PROPERTY_LIGHT_EXPONENT ) )->SetValue( p_light->GetExponent() );
 	}
 
-	void LightTreeItemProperty::OnAmbientColourChange( Colour const & p_value )
+	void LightTreeItemProperty::OnColourChange( Colour const & p_value )
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			GetLight()->SetAmbient( p_value );
+			GetLight()->SetColour( p_value );
 		} );
 	}
 
-	void LightTreeItemProperty::OnDiffuseColourChange( Colour const & p_value )
+	void LightTreeItemProperty::OnIntensityChange( Point3f const & p_value )
 	{
-		DoApplyChange( [p_value, this]()
-		{
-			GetLight()->SetDiffuse( p_value );
-		} );
-	}
+		float a = p_value[0];
+		float d = p_value[1];
+		float s = p_value[2];
 
-	void LightTreeItemProperty::OnSpecularColourChange( Colour const & p_value )
-	{
-		DoApplyChange( [p_value, this]()
+		DoApplyChange( [a, d, s, this]()
 		{
-			GetLight()->SetSpecular( p_value );
+			GetLight()->SetIntensity( a, d, s );
 		} );
 	}
 

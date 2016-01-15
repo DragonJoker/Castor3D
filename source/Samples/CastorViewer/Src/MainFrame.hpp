@@ -45,6 +45,7 @@ namespace CastorViewer
 		void DoPopulateToolBar();
 		void DoInitialisePerspectives();
 		void DoLogCallback( Castor::String const & p_strLog, Castor::ELogType p_eLogType );
+		void DoCleanupScene();
 
 	private:
 		DECLARE_EVENT_TABLE()

@@ -260,6 +260,16 @@ namespace Castor3D
 		{
 			m_topology = p_value;
 		}
+		/**
+		 *\~english
+		 *\return		The geometry buffers initialisation status.
+		 *\~french
+		 *\return		Le statut d'initialisation des tampons de géométrie.
+		 */
+		inline bool IsInitialised()const
+		{
+			return m_initialised;
+		}
 
 	protected:
 		/**
@@ -304,8 +314,10 @@ namespace Castor3D
 		MatrixBufferUPtr m_pMatrixBuffer;
 		//!\~english The shader program.	\~french Le programme de rendu.
 		ShaderProgramBaseWPtr m_program;
-		//!\~english The buffers topology	\~french La topologie des tampons.
+		//!\~english The buffers topology.	\~french La topologie des tampons.
 		eTOPOLOGY m_topology;
+		//!\~english The initialisation status.	\~french Le status d'initialisation.
+		bool m_initialised = false;
 	};
 }
 

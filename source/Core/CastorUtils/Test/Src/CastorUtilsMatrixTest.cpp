@@ -211,10 +211,10 @@ namespace Testing
 
 	//*********************************************************************************************
 
+	namespace matrix = Castor::matrix;
 	using Castor::real;
 	using Castor::Angle;
 	using Castor::Logger;
-	using Castor::matrix;
 	using Castor::Matrix4x4f;
 	using Castor::Matrix4x4r;
 	using Castor::Matrix4x4d;

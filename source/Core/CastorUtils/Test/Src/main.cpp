@@ -9,6 +9,7 @@
 #include "CastorUtilsPixelFormatTest.hpp"
 #include "CastorUtilsStringTest.hpp"
 #include "CastorUtilsZipTest.hpp"
+#include "CastorUtilsUniqueTest.hpp"
 
 int main( int argc, char const * argv[] )
 {
@@ -32,6 +33,7 @@ int main( int argc, char const * argv[] )
 #endif
 	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixBench >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsStringBench >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsUniqueTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsMatrixTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );

@@ -679,18 +679,6 @@ namespace Castor3D
 			m_pShininess.lock()->SetValue( GetShininess() );
 			m_pOpacity.lock()->SetValue( GetAlpha() );
 		}
-
-		FrameVariableBufferSPtr l_sceneBuffer = m_sceneBuffer.lock();
-
-		if ( l_sceneBuffer )
-		{
-			RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
-
-			if ( l_renderSystem->GetCurrentCamera() )
-			{
-				m_pCameraPos.lock()->SetValue( l_renderSystem->GetCurrentCamera()->GetParent()->GetDerivedPosition() );
-			}
-		}
 	}
 
 	void Pass::DoGetTextures()

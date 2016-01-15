@@ -64,8 +64,7 @@ bool RenderEngine::Draw()
 				int level = 0;
 				// lancer de rayon
 				Ray l_viewRay( Point3r( real( x - 128 ), real( y - 128 ), real( -10000.0 ) ), Point3r( 0, 0, 1 ) );
-				auto l_itNodesEnd = m_pScene->NodesEnd();
-				auto l_itLightsEnd = m_pScene->LightsEnd();
+				auto l_itLightsEnd = m_pScene->Lights().end();
 				GeometrySPtr l_pNearestGeometry = nullptr;
 				SubmeshSPtr l_pNearestSubmesh;
 
@@ -75,9 +74,9 @@ bool RenderEngine::Draw()
 					real l_fDistance = 20000.0f;
 					FaceSPtr l_pFace;
 
-					for ( SceneNodePtrStrMap::iterator l_it = m_pScene->NodesBegin(); l_it != l_itNodesEnd; ++l_it )
+					for ( auto && l_it : m_pScene->Nodes() )
 					{
-						l_pNearestGeometry = l_it->second->GetNearestGeometry( & l_viewRay, l_fDistance, & l_pFace, & l_pNearestSubmesh );
+						l_pNearestGeometry = l_it.second->GetNearestGeometry( & l_viewRay, l_fDistance, & l_pFace, & l_pNearestSubmesh );
 					}
 
 					if ( l_pNearestGeometry )
@@ -99,9 +98,9 @@ bool RenderEngine::Draw()
 						MaterialSPtr l_pCurrentMat = l_pNearestGeometry->GetMaterial( l_pNearestSubmesh );
 
 						// calcul de la valeur d'éclairement au point
-						for ( auto l_it = m_pScene->LightsBegin(); l_it != l_itLightsEnd; ++l_it )
+						for ( auto && l_it : m_pScene->TypeSortedLights() )
 						{
-							for ( auto l_pCurrent : l_it->second )
+							for ( auto l_pCurrent : l_it.second )
 							{
 								Point3r l_vDist( l_pCurrent->GetParent()->GetPosition() - l_vNewStart );
 
@@ -115,13 +114,16 @@ bool RenderEngine::Draw()
 										// calcul des ombres
 										bool l_bInShadow = false;
 
-										for ( SceneNodePtrStrMap::iterator l_it = m_pScene->NodesBegin(); !l_bInShadow && l_it != l_itNodesEnd; ++l_it )
+										for ( auto && l_it : m_pScene->Nodes() )
 										{
-											l_pNearestGeometry = l_it->second->GetNearestGeometry( &l_lightRay, l_fT, nullptr, nullptr );
-
-											if ( l_pNearestGeometry )
+											if ( !l_bInShadow )
 											{
-												l_bInShadow = true;
+												l_pNearestGeometry = l_it.second->GetNearestGeometry( &l_lightRay, l_fT, nullptr, nullptr );
+
+												if ( l_pNearestGeometry )
+												{
+													l_bInShadow = true;
+												}
 											}
 										}
 
@@ -129,9 +131,9 @@ bool RenderEngine::Draw()
 										{
 											// lambert
 											float l_fLambert = float( point::dot( l_lightRay.m_ptDirection, l_vNormal ) * coef );
-											l_clrColour.red() += l_pCurrent->GetDiffuse()[0] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().red() * l_fLambert;
-											l_clrColour.green() += l_pCurrent->GetDiffuse()[1] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().green() * l_fLambert;
-											l_clrColour.blue() += l_pCurrent->GetDiffuse()[2] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().blue() * l_fLambert;
+											l_clrColour.red() += l_pCurrent->GetColour()[0] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().red() * l_fLambert;
+											l_clrColour.green() += l_pCurrent->GetColour()[1] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().green() * l_fLambert;
+											l_clrColour.blue() += l_pCurrent->GetColour()[2] * l_pCurrentMat->GetPass( 0 )->GetDiffuse().blue() * l_fLambert;
 										}
 									}
 								}

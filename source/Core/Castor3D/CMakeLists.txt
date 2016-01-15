@@ -344,7 +344,7 @@ set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core" )
 add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 add_target_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
 add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
-	
+
 # Copying core zip data files
 file(
 	GLOB
@@ -352,7 +352,7 @@ file(
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/Data/*.zip
 )
 copy_target_files( ${PROJECT_NAME} "" ${CoreZipFiles} )
-	
+
 # Copying shader languages files
 file(
 	GLOB

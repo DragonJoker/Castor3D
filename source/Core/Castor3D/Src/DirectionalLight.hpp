@@ -141,6 +141,13 @@ namespace Castor3D
 		C3D_API static LightCategorySPtr Create();
 		/**
 		 *\~english
+		 *\brief		Puts the light into the given texture.
+		 *\~french
+		 *\brief		Met la lumière dans la texture donnée.
+		 */
+		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const;
+		/**
+		 *\~english
 		 *\brief		Sets the light source direction
 		 *\param[in]	p_position	The new value
 		 *\~french

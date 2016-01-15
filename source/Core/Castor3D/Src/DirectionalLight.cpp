@@ -83,6 +83,15 @@ namespace Castor3D
 		return std::make_shared< DirectionalLight >();
 	}
 
+	void DirectionalLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	{
+		int l_offset = 0;
+		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
+		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
+		Point4f l_posType = GetPositionType();
+		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+	}
+
 	void DirectionalLight::SetDirection( Castor::Point3f const & p_ptPosition )
 	{
 		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 0.0f ) );

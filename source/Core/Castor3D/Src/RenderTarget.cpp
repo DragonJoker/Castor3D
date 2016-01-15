@@ -233,7 +233,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetTechnique( l_name );
+						p_obj.SetTechnique( l_name, Parameters() );
 					}
 
 					break;
@@ -359,7 +359,7 @@ namespace Castor3D
 		, m_bStereo( false )
 		, m_rIntraOcularDistance( 0 )
 		, m_index( ++sm_uiCount )
-		, m_strTechniqueName( cuT( "direct" ) )
+		, m_techniqueName( cuT( "direct" ) )
 		, m_fbLeftEye( *this )
 		, m_fbRightEye( *this )
 	{
@@ -380,25 +380,18 @@ namespace Castor3D
 
 			if ( !m_pRenderTechnique )
 			{
-				Parameters l_params;
-
-				if ( m_strTechniqueName == cuT( "msaa" ) )
+				if ( m_techniqueName == cuT( "msaa" ) )
 				{
 					m_bMultisampling = true;
-					l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
-				}
-				else if ( m_strTechniqueName == cuT( "ssaa" ) )
-				{
-					l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
 				}
 
 				try
 				{
-					m_pRenderTechnique = GetOwner()->CreateTechnique( m_strTechniqueName, *this, l_params );
+					m_pRenderTechnique = GetOwner()->CreateTechnique( m_techniqueName, *this, m_techniqueParameters );
 				}
 				catch ( Exception & p_exc )
 				{
-					Logger::LogError( cuT( "Couldn't load technique " ) + m_strTechniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+					Logger::LogError( cuT( "Couldn't load technique " ) + m_techniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
 					throw;
 				}
 			}
@@ -575,9 +568,10 @@ namespace Castor3D
 		m_size = p_size;
 	}
 
-	void RenderTarget::SetTechnique( Castor::String const & p_name )
+	void RenderTarget::SetTechnique( Castor::String const & p_name, Parameters const & p_parameters )
 	{
-		m_strTechniqueName = p_name;
+		m_techniqueName = p_name;
+		m_techniqueParameters = p_parameters;
 		m_bMultisampling = p_name == cuT( "msaa" );
 	}
 

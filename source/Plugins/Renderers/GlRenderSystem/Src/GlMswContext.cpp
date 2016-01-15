@@ -41,16 +41,21 @@ namespace GlRender
 	{
 		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
 		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
-		m_hDC = ::GetDC( p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd() );
-		bool l_bHasPF = false;
+		bool l_isMain = false;
 
 		if ( !l_pMainContext )
 		{
 			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
+			m_hDC = ::GetDC( p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd() );
+		}
+		else if ( l_pMainContext->GetImpl()->m_hWnd == m_hWnd )
+		{
+			l_isMain = true;
+			m_hContext = l_pMainContext->GetImpl()->m_hContext;
 		}
 
-		if ( !l_renderSystem->IsInitialised() )
+		if ( !l_renderSystem->IsInitialised() && !l_isMain )
 		{
 			m_hContext = DoCreateDummyContext( p_window );
 			SetCurrent();
@@ -72,6 +77,8 @@ namespace GlRender
 			m_hContext = NULL;
 		}
 
+		bool l_bHasPF = false;
+
 		if ( !l_pMainContext )
 		{
 			if ( p_window->IsUsingStereo() )
@@ -84,7 +91,7 @@ namespace GlRender
 				l_bHasPF = DoSelectPixelFormat( p_window );
 			}
 		}
-		else
+		else if ( !l_isMain )
 		{
 			l_bHasPF = DoSelectPixelFormat( p_window );
 		}
@@ -107,12 +114,16 @@ namespace GlRender
 				m_initialised = true;
 			}
 		}
-		else
+		else if ( !l_isMain )
 		{
 			Logger::LogError( cuT( "No supported pixel format found, context creation failed" ) );
 		}
+		else
+		{
+			m_initialised = true;
+		}
 
-		if ( m_initialised )
+		if ( m_initialised && !l_isMain )
 		{
 			glTrack( GetOpenGl(), "GlContextImpl", this );
 			SetCurrent();
@@ -150,7 +161,11 @@ namespace GlRender
 		try
 		{
 			glUntrack( GetOpenGl(), this );
-			GetOpenGl().DeleteContext( m_hContext );
+
+			if ( m_hDC )
+			{
+				GetOpenGl().DeleteContext( m_hContext );
+			}
 		}
 		catch ( ... )
 		{

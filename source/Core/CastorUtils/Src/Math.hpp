@@ -219,33 +219,6 @@ namespace Castor
 	//************************************************************************************************
 	/**
 	 *\~english
-	 *\brief		Returns p_value if it is in the range [p_min,p_max], p_min if lower than p_min, p_max if larger than p_max
-	 *\param[in]	p_min, p_max	The range
-	 *\param[in]	p_value			The value to test
-	 *\return		The result
-	 *\~french
-	 *\brief		Renvoie la valeur si elle est dans l'ensemble [p_min,p_max], p_min si elle lui est inférieure, p_max si elle lui est supérieure
-	 *\param[in]	p_min, p_max	Les bornes
-	 *\param[in]	p_value			La valeur à tester
-	 *\return		Le résultat
-	 */
-	template< typename T >
-	inline T const & minmax( T const & p_min, T const & p_value, T const & p_max )
-	{
-		if ( p_value < p_min )
-		{
-			return p_min;
-		}
-
-		if ( p_value > p_max )
-		{
-			return p_max;
-		}
-
-		return p_value;
-	}
-	/**
-	 *\~english
 	 *\brief		Puts the value in the range [min, max]
 	 *\param[in]	p_min, p_max	The range
 	 *\param[in]	p_value			The value to clamp
@@ -257,7 +230,7 @@ namespace Castor
 	 *\return		Le résultat
 	 */
 	template< typename T >
-	inline void clamp( T const & p_min, T & p_value, T const & p_max )
+	inline void clamp( T & p_value, T const & p_min, T const & p_max )
 	{
 		if ( p_value < p_min )
 		{
@@ -283,7 +256,7 @@ namespace Castor
 	 *\return		Le résultat
 	 */
 	template< typename T >
-	inline T clamp( T const & p_min, T const & p_value, T const & p_max )
+	inline T clamp( T const & p_value, T const & p_min, T const & p_max )
 	{
 		T l_tReturn = p_value;
 

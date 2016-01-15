@@ -208,6 +208,7 @@ namespace Castor3D
 		, m_pParentMesh( p_pMesh )
 		, m_uiProgramFlags( 0 )
 		, m_initialised( false )
+		, m_bDirty( true )
 	{
 	}
 
@@ -218,9 +219,9 @@ namespace Castor3D
 
 	void Submesh::Initialise()
 	{
-		if ( m_pGeometryBuffers->Create() )
+		if ( !m_initialised )
 		{
-			m_initialised = true;// m_pGeometryBuffers->Initialise( nullptr, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+			m_initialised = m_pGeometryBuffers->Create();
 		}
 	}
 
@@ -826,70 +827,74 @@ namespace Castor3D
 
 	void Submesh::SortFaces( Point3r const & p_ptCameraPosition )
 	{
-		if ( m_ptCameraPosition != p_ptCameraPosition )
+		try
 		{
-			GeometryBuffersSPtr l_pGeometryBuffers = GetGeometryBuffers();
-			IndexBuffer & l_indices = l_pGeometryBuffers->GetIndexBuffer();
-			VertexBuffer & l_vertices = l_pGeometryBuffers->GetVertexBuffer();
-
-			if ( l_pGeometryBuffers && l_pGeometryBuffers->Bind() )
+			if ( m_ptCameraPosition != p_ptCameraPosition )
 			{
-				m_ptCameraPosition = p_ptCameraPosition;
-				uint32_t l_uiIdxSize = l_indices.GetSize();
-				uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, eACCESS_TYPE_WRITE | eACCESS_TYPE_READ );
+				GeometryBuffersSPtr l_pGeometryBuffers = GetGeometryBuffers();
 
-				if ( l_pIdx )
+				if ( l_pGeometryBuffers && l_pGeometryBuffers->IsInitialised() && l_pGeometryBuffers->Bind() )
 				{
-					struct stFACE_DISTANCE
-					{
-						uint32_t m_index[3];
-						double m_distance;
-					};
-					uint32_t l_uiStride = l_vertices.GetDeclaration().GetStride();
-					uint8_t * l_pVtx = l_vertices.data();
-					DECLARE_VECTOR( stFACE_DISTANCE, Face );
-					FaceArray l_arraySorted;
-					l_arraySorted.reserve( l_uiIdxSize / 3 );
+					IndexBuffer & l_indices = l_pGeometryBuffers->GetIndexBuffer();
+					VertexBuffer & l_vertices = l_pGeometryBuffers->GetVertexBuffer();
+					m_ptCameraPosition = p_ptCameraPosition;
+					uint32_t l_uiIdxSize = l_indices.GetSize();
+					uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, eACCESS_TYPE_WRITE | eACCESS_TYPE_READ );
 
-					if ( l_pVtx )
+					if ( l_pIdx )
 					{
-						for ( uint32_t * l_it = l_pIdx + 0; l_it < l_pIdx + l_uiIdxSize; l_it += 3 )
+						struct stFACE_DISTANCE
 						{
-							double l_dDistance = 0.0;
-							Point3r l_pVtx1( reinterpret_cast< real const * >( &l_pVtx[l_it[0] * l_uiStride] ) );
-							l_pVtx1 -= p_ptCameraPosition;
-							l_dDistance += point::distance_squared( l_pVtx1 );
-							Point3r l_pVtx2( reinterpret_cast< real const * >( &l_pVtx[l_it[1] * l_uiStride] ) );
-							l_pVtx2 -= p_ptCameraPosition;
-							l_dDistance += point::distance_squared( l_pVtx2 );
-							Point3r l_pVtx3( reinterpret_cast< real const * >( &l_pVtx[l_it[2] * l_uiStride] ) );
-							l_pVtx3 -= p_ptCameraPosition;
-							l_dDistance += point::distance_squared( l_pVtx3 );
-							stFACE_DISTANCE l_face = { {l_it[0], l_it[1], l_it[2]}, l_dDistance };
-							l_arraySorted.push_back( l_face );
+							uint32_t m_index[3];
+							double m_distance;
+						};
+						uint32_t l_uiStride = l_vertices.GetDeclaration().GetStride();
+						uint8_t * l_pVtx = l_vertices.data();
+						DECLARE_VECTOR( stFACE_DISTANCE, Face );
+						FaceArray l_arraySorted;
+						l_arraySorted.reserve( l_uiIdxSize / 3 );
+
+						if ( l_pVtx )
+						{
+							for ( uint32_t * l_it = l_pIdx + 0; l_it < l_pIdx + l_uiIdxSize; l_it += 3 )
+							{
+								double l_dDistance = 0.0;
+								Point3r l_pVtx1( reinterpret_cast< real const * >( &l_pVtx[l_it[0] * l_uiStride] ) );
+								l_pVtx1 -= p_ptCameraPosition;
+								l_dDistance += point::distance_squared( l_pVtx1 );
+								Point3r l_pVtx2( reinterpret_cast< real const * >( &l_pVtx[l_it[1] * l_uiStride] ) );
+								l_pVtx2 -= p_ptCameraPosition;
+								l_dDistance += point::distance_squared( l_pVtx2 );
+								Point3r l_pVtx3( reinterpret_cast< real const * >( &l_pVtx[l_it[2] * l_uiStride] ) );
+								l_pVtx3 -= p_ptCameraPosition;
+								l_dDistance += point::distance_squared( l_pVtx3 );
+								stFACE_DISTANCE l_face = { {l_it[0], l_it[1], l_it[2]}, l_dDistance };
+								l_arraySorted.push_back( l_face );
+							}
+
+							std::sort( l_arraySorted.begin(), l_arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
+							{
+								return p_left.m_distance < p_right.m_distance;
+							} );
+
+							for ( FaceArrayConstIt l_it = l_arraySorted.begin(); l_it != l_arraySorted.end(); ++l_it )
+							{
+								*l_pIdx++ = l_it->m_index[0];
+								*l_pIdx++ = l_it->m_index[1];
+								*l_pIdx++ = l_it->m_index[2];
+							}
 						}
 
-						std::sort( l_arraySorted.begin(), l_arraySorted.end(), []( stFACE_DISTANCE const & p_left, stFACE_DISTANCE const & p_right )
-						{
-							return p_left.m_distance < p_right.m_distance;
-						} );
-
-						for ( FaceArrayConstIt l_it = l_arraySorted.begin(); l_it != l_arraySorted.end(); ++l_it )
-						{
-							*l_pIdx = l_it->m_index[0];
-							l_pIdx++;
-							*l_pIdx = l_it->m_index[1];
-							l_pIdx++;
-							*l_pIdx = l_it->m_index[2];
-							l_pIdx++;
-						}
+						l_indices.Unlock();
 					}
 
-					l_indices.Unlock();
+					l_pGeometryBuffers->Unbind();
 				}
-
-				l_pGeometryBuffers->Unbind();
 			}
+		}
+		catch ( Exception const & p_exc )
+		{
+			Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
 		}
 	}
 

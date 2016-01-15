@@ -140,6 +140,13 @@ namespace Castor3D
 		C3D_API static LightCategorySPtr Create();
 		/**
 		 *\~english
+		 *\brief		Puts the light into the given texture.
+		 *\~french
+		 *\brief		Met la lumière dans la texture donnée.
+		 */
+		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const;
+		/**
+		 *\~english
 		 *\brief		Sets the light source position
 		 *\param[in]	p_position	The new value
 		 *\~french
@@ -225,6 +232,12 @@ namespace Castor3D
 		{
 			return m_cutOff;
 		}
+
+	private:
+		using LightCategory::DoBindComponent;
+		void DoBindComponent( float p_exp, float p_cut, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Matrix4x4d const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 
 	private:
 		//!\~english The attenuation components : constant, linear and quadratic	\~french Les composantes d'attenuation : constante, linéaire et quadratique

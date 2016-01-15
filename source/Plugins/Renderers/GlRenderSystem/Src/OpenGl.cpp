@@ -12,6 +12,16 @@ using namespace Castor;
 
 #define DEF_USE_DIRECT_STATE_ACCESS 0
 
+
+#define GL_GET_FUNC( func, ext )\
+	if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ), m_pfn##func ) )\
+	{\
+		if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ) + string::string_cast< xchar >( #ext ), m_pfn##func ) )\
+		{\
+			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + string::string_cast< xchar >( #func ) );\
+		}\
+	}
+
 //*************************************************************************************************
 
 TexFunctionsBase::TexFunctionsBase( OpenGl & p_gl )
@@ -23,13 +33,20 @@ TexFunctionsBase::TexFunctionsBase( OpenGl & p_gl )
 
 TexFunctions::TexFunctions( OpenGl & p_gl )
 	: TexFunctionsBase( p_gl )
-	, m_pfnTexSubImage1D()
-	, m_pfnTexSubImage2D()
-	, m_pfnTexSubImage3D()
-	, m_pfnTexImage1D()
-	, m_pfnTexImage2D()
-	, m_pfnTexImage3D()
 {
+	m_pfnBindTexture = &glBindTexture;
+	m_pfnTexSubImage1D = &glTexSubImage1D;
+	m_pfnTexSubImage2D = &glTexSubImage2D;
+	m_pfnTexImage1D = &glTexImage1D;
+	m_pfnTexImage2D = &glTexImage2D;
+	m_pfnTexParameteri = &glTexParameteri;
+	m_pfnTexParameterf = &glTexParameterf;
+	m_pfnTexParameteriv = &glTexParameteriv;
+	m_pfnTexParameterfv = &glTexParameterfv;
+	m_pfnGetTexImage = &glGetTexImage;
+	GL_GET_FUNC( TexImage3D, EXT );
+	GL_GET_FUNC( TexSubImage3D, EXT );
+	GL_GET_FUNC( GenerateMipmap, EXT );
 }
 
 bool TexFunctions::GenerateMipmap( eGL_TEXDIM mode )
@@ -172,6 +189,18 @@ TexFunctionsDSA::TexFunctionsDSA( OpenGl & p_gl )
 	, m_pfnTextureImage2D()
 	, m_pfnTextureImage3D()
 {
+	GL_GET_FUNC( TextureSubImage1D, EXT );
+	GL_GET_FUNC( TextureSubImage2D, EXT );
+	GL_GET_FUNC( TextureSubImage3D, EXT );
+	GL_GET_FUNC( TextureImage1D, EXT );
+	GL_GET_FUNC( TextureImage2D, EXT );
+	GL_GET_FUNC( TextureImage3D, EXT );
+	GL_GET_FUNC( TextureParameteri, EXT );
+	GL_GET_FUNC( TextureParameterf, EXT );
+	GL_GET_FUNC( TextureParameteriv, EXT );
+	GL_GET_FUNC( TextureParameterfv, EXT );
+	GL_GET_FUNC( GetTextureImage, EXT );
+	GL_GET_FUNC( GenerateTextureMipmap, EXT );
 }
 
 bool TexFunctionsDSA::GenerateMipmap( eGL_TEXDIM mode )
@@ -301,6 +330,33 @@ bool TexFunctionsDSA::GetTexImage( eGL_TEXDIM mode, int level, eGL_FORMAT format
 BufFunctionsBase::BufFunctionsBase( OpenGl & p_gl )
 	: Holder( p_gl )
 {
+	if ( p_gl.HasExtension( NV_shader_buffer_load ) )
+	{
+		GL_GET_FUNC( MakeBufferResident, NV );
+		GL_GET_FUNC( MakeBufferNonResident, NV );
+		GL_GET_FUNC( IsBufferResident, NV );
+		GL_GET_FUNC( MakeNamedBufferResident, NV );
+		GL_GET_FUNC( MakeNamedBufferNonResident, NV );
+		GL_GET_FUNC( IsNamedBufferResident, NV );
+		GL_GET_FUNC( GetBufferParameterui64v, NV );
+		GL_GET_FUNC( GetNamedBufferParameterui64v, NV );
+	}
+
+	if ( p_gl.HasExtension( NV_vertex_buffer_unified_memory ) )
+	{
+		GL_GET_FUNC( BufferAddressRange, NV );
+		GL_GET_FUNC( VertexFormat, NV );
+		GL_GET_FUNC( NormalFormat, NV );
+		GL_GET_FUNC( ColorFormat, NV );
+		GL_GET_FUNC( IndexFormat, NV );
+		GL_GET_FUNC( TexCoordFormat, NV );
+		GL_GET_FUNC( EdgeFlagFormat, NV );
+		GL_GET_FUNC( SecondaryColorFormat, NV );
+		GL_GET_FUNC( FogCoordFormat, NV );
+		GL_GET_FUNC( VertexAttribFormat, NV );
+		GL_GET_FUNC( VertexAttribIFormat, NV );
+	}
+
 }
 
 bool BufFunctionsBase::EnableClientState( eGL_BUFFER_USAGE p_eArray )
@@ -432,6 +488,14 @@ bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARA
 BufFunctions::BufFunctions( OpenGl & p_gl )
 	: BufFunctionsBase( p_gl )
 {
+	GL_GET_FUNC( BindBuffer, ARB );
+	GL_GET_FUNC( BufferData, ARB );
+	GL_GET_FUNC( BufferSubData, ARB );
+	GL_GET_FUNC( GetBufferParameteriv, ARB );
+	GL_GET_FUNC( MapBuffer, ARB );
+	GL_GET_FUNC( UnmapBuffer, ARB );
+	GL_GET_FUNC( MapBufferRange, );
+	GL_GET_FUNC( FlushMappedBufferRange, );
 }
 
 bool BufFunctions::BindBuffer( eGL_BUFFER_TARGET p_target, uint32_t buffer )
@@ -503,6 +567,13 @@ BufFunctionsDSA::BufFunctionsDSA( OpenGl & p_gl )
 	: BufFunctionsBase( p_gl )
 	, m_uiBuffer( 0 )
 {
+	GL_GET_FUNC( NamedBufferData, EXT );
+	GL_GET_FUNC( NamedBufferSubData, EXT );
+	GL_GET_FUNC( GetNamedBufferParameteriv, EXT );
+	GL_GET_FUNC( MapNamedBuffer, EXT );
+	GL_GET_FUNC( UnmapNamedBuffer, EXT );
+	GL_GET_FUNC( MapNamedBufferRange, EXT );
+	GL_GET_FUNC( FlushMappedNamedBufferRange, EXT );
 }
 
 bool BufFunctionsDSA::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )
@@ -715,9 +786,9 @@ OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
 	PixelFormats[ePIXEL_FORMAT_B8G8R8] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB8, eGL_TYPE_UNSIGNED_BYTE );
 	PixelFormats[ePIXEL_FORMAT_A8R8G8B8] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
 	PixelFormats[ePIXEL_FORMAT_A8B8G8R8] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
-	PixelFormats[ePIXEL_FORMAT_RGB16F32F] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB16F, eGL_TYPE_FLOAT );
-	PixelFormats[ePIXEL_FORMAT_ARGB16F32F] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA16F, eGL_TYPE_FLOAT );
-	PixelFormats[ePIXEL_FORMAT_RGB32F] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB32F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_RGB16F32F] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB16F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_ARGB16F32F] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA16F, eGL_TYPE_FLOAT );
+	PixelFormats[ePIXEL_FORMAT_RGB32F] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB32F, eGL_TYPE_FLOAT );
 	PixelFormats[ePIXEL_FORMAT_ARGB32F] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA32F, eGL_TYPE_FLOAT );
 	PixelFormats[ePIXEL_FORMAT_DXTC1] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT1, eGL_TYPE_DEFAULT );
 	PixelFormats[ePIXEL_FORMAT_DXTC3] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_COMPRESSED_RGBA_S3TC_DXT3, eGL_TYPE_DEFAULT );
@@ -957,14 +1028,6 @@ bool OpenGl::PreInitialise( String const & p_strExtensions )
 
 bool OpenGl::Initialise()
 {
-#define GL_GET_FUNC( ptr, func, ext )\
-	if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ), ptr->m_pfn##func ) )\
-	{\
-		if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ) + string::string_cast< xchar >( #ext ), ptr->m_pfn##func ) )\
-		{\
-			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + string::string_cast< xchar >( #func ) );\
-		}\
-	}
 	m_pfnGetError = &glGetError;
 	m_pfnClearColor = &glClearColor;
 	m_pfnShadeModel = &glShadeModel;
@@ -1010,14 +1073,14 @@ bool OpenGl::Initialise()
 	m_pfnStencilOp = &glStencilOp;
 	m_pfnStencilFunc = &glStencilFunc;
 	m_pfnStencilMask = &glStencilMask;
-	GL_GET_FUNC( this, BlendEquation, EXT );
-	GL_GET_FUNC( this, BlendFuncSeparate, EXT );
-	GL_GET_FUNC( this, BlendColor, EXT );
-	GL_GET_FUNC( this, StencilOpSeparate, ATI );
-	GL_GET_FUNC( this, StencilFuncSeparate, ATI );
-	GL_GET_FUNC( this, StencilMaskSeparate, );
-	GL_GET_FUNC( this, ActiveTexture, ARB );
-	GL_GET_FUNC( this, ClientActiveTexture, ARB );
+	GL_GET_FUNC( BlendEquation, EXT );
+	GL_GET_FUNC( BlendFuncSeparate, EXT );
+	GL_GET_FUNC( BlendColor, EXT );
+	GL_GET_FUNC( StencilOpSeparate, ATI );
+	GL_GET_FUNC( StencilFuncSeparate, ATI );
+	GL_GET_FUNC( StencilMaskSeparate, );
+	GL_GET_FUNC( ActiveTexture, ARB );
+	GL_GET_FUNC( ClientActiveTexture, ARB );
 #if defined( _WIN32 )
 	m_pfnMakeCurrent = &wglMakeCurrent;
 	m_pfnSwapBuffers = &::SwapBuffers;
@@ -1065,86 +1128,19 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( EXT_direct_state_access ) )
 	{
-		TexFunctionsDSA * l_pTexFunctions = new TexFunctionsDSA( *this );
-		GL_GET_FUNC( l_pTexFunctions, TextureSubImage1D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureSubImage2D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureImage1D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureImage2D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureParameteri, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureParameterf, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureParameteriv, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureParameterfv, EXT );
-		GL_GET_FUNC( l_pTexFunctions, GetTextureImage, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureImage3D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TextureSubImage3D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, GenerateTextureMipmap, EXT );
-		m_pTexFunctions = l_pTexFunctions;
-		BufFunctionsDSA * l_pBufFunctions = new BufFunctionsDSA( *this );
-		GL_GET_FUNC( l_pBufFunctions, NamedBufferData, EXT );
-		GL_GET_FUNC( l_pBufFunctions, NamedBufferSubData, EXT );
-		GL_GET_FUNC( l_pBufFunctions, GetNamedBufferParameteriv, EXT );
-		GL_GET_FUNC( l_pBufFunctions, MapNamedBuffer, EXT );
-		GL_GET_FUNC( l_pBufFunctions, UnmapNamedBuffer, EXT );
-		GL_GET_FUNC( l_pBufFunctions, MapNamedBufferRange, EXT );
-		GL_GET_FUNC( l_pBufFunctions, FlushMappedNamedBufferRange, EXT );
-		m_pBufFunctions = l_pBufFunctions;
+		m_pTexFunctions = new TexFunctionsDSA( *this );
+		m_pBufFunctions = new BufFunctionsDSA( *this );
 	}
 	else
 #endif
 	{
-		TexFunctions * l_pTexFunctions = new TexFunctions( *this );
-		l_pTexFunctions->m_pfnBindTexture = &glBindTexture;
-		l_pTexFunctions->m_pfnTexSubImage1D = &glTexSubImage1D;
-		l_pTexFunctions->m_pfnTexSubImage2D = &glTexSubImage2D;
-		l_pTexFunctions->m_pfnTexImage1D = &glTexImage1D;
-		l_pTexFunctions->m_pfnTexImage2D = &glTexImage2D;
-		l_pTexFunctions->m_pfnTexParameteri = &glTexParameteri;
-		l_pTexFunctions->m_pfnTexParameterf = &glTexParameterf;
-		l_pTexFunctions->m_pfnTexParameteriv = &glTexParameteriv;
-		l_pTexFunctions->m_pfnTexParameterfv = &glTexParameterfv;
-		l_pTexFunctions->m_pfnGetTexImage = &glGetTexImage;
-		GL_GET_FUNC( l_pTexFunctions, TexImage3D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, TexSubImage3D, EXT );
-		GL_GET_FUNC( l_pTexFunctions, GenerateMipmap, EXT );
-		m_pTexFunctions = l_pTexFunctions;
-		BufFunctions * l_pBufFunctions = new BufFunctions( *this );
-		GL_GET_FUNC( l_pBufFunctions, BindBuffer, ARB );
-		GL_GET_FUNC( l_pBufFunctions, BufferData, ARB );
-		GL_GET_FUNC( l_pBufFunctions, BufferSubData, ARB );
-		GL_GET_FUNC( l_pBufFunctions, GetBufferParameteriv, ARB );
-		GL_GET_FUNC( l_pBufFunctions, MapBuffer, ARB );
-		GL_GET_FUNC( l_pBufFunctions, UnmapBuffer, ARB );
-		GL_GET_FUNC( l_pBufFunctions, MapBufferRange, );
-		GL_GET_FUNC( l_pBufFunctions, FlushMappedBufferRange, );
-		m_pBufFunctions = l_pBufFunctions;
+		m_pTexFunctions = new TexFunctions( *this );
+		m_pBufFunctions = new BufFunctions( *this );
 	}
 
 	if ( HasExtension( NV_shader_buffer_load ) )
 	{
-		GL_GET_FUNC( m_pBufFunctions, MakeBufferResident, NV );
-		GL_GET_FUNC( m_pBufFunctions, MakeBufferNonResident, NV );
-		GL_GET_FUNC( m_pBufFunctions, IsBufferResident, NV );
-		GL_GET_FUNC( m_pBufFunctions, MakeNamedBufferResident, NV );
-		GL_GET_FUNC( m_pBufFunctions, MakeNamedBufferNonResident, NV );
-		GL_GET_FUNC( m_pBufFunctions, IsNamedBufferResident, NV );
-		GL_GET_FUNC( m_pBufFunctions, GetBufferParameterui64v, NV );
-		GL_GET_FUNC( m_pBufFunctions, GetNamedBufferParameterui64v, NV );
-		GL_GET_FUNC( this, GetIntegerui64v, NV );
-	}
-
-	if ( HasExtension( NV_vertex_buffer_unified_memory ) )
-	{
-		GL_GET_FUNC( m_pBufFunctions, BufferAddressRange, NV );
-		GL_GET_FUNC( m_pBufFunctions, VertexFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, NormalFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, ColorFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, IndexFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, TexCoordFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, EdgeFlagFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, SecondaryColorFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, FogCoordFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, VertexAttribFormat, NV );
-		GL_GET_FUNC( m_pBufFunctions, VertexAttribIFormat, NV );
+		GL_GET_FUNC( GetIntegerui64v, NV );
 	}
 
 	m_bBindVboToGpuAddress = HasExtension( NV_shader_buffer_load ) && HasExtension( NV_vertex_buffer_unified_memory );
@@ -1153,8 +1149,8 @@ bool OpenGl::Initialise()
 
 	if ( m_iVersion >= 40 || HasExtension( ARB_draw_buffers_blend ) )
 	{
-		GL_GET_FUNC( this, BlendEquationi, ARB );
-		GL_GET_FUNC( this, BlendFuncSeparatei, ARB );
+		GL_GET_FUNC( BlendEquationi, ARB );
+		GL_GET_FUNC( BlendFuncSeparatei, ARB );
 	}
 	else if ( HasExtension( AMD_draw_buffers_blend ) )
 	{
@@ -1167,8 +1163,8 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( ARB_texture_multisample ) )
 	{
-		GL_GET_FUNC( this, TexImage2DMultisample, );
-		GL_GET_FUNC( this, SampleCoverage, ARB );
+		GL_GET_FUNC( TexImage2DMultisample, );
+		GL_GET_FUNC( SampleCoverage, ARB );
 	}
 
 	if ( HasExtension( ARB_imaging ) )
@@ -1177,24 +1173,24 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( ARB_debug_output ) )
 	{
-		GL_GET_FUNC( this, DebugMessageCallback, ARB );
+		GL_GET_FUNC( DebugMessageCallback, ARB );
 	}
 	else if ( HasExtension( AMDX_debug_output ) )
 	{
-		GL_GET_FUNC( this, DebugMessageCallbackAMD, );
+		GL_GET_FUNC( DebugMessageCallbackAMD, );
 	}
 
 	if ( HasExtension( ARB_vertex_buffer_object ) )
 	{
 		m_bHasVbo = true;
-		GL_GET_FUNC( this, GenBuffers, ARB );
-		GL_GET_FUNC( this, DeleteBuffers, ARB );
-		GL_GET_FUNC( this, IsBuffer, ARB );
+		GL_GET_FUNC( GenBuffers, ARB );
+		GL_GET_FUNC( DeleteBuffers, ARB );
+		GL_GET_FUNC( IsBuffer, ARB );
 
 		if ( HasExtension( EXT_coordinate_frame ) )
 		{
-			GL_GET_FUNC( this, TangentPointer, EXT );
-			GL_GET_FUNC( this, BinormalPointer, EXT );
+			GL_GET_FUNC( TangentPointer, EXT );
+			GL_GET_FUNC( BinormalPointer, EXT );
 		}
 
 		if ( HasExtension( ARB_pixel_buffer_object ) )
@@ -1206,82 +1202,82 @@ bool OpenGl::Initialise()
 	if ( HasExtension( ARB_vertex_array_object ) )
 	{
 		m_bHasVao = true;
-		GL_GET_FUNC( this, GenVertexArrays, );
-		GL_GET_FUNC( this, BindVertexArray, );
-		GL_GET_FUNC( this, IsVertexArray, );
-		GL_GET_FUNC( this, DeleteVertexArrays, );
+		GL_GET_FUNC( GenVertexArrays, );
+		GL_GET_FUNC( BindVertexArray, );
+		GL_GET_FUNC( IsVertexArray, );
+		GL_GET_FUNC( DeleteVertexArrays, );
 	}
 
 	if ( HasExtension( ARB_texture_buffer_object ) )
 	{
 		m_bHasTbo = true;
-		GL_GET_FUNC( this, TexBuffer, EXT );
+		GL_GET_FUNC( TexBuffer, EXT );
 	}
 
 	if ( HasExtension( ARB_framebuffer_object ) )
 	{
 		m_bHasFbo = true;
-		GL_GET_FUNC( this, DrawBuffers, ARB );
-		GL_GET_FUNC( this, BlitFramebuffer, ARB );
-		GL_GET_FUNC( this, GenRenderbuffers, ARB );
-		GL_GET_FUNC( this, DeleteRenderbuffers, ARB );
-		GL_GET_FUNC( this, IsRenderbuffer, ARB );
-		GL_GET_FUNC( this, BindRenderbuffer, ARB );
-		GL_GET_FUNC( this, RenderbufferStorage, ARB );
-		GL_GET_FUNC( this, RenderbufferStorageMultisample, ARB );
-		GL_GET_FUNC( this, GetRenderbufferParameteriv, ARB );
-		GL_GET_FUNC( this, FramebufferRenderbuffer, ARB );
-		GL_GET_FUNC( this, GenFramebuffers, ARB );
-		GL_GET_FUNC( this, DeleteFramebuffers, ARB );
-		GL_GET_FUNC( this, IsFramebuffer, ARB );
-		GL_GET_FUNC( this, BindFramebuffer, ARB );
-		GL_GET_FUNC( this, FramebufferTexture, ARB );
-		GL_GET_FUNC( this, FramebufferTexture1D, ARB );
-		GL_GET_FUNC( this, FramebufferTexture2D, ARB );
-		GL_GET_FUNC( this, FramebufferTexture3D, ARB );
-		GL_GET_FUNC( this, FramebufferTextureLayer, ARB );
-		GL_GET_FUNC( this, CheckFramebufferStatus, ARB );
+		GL_GET_FUNC( DrawBuffers, ARB );
+		GL_GET_FUNC( BlitFramebuffer, ARB );
+		GL_GET_FUNC( GenRenderbuffers, ARB );
+		GL_GET_FUNC( DeleteRenderbuffers, ARB );
+		GL_GET_FUNC( IsRenderbuffer, ARB );
+		GL_GET_FUNC( BindRenderbuffer, ARB );
+		GL_GET_FUNC( RenderbufferStorage, ARB );
+		GL_GET_FUNC( RenderbufferStorageMultisample, ARB );
+		GL_GET_FUNC( GetRenderbufferParameteriv, ARB );
+		GL_GET_FUNC( FramebufferRenderbuffer, ARB );
+		GL_GET_FUNC( GenFramebuffers, ARB );
+		GL_GET_FUNC( DeleteFramebuffers, ARB );
+		GL_GET_FUNC( IsFramebuffer, ARB );
+		GL_GET_FUNC( BindFramebuffer, ARB );
+		GL_GET_FUNC( FramebufferTexture, ARB );
+		GL_GET_FUNC( FramebufferTexture1D, ARB );
+		GL_GET_FUNC( FramebufferTexture2D, ARB );
+		GL_GET_FUNC( FramebufferTexture3D, ARB );
+		GL_GET_FUNC( FramebufferTextureLayer, ARB );
+		GL_GET_FUNC( CheckFramebufferStatus, ARB );
 	}
 	else if ( HasExtension( EXT_framebuffer_object ) )
 	{
 		m_bHasFbo = true;
-		GL_GET_FUNC( this, DrawBuffers, EXT );
-		GL_GET_FUNC( this, BlitFramebuffer, EXT );
-		GL_GET_FUNC( this, GenRenderbuffers, EXT );
-		GL_GET_FUNC( this, DeleteRenderbuffers, EXT );
-		GL_GET_FUNC( this, IsRenderbuffer, EXT );
-		GL_GET_FUNC( this, BindRenderbuffer, EXT );
-		GL_GET_FUNC( this, RenderbufferStorage, EXT );
-		GL_GET_FUNC( this, RenderbufferStorageMultisample, EXT );
-		GL_GET_FUNC( this, GetRenderbufferParameteriv, EXT );
-		GL_GET_FUNC( this, FramebufferRenderbuffer, EXT );
-		GL_GET_FUNC( this, GenFramebuffers, EXT );
-		GL_GET_FUNC( this, DeleteFramebuffers, EXT );
-		GL_GET_FUNC( this, IsFramebuffer, EXT );
-		GL_GET_FUNC( this, BindFramebuffer, EXT );
-		GL_GET_FUNC( this, FramebufferTexture, EXT );
-		GL_GET_FUNC( this, FramebufferTexture1D, EXT );
-		GL_GET_FUNC( this, FramebufferTexture2D, EXT );
-		GL_GET_FUNC( this, FramebufferTexture3D, EXT );
-		GL_GET_FUNC( this, FramebufferTextureLayer, EXT );
-		GL_GET_FUNC( this, CheckFramebufferStatus, EXT );
+		GL_GET_FUNC( DrawBuffers, EXT );
+		GL_GET_FUNC( BlitFramebuffer, EXT );
+		GL_GET_FUNC( GenRenderbuffers, EXT );
+		GL_GET_FUNC( DeleteRenderbuffers, EXT );
+		GL_GET_FUNC( IsRenderbuffer, EXT );
+		GL_GET_FUNC( BindRenderbuffer, EXT );
+		GL_GET_FUNC( RenderbufferStorage, EXT );
+		GL_GET_FUNC( RenderbufferStorageMultisample, EXT );
+		GL_GET_FUNC( GetRenderbufferParameteriv, EXT );
+		GL_GET_FUNC( FramebufferRenderbuffer, EXT );
+		GL_GET_FUNC( GenFramebuffers, EXT );
+		GL_GET_FUNC( DeleteFramebuffers, EXT );
+		GL_GET_FUNC( IsFramebuffer, EXT );
+		GL_GET_FUNC( BindFramebuffer, EXT );
+		GL_GET_FUNC( FramebufferTexture, EXT );
+		GL_GET_FUNC( FramebufferTexture1D, EXT );
+		GL_GET_FUNC( FramebufferTexture2D, EXT );
+		GL_GET_FUNC( FramebufferTexture3D, EXT );
+		GL_GET_FUNC( FramebufferTextureLayer, EXT );
+		GL_GET_FUNC( CheckFramebufferStatus, EXT );
 	}
 
 	if ( HasExtension( ARB_sampler_objects ) )
 	{
 		m_bHasSpl = true;
-		GL_GET_FUNC( this, GenSamplers, );
-		GL_GET_FUNC( this, DeleteSamplers, );
-		GL_GET_FUNC( this, IsSampler, );
-		GL_GET_FUNC( this, BindSampler, );
-		GL_GET_FUNC( this, GetSamplerParameteruiv, );
-		GL_GET_FUNC( this, GetSamplerParameterfv, );
-		GL_GET_FUNC( this, GetSamplerParameteriv, );
-		GL_GET_FUNC( this, SamplerParameteruiv, );
-		GL_GET_FUNC( this, SamplerParameterf, );
-		GL_GET_FUNC( this, SamplerParameterfv, );
-		GL_GET_FUNC( this, SamplerParameteri, );
-		GL_GET_FUNC( this, SamplerParameteriv, );
+		GL_GET_FUNC( GenSamplers, );
+		GL_GET_FUNC( DeleteSamplers, );
+		GL_GET_FUNC( IsSampler, );
+		GL_GET_FUNC( BindSampler, );
+		GL_GET_FUNC( GetSamplerParameteruiv, );
+		GL_GET_FUNC( GetSamplerParameterfv, );
+		GL_GET_FUNC( GetSamplerParameteriv, );
+		GL_GET_FUNC( SamplerParameteruiv, );
+		GL_GET_FUNC( SamplerParameterf, );
+		GL_GET_FUNC( SamplerParameterfv, );
+		GL_GET_FUNC( SamplerParameteri, );
+		GL_GET_FUNC( SamplerParameteriv, );
 
 		if ( HasExtension( EXT_texture_filter_anisotropic ) )
 		{
@@ -1292,118 +1288,118 @@ bool OpenGl::Initialise()
 	if ( HasExtension( ARB_draw_instanced ) )
 	{
 		m_bHasInstancedDraw = true;
-		GL_GET_FUNC( this, DrawArraysInstanced, ARB );
-		GL_GET_FUNC( this, DrawElementsInstanced, ARB );
+		GL_GET_FUNC( DrawArraysInstanced, ARB );
+		GL_GET_FUNC( DrawElementsInstanced, ARB );
 
 		if ( HasExtension( ARB_instanced_arrays ) )
 		{
 			m_bHasInstancedArrays = true;
-			GL_GET_FUNC( this, VertexAttribDivisor, ARB );
+			GL_GET_FUNC( VertexAttribDivisor, ARB );
 		}
 	}
 	else if ( HasExtension( EXT_draw_instanced ) )
 	{
 		m_bHasInstancedDraw = true;
-		GL_GET_FUNC( this, DrawArraysInstanced, EXT );
-		GL_GET_FUNC( this, DrawElementsInstanced, EXT );
+		GL_GET_FUNC( DrawArraysInstanced, EXT );
+		GL_GET_FUNC( DrawElementsInstanced, EXT );
 
 		if ( HasExtension( EXT_instanced_arrays ) )
 		{
 			m_bHasInstancedArrays = true;
-			GL_GET_FUNC( this, VertexAttribDivisor, EXT );
+			GL_GET_FUNC( VertexAttribDivisor, EXT );
 		}
 	}
 
 	if ( HasExtension( ARB_vertex_program ) )
 	{
 		m_bHasVSh = true;
-		GL_GET_FUNC( this, CreateShader, );
-		GL_GET_FUNC( this, DeleteShader, );
-		GL_GET_FUNC( this, IsShader, ARB );
-		GL_GET_FUNC( this, AttachShader, );
-		GL_GET_FUNC( this, DetachShader, );
-		GL_GET_FUNC( this, CompileShader, ARB );
-		GL_GET_FUNC( this, GetShaderiv, );
-		GL_GET_FUNC( this, GetShaderInfoLog, );
-		GL_GET_FUNC( this, ShaderSource, ARB );
-		GL_GET_FUNC( this, CreateProgram, );
-		GL_GET_FUNC( this, DeleteProgram, );
-		GL_GET_FUNC( this, LinkProgram, ARB );
-		GL_GET_FUNC( this, UseProgram, );
-		GL_GET_FUNC( this, GetProgramiv, ARB );
-		GL_GET_FUNC( this, GetProgramInfoLog, );
-		GL_GET_FUNC( this, GetAttribLocation, ARB );
-		GL_GET_FUNC( this, IsProgram, ARB );
-		GL_GET_FUNC( this, EnableVertexAttribArray, ARB );
-		GL_GET_FUNC( this, VertexAttribPointer, ARB );
-		GL_GET_FUNC( this, VertexAttribIPointer, ARB );
-		GL_GET_FUNC( this, DisableVertexAttribArray, ARB );
-		GL_GET_FUNC( this, ProgramParameteri, ARB );
-		GL_GET_FUNC( this, GetUniformLocation, ARB );
+		GL_GET_FUNC( CreateShader, );
+		GL_GET_FUNC( DeleteShader, );
+		GL_GET_FUNC( IsShader, ARB );
+		GL_GET_FUNC( AttachShader, );
+		GL_GET_FUNC( DetachShader, );
+		GL_GET_FUNC( CompileShader, ARB );
+		GL_GET_FUNC( GetShaderiv, );
+		GL_GET_FUNC( GetShaderInfoLog, );
+		GL_GET_FUNC( ShaderSource, ARB );
+		GL_GET_FUNC( CreateProgram, );
+		GL_GET_FUNC( DeleteProgram, );
+		GL_GET_FUNC( LinkProgram, ARB );
+		GL_GET_FUNC( UseProgram, );
+		GL_GET_FUNC( GetProgramiv, ARB );
+		GL_GET_FUNC( GetProgramInfoLog, );
+		GL_GET_FUNC( GetAttribLocation, ARB );
+		GL_GET_FUNC( IsProgram, ARB );
+		GL_GET_FUNC( EnableVertexAttribArray, ARB );
+		GL_GET_FUNC( VertexAttribPointer, ARB );
+		GL_GET_FUNC( VertexAttribIPointer, ARB );
+		GL_GET_FUNC( DisableVertexAttribArray, ARB );
+		GL_GET_FUNC( ProgramParameteri, ARB );
+		GL_GET_FUNC( GetUniformLocation, ARB );
 
 		if ( HasExtension( ARB_fragment_program ) )
 		{
 			m_bHasPSh = true;
-			GL_GET_FUNC( this, Uniform1i, ARB );
-			GL_GET_FUNC( this, Uniform2i, ARB );
-			GL_GET_FUNC( this, Uniform3i, ARB );
-			GL_GET_FUNC( this, Uniform4i, ARB );
-			GL_GET_FUNC( this, Uniform1iv, ARB );
-			GL_GET_FUNC( this, Uniform2iv, ARB );
-			GL_GET_FUNC( this, Uniform3iv, ARB );
-			GL_GET_FUNC( this, Uniform4iv, ARB );
-			GL_GET_FUNC( this, Uniform1ui, EXT );
-			GL_GET_FUNC( this, Uniform2ui, EXT );
-			GL_GET_FUNC( this, Uniform3ui, EXT );
-			GL_GET_FUNC( this, Uniform4ui, EXT );
-			GL_GET_FUNC( this, Uniform1uiv, EXT );
-			GL_GET_FUNC( this, Uniform2uiv, EXT );
-			GL_GET_FUNC( this, Uniform3uiv, EXT );
-			GL_GET_FUNC( this, Uniform4uiv, EXT );
-			GL_GET_FUNC( this, Uniform1f, ARB );
-			GL_GET_FUNC( this, Uniform2f, ARB );
-			GL_GET_FUNC( this, Uniform3f, ARB );
-			GL_GET_FUNC( this, Uniform4f, ARB );
-			GL_GET_FUNC( this, Uniform1fv, ARB );
-			GL_GET_FUNC( this, Uniform2fv, ARB );
-			GL_GET_FUNC( this, Uniform3fv, ARB );
-			GL_GET_FUNC( this, Uniform4fv, ARB );
-			GL_GET_FUNC( this, Uniform1d, );
-			GL_GET_FUNC( this, Uniform2d, );
-			GL_GET_FUNC( this, Uniform3d, );
-			GL_GET_FUNC( this, Uniform4d, );
-			GL_GET_FUNC( this, Uniform1dv, );
-			GL_GET_FUNC( this, Uniform2dv, );
-			GL_GET_FUNC( this, Uniform3dv, );
-			GL_GET_FUNC( this, Uniform4dv, );
-			GL_GET_FUNC( this, UniformMatrix2fv, ARB );
-			GL_GET_FUNC( this, UniformMatrix2x3fv, );
-			GL_GET_FUNC( this, UniformMatrix2x4fv, );
-			GL_GET_FUNC( this, UniformMatrix3fv, ARB );
-			GL_GET_FUNC( this, UniformMatrix3x2fv, );
-			GL_GET_FUNC( this, UniformMatrix3x4fv, );
-			GL_GET_FUNC( this, UniformMatrix4fv, ARB );
-			GL_GET_FUNC( this, UniformMatrix4x2fv, );
-			GL_GET_FUNC( this, UniformMatrix4x3fv, );
-			GL_GET_FUNC( this, UniformMatrix2dv, );
-			GL_GET_FUNC( this, UniformMatrix2x3dv, );
-			GL_GET_FUNC( this, UniformMatrix2x4dv, );
-			GL_GET_FUNC( this, UniformMatrix3dv, );
-			GL_GET_FUNC( this, UniformMatrix3x2dv, );
-			GL_GET_FUNC( this, UniformMatrix3x4dv, );
-			GL_GET_FUNC( this, UniformMatrix4dv, );
-			GL_GET_FUNC( this, UniformMatrix4x2dv, );
-			GL_GET_FUNC( this, UniformMatrix4x3dv, );
+			GL_GET_FUNC( Uniform1i, ARB );
+			GL_GET_FUNC( Uniform2i, ARB );
+			GL_GET_FUNC( Uniform3i, ARB );
+			GL_GET_FUNC( Uniform4i, ARB );
+			GL_GET_FUNC( Uniform1iv, ARB );
+			GL_GET_FUNC( Uniform2iv, ARB );
+			GL_GET_FUNC( Uniform3iv, ARB );
+			GL_GET_FUNC( Uniform4iv, ARB );
+			GL_GET_FUNC( Uniform1ui, EXT );
+			GL_GET_FUNC( Uniform2ui, EXT );
+			GL_GET_FUNC( Uniform3ui, EXT );
+			GL_GET_FUNC( Uniform4ui, EXT );
+			GL_GET_FUNC( Uniform1uiv, EXT );
+			GL_GET_FUNC( Uniform2uiv, EXT );
+			GL_GET_FUNC( Uniform3uiv, EXT );
+			GL_GET_FUNC( Uniform4uiv, EXT );
+			GL_GET_FUNC( Uniform1f, ARB );
+			GL_GET_FUNC( Uniform2f, ARB );
+			GL_GET_FUNC( Uniform3f, ARB );
+			GL_GET_FUNC( Uniform4f, ARB );
+			GL_GET_FUNC( Uniform1fv, ARB );
+			GL_GET_FUNC( Uniform2fv, ARB );
+			GL_GET_FUNC( Uniform3fv, ARB );
+			GL_GET_FUNC( Uniform4fv, ARB );
+			GL_GET_FUNC( Uniform1d, );
+			GL_GET_FUNC( Uniform2d, );
+			GL_GET_FUNC( Uniform3d, );
+			GL_GET_FUNC( Uniform4d, );
+			GL_GET_FUNC( Uniform1dv, );
+			GL_GET_FUNC( Uniform2dv, );
+			GL_GET_FUNC( Uniform3dv, );
+			GL_GET_FUNC( Uniform4dv, );
+			GL_GET_FUNC( UniformMatrix2fv, ARB );
+			GL_GET_FUNC( UniformMatrix2x3fv, );
+			GL_GET_FUNC( UniformMatrix2x4fv, );
+			GL_GET_FUNC( UniformMatrix3fv, ARB );
+			GL_GET_FUNC( UniformMatrix3x2fv, );
+			GL_GET_FUNC( UniformMatrix3x4fv, );
+			GL_GET_FUNC( UniformMatrix4fv, ARB );
+			GL_GET_FUNC( UniformMatrix4x2fv, );
+			GL_GET_FUNC( UniformMatrix4x3fv, );
+			GL_GET_FUNC( UniformMatrix2dv, );
+			GL_GET_FUNC( UniformMatrix2x3dv, );
+			GL_GET_FUNC( UniformMatrix2x4dv, );
+			GL_GET_FUNC( UniformMatrix3dv, );
+			GL_GET_FUNC( UniformMatrix3x2dv, );
+			GL_GET_FUNC( UniformMatrix3x4dv, );
+			GL_GET_FUNC( UniformMatrix4dv, );
+			GL_GET_FUNC( UniformMatrix4x2dv, );
+			GL_GET_FUNC( UniformMatrix4x3dv, );
 
 			if ( HasExtension( ARB_uniform_buffer_object ) )
 			{
 				m_bHasUbo = m_iGlslVersion >= 140;
-				GL_GET_FUNC( this, GetUniformBlockIndex, );
-				GL_GET_FUNC( this, BindBufferBase, EXT );
-				GL_GET_FUNC( this, UniformBlockBinding, );
-				GL_GET_FUNC( this, GetUniformIndices, );
-				GL_GET_FUNC( this, GetActiveUniformsiv, );
-				GL_GET_FUNC( this, GetActiveUniformBlockiv, );
+				GL_GET_FUNC( GetUniformBlockIndex, );
+				GL_GET_FUNC( BindBufferBase, EXT );
+				GL_GET_FUNC( UniformBlockBinding, );
+				GL_GET_FUNC( GetUniformIndices, );
+				GL_GET_FUNC( GetActiveUniformsiv, );
+				GL_GET_FUNC( GetActiveUniformBlockiv, );
 			}
 
 			if ( HasExtension( ARB_geometry_shader4 ) || HasExtension( EXT_geometry_shader4 ) )
@@ -1413,7 +1409,7 @@ bool OpenGl::Initialise()
 				if ( HasExtension( ARB_tessellation_shader ) )
 				{
 					m_bHasTSh = true;
-					GL_GET_FUNC( this, PatchParameteri, );
+					GL_GET_FUNC( PatchParameteri, );
 
 					if ( HasExtension( ARB_compute_shader ) )
 					{
@@ -1426,18 +1422,17 @@ bool OpenGl::Initialise()
 
 	HasExtension( ARB_timer_query );
 
-	GL_GET_FUNC( this, GenQueries, ARB );
-	GL_GET_FUNC( this, DeleteQueries, ARB );
-	GL_GET_FUNC( this, IsQuery, ARB );
-	GL_GET_FUNC( this, BeginQuery, ARB );
-	GL_GET_FUNC( this, EndQuery, ARB );
-	GL_GET_FUNC( this, QueryCounter, ARB );
-	GL_GET_FUNC( this, GetQueryObjectiv, ARB );
-	GL_GET_FUNC( this, GetQueryObjectuiv, ARB );
-	GL_GET_FUNC( this, GetQueryObjecti64v, ARB );
-	GL_GET_FUNC( this, GetQueryObjectui64v, ARB );
+	GL_GET_FUNC( GenQueries, ARB );
+	GL_GET_FUNC( DeleteQueries, ARB );
+	GL_GET_FUNC( IsQuery, ARB );
+	GL_GET_FUNC( BeginQuery, ARB );
+	GL_GET_FUNC( EndQuery, ARB );
+	GL_GET_FUNC( QueryCounter, ARB );
+	GL_GET_FUNC( GetQueryObjectiv, ARB );
+	GL_GET_FUNC( GetQueryObjectuiv, ARB );
+	GL_GET_FUNC( GetQueryObjecti64v, ARB );
+	GL_GET_FUNC( GetQueryObjectui64v, ARB );
 
-#undef GL_GET_FUNC
 	return true;
 }
 

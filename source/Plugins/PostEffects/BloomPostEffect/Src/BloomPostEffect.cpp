@@ -59,15 +59,14 @@ namespace Bloom
 
 			// Shader inputs
 			ATTRIBUTE( l_writer, Vec2, vertex );
-			ATTRIBUTE( l_writer, Vec2, texture );
 
 			// Shader outputs
 			OUT( l_writer, Vec2, vtx_texture );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				vtx_texture = texture;
-				BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.X, vertex.Y, 0.0, 1.0 );
+				vtx_texture = vertex;
+				BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.XY, 0.0, 1.0 );
 			} );
 			return l_writer.Finalise();
 		}
@@ -137,6 +136,7 @@ namespace Bloom
 			UNIFORM( l_writer, Sampler2D, c3d_mapPass2 );
 			UNIFORM( l_writer, Sampler2D, c3d_mapPass3 );
 			UNIFORM( l_writer, Sampler2D, c3d_mapScene );
+
 			IN( l_writer, Vec2, vtx_texture );
 
 			// Shader outputs
@@ -151,6 +151,162 @@ namespace Bloom
 				plx_v4FragColor += texture2D( c3d_mapScene, vtx_texture );
 			} );
 			return l_writer.Finalise();
+		}
+
+#endif
+#if defined( C3D_HAS_D3D11_RENDERER )
+
+		Castor::String GetHlslVertexProgram( RenderSystem * p_renderSystem )
+		{
+			String l_return;
+			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
+			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
+
+			if ( l_uniforms )
+			{
+				l_return += l_uniforms->GetVertexInMatrices( 0 );
+				l_return +=
+					cuT( "struct VtxInput\n" )
+					cuT( "{\n" )
+					cuT( "	float2 Position: POSITION0;\n" )
+					cuT( "};\n" )
+					cuT( "struct VtxOutput\n" )
+					cuT( "{\n" )
+					cuT( "	float4 Position: SV_POSITION;\n" )
+					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+					cuT( "};\n" )
+					cuT( "VtxOutput mainVx( in VtxInput p_input )\n" )
+					cuT( "{\n" )
+					cuT( "	VtxOutput l_output;\n" )
+					cuT( "	l_output.Position = mul( float4( p_input.Position, 0.0, 1.0 ), c3d_mtxProjectionModelView );\n" )
+					cuT( "	l_output.TextureUV = p_input.Position;\n" )
+					cuT( "	return l_output;\n" )
+					cuT( "}\n" );
+			}
+
+			return l_return;
+		}
+
+		Castor::String GetHlslHiPassProgram( RenderSystem * p_renderSystem )
+		{
+			String l_return;
+			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
+			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
+
+			if ( l_uniforms )
+			{
+				l_return +=
+					cuT( "SamplerState DefaultSampler\n" )
+					cuT( "{\n" )
+					cuT( "	AddressU = WRAP;\n" )
+					cuT( "	AddressV = WRAP;\n" )
+					cuT( "	AddressW = WRAP;\n" )
+					cuT( "	MipFilter = NONE;\n" )
+					cuT( "	MinFilter = LINEAR;\n" )
+					cuT( "	MagFilter = LINEAR;\n" )
+					cuT( "};\n" )
+					cuT( "struct PxlInput\n" )
+					cuT( "{\n" )
+					cuT( "	float4 Position: SV_POSITION;\n" )
+					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+					cuT( "};\n" )
+					cuT( "Texture2D c3d_mapDiffuse: register( t0 );\n" )
+					cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
+					cuT( "{\n" )
+					cuT( "	float4 pxl_v4FragColor = float4( c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV ).rgb, 1.0 );\n" )
+ 					cuT( "	plx_v4FragColor.x = plx_v4FragColor.x > 1.0 ? 1.0 : 0.0;\n" )
+					cuT( "	plx_v4FragColor.y = plx_v4FragColor.y > 1.0 ? 1.0 : 0.0;\n" )
+					cuT( "	plx_v4FragColor.z = plx_v4FragColor.z > 1.0 ? 1.0 : 0.0;\n" )
+					cuT( "	return plx_v4FragColor;\n" )
+					cuT( "}\n" );
+			}
+
+			return l_return;
+		}
+
+		Castor::String GetHlslBlurProgram( RenderSystem * p_renderSystem )
+		{
+			String l_return;
+			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
+			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
+
+			if ( l_uniforms )
+			{
+				l_return +=
+					cuT( "SamplerState DefaultSampler\n" )
+					cuT( "{\n" )
+					cuT( "	AddressU = WRAP;\n" )
+					cuT( "	AddressV = WRAP;\n" )
+					cuT( "	AddressW = WRAP;\n" )
+					cuT( "	MipFilter = NONE;\n" )
+					cuT( "	MinFilter = LINEAR;\n" )
+					cuT( "	MagFilter = LINEAR;\n" )
+					cuT( "};\n" )
+					cuT( "struct PxlInput\n" )
+					cuT( "{\n" )
+					cuT( "	float4 Position: SV_POSITION;\n" )
+					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+					cuT( "};\n" )
+					cuT( "cbuffer FilterConfig: register( cb0 )\n" )
+					cuT( "{\n" )
+					cuT( "	float c3d_fCoefficients[3];\n" )
+					cuT( "	float c3d_fOffsetX;\n" )
+					cuT( "	float c3d_fOffsetY;\n" )
+					cuT( "};\n" )
+					cuT( "Texture2D c3d_mapDiffuse: register( t0 );\n" )
+					cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
+					cuT( "{\n" )
+					cuT( "	float2 l_offset = float2( c3d_fOffsetX, c3d_fOffsetY );\n" )
+					cuT( "	float4 plx_v4FragColor = c3d_fCoefficients[0] * c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV - l_offset );\n" )
+					cuT( "	plx_v4FragColor += c3d_fCoefficients[0] * c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV );\n" )
+					cuT( "	plx_v4FragColor += c3d_fCoefficients[0] * c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV + l_offset );\n" )
+					cuT( "	return plx_v4FragColor;\n" )
+					cuT( "}\n" );
+			}
+
+			return l_return;
+		}
+
+		Castor::String GetHlslCombineProgram( RenderSystem * p_renderSystem )
+		{
+			String l_return;
+			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
+			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
+
+			if ( l_uniforms )
+			{
+				l_return +=
+					cuT( "SamplerState DefaultSampler\n" )
+					cuT( "{\n" )
+					cuT( "	AddressU = WRAP;\n" )
+					cuT( "	AddressV = WRAP;\n" )
+					cuT( "	AddressW = WRAP;\n" )
+					cuT( "	MipFilter = NONE;\n" )
+					cuT( "	MinFilter = LINEAR;\n" )
+					cuT( "	MagFilter = LINEAR;\n" )
+					cuT( "};\n" )
+					cuT( "struct PxlInput\n" )
+					cuT( "{\n" )
+					cuT( "	float4 Position: SV_POSITION;\n" )
+					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
+					cuT( "};\n" )
+					cuT( "Texture2D c3d_mapPass0: register( t0 );\n" )
+					cuT( "Texture2D c3d_mapPass1: register( t1 );\n" )
+					cuT( "Texture2D c3d_mapPass2: register( t2 );\n" )
+					cuT( "Texture2D c3d_mapPass3: register( t3 );\n" )
+					cuT( "Texture2D c3d_mapScene: register( t4 );\n" )
+					cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
+					cuT( "{\n" )
+					cuT( "	float4 plx_v4FragColor  = texture2D( c3d_mapPass0, vtx_texture );\n" )
+					cuT( "	plx_v4FragColor += c3d_mapPass1.texture2D( DefaultSampler, p_input.TextureUV );\n" )
+					cuT( "	plx_v4FragColor += c3d_mapPass2.texture2D( DefaultSampler, p_input.TextureUV );\n" )
+					cuT( "	plx_v4FragColor += c3d_mapPass3.texture2D( DefaultSampler, p_input.TextureUV );\n" )
+					cuT( "	plx_v4FragColor += c3d_mapScene.texture2D( DefaultSampler, p_input.TextureUV );\n" )
+					cuT( "	return plx_v4FragColor;\n" )
+					cuT( "}\n" );
+			}
+
+			return l_return;
 		}
 
 #endif
@@ -189,6 +345,9 @@ namespace Bloom
 			l_sampler = p_renderTarget.GetOwner()->GetSamplerManager().Create( l_name );
 			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, l_mode );
 			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, l_mode );
+			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_BORDER );
+			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_BORDER );
+			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_BORDER );
 		}
 		else
 		{
@@ -248,18 +407,16 @@ namespace Bloom
 		m_kernel[1] = 6;
 		m_kernel[2] = 5;
 
-		std::vector< xchar > l_buffer( 100 );
+		String l_count;
 
-		if ( p_param.Get( cuT( "OffsetX" ), l_buffer.data(), l_buffer.size() ) )
+		if ( p_param.Get( cuT( "OffsetX" ), l_count ) )
 		{
-			m_offsetX = string::to_float( l_buffer.data() );
+			m_offsetX = string::to_float( l_count );
 		}
 
-		p_param.Get( cuT( "OffsetY" ), l_buffer.data(), l_buffer.size() );
-
-		if ( p_param.Get( cuT( "OffsetX" ), l_buffer.data(), l_buffer.size() ) )
+		if ( p_param.Get( cuT( "OffsetX" ), l_count ) )
 		{
-			m_offsetY = string::to_float( l_buffer.data() );
+			m_offsetY = string::to_float( l_count );
 		}
 
 		// Normalize kernel coefficients
@@ -278,18 +435,17 @@ namespace Bloom
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
 			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
-			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
 		};
 		m_declaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 
 		real l_pBuffer[] =
 		{
-			0, 0, 0, 0,
-			1, 1, 1, 1,
-			0, 1, 0, 1,
-			0, 0, 0, 0,
-			1, 0, 1, 0,
-			1, 1, 1, 1,
+			0, 0,
+			1, 1,
+			0, 1,
+			0, 0,
+			1, 0,
+			1, 1,
 		};
 
 		std::memcpy( m_buffer, l_pBuffer, sizeof( l_pBuffer ) );
@@ -315,7 +471,6 @@ namespace Bloom
 		String l_hipass;
 		String l_blur;
 		String l_combine;
-
 #if defined( C3D_HAS_GL_RENDERER )
 
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
@@ -325,8 +480,25 @@ namespace Bloom
 			l_blur = GetGlslBlurProgram( m_renderSystem );
 			l_combine = GetGlslCombineProgram( m_renderSystem );
 		}
+		else
 
 #endif
+#if defined( DC3D_HAS_D3D11_RENDERER )
+
+		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
+		{
+			l_vertex = GetHlslVertexProgram( m_renderSystem );
+			l_hipass = GetHlslHiPassProgram( m_renderSystem );
+			l_blur = GetHlslBlurProgram( m_renderSystem );
+			l_combine = GetHlslCombineProgram( m_renderSystem );
+		}
+		else
+
+#endif
+
+		{
+			CASTOR_EXCEPTION( "Unsupported renderer type" );
+		}
 
 		if ( !l_vertex.empty() && !l_hipass.empty() )
 		{
@@ -434,8 +606,8 @@ namespace Bloom
 		if ( DoHiPassFilter() )
 		{
 			DoDownSample();
-			DoBlur( m_hiPassSurfaces, m_blurSurfaces, m_filterOffsetX, m_offsetX );
-			DoBlur( m_blurSurfaces, m_hiPassSurfaces, m_filterOffsetY, m_offsetY );
+			DoBlur( m_hiPassSurfaces, m_blurSurfaces, FILTER_COUNT, m_filterOffsetX, m_offsetX );
+			DoBlur( m_blurSurfaces, m_hiPassSurfaces, FILTER_COUNT, m_filterOffsetY, m_offsetY );
 			DoCombine();
 		}
 
@@ -485,7 +657,7 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
+	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
 	{
 		auto l_context = m_renderSystem->GetCurrentContext();
 
@@ -495,7 +667,7 @@ namespace Bloom
 		m_filterOffsetX->SetValue( 0 );
 		m_filterOffsetY->SetValue( 0 );
 
-		for ( uint32_t i = 0; i < p_sources.size(); ++i )
+		for ( uint32_t i = 0; i < p_count; ++i )
 		{
 			auto l_source = &p_sources[i];
 			auto l_destination = &p_destinations[i];
@@ -516,24 +688,29 @@ namespace Bloom
 			ShaderProgramBaseSPtr l_program = m_combineProgram.lock();
 			m_viewport.SetSize( m_renderTarget.GetSize() );
 			m_viewport.Render( m_renderSystem->GetPipeline() );
-	
-			m_hiPassSurfaces[0].m_colourTexture->SetIndex( 0 );
-			m_hiPassSurfaces[1].m_colourTexture->SetIndex( 1 );
-			m_hiPassSurfaces[2].m_colourTexture->SetIndex( 2 );
-			m_hiPassSurfaces[3].m_colourTexture->SetIndex( 3 );
-	
+
+			auto l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
+			auto l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
+			auto l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
+			auto l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
+
+			l_texture0->SetIndex( 0 );
+			l_texture1->SetIndex( 1 );
+			l_texture2->SetIndex( 2 );
+			l_texture3->SetIndex( 3 );
+
 			uint32_t l_id = m_renderTarget.GetTexture()->GetIndex();
 			m_renderTarget.GetTexture()->SetIndex( 4 );
-	
+
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
 				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
-				m_combineMapPass0->SetValue( m_hiPassSurfaces[0].m_colourTexture.get() );
-				m_combineMapPass1->SetValue( m_hiPassSurfaces[1].m_colourTexture.get() );
-				m_combineMapPass2->SetValue( m_hiPassSurfaces[2].m_colourTexture.get() );
-				m_combineMapPass3->SetValue( m_hiPassSurfaces[3].m_colourTexture.get() );
+				m_combineMapPass0->SetValue( l_texture0.get() );
+				m_combineMapPass1->SetValue( l_texture1.get() );
+				m_combineMapPass2->SetValue( l_texture2.get() );
+				m_combineMapPass3->SetValue( l_texture3.get() );
 				m_combineMapScene->SetValue( m_renderTarget.GetTexture().get() );
-	
+
 				if ( l_matrices )
 				{
 					m_renderSystem->GetPipeline().ApplyProjection( *l_matrices );
@@ -541,21 +718,21 @@ namespace Bloom
 	
 				l_program->Bind( 0, 1 );
 			}
-	
-			m_hiPassSurfaces[0].m_colourTexture->BindAt( 0 );
-			m_hiPassSurfaces[1].m_colourTexture->BindAt( 1 );
-			m_hiPassSurfaces[2].m_colourTexture->BindAt( 2 );
-			m_hiPassSurfaces[3].m_colourTexture->BindAt( 3 );
+
+			l_texture0->BindAt( 0 );
+			l_texture1->BindAt( 1 );
+			l_texture2->BindAt( 2 );
+			l_texture3->BindAt( 3 );
 			m_renderTarget.GetTexture()->BindAt( 4 );
-	
+
 			m_geometryBuffers->Draw( l_program, m_vertices.size(), 0 );
-	
-			m_hiPassSurfaces[0].m_colourTexture->UnbindFrom( 0 );
-			m_hiPassSurfaces[1].m_colourTexture->UnbindFrom( 1 );
-			m_hiPassSurfaces[2].m_colourTexture->UnbindFrom( 2 );
-			m_hiPassSurfaces[3].m_colourTexture->UnbindFrom( 3 );
+
+			l_texture0->UnbindFrom( 0 );
+			l_texture1->UnbindFrom( 1 );
+			l_texture2->UnbindFrom( 2 );
+			l_texture3->UnbindFrom( 3 );
 			m_renderTarget.GetTexture()->UnbindFrom( 4 );
-	
+
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
 				l_program->Unbind();

@@ -53,21 +53,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Parameters()
+		C3D_API ~Parameters()
 		{
 		}
 		/**
 		 *\~english
 		 *\brief		Adds a parameter
 		 *\remark		If a parameter with the given name already exists, nothing is done
-		 *\param[in]	p_name	The parameter name
+		 *\param[in]	p_name		The parameter name
 		 *\param[in]	p_tParam	The parameter values
 		 *\param[in]	p_count	The values count
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
 		 *\brief		Ajoute un paramètre
 		 *\remark		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_name	Le nom du paramètre
+		 *\param[in]	p_name		Le nom du paramètre
 		 *\param[in]	p_tParam	Les valeurs du paramètre
 		 *\param[in]	p_count	Le compte des valeurs
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
@@ -75,31 +75,20 @@ namespace Castor3D
 		template< typename T, uint32_t N >
 		inline bool Add( Castor::String const & p_name, T const( & p_tParam )[N] )
 		{
-			bool l_return = false;
-			ParamNameMapIt l_it = m_mapParameters.find( p_name );
-
-			if ( l_it == m_mapParameters.end() )
-			{
-				ByteArray l_param( sizeof( T ) * N, 0 );
-				std::memcpy( &l_param[0], p_tParam, sizeof( T ) * N );
-				m_mapParameters.insert( std::make_pair( p_name, l_param ) );
-				l_return = true;
-			}
-
-			return l_return;
+			Add( p_name, p_tParam, N );
 		}
 		/**
 		 *\~english
 		 *\brief		Adds a parameter
 		 *\remark		If a parameter with the given name already exists, nothing is done
-		 *\param[in]	p_name	The parameter name
+		 *\param[in]	p_name		The parameter name
 		 *\param[in]	p_tParam	The parameter values
 		 *\param[in]	p_count	The values count
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
 		 *\brief		Ajoute un paramètre
 		 *\remark		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_name	Le nom du paramètre
+		 *\param[in]	p_name		Le nom du paramètre
 		 *\param[in]	p_tParam	Les valeurs du paramètre
 		 *\param[in]	p_count	Le compte des valeurs
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
@@ -124,13 +113,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds a parameter
 		 *\remark		If a parameter with the given name already exists, nothing is done
-		 *\param[in]	p_name	The parameter name
+		 *\param[in]	p_name		The parameter name
 		 *\param[in]	p_tParam	The parameter value
 		 *\return		\p false if a parameter with the given name already exists
 		 *\~french
 		 *\brief		Ajoute un paramètre
 		 *\remark		Si un paramètre avec le nom donné existe déjà, rien n'est fait
-		 *\param[in]	p_name	Le nom du paramètre
+		 *\param[in]	p_name		Le nom du paramètre
 		 *\param[in]	p_tParam	La valeur du paramètre
 		 *\return		\p false si un paramètre avec le nom donné existe déjà
 		 */
@@ -144,6 +133,36 @@ namespace Castor3D
 			{
 				ByteArray l_param( sizeof( T ), 0 );
 				std::memcpy( &l_param[0], &p_tParam, sizeof( T ) );
+				m_mapParameters.insert( std::make_pair( p_name, l_param ) );
+				l_return = true;
+			}
+
+			return l_return;
+		}
+		/**
+		 *\~english
+		 *\brief		Adds a string parameter
+		 *\remark		If a parameter with the given name already exists, nothing is done
+		 *\param[in]	p_name		The parameter name
+		 *\param[in]	p_tParam	The parameter value
+		 *\return		\p false if a parameter with the given name already exists
+		 *\~french
+		 *\brief		Ajoute un paramètre chaîne de caractères
+		 *\remark		Si un paramètre avec le nom donné existe déjà, rien n'est fait
+		 *\param[in]	p_name		Le nom du paramètre
+		 *\param[in]	p_tParam	La valeur du paramètre
+		 *\return		\p false si un paramètre avec le nom donné existe déjà
+		 */
+		inline bool Add( Castor::String const & p_name, Castor::String const & p_tParam )
+		{
+			bool l_return = false;
+			ParamNameMapIt l_it = m_mapParameters.find( p_name );
+
+			if ( l_it == m_mapParameters.end() )
+			{
+				size_t l_size = sizeof( xchar ) * p_tParam.size();
+				ByteArray l_param( l_size + 1, 0 );
+				std::memcpy( &l_param[0], p_tParam.data(), l_size );
 				m_mapParameters.insert( std::make_pair( p_name, l_param ) );
 				l_return = true;
 			}
@@ -201,6 +220,31 @@ namespace Castor3D
 					std::memcpy( &p_tParam, &l_it->second[0], sizeof( T ) );
 					l_return = true;
 				}
+			}
+
+			return l_return;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves a parameter value
+		 *\param[in]	p_name	The parameter name
+		 *\param[out]	p_tParam	The parameter value
+		 *\return		\p false if there is no parameter with the given name
+		 *\~french
+		 *\brief		Récupère la valeur d'un paramètre
+		 *\param[in]	p_name	Le nom du paramètre
+		 *\param[out]	p_tParam	La valeur du paramètre
+		 *\return		\p false s'il n'y a pas de paramètre avec le nom donné
+		 */
+		inline bool Get( Castor::String const & p_name, Castor::String & p_tParam )const
+		{
+			bool l_return = false;
+			ParamNameMapConstIt l_it = m_mapParameters.find( p_name );
+
+			if ( l_it != m_mapParameters.end() )
+			{
+				p_tParam = reinterpret_cast< xchar const * const >( l_it->second.data() );
+				l_return = true;
 			}
 
 			return l_return;

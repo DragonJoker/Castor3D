@@ -46,10 +46,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetSize )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetFormat )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetDepth )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetMsaa )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetSsaa )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetTechnique )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetStereo )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetDeferred )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetPostEffect )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 
@@ -84,9 +82,8 @@ namespace Castor3D
 	// Light parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightParent )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_LightAmbient )
-	DECLARE_ATTRIBUTE_PARSER( Parser_LightDiffuse )
-	DECLARE_ATTRIBUTE_PARSER( Parser_LightSpecular )
+	DECLARE_ATTRIBUTE_PARSER( Parser_LightColour )
+	DECLARE_ATTRIBUTE_PARSER( Parser_LightIntensity )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightAttenuation )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightCutOff )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightExponent )

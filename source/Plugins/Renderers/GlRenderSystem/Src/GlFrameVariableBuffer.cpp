@@ -961,7 +961,6 @@ namespace GlRender
 	{
 		if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
 		{
-			m_glBuffer.Bind();
 			m_glBuffer.Fill( &m_buffer[0], m_uniformBlockSize, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		}
 		else
@@ -979,7 +978,7 @@ namespace GlRender
 	{
 		if ( m_uniformBlockIndex != eGL_INVALID_INDEX )
 		{
-			//m_glBuffer.Unbind();
+			m_glBuffer.Unbind();
 		}
 	}
 }

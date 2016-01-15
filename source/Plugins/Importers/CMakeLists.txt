@@ -1,3 +1,4 @@
+option( CASTOR_BUILDGRP_IMPORTER "Build Castor3D Importer plugins" TRUE )
 option( CASTOR_BUILD_IMPORTER_ASSIMP "Build Assimp Importer plugin (needs ASSIMP library)" TRUE )
 option( CASTOR_BUILD_IMPORTER_ASE "Build ASE Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_LWO "Build LWO Importer plugin" TRUE )
@@ -20,74 +21,76 @@ function( ImportersInit )
 endfunction( ImportersInit )
 
 function( ImportersBuild )
-	if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
-		set( Build ${Assimp} )
-		add_subdirectory( Plugins/Importers/AssimpImporter )
-		set( Assimp ${Build} PARENT_SCOPE )
-	endif()
+	if ( ${CASTOR_BUILDGRP_IMPORTER} )
+		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
+			set( Build ${Assimp} )
+			add_subdirectory( Plugins/Importers/AssimpImporter )
+			set( Assimp ${Build} PARENT_SCOPE )
+		endif()
 
-	if( ${CASTOR_BUILD_IMPORTER_PLY} )
-		set( Build ${Ply} )
-		add_subdirectory( Plugins/Importers/PlyImporter )
-		set( Ply ${Build} PARENT_SCOPE )
-	endif()
+		if( ${CASTOR_BUILD_IMPORTER_PLY} )
+			set( Build ${Ply} )
+			add_subdirectory( Plugins/Importers/PlyImporter )
+			set( Ply ${Build} PARENT_SCOPE )
+		endif()
 
-	STRING( FIND "${Build}" "yes" POS )
-	if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
-		msg_debug( "using builtin importers" )
-		if( ${CASTOR_BUILD_IMPORTER_ASE} )
-			set( Build ${Ase} )
-			add_subdirectory( Plugins/Importers/AseImporter )
-			set( Ase ${Build} PARENT_SCOPE )
+		STRING( FIND "${Build}" "yes" POS )
+		if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
+			msg_debug( "using builtin importers" )
+			if( ${CASTOR_BUILD_IMPORTER_ASE} )
+				set( Build ${Ase} )
+				add_subdirectory( Plugins/Importers/AseImporter )
+				set( Ase ${Build} PARENT_SCOPE )
+			endif()
+			
+			if( ${CASTOR_BUILD_IMPORTER_LWO} )
+				set( Build ${Lwo} )
+				add_subdirectory( Plugins/Importers/LwoImporter )
+				set( Lwo ${Build} PARENT_SCOPE )
+			endif()
+			
+			if( ${CASTOR_BUILD_IMPORTER_MD2} )
+				set( Build ${Md2} )
+				add_subdirectory( Plugins/Importers/Md2Importer )
+				set( Md2 ${Build} PARENT_SCOPE )
+			endif()
+			
+			if( ${CASTOR_BUILD_IMPORTER_MD3} )
+				set( Build ${Md3} )
+				add_subdirectory( Plugins/Importers/Md3Importer )
+				set( Md3 ${Build} PARENT_SCOPE )
+			endif()
+			
+			if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+				set( Build ${Obj} )
+				add_subdirectory( Plugins/Importers/ObjImporter )
+				set( Obj ${Build} PARENT_SCOPE )
+			endif()
+			
+			if( ${CASTOR_BUILD_IMPORTER_3DS} )
+				set( Build ${3ds} )
+				add_subdirectory( Plugins/Importers/SMaxImporter )
+				set( 3ds ${Build} PARENT_SCOPE )
+			endif()
+		else()
+			set( Ase "no (Not needed)" PARENT_SCOPE )
+			set( Md2 "no (Not needed)" PARENT_SCOPE )
+			set( Md3 "no (Not needed)" PARENT_SCOPE )
+			set( 3ds "no (Not needed)" PARENT_SCOPE )
+			set( Lwo "no (Not needed)" PARENT_SCOPE )
+			set( Obj "no (Not needed)" PARENT_SCOPE )
 		endif()
-    	
-		if( ${CASTOR_BUILD_IMPORTER_LWO} )
-			set( Build ${Lwo} )
-			add_subdirectory( Plugins/Importers/LwoImporter )
-			set( Lwo ${Build} PARENT_SCOPE )
-		endif()
-    	
-		if( ${CASTOR_BUILD_IMPORTER_MD2} )
-			set( Build ${Md2} )
-			add_subdirectory( Plugins/Importers/Md2Importer )
-			set( Md2 ${Build} PARENT_SCOPE )
-		endif()
-    	
-		if( ${CASTOR_BUILD_IMPORTER_MD3} )
-			set( Build ${Md3} )
-			add_subdirectory( Plugins/Importers/Md3Importer )
-			set( Md3 ${Build} PARENT_SCOPE )
-		endif()
-    	
-		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-			set( Build ${Obj} )
-			add_subdirectory( Plugins/Importers/ObjImporter )
-			set( Obj ${Build} PARENT_SCOPE )
-		endif()
-    	
-		if( ${CASTOR_BUILD_IMPORTER_3DS} )
-			set( Build ${3ds} )
-			add_subdirectory( Plugins/Importers/SMaxImporter )
-			set( 3ds ${Build} PARENT_SCOPE )
-		endif()
-	else()
-		set( Ase "no (Not needed)" PARENT_SCOPE )
-		set( Md2 "no (Not needed)" PARENT_SCOPE )
-		set( Md3 "no (Not needed)" PARENT_SCOPE )
-		set( 3ds "no (Not needed)" PARENT_SCOPE )
-		set( Lwo "no (Not needed)" PARENT_SCOPE )
-		set( Obj "no (Not needed)" PARENT_SCOPE )
-	endif()
 
-	set( CastorMinLibraries
-		${CastorMinLibraries}
-		PARENT_SCOPE
-	)
+		set( CastorMinLibraries
+			${CastorMinLibraries}
+			PARENT_SCOPE
+		)
 
-	set( CastorBinsDependencies
-		${CastorBinsDependencies}
-		PARENT_SCOPE
-	)
+		set( CastorBinsDependencies
+			${CastorBinsDependencies}
+			PARENT_SCOPE
+		)
+	endif ()
 endfunction( ImportersBuild )
 
 function( ImportersSummary msg )
@@ -104,90 +107,92 @@ function( ImportersSummary msg )
 endfunction( ImportersSummary )
 
 function( ImportersSetup )
-	cpack_add_component_group( Importers
-		DESCRIPTION "Importer plugins usable in Castor3D"
-	)
-
-	if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
-		cpack_add_component( AssimpImporter
-			DISPLAY_NAME "AssimpImporter plugin"
-			DESCRIPTION "Allows the mesh import using Assimp library in Castor3D"
-			GROUP Importers
-			DEPENDS Castor3D
-			INSTALL_TYPES Full
+	if ( ${CASTOR_BUILDGRP_IMPORTER} )
+		cpack_add_component_group( Importers
+			DESCRIPTION "Importer plugins usable in Castor3D"
 		)
+
+		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
+			cpack_add_component( AssimpImporter
+				DISPLAY_NAME "AssimpImporter plugin"
+				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D"
+				GROUP Importers
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+
+		if( ${CASTOR_BUILD_IMPORTER_PLY} )
+			cpack_add_component( PlyImporter
+				DISPLAY_NAME "PlyImporter plugin"
+				DESCRIPTION "Allows the Stanford PLY objects import in Castor3D"
+				GROUP Importers
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
+
+		STRING( FIND "${Assimp}" "yes" POS )
+		if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
+			if( ${CASTOR_BUILD_IMPORTER_ASE} )
+				cpack_add_component( AseImporter
+					DISPLAY_NAME "AseImporter plugin"
+					DESCRIPTION "Allows the ASE objects import in Castor3D"
+					GROUP Importers
+					DEPENDS Castor3D
+					INSTALL_TYPES Full
+				)
+			endif ()
+
+			if( ${CASTOR_BUILD_IMPORTER_LWO} )
+				cpack_add_component( LwoImporter
+					DISPLAY_NAME "AseImporter plugin"
+					DESCRIPTION "Allows the LightWave Objects import in Castor3D"
+					GROUP Importers
+					DEPENDS Castor3D
+					INSTALL_TYPES Full
+				)
+			endif ()
+
+			if( ${CASTOR_BUILD_IMPORTER_MD2} )
+				cpack_add_component( Md2Importer
+					DISPLAY_NAME "Md2Importer plugin"
+					DESCRIPTION "Allows the MD2 objects import in Castor3D"
+					GROUP Importers
+					DEPENDS Castor3D
+					INSTALL_TYPES Full
+				)
+			endif ()
+
+			if( ${CASTOR_BUILD_IMPORTER_MD3} )
+				cpack_add_component( Md3Importer
+					DISPLAY_NAME "Md3Importer plugin"
+					DESCRIPTION "Allows the MD3 objects import in Castor3D"
+					GROUP Importers
+					DEPENDS Castor3D
+					INSTALL_TYPES Full
+				)
+			endif ()
+
+			if( ${CASTOR_BUILD_IMPORTER_OBJ} )
+				cpack_add_component( ObjImporter
+					DISPLAY_NAME "ObjImporter plugin"
+					DESCRIPTION "Allows the OBJ objects import in Castor3D"
+					GROUP Importers
+					DEPENDS Castor3D
+					INSTALL_TYPES Full
+				)
+			endif ()
+
+			if( ${CASTOR_BUILD_IMPORTER_SMAX} )
+				cpack_add_component( SMaxImporter
+					DISPLAY_NAME "SMaxImporter plugin"
+					DESCRIPTION "Allows the 3D Studio Max objects import in Castor3D"
+					GROUP Importers
+					DEPENDS Castor3D
+					INSTALL_TYPES Full
+				)
+			endif ()
+		endif()
 	endif ()
-
-	if( ${CASTOR_BUILD_IMPORTER_PLY} )
-		cpack_add_component( PlyImporter
-			DISPLAY_NAME "PlyImporter plugin"
-			DESCRIPTION "Allows the Stanford PLY objects import in Castor3D"
-			GROUP Importers
-			DEPENDS Castor3D
-			INSTALL_TYPES Minimal Full
-		)
-	endif ()
-
-	STRING( FIND "${Assimp}" "yes" POS )
-	if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
-		if( ${CASTOR_BUILD_IMPORTER_ASE} )
-			cpack_add_component( AseImporter
-				DISPLAY_NAME "AseImporter plugin"
-				DESCRIPTION "Allows the ASE objects import in Castor3D"
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-
-		if( ${CASTOR_BUILD_IMPORTER_LWO} )
-			cpack_add_component( LwoImporter
-				DISPLAY_NAME "AseImporter plugin"
-				DESCRIPTION "Allows the LightWave Objects import in Castor3D"
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-
-		if( ${CASTOR_BUILD_IMPORTER_MD2} )
-			cpack_add_component( Md2Importer
-				DISPLAY_NAME "Md2Importer plugin"
-				DESCRIPTION "Allows the MD2 objects import in Castor3D"
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-
-		if( ${CASTOR_BUILD_IMPORTER_MD3} )
-			cpack_add_component( Md3Importer
-				DISPLAY_NAME "Md3Importer plugin"
-				DESCRIPTION "Allows the MD3 objects import in Castor3D"
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-
-		if( ${CASTOR_BUILD_IMPORTER_OBJ} )
-			cpack_add_component( ObjImporter
-				DISPLAY_NAME "ObjImporter plugin"
-				DESCRIPTION "Allows the OBJ objects import in Castor3D"
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-
-		if( ${CASTOR_BUILD_IMPORTER_SMAX} )
-			cpack_add_component( SMaxImporter
-				DISPLAY_NAME "SMaxImporter plugin"
-				DESCRIPTION "Allows the 3D Studio Max objects import in Castor3D"
-				GROUP Importers
-				DEPENDS Castor3D
-				INSTALL_TYPES Full
-			)
-		endif ()
-	endif()
 endfunction( ImportersSetup )

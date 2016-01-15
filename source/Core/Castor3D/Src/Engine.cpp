@@ -47,12 +47,12 @@ namespace Castor3D
 	static const char * C3D_MAIN_LOOP_EXISTS = "Render loop is already started";
 
 	Engine::Engine()
-		: m_renderSystem( NULL )
+		: Unique< Engine >( this )
+		, m_renderSystem( NULL )
 		, m_cleaned( true )
 		, m_perObjectLighting( true )
 	{
 		std::locale::global( std::locale() );
-		CASTOR_INIT_UNIQUE_INSTANCE();
 
 		m_animationManager = std::make_unique< AnimationManager >( *this );
 		m_shaderManager = std::make_unique< ShaderManager >( *this );
@@ -118,16 +118,56 @@ namespace Castor3D
 		}
 
 		m_pluginManager->Clear();
-		CASTOR_CLEANUP_UNIQUE_INSTANCE();
 	}
 
 	void Engine::Initialise( uint32_t p_wanted, bool p_threaded )
 	{
-		REQUIRE( m_renderSystem );
+		if ( m_renderSystem )
+		{
+			m_targetManager->SetRenderSystem( m_renderSystem );
+			m_samplerManager->SetRenderSystem( m_renderSystem );
+			m_shaderManager->SetRenderSystem( m_renderSystem );
+			m_overlayManager->SetRenderSystem( m_renderSystem );
+			m_materialManager->SetRenderSystem( m_renderSystem );
+			m_sceneManager->SetRenderSystem( m_renderSystem );
+			m_blendStateManager->SetRenderSystem( m_renderSystem );
+			m_animationManager->SetRenderSystem( m_renderSystem );
+			m_shaderManager->SetRenderSystem( m_renderSystem );
+			m_depthStencilStateManager->SetRenderSystem( m_renderSystem );
+			m_rasteriserStateManager->SetRenderSystem( m_renderSystem );
+			m_blendStateManager->SetRenderSystem( m_renderSystem );
+			m_windowManager->SetRenderSystem( m_renderSystem );
+
+			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
+			m_defaultSampler = m_samplerManager->Create( cuT( "Default" ) );
+			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
+			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
+			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
+			m_lightsSampler = m_samplerManager->Create( cuT( "LightsSampler" ) );
+			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
+			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
+
+			DoLoadCoreData();
+		}
 
 		if ( !m_renderSystem )
 		{
 			CASTOR_EXCEPTION( C3D_NO_RENDERSYSTEM );
+		}
+
+		if ( m_defaultBlendState )
+		{
+			m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
+		}
+
+		if ( m_lightsSampler )
+		{
+			m_listenerManager->PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
+		}
+
+		if ( m_defaultSampler )
+		{
+			m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
 		}
 
 		if ( p_threaded )
@@ -156,7 +196,6 @@ namespace Castor3D
 			m_meshManager->Cleanup();
 			m_overlayManager->Cleanup();
 			m_materialManager->Cleanup();
-			m_windowManager->Cleanup();
 			m_shaderManager->Cleanup();
 
 			if ( m_defaultBlendState )
@@ -174,11 +213,13 @@ namespace Castor3D
 				m_listenerManager->PostEvent( MakeCleanupEvent( *m_defaultSampler ) );
 			}
 
+			m_windowManager->Cleanup();
 			m_renderLoop.reset();
 			m_renderSystem->Cleanup();
 
 			m_targetManager->Clear();
 			m_samplerManager->Clear();
+			m_meshManager->Clear();
 			m_shaderManager->Clear();
 			m_overlayManager->Clear();
 			m_materialManager->Clear();
@@ -192,21 +233,6 @@ namespace Castor3D
 			m_rasteriserStateManager->Clear();
 			m_blendStateManager->Clear();
 			m_windowManager->Clear();
-
-			if ( m_defaultBlendState )
-			{
-				m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultBlendState ) );
-			}
-
-			if ( m_lightsSampler )
-			{
-				m_listenerManager->PostEvent( MakeInitialiseEvent( *m_lightsSampler ) );
-			}
-
-			if ( m_defaultSampler )
-			{
-				m_listenerManager->PostEvent( MakeInitialiseEvent( *m_defaultSampler ) );
-			}
 		}
 	}
 
@@ -217,30 +243,6 @@ namespace Castor3D
 
 		if ( m_renderSystem )
 		{
-			m_targetManager->SetRenderSystem( m_renderSystem );
-			m_samplerManager->SetRenderSystem( m_renderSystem );
-			m_shaderManager->SetRenderSystem( m_renderSystem );
-			m_overlayManager->SetRenderSystem( m_renderSystem );
-			m_materialManager->SetRenderSystem( m_renderSystem );
-			m_sceneManager->SetRenderSystem( m_renderSystem );
-			m_blendStateManager->SetRenderSystem( m_renderSystem );
-			m_animationManager->SetRenderSystem( m_renderSystem );
-			m_shaderManager->SetRenderSystem( m_renderSystem );
-			m_depthStencilStateManager->SetRenderSystem( m_renderSystem );
-			m_rasteriserStateManager->SetRenderSystem( m_renderSystem );
-			m_blendStateManager->SetRenderSystem( m_renderSystem );
-			m_windowManager->SetRenderSystem( m_renderSystem );
-
-			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
-			m_defaultSampler = m_samplerManager->Create( cuT( "Default" ) );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
-			m_defaultSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIP, eINTERPOLATION_MODE_LINEAR );
-			m_lightsSampler = m_samplerManager->Create( cuT( "LightsSampler" ) );
-			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_NEAREST );
-			m_lightsSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_NEAREST );
-
-			DoLoadCoreData();
 			l_return = true;
 		}
 

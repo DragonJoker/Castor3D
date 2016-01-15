@@ -924,39 +924,49 @@ namespace Deferred
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0 ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, l_v4Emissive.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_eye, l_v3Position - c3d_v3CameraPosition );
+			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) );
 
-			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
+			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
+			LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.X );
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( l_lighting->GetLight( i ), l_eye, l_fMatShininess,
+				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
 													 FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
 													 l_output );
 			}
-			ROF
+			ROF;
 
-			FOR( l_writer, Int, i, c3d_iLightsCount.x, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y" ), cuT( "++i" ) )
+			l_begin = l_end;
+			l_end += c3d_iLightsCount.Y;
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( l_lighting->GetLight( i ), l_eye, l_fMatShininess,
+				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
 											   FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
 											   l_output );
 			}
-			ROF
+			ROF;
 
-			FOR( l_writer, Int, i, c3d_iLightsCount.x + c3d_iLightsCount.y, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y + c3d_iLightsCount.z" ), cuT( "++i" ) )
+			l_begin = l_end;
+			l_end += c3d_iLightsCount.Z;
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( l_lighting->GetLight( i ), l_eye, l_fMatShininess,
+				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
 											  FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
 											  l_output );
 			}
-			ROF
+			ROF;
 
 			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( Int( &l_writer, 1 ) - l_v4Emissive.W ) *
-													l_writer.Paren( l_v3Emissive +
-																	l_writer.Paren( l_v3Ambient * l_v4Ambient.XYZ ) +
+													l_writer.Paren( l_writer.Paren( l_v3Ambient + l_v4Ambient.XYZ ) +
 																	l_writer.Paren( l_v3Diffuse * l_v4Diffuse.XYZ ) +
-																	l_writer.Paren( l_v3Specular * l_v4Specular.XYZ ) ) ) +
+																	l_writer.Paren( l_v3Specular * l_v4Specular.XYZ ) +
+																	l_v3Emissive ) ) +
 									l_writer.Paren( l_v4Emissive.W * l_v4Diffuse.XYZ ), 1 );
 		} );
 

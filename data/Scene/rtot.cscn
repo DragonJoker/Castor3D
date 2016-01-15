@@ -37,18 +37,18 @@ scene "TextureScene"
 
 	light "TextureSunLight"
 	{
-		parent		"TextureSunLightNode"
-		type		directional
-		diffuse		0.8 0.8 0.8 1.0
-		specular	1.0 1.0 1.0 1.0
+		parent "TextureSunLightNode"
+		type directional
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0
 	}
 
 	light "TextureSunLight2"
 	{
-		parent		"TextureSunLightNode2"
-		type		directional
-		diffuse		0.8 0.8 0.8 1.0
-		specular	1.0 1.0 1.0 1.0
+		parent "TextureSunLightNode2"
+		type directional
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0
 	}
 
 	camera "TextureCamera"
@@ -106,7 +106,6 @@ material "RToTMaterial"
 			{
 				format rgb24
 				size 1024 1024
-				msaa 8
 				scene "TextureScene"
 				camera "TextureCamera"
 			}
@@ -138,18 +137,18 @@ scene "FinalScene"
 
 	light "FinalSunLight"
 	{
-		parent		"FinalSunLightNode"
-		type		directional
-		diffuse		0.8 0.8 0.8 1.0
-		specular	1.0 1.0 1.0 1.0
+		parent "FinalSunLightNode"
+		type directional
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0
 	}
 
 	light "FinalSunLight2"
 	{
-		parent		"FinalSunLightNode2"
-		type		directional
-		diffuse		0.8 0.8 0.8 1.0
-		specular	1.0 1.0 1.0 1.0
+		parent "FinalSunLightNode2"
+		type directional
+		colour 1.0 1.0 1.0
+		intensity 0.0 0.8 1.0
 	}
 
 	object "FinalGeometry"
@@ -188,10 +187,7 @@ window "MyWindow"
 		format argb32
 		depth depth24s8
 		size 1125 600
-		//msaa 8
 		scene "FinalScene"
 		camera "MainCamera"
 	}
-	//fullscreen true
-	//vsync true
 }

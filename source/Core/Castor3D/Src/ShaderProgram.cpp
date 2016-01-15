@@ -505,8 +505,6 @@ namespace Castor3D
 		{
 			m_activeShaders.clear();
 
-			bool l_bResult = true;
-
 			for ( auto l_shader : m_pShaders )
 			{
 				if ( l_shader && l_shader->HasSource() )
@@ -519,7 +517,6 @@ namespace Castor3D
 						Logger::LogError( cuT( "ShaderProgram::Initialise - COMPILER ERROR" ) );
 						l_shader->Destroy();
 						m_status = ePROGRAM_STATUS_ERROR;
-						l_bResult = false;
 					}
 					else
 					{
@@ -529,32 +526,29 @@ namespace Castor3D
 				}
 			}
 
-			if ( l_bResult )
+			if ( !Link() )
 			{
-				if ( !Link() )
+				Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
+
+				for ( auto l_shader : m_activeShaders )
 				{
-					Logger::LogError( cuT( "ShaderProgram::Initialise - LINKER ERROR" ) );
-
-					for ( auto l_shader : m_activeShaders )
-					{
-						StringStream l_source;
-						l_source << format::line_prefix();
-						l_source << l_shader->GetLoadedSource();
-						Logger::LogDebug( l_source.str() );
-						l_shader->Destroy();
-					}
-
-					m_status = ePROGRAM_STATUS_ERROR;
+					StringStream l_source;
+					l_source << format::line_prefix();
+					l_source << l_shader->GetLoadedSource();
+					Logger::LogDebug( l_source.str() );
+					l_shader->Destroy();
 				}
-				else
+
+				m_status = ePROGRAM_STATUS_ERROR;
+			}
+			else
+			{
+				for ( auto && l_buffer : m_listFrameVariableBuffers )
 				{
-					for ( auto && l_buffer : m_listFrameVariableBuffers )
-					{
-						l_buffer->Initialise( *this );
-					}
-
-					Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
+					l_buffer->Initialise( *this );
 				}
+
+				Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
 			}
 		}
 	}

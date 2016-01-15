@@ -1,4 +1,4 @@
-﻿#include "DirectRenderTechnique.hpp"
+#include "DirectRenderTechnique.hpp"
 
 #include <Camera.hpp>
 #include <DepthStencilRenderBuffer.hpp>
@@ -198,17 +198,6 @@ namespace Direct
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
-#if !defined( NDEBUG )
-
-		auto l_background = GetOwner()->GetMaterialManager().Find( cuT( "Gray" ) );
-		auto l_foreground = GetOwner()->GetMaterialManager().Find( cuT( "DarkRed" ) );
-		auto l_font = GetOwner()->GetFontManager().get( cuT( "Arial20" ) );
-		auto l_panel = GetOwner()->GetOverlayManager().CreatePanel( cuT( "DirectRenderTechnique_DebugPanel" ), Position( 0, 200 ), Size( 350, 600 ), l_background );
-		m_debugOverlay = GetOwner()->GetOverlayManager().CreateText( cuT( "DirectRenderTechnique_DebugText" ), Position( 5, 5 ), Size( 340, 590 ), l_foreground, l_font, l_panel->GetOverlay().shared_from_this() );
-		m_debugOverlay->SetVAlign( eVALIGN_TOP );
-
-#endif
-
 		return true;
 	}
 
@@ -230,62 +219,6 @@ namespace Direct
 
 	void RenderTechnique::DoEndRender()
 	{
-#if !defined( NDEBUG )
-
-		auto l_scene = GetOwner()->GetRenderSystem()->GetTopScene();
-		auto l_node = l_scene->GetNode( cuT( "FinalNode" ) );
-		auto l_light = l_scene->GetLight( cuT( "PointLight" ) );
-
-		if ( l_node && l_light )
-		{
-			auto reflect = []( Point3f const & p_incident, Point3f const & p_normal )
-			{
-				return p_incident - 2.0_r * point::dot( p_normal, p_incident ) * p_normal;
-			};
-
-			Castor::StringStream l_stream;
-			auto l_camera = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
-			l_stream << cuT( "Camera position:\n  " ) << l_camera[0] << cuT( "\n  " ) << l_camera[1] << cuT( "\n  " ) << l_camera[2] << "\n\n";
-
-			SceneNodeSPtr l_node = l_scene->GetNode( cuT( "FinalNode" ) );
-			Point3f l_normal( 0, 0, -1 );
-			Point3f l_vertex = l_node->GetDerivedPosition();
-			l_normal = l_node->GetDerivedTransformationMatrix() * l_normal;
-			l_stream << cuT( "Object position:\n  " ) << l_vertex[0] << cuT( "\n  " ) << l_vertex[1] << cuT( "\n  " ) << l_vertex[2] << "\n";
-			l_stream << cuT( "Object normal:\n  " ) << l_normal[0] << cuT( "\n  " ) << l_normal[1] << cuT( "\n  " ) << l_normal[2] << "\n\n";
-
-			auto l_positionType = l_light->GetPositionType();
-			Point3f l_direction( l_positionType[0], l_positionType[1], l_positionType[2] );
-			point::normalise( l_direction );
-			l_stream << cuT( "Light direction:\n  " ) << l_direction[0] << cuT( "\n  " ) << l_direction[1] << cuT( "\n  " ) << l_direction[2] << "\n";
-
-			float l_diffuseFactor = point::dot( l_normal, -l_direction );
-
-			if ( l_diffuseFactor > 0 )
-			{
-				Point3f l_diffuse = Point3f( 0.8, 0.8, 0.8 ) * l_diffuseFactor;
-				l_stream << cuT( "Light diffuse:\n  " ) << l_diffuse[0] << cuT( "\n  " ) << l_diffuse[1] << cuT( "\n  " ) << l_diffuse[2] << "\n";
-
-				Point3f l_vertexToEye = point::get_normalised( l_camera - l_vertex );
-				Point3f l_lightReflect = point::get_normalised( reflect( l_direction, l_normal ) );
-				float l_specularFactor = point::dot( l_vertexToEye, l_lightReflect );
-
-				if ( l_specularFactor > 0 )
-				{
-					l_specularFactor = pow( l_specularFactor, 51.2f );
-					Point3f l_specular = Point3f( 1, 1, 1 ) * l_specularFactor;
-					l_stream << cuT( "Light specular:\n  " ) << l_specular[0] << cuT( "\n  " ) << l_specular[1] << cuT( "\n  " ) << l_specular[2] << "\n";
-				}
-			}
-
-			m_debugOverlay->SetCaption( l_stream.str() );
-		}
-		else
-		{
-			m_debugOverlay->GetOverlay().GetParent()->SetVisible( false );
-		}
-
-#endif
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
@@ -360,7 +293,7 @@ namespace Direct
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
-		std::function< void() > l_main = [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.X, vtx_normal.Y, vtx_normal.Z ) ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( 0.0f ), 0, 0 ) );
@@ -369,6 +302,7 @@ namespace Direct
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
@@ -378,6 +312,7 @@ namespace Direct
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
+					l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 					l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 				}
 
@@ -398,7 +333,7 @@ namespace Direct
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
 													 FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 													 l_output );
 			}
@@ -410,7 +345,7 @@ namespace Direct
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
 											   FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											   l_output );
 			}
@@ -422,7 +357,7 @@ namespace Direct
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
 											  FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											  l_output );
 			}
@@ -456,13 +391,12 @@ namespace Direct
 				}
 			}
 
-			pxl_v4FragColor = vec4( l_v3Emissive +
-									l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.XYZ ) +
 									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ) +
-									c3d_v4MatEmissive.XYZ, l_fAlpha );
-		};
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
+									l_v3Emissive, l_fAlpha );
+		} );
+
 		return l_writer.Finalise();
 
 #undef CHECK_FLAG
