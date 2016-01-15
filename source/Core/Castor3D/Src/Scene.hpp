@@ -864,45 +864,6 @@ namespace Castor3D
 			p_map.clear();
 		}
 
-		template< typename MapType >
-		void DoRemoveNodesAndUnattached( MapType & p_map )
-		{
-			std::set< Castor::String > l_setNodes;
-
-			for ( typename MapType::iterator l_it = p_map.begin(); l_it != p_map.end(); ++l_it )
-			{
-				if ( l_it->second->GetParent() && l_setNodes.find( l_it->second->GetParent()->GetName() ) == l_setNodes.end() )
-				{
-					l_setNodes.insert( l_it->second->GetParent()->GetName() );
-				}
-			}
-
-			SceneNodePtrStrMap::iterator l_itNode = m_addedNodes.begin();
-
-			while ( l_itNode != m_addedNodes.end() )
-			{
-				if ( l_setNodes.find( l_itNode->first ) == l_setNodes.end() )
-				{
-					l_itNode->second->Detach();
-					l_itNode->second.reset();
-					m_addedNodes.erase( l_itNode );
-					l_itNode = m_addedNodes.begin();
-				}
-				else
-				{
-					++l_itNode;
-				}
-			}
-
-			for ( typename MapType::iterator l_it = p_map.begin(); l_it != p_map.end(); ++l_it )
-			{
-				if ( !l_it->second->GetParent() )
-				{
-					p_map.erase( l_it );
-					l_it = p_map.begin();
-				}
-			}
-		}
 		template< class MapType, class ArrayType >
 		void DoRemoveAll( MapType & p_map, ArrayType & p_array )
 		{
@@ -917,6 +878,7 @@ namespace Castor3D
 
 			p_map.clear();
 		}
+
 		template< class ObjectType, typename KeyType >
 		bool DoCheckObject( KeyType const & p_key, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
 		{
@@ -944,6 +906,7 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 		template< class ObjectType, typename KeyType >
 		bool DoAddObject( std::shared_ptr< ObjectType > p_object, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
 		{
@@ -972,6 +935,7 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 		template< class ObjectType, typename KeyType >
 		std::shared_ptr< ObjectType > DoGetObject( std::map< KeyType, std::shared_ptr< ObjectType > > const & p_map, KeyType const & p_key )const
 		{
@@ -986,6 +950,7 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 		template< class ObjectType, typename KeyType >
 		void DoRemoveObject( std::shared_ptr< ObjectType > p_object, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, std::vector< std::shared_ptr< ObjectType > > & p_array )
 		{
