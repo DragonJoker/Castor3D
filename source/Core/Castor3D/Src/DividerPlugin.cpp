@@ -28,11 +28,10 @@ namespace Castor3D
 #elif defined( __GNUG__)
 #	if GCC_VERSION >= 50300
 	static const String GetDividerTypeFunctionABIName = cuT( "_Z14GetDividerTypeB5cxx11v" );
-	static const String CreateDividerFunctionABIName = cuT( "_Z13CreateDividerB5cxx11v" );
 #	else
 	static const String GetDividerTypeFunctionABIName = cuT( "_Z14GetDividerTypev" );
-	static const String CreateDividerFunctionABIName = cuT( "_Z13CreateDividerv" );
 #	endif
+	static const String CreateDividerFunctionABIName = cuT( "_Z13CreateDividerv" );
 	static const String DestroyDividerFunctionABIName = cuT( "_Z14DestroyDividerPN8Castor3D10SubdividerE" );
 #else
 #	error "Implement ABI names for this compiler"

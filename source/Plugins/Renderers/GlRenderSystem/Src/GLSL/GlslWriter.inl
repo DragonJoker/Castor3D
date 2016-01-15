@@ -407,17 +407,6 @@ namespace GlRender
 		}
 
 		template< typename T >
-		inline Optional< T > GlslWriter::GetLayout( Castor::String const & p_name, bool p_enabled )
-		{
-			if ( p_enabled )
-			{
-				*this << Layout() << Out() << T().m_type << p_name << cuT( ";" ) << Endl();
-			}
-
-			return Optional< T >( this, p_name, p_enabled );
-		}
-
-		template< typename T >
 		inline Optional< T > GlslWriter::GetUniform( Castor::String const & p_name, bool p_enabled )
 		{
 			if ( p_enabled )

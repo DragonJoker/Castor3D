@@ -32,8 +32,12 @@ namespace Castor3D
 	static const String GetPostEffectTypeFunctionABIName = cuT( "?GetPostEffectType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
 #	endif
 #elif defined( __GNUG__)
-	static const String CreateEffectFunctionABIName = cuT( "_Z12CreateEffectPN8Castor3D12RenderSystemEPN8Castor3D14RenderTargetE" );
+	static const String CreateEffectFunctionABIName = cuT( "_Z12CreateEffectPN8Castor3D12RenderSystemERNS_12RenderTargetERKNS_10ParametersE" );
+#	if GCC_VERSION >= 50300
+	static const String GetPostEffectTypeFunctionABIName = cuT( "_Z17GetPostEffectTypeB5cxx11v" );
+#else
 	static const String GetPostEffectTypeFunctionABIName = cuT( "_Z17GetPostEffectTypev" );
+#endif
 #else
 #	error "Implement ABI names for this compiler"
 #endif
