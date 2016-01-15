@@ -6,6 +6,8 @@
 
 #include <Logger.hpp>
 
+#include <Engine.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 

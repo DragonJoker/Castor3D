@@ -2,6 +2,8 @@
 
 #include "SceneNode.hpp"
 
+#include <PixelBuffer.hpp>
+
 using namespace Castor;
 
 namespace Castor3D

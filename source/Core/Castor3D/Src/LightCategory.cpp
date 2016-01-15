@@ -2,6 +2,7 @@
 #include "Light.hpp"
 
 #include <Logger.hpp>
+#include <PixelBuffer.hpp>
 
 using namespace Castor;
 
