@@ -5,6 +5,8 @@
 #include <BufferDeclaration.hpp>
 #include <Logger.hpp>
 
+#include <Engine.hpp>
+
 using namespace Castor3D;
 
 namespace Dx11Render

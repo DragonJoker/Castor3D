@@ -119,7 +119,6 @@ namespace Castor3D
 	private:
 		friend class Light;
 
-
 	public:
 		/**
 		 *\~english
@@ -139,31 +138,71 @@ namespace Castor3D
 		C3D_API virtual ~LightCategory();
 		/**
 		 *\~english
-		 *\brief		Sets the light's ambient colour
-		 *\param[in]	p_ambient	The new value
+		 *\brief		Puts the light into the given texture.
 		 *\~french
-		 *\brief		Définit la couleur ambiante
-		 *\param[in]	p_ambient	La nouvelle valeur
+		 *\brief		Met la lumière dans la texture donnée.
 		 */
-		C3D_API void SetAmbient( Castor::Point4f const & p_ambient );
+		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const = 0;
 		/**
 		 *\~english
-		 *\brief		Sets the light's diffuse colour
-		 *\param[in]	p_diffuse	The new value
+		 *\brief		Sets the light's colour.
+		 *\param[in]	p_colour	The new value.
 		 *\~french
-		 *\brief		Définit la couleur diffuse
-		 *\param[in]	p_diffuse	La nouvelle valeur
+		 *\brief		Définit la couleur.
+		 *\param[in]	p_colour	La nouvelle valeur.
 		 */
-		C3D_API void SetDiffuse( Castor::Point4f const & p_diffuse );
+		inline void SetColour( Castor::Point3f const & p_colour )
+		{
+			m_colour = p_colour;
+		}
 		/**
 		 *\~english
-		 *\brief		Sets the light's specular colour
-		 *\param[in]	p_specular	The new value
+		 *\brief		Sets the light's intensity values.
+		 *\param[in]	p_intensity	The new values.
 		 *\~french
-		 *\brief		Définit la couleur spéculaire
-		 *\param[in]	p_specular	La nouvelle valeur
+		 *\brief		Définit les valeurs d'intensité.
+		 *\param[in]	p_intensity	Les nouvelles valeurs.
 		 */
-		C3D_API void SetSpecular( Castor::Point4f const & p_specular );
+		inline void SetIntensity( Castor::Point3f const & p_intensity )
+		{
+			m_intensity = p_intensity;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the light's diffuse intensity
+		 *\param[in]	p_intensity	The new value
+		 *\~french
+		 *\brief		Définit l'intensité diffuse
+		 *\param[in]	p_intensity	La nouvelle valeur
+		 */
+		inline void SetAmbientIntensity( float p_intensity )
+		{
+			m_intensity[0] = p_intensity;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the light's diffuse intensity
+		 *\param[in]	p_intensity	The new value
+		 *\~french
+		 *\brief		Définit l'intensité diffuse
+		 *\param[in]	p_intensity	La nouvelle valeur
+		 */
+		inline void SetDiffuseIntensity( float p_intensity )
+		{
+			m_intensity[1] = p_intensity;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the light's specular intensity
+		 *\param[in]	p_intensity	The new value
+		 *\~french
+		 *\brief		Définit l'intensité spéculaire
+		 *\param[in]	p_intensity	La nouvelle valeur
+		 */
+		inline void SetSpecularIntensity( float p_intensity )
+		{
+			m_intensity[2] = p_intensity;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the light type
@@ -184,9 +223,9 @@ namespace Castor3D
 		 *\brief		Récupère la couleur ambiante
 		 *\return		La valeur
 		 */
-		inline Castor::Point4f const & GetAmbient()const
+		inline float GetAmbientIntensity()const
 		{
-			return m_ambient;
+			return m_intensity[0];
 		}
 		/**
 		 *\~english
@@ -196,9 +235,9 @@ namespace Castor3D
 		 *\brief		Récupère la couleur diffuse
 		 *\return		La valeur
 		 */
-		inline Castor::Point4f const & GetDiffuse()const
+		inline float GetDiffuseIntensity()const
 		{
-			return m_diffuse;
+			return m_intensity[1];
 		}
 		/**
 		 *\~english
@@ -208,45 +247,49 @@ namespace Castor3D
 		 *\brief		Récupère la couleur spéculaire
 		 *\return		La valeur
 		 */
-		inline Castor::Point4f const & GetSpecular()const
+		inline float GetSpecularIntensity()const
 		{
-			return m_specular;
+			return m_intensity[2];
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the ambient colour
-		 *\return		The value
+		 *\return		The intensity values
 		 *\~french
-		 *\brief		Récupère la couleur ambiante
-		 *\return		La valeur
+		 *\return		Les valeurs d'intensité
 		 */
-		inline Castor::Point4f & GetAmbient()
+		inline Castor::Point3f const & GetIntensity()const
 		{
-			return m_ambient;
+			return m_intensity;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the diffuse colour
-		 *\return		The value
+		 *\return		The intensity values
 		 *\~french
-		 *\brief		Récupère la couleur diffuse
-		 *\return		La valeur
+		 *\return		Les valeurs d'intensité
 		 */
-		inline Castor::Point4f & GetDiffuse()
+		inline Castor::Point3f & GetIntensity()
 		{
-			return m_diffuse;
+			return m_intensity;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the specular colour
-		 *\return		The value
+		 *\return		The colour.
 		 *\~french
-		 *\brief		Récupère la couleur spéculaire
-		 *\return		La valeur
+		 *\return		La couleur.
 		 */
-		inline Castor::Point4f & GetSpecular()
+		inline Castor::Point3f const & GetColour()const
 		{
-			return m_specular;
+			return m_colour;
+		}
+		/**
+		 *\~english
+		 *\return		The colour.
+		 *\~french
+		 *\return		La couleur.
+		 */
+		inline Castor::Point3f & GetColour()
+		{
+			return m_colour;
 		}
 		/**
 		 *\~english
@@ -284,7 +327,7 @@ namespace Castor3D
 		 */
 		inline Castor::Point4f const & GetPositionType()const
 		{
-			return m_ptPositionType;
+			return m_positionType;
 		}
 		/**
 		 *\~english
@@ -296,7 +339,10 @@ namespace Castor3D
 		 */
 		virtual void SetPositionType( Castor::Point4f const & p_ptPosition )
 		{
-			m_ptPositionType = p_ptPosition;
+			m_positionType[0] = float( p_ptPosition[0] );
+			m_positionType[1] = float( p_ptPosition[1] );
+			m_positionType[2] = float( -p_ptPosition[2] );
+			m_positionType[3] = float( p_ptPosition[3] );
 		}
 		/**
 		 *\~english
@@ -308,25 +354,28 @@ namespace Castor3D
 		 */
 		virtual void SetPositionType( Castor::Point4d const & p_ptPosition )
 		{
-			m_ptPositionType[0] = float( p_ptPosition[0] );
-			m_ptPositionType[1] = float( p_ptPosition[1] );
-			m_ptPositionType[2] = float( p_ptPosition[2] );
-			m_ptPositionType[3] = float( p_ptPosition[3] );
+			m_positionType[0] = float( p_ptPosition[0] );
+			m_positionType[1] = float( p_ptPosition[1] );
+			m_positionType[2] = float( -p_ptPosition[2] );
+			m_positionType[3] = float( p_ptPosition[3] );
 		}
+
+	protected:
+		void DoBindComponent( Castor::Point3f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Point4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Coords4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
 
 	private:
 		//!\~english The light type	\~french Le type de lumière
 		eLIGHT_TYPE m_eLightType;
 		//!\~english The parent light	\~french La lumière parente
 		Light * m_pLight;
-		//!\~english The ambient colour values	\~french La couleur ambiante
-		Castor::Point4f m_ambient;
-		//!\~english The diffuse colour values	\~french La couleur diffuse
-		Castor::Point4f m_diffuse;
-		//!\~english The specular colour values	\~french La couleur spéculaire
-		Castor::Point4f m_specular;
+		//!\~english The colour.	\~french La couleur.
+		Castor::Point3f m_colour;
+		//!\~english The intensity values.	\~french Les valeurs d'intensité.
+		Castor::Point3f m_intensity;
 		//!\~english The position and type of the light (type is in 4th coordinate)	\~french La position et le type de la lumière (le type est dans la 4ème coordonnée)
-		Castor::Point4f m_ptPositionType;
+		Castor::Point4f m_positionType;
 	};
 }
 

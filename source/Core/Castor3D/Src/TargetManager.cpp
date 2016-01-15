@@ -51,7 +51,7 @@ namespace Castor3D
 
 		for ( auto l_target : m_renderTargets[eTARGET_TYPE_TEXTURE] )
 		{
-			p_objCount += l_target->GetScene()->GetGeometriesCount();
+			p_objCount += l_target->GetScene()->Geometries().size();
 			p_fceCount += l_target->GetScene()->GetFaceCount();
 			p_vtxCount += l_target->GetScene()->GetVertexCount();
 			l_target->Render( p_time );
@@ -59,7 +59,7 @@ namespace Castor3D
 
 		for ( auto l_target : m_renderTargets[eTARGET_TYPE_WINDOW] )
 		{
-			p_objCount += l_target->GetScene()->GetGeometriesCount();
+			p_objCount += l_target->GetScene()->Geometries().size();
 			p_fceCount += l_target->GetScene()->GetFaceCount();
 			p_vtxCount += l_target->GetScene()->GetVertexCount();
 			l_target->Render( p_time );

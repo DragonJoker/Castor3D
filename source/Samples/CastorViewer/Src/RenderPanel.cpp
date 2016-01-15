@@ -1,8 +1,8 @@
 #include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
-#include "CameraRotateEvent.hpp"
-#include "CameraTranslateEvent.hpp"
+#include "RotateNodeEvent.hpp"
+#include "TranslateNodeEvent.hpp"
 #include "KeyboardEvent.hpp"
 
 #include <algorithm>
@@ -16,6 +16,8 @@
 #include <Scene.hpp>
 #include <SceneNode.hpp>
 #include <WindowHandle.hpp>
+
+#include <Math.hpp>
 #include <Utils.hpp>
 
 #if HAS_CASTORGUI
@@ -29,6 +31,13 @@ using namespace Castor;
 
 namespace CastorViewer
 {
+	namespace
+	{
+		static const real MAX_CAM_SPEED = 2.0_r;
+		static const real MIN_CAM_SPEED = 0.1_r;
+		static const real CAM_SPEED_INC = 0.9_r;
+	}
+
 #if HAS_CASTORGUI
 
 	namespace
@@ -74,13 +83,13 @@ namespace CastorViewer
 		, m_mouseLeftDown( false )
 		, m_mouseRightDown( false )
 		, m_mouseMiddleDown( false )
-		, m_rZoom( 1.0 )
-		, m_x( 0.0 )
-		, m_y( 0.0 )
-		, m_oldX( 0.0 )
-		, m_oldY( 0.0 )
+		, m_rZoom( 1.0_r )
+		, m_x( 0.0_r )
+		, m_y( 0.0_r )
+		, m_oldX( 0.0_r )
+		, m_oldY( 0.0_r )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
-		, m_rFpCamSpeed( 2.0 )
+		, m_rFpCamSpeed( MAX_CAM_SPEED )
 
 #if HAS_CASTORGUI
 
@@ -145,19 +154,13 @@ namespace CastorViewer
 
 				if ( l_pScene )
 				{
-					SceneNodeSPtr l_cameraNode = p_window->GetCamera()->GetParent();
-					m_ptOriginalPosition = l_cameraNode->GetPosition();
-					m_qOriginalOrientation = l_cameraNode->GetOrientation();
-					m_pRotateCamEvent = std::make_shared< CameraRotateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
-					m_pTranslateCamEvent = std::make_shared< CameraTranslateEvent >( l_cameraNode, real( 0 ), real( 0 ), real( 0 ) );
+					m_cameraNode = p_window->GetCamera()->GetParent();
+					m_lightsNode = l_pScene->GetNode( cuT( "PointLightsNode" ) );
+					m_ptOriginalPosition = m_cameraNode->GetPosition();
+					m_qOriginalOrientation = m_cameraNode->GetOrientation();
 					m_pRenderWindow = p_window;
 					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_window );
-					m_pointlightsNode = l_pScene->GetNode( cuT( "PointLightsNode" ) );
-
-					if ( m_pointlightsNode )
-					{
-						DoStartTimer( eTIMER_ID_ROTATE_LIGHT );
-					}
+					m_currentNode = m_cameraNode;
 				}
 
 #if HAS_CASTORGUI
@@ -167,6 +170,16 @@ namespace CastorViewer
 #endif
 			}
 		}
+	}
+
+	void RenderPanel::DoResetTimers()
+	{
+		DoStopTimer( eTIMER_ID_COUNT );
+		m_rZoom = 1.0_r;
+		m_x = 0.0_r;
+		m_y = 0.0_r;
+		m_oldX = 0.0_r;
+		m_oldY = 0.0_r;
 	}
 
 	void RenderPanel::DoStartTimer( int p_iId )
@@ -182,7 +195,7 @@ namespace CastorViewer
 		}
 		else
 		{
-			for ( int i = 0; i < eTIMER_ID_ROTATE_LIGHT; i++ )
+			for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 			{
 				m_pTimer[i]->Stop();
 			}
@@ -195,33 +208,20 @@ namespace CastorViewer
 
 		if ( l_pWindow )
 		{
-			SceneSPtr l_pScene = l_pWindow->GetScene();
-			DoStopTimer( eTIMER_ID_COUNT );
-			m_rZoom = 1.0;
-			m_x = 0.0;
-			m_y = 0.0;
-			m_oldX = 0.0;
-			m_oldY = 0.0;
+			DoResetTimers();
 
-			if ( l_pScene )
+			if ( m_cameraNode )
 			{
-				SceneNodeSPtr l_cameraNode = l_pScene->GetCameraRootNode();
-				l_cameraNode->SetOrientation( m_qOriginalOrientation );
-				l_cameraNode->SetPosition( m_ptOriginalPosition );
+				m_cameraNode->SetOrientation( m_qOriginalOrientation );
+				m_cameraNode->SetPosition( m_ptOriginalPosition );
 			}
 		}
 	}
 
 	void RenderPanel::DoReloadScene()
 	{
-		DoStopTimer( eTIMER_ID_COUNT );
-		DoStopTimer( eTIMER_ID_ROTATE_LIGHT );
+		DoResetTimers();
 		wxGetApp().GetMainFrame()->LoadScene();
-		m_rZoom = 1.0;
-		m_x = 0.0;
-		m_y = 0.0;
-		m_oldX = 0.0;
-		m_oldY = 0.0;
 	}
 
 	real RenderPanel::DoTransformX( int x )
@@ -283,7 +283,6 @@ namespace CastorViewer
 		EVT_TIMER( eTIMER_ID_RIGHT, RenderPanel::OnTimerRgt )
 		EVT_TIMER( eTIMER_ID_UP, RenderPanel::OnTimerUp )
 		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::OnTimerDwn )
-		EVT_TIMER( eTIMER_ID_ROTATE_LIGHT, RenderPanel::OnTimerRotateLights )
 		EVT_SIZE( RenderPanel::OnSize )
 		EVT_MOVE( RenderPanel::OnMove )
 		EVT_PAINT( RenderPanel::OnPaint )
@@ -309,47 +308,37 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, real( 0 ), real( 0 ), m_rFpCamSpeed );
-		p_event.Skip();
-	}
-
-	void RenderPanel::OnTimerRotateLights( wxTimerEvent & p_event )
-	{
-		m_pListener->PostEvent( MakeFunctorEvent( eEVENT_TYPE_POST_RENDER, [this]()
-		{
-			m_pointlightsNode->Yaw( 1.0_degrees );
-		} ) );
-
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_rFpCamSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, real( 0 ), real( 0 ), -m_rFpCamSpeed );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_rFpCamSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, m_rFpCamSpeed, real( 0 ), real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, m_rFpCamSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, -m_rFpCamSpeed, real( 0 ), real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, -m_rFpCamSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, real( 0 ), -m_rFpCamSpeed, real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_rFpCamSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, real( 0 ), m_rFpCamSpeed, real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, m_rFpCamSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
@@ -465,6 +454,10 @@ namespace CastorViewer
 			case WXK_PAGEDOWN:
 				DoStartTimer( eTIMER_ID_DOWN );
 				break;
+
+			case 'L':
+				m_currentNode = m_lightsNode;
+				break;
 			}
 		}
 
@@ -515,6 +508,10 @@ namespace CastorViewer
 
 			case WXK_PAGEDOWN:
 				DoStopTimer( eTIMER_ID_DOWN );
+				break;
+
+			case 'L':
+				m_currentNode = m_cameraNode;
 				break;
 			}
 		}
@@ -666,18 +663,28 @@ namespace CastorViewer
 #endif
 		{
 			RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-			real l_deltaX = std::min( 1.0_r, m_rFpCamSpeed ) * ( m_oldX - m_x ) / 2.0_r;
-			real l_deltaY = std::min( 1.0_r, m_rFpCamSpeed ) * ( m_oldY - m_y ) / 2.0_r;
 
 			if ( l_pWindow )
 			{
+				real l_deltaX = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
+				real l_deltaY = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
+
+				if ( p_event.ControlDown() )
+				{
+					l_deltaX = 0;
+				}
+				else if ( p_event.ShiftDown() )
+				{
+					l_deltaY = 0;
+				}
+
 				if ( m_mouseLeftDown )
 				{
-					MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, l_deltaY, l_deltaX, 0 );
+					m_pListener->PostEvent( std::make_shared< RotateNodeEvent >( m_currentNode, l_deltaY, l_deltaX, 0.0_r ) );
 				}
 				else if ( m_mouseRightDown )
 				{
-					MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, -l_deltaX, l_deltaY, 0 );
+					m_pListener->PostEvent( std::make_shared< RotateNodeEvent >( m_currentNode, -l_deltaX, l_deltaY, 0.0_r ) );
 				}
 
 				if ( m_mouseLeftDown || m_mouseRightDown )
@@ -711,12 +718,14 @@ namespace CastorViewer
 		{
 			if ( l_wheelRotation < 0 )
 			{
-				m_rFpCamSpeed *= real( 0.9 );
+				m_rFpCamSpeed *= CAM_SPEED_INC;
 			}
 			else
 			{
-				m_rFpCamSpeed /= real( 0.9 );
+				m_rFpCamSpeed /= CAM_SPEED_INC;
 			}
+
+			clamp( m_rFpCamSpeed, MIN_CAM_SPEED, MAX_CAM_SPEED );
 		}
 
 		p_event.Skip();

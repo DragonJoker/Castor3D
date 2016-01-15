@@ -31,13 +31,12 @@ namespace GlRender
 			inline Light( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 			inline Light & operator=( Light const & p_rhs );
 			template< typename T > inline Light & operator=( T const & p_rhs );
-			inline Vec4 m_v4Ambient()const;
-			inline Vec4 m_v4Diffuse()const;
-			inline Vec4 m_v4Specular()const;
-			inline Vec4 m_v4Position()const;
+			inline Vec3 m_v3Colour()const;
+			inline Vec3 m_v3Intensity()const;
+			inline Vec3 m_v3Position()const;
 			inline Int m_iType()const;
 			inline Vec3 m_v3Attenuation()const;
-			inline Mat4 m_v3Direction()const;
+			inline Vec3 m_v3Direction()const;
 			inline Float m_fExponent()const;
 			inline Float m_fCutOff()const;
 		};

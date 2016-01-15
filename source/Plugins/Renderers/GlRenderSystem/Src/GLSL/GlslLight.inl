@@ -52,24 +52,19 @@ namespace GlRender
 			return *this;
 		}
 		
-		Vec4 Light::m_v4Ambient()const
+		Vec3 Light::m_v3Colour()const
 		{
-			return Vec4( m_writer, m_name + cuT( ".m_v4Ambient" ) );
+			return Vec3( m_writer, m_name + cuT( ".m_v3Colour" ) );
 		}
 		
-		Vec4 Light::m_v4Diffuse()const
+		Vec3 Light::m_v3Intensity()const
 		{
-			return Vec4( m_writer, Castor::String( *this ) + cuT( ".m_v4Diffuse" ) );
+			return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Intensity" ) );
 		}
 		
-		Vec4 Light::m_v4Specular()const
+		Vec3 Light::m_v3Position()const
 		{
-			return Vec4( m_writer, Castor::String( *this ) + cuT( ".m_v4Specular" ) );
-		}
-		
-		Vec4 Light::m_v4Position()const
-		{
-			return Vec4( m_writer, Castor::String( *this ) + cuT( ".m_v4Position" ) );
+			return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Position" ) );
 		}
 		
 		Int Light::m_iType()const
@@ -82,9 +77,9 @@ namespace GlRender
 			return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Attenuation" ) );
 		}
 		
-		Mat4 Light::m_v3Direction()const
+		Vec3 Light::m_v3Direction()const
 		{
-			return Mat4( m_writer, Castor::String( *this ) + cuT( ".m_v3Direction" ) );
+			return Vec3( m_writer, Castor::String( *this ) + cuT( ".m_v3Direction" ) );
 		}
 		
 		Float Light::m_fExponent()const

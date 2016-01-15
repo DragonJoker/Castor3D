@@ -35,9 +35,8 @@ namespace Castor
 	\remark		Contient des fonctions de rotation, translation, scale et multiplication (optimisées pour des matrices 4x4)
 				<br />Permet aussi de calculer les frustum, persperctive, ortho, le passage main gauche main droite et inversement
 	*/
-	class matrix
+	namespace matrix
 	{
-	public:
 		/**
 		 *\~english
 		 *\brief		Rotation function, builds a rotation matrix from the quaternion in parameter.
@@ -160,18 +159,6 @@ namespace Castor
 		static SquareMatrix< T, 4 > & set_scale( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_scale );
 		/**
 		 *\~english
-		 *\brief		Retrieves scale from a transformation matrix.
-		 *\param[in]	p_matrix	The matrix holding the scale transformation
-		 *\param[out]	p_scale		Receives the scale value
-		 *\~french
-		 *\brief		Récupère la mise a l'échelle à partir d'une matrice de transformation.
-		 *\param[in]	p_matrix	La matrice qui contient les transformations
-		 *\param[out]	p_scale		Récupère les valeurs d'échelle sur les 3 axes
-		 */
-		template< typename T, typename U >
-		static void get_scale( SquareMatrix< T, 4 > const & p_matrix, Point< U, 3 > & p_scale );
-		/**
-		 *\~english
 		 *\brief		Translate function. Translates a matrix from the three values in parameter.
 		 *\param[out]	p_matrix			The matrix that will be translated
 		 *\param[in]	p_tx, p_ty, p_tz	The translate values
@@ -220,18 +207,6 @@ namespace Castor
 		static SquareMatrix< T, 4 > & set_translate( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_translation );
 		/**
 		 *\~english
-		 *\brief		Retrieves translation from a transformation matrix.
-		 *\param[in]	p_matrix		The matrix holding the scale transformation
-		 *\param[out]	p_translation	Receives the translation value
-		 *\~french
-		 *\brief		Récupère la translation à partir d'une matrice de transformation.
-		 *\param[in]	p_matrix		La matrice qui contient les transformations
-		 *\param[out]	p_translation	Récupère les valeurs de translation sur les 3 axes
-		 */
-		template< typename T, typename U >
-		static void get_translate( SquareMatrix< T, 4 > const & p_matrix, Point< U, 3 > & p_translation );
-		/**
-		 *\~english
 		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
 		 *\param[out]	p_matrix		Receives the transformation
 		 *\param[in]	p_ptPosition	The translation value
@@ -262,6 +237,34 @@ namespace Castor
 		 */
 		template< typename T, typename U >
 		static SquareMatrix< T, 4 > & transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_ptPosition, Castor::Point< U, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		/**
+		 *\~english
+		 *\brief		Transforms the position/scale through a transformation matrix.
+		 *\param[out]	p_matrix	The transformation matrix
+		 *\param[in]	p_value		The position/scale.
+		 *\return		The transformed position.
+		 *\~french
+		 *\brief		Transforme une position/mise à l'échelle via une matrice de transformation.
+		 *\param[out]	p_matrix	La matrice de transformation.
+		 *\param[in]	p_value		La position/mise à l'échelle.
+		 *\return		La position transformée.
+		 */
+		template< typename T, typename U >
+		static Point< U, 3 > get_transformed( Castor::SquareMatrix< T, 4 > const & p_matrix, Castor::Point< U, 3 > const & p_value );
+		/**
+		 *\~english
+		 *\brief		Transforms the orientation through a transformation matrix.
+		 *\param[out]	p_matrix	The transformation matrix.
+		 *\param[in]	p_value		The orientation.
+		 *\return		The transformed orientation.
+		 *\~french
+		 *\brief		Transforme une orientation via une matrice de transformation.
+		 *\param[out]	p_matrix	La matrice de transformation.
+		 *\param[in]	p_value		L'orientation.
+		 *\return		La position transformée.
+		 */
+		template< typename T >
+		static Quaternion get_transformed( Castor::SquareMatrix< T, 4 > const & p_matrix, Castor::Quaternion const & p_value );
 		/**
 		 *\~english
 		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
@@ -364,7 +367,7 @@ namespace Castor
 		 */
 		template< typename T >
 		static SquareMatrix< T, 4 > get_switch_hand( SquareMatrix< T, 4 > const & p_matrix );
-	};
+	}
 }
 
 #include "TransformationMatrix.inl"

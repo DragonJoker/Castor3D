@@ -126,12 +126,27 @@ namespace CastorViewer
 		return l_return;
 	}
 
+	void MainFrame::DoCleanupScene()
+	{
+		auto l_scene = m_pMainScene.lock();
+		m_pMainScene.reset();
+
+		if ( l_scene )
+		{
+			m_materialsList->UnloadMaterials();
+			m_sceneObjectsList->UnloadScene();
+			m_pMainCamera.reset();
+			m_pSceneNode.reset();
+			l_scene.reset();
+			Logger::LogDebug( cuT( "MainFrame::DoCleanupScene - Scene related objects unloaded." ) );
+		}
+
+	}
+
 	void MainFrame::LoadScene( wxString const & p_strFileName )
 	{
 		if ( m_pRenderPanel && wxGetApp().GetCastor() )
 		{
-			Logger::LogDebug( ( wxChar const * )( cuT( "MainFrame::LoadScene - " ) + p_strFileName ).c_str() );
-
 			if ( !p_strFileName.empty() )
 			{
 				m_strFilePath = ( wxChar const * )p_strFileName.c_str();
@@ -139,15 +154,8 @@ namespace CastorViewer
 
 			if ( !m_strFilePath.empty() )
 			{
-				String l_strLowered = string::lower_case( m_strFilePath );
-
-				if ( m_pMainScene.lock() )
-				{
-					m_materialsList->UnloadMaterials();
-					m_sceneObjectsList->UnloadScene();
-					m_pMainScene.reset();
-					Logger::LogDebug( cuT( "MainFrame::LoadScene - Scene unloaded" ) );
-				}
+				Logger::LogDebug( ( wxChar const * )( cuT( "MainFrame::LoadScene - " ) + m_strFilePath ).c_str() );
+				DoCleanupScene();
 
 				m_pRenderPanel->SetRenderWindow( nullptr );
 				RenderWindowSPtr l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor(), m_strFilePath, CASTOR_WANTED_FPS, CASTOR3D_THREADED );
@@ -165,12 +173,22 @@ namespace CastorViewer
 							ShowFullScreen( true, wxFULLSCREEN_ALL );
 						}
 
-						SetClientSize( l_window->GetSize().width() + m_iPropertiesWidth, l_window->GetSize().height() + m_iLogsHeight );
+						if ( !IsMaximized() )
+						{
+							SetClientSize( l_window->GetSize().width() + m_iPropertiesWidth, l_window->GetSize().height() + m_iLogsHeight );
+						}
+						else
+						{
+							Maximize( false );
+							SetClientSize( l_window->GetSize().width() + m_iPropertiesWidth, l_window->GetSize().height() + m_iLogsHeight );
+							Maximize();
+						}
+
 						Logger::LogInfo( cuT( "Scene file read" ) );
 					}
 					else
 					{
-						wxMessageBox( _( "Can't initialise the render window" ) );
+						wxMessageBox( _( "Can't initialise the render window." ) );
 					}
 
 					if ( CASTOR3D_THREADED )
@@ -186,10 +204,14 @@ namespace CastorViewer
 #endif
 				}
 			}
+			else
+			{
+				wxMessageBox( _( "Can't open a scene file : empty file name." ) );
+			}
 		}
 		else
 		{
-			wxMessageBox( _( "Can't open a scene file : no engine loaded" ) );
+			wxMessageBox( _( "Can't open a scene file : no engine loaded." ) );
 		}
 	}
 

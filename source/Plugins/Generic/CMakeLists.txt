@@ -1,3 +1,4 @@
+option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" TRUE )
 option( CASTOR_BUILD_GENERIC_CASTORGUI "Build CastorGui generic plugin" TRUE )
 
 function( GenericInit )
@@ -5,21 +6,23 @@ function( GenericInit )
 endfunction( GenericInit )
 
 function( GenericBuild )
-	if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
-		set( Build ${Cgui} )
-		add_subdirectory( Plugins/Generic/CastorGui )
-		set( Cgui ${Build} PARENT_SCOPE )
-	endif()
+	if ( ${CASTOR_BUILDGRP_GENERIC} )
+		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
+			set( Build ${Cgui} )
+			add_subdirectory( Plugins/Generic/CastorGui )
+			set( Cgui ${Build} PARENT_SCOPE )
+		endif()
 
-	set( CastorMinLibraries
-		${CastorMinLibraries}
-		PARENT_SCOPE
-	)
+		set( CastorMinLibraries
+			${CastorMinLibraries}
+			PARENT_SCOPE
+		)
 
-	set( CastorBinsDependencies
-		${CastorBinsDependencies}
-		PARENT_SCOPE
-	)
+		set( CastorBinsDependencies
+			${CastorBinsDependencies}
+			PARENT_SCOPE
+		)
+	endif ()
 endfunction( GenericBuild )
 
 function( GenericSummary msg )
@@ -29,17 +32,19 @@ function( GenericSummary msg )
 endfunction( GenericSummary )
 
 function( GenericSetup )
-	cpack_add_component_group( Generic
-		DESCRIPTION "Generic plugins usable in Castor3D"
-	)
-
-	if( ${CASTOR_BUILD_POSTFX_SSAO} )
-		cpack_add_component( CastorGui
-			DISPLAY_NAME "CastorGui plugin"
-			DESCRIPTION "Allows GUI creation using Castor3D"
-			GROUP Generic
-			DEPENDS Castor3D
-			INSTALL_TYPES Full
+	if ( ${CASTOR_BUILDGRP_GENERIC} )
+		cpack_add_component_group( Generic
+			DESCRIPTION "Generic plugins usable in Castor3D"
 		)
-	endif()
+
+		if( ${CASTOR_BUILD_POSTFX_SSAO} )
+			cpack_add_component( CastorGui
+				DISPLAY_NAME "CastorGui plugin"
+				DESCRIPTION "Allows GUI creation using Castor3D"
+				GROUP Generic
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif()
+	endif ()
 endfunction( GenericSetup )

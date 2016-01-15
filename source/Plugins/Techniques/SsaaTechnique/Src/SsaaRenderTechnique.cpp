@@ -1,4 +1,4 @@
-﻿#include "SsaaRenderTechnique.hpp"
+#include "SsaaRenderTechnique.hpp"
 
 #include <BlendState.hpp>
 #include <Camera.hpp>
@@ -175,11 +175,11 @@ namespace Ssaa
 		: RenderTechniqueBase( cuT( "ssaa" ), p_renderTarget, p_pRenderSystem, p_params )
 		, m_iSamplesCount( 1 )
 	{
-		p_params.Get( cuT( "samples_count" ), m_iSamplesCount );
+		String l_count;
 
-		if ( m_iSamplesCount <= 0 )
+		if ( p_params.Get( cuT( "samples_count" ), l_count ) )
 		{
-			m_iSamplesCount = 1;
+			m_iSamplesCount = string::to_int( l_count );
 		}
 
 		Logger::LogInfo( std::stringstream() << "Using SSAA, " << m_iSamplesCount << " samples" );
@@ -335,13 +335,13 @@ namespace Ssaa
 		UBO_PASS( l_writer );
 
 		// Fragment Intputs
-		IN( l_writer, Vec3, vtx_vertex );
-		IN( l_writer, Vec3, vtx_normal );
-		IN( l_writer, Vec3, vtx_tangent );
-		IN( l_writer, Vec3, vtx_bitangent );
-		IN( l_writer, Vec3, vtx_texture );
+		Vec3 vtx_vertex( l_writer.GetIn< Vec3 >( cuT( "vtx_vertex" ) ) );
+		Vec3 vtx_normal( l_writer.GetIn< Vec3 >( cuT( "vtx_normal" ) ) );
+		Vec3 vtx_tangent( l_writer.GetIn< Vec3 >( cuT( "vtx_tangent" ) ) );
+		Vec3 vtx_bitangent( l_writer.GetIn< Vec3 >( cuT( "vtx_bitangent" ) ) );
+		Vec3 vtx_texture( l_writer.GetIn< Vec3 >( cuT( "vtx_texture" ) ) );
 
-		FRAG_OUTPUT( l_writer, Vec4, pxl_v4FragColor, 0 );
+		Vec4 pxl_v4FragColor( l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 ) );
 
 		if ( l_writer.GetOpenGl().HasTbo() )
 		{
@@ -363,16 +363,17 @@ namespace Ssaa
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
-		std::function< void() > l_main = [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.X, vtx_normal.Y, vtx_normal.Z ) ) );
-			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( &l_writer, 0.0f ), 0, 0 ) );
+			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Diffuse, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Specular, vec3( Float( 0.0f ), 0, 0 ) );
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
-			pxl_v4FragColor = vec4( Float( &l_writer, 0.0f ), 0.0f, 0.0f, 0.0f );
+			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) );
+			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
@@ -381,6 +382,7 @@ namespace Ssaa
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
+					l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 					l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 				}
 
@@ -395,32 +397,41 @@ namespace Ssaa
 				}
 			}
 
-			FOR( l_writer, Int, i, 0, cuT( "i < c3d_iLightsCount.x" ), cuT( "++i" ) )
+			LOCALE_ASSIGN( l_writer, Int, l_begin, Int( 0 ) );
+			LOCALE_ASSIGN( l_writer, Int, l_end, c3d_iLightsCount.X );
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
 													 FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 													 l_output );
 			}
-			ROF
+			ROF;
 
-			FOR( l_writer, Int, i, c3d_iLightsCount.x, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y" ), cuT( "++i" ) )
+			l_begin = l_end;
+			l_end += c3d_iLightsCount.Y;
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
 											   FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											   l_output );
 			}
-			ROF
+			ROF;
 
-			FOR( l_writer, Int, i, c3d_iLightsCount.x + c3d_iLightsCount.y, cuT( "i < c3d_iLightsCount.x + c3d_iLightsCount.y + c3d_iLightsCount.z" ), cuT( "++i" ) )
+			l_begin = l_end;
+			l_end += c3d_iLightsCount.Z;
+
+			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
 											  FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											  l_output );
 			}
-			ROF
+			ROF;
 
 			if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
 			{
@@ -450,15 +461,12 @@ namespace Ssaa
 				}
 			}
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.XYZ ) +
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.XYZ ) +
-									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ), l_fAlpha );
+									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ) +
+									l_v3Emissive, l_fAlpha );
+		} );
 
-			pxl_v4FragColor.XYZ = vec3( min( l_v3Emissive.X, pxl_v4FragColor.X ),
-										min( l_v3Emissive.Y, pxl_v4FragColor.Y ),
-										min( l_v3Emissive.Z, pxl_v4FragColor.Z ) );
-		};
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
 
 #undef CHECK_FLAG

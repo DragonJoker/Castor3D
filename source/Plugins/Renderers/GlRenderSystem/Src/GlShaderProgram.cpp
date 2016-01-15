@@ -52,31 +52,25 @@ namespace GlRender
 	{
 		bool l_return = false;
 		int l_iLinked = 0;
+		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
+		l_return &= GetOpenGl().LinkProgram( GetGlName() );
+		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_iLinked );
+		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );
+		m_linkerLog = DoRetrieveLinkerLog();
 
-		if ( m_status != ePROGRAM_STATUS_ERROR )
+		if ( l_iLinked && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
 		{
-			l_return = true;
-			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
-			l_return &= GetOpenGl().LinkProgram( GetGlName() );
-			l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_iLinked );
-			Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );
-			m_linkerLog = DoRetrieveLinkerLog();
-
-			if ( l_iLinked && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
+			if ( !m_linkerLog.empty() )
 			{
-				if ( !m_linkerLog.empty() )
-				{
-					Logger::LogWarning( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
-				}
+				Logger::LogWarning( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+			}
 
-				l_return = DoLink();
-			}
-			else
-			{
-				Logger::LogError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
-				m_status = ePROGRAM_STATUS_ERROR;
-				l_return = false;
-			}
+			l_return = DoLink();
+		}
+		else
+		{
+			Logger::LogError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+			m_status = ePROGRAM_STATUS_ERROR;
 		}
 
 		return l_return;

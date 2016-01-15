@@ -185,14 +185,6 @@ namespace Direct
 		Castor::String DoGetD3D11PixelShaderSource( uint32_t p_flags )const;
 
 #endif
-#if !defined( NDEBUG )
-
-
-	private:
-		Castor3D::TextOverlaySPtr m_debugOverlay;
-
-#endif
-
 	};
 }
 

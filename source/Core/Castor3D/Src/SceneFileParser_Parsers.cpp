@@ -327,42 +327,33 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetDepth )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetMsaa )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetTechnique )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 	if ( l_pContext->pRenderTarget )
 	{
-		uint16_t l_usSamples;
-		p_params[0]->Get( l_usSamples );
+		String l_name;
+		p_params[0]->Get( l_name );
+		Parameters l_parameters;
 
-		if ( l_usSamples > 1 )
+		if ( p_params.size() > 1 )
 		{
-			l_pContext->pRenderTarget->SetTechnique( cuT( "msaa" ) );
-			l_pContext->pRenderTarget->SetSamplesCount( l_usSamples );
+			String l_tmp;
+			StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
+
+			for ( auto l_value : l_arrayStrParams )
+			{
+				StringArray l_param = string::split( l_value, cuT( "= " ), 2, false );
+
+				if ( l_param.size() > 1 )
+				{
+					l_parameters.Add( l_param[0], l_param[1] );
+				}
+			}
 		}
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "Directive <render_target::msaa> : No target initialised." ) );
-	}
-}
-END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetSsaa )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_pContext->pRenderTarget )
-	{
-		uint16_t l_usSamples;
-		p_params[0]->Get( l_usSamples );
-
-		if ( l_usSamples > 1 )
-		{
-			l_pContext->pRenderTarget->SetTechnique( cuT( "ssaa" ) );
-			l_pContext->pRenderTarget->SetSamplesCount( l_usSamples );
-		}
+		l_pContext->pRenderTarget->SetTechnique( l_name, l_parameters );
 	}
 	else
 	{
@@ -393,27 +384,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetStereo )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetDeferred )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_pContext->pRenderTarget )
-	{
-		bool l_bValue;
-		p_params[0]->Get( l_bValue );
-
-		if ( l_bValue )
-		{
-			l_pContext->pRenderTarget->SetTechnique( cuT( "deferred" ) );
-		}
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "Directive <render_target::deferred> : No target initialised." ) );
-	}
-}
-END_ATTRIBUTE()
-
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -438,7 +408,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 
 				if ( l_param.size() > 1 )
 				{
-					l_parameters.Add( l_param[0], l_param[1].c_str(), l_param[1].size() );
+					l_parameters.Add( l_param[0], l_param[1] );
 				}
 			}
 		}
@@ -1000,53 +970,36 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightType )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightAmbient )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightColour )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 	if ( l_pContext->pLight )
 	{
-		Point4f l_vVector;
+		Point3f l_vVector;
 		p_params[0]->Get( l_vVector );
-		l_pContext->pLight->SetAmbient( l_vVector.ptr() );
+		l_pContext->pLight->SetColour( l_vVector.ptr() );
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::ambient> : Light not initialised. Have you set it's type ?" ) );
+		PARSING_ERROR( cuT( "Directive <light::colour> : Light not initialised. Have you set it's type ?" ) );
 	}
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightDiffuse )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightIntensity )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
 	if ( l_pContext->pLight )
 	{
-		Point4f l_vVector;
+		Point3f l_vVector;
 		p_params[0]->Get( l_vVector );
-		l_pContext->pLight->SetDiffuse( l_vVector.ptr() );
+		l_pContext->pLight->SetIntensity( l_vVector.ptr() );
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::diffuse> : Light not initialised. Have you set it's type ?" ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightSpecular )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_pContext->pLight )
-	{
-		Point4f l_vVector;
-		p_params[0]->Get( l_vVector );
-		l_pContext->pLight->SetSpecular( l_vVector.ptr() );
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "Directive <light::specular> : Light not initialised. Have you set it's type ?" ) );
+		PARSING_ERROR( cuT( "Directive <light::intensity> : Light not initialised. Have you set it's type ?" ) );
 	}
 }
 END_ATTRIBUTE()

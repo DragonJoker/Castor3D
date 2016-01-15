@@ -526,22 +526,40 @@ namespace Castor3D
 
 	Point3r SceneNode::GetDerivedPosition()
 	{
-		Point3r l_return;
-		matrix::get_translate( GetDerivedTransformationMatrix(), l_return );
+		Point3r l_return( m_position );
+		auto l_parent = GetParent();
+
+		if ( l_parent )
+		{
+			l_return = matrix::get_transformed( l_parent->GetDerivedTransformationMatrix(), m_position );
+		}
+
 		return l_return;
 	}
 
 	Quaternion SceneNode::GetDerivedOrientation()
 	{
-		Quaternion l_return;
-		matrix::get_rotate( GetDerivedTransformationMatrix(), l_return );
+		Quaternion l_return( m_orientation );
+		auto l_parent = GetParent();
+
+		if ( l_parent )
+		{
+			l_return  = l_parent->GetDerivedOrientation() * l_return;
+		}
+
 		return l_return;
 	}
 
 	Point3r SceneNode::GetDerivedScale()
 	{
-		Point3r l_return;
-		matrix::get_scale( GetDerivedTransformationMatrix(), l_return );
+		Point3r l_return( m_scale );
+		auto l_parent = GetParent();
+
+		if ( l_parent )
+		{
+			l_return *= l_parent->GetDerivedScale();
+		}
+
 		return l_return;
 	}
 

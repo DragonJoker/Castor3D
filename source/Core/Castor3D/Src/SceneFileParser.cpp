@@ -314,10 +314,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_RENDER_TARGET, cuT( "size" ), Parser_RenderTargetSize, 1, ePARAMETER_TYPE_SIZE );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "format" ), Parser_RenderTargetFormat, 1, ePARAMETER_TYPE_PIXELFORMAT );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "depth" ), Parser_RenderTargetDepth, 1, ePARAMETER_TYPE_PIXELFORMAT );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "msaa" ), Parser_RenderTargetMsaa, 1, ePARAMETER_TYPE_UINT16 );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "ssaa" ), Parser_RenderTargetSsaa, 1, ePARAMETER_TYPE_UINT16 );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "technique" ), Parser_RenderTargetTechnique, 2, ePARAMETER_TYPE_NAME, ePARAMETER_TYPE_TEXT );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "stereo" ), Parser_RenderTargetStereo, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "deferred" ), Parser_RenderTargetDeferred, 1, ePARAMETER_TYPE_BOOL );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "postfx" ), Parser_RenderTargetPostEffect, 2, ePARAMETER_TYPE_NAME, ePARAMETER_TYPE_TEXT );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "}" ), Parser_RenderTargetEnd );
 
@@ -349,9 +347,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapLightTypes );
-	AddParser( eSECTION_LIGHT, cuT( "ambient" ), Parser_LightAmbient, 1, ePARAMETER_TYPE_POINT4F );
-	AddParser( eSECTION_LIGHT, cuT( "diffuse" ), Parser_LightDiffuse, 1, ePARAMETER_TYPE_POINT4F );
-	AddParser( eSECTION_LIGHT, cuT( "specular" ), Parser_LightSpecular, 1, ePARAMETER_TYPE_POINT4F );
+	AddParser( eSECTION_LIGHT, cuT( "colour" ), Parser_LightColour, 1, ePARAMETER_TYPE_POINT3F );
+	AddParser( eSECTION_LIGHT, cuT( "intensity" ), Parser_LightIntensity, 1, ePARAMETER_TYPE_POINT3F );
 	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, 1, ePARAMETER_TYPE_POINT3F );
 	AddParser( eSECTION_LIGHT, cuT( "cut_off" ), Parser_LightCutOff, 1, ePARAMETER_TYPE_FLOAT );
 	AddParser( eSECTION_LIGHT, cuT( "exponent" ), Parser_LightExponent, 1, ePARAMETER_TYPE_FLOAT );

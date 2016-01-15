@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
+#include "Parameter.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -233,13 +234,15 @@ namespace Castor3D
 		C3D_API DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )const;
 		/**
 		 *\~english
-		 *\brief		Defines the RenderTechnique
-		 *\param[in]	p_name	The RenderTechnique name
+		 *\brief		Defines the RenderTechnique.
+		 *\param[in]	p_name			The RenderTechnique name.
+		 *\param[in]	p_parameters	The RenderTechnique parameters.
 		 *\~french
-		 *\brief		Définit la RenderTechnique
-		 *\param[in]	p_name	La RenderTechnique name
+		 *\brief		Définit la RenderTechnique.
+		 *\param[in]	p_name			Le nom de la RenderTechnique.
+		 *\param[in]	p_parameters	Les paramètres de la RenderTechnique.
 		 */
-		C3D_API void SetTechnique( Castor::String const & p_name );
+		C3D_API void SetTechnique( Castor::String const & p_name, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the eVIEWPORT_TYPE
@@ -726,8 +729,10 @@ namespace Castor3D
 		static uint32_t sm_uiCount;
 		//!\~english This render target's index	\~french L'index de cette render target
 		uint32_t m_index;
-		//!\~english This render target's render technique name	\~french Le nom de la technique de rendu de cette render target
-		Castor::String m_strTechniqueName;
+		//!\~english The render technique name.	\~french Le nom de la technique de rendu.
+		Castor::String m_techniqueName;
+		//!\~english The render technique parameters.	\~french Les paramètres de la technique de rendu.
+		Parameters m_techniqueParameters;
 		//!\~english Depth and stencil buffers states	\~french Etats des buffers de profondeur et stencil
 		DepthStencilStateWPtr m_wpDepthStencilState;
 		//!\~english Rasteriser states	\~french Etats du rasteriser

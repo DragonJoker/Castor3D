@@ -2,6 +2,7 @@
 #include "Light.hpp"
 
 #include <Logger.hpp>
+#include <PixelBuffer.hpp>
 
 using namespace Castor;
 
@@ -42,17 +43,12 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tambient " ) ) > 0 && Point4f::TextLoader()( p_light.GetAmbient(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tcolour " ) ) > 0 && Point3f::TextLoader()( p_light.GetColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tdiffuse " ) ) > 0 && Point4f::TextLoader()( p_light.GetDiffuse(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( cuT( "\t\tspecular " ) ) > 0 && Point4f::TextLoader()( p_light.GetSpecular(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t\tintensity " ) ) > 0 && Point3f::TextLoader()( p_light.GetIntensity(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		return l_return;
@@ -81,17 +77,12 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( p_obj.GetAmbient(), eCHUNK_TYPE_LIGHT_AMBIENT, p_chunk );
+			l_return = DoFillChunk( p_obj.GetColour(), eCHUNK_TYPE_LIGHT_COLOUR, p_chunk );
 		}
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( p_obj.GetDiffuse(), eCHUNK_TYPE_LIGHT_DIFFUSE, p_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetSpecular(), eCHUNK_TYPE_LIGHT_SPECULAR, p_chunk );
+			l_return = DoFillChunk( p_obj.GetIntensity(), eCHUNK_TYPE_LIGHT_INTENSITY, p_chunk );
 		}
 
 		return l_return;
@@ -100,7 +91,7 @@ namespace Castor3D
 	bool LightCategory::BinaryParser::Parse( LightCategory & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
-		Point4f l_colour;
+		Point3f l_vec3;
 
 		switch ( p_chunk.GetChunkType() )
 		{
@@ -108,32 +99,22 @@ namespace Castor3D
 			l_return = MovableObject::BinaryParser( m_path ).Parse( *p_obj.GetLight(), p_chunk );
 			break;
 
-		case eCHUNK_TYPE_LIGHT_AMBIENT:
-			l_return = DoParseChunk( l_colour, p_chunk );
+		case eCHUNK_TYPE_LIGHT_COLOUR:
+			l_return = DoParseChunk( l_vec3, p_chunk );
 
 			if ( l_return )
 			{
-				p_obj.SetAmbient( l_colour );
+				p_obj.SetColour( l_vec3 );
 			}
 
 			break;
 
-		case eCHUNK_TYPE_LIGHT_DIFFUSE:
-			l_return = DoParseChunk( l_colour, p_chunk );
+		case eCHUNK_TYPE_LIGHT_INTENSITY:
+			l_return = DoParseChunk( l_vec3, p_chunk );
 
 			if ( l_return )
 			{
-				p_obj.SetDiffuse( l_colour );
-			}
-
-			break;
-
-		case eCHUNK_TYPE_LIGHT_SPECULAR:
-			l_return = DoParseChunk( l_colour, p_chunk );
-
-			if ( l_return )
-			{
-				p_obj.SetSpecular( l_colour );
+				p_obj.SetIntensity( l_vec3 );
 			}
 
 			break;
@@ -151,37 +132,31 @@ namespace Castor3D
 
 	LightCategory::LightCategory( eLIGHT_TYPE p_eLightType )
 		: m_eLightType( p_eLightType )
-		, m_ambient( 0.0, 0.0, 0.0, 1.0 )
-		, m_diffuse( 0.0, 0.0, 0.0, 1.0 )
-		, m_specular( 1.0, 1.0, 1.0, 1.0 )
-		, m_ptPositionType( 0.0, 0.0, 1.0, 0.0 )
+		, m_colour( 1.0, 1.0, 1.0 )
+		, m_intensity( 0.0, 1.0, 1.0 )
+		, m_positionType( 0.0, 0.0, 1.0, float( p_eLightType ) )
 	{
-		switch ( p_eLightType )
-		{
-		case eLIGHT_TYPE_DIRECTIONAL:
-			m_ptPositionType[3] = 0.0f;
-
-		default:
-			m_ptPositionType[3] = 1.0f;
-		}
 	}
 
 	LightCategory::~LightCategory()
 	{
 	}
 
-	void LightCategory::SetAmbient( Point4f const & p_ambient )
+	void LightCategory::DoBindComponent( Point3f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		m_ambient = p_ambient;
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		std::memcpy( l_pDst, p_component.const_ptr(), 3 * sizeof( float ) );
 	}
 
-	void LightCategory::SetDiffuse( Point4f const & p_diffuse )
+	void LightCategory::DoBindComponent( Point4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		m_diffuse = p_diffuse;
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 
-	void LightCategory::SetSpecular( Point4f const & p_specular )
+	void LightCategory::DoBindComponent( Coords4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
 	{
-		m_specular = p_specular;
+		uint8_t * l_pDst = &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) );
+		std::memcpy( l_pDst, p_component.const_ptr(), 4 * sizeof( float ) );
 	}
 }

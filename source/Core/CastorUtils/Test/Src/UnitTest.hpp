@@ -117,6 +117,30 @@ namespace Testing
 		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
 	}
 
+#	define TEST_CHECK_THROW( x )\
+	p_testCount++;\
+	try\
+	{\
+		( x ); \
+		p_errCount++;\
+		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
+	}\
+	catch ( ... )\
+	{\
+	}
+
+#	define TEST_CHECK_NOTHROW( x )\
+	p_testCount++;\
+	try\
+	{\
+		( x ); \
+	}\
+	catch ( ... )\
+	{\
+		p_errCount++;\
+		Castor::Logger::LogWarning( std::stringstream() << "Failure at " << __FILE__ << " - " << __FUNCTION__ << ", line " << __LINE__ << ": " << #x );\
+	}
+
 #	define TEST_EQUAL( x, y )\
 	p_testCount++;\
 	if( !compare( x, y ) )\

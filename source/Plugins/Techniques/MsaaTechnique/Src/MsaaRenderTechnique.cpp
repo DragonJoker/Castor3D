@@ -1,4 +1,4 @@
-﻿#include "MsaaRenderTechnique.hpp"
+#include "MsaaRenderTechnique.hpp"
 
 #include <FrameBuffer.hpp>
 #include <RasteriserState.hpp>
@@ -174,11 +174,16 @@ namespace Msaa
 		: RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_pRenderSystem, p_params )
 		, m_iSamplesCount( 0 )
 	{
-		p_params.Get( cuT( "samples_count" ), m_iSamplesCount );
+		String l_count;
+
+		if ( p_params.Get( cuT( "samples_count" ), l_count ) )
+		{
+			m_iSamplesCount = string::to_int( l_count );
+		}
 
 		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_iSamplesCount << cuT( " samples" ) );
 		m_pMsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-		m_pMsColorBuffer = m_pMsFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_A8R8G8B8 );
+		m_pMsColorBuffer = m_pMsFrameBuffer->CreateColourRenderBuffer( m_pRenderTarget->GetPixelFormat() );
 		m_pMsDepthBuffer = m_pMsFrameBuffer->CreateDepthStencilRenderBuffer( m_pRenderTarget->GetDepthFormat() );
 		m_pMsColorAttach = m_pRenderTarget->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_pRenderTarget->CreateAttachment( m_pMsDepthBuffer );
@@ -364,7 +369,7 @@ namespace Msaa
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
-		std::function< void() > l_main = [&]()
+		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( vtx_normal.X, vtx_normal.Y, vtx_normal.Z ) ) );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Ambient, vec3( Float( 0.0f ), 0, 0 ) );
@@ -373,6 +378,7 @@ namespace Msaa
 			LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 			LOCALE_ASSIGN( l_writer, Float, l_fMatShininess, c3d_fMatShininess );
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
+			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
 			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
@@ -382,6 +388,7 @@ namespace Msaa
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) )
 				{
 					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapNormal, texture2D( c3d_mapNormal, vtx_texture.XY ).XYZ );
+					l_v3MapNormal = Float( &l_writer, 2.0f ) * l_v3MapNormal - vec3( Int( &l_writer, 1 ), 1.0, 1.0 );
 					l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 				}
 
@@ -402,7 +409,7 @@ namespace Msaa
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeDirectionalLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
 													 FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 													 l_output );
 			}
@@ -414,7 +421,7 @@ namespace Msaa
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputePointLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
 											   FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											   l_output );
 			}
@@ -426,7 +433,7 @@ namespace Msaa
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
 				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
-				l_lighting->ComputeSpotLight( l_lighting->GetLight( i ), c3d_v3CameraPosition, l_fMatShininess,
+				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
 											  FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											  l_output );
 			}
@@ -460,12 +467,12 @@ namespace Msaa
 				}
 			}
 
-			pxl_v4FragColor = vec4( l_v3Emissive +
-									l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.XYZ ) +
-									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ), l_fAlpha );
-		};
-		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
+									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ) +
+									l_v3Emissive, l_fAlpha );
+		} );
+
 		return l_writer.Finalise();
 
 #undef CHECK_FLAG

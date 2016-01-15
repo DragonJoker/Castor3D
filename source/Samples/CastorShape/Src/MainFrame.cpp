@@ -420,8 +420,8 @@ namespace CastorShape
 				if ( l_light1 )
 				{
 					l_light1->GetDirectionalLight()->SetDirection( Point3r( 0.0f, 0.0f, 1.0f ) );
-					l_light1->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-					l_light1->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light1->GetDirectionalLight()->SetColour( Point3f( 1.0f, 1.0f, 1.0f ) );
+					l_light1->GetDirectionalLight()->SetIntensity( Point3f( 0.0f, 1.0f, 1.0f ) );
 					l_light1->SetEnabled( true );
 				}
 
@@ -430,8 +430,8 @@ namespace CastorShape
 				if ( l_light2 )
 				{
 					l_light2->GetDirectionalLight()->SetDirection( Point3r( 0.0f, -1.0f, 1.0f ) );
-					l_light2->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-					l_light2->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light2->GetDirectionalLight()->SetColour( Point3f( 1.0f, 1.0f, 1.0f ) );
+					l_light2->GetDirectionalLight()->SetIntensity( Point3f( 0.0f, 1.0f, 1.0f ) );
 					l_light2->SetEnabled( true );
 				}
 
@@ -440,8 +440,8 @@ namespace CastorShape
 				if ( l_light3 )
 				{
 					l_light3->GetDirectionalLight()->SetDirection( Point3r( -1.0f, -1.0f, -1.0f ) );
-					l_light3->GetDirectionalLight()->SetDiffuse( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
-					l_light3->GetDirectionalLight()->SetSpecular( Point4f( 1.0f, 1.0f, 1.0f, 1.0f ) );
+					l_light3->GetDirectionalLight()->SetColour( Point3f( 1.0f, 1.0f, 1.0f ) );
+					l_light3->GetDirectionalLight()->SetIntensity( Point3f( 0.0f, 1.0f, 1.0f ) );
 					l_light3->SetEnabled( true );
 				}
 			}

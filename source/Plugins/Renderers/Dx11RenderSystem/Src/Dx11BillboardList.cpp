@@ -1,6 +1,9 @@
 #include "Dx11BillboardList.hpp"
 #include "Dx11RenderSystem.hpp"
 
+#include <Engine.hpp>
+#include <ShaderManager.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 using namespace Dx11Render;

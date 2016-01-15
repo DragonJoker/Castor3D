@@ -64,7 +64,7 @@ namespace Bloom
 	private:
 		bool DoHiPassFilter();
 		void DoDownSample();
-		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
+		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
 		void DoCombine();
 
 		Castor3D::ShaderProgramBaseWPtr m_hiPassProgram;
@@ -87,7 +87,7 @@ namespace Bloom
 		Castor3D::BufferDeclarationSPtr m_declaration;
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_vertices;
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
-		Castor::real m_buffer[24];
+		Castor::real m_buffer[12];
 		SurfaceArray m_hiPassSurfaces;
 		SurfaceArray m_blurSurfaces;
 		std::array< float, KERNEL_SIZE > m_kernel;

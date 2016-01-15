@@ -26,7 +26,11 @@ namespace Castor3D
 	static const String DestroyDividerFunctionABIName = cuT( "?DestroyDivider@@YAXPAVSubdivider@Castor3D@@@Z" );
 # endif
 #elif defined( __GNUG__)
+#	if GCC_VERSION >= 50300
+	static const String GetDividerTypeFunctionABIName = cuT( "_Z14GetDividerTypeB5cxx11v" );
+#	else
 	static const String GetDividerTypeFunctionABIName = cuT( "_Z14GetDividerTypev" );
+#	endif
 	static const String CreateDividerFunctionABIName = cuT( "_Z13CreateDividerv" );
 	static const String DestroyDividerFunctionABIName = cuT( "_Z14DestroyDividerPN8Castor3D10SubdividerE" );
 #else

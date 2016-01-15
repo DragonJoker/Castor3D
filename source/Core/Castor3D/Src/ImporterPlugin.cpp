@@ -31,9 +31,13 @@ namespace Castor3D
 #endif
 #	endif
 #elif defined( __GNUG__)
+#	if GCC_VERSION >= 50300
+	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsB5cxx11v" );
+#	else
+	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsv" );
+#	endif
 	static const String CreateImporterFunctionABIName = cuT( "_Z6CreatePN8Castor3D6EngineEPNS_14ImporterPluginE" );
 	static const String DestroyImporterFunctionABIName = cuT( "_Z7DestroyPN8Castor3D14ImporterPluginE" );
-	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsv" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif

@@ -38,33 +38,24 @@ namespace Castor3D
 	{
 	}
 
-	void Light::Render()
+	void Light::Bind( PxBufferBase & p_texture, uint32_t p_index )
 	{
 		SceneNodeSPtr l_node = GetParent();
 
-		if ( l_node )
+		switch ( m_pCategory->GetLightType() )
 		{
-			Point3r l_position = l_node->GetDerivedPosition();
+		case eLIGHT_TYPE_DIRECTIONAL:
+			GetDirectionalLight()->Bind( p_texture, p_index );
+			break;
 
-			switch ( m_pCategory->GetLightType() )
-			{
-			case eLIGHT_TYPE_DIRECTIONAL:
-				std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( point::get_normalised( l_position ) );
-				break;
+		case eLIGHT_TYPE_POINT:
+			GetPointLight()->Bind( p_texture, p_index );
+			break;
 
-			case eLIGHT_TYPE_POINT:
-				std::static_pointer_cast< PointLight >( m_pCategory )->SetPosition( l_position );
-				break;
-
-			case eLIGHT_TYPE_SPOT:
-				std::static_pointer_cast< SpotLight >( m_pCategory )->SetPosition( l_position );
-				break;
-			}
+		case eLIGHT_TYPE_SPOT:
+			GetSpotLight()->Bind( p_texture, p_index );
+			break;
 		}
-	}
-
-	void Light::EndRender()
-	{
 	}
 
 	void Light::AttachTo( SceneNodeSPtr p_node )

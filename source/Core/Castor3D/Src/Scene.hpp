@@ -139,13 +139,13 @@ namespace Castor3D
 		struct stRENDER_NODE
 		{
 			//!\~english The parent mesh node	\~french Le node du mesh parent
-			SceneNodeSPtr m_pNode;
+			SceneNodeSPtr m_node;
 			//!\~english The geometry instanciating the submesh	\~french La géométrie instanciant le submesh
-			GeometrySPtr m_pGeometry;
+			GeometrySPtr m_geometry;
 			//!\~english The submesh	\~french Le sous-maillage
-			SubmeshSPtr m_pSubmesh;
+			SubmeshSPtr m_submesh;
 			//!\~english The material	\~french Le matériau
-			MaterialSPtr m_pMaterial;
+			MaterialSPtr m_material;
 		};
 		//!\~english Multimap of stRENDER_NODEs sorted by distance	\~french Multimap de stRENDER_NODEs triés par distance
 		DECLARE_MULTIMAP( double, stRENDER_NODE, RenderNodeByDistance );
@@ -644,7 +644,7 @@ namespace Castor3D
 		 */
 		void SetBackgroundColour( Castor::Colour const & p_clrNew )
 		{
-			m_clrBackground = p_clrNew;
+			m_backgroundColour = p_clrNew;
 		}
 		/**
 		 *\~english
@@ -656,7 +656,7 @@ namespace Castor3D
 		 */
 		Castor::Colour const & GetBackgroundColour()const
 		{
-			return m_clrBackground;
+			return m_backgroundColour;
 		}
 		/**
 		 *\~english
@@ -728,7 +728,7 @@ namespace Castor3D
 		 */
 		inline TextureBaseSPtr GetBackgroundImage()const
 		{
-			return m_pBackgroundImage;
+			return m_backgroundImage;
 		}
 		/**
 		 *\~english
@@ -745,278 +745,75 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the ambient light colour
-		 *\return		The value
+		 *\return		The ambient light colour
 		 *\~french
-		 *\brief		Récupère la couleur de la lumière ambiante
-		 *\return		La valeur
+		 *\return		La couleur de la lumière ambiante
 		 */
 		inline Castor::Colour const & GetAmbientLight()const
 		{
-			return m_clAmbientLight;
+			return m_ambientLight;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the scene nodes count
-		 *\return		The value
+		 *\brief		Sets the ambient light colour.
+		 *\param[in]	The new value.
 		 *\~french
-		 *\brief		Récupère le nombre de SceneNodes
-		 *\return		La valeur
-		 */
-		inline uint32_t GetNodesCount()const
-		{
-			return uint32_t( m_addedNodes.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the scene nodes map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des SceneNodes
-		 *\return		La valeur
-		 */
-		inline SceneNodePtrStrMap::iterator NodesBegin()
-		{
-			return m_addedNodes.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the scene nodes map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des SceneNodes
-		 *\return		La valeur
-		 */
-		inline SceneNodePtrStrMap::const_iterator NodesBegin()const
-		{
-			return m_addedNodes.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the scene nodes map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des SceneNodes
-		 *\return		La valeur
-		 */
-		inline SceneNodePtrStrMap::iterator NodesEnd()
-		{
-			return m_addedNodes.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the scene nodes map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des SceneNodes
-		 *\return		La valeur
-		 */
-		inline SceneNodePtrStrMap::const_iterator NodesEnd()const
-		{
-			return m_addedNodes.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the lights count
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre de lumières
-		 *\return		La valeur
-		 */
-		inline uint32_t GetLightsCount()const
-		{
-			return uint32_t( m_mapLights.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the lights map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des lumières
-		 *\return		La valeur
-		 */
-		inline LightsMap::iterator LightsBegin()
-		{
-			return m_mapLights.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the lights map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des lumières
-		 *\return		La valeur
-		 */
-		inline LightsMap::const_iterator LightsBegin()const
-		{
-			return m_mapLights.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the lights map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des lumières
-		 *\return		La valeur
-		 */
-		inline LightsMap::iterator LightsEnd()
-		{
-			return m_mapLights.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the lights map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des lumières
-		 *\return		La valeur
-		 */
-		inline LightsMap::const_iterator LightsEnd()const
-		{
-			return m_mapLights.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the geometries count
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre de géométries
-		 *\return		La valeur
-		 */
-		inline uint32_t GetGeometriesCount()const
-		{
-			return uint32_t( m_addedPrimitives.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the geometries map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la map des géométries
-		 *\return		La valeur
-		 */
-		inline GeometryPtrStrMap const & Geometries()const
-		{
-			return m_addedPrimitives;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the geometries map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des géométries
-		 *\return		La valeur
-		 */
-		inline GeometryPtrStrMap::iterator GeometriesBegin()
-		{
-			return m_addedPrimitives.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the geometries map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des géométries
-		 *\return		La valeur
-		 */
-		inline GeometryPtrStrMap::const_iterator GeometriesBegin()const
-		{
-			return m_addedPrimitives.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the geometries map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des géométries
-		 *\return		La valeur
-		 */
-		inline GeometryPtrStrMap::iterator GeometriesEnd()
-		{
-			return m_addedPrimitives.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the geometries map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des géométries
-		 *\return		La valeur
-		 */
-		inline GeometryPtrStrMap::const_iterator GeometriesEnd()const
-		{
-			return m_addedPrimitives.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the cameras count
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nombre de caméras
-		 *\return		La valeur
-		 */
-		inline uint32_t GetCamerasCount()const
-		{
-			return uint32_t( m_addedCameras.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the cameras map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des caméras
-		 *\return		La valeur
-		 */
-		inline CameraPtrStrMap::iterator CamerasBegin()
-		{
-			return m_addedCameras.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the cameras map begin
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la map des caméras
-		 *\return		La valeur
-		 */
-		inline CameraPtrStrMap::const_iterator CamerasBegin()const
-		{
-			return m_addedCameras.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the cameras map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des caméras
-		 *\return		La valeur
-		 */
-		inline CameraPtrStrMap::iterator CamerasEnd()
-		{
-			return m_addedCameras.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the cameras map end
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map des caméras
-		 *\return		La valeur
-		 */
-		inline CameraPtrStrMap::const_iterator CamerasEnd()const
-		{
-			return m_addedCameras.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the ambient light colour
-		 *\param[in]	The new value
-		 *\~french
-		 *\brief		Définit la couleur de la lumière ambiante
-		 *\param[in]	La nouvelle valeur
+		 *\brief		Définit la couleur de la lumière ambiante.
+		 *\param[in]	La nouvelle valeur.
 		 */
 		inline void SetAmbientLight( Castor::Colour const & val )
 		{
-			m_clAmbientLight = val;
+			m_ambientLight = val;
+		}
+		/**
+		 *\~english
+		 *\return		The nodes map.
+		 *\~french
+		 *\return		La map de noeuds.
+		 */
+		inline SceneNodePtrStrMap const & Nodes()const
+		{
+			return m_nodes;
+		}
+		/**
+		 *\~english
+		 *\return		The lights map.
+		 *\~french
+		 *\return		La map de lumières.
+		 */
+		inline LightPtrStrMap const & Lights()const
+		{
+			return m_lights;
+		}
+		/**
+		 *\~english
+		 *\return		The lights map.
+		 *\~french
+		 *\return		La map de lumières.
+		 */
+		inline LightsMap const & TypeSortedLights()const
+		{
+			return m_typeSortedLights;
+		}
+		/**
+		 *\~english
+		 *\return		The geometries map.
+		 *\~french
+		 *\return		La map de géométries.
+		 */
+		inline GeometryPtrStrMap const & Geometries()const
+		{
+			return m_primitives;
+		}
+		/**
+		 *\~english
+		 *\return		The cameras map.
+		 *\~french
+		 *\return		La map de caméras.
+		 */
+		inline CameraPtrStrMap const & Cameras()const
+		{
+			return m_cameras;
 		}
 		//@}
 
@@ -1034,7 +831,6 @@ namespace Castor3D
 		void DoRenderSubmesh( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, stRENDER_NODE const & p_node );
 		void DoApplySkeleton( FrameVariableBuffer const & p_matrixBuffer, AnimatedObjectSPtr p_object );
 		void DoRenderBillboards( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
-		void DoBindLight( LightSPtr p_light, int p_index, ShaderProgramBase & p_program );
 
 		template< typename MapType >
 		void DoMerge( SceneSPtr p_scene, MapType & p_map, MapType & p_myMap )
@@ -1068,60 +864,21 @@ namespace Castor3D
 			p_map.clear();
 		}
 
-		template< typename MapType >
-		void DoRemoveNodesAndUnattached( MapType & p_map )
-		{
-			std::set< Castor::String > l_setNodes;
-
-			for ( typename MapType::iterator l_it = p_map.begin(); l_it != p_map.end(); ++l_it )
-			{
-				if ( l_it->second->GetParent() && l_setNodes.find( l_it->second->GetParent()->GetName() ) == l_setNodes.end() )
-				{
-					l_setNodes.insert( l_it->second->GetParent()->GetName() );
-				}
-			}
-
-			SceneNodePtrStrMap::iterator l_itNode = m_addedNodes.begin();
-
-			while ( l_itNode != m_addedNodes.end() )
-			{
-				if ( l_setNodes.find( l_itNode->first ) == l_setNodes.end() )
-				{
-					l_itNode->second->Detach();
-					l_itNode->second.reset();
-					m_addedNodes.erase( l_itNode );
-					l_itNode = m_addedNodes.begin();
-				}
-				else
-				{
-					++l_itNode;
-				}
-			}
-
-			for ( typename MapType::iterator l_it = p_map.begin(); l_it != p_map.end(); ++l_it )
-			{
-				if ( !l_it->second->GetParent() )
-				{
-					p_map.erase( l_it );
-					l_it = p_map.begin();
-				}
-			}
-		}
 		template< class MapType, class ArrayType >
 		void DoRemoveAll( MapType & p_map, ArrayType & p_array )
 		{
 			auto l_lock = Castor::make_unique_lock( m_mutex );
-			typename MapType::iterator l_it = p_map.begin();
 
-			while ( p_map.size() > 0 )
+			for ( auto && l_it : p_map )
 			{
-				l_it->second->Detach();
-				p_array.push_back( l_it->second );
-				l_it->second.reset();
-				p_map.erase( l_it );
-				l_it = p_map.begin();
+				l_it.second->Detach();
+				p_array.push_back( l_it.second );
+				l_it.second.reset();
 			}
+
+			p_map.clear();
 		}
+
 		template< class ObjectType, typename KeyType >
 		bool DoCheckObject( KeyType const & p_key, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
 		{
@@ -1149,6 +906,7 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 		template< class ObjectType, typename KeyType >
 		bool DoAddObject( std::shared_ptr< ObjectType > p_object, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, Castor::String const & p_strType )
 		{
@@ -1177,6 +935,7 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 		template< class ObjectType, typename KeyType >
 		std::shared_ptr< ObjectType > DoGetObject( std::map< KeyType, std::shared_ptr< ObjectType > > const & p_map, KeyType const & p_key )const
 		{
@@ -1191,6 +950,7 @@ namespace Castor3D
 
 			return l_return;
 		}
+
 		template< class ObjectType, typename KeyType >
 		void DoRemoveObject( std::shared_ptr< ObjectType > p_object, std::map< KeyType, std::shared_ptr< ObjectType > > & p_map, std::vector< std::shared_ptr< ObjectType > > & p_array )
 		{
@@ -1222,67 +982,63 @@ namespace Castor3D
 		//!\~english The root node for every object other than camera (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds d'objet
 		SceneNodeSPtr m_rootObjectNode;
 		//!\~english The nodes map	\~french La map des noeuds
-		SceneNodePtrStrMap m_addedNodes;
-		//!\~english Added cameras	\~french Les caméras
-		CameraPtrStrMap m_addedCameras;
-		//!\~english Added lights	\~french Les lumières
-		LightPtrStrMap m_addedLights;
-		//!\~english Added primitives	\~french Les objets
-		GeometryPtrStrMap m_addedPrimitives;
-		//!\~english The lights to delete array	\~french Le tableau de lumières à détruire
-		LightPtrArray m_arrayLightsToDelete;
+		SceneNodePtrStrMap m_nodes;
 		//!\~english The nodes to delete array	\~french Le tableau de noeuds à détruire
-		SceneNodePtrArray m_arrayNodesToDelete;
-		//!\~english The geometries to delete array	\~french Le tableau d'objets à détruire
-		GeometryPtrArray m_arrayPrimitivesToDelete;
+		SceneNodePtrArray m_nodesToDelete;
+		//!\~english Added cameras	\~french Les caméras
+		CameraPtrStrMap m_cameras;
 		//!\~english The cameras to delete array	\~french Le tableau de caméras à détruire
-		CameraPtrArray m_arrayCamerasToDelete;
+		CameraPtrArray m_camerasToDelete;
+		//!\~english Added lights.	\~french Les lumières.
+		LightPtrStrMap m_lights;
+		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.
+		LightsMap m_typeSortedLights;
+		//!\~english The lights to delete array	\~french Le tableau de lumières à détruire
+		LightPtrArray m_lightsToDelete;
+		//!\~english Added primitives	\~french Les objets
+		GeometryPtrStrMap m_primitives;
+		//!\~english The geometries to delete array	\~french Le tableau d'objets à détruire
+		GeometryPtrArray m_primitivesToDelete;
 		//!\~english The newly added geometries, it is used to make the vertex buffer of them, then they are removed from the map.	\~french Les géométries nouvellement ajoutées.
 		GeometryPtrStrMap m_newlyAddedPrimitives;
+		//!\~english The billboards lists	\~french Les listes de billboards
+		BillboardListStrMap m_billboards;
+		//!\~english The billboards lists to delete	\~french Les listes de billboards à détruire
+		BillboardListArray m_billboardsToDelete;
 		//!\~english The added animated object groups, it is used to make the vertex buffer of them, then they are removed from the map.	\~french Les groupes d'objets animés.
-		AnimatedObjectGroupPtrStrMap m_addedGroups;
+		AnimatedObjectGroupPtrStrMap m_animatedObjectsGroups;
 		//!\~english The scene faces count	\~french Le nombre de faces dans la scène
-		uint32_t m_nbFaces;
+		uint32_t m_facesCount;
 		//!\~english The scene vertices count	\~french Le nombre de vertices dans la scène
-		uint32_t m_nbVertex;
+		uint32_t m_vertexCount;
 		//!\~english Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated	\~french Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;
 		//!\~english Ambient light color	\~french Couleur de la lumière ambiante
-		Castor::Colour m_clAmbientLight;
+		Castor::Colour m_ambientLight;
 		//!\~english The mutex, to make the Scene threadsafe	\~french Le mutex protégeant les données de la scène
 		mutable std::recursive_mutex m_mutex;
 		//!\~english The lights factory	\~french La fabrique de lumières
 		LightFactory & m_lightFactory;
 		//!\~english The overlays array	\~french Le tableau d'overlays
-		OverlayPtrArray m_arrayOverlays;
-		//!\~english Lights map, ordered by index	\~french Map de lumières, triées par index
-		LightsMap m_mapLights;
-		//!\~english The geometries with no alpha blending, sorted by material	\~french Les géométries n'ayant pas d'alpha blend, triées par matériau
-		SubmeshNodesByMaterialMap m_mapSubmeshesNoAlpha;
+		OverlayPtrArray m_overlays;
 		//!\~english The geometries without alpha blending, unsorted	\~french Les géométries sans alpha blend, non triées
-		RenderNodeArray m_arraySubmeshesNoAlpha;
-		//!\~english The geometries with alpha blending, sorted by material	\~french Les géométries avec de l'alpha blend, triées par matériau
-		SubmeshNodesByMaterialMap m_mapSubmeshesAlpha;
-		//!\~english The geometries with alpha blending, sorted by distance to the camera	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra
-		RenderNodeByDistanceMMap m_mapSubmeshesAlphaSorted;
+		RenderNodeArray m_submeshesNoAlpha;
+		//!\~english The geometries with no alpha blending, sorted by material	\~french Les géométries n'ayant pas d'alpha blend, triées par matériau
+		SubmeshNodesByMaterialMap m_materialSortedSubmeshesNoAlpha;
 		//!\~english The geometries with alpha blending, unsorted	\~french Les géométries avec de l'alpha blend, non triées
-		RenderNodeArray m_arraySubmeshesAlpha;
+		RenderNodeArray m_submeshesAlpha;
+		//!\~english The geometries with alpha blending, sorted by material	\~french Les géométries avec de l'alpha blend, triées par matériau
+		SubmeshNodesByMaterialMap m_materialSortedSubmeshesAlpha;
+		//!\~english The geometries with alpha blending, sorted by distance to the camera	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra
+		RenderNodeByDistanceMMap m_distanceSortedSubmeshesAlpha;
 		//!\~english The scene background colour	\~french La couleur de fond de la scène
-		Castor::Colour m_clrBackground;
-		//!\~english The billboards lists	\~french Les listes de billboards
-		BillboardListStrMap m_mapBillboardsLists;
-		//!\~english The billboards lists to delete	\~french Les listes de billboards à détruire
-		BillboardListArray m_arrayBillboardsToDelete;
+		Castor::Colour m_backgroundColour;
 		//!\~english The background image	\~french L'image de fond
-		TextureBaseSPtr m_pBackgroundImage;
-		//!\~english Tells if at least one light has changed since last frame	\~french Dit si une lumière au moins a changé depuis la dernière frame
-		bool m_bLightsChanged;
+		TextureBaseSPtr m_backgroundImage;
 		//!\~english The image containing lights data	\~french L'image contenant les données des lumières
-		Castor::PxBufferBaseSPtr m_pLightsData;
+		Castor::PxBufferBaseSPtr m_lightsData;
 		//!\~english The lights texture	\~french La texture contenant les lumières
-		TextureUnitSPtr m_pLightsTexture;
-		//!\~english The set of available images	indices	\~french Le set contenant les indices des lumières disponibles
-		std::set< int > m_setFreeLights;
+		TextureUnitSPtr m_lightsTexture;
 	};
 }
 

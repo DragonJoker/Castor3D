@@ -1,6 +1,10 @@
 #include "Dx11OverlayRenderer.hpp"
+
 #include "Dx11RenderSystem.hpp"
 #include "Dx11ShaderProgram.hpp"
+
+#include <Engine.hpp>
+#include <ShaderManager.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

@@ -56,6 +56,7 @@ namespace Castor3D
 		if ( m_mainContext )
 		{
 			m_mainContext->Cleanup();
+			m_mainContext.reset();
 		}
 
 #if !defined( NDEBUG )

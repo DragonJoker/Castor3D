@@ -63,71 +63,71 @@ namespace Castor3D
 
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature )
 	{
-		bool l_return = true;
+		m_initialised = true;
 		m_program = p_shader;
 
-		if ( l_return && m_pVertexBuffer )
+		if ( m_initialised && m_pVertexBuffer )
 		{
-			l_return = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
+			m_initialised = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
 		}
 
-		if ( l_return )
+		if ( m_initialised )
 		{
-			l_return = DoInitialise();
+			m_initialised = DoInitialise();
 		}
 
-		return l_return;
+		return m_initialised;
 	}
 
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature )
 	{
-		bool l_return = true;
+		m_initialised = true;
 		m_program = p_shader;
 
-		if ( l_return && m_pVertexBuffer )
+		if ( m_initialised && m_pVertexBuffer )
 		{
-			l_return = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
+			m_initialised = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
 		}
 
-		if ( l_return && m_pIndexBuffer )
+		if ( m_initialised && m_pIndexBuffer )
 		{
-			l_return = m_pIndexBuffer->Initialise( p_idxType, p_idxNature, p_shader );
+			m_initialised = m_pIndexBuffer->Initialise( p_idxType, p_idxNature, p_shader );
 		}
 
-		if ( l_return )
+		if ( m_initialised )
 		{
-			l_return = DoInitialise();
+			m_initialised = DoInitialise();
 		}
 
-		return l_return;
+		return m_initialised;
 	}
 
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature, eBUFFER_ACCESS_TYPE p_mtxType, eBUFFER_ACCESS_NATURE p_mtxNature )
 	{
-		bool l_return = true;
+		m_initialised = true;
 		m_program = p_shader;
 
-		if ( l_return && m_pVertexBuffer )
+		if ( m_initialised && m_pVertexBuffer )
 		{
-			l_return = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
+			m_initialised = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature, p_shader );
 		}
 
-		if ( l_return && m_pIndexBuffer )
+		if ( m_initialised && m_pIndexBuffer )
 		{
-			l_return = m_pIndexBuffer->Initialise( p_idxType, p_idxNature, p_shader );
+			m_initialised = m_pIndexBuffer->Initialise( p_idxType, p_idxNature, p_shader );
 		}
 
-		if ( l_return && m_pMatrixBuffer )
+		if ( m_initialised && m_pMatrixBuffer )
 		{
 			m_pMatrixBuffer->Initialise( p_mtxType, p_mtxNature, p_shader );
 		}
 
-		if ( l_return )
+		if ( m_initialised )
 		{
-			l_return = DoInitialise();
+			m_initialised = DoInitialise();
 		}
 
-		return l_return;
+		return m_initialised;
 	}
 
 	void GeometryBuffers::Cleanup()

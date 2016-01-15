@@ -17,19 +17,19 @@ namespace detail
 {
 	struct stBONE_NODE
 	{
+		stBONE_NODE()
+			: bTranslate( false )
+			, bRotate( false )
+			, bScale( false )
+		{
+		}
+
 		Point3r ptTranslate;
 		Point3r ptScale;
 		Quaternion qRotate;
 		bool bTranslate;
 		bool bRotate;
 		bool bScale;
-
-		stBONE_NODE()
-			:	bTranslate( false	)
-			,	bRotate( false	)
-			,	bScale( false	)
-		{
-		}
 	};
 
 	typedef std::map< real, stBONE_NODE > NodeTimeMap;
@@ -222,7 +222,15 @@ MeshSPtr AssimpImporter::DoImportMesh()
 {
 	String l_name = m_fileName.GetFileName();
 	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-	m_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+
+	if ( GetOwner()->GetMeshManager().Has( l_meshName ) )
+	{
+		m_pMesh = GetOwner()->GetMeshManager().Find( l_meshName );
+	}
+	else
+	{
+		m_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+	}
 
 	if ( !m_pMesh->GetSubmeshCount() )
 	{
@@ -469,9 +477,11 @@ MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial
 		l_name = m_fileName.GetFileName() + string::to_string( m_anonymous++ );
 	}
 
-	l_return = l_mtlManager.Find( l_name );
-
-	if ( !l_return )
+	if ( l_mtlManager.Has( l_name ) )
+	{
+		l_return = l_mtlManager.Find( l_name );
+	}
+	else
 	{
 		float l_fOpacity = 1;
 		float l_fShininess = 0.5f;

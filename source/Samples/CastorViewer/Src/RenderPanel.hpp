@@ -24,20 +24,19 @@ namespace CastorViewer
 		eTIMER_ID_RIGHT,
 		eTIMER_ID_UP,
 		eTIMER_ID_DOWN,
-		eTIMER_ID_ROTATE_LIGHT,
 		eTIMER_ID_COUNT,
 	}	eTIMER_ID;
 
-	class MouseCameraEvent;
-	class CameraRotateEvent;
-	class CameraTranslateEvent;
+	class MouseNodeEvent;
+	class RotateNodeEvent;
+	class TranslateNodeEvent;
 	class FirstPersonCameraRotateEvent;
 	class FirstPersonCameraTranslateEvent;
 	class KeyboardEvent;
 
-	DECLARE_SMART_PTR( MouseCameraEvent );
-	DECLARE_SMART_PTR( CameraRotateEvent );
-	DECLARE_SMART_PTR( CameraTranslateEvent );
+	DECLARE_SMART_PTR( MouseNodeEvent );
+	DECLARE_SMART_PTR( RotateNodeEvent );
+	DECLARE_SMART_PTR( TranslateNodeEvent );
 	DECLARE_SMART_PTR( FirstPersonCameraRotateEvent );
 	DECLARE_SMART_PTR( FirstPersonCameraTranslateEvent );
 	DECLARE_SMART_PTR( KeyboardEvent );
@@ -69,6 +68,7 @@ namespace CastorViewer
 		}
 
 	private:
+		void DoResetTimers();
 		void DoStartTimer( int p_iId );
 		void DoStopTimer( int p_iId );
 		void DoResetCamera();
@@ -85,7 +85,6 @@ namespace CastorViewer
 		void OnTimerRgt( wxTimerEvent & p_event );
 		void OnTimerUp( wxTimerEvent & p_event );
 		void OnTimerDwn( wxTimerEvent &	p_event );
-		void OnTimerRotateLights( wxTimerEvent & p_event );
 		void OnSize( wxSizeEvent & p_event );
 		void OnMove( wxMoveEvent & p_event );
 		void OnPaint( wxPaintEvent & p_event );
@@ -123,13 +122,13 @@ namespace CastorViewer
 		wxTimer * m_pTimer[eTIMER_ID_COUNT];
 		Castor3D::RenderWindowWPtr m_pRenderWindow;
 		Castor3D::FrameListenerSPtr m_pListener;
-		Castor3D::SceneNodeSPtr m_pointlightsNode;
 		wxCursor * m_pCursorArrow;
 		wxCursor * m_pCursorHand;
 		wxCursor * m_pCursorNone;
 
-		MouseCameraEventSPtr m_pRotateCamEvent;
-		CameraTranslateEventSPtr m_pTranslateCamEvent;
+		Castor3D::SceneNodeSPtr m_cameraNode;
+		Castor3D::SceneNodeSPtr m_lightsNode;
+		Castor3D::SceneNodeSPtr m_currentNode;
 		FirstPersonCameraRotateEventSPtr m_pFpRotateCamEvent;
 		FirstPersonCameraTranslateEventSPtr m_pFpTranslateCamEvent;
 		KeyboardEventSPtr m_pKeyboardEvent;

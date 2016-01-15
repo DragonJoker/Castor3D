@@ -1,5 +1,8 @@
 ﻿#include "SpotLight.hpp"
-#include "Vertex.hpp"
+
+#include "SceneNode.hpp"
+
+#include <PixelBuffer.hpp>
 
 using namespace Castor;
 
@@ -145,6 +148,20 @@ namespace Castor3D
 		return std::make_shared< SpotLight >();
 	}
 
+	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
+	{
+		int l_offset = 0;
+		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
+		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
+		Point4f l_posType = GetPositionType();
+		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
+		Matrix4x4r l_orientation;
+		GetLight()->GetParent()->GetDerivedOrientation().to_matrix( l_orientation );
+		DoBindComponent( l_orientation, p_index, l_offset, p_texture );
+		DoBindComponent( GetExponent(), GetCutOff(), p_index, l_offset, p_texture );
+	}
+
 	void SpotLight::SetPosition( Castor::Point3r const & p_ptPosition )
 	{
 		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 2.0f ) );
@@ -169,5 +186,24 @@ namespace Castor3D
 	void SpotLight::SetCutOff( float p_cutOff )
 	{
 		m_cutOff = p_cutOff;
+	}
+
+	void SpotLight::DoBindComponent( float p_exp, float p_cut, int p_index, int & p_offset, PxBufferBase & p_data )const
+	{
+		float * l_pDst = reinterpret_cast< float * >( &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) ) );
+		*l_pDst++ = p_exp;
+		*l_pDst++ = p_cut;
+	}
+
+	void SpotLight::DoBindComponent( Matrix4x4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
+	{
+		Point3f l_direction( 0, 0, 1 );
+		l_direction = matrix::get_transformed( p_component, l_direction );
+		DoBindComponent( l_direction, p_index, p_offset, p_data );
+	}
+
+	void SpotLight::DoBindComponent( Matrix4x4d const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
+	{
+		DoBindComponent( Matrix4x4f( p_component.const_ptr() ), p_index, p_offset, p_data );
 	}
 }

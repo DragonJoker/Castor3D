@@ -262,4 +262,9 @@ typedef wchar_t ychar;
 #	define CU_PARAM_UNUSED( x )
 #endif
 
+#define CASTOR_ENUM_BOUNDS( EnumName, EnumMin )\
+	EnumName##_COUNT,\
+	EnumName##_MIN = EnumMin,\
+	EnumName##_MAX = EnumName##_COUNT - 1
+
 #endif

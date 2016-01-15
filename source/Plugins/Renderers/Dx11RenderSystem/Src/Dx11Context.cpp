@@ -3,11 +3,13 @@
 #include "Dx11RenderSystem.hpp"
 #include "Dx11BackBuffers.hpp"
 
+#include <Engine.hpp>
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
 #include <OneFrameVariable.hpp>
 #include <PlatformWindowHandle.hpp>
 #include <RenderLoop.hpp>
+#include <RenderTarget.hpp>
 #include <RenderWindow.hpp>
 #include <Texture.hpp>
 #include <VertexBuffer.hpp>
