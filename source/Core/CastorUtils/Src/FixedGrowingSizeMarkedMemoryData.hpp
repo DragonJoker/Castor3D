@@ -20,6 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "MemoryDataTyper.hpp"
 
+#include <algorithm>
+#include <cstddef>
+
 namespace Castor
 {
 	/*!
