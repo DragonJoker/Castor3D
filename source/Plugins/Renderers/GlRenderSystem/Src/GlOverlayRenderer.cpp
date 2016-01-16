@@ -126,12 +126,4 @@ ShaderProgramBaseSPtr GlOverlayRenderer::DoCreateProgram( uint32_t p_flags )
 	return l_program;
 }
 
-void GlOverlayRenderer::DoInitialise()
-{
-}
-
-void GlOverlayRenderer::DoCleanup()
-{
-}
-
 //*************************************************************************************************

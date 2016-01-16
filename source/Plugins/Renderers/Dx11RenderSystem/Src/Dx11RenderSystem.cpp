@@ -43,8 +43,8 @@ namespace Dx11Render
 		DirectX11::Initialise();
 		m_pipelineImpl = std::make_shared< DxPipelineImpl >( *m_pipeline );
 		m_pipeline->UpdateImpl();
-		m_bInstancing = true;
-		m_bNonPowerOfTwoTextures = true;
+		m_instancing = true;
+		m_nonPowerOfTwoTextures = true;
 	}
 
 	DxRenderSystem::~DxRenderSystem()

@@ -456,6 +456,7 @@ namespace Castor3D
 	{
 		m_lightsData.reset();
 		m_lightsTexture.reset();
+		m_billboardsToDelete.clear();
 	}
 
 	void Scene::Initialise()
@@ -490,6 +491,11 @@ namespace Castor3D
 		DoRemoveAll( m_cameras, m_camerasToDelete );
 		DoRemoveAll( m_nodes, m_nodesToDelete );
 
+		for ( auto && l_billboard : m_billboardsToDelete )
+		{
+			GetOwner()->PostEvent( MakeCleanupEvent( *l_billboard ) );
+		}
+
 		if ( m_backgroundImage )
 		{
 			GetOwner()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
@@ -501,7 +507,6 @@ namespace Castor3D
 
 		m_lightsToDelete.clear();
 		m_primitivesToDelete.clear();
-		m_billboardsToDelete.clear();
 		m_camerasToDelete.clear();
 		m_nodesToDelete.clear();
 
@@ -1636,9 +1641,11 @@ namespace Castor3D
 
 		for ( auto l_it = p_itBegin; l_it != p_itEnd; ++l_it )
 		{
-			l_it->second->InitialiseShader( p_technique );
-			p_pipeline.SetModelMatrix( l_it->second->GetParent()->GetDerivedTransformationMatrix() );
-			l_it->second->Render();
+			if ( l_it->second->InitialiseShader( p_technique ) )
+			{
+				p_pipeline.SetModelMatrix( l_it->second->GetParent()->GetDerivedTransformationMatrix() );
+				l_it->second->Render();
+			}
 		}
 	}
 }

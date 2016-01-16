@@ -240,13 +240,13 @@ namespace Castor3D
 		 *\brief		Returns the first object at mouse coords x and y
 		 *\param[in]	p_scene	The scene used for the selection
 		 *\param[in]	p_mode		The selection mode (vertex, face, submesh, geometry)
-		 *\param[in]	p_x		The x mouse coordinate
-		 *\param[in]	p_y		The y mouse coordinate
+		 *\param[in]	p_x			The x mouse coordinate
+		 *\param[in]	p_y			The y mouse coordinate
 		 *\param[out]	p_stFound	The selection result
 		 *\return		\p true if something was found, false if not
 		 *\~french
 		 *\brief		Récupère l'objet le plus proche aux coordonnées souris x et y
-		 *\param[in]	p_scene	La scène où on doit sélectionner un objet
+		 *\param[in]	p_scene		La scène où on doit sélectionner un objet
 		 *\param[in]	p_mode		Le mode de sélection (vertex, face, submesh, geometry)
 		 *\param[in]	p_x, p_y	Les coordonnées de la souris
 		 *\param[out]	p_stFound	Le résultat de la sélection
@@ -254,87 +254,87 @@ namespace Castor3D
 		*/
 		C3D_API bool Select( SceneSPtr p_scene, eSELECTION_MODE p_mode, int p_x, int p_y, stSELECT_RESULT & p_stFound );
 		/**
-		*\~english
-		*\brief		Retrieves the viewport type
-		*\return		The viewport type
-		*\~french
-		*\brief		Récupère le type de viewport
-		*\return		Le type de viewport
-		*/
+		 *\~english
+		 *\brief		Retrieves the viewport type
+		 *\return		The viewport type
+		 *\~french
+		 *\brief		Récupère le type de viewport
+		 *\return		Le type de viewport
+		 */
 		C3D_API eVIEWPORT_TYPE GetViewportType()const;
 		/**
-		*\~english
-		*\brief		Sets the viewport type
-		*\param[in]	val	The viewport type
-		*\~french
-		*\brief		Définit le type de viewport
-		*\param[in]	val	Le type de viewport
-		*/
+		 *\~english
+		 *\brief		Sets the viewport type
+		 *\param[in]	val	The viewport type
+		 *\~french
+		 *\brief		Définit le type de viewport
+		 *\param[in]	val	Le type de viewport
+		 */
 		C3D_API void SetViewportType( eVIEWPORT_TYPE val );
 		/**
-		*\~english
-		*\brief		Retrieves the viewport width
-		*\return		The width
-		*\~french
-		*\brief		Récupère la largeur du viewport
-		*\return		La largeur
-		*/
+		 *\~english
+		 *\brief		Retrieves the viewport width
+		 *\return		The width
+		 *\~french
+		 *\brief		Récupère la largeur du viewport
+		 *\return		La largeur
+		 */
 		C3D_API uint32_t GetWidth()const;
 		/**
-		*\~english
-		*\brief		Retrieves the viewport height
-		*\return		The height
-		*\~french
-		*\brief		Récupère la hauteur du viewport
-		*\return		La hauteur
-		*/
+		 *\~english
+		 *\brief		Retrieves the viewport height
+		 *\return		The height
+		 *\~french
+		 *\brief		Récupère la hauteur du viewport
+		 *\return		La hauteur
+		 */
 		C3D_API uint32_t GetHeight()const;
 		/**
-		*\~english
-		*\brief		Checks if given CubeBox is in the view frustum
-		*\param[in]	p_box				The CubeBox
-		*\param[in]	m_transformations	The CubeBox transformations matrix
-		*\return		\p false if the CubeBox is completely out of the view frustum
-		*\~french
-		*\brief
-		*\brief		Vérifie si la CubeBox donnée est dans le frustum de vue
-		*\param[in]	p_box				La CubeBox
-		*\param[in]	m_transformations	La matrice de transformations de la CubeBox
-		*\return		\p false si la CubeBox est complètement en dehors du frustum de vue
-		*/
+		 *\~english
+		 *\brief		Checks if given CubeBox is in the view frustum
+		 *\param[in]	p_box				The CubeBox
+		 *\param[in]	m_transformations	The CubeBox transformations matrix
+		 *\return		\p false if the CubeBox is completely out of the view frustum
+		 *\~french
+		 *\brief
+		 *\brief		Vérifie si la CubeBox donnée est dans le frustum de vue
+		 *\param[in]	p_box				La CubeBox
+		 *\param[in]	m_transformations	La matrice de transformations de la CubeBox
+		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue
+		 */
 		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
 		/**
-		*\~english
-		*\brief		Checks if given point is in the view frustum
-		*\param[in]	p_point	The point
-		*\return		\p false if the point out of the view frustum
-		*\~french
-		*\brief
-		*\brief		Vérifie si le point donné est dans le frustum de vue
-		*\param[in]	p_point	Le point
-		*\return		\p false si le point en dehors du frustum de vue
-		*/
+		 *\~english
+		 *\brief		Checks if given point is in the view frustum
+		 *\param[in]	p_point	The point
+		 *\return		\p false if the point out of the view frustum
+		 *\~french
+		 *\brief
+		 *\brief		Vérifie si le point donné est dans le frustum de vue
+		 *\param[in]	p_point	Le point
+		 *\return		\p false si le point en dehors du frustum de vue
+		 */
 		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
 		/**
-		*\~english
-		*\brief		Retrieves the Viewport
-		*\return		The Viewport
-		*\~french
-		*\brief		Récupère le Viewport
-		*\return		Le Viewport
-		*/
+		 *\~english
+		 *\brief		Retrieves the Viewport
+		 *\return		The Viewport
+		 *\~french
+		 *\brief		Récupère le Viewport
+		 *\return		Le Viewport
+		 */
 		inline Viewport const & GetViewport()const
 		{
 			return m_viewport;
 		}
 		/**
-		*\~english
-		*\brief		Retrieves the Viewport
-		*\return		The Viewport
-		*\~french
-		*\brief		Récupère le Viewport
-		*\return		Le Viewport
-		*/
+		 *\~english
+		 *\brief		Retrieves the Viewport
+		 *\return		The Viewport
+		 *\~french
+		 *\brief		Récupère le Viewport
+		 *\return		Le Viewport
+		 */
 		inline Viewport & GetViewport()
 		{
 			return m_viewport;

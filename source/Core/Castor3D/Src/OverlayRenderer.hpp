@@ -141,20 +141,6 @@ namespace Castor3D
 		C3D_API virtual ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_flags ) = 0;
 		/**
 		 *\~english
-		 *\brief		Initialises the buffers
-		 *\~french
-		 *\brief		Initialise les tampons
-		 */
-		C3D_API virtual void DoInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Flushes the renderer
-		 *\~french
-		 *\brief		Nettoie le renderer
-		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
 		 *\brief		Retrieves a panel program compiled using given flags
 		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program

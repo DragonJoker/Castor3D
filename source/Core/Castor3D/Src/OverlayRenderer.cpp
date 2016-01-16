@@ -128,15 +128,10 @@ namespace Castor3D
 		DepthStencilStateSPtr l_dsState = m_wp2DDepthStencilState.lock();
 		l_dsState->SetDepthTest( false );
 		l_dsState->Initialise();
-
-		// Driver specific
-		DoInitialise();
 	}
 
 	void OverlayRenderer::Cleanup()
 	{
-		DoCleanup();
-
 		BlendStateSPtr l_blendState = m_wp2DBlendState.lock();
 		l_blendState->Cleanup();
 

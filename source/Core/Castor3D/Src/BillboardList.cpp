@@ -168,9 +168,10 @@ namespace Castor3D
 		l_pVtxBuffer->Resize( uint32_t( m_arrayPositions.size() * l_uiStride ) );
 		uint8_t * l_pBuffer = l_pVtxBuffer->data();
 
-		for ( Point3rArrayConstIt l_it = m_arrayPositions.begin(); l_it != m_arrayPositions.end(); ++l_it )
+		for ( auto & l_pos : m_arrayPositions )
 		{
-			std::memcpy( l_pBuffer, l_it->const_ptr(), l_uiStride );
+			l_pos[2] = -l_pos[2];
+			std::memcpy( l_pBuffer, l_pos.const_ptr(), l_uiStride );
 			l_pBuffer += l_uiStride;
 		}
 
@@ -180,31 +181,42 @@ namespace Castor3D
 
 	bool BillboardList::InitialiseShader( RenderTechniqueBase & p_technique )
 	{
-		MaterialSPtr l_pMaterial = m_wpMaterial.lock();
+		MaterialSPtr l_material = m_wpMaterial.lock();
 		bool l_return = false;
 
-		if ( l_pMaterial && l_pMaterial->GetPassCount() )
+		if ( l_material && l_material->GetPassCount() )
 		{
-			l_pMaterial->Cleanup();
-			ShaderProgramBaseSPtr l_program = DoGetProgram( p_technique, l_pMaterial->GetPass( 0 )->GetTextureFlags() );
+			auto & l_manager = GetOwner()->GetShaderManager();
 
-			if ( m_wpProgram.expired() || m_wpProgram.lock() != l_program )
+			for ( auto l_pass : *l_material )
 			{
-				m_wpProgram = l_program;
-				l_return = DoInitialise();
+				ShaderProgramBaseSPtr l_program = l_manager.GetBillboardProgram( l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
 
-				if ( l_return )
+				if ( !l_program )
 				{
-					l_pMaterial->Initialise();
-					m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
-					m_geometryBuffers->Create();
-					m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-					m_bNeedUpdate = false;
+					l_program = DoGetProgram( p_technique, l_pass->GetTextureFlags() );
+					l_manager.AddBillboardProgram( l_program, l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
 				}
-			}
-			else
-			{
-				l_return = true;
+
+				if ( m_wpProgram.expired() || m_wpProgram.lock() != l_program )
+				{
+					l_pass->Cleanup();
+					m_wpProgram = l_program;
+					l_return = DoInitialise();
+
+					if ( l_return )
+					{
+						l_pass->Initialise();
+						m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
+						m_geometryBuffers->Create();
+						m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+						m_bNeedUpdate = false;
+					}
+				}
+				else
+				{
+					l_return = true;
+				}
 			}
 		}
 
