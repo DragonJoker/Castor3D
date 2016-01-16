@@ -575,6 +575,7 @@ namespace Castor
 			{
 				m_ignored = false;
 				m_ignoreLevel = 0;
+				m_context->m_sections.pop();
 			}
 		}
 		else
