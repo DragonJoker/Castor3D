@@ -65,7 +65,11 @@ namespace Castor
 		{
 			if ( traits_type::eq_int_type( c, traits_type::eof() ) )
 			{
-				sync();
+				do_sync();
+			}
+			else if ( c == '\n' )
+			{
+				do_sync();
 			}
 			else
 			{
@@ -75,7 +79,7 @@ namespace Castor
 			return c;
 		}
 
-		virtual int sync()
+		virtual int do_sync()
 		{
 			if ( !m_buffer.empty() )
 			{

@@ -411,7 +411,7 @@ namespace Castor
 		return l_return;
 	}
 
-	Path File::GetWorkingDirectory()
+	Path File::GetExecutableDirectory()
 	{
 		Path l_pathReturn;
 #if defined( _WIN32 )

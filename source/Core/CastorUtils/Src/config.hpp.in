@@ -36,4 +36,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #undef CASTOR_USE_UNICODE
 #define CASTOR_USE_UNICODE @CASTOR_USE_UNICODE@
 
+//! Tells whether or not use SSE2 instructions for Point4f and Matrix4x4f operations.
+#undef CASTOR_USE_SSE2
+#define CASTOR_USE_SSE2 @CASTOR_USE_SSE2@
+
 #endif

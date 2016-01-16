@@ -391,7 +391,7 @@ namespace Direct
 				}
 			}
 
-			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient * c3d_v4MatAmbient.XYZ ) +
+			pxl_v4FragColor = vec4( l_writer.Paren( l_v3Ambient + c3d_v4MatAmbient.XYZ ) +
 									l_writer.Paren( l_v3Diffuse * c3d_v4MatDiffuse.XYZ ) +
 									l_writer.Paren( l_v3Specular * c3d_v4MatSpecular.XYZ ) +
 									l_v3Emissive, l_fAlpha );

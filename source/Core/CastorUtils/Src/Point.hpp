@@ -28,6 +28,84 @@ namespace Castor
 {
 	/*!
 	\author		Sylvain DOREMUS
+	\date		15/01/2016
+	\~english
+	\brief		Holds the point coords, and can be specialised to customise the behaviour.
+	\~french
+	\brief		Contient les coordonnées du point, peut être spécialisée, afin de personnaliser le comportement.
+	*/
+	template< typename T, uint32_t Count >
+	class PointDataHolder
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		PointDataHolder()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		~PointDataHolder()
+		{
+		}
+
+	protected:
+		//!\~english The point data.	\~french Les données du point.
+		T m_coords[Count];
+	};
+
+#if CASTOR_USE_SSE2
+
+	/*!
+	\author		Sylvain DOREMUS
+	\date		15/01/2016
+	\~english
+	\brief		Specialisation for 4 floats, allocates an aligned buffer.
+	\~french
+	\brief		Spécialisation pour 4 floats, alloue un tampon aligné.
+	*/
+	template<>
+	class PointDataHolder< float, 4 >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		PointDataHolder()
+			: m_coords( reinterpret_cast< float * >( AlignedAlloc( 16, 16 ) ) )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		~PointDataHolder()
+		{
+			AlignedFree( m_coords );
+		}
+
+	protected:
+		//!\~english The point data.	\~french Les données du point.
+		float * m_coords;
+	};
+
+#endif
+
+	/*!
+	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
 	\brief		Templated static dimensions point representation
@@ -38,6 +116,7 @@ namespace Castor
 	*/
 	template< typename T, uint32_t Count >
 	class Point
+		: public PointDataHolder< T, Count >
 	{
 	public:
 		/*!
@@ -154,6 +233,13 @@ namespace Castor
 	public:
 		/**
 		 *\~english
+		 *\brief		Default Constructor.
+		 *\~french
+		 *\brief		Constructeur par défaut.
+		 */
+		Point();
+		/**
+		 *\~english
 		 *\brief		Copy Constructor
 		 *\param[in]	p_ptPoint	The Point object to copy
 		 *\~french
@@ -215,8 +301,8 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		template< typename ... Values >
-		explicit Point( Values ... p_values );
+		template< typename ValueA, typename ValueB, typename ... Values >
+		explicit Point( ValueA p_valueA, ValueB p_valueB, Values ... p_values );
 #else
 		/**
 		 *\~english
@@ -526,7 +612,7 @@ namespace Castor
 		 */
 		inline T const & operator[]( uint32_t p_pos )const
 		{
-			return m_coords[p_pos];
+			return this->m_coords[p_pos];
 		}
 		/**
 		 *\~english
@@ -540,7 +626,7 @@ namespace Castor
 		 */
 		inline T & operator[]( uint32_t p_pos )
 		{
-			return m_coords[p_pos];
+			return this->m_coords[p_pos];
 		}
 		/**
 		 *\~english
@@ -574,7 +660,7 @@ namespace Castor
 		 */
 		inline T * ptr()
 		{
-			return &m_coords[0];
+			return &this->m_coords[0];
 		}
 		/**
 		 *\~english
@@ -586,7 +672,7 @@ namespace Castor
 		 */
 		inline T const * const_ptr()const
 		{
-			return &m_coords[0];
+			return &this->m_coords[0];
 		}
 		/**
 		 *\~english
@@ -598,7 +684,7 @@ namespace Castor
 		 */
 		inline iterator begin()
 		{
-			return &m_coords[0];
+			return &this->m_coords[0];
 		}
 		/**
 		 *\~english
@@ -610,7 +696,7 @@ namespace Castor
 		 */
 		inline const_iterator begin()const
 		{
-			return &m_coords[0];
+			return &this->m_coords[0];
 		}
 		/**
 		 *\~english
@@ -622,7 +708,7 @@ namespace Castor
 		 */
 		inline const_iterator end()const
 		{
-			return &m_coords[0] + Count;
+			return &this->m_coords[0] + Count;
 		}
 		/**
 		 *\~english
@@ -634,11 +720,8 @@ namespace Castor
 		 */
 		inline iterator end()
 		{
-			return &m_coords[0] + Count;
+			return &this->m_coords[0] + Count;
 		}
-
-	private:
-		T m_coords[Count];
 	};
 	/**
 	 *\~english

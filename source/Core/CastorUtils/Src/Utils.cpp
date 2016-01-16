@@ -1,10 +1,29 @@
-﻿#include "Utils.hpp"
+#include "Utils.hpp"
 #include "Size.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
 #else
 #	include <X11/Xlib.h>
+#endif
+
+#if defined( __GNUG__ )
+
+#define cpuid( func, ax, bx, cx, dx )\
+	__asm__ __volatile__ ( "cpuid":\
+	"=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
+
+#elif defined( _MSC_VER )
+
+#define cpuid( func, a, b, c, d )\
+	asm {\
+		mov	eax, func\
+		cpuid\
+		mov	a, eax\
+		mov	b, ebx\
+		mov	c, ecx\
+		mov	d, edx\
+	}
 #endif
 
 namespace Castor

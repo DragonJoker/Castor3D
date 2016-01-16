@@ -252,7 +252,7 @@ namespace Castor
 		 *\brief		Donne le répertoire d'exécution
 		 *\return		Le répertoire
 		 */
-		CU_API static Path	GetWorkingDirectory();
+		CU_API static Path GetExecutableDirectory();
 		/**
 		 *\~english
 		 *\brief		Gives the user home directory

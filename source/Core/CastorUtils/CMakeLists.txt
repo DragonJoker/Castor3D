@@ -1,4 +1,5 @@
 option( CASTOR_USE_UNICODE "Use UNICODE strings (not recommended)" FALSE)
+option( CASTOR_USE_SSE2 "Use SSE2 instructions for Point4f and Matrix4x4f operations" TRUE)
 
 project( CastorUtils )
 
@@ -38,11 +39,11 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	include_directories( ${FreeImage_INCLUDE_DIR} )
 	include_directories( ${ZLIB_INCLUDE_DIRS} )
 	include_directories( ${LIBZIP_INCLUDE_DIRS} )
-	
+
 	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
 	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
 	option( CASTOR_USE_LOG_TRACK "Enable function tracking to be written in log file" FALSE )
-	
+
 	#FreeImage Libs
 	set( FreeImageLibraries "")
 	foreach(Lib ${FreeImage_LIBRARIES})
@@ -52,7 +53,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			set(FreeImageLibraries "${Lib}")
 		endif()
 	endforeach()
-	
+
 	#FreeType Libs
 	set( FreeTypeLibraries "")
 	foreach(Lib ${FREETYPE_LIBRARIES})
@@ -62,7 +63,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			set(FreeTypeLibraries "${Lib}")
 		endif()
 	endforeach()
-	
+
 	#Zlib Libs
 	set( ZlibLibraries "")
 	foreach(Lib ${ZLIB_LIBRARIES})
@@ -72,7 +73,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			set(ZlibLibraries "${Lib}")
 		endif()
 	endforeach()
-	
+
 	#libzip Libs
 	set( LibZipLibraries "")
 	foreach(Lib ${LIBZIP_LIBRARY})
@@ -82,7 +83,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			set(LibZipLibraries "${Lib}")
 		endif()
 	endforeach()
-	
+
 	#X11 Libs
 	set( X11Libraries "" )
 	foreach( Lib ${X11_LIBRARIES} )
@@ -92,7 +93,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			set( X11Libraries "${Lib}" )
 		endif()
 	endforeach()
-	
+
 	set( CastorBinsDependencies 
 		${CastorBinsDependencies}
 		${PROJECT_NAME}
@@ -107,12 +108,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		${LibZipLibraries}
 		${X11Libraries}
 	)
-	
+
 	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
 	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 	set( ${PROJECT_NAME}_VERSION_MINOR	8 )
 	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
-	
+
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
 		set( CASTOR_USE_PCH 1 )
 	else()
@@ -138,6 +139,11 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	else()
 		set( CASTOR_USE_UNICODE 0 )
 	endif()
+	if( CASTOR_USE_SSE2 )
+		set( CASTOR_USE_SSE2 1 )
+	else()
+		set( CASTOR_USE_SSE2 0 )
+	endif()
 	
 	configure_file( 
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/config.hpp.in
@@ -145,10 +151,10 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		@ONLY
 		NEWLINE_STYLE LF
 	)
-	
+
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
-	
+
 	add_target(
 		${PROJECT_NAME}
 		api_dll
@@ -157,6 +163,9 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		"CastorUtilsPch.hpp"
 		"CastorUtilsPch.cpp"
 		"${FreeImage_FLAGS}"
+		""
+		""
+		"${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp"
 	)
 	
 	if ( WIN32 )
@@ -348,6 +357,8 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	source_group( "Source Files\\Miscellaneous" FILES ${CASTOR_Miscellaneous_SOURCE_FILES} )
 
 	file( GLOB CASTOR_Config_HEADER_FILES
+		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.hpp
+		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Config*.hpp
@@ -358,6 +369,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*SmartPtr*.inl
 	)
 	file( GLOB CASTOR_Config_SOURCE_FILES
+		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Config*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Macros*.cpp
