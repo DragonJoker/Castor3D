@@ -1,18 +1,31 @@
 #include "Aligned.hpp"
 
-#if defined( _MSC_VER )
+#include "Logger.hpp"
+
+#if defined( _WIN32 )
 #	include <malloc.h>
 #	define CU_ALIGNED_FREE( m )\
 	_aligned_free( m )
 #	define CU_ALIGNED_ALLOC( m, a, s )\
 	m = _aligned_malloc( s, a )
 #else
-#	define _GNU_SOURCE
 #	include <cstdlib>
 #	define CU_ALIGNED_FREE( m )\
 	free( m )
 #	define CU_ALIGNED_ALLOC( m, a, s )\
-	m = aligned_alloc( a, s )
+	int l_error = posix_memalign( &m, a, s );\
+	if ( l_error )\
+	{\
+		if ( l_error == EINVAL )\
+		{\
+			Logger::LogError( StringStream() << cuT( "Aligned allocation failed, alignment of " ) << a << cuT( " is not a power of two times sizeof( void * )" ) );\
+		}\
+		else if ( l_error == ENOMEM )\
+		{\
+			Logger::LogError( StringStream() << cuT( "Aligned allocation failed, no memory available" ) );\
+		}\
+		m = nullptr;\
+	}\
 #endif
 
 namespace Castor
