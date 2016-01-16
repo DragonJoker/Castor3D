@@ -11,10 +11,7 @@
 #	define CU_ALIGNED_FREE( m )\
 	free( m )
 #	define CU_ALIGNED_ALLOC( m, a, s )\
-	if ( posix_memalign( &m, a, s ) )\
-	{\
-		m = nullptr;\
-	}
+	m = aligned_alloc( a, s )
 #	if defined( __GNUG__ )
 #		include <sys/time.h>
 #		include <errno.h>

@@ -40,7 +40,8 @@ namespace Testing
 		virtual void Execute();
 
 	private:
-		void MtxMultCastor();
+		void MtxMultCastorCpp();
+		void MtxMultCastorSse2();
 		void MtxMultCL();
 
 		Castor::Matrix4x4f m_mtx4x4CuA;

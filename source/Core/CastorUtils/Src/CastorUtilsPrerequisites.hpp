@@ -215,7 +215,9 @@ namespace Castor
 	class Path;
 	class DynamicLibrary;
 	template< int A >
-	struct Aligned;
+	class Aligned;
+	template< typename T >
+	class AlignedFrom;
 	struct MessageBase;
 	class Logger;
 	class LoggerImpl;
@@ -374,6 +376,30 @@ namespace Castor
 	 *\param[in]	p_eLogType	Le type de log
 	 */
 	typedef std::function< void ( String const & p_strLog, ELogType p_eLogType ) > LogCallback;
+
+	template< typename Pool > class PoolManagedObject;
+
+	class NonAlignedMemoryAllocator;
+	template< size_t Align > class AlignedMemoryAllocator;
+
+	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedSizeMemoryData;
+	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedGrowingSizeMemoryData;
+	template< typename Object > class FixedSizeMarkedMemoryData;
+	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
+
+	/*!
+	\~english
+	\brief		Supported MemoryData types.
+	\~french
+	\brief		Types de MemoryData supportés.
+	*/
+	typedef enum eMEMDATA_TYPE
+	{
+		eMEMDATA_TYPE_FIXED,
+		eMEMDATA_TYPE_FIXED_MARKED,
+		eMEMDATA_TYPE_FIXED_GROWING,
+		eMEMDATA_TYPE_FIXED_GROWING_MARKED,
+	}	eMEMDATA_TYPE;
 }
 
 #include "Debug.hpp"

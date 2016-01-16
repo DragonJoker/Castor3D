@@ -246,7 +246,7 @@ namespace Castor
 		}
 
 	public:
-		//!\~english The slope point		\~french Le point de pente
+		//!\~english The slope point	\~french Le point de pente
 		Point< T, 3 > m_slope;
 		//!\~english The origin point	\~french Le point d'origine
 		Point< T, 3 > m_origin;

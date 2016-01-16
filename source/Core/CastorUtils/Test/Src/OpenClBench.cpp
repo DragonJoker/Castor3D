@@ -180,7 +180,7 @@ namespace Testing
 
 		if ( l_bContinue )
 		{
-			Castor::Path l_filePath = Castor::File::GetWorkingDirectory();
+			Castor::Path l_filePath = Castor::File::GetExecutableDirectory();
 			std::string l_path = Castor::string::string_cast< char >( l_filePath / cuT( "mtx_ope.cl" ) );
 			std::ifstream l_file( l_path );
 			l_bContinue = CheckErr( l_file ? CL_SUCCESS : -1, l_path.c_str() );
@@ -256,13 +256,19 @@ namespace Testing
 
 	void OpenCLBench::Execute()
 	{
-		BENCHMARK( MtxMultCastor, NB_TESTS );
+		BENCHMARK( MtxMultCastorCpp, NB_TESTS );
+		BENCHMARK( MtxMultCastorSse2, NB_TESTS );
 		BENCHMARK( MtxMultCL, NB_TESTS );
 	}
 
-	void OpenCLBench::MtxMultCastor()
+	void OpenCLBench::MtxMultCastorCpp()
 	{
-		m_mtx4x4CuC = m_mtx4x4CuA * m_mtx4x4CuB;
+		Castor::SqrMtxOperators< float, 4 >::mul_cpp( m_mtx4x4CuA, m_mtx4x4CuB );
+	}
+
+	void OpenCLBench::MtxMultCastorSse2()
+	{
+		Castor::SqrMtxOperators< float, 4 >::mul_sse2( m_mtx4x4CuA, m_mtx4x4CuB );
 	}
 
 	void OpenCLBench::MtxMultCL()

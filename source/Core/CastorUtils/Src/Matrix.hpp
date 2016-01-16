@@ -26,6 +26,240 @@ namespace Castor
 {
 	/*!
 	\author		Sylvain DOREMUS
+	\date		15/01/2016
+	\~english
+	\brief		Holds the matrix data, and can be specialised to customise the behaviour.
+	\~french
+	\brief		Contient les données de la matrice, peut être spécialisée, afin de personnaliser le comportement.
+	*/
+	template< typename T, uint32_t Columns, uint32_t Rows >
+	class MatrixDataHolder
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		MatrixDataHolder()
+			: m_data( new T[Columns * Rows] )
+			, m_ownCoords( true )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		MatrixDataHolder( T * p_data )
+			: m_data( p_data )
+			, m_ownCoords( false )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Move constructor.
+		 *\param[in]	p_rhs	The other object.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 *\param[in]	p_rhs	L'autre objet.
+		 */
+		MatrixDataHolder( MatrixDataHolder< T, Columns, Rows > && p_rhs )
+			: m_data( p_rhs.m_data )
+			, m_ownCoords( p_rhs.m_ownCoords )
+		{
+			p_rhs.m_data = NULL;
+			p_rhs.m_ownCoords = true;
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		~MatrixDataHolder()
+		{
+			if ( m_ownCoords )
+			{
+				delete [] m_data;
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\param[in]	p_rhs	The other object.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 *\param[in]	p_rhs	L'autre objet.
+		 */
+		MatrixDataHolder & operator=( MatrixDataHolder< T, Columns, Rows > && p_rhs )
+		{
+			if ( this != &p_rhs )
+			{
+				if ( m_ownCoords )
+				{
+					delete [] m_data;
+				}
+
+				m_data = p_rhs.m_data;
+				m_ownCoords = p_rhs.m_ownCoords;
+				p_rhs.m_data = NULL;
+				p_rhs.m_ownCoords = true;
+			}
+
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\brief		Links the data pointer to the one given in parameter
+		 *\remark		The matrix loses ownership of it's data
+		 *\~french
+		 *\brief		Lie les données de cette matrice à celles données en paramètre
+		 *\remark		La matrice perd la responsabilité de ses données
+		 */
+		void link( T * p_data )
+		{
+			if ( m_ownCoords )
+			{
+				delete [] m_data;
+				m_data = NULL;
+			}
+
+			m_data = p_data;
+			m_ownCoords = false;
+		}
+
+	protected:
+		//!\~english The matrix data.	\~french Les données de la matrice.
+		T * m_data;
+
+	private:
+		//!\~english The matrix owns its data.	\~french La matrice st responsable de ses données.
+		bool m_ownCoords;
+	};
+
+#if CASTOR_USE_SSE2
+
+	/*!
+	\author		Sylvain DOREMUS
+	\date		15/01/2016
+	\~english
+	\brief		Specialisation for 4 floats, allocates an aligned buffer.
+	\~french
+	\brief		Spécialisation pour 4 floats, alloue un tampon aligné.
+	*/
+	template<>
+	class MatrixDataHolder< float, 4, 4 >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		MatrixDataHolder()
+			: m_data( reinterpret_cast< float * >( AlignedAlloc( 16, 64 ) ) )
+			, m_ownCoords( true )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		MatrixDataHolder( float * p_data )
+			: m_data( p_data )
+			, m_ownCoords( false )
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Move constructor.
+		 *\param[in]	p_rhs	The other object.
+		 *\~french
+		 *\brief		Constructeur par déplacement.
+		 *\param[in]	p_rhs	L'autre objet.
+		 */
+		MatrixDataHolder( MatrixDataHolder< float, 4, 4 > && p_rhs )
+			: m_data( p_rhs.m_data )
+			, m_ownCoords( p_rhs.m_ownCoords )
+		{
+			p_rhs.m_data = NULL;
+			p_rhs.m_ownCoords = true;
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		~MatrixDataHolder()
+		{
+			if ( m_ownCoords )
+			{
+				AlignedFree( m_data );
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\param[in]	p_rhs	The other object.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 *\param[in]	p_rhs	L'autre objet.
+		 */
+		MatrixDataHolder & operator=( MatrixDataHolder< float, 4, 4 > && p_rhs )
+		{
+			if ( this != &p_rhs )
+			{
+				if ( m_ownCoords )
+				{
+					AlignedFree( m_data );
+				}
+
+				m_data = p_rhs.m_data;
+				m_ownCoords = p_rhs.m_ownCoords;
+				p_rhs.m_data = NULL;
+				p_rhs.m_ownCoords = true;
+			}
+
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\brief		Links the data pointer to the one given in parameter
+		 *\remark		The matrix loses ownership of it's data
+		 *\~french
+		 *\brief		Lie les données de cette matrice à celles données en paramètre
+		 *\remark		La matrice perd la responsabilité de ses données
+		 */
+		void link( float * p_data )
+		{
+			if ( m_ownCoords )
+			{
+				AlignedFree( m_data );
+				m_data = NULL;
+			}
+
+			m_data = p_data;
+			m_ownCoords = false;
+		}
+
+	protected:
+		//!\~english The matrix data.	\~french Les données de la matrice.
+		float * m_data;
+		//!\~english The matrix owns its data.	\~french La matrice st responsable de ses données.
+		bool m_ownCoords;
+	};
+
+#endif
+
+	/*!
+	\author		Sylvain DOREMUS
 	\version	0.1.0.0
 	\date		09/02/2010
 	\~english
@@ -37,6 +271,7 @@ namespace Castor
 	*/
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	class Matrix
+		: public MatrixDataHolder< T, Columns, Rows >
 	{
 	protected:
 		typedef T __value_type;
@@ -524,10 +759,7 @@ namespace Castor
 		void do_update_columns()const;
 
 	protected:
-		bool m_ownCoords;
-		value_type * m_data;
 		mutable col_type m_columns[Columns];
-
 #if !defined( NDEBUG )
 		mutable value_type * m_debugData[Columns][Rows];
 #endif

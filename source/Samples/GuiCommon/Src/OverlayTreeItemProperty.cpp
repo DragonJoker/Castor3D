@@ -229,11 +229,11 @@ namespace GuiCommon
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_INNER_UV )
 			{
-				OnBorderInnerUVChange( Point4d( l_property->GetValue() ) );
+				OnBorderInnerUVChange( Point4dRefFromVariant( l_property->GetValue() ) );
 			}
 			else if ( l_property->GetName() == PROPERTY_OVERLAY_BORDER_OUTER_UV )
 			{
-				OnBorderOuterUVChange( Point4d( l_property->GetValue() ) );
+				OnBorderOuterUVChange( Point4dRefFromVariant( l_property->GetValue() ) );
 			}
 		}
 	}

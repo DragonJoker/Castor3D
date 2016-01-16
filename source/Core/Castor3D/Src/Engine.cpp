@@ -36,6 +36,7 @@
 #include <DynamicLibrary.hpp>
 #include <PreciseTimer.hpp>
 #include <Templates.hpp>
+#include <UniqueObjectPool.hpp>
 
 using namespace Castor;
 
@@ -257,7 +258,7 @@ namespace Castor3D
 	Path Engine::GetPluginsDirectory()
 	{
 		Path l_pathReturn;
-		Path l_pathBin = File::GetWorkingDirectory();
+		Path l_pathBin = File::GetExecutableDirectory();
 		Path l_pathUsr = l_pathBin.GetPath();
 		l_pathReturn = l_pathUsr / cuT( "lib" ) / cuT( "Castor3D" );
 		return l_pathReturn;
@@ -271,7 +272,7 @@ namespace Castor3D
 	Path Engine::GetDataDirectory()
 	{
 		Path l_pathReturn;
-		Path l_pathBin = File::GetWorkingDirectory();
+		Path l_pathBin = File::GetExecutableDirectory();
 		Path l_pathUsr = l_pathBin.GetPath();
 		l_pathReturn = l_pathUsr / cuT( "share" );
 		return l_pathReturn;

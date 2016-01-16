@@ -8,8 +8,6 @@ namespace Castor
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( NoInit const & )
-		: m_data( new T[16] )
-		, m_ownCoords( true )
 	{
 		do_update_columns();
 	}
@@ -28,8 +26,7 @@ namespace Castor
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::Matrix( T * p_matrix )
-		: m_data( p_matrix )
-		, m_ownCoords( false )
+		: MatrixDataHolder< T, Columns, Rows >( p_matrix )
 	{
 		do_update_columns();
 	}
@@ -42,22 +39,19 @@ namespace Castor
 
 		for ( uint64_t i = 0; i < l_count; i++ )
 		{
-			m_data[i] = T( p_matrix[i] );
+			this->m_data[i] = T( p_matrix[i] );
 		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > const & p_matrix )
 		: Matrix( NoInit() )
 	{
-		std::memcpy( m_data, p_matrix.const_ptr(), my_type::size );
+		std::memcpy( this->m_data, p_matrix.const_ptr(), my_type::size );
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > && p_matrix )
-		: m_data( std::move( p_matrix.m_data ) )
-		, m_ownCoords( std::move( p_matrix.m_ownCoords ) )
+		: MatrixDataHolder< T, Columns, Rows >( std::move( p_matrix ) )
 	{
-		p_matrix.m_data = NULL;
-		p_matrix.m_ownCoords = true;
 		do_update_columns();
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -69,21 +63,17 @@ namespace Castor
 
 		for ( uint64_t i = 0; i < l_count; i++ )
 		{
-			m_data[i] = T( p_matrix.m_data[i] );
+			this->m_data[i] = T( p_matrix.m_data[i] );
 		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows >::~Matrix()
 	{
-		if ( m_ownCoords )
-		{
-			delete [] m_data;
-		}
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::initialise( T const & p_value )
 	{
-		std::memset( m_data, 0, my_type::size );
+		std::memset( this->m_data, 0, my_type::size );
 
 		if ( p_value )
 		{
@@ -232,7 +222,7 @@ namespace Castor
 	inline T Matrix< T, Columns, Rows >::get_trace()const
 	{
 		T l_sum = T();
-		T * l_buffer = m_data;
+		T * l_buffer = this->m_data;
 
 		for ( int i = 0; i < min_value< Columns, Rows >::value; i++ )
 		{
@@ -245,8 +235,8 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::set_identity()
 	{
-		std::memset( m_data, 0, size );
-		T * l_buffer = m_data;
+		std::memset( this->m_data, 0, size );
+		T * l_buffer = this->m_data;
 
 		for ( int i = 0; i < min_value< Columns, Rows >::value; i++ )
 		{
@@ -264,7 +254,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Matrix< T, Columns, Rows > const & p_matrix )
 	{
-		std::memcpy( m_data, p_matrix.m_data, my_type::size );
+		std::memcpy( this->m_data, p_matrix.m_data, my_type::size );
 		return *this;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
@@ -272,15 +262,7 @@ namespace Castor
 	{
 		if ( this != &p_matrix )
 		{
-			if ( m_ownCoords )
-			{
-				delete [] m_data;
-			}
-
-			m_data = std::move( p_matrix.m_data );
-			m_ownCoords = std::move( p_matrix.m_ownCoords );
-			p_matrix.m_data = NULL;
-			p_matrix.m_ownCoords = true;
+			MatrixDataHolder< T, Columns, Rows >::operator=( std::move( p_matrix ) );
 			do_update_columns();
 		}
 
@@ -291,7 +273,7 @@ namespace Castor
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Matrix< Type, Columns, Rows > const & p_matrix )
 	{
 		Type const * l_buffer = p_matrix.const_ptr();
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
@@ -304,7 +286,7 @@ namespace Castor
 	template< typename Type >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator=( Type const * p_matrix )
 	{
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( uint64_t i = 0; i < count; i++ )
 		{
@@ -318,7 +300,7 @@ namespace Castor
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator+=( Matrix< Type, Columns, Rows > const & p_matrix )
 	{
 		Type const * l_buffer = p_matrix.const_ptr();
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
@@ -332,7 +314,7 @@ namespace Castor
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator-=( Matrix< Type, Columns, Rows > const & p_matrix )
 	{
 		Type const * l_buffer = p_matrix.const_ptr();
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
@@ -344,7 +326,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator+=( T const & p_value )
 	{
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
@@ -356,7 +338,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator-=( T const & p_value )
 	{
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
@@ -368,7 +350,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator*=( T const & p_value )
 	{
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
@@ -380,7 +362,7 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline Matrix< T, Columns, Rows > & Matrix< T, Columns, Rows >::operator/=( T const & p_value )
 	{
-		T * l_mine = m_data;
+		T * l_mine = this->m_data;
 
 		for ( int i = 0; i < count; i++ )
 		{
@@ -414,31 +396,24 @@ namespace Castor
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline T * Matrix< T, Columns, Rows >::ptr()
 	{
-		return m_data;
+		return this->m_data;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline T const * Matrix< T, Columns, Rows >::const_ptr()const
 	{
-		return m_data;
+		return this->m_data;
 	}
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::link( T * p_coords )
 	{
-		if ( m_ownCoords )
-		{
-			delete [] m_data;
-			m_data = NULL;
-		}
-
-		m_data = p_coords;
-		m_ownCoords = false;
+		MatrixDataHolder< T, Columns, Rows >::link( p_coords );
 		do_update_columns();
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
 	inline void Matrix< T, Columns, Rows >::do_update_columns()const
 	{
-		value_type * l_buffer = m_data;
+		value_type * l_buffer = this->m_data;
 
 		for ( uint32_t i = 0; i < Columns; ++i )
 		{

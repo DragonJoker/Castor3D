@@ -87,15 +87,21 @@ namespace Castor
 //*************************************************************************************************
 
 	template< typename T, uint32_t Count >
+	Point< T, Count >::Point()
+	{
+		std::memset( this->m_coords, 0, binary_size );
+	}
+
+	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( T const * p_pValues )
 	{
 		if ( !p_pValues )
 		{
-			std::memset( m_coords, 0, binary_size );
+			std::memset( this->m_coords, 0, binary_size );
 		}
 		else
 		{
-			std::memcpy( m_coords, p_pValues, binary_size );
+			std::memcpy( this->m_coords, p_pValues, binary_size );
 		}
 	}
 
@@ -105,13 +111,13 @@ namespace Castor
 	{
 		if ( !p_pValues )
 		{
-			std::memset( m_coords, 0, binary_size );
+			std::memset( this->m_coords, 0, binary_size );
 		}
 		else
 		{
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				m_coords[i] = p_pValues[i];
+				this->m_coords[i] = p_pValues[i];
 			}
 		}
 	}
@@ -141,11 +147,11 @@ namespace Castor
 		}
 	}
 	template< typename T, uint32_t Count >
-	template< typename ... Values >
-	Point< T, Count >::Point( Values ... p_values )
+	template< typename ValueA, typename ValueB, typename ... Values >
+	Point< T, Count >::Point( ValueA p_valueA, ValueB p_valueB, Values ... p_values )
 	{
-		std::memset( m_coords, 0, binary_size );
-		construct< T, Count, 0, Values... >( *this, p_values... );
+		std::memset( this->m_coords, 0, binary_size );
+		construct< T, Count, 0, ValueA, ValueB, Values... >( *this, p_valueA, p_valueB, p_values... );
 	}
 
 #else
@@ -153,64 +159,64 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point()
 	{
-		std::memset( m_coords, 0, binary_size );
+		std::memset( this->m_coords, 0, binary_size );
 	}
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( T const & p_vA, T const & p_vB )
 	{
-		std::memset( m_coords, 0, binary_size );
-		m_coords[0] = p_vA;
-		m_coords[1] = p_vB;
+		std::memset( this->m_coords, 0, binary_size );
+		this->m_coords[0] = p_vA;
+		this->m_coords[1] = p_vB;
 	}
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( T const & p_vA, T const & p_vB, T const & p_vC )
 	{
-		std::memset( m_coords, 0, binary_size );
-		m_coords[0] = p_vA;
-		m_coords[1] = p_vB;
-		m_coords[2] = p_vC;
+		std::memset( this->m_coords, 0, binary_size );
+		this->m_coords[0] = p_vA;
+		this->m_coords[1] = p_vB;
+		this->m_coords[2] = p_vC;
 	}
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( T const & p_vA, T const & p_vB, T const & p_vC, T const & p_vD )
 	{
-		std::memset( m_coords, 0, binary_size );
-		m_coords[0] = p_vA;
-		m_coords[1] = p_vB;
-		m_coords[2] = p_vC;
-		m_coords[3] = p_vD;
+		std::memset( this->m_coords, 0, binary_size );
+		this->m_coords[0] = p_vA;
+		this->m_coords[1] = p_vB;
+		this->m_coords[2] = p_vC;
+		this->m_coords[3] = p_vD;
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, typename V >
 	Point< T, Count >::Point( U const & p_vA, V const & p_vB )
 	{
-		std::memset( m_coords, 0, binary_size );
-		m_coords[0] = T( p_vA );
-		m_coords[1] = T( p_vB );
+		std::memset( this->m_coords, 0, binary_size );
+		this->m_coords[0] = T( p_vA );
+		this->m_coords[1] = T( p_vB );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, typename V, typename W >
 	Point< T, Count >::Point( U const & p_vA, V const & p_vB, W const & p_vC )
 	{
-		std::memset( m_coords, 0, binary_size );
-		m_coords[0] = T( p_vA );
-		m_coords[1] = T( p_vB );
-		m_coords[2] = T( p_vC );
+		std::memset( this->m_coords, 0, binary_size );
+		this->m_coords[0] = T( p_vA );
+		this->m_coords[1] = T( p_vB );
+		this->m_coords[2] = T( p_vC );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, typename V, typename W, typename X >
 	Point< T, Count >::Point( U const & p_vA, V const & p_vB, W const & p_vC, X const & p_vD )
 	{
-		std::memset( m_coords, 0, binary_size );
-		m_coords[0] = T( p_vA );
-		m_coords[1] = T( p_vB );
-		m_coords[2] = T( p_vC );
-		m_coords[3] = T( p_vD );
+		std::memset( this->m_coords, 0, binary_size );
+		this->m_coords[0] = T( p_vA );
+		this->m_coords[1] = T( p_vB );
+		this->m_coords[2] = T( p_vC );
+		this->m_coords[3] = T( p_vD );
 	}
 
 #endif
@@ -221,13 +227,13 @@ namespace Castor
 	{
 		if ( std::is_same< T, U >::value )
 		{
-			std::memcpy( m_coords, p_pt.m_coords, binary_size );
+			std::memcpy( this->m_coords, p_pt.m_coords, binary_size );
 		}
 		else
 		{
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				m_coords[i] = static_cast< T >( p_pt.m_coords[i] );
+				this->m_coords[i] = static_cast< T >( p_pt.m_coords[i] );
 			}
 		}
 	}
@@ -235,20 +241,20 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( Point< T, Count > const & p_pt )
 	{
-		std::memcpy( m_coords, p_pt.m_coords, binary_size );
+		std::memcpy( this->m_coords, p_pt.m_coords, binary_size );
 	}
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( Point< T, Count > && p_pt )
 	{
-		std::memcpy( m_coords, p_pt.m_coords, binary_size );
+		std::memcpy( this->m_coords, p_pt.m_coords, binary_size );
 		std::memset( p_pt.m_coords, 0, binary_size );
 	}
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point( Coords< T, Count > const & p_pt )
 	{
-		std::memcpy( m_coords, p_pt.const_ptr(), binary_size );
+		std::memcpy( this->m_coords, p_pt.const_ptr(), binary_size );
 	}
 
 	template< typename T, uint32_t Count >
@@ -259,7 +265,7 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > & Point< T, Count >::operator=( Point< T, Count > const & p_pt )
 	{
-		std::memcpy( m_coords, p_pt.m_coords, binary_size );
+		std::memcpy( this->m_coords, p_pt.m_coords, binary_size );
 		return * this;
 	}
 
@@ -268,7 +274,7 @@ namespace Castor
 	{
 		if ( this != & p_pt )
 		{
-			std::memcpy( m_coords, p_pt.m_coords, binary_size );
+			std::memcpy( this->m_coords, p_pt.m_coords, binary_size );
 			std::memset( p_pt.m_coords, 0, binary_size );
 		}
 
@@ -376,7 +382,7 @@ namespace Castor
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			std::swap( m_coords[i], p_pt.m_coords[i] );
+			std::swap( this->m_coords[i], p_pt.m_coords[i] );
 		}
 	}
 
@@ -385,7 +391,7 @@ namespace Castor
 	{
 		for ( uint32_t i = 0; i < Count / 2; i++ )
 		{
-			std::swap( m_coords[i], m_coords[Count - 1 - i] );
+			std::swap( this->m_coords[i], this->m_coords[Count - 1 - i] );
 		}
 	}
 
@@ -394,7 +400,7 @@ namespace Castor
 	{
 		for ( uint32_t i = 0; i < Count; i++ )
 		{
-			p_pResult[i] = m_coords[i];
+			p_pResult[i] = this->m_coords[i];
 		}
 	}
 
@@ -402,14 +408,14 @@ namespace Castor
 	T const & Point< T, Count >::at( uint32_t p_pos )const
 	{
 		REQUIRE( p_pos < Count );
-		return m_coords[p_pos];
+		return this->m_coords[p_pos];
 	}
 
 	template< typename T, uint32_t Count >
 	T & Point< T, Count >::at( uint32_t p_pos )
 	{
 		REQUIRE( p_pos < Count );
-		return m_coords[p_pos];
+		return this->m_coords[p_pos];
 	}
 
 //*************************************************************************************************
