@@ -7,7 +7,7 @@
 #	define CU_ALIGNED_ALLOC( m, a, s )\
 	m = _aligned_malloc( s, a )
 #else
-#	include <stdlib.h>
+#	include <cstdlib>
 #	define CU_ALIGNED_FREE( m )\
 	free( m )
 #	define CU_ALIGNED_ALLOC( m, a, s )\
