@@ -7,7 +7,7 @@
 #	define CU_ALIGNED_ALLOC( m, a, s )\
 	m = _aligned_malloc( s, a )
 #else
-#	define _ISOC11_SOURCE
+#	define _GNU_SOURCE
 #	include <cstdlib>
 #	define CU_ALIGNED_FREE( m )\
 	free( m )
