@@ -7,21 +7,12 @@
 #	define CU_ALIGNED_ALLOC( m, a, s )\
 	m = _aligned_malloc( s, a )
 #else
+#	define _ISOC11_SOURCE
 #	include <cstdlib>
 #	define CU_ALIGNED_FREE( m )\
 	free( m )
 #	define CU_ALIGNED_ALLOC( m, a, s )\
 	m = aligned_alloc( a, s )
-#	if defined( __GNUG__ )
-#		include <sys/time.h>
-#		include <errno.h>
-#		include <iostream>
-#		include <unistd.h>
-#		include <cerrno>
-#		if !defined( _WIN32 )
-#			include <X11/Xlib.h>
-#		endif
-#	endif
 #endif
 
 namespace Castor
