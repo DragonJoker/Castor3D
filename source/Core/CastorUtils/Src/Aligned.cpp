@@ -25,7 +25,7 @@
 			Logger::LogError( StringStream() << cuT( "Aligned allocation failed, no memory available" ) );\
 		}\
 		m = nullptr;\
-	}\
+	}
 #endif
 
 namespace Castor
