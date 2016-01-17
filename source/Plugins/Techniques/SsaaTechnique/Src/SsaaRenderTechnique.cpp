@@ -14,6 +14,8 @@
 #include <RenderTarget.hpp>
 #include <Scene.hpp>
 #include <TextureAttachment.hpp>
+#include <StaticTexture.hpp>
+#include <PixelBufferBase.hpp>
 
 #include <Logger.hpp>
 
@@ -173,21 +175,21 @@ namespace Ssaa
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 		: RenderTechniqueBase( cuT( "ssaa" ), p_renderTarget, p_pRenderSystem, p_params )
-		, m_iSamplesCount( 1 )
+		, m_samplesCount( 1 )
 	{
 		String l_count;
 
 		if ( p_params.Get( cuT( "samples_count" ), l_count ) )
 		{
-			m_iSamplesCount = string::to_int( l_count );
+			m_samplesCount = string::to_int( l_count );
 		}
 
-		Logger::LogInfo( std::stringstream() << "Using SSAA, " << m_iSamplesCount << " samples" );
-		m_pSsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-		m_pSsColorBuffer = m_pRenderTarget->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pSsColorAttach = m_pRenderTarget->CreateAttachment( m_pSsColorBuffer );
-		m_pSsDepthBuffer = m_pSsFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
-		m_pSsDepthAttach = m_pRenderTarget->CreateAttachment( m_pSsDepthBuffer );
+		Logger::LogInfo( std::stringstream() << "Using SSAA, " << m_samplesCount << " samples" );
+		m_ssFrameBuffer = m_renderTarget->CreateFrameBuffer();
+		m_ssColorBuffer = m_renderTarget->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_ssColorAttach = m_ssFrameBuffer->CreateAttachment( m_ssColorBuffer );
+		m_ssDepthBuffer = m_ssFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
+		m_ssDepthAttach = m_ssFrameBuffer->CreateAttachment( m_ssDepthBuffer );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -202,93 +204,88 @@ namespace Ssaa
 
 	bool RenderTechnique::DoCreate()
 	{
-		bool l_bReturn = m_pSsFrameBuffer->Create( 0 );
-		l_bReturn &= m_pSsColorBuffer->Create();
-		l_bReturn &= m_pSsDepthBuffer->Create();
-		return l_bReturn;
+		bool l_return = m_ssFrameBuffer->Create( 0 );
+		l_return &= m_ssColorBuffer->Create();
+		l_return &= m_ssDepthBuffer->Create();
+		return l_return;
 	}
 
 	void RenderTechnique::DoDestroy()
 	{
-		m_pSsColorBuffer->Destroy();
-		m_pSsDepthBuffer->Destroy();
-		m_pSsFrameBuffer->Destroy();
+		m_ssColorBuffer->Destroy();
+		m_ssDepthBuffer->Destroy();
+		m_ssFrameBuffer->Destroy();
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
-		bool l_bReturn = true;
-		m_rect = Castor::Rectangle( Position(), m_pRenderTarget->GetSize() );
-		m_sizeSsaa = Size( m_pRenderTarget->GetSize().width() * m_iSamplesCount, m_pRenderTarget->GetSize().height() * m_iSamplesCount );
-		m_rectSsaa.set( 0, 0, m_sizeSsaa.width(), m_sizeSsaa.height() );
+		bool l_return = true;
+		m_size = Size( m_renderTarget->GetSize().width() * m_samplesCount, m_renderTarget->GetSize().height() * m_samplesCount );
 
-		m_pSsColorBuffer->SetType( eTEXTURE_TYPE_2D );
-		m_pSsColorBuffer->SetImage( m_sizeSsaa, ePIXEL_FORMAT_A8R8G8B8 );
-		l_bReturn = m_pSsColorBuffer->Initialise( 0 );
+		m_ssColorBuffer->SetType( eTEXTURE_TYPE_2D );
+		m_ssColorBuffer->SetImage( m_size, m_renderTarget->GetPixelFormat() );
+		l_return = m_ssColorBuffer->Initialise( 0 );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_pSsDepthBuffer->Initialise( m_sizeSsaa );
+			l_return = m_ssDepthBuffer->Initialise( m_size );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_pSsFrameBuffer->Initialise( m_sizeSsaa );
+			l_return = m_ssFrameBuffer->Initialise( m_size );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_pSsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+			l_return = m_ssFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = m_pSsFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pSsColorAttach, eTEXTURE_TARGET_2D );
+				l_return = m_ssFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_ssColorAttach, eTEXTURE_TARGET_2D );
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					l_bReturn = m_pSsFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pSsDepthAttach );
+					l_return = m_ssFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_ssDepthAttach );
 				}
 
-				m_pSsFrameBuffer->Unbind();
+				m_ssFrameBuffer->Unbind();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
-		m_pSsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_pSsFrameBuffer->DetachAll();
-		m_pSsFrameBuffer->Unbind();
-		m_pSsFrameBuffer->Cleanup();
-		m_pSsColorBuffer->Cleanup();
-		m_pSsDepthBuffer->Cleanup();
+		m_ssFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_ssFrameBuffer->DetachAll();
+		m_ssFrameBuffer->Unbind();
+		m_ssFrameBuffer->Cleanup();
+		m_ssColorBuffer->Cleanup();
+		m_ssDepthBuffer->Cleanup();
 	}
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		return m_pSsFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		return m_ssFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 	}
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
-		m_pRenderTarget->GetDepthStencilState()->Apply();
-		m_pRenderTarget->GetRasteriserState()->Apply();
-		p_camera.GetViewport().SetSize( m_sizeSsaa );
-		p_camera.Render();
-		p_scene.Render( *this, p_dFrameTime, p_camera );
-		p_camera.EndRender();
-		return true;
+		m_renderTarget->GetDepthStencilState()->Apply();
+		m_renderTarget->GetRasteriserState()->Apply();
+		return RenderTechniqueBase::DoRender( m_size, p_scene, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
 	{
-		m_pSsFrameBuffer->Unbind();
-		m_pRenderTarget->GetDepthStencilState()->Apply();
-		m_pRenderTarget->GetRasteriserState()->Apply();
-		GetOwner()->GetDefaultBlendState()->Apply();
-		GetOwner()->GetRenderSystem()->GetCurrentContext()->RenderTextureToCurrentBuffer( m_pRenderTarget->GetSize(), m_pSsColorBuffer );
+		m_ssFrameBuffer->Unbind();
+		m_ssFrameBuffer->StretchInto( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( Position( 0, 0 ), m_size ), Castor::Rectangle( Position( 0, 0 ), m_renderTarget->GetSize() ), eBUFFER_COMPONENT_COLOUR, eINTERPOLATION_MODE_LINEAR );
+//		GetOwner()->GetRenderSystem()->GetCurrentContext()->RenderTextureToCurrentBuffer( m_renderTarget->GetSize(), m_ssColorBuffer );
+		m_renderTarget->GetDepthStencilState()->Apply();
+		m_renderTarget->GetRasteriserState()->Apply();
+		m_renderTarget->GetFrameBuffer()->Bind();
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const

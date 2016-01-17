@@ -283,28 +283,6 @@ namespace Castor3D
 		C3D_API void SetIntraOcularDistance( real p_rIod );
 		/**
 		 *\~english
-		 *\brief		Creates an attachment to a render buffer
-		 *\param[in]	p_renderBuffer	The render buffer
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à un tampon de rendu
-		 *\param[in]	p_renderBuffer	Le tampon de rendu
-		 *\return		L'attache créée
-		 */
-		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates an attachment to a texture
-		 *\param[in]	p_texture	The texture
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à une texture
-		 *\param[in]	p_texture	La texture
-		 *\return		L'attache créée
-		 */
-		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture ) = 0;
-		/**
-		 *\~english
 		 *\brief		Creates a frame buffer
 		 *\return		The created frame buffer
 		 *\~french
@@ -370,7 +348,7 @@ namespace Castor3D
 		 */
 		inline RenderTechniqueBaseSPtr GetTechnique()const
 		{
-			return m_pRenderTechnique;
+			return m_renderTechnique;
 		}
 		/**
 		 *\~english
@@ -382,7 +360,7 @@ namespace Castor3D
 		 */
 		inline void SetTechnique( RenderTechniqueBaseSPtr p_pTechnique )
 		{
-			m_pRenderTechnique = p_pTechnique;
+			m_renderTechnique = p_pTechnique;
 		}
 		/**
 		 *\~english
@@ -406,7 +384,7 @@ namespace Castor3D
 		 */
 		inline int32_t GetSamplesCount()const
 		{
-			return m_iSamplesCount;
+			return m_samplesCount;
 		}
 		/**
 		 *\~english
@@ -418,7 +396,7 @@ namespace Castor3D
 		 */
 		inline void	SetSamplesCount( int32_t val )
 		{
-			m_iSamplesCount = val;
+			m_samplesCount = val;
 		}
 		/**
 		 *\~english
@@ -696,11 +674,11 @@ namespace Castor3D
 		//!\~english The target size	\~french Les dimensions de la cible
 		Castor::Size m_size;
 		//!\~english The technique used to render this target	\~french La technique utilisée pour rendre cette cible
-		RenderTechniqueBaseSPtr m_pRenderTechnique;
+		RenderTechniqueBaseSPtr m_renderTechnique;
 		//!\~english Tells whether or not to use multisampling	\~french Dit si on utilise le multisampling ou pas
 		bool m_bMultisampling;
 		//!\~english Defines the samples count if multisampling is activated	\~french Le nombre de samples utilisés pour le multisampling
-		int32_t m_iSamplesCount;
+		int32_t m_samplesCount;
 		//!\~english The scene rendered in this render target	\~french La scène rendue par cette RenderTarget
 		SceneWPtr m_pScene;
 		//!\~english The camera used to render the scene	\~french La caméra utilisée pour rendre la scène

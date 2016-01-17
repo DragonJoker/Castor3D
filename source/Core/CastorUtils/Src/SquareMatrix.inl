@@ -402,7 +402,7 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline bool SquareMatrix< T, Count >::is_orthogonal()const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 		my_matrix_type l_mTmp( *this );
 		SquareMatrix< T, Count > l_mId1;
 		SquareMatrix< T, Count > l_mId2;
@@ -420,35 +420,35 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline bool SquareMatrix< T, Count >::is_symmetrical()const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
+			for ( uint32_t j = 0; j < Count && l_return; j++ )
 			{
-				l_bReturn = Castor::Policy< T >::equals( this->m_columns[i][j], this->m_columns[j][i] );
+				l_return = Castor::Policy< T >::equals( this->m_columns[i][j], this->m_columns[j][i] );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count >
 	inline bool SquareMatrix< T, Count >::is_anti_symmetrical()const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
+			for ( uint32_t j = 0; j < Count && l_return; j++ )
 			{
 				if ( !Castor::Policy< T >::is_null( this->m_columns[i][j] + this->m_columns[j][i] ) )
 				{
-					l_bReturn = false;
+					l_return = false;
 				}
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::get_inverse()const
@@ -614,17 +614,17 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline bool operator==( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			for ( uint32_t j = 0; j < Count && l_bReturn; j++ )
+			for ( uint32_t j = 0; j < Count && l_return; j++ )
 			{
-				l_bReturn = Castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
+				l_return = Castor::Policy< T >::equals( p_mtxA[i][j], p_mtxB[i][j] );
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 	template< typename T, uint32_t Count >
 	inline bool operator!=( SquareMatrix< T, Count > const & p_mtxA, SquareMatrix< T, Count > const & p_mtxB )

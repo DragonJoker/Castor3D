@@ -151,7 +151,7 @@ namespace Castor3D
 		DoResize( p_size );
 	}
 
-	bool FrameBuffer::BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_uiComponents )
+	bool FrameBuffer::BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_components )
 	{
 		bool l_return = p_buffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
 
@@ -162,7 +162,25 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = DoBlitInto( p_buffer, p_rectSrcDst, p_uiComponents, eINTERPOLATION_MODE_NEAREST );
+			l_return = DoBlitInto( p_buffer, p_rectSrcDst, p_components );
+			p_buffer->Unbind();
+		}
+
+		return l_return;
+	}
+
+	bool FrameBuffer::StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation )
+	{
+		bool l_return = p_buffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
+
+		if ( l_return )
+		{
+			l_return = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
+		}
+
+		if ( l_return )
+		{
+			l_return = DoStretchInto( p_buffer, p_rectSrc, p_rectDst, p_components, p_interpolation );
 			p_buffer->Unbind();
 		}
 

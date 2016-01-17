@@ -336,13 +336,13 @@ namespace Deferred
 		, m_viewport( Viewport::Ortho( *m_renderSystem->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
-		m_geometryPassFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+		m_geometryPassFrameBuffer = m_renderTarget->CreateFrameBuffer();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
 			m_lightPassTextures[i] = m_renderSystem->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 			m_lightPassTextures[i]->SetRenderTarget( p_renderTarget.shared_from_this() );
-			m_geometryPassTexAttachs[i] = m_pRenderTarget->CreateAttachment( m_lightPassTextures[i] );
+			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassTextures[i] );
 		}
 
 		m_lightPassShaderProgram = GetOwner()->GetShaderManager().GetNewProgram();
@@ -406,13 +406,13 @@ namespace Deferred
 			l_buffer += l_stride;
 		}
 
-		m_pGeometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
+		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		GetOwner()->SetPerObjectLighting( false );
 	}
 
 	RenderTechnique::~RenderTechnique()
 	{
-		m_pGeometryBuffers.reset();
+		m_geometryBuffers.reset();
 		m_lightPassShaderProgram.reset();
 		m_pDeclaration.reset();
 	}
@@ -446,7 +446,7 @@ namespace Deferred
 			FrameVariableBufferSPtr l_scene = GetOwner()->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = l_scene;
 
-			m_pGeometryBuffers->Create();
+			m_geometryBuffers->Create();
 			eSHADER_MODEL l_model = GetOwner()->GetRenderSystem()->GetMaxShaderModel();
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX, l_model, DoGetLightPassVertexShaderSource( 0 ) );
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL, l_model, DoGetLightPassPixelShaderSource( 0 ) );
@@ -457,7 +457,7 @@ namespace Deferred
 
 	void RenderTechnique::DoDestroy()
 	{
-		m_pGeometryBuffers->Destroy();
+		m_geometryBuffers->Destroy();
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH; i++ )
 		{
@@ -474,20 +474,20 @@ namespace Deferred
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
 			m_lightPassTextures[i]->SetType( eTEXTURE_TYPE_2D );
-			m_lightPassTextures[i]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_ARGB32F );
+			m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
 			l_return = m_lightPassTextures[i]->Initialise( p_index++ );
 		}
 
 		if ( l_return )
 		{
 			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetType( eTEXTURE_TYPE_2D );
-			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_DEPTH32 );
+			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetImage( m_size, ePIXEL_FORMAT_DEPTH32 );
 			l_return = m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise( p_index++ );
 		}
 
 		if ( l_return )
 		{
-			l_return = m_geometryPassFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
+			l_return = m_geometryPassFrameBuffer->Initialise( m_size );
 		}
 
 		if ( l_return )
@@ -524,7 +524,7 @@ namespace Deferred
 		FrameVariableBufferSPtr l_scene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferScene );
 		l_scene->GetVariable( ShaderProgramBase::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
-		m_pGeometryBuffers->Initialise( m_lightPassShaderProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+		m_geometryBuffers->Initialise( m_lightPassShaderProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		return l_return;
 	}
 
@@ -534,7 +534,7 @@ namespace Deferred
 		m_geometryPassDsState->Cleanup();
 		m_lightPassDsState->Cleanup();
 		m_lightPassBlendState->Cleanup();
-		m_pGeometryBuffers->Cleanup();
+		m_geometryBuffers->Cleanup();
 		m_lightPassShaderProgram->Cleanup();
 		m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 		m_geometryPassFrameBuffer->DetachAll();
@@ -555,10 +555,10 @@ namespace Deferred
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
-		m_pRenderTarget->GetDepthStencilState()->Apply();
-		m_pRenderTarget->GetRasteriserState()->Apply();
+		m_renderTarget->GetDepthStencilState()->Apply();
+		m_renderTarget->GetRasteriserState()->Apply();
 		//m_geometryPassDsState->Apply();
-		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_dFrameTime );
+		return RenderTechniqueBase::DoRender( m_size, p_scene, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
@@ -567,44 +567,43 @@ namespace Deferred
 
 #if DEBUG_BUFFERS
 
-		Size const & l_size = m_pRenderTarget->GetSize();
-		int l_width = int( l_size.width() );
-		int l_height = int( l_size.height() );
+		int l_width = int( m_size.width() );
+		int l_height = int( m_size.height() );
 		int l_thirdWidth = int( l_width / 3.0f );
 		int l_twoThirdWidth = int( 2.0f * l_width / 3.0f );
 		int l_thirdHeight = int( l_height / 3.0f );
 		int l_twothirdHeight = int( 2.0f * l_height / 3.0f );
-		m_geometryPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, 0, l_thirdWidth, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_AMBIENT]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_thirdHeight, l_width, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_EMISSIVE]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
-		m_geometryPassTexAttachs[eDS_TEXTURE_DEPTH]->Blit( m_pRenderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_twothirdHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_POSITION]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, 0, l_thirdWidth, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_AMBIENT]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, 0, l_twoThirdWidth, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_DIFFUSE]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, 0, l_width, l_thirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_NORMALS]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_thirdHeight, l_thirdWidth, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_TANGENT]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_thirdHeight, l_twoThirdWidth, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_BITANGENT]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_thirdHeight, l_width, l_twothirdHeight ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_SPECULAR]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( 0, l_twothirdHeight, l_thirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_EMISSIVE]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_thirdWidth, l_twothirdHeight, l_twoThirdWidth, l_height ), eINTERPOLATION_MODE_LINEAR );
+		m_geometryPassTexAttachs[eDS_TEXTURE_DEPTH]->Blit( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( 0, 0, l_width, l_height ), Castor::Rectangle( l_twoThirdWidth, l_twothirdHeight, l_width, l_height ), eINTERPOLATION_MODE_LINEAR );
 
 #else
 
 		Pipeline & l_pipeline = m_renderSystem->GetPipeline();
 		ContextRPtr l_pContext = m_renderSystem->GetCurrentContext();
 
-		m_pRenderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		m_pRenderTarget->GetFrameBuffer()->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
-		m_pRenderTarget->GetFrameBuffer()->Clear();
+		m_renderTarget->GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		m_renderTarget->GetFrameBuffer()->SetClearColour( m_renderSystem->GetTopScene()->GetBackgroundColour() );
+		m_renderTarget->GetFrameBuffer()->Clear();
 
-		m_pRenderTarget->GetDepthStencilState()->Apply();
-		m_pRenderTarget->GetRasteriserState()->Apply();
+		m_renderTarget->GetDepthStencilState()->Apply();
+		m_renderTarget->GetRasteriserState()->Apply();
 		m_lightPassBlendState->Apply();
 
-		m_viewport.SetSize( m_pRenderTarget->GetSize() );
+		m_viewport.SetSize( m_size );
 		m_viewport.Render( l_pipeline );
 		l_pContext->CullFace( eFACE_BACK );
 
 		if ( m_pShaderCamera )
 		{
 			bool l_return = true;
-			//Point3r l_position = m_pRenderTarget->GetCamera()->GetParent()->GetDerivedPosition();
+			//Point3r l_position = m_renderTarget->GetCamera()->GetParent()->GetDerivedPosition();
 			//m_pShaderCamera->SetValue( l_position );
 			l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 			auto & l_sceneBuffer = *m_lightPassScene.lock();
@@ -619,7 +618,7 @@ namespace Deferred
 
 			if ( l_return )
 			{
-				m_pGeometryBuffers->Draw( m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
+				m_geometryBuffers->Draw( m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 				{

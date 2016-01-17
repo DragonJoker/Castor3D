@@ -194,23 +194,17 @@ namespace Ssaa
 
 	protected:
 		//!\~english The supersampled frame buffer	\~french Le tampon d'image supersamplé
-		Castor3D::FrameBufferSPtr m_pSsFrameBuffer;
+		Castor3D::FrameBufferSPtr m_ssFrameBuffer;
 		//!\~english The buffer receiving the supersampled color render	\~french Le tampon recevant le rendu couleur supersamplé
-		Castor3D::DynamicTextureSPtr m_pSsColorBuffer;
+		Castor3D::DynamicTextureSPtr m_ssColorBuffer;
 		//!\~english The buffer receiving the supersampled depth render	\~french Le tampon recevant le rendu profondeur supersamplé
-		Castor3D::DepthStencilRenderBufferSPtr m_pSsDepthBuffer;
+		Castor3D::DepthStencilRenderBufferSPtr m_ssDepthBuffer;
 		//!\~english The attach between supersampled colour buffer and supersampled frame buffer	\~french L'attache entre le tampon couleur supersamplé et le tampon supersamplé
-		Castor3D::TextureAttachmentSPtr m_pSsColorAttach;
+		Castor3D::TextureAttachmentSPtr m_ssColorAttach;
 		//!\~english The attach between supersampled depth buffer and supersampled frame buffer	\~french L'attache entre le tampon profondeur supersamplé et le tampon supersamplé
-		Castor3D::RenderBufferAttachmentSPtr m_pSsDepthAttach;
+		Castor3D::RenderBufferAttachmentSPtr m_ssDepthAttach;
 		//!\~english The samples count	\~french Le nombre de samples
-		int m_iSamplesCount;
-		//!\~english Supersampled size	\~french Taille supersamplée
-		Castor::Size m_sizeSsaa;
-		//!\~english Supersampled rectangle	\~french Rectangle supersamplé
-		Castor::Rectangle m_rectSsaa;
-		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique
-		Castor::Rectangle m_rect;
+		int m_samplesCount;
 	};
 }
 

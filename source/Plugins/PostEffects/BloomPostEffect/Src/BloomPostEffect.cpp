@@ -359,7 +359,7 @@ namespace Bloom
 
 		m_colourTexture->SetSampler( l_sampler );
 		m_colourTexture->SetRenderTarget( p_renderTarget.shared_from_this() );
-		m_colourAttach = p_renderTarget.CreateAttachment( m_colourTexture );
+		m_colourAttach = m_fbo->CreateAttachment( m_colourTexture );
 
 		m_colourTexture->SetType( eTEXTURE_TYPE_2D );
 		m_colourTexture->SetImage( p_size, ePIXEL_FORMAT_R8G8B8 );

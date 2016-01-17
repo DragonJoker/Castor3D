@@ -174,7 +174,7 @@ namespace Castor3D
 			l_pBuffer += l_uiStride;
 		}
 
-		m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_POINTS );
+		m_geometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_POINTS );
 		return true;
 	}
 
@@ -197,8 +197,8 @@ namespace Castor3D
 				{
 					l_pMaterial->Initialise();
 					m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
-					m_pGeometryBuffers->Create();
-					m_pGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+					m_geometryBuffers->Create();
+					m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 					m_bNeedUpdate = false;
 				}
 			}
@@ -216,9 +216,9 @@ namespace Castor3D
 		m_pDimensionsUniform.reset();
 		ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
 		l_program->Cleanup();
-		m_pGeometryBuffers->Cleanup();
-		m_pGeometryBuffers->Destroy();
-		m_pGeometryBuffers.reset();
+		m_geometryBuffers->Cleanup();
+		m_geometryBuffers->Destroy();
+		m_geometryBuffers.reset();
 	}
 
 	void BillboardList::RemovePoint( uint32_t p_index )
@@ -249,7 +249,7 @@ namespace Castor3D
 			Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 			ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
 			MaterialSPtr l_pMaterial = m_wpMaterial.lock();
-			VertexBuffer & l_vtxBuffer = m_pGeometryBuffers->GetVertexBuffer();
+			VertexBuffer & l_vtxBuffer = m_geometryBuffers->GetVertexBuffer();
 			uint32_t l_uiSize = l_vtxBuffer.GetSize() / l_vtxBuffer.GetDeclaration().GetStride();
 
 			if ( l_program && l_pMaterial )
@@ -268,7 +268,7 @@ namespace Castor3D
 					}
 
 					l_pass->Render( l_index++, l_count );
-					m_pGeometryBuffers->Draw( l_program, l_uiSize, 0 );
+					m_geometryBuffers->Draw( l_program, l_uiSize, 0 );
 					l_pass->EndRender();
 				}
 			}

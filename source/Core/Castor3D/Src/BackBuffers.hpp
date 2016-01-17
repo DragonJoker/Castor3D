@@ -95,6 +95,34 @@ namespace Castor3D
 		C3D_API virtual Castor::Size GetSize()const = 0;
 		/**
 		 *\~english
+		 *\brief		Creates an attachment to a render buffer
+		 *\param[in]	p_renderBuffer	The render buffer
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un tampon de rendu
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
+		 *\return		L'attache créée
+		 */
+		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer )
+		{
+			return nullptr;
+		}
+		/**
+		 *\~english
+		 *\brief		Creates an attachment to a texture
+		 *\param[in]	p_texture	The texture
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à une texture
+		 *\param[in]	p_texture	La texture
+		 *\return		L'attache créée
+		 */
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture )
+		{
+			return nullptr;
+		}
+		/**
+		 *\~english
 		 *\brief		Checks if the FBO is complete
 		 *\return		\p false if the buffer is in error if there is an attachment missing
 		 *\~french

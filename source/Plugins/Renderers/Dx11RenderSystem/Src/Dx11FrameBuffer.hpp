@@ -73,6 +73,14 @@ namespace Dx11Render
 		 */
 		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat );
 		/**
+		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
+		 */
+		virtual Castor3D::RenderBufferAttachmentSPtr CreateAttachment( Castor3D::RenderBufferSPtr p_renderBuffer );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
+		 */
+		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_texture );
+		/**
 		 *\copydoc		Castor3D::FrameBuffer::DownloadBuffer
 		 */
 		virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
@@ -122,7 +130,11 @@ namespace Dx11Render
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_interpolation );
+		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
+		 */
+		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::eINTERPOLATION_MODE p_interpolation );
 
 	private:
 		DxRenderSystem * m_renderSystem;

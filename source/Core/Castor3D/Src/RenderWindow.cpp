@@ -177,9 +177,9 @@ namespace Castor3D
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
 		GetOwner()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
 
-		if ( !m_pRenderTarget.expired() )
+		if ( !m_renderTarget.expired() )
 		{
-			GetOwner()->GetTargetManager().Remove( std::move( m_pRenderTarget.lock() ) );
+			GetOwner()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 

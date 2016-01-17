@@ -842,9 +842,9 @@ namespace GlRender
 		{
 			return TextureWrapMode[p_eWrapMode];
 		}
-		inline eGL_INTERPOLATION_MODE Get( Castor3D::eINTERPOLATION_MODE p_eInterpolationMode )const
+		inline eGL_INTERPOLATION_MODE Get( Castor3D::eINTERPOLATION_MODE p_interpolation )const
 		{
-			return TextureInterpolation[p_eInterpolationMode];
+			return TextureInterpolation[p_interpolation];
 		}
 		inline int Get( Castor3D::eBLEND_SOURCE p_eArgument )const
 		{
@@ -878,9 +878,9 @@ namespace GlRender
 		{
 			return Internals[p_eFormat];
 		}
-		inline uint32_t GetComponents( uint32_t p_uiComponents )const
+		inline uint32_t GetComponents( uint32_t p_components )const
 		{
-			return ( p_uiComponents & Castor3D::eBUFFER_COMPONENT_COLOUR ? eGL_BUFFER_BIT_COLOR : 0 ) | ( p_uiComponents & Castor3D::eBUFFER_COMPONENT_DEPTH ? eGL_BUFFER_BIT_DEPTH : 0 ) | ( p_uiComponents & Castor3D::eBUFFER_COMPONENT_STENCIL ? eGL_BUFFER_BIT_STENCIL : 0 );
+			return ( p_components & Castor3D::eBUFFER_COMPONENT_COLOUR ? eGL_BUFFER_BIT_COLOR : 0 ) | ( p_components & Castor3D::eBUFFER_COMPONENT_DEPTH ? eGL_BUFFER_BIT_DEPTH : 0 ) | ( p_components & Castor3D::eBUFFER_COMPONENT_STENCIL ? eGL_BUFFER_BIT_STENCIL : 0 );
 		}
 		inline eGL_TEXTURE_ATTACHMENT Get( Castor3D::eATTACHMENT_POINT p_eAttachment )const
 		{

@@ -142,7 +142,7 @@ namespace Castor3D
 		 */
 		inline int	GetSamplesCount()const
 		{
-			return m_iSamplesCount;
+			return m_samplesCount;
 		}
 		/**
 		 *\~english
@@ -154,7 +154,7 @@ namespace Castor3D
 		 */
 		inline void SetSamplesCount( int p_count )
 		{
-			m_iSamplesCount = p_count;
+			m_samplesCount = p_count;
 		}
 		/**
 		 *\~english
@@ -190,7 +190,7 @@ namespace Castor3D
 		//!\~english The texture render target	\~french La cible de rendu
 		RenderTargetWPtr m_renderTarget;
 		//!\~english The samples count, if it is a multisample texture	\~french Le nombre de samples dans le cas où c'est une texture multisample
-		int m_iSamplesCount;
+		int m_samplesCount;
 	};
 }
 

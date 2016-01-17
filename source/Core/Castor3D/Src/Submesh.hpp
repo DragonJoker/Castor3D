@@ -643,7 +643,7 @@ namespace Castor3D
 		 */
 		inline GeometryBuffersSPtr GetGeometryBuffers()const
 		{
-			return m_pGeometryBuffers;
+			return m_geometryBuffers;
 		}
 		/**
 		 *\~english
@@ -732,7 +732,7 @@ namespace Castor3D
 		//!\~english The shader program flags	\~french Les indicateurs pour le shader
 		uint32_t m_uiProgramFlags;
 		//!\~english Pointer over geometry buffers	\~french Pointeur sur les buffers de la géométrie
-		GeometryBuffersSPtr m_pGeometryBuffers;
+		GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english Tells the renderer has been initialised	\~french Dit que le renderer a été initialisé
 		bool m_initialised;
 		//!\~english Tells the VAO needs reininitialisation	\~french Dit que le VAO a besoin d'être réinitialisé

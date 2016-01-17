@@ -505,7 +505,7 @@ namespace Castor3D
 		 */
 		inline void SetRenderTarget( RenderTargetSPtr p_pTarget )
 		{
-			m_pRenderTarget = p_pTarget;
+			m_renderTarget = p_pTarget;
 		}
 		/**
 		 *\~english
@@ -630,7 +630,7 @@ namespace Castor3D
 		 */
 		inline RenderTargetSPtr GetRenderTarget()const
 		{
-			return m_pRenderTarget.lock();
+			return m_renderTarget.lock();
 		}
 
 	private:
@@ -658,7 +658,7 @@ namespace Castor3D
 		//!\~english The unit texture's path	\~french Le chemin de la texture de l'unité
 		Castor::Path m_pathTexture;
 		//!\~english The render target used to compute the texture, if this unit is a render target	\~french La render target utilisée pour générer la texture si cette unité est une render target
-		RenderTargetWPtr m_pRenderTarget;
+		RenderTargetWPtr m_renderTarget;
 		//!\~english The sampler state assigned to this unit	\~french Le sampler state affecté à cette unité
 		SamplerWPtr m_pSampler;
 		//!\~english The blend colour when it is enabled	\~french Couleur de mélange lorsque celui-ci est actif

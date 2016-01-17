@@ -118,18 +118,38 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one
-		 *\param[in]	p_buffer			The buffer receiving this one
-		 *\param[in]	p_rectSrcDst		The rectangle
-		 *\param[in]	p_uiComponents		Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
+		 *\param[in]	p_buffer		The buffer receiving this one
+		 *\param[in]	p_rect			The rectangle
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Blitte ce tampon dans celui donné
-		 *\param[in]	p_buffer			Le tampon recevant celui-ci
-		 *\param[in]	p_rectSrcDst		Le rectangle
-		 *\param[in]	p_uiComponents		OU logique de eBUFFER_COMPONENT indiquant les buffers à copier
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci
+		 *\param[in]	p_rect			Le rectangle
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers à copier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_uiComponents );
+		C3D_API bool BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components );
+		/**
+		 *\~english
+		 *\brief		Stretches this frame buffer into the given one.
+		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\param[in]	p_buffer		The buffer receiving this one.
+		 *\param[in]	p_rectSrc		The source rectangle.
+		 *\param[in]	p_rectDst		The destination rectangle.
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied.
+		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Stretche ce tampon dans celui donné.
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
+		 *\param[in]	p_rectSrc		Le rectangle source.
+		 *\param[in]	p_rectDst		Le rectangle destination.
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers à copier.
+		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API bool StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation );
 		/**
 		 *\~english
 		 *\brief		Specifies the buffers to be drawn into
@@ -294,6 +314,28 @@ namespace Castor3D
 		C3D_API virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat ) = 0;
 		/**
 		 *\~english
+		 *\brief		Creates an attachment to a render buffer
+		 *\param[in]	p_renderBuffer	The render buffer
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à un tampon de rendu
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
+		 *\return		L'attache créée
+		 */
+		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates an attachment to a texture
+		 *\param[in]	p_texture	The texture
+		 *\return		The created attachment
+		 *\~french
+		 *\brief		Crée une attache à une texture
+		 *\param[in]	p_texture	La texture
+		 *\return		L'attache créée
+		 */
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture ) = 0;
+		/**
+		 *\~english
 		 *\brief		Checks if the FBO is complete
 		 *\return		\p false if the buffer is in error if there is an attachment missing
 		 *\~french
@@ -412,22 +454,39 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one
-		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_buffer			The buffer receiving this one
-		 *\param[in]	p_rectDst			The destination rectangle
-		 *\param[in]	p_uiComponents		Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
-		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched
+		 *\param[in]	p_buffer		The buffer receiving this one
+		 *\param[in]	p_rect			The destination rectangle
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Blitte ce tampon dans celui donné
-		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_buffer			Le tampon recevant celui-ci
-		 *\param[in]	p_rectDst			Le rectangle destination
-		 *\param[in]	p_uiComponents		OU logique de eBUFFER_COMPONENT indiquant les buffers à copier
-		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci
+		 *\param[in]	p_rect			Le rectangle destination
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers à copier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_interpolation ) = 0;
+		C3D_API virtual bool DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components ) = 0;
+		/**
+		 *\~english
+		 *\brief		Blit this frame buffer into the given one.
+		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\param[in]	p_buffer		The buffer receiving this one.
+		 *\param[in]	p_rectSrc		The source rectangle.
+		 *\param[in]	p_rectDst		The destination rectangle.
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied.
+		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Blitte ce tampon dans celui donné.
+		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST.
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
+		 *\param[in]	p_rectSrc		Le rectangle source.
+		 *\param[in]	p_rectDst		Le rectangle destination.
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers à copier.
+		 *\param[in]	p_interpolation	L'interpolation à appliquer si l'image est redimensionnée.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API virtual bool DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation ) = 0;
 
 	private:
 		C3D_API bool DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );

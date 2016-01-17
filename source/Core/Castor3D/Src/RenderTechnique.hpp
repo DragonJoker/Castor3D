@@ -146,15 +146,23 @@ namespace Castor3D
 		C3D_API Castor::String GetPixelShaderSource( uint32_t p_flags )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the technique name
-		 *\return		The value
+		 *\return		The technique name.
 		 *\~french
-		 *\brief		Récupère le nom de la technique
-		 *\return		La valeur
+		 *\return		Le nom de la technique.
 		 */
 		inline Castor::String const & GetName()const
 		{
 			return m_name;
+		}
+		/**
+		 *\~english
+		 *\return		The render area dimensions.
+		 *\~french
+		 *\return		Les dimensions de la zone de rendu.
+		 */
+		inline Castor::Size const & GetSize()const
+		{
+			return m_size;
 		}
 
 	protected:
@@ -217,7 +225,7 @@ namespace Castor3D
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime );
+		C3D_API virtual bool DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime ) = 0;
 		/**
 		 *\~english
 		 *\brief		Render end function
@@ -238,14 +246,35 @@ namespace Castor3D
 		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const = 0;
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[in]	p_size			The render target dimensions.
+		 *\param[in]	p_scene			The scene to render.
+		 *\param[in]	p_camera		The camera through which the scene is viewed.
+		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered.
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	p_size			Les dimensions de la cible de rendu.
+		 *\param[in]	p_scene			La scène à dessiner.
+		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API virtual bool DoRender( Castor::Size const & p_size, Scene & p_scene, Camera & p_camera, double p_dFrameTime );
+
+	protected:
 		//!\~english The technique name	\~french Le nom de la technique
 		Castor::String m_name;
 		//!\~english The technique intialisation status.	\~french Le statut d'initialisation de la technique.
 		bool m_initialised;
 		//!\~english The parent render target	\~french La render target parente
-		RenderTarget * m_pRenderTarget;
+		RenderTarget * m_renderTarget;
 		//!\~english The	render system	\~french Le render system
 		RenderSystem * m_renderSystem;
+		//!\~english The render area dimension.	\~french Les dimensions de l'aire de rendu.
+		Castor::Size m_size;
 	};
 }
 

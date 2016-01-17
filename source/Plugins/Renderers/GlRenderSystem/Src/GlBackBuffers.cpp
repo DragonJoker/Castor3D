@@ -109,7 +109,12 @@ namespace GlRender
 	{
 	}
 
-	bool GlBackBuffers::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolationMode )
+	bool GlBackBuffers::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
+	{
+		return false;
+	}
+
+	bool GlBackBuffers::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation )
 	{
 		return false;
 	}

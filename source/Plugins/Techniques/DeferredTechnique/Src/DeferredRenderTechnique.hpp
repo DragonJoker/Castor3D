@@ -281,7 +281,7 @@ namespace Deferred
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
-		Castor3D::GeometryBuffersSPtr m_pGeometryBuffers;
+		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)
 		Castor3D::Viewport m_viewport;
 		//!\~english The shader variable containing the camera position	\~french La variable de shader contenant la position de la caméra
