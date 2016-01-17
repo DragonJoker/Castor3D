@@ -284,9 +284,9 @@ namespace Castor3D
 	{
 		m_pFrameBuffer = m_renderTarget.CreateFrameBuffer();
 		m_pColorTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pColorAttach = m_renderTarget.CreateAttachment( m_pColorTexture );
+		m_pColorAttach = m_pFrameBuffer->CreateAttachment( m_pColorTexture );
 		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
-		m_pDepthAttach = m_renderTarget.CreateAttachment( m_pDepthBuffer );
+		m_pDepthAttach = m_pFrameBuffer->CreateAttachment( m_pDepthBuffer );
 		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
@@ -353,9 +353,9 @@ namespace Castor3D
 		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
 		, m_initialised( false )
 		, m_size( Size( 100, 100 ) )
-		, m_pRenderTechnique( )
+		, m_renderTechnique( )
 		, m_bMultisampling( false )
-		, m_iSamplesCount( 0 )
+		, m_samplesCount( 0 )
 		, m_bStereo( false )
 		, m_rIntraOcularDistance( 0 )
 		, m_index( ++sm_uiCount )
@@ -378,7 +378,7 @@ namespace Castor3D
 			m_fbLeftEye.Create();
 			m_fbRightEye.Create();
 
-			if ( !m_pRenderTechnique )
+			if ( !m_renderTechnique )
 			{
 				if ( m_techniqueName == cuT( "msaa" ) )
 				{
@@ -387,7 +387,7 @@ namespace Castor3D
 
 				try
 				{
-					m_pRenderTechnique = GetOwner()->CreateTechnique( m_techniqueName, *this, m_techniqueParameters );
+					m_renderTechnique = GetOwner()->CreateTechnique( m_techniqueName, *this, m_techniqueParameters );
 				}
 				catch ( Exception & p_exc )
 				{
@@ -399,9 +399,9 @@ namespace Castor3D
 			m_fbLeftEye.Initialise( p_index, m_size );
 			m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
 			m_fbRightEye.Initialise( p_index, m_size );
-			m_pRenderTechnique->Create();
+			m_renderTechnique->Create();
 			uint32_t l_index = p_index;
-			m_pRenderTechnique->Initialise( l_index );
+			m_renderTechnique->Initialise( l_index );
 
 			for ( auto && l_effect : m_postEffects )
 			{
@@ -422,13 +422,13 @@ namespace Castor3D
 			}
 
 			m_initialised = false;
-			m_pRenderTechnique->Cleanup();
+			m_renderTechnique->Cleanup();
 			m_fbLeftEye.Cleanup();
 			m_fbRightEye.Cleanup();
-			m_pRenderTechnique->Destroy();
+			m_renderTechnique->Destroy();
 			m_fbLeftEye.Destroy();
 			m_fbRightEye.Destroy();
-			m_pRenderTechnique.reset();
+			m_renderTechnique.reset();
 		}
 	}
 
@@ -585,19 +585,19 @@ namespace Castor3D
 		{
 			p_fb.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
 
-			if ( m_pRenderTechnique->BeginRender() )
+			if ( m_renderTechnique->BeginRender() )
 			{
-				p_fb.m_pFrameBuffer->Clear();
 #if !defined( NDEBUG )
 				Colour l_save = p_fb.m_pFrameBuffer->GetClearColour();
 				p_fb.m_pFrameBuffer->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
 #endif
-				l_scene->RenderBackground( m_size );
+				p_fb.m_pFrameBuffer->Clear();
 #if !defined( NDEBUG )
 				p_fb.m_pFrameBuffer->SetClearColour( l_save );
 #endif
-				m_pRenderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
-				m_pRenderTechnique->EndRender();
+				l_scene->RenderBackground( m_renderTechnique->GetSize() );
+				m_renderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
+				m_renderTechnique->EndRender();
 			}
 		}
 

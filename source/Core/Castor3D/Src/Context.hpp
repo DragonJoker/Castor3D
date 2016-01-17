@@ -330,7 +330,7 @@ namespace Castor3D
 		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
 		OneTextureFrameVariableSPtr m_mapDiffuse;
 		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
-		GeometryBuffersSPtr m_pGeometryBuffers;
+		GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english The GeometryBuffers used when rendering a texture to the back buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon de fenêtre.
 		GeometryBuffersSPtr m_finalGeometryBuffers;
 		//!\~english The Viewport used when rendering a texture into to a frame buffer.	\~french Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.

@@ -187,7 +187,7 @@ namespace Castor3D
 		 */
 		inline void SetSamplesCount( int p_iSamples )
 		{
-			m_iSamplesCount = p_iSamples;
+			m_samplesCount = p_iSamples;
 		}
 		/**
 		 *\~english
@@ -199,7 +199,7 @@ namespace Castor3D
 		 */
 		inline int GetSamplesCount()
 		{
-			return m_iSamplesCount;
+			return m_samplesCount;
 		}
 
 	protected:
@@ -212,7 +212,7 @@ namespace Castor3D
 		//!\~english The buffer pixel format	\~french Le format des pixels du tampon
 		Castor::ePIXEL_FORMAT m_ePixelFormat;
 		//!\~english The samples count, if multisampling is enabled	\~french Le nombre d'échantillons, en cas de multisampling
-		int m_iSamplesCount;
+		int m_samplesCount;
 	};
 }
 

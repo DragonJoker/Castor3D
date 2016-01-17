@@ -53,7 +53,7 @@ namespace GlRender
 			{
 				eATTACHMENT_POINT l_eAttach = l_attach->GetAttachmentPoint();
 
-				if ( l_eAttach != eATTACHMENT_POINT_NONE && l_eAttach != eATTACHMENT_POINT_DEPTH && l_eAttach != eATTACHMENT_POINT_STENCIL )
+				if ( l_eAttach == eATTACHMENT_POINT_COLOUR )
 				{
 					l_arrayAttaches.push_back( GetOpenGl().Get( l_eAttach ) + l_attach->GetAttachmentIndex() );
 				}
@@ -111,6 +111,16 @@ namespace GlRender
 		return std::make_shared< GlDepthStencilRenderBuffer >( GetOpenGl(), p_ePixelFormat );
 	}
 
+	RenderBufferAttachmentSPtr GlFrameBuffer::CreateAttachment( RenderBufferSPtr p_renderBuffer )
+	{
+		return std::make_shared< GlRenderBufferAttachment >( GetOpenGl(), p_renderBuffer );
+	}
+
+	TextureAttachmentSPtr GlFrameBuffer::CreateAttachment( DynamicTextureSPtr p_texture )
+	{
+		return std::make_shared< GlTextureAttachment >( GetOpenGl(), p_texture );
+	}
+
 	void GlFrameBuffer::DoUpdateClearColour()
 	{
 		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
@@ -132,8 +142,13 @@ namespace GlRender
 		BindableType::Unbind();
 	}
 
-	bool GlFrameBuffer::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolationMode )
+	bool GlFrameBuffer::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
 	{
-		return GetOpenGl().BlitFramebuffer( p_rectDst, p_rectDst, GetOpenGl().GetComponents( p_uiComponents ), GetOpenGl().Get( p_eInterpolationMode ) );
+		return GetOpenGl().BlitFramebuffer( p_rect, p_rect, GetOpenGl().GetComponents( p_components ), eGL_INTERPOLATION_MODE_NEAREST );
+	}
+
+	bool GlFrameBuffer::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation )
+	{
+		return GetOpenGl().BlitFramebuffer( p_rectSrc, p_rectDst, GetOpenGl().GetComponents( p_components ), GetOpenGl().Get( p_interpolation ) );
 	}
 }

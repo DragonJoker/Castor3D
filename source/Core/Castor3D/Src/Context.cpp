@@ -104,7 +104,7 @@ namespace Castor3D
 		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		m_pGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
+		m_geometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
 		l_pVtxBuffer->Resize( m_finalVertex.size() * m_pDeclaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_finalVertex.begin(), m_finalVertex.end() );
@@ -120,8 +120,8 @@ namespace Castor3D
 		{
 			SetCurrent();
 			l_program->Initialise();
-			m_pGeometryBuffers->Create();
-			m_pGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_geometryBuffers->Create();
+			m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_finalGeometryBuffers->Create();
 			m_finalGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_pDsStateNoDepth->Initialise();
@@ -138,8 +138,8 @@ namespace Castor3D
 		SetCurrent();
 		m_pDsStateNoDepth->Cleanup();
 		m_pDsStateNoDepthWrite->Cleanup();
-		m_pGeometryBuffers->Cleanup();
-		m_pGeometryBuffers->Destroy();
+		m_geometryBuffers->Cleanup();
+		m_geometryBuffers->Destroy();
 		m_finalGeometryBuffers->Cleanup();
 		m_finalGeometryBuffers->Destroy();
 		ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
@@ -154,7 +154,7 @@ namespace Castor3D
 		m_pDsStateNoDepth.reset();
 		m_pDsStateNoDepthWrite.reset();
 		m_finalGeometryBuffers.reset();
-		m_pGeometryBuffers.reset();
+		m_geometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_renderTextureProgram.reset();
 		m_window = NULL;
@@ -190,7 +190,7 @@ namespace Castor3D
 	void Context::RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture )
 	{
 		m_mapDiffuse->SetValue( p_texture.get() );
-		DoRenderTexture( p_size, p_texture, m_pGeometryBuffers, m_renderTextureProgram.lock() );
+		DoRenderTexture( p_size, p_texture, m_geometryBuffers, m_renderTextureProgram.lock() );
 	}
 
 	void Context::RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture )
@@ -201,7 +201,7 @@ namespace Castor3D
 
 	void Context::RenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, ShaderProgramBaseSPtr p_program )
 	{
-		DoRenderTexture( p_size, p_texture, m_pGeometryBuffers, p_program );
+		DoRenderTexture( p_size, p_texture, m_geometryBuffers, p_program );
 	}
 
 	void Context::DoRenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramBaseSPtr p_program )

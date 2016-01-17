@@ -357,7 +357,7 @@ namespace Castor3D
 		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
 		bool m_bNeedUpdate;
 		//!\~english The positions GPU buffers	\~french Les tampon GPU de positions
-		GeometryBuffersSPtr m_pGeometryBuffers;
+		GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english  The shader program used to draw the billboards	\~french Le shader utilise pour rendre les billboards
 		ShaderProgramBaseWPtr m_wpProgram;
 		//!\~english The Material	\~french Le Material

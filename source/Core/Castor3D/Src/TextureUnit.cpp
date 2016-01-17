@@ -478,9 +478,9 @@ namespace Castor3D
 
 	TextureUnit::~TextureUnit()
 	{
-		if ( !m_pRenderTarget.expired() )
+		if ( !m_renderTarget.expired() )
 		{
-			GetOwner()->GetTargetManager().Remove( std::move( m_pRenderTarget.lock() ) );
+			GetOwner()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 
@@ -492,7 +492,7 @@ namespace Castor3D
 
 	void TextureUnit::Initialise()
 	{
-		RenderTargetSPtr l_target = m_pRenderTarget.lock();
+		RenderTargetSPtr l_target = m_renderTarget.lock();
 		SamplerSPtr l_pSampler = m_pSampler.lock();
 
 		if ( l_target )
@@ -522,7 +522,7 @@ namespace Castor3D
 		}
 
 		m_clrBlend = Colour();
-		RenderTargetSPtr l_target = m_pRenderTarget.lock();
+		RenderTargetSPtr l_target = m_renderTarget.lock();
 
 		if ( l_target )
 		{

@@ -24,16 +24,6 @@ GlRenderTarget::~GlRenderTarget()
 {
 }
 
-RenderBufferAttachmentSPtr GlRenderTarget::CreateAttachment( RenderBufferSPtr p_renderBuffer )
-{
-	return std::make_shared< GlRenderBufferAttachment >( GetOpenGl(), p_renderBuffer );
-}
-
-TextureAttachmentSPtr GlRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )
-{
-	return std::make_shared< GlTextureAttachment >( GetOpenGl(), p_texture );
-}
-
 FrameBufferSPtr GlRenderTarget::CreateFrameBuffer()
 {
 	return std::make_shared< GlFrameBuffer >( GetOpenGl(), *m_renderSystem->GetOwner() );

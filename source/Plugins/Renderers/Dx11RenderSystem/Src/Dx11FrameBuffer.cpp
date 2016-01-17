@@ -1,8 +1,11 @@
 #include "Dx11FrameBuffer.hpp"
-#include "Dx11RenderSystem.hpp"
-#include "Dx11DynamicTexture.hpp"
+
 #include "Dx11ColourRenderBuffer.hpp"
 #include "Dx11DepthStencilRenderBuffer.hpp"
+#include "Dx11DynamicTexture.hpp"
+#include "Dx11RenderBufferAttachment.hpp"
+#include "Dx11RenderSystem.hpp"
+#include "Dx11TextureAttachment.hpp"
 
 #include <Logger.hpp>
 
@@ -225,6 +228,27 @@ namespace Dx11Render
 		return std::make_shared< DxDepthStencilRenderBuffer >( m_renderSystem, p_ePixelFormat );
 	}
 
+	RenderBufferAttachmentSPtr DxFrameBuffer::CreateAttachment( RenderBufferSPtr p_renderBuffer )
+	{
+		RenderBufferAttachmentSPtr l_return;
+
+		if ( p_renderBuffer->GetComponent() == eBUFFER_COMPONENT_COLOUR )
+		{
+			l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_renderBuffer ) );
+		}
+		else
+		{
+			l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_renderBuffer ) );
+		}
+
+		return l_return;
+	}
+
+	TextureAttachmentSPtr DxFrameBuffer::CreateAttachment( DynamicTextureSPtr p_texture )
+	{
+		return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), p_texture );
+	}
+
 	bool DxFrameBuffer::DownloadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index, PxBufferBaseSPtr p_buffer )
 	{
 		DxDynamicTextureSPtr l_texture;
@@ -382,13 +406,13 @@ namespace Dx11Render
 		m_depthBuffer->Resize( p_size );
 	}
 
-	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_interpolation ) )
+	bool DxFrameBuffer::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
 	{
 		ID3D11DeviceContext * l_deviceContext = static_cast< DxContext * >( m_renderSystem->GetCurrentContext() )->GetDeviceContext();
 		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_buffer );
-		bool l_bDepth = ( p_uiComponents & eBUFFER_COMPONENT_DEPTH ) == eBUFFER_COMPONENT_DEPTH;
-		bool l_bStencil = ( p_uiComponents & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
-		bool l_bColour = ( p_uiComponents & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
+		bool l_bDepth = ( p_components & eBUFFER_COMPONENT_DEPTH ) == eBUFFER_COMPONENT_DEPTH;
+		bool l_bStencil = ( p_components & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
+		bool l_bColour = ( p_components & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
 		HRESULT l_hr = S_OK;
 
 		for ( auto && l_attach : m_attaches )
@@ -407,12 +431,17 @@ namespace Dx11Render
 
 					if ( l_srcView && l_dstView )
 					{
-						l_hr = DoBlit( l_deviceContext, p_rectDst, l_srcView, l_srcSamples, l_dstView, l_dstSamples, DirectX11::Get( l_format ) );
+						l_hr = DoBlit( l_deviceContext, p_rect, l_srcView, l_srcSamples, l_dstView, l_dstSamples, DirectX11::Get( l_format ) );
 					}
 				}
 			}
 		}
 
 		return l_hr == S_OK;
+	}
+
+	bool DxFrameBuffer::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation )
+	{
+		return DoBlitInto( p_buffer, p_rectSrc, p_components );
 	}
 }

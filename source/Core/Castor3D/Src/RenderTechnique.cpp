@@ -22,7 +22,7 @@ namespace Castor3D
 {
 	RenderTechniqueBase::RenderTechniqueBase( String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
 		: OwnedBy< Engine >( *p_renderSystem->GetOwner() )
-		, m_pRenderTarget( &p_renderTarget )
+		, m_renderTarget( &p_renderTarget )
 		, m_renderSystem( p_renderSystem )
 		, m_name( p_name )
 		, m_initialised( false )
@@ -54,6 +54,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
+			m_size = m_renderTarget->GetSize();
 			m_initialised = DoInitialise( p_index );
 		}
 
@@ -81,13 +82,13 @@ namespace Castor3D
 	{
 		DoEndRender();
 
-		for ( auto && l_effect : m_pRenderTarget->GetPostEffects() )
+		for ( auto && l_effect : m_renderTarget->GetPostEffects() )
 		{
 			l_effect->Apply();
 		}
 
-		GetOwner()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_pRenderTarget->GetSize() );
-		m_pRenderTarget->GetFrameBuffer()->Unbind();
+		GetOwner()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_renderTarget->GetSize() );
+		m_renderTarget->GetFrameBuffer()->Unbind();
 		m_renderSystem->PopScene();
 	}
 
@@ -96,9 +97,9 @@ namespace Castor3D
 		return DoGetPixelShaderSource( p_flags );
 	}
 
-	bool RenderTechniqueBase::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
+	bool RenderTechniqueBase::DoRender( Size const & p_size, Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
-		p_camera.GetViewport().SetSize( m_pRenderTarget->GetSize() );
+		p_camera.GetViewport().SetSize( p_size );
 		p_camera.Render();
 		p_scene.Render( *this, p_dFrameTime, p_camera );
 		p_camera.EndRender();

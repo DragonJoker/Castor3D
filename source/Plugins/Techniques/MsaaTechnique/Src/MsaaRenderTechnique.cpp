@@ -172,21 +172,21 @@ namespace Msaa
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
 		: RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_pRenderSystem, p_params )
-		, m_iSamplesCount( 0 )
+		, m_samplesCount( 0 )
 	{
 		String l_count;
 
 		if ( p_params.Get( cuT( "samples_count" ), l_count ) )
 		{
-			m_iSamplesCount = string::to_int( l_count );
+			m_samplesCount = string::to_int( l_count );
 		}
 
-		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_iSamplesCount << cuT( " samples" ) );
-		m_pMsFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
-		m_pMsColorBuffer = m_pMsFrameBuffer->CreateColourRenderBuffer( m_pRenderTarget->GetPixelFormat() );
-		m_pMsDepthBuffer = m_pMsFrameBuffer->CreateDepthStencilRenderBuffer( m_pRenderTarget->GetDepthFormat() );
-		m_pMsColorAttach = m_pRenderTarget->CreateAttachment( m_pMsColorBuffer );
-		m_pMsDepthAttach = m_pRenderTarget->CreateAttachment( m_pMsDepthBuffer );
+		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
+		m_msFrameBuffer = m_renderTarget->CreateFrameBuffer();
+		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( m_renderTarget->GetPixelFormat() );
+		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget->GetDepthFormat() );
+		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
+		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
 		RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
 		l_pRasteriser->SetMultisample( true );
 		m_wpMsRasteriserState = l_pRasteriser;
@@ -204,9 +204,9 @@ namespace Msaa
 
 	bool RenderTechnique::DoCreate()
 	{
-		bool l_bReturn = m_pMsFrameBuffer->Create( m_iSamplesCount );
-		m_pMsColorBuffer->SetSamplesCount( m_iSamplesCount );
-		m_pMsDepthBuffer->SetSamplesCount( m_iSamplesCount );
+		bool l_bReturn = m_msFrameBuffer->Create( m_samplesCount );
+		m_pMsColorBuffer->SetSamplesCount( m_samplesCount );
+		m_pMsDepthBuffer->SetSamplesCount( m_samplesCount );
 		l_bReturn &= m_pMsColorBuffer->Create();
 		l_bReturn &= m_pMsDepthBuffer->Create();
 		return l_bReturn;
@@ -216,43 +216,43 @@ namespace Msaa
 	{
 		m_pMsColorBuffer->Destroy();
 		m_pMsDepthBuffer->Destroy();
-		m_pMsFrameBuffer->Destroy();
+		m_msFrameBuffer->Destroy();
 	}
 
 	bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	{
 		bool l_bReturn = true;
-		m_rect = Castor::Rectangle( Position(), m_pRenderTarget->GetSize() );
+		m_rect = Castor::Rectangle( Position(), m_size );
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_pMsColorBuffer->Initialise( m_pRenderTarget->GetSize() );
+			l_bReturn = m_pMsColorBuffer->Initialise( m_size );
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_pMsDepthBuffer->Initialise( m_pRenderTarget->GetSize() );
+			l_bReturn = m_pMsDepthBuffer->Initialise( m_size );
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_pMsFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
+			l_bReturn = m_msFrameBuffer->Initialise( m_size );
 		}
 
 		if ( l_bReturn )
 		{
-			l_bReturn = m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+			l_bReturn = m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
 			if ( l_bReturn )
 			{
-				l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pMsColorAttach );
+				l_bReturn = m_msFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pMsColorAttach );
 
 				if ( l_bReturn )
 				{
-					l_bReturn = m_pMsFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pMsDepthAttach );
+					l_bReturn = m_msFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pMsDepthAttach );
 				}
 
-				m_pMsFrameBuffer->Unbind();
+				m_msFrameBuffer->Unbind();
 			}
 		}
 
@@ -261,40 +261,40 @@ namespace Msaa
 
 	void RenderTechnique::DoCleanup()
 	{
-		m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_pMsFrameBuffer->DetachAll();
-		m_pMsFrameBuffer->Unbind();
-		m_pMsFrameBuffer->Cleanup();
+		m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_msFrameBuffer->DetachAll();
+		m_msFrameBuffer->Unbind();
+		m_msFrameBuffer->Cleanup();
 		m_pMsColorBuffer->Cleanup();
 		m_pMsDepthBuffer->Cleanup();
 	}
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		return m_pMsFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		return m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 	}
 
 	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
-		m_pRenderTarget->GetDepthStencilState()->Apply();
+		m_renderTarget->GetDepthStencilState()->Apply();
 
-		if ( !m_iSamplesCount )
+		if ( !m_samplesCount )
 		{
-			m_pRenderTarget->GetRasteriserState()->Apply();
+			m_renderTarget->GetRasteriserState()->Apply();
 		}
 		else
 		{
 			m_wpMsRasteriserState.lock()->Apply();
 		}
 
-		return RenderTechniqueBase::DoRender( p_scene, p_camera, p_dFrameTime );
+		return RenderTechniqueBase::DoRender( m_size, p_scene, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
 	{
-		m_pMsFrameBuffer->Unbind();
-		m_pMsFrameBuffer->BlitInto( m_pRenderTarget->GetFrameBuffer(), m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
-		m_pRenderTarget->GetFrameBuffer()->Bind();
+		m_msFrameBuffer->Unbind();
+		m_msFrameBuffer->BlitInto( m_renderTarget->GetFrameBuffer(), m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
+		m_renderTarget->GetFrameBuffer()->Bind();
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const

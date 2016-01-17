@@ -4,8 +4,6 @@
 #include "Dx11FrameBuffer.hpp"
 #include "Dx11ColourRenderBuffer.hpp"
 #include "Dx11DepthStencilRenderBuffer.hpp"
-#include "Dx11TextureAttachment.hpp"
-#include "Dx11RenderBufferAttachment.hpp"
 
 #include <RenderTarget.hpp>
 #include <Scene.hpp>
@@ -22,27 +20,6 @@ DxRenderTarget::DxRenderTarget( DxRenderSystem * p_renderSystem, eTARGET_TYPE p_
 
 DxRenderTarget::~DxRenderTarget()
 {
-}
-
-RenderBufferAttachmentSPtr DxRenderTarget::CreateAttachment( RenderBufferSPtr p_renderBuffer )
-{
-	RenderBufferAttachmentSPtr l_return;
-
-	if ( p_renderBuffer->GetComponent() == eBUFFER_COMPONENT_COLOUR )
-	{
-		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxColourRenderBuffer >( p_renderBuffer ) );
-	}
-	else
-	{
-		l_return = std::make_shared< DxRenderBufferAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), std::static_pointer_cast< DxDepthStencilRenderBuffer >( p_renderBuffer ) );
-	}
-
-	return l_return;
-}
-
-TextureAttachmentSPtr DxRenderTarget::CreateAttachment( DynamicTextureSPtr p_texture )
-{
-	return std::make_shared< DxTextureAttachment >( static_cast< DxRenderSystem * >( m_renderSystem ), p_texture );
 }
 
 FrameBufferSPtr DxRenderTarget::CreateFrameBuffer()

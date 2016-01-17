@@ -196,7 +196,7 @@ namespace Msaa
 
 	protected:
 		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé
-		Castor3D::FrameBufferSPtr m_pMsFrameBuffer;
+		Castor3D::FrameBufferSPtr m_msFrameBuffer;
 		//!\~english The buffer receiving the multisampled color render	\~french Le tampon recevant le rendu couleur multisamplé
 		Castor3D::ColourRenderBufferSPtr m_pMsColorBuffer;
 		//!\~english The buffer receiving the multisampled depth render	\~french Le tampon recevant le rendu profondeur multisamplé
@@ -206,7 +206,7 @@ namespace Msaa
 		//!\~english The attach between multisampled depth buffer and multisampled frame buffer	\~french L'attache entre le tampon profondeur multisamplé et le tampon multisamplé
 		Castor3D::RenderBufferAttachmentSPtr m_pMsDepthAttach;
 		//!\~english The samples count	\~french Le nombre de samples
-		int m_iSamplesCount;
+		int m_samplesCount;
 		//!\~english Multisampled rasteriser states	\~french Etats du rasteriser pour le multisample
 		Castor3D::RasteriserStateWPtr m_wpMsRasteriserState;
 		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique

@@ -221,7 +221,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			m_initialised = m_pGeometryBuffers->Create();
+			m_initialised = m_geometryBuffers->Create();
 		}
 	}
 
@@ -528,11 +528,11 @@ namespace Castor3D
 		if ( DoPrepareGeometryBuffers( p_pass ) )
 		{
 			ShaderProgramBaseSPtr l_program = p_pass.GetShader< ShaderProgramBase >();
-			uint32_t l_uiSize = m_pGeometryBuffers->GetVertexBuffer().GetSize() / m_pGeometryBuffers->GetVertexBuffer().GetDeclaration().GetStride();
+			uint32_t l_uiSize = m_geometryBuffers->GetVertexBuffer().GetSize() / m_geometryBuffers->GetVertexBuffer().GetDeclaration().GetStride();
 
-			if ( m_pGeometryBuffers->HasIndexBuffer() )
+			if ( m_geometryBuffers->HasIndexBuffer() )
 			{
-				l_uiSize = m_pGeometryBuffers->GetIndexBuffer().GetSize();
+				l_uiSize = m_geometryBuffers->GetIndexBuffer().GetSize();
 			}
 
 			uint32_t l_count = GetRefCount( p_pass.GetParent() );
@@ -541,16 +541,16 @@ namespace Castor3D
 			{
 				if ( GetOwner()->GetRenderSystem()->HasInstancing() )
 				{
-					m_pGeometryBuffers->DrawInstanced( l_program, l_uiSize, 0, l_count );
+					m_geometryBuffers->DrawInstanced( l_program, l_uiSize, 0, l_count );
 				}
 				else
 				{
-					m_pGeometryBuffers->Draw( l_program, l_uiSize, 0 );
+					m_geometryBuffers->Draw( l_program, l_uiSize, 0 );
 				}
 			}
 			else
 			{
-				m_pGeometryBuffers->Draw( l_program, l_uiSize, 0 );
+				m_geometryBuffers->Draw( l_program, l_uiSize, 0 );
 			}
 		}
 	}
@@ -946,9 +946,9 @@ namespace Castor3D
 	{
 		eTOPOLOGY l_return = eTOPOLOGY_COUNT;
 
-		if ( m_pGeometryBuffers )
+		if ( m_geometryBuffers )
 		{
-			l_return = m_pGeometryBuffers->GetTopology();
+			l_return = m_geometryBuffers->GetTopology();
 		}
 
 		return l_return;
@@ -956,9 +956,9 @@ namespace Castor3D
 
 	void Submesh::SetTopology( eTOPOLOGY p_value )
 	{
-		if ( m_pGeometryBuffers )
+		if ( m_geometryBuffers )
 		{
-			m_pGeometryBuffers->SetTopology( p_value );
+			m_geometryBuffers->SetTopology( p_value );
 		}
 	}
 
@@ -1082,10 +1082,10 @@ namespace Castor3D
 	{
 		m_initialised = false;
 
-		if ( m_pGeometryBuffers )
+		if ( m_geometryBuffers )
 		{
-			m_pGeometryBuffers->Cleanup();
-			m_pGeometryBuffers->Destroy();
+			m_geometryBuffers->Cleanup();
+			m_geometryBuffers->Destroy();
 		}
 	}
 
@@ -1110,11 +1110,11 @@ namespace Castor3D
 		if ( GetOwner()->GetRenderSystem()->HasInstancing() )
 		{
 			MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( *GetOwner() );
-			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ), eTOPOLOGY_TRIANGLES );
+			m_geometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ), eTOPOLOGY_TRIANGLES );
 		}
 		else
 		{
-			m_pGeometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
+			m_geometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
 		}
 	}
 
@@ -1124,11 +1124,11 @@ namespace Castor3D
 
 		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			if ( m_pGeometryBuffers && m_bDirty )
+			if ( m_geometryBuffers && m_bDirty )
 			{
 				m_bDirty = false;
-				m_pGeometryBuffers->Cleanup();
-				m_pGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
+				m_geometryBuffers->Cleanup();
+				m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 
 			auto l_matrixBuffer = p_pass.GetMatrixBuffer();

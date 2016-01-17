@@ -133,7 +133,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoBlitInto
 		 */
-		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, Castor3D::eINTERPOLATION_MODE p_interpolation );
+		virtual bool DoBlitInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components );
+		/**
+		 *\copydoc		Castor3D::FrameBuffer::DoStretchInto
+		 */
+		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::eINTERPOLATION_MODE p_interpolation );
 
 	private:
 		eGL_FRAMEBUFFER_MODE m_glBindingMode;

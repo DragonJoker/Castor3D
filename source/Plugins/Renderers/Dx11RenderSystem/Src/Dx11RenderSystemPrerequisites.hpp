@@ -298,9 +298,9 @@ namespace Dx11Render
 		{
 			return LightIndexes[p_index];
 		}
-		static inline DWORD Get( Castor3D::eINTERPOLATION_MODE p_eInterpolationMode )
+		static inline DWORD Get( Castor3D::eINTERPOLATION_MODE p_interpolation )
 		{
-			return TextureInterpolation[p_eInterpolationMode];
+			return TextureInterpolation[p_interpolation];
 		}
 		static inline DWORD Get( Castor3D::eBLEND_SOURCE p_eArgument )
 		{

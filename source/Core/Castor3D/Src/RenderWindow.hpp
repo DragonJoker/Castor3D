@@ -427,7 +427,7 @@ namespace Castor3D
 		 */
 		inline RenderTargetSPtr GetRenderTarget()const
 		{
-			return m_pRenderTarget.lock();
+			return m_renderTarget.lock();
 		}
 		/**
 		 *\~english
@@ -439,7 +439,7 @@ namespace Castor3D
 		 */
 		inline void SetRenderTarget( RenderTargetSPtr p_pTarget )
 		{
-			m_pRenderTarget = p_pTarget;
+			m_renderTarget = p_pTarget;
 		}
 		/**
 		 *\~english
@@ -575,7 +575,7 @@ namespace Castor3D
 		//!\~english The handle of the display window	\~french Handle de la fenêtre sustème
 		WindowHandle m_handle;
 		//!\~english The render target, which receives the main render	\~french La render target, recevant le rendu principal
-		RenderTargetWPtr m_pRenderTarget;
+		RenderTargetWPtr m_renderTarget;
 		//!\~english The events listener	\~french Gestionnaire d'évènements
 		FrameListenerWPtr m_wpListener;
 		//!\~english Tells if the window is initalised	\~french Dit si la fenêtre est initialisée

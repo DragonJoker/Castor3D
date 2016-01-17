@@ -224,15 +224,15 @@ namespace Dx11Render
 	{
 	}
 
-	bool DxBackBuffers::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_interpolation ) )
+	bool DxBackBuffers::DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components )
 	{
 		typedef std::pair< ID3D11View *, ID3D11View * > SrcDstPair;
 		DECLARE_VECTOR( SrcDstPair, SrcDstPair );
 		SrcDstPairArray l_arrayPairs;
 		DxFrameBufferSPtr l_pBuffer = std::static_pointer_cast< DxFrameBuffer >( p_buffer );
-		bool l_bDepth = ( p_uiComponents & eBUFFER_COMPONENT_DEPTH ) == eBUFFER_COMPONENT_DEPTH;
-		bool l_bStencil = ( p_uiComponents & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
-		bool l_bColour = ( p_uiComponents & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
+		bool l_bDepth = ( p_components & eBUFFER_COMPONENT_DEPTH ) == eBUFFER_COMPONENT_DEPTH;
+		bool l_bStencil = ( p_components & eBUFFER_COMPONENT_STENCIL ) == eBUFFER_COMPONENT_STENCIL;
+		bool l_bColour = ( p_components & eBUFFER_COMPONENT_COLOUR ) == eBUFFER_COMPONENT_COLOUR;
 
 		if ( l_bColour )
 		{
@@ -284,11 +284,11 @@ namespace Dx11Render
 					D3D11_BOX l_box = { 0 };
 					l_box.front = 0;
 					l_box.back = 1;
-					l_box.left = p_rectDst.left();
-					l_box.right = p_rectDst.right();
-					l_box.top = p_rectDst.top();
-					l_box.bottom = p_rectDst.bottom();
-					l_deviceContext->CopySubresourceRegion( l_pDstSurface, 0, p_rectDst.left(), p_rectDst.top(), 0, l_pSrcSurface, 0, &l_box );
+					l_box.left = p_rect.left();
+					l_box.right = p_rect.right();
+					l_box.top = p_rect.top();
+					l_box.bottom = p_rect.bottom();
+					l_deviceContext->CopySubresourceRegion( l_pDstSurface, 0, p_rect.left(), p_rect.top(), 0, l_pSrcSurface, 0, &l_box );
 				}
 
 				SafeRelease( l_pSrcSurface );
@@ -302,5 +302,10 @@ namespace Dx11Render
 		}
 
 		return l_hr == S_OK;
+	}
+
+	bool DxBackBuffers::DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE CU_PARAM_UNUSED( p_interpolation ) )
+	{
+		return DoBlitInto( p_buffer, p_rectSrc, p_components );
 	}
 }
