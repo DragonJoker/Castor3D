@@ -153,7 +153,7 @@ namespace Castor3D
 		, m_bNeedUpdate( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) };
-		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
+		m_declaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 	}
 
 	BillboardList::~BillboardList()
@@ -163,8 +163,8 @@ namespace Castor3D
 	bool BillboardList::Initialise()
 	{
 		VertexBufferUPtr l_pVtxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner(), &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-		uint32_t l_uiStride = m_pDeclaration->GetStride();
+		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner(), &( *m_declaration )[0], m_declaration->Size() );
+		uint32_t l_uiStride = m_declaration->GetStride();
 		l_pVtxBuffer->Resize( uint32_t( m_arrayPositions.size() * l_uiStride ) );
 		uint8_t * l_pBuffer = l_pVtxBuffer->data();
 

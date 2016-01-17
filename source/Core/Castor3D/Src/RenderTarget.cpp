@@ -583,18 +583,10 @@ namespace Castor3D
 
 		if ( l_scene )
 		{
-			p_fb.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
-
 			if ( m_renderTechnique->BeginRender() )
 			{
-#if !defined( NDEBUG )
-				Colour l_save = p_fb.m_pFrameBuffer->GetClearColour();
-				p_fb.m_pFrameBuffer->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_DARKBLUE ) );
-#endif
+				p_fb.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
 				p_fb.m_pFrameBuffer->Clear();
-#if !defined( NDEBUG )
-				p_fb.m_pFrameBuffer->SetClearColour( l_save );
-#endif
 				l_scene->RenderBackground( m_renderTechnique->GetSize() );
 				m_renderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
 				m_renderTechnique->EndRender();
