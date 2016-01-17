@@ -353,7 +353,7 @@ namespace Castor3D
 		//!\~english The positions list	\~french La liste des positions
 		Castor::Point3rArray m_arrayPositions;
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets
-		BufferDeclarationSPtr m_pDeclaration;
+		BufferDeclarationSPtr m_declaration;
 		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
 		bool m_bNeedUpdate;
 		//!\~english The positions GPU buffers	\~french Les tampon GPU de positions

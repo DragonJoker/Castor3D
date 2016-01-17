@@ -454,7 +454,7 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return m_pParentMesh->GetSkeleton();
+			return m_parentMesh->GetSkeleton();
 		}
 		/**
 		 *\~english
@@ -631,7 +631,7 @@ namespace Castor3D
 		 */
 		inline BufferDeclarationSPtr GetDeclaration()
 		{
-			return m_pDeclaration;
+			return m_declaration;
 		}
 		/**
 		 *\~english
@@ -667,7 +667,7 @@ namespace Castor3D
 		 */
 		inline MeshRPtr GetParent()const
 		{
-			return m_pParentMesh;
+			return m_parentMesh;
 		}
 		/**
 		 *\~english
@@ -679,7 +679,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetProgramFlags()const
 		{
-			return m_uiProgramFlags;
+			return m_programFlags;
 		}
 		/**
 		 *\~english
@@ -698,7 +698,7 @@ namespace Castor3D
 		FaceSPtr DoAddFace( const FaceSPtr p_face );
 		void DoGenerateVertexBuffer();
 		void DoGenerateIndexBuffer();
-		void DoGenerateMatrixBuffer();
+		void DoGenerateMatrixBuffer( uint32_t p_count );
 		void DoUpdateDeclaration();
 		void DoCleanupGeometryBuffers();
 		void DoCreateGeometryBuffers();
@@ -706,13 +706,13 @@ namespace Castor3D
 
 	private:
 		//!\~english The submesh ID	\~french L'id du sbmesh
-		uint32_t m_uiID;
+		uint32_t m_id;
 		//!\~english The submesh instances count	\~french Le nombre d'instances du submesh
-		std::map< MaterialSPtr, uint32_t > m_uiInstanceCount;
+		std::map< MaterialSPtr, uint32_t > m_instanceCount;
 		//!\~english The faces in the submesh	\~french Le tableau de faces
 		FacePtrArray m_arrayFaces;
 		//!\~english Tells if normals exist or need to be computed	\~french Dit si les normales existent ou doivent être calculées
-		bool m_bHasNormals;
+		bool m_hasNormals;
 		//!\~english The Material assigned at creation	\~french Le Materiau affecté à la création
 		MaterialWPtr m_defaultMaterial;
 		//!\~english The combo box container	\~french Le conteneur boîte
@@ -724,19 +724,19 @@ namespace Castor3D
 		//!\~english The vertex pointer array	\~french Le tableau de sommets
 		VertexPtrArray m_points;
 		//!\~english Vertex elements declaration	\~french Déclaration des éléments d'un sommet
-		BufferDeclarationSPtr m_pDeclaration;
+		BufferDeclarationSPtr m_declaration;
 		//!\~english The transformed camera position at last sort	\~french La position transformée de la caméra au dernier tri
-		Castor::Point3r m_ptCameraPosition;
+		Castor::Point3r m_cameraPosition;
 		//!\~english The parent mesh	\~french Le mesh parent
-		MeshRPtr m_pParentMesh;
+		MeshRPtr m_parentMesh;
 		//!\~english The shader program flags	\~french Les indicateurs pour le shader
-		uint32_t m_uiProgramFlags;
+		uint32_t m_programFlags;
 		//!\~english Pointer over geometry buffers	\~french Pointeur sur les buffers de la géométrie
 		GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english Tells the renderer has been initialised	\~french Dit que le renderer a été initialisé
 		bool m_initialised;
 		//!\~english Tells the VAO needs reininitialisation	\~french Dit que le VAO a besoin d'être réinitialisé
-		bool m_bDirty;
+		bool m_dirty;
 	};
 }
 

@@ -442,7 +442,7 @@ namespace Castor3D
 		 */
 		inline bool IsStereoAvailable()const
 		{
-			return m_bStereoAvailable;
+			return m_stereoAvailable;
 		}
 		/**
 		 *\~english
@@ -452,7 +452,7 @@ namespace Castor3D
 		 */
 		inline void SetStereoAvailable( bool p_bStereo )
 		{
-			m_bStereoAvailable = p_bStereo;
+			m_stereoAvailable = p_bStereo;
 		}
 		/**
 		 *\~english
@@ -482,7 +482,7 @@ namespace Castor3D
 		 */
 		inline eRENDERER_TYPE GetRendererType()const
 		{
-			return m_eRendererType;
+			return m_rendererType;
 		}
 		/**
 		 *\~english
@@ -494,7 +494,7 @@ namespace Castor3D
 		 */
 		inline bool HasInstancing()const
 		{
-			return m_bInstancing;
+			return m_instancing;
 		}
 		/**
 		 *\~english
@@ -506,7 +506,7 @@ namespace Castor3D
 		 */
 		inline bool HasAccumulationBuffer()const
 		{
-			return m_bAccumBuffer;
+			return m_accumBuffer;
 		}
 		/**
 		 *\~english
@@ -518,7 +518,7 @@ namespace Castor3D
 		 */
 		inline bool HasNonPowerOfTwoTextures()const
 		{
-			return m_bNonPowerOfTwoTextures;
+			return m_nonPowerOfTwoTextures;
 		}
 		/**
 		 *\~english
@@ -638,13 +638,13 @@ namespace Castor3D
 		//!\~english Tells whether or not it is initialised	\~french Dit si le render system est initialisé
 		bool m_initialised;
 		//!\~english Tells whether or not the selected render API supports instanced draw calls	\~french Dit si l'API de rendu choisie supporte le dessin instancié
-		bool m_bInstancing;
+		bool m_instancing;
 		//!\~english Tells whether or not the selected render API supports accumulation buffers	\~french Dit si l'API de rendu choisie supporte le buffer d'accumulation
-		bool m_bAccumBuffer;
+		bool m_accumBuffer;
 		//!\~english Tells whether or not the selected render API supports non power of two textures	\~french Dit si l'API de rendu choisie supporte les textures non puissance de 2
-		bool m_bNonPowerOfTwoTextures;
+		bool m_nonPowerOfTwoTextures;
 		//!\~english Tells the RenderSystem supports stereo	\~french Dit si le RenderSystem supporte la stéréo
-		bool m_bStereoAvailable;
+		bool m_stereoAvailable;
 		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
 		bool m_useShader[eSHADER_TYPE_COUNT];
 		//!\~english The maximum supported shader model.	\~french Le modèle de shader maximum supporté.
@@ -660,7 +660,7 @@ namespace Castor3D
 		//!\~english Scene stack	\~french Pile des scènes
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée
-		eRENDERER_TYPE m_eRendererType;
+		eRENDERER_TYPE m_rendererType;
 		//!\~english The currently active camera	\~french La caméra actuellement active
 		CameraRPtr m_pCurrentCamera;
 		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.

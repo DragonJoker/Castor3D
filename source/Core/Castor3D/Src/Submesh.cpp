@@ -204,11 +204,11 @@ namespace Castor3D
 	Submesh::Submesh( Engine & p_engine, MeshRPtr p_pMesh, uint32_t p_uiId )
 		: OwnedBy< Engine >( p_engine )
 		, m_defaultMaterial( p_engine.GetMaterialManager().GetDefaultMaterial() )
-		, m_uiID( p_uiId )
-		, m_pParentMesh( p_pMesh )
-		, m_uiProgramFlags( 0 )
+		, m_id( p_uiId )
+		, m_parentMesh( p_pMesh )
+		, m_programFlags( 0 )
 		, m_initialised( false )
-		, m_bDirty( true )
+		, m_dirty( true )
 	{
 	}
 
@@ -292,8 +292,8 @@ namespace Castor3D
 
 	uint32_t Submesh::GetPointsCount()const
 	{
-// Mais pourquoi * sizeof( real ) ?	return std::max< uint32_t >( uint32_t( m_points.size() ), uint32_t( sizeof( real ) * m_vertex.lock()->GetSize() / m_pDeclaration->GetStride() ) );
-		return std::max< uint32_t >( uint32_t( m_points.size() ), uint32_t( GetGeometryBuffers()->GetVertexBuffer().GetSize() / m_pDeclaration->GetStride() ) );
+// Mais pourquoi * sizeof( real ) ?	return std::max< uint32_t >( uint32_t( m_points.size() ), uint32_t( sizeof( real ) * m_vertex.lock()->GetSize() / m_declaration->GetStride() ) );
+		return std::max< uint32_t >( uint32_t( m_points.size() ), uint32_t( GetGeometryBuffers()->GetVertexBuffer().GetSize() / m_declaration->GetStride() ) );
 	}
 
 	int Submesh::IsInMyPoints( Point3r const & p_vertex, double p_precision )
@@ -319,7 +319,7 @@ namespace Castor3D
 	{
 		DoUpdateDeclaration();
 		BufferElementGroupSPtr l_return;
-		m_pointsData.push_back( ByteArray( m_pDeclaration->GetStride() ) );
+		m_pointsData.push_back( ByteArray( m_declaration->GetStride() ) );
 		uint8_t * l_pData = &( *m_pointsData.rbegin() )[0];
 		l_return = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
 		Vertex::SetPosition( l_return, x, y, z );
@@ -341,7 +341,7 @@ namespace Castor3D
 	{
 		DoUpdateDeclaration();
 		stVERTEX_GROUP l_vertices = p_vertices;
-		uint32_t l_uiStride = m_pDeclaration->GetStride();
+		uint32_t l_uiStride = m_declaration->GetStride();
 		uint32_t l_uiSize = l_vertices.m_uiCount * l_uiStride;
 		m_pointsData.push_back( ByteArray( l_uiSize ) );
 		uint8_t * l_pData = &( *m_pointsData.rbegin() )[0];
@@ -431,7 +431,7 @@ namespace Castor3D
 					l_vertices.m_pBones++;
 				}
 
-				m_uiProgramFlags |= ePROGRAM_FLAG_SKINNING;
+				m_programFlags |= ePROGRAM_FLAG_SKINNING;
 			}
 		}
 	}
@@ -444,7 +444,7 @@ namespace Castor3D
 		{
 			l_return = std::make_shared< Face >( a, b, c );
 			m_arrayFaces.push_back( l_return );
-			m_bHasNormals = false;
+			m_hasNormals = false;
 		}
 		else
 		{
@@ -486,10 +486,15 @@ namespace Castor3D
 	{
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
-
-		if ( GetOwner()->GetRenderSystem()->HasInstancing() )
+		uint32_t l_count = 0;
+		l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
 		{
-			DoGenerateMatrixBuffer();
+			return p_count + p_pair.second;
+		} );
+
+		if ( l_count > 1 )
+		{
+			DoGenerateMatrixBuffer( l_count );
 		}
 
 		GetOwner()->PostEvent( MakeInitialiseEvent( *this ) );
@@ -497,8 +502,8 @@ namespace Castor3D
 
 	SubmeshSPtr Submesh::Clone()
 	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetOwner(), m_pParentMesh, m_uiID );
-		uint32_t l_uiStride = m_pDeclaration->GetStride();
+		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetOwner(), m_parentMesh, m_id );
+		uint32_t l_uiStride = m_declaration->GetStride();
 
 		//On effectue une copie des vertex
 		for ( VertexPtrArrayConstIt l_it = m_points.begin(); l_it != m_points.end(); ++l_it )
@@ -580,7 +585,7 @@ namespace Castor3D
 
 	void Submesh::ComputeNormals( bool p_bReverted )
 	{
-		if ( !m_bHasNormals )
+		if ( !m_hasNormals )
 		{
 			Point3r l_vec2m1;
 			Point3r l_vec3m1;
@@ -677,7 +682,7 @@ namespace Castor3D
 				point::normalise( l_value );
 			}
 
-			m_bHasNormals = true;
+			m_hasNormals = true;
 		}
 	}
 
@@ -829,7 +834,7 @@ namespace Castor3D
 	{
 		try
 		{
-			if ( m_ptCameraPosition != p_ptCameraPosition )
+			if ( m_cameraPosition != p_ptCameraPosition )
 			{
 				GeometryBuffersSPtr l_pGeometryBuffers = GetGeometryBuffers();
 
@@ -837,7 +842,7 @@ namespace Castor3D
 				{
 					IndexBuffer & l_indices = l_pGeometryBuffers->GetIndexBuffer();
 					VertexBuffer & l_vertices = l_pGeometryBuffers->GetVertexBuffer();
-					m_ptCameraPosition = p_ptCameraPosition;
+					m_cameraPosition = p_ptCameraPosition;
 					uint32_t l_uiIdxSize = l_indices.GetSize();
 					uint32_t * l_pIdx = l_indices.Lock( 0, l_uiIdxSize, eACCESS_TYPE_WRITE | eACCESS_TYPE_READ );
 
@@ -900,12 +905,12 @@ namespace Castor3D
 
 	void Submesh::Ref( MaterialSPtr p_material )
 	{
-		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_uiInstanceCount.find( p_material );
+		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_instanceCount.find( p_material );
 
-		if ( l_it == m_uiInstanceCount.end() )
+		if ( l_it == m_instanceCount.end() )
 		{
-			m_uiInstanceCount[p_material] = 0;
-			l_it = m_uiInstanceCount.find( p_material );
+			m_instanceCount[p_material] = 0;
+			l_it = m_instanceCount.find( p_material );
 		}
 
 		l_it->second++;
@@ -913,9 +918,9 @@ namespace Castor3D
 
 	void Submesh::UnRef( MaterialSPtr p_material )
 	{
-		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_uiInstanceCount.find( p_material );
+		std::map< MaterialSPtr, uint32_t >::iterator l_it = m_instanceCount.find( p_material );
 
-		if ( l_it == m_uiInstanceCount.end() )
+		if ( l_it == m_instanceCount.end() )
 		{
 			if ( l_it->second )
 			{
@@ -924,7 +929,7 @@ namespace Castor3D
 
 			if ( !l_it->second )
 			{
-				m_uiInstanceCount.erase( l_it );
+				m_instanceCount.erase( l_it );
 			}
 		}
 	}
@@ -932,9 +937,9 @@ namespace Castor3D
 	uint32_t Submesh::GetRefCount( MaterialSPtr p_material )const
 	{
 		uint32_t l_return = 0;
-		std::map< MaterialSPtr, uint32_t >::const_iterator l_it = m_uiInstanceCount.find( p_material );
+		std::map< MaterialSPtr, uint32_t >::const_iterator l_it = m_instanceCount.find( p_material );
 
-		if ( l_it != m_uiInstanceCount.end() )
+		if ( l_it != m_instanceCount.end() )
 		{
 			l_return = l_it->second;
 		}
@@ -968,7 +973,7 @@ namespace Castor3D
 		{
 			uint8_t * l_pBuffer;
 			VertexBuffer & l_vertexBuffer = GetGeometryBuffers()->GetVertexBuffer();
-			uint32_t l_uiStride = m_pDeclaration->GetStride();
+			uint32_t l_uiStride = m_declaration->GetStride();
 			uint32_t l_uiSize = uint32_t( m_points.size() ) * l_uiStride;
 			VertexPtrArrayIt l_itPoints = m_points.begin();
 
@@ -1033,32 +1038,23 @@ namespace Castor3D
 		}
 	}
 
-	void Submesh::DoGenerateMatrixBuffer()
+	void Submesh::DoGenerateMatrixBuffer( uint32_t p_count )
 	{
 		if ( GetGeometryBuffers()->HasMatrixBuffer() )
 		{
-			uint32_t l_count = 0;
-			l_count = std::accumulate( m_uiInstanceCount.begin(), m_uiInstanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
-			{
-				return p_count + p_pair.second;
-			} );
+			MatrixBuffer & l_matrixBuffer = GetGeometryBuffers()->GetMatrixBuffer();
+			uint32_t l_uiSize = p_count * 16;
 
-			if ( l_count )
+			if ( l_matrixBuffer.GetSize() != l_uiSize )
 			{
-				MatrixBuffer & l_matrixBuffer = GetGeometryBuffers()->GetMatrixBuffer();
-				uint32_t l_uiSize = l_count * 16;
-
-				if ( l_matrixBuffer.GetSize() != l_uiSize )
-				{
-					l_matrixBuffer.Resize( l_uiSize );
-				}
+				l_matrixBuffer.Resize( l_uiSize );
 			}
 		}
 	}
 
 	void Submesh::DoUpdateDeclaration()
 	{
-		if ( !m_pDeclaration )
+		if ( !m_declaration )
 		{
 			std::vector< BufferElementDeclaration >	l_vertexDeclarationElements;
 			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) );
@@ -1073,7 +1069,7 @@ namespace Castor3D
 				l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS, eELEMENT_TYPE_4FLOATS ) );
 			}
 
-			m_pDeclaration = std::make_shared< BufferDeclaration >( &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
+			m_declaration = std::make_shared< BufferDeclaration >( &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
 			DoCreateGeometryBuffers();
 		}
 	}
@@ -1124,9 +1120,9 @@ namespace Castor3D
 
 		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			if ( m_geometryBuffers && m_bDirty )
+			if ( m_geometryBuffers && m_dirty )
 			{
-				m_bDirty = false;
+				m_dirty = false;
 				m_geometryBuffers->Cleanup();
 				m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 			}

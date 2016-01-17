@@ -20,12 +20,12 @@ namespace Castor3D
 {
 	RenderSystem::RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType )
 		: OwnedBy< Engine >( p_engine )
-		, m_eRendererType( p_eRendererType )
+		, m_rendererType( p_eRendererType )
 		, m_initialised( false )
-		, m_bStereoAvailable( false )
-		, m_bInstancing( false )
-		, m_bAccumBuffer( false )
-		, m_bNonPowerOfTwoTextures( false )
+		, m_stereoAvailable( false )
+		, m_instancing( false )
+		, m_accumBuffer( false )
+		, m_nonPowerOfTwoTextures( false )
 		, m_currentContext( nullptr )
 		, m_pCurrentCamera( nullptr )
 	{

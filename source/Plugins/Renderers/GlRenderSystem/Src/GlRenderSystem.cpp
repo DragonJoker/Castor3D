@@ -36,7 +36,8 @@ namespace GlRender
 		, m_extensionsInit( false )
 		, m_openGl( *this )
 	{
-		m_bAccumBuffer = true;
+		m_instancing = true;
+		m_accumBuffer = true;
 		m_pipelineImpl = std::make_shared< GlPipelineImpl >( GetOpenGl(), *m_pipeline );
 		m_pipeline->UpdateImpl();
 	}
@@ -70,7 +71,7 @@ namespace GlRender
 				Logger::LogInfo( cuT( "Renderer : " ) + GetOpenGl().GetRenderer()	);
 				Logger::LogInfo( cuT( "OpenGL Version : " ) + GetOpenGl().GetStrVersion()	);
 				m_extensionsInit = true;
-				m_bInstancing = GetOpenGl().HasInstancing();
+				m_instancing = GetOpenGl().HasInstancing();
 
 				m_openGlMajor = GetOpenGl().GetVersion() / 10;
 				m_openGlMinor = GetOpenGl().GetVersion() % 10;
@@ -104,7 +105,7 @@ namespace GlRender
 					m_maxShaderModel = eSHADER_MODEL_1;
 				}
 
-				m_bNonPowerOfTwoTextures = GetOpenGl().HasNonPowerOfTwoTextures();
+				m_nonPowerOfTwoTextures = GetOpenGl().HasNonPowerOfTwoTextures();
 				REQUIRE( m_maxShaderModel >= eSHADER_MODEL_2 );
 			}
 		}
