@@ -152,7 +152,7 @@ namespace Castor3D
 			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
 			DepthStencilRenderBufferSPtr m_pDepthBuffer;
 			//!\~english The frame buffer	\~french Le tampon d'image
-			FrameBufferSPtr m_pFrameBuffer;
+			FrameBufferSPtr m_frameBuffer;
 			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
 			TextureAttachmentSPtr m_pColorAttach;
 			//!\~english The attach between depth buffer and main frame buffer	\~french L'attache entre le tampon profondeur et le tampon principal
@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~RenderTarget();
+		C3D_API ~RenderTarget();
 		/**
 		 *\~english
 		 *\brief		Renders one frame
@@ -189,7 +189,7 @@ namespace Castor3D
 		 *\brief		Rend une image
 		 *\param[in]	p_dFrameTime		Le temps écoulé depuis le rendu de la dernière frame
 		 */
-		C3D_API virtual void Render( double p_dFrameTime );
+		C3D_API void Render( double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -281,15 +281,6 @@ namespace Castor3D
 		 *\param[in]	p_rIod	La distance inter oculaire
 		 */
 		C3D_API void SetIntraOcularDistance( real p_rIod );
-		/**
-		 *\~english
-		 *\brief		Creates a frame buffer
-		 *\return		The created frame buffer
-		 *\~french
-		 *\brief		Crée un tampon d'image
-		 *\return		Le tampon d'image créé
-		 */
-		C3D_API virtual FrameBufferSPtr CreateFrameBuffer() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status
@@ -492,7 +483,7 @@ namespace Castor3D
 		 */
 		inline FrameBufferSPtr GetFrameBufferLEye()const
 		{
-			return m_fbLeftEye.m_pFrameBuffer;
+			return m_fbLeftEye.m_frameBuffer;
 		}
 		/**
 		 *\~english
@@ -516,7 +507,7 @@ namespace Castor3D
 		 */
 		inline FrameBufferSPtr GetFrameBufferREye()const
 		{
-			return m_fbRightEye.m_pFrameBuffer;
+			return m_fbRightEye.m_frameBuffer;
 		}
 		/**
 		 *\~english

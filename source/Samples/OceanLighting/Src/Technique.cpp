@@ -95,8 +95,8 @@ double time()
 
 //*************************************************************************************************
 
-RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
-	: RenderTechniqueBase( cuT( "ocean" ), p_renderTarget, p_pRenderSystem, p_params )
+RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+	: RenderTechniqueBase( cuT( "ocean" ), p_renderTarget, p_renderSystem, p_params )
 	, m_render( NULL )
 	, m_sky( NULL )
 	, m_skymap( NULL )
@@ -172,11 +172,11 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_vboBuffer[1] = 0.0f;
 	m_vboBuffer[2] = 0.0f;
 	m_vboBuffer[3] = 0.0f;
-	m_pFrameBuffer = m_pRenderTarget->CreateFrameBuffer();
+	m_frameBuffer = m_renderSystem->CreateFrameBuffer();
 	m_pColorBuffer = m_renderSystem->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
-	m_pColorAttach = m_pRenderTarget->CreateAttachment( m_pColorBuffer );
-	m_pDepthAttach = m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
+	m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24S8 );
+	m_pColorAttach = m_frameBuffer->CreateAttachment( m_pColorBuffer );
+	m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 	BufferElementDeclaration l_skymapDeclaration[] =
 	{
 		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS )
@@ -195,24 +195,24 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_pTexIrradiance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 	m_pTexInscatter = GetOwner()->GetRenderSystem()->CreateStaticTexture();
 	m_pTexTransmittance = GetOwner()->GetRenderSystem()->CreateStaticTexture();
-	m_pTexSky = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_pTexNoise = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexSky = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexNoise = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 #if ENABLE_FFT
 	BufferElementDeclaration l_quadVertexDeclarationElements[] =
 	{
 		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_4FLOATS )
 	};
-	m_pTexSpectrum_1_2 = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_pTexSpectrum_3_4 = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_pTexSlopeVariance = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_pTexFFTA = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_pTexFFTB = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_pTexButterfly = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_variancesFbo = m_pRenderTarget->CreateFrameBuffer();
-	m_fftFbo1 = m_pRenderTarget->CreateFrameBuffer();
-	m_fftFbo2 = m_pRenderTarget->CreateFrameBuffer();
-	m_pAttachFftA = m_pRenderTarget->CreateAttachment( m_pTexFFTA );
-	m_pAttachFftB = m_pRenderTarget->CreateAttachment( m_pTexFFTB );
+	m_pTexSpectrum_1_2 = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexSpectrum_3_4 = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexSlopeVariance = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexFFTA = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexFFTB = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexButterfly = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_variancesFbo = m_renderTarget->CreateFrameBuffer();
+	m_fftFbo1 = m_renderTarget->CreateFrameBuffer();
+	m_fftFbo2 = m_renderTarget->CreateFrameBuffer();
+	m_pAttachFftA = m_renderTarget->CreateAttachment( m_pTexFFTA );
+	m_pAttachFftB = m_renderTarget->CreateAttachment( m_pTexFFTB );
 	VertexBufferSPtr l_pVtxBufferVar = std::make_shared< VertexBuffer >( GetOwner()->GetRenderSystem(), l_quadVertexDeclarationElements );
 	VertexBufferSPtr l_pVtxBufferIni = std::make_shared< VertexBuffer >( GetOwner()->GetRenderSystem(), l_quadVertexDeclarationElements );
 	VertexBufferSPtr l_pVtxBufferFtx = std::make_shared< VertexBuffer >( GetOwner()->GetRenderSystem(), l_quadVertexDeclarationElements );
@@ -254,10 +254,10 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	std::memcpy( l_pIdxBufferFtx->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
 	std::memcpy( l_pIdxBufferFty->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
 #else
-	m_pTexWave = m_pRenderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+	m_pTexWave = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 #endif
-	m_fbo = m_pRenderTarget->CreateFrameBuffer();
-	m_pAttachSky = m_pRenderTarget->CreateAttachment( m_pTexSky );
+	m_fbo = m_renderSystem->CreateFrameBuffer();
+	m_pAttachSky = m_fbo->CreateAttachment( m_pTexSky );
 	VertexBufferUPtr l_pVtxBufferSky = std::make_unique< VertexBuffer >( *GetOwner(), l_skymapDeclaration );
 	VertexBufferUPtr l_pVtxBufferMap = std::make_unique< VertexBuffer >( *GetOwner(), l_skymapDeclaration );
 	VertexBufferUPtr l_pVtxBufferClo = std::make_unique< VertexBuffer >( *GetOwner(), l_cloudsVertexDeclarationElements );
@@ -359,10 +359,10 @@ RenderTechnique::~RenderTechnique()
 	m_pSamplerAnisotropicRepeat.reset();
 }
 
-RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
+RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 {
 	// No make_shared because ctor is protected;
-	return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_pRenderSystem, p_params ) );
+	return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 }
 
 // ----------------------------------------------------------------------------
@@ -734,7 +734,7 @@ bool RenderTechnique::DoCreate()
 	m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 	m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 	m_pSamplerAnisotropicRepeat->SetMaxAnisotropy( real( 0.1 ) );
-	m_pFrameBuffer->Create( 0 );
+	m_frameBuffer->Create( 0 );
 	m_pColorBuffer->Create();
 	m_pDepthBuffer->Create();
 	m_pTexIrradiance->Create();
@@ -829,7 +829,7 @@ void RenderTechnique::DoDestroy()
 #endif
 	m_pColorBuffer->Destroy();
 	m_pDepthBuffer->Destroy();
-	m_pFrameBuffer->Destroy();
+	m_frameBuffer->Destroy();
 }
 
 bool RenderTechnique::DoInitialise( uint32_t & p_index )
@@ -842,16 +842,16 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_pSamplerAnisotropicRepeat->Initialise();
 
 	m_pColorBuffer->SetType( eTEXTURE_TYPE_2D );
-	m_pColorBuffer->SetImage( m_pRenderTarget->GetSize(), ePIXEL_FORMAT_A8R8G8B8 );
-	m_pDepthBuffer->Initialise( m_pRenderTarget->GetSize() );
-	m_pFrameBuffer->Initialise( m_pRenderTarget->GetSize() );
-	bool l_bReturn = m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+	m_pColorBuffer->SetImage( m_renderTarget->GetSize(), ePIXEL_FORMAT_A8R8G8B8 );
+	m_pDepthBuffer->Initialise( m_renderTarget->GetSize() );
+	m_frameBuffer->Initialise( m_renderTarget->GetSize() );
+	bool l_bReturn = m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
 	if ( l_bReturn )
 	{
-		l_bReturn &= m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pColorAttach, eTEXTURE_TARGET_2D );
-		l_bReturn &= m_pFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
-		m_pFrameBuffer->Unbind();
+		l_bReturn &= m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, m_pColorAttach, eTEXTURE_TARGET_2D );
+		l_bReturn &= m_frameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
+		m_frameBuffer->Unbind();
 	}
 
 	FILE * f = NULL;
@@ -957,7 +957,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	for ( int i = 0; i < 5; ++i )
 	{
-		m_arrayFftAttaches.push_back( m_pRenderTarget->CreateAttachment( m_pTexFFTA ) );
+		m_arrayFftAttaches.push_back( m_renderTarget->CreateAttachment( m_pTexFFTA ) );
 		m_fftFbo1->Attach( eATTACHMENT_POINT_COLOUR, i, m_arrayFftAttaches[i], eTEXTURE_TARGET_LAYER, i );
 	}
 
@@ -1000,7 +1000,7 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	for ( int layer = 0; layer < m_N_SLOPE_VARIANCE; ++layer )
 	{
-		TextureAttachmentSPtr l_pAttach = m_pRenderTarget->CreateAttachment( m_pTexSlopeVariance );
+		TextureAttachmentSPtr l_pAttach = m_renderTarget->CreateAttachment( m_pTexSlopeVariance );
 		m_arrayVarianceAttaches.push_back( l_pAttach );
 		m_variancesFbo->Attach( eATTACHMENT_POINT_COLOUR, l_pAttach, eTEXTURE_TARGET_3D, layer );
 	}
@@ -1063,10 +1063,10 @@ void RenderTechnique::DoCleanup()
 	m_pSamplerLinearRepeat->Cleanup();
 	m_pSamplerAnisotropicClamp->Cleanup();
 	m_pSamplerAnisotropicRepeat->Cleanup();
-	m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_pFrameBuffer->DetachAll();
-	m_pFrameBuffer->Unbind();
-	m_pFrameBuffer->Cleanup();
+	m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+	m_frameBuffer->DetachAll();
+	m_frameBuffer->Unbind();
+	m_frameBuffer->Cleanup();
 	m_pColorBuffer->Cleanup();
 	m_pDepthBuffer->Cleanup();
 }
@@ -1111,7 +1111,7 @@ bool RenderTechnique::DoBeginRender()
 	return true;
 }
 
-bool RenderTechnique::Render( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_PARAM_UNUSED( p_camera ), eTOPOLOGY CU_PARAM_UNUSED( p_ePrimitives ), double CU_PARAM_UNUSED( p_dFrameTime ) )
+bool RenderTechnique::DoRender( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_PARAM_UNUSED( p_camera ), double CU_PARAM_UNUSED( p_dFrameTime ) )
 {
 	Pipeline & l_pPipeline = GetOwner()->GetRenderSystem()->GetPipeline();
 	Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
@@ -1152,9 +1152,9 @@ void RenderTechnique::DoEndRender()
 	simulateFFTWaves( float( t ) );
 	m_lastTime = t;
 #endif
-	m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-	m_pRenderTarget->GetDepthStencilState()->Apply();
-	m_pRenderTarget->GetRasteriserState()->Apply();
+	m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+	m_renderTarget->GetDepthStencilState()->Apply();
+	m_renderTarget->GetRasteriserState()->Apply();
 	l_pPipeline.ApplyViewport( m_width, m_height );
 #if ENABLE_FFT
 	float ch = m_cameraHeight;
@@ -1258,14 +1258,14 @@ void RenderTechnique::DoEndRender()
 	m_render->Bind( 0, 1 );
 	m_renderGBuffers->Draw( m_render, m_renderGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_render->Unbind();
-	m_pRenderTarget->GetRasteriserState()->Apply();
+	m_renderTarget->GetRasteriserState()->Apply();
 
 	if ( m_cloudLayer && ch > 3000.0 )
 	{
 		drawClouds( sun, projview.const_ptr() );
 	}
 
-	m_pFrameBuffer->Unbind();
+	m_frameBuffer->Unbind();
 }
 
 void RenderTechnique::DoCleanupPrograms( bool all )

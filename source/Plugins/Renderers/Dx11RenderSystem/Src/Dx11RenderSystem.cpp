@@ -1,8 +1,8 @@
 #include "Dx11RenderSystem.hpp"
 
+#include "Dx11BackBuffers.hpp"
 #include "Dx11OverlayRenderer.hpp"
-#include "Dx11RenderTarget.hpp"
-#include "Dx11RenderWindow.hpp"
+#include "Dx11FrameBuffer.hpp"
 #include "Dx11ShaderProgram.hpp"
 #include "Dx11ShaderObject.hpp"
 #include "Dx11Context.hpp"
@@ -51,16 +51,6 @@ namespace Dx11Render
 	{
 		m_pipelineImpl.reset();
 		DirectX11::Cleanup();
-	}
-
-	void DxRenderSystem::CheckShaderSupport()
-	{
-		m_useShader[eSHADER_TYPE_VERTEX] = m_featureLevel >= D3D_FEATURE_LEVEL_9_1;
-		m_useShader[eSHADER_TYPE_PIXEL] = m_featureLevel >= D3D_FEATURE_LEVEL_9_1;
-		m_useShader[eSHADER_TYPE_GEOMETRY] = m_featureLevel >= D3D_FEATURE_LEVEL_10_0;
-		m_useShader[eSHADER_TYPE_HULL] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
-		m_useShader[eSHADER_TYPE_DOMAIN] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
-		m_useShader[eSHADER_TYPE_COMPUTE] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
 	}
 
 	bool DxRenderSystem::InitialiseDevice( HWND p_hWnd, DXGI_SWAP_CHAIN_DESC & p_swapChainDesc )
@@ -277,21 +267,6 @@ namespace Dx11Render
 		return std::make_shared< DxSampler >( this, p_name );
 	}
 
-	RenderTargetSPtr DxRenderSystem::CreateRenderTarget( Castor3D::eTARGET_TYPE p_type )
-	{
-		return std::make_shared< DxRenderTarget >( this, p_type );
-	}
-
-	RenderWindowSPtr DxRenderSystem::CreateRenderWindow()
-	{
-		return std::make_shared< DxRenderWindow >( this );
-	}
-
-	ShaderProgramBaseSPtr DxRenderSystem::CreateHlslShaderProgram()
-	{
-		return std::make_shared< DxShaderProgram >( *this );
-	}
-
 	ShaderProgramBaseSPtr DxRenderSystem::CreateShaderProgram()
 	{
 		return std::make_shared< DxShaderProgram >( *this );
@@ -327,6 +302,16 @@ namespace Dx11Render
 		return std::make_shared< DxDynamicTexture >( *this, p_cpuAccess, p_gpuAccess );
 	}
 
+	FrameBufferSPtr DxRenderSystem::CreateFrameBuffer()
+	{
+		return std::make_shared< DxFrameBuffer >( this );
+	}
+
+	Castor3D::BackBuffersSPtr DxRenderSystem::CreateBackBuffers()
+	{
+		return std::make_shared< DxBackBuffers >( this );
+	}
+
 	void DxRenderSystem::DoInitialise()
 	{
 		static std::map< D3D_FEATURE_LEVEL, String > StrFeatureLevel;
@@ -349,7 +334,12 @@ namespace Dx11Render
 			Logger::LogInfo( cuT( "************************************************************************************************************************" ) );
 			Logger::LogInfo( cuT( "Initialising Direct3D" ) );
 			Logger::LogInfo( cuT( "Dx11Context::InitialiseDevice - Loaded " ) + StrFeatureLevel[m_featureLevel] + cuT( " compliant device" ) );
-			CheckShaderSupport();
+			m_useShader[eSHADER_TYPE_VERTEX] = m_featureLevel >= D3D_FEATURE_LEVEL_9_1;
+			m_useShader[eSHADER_TYPE_PIXEL] = m_featureLevel >= D3D_FEATURE_LEVEL_9_1;
+			m_useShader[eSHADER_TYPE_GEOMETRY] = m_featureLevel >= D3D_FEATURE_LEVEL_10_0;
+			m_useShader[eSHADER_TYPE_HULL] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
+			m_useShader[eSHADER_TYPE_DOMAIN] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
+			m_useShader[eSHADER_TYPE_COMPUTE] = m_featureLevel >= D3D_FEATURE_LEVEL_11_0;
 			m_pipeline->Initialise();
 			m_initialised = true;
 			Logger::LogInfo( cuT( "Video card name: " ) + string::string_cast< xchar >( m_adapterDesc.Description ) );

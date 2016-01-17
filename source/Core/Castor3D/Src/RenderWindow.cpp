@@ -164,6 +164,7 @@ namespace Castor3D
 		, m_initialised( false )
 		, m_bVSync( false )
 		, m_bFullscreen( false )
+		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
 	{
 		auto l_dsstate = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		l_dsstate->SetDepthTest( false );
@@ -196,30 +197,27 @@ namespace Castor3D
 			if ( m_initialised )
 			{
 				m_context->SetCurrent();
-				m_initialised = DoInitialise();
 				m_backBuffers->Initialise( GetSize(), GetPixelFormat() );
 
-				if ( m_initialised )
+				SceneSPtr l_pScene = GetScene();
+				RenderTargetSPtr l_target = GetRenderTarget();
+
+				if ( l_pScene )
 				{
-					SceneSPtr l_pScene = GetScene();
-					RenderTargetSPtr l_target = GetRenderTarget();
+					m_backBuffers->SetClearColour( l_pScene->GetBackgroundColour() );
+				}
+				else
+				{
+					m_backBuffers->SetClearColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
+				}
 
-					if ( l_pScene )
-					{
-						m_backBuffers->SetClearColour( l_pScene->GetBackgroundColour() );
-					}
-					else
-					{
-						m_backBuffers->SetClearColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
-					}
-
-					if ( l_target )
-					{
-						l_target->Initialise( 1 );
-					}
+				if ( l_target )
+				{
+					l_target->Initialise( 1 );
 				}
 
 				m_context->EndCurrent();
+				m_initialised = true;
 			}
 		}
 

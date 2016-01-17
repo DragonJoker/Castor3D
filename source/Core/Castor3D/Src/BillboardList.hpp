@@ -328,15 +328,6 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Initialises the shader program
-		 *\return		\p true if all is OK
-		 *\~french
-		 *\brief		Initialise le shader
-		 *\return		\p true si tout s'est bien passe
-		 */
-		C3D_API virtual bool DoInitialise() = 0;
-		/**
-		 *\~english
 		 *\brief		Retrieves the appropriate shader program
 		 *\param[in]	p_technique	The current rendering technique, used to select appropriate shaders
 		 *\param[in]	p_flags		The texture channels flags, to create the right program

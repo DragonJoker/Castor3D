@@ -1,8 +1,8 @@
 #include "GlRenderSystem.hpp"
 
+#include "GlBackBuffers.hpp"
 #include "GlOverlayRenderer.hpp"
-#include "GlRenderWindow.hpp"
-#include "GlRenderTarget.hpp"
+#include "GlFrameBuffer.hpp"
 #include "GlShaderProgram.hpp"
 #include "GlShaderObject.hpp"
 #include "OpenGl.hpp"
@@ -45,16 +45,6 @@ namespace GlRender
 	GlRenderSystem::~GlRenderSystem()
 	{
 		m_pipelineImpl.reset();
-	}
-
-	void GlRenderSystem::CheckShaderSupport()
-	{
-		m_useShader[eSHADER_TYPE_COMPUTE] = GetOpenGl().HasCSh();
-		m_useShader[eSHADER_TYPE_HULL] = GetOpenGl().HasTSh();
-		m_useShader[eSHADER_TYPE_DOMAIN] = GetOpenGl().HasTSh();
-		m_useShader[eSHADER_TYPE_GEOMETRY] = GetOpenGl().HasGSh();
-		m_useShader[eSHADER_TYPE_PIXEL] = GetOpenGl().HasPSh();
-		m_useShader[eSHADER_TYPE_VERTEX] = GetOpenGl().HasVSh();
 	}
 
 	bool GlRenderSystem::InitOpenGlExtensions()
@@ -153,21 +143,6 @@ namespace GlRender
 		return std::make_shared< GlSampler >( GetOpenGl(), this, p_name );
 	}
 
-	RenderTargetSPtr GlRenderSystem::CreateRenderTarget( eTARGET_TYPE p_type )
-	{
-		return std::make_shared< GlRenderTarget >( GetOpenGl(), this, p_type );
-	}
-
-	RenderWindowSPtr GlRenderSystem::CreateRenderWindow()
-	{
-		return std::make_shared< GlRenderWindow >( GetOpenGl(), this );
-	}
-
-	ShaderProgramBaseSPtr GlRenderSystem::CreateGlslShaderProgram()
-	{
-		return std::make_shared< GlShaderProgram >( GetOpenGl(), *this );
-	}
-
 	ShaderProgramBaseSPtr GlRenderSystem::CreateShaderProgram()
 	{
 		return std::make_shared< GlShaderProgram >( GetOpenGl(), *this );
@@ -203,6 +178,16 @@ namespace GlRender
 		return std::make_shared< GlDynamicTexture >( GetOpenGl(), *this, p_cpuAccess, p_gpuAccess );
 	}
 
+	FrameBufferSPtr GlRenderSystem::CreateFrameBuffer()
+	{
+		return std::make_shared< GlFrameBuffer >( GetOpenGl(), *GetOwner() );
+	}
+
+	Castor3D::BackBuffersSPtr GlRenderSystem::CreateBackBuffers()
+	{
+		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetOwner() );
+	}
+
 	void GlRenderSystem::DoInitialise()
 	{
 		if ( !m_initialised )
@@ -211,7 +196,12 @@ namespace GlRender
 
 			m_useVertexBufferObjects = GetOpenGl().HasVbo();
 			m_initialised = true;
-			CheckShaderSupport();
+			m_useShader[eSHADER_TYPE_COMPUTE] = GetOpenGl().HasCSh();
+			m_useShader[eSHADER_TYPE_HULL] = GetOpenGl().HasTSh();
+			m_useShader[eSHADER_TYPE_DOMAIN] = GetOpenGl().HasTSh();
+			m_useShader[eSHADER_TYPE_GEOMETRY] = GetOpenGl().HasGSh();
+			m_useShader[eSHADER_TYPE_PIXEL] = GetOpenGl().HasPSh();
+			m_useShader[eSHADER_TYPE_VERTEX] = GetOpenGl().HasVSh();
 			m_pipeline->Initialise();
 		}
 	}

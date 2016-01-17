@@ -170,8 +170,8 @@ namespace Msaa
 	PixelShaderSource g_ps;
 #endif
 
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
-		: RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_pRenderSystem, p_params )
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+		: RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params )
 		, m_samplesCount( 0 )
 	{
 		String l_count;
@@ -182,7 +182,7 @@ namespace Msaa
 		}
 
 		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
-		m_msFrameBuffer = m_renderTarget->CreateFrameBuffer();
+		m_msFrameBuffer = m_renderSystem->CreateFrameBuffer();
 		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( m_renderTarget->GetPixelFormat() );
 		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget->GetDepthFormat() );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
@@ -196,10 +196,10 @@ namespace Msaa
 	{
 	}
 
-	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
+	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
-		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_pRenderSystem, p_params ) );
+		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
 	bool RenderTechnique::DoCreate()

@@ -354,7 +354,7 @@ namespace Bloom
 			l_sampler = p_renderTarget.GetOwner()->GetSamplerManager().Find( l_name );
 		}
 
-		m_fbo = p_renderTarget.CreateFrameBuffer();
+		m_fbo = p_renderTarget.GetOwner()->GetRenderSystem()->CreateFrameBuffer();
 		m_colourTexture = p_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
 		m_colourTexture->SetSampler( l_sampler );

@@ -331,12 +331,12 @@ namespace Deferred
 		cuT( "c3d_mapDepth" ),
 	};
 
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
-		: RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_pRenderSystem, p_params )
-		, m_viewport( Viewport::Ortho( *m_renderSystem->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+		: RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
+		, m_viewport( Viewport::Ortho( *p_renderSystem->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
-		m_geometryPassFrameBuffer = m_renderTarget->CreateFrameBuffer();
+		m_geometryPassFrameBuffer = m_renderSystem->CreateFrameBuffer();
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
@@ -417,10 +417,10 @@ namespace Deferred
 		m_pDeclaration.reset();
 	}
 
-	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
+	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
-		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_pRenderSystem, p_params ) );
+		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
 	bool RenderTechnique::DoCreate()

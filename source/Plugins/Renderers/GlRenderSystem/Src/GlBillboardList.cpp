@@ -195,17 +195,4 @@ ShaderProgramBaseSPtr GlBillboardList::DoGetProgram( RenderTechniqueBase const &
 	return l_program;
 }
 
-bool GlBillboardList::DoInitialise()
-{
-	bool l_return = false;
-	ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
-
-	if ( l_program )
-	{
-		l_program->Initialise();
-	}
-
-	return true;
-}
-
 //*************************************************************************************************

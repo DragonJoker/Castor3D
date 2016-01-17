@@ -202,7 +202,11 @@ namespace Castor3D
 				{
 					l_pass->Cleanup();
 					m_wpProgram = l_program;
-					l_return = DoInitialise();
+
+					if ( l_program )
+					{
+						l_program->Initialise();
+					}
 
 					if ( l_return )
 					{

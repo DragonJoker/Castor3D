@@ -19,7 +19,7 @@ namespace Castor3D
 	RenderTargetSPtr TargetManager::Create( eTARGET_TYPE p_type )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		RenderTargetSPtr l_return = m_renderSystem->CreateRenderTarget( p_type );
+		RenderTargetSPtr l_return = std::make_shared< RenderTarget >( *GetOwner(), p_type );
 		m_renderTargets[p_type].push_back( l_return );
 		return l_return;
 	}

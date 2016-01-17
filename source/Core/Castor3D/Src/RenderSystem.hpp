@@ -306,26 +306,6 @@ namespace Castor3D
 		C3D_API virtual SamplerSPtr CreateSampler( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
-		 *\brief		Create a render target
-		 *\param[in]	p_type	The render target type
-		 *\return		The object
-		 *\~french
-		 *\brief		Crée une cible de rendu
-		 *\param[in]	p_type	Le type de cible de rendu
-		 *\return		L'objet
-		 */
-		C3D_API virtual RenderTargetSPtr CreateRenderTarget( eTARGET_TYPE p_type ) = 0;
-		/**
-		 *\~english
-		 *\brief		Create a render window
-		 *\return		The object
-		 *\~french
-		 *\brief		Crée une fenêtre de rendu
-		 *\return		L'objet
-		 */
-		C3D_API virtual RenderWindowSPtr CreateRenderWindow() = 0;
-		/**
-		 *\~english
 		 *\brief		Creates a ShaderProgram (GLSL or HLSL only)
 		 *\return		The created ShaderProgram
 		 *\~french
@@ -412,6 +392,24 @@ namespace Castor3D
 		 *\return		Une implémentation de pipeline, en fonction de l'API chargée.
 		 */
 		C3D_API virtual IPipelineImplSPtr GetPipelineImpl() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a frame buffer.
+		 *\return		The created frame buffer.
+		 *\~french
+		 *\brief		Crée un tampon d'image.
+		 *\return		Le tampon d'image créé.
+		 */
+		C3D_API virtual FrameBufferSPtr CreateFrameBuffer() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates the window back buffers.
+		 *\return		The created back buffers.
+		 *\~french
+		 *\brief		Crée les tampons d'image de la fenêtre
+		 *\return		Les tampons d'image créés.
+		 */
+		C3D_API virtual Castor3D::BackBuffersSPtr CreateBackBuffers() = 0;
 		/**
 		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type

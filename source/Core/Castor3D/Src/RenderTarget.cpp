@@ -282,11 +282,11 @@ namespace Castor3D
 
 	bool RenderTarget::stFRAME_BUFFER::Create()
 	{
-		m_pFrameBuffer = m_renderTarget.CreateFrameBuffer();
+		m_frameBuffer = m_renderTarget.GetOwner()->GetRenderSystem()->CreateFrameBuffer();
 		m_pColorTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pColorAttach = m_pFrameBuffer->CreateAttachment( m_pColorTexture );
-		m_pDepthBuffer = m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
-		m_pDepthAttach = m_pFrameBuffer->CreateAttachment( m_pDepthBuffer );
+		m_pColorAttach = m_frameBuffer->CreateAttachment( m_pColorTexture );
+		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
+		m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 		SamplerSPtr l_pSampler = m_renderTarget.GetOwner()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
@@ -299,12 +299,12 @@ namespace Castor3D
 	{
 		m_pColorTexture->Destroy();
 		m_pDepthBuffer->Destroy();
-		m_pFrameBuffer->Destroy();
+		m_frameBuffer->Destroy();
 		m_pDepthAttach.reset();
 		m_pDepthBuffer.reset();
 		m_pColorAttach.reset();
 		m_pColorTexture.reset();
-		m_pFrameBuffer.reset();
+		m_frameBuffer.reset();
 	}
 
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
@@ -313,19 +313,19 @@ namespace Castor3D
 		m_pColorTexture->SetType( eTEXTURE_TYPE_2D );
 		m_pColorTexture->SetImage( p_size, m_renderTarget.GetPixelFormat() );
 		Size l_size = m_pColorTexture->GetDimensions();
-		m_pFrameBuffer->Create( 0 );
+		m_frameBuffer->Create( 0 );
 		m_pColorTexture->Create();
 		m_pColorTexture->Initialise( p_index );
 		m_pDepthBuffer->Create();
 		m_pDepthBuffer->Initialise( l_size );
-		m_pFrameBuffer->Initialise( l_size );
+		m_frameBuffer->Initialise( l_size );
 
-		if ( m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
+		if ( m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
-			m_pFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
-			m_pFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
-			l_return = m_pFrameBuffer->IsComplete();
-			m_pFrameBuffer->Unbind();
+			m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
+			m_frameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
+			l_return = m_frameBuffer->IsComplete();
+			m_frameBuffer->Unbind();
 		}
 
 		return l_return;
@@ -333,10 +333,10 @@ namespace Castor3D
 
 	void RenderTarget::stFRAME_BUFFER::Cleanup()
 	{
-		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_pFrameBuffer->DetachAll();
-		m_pFrameBuffer->Unbind();
-		m_pFrameBuffer->Cleanup();
+		m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_frameBuffer->DetachAll();
+		m_frameBuffer->Unbind();
+		m_frameBuffer->Cleanup();
 		m_pColorTexture->Cleanup();
 		m_pDepthBuffer->Cleanup();
 	}
@@ -577,7 +577,7 @@ namespace Castor3D
 
 	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )
 	{
-		m_pCurrentFrameBuffer = p_fb.m_pFrameBuffer;
+		m_pCurrentFrameBuffer = p_fb.m_frameBuffer;
 		m_pCurrentCamera = p_pCamera;
 		SceneSPtr l_scene = GetScene();
 
@@ -585,8 +585,8 @@ namespace Castor3D
 		{
 			if ( m_renderTechnique->BeginRender() )
 			{
-				p_fb.m_pFrameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
-				p_fb.m_pFrameBuffer->Clear();
+				p_fb.m_frameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
+				p_fb.m_frameBuffer->Clear();
 				l_scene->RenderBackground( m_renderTechnique->GetSize() );
 				m_renderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
 				m_renderTechnique->EndRender();

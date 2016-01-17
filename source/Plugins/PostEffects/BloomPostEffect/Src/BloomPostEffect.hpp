@@ -54,7 +54,7 @@ namespace Bloom
 		using SurfaceArray = std::array< BloomPostEffectSurface, FILTER_COUNT >;
 
 	public:
-		BloomPostEffect( Castor3D::RenderSystem * p_pRenderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
+		BloomPostEffect( Castor3D::RenderSystem * p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
 		virtual ~BloomPostEffect();
 
 		virtual bool Initialise();

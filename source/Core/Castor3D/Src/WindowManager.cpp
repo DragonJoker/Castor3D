@@ -19,7 +19,7 @@ namespace Castor3D
 	RenderWindowSPtr WindowManager::Create()
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		RenderWindowSPtr l_return = m_renderSystem->CreateRenderWindow();
+		RenderWindowSPtr l_return = std::make_shared< RenderWindow >( *GetOwner() );
 
 		if ( l_return )
 		{

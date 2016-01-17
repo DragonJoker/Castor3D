@@ -32,49 +32,100 @@ namespace GlRender
 	public:
 		GlRenderSystem( Castor3D::Engine & p_engine );
 		virtual ~GlRenderSystem();
-
-		void CheckShaderSupport();	//!< Checks the different shader types support.
-		bool InitOpenGlExtensions();	//!< Initialize OpenGL Extensions
-
+		//!< Initialize OpenGL Extensions
+		bool InitOpenGlExtensions();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateContext
+		 */
 		virtual Castor3D::ContextSPtr CreateContext();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
+		 */
 		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer, Castor3D::eTOPOLOGY p_topology );
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateDepthStencilState
+		 */
 		virtual Castor3D::DepthStencilStateSPtr CreateDepthStencilState();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateRasteriserState
+		 */
 		virtual Castor3D::RasteriserStateSPtr CreateRasteriserState();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateBlendState
+		 */
 		virtual Castor3D::BlendStateSPtr CreateBlendState();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateSampler
+		 */
 		virtual Castor3D::SamplerSPtr CreateSampler( Castor::String const & p_name );
-		virtual Castor3D::RenderTargetSPtr CreateRenderTarget( Castor3D::eTARGET_TYPE p_type );
-		virtual Castor3D::RenderWindowSPtr CreateRenderWindow();
-		virtual Castor3D::ShaderProgramBaseSPtr CreateGlslShaderProgram();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateShaderProgram
+		 */
 		virtual Castor3D::ShaderProgramBaseSPtr CreateShaderProgram();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateOverlayRenderer
+		 */
 		virtual Castor3D::OverlayRendererSPtr CreateOverlayRenderer();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateIndexBuffer
+		 */
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer<uint32_t> * p_buffer );
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateVertexBuffer
+		 */
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, Castor3D::CpuBuffer< uint8_t > * p_buffer );
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateMatrixBuffer
+		 */
 		virtual std::shared_ptr< Castor3D::GpuBuffer< real > > CreateMatrixBuffer( Castor3D::CpuBuffer< real > * p_buffer );
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateStaticTexture
+		 */
 		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateDynamicTexture
+		 */
 		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateFrameVariableBuffer
+		 */
 		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name );
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateBillboardsList
+		 */
 		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_scene );
-
-		virtual Castor3D::ShaderProgramBaseSPtr DoCreateHlslShaderProgram()
-		{
-			return nullptr;
-		}
-
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateFrameBuffer
+		 */
+		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateBackBuffers
+		 */
+		virtual Castor3D::BackBuffersSPtr CreateBackBuffers();
+		/**
+		 *\copydoc		Castor3D::RenderSystem::NeedsMatrixTransposition
+		 */
 		virtual	bool NeedsMatrixTransposition()const
 		{
 			return false;
 		}
-
+		/**
+		 *\copydoc		Castor3D::RenderSystem::SupportsDepthBuffer
+		 */
 		virtual bool SupportsDepthBuffer()const
 		{
 			return true;
 		}
-
+		/**
+		 *\copydoc		Castor3D::RenderSystem::GetPipelineImpl
+		 */
 		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()
 		{
 			return m_pipelineImpl;
 		}
-
+		/**
+		 *\copydoc		Castor3D::RenderSystem::UseVertexBufferObjects
+		 */
 		inline bool UseVertexBufferObjects()
 		{
 			return m_useVertexBufferObjects;

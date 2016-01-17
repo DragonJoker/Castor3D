@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~RenderWindow();
+		C3D_API ~RenderWindow();
 		/**
 		 *\~english
 		 *\brief		Sets the handle, initialises the window.
@@ -167,7 +167,7 @@ namespace Castor3D
 		 *\brief		Renders one frame
 		 *\param[in]	p_bForce		Dit si on force le rendu
 		 */
-		C3D_API virtual void Render( bool p_bForce );
+		C3D_API void Render( bool p_bForce );
 		/**
 		 *\~english
 		 *\brief		Resizes the window
@@ -194,7 +194,7 @@ namespace Castor3D
 		 *\brief		Définit la caméra
 		 *\param[in]	p_pCamera	La caméra
 		 */
-		C3D_API virtual void SetCamera( CameraSPtr p_pCamera );
+		C3D_API void SetCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
 		 *\brief		Retrieves the multisampling status
@@ -519,48 +519,6 @@ namespace Castor3D
 		{
 			return m_backBuffers;
 		}
-
-	protected:
-		/**
-		 *\~english
-		 *\brief		Sets the window's back buffers.
-		 *\param[in]	p_backBuffers	The window's back buffers.
-		 *\~french
-		 *\brief		Définit les tampons de rendu de la fenêtre.
-		 *\param[in]	p_backBuffers	Les tampons de rendu de la fenêtre.
-		 */
-		inline void DoSetBackBuffers( BackBuffersSPtr p_backBuffers )
-		{
-			m_backBuffers = p_backBuffers;
-		}
-		/**
-		 *\~english
-		 *\brief		Initialises the back buffers.
-		 *\~french
-		 *\brief		Initialise les tampons de rendu de la fenêtre.
-		 */
-		C3D_API virtual bool DoInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans the back buffers up.
-		 *\~french
-		 *\brief		Nettoie les tampons de rendu de la fenêtre.
-		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Begins the scene on GPU side
-		 *\~french
-		 *\brief		Démarre la scène côté GPU
-		 */
-		C3D_API virtual void DoBeginScene() = 0;
-		/**
-		 *\~english
-		 *\brief		Ends the scene on GPU side
-		 *\~french
-		 *\brief		Termine la scène côté GPU
-		 */
-		C3D_API virtual void DoEndScene() = 0;
 
 	private:
 		Castor::String DoGetName();

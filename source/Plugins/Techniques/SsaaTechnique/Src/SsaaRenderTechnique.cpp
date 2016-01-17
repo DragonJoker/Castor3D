@@ -173,8 +173,8 @@ namespace Ssaa
 	PixelShaderSource g_ps;
 #endif
 
-	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
-		: RenderTechniqueBase( cuT( "ssaa" ), p_renderTarget, p_pRenderSystem, p_params )
+	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+		: RenderTechniqueBase( cuT( "ssaa" ), p_renderTarget, p_renderSystem, p_params )
 		, m_samplesCount( 1 )
 	{
 		String l_count;
@@ -185,7 +185,7 @@ namespace Ssaa
 		}
 
 		Logger::LogInfo( std::stringstream() << "Using SSAA, " << m_samplesCount << " samples" );
-		m_ssFrameBuffer = m_renderTarget->CreateFrameBuffer();
+		m_ssFrameBuffer = m_renderSystem->CreateFrameBuffer();
 		m_ssColorBuffer = m_renderTarget->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_ssColorAttach = m_ssFrameBuffer->CreateAttachment( m_ssColorBuffer );
 		m_ssDepthBuffer = m_ssFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH24 );
@@ -196,10 +196,10 @@ namespace Ssaa
 	{
 	}
 
-	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params )
+	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
-		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_pRenderSystem, p_params ) );
+		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
 	bool RenderTechnique::DoCreate()

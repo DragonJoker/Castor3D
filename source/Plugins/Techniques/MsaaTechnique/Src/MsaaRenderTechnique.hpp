@@ -55,15 +55,15 @@ namespace Msaa
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\param[in]	p_params		The technique parameters
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 	public:
 		/**
@@ -77,17 +77,17 @@ namespace Msaa
 		 *\~english
 		 *\brief		Instantiation function, used by the factory to create objects of a wanted type
 		 *\param[in]	p_renderTarget	The technique render target
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\param[in]	p_iSamplesCount	The wanted samples count
 		 *\return		A clone of this object
 		 *\~french
 		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		Un clône de cet objet
 		 */
-		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 	protected:
 		/**

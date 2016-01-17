@@ -33,7 +33,6 @@ namespace GlRender
 		virtual ~GlBillboardList();
 
 	private:
-		virtual bool DoInitialise();
 		virtual Castor3D::ShaderProgramBaseSPtr DoGetProgram( Castor3D::RenderTechniqueBase const & p_technique, uint32_t p_flags );
 	};
 }

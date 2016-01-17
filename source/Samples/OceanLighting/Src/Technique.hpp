@@ -32,9 +32,7 @@ namespace OceanLighting
 	protected:
 		friend class Castor3D::TechniqueFactory;
 
-		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
-
-		virtual bool Render( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, Castor3D::eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 	public:
 		virtual ~RenderTechnique();
@@ -42,17 +40,17 @@ namespace OceanLighting
 		 *\~english
 		 *\brief		Instantiation function, used by the factory to create objects of a wanted type
 		 *\param[in]	p_renderTarget	The technique render target
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\param[in]	p_params		The technique parameters
 		 *\return		A clone of this object
 		 *\~french
 		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\param[in]	p_renderSystem	Le render system
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		Un clône de cet objet
 		 */
-		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 		inline void SetReloadPrograms( bool p_bLayer )
 		{
@@ -327,6 +325,10 @@ namespace OceanLighting
 		 */
 		virtual bool DoBeginRender();
 
+		/** \copydoc Castor3D::RenderTechniqueBase::DoRender
+		*/
+		virtual bool DoRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, double p_dFrameTime );
+
 		/** \copydoc Castor3D::RenderTechniqueBase::DoEndRender
 		 */
 		virtual void DoEndRender();
@@ -394,7 +396,7 @@ namespace OceanLighting
 
 	private:
 		//!\~english The frame buffer	\~french Le tampon d'image
-		Castor3D::FrameBufferSPtr m_pFrameBuffer;
+		Castor3D::FrameBufferSPtr m_frameBuffer;
 		//!\~english The buffer receiving the color render	\~french Le tampon recevant le rendu couleur
 		Castor3D::DynamicTextureSPtr m_pColorBuffer;
 		//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
