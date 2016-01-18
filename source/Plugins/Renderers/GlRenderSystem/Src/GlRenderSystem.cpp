@@ -21,6 +21,10 @@
 
 #include "GlslSource.hpp"
 
+#include <Engine.hpp>
+#include <RenderTechnique.hpp>
+#include <ShaderManager.hpp>
+
 #include <Logger.hpp>
 
 using namespace Castor3D;

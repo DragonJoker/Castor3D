@@ -108,15 +108,11 @@ endfunction( ImportersSummary )
 
 function( ImportersSetup )
 	if ( ${CASTOR_BUILDGRP_IMPORTER} )
-		cpack_add_component_group( Importers
-			DESCRIPTION "Importer plugins usable in Castor3D"
-		)
-
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			cpack_add_component( AssimpImporter
-				DISPLAY_NAME "AssimpImporter plugin"
-				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D"
-				GROUP Importers
+				DISPLAY_NAME "AssimpImporter"
+				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
@@ -124,9 +120,9 @@ function( ImportersSetup )
 
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
 			cpack_add_component( PlyImporter
-				DISPLAY_NAME "PlyImporter plugin"
-				DESCRIPTION "Allows the Stanford PLY objects import in Castor3D"
-				GROUP Importers
+				DISPLAY_NAME "PlyImporter"
+				DESCRIPTION "Allows the Stanford PLY objects import in Castor3D."
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
 			)
@@ -136,9 +132,9 @@ function( ImportersSetup )
 		if( ${POS} STREQUAL -1 OR CASTOR_FORCE_ALL_IMPORTERS )
 			if( ${CASTOR_BUILD_IMPORTER_ASE} )
 				cpack_add_component( AseImporter
-					DISPLAY_NAME "AseImporter plugin"
-					DESCRIPTION "Allows the ASE objects import in Castor3D"
-					GROUP Importers
+					DISPLAY_NAME "AseImporter"
+					DESCRIPTION "Allows the ASE objects import in Castor3D."
+					GROUP Plugins
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
 				)
@@ -146,9 +142,9 @@ function( ImportersSetup )
 
 			if( ${CASTOR_BUILD_IMPORTER_LWO} )
 				cpack_add_component( LwoImporter
-					DISPLAY_NAME "AseImporter plugin"
-					DESCRIPTION "Allows the LightWave Objects import in Castor3D"
-					GROUP Importers
+					DISPLAY_NAME "AseImporter"
+					DESCRIPTION "Allows the LightWave Objects import in Castor3D."
+					GROUP Plugins
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
 				)
@@ -156,9 +152,9 @@ function( ImportersSetup )
 
 			if( ${CASTOR_BUILD_IMPORTER_MD2} )
 				cpack_add_component( Md2Importer
-					DISPLAY_NAME "Md2Importer plugin"
-					DESCRIPTION "Allows the MD2 objects import in Castor3D"
-					GROUP Importers
+					DISPLAY_NAME "Md2Importer"
+					DESCRIPTION "Allows the MD2 objects import in Castor3D."
+					GROUP Plugins
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
 				)
@@ -166,9 +162,9 @@ function( ImportersSetup )
 
 			if( ${CASTOR_BUILD_IMPORTER_MD3} )
 				cpack_add_component( Md3Importer
-					DISPLAY_NAME "Md3Importer plugin"
-					DESCRIPTION "Allows the MD3 objects import in Castor3D"
-					GROUP Importers
+					DISPLAY_NAME "Md3Importer"
+					DESCRIPTION "Allows the MD3 objects import in Castor3D."
+					GROUP Plugins
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
 				)
@@ -176,9 +172,9 @@ function( ImportersSetup )
 
 			if( ${CASTOR_BUILD_IMPORTER_OBJ} )
 				cpack_add_component( ObjImporter
-					DISPLAY_NAME "ObjImporter plugin"
-					DESCRIPTION "Allows the OBJ objects import in Castor3D"
-					GROUP Importers
+					DISPLAY_NAME "ObjImporter"
+					DESCRIPTION "Allows the OBJ objects import in Castor3D."
+					GROUP Plugins
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
 				)
@@ -186,9 +182,9 @@ function( ImportersSetup )
 
 			if( ${CASTOR_BUILD_IMPORTER_SMAX} )
 				cpack_add_component( SMaxImporter
-					DISPLAY_NAME "SMaxImporter plugin"
-					DESCRIPTION "Allows the 3D Studio Max objects import in Castor3D"
-					GROUP Importers
+					DISPLAY_NAME "SMaxImporter"
+					DESCRIPTION "Allows the 3D Studio Max objects import in Castor3D."
+					GROUP Plugins
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
 				)

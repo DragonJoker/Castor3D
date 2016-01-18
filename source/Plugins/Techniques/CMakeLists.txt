@@ -66,12 +66,8 @@ function( TechniquesSummary msg )
 endfunction( TechniquesSummary )
 
 function( TechniquesSetup )
-	cpack_add_component_group( Techniques
-		DESCRIPTION "RenderTechnique plugins usable in Castor3D"
-	)
-
 	cpack_add_component( DirectTechnique
-		DISPLAY_NAME "DirectTechnique plugin"
+		DISPLAY_NAME "DirectTechnique"
 		DESCRIPTION "Default direct rendering technique"
 		GROUP Techniques
 		DEPENDS Castor3D
@@ -81,27 +77,27 @@ function( TechniquesSetup )
 	if ( ${CASTOR_BUILDGRP_TECHNIQUE} )
 		if( ${CASTOR_BUILD_TECHNIQUE_DEFERRED} )
 			cpack_add_component( DeferredTechnique
-				DISPLAY_NAME "DeferredTechnique plugin"
-				DESCRIPTION "Allows rendering with Deferred Lighting technique"
-				GROUP Techniques
+				DISPLAY_NAME "DeferredTechnique"
+				DESCRIPTION "Allows rendering with Deferred Lighting technique."
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_MSAA} )
 			cpack_add_component( MsaaTechnique
-				DISPLAY_NAME "MsaaTechnique plugin"
-				DESCRIPTION "Allows rendering with MSAA technique"
-				GROUP Techniques
+				DISPLAY_NAME "MsaaTechnique"
+				DESCRIPTION "Allows rendering with MSAA technique."
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
 		endif()
 		if( ${CASTOR_BUILD_TECHNIQUE_SSAA} )
 			cpack_add_component( SsaaTechnique
-				DISPLAY_NAME "SsaaTechnique plugin"
-				DESCRIPTION "Allows rendering with SSAA technique"
-				GROUP Techniques
+				DISPLAY_NAME "SsaaTechnique"
+				DESCRIPTION "Allows rendering with SSAA technique."
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)

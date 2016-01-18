@@ -210,6 +210,26 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		cpack_add_install_type( Developer )
 		cpack_add_install_type( Full )
 
+		cpack_add_component_group( Test
+			DISPLAY_NAME "Test"
+			DESCRIPTION "Applications used to perform regression and performance tests."
+		)
+
+		cpack_add_component_group( Plugins
+			DISPLAY_NAME "Plugins"
+			DESCRIPTION "Plugins usable in Castor3D."
+		)
+
+		cpack_add_component_group( Tools
+			DISPLAY_NAME "Tools"
+			DESCRIPTION "Some tools"
+		)
+
+		cpack_add_component_group( Samples
+			DISPLAY_NAME "Samples"
+			DESCRIPTION "Samples scenes and applications, to demonstrate Castor3D."
+		)
+
 		CoreSetup()
 		if ( ${CASTOR_BUILD_CASTOR3D} )
 			PluginsSetup()

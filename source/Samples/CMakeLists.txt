@@ -150,16 +150,16 @@ function( SamplesSetup )
 	if( ${CASTOR_BUILDGRP_SAMPLE} )
 		if( ${CASTOR_BUILD_SAMPLE_GUICOMMON} )
 			cpack_add_component( GuiCommon_dev
-				DISPLAY_NAME "GuiCommon library"
-				DESCRIPTION "Common classes and functions for CastorWiewer and CastorShape"
+				DISPLAY_NAME "GuiCommon SDK"
+				DESCRIPTION "Common classes and functions for CastorWiewer and CastorShape."
 				GROUP Development
 				DEPENDS Castor3D
 				INSTALL_TYPES Developer Full
 			)
 			if( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} )
 				cpack_add_component( CastorViewer
-					DISPLAY_NAME "CastorViewer application"
-					DESCRIPTION "A simple scene viewer using Castor3D"
+					DISPLAY_NAME "CastorViewer"
+					DESCRIPTION "A simple scene viewer using Castor3D."
 					GROUP Samples
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
@@ -167,8 +167,8 @@ function( SamplesSetup )
 			endif ()
 			if( ${CASTOR_BUILD_SAMPLE_CASTOR_SHAPE} )
 				cpack_add_component( CastorShape
-					DISPLAY_NAME "CastorShape application"
-					DESCRIPTION "A little modeler, using Castor3D"
+					DISPLAY_NAME "CastorShape"
+					DESCRIPTION "A little modeler, using Castor3D."
 					GROUP Samples
 					DEPENDS Castor3D
 					INSTALL_TYPES Full
@@ -177,8 +177,8 @@ function( SamplesSetup )
 		endif ()
 		if( ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING} )
 			cpack_add_component( OceanLighting
-				DISPLAY_NAME "OceanLighting application"
-				DESCRIPTION "Eric Bruneton's OceanLightingFFT demo adapted for Castor3D"
+				DISPLAY_NAME "OceanLighting"
+				DESCRIPTION "Eric Bruneton's OceanLightingFFT demo adapted for Castor3D."
 				GROUP Samples
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
@@ -187,8 +187,8 @@ function( SamplesSetup )
 		if( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER_SHARP} )
 			if ( MSVC )
 				cpack_add_component( CastorViewerSharp
-					DISPLAY_NAME "CastorViewerSharp application"
-					DESCRIPTION "A simple scene viewer, using Castir3D and developed in C#/WPF"
+					DISPLAY_NAME "CastorViewerSharp"
+					DESCRIPTION "A simple scene viewer, using Castor3D and developed in C#/WPF."
 					GROUP Samples
 					DEPENDS Castor3D
 					INSTALL_TYPES Full

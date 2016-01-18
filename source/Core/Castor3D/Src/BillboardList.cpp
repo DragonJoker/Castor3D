@@ -206,7 +206,7 @@ namespace Castor3D
 
 					if ( l_program )
 					{
-						auto l_config = l_program->FindFrameVariableBuffer( cuT( "Config" ) );
+						auto l_config = l_program->FindFrameVariableBuffer( cuT( "Billboard" ) );
 
 						if ( l_config )
 						{
