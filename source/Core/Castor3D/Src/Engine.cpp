@@ -305,18 +305,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool Engine::SupportsDepthBuffer()const
-	{
-		bool l_return = false;
-
-		if ( m_renderSystem )
-		{
-			l_return = m_renderSystem->SupportsDepthBuffer();
-		}
-
-		return l_return;
-	}
-
 	void Engine::RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers )
 	{
 		auto && l_it = m_additionalParsers.find( p_name );

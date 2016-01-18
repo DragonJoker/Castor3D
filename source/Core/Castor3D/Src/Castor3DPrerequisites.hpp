@@ -59,13 +59,13 @@ namespace Castor3D
 		eINTERPOLATOR_MODE_COUNT
 	}	eINTERPOLATOR_MODE;
 
-	class Animable;				//!< Base class for all objects with animations
-	class MovingObjectBase;		//!< Class which represents the moving objects
-	class ObjMovingObject;		//!< Specialisation of MovingObject for MovableObjects
-	class BoneMovingObject;		//!< Specialisation of MovingObject for Bone
-	class Animation;			//!< The class which manages key frames
-	class AnimatedObject;		//!< Class which represents the animated objects
-	class AnimatedObjectGroup;	//!< Class which represents the animated object groups
+	class Animable;
+	class MovingObjectBase;
+	class ObjMovingObject;
+	class BoneMovingObject;
+	class Animation;
+	class AnimatedObject;
+	class AnimatedObjectGroup;
 	class Bone;
 	class Skeleton;
 	struct stVERTEX_BONE_DATA;
@@ -126,12 +126,10 @@ namespace Castor3D
 	//@{
 
 	class Camera;
-	class RenderTarget;
 	class Viewport;
 	class Ray;
 
 	DECLARE_SMART_PTR( Camera );
-	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( Viewport );
 	DECLARE_SMART_PTR( Ray );
 
@@ -645,11 +643,8 @@ namespace Castor3D
 	class TextureBase;
 	class StaticTexture;
 	class DynamicTexture;
-	//! The texture unit class
 	class TextureUnit;
-	//! The material class
 	class Material;
-	//! The material pass class (for multipass materials)
 	class Pass;
 	class Sampler;
 
@@ -1090,6 +1085,7 @@ namespace Castor3D
 
 	template< typename T > class CpuBuffer;
 	class RenderSystem;
+	class RenderTechniqueBase;
 	class Context;
 	class RenderWindow;
 	class IPipelineImpl;
@@ -1179,7 +1175,6 @@ namespace Castor3D
 	CASTOR_TYPE( uint8_t )
 	{
 		eSHADER_LANGUAGE_GLSL,
-		eSHADER_LANGUAGE_HLSL,
 		eSHADER_LANGUAGE_AUTO,
 		eSHADER_LANGUAGE_COUNT,
 	}	eSHADER_LANGUAGE;
@@ -1661,7 +1656,6 @@ namespace Castor3D
 	{
 		eRENDERER_TYPE_UNDEFINED = -1,
 		eRENDERER_TYPE_OPENGL = 0,		//!< OpenGl Renderer
-		eRENDERER_TYPE_DIRECT3D = 1,	//!< Direct3D11 Renderer
 		eRENDERER_TYPE_COUNT = 2,
 	}	eRENDERER_TYPE;
 	/*!
@@ -1932,6 +1926,7 @@ namespace Castor3D
 	class RenderLoopSync;
 
 	DECLARE_SMART_PTR( RenderWindow );
+	DECLARE_SMART_PTR( RenderTarget );
 	DECLARE_SMART_PTR( RenderBuffer );
 	DECLARE_SMART_PTR( ColourRenderBuffer );
 	DECLARE_SMART_PTR( DepthStencilRenderBuffer );

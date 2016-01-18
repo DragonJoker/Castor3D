@@ -17,14 +17,6 @@ function( PostEffectsBuild )
 			)
 		endif ()
 
-		if( ${CASTOR_BUILD_RENDERER_D3D11} )
-			set( PostEffectLibraries
-				${PostEffectLibraries}
-				${D3dLibraries}
-				Dx11RenderSystem
-			)
-		endif ()
-
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			set( Build ${Bloom} )
 			add_subdirectory( Plugins/PostEffects/BloomPostEffect )
@@ -51,15 +43,11 @@ endfunction( PostEffectsSummary )
 
 function( PostEffectsSetup )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
-		cpack_add_component_group( PostEffects
-			DESCRIPTION "PostEffects plugins usable in Castor3D"
-		)
-
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			cpack_add_component( BloomPostEffect
-				DISPLAY_NAME "BloomPostEffect plugin"
-				DESCRIPTION "Allows Bloom post effect"
-				GROUP PostEffects
+				DISPLAY_NAME "BloomPostEffect"
+				DESCRIPTION "Allows HDR Bloom post effect."
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)

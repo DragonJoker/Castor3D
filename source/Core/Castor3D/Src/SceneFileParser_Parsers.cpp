@@ -849,7 +849,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBillboard )
 
 	if ( l_pContext->pScene )
 	{
-		l_pContext->pBillboards = l_pContext->m_pParser->GetOwner()->GetRenderSystem()->CreateBillboardsList( l_pContext->pScene );
+		l_pContext->pBillboards = std::make_shared< BillboardList >( l_pContext->pScene, *l_pContext->m_pParser->GetOwner()->GetRenderSystem() );
 
 		if ( l_pContext->pBillboards )
 		{
@@ -2172,32 +2172,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassGlShader )
 }
 END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassHlShader )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->pShaderProgram.reset();
-	l_pContext->eShaderObject = eSHADER_TYPE_COUNT;
-
-	if ( l_pContext->uiPass >= 0 )
-	{
-		eRENDERER_TYPE l_eRendererType = l_pContext->m_pParser->GetOwner()->GetRenderSystem()->GetRendererType();
-
-		if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D )
-		{
-			l_pContext->pShaderProgram = l_pContext->m_pParser->GetOwner()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
-		}
-		else
-		{
-			p_parser->Ignore();
-		}
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "Directive <pass::hl_shader> : Pass not initialised" ) );
-	}
-}
-END_ATTRIBUTE_PUSH( eSECTION_HLSL_SHADER )
-
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlphaBlendMode )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2527,32 +2501,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramFile )
 	else
 	{
 		PARSING_ERROR( cuT( "Directive <program::file>: Shader not initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramEntry )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	String l_name;
-	eRENDERER_TYPE l_eRendererType = l_pContext->eRendererType;
-
-	if ( l_eRendererType == eRENDERER_TYPE_DIRECT3D )
-	{
-		p_params[0]->Get( l_name );
-
-		if ( l_pContext->eShaderObject != eSHADER_TYPE_COUNT )
-		{
-			l_pContext->pShaderProgram->SetEntryPoint( l_pContext->eShaderObject, l_name );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Directive <program::entry> : Shader Program not initialised" ) );
-		}
-	}
-	else
-	{
-		PARSING_WARNING( cuT( "Directive <program::entry> : Non D3D Renderer" ) );
 	}
 }
 END_ATTRIBUTE()

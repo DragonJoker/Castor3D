@@ -131,7 +131,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~BillboardList();
+		C3D_API ~BillboardList();
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements
@@ -159,32 +159,6 @@ namespace Castor3D
 		 *\return		\p true si tout s'est bien passe
 		 */
 		C3D_API bool InitialiseShader( RenderTechniqueBase & p_technique );
-		/**
-		 *\~english
-		 *\brief		Gets a point from the list
-		 *\param[in]	p_index	The point index
-		 *\return		The point
-		 *\~french
-		 *\brief		Recupere un point de la liste
-		 *\param[in]	p_index	L'index du point
-		 *\return		Le point
-		 */
-		Castor::Point3r const & GetAt( uint32_t p_index )const
-		{
-			return m_arrayPositions[p_index];
-		}
-		/**
-		 *\~english
-		 *\brief		Gets the list size
-		 *\return		The value
-		 *\~french
-		 *\brief		Recupere la taille de la liste
-		 *\return		La valeur
-		 */
-		uint32_t GetCount()const
-		{
-			return uint32_t( m_arrayPositions.size() );
-		}
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -239,6 +213,32 @@ namespace Castor3D
 		C3D_API void SetDimensions( Castor::Size const & p_dimensions );
 		/**
 		 *\~english
+		 *\brief		Gets a point from the list
+		 *\param[in]	p_index	The point index
+		 *\return		The point
+		 *\~french
+		 *\brief		Recupere un point de la liste
+		 *\param[in]	p_index	L'index du point
+		 *\return		Le point
+		 */
+		inline Castor::Point3r const & GetAt( uint32_t p_index )const
+		{
+			return m_arrayPositions[p_index];
+		}
+		/**
+		 *\~english
+		 *\brief		Gets the list size
+		 *\return		The value
+		 *\~french
+		 *\brief		Recupere la taille de la liste
+		 *\return		La valeur
+		 */
+		inline uint32_t GetCount()const
+		{
+			return uint32_t( m_arrayPositions.size() );
+		}
+		/**
+		 *\~english
 		 *\brief		Sets a point in the list
 		 *\param[in]	p_index		The point index
 		 *\param[in]	p_ptPosition	The point
@@ -247,7 +247,7 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index du point
 		 *\param[in]	p_ptPosition	Le point
 		 */
-		void SetAt( uint32_t p_index, Castor::Point3r const & p_ptPosition )
+		inline void SetAt( uint32_t p_index, Castor::Point3r const & p_ptPosition )
 		{
 			m_bNeedUpdate = true;
 			m_arrayPositions[p_index] = p_ptPosition;
@@ -284,7 +284,7 @@ namespace Castor3D
 		 *\brief		Recupere un iterateur sur le debut de la liste
 		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayIt Begin()
+		inline Castor::Point3rArrayIt begin()
 		{
 			return m_arrayPositions.begin();
 		}
@@ -296,7 +296,7 @@ namespace Castor3D
 		 *\brief		Recupere un iterateur sur le debut de la liste
 		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayConstIt Begin()const
+		inline Castor::Point3rArrayConstIt begin()const
 		{
 			return m_arrayPositions.begin();
 		}
@@ -308,7 +308,7 @@ namespace Castor3D
 		 *\brief		Recupere un iterateur sur la fin de la liste
 		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayIt End()
+		inline Castor::Point3rArrayIt end()
 		{
 			return m_arrayPositions.end();
 		}
@@ -320,25 +320,10 @@ namespace Castor3D
 		 *\brief		Recupere un iterateur sur la fin de la liste
 		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayConstIt End()const
+		inline Castor::Point3rArrayConstIt end()const
 		{
 			return m_arrayPositions.end();
 		}
-
-	protected:
-		/**
-		 *\~english
-		 *\brief		Retrieves the appropriate shader program
-		 *\param[in]	p_technique	The current rendering technique, used to select appropriate shaders
-		 *\param[in]	p_flags		The texture channels flags, to create the right program
-		 *\return		\p true if all is OK
-		 *\~french
-		 *\brief		Récupère le shader approprié
-		 *\param[in]	p_technique	La technique de rendu courante, utilisee pour recuperer les bons shaders
-		 *\param[in]	p_flags		Les indicateurs de canaux de textures, pour créer le bon programme
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual ShaderProgramBaseSPtr DoGetProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
 
 	protected:
 		//!\~english The positions list	\~french La liste des positions

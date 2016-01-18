@@ -107,10 +107,6 @@ namespace Castor3D
 				l_return = p_file.WriteText( l_strTabs + cuT( "gl_shader_program\n" ) ) > 0;
 				break;
 
-			case eSHADER_LANGUAGE_HLSL:
-				l_return = p_file.WriteText( l_strTabs + cuT( "hl_shader_program\n" ) ) > 0;
-				break;
-
 			default:
 				l_return = false;
 				break;
@@ -383,28 +379,6 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgramBase::SetEntryPoint( eSHADER_TYPE p_target, String const & p_name )
-	{
-		if ( m_pShaders[p_target] )
-		{
-			m_pShaders[p_target]->SetEntryPoint( p_name );
-		}
-
-		ResetToCompile();
-	}
-
-	String ShaderProgramBase::GetEntryPoint( eSHADER_TYPE p_target )const
-	{
-		String l_strReturn;
-
-		if ( m_pShaders[p_target] )
-		{
-			l_strReturn = m_pShaders[p_target]->GetEntryPoint();
-		}
-
-		return l_strReturn;
-	}
-
 	bool ShaderProgramBase::HasObject( eSHADER_TYPE p_target )const
 	{
 		return m_pShaders[p_target] && m_pShaders[p_target]->HasSource() && m_pShaders[p_target]->GetStatus() == eSHADER_STATUS_COMPILED;
@@ -499,7 +473,7 @@ namespace Castor3D
 		return DoGetVertexShaderSource( p_uiProgramFlags );
 	}
 
-	void ShaderProgramBase::DoInitialise()
+	bool ShaderProgramBase::DoInitialise()
 	{
 		if ( m_status == ePROGRAM_STATUS_NOTLINKED )
 		{
@@ -551,6 +525,8 @@ namespace Castor3D
 				Logger::LogInfo( cuT( "ShaderProgram::Initialise - Program Linked successfully" ) );
 			}
 		}
+
+		return m_status == ePROGRAM_STATUS_LINKED;
 	}
 
 	void ShaderProgramBase::DoBind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )

@@ -126,25 +126,6 @@ namespace GlRender
 		 *\copydoc		Castor3D::FrameBuffer::DoClear
 		 */
 		virtual void DoClear( uint32_t p_targets );
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoInitialise
-		 */
-		virtual bool DoInitialise( Castor::Size const & p_size )
-		{
-			return true;
-		}
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoCleanup
-		 */
-		virtual void DoCleanup()
-		{
-		}
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoResize
-		 */
-		virtual void DoResize( Castor::Size const & p_size )
-		{
-		}
 
 	private:
 		eGL_FRAMEBUFFER_MODE m_bindingMode;

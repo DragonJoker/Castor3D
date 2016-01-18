@@ -7,9 +7,9 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlColourRenderBuffer::GlColourRenderBuffer( OpenGl & p_gl, ePIXEL_FORMAT p_eFormat )
-		: ColourRenderBuffer( p_eFormat )
-		, m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_eFormat ), *this )
+	GlColourRenderBuffer::GlColourRenderBuffer( OpenGl & p_gl, ePIXEL_FORMAT p_format )
+		: ColourRenderBuffer( p_format )
+		, m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_format ), *this )
 	{
 	}
 

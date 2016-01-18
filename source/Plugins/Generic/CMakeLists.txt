@@ -33,17 +33,20 @@ endfunction( GenericSummary )
 
 function( GenericSetup )
 	if ( ${CASTOR_BUILDGRP_GENERIC} )
-		cpack_add_component_group( Generic
-			DESCRIPTION "Generic plugins usable in Castor3D"
-		)
-
-		if( ${CASTOR_BUILD_POSTFX_SSAO} )
+		if( ${CASTOR_BUILD_GENERIC_CASTORGUI} )
 			cpack_add_component( CastorGui
-				DISPLAY_NAME "CastorGui plugin"
-				DESCRIPTION "Allows GUI creation using Castor3D"
-				GROUP Generic
+				DISPLAY_NAME "CastorGui"
+				DESCRIPTION "Allows GUI creation using Castor3D."
+				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
+			)
+			cpack_add_component( CastorGui_dev
+				DISPLAY_NAME "CastorGui SDK"
+				DESCRIPTION "Development files for CastorGui."
+				GROUP Development
+				DEPENDS Castor3D_dev
+				INSTALL_TYPES Developer Full
 			)
 		endif()
 	endif ()

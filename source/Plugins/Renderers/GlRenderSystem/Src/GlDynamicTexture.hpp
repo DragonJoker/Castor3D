@@ -38,7 +38,7 @@ namespace GlRender
 		virtual uint8_t * Lock( uint32_t p_uiLock );
 		virtual void Unlock( bool p_bModified );
 		virtual void GenerateMipmaps();
-		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_eFormat );
+		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 
 		inline uint32_t GetGlName()const
 		{

@@ -142,7 +142,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassBlendFunc )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassGlShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassHlShader )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
 
@@ -168,7 +167,6 @@ namespace Castor3D
 
 	// Shader Program Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramFile )
-	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramEntry )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramSampler )
 	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryInputType )
 	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryOutputType )

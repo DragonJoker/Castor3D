@@ -852,11 +852,11 @@ namespace Castor
 			return l_eReturn;
 		}
 
-		String GetFormatName( ePIXEL_FORMAT p_eFormat )
+		String GetFormatName( ePIXEL_FORMAT p_format )
 		{
 			String l_strReturn;
 
-			switch ( p_eFormat )
+			switch ( p_format )
 			{
 			case ePIXEL_FORMAT_L8:
 				l_strReturn = pixel_definitions< ePIXEL_FORMAT_L8 >::to_str();

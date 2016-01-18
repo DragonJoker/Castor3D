@@ -94,20 +94,6 @@ namespace GlRender
 		{
 			return true;
 		}
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::HasFixedSize
-		 */
-		virtual bool HasFixedSize()const
-		{
-			return false;
-		}
-		/**
-		 *\copydoc		Castor3D::FrameBuffer::GetSize
-		 */
-		virtual Castor::Size GetSize()const
-		{
-			return Castor::Size();
-		}
 
 	private:
 		/**

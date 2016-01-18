@@ -59,11 +59,6 @@ namespace GuiCommon
 				l_wildcard = _( "GLSL Files" );
 				l_wildcard += wxT( " (*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval)|*.glsl;*.frag;*.vert;*.geom;*.ctrl;*.eval" );
 				break;
-
-			case Castor3D::eSHADER_LANGUAGE_HLSL:
-				l_wildcard = _( "HLSL Files" );
-				l_wildcard += wxT( " (*.hlsl)|*.hlsl" );
-				break;
 			}
 
 			wxFileDialog l_dialog( this, _( "Save Shader file " ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -158,10 +153,6 @@ namespace GuiCommon
 		{
 		case Castor3D::eSHADER_LANGUAGE_GLSL:
 			l_extension = wxT( ".glsl" );
-			break;
-
-		case Castor3D::eSHADER_LANGUAGE_HLSL:
-			l_extension = wxT( ".hlsl" );
 			break;
 		}
 

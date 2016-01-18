@@ -21,7 +21,7 @@ namespace Castor3D
 
 	bool GeometryBuffers::Create()
 	{
-		bool l_return = DoCreate();
+		bool l_return = true;
 
 		if ( l_return && m_pVertexBuffer )
 		{
@@ -57,8 +57,6 @@ namespace Castor3D
 		{
 			m_pMatrixBuffer->Destroy();
 		}
-
-		DoDestroy();
 	}
 
 	bool GeometryBuffers::Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature )

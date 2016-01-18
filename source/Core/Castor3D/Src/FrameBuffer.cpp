@@ -26,12 +26,11 @@ namespace Castor3D
 
 	bool FrameBuffer::Initialise( Castor::Size const & p_size )
 	{
-		return DoInitialise( p_size );
+		return true;
 	}
 
 	void FrameBuffer::Cleanup()
 	{
-		DoCleanup();
 	}
 
 	void FrameBuffer::SetClearColour( Castor::Colour const & p_clrClear )
@@ -147,8 +146,6 @@ namespace Castor3D
 				std::static_pointer_cast< RenderBufferAttachment >( l_attach )->GetRenderBuffer()->Resize( p_size );
 			}
 		}
-
-		DoResize( p_size );
 	}
 
 	bool FrameBuffer::BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_components )

@@ -53,33 +53,6 @@ namespace Castor3D
 				l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_declaration->GetStride()] );
 			}
 		}
-		{
-			if ( p_invertFinal )
-			{
-				real l_pBuffer[] =
-				{
-					0, 0, 0, 1,
-					1, 1, 1, 0,
-					0, 1, 0, 0,
-					0, 0, 0, 1,
-					1, 0, 1, 1,
-					1, 1, 1, 0,
-				};
-
-				std::memcpy( m_finalBuffer, l_pBuffer, sizeof( l_pBuffer ) );
-			}
-			else
-			{
-				std::memcpy( m_finalBuffer, m_pBuffer, sizeof( m_pBuffer ) );
-			}
-
-			uint32_t i = 0;
-
-			for ( auto & l_vertex : m_finalVertex )
-			{
-				l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_finalBuffer )[i++ * m_declaration->GetStride()] );
-			}
-		}
 	}
 
 	Context::~Context()
@@ -105,10 +78,6 @@ namespace Castor3D
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_declaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 		m_geometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_declaration )[0], m_declaration->Size() );
-		l_pVtxBuffer->Resize( m_finalVertex.size() * m_declaration->GetStride() );
-		l_pVtxBuffer->LinkCoords( m_finalVertex.begin(), m_finalVertex.end() );
-		m_finalGeometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		m_pDsStateNoDepth = GetOwner()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
 		m_pDsStateNoDepth->SetDepthTest( false );
 		m_pDsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
@@ -122,8 +91,6 @@ namespace Castor3D
 			l_program->Initialise();
 			m_geometryBuffers->Create();
 			m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_finalGeometryBuffers->Create();
-			m_finalGeometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_pDsStateNoDepth->Initialise();
 			m_pDsStateNoDepthWrite->Initialise();
 			EndCurrent();
@@ -140,8 +107,6 @@ namespace Castor3D
 		m_pDsStateNoDepthWrite->Cleanup();
 		m_geometryBuffers->Cleanup();
 		m_geometryBuffers->Destroy();
-		m_finalGeometryBuffers->Cleanup();
-		m_finalGeometryBuffers->Destroy();
 		ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
 
 		if ( l_program )
@@ -153,7 +118,6 @@ namespace Castor3D
 		DoCleanup();
 		m_pDsStateNoDepth.reset();
 		m_pDsStateNoDepthWrite.reset();
-		m_finalGeometryBuffers.reset();
 		m_geometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_renderTextureProgram.reset();
@@ -187,16 +151,10 @@ namespace Castor3D
 		DoSetAlphaFunc( p_func, p_value );
 	}
 
-	void Context::RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture )
+	void Context::RenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture )
 	{
 		m_mapDiffuse->SetValue( p_texture.get() );
 		DoRenderTexture( p_size, p_texture, m_geometryBuffers, m_renderTextureProgram.lock() );
-	}
-
-	void Context::RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture )
-	{
-		m_mapDiffuse->SetValue( p_texture.get() );
-		DoRenderTexture( p_size, p_texture, m_finalGeometryBuffers, m_renderTextureProgram.lock() );
 	}
 
 	void Context::RenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture, ShaderProgramBaseSPtr p_program )

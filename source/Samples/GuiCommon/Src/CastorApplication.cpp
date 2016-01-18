@@ -8,6 +8,8 @@
 #include <wx/display.h>
 
 #include <Engine.hpp>
+#include <PluginManager.hpp>
+#include <RendererPlugin.hpp>
 
 #include <File.hpp>
 #include <Exception.hpp>
@@ -172,10 +174,6 @@ namespace GuiCommon
 			{
 				m_rendererType = eRENDERER_TYPE_OPENGL;
 			}
-			else if ( l_parser.Found( wxT( "directx" ) ) )
-			{
-				m_rendererType = eRENDERER_TYPE_DIRECT3D;
-			}
 
 			wxString l_strFileName;
 
@@ -248,6 +246,16 @@ namespace GuiCommon
 		DoLoadPlugins( p_splashScreen );
 
 		p_splashScreen.Step( _( "Initialising Castor3D" ), 1 );
+		auto l_renderers = m_castor->GetPluginManager().GetPlugins( ePLUGIN_TYPE_RENDERER );
+
+		if ( l_renderers.empty() )
+		{
+			CASTOR_EXCEPTION( "No renderer plugins" );
+		}
+		else if ( l_renderers.size() == 1 )
+		{
+			m_rendererType = std::static_pointer_cast< RendererPlugin >( l_renderers.begin()->second )->GetRendererType();
+		}
 
 		if ( m_rendererType == eRENDERER_TYPE_UNDEFINED )
 		{

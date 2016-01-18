@@ -160,15 +160,6 @@ namespace Castor3D
 		C3D_API bool SupportsShaderModel( eSHADER_MODEL p_eShaderModel );
 		/**
 		 *\~english
-		 *\brief		Tells if the renderer API supports depth buffer for main FBO
-		 *\return		The support status
-		 *\~french
-		 *\brief		Dit si l'API de rendu supporte les tampons de profondeur pour le FBO principal
-		 *\return		Le statut du support
-		 */
-		C3D_API bool SupportsDepthBuffer()const;
-		/**
-		 *\~english
 		 *\brief		Registers additional parsers for SceneFileParser.
 		 *\param[in]	p_name		The registering name.
 		 *\param[in]	p_parsers	The parsers.

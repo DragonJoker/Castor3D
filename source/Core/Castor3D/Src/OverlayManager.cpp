@@ -216,7 +216,7 @@ namespace Castor3D
 		{
 			if ( !m_pRenderer )
 			{
-				m_pRenderer = GetOwner()->GetRenderSystem()->CreateOverlayRenderer();
+				m_pRenderer = std::make_shared< OverlayRenderer >( *GetOwner()->GetRenderSystem() );
 				m_pRenderer->Initialise();
 			}
 		}

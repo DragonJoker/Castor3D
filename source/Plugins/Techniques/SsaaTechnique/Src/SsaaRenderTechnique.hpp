@@ -178,19 +178,6 @@ namespace Ssaa
 		Castor::String DoGetGlPixelShaderSource( uint32_t p_flags )const;
 
 #endif
-#if C3D_HAS_D3D11_RENDERER
-
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String DoGetD3D11PixelShaderSource( uint32_t p_flags )const;
-
-#endif
 
 	protected:
 		//!\~english The supersampled frame buffer	\~french Le tampon d'image supersamplé

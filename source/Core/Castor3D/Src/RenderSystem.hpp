@@ -202,17 +202,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Checks if the loaded render API needs matrix transposition for shader variables
-		 *\remarks		Needed because of Direct3D 11
-		 *\return		\p false if the doesn't need it
-		 *\~french
-		 *\brief		Vérifie si l'API de rendu nécessite de transposer les matrices pour les variables de shaders
-		 *\remarks		Nécessaire à cause de Direct3D 11
-		 *\return		\p false s'il la transposition n'est pas nécessaire
-		 */
-		C3D_API virtual	bool NeedsMatrixTransposition()const = 0;
-		/**
-		 *\~english
 		 *\brief		Creates a geometries buffer holder.
 		 *\param[in]	p_pVertexBuffer	The vertex buffer.
 		 *\param[in]	p_pIndexBuffer	The index buffer.
@@ -248,15 +237,6 @@ namespace Castor3D
 		C3D_API virtual FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name ) = 0;
 		/**
 		 *\~english
-		 *\brief		Tells if the renderer API supports depth buffer for main FBO
-		 *\return		The support status
-		 *\~french
-		 *\brief		Dit si l'API de rendu supporte les tampons de profondeur pour le FBO principal
-		 *\return		Le statut du support
-		 */
-		C3D_API virtual bool SupportsDepthBuffer()const = 0;
-		/**
-		 *\~english
 		 *\brief		Create a depth and stencil states object
 		 *\return		The object
 		 *\~french
@@ -284,17 +264,6 @@ namespace Castor3D
 		C3D_API virtual BlendStateSPtr CreateBlendState() = 0;
 		/**
 		 *\~english
-		 *\brief		Create a billboards list
-		 *\param[in]	p_scene		The parent scene
-		 *\return		The object
-		 *\~french
-		 *\brief		Crée une liste de billboards
-		 *\param[in]	p_scene		La scène parente
-		 *\return		L'objet
-		 */
-		C3D_API virtual BillboardListSPtr CreateBillboardsList( SceneSPtr p_scene ) = 0;
-		/**
-		 *\~english
 		 *\brief		Create a sampler
 		 *\param[in]	p_name	The sampler name
 		 *\return		The object
@@ -313,15 +282,6 @@ namespace Castor3D
 		 *\return		Le ShaderProgram créé
 		 */
 		C3D_API virtual ShaderProgramBaseSPtr CreateShaderProgram() = 0;
-		/**
-		 *\~english
-		 *\brief		Creates an overlay renderer
-		 *\return		The created renderer
-		 *\~french
-		 *\brief		Crée un renderer d'incrustations
-		 *\return		Le renderer créé
-		 */
-		C3D_API virtual OverlayRendererSPtr CreateOverlayRenderer() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
@@ -406,10 +366,28 @@ namespace Castor3D
 		 *\brief		Creates the window back buffers.
 		 *\return		The created back buffers.
 		 *\~french
-		 *\brief		Crée les tampons d'image de la fenêtre
+		 *\brief		Crée les tampons d'image de la fenêtre.
 		 *\return		Les tampons d'image créés.
 		 */
-		C3D_API virtual Castor3D::BackBuffersSPtr CreateBackBuffers() = 0;
+		C3D_API virtual BackBuffersSPtr CreateBackBuffers() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a shader program for overlays rendering use.
+		 *\return		The created program.
+		 *\~french
+		 *\brief		Crée un programme shader pour les rendu d'incrustations
+		 *\return		Le programme créé.
+		 */
+		C3D_API virtual ShaderProgramBaseSPtr CreateOverlayProgram( uint32_t p_flags ) = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a shader program for billboards rendering use.
+		 *\return		The created program.
+		 *\~french
+		 *\brief		Crée un programme shader pour les rendu de billboards.
+		 *\return		Le programme créé.
+		 */
+		C3D_API virtual ShaderProgramBaseSPtr CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type

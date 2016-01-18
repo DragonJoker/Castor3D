@@ -233,36 +233,6 @@ namespace Deferred
 		Castor::String DoGetGlLightPassPixelShaderSource( uint32_t p_flags )const;
 #endif
 
-#if C3D_HAS_D3D11_RENDERER
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String DoGetD3D11PixelShaderSource( uint32_t p_flags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		Castor::String DoGetD3D11LightPassVertexShaderSource( uint32_t p_uiProgramFlags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String DoGetD3D11LightPassPixelShaderSource( uint32_t p_flags )const;
-#endif
-
 	protected:
 		//!\~english The various textures	\~french Les diverses textures
 		Castor3D::DynamicTextureSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];

@@ -43,21 +43,9 @@ namespace Castor3D
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
 
-		if ( p_object.GetParent()->GetLanguage() == eSHADER_LANGUAGE_GLSL )
+		if ( l_return )
 		{
-			// One source for each object
-			if ( l_return )
-			{
-				l_return = DoFillChunk( p_object.GetLoadedSource(), eCHUNK_TYPE_SHADER_OBJECT_SOURCE, l_chunk );
-			}
-		}
-		else
-		{
-			// One source for all program but entries for objects
-			if ( l_return )
-			{
-				l_return = DoFillChunk( p_object.GetEntryPoint(), eCHUNK_TYPE_SHADER_OBJECT_ENTRY, l_chunk );
-			}
+			l_return = DoFillChunk( p_object.GetLoadedSource(), eCHUNK_TYPE_SHADER_OBJECT_SOURCE, l_chunk );
 		}
 
 		if ( p_object.GetType() == eSHADER_TYPE_GEOMETRY )
@@ -135,16 +123,6 @@ namespace Castor3D
 
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_SHADER_OBJECT_ENTRY:
-				l_return = DoParseChunk( l_strText, l_chunk );
-
-				if ( l_return )
-				{
-					p_object.SetEntryPoint( l_strText );
-				}
-
-				break;
-
 			case eCHUNK_TYPE_SHADER_OBJECT_SOURCE:
 				l_return = DoParseChunk( l_strText, l_chunk );
 
@@ -348,8 +326,6 @@ namespace Castor3D
 
 	void ShaderObjectBase::Bind()
 	{
-		DoBind();
-
 		for ( auto && l_variable : m_listFrameVariables )
 		{
 			l_variable->Bind();
@@ -362,8 +338,6 @@ namespace Castor3D
 		{
 			l_variable->Unbind();
 		}
-
-		DoUnbind();
 	}
 
 	void ShaderObjectBase::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )

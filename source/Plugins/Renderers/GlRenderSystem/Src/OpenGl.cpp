@@ -2511,13 +2511,13 @@ bool OpenGl::BindRenderbuffer( eGL_RENDERBUFFER_MODE p_eBindingMode, uint32_t id
 	return glCheckError( *this, "glBindRenderbuffer" );
 }
 
-bool OpenGl::RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE p_eFormat, int width, int height )const
+bool OpenGl::RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE p_format, int width, int height )const
 {
-	m_pfnRenderbufferStorage( p_eBindingMode, p_eFormat, width, height );
+	m_pfnRenderbufferStorage( p_eBindingMode, p_format, width, height );
 	return glCheckError( *this, "glRenderbufferStorage" );
 }
 
-bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE p_eFormat, int width, int height )const
+bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE p_format, int width, int height )const
 {
 	bool l_return = true;
 	int l_iMaxSamples;
@@ -2527,13 +2527,13 @@ bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMod
 
 	if ( p_iSamples <= l_iMaxSamples && width <= l_iMaxSize && height < l_iMaxSize )
 	{
-		m_pfnRenderbufferStorageMultisample( p_eBindingMode, p_iSamples, p_eFormat, width, height );
+		m_pfnRenderbufferStorageMultisample( p_eBindingMode, p_iSamples, p_format, width, height );
 		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( p_iSamples > l_iMaxSamples )
 	{
 		Logger::LogWarning( String( cuT( "glRenderbufferStorageMultisample - Asked for more samples than available, setting it to max available" ) ) );
-		m_pfnRenderbufferStorageMultisample( p_eBindingMode, l_iMaxSamples, p_eFormat, width, height );
+		m_pfnRenderbufferStorageMultisample( p_eBindingMode, l_iMaxSamples, p_format, width, height );
 		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( width > l_iMaxSize )
@@ -2550,13 +2550,13 @@ bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMod
 	return l_return;
 }
 
-bool OpenGl::RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE p_eFormat, Castor::Size const & size )const
+bool OpenGl::RenderbufferStorage( eGL_RENDERBUFFER_MODE p_eBindingMode, eGL_RENDERBUFFER_STORAGE p_format, Castor::Size const & size )const
 {
-	m_pfnRenderbufferStorage( p_eBindingMode, p_eFormat, size.width(), size.height() );
+	m_pfnRenderbufferStorage( p_eBindingMode, p_format, size.width(), size.height() );
 	return glCheckError( *this, "glRenderbufferStorage" );
 }
 
-bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE p_eFormat, Castor::Size const & size )const
+bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMode, int p_iSamples, eGL_RENDERBUFFER_STORAGE p_format, Castor::Size const & size )const
 {
 	bool l_return = true;
 	int l_iMaxSamples;
@@ -2566,13 +2566,13 @@ bool OpenGl::RenderbufferStorageMultisample( eGL_RENDERBUFFER_MODE p_eBindingMod
 
 	if ( p_iSamples <= l_iMaxSamples && int( size.width() ) <= l_iMaxSize && int( size.height() ) < l_iMaxSize )
 	{
-		m_pfnRenderbufferStorageMultisample( p_eBindingMode, p_iSamples, p_eFormat, size.width(), size.height() );
+		m_pfnRenderbufferStorageMultisample( p_eBindingMode, p_iSamples, p_format, size.width(), size.height() );
 		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( p_iSamples > l_iMaxSamples )
 	{
 		Logger::LogWarning( String( cuT( "glRenderbufferStorageMultisample - Asked for more samples than available, setting it to max available" ) ) );
-		m_pfnRenderbufferStorageMultisample( p_eBindingMode, l_iMaxSamples, p_eFormat, size.width(), size.height() );
+		m_pfnRenderbufferStorageMultisample( p_eBindingMode, l_iMaxSamples, p_format, size.width(), size.height() );
 		l_return = glCheckError( *this, "glRenderbufferStorageMultisample" );
 	}
 	else if ( int( size.width() ) > l_iMaxSize )

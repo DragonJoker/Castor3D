@@ -36,7 +36,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgramBase::Initialise
 		 */
-		virtual void Initialise();
+		virtual bool Initialise();
 		/**
 		 *\copydoc		Castor3D::ShaderProgramBase::Cleanup
 		 */

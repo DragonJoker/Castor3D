@@ -174,15 +174,15 @@ namespace Castor3D
 		 *\remark		Doesn't update the internal buffer, so either never use it or always use it
 		 *\param[in]	p_buffer	The image buffer
 		 *\param[in]	p_size		The image resolution
-		 *\param[in]	p_eFormat	The image pixel format
+		 *\param[in]	p_format	The image pixel format
 		 *\~french
 		 *\brief		Envoie le buffer d'image au driver
 		 *\remark		Ne met pas à jour le buffer interne, donc ne l'utilisez jamais ou utilisez la tout le temps
 		 *\param[in]	p_buffer	Le buffer d'image
 		 *\param[in]	p_size		Les dimensions de l'image
-		 *\param[in]	p_eFormat	Le format des pixels de l'image
+		 *\param[in]	p_format	Le format des pixels de l'image
 		 */
-		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_eFormat ) = 0;
+		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
 
 		using TextureBase::SetImage;
 

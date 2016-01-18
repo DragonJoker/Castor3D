@@ -540,7 +540,7 @@ namespace Castor3D
 			{
 				ContextRPtr l_context = GetOwner()->GetRenderSystem()->GetCurrentContext();
 				l_context->GetNoDepthState()->Apply();
-				l_context->RenderTextureToCurrentBuffer( p_size, m_backgroundImage );
+				l_context->RenderTexture( p_size, m_backgroundImage );
 			}
 		}
 	}

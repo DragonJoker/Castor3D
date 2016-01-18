@@ -39,13 +39,17 @@ namespace GlRender
 		ObjectType::Destroy();
 	}
 
-	void GlShaderProgram::Initialise()
+	bool GlShaderProgram::Initialise()
 	{
+		bool l_return = true;
+
 		if ( m_status != ePROGRAM_STATUS_LINKED )
 		{
 			ObjectType::Create();
-			DoInitialise();
+			l_return = DoInitialise();
 		}
+
+		return l_return;
 	}
 
 	bool GlShaderProgram::Link()
