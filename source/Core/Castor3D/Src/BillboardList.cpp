@@ -2,6 +2,7 @@
 
 #include "Buffer.hpp"
 #include "Engine.hpp"
+#include "FrameVariableBuffer.hpp"
 #include "Material.hpp"
 #include "MaterialManager.hpp"
 #include "Pass.hpp"
@@ -41,9 +42,9 @@ namespace Castor3D
 		{
 			l_return = p_file.WriteText( cuT( "\t\tpositions\n\t\t{\n" ) ) > 0;
 
-			for ( Point3rArray::const_iterator l_it = p_obj.Begin(); l_it != p_obj.End(); ++l_it )
+			for ( auto const & l_point : p_obj )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tpos %f %f %f" ), l_it->at( 0 ), l_it->at( 1 ), l_it->at( 2 ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "\t\t\tpos %f %f %f" ), l_point[0], l_point[1], l_point[2] ) > 0;
 			}
 
 			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
@@ -86,9 +87,9 @@ namespace Castor3D
 
 		if ( l_return && p_obj.GetCount() )
 		{
-			for ( Point3rArray::const_iterator l_it = p_obj.Begin(); l_it != p_obj.End(); ++l_it )
+			for ( auto const & l_point : p_obj )
 			{
-				l_return = DoFillChunk( *l_it, eCHUNK_TYPE_BILLBOARD_POSITION, l_chunk );
+				l_return = DoFillChunk( l_point, eCHUNK_TYPE_BILLBOARD_POSITION, l_chunk );
 			}
 		}
 
@@ -194,7 +195,7 @@ namespace Castor3D
 
 				if ( !l_program )
 				{
-					l_program = DoGetProgram( p_technique, l_pass->GetTextureFlags() );
+					l_program = GetOwner()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
 					l_manager.AddBillboardProgram( l_program, l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
 				}
 
@@ -205,7 +206,25 @@ namespace Castor3D
 
 					if ( l_program )
 					{
-						l_program->Initialise();
+						auto l_config = l_program->FindFrameVariableBuffer( cuT( "Config" ) );
+
+						if ( l_config )
+						{
+							l_config->GetVariable( cuT( "c3d_v2iDimensions" ), m_pDimensionsUniform );
+
+							if ( !m_pDimensionsUniform )
+							{
+								Logger::LogError( cuT( "Couldn't find Config UBO in billboard shader program" ) );
+							}
+							else
+							{
+								l_return = l_program->Initialise();
+							}
+						}
+						else
+						{
+							Logger::LogError( cuT( "Couldn't find Config UBO in billboard shader program" ) );
+						}
 					}
 
 					if ( l_return )

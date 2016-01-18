@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~OverlayRenderer();
+		C3D_API ~OverlayRenderer();
 		/**
 		 *\~english
 		 *\brief		Initialises the buffers
@@ -130,17 +130,6 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Retrieves a program compiled using given flags
-		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL
-		 *\return		The program
-		 *\~french
-		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL
-		 *\return		Le programme
-		 */
-		C3D_API virtual ShaderProgramBaseSPtr DoCreateProgram( uint32_t p_flags ) = 0;
-		/**
-		 *\~english
 		 *\brief		Retrieves a panel program compiled using given flags
 		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL
 		 *\return		The program
@@ -173,7 +162,7 @@ namespace Castor3D
 		 *\param[in,out]p_programs	Recherche un shader correspondant dans cette map. S'il n'y en a pas, crée le programme et l'ajoute à la map.
 		 *\return		Le programme
 		 */
-		C3D_API virtual ShaderProgramBaseSPtr DoGetProgram( uint32_t p_flags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs );
+		C3D_API ShaderProgramBaseSPtr DoGetProgram( uint32_t p_flags, std::map< uint32_t, ShaderProgramBaseSPtr > & p_programs );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.

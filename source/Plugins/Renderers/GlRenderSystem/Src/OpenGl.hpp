@@ -304,8 +304,8 @@ namespace GlRender
 
 			PixelFmt() {}
 
-			PixelFmt( eGL_FORMAT p_eFormat, eGL_INTERNAL p_eInternal, eGL_TYPE p_type )
-				: Format( p_eFormat )
+			PixelFmt( eGL_FORMAT p_format, eGL_INTERNAL p_eInternal, eGL_TYPE p_type )
+				: Format( p_format )
 				, Internal( p_eInternal )
 				, Type( p_type )
 			{
@@ -874,9 +874,9 @@ namespace GlRender
 		{
 			return ShaderTypes[p_type];
 		}
-		inline eGL_INTERNAL_FORMAT GetInternal( Castor::ePIXEL_FORMAT p_eFormat )const
+		inline eGL_INTERNAL_FORMAT GetInternal( Castor::ePIXEL_FORMAT p_format )const
 		{
-			return Internals[p_eFormat];
+			return Internals[p_format];
 		}
 		inline uint32_t GetComponents( uint32_t p_components )const
 		{

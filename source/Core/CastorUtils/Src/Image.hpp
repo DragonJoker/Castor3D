@@ -301,14 +301,14 @@ namespace Castor
 		 *\brief		Retrieves the wanted pixel and puts it in the buffer to the given format
 		 *\param[in]	x,y			The pixel coordinates
 		 *\param[out]	p_pPixel	Receives the pixel in given format
-		 *\param[in]	p_eFormat	The wanted format for the pixel buffer
+		 *\param[in]	p_format	The wanted format for the pixel buffer
 		 *\~french
 		 *\brief		Récupère le pixel demandé et remplit le buffer au format donné
 		 *\param[in]	x,y			Les coordonnées du pixel
 		 *\param[out]	p_pPixel	Reçoit le pixel dans le format donné
-		 *\param[in]	p_eFormat	Le format voulu pour le buffer
+		 *\param[in]	p_format	Le format voulu pour le buffer
 		 */
-		CU_API void GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, ePIXEL_FORMAT p_eFormat )const;
+		CU_API void GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, ePIXEL_FORMAT p_format )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel colour

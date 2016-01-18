@@ -316,7 +316,7 @@ namespace Castor3D
 		else
 		{
 			// Since it does not exist yet, create it and initialise it
-			l_return = DoCreateProgram( p_flags );
+			l_return = GetOwner()->CreateOverlayProgram( p_flags );
 
 			if ( l_return )
 			{

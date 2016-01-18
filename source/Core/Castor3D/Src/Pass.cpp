@@ -196,17 +196,6 @@ namespace Castor3D
 
 					break;
 
-				case eCHUNK_TYPE_PASS_HLSHADER:
-					l_program = p_pass.GetOwner()->GetShaderManager().GetNewProgram( eSHADER_LANGUAGE_HLSL );
-					l_return = ShaderProgramBase::BinaryParser( m_path ).Parse( *l_program, l_chunk );
-
-					if ( l_return )
-					{
-						p_pass.SetShader( l_program );
-					}
-
-					break;
-
 				case eCHUNK_TYPE_PASS_TEXTURE:
 					l_pUnit = p_pass.AddTextureUnit();
 					l_return = TextureUnit::BinaryParser( m_path ).Parse( *l_pUnit, l_chunk );

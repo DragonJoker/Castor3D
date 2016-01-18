@@ -63,19 +63,6 @@ namespace GlRender
 		 */
 		virtual void AttachTo( Castor3D::ShaderProgramBase & p_program );
 		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::SetEntryPoint
-		 */
-		virtual void SetEntryPoint( Castor::String const & CU_PARAM_UNUSED( p_name ) )
-		{
-		}
-		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::GetEntryPoint
-		 */
-		virtual Castor::String GetEntryPoint()const
-		{
-			return cuT( "" );
-		}
-		/**
 		 *\~english
 		 *\brief		Tells if the compiled shader has the given parameter
 		 *\param[in]	p_name	The parameter name
@@ -121,14 +108,6 @@ namespace GlRender
 		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value );
 
 	private:
-		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::DoBind
-		 */
-		virtual void DoBind() {}
-		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::DoUnbind
-		 */
-		virtual void DoUnbind() {}
 		/**
 		 *\copydoc		Castor3D::ShaderObjectBase::DoRetrieveCompilerLog
 		 */

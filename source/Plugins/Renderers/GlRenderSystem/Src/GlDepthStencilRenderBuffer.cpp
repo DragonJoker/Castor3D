@@ -7,9 +7,9 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlDepthStencilRenderBuffer::GlDepthStencilRenderBuffer( OpenGl & p_gl, ePIXEL_FORMAT p_eFormat )
-		: DepthStencilRenderBuffer( p_eFormat )
-		, m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_eFormat ), *this )
+	GlDepthStencilRenderBuffer::GlDepthStencilRenderBuffer( OpenGl & p_gl, ePIXEL_FORMAT p_format )
+		: DepthStencilRenderBuffer( p_format )
+		, m_glRenderBuffer( p_gl, p_gl.GetRboStorage( p_format ), *this )
 	{
 	}
 

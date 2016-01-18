@@ -63,8 +63,6 @@ namespace GlRender
 		virtual void Unbind();
 
 	private:
-		virtual bool DoCreate();
-		virtual void DoDestroy();
 		virtual bool DoInitialise();
 		virtual void DoCleanup();
 

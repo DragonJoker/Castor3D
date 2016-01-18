@@ -126,18 +126,7 @@ namespace Castor3D
 		 *\param[in]	p_size			La taille du viewport de rendu.
 		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderTextureToCurrentBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture );
-		/**
-		 *\~english
-		 *\brief		Renders the given texture to the back buffers.
-		 *\param[in]	p_size			The render viewport size.
-		 *\param[in]	p_texture		The texture.
-		 *\~french
-		 *\brief		Rend la texture donnée dans le tampon e la fenêtre.
-		 *\param[in]	p_size			La taille du viewport de rendu.
-		 *\param[in]	p_texture		La texture.
-		 */
-		C3D_API void RenderTextureToBackBuffer( Castor::Size const & p_size, TextureBaseSPtr p_texture );
+		C3D_API void RenderTexture( Castor::Size const & p_size, TextureBaseSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
@@ -331,20 +320,14 @@ namespace Castor3D
 		OneTextureFrameVariableSPtr m_mapDiffuse;
 		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
 		GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english The GeometryBuffers used when rendering a texture to the back buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon de fenêtre.
-		GeometryBuffersSPtr m_finalGeometryBuffers;
 		//!\~english The Viewport used when rendering a texture into to a frame buffer.	\~french Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
 		Castor3D::BufferDeclarationSPtr m_declaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
-		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
-		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_finalVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
 		Castor::real m_pBuffer[24];
-		//!	6 * [2(vertex position) 2(texture coordinates)]
-		Castor::real m_finalBuffer[24];
 		//!\~english The DepthStencilState without depth write and test.	\~french Le DepthStencilState sans test ni écriture de profondeur.
 		DepthStencilStateSPtr m_pDsStateNoDepth;
 		//!\~english The DepthStencilState without depth write.	\~french Le DepthStencilState sans écriture de profondeur.

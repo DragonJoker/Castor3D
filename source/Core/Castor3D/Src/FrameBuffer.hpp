@@ -392,24 +392,6 @@ namespace Castor3D
 		C3D_API Castor::ePIXEL_FORMAT DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index );
 		/**
 		 *\~english
-		 *\brief		Initialises color and depth cache buffers.
-		 *\param[in]	p_size	The frame buffer size.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Initialise les tampons de cache de couleur de profondeur.
-		 *\param[in]	p_size	La taille du tampon d'image.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API virtual bool DoInitialise( Castor::Size const & p_size ) = 0;
-		/**
-		 *\~english
-		 *\brief		Cleans up cache buffers.
-		 *\~french
-		 *\brief		Nettoie les tampons de cache.
-		 */
-		C3D_API virtual void DoCleanup() = 0;
-		/**
-		 *\~english
 		 *\brief		Defines the colour used when Context::Clear is called on the color buffer.
 		 *\~french
 		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur.
@@ -442,15 +424,6 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 */
 		C3D_API virtual void DoUnbind() = 0;
-		/**
-		 *\~english
-		 *\brief		Resizes each attached buffer
-		 *\param[in]	p_size	The new dimensions
-		 *\~french
-		 *\brief		Redimensionne tous les tampons attachés
-		 *\param[in]	p_size	Les nouvelles dimensions
-		 */
-		C3D_API virtual void DoResize( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one

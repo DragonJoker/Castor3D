@@ -274,22 +274,6 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Creates the GPU related stuff
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Crée les objets GPU
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoCreate() = 0;
-		/**
-		 *\~english
-		 *\brief		Destroys the GPU related stuff
-		 *\~french
-		 *\brief		Détruit les objets GPU
-		 */
-		C3D_API virtual void DoDestroy() = 0;
-		/**
-		 *\~english
 		 *\brief		Initialisation function
 		 *\return		\p true if OK
 		 *\~french

@@ -21,14 +21,6 @@ function( TechniquesBuild )
 		)
 	endif ()
 
-	if( ${CASTOR_BUILD_RENDERER_D3D11} )
-		set( TechniqueLibraries
-			${TechniqueLibraries}
-			${D3dLibraries}
-			Dx11RenderSystem
-		)
-	endif ()
-
 	set( Build ${Drct} )
 	add_subdirectory( Plugins/Techniques/DirectTechnique )
 	set( Drct ${Build} PARENT_SCOPE )

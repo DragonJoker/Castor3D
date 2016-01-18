@@ -24,21 +24,71 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.7.0.0
+	\date		12/11/2012
+	\~english
+	\brief		Render buffer receiving colour component.
+	\~french
+	\brief		Tampon de rendu recevant une composante de couleur.
+	*/
 	class GlColourRenderBuffer
 		: public Castor3D::ColourRenderBuffer
 	{
 	public:
-		GlColourRenderBuffer( OpenGl & p_gl, Castor::ePIXEL_FORMAT p_eFormat );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_gl		The OpenGL api.
+		 *\param[in]	p_format	The pixels format.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_gl		L'api OpenGL.
+		 *\param[in]	p_format	Le format des pixels.
+		 */
+		GlColourRenderBuffer( OpenGl & p_gl, Castor::ePIXEL_FORMAT p_format );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
 		virtual ~GlColourRenderBuffer();
-
+		/**
+		 *\copydoc		Castor3D::ColourRenderBuffer::Create
+		 */
 		virtual bool Create();
+		/**
+		 *\copydoc		Castor3D::ColourRenderBuffer::Destroy
+		 */
 		virtual void Destroy();
+		/**
+		 *\copydoc		Castor3D::ColourRenderBuffer::Initialise
+		 */
 		virtual bool Initialise( Castor::Size const & p_size );
+		/**
+		 *\copydoc		Castor3D::ColourRenderBuffer::Cleanup
+		 */
 		virtual void Cleanup();
+		/**
+		 *\copydoc		Castor3D::ColourRenderBuffer::Bind
+		 */
 		virtual bool Bind();
+		/**
+		 *\copydoc		Castor3D::ColourRenderBuffer::Unbind
+		 */
 		virtual void Unbind();
+		/**
+		 *\copydoc		Castor3D::ColourRenderBuffer::Resize
+		 */
 		virtual bool Resize( Castor::Size const & p_size );
-
+		/**
+		 *\~english
+		 *\return		The OpenGL buffer name.
+		 *\~french
+		 *\return		Le nom OpenGL du tampon.
+		 */
 		inline uint32_t	GetGlName()const
 		{
 			return m_glRenderBuffer.GetGlName();

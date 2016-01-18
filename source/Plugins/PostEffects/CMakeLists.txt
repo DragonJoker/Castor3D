@@ -17,14 +17,6 @@ function( PostEffectsBuild )
 			)
 		endif ()
 
-		if( ${CASTOR_BUILD_RENDERER_D3D11} )
-			set( PostEffectLibraries
-				${PostEffectLibraries}
-				${D3dLibraries}
-				Dx11RenderSystem
-			)
-		endif ()
-
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			set( Build ${Bloom} )
 			add_subdirectory( Plugins/PostEffects/BloomPostEffect )

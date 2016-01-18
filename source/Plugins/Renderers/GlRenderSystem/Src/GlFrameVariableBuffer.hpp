@@ -30,27 +30,6 @@ namespace GlRender
 		virtual void operator()( OpenGl & p_gl, uint32_t p_index, Castor3D::FrameVariableSPtr p_variable ) = 0;
 	};
 
-	class UboVariableInfos
-	{
-	public:
-		UboVariableInfos()
-			: m_index( 0 )
-			, m_offset( 0 )
-			, m_size( 0 )
-		{
-		}
-
-		~UboVariableInfos()
-		{
-		}
-
-		uint32_t m_index;
-		int m_offset;
-		int m_size;
-	};
-
-	DECLARE_SMART_PTR( UboVariableInfos );
-	DECLARE_MAP( Castor3D::FrameVariableSPtr, UboVariableInfosSPtr, UboVariableInfos );
 	DECLARE_MAP( Castor3D::FrameVariableSPtr, GlVariableApplyerBaseSPtr, VariableApplyer );
 
 	class GlFrameVariableBuffer

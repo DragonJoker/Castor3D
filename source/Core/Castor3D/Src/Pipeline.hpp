@@ -58,7 +58,7 @@ namespace Castor3D
 		C3D_API IPipelineImpl( Pipeline & p_pipeline, bool p_rightHanded );
 		/**
 		 *\~english
-		 *\brief		Denstructor.
+		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */

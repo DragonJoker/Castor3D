@@ -156,24 +156,6 @@ namespace Castor3D
 		C3D_API virtual void Destroy() = 0;
 		/**
 		 *\~english
-		 *\brief		Defines entry point for shader languages that need it
-		 *\param[in]	p_name	The entry point
-		 *\~french
-		 *\brief		Définit le point d'entrée pour ls langages en ayant besoin
-		 *\param[in]	p_name	Le point d'entrée
-		 */
-		C3D_API virtual void SetEntryPoint( Castor::String const & p_name ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the entry point
-		 *\return		The entry point
-		 *\~french
-		 *\brief		Récupère le point d'entrée
-		 *\return		Le point d'entrée
-		 */
-		C3D_API virtual Castor::String	GetEntryPoint()const = 0;
-		/**
-		 *\~english
 		 *\brief		Detaches this shader from it's program
 		 *\~french
 		 *\brief		Détache ce shader de son programme
@@ -524,20 +506,6 @@ namespace Castor3D
 		 *\return		\p true s'il n'y a pas d'erreurs.
 		 */
 		C3D_API bool DoCheckErrors();
-		/**
-		 *\~english
-		 *\brief		Activates the shader
-		 *\~french
-		 *\brief		Active le shader
-		 */
-		virtual void DoBind() = 0;
-		/**
-		 *\~english
-		 *\brief		Deactivates the shader
-		 *\~french
-		 *\brief		Désactive le shader
-		 */
-		virtual void DoUnbind() = 0;
 		/**
 		 *\~english
 		 *\return		Retrieve compiler messages.

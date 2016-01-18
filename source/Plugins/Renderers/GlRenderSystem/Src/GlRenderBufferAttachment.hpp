@@ -51,12 +51,22 @@ namespace GlRender
 		 *\copydoc		Castor3D::TextureAttachment::Blit
 		 */
 		virtual bool Blit( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, Castor3D::eINTERPOLATION_MODE p_interpolation );
-
+		/**
+		 *\~english
+		 *\return		The OpenGL buffer status.
+		 *\~french
+		 *\return		Le statut OpenGL du tampon.
+		 */
 		inline eGL_FRAMEBUFFER_STATUS GetGlStatus()const
 		{
 			return m_glStatus;
 		}
-
+		/**
+		 *\~english
+		 *\return		The OpenGL attachment point.
+		 *\~french
+		 *\return		Le point d'attache OpenGL.
+		 */
 		inline eGL_RENDERBUFFER_ATTACHMENT GetGlAttachmentPoint()const
 		{
 			return m_glAttachmentPoint;

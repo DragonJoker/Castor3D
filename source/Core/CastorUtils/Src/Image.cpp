@@ -404,13 +404,13 @@ namespace Castor
 		return * this;
 	}
 
-	void Image::GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, ePIXEL_FORMAT p_eFormat )const
+	void Image::GetPixel( uint32_t x, uint32_t y, uint8_t * p_pPixel, ePIXEL_FORMAT p_format )const
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() && p_pPixel );
 		uint8_t const * l_pSrc = &( *m_pBuffer->get_at( x, y ) );
 		uint8_t * l_pDst = p_pPixel;
-		PF::ConvertPixel( GetPixelFormat(), l_pSrc, p_eFormat, l_pDst );
+		PF::ConvertPixel( GetPixelFormat(), l_pSrc, p_format, l_pDst );
 		CHECK_INVARIANTS();
 	}
 

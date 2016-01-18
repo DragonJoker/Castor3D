@@ -24,18 +24,57 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		03/01/2011
+	\~english
+	\brief		Implementation of the rendering pipeline.
+	\~french
+	\brief		Implémentation du pipeline de rendu.
+	*/
 	class GlPipelineImpl
 		: public Castor3D::IPipelineImpl
 		, public Holder
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_gl		The OpenGL api.
+		 *\param[in]	p_pipeline	The parent pipeline.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_gl		L'api OpenGL.
+		 *\param[in]	p_pipeline	Le pipeline parent.
+		 */
 		GlPipelineImpl( OpenGl & p_gl, Castor3D::Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
 		virtual ~GlPipelineImpl();
-
+		/**
+		 *\copydoc		Castor3D::IPipelineImpl::ApplyViewport
+		 */
 		virtual void ApplyViewport( int p_windowWidth, int p_windowHeight );
+		/**
+		 *\copydoc		Castor3D::IPipelineImpl::Perspective
+		 */
 		virtual void Perspective( Castor::Matrix4x4r & p_result, Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		/**
+		 *\copydoc		Castor3D::IPipelineImpl::Frustum
+		 */
 		virtual void Frustum( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\copydoc		Castor3D::IPipelineImpl::Ortho
+		 */
 		virtual void Ortho( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\copydoc		Castor3D::IPipelineImpl::LookAt
+		 */
 		virtual void LookAt( Castor::Matrix4x4r & p_result, Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
 	};
 }

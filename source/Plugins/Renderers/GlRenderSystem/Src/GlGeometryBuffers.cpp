@@ -201,15 +201,6 @@ namespace GlRender
 		m_impl->Unbind();
 	}
 
-	bool GlGeometryBuffers::DoCreate()
-	{
-		return true;
-	}
-
-	void GlGeometryBuffers::DoDestroy()
-	{
-	}
-
 	bool GlGeometryBuffers::DoInitialise()
 	{
 		bool l_return = m_program.expired();

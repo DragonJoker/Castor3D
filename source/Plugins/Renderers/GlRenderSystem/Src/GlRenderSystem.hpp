@@ -63,10 +63,6 @@ namespace GlRender
 		 */
 		virtual Castor3D::ShaderProgramBaseSPtr CreateShaderProgram();
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateOverlayRenderer
-		 */
-		virtual Castor3D::OverlayRendererSPtr CreateOverlayRenderer();
-		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateIndexBuffer
 		 */
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint32_t > > CreateIndexBuffer( Castor3D::CpuBuffer<uint32_t> * p_buffer );
@@ -91,10 +87,6 @@ namespace GlRender
 		 */
 		virtual Castor3D::FrameVariableBufferSPtr CreateFrameVariableBuffer( Castor::String const & p_name );
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateBillboardsList
-		 */
-		virtual Castor3D::BillboardListSPtr CreateBillboardsList( Castor3D::SceneSPtr p_scene );
-		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameBuffer
 		 */
 		virtual Castor3D::FrameBufferSPtr CreateFrameBuffer();
@@ -103,19 +95,13 @@ namespace GlRender
 		 */
 		virtual Castor3D::BackBuffersSPtr CreateBackBuffers();
 		/**
-		 *\copydoc		Castor3D::RenderSystem::NeedsMatrixTransposition
-		 */
-		virtual	bool NeedsMatrixTransposition()const
-		{
-			return false;
-		}
+		*\copydoc		Castor3D::RenderSystem::CreateOverlayProgram
+		*/
+		virtual Castor3D::ShaderProgramBaseSPtr CreateOverlayProgram( uint32_t p_flags );
 		/**
-		 *\copydoc		Castor3D::RenderSystem::SupportsDepthBuffer
-		 */
-		virtual bool SupportsDepthBuffer()const
-		{
-			return true;
-		}
+		*\copydoc		Castor3D::RenderSystem::CreateBillboardsProgram
+		*/
+		virtual Castor3D::ShaderProgramBaseSPtr CreateBillboardsProgram( Castor3D::RenderTechniqueBase const & p_technique, uint32_t p_flags );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::GetPipelineImpl
 		 */

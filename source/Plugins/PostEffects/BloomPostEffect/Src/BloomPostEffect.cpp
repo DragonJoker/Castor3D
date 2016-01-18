@@ -25,11 +25,6 @@
 using namespace GlRender;
 #endif
 
-#if C3D_HAS_D3D11_RENDERER
-#	include <Dx11RenderSystem.hpp>
-using namespace Dx11Render;
-#endif
-
 using namespace Castor;
 using namespace Castor3D;
 
@@ -151,162 +146,6 @@ namespace Bloom
 				plx_v4FragColor += texture2D( c3d_mapScene, vtx_texture );
 			} );
 			return l_writer.Finalise();
-		}
-
-#endif
-#if defined( C3D_HAS_D3D11_RENDERER )
-
-		Castor::String GetHlslVertexProgram( RenderSystem * p_renderSystem )
-		{
-			String l_return;
-			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
-			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
-
-			if ( l_uniforms )
-			{
-				l_return += l_uniforms->GetVertexInMatrices( 0 );
-				l_return +=
-					cuT( "struct VtxInput\n" )
-					cuT( "{\n" )
-					cuT( "	float2 Position: POSITION0;\n" )
-					cuT( "};\n" )
-					cuT( "struct VtxOutput\n" )
-					cuT( "{\n" )
-					cuT( "	float4 Position: SV_POSITION;\n" )
-					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
-					cuT( "};\n" )
-					cuT( "VtxOutput mainVx( in VtxInput p_input )\n" )
-					cuT( "{\n" )
-					cuT( "	VtxOutput l_output;\n" )
-					cuT( "	l_output.Position = mul( float4( p_input.Position, 0.0, 1.0 ), c3d_mtxProjectionModelView );\n" )
-					cuT( "	l_output.TextureUV = p_input.Position;\n" )
-					cuT( "	return l_output;\n" )
-					cuT( "}\n" );
-			}
-
-			return l_return;
-		}
-
-		Castor::String GetHlslHiPassProgram( RenderSystem * p_renderSystem )
-		{
-			String l_return;
-			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
-			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
-
-			if ( l_uniforms )
-			{
-				l_return +=
-					cuT( "SamplerState DefaultSampler\n" )
-					cuT( "{\n" )
-					cuT( "	AddressU = WRAP;\n" )
-					cuT( "	AddressV = WRAP;\n" )
-					cuT( "	AddressW = WRAP;\n" )
-					cuT( "	MipFilter = NONE;\n" )
-					cuT( "	MinFilter = LINEAR;\n" )
-					cuT( "	MagFilter = LINEAR;\n" )
-					cuT( "};\n" )
-					cuT( "struct PxlInput\n" )
-					cuT( "{\n" )
-					cuT( "	float4 Position: SV_POSITION;\n" )
-					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
-					cuT( "};\n" )
-					cuT( "Texture2D c3d_mapDiffuse: register( t0 );\n" )
-					cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
-					cuT( "{\n" )
-					cuT( "	float4 pxl_v4FragColor = float4( c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV ).rgb, 1.0 );\n" )
- 					cuT( "	plx_v4FragColor.x = plx_v4FragColor.x > 1.0 ? 1.0 : 0.0;\n" )
-					cuT( "	plx_v4FragColor.y = plx_v4FragColor.y > 1.0 ? 1.0 : 0.0;\n" )
-					cuT( "	plx_v4FragColor.z = plx_v4FragColor.z > 1.0 ? 1.0 : 0.0;\n" )
-					cuT( "	return plx_v4FragColor;\n" )
-					cuT( "}\n" );
-			}
-
-			return l_return;
-		}
-
-		Castor::String GetHlslBlurProgram( RenderSystem * p_renderSystem )
-		{
-			String l_return;
-			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
-			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
-
-			if ( l_uniforms )
-			{
-				l_return +=
-					cuT( "SamplerState DefaultSampler\n" )
-					cuT( "{\n" )
-					cuT( "	AddressU = WRAP;\n" )
-					cuT( "	AddressV = WRAP;\n" )
-					cuT( "	AddressW = WRAP;\n" )
-					cuT( "	MipFilter = NONE;\n" )
-					cuT( "	MinFilter = LINEAR;\n" )
-					cuT( "	MagFilter = LINEAR;\n" )
-					cuT( "};\n" )
-					cuT( "struct PxlInput\n" )
-					cuT( "{\n" )
-					cuT( "	float4 Position: SV_POSITION;\n" )
-					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
-					cuT( "};\n" )
-					cuT( "cbuffer FilterConfig: register( cb0 )\n" )
-					cuT( "{\n" )
-					cuT( "	float c3d_fCoefficients[3];\n" )
-					cuT( "	float c3d_fOffsetX;\n" )
-					cuT( "	float c3d_fOffsetY;\n" )
-					cuT( "};\n" )
-					cuT( "Texture2D c3d_mapDiffuse: register( t0 );\n" )
-					cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
-					cuT( "{\n" )
-					cuT( "	float2 l_offset = float2( c3d_fOffsetX, c3d_fOffsetY );\n" )
-					cuT( "	float4 plx_v4FragColor = c3d_fCoefficients[0] * c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV - l_offset );\n" )
-					cuT( "	plx_v4FragColor += c3d_fCoefficients[0] * c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV );\n" )
-					cuT( "	plx_v4FragColor += c3d_fCoefficients[0] * c3d_mapDiffuse.Sample( DefaultSampler, p_input.TextureUV + l_offset );\n" )
-					cuT( "	return plx_v4FragColor;\n" )
-					cuT( "}\n" );
-			}
-
-			return l_return;
-		}
-
-		Castor::String GetHlslCombineProgram( RenderSystem * p_renderSystem )
-		{
-			String l_return;
-			DxRenderSystem * l_rs = static_cast< DxRenderSystem * >( p_renderSystem );
-			std::unique_ptr< UniformsBase > l_uniforms = UniformsBase::Get( *l_rs );
-
-			if ( l_uniforms )
-			{
-				l_return +=
-					cuT( "SamplerState DefaultSampler\n" )
-					cuT( "{\n" )
-					cuT( "	AddressU = WRAP;\n" )
-					cuT( "	AddressV = WRAP;\n" )
-					cuT( "	AddressW = WRAP;\n" )
-					cuT( "	MipFilter = NONE;\n" )
-					cuT( "	MinFilter = LINEAR;\n" )
-					cuT( "	MagFilter = LINEAR;\n" )
-					cuT( "};\n" )
-					cuT( "struct PxlInput\n" )
-					cuT( "{\n" )
-					cuT( "	float4 Position: SV_POSITION;\n" )
-					cuT( "	float3 TextureUV: TEXCOORD0;\n" )
-					cuT( "};\n" )
-					cuT( "Texture2D c3d_mapPass0: register( t0 );\n" )
-					cuT( "Texture2D c3d_mapPass1: register( t1 );\n" )
-					cuT( "Texture2D c3d_mapPass2: register( t2 );\n" )
-					cuT( "Texture2D c3d_mapPass3: register( t3 );\n" )
-					cuT( "Texture2D c3d_mapScene: register( t4 );\n" )
-					cuT( "float4 mainPx( in PxlInput p_input ): SV_TARGET\n" )
-					cuT( "{\n" )
-					cuT( "	float4 plx_v4FragColor  = texture2D( c3d_mapPass0, vtx_texture );\n" )
-					cuT( "	plx_v4FragColor += c3d_mapPass1.texture2D( DefaultSampler, p_input.TextureUV );\n" )
-					cuT( "	plx_v4FragColor += c3d_mapPass2.texture2D( DefaultSampler, p_input.TextureUV );\n" )
-					cuT( "	plx_v4FragColor += c3d_mapPass3.texture2D( DefaultSampler, p_input.TextureUV );\n" )
-					cuT( "	plx_v4FragColor += c3d_mapScene.texture2D( DefaultSampler, p_input.TextureUV );\n" )
-					cuT( "	return plx_v4FragColor;\n" )
-					cuT( "}\n" );
-			}
-
-			return l_return;
 		}
 
 #endif
@@ -483,18 +322,6 @@ namespace Bloom
 		else
 
 #endif
-#if defined( DC3D_HAS_D3D11_RENDERER )
-
-		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_DIRECT3D )
-		{
-			l_vertex = GetHlslVertexProgram( m_renderSystem );
-			l_hipass = GetHlslHiPassProgram( m_renderSystem );
-			l_blur = GetHlslBlurProgram( m_renderSystem );
-			l_combine = GetHlslCombineProgram( m_renderSystem );
-		}
-		else
-
-#endif
 
 		{
 			CASTOR_EXCEPTION( "Unsupported renderer type" );
@@ -613,7 +440,7 @@ namespace Bloom
 
 		if ( m_renderTarget.GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
-			m_renderSystem->GetCurrentContext()->RenderTextureToCurrentBuffer( m_renderTarget.GetSize(), m_blurSurfaces[0].m_colourTexture );
+			m_renderSystem->GetCurrentContext()->RenderTexture( m_renderTarget.GetSize(), m_blurSurfaces[0].m_colourTexture );
 			m_renderTarget.GetFrameBuffer()->Unbind();
 		}
 
@@ -649,7 +476,7 @@ namespace Bloom
 
 			if ( l_destination->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
-				l_context->RenderTextureToCurrentBuffer( l_destination->m_size, l_source->m_colourTexture );
+				l_context->RenderTexture( l_destination->m_size, l_source->m_colourTexture );
 				l_destination->m_fbo->Unbind();
 			}
 

@@ -132,12 +132,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel format name
-		 *\param[in]	p_eFormat	The pixel format
+		 *\param[in]	p_format	The pixel format
 		 *\~french
 		 *\brief		Fonction de récuperation du nom d'un format de pixel
-		 *\param[in]	p_eFormat	Le format de pixels
+		 *\param[in]	p_format	Le format de pixels
 		 */
-		CU_API String GetFormatName( ePIXEL_FORMAT p_eFormat );
+		CU_API String GetFormatName( ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Function to retrieve pixel colour component in float

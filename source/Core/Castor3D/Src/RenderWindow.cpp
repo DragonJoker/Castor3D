@@ -525,16 +525,7 @@ namespace Castor3D
 
 			m_wpDepthStencilState.lock()->Apply();
 			m_wpRasteriserState.lock()->Apply();
-
-			if ( m_backBuffers->HasFixedSize() )
-			{
-				m_context->RenderTextureToBackBuffer( m_backBuffers->GetSize(), p_texture );
-			}
-			else
-			{
-				m_context->RenderTextureToBackBuffer( m_size, p_texture );
-			}
-
+			m_context->RenderTexture( m_size, p_texture );
 			m_backBuffers->Unbind();
 		}
 	}
