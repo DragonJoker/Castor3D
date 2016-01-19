@@ -22,7 +22,7 @@ V.   General Questions
 
 Castor3D is a 3D engine written in C++.
 It works on Windows and also on GNU/Linux.
-It uses OpenGL (with GLSL) or Direct3D 11 (with HLSL).
+It uses OpenGL (with GLSL).
 
 
 #   **-----------------------------------------------------------------------**
@@ -45,7 +45,6 @@ Last (but not least) CastorViewer depends on GuiCommon, Castor3D and wxWidgets.
 Some plugins are also built :
 Renderers:
 - GlRenderSystem depends on OpenGL (not GLU).
-- Dx11RenderSystem uses Direct3D 11.
 
 Importers: ASE, 3DS, LWO, OBJ, PLY, MD2, MD3. If you have Assimp installed,
            you can build ASSIMPImporter which replaces the previous ones,
