@@ -12,12 +12,12 @@ using namespace Castor;
 namespace Castor3D
 {
 	Animation::Animation( String const & p_name )
-		:	Named( p_name )
-		,	m_rCurrentTime( 0.0 )
-		,	m_eState( eSTATE_STOPPED )
-		,	m_rScale( 1.0 )
-		,	m_bLooped( false )
-		,	m_rLength( 0.0 )
+		: Named( p_name )
+		, m_currentTime( 0.0 )
+		, m_state( eSTATE_STOPPED )
+		, m_scale( 1.0 )
+		, m_looped( false )
+		, m_length( 0.0 )
 	{
 	}
 
@@ -25,61 +25,61 @@ namespace Castor3D
 	{
 	}
 
-	void Animation::Update( real p_rTslf )
+	void Animation::Update( real p_tslf )
 	{
-		if ( m_rLength == 0 )
+		if ( m_length == 0 )
 		{
-			std::for_each( m_mapToMove.begin(), m_mapToMove.end(), [&]( std::pair< String, MovingObjectBaseSPtr > p_pair )
+			for ( auto l_it : m_toMove )
 			{
-				m_rLength = std::max( m_rLength, p_pair.second->GetLength() );
-			} );
+				m_length = std::max( m_length, l_it.second->GetLength() );
+			}
 		}
 
-		if ( m_eState == eSTATE_PLAYING )
+		if ( m_state == eSTATE_PLAYING )
 		{
-			m_rCurrentTime += ( p_rTslf * m_rScale );
+			m_currentTime += ( p_tslf * m_scale );
 
-			if ( m_rCurrentTime >= m_rLength )
+			if ( m_currentTime >= m_length )
 			{
-				if ( !m_bLooped )
+				if ( !m_looped )
 				{
-					m_eState = eSTATE_PAUSED;
-					m_rCurrentTime = m_rLength;
+					m_state = eSTATE_PAUSED;
+					m_currentTime = m_length;
 				}
 				else
 				{
-					m_rCurrentTime = fmod( m_rCurrentTime, m_rLength );
+					m_currentTime = fmod( m_currentTime, m_length );
 				}
 			}
 		}
 
-		if ( m_eState != eSTATE_STOPPED )
+		if ( m_state != eSTATE_STOPPED )
 		{
-			std::for_each( m_mapToMove.begin(), m_mapToMove.end(), [&]( std::pair< String, MovingObjectBaseSPtr > p_pair )
+			for ( auto l_it : m_toMove )
 			{
-				p_pair.second->Update( m_rCurrentTime, m_bLooped, Matrix4x4r().get_identity() );
-			} );
+				l_it.second->Update( m_currentTime, m_looped, Matrix4x4r().get_identity() );
+			}
 		}
 	}
 
 	MovingObjectBaseSPtr Animation::AddMovingObject()
 	{
-		std::shared_ptr< MovingNode > l_pObj = std::make_shared< MovingNode >();
-		m_mapToMove.insert( std::make_pair( string::to_string( uint32_t( m_mapToMove.size() ) ), l_pObj ) );
-		return l_pObj;
+		std::shared_ptr< MovingNode > l_node = std::make_shared< MovingNode >();
+		m_toMove.insert( std::make_pair( string::to_string( uint32_t( m_toMove.size() ) ), l_node ) );
+		return l_node;
 	}
 
 	MovingObjectBaseSPtr Animation::AddMovingObject( MovableObjectSPtr p_object )
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_object->GetName() );
+		MovingObjectPtrStrMapIt l_it = m_toMove.find( p_object->GetName() );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it == m_toMove.end() )
 		{
 			std::shared_ptr< MovingObject > l_pObj = std::make_shared< MovingObject >();
 			l_pObj->SetObject( p_object );
 			l_return = l_pObj;
-			m_mapToMove.insert( std::make_pair( p_object->GetName(), l_return ) );
+			m_toMove.insert( std::make_pair( p_object->GetName(), l_return ) );
 		}
 		else
 		{
@@ -89,17 +89,17 @@ namespace Castor3D
 		return l_return;
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( BoneSPtr p_pBone )
+	MovingObjectBaseSPtr Animation::AddMovingObject( BoneSPtr p_bone )
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pBone->GetName() );
+		MovingObjectPtrStrMapIt l_it = m_toMove.find( p_bone->GetName() );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it == m_toMove.end() )
 		{
 			std::shared_ptr< MovingBone > l_pObj = std::make_shared< MovingBone >();
-			l_pObj->SetBone( p_pBone );
+			l_pObj->SetBone( p_bone );
 			l_return = l_pObj;
-			m_mapToMove.insert( std::make_pair( p_pBone->GetName(), l_return ) );
+			m_toMove.insert( std::make_pair( p_bone->GetName(), l_return ) );
 		}
 		else
 		{
@@ -111,11 +111,11 @@ namespace Castor3D
 
 	void Animation::AddMovingObject( MovingObjectBaseSPtr p_object )
 	{
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_object->GetName() );
+		MovingObjectPtrStrMapIt l_it = m_toMove.find( p_object->GetName() );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it == m_toMove.end() )
 		{
-			m_mapToMove.insert( std::make_pair( p_object->GetName(), p_object ) );
+			m_toMove.insert( std::make_pair( p_object->GetName(), p_object ) );
 		}
 		else
 		{
@@ -123,12 +123,12 @@ namespace Castor3D
 		}
 	}
 
-	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_pBone )const
+	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_bone )const
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_mapToMove.find( p_pBone->GetName() );
+		MovingObjectPtrStrMapConstIt l_it = m_toMove.find( p_bone->GetName() );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it != m_toMove.end() )
 		{
 			l_return = l_it->second;
 		}
@@ -139,9 +139,9 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::GetMovingObject( MovableObjectSPtr p_object )const
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_mapToMove.find( p_object->GetName() );
+		MovingObjectPtrStrMapConstIt l_it = m_toMove.find( p_object->GetName() );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it != m_toMove.end() )
 		{
 			l_return = l_it->second;
 		}
@@ -151,23 +151,23 @@ namespace Castor3D
 
 	void Animation::Play()
 	{
-		m_eState = eSTATE_PLAYING;
+		m_state = eSTATE_PLAYING;
 	}
 
 	void Animation::Pause()
 	{
-		if ( m_eState == eSTATE_PLAYING )
+		if ( m_state == eSTATE_PLAYING )
 		{
-			m_eState = eSTATE_PAUSED;
+			m_state = eSTATE_PAUSED;
 		}
 	}
 
 	void Animation::Stop()
 	{
-		if ( m_eState != eSTATE_STOPPED )
+		if ( m_state != eSTATE_STOPPED )
 		{
-			m_eState = eSTATE_STOPPED;
-			m_rCurrentTime = 0.0;
+			m_state = eSTATE_STOPPED;
+			m_currentTime = 0.0;
 		}
 	}
 }

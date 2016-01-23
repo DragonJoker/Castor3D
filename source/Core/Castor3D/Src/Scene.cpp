@@ -1390,28 +1390,25 @@ namespace Castor3D
 
 				if ( l_skeleton )
 				{
-					Matrix4x4rFrameVariableSPtr l_variable;
-					l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_variable );
-
 					if ( l_variable )
 					{
 						int i = 0;
 
-						for ( auto && l_it = l_animated->AnimationsBegin(); l_it != l_animated->AnimationsEnd(); ++l_it )
+						for ( auto && l_bone : *l_skeleton )
 						{
-							Matrix4x4r l_final( 1.0_r );
+							Matrix4x4r l_mtxFinal( 1.0_r );
 
-							for ( BonePtrArrayIt l_itBones = l_skeleton->Begin(); l_itBones != l_skeleton->End(); ++l_itBones )
+							for ( auto const & l_itAnim : p_object->GetAnimations() )
 							{
-								MovingObjectBaseSPtr l_moving = l_it->second->GetMovingObject( *l_itBones );
+								MovingObjectBaseSPtr l_moving = l_itAnim.second->GetMovingObject( l_bone );
 
 								if ( l_moving )
 								{
-									l_final *= l_moving->GetFinalTransformation();
+									l_mtxFinal *= l_moving->GetFinalTransformation();
 								}
 							}
 
-							l_variable->SetValue( l_final.const_ptr(), i++ );
+							l_variable->SetValue( l_mtxFinal.const_ptr(), i++ );
 						}
 					}
 				}

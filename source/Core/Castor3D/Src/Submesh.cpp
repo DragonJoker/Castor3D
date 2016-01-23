@@ -1001,7 +1001,7 @@ namespace Castor3D
 					l_pBuffer += l_uiStride;
 				}
 
-				//m_points.clear();
+				m_points.clear();
 			}
 		}
 	}
@@ -1033,7 +1033,7 @@ namespace Castor3D
 					}
 				}
 
-				//m_arrayFaces.clear();
+				m_arrayFaces.clear();
 			}
 		}
 	}
@@ -1056,20 +1056,6 @@ namespace Castor3D
 	{
 		if ( !m_declaration )
 		{
-			std::vector< BufferElementDeclaration >	l_vertexDeclarationElements;
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_NORMAL, eELEMENT_TYPE_3FLOATS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_TANGENT, eELEMENT_TYPE_3FLOATS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BITANGENT, eELEMENT_TYPE_3FLOATS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_3FLOATS ) );
-
-			if ( GetSkeleton() )
-			{
-				l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_IDS, eELEMENT_TYPE_4INTS ) );
-				l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS, eELEMENT_TYPE_4FLOATS ) );
-			}
-
-			m_declaration = std::make_shared< BufferDeclaration >( &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
 			DoCreateGeometryBuffers();
 		}
 	}
@@ -1100,6 +1086,7 @@ namespace Castor3D
 			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS, eELEMENT_TYPE_4FLOATS ) );
 		}
 
+		m_declaration = std::make_shared< BufferDeclaration >( &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
 		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
 		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetOwner() );
 

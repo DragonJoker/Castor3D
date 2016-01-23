@@ -44,14 +44,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds bone informations to the vertex
-		 *\param[in]	p_uiBoneId	The bone ID
-		 *\param[in]	p_fWeight	The bone weight
+		 *\param[in]	p_boneId	The bone ID
+		 *\param[in]	p_weight	The bone weight
 		 *\~french
 		 *\brief		Ajoute des informations de bone au vertice
-		 *\param[in]	p_uiBoneId	L'ID du bone
-		 *\param[in]	p_fWeight	Le poids du bone
+		 *\param[in]	p_boneId	L'ID du bone
+		 *\param[in]	p_weight	Le poids du bone
 		 */
-		C3D_API void AddBoneData( uint32_t p_uiBoneId, real p_fWeight );
+		C3D_API void AddBoneData( uint32_t p_boneId, real p_weight );
 
 		//!\~english The bones ID	\~french L'ID des bones
 		uint32_t m_ids[C3D_MAX_BONES_PER_VERTEX];

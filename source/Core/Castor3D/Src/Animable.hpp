@@ -75,56 +75,18 @@ namespace Castor3D
 		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
+		 *\return		The animations.
 		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
+		 *\return		Les animations.
 		 */
-		inline AnimationPtrStrMapIt AnimationsBegin()
+		inline AnimationPtrStrMap const & GetAnimations()const
 		{
-			return m_mapAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsBegin()const
-		{
-			return m_mapAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animations map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapIt AnimationsEnd()
-		{
-			return m_mapAnimations.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animations map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsEnd()const
-		{
-			return m_mapAnimations.end();
+			return m_animations;
 		}
 
 	protected:
 		//!\~english All animations	\~french Toutes les animations
-		AnimationPtrStrMap m_mapAnimations;
+		AnimationPtrStrMap m_animations;
 	};
 }
 

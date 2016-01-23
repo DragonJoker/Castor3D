@@ -38,17 +38,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_qSrc	The start
-		 *\param[in]	p_qDest	The end
+		 *\param[in]	p_src	The start
+		 *\param[in]	p_dst	The end
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_qSrc	Le départ
-		 *\param[in]	p_qDest	L'arrivée
+		 *\param[in]	p_dst	L'arrivée
 		 */
-		C3D_API Interpolator( Castor::Quaternion const & p_qSrc, Castor::Quaternion const & p_qDest )
-			: m_tSrc( p_qSrc )
-			, m_tCurrent( p_qSrc )
-			, m_tDest( p_qDest )
+		C3D_API Interpolator( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst )
+			: m_src( p_src )
+			, m_cur( p_src )
+			, m_dst( p_dst )
 		{
 		}
 		/**
@@ -68,20 +68,19 @@ namespace Castor3D
 		 *\brief		Fonction d'interpolation
 		 *\param[in]	p_rPercent	Le pourcentage
 		 */
-		C3D_API Castor::Quaternion const & operator()( real p_rPercent )
+		C3D_API Castor::Quaternion const & operator()( real p_percent )
 		{
-			m_tCurrent = m_tSrc.Slerp( m_tDest, p_rPercent, true );
-			//m_tCurrent = m_tCurrent * (m_tDest - m_tSrc).Slerp( Castor::Quaternion::Identity(), 1.0f - p_rPercent, true );
-			return m_tCurrent;
+			m_cur = m_src.slerp( m_dst, p_percent );
+			return m_cur;
 		}
 
 	protected:
 		//!\~english The starting value	\~french La valeur de départ
-		Castor::Quaternion m_tSrc;
+		Castor::Quaternion m_src;
 		//!\~english The current value	\~french La valeur courante
-		Castor::Quaternion m_tCurrent;
+		Castor::Quaternion m_cur;
 		//!\~english The ending value	\~french La valeur d'arrivée
-		Castor::Quaternion m_tDest;
+		Castor::Quaternion m_dst;
 	};
 }
 

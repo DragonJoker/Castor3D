@@ -4,10 +4,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	const String MovingNode::StrVoidString;
-
 	MovingNode::MovingNode()
-		:	MovingObjectBase( eMOVING_OBJECT_TYPE_NODE )
+		: MovingObjectBase( eMOVING_OBJECT_TYPE_NODE )
 	{
 	}
 
@@ -17,12 +15,12 @@ namespace Castor3D
 
 	String const & MovingNode::GetName()const
 	{
-		return StrVoidString;
+		return cuEmptyString;
 	}
 
 	void MovingNode::DoApply()
 	{
-		m_mtxFinalTransformation = m_mtxTransformations;
+		m_finalTransformation = m_transformations;
 	}
 
 	MovingObjectBaseSPtr MovingNode::DoClone()

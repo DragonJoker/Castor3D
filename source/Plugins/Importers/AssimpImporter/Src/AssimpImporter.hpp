@@ -91,7 +91,7 @@ namespace C3dAssimp
 
 	private:
 		int m_anonymous;
-		Castor3D::MeshSPtr m_pMesh;
+		Castor3D::MeshSPtr m_mesh;
 		std::map< Castor::String, uint32_t > m_mapBoneByID;
 		std::vector< Castor3D::BoneSPtr > m_arrayBones;
 	};

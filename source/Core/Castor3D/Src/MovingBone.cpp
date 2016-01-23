@@ -6,7 +6,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MovingBone::MovingBone()
-		:	MovingObjectBase( eMOVING_OBJECT_TYPE_BONE )
+		: MovingObjectBase( eMOVING_OBJECT_TYPE_BONE )
 	{
 	}
 
@@ -21,7 +21,7 @@ namespace Castor3D
 
 	void MovingBone::DoApply()
 	{
-		m_mtxFinalTransformation = m_mtxTransformations * GetBone()->GetOffsetMatrix();
+		m_finalTransformation = m_transformations * GetBone()->GetOffsetMatrix();
 	}
 
 	MovingObjectBaseSPtr MovingBone::DoClone()

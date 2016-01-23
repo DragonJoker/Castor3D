@@ -38,17 +38,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_tSrc	The start
+		 *\param[in]	p_src	The start
 		 *\param[in]	p_tDest	The end
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_tSrc	Le départ
-		 *\param[in]	p_tDest	L'arrivée
+		 *\param[in]	p_src	Le départ
+		 *\param[in]	p_dst	L'arrivée
 		 */
-		Interpolator( Type const & p_tSrc, Type const & p_tDest )
-			: m_tSrc( p_tSrc )
-			, m_tCurrent( p_tSrc )
-			, m_tDest( p_tDest )
+		Interpolator( Type const & p_src, Type const & p_dst )
+			: m_src( p_src )
+			, m_cur( p_src )
+			, m_dst( p_dst )
 		{
 		}
 		/**
@@ -64,37 +64,37 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Interpolation function
 		 *\remark		Must be implemented by the interpolator you create
-		 *\param[in]	p_rPercent	The percentage
+		 *\param[in]	p_percent	The percentage
 		 *\~french
 		 *\brief		Fonction d'interpolation
 		 *\remark		Doit être implémentée par l'interpolateur que vous créez
-		 *\param[in]	p_rPercent	Le pourcentage
+		 *\param[in]	p_percent	Le pourcentage
 		 */
-		Type const & operator()( real p_rPercent )
+		Type const & operator()( real p_percent )
 		{
-			if ( p_rPercent <= 0.0 )
+			if ( p_percent <= 0.0 )
 			{
-				m_tCurrent = m_tSrc;
+				m_cur = m_src;
 			}
-			else if ( p_rPercent >= 1.0 )
+			else if ( p_percent >= 1.0 )
 			{
-				m_tCurrent = m_tDest;
+				m_cur = m_dst;
 			}
 			else
 			{
-				m_tCurrent = m_tSrc + ( ( m_tDest - m_tSrc ) * p_rPercent );
+				m_cur = m_src + ( ( m_dst - m_src ) * p_percent );
 			}
 
-			return m_tCurrent;
+			return m_cur;
 		}
 
 	protected:
 		//!\~english The starting value	\~french La valeur de départ
-		Type m_tSrc;
+		Type m_src;
 		//!\~english The current value	\~french La valeur courante
-		Type m_tCurrent;
+		Type m_cur;
 		//!\~english The ending value	\~french La valeur d'arrivée
-		Type m_tDest;
+		Type m_dst;
 	};
 }
 

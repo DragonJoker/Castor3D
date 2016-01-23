@@ -68,7 +68,7 @@ namespace Castor3D
 		 */
 		inline void SetBone( BoneSPtr p_pBone )
 		{
-			m_pBone = p_pBone;
+			m_bone = p_pBone;
 		}
 		/**
 		 *\~english
@@ -80,7 +80,7 @@ namespace Castor3D
 		 */
 		inline BoneSPtr GetBone()const
 		{
-			return m_pBone.lock();
+			return m_bone.lock();
 		}
 
 	private:
@@ -89,7 +89,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The bone affected by the animations	\~french L'os affecté par les animations
-		BoneWPtr m_pBone;
+		BoneWPtr m_bone;
 	};
 }
 

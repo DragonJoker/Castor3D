@@ -37,14 +37,6 @@ namespace Castor3D
 	*/
 	class Bone
 	{
-	private:
-		//!\~english The bone name	\~french Le nom du bone
-		Castor::String m_name;
-		//!\~english The matrix from mesh to bone space	\~french La matrice de transformation de l'espace mesh vers l'espace bone
-		Castor::Matrix4x4r m_mtxOffset;
-		//!\~english The parent skeleton	\~french Le squelette parent
-		Skeleton & m_skeleton;
-
 	public:
 		/**
 		 *\~english
@@ -96,7 +88,7 @@ namespace Castor3D
 		 */
 		inline const Castor::Matrix4x4r & GetOffsetMatrix()const
 		{
-			return m_mtxOffset;
+			return m_offset;
 		}
 		/**
 		 *\~english
@@ -108,7 +100,7 @@ namespace Castor3D
 		 */
 		inline void SetOffsetMatrix( const Castor::Matrix4x4r & p_mtxOffset )
 		{
-			m_mtxOffset = p_mtxOffset;
+			m_offset = p_mtxOffset;
 		}
 		/**
 		 *\~english
@@ -122,6 +114,14 @@ namespace Castor3D
 		{
 			return m_skeleton;
 		}
+
+	private:
+		//!\~english The bone name	\~french Le nom du bone
+		Castor::String m_name;
+		//!\~english The matrix from mesh to bone space	\~french La matrice de transformation de l'espace mesh vers l'espace bone
+		Castor::Matrix4x4r m_offset;
+		//!\~english The parent skeleton	\~french Le squelette parent
+		Skeleton & m_skeleton;
 	};
 }
 

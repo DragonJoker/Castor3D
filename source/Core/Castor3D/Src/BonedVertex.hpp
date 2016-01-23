@@ -118,12 +118,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
-		 *\param[in]	p_pData		The new value
+		 *\param[in]	p_data		The new value
 		 *\~french
 		 *\brief		Définit les données de bones du groupe
-		 *\param[in]	p_pData		La nouvelle valeur
+		 *\param[in]	p_data		La nouvelle valeur
 		 */
-		C3D_API void SetBones( stVERTEX_BONE_DATA * p_pData );
+		C3D_API void SetBones( stVERTEX_BONE_DATA * p_data );
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
@@ -136,14 +136,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
-		 *\param[in]	p_pElement	The group
+		 *\param[in]	p_element	The group
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère les données de bones du groupe
-		 *\param[in]	p_pElement	Le groupe
+		 *\param[in]	p_element	Le groupe
 		 *\return		La valeur
 		 */
-		C3D_API static stVERTEX_BONE_DATA GetBones( BufferElementGroupSPtr p_pElement );
+		C3D_API static stVERTEX_BONE_DATA GetBones( BufferElementGroupSPtr p_element );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
@@ -158,28 +158,6 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
-		 *\param[out]	p_pElement	The group
-		 *\param[in]	p_pData		The new value
-		 *\~french
-		 *\brief		Définit les données de bones du groupe
-		 *\param[out]	p_pElement	Le groupe
-		 *\param[in]	p_pData		La nouvelle valeur
-		 */
-		C3D_API static void SetBones( BufferElementGroupSPtr p_pElement, stVERTEX_BONE_DATA * p_pData );
-		/**
-		 *\~english
-		 *\brief		Sets the group bones datas
-		 *\param[out]	p_pElement	The group
-		 *\param[in]	p_pData		The new value
-		 *\~french
-		 *\brief		Définit les données de bones du groupe
-		 *\param[out]	p_pElement	Le groupe
-		 *\param[in]	p_pData		La nouvelle valeur
-		 */
-		C3D_API static void SetBones( BufferElementGroupSPtr p_pElement, stVERTEX_BONE_DATA const & p_pData );
-		/**
-		 *\~english
-		 *\brief		Sets the group bones datas
 		 *\param[out]	p_element	The group
 		 *\param[in]	p_pData		The new value
 		 *\~french
@@ -187,48 +165,46 @@ namespace Castor3D
 		 *\param[out]	p_element	Le groupe
 		 *\param[in]	p_pData		La nouvelle valeur
 		 */
-		C3D_API static void SetBones( BufferElementGroup & p_element, stVERTEX_BONE_DATA * p_pData );
+		C3D_API static void SetBones( BufferElementGroupSPtr p_element, stVERTEX_BONE_DATA * p_pData );
 		/**
 		 *\~english
 		 *\brief		Sets the group bones datas
 		 *\param[out]	p_element	The group
-		 *\param[in]	p_pData		The new value
+		 *\param[in]	p_data		The new value
 		 *\~french
 		 *\brief		Définit les données de bones du groupe
 		 *\param[out]	p_element	Le groupe
-		 *\param[in]	p_pData		La nouvelle valeur
+		 *\param[in]	p_data		La nouvelle valeur
 		 */
-		C3D_API static void SetBones( BufferElementGroup & p_element, stVERTEX_BONE_DATA const & p_pData );
+		C3D_API static void SetBones( BufferElementGroupSPtr p_element, stVERTEX_BONE_DATA const & p_data );
 		/**
 		 *\~english
-		 *\brief		Retrieves bones informations' buffer offset
-		 *\return		The value
+		 *\brief		Sets the group bones datas
+		 *\param[out]	p_element	The group
+		 *\param[in]	p_data		The new value
 		 *\~french
-		 *\brief		Récupère l'offset dans le buffer des informations des bones
-		 *\return		La valeur
+		 *\brief		Définit les données de bones du groupe
+		 *\param[out]	p_element	Le groupe
+		 *\param[in]	p_data		La nouvelle valeur
 		 */
-		static inline const uint32_t GetOffsetBon()
-		{
-			return sm_uiOffsetBon;
-		}
+		C3D_API static void SetBones( BufferElementGroup & p_element, stVERTEX_BONE_DATA * p_data );
 		/**
 		 *\~english
-		 *\brief		Retrieves bones informations binary size
-		 *\return		The value
+		 *\brief		Sets the group bones datas
+		 *\param[out]	p_element	The group
+		 *\param[in]	p_data		The new value
 		 *\~french
-		 *\brief		Récupère la taille en octets des informations des bones
-		 *\return		La valeur
+		 *\brief		Définit les données de bones du groupe
+		 *\param[out]	p_element	Le groupe
+		 *\param[in]	p_data		La nouvelle valeur
 		 */
-		static inline const uint32_t GetSizeBon()
-		{
-			return sm_uiSizeBon;
-		}
+		C3D_API static void SetBones( BufferElementGroup & p_element, stVERTEX_BONE_DATA const & p_data );
 
 	protected:
 		//!\~english Bones informations binary size	\~french Taille en octets des informations des bones
-		static const uint32_t sm_uiSizeBon = uint32_t( 4 * ( sizeof( real ) + sizeof( uint32_t ) ) );
+		static const uint32_t sm_sizeBon = uint32_t( 4 * ( sizeof( real ) + sizeof( uint32_t ) ) );
 		//!\~english Bones informations buffer offset	\~french Offset dans le buffer des informations des bones
-		static const uint32_t sm_uiOffsetBon = sm_uiOffsetTex + sm_uiSizeTex;
+		static const uint32_t sm_offsetBon = sm_uiOffsetTex + sm_uiSizeTex;
 	};
 }
 

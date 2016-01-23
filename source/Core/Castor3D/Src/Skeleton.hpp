@@ -38,12 +38,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pMesh	The parent mesh
+		 *\param[in]	p_mesh	The parent mesh
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pMesh	Le maillage parent
+		 *\param[in]	p_mesh	Le maillage parent
 		 */
-		C3D_API Skeleton( MeshSPtr p_pMesh );
+		C3D_API Skeleton( MeshSPtr p_mesh );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -54,13 +54,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a bone to the skeleton
-		 *\param[in]	p_pBone		The bone
+		 *\param[in]	p_bone		The bone
 		 *\return
 		 *\~french
 		 *\brief		Ajoute un os au squelette
-		 *\param[in]	p_pBone		L'os
+		 *\param[in]	p_bone		L'os
 		 */
-		C3D_API void AddBone( BoneSPtr p_pBone );
+		C3D_API void AddBone( BoneSPtr p_bone );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first bone
@@ -69,9 +69,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le premier os
 		 *\return		La valeur
 		 */
-		inline BonePtrArrayIt Begin()
+		inline BonePtrArrayIt begin()
 		{
-			return m_arrayBones.begin();
+			return m_bones.begin();
 		}
 		/**
 		 *\~english
@@ -81,9 +81,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le premier os
 		 *\return		La valeur
 		 */
-		inline BonePtrArrayConstIt Begin()const
+		inline BonePtrArrayConstIt begin()const
 		{
-			return m_arrayBones.begin();
+			return m_bones.begin();
 		}
 		/**
 		 *\~english
@@ -93,9 +93,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau d'os
 		 *\return		La valeur
 		 */
-		inline BonePtrArrayIt End()
+		inline BonePtrArrayIt end()
 		{
-			return m_arrayBones.end();
+			return m_bones.end();
 		}
 		/**
 		 *\~english
@@ -105,9 +105,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau d'os
 		 *\return		La valeur
 		 */
-		inline BonePtrArrayConstIt End()const
+		inline BonePtrArrayConstIt end()const
 		{
-			return m_arrayBones.end();
+			return m_bones.end();
 		}
 		/**
 		 *\~english
@@ -119,19 +119,19 @@ namespace Castor3D
 		 */
 		inline Castor::Matrix4x4r const & GetGlobalInverseTransform()const
 		{
-			return m_mtxGlobalInverse;
+			return m_globalInverse;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the global inverse transform
-		 *\param[in]	p_mtxTransform	The new value
+		 *\param[in]	p_transform	The new value
 		 *\~french
 		 *\brief		Définit la transformation globale inversée
-		 *\param[in]	p_mtxTransform	La nouvelle valeur
+		 *\param[in]	p_transform	La nouvelle valeur
 		 */
-		inline void SetGlobalInverseTransform( Castor::Matrix4x4r const & p_mtxTransform )
+		inline void SetGlobalInverseTransform( Castor::Matrix4x4r const & p_transform )
 		{
-			m_mtxGlobalInverse = p_mtxTransform;
+			m_globalInverse = p_transform;
 		}
 		/**
 		 *\~english
@@ -143,16 +143,16 @@ namespace Castor3D
 		 */
 		inline Castor::String const & GetMeshName()const
 		{
-			return m_wpMesh.lock()->GetName();
+			return m_mesh.lock()->GetName();
 		}
 
 	private:
 		//!\~english The mesh	\~french Le maillage
-		MeshWPtr m_wpMesh;
+		MeshWPtr m_mesh;
 		//!\~english The bones	\~french Les bones
-		BonePtrArray m_arrayBones;
+		BonePtrArray m_bones;
 		//!\~english The global skeleton transform	\~french La transformation globale du squelette
-		Castor::Matrix4x4r m_mtxGlobalInverse;
+		Castor::Matrix4x4r m_globalInverse;
 	};
 }
 

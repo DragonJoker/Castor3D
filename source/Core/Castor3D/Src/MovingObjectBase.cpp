@@ -1,6 +1,7 @@
 ﻿#include "MovingObjectBase.hpp"
 #include "KeyFrame.hpp"
 #include "Interpolator.hpp"
+#include "QuaternionInterpolator.hpp"
 
 #include <TransformationMatrix.hpp>
 #include <Quaternion.hpp>
@@ -10,10 +11,10 @@ using namespace Castor;
 namespace Castor3D
 {
 	MovingObjectBase::MovingObjectBase( eMOVING_OBJECT_TYPE p_type )
-		:	m_rLength( 0.0 )
-		,	m_type( p_type )
+		: m_length( 0.0_r )
+		, m_type( p_type )
 	{
-		m_mtxFinalTransformation.set_identity();
+		m_finalTransformation.set_identity();
 	}
 
 	MovingObjectBase::~MovingObjectBase()
@@ -22,90 +23,93 @@ namespace Castor3D
 
 	void MovingObjectBase::AddChild( MovingObjectBaseSPtr p_object )
 	{
-		m_arrayChildren.push_back( p_object );
+		m_children.push_back( p_object );
 	}
 
-	void MovingObjectBase::Update( real p_rTime, bool p_bLooped, Matrix4x4r const & p_mtxTransformations )
+	void MovingObjectBase::Update( real p_time, bool p_looped, Matrix4x4r const & p_mtxTransformations )
 	{
-		m_mtxTransformations = p_mtxTransformations * DoComputeTransform( p_rTime );
+		m_transformations = p_mtxTransformations * DoComputeTransform( p_time );
 		DoApply();
-		std::for_each( m_arrayChildren.begin(), m_arrayChildren.end(), [&]( MovingObjectBaseSPtr p_object )
+
+		for ( auto l_object : m_children )
 		{
-			p_object->Update( p_rTime, p_bLooped, m_mtxTransformations );
-		} );
+			l_object->Update( p_time, p_looped, m_transformations );
+		}
 	}
 
-	ScaleKeyFrameSPtr MovingObjectBase::AddScaleKeyFrame( real p_rFrom )
+	ScaleKeyFrameSPtr MovingObjectBase::AddScaleKeyFrame( real p_from )
 	{
-		return DoAddKeyFrame< ScaleKeyFrame >( p_rFrom, m_mapScales );
+		return DoAddKeyFrame( p_from, m_scales );
 	}
 
-	TranslateKeyFrameSPtr MovingObjectBase::AddTranslateKeyFrame( real p_rFrom )
+	TranslateKeyFrameSPtr MovingObjectBase::AddTranslateKeyFrame( real p_from )
 	{
-		return DoAddKeyFrame< TranslateKeyFrame >( p_rFrom, m_mapTranslates );
+		return DoAddKeyFrame( p_from, m_translates );
 	}
 
-	RotateKeyFrameSPtr MovingObjectBase::AddRotateKeyFrame( real p_rFrom )
+	RotateKeyFrameSPtr MovingObjectBase::AddRotateKeyFrame( real p_from )
 	{
-		return DoAddKeyFrame< RotateKeyFrame >( p_rFrom, m_mapRotates );
+		return DoAddKeyFrame( p_from, m_rotates );
 	}
 
-	void MovingObjectBase::RemoveScaleKeyFrame( real p_rTime )
+	void MovingObjectBase::RemoveScaleKeyFrame( real p_time )
 	{
-		DoRemoveKeyFrame< ScaleKeyFrame >( p_rTime, m_mapScales );
+		DoRemoveKeyFrame( p_time, m_scales );
 	}
 
-	void MovingObjectBase::RemoveTranslateKeyFrame( real p_rTime )
+	void MovingObjectBase::RemoveTranslateKeyFrame( real p_time )
 	{
-		DoRemoveKeyFrame< TranslateKeyFrame >( p_rTime, m_mapTranslates );
+		DoRemoveKeyFrame( p_time, m_translates );
 	}
 
-	void MovingObjectBase::RemoveRotateKeyFrame( real p_rTime )
+	void MovingObjectBase::RemoveRotateKeyFrame( real p_time )
 	{
-		DoRemoveKeyFrame< RotateKeyFrame >( p_rTime, m_mapRotates );
+		DoRemoveKeyFrame( p_time, m_rotates );
 	}
 
 	MovingObjectBaseSPtr MovingObjectBase::Clone( MovingObjectPtrStrMap & p_map )
 	{
 		MovingObjectBaseSPtr l_return = DoClone();
 		p_map.insert( std::make_pair( l_return->GetName(), l_return ) );
-		l_return->m_mtxNodeTransform = m_mtxNodeTransform;
-		l_return->m_arrayChildren.clear();
-		std::for_each( m_arrayChildren.begin(), m_arrayChildren.end(), [&]( MovingObjectBaseSPtr p_object )
+		l_return->m_nodeTransform = m_nodeTransform;
+		l_return->m_children.clear();
+
+		for ( auto l_object : m_children )
 		{
-			l_return->m_arrayChildren.push_back( p_object->Clone( p_map ) );
-		} );
+			l_return->m_children.push_back( l_object->Clone( p_map ) );
+		}
+
 		return l_return;
 	}
 
-	Matrix4x4r MovingObjectBase::DoComputeTransform( real p_rTime )
+	Matrix4x4r MovingObjectBase::DoComputeTransform( real p_time )
 	{
 		Matrix4x4r l_return;
 
 		if ( HasKeyFrames() )
 		{
-			matrix::set_transform( l_return, DoComputeTranslation( p_rTime ), DoComputeScaling( p_rTime ), DoComputeRotation( p_rTime ) );
+			matrix::set_transform( l_return, DoComputeTranslation( p_time ), DoComputeScaling( p_time ), DoComputeRotation( p_time ) );
 		}
 		else
 		{
-			l_return = m_mtxNodeTransform;
+			l_return = m_nodeTransform;
 		}
 
 		return l_return;
 	}
 
-	Point3r MovingObjectBase::DoComputeScaling( real p_rTime )
+	Point3r MovingObjectBase::DoComputeScaling( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_rTime, m_mapScales, Point3r( 1.0, 1.0, 1.0 ) );
+		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_scales, Point3r( 1.0_r, 1.0_r, 1.0_r ) );
 	}
 
-	Point3r MovingObjectBase::DoComputeTranslation( real p_rTime )
+	Point3r MovingObjectBase::DoComputeTranslation( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_rTime, m_mapTranslates, Point3r() );
+		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_translates, Point3r() );
 	}
 
-	Quaternion MovingObjectBase::DoComputeRotation( real p_rTime )
+	Quaternion MovingObjectBase::DoComputeRotation( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_rTime, m_mapRotates, Quaternion() );
+		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_rotates, Quaternion() );
 	}
 }

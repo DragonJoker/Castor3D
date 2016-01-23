@@ -40,16 +40,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_rTimeIndex	When the key frame starts
+		 *\param[in]	p_timeIndex	When the key frame starts
 		 *\param[in]	p_value		The wanted value
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_rTimeIndex	Quand la key frame commence
+		 *\param[in]	p_timeIndex	Quand la key frame commence
 		 *\param[in]	p_value		La valeur voulue
 		 */
-		KeyFrame( real p_rTimeIndex = 0, T const & p_value = T() )
-			: m_rTimeIndex( p_rTimeIndex )
-			, m_tValue( p_value )
+		KeyFrame( real p_timeIndex = 0, T const & p_value = T() )
+			: m_timeIndex( p_timeIndex )
+			, m_value( p_value )
 		{
 		}
 		/**
@@ -71,7 +71,7 @@ namespace Castor3D
 		 */
 		inline void SetValue( T const & p_value )
 		{
-			m_tValue = p_value;
+			m_value = p_value;
 		}
 		/**
 		 *\~english
@@ -83,7 +83,7 @@ namespace Castor3D
 		 */
 		inline T const & GetValue()const
 		{
-			return m_tValue;
+			return m_value;
 		}
 		/**
 		 *\~english
@@ -95,7 +95,7 @@ namespace Castor3D
 		 */
 		inline real GetTimeIndex()const
 		{
-			return m_rTimeIndex;
+			return m_timeIndex;
 		}
 		/**
 		 *\~english
@@ -107,14 +107,14 @@ namespace Castor3D
 		 */
 		inline void SetTimeIndex( real p_rValue )
 		{
-			m_rTimeIndex = p_rValue;
+			m_timeIndex = p_rValue;
 		}
 
 	protected:
 		//!\~english The start time index	\~french L'index de temps de début
-		real m_rTimeIndex;
+		real m_timeIndex;
 		//!\~english The value at start time	\~french La valeur à l'index de temps de début
-		T m_tValue;
+		T m_value;
 	};
 }
 

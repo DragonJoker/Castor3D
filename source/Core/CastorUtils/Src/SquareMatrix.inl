@@ -412,12 +412,6 @@ namespace Castor
 		return ( l_mId1 == *this * l_mTmp ) && ( l_mId2 == l_mTmp * ( *this ) );
 	}
 	template< typename T, uint32_t Count >
-	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::transpose()
-	{
-		*this = my_matrix_type::get_transposed();
-		return *this;
-	}
-	template< typename T, uint32_t Count >
 	inline bool SquareMatrix< T, Count >::is_symmetrical()const
 	{
 		bool l_return = true;
@@ -505,6 +499,27 @@ namespace Castor
 			}
 
 			std::memcpy( my_matrix_type::ptr(), l_mTmp.const_ptr(), my_matrix_type::size );
+		}
+
+		return *this;
+	}
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > SquareMatrix< T, Count >::get_transposed()const
+	{
+		SquareMatrix< T, Count > l_return( *this );
+		return l_return.transpose();
+	}
+	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::transpose()
+	{
+		T const * l_buffer = const_ptr();
+
+		for ( uint32_t i = 0; i < Count; i++ )
+		{
+			for ( uint32_t j = 0; j < i; j++ )
+			{
+				std::swap( ( *this )[j][i], ( *this )[i][j] );
+			}
 		}
 
 		return *this;

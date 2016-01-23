@@ -56,12 +56,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the animations of the object, given the time since the last frame
-		 *\param[in]	p_rTslf		Time elapsed since the last frame
+		 *\param[in]	p_tslf		Time elapsed since the last frame
 		 *\~french
 		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
-		 *\param[in]	p_rTslf		Le temps écoulé depuis la dernière frame
+		 *\param[in]	p_tslf		Le temps écoulé depuis la dernière frame
 		 */
-		C3D_API void Update( real p_rTslf );
+		C3D_API void Update( real p_tslf );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\brief		Définit la géométrie
 		 *\param[in]	p_pGeometry	La géométrie
 		 */
-		C3D_API void SetGeometry( GeometrySPtr p_pGeometry );
+		C3D_API void SetGeometry( GeometrySPtr p_geometry );
 		/**
 		 *\~english
 		 *\brief		Defines the mesh
@@ -138,7 +138,7 @@ namespace Castor3D
 		 *\brief		Définit le maillage
 		 *\param[in]	p_pMesh	Le maillage
 		 */
-		C3D_API void SetMesh( MeshSPtr p_pMesh );
+		C3D_API void SetMesh( MeshSPtr p_msh );
 		/**
 		 *\~english
 		 *\brief		Defines the skeleton
@@ -147,31 +147,7 @@ namespace Castor3D
 		 *\brief		Définit le squelette
 		 *\param[in]	p_pSkeleton	Le squelette
 		 */
-		C3D_API void SetSkeleton( SkeletonSPtr p_pSkeleton );
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapIt AnimationsBegin()
-		{
-			return m_mapAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsBegin()const
-		{
-			return m_mapAnimations.begin();
-		}
+		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the end of the animations map
@@ -180,21 +156,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin de la map d'animations
 		 *\return		La valeur
 		 */
-		inline AnimationPtrStrMapIt AnimationsEnd()
+		inline AnimationPtrStrMap const & GetAnimations()const
 		{
-			return m_mapAnimations.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animations map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsEnd()const
-		{
-			return m_mapAnimations.end();
+			return m_animations;
 		}
 		/**
 		 *\~english
@@ -206,7 +170,7 @@ namespace Castor3D
 		 */
 		inline GeometrySPtr GetGeometry()const
 		{
-			return m_wpGeometry.lock();
+			return m_geometry.lock();
 		}
 		/**
 		 *\~english
@@ -218,7 +182,7 @@ namespace Castor3D
 		 */
 		inline MeshSPtr GetMesh()const
 		{
-			return m_wpMesh.lock();
+			return m_mesh.lock();
 		}
 		/**
 		 *\~english
@@ -230,24 +194,24 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return m_wpSkeleton.lock();
+			return m_skeleton.lock();
 		}
 
 	private:
-		void DoSetGeometry( GeometrySPtr p_pGeometry );
-		void DoSetMesh( MeshSPtr p_pMesh );
-		void DoSetSkeleton( SkeletonSPtr p_pSkeleton );
+		void DoSetGeometry( GeometrySPtr p_geometry );
+		void DoSetMesh( MeshSPtr p_mesh );
+		void DoSetSkeleton( SkeletonSPtr p_skeleton );
 		void DoCopyAnimations( AnimableSPtr p_object );
 
 	protected:
 		//!\~english All animations	\~french Toutes les animations
-		AnimationPtrStrMap m_mapAnimations;
+		AnimationPtrStrMap m_animations;
 		//! The geometry affected by the animations	\~french La géométrie affectée par les animations
-		GeometryWPtr m_wpGeometry;
+		GeometryWPtr m_geometry;
 		//! The mesh affected by the animations	\~french Le maillage affecté par les animations
-		MeshWPtr m_wpMesh;
+		MeshWPtr m_mesh;
 		//! The skeleton affected by the animations	\~french Le squelette affecté par les animations
-		SkeletonWPtr m_wpSkeleton;
+		SkeletonWPtr m_skeleton;
 	};
 }
 

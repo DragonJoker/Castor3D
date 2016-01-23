@@ -21,7 +21,7 @@ namespace Castor3D
 
 	void MovingObject::DoApply()
 	{
-		m_mtxFinalTransformation = m_mtxTransformations;
+		m_finalTransformation = m_transformations;
 	}
 
 	MovingObjectBaseSPtr MovingObject::DoClone()

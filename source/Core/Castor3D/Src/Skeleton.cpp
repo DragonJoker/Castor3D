@@ -10,9 +10,9 @@ using namespace Castor3D;
 
 Skeleton::Skeleton( MeshSPtr p_mesh )
 	: Animable( *p_mesh->GetOwner() )
-	, m_wpMesh( p_mesh )
+	, m_mesh( p_mesh )
+	, m_globalInverse( 1.0_r )
 {
-	m_mtxGlobalInverse.set_identity();
 }
 
 Skeleton::~Skeleton()
@@ -21,7 +21,7 @@ Skeleton::~Skeleton()
 
 void Skeleton::AddBone( BoneSPtr p_pBone )
 {
-	m_arrayBones.push_back( p_pBone );
+	m_bones.push_back( p_pBone );
 }
 
 //*************************************************************************************************

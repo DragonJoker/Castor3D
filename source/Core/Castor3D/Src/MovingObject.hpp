@@ -68,7 +68,7 @@ namespace Castor3D
 		 */
 		inline void SetObject( MovableObjectSPtr p_object )
 		{
-			m_pObject = p_object;
+			m_object = p_object;
 		}
 		/**
 		 *\~english
@@ -80,7 +80,7 @@ namespace Castor3D
 		 */
 		inline MovableObjectSPtr GetObject()const
 		{
-			return m_pObject.lock();
+			return m_object.lock();
 		}
 
 	private:
@@ -89,7 +89,7 @@ namespace Castor3D
 
 	private:
 		//!\~english The object affected by the animations	\~french L'objet affecté par les animations
-		MovableObjectWPtr m_pObject;
+		MovableObjectWPtr m_object;
 	};
 }
 

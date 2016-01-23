@@ -50,10 +50,10 @@ namespace Castor3D
 		*/
 		typedef enum eSTATE CASTOR_TYPE( uint8_t )
 		{
-			eSTATE_PLAYING	//!< Playing animation state
-			,	eSTATE_STOPPED	//!< Stopped animation state
-			,	eSTATE_PAUSED	//!< Paused animation state
-			,	eSTATE_COUNT
+			eSTATE_PLAYING,	//!< Playing animation state
+			eSTATE_STOPPED,	//!< Stopped animation state
+			eSTATE_PAUSED,	//!< Paused animation state
+			eSTATE_COUNT
 		}	eSTATE;
 
 	public:
@@ -128,12 +128,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the animation, updates the key frame at the good time index
-		 *\param[in]	p_rTslf	The time since the last frame
+		 *\param[in]	p_tslf	The time since the last frame
 		 *\~french
 		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps
-		 *\param[in]	p_rTslf	Le temps écoulé depuis la dernière frame
+		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame
 		 */
-		C3D_API void Update( real p_rTslf );
+		C3D_API void Update( real p_tslf );
 		/**
 		 *\~english
 		 *\brief		Plays the animation
@@ -165,7 +165,7 @@ namespace Castor3D
 		 */
 		inline eSTATE GetState()const
 		{
-			return m_eState;
+			return m_state;
 		}
 		/**
 		 *\~english
@@ -177,7 +177,7 @@ namespace Castor3D
 		 */
 		inline real GetScale()const
 		{
-			return m_rScale;
+			return m_scale;
 		}
 		/**
 		 *\~english
@@ -189,31 +189,31 @@ namespace Castor3D
 		 */
 		inline bool IsLooped()const
 		{
-			return m_bLooped;
+			return m_looped;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the animation time scale
-		 *\param[in]	p_rScale	The new value
+		 *\param[in]	p_scale	The new value
 		 *\~french
 		 *\brief		Définit le multiplicateur de temps de l'animation
-		 *\param[in]	p_rScale	La nouvelle valeur
+		 *\param[in]	p_scale	La nouvelle valeur
 		 */
-		inline void	SetScale( real p_rScale )
+		inline void	SetScale( real p_scale )
 		{
-			m_rScale = p_rScale;
+			m_scale = p_scale;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the animation loop status
-		 *\param[in]	p_bLooped	The new value
+		 *\param[in]	p_looped	The new value
 		 *\~french
 		 *\brief		Définit l'état de boucle de l'animation
-		 *\param[in]	p_bLooped	La nouvelle valeur
+		 *\param[in]	p_looped	La nouvelle valeur
 		 */
-		inline void SetLooped( bool p_bLooped )
+		inline void SetLooped( bool p_looped )
 		{
-			m_bLooped = p_bLooped;
+			m_looped = p_looped;
 		}
 		/**
 		 *\~english
@@ -225,7 +225,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetMovingObjectsCount()const
 		{
-			return uint32_t( m_mapToMove.size() );
+			return uint32_t( m_toMove.size() );
 		}
 		/**
 		 *\~english
@@ -235,9 +235,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la map d'objets mouvants
 		 *\return		L'itérateur
 		 */
-		inline MovingObjectPtrStrMapIt Begin()
+		inline MovingObjectPtrStrMapIt begin()
 		{
-			return m_mapToMove.begin();
+			return m_toMove.begin();
 		}
 		/**
 		 *\~english
@@ -247,9 +247,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la map d'objets mouvants
 		 *\return		L'itérateur
 		 */
-		inline MovingObjectPtrStrMapConstIt Begin()const
+		inline MovingObjectPtrStrMapConstIt begin()const
 		{
-			return m_mapToMove.begin();
+			return m_toMove.begin();
 		}
 		/**
 		 *\~english
@@ -259,9 +259,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin de la map d'objets mouvants
 		 *\return		L'itérateur
 		 */
-		inline MovingObjectPtrStrMapIt End()
+		inline MovingObjectPtrStrMapIt end()
 		{
-			return m_mapToMove.end();
+			return m_toMove.end();
 		}
 		/**
 		 *\~english
@@ -271,24 +271,24 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la fin de la map d'objets mouvants
 		 *\return		L'itérateur
 		 */
-		inline MovingObjectPtrStrMapConstIt End()const
+		inline MovingObjectPtrStrMapConstIt end()const
 		{
-			return m_mapToMove.end();
+			return m_toMove.end();
 		}
 
 	protected:
 		//!\~english The current playing time	\~french L'index de temps courant
-		real m_rCurrentTime;
+		real m_currentTime;
 		//!\~english The current state of the animation	\~french L'état actuel de l'animation
-		eSTATE m_eState;
+		eSTATE m_state;
 		//!\~english The animation time scale	\~french Le multiplicateur de temps
-		real m_rScale;
+		real m_scale;
 		//!\~english The animation length	\~french La durée de l'animation
-		real m_rLength;
+		real m_length;
 		//!\~english Tells whether or not the animation is looped	\~french Dit si oui ou non l'animation est bouclée
-		bool m_bLooped;
+		bool m_looped;
 		//! The moving objects
-		MovingObjectPtrStrMap m_mapToMove;
+		MovingObjectPtrStrMap m_toMove;
 	};
 }
 
