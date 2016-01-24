@@ -1,11 +1,10 @@
-﻿#include "Animation.hpp"
+#include "Animation.hpp"
 
-#include "MovingObject.hpp"
-#include "MovingNode.hpp"
-#include "MovingBone.hpp"
-#include "MovableObject.hpp"
-#include "Skeleton.hpp"
 #include "Bone.hpp"
+#include "MovableObject.hpp"
+#include "MovingBone.hpp"
+#include "MovingNode.hpp"
+#include "MovingObject.hpp"
 
 using namespace Castor;
 
@@ -64,22 +63,22 @@ namespace Castor3D
 
 	MovingObjectBaseSPtr Animation::AddMovingObject()
 	{
-		std::shared_ptr< MovingNode > l_node = std::make_shared< MovingNode >();
-		m_toMove.insert( std::make_pair( string::to_string( uint32_t( m_toMove.size() ) ), l_node ) );
-		return l_node;
+		std::shared_ptr< MovingNode > l_return = std::make_shared< MovingNode >();
+		m_toMove.insert( std::make_pair( cuT( "Node_" ) + string::to_string( uint32_t( m_toMove.size() ) ), l_return ) );
+		return l_return;
 	}
 
 	MovingObjectBaseSPtr Animation::AddMovingObject( MovableObjectSPtr p_object )
 	{
 		MovingObjectBaseSPtr l_return;
-		auto l_it = m_toMove.find( p_object->GetName() );
+		auto l_it = m_toMove.find( cuT( "Movable_" ) + p_object->GetName() );
 
 		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< MovingObject > l_pObj = std::make_shared< MovingObject >();
-			l_pObj->SetObject( p_object );
-			l_return = l_pObj;
-			m_toMove.insert( std::make_pair( p_object->GetName(), l_return ) );
+			std::shared_ptr< MovingObject > l_moving = std::make_shared< MovingObject >();
+			l_moving->SetObject( p_object );
+			l_return = l_moving;
+			m_toMove.insert( std::make_pair( cuT( "Movable_" ) + p_object->GetName(), l_return ) );
 		}
 		else
 		{
@@ -92,58 +91,18 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::AddMovingObject( BoneSPtr p_bone )
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapIt l_it = m_toMove.find( p_bone->GetName() );
+		auto l_it = m_toMove.find( cuT( "Bone_" ) + p_bone->GetName() );
 
 		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< MovingBone > l_pObj = std::make_shared< MovingBone >();
-			l_pObj->SetBone( p_bone );
-			l_return = l_pObj;
-			m_toMove.insert( std::make_pair( p_bone->GetName(), l_return ) );
+			std::shared_ptr< MovingBone > l_moving = std::make_shared< MovingBone >();
+			l_moving->SetBone( p_bone );
+			l_return = l_moving;
+			m_toMove.insert( std::make_pair( cuT( "Bone_" ) + p_bone->GetName(), l_return ) );
 		}
 		else
 		{
 			CASTOR_EXCEPTION( "Can't add this bone : already added" );
-		}
-
-		return l_return;
-	}
-
-	void Animation::AddMovingObject( MovingObjectBaseSPtr p_object )
-	{
-		MovingObjectPtrStrMapIt l_it = m_toMove.find( p_object->GetName() );
-
-		if ( l_it == m_toMove.end() )
-		{
-			m_toMove.insert( std::make_pair( p_object->GetName(), p_object ) );
-		}
-		else
-		{
-			CASTOR_EXCEPTION( "Can't add this object : already added" );
-		}
-	}
-
-	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_bone )const
-	{
-		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_toMove.find( cuT( "Bone_" ) + p_bone->GetName() );
-
-		if ( l_it != m_toMove.end() )
-		{
-			l_return = l_it->second;
-		}
-
-		return l_return;
-	}
-
-	MovingObjectBaseSPtr Animation::GetMovingObject( MovableObjectSPtr p_object )const
-	{
-		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_toMove.find( p_object->GetName() );
-
-		if ( l_it != m_toMove.end() )
-		{
-			l_return = l_it->second;
 		}
 
 		return l_return;

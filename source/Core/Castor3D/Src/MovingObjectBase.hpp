@@ -35,42 +35,23 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose
 	*/
-	typedef enum eMOVING_OBJECT_TYPE CASTOR_TYPE( uint8_t )
-	{
-		eMOVING_OBJECT_TYPE_NODE,
-		eMOVING_OBJECT_TYPE_OBJECT,
-		eMOVING_OBJECT_TYPE_BONE,
-	}	eMOVING_OBJECT_TYPE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents the moving things
-	\remark		Manages translation, scaling, rotation of the thing
-	\~french
-	\brief		Classe de représentation de choses mouvantes
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose
-	*/
 	class MovingObjectBase
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_type	The moving thing type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_type	Le type du machin mouvant
 		 */
-		C3D_API MovingObjectBase( eMOVING_OBJECT_TYPE p_type );
+		C3D_API MovingObjectBase();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~MovingObjectBase();
+		C3D_API virtual ~MovingObjectBase();
 		/**
 		 *\~english
 		 *\brief		Adds a child to this object
@@ -166,17 +147,6 @@ namespace Castor3D
 		C3D_API void RemoveRotateKeyFrame( real p_time );
 		/**
 		 *\~english
-		 *\brief		Clones this moving thing
-		 *\param[out]	p_map	Receives the created clone and it's childs
-		 *\return		The clone
-		 *\~french
-		 *\brief		Clone cet objet animable
-		 *\param[out]	p_map	Reçoit les enfants clonés en plus de l'objet cloné
-		 *\return		Le clone
-		 */
-		C3D_API MovingObjectBaseSPtr Clone( MovingObjectPtrStrMap & p_map );
-		/**
-		 *\~english
 		 *\return		The scale key frames.
 		 *\~french
 		 *\return		Les key frames de mise à l'échelle.
@@ -242,14 +212,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the animation node transformation
-		 *\param[in]	p_mtxTransform	The new value
+		 *\param[in]	p_transform	The new value
 		 *\~french
 		 *\brief		Définit les animations du noeud de transformation
-		 *\param[in]	p_mtxTransform	La nouvelle valeur
+		 *\param[in]	p_transform	La nouvelle valeur
 		 */
-		inline void SetNodeTransform( Castor::Matrix4x4r const & p_mtxTransform )
+		inline void SetNodeTransform( Castor::Matrix4x4r const & p_transform )
 		{
-			m_nodeTransform = p_mtxTransform;
+			m_nodeTransform = p_transform;
 		}
 		/**
 		 *\~english
@@ -263,52 +233,6 @@ namespace Castor3D
 		{
 			return !m_rotates.empty() || !m_scales.empty() || !m_translates.empty();
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the moving thuing type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type du machin mouvant
-		 *\return		La valeur
-		 */
-		inline eMOVING_OBJECT_TYPE GetType()const
-		{
-			return m_type;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves final transformation matrix for current animation time
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la matrice finale de transformation du bone pour le temps courant de l'animation
-		 *\return		La valeur
-		 */
-		inline const Castor::Matrix4x4r & GetFinalTransformation()const
-		{
-			return m_finalTransformation;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets final transformation for current animation time
-		 *\param[in]	p_mtx	The new value
-		 *\~french
-		 *\brief		Définit la matrice finale de transformation du bone pour le temps courant de l'animation
-		 *\param[in]	p_mtx	La nouvelle valeur
-		 */
-		inline void SetFinalTransformation( const Castor::Matrix4x4r & p_mtx )
-		{
-			m_finalTransformation = p_mtx;
-		}
-		/**
-		 *\~english
-		 *\return		The children.
-		 *\~french
-		 *\return		Les enfants.
-		 */
-		inline MovingObjectPtrArray const & GetChildren()const
-		{
-			return m_children;
-		}
 
 	protected:
 		/**
@@ -318,15 +242,6 @@ namespace Castor3D
 		 *\brief		Met à jour les transformations appliquées à l'objet
 		 */
 		C3D_API virtual void DoApply() = 0;
-		/**
-		 *\~english
-		 *\brief		Clones this moving thing
-		 *\return		The clone
-		 *\~french
-		 *\brief		Clone cet objet animable
-		 *\return		Le clone
-		 */
-		C3D_API virtual MovingObjectBaseSPtr DoClone() = 0;
 
 	private:
 		Castor::Matrix4x4r DoComputeTransform( real p_time );
@@ -355,15 +270,9 @@ namespace Castor3D
 		Castor::Matrix4x4r m_nodeTransform;
 		//!\~english Actual transformations	\~french Transformations actuelles
 		Castor::Matrix4x4r m_transformations;
-		//!\~english The moving thing type	\~french Le type du machin mouvant
-		eMOVING_OBJECT_TYPE m_type;
-		//!\~english The matrix holding transformation at current time	\~french La matrice de transformation complète au temps courant de l'animation
-		Castor::Matrix4x4r m_finalTransformation;
 	};
 }
 
 #include "MovingObjectBase.inl"
 
 #endif
-
-

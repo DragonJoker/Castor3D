@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_NODE_H___
-#define ___C3D_MOVING_NODE_H___
+#ifndef ___C3D_MOVING_NODE___
+#define ___C3D_MOVING_NODE___
 
 #include "MovingObjectBase.hpp"
 
@@ -63,7 +63,6 @@ namespace Castor3D
 
 	private:
 		virtual void DoApply();
-		virtual MovingObjectBaseSPtr DoClone();
 	};
 }
 

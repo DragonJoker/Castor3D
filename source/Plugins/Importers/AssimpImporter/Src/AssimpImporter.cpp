@@ -6,6 +6,8 @@
 #include <Bone.hpp>
 #include <MeshManager.hpp>
 #include <SceneManager.hpp>
+#include <AnimationManager.hpp>
+#include <MovingObjectBase.hpp>
 
 #include <Logger.hpp>
 
@@ -544,18 +546,29 @@ namespace C3dAssimp
 		}
 	}
 
-	AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_pAnimation )
+	AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
 	{
-		String l_name = string::string_cast< xchar >( p_pAnimation->mName.C_Str() );
+		String l_name = string::string_cast< xchar >( p_aiAnimation->mName.C_Str() );
 
 		if ( l_name.empty() )
 		{
 			l_name = m_fileName.GetFileName();
 		}
 
-		AnimationSPtr l_animation = p_pSkeleton->CreateAnimation( l_name );
-		real l_ticksPerSecond = real( p_pAnimation->mTicksPerSecond ? p_pAnimation->mTicksPerSecond : 25.0_r );
-		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_pSkeleton, p_node, p_pAnimation, nullptr );
+		AnimationManager & l_collection = GetOwner()->GetAnimationManager();
+		AnimationSPtr l_animation;
+
+		if ( !l_collection.Has( l_name ) )
+		{
+			l_animation = l_collection.Create( l_name, l_name );
+		}
+		else
+		{
+			l_animation = l_collection.Find( l_name );
+		}
+
+		real l_ticksPerSecond = real( p_aiAnimation->mTicksPerSecond ? p_aiAnimation->mTicksPerSecond : 25.0_r );
+		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_pSkeleton, p_node, p_aiAnimation, nullptr );
 		return l_animation;
 	}
 

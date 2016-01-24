@@ -2,7 +2,7 @@
 
 #include "AnimatedObjectGroup.hpp"
 #include "AnimatedObject.hpp"
-#include "Animation.hpp"
+#include "AnimationManager.hpp"
 #include "BillboardList.hpp"
 #include "BlendStateManager.hpp"
 #include "BorderPanelOverlay.hpp"
@@ -3311,29 +3311,15 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimatedObject )
 
 	if ( l_pContext->pScene )
 	{
-		GeometrySPtr l_pGeometry = l_pContext->pScene->GetGeometry( l_name );
+		MovableObjectSPtr l_pObject = l_pContext->pScene->GetGeometry( l_name );
 
-		if ( l_pGeometry )
+		if ( l_pObject )
 		{
-			AnimatedObjectSPtr l_object = l_pContext->pGroup->CreateObject( l_name );
-
-			if ( l_object )
-			{
-				for ( auto l_submesh : *l_pGeometry->GetMesh() )
-				{
-					l_object->SetSubmesh( l_submesh );
-				}
-
-				l_pGeometry->SetAnimatedObject( l_object );
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : An object with the given name already exists : " ) + l_name );
-			}
+			l_pContext->pGroup->AddObject( l_pObject );
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : No geometry with name " ) + l_name );
+			PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : No object with name " ) + l_name );
 		}
 	}
 	else
@@ -3351,9 +3337,19 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 
 	if ( l_pContext->pGroup )
 	{
-		l_pContext->pGroup->AddAnimation( l_name );
-		l_pContext->pGroup->SetAnimationLooped( l_name, true );
-		l_pContext->pGroup->StartAnimation( l_name );
+		AnimationManager & l_collection = l_pContext->m_pParser->GetOwner()->GetAnimationManager();
+
+		if ( l_collection.Has( l_name ) )
+		{
+			AnimationSPtr l_pAnimation = l_collection.Find( l_name );
+			l_pContext->pGroup->AddAnimation( l_pAnimation );
+			l_pAnimation->SetLooped( true );
+			l_pContext->pGroup->StartAnimation( l_name );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "Directive <animated_object_group::animation> : No animation with name " ) + l_name );
+		}
 	}
 	else
 	{

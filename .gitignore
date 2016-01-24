@@ -7,7 +7,12 @@
 /.gitattributes
 /data/Ignored
 /data/Scene/Tests
-/source/CMake
+/data/Scene/Alpha
+/data/Scene/Anim
+/data/Scene/Billboards
+/data/Scene/Lighting
+/data/Scene/Parc
+/source/Core/Castor3D/Src/Data/Core
 *.csproj
 *.suo
 *.gch

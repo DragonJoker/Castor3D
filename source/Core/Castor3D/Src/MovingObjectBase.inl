@@ -63,7 +63,7 @@
 				--l_itPrv;
 				real l_dt = l_itCur->first - l_itPrv->first;
 				real l_factor = ( p_time - l_itPrv->first ) / l_dt;
-				l_return = Interpolator< ValueType, Mode >( l_itPrv->second->GetValue(), l_itCur->second->GetValue() )( l_factor );
+				l_return = Interpolator< ValueType, Mode >( l_itPrv->second->GetValue(), l_itCur->second->GetValue() ).Interpolate( l_factor );
 			}
 		}
 

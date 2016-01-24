@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SKELETON_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Animable.hpp"
 
 namespace Castor3D
 {
@@ -32,7 +31,6 @@ namespace Castor3D
 	\brief		Le squelette, contient chaque bone
 	*/
 	class Skeleton
-		: public Animable
 	{
 	public:
 		/**
@@ -53,12 +51,21 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds a bone to the skeleton
 		 *\param[in]	p_bone		The bone
-		 *\return
 		 *\~french
 		 *\brief		Ajoute un os au squelette
 		 *\param[in]	p_bone		L'os
 		 */
 		C3D_API void AddBone( BoneSPtr p_bone );
+		/**
+		 *\~english
+		 *\brief		Adds an animation to the skeleton
+		 *\param[in]	p_animation	The animation
+		 *\return		
+		 *\~french
+		 *\brief		Ajoute une animation au squelette
+		 *\param[in]	p_animation	L'animation
+		 */
+		C3D_API void AddAnimation( AnimationSPtr p_animation );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first bone
@@ -135,7 +142,9 @@ namespace Castor3D
 	private:
 		//!\~english The bones	\~french Les bones
 		BonePtrArray m_bones;
-		//!\~english The global skeleton transform	\~french La transformation globale du squelette
+		//!\~english	This skeleton's animations	\~french	Les animations de ce squelette
+		AnimationPtrStrMap m_animations;
+		//!\~english	The global skeleton transform	\~french	La transformation globale du squelette
 		Castor::Matrix4x4r m_globalInverse;
 	};
 }

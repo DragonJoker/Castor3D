@@ -63,11 +63,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the wanted translation
-		 *\param[in]	p_ptTranslate	The translation
+		 *\brief		Defines the wanted value
+		 *\param[in]	p_value	The value
 		 *\~french
-		 *\brief		Définit la translation voulue
-		 *\param[in]	p_ptTranslate	La translation
+		 *\brief		Définit la valeur voulue
+		 *\param[in]	p_value	La valeur
 		 */
 		inline void SetValue( T const & p_value )
 		{
@@ -75,11 +75,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the wanted translation
-		 *\return		The translation
+		 *\brief		Retrieves the wanted value
+		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la translation voulue
-		 *\return		La translation
+		 *\brief		Récupère la valeur voulue
+		 *\return		La valeur
 		 */
 		inline T const & GetValue()const
 		{
@@ -100,14 +100,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the start time index
-		 *\param[in]	p_rValue	The time index
+		 *\param[in]	p_value	The time index
 		 *\~french
 		 *\brief		Définit le temps de départ
-		 *\param[in]	p_rValue	Le temps
+		 *\param[in]	p_value	Le temps
 		 */
-		inline void SetTimeIndex( real p_rValue )
+		inline void SetTimeIndex( real p_value )
 		{
-			m_timeIndex = p_rValue;
+			m_timeIndex = p_value;
 		}
 
 	protected:

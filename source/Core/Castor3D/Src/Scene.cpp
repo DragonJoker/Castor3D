@@ -4,6 +4,7 @@
 #include "AnimatedObjectGroup.hpp"
 #include "Animation.hpp"
 #include "BlendStateManager.hpp"
+#include "Bone.hpp"
 #include "Buffer.hpp"
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -478,6 +479,7 @@ namespace Castor3D
 		m_renderNodes.clear();
 		m_opaqueRenderNodes.clear();
 		m_transparentRenderNodes.clear();
+		m_distantSortedTransparentRenderNodes.clear();
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 
 		for ( auto && l_overlay : m_overlays )
@@ -1390,25 +1392,16 @@ namespace Castor3D
 
 				if ( l_skeleton )
 				{
+					Matrix4x4rFrameVariableSPtr l_variable;
+					p_matrixBuffer.GetVariable( Pipeline::MtxBones, l_variable );
+
 					if ( l_variable )
 					{
 						int i = 0;
 
 						for ( auto && l_bone : *l_skeleton )
 						{
-							Matrix4x4r l_mtxFinal( 1.0_r );
-
-							for ( auto const & l_itAnim : p_object->GetAnimations() )
-							{
-								MovingObjectBaseSPtr l_moving = l_itAnim.second->GetMovingObject( l_bone );
-
-								if ( l_moving )
-								{
-									l_mtxFinal *= l_moving->GetFinalTransformation();
-								}
-							}
-
-							l_variable->SetValue( l_mtxFinal.const_ptr(), i++ );
+							l_variable->SetValue( l_bone->GetFinalTransformation(), i++ );
 						}
 					}
 				}

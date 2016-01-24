@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_BONE_H___
-#define ___C3D_MOVING_BONE_H___
+#ifndef ___C3D_MOVING_BONE___
+#define ___C3D_MOVING_BONE___
 
 #include "MovingObjectBase.hpp"
 
@@ -57,18 +57,18 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual Castor::String const & GetName()const;
+		virtual Castor::String const & GetName()const;
 		/**
 		 *\~english
 		 *\brief		Defines the movable object
-		 *\param[in]	p_object	The object
+		 *\param[in]	p_bone	The object
 		 *\~french
 		 *\brief		Définit l'objet mouvant
-		 *\param[in]	p_object	L'objet
+		 *\param[in]	p_bone	L'objet
 		 */
-		inline void SetBone( BoneSPtr p_pBone )
+		inline void SetBone( BoneSPtr p_bone )
 		{
-			m_bone = p_pBone;
+			m_bone = p_bone;
 		}
 		/**
 		 *\~english
@@ -85,10 +85,9 @@ namespace Castor3D
 
 	private:
 		virtual void DoApply();
-		virtual MovingObjectBaseSPtr DoClone();
 
 	private:
-		//!\~english The bone affected by the animations	\~french L'os affecté par les animations
+		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations
 		BoneWPtr m_bone;
 	};
 }

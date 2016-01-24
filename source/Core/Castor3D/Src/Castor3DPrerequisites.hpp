@@ -55,7 +55,8 @@ namespace Castor3D
 	*/
 	typedef enum eINTERPOLATOR_MODE
 	{
-		eINTERPOLATOR_MODE_LINEAR, //!<\~english Linear mode	\~french Mode linéaire
+		eINTERPOLATOR_MODE_NONE,	//!<\~english No interpolation.	\~french Pas d'interpolation.
+		eINTERPOLATOR_MODE_LINEAR,	//!<\~english Linear mode.	\~french Mode linéaire.
 		eINTERPOLATOR_MODE_COUNT
 	}	eINTERPOLATOR_MODE;
 
@@ -69,15 +70,11 @@ namespace Castor3D
 	class Bone;
 	class Skeleton;
 	struct stVERTEX_BONE_DATA;
-	template< class Type, eINTERPOLATOR_MODE Mode > class Interpolator;
 	template< typename T > class KeyFrame;
 
 	typedef KeyFrame< Castor::Point3r > ScaleKeyFrame;
 	typedef KeyFrame< Castor::Point3r > TranslateKeyFrame;
 	typedef KeyFrame< Castor::Quaternion > RotateKeyFrame;
-
-	typedef Interpolator< Castor::Point3r, eINTERPOLATOR_MODE_LINEAR > LinearPointInterpolator;
-	typedef Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR > LinearQuaternionInterpolator;
 
 	typedef std::pair< uint32_t, real > VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
 	using Castor::UIntStrMap;

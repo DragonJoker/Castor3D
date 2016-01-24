@@ -1,5 +1,7 @@
 ﻿#include "BonedVertex.hpp"
 
+#include "VertexBoneData.hpp"
+
 using namespace Castor;
 
 namespace Castor3D
@@ -37,46 +39,46 @@ namespace Castor3D
 
 	stVERTEX_BONE_DATA BonedVertex::GetBones()const
 	{
-		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( &m_group.const_ptr()[sm_offsetBon] );
+		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( &m_group.const_ptr()[sm_uiOffsetBon] );
 	}
 
 	void BonedVertex::SetBones( stVERTEX_BONE_DATA * p_data )
 	{
-		std::memcpy( &m_group.ptr()[sm_offsetBon], p_data, sizeof( stVERTEX_BONE_DATA ) );
+		std::memcpy( &m_group.ptr()[sm_uiOffsetBon], p_data, sizeof( stVERTEX_BONE_DATA ) );
 	}
 
 	void BonedVertex::SetBones( stVERTEX_BONE_DATA const & p_data )
 	{
-		std::memcpy( &m_group.ptr()[sm_offsetBon], &p_data, sizeof( stVERTEX_BONE_DATA ) );
+		std::memcpy( &m_group.ptr()[sm_uiOffsetBon], &p_data, sizeof( stVERTEX_BONE_DATA ) );
 	}
 
 	stVERTEX_BONE_DATA BonedVertex::GetBones( BufferElementGroupSPtr p_group )
 	{
-		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( &p_group->const_ptr()[sm_offsetBon] );
+		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( &p_group->const_ptr()[sm_uiOffsetBon] );
 	}
 
 	stVERTEX_BONE_DATA BonedVertex::GetBones( BufferElementGroup const & p_group )
 	{
-		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( &p_group.const_ptr()[sm_offsetBon] );
+		return *reinterpret_cast< stVERTEX_BONE_DATA const * >( &p_group.const_ptr()[sm_uiOffsetBon] );
 	}
 
 	void BonedVertex::SetBones( BufferElementGroupSPtr p_group, stVERTEX_BONE_DATA * p_data )
 	{
-		std::memcpy( &p_group->ptr()[sm_offsetBon], p_data, sizeof( stVERTEX_BONE_DATA ) );
+		std::memcpy( &p_group->ptr()[sm_uiOffsetBon], p_data, sizeof( stVERTEX_BONE_DATA ) );
 	}
 
 	void BonedVertex::SetBones( BufferElementGroupSPtr p_group, stVERTEX_BONE_DATA const & p_data )
 	{
-		std::memcpy( &p_group->ptr()[sm_offsetBon], &p_data, sizeof( stVERTEX_BONE_DATA ) );
+		std::memcpy( &p_group->ptr()[sm_uiOffsetBon], &p_data, sizeof( stVERTEX_BONE_DATA ) );
 	}
 
 	void BonedVertex::SetBones( BufferElementGroup & p_group, stVERTEX_BONE_DATA * p_data )
 	{
-		std::memcpy( &p_group.ptr()[sm_offsetBon], p_data, sizeof( stVERTEX_BONE_DATA ) );
+		std::memcpy( &p_group.ptr()[sm_uiOffsetBon], p_data, sizeof( stVERTEX_BONE_DATA ) );
 	}
 
 	void BonedVertex::SetBones( BufferElementGroup & p_group, stVERTEX_BONE_DATA const & p_data )
 	{
-		std::memcpy( &p_group.ptr()[sm_offsetBon], &p_data, sizeof( stVERTEX_BONE_DATA ) );
+		std::memcpy( &p_group.ptr()[sm_uiOffsetBon], &p_data, sizeof( stVERTEX_BONE_DATA ) );
 	}
 }

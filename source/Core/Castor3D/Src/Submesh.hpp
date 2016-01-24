@@ -19,14 +19,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SUBMESH_H___
 
 #include "Castor3DPrerequisites.hpp"
-
-#include "Animable.hpp"
 #include "Mesh.hpp"
 #include "FaceIndices.hpp"
 #include "FaceInfos.hpp"
 #include "VertexBoneData.hpp"
 #include "VertexGroup.hpp"
-#include "Animable.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -44,7 +41,6 @@ namespace Castor3D
 	*/
 	class Submesh
 		: public Castor::OwnedBy< Engine >
-		, public Animable
 	{
 	public:
 		/*!

@@ -115,16 +115,14 @@ namespace Castor3D
 			C3D_API virtual bool operator()( AnimatedObjectGroup const & p_group, Castor::TextFile & p_file );
 		};
 
-	private:
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		AnimatedObjectGroup();
-
-	public:
+		C3D_API AnimatedObjectGroup();
 		/**
 		 *\~english
 		 *\brief		Specified constructor
@@ -138,15 +136,6 @@ namespace Castor3D
 		C3D_API AnimatedObjectGroup( SceneSPtr p_scene, Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_src	The source
-		 *\~french
-		 *\brief		Constructeur par recopier
-		 *\param[in]	p_src	La source
-		 */
-		C3D_API AnimatedObjectGroup( AnimatedObjectGroup const & p_src );
-		/**
-		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
@@ -155,14 +144,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list
-		 *\param[in]	p_name	The name
+		 *\param[in]	p_object	The MovableObject from which AnimatedObject is created
 		 *\return		The created AnimatedObject
 		 *\~french
 		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste
-		 *\param[in]	p_name	Le nom
+		 *\param[in]	p_object	Le MovableObject à partir duquel l'AnimatedObject est créé
 		 *\return		L'AnimatedObject créé
 		 */
-		C3D_API AnimatedObjectSPtr CreateObject( Castor::String const & p_name );
+		C3D_API AnimatedObjectSPtr AddObject( MovableObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.
@@ -177,12 +166,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds the animation to the list
-		 *\param[in]	p_name	The animation to add
+		 *\param[in]	p_animation	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
-		 *\param[in]	p_name	L'animation à ajouter
+		 *\param[in]	p_animation	L'animation à ajouter
 		 */
-		C3D_API void AddAnimation( Castor::String const & p_name );
+		C3D_API void AddAnimation( AnimationSPtr p_animation );
 		/**
 		 *\~english
 		 *\brief		Updates all animated objects
@@ -190,17 +179,6 @@ namespace Castor3D
 		 *\brief		Met à jour toutes les animations
 		 */
 		C3D_API void Update();
-		/**
-		 *\~english
-		 *\brief		Sets the loop status of wanted animation
-		 *\param[in]	p_name		The name of the animation
-		 *\param[in]	p_looped	The status
-		 *\~french
-		 *\brief		Définit le statut de bouclage de l'animation voulue
-		 *\param[in]	p_name		Le nom de l'animation
-		 *\param[in]	p_looped	Le statut
-		 */
-		C3D_API void SetAnimationLooped( Castor::String const & p_name, bool p_looped );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
@@ -275,11 +253,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The animations names.
+		 *\return		The animations map.
 		 *\~french
-		 *\return		Les noms des animations.
+		 *\return		La map d'animations.
 		 */
-		inline Castor::StrSet const & GetAnimations()const
+		inline AnimationPtrStrMap const & GetAnimations()const
 		{
 			return m_animations;
 		}
@@ -305,10 +283,12 @@ namespace Castor3D
 		}
 
 	private:
-		//!<\~english The list of group animations	\~french La liste des animations du groupe
-		Castor::StrSet m_animations;
+		//!<\~english The list of animations	\~french La liste des animations
+		AnimationPtrStrMap m_animations;
 		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject
 		AnimatedObjectPtrStrMap m_objects;
+		//!<\~english The map of currently playing animations	\~french La map des animations en cours
+		AnimationPtrStrMap m_playingAnimations;
 		//!<\~english The scene that updates animations	\~french La scène qui met à jour les animations
 		SceneWPtr m_scene;
 		//!<\~english A timer, usefull for animation handling	\~french Un timer, pour mettre à jour précisément les animations
@@ -317,3 +297,4 @@ namespace Castor3D
 }
 
 #endif
+

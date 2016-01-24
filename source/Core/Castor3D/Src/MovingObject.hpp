@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_OBJECT_H___
-#define ___C3D_MOVING_OBJECT_H___
+#ifndef ___C3D_MOVING_OBJECT___
+#define ___C3D_MOVING_OBJECT___
 
 #include "MovingObjectBase.hpp"
 
@@ -57,7 +57,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual Castor::String const & GetName()const;
+		virtual Castor::String const & GetName()const;
 		/**
 		 *\~english
 		 *\brief		Defines the movable object
@@ -84,11 +84,10 @@ namespace Castor3D
 		}
 
 	private:
-		C3D_API virtual void DoApply();
-		C3D_API virtual MovingObjectBaseSPtr DoClone();
+		virtual void DoApply();
 
 	private:
-		//!\~english The object affected by the animations	\~french L'objet affecté par les animations
+		//!\~english	The object affected by the animations	\~french	L'objet affecté par les animations
 		MovableObjectWPtr m_object;
 	};
 }

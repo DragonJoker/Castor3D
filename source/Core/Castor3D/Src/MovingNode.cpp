@@ -1,15 +1,15 @@
-﻿#include "MovingNode.hpp"
+#include "MovingNode.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
 	MovingNode::MovingNode()
-		: MovingObjectBase( eMOVING_OBJECT_TYPE_NODE )
+		: MovingObjectBase()
 	{
 	}
 
-	MovingNode::~MovingNode()
+	MovingNode :: ~MovingNode()
 	{
 	}
 
@@ -20,11 +20,5 @@ namespace Castor3D
 
 	void MovingNode::DoApply()
 	{
-		m_finalTransformation = m_transformations;
-	}
-
-	MovingObjectBaseSPtr MovingNode::DoClone()
-	{
-		return std::make_shared< MovingNode >( *this );
 	}
 }

@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_MOVABLE_OBJECT_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Animable.hpp"
 #include "BinaryParser.hpp"
 
 #include <OwnedBy.hpp>
@@ -38,7 +37,6 @@ namespace Castor3D
 	class MovableObject
 		: public std::enable_shared_from_this< MovableObject >
 		, public Castor::OwnedBy< Engine >
-		, public Animable
 	{
 	public:
 		/*!

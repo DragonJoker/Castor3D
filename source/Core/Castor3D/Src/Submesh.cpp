@@ -203,7 +203,6 @@ namespace Castor3D
 
 	Submesh::Submesh( Engine & p_engine, MeshRPtr p_pMesh, uint32_t p_uiId )
 		: OwnedBy< Engine >( p_engine )
-		, Animable()
 		, m_defaultMaterial( p_engine.GetMaterialManager().GetDefaultMaterial() )
 		, m_id( p_uiId )
 		, m_parentMesh( p_pMesh )

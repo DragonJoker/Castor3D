@@ -1,20 +1,15 @@
-﻿#include "MovingObjectBase.hpp"
+#include "MovingObjectBase.hpp"
+
 #include "KeyFrame.hpp"
 #include "Interpolator.hpp"
-#include "QuaternionInterpolator.hpp"
-
-#include <TransformationMatrix.hpp>
-#include <Quaternion.hpp>
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	MovingObjectBase::MovingObjectBase( eMOVING_OBJECT_TYPE p_type )
-		: m_length( 0.0_r )
-		, m_type( p_type )
+	MovingObjectBase::MovingObjectBase()
+		: m_length( 0 )
 	{
-		m_finalTransformation.set_identity();
 	}
 
 	MovingObjectBase::~MovingObjectBase()
@@ -26,9 +21,9 @@ namespace Castor3D
 		m_children.push_back( p_object );
 	}
 
-	void MovingObjectBase::Update( real p_time, bool p_looped, Matrix4x4r const & p_mtxTransformations )
+	void MovingObjectBase::Update( real p_time, bool p_looped, Matrix4x4r const & p_transformations )
 	{
-		m_transformations = p_mtxTransformations * DoComputeTransform( p_time );
+		m_transformations = p_transformations * DoComputeTransform( p_time );
 		DoApply();
 
 		for ( auto l_object : m_children )
@@ -67,21 +62,6 @@ namespace Castor3D
 		DoRemoveKeyFrame( p_time, m_rotates );
 	}
 
-	MovingObjectBaseSPtr MovingObjectBase::Clone( MovingObjectPtrStrMap & p_map )
-	{
-		MovingObjectBaseSPtr l_return = DoClone();
-		p_map.insert( std::make_pair( l_return->GetName(), l_return ) );
-		l_return->m_nodeTransform = m_nodeTransform;
-		l_return->m_children.clear();
-
-		for ( auto l_object : m_children )
-		{
-			l_return->m_children.push_back( l_object->Clone( p_map ) );
-		}
-
-		return l_return;
-	}
-
 	Matrix4x4r MovingObjectBase::DoComputeTransform( real p_time )
 	{
 		Matrix4x4r l_return;
@@ -118,17 +98,16 @@ namespace Castor3D
 
 	Point3r MovingObjectBase::DoComputeScaling( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_scales, Point3r( 1.0_r, 1.0_r, 1.0_r ) );
+		return DoCompute< eINTERPOLATOR_MODE_NONE >( p_time, m_scales, Point3r( 1, 1, 1 ) );
 	}
 
 	Point3r MovingObjectBase::DoComputeTranslation( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_translates, Point3r() );
+		return DoCompute< eINTERPOLATOR_MODE_NONE >( p_time, m_translates, Point3r() );
 	}
 
 	Quaternion MovingObjectBase::DoComputeRotation( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_rotates, Quaternion() );
+		return DoCompute< eINTERPOLATOR_MODE_NONE >( p_time, m_rotates, Quaternion() );
 	}
 }
-
