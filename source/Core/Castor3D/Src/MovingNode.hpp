@@ -62,8 +62,8 @@ namespace Castor3D
 		C3D_API virtual Castor::String const & GetName()const;
 
 	private:
-		C3D_API virtual void DoApply();
-		C3D_API virtual MovingObjectBaseSPtr DoClone();
+		virtual void DoApply();
+		virtual MovingObjectBaseSPtr DoClone();
 	};
 }
 

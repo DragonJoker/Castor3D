@@ -193,8 +193,7 @@ namespace C3dAssimp
 
 				if ( l_aiScene->HasAnimations() )
 				{
-					l_skeleton = std::make_shared< Skeleton >( m_mesh );
-					m_mesh->SetSkeleton( l_skeleton );
+					l_skeleton = std::make_shared< Skeleton >();
 					l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
 				}
 
@@ -202,7 +201,7 @@ namespace C3dAssimp
 				{
 					bool l_create = true;
 
-					for ( uint32_t i = 0; i < 1 && i < l_aiScene->mNumMeshes; ++i )
+					for ( uint32_t i = 0; i < l_aiScene->mNumMeshes; ++i )
 					{
 						if ( l_create )
 						{
@@ -350,6 +349,7 @@ namespace C3dAssimp
 			if ( p_aiMesh->HasBones() && p_skeleton )
 			{
 				DoProcessBones( p_skeleton, p_aiMesh->mBones, p_aiMesh->mNumBones, l_arrayBones );
+				p_submesh->SetSkeleton( p_skeleton );
 				l_vertices.m_pBones = &l_arrayBones[0];
 			}
 

@@ -84,8 +84,8 @@ namespace Castor3D
 		}
 
 	private:
-		C3D_API virtual void DoApply();
-		C3D_API virtual MovingObjectBaseSPtr DoClone();
+		virtual void DoApply();
+		virtual MovingObjectBaseSPtr DoClone();
 
 	private:
 		//!\~english The bone affected by the animations	\~french L'os affecté par les animations

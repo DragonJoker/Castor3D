@@ -22,6 +22,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Animable.hpp"
 #include "BinaryParser.hpp"
 
+#include <OwnedBy.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -34,8 +36,9 @@ namespace Castor3D
 	\brief		Classe d'objet déplaçable
 	*/
 	class MovableObject
-		: public Animable
-		, public std::enable_shared_from_this< MovableObject >
+		: public std::enable_shared_from_this< MovableObject >
+		, public Castor::OwnedBy< Engine >
+		, public Animable
 	{
 	public:
 		/*!

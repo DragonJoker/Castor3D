@@ -72,7 +72,7 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::AddMovingObject( MovableObjectSPtr p_object )
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapIt l_it = m_toMove.find( p_object->GetName() );
+		auto l_it = m_toMove.find( p_object->GetName() );
 
 		if ( l_it == m_toMove.end() )
 		{
@@ -126,7 +126,7 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_bone )const
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_toMove.find( p_bone->GetName() );
+		MovingObjectPtrStrMapConstIt l_it = m_toMove.find( cuT( "Bone_" ) + p_bone->GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{

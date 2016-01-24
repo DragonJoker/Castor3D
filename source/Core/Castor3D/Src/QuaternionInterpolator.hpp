@@ -42,7 +42,7 @@ namespace Castor3D
 		 *\param[in]	p_dst	The end
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_qSrc	Le départ
+		 *\param[in]	p_src	Le départ
 		 *\param[in]	p_dst	L'arrivée
 		 */
 		C3D_API Interpolator( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst )

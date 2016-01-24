@@ -123,22 +123,13 @@ namespace Castor3D
 		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Defines the geometry
-		 *\param[in]	p_pGeometry	The geometry
-		 *\~french
-		 *\brief		Définit la géométrie
-		 *\param[in]	p_pGeometry	La géométrie
-		 */
-		C3D_API void SetGeometry( GeometrySPtr p_geometry );
-		/**
-		 *\~english
 		 *\brief		Defines the mesh
-		 *\param[in]	p_pMesh	The mesh
+		 *\param[in]	p_submesh	The mesh
 		 *\~french
 		 *\brief		Définit le maillage
-		 *\param[in]	p_pMesh	Le maillage
+		 *\param[in]	p_submesh	Le maillage
 		 */
-		C3D_API void SetMesh( MeshSPtr p_msh );
+		C3D_API void SetSubmesh( SubmeshSPtr p_submesh );
 		/**
 		 *\~english
 		 *\brief		Defines the skeleton
@@ -162,27 +153,15 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the geometry
-		 *\return		The geometry
-		 *\~french
-		 *\brief		Récupère le géométrie
-		 *\return		La géométrie
-		 */
-		inline GeometrySPtr GetGeometry()const
-		{
-			return m_geometry.lock();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the mesh
 		 *\return		The mesh
 		 *\~french
 		 *\brief		Récupère le maillage
 		 *\return		Le maillage
 		 */
-		inline MeshSPtr GetMesh()const
+		inline SubmeshSPtr GetSubmesh()const
 		{
-			return m_mesh.lock();
+			return m_submesh.lock();
 		}
 		/**
 		 *\~english
@@ -198,18 +177,15 @@ namespace Castor3D
 		}
 
 	private:
-		void DoSetGeometry( GeometrySPtr p_geometry );
-		void DoSetMesh( MeshSPtr p_mesh );
+		void DoSetSubmesh( SubmeshSPtr p_mesh );
 		void DoSetSkeleton( SkeletonSPtr p_skeleton );
 		void DoCopyAnimations( AnimableSPtr p_object );
 
 	protected:
 		//!\~english All animations	\~french Toutes les animations
 		AnimationPtrStrMap m_animations;
-		//! The geometry affected by the animations	\~french La géométrie affectée par les animations
-		GeometryWPtr m_geometry;
 		//! The mesh affected by the animations	\~french Le maillage affecté par les animations
-		MeshWPtr m_mesh;
+		SubmeshWPtr m_submesh;
 		//! The skeleton affected by the animations	\~french Le squelette affecté par les animations
 		SkeletonWPtr m_skeleton;
 	};

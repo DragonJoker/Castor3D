@@ -203,6 +203,7 @@ namespace Castor3D
 
 	Submesh::Submesh( Engine & p_engine, MeshRPtr p_pMesh, uint32_t p_uiId )
 		: OwnedBy< Engine >( p_engine )
+		, Animable()
 		, m_defaultMaterial( p_engine.GetMaterialManager().GetDefaultMaterial() )
 		, m_id( p_uiId )
 		, m_parentMesh( p_pMesh )
@@ -292,7 +293,6 @@ namespace Castor3D
 
 	uint32_t Submesh::GetPointsCount()const
 	{
-// Mais pourquoi * sizeof( real ) ?	return std::max< uint32_t >( uint32_t( m_points.size() ), uint32_t( sizeof( real ) * m_vertex.lock()->GetSize() / m_declaration->GetStride() ) );
 		return std::max< uint32_t >( uint32_t( m_points.size() ), uint32_t( GetGeometryBuffers()->GetVertexBuffer().GetSize() / m_declaration->GetStride() ) );
 	}
 
@@ -423,11 +423,9 @@ namespace Castor3D
 
 			if ( l_vertices.m_pBones )
 			{
-				//l_pData = &(*m_pointsData.rbegin())[0];
 				for ( VertexPtrArrayIt l_it = m_points.begin() + l_uiVtxCount; l_it != m_points.end(); ++l_it )
 				{
 					BonedVertex::SetBones( *l_it, l_vertices.m_pBones );
-					//l_pData += l_uiStride;
 					l_vertices.m_pBones++;
 				}
 

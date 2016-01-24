@@ -22,25 +22,25 @@ namespace Castor3D
 
 	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file, Scene * p_scene )
 	{
-		m_pScene = p_scene;
+		m_scene = p_scene;
 		return operator()( p_group, p_file );
 	}
 
 	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file )
 	{
 		Collection< AnimatedObjectGroup, String > l_collection;
-		bool l_bResult = false;
+		bool l_result = false;
 
-		if ( ! l_bResult || l_collection.has( p_group.GetName() ) )
+		if ( !l_result || l_collection.has( p_group.GetName() ) )
 		{
-			Logger::LogInfo( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
+			Logger::LogWarning( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
 		}
 		else
 		{
 			Logger::LogInfo( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
 		}
 
-		return l_bResult;
+		return l_result;
 	}
 
 	//*************************************************************************************************
@@ -218,3 +218,4 @@ namespace Castor3D
 		}
 	}
 }
+

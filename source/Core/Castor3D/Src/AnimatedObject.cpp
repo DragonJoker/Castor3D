@@ -1,9 +1,10 @@
 ﻿#include "AnimatedObject.hpp"
+
 #include "AnimatedObjectGroup.hpp"
 #include "Animation.hpp"
 #include "Geometry.hpp"
 #include "Scene.hpp"
-#include "Mesh.hpp"
+#include "Submesh.hpp"
 #include "Skeleton.hpp"
 
 using namespace Castor;
@@ -97,16 +98,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void AnimatedObject::SetGeometry( GeometrySPtr p_object )
+	void AnimatedObject::SetSubmesh( SubmeshSPtr p_submesh )
 	{
 		m_animations.clear();
-		DoSetGeometry( p_object );
-	}
-
-	void AnimatedObject::SetMesh( MeshSPtr p_mesh )
-	{
-		m_animations.clear();
-		DoSetMesh( p_mesh );
+		DoSetSubmesh( p_submesh );
 	}
 
 	void AnimatedObject::SetSkeleton( SkeletonSPtr p_skeleton )
@@ -115,26 +110,15 @@ namespace Castor3D
 		DoSetSkeleton( p_skeleton );
 	}
 
-	void AnimatedObject::DoSetGeometry( GeometrySPtr p_object )
+	void AnimatedObject::DoSetSubmesh( SubmeshSPtr p_submesh )
 	{
-		if ( p_object )
+		if ( p_submesh )
 		{
-			DoCopyAnimations( p_object );
-			DoSetMesh( p_object->GetMesh() );
+			DoCopyAnimations( p_submesh );
+			DoSetSkeleton( p_submesh->GetSkeleton() );
 		}
 
-		m_geometry = p_object;
-	}
-
-	void AnimatedObject::DoSetMesh( MeshSPtr p_mesh )
-	{
-		if ( p_mesh )
-		{
-			DoCopyAnimations( p_mesh );
-			DoSetSkeleton( p_mesh->GetSkeleton() );
-		}
-
-		m_mesh = p_mesh;
+		m_submesh = p_submesh;
 	}
 
 	void AnimatedObject::DoSetSkeleton( SkeletonSPtr p_skeleton )

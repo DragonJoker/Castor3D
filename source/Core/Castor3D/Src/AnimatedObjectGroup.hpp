@@ -80,7 +80,7 @@ namespace Castor3D
 			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file );
 
 		private:
-			Scene * m_pScene;
+			Scene * m_scene;
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -304,7 +304,7 @@ namespace Castor3D
 			return m_scene.lock();
 		}
 
-	protected:
+	private:
 		//!<\~english The list of group animations	\~french La liste des animations du groupe
 		Castor::StrSet m_animations;
 		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject

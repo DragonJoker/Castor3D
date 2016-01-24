@@ -1,4 +1,5 @@
 ﻿#include "MovableObject.hpp"
+
 #include "SceneNode.hpp"
 #include "Scene.hpp"
 #include "Animation.hpp"
@@ -80,14 +81,14 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	MovableObject::MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type )
-		: Animable( *p_scene->GetOwner() )
+		: OwnedBy< Engine >( *p_scene->GetOwner() )
 		, m_type( p_type )
 		, m_pScene( p_scene )
 	{
 	}
 
 	MovableObject::MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, String const & p_name, eMOVABLE_TYPE p_type )
-		: Animable( *p_scene->GetOwner() )
+		: OwnedBy< Engine >( *p_scene->GetOwner() )
 		, m_name( p_name )
 		, m_pSceneNode( p_sn )
 		, m_type( p_type )

@@ -6,7 +6,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MovingObject::MovingObject()
-		:	MovingObjectBase( eMOVING_OBJECT_TYPE_OBJECT )
+		: MovingObjectBase( eMOVING_OBJECT_TYPE_OBJECT )
 	{
 	}
 

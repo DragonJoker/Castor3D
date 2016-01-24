@@ -3319,7 +3319,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimatedObject )
 
 			if ( l_object )
 			{
-				l_object->SetGeometry( l_pGeometry );
+				for ( auto l_submesh : *l_pGeometry->GetMesh() )
+				{
+					l_object->SetSubmesh( l_submesh );
+				}
+
 				l_pGeometry->SetAnimatedObject( l_object );
 			}
 			else

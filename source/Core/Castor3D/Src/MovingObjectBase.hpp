@@ -365,3 +365,5 @@ namespace Castor3D
 #include "MovingObjectBase.inl"
 
 #endif
+
+

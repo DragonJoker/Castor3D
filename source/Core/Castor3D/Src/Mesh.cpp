@@ -21,7 +21,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	Mesh::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Mesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< Mesh, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -127,7 +127,7 @@ namespace Castor3D
 
 	Mesh::Mesh( Engine & p_engine, String const & p_name )
 		: Resource< Mesh >( p_name )
-		, Animable( p_engine )
+		, OwnedBy< Engine >( p_engine )
 		, m_modified( false )
 	{
 	}

@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SKELETON_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Mesh.hpp"
+#include "Animable.hpp"
 
 namespace Castor3D
 {
@@ -38,19 +38,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_mesh	The parent mesh
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_mesh	Le maillage parent
 		 */
-		C3D_API Skeleton( MeshSPtr p_mesh );
+		C3D_API Skeleton();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Skeleton();
+		C3D_API ~Skeleton();
 		/**
 		 *\~english
 		 *\brief		Adds a bone to the skeleton
@@ -133,22 +131,8 @@ namespace Castor3D
 		{
 			m_globalInverse = p_transform;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh name
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le nom du maillage
-		 *\return		La valeur
-		 */
-		inline Castor::String const & GetMeshName()const
-		{
-			return m_mesh.lock()->GetName();
-		}
 
 	private:
-		//!\~english The mesh	\~french Le maillage
-		MeshWPtr m_mesh;
 		//!\~english The bones	\~french Les bones
 		BonePtrArray m_bones;
 		//!\~english The global skeleton transform	\~french La transformation globale du squelette
