@@ -167,7 +167,7 @@ namespace Castor3D
 	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
 	*/
 	template<> 
-	class C3D_API Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
+	class Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
 	{
 	public:
 		/**
@@ -205,7 +205,7 @@ namespace Castor3D
 		 */
 		inline Castor::Quaternion const & Interpolate( real p_percent )
 		{
-			m_cur = m_src.Slerp( m_dst, p_percent, true );
+			m_cur = m_src.slerp( m_dst, p_percent );
 			return m_cur;
 		}
 

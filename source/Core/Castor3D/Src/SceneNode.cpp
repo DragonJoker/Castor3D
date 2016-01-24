@@ -591,7 +591,7 @@ namespace Castor3D
 
 			if ( l_parent )
 			{
-				m_derivedTransform = l_parent->GetDerivedTransformationMatrix() * m_transform;
+				m_derivedTransform = m_transform * l_parent->GetDerivedTransformationMatrix();
 			}
 			else
 			{

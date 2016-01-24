@@ -68,25 +68,7 @@ namespace Castor3D
 
 		if ( HasKeyFrames() )
 		{
-			auto l_translate = DoComputeTranslation( p_time );
-			auto l_scale = DoComputeScaling( p_time );
-			auto l_rotate = DoComputeRotation( p_time );
-
-			l_rotate.to_matrix( l_return );
-
-			l_return[0][0] *= l_scale[0];
-			l_return[0][1] *= l_scale[0];
-			l_return[0][2] *= l_scale[0];
-			l_return[1][0] *= l_scale[1];
-			l_return[1][1] *= l_scale[1];
-			l_return[1][2] *= l_scale[1];
-			l_return[2][0] *= l_scale[2];
-			l_return[2][1] *= l_scale[2];
-			l_return[2][2] *= l_scale[2];
-
-			l_return[3][0] = l_translate[0];
-			l_return[3][1] = l_translate[1];
-			l_return[3][2] = l_translate[2];
+			matrix::set_transform( l_return, DoComputeTranslation( p_time ), DoComputeScaling( p_time ), DoComputeRotation( p_time ) );
 		}
 		else
 		{

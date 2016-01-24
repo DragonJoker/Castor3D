@@ -3341,9 +3341,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 
 		if ( l_collection.Has( l_name ) )
 		{
-			AnimationSPtr l_pAnimation = l_collection.Find( l_name );
-			l_pContext->pGroup->AddAnimation( l_pAnimation );
-			l_pAnimation->SetLooped( true );
+			auto l_animation = l_collection.Find( l_name );
+			l_pContext->pGroup->AddAnimation( l_animation );
+			l_animation->SetLooped( true );
 			l_pContext->pGroup->StartAnimation( l_name );
 		}
 		else
