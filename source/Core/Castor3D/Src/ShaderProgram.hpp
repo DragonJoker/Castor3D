@@ -465,15 +465,13 @@ namespace Castor3D
 		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
-		 *\brief		Activates the program
-		 *\param[in]	p_byIndex	The current pass index
-		 *\param[in]	p_byCount	The material passes count
+		 *\brief		Activates the program.
+		 *\param[in]	p_bindUbo	Tells if the frame variable buffers muts be bound.
 		 *\~french
-		 *\brief		Active le programme
-		 *\param[in]	p_byIndex	L'index de la passe courante
-		 *\param[in]	p_byCount	Le compte des passes du material
+		 *\brief		Active le programme.
+		 *\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
 		 */
-		C3D_API virtual void Bind( uint8_t p_byIndex, uint8_t p_byCount ) = 0;
+		C3D_API virtual void Bind( bool p_bindUbo = true ) = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivates the program
@@ -582,15 +580,13 @@ namespace Castor3D
 		C3D_API bool DoInitialise();
 		/**
 		*\~english
-		*\brief		Activates the program
-		*\param[in]	p_byIndex	The current pass index
-		*\param[in]	p_byCount	The material passes count
+		*\brief		Activates the program.
+		*\param[in]	p_bindUbo	Tells if the frame variable buffers muts be bound.
 		*\~french
-		*\brief		Active le programme
-		*\param[in]	p_byIndex	L'index de la passe courante
-		*\param[in]	p_byCount	Le compte des passes du material
+		*\brief		Active le programme.
+		*\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
 		*/
-		C3D_API void DoBind( uint8_t p_byIndex, uint8_t p_byCount );
+		C3D_API void DoBind( bool p_bindUbo );
 		/**
 		*\~english
 		*\brief		Deactivates the program

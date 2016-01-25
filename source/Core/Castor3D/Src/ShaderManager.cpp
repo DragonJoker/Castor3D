@@ -123,9 +123,6 @@ namespace Castor3D
 		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxProjection, 1 );
 		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxModel, 1 );
 		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxView, 1 );
-		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxModelView, 1 );
-		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxProjectionView, 1 );
-		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxProjectionModelView, 1 );
 		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxNormal, 1 );
 
 		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )

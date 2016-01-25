@@ -289,9 +289,6 @@ namespace Castor3D
 
 			if ( l_program && l_pMaterial )
 			{
-				uint8_t l_index = 0;
-				uint8_t l_count = l_pMaterial->GetPassCount();
-
 				for ( auto && l_pass : *l_pMaterial )
 				{
 					l_pass->BindToAutomaticProgram( l_program );
@@ -302,7 +299,7 @@ namespace Castor3D
 						l_pipeline.ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 					}
 
-					l_pass->Render( l_index++, l_count );
+					l_pass->Render();
 					m_geometryBuffers->Draw( l_program, l_uiSize, 0 );
 					l_pass->EndRender();
 				}

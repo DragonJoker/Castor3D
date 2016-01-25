@@ -351,7 +351,7 @@ namespace Castor3D
 		}
 		else
 		{
-			//Logger::LogInfo( m_name + cuT( " - Can't add SceneNode ") + l_name + cuT( " - Already in childs"));
+			Logger::LogWarning( m_name + cuT( " - Can't add SceneNode ") + l_name + cuT( " - Already in childs"));
 		}
 	}
 
@@ -544,7 +544,7 @@ namespace Castor3D
 
 		if ( l_parent )
 		{
-			l_return  = l_parent->GetDerivedOrientation() * l_return;
+			l_return  = l_return * l_parent->GetDerivedOrientation();
 		}
 
 		return l_return;

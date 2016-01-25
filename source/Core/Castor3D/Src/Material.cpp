@@ -159,36 +159,6 @@ namespace Castor3D
 		}
 	}
 
-	void Material::Render()
-	{
-		uint8_t l_byIndex = 0;
-		uint8_t l_byCount = uint8_t( m_passes.size() );
-
-		for ( auto && l_pass : m_passes )
-		{
-			l_pass->Render( l_byIndex++, l_byCount );
-		}
-	}
-
-	void Material::Render2D()
-	{
-		uint8_t l_byIndex = 0;
-		uint8_t l_byCount = uint8_t( m_passes.size() );
-
-		for ( auto && l_pass : m_passes )
-		{
-			l_pass->Render2D( l_byIndex++, l_byCount );
-		}
-	}
-
-	void Material::EndRender()
-	{
-		for ( auto && l_pass : m_passes )
-		{
-			l_pass->EndRender();
-		}
-	}
-
 	PassSPtr Material::CreatePass()
 	{
 		PassSPtr l_newPass = std::make_shared< Pass >( *GetOwner(), shared_from_this() );

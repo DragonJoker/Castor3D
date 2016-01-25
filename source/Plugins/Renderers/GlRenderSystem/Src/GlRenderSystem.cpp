@@ -354,13 +354,14 @@ namespace GlRender
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( c3d_mtxProjectionModelView * gl_in[0].gl_Position() ).XYZ );
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMVP, c3d_mtxProjection * c3d_mtxView * c3d_mtxModel );
+				LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( l_mtxMVP * gl_in[0].gl_Position() ).XYZ );
 				l_position.Y = c3d_v3CameraPosition.Y;
 				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, c3d_v3CameraPosition - l_position );
 				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0.0f ), 1.0, 0.0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( c3d_mtxProjectionModelView * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).XYZ );
-				l_v3Normal = l_writer.Paren( c3d_mtxProjectionModelView * vec4( l_v3Normal, 0.0 ) ).XYZ;
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( l_mtxMVP * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).XYZ );
+				l_v3Normal = l_writer.Paren( l_mtxMVP * vec4( l_v3Normal, 0.0 ) ).XYZ;
 
 				LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );

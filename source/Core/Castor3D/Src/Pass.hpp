@@ -175,25 +175,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the pass
-		 *\param[in]	p_byIndex	The pass index
-		 *\param[in]	p_byCount	The material passes count
 		 *\~french
 		 *\brief		Applique la passe
-		 *\param[in]	p_byIndex	L'index de la passe
-		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		C3D_API void Render( uint8_t p_byIndex, uint8_t p_byCount );
+		C3D_API void Render();
 		/**
 		 *\~english
 		 *\brief		Applies the pass for 2D render
-		 *\param[in]	p_byIndex	The pass index
-		 *\param[in]	p_byCount	The material passes count
 		 *\~french
 		 *\brief		Applique la passe pour un rendu 2D
-		 *\param[in]	p_byIndex	L'index de la passe
-		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		C3D_API void Render2D( uint8_t p_byIndex, uint8_t p_byCount );
+		C3D_API void Render2D();
 		/**
 		 *\~english
 		 *\brief		Removes the pass (to avoid it from interfering with other passes)
@@ -283,23 +275,33 @@ namespace Castor3D
 		C3D_API bool HasShader()const;
 		/**
 		 *\~english
+		 *\brief		Binds the program and the textures.
+		 *\remarks		The frame variable buffers are not bound.
+						A call to FillShaderVariables must be done before the draw call.
+		 *\~french
+		 *\brief		Lie le programme et les textures.
+		 *\remarks		Les tampons de variables de frame ne seront as liés.
+						Un appel à FillShaderVariables doit être fait avant le draw call.
+		 */
+		C3D_API void Bind();
+		/**
+		 *\~english
+		 *\brief		Fills shader variables.
+		 *\~french
+		 *\brief		Remplit les variables de shader.
+		 */
+		C3D_API void FillShaderVariables();
+		/**
+		 *\~english
 		 *\brief		Gives the current shader program
 		 *\return		The shader program, nullptr if none
 		 *\~french
 		 *\brief		Récupère le shader
 		 *\return		\p nullptr si aucun
 		 */
-		template< typename T >
-		std::shared_ptr<T> GetShader()const
+		inline ShaderProgramBaseSPtr GetShader()const
 		{
-			std::shared_ptr<T> l_return;
-
-			if ( ! m_shaderProgram.expired() )
-			{
-				l_return = std::static_pointer_cast<T, ShaderProgramBase>( m_shaderProgram.lock() );
-			}
-
-			return l_return;
+			return m_shaderProgram.lock();
 		}
 		/**
 		 *\~english
@@ -784,14 +786,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the pass
-		 *\param[in]	p_byIndex	The pass index
-		 *\param[in]	p_byCount	The material passes count
 		 *\~french
 		 *\brief		Applique la passe
-		 *\param[in]	p_byIndex	L'index de la passe
-		 *\param[in]	p_byCount	Le compte des passes du material
 		 */
-		C3D_API void DoRender( uint8_t p_byIndex, uint8_t p_byCount );
+		C3D_API void DoRender();
 		/**
 		 *\~english
 		 *\brief		Unapplies the pass.
@@ -799,13 +797,6 @@ namespace Castor3D
 		 *\brief		Désapplique la passe.
 		 */
 		C3D_API void DoEndRender();
-		/**
-		 *\~english
-		 *\brief		Fills shader variables
-		 *\~french
-		 *\brief		Remplit les variables de shader
-		 */
-		C3D_API void DoFillShaderVariables();
 
 	protected:
 		typedef std::pair< TextureUnitWPtr, OneTextureFrameVariableWPtr > UnitVariablePair;

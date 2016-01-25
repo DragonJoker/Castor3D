@@ -1130,7 +1130,7 @@ bool RenderTechnique::DoRender( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_
 	m_cloudColor.to_bgra( l_colour );
 	m_skymapCloudsColor->SetValue( l_colour );
 	m_skymapBlendState.lock()->Apply();
-	m_skymap->Bind( 0, 1 );
+	m_skymap->Bind();
 	m_skymapGBuffers->Draw( m_skymap, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_skymap->Unbind();
 	m_fbo->Unbind();
@@ -1190,7 +1190,7 @@ void RenderTechnique::DoEndRender()
 	m_skyWorldSunDir->SetValue( sun );
 	m_skyHdrExposure->SetValue( m_hdrExposure );
 	m_skyBlendState.lock()->Apply();
-	m_sky->Bind( 0, 1 );
+	m_sky->Bind();
 	m_skyGBuffers->Draw( m_sky, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_sky->Unbind();
 
@@ -1255,7 +1255,7 @@ void RenderTechnique::DoEndRender()
 
 	m_renderRasteriserState.lock()->Apply();
 	m_renderBlendState.lock()->Apply();
-	m_render->Bind( 0, 1 );
+	m_render->Bind();
 	m_renderGBuffers->Draw( m_render, m_renderGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_render->Unbind();
 	m_renderTarget->GetRasteriserState()->Apply();
@@ -1536,7 +1536,7 @@ void RenderTechnique::drawClouds( const Point3f & sun, const Matrix4x4f & mat )
 	m_cloudColor.to_bgra( l_colour );
 	m_cloudsCloudsColor->SetValue( l_colour );
 	m_cloudsBlendState.lock()->Apply();
-	m_clouds->Bind( 0, 1 );
+	m_clouds->Bind();
 	m_cloudsGBuffers->Draw( m_clouds, m_cloudsGBuffers->GetIndexBuffer().GetSize(), 0 );
 	m_clouds->Unbind();
 }

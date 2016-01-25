@@ -179,7 +179,7 @@ namespace Castor3D
 				GetOwner()->GetPipeline().ApplyProjection( *l_matrices );
 			}
 
-			l_program->Bind( 0, 1 );
+			l_program->Bind();
 		}
 
 		if ( p_texture->BindAt( 0 ) )

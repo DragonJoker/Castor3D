@@ -18,9 +18,6 @@ namespace Castor3D
 	const String Pipeline::MtxProjection = cuT( "c3d_mtxProjection" );
 	const String Pipeline::MtxModel = cuT( "c3d_mtxModel" );
 	const String Pipeline::MtxView = cuT( "c3d_mtxView" );
-	const String Pipeline::MtxModelView = cuT( "c3d_mtxModelView" );
-	const String Pipeline::MtxProjectionView = cuT( "c3d_mtxProjectionView" );
-	const String Pipeline::MtxProjectionModelView = cuT( "c3d_mtxProjectionModelView" );
 	const String Pipeline::MtxNormal = cuT( "c3d_mtxNormal" );
 	const String Pipeline::MtxBones = cuT( "c3d_mtxBones" );
 	const String Pipeline::MtxTexture[C3D_MAX_TEXTURE_MATRICES] =
@@ -45,10 +42,7 @@ namespace Castor3D
 		, m_mtxView( 1 )
 		, m_mtxModel( 1 )
 		, m_mtxProjection( 1 )
-		, m_mtxProjectionView( 1 )
-		, m_mtxModelView( 1 )
 		, m_mtxNormal( 1 )
-		, m_mtxProjectionModelView( 1 )
 	{
 	}
 
@@ -115,26 +109,8 @@ namespace Castor3D
 
 	void Pipeline::ApplyNormal( FrameVariableBuffer & p_matrixBuffer )
 	{
-		m_mtxNormal = m_mtxModelView.get_minor( 3, 3 ).invert().transpose();
+		m_mtxNormal = ( m_mtxModel * m_mtxView ).get_minor( 3, 3 ).invert().transpose();
 		DoApplyMatrix( m_mtxNormal, MtxNormal, p_matrixBuffer );
-	}
-
-	void Pipeline::ApplyModelView( FrameVariableBuffer & p_matrixBuffer )
-	{
-		m_mtxModelView = m_mtxView * m_mtxModel;
-		DoApplyMatrix( m_mtxModelView, MtxModelView, p_matrixBuffer );
-	}
-
-	void Pipeline::ApplyProjectionModelView( FrameVariableBuffer & p_matrixBuffer )
-	{
-		m_mtxProjectionModelView = m_mtxModelView * m_mtxProjection;
-		DoApplyMatrix( m_mtxProjectionModelView, MtxProjectionModelView, p_matrixBuffer );
-	}
-
-	void Pipeline::ApplyProjectionView( FrameVariableBuffer & p_matrixBuffer )
-	{
-		m_mtxProjectionView = m_mtxView * m_mtxProjection;
-		DoApplyMatrix( m_mtxProjectionView, MtxProjectionView, p_matrixBuffer );
 	}
 
 	void Pipeline::ApplyTexture( uint32_t p_index, FrameVariableBuffer & p_matrixBuffer )
@@ -153,33 +129,21 @@ namespace Castor3D
 			{
 				ApplyModel( p_matrixBuffer );
 			}
-
-			if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
-			{
-				ApplyView( p_matrixBuffer );
-				ApplyProjectionView( p_matrixBuffer );
-
-				if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
-				{
-					ApplyModelView( p_matrixBuffer );
-					ApplyProjectionModelView( p_matrixBuffer );
-					ApplyNormal( p_matrixBuffer );
-				}
-			}
 		}
-		else if ( p_matrices & MASK_MTXMODE_MODEL )
+
+		if ( p_matrices & MASK_MTXMODE_MODEL )
 		{
 			ApplyModel( p_matrixBuffer );
-
-			if ( ( p_matrices & MASK_MTXMODE_VIEW ) )
-			{
-				ApplyModelView( p_matrixBuffer );
-				ApplyNormal( p_matrixBuffer );
-			}
 		}
-		else if ( p_matrices & MASK_MTXMODE_VIEW )
+		
+		if ( p_matrices & MASK_MTXMODE_VIEW )
 		{
 			ApplyView( p_matrixBuffer );
+
+			if ( p_matrices & MASK_MTXMODE_MODEL )
+			{
+				ApplyNormal( p_matrixBuffer );
+			}
 		}
 
 		for ( uint32_t i = 0; i < C3D_MAX_TEXTURE_MATRICES; ++i )

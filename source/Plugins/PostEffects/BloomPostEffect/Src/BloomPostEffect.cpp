@@ -543,7 +543,7 @@ namespace Bloom
 					m_renderSystem->GetPipeline().ApplyProjection( *l_matrices );
 				}
 	
-				l_program->Bind( 0, 1 );
+				l_program->Bind();
 			}
 
 			l_texture0->BindAt( 0 );

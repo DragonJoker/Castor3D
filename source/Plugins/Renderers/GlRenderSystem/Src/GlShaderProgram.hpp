@@ -44,7 +44,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgramBase::Bind
 		 */
-		virtual void Bind( uint8_t p_index, uint8_t p_count );
+		virtual void Bind( bool p_bindUbo );
 		/**
 		 *\copydoc		Castor3D::ShaderProgramBase::Unbind
 		 */

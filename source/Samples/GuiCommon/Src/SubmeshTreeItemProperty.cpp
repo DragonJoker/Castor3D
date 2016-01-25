@@ -200,7 +200,7 @@ namespace GuiCommon
 			if ( l_material )
 			{
 				l_geometry->SetMaterial( l_submesh, l_material );
-				l_geometry->GetScene()->InitialiseGeometries();
+				l_geometry->GetScene()->SetChanged();
 			}
 		} );
 	}
