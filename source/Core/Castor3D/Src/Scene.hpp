@@ -840,16 +840,16 @@ namespace Castor3D
 		 *\brief		Applies geometry instance specific transformations.
 		 *\param[in]	p_matrixBuffer		The frame variable buffer holding matrices.
 		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_geometry			The geometry instance.
+		 *\param[in]	p_submesh			The geometry instance.
 		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
 		 *\~french
 		 *\brief		Applique les transformations liées à une instance de géométrie.
 		 *\param[in]	p_matrixBuffer		Le tampon de variables de programme contenant les matrices.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_geometry			L'instance de géométrie.
+		 *\param[in]	p_submesh			L'instance de géométrie.
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		void DoFillMatrixBuffer( Pass & p_pass, Pipeline & p_pipeline, Geometry const & p_geometry, uint64_t p_excludedMtxFlags );
+		void DoFillMatrixBuffer( Pass & p_pass, Pipeline & p_pipeline, Submesh const & p_submesh, uint64_t p_excludedMtxFlags );
 		/**
 		 *\~english
 		 *\brief		Unbinds the given pass.
