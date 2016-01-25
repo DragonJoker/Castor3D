@@ -338,7 +338,7 @@ namespace Deferred
 			auto & l_sceneBuffer = *m_lightPassScene.lock();
 			m_renderSystem->GetTopScene()->BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
 			m_renderSystem->GetTopScene()->BindCamera( l_sceneBuffer );
-			m_lightPassShaderProgram->Bind( 0, 1 );
+			m_lightPassShaderProgram->Bind();
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{

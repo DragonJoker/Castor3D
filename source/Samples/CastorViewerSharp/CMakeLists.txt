@@ -1,4 +1,4 @@
-if ( MSVC )
+if ( MSVC AND ${CASTOR_BUILDGRP_BINDING} )
 	project( CastorViewerSharp )
 
 	set( CVS_VERSION_MAJOR 0 )

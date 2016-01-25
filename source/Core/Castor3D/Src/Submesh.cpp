@@ -532,7 +532,7 @@ namespace Castor3D
 	{
 		if ( DoPrepareGeometryBuffers( p_pass ) )
 		{
-			ShaderProgramBaseSPtr l_program = p_pass.GetShader< ShaderProgramBase >();
+			ShaderProgramBaseSPtr l_program = p_pass.GetShader();
 			uint32_t l_uiSize = m_geometryBuffers->GetVertexBuffer().GetSize() / m_geometryBuffers->GetVertexBuffer().GetDeclaration().GetStride();
 
 			if ( m_geometryBuffers->HasIndexBuffer() )
@@ -1116,7 +1116,7 @@ namespace Castor3D
 
 	bool Submesh::DoPrepareGeometryBuffers( Pass const & p_pass )
 	{
-		ShaderProgramBaseSPtr l_program = p_pass.GetShader< ShaderProgramBase >();
+		ShaderProgramBaseSPtr l_program = p_pass.GetShader();
 
 		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{

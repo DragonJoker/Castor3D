@@ -178,7 +178,7 @@ namespace Castor
 			set_scale( l_scale, p_ptScale );
 			set_rotate( l_rotate, p_qOrientation );
 			set_translate( l_translate, p_ptPosition );
-			p_matrix = l_scale * l_rotate * l_translate;
+			p_matrix = l_translate * l_rotate * l_scale;
 			return p_matrix;
 		}
 
@@ -191,7 +191,7 @@ namespace Castor
 			set_scale( l_scale, p_ptScale );
 			set_rotate( l_rotate, p_qOrientation );
 			set_translate( l_translate, p_ptPosition );
-			p_matrix *= l_scale * l_rotate * l_translate;
+			p_matrix *= l_translate * l_rotate * l_scale;
 			return p_matrix;
 		}
 

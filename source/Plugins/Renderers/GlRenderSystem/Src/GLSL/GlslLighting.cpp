@@ -351,7 +351,7 @@ namespace GlRender
 
 					LOCALE_ASSIGN( m_writer, Vec3, l_vertexToEye, normalize( p_worldEye - p_fragmentIn.m_v3Vertex ) );
 					LOCALE_ASSIGN( m_writer, Vec3, l_lightReflect, normalize( reflect( p_direction, p_fragmentIn.m_v3Normal ) ) );
-					LOCALE_ASSIGN( m_writer, Float, l_specularFactor, dot( l_vertexToEye, l_lightReflect ) );
+					LOCALE_ASSIGN( m_writer, Float, l_specularFactor, -dot( l_vertexToEye, l_lightReflect ) );
 
 					IF( m_writer, l_specularFactor > Float( 0 ) )
 					{

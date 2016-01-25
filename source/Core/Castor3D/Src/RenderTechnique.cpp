@@ -101,7 +101,7 @@ namespace Castor3D
 	{
 		p_camera.GetViewport().SetSize( p_size );
 		p_camera.Render();
-		p_scene.Render( *this, p_dFrameTime, p_camera );
+		p_scene.Render( *this, p_camera );
 		p_camera.EndRender();
 		return true;
 	}

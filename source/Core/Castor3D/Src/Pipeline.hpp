@@ -279,33 +279,6 @@ namespace Castor3D
 		C3D_API void ApplyNormal( FrameVariableBuffer & p_matrixBuffer );
 		/**
 		 *\~english
-		 *\brief		Puts the current model/view matrix into the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice modèle/vue dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyModelView( FrameVariableBuffer & p_matrixBuffer );
-		/**
-		 *\~english
-		 *\brief		Puts the current projection/view matrix into the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice projection/vue dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyProjectionView( FrameVariableBuffer & p_matrixBuffer );
-		/**
-		 *\~english
-		 *\brief		Puts the current projection/model/view matrix into the given frame variables buffer.
-		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
-		 *\~french
-		 *\brief		Met la matrice projection/modèle/vue dans le buffer de variables donné.
-		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
-		 */
-		C3D_API void ApplyProjectionModelView( FrameVariableBuffer & p_matrixBuffer );
-		/**
-		 *\~english
 		 *\brief		Puts the current texture 0 matrix into the given frame variables buffer.
 		 *\param[in]	p_index			The texture index.
 		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
@@ -523,9 +496,6 @@ namespace Castor3D
 		static const Castor::String MtxProjection;
 		static const Castor::String MtxModel;
 		static const Castor::String MtxView;
-		static const Castor::String MtxModelView;
-		static const Castor::String MtxProjectionView;
-		static const Castor::String MtxProjectionModelView;
 		static const Castor::String MtxNormal;
 		static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 		static const Castor::String MtxBones;
@@ -541,12 +511,6 @@ namespace Castor3D
 		Castor::Matrix4x4r m_mtxView;
 		//!\~english The projection matrix	\~french La matrice projection
 		Castor::Matrix4x4r m_mtxProjection;
-		//!\~english The model-view matrix	\~french La matrice modèle-vue
-		Castor::Matrix4x4r m_mtxModelView;
-		//!\~english The projection-view matrix	\~french La matrice projection-vue
-		Castor::Matrix4x4r m_mtxProjectionView;
-		//!\~english The projection-model-view matrix	\~french La matrice projection-modèle-vue
-		Castor::Matrix4x4r m_mtxProjectionModelView;
 		//!\~english The normals matrix	\~french La matrice des normales
 		Castor::Matrix4x4r m_mtxNormal;
 		//!\~english The texture matrices	\~french Les matrices de texture

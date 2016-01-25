@@ -262,9 +262,6 @@ namespace GlRender
 	UNIFORM( l_matrices, Mat4, c3d_mtxProjection );\
 	UNIFORM( l_matrices, Mat4, c3d_mtxModel );\
 	UNIFORM( l_matrices, Mat4, c3d_mtxView );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxModelView );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxProjectionView );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxProjectionModelView );\
 	UNIFORM( l_matrices, Mat4, c3d_mtxNormal );\
 	UNIFORM( l_matrices, Mat4, c3d_mtxTexture0 );\
 	UNIFORM( l_matrices, Mat4, c3d_mtxTexture1 );\

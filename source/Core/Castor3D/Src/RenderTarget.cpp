@@ -436,19 +436,28 @@ namespace Castor3D
 	{
 		SceneSPtr l_pScene = GetScene();
 
-		if ( l_pScene && l_pScene->HasChanged() )
+		if ( l_pScene )
 		{
-			l_pScene->InitialiseGeometries();
-		}
+			l_pScene->Update();
 
-		if ( m_initialised && l_pScene )
-		{
-			if ( m_bStereo && m_rIntraOcularDistance > 0 && GetOwner()->GetRenderSystem()->IsStereoAvailable() )
+			if ( m_initialised )
 			{
-				if ( GetCameraLEye() && GetCameraREye() )
+				if ( m_bStereo && m_rIntraOcularDistance > 0 && GetOwner()->GetRenderSystem()->IsStereoAvailable() )
 				{
-					DoRender( m_fbLeftEye, GetCameraLEye(), p_dFrameTime );
-					DoRender( m_fbRightEye, GetCameraREye(), p_dFrameTime );
+					if ( GetCameraLEye() && GetCameraREye() )
+					{
+						DoRender( m_fbLeftEye, GetCameraLEye(), p_dFrameTime );
+						DoRender( m_fbRightEye, GetCameraREye(), p_dFrameTime );
+					}
+					else
+					{
+						CameraSPtr l_pCamera = GetCamera();
+
+						if ( l_pCamera )
+						{
+							DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
+						}
+					}
 				}
 				else
 				{
@@ -458,15 +467,6 @@ namespace Castor3D
 					{
 						DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
 					}
-				}
-			}
-			else
-			{
-				CameraSPtr l_pCamera = GetCamera();
-
-				if ( l_pCamera )
-				{
-					DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
 				}
 			}
 		}

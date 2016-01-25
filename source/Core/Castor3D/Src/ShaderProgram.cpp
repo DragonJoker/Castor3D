@@ -529,7 +529,7 @@ namespace Castor3D
 		return m_status == ePROGRAM_STATUS_LINKED;
 	}
 
-	void ShaderProgramBase::DoBind( uint8_t CU_PARAM_UNUSED( p_byIndex ), uint8_t CU_PARAM_UNUSED( p_byCount ) )
+	void ShaderProgramBase::DoBind( bool p_bindUbo )
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
@@ -538,11 +538,14 @@ namespace Castor3D
 				l_shader->Bind();
 			}
 
-			uint32_t l_index = 0;
-
-			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+			if ( p_bindUbo )
 			{
-				l_variableBuffer->Bind( l_index++ );
+				uint32_t l_index = 0;
+
+				for ( auto l_variableBuffer : m_listFrameVariableBuffers )
+				{
+					l_variableBuffer->Bind( l_index++ );
+				}
 			}
 		}
 	}

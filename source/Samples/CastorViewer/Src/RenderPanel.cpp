@@ -308,37 +308,37 @@ namespace CastorViewer
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_rFpCamSpeed ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_rFpCamSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_rFpCamSpeed ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_rFpCamSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, m_rFpCamSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, -m_rFpCamSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, -m_rFpCamSpeed, 0.0_r, 0.0_r ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, m_rFpCamSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_rFpCamSpeed, 0.0_r ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, m_rFpCamSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, m_rFpCamSpeed, 0.0_r ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_rFpCamSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 

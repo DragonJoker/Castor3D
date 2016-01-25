@@ -144,6 +144,11 @@ namespace Castor3D
 
 	void Mesh::Cleanup()
 	{
+		for ( auto l_submesh : m_submeshes )
+		{
+			l_submesh->Cleanup();
+		}
+
 		m_submeshes.clear();
 	}
 

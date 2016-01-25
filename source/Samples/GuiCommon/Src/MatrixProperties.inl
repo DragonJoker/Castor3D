@@ -97,10 +97,10 @@ namespace GuiCommon
 
 				for ( size_t j = 0; j < Count; ++j )
 				{
-					l_names[j] << p_rowNames[i] << wxT( "." ) << p_colNames[j];
+					l_names[j] << p_colNames[i] << wxT( "." ) << p_rowNames[j];
 				}
 
-				wxPGProperty * l_property = new PointProperty< T, Count >( l_names, wxString() << _( "Row " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i] ) );
+				wxPGProperty * l_property = new PointProperty< T, Count >( l_names, wxString() << _( "Col " ) << p_rowNames[i], wxPG_LABEL, Castor::Point< T, Count >( p_value[i] ) );
 				l_property->Enable( false );
 				p_prop->AddPrivateChild( l_property );
 			}

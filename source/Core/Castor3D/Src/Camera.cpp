@@ -194,8 +194,42 @@ namespace Castor3D
 		{
 			if ( l_modified || l_node->IsModified() )
 			{
-				m_view = l_node->GetDerivedTransformationMatrix();
-				//matrix::set_transform( m_view, l_node->GetDerivedPosition() * Point3r( 1, 1, 1 ), Point3r( 1, 1, 1 ), l_node->GetDerivedOrientation() );
+				auto const & l_position = l_node->GetDerivedPosition();
+				auto const & l_orientation = l_node->GetDerivedOrientation();
+				Point3r l_right, l_up, l_lookat;
+				l_orientation.to_axes( l_right, l_up, l_lookat );
+				point::normalise( l_right );
+				point::normalise( l_up );
+				point::normalise( l_lookat );
+
+				// Rotation
+				Matrix4x4r l_rotate{ 1.0_r };
+				auto & l_col0 = l_rotate[0];
+				auto & l_col1 = l_rotate[1];
+				auto & l_col2 = l_rotate[2];
+				l_col0[0] = l_right[0];
+				l_col0[1] = l_up[0];
+				l_col0[2] = l_lookat[0];
+				l_col0[3] = 0.0_r;
+				l_col1[0] = l_right[1];
+				l_col1[1] = l_up[1];
+				l_col1[2] = l_lookat[1];
+				l_col1[3] = 0.0_r;
+				l_col2[0] = l_right[2];
+				l_col2[1] = l_up[2];
+				l_col2[2] = l_lookat[2];
+				l_col2[3] = 0.0_r;
+
+				// Translation
+				Matrix4x4r l_translate { 1.0_r };
+				auto & l_col3 = l_translate[3];
+				l_col3[0] = -l_position[0];
+				l_col3[1] = -l_position[1];
+				l_col3[2] = -l_position[2];
+				l_col3[3] = 1.0_r;
+
+				m_view = l_rotate * l_translate;
+				//m_view = l_node->GetDerivedTransformationMatrix();
 
 				// Express frustum in view coordinates
 				for ( int i = 0; i < eFRUSTUM_PLANE_COUNT; ++i )

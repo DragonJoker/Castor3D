@@ -343,9 +343,6 @@ namespace Castor3D
 
 	void OverlayRenderer::DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, TextureBaseSPtr p_texture, uint32_t p_count )
 	{
-		uint8_t l_byIndex = 0;
-		uint8_t l_byCount = uint8_t( p_material.GetPassCount() );
-
 		for ( auto && l_pass : p_material )
 		{
 			ShaderProgramBaseSPtr l_program;
@@ -379,14 +376,14 @@ namespace Castor3D
 						l_textureVariable->SetValue( p_texture.get() );
 					}
 
-					l_pass->Render2D( l_byIndex++, l_byCount );
+					l_pass->Render2D();
 					p_texture->BindAt( 0 );
 					p_geometryBuffers->Draw( l_program, p_count, 0 );
 					p_texture->UnbindFrom( 0 );
 				}
 				else
 				{
-					l_pass->Render2D( l_byIndex++, l_byCount );
+					l_pass->Render2D();
 					p_geometryBuffers->Draw( l_program, p_count, 0 );
 				}
 

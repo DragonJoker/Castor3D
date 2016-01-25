@@ -88,7 +88,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			ShaderProgramBaseSPtr l_program = p_pass.GetShader< ShaderProgramBase >();
+			ShaderProgramBaseSPtr l_program = p_pass.GetShader();
 
 			if ( l_program )
 			{
@@ -337,7 +337,7 @@ namespace Castor3D
 
 		if ( l_return && p_pass.HasShader() )
 		{
-			l_return = ShaderProgramBase::TextLoader()( * p_pass.GetShader<ShaderProgramBase>(), p_file );
+			l_return = ShaderProgramBase::TextLoader()( * p_pass.GetShader(), p_file );
 		}
 
 		if ( l_return )
@@ -530,15 +530,15 @@ namespace Castor3D
 		m_mapUnits.clear();
 	}
 
-	void Pass::Render( uint8_t p_index, uint8_t p_count )
+	void Pass::Render()
 	{
 		m_pBlendState->Apply();
-		DoRender( p_index, p_count );
+		DoRender();
 	}
 
-	void Pass::Render2D( uint8_t p_index, uint8_t p_count )
+	void Pass::Render2D()
 	{
-		DoRender( p_index, p_count );
+		DoRender();
 	}
 
 	void Pass::EndRender()
@@ -623,6 +623,64 @@ namespace Castor3D
 		return m_pBlendState->IsBlendEnabled();
 	}
 
+	void Pass::Bind()
+	{
+		auto l_program = GetShader();
+
+		if ( l_program )
+		{
+			l_program->Bind( false );
+		}
+
+		for ( auto && l_it : m_arrayTextureUnits )
+		{
+			l_it->Bind();
+		}
+	}
+
+	void Pass::FillShaderVariables()
+	{
+		auto l_program = GetShader();
+
+		if ( l_program )
+		{
+			for ( auto && l_pair : m_mapUnits )
+			{
+				TextureUnitSPtr l_unit = l_pair.second.first.lock();
+				OneTextureFrameVariableSPtr l_variable = l_pair.second.second.lock();
+
+				if ( l_unit && l_variable )
+				{
+					l_variable->SetValue( l_unit->GetTexture().get() );
+				}
+			}
+
+			FrameVariableBufferSPtr l_passBuffer = m_passBuffer.lock();
+
+			if ( l_passBuffer )
+			{
+				Point4f l_colour;
+				GetAmbient().to_rgba( l_colour );
+				m_pAmbient.lock()->SetValue( l_colour );
+				GetDiffuse().to_rgba( l_colour );
+				m_pDiffuse.lock()->SetValue( l_colour );
+				GetSpecular().to_rgba( l_colour );
+				m_pSpecular.lock()->SetValue( l_colour );
+				GetEmissive().to_rgba( l_colour );
+				m_pEmissive.lock()->SetValue( l_colour );
+				m_pShininess.lock()->SetValue( GetShininess() );
+				m_pOpacity.lock()->SetValue( GetAlpha() );
+			}
+
+			uint32_t l_index = 0;
+
+			for ( auto l_variableBuffer : l_program->GetFrameVariableBuffers() )
+			{
+				l_variableBuffer->Bind( l_index++ );
+			}
+		}
+	}
+
 	void Pass::DoGetTexture( eTEXTURE_CHANNEL p_channel, String const & p_name, ShaderProgramBase & p_program, OneTextureFrameVariableWPtr & p_variable )
 	{
 		TextureUnitSPtr l_unit = GetTextureUnit( p_channel );
@@ -636,37 +694,6 @@ namespace Castor3D
 				m_mapUnits.insert( std::make_pair( p_channel, std::make_pair( l_unit, l_variable ) ) );
 				p_variable = l_variable;
 			}
-		}
-	}
-
-	void Pass::DoFillShaderVariables()
-	{
-		for ( auto && l_pair : m_mapUnits )
-		{
-			TextureUnitSPtr l_unit = l_pair.second.first.lock();
-			OneTextureFrameVariableSPtr l_variable = l_pair.second.second.lock();
-
-			if ( l_unit && l_variable )
-			{
-				l_variable->SetValue( l_unit->GetTexture().get() );
-			}
-		}
-
-		FrameVariableBufferSPtr l_passBuffer = m_passBuffer.lock();
-
-		if ( l_passBuffer )
-		{
-			Point4f l_colour;
-			GetAmbient().to_rgba( l_colour );
-			m_pAmbient.lock()->SetValue( l_colour );
-			GetDiffuse().to_rgba( l_colour );
-			m_pDiffuse.lock()->SetValue( l_colour );
-			GetSpecular().to_rgba( l_colour );
-			m_pSpecular.lock()->SetValue( l_colour );
-			GetEmissive().to_rgba( l_colour );
-			m_pEmissive.lock()->SetValue( l_colour );
-			m_pShininess.lock()->SetValue( GetShininess() );
-			m_pOpacity.lock()->SetValue( GetAlpha() );
 		}
 	}
 
@@ -750,14 +777,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Pass::DoRender( uint8_t p_index, uint8_t p_count )
+	void Pass::DoRender()
 	{
 		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
 
 		if ( l_program )
 		{
-			DoFillShaderVariables();
-			l_program->Bind( p_index, p_count );
+			l_program->Bind( false );
+			FillShaderVariables();
 		}
 
 		for ( auto && l_it : m_arrayTextureUnits )

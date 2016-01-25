@@ -65,7 +65,7 @@ namespace GuiCommon
 
 	void ShaderDialog::DoInitialiseShaderLanguage()
 	{
-		m_shaderProgram = m_pPass.lock()->GetShader< ShaderProgramBase >();
+		m_shaderProgram = m_pPass.lock()->GetShader();
 
 		if ( m_shaderProgram.lock() )
 		{
@@ -126,15 +126,18 @@ namespace GuiCommon
 
 		for ( int i = 0; i < eSHADER_TYPE_COUNT; i++ )
 		{
-			wxArrayString l_arrayChoices;
-			l_arrayChoices.push_back( wxCOMBO_NEW );
+			if ( l_program->HasObject( eSHADER_TYPE( i ) ) )
+			{
+				wxArrayString l_arrayChoices;
+				l_arrayChoices.push_back( wxCOMBO_NEW );
 
-			// The editor page
-			m_pEditorPages[i] = new ShaderEditorPage( m_bCanEdit, *m_pStcContext, l_program, eSHADER_TYPE( i ), m_pNotebookEditors );
-			m_pEditorPages[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
-			m_pEditorPages[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-			m_pNotebookEditors->AddPage( m_pEditorPages[i], l_arrayTexts[i], true );
-			m_pEditorPages[i]->SetSize( 0, 22, m_pNotebookEditors->GetClientSize().x, m_pNotebookEditors->GetClientSize().y - 22 );
+				// The editor page
+				m_pEditorPages[i] = new ShaderEditorPage( m_bCanEdit, *m_pStcContext, l_program, eSHADER_TYPE( i ), m_pNotebookEditors );
+				m_pEditorPages[i]->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
+				m_pEditorPages[i]->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
+				m_pNotebookEditors->AddPage( m_pEditorPages[i], l_arrayTexts[i], true );
+				m_pEditorPages[i]->SetSize( 0, 22, m_pNotebookEditors->GetClientSize().x, m_pNotebookEditors->GetClientSize().y - 22 );
+			}
 		}
 	}
 

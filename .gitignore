@@ -11,3 +11,9 @@
 *.csproj
 *.suo
 *.gch
+/data/Scene/Alpha
+/data/Scene/Anim
+/data/Scene/Billboards
+/data/Scene/Lighting
+/data/Scene/Parc
+/source/Core/Castor3D/Src/Data/Core

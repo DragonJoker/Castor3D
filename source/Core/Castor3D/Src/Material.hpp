@@ -151,27 +151,6 @@ namespace Castor3D
 		C3D_API virtual ~Material();
 		/**
 		 *\~english
-		 *\brief		Activates the material
-		 *\~french
-		 *\brief		Active le matériau
-		 */
-		C3D_API void Render();
-		/**
-		 *\~english
-		 *\brief		Activates the material in 2D mode
-		 *\~french
-		 *\brief		Active le matériau en mode 2D
-		 */
-		C3D_API void Render2D();
-		/**
-		 *\~english
-		 *\brief		Deactivates the material (to avoid it from interfering with other materials)
-		 *\~french
-		 *\brief		Désactive le matériau (pour qu'il n'interfère pas avec les autres)
-		 */
-		C3D_API void EndRender();
-		/**
-		 *\~english
 		 *\brief		Initialises the material and all it's passes
 		 *\~french
 		 *\brief		Initialise le matériau et toutes ses passes

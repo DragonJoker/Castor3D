@@ -80,12 +80,12 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlShaderProgram::Bind( uint8_t p_index, uint8_t p_count )
+	void GlShaderProgram::Bind( bool p_bindUbo )
 	{
 		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
 		{
 			GetOpenGl().UseProgram( GetGlName() );
-			DoBind( p_index, p_count );
+			DoBind( p_bindUbo );
 		}
 	}
 
@@ -172,47 +172,52 @@ namespace GlRender
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
+			LOCALE( l_writer, Mat4, l_mtxModel );
+			bool l_set = false;
 
 			if ( ( p_programFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 			{
-				LOCALE( l_writer, Mat4, l_mtxBoneTransform );
-				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 0 )]] * weights[Int( 0 )];
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxBoneTransform, c3d_mtxBones[bone_ids[Int( 0 )]] * weights[Int( 0 )] );
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 1 )]] * weights[Int( 1 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 2 )]] * weights[Int( 2 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids[Int( 3 )]] * weights[Int( 3 )];
 				//l_mtxBoneTransform = transpose( l_mtxBoneTransform );
-				l_v4Vertex = l_mtxBoneTransform * l_v4Vertex;
-				l_v4Normal = l_mtxBoneTransform * l_v4Normal;
-				l_v4Tangent = l_mtxBoneTransform * l_v4Tangent;
-				l_v4Bitangent = l_mtxBoneTransform * l_v4Bitangent;
+				l_mtxModel = l_mtxBoneTransform;
+				l_set = true;
 			}
 
 			if ( ( p_programFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
 			{
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, transform );
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
-				l_v4Vertex = l_mtxMV * l_v4Vertex;
-				l_v4Normal = l_mtxN * l_v4Normal;
-				l_v4Tangent = l_mtxN * l_v4Tangent;
-				l_v4Bitangent = l_mtxN * l_v4Bitangent;
+
+				if ( l_set )
+				{
+					l_mtxModel = l_mtxMV * l_mtxModel;
+				}
+				else
+				{
+					l_mtxModel = l_mtxMV;
+				}
 			}
 			else
 			{
-				l_v4Vertex = c3d_mtxModel * l_v4Vertex;
-				l_v4Normal = c3d_mtxModel * l_v4Normal;
-				l_v4Tangent = c3d_mtxModel * l_v4Tangent;
-				l_v4Bitangent = c3d_mtxModel * l_v4Bitangent;
-				//l_v4Normal = c3d_mtxNormal * l_v4Normal;
-				//l_v4Tangent = c3d_mtxNormal * l_v4Tangent;
-				//l_v4Bitangent = c3d_mtxNormal * l_v4Bitangent;
+				if ( l_set )
+				{
+					l_mtxModel = c3d_mtxModel * l_mtxModel;
+				}
+				else
+				{
+					l_mtxModel = c3d_mtxModel;
+				}
 			}
 
 			vtx_texture = texture;
-			vtx_vertex = l_v4Vertex.XYZ;
-			vtx_normal = normalize( l_v4Normal.XYZ );
-			vtx_tangent = normalize( l_v4Tangent.XYZ );
-			vtx_bitangent = normalize( l_v4Bitangent.XYZ );
-			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * c3d_mtxView * l_v4Vertex;
+			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).XYZ;
+			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).XYZ );
+			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).XYZ );
+			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).XYZ );
+			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * c3d_mtxView * l_mtxModel * l_v4Vertex;
 		};
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
