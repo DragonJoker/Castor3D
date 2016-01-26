@@ -3309,17 +3309,17 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimatedObject )
 	String l_name;
 	p_params[0]->Get( l_name );
 
-	if ( l_pContext->pScene )
+	if ( l_pContext->pScene && l_pContext->pGroup )
 	{
-		MovableObjectSPtr l_pObject = l_pContext->pScene->GetGeometry( l_name );
+		GeometrySPtr l_geometry = l_pContext->pScene->GetGeometry( l_name );
 
-		if ( l_pObject )
+		if ( l_geometry )
 		{
-			l_pContext->pGroup->AddObject( l_pObject );
+			l_pContext->pGroup->AddObject( l_geometry );
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : No object with name " ) + l_name );
+			PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : No geometry with name " ) + l_name );
 		}
 	}
 	else
@@ -3337,19 +3337,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 
 	if ( l_pContext->pGroup )
 	{
-		AnimationManager & l_collection = l_pContext->m_pParser->GetOwner()->GetAnimationManager();
-
-		if ( l_collection.Has( l_name ) )
-		{
-			auto l_animation = l_collection.Find( l_name );
-			l_pContext->pGroup->AddAnimation( l_animation );
-			l_animation->SetLooped( true );
-			l_pContext->pGroup->StartAnimation( l_name );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Directive <animated_object_group::animation> : No animation with name " ) + l_name );
-		}
+		l_pContext->pGroup->AddAnimation( l_name );
+		l_pContext->pGroup->SetAnimationLooped( l_name, true );
+		l_pContext->pGroup->StartAnimation( l_name );
 	}
 	else
 	{

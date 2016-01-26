@@ -99,10 +99,7 @@ namespace Castor3D
 	MovableObject::~MovableObject()
 	{
 		Detach();
-	}
-
-	void MovableObject::Cleanup()
-	{
+		Animable::CleanupAnimations();
 	}
 
 	void MovableObject::Detach()

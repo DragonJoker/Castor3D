@@ -144,6 +144,8 @@ namespace Castor3D
 
 	void Mesh::Cleanup()
 	{
+		Animable::CleanupAnimations();
+
 		for ( auto l_submesh : m_submeshes )
 		{
 			l_submesh->Cleanup();

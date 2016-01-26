@@ -1,11 +1,13 @@
 #include "MovingNode.hpp"
 
+#include "Animation.hpp"
+
 using namespace Castor;
 
 namespace Castor3D
 {
 	MovingNode::MovingNode()
-		: MovingObjectBase()
+		: MovingObjectBase( eMOVING_OBJECT_TYPE_NODE )
 	{
 	}
 
@@ -20,5 +22,13 @@ namespace Castor3D
 
 	void MovingNode::DoApply()
 	{
+		m_finalTransform = m_nodeTransform;
+	}
+
+	MovingObjectBaseSPtr MovingNode::DoClone( Animation & p_animation )
+	{
+		auto l_return = std::make_shared< MovingNode >();
+		p_animation.AddMovingObject( l_return, l_return );
+		return l_return;
 	}
 }

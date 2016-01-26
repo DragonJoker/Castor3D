@@ -1,5 +1,6 @@
 #include "MovingObject.hpp"
 
+#include "Animation.hpp"
 #include "MovableObject.hpp"
 #include "SceneNode.hpp"
 
@@ -8,7 +9,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MovingObject::MovingObject()
-		: MovingObjectBase()
+		: MovingObjectBase( eMOVING_OBJECT_TYPE_OBJECT )
 	{
 	}
 
@@ -23,19 +24,14 @@ namespace Castor3D
 
 	void MovingObject::DoApply()
 	{
-		//MovableObjectSPtr l_pObject = GetObject();
+		m_finalTransform = m_cumulativeTransform;
+	}
 
-		//if ( l_pObject )
-		//{
-		//	Point3r l_ptScale;
-		//	Point3r l_ptTranslate;
-		//	Quaternion l_qRotate;
-		//	matrix::get_scale( m_mtxTransformations, l_ptScale );
-		//	matrix::get_translate( m_mtxTransformations, l_ptTranslate );
-		//	matrix::get_rotate( m_mtxTransformations, l_qRotate );
-		//	GetObject()->GetParent()->Scale( l_ptScale );
-		//	GetObject()->GetParent()->Translate( l_ptTranslate );
-		//	GetObject()->GetParent()->Rotate( l_qRotate );
-		//}
+	MovingObjectBaseSPtr MovingObject::DoClone( Animation & p_animation )
+	{
+		auto l_return = std::make_shared< MovingObject >();
+		l_return->m_object = m_object;
+		p_animation.AddMovingObject( l_return, l_return );
+		return l_return;
 	}
 }

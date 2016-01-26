@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include "Animable.hpp"
+
 namespace Castor3D
 {
 	/*!
@@ -31,6 +33,7 @@ namespace Castor3D
 	\brief		Le squelette, contient chaque bone
 	*/
 	class Skeleton
+		: public Animable
 	{
 	public:
 		/**

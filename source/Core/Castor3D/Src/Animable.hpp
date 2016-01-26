@@ -33,21 +33,23 @@ namespace Castor3D
 	*/
 	class Animable
 	{
+	protected:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructeur.
+		 */
+		Animable();
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		~Animable();
+
 	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		C3D_API Animable();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~Animable();
 		/**
 		*\~english
 		*\brief		Creates an animation
@@ -59,6 +61,13 @@ namespace Castor3D
 		*\return		l'animation
 		*/
 		C3D_API AnimationSPtr CreateAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Empties the animations map.
+		 *\~french
+		 *\brief		Vid ela map d'animations.
+		*/
+		C3D_API void CleanupAnimations();
 		/**
 		*\~english
 		*\brief		Retrieves an animation

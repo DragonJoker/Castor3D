@@ -144,14 +144,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list
-		 *\param[in]	p_object	The MovableObject from which AnimatedObject is created
+		 *\param[in]	p_object	The Geometry from which AnimatedObject is created
 		 *\return		The created AnimatedObject
 		 *\~french
 		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste
-		 *\param[in]	p_object	Le MovableObject à partir duquel l'AnimatedObject est créé
+		 *\param[in]	p_object	La Geometry à partir duquel l'AnimatedObject est créé
 		 *\return		L'AnimatedObject créé
 		 */
-		C3D_API AnimatedObjectSPtr AddObject( MovableObjectSPtr p_object );
+		C3D_API AnimatedObjectSPtr AddObject( GeometrySPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.
@@ -166,12 +166,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds the animation to the list
-		 *\param[in]	p_animation	The animation to add
+		 *\param[in]	p_name	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
-		 *\param[in]	p_animation	L'animation à ajouter
+		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		C3D_API void AddAnimation( AnimationSPtr p_animation );
+		C3D_API void AddAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Sets the loop status of wanted animation.
+		 *\param[in]	p_name		The name of the animation.
+		 *\param[in]	p_looped	The status.
+		 *\~french
+		 *\brief		Définit le statut de bouclage de l'animation voulue.
+		 *\param[in]	p_name		Le nom de l'animation.
+		 *\param[in]	p_looped	Le statut.
+		 */
+		C3D_API void SetAnimationLooped( Castor::String const & p_name, bool p_looped );
 		/**
 		 *\~english
 		 *\brief		Updates all animated objects
@@ -229,35 +240,11 @@ namespace Castor3D
 		C3D_API void PauseAllAnimations();
 		/**
 		 *\~english
-		 *\brief		Retrieves the animations count
-		 *\return		The animations count
-		 *\~french
-		 *\brief		Récupère le compte des animations
-		 *\return		Le compte des animations
-		 */
-		inline uint32_t GetAnimationCount()const
-		{
-			return uint32_t( m_animations.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the objects count
-		 *\return		The objects count
-		 *\~french
-		 *\brief		Récupère le compte des objets
-		 *\return		Le compte des objets
-		 */
-		inline uint32_t GetObjectCount()const
-		{
-			return uint32_t( m_objects.size() );
-		}
-		/**
-		 *\~english
 		 *\return		The animations map.
 		 *\~french
 		 *\return		La map d'animations.
 		 */
-		inline AnimationPtrStrMap const & GetAnimations()const
+		inline Castor::StrSet const & GetAnimations()const
 		{
 			return m_animations;
 		}
@@ -284,11 +271,9 @@ namespace Castor3D
 
 	private:
 		//!<\~english The list of animations	\~french La liste des animations
-		AnimationPtrStrMap m_animations;
+		Castor::StrSet m_animations;
 		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject
 		AnimatedObjectPtrStrMap m_objects;
-		//!<\~english The map of currently playing animations	\~french La map des animations en cours
-		AnimationPtrStrMap m_playingAnimations;
 		//!<\~english The scene that updates animations	\~french La scène qui met à jour les animations
 		SceneWPtr m_scene;
 		//!<\~english A timer, usefull for animation handling	\~french Un timer, pour mettre à jour précisément les animations

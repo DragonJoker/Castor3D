@@ -1377,28 +1377,23 @@ namespace Castor3D
 		p_pass.Render();
 	}
 
-	void Scene::DoFillMatrixBuffer( Pass & p_pass, Pipeline & p_pipeline, Submesh const & p_submesh, uint64_t p_excludedMtxFlags )
+	void Scene::DoFillMatrixBuffer( Pass & p_pass, Pipeline & p_pipeline, Geometry const & p_geometry, uint64_t p_excludedMtxFlags )
 	{
 		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
 
 		if ( l_matrixBuffer )
 		{
 			p_pipeline.ApplyMatrices( *l_matrixBuffer, ( 0xFFFFFFFFFFFFFFFF & ~p_excludedMtxFlags ) );
-			SkeletonSPtr l_skeleton = p_submesh.GetSkeleton();
+			auto l_animated = p_geometry.GetAnimatedObject();
 
-			if ( l_skeleton )
+			if ( l_animated )
 			{
 				Matrix4x4rFrameVariableSPtr l_variable;
 				l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_variable );
 
 				if ( l_variable )
 				{
-					int i = 0;
-
-					for ( auto && l_bone : *l_skeleton )
-					{
-						l_variable->SetValue( l_bone->GetFinalTransformation(), i++ );
-					}
+					l_animated->FillShader( *l_variable );
 				}
 			}
 		}
@@ -1434,7 +1429,7 @@ namespace Castor3D
 					for ( auto l_renderNode : l_itSubmeshes.second )
 					{
 						p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_submesh, 0 );
+						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
 						DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() );
 						l_renderNode.m_submesh->Draw( *l_pass );
 						DoUnbindPass( *l_pass );
@@ -1469,7 +1464,7 @@ namespace Castor3D
 							l_buffer += 16;
 						}
 
-						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_submesh, MASK_MTXMODE_MODEL );
+						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_itSubmeshes.second[0].m_geometry, MASK_MTXMODE_MODEL );
 						DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() | ePROGRAM_FLAG_INSTANCIATION );
 						l_itSubmeshes.second[0].m_submesh->Draw( *l_pass );
 						DoUnbindPass( *l_pass );
@@ -1479,7 +1474,7 @@ namespace Castor3D
 						for ( auto l_renderNode : l_itSubmeshes.second )
 						{
 							p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-							DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_submesh, 0 );
+							DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
 							DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() );
 							l_renderNode.m_submesh->Draw( *l_pass );
 							DoUnbindPass( *l_pass );
@@ -1503,7 +1498,7 @@ namespace Castor3D
 			for ( auto l_pass : *l_material )
 			{
 				p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-				DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_submesh, 0 );
+				DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
 				DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() );
 				l_renderNode.m_submesh->Draw( *l_pass );
 				DoUnbindPass( *l_pass );

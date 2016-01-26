@@ -454,19 +454,7 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return m_skeleton;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the skeleton
-		 *\param[in]	p_skeleton	The new value
-		 *\~french
-		 *\brief		Définit le squelette
-		 *\param[in]	p_skeleton	La nouvelle valeur
-		 */
-		inline void SetSkeleton( SkeletonSPtr p_skeleton )
-		{
-			m_skeleton = p_skeleton;
+			return GetParent()->GetSkeleton();
 		}
 		/**
 		 *\~english
@@ -749,8 +737,6 @@ namespace Castor3D
 		bool m_initialised;
 		//!\~english Tells the VAO needs reininitialisation	\~french Dit que le VAO a besoin d'être réinitialisé
 		bool m_dirty;
-		//!\~english The skeleton	\~french Le squelette
-		SkeletonSPtr m_skeleton;
 	};
 }
 

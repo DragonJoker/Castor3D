@@ -1,5 +1,6 @@
 #include "MovingBone.hpp"
 
+#include "Animation.hpp"
 #include "Bone.hpp"
 
 using namespace Castor;
@@ -7,7 +8,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MovingBone::MovingBone()
-		: MovingObjectBase()
+		: MovingObjectBase( eMOVING_OBJECT_TYPE_BONE )
 	{
 	}
 
@@ -26,7 +27,15 @@ namespace Castor3D
 
 		if ( l_bone )
 		{
-			l_bone->SetFinalTransformation( m_transformations * l_bone->GetOffsetMatrix() );
+			m_finalTransform = m_cumulativeTransform * l_bone->GetOffsetMatrix();
 		}
+	}
+
+	MovingObjectBaseSPtr MovingBone::DoClone( Animation & p_animation )
+	{
+		auto l_return = std::make_shared< MovingBone >();
+		l_return->m_bone = m_bone;
+		p_animation.AddMovingObject( l_return, l_return );
+		return l_return;
 	}
 }

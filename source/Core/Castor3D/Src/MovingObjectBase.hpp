@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include <SquareMatrix.hpp>
+#include <Quaternion.hpp>
 
 namespace Castor3D
 {
@@ -29,129 +30,174 @@ namespace Castor3D
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		Class which represents the moving things
-	\remark		Manages translation, scaling, rotation of the thing
+	\brief		Class which represents the moving things.
+	\remark		Manages translation, scaling, rotation of the thing.
 	\~french
-	\brief		Classe de représentation de choses mouvantes
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose
+	\brief		Classe de représentation de choses mouvantes.
+	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
+	*/
+	typedef enum eMOVING_OBJECT_TYPE CASTOR_TYPE( uint8_t )
+	{
+		eMOVING_OBJECT_TYPE_NODE,
+		eMOVING_OBJECT_TYPE_OBJECT,
+		eMOVING_OBJECT_TYPE_BONE,
+	}	eMOVING_OBJECT_TYPE;
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.1
+	\date		09/02/2010
+	\~english
+	\brief		Class which represents the moving things.
+	\remark		Manages translation, scaling, rotation of the thing.
+	\~french
+	\brief		Classe de représentation de choses mouvantes.
+	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
 	class MovingObjectBase
 	{
+	protected:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_type	The moving thing type.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_type	Le type du machin mouvant.
+		 */
+		C3D_API MovingObjectBase( eMOVING_OBJECT_TYPE p_type );
+		/**
+		 *\~english
+		 *\brief		Copy constructor.
+		 *\~french
+		 *\brief		Constructeur par copie.
+		 */
+		C3D_API MovingObjectBase( MovingObjectBase const & p_rhs );
+
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Constructeur
-		 */
-		C3D_API MovingObjectBase();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~MovingObjectBase();
 		/**
 		 *\~english
-		 *\brief		Adds a child to this object
-		 *\remark		The child's transformations are affected by this object's ones
-		 *\param[in]	p_object	The child
+		 *\brief		Adds a child to this object.
+		 *\remark		The child's transformations are affected by this object's ones.
+		 *\param[in]	p_object	The child.
 		 *\~french
-		 *\brief		Ajoute un objet enfant à celui-ci
-		 *\remark		Les transformations de l'enfant sont affectées par celles de cet objet
-		 *\param[in]	p_object	L'enfant
+		 *\brief		Ajoute un objet enfant à celui-ci.
+		 *\remark		Les transformations de l'enfant sont affectées par celles de cet objet.
+		 *\param[in]	p_object	L'enfant.
 		 */
 		C3D_API void AddChild( MovingObjectBaseSPtr p_object );
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations at given time
-		 *\param[in]	p_time				Current time index
-		 *\param[in]	p_looped			Tells if the animation is looped
-		 *\param[în]	p_transformations	The current transformation matrix
+		 *\brief		Updates the object, applies the transformations at given time.
+		 *\param[in]	p_time				Current time index.
+		 *\param[in]	p_looped			Tells if the animation is looped.
+		 *\param[în]	p_transformations	The current transformation matrix.
 		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné
-		 *\param[in]	p_time				Index de temps courant
-		 *\param[in]	p_looped			Dit si l'animation est bouclée
-		 *\param[în]	p_transformations	La matrice de transformation courante
+		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
+		 *\param[in]	p_time				Index de temps courant.
+		 *\param[in]	p_looped			Dit si l'animation est bouclée.
+		 *\param[în]	p_transformations	La matrice de transformation courante.
 		 */
 		C3D_API void Update( real p_time, bool p_looped, Castor::Matrix4x4r const & p_transformations );
 		/**
 		 *\~english
-		 *\brief		Retrieves the object name
-		 *\return		The name
+		 *\brief		Retrieves the object name.
+		 *\return		The name.
 		 *\~french
-		 *\brief		Récupère le nom de l'objet
-		 *\return		Le nom
+		 *\brief		Récupère le nom de l'objet.
+		 *\return		Le nom.
 		 */
 		C3D_API virtual Castor::String const & GetName()const = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a key frame and adds it to the list
-		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified
-		 *\param[in]	p_from	The starting time
+		 *\brief		Creates a scaling key frame and adds it to the list.
+		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
+		 *\param[in]	p_from	The starting time.
+		 *\param[in]	p_value	The key frame value.
 		 *\~french
-		 *\brief		Crée une key frame et l'ajoute à la liste
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
-		 *\param[in]	p_from	L'index de temps de début
+		 *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
+		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
+		 *\param[in]	p_from	L'index de temps de début.
+		 *\param[in]	p_value	La valeur de la key frame.
 		 */
-		C3D_API ScaleKeyFrameSPtr AddScaleKeyFrame( real p_from );
+		C3D_API Point3rKeyFrame & AddScaleKeyFrame( real p_from, Castor::Point3r const & p_value = Castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
-		 *\brief		Creates a key frame and adds it to the list
-		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified
-		 *\param[in]	p_from	The starting time
+		 *\brief		Creates a translation key frame and adds it to the list.
+		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
+		 *\param[in]	p_from	The starting time.
+		 *\param[in]	p_value	The key frame value.
 		 *\~french
-		 *\brief		Crée une key frame et l'ajoute à la liste
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
-		 *\param[in]	p_from	L'index de temps de début
+		 *\brief		Crée une key frame de translation et l'ajoute à la liste.
+		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
+		 *\param[in]	p_from	L'index de temps de début.
+		 *\param[in]	p_value	La valeur de la key frame.
 		 */
-		C3D_API TranslateKeyFrameSPtr AddTranslateKeyFrame( real p_from );
+		C3D_API Point3rKeyFrame & AddTranslateKeyFrame( real p_from, Castor::Point3r const & p_value = Castor::Point3r() );
 		/**
 		 *\~english
-		 *\brief		Creates a key frame and adds it to the list
-		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified
-		 *\param[in]	p_from	The starting time
+		 *\brief		Creates a rotation key frame and adds it to the list.
+		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
+		 *\param[in]	p_from	The starting time.
+		 *\param[in]	p_value	The key frame value.
 		 *\~french
-		 *\brief		Crée une key frame et l'ajoute à la liste
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée
-		 *\param[in]	p_from	L'index de temps de début
+		 *\brief		Crée une key frame de rotation et l'ajoute à la liste.
+		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
+		 *\param[in]	p_from	L'index de temps de début.
+		 *\param[in]	p_value	La valeur de la key frame.
 		 */
-		C3D_API RotateKeyFrameSPtr AddRotateKeyFrame( real p_from );
+		C3D_API QuaternionKeyFrame & AddRotateKeyFrame( real p_from, Castor::Quaternion const & p_value = Castor::Quaternion() );
 		/**
 		 *\~english
-		 *\brief		Deletes the key frame at time index p_time
-		 *\param[in]	p_time	The time index
+		 *\brief		Deletes the scaling key frame at time index p_time.
+		 *\param[in]	p_time	The time index.
 		 *\~french
-		 *\brief		Supprime la key frame à l'index de temps donné
-		 *\param[in]	p_time	L'index de temps
+		 *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
+		 *\param[in]	p_time	L'index de temps.
 		 */
 		C3D_API void RemoveScaleKeyFrame( real p_time );
 		/**
 		 *\~english
-		 *\brief		Deletes the key frame at time index p_time
-		 *\param[in]	p_time	The time index
+		 *\brief		Deletes the translation key frame at time index p_time.
+		 *\param[in]	p_time	The time index.
 		 *\~french
-		 *\brief		Supprime la key frame à l'index de temps donné
-		 *\param[in]	p_time	L'index de temps
+		 *\brief		Supprime la key frame de translation à l'index de temps donné.
+		 *\param[in]	p_time	L'index de temps.
 		 */
 		C3D_API void RemoveTranslateKeyFrame( real p_time );
 		/**
 		 *\~english
-		 *\brief		Deletes the key frame at time index p_time
-		 *\param[in]	p_time	The time index
+		 *\brief		Deletes the rotation key frame at time index p_time.
+		 *\param[in]	p_time	The time index.
 		 *\~french
-		 *\brief		Supprime la key frame à l'index de temps donné
-		 *\param[in]	p_time	L'index de temps
+		 *\brief		Supprime la key frame de rotation à l'index de temps donné.
+		 *\param[in]	p_time	L'index de temps.
 		 */
 		C3D_API void RemoveRotateKeyFrame( real p_time );
+		/**
+		 *\~english
+		 *\brief		Clones this moving thing.
+		 *\param[out]	p_animation	The clone is added to this animation.
+		 *\return		The clone.
+		 *\~french
+		 *\brief		Clône cet objet animable.
+		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
+		 *\return		Le clône.
+		 */
+		C3D_API MovingObjectBaseSPtr Clone( Animation & p_animation );
 		/**
 		 *\~english
 		 *\return		The scale key frames.
 		 *\~french
 		 *\return		Les key frames de mise à l'échelle.
 		 */
-		inline ScaleKeyFramePtrRealMap const & GetScales()const
+		inline Point3rKeyFrameRealMap const & GetScales()const
 		{
 			return m_scales;
 		}
@@ -161,7 +207,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les key frames de déplacement.
 		 */
-		inline TranslateKeyFramePtrRealMap const & GetTranslates()const
+		inline Point3rKeyFrameRealMap const & GetTranslates()const
 		{
 			return m_translates;
 		}
@@ -171,7 +217,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les key frames de rotation.
 		 */
-		inline RotateKeyFramePtrRealMap const & GetRotates()const
+		inline QuaternionKeyFrameRealMap const & GetRotates()const
 		{
 			return m_rotates;
 		}
@@ -187,11 +233,21 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation length
-		 *\param[in]	p_length	The new value
+		 *\return		The moving object type.
 		 *\~french
-		 *\brief		Définit la durée de l'animation
-		 *\param[in]	p_length	La nouvelle valeur
+		 *\return		Le type d'objet mouvant.
+		 */
+		inline eMOVING_OBJECT_TYPE GetType()const
+		{
+			return m_type;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the animation length.
+		 *\param[in]	p_length	The new value.
+		 *\~french
+		 *\brief		Définit la durée de l'animation.
+		 *\param[in]	p_length	La nouvelle valeur.
 		 */
 		inline void	SetLength( real p_length )
 		{
@@ -199,11 +255,21 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the animation node transformation
-		 *\return		The value
+		 *\brief		The final object's animations transformation.
 		 *\~french
-		 *\brief		Récupère les animations du noeud de transformation
-		 *\return		La valeur
+		 *\brief		La transfomation finale des animations du de cet objet.
+		 */
+		inline Castor::Matrix4x4r const & GetFinalTransform()const
+		{
+			return m_finalTransform;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the animation node transformation.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère les animations du noeud de transformation.
+		 *\return		La valeur.
 		 */
 		inline Castor::Matrix4x4r const & GetNodeTransform()const
 		{
@@ -211,11 +277,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the animation node transformation
-		 *\param[in]	p_transform	The new value
+		 *\brief		Sets the animation node transformation.
+		 *\param[in]	p_transform	The new value.
 		 *\~french
-		 *\brief		Définit les animations du noeud de transformation
-		 *\param[in]	p_transform	La nouvelle valeur
+		 *\brief		Définit les animations du noeud de transformation.
+		 *\param[in]	p_transform	La nouvelle valeur.
 		 */
 		inline void SetNodeTransform( Castor::Matrix4x4r const & p_transform )
 		{
@@ -223,11 +289,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Tells whether or not the object has keyframes
-		 *\return		\p false if no keyframes
+		 *\brief		Tells whether or not the object has keyframes.
+		 *\return		\p false if no keyframes.
 		 *\~french
-		 *\brief		Dit si l'objet a des keyframes
-		 *\return		\p false si pas de keyframes
+		 *\brief		Dit si l'objet a des keyframes.
+		 *\return		\p false si pas de keyframes.
 		 */
 		inline bool HasKeyFrames()const
 		{
@@ -237,39 +303,122 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Updates the object, applies the transformations matrix
+		 *\brief		Updates the object, applies the transformations matrix.
 		 *\~french
-		 *\brief		Met à jour les transformations appliquées à l'objet
+		 *\brief		Met à jour les transformations appliquées à l'objet.
 		 */
 		C3D_API virtual void DoApply() = 0;
+		/**
+		 *\~english
+		 *\brief		Clones this moving thing.
+		 *\param[out]	p_animation	The clone is added to this animation.
+		 *\return		The clone.
+		 *\~french
+		 *\brief		Clône cet objet animable.
+		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
+		 *\return		Le clône.
+		 */
+		C3D_API virtual MovingObjectBaseSPtr DoClone( Animation & p_animation ) = 0;
 
 	private:
+		/**
+		 *\~english
+		 *\brief		Computes the animation's matrix transformations for this object.
+		 *\param[in]	p_time	The time index.
+		 *\return		The transformation matrix.
+		 *\~french
+		 *\brief		Calcule la matrice de transformation pour l'animation de cet objet.
+		 *\param[in]	p_time	L'index de temps.
+		 *\return		La matrice de transformation.
+		 */
 		Castor::Matrix4x4r DoComputeTransform( real p_time );
+		/**
+		 *\~english
+		 *\brief		Computes the animation's scaling for this object.
+		 *\param[in]	p_time	The time index.
+		 *\return		The scaling.
+		 *\~french
+		 *\brief		Calcule la mise à l'échelle pour l'animation de cet objet.
+		 *\param[in]	p_time	L'index de temps.
+		 *\return		La mise à l'échelle.
+		 */
 		Castor::Point3r DoComputeScaling( real p_time );
+		/**
+		 *\~english
+		 *\brief		Computes the animation's tranlation for this object.
+		 *\param[in]	p_time	The time index.
+		 *\return		The tranlation.
+		 *\~french
+		 *\brief		Calcule la tranlation pour l'animation de cet objet.
+		 *\param[in]	p_time	L'index de temps.
+		 *\return		La tranlation.
+		 */
 		Castor::Point3r DoComputeTranslation( real p_time );
+		/**
+		 *\~english
+		 *\brief		Computes the animation's rotation for this object.
+		 *\param[in]	p_time	The time index.
+		 *\return		The rotation.
+		 *\~french
+		 *\brief		Calcule la rotation pour l'animation de cet objet.
+		 *\param[in]	p_time	L'index de temps.
+		 *\return		La rotation.
+		 */
 		Castor::Quaternion DoComputeRotation( real p_time );
+		/**
+		 *\~english
+		 *\brief		Creates a key frame and adds it to the list.
+		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
+		 *\param[in]	p_from	The starting time.
+		 *\~french
+		 *\brief		Crée une key frame et l'ajoute à la liste.
+		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
+		 *\param[in]	p_from	L'index de temps de début.
+		 */
+		template< class KeyFrameType, typename T >
+		KeyFrameType & DoAddKeyFrame( real p_from, std::map< real, KeyFrameType > & p_map, T const & p_value );
+		/**
+		 *\~english
+		 *\brief		Deletes the key frame at time index p_time.
+		 *\param[in]	p_time	The time index.
+		 *\~french
+		 *\brief		Supprime la key frame à l'index de temps donné.
+		 *\param[in]	p_time	L'index de temps.
+		 */
 		template< class KeyFrameType >
-		std::shared_ptr< KeyFrameType > DoAddKeyFrame( real p_from, std::map< real, std::shared_ptr< KeyFrameType > > & p_map );
-		template< class KeyFrameType >
-		void DoRemoveKeyFrame( real p_time, std::map< real, std::shared_ptr< KeyFrameType > > & p_map );
+		void DoRemoveKeyFrame( real p_time, std::map< real, KeyFrameType > & p_map );
+		/**
+		 *\~english
+		 *\brief		Computes the animation's value (translation, rotation or scaling) for this object.
+		 *\param[in]	p_time	The time index.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Calcule la valeur (translation, rotation ou mise à l'échelle) pour l'animation de cet objet.
+		 *\param[in]	p_time	L'index de temps.
+		 *\return		La valeur.
+		 */
 		template< eINTERPOLATOR_MODE Mode, class ValueType, class KeyFrameType >
-		ValueType DoCompute( real p_time, std::map< real, std::shared_ptr< KeyFrameType > > const & p_map, ValueType const & p_default );
+		ValueType DoCompute( real p_time, std::map< real, KeyFrameType > const & p_map, ValueType const & p_default );
 
 	protected:
-		//!\~english The key frames sorted by start time	\~french Les keyframes, triées par index de temps de début
-		ScaleKeyFramePtrRealMap m_scales;
-		//!\~english The key frames sorted by start time	\~french Les keyframes, triées par index de temps de début
-		TranslateKeyFramePtrRealMap m_translates;
-		//!\~english The key frames sorted by start time	\~french Les keyframes, triées par index de temps de début
-		RotateKeyFramePtrRealMap m_rotates;
-		//!\~english The animation length	\~french La durée de l'animation
+		//!\~english The moving thing type.	\~french Le type du machin mouvant.
+		eMOVING_OBJECT_TYPE m_type;
+		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
+		Point3rKeyFrameRealMap m_scales;
+		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
+		Point3rKeyFrameRealMap m_translates;
+		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
+		QuaternionKeyFrameRealMap m_rotates;
+		//!\~english The animation length.	\~french La durée de l'animation.
 		real m_length;
-		//!\~english The objects depending on this one	\~french Les objets dépendant de celui-ci
+		//!\~english The objects depending on this one.	\~french Les objets dépendant de celui-ci.
 		MovingObjectPtrArray m_children;
-		//!\~english Animation node transformations	\~french Transformations du noeud d'animation
+		//!\~english The cumulative animation transformations.	\~french Les transformations cumulées de l'animation.
+		Castor::Matrix4x4r m_cumulativeTransform;
+		//!\~english Animation node transformations.	\~french Transformations du noeud d'animation.
 		Castor::Matrix4x4r m_nodeTransform;
-		//!\~english Actual transformations	\~french Transformations actuelles
-		Castor::Matrix4x4r m_transformations;
+		//!\~english The matrix holding transformation at current time.	\~french La matrice de transformation complète au temps courant de l'animation.
+		Castor::Matrix4x4r m_finalTransform;
 	};
 }
 

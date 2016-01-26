@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_MESH_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Animable.hpp"
 #include "BinaryParser.hpp"
 #include "MeshGenerator.hpp"
 
@@ -41,6 +42,7 @@ namespace Castor3D
 	class Mesh
 		: public Castor::Resource< Mesh >
 		, public Castor::OwnedBy< Engine >
+		, public Animable
 	{
 	public:
 		/*!
@@ -347,6 +349,30 @@ namespace Castor3D
 		{
 			return m_sphere;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the skeleton
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le squelette
+		 *\return		La valeur
+		 */
+		inline SkeletonSPtr GetSkeleton()const
+		{
+			return m_skeleton;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the skeleton
+		 *\param[in]	p_skeleton	The new value
+		 *\~french
+		 *\brief		Définit le squelette
+		 *\param[in]	p_skeleton	La nouvelle valeur
+		 */
+		inline void SetSkeleton( SkeletonSPtr p_skeleton )
+		{
+			m_skeleton = p_skeleton;
+		}
 
 	protected:
 		friend class MeshGenerator;
@@ -359,6 +385,8 @@ namespace Castor3D
 		Castor::SphereBox m_sphere;
 		//!\~english The submeshes array	\~french Le tableau de sous maillages
 		SubmeshPtrArray m_submeshes;
+		//!\~english The skeleton	\~french Le squelette
+		SkeletonSPtr m_skeleton;
 	};
 }
 

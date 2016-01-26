@@ -85,6 +85,7 @@ namespace Castor3D
 
 	private:
 		virtual void DoApply();
+		virtual MovingObjectBaseSPtr DoClone( Animation & p_animation );
 
 	private:
 		//!\~english	The object affected by the animations	\~french	L'objet affecté par les animations

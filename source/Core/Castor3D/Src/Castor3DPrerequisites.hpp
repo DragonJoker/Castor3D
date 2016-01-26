@@ -72,17 +72,13 @@ namespace Castor3D
 	struct stVERTEX_BONE_DATA;
 	template< typename T > class KeyFrame;
 
-	typedef KeyFrame< Castor::Point3r > ScaleKeyFrame;
-	typedef KeyFrame< Castor::Point3r > TranslateKeyFrame;
-	typedef KeyFrame< Castor::Quaternion > RotateKeyFrame;
+	typedef KeyFrame< Castor::Point3r > Point3rKeyFrame;
+	typedef KeyFrame< Castor::Quaternion > QuaternionKeyFrame;
 
 	typedef std::pair< uint32_t, real > VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
 	using Castor::UIntStrMap;
 	using Castor::UInt64StrMap;
 
-	DECLARE_SMART_PTR( ScaleKeyFrame );
-	DECLARE_SMART_PTR( TranslateKeyFrame );
-	DECLARE_SMART_PTR( RotateKeyFrame );
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( MovingObjectBase );
 	DECLARE_SMART_PTR( Animation );
@@ -96,23 +92,17 @@ namespace Castor3D
 	//! Animation pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
 	//! KeyFrame pointer map, sorted by time index
-	DECLARE_MAP( real, ScaleKeyFrameSPtr, ScaleKeyFramePtrReal );
+	DECLARE_MAP( real, Point3rKeyFrame, Point3rKeyFrameReal );
 	//! KeyFrame pointer map, sorted by time index
-	DECLARE_MAP( real, TranslateKeyFrameSPtr, TranslateKeyFramePtrReal );
-	//! KeyFrame pointer map, sorted by time index
-	DECLARE_MAP( real, RotateKeyFrameSPtr, RotateKeyFramePtrReal );
+	DECLARE_MAP( real, QuaternionKeyFrame, QuaternionKeyFrameReal );
 	//! AnimatedObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, MovingObjectBaseSPtr, MovingObjectPtrStr );
-	//! KeyFrame pointer array
-	DECLARE_VECTOR( ScaleKeyFrameSPtr, ScaleKeyFramePtr );
-	//! KeyFrame pointer array
-	DECLARE_VECTOR( TranslateKeyFrameSPtr, TranslateKeyFramePtr );
-	//! KeyFrame pointer array
-	DECLARE_VECTOR( RotateKeyFrameSPtr, RotateKeyFramePtr );
 	//! VertexWeight pointer array
 	DECLARE_VECTOR( VertexWeight, VertexWeight );
+	//! Animation pointer array
+	DECLARE_VECTOR( AnimationSPtr, AnimationPtr );
 	//! Bone pointer array
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
 	//! MovingObject pointer array

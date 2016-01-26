@@ -13,6 +13,7 @@ namespace Castor3D
 
 	Skeleton::~Skeleton()
 	{
+		Animable::CleanupAnimations();
 	}
 
 	void Skeleton::AddBone( BoneSPtr p_bone )

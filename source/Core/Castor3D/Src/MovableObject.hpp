@@ -19,6 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_MOVABLE_OBJECT_H___
 
 #include "Castor3DPrerequisites.hpp"
+
+#include "Animable.hpp"
 #include "BinaryParser.hpp"
 
 #include <OwnedBy.hpp>
@@ -37,6 +39,7 @@ namespace Castor3D
 	class MovableObject
 		: public std::enable_shared_from_this< MovableObject >
 		, public Castor::OwnedBy< Engine >
+		, public Animable
 	{
 	public:
 		/*!
@@ -147,13 +150,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~MovableObject();
-		/**
-		 *\~english
-		 *\brief		Cleans the pointers the object has created and that are not necessary (currently none)
-		 *\~french
-		 *\brief		Nettoie l'instance
-		 */
-		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Detaches the movable object from it's parent

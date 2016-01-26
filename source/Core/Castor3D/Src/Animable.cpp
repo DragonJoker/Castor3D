@@ -31,6 +31,11 @@ namespace Castor3D
 		return l_return;
 	}
 
+	void Animable::CleanupAnimations()
+	{
+		m_animations.clear();
+	}
+
 	AnimationSPtr Animable::GetAnimation( Castor::String const & p_name )
 	{
 		AnimationSPtr l_return;

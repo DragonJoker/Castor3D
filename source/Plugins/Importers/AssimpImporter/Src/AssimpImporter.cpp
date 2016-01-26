@@ -197,6 +197,7 @@ namespace C3dAssimp
 				{
 					l_skeleton = std::make_shared< Skeleton >();
 					l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
+					m_mesh->SetSkeleton( l_skeleton );
 				}
 
 				if ( l_aiScene->HasMeshes() )
@@ -351,7 +352,6 @@ namespace C3dAssimp
 			if ( p_aiMesh->HasBones() && p_skeleton )
 			{
 				DoProcessBones( p_skeleton, p_aiMesh->mBones, p_aiMesh->mNumBones, l_arrayBones );
-				p_submesh->SetSkeleton( p_skeleton );
 				l_vertices.m_pBones = &l_arrayBones[0];
 			}
 
@@ -546,7 +546,7 @@ namespace C3dAssimp
 		}
 	}
 
-	AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_pSkeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
+	AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
 	{
 		String l_name = string::string_cast< xchar >( p_aiAnimation->mName.C_Str() );
 
@@ -555,20 +555,9 @@ namespace C3dAssimp
 			l_name = m_fileName.GetFileName();
 		}
 
-		AnimationManager & l_collection = GetOwner()->GetAnimationManager();
-		AnimationSPtr l_animation;
-
-		if ( !l_collection.Has( l_name ) )
-		{
-			l_animation = l_collection.Create( l_name, l_name );
-		}
-		else
-		{
-			l_animation = l_collection.Find( l_name );
-		}
-
+		AnimationSPtr l_animation = p_skeleton->CreateAnimation( l_name );
 		real l_ticksPerSecond = real( p_aiAnimation->mTicksPerSecond ? p_aiAnimation->mTicksPerSecond : 25.0_r );
-		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_pSkeleton, p_node, p_aiAnimation, nullptr );
+		DoProcessAnimationNodes( l_animation, l_ticksPerSecond, p_skeleton, p_node, p_aiAnimation, nullptr );
 		return l_animation;
 	}
 
@@ -580,32 +569,32 @@ namespace C3dAssimp
 
 		if ( l_aiNodeAnim )
 		{
-			BonePtrArrayConstIt l_itBone = std::find_if( p_skeleton->begin(), p_skeleton->end(), [&]( BoneSPtr p_bone )
+			auto l_itBone = std::find_if( p_skeleton->begin(), p_skeleton->end(), [&]( BoneSPtr p_bone )
 			{
 				return p_bone->GetName() == l_name;
 			} );
 
 			if ( l_itBone != p_skeleton->end() )
 			{
-				l_object = p_animation->AddMovingObject( *l_itBone );
+				l_object = p_animation->AddMovingObject( *l_itBone, p_object );
 			}
 			else
 			{
-				l_object = p_animation->AddMovingObject();
+				l_object = p_animation->AddMovingObject( p_object );
 			}
 
 			// We treat translations
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumPositionKeys; ++i )
 			{
 				Point3r l_translate( l_aiNodeAnim->mPositionKeys[i].mValue.x, l_aiNodeAnim->mPositionKeys[i].mValue.y, l_aiNodeAnim->mPositionKeys[i].mValue.z );
-				l_object->AddTranslateKeyFrame( real( l_aiNodeAnim->mPositionKeys[i].mTime ) / p_ticksPerSecond )->SetValue( l_translate );
+				l_object->AddTranslateKeyFrame( real( l_aiNodeAnim->mPositionKeys[i].mTime ) / p_ticksPerSecond, l_translate );
 			}
 
 			// Then we treat scalings
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumScalingKeys; ++i )
 			{
 				Point3r l_scale( l_aiNodeAnim->mScalingKeys[i].mValue.x, l_aiNodeAnim->mScalingKeys[i].mValue.y, l_aiNodeAnim->mScalingKeys[i].mValue.z );
-				l_object->AddScaleKeyFrame( real( l_aiNodeAnim->mScalingKeys[i].mTime ) / p_ticksPerSecond )->SetValue( l_scale );
+				l_object->AddScaleKeyFrame( real( l_aiNodeAnim->mScalingKeys[i].mTime ) / p_ticksPerSecond, l_scale );
 			}
 
 			// And eventually the rotations
@@ -613,13 +602,13 @@ namespace C3dAssimp
 			{
 				Quaternion l_rotate;
 				l_rotate.from_matrix( Matrix3x3r( &l_aiNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 ) );
-				l_object->AddRotateKeyFrame( real( l_aiNodeAnim->mRotationKeys[i].mTime ) / p_ticksPerSecond )->SetValue( l_rotate );
+				l_object->AddRotateKeyFrame( real( l_aiNodeAnim->mRotationKeys[i].mTime ) / p_ticksPerSecond, l_rotate );
 			}
 		}
 
 		if ( !l_object )
 		{
-			l_object = p_animation->AddMovingObject();
+			l_object = p_animation->AddMovingObject( p_object );
 		}
 
 		if ( p_object )
