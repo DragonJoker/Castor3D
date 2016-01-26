@@ -9,7 +9,7 @@
 #	define CU_ALIGNED_ALLOC( m, a, s )\
 	m = _aligned_malloc( s, a )
 #else
-#	if GCC_VERSION >= 40900
+#	if GCC_VERSION >= 50000
 #		ifndef _ISOC11_SOURCE
 #			define _ISOC11_SOURCE
 #		endif
