@@ -512,7 +512,7 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	inline SquareMatrix< T, Count > & SquareMatrix< T, Count >::transpose()
 	{
-		T const * l_buffer = const_ptr();
+		T const * l_buffer = my_matrix_type::const_ptr();
 
 		for ( uint32_t i = 0; i < Count; i++ )
 		{

@@ -1,4 +1,6 @@
-﻿namespace Castor3D
+﻿#include "Interpolator.hpp"
+
+namespace Castor3D
 {
 	template< class KeyFrameType, typename T >
 	KeyFrameType & MovingObjectBase::DoAddKeyFrame( real p_from, std::map< real, KeyFrameType > & p_map, T const & p_value )

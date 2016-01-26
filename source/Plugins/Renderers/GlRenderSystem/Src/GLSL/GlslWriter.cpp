@@ -309,24 +309,6 @@ namespace GlRender
 			return *this;
 		}
 
-		GlslWriter & GlslWriter::operator<<( Legacy_MatrixOut const & p_rhs )
-		{
-			m_stream << m_variables->GetVertexOutMatrices() << std::endl;
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Legacy_MatrixCopy const & p_rhs )
-		{
-			m_stream << m_variables->GetVertexMatrixCopy() << std::endl;
-			return *this;
-		}
-
-		GlslWriter & GlslWriter::operator<<( Legacy_PixelModelView const & p_rhs )
-		{
-			m_stream << m_variables->GetPixelMtxModelView() << std::endl;
-			return *this;
-		}
-
 		GlslWriter & GlslWriter::operator<<( Endl const & p_rhs )
 		{
 			m_stream << std::endl;

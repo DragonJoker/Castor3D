@@ -448,6 +448,10 @@ namespace Castor3D
 		else if ( m_status == eSHADER_STATUS_ERROR )
 		{
 			Logger::LogWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
+			StringStream l_source;
+			l_source << format::line_prefix();
+			l_source << m_loadedSource;
+			Logger::LogDebug( l_source.str() );
 			m_status = eSHADER_STATUS_NOTCOMPILED;
 		}
 

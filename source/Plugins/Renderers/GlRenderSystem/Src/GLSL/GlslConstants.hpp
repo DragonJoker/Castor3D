@@ -54,17 +54,6 @@ namespace GlRender
 
 		static ConstantsStd constantsStd;
 		static ConstantsUbo constantsUbo;
-
-		//! No UBO
-		struct Legacy_MatrixOut
-		{
-		};
-		struct Legacy_MatrixCopy
-		{
-		};
-		struct Legacy_PixelModelView
-		{
-		};
 	}
 }
 

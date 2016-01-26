@@ -163,11 +163,9 @@ namespace GlRender
 		OUT( l_writer, Vec3, vtx_tangent );
 		OUT( l_writer, Vec3, vtx_bitangent );
 		OUT( l_writer, Vec3, vtx_texture );
-		l_writer << Legacy_MatrixOut();
 
 		std::function< void() > l_main = [&]()
 		{
-			l_writer << Legacy_MatrixCopy();
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( vertex.XYZ, 1.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );

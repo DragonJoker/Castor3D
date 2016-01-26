@@ -162,9 +162,6 @@ namespace GlRender
 			C3D_Gl_API GlslWriter & operator<<( Layout const & p_rhs );
 			C3D_Gl_API GlslWriter & operator<<( Uniform const & p_rhs );
 
-			C3D_Gl_API GlslWriter & operator<<( Legacy_MatrixOut const & p_rhs );
-			C3D_Gl_API GlslWriter & operator<<( Legacy_MatrixCopy const & p_rhs );
-			C3D_Gl_API GlslWriter & operator<<( Legacy_PixelModelView const & p_rhs );
 
 			C3D_Gl_API GlslWriter & operator<<( Endl const & p_rhs );
 			C3D_Gl_API GlslWriter & operator<<( Endi const & p_rhs );
