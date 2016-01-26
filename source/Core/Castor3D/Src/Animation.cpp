@@ -10,6 +10,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	//*************************************************************************************************
+
 	namespace
 	{
 		static String MovingName[] =
@@ -19,6 +21,140 @@ namespace Castor3D
 			cuT( "Bone_" ),
 		};
 	}
+
+	//*************************************************************************************************
+
+	Animation::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< Animation >( p_path )
+	{
+	}
+
+	bool Animation::BinaryParser::Fill( Animation const & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+		BinaryChunk l_chunk( eCHUNK_TYPE_ANIMATION );
+
+		if ( l_return )
+		{
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+		}
+
+		for ( auto && l_moving : p_obj.m_arrayMoving )
+		{
+			switch ( l_moving->GetType() )
+			{
+			case eMOVING_OBJECT_TYPE_NODE:
+				l_return &= MovingNode::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingNode >( l_moving ), l_chunk );
+				break;
+
+			case eMOVING_OBJECT_TYPE_OBJECT:
+				l_return &= MovingObject::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingObject >( l_moving ), l_chunk );
+				break;
+
+			case eMOVING_OBJECT_TYPE_BONE:
+				l_return &= MovingBone::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingBone >( l_moving ), l_chunk );
+				break;
+			}
+		}
+
+		if ( l_return )
+		{
+			l_chunk.Finalise();
+			p_chunk.AddSubChunk( l_chunk );
+		}
+
+		return l_return;
+	}
+
+	void RecursiveAddChildren( Animation & p_animation, MovingObjectBaseSPtr p_moving, MovingObjectBaseSPtr p_parent )
+	{
+		if ( !p_animation.HasMovingObject( p_moving->GetType(), p_moving->GetName() ) )
+		{
+			p_animation.AddMovingObject( p_moving, p_parent );
+
+			for ( auto l_moving : p_moving->GetChildren() )
+			{
+				RecursiveAddChildren( p_animation, l_moving, p_moving );
+			}
+		}
+	}
+
+	bool Animation::BinaryParser::Parse( Animation & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+		MovingNodeSPtr l_node;
+		MovingObjectSPtr l_object;
+		MovingBoneSPtr l_bone;
+		String l_name;
+
+		while ( p_chunk.CheckAvailable( 1 ) )
+		{
+			BinaryChunk l_chunk;
+			l_return = p_chunk.GetSubChunk( l_chunk );
+
+			if ( l_return )
+			{
+				switch ( l_chunk.GetChunkType() )
+				{
+				case eCHUNK_TYPE_NAME:
+					l_return = DoParseChunk( l_name, l_chunk );
+
+					if ( l_return )
+					{
+						p_obj.m_name = l_name;
+					}
+
+					break;
+
+				case eCHUNK_TYPE_ANIM_SCALE:
+					l_return = DoParseChunk( p_obj.m_scale, l_chunk );
+					break;
+
+				case eCHUNK_TYPE_MOVING_NODE:
+					l_node = std::make_shared< MovingNode >();
+					l_return = MovingNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
+
+					if ( l_return )
+					{
+						RecursiveAddChildren( p_obj, l_node, nullptr );
+					}
+
+					break;
+
+				case eCHUNK_TYPE_MOVING_OBJECT:
+					l_object = std::make_shared< MovingObject >();
+					l_return = MovingObject::BinaryParser( m_path ).Parse( *l_object, l_chunk );
+
+					if ( l_return )
+					{
+						RecursiveAddChildren( p_obj, l_object, nullptr );
+					}
+
+					break;
+
+				case eCHUNK_TYPE_MOVING_BONE:
+					l_bone = std::make_shared< MovingBone >();
+					l_return = MovingBone::BinaryParser( m_path ).Parse( *l_bone, l_chunk );
+
+					if ( l_return )
+					{
+						RecursiveAddChildren( p_obj, l_bone, nullptr );
+					}
+
+					break;
+				}
+			}
+
+			if ( !l_return )
+			{
+				p_chunk.EndParse();
+			}
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
 
 	Animation::Animation( String const & p_name )
 		: Named( p_name )
@@ -162,7 +298,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Can't add this bone : already added" );
+			Logger::LogWarning( "Can't add this bone : already added" );
 		}
 
 		return l_return;
@@ -238,4 +374,6 @@ namespace Castor3D
 
 		return l_clone;
 	}
+
+	//*************************************************************************************************
 }

@@ -1,6 +1,5 @@
 ﻿#include "Engine.hpp"
 
-#include "AnimationManager.hpp"
 #include "BlendStateManager.hpp"
 #include "CleanupEvent.hpp"
 #include "DebugOverlays.hpp"
@@ -55,7 +54,6 @@ namespace Castor3D
 	{
 		std::locale::global( std::locale() );
 
-		m_animationManager = std::make_unique< AnimationManager >( *this );
 		m_shaderManager = std::make_unique< ShaderManager >( *this );
 		m_samplerManager = std::make_unique< SamplerManager >( *this );
 		m_depthStencilStateManager = std::make_unique< DepthStencilStateManager >( *this );
@@ -92,7 +90,6 @@ namespace Castor3D
 		m_depthStencilStateManager->Clear();
 		m_rasteriserStateManager->Clear();
 		m_blendStateManager->Clear();
-		m_animationManager->Clear();
 		m_meshManager->Clear();
 		m_overlayManager->Clear();
 		m_fontManager.clear();
@@ -132,7 +129,6 @@ namespace Castor3D
 			m_materialManager->SetRenderSystem( m_renderSystem );
 			m_sceneManager->SetRenderSystem( m_renderSystem );
 			m_blendStateManager->SetRenderSystem( m_renderSystem );
-			m_animationManager->SetRenderSystem( m_renderSystem );
 			m_shaderManager->SetRenderSystem( m_renderSystem );
 			m_depthStencilStateManager->SetRenderSystem( m_renderSystem );
 			m_rasteriserStateManager->SetRenderSystem( m_renderSystem );
@@ -226,7 +222,6 @@ namespace Castor3D
 			m_materialManager->Clear();
 			m_sceneManager->Clear();
 			m_blendStateManager->Clear();
-			m_animationManager->Clear();
 			m_fontManager.clear();
 			m_imageManager.clear();
 			m_shaderManager->Clear();

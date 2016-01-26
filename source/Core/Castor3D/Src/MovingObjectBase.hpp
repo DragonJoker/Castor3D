@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MOVING_OBJECT_BASE_H___
 #define ___C3D_MOVING_OBJECT_BASE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "BinaryParser.hpp"
 
 #include <SquareMatrix.hpp>
 #include <Quaternion.hpp>
@@ -36,25 +36,59 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	typedef enum eMOVING_OBJECT_TYPE CASTOR_TYPE( uint8_t )
-	{
-		eMOVING_OBJECT_TYPE_NODE,
-		eMOVING_OBJECT_TYPE_OBJECT,
-		eMOVING_OBJECT_TYPE_BONE,
-	}	eMOVING_OBJECT_TYPE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which represents the moving things.
-	\remark		Manages translation, scaling, rotation of the thing.
-	\~french
-	\brief		Classe de représentation de choses mouvantes.
-	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
-	*/
 	class MovingObjectBase
 	{
+	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		MovingObjectBase binary loader.
+		\~english
+		\brief		Loader binaire de MovingObjectBase.
+		*/
+		class BinaryParser
+			: public Castor3D::BinaryParser< MovingObjectBase >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_path	The current folder path.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
+			 */
+			C3D_API BinaryParser( Castor::Path const & p_path );
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data.
+			 *\param[in]	p_obj	The object to write.
+			 *\param[out]	p_chunk	The chunk to fill.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			 *\param[in]	p_obj	L'objet à écrire.
+			 *\param[out]	p_chunk	Le chunk à remplir.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Fill( MovingObjectBase const & p_obj, BinaryChunk & p_chunk )const;
+			/**
+			 *\~english
+			 *\brief		Function used to retrieve specific data from the chunk.
+			 *\param[out]	p_obj	The object to read.
+			 *\param[in]	p_chunk	The chunk containing data.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+			 *\param[out]	p_obj	L'objet à lire.
+			 *\param[in]	p_chunk	Le chunk contenant les données.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Parse( MovingObjectBase & p_obj, BinaryChunk & p_chunk )const;
+		};
+
 	protected:
 		/**
 		 *\~english
@@ -299,6 +333,16 @@ namespace Castor3D
 		{
 			return !m_rotates.empty() || !m_scales.empty() || !m_translates.empty();
 		}
+		/**
+		 *\~english
+		 *\return		The children array.
+		 *\~french
+		 *\return		Le tableau d'enfants.
+		 */
+		inline MovingObjectPtrArray const & GetChildren()const
+		{
+			return m_children;
+		}
 
 	protected:
 		/**
@@ -409,14 +453,14 @@ namespace Castor3D
 		Point3rKeyFrameRealMap m_translates;
 		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
 		QuaternionKeyFrameRealMap m_rotates;
+		//!\~english Animation node transformations.	\~french Transformations du noeud d'animation.
+		Castor::Matrix4x4r m_nodeTransform;
 		//!\~english The animation length.	\~french La durée de l'animation.
 		real m_length;
 		//!\~english The objects depending on this one.	\~french Les objets dépendant de celui-ci.
 		MovingObjectPtrArray m_children;
 		//!\~english The cumulative animation transformations.	\~french Les transformations cumulées de l'animation.
 		Castor::Matrix4x4r m_cumulativeTransform;
-		//!\~english Animation node transformations.	\~french Transformations du noeud d'animation.
-		Castor::Matrix4x4r m_nodeTransform;
 		//!\~english The matrix holding transformation at current time.	\~french La matrice de transformation complète au temps courant de l'animation.
 		Castor::Matrix4x4r m_finalTransform;
 	};

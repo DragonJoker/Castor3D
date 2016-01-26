@@ -30,6 +30,16 @@ add_target(
 	"Castor3DPch.cpp"
 )
 
+file( GLOB ${PROJECT_NAME}_Prerequisites_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Prerequisites*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Prerequisites*.inl
+)
+file( GLOB ${PROJECT_NAME}_Prerequisites_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Prerequisites*.cpp
+)
+source_group( "Header Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_HEADER_FILES} )
+source_group( "Source Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_SOURCE_FILES} )
+
 file( GLOB ${PROJECT_NAME}_Main_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.inl

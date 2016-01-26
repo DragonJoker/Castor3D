@@ -6,7 +6,6 @@
 #include <Bone.hpp>
 #include <MeshManager.hpp>
 #include <SceneManager.hpp>
-#include <AnimationManager.hpp>
 #include <MovingObjectBase.hpp>
 
 #include <Logger.hpp>

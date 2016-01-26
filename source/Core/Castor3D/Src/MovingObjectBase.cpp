@@ -3,11 +3,144 @@
 #include "Animation.hpp"
 #include "KeyFrame.hpp"
 #include "Interpolator.hpp"
+#include "MovingBone.hpp"
+#include "MovingNode.hpp"
+#include "MovingObject.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
+	//*************************************************************************************************
+
+	MovingObjectBase::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< MovingObjectBase >( p_path )
+	{
+	}
+
+	bool MovingObjectBase::BinaryParser::Fill( MovingObjectBase const & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+
+		if ( l_return )
+		{
+			l_return = DoFillChunk( p_obj.m_nodeTransform, eCHUNK_TYPE_MOVING_TRANSFORM, p_chunk );
+		}
+
+		for ( auto const & l_kf : p_obj.m_scales )
+		{
+			l_return = DoFillChunk( l_kf.second.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
+			l_return = DoFillChunk( l_kf.second.GetValue(), eCHUNK_TYPE_KEYFRAME_SCALE, p_chunk );
+		}
+
+		for ( auto const & l_kf : p_obj.m_translates )
+		{
+			l_return = DoFillChunk( l_kf.second.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
+			l_return = DoFillChunk( l_kf.second.GetValue(), eCHUNK_TYPE_KEYFRAME_TRANSLATE, p_chunk );
+		}
+
+		for ( auto const & l_kf : p_obj.m_rotates )
+		{
+			l_return = DoFillChunk( l_kf.second.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
+			l_return = DoFillChunk( l_kf.second.GetValue(), eCHUNK_TYPE_KEYFRAME_ROTATE, p_chunk );
+		}
+
+		for ( auto const & l_moving : p_obj.m_children )
+		{
+			switch ( l_moving->GetType() )
+			{
+			case eMOVING_OBJECT_TYPE_NODE:
+				l_return &= MovingNode::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingNode >( l_moving ), p_chunk );
+				break;
+
+			case eMOVING_OBJECT_TYPE_OBJECT:
+				l_return &= MovingObject::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingObject >( l_moving ), p_chunk );
+				break;
+
+			case eMOVING_OBJECT_TYPE_BONE:
+				l_return &= MovingBone::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingBone >( l_moving ), p_chunk );
+				break;
+			}
+		}
+
+		return l_return;
+	}
+
+	bool MovingObjectBase::BinaryParser::Parse( MovingObjectBase & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+		Matrix4x4r l_transform;
+		Point3r l_point;
+		Quaternion l_quat;
+		MovingNodeSPtr l_node;
+		MovingObjectSPtr l_object;
+		MovingBoneSPtr l_bone;
+		real l_time;
+
+		switch ( p_chunk.GetChunkType() )
+		{
+		case eCHUNK_TYPE_MOVING_TRANSFORM:
+			l_return = DoParseChunk( p_obj.m_nodeTransform, p_chunk );
+			break;
+
+		case eCHUNK_TYPE_KEYFRAME_TIME:
+			l_return = DoParseChunk( l_time, p_chunk );
+			break;
+
+		case eCHUNK_TYPE_KEYFRAME_SCALE:
+			l_return = DoParseChunk( l_point, p_chunk );
+			p_obj.AddScaleKeyFrame( l_time, l_point );
+			break;
+
+		case eCHUNK_TYPE_KEYFRAME_TRANSLATE:
+			l_return = DoParseChunk( l_point, p_chunk );
+			p_obj.AddTranslateKeyFrame( l_time, l_point );
+			break;
+
+		case eCHUNK_TYPE_KEYFRAME_ROTATE:
+			l_return = DoParseChunk( l_quat, p_chunk );
+			p_obj.AddRotateKeyFrame( l_time, l_quat );
+			break;
+
+		case eCHUNK_TYPE_MOVING_BONE:
+			l_bone = std::make_shared< MovingBone >();
+			l_return = MovingBone::BinaryParser( m_path ).Parse( *l_bone, p_chunk );
+
+			if ( l_return )
+			{
+				p_obj.m_children.push_back( l_bone );
+			}
+
+			break;
+
+		case eCHUNK_TYPE_MOVING_NODE:
+			l_node = std::make_shared< MovingNode >();
+			l_return = MovingNode::BinaryParser( m_path ).Parse( *l_node, p_chunk );
+
+			if ( l_return )
+			{
+				p_obj.m_children.push_back( l_node );
+			}
+
+			break;
+
+		case eCHUNK_TYPE_MOVING_OBJECT:
+			l_object = std::make_shared< MovingObject >();
+			l_return = MovingObject::BinaryParser( m_path ).Parse( *l_object, p_chunk );
+
+			if ( l_return )
+			{
+				p_obj.m_children.push_back( l_object );
+			}
+
+			break;
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
 	MovingObjectBase::MovingObjectBase( eMOVING_OBJECT_TYPE p_type )
 		: m_length( 0 )
 		, m_type( p_type )
@@ -126,4 +259,6 @@ namespace Castor3D
 
 		return l_return;
 	}
+
+	//*************************************************************************************************
 }

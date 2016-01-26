@@ -2,7 +2,6 @@
 
 #include "AnimatedObjectGroup.hpp"
 #include "AnimatedObject.hpp"
-#include "AnimationManager.hpp"
 #include "BillboardList.hpp"
 #include "BlendStateManager.hpp"
 #include "BorderPanelOverlay.hpp"
