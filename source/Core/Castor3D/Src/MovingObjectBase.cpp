@@ -86,17 +86,17 @@ namespace Castor3D
 
 	Point3r MovingObjectBase::DoComputeScaling( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_NONE >( p_time, m_scales, Point3r( 1, 1, 1 ) );
+		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_scales, Point3r( 1, 1, 1 ) );
 	}
 
 	Point3r MovingObjectBase::DoComputeTranslation( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_NONE >( p_time, m_translates, Point3r() );
+		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_translates, Point3r() );
 	}
 
 	Quaternion MovingObjectBase::DoComputeRotation( real p_time )
 	{
-		return DoCompute< eINTERPOLATOR_MODE_NONE >( p_time, m_rotates, Quaternion() );
+		return DoCompute< eINTERPOLATOR_MODE_LINEAR >( p_time, m_rotates, Quaternion() );
 	}
 
 	MovingObjectBaseSPtr MovingObjectBase::Clone( Animation & p_animation )

@@ -40,9 +40,9 @@ namespace Castor3D
 		{
 			if ( m_length == 0 )
 			{
-				for ( auto l_moving : m_arrayMoving )
+				for ( auto l_it : m_toMove )
 				{
-					m_length = std::max( m_length, l_moving->GetLength() );
+					m_length = std::max( m_length, l_it.second->GetLength() );
 				}
 			}
 
@@ -96,7 +96,7 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::AddMovingObject( MovingObjectBaseSPtr p_parent )
 	{
 		std::shared_ptr< MovingNode > l_return = std::make_shared< MovingNode >();
-		String l_name = MovingName[eMOVING_OBJECT_TYPE_NODE] + string::to_string( uint32_t( m_toMove.size() ) );
+		String l_name = MovingName[eMOVING_OBJECT_TYPE_NODE] + l_return->GetName();
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
@@ -196,7 +196,7 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::GetMovingObject( MovableObjectSPtr p_object )const
 	{
 		MovingObjectBaseSPtr l_return;
-		auto l_it = m_toMove.find( p_object->GetName() );
+		auto l_it = m_toMove.find( MovingName[eMOVING_OBJECT_TYPE_OBJECT] + p_object->GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{
@@ -209,7 +209,7 @@ namespace Castor3D
 	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_bone )const
 	{
 		MovingObjectBaseSPtr l_return;
-		auto l_it = m_toMove.find( p_bone->GetName() );
+		auto l_it = m_toMove.find( MovingName[eMOVING_OBJECT_TYPE_BONE] + p_bone->GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{

@@ -64,6 +64,10 @@ namespace Castor3D
 	private:
 		virtual void DoApply();
 		virtual MovingObjectBaseSPtr DoClone( Animation & p_animation );
+
+	private:
+		Castor::String m_name;
+		static uint32_t s_count;
 	};
 }
 

@@ -205,7 +205,19 @@ namespace Castor3D
 		 */
 		inline Castor::Quaternion const & Interpolate( real p_percent )
 		{
-			m_cur = m_src.slerp( m_dst, p_percent );
+			if ( p_percent <= 0.0 )
+			{
+				m_cur = m_src;
+			}
+			else if ( p_percent >= 1.0 )
+			{
+				m_cur = m_dst;
+			}
+			else
+			{
+				m_cur = m_src.slerp( m_dst, p_percent );
+			}
+
 			return m_cur;
 		}
 
