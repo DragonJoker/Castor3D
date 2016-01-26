@@ -38,7 +38,7 @@ namespace Castor
 	private:
 		typedef T __value_type;
 		typedef SquareMatrix< __value_type, Count > __square_type;
-		typedef SquareMatrix< __value_type, Count > __transpose;
+		typedef __square_type __transpose;
 
 	public:
 		//!\~english Typedef on the policy	\~french Typedef sur la politique
@@ -50,7 +50,7 @@ namespace Castor
 		//!\~english Typedef on the line type	\~french Typedef sur le type de ligne
 		typedef typename Matrix< __value_type, Count, Count >::row_type row_type;
 		//!\~english Typedef on the transposed matrix type	\~french Typedef sur le type de matrice transposée
-		typedef __square_type transpose_type;
+		typedef __transpose transpose_type;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
 		typedef __square_type square_matrix_type;
 		//!\~english Typedef on this matrix type	\~french Typedef sur le type de cette matrice
@@ -182,6 +182,24 @@ namespace Castor
 		__value_type get_determinant()const;
 		/**
 		 *\~english
+		 *\brief		Computes and returns the transposed of this matrix
+		 *\return		The transposed
+		 *\~french
+		 *\brief		Calcule et renvoie la transposée de cette matrice
+		 *\return		La transposée
+		 */
+		transpose_type get_transposed()const;
+		/**
+		 *\~english
+		 *\brief		Transposes this matrix
+		 *\return		This matrix
+		 *\~french
+		 *\brief		Transpose cette matrice.
+		 *\return		Cette matrice.
+		 */
+		my_square_type & transpose();
+		/**
+		 *\~english
 		 *\brief		Tells if the matrix is orthogonal
 		 *\return		\p true if it is orthogonal
 		 *\~french
@@ -189,15 +207,6 @@ namespace Castor
 		 *\return		\p true si elle est orthogonale
 		 */
 		bool is_orthogonal()const;
-		/**
-		 *\~english
-		 *\brief		Transposes this matrix
-		 *\return		A reference to this matrix
-		 *\~french
-		 *\brief		Transpose cette matrice
-		 *\return		Une référence sur cette matrice
-		 */
-		SquareMatrix< T, Count > & transpose();
 		/**
 		 *\~english
 		 *\brief		Tells if this matrix is symmetrical

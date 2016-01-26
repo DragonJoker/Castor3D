@@ -1,63 +1,103 @@
-﻿#include "AnimatedObject.hpp"
-#include "AnimatedObjectGroup.hpp"
+#include "AnimatedObject.hpp"
+
+#include "Animable.hpp"
 #include "Animation.hpp"
 #include "Geometry.hpp"
-#include "Scene.hpp"
+#include "MatrixFrameVariable.hpp"
 #include "Mesh.hpp"
+#include "MovableObject.hpp"
+#include "MovingObjectBase.hpp"
 #include "Skeleton.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	AnimatedObject::AnimatedObject( Castor::String const & p_name )
-		:	Named( p_name )
+	AnimatedObject::AnimatedObject( String const & p_name )
+		: Named( p_name )
 	{
 	}
 
-	AnimatedObject::~AnimatedObject()
+	AnimatedObject :: ~AnimatedObject()
 	{
 	}
 
-	void AnimatedObject::Update( real p_rTslf )
+	void AnimatedObject::Update( real p_tslf )
 	{
-		std::for_each( m_mapAnimations.begin(), m_mapAnimations.end(), [&]( std::pair< String, AnimationSPtr > p_pair )
+		for ( auto l_animation : m_playingAnimations )
 		{
-			if ( p_pair.second->GetState() != Animation::eSTATE_STOPPED )
+			l_animation->Update( p_tslf );
+		}
+	}
+
+	void AnimatedObject::FillShader( Matrix4x4rFrameVariable & p_variable )
+	{
+		SkeletonSPtr l_skeleton = GetSkeleton();
+
+		if ( l_skeleton )
+		{
+			int i = 0;
+
+			for ( auto l_bone : *l_skeleton )
 			{
-				p_pair.second->Update( p_rTslf );
+				Matrix4x4r l_final( 1.0_r );
+
+				for ( auto l_animation : m_playingAnimations )
+				{
+					MovingObjectBaseSPtr l_moving = l_animation->GetMovingObject( l_bone );
+
+					if ( l_moving )
+					{
+						l_final *= l_moving->GetFinalTransform();
+					}
+				}
+
+				p_variable.SetValue( l_final.const_ptr(), i++ );
 			}
-		} );
+		}
 	}
 
 	void AnimatedObject::StartAnimation( String const & p_name )
 	{
 		AnimationSPtr l_animation;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
+		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_mapAnimations.end() )
+		if ( l_it != m_animations.end() )
 		{
-			l_it->second->Play();
+			auto l_animation = l_it->second;
+
+			if ( l_animation->GetState() != Animation::eSTATE_PLAYING
+				 && l_animation->GetState() != Animation::eSTATE_PAUSED )
+			{
+				l_animation->Play();
+				m_playingAnimations.push_back( l_animation );
+			}
 		}
 	}
 
 	void AnimatedObject::StopAnimation( String const & p_name )
 	{
 		AnimationSPtr l_animation;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
+		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_mapAnimations.end() )
+		if ( l_it != m_animations.end() )
 		{
-			l_it->second->Stop();
+			auto l_animation = l_it->second;
+
+			if ( l_animation->GetState() != Animation::eSTATE_STOPPED )
+			{
+				l_animation->Stop();
+				m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), l_animation ) );
+			}
 		}
 	}
 
 	void AnimatedObject::PauseAnimation( String const & p_name )
 	{
 		AnimationSPtr l_animation;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
+		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_mapAnimations.end() )
+		if ( l_it != m_animations.end() )
 		{
 			l_it->second->Pause();
 		}
@@ -65,34 +105,39 @@ namespace Castor3D
 
 	void AnimatedObject::StartAllAnimations()
 	{
-		std::for_each( m_mapAnimations.begin(), m_mapAnimations.end(), [&]( std::pair< String, AnimationSPtr > p_pair )
+		m_playingAnimations.clear();
+
+		for ( auto l_it : m_animations )
 		{
-			p_pair.second->Play();
-		} );
+			l_it.second->Play();
+			m_playingAnimations.push_back( l_it.second );
+		}
 	}
 
 	void AnimatedObject::StopAllAnimations()
 	{
-		std::for_each( m_mapAnimations.begin(), m_mapAnimations.end(), [&]( std::pair< String, AnimationSPtr > p_pair )
+		m_playingAnimations.clear();
+
+		for ( auto l_it : m_animations )
 		{
-			p_pair.second->Stop();
-		} );
+			l_it.second->Stop();
+		}
 	}
 
 	void AnimatedObject::PauseAllAnimations()
 	{
-		std::for_each( m_mapAnimations.begin(), m_mapAnimations.end(), [&]( std::pair< String, AnimationSPtr > p_pair )
+		for ( auto l_it : m_animations )
 		{
-			p_pair.second->Pause();
-		} );
+			l_it.second->Pause();
+		}
 	}
 
 	AnimationSPtr AnimatedObject::GetAnimation( Castor::String const & p_name )
 	{
 		AnimationSPtr l_return;
-		AnimationPtrStrMapIt l_it = m_mapAnimations.find( p_name );
+		auto l_it = m_animations.find( p_name );
 
-		if ( l_it != m_mapAnimations.end() )
+		if ( l_it != m_animations.end() )
 		{
 			l_return = l_it->second;
 		}
@@ -102,19 +147,19 @@ namespace Castor3D
 
 	void AnimatedObject::SetGeometry( GeometrySPtr p_object )
 	{
-		m_mapAnimations.clear();
+		m_animations.clear();
 		DoSetGeometry( p_object );
 	}
 
 	void AnimatedObject::SetMesh( MeshSPtr p_pMesh )
 	{
-		m_mapAnimations.clear();
+		m_animations.clear();
 		DoSetMesh( p_pMesh );
 	}
 
 	void AnimatedObject::SetSkeleton( SkeletonSPtr p_pSkeleton )
 	{
-		m_mapAnimations.clear();
+		m_animations.clear();
 		DoSetSkeleton( p_pSkeleton );
 	}
 
@@ -122,61 +167,44 @@ namespace Castor3D
 	{
 		if ( p_object )
 		{
-			DoCopyAnimations( p_object );
 			DoSetMesh( p_object->GetMesh() );
 		}
 
-		m_wpGeometry = p_object;
+		m_geometry = p_object;
 	}
 
-	void AnimatedObject::DoSetMesh( MeshSPtr p_pMesh )
+	void AnimatedObject::DoSetMesh( MeshSPtr p_mesh )
 	{
-		if ( p_pMesh )
+		if ( p_mesh )
 		{
-			DoCopyAnimations( p_pMesh );
-			DoSetSkeleton( p_pMesh->GetSkeleton() );
+			DoCopyAnimations( p_mesh );
+			DoSetSkeleton( p_mesh->GetSkeleton() );
 		}
 
-		m_wpMesh = p_pMesh;
+		m_mesh = p_mesh;
 	}
 
-	void AnimatedObject::DoSetSkeleton( SkeletonSPtr p_pSkeleton )
+	void AnimatedObject::DoSetSkeleton( SkeletonSPtr p_skeleton )
 	{
-		if ( p_pSkeleton )
+		if ( p_skeleton )
 		{
-			DoCopyAnimations( p_pSkeleton );
+			DoCopyAnimations( p_skeleton );
 		}
 
-		m_wpSkeleton = p_pSkeleton;
+		m_skeleton = p_skeleton;
 	}
 
 	void AnimatedObject::DoCopyAnimations( AnimableSPtr p_object )
 	{
-		std::for_each( p_object->AnimationsBegin(), p_object->AnimationsEnd(), [&]( std::pair< String, AnimationSPtr > p_pair )
+		for ( auto l_itAnim : p_object->GetAnimations() )
 		{
-			AnimationSPtr l_pAnimation = p_pair.second;
-			MovingObjectPtrStrMap l_mapToMove;
-			AnimationSPtr l_pClone;
-			AnimationPtrStrMap::iterator l_it = m_mapAnimations.find( l_pAnimation->GetName() );
+			AnimationSPtr l_animation = l_itAnim.second;
+			auto l_it = m_animations.find( l_animation->GetName() );
 
-			if ( l_it == m_mapAnimations.end() )
+			if ( l_it == m_animations.end() )
 			{
-				m_mapAnimations.insert( std::make_pair( l_pAnimation->GetName(), std::make_shared< Animation >( l_pAnimation->GetName() ) ) );
-				l_it = m_mapAnimations.find( l_pAnimation->GetName() );
+				m_animations.insert( std::make_pair( l_animation->GetName(), l_animation->Clone() ) );
 			}
-
-			l_pClone = l_it->second;
-			std::for_each( l_pAnimation->Begin(), l_pAnimation->End(), [&]( std::pair< String, MovingObjectBaseSPtr > p_pair )
-			{
-				if ( l_mapToMove.find( p_pair.first ) == l_mapToMove.end() )
-				{
-					p_pair.second->Clone( l_mapToMove );
-				}
-			} );
-			std::for_each( l_mapToMove.begin(), l_mapToMove.end(), [&]( std::pair< String, MovingObjectBaseSPtr > p_pair )
-			{
-				l_pClone->AddMovingObject( p_pair.second );
-			} );
-		} );
+		}
 	}
 }

@@ -51,8 +51,8 @@ namespace Castor
 		 *\param[in]	p_mode	Le mode d'ouverture du fichier
 		 */
 		Loader( File::eOPEN_MODE p_mode, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
-			: m_eOpenMode( p_mode )
-			, m_eEncodingMode( p_encodingMode )
+			: m_openMode( p_mode )
+			, m_encodingMode( p_encodingMode )
 		{
 		}
 		/**
@@ -76,7 +76,7 @@ namespace Castor
 		 */
 		virtual bool operator()( T & p_object, Path const & p_pathFile )
 		{
-			TFile l_file( p_pathFile, File::eOPEN_MODE_READ | m_eOpenMode, m_eEncodingMode );
+			TFile l_file( p_pathFile, File::eOPEN_MODE_READ | m_openMode, m_encodingMode );
 			return operator()( p_object, l_file );
 		}
 		/**
@@ -105,7 +105,7 @@ namespace Castor
 		 */
 		virtual bool operator()( T const & p_object, Path const & p_pathFile )
 		{
-			TFile l_file( p_pathFile, File::eOPEN_MODE_WRITE | m_eOpenMode, m_eEncodingMode );
+			TFile l_file( p_pathFile, File::eOPEN_MODE_WRITE | m_openMode, m_encodingMode );
 			return operator()( p_object, l_file );
 		}
 		/**
@@ -123,9 +123,11 @@ namespace Castor
 			LOADER_ERROR( "Export not supported by the loader registered for this type" );
 		}
 
-	private:
-		File::eOPEN_MODE m_eOpenMode;
-		File::eENCODING_MODE m_eEncodingMode;
+	protected:
+		//!\~english The file open mode.	\~french Le mode d'ouverture du fichier.
+		File::eOPEN_MODE m_openMode;
+		//!\~english The file encoding mode.	\~french Le mode d'encodage du fichier.
+		File::eENCODING_MODE m_encodingMode;
 	};
 }
 

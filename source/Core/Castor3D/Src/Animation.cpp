@@ -1,23 +1,168 @@
-﻿#include "Animation.hpp"
+#include "Animation.hpp"
 
-#include "MovingObject.hpp"
-#include "MovingNode.hpp"
-#include "MovingBone.hpp"
-#include "MovableObject.hpp"
-#include "Skeleton.hpp"
 #include "Bone.hpp"
+#include "Geometry.hpp"
+#include "MovingBone.hpp"
+#include "MovingNode.hpp"
+#include "MovingObject.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
+	//*************************************************************************************************
+
+	namespace
+	{
+		static String MovingName[] =
+		{
+			cuT( "Node_" ),
+			cuT( "Object_" ),
+			cuT( "Bone_" ),
+		};
+	}
+
+	//*************************************************************************************************
+
+	Animation::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< Animation >( p_path )
+	{
+	}
+
+	bool Animation::BinaryParser::Fill( Animation const & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+		BinaryChunk l_chunk( eCHUNK_TYPE_ANIMATION );
+
+		if ( l_return )
+		{
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+		}
+
+		for ( auto && l_moving : p_obj.m_arrayMoving )
+		{
+			switch ( l_moving->GetType() )
+			{
+			case eMOVING_OBJECT_TYPE_NODE:
+				l_return &= MovingNode::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingNode >( l_moving ), l_chunk );
+				break;
+
+			case eMOVING_OBJECT_TYPE_OBJECT:
+				l_return &= MovingObject::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingObject >( l_moving ), l_chunk );
+				break;
+
+			case eMOVING_OBJECT_TYPE_BONE:
+				l_return &= MovingBone::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingBone >( l_moving ), l_chunk );
+				break;
+			}
+		}
+
+		if ( l_return )
+		{
+			l_chunk.Finalise();
+			p_chunk.AddSubChunk( l_chunk );
+		}
+
+		return l_return;
+	}
+
+	void RecursiveAddChildren( Animation & p_animation, MovingObjectBaseSPtr p_moving, MovingObjectBaseSPtr p_parent )
+	{
+		if ( !p_animation.HasMovingObject( p_moving->GetType(), p_moving->GetName() ) )
+		{
+			p_animation.AddMovingObject( p_moving, p_parent );
+
+			for ( auto l_moving : p_moving->GetChildren() )
+			{
+				RecursiveAddChildren( p_animation, l_moving, p_moving );
+			}
+		}
+	}
+
+	bool Animation::BinaryParser::Parse( Animation & p_obj, BinaryChunk & p_chunk )const
+	{
+		bool l_return = true;
+		MovingNodeSPtr l_node;
+		MovingObjectSPtr l_object;
+		MovingBoneSPtr l_bone;
+		String l_name;
+
+		while ( p_chunk.CheckAvailable( 1 ) )
+		{
+			BinaryChunk l_chunk;
+			l_return = p_chunk.GetSubChunk( l_chunk );
+
+			if ( l_return )
+			{
+				switch ( l_chunk.GetChunkType() )
+				{
+				case eCHUNK_TYPE_NAME:
+					l_return = DoParseChunk( l_name, l_chunk );
+
+					if ( l_return )
+					{
+						p_obj.m_name = l_name;
+					}
+
+					break;
+
+				case eCHUNK_TYPE_ANIM_SCALE:
+					l_return = DoParseChunk( p_obj.m_scale, l_chunk );
+					break;
+
+				case eCHUNK_TYPE_MOVING_NODE:
+					l_node = std::make_shared< MovingNode >();
+					l_return = MovingNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
+
+					if ( l_return )
+					{
+						RecursiveAddChildren( p_obj, l_node, nullptr );
+					}
+
+					break;
+
+				case eCHUNK_TYPE_MOVING_OBJECT:
+					l_object = std::make_shared< MovingObject >();
+					l_return = MovingObject::BinaryParser( m_path ).Parse( *l_object, l_chunk );
+
+					if ( l_return )
+					{
+						RecursiveAddChildren( p_obj, l_object, nullptr );
+					}
+
+					break;
+
+				case eCHUNK_TYPE_MOVING_BONE:
+					l_bone = std::make_shared< MovingBone >();
+					l_return = MovingBone::BinaryParser( m_path ).Parse( *l_bone, l_chunk );
+
+					if ( l_return )
+					{
+						RecursiveAddChildren( p_obj, l_bone, nullptr );
+					}
+
+					break;
+				}
+			}
+
+			if ( !l_return )
+			{
+				p_chunk.EndParse();
+			}
+		}
+
+		return l_return;
+	}
+
+	//*************************************************************************************************
+
 	Animation::Animation( String const & p_name )
-		:	Named( p_name )
-		,	m_rCurrentTime( 0.0 )
-		,	m_eState( eSTATE_STOPPED )
-		,	m_rScale( 1.0 )
-		,	m_bLooped( false )
-		,	m_rLength( 0.0 )
+		: Named( p_name )
+		, m_currentTime( 0.0 )
+		, m_state( eSTATE_STOPPED )
+		, m_scale( 1.0 )
+		, m_looped( false )
+		, m_length( 0.0 )
 	{
 	}
 
@@ -25,61 +170,105 @@ namespace Castor3D
 	{
 	}
 
-	void Animation::Update( real p_rTslf )
+	void Animation::Update( real p_tslf )
 	{
-		if ( m_rLength == 0 )
+		if ( m_state != eSTATE_STOPPED )
 		{
-			std::for_each( m_mapToMove.begin(), m_mapToMove.end(), [&]( std::pair< String, MovingObjectBaseSPtr > p_pair )
+			if ( m_length == 0 )
 			{
-				m_rLength = std::max( m_rLength, p_pair.second->GetLength() );
-			} );
-		}
-
-		if ( m_eState == eSTATE_PLAYING )
-		{
-			m_rCurrentTime += ( p_rTslf * m_rScale );
-
-			if ( m_rCurrentTime >= m_rLength )
-			{
-				if ( !m_bLooped )
+				for ( auto l_it : m_toMove )
 				{
-					m_eState = eSTATE_PAUSED;
-					m_rCurrentTime = m_rLength;
-				}
-				else
-				{
-					m_rCurrentTime = fmod( m_rCurrentTime, m_rLength );
+					m_length = std::max( m_length, l_it.second->GetLength() );
 				}
 			}
-		}
 
-		if ( m_eState != eSTATE_STOPPED )
-		{
-			std::for_each( m_mapToMove.begin(), m_mapToMove.end(), [&]( std::pair< String, MovingObjectBaseSPtr > p_pair )
+			if ( m_state == eSTATE_PLAYING )
 			{
-				p_pair.second->Update( m_rCurrentTime, m_bLooped, Matrix4x4r().get_identity() );
-			} );
+				m_currentTime += ( p_tslf * m_scale );
+
+				if ( m_currentTime >= m_length )
+				{
+					if ( !m_looped )
+					{
+						m_state = eSTATE_PAUSED;
+						m_currentTime = m_length;
+					}
+					else
+					{
+						m_currentTime = fmod( m_currentTime, m_length );
+					}
+				}
+			}
+
+			for ( auto l_moving : m_arrayMoving )
+			{
+				l_moving->Update( m_currentTime, m_looped, Matrix4x4r().get_identity() );
+			}
 		}
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject()
+	void Animation::Play()
 	{
-		std::shared_ptr< MovingNode > l_pObj = std::make_shared< MovingNode >();
-		m_mapToMove.insert( std::make_pair( string::to_string( uint32_t( m_mapToMove.size() ) ), l_pObj ) );
-		return l_pObj;
+		m_state = eSTATE_PLAYING;
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( MovableObjectSPtr p_object )
+	void Animation::Pause()
+	{
+		if ( m_state == eSTATE_PLAYING )
+		{
+			m_state = eSTATE_PAUSED;
+		}
+	}
+
+	void Animation::Stop()
+	{
+		if ( m_state != eSTATE_STOPPED )
+		{
+			m_state = eSTATE_STOPPED;
+			m_currentTime = 0.0;
+		}
+	}
+
+	MovingObjectBaseSPtr Animation::AddMovingObject( MovingObjectBaseSPtr p_parent )
+	{
+		std::shared_ptr< MovingNode > l_return = std::make_shared< MovingNode >();
+		String l_name = MovingName[eMOVING_OBJECT_TYPE_NODE] + l_return->GetName();
+		auto l_it = m_toMove.find( l_name );
+
+		if ( l_it == m_toMove.end() )
+		{
+			m_toMove.insert( std::make_pair( l_name, l_return ) );
+
+			if ( !p_parent )
+			{
+				m_arrayMoving.push_back( l_return );
+			}
+		}
+		else
+		{
+			CASTOR_EXCEPTION( "Can't add this node : already added" );
+		}
+
+		return l_return;
+	}
+
+	MovingObjectBaseSPtr Animation::AddMovingObject( GeometrySPtr p_object, MovingObjectBaseSPtr p_parent )
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_object->GetName() );
+		String l_name = MovingName[eMOVING_OBJECT_TYPE_OBJECT] + p_object->GetName();
+		auto l_it = m_toMove.find( l_name );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< MovingObject > l_pObj = std::make_shared< MovingObject >();
-			l_pObj->SetObject( p_object );
-			l_return = l_pObj;
-			m_mapToMove.insert( std::make_pair( p_object->GetName(), l_return ) );
+			std::shared_ptr< MovingObject > l_moving = std::make_shared< MovingObject >();
+			l_moving->SetObject( p_object );
+			l_return = l_moving;
+			m_toMove.insert( std::make_pair( l_name, l_return ) );
+
+			if ( !p_parent )
+			{
+				m_arrayMoving.push_back( l_return );
+			}
 		}
 		else
 		{
@@ -89,33 +278,45 @@ namespace Castor3D
 		return l_return;
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( BoneSPtr p_pBone )
+	MovingObjectBaseSPtr Animation::AddMovingObject( BoneSPtr p_bone, MovingObjectBaseSPtr p_parent )
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_pBone->GetName() );
+		String l_name = MovingName[eMOVING_OBJECT_TYPE_BONE] + p_bone->GetName();
+		auto l_it = m_toMove.find( l_name );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< MovingBone > l_pObj = std::make_shared< MovingBone >();
-			l_pObj->SetBone( p_pBone );
-			l_return = l_pObj;
-			m_mapToMove.insert( std::make_pair( p_pBone->GetName(), l_return ) );
+			std::shared_ptr< MovingBone > l_moving = std::make_shared< MovingBone >();
+			l_moving->SetBone( p_bone );
+			l_return = l_moving;
+			m_toMove.insert( std::make_pair( l_name, l_return ) );
+
+			if ( !p_parent )
+			{
+				m_arrayMoving.push_back( l_return );
+			}
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Can't add this bone : already added" );
+			Logger::LogWarning( "Can't add this bone : already added" );
 		}
 
 		return l_return;
 	}
 
-	void Animation::AddMovingObject( MovingObjectBaseSPtr p_object )
+	void Animation::AddMovingObject( MovingObjectBaseSPtr p_object, MovingObjectBaseSPtr p_parent )
 	{
-		MovingObjectPtrStrMapIt l_it = m_mapToMove.find( p_object->GetName() );
+		String l_name = MovingName[p_object->GetType()] + p_object->GetName();
+		MovingObjectPtrStrMapIt l_it = m_toMove.find( l_name );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it == m_toMove.end() )
 		{
-			m_mapToMove.insert( std::make_pair( p_object->GetName(), p_object ) );
+			m_toMove.insert( std::make_pair( l_name, p_object ) );
+
+			if ( !p_parent )
+			{
+				m_arrayMoving.push_back( p_object );
+			}
 		}
 		else
 		{
@@ -123,25 +324,17 @@ namespace Castor3D
 		}
 	}
 
-	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_pBone )const
+	bool Animation::HasMovingObject( eMOVING_OBJECT_TYPE p_type, Castor::String const & p_name )const
 	{
-		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_mapToMove.find( p_pBone->GetName() );
-
-		if ( l_it == m_mapToMove.end() )
-		{
-			l_return = l_it->second;
-		}
-
-		return l_return;
+		return m_toMove.find( MovingName[p_type] + p_name ) != m_toMove.end();
 	}
 
 	MovingObjectBaseSPtr Animation::GetMovingObject( MovableObjectSPtr p_object )const
 	{
 		MovingObjectBaseSPtr l_return;
-		MovingObjectPtrStrMapConstIt l_it = m_mapToMove.find( p_object->GetName() );
+		auto l_it = m_toMove.find( MovingName[eMOVING_OBJECT_TYPE_OBJECT] + p_object->GetName() );
 
-		if ( l_it == m_mapToMove.end() )
+		if ( l_it != m_toMove.end() )
 		{
 			l_return = l_it->second;
 		}
@@ -149,25 +342,38 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Animation::Play()
+	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_bone )const
 	{
-		m_eState = eSTATE_PLAYING;
+		MovingObjectBaseSPtr l_return;
+		auto l_it = m_toMove.find( MovingName[eMOVING_OBJECT_TYPE_BONE] + p_bone->GetName() );
+
+		if ( l_it != m_toMove.end() )
+		{
+			l_return = l_it->second;
+		}
+
+		return l_return;
 	}
 
-	void Animation::Pause()
+	AnimationSPtr Animation::Clone()const
 	{
-		if ( m_eState == eSTATE_PLAYING )
+		auto l_clone = std::make_shared< Animation >( GetName() );
+		MovingObjectPtrStrMap l_toMove;
+
+		for ( auto l_moving : m_arrayMoving )
 		{
-			m_eState = eSTATE_PAUSED;
+			auto l_mcln = l_moving->Clone( *l_clone );
+			ENSURE( l_mcln );
+
+			if ( l_mcln )
+			{
+				l_clone->m_arrayMoving.push_back( l_mcln );
+				l_clone->m_toMove.insert( std::make_pair( MovingName[l_mcln->GetType()] + l_mcln->GetName(), l_mcln ) );
+			}
 		}
+
+		return l_clone;
 	}
 
-	void Animation::Stop()
-	{
-		if ( m_eState != eSTATE_STOPPED )
-		{
-			m_eState = eSTATE_STOPPED;
-			m_rCurrentTime = 0.0;
-		}
-	}
+	//*************************************************************************************************
 }

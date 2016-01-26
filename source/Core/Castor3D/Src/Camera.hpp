@@ -62,7 +62,7 @@ namespace Castor3D
 		//!\~english A selection can be a submesh	\~french Une sélection peut être un sous-maillage
 		SubmeshWPtr m_pSubmesh;
 		//!\~english A selection can be a mesh	\~french Une sélection peut être un maillage
-		MeshWPtr m_pMesh;
+		MeshWPtr m_mesh;
 		//!\~english A selection can be a geometry	\~french Une sélection peut être une géométrie
 		GeometryWPtr m_pGeometry;
 	};

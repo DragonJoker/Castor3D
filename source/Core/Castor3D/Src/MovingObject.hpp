@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_OBJECT_H___
-#define ___C3D_MOVING_OBJECT_H___
+#ifndef ___C3D_MOVING_OBJECT___
+#define ___C3D_MOVING_OBJECT___
 
 #include "MovingObjectBase.hpp"
 
@@ -34,6 +34,57 @@ namespace Castor3D
 	class MovingObject
 		: public MovingObjectBase
 	{
+	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		MovingBone binary loader.
+		\~english
+		\brief		Loader binaire de MovingBone.
+		*/
+		class BinaryParser
+			: public Castor3D::BinaryParser< MovingObject >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_path	The current folder path.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
+			 */
+			C3D_API BinaryParser( Castor::Path const & p_path );
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data.
+			 *\param[in]	p_obj	The object to write.
+			 *\param[out]	p_chunk	The chunk to fill.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			 *\param[in]	p_obj	L'objet à écrire.
+			 *\param[out]	p_chunk	Le chunk à remplir.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Fill( MovingObject const & p_obj, BinaryChunk & p_chunk )const;
+			/**
+			 *\~english
+			 *\brief		Function used to retrieve specific data from the chunk.
+			 *\param[out]	p_obj	The object to read.
+			 *\param[in]	p_chunk	The chunk containing data.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+			 *\param[out]	p_obj	L'objet à lire.
+			 *\param[in]	p_chunk	Le chunk contenant les données.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Parse( MovingObject & p_obj, BinaryChunk & p_chunk )const;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -57,7 +108,7 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual Castor::String const & GetName()const;
+		virtual Castor::String const & GetName()const;
 		/**
 		 *\~english
 		 *\brief		Defines the movable object
@@ -68,7 +119,7 @@ namespace Castor3D
 		 */
 		inline void SetObject( MovableObjectSPtr p_object )
 		{
-			m_pObject = p_object;
+			m_object = p_object;
 		}
 		/**
 		 *\~english
@@ -80,16 +131,16 @@ namespace Castor3D
 		 */
 		inline MovableObjectSPtr GetObject()const
 		{
-			return m_pObject.lock();
+			return m_object.lock();
 		}
 
 	private:
-		C3D_API virtual void DoApply();
-		C3D_API virtual MovingObjectBaseSPtr DoClone();
+		virtual void DoApply();
+		virtual MovingObjectBaseSPtr DoClone( Animation & p_animation );
 
 	private:
-		//!\~english The object affected by the animations	\~french L'objet affecté par les animations
-		MovableObjectWPtr m_pObject;
+		//!\~english	The object affected by the animations	\~french	L'objet affecté par les animations
+		MovableObjectWPtr m_object;
 	};
 }
 

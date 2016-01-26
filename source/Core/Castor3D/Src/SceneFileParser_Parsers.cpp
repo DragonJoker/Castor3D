@@ -2,7 +2,6 @@
 
 #include "AnimatedObjectGroup.hpp"
 #include "AnimatedObject.hpp"
-#include "Animation.hpp"
 #include "BillboardList.hpp"
 #include "BlendStateManager.hpp"
 #include "BorderPanelOverlay.hpp"
@@ -3309,23 +3308,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimatedObject )
 	String l_name;
 	p_params[0]->Get( l_name );
 
-	if ( l_pContext->pScene )
+	if ( l_pContext->pScene && l_pContext->pGroup )
 	{
-		GeometrySPtr l_pGeometry = l_pContext->pScene->GetGeometry( l_name );
+		GeometrySPtr l_geometry = l_pContext->pScene->GetGeometry( l_name );
 
-		if ( l_pGeometry )
+		if ( l_geometry )
 		{
-			AnimatedObjectSPtr l_object = l_pContext->pGroup->CreateObject( l_name );
-
-			if ( l_object )
-			{
-				l_object->SetGeometry( l_pGeometry );
-				l_pGeometry->SetAnimatedObject( l_object );
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : An object with the given name already exists : " ) + l_name );
-			}
+			l_pContext->pGroup->AddObject( l_geometry );
 		}
 		else
 		{

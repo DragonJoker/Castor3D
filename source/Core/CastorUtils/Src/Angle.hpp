@@ -481,16 +481,16 @@ namespace Castor
 	 *\return		Le résultat de la division
 	 */
 	CU_API Angle operator/( Angle const & p_lhs, double p_rhs );
+}
 
-	inline Angle operator "" _degrees( long double p_value )
-	{
-		return Angle::from_degrees( p_value );
-	}
+inline Castor::Angle operator "" _degrees( long double p_value )
+{
+	return Castor::Angle::from_degrees( p_value );
+}
 
-	inline Angle operator "" _radians( long double p_value )
-	{
-		return Angle::from_radians( p_value );
-	}
+inline Castor::Angle operator "" _radians( long double p_value )
+{
+	return Castor::Angle::from_radians( p_value );
 }
 
 #endif

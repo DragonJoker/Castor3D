@@ -454,7 +454,7 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return m_parentMesh->GetSkeleton();
+			return GetParent()->GetSkeleton();
 		}
 		/**
 		 *\~english

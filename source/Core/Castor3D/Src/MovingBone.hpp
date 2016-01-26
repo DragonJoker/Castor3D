@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_BONE_H___
-#define ___C3D_MOVING_BONE_H___
+#ifndef ___C3D_MOVING_BONE___
+#define ___C3D_MOVING_BONE___
 
 #include "MovingObjectBase.hpp"
 
@@ -34,6 +34,57 @@ namespace Castor3D
 	class MovingBone
 		: public MovingObjectBase
 	{
+	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		MovingBone binary loader.
+		\~english
+		\brief		Loader binaire de MovingBone.
+		*/
+		class BinaryParser
+			: public Castor3D::BinaryParser< MovingBone >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_path	The current folder path.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
+			 */
+			C3D_API BinaryParser( Castor::Path const & p_path );
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data.
+			 *\param[in]	p_obj	The object to write.
+			 *\param[out]	p_chunk	The chunk to fill.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			 *\param[in]	p_obj	L'objet à écrire.
+			 *\param[out]	p_chunk	Le chunk à remplir.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Fill( MovingBone const & p_obj, BinaryChunk & p_chunk )const;
+			/**
+			 *\~english
+			 *\brief		Function used to retrieve specific data from the chunk.
+			 *\param[out]	p_obj	The object to read.
+			 *\param[in]	p_chunk	The chunk containing data.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+			 *\param[out]	p_obj	L'objet à lire.
+			 *\param[in]	p_chunk	Le chunk contenant les données.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Parse( MovingBone & p_obj, BinaryChunk & p_chunk )const;
+		};
+
 	public:
 		/**
 		 *\~english
@@ -57,18 +108,18 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual Castor::String const & GetName()const;
+		virtual Castor::String const & GetName()const;
 		/**
 		 *\~english
 		 *\brief		Defines the movable object
-		 *\param[in]	p_object	The object
+		 *\param[in]	p_bone	The object
 		 *\~french
 		 *\brief		Définit l'objet mouvant
-		 *\param[in]	p_object	L'objet
+		 *\param[in]	p_bone	L'objet
 		 */
-		inline void SetBone( BoneSPtr p_pBone )
+		inline void SetBone( BoneSPtr p_bone )
 		{
-			m_pBone = p_pBone;
+			m_bone = p_bone;
 		}
 		/**
 		 *\~english
@@ -80,16 +131,16 @@ namespace Castor3D
 		 */
 		inline BoneSPtr GetBone()const
 		{
-			return m_pBone.lock();
+			return m_bone.lock();
 		}
 
 	private:
-		C3D_API virtual void DoApply();
-		C3D_API virtual MovingObjectBaseSPtr DoClone();
+		virtual void DoApply();
+		virtual MovingObjectBaseSPtr DoClone( Animation & p_animation );
 
 	private:
-		//!\~english The bone affected by the animations	\~french L'os affecté par les animations
-		BoneWPtr m_pBone;
+		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations
+		BoneWPtr m_bone;
 	};
 }
 

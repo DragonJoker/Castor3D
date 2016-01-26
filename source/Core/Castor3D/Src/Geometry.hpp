@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_GEOMETRY_H___
 
 #include "Castor3DPrerequisites.hpp"
+
 #include "MovableObject.hpp"
 
 namespace Castor3D

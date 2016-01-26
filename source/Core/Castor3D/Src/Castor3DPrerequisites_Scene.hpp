@@ -15,44 +15,33 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_ANIMATION_MANAGER_H___
-#define ___C3D_ANIMATION_MANAGER_H___
-
-#include "Manager.hpp"
-#include "Animation.hpp"
+#ifndef ___C3D_PREREQUISITES_SCENE_H___
+#define ___C3D_PREREQUISITES_SCENE_H___
 
 namespace Castor3D
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		13/10/2015
-	\version	0.8.0
-	\~english
-	\brief		Animation manager.
-	\~french
-	\brief		Gestionnaire de Animation.
-	*/
-	class AnimationManager
-		: public Manager< Castor::String, Animation >
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur.
-		 */
-		C3D_API AnimationManager( Engine & p_engine );
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		C3D_API virtual ~AnimationManager();
-	};
+	/**@name Scene */
+	//@{
+
+	class Scene;
+	class SceneLoader;
+	class SceneNode;
+	class SceneFileContext;
+	class SceneFileParser;
+
+	DECLARE_SMART_PTR( SceneNode );
+	DECLARE_SMART_PTR( Scene );
+	DECLARE_SMART_PTR( SceneFileContext );
+	DECLARE_SMART_PTR( SceneFileParser );
+
+	//! SceneNode pointer array
+	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
+	//! Scene pointer map, sorted by name
+	DECLARE_MAP( Castor::String, SceneSPtr, ScenePtrStr );
+	//! SceneNode pointer map, sorted by name
+	DECLARE_MAP( Castor::String, SceneNodeSPtr, SceneNodePtrStr );
+
+	//@}
 }
 
 #endif

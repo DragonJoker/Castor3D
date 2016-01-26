@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SCENE_NODE_H___
 
 #include "Castor3DPrerequisites.hpp"
+
 #include "BinaryParser.hpp"
 
 #include <OwnedBy.hpp>

@@ -25,6 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <CubeBox.hpp>
 #include <SphereBox.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -40,6 +41,7 @@ namespace Castor3D
 	*/
 	class Mesh
 		: public Castor::Resource< Mesh >
+		, public Castor::OwnedBy< Engine >
 		, public Animable
 	{
 	public:
@@ -357,19 +359,19 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return m_pSkeleton;
+			return m_skeleton;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the skeleton
-		 *\param[in]	p_pSkeleton	The new value
+		 *\param[in]	p_skeleton	The new value
 		 *\~french
 		 *\brief		Définit le squelette
-		 *\param[in]	p_pSkeleton	La nouvelle valeur
+		 *\param[in]	p_skeleton	La nouvelle valeur
 		 */
-		inline void SetSkeleton( SkeletonSPtr p_pSkeleton )
+		inline void SetSkeleton( SkeletonSPtr p_skeleton )
 		{
-			m_pSkeleton = p_pSkeleton;
+			m_skeleton = p_skeleton;
 		}
 
 	protected:
@@ -384,7 +386,7 @@ namespace Castor3D
 		//!\~english The submeshes array	\~french Le tableau de sous maillages
 		SubmeshPtrArray m_submeshes;
 		//!\~english The skeleton	\~french Le squelette
-		SkeletonSPtr m_pSkeleton;
+		SkeletonSPtr m_skeleton;
 	};
 }
 

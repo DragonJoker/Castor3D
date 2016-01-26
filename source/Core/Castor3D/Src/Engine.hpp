@@ -412,8 +412,6 @@ namespace Castor3D
 		SamplerSPtr m_defaultSampler;
 		//!\~english Lights textures sampler.	\~french L'échantillonneur utilisé pour les textures de lumières.
 		SamplerSPtr m_lightsSampler;
-		//!\~english The animations collection.	\~french La collection d'animations.
-		DECLARE_MANAGER_MEMBER( animation, Animation );
 		//!\~english The shaders collection.	\~french La collection de shaders.
 		DECLARE_MANAGER_MEMBER( shader, Shader );
 		//!\~english The sampler states collection.	\~french La collection de sampler states.

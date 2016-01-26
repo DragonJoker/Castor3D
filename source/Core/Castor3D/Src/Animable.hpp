@@ -18,9 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ANIMABLE_H___
 #define ___C3D_ANIMABLE_H___
 
-#include "Castor3DPrerequisites.hpp"
-
-#include <OwnedBy.hpp>
+#include "BinaryParser.hpp"
 
 namespace Castor3D
 {
@@ -34,23 +32,75 @@ namespace Castor3D
 	\brief		interface publique d'animable
 	*/
 	class Animable
-		: public Castor::OwnedBy< Engine >
 	{
 	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		Animable binary loader.
+		\~english
+		\brief		Loader binaire d'Animable.
+		*/
+		class BinaryParser
+			: public Castor3D::BinaryParser< Animable >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_path	The current folder path.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
+			 */
+			C3D_API BinaryParser( Castor::Path const & p_path );
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data.
+			 *\param[in]	p_obj	The object to write.
+			 *\param[out]	p_chunk	The chunk to fill.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			 *\param[in]	p_obj	L'objet à écrire.
+			 *\param[out]	p_chunk	Le chunk à remplir.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Fill( Animable const & p_obj, BinaryChunk & p_chunk )const;
+			/**
+			 *\~english
+			 *\brief		Function used to retrieve specific data from the chunk.
+			 *\param[out]	p_obj	The object to read.
+			 *\param[in]	p_chunk	The chunk containing data.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+			 *\param[out]	p_obj	L'objet à lire.
+			 *\param[in]	p_chunk	Le chunk contenant les données.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Parse( Animable & p_obj, BinaryChunk & p_chunk )const;
+		};
+
+	protected:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
-		C3D_API Animable( Engine & p_engine );
+		Animable();
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~Animable();
+		~Animable();
+
+	public:
 		/**
 		*\~english
 		*\brief		Creates an animation
@@ -62,6 +112,13 @@ namespace Castor3D
 		*\return		l'animation
 		*/
 		C3D_API AnimationSPtr CreateAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Empties the animations map.
+		 *\~french
+		 *\brief		Vid ela map d'animations.
+		*/
+		C3D_API void CleanupAnimations();
 		/**
 		*\~english
 		*\brief		Retrieves an animation
@@ -75,56 +132,18 @@ namespace Castor3D
 		C3D_API AnimationSPtr GetAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
+		 *\return		The animations.
 		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
+		 *\return		Les animations.
 		 */
-		inline AnimationPtrStrMapIt AnimationsBegin()
+		inline AnimationPtrStrMap const & GetAnimations()const
 		{
-			return m_mapAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsBegin()const
-		{
-			return m_mapAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animations map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapIt AnimationsEnd()
-		{
-			return m_mapAnimations.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animations map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsEnd()const
-		{
-			return m_mapAnimations.end();
+			return m_animations;
 		}
 
 	protected:
 		//!\~english All animations	\~french Toutes les animations
-		AnimationPtrStrMap m_mapAnimations;
+		AnimationPtrStrMap m_animations;
 	};
 }
 

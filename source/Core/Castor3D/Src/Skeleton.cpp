@@ -1,27 +1,31 @@
-﻿#include "Skeleton.hpp"
+#include "Skeleton.hpp"
 
 #include "Animation.hpp"
-#include "Mesh.hpp"
 
 using namespace Castor;
-using namespace Castor3D;
 
-//*************************************************************************************************
-
-Skeleton::Skeleton( MeshSPtr p_mesh )
-	: Animable( *p_mesh->GetOwner() )
-	, m_wpMesh( p_mesh )
+namespace Castor3D
 {
-	m_mtxGlobalInverse.set_identity();
-}
+	Skeleton::Skeleton()
+		: m_globalInverse( 1 )
+	{
+	}
 
-Skeleton::~Skeleton()
-{
-}
+	Skeleton::~Skeleton()
+	{
+		Animable::CleanupAnimations();
+	}
 
-void Skeleton::AddBone( BoneSPtr p_pBone )
-{
-	m_arrayBones.push_back( p_pBone );
-}
+	void Skeleton::AddBone( BoneSPtr p_bone )
+	{
+		m_bones.push_back( p_bone );
+	}
 
-//*************************************************************************************************
+	void Skeleton::AddAnimation( AnimationSPtr p_animation )
+	{
+		if ( m_animations.find( p_animation->GetName() ) == m_animations.end() )
+		{
+			m_animations.insert( std::make_pair( p_animation->GetName(), p_animation ) );
+		}
+	}
+}

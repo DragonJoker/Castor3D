@@ -56,12 +56,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Updates the animations of the object, given the time since the last frame
-		 *\param[in]	p_rTslf		Time elapsed since the last frame
+		 *\param[in]	p_tslf		Time elapsed since the last frame
 		 *\~french
 		 *\brief		Met à jour les animations de l'objet, selon le temps écoulé depuis la dernière frame
-		 *\param[in]	p_rTslf		Le temps écoulé depuis la dernière frame
+		 *\param[in]	p_tslf		Le temps écoulé depuis la dernière frame
 		 */
-		C3D_API void Update( real p_rTslf );
+		C3D_API void Update( real p_tslf );
+		/**
+		 *\~english
+		 *\brief		Fills a shader variable with this object's skeleton transforms.
+		 *\param[out]	p_variable	Receives the transforms.
+		 *\~french
+		 *\brief		Remplit une variable de shader avec les transformations du squelette de cet objet.
+		 *\param[out]	p_variable	Reçoit les transformations.
+		 */
+		C3D_API void FillShader( Matrix4x4rFrameVariable & p_variable );
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
@@ -124,78 +133,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the geometry
-		 *\param[in]	p_pGeometry	The geometry
+		 *\param[in]	p_geometry	The geometry
 		 *\~french
 		 *\brief		Définit la géométrie
-		 *\param[in]	p_pGeometry	La géométrie
+		 *\param[in]	p_geometry	La géométrie
 		 */
-		C3D_API void SetGeometry( GeometrySPtr p_pGeometry );
+		C3D_API void SetGeometry( GeometrySPtr p_geometry );
 		/**
 		 *\~english
 		 *\brief		Defines the mesh
-		 *\param[in]	p_pMesh	The mesh
+		 *\param[in]	p_mesh	The mesh
 		 *\~french
 		 *\brief		Définit le maillage
-		 *\param[in]	p_pMesh	Le maillage
+		 *\param[in]	p_mesh	Le maillage
 		 */
-		C3D_API void SetMesh( MeshSPtr p_pMesh );
+		C3D_API void SetMesh( MeshSPtr p_mesh );
 		/**
 		 *\~english
 		 *\brief		Defines the skeleton
-		 *\param[in]	p_pSkeleton	The skeleton
+		 *\param[in]	p_skeleton	The skeleton
 		 *\~french
 		 *\brief		Définit le squelette
-		 *\param[in]	p_pSkeleton	Le squelette
+		 *\param[in]	p_skeleton	Le squelette
 		 */
-		C3D_API void SetSkeleton( SkeletonSPtr p_pSkeleton );
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapIt AnimationsBegin()
-		{
-			return m_mapAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsBegin()const
-		{
-			return m_mapAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animations map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapIt AnimationsEnd()
-		{
-			return m_mapAnimations.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animations map
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		La valeur
-		 */
-		inline AnimationPtrStrMapConstIt AnimationsEnd()const
-		{
-			return m_mapAnimations.end();
-		}
+		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Retrieves the geometry
@@ -206,7 +167,7 @@ namespace Castor3D
 		 */
 		inline GeometrySPtr GetGeometry()const
 		{
-			return m_wpGeometry.lock();
+			return m_geometry.lock();
 		}
 		/**
 		 *\~english
@@ -218,7 +179,7 @@ namespace Castor3D
 		 */
 		inline MeshSPtr GetMesh()const
 		{
-			return m_wpMesh.lock();
+			return m_mesh.lock();
 		}
 		/**
 		 *\~english
@@ -230,25 +191,28 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return m_wpSkeleton.lock();
+			return m_skeleton.lock();
 		}
 
 	private:
-		void DoSetGeometry( GeometrySPtr p_pGeometry );
-		void DoSetMesh( MeshSPtr p_pMesh );
-		void DoSetSkeleton( SkeletonSPtr p_pSkeleton );
+		void DoSetGeometry( GeometrySPtr p_geometry );
+		void DoSetMesh( MeshSPtr p_mesh );
+		void DoSetSkeleton( SkeletonSPtr p_skeleton );
 		void DoCopyAnimations( AnimableSPtr p_object );
 
 	protected:
-		//!\~english All animations	\~french Toutes les animations
-		AnimationPtrStrMap m_mapAnimations;
-		//! The geometry affected by the animations	\~french La géométrie affectée par les animations
-		GeometryWPtr m_wpGeometry;
-		//! The mesh affected by the animations	\~french Le maillage affecté par les animations
-		MeshWPtr m_wpMesh;
-		//! The skeleton affected by the animations	\~french Le squelette affecté par les animations
-		SkeletonWPtr m_wpSkeleton;
+		//!\~english All animations.	\~french Toutes les animations.
+		AnimationPtrStrMap m_animations;
+		//!\~english Currently playing animations.	\~french Les animations en cours de lecture.
+		AnimationPtrArray m_playingAnimations;
+		//! The geometry affected by the animations.	\~french La géométrie affectée par les animations.
+		GeometryWPtr m_geometry;
+		//! The mesh affected by the animations.	\~french Le maillage affecté par les animations.
+		MeshWPtr m_mesh;
+		//! The skeleton affected by the animations.	\~french Le squelette affecté par les animations.
+		SkeletonWPtr m_skeleton;
 	};
 }
 
 #endif
+

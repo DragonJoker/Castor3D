@@ -4,6 +4,7 @@
 #include "AnimatedObjectGroup.hpp"
 #include "Animation.hpp"
 #include "BlendStateManager.hpp"
+#include "Bone.hpp"
 #include "Buffer.hpp"
 #include "Camera.hpp"
 #include "BillboardList.hpp"
@@ -478,6 +479,7 @@ namespace Castor3D
 		m_renderNodes.clear();
 		m_opaqueRenderNodes.clear();
 		m_transparentRenderNodes.clear();
+		m_distanceSortedTransparentRenderNodes.clear();
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 
 		for ( auto && l_overlay : m_overlays )
@@ -1386,34 +1388,12 @@ namespace Castor3D
 
 			if ( l_animated )
 			{
-				SkeletonSPtr l_skeleton = l_animated->GetSkeleton();
+				Matrix4x4rFrameVariableSPtr l_variable;
+				l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_variable );
 
-				if ( l_skeleton )
+				if ( l_variable )
 				{
-					Matrix4x4rFrameVariableSPtr l_variable;
-					l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_variable );
-
-					if ( l_variable )
-					{
-						int i = 0;
-
-						for ( auto && l_it = l_animated->AnimationsBegin(); l_it != l_animated->AnimationsEnd(); ++l_it )
-						{
-							Matrix4x4r l_final( 1.0_r );
-
-							for ( BonePtrArrayIt l_itBones = l_skeleton->Begin(); l_itBones != l_skeleton->End(); ++l_itBones )
-							{
-								MovingObjectBaseSPtr l_moving = l_it->second->GetMovingObject( *l_itBones );
-
-								if ( l_moving )
-								{
-									l_final *= l_moving->GetFinalTransformation();
-								}
-							}
-
-							l_variable->SetValue( l_final.const_ptr(), i++ );
-						}
-					}
+					l_animated->FillShader( *l_variable );
 				}
 			}
 		}
@@ -1473,29 +1453,18 @@ namespace Castor3D
 
 				for ( auto l_pass : *l_material )
 				{
-					if ( l_submesh->GetRefCount( l_material ) > 1 && l_submesh->GetGeometryBuffers()->HasMatrixBuffer() )
+					if ( l_submesh->GetRefCount( l_material ) > 1 && l_submesh->GetGeometryBuffers()->HasMatrixBuffer()
+						 && ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) != ePROGRAM_FLAG_SKINNING )
 					{
 						real * l_buffer = l_submesh->GetGeometryBuffers()->GetMatrixBuffer().data();
 
-						if ( ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+						for ( auto && l_renderNode : l_itSubmeshes.second )
 						{
-							for ( auto && l_renderNode : l_itSubmeshes.second )
-							{
-								DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, MASK_MTXMODE_MODEL );
-								std::memcpy( l_buffer, ( l_renderNode.m_node->GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), 16 * sizeof( real ) );
-								l_buffer += 16;
-							}
-						}
-						else
-						{
-							for ( auto && l_renderNode : l_itSubmeshes.second )
-							{
-								DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, MASK_MTXMODE_MODEL );
-								std::memcpy( l_buffer, ( l_renderNode.m_node->GetDerivedTransformationMatrix() ).const_ptr(), 16 * sizeof( real ) );
-								l_buffer += 16;
-							}
+							std::memcpy( l_buffer, ( l_renderNode.m_node->GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), 16 * sizeof( real ) );
+							l_buffer += 16;
 						}
 
+						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_itSubmeshes.second[0].m_geometry, MASK_MTXMODE_MODEL );
 						DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() | ePROGRAM_FLAG_INSTANCIATION );
 						l_itSubmeshes.second[0].m_submesh->Draw( *l_pass );
 						DoUnbindPass( *l_pass );

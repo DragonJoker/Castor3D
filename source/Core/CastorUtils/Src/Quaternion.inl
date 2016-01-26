@@ -539,25 +539,36 @@ namespace Castor
 		if ( l_cosTheta < 0 )
 		{
 			l_cosTheta = -l_cosTheta;
-			l_target = -p_target;
+			l_target.x = -l_target.x;
+			l_target.y = -l_target.y;
+			l_target.z = -l_target.z;
+			l_target.w = -l_target.w;
 		}
 
-		// Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
-		if ( l_cosTheta > 1 - std::numeric_limits< T >::epsilon() )
+		// Calculate coefficients
+		T l_sclp, l_sclq;
+
+		if ( ( T( 1.0 ) - l_cosTheta ) > 0.0001 ) // 0.0001 -> some epsillon
 		{
-			// Linear interpolation
-			return QuaternionT< T >(
-					   mix_values( x, p_target.x, T( p_factor ) ),
-					   mix_values( y, p_target.y, T( p_factor ) ),
-					   mix_values( z, p_target.z, T( p_factor ) ),
-					   mix_values( w, p_target.w, T( p_factor ) ) );
+			// Standard case (slerp)
+			T l_omega, l_sinom;
+			l_omega = acos( l_cosTheta ); // extract theta from dot product's cos theta
+			l_sinom = sin( l_omega );
+			l_sclp = sin( ( 1.0 - p_factor ) * l_omega ) / l_sinom;
+			l_sclq = sin( p_factor * l_omega ) / l_sinom;
 		}
 		else
 		{
-			// Essential Mathematics, page 467
-			T l_angle = acos( l_cosTheta );
-			return ( sin( ( 1.0 - p_factor ) * l_angle ) * ( *this ) + sin( p_factor * l_angle ) * p_target ) / sin( l_angle );
+			// Very close, do linear interp (because it's faster)
+			l_sclp = T( 1.0 ) - p_factor;
+			l_sclq = p_factor;
 		}
+
+		l_target.x = l_sclp * this->x + l_sclq * l_target.x;
+		l_target.y = l_sclp * this->y + l_sclq * l_target.y;
+		l_target.z = l_sclp * this->z + l_sclq * l_target.z;
+		l_target.w = l_sclp * this->w + l_sclq * l_target.w;
+		return l_target;
 	}
 
 	template< typename T >
@@ -571,25 +582,36 @@ namespace Castor
 		if ( l_cosTheta < 0 )
 		{
 			l_cosTheta = -l_cosTheta;
-			l_target = -p_target;
+			l_target.x = -l_target.x;
+			l_target.y = -l_target.y;
+			l_target.z = -l_target.z;
+			l_target.w = -l_target.w;
 		}
 
-		// Perform a linear interpolation when cosTheta is close to 1 to avoid side effect of sin(angle) becoming a zero denominator
-		if ( l_cosTheta > 1 - std::numeric_limits< T >::epsilon() )
+		// Calculate coefficients
+		T l_sclp, l_sclq;
+
+		if ( ( T( 1.0 ) - l_cosTheta ) > 0.0001 ) // 0.0001 -> some epsillon
 		{
-			// Linear interpolation
-			return QuaternionT< T >(
-					   mix_values( x, p_target.x, T( p_factor ) ),
-					   mix_values( y, p_target.y, T( p_factor ) ),
-					   mix_values( z, p_target.z, T( p_factor ) ),
-					   mix_values( w, p_target.w, T( p_factor ) ) );
+			// Standard case (slerp)
+			T l_omega, l_sinom;
+			l_omega = acos( l_cosTheta ); // extract theta from dot product's cos theta
+			l_sinom = sin( l_omega );
+			l_sclp = sin( ( 1.0 - p_factor ) * l_omega ) / l_sinom;
+			l_sclq = sin( p_factor * l_omega ) / l_sinom;
 		}
 		else
 		{
-			// Essential Mathematics, page 467
-			T l_angle = acos( l_cosTheta );
-			return ( sin( ( 1.0 - p_factor ) * l_angle ) * ( *this ) + sin( p_factor * l_angle ) * p_target ) / sin( l_angle );
+			// Very close, do linear interp (because it's faster)
+			l_sclp = T( 1.0 ) - p_factor;
+			l_sclq = p_factor;
 		}
+
+		l_target.x = l_sclp * this->x + l_sclq * l_target.x;
+		l_target.y = l_sclp * this->y + l_sclq * l_target.y;
+		l_target.z = l_sclp * this->z + l_sclq * l_target.z;
+		l_target.w = l_sclp * this->w + l_sclq * l_target.w;
+		return l_target;
 	}
 
 	template< typename T >
