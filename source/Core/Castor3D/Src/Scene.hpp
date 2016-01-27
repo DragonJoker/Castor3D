@@ -826,15 +826,17 @@ namespace Castor3D
 		 *\param[in]	p_technique		The render technique.
 		 *\param[in]	p_pipeline		The render pipeline.
 		 *\param[in]	p_pass			The pass.
+		 *\param[in]	p_geometry		The geometry instance.
 		 *\param[in]	p_programFlags	The shader program flags (combination of ePROGRAM_FLAG).
 		 *\~french
 		 *\brief		Active la passe donnée.
 		 *\param[in]	p_technique		La technique de rendu.
 		 *\param[in]	p_pipeline		Le pipeline de rendu.
 		 *\param[in]	p_pass			La passe.
+		 *\param[in]	p_geometry		L'instance de géométrie.
 		 *\param[in]	p_programFlags	Les indicateurs du programme shader (combinaison de ePROGRAM_FLAG).
 		 */
-		void DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, uint32_t p_programFlags );
+		void DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Applies geometry instance specific transformations.

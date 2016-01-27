@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_BONE___
-#define ___C3D_MOVING_BONE___
+#ifndef ___C3D_SKELETON_ANIMATION_BONE___
+#define ___C3D_SKELETON_ANIMATION_BONE___
 
-#include "MovingObjectBase.hpp"
+#include "AnimationObjectBase.hpp"
 
 namespace Castor3D
 {
@@ -31,8 +31,8 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation de MovingObjectBase pour les Bones.
 	*/
-	class MovingBone
-		: public MovingObjectBase
+	class SkeletonAnimationBone
+		: public AnimationObjectBase
 	{
 	public:
 		/*!
@@ -45,7 +45,7 @@ namespace Castor3D
 		\brief		Loader binaire de MovingBone.
 		*/
 		class BinaryParser
-			: public Castor3D::BinaryParser< MovingBone >
+			: public Castor3D::BinaryParser< SkeletonAnimationBone >
 		{
 		public:
 			/**
@@ -69,7 +69,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Fill( MovingBone const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( SkeletonAnimationBone const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk.
@@ -82,7 +82,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Parse( MovingBone & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( SkeletonAnimationBone & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -92,14 +92,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API MovingBone();
+		C3D_API SkeletonAnimationBone();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~MovingBone();
+		C3D_API ~SkeletonAnimationBone();
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name
@@ -136,7 +136,7 @@ namespace Castor3D
 
 	private:
 		virtual void DoApply();
-		virtual MovingObjectBaseSPtr DoClone( Animation & p_animation );
+		virtual AnimationObjectBaseSPtr DoClone( Animation & p_animation );
 
 	private:
 		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations

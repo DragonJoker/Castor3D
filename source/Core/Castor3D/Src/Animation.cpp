@@ -2,9 +2,9 @@
 
 #include "Bone.hpp"
 #include "Geometry.hpp"
-#include "MovingBone.hpp"
-#include "MovingNode.hpp"
-#include "MovingObject.hpp"
+#include "SkeletonAnimationBone.hpp"
+#include "SkeletonAnimationNode.hpp"
+#include "SkeletonAnimationObject.hpp"
 
 using namespace Castor;
 
@@ -43,16 +43,16 @@ namespace Castor3D
 		{
 			switch ( l_moving->GetType() )
 			{
-			case eMOVING_OBJECT_TYPE_NODE:
-				l_return &= MovingNode::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingNode >( l_moving ), l_chunk );
+			case eANIMATION_OBJECT_TYPE_NODE:
+				l_return &= SkeletonAnimationNode::BinaryParser( m_path ).Fill( *std::static_pointer_cast< SkeletonAnimationNode >( l_moving ), l_chunk );
 				break;
 
-			case eMOVING_OBJECT_TYPE_OBJECT:
-				l_return &= MovingObject::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingObject >( l_moving ), l_chunk );
+			case eANIMATION_OBJECT_TYPE_OBJECT:
+				l_return &= SkeletonAnimationObject::BinaryParser( m_path ).Fill( *std::static_pointer_cast< SkeletonAnimationObject >( l_moving ), l_chunk );
 				break;
 
-			case eMOVING_OBJECT_TYPE_BONE:
-				l_return &= MovingBone::BinaryParser( m_path ).Fill( *std::static_pointer_cast< MovingBone >( l_moving ), l_chunk );
+			case eANIMATION_OBJECT_TYPE_BONE:
+				l_return &= SkeletonAnimationBone::BinaryParser( m_path ).Fill( *std::static_pointer_cast< SkeletonAnimationBone >( l_moving ), l_chunk );
 				break;
 			}
 		}
@@ -66,11 +66,11 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void RecursiveAddChildren( Animation & p_animation, MovingObjectBaseSPtr p_moving, MovingObjectBaseSPtr p_parent )
+	void RecursiveAddChildren( Animation & p_animation, AnimationObjectBaseSPtr p_moving, AnimationObjectBaseSPtr p_parent )
 	{
-		if ( !p_animation.HasMovingObject( p_moving->GetType(), p_moving->GetName() ) )
+		if ( !p_animation.HasObject( p_moving->GetType(), p_moving->GetName() ) )
 		{
-			p_animation.AddMovingObject( p_moving, p_parent );
+			p_animation.AddObject( p_moving, p_parent );
 
 			for ( auto l_moving : p_moving->GetChildren() )
 			{
@@ -82,9 +82,9 @@ namespace Castor3D
 	bool Animation::BinaryParser::Parse( Animation & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
-		MovingNodeSPtr l_node;
-		MovingObjectSPtr l_object;
-		MovingBoneSPtr l_bone;
+		SkeletonAnimationNodeSPtr l_node;
+		SkeletonAnimationObjectSPtr l_object;
+		SkeletonAnimationBoneSPtr l_bone;
 		String l_name;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
@@ -111,8 +111,8 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_MOVING_NODE:
-					l_node = std::make_shared< MovingNode >();
-					l_return = MovingNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
+					l_node = std::make_shared< SkeletonAnimationNode >();
+					l_return = SkeletonAnimationNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
 
 					if ( l_return )
 					{
@@ -122,8 +122,8 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_MOVING_OBJECT:
-					l_object = std::make_shared< MovingObject >();
-					l_return = MovingObject::BinaryParser( m_path ).Parse( *l_object, l_chunk );
+					l_object = std::make_shared< SkeletonAnimationObject >();
+					l_return = SkeletonAnimationObject::BinaryParser( m_path ).Parse( *l_object, l_chunk );
 
 					if ( l_return )
 					{
@@ -133,8 +133,8 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_MOVING_BONE:
-					l_bone = std::make_shared< MovingBone >();
-					l_return = MovingBone::BinaryParser( m_path ).Parse( *l_bone, l_chunk );
+					l_bone = std::make_shared< SkeletonAnimationBone >();
+					l_return = SkeletonAnimationBone::BinaryParser( m_path ).Parse( *l_bone, l_chunk );
 
 					if ( l_return )
 					{
@@ -229,10 +229,10 @@ namespace Castor3D
 		}
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( Castor::String const & p_name, MovingObjectBaseSPtr p_parent )
+	AnimationObjectBaseSPtr Animation::AddObject( Castor::String const & p_name, AnimationObjectBaseSPtr p_parent )
 	{
-		std::shared_ptr< MovingNode > l_return = std::make_shared< MovingNode >( p_name );
-		String l_name = MovingName[eMOVING_OBJECT_TYPE_NODE] + p_name;
+		std::shared_ptr< SkeletonAnimationNode > l_return = std::make_shared< SkeletonAnimationNode >( p_name );
+		String l_name = MovingName[eANIMATION_OBJECT_TYPE_NODE] + p_name;
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
@@ -252,15 +252,15 @@ namespace Castor3D
 		return l_return;
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( GeometrySPtr p_object, MovingObjectBaseSPtr p_parent )
+	AnimationObjectBaseSPtr Animation::AddObject( GeometrySPtr p_object, AnimationObjectBaseSPtr p_parent )
 	{
-		MovingObjectBaseSPtr l_return;
-		String l_name = MovingName[eMOVING_OBJECT_TYPE_OBJECT] + p_object->GetName();
+		AnimationObjectBaseSPtr l_return;
+		String l_name = MovingName[eANIMATION_OBJECT_TYPE_OBJECT] + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< MovingObject > l_moving = std::make_shared< MovingObject >();
+			std::shared_ptr< SkeletonAnimationObject > l_moving = std::make_shared< SkeletonAnimationObject >();
 			l_moving->SetObject( p_object );
 			l_return = l_moving;
 			m_toMove.insert( std::make_pair( l_name, l_return ) );
@@ -278,15 +278,15 @@ namespace Castor3D
 		return l_return;
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( BoneSPtr p_bone, MovingObjectBaseSPtr p_parent )
+	AnimationObjectBaseSPtr Animation::AddObject( BoneSPtr p_bone, AnimationObjectBaseSPtr p_parent )
 	{
-		MovingObjectBaseSPtr l_return;
-		String l_name = MovingName[eMOVING_OBJECT_TYPE_BONE] + p_bone->GetName();
+		AnimationObjectBaseSPtr l_return;
+		String l_name = MovingName[eANIMATION_OBJECT_TYPE_BONE] + p_bone->GetName();
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
 		{
-			std::shared_ptr< MovingBone > l_moving = std::make_shared< MovingBone >();
+			std::shared_ptr< SkeletonAnimationBone > l_moving = std::make_shared< SkeletonAnimationBone >();
 			l_moving->SetBone( p_bone );
 			l_return = l_moving;
 			m_toMove.insert( std::make_pair( l_name, l_return ) );
@@ -304,10 +304,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Animation::AddMovingObject( MovingObjectBaseSPtr p_object, MovingObjectBaseSPtr p_parent )
+	void Animation::AddObject( AnimationObjectBaseSPtr p_object, AnimationObjectBaseSPtr p_parent )
 	{
 		String l_name = MovingName[p_object->GetType()] + p_object->GetName();
-		MovingObjectPtrStrMapIt l_it = m_toMove.find( l_name );
+		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )
 		{
@@ -324,15 +324,15 @@ namespace Castor3D
 		}
 	}
 
-	bool Animation::HasMovingObject( eMOVING_OBJECT_TYPE p_type, Castor::String const & p_name )const
+	bool Animation::HasObject( eANIMATION_OBJECT_TYPE p_type, Castor::String const & p_name )const
 	{
 		return m_toMove.find( MovingName[p_type] + p_name ) != m_toMove.end();
 	}
 
-	MovingObjectBaseSPtr Animation::GetMovingObject( MovableObjectSPtr p_object )const
+	AnimationObjectBaseSPtr Animation::GetObject( MovableObjectSPtr p_object )const
 	{
-		MovingObjectBaseSPtr l_return;
-		auto l_it = m_toMove.find( MovingName[eMOVING_OBJECT_TYPE_OBJECT] + p_object->GetName() );
+		AnimationObjectBaseSPtr l_return;
+		auto l_it = m_toMove.find( MovingName[eANIMATION_OBJECT_TYPE_OBJECT] + p_object->GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{
@@ -342,10 +342,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	MovingObjectBaseSPtr Animation::GetMovingObject( BoneSPtr p_bone )const
+	AnimationObjectBaseSPtr Animation::GetObject( BoneSPtr p_bone )const
 	{
-		MovingObjectBaseSPtr l_return;
-		auto l_it = m_toMove.find( MovingName[eMOVING_OBJECT_TYPE_BONE] + p_bone->GetName() );
+		AnimationObjectBaseSPtr l_return;
+		auto l_it = m_toMove.find( MovingName[eANIMATION_OBJECT_TYPE_BONE] + p_bone->GetName() );
 
 		if ( l_it != m_toMove.end() )
 		{
@@ -358,7 +358,7 @@ namespace Castor3D
 	AnimationSPtr Animation::Clone()const
 	{
 		auto l_clone = std::make_shared< Animation >( GetName() );
-		MovingObjectPtrStrMap l_toMove;
+		AnimationObjectPtrStrMap l_toMove;
 
 		for ( auto l_moving : m_arrayMoving )
 		{

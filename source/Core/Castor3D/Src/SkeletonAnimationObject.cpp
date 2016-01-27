@@ -1,7 +1,8 @@
-#include "MovingBone.hpp"
+#include "SkeletonAnimationObject.hpp"
 
 #include "Animation.hpp"
-#include "Bone.hpp"
+#include "MovableObject.hpp"
+#include "SceneNode.hpp"
 
 using namespace Castor;
 
@@ -9,12 +10,12 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	MovingBone::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< MovingBone >( p_path )
+	SkeletonAnimationObject::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< SkeletonAnimationObject >( p_path )
 	{
 	}
 
-	bool MovingBone::BinaryParser::Fill( MovingBone const & p_obj, BinaryChunk & p_chunk )const
+	bool SkeletonAnimationObject::BinaryParser::Fill( SkeletonAnimationObject const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_MOVING_BONE );
@@ -26,7 +27,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = MovingObjectBase::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = AnimationObjectBase::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
 		if ( l_return )
@@ -38,7 +39,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool MovingBone::BinaryParser::Parse( MovingBone & p_obj, BinaryChunk & p_chunk )const
+	bool SkeletonAnimationObject::BinaryParser::Parse( SkeletonAnimationObject & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		String l_name;
@@ -58,7 +59,7 @@ namespace Castor3D
 					break;
 
 				default:
-					l_return = MovingObjectBase::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+					l_return = AnimationObjectBase::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 					break;
 				}
 			}
@@ -74,35 +75,30 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MovingBone::MovingBone()
-		: MovingObjectBase( eMOVING_OBJECT_TYPE_BONE )
+	SkeletonAnimationObject::SkeletonAnimationObject()
+		: AnimationObjectBase( eANIMATION_OBJECT_TYPE_OBJECT )
 	{
 	}
 
-	MovingBone :: ~MovingBone()
+	SkeletonAnimationObject::~SkeletonAnimationObject()
 	{
 	}
 
-	String const & MovingBone::GetName()const
+	String const & SkeletonAnimationObject::GetName()const
 	{
-		return GetBone()->GetName();
+		return GetObject()->GetName();
 	}
 
-	void MovingBone::DoApply()
+	void SkeletonAnimationObject::DoApply()
 	{
-		BoneSPtr l_bone = GetBone();
-
-		if ( l_bone )
-		{
-			m_finalTransform = m_cumulativeTransform * l_bone->GetOffsetMatrix();
-		}
+		m_finalTransform = m_cumulativeTransform;
 	}
 
-	MovingObjectBaseSPtr MovingBone::DoClone( Animation & p_animation )
+	AnimationObjectBaseSPtr SkeletonAnimationObject::DoClone( Animation & p_animation )
 	{
-		auto l_return = std::make_shared< MovingBone >();
-		l_return->m_bone = m_bone;
-		p_animation.AddMovingObject( l_return, l_return );
+		auto l_return = std::make_shared< SkeletonAnimationObject >();
+		l_return->m_object = m_object;
+		p_animation.AddObject( l_return, l_return );
 		return l_return;
 	}
 
