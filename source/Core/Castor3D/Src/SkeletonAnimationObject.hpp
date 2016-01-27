@@ -15,10 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_NODE___
-#define ___C3D_MOVING_NODE___
+#ifndef ___C3D_SKELETON_ANIMATION_OBJECT___
+#define ___C3D_SKELETON_ANIMATION_OBJECT___
 
-#include "MovingObjectBase.hpp"
+#include "AnimationObjectBase.hpp"
 
 namespace Castor3D
 {
@@ -27,14 +27,12 @@ namespace Castor3D
 	\version	0.7.0
 	\date		09/12/2013
 	\~english
-	\brief		Implementation of MovingObjectBase for abstract nodes
-	\remark		Used to decompose the model and place intermediate animations
+	\brief		Implementation of MovingObjectBase for MovableObject
 	\~french
-	\brief		Implémentation de MovingObjectBase pour des noeuds abstraits.
-	\remark		Utilisé afin de décomposer le modèle et ajouter des animatiobns intermédiaires
+	\brief		Implémentation de MovingObjectBase pour les MovableObject
 	*/
-	class MovingNode
-		: public MovingObjectBase
+	class SkeletonAnimationObject
+		: public AnimationObjectBase
 	{
 	public:
 		/*!
@@ -47,7 +45,7 @@ namespace Castor3D
 		\brief		Loader binaire de MovingBone.
 		*/
 		class BinaryParser
-			: public Castor3D::BinaryParser< MovingNode >
+			: public Castor3D::BinaryParser< SkeletonAnimationObject >
 		{
 		public:
 			/**
@@ -71,7 +69,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Fill( MovingNode const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( SkeletonAnimationObject const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk.
@@ -84,26 +82,24 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Parse( MovingNode & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( SkeletonAnimationObject & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_name	The node name.
+		 *\brief		Constructor
 		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_name	Le nom du noeud.
+		 *\brief		Constructeur
 		 */
-		C3D_API MovingNode( Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API SkeletonAnimationObject();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~MovingNode();
+		C3D_API ~SkeletonAnimationObject();
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name
@@ -112,17 +108,39 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual Castor::String const & GetName()const
+		virtual Castor::String const & GetName()const;
+		/**
+		 *\~english
+		 *\brief		Defines the movable object
+		 *\param[in]	p_object	The object
+		 *\~french
+		 *\brief		Définit l'objet mouvant
+		 *\param[in]	p_object	L'objet
+		 */
+		inline void SetObject( MovableObjectSPtr p_object )
 		{
-			return m_name;
+			m_object = p_object;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the moving object
+		 *\return		The moving object
+		 *\~french
+		 *\brief		Récupère l'objet mouvant
+		 *\return		L'objet mouvant
+		 */
+		inline MovableObjectSPtr GetObject()const
+		{
+			return m_object.lock();
 		}
 
 	private:
 		virtual void DoApply();
-		virtual MovingObjectBaseSPtr DoClone( Animation & p_animation );
+		virtual AnimationObjectBaseSPtr DoClone( Animation & p_animation );
 
 	private:
-		Castor::String m_name;
+		//!\~english	The object affected by the animations	\~french	L'objet affecté par les animations
+		MovableObjectWPtr m_object;
 	};
 }
 

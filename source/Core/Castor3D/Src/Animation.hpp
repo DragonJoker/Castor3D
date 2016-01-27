@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "MovingObjectBase.hpp"
+#include "AnimationObjectBase.hpp"
 
 namespace Castor3D
 {
@@ -165,7 +165,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du noeud.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API MovingObjectBaseSPtr AddMovingObject( Castor::String const & p_name, MovingObjectBaseSPtr p_parent );
+		C3D_API AnimationObjectBaseSPtr AddObject( Castor::String const & p_name, AnimationObjectBaseSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving object.
@@ -176,7 +176,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet déplaçable.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API MovingObjectBaseSPtr AddMovingObject( GeometrySPtr p_object, MovingObjectBaseSPtr p_parent );
+		C3D_API AnimationObjectBaseSPtr AddObject( GeometrySPtr p_object, AnimationObjectBaseSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving bone.
@@ -187,7 +187,7 @@ namespace Castor3D
 		 *\param[in]	p_bone		L'os.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API MovingObjectBaseSPtr AddMovingObject( BoneSPtr p_bone, MovingObjectBaseSPtr p_parent );
+		C3D_API AnimationObjectBaseSPtr AddObject( BoneSPtr p_bone, AnimationObjectBaseSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Adds an animated object.
@@ -198,7 +198,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet animé.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API void AddMovingObject( MovingObjectBaseSPtr p_object, MovingObjectBaseSPtr p_parent );
+		C3D_API void AddObject( AnimationObjectBaseSPtr p_object, AnimationObjectBaseSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.
@@ -209,7 +209,7 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type de l'objet.
 		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		C3D_API bool HasMovingObject( eMOVING_OBJECT_TYPE p_type, Castor::String const & p_name )const;
+		C3D_API bool HasObject( eANIMATION_OBJECT_TYPE p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
@@ -218,7 +218,7 @@ namespace Castor3D
 		 *\brief		Récupère un objet animé.
 		 *\param[in]	p_object	L'objet déplaçable.
 		 */
-		C3D_API MovingObjectBaseSPtr GetMovingObject( MovableObjectSPtr p_object )const;
+		C3D_API AnimationObjectBaseSPtr GetObject( MovableObjectSPtr p_object )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone.
@@ -227,7 +227,7 @@ namespace Castor3D
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API MovingObjectBaseSPtr GetMovingObject( BoneSPtr p_bone )const;
+		C3D_API AnimationObjectBaseSPtr GetObject( BoneSPtr p_bone )const;
 		/**
 		 *\~english
 		 *\brief		Clones this animation.
@@ -305,57 +305,9 @@ namespace Castor3D
 		 *\brief		Récupère le nombre d'objets mouvants
 		 *\return		Le nombre
 		 */
-		inline uint32_t GetMovingObjectsCount()const
+		inline AnimationObjectPtrStrMap const & GetObjects()const
 		{
-			return uint32_t( m_toMove.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an interator on the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapIt begin()
-		{
-			return m_toMove.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant interator on the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapConstIt begin()const
-		{
-			return m_toMove.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an interator on the end of the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapIt end()
-		{
-			return m_toMove.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant interator on the end of the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin de la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapConstIt end()const
-		{
-			return m_toMove.end();
+			return m_toMove;
 		}
 
 	protected:
@@ -370,9 +322,9 @@ namespace Castor3D
 		//!\~english Tells whether or not the animation is looped	\~french Dit si oui ou non l'animation est bouclée
 		bool m_looped;
 		//! The parent moving objects
-		MovingObjectPtrArray m_arrayMoving;
+		AnimationObjectPtrArray m_arrayMoving;
 		//! The moving objects
-		MovingObjectPtrStrMap m_toMove;
+		AnimationObjectPtrStrMap m_toMove;
 	};
 }
 

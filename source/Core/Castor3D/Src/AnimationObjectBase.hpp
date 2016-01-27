@@ -15,8 +15,8 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_MOVING_OBJECT_BASE_H___
-#define ___C3D_MOVING_OBJECT_BASE_H___
+#ifndef ___C3D_ANIMATION_OBJECT_BASE_H___
+#define ___C3D_ANIMATION_OBJECT_BASE_H___
 
 #include "BinaryParser.hpp"
 
@@ -36,7 +36,7 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	class MovingObjectBase
+	class AnimationObjectBase
 	{
 	public:
 		/*!
@@ -49,7 +49,7 @@ namespace Castor3D
 		\brief		Loader binaire de MovingObjectBase.
 		*/
 		class BinaryParser
-			: public Castor3D::BinaryParser< MovingObjectBase >
+			: public Castor3D::BinaryParser< AnimationObjectBase >
 		{
 		public:
 			/**
@@ -73,7 +73,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Fill( MovingObjectBase const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( AnimationObjectBase const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk.
@@ -86,7 +86,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Parse( MovingObjectBase & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( AnimationObjectBase & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	protected:
@@ -98,14 +98,14 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_type	Le type du machin mouvant.
 		 */
-		C3D_API MovingObjectBase( eMOVING_OBJECT_TYPE p_type );
+		C3D_API AnimationObjectBase( eANIMATION_OBJECT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API MovingObjectBase( MovingObjectBase const & p_rhs );
+		C3D_API AnimationObjectBase( AnimationObjectBase const & p_rhs );
 
 	public:
 		/**
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~MovingObjectBase();
+		C3D_API virtual ~AnimationObjectBase();
 		/**
 		 *\~english
 		 *\brief		Adds a child to this object.
@@ -125,7 +125,7 @@ namespace Castor3D
 		 *\remark		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	p_object	L'enfant.
 		 */
-		C3D_API void AddChild( MovingObjectBaseSPtr p_object );
+		C3D_API void AddChild( AnimationObjectBaseSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time.
@@ -224,7 +224,7 @@ namespace Castor3D
 		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
 		 *\return		Le clône.
 		 */
-		C3D_API MovingObjectBaseSPtr Clone( Animation & p_animation );
+		C3D_API AnimationObjectBaseSPtr Clone( Animation & p_animation );
 		/**
 		 *\~english
 		 *\return		The scale key frames.
@@ -271,7 +271,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le type d'objet mouvant.
 		 */
-		inline eMOVING_OBJECT_TYPE GetType()const
+		inline eANIMATION_OBJECT_TYPE GetType()const
 		{
 			return m_type;
 		}
@@ -339,7 +339,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		inline MovingObjectPtrArray const & GetChildren()const
+		inline AnimationObjectPtrArray const & GetChildren()const
 		{
 			return m_children;
 		}
@@ -362,7 +362,7 @@ namespace Castor3D
 		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
 		 *\return		Le clône.
 		 */
-		C3D_API virtual MovingObjectBaseSPtr DoClone( Animation & p_animation ) = 0;
+		C3D_API virtual AnimationObjectBaseSPtr DoClone( Animation & p_animation ) = 0;
 
 	private:
 		/**
@@ -446,7 +446,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The moving thing type.	\~french Le type du machin mouvant.
-		eMOVING_OBJECT_TYPE m_type;
+		eANIMATION_OBJECT_TYPE m_type;
 		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
 		Point3rKeyFrameRealMap m_scales;
 		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
@@ -458,7 +458,7 @@ namespace Castor3D
 		//!\~english The animation length.	\~french La durée de l'animation.
 		real m_length;
 		//!\~english The objects depending on this one.	\~french Les objets dépendant de celui-ci.
-		MovingObjectPtrArray m_children;
+		AnimationObjectPtrArray m_children;
 		//!\~english The cumulative animation transformations.	\~french Les transformations cumulées de l'animation.
 		Castor::Matrix4x4r m_cumulativeTransform;
 		//!\~english The matrix holding transformation at current time.	\~french La matrice de transformation complète au temps courant de l'animation.
@@ -466,6 +466,6 @@ namespace Castor3D
 	};
 }
 
-#include "MovingObjectBase.inl"
+#include "AnimationObjectBase.inl"
 
 #endif

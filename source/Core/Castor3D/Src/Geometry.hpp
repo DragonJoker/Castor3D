@@ -201,17 +201,6 @@ namespace Castor3D
 		C3D_API void SetMaterial( SubmeshSPtr p_submesh, MaterialSPtr p_material );
 		/**
 		 *\~english
-		 *\brief		Gets this instance shader program flags.
-		 *\param[in]	p_submesh	The submesh.
-		 *\return		The program flags.
-		 *\~french
-		 *\brief		Récupère les indicateurs de programme shader pour cette instance.
-		 *\param[in]	p_submesh	Le sous-maillage.
-		 *\return		Les indicateurs de programme.
-		 */
-		C3D_API uint32_t GetProgramFlags( Submesh & p_submesh );
-		/**
-		 *\~english
 		 *\brief		Retrieves the mesh
 		 *\return		The mesh
 		 *\~french
@@ -268,7 +257,7 @@ namespace Castor3D
 		 */
 		inline AnimatedObjectSPtr const & GetAnimatedObject()const
 		{
-			return m_pAnimatedObject;
+			return m_animatedObject;
 		}
 		/**
 		 *\~english
@@ -280,7 +269,7 @@ namespace Castor3D
 		 */
 		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
 		{
-			m_pAnimatedObject = p_object;
+			m_animatedObject = p_object;
 		}
 
 	protected:
@@ -295,7 +284,7 @@ namespace Castor3D
 		//!\~english Tells if the geometry is visible	\~french Dit si la géométrie est visible
 		bool m_visible;
 		//!\~english The animated object instance, if any	\~french L'instance d'objet animé, s'il y en a un
-		AnimatedObjectSPtr m_pAnimatedObject;
+		AnimatedObjectSPtr m_animatedObject;
 		//!\~english The submeshes materials	\~french Les matériaux des sous maillages
 		std::map< SubmeshSPtr, MaterialSPtr > m_submeshesMaterials;
 	};

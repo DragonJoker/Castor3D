@@ -268,6 +268,11 @@ bool SceneFileParser::ParseFile( Path const & p_pathFile )
 		Castor::ZipArchive l_archive( l_path, File::eOPEN_MODE_READ );
 		l_path = Engine::GetEngineDirectory() / p_pathFile.GetFileName();
 
+		if ( File::DirectoryExists( l_path ) )
+		{
+			File::DirectoryDelete( l_path );
+		}
+
 		if ( l_archive.Inflate( l_path ) )
 		{
 			PathArray l_files;

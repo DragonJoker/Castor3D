@@ -3,7 +3,7 @@
 namespace Castor3D
 {
 	template< class KeyFrameType, typename T >
-	KeyFrameType & MovingObjectBase::DoAddKeyFrame( real p_from, std::map< real, KeyFrameType > & p_map, T const & p_value )
+	KeyFrameType & AnimationObjectBase::DoAddKeyFrame( real p_from, std::map< real, KeyFrameType > & p_map, T const & p_value )
 	{
 		auto l_it = p_map.find( p_from );
 
@@ -21,7 +21,7 @@ namespace Castor3D
 	}
 
 	template< class KeyFrameType >
-	void MovingObjectBase::DoRemoveKeyFrame( real p_time, std::map< real, KeyFrameType > & p_map )
+	void AnimationObjectBase::DoRemoveKeyFrame( real p_time, std::map< real, KeyFrameType > & p_map )
 	{
 		auto l_it = p_map.find( p_time );
 
@@ -32,7 +32,7 @@ namespace Castor3D
 	}
 
 	template< eINTERPOLATOR_MODE Mode, class ValueType, class KeyFrameType >
-	ValueType MovingObjectBase::DoCompute( real p_time, std::map< real, KeyFrameType > const & p_map, ValueType const & p_default )
+	ValueType AnimationObjectBase::DoCompute( real p_time, std::map< real, KeyFrameType > const & p_map, ValueType const & p_default )
 	{
 		ValueType l_return( p_default );
 		auto l_itCur = std::find_if( p_map.begin(), p_map.end(), [&p_time]( std::pair< real, KeyFrameType > const & p_pair )

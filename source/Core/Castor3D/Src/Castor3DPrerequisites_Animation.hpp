@@ -49,18 +49,18 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	typedef enum eMOVING_OBJECT_TYPE CASTOR_TYPE( uint8_t )
+	typedef enum eANIMATION_OBJECT_TYPE CASTOR_TYPE( uint8_t )
 	{
-		eMOVING_OBJECT_TYPE_NODE,
-		eMOVING_OBJECT_TYPE_OBJECT,
-		eMOVING_OBJECT_TYPE_BONE,
-	}	eMOVING_OBJECT_TYPE;
+		eANIMATION_OBJECT_TYPE_NODE,
+		eANIMATION_OBJECT_TYPE_OBJECT,
+		eANIMATION_OBJECT_TYPE_BONE,
+	}	eANIMATION_OBJECT_TYPE;
 
 	class Animable;
-	class MovingObjectBase;
-	class MovingObject;
-	class MovingBone;
-	class MovingNode;
+	class AnimationObjectBase;
+	class SkeletonAnimationObject;
+	class SkeletonAnimationBone;
+	class SkeletonAnimationNode;
 	class Animation;
 	class AnimatedObject;
 	class AnimatedObjectGroup;
@@ -77,10 +77,10 @@ namespace Castor3D
 	using Castor::UInt64StrMap;
 
 	DECLARE_SMART_PTR( AnimatedObject );
-	DECLARE_SMART_PTR( MovingObjectBase );
-	DECLARE_SMART_PTR( MovingObject );
-	DECLARE_SMART_PTR( MovingBone );
-	DECLARE_SMART_PTR( MovingNode );
+	DECLARE_SMART_PTR( AnimationObjectBase );
+	DECLARE_SMART_PTR( SkeletonAnimationObject );
+	DECLARE_SMART_PTR( SkeletonAnimationBone );
+	DECLARE_SMART_PTR( SkeletonAnimationNode );
 	DECLARE_SMART_PTR( Animation );
 	DECLARE_SMART_PTR( AnimatedObjectGroup );
 	DECLARE_SMART_PTR( Bone );
@@ -98,7 +98,7 @@ namespace Castor3D
 	//! AnimatedObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
-	DECLARE_MAP( Castor::String, MovingObjectBaseSPtr, MovingObjectPtrStr );
+	DECLARE_MAP( Castor::String, AnimationObjectBaseSPtr, AnimationObjectPtrStr );
 	//! VertexWeight pointer array
 	DECLARE_VECTOR( VertexWeight, VertexWeight );
 	//! Animation pointer array
@@ -106,7 +106,7 @@ namespace Castor3D
 	//! Bone pointer array
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
 	//! MovingObject pointer array
-	DECLARE_VECTOR( MovingObjectBaseSPtr, MovingObjectPtr );
+	DECLARE_VECTOR( AnimationObjectBaseSPtr, AnimationObjectPtr );
 
 	//@}
 }

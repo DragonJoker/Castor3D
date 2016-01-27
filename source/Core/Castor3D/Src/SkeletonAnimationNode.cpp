@@ -1,4 +1,4 @@
-#include "MovingNode.hpp"
+#include "SkeletonAnimationNode.hpp"
 
 #include "Animation.hpp"
 
@@ -8,12 +8,12 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	MovingNode::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< MovingNode >( p_path )
+	SkeletonAnimationNode::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< SkeletonAnimationNode >( p_path )
 	{
 	}
 
-	bool MovingNode::BinaryParser::Fill( MovingNode const & p_obj, BinaryChunk & p_chunk )const
+	bool SkeletonAnimationNode::BinaryParser::Fill( SkeletonAnimationNode const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_MOVING_BONE );
@@ -25,7 +25,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = MovingObjectBase::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = AnimationObjectBase::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
 		if ( l_return )
@@ -37,7 +37,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool MovingNode::BinaryParser::Parse( MovingNode & p_obj, BinaryChunk & p_chunk )const
+	bool SkeletonAnimationNode::BinaryParser::Parse( SkeletonAnimationNode & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		String l_name;
@@ -56,7 +56,7 @@ namespace Castor3D
 					break;
 
 				default:
-					l_return = MovingObjectBase::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+					l_return = AnimationObjectBase::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 					break;
 				}
 			}
@@ -72,25 +72,25 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MovingNode::MovingNode( String const & p_name )
-		: MovingObjectBase( eMOVING_OBJECT_TYPE_NODE )
+	SkeletonAnimationNode::SkeletonAnimationNode( String const & p_name )
+		: AnimationObjectBase( eANIMATION_OBJECT_TYPE_NODE )
 		, m_name( p_name )
 	{
 	}
 
-	MovingNode :: ~MovingNode()
+	SkeletonAnimationNode :: ~SkeletonAnimationNode()
 	{
 	}
 
-	void MovingNode::DoApply()
+	void SkeletonAnimationNode::DoApply()
 	{
 		m_finalTransform = m_nodeTransform;
 	}
 
-	MovingObjectBaseSPtr MovingNode::DoClone( Animation & p_animation )
+	AnimationObjectBaseSPtr SkeletonAnimationNode::DoClone( Animation & p_animation )
 	{
-		auto l_return = std::make_shared< MovingNode >( m_name );
-		p_animation.AddMovingObject( l_return, l_return );
+		auto l_return = std::make_shared< SkeletonAnimationNode >( m_name );
+		p_animation.AddObject( l_return, l_return );
 		return l_return;
 	}
 

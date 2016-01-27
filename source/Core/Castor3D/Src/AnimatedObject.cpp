@@ -6,7 +6,7 @@
 #include "MatrixFrameVariable.hpp"
 #include "Mesh.hpp"
 #include "MovableObject.hpp"
-#include "MovingObjectBase.hpp"
+#include "AnimationObjectBase.hpp"
 #include "Skeleton.hpp"
 
 using namespace Castor;
@@ -44,7 +44,7 @@ namespace Castor3D
 
 				for ( auto l_animation : m_playingAnimations )
 				{
-					MovingObjectBaseSPtr l_moving = l_animation->GetMovingObject( l_bone );
+					auto l_moving = l_animation->GetObject( l_bone );
 
 					if ( l_moving )
 					{

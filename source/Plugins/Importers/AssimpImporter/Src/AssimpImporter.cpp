@@ -6,7 +6,7 @@
 #include <Bone.hpp>
 #include <MeshManager.hpp>
 #include <SceneManager.hpp>
-#include <MovingObjectBase.hpp>
+#include <AnimationObjectBase.hpp>
 
 #include <Logger.hpp>
 
@@ -597,11 +597,11 @@ namespace C3dAssimp
 		return l_animation;
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, MovingObjectBaseSPtr p_object )
+	void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectBaseSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode->mName.data );
 		const aiNodeAnim * l_aiNodeAnim = detail::FindNodeAnim( p_aiAnimation, l_name );
-		MovingObjectBaseSPtr l_object;
+		AnimationObjectBaseSPtr l_object;
 
 		if ( l_aiNodeAnim )
 		{
@@ -612,11 +612,11 @@ namespace C3dAssimp
 
 			if ( l_itBone != p_skeleton->end() )
 			{
-				l_object = p_animation->AddMovingObject( *l_itBone, p_object );
+				l_object = p_animation->AddObject( *l_itBone, p_object );
 			}
 			else
 			{
-				l_object = p_animation->AddMovingObject( p_aiNode->mName.C_Str(), p_object );
+				l_object = p_animation->AddObject( p_aiNode->mName.C_Str(), p_object );
 			}
 
 			// We treat translations
@@ -644,7 +644,7 @@ namespace C3dAssimp
 
 		if ( !l_object )
 		{
-			l_object = p_animation->AddMovingObject( p_aiNode->mName.C_Str(), p_object );
+			l_object = p_animation->AddObject( p_aiNode->mName.C_Str(), p_object );
 		}
 
 		if ( p_object )
