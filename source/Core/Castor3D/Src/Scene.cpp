@@ -1386,7 +1386,7 @@ namespace Castor3D
 			p_pipeline.ApplyMatrices( *l_matrixBuffer, ( 0xFFFFFFFFFFFFFFFF & ~p_excludedMtxFlags ) );
 			auto l_animated = p_geometry.GetAnimatedObject();
 
-			if ( l_animated )
+			if ( l_animated && l_animated->IsPlayingAnimation() )
 			{
 				Matrix4x4rFrameVariableSPtr l_variable;
 				l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_variable );
@@ -1430,7 +1430,7 @@ namespace Castor3D
 					{
 						p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
 						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
-						DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() );
+						DoBindPass( p_technique, p_pipeline, *l_pass, l_renderNode.m_geometry->GetProgramFlags( *l_renderNode.m_submesh ) );
 						l_renderNode.m_submesh->Draw( *l_pass );
 						DoUnbindPass( *l_pass );
 					}
@@ -1465,7 +1465,7 @@ namespace Castor3D
 						}
 
 						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_itSubmeshes.second[0].m_geometry, MASK_MTXMODE_MODEL );
-						DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() | ePROGRAM_FLAG_INSTANCIATION );
+						DoBindPass( p_technique, p_pipeline, *l_pass, l_itSubmeshes.second[0].m_geometry->GetProgramFlags( *l_itSubmeshes.second[0].m_submesh ) | ePROGRAM_FLAG_INSTANCIATION );
 						l_itSubmeshes.second[0].m_submesh->Draw( *l_pass );
 						DoUnbindPass( *l_pass );
 					}
@@ -1475,7 +1475,7 @@ namespace Castor3D
 						{
 							p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
 							DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
-							DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() );
+							DoBindPass( p_technique, p_pipeline, *l_pass, l_renderNode.m_geometry->GetProgramFlags( *l_renderNode.m_submesh ) );
 							l_renderNode.m_submesh->Draw( *l_pass );
 							DoUnbindPass( *l_pass );
 						}
@@ -1499,7 +1499,7 @@ namespace Castor3D
 			{
 				p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
 				DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
-				DoBindPass( p_technique, p_pipeline, *l_pass, l_submesh->GetProgramFlags() );
+				DoBindPass( p_technique, p_pipeline, *l_pass, l_renderNode.m_geometry->GetProgramFlags( *l_renderNode.m_submesh ) );
 				l_renderNode.m_submesh->Draw( *l_pass );
 				DoUnbindPass( *l_pass );
 			}

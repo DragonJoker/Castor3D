@@ -193,6 +193,16 @@ namespace Castor3D
 		{
 			return m_skeleton.lock();
 		}
+		/**
+		 *\~english
+		 *\return		\p true if the object is playing an animation.
+		 *\~french
+		 *\return		\p true si l'objet joue une animation.
+		 */
+		inline bool IsPlayingAnimation()const
+		{
+			return !m_playingAnimations.empty();
+		}
 
 	private:
 		void DoSetGeometry( GeometrySPtr p_geometry );

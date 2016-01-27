@@ -1,5 +1,6 @@
 ﻿#include "Geometry.hpp"
 
+#include "AnimatedObject.hpp"
 #include "Engine.hpp"
 #include "Material.hpp"
 #include "MaterialManager.hpp"
@@ -262,6 +263,23 @@ namespace Castor3D
 		else
 		{
 			Logger::LogError( cuT( "Geometry::GetMaterial - Wrong submesh" ) );
+		}
+
+		return l_return;
+	}
+	
+	uint32_t Geometry::GetProgramFlags( Submesh & p_submesh )
+	{
+		uint32_t l_return = p_submesh.GetProgramFlags();
+
+		if ( ( l_return & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+		{
+			auto l_animated = GetAnimatedObject();
+
+			if ( !l_animated || !l_animated->IsPlayingAnimation() )
+			{
+				l_return &= ~ePROGRAM_FLAG_SKINNING;
+			}
 		}
 
 		return l_return;
