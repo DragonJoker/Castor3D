@@ -158,12 +158,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving node.
+		 *\param[in]	p_name		The node name.
 		 *\param[in]	p_parent	The moving object's parent.
 		 *\~french
 		 *\brief		Crée et ajoute un noeud mouvant.
+		 *\param[in]	p_name		Le nom du noeud.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API MovingObjectBaseSPtr AddMovingObject( MovingObjectBaseSPtr p_parent );
+		C3D_API MovingObjectBaseSPtr AddMovingObject( Castor::String const & p_name, MovingObjectBaseSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving object.

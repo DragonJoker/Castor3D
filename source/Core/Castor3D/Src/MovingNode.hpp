@@ -90,11 +90,13 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_name	The node name.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_name	Le nom du noeud.
 		 */
-		C3D_API MovingNode();
+		C3D_API MovingNode( Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -110,7 +112,10 @@ namespace Castor3D
 		 *\brief		Récupère le nom de l'objet
 		 *\return		Le nom
 		 */
-		C3D_API virtual Castor::String const & GetName()const;
+		C3D_API virtual Castor::String const & GetName()const
+		{
+			return m_name;
+		}
 
 	private:
 		virtual void DoApply();
@@ -118,7 +123,6 @@ namespace Castor3D
 
 	private:
 		Castor::String m_name;
-		static uint32_t s_count;
 	};
 }
 

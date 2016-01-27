@@ -75,10 +75,6 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgramBase::DoGetVertexShaderSource
 		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_programFlags )const;
-		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::DoGetVertexShaderSource
-		 */
 		virtual Castor::String DoRetrieveLinkerLog();
 
 	private:

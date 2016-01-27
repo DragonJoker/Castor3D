@@ -226,7 +226,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english Bones informations binary size	\~french Taille en octets des informations des bones
-		static const uint32_t sm_uiSizeBon = uint32_t( 4 * ( sizeof( real ) + sizeof( uint32_t ) ) );
+		static const uint32_t sm_uiSizeBon = uint32_t( C3D_MAX_BONES_PER_VERTEX * ( sizeof( real ) + sizeof( uint32_t ) ) );
 		//!\~english Bones informations buffer offset	\~french Offset dans le buffer des informations des bones
 		static const uint32_t sm_uiOffsetBon = sm_uiOffsetTex + sm_uiSizeTex;
 	};

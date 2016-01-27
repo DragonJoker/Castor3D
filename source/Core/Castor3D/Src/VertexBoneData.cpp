@@ -5,12 +5,9 @@ using namespace Castor;
 namespace Castor3D
 {
 	stVERTEX_BONE_DATA::stVERTEX_BONE_DATA()
+		: m_ids{}
+		, m_weights{}
 	{
-		for ( int i = 0; i < C3D_MAX_BONES_PER_VERTEX; ++i )
-		{
-			m_ids[i] = 0;
-			m_weights[i] = 0.0_r;
-		}
 	}
 
 	void stVERTEX_BONE_DATA::AddBoneData( uint32_t p_boneId, real p_weight )

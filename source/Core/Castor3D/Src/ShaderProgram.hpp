@@ -442,15 +442,6 @@ namespace Castor3D
 		C3D_API FrameVariablePtrList const & GetFrameVariables( eSHADER_TYPE p_type )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
-		 */
-		C3D_API Castor::String GetVertexShaderSource( uint32_t p_uiProgramFlags )const;
-		/**
-		 *\~english
 		 *\brief		Cleans the program up
 		 *\~french
 		 *\brief		Nettoie le programme
@@ -623,15 +614,6 @@ namespace Castor3D
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
 		virtual OneTextureFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Combinaison de ePROGRAM_FLAG
-		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const = 0;
 
 	protected:
 		//!<\~english The program status	\~french Le statut du programme

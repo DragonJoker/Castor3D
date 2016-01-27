@@ -103,6 +103,10 @@ namespace GlRender
 		*/
 		virtual Castor3D::ShaderProgramBaseSPtr CreateBillboardsProgram( Castor3D::RenderTechniqueBase const & p_technique, uint32_t p_flags );
 		/**
+		*\copydoc		Castor3D::RenderSystem::GetVertexShaderSource
+		*/
+		virtual Castor::String GlRenderSystem::GetVertexShaderSource( uint32_t p_programFlags );
+		/**
 		 *\copydoc		Castor3D::RenderSystem::GetPipelineImpl
 		 */
 		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()

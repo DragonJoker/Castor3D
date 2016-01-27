@@ -1079,8 +1079,10 @@ namespace Castor3D
 
 		if ( GetSkeleton() )
 		{
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_IDS, eELEMENT_TYPE_4INTS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS, eELEMENT_TYPE_4FLOATS ) );
+			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_3INTS ) );
+			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_3INTS ) );
+			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_3FLOATS ) );
+			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_3FLOATS ) );
 		}
 
 		m_declaration = std::make_shared< BufferDeclaration >( &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );

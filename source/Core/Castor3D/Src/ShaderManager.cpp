@@ -77,7 +77,7 @@ namespace Castor3D
 			if ( l_return )
 			{
 				eSHADER_MODEL l_model = GetOwner()->GetRenderSystem()->GetMaxShaderModel();
-				l_return->SetSource( eSHADER_TYPE_VERTEX, l_model, l_return->GetVertexShaderSource( p_programFlags ) );
+				l_return->SetSource( eSHADER_TYPE_VERTEX, l_model, GetOwner()->GetRenderSystem()->GetVertexShaderSource( p_programFlags ) );
 				l_return->SetSource( eSHADER_TYPE_PIXEL, l_model, p_technique.GetPixelShaderSource( p_textureFlags ) );
 
 				CreateTextureVariables( *l_return, p_textureFlags );
@@ -130,7 +130,7 @@ namespace Castor3D
 			l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxTexture[i], 1 );
 		}
 
-		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxBones, 100 );
+		l_pMatrixBuffer->CreateVariable( p_shader, eFRAME_VARIABLE_TYPE_MAT4X4R, Pipeline::MtxBones, 400 );
 		p_shader.AddFrameVariableBuffer( l_pMatrixBuffer, p_shaderMask );
 		return l_pMatrixBuffer;
 	}

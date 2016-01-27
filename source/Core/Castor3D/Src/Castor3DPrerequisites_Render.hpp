@@ -286,8 +286,10 @@ namespace Castor3D
 		eELEMENT_USAGE_TEXCOORDS1,		//!< Texture coordinates 1
 		eELEMENT_USAGE_TEXCOORDS2,		//!< Texture coordinates 2
 		eELEMENT_USAGE_TEXCOORDS3,		//!< Texture coordinates 3
-		eELEMENT_USAGE_BONE_IDS,		//!< Bone IDs
-		eELEMENT_USAGE_BONE_WEIGHTS,	//!< Bone weights
+		eELEMENT_USAGE_BONE_IDS0,		//!< Bone IDs 0
+		eELEMENT_USAGE_BONE_IDS1,		//!< Bone IDs 1
+		eELEMENT_USAGE_BONE_WEIGHTS0,	//!< Bone weights 0
+		eELEMENT_USAGE_BONE_WEIGHTS1,	//!< Bone weights 1
 		eELEMENT_USAGE_COUNT,
 	}	eELEMENT_USAGE;
 	/*!
@@ -302,15 +304,15 @@ namespace Castor3D
 	typedef enum eELEMENT_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		eELEMENT_TYPE_1FLOAT,	//!< 1 float
-		eELEMENT_TYPE_2FLOATS,	//!< 2 floats
-		eELEMENT_TYPE_3FLOATS,	//!< 3 floats
-		eELEMENT_TYPE_4FLOATS,	//!< 4 floats
-		eELEMENT_TYPE_COLOUR,	//!< colour (uint32_t)
-		eELEMENT_TYPE_1INT,		//!< 1 int (4 bytes each)
-		eELEMENT_TYPE_2INTS,	//!< 2 ints (4 bytes each)
-		eELEMENT_TYPE_3INTS,	//!< 3 ints (4 bytes each)
-		eELEMENT_TYPE_4INTS,	//!< 4 ints (4 bytes each)
+		eELEMENT_TYPE_1FLOAT,		//!< 1 float (GLSL float)
+		eELEMENT_TYPE_2FLOATS,		//!< 2 floats (GLSL vec2)
+		eELEMENT_TYPE_3FLOATS,		//!< 3 floats (GLSL vec3)
+		eELEMENT_TYPE_4FLOATS,		//!< 4 floats (GLSL vec4)
+		eELEMENT_TYPE_COLOUR,		//!< colour (uint32_t)
+		eELEMENT_TYPE_1INT,			//!< 1 int (4 bytes each, GLSL int)
+		eELEMENT_TYPE_2INTS,		//!< 2 ints (4 bytes each, GLSL ivec2)
+		eELEMENT_TYPE_3INTS,		//!< 3 ints (4 bytes each, GLSL ivec3)
+		eELEMENT_TYPE_4INTS,		//!< 4 ints (4 bytes each, GLSL ivec4)
 		eELEMENT_TYPE_COUNT,
 	}	eELEMENT_TYPE;
 

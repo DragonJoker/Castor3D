@@ -390,6 +390,15 @@ namespace Castor3D
 		C3D_API virtual ShaderProgramBaseSPtr CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
 		/**
 		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
+		 *\param[in]	p_programFlags	Combinaison de ePROGRAM_FLAG
+		 */
+		C3D_API virtual Castor::String GetVertexShaderSource( uint32_t p_programFlags ) = 0;
+		/**
+		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type
 		 *\param[in]	p_type	The shader type
 		 *\~french

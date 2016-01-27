@@ -34,6 +34,7 @@ namespace GlRender
 		struct SamplerBuffer;
 		struct Sampler1D;
 		struct Sampler2D;
+		struct Sampler2DRect;
 		struct Sampler3D;
 
 		class LightingModel;
@@ -264,7 +265,7 @@ namespace GlRender
 	UNIFORM( l_matrices, Mat4, c3d_mtxTexture1 );\
 	UNIFORM( l_matrices, Mat4, c3d_mtxTexture2 );\
 	UNIFORM( l_matrices, Mat4, c3d_mtxTexture3 );\
-	UNIFORM_ARRAY( l_matrices, Mat4, c3d_mtxBones, 100 );\
+	UNIFORM_ARRAY( l_matrices, Mat4, c3d_mtxBones, 400 );\
 	l_matrices.End();
 
 #define UBO_PASS( Writer )\

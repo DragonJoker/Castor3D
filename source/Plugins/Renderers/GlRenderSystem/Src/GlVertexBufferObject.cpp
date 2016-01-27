@@ -46,12 +46,20 @@ namespace GlRender
 				l_name = cuT( "texture" );
 				break;
 
-			case eELEMENT_USAGE_BONE_IDS:
-				l_name = cuT( "bone_ids" );
+			case eELEMENT_USAGE_BONE_IDS0:
+				l_name = cuT( "bone_ids0" );
 				break;
 
-			case eELEMENT_USAGE_BONE_WEIGHTS:
-				l_name = cuT( "weights" );
+			case eELEMENT_USAGE_BONE_IDS1:
+				l_name = cuT( "bone_ids1" );
+				break;
+
+			case eELEMENT_USAGE_BONE_WEIGHTS0:
+				l_name = cuT( "weights0" );
+				break;
+
+			case eELEMENT_USAGE_BONE_WEIGHTS1:
+				l_name = cuT( "weights1" );
 				break;
 			}
 

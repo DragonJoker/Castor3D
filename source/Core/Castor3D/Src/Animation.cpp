@@ -229,10 +229,10 @@ namespace Castor3D
 		}
 	}
 
-	MovingObjectBaseSPtr Animation::AddMovingObject( MovingObjectBaseSPtr p_parent )
+	MovingObjectBaseSPtr Animation::AddMovingObject( Castor::String const & p_name, MovingObjectBaseSPtr p_parent )
 	{
-		std::shared_ptr< MovingNode > l_return = std::make_shared< MovingNode >();
-		String l_name = MovingName[eMOVING_OBJECT_TYPE_NODE] + l_return->GetName();
+		std::shared_ptr< MovingNode > l_return = std::make_shared< MovingNode >( p_name );
+		String l_name = MovingName[eMOVING_OBJECT_TYPE_NODE] + p_name;
 		auto l_it = m_toMove.find( l_name );
 
 		if ( l_it == m_toMove.end() )

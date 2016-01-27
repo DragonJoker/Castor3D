@@ -150,6 +150,8 @@ namespace C3dAssimp
 
 	MeshSPtr AssimpImporter::DoImportMesh()
 	{
+		m_mapBoneByID.clear();
+		m_arrayBones.clear();
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
@@ -190,14 +192,9 @@ namespace C3dAssimp
 
 			if ( l_aiScene )
 			{
-				SkeletonSPtr l_skeleton;
-
-				if ( l_aiScene->HasAnimations() )
-				{
-					l_skeleton = std::make_shared< Skeleton >();
-					l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
-					m_mesh->SetSkeleton( l_skeleton );
-				}
+				SkeletonSPtr l_skeleton = std::make_shared< Skeleton >();
+				l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
+				m_mesh->SetSkeleton( l_skeleton );
 
 				if ( l_aiScene->HasMeshes() )
 				{
@@ -213,21 +210,61 @@ namespace C3dAssimp
 						l_create = DoProcessMesh( l_skeleton, l_aiScene->mMeshes[i], l_aiScene, l_submesh );
 					}
 
-					if ( l_aiScene->HasAnimations() && l_skeleton )
+					if ( l_skeleton->begin() == l_skeleton->end() )
 					{
-						for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
+						m_mesh->SetSkeleton( nullptr );
+						l_skeleton.reset();
+					}
+
+					if ( l_skeleton )
+					{
+						if ( l_aiScene->HasAnimations() )
 						{
-							DoProcessAnimation( l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] );
+							for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
+							{
+								DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] );
+							}
 						}
+
+						l_importer.FreeScene();
+
+						if ( string::upper_case( m_fileName.GetExtension() ) == cuT( "MD5MESH" ) )
+						{
+							// Workaround to load multiple animations with MD5 models.
+							PathArray l_files;
+							File::ListDirectoryFiles( m_fileName.GetPath(), l_files );
+
+							for ( auto l_file : l_files )
+							{
+								if ( string::lower_case( l_file.GetExtension() ) == cuT( "md5anim" ) )
+								{
+									// The .md5anim with the same name as the .md5mesh has already been loaded by assimp.
+									if ( l_file.GetFileName() != m_fileName.GetFileName() )
+									{
+										auto l_scene = l_importer.ReadFile( l_file, l_flags );
+
+										for ( uint32_t i = 0; i < l_scene->mNumAnimations; ++i )
+										{
+											DoProcessAnimation( l_file.GetFileName(), l_skeleton, l_scene->mRootNode, l_scene->mAnimations[i] );
+										}
+
+										l_importer.FreeScene();
+									}
+								}
+							}
+						}
+					}
+					else
+					{
+						l_importer.FreeScene();
 					}
 				}
 				else
 				{
 					GetOwner()->GetMeshManager().Remove( l_meshName );
 					m_mesh.reset();
+					l_importer.FreeScene();
 				}
-
-				l_importer.FreeScene();
 			}
 			else
 			{
@@ -545,13 +582,13 @@ namespace C3dAssimp
 		}
 	}
 
-	AnimationSPtr AssimpImporter::DoProcessAnimation( SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
+	AnimationSPtr AssimpImporter::DoProcessAnimation( String const & p_name, SkeletonSPtr p_skeleton, aiNode * p_node, aiAnimation * p_aiAnimation )
 	{
 		String l_name = string::string_cast< xchar >( p_aiAnimation->mName.C_Str() );
 
 		if ( l_name.empty() )
 		{
-			l_name = m_fileName.GetFileName();
+			l_name = p_name;
 		}
 
 		AnimationSPtr l_animation = p_skeleton->CreateAnimation( l_name );
@@ -579,7 +616,7 @@ namespace C3dAssimp
 			}
 			else
 			{
-				l_object = p_animation->AddMovingObject( p_object );
+				l_object = p_animation->AddMovingObject( p_aiNode->mName.C_Str(), p_object );
 			}
 
 			// We treat translations
@@ -607,7 +644,7 @@ namespace C3dAssimp
 
 		if ( !l_object )
 		{
-			l_object = p_animation->AddMovingObject( p_object );
+			l_object = p_animation->AddMovingObject( p_aiNode->mName.C_Str(), p_object );
 		}
 
 		if ( p_object )
