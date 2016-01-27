@@ -105,7 +105,7 @@ namespace GlRender
 		/**
 		*\copydoc		Castor3D::RenderSystem::GetVertexShaderSource
 		*/
-		virtual Castor::String GlRenderSystem::GetVertexShaderSource( uint32_t p_programFlags );
+		virtual Castor::String GetVertexShaderSource( uint32_t p_programFlags );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::GetPipelineImpl
 		 */
