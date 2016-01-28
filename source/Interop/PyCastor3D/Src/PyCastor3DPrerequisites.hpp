@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -579,10 +579,149 @@ namespace cpy
 	{
 		return MemberRetValueSetter< Value, Class >( p_function );
 	}
+
+	inline void IndexError()
+	{
+		PyErr_SetString( PyExc_IndexError, "Index out of range" );
+	}
+
+	template< class T >
+	struct std_vector_wrapper
+	{
+		using vector_type = T;
+		using value_type = typename vector_type::value_type;
+
+		static inline value_type & get( vector_type & x, int i )
+		{
+			if ( i<0 )
+			{
+				i += x.size();
+			}
+
+			if ( i >= 0 && i < x.size() )
+			{
+				return x[i];
+			}
+
+			IndexError();
+		}
+
+		static inline void set( vector_type & x, int i, value_type const & v )
+		{
+			if ( i < 0 )
+			{
+				i += x.size();
+			}
+
+			if ( i >= 0 && i < x.size() )
+			{
+				x[i] = v;
+			}
+			else
+			{
+				IndexError();
+			}
+		}
+
+		static inline void del( vector_type & x, int i )
+		{
+			if ( i < 0 )
+			{
+				i += x.size();
+			}
+
+			if ( i >= 0 && i < x.size() )
+			{
+				x.erase( i );
+			}
+			else
+			{
+				IndexError();
+			}
+		}
+
+		static inline void add( vector_type & x, value_type const & v )
+		{
+			x.push_back( v );
+		}
+	};
+
+	template< class Cont, class Func >
+	inline py::class_< Cont > make_vector_wrapper( std::string const & p_name, Func p_accessor )
+	{
+		return py::class_< Cont >( p_name.c_str() )
+		.def( "__len__", &Cont::size )
+		.def( "clear", &Cont::clear )
+		.def( "append", &std_vector_wrapper< Cont >::add,
+			py::with_custodian_and_ward<1,2>()) // to let container keep value
+		.def( "__getitem__", &std_vector_wrapper< Cont >::get,
+			py::return_value_policy< py::copy_non_const_reference >() )
+		.def( "__setitem__", &std_vector_wrapper< Cont >::set,
+			py::with_custodian_and_ward< 1, 2 >()) // to let container keep value
+		.def( "__delitem__", &std_vector_wrapper< Cont >::del )
+		;
+	}
+
+	inline void KeyError()
+	{
+		PyErr_SetString( PyExc_KeyError, "Key not found" );
+	}
+
+	template< class T >
+	struct std_map_wrapper
+	{
+		using map_type = T;
+		using key_type = typename map_type::key_type;
+		using mapped_type = typename map_type::mapped_type;
+
+		static inline mapped_type & get( map_type & x, key_type const & i )
+		{
+			auto it = x.find( i );
+
+			if( it != x.end() ) 
+			{
+				return it->second;
+			}
+
+			KeyError();
+		}
+
+		static inline void set( map_type & x, key_type const & i, mapped_type const & v )
+		{
+			x[i] = v;
+		}
+
+		static inline void del( map_type & x, key_type const & i )
+		{
+			auto it = x.find( i );
+
+			if( it != x.end() ) 
+			{
+				x.erase( i );
+			}
+			else
+			{
+				KeyError();
+			}
+		}
+	};
+
+	template< class Cont, class Func >
+	inline py::class_< Cont > make_map_wrapper( std::string const & p_name, Func p_accessor )
+	{
+		return py::class_< Cont >( p_name.c_str() )
+		.def( "__len__", &Cont::size )
+		.def( "clear", &Cont::clear )
+		.def( "__getitem__", &std_map_wrapper< Cont >::get,
+			py::return_value_policy< py::copy_non_const_reference >() )
+		.def( "__setitem__", &std_map_wrapper< Cont >::set,
+			py::with_custodian_and_ward< 1, 2 >() ) // to let container keep value
+		.def( "__delitem__", &std_map_wrapper< Cont >::del )
+		;
+	}
 }
 
 extern void ExportCastorUtils();
 extern void ExportCastor3D();
 
 #endif
-
