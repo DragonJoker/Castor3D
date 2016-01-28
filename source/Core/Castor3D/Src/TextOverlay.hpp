@@ -307,11 +307,11 @@ namespace Castor3D
 		struct DisplayableChar
 		{
 			//!\~english The character to display	\~french Le caractère à afficher.
-			char32_t m_char;
+			Castor::Glyph * m_glyph;
 			//!\~english The character position, relative to its line.	\~french La position du caractère, relative à sa ligne.
 			double m_left;
-			//!\~english The character size.	\~french Les dimensions du caractère.
-			Point2d m_size;
+			//!\~english The character dimensions.	\~french Les dimensions du caractère.
+			Castor::Point2d m_size;
 		};
 		/*!
 		\author 	Sylvain DOREMUS
@@ -326,9 +326,9 @@ namespace Castor3D
 			//!\~english The displayable characters.	\~french Les caractères affichables.
 			std::vector< DisplayableChar > m_characters;
 			//!\~english The line position.	\~french La position de la ligne.
-			Point2d m_position;
-			//!\~english The line dimensions.	\~french Les dimensions de la ligne.
-			Point2d m_size;
+			Castor::Point2d m_position;
+			//!\~english The line width.	\~french La largeur de la ligne.
+			double m_width;
 		};
 		using DisplayableLineArray = std::vector< DisplayableLine >;
 		/**
@@ -345,59 +345,51 @@ namespace Castor3D
 		 *\remarks		Takes care of vertical alignment to retrieve the right vertical offset.
 		 *\param[in]	p_renderSize	The render size.
 		 *\param[in]	p_size			The overlay dimensions.
-		 *\param[out]	p_offset		Receives the vertical offset.
 		 *\return		The lines.
 		 *\~french
 		 *\brief		Calcule les lignes à afficher.
 		 *\remarks		Prend en compte l'alignement vertical, pour calculer le décalage vertical.
 		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
 		 *\param[in]	p_size			The overlay dimensions.
-		 *\param[out]	p_offset		Receives the vertical offset.
 		 *\return		Les lignes.
 		 */
-		C3D_API DisplayableLineArray DoPrepareText( Size const & p_renderSize, Castor::Point2d const & p_size, double & p_offset );
+		C3D_API DisplayableLineArray DoPrepareText( Castor::Size const & p_renderSize, Castor::Point2d const & p_size );
 		/**
 		 *\~english
 		 *\brief		Adds a word to the vertex buffer.
 		 *\param[in]	p_renderSize	The render size.
 		 *\param[in]	p_word			The word to add.
 		 *\param[in]	p_wordWidth		The word width.
-		 *\param[in]	p_position		The word position.
 		 *\param[in]	p_size			The overlay size.
-		 *\param[out]	p_lineWidth		The line width.
+		 *\param[out]	p_left			The left position.
+		 *\param[out]	p_line			The line.
+		 *\param[out]	p_lines			The lines.
 		 *\~french
 		 *\brief		Ajoute un mot au tampon de sommets.
 		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
 		 *\param[in]	p_word			Le mot à ajouter.
 		 *\param[in]	p_wordWidth		La largeur du mot.
-		 *\param[in]	p_position		La position du mot.
 		 *\param[in]	p_size			La taille de l'incrustation.
-		 *\param[out]	p_lineWidth		La largeur de la ligne.
+		 *\param[out]	p_left			La position à gauche.
+		 *\param[out]	p_line			La ligne.
+		 *\param[out]	p_lines			Les lignes.
 		 */
 		C3D_API void DoPrepareWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines );
 		/**
 		 *\~english
-		 *\brief		Adds a word to the vertex buffer.
-		 *\param[in]	p_renderSize	The render size.
-		 *\param[in]	p_word			The word to add.
-		 *\param[in]	p_wordWidth		The word width.
-		 *\param[in]	p_position		The word position.
-		 *\param[in]	p_size			The overlay size.
-		 *\param[out]	p_lineWidth		The line width.
-		 *\param[out]	p_lineVtx		The line.
-		 *\param[out]	p_linesVtx		The lines.
+		 *\brief		Fills the line, and jumps to the next one.
+		 *\param[in]	p_size	The overlay size.
+		 *\param[out]	p_left	The left position.
+		 *\param[out]	p_line	The line.
+		 *\param[out]	p_lines	The lines.
 		 *\~french
-		 *\brief		Ajoute un mot au tampon de sommets.
-		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
-		 *\param[in]	p_word			Le mot à ajouter.
-		 *\param[in]	p_wordWidth		La largeur du mot.
-		 *\param[in]	p_position		La position du mot.
-		 *\param[in]	p_size			La taille de l'incrustation.
-		 *\param[out]	p_lineWidth		La largeur de la ligne.
-		 *\param[out]	p_lineVtx		La ligne.
-		 *\param[out]	p_linesVtx		Les lignes.
+		 *\brief		Finit la ligne et passe à la ligne suivante.
+		 *\param[in]	p_size	La taille de l'incrustation.
+		 *\param[out]	p_left	La position à gauche.
+		 *\param[out]	p_line	La ligne.
+		 *\param[out]	p_lines	Les lignes.
 		 */
-		C3D_API void DoWriteWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, double p_verticalOffset, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		C3D_API void DoFinishLine( Castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines );
 		/**
 		 *\~english
 		 *\brief		Horizontally align a line.
