@@ -42,11 +42,19 @@ function( DividersBuild )
 endfunction( DividersBuild )
 
 function( DividersSummary msg )
-	set( msg_tmp "\n\nSubdividers :" )
-	set( msg_tmp "${msg_tmp}\n    PN-Triangles        ${PNTri}" )
-	set( msg_tmp "${msg_tmp}\n    Loop                ${Loop}" )
-	set( msg_tmp "${msg_tmp}\n    Phong               ${Phong}" )
-	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
+	if ( ${CASTOR_BUILDGRP_DIVIDER} )
+		set( msg_tmp "\n\nSubdividers :" )
+		if( ${CASTOR_BUILD_DIVIDER_PNTRIANGLES} )
+			set( msg_tmp "${msg_tmp}\n    PN-Triangles        ${PNTri}" )
+		endif()
+		if( ${CASTOR_BUILD_DIVIDER_LOOP} )
+			set( msg_tmp "${msg_tmp}\n    Loop                ${Loop}" )
+		endif()
+		if( ${CASTOR_BUILD_DIVIDER_PHONG} )
+			set( msg_tmp "${msg_tmp}\n    Phong               ${Phong}" )
+		endif()
+		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
+	endif ()
 endfunction( DividersSummary )
 
 function( DividersSetup )
@@ -69,7 +77,7 @@ function( DividersSetup )
 				INSTALL_TYPES Full
 			)
 		endif()
-		if( ${CASTOR_BUILD_DIVIDER_PNTRIANGLES} )
+		if( ${CASTOR_BUILD_DIVIDER_PHONG} )
 			cpack_add_component( PhongDivider
 				DISPLAY_NAME "PhongDivider"
 				DESCRIPTION "Allows the mesh subdivision using Phong tessellation."

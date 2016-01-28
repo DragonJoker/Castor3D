@@ -60,6 +60,8 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 	endif()
 	
 	link_directories( ${Boost_LIBRARY_DIR} )
+	#link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
+	#link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
 
 	add_target( 
 		${PROJECT_NAME}
@@ -78,7 +80,7 @@ if ( wxWidgets_FOUND AND GTK2_FOUND )
 			LIBRARY_OUTPUT_NAME_RELEASE castor_wx
 			RUNTIME_OUTPUT_NAME_RELEASE castor_wx
 			ARCHIVE_OUTPUT_NAME_RELEASE castor_wx
-			FOLDER "Bindings"
+			FOLDER "Interop"
 	)
 
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

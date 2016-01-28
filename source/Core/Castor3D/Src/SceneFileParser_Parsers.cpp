@@ -412,7 +412,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 			}
 		}
 
-		for ( auto l_it : l_engine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_POSTFX ) )
+		for ( auto l_it : l_engine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_POSTFX ) )
 		{
 			l_plugin = std::static_pointer_cast< PostFxPlugin, PluginBase >( l_it.second );
 
@@ -814,7 +814,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneImport )
 		ImporterSPtr l_pImporter;
 		ImporterPlugin::ExtensionArray l_arrayExtensions;
 
-		for ( auto l_it : l_pEngine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_IMPORTER ) )
+		for ( auto l_it : l_pEngine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 		{
 			l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
 
@@ -1487,7 +1487,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		ImporterSPtr l_pImporter;
 		ImporterPlugin::ExtensionArray l_arrayExtensions;
 
-		for ( auto l_it : l_pEngine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_IMPORTER ) )
+		for ( auto l_it : l_pEngine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
 		{
 			l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
 
@@ -1531,7 +1531,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 		p_params[0]->Get( l_name );
 		p_params[1]->Get( l_count );
 
-		for ( auto l_it : l_pEngine->GetPluginManager().GetPluginsList( ePLUGIN_TYPE_DIVIDER ) )
+		for ( auto l_it : l_pEngine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_DIVIDER ) )
 		{
 			l_pPlugin = std::static_pointer_cast< DividerPlugin, PluginBase >( l_it.second );
 

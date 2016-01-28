@@ -194,7 +194,7 @@ if ( MSVC )
 			COMPONENT ${PROJECT_NAME}
 		)
 		
-		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Bindings/ComCastor3D" )
+		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop/ComCastor3D" )
 		add_target_astyle( ${PROJECT_NAME} ".hpp;.inl;.cpp" )
 		set( Build "yes (version ${CMC_VERSION_MAJOR}.${CMC_VERSION_MINOR}.${CMC_VERSION_BUILD})" PARENT_SCOPE )
 

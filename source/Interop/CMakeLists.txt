@@ -1,9 +1,9 @@
-option( CASTOR_BUILDGRP_BINDING "Build Castor3D binding plugins" TRUE )
-option( CASTOR_BUILD_BINDING_PYCASTOR3D "Build Python Castor3D binding" TRUE )
-option( CASTOR_BUILD_BINDING_PYGUICOMMON "Build Python GuiCommon binding" TRUE )
-option( CASTOR_BUILD_BINDING_COM "Build COM Castor3D binding" TRUE )
+option( CASTOR_BUILDGRP_INTEROP "Build Castor3D binding plugins" TRUE )
+option( CASTOR_BUILD_INTEROP_PYCASTOR3D "Build Python Castor3D binding" TRUE )
+option( CASTOR_BUILD_INTEROP_PYGUICOMMON "Build Python GuiCommon binding" TRUE )
+option( CASTOR_BUILD_INTEROP_COM "Build COM Castor3D binding" TRUE )
 
-function( BindingsInit )
+function( InteropInit )
 	set( PyC3D "no (Not wanted)" PARENT_SCOPE )
 	set( PyGui "no (Not wanted)" PARENT_SCOPE )
 	if ( MSVC )
@@ -11,15 +11,15 @@ function( BindingsInit )
 	else ()
 		set( ComC3D "no (Not available)" PARENT_SCOPE )
 	endif ()
-endfunction( BindingsInit )
+endfunction( InteropInit )
 
-function( BindingsBuild )
-	if( ${CASTOR_BUILDGRP_BINDING} )
-		if ( ${CASTOR_BUILD_BINDING_PYCASTOR3D} OR ${CASTOR_BUILD_BINDING_PYGUICOMMON} )
+function( InteropBuild )
+	if( ${CASTOR_BUILDGRP_INTEROP} )
+		if ( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} OR ${CASTOR_BUILD_INTEROP_PYGUICOMMON} )
 			find_package( PythonLibs )
 
 			if ( PYTHONLIBS_FOUND )
-				set( Boost_USE_STATIC_LIBS ON )
+			#set( Boost_USE_STATIC_LIBS ON )
 				find_package( Boost OPTIONAL_COMPONENTS python )
 
 				if ( Boost_PYTHON_FOUND )
@@ -40,15 +40,15 @@ function( BindingsBuild )
 						endif ()
 					endforeach()
 
-					if( ${CASTOR_BUILD_BINDING_PYCASTOR3D} )
+					if( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} )
 						set( Build ${PyC3D} )
-						add_subdirectory( Bindings/PyCastor3D )
+					add_subdirectory( Interop/PyCastor3D )
 						set( PyC3D ${Build} PARENT_SCOPE )
 					endif()
 
-					if( ${CASTOR_BUILD_BINDING_PYGUICOMMON} )
+					if( ${CASTOR_BUILD_INTEROP_PYGUICOMMON} )
 						set( Build ${PyGui} )
-						add_subdirectory( Bindings/PyGuiCommon )
+					add_subdirectory( Interop/PyGuiCommon )
 						set( PyGui ${Build} PARENT_SCOPE )
 					endif()
 				else ()
@@ -61,9 +61,9 @@ function( BindingsBuild )
 			endif ()
 		endif ()
 
-		if( ${CASTOR_BUILD_BINDING_COM} )
+		if( ${CASTOR_BUILD_INTEROP_COM} )
 			set( Build ${ComC3D} )
-			add_subdirectory( Bindings/ComCastor3D )
+		add_subdirectory( Interop/ComCastor3D )
 			set( ComC3D ${Build} PARENT_SCOPE )
 		endif()
 
@@ -77,47 +77,55 @@ function( BindingsBuild )
 			PARENT_SCOPE
 		)
 	endif ()
-endfunction( BindingsBuild )
+endfunction( InteropBuild )
 
-function( BindingsSummary msg )
-	set( msg_tmp "\n\nBindings :" )
-	set( msg_tmp "${msg_tmp}\n    PyCastor3D          ${PyC3D}" )
-	set( msg_tmp "${msg_tmp}\n    PyGuiCommon         ${PyGui}" )
-	set( msg_tmp "${msg_tmp}\n    COM                 ${ComC3D}" )
-	SET( msg "${msg}${msg_tmp}" PARENT_SCOPE )
-endfunction( BindingsSummary )
+function( InteropSummary msg )
+	if ( ${CASTOR_BUILDGRP_INTEROP} )
+		set( msg_tmp "\n\nInteroperability :" )
+		if ( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} )
+			set( msg_tmp "${msg_tmp}\n    PyCastor3D          ${PyC3D}" )
+		endif ()
+		if ( ${CASTOR_BUILD_INTEROP_PYGUICOMMON} )
+			set( msg_tmp "${msg_tmp}\n    PyGuiCommon         ${PyGui}" )
+		endif ()
+		if ( ${CASTOR_BUILD_INTEROP_COM} )
+			set( msg_tmp "${msg_tmp}\n    COM                 ${ComC3D}" )
+		endif ()
+		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
+	endif ()
+endfunction( InteropSummary )
 
-function( BindingsSetup )
-	if ( ${CASTOR_BUILDGRP_BINDING} )
-		cpack_add_component_group( Bindings
+function( InteropSetup )
+if ( ${CASTOR_BUILDGRP_INTEROP} )
+	cpack_add_component_group( Interoperability
 			DESCRIPTION "Bindings to use Castor3D in other languages (C# and Python yet)"
 		)
 
-		if( ${CASTOR_BUILD_BINDING_PYCASTOR3D} )
+		if( ${CASTOR_BUILD_INTEROP_PYCASTOR3D} )
 			cpack_add_component( PyCastor3D
 				DISPLAY_NAME "PyCastor3D library"
 				DESCRIPTION "Python binding for Castor3D"
-				GROUP Bindings
+			GROUP Interoperability
 				INSTALL_TYPES Full
 			)
 		endif()
 
-		if( ${CASTOR_BUILD_BINDING_PYGUICOMMON} )
+		if( ${CASTOR_BUILD_INTEROP_PYGUICOMMON} )
 			cpack_add_component( PyGuiCommon
 				DISPLAY_NAME "PyGuiCommon library"
 				DESCRIPTION "Python binding for GuiCommon"
-				GROUP Bindings
+			GROUP Interoperability
 				INSTALL_TYPES Full
 			)
 		endif()
 
-		if( ${CASTOR_BUILD_BINDING_COM} )
+		if( ${CASTOR_BUILD_INTEROP_COM} )
 			cpack_add_component( ComCastor3D
 				DISPLAY_NAME "ComCastor3D library"
 				DESCRIPTION "COM binding for Castor3D"
-				GROUP Bindings
+			GROUP Interoperability
 				INSTALL_TYPES Full
 			)
 		endif()
 	endif ()
-endfunction( BindingsSetup )
+endfunction( InteropSetup )

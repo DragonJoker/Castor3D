@@ -164,6 +164,18 @@ namespace Castor3D
 		C3D_API void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
+		 *\brief		Retrieves the font name.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère le nom de la police.
+		 *\return		La valeur.
+		 */
+		C3D_API Castor::String const & GetFontName()const
+		{
+			return GetFontTexture()->GetFontName();
+		}
+		/**
+		 *\~english
 		 *\return		\p true if this overlay's has changed.
 		 *\~french
 		 *\return		\p true si cette incrustation a changé.

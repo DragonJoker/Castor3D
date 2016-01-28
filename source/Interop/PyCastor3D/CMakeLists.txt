@@ -1,5 +1,7 @@
 project( PyCastor3D )
 
+link_directories( ${BOOST_LIBRARY_DIR} )
+
 set( PYC_VERSION_MAJOR 0 )
 set( PYC_VERSION_MINOR 7 )
 set( PYC_VERSION_BUILD 0 )
@@ -11,6 +13,8 @@ include_directories( ${Boost_INCLUDE_DIR} )
 include_directories( ${PYTHON_INCLUDE_DIR} )
 
 link_directories( ${Boost_LIBRARY_DIR} )
+#link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
+#link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
 
 add_target( 
 	PyCastor3D
@@ -31,7 +35,7 @@ set_target_properties( PyCastor3D
 		LIBRARY_OUTPUT_NAME_RELEASE castor
 		RUNTIME_OUTPUT_NAME_RELEASE castor
 		ARCHIVE_OUTPUT_NAME_RELEASE castor
-		FOLDER "Bindings"
+		FOLDER "Interop"
 )
 
 add_target_astyle( PyCastor3D ".h;.hpp;.inl;.cpp" )
