@@ -11,7 +11,6 @@
 #include "NewSphereDialog.hpp"
 #include "NewTorusDialog.hpp"
 #include "NewMaterialDialog.hpp"
-#include "RenderEngine.hpp"
 
 #include <ImagesLoader.hpp>
 #include <MaterialsList.hpp>
@@ -653,7 +652,6 @@ namespace CastorShape
 		EVT_MENU( eSelect, MainFrame::OnSelect )
 		EVT_MENU( eModify, MainFrame::OnModify )
 		EVT_MENU( eNone, MainFrame::OnNothing )
-		EVT_MENU( eRender, MainFrame::OnRender )
 		EVT_TOOL( eFile, MainFrame::OnFileMenu )
 		EVT_TOOL( eNew, MainFrame::OnNewMenu )
 		EVT_TOOL( eSettings, MainFrame::OnSettingsMenu )
@@ -1370,13 +1368,6 @@ namespace CastorShape
 			}
 		}
 
-		p_event.Skip();
-	}
-
-	void MainFrame::OnRender( wxCommandEvent & p_event )
-	{
-		RenderEngine renderEngine( cuT( "Scene.tga" ), m_mainScene.lock() );
-		renderEngine.Draw();
 		p_event.Skip();
 	}
 

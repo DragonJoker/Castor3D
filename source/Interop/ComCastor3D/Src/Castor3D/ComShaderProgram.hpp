@@ -62,8 +62,6 @@ namespace CastorCom
 			m_internal = pass;
 		}
 
-		COM_PROPERTY_INDEXED( EntryPoint, eSHADER_TYPE, BSTR, make_indexed_getter( m_internal.get(), &Castor3D::ShaderProgramBase::GetEntryPoint ), make_indexed_putter( m_internal.get(), &Castor3D::ShaderProgramBase::SetEntryPoint ) );
-
 		STDMETHOD( get_File )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [out, retval] */ BSTR * pVal );
 		STDMETHOD( put_File )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [in] */ BSTR val );
 		STDMETHOD( get_Source )( /* [in] */ eSHADER_TYPE target, /* [in] */ eSHADER_MODEL model, /* [out, retval] */ BSTR * pVal );

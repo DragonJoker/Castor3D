@@ -67,10 +67,6 @@ namespace CastorCom
 		COM_PROPERTY( Name, BSTR, make_getter( m_internal.get(), &Castor3D::Scene::GetName ), make_putter( m_internal.get(), &Castor3D::Scene::SetName ) );
 		COM_PROPERTY( AmbientLight, IColour *, make_getter( m_internal.get(), &Castor3D::Scene::GetAmbientLight ), make_putter( m_internal.get(), &Castor3D::Scene::SetAmbientLight ) );
 
-		COM_PROPERTY_GET( NodesCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Scene::GetNodesCount ) );
-		COM_PROPERTY_GET( LightsCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Scene::GetLightsCount ) );
-		COM_PROPERTY_GET( GeometriesCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Scene::GetGeometriesCount ) );
-		COM_PROPERTY_GET( CamerasCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Scene::GetCamerasCount ) );
 		COM_PROPERTY_GET( RootNode, ISceneNode *, make_getter( m_internal.get(), &Castor3D::Scene::GetRootNode ) );
 		COM_PROPERTY_GET( ObjectRootNode, ISceneNode *, make_getter( m_internal.get(), &Castor3D::Scene::GetObjectRootNode ) );
 		COM_PROPERTY_GET( CameraRootNode, ISceneNode *, make_getter( m_internal.get(), &Castor3D::Scene::GetCameraRootNode ) );
@@ -89,10 +85,6 @@ namespace CastorCom
 		STDMETHOD( RemoveNode )( /* [in] */ ISceneNode * node );
 		STDMETHOD( RemoveGeometry )( /* [in] */ IGeometry * geometry );
 		STDMETHOD( RemoveCamera )( /* [in] */ ICamera * camera );
-		STDMETHOD( RemoveAllLights )();
-		STDMETHOD( RemoveAllNodes )();
-		STDMETHOD( RemoveAllGeometries )();
-		STDMETHOD( RemoveAllCameras )();
 		STDMETHOD( GetBackgroundImage )( /* [out, retval] */ ITextureBase ** pVal );
 
 	private:

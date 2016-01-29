@@ -1139,8 +1139,6 @@ interface IShaderProgram
 	[propput, id( 1 ), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT File( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [in] BSTR val );
 	[propget, id( 2 ), helpstring( "Retrieves the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [out, retval] BSTR * pVal );
 	[propput, id( 2 ), helpstring( "Sets the shader source for the shader object of wanted type" )] HRESULT Source( [in] eSHADER_TYPE target, [in] eSHADER_MODEL model, [in] BSTR val );
-	[propget, id( 3 ), helpstring( "Retrieves the entry point for the shader object of wanted type" )] HRESULT EntryPoint( [in] eSHADER_TYPE target, [out, retval] BSTR * pVal );
-	[propput, id( 3 ), helpstring( "Sets the entry point for the shader object of wanted type" )] HRESULT EntryPoint( [in] eSHADER_TYPE target, [in] BSTR val );
 	[id( 4 ), helpstring( "Initialises the shader program" )] HRESULT Initialise();
 	[id( 5 ), helpstring( "Cleans the shader program up" )] HRESULT Cleanup();
 	[id( 6 ), helpstring( "Creates the shader object of wanted type" )] HRESULT CreateObject( [in] eSHADER_TYPE val );
@@ -1249,10 +1247,6 @@ interface IScene
 	[propput, id( 2 ), helpstring( "The scene name" )] HRESULT Name( [in] BSTR val );
 	[propget, id( 3 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [out, retval] IColour ** pVal );
 	[propput, id( 3 ), helpstring( "The ambient light colour" )] HRESULT AmbientLight( [in] IColour * val );
-	[propget, id( 4 ), helpstring( "The nodes count" )] HRESULT NodesCount( [out, retval] unsigned int * pVal );
-	[propget, id( 5 ), helpstring( "The lights count" )] HRESULT LightsCount( [out, retval] unsigned int * pVal );
-	[propget, id( 6 ), helpstring( "The geometries count" )] HRESULT GeometriesCount( [out, retval] unsigned int * pVal );
-	[propget, id( 7 ), helpstring( "The cameras count" )] HRESULT CamerasCount( [out, retval] unsigned int * pVal );
 	[propget, id( 8 ), helpstring( "The root scene node" )] HRESULT RootNode( [out, retval] ISceneNode ** pVal );
 	[propget, id( 9 ), helpstring( "The objects root scene node" )] HRESULT ObjectRootNode( [out, retval] ISceneNode ** pVal );
 	[propget, id( 10 ), helpstring( "The cameras root scene node" )] HRESULT CameraRootNode( [out, retval] ISceneNode ** pVal );
@@ -1270,10 +1264,6 @@ interface IScene
 	[id( 22 ), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
 	[id( 23 ), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
 	[id( 24 ), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
-	[id( 25 ), helpstring( "Removes all lights from the scene" )] HRESULT RemoveAllLights();
-	[id( 26 ), helpstring( "Removes all scene nodes from the scene" )] HRESULT RemoveAllNodes();
-	[id( 27 ), helpstring( "Removes all geometries from the scene" )] HRESULT RemoveAllGeometries();
-	[id( 29 ), helpstring( "Removes all cameras from the scene" )] HRESULT RemoveAllCameras();
 	[id( 30 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITextureBase ** pVal );
 };
 
@@ -1353,12 +1343,14 @@ interface IMovableObject
 interface ILightCategory
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The light ambient value" )] HRESULT Ambient( [out, retval] IColour ** pVal );
-	[propput, id( 1 ), helpstring( "The light ambient value" )] HRESULT Ambient( [in] IColour * val );
-	[propget, id( 2 ), helpstring( "The light diffuse value" )] HRESULT Diffuse( [out, retval] IColour ** pVal );
-	[propput, id( 2 ), helpstring( "The light diffuse value" )] HRESULT Diffuse( [in] IColour * val );
-	[propget, id( 3 ), helpstring( "The light specular value" )] HRESULT Specular( [out, retval] IColour ** pVal );
-	[propput, id( 3 ), helpstring( "The light specular value" )] HRESULT Specular( [in] IColour * val );
+	[propget, id( 1 ), helpstring( "The light colour" )] HRESULT Colour( [out, retval] IVector3D ** pVal );
+	[propput, id( 1 ), helpstring( "The light colour" )] HRESULT Colour( [in] IVector3D * val );
+	[propget, id( 2 ), helpstring( "The light ambient intensity" )] HRESULT AmbientIntensity( [out, retval] float * pVal );
+	[propput, id( 2 ), helpstring( "The light ambient intensity" )] HRESULT AmbientIntensity( [in] float val );
+	[propget, id( 3 ), helpstring( "The light diffuse intensity" )] HRESULT DiffuseIntensity( [out, retval] float * pVal );
+	[propput, id( 3 ), helpstring( "The light diffuse intensity" )] HRESULT DiffuseIntensity( [in] float val );
+	[propget, id( 4 ), helpstring( "The light specular intensity" )] HRESULT SpecularIntensity( [out, retval] float * pVal );
+	[propput, id( 4 ), helpstring( "The light specular intensity" )] HRESULT SpecularIntensity( [in] float val );
 };
 
 // IDirectionalLight

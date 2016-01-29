@@ -102,7 +102,6 @@ namespace CastorShape
 		void OnNothing( wxCommandEvent & p_event );
 		void OnSubdivideAllPNTriangles( wxCommandEvent & p_event );
 		void OnSubdivideAllLoop( wxCommandEvent & p_event );
-		void OnRender( wxCommandEvent & p_event );
 		void OnFileMenu( wxCommandEvent & p_event );
 		void OnNewMenu( wxCommandEvent & p_event );
 		void OnSettingsMenu( wxCommandEvent & p_event );

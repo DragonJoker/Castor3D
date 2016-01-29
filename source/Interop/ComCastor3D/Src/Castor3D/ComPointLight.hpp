@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define __COMC3D_COM_TEXTURE_UNIT_H__
 
 #include "ComLightCategory.hpp"
-#include "ComVector3D.hpp"
 
 #include <PointLight.hpp>
 
@@ -63,9 +62,10 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Ambient, IColour *, make_getter( m_internal.get(), &Castor3D::LightCategory::GetAmbient ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetAmbient ) );
-		COM_PROPERTY( Diffuse, IColour *, make_getter( m_internal.get(), &Castor3D::LightCategory::GetDiffuse ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetDiffuse ) );
-		COM_PROPERTY( Specular, IColour *, make_getter( m_internal.get(), &Castor3D::LightCategory::GetSpecular ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetSpecular ) );
+		COM_PROPERTY( Colour, IVector3D *, make_getter( m_internal.get(), &Castor3D::LightCategory::GetColour ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetColour ) );
+		COM_PROPERTY( AmbientIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetAmbientIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetAmbientIntensity ) );
+		COM_PROPERTY( DiffuseIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetDiffuseIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetDiffuseIntensity ) );
+		COM_PROPERTY( SpecularIntensity, float, make_getter( m_internal.get(), &Castor3D::LightCategory::GetSpecularIntensity ), make_putter( m_internal.get(), &Castor3D::LightCategory::SetSpecularIntensity ) );
 		COM_PROPERTY( Position, IVector3D *, make_getter( m_internal.get(), &Castor3D::PointLight::GetPosition ), make_putter( m_internal.get(), &Castor3D::PointLight::SetPosition ) );
 		COM_PROPERTY( Attenuation, IVector3D *, make_getter( m_internal.get(), &Castor3D::PointLight::GetAttenuation ), make_putter( m_internal.get(), &Castor3D::PointLight::SetAttenuation ) );
 

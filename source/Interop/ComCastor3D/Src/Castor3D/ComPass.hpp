@@ -70,7 +70,7 @@ namespace CastorCom
 		COM_PROPERTY( Shininess, float, make_getter( m_internal.get(), &Castor3D::Pass::GetShininess ), make_putter( m_internal.get(), &Castor3D::Pass::SetShininess ) );
 		COM_PROPERTY( TwoSided, boolean, make_getter( m_internal.get(), &Castor3D::Pass::IsTwoSided ), make_putter( m_internal.get(), &Castor3D::Pass::SetTwoSided ) );
 		COM_PROPERTY( Alpha, float, make_getter( m_internal.get(), &Castor3D::Pass::GetAlpha ), make_putter( m_internal.get(), &Castor3D::Pass::SetAlpha ) );
-		COM_PROPERTY( Shader, IShaderProgram *, make_getter( m_internal.get(), &Castor3D::Pass::GetShader< Castor3D::ShaderProgramBase > ), make_putter( m_internal.get(), &Castor3D::Pass::SetShader ) );
+		COM_PROPERTY( Shader, IShaderProgram *, make_getter( m_internal.get(), &Castor3D::Pass::GetShader ), make_putter( m_internal.get(), &Castor3D::Pass::SetShader ) );
 
 		COM_PROPERTY_GET( TextureUnitCount, unsigned int, make_getter( m_internal.get(), &Castor3D::Pass::GetTextureUnitsCount ) );
 
