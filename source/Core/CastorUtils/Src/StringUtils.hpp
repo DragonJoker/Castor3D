@@ -467,7 +467,7 @@ namespace Castor
 				 *\brief		Constructeur.
 				 *\param[in]	p_it	L'itérateur sur la chaîne.
 				*/
-				inline iterator( std::string::const_iterator const & p_it );
+				inline iterator( std::string::iterator const & p_it );
 				/**
 				 *\~english
 				 *\brief		Copy constructor.
@@ -484,17 +484,6 @@ namespace Castor
 				 *\brief		Destructeur.
 				*/
 				inline ~iterator();
-				/**
-				 *\~english
-				 *\brief		Assignment operator.
-				 *\param[in]	p_it	The string iterator.
-				 \return		A reference to this object.
-				 *\~french
-				 *\brief		Opérateur d'affectation.
-				 *\param[in]	p_it	L'itérateur sur la chaîne originale.
-				 \return		Une référence sur cet objet.
-				*/
-				inline iterator & operator=( std::string::const_iterator const & p_it );
 				/**
 				 *\~english
 				 *\brief		Assignment operator.
@@ -597,13 +586,6 @@ namespace Castor
 				 *\~french
 				 *\brief		Opérateur d'égalité.
 				*/
-				inline bool operator==( const std::string::const_iterator & p_it )const;
-				/**
-				 *\~english
-				 *\brief		Equality operator.
-				 *\~french
-				 *\brief		Opérateur d'égalité.
-				*/
 				inline bool operator==( const std::string::iterator & p_it )const;
 				/**
 				 *\~english
@@ -618,14 +600,213 @@ namespace Castor
 				 *\~french
 				 *\brief		Opérateur de différence.
 				*/
-				inline bool operator!=( const std::string::const_iterator & p_it )const;
+				inline bool operator!=( const std::string::iterator & p_it )const;
+				/**
+				 *\~english
+				 *\brief		Retrieves the internal iterator.
+				 *\~french
+				 *\brief		Récupère la'itérateur interne.
+				*/
+				inline std::string::iterator internal()const;
+
+			private:
+				/**
+				 *\~english
+				 *\brief		Computes the cached codepoint.
+				 *\~french
+				 *\brief		Calcule la valeur UTF-8 cachée.
+				*/
+				inline void DoCalculateCurrentCodePoint()const;
+
+			private:
+				//!\~english The internal iterator.
+				std::string::iterator m_it;
+				//!\~english The last computed codepoint.
+				mutable char32_t m_lastCodePoint;
+				//!\~english Tells the codepoint needs recomputing.
+				mutable bool m_dirty;
+			};
+			/**
+			 *\~english
+			 *\brief		Addition operator.
+			 *\param[in]	p_it		The iterator.
+			 *\param[in]	p_offset	The offset to add.
+			 \return		A reference to this object.
+			 *\~french
+			 *\brief		Addition operator.
+			 *\param[in]	p_it		The iterator.
+			 *\param[in]	p_offset	The offset to add.
+			 \return		A reference to this object.
+			*/
+			inline iterator operator+( iterator p_it, size_t p_offset );
+			/**
+			 *\~english
+			 *\brief		Subtraction operator.
+			 *\param[in]	p_it		The iterator.
+			 *\param[in]	p_offset	The offset to subtract.
+			 \return		A reference to this object.
+			 *\~french
+			 *\brief		Subtraction operator.
+			 *\param[in]	p_it		The iterator.
+			 *\param[in]	p_offset	The offset to subtract.
+			 \return		A reference to this object.
+			*/
+			inline iterator operator-( iterator p_it, size_t p_offset );
+			/*!
+			\author		Sylvain Doremus
+			\version	0.8.0
+			\date		09/03/2015
+			\~english
+			\brief		An iterator, to an UTF-8 string
+			\~french
+			\brief		Un itérateur sur une chaîne UTF-8
+			*/
+			class const_iterator
+				: public std::iterator< std::bidirectional_iterator_tag, char32_t, std::string::difference_type, const char32_t *, const char32_t & >
+			{
+			public:
+				/**
+				 *\~english
+				 *\brief		Constructor.
+				 *\param[in]	p_it	The string iterator.
+				 *\~french
+				 *\brief		Constructeur.
+				 *\param[in]	p_it	L'itérateur sur la chaîne.
+				*/
+				inline const_iterator( std::string::const_iterator const & p_it );
+				/**
+				 *\~english
+				 *\brief		Copy constructor.
+				 *\param[in]	p_it	The other object.
+				 *\~french
+				 *\brief		Constructeur par copie.
+				 *\param[in]	p_it	L'autre objet.
+				*/
+				inline const_iterator( const_iterator const & p_it );
+				/**
+				 *\~english
+				 *\brief		Destructor
+				 *\~french
+				 *\brief		Destructeur.
+				*/
+				inline ~const_iterator();
+				/**
+				 *\~english
+				 *\brief		Assignment operator.
+				 *\param[in]	p_it	The string iterator.
+				 \return		A reference to this object.
+				 *\~french
+				 *\brief		Opérateur d'affectation.
+				 *\param[in]	p_it	L'itérateur sur la chaîne originale.
+				 \return		Une référence sur cet objet.
+				*/
+				inline const_iterator & operator=( std::string::const_iterator const & p_it );
+				/**
+				 *\~english
+				 *\brief		Copy assignment operator.
+				 *\param[in]	p_it	The other object.
+				 \return		A reference to this object.
+				 *\~french
+				 *\brief		Opérateur d'affectation.
+				 *\param[in]	p_it	L'autre itérateur.
+				 \return		Une référence sur cet objet.
+				*/
+				inline const_iterator & operator=( const_iterator const & p_it );
+				/**
+				 *\~english
+				 *\brief		Assigment addition operator.
+				 *\param[in]	p_offset	The offset to add.
+				 \return		A reference to this object.
+				 *\~french
+				 *\brief		Opérateur d'affection par addition.
+				 *\param[in]	p_offset	Le décalage à appliquer.
+				 \return		Une référence sur cet objet.
+				*/
+				inline const_iterator & operator+=( size_t p_offset );
+				/**
+				 *\~english
+				 *\brief		Assignment subtraction operator.
+				 *\param[in]	p_offset	The offset to subtract.
+				 \return		A reference to this object.
+				 *\~french
+				 *\brief		Opérateur d'affectation par soustraction.
+				 *\param[in]	p_offset	Ld eécalage à appliquer.
+				 \return		Une référence sur cet objet.
+				*/
+				inline const_iterator & operator-=( size_t p_offset );
+				/**
+				 *\~english
+				 *\brief		Pre-increment operator.
+				 \return		A reference to this object.
+				 *\~english
+				 *\brief		Opérateur de pré-increment.
+				 \return		Une référence sur cet objet.
+				*/
+				inline const_iterator & operator++();
+				/**
+				 *\~english
+				 *\brief		Post-increment operator.
+				 \return		A copy of this iterator, before increment.
+				 *\~french
+				 *\brief		Opérateur de post-increment.
+				 \return		Une copie de cet itérateur, avant l'incrémentation.
+				*/
+				inline const_iterator operator++( int );
+				/**
+				 *\~english
+				 *\brief		Pre-decrement operator.
+				 \return		A reference to this object.
+				 *\~french
+				 *\brief		Opérateur de pré-décrement.
+				 \return		Une référence sur cet objet.
+				*/
+				inline const_iterator & operator--();
+				/**
+				 *\~english
+				 *\brief		Post-decrement operator.
+				 \return		A copy of this iterator, before decrement.
+				 *\~french
+				 *\brief		Opérateur de post-décrement.
+				 \return		Une copie de cet itérateur, avant la décrémentation.
+				*/
+				inline const_iterator operator--( int );
+				/**
+				 *\~english
+				 *\brief		Access to the current codepoint value.
+				 \return		The current codepoint value.
+				 *\~french
+				 *\brief		Accès à la valeur UTF-8 courante.
+				 \return		La valeur.
+				*/
+				inline char32_t operator*()const;
+				/**
+				 *\~english
+				 *\brief		Equality operator.
+				 *\~french
+				 *\brief		Opérateur d'égalité.
+				*/
+				inline bool operator==( const const_iterator & p_it )const;
+				/**
+				 *\~english
+				 *\brief		Equality operator.
+				 *\~french
+				 *\brief		Opérateur d'égalité.
+				*/
+				inline bool operator==( const std::string::const_iterator & p_it )const;
 				/**
 				 *\~english
 				 *\brief		Difference operator.
 				 *\~french
 				 *\brief		Opérateur de différence.
 				*/
-				inline bool operator!=( const std::string::iterator & p_it )const;
+				inline bool operator!=( const const_iterator & p_it )const;
+				/**
+				 *\~english
+				 *\brief		Difference operator.
+				 *\~french
+				 *\brief		Opérateur de différence.
+				*/
+				inline bool operator!=( const std::string::const_iterator & p_it )const;
 				/**
 				 *\~english
 				 *\brief		Retrieves the internal iterator.
@@ -663,7 +844,7 @@ namespace Castor
 			 *\param[in]	p_offset	The offset to add.
 			 \return		A reference to this object.
 			*/
-			inline iterator operator+( iterator p_it, size_t p_offset );
+			inline const_iterator operator+( const_iterator p_it, size_t p_offset );
 			/**
 			 *\~english
 			 *\brief		Subtraction operator.
@@ -676,7 +857,7 @@ namespace Castor
 			 *\param[in]	p_offset	The offset to subtract.
 			 \return		A reference to this object.
 			*/
-			inline iterator operator-( iterator p_it, size_t p_offset );
+			inline const_iterator operator-( const_iterator p_it, size_t p_offset );
 		}
 	}
 	/*!
