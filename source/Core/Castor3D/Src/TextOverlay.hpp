@@ -164,6 +164,13 @@ namespace Castor3D
 		C3D_API void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
+		 *\brief		Loads new glyphs in the caption.
+		 *\~french
+		 *\brief		Charge les nouveaux glyphes dans le texte.
+		 */
+		C3D_API void LoadNewGlyphs();
+		/**
+		 *\~english
 		 *\brief		Retrieves the font name.
 		 *\return		The value.
 		 *\~french
@@ -434,6 +441,8 @@ namespace Castor3D
 		bool m_textChanged;
 		//!\~english The size (in spaces) of tabulation character.	\~french La taille (en espaces) du caractère de tabulation.
 		uint32_t m_tabSize = 4;
+		//!\~english The connection to the FontTexture changed notification signal.	\~french La connexion au signal de notification de changement de la texture.
+		uint32_t m_connection = 0;
 	};
 }
 

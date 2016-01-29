@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include <OwnedBy.hpp>
+#include <Signal.hpp>
 
 namespace Castor3D
 {
@@ -114,6 +115,32 @@ namespace Castor3D
 		{
 			return m_texture;
 		}
+		/**
+		 *\~english
+		 *\brief		Connects a client to the changed notification signal.
+		 *\param[in]	p_function	The client function.
+		 *\return		The connection.
+		 *\~french
+		 *\brief		Connecte un client au signal de notification de changement.
+		 *\param[in]	p_function	La fonction du client.
+		 *\return		La connexion.
+		 */
+		inline uint32_t Connect( std::function< void( FontTexture const & ) > p_function )
+		{
+			return m_signal.connect( p_function );
+		}
+		/**
+		 *\~english
+		 *\brief		Disconnects a client from the changed notification signal.
+		 *\return		The connection.
+		 *\~french
+		 *\brief		Déconnecte un client du signal de notification de changement.
+		 *\return		La connexion.
+		 */
+		inline void Disconnect( uint32_t p_connection )
+		{
+			m_signal.disconnect( p_connection );
+		}
 
 	private:
 		//!\~english The font.	\~french La police.
@@ -124,6 +151,8 @@ namespace Castor3D
 		TextureBaseSPtr m_texture;
 		//!\~english Glyphs positions in the texture.	\~french Position des glyphes.
 		GlyphPositionMap m_glyphsPositions;
+		//!\~english The signal used to notify clients that this texture has changed.	\~french Signal utilisé pour notifier les clients que cette texture a changé.
+		Castor::Signal< std::function< void( FontTexture const & ) > > m_signal;
 	};
 }
 

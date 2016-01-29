@@ -165,7 +165,19 @@ namespace Castor3D
 				l_fontTexture = l_engine->GetOverlayManager().CreateFontTexture( l_pFont );
 			}
 
+			auto l_texture = m_fontTexture.lock();
+
+			if ( m_connection && l_texture )
+			{
+				l_texture->Disconnect( m_connection );
+			}
+
 			m_fontTexture = l_fontTexture;
+
+			m_connection = l_fontTexture->Connect( [this]( FontTexture const & p_texture )
+			{
+				m_textChanged = true;
+			} );
 		}
 		else
 		{
@@ -174,6 +186,33 @@ namespace Castor3D
 
 		l_engine->PostEvent( MakeInitialiseEvent( *this ) );
 		m_textChanged = true;
+	}
+
+	void TextOverlay::LoadNewGlyphs()
+	{
+		FontTextureSPtr l_fontTexture = GetFontTexture();
+		FontSPtr l_font = l_fontTexture->GetFont();
+		std::vector< char32_t > l_new;
+
+		for ( string::utf8::iterator l_it = m_currentCaption.begin(); l_it != m_currentCaption.end(); ++l_it )
+		{
+			if ( !l_font->HasGlyphAt( *l_it ) )
+			{
+				l_new.push_back( *l_it );
+			}
+		}
+
+		if ( !l_new.empty() )
+		{
+			l_fontTexture->Cleanup();
+
+			for ( auto l_char : l_new )
+			{
+				l_font->LoadGlyph( l_char );
+			}
+
+			l_fontTexture->Initialise();
+		}
 	}
 
 	void TextOverlay::DoRender( OverlayRendererSPtr p_renderer )
@@ -244,17 +283,6 @@ namespace Castor3D
 									real l_uvBottom = real( l_uvTopUncropped + l_uvBottomCrop );
 									real l_uvTop = real( l_uvTopUncropped + ( l_char.m_size[1] / l_texDim.height() ) - l_uvTopCrop );
 
-									//int32_t l_left = int32_t( l_ovPosition.x() + l_leftUncropped );
-									//int32_t l_right = int32_t( l_ovPosition.x() + l_leftUncropped + l_char.m_size[0] );
-									//int32_t l_top = int32_t( l_ovPosition.y() + l_topUncropped );
-									//int32_t l_bottom = int32_t( l_ovPosition.y() + l_topUncropped + l_char.m_size[1] );
-
-									//real l_uvLeft = real( l_uvLeftUncropped );
-									//real l_uvRight = real( l_uvLeftUncropped + ( l_char.m_size[0] / l_texDim.width() ) );
-									//// The UV is vertically inverted since the image is bottom-up, and the overlay is drawn top-bottom.
-									//real l_uvBottom = real( l_uvTopUncropped );
-									//real l_uvTop = real( l_uvTopUncropped + ( l_char.m_size[1] / l_texDim.height() ) );
-
 									OverlayCategory::Vertex l_vertexTR = { { l_right, l_top },    { l_uvRight, l_uvTop } };
 									OverlayCategory::Vertex l_vertexTL = { { l_left,  l_top },    { l_uvLeft,  l_uvTop } };
 									OverlayCategory::Vertex l_vertexBL = { { l_left,  l_bottom }, { l_uvLeft,  l_uvBottom } };
@@ -294,17 +322,7 @@ namespace Castor3D
 
 			for ( string::utf8::iterator l_itLine = l_lineText.begin(); l_itLine != l_lineText.end(); ++l_itLine )
 			{
-				Glyph * l_glyph;
-
-				if ( l_font->HasGlyphAt( *l_itLine ) )
-				{
-					l_glyph = &l_font->GetGlyphAt( *l_itLine );
-				}
-				else
-				{
-					// TODO : Check for glyphs that need to be loaded and added to the texture, instead of this thing.
-					l_glyph = &l_font->GetGlyphAt( cuT( '?' ) );
-				}
+				Glyph * l_glyph = &l_font->GetGlyphAt( *l_itLine );
 
 				DisplayableChar l_character = { l_glyph, 0.0, Point2d( double( std::max( l_glyph->GetSize().width(), l_glyph->GetAdvance().width() ) ), double( std::max( l_glyph->GetSize().height(), l_glyph->GetAdvance().height() ) ) ) };
 
@@ -351,6 +369,8 @@ namespace Castor3D
 
 		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK_WORDS )
 		{
+			// The word will overflow the overlay size, so we jump to the next line,
+			// and will write the word on this next line.
 			DoFinishLine( p_size, p_left, p_line, p_lines );
 		}
 
