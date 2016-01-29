@@ -172,7 +172,7 @@ namespace Castor
 
 			//*************************************************************************************************
 
-			iterator::iterator( std::string::const_iterator const & p_it )
+			iterator::iterator( std::string::iterator const & p_it )
 				: m_it( p_it )
 				, m_lastCodePoint( 0 )
 				, m_dirty( true )
@@ -188,14 +188,6 @@ namespace Castor
 
 			iterator::~iterator()
 			{
-			}
-
-			iterator & iterator::operator=( std::string::const_iterator const & p_it )
-			{
-				m_it = p_it;
-				m_lastCodePoint = 0;
-				m_dirty = true;
-				return *this;
 			}
 
 			iterator & iterator::operator=( std::string::iterator const & p_it )
@@ -305,11 +297,6 @@ namespace Castor
 				return m_it == p_it.m_it;
 			}
 
-			bool iterator::operator==( const std::string::const_iterator & p_it )const
-			{
-				return m_it == p_it;
-			}
-
 			bool iterator::operator==( const std::string::iterator & p_it )const
 			{
 				return m_it == p_it;
@@ -320,17 +307,12 @@ namespace Castor
 				return m_it != p_it.m_it;
 			}
 
-			bool iterator::operator!=( const std::string::const_iterator & p_it )const
-			{
-				return m_it != p_it;
-			}
-
 			bool iterator::operator!=( const std::string::iterator & p_it )const
 			{
 				return m_it != p_it;
 			}
 
-			std::string::const_iterator iterator::internal()const
+			std::string::iterator iterator::internal()const
 			{
 				return m_it;
 			}
@@ -356,6 +338,179 @@ namespace Castor
 			iterator operator-( iterator p_it, size_t p_offset )
 			{
 				iterator l_it( p_it );
+				l_it -= p_offset;
+				return l_it;
+			}
+
+			//*************************************************************************************************
+
+			const_iterator::const_iterator( std::string::const_iterator const & p_it )
+				: m_it( p_it )
+				, m_lastCodePoint( 0 )
+				, m_dirty( true )
+			{
+			}
+
+			const_iterator::const_iterator( const_iterator const & p_it )
+				: m_it( p_it.m_it )
+				, m_lastCodePoint( p_it.m_lastCodePoint )
+				, m_dirty( p_it.m_dirty )
+			{
+			}
+
+			const_iterator::~const_iterator()
+			{
+			}
+
+			const_iterator & const_iterator::operator=( std::string::const_iterator const & p_it )
+			{
+				m_it = p_it;
+				m_lastCodePoint = 0;
+				m_dirty = true;
+				return *this;
+			}
+			
+			const_iterator & const_iterator::operator=( const_iterator const & p_it )
+			{
+				m_it = p_it.m_it;
+				m_lastCodePoint = p_it.m_lastCodePoint;
+				m_dirty = p_it.m_dirty;
+				return *this;
+			}
+
+			const_iterator & const_iterator::operator+=( size_t p_offset )
+			{
+				while ( p_offset-- )
+				{
+					++( *this );
+				}
+
+				return *this;
+			}
+
+			const_iterator & const_iterator::operator-=( size_t p_offset )
+			{
+				while ( p_offset-- )
+				{
+					--( *this );
+				}
+
+				return *this;
+			}
+
+			const_iterator & const_iterator::operator++()
+			{
+				char l_firstByte = *m_it;
+				++m_it;
+
+				if ( l_firstByte & FirstBitMask ) // This means the first byte has a value greater than 127, and so is beyond the ASCII range.
+				{
+					++m_it;
+
+					if ( l_firstByte & ThirdBitMask ) // This means that the first byte has a value greater than 224, and so it must be at least a three-octet code point.
+					{
+						++m_it;
+
+						if ( l_firstByte & FourthBitMask ) // This means that the first byte has a value greater than 240, and so it must be a four-octet code point.
+						{
+							++m_it;
+						}
+					}
+				}
+
+				m_dirty = true;
+				return *this;
+			}
+
+			const_iterator const_iterator::operator++( int )
+			{
+				const_iterator temp = *this;
+				++( *this );
+				return temp;
+			}
+
+			const_iterator & const_iterator::operator--()
+			{
+				--m_it;
+
+				if ( *m_it & FirstBitMask ) // This means that the previous byte is not an ASCII character.
+				{
+					--m_it;
+
+					if ( ( *m_it & SecondBitMask ) == 0 )
+					{
+						--m_it;
+
+						if ( ( *m_it & SecondBitMask ) == 0 )
+						{
+							--m_it;
+						}
+					}
+				}
+
+				m_dirty = true;
+				return *this;
+			}
+
+			const_iterator const_iterator::operator--( int )
+			{
+				const_iterator temp = *this;
+				--( *this );
+				return temp;
+			}
+
+			char32_t const_iterator::operator*()const
+			{
+				DoCalculateCurrentCodePoint();
+				return m_lastCodePoint;
+			}
+
+			bool const_iterator::operator==( const const_iterator & p_it )const
+			{
+				return m_it == p_it.m_it;
+			}
+
+			bool const_iterator::operator==( const std::string::const_iterator & p_it )const
+			{
+				return m_it == p_it;
+			}
+
+			bool const_iterator::operator!=( const const_iterator & p_it )const
+			{
+				return m_it != p_it.m_it;
+			}
+
+			bool const_iterator::operator!=( const std::string::const_iterator & p_it )const
+			{
+				return m_it != p_it;
+			}
+
+			std::string::const_iterator const_iterator::internal()const
+			{
+				return m_it;
+			}
+
+			void const_iterator::DoCalculateCurrentCodePoint()const
+			{
+				if ( m_dirty )
+				{
+					m_lastCodePoint = to_utf8( m_it );
+					m_dirty = false;
+				}
+			}
+
+			//*************************************************************************************************
+
+			inline const_iterator operator+( const_iterator p_it, size_t p_offset )
+			{
+				const_iterator l_it( p_it );
+				l_it += p_offset;
+				return l_it;
+			}
+
+			const_iterator operator-( const_iterator p_it, size_t p_offset )
+			{
+				const_iterator l_it( p_it );
 				l_it -= p_offset;
 				return l_it;
 			}

@@ -116,14 +116,13 @@ namespace Castor
 			virtual void Cleanup() = 0;
 			/**
 			 *\~english
-			 *\brief		Loads wanted glyph
-			 *\param[in]	p_glyph	The glyph
-			 *\return		The glyph
+			 *\brief		Loads wanted glyph.
+			 *\param[in]	p_glyph	The glyph.
 			 *\~french
-			 *\brief		Charge le glyphe voulue
-			 *\param[in]	p_glyph	Le glyphe
+			 *\brief		Charge le glyphe voulu.
+			 *\param[in]	p_glyph	Le glyphe.
 			 */
-			virtual int LoadGlyph( Glyph & p_glyph ) = 0;
+			virtual void LoadGlyph( Glyph & p_glyph ) = 0;
 		};
 
 		DECLARE_MAP( char32_t, std::unique_ptr< Glyph >, Glyph );
@@ -162,17 +161,16 @@ namespace Castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API virtual ~Font();
+		CU_API ~Font();
 		/**
 		 *\~english
-		 *\brief		Loads wanted glyph
-		 *\param[in]	p_char	The character
-		 *\return		The glyph
+		 *\brief		Loads wanted glyph.
+		 *\param[in]	p_char	The character.
 		 *\~french
-		 *\brief		Charge le glyphe voulue
-		 *\param[in]	p_char	Le caractère
+		 *\brief		Charge le glyphe voulu.
+		 *\param[in]	p_char	Le caractère.
 		 */
-		CU_API int LoadGlyph( char32_t p_char );
+		CU_API void LoadGlyph( char32_t p_char );
 		/**
 		 *\~english
 		 *\brief		Tells if the font already has load ed the wanted glyph.
@@ -412,7 +410,18 @@ namespace Castor
 			return m_faceName;
 		}
 
-	protected:
+	private:
+		/**
+		 *\~english
+		 *\brief		Loads wanted glyph.
+		 *\param[in]	p_char	The character.
+		 *\~french
+		 *\brief		Charge le glyphe voulu.
+		 *\param[in]	p_char	Le caractère.
+		 */
+		void DoLoadGlyph( char32_t p_char );
+
+	private:
 		//!\~english The height of the font	\~french La hauteur de la police
 		uint32_t m_uiHeight;
 		//!\~english The path of the font file	\~french Le chemin du fichier de la police

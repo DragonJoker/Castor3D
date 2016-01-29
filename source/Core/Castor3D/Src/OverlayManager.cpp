@@ -159,27 +159,6 @@ namespace Castor3D
 		return  l_return;
 	}
 
-	void OverlayManager::DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent )
-	{
-		std::unique_lock< Collection > l_lock( m_elements );
-		m_elements.insert( p_name, p_overlay );
-		int l_level = 0;
-
-		if ( p_parent )
-		{
-			l_level = p_parent->GetLevel() + 1;
-			p_parent->AddChild( p_overlay );
-		}
-
-		if ( l_level > int( m_overlayCountPerLevel.size() ) )
-		{
-			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
-		}
-
-		p_overlay->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
-		m_overlays.insert( p_overlay->GetCategory() );
-	}
-
 	void OverlayManager::Remove( Castor::String const & p_name )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
@@ -226,6 +205,15 @@ namespace Castor3D
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		Update();
+
+		for ( auto l_it : m_elements )
+		{
+			if ( l_it.second->GetCategory()->GetType() == eOVERLAY_TYPE_TEXT )
+			{
+				l_it.second->GetTextOverlay()->LoadNewGlyphs();
+			}
+		}
+
 		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
 		Context * l_context = l_renderSystem->GetCurrentContext();
 
@@ -385,5 +373,26 @@ namespace Castor3D
 		}
 
 		return l_return;
+	}
+
+	void OverlayManager::DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent )
+	{
+		std::unique_lock< Collection > l_lock( m_elements );
+		m_elements.insert( p_name, p_overlay );
+		int l_level = 0;
+
+		if ( p_parent )
+		{
+			l_level = p_parent->GetLevel() + 1;
+			p_parent->AddChild( p_overlay );
+		}
+
+		if ( l_level > int( m_overlayCountPerLevel.size() ) )
+		{
+			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+		}
+
+		p_overlay->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
+		m_overlays.insert( p_overlay->GetCategory() );
 	}
 }

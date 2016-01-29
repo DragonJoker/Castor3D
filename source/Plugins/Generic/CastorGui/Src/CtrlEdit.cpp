@@ -240,9 +240,9 @@ namespace CastorGui
 
 	void EditCtrl::DoAddCharAtCaret( String const & p_char )
 	{
-		size_t l_diff = std::distance( string::utf8::iterator( m_caption.begin() ), m_caretIt );
+		size_t l_diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
 		m_caption = String( m_caption.cbegin(), m_caretIt.internal() ) + p_char + String( m_caretIt.internal(), m_caption.cend() );
-		m_caretIt = string::utf8::iterator( m_caption.begin() ) + l_diff + 1;
+		m_caretIt = string::utf8::const_iterator( m_caption.begin() ) + l_diff + 1;
 		DoUpdateCaption();
 	}
 
@@ -250,9 +250,9 @@ namespace CastorGui
 	{
 		if ( m_caretIt != m_caption.end() )
 		{
-			size_t l_diff = std::distance( string::utf8::iterator( m_caption.begin() ), m_caretIt );
+			size_t l_diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
 			String l_caption( m_caption.cbegin(), m_caretIt.internal() );
-			string::utf8::iterator l_it = m_caretIt;
+			string::utf8::const_iterator l_it = m_caretIt;
 
 			if ( ++l_it != m_caption.end() )
 			{
@@ -260,7 +260,7 @@ namespace CastorGui
 			}
 
 			m_caption = l_caption;
-			m_caretIt = string::utf8::iterator( m_caption.begin() ) + l_diff;
+			m_caretIt = string::utf8::const_iterator( m_caption.begin() ) + l_diff;
 			DoUpdateCaption();
 		}
 	}
@@ -270,9 +270,9 @@ namespace CastorGui
 		if ( m_caretIt != m_caption.begin() )
 		{
 			m_caretIt--;
-			size_t l_diff = std::distance( string::utf8::iterator( m_caption.begin() ), m_caretIt );
+			size_t l_diff = std::distance( string::utf8::const_iterator( m_caption.begin() ), m_caretIt );
 			String l_caption( m_caption.cbegin(), m_caretIt.internal() );
-			string::utf8::iterator l_it = m_caretIt;
+			string::utf8::const_iterator l_it = m_caretIt;
 
 			if ( ++l_it != m_caption.end() )
 			{
@@ -280,7 +280,7 @@ namespace CastorGui
 			}
 
 			m_caption = l_caption;
-			m_caretIt = string::utf8::iterator( m_caption.begin() ) + l_diff;
+			m_caretIt = string::utf8::const_iterator( m_caption.begin() ) + l_diff;
 			DoUpdateCaption();
 		}
 	}

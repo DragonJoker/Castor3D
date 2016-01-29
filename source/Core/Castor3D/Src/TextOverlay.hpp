@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -164,6 +164,13 @@ namespace Castor3D
 		C3D_API void SetFont( Castor::String const & p_strFont );
 		/**
 		 *\~english
+		 *\brief		Loads new glyphs in the caption.
+		 *\~french
+		 *\brief		Charge les nouveaux glyphes dans le texte.
+		 */
+		C3D_API void LoadNewGlyphs();
+		/**
+		 *\~english
 		 *\brief		Retrieves the font name.
 		 *\return		The value.
 		 *\~french
@@ -216,7 +223,7 @@ namespace Castor3D
 		 */
 		inline Castor::String GetCaption()const
 		{
-			return m_strCaption;
+			return m_currentCaption;
 		}
 		/**
 		 *\~english
@@ -228,7 +235,7 @@ namespace Castor3D
 		 */
 		inline void SetCaption( Castor::String const & p_strCaption )
 		{
-			m_strCaption = p_strCaption;
+			m_currentCaption = p_strCaption;
 			m_textChanged = true;
 		}
 		/**
@@ -295,7 +302,42 @@ namespace Castor3D
 			m_vAlign = p_align;
 		}
 
-	protected:
+	private:
+		/*!
+		\author 	Sylvain DOREMUS
+		\date 		28/01/2016
+		\~english
+		\brief		A character, along with its size and relative position.
+		\~french
+		\brief		Un caractère, avec ses dimensions et sa position relative.
+		*/
+		struct DisplayableChar
+		{
+			//!\~english The character to display	\~french Le caractère à afficher.
+			Castor::Glyph * m_glyph;
+			//!\~english The character position, relative to its line.	\~french La position du caractère, relative à sa ligne.
+			double m_left;
+			//!\~english The character dimensions.	\~french Les dimensions du caractère.
+			Castor::Point2d m_size;
+		};
+		/*!
+		\author 	Sylvain DOREMUS
+		\date 		28/01/2016
+		\~english
+		\brief		A text line, along with its size and position.
+		\~french
+		\brief		Une ligne de texte, avec ses dimensions et sa position.
+		*/
+		struct DisplayableLine
+		{
+			//!\~english The displayable characters.	\~french Les caractères affichables.
+			std::vector< DisplayableChar > m_characters;
+			//!\~english The line position.	\~french La position de la ligne.
+			Castor::Point2d m_position;
+			//!\~english The line width.	\~french La largeur de la ligne.
+			double m_width;
+		};
+		using DisplayableLineArray = std::vector< DisplayableLine >;
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
@@ -306,59 +348,85 @@ namespace Castor3D
 		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
 		/**
 		 *\~english
+		 *\brief		Computes the lines to display.
+		 *\remarks		Takes care of vertical alignment to retrieve the right vertical offset.
+		 *\param[in]	p_renderSize	The render size.
+		 *\param[in]	p_size			The overlay dimensions.
+		 *\return		The lines.
+		 *\~french
+		 *\brief		Calcule les lignes à afficher.
+		 *\remarks		Prend en compte l'alignement vertical, pour calculer le décalage vertical.
+		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
+		 *\param[in]	p_size			The overlay dimensions.
+		 *\return		Les lignes.
+		 */
+		C3D_API DisplayableLineArray DoPrepareText( Castor::Size const & p_renderSize, Castor::Point2d const & p_size );
+		/**
+		 *\~english
 		 *\brief		Adds a word to the vertex buffer.
 		 *\param[in]	p_renderSize	The render size.
 		 *\param[in]	p_word			The word to add.
 		 *\param[in]	p_wordWidth		The word width.
-		 *\param[in]	p_position		The word position.
 		 *\param[in]	p_size			The overlay size.
-		 *\param[out]	p_lineWidth		The line width.
-		 *\param[out]	p_lineVtx		The line.
-		 *\param[out]	p_linesVtx		The lines.
+		 *\param[out]	p_left			The left position.
+		 *\param[out]	p_line			The line.
+		 *\param[out]	p_lines			The lines.
 		 *\~french
 		 *\brief		Ajoute un mot au tampon de sommets.
 		 *\param[in]	p_renderSize	Les dimensions de la zone de rendu.
 		 *\param[in]	p_word			Le mot à ajouter.
 		 *\param[in]	p_wordWidth		La largeur du mot.
-		 *\param[in]	p_position		La position du mot.
 		 *\param[in]	p_size			La taille de l'incrustation.
-		 *\param[out]	p_lineWidth		La largeur de la ligne.
-		 *\param[out]	p_lineVtx		La ligne.
-		 *\param[out]	p_linesVtx		Les lignes.
+		 *\param[out]	p_left			La position à gauche.
+		 *\param[out]	p_line			La ligne.
+		 *\param[out]	p_lines			Les lignes.
 		 */
-		C3D_API void DoWriteWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, Castor::Point2d & p_position, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		C3D_API void DoPrepareWord( Castor::Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines );
+		/**
+		 *\~english
+		 *\brief		Fills the line, and jumps to the next one.
+		 *\param[in]	p_size	The overlay size.
+		 *\param[out]	p_left	The left position.
+		 *\param[out]	p_line	The line.
+		 *\param[out]	p_lines	The lines.
+		 *\~french
+		 *\brief		Finit la ligne et passe à la ligne suivante.
+		 *\param[in]	p_size	La taille de l'incrustation.
+		 *\param[out]	p_left	La position à gauche.
+		 *\param[out]	p_line	La ligne.
+		 *\param[out]	p_lines	Les lignes.
+		 */
+		C3D_API void DoFinishLine( Castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines );
 		/**
 		 *\~english
 		 *\brief		Horizontally align a line.
 		 *\param[in]	p_width		The overlay width.
-		 *\param[out]	p_lineWidth	The line width.
 		 *\param[out]	p_lineVtx	The line.
 		 *\param[out]	p_linesVtx	The lines.
 		 *\~french
 		 *\brief		Aligne horizontalement une ligne.
 		 *\param[in]	p_width		La largeur de l'incrustation.
-		 *\param[out]	p_lineWidth	La largeur de la ligne.
 		 *\param[out]	p_lineVtx	La ligne.
 		 *\param[out]	p_linesVtx	Les lignes.
 		 */
-		C3D_API void DoAlignHorizontally( double p_width, double & p_lineWidth, OverlayCategory::VertexArray & p_lineVtx, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		C3D_API void DoAlignHorizontally( double p_width, DisplayableLine & p_line, DisplayableLineArray & p_lines );
 		/**
 		 *\~english
 		 *\brief		Vertically align text
 		 *\param[in]	p_height		The overlay width
 		 *\param[out]	p_linesHeight	The lines height
-		 *\param[out]	p_linesVtx		the lines
+		 *\param[out]	p_lines			The lines
 		 *\~french
 		 *\brief		Aligne verticalement un texte.
 		 *\param[in]	p_height		La hauteur de l'incrustation.
 		 *\param[out]	p_linesHeight	La hauteur des lignes.
-		 *\param[out]	p_linesVtx		Les lignes.
+		 *\param[out]	p_lines			Les lignes.
 		 */
-		C3D_API void DoAlignVertically( double p_height, double p_linesHeight, std::vector< OverlayCategory::VertexArray > & p_linesVtx );
+		C3D_API void DoAlignVertically( double p_height, double p_linesHeight, DisplayableLineArray & p_lines );
 
 	protected:
 		//!\~english The current overlay caption	\~french Le texte courant de l'incrustation
-		Castor::String m_strCaption;
+		Castor::String m_currentCaption;
 		//!\~english The previous overlay caption	\~french Le texte précédent de l'incrustation
 		Castor::String m_previousCaption;
 		//!\~english The texture associated to the overlay font.	\~french La texture associée à la police de l'incrustation.
@@ -371,6 +439,10 @@ namespace Castor3D
 		eVALIGN m_vAlign;
 		//!\~english Tells if the text (caption, wrap mode, or alignments) has changed.	\~french Dit si le texte (contenu, mode de découpe, alignements) a changé.
 		bool m_textChanged;
+		//!\~english The size (in spaces) of tabulation character.	\~french La taille (en espaces) du caractère de tabulation.
+		uint32_t m_tabSize = 4;
+		//!\~english The connection to the FontTexture changed notification signal.	\~french La connexion au signal de notification de changement de la texture.
+		uint32_t m_connection = 0;
 	};
 }
 

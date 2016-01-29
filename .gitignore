@@ -12,6 +12,7 @@
 /data/Scene/Anim
 /data/Scene/Billboards
 /data/Scene/Lighting
+/data/Scene/Overlay
 /data/Scene/Parc
 /source/Core/Castor3D/Src/Data/Core
 *.csproj

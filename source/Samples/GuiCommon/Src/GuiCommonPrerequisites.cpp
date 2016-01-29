@@ -55,9 +55,8 @@ namespace GuiCommon
 			{
 			}
 
-			virtual int LoadGlyph( Glyph & p_glyph )
+			virtual void LoadGlyph( Glyph & p_glyph )
 			{
-				return 0;
 				//FT_Glyph l_ftGlyph;
 				//CHECK_FT_ERR( FT_Load_Glyph, m_face, FT_Get_Char_Index( m_face, p_glyph.GetCharacter() ), FT_LOAD_DEFAULT );
 				//CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &l_ftGlyph );
