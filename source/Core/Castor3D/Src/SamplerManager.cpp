@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	SamplerManager::SamplerManager( Engine & p_engine )
-		: Manager< String, Sampler >( p_engine )
+		: Manager< String, Sampler, Engine >( p_engine )
 	{
 	}
 

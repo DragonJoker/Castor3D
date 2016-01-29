@@ -173,9 +173,9 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour un gestionnaire d'éléments.
 	*/
-	template< typename Key, typename Elem >
+	template< typename Key, typename Elem, typename Owner >
 	class Manager
-		: public Castor::OwnedBy< Engine >
+		: public Castor::OwnedBy< Owner >
 	{
 	public:
 		typedef Castor::Collection< Elem, Key > Collection;

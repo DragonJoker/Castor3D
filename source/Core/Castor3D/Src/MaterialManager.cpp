@@ -14,7 +14,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MaterialManager::MaterialManager( Engine & p_engine )
-		: Manager< Castor::String, Material >( p_engine )
+		: Manager< Castor::String, Material, Engine >( p_engine )
 	{
 	}
 
@@ -44,7 +44,7 @@ namespace Castor3D
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		m_defaultMaterial.reset();
-		Manager< Castor::String, Material >::Clear();
+		Manager< Castor::String, Material, Engine >::Clear();
 	}
 
 	void MaterialManager::GetNames( StringArray & l_names )

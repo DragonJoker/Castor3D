@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de DepthStencilState.
 	*/
 	class DepthStencilStateManager
-		: public Manager< Castor::String, DepthStencilState >
+		: public Manager< Castor::String, DepthStencilState, Engine >
 	{
 	public:
 		/**

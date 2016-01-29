@@ -87,7 +87,7 @@ namespace Castor3D
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Cameras" ) );
 
-			for ( auto const & l_it : p_scene.Cameras() )
+			for ( auto const & l_it : p_scene.m_cameras )
 			{
 				l_return &= Camera::TextLoader()( *l_it.second, p_file );
 			}
@@ -97,7 +97,7 @@ namespace Castor3D
 		{
 			Logger::LogInfo( cuT( "Scene::Write - Lights" ) );
 
-			for ( auto const & l_it : p_scene.Lights() )
+			for ( auto const & l_it : p_scene.m_lights )
 			{
 				auto l_light = l_it.second;
 

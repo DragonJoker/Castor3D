@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de Sampler.
 	*/
 	class SamplerManager
-		: public Manager< Castor::String, Sampler >
+		: public Manager< Castor::String, Sampler, Engine >
 	{
 	public:
 		/**

@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
 	class MaterialManager
-		: public Manager< Castor::String, Material >
+		: public Manager< Castor::String, Material, Engine >
 	{
 	private:
 		DECLARE_VECTOR(	MaterialWPtr, MaterialWPtr );

@@ -53,7 +53,7 @@ namespace Castor3D
 	\brief		Gestionnaire de frame listener.
 	*/
 	class ListenerManager
-		: public Manager< Castor::String, FrameListener >
+		: public Manager< Castor::String, FrameListener, Engine >
 	{
 	public:
 		/**

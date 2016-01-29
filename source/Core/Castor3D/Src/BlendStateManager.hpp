@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de BlendState.
 	*/
 	class BlendStateManager
-		: public Manager< Castor::String, BlendState >
+		: public Manager< Castor::String, BlendState, Engine >
 	{
 	public:
 		/**

@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MeshManager::MeshManager( Engine & p_engine )
-		: Manager< Castor::String, Mesh >( p_engine )
+		: Manager< Castor::String, Mesh, Engine >( p_engine )
 	{
 	}
 

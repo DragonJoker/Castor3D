@@ -21,7 +21,7 @@ namespace Castor3D
 #endif
 
 	PluginManager::PluginManager( Engine & p_engine )
-		: Manager< Path, PluginBase >( p_engine )
+		: Manager< Path, PluginBase, Engine >( p_engine )
 	{
 	}
 

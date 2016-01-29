@@ -36,7 +36,7 @@ namespace Castor3D
 	\brief		Gestionnaire de maillages.
 	*/
 	class MeshManager
-		: public Manager< Castor::String, Mesh >
+		: public Manager< Castor::String, Mesh, Engine >
 	{
 	public:
 		/**

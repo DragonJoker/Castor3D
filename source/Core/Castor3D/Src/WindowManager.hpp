@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de fenêtres de rendu.
 	*/
 	class WindowManager
-		: public Manager< uint32_t, RenderWindow >
+		: public Manager< uint32_t, RenderWindow, Engine >
 	{
 	public:
 		/**

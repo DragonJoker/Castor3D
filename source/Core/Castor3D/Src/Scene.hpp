@@ -768,16 +768,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The lights map.
-		 *\~french
-		 *\return		La map de lumières.
-		 */
-		inline LightsMap const & TypeSortedLights()const
-		{
-			return m_typeSortedLights;
-		}
-		/**
-		 *\~english
 		 *\return		The geometries map.
 		 *\~french
 		 *\return		La map de géométries.

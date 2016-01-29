@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	BlendStateManager::BlendStateManager( Engine & p_engine )
-		: Manager< String, BlendState >( p_engine )
+		: Manager< String, BlendState, Engine >( p_engine )
 	{
 	}
 

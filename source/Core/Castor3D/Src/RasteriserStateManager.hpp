@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de RasteriserState.
 	*/
 	class RasteriserStateManager
-		: public Manager< Castor::String, RasteriserState >
+		: public Manager< Castor::String, RasteriserState, Engine >
 	{
 	public:
 		/**

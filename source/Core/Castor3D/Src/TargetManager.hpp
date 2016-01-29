@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Gestionnaire de RenderTarget.
 	*/
 	class TargetManager
-		: public Manager< Castor::String, RenderTarget >
+		: public Manager< Castor::String, RenderTarget, Engine >
 	{
 	public:
 		/**

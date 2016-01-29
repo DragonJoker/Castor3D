@@ -59,7 +59,7 @@ namespace Castor3D
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	class OverlayManager
-		: public Manager< Castor::String, Overlay >
+		: public Manager< Castor::String, Overlay, Engine >
 	{
 	public:
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;

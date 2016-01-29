@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RasteriserStateManager::RasteriserStateManager( Engine & p_engine )
-		: Manager< String, RasteriserState >( p_engine )
+		: Manager< String, RasteriserState, Engine >( p_engine )
 	{
 	}
 

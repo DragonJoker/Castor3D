@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Gestionnaire de Scene.
 	*/
 	class SceneManager
-		: public Manager< Castor::String, Scene >
+		: public Manager< Castor::String, Scene, Engine >
 	{
 	public:
 		/**

@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de plug-ins.
 	*/
 	class PluginManager
-		: public Manager< Castor::Path, PluginBase >
+		: public Manager< Castor::Path, PluginBase, Engine >
 	{
 	public:
 		/**

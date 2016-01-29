@@ -8,7 +8,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	WindowManager::WindowManager( Engine & p_engine )
-		: Manager< uint32_t, RenderWindow >( p_engine )
+		: Manager< uint32_t, RenderWindow, Engine >( p_engine )
 	{
 	}
 

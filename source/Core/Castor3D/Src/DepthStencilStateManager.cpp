@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	DepthStencilStateManager::DepthStencilStateManager( Engine & p_engine )
-		: Manager< String, DepthStencilState >( p_engine )
+		: Manager< String, DepthStencilState, Engine >( p_engine )
 	{
 	}
 

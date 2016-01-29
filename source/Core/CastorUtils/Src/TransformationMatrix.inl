@@ -179,19 +179,19 @@ namespace Castor
 			p_qOrientation.to_matrix( p_matrix );
 
 			// Set up final matrix with scale, rotation and translation
-			p_matrix[0][0] *= p_ptScale[0];
-			p_matrix[0][1] *= p_ptScale[0];
-			p_matrix[0][2] *= p_ptScale[0];
-			p_matrix[1][0] *= p_ptScale[1];
-			p_matrix[1][1] *= p_ptScale[1];
-			p_matrix[1][2] *= p_ptScale[1];
-			p_matrix[2][0] *= p_ptScale[2];
-			p_matrix[2][1] *= p_ptScale[2];
-			p_matrix[2][2] *= p_ptScale[2];
+			p_matrix[0][0] *= T( p_ptScale[0] );
+			p_matrix[0][1] *= T( p_ptScale[0] );
+			p_matrix[0][2] *= T( p_ptScale[0] );
+			p_matrix[1][0] *= T( p_ptScale[1] );
+			p_matrix[1][1] *= T( p_ptScale[1] );
+			p_matrix[1][2] *= T( p_ptScale[1] );
+			p_matrix[2][0] *= T( p_ptScale[2] );
+			p_matrix[2][1] *= T( p_ptScale[2] );
+			p_matrix[2][2] *= T( p_ptScale[2] );
 
-			p_matrix[3][0] = p_ptPosition[0];
-			p_matrix[3][1] = p_ptPosition[1];
-			p_matrix[3][2] = p_ptPosition[2];
+			p_matrix[3][0] = T( p_ptPosition[0] );
+			p_matrix[3][1] = T( p_ptPosition[1] );
+			p_matrix[3][2] = T( p_ptPosition[2] );
 			return p_matrix;
 		}
 

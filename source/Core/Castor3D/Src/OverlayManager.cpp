@@ -35,7 +35,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	OverlayManager::OverlayManager( Engine & p_engine )
-		: Manager< String, Overlay >( p_engine )
+		: Manager< String, Overlay, Engine >( p_engine )
 		, m_overlayCountPerLevel( 1000, 0 )
 		, m_viewport( Viewport::Ortho( p_engine, 0, 1, 1, 0, 0, 1000 ) )
 	{
@@ -48,7 +48,7 @@ namespace Castor3D
 	void OverlayManager::Clear()
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		Manager< String, Overlay >::Clear();
+		Manager< String, Overlay, Engine >::Clear();
 		m_overlays.clear();
 		m_fontTextures.clear();
 	}

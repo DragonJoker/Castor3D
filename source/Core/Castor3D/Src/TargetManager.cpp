@@ -8,7 +8,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	TargetManager::TargetManager( Engine & p_engine )
-		: Manager< String, RenderTarget >( p_engine )
+		: Manager< String, RenderTarget, Engine >( p_engine )
 	{
 	}
 
