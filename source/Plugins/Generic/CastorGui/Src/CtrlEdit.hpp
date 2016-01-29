@@ -201,7 +201,7 @@ namespace CastorGui
 		//! The caption
 		Castor::String m_caption;
 		//! The caret index in the caption
-		Castor::string::utf8::iterator m_caretIt;
+		Castor::string::utf8::const_iterator m_caretIt;
 		//! The activation status
 		bool m_active;
 		//! The text overlay used to display the caption
