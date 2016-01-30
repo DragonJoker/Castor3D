@@ -9,11 +9,11 @@
 #include <Submesh.hpp>
 #include <Vertex.hpp>
 #include <Buffer.hpp>
-#include <Geometry.hpp>
+#include <GeometryManager.hpp>
 #include <Face.hpp>
 #include <RenderSystem.hpp>
 #include <SceneManager.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <Version.hpp>
 #include <Plugin.hpp>
 #include <Engine.hpp>
@@ -43,9 +43,9 @@ namespace Obj
 		if ( l_pMesh )
 		{
 			l_pMesh->GenerateBuffers();
-			l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetOwner(), cuT( "Scene_OBJ" ) );
-			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
+			l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetEngine() );
+			SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
+			GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
 			l_pGeometry->AttachTo( l_pNode );
 			l_pGeometry->SetMesh( l_pMesh );
 		}
@@ -116,7 +116,7 @@ namespace Obj
 		if ( l_pImage && p_pPass )
 		{
 			TextureUnitSPtr l_pTexture = p_pPass->AddTextureUnit();
-			StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 			l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			l_pTexture->SetTexture( l_pStaTexture );
@@ -129,7 +129,7 @@ namespace Obj
 	{
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr l_return = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
+		MeshSPtr l_return = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
 		String l_strSection;
 		String l_strValue;
 		String l_strLine;
@@ -148,7 +148,7 @@ namespace Obj
 		stUV l_uv;
 		stNORMAL l_normal;
 		stGROUP * l_pGroup = NULL;
-		MaterialManager & l_mtlManager = GetOwner()->GetMaterialManager();
+		MaterialManager & l_mtlManager = GetEngine()->GetMaterialManager();
 		FaceArray * l_pArrayIndex = NULL;
 
 		while ( m_pFile->IsOk() )
@@ -638,7 +638,7 @@ namespace Obj
 		float l_components[3];
 		float l_fAlpha = 1.0f;
 		bool l_bOpaFound = false;
-		MaterialManager & l_mtlManager = GetOwner()->GetMaterialManager();
+		MaterialManager & l_mtlManager = GetEngine()->GetMaterialManager();
 		TextFile l_matFile( p_pathMatFile, File::eOPEN_MODE_READ );
 
 		while ( l_matFile.IsOk() )
@@ -682,7 +682,7 @@ namespace Obj
 
 						if ( !l_pMaterial )
 						{
-							l_pMaterial = l_mtlManager.Create( l_strValue, *GetOwner(), l_strValue );
+							l_pMaterial = l_mtlManager.Create( l_strValue, *GetEngine() );
 							m_arrayLoadedMaterials.push_back( l_pMaterial );
 						}
 

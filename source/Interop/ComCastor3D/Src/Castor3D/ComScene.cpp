@@ -4,6 +4,11 @@
 #include "ComLight.hpp"
 #include "ComTextureBase.hpp"
 
+#include <BillboardManager.hpp>
+#include <CameraManager.hpp>
+#include <GeometryManager.hpp>
+#include <LightManager.hpp>
+#include <SceneNodeManager.hpp>
 #include <Viewport.hpp>
 
 namespace CastorCom
@@ -76,7 +81,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->CreateSceneNode( FromBstr( name ), static_cast< CSceneNode * >( parent )->GetInternal() ) );
+					static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeManager().Create( FromBstr( name ), static_cast< CSceneNode * >( parent )->GetInternal() ) );
 				}
 			}
 		}
@@ -106,7 +111,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->CreateGeometry( FromBstr( name ) ) );
+					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->GetGeometryManager().Create( FromBstr( name ), nullptr ) );
 				}
 			}
 		}
@@ -136,7 +141,9 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CCamera * >( *pVal )->SetInternal( m_internal->CreateCamera( FromBstr( name ), ww, wh, node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr ) );
+					auto l_camera = m_internal->GetCameraManager().Create( FromBstr( name ), node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr );
+					l_camera->GetViewport().SetSize( Castor::Size( ww, wh ) );
+					static_cast< CCamera * >( *pVal )->SetInternal( l_camera );
 				}
 			}
 		}
@@ -166,7 +173,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->SetInternal( m_internal->CreateLight( FromBstr( name ), node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr, Castor3D::eLIGHT_TYPE( type ) ) );
+					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightManager().Create( FromBstr( name ), node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr, Castor3D::eLIGHT_TYPE( type ) ) );
 				}
 			}
 		}
@@ -196,7 +203,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-                    static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetNode( FromBstr( name ) ) );
+                    static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeManager().Find( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -226,7 +233,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->GetGeometry( FromBstr( name ) ) );
+					static_cast< CGeometry * >( *pVal )->SetInternal( m_internal->GetGeometryManager().Find( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -256,7 +263,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLight( FromBstr( name ) ) );
+					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightManager().Find( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -286,7 +293,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CCamera * >( *pVal )->SetInternal( m_internal->GetCamera( FromBstr( name ) ) );
+					static_cast< CCamera * >( *pVal )->SetInternal( m_internal->GetCameraManager().Find( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -312,7 +319,7 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->RemoveLight( static_cast< CLight * >( val )->GetInternal() );
+				m_internal->GetLightManager().Remove( static_cast< CLight * >( val )->GetInternal()->GetName() );
 				hr = S_OK;
 			}
 		}
@@ -338,7 +345,7 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->RemoveNode( static_cast< CSceneNode * >( val )->GetInternal() );
+				m_internal->GetSceneNodeManager().Remove( static_cast< CSceneNode * >( val )->GetInternal()->GetName() );
 				hr = S_OK;
 			}
 		}
@@ -364,7 +371,7 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->RemoveGeometry( static_cast< CGeometry * >( val )->GetInternal() );
+				m_internal->GetGeometryManager().Remove( static_cast< CGeometry * >( val )->GetInternal()->GetName() );
 				hr = S_OK;
 			}
 		}
@@ -390,7 +397,7 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->RemoveCamera( static_cast< CCamera * >( val )->GetInternal() );
+				m_internal->GetCameraManager().Remove( static_cast< CCamera * >( val )->GetInternal()->GetName() );
 				hr = S_OK;
 			}
 		}

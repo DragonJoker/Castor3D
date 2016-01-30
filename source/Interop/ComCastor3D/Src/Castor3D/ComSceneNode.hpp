@@ -46,7 +46,7 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					m_instance->GetOwner()->GetOwner()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value]
+					m_instance->GetScene()->GetEngine()->PostEvent( Castor3D::MakeFunctorEvent( Castor3D::eEVENT_TYPE_PRE_RENDER, [this, value]
 					{
 						( m_instance->*m_function )( parameter_cast< Value >( value ) );
 					} ) );

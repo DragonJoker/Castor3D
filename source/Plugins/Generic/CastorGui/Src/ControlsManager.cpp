@@ -18,7 +18,7 @@ using namespace Castor3D;
 namespace CastorGui
 {
 	ControlsManager::ControlsManager( Engine * p_engine )
-		: FrameListener()
+		: FrameListener( PLUGIN_NAME )
 		, m_engine( p_engine )
 		, m_changed( true )
 	{

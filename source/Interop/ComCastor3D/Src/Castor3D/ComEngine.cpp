@@ -57,7 +57,7 @@ namespace CastorCom
 		}
 
 		template< typename TObj, typename TKey >
-		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::Manager< TKey, TObj > & p_manager, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::ResourceManager< TKey, TObj > & p_manager, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
 			return DoParse( *CreateObject< TObj >( p_engine, p_manager ), p_chunk, p_parser );
 		}
@@ -312,7 +312,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneManager().Create( FromBstr( name ), *m_internal, FromBstr( name ) ) );
+					static_cast< CScene * >( *pVal )->SetInternal( m_internal->GetSceneManager().Create( FromBstr( name ), *m_internal ) );
 				}
 			}
 		}

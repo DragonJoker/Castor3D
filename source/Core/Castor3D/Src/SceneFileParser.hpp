@@ -146,6 +146,8 @@ namespace Castor3D
 		UIntStrMap m_mapTextWrappingModes;
 		UIntStrMap m_mapBorderPositions;
 		UIntStrMap m_mapBlendModes;
+		UIntStrMap m_mapVerticalAligns;
+		UIntStrMap m_mapHorizontalAligns;
 
 	public:
 		/**

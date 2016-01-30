@@ -160,7 +160,7 @@ namespace Castor3D
 			, m_rootCameraNode( p_rootCameraNode )
 			, m_rootObjectNode( p_rootObjectNode )
 		{
-			m_renderSystem = p_owner.GetEngine()->GetRenderSystem();
+			this->m_renderSystem = p_owner.GetEngine()->GetRenderSystem();
 		}
 		/**
 		 *\~english
@@ -181,7 +181,7 @@ namespace Castor3D
 		 */
 		inline Engine * GetEngine()const
 		{
-			return GetScene()->GetEngine();
+			return this->GetScene()->GetEngine();
 		}
 		/**
 		 *\~english
@@ -191,14 +191,14 @@ namespace Castor3D
 		 */
 		inline void Cleanup()
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto l_lock = Castor::make_unique_lock( this->m_elements );
 
 			for ( auto && l_it : this->m_elements )
 			{
 				ElementDetacher< Elem >::Detach( *l_it.second );
 			}
 
-			GetScene()->SetChanged();
+			this->GetScene()->SetChanged();
 		}
 		/**
 		 *\~english
@@ -210,14 +210,14 @@ namespace Castor3D
 		 */
 		inline void Remove( Key const & p_name )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto l_lock = Castor::make_unique_lock( this->m_elements );
 
-			if ( m_elements.has( p_name ) )
+			if ( this->m_elements.has( p_name ) )
 			{
-				auto l_element = m_elements.find( p_name );
+				auto l_element = this->m_elements.find( p_name );
 				ElementDetacher< Elem >::Detach( *l_element );
-				m_elements.erase( p_name );
-				GetScene()->SetChanged();
+				this->m_elements.erase( p_name );
+				this->GetScene()->SetChanged();
 			}
 		}
 		/**
@@ -230,10 +230,10 @@ namespace Castor3D
 		 */
 		inline void MergeInto( ObjectManager< Key, Elem > & p_destination )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto l_lock = Castor::make_unique_lock( this->m_elements );
 			auto l_lockOther = Castor::make_unique_lock( p_destination.m_elements );
 
-			for ( auto l_it : m_elements )
+			for ( auto l_it : this->m_elements )
 			{
 				ElementMerger< Key, Elem >::Merge( *this, p_destination.m_elements, l_it.second, p_destination.m_rootCameraNode, p_destination.m_rootObjectNode );
 			}
@@ -256,20 +256,20 @@ namespace Castor3D
 		template< typename ... Parameters >
 		inline std::shared_ptr< Elem > Create( Key const & p_name, SceneNodeSPtr p_parent = nullptr, Parameters && ... p_params )
 		{
-			auto l_lock = Castor::make_unique_lock( m_elements );
+			auto l_lock = Castor::make_unique_lock( this->m_elements );
 			std::shared_ptr< Elem > l_return;
 
-			if ( !m_elements.has( p_name ) )
+			if ( !this->m_elements.has( p_name ) )
 			{
 				l_return = std::make_shared< Elem >( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
-				m_elements.insert( p_name, l_return );
+				this->m_elements.insert( p_name, l_return );
 				ElementAttacher< Elem >::Attach( l_return, p_parent, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
-				GetScene()->SetChanged();
+				this->GetScene()->SetChanged();
 			}
 			else
 			{
-				l_return = m_elements.find( p_name );
+				l_return = this->m_elements.find( p_name );
 				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
 			}
 
@@ -283,7 +283,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetObjectCount()const
 		{
-			return m_elements.size();
+			return this->m_elements.size();
 		}
 
 	private:

@@ -24,7 +24,7 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = l_manager.Create( p_name, *p_engine, p_name );
+			l_return = l_manager.Create( p_name, *p_engine );
 			l_return->CreatePass();
 		}
 
@@ -39,7 +39,7 @@ namespace CastorGui
 
 		if ( !l_return )
 		{
-			l_return = l_manager.Create( p_name, *p_engine, p_name );
+			l_return = l_manager.Create( p_name, *p_engine );
 			l_return->CreatePass();
 		}
 

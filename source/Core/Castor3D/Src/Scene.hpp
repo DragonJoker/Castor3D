@@ -240,15 +240,6 @@ namespace Castor3D
 		C3D_API bool SetBackgroundImage( Castor::Path const & p_pathFile );
 		/**
 		 *\~english
-		 *\brief		Removes an animated object group from the scene
-		 *\param[in]	p_pGroup	The animated object group
-		 *\~french
-		 *\brief		Enlève un groupe d'objets animés de la scène
-		 *\param[in]	p_pGroup	Le groupe d'objets animés
-		 */
-		C3D_API void RemoveAnimatedObjectGroup( AnimatedObjectGroupSPtr p_pGroup );
-		/**
-		 *\~english
 		 *\brief		Imports a scene from an foreign file
 		 *\param[in]	p_fileName	file to read from
 		 *\param[in]	p_importer	The importer, which is in charge of loading the scene
@@ -260,23 +251,6 @@ namespace Castor3D
 		 *\return		\p false si un problème quelconque a été rencontré
 		 */
 		C3D_API bool ImportExternal( Castor::String const & p_fileName, Importer & p_importer );
-		/**
-		 *\~english
-		 *\brief		Selects the nearest element in the ray's way
-		 *\param[in]	p_ray		The ray
-		 *\param[out]	p_geo		The nearest met geometry
-		 *\param[out]	p_submesh	The nearest met submesh
-		 *\param[out]	p_face		The nearest met Face
-		 *\param[out]	p_vertex	The nearest met Vertex
-		 *\~french
-		 *\brief		Sélectionne l'élément le plus proche touché par le rayon
-		 *\param[in]	p_ray		Le rayon
-		 *\param[out]	p_geo		La géométrie la plus proche
-		 *\param[out]	p_submesh	Le submesh le plus proche, dans la géométrie
-		 *\param[out]	p_face		La face la plus proche, dans le submesh
-		 *\param[out]	p_vertex	Le vertex le plus proche, dans la face
-		 */
-		C3D_API void Select( Ray * p_ray, GeometrySPtr & p_geo, SubmeshSPtr & p_submesh, FaceSPtr * p_face, Vertex * p_vertex );
 		/**
 		 *\~english
 		 *\brief		Merges the content of the given scene to this scene

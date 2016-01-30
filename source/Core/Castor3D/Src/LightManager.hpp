@@ -172,7 +172,7 @@ namespace Castor3D
 		}
 
 	private:
-		void DoAddLight( LightSPtr p_light );
+		C3D_API void DoAddLight( LightSPtr p_light );
 
 	private:
 		using LightsArray = std::vector< LightSPtr >;

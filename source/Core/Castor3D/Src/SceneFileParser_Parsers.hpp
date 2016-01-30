@@ -216,6 +216,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayFont )
 	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayText )
 	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayTextWrapping )
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayVerticalAlign )
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayHorizontalAlign )
 
 	// Camera parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_CameraParent )

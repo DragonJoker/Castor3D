@@ -13,10 +13,10 @@
 #	include <Windows.h>
 #endif
 
-#include <Camera.hpp>
-#include <Geometry.hpp>
-#include <Scene.hpp>
-#include <SceneNode.hpp>
+#include <CameraManager.hpp>
+#include <GeometryManager.hpp>
+#include <SceneManager.hpp>
+#include <SceneNodeManager.hpp>
 #include <TargetManager.hpp>
 #include <WindowHandle.hpp>
 #include <WindowManager.hpp>
@@ -81,18 +81,19 @@ void RenderPanel::InitialiseRenderWindow()
 	SceneNodeSPtr l_pNode;
 	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->GetWindowManager().Create();
 	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
-	SceneNodeSPtr l_pCamBaseNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
+	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
 
 	if ( m_renderType == eVIEWPORT_TYPE_PERSPECTIVE )
 	{
-		SceneNodeSPtr l_pCamYawNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
-		SceneNodeSPtr l_pCamPitchNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
-		SceneNodeSPtr l_pCamRollNode = m_mainScene->CreateSceneNode( l_streamName.str() + cuT( "_CamRollNode" ), l_pCamPitchNode );
+		SceneNodeSPtr l_pCamYawNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
+		SceneNodeSPtr l_pCamPitchNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
+		SceneNodeSPtr l_pCamRollNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamRollNode" ), l_pCamPitchNode );
 		l_pNode = l_pCamRollNode;
 	}
 
-	CameraSPtr l_pCamera = m_mainScene->CreateCamera( l_streamName.str() + cuT( "_Camera" ), GetClientSize().x, GetClientSize().y, l_pNode );
+	CameraSPtr l_pCamera = m_mainScene->GetCameraManager().Create( l_streamName.str() + cuT( "_Camera" ), l_pNode );
+	l_pCamera->GetViewport().SetSize( Size( GetClientSize().x, GetClientSize().y ) );
 	l_pRenderTarget->SetScene( m_mainScene );
 	l_pRenderTarget->SetCamera( l_pCamera );
 	l_pRenderTarget->SetSize( Size( GetClientSize().x, GetClientSize().y ) );
@@ -340,25 +341,23 @@ void RenderPanel::OnMenuClose( wxCommandEvent & WXUNUSED( p_event ) )
 
 void RenderPanel::DoSelectGeometry( int p_x, int p_y )
 {
-	GeometrySPtr l_geo = std::make_shared< Geometry >( m_mainScene );
+	//GeometrySPtr l_geo = std::make_shared< Geometry >( m_mainScene );
 
-	if ( ! m_pRenderWindow.expired() )
-	{
-		FrameEventSPtr l_pEvent( new SelectObjectFrameEvent( m_mainScene, l_geo, SubmeshSPtr(), FaceSPtr(), VertexSPtr(), m_pRenderWindow.lock()->GetCamera(), this, p_x, p_y ) );
-		m_listener->PostEvent( l_pEvent );
-	}
+	//if ( ! m_pRenderWindow.expired() )
+	//{
+	//	FrameEventSPtr l_pEvent( new SelectObjectFrameEvent( m_mainScene, l_geo, SubmeshSPtr(), FaceSPtr(), VertexSPtr(), m_pRenderWindow.lock()->GetCamera(), this, p_x, p_y ) );
+	//	m_listener->PostEvent( l_pEvent );
+	//}
 }
 
 void RenderPanel::DoSelectVertex( int CU_PARAM_UNUSED( p_x ), int CU_PARAM_UNUSED( p_y ) )
 {
-	/*
-		VertexSPtr l_vertex = std::make_shared< Vertex >(  );
+	//VertexSPtr l_vertex = std::make_shared< Vertex >(  );
 
-		if ( ! m_pRenderWindow.expired())
-		{
-			m_listener->PostEvent( new SelectObjectFrameEvent( m_mainScene, GeometrySPtr(), SubmeshSPtr(), FaceSPtr(), l_vertex, m_pRenderWindow.lock()->GetCamera(), this, p_x, p_y)));
-		}
-	*/
+	//if ( ! m_pRenderWindow.expired())
+	//{
+	//	m_listener->PostEvent( new SelectObjectFrameEvent( m_mainScene, GeometrySPtr(), SubmeshSPtr(), FaceSPtr(), l_vertex, m_pRenderWindow.lock()->GetCamera(), this, p_x, p_y)));
+	//}
 }
 
 void RenderPanel::DoSelectAll()

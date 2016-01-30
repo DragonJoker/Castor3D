@@ -5,11 +5,11 @@
 #include <MeshManager.hpp>
 #include <Submesh.hpp>
 #include <Face.hpp>
-#include <Geometry.hpp>
+#include <GeometryManager.hpp>
 #include <Version.hpp>
 #include <Engine.hpp>
 #include <SceneManager.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <Plugin.hpp>
 #include <StaticTexture.hpp>
 #include <Vertex.hpp>
@@ -44,9 +44,9 @@ SceneSPtr Md2Importer::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_MD2" ), *GetOwner(), cuT( "Scene_MD2" ) );
-		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
+		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD2" ), *GetEngine() );
+		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
+		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
 		l_pGeometry->AttachTo( l_pNode );
 		l_pGeometry->SetMesh( l_pMesh );
 	}
@@ -69,7 +69,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 	l_meshName = m_fileName.GetFileName();
 	l_materialName = m_fileName.GetFileName();
-	l_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	l_pMesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 
 	if ( m_header.m_version != 8 )
@@ -78,11 +78,11 @@ MeshSPtr Md2Importer::DoImportMesh()
 	}
 	else
 	{
-		l_material = GetOwner()->GetMaterialManager().Find( l_materialName );
+		l_material = GetEngine()->GetMaterialManager().Find( l_materialName );
 
 		if ( !l_material )
 		{
-			l_material = GetOwner()->GetMaterialManager().Create( l_materialName, *GetOwner(), l_materialName );
+			l_material = GetEngine()->GetMaterialManager().Create( l_materialName, *GetEngine() );
 			l_material->CreatePass();
 		}
 
@@ -99,7 +99,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 		}
 
 		l_pMesh->ComputeNormals();
-		GetOwner()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
+		GetEngine()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 	}
 
 	DoCleanUp();
@@ -135,13 +135,13 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 					l_strPath = m_filePath / l_strValue;
 				}
 
-				l_pImage = GetOwner()->GetImageManager().create( l_strValue, l_strPath );
+				l_pImage = GetEngine()->GetImageManager().create( l_strValue, l_strPath );
 			}
 
 			if ( l_pImage && p_pPass )
 			{
 				l_pTexture = p_pPass->AddTextureUnit();
-				StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+				StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 				l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 				l_pStaTexture->SetImage( l_pImage->GetPixels() );
 				l_pTexture->SetTexture( l_pStaTexture );

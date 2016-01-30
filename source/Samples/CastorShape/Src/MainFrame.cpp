@@ -23,10 +23,10 @@
 
 #include <DirectionalLight.hpp>
 #include <DividerPlugin.hpp>
-#include <Geometry.hpp>
+#include <GeometryManager.hpp>
 #include <ImporterPlugin.hpp>
 #include <Importer.hpp>
-#include <Light.hpp>
+#include <LightManager.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <Pass.hpp>
@@ -34,6 +34,7 @@
 #include <RenderLoop.hpp>
 #include <RenderWindow.hpp>
 #include <SceneManager.hpp>
+#include <SceneNodeManager.hpp>
 #include <Subdivider.hpp>
 
 #include <xpms/castor_dark.xpm>
@@ -399,7 +400,7 @@ namespace CastorShape
 
 			if ( l_return )
 			{
-				SceneSPtr l_scene = wxGetApp().GetCastor()->GetSceneManager().Create( cuT( "MainScene" ), *wxGetApp().GetCastor(), cuT( "MainScene" ) );
+				SceneSPtr l_scene = wxGetApp().GetCastor()->GetSceneManager().Create( cuT( "MainScene" ), *wxGetApp().GetCastor() );
 				m_mainScene = l_scene;
 				l_scene->SetBackgroundColour( Colour::from_components( 0.5, 0.5, 0.5, 1.0 ) );
 				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
@@ -414,7 +415,7 @@ namespace CastorShape
 					m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
 				}
 
-				LightSPtr l_light1 = l_scene->CreateLight( cuT( "Light1" ), l_scene->CreateSceneNode( cuT( "Light1Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light1 = l_scene->GetLightManager().Create( cuT( "Light1" ), l_scene->GetSceneNodeManager().Create( cuT( "Light1Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
 
 				if ( l_light1 )
 				{
@@ -424,7 +425,7 @@ namespace CastorShape
 					l_light1->SetEnabled( true );
 				}
 
-				LightSPtr l_light2 = l_scene->CreateLight( cuT( "Light2" ), l_scene->CreateSceneNode( cuT( "Light2Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light2 = l_scene->GetLightManager().Create( cuT( "Light2" ), l_scene->GetSceneNodeManager().Create( cuT( "Light2Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
 
 				if ( l_light2 )
 				{
@@ -434,7 +435,7 @@ namespace CastorShape
 					l_light2->SetEnabled( true );
 				}
 
-				LightSPtr l_light3 = l_scene->CreateLight( cuT( "Light3" ), l_scene->CreateSceneNode( cuT( "Light3Node" ) ), eLIGHT_TYPE_DIRECTIONAL );
+				LightSPtr l_light3 = l_scene->GetLightManager().Create( cuT( "Light3" ), l_scene->GetSceneNodeManager().Create( cuT( "Light3Node" ), nullptr ), eLIGHT_TYPE_DIRECTIONAL );
 
 				if ( l_light3 )
 				{
@@ -555,7 +556,7 @@ namespace CastorShape
 			p_name << m_iNbGeometries;
 		}
 
-		SceneNodeSPtr l_sceneNode = p_scene->CreateSceneNode( cuT( "SN_" ) + p_name, p_scene->GetObjectRootNode() );
+		SceneNodeSPtr l_sceneNode = p_scene->GetSceneNodeManager().Create( cuT( "SN_" ) + p_name, p_scene->GetObjectRootNode() );
 
 		if ( l_sceneNode )
 		{
@@ -568,11 +569,10 @@ namespace CastorShape
 			l_dimensions.push_back( c );
 			StringStream l_stream;
 			l_stream << GuiCommon::make_String( p_baseName ) << cuT( "_" ) << p_meshStrVars.rdbuf();
-			GeometrySPtr l_geometry = p_scene->CreateGeometry( p_name, p_meshType, l_stream.str(), l_faces, l_dimensions );
+			GeometrySPtr l_geometry = p_scene->GetGeometryManager().Create( p_name, l_sceneNode, p_scene->GetEngine()->GetMeshManager().Create( l_stream.str(), p_meshType, l_faces, l_dimensions ) );
 
 			if ( l_geometry )
 			{
-				l_sceneNode->AttachObject( l_geometry );
 				String l_materialName = p_dialog->GetMaterialName();
 				MeshSPtr l_mesh = l_geometry->GetMesh();
 

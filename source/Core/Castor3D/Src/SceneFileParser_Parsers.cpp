@@ -3045,6 +3045,44 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayTextWrapping )
 }
 END_ATTRIBUTE()
 
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayVerticalAlign )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	OverlaySPtr l_overlay = l_pContext->pOverlay;
+
+	if ( l_overlay && l_overlay->GetType() == eOVERLAY_TYPE_TEXT )
+	{
+		uint32_t l_value;
+		p_params[0]->Get( l_value );
+
+		l_overlay->GetTextOverlay()->SetVAlign( eVALIGN( l_value ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <text_overlay::vertical_align> : TextOverlay not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayHorizontalAlign )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	OverlaySPtr l_overlay = l_pContext->pOverlay;
+
+	if ( l_overlay && l_overlay->GetType() == eOVERLAY_TYPE_TEXT )
+	{
+		uint32_t l_value;
+		p_params[0]->Get( l_value );
+
+		l_overlay->GetTextOverlay()->SetHAlign( eHALIGN( l_value ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Directive <text_overlay::horizontal_align> : TextOverlay not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayText )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );

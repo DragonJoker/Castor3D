@@ -139,7 +139,7 @@ namespace Ssaa
 	{
 		m_ssFrameBuffer->Unbind();
 		m_ssFrameBuffer->StretchInto( m_renderTarget->GetFrameBuffer(), Castor::Rectangle( Position( 0, 0 ), m_size ), Castor::Rectangle( Position( 0, 0 ), m_renderTarget->GetSize() ), eBUFFER_COMPONENT_COLOUR, eINTERPOLATION_MODE_LINEAR );
-//		GetOwner()->GetRenderSystem()->GetCurrentContext()->RenderTextureToCurrentBuffer( m_renderTarget->GetSize(), m_ssColorBuffer );
+//		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTextureToCurrentBuffer( m_renderTarget->GetSize(), m_ssColorBuffer );
 		m_renderTarget->GetDepthStencilState()->Apply();
 		m_renderTarget->GetRasteriserState()->Apply();
 		m_renderTarget->GetFrameBuffer()->Bind();

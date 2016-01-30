@@ -95,7 +95,7 @@ namespace CastorCom
 #if HAS_CASTORGUI
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseMove( Castor::Position( m_oldX, m_oldY ) );
 			}
 			catch ( Castor::Exception & )
@@ -123,7 +123,7 @@ namespace CastorCom
 #if HAS_CASTORGUI
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT );
 			}
 			catch ( Castor::Exception & )
@@ -151,7 +151,7 @@ namespace CastorCom
 #if HAS_CASTORGUI
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT );
 			}
 			catch ( Castor::Exception & )
@@ -179,7 +179,7 @@ namespace CastorCom
 #if HAS_CASTORGUI
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE );
 			}
 			catch ( Castor::Exception & )
@@ -207,7 +207,7 @@ namespace CastorCom
 #if HAS_CASTORGUI
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE );
 			}
 			catch ( Castor::Exception & )
@@ -235,7 +235,7 @@ namespace CastorCom
 #if HAS_CASTORGUI
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT );
 			}
 			catch ( Castor::Exception & )
@@ -263,7 +263,7 @@ namespace CastorCom
 #if HAS_CASTORGUI
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT );
 			}
 			catch ( Castor::Exception & )

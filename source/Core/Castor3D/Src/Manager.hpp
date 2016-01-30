@@ -192,7 +192,7 @@ namespace Castor3D
 		 *\param[in]	p_owner	Le propriétaire.
 		 */
 		inline Manager( Owner & p_owner )
-			: OwnedBy< Owner >( p_owner )
+			: Castor::OwnedBy< Owner >( p_owner )
 			, m_renderSystem( nullptr )
 		{
 		}
