@@ -70,7 +70,8 @@ Generic:
 
 Two additional projects are also generated:
 - ImgConverter : Allows you to convert any image file type to XPM or ICO.
-- CastorUtilsTest : Allows you to run unit and performance tests for CastorUtils.
+- CastorUtilsTest : Allows you to run unit and performance tests for
+    CastorUtils.
 
 Documentation for CastorUtils and Castor3D can be generated using Doxygen.
 
@@ -89,11 +90,12 @@ The plug-ins are installed in <install_dir>/lib/Castor3D/
 The build is configurable through CMake using the following options:
 - PROJECTS_BINARIES_OUTPUT_DIR
     Used to specify the root directory for compiled binaries.
-    inside this folder, the bin, lib, and share directories will be created,
+    Inside this folder, the bin, lib, and share directories will be created,
     and binaries will be put in the right folders.
     Some files will also be copied in share directory, that are used by the
     projects.
-    On Windows, the external DLLs will be copied here, if they are found.
+    On Windows, the external DLLs will be copied in bin folder, if they are
+    found.
 
 - PROJECTS_USE_PRECOMPILED_HEADERS
     Used to enable/disable the use of Precompiled Headers for the compilation.
@@ -163,7 +165,7 @@ The build is configurable through CMake using the following options:
     built.
 
 - CASTOR_USE_SSE2:
-    Enables use of SSE2 instructions for Poit4f and Matrix4x4f operations.
+    Enables use of SSE2 instructions for Point4f and Matrix4x4f operations.
 
 #   **-----------------------------------------------------------------------**
 #   **                        IV. Running Castor3D                           **
