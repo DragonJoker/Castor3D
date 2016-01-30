@@ -143,7 +143,7 @@ namespace GlRender
 	//************************************************************************************************
 
 	GlSampler::GlSampler( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_name )
-		: Sampler( *p_renderSystem->GetOwner(), p_name )
+		: Sampler( *p_renderSystem->GetEngine(), p_name )
 		, Holder( p_gl )
 	{
 	}

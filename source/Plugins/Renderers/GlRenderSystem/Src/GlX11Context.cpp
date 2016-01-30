@@ -63,7 +63,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 		m_display = p_window->GetHandle().GetInternal< IXWindowHandle >()->GetDisplay();
 	}
 
-	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
+	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
 	if ( l_pMainContext )
@@ -183,7 +183,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 				{
 					glXMakeCurrent( m_display, m_drawable, m_glxContext );
 					l_renderSystem->Initialise();
-					p_window->GetOwner()->GetMaterialManager().Initialise();
+					p_window->GetEngine()->GetMaterialManager().Initialise();
 					glXMakeCurrent( m_display, None, NULL );
 				}
 			}
@@ -281,7 +281,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_wi
 		if ( p_window->IsUsingStereo() )
 		{
 			// Maybe because of stereo ? We try in mono
-			p_window->GetOwner()->GetRenderSystem()->SetStereoAvailable( false );
+			p_window->GetEngine()->GetRenderSystem()->SetStereoAvailable( false );
 			Logger::LogWarning( cuT( "GlXContext::Create - Stereo glXChooseFBConfig failed, using mono FB config" ) );
 			p_arrayAttribs.clear();
 			p_arrayAttribs.push_back( GLX_RENDER_TYPE	);
@@ -343,7 +343,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_wi
 	{
 		if ( p_window->IsUsingStereo() )
 		{
-			p_window->GetOwner()->GetRenderSystem()->SetStereoAvailable( true );
+			p_window->GetEngine()->GetRenderSystem()->SetStereoAvailable( true );
 			Logger::LogDebug( cuT( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
 		}
 		else
@@ -385,7 +385,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithoutFBConfig( IntArray & p_arr
 bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_window )
 {
 	bool l_return = false;
-	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
+	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
 	if ( GetOpenGl().HasCreateContextAttribs() )

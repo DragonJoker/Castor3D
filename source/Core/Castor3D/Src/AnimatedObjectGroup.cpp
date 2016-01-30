@@ -76,15 +76,9 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	AnimatedObjectGroup::AnimatedObjectGroup()
-		: Named( cuT( "" ) )
-	{
-		m_timer.TimeS();
-	}
-
-	AnimatedObjectGroup::AnimatedObjectGroup( SceneSPtr p_scene, String const & p_name )
+	AnimatedObjectGroup::AnimatedObjectGroup( String const & p_name, Scene & p_scene )
 		: Named( p_name )
-		, m_scene( p_scene )
+		, OwnedBy< Scene >( p_scene )
 	{
 		m_timer.TimeS();
 	}

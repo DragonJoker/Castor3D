@@ -68,10 +68,10 @@ namespace Castor3D
 
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( GetOwner() );
+			m_pfnOnLoad( GetEngine() );
 		}
 
-		m_pfnCreateImporter( GetOwner(), this );
+		m_pfnCreateImporter( GetEngine(), this );
 	}
 
 	ImporterPlugin::~ImporterPlugin()
@@ -80,7 +80,7 @@ namespace Castor3D
 
 		if ( m_pfnOnUnload )
 		{
-			m_pfnOnUnload( GetOwner() );
+			m_pfnOnUnload( GetEngine() );
 		}
 	}
 

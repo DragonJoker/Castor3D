@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	DepthStencilStateManager::DepthStencilStateManager( Engine & p_engine )
-		: Manager< String, DepthStencilState, Engine >( p_engine )
+		: ResourceManager< String, DepthStencilState >( p_engine )
 	{
 	}
 
@@ -24,7 +24,7 @@ namespace Castor3D
 		{
 			l_return = m_renderSystem->CreateDepthStencilState();
 			m_elements.insert( p_name, l_return );
-			GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
 			Logger::LogInfo( cuT( "DepthStencilStateManager::Create - Created DepthStencilState: " ) + p_name + cuT( "" ) );
 		}
 		else

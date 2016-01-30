@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RASTERISER_STATE_MANAGER_H___
 #define ___C3D_RASTERISER_STATE_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "RasteriserState.hpp"
 
 namespace Castor3D
@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de RasteriserState.
 	*/
 	class RasteriserStateManager
-		: public Manager< Castor::String, RasteriserState, Engine >
+		: public ResourceManager< Castor::String, RasteriserState >
 	{
 	public:
 		/**
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~RasteriserStateManager();
+		C3D_API ~RasteriserStateManager();
 		/**
 		 *\~english
 		 *\brief		Creates and returns a RasteriserState, given a name

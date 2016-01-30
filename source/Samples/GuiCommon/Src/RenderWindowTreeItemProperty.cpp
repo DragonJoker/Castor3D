@@ -16,7 +16,7 @@ namespace GuiCommon
 	}
 
 	RenderWindowTreeItemProperty::RenderWindowTreeItemProperty( bool p_editable, RenderWindowSPtr p_window )
-		: TreeItemProperty( p_window->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
+		: TreeItemProperty( p_window->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_RENDER_WINDOW )
 		, m_window( p_window )
 	{
 		PROPERTY_CATEGORY_RENDER_WINDOW = _( "Render Window: " );

@@ -80,7 +80,7 @@ namespace GuiCommon
 	{
 		m_shaderModel = eSHADER_MODEL_COUNT;
 		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
-		RenderSystem * l_renderSystem = l_program->GetOwner();
+		RenderSystem * l_renderSystem = l_program->GetRenderSystem();
 
 		if ( l_renderSystem->CheckSupport( eSHADER_MODEL_5 ) )
 		{

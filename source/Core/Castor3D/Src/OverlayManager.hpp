@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_OVERLAY_MANAGER_H___
 #define ___C3D_OVERLAY_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "Overlay.hpp"
 #include "OverlayFactory.hpp"
 #include "Viewport.hpp"
@@ -59,7 +59,7 @@ namespace Castor3D
 	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gérer les Z-Index
 	*/
 	class OverlayManager
-		: public Manager< Castor::String, Overlay, Engine >
+		: public ResourceManager< Castor::String, Overlay >
 	{
 	public:
 		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
@@ -81,21 +81,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~OverlayManager();
+		C3D_API ~OverlayManager();
 		/**
 		 *\~english
 		 *\brief		Clears all overlays lists
 		 *\~french
 		 *\brief		Vide les listes d'incrustations
 		 */
-		C3D_API virtual void Clear();
+		C3D_API void Clear();
 		/**
 		 *\~english
 		 *\brief		Cleans all overlays up.
 		 *\~french
 		 *\brief		Nettoie les incrustations.
 		 */
-		C3D_API virtual void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Removes an overlay from the lists.
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\brief		Enlève une incrustation des listes.
 		 *\param[in]	p_name		Le nom de l'incrustation.
 		 */
-		C3D_API virtual void Remove( Castor::String const & p_name );
+		C3D_API void Remove( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Creates an overlay, given a type and the overlay definitions
@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_scene	La scène contenant l'overlay
 		 *\return		L'overlay
 		 */
-		C3D_API OverlaySPtr Create( eOVERLAY_TYPE p_type, Castor::String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene );
+		C3D_API OverlaySPtr Create( Castor::String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene );
 		/**
 		 *\~english
 		 *\brief		Creates a panel overlay.

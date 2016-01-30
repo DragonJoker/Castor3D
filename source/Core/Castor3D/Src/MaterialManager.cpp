@@ -14,7 +14,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MaterialManager::MaterialManager( Engine & p_engine )
-		: Manager< Castor::String, Material, Engine >( p_engine )
+		: ResourceManager< Castor::String, Material >( p_engine )
 	{
 	}
 
@@ -29,14 +29,14 @@ namespace Castor3D
 
 		if ( !m_elements.has( Material::DefaultMaterialName ) )
 		{
-			m_defaultMaterial = Create( Material::DefaultMaterialName, *GetOwner(), Material::DefaultMaterialName );
+			m_defaultMaterial = Create( Material::DefaultMaterialName, *GetEngine() );
 			m_defaultMaterial->CreatePass();
 			m_defaultMaterial->GetPass( 0 )->SetTwoSided( true );
 		}
 		else
 		{
 			m_defaultMaterial = m_elements.find( Material::DefaultMaterialName );
-			GetOwner()->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *m_defaultMaterial ) );
 		}
 	}
 
@@ -44,7 +44,7 @@ namespace Castor3D
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		m_defaultMaterial.reset();
-		Manager< Castor::String, Material, Engine >::Clear();
+		ResourceManager< Castor::String, Material >::Clear();
 	}
 
 	void MaterialManager::GetNames( StringArray & l_names )
@@ -63,14 +63,14 @@ namespace Castor3D
 	bool MaterialManager::Write( TextFile & p_file )const
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		GetOwner()->GetSamplerManager().lock();
+		GetEngine()->GetSamplerManager().lock();
 
-		for ( auto l_it : GetOwner()->GetSamplerManager() )
+		for ( auto l_it : GetEngine()->GetSamplerManager() )
 		{
 			Sampler::TextLoader()( *l_it.second, p_file );
 		}
 
-		GetOwner()->GetSamplerManager().unlock();
+		GetEngine()->GetSamplerManager().unlock();
 
 		bool l_return = true;
 		auto l_it = m_elements.begin();
@@ -97,7 +97,7 @@ namespace Castor3D
 	bool MaterialManager::Read( TextFile & p_file )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		SceneFileParser l_parser( *GetOwner() );
+		SceneFileParser l_parser( *GetEngine() );
 		l_parser.ParseFile( p_file );
 		return true;
 	}

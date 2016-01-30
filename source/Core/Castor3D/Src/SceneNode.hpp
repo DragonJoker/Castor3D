@@ -146,24 +146,17 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_scene	The parent scene.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_scene	La scène parente.
-		 */
-		C3D_API SceneNode( Scene & p_scene );
-		/**
-		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_scene	The parent scene
-		 *\param[in]	p_name	The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
+		 *\param[in]	p_name		The node's name.
+		 *\param[in]	p_scene		The parent scene.
+		 *\param[in]	p_parent	The parent scene node.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_scene	La scène parente
-		 *\param[in]	p_name	The node's name. If empty the name is "SceneNode<s_nbSceneNodes>"
+		 *\param[in]	p_name		Le nom du noeud.
+		 *\param[in]	p_scene		La scène parente.
+		 *\param[in]	p_parent	Le noeud de scène parent.
 		 */
-		C3D_API SceneNode( Scene & p_scene, Castor::String const & p_name = Castor::cuEmptyString );
+		C3D_API SceneNode( Castor::String const & p_name, Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -329,17 +322,6 @@ namespace Castor3D
 		 *\param[in]	p_scale	La nouvelle valeur
 		 */
 		C3D_API void SetScale( Castor::Point3r const & p_scale );
-		/**
-		 *\~english
-		 *\brief		Creates the vertex buffer of attached geometries
-		 *\param[out]	p_nbFaces		Receives the faces count
-		 *\param[out]	p_nbVertex		Receives the vertex count
-		 *\~french
-		 *\brief		Crée les tampons de sommets des géométries attachées
-		 *\param[out]	p_nbFaces		Reçoit le nombre de faces
-		 *\param[out]	p_nbVertex		Reçoit le nombre de sommets
-		 */
-		C3D_API void CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex )const;
 		/**
 		 *\~english
 		 *\brief		Gets the nearest geometry held by this node or it's children nodes, which is hit by the ray

@@ -1,8 +1,8 @@
 ﻿#include "MovableObject.hpp"
 
-#include "SceneNode.hpp"
-#include "Scene.hpp"
 #include "Animation.hpp"
+#include "Scene.hpp"
+#include "SceneNodeManager.hpp"
 
 using namespace Castor;
 
@@ -55,7 +55,7 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				SceneNodeSPtr l_pParent = p_obj.GetScene()->GetNode( l_name );
+				SceneNodeSPtr l_pParent = p_obj.GetScene()->GetSceneNodeManager().Find( l_name );
 
 				if ( l_pParent )
 				{
@@ -80,19 +80,11 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	MovableObject::MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type )
-		: OwnedBy< Engine >( *p_scene->GetOwner() )
-		, m_type( p_type )
-		, m_pScene( p_scene )
-	{
-	}
-
-	MovableObject::MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, String const & p_name, eMOVABLE_TYPE p_type )
-		: OwnedBy< Engine >( *p_scene->GetOwner() )
+	MovableObject::MovableObject( String const & p_name, Scene & p_scene, eMOVABLE_TYPE p_type, SceneNodeSPtr p_sn )
+		: OwnedBy< Scene >( p_scene )
 		, m_name( p_name )
-		, m_pSceneNode( p_sn )
 		, m_type( p_type )
-		, m_pScene( p_scene )
+		, m_pSceneNode( p_sn )
 	{
 	}
 

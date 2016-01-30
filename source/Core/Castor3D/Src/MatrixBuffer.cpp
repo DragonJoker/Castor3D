@@ -33,7 +33,7 @@ namespace Castor3D
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = GetOwner()->GetRenderSystem()->CreateMatrixBuffer( this );
+			m_pBuffer = GetEngine()->GetRenderSystem()->CreateMatrixBuffer( this );
 		}
 
 		bool l_return = m_pBuffer != nullptr;

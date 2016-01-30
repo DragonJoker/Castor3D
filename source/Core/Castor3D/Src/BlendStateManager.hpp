@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_BLEND_STATE_MANAGER_H___
 #define ___C3D_BLEND_STATE_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "BlendState.hpp"
 
 namespace Castor3D
@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de BlendState.
 	*/
 	class BlendStateManager
-		: public Manager< Castor::String, BlendState, Engine >
+		: public ResourceManager< Castor::String, BlendState >
 	{
 	public:
 		/**
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~BlendStateManager();
+		C3D_API ~BlendStateManager();
 		/**
 		 *\~english
 		 *\brief		Creates and returns a BlendState, given a name
@@ -65,6 +65,9 @@ namespace Castor3D
 		 *\return		Le BlendState créé ou existant
 		 */
 		C3D_API BlendStateSPtr Create( Castor::String const & p_name );
+
+	private:
+		using ResourceManager< Castor::String, BlendState >::Create;
 	};
 }
 

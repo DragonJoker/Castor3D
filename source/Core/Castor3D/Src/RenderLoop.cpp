@@ -25,7 +25,7 @@ namespace Castor3D
 		, m_renderSystem( p_renderSystem )
 		, m_debugOverlays( std::make_unique< DebugOverlays >( p_engine ) )
 	{
-		m_debugOverlays->Initialise( GetOwner()->GetOverlayManager() );
+		m_debugOverlays->Initialise( GetEngine()->GetOverlayManager() );
 	}
 
 	RenderLoop::~RenderLoop()
@@ -82,9 +82,9 @@ namespace Castor3D
 
 		try
 		{
-			GetOwner()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
-			GetOwner()->GetOverlayManager().Update();
-			GetOwner()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
+			GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
+			GetEngine()->GetOverlayManager().Update();
+			GetEngine()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		}
 		catch ( Exception & p_exc )
 		{
@@ -100,12 +100,12 @@ namespace Castor3D
 		}
 
 		m_renderSystem->GetMainContext()->EndCurrent();
-		GetOwner()->GetWindowManager().Render( true );
+		GetEngine()->GetWindowManager().Render( true );
 	}
 
 	void RenderLoop::DoCpuStep()
 	{
-		GetOwner()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
+		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
 	}
 
 	void RenderLoop::DoRenderFrame()

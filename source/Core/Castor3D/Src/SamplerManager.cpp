@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	SamplerManager::SamplerManager( Engine & p_engine )
-		: Manager< String, Sampler, Engine >( p_engine )
+		: ResourceManager< String, Sampler >( p_engine )
 	{
 	}
 
@@ -30,7 +30,7 @@ namespace Castor3D
 			{
 				l_return = m_renderSystem->CreateSampler( p_name );
 				m_elements.insert( p_name, l_return );
-				GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
 				Logger::LogInfo( cuT( "SamplerManager::Create - Created Sampler: " ) + p_name + cuT( "" ) );
 			}
 			else

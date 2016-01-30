@@ -74,7 +74,7 @@ namespace GuiCommon
 		else
 		{
 			PassSPtr l_pass = m_pPass.lock();
-			Engine * l_engine = l_pass->GetOwner();
+			Engine * l_engine = l_pass->GetEngine();
 			auto l_lock = Castor::make_unique_lock( l_engine->GetWindowManager() );
 			auto && l_it = l_engine->GetWindowManager().begin();
 

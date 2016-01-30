@@ -494,12 +494,12 @@ namespace Castor3D
 			DoGenerateMatrixBuffer( l_count );
 		}
 
-		GetOwner()->PostEvent( MakeInitialiseEvent( *this ) );
+		GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
 	}
 
 	SubmeshSPtr Submesh::Clone()
 	{
-		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetOwner(), m_parentMesh, m_id );
+		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetEngine(), m_parentMesh, m_id );
 		uint32_t l_uiStride = m_declaration->GetStride();
 
 		//On effectue une copie des vertex
@@ -541,7 +541,7 @@ namespace Castor3D
 
 			if ( l_count > 1 )
 			{
-				if ( GetOwner()->GetRenderSystem()->HasInstancing() )
+				if ( GetEngine()->GetRenderSystem()->HasInstancing() )
 				{
 					m_geometryBuffers->DrawInstanced( l_program, l_uiSize, 0, l_count );
 				}
@@ -1086,17 +1086,17 @@ namespace Castor3D
 		}
 
 		m_declaration = std::make_shared< BufferDeclaration >( &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
-		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetOwner() );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
+		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
 
-		if ( GetOwner()->GetRenderSystem()->HasInstancing() )
+		if ( GetEngine()->GetRenderSystem()->HasInstancing() )
 		{
-			MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( *GetOwner() );
-			m_geometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ), eTOPOLOGY_TRIANGLES );
+			MatrixBufferUPtr l_pMtxBuffer = std::make_unique< MatrixBuffer >( *GetEngine() );
+			m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), std::move( l_pMtxBuffer ), eTOPOLOGY_TRIANGLES );
 		}
 		else
 		{
-			m_geometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
+			m_geometryBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
 		}
 	}
 
@@ -1117,7 +1117,7 @@ namespace Castor3D
 
 			if ( l_program && l_matrixBuffer )
 			{
-				GetOwner()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
+				GetEngine()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
 			}
 		}
 

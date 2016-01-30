@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Named.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -34,15 +36,18 @@ namespace Castor3D
 	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur eEVENT_TYPE)
 	*/
 	class FrameListener
+		: public Castor::Named
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_name	The listener's name.
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_name	Le nom du listener
 		 */
-		C3D_API FrameListener();
+		C3D_API FrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -13,7 +13,7 @@ namespace GlRender
 	}
 
 	GlDepthStencilState::GlDepthStencilState( GlRenderSystem * p_renderSystem, OpenGl & p_gl )
-		: DepthStencilState( *p_renderSystem->GetOwner() )
+		: DepthStencilState( *p_renderSystem->GetEngine() )
 		, Holder( p_gl )
 		, m_renderSystem( p_renderSystem )
 	{

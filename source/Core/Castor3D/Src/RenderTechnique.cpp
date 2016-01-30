@@ -21,7 +21,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderTechniqueBase::RenderTechniqueBase( String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
-		: OwnedBy< Engine >( *p_renderSystem->GetOwner() )
+		: OwnedBy< Engine >( *p_renderSystem->GetEngine() )
 		, m_renderTarget( &p_renderTarget )
 		, m_renderSystem( p_renderSystem )
 		, m_name( p_name )
@@ -87,7 +87,7 @@ namespace Castor3D
 			l_effect->Apply();
 		}
 
-		GetOwner()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_renderTarget->GetSize() );
+		GetEngine()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_renderTarget->GetSize() );
 		m_renderTarget->GetFrameBuffer()->Unbind();
 		m_renderSystem->PopScene();
 	}

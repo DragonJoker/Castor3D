@@ -122,6 +122,13 @@ namespace Castor
 		inline TObjPtrMapConstIt end()const;
 		/**
 		 *\~english
+		 *\return		\p true if the collection is empty.
+		 *\~french
+		 *\return		\p true si la collection est vide.
+		 */
+		inline bool empty()const;
+		/**
+		 *\~english
 		 *\brief		Clears the collection
 		 *\~french
 		 *\brief		Vide la collection

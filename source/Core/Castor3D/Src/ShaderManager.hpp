@@ -47,7 +47,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~ShaderManager();
+		C3D_API ~ShaderManager();
 		/**
 		 *\~english
 		 *\brief		Destroys all the shaders of the array of shaders to destroy

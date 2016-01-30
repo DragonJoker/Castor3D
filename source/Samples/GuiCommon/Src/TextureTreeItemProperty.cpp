@@ -28,7 +28,7 @@ namespace GuiCommon
 	}
 
 	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
-		: TreeItemProperty( p_texture->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
+		: TreeItemProperty( p_texture->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_TEXTURE )
 		, m_texture( p_texture )
 	{
 		PROPERTY_CATEGORY_TEXTURE = _( "Texture" );

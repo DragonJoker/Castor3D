@@ -149,15 +149,15 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node, Viewport const & p_viewport )
-		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
+	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, Viewport const & p_viewport )
+		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_CAMERA, p_node )
 		, m_viewport( p_viewport )
 	{
 	}
 
-	Camera::Camera( SceneSPtr p_scene, String const & p_name, SceneNodeSPtr p_node )
-		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_CAMERA )
-		, m_viewport( Viewport::Ortho( *p_scene->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
+	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node )
+		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_CAMERA, p_node )
+		, m_viewport( Viewport::Ortho( *p_scene.GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 	{
 	}
 
@@ -187,7 +187,7 @@ namespace Castor3D
 
 	void Camera::Render()
 	{
-		bool l_modified = m_viewport.Render( GetOwner()->GetRenderSystem()->GetPipeline() );
+		bool l_modified = m_viewport.Render( GetScene()->GetEngine()->GetRenderSystem()->GetPipeline() );
 		SceneNodeSPtr l_node = GetParent();
 
 		if ( l_node )
@@ -238,15 +238,15 @@ namespace Castor3D
 				}
 			}
 
-			GetOwner()->GetRenderSystem()->GetPipeline().SetViewMatrix( m_view );
+			GetScene()->GetEngine()->GetRenderSystem()->GetPipeline().SetViewMatrix( m_view );
 		}
 
-		GetOwner()->GetRenderSystem()->SetCurrentCamera( this );
+		GetScene()->GetEngine()->GetRenderSystem()->SetCurrentCamera( this );
 	}
 
 	void Camera::EndRender()
 	{
-		GetOwner()->GetRenderSystem()->SetCurrentCamera( NULL );
+		GetScene()->GetEngine()->GetRenderSystem()->SetCurrentCamera( NULL );
 	}
 
 	void Camera::Resize( uint32_t p_width, uint32_t p_height )

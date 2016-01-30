@@ -1,13 +1,15 @@
 ﻿#include "SceneNode.hpp"
+
 #include "Engine.hpp"
-#include "MovableObject.hpp"
-#include "Scene.hpp"
-#include "Ray.hpp"
 #include "Geometry.hpp"
-#include "RenderSystem.hpp"
-#include "Pipeline.hpp"
-#include "Vertex.hpp"
 #include "Mesh.hpp"
+#include "MovableObject.hpp"
+#include "Pipeline.hpp"
+#include "Ray.hpp"
+#include "RenderSystem.hpp"
+#include "Scene.hpp"
+#include "SceneNodeManager.hpp"
+#include "Vertex.hpp"
 
 #include <Logger.hpp>
 #include <TransformationMatrix.hpp>
@@ -17,7 +19,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	SceneNode::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< SceneNode, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< SceneNode, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -82,7 +84,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SceneNode::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< SceneNode >( p_path )
+		: Castor3D::BinaryParser< SceneNode >( p_path )
 	{
 	}
 
@@ -204,7 +206,7 @@ namespace Castor3D
 
 						if ( l_return )
 						{
-							SceneNodeSPtr l_node = p_obj.GetOwner()->CreateSceneNode( l_name, p_obj.shared_from_this() );
+							SceneNodeSPtr l_node = p_obj.GetScene()->GetSceneNodeManager().Create( l_name, p_obj.shared_from_this() );
 							l_return = SceneNode::BinaryParser( m_path ).Parse( *l_node, l_chunk );
 						}
 					}
@@ -230,12 +232,7 @@ namespace Castor3D
 
 	uint64_t SceneNode::Count = 0;
 
-	SceneNode::SceneNode( Scene & p_scene )
-		: SceneNode( p_scene, String() )
-	{
-	}
-
-	SceneNode::SceneNode( Scene & p_scene, String const & p_name )
+	SceneNode::SceneNode( String const & p_name, Scene & p_scene )
 		: OwnedBy< Scene >( p_scene )
 		, Named( p_name )
 		, m_visible( true )
@@ -458,29 +455,6 @@ namespace Castor3D
 		m_scale = p_scale;
 		DoUpdateChildsDerivedTransform();
 		m_mtxChanged = true;
-	}
-
-	void SceneNode::CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex )const
-	{
-		for ( auto && l_it : m_objects )
-		{
-			MovableObjectSPtr l_current = l_it.lock();
-
-			if ( l_current && l_current->GetType() == eMOVABLE_TYPE_GEOMETRY )
-			{
-				std::static_pointer_cast< Geometry >( l_current )->CreateBuffers( p_nbFaces, p_nbVertex );
-			}
-		}
-
-		for ( auto && l_it : m_childs )
-		{
-			SceneNodeSPtr l_current = l_it.second.lock();
-
-			if ( l_current )
-			{
-				l_current->CreateBuffers( p_nbFaces, p_nbVertex );
-			}
-		}
 	}
 
 	GeometrySPtr SceneNode::GetNearestGeometry( Ray * p_ray, real & p_distance, FaceSPtr * p_nearestFace, SubmeshSPtr * p_nearestSubmesh )

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SAMPLER_MANAGER_H___
 #define ___C3D_SAMPLER_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "Sampler.hpp"
 
 namespace Castor3D
@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de Sampler.
 	*/
 	class SamplerManager
-		: public Manager< Castor::String, Sampler, Engine >
+		: public ResourceManager< Castor::String, Sampler >
 	{
 	public:
 		/**
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~SamplerManager();
+		C3D_API ~SamplerManager();
 		/**
 		 *\~english
 		 *\brief		Creates and returns a Sampler, given a name
@@ -65,6 +65,9 @@ namespace Castor3D
 		 *\return		Le Sampler créé ou existant
 		 */
 		C3D_API SamplerSPtr Create( Castor::String const & p_name );
+
+	private:
+		using ResourceManager< Castor::String, Sampler >::Create;
 	};
 }
 

@@ -113,18 +113,23 @@ namespace Castor3D
 			 */
 			C3D_API virtual bool Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const;
 		};
+
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_scene		The parent scene
-		 *\param[in]	p_renderSystem	The RenderSystem
+		 *\param[in]	p_name			The name.
+		 *\param[in]	p_scene			The parent scene.
+		 *\param[in]	p_parent		The parent scene node.
+		 *\param[in]	p_renderSystem	The RenderSystem.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_scene		La scene parente
-		 *\param[in]	p_renderSystem	Le RenderSystem
+		 *\param[in]	p_name			Le nom.
+		 *\param[in]	p_scene			La scene parente.
+		 *\param[in]	p_parent		Le noeud de scène parent.
+		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 */
-		C3D_API BillboardList( SceneSPtr p_scene, RenderSystem & p_renderSystem );
+		C3D_API BillboardList( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor

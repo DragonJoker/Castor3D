@@ -103,7 +103,7 @@ namespace GuiCommon
 
 	void FrameVariablesList::DoAddBuffer( wxTreeItemId p_id, FrameVariableBufferSPtr p_buffer )
 	{
-		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetOwner()->GetOwner(), m_propertiesHolder->IsEditable(), p_buffer ) );
+		wxTreeItemId l_id = AppendItem( p_id, p_buffer->GetName(), eID_FRAME_VARIABLE_BUFFER, eID_FRAME_VARIABLE_BUFFER_SEL, new FrameVariableBufferTreeItemProperty( m_program.lock()->GetRenderSystem()->GetEngine(), m_propertiesHolder->IsEditable(), p_buffer ) );
 		uint32_t l_index = 0;
 
 		for ( auto && l_variable : *p_buffer )

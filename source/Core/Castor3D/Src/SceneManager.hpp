@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SCENE_MANAGER_H___
 #define ___C3D_SCENE_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 
 #include "LightFactory.hpp"
 #include "Scene.hpp"
@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Gestionnaire de Scene.
 	*/
 	class SceneManager
-		: public Manager< Castor::String, Scene, Engine >
+		: public ResourceManager< Castor::String, Scene >
 	{
 	public:
 		/**

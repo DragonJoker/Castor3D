@@ -1,7 +1,7 @@
 #include "PlyImporter.hpp"
 
 #include <RenderSystem.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <SceneManager.hpp>
 #include <Camera.hpp>
 #include <Viewport.hpp>
@@ -9,7 +9,7 @@
 #include <MeshManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
-#include <Geometry.hpp>
+#include <GeometryManager.hpp>
 #include <Mesh.hpp>
 #include <Submesh.hpp>
 #include <Face.hpp>
@@ -36,10 +36,9 @@ SceneSPtr PlyImporter::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_PLY" ), *GetOwner(), cuT( "Scene_PLY" ) );
-		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-		l_pGeometry->AttachTo( l_pNode );
+		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_PLY" ), *GetEngine() );
+		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
+		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
 		l_pGeometry->SetMesh( l_pMesh );
 	}
 
@@ -53,7 +52,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 	String l_name = m_fileName.GetFileName();
 	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 	String l_materialName = l_meshName;
-	MeshSPtr l_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_pMesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	std::ifstream l_isFile;
 	l_isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
 	std::string l_strLine;
@@ -64,11 +63,11 @@ MeshSPtr PlyImporter::DoImportMesh()
 	Coords3r l_ptNml;
 	Coords2r l_ptTex;
 	SubmeshSPtr l_pSubmesh = l_pMesh->CreateSubmesh();
-	MaterialSPtr l_pMaterial = GetOwner()->GetMaterialManager().Find( l_materialName );
+	MaterialSPtr l_pMaterial = GetEngine()->GetMaterialManager().Find( l_materialName );
 
 	if ( ! l_pMaterial )
 	{
-		l_pMaterial = GetOwner()->GetMaterialManager().Create( l_materialName, *GetOwner(), l_materialName );
+		l_pMaterial = GetEngine()->GetMaterialManager().Create( l_materialName, *GetEngine() );
 		l_pMaterial->CreatePass();
 	}
 

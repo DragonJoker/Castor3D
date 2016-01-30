@@ -35,7 +35,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	OverlayManager::OverlayManager( Engine & p_engine )
-		: Manager< String, Overlay, Engine >( p_engine )
+		: ResourceManager< String, Overlay >( p_engine )
 		, m_overlayCountPerLevel( 1000, 0 )
 		, m_viewport( Viewport::Ortho( p_engine, 0, 1, 1, 0, 0, 1000 ) )
 	{
@@ -48,7 +48,7 @@ namespace Castor3D
 	void OverlayManager::Clear()
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		Manager< String, Overlay, Engine >::Clear();
+		ResourceManager< String, Overlay >::Clear();
 		m_overlays.clear();
 		m_fontTextures.clear();
 	}
@@ -59,18 +59,18 @@ namespace Castor3D
 
 		for ( auto && l_overlay : *this )
 		{
-			GetOwner()->PostEvent( MakeCleanupEvent( *l_overlay ) );
+			GetEngine()->PostEvent( MakeCleanupEvent( *l_overlay ) );
 		}
 
 		for ( auto && l_it : m_fontTextures )
 		{
-			GetOwner()->PostEvent( MakeCleanupEvent( *l_it.second ) );
+			GetEngine()->PostEvent( MakeCleanupEvent( *l_it.second ) );
 		}
 	}
 
 	PanelOverlaySPtr OverlayManager::CreatePanel( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
 	{
-		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_PANEL, p_name, p_parent, nullptr );
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_PANEL, p_parent, nullptr );
 		l_overlay->SetPosition( p_position );
 		l_overlay->SetSize( p_size );
 		l_overlay->SetMaterial( p_material );
@@ -79,7 +79,7 @@ namespace Castor3D
 
 	PanelOverlaySPtr OverlayManager::CreatePanel( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
 	{
-		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_PANEL, p_name, p_parent, nullptr );
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_PANEL, p_parent, nullptr );
 		l_overlay->SetPixelPosition( p_position );
 		l_overlay->SetPixelSize( p_size );
 		l_overlay->SetMaterial( p_material );
@@ -88,7 +88,7 @@ namespace Castor3D
 
 	BorderPanelOverlaySPtr OverlayManager::CreateBorderPanel( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
 	{
-		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_BORDER_PANEL, p_name, p_parent, nullptr );
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_BORDER_PANEL, p_parent, nullptr );
 		l_overlay->SetMaterial( p_material );
 		l_overlay->SetPosition( p_position );
 		l_overlay->SetSize( p_size );
@@ -100,7 +100,7 @@ namespace Castor3D
 
 	BorderPanelOverlaySPtr OverlayManager::CreateBorderPanel( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
 	{
-		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_BORDER_PANEL, p_name, p_parent, nullptr );
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_BORDER_PANEL, p_parent, nullptr );
 		l_overlay->SetPixelPosition( p_position );
 		l_overlay->SetPixelSize( p_size );
 		l_overlay->SetMaterial( p_material );
@@ -112,7 +112,7 @@ namespace Castor3D
 
 	TextOverlaySPtr OverlayManager::CreateText( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
 	{
-		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_TEXT, p_name, p_parent, nullptr );
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_TEXT, p_parent, nullptr );
 		l_overlay->SetMaterial( p_material );
 		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
 		l_return->SetPosition( p_position );
@@ -123,7 +123,7 @@ namespace Castor3D
 
 	TextOverlaySPtr OverlayManager::CreateText( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
 	{
-		OverlaySPtr l_overlay = Create( eOVERLAY_TYPE_TEXT, p_name, p_parent, nullptr );
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_TEXT, p_parent, nullptr );
 		l_overlay->SetMaterial( p_material );
 		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
 		l_return->SetPixelPosition( p_position );
@@ -132,14 +132,14 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OverlaySPtr OverlayManager::Create( eOVERLAY_TYPE p_type, String const & p_name, OverlaySPtr p_parent, SceneSPtr p_scene )
+	OverlaySPtr OverlayManager::Create( String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		OverlaySPtr l_return;
 
 		if ( !m_elements.has( p_name ) )
 		{
-			l_return = std::make_shared< Overlay >( *GetOwner(), p_type, p_scene, p_parent );
+			l_return = std::make_shared< Overlay >( *GetEngine(), p_type, p_scene, p_parent );
 			l_return->SetName( p_name );
 
 			if ( p_scene )
@@ -183,7 +183,7 @@ namespace Castor3D
 
 	void OverlayManager::Update()
 	{
-		if ( GetOwner()->IsCleaned() )
+		if ( GetEngine()->IsCleaned() )
 		{
 			if ( m_pRenderer )
 			{
@@ -195,7 +195,7 @@ namespace Castor3D
 		{
 			if ( !m_pRenderer )
 			{
-				m_pRenderer = std::make_shared< OverlayRenderer >( *GetOwner()->GetRenderSystem() );
+				m_pRenderer = std::make_shared< OverlayRenderer >( *GetEngine()->GetRenderSystem() );
 				m_pRenderer->Initialise();
 			}
 		}
@@ -214,7 +214,7 @@ namespace Castor3D
 			}
 		}
 
-		RenderSystem * l_renderSystem = GetOwner()->GetRenderSystem();
+		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
 		Context * l_context = l_renderSystem->GetCurrentContext();
 
 		if ( l_context && m_pRenderer )
@@ -287,7 +287,7 @@ namespace Castor3D
 	bool OverlayManager::Read( Castor::TextFile & p_file )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		SceneFileParser l_parser( *GetOwner() );
+		SceneFileParser l_parser( *GetEngine() );
 		return l_parser.ParseFile( p_file );
 	}
 
@@ -330,7 +330,7 @@ namespace Castor3D
 
 				if ( !l_overlay )
 				{
-					l_overlay = std::make_shared< Overlay >( *GetOwner(), l_type );
+					l_overlay = std::make_shared< Overlay >( *GetEngine(), l_type );
 					l_overlay->SetName( l_name );
 					DoAddOverlay( l_name, l_overlay, nullptr );
 				}
@@ -367,9 +367,9 @@ namespace Castor3D
 
 		if ( l_it == m_fontTextures.end() )
 		{
-			l_return = std::make_shared< FontTexture >( *GetOwner(), p_font );
+			l_return = std::make_shared< FontTexture >( *GetEngine(), p_font );
 			m_fontTextures.insert( std::make_pair( p_font->GetName(), l_return ) );
-			GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
 		}
 
 		return l_return;

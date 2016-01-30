@@ -98,8 +98,8 @@ namespace Castor3D
 
 			if ( l_txt )
 			{
-				double l_time = GetOwner()->GetRenderSystem()->GetGpuTime().count() / 1000.0;
-				GetOwner()->GetRenderSystem()->ResetGpuTime();
+				double l_time = GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0;
+				GetEngine()->GetRenderSystem()->ResetGpuTime();
 				l_txt->SetCaption( string::to_string( int( l_time ) ) + cuT( " ms" ) );
 			}
 

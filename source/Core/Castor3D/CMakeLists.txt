@@ -40,18 +40,33 @@ file( GLOB ${PROJECT_NAME}_Prerequisites_SOURCE_FILES
 source_group( "Header Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_HEADER_FILES} )
 source_group( "Source Files\\Prerequisites" FILES ${${PROJECT_NAME}_Prerequisites_SOURCE_FILES} )
 
-file( GLOB ${PROJECT_NAME}_Main_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.inl
+file( GLOB ${PROJECT_NAME}_Manager_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.inl
 )
-file( GLOB ${PROJECT_NAME}_Main_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/Engine.cpp
+file( GLOB ${PROJECT_NAME}_Manager_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Manager*.cpp
 )
-source_group( "Header Files\\Main" FILES ${${PROJECT_NAME}_Main_HEADER_FILES} )
-source_group( "Source Files\\Main" FILES ${${PROJECT_NAME}_Main_SOURCE_FILES} )
+source_group( "Header Files\\Managers" FILES ${${PROJECT_NAME}_Manager_HEADER_FILES} )
+source_group( "Source Files\\Managers" FILES ${${PROJECT_NAME}_Manager_SOURCE_FILES} )
+
+file( GLOB ${PROJECT_NAME}_Scene_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.hpp
+)
+file( GLOB ${PROJECT_NAME}_Scene_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.cpp
+)
+source_group( "Header Files\\Scene" FILES ${${PROJECT_NAME}_Scene_HEADER_FILES} )
+source_group( "Source Files\\Scene" FILES ${${PROJECT_NAME}_Scene_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_Plugin_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.hpp
@@ -284,24 +299,6 @@ file( GLOB ${PROJECT_NAME}_MeshCategory_SOURCE_FILES
 )
 source_group( "Header Files\\Mesh\\Generator" FILES ${${PROJECT_NAME}_MeshCategory_HEADER_FILES} )
 source_group( "Source Files\\Mesh\\Generator" FILES ${${PROJECT_NAME}_MeshCategory_SOURCE_FILES} )
-
-file( GLOB ${PROJECT_NAME}_Scene_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.hpp
-)
-file( GLOB ${PROJECT_NAME}_Scene_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.cpp
-)
-source_group( "Header Files\\Scene" FILES ${${PROJECT_NAME}_Scene_HEADER_FILES} )
-source_group( "Source Files\\Scene" FILES ${${PROJECT_NAME}_Scene_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_SceneLight_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Light*.hpp

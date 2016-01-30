@@ -154,6 +154,8 @@ namespace Castor3D
 			 */
 			C3D_API virtual bool Parse( Camera & p_obj, BinaryChunk & p_chunk )const;
 		};
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -168,7 +170,7 @@ namespace Castor3D
 		 *\param[in]	p_node		SceneNode parent
 		 *\param[in]	p_viewport	Viewport à copier
 		 */
-		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node, Viewport const & p_viewport );
+		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport const & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
@@ -181,7 +183,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom de la caméra
 		 *\param[in]	p_node	SceneNode parent
 		 */
-		C3D_API Camera( SceneSPtr p_scene, Castor::String const & p_name, const SceneNodeSPtr p_node );
+		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor

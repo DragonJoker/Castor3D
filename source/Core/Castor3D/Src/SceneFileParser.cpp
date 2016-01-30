@@ -520,7 +520,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
 
-	for ( auto && l_it : GetOwner()->GetAdditionalParsers() )
+	for ( auto && l_it : GetEngine()->GetAdditionalParsers() )
 	{
 		for ( auto && l_itSections : l_it.second )
 		{
@@ -531,9 +531,9 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 		}
 	}
 
-	if ( GetOwner()->GetRenderSystem() )
+	if ( GetEngine()->GetRenderSystem() )
 	{
-		l_pContext->eRendererType = GetOwner()->GetRenderSystem()->GetRendererType();
+		l_pContext->eRendererType = GetEngine()->GetRenderSystem()->GetRendererType();
 	}
 }
 

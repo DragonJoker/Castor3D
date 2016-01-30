@@ -39,7 +39,7 @@ namespace GlRender
 
 	bool GlContextImpl::Initialise( RenderWindow * p_window )
 	{
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		bool l_isMain = false;
 
@@ -128,7 +128,7 @@ namespace GlRender
 			glTrack( GetOpenGl(), "GlContextImpl", this );
 			SetCurrent();
 			l_renderSystem->Initialise();
-			p_window->GetOwner()->GetMaterialManager().Initialise();
+			p_window->GetEngine()->GetMaterialManager().Initialise();
 #if !defined( NDEBUG )
 
 			if ( GetOpenGl().HasDebugOutput() )
@@ -209,7 +209,7 @@ namespace GlRender
 
 		try
 		{
-			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
+			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 
 			if ( GetOpenGl().HasCreateContextAttribs() )
 			{
@@ -326,7 +326,7 @@ namespace GlRender
 			l_pfd.cStencilBits = 1;
 		}
 
-		if ( p_window->IsUsingStereo() && p_window->GetOwner()->GetRenderSystem()->IsStereoAvailable() )
+		if ( p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->IsStereoAvailable() )
 		{
 			l_pfd.dwFlags	|= PFD_STEREO;
 		}
@@ -363,56 +363,62 @@ namespace GlRender
 	bool GlContextImpl::DoSelectStereoPixelFormat( RenderWindow * p_window )
 	{
 		bool l_return = false;
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetOwner()->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
 		int l_iPixelFormat = ::DescribePixelFormat( m_hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &l_pfd );
 		bool l_bStereoAvailable = false;
 
+		BYTE l_color = PF::GetBytesPerPixel( p_window->GetPixelFormat() ) * 8;
+		BYTE l_depth = 0;
+		BYTE l_stencil = 0;
+
+		if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH16 )
+		{
+			l_depth = 16;
+		}
+		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH32 )
+		{
+			l_depth = 32;
+		}
+		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24 )
+		{
+			l_depth = 24;
+		}
+		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24S8 )
+		{
+			l_depth = 24;
+			l_stencil = 8;
+		}
+		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL8 )
+		{
+			l_stencil = 8;
+		}
+		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL1 )
+		{
+			l_stencil = 1;
+		}
+
 		while ( l_iPixelFormat && !l_bStereoAvailable )
 		{
-			BYTE l_color = PF::GetBytesPerPixel( p_window->GetPixelFormat() ) * 8;
-			BYTE l_depth = 0;
-			BYTE l_stencil = 0;
-
-			if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH16 )
-			{
-				l_depth = 16;
-			}
-			else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH32 )
-			{
-				l_depth = 32;
-			}
-			else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24 )
-			{
-				l_depth = 24;
-			}
-			else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24S8 )
-			{
-				l_depth = 24;
-				l_stencil = 8;
-			}
-			else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL8 )
-			{
-				l_stencil = 8;
-			}
-			else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL1 )
-			{
-				l_stencil = 1;
-			}
-
 			::DescribePixelFormat( m_hDC, l_iPixelFormat, sizeof( PIXELFORMATDESCRIPTOR ), &l_pfd );
 
-			if ( ( l_pfd.dwFlags & PFD_STEREO )
-					&& ( l_pfd.dwFlags & PFD_SUPPORT_OPENGL )
-					&& ( l_pfd.dwFlags & PFD_DOUBLEBUFFER )
-					&& ( l_pfd.dwFlags & PFD_DRAW_TO_WINDOW )
-					&& l_pfd.iPixelType == PFD_TYPE_RGBA
-					&& l_pfd.cColorBits == l_color
-					&& l_pfd.cDepthBits == l_depth
-					&& l_pfd.cStencilBits == l_stencil )
+			if ( l_pfd.dwFlags & PFD_STEREO )
 			{
-				l_bStereoAvailable = true;
+				if ( ( l_pfd.dwFlags & PFD_SUPPORT_OPENGL )
+					 && ( l_pfd.dwFlags & PFD_DOUBLEBUFFER )
+					 && ( l_pfd.dwFlags & PFD_DRAW_TO_WINDOW )
+					 && l_pfd.iPixelType == PFD_TYPE_RGBA
+					 && l_pfd.cColorBits == l_color
+					 && l_pfd.cDepthBits == l_depth
+					 && l_pfd.cStencilBits == l_stencil )
+				{
+					l_bStereoAvailable = true;
+				}
+				else
+				{
+					l_iPixelFormat--;
+				}
 			}
 			else
 			{

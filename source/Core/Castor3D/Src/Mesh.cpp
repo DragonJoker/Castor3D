@@ -125,15 +125,10 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Mesh::Mesh( Engine & p_engine, String const & p_name )
+	Mesh::Mesh( String const & p_name, Engine & p_engine )
 		: Resource< Mesh >( p_name )
 		, OwnedBy< Engine >( p_engine )
 		, m_modified( false )
-	{
-	}
-
-	Mesh::Mesh( Engine & p_engine )
-		: Mesh( p_engine, cuEmptyString )
 	{
 	}
 
@@ -248,7 +243,7 @@ namespace Castor3D
 
 	SubmeshSPtr Mesh::CreateSubmesh()
 	{
-		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetOwner(), this, GetSubmeshCount() );
+		SubmeshSPtr l_submesh = std::make_shared< Submesh >( *GetEngine(), this, GetSubmeshCount() );
 		m_submeshes.push_back( l_submesh );
 		return l_submesh;
 	}
@@ -283,7 +278,7 @@ namespace Castor3D
 
 	MeshSPtr Mesh::Clone( String const & p_name )
 	{
-		MeshSPtr l_clone = std::make_shared< Mesh >( *GetOwner(), p_name );
+		MeshSPtr l_clone = std::make_shared< Mesh >( p_name, *GetEngine() );
 
 		for ( auto && l_submesh : m_submeshes )
 		{

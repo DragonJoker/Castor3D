@@ -14,7 +14,7 @@
 #include <FunctorEvent.hpp>
 #include <RenderWindow.hpp>
 #include <Scene.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <WindowHandle.hpp>
 
 #include <Math.hpp>
@@ -155,7 +155,12 @@ namespace CastorViewer
 				if ( l_pScene )
 				{
 					m_cameraNode = p_window->GetCamera()->GetParent();
-					m_lightsNode = l_pScene->GetNode( cuT( "PointLightsNode" ) );
+
+					if ( l_pScene->GetSceneNodeManager().Has( cuT( "PointLightsNode" ) ) )
+					{
+						m_lightsNode = l_pScene->GetSceneNodeManager().Find( cuT( "PointLightsNode" ) );
+					}
+
 					m_ptOriginalPosition = m_cameraNode->GetPosition();
 					m_qOriginalOrientation = m_cameraNode->GetOrientation();
 					m_pRenderWindow = p_window;
@@ -165,7 +170,7 @@ namespace CastorViewer
 
 #if HAS_CASTORGUI
 
-				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_window->GetOwner()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_window->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
 
 #endif
 			}

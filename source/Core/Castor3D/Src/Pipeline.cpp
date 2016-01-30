@@ -57,7 +57,7 @@ namespace Castor3D
 
 	void Pipeline::UpdateImpl()
 	{
-		m_impl = GetOwner()->GetPipelineImpl();
+		m_impl = GetRenderSystem()->GetPipelineImpl();
 	}
 
 	bool Pipeline::Project( Point3r const & p_ptObj, Point4r const & p_ptViewport, Point3r & p_result )

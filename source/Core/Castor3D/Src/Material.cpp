@@ -131,7 +131,7 @@ namespace Castor3D
 
 	const Castor::String Material::DefaultMaterialName = cuT( "DefaultMaterial" );
 
-	Material::Material( Engine & p_engine, String const & p_name )
+	Material::Material( String const & p_name, Engine & p_engine )
 		: Resource<Material>( p_name )
 		, OwnedBy< Engine >( p_engine )
 	{
@@ -161,7 +161,7 @@ namespace Castor3D
 
 	PassSPtr Material::CreatePass()
 	{
-		PassSPtr l_newPass = std::make_shared< Pass >( *GetOwner(), shared_from_this() );
+		PassSPtr l_newPass = std::make_shared< Pass >( *GetEngine(), shared_from_this() );
 		m_passes.push_back( l_newPass );
 		return l_newPass;
 	}

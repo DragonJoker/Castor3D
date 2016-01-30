@@ -174,12 +174,12 @@ namespace GlRender
 
 	FrameBufferSPtr GlRenderSystem::CreateFrameBuffer()
 	{
-		return std::make_shared< GlFrameBuffer >( GetOpenGl(), *GetOwner() );
+		return std::make_shared< GlFrameBuffer >( GetOpenGl(), *GetEngine() );
 	}
 
 	Castor3D::BackBuffersSPtr GlRenderSystem::CreateBackBuffers()
 	{
-		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetOwner() );
+		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetEngine() );
 	}
 
 	String GlRenderSystem::GetVertexShaderSource( uint32_t p_programFlags )
@@ -277,7 +277,7 @@ namespace GlRender
 		using namespace GLSL;
 
 		// Shader program
-		ShaderManager & l_manager = GetOwner()->GetShaderManager();
+		ShaderManager & l_manager = GetEngine()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
@@ -390,13 +390,13 @@ namespace GlRender
 			cuT( "polygon" ),//eTOPOLOGY_POLYGON
 		};
 
-		ShaderManager & l_manager = GetOwner()->GetShaderManager();
+		ShaderManager & l_manager = GetEngine()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreateTextureVariables( *l_program, p_flags );
-		FrameVariableBufferSPtr l_billboardUbo = GetOwner()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
+		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
 		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 		ShaderObjectBaseSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );

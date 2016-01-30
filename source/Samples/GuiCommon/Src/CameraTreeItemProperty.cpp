@@ -17,7 +17,7 @@ namespace GuiCommon
 	}
 
 	CameraTreeItemProperty::CameraTreeItemProperty( bool p_editable, Castor3D::CameraSPtr p_camera )
-		: TreeItemProperty( p_camera->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
+		: TreeItemProperty( p_camera->GetScene()->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_CAMERA )
 		, m_camera( p_camera )
 	{
 		PROPERTY_CATEGORY_CAMERA = _( "Camera: " );

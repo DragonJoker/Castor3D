@@ -8,7 +8,7 @@ using namespace Castor3D;
 namespace GlRender
 {
 	GlBlendState::GlBlendState( GlRenderSystem * p_renderSystem, OpenGl & p_gl )
-		: BlendState( *p_renderSystem->GetOwner() )
+		: BlendState( *p_renderSystem->GetEngine() )
 		, Holder( p_gl )
 		, m_renderSystem( p_renderSystem )
 	{

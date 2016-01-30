@@ -27,11 +27,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Collection.hpp>
 #include <OwnedBy.hpp>
 #include <Logger.hpp>
+#include <Signal.hpp>
 
 namespace Castor3D
 {
 	static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created object: " );
 	static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate object: " );
+	static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - NULL object: " );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -54,9 +56,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui ne supportent pas l'initialisation.
 	*/
 	template< typename Elem >
-	struct ElementInitialiser < Elem, typename std::enable_if < !is_initialisable< Elem >::value >::type >
+	struct ElementInitialiser< Elem, typename std::enable_if < !is_initialisable< Elem >::value >::type >
 	{
-		void operator()( Engine & p_engine, Elem & p_element )
+		static void Initialise( Engine & p_engine, Elem & p_element )
 		{
 		}
 	};
@@ -72,9 +74,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
+	struct ElementInitialiser< Elem, typename std::enable_if < is_initialisable< Elem >::value && is_instant< Elem >::value >::type >
 	{
-		void operator()( Engine & p_engine, Elem & p_element )
+		static void Initialise( Engine & p_engine, Elem & p_element )
 		{
 			p_element.Initialise();
 		}
@@ -91,9 +93,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementInitialiser < Elem, typename std::enable_if < is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
+	struct ElementInitialiser< Elem, typename std::enable_if < is_initialisable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
-		void operator()( Engine & p_engine, Elem & p_element )
+		static void Initialise( Engine & p_engine, Elem & p_element )
 		{
 			p_engine.PostEvent( MakeInitialiseEvent( p_element ) );
 		}
@@ -120,9 +122,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui ne supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementCleaner < Elem, typename std::enable_if < !is_cleanable< Elem >::value >::type >
+	struct ElementCleaner< Elem, typename std::enable_if < !is_cleanable< Elem >::value >::type >
 	{
-		void operator()( Engine & p_engine, Elem & p_element )
+		static void Cleanup( Engine & p_engine, Elem & p_element )
 		{
 		}
 	};
@@ -138,9 +140,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
+	struct ElementCleaner< Elem, typename std::enable_if < is_cleanable< Elem >::value && is_instant< Elem >::value >::type >
 	{
-		void operator()( Engine & p_engine, Elem & p_element )
+		static void Cleanup( Engine & p_engine, Elem & p_element )
 		{
 			p_element.Cleanup();
 		}
@@ -157,9 +159,9 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types qui supportent le cleanup.
 	*/
 	template< typename Elem >
-	struct ElementCleaner < Elem, typename std::enable_if < is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
+	struct ElementCleaner< Elem, typename std::enable_if < is_cleanable< Elem >::value && !is_instant< Elem >::value >::type >
 	{
-		void operator()( Engine & p_engine, Elem & p_element )
+		static void Cleanup( Engine & p_engine, Elem & p_element )
 		{
 			p_engine.PostEvent( MakeCleanupEvent( p_element ) );
 		}
@@ -173,24 +175,24 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour un gestionnaire d'éléments.
 	*/
-	template< typename Key, typename Elem, typename Owner >
+	template< typename Key, typename Elem, typename Owner, typename EngineGetter >
 	class Manager
 		: public Castor::OwnedBy< Owner >
 	{
 	public:
 		typedef Castor::Collection< Elem, Key > Collection;
 
-	public:
+	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_owner	The owner.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_owner	Le propriétaire.
 		 */
-		Manager( Engine & p_engine )
-			: OwnedBy< Engine >( p_engine )
+		inline Manager( Owner & p_owner )
+			: OwnedBy< Owner >( p_owner )
 			, m_renderSystem( nullptr )
 		{
 		}
@@ -200,22 +202,24 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~Manager()
+		inline ~Manager()
 		{
 		}
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Sets all the elements to be cleaned up.
 		 *\~french
 		 *\brief		Met tous les éléments à nettoyer.
 		 */
-		virtual void Cleanup()
+		inline void Cleanup()
 		{
 			std::unique_lock< Collection > l_lock( m_elements );
 
 			for ( auto && l_it : this->m_elements )
 			{
-				ElementCleaner< Elem >()( *GetOwner(), *l_it.second );
+				ElementCleaner< Elem >::Cleanup( *GetEngine(), *l_it.second );
 			}
 		}
 		/**
@@ -224,9 +228,19 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide la collection.
 		 */
-		virtual void Clear()
+		inline void Clear()
 		{
 			m_elements.clear();
+		}
+		/**
+		 *\~english
+		 *\return		\p true if the manager is empty.
+		 *\~french
+		 *\return		\p true si le gestionnaire est vide.
+		 */
+		inline bool IsEmpty()
+		{
+			return m_elements.empty();
 		}
 		/**
 		 *\~english
@@ -238,16 +252,25 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'élément.
 		 *\param[in]	p_element	L'élément.
 		 */
-		virtual void Insert( Key const & p_name, std::shared_ptr< Elem > p_element )
+		inline void Insert( Key const & p_name, std::shared_ptr< Elem > p_element )
 		{
-			std::unique_lock< Collection > l_lock( m_elements );
-
-			if ( m_elements.has( p_name ) )
+			if ( p_element )
 			{
-				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
-			}
+				std::unique_lock< Collection > l_lock( m_elements );
 
-			m_elements.insert( p_name, p_element );
+				if ( m_elements.has( p_name ) )
+				{
+					Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+				}
+				else
+				{
+					m_elements.insert( p_name, p_element );
+				}
+			}
+			else
+			{
+				Castor::Logger::LogWarning( WARNING_MANAGER_NULL_OBJECT );
+			}
 		}
 		/**
 		 *\~english
@@ -257,7 +280,7 @@ namespace Castor3D
 		 *\brief		Retire un objet à partir d'un nom.
 		 *\param[in]	p_name		Le nom d'objet.
 		 */
-		virtual void Remove( Key const & p_name )
+		inline void Remove( Key const & p_name )
 		{
 			m_elements.erase( p_name );
 		}
@@ -280,6 +303,16 @@ namespace Castor3D
 		inline RenderSystem * SetRenderSystem()const
 		{
 			return m_renderSystem;
+		}
+		/**
+		*\~english
+		*\return		The Engine.
+		*\~french
+		*\return		L'Engine.
+		*/
+		inline Engine * GetEngine()const
+		{
+			return EngineGetter::Get( *this );
 		}
 		/**
 		 *\~english
@@ -375,19 +408,16 @@ namespace Castor3D
 		{
 			return m_elements.end();
 		}
-
-#	if CASTOR_HAS_VARIADIC_TEMPLATES
-
 		/**
 		 *\~english
 		 *\brief		Creates an object from a name.
 		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_params	The constructor parameters.
+		 *\param[in]	p_params	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet à partir d'un nom.
 		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_params	Les paramètres de construction.
+		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >
@@ -398,9 +428,9 @@ namespace Castor3D
 
 			if ( !m_elements.has( p_name ) )
 			{
-				l_return = std::make_shared< Elem >( std::forward< Parameters >( p_params )... );
+				l_return = std::make_shared< Elem >( p_name, std::forward< Parameters >( p_params )... );
 				m_elements.insert( p_name, l_return );
-				ElementInitialiser< Elem >()( *GetOwner(), *l_return );
+				ElementInitialiser< Elem >::Initialise( *GetEngine(), *l_return );
 				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
 			}
 			else
@@ -411,8 +441,6 @@ namespace Castor3D
 
 			return l_return;
 		}
-
-#	endif
 
 	protected:
 		//!\~english The RenderSystem.	\~french Le RenderSystem.
