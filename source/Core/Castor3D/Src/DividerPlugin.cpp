@@ -63,7 +63,7 @@ namespace Castor3D
 
 		if ( m_pfnOnLoad )
 		{
-			m_pfnOnLoad( GetOwner() );
+			m_pfnOnLoad( GetEngine() );
 		}
 	}
 
@@ -71,7 +71,7 @@ namespace Castor3D
 	{
 		if ( m_pfnOnUnload )
 		{
-			m_pfnOnUnload( GetOwner() );
+			m_pfnOnUnload( GetEngine() );
 		}
 	}
 

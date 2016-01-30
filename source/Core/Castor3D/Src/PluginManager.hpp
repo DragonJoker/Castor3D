@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_PLUGIN_MANAGER_H___
 #define ___C3D_PLUGIN_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "Plugin.hpp"
 
 namespace Castor3D
@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de plug-ins.
 	*/
 	class PluginManager
-		: public Manager< Castor::Path, PluginBase >
+		: public ResourceManager< Castor::Path, PluginBase >
 	{
 	public:
 		/**
@@ -51,15 +51,15 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~PluginManager();
+		C3D_API ~PluginManager();
 		/**
 		 *\copydoc		Castor::Manager::Cleanup
 		 */
-		C3D_API virtual void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\copydoc		Castor::Manager::Clear
 		 */
-		C3D_API virtual void Clear();
+		C3D_API void Clear();
 		/**
 		 *\~english
 		 *\brief		Loads a plugin, given the plugin name (ex: libGlRenderSystem.dll => GlRenderSystem)
@@ -132,6 +132,9 @@ namespace Castor3D
 		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
 		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary );
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
+
+	private:
+		using ResourceManager< Castor::Path, PluginBase >::Create;
 
 	private:
 		//!\~english The loaded shared libraries map	\~french La map des shared libraries chargées

@@ -44,7 +44,7 @@ namespace Msaa
 		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget->GetDepthFormat() );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
-		RasteriserStateSPtr l_pRasteriser = GetOwner()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
+		RasteriserStateSPtr l_pRasteriser = GetEngine()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
 		l_pRasteriser->SetMultisample( true );
 		m_wpMsRasteriserState = l_pRasteriser;
 	}

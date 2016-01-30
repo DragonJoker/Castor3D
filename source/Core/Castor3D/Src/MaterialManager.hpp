@@ -18,7 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MATERIAL_MANAGER_H___
 #define ___C3D_MATERIAL_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
+
 #include "Material.hpp"
 
 namespace Castor3D
@@ -33,7 +34,7 @@ namespace Castor3D
 	\brief		Collection de matériaux, avec des fonctions additionnelles
 	*/
 	class MaterialManager
-		: public Manager< Castor::String, Material >
+		: public ResourceManager< Castor::String, Material >
 	{
 	private:
 		DECLARE_VECTOR(	MaterialWPtr, MaterialWPtr );
@@ -54,13 +55,13 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~MaterialManager();
+		C3D_API ~MaterialManager();
 		/**
 		 *\~english
 		 *\brief		Materials initialisation function.
 		 *\remark		Intialises the default material, a renderer must have been loaded.
 		 */
-		C3D_API virtual void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Deletes the default material, flush the collection
@@ -87,7 +88,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Write( Castor::TextFile & p_file )const;
+		C3D_API bool Write( Castor::TextFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads materials from a text file
@@ -98,7 +99,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Read( Castor::TextFile & p_file );
+		C3D_API bool Read( Castor::TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Writes materials in a binary file
@@ -109,7 +110,7 @@ namespace Castor3D
 		 *\param[out]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Save( Castor::BinaryFile & p_file )const;
+		C3D_API bool Save( Castor::BinaryFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads materials from a binary file
@@ -120,7 +121,7 @@ namespace Castor3D
 		 *\param[in]	p_file	Le fichier
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Load( Castor::BinaryFile & p_file );
+		C3D_API bool Load( Castor::BinaryFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Retrieves the default material

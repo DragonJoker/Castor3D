@@ -52,6 +52,11 @@ namespace Castor
 		return m_objects.end();
 	}
 	template< typename TObj, typename TKey >
+	inline bool Collection< TObj, TKey >::empty()const
+	{
+		return m_objects.empty();
+	}
+	template< typename TObj, typename TKey >
 	inline void Collection< TObj, TKey >::clear() throw( )
 	{
 		auto l_lock( make_unique_lock( m_mutex ) );

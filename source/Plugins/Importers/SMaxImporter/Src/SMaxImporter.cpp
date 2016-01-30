@@ -1,6 +1,6 @@
 #include <RenderSystem.hpp>
 #include <Buffer.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <SceneManager.hpp>
 #include <Camera.hpp>
 #include <Viewport.hpp>
@@ -8,7 +8,7 @@
 #include <MeshManager.hpp>
 #include <Pass.hpp>
 #include <TextureUnit.hpp>
-#include <Geometry.hpp>
+#include <GeometryManager.hpp>
 #include <Mesh.hpp>
 #include <Submesh.hpp>
 #include <Face.hpp>
@@ -44,9 +44,9 @@ SceneSPtr SMaxImporter::DoImportScene()
 	if ( l_pMesh )
 	{
 		l_pMesh->GenerateBuffers();
-		l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetOwner(), cuT( "Scene_3DS" ) );
-		SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-		GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
+		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetEngine() );
+		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
+		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
 		l_pGeometry->AttachTo( l_pNode );
 		l_pGeometry->SetMesh( l_pMesh );
 	}
@@ -67,7 +67,7 @@ MeshSPtr SMaxImporter::DoImportMesh()
 
 	if ( m_pFile->IsOk() )
 	{
-		l_pMesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+		l_pMesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		DoReadChunk( &l_currentChunk );
 
 		if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
@@ -307,12 +307,12 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 
 	if ( !l_strMatName.empty() )
 	{
-		MaterialManager * l_pMtlManager = &GetOwner()->GetMaterialManager();
+		MaterialManager * l_pMtlManager = &GetEngine()->GetMaterialManager();
 		l_pMaterial = l_pMtlManager->Find( l_strMatName );
 
 		if ( ! l_pMaterial )
 		{
-			l_pMaterial = l_pMtlManager->Create( l_strMatName, *GetOwner(), l_strMatName );
+			l_pMaterial = l_pMtlManager->Create( l_strMatName, *GetEngine() );
 			l_pMaterial->CreatePass();
 		}
 
@@ -336,12 +336,12 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 					l_strPath = m_pFile->GetFilePath() / string::lower_case( l_strTexture );
 				}
 
-				ImageSPtr l_pImage = GetOwner()->GetImageManager().create( l_strPath, l_strPath );
+				ImageSPtr l_pImage = GetEngine()->GetImageManager().create( l_strPath, l_strPath );
 
 				if ( l_pImage )
 				{
 					TextureUnitSPtr l_unit = l_pPass->AddTextureUnit();
-					StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+					StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 					l_pStaTexture->SetImage( l_pImage->GetPixels() );
 					l_unit->SetTexture( l_pStaTexture );
@@ -351,7 +351,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 			}
 		}
 
-		GetOwner()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
+		GetEngine()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_pMaterial ) );
 	}
 }
 
@@ -735,7 +735,7 @@ void SMaxImporter::DoReadObjectMaterial( SMaxChunk * p_pChunk, SubmeshSPtr p_pSu
 	MaterialSPtr l_pMaterial;
 	MaterialManager * l_pMtlManager;
 	p_pChunk->m_ulBytesRead += DoGetString( l_materialName );
-	l_pMtlManager = &GetOwner()->GetMaterialManager();
+	l_pMtlManager = &GetEngine()->GetMaterialManager();
 	l_pMaterial = l_pMtlManager->Find( l_materialName );
 
 	if ( l_pMaterial && !p_pSubmesh->GetDefaultMaterial() )

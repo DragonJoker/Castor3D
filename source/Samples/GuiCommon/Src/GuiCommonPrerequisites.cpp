@@ -180,7 +180,7 @@ namespace GuiCommon
 		}
 
 		template< typename TObj, typename TKey >
-		bool DoFillManager( Engine & p_engine, Manager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		bool DoFillManager( Engine & p_engine, ResourceManager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
 			return DoParse( *CreateObject< TObj >( p_engine, p_manager ), p_chunk, p_parser );
 		}

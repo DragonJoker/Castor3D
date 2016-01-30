@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DEPTH_STENCIL_STATE_MANAGER_H___
 #define ___C3D_DEPTH_STENCIL_STATE_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "DepthStencilState.hpp"
 
 namespace Castor3D
@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de DepthStencilState.
 	*/
 	class DepthStencilStateManager
-		: public Manager< Castor::String, DepthStencilState >
+		: public ResourceManager< Castor::String, DepthStencilState >
 	{
 	public:
 		/**
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~DepthStencilStateManager();
+		C3D_API ~DepthStencilStateManager();
 		/**
 		 *\~english
 		 *\brief		Creates and returns a DepthStencilState, given a name
@@ -65,6 +65,9 @@ namespace Castor3D
 		 *\return		Le DepthStencilState créé ou existant
 		 */
 		C3D_API DepthStencilStateSPtr Create( Castor::String const & p_name );
+
+	private:
+		using ResourceManager< Castor::String, DepthStencilState >::Create;
 	};
 }
 

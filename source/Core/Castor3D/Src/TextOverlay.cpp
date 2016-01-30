@@ -152,7 +152,7 @@ namespace Castor3D
 	void TextOverlay::SetFont( String const & p_strFont )
 	{
 		// Récupération / Création de la police
-		Engine * l_engine = m_pOverlay->GetOwner();
+		Engine * l_engine = m_pOverlay->GetEngine();
 		FontManager & l_fontManager = l_engine->GetFontManager();
 		FontSPtr l_pFont = l_fontManager.get( p_strFont );
 

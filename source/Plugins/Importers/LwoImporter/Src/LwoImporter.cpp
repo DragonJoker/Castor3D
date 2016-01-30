@@ -10,11 +10,11 @@
 #include <Submesh.hpp>
 #include <Vertex.hpp>
 #include <Buffer.hpp>
-#include <Geometry.hpp>
+#include <GeometryManager.hpp>
 #include <Face.hpp>
 #include <RenderSystem.hpp>
 #include <SceneManager.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <Version.hpp>
 #include <Plugin.hpp>
 #include <Engine.hpp>
@@ -50,10 +50,9 @@ namespace Lwo
 		if ( l_pMesh )
 		{
 			l_pMesh->GenerateBuffers();
-			l_pScene = GetOwner()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetOwner(), cuT( "Scene_LWO" ) );
-			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-			GeometrySPtr l_pGeometry = l_pScene->CreateGeometry( l_pMesh->GetName() );
-			l_pGeometry->AttachTo( l_pNode );
+			l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetEngine() );
+			SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
+			GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
 			l_pGeometry->SetMesh( l_pMesh );
 		}
 
@@ -75,7 +74,7 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_return = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+			l_return = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4	) );
@@ -219,7 +218,7 @@ namespace Lwo
 
 		for ( std::vector< SubmeshPtrStrPair >::iterator l_it = m_arraySubmeshByMatName.begin() ; l_it != m_arraySubmeshByMatName.end() ; ++l_it )
 		{
-			l_pMaterial = GetOwner()->GetMaterialManager().Find( string::string_cast< xchar >( l_it->first ) );
+			l_pMaterial = GetEngine()->GetMaterialManager().Find( string::string_cast< xchar >( l_it->first ) );
 
 			if ( l_pMaterial )
 			{
@@ -918,7 +917,7 @@ namespace Lwo
 						StringStream l_strLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
 						l_pTexture = p_pPass->AddTextureUnit();
-						StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+						StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 						l_pStaTexture->SetImage( l_it->second->GetPixels() );
 						l_pTexture->SetTexture( l_pStaTexture );
@@ -1032,7 +1031,7 @@ namespace Lwo
 			p_pChunk->m_uiRead += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
 			Logger::LogDebug( cuT( "	Name : " ) + string::string_cast< xchar >( m_strName ) );
 			Logger::LogDebug( cuT( "	Source : " ) + string::string_cast< xchar >( m_strSource ) );
-			l_pMaterial = GetOwner()->GetMaterialManager().Create( string::string_cast< xchar >( m_strName ), *GetOwner(), string::string_cast< xchar >( m_strName ) );
+			l_pMaterial = GetEngine()->GetMaterialManager().Create( string::string_cast< xchar >( m_strName ), *GetEngine() );
 			l_pPass = l_pMaterial->GetPass( 0 );
 		}
 
@@ -1153,7 +1152,7 @@ namespace Lwo
 							l_pathImage = m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage;
 						}
 
-						ImageSPtr l_pImage = GetOwner()->GetImageManager().create( string::string_cast< xchar >( l_strName ), l_pathImage );
+						ImageSPtr l_pImage = GetEngine()->GetImageManager().create( string::string_cast< xchar >( l_strName ), l_pathImage );
 						break;
 					}
 

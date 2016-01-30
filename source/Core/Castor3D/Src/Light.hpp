@@ -42,31 +42,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_name			The light name
 		 *\param[in]	p_scene			Parent scene
+		 *\param[in]	p_pFactory		Factory used to create the LightCategory
+		 *\param[in]	p_eLightType	The light type
 		 *\param[in]	p_node			The parent scene node
-		 *\param[in]	p_pFactory		Factory used to create the LightCategory
-		 *\param[in]	p_eLightType	The light type
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_name			Le nom de la lumière
 		 *\param[in]	p_scene			La scène parente
+		 *\param[in]	p_pFactory		La fabrique de LightCategory
+		 *\param[in]	p_eLightType	Le type de lumière
 		 *\param[in]	p_node			Le scene node parent
-		 *\param[in]	p_pFactory		La fabrique de LightCategory
-		 *\param[in]	p_eLightType	Le type de lumière
 		 */
-		C3D_API Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_scene			Parent scene
-		 *\param[in]	p_pFactory		Factory used to create the LightCategory
-		 *\param[in]	p_eLightType	The light type
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_scene			La scène parente
-		 *\param[in]	p_pFactory		La fabrique de LightCategory
-		 *\param[in]	p_eLightType	Le type de lumière
-		 */
-		C3D_API Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType );
+		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_eLightType );
 		/**
 		 *\~english
 		 *\brief		Destructor

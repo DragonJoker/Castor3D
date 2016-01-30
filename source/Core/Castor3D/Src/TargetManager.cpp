@@ -1,5 +1,6 @@
 ﻿#include "TargetManager.hpp"
 
+#include "GeometryManager.hpp"
 #include "RenderSystem.hpp"
 #include "Scene.hpp"
 
@@ -8,7 +9,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	TargetManager::TargetManager( Engine & p_engine )
-		: Manager< String, RenderTarget >( p_engine )
+		: ResourceManager< String, RenderTarget >( p_engine )
 	{
 	}
 
@@ -19,7 +20,7 @@ namespace Castor3D
 	RenderTargetSPtr TargetManager::Create( eTARGET_TYPE p_type )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		RenderTargetSPtr l_return = std::make_shared< RenderTarget >( *GetOwner(), p_type );
+		RenderTargetSPtr l_return = std::make_shared< RenderTarget >( *GetEngine(), p_type );
 		m_renderTargets[p_type].push_back( l_return );
 		return l_return;
 	}
@@ -51,17 +52,17 @@ namespace Castor3D
 
 		for ( auto l_target : m_renderTargets[eTARGET_TYPE_TEXTURE] )
 		{
-			p_objCount += l_target->GetScene()->Geometries().size();
-			p_fceCount += l_target->GetScene()->GetFaceCount();
-			p_vtxCount += l_target->GetScene()->GetVertexCount();
+			p_objCount += l_target->GetScene()->GetGeometryManager().GetObjectCount();
+			p_fceCount += l_target->GetScene()->GetGeometryManager().GetFaceCount();
+			p_vtxCount += l_target->GetScene()->GetGeometryManager().GetVertexCount();
 			l_target->Render( p_time );
 		}
 
 		for ( auto l_target : m_renderTargets[eTARGET_TYPE_WINDOW] )
 		{
-			p_objCount += l_target->GetScene()->Geometries().size();
-			p_fceCount += l_target->GetScene()->GetFaceCount();
-			p_vtxCount += l_target->GetScene()->GetVertexCount();
+			p_objCount += l_target->GetScene()->GetGeometryManager().GetObjectCount();
+			p_fceCount += l_target->GetScene()->GetGeometryManager().GetFaceCount();
+			p_vtxCount += l_target->GetScene()->GetGeometryManager().GetVertexCount();
 			l_target->Render( p_time );
 		}
 	}

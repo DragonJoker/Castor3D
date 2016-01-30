@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MESH_MANAGER_H___
 #define ___C3D_MESH_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "Mesh.hpp"
 #include "MeshFactory.hpp"
 
@@ -36,7 +36,7 @@ namespace Castor3D
 	\brief		Gestionnaire de maillages.
 	*/
 	class MeshManager
-		: public Manager< Castor::String, Mesh >
+		: public ResourceManager< Castor::String, Mesh >
 	{
 	public:
 		/**
@@ -54,7 +54,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~MeshManager();
+		C3D_API ~MeshManager();
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations.

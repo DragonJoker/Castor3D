@@ -160,14 +160,14 @@ namespace GuiCommon
 		if ( p_scene )
 		{
 			wxTreeItemId l_scene = AddRoot( p_scene->GetName(), eBMP_SCENE, eBMP_SCENE_SEL, new SceneTreeItemProperty( m_propertiesHolder->IsEditable(), p_scene ) );
-			p_scene->GetOwner()->GetWindowManager().lock();
+			p_scene->GetEngine()->GetWindowManager().lock();
 
-			for ( auto l_it : p_scene->GetOwner()->GetWindowManager() )
+			for ( auto l_it : p_scene->GetEngine()->GetWindowManager() )
 			{
 				DoAddRenderWindow( l_scene, l_it.second );
 			}
 
-			p_scene->GetOwner()->GetWindowManager().unlock();
+			p_scene->GetEngine()->GetWindowManager().unlock();
 			SceneNodeSPtr l_rootNode = p_scene->GetRootNode();
 
 			if ( l_rootNode )
@@ -238,7 +238,7 @@ namespace GuiCommon
 	{
 		CameraSPtr l_camera = std::static_pointer_cast< Camera >( p_camera );
 		wxTreeItemId l_id = AppendItem( p_id, l_camera->GetName(), eBMP_CAMERA, eBMP_CAMERA_SEL, new CameraTreeItemProperty( m_propertiesHolder->IsEditable(), l_camera ) );
-		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *l_camera->GetOwner(), l_camera->GetViewport() ) );
+		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *l_camera->GetScene()->GetEngine(), l_camera->GetViewport() ) );
 	}
 
 	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )

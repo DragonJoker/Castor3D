@@ -38,6 +38,7 @@ namespace Castor3D
 	*/
 	class AnimatedObjectGroup
 		: public Castor::Named
+		, public Castor::OwnedBy< Scene >
 	{
 	public:
 		/*!
@@ -118,22 +119,15 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		C3D_API AnimatedObjectGroup();
-		/**
-		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_scene	The scene
 		 *\param[in]	p_name	The group name
+		 *\param[in]	p_scene	The scene
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_scene	La scène
 		 *\param[in]	p_name	Le nom du groupe
+		 *\param[in]	p_scene	La scène
 		 */
-		C3D_API AnimatedObjectGroup( SceneSPtr p_scene, Castor::String const & p_name );
+		C3D_API AnimatedObjectGroup( Castor::String const & p_name, Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor

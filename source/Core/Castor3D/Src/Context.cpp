@@ -25,7 +25,7 @@ namespace Castor3D
 		, m_window( NULL )
 		, m_initialised( false )
 		, m_bMultiSampling( false )
-		, m_viewport( Viewport::Ortho( *GetOwner()->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
+		, m_viewport( Viewport::Ortho( *GetRenderSystem()->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
@@ -68,20 +68,20 @@ namespace Castor3D
 	bool Context::Initialise( RenderWindow * p_window )
 	{
 		m_window = p_window;
-		ShaderManager & l_manager = GetOwner()->GetOwner()->GetShaderManager();
+		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
 		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
 		m_renderTextureProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner()->GetOwner(), &( *m_declaration )[0], m_declaration->Size() );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
 		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_declaration->GetStride() );
 		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		m_geometryBuffers = GetOwner()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
-		m_pDsStateNoDepth = GetOwner()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
+		m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
+		m_pDsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
 		m_pDsStateNoDepth->SetDepthTest( false );
 		m_pDsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
-		m_pDsStateNoDepthWrite = GetOwner()->GetOwner()->GetDepthStencilStateManager().Create( cuT( "NoDepthWriterState" ) );
+		m_pDsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthWriterState" ) );
 		m_pDsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
 
@@ -127,12 +127,12 @@ namespace Castor3D
 	void Context::SetCurrent()
 	{
 		DoSetCurrent();
-		GetOwner()->SetCurrentContext( this );
+		GetRenderSystem()->SetCurrentContext( this );
 	}
 
 	void Context::EndCurrent()
 	{
-		GetOwner()->SetCurrentContext( NULL );
+		GetRenderSystem()->SetCurrentContext( NULL );
 		DoEndCurrent();
 	}
 
@@ -166,7 +166,7 @@ namespace Castor3D
 	{
 		ShaderProgramBaseSPtr l_program = p_program;
 		m_viewport.SetSize( p_size );
-		m_viewport.Render( GetOwner()->GetPipeline() );
+		m_viewport.Render( GetRenderSystem()->GetPipeline() );
 		uint32_t l_id = p_texture->GetIndex();
 		p_texture->SetIndex( 0 );
 
@@ -176,7 +176,7 @@ namespace Castor3D
 
 			if ( l_matrices )
 			{
-				GetOwner()->GetPipeline().ApplyProjection( *l_matrices );
+				GetRenderSystem()->GetPipeline().ApplyProjection( *l_matrices );
 			}
 
 			l_program->Bind();

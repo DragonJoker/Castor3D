@@ -5,7 +5,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FrameListener::FrameListener()
+	FrameListener::FrameListener( String const & p_name )
+		: Named( p_name )
 	{
 	}
 

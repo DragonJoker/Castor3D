@@ -16,8 +16,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Light::Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType, SceneNodeSPtr p_node, String const & p_name )
-		: MovableObject( p_scene, p_node, p_name, eMOVABLE_TYPE_LIGHT )
+	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_eLightType )
+		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_LIGHT, p_node )
 		, m_enabled( false )
 	{
 		m_pCategory = p_factory.Create( p_eLightType );
@@ -27,11 +27,6 @@ namespace Castor3D
 		{
 			m_pCategory->SetPositionType( Point4f( p_node->GetPosition()[0], p_node->GetPosition()[1], p_node->GetPosition()[2], real( 0.0 ) ) );
 		}
-	}
-
-	Light::Light( LightFactory & p_factory, SceneSPtr p_scene, eLIGHT_TYPE p_eLightType )
-		:	Light( p_factory, p_scene, p_eLightType, nullptr, String() )
-	{
 	}
 
 	Light::~Light()

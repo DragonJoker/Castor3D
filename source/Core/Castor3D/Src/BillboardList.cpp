@@ -117,7 +117,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetMaterial( p_obj.GetOwner()->GetMaterialManager().Find( l_name ) );
+						p_obj.SetMaterial( p_obj.GetScene()->GetEngine()->GetMaterialManager().Find( l_name ) );
 					}
 
 					break;
@@ -149,8 +149,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	BillboardList::BillboardList( SceneSPtr p_scene, RenderSystem & p_renderSystem )
-		: MovableObject( p_scene, eMOVABLE_TYPE_BILLBOARD )
+	BillboardList::BillboardList( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem )
+		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_BILLBOARD, p_parent )
 		, m_bNeedUpdate( false )
 	{
 		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) };
@@ -164,7 +164,7 @@ namespace Castor3D
 	bool BillboardList::Initialise()
 	{
 		VertexBufferUPtr l_pVtxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetOwner(), &( *m_declaration )[0], m_declaration->Size() );
+		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
 		uint32_t l_uiStride = m_declaration->GetStride();
 		l_pVtxBuffer->Resize( uint32_t( m_arrayPositions.size() * l_uiStride ) );
 		uint8_t * l_pBuffer = l_pVtxBuffer->data();
@@ -176,7 +176,7 @@ namespace Castor3D
 			l_pBuffer += l_uiStride;
 		}
 
-		m_geometryBuffers = GetOwner()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_POINTS );
+		m_geometryBuffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_POINTS );
 		return true;
 	}
 
@@ -187,7 +187,7 @@ namespace Castor3D
 
 		if ( l_material && l_material->GetPassCount() )
 		{
-			auto & l_manager = GetOwner()->GetShaderManager();
+			auto & l_manager = GetScene()->GetEngine()->GetShaderManager();
 
 			for ( auto l_pass : *l_material )
 			{
@@ -195,7 +195,7 @@ namespace Castor3D
 
 				if ( !l_program )
 				{
-					l_program = GetOwner()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
+					l_program = GetScene()->GetEngine()->GetRenderSystem()->CreateBillboardsProgram( p_technique, l_pass->GetTextureFlags() );
 					l_manager.AddBillboardProgram( l_program, l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
 				}
 
@@ -281,7 +281,7 @@ namespace Castor3D
 	{
 		if ( !m_bNeedUpdate )
 		{
-			Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
+			Pipeline & l_pipeline = GetScene()->GetEngine()->GetRenderSystem()->GetPipeline();
 			ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
 			MaterialSPtr l_pMaterial = m_wpMaterial.lock();
 			VertexBuffer & l_vtxBuffer = m_geometryBuffers->GetVertexBuffer();

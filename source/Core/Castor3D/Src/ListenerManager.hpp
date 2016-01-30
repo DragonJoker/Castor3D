@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_LISTENER_MANAGER_H___
 #define ___C3D_LISTENER_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 
 #include "FrameListener.hpp"
 
@@ -38,7 +38,7 @@ namespace Castor3D
 	template<>
 	struct ElementCleaner< FrameListener, FrameListener >
 	{
-		void operator()( Engine & p_engine, FrameListener & p_element )
+		static void Cleanup( Engine & p_engine, FrameListener & p_element )
 		{
 			p_element.Flush();
 		}
@@ -53,7 +53,7 @@ namespace Castor3D
 	\brief		Gestionnaire de frame listener.
 	*/
 	class ListenerManager
-		: public Manager< Castor::String, FrameListener >
+		: public ResourceManager< Castor::String, FrameListener >
 	{
 	public:
 		/**

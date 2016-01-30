@@ -5,6 +5,7 @@
 
 namespace Castor
 {
-	IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::Engine );
-	IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::RenderSystem );
+	IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::Engine, Engine );
+	IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::RenderSystem, RenderSystem );
+	IMPLEMENT_EXPORTED_OWNED_BY( Castor3D::Scene, Scene );
 }

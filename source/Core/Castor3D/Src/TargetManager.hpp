@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TARGET_MANAGER_H___
 #define ___C3D_TARGET_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 
 #include "RenderTarget.hpp"
 #include "TechniqueFactory.hpp"
@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Gestionnaire de RenderTarget.
 	*/
 	class TargetManager
-		: public Manager< Castor::String, RenderTarget >
+		: public ResourceManager< Castor::String, RenderTarget >
 	{
 	public:
 		/**
@@ -53,7 +53,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~TargetManager();
+		C3D_API ~TargetManager();
 		/**
 		 *\~english
 		 *\brief		Creates a render target of given type
@@ -89,6 +89,9 @@ namespace Castor3D
 		 *\param[in,out]	p_objCount	Reçoit le nombre d'objets dessinés.
 		 */
 		C3D_API void Render( double & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
+
+	private:
+		using ResourceManager< Castor::String, RenderTarget >::Create;
 
 	private:
 		DECLARE_VECTOR( RenderTargetSPtr, RenderTarget );

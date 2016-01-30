@@ -79,7 +79,7 @@ namespace Castor
 	 *\brief		Macro pour déclarer une spécialisation exportée de OwnedBy.
 	 *\remarks		Doit être utilisée dans le namespace Castor.
 	 */
-#	define DECLARED_EXPORTED_OWNED_BY( exp, owner )\
+#	define DECLARED_EXPORTED_OWNED_BY( exp, owner, name )\
 	template<>\
 	class exp OwnedBy< owner >\
 	{\
@@ -92,7 +92,7 @@ namespace Castor
 		OwnedBy( OwnedBy< owner > && p_rhs );\
 		~OwnedBy();\
 	public:\
-		owner * GetOwner()const;\
+		owner * Get##name()const;\
 	private:\
 		owner & m_owner;\
 	}
@@ -105,7 +105,7 @@ namespace Castor
 	 *\brief		Macro pour implémenter une spécialisation de OwnedBy.
 	 *\remarks		Doit être utilisée dans le namespace Castor.
 	 */
-#	define IMPLEMENT_EXPORTED_OWNED_BY( owner )\
+#	define IMPLEMENT_EXPORTED_OWNED_BY( owner, name )\
 	OwnedBy< owner >::OwnedBy( owner & p_owner )\
 		: m_owner( p_owner )\
 	{\
@@ -121,7 +121,7 @@ namespace Castor
 	OwnedBy< owner >::~OwnedBy()\
 	{\
 	}\
-	owner * OwnedBy< owner >::GetOwner()const\
+	owner * OwnedBy< owner >::Get##name()const\
 	{\
 		return &m_owner;\
 	}

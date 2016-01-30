@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	MeshManager::MeshManager( Engine & p_engine )
-		: Manager< Castor::String, Mesh >( p_engine )
+		: ResourceManager< Castor::String, Mesh >( p_engine )
 	{
 	}
 
@@ -32,7 +32,7 @@ namespace Castor3D
 
 		if ( !m_elements.has( p_name ) )
 		{
-			l_return = std::make_shared< Mesh >( *GetOwner(), p_name );
+			l_return = std::make_shared< Mesh >( p_name, *GetEngine() );
 			m_factory.Create( p_type )->Generate( *l_return, p_arrayFaces, p_arraySizes );
 			m_elements.insert( p_name, l_return );
 			Logger::LogInfo( cuT( "MeshManager::Create - Created Mesh: " ) + p_name + cuT( "" ) );
@@ -94,11 +94,16 @@ namespace Castor3D
 
 			if ( !l_pMesh )
 			{
-				l_pMesh = std::make_shared< Mesh >( *GetOwner(), cuEmptyString );
+				l_pMesh = std::make_shared< Mesh >( cuEmptyString, *GetEngine() );
+				l_return = Mesh::BinaryParser( p_file.GetFileFullPath() ).Parse( *l_pMesh, p_file );
 				m_elements.insert( cuEmptyString, l_pMesh );
 			}
+			else
+			{
+				// Mesh already loaded, don't do anything.
+				l_return = true;
+			}
 
-			l_return = Mesh::BinaryParser( p_file.GetFileFullPath() ).Parse( *l_pMesh, p_file );
 		}
 
 		return l_return;

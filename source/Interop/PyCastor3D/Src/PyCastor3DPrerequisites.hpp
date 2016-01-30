@@ -33,13 +33,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Animable.hpp>
 #include <AnimatedObject.hpp>
-#include <AnimatedObjectGroup.hpp>
+#include <AnimatedObjectGroupManager.hpp>
+#include <BillboardManager.hpp>
 #include <Engine.hpp>
 #include <SceneManager.hpp>
-#include <Camera.hpp>
+#include <CameraManager.hpp>
 #include <MeshManager.hpp>
 #include <Submesh.hpp>
-#include <Light.hpp>
+#include <LightManager.hpp>
 #include <DirectionalLight.hpp>
 #include <SpotLight.hpp>
 #include <PointLight.hpp>
@@ -49,9 +50,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <TextureUnit.hpp>
 #include <StaticTexture.hpp>
 #include <DynamicTexture.hpp>
+#include <SceneNodeManager.hpp>
 #include <ShaderProgram.hpp>
 #include <SamplerManager.hpp>
-#include <Geometry.hpp>
+#include <GeometryManager.hpp>
 #include <WindowManager.hpp>
 #include <OverlayManager.hpp>
 #include <PanelOverlay.hpp>

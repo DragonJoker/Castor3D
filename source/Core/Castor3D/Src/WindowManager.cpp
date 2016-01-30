@@ -8,7 +8,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	WindowManager::WindowManager( Engine & p_engine )
-		: Manager< uint32_t, RenderWindow >( p_engine )
+		: ResourceManager< uint32_t, RenderWindow >( p_engine )
 	{
 	}
 
@@ -19,7 +19,7 @@ namespace Castor3D
 	RenderWindowSPtr WindowManager::Create()
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		RenderWindowSPtr l_return = std::make_shared< RenderWindow >( *GetOwner() );
+		RenderWindowSPtr l_return = std::make_shared< RenderWindow >( *GetEngine() );
 
 		if ( l_return )
 		{

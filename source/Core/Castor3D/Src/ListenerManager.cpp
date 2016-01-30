@@ -7,9 +7,9 @@ using namespace Castor;
 namespace Castor3D
 {
 	ListenerManager::ListenerManager( Engine & p_engine )
-		: Manager< String, FrameListener >( p_engine )
-		, m_defaultListener( Manager< String, FrameListener >::Create( cuT( "Default" ) ) )
+		: ResourceManager< String, FrameListener >( p_engine )
 	{
+		m_defaultListener = ResourceManager< String, FrameListener >::Create( cuT( "Default" ) );
 	}
 
 	ListenerManager::~ListenerManager()

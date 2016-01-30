@@ -39,7 +39,7 @@ namespace CastorViewer
 		}
 
 		template< typename TObj, typename TKey >
-		bool ParseManager( Engine * p_engine, Manager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
+		bool ParseManager( Engine * p_engine, ResourceManager< TKey, TObj > & p_manager, BinaryChunk & p_chunk, typename TObj::BinaryParser p_parser )
 		{
 			bool l_result = true;
 			auto l_lock = make_unique_lock( p_manager );

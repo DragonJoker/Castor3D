@@ -446,6 +446,12 @@ namespace Castor3D
 	class AnimationManager;
 	class TargetManager;
 	class ListenerManager;
+	class GeometryManager;
+	class CameraManager;
+	class LightManager;
+	class AnimatedObjectGroupManager;
+	class SceneNodeManager;
+	class BillboardManager;
 
 	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( ShaderManager );
@@ -461,6 +467,12 @@ namespace Castor3D
 	DECLARE_SMART_PTR( AnimationManager );
 	DECLARE_SMART_PTR( TargetManager );
 	DECLARE_SMART_PTR( ListenerManager );
+	DECLARE_SMART_PTR( GeometryManager );
+	DECLARE_SMART_PTR( CameraManager );
+	DECLARE_SMART_PTR( LightManager );
+	DECLARE_SMART_PTR( AnimatedObjectGroupManager );
+	DECLARE_SMART_PTR( SceneNodeManager );
+	DECLARE_SMART_PTR( BillboardManager );
 
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );
@@ -538,14 +550,31 @@ namespace Castor3D
 	*/
 	template< typename T > struct is_instant : std::false_type {};
 	template<> struct is_instant< Scene > : std::true_type {};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		29/01/2016
+	\~english
+	\brief		Helper class, telling if the template parameter has the method Detach.
+	\~french
+	\brief		Classe d'aide, dit si le paramètre template possède la méthode Detach.
+	*/
+	template< typename T > struct is_detachable : std::false_type {};
+	template<> struct is_detachable< MovableObject > : std::true_type {};
+	template<> struct is_detachable< Camera > : std::true_type {};
+	template<> struct is_detachable< Geometry > : std::true_type {};
+	template<> struct is_detachable< Light > : std::true_type {};
+	template<> struct is_detachable< BillboardList > : std::true_type {};
+	template<> struct is_detachable< SceneNode > : std::true_type {};
 
 	//@}
 }
 
 namespace Castor
 {
-	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine );
-	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::RenderSystem );
+	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Engine, Engine );
+	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::RenderSystem, RenderSystem );
+	DECLARED_EXPORTED_OWNED_BY( C3D_API, Castor3D::Scene, Scene );
 }
 
 #endif

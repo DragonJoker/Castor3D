@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	BlendStateManager::BlendStateManager( Engine & p_engine )
-		: Manager< String, BlendState >( p_engine )
+		: ResourceManager< String, BlendState >( p_engine )
 	{
 	}
 
@@ -24,7 +24,7 @@ namespace Castor3D
 		{
 			l_return = m_renderSystem->CreateBlendState();
 			m_elements.insert( p_name, l_return );
-			GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
 			Logger::LogInfo( cuT( "BlendStateManager::Create - Created BlendState: " ) + p_name + cuT( "" ) );
 		}
 		else

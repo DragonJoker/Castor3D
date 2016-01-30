@@ -20,7 +20,7 @@ namespace GuiCommon
 	}
 
 	SceneTreeItemProperty::SceneTreeItemProperty( bool p_editable, SceneSPtr p_scene )
-		: TreeItemProperty( p_scene->GetOwner(), p_editable, ePROPERTY_DATA_TYPE_SCENE )
+		: TreeItemProperty( p_scene->GetEngine(), p_editable, ePROPERTY_DATA_TYPE_SCENE )
 		, m_scene( p_scene )
 	{
 		PROPERTY_CATEGORY_SCENE = _( "Scene: " );

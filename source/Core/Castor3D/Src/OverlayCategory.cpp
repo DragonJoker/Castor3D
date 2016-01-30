@@ -141,7 +141,7 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				p_obj.SetMaterial( p_obj.m_pOverlay->GetOwner()->GetMaterialManager().Find( l_name ) );
+				p_obj.SetMaterial( p_obj.m_pOverlay->GetEngine()->GetMaterialManager().Find( l_name ) );
 			}
 
 			break;

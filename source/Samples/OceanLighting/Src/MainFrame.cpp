@@ -4,13 +4,13 @@
 
 #include "MainFrame.hpp"
 
-#include <Camera.hpp>
-#include <Scene.hpp>
+#include <CameraManager.hpp>
 #include <PlatformWindowHandle.hpp>
 #include <PluginManager.hpp>
 #include <Parameter.hpp>
 #include <RenderLoop.hpp>
 #include <SceneManager.hpp>
+#include <SceneNodeManager.hpp>
 #include <TargetManager.hpp>
 #include <TechniqueFactory.hpp>
 #include <WindowManager.hpp>
@@ -334,9 +334,10 @@ namespace OceanLighting
 
 		if ( l_bReturn )
 		{
-			SceneSPtr l_pScene = m_pCastor3D->GetSceneManager().Create( cuT( "DummyScene" ), *m_pCastor3D, cuT( "DummyScene" ) );
-			SceneNodeSPtr l_pNode = l_pScene->CreateSceneNode( cuT( "DummyCameraNode" ), l_pScene->GetCameraRootNode() );
-			CameraSPtr l_pCamera = l_pScene->CreateCamera( cuT( "DummyCamera" ), m_width, m_height, l_pNode );
+			SceneSPtr l_pScene = m_pCastor3D->GetSceneManager().Create( cuT( "DummyScene" ), *m_pCastor3D );
+			SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( cuT( "DummyCameraNode" ), l_pScene->GetCameraRootNode() );
+			CameraSPtr l_pCamera = l_pScene->GetCameraManager().Create( cuT( "DummyCamera" ), l_pNode );
+			l_pCamera->GetViewport().SetSize( Size( m_width, m_height ) );
 			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
 			RenderTargetSPtr l_target = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 			l_target->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );

@@ -67,7 +67,7 @@ namespace Castor3D
 
 				case eCHUNK_TYPE_TEXTURE_DATA:
 					l_pPxBuffer = PxBufferBase::create( l_size, l_ePf, l_chunk.GetRemainingData(), l_ePf );
-					l_pTexture = p_unit.GetOwner()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+					l_pTexture = p_unit.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 					l_pTexture->SetImage( l_pPxBuffer );
 					p_unit.SetTexture( l_pTexture );
 					break;
@@ -473,14 +473,14 @@ namespace Castor3D
 		m_eRgbArguments[1] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[0] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[1] = eBLEND_SOURCE_COUNT;
-		m_pSampler = GetOwner()->GetDefaultSampler();
+		m_pSampler = GetEngine()->GetDefaultSampler();
 	}
 
 	TextureUnit::~TextureUnit()
 	{
 		if ( !m_renderTarget.expired() )
 		{
-			GetOwner()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
+			GetEngine()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 
@@ -536,7 +536,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			Pipeline & l_pipeline = GetOwner()->GetRenderSystem()->GetPipeline();
+			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetPipeline();
 			m_pTexture->Bind();
 
 			if ( m_changed && ( m_bAutoMipmaps || m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC ) )
@@ -688,12 +688,12 @@ namespace Castor3D
 
 		if ( !p_pathFile.empty() && File::FileExists( p_pathFile ) )
 		{
-			l_pImage = GetOwner()->GetImageManager().create( p_pathFile.GetFileName(), p_pathFile );
+			l_pImage = GetEngine()->GetImageManager().create( p_pathFile.GetFileName(), p_pathFile );
 		}
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_pStaTexture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+			StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 			l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 			l_pStaTexture->SetImage( l_pImage->GetPixels() );
 			SetTexture( l_pStaTexture );

@@ -133,7 +133,7 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TARGET:
-					l_target = p_obj.GetOwner()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
+					l_target = p_obj.GetEngine()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 					l_return = RenderTarget::BinaryParser( m_path ).Parse( *l_target, l_chunk );
 					break;
 
@@ -166,21 +166,21 @@ namespace Castor3D
 		, m_bFullscreen( false )
 		, m_backBuffers( p_engine.GetRenderSystem()->CreateBackBuffers() )
 	{
-		auto l_dsstate = GetOwner()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		auto l_dsstate = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		l_dsstate->SetDepthTest( false );
 		m_wpDepthStencilState = l_dsstate;
-		m_wpRasteriserState = GetOwner()->GetRasteriserStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderWindowState_" ) + string::to_string( m_index ) );
 		s_nbRenderWindows++;
 	}
 
 	RenderWindow::~RenderWindow()
 	{
 		FrameListenerSPtr l_pListener( m_wpListener.lock() );
-		GetOwner()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
+		GetEngine()->GetListenerManager().Remove( cuT( "RenderWindow_" ) + string::to_string( m_index ) );
 
 		if ( !m_renderTarget.expired() )
 		{
-			GetOwner()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
+			GetEngine()->GetTargetManager().Remove( std::move( m_renderTarget.lock() ) );
 		}
 	}
 
@@ -191,7 +191,7 @@ namespace Castor3D
 
 		if ( m_handle )
 		{
-			GetOwner()->GetRenderLoop().CreateContext( *this );
+			GetEngine()->GetRenderLoop().CreateContext( *this );
 			m_initialised = m_context && m_context->IsInitialised();
 
 			if ( m_initialised )
@@ -233,7 +233,7 @@ namespace Castor3D
 			l_target->Cleanup();
 		}
 
-		if ( m_context != GetOwner()->GetRenderSystem()->GetMainContext() )
+		if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
 		{
 			m_context->Cleanup();
 		}
@@ -243,7 +243,7 @@ namespace Castor3D
 	{
 		if ( m_initialised )
 		{
-			Engine * l_pEngine = GetOwner();
+			Engine * l_pEngine = GetEngine();
 			RenderTargetSPtr l_target = GetRenderTarget();
 			m_context->SetCurrent();
 

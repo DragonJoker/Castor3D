@@ -18,7 +18,7 @@ using namespace Castor;
 
 //****************************************************************************************************
 
-SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_pFile )
+SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pFile )
 	: FileParserContext( p_pFile )
 	, pWindow()
 	, pSceneNode()
@@ -199,6 +199,14 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser,  TextFile * p_p
 	m_mapBlendModes[cuT( "none" )] = eBLEND_MODE_NONE;
 	m_mapBlendModes[cuT( "additive" )] = eBLEND_MODE_ADDITIVE;
 	m_mapBlendModes[cuT( "multiplicative" )] = eBLEND_MODE_MULTIPLICATIVE;
+
+	m_mapVerticalAligns[cuT( "top" )] = eVALIGN_TOP;
+	m_mapVerticalAligns[cuT( "center" )] = eVALIGN_CENTER;
+	m_mapVerticalAligns[cuT( "bottom" )] = eVALIGN_BOTTOM;
+
+	m_mapHorizontalAligns[cuT( "left" )] = eHALIGN_LEFT;
+	m_mapHorizontalAligns[cuT( "center" )] = eHALIGN_CENTER;
+	m_mapHorizontalAligns[cuT( "right" )] = eHALIGN_RIGHT;
 }
 
 void SceneFileContext::Initialise()
@@ -488,10 +496,12 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "}" ), Parser_OverlayEnd );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "font" ), Parser_TextOverlayFont, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text" ), Parser_TextOverlayText, 1, ePARAMETER_TYPE_TEXT );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_wrapping" ), Parser_TextOverlayTextWrapping, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextWrappingModes );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "vertical_align" ), Parser_TextOverlayVerticalAlign, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapVerticalAligns );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "horizontal_align" ), Parser_TextOverlayHorizontalAlign, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapHorizontalAligns );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "}" ), Parser_OverlayEnd );
 
 	AddParser( eSECTION_CAMERA, cuT( "parent" ), Parser_CameraParent, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_CAMERA, cuT( "viewport" ), Parser_CameraViewport );
@@ -520,7 +530,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
 
-	for ( auto && l_it : GetOwner()->GetAdditionalParsers() )
+	for ( auto && l_it : GetEngine()->GetAdditionalParsers() )
 	{
 		for ( auto && l_itSections : l_it.second )
 		{
@@ -531,9 +541,9 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 		}
 	}
 
-	if ( GetOwner()->GetRenderSystem() )
+	if ( GetEngine()->GetRenderSystem() )
 	{
-		l_pContext->eRendererType = GetOwner()->GetRenderSystem()->GetRendererType();
+		l_pContext->eRendererType = GetEngine()->GetRenderSystem()->GetRendererType();
 	}
 }
 

@@ -130,7 +130,7 @@ namespace GlRender
 		uint64_t l_time = 0;
 		m_queryIndex = 1 - m_queryIndex;
 		m_timerQuery[m_queryIndex].GetInfos( eGL_QUERY_INFO_RESULT, l_time );
-		GetOwner()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
+		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
 		GetImpl()->EndCurrent();
 	}
 

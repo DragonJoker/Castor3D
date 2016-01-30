@@ -4,7 +4,7 @@
 #include <BufferDeclaration.hpp>
 #include <BufferElementDeclaration.hpp>
 #include <BufferElementGroup.hpp>
-#include <Camera.hpp>
+#include <CameraManager.hpp>
 #include <ColourRenderBuffer.hpp>
 #include <Context.hpp>
 #include <DepthStencilRenderBuffer.hpp>
@@ -15,6 +15,7 @@
 #include <FrameVariableBuffer.hpp>
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
+#include <LightManager.hpp>
 #include <MatrixBuffer.hpp>
 #include <OneFrameVariable.hpp>
 #include <Pipeline.hpp>
@@ -62,7 +63,7 @@ namespace Deferred
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 		: RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
-		, m_viewport( Viewport::Ortho( *p_renderSystem->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
+		, m_viewport( Viewport::Ortho( *p_renderSystem->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem->CreateFrameBuffer();
@@ -74,9 +75,9 @@ namespace Deferred
 			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassTextures[i] );
 		}
 
-		m_lightPassShaderProgram = GetOwner()->GetShaderManager().GetNewProgram();
+		m_lightPassShaderProgram = GetEngine()->GetShaderManager().GetNewProgram();
 
-		m_geometryPassDsState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "GeometricPassState" ) );
+		m_geometryPassDsState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "GeometricPassState" ) );
 		m_geometryPassDsState->SetStencilTest( true );
 		m_geometryPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_geometryPassDsState->SetStencilWriteMask( 0xFFFFFFFF );
@@ -93,7 +94,7 @@ namespace Deferred
 		m_geometryPassDsState->SetDepthTest( true );
 		m_geometryPassDsState->SetDepthMask( eWRITING_MASK_ALL );
 
-		m_lightPassDsState = GetOwner()->GetDepthStencilStateManager().Create( cuT( "LightPassState" ) );
+		m_lightPassDsState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "LightPassState" ) );
 		m_lightPassDsState->SetStencilTest( true );
 		m_lightPassDsState->SetStencilReadMask( 0xFFFFFFFF );
 		m_lightPassDsState->SetStencilWriteMask( 0 );
@@ -104,7 +105,7 @@ namespace Deferred
 		m_lightPassDsState->SetDepthTest( true );
 		m_lightPassDsState->SetDepthMask( eWRITING_MASK_ZERO );
 
-		m_lightPassBlendState = GetOwner()->GetBlendStateManager().Create( cuT( "LightPassState" ) );
+		m_lightPassBlendState = GetEngine()->GetBlendStateManager().Create( cuT( "LightPassState" ) );
 
 		BufferElementDeclaration l_vertexDeclarationElements[] =
 		{
@@ -113,7 +114,7 @@ namespace Deferred
 		};
 		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetOwner(), l_vertexDeclarationElements );
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), l_vertexDeclarationElements );
 
 		real l_pBuffer[] =
 		{
@@ -136,7 +137,7 @@ namespace Deferred
 		}
 
 		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
-		GetOwner()->SetPerObjectLighting( false );
+		GetEngine()->SetPerObjectLighting( false );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -159,7 +160,7 @@ namespace Deferred
 		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 		{
 			l_return = m_lightPassTextures[i]->Create();
-			m_lightPassTextures[i]->SetSampler( GetOwner()->GetLightsSampler() );
+			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
 		}
 
 		if ( l_return )
@@ -171,12 +172,12 @@ namespace Deferred
 				m_lightPassShaderProgram->CreateFrameVariable( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
 			}
 
-			m_lightPassMatrices = GetOwner()->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
-			FrameVariableBufferSPtr l_scene = GetOwner()->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
+			m_lightPassMatrices = GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
+			FrameVariableBufferSPtr l_scene = GetEngine()->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = l_scene;
 
 			m_geometryBuffers->Create();
-			eSHADER_MODEL l_model = GetOwner()->GetRenderSystem()->GetMaxShaderModel();
+			eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetMaxShaderModel();
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX, l_model, DoGetLightPassVertexShaderSource( 0 ) );
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL, l_model, DoGetLightPassPixelShaderSource( 0 ) );
 		}
@@ -336,8 +337,8 @@ namespace Deferred
 			//m_pShaderCamera->SetValue( l_position );
 			l_pipeline.ApplyMatrices( *m_lightPassMatrices.lock(), 0xFFFFFFFFFFFFFFFF );
 			auto & l_sceneBuffer = *m_lightPassScene.lock();
-			m_renderSystem->GetTopScene()->BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
-			m_renderSystem->GetTopScene()->BindCamera( l_sceneBuffer );
+			m_renderSystem->GetTopScene()->GetLightManager().BindLights( *m_lightPassShaderProgram, l_sceneBuffer );
+			m_renderSystem->GetTopScene()->GetCameraManager().BindCamera( l_sceneBuffer );
 			m_lightPassShaderProgram->Bind();
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
@@ -356,7 +357,7 @@ namespace Deferred
 			}
 
 			m_lightPassShaderProgram->Unbind();
-			m_renderSystem->GetTopScene()->UnbindLights( *m_lightPassShaderProgram, *m_lightPassScene.lock() );
+			m_renderSystem->GetTopScene()->GetLightManager().UnbindLights( *m_lightPassShaderProgram, *m_lightPassScene.lock() );
 		}
 
 #endif

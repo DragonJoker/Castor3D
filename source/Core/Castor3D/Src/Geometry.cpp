@@ -109,7 +109,7 @@ namespace Castor3D
 		bool l_return = true;
 		String l_name;
 		uint32_t l_id = 0;
-		MaterialManager & l_mtlManager = p_obj.GetScene()->GetOwner()->GetMaterialManager();
+		MaterialManager & l_mtlManager = p_obj.GetScene()->GetEngine()->GetMaterialManager();
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
@@ -129,7 +129,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetMesh( p_obj.GetScene()->GetOwner()->GetMeshManager().Find( l_name ) );
+						p_obj.SetMesh( p_obj.GetScene()->GetEngine()->GetMeshManager().Find( l_name ) );
 					}
 
 					break;
@@ -161,8 +161,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	Geometry::Geometry( SceneSPtr p_scene, MeshSPtr p_mesh, SceneNodeSPtr p_sn, String const & p_name )
-		:	MovableObject( p_scene, p_sn, p_name, eMOVABLE_TYPE_GEOMETRY )
+	Geometry::Geometry( String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh )
+		:	MovableObject( p_name, p_scene, eMOVABLE_TYPE_GEOMETRY, p_sn )
 		,	m_mesh( p_mesh )
 		,	m_changed( true )
 		,	m_listCreated( false )

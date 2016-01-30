@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_WINDOW_MANAGER_H___
 #define ___C3D_WINDOW_MANAGER_H___
 
-#include "Manager.hpp"
+#include "ResourceManager.hpp"
 #include "RenderWindow.hpp"
 
 namespace Castor3D
@@ -33,7 +33,7 @@ namespace Castor3D
 	\brief		Gestionnaire de fenêtres de rendu.
 	*/
 	class WindowManager
-		: public Manager< uint32_t, RenderWindow >
+		: public ResourceManager< uint32_t, RenderWindow >
 	{
 	public:
 		/**
@@ -51,7 +51,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~WindowManager();
+		C3D_API ~WindowManager();
 		/**
 		*\copydoc		Castor3D::Manager::Create
 		*/
@@ -67,6 +67,7 @@ namespace Castor3D
 		C3D_API void Render( bool p_force );
 
 	private:
+		using ResourceManager< uint32_t, RenderWindow >::Create;
 	};
 }
 

@@ -3,7 +3,7 @@
 
 #include <RenderSystem.hpp>
 #include <Buffer.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <Scene.hpp>
 #include <Camera.hpp>
 #include <Viewport.hpp>
@@ -371,7 +371,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialName )
 
 	if ( !l_pMaterial )
 	{
-		l_pMaterial = l_manager.Create( l_strName, *l_pEngine, l_strName );
+		l_pMaterial = l_manager.Create( l_strName, *l_pEngine );
 		l_pMaterial->CreatePass();
 	}
 
@@ -681,7 +681,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeName )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	String l_strValue;
 	p_params[0]->Get( l_strValue );
-	l_pContext->pSceneNode = l_pContext->pScene->CreateSceneNode( l_strValue );
+	l_pContext->pSceneNode = l_pContext->pScene->GetSceneNodeManager().Create( l_strValue, nullptr );
 }
 END_ATTRIBUTE()
 

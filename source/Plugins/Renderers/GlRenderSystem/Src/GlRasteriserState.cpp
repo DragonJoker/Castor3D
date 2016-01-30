@@ -13,7 +13,7 @@ namespace GlRender
 	}
 
 	GlRasteriserState::GlRasteriserState( GlRenderSystem * p_renderSystem, OpenGl & p_gl )
-		: RasteriserState( *p_renderSystem->GetOwner() )
+		: RasteriserState( *p_renderSystem->GetEngine() )
 		, Holder( p_gl )
 		, m_renderSystem( p_renderSystem )
 	{

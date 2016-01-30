@@ -18,14 +18,14 @@ namespace Castor3D
 		, m_font( p_font )
 	{
 		// Récupération / Création de la police
-		FontManager & l_fontManager = GetOwner()->GetFontManager();
-		SamplerSPtr l_pSampler = GetOwner()->GetSamplerManager().Create( p_font->GetName() );
+		FontManager & l_fontManager = GetEngine()->GetFontManager();
+		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( p_font->GetName() );
 		l_pSampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_EDGE );
 		l_pSampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_EDGE );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 		m_sampler = l_pSampler;
-		m_texture = GetOwner()->GetRenderSystem()->CreateStaticTexture();
+		m_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 		m_texture->SetType( eTEXTURE_TYPE_2D );
 		m_texture->SetSampler( l_pSampler );
 	}

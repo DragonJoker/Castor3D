@@ -14,7 +14,7 @@ namespace Castor3D
 		, m_type( eTEXTURE_TYPE_2D )
 		, m_eMapMode( eTEXTURE_MAP_MODE_NONE )
 		, m_index( 0 )
-		, m_pSampler( p_renderSystem.GetOwner()->GetDefaultSampler() )
+		, m_pSampler( p_renderSystem.GetEngine()->GetDefaultSampler() )
 		, m_cpuAccess( p_cpuAccess )
 		, m_gpuAccess( p_gpuAccess )
 	{

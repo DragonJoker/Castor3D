@@ -1,12 +1,14 @@
 #include "AssimpImporter.hpp"
 
+#include <AnimationObjectBase.hpp>
+#include <Bone.hpp>
+#include <GeometryManager.hpp>
 #include <InitialiseEvent.hpp>
 #include <ImporterPlugin.hpp>
 #include <MaterialManager.hpp>
-#include <Bone.hpp>
 #include <MeshManager.hpp>
 #include <SceneManager.hpp>
-#include <AnimationObjectBase.hpp>
+#include <SceneNodeManager.hpp>
 
 #include <Logger.hpp>
 
@@ -137,10 +139,9 @@ namespace C3dAssimp
 		if ( m_mesh )
 		{
 			m_mesh->GenerateBuffers();
-			l_scene = GetOwner()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetOwner(), cuT( "Scene_ASSIMP" ) );
-			SceneNodeSPtr l_node = l_scene->CreateSceneNode( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_pGeometry = l_scene->CreateGeometry( m_mesh->GetName() );
-			l_pGeometry->AttachTo( l_node );
+			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetEngine() );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( m_mesh->GetName(), l_scene->GetObjectRootNode() );
+			GeometrySPtr l_pGeometry = l_scene->GetGeometryManager().Create( m_mesh->GetName(), l_node );
 			l_pGeometry->SetMesh( m_mesh );
 			m_mesh.reset();
 		}
@@ -155,13 +156,13 @@ namespace C3dAssimp
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
-		if ( GetOwner()->GetMeshManager().Has( l_meshName ) )
+		if ( GetEngine()->GetMeshManager().Has( l_meshName ) )
 		{
-			m_mesh = GetOwner()->GetMeshManager().Find( l_meshName );
+			m_mesh = GetEngine()->GetMeshManager().Find( l_meshName );
 		}
 		else
 		{
-			m_mesh = GetOwner()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+			m_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 		}
 
 		if ( !m_mesh->GetSubmeshCount() )
@@ -261,7 +262,7 @@ namespace C3dAssimp
 				}
 				else
 				{
-					GetOwner()->GetMeshManager().Remove( l_meshName );
+					GetEngine()->GetMeshManager().Remove( l_meshName );
 					m_mesh.reset();
 					l_importer.FreeScene();
 				}
@@ -270,7 +271,7 @@ namespace C3dAssimp
 			{
 				// The import failed, report it
 				Logger::LogError( std::stringstream() << "Scene import failed : " << l_importer.GetErrorString() );
-				GetOwner()->GetMeshManager().Remove( l_meshName );
+				GetEngine()->GetMeshManager().Remove( l_meshName );
 				m_mesh.reset();
 			}
 		}
@@ -422,7 +423,7 @@ namespace C3dAssimp
 	{
 		MaterialSPtr l_return;
 		PassSPtr l_pass;
-		MaterialManager & l_mtlManager = GetOwner()->GetMaterialManager();
+		MaterialManager & l_mtlManager = GetEngine()->GetMaterialManager();
 		aiString l_mtlname;
 		p_pAiMaterial->Get( AI_MATKEY_NAME, l_mtlname );
 		String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
@@ -453,7 +454,7 @@ namespace C3dAssimp
 			float l_shininess = 0.5f;
 			float l_shininessStrength = 1.0f;
 			int l_twoSided = 0;
-			l_return = l_mtlManager.Create( l_name, *GetOwner(), l_name );
+			l_return = l_mtlManager.Create( l_name, *GetEngine() );
 			l_return->CreatePass();
 			l_pass = l_return->GetPass( 0 );
 			p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );

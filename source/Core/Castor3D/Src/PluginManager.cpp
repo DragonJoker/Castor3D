@@ -21,7 +21,7 @@ namespace Castor3D
 #endif
 
 	PluginManager::PluginManager( Engine & p_engine )
-		: Manager< Path, PluginBase >( p_engine )
+		: ResourceManager< Path, PluginBase >( p_engine )
 	{
 	}
 
@@ -137,7 +137,7 @@ namespace Castor3D
 
 		if ( l_plugin )
 		{
-			m_renderSystem = l_plugin->CreateRenderSystem( GetOwner() );
+			m_renderSystem = l_plugin->CreateRenderSystem( GetEngine() );
 		}
 
 		return m_renderSystem;
@@ -171,7 +171,7 @@ namespace Castor3D
 
 	PluginBaseSPtr PluginManager::LoadRendererPlugin( DynamicLibrarySPtr p_pLibrary )
 	{
-		RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( p_pLibrary, GetOwner() );
+		RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( p_pLibrary, GetEngine() );
 		PluginBaseSPtr l_return = std::static_pointer_cast<PluginBase, RendererPlugin>( l_pRenderer );
 		eRENDERER_TYPE l_eRendererType = l_pRenderer->GetRendererType();
 
@@ -191,7 +191,7 @@ namespace Castor3D
 
 	PluginBaseSPtr PluginManager::LoadTechniquePlugin( DynamicLibrarySPtr p_pLibrary )
 	{
-		return std::make_shared< TechniquePlugin >( p_pLibrary, GetOwner() );
+		return std::make_shared< TechniquePlugin >( p_pLibrary, GetEngine() );
 	}
 
 	PluginBaseSPtr PluginManager::InternalLoadPlugin( Path const & p_pathFile )
@@ -226,11 +226,11 @@ namespace Castor3D
 				switch ( l_type )
 				{
 				case ePLUGIN_TYPE_DIVIDER:
-					l_return = std::make_shared< DividerPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< DividerPlugin >( l_pLibrary, GetEngine() );
 					break;
 
 				case ePLUGIN_TYPE_IMPORTER:
-					l_return = std::make_shared< ImporterPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< ImporterPlugin >( l_pLibrary, GetEngine() );
 					break;
 
 				case ePLUGIN_TYPE_RENDERER:
@@ -238,7 +238,7 @@ namespace Castor3D
 					break;
 
 				case ePLUGIN_TYPE_GENERIC:
-					l_return = std::make_shared< GenericPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< GenericPlugin >( l_pLibrary, GetEngine() );
 					break;
 
 				case ePLUGIN_TYPE_TECHNIQUE:
@@ -246,7 +246,7 @@ namespace Castor3D
 					break;
 
 				case ePLUGIN_TYPE_POSTFX:
-					l_return = std::make_shared< PostFxPlugin >( l_pLibrary, GetOwner() );
+					l_return = std::make_shared< PostFxPlugin >( l_pLibrary, GetEngine() );
 					break;
 
 				default:
@@ -259,7 +259,7 @@ namespace Castor3D
 					l_return->GetRequiredVersion( l_toCheck );
 					String l_strToLog( cuT( "LoadPlugin - Plugin [" ) );
 					Logger::LogInfo( StringStream() << l_strToLog << l_return->GetName() << cuT( "] - Required engine version : " ) << l_toCheck );
-					Version l_version = GetOwner()->GetVersion();
+					Version l_version = GetEngine()->GetVersion();
 
 					if ( l_toCheck <= l_version )
 					{

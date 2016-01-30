@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RasteriserStateManager::RasteriserStateManager( Engine & p_engine )
-		: Manager< String, RasteriserState >( p_engine )
+		: ResourceManager< String, RasteriserState >( p_engine )
 	{
 	}
 
@@ -24,7 +24,7 @@ namespace Castor3D
 		{
 			l_return = m_renderSystem->CreateRasteriserState();
 			m_elements.insert( p_name, l_return );
-			GetOwner()->PostEvent( MakeInitialiseEvent( *l_return ) );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
 			Logger::LogInfo( cuT( "RasteriserStateManager::Create - Created RasteriserState: " ) + p_name + cuT( "" ) );
 		}
 		else

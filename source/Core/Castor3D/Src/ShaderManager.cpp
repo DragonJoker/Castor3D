@@ -28,7 +28,7 @@ namespace Castor3D
 	{
 		for ( auto l_program : m_arrayPrograms )
 		{
-			GetOwner()->PostEvent( MakeCleanupEvent( *l_program ) );
+			GetEngine()->PostEvent( MakeCleanupEvent( *l_program ) );
 		}
 	}
 
@@ -76,8 +76,8 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				eSHADER_MODEL l_model = GetOwner()->GetRenderSystem()->GetMaxShaderModel();
-				l_return->SetSource( eSHADER_TYPE_VERTEX, l_model, GetOwner()->GetRenderSystem()->GetVertexShaderSource( p_programFlags ) );
+				eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetMaxShaderModel();
+				l_return->SetSource( eSHADER_TYPE_VERTEX, l_model, GetEngine()->GetRenderSystem()->GetVertexShaderSource( p_programFlags ) );
 				l_return->SetSource( eSHADER_TYPE_PIXEL, l_model, p_technique.GetPixelShaderSource( p_textureFlags ) );
 
 				CreateTextureVariables( *l_return, p_textureFlags );

@@ -179,9 +179,9 @@ namespace Bloom
 
 		SamplerSPtr l_sampler;
 
-		if ( !p_renderTarget.GetOwner()->GetSamplerManager().Has( l_name ) )
+		if ( !p_renderTarget.GetEngine()->GetSamplerManager().Has( l_name ) )
 		{
-			l_sampler = p_renderTarget.GetOwner()->GetSamplerManager().Create( l_name );
+			l_sampler = p_renderTarget.GetEngine()->GetSamplerManager().Create( l_name );
 			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, l_mode );
 			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, l_mode );
 			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_BORDER );
@@ -190,10 +190,10 @@ namespace Bloom
 		}
 		else
 		{
-			l_sampler = p_renderTarget.GetOwner()->GetSamplerManager().Find( l_name );
+			l_sampler = p_renderTarget.GetEngine()->GetSamplerManager().Find( l_name );
 		}
 
-		m_fbo = p_renderTarget.GetOwner()->GetRenderSystem()->CreateFrameBuffer();
+		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		m_colourTexture = p_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
 		m_colourTexture->SetSampler( l_sampler );
@@ -238,7 +238,7 @@ namespace Bloom
 
 	BloomPostEffect::BloomPostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
 		: PostEffect( p_renderSystem, p_renderTarget, p_param )
-		, m_viewport( Viewport::Ortho( *p_renderSystem->GetOwner(), 0, 1, 0, 1, 0, 1 ) )
+		, m_viewport( Viewport::Ortho( *p_renderSystem->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 		, m_offsetX( 1.2f )
 		, m_offsetY( 1.2f )
 	{
@@ -303,7 +303,7 @@ namespace Bloom
 	bool BloomPostEffect::Initialise()
 	{
 		bool l_return = false;
-		ShaderManager & l_manager = m_renderSystem->GetOwner()->GetShaderManager();
+		ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
 		eSHADER_MODEL l_model = m_renderSystem->GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 		String l_vertex;
@@ -370,7 +370,7 @@ namespace Bloom
 			l_program->Initialise();
 			m_combineProgram = l_program;
 
-			VertexBufferUPtr l_vtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetOwner(), &( *m_declaration )[0], m_declaration->Size() );
+			VertexBufferUPtr l_vtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
 			l_vtxBuffer->Resize( m_vertices.size() * m_declaration->GetStride() );
 			l_vtxBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
 			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_vtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );

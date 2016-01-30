@@ -33,7 +33,7 @@ bool SelectObjectFrameEvent::Apply()
 	FaceSPtr l_pFace = m_face.lock();
 	GeometrySPtr l_pGeometry = m_geometry.lock();
 	SubmeshSPtr l_submesh = m_submesh.lock();
-	m_scene.lock()->Select( &l_ray, l_pGeometry, l_submesh, &l_pFace, m_vertex );
+	//m_scene.lock()->Select( &l_ray, l_pGeometry, l_submesh, &l_pFace, m_vertex );
 
 	if ( l_wantGeo )
 	{

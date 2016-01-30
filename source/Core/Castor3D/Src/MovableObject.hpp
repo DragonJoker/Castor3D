@@ -38,7 +38,7 @@ namespace Castor3D
 	*/
 	class MovableObject
 		: public std::enable_shared_from_this< MovableObject >
-		, public Castor::OwnedBy< Engine >
+		, public Castor::OwnedBy< Scene >
 		, public Animable
 	{
 	public:
@@ -122,27 +122,22 @@ namespace Castor3D
 			C3D_API virtual bool Parse( MovableObject & p_obj, BinaryChunk & p_chunk )const;
 		};
 
-	public :
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		C3D_API MovableObject( SceneSPtr p_scene, eMOVABLE_TYPE p_type );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_sn	Parent node
 		 *\param[in]	p_name	The name
+		 *\param[in]	p_scene	The parent scene
+		 *\param[in]	p_sn	Parent node
 		 *\param[in]	p_type	MovableObject type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_sn	Noeud parent
 		 *\param[in]	p_name	Le nom
+		 *\param[in]	p_scene	La scène parente
+		 *\param[in]	p_sn	Noeud parent
 		 *\param[in]	p_type	Le type de MovableObject
 		 */
-		C3D_API MovableObject( SceneSPtr p_scene, SceneNodeSPtr p_sn, Castor::String const & p_name, eMOVABLE_TYPE p_type );
+		C3D_API MovableObject( Castor::String const & p_name, Scene & p_scene, eMOVABLE_TYPE p_type, SceneNodeSPtr p_sn );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -190,18 +185,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parent scene
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la scène parente
-		 *\return		La valeur
-		 */
-		inline SceneSPtr GetScene()const
-		{
-			return m_pScene.lock();
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the object type
 		 *\return		The value
 		 *\~french
@@ -234,8 +217,6 @@ namespace Castor3D
 		Castor::String m_strNodeName;
 		//!\~english The parent scene node	\~french Le noeud parent
 		SceneNodeWPtr m_pSceneNode;
-		//!\~english The parent scene	\~french La scène parente
-		SceneWPtr m_pScene;
 		//!\~english The node change notification index.	\~french L'indice de notifcation des changements du noeud.
 		uint32_t m_notifyIndex = 0;
 	};
