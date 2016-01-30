@@ -147,29 +147,7 @@ namespace Castor3D
 		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.
 		 */
-		template< typename ... Parameters >
-		inline std::shared_ptr< Light > Create( Castor::String const & p_name, SceneNodeSPtr p_parent, Parameters && ... p_params )
-		{
-			std::unique_lock< Collection > l_lock( m_elements );
-			std::shared_ptr< Light > l_return;
-
-			if ( !m_elements.has( p_name ) )
-			{
-				l_return = std::make_shared< Light >( p_name, *this->GetScene(), p_parent, m_lightFactory, std::forward< Parameters >( p_params )... );
-				m_elements.insert( p_name, l_return );
-				ElementAttacher< Light >::Attach( l_return, p_parent, m_rootNode, m_rootCameraNode, m_rootObjectNode );
-				DoAddLight( l_return );
-				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
-				GetScene()->SetChanged();
-			}
-			else
-			{
-				l_return = m_elements.find( p_name );
-				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
-			}
-
-			return l_return;
-		}
+		C3D_API std::shared_ptr< Light > Create( Castor::String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_eLightType );
 
 	private:
 		C3D_API void DoAddLight( LightSPtr p_light );

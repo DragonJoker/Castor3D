@@ -114,6 +114,29 @@ namespace Castor3D
 		}
 	}
 
+	LightSPtr LightManager::Create( Castor::String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_eLightType )
+	{
+		std::unique_lock< Collection > l_lock( m_elements );
+		LightSPtr l_return;
+
+		if ( !m_elements.has( p_name ) )
+		{
+			l_return = std::make_shared< Light >( p_name, *this->GetScene(), p_parent, m_lightFactory, p_eLightType );
+			m_elements.insert( p_name, l_return );
+			ElementAttacher< Light >::Attach( l_return, p_parent, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+			DoAddLight( l_return );
+			Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
+			GetScene()->SetChanged();
+		}
+		else
+		{
+			l_return = m_elements.find( p_name );
+			Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+		}
+
+		return l_return;
+	}
+
 	void LightManager::DoAddLight( LightSPtr p_light )
 	{
 		auto l_it = m_typeSortedLights.insert( std::make_pair( p_light->GetLightType(), LightsArray() ) ).first;

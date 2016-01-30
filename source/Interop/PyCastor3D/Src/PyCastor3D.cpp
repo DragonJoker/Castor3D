@@ -22,6 +22,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 using namespace Castor;
 using namespace Castor3D;
 
+#define RESOURCE_MANAGER( name )\
+	name##Manager & ( Engine::*engGet##name##Manager )() = &Engine::Get##name##Manager
+#define OBJECT_MANAGER( name )\
+	name##Manager & ( Scene::*scnGet##name##Manager )() = &Scene::Get##name##Manager
+
 void ExportCastor3D()
 {
 	// Make "from castor.gfx import <whatever>" work
@@ -527,10 +532,10 @@ void ExportCastor3D()
 	//@}
 	/**@group_name ShaderProgram	*/
 	//@{
-	void( ShaderProgramBase::*ShaderProgramFileSetter )( eSHADER_TYPE, eSHADER_MODEL, Path const & ) = &ShaderProgramBase::SetFile;
+	void( ShaderProgramBase::*shaderProgramFileSetter )( eSHADER_TYPE, eSHADER_MODEL, Path const & ) = &ShaderProgramBase::SetFile;
 	py::class_< ShaderProgramBase, boost::noncopyable >( "ShaderProgram", py::no_init )
 		.def( "get_file", &ShaderProgramBase::GetFile )
-		.def( "set_file", ShaderProgramFileSetter )
+		.def( "set_file", shaderProgramFileSetter )
 		.def( "get_source", &ShaderProgramBase::GetSource )
 		.def( "set_source", &ShaderProgramBase::SetSource )
 		.def( "initialise", &ShaderProgramBase::Initialise )
@@ -560,7 +565,7 @@ void ExportCastor3D()
 	/**@group_name Material	*/
 	//@{
 	typedef PassPtrArrayIt( Material::*PassPtrArrayItFunc )( );
-	py::class_< Material >( "Material", py::init< Engine &, String const & >() )
+	py::class_< Material >( "Material", py::init< String const &, Engine & >() )
 		.add_property( "pass_count", &Material::GetPassCount, "The material's passes count" )
 		.def( "initialise", &Material::Initialise )
 		.def( "cleanup", &Material::Cleanup )
@@ -594,12 +599,52 @@ void ExportCastor3D()
 		.def( "get_animation", &Mesh::GetAnimation )
 		;
 	//@}
+	/**@group_name SceneNodeManager	*/
+	//@{
+	SceneNodeSPtr( SceneNodeManager::*sceneNodeCreator )( Castor::String const &, SceneNodeSPtr ) = &SceneNodeManager::Create;
+	py::class_< SceneNodeManager, boost::noncopyable >( "SceneNodeManager", py::no_init )
+		.def( "create", sceneNodeCreator, "Creates a SceneNode" )
+		.def( "remove", &SceneNodeManager::Remove, "Finds a SceneNode" )
+		.def( "has", &SceneNodeManager::Has, "Tells if the manager has a SceneNode" )
+		.def( "find", &SceneNodeManager::Find, "Finds a SceneNode" )
+		;
+	//@}
+	/**@group_name CameraManager	*/
+	//@{
+	CameraSPtr( CameraManager::*cameraCreator )( Castor::String const &, SceneNodeSPtr, Viewport const & ) = &CameraManager::Create;
+	py::class_< CameraManager, boost::noncopyable >( "CameraManager", py::no_init )
+		.def( "create", cameraCreator, "Creates a Camera" )
+		.def( "remove", &CameraManager::Remove, "Finds a Camera" )
+		.def( "has", &CameraManager::Has, "Tells if the manager has a Camera" )
+		.def( "find", &CameraManager::Find, "Finds a Camera" )
+		;
+	//@}
+	/**@group_name GeometryManager	*/
+	//@{
+	GeometrySPtr( GeometryManager::*geometryCreator )( Castor::String const &, SceneNodeSPtr ) = &GeometryManager::Create;
+	py::class_< GeometryManager, boost::noncopyable >( "GeometryManager", py::no_init )
+		.def( "create", geometryCreator, "Creates a Geometry" )
+		.def( "remove", &GeometryManager::Remove, "Finds a Geometry" )
+		.def( "has", &GeometryManager::Has, "Tells if the manager has a Geometry" )
+		.def( "find", &GeometryManager::Find, "Finds a Geometry" )
+		;
+	//@}
+	/**@group_name LightManager	*/
+	//@{
+	LightSPtr( LightManager::*lightCreator )( Castor::String const &, SceneNodeSPtr, eLIGHT_TYPE ) = &LightManager::Create;
+	py::class_< LightManager, boost::noncopyable >( "LightManager", py::no_init )
+		.def( "create", lightCreator, "Creates a Light" )
+		.def( "remove", &LightManager::Remove, "Finds a Light" )
+		.def( "has", &LightManager::Has, "Tells if the manager has a Light" )
+		.def( "find", &LightManager::Find, "Finds a Light" )
+		;
 	//@}
 	/**@group_name Scene	*/
 	//@{
-	SceneNodeSPtr( Scene::*SceneNodeCreator )( Castor::String const &, SceneNodeSPtr ) = &Scene::CreateSceneNode;
-	GeometrySPtr( Scene::*SceneGeometryCreator )( Castor::String const & ) = &Scene::CreateGeometry;
-	CameraSPtr( Scene::*SceneCameraCreator )( Castor::String const &, int, int, SceneNodeSPtr ) = &Scene::CreateCamera;
+	OBJECT_MANAGER( SceneNode );
+	OBJECT_MANAGER( Camera );
+	OBJECT_MANAGER( Geometry );
+	OBJECT_MANAGER( Light );
 	py::class_< Scene, boost::noncopyable >( "Scene", py::no_init )
 		.add_property( "background_colour", py::make_function( &Scene::GetBackgroundColour, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetBackgroundColour, "The background colour" )
 		.add_property( "name", py::make_function( &Scene::GetName, py::return_value_policy< py::copy_const_reference >() ), &Scene::SetName, "The scene name" )
@@ -607,23 +652,11 @@ void ExportCastor3D()
 		.add_property( "root_node", &Scene::GetRootNode, "The root scene node" )
 		.add_property( "root_object_node", &Scene::GetObjectRootNode, "The objects root scene node" )
 		.add_property( "root_camera_node", &Scene::GetCameraRootNode, "The cameras root scene node" )
-		.def( "nodes", cpy::make_map_wrapper< SceneNodePtrStrMap >( "SceneNodes", &Scene::Nodes ) )
-		.def( "lights", cpy::make_map_wrapper< SceneNodePtrStrMap >( "Lights", &Scene::Lights ) )
-		.def( "geometries", cpy::make_map_wrapper< SceneNodePtrStrMap >( "Geometries", &Scene::Geometries ) )
-		.def( "cameras", cpy::make_map_wrapper< SceneNodePtrStrMap >( "Cameras", &Scene::Cameras ) )
 		.def( "cleanup", &Scene::Cleanup )
-		.def( "create_node", SceneNodeCreator )
-		.def( "create_geometry", SceneGeometryCreator )
-		.def( "create_camera", SceneCameraCreator )
-		.def( "create_light", &Scene::CreateLight )
-		.def( "get_node", &Scene::GetNode )
-		.def( "get_geometry", &Scene::GetGeometry )
-		.def( "get_camera", &Scene::GetCamera )
-		.def( "get_ligth", &Scene::GetLight )
-		.def( "remove_node", &Scene::RemoveNode )
-		.def( "remove_geometry", &Scene::RemoveGeometry )
-		.def( "remove_camera", &Scene::RemoveCamera )
-		.def( "remove_light", &Scene::RemoveLight )
+		.def( "nodes", py::make_function( scnGetSceneNodeManager, py::return_value_policy< py::copy_non_const_reference >() ), "The SceneNodes manager" )
+		.def( "geometries", py::make_function( scnGetGeometryManager, py::return_value_policy< py::copy_non_const_reference >() ), "The Geometries manager" )
+		.def( "cameras", py::make_function( scnGetCameraManager, py::return_value_policy< py::copy_non_const_reference >() ), "The Cameras manager" )
+		.def( "lights", py::make_function( scnGetLightManager, py::return_value_policy< py::copy_non_const_reference >() ), "The Lights manager" )
 		.def( "get_background_image", &Scene::GetBackgroundImage )
 		.def( "set_background_image", &Scene::SetBackgroundImage )
 		;
@@ -650,7 +683,7 @@ void ExportCastor3D()
 	py::class_< MovableObject, boost::noncopyable >( "MovableObject", py::no_init )
 		.add_property( "name", py::make_function( &MovableObject::GetName, py::return_value_policy< py::copy_const_reference >() ), "The object name" )
 		.add_property( "type", &MovableObject::GetType, "The movable type" )
-		.add_property( "scene", &MovableObject::GetScene, "The object's parent scene" )
+		.add_property( "scene", py::make_function( &MovableObject::GetScene, py::return_value_policy< py::return_by_value >() ), "The object's parent scene" )
 		.def( "attach", &MovableObject::AttachTo )
 		.def( "detach", &MovableObject::Detach )
 		;
@@ -713,7 +746,7 @@ void ExportCastor3D()
 	//@}
 	/**@group_name SceneNode	*/
 	//@{
-	py::class_< SceneNode, std::shared_ptr< SceneNode >, boost::noncopyable >( "SceneNode", py::init< Scene &, String const & >() )
+	py::class_< SceneNode, std::shared_ptr< SceneNode >, boost::noncopyable >( "SceneNode", py::no_init )
 		.add_property( "position", cpy::make_getter( &SceneNode::GetPosition, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &SceneNode::SetPosition ), "The node position" )
 		.add_property( "orientation", cpy::make_getter( &SceneNode::GetOrientation, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &SceneNode::SetOrientation ), "The node orientation" )
 		.add_property( "scale", cpy::make_getter( &SceneNode::GetScale, py::return_value_policy< py::copy_const_reference >() ), cpy::make_setter( &SceneNode::SetScale ), "The node scale" )
@@ -794,7 +827,7 @@ void ExportCastor3D()
 	//@{
 	typedef Castor::StrSetIt( AnimatedObjectGroup::*AnimatedObjectGroupAnimationsItFunc )( );
 	typedef AnimatedObjectPtrStrMapIt( AnimatedObjectGroup::*AnimatedObjectGroupObjectsItFunc )( );
-	py::class_< AnimatedObjectGroup >( "AnimatedObjectGroup", py::init< SceneSPtr, Castor::String >() )
+	py::class_< AnimatedObjectGroup >( "AnimatedObjectGroup", py::no_init )
 		.add_property( "scene", &AnimatedObjectGroup::GetScene )
 		//.def( "objects", &AnimatedObjectGroup::GetObjects )
 		.def( "start_all_animations", &AnimatedObjectGroup::StartAllAnimations )
@@ -811,7 +844,7 @@ void ExportCastor3D()
 	MeshSPtr( MeshManager::*meshCreator1 )( Castor::String const &, eMESH_TYPE ) = &MeshManager::Create;
 	MeshSPtr( MeshManager::*meshCreator2 )( Castor::String const &, eMESH_TYPE, UIntArray const & ) = &MeshManager::Create;
 	MeshSPtr( MeshManager::*meshCreator3 )( Castor::String const &, eMESH_TYPE, UIntArray const &, RealArray const & ) = &MeshManager::Create;
-	py::class_< MeshManager, boost::noncopyable >( "MeshManager", py::init< Engine & >() )
+	py::class_< MeshManager, boost::noncopyable >( "MeshManager", py::no_init )
 		.def( "create", meshCreator1 )
 		.def( "create", meshCreator2 )
 		.def( "create", meshCreator3 )
@@ -822,8 +855,9 @@ void ExportCastor3D()
 	//@}
 	/**@group_name WindowManager	*/
 	//@{
-	py::class_< MeshManager, boost::noncopyable >( "WindowManager", py::init< Engine & >() )
-		.def( "create", &WindowManager::Create )
+	RenderWindowSPtr( WindowManager::*windowCreator )() = &WindowManager::Create;
+	py::class_< WindowManager, boost::noncopyable >( "WindowManager", py::no_init )
+		.def( "create", windowCreator )
 		.def( "remove", &WindowManager::Remove )
 		.def( "has", &WindowManager::Has )
 		.def( "find", &WindowManager::Find )
@@ -831,8 +865,8 @@ void ExportCastor3D()
 	//@}
 	/**@group_name MaterialManager	*/
 	//@{
-	MaterialSPtr( MaterialManager::*mtlmgrCreate )( Castor::String const &, Engine &, Castor::String const & ) = &MaterialManager::Create;
-	py::class_< MaterialManager, boost::noncopyable >( "MaterialManager", py::init< Engine & >() )
+	MaterialSPtr( MaterialManager::*mtlmgrCreate )( Castor::String const &, Engine & ) = &MaterialManager::Create;
+	py::class_< MaterialManager, boost::noncopyable >( "MaterialManager", py::no_init )
 		.def( "create", mtlmgrCreate )
 		.def( "remove", &MaterialManager::Remove )
 		.def( "has", &MaterialManager::Has )
@@ -841,8 +875,8 @@ void ExportCastor3D()
 	//@}
 	/**@group_name SceneManager	*/
 	//@{
-	SceneSPtr( SceneManager::*scnmgrCreate )( Castor::String const &, Engine &, Castor::String const & ) = &SceneManager::Create;
-	py::class_< SceneManager, boost::noncopyable >( "SceneManager", py::init< Engine & >() )
+	SceneSPtr( SceneManager::*scnmgrCreate )( Castor::String const &, Engine & ) = &SceneManager::Create;
+	py::class_< SceneManager, boost::noncopyable >( "SceneManager", py::no_init )
 		.def( "create", scnmgrCreate )
 		.def( "remove", &SceneManager::Remove )
 		.def( "has", &SceneManager::Has )
@@ -851,7 +885,7 @@ void ExportCastor3D()
 	//@}
 	/**@group_name OverlayManager	*/
 	//@{
-	py::class_< OverlayManager, boost::noncopyable >( "OverlayManager", py::init< Engine & >() )
+	py::class_< OverlayManager, boost::noncopyable >( "OverlayManager", py::no_init )
 		.def( "create", &OverlayManager::Create )
 		.def( "remove", &OverlayManager::Remove )
 		.def( "has", &OverlayManager::Has )
@@ -861,7 +895,7 @@ void ExportCastor3D()
 	/**@group_name PluginManager	*/
 	//@{
 	PluginBaseSPtr( PluginManager::*pluginLoader )( Castor::Path const & ) = &PluginManager::LoadPlugin;
-	py::class_< PluginManager, boost::noncopyable >( "PluginManager", py::init< Engine & >() )
+	py::class_< PluginManager, boost::noncopyable >( "PluginManager", py::no_init )
 		.def( "load_plugin", pluginLoader )
 		.def( "load_plugins", &PluginManager::LoadAllPlugins )
 		.def( "get_plugins", &PluginManager::GetPlugins )
@@ -869,14 +903,12 @@ void ExportCastor3D()
 	//@}
 	/**@group_name Engine	*/
 	//@{
-#define ENGINE_MANAGER( name )	name##Manager & ( Engine::*engGet##name##Manager )() = &Engine::Get##name##Manager
-	ENGINE_MANAGER( Scene );
-	ENGINE_MANAGER( Plugin );
-	ENGINE_MANAGER( Material );
-	ENGINE_MANAGER( Mesh );
-	ENGINE_MANAGER( Overlay );
-	ENGINE_MANAGER( Window );
-#undef ENGINE_MANAGER
+	RESOURCE_MANAGER( Scene );
+	RESOURCE_MANAGER( Plugin );
+	RESOURCE_MANAGER( Material );
+	RESOURCE_MANAGER( Mesh );
+	RESOURCE_MANAGER( Overlay );
+	RESOURCE_MANAGER( Window );
 	py::class_< Engine, boost::noncopyable >( "Engine", py::init<>() )
 		.def( "initialise", &Engine::Initialise )
 		.def( "cleanup", &Engine::Cleanup )
