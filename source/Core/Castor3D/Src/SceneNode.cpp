@@ -296,6 +296,7 @@ namespace Castor3D
 
 		if ( l_parent )
 		{
+			m_parent.reset();
 			l_parent->DetachChild( shared_from_this() );
 			l_parent.reset();
 		}
@@ -360,7 +361,7 @@ namespace Castor3D
 		}
 		else
 		{
-			Logger::LogInfo( m_name + cuT( " - Can't remove SceneNode - Null pointer given" ) );
+			Logger::LogWarning( m_name + cuT( " - Can't remove SceneNode - Null pointer given" ) );
 		}
 	}
 
@@ -380,7 +381,7 @@ namespace Castor3D
 		}
 		else
 		{
-			Logger::LogInfo( m_name + cuT( " - Can't remove SceneNode " ) + p_childName + cuT( " - Not in childs" ) );
+			Logger::LogWarning( m_name + cuT( " - Can't remove SceneNode " ) + p_childName + cuT( " - Not in childs" ) );
 		}
 	}
 

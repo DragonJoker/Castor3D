@@ -18,7 +18,7 @@ scene "TextureScene"
 
 	camera_node "TextureCameraNode"
 	{
-		position 0.0 0.0 -550.0
+		position 0.0 0.0 550.0
 	}
 
 	scene_node "TextureGeometryNode"
@@ -127,12 +127,7 @@ scene "FinalScene"
 
 	scene_node "FinalSunLightNode"
 	{
-		position  0.0 0.0 1.0
-	}
-
-	scene_node "FinalSunLightNode2"
-	{
-		position  0.0 0.0 -1.0
+		position  0.0 1.0 1.0
 	}
 
 	light "FinalSunLight"
@@ -143,27 +138,19 @@ scene "FinalScene"
 		intensity 0.0 0.8 1.0
 	}
 
-	light "FinalSunLight2"
-	{
-		parent "FinalSunLightNode2"
-		type directional
-		colour 1.0 1.0 1.0
-		intensity 0.0 0.8 1.0
-	}
-
 	object "FinalGeometry"
 	{
 		parent "FinalGeometryNode"
 		mesh "FinalMesh"
 		{
-			type cube 1.0 1.0 1.0
+			type cube 25 25 25
 		}
 		material "RToTMaterial"
 	}
 
 	scene_node "MainCameraNode"
 	{
-		position 0.0 0.0 -100.0
+		position 0.0 0.0 100.0
 	}
 	camera "MainCamera"
 	{
@@ -179,7 +166,7 @@ scene "FinalScene"
 		}
 	}
 }
-/**/
+
 window "MyWindow"
 {
 	render_target
