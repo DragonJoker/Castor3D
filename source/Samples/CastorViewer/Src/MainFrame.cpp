@@ -40,9 +40,9 @@
 #include <PluginException.hpp>
 
 #include <xpms/castor.xpm>
+#include <xpms/print_screen.xpm>
 
 #if defined( GUICOMMON_RECORDS )
-#	include <xpms/print_screen.xpm>
 #	include <xpms/record.xpm>
 #	include <xpms/stop.xpm>
 #endif
@@ -372,6 +372,7 @@ namespace CastorViewer
 		wxMemoryInputStream l_isPrint( print_screen_png, sizeof( print_screen_png ) );
 		wxImage l_imgPrint( l_isPrint, wxBITMAP_TYPE_PNG );
 		m_toolBar->AddTool( eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), l_imgPrint.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
+
 #if defined( GUICOMMON_RECORDS )
 		wxImage l_imgRecord;
 		l_imgRecord.Create( record_xpm );

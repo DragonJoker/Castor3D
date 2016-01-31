@@ -76,7 +76,6 @@ namespace GuiCommon
 				m_iWantedFPS = p_wantedFPS;
 				m_uiRecordedCount = 0;
 				m_ui64RecordedTime = 0;
-				m_bufferNV12.resize( p_size.width() * ( p_size.height() * 3 ) / 2 );
 				wxString l_strWildcard = _( "AVI Video files" );
 				l_strWildcard += wxT( "(*.avi)|*.avi" );
 				wxFileDialog l_dialog( nullptr, _( "Please choose a video file name" ), wxEmptyString, wxEmptyString, l_strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
@@ -127,7 +126,6 @@ namespace GuiCommon
 			wxMilliClock_t m_msSaved;
 			uint32_t m_uiRecordedCount;
 			uint64_t m_ui64RecordedTime;
-			std::vector< uint8_t > m_bufferNV12;
 			int m_iWantedFPS;
 		};
 
@@ -576,6 +574,7 @@ namespace GuiCommon
 		{
 		public:
 			RecorderImpl()
+				: RecorderImplBase()
 			{
 			}
 
@@ -593,12 +592,12 @@ namespace GuiCommon
 			}
 
 		private:
-			virtual bool DoUpdateTime( uint64_t p_uiTimeDiff )
+			virtual bool DoUpdateTime( uint64_t )
 			{
 				return true;
 			}
 
-			virtual bool DoStartRecord( Size const & p_size, wxString const & p_name )
+			virtual bool DoStartRecord( Size const &, wxString const & )
 			{
 				return true;
 			}
@@ -623,7 +622,7 @@ namespace GuiCommon
 			{
 			}
 
-			virtual bool StartRecord( Size const & p_size )
+			virtual bool StartRecord( Size const & p_size, int p_wantedFPS )
 			{
 				return true;
 			}
