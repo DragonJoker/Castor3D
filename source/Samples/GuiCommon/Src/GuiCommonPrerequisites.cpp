@@ -343,7 +343,7 @@ namespace GuiCommon
 		}
 	}
 
-	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap )
 	{
 		p_bitmap.Create( p_width, p_height, 24 );
 		wxNativePixelData l_data( p_bitmap );
@@ -351,32 +351,70 @@ namespace GuiCommon
 		if ( p_bitmap.IsOk() && uint32_t( l_data.GetWidth() ) == p_width && uint32_t( l_data.GetHeight() ) == p_height )
 		{
 			wxNativePixelData::Iterator l_it( l_data );
-			uint8_t const * l_pBuffer = p_buffer;
 
 			try
 			{
-				for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
+				if ( p_flip )
 				{
-#if defined( _WIN32 )
-					wxNativePixelData::Iterator l_rowStart = l_it;
-#endif
+					uint32_t l_pitch = p_width * 4;
+					uint8_t const * l_buffer = p_buffer + ( p_height - 1 ) * l_pitch;
 
-					for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
+					for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
 					{
-						l_it.Blue() = *l_pBuffer;
-						l_pBuffer++;
-						l_it.Green() = *l_pBuffer;
-						l_pBuffer++;
-						l_it.Red() = *l_pBuffer;
-						l_pBuffer++;
-						l_pBuffer++;
-						l_it++;
-					}
+						uint8_t const * l_line = l_buffer;
+#if defined( _WIN32 )
+						wxNativePixelData::Iterator l_rowStart = l_it;
+#endif
+
+						for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
+						{
+							l_it.Blue() = *l_line;
+							l_line++;
+							l_it.Green() = *l_line;
+							l_line++;
+							l_it.Red() = *l_line;
+							l_line++;
+							// Don't write the alpha.
+							l_line++;
+							l_it++;
+						}
+
+						l_buffer -= l_pitch;
 
 #if defined( _WIN32 )
-					l_it = l_rowStart;
-					l_it.OffsetY( l_data, 1 );
+						l_it = l_rowStart;
+						l_it.OffsetY( l_data, 1 );
 #endif
+					}
+				}
+				else
+				{
+					uint8_t const * l_buffer = p_buffer;
+
+					for ( uint32_t i = 0; i < p_height && l_it.IsOk(); i++ )
+					{
+#if defined( _WIN32 )
+						wxNativePixelData::Iterator l_rowStart = l_it;
+#endif
+
+						for ( uint32_t j = 0; j < p_width && l_it.IsOk(); j++ )
+						{
+							l_it.Blue() = *l_buffer;
+							l_buffer++;
+							l_it.Green() = *l_buffer;
+							l_buffer++;
+							l_it.Red() = *l_buffer;
+							l_buffer++;
+							// Don't write the alpha.
+							l_buffer++;
+							l_it++;
+						}
+
+#if defined( _WIN32 )
+						l_it = l_rowStart;
+						l_it.OffsetY( l_data, 1 );
+#endif
+					}
 				}
 			}
 			catch ( ... )
@@ -386,12 +424,27 @@ namespace GuiCommon
 		}
 	}
 
-	void CreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap )
+	void CreateBitmapFromBuffer( PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap )
 	{
-		if ( p_pUnit->GetImageBuffer() )
+		PxBufferBaseSPtr l_buffer;
+
+		if ( p_buffer->format() != ePIXEL_FORMAT_A8R8G8B8 )
 		{
-			PxBufferBaseSPtr l_pBuffer = PxBufferBase::create( Size( p_pUnit->GetWidth(), p_pUnit->GetHeight() ), ePIXEL_FORMAT_A8R8G8B8, p_pUnit->GetImageBuffer(), p_pUnit->GetPixelFormat() );
-			CreateBitmapFromBuffer( l_pBuffer->const_ptr(), l_pBuffer->width(), l_pBuffer->height(), p_bitmap );
+			l_buffer = PxBufferBase::create( Size( p_buffer->width(), p_buffer->height() ), ePIXEL_FORMAT_A8R8G8B8, p_buffer->const_ptr(), p_buffer->format() );
+		}
+		else
+		{
+			l_buffer = p_buffer;
+		}
+
+		CreateBitmapFromBuffer( l_buffer->const_ptr(), l_buffer->width(), l_buffer->height(), p_flip, p_bitmap );
+	}
+
+	void CreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, bool p_flip, wxBitmap & p_bitmap )
+	{
+		if ( p_pUnit->GetImagePixels() )
+		{
+			CreateBitmapFromBuffer( p_pUnit->GetImagePixels(), p_flip, p_bitmap );
 		}
 		else if ( !p_pUnit->GetTexturePath().empty() )
 		{
@@ -420,7 +473,7 @@ namespace GuiCommon
 	RenderWindowSPtr LoadScene( Engine & p_engine, String const & p_fileName, uint32_t p_wantedFps, bool p_threaded )
 	{
 		RenderWindowSPtr l_return;
-		Logger::LogDebug( ( wxChar const * )( cuT( "GuiCommon::LoadSceneFile - " ) + p_fileName ).c_str() );
+		Logger::LogDebug( cuT( "GuiCommon::LoadSceneFile - " ) + p_fileName );
 
 		if ( !p_fileName.empty() )
 		{

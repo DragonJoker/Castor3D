@@ -908,7 +908,11 @@ namespace GlRender
 
 					UIntArray l_arrayIndices( l_arrayNames.size() );
 					GetOpenGl().GetUniformIndices( l_program->GetGlName(), int( l_arrayNames.size() ), &l_arrayNames[0], &l_arrayIndices[0] );
-					clear_container( l_arrayNames );
+
+					for ( auto l_name : l_arrayNames )
+					{
+						delete [] l_name;
+					}
 					int i = 0;
 
 					for ( auto && l_variable : m_listVariables )

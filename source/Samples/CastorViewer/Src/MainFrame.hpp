@@ -13,6 +13,8 @@
 #include <Logger.hpp>
 #include <Path.hpp>
 
+#include <Recorder.hpp>
+
 namespace CastorViewer
 {
 	class RenderPanel;
@@ -46,6 +48,9 @@ namespace CastorViewer
 		void DoInitialisePerspectives();
 		void DoLogCallback( Castor::String const & p_strLog, Castor::ELogType p_eLogType );
 		void DoCleanupScene();
+		void DoSaveFrame();
+		bool DoStartRecord();
+		void DoStopRecord();
 
 	private:
 		DECLARE_EVENT_TABLE()
@@ -63,6 +68,9 @@ namespace CastorViewer
 		void OnShowLogs( wxCommandEvent & p_event );
 		void OnShowLists( wxCommandEvent & p_event );
 		void OnShowProperties( wxCommandEvent & p_event );
+		void OnPrintScreen( wxCommandEvent & p_event );
+		void OnRecord( wxCommandEvent & p_event );
+		void OnStop( wxCommandEvent & p_event );
 
 	private:
 		int m_iLogsHeight;
@@ -91,6 +99,8 @@ namespace CastorViewer
 		wxTimer * m_timerMsg;
 		wxArrayString m_msgLogList;
 		std::mutex m_msgLogListMtx;
+		GuiCommon::Recorder m_recorder;
+		int m_recordFps;
 	};
 }
 

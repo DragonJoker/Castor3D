@@ -519,6 +519,26 @@ namespace Castor3D
 		{
 			return m_backBuffers;
 		}
+		/**
+		 *\~english
+		 *\brief		Tells the next frame must be saved.
+		 *\~french
+		 *\brief		Dit que la prochaine image doit être enregistrée.
+		 */
+		inline void SaveFrame()
+		{
+			m_toSave = true;
+		}
+		/**
+		 *\~english
+		 *\return		The saved image.
+		 *\~french
+		 *\return		L'image enregistrée.
+		 */
+		inline Castor::PxBufferBaseSPtr GetSavedFrame()const
+		{
+			return m_saveBuffer;
+		}
 
 	private:
 		Castor::String DoGetName();
@@ -554,6 +574,10 @@ namespace Castor3D
 		BackBuffersSPtr m_backBuffers;
 		//!\~english The window size.	\~french Les dimensions de la fenêtre.
 		Castor::Size m_size;
+		//!\~english  Tells we need to save a frame.	\~english Dit si l'on veut sauvegarder une immage.
+		bool m_toSave = false;
+		//!\~english  The pixel buffer holding the saved image.	\~english Le tampon de pixels contenant l'image sauvegardée.
+		Castor::PxBufferBaseSPtr m_saveBuffer;
 	};
 }
 

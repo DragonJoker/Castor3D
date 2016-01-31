@@ -56,6 +56,7 @@ namespace GlRender
 	{
 		bool l_return = false;
 		int l_iLinked = 0;
+		ENSURE( GetGlName() != eGL_INVALID_INDEX );
 		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
 		l_return &= GetOpenGl().LinkProgram( GetGlName() );
 		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_iLinked );

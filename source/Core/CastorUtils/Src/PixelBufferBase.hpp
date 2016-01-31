@@ -47,13 +47,13 @@ namespace Castor
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_size			Buffer dimensions.
-		 *\param[in]	p_ePixelFormat	Pixels format.
+		 *\param[in]	p_pixelFormat	Pixels format.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_size			Dimensions du buffer.
-		 *\param[in]	p_ePixelFormat	Format des pixels du buffer.
+		 *\param[in]	p_pixelFormat	Format des pixels du buffer.
 		 */
-		CU_API PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_ePixelFormat );
+		CU_API PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -92,14 +92,14 @@ namespace Castor
 		 *\brief		Initialises the data buffer to the given one
 		 *\remark		Conversions are made if needed
 		 *\param[in]	p_buffer		Data buffer
-		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
+		 *\param[in]	p_pixelFormat	Data buffer's pixels format
 		 *\~french
 		 *\brief		Initialise le buffer de données à celui donné
 		 *\remark		Des conversions sont faites si besoin est
 		 *\param[in]	p_buffer		Buffer de données
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
+		 *\param[in]	p_pixelFormat	Format des pixels du buffer de données
 		 */
-		CU_API virtual void init( uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat );
+		CU_API virtual void init( uint8_t const * p_buffer, ePIXEL_FORMAT p_pixelFormat );
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer at the given size
@@ -122,17 +122,24 @@ namespace Castor
 		CU_API virtual void swap( PxBufferBase & p_pixelBuffer );
 		/**
 		 *\~english
+		 *\brief		Makes a vertical swap of pixels
+		 *\~french
+		 *\brief		Effectue un échange vertical des pixels
+		 */
+		CU_API void flip();
+		/**
+		 *\~english
 		 *\brief		Converts and assigns a data buffer to this buffer
 		 *\param[in]	p_buffer		Data buffer
-		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
+		 *\param[in]	p_pixelFormat	Data buffer's pixels format
 		 *\return
 		 *\~french
 		 *\brief		Convertit et assigne les données du buffer donné à ce buffer
 		 *\param[in]	p_buffer		Buffer de données
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
+		 *\param[in]	p_pixelFormat	Format des pixels du buffer de données
 		 *\return
 		 */
-		CU_API virtual void assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_eBufferFormat ) = 0;
+		CU_API virtual void assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_pixelFormat ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on constant datas
@@ -193,13 +200,6 @@ namespace Castor
 		CU_API virtual const_iterator get_at( uint32_t x, uint32_t y )const = 0;
 		/**
 		 *\~english
-		 *\brief		Makes a vertical swap of pixels
-		 *\~french
-		 *\brief		Effectue un échange vertical des pixels
-		 */
-		CU_API virtual void flip() = 0;
-		/**
-		 *\~english
 		 *\brief		Makes a horizontal swap of pixels
 		 *\~french
 		 *\brief		Effectue un échange horizontal des pixels
@@ -215,7 +215,7 @@ namespace Castor
 		 */
 		inline ePIXEL_FORMAT format()const
 		{
-			return m_ePixelFormat;
+			return m_pixelFormat;
 		}
 		/**
 		 *\~english
@@ -297,28 +297,28 @@ namespace Castor
 		 *\~english
 		 *\brief		Creates a buffer with the given data
 		 *\param[in]	p_size			Buffer dimensions
-		 *\param[in]	p_eWantedFormat	Pixels format
+		 *\param[in]	p_wantedFormat	Pixels format
 		 *\param[in]	p_buffer		Data buffer
-		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
+		 *\param[in]	p_bufferFormat	Data buffer's pixels format
 		 *\return		The created buffer
 		 *\~french
 		 *\brief		Crée un buffer avec les données voulues
 		 *\param[in]	p_size			Dimensions du buffer
-		 *\param[in]	p_eWantedFormat	Format des pixels du buffer
+		 *\param[in]	p_wantedFormat	Format des pixels du buffer
 		 *\param[in]	p_buffer		Buffer de données
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
+		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 *\return		Le buffer créé
 		 */
-		CU_API static PxBufferBaseSPtr create( Size const & p_size, ePIXEL_FORMAT p_eWantedFormat, uint8_t const * p_buffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API static PxBufferBaseSPtr create( Size const & p_size, ePIXEL_FORMAT p_wantedFormat, uint8_t const * p_buffer = NULL, ePIXEL_FORMAT p_bufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
 
 	private:
-		ePIXEL_FORMAT m_ePixelFormat;
+		ePIXEL_FORMAT m_pixelFormat;
 
 	protected:
 		//!\~english Buffer dimensions	\~french Dimensions du buffer
 		Size m_size;
 		//!\~english Buffer data	\~french Données du buffer
-		px_array m_pBuffer;
+		px_array m_buffer;
 	};
 }
 

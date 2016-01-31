@@ -1,5 +1,5 @@
 /* XPM */
-static const  char * scene_blanc_xpm[] = {
+static const char * scene_blanc_xpm[] = {
 "64 64 2175 2",
 "  	c None",
 ". 	c #2C3734",

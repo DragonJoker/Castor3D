@@ -24,6 +24,7 @@ namespace GlRender
 
 	bool GlQuery::Begin()
 	{
+		ENSURE( GetGlName() != eGL_INVALID_INDEX );
 		return GetOpenGl().BeginQuery( m_target, GetGlName() );
 	}
 

@@ -145,6 +145,12 @@ namespace GlRender
 
 	uint8_t * GlPboTextureStorage::DoLock( uint32_t p_lock )
 	{
+		if ( ( p_lock & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ
+			 && ( m_cpuAccess & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ )
+		{
+			DoDownloadAsync();
+		}
+
 		return m_buffer.lock()->ptr();
 	}
 

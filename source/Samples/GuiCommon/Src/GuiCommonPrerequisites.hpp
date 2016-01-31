@@ -165,34 +165,53 @@ namespace GuiCommon
 
 	/**
 	 *\~english
-	 *\brief		Copies the buffer into the bitmap
-	 *\remark		The buffer must be in BGRA 32bits
-	 *\param[in]	p_buffer	The buffer
-	 *\param[in]	p_width	The buffer image's width
-	 *\param[in]	p_height	The buffer image's height
-	 *\param[out]	p_bitmap	Receives the generated bitmap
+	 *\brief		Copies the buffer into the bitmap.
+	 *\remark		The buffer must be in BGRA 32bits.
+	 *\param[in]	p_buffer	The buffer.
+	 *\param[in]	p_width		The buffer image's width.
+	 *\param[in]	p_height	The buffer image's height.
+	 *\param[in]	p_flip		Dit si l'image doit être flippée.
+	 *\param[out]	p_bitmap	Receives the generated bitmap.
 	 *\~french
-	 *\brief		Copie le buffer donné dans un bitmap
-	 *\remark		Le buffer doit être en format BGRA 32bits
-	 *\param[in]	p_buffer	Le buffer
-	 *\param[in]	p_width	La largeur de l'image
-	 *\param[in]	p_height	La hauteur de l'image
-	 *\param[out]	p_bitmap	Reçoit le bitmap généré
+	 *\brief		Copie le buffer donné dans un bitmap.
+	 *\remark		Le buffer doit être en format BGRA 32bits.
+	 *\param[in]	p_buffer	Le buffer.
+	 *\param[in]	p_width		La largeur de l'image.
+	 *\param[in]	p_height	La hauteur de l'image.
+	 *\param[in]	p_flip		Tells if the image mut be flipped.
+	 *\param[out]	p_bitmap	Reçoit le bitmap généré.
 	 */
-	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, wxBitmap & p_bitmap );
+	void CreateBitmapFromBuffer( uint8_t const * p_buffer, uint32_t p_width, uint32_t p_height, bool p_flip, wxBitmap & p_bitmap );
 	/**
 	 *\~english
-	 *\brief		Copies the unit texture into the bitmap
-	 *\remark		The image buffer will be copied in a BGRA 32bits buffer
-	 *\param[in]	p_pUnit		The unit
-	 *\param[out]	p_bitmap	Receives the generated bitmap
+	 *\brief		Copies the pixel buffer into the bitmap.
+	 *\remark		The buffer will be copied in a BGRA 32bits buffer, if needed.
+	 *\param[in]	p_buffer	The pixel buffer.
+	 *\param[in]	p_flip		Dit si l'image doit être flippée.
+	 *\param[out]	p_bitmap	Receives the generated bitmap.
 	 *\~french
-	 *\brief		Copie la texture de l'unité dans un bitmap
-	 *\remark		Le buffer de l'image va être copié dans un buffer BGRA 32bits
-	 *\param[in]	p_pUnit		L'unité
-	 *\param[out]	p_bitmap	Reçoit le bitmap généré
+	 *\brief		Copie le tampon de pixels dans un bitmap.
+	 *\remark		Le buffer va être copié dans un buffer BGRA 32bits, si nécessaire.
+	 *\param[in]	p_pUnit		Le tampon de pixels.
+	 *\param[in]	p_flip		Tells if the image mut be flipped.
+	 *\param[out]	p_bitmap	Reçoit le bitmap généré.
 	 */
-	void CreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_pUnit, wxBitmap & p_bitmap );
+	void CreateBitmapFromBuffer( Castor::PxBufferBaseSPtr p_buffer, bool p_flip, wxBitmap & p_bitmap );
+	/**
+	 *\~english
+	 *\brief		Copies the unit texture into the bitmap.
+	 *\remark		The image buffer will be copied in a BGRA 32bits buffer, if needed.
+	 *\param[in]	p_unit		The unit.
+	 *\param[in]	p_flip		Dit si l'image doit être flippée.
+	 *\param[out]	p_bitmap	Receives the generated bitmap.
+	 *\~french
+	 *\brief		Copie la texture de l'unité dans un bitmap.
+	 *\remark		Le buffer de l'image va être copié dans un buffer BGRA 32bits, si nécessaire.
+	 *\param[in]	p_unit		L'unité.
+	 *\param[in]	p_flip		Tells if the image must be flipped.
+	 *\param[out]	p_bitmap	Reçoit le bitmap généré.
+	 */
+	void CreateBitmapFromBuffer( Castor3D::TextureUnitSPtr p_unit, bool p_flip, wxBitmap & p_bitmap );
 	/**
 	 *\~english
 	 *\brief		Loads a scene.
