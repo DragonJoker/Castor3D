@@ -214,6 +214,7 @@ namespace Castor3D
 				if ( l_target )
 				{
 					l_target->Initialise( 1 );
+					m_saveBuffer = PxBufferBase::create( l_target->GetSize(), l_target->GetPixelFormat() );
 				}
 
 				m_context->EndCurrent();
@@ -512,6 +513,19 @@ namespace Castor3D
 
 	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_texture )
 	{
+		if ( m_toSave )
+		{
+			auto l_buffer = p_texture->Lock( eACCESS_TYPE_READ );
+
+			if ( l_buffer )
+			{
+				std::memcpy( m_saveBuffer->ptr(), l_buffer, m_saveBuffer->size() );
+				p_texture->Unlock( false );
+			}
+
+			m_toSave = false;
+		}
+
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
 #if !defined( NDEBUG )

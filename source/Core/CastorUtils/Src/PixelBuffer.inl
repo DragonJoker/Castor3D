@@ -1,11 +1,11 @@
 ﻿namespace Castor
 {
 	template< TPL_PIXEL_FORMAT FT >
-	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
+	PxBuffer< FT >::PxBuffer( Size const & p_size, uint8_t const * p_buffer, ePIXEL_FORMAT p_bufferFormat )
 		: PxBufferBase( p_size, ePIXEL_FORMAT( FT ) )
 		, m_column( p_size.width() )
 	{
-		init( p_buffer, p_eBufferFormat );
+		init( p_buffer, p_bufferFormat );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
@@ -67,28 +67,28 @@
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
-	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
+	void PxBuffer< FT >::assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_bufferFormat )
 	{
-		uint8_t l_uiSize = PF::GetBytesPerPixel( p_eBufferFormat );
-		uint32_t l_uiDstMax = count();
-		uint32_t l_uiSrcMax = uint32_t( p_buffer.size() / l_uiSize );
+		uint8_t l_size = PF::GetBytesPerPixel( p_bufferFormat );
+		uint32_t l_dstMax = count();
+		uint32_t l_srcMax = uint32_t( p_buffer.size() / l_size );
 
-		if ( p_buffer.size() > 0 && l_uiSrcMax == l_uiDstMax )
+		if ( p_buffer.size() > 0 && l_srcMax == l_dstMax )
 		{
-			PF::ConvertBuffer( p_eBufferFormat, p_buffer.data(), uint32_t( p_buffer.size() ), format(), m_pBuffer.data(), size() );
+			PF::ConvertBuffer( p_bufferFormat, p_buffer.data(), uint32_t( p_buffer.size() ), format(), m_buffer.data(), size() );
 		}
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	uint8_t const * PxBuffer< FT >::const_ptr()const
 	{
-		return m_pBuffer.data();
+		return m_buffer.data();
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	uint8_t * PxBuffer< FT >::ptr()
 	{
-		return m_pBuffer.data();
+		return m_buffer.data();
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
@@ -107,49 +107,28 @@
 	typename PxBuffer< FT >::iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )
 	{
 		REQUIRE( x < width() && y < height() );
-		return m_pBuffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
+		return m_buffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	typename PxBuffer< FT >::const_iterator PxBuffer< FT >::get_at( uint32_t x, uint32_t y )const
 	{
 		REQUIRE( x < width() && y < height() );
-		return m_pBuffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
-	}
-
-	template< TPL_PIXEL_FORMAT FT >
-	void PxBuffer< FT >::flip()
-	{
-		uint32_t l_uiWidth = width() * pixel_definitions< FT >::Size;
-		uint32_t l_uiHeight = height();
-		uint8_t * l_pBufferTop = &m_pBuffer[0];
-		uint8_t * l_pBufferBottom = &m_pBuffer[( l_uiHeight - 1 ) * l_uiWidth - 1];
-
-		for ( uint32_t i = 0; i < l_uiHeight / 2; i++ )
-		{
-			for ( uint32_t j = 0; j < l_uiWidth; j++ )
-			{
-				std::swap( l_pBufferTop[j], l_pBufferBottom[j] );
-			}
-
-			l_pBufferTop	+= l_uiWidth;
-			l_pBufferBottom	-= l_uiWidth;
-		}
+		return m_buffer.begin() + ( ( x * height() + y ) * pixel_definitions< FT >::Size );
 	}
 
 	template< TPL_PIXEL_FORMAT FT >
 	void PxBuffer< FT >::mirror()
 	{
-		uint32_t l_uiWidth = width() * pixel_definitions< FT >::Size;
-		uint32_t l_uiHeight = height();
-		uint8_t * l_pxA, *l_pxB;
+		uint32_t l_width = width() * pixel_definitions< FT >::Size;
+		uint32_t l_height = height();
 
-		for ( uint32_t i = 0; i < l_uiHeight; i++ )
+		for ( uint32_t i = 0; i < l_height; i++ )
 		{
-			l_pxA = &m_pBuffer[i * l_uiWidth];
-			l_pxB = &m_pBuffer[( i + 1 ) * l_uiWidth - 1];
+			uint8_t * l_pxA = &m_buffer[i * l_width];
+			uint8_t * l_pxB = &m_buffer[( i + 1 ) * l_width - 1];
 
-			for ( uint32_t j = 0; j < l_uiWidth / 2; j += pixel_definitions< FT >::Size )
+			for ( uint32_t j = 0; j < l_width / 2; j += pixel_definitions< FT >::Size )
 			{
 				for ( uint32_t k = 0; k < pixel_definitions< FT >::Size; k++ )
 				{
@@ -167,14 +146,14 @@
 	{
 		if ( p_column < width() )
 		{
-			uint8_t const * l_pBuffer = &m_pBuffer[p_column * width() * pixel_definitions< FT >::Size];
+			uint8_t const * l_buffer = &m_buffer[p_column * width() * pixel_definitions< FT >::Size];
 			m_column = column( height() );
 
 			for ( uint32_t j = 0; j < height(); j++ )
 			{
 				m_column[j].unlink();
-				m_column[j].template set< FT >( l_pBuffer );
-				l_pBuffer += pixel_definitions< FT >::Size;
+				m_column[j].template set< FT >( l_buffer );
+				l_buffer += pixel_definitions< FT >::Size;
 			}
 		}
 	}
@@ -184,13 +163,13 @@
 	{
 		if ( p_column < width() )
 		{
-			uint8_t * l_pBuffer = &m_pBuffer[p_column * width() * pixel_definitions< FT >::Size];
+			uint8_t * l_buffer = &m_buffer[p_column * width() * pixel_definitions< FT >::Size];
 			m_column = column( height() );
 
 			for ( uint32_t j = 0; j < height(); j++ )
 			{
-				m_column[j].link( l_pBuffer );
-				l_pBuffer += pixel_definitions< FT >::Size;
+				m_column[j].link( l_buffer );
+				l_buffer += pixel_definitions< FT >::Size;
 			}
 		}
 	}

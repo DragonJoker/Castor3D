@@ -595,6 +595,7 @@ namespace Castor3D
 
 		if ( !m_billboardManager->IsEmpty() )
 		{
+			auto l_lock = make_unique_lock( *m_billboardManager );
 			l_context->CullFace( eFACE_FRONT );
 			DoRenderBillboards( p_technique, l_pipeline, m_billboardManager->begin(), m_billboardManager->end() );
 			l_context->CullFace( eFACE_BACK );

@@ -68,37 +68,6 @@ namespace GuiCommon
 		, m_engine( NULL )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
-		wxBusyCursor l_wait;
-		ImagesLoader::AddBitmap( eBMP_SCENE, scene_xpm );
-		ImagesLoader::AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_NODE, node_xpm );
-		ImagesLoader::AddBitmap( eBMP_NODE_SEL, node_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_CAMERA, camera_xpm );
-		ImagesLoader::AddBitmap( eBMP_CAMERA_SEL, camera_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_VIEWPORT, viewport_xpm );
-		ImagesLoader::AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_GEOMETRY, geometry_xpm );
-		ImagesLoader::AddBitmap( eBMP_GEOMETRY_SEL, geometry_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT, directional_xpm );
-		ImagesLoader::AddBitmap( eBMP_DIRECTIONAL_LIGHT_SEL, directional_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_POINT_LIGHT, point_xpm );
-		ImagesLoader::AddBitmap( eBMP_POINT_LIGHT_SEL, point_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_SPOT_LIGHT, spot_xpm );
-		ImagesLoader::AddBitmap( eBMP_SPOT_LIGHT_SEL, spot_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_SUBMESH, submesh_xpm );
-		ImagesLoader::AddBitmap( eBMP_SUBMESH_SEL, submesh_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY, panel_xpm );
-		ImagesLoader::AddBitmap( eBMP_PANEL_OVERLAY_SEL, panel_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY, border_panel_xpm );
-		ImagesLoader::AddBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL, border_panel_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY, text_xpm );
-		ImagesLoader::AddBitmap( eBMP_TEXT_OVERLAY_SEL, text_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_TARGET_SEL, render_target_sel_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_WINDOW, render_window_xpm );
-		ImagesLoader::AddBitmap( eBMP_RENDER_WINDOW_SEL, render_window_sel_xpm );
-		ImagesLoader::WaitAsyncLoads();
-
 		wxImage * l_icons[] =
 		{
 			ImagesLoader::GetBitmap( eBMP_SCENE ),
@@ -109,6 +78,10 @@ namespace GuiCommon
 			ImagesLoader::GetBitmap( eBMP_RENDER_TARGET_SEL ),
 			ImagesLoader::GetBitmap( eBMP_RENDER_WINDOW ),
 			ImagesLoader::GetBitmap( eBMP_RENDER_WINDOW_SEL ),
+			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE ),
+			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_SEL ),
+			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_BUFFER ),
+			ImagesLoader::GetBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL ),
 			ImagesLoader::GetBitmap( eBMP_NODE ),
 			ImagesLoader::GetBitmap( eBMP_NODE_SEL ),
 			ImagesLoader::GetBitmap( eBMP_CAMERA ),
@@ -129,6 +102,12 @@ namespace GuiCommon
 			ImagesLoader::GetBitmap( eBMP_BORDER_PANEL_OVERLAY_SEL ),
 			ImagesLoader::GetBitmap( eBMP_TEXT_OVERLAY ),
 			ImagesLoader::GetBitmap( eBMP_TEXT_OVERLAY_SEL ),
+			ImagesLoader::GetBitmap( eBMP_MATERIAL ),
+			ImagesLoader::GetBitmap( eBMP_MATERIAL_SEL ),
+			ImagesLoader::GetBitmap( eBMP_PASS ),
+			ImagesLoader::GetBitmap( eBMP_PASS_SEL ),
+			ImagesLoader::GetBitmap( eBMP_TEXTURE ),
+			ImagesLoader::GetBitmap( eBMP_TEXTURE_SEL ),
 		};
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );

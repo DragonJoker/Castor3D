@@ -163,7 +163,7 @@ namespace GlRender
 
 		/** Destructor
 		*/
-		inline ~Object()
+		~Object()
 		{
 		}
 

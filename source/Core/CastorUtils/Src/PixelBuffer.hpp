@@ -45,16 +45,16 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_ptSize		Buffer wanted dimensions
+		 *\param[in]	p_size			Buffer wanted dimensions
 		 *\param[in]	p_buffer		Data buffer
-		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
+		 *\param[in]	p_bufferFormat	Data buffer's pixels format
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_ptSize		Les dimensions voulues pour le buffer
+		 *\param[in]	p_size			Les dimensions voulues pour le buffer
 		 *\param[in]	p_buffer		Buffer de données
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
+		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 */
-		PxBuffer( Size const & p_ptSize, uint8_t const * p_buffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		PxBuffer( Size const & p_size, uint8_t const * p_buffer = NULL, ePIXEL_FORMAT p_bufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -141,15 +141,15 @@ namespace Castor
 		 *\~english
 		 *\brief		Converts and assigns a data buffer to this buffer
 		 *\param[in]	p_buffer		Data buffer
-		 *\param[in]	p_eBufferFormat	Data buffer's pixels format
+		 *\param[in]	p_bufferFormat	Data buffer's pixels format
 		 *\return
 		 *\~french
 		 *\brief		Convertit et assigne les données du buffer donné à ce buffer
 		 *\param[in]	p_buffer		Buffer de données
-		 *\param[in]	p_eBufferFormat	Format des pixels du buffer de données
+		 *\param[in]	p_bufferFormat	Format des pixels du buffer de données
 		 *\return
 		 */
-		virtual void assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_eBufferFormat );
+		virtual void assign( std::vector< uint8_t > const & p_buffer, ePIXEL_FORMAT p_bufferFormat );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pointer on constant datas
@@ -208,13 +208,6 @@ namespace Castor
 		 *\return		Les données constantes du pixel
 		 */
 		virtual const_iterator get_at( uint32_t x, uint32_t y )const;
-		/**
-		 *\~english
-		 *\brief		Makes a vertical swap of pixels
-		 *\~french
-		 *\brief		Effectue un échange vertical des pixels
-		 */
-		virtual void flip();
 		/**
 		 *\~english
 		 *\brief		Makes a horizontal swap of pixels

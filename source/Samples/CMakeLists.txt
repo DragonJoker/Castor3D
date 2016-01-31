@@ -28,7 +28,35 @@ function( SamplesBuild )
 			else()
 				set( GTK2_FOUND TRUE )
 			endif()
-		
+
+			set( OpenCV_STATIC FALSE )
+			find_package( OpenCV )
+			find_package( FFMPEG )
+
+			if( OPENCV_FOUND OR OpenCV_FOUND )
+				include_directories( ${OpenCV_INCLUDE_DIR} )
+				include_directories( ${OpenCV_INCLUDE_DIRS} )
+				link_directories( ${OpenCV_LINK_DIRECTORIES} )
+			endif()
+
+			if( FFMPEG_FOUND )
+				include_directories( ${FFMPEG_INCLUDE_DIR} )
+			endif ()
+
+			set( GUICOMMON_C_FLAGS "" )
+			set( GUICOMMON_CXX_FLAGS "" )
+			set( GUICOMMON_LINKS "" )
+
+			if( FFMPEG_FOUND )
+				set( GUICOMMON_C_FLAGS "${GUICOMMON_C_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
+				set( GUICOMMON_CXX_FLAGS "${GUICOMMON_CXX_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_FFMPEG")
+				message( STATUS "+ Found FFMPEG" )
+			elseif( OpenCV_FOUND )
+				set( GUICOMMON_C_FLAGS "${GUICOMMON_C_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_OCV")
+				set( GUICOMMON_CXX_FLAGS "${GUICOMMON_CXX_FLAGS} -DGUICOMMON_RECORDS -DGUICOMMON_OCV")
+				message( STATUS "+ Found OpenCV (version ${OpenCV_VERSION})" )
+			endif()
+
 			#we look for wxWidgets
 			if (WIN32)
 				find_package( wxWidgets COMPONENTS stc scintilla core base aui adv propgrid )
@@ -50,7 +78,7 @@ function( SamplesBuild )
 						set( wxWidgetsLibraries "${Lib}" )
 					endif()
 				endforeach()
-		
+
 				foreach( Lib ${GTK2_LIBRARIES} )
 					if( wxWidgetsLibraries )
 						set( wxWidgetsLibraries "${wxWidgetsLibraries}|${Lib}" )
@@ -58,30 +86,55 @@ function( SamplesBuild )
 						set( wxWidgetsLibraries "${Lib}" )
 					endif()
 				endforeach()
-		
+
+				#OpenCV libs
+				set( OpenCVLibraries "")
+				set( OpenCV_LIBS
+					${OpenCV_LIBS}
+					${OpenCV_core_LIBRARY}
+					${OpenCV_highgui_LIBRARY}
+				)
+				foreach(Lib ${OpenCV_LIBS})
+					if (OpenCVLibraries)
+						set(OpenCVLibraries "${OpenCVLibraries}|${Lib}")
+					else()
+						set(OpenCVLibraries "${Lib}")
+					endif()
+				endforeach()
+
+				#FFMPEG Libs
+				set( FFMpegLibraries "")
+				foreach(Lib ${FFMPEG_LIBRARIES})
+					if (FFMpegLibraries)
+						set(FFMpegLibraries "${FFMpegLibraries}|${Lib}")
+					else()
+						set(FFMpegLibraries "${Lib}")
+					endif()
+				endforeach()
+
 				#Few more configuration for wxWidgets
 				string( COMPARE EQUAL "${wxWidgets_USE_DEBUG}" "ON" IsWxDebug )
 				set( wxWidgets_CXXFLAGS "${wxWidgets_CXX_FLAGS} -D_FILE_OFFSET_BITS=64 -D_LARGE_FILES" )
-		
+
 				if( NOT WIN32 )
 					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXGTK__" )
 				endif()
-		
+
 				if( IsWxDebug )
 					set( wxWidgets_CXXFLAGS "${wxWidgets_CXXFLAGS} -D__WXDEBUG__" )
 				endif()
-		
+
 				if( ${CASTOR_BUILD_SAMPLE_GUICOMMON} )
 					set( Build ${GuiCmn} )
 					add_subdirectory( Samples/GuiCommon )
 					set( GuiCmn ${Build} PARENT_SCOPE )
-		
+
 					if( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} )
 						set( Build ${CViewer} )
 						add_subdirectory( Samples/CastorViewer )
 						set( CViewer ${Build} PARENT_SCOPE )
 					endif()
-		
+
 					if( ${CASTOR_BUILD_SAMPLE_CASTOR_SHAPE} )
 						set( Build ${CShape} )
 						add_subdirectory( Samples/CastorShape )
@@ -92,7 +145,7 @@ function( SamplesBuild )
 				elseif ( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} )
 					message( WARNING "You need GuiCommon to be able to build CastorViewer" )
 				endif()
-		
+
 				if( ${CASTOR_BUILD_SAMPLE_OCEAN_LIGHTING} )
 					set( Build ${Ocean} )
 					add_subdirectory( Samples/OceanLighting )

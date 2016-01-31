@@ -31,21 +31,33 @@ namespace Castor
 	*/
 	struct MessageBase
 	{
-		/** Constructor
-		*\param[in]	type		The message typ
-		*/
-		MessageBase( ELogType type )
+		/** Constructor.
+		 *\param[in]	type	The message type.
+		 *\param[in]	message	The message text.
+		 */
+		inline MessageBase( ELogType type, std::string const & message )
 			: m_type( type )
+			, m_message( message )
+		{
+		}
+		/** Destructor.
+		 */
+		virtual ~MessageBase()
 		{
 		}
 
-		/** Retrieves the message content
-		 *\return		The message tex
-		*/
-		virtual String GetMessage() = 0;
+		/** Retrieves the message content.
+		 *\return		The message text.
+		 */
+		inline std::string const & GetMessage()const
+		{
+			return m_message;
+		}
 
-		//! The message type
+		//! The message type.
 		ELogType m_type;
+		//! The message text.
+		std::string m_message;
 	};
 
 	/** Template class, holding character type dependant message text
@@ -57,23 +69,13 @@ namespace Castor
 		typedef std::basic_string< Char > string_type;
 
 		/** Constructor
-		*\param[in]	type		The message typ
-		*\param[in]	message		The message tex
-		*/
-		BasicMessage( ELogType type, string_type const & message )
-			: MessageBase( type )
-			, m_message( message )
+		 *\param[in]	type	The message type.
+		 *\param[in]	message	The message text.
+		 */
+		inline BasicMessage( ELogType type, string_type const & message )
+			: MessageBase( type, string::string_cast< char >( message ) )
 		{
 		}
-
-		//@copydoc Database::SMessageBase::GetMessage
-		virtual String GetMessage()
-		{
-			return string::string_cast< xchar >( m_message );
-		}
-
-		//! The message text
-		string_type m_message;
 	};
 
 	//! A char message

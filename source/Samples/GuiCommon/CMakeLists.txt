@@ -9,6 +9,8 @@ set( CastorBinsDependencies
 set( CastorBinLibraries
 	${CastorMinLibraries}
 	${wxWidgetsLibraries}
+	${FFMpegLibraries}
+	${OpenCVLibraries}
 	${PROJECT_NAME}
 	PARENT_SCOPE
 )
@@ -29,8 +31,8 @@ add_target(
 	"${CastorBinLibraries}"
 	"GuiCommonPch.hpp"
 	"GuiCommonPch.cpp"
-	"${wxWidgets_CFLAGS}"
-	"${wxWidgets_CXXFLAGS}"
+	"${wxWidgets_CFLAGS} ${GUICOMMON_C_FLAGS}"
+	"${wxWidgets_CXXFLAGS} ${GUICOMMON_CXX_FLAGS}"
 )
 
 file( GLOB ${PROJECT_NAME}_TREE_ITEMS_HEADER_FILES

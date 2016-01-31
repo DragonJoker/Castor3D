@@ -3,16 +3,16 @@
 namespace Castor
 {
 	PxBufferBase::PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_ePixelFormat )
-		: m_ePixelFormat( p_ePixelFormat )
+		: m_pixelFormat( p_ePixelFormat )
 		, m_size( p_size )
-		, m_pBuffer( 0 )
+		, m_buffer( 0 )
 	{
 	}
 
 	PxBufferBase::PxBufferBase( PxBufferBase const & p_pixelBuffer )
-		: m_ePixelFormat( p_pixelBuffer.m_ePixelFormat )
+		: m_pixelFormat( p_pixelBuffer.m_pixelFormat )
 		, m_size( p_pixelBuffer.m_size )
-		, m_pBuffer( 0 )
+		, m_buffer( 0 )
 	{
 	}
 
@@ -24,35 +24,35 @@ namespace Castor
 	{
 		clear();
 		m_size = p_pixelBuffer.m_size;
-		m_ePixelFormat = p_pixelBuffer.m_ePixelFormat;
-		init( p_pixelBuffer.m_pBuffer.data(), p_pixelBuffer.m_ePixelFormat );
+		m_pixelFormat = p_pixelBuffer.m_pixelFormat;
+		init( p_pixelBuffer.m_buffer.data(), p_pixelBuffer.m_pixelFormat );
 		return * this;
 	}
 
 	void PxBufferBase::clear()
 	{
-		m_pBuffer.clear();
+		m_buffer.clear();
 	}
 
 	void PxBufferBase::init( uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 	{
-		uint8_t l_uiBpp = PF::GetBytesPerPixel( format() );
-		uint32_t l_uiSize = count() * l_uiBpp;
-		m_pBuffer.resize( l_uiSize );
+		uint8_t l_bpp = PF::GetBytesPerPixel( format() );
+		uint32_t l_size = count() * l_bpp;
+		m_buffer.resize( l_size );
 
 		if ( p_buffer == NULL )
 		{
-			memset( m_pBuffer.data(), 0, l_uiSize );
+			memset( m_buffer.data(), 0, l_size );
 		}
 		else
 		{
-			if ( p_eBufferFormat == m_ePixelFormat )
+			if ( p_eBufferFormat == m_pixelFormat )
 			{
-				memcpy( m_pBuffer.data(), p_buffer, l_uiSize );
+				memcpy( m_buffer.data(), p_buffer, l_size );
 			}
 			else
 			{
-				PF::ConvertBuffer( p_eBufferFormat, p_buffer, count() * PF::GetBytesPerPixel( p_eBufferFormat ), format(), m_pBuffer.data(), size() );
+				PF::ConvertBuffer( p_eBufferFormat, p_buffer, count() * PF::GetBytesPerPixel( p_eBufferFormat ), format(), m_buffer.data(), size() );
 			}
 		}
 	}
@@ -66,8 +66,29 @@ namespace Castor
 	void PxBufferBase::swap( PxBufferBase & p_pixelBuffer )
 	{
 		std::swap( m_size, p_pixelBuffer.m_size );
-		std::swap( m_ePixelFormat, p_pixelBuffer.m_ePixelFormat );
-		std::swap( m_pBuffer, p_pixelBuffer.m_pBuffer );
+		std::swap( m_pixelFormat, p_pixelBuffer.m_pixelFormat );
+		std::swap( m_buffer, p_pixelBuffer.m_buffer );
+	}
+
+	void PxBufferBase::flip()
+	{
+		uint32_t l_width = width() * PF::GetBytesPerPixel( m_pixelFormat );
+		uint32_t l_height = height();
+		uint32_t l_hheight = l_height / 2;
+		uint8_t * l_bufferTop = &m_buffer[0];
+		uint8_t * l_bufferBot = &m_buffer[( l_height - 1 ) * l_width - 1];
+		std::vector< uint8_t > l_buffer( l_width );
+
+		for ( uint32_t i = 0; i < l_hheight; i++ )
+		{
+			auto l_topLine = l_bufferTop;
+			auto l_botLine = l_bufferBot;
+			std::memcpy( l_buffer.data(), l_bufferTop, l_width );
+			std::memcpy( l_bufferTop, l_bufferBot, l_width );
+			std::memcpy( l_bufferBot, l_buffer.data(), l_width );
+			l_bufferTop += l_width;
+			l_bufferBot -= l_width;
+		}
 	}
 
 	PxBufferBaseSPtr PxBufferBase::create( Size const & p_size, ePIXEL_FORMAT p_eWantedFormat, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
