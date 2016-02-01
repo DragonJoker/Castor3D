@@ -306,12 +306,12 @@ namespace GuiCommon
 	{
 		p_splashScreen.Step( _( "Loading images" ), 1 );
 		wxInitAllImageHandlers();
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP, scene_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, scene_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECT, scene_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECT_SEL, scene_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATION, scene_xpm );
-		ImagesLoader::AddBitmap( eBMP_ANIMATION_SEL, scene_xpm );
+		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP, animated_object_group_xpm );
+		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL, animated_object_group_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECT, animated_object_xpm );
+		ImagesLoader::AddBitmap( eBMP_ANIMATED_OBJECT_SEL, animated_object_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_ANIMATION, animation_xpm );
+		ImagesLoader::AddBitmap( eBMP_ANIMATION_SEL, animation_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_SCENE, scene_xpm );
 		ImagesLoader::AddBitmap( eBMP_SCENE_SEL, scene_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_NODE, node_xpm );

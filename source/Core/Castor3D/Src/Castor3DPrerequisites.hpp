@@ -42,6 +42,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor3D
 {
 	using Castor::real;
+	using Castor::UIntStrMap;
+	using Castor::UInt64StrMap;
 }
 
 #include "Castor3DPrerequisites_Animation.hpp"

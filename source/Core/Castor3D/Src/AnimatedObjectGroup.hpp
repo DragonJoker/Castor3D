@@ -179,6 +179,17 @@ namespace Castor3D
 		C3D_API void SetAnimationLooped( Castor::String const & p_name, bool p_looped );
 		/**
 		 *\~english
+		 *\brief		Sets the time scale of wanted animation.
+		 *\param[in]	p_name	The name of the animation.
+		 *\param[in]	p_scale	The scale.
+		 *\~french
+		 *\brief		Définit le multiplicateur de temps de l'animation voulue.
+		 *\param[in]	p_name	Le nom de l'animation.
+		 *\param[in]	p_scale	Le multiplicateur.
+		 */
+		C3D_API void SetAnimationScale( Castor::String const & p_name, float p_scale );
+		/**
+		 *\~english
 		 *\brief		Updates all animated objects
 		 *\~french
 		 *\brief		Met à jour toutes les animations
@@ -238,7 +249,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La map d'animations.
 		 */
-		inline Castor::StrSet const & GetAnimations()const
+		inline AnimationStateMap const & GetAnimations()const
 		{
 			return m_animations;
 		}
@@ -255,7 +266,7 @@ namespace Castor3D
 
 	private:
 		//!<\~english The list of animations	\~french La liste des animations
-		Castor::StrSet m_animations;
+		AnimationStateMap m_animations;
 		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject
 		AnimatedObjectPtrStrMap m_objects;
 		//!<\~english A timer, usefull for animation handling	\~french Un timer, pour mettre à jour précisément les animations

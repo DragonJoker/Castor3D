@@ -3361,8 +3361,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 	if ( l_pContext->pGroup )
 	{
 		l_pContext->pGroup->AddAnimation( l_name );
-		l_pContext->pGroup->SetAnimationLooped( l_name, true );
-		l_pContext->pGroup->StartAnimation( l_name );
 	}
 	else
 	{

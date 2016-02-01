@@ -66,15 +66,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\remark		Used for instanciation
-		 *\param[in]	p_count	Instances count
+		 *\param[in]	p_instantiated	Tells if the buffer is instantiated
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\remark		Utilisé pour l'instanciation
-		 *\param[in]	p_count	Nombre d'instances
+		 *\param[in]	p_instantiated	Dit si le tampon est instantié
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Bind( uint32_t p_count );
+		C3D_API bool Bind( bool p_instantiated );
 
 	private:
 		using CpuBuffer< real >::Bind;

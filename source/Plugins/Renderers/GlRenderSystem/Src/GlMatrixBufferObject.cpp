@@ -64,7 +64,7 @@ namespace GlRender
 		GlBuffer< real >::DoCleanup();
 	}
 
-	bool GlMatrixBufferObject::Bind( uint32_t p_count )
+	bool GlMatrixBufferObject::Bind( bool p_instantiated )
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
@@ -76,7 +76,7 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = DoAttributeBind( p_count > 1 );
+			l_return = DoAttributeBind( p_instantiated );
 		}
 
 		return l_return;

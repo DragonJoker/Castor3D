@@ -186,6 +186,15 @@ namespace GuiCommon
 	wxBoolProperty * CreateProperty( wxString const & p_name, bool const & p_value, bool p_checkbox );
 	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value );
 	wxStringProperty * CreateProperty( wxString const & p_name, wxString const & p_value, ButtonEventMethod p_method, wxEvtHandler * p_handler, wxPGEditor * p_editor );
+
+	template< typename PropertyType >
+	PropertyType * CreateProperty( wxString const & p_name, wxVariant && p_value, wxString const & p_help )
+	{
+		auto l_return = new PropertyType( p_name );
+		l_return->SetValue( p_value );
+		l_return->SetHelpString( p_help );
+		return l_return;
+	}
 }
 
 #include "AdditionalProperties.inl"

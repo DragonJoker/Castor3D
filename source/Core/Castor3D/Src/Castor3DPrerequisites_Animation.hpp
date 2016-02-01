@@ -40,6 +40,21 @@ namespace Castor3D
 	}	eINTERPOLATOR_MODE;
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		09/02/2010
+	\~english
+	\brief		Animation State Enumerator.
+	\~french
+	\brief		Enumération des états d'une animation.
+	*/
+	typedef enum eANIMATION_STATE CASTOR_TYPE( uint8_t )
+	{
+		eANIMATION_STATE_PLAYING,	//!< Playing animation state.
+		eANIMATION_STATE_STOPPED,	//!< Stopped animation state.
+		eANIMATION_STATE_PAUSED,	//!< Paused animation state.
+		eANIMATION_STATE_COUNT
+	}	eANIMATION_STATE;
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
 	\~english
@@ -69,12 +84,12 @@ namespace Castor3D
 	struct stVERTEX_BONE_DATA;
 	template< typename T > class KeyFrame;
 
-	typedef KeyFrame< Castor::Point3r > Point3rKeyFrame;
-	typedef KeyFrame< Castor::Quaternion > QuaternionKeyFrame;
+	using AnimationStateMap = std::map< Castor::String, eANIMATION_STATE >;
 
-	typedef std::pair< uint32_t, real > VertexWeight;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
-	using Castor::UIntStrMap;
-	using Castor::UInt64StrMap;
+	using Point3rKeyFrame = KeyFrame< Castor::Point3r >;
+	using QuaternionKeyFrame = KeyFrame< Castor::Quaternion >;
+
+	using VertexWeight = std::pair< uint32_t, real >;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
 
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimationObjectBase );

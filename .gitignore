@@ -20,3 +20,4 @@
 *.suo
 *.gch
 *.*~
+/data/Scene/Sampler

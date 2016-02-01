@@ -37,7 +37,7 @@ namespace GlRender
 		virtual void Cleanup();
 		virtual real * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags );
 		virtual void Unlock();
-		virtual bool Bind( uint32_t p_count );
+		virtual bool Bind( bool p_instantiated );
 		virtual void Unbind();
 
 	protected:

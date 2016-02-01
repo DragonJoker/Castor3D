@@ -95,7 +95,7 @@ namespace GlRender
 
 				if ( p_buffers.HasMatrixBuffer() )
 				{
-					p_buffers.GetMatrixBuffer().Bind( 2 );
+					p_buffers.GetMatrixBuffer().Bind( true );
 				}
 
 				GetOpenGl().BindVertexArray( 0 );

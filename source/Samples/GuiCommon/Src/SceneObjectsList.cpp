@@ -261,9 +261,9 @@ namespace GuiCommon
 
 	void SceneObjectsList::DoAddAnimatedObjectGroup( wxTreeItemId p_id, Castor3D::AnimatedObjectGroupSPtr p_group )
 	{
-		for ( auto && l_name : p_group->GetAnimations() )
+		for ( auto && l_it : p_group->GetAnimations() )
 		{
-			AppendItem( p_id, l_name, eBMP_ANIMATION, eBMP_ANIMATION_SEL, new AnimationTreeItemProperty( m_engine, m_propertiesHolder->IsEditable(), p_group, l_name ) );
+			AppendItem( p_id, l_it.first, eBMP_ANIMATION, eBMP_ANIMATION_SEL, new AnimationTreeItemProperty( m_engine, m_propertiesHolder->IsEditable(), p_group, l_it.first, l_it.second ) );
 		}
 	}
 

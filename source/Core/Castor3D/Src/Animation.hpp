@@ -91,24 +91,6 @@ namespace Castor3D
 		};
 
 	public:
-		/*!
-		\author 	Sylvain DOREMUS
-		\date 		09/02/2010
-		\~english
-		\brief		Animation State Enum.
-		\remark		The enumeration which defines all the states of an animation : playing, stopped, paused.
-		\~french
-		\brief		Enumération des états d'une animation.
-		*/
-		typedef enum eSTATE CASTOR_TYPE( uint8_t )
-		{
-			eSTATE_PLAYING,	//!< Playing animation state.
-			eSTATE_STOPPED,	//!< Stopped animation state.
-			eSTATE_PAUSED,	//!< Paused animation state.
-			eSTATE_COUNT
-		}	eSTATE;
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -245,7 +227,7 @@ namespace Castor3D
 		 *\brief		Récupère l'état de l'animation
 		 *\return		L'état de l'animation
 		 */
-		inline eSTATE GetState()const
+		inline eANIMATION_STATE GetState()const
 		{
 			return m_state;
 		}
@@ -314,7 +296,7 @@ namespace Castor3D
 		//!\~english The current playing time	\~french L'index de temps courant
 		real m_currentTime;
 		//!\~english The current state of the animation	\~french L'état actuel de l'animation
-		eSTATE m_state;
+		eANIMATION_STATE m_state;
 		//!\~english The animation time scale	\~french Le multiplicateur de temps
 		real m_scale;
 		//!\~english The animation length	\~french La durée de l'animation

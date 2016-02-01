@@ -41,14 +41,18 @@ namespace GuiCommon
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
 		 *\param[in]	p_editable	Tells if the properties are modifiable.
-		 *\param[in]	p_animation	The target Animation.
+		 *\param[in]	p_group		The target AnimatedObjectGroup.
+		 *\param[in]	p_name		The target animation name.
+		 *\param[in]	p_state		The target animation state.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	p_animation	L'Animation cible.
+		 *\param[in]	p_group		L'AnimatedObjectGroup cible.
+		 *\param[in]	p_name		Le nom de l'animation cible.
+		 *\param[in]	p_state		L'état de l'animation cible.
 		 */
-		AnimationTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group, Castor::String const & p_name );
+		AnimationTreeItemProperty( Castor3D::Engine * p_engine, bool p_editable, Castor3D::AnimatedObjectGroupSPtr p_group, Castor::String const & p_name, Castor3D::eANIMATION_STATE p_state );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -58,10 +62,10 @@ namespace GuiCommon
 		~AnimationTreeItemProperty();
 		/**
 		 *\~english
-		 *\brief		Retrieves the Animation.
+		 *\brief		Retrieves the AnimatedObjectGroup.
 		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère l'Animation.
+		 *\brief		Récupère l'AnimatedObjectGroup.
 		 *\return		La valeur.
 		 */
 		inline Castor3D::AnimatedObjectGroupSPtr GetGroup()
@@ -73,12 +77,24 @@ namespace GuiCommon
 		 *\brief		Retrieves the animation name.
 		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère le de nom de l'animation.
+		 *\brief		Récupère le nom de l'animation.
 		 *\return		La valeur.
 		 */
-		inline Castor::String GetName()
+		inline Castor::String const & GetName()
 		{
 			return m_name;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the animation state.
+		 *\return		The value.
+		 *\~french
+		 *\brief		Récupère l'état de l'animation.
+		 *\return		La valeur.
+		 */
+		inline Castor3D::eANIMATION_STATE GetState()
+		{
+			return m_state;
 		}
 
 	private:
@@ -93,11 +109,15 @@ namespace GuiCommon
 
 	private:
 		void OnSpeedChange( double p_value );
+		void OnLoopedChange( bool p_value );
 		bool OnStateChange( wxPGProperty * p_property );
 
 	private:
 		Castor3D::AnimatedObjectGroupWPtr m_group;
 		Castor::String m_name;
+		double m_scale = 1.0;
+		bool m_looped = false;
+		Castor3D::eANIMATION_STATE m_state = Castor3D::eANIMATION_STATE_STOPPED;
 	};
 }
 
