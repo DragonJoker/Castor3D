@@ -41,6 +41,7 @@ namespace GuiCommon
 		void DoAddCamera( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_camera );
 		void DoAddLight( wxTreeItemId p_id, Castor3D::MovableObjectSPtr p_light );
 		void DoAddNode( wxTreeItemId p_id, Castor3D::SceneNodeSPtr p_node );
+		void DoAddAnimatedObjectGroup( wxTreeItemId p_id, Castor3D::AnimatedObjectGroupSPtr p_group );
 		void DoAddOverlay( wxTreeItemId p_id, Castor3D::OverlayCategorySPtr p_overlay );
 
 		DECLARE_EVENT_TABLE()

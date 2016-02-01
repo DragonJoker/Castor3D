@@ -252,24 +252,12 @@ namespace Castor3D
 		{
 			return m_objects;
 		}
-		/**
-		 *\~english
-		 *\return		The Scene.
-		 *\~french
-		 *\return		La Scene.
-		 */
-		inline SceneSPtr GetScene()const
-		{
-			return m_scene.lock();
-		}
 
 	private:
 		//!<\~english The list of animations	\~french La liste des animations
 		Castor::StrSet m_animations;
 		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject
 		AnimatedObjectPtrStrMap m_objects;
-		//!<\~english The scene that updates animations	\~french La scène qui met à jour les animations
-		SceneWPtr m_scene;
 		//!<\~english A timer, usefull for animation handling	\~french Un timer, pour mettre à jour précisément les animations
 		Castor::PreciseTimer m_timer;
 	};
