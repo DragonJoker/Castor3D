@@ -123,7 +123,7 @@ namespace Castor3D
 		{
 			l_return = std::make_shared< Light >( p_name, *this->GetScene(), p_parent, m_lightFactory, p_eLightType );
 			m_elements.insert( p_name, l_return );
-			ElementAttacher< Light >::Attach( l_return, p_parent, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+			ElementAttacher< Light >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 			DoAddLight( l_return );
 			Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
 			GetScene()->SetChanged();

@@ -110,7 +110,8 @@ namespace Castor
 		 *\param[in]	p_count	Le compte des objets.
 		 */
 		ObjectPool( size_t p_count )noexcept
-			: m_count( p_count )
+	:
+		m_count( p_count )
 		{
 			MemoryData::Initialise( m_count );
 		}
@@ -162,12 +163,12 @@ namespace Castor
 		 *\brief		Deallocates an object (gives its memory back to the pool).
 		 *\param[in]	p_object	The object to deallocate.
 		 *\return		\p true if the object came from the pool.
-		 *\return		
+		 *\return
 		 *\~french
 		 *\brief		Désalloue un objet (rend sa mémoire au pool).
 		 *\param[in]	p_object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
-		 *\return		
+		 *\return
 		 */
 		bool Deallocate( Object * p_object )noexcept
 		{
@@ -182,10 +183,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\return		The objects count.
-		 *\return		
+		 *\return
 		 *\~french
 		 *\return		Le compte d'objets.
-		 *\return		
+		 *\return
 		 */
 		uint32_t GetCount()noexcept
 		{
@@ -226,7 +227,8 @@ namespace Castor
 		 *\param[in]	p_count	Le compte des objets.
 		 */
 		AlignedObjectPool( size_t p_count )noexcept
-			: m_count( p_count )
+	:
+		m_count( p_count )
 		{
 			MemoryData::Initialise( m_count );
 		}
@@ -278,12 +280,12 @@ namespace Castor
 		 *\brief		Deallocates an object (gives its memory back to the pool).
 		 *\param[in]	p_object	The object to deallocate.
 		 *\return		\p true if the object came from the pool.
-		 *\return		
+		 *\return
 		 *\~french
 		 *\brief		Désalloue un objet (rend sa mémoire au pool).
 		 *\param[in]	p_object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
-		 *\return		
+		 *\return
 		 */
 		bool Deallocate( Object * object )noexcept
 		{
@@ -298,10 +300,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\return		The objects count.
-		 *\return		
+		 *\return
 		 *\~french
 		 *\return		Le compte d'objets.
-		 *\return		
+		 *\return
 		 */
 		uint32_t GetCount()noexcept
 		{

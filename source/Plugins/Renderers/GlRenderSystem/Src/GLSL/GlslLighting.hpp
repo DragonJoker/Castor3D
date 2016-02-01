@@ -55,7 +55,7 @@ namespace GlRender
 			C3D_Gl_API Light GetPointLight( Type const & p_value );
 			C3D_Gl_API Light GetSpotLight( Type const & p_value );
 			C3D_Gl_API void ComputeDirectionalLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
-													 FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+					FragmentInput const & p_fragmentIn, OutputComponents & p_output );
 
 			C3D_Gl_API void ComputePointLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
 											   FragmentInput const & p_fragmentIn, OutputComponents & p_output );

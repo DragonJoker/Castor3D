@@ -63,6 +63,7 @@ void Torus::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const 
 
 		// Build the torus
 		l_step = real( Angle::PiMult2 ) / m_uiExternalNbFaces;
+
 		for ( uint32_t i = 1; i <= l_uiExtMax; i++ )
 		{
 			l_uiPCr = l_uiCur;

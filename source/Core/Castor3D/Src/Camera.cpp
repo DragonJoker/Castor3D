@@ -203,7 +203,7 @@ namespace Castor3D
 				point::normalise( l_lookat );
 
 				// Rotation
-				Matrix4x4r l_rotate{ 1.0_r };
+				Matrix4x4r l_rotate { 1.0_r };
 				auto & l_col0 = l_rotate[0];
 				auto & l_col1 = l_rotate[1];
 				auto & l_col2 = l_rotate[2];

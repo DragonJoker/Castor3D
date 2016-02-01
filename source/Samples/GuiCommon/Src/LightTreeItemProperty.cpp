@@ -56,7 +56,7 @@ namespace GuiCommon
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_LIGHT + wxString( l_light->GetName() ) ) );
 			Colour l_colour = Colour::from_rgb( l_light->GetColour() );
 			p_grid->Append( new wxColourProperty( PROPERTY_LIGHT_COLOUR ) )->SetValue( wxVariant( wxColour( l_colour.to_bgr() ) ) );
-			p_grid->Append( new Point3fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( wxVariant( l_light->GetIntensity() ) );
+			p_grid->Append( new Point3fProperty( PROPERTY_LIGHT_INTENSITY ) )->SetValue( WXVARIANT( l_light->GetIntensity() ) );
 
 			switch ( l_light->GetLightType() )
 			{

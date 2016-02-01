@@ -25,7 +25,7 @@ namespace GlRender
 	namespace GLSL
 	{
 		struct SamplerBuffer
-			: public Type
+				: public Type
 		{
 			inline SamplerBuffer();
 			inline SamplerBuffer( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -34,7 +34,7 @@ namespace GlRender
 		};
 
 		struct Sampler1D
-			: public Type
+				: public Type
 		{
 			inline Sampler1D();
 			inline Sampler1D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -43,7 +43,7 @@ namespace GlRender
 		};
 
 		struct Sampler2D
-			: public Type
+				: public Type
 		{
 			inline Sampler2D();
 			inline Sampler2D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -52,7 +52,7 @@ namespace GlRender
 		};
 
 		struct Sampler3D
-			: public Type
+				: public Type
 		{
 			inline Sampler3D();
 			inline Sampler3D( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

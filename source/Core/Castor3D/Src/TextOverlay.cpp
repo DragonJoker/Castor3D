@@ -327,7 +327,7 @@ namespace Castor3D
 				DisplayableChar l_character = { l_glyph, 0.0, Point2d( double( std::max( l_glyph->GetSize().width(), l_glyph->GetAdvance().width() ) ), double( std::max( l_glyph->GetSize().height(), l_glyph->GetAdvance().height() ) ) ) };
 
 				if ( l_glyph->GetCharacter() == cuT( ' ' )
-					 || l_glyph->GetCharacter() == cuT( '\t' ) )
+						|| l_glyph->GetCharacter() == cuT( '\t' ) )
 				{
 					// Write the word and leave space before next word.
 					DoPrepareWord( p_renderSize, l_word, l_wordWidth, p_size, l_left, l_line, l_return );
@@ -446,7 +446,7 @@ namespace Castor3D
 		auto l_removed = std::remove_if( p_line.m_characters.begin(), p_line.m_characters.end(), [&p_width]( DisplayableChar const & p_char )
 		{
 			return p_char.m_left > p_width
-				|| p_char.m_left + p_char.m_size[0] < 0;
+				   || p_char.m_left + p_char.m_size[0] < 0;
 		} );
 
 		p_line.m_characters.erase( l_removed, p_line.m_characters.end() );
@@ -478,7 +478,7 @@ namespace Castor3D
 		auto l_removed = std::remove_if( p_lines.begin(), p_lines.end(), [&p_height, &l_maxHeight]( DisplayableLine const & p_line )
 		{
 			return p_line.m_position[1] > p_height
-				|| p_line.m_position[1] + l_maxHeight < 0;
+				   || p_line.m_position[1] + l_maxHeight < 0;
 		} );
 
 		p_lines.erase( l_removed, p_lines.end() );

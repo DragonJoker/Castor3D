@@ -103,7 +103,7 @@ namespace C3dAssimp
 {
 	namespace detail
 	{
-		const aiNodeAnim * FindNodeAnim( const aiAnimation* p_animation, const String p_nodeName )
+		const aiNodeAnim * FindNodeAnim( const aiAnimation * p_animation, const String p_nodeName )
 		{
 			const aiNodeAnim * l_return = NULL;
 

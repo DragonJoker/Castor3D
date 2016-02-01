@@ -126,7 +126,7 @@ namespace Castor
 			}
 
 			uint8_t * space = *--m_freeIndex;
-			*space++ = ALLOCATED;
+			* space++ = ALLOCATED;
 			return reinterpret_cast< Object * >( space );
 		}
 		/**
@@ -168,9 +168,9 @@ namespace Castor
 
 				if ( m_buffersEnd == std::find_if(	m_buffers, m_buffersEnd,
 													[&marked]( buffer const & buffer )
-													{
-														return ptrdiff_t( marked ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( marked ) < ptrdiff_t( buffer.m_end );
-													} ) )
+			{
+				return ptrdiff_t( marked ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( marked ) < ptrdiff_t( buffer.m_end );
+				} ) )
 				{
 					ReportError< ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES >( Namer::Name, ( void * )p_space );
 					return false;

@@ -20,7 +20,7 @@ namespace GlRender
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
-					  )
+					)
 		, m_glRenderSystem( &p_renderSystem )
 		, m_glDimension( eGL_TEXDIM_2D )
 		, m_static( p_static )

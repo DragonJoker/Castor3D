@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds an animation to the skeleton
 		 *\param[in]	p_animation	The animation
-		 *\return		
+		 *\return
 		 *\~french
 		 *\brief		Ajoute une animation au squelette
 		 *\param[in]	p_animation	L'animation

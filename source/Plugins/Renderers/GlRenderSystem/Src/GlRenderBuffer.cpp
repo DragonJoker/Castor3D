@@ -15,12 +15,12 @@ namespace GlRender
 						std::bind( &OpenGl::DeleteRenderbuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 						std::bind( &OpenGl::IsRenderbuffer, std::ref( p_gl ), std::placeholders::_1 ),
 						[&p_gl]( uint32_t p_glName )
-						{
-							return p_gl.BindRenderbuffer( eGL_RENDERBUFFER_MODE_DEFAULT, p_glName );
-						} )
-		, m_internal( p_internal )
-		, m_size( 0, 0 )
-		, m_renderBuffer( p_renderBuffer )
+	{
+		return p_gl.BindRenderbuffer( eGL_RENDERBUFFER_MODE_DEFAULT, p_glName );
+	} )
+	, m_internal( p_internal )
+	, m_size( 0, 0 )
+	, m_renderBuffer( p_renderBuffer )
 	{
 		REQUIRE( p_internal != 0 );
 	}

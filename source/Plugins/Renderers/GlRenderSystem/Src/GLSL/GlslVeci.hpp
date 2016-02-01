@@ -25,7 +25,7 @@ namespace GlRender
 	namespace GLSL
 	{
 		struct IVec2
-			: public Type
+				: public Type
 		{
 			inline IVec2();
 			inline IVec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -45,7 +45,7 @@ namespace GlRender
 		};
 
 		struct IVec3
-			: public Type
+				: public Type
 		{
 			inline IVec3();
 			inline IVec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -87,7 +87,7 @@ namespace GlRender
 		};
 
 		struct IVec4
-			: public Type
+				: public Type
 		{
 			inline IVec4();
 			inline IVec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

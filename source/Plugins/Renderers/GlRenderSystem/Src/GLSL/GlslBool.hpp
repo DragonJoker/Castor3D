@@ -25,7 +25,7 @@ namespace GlRender
 	namespace GLSL
 	{
 		struct GlslBool
-			: public Type
+				: public Type
 		{
 			inline GlslBool();
 			inline GlslBool( bool p_value );

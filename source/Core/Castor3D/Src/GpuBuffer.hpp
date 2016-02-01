@@ -87,16 +87,25 @@ namespace Castor3D
 		 *\brief		Initialisation function, used by VBOs
 		 *\param[in]	p_type		Buffer access type
 		 *\param[in]	p_nature	Buffer access nature
-		 *\param[in]	p_program	The shader program
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation, utilisée par les VBOs
 		 *\param[in]	p_type		Type d'accès du tampon
 		 *\param[in]	p_nature	Nature d'accès du tampon
-		 *\param[in]	p_program	Le programme de shader
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, Castor3D::ShaderProgramBaseSPtr p_program = nullptr ) = 0;
+		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature ) = 0;
+		/**
+		 *\~english
+		 *\brief		Loads attributes for the given program.
+		 *\param[in]	p_program	The program.
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Charge les attributs pour le programme donné.
+		 *\param[in]	p_program	Le programme.
+		 *\return		\p true si tout s'est bien passé
+		 */
+		virtual bool AttachTo( Castor3D::ShaderProgramBaseSPtr p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function

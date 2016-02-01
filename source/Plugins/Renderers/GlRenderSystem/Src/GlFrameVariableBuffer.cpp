@@ -913,6 +913,7 @@ namespace GlRender
 					{
 						delete [] l_name;
 					}
+
 					int i = 0;
 
 					for ( auto && l_variable : m_listVariables )

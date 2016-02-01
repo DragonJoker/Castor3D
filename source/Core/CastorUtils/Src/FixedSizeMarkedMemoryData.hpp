@@ -59,7 +59,7 @@ namespace Castor
 		{
 			m_total = p_count;
 			m_buffer = new uint8_t[m_total + m_total * sizeof( Object )];
-			m_free = new uint8_t *[m_total];
+			m_free = new uint8_t * [m_total];
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
 			size_t l_size = sizeof( Object ) + 1;
@@ -105,7 +105,7 @@ namespace Castor
 			m_buffer = NULL;
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
-		}		
+		}
 		/**
 		 *\~english
 		 *\brief		Gives the address an available chunk.
@@ -123,11 +123,11 @@ namespace Castor
 				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
 				return NULL;
 			}
-		
+
 			uint8_t * l_space = *--m_freeIndex;
-			*l_space = ALLOCATED;
+			* l_space = ALLOCATED;
 			return reinterpret_cast< Object * >( ++l_space );
-		}		
+		}
 		/**
 		 *\~english
 		 *\brief		Frees the given memory.

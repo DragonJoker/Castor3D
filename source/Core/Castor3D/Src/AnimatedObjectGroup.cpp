@@ -160,7 +160,7 @@ namespace Castor3D
 
 				if ( l_animation )
 				{
-					l_animation->SetLooped( p_scale );
+					l_animation->SetScale( p_scale );
 				}
 			}
 		}

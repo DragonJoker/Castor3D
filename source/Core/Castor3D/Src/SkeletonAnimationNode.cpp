@@ -46,7 +46,7 @@ namespace Castor3D
 		{
 			BinaryChunk l_chunk;
 			l_return = p_chunk.GetSubChunk( l_chunk );
-			
+
 			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )

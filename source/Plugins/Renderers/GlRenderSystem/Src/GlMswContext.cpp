@@ -406,12 +406,12 @@ namespace GlRender
 			if ( l_pfd.dwFlags & PFD_STEREO )
 			{
 				if ( ( l_pfd.dwFlags & PFD_SUPPORT_OPENGL )
-					 && ( l_pfd.dwFlags & PFD_DOUBLEBUFFER )
-					 && ( l_pfd.dwFlags & PFD_DRAW_TO_WINDOW )
-					 && l_pfd.iPixelType == PFD_TYPE_RGBA
-					 && l_pfd.cColorBits == l_color
-					 && l_pfd.cDepthBits == l_depth
-					 && l_pfd.cStencilBits == l_stencil )
+						&& ( l_pfd.dwFlags & PFD_DOUBLEBUFFER )
+						&& ( l_pfd.dwFlags & PFD_DRAW_TO_WINDOW )
+						&& l_pfd.iPixelType == PFD_TYPE_RGBA
+						&& l_pfd.cColorBits == l_color
+						&& l_pfd.cDepthBits == l_depth
+						&& l_pfd.cStencilBits == l_stencil )
 				{
 					l_bStereoAvailable = true;
 				}

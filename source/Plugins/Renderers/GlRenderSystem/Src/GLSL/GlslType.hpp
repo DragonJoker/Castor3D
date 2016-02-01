@@ -29,7 +29,7 @@ namespace GlRender
 		template< typename T > struct is_type : public std::false_type {};
 
 		struct Type
-			: public Expr
+				: public Expr
 		{
 			C3D_Gl_API Type( Castor::String const & p_type );
 			C3D_Gl_API Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

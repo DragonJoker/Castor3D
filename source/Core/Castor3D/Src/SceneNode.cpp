@@ -349,7 +349,7 @@ namespace Castor3D
 		}
 		else
 		{
-			Logger::LogWarning( m_name + cuT( " - Can't add SceneNode ") + l_name + cuT( " - Already in childs"));
+			Logger::LogWarning( m_name + cuT( " - Can't add SceneNode " ) + l_name + cuT( " - Already in childs" ) );
 		}
 	}
 

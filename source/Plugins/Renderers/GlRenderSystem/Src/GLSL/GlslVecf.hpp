@@ -25,7 +25,7 @@ namespace GlRender
 	namespace GLSL
 	{
 		struct Vec2
-			: public Type
+				: public Type
 		{
 			inline Vec2();
 			inline Vec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -45,7 +45,7 @@ namespace GlRender
 		};
 
 		struct Vec3
-			: public Type
+				: public Type
 		{
 			inline Vec3();
 			inline Vec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

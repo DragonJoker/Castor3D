@@ -185,7 +185,7 @@ namespace Castor
 					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], unknown error." ) );
 					break;
 				}
-		}
+			}
 
 			return l_return;
 		}

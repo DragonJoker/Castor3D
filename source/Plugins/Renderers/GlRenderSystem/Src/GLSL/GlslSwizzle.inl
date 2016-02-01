@@ -35,7 +35,7 @@ namespace GlRender
 			};
 
 			template< typename TInput, typename TOutput, typename UInput, typename UOutput >
-			struct SwizzleOperator< TInput, TOutput, UInput, UOutput, typename std::enable_if< are_equal< TOutput, UOutput >::value && !are_equal< TOutput, Float >::value && !are_equal< TOutput, Int >::value >::type >
+			struct SwizzleOperator < TInput, TOutput, UInput, UOutput, typename std::enable_if < are_equal< TOutput, UOutput >::value && !are_equal< TOutput, Float >::value && !are_equal< TOutput, Int >::value >::type >
 			{
 				Swizzle< TInput, TOutput > & operator()( Castor::String const & p_operator, Swizzle< TInput, TOutput > & p_lhs, Swizzle< UInput, TOutput > const & p_rhs )
 				{
@@ -305,7 +305,7 @@ namespace GlRender
 			l_return.m_value << Castor::String( static_cast< Output >( p_a ) ) << cuT( " / " ) << Castor::String( static_cast< Int >( p_b ) );
 			return l_return;
 		}
-		
+
 		template< typename Input, typename Output >
 		Output operator+( Swizzle< Input, Output > const & p_a, float p_b )
 		{

@@ -70,7 +70,7 @@ namespace GuiCommon
 			}
 			else if ( l_property->GetName() == PROPERTY_ANIMATION_LOOPED )
 			{
-				OnSpeedChange( l_property->GetValue().GetReal() );
+				OnLoopedChange( l_property->GetValue().GetBool() );
 			}
 		}
 	}

@@ -18,7 +18,7 @@ namespace GlRender
 				  std::bind( &OpenGl::CreateShader, std::ref( p_gl ), p_gl.Get( p_type ) ),
 				  std::bind( &OpenGl::DeleteShader, std::ref( p_gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsShader, std::ref( p_gl ), std::placeholders::_1 )
-				  )
+				)
 		, m_shaderProgram( NULL )
 	{
 	}

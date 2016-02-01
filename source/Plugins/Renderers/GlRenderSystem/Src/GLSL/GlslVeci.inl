@@ -25,7 +25,7 @@ namespace GlRender
 			: Type( cuT( "ivec2 " ) )
 		{
 		}
-		
+
 		IVec2::IVec2( GlslWriter * p_writer, Castor::String const & p_name )
 			: Type( cuT( "ivec2 " ), p_writer, p_name )
 		{
@@ -34,7 +34,7 @@ namespace GlRender
 		IVec2::~IVec2()
 		{
 		}
-		
+
 		IVec2 & IVec2::operator=( IVec2 const & p_rhs )
 		{
 			if ( m_writer )
@@ -71,7 +71,7 @@ namespace GlRender
 			: Type( cuT( "ivec3 " ) )
 		{
 		}
-		
+
 		IVec3::IVec3( GlslWriter * p_writer, Castor::String const & p_name )
 			: Type( cuT( "ivec3 " ), p_writer, p_name )
 		{

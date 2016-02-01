@@ -33,7 +33,7 @@ namespace GlRender
 		Base class for each OpenGL bindable object (with glBind* or glBind* / glUnbind* functions)
 	*/
 	template< typename CreateFunction, typename DestroyFunction,
-		typename BindFunction, typename UnbindFunction = BindFunction >
+			  typename BindFunction, typename UnbindFunction = BindFunction >
 	class Bindable
 		: private Object< CreateFunction, DestroyFunction >
 	{
@@ -123,7 +123,7 @@ namespace GlRender
 					}
 				}
 			}
-			
+
 			if ( l_return )
 			{
 				glTrack( GetOpenGl(), GetGlTypeName(), this );

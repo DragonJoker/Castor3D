@@ -1497,7 +1497,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
+			CASTOR_EXCEPTION( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
 		}
 	}
 }

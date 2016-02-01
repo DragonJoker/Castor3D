@@ -113,7 +113,7 @@ namespace Castor3D
 			{
 				l_return = std::make_shared< Geometry >( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
 				m_elements.insert( p_name, l_return );
-				ElementAttacher< Geometry >::Attach( l_return, p_parent, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+				ElementAttacher< Geometry >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_return, this]()
 				{
 					l_return->CreateBuffers( m_facesCount, m_vertexCount );

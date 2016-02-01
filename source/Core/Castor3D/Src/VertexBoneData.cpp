@@ -5,8 +5,8 @@ using namespace Castor;
 namespace Castor3D
 {
 	stVERTEX_BONE_DATA::stVERTEX_BONE_DATA()
-		: m_ids{}
-		, m_weights{}
+		: m_ids {}
+	, m_weights {}
 	{
 	}
 

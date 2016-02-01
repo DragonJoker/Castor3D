@@ -124,7 +124,12 @@ namespace GlRender
 		GlBuffer< uint8_t >::DoDestroy();
 	}
 
-	bool GlVertexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, ShaderProgramBaseSPtr p_program )
+	bool GlVertexBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
+	{
+		return GlBuffer< uint8_t >::DoInitialise( p_type, p_nature );
+	}
+
+	bool GlVertexBufferObject::AttachTo( ShaderProgramBaseSPtr p_program )
 	{
 		bool l_return = true;
 		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_program );
@@ -143,15 +148,6 @@ namespace GlRender
 			{
 				l_return = DoAttributesInitialise();
 			}
-
-			if ( l_return )
-			{
-				l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_nature );
-			}
-		}
-		else if ( !l_pOldProgram )
-		{
-			l_return = GlBuffer< uint8_t >::DoInitialise( p_type, p_nature );
 		}
 
 		return l_return;

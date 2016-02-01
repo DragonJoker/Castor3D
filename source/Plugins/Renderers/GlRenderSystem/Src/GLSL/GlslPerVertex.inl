@@ -23,12 +23,12 @@ namespace GlRender
 			: Type( cuT( "gl_PerVertex " ) )
 		{
 		}
-		
+
 		gl_PerVertex::gl_PerVertex( GlslWriter * p_writer, Castor::String const & p_name )
 			: Type( cuT( "gl_PerVertex " ), p_writer, p_name )
 		{
 		}
-		
+
 		gl_PerVertex & gl_PerVertex::operator=( gl_PerVertex const & p_rhs )
 		{
 			if ( m_writer )
@@ -56,12 +56,12 @@ namespace GlRender
 		{
 			return Vec4( m_writer, m_value.str() + cuT( ".gl_Position" ) );
 		}
-		
+
 		Float gl_PerVertex::gl_PointSize()const
 		{
 			return Float( m_writer, m_value.str() + cuT( ".gl_PointSize" ) );
 		}
-		
+
 		Float gl_PerVertex::gl_ClipDistance()const
 		{
 			return Array< Float >( m_writer, m_value.str() + cuT( ".gl_ClipDistance" ), 8 );

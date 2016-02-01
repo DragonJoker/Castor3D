@@ -35,10 +35,10 @@ namespace GlRender
 	template< typename T >
 	class GlBufferBase
 		: public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-						   std::function< bool( uint32_t ) > >
+		  std::function< bool( uint32_t ) > >
 	{
 		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-									   std::function< bool( uint32_t ) > >;
+			  std::function< bool( uint32_t ) > >;
 
 	public:
 		GlBufferBase( OpenGl & p_gl, eGL_BUFFER_TARGET p_target );

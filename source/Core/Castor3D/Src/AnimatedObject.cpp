@@ -67,7 +67,7 @@ namespace Castor3D
 			auto l_animation = l_it->second;
 
 			if ( l_animation->GetState() != eANIMATION_STATE_PLAYING
-				 && l_animation->GetState() != eANIMATION_STATE_PAUSED )
+					&& l_animation->GetState() != eANIMATION_STATE_PAUSED )
 			{
 				l_animation->Play();
 				m_playingAnimations.push_back( l_animation );

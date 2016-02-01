@@ -46,7 +46,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types d'objet non attachables.
 	*/
 	template< typename Elem >
-	struct ElementAttacher< Elem, typename std::enable_if< !is_detachable< Elem >::value >::type >
+	struct ElementAttacher < Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
 	{
 		static void Attach( std::shared_ptr< Elem > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		{
@@ -74,7 +74,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types d'objet non détachables.
 	*/
 	template< typename Elem >
-	struct ElementDetacher< Elem, typename std::enable_if< !is_detachable< Elem >::value >::type >
+	struct ElementDetacher < Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
 	{
 		static void Detach( Elem & p_element )
 		{
@@ -235,7 +235,7 @@ namespace Castor3D
 
 			for ( auto l_it : this->m_elements )
 			{
-				ElementMerger< Key, Elem >::Merge( *this, p_destination.m_elements, l_it.second, p_destination.m_rootCameraNode, p_destination.m_rootObjectNode );
+				ElementMerger< Key, Elem >::Merge( *this, p_destination.m_elements, l_it.second, p_destination.m_rootCameraNode.lock(), p_destination.m_rootObjectNode.lock() );
 			}
 
 			Manager< Key, Elem, Scene, ObjectManagerEngineGetter >::Clear();
@@ -263,7 +263,7 @@ namespace Castor3D
 			{
 				l_return = std::make_shared< Elem >( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
 				this->m_elements.insert( p_name, l_return );
-				ElementAttacher< Elem >::Attach( l_return, p_parent, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+				ElementAttacher< Elem >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
 				this->GetScene()->SetChanged();
 			}
@@ -291,11 +291,11 @@ namespace Castor3D
 
 	protected:
 		//!\~english The root node	\~french Le noeud père de tous les noeuds de la scène
-		SceneNodeSPtr m_rootNode;
+		SceneNodeWPtr m_rootNode;
 		//!\~english The root node used only for cameras (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds de caméra
-		SceneNodeSPtr m_rootCameraNode;
+		SceneNodeWPtr m_rootCameraNode;
 		//!\~english The root node for every object other than camera (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds d'objet
-		SceneNodeSPtr m_rootObjectNode;
+		SceneNodeWPtr m_rootObjectNode;
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -347,7 +347,7 @@ namespace Castor3D
 	\remarks	Spécialisation pour les types d'objet non détachables.
 	*/
 	template< typename Key, typename Elem >
-	struct ElementMerger< Key, Elem, typename std::enable_if< !is_detachable< Elem >::value >::type >
+	struct ElementMerger < Key, Elem, typename std::enable_if < !is_detachable< Elem >::value >::type >
 	{
 		static void Merge( ObjectManager< Key, Elem > const & p_source, Castor::Collection< Elem, Key > & p_destination, std::shared_ptr< Elem > p_element, SceneNodeSPtr p_cameraRootNode, SceneNodeSPtr p_objectRootNode )
 		{

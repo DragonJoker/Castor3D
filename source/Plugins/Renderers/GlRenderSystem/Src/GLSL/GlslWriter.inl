@@ -268,7 +268,7 @@ namespace GlRender
 
 			if ( m_keywords->HasNamedFragData() )
 			{
-				*this << Layout{ int( p_index ) } << Out() << T().m_type << p_name << cuT( ";" ) << Endl();
+				*this << Layout { int( p_index ) } << Out() << T().m_type << p_name << cuT( ";" ) << Endl();
 				l_name = p_name;
 			}
 			else

@@ -135,7 +135,7 @@ namespace Castor3D
 		{
 			ApplyModel( p_matrixBuffer );
 		}
-		
+
 		if ( p_matrices & MASK_MTXMODE_VIEW )
 		{
 			ApplyView( p_matrixBuffer );

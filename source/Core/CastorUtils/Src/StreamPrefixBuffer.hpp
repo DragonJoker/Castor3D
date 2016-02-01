@@ -39,8 +39,8 @@ namespace Castor
 		*/
 		template < typename prefix_type, typename char_type, typename traits = std::char_traits< char_type > >
 		struct basic_prefix_buffer
-			: public std::basic_streambuf< char_type, traits >
-			, public prefix_type
+				: public std::basic_streambuf< char_type, traits >
+				, public prefix_type
 		{
 		public:
 			typedef typename traits::int_type int_type;

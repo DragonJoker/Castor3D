@@ -60,7 +60,7 @@ namespace GlRender
 			: Type( cuT( "int " ), p_writer, p_name )
 		{
 		}
-			
+
 		Int & Int::operator=( Int const & p_rhs )
 		{
 			if ( m_writer )

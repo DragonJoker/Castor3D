@@ -38,7 +38,7 @@ namespace Castor
 		*/
 		template < typename char_type, typename prefix_traits >
 		struct base_prefixer
-			: public prefix_traits
+				: public prefix_traits
 		{
 			std::basic_string< char_type > to_string()
 			{

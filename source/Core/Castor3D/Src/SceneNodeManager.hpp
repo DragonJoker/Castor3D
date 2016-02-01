@@ -112,7 +112,7 @@ namespace Castor3D
 			{
 				l_return = std::make_shared< SceneNode >( p_name, *this->GetScene(), std::forward< Parameters >( p_params )... );
 				m_elements.insert( p_name, l_return );
-				ElementAttacher< SceneNode >::Attach( l_return, p_parent, m_rootNode, m_rootCameraNode, m_rootObjectNode );
+				ElementAttacher< SceneNode >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
 				GetScene()->SetChanged();
 			}

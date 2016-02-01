@@ -43,7 +43,7 @@ namespace GlRender
 			if ( m_writer.GetOpenGl().HasUbo() )
 			{
 				m_writer << Endl();
-				m_writer << StdLayout{ 140 } << Uniform() << p_name << Endl();
+				m_writer << StdLayout { 140 } << Uniform() << p_name << Endl();
 				m_writer.m_uniform.clear();
 				m_block = new IndentBlock( m_writer );
 			}
@@ -124,7 +124,7 @@ namespace GlRender
 			m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << std::endl;
 		}
 
-		void GlslWriter::For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type const &) > p_function )
+		void GlslWriter::For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type const & ) > p_function )
 		{
 			m_stream << std::endl;
 			m_stream << cuT( "for( " ) << Castor::String( p_init ) << cuT( "; " ) << p_cond.m_value.rdbuf() << cuT( "; " ) << p_incr.m_value.rdbuf() << cuT( " )" ) << std::endl;
