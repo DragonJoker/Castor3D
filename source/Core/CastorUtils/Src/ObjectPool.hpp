@@ -50,35 +50,6 @@ namespace Castor
 			p_space->~Object();
 		}
 	};
-	///*!
-	//\author		Sylvain DOREMUS
-	//\version	0.8.0
-	//\date		08/01/2016
-	//\~english
-	//\brief		Policy used to construct/destruct object if needed.
-	//\~french
-	//\brief		Poliituqe utilisée pour construire/détruire un objet si nécessaire.
-	//*/
-	//template< typename Object >
-	//struct NewDeletePolicy< Object, typename std::enable_if< std::is_same< Object, int8_t >::value || std::is_same< Object, uint8_t >::value
-	//														 || std::is_same< Object, int16_t >::value || std::is_same< Object, uint16_t >::value
-	//														 || std::is_same< Object, int32_t >::value || std::is_same< Object, uint32_t >::value
-	//														 || std::is_same< Object, int64_t >::value || std::is_same< Object, uint64_t >::value
-	//														 || std::is_same< Object, float >::value || std::is_same< Object, double >::value
-	//														 || std::is_same< Object, long double >::value >::type >
-	//{
-	//	template< typename ... TParams >
-	//	static inline Object * Ctor( Object * p_space, TParams ... p_params )
-	//	{
-	//		return new( l_space )Object( p_params... );
-	//	}
-
-	//	template< typename ... TParams >
-	//	static inline Dtor( Object * p_space )
-	//	{
-	//		p_space->~Object();
-	//	}
-	//};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
@@ -110,8 +81,7 @@ namespace Castor
 		 *\param[in]	p_count	Le compte des objets.
 		 */
 		ObjectPool( size_t p_count )noexcept
-	:
-		m_count( p_count )
+			: m_count( p_count )
 		{
 			MemoryData::Initialise( m_count );
 		}
@@ -163,12 +133,10 @@ namespace Castor
 		 *\brief		Deallocates an object (gives its memory back to the pool).
 		 *\param[in]	p_object	The object to deallocate.
 		 *\return		\p true if the object came from the pool.
-		 *\return
 		 *\~french
 		 *\brief		Désalloue un objet (rend sa mémoire au pool).
 		 *\param[in]	p_object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
-		 *\return
 		 */
 		bool Deallocate( Object * p_object )noexcept
 		{
@@ -183,10 +151,8 @@ namespace Castor
 		/**
 		 *\~english
 		 *\return		The objects count.
-		 *\return
 		 *\~french
 		 *\return		Le compte d'objets.
-		 *\return
 		 */
 		uint32_t GetCount()noexcept
 		{
@@ -227,8 +193,7 @@ namespace Castor
 		 *\param[in]	p_count	Le compte des objets.
 		 */
 		AlignedObjectPool( size_t p_count )noexcept
-	:
-		m_count( p_count )
+			: m_count( p_count )
 		{
 			MemoryData::Initialise( m_count );
 		}
@@ -280,12 +245,10 @@ namespace Castor
 		 *\brief		Deallocates an object (gives its memory back to the pool).
 		 *\param[in]	p_object	The object to deallocate.
 		 *\return		\p true if the object came from the pool.
-		 *\return
 		 *\~french
 		 *\brief		Désalloue un objet (rend sa mémoire au pool).
 		 *\param[in]	p_object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
-		 *\return
 		 */
 		bool Deallocate( Object * object )noexcept
 		{
@@ -300,10 +263,8 @@ namespace Castor
 		/**
 		 *\~english
 		 *\return		The objects count.
-		 *\return
 		 *\~french
 		 *\return		Le compte d'objets.
-		 *\return
 		 */
 		uint32_t GetCount()noexcept
 		{

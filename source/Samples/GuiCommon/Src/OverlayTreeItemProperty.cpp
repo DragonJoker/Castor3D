@@ -80,7 +80,7 @@ namespace GuiCommon
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_OVERLAY + wxString( l_overlay->GetOverlayName() ) ) );
 			p_grid->Append( new PositionProperty( PROPERTY_OVERLAY_POSITION ) )->SetValue( WXVARIANT( l_overlay->GetPixelPosition() ) );
 			p_grid->Append( new SizeProperty( PROPERTY_OVERLAY_SIZE ) )->SetValue( WXVARIANT( l_overlay->GetPixelSize() ) );
-			p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_MATERIAL ) )->SetValue( WXVARIANT( l_overlay->GetMaterial()->GetName() ) );
+			p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_MATERIAL ) )->SetValue( wxVariant( make_wxString( l_overlay->GetMaterial()->GetName() ) ) );
 
 			switch ( l_overlay->GetType() )
 			{

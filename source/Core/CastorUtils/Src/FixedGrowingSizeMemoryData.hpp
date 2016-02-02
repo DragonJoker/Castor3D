@@ -134,9 +134,9 @@ namespace Castor
 
 				if ( m_buffersEnd == std::find_if(	m_buffers, m_buffersEnd,
 													[&p_space]( buffer const & buffer )
-			{
-				return ptrdiff_t( p_space ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( p_space ) < ptrdiff_t( buffer.m_end );
-				} ) )
+													{
+														return ptrdiff_t( p_space ) >= ptrdiff_t( buffer.m_data ) && ptrdiff_t( p_space ) < ptrdiff_t( buffer.m_end );
+													} ) )
 				{
 					ReportError< ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES >( Namer::Name, ( void * )p_space );
 					return false;

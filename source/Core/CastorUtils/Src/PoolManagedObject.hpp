@@ -55,8 +55,7 @@ namespace Castor
 		 */
 		template< typename ... Params >
 		ManagedObject( Params ... p_params )noexcept
-	:
-		Object( p_params... )
+			: Object( p_params... )
 		{
 		}
 		/**
@@ -68,8 +67,7 @@ namespace Castor
 		 *\param[in]	p_rhs	L'autre objet.
 		 */
 		ManagedObject( ManagedObject const & p_rhs )noexcept
-	:
-		Object( p_rhs )
+			: Object( p_rhs )
 		{
 		}
 		/**
@@ -81,8 +79,7 @@ namespace Castor
 		 *\param[in]	p_rhs	L'autre objet.
 		 */
 		ManagedObject( Object const & p_rhs )noexcept
-	:
-		Object( p_rhs )
+			: Object( p_rhs )
 		{
 		}
 		/**

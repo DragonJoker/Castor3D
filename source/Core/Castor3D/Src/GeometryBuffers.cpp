@@ -68,13 +68,6 @@ namespace Castor3D
 			m_initialised = m_pVertexBuffer->Initialise( p_vtxType, p_vtxNature );
 		}
 
-		m_program = p_shader;
-
-		if ( m_pVertexBuffer )
-		{
-			m_initialised = m_pVertexBuffer->AttachTo( p_shader );
-		}
-
 		return AttachTo( p_shader );
 	}
 
@@ -90,18 +83,6 @@ namespace Castor3D
 		if ( m_initialised && m_pIndexBuffer )
 		{
 			m_initialised = m_pIndexBuffer->Initialise( p_idxType, p_idxNature );
-		}
-
-		m_program = p_shader;
-
-		if ( m_pVertexBuffer )
-		{
-			m_initialised = m_pVertexBuffer->AttachTo( p_shader );
-		}
-
-		if ( m_initialised && m_pIndexBuffer )
-		{
-			m_initialised = m_pIndexBuffer->AttachTo( p_shader );
 		}
 
 		return AttachTo( p_shader );
