@@ -25,7 +25,7 @@ namespace GlRender
 	namespace GLSL
 	{
 		struct Int
-			: public Type
+				: public Type
 		{
 			inline Int();
 			inline Int( Type const & p_value );
@@ -43,7 +43,7 @@ namespace GlRender
 		};
 
 		struct Float
-			: public Type
+				: public Type
 		{
 			inline Float();
 			inline Float( Type const & p_value );

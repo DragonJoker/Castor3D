@@ -29,7 +29,12 @@ namespace GlRender
 		GlBuffer< real >::DoDestroy();
 	}
 
-	bool GlMatrixBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature, Castor3D::ShaderProgramBaseSPtr p_program )
+	bool GlMatrixBufferObject::Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
+	{
+		return GlBuffer< real >::DoInitialise( p_type, p_nature );
+	}
+
+	bool GlMatrixBufferObject::AttachTo( Castor3D::ShaderProgramBaseSPtr p_program )
 	{
 		bool l_return = true;
 		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_program );
@@ -44,15 +49,6 @@ namespace GlRender
 			{
 				l_return = DoAttributeInitialise();
 			}
-
-			if ( l_return )
-			{
-				l_return = GlBuffer< real >::DoInitialise( p_type, p_nature );
-			}
-		}
-		else if ( !l_pOldProgram )
-		{
-			l_return = GlBuffer< real >::DoInitialise( p_type, p_nature );
 		}
 
 		return l_return;
@@ -64,7 +60,7 @@ namespace GlRender
 		GlBuffer< real >::DoCleanup();
 	}
 
-	bool GlMatrixBufferObject::Bind( uint32_t p_count )
+	bool GlMatrixBufferObject::Bind( bool p_instantiated )
 	{
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 		bool l_return = l_pBuffer && l_pBuffer->IsAssigned();
@@ -76,7 +72,7 @@ namespace GlRender
 
 		if ( l_return )
 		{
-			l_return = DoAttributeBind( p_count > 1 );
+			l_return = DoAttributeBind( p_instantiated );
 		}
 
 		return l_return;

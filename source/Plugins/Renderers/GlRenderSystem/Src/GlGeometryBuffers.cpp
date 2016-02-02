@@ -54,17 +54,17 @@ namespace GlRender
 
 	class GlGeometryBuffersVao
 		: public GlGeometryBuffersImpl
-		, public Bindable<
-			std::function< bool( int, uint32_t * ) >,
-			std::function< bool( int, uint32_t const * ) >,
-			std::function< bool( uint32_t ) >
-			>
+		, public Bindable <
+		std::function< bool( int, uint32_t * ) >,
+		std::function< bool( int, uint32_t const * ) >,
+		std::function< bool( uint32_t ) >
+		>
 	{
-		using ObjectType = Bindable<
-			std::function< bool( int, uint32_t * ) >,
-			std::function< bool( int, uint32_t const * ) >,
-			std::function< bool( uint32_t ) >
-			>;
+		using ObjectType = Bindable <
+						   std::function< bool( int, uint32_t * ) >,
+						   std::function< bool( int, uint32_t const * ) >,
+						   std::function< bool( uint32_t ) >
+						   >;
 
 	public:
 		GlGeometryBuffersVao( GlGeometryBuffers & p_buffers, OpenGl & p_gl )
@@ -75,7 +75,7 @@ namespace GlRender
 						  std::bind( &OpenGl::DeleteVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 						  std::bind( &OpenGl::IsVertexArray, std::ref( p_gl ), std::placeholders::_1 ),
 						  std::bind( &OpenGl::BindVertexArray, std::ref( p_gl ), std::placeholders::_1 )
-						  )
+						)
 		{
 			bool l_return = ObjectType::Create();
 
@@ -95,7 +95,7 @@ namespace GlRender
 
 				if ( p_buffers.HasMatrixBuffer() )
 				{
-					p_buffers.GetMatrixBuffer().Bind( 2 );
+					p_buffers.GetMatrixBuffer().Bind( true );
 				}
 
 				GetOpenGl().BindVertexArray( 0 );

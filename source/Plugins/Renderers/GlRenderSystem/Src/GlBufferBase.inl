@@ -10,10 +10,10 @@ namespace GlRender
 						std::bind( &OpenGl::DeleteBuffers, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 						std::bind( &OpenGl::IsBuffer, std::ref( p_gl ), std::placeholders::_1 ),
 						[&p_gl, p_target]( uint32_t p_glName )
-						{
-							return p_gl.BindBuffer( p_target, p_glName );
-						} )
-		, m_target( p_target )
+	{
+		return p_gl.BindBuffer( p_target, p_glName );
+	} )
+	, m_target( p_target )
 	{
 	}
 

@@ -741,6 +741,7 @@ namespace Castor3D
 					if ( l_material )
 					{
 						stRENDER_NODE l_renderNode = { l_sceneNode, l_primitive.second, l_submesh, l_material };
+
 						if ( l_material->HasAlphaBlending() )
 						{
 							auto l_itMap = m_transparentRenderNodes.insert( std::make_pair( l_material, SubmeshRenderNodesMap() ) ).first;
@@ -873,7 +874,7 @@ namespace Castor3D
 				for ( auto l_pass : *l_material )
 				{
 					if ( l_submesh->GetRefCount( l_material ) > 1 && l_submesh->GetGeometryBuffers()->HasMatrixBuffer()
-						 && ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) != ePROGRAM_FLAG_SKINNING )
+							&& ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) != ePROGRAM_FLAG_SKINNING )
 					{
 						real * l_buffer = l_submesh->GetGeometryBuffers()->GetMatrixBuffer().data();
 

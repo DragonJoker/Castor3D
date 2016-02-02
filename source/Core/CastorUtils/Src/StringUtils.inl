@@ -369,7 +369,7 @@ namespace Castor
 				m_dirty = true;
 				return *this;
 			}
-			
+
 			const_iterator & const_iterator::operator=( const_iterator const & p_it )
 			{
 				m_it = p_it.m_it;

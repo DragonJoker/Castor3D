@@ -79,7 +79,7 @@ namespace GlRender
 		uint8_t * l_return = NULL;
 
 		if ( ( m_cpuAccess && p_lock & eACCESS_TYPE_READ ) == eACCESS_TYPE_READ
-			 || ( m_cpuAccess & p_lock & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
+				|| ( m_cpuAccess & p_lock & eACCESS_TYPE_WRITE ) == eACCESS_TYPE_WRITE )
 		{
 			l_return = m_buffer.lock()->ptr();
 		}

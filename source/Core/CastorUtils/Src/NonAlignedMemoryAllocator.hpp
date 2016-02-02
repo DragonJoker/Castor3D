@@ -35,7 +35,7 @@ namespace Castor
 	*/
 	class NonAlignedMemoryAllocator
 	{
-	public:	
+	public:
 		/**
 		 *\~english
 		 *\brief		Allocates memory.
@@ -47,7 +47,7 @@ namespace Castor
 		static uint8_t * Allocate( uint32_t p_size )
 		{
 			return new uint8_t[p_size];;
-		}		
+		}
 		/**
 		 *\~english
 		 *\brief		Frees the given memory.

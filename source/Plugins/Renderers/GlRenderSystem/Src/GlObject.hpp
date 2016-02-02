@@ -40,16 +40,16 @@ namespace GlRender
 		typedef std::function< bool( int, uint32_t * ) > CreateFunction;
 
 		static inline uint32_t Apply( CreateFunction p_creator )
+	{
+		uint32_t l_return = -1;
+
+		if ( !p_creator( 1, &l_return ) )
 		{
-			uint32_t l_return = -1;
-
-			if ( !p_creator( 1, &l_return ) )
-			{
-				l_return = -1;
-			}
-
-			return l_return;
+			l_return = -1;
 		}
+
+		return l_return;
+	}
 	};
 
 	/*!
@@ -70,9 +70,9 @@ namespace GlRender
 		typedef std::function< uint32_t() > CreateFunction;
 
 		static inline uint32_t Apply( CreateFunction p_creator )
-		{
-			return p_creator();
-		}
+	{
+		return p_creator();
+	}
 	};
 
 	/*!
@@ -93,9 +93,9 @@ namespace GlRender
 		typedef std::function< bool( int, uint32_t const * ) > DestroyFunction;
 
 		static inline void Apply( DestroyFunction p_destroyer, uint32_t p_glName )
-		{
-			p_destroyer( 1, &p_glName );
-		}
+	{
+		p_destroyer( 1, &p_glName );
+	}
 	};
 
 	/*!
@@ -116,9 +116,9 @@ namespace GlRender
 		typedef std::function< bool( uint32_t ) > DestroyFunction;
 
 		static inline void Apply( DestroyFunction p_destroyer, uint32_t p_glName )
-		{
-			p_destroyer( p_glName );
-		}
+	{
+		p_destroyer( p_glName );
+	}
 	};
 
 	/*!

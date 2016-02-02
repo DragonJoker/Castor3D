@@ -55,7 +55,7 @@ namespace Castor
 		{
 			m_total = p_count;
 			m_buffer = MemoryAllocator::Allocate( m_total * sizeof( Object ) );
-			m_free = new Object *[m_total];
+			m_free = new Object * [m_total];
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
 
@@ -66,7 +66,7 @@ namespace Castor
 			}
 
 			m_freeEnd = m_freeIndex;
-		}		
+		}
 		/**
 		 *\~english
 		 *\brief		Cleans the pool up, reports memory leaks.
@@ -86,7 +86,7 @@ namespace Castor
 			m_buffer = NULL;
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
-		}		
+		}
 		/**
 		 *\~english
 		 *\brief		Gives the address an available chunk.
@@ -102,9 +102,9 @@ namespace Castor
 				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
 				return NULL;
 			}
-		
+
 			return *--m_freeIndex;
-		}		
+		}
 		/**
 		 *\~english
 		 *\brief		Frees the given memory.

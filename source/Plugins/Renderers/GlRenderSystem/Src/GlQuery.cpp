@@ -13,7 +13,7 @@ namespace GlRender
 				  std::bind( &OpenGl::GenQueries, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 				  std::bind( &OpenGl::DeleteQueries, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 				  std::bind( &OpenGl::IsQuery, std::ref( p_gl ), std::placeholders::_1 )
-				  )
+				)
 		, m_target( p_query )
 	{
 	}

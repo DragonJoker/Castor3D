@@ -25,12 +25,12 @@ namespace GlRender
 			: Type( cuT( "mat3 " ) )
 		{
 		}
-		
+
 		Mat3::Mat3( GlslWriter * p_writer, Castor::String const & p_name )
 			: Type( cuT( "mat3 " ), p_writer, p_name )
 		{
 		}
-		
+
 		Mat3 & Mat3::operator=( Mat3 const & p_rhs )
 		{
 			if ( m_writer )
@@ -67,12 +67,12 @@ namespace GlRender
 			: Type( cuT( "mat4 " ) )
 		{
 		}
-		
+
 		Mat4::Mat4( GlslWriter * p_writer, Castor::String const & p_name )
 			: Type( cuT( "mat4 " ), p_writer, p_name )
 		{
 		}
-		
+
 		Mat4 & Mat4::operator=( Mat4 const & p_rhs )
 		{
 			if ( m_writer )

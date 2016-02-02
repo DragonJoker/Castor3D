@@ -36,7 +36,7 @@ namespace Castor
 		}
 
 #else
-	  
+
 		namespace
 		{
 			const int CALLS_TO_CAPTURE( 20 );

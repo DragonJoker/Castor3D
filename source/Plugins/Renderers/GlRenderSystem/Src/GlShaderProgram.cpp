@@ -23,7 +23,7 @@ namespace GlRender
 				  std::bind( &OpenGl::CreateProgram, std::ref( p_gl ) ),
 				  std::bind( &OpenGl::DeleteProgram, std::ref( p_gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsProgram, std::ref( p_gl ), std::placeholders::_1 )
-				  )
+				)
 	{
 		CreateObject( eSHADER_TYPE_VERTEX );
 		CreateObject( eSHADER_TYPE_PIXEL );

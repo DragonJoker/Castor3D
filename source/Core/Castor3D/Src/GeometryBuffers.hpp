@@ -180,6 +180,15 @@ namespace Castor3D
 		C3D_API virtual void Unbind();
 		/**
 		 *\~english
+		 *\brief		Loads attributes for the given program.
+		 *\param[in]	p_program	The program.
+		 *\~french
+		 *\brief		Charge les attributs pour le programme donné.
+		 *\param[in]	p_program	Le programme.
+		 */
+		C3D_API bool AttachTo( ShaderProgramBaseSPtr p_program );
+		/**
+		 *\~english
 		 *\brief		Retrieves the indices buffer
 		 *\return		The value
 		 *\~french
@@ -269,6 +278,16 @@ namespace Castor3D
 		inline bool IsInitialised()const
 		{
 			return m_initialised;
+		}
+		/**
+		 *\~english
+		 *\return		The geometry buffers initialisation status.
+		 *\~french
+		 *\return		Le statut d'initialisation des tampons de géométrie.
+		 */
+		inline ShaderProgramBaseSPtr GetProgram()const
+		{
+			return m_program.lock();
 		}
 
 	protected:

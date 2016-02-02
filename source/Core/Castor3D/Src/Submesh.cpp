@@ -1112,6 +1112,10 @@ namespace Castor3D
 				m_geometryBuffers->Cleanup();
 				m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STREAM, eBUFFER_ACCESS_NATURE_DRAW );
 			}
+			else if ( l_program != m_geometryBuffers->GetProgram() )
+			{
+				m_geometryBuffers->AttachTo( l_program );
+			}
 
 			auto l_matrixBuffer = p_pass.GetMatrixBuffer();
 

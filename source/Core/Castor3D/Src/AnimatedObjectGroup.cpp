@@ -53,9 +53,9 @@ namespace Castor3D
 	{
 		bool l_return = p_file.WriteText( cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
 
-		for ( auto l_name : p_group.GetAnimations() )
+		for ( auto l_it : p_group.GetAnimations() )
 		{
-			l_return &= p_file.WriteText( cuT( "\tanimation " ) + l_name + cuT( "\n" ) ) > 0;
+			l_return &= p_file.WriteText( cuT( "\tanimation " ) + l_it.first + cuT( "\n" ) ) > 0;
 		}
 
 		for ( auto l_it : p_group.GetObjects() )
@@ -120,7 +120,7 @@ namespace Castor3D
 	{
 		if ( m_animations.find( p_name ) == m_animations.end() )
 		{
-			m_animations.insert( p_name );
+			m_animations.insert( std::make_pair( p_name, eANIMATION_STATE_STOPPED ) );
 		}
 	}
 
@@ -150,36 +150,64 @@ namespace Castor3D
 		}
 	}
 
-	void AnimatedObjectGroup::StartAnimation( String const & p_name )
+	void AnimatedObjectGroup::SetAnimationScale( Castor::String const & p_name, float p_scale )
 	{
 		if ( m_animations.find( p_name ) != m_animations.end() )
+		{
+			for ( auto l_it : m_objects )
+			{
+				AnimationSPtr l_animation = l_it.second->GetAnimation( p_name );
+
+				if ( l_animation )
+				{
+					l_animation->SetScale( p_scale );
+				}
+			}
+		}
+	}
+
+	void AnimatedObjectGroup::StartAnimation( String const & p_name )
+	{
+		auto l_itAnim = m_animations.find( p_name );
+
+		if ( l_itAnim != m_animations.end() )
 		{
 			for ( auto l_it : m_objects )
 			{
 				l_it.second->StartAnimation( p_name );
 			}
+
+			l_itAnim->second = eANIMATION_STATE_PLAYING;
 		}
 	}
 
 	void AnimatedObjectGroup::StopAnimation( String const & p_name )
 	{
-		if ( m_animations.find( p_name ) != m_animations.end() )
+		auto l_itAnim = m_animations.find( p_name );
+
+		if ( l_itAnim != m_animations.end() )
 		{
 			for ( auto l_it : m_objects )
 			{
 				l_it.second->StopAnimation( p_name );
 			}
+
+			l_itAnim->second = eANIMATION_STATE_STOPPED;
 		}
 	}
 
 	void AnimatedObjectGroup::PauseAnimation( String const & p_name )
 	{
-		if ( m_animations.find( p_name ) != m_animations.end() )
+		auto l_itAnim = m_animations.find( p_name );
+
+		if ( l_itAnim != m_animations.end() )
 		{
 			for ( auto l_it : m_objects )
 			{
 				l_it.second->PauseAnimation( p_name );
 			}
+
+			l_itAnim->second = eANIMATION_STATE_PAUSED;
 		}
 	}
 
@@ -189,6 +217,11 @@ namespace Castor3D
 		{
 			l_it.second->StartAllAnimations();
 		}
+
+		for ( auto l_it : m_animations )
+		{
+			l_it.second = eANIMATION_STATE_PLAYING;
+		}
 	}
 
 	void AnimatedObjectGroup::StopAllAnimations()
@@ -197,6 +230,11 @@ namespace Castor3D
 		{
 			l_it.second->StopAllAnimations();
 		}
+
+		for ( auto l_it : m_animations )
+		{
+			l_it.second = eANIMATION_STATE_STOPPED;
+		}
 	}
 
 	void AnimatedObjectGroup::PauseAllAnimations()
@@ -204,6 +242,11 @@ namespace Castor3D
 		for ( auto l_it : m_objects )
 		{
 			l_it.second->PauseAllAnimations();
+		}
+
+		for ( auto l_it : m_animations )
+		{
+			l_it.second = eANIMATION_STATE_PAUSED;
 		}
 	}
 }

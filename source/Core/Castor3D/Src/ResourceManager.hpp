@@ -36,7 +36,7 @@ namespace Castor3D
 		template< typename Key, typename Elem >
 		static Engine * Get( Manager< Key, Elem, Engine, ResourceManagerEngineGetter > const & p_this )
 		{
-		  return static_cast< Castor::OwnedBy< Engine > const & >( p_this ).GetEngine();
+			return static_cast< Castor::OwnedBy< Engine > const & >( p_this ).GetEngine();
 		}
 	};
 	/*!

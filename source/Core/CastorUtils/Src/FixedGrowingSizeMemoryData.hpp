@@ -107,7 +107,7 @@ namespace Castor
 				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
 				return NULL;
 			}
-		
+
 			return *--m_freeIndex;
 		}
 		/**

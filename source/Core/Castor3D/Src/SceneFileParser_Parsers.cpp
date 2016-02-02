@@ -1497,7 +1497,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
+			CASTOR_EXCEPTION( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
 		}
 	}
 }
@@ -3361,8 +3361,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 	if ( l_pContext->pGroup )
 	{
 		l_pContext->pGroup->AddAnimation( l_name );
-		l_pContext->pGroup->SetAnimationLooped( l_name, true );
-		l_pContext->pGroup->StartAnimation( l_name );
 	}
 	else
 	{

@@ -25,7 +25,7 @@ namespace GlRender
 	namespace GLSL
 	{
 		struct Void
-			: public Type
+				: public Type
 		{
 			inline Void();
 			inline Void( GlslWriter * p_writer );

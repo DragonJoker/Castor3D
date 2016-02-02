@@ -159,7 +159,7 @@ namespace Castor3D
 	Animation::Animation( String const & p_name )
 		: Named( p_name )
 		, m_currentTime( 0.0 )
-		, m_state( eSTATE_STOPPED )
+		, m_state( eANIMATION_STATE_STOPPED )
 		, m_scale( 1.0 )
 		, m_looped( false )
 		, m_length( 0.0 )
@@ -172,7 +172,7 @@ namespace Castor3D
 
 	void Animation::Update( real p_tslf )
 	{
-		if ( m_state != eSTATE_STOPPED )
+		if ( m_state != eANIMATION_STATE_STOPPED )
 		{
 			if ( m_length == 0 )
 			{
@@ -182,7 +182,7 @@ namespace Castor3D
 				}
 			}
 
-			if ( m_state == eSTATE_PLAYING )
+			if ( m_state == eANIMATION_STATE_PLAYING )
 			{
 				m_currentTime += ( p_tslf * m_scale );
 
@@ -190,7 +190,7 @@ namespace Castor3D
 				{
 					if ( !m_looped )
 					{
-						m_state = eSTATE_PAUSED;
+						m_state = eANIMATION_STATE_PAUSED;
 						m_currentTime = m_length;
 					}
 					else
@@ -209,22 +209,22 @@ namespace Castor3D
 
 	void Animation::Play()
 	{
-		m_state = eSTATE_PLAYING;
+		m_state = eANIMATION_STATE_PLAYING;
 	}
 
 	void Animation::Pause()
 	{
-		if ( m_state == eSTATE_PLAYING )
+		if ( m_state == eANIMATION_STATE_PLAYING )
 		{
-			m_state = eSTATE_PAUSED;
+			m_state = eANIMATION_STATE_PAUSED;
 		}
 	}
 
 	void Animation::Stop()
 	{
-		if ( m_state != eSTATE_STOPPED )
+		if ( m_state != eANIMATION_STATE_STOPPED )
 		{
-			m_state = eSTATE_STOPPED;
+			m_state = eANIMATION_STATE_STOPPED;
 			m_currentTime = 0.0;
 		}
 	}

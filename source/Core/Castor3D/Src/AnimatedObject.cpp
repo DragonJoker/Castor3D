@@ -66,8 +66,8 @@ namespace Castor3D
 		{
 			auto l_animation = l_it->second;
 
-			if ( l_animation->GetState() != Animation::eSTATE_PLAYING
-				 && l_animation->GetState() != Animation::eSTATE_PAUSED )
+			if ( l_animation->GetState() != eANIMATION_STATE_PLAYING
+					&& l_animation->GetState() != eANIMATION_STATE_PAUSED )
 			{
 				l_animation->Play();
 				m_playingAnimations.push_back( l_animation );
@@ -84,7 +84,7 @@ namespace Castor3D
 		{
 			auto l_animation = l_it->second;
 
-			if ( l_animation->GetState() != Animation::eSTATE_STOPPED )
+			if ( l_animation->GetState() != eANIMATION_STATE_STOPPED )
 			{
 				l_animation->Stop();
 				m_playingAnimations.erase( std::find( m_playingAnimations.begin(), m_playingAnimations.end(), l_animation ) );

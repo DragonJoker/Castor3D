@@ -42,8 +42,8 @@ namespace GuiCommon
 		if ( l_scene )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SCENE + l_scene->GetName() ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( wxVariant( wxColour( l_scene->GetAmbientLight().to_bgr() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( wxVariant( wxColour( l_scene->GetBackgroundColour().to_bgr() ) ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_AMBIENT_LIGHT ) )->SetValue( WXVARIANT( wxColour( l_scene->GetAmbientLight().to_bgr() ) ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_SCENE_BACKGROUND_COLOUR ) )->SetValue( WXVARIANT( wxColour( l_scene->GetBackgroundColour().to_bgr() ) ) );
 
 			if ( l_scene->GetBackgroundImage() )
 			{

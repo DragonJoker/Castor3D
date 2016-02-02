@@ -142,7 +142,7 @@ namespace Castor
 					l_colR = _mm_add_ps( l_colR, _mm_mul_ps( l_col3, l_colB ) );	// l_colR += l_col3 * l_colB
 					_mm_store_ps( l_result[i].ptr(), l_colR );
 				}
-	
+
 				p_lhs = l_result;
 			}
 
@@ -312,7 +312,7 @@ namespace Castor
 				{
 					l_tReturn = -l_mtxTmp.get_determinant();
 				}
-	
+
 				return l_tReturn;
 			}
 		};

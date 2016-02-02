@@ -126,7 +126,7 @@ namespace Castor
 			}
 
 			uint8_t * space = *--m_freeIndex;
-			*space++ = ALLOCATED;
+			* space++ = ALLOCATED;
 			return reinterpret_cast< Object * >( space );
 		}
 		/**

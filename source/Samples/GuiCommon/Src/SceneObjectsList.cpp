@@ -1,5 +1,8 @@
 #include "SceneObjectsList.hpp"
 
+#include "AnimatedObjectGroupTreeItemProperty.hpp"
+#include "AnimatedObjectTreeItemProperty.hpp"
+#include "AnimationTreeItemProperty.hpp"
 #include "CameraTreeItemProperty.hpp"
 #include "GeometryTreeItemProperty.hpp"
 #include "LightTreeItemProperty.hpp"
@@ -14,48 +17,21 @@
 
 #include "ImagesLoader.hpp"
 
-#include "xpms/node.xpm"
-#include "xpms/node_sel.xpm"
-#include "xpms/camera.xpm"
-#include "xpms/camera_sel.xpm"
-#include "xpms/directional.xpm"
-#include "xpms/directional_sel.xpm"
-#include "xpms/point.xpm"
-#include "xpms/point_sel.xpm"
-#include "xpms/spot.xpm"
-#include "xpms/spot_sel.xpm"
-#include "xpms/geometry.xpm"
-#include "xpms/geometry_sel.xpm"
-#include "xpms/submesh.xpm"
-#include "xpms/submesh_sel.xpm"
-#include "xpms/scene.xpm"
-#include "xpms/scene_sel.xpm"
-#include "xpms/panel.xpm"
-#include "xpms/panel_sel.xpm"
-#include "xpms/border_panel.xpm"
-#include "xpms/border_panel_sel.xpm"
-#include "xpms/text.xpm"
-#include "xpms/text_sel.xpm"
-#include "xpms/viewport.xpm"
-#include "xpms/viewport_sel.xpm"
-#include "xpms/render_window.xpm"
-#include "xpms/render_window_sel.xpm"
-#include "xpms/render_target.xpm"
-#include "xpms/render_target_sel.xpm"
-
 #include <wx/imaglist.h>
 #include <wx/aui/framemanager.h>
 #include <wx/artprov.h>
 
-#include <Camera.hpp>
-#include <Geometry.hpp>
+#include <AnimatedObjectGroupManager.hpp>
+#include <AnimatedObject.hpp>
+#include <Animation.hpp>
+#include <CameraManager.hpp>
+#include <GeometryManager.hpp>
 #include <Engine.hpp>
-#include <Light.hpp>
-#include <Material.hpp>
+#include <LightManager.hpp>
 #include <MaterialManager.hpp>
-#include <Mesh.hpp>
+#include <MeshManager.hpp>
 #include <OverlayManager.hpp>
-#include <Scene.hpp>
+#include <SceneManager.hpp>
 #include <WindowManager.hpp>
 
 using namespace Castor3D;
@@ -70,6 +46,12 @@ namespace GuiCommon
 	{
 		wxImage * l_icons[] =
 		{
+			ImagesLoader::GetBitmap( eBMP_ANIMATED_OBJECTGROUP ),
+			ImagesLoader::GetBitmap( eBMP_ANIMATED_OBJECTGROUP_SEL ),
+			ImagesLoader::GetBitmap( eBMP_ANIMATED_OBJECT ),
+			ImagesLoader::GetBitmap( eBMP_ANIMATED_OBJECT_SEL ),
+			ImagesLoader::GetBitmap( eBMP_ANIMATION ),
+			ImagesLoader::GetBitmap( eBMP_ANIMATION_SEL ),
 			ImagesLoader::GetBitmap( eBMP_SCENE ),
 			ImagesLoader::GetBitmap( eBMP_SCENE_SEL ),
 			ImagesLoader::GetBitmap( eBMP_VIEWPORT ),
@@ -153,6 +135,15 @@ namespace GuiCommon
 			{
 				DoAddNode( l_scene, l_rootNode );
 			}
+
+			p_scene->GetAnimatedObjectGroupManager().lock();
+
+			for ( auto l_it : p_scene->GetAnimatedObjectGroupManager() )
+			{
+				DoAddAnimatedObjectGroup( AppendItem( l_scene, l_it.first, eBMP_ANIMATED_OBJECTGROUP, eBMP_ANIMATED_OBJECTGROUP_SEL, new AnimatedObjectGroupTreeItemProperty( m_propertiesHolder->IsEditable(), l_it.second ) ), l_it.second );
+			}
+
+			p_scene->GetAnimatedObjectGroupManager().unlock();
 
 			for ( auto && l_overlay : p_engine->GetOverlayManager() )
 			{
@@ -265,6 +256,14 @@ namespace GuiCommon
 		for ( auto && l_pair : p_node->GetChilds() )
 		{
 			DoAddNode( AppendItem( p_id, l_pair.first, eBMP_NODE, eBMP_NODE_SEL, new NodeTreeItemProperty( m_propertiesHolder->IsEditable(), m_engine, l_pair.second.lock() ) ), l_pair.second.lock() );
+		}
+	}
+
+	void SceneObjectsList::DoAddAnimatedObjectGroup( wxTreeItemId p_id, Castor3D::AnimatedObjectGroupSPtr p_group )
+	{
+		for ( auto && l_it : p_group->GetAnimations() )
+		{
+			AppendItem( p_id, l_it.first, eBMP_ANIMATION, eBMP_ANIMATION_SEL, new AnimationTreeItemProperty( m_engine, m_propertiesHolder->IsEditable(), p_group, l_it.first, l_it.second ) );
 		}
 	}
 

@@ -166,7 +166,7 @@ namespace Castor3D
 	\~french
 	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
 	*/
-	template<> 
+	template<>
 	class Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
 	{
 	public:
