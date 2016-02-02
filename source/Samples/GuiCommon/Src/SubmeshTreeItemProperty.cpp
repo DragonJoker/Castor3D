@@ -125,7 +125,7 @@ namespace GuiCommon
 
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_SUBMESH + wxString( l_geometry->GetName() ) ) );
 			p_grid->Append( new wxEnumProperty( PROPERTY_TOPOLOGY, PROPERTY_TOPOLOGY, l_choices ) )->SetValue( l_selected );
-			p_grid->Append( DoCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( wxVariant( l_geometry->GetMaterial( l_submesh )->GetName() ) );
+			p_grid->Append( DoCreateMaterialProperty( PROPERTY_SUBMESH_MATERIAL ) )->SetValue( WXVARIANT( l_geometry->GetMaterial( l_submesh )->GetName() ) );
 		}
 	}
 

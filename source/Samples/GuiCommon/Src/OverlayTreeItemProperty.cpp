@@ -78,9 +78,9 @@ namespace GuiCommon
 		if ( l_overlay )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_OVERLAY + wxString( l_overlay->GetOverlayName() ) ) );
-			p_grid->Append( new PositionProperty( PROPERTY_OVERLAY_POSITION ) )->SetValue( wxVariant( l_overlay->GetPixelPosition() ) );
-			p_grid->Append( new SizeProperty( PROPERTY_OVERLAY_SIZE ) )->SetValue( wxVariant( l_overlay->GetPixelSize() ) );
-			p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_MATERIAL ) )->SetValue( wxVariant( l_overlay->GetMaterial()->GetName() ) );
+			p_grid->Append( new PositionProperty( PROPERTY_OVERLAY_POSITION ) )->SetValue( WXVARIANT( l_overlay->GetPixelPosition() ) );
+			p_grid->Append( new SizeProperty( PROPERTY_OVERLAY_SIZE ) )->SetValue( WXVARIANT( l_overlay->GetPixelSize() ) );
+			p_grid->Append( DoCreateMaterialProperty( PROPERTY_OVERLAY_MATERIAL ) )->SetValue( WXVARIANT( l_overlay->GetMaterial()->GetName() ) );
 
 			switch ( l_overlay->GetType() )
 			{
@@ -189,7 +189,7 @@ namespace GuiCommon
 		FontSPtr l_font = p_overlay->GetFontTexture()->GetFont();
 		wxFontInfo l_info( l_font->GetHeight() );
 		l_info.FaceName( l_font->GetFaceName() );
-		p_grid->Append( new wxFontProperty( PROPERTY_OVERLAY_FONT ) )->SetValue( wxVariant( wxFont( l_info ) ) );
+		p_grid->Append( new wxFontProperty( PROPERTY_OVERLAY_FONT ) )->SetValue( WXVARIANT( wxFont( l_info ) ) );
 		p_grid->Append( new wxStringProperty( PROPERTY_OVERLAY_CAPTION ) )->SetValue( p_overlay->GetCaption() );
 	}
 
