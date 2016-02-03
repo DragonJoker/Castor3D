@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_OVERLAY_RENDERER_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "BufferDeclaration.hpp"
 #include "OverlayCategory.hpp"
 
 #include <OwnedBy.hpp>
@@ -213,7 +214,7 @@ namespace Castor3D
 		//!\~english The GeometryBuffers used to render texts	\~french Les GeometryBuffers utilisé pour rendre les textes
 		std::vector< GeometryBuffersSPtr > m_pTextsGeometryBuffers;
 		//!\~english The buffer elements declaration	\~french La déclaration des éléments du tampon
-		BufferDeclarationSPtr m_declaration;
+		BufferDeclaration m_declaration;
 		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
 		Castor::Size m_size;
 		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi)

@@ -19,7 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SHADER_PROGRAM_H___
 
 #include "Castor3DPrerequisites.hpp"
+
 #include "FrameVariable.hpp"
+#include "VertexLayout.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -553,6 +555,16 @@ namespace Castor3D
 		{
 			return m_eLanguage;
 		}
+		/**
+		 *\~english
+		 *\return		The program vertex layout.
+		 *\~french
+		 *\return		Le layout des sommets du programme.
+		 */
+		inline VertexLayout const & GetVertexLayout()const
+		{
+			return m_vertexLayout;
+		}
 
 	protected:
 		/**
@@ -632,6 +644,8 @@ namespace Castor3D
 		std::array< FrameVariableBufferPtrList, eSHADER_TYPE_COUNT > m_frameVariableBuffers;
 		//!\~english The frame variable buffers map	\~french La liste des buffer de variables de frame
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;
+		//!\~english The deduced vertex layout, from compiled program	\~french Le layout des vertex, déduit à la compilation.
+		VertexLayout m_vertexLayout;
 	};
 }
 

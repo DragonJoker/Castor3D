@@ -18,7 +18,6 @@ namespace Castor3D
 	bool SubdivisionFrameEvent::Apply()
 	{
 		m_pSubmesh->ComputeNormals();
-		m_pSubmesh->GenerateBuffers();
 		m_pSubmesh->Initialise();
 		return true;
 	}

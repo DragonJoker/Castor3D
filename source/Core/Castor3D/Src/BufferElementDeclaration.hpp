@@ -27,55 +27,50 @@ namespace Castor3D
 	\version	0.6.1.0
 	\date		03/01/2011
 	\~english
-	\brief		Buffer element description
-	\remark		Describes usage and type of an element in a vertex buffer
+	\brief		Buffer element description.
+	\remark		Describes usage and type of an element in a vertex buffer.
 	\~french
-	\brief		Description d'un élément de tampon
-	\remark		Décrit l'utilisation et le type d'un élément de tampon de sommets
+	\brief		Description d'un élément de tampon.
+	\remark		Décrit l'utilisation et le type d'un élément de tampon de sommets.
 	*/
 	struct BufferElementDeclaration
 	{
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		BufferElementDeclaration()
-			:	m_uiStream()
-			,	m_eUsage()
-			,	m_eDataType()
-			,	m_offset()
+			: m_dataType()
+			, m_offset()
+			, m_name()
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_uiStream	Stream index
-		 *\param[in]	p_eUsage	Element usage
-		 *\param[in]	p_type		Element type
-		 *\param[in]	p_offset	Offset in the stream
+		 *\brief		Constructor.
+		 *\param[in]	p_name		The associated variable name.
+		 *\param[in]	p_type		Element type.
+		 *\param[in]	p_offset	Offset in the stream.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_uiStream	Index du flux
-		 *\param[in]	p_eUsage	Utilisation de l'élément
-		 *\param[in]	p_type		Type de l'élément
-		 *\param[in]	p_offset	Offset dans le tampon
+		 *\brief		Constructeur.
+		 *\param[in]	p_name		Le nom de la variable associée.
+		 *\param[in]	p_type		Type de l'élément.
+		 *\param[in]	p_offset	Offset dans le tampon.
 		 */
-		BufferElementDeclaration( uint32_t p_uiStream, eELEMENT_USAGE p_eUsage, eELEMENT_TYPE p_type, uint32_t p_offset = 0 )
-			:	m_uiStream( p_uiStream )
-			,	m_eUsage( p_eUsage )
-			,	m_eDataType( p_type )
-			,	m_offset( p_offset )
+		BufferElementDeclaration( Castor::String const & p_name, eELEMENT_TYPE p_type, uint32_t p_offset = 0 )
+			: m_dataType( p_type )
+			, m_offset( p_offset )
+			, m_name( p_name )
 		{
 		}
-		//!\~english Stream index	\~french Index du flux
-		uint32_t m_uiStream;
-		//!\~english Element usage	\~french Utilisation de l'élément
-		eELEMENT_USAGE m_eUsage;
-		//!\~english Element type	\~french Type de l'élément
-		eELEMENT_TYPE m_eDataType;
-		//!\~english Offset in stream	\~french Offset dans le tampon
+
+		//!\~english The associated variable name.	\~french Le nom de la variable associée.
+		Castor::String m_name;
+		//!\~english Element type.	\~french Type de l'élément.
+		eELEMENT_TYPE m_dataType;
+		//!\~english Offset in buffer.	\~french Offset dans le tampon.
 		uint32_t m_offset;
 	};
 }

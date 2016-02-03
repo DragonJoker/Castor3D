@@ -268,14 +268,6 @@ namespace Castor3D
 		}
 	}
 
-	void Mesh::GenerateBuffers()
-	{
-		for ( auto && l_submesh : m_submeshes )
-		{
-			l_submesh->GenerateBuffers();
-		}
-	}
-
 	MeshSPtr Mesh::Clone( String const & p_name )
 	{
 		MeshSPtr l_clone = std::make_shared< Mesh >( p_name, *GetEngine() );

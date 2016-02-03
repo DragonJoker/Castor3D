@@ -13,101 +13,53 @@ namespace GlRender
 		: GlBuffer< uint8_t >( p_renderSystem, p_gl, eGL_BUFFER_TARGET_ARRAY, p_buffer )
 		, m_bufferDeclaration( p_declaration )
 	{
-		for ( auto l_element : m_bufferDeclaration )
-		{
-			String l_name;
+		//for ( auto l_element : m_bufferDeclaration )
+		//{
+		//	GlAttributeBaseSPtr l_attribute;
 
-			switch ( l_element.m_eUsage )
-			{
-			case eELEMENT_USAGE_POSITION:
-				l_name = cuT( "vertex" );
-				break;
+		//	switch ( l_element.m_dataType )
+		//	{
+		//	case eELEMENT_TYPE_1FLOAT:
+		//		l_attribute = std::make_shared< GlAttribute1r >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_NORMAL:
-				l_name = cuT( "normal" );
-				break;
+		//	case eELEMENT_TYPE_2FLOATS:
+		//		l_attribute = std::make_shared< GlAttribute2r >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_TANGENT:
-				l_name = cuT( "tangent" );
-				break;
+		//	case eELEMENT_TYPE_3FLOATS:
+		//		l_attribute = std::make_shared< GlAttribute3r >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_BITANGENT:
-				l_name = cuT( "bitangent" );
-				break;
+		//	case eELEMENT_TYPE_4FLOATS:
+		//		l_attribute = std::make_shared< GlAttribute4r >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_DIFFUSE:
-				l_name = cuT( "colour" );
-				break;
+		//	case eELEMENT_TYPE_COLOUR:
+		//		l_attribute = std::make_shared< GlAttribute1ui >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_TEXCOORDS0:
-			case eELEMENT_USAGE_TEXCOORDS1:
-			case eELEMENT_USAGE_TEXCOORDS2:
-			case eELEMENT_USAGE_TEXCOORDS3:
-				l_name = cuT( "texture" );
-				break;
+		//	case eELEMENT_TYPE_1INT:
+		//		l_attribute = std::make_shared< GlAttribute1i >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_BONE_IDS0:
-				l_name = cuT( "bone_ids0" );
-				break;
+		//	case eELEMENT_TYPE_2INTS:
+		//		l_attribute = std::make_shared< GlAttribute2i >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_BONE_IDS1:
-				l_name = cuT( "bone_ids1" );
-				break;
+		//	case eELEMENT_TYPE_3INTS:
+		//		l_attribute = std::make_shared< GlAttribute3i >( p_gl, &p_renderSystem, l_name );
+		//		break;
 
-			case eELEMENT_USAGE_BONE_WEIGHTS0:
-				l_name = cuT( "weights0" );
-				break;
+		//	case eELEMENT_TYPE_4INTS:
+		//		l_attribute = std::make_shared< GlAttribute4i >( p_gl, &p_renderSystem, l_name );
+		//		break;
+		//	}
 
-			case eELEMENT_USAGE_BONE_WEIGHTS1:
-				l_name = cuT( "weights1" );
-				break;
-			}
-
-			GlAttributeBaseSPtr l_attribute;
-
-			switch ( l_element.m_eDataType )
-			{
-			case eELEMENT_TYPE_1FLOAT:
-				l_attribute = std::make_shared< GlAttribute1r >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_2FLOATS:
-				l_attribute = std::make_shared< GlAttribute2r >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_3FLOATS:
-				l_attribute = std::make_shared< GlAttribute3r >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_4FLOATS:
-				l_attribute = std::make_shared< GlAttribute4r >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_COLOUR:
-				l_attribute = std::make_shared< GlAttribute1ui >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_1INT:
-				l_attribute = std::make_shared< GlAttribute1i >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_2INTS:
-				l_attribute = std::make_shared< GlAttribute2i >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_3INTS:
-				l_attribute = std::make_shared< GlAttribute3i >( p_gl, &p_renderSystem, l_name );
-				break;
-
-			case eELEMENT_TYPE_4INTS:
-				l_attribute = std::make_shared< GlAttribute4i >( p_gl, &p_renderSystem, l_name );
-				break;
-			}
-
-			l_attribute->SetOffset( l_element.m_offset );
-			l_attribute->SetStride( m_bufferDeclaration.GetStride() );
-			m_arrayAttributes.push_back( l_attribute );
-		}
+		//	l_attribute->SetOffset( l_element.m_offset );
+		//	l_attribute->SetStride( m_bufferDeclaration.GetStride() );
+		//	m_arrayAttributes.push_back( l_attribute );
+		//}
 	}
 
 	GlVertexBufferObject::~GlVertexBufferObject()

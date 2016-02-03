@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 #include "Viewport.hpp"
+#include "BufferDeclaration.hpp"
 
 #include <Colour.hpp>
 #include <OwnedBy.hpp>
@@ -323,7 +324,7 @@ namespace Castor3D
 		//!\~english The Viewport used when rendering a texture into to a frame buffer.	\~french Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
 		Viewport m_viewport;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
-		Castor3D::BufferDeclarationSPtr m_declaration;
+		Castor3D::BufferDeclaration m_declaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]

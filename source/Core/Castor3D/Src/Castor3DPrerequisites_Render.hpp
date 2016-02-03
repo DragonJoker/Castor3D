@@ -270,33 +270,6 @@ namespace Castor3D
 	\version	0.6.1.0
 	\date		03/01/2011
 	\~english
-	\brief		Element usage enumeration
-	\~french
-	\brief		Enumération des utilisations d'éléments de tampon
-	*/
-	typedef enum eELEMENT_USAGE
-	CASTOR_TYPE( uint8_t )
-	{
-		eELEMENT_USAGE_POSITION,		//!< Position coords
-		eELEMENT_USAGE_NORMAL,			//!< Normal coords
-		eELEMENT_USAGE_TANGENT,			//!< Tangent coords
-		eELEMENT_USAGE_BITANGENT,		//!< Bitangent coords
-		eELEMENT_USAGE_DIFFUSE,			//!< Diffuse colour
-		eELEMENT_USAGE_TEXCOORDS0,		//!< Texture coordinates 0
-		eELEMENT_USAGE_TEXCOORDS1,		//!< Texture coordinates 1
-		eELEMENT_USAGE_TEXCOORDS2,		//!< Texture coordinates 2
-		eELEMENT_USAGE_TEXCOORDS3,		//!< Texture coordinates 3
-		eELEMENT_USAGE_BONE_IDS0,		//!< Bone IDs 0
-		eELEMENT_USAGE_BONE_IDS1,		//!< Bone IDs 1
-		eELEMENT_USAGE_BONE_WEIGHTS0,	//!< Bone weights 0
-		eELEMENT_USAGE_BONE_WEIGHTS1,	//!< Bone weights 1
-		eELEMENT_USAGE_COUNT,
-	}	eELEMENT_USAGE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		03/01/2011
-	\~english
 	\brief		Element type enumeration
 	\~french
 	\brief		Enumération des types pour les éléments de tampon

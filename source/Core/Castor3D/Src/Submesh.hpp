@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SUBMESH_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "BufferDeclaration.hpp"
 #include "Mesh.hpp"
 #include "FaceIndices.hpp"
 #include "FaceInfos.hpp"
@@ -303,7 +304,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Genère les buffers 3D
 		 */
-		C3D_API void GenerateBuffers();
+		C3D_API void GenerateBuffers( ShaderProgramBase const & p_program );
 		/**
 		 *\~english
 		 *\brief		Clones the submesh and returns the clone
@@ -319,7 +320,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Recrée les Vertex et Index buffers
 		 */
-		C3D_API void ResetGpuBuffers();
+		C3D_API void ResetGpuBuffers( ShaderProgramBase const & p_program );
 		/**
 		 *\~english
 		 *\brief		Draws the submesh
@@ -629,7 +630,7 @@ namespace Castor3D
 		 *\brief		Récupère la BufferDeclaration
 		 *\return		La BufferDeclaration
 		 */
-		inline BufferDeclarationSPtr GetDeclaration()
+		inline BufferDeclaration const & GetDeclaration()const
 		{
 			return m_declaration;
 		}
@@ -699,9 +700,8 @@ namespace Castor3D
 		void DoGenerateVertexBuffer();
 		void DoGenerateIndexBuffer();
 		void DoGenerateMatrixBuffer( uint32_t p_count );
-		void DoUpdateDeclaration();
 		void DoCleanupGeometryBuffers();
-		void DoCreateGeometryBuffers();
+		void DoCreateGeometryBuffers( ShaderProgramBase const & p_program );
 		bool DoPrepareGeometryBuffers( Pass const & p_pass );
 
 	private:
@@ -724,7 +724,7 @@ namespace Castor3D
 		//!\~english The vertex pointer array	\~french Le tableau de sommets
 		VertexPtrArray m_points;
 		//!\~english Vertex elements declaration	\~french Déclaration des éléments d'un sommet
-		BufferDeclarationSPtr m_declaration;
+		BufferDeclaration m_declaration;
 		//!\~english The transformed camera position at last sort	\~french La position transformée de la caméra au dernier tri
 		Castor::Point3r m_cameraPosition;
 		//!\~english The parent mesh	\~french Le mesh parent

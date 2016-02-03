@@ -46,14 +46,8 @@ namespace Castor3D
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_previousPanelZIndex( 0 )
 		, m_previousBorderZIndex( 0 )
+		, m_declaration( { BufferElementDeclaration( cuT( "" ), eELEMENT_TYPE_2INTS ), BufferElementDeclaration( cuT( "" ), eELEMENT_TYPE_2FLOATS ) } )
 	{
-		BufferElementDeclaration l_vertexDeclarationElements[] =
-		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2INTS ),
-			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
-		};
-
-		m_declaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 		m_wp2DBlendState = GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OVERLAY_BLEND" ) );
 		m_wp2DDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "OVERLAY_DS" ) );
 	}
@@ -69,8 +63,6 @@ namespace Castor3D
 		{
 			l_vertex.reset();
 		}
-
-		m_declaration.reset();
 	}
 
 	void OverlayRenderer::Initialise()
@@ -78,8 +70,8 @@ namespace Castor3D
 		if ( !m_pPanelGeometryBuffer )
 		{
 			// Panel Overlays buffers
-			VertexBufferUPtr l_pPanelVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
-			uint32_t l_uiStride = m_declaration->GetStride();
+			VertexBufferUPtr l_pPanelVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			uint32_t l_uiStride = m_declaration.GetStride();
 			l_pPanelVtxBuffer->Resize( m_panelVertex.size() * l_uiStride );
 			uint8_t * l_buffer = l_pPanelVtxBuffer->data();
 
@@ -97,8 +89,8 @@ namespace Castor3D
 		if ( !m_pBorderGeometryBuffer )
 		{
 			// Border Overlays buffers
-			VertexBufferUPtr l_pBorderVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
-			uint32_t l_uiStride = m_declaration->GetStride();
+			VertexBufferUPtr l_pBorderVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			uint32_t l_uiStride = m_declaration.GetStride();
 			l_pBorderVtxBuffer->Resize( m_borderVertex.size() * l_uiStride );
 			uint8_t * l_buffer = l_pBorderVtxBuffer->data();
 
@@ -330,8 +322,8 @@ namespace Castor3D
 
 	GeometryBuffersSPtr OverlayRenderer::DoCreateTextGeometryBuffers()
 	{
-		VertexBufferUPtr l_pTextVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
-		l_pTextVtxBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_declaration->GetStride() );
+		VertexBufferUPtr l_pTextVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+		l_pTextVtxBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_declaration.GetStride() );
 
 		GeometryBuffersSPtr l_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( std::move( l_pTextVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		l_geometryBuffers->Create();

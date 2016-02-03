@@ -153,7 +153,7 @@ namespace Castor3D
 		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_BILLBOARD, p_parent )
 		, m_bNeedUpdate( false )
 	{
-		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) };
+		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( cuT( "" ), eELEMENT_TYPE_3FLOATS ) };
 		m_declaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 	}
 
@@ -164,7 +164,7 @@ namespace Castor3D
 	bool BillboardList::Initialise()
 	{
 		VertexBufferUPtr l_pVtxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
+		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), *m_declaration );
 		uint32_t l_uiStride = m_declaration->GetStride();
 		l_pVtxBuffer->Resize( uint32_t( m_arrayPositions.size() * l_uiStride ) );
 		uint8_t * l_pBuffer = l_pVtxBuffer->data();
@@ -283,13 +283,13 @@ namespace Castor3D
 		{
 			Pipeline & l_pipeline = GetScene()->GetEngine()->GetRenderSystem()->GetPipeline();
 			ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
-			MaterialSPtr l_pMaterial = m_wpMaterial.lock();
+			MaterialSPtr l_material = m_wpMaterial.lock();
 			VertexBuffer & l_vtxBuffer = m_geometryBuffers->GetVertexBuffer();
 			uint32_t l_uiSize = l_vtxBuffer.GetSize() / l_vtxBuffer.GetDeclaration().GetStride();
 
-			if ( l_program && l_pMaterial )
+			if ( l_program && l_material )
 			{
-				for ( auto && l_pass : *l_pMaterial )
+				for ( auto && l_pass : *l_material )
 				{
 					l_pass->BindToAutomaticProgram( l_program );
 					auto l_matrixBuffer = l_pass->GetMatrixBuffer();

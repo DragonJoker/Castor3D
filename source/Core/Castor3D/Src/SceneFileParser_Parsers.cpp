@@ -1557,7 +1557,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshEnd )
 
 	if ( l_pContext->pMesh )
 	{
-		l_pContext->pMesh->GenerateBuffers();
 		l_pContext->pGeometry->SetMesh( l_pContext->pMesh );
 		l_pContext->pMesh.reset();
 	}

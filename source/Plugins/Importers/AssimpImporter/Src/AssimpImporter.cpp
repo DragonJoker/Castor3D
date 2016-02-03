@@ -138,7 +138,6 @@ namespace C3dAssimp
 
 		if ( m_mesh )
 		{
-			m_mesh->GenerateBuffers();
 			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetEngine() );
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( m_mesh->GetName(), l_scene->GetObjectRootNode() );
 			GeometrySPtr l_pGeometry = l_scene->GetGeometryManager().Create( m_mesh->GetName(), l_node );

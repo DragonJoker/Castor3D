@@ -26,14 +26,8 @@ namespace Castor3D
 		, m_initialised( false )
 		, m_bMultiSampling( false )
 		, m_viewport( Viewport::Ortho( *GetRenderSystem()->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
+		, m_declaration( NULL, 0 )
 	{
-		BufferElementDeclaration l_vertexDeclarationElements[] =
-		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
-			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
-		};
-		m_declaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
-
 		{
 			real l_pBuffer[] =
 			{
@@ -46,12 +40,6 @@ namespace Castor3D
 			};
 
 			std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
-			uint32_t i = 0;
-
-			for ( auto & l_vertex : m_arrayVertex )
-			{
-				l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_declaration->GetStride()] );
-			}
 		}
 	}
 
@@ -61,8 +49,6 @@ namespace Castor3D
 		{
 			l_vertex.reset();
 		}
-
-		m_declaration.reset();
 	}
 
 	bool Context::Initialise( RenderWindow * p_window )
@@ -74,10 +60,6 @@ namespace Castor3D
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
-		l_pVtxBuffer->Resize( m_arrayVertex.size() * m_declaration->GetStride() );
-		l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
-		m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		m_pDsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
 		m_pDsStateNoDepth->SetDepthTest( false );
 		m_pDsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
@@ -89,6 +71,18 @@ namespace Castor3D
 		{
 			SetCurrent();
 			l_program->Initialise();
+			m_declaration = l_program->GetVertexLayout().CreateDeclaration();
+			uint32_t i = 0;
+
+			for ( auto & l_vertex : m_arrayVertex )
+			{
+				l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_declaration.GetStride()] );
+			}
+
+			VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			l_pVtxBuffer->Resize( m_arrayVertex.size() * m_declaration.GetStride() );
+			l_pVtxBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 			m_geometryBuffers->Create();
 			m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 			m_pDsStateNoDepth->Initialise();

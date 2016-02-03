@@ -35,7 +35,6 @@ SceneSPtr PlyImporter::DoImportScene()
 
 	if ( l_pMesh )
 	{
-		l_pMesh->GenerateBuffers();
 		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_PLY" ), *GetEngine() );
 		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
 		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );

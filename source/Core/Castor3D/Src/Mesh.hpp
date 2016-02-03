@@ -228,13 +228,6 @@ namespace Castor3D
 		 */
 		C3D_API void ComputeNormals( bool p_bReverted = false );
 		/**
-		 *\~english
-		 *\brief		Initialises vertex buffers
-		 *\~french
-		 *\brief		Initialise les tampons de sommets
-		 */
-		C3D_API void GenerateBuffers();
-		/**
 		*\~english
 		*\brief		Increments submeshes' instance count
 		*\param[in]	p_material	The material for which the instance count is incremented

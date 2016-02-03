@@ -13,6 +13,7 @@
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
 #include "Skeleton.hpp"
+#include "VertexLayout.hpp"
 
 #include <BlockTracker.hpp>
 
@@ -209,6 +210,7 @@ namespace Castor3D
 		, m_programFlags( 0 )
 		, m_initialised( false )
 		, m_dirty( true )
+		, m_declaration( NULL, 0 )
 	{
 	}
 
@@ -287,12 +289,12 @@ namespace Castor3D
 
 	uint32_t Submesh::GetFaceCount()const
 	{
-		return std::max( uint32_t( m_arrayFaces.size() ), GetGeometryBuffers()->GetIndexBuffer().GetSize() / 3 );
+		return std::max( uint32_t( m_arrayFaces.size() ), GetGeometryBuffers() ? GetGeometryBuffers()->GetIndexBuffer().GetSize() / 3 : 0u );
 	}
 
 	uint32_t Submesh::GetPointsCount()const
 	{
-		return std::max< uint32_t >( uint32_t( m_points.size() ), uint32_t( GetGeometryBuffers()->GetVertexBuffer().GetSize() / m_declaration->GetStride() ) );
+		return std::max< uint32_t >( uint32_t( m_points.size() ), GetGeometryBuffers() ? GetGeometryBuffers()->GetVertexBuffer().GetSize() / m_declaration.GetStride() : 0u );
 	}
 
 	int Submesh::IsInMyPoints( Point3r const & p_vertex, double p_precision )
@@ -316,9 +318,9 @@ namespace Castor3D
 
 	BufferElementGroupSPtr Submesh::AddPoint( real x, real y, real z )
 	{
-		DoUpdateDeclaration();
 		BufferElementGroupSPtr l_return;
-		m_pointsData.push_back( ByteArray( m_declaration->GetStride() ) );
+		uint32_t l_uiStride = 3 * sizeof( real ) * 5;
+		m_pointsData.push_back( ByteArray( l_uiStride ) );
 		uint8_t * l_pData = &( *m_pointsData.rbegin() )[0];
 		l_return = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
 		Vertex::SetPosition( l_return, x, y, z );
@@ -338,9 +340,8 @@ namespace Castor3D
 
 	void Submesh::AddPoints( stVERTEX_GROUP const & p_vertices )
 	{
-		DoUpdateDeclaration();
 		stVERTEX_GROUP l_vertices = p_vertices;
-		uint32_t l_uiStride = m_declaration->GetStride();
+		uint32_t l_uiStride = 3 * sizeof( real ) * 5 + ( l_vertices.m_pBones ? sizeof( stVERTEX_BONE_DATA ) : 0 );
 		uint32_t l_uiSize = l_vertices.m_uiCount * l_uiStride;
 		m_pointsData.push_back( ByteArray( l_uiSize ) );
 		uint8_t * l_pData = &( *m_pointsData.rbegin() )[0];
@@ -479,8 +480,9 @@ namespace Castor3D
 		}
 	}
 
-	void Submesh::GenerateBuffers()
+	void Submesh::GenerateBuffers( ShaderProgramBase const & p_program )
 	{
+		DoCreateGeometryBuffers( p_program );
 		DoGenerateVertexBuffer();
 		DoGenerateIndexBuffer();
 		uint32_t l_count = 0;
@@ -494,13 +496,13 @@ namespace Castor3D
 			DoGenerateMatrixBuffer( l_count );
 		}
 
-		GetEngine()->PostEvent( MakeInitialiseEvent( *this ) );
+		Initialise();
 	}
 
 	SubmeshSPtr Submesh::Clone()
 	{
 		SubmeshSPtr l_clone = std::make_shared< Submesh >( *GetEngine(), m_parentMesh, m_id );
-		uint32_t l_uiStride = m_declaration->GetStride();
+		uint32_t l_uiStride = m_declaration.GetStride();
 
 		//On effectue une copie des vertex
 		for ( VertexPtrArrayConstIt l_it = m_points.begin(); l_it != m_points.end(); ++l_it )
@@ -519,10 +521,10 @@ namespace Castor3D
 		return l_clone;
 	}
 
-	void Submesh::ResetGpuBuffers()
+	void Submesh::ResetGpuBuffers( ShaderProgramBase const & p_program )
 	{
 		DoCleanupGeometryBuffers();
-		DoCreateGeometryBuffers();
+		DoCreateGeometryBuffers( p_program );
 	}
 
 	void Submesh::Draw( Pass const & p_pass )
@@ -970,7 +972,7 @@ namespace Castor3D
 		{
 			uint8_t * l_pBuffer;
 			VertexBuffer & l_vertexBuffer = GetGeometryBuffers()->GetVertexBuffer();
-			uint32_t l_uiStride = m_declaration->GetStride();
+			uint32_t l_uiStride = m_declaration.GetStride();
 			uint32_t l_uiSize = uint32_t( m_points.size() ) * l_uiStride;
 			VertexPtrArrayIt l_itPoints = m_points.begin();
 
@@ -1049,14 +1051,6 @@ namespace Castor3D
 		}
 	}
 
-	void Submesh::DoUpdateDeclaration()
-	{
-		if ( !m_declaration )
-		{
-			DoCreateGeometryBuffers();
-		}
-	}
-
 	void Submesh::DoCleanupGeometryBuffers()
 	{
 		m_initialised = false;
@@ -1068,25 +1062,10 @@ namespace Castor3D
 		}
 	}
 
-	void Submesh::DoCreateGeometryBuffers()
+	void Submesh::DoCreateGeometryBuffers( ShaderProgramBase const & p_program )
 	{
-		std::vector< BufferElementDeclaration >	l_vertexDeclarationElements;
-		l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) );
-		l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_NORMAL, eELEMENT_TYPE_3FLOATS ) );
-		l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_TANGENT, eELEMENT_TYPE_3FLOATS ) );
-		l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BITANGENT, eELEMENT_TYPE_3FLOATS ) );
-		l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_3FLOATS ) );
-
-		if ( GetSkeleton() )
-		{
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_3INTS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_3INTS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_3FLOATS ) );
-			l_vertexDeclarationElements.push_back( BufferElementDeclaration( 0, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_3FLOATS ) );
-		}
-
-		m_declaration = std::make_shared< BufferDeclaration >( &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), &l_vertexDeclarationElements[0], uint32_t( l_vertexDeclarationElements.size() ) );
+		m_declaration = p_program.GetVertexLayout().CreateDeclaration();
+		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), m_declaration );
 		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
 
 		if ( GetEngine()->GetRenderSystem()->HasInstancing() )
@@ -1106,6 +1085,11 @@ namespace Castor3D
 
 		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
+			if ( !m_geometryBuffers )
+			{
+				GenerateBuffers( *l_program );
+			}
+
 			if ( m_geometryBuffers && m_dirty )
 			{
 				m_dirty = false;

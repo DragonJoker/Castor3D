@@ -165,8 +165,6 @@ namespace GlRender
 	{
 	public:
 		BufFunctionsBase( OpenGl & p_gl );
-		virtual bool EnableClientState( eGL_BUFFER_USAGE p_eArray );
-		virtual bool DisableClientState( eGL_BUFFER_USAGE p_eArray );
 		virtual bool BindBuffer( eGL_BUFFER_TARGET target, uint32_t buffer ) = 0;
 		virtual bool BufferData( eGL_BUFFER_TARGET target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage ) = 0;
 		virtual bool BufferSubData( eGL_BUFFER_TARGET target, ptrdiff_t offset, ptrdiff_t size, void const * data ) = 0;
@@ -205,10 +203,6 @@ namespace GlRender
 		virtual bool GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARAMETER pname,  uint64_t * params );
 
 		//@}
-
-		std::function< void( uint32_t array ) > m_pfnEnableClientState;
-		std::function< void( uint32_t array ) > m_pfnDisableClientState;
-
 		/*@name NV_vertex_buffer_unified_memory extension */
 		//@{
 
@@ -487,8 +481,6 @@ namespace GlRender
 		C3D_Gl_API bool BindTexture( eGL_TEXDIM p_target, uint32_t texture )const;
 		C3D_Gl_API bool ActiveTexture( eGL_TEXTURE_INDEX target )const;
 		C3D_Gl_API bool ClientActiveTexture( eGL_TEXTURE_INDEX target )const;
-		C3D_Gl_API bool EnableClientState( eGL_BUFFER_USAGE p_eArray )const;
-		C3D_Gl_API bool DisableClientState( eGL_BUFFER_USAGE p_eArray )const;
 		C3D_Gl_API bool GenerateMipmap( eGL_TEXDIM p_target )const;
 		C3D_Gl_API bool TexSubImage1D( eGL_TEXDIM p_target, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )const;
 		C3D_Gl_API bool TexSubImage2D( eGL_TEXDIM p_target, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )const;
@@ -718,26 +710,27 @@ namespace GlRender
 		/**@name Uniform Buffer Objects Functions */
 		//@{
 
-		C3D_Gl_API uint32_t GetUniformBlockIndex( uint32_t program, char const * uniformBlockName )const;
+		C3D_Gl_API uint32_t GetUniformBlockIndex( uint32_t shader, char const * uniformBlockName )const;
 		C3D_Gl_API bool BindBufferBase( uint32_t target, uint32_t index, uint32_t buffer )const;
-		C3D_Gl_API bool UniformBlockBinding( uint32_t program, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
-		C3D_Gl_API bool GetUniformIndices( uint32_t program, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
-		C3D_Gl_API bool GetActiveUniformsiv( uint32_t program, int uniformCount, uint32_t const * uniformIndices, eGL_UNIFORM_NAME pname, int * params )const;
-		C3D_Gl_API bool GetActiveUniformBlockiv( uint32_t program, uint32_t uniformBlockIndex, eGL_UNIFORM_NAME pname, int * params )const;
+		C3D_Gl_API bool UniformBlockBinding( uint32_t shader, uint32_t uniformBlockIndex, uint32_t uniformBlockBinding )const;
+		C3D_Gl_API bool GetUniformIndices( uint32_t shader, int uniformCount, char const ** uniformNames, uint32_t * uniformIndices )const;
+		C3D_Gl_API bool GetActiveUniformsiv( uint32_t shader, int uniformCount, uint32_t const * uniformIndices, eGL_UNIFORM_NAME pname, int * params )const;
+		C3D_Gl_API bool GetActiveUniformBlockiv( uint32_t shader, uint32_t uniformBlockIndex, eGL_UNIFORM_NAME pname, int * params )const;
 
 		//@}
 		/**@name Shader object Functions */
 		//@{
 
 		C3D_Gl_API uint32_t CreateShader( eGL_SHADER_TYPE type )const;
-		C3D_Gl_API bool DeleteShader( uint32_t shader )const;
-		C3D_Gl_API bool IsShader( uint32_t shader )const;
+		C3D_Gl_API bool DeleteShader( uint32_t program )const;
+		C3D_Gl_API bool IsShader( uint32_t program )const;
 		C3D_Gl_API bool AttachShader( uint32_t program, uint32_t shader )const;
 		C3D_Gl_API bool DetachShader( uint32_t program, uint32_t shader )const;
-		C3D_Gl_API bool CompileShader( uint32_t shader )const;
-		C3D_Gl_API bool GetShaderiv( uint32_t shader, uint32_t pname, int * param )const;
-		C3D_Gl_API bool GetShaderInfoLog( uint32_t shader, int bufSize, int * length, char * infoLog )const;
-		C3D_Gl_API bool ShaderSource( uint32_t shader, int count, char const ** strings, int const * lengths )const;
+		C3D_Gl_API bool CompileShader( uint32_t program )const;
+		C3D_Gl_API bool GetShaderiv( uint32_t program, uint32_t pname, int * param )const;
+		C3D_Gl_API bool GetShaderInfoLog( uint32_t program, int bufSize, int * length, char * infoLog )const;
+		C3D_Gl_API bool ShaderSource( uint32_t program, int count, char const ** strings, int const * lengths )const;
+		C3D_Gl_API bool GetActiveAttrib( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const;
 
 		//@}
 		/**@name Shader program Functions */
@@ -793,6 +786,17 @@ namespace GlRender
 		C3D_Gl_API bool GetQueryObjectInfos( uint32_t p_id, eGL_QUERY_INFO p_name, uint64_t * p_params )const;
 
 		//@}
+		/**@name GL_ARB_program_interface_query */
+		//@{
+
+		C3D_Gl_API bool GetProgramInterfaceInfos( uint32_t program, eGLSL_INTERFACE programInterface, eGLSL_DATA_NAME name, int * params );
+		C3D_Gl_API bool GetProgramResourceIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
+		C3D_Gl_API bool GetProgramResourceLocation( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
+		C3D_Gl_API bool GetProgramResourceLocationIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
+		C3D_Gl_API bool GetProgramResourceName( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int bufSize, int * length, char * name );
+		C3D_Gl_API bool GetProgramResourceInfos( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params );
+
+		//@}
 		/**@name Other functions */
 		//@{
 
@@ -800,6 +804,7 @@ namespace GlRender
 		C3D_Gl_API bool GlCheckError( std::wstring const & p_strText )const;
 		C3D_Gl_API eGL_LOCK GetLockFlags( uint32_t p_flags )const;
 		C3D_Gl_API uint32_t GetBitfieldFlags( uint32_t p_flags )const;
+		C3D_Gl_API Castor3D::eELEMENT_TYPE Get( eGLSL_ATTRIBUTE_TYPE p_type )const;
 
 #if !defined( NDEBUG )
 
@@ -865,10 +870,6 @@ namespace GlRender
 		inline PixelFmt Get( Castor::ePIXEL_FORMAT p_pixelFormat )const
 		{
 			return PixelFormats[p_pixelFormat];
-		}
-		inline eGL_BUFFER_USAGE Get( Castor3D::eELEMENT_USAGE p_eUsage )const
-		{
-			return Usages[p_eUsage];
 		}
 		inline eGL_SHADER_TYPE Get( Castor3D::eSHADER_TYPE p_type )const
 		{
@@ -966,7 +967,7 @@ namespace GlRender
 		{
 			return m_iGlslVersion;
 		}
-		C3D_Gl_API bool HasExtension( Castor::String const & p_strExtName )const;
+		C3D_Gl_API bool HasExtension( Castor::String const & p_strExtName, bool p_log = true )const;
 		inline eGL_BUFFER_MODE GetBufferFlags( uint32_t p_flags )const
 		{
 			eGL_BUFFER_MODE l_eReturn = eGL_BUFFER_MODE( 0 );
@@ -1038,7 +1039,6 @@ namespace GlRender
 		eGL_WRAP_MODE TextureWrapMode[Castor3D::eWRAP_MODE_COUNT];
 		eGL_INTERPOLATION_MODE TextureInterpolation[Castor3D::eINTERPOLATION_MODE_COUNT];
 		eGL_BLEND_FACTOR BlendFactors[Castor3D::eBLEND_COUNT];
-		eGL_BUFFER_USAGE Usages[Castor3D::eELEMENT_USAGE_COUNT];
 		eGL_BLEND_SOURCE TextureArguments[Castor3D::eBLEND_SOURCE_COUNT];
 		eGL_BLEND_FUNC RgbBlendFuncs[Castor3D::eRGB_BLEND_FUNC_COUNT];
 		eGL_BLEND_FUNC AlphaBlendFuncs[Castor3D::eALPHA_BLEND_FUNC_COUNT];
@@ -1060,6 +1060,7 @@ namespace GlRender
 		eGL_FUNC DepthFuncs[Castor3D::eDEPTH_FUNC_COUNT];
 		std::map< eGL_TEXTURE_ATTACHMENT, eGL_BUFFER > BuffersTA;
 		std::map< eGL_RENDERBUFFER_ATTACHMENT, eGL_BUFFER > BuffersRBA;
+		Castor3D::eELEMENT_TYPE ElementTypes[Castor3D::eELEMENT_TYPE_COUNT];
 
 		bool m_bHasVao;
 		bool m_bHasUbo;
@@ -1389,6 +1390,7 @@ namespace GlRender
 		std::function< void( uint32_t program, int bufSize, int * length, char * infoLog ) > m_pfnGetProgramInfoLog;
 		std::function< int( uint32_t program, char const * name ) > m_pfnGetAttribLocation;
 		std::function< void( uint32_t program, uint32_t pname, int value ) > m_pfnProgramParameteri;
+		std::function< void( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveAttrib;
 
 		//@}
 		/**@name Vertex Attribute Pointer */
@@ -1419,8 +1421,6 @@ namespace GlRender
 		std::function< void( uint32_t value, uint64_t * result ) > m_pfnGetIntegerui64v;
 
 		//@}
-
-		//@}
 		/*@name Queries */
 		//@{
 
@@ -1434,6 +1434,17 @@ namespace GlRender
 		std::function< void( uint32_t id, uint32_t pname, uint32_t * params ) > m_pfnGetQueryObjectuiv;
 		std::function< void( uint32_t id, uint32_t pname, int64_t * params ) > m_pfnGetQueryObjecti64v;
 		std::function< void( uint32_t id, uint32_t pname, uint64_t * params ) > m_pfnGetQueryObjectui64v;
+
+		//@}
+		/*@name GL_ARB_program_interface_query */
+		//@{
+
+		std::function< void( uint32_t program, uint32_t programInterface, uint32_t name, int * params ) > m_pfnGetProgramInterfaceiv;
+		std::function< void( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceIndex;
+		std::function< void( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocation;
+		std::function< void( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocationIndex;
+		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int bufSize, int * length, char * name ) > m_pfnGetProgramResourceName;
+		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params ) > m_pfnGetProgramResourceiv;
 
 		//@}
 
@@ -1660,6 +1671,7 @@ namespace GlRender
 	MAKE_GL_EXTENSION( NV_vertex_buffer_unified_memory )
 	MAKE_GL_EXTENSION( NV_shader_buffer_load )
 	MAKE_GL_EXTENSION( ARB_timer_query )
+	MAKE_GL_EXTENSION( ARB_program_interface_query )
 
 #	if defined( _WIN32 )
 	MAKE_WGL_EXTENSION( ARB_create_context )
