@@ -125,7 +125,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 		m_skins = new Md2Skin[m_header.m_numSkins];
 		m_pFile->Seek( m_header.m_offsetSkins );
 		l_uiRead = m_pFile->ReadArray( m_skins, m_header.m_numSkins );
-		Logger::LogDebug( StringStream() << cuT( "- Skins: ") << ( l_uiRead / sizeof( Md2Skin ) ) << cuT( "/") << m_header.m_numSkins << cuT( " (") << l_uiRead << cuT( " bytes, from ") << m_header.m_offsetSkins << cuT( ")" ) );
+		Logger::LogDebug( StringStream() << cuT( "- Skins: " ) << ( l_uiRead / sizeof( Md2Skin ) ) << cuT( "/" ) << m_header.m_numSkins << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << m_header.m_offsetSkins << cuT( ")" ) );
 
 		for ( int i = 0 ; i < m_header.m_numSkins && !l_pTexture ; i++ )
 		{
@@ -165,7 +165,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 		m_texCoords = new Md2TexCoord[m_header.m_numTexCoords];
 		m_pFile->Seek( m_header.m_offsetTexCoords );
 		l_uiRead = m_pFile->ReadArray( m_texCoords, m_header.m_numTexCoords );
-		Logger::LogDebug( StringStream() << cuT( "- TexCoords: ") << ( l_uiRead / sizeof( Md2TexCoord ) ) << cuT( "/") << m_header.m_numTexCoords << cuT( " (") << l_uiRead << cuT( " bytes, from ") << m_header.m_offsetTexCoords << cuT( ")" ) );
+		Logger::LogDebug( StringStream() << cuT( "- TexCoords: " ) << ( l_uiRead / sizeof( Md2TexCoord ) ) << cuT( "/" ) << m_header.m_numTexCoords << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << m_header.m_offsetTexCoords << cuT( ")" ) );
 	}
 
 	if ( m_header.m_numTriangles > 0 )
@@ -173,7 +173,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 		m_triangles = new Md2Face[m_header.m_numTriangles];
 		m_pFile->Seek( m_header.m_offsetTriangles );
 		l_uiRead = m_pFile->ReadArray( m_triangles, m_header.m_numTriangles );
-		Logger::LogDebug( StringStream() << cuT( "- Triangles: ") << ( l_uiRead / sizeof( Md2Face ) ) << cuT( "/") << m_header.m_numTriangles << cuT( " (") << l_uiRead << cuT( " bytes, from ") << m_header.m_offsetTriangles << cuT( ")" ) );
+		Logger::LogDebug( StringStream() << cuT( "- Triangles: " ) << ( l_uiRead / sizeof( Md2Face ) ) << cuT( "/" ) << m_header.m_numTriangles << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << m_header.m_offsetTriangles << cuT( ")" ) );
 	}
 
 	if ( m_header.m_numFrames > 0 )

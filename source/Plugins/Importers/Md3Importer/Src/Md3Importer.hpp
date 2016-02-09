@@ -73,7 +73,7 @@ namespace Castor3D
 		};
 
 		struct Md3Tag
-			: Castor::AlignedFrom< Castor::Point3r >
+				: Castor::AlignedFrom< Castor::Point3r >
 		{
 			char m_strName[64];
 			Castor::Point3r m_position;

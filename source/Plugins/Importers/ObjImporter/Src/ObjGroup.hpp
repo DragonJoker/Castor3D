@@ -40,23 +40,23 @@ namespace Obj
 	};
 	struct stGROUP
 	{
-		Castor::String			m_strName;
-		Castor3D::MaterialSPtr	m_pMaterial;
-		UIntUIntMap				m_mapVtxIndex;
-		VertexArray				m_arrayVtx;
-		NormalArray				m_arrayNml;
-		UvArray					m_arrayTex;
-		VertexArray				m_arraySubVtx;
-		UvwArray				m_arraySubTex;
-		NormalArray				m_arraySubNml;
-		FaceArray				m_arrayFaces;
-		FaceArrayGrpMap			m_mapIdx;
-		std::size_t				m_uiGroupId;
-		bool					m_bHasNormals;
+		Castor::String m_strName;
+		Castor3D::MaterialSPtr m_pMaterial;
+		UIntUIntMap m_mapVtxIndex;
+		VertexArray m_arrayVtx;
+		NormalArray m_arrayNml;
+		UvArray m_arrayTex;
+		VertexArray m_arraySubVtx;
+		UvwArray m_arraySubTex;
+		NormalArray m_arraySubNml;
+		FaceArray m_arrayFaces;
+		FaceArrayGrpMap m_mapIdx;
+		std::size_t m_uiGroupId;
+		bool m_bHasNormals;
 
 		stGROUP()
-			:	m_uiGroupId		( 0 	)
-			,	m_bHasNormals	( false	)
+			: m_uiGroupId( 0 )
+			, m_bHasNormals( false )
 		{
 			m_mapIdx.insert( std::make_pair( 0, FaceArray() ) );
 		}

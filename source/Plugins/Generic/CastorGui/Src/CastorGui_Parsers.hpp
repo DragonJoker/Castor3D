@@ -80,7 +80,7 @@ namespace CastorGui
 	DECLARE_ATTRIBUTE_PARSER( Parser_StaticFont );
 	DECLARE_ATTRIBUTE_PARSER( Parser_StaticCaption );
 	DECLARE_ATTRIBUTE_PARSER( Parser_StaticEnd );
-	
+
 	DECLARE_ATTRIBUTE_PARSER( Parser_ControlPixelPosition );
 	DECLARE_ATTRIBUTE_PARSER( Parser_ControlPixelSize );
 	DECLARE_ATTRIBUTE_PARSER( Parser_ControlPixelBorderSize );

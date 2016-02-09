@@ -88,9 +88,9 @@ namespace Castor3D
 	inline bool operator==( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
 	{
 		return p_lhs.m_dataType == p_rhs.m_dataType
-			&& p_lhs.m_name == p_rhs.m_name
-			&& p_lhs.m_offset == p_rhs.m_offset
-			&& p_lhs.m_usages == p_rhs.m_usages;
+			   && p_lhs.m_name == p_rhs.m_name
+			   && p_lhs.m_offset == p_rhs.m_offset
+			   && p_lhs.m_usages == p_rhs.m_usages;
 	}
 	/**
 	*\~english
@@ -103,9 +103,9 @@ namespace Castor3D
 	inline bool operator!=( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
 	{
 		return p_lhs.m_dataType != p_rhs.m_dataType
-			|| p_lhs.m_name != p_rhs.m_name
-			|| p_lhs.m_offset != p_rhs.m_offset
-			|| p_lhs.m_usages != p_rhs.m_usages;
+			   || p_lhs.m_name != p_rhs.m_name
+			   || p_lhs.m_offset != p_rhs.m_offset
+			   || p_lhs.m_usages != p_rhs.m_usages;
 	}
 }
 

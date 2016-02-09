@@ -168,6 +168,7 @@ namespace CastorGui
 		{
 			l_text->SetCaption( GetItems()[l_sel] );
 		}
+
 		if ( l_manager )
 		{
 			l_manager->Create( m_expand );

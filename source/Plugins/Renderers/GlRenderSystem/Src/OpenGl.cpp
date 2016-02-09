@@ -16,9 +16,9 @@ using namespace Castor;
 template< typename T >
 inline void GetFunction( T & p_function, String const & p_name, String const & p_extension )
 {
-	if( !gl_api::GetFunction( p_name, p_function ) )
+	if ( !gl_api::GetFunction( p_name, p_function ) )
 	{
-		if( !gl_api::GetFunction( p_name + p_extension, p_function ) )
+		if ( !gl_api::GetFunction( p_name + p_extension, p_function ) )
 		{
 			Logger::LogWarning( cuT( "Unable to retrieve function " ) + p_name );
 		}

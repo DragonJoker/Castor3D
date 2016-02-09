@@ -32,8 +32,8 @@ namespace Obj
 		,	private Castor::NonCopyable
 	{
 	private:
-		DECLARE_MAP(	Castor3D::PassSPtr,				Castor::Point3f,	FloatPass		);
-		DECLARE_VECTOR(	Castor3D::StaticTextureSPtr,						StaticTexture	);
+		DECLARE_MAP( Castor3D::PassSPtr, Castor::Point3f, FloatPass );
+		DECLARE_VECTOR( Castor3D::StaticTextureSPtr, StaticTexture );
 		typedef std::shared_ptr< std::thread > ThreadSPtr;
 
 	public:

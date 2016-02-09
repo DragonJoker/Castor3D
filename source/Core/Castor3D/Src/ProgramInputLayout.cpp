@@ -13,8 +13,8 @@ namespace Castor3D
 			String l_name = string::lower_case( p_name );
 			String l_ref = string::lower_case( p_ref );
 			return l_name == l_ref
-				|| l_name.find( l_ref ) != String::npos
-				|| l_ref.find( l_name ) != String::npos;
+				   || l_name.find( l_ref ) != String::npos
+				   || l_ref.find( l_name ) != String::npos;
 		}
 	}
 
@@ -30,7 +30,7 @@ namespace Castor3D
 	void ProgramInputLayout::DoAddAttribute( String const & p_name, eELEMENT_TYPE p_type, uint32_t p_offset )
 	{
 		auto l_usage = DoGuessUsages( p_name, p_type );
-		m_layout.push_back( BufferElementDeclaration{ p_name, l_usage, p_type, p_offset } );
+		m_layout.push_back( BufferElementDeclaration { p_name, l_usage, p_type, p_offset } );
 	}
 
 	uint32_t ProgramInputLayout::DoGuessUsages( String const & p_name, eELEMENT_TYPE p_type )

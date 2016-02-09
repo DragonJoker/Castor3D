@@ -33,5 +33,5 @@ C3D_Bloom_API String GetPostEffectType()
 
 C3D_Bloom_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params )
 {
-	 return std::make_shared< BloomPostEffect >( p_renderSystem, p_renderTarget, p_params );
+	return std::make_shared< BloomPostEffect >( p_renderSystem, p_renderTarget, p_params );
 }

@@ -206,6 +206,7 @@ namespace CastorShape
 			}
 
 			reinterpret_cast< wxEnumProperty * >( m_properties->GetProperty( PROPERTY_MATERIAL_PASSES ) )->SetChoices( l_choices );
+
 			m_properties->SetPropertyValue( PROPERTY_MATERIAL_PASSES, l_value );
 		}
 
@@ -219,21 +220,33 @@ namespace CastorShape
 		}
 
 		reinterpret_cast< wxEnumProperty * >( m_properties->GetProperty( PROPERTY_PASS_TEXTURES ) )->SetChoices( l_choices );
+
 		m_properties->SetPropertyValue( PROPERTY_PASS_TEXTURES, wxEmptyString );
+
 		m_properties->SetPropertyLabel( PROPERTY_CATEGORY_PASS, PROPERTY_CATEGORY_PASS + l_value );
 
 		m_properties->HideProperty( PROPERTY_CATEGORY_TEXTURE, true );
+
 		m_properties->HideProperty( PROPERTY_CHANNEL, true );
+
 		m_properties->HideProperty( PROPERTY_TEXTURE_IMAGE, true );
 
 		m_properties->HideProperty( PROPERTY_CATEGORY_PASS, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_DIFFUSE, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_AMBIENT, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_SPECULAR, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_EMISSIVE, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_EXPONENT, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_TWO_SIDED, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_OPACITY, false );
+
 		m_properties->HideProperty( PROPERTY_PASS_TEXTURES, false );
 	}
 
@@ -342,9 +355,10 @@ namespace CastorShape
 			}
 
 			reinterpret_cast< wxEnumProperty * >( m_properties->GetProperty( PROPERTY_PASS_TEXTURES ) )->SetChoices( l_choices );
+
 			m_properties->SetPropertyValue( PROPERTY_PASS_TEXTURES, l_value );
 		}
-		
+
 		m_properties->SetPropertyLabel( PROPERTY_CATEGORY_TEXTURE, PROPERTY_CATEGORY_TEXTURE + l_value );
 		m_properties->HideProperty( PROPERTY_CATEGORY_TEXTURE, false );
 		m_properties->HideProperty( PROPERTY_CHANNEL, false );
@@ -368,9 +382,9 @@ namespace CastorShape
 	}
 
 	BEGIN_EVENT_TABLE( NewMaterialDialog, wxDialog )
-	EVT_CLOSE( NewMaterialDialog::OnClose )
-	EVT_BUTTON( wxID_OK, NewMaterialDialog::OnOk )
-	EVT_BUTTON( wxID_CANCEL, NewMaterialDialog::OnCancel )
+		EVT_CLOSE( NewMaterialDialog::OnClose )
+		EVT_BUTTON( wxID_OK, NewMaterialDialog::OnOk )
+		EVT_BUTTON( wxID_CANCEL, NewMaterialDialog::OnCancel )
 	END_EVENT_TABLE()
 
 	void NewMaterialDialog::OnClose( wxCloseEvent & WXUNUSED( p_event ) )

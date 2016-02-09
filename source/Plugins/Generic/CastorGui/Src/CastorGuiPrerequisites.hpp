@@ -44,7 +44,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported controls in a OptionsPanel
 	*/
 	typedef enum eCONTROL_TYPE
-		: uint8_t
+	: uint8_t
 	{
 		eCONTROL_TYPE_NONE,
 		//! StaticCtrl
@@ -68,7 +68,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported combobox events
 	*/
 	typedef enum eCOMBOBOX_EVENT
-		: uint8_t
+	: uint8_t
 	{
 		//! Item selected
 		eCOMBOBOX_EVENT_SELECTED,
@@ -83,7 +83,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported listbox events
 	*/
 	typedef enum eLISTBOX_EVENT
-		: uint8_t
+	: uint8_t
 	{
 		//! Item selected
 		eLISTBOX_EVENT_SELECTED,
@@ -98,7 +98,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported button events
 	*/
 	typedef enum eBUTTON_EVENT
-		: uint8_t
+	: uint8_t
 	{
 		//! Button clicked
 		eBUTTON_EVENT_CLICKED,
@@ -113,7 +113,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported slider events
 	*/
 	typedef enum eSLIDER_EVENT
-		: uint8_t
+	: uint8_t
 	{
 		//! Slider thumb release
 		eSLIDER_EVENT_THUMBRELEASE,
@@ -130,7 +130,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported edit events
 	*/
 	typedef enum eEDIT_EVENT
-		: uint8_t
+	: uint8_t
 	{
 		//! The edit text has changed
 		eEDIT_EVENT_UPDATED,
@@ -147,7 +147,7 @@ namespace CastorGui
 	 *\brief		Comb control supported styles
 	*/
 	typedef enum eCOMBO_STYLE
-		: uint32_t
+	: uint32_t
 	{
 		//! Read only combo box
 		eCOMBO_STYLE_READONLY = 0x00000001,
@@ -160,7 +160,7 @@ namespace CastorGui
 	 *\brief		Edit control supported styles
 	*/
 	typedef enum eEDIT_STYLE
-		: uint32_t
+	: uint32_t
 	{
 		//! The edit control process 'return' hit as an event and not as a newline
 		eEDIT_STYLE_PROCESS_ENTER = 0x00000100,
@@ -179,7 +179,7 @@ namespace CastorGui
 	 *\brief		Slider control supported styles
 	*/
 	typedef enum eSLIDER_STYLE
-		: uint32_t
+	: uint32_t
 	{
 		// The slider is displaye horizontally (default mode)
 		eSLIDER_STYLE_HORIZONTAL = 0x00010000,
@@ -194,7 +194,7 @@ namespace CastorGui
 	 *\brief		Static control supported styles
 	*/
 	typedef enum eSTATIC_STYLE
-		: uint32_t
+	: uint32_t
 	{
 		//! The static's text is left aligned
 		eSTATIC_STYLE_HALIGN_LEFT	= 0x01000000,
@@ -217,7 +217,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported GUI events in ControlInfos
 	*/
 	typedef enum eGUI_EVENT
-		: uint8_t
+	: uint8_t
 	{
 		//! Event to ask the main window to show a message box
 		eGUI_EVENT_SHOW_MESSAGE_BOX,
@@ -400,7 +400,7 @@ namespace CastorGui
 	 *\brief		Enumeration of supported control events
 	*/
 	typedef enum eCONTROL_EVENT
-		: uint8_t
+	: uint8_t
 	{
 		//! Control activated
 		eCONTROL_EVENT_ACTIVATE,

@@ -246,7 +246,7 @@ namespace Castor3D
 			if ( m_vertexBuffer )
 			{
 				m_initialised = m_vertexBuffer->Create();
-				m_initialised &= m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW);
+				m_initialised &= m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 			}
 
 			if ( m_initialised && m_indexBuffer )
@@ -873,7 +873,7 @@ namespace Castor3D
 		{
 			if ( m_cameraPosition != p_ptCameraPosition )
 			{
-				if ( m_initialised && m_indexBuffer && m_vertexBuffer  )
+				if ( m_initialised && m_indexBuffer && m_vertexBuffer )
 				{
 					IndexBuffer & l_indices = *m_indexBuffer;
 					VertexBuffer & l_vertices = *m_vertexBuffer;
@@ -1019,12 +1019,14 @@ namespace Castor3D
 		if ( ( GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 		{
 			m_bonesBuffer = std::make_unique< VertexBuffer >( *GetEngine(), BufferDeclaration
-			{ {
-				BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_3INTS, 0 },
-				BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_3INTS, 0 },
-				BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_3FLOATS, 0 },
-				BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_3FLOATS, 0 },
-			} } );
+			{
+				{
+					BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_3INTS, 0 },
+					BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_3INTS, 0 },
+					BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_3FLOATS, 0 },
+					BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_3FLOATS, 0 },
+				}
+			} );
 		}
 		else if ( GetEngine()->GetRenderSystem()->HasInstancing() )
 		{

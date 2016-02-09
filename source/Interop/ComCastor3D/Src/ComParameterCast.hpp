@@ -63,7 +63,7 @@ namespace CastorCom
 	template<>
 	inline FLOAT parameter_cast< FLOAT, Castor::ColourComponent >( Castor::ColourComponent const & value )
 	{
-		return (FLOAT)value;
+		return ( FLOAT )value;
 	}
 	template<>
 	inline IScene * parameter_cast< IScene *, Castor3D::SceneSPtr >( Castor3D::SceneSPtr const & value )

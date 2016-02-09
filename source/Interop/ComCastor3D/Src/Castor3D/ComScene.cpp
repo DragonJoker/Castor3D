@@ -141,7 +141,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					auto l_camera = m_internal->GetCameraManager().Create( FromBstr( name ), node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr );
+					auto l_camera = m_internal->GetCameraManager().Create( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr );
 					l_camera->GetViewport().SetSize( Castor::Size( ww, wh ) );
 					static_cast< CCamera * >( *pVal )->SetInternal( l_camera );
 				}
@@ -173,7 +173,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightManager().Create( FromBstr( name ), node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr, Castor3D::eLIGHT_TYPE( type ) ) );
+					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightManager().Create( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr, Castor3D::eLIGHT_TYPE( type ) ) );
 				}
 			}
 		}
@@ -199,11 +199,11 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-                hr = CSceneNode::CreateInstance( pVal );
+				hr = CSceneNode::CreateInstance( pVal );
 
 				if ( hr == S_OK )
 				{
-                    static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeManager().Find( FromBstr( name ) ) );
+					static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeManager().Find( FromBstr( name ) ) );
 				}
 			}
 		}

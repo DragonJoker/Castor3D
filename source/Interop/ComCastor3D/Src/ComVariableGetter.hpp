@@ -98,7 +98,7 @@ namespace CastorCom
 
 	template< typename Value >
 	StaticGetter< Value >
-	make_static_getter( Value ( *function )() )
+	make_static_getter( Value( *function )() )
 	{
 		return StaticGetter< Value >( function );
 	}
@@ -116,7 +116,7 @@ namespace CastorCom
 		HRESULT operator()( _Value * value )
 		{
 			HRESULT hr = E_POINTER;
-			
+
 			if ( m_instance )
 			{
 				if ( value )
@@ -165,7 +165,7 @@ namespace CastorCom
 		HRESULT operator()( _Value * value )
 		{
 			HRESULT hr = E_POINTER;
-			
+
 			if ( m_instance )
 			{
 				if ( value )
@@ -215,7 +215,7 @@ namespace CastorCom
 		HRESULT operator()( _Value * value )
 		{
 			HRESULT hr = E_POINTER;
-			
+
 			if ( m_instance )
 			{
 				if ( value )

@@ -72,7 +72,7 @@ namespace CastorGui
 		TextOverlaySPtr l_text = m_text.lock();
 		l_text->SetMaterial( GetForegroundMaterial() );
 
-		if ( !l_text->GetFontTexture() ||!!l_text->GetFontTexture()->GetFont() )
+		if ( !l_text->GetFontTexture() || !l_text->GetFontTexture()->GetFont() )
 		{
 			l_text->SetFont( GetControlsManager()->GetDefaultFont()->GetName() );
 		}

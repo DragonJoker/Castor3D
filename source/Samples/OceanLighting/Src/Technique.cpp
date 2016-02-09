@@ -179,7 +179,7 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 	BufferElementDeclaration l_skymapDeclaration[] =
 	{
-	  BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS )
+		BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS )
 	};
 	BufferElementDeclaration l_cloudsVertexDeclarationElements[] =
 	{

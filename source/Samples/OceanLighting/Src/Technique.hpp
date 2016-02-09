@@ -335,11 +335,17 @@ namespace OceanLighting
 
 		/** \copydoc Castor3D::RenderTechniqueBase::DoGetVertexShaderSource
 		 */
-		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const { return Castor::String(); }
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
+		{
+			return Castor::String();
+		}
 
 		/** \copydoc Castor3D::RenderTechniqueBase::DoGetPixelShaderSource
 		 */
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const { return Castor::String(); }
+		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const
+		{
+			return Castor::String();
+		}
 
 	private:
 		void DoCleanupPrograms( bool all );

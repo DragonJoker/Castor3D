@@ -738,11 +738,11 @@ namespace CastorShape
 		clear_container( m_selectedGeometryMaterials );
 		m_mainScene.reset();
 
-		if( m_3dFrame )
+		if ( m_3dFrame )
 		{
 			m_3dFrame->DestroyRenderWindow();
 
-			if (m_bMultiFrames)
+			if ( m_bMultiFrames )
 			{
 				m_2dFrameHD->DestroyRenderWindow();
 				m_2dFrameBG->DestroyRenderWindow();

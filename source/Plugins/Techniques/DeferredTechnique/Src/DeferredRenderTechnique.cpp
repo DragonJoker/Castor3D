@@ -109,8 +109,8 @@ namespace Deferred
 
 		m_declaration = BufferDeclaration(
 		{
-		  BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
-		    BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS ),
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
+			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS ),
 		} );
 
 		real l_data[] =
@@ -375,6 +375,7 @@ namespace Deferred
 		{
 			return DoGetGlPixelShaderSource( p_flags );
 		}
+
 #endif
 
 		CASTOR_EXCEPTION( "No renderer selected" );
@@ -635,9 +636,9 @@ namespace Deferred
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
-				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
-													 FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+													 FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
 													 l_output );
 			}
 			ROF;
@@ -647,9 +648,9 @@ namespace Deferred
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
-				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
-											   FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+											   FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
 											   l_output );
 			}
 			ROF;
@@ -659,18 +660,18 @@ namespace Deferred
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
-				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
-											  FragmentInput{ l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
+											  FragmentInput { l_v3Position, l_v3Normal, l_v3Tangent, l_v3Bitangent },
 											  l_output );
 			}
 			ROF;
 
 			pxl_v4FragColor = vec4( l_writer.Paren( l_writer.Paren( Int( &l_writer, 1 ) - l_v4Emissive.W ) *
 													l_writer.Paren( l_writer.Paren( l_v3Ambient + l_v4Ambient.XYZ ) +
-																	l_writer.Paren( l_v3Diffuse * l_v4Diffuse.XYZ ) +
-																	l_writer.Paren( l_v3Specular * l_v4Specular.XYZ ) +
-																	l_v3Emissive ) ) +
+															l_writer.Paren( l_v3Diffuse * l_v4Diffuse.XYZ ) +
+															l_writer.Paren( l_v3Specular * l_v4Specular.XYZ ) +
+															l_v3Emissive ) ) +
 									l_writer.Paren( l_v4Emissive.W * l_v4Diffuse.XYZ ), 1 );
 		} );
 

@@ -83,7 +83,7 @@ namespace Bloom
 			{
 				plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.X, vtx_texture.Y ) ).XYZ, 1.0 );
 
- 				plx_v4FragColor.X = TERNARY( l_writer, Float, plx_v4FragColor.X > 1.0, Float( 1 ), Float( 0 ) );
+				plx_v4FragColor.X = TERNARY( l_writer, Float, plx_v4FragColor.X > 1.0, Float( 1 ), Float( 0 ) );
 				plx_v4FragColor.Y = TERNARY( l_writer, Float, plx_v4FragColor.Y > 1.0, Float( 1 ), Float( 0 ) );
 				plx_v4FragColor.Z = TERNARY( l_writer, Float, plx_v4FragColor.Z > 1.0, Float( 1 ), Float( 0 ) );
 			} );
@@ -273,7 +273,7 @@ namespace Bloom
 
 		m_declaration = BufferDeclaration(
 		{
-		  BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
 		} );
 
 		real l_pBuffer[] =
@@ -541,7 +541,7 @@ namespace Bloom
 				{
 					m_renderSystem->GetPipeline().ApplyProjection( *l_matrices );
 				}
-	
+
 				l_program->Bind();
 			}
 
@@ -563,7 +563,7 @@ namespace Bloom
 			{
 				l_program->Unbind();
 			}
-	
+
 			m_renderTarget.GetTexture()->SetIndex( l_id );
 			m_blurSurfaces[0].m_fbo->Unbind();
 		}

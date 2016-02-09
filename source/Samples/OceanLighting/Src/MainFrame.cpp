@@ -475,11 +475,10 @@ namespace OceanLighting
 		//}
 		switch ( p_event.GetKeyCode() )
 		{
-			/*
-					case 27:
-						Close();
-						break;
-			*/
+		//case 27:
+		//	Close();
+		//	break;
+
 		case '+':
 			if ( m_pTechnique )
 			{
