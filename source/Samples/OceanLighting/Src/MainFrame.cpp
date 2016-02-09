@@ -334,16 +334,16 @@ namespace OceanLighting
 
 		if ( l_bReturn )
 		{
-			SceneSPtr l_pScene = m_pCastor3D->GetSceneManager().Create( cuT( "DummyScene" ), *m_pCastor3D );
-			SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( cuT( "DummyCameraNode" ), l_pScene->GetCameraRootNode() );
-			CameraSPtr l_pCamera = l_pScene->GetCameraManager().Create( cuT( "DummyCamera" ), l_pNode );
+			SceneSPtr l_scene = m_pCastor3D->GetSceneManager().Create( cuT( "DummyScene" ), *m_pCastor3D );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( cuT( "DummyCameraNode" ), l_scene->GetCameraRootNode() );
+			CameraSPtr l_pCamera = l_scene->GetCameraManager().Create( cuT( "DummyCamera" ), l_node );
 			l_pCamera->GetViewport().SetSize( Size( m_width, m_height ) );
 			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
 			RenderTargetSPtr l_target = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 			l_target->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
 			l_target->SetDepthFormat( ePIXEL_FORMAT_DEPTH24S8 );
 			l_target->SetSize( Size( m_width, m_height ) );
-			l_target->SetScene( l_pScene );
+			l_target->SetScene( l_scene );
 			l_target->SetCamera( l_pCamera );
 			Parameters l_params;
 			m_pTechnique = std::static_pointer_cast< RenderTechnique >( m_pCastor3D->CreateTechnique( cuT( "ocean lighting" ), *l_target, l_params ) );
@@ -475,11 +475,10 @@ namespace OceanLighting
 		//}
 		switch ( p_event.GetKeyCode() )
 		{
-			/*
-					case 27:
-						Close();
-						break;
-			*/
+		//case 27:
+		//	Close();
+		//	break;
+
 		case '+':
 			if ( m_pTechnique )
 			{

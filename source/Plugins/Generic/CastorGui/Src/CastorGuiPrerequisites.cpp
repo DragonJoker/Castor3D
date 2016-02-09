@@ -32,7 +32,7 @@ namespace CastorGui
 		return l_return;
 	}
 
-	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureBaseSPtr p_texture )
+	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureSPtr p_texture )
 	{
 		MaterialManager & l_manager = p_engine->GetMaterialManager();
 		MaterialSPtr l_return = l_manager.Find( p_name );

@@ -171,12 +171,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines this geometry's mesh
-		 *\param[in]	p_pMesh	The mesh
+		 *\param[in]	p_mesh	The mesh
 		 *\~french
 		 *\brief		Définit le maillage de la géométrie
-		 *\param[in]	p_pMesh	Le maillage
+		 *\param[in]	p_mesh	Le maillage
 		 */
-		C3D_API void SetMesh( MeshSPtr p_pMesh );
+		C3D_API void SetMesh( MeshSPtr p_mesh );
 		/**
 		 *\~english
 		 *\brief		Retrieves the submesh material

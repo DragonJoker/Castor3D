@@ -18,6 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 #define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 
+#include <BufferDeclaration.hpp>
 #include <RenderTechnique.hpp>
 #include <Viewport.hpp>
 
@@ -241,15 +242,17 @@ namespace Deferred
 		//!\~english The attachments between textures and deferred shading frame buffer	\~french Les attaches entre les texture et le tampon deferred shading
 		Castor3D::TextureAttachmentSPtr m_geometryPassTexAttachs[eDS_TEXTURE_COUNT];
 		//!\~english The shader program used to render lights	\~french Le shader utilisé pour rendre les lumières
-		Castor3D::ShaderProgramBaseSPtr m_lightPassShaderProgram;
+		Castor3D::ShaderProgramSPtr m_lightPassShaderProgram;
 		//!\~english The framve variable buffer used to apply matrices	\~french Le tampon de variables shader utilisé pour appliquer les matrices
 		Castor3D::FrameVariableBufferWPtr m_lightPassMatrices;
 		//!\~english The framve variable buffer used to transmit scene values	\~french Le tampon de variables shader utilisé pour transmettre les variables de scène
 		Castor3D::FrameVariableBufferWPtr m_lightPassScene;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
-		Castor3D::BufferDeclarationSPtr m_pDeclaration;
+		Castor3D::BufferDeclaration m_declaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
+		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		Castor3D::VertexBufferUPtr m_vertexBuffer;
 		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)

@@ -17,13 +17,14 @@ using namespace Castor;
 namespace GlRender
 {
 	GlShaderProgram::GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: ShaderProgramBase( p_renderSystem, eSHADER_LANGUAGE_GLSL )
+		: ShaderProgram( p_renderSystem, eSHADER_LANGUAGE_GLSL )
 		, Object( p_gl,
 				  "GlShaderProgram",
 				  std::bind( &OpenGl::CreateProgram, std::ref( p_gl ) ),
 				  std::bind( &OpenGl::DeleteProgram, std::ref( p_gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsProgram, std::ref( p_gl ), std::placeholders::_1 )
 				)
+		, m_layout( p_gl, p_renderSystem )
 	{
 		CreateObject( eSHADER_TYPE_VERTEX );
 		CreateObject( eSHADER_TYPE_PIXEL );
@@ -35,6 +36,7 @@ namespace GlRender
 
 	void GlShaderProgram::Cleanup()
 	{
+		m_layout.Cleanup();
 		DoCleanup();
 		ObjectType::Destroy();
 	}
@@ -47,6 +49,11 @@ namespace GlRender
 		{
 			ObjectType::Create();
 			l_return = DoInitialise();
+
+			if ( l_return )
+			{
+				m_layout.Initialise( *this );
+			}
 		}
 
 		return l_return;
@@ -126,7 +133,7 @@ namespace GlRender
 
 	std::shared_ptr< OneTextureFrameVariable > GlShaderProgram::DoCreateTextureVariable( int p_occurences )
 	{
-		return std::make_shared< GlOneFrameVariable< TextureBaseRPtr > >( GetOpenGl(), p_occurences, this );
+		return std::make_shared< GlOneFrameVariable< TextureRPtr > >( GetOpenGl(), p_occurences, this );
 	}
 
 	String GlShaderProgram::DoRetrieveLinkerLog()

@@ -97,17 +97,6 @@ namespace Castor3D
 		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature ) = 0;
 		/**
 		 *\~english
-		 *\brief		Loads attributes for the given program.
-		 *\param[in]	p_program	The program.
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Charge les attributs pour le programme donné.
-		 *\param[in]	p_program	Le programme.
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool AttachTo( Castor3D::ShaderProgramBaseSPtr p_program ) = 0;
-		/**
-		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage

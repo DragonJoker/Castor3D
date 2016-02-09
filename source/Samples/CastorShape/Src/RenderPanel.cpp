@@ -78,7 +78,7 @@ void RenderPanel::InitialiseRenderWindow()
 	Logger::LogInfo( cuT( "Initialising RenderWindow" ) );
 	StringStream l_streamName;
 	l_streamName << cuT( "RenderPanel_" ) << GetId();
-	SceneNodeSPtr l_pNode;
+	SceneNodeSPtr l_node;
 	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->GetWindowManager().Create();
 	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
@@ -89,10 +89,10 @@ void RenderPanel::InitialiseRenderWindow()
 		SceneNodeSPtr l_pCamYawNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamYawNode" ), l_pCamBaseNode );
 		SceneNodeSPtr l_pCamPitchNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamPitchNode" ), l_pCamYawNode );
 		SceneNodeSPtr l_pCamRollNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamRollNode" ), l_pCamPitchNode );
-		l_pNode = l_pCamRollNode;
+		l_node = l_pCamRollNode;
 	}
 
-	CameraSPtr l_pCamera = m_mainScene->GetCameraManager().Create( l_streamName.str() + cuT( "_Camera" ), l_pNode );
+	CameraSPtr l_pCamera = m_mainScene->GetCameraManager().Create( l_streamName.str() + cuT( "_Camera" ), l_node );
 	l_pCamera->GetViewport().SetSize( Size( GetClientSize().x, GetClientSize().y ) );
 	l_pRenderTarget->SetScene( m_mainScene );
 	l_pRenderTarget->SetCamera( l_pCamera );

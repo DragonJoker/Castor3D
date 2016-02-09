@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -275,22 +275,20 @@ namespace Castor3D
 	\brief		Enumération des utilisations d'éléments de tampon
 	*/
 	typedef enum eELEMENT_USAGE
-	CASTOR_TYPE( uint8_t )
+	CASTOR_TYPE( uint32_t )
 	{
-		eELEMENT_USAGE_POSITION,		//!< Position coords
-		eELEMENT_USAGE_NORMAL,			//!< Normal coords
-		eELEMENT_USAGE_TANGENT,			//!< Tangent coords
-		eELEMENT_USAGE_BITANGENT,		//!< Bitangent coords
-		eELEMENT_USAGE_DIFFUSE,			//!< Diffuse colour
-		eELEMENT_USAGE_TEXCOORDS0,		//!< Texture coordinates 0
-		eELEMENT_USAGE_TEXCOORDS1,		//!< Texture coordinates 1
-		eELEMENT_USAGE_TEXCOORDS2,		//!< Texture coordinates 2
-		eELEMENT_USAGE_TEXCOORDS3,		//!< Texture coordinates 3
-		eELEMENT_USAGE_BONE_IDS0,		//!< Bone IDs 0
-		eELEMENT_USAGE_BONE_IDS1,		//!< Bone IDs 1
-		eELEMENT_USAGE_BONE_WEIGHTS0,	//!< Bone weights 0
-		eELEMENT_USAGE_BONE_WEIGHTS1,	//!< Bone weights 1
-		eELEMENT_USAGE_COUNT,
+		eELEMENT_USAGE_UNKNOWN = 0x000,			//!< Position coords
+		eELEMENT_USAGE_POSITION = 0x001,		//!< Position coords
+		eELEMENT_USAGE_NORMAL = 0x002,			//!< Normal coords
+		eELEMENT_USAGE_TANGENT = 0x004,			//!< Tangent coords
+		eELEMENT_USAGE_BITANGENT = 0x008,		//!< Bitangent coords
+		eELEMENT_USAGE_DIFFUSE = 0x010,			//!< Diffuse colour
+		eELEMENT_USAGE_TEXCOORDS = 0x020,		//!< Texture coordinates
+		eELEMENT_USAGE_BONE_IDS0 = 0x040,		//!< Bone IDs 0
+		eELEMENT_USAGE_BONE_IDS1 = 0x080,		//!< Bone IDs 1
+		eELEMENT_USAGE_BONE_WEIGHTS0 = 0x100,	//!< Bone weights 0
+		eELEMENT_USAGE_BONE_WEIGHTS1 = 0x200,	//!< Bone weights 1
+		eELEMENT_USAGE_TRANSFORM = 0x400,		//!< Instantiation matrix
 	}	eELEMENT_USAGE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -313,8 +311,72 @@ namespace Castor3D
 		eELEMENT_TYPE_2INTS,		//!< 2 ints (4 bytes each, GLSL ivec2)
 		eELEMENT_TYPE_3INTS,		//!< 3 ints (4 bytes each, GLSL ivec3)
 		eELEMENT_TYPE_4INTS,		//!< 4 ints (4 bytes each, GLSL ivec4)
+		eELEMENT_TYPE_2x2FLOATS,	//!< 2x2 floats (GLSL mat2)
+		eELEMENT_TYPE_3x3FLOATS,	//!< 3x3 floats (GLSL mat3)
+		eELEMENT_TYPE_4x4FLOATS,	//!< 4x4 floats (GLSL mat4)
 		eELEMENT_TYPE_COUNT,
 	}	eELEMENT_TYPE;
+
+	inline uint32_t GetSize( eELEMENT_TYPE p_type )
+	{
+		switch ( p_type )
+		{
+		case eELEMENT_TYPE_1FLOAT:
+			return uint32_t( 1u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_2FLOATS:
+			return uint32_t( 2u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_3FLOATS:
+			return uint32_t( 3u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_4FLOATS:
+			return uint32_t( 4u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_COLOUR:
+			return uint32_t( sizeof( uint32_t ) );
+			break;
+
+		case eELEMENT_TYPE_1INT:
+			return uint32_t( 1u * sizeof( int32_t ) );
+			break;
+
+		case eELEMENT_TYPE_2INTS:
+			return uint32_t( 2u * sizeof( int32_t ) );
+			break;
+
+		case eELEMENT_TYPE_3INTS:
+			return uint32_t( 3u * sizeof( int32_t ) );
+			break;
+
+		case eELEMENT_TYPE_4INTS:
+			return uint32_t( 4u * sizeof( int32_t ) );
+			break;
+
+		case eELEMENT_TYPE_2x2FLOATS:
+			return uint32_t( 2u * 2u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_3x3FLOATS:
+			return uint32_t( 3u * 3u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_4x4FLOATS:
+			return uint32_t( 4u * 4u * sizeof( real ) );
+			break;
+
+		default:
+			assert( false && "Unsupported vertex buffer attribute type." );
+			break;
+		}
+
+		return 0;
+	}
+
 
 	template< typename T > class CpuBuffer;
 	class RenderSystem;

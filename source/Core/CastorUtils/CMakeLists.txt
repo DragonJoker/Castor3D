@@ -586,6 +586,6 @@ set( CastorMinLibraries
 	PARENT_SCOPE
 )
 
-if( ${CASTOR_BUILD_TEST} AND ${CASTOR_BUILDGRP_TOOL} )
+if( ${CASTOR_BUILDGRP_TEST} )
 	add_subdirectory( Test )
 endif()

@@ -69,7 +69,7 @@ namespace CastorCom
 		COM_PROPERTY_GET( Height, UINT, make_getter( m_buffer.get(), &Castor::PxBufferBase::height ) );
 		COM_PROPERTY_GET( Dimensions, ISize *, make_getter( m_buffer.get(), &Castor::PxBufferBase::dimensions ) );
 
-		STDMETHOD( Flip) ();
+		STDMETHOD( Flip )();
 		STDMETHOD( Mirror )();
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format );
 

@@ -69,7 +69,7 @@ namespace Castor3D
 	void RenderSystem::RenderAmbientLight( Castor::Colour const & p_clColour, FrameVariableBuffer & p_variableBuffer )
 	{
 		Point4fFrameVariableSPtr l_variable;
-		p_variableBuffer.GetVariable( ShaderProgramBase::AmbientLight, l_variable );
+		p_variableBuffer.GetVariable( ShaderProgram::AmbientLight, l_variable );
 		Point4f l_ptColour;
 		p_clColour.to_rgba( l_ptColour );
 		l_variable->SetValue( l_ptColour );
@@ -97,7 +97,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	ShaderProgramBaseSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage )
+	ShaderProgramSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage )
 	{
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 

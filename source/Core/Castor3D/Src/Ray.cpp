@@ -236,8 +236,8 @@ real Ray::Intersects( SphereBox const & p_sphere )
 real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_nearestFace ), SubmeshSPtr * p_nearestSubmesh )
 {
 	Point3r l_vCenter( p_pGeometry->GetParent()->GetPosition() );
-	MeshSPtr l_pMesh = p_pGeometry->GetMesh();
-	SphereBox l_sphere( l_vCenter, l_pMesh->GetCollisionSphere().GetRadius() );
+	MeshSPtr l_mesh = p_pGeometry->GetMesh();
+	SphereBox l_sphere( l_vCenter, l_mesh->GetCollisionSphere().GetRadius() );
 	real l_distance = Intersects( l_sphere );
 	//real l_faceDist = 10e6, l_vertexDist = 10e6;
 	//real l_curfaceDist, l_curvertexDist;
@@ -246,7 +246,7 @@ real Ray::Intersects( GeometrySPtr p_pGeometry, FaceSPtr * CU_PARAM_UNUSED( p_ne
 	{
 		l_distance = -1.0f;
 
-		for ( auto && l_submesh : *l_pMesh )
+		for ( auto && l_submesh : *l_mesh )
 		{
 			Point3r l_submeshCenter = l_vCenter + l_submesh->GetSphere().GetCenter();
 			l_sphere.Load( l_submeshCenter, l_submesh->GetSphere().GetRadius() );

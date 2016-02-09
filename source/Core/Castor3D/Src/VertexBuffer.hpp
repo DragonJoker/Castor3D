@@ -41,32 +41,15 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_renderSystem	The RenderSystem
-		 *\param[in]	p_pElements		The elements descriptions
-		 *\param[in]	p_uiNbElements	The elements descriptions count
+		 *\brief		Constructor.
+		 *\param[in]	p_engine		The engine.
+		 *\param[in]	p_declaration	The buffer declaration.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_renderSystem	The RenderSystem
-		 *\param[in]	p_pElements		Les descriptions des éléments
-		 *\param[in]	p_uiNbElements	Le compte des descriptions des éléments
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	p_declaration	La déclaration du tampon.
 		 */
-		C3D_API VertexBuffer( Engine & p_engine, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
-		/**
-		*\~english
-		*\brief		Constructor
-		*\param[in]	p_engine		The engine
-		*\param[in]	p_pElements		The elements descriptions
-		*\~french
-		*\brief		Constructeur
-		*\param[in]	p_engine		Le moteur
-		*\param[in]	p_pElements		Les descriptions des éléments
-		*/
-		template< uint32_t N >
-		inline VertexBuffer( Engine & p_engine, BufferElementDeclaration const( &p_pElements )[N] )
-			: VertexBuffer( p_engine, p_pElements, N )
-		{
-		}
+		C3D_API VertexBuffer( Engine & p_engine, BufferDeclaration const & p_declaration );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -106,12 +89,13 @@ namespace Castor3D
 		template< typename ItType >
 		inline void LinkCoords( ItType p_begin, ItType p_end )
 		{
-			size_t i = 0;
 			uint32_t l_stride = m_bufferDeclaration.GetStride();
+			uint8_t * l_buffer = CpuBuffer< uint8_t >::data();
 
 			for ( auto && l_it = p_begin; l_it != p_end; ++l_it )
 			{
-				( *l_it )->LinkCoords( &CpuBuffer< uint8_t >::data()[i++ * l_stride], l_stride );
+				( *l_it )->LinkCoords( l_buffer, l_stride );
+				l_buffer += l_stride;
 			}
 		}
 

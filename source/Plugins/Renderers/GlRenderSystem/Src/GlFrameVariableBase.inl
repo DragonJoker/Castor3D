@@ -2,9 +2,9 @@
 
 namespace GlRender
 {
-	template<> struct OneVariableBinder< Castor3D::TextureBaseRPtr >
+	template<> struct OneVariableBinder< Castor3D::TextureRPtr >
 	{
-		inline void operator()( OpenGl & p_gl, int p_glName, Castor3D::TextureBaseRPtr const * p_value, uint32_t p_occurences )
+		inline void operator()( OpenGl & p_gl, int p_glName, Castor3D::TextureRPtr const * p_value, uint32_t p_occurences )
 		{
 			if ( p_occurences <= 1 && *p_value )
 			{

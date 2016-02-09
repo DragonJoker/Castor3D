@@ -9,7 +9,7 @@
 		}
 
 		template<>
-		void Parse< TextureBase * >( Castor::String const & p_strValue, TextureBase *& p_value )
+		void Parse< Texture * >( Castor::String const & p_strValue, Texture *& p_value )
 		{
 			uint32_t p_index;
 			Castor::string::parse( p_strValue, p_index );
@@ -57,9 +57,9 @@
 		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_DOUBLE;
 		C3D_API static const xchar * FullTypeName;
 	};
-	template<> struct OneFrameVariableDefinitions< TextureBase * >
+	template<> struct OneFrameVariableDefinitions< Texture * >
 	{
-		static const uint32_t Size = uint32_t( sizeof( TextureBase * ) * 1 * 1 );
+		static const uint32_t Size = uint32_t( sizeof( Texture * ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
 		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_SAMPLER;
 		C3D_API static const xchar * FullTypeName;
@@ -68,7 +68,7 @@
 	//*************************************************************************************************
 
 	template< typename T >
-	OneFrameVariable< T >::OneFrameVariable( ShaderProgramBase * p_program )
+	OneFrameVariable< T >::OneFrameVariable( ShaderProgram * p_program )
 		:	TFrameVariable< T >( p_program )
 	{
 		this->m_values = new T[1];
@@ -76,7 +76,7 @@
 	}
 
 	template< typename T >
-	OneFrameVariable< T >::OneFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences )
+	OneFrameVariable< T >::OneFrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
 		:	TFrameVariable< T >( p_program, p_occurences )
 	{
 		this->m_values = new T[p_occurences];

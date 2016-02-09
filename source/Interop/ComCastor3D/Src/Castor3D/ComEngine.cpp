@@ -230,7 +230,7 @@ namespace CastorCom
 	CEngine::~CEngine()
 	{
 	}
-	
+
 	STDMETHODIMP CEngine::Create()
 	{
 		HRESULT hr = E_POINTER;

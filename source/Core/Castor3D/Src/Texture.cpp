@@ -7,7 +7,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureBase::TextureBase( eTEXTURE_BASE_TYPE p_baseType, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	Texture::Texture( eTEXTURE_BASE_TYPE p_baseType, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_initialised( false )
 		, m_baseType( p_baseType )
@@ -20,22 +20,22 @@ namespace Castor3D
 	{
 	}
 
-	TextureBase::~TextureBase()
+	Texture::~Texture()
 	{
 	}
 
-	void TextureBase::SetImage( Castor::PxBufferBaseSPtr p_buffer )
+	void Texture::SetImage( Castor::PxBufferBaseSPtr p_buffer )
 	{
 		m_uiDepth = 1;
 		m_pPixelBuffer = p_buffer;
 	}
 
-	bool TextureBase::Bind()
+	bool Texture::Bind()
 	{
 		return BindAt( m_index );
 	}
 
-	void TextureBase::Unbind()
+	void Texture::Unbind()
 	{
 		UnbindFrom( m_index );
 	}

@@ -12,7 +12,7 @@ using namespace Castor3D;
 using namespace Castor;
 namespace GuiCommon
 {
-	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramBaseSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_ptPosition, const wxSize p_ptSize )
+	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_ptPosition, const wxSize p_ptSize )
 		: wxPanel( p_parent, wxID_ANY, p_ptPosition, p_ptSize )
 		, m_shaderProgram( p_shader )
 		, m_stcContext( p_stcContext )
@@ -47,7 +47,7 @@ namespace GuiCommon
 
 	void ShaderEditorPage::SaveFile( bool p_createIfNone )
 	{
-		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
+		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 
 		if ( m_shaderFile.empty() && p_createIfNone )
 		{
@@ -79,7 +79,7 @@ namespace GuiCommon
 	void ShaderEditorPage::DoInitialiseShaderLanguage()
 	{
 		m_shaderModel = eSHADER_MODEL_COUNT;
-		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
+		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 		RenderSystem * l_renderSystem = l_program->GetRenderSystem();
 
 		if ( l_renderSystem->CheckSupport( eSHADER_MODEL_5 ) )
@@ -146,7 +146,7 @@ namespace GuiCommon
 
 	void ShaderEditorPage::DoLoadPage()
 	{
-		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
+		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 		wxString l_extension;
 
 		switch ( l_program->GetLanguage() )

@@ -139,10 +139,6 @@ namespace GuiCommon
 		template<>
 		void InitialiseObject< Mesh >( std::shared_ptr< Mesh > p_object, Engine & p_engine )
 		{
-			p_engine.PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&p_object]()
-			{
-				p_object->GenerateBuffers();
-			} ) );
 		}
 
 		template<>

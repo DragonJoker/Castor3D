@@ -766,7 +766,7 @@ namespace Castor3D
 
 	void Scene::DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags )
 	{
-		ShaderProgramBaseSPtr l_program;
+		ShaderProgramSPtr l_program;
 
 		if ( p_pass.HasAutomaticShader() )
 		{
@@ -873,10 +873,10 @@ namespace Castor3D
 
 				for ( auto l_pass : *l_material )
 				{
-					if ( l_submesh->GetRefCount( l_material ) > 1 && l_submesh->GetGeometryBuffers()->HasMatrixBuffer()
+					if ( l_submesh->GetRefCount( l_material ) > 1 && l_submesh->HasMatrixBuffer()
 							&& ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) != ePROGRAM_FLAG_SKINNING )
 					{
-						real * l_buffer = l_submesh->GetGeometryBuffers()->GetMatrixBuffer().data();
+						real * l_buffer = l_submesh->GetMatrixBuffer().data();
 
 						for ( auto && l_renderNode : l_itSubmeshes.second )
 						{

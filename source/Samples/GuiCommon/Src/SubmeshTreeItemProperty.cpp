@@ -80,7 +80,7 @@ namespace GuiCommon
 			l_choices.Add( PROPERTY_TOPOLOGY_POLYGON );
 			wxString l_selected;
 
-			switch ( l_submesh->GetGeometryBuffers()->GetTopology() )
+			switch ( l_submesh->GetTopology() )
 			{
 			case eTOPOLOGY_POINTS:
 				l_selected = PROPERTY_TOPOLOGY_POINTS;
@@ -212,7 +212,7 @@ namespace GuiCommon
 
 		DoApplyChange( [p_value, l_geometry, l_submesh]()
 		{
-			l_submesh->GetGeometryBuffers()->SetTopology( p_value );
+			l_submesh->SetTopology( p_value );
 		} );
 	}
 }

@@ -25,33 +25,38 @@ using namespace Castor;
 //*************************************************************************************************
 
 Md2Importer::Md2Importer( Engine & p_pEngine, String const & p_textureName )
-	:	Importer( p_pEngine )
-	,	m_textureName( p_textureName )
-	,	m_skins( nullptr )
-	,	m_texCoords( nullptr )
-	,	m_triangles( nullptr )
-	,	m_frames( nullptr )
-	,	m_pFile( nullptr )
+	: Importer( p_pEngine )
+	, m_textureName( p_textureName )
+	, m_skins( nullptr )
+	, m_texCoords( nullptr )
+	, m_triangles( nullptr )
+	, m_frames( nullptr )
+	, m_pFile( nullptr )
 {
 	memset( & m_header, 0, sizeof( Md2Header ) );
 }
 
 SceneSPtr Md2Importer::DoImportScene()
 {
-	MeshSPtr l_pMesh = DoImportMesh();
-	SceneSPtr l_pScene;
+	MeshSPtr l_mesh = DoImportMesh();
+	SceneSPtr l_scene;
 
-	if ( l_pMesh )
+	if ( l_mesh )
 	{
-		l_pMesh->GenerateBuffers();
-		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD2" ), *GetEngine() );
-		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
-		l_pGeometry->AttachTo( l_pNode );
-		l_pGeometry->SetMesh( l_pMesh );
+		l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD2" ), *GetEngine() );
+		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+		l_geometry->AttachTo( l_node );
+
+		for ( auto && l_submesh : *l_mesh )
+		{
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+		}
+
+		l_geometry->SetMesh( l_mesh );
 	}
 
-	return l_pScene;
+	return l_scene;
 }
 
 MeshSPtr Md2Importer::DoImportMesh()
@@ -61,7 +66,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 	SubmeshSPtr l_submesh;
 	MaterialSPtr l_material;
 	PassSPtr l_pass;
-	MeshSPtr l_pMesh;
+	MeshSPtr l_mesh;
 	String l_meshName;
 	String l_materialName;
 	TextureUnitSPtr l_unit;
@@ -69,7 +74,7 @@ MeshSPtr Md2Importer::DoImportMesh()
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 	l_meshName = m_fileName.GetFileName();
 	l_materialName = m_fileName.GetFileName();
-	l_pMesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 
 	if ( m_header.m_version != 8 )
@@ -91,19 +96,19 @@ MeshSPtr Md2Importer::DoImportMesh()
 		l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 		l_pass->SetShininess( 64.0f );
 		DoReadMD2Data( l_pass );
-		DoConvertDataStructures( l_pMesh );
+		DoConvertDataStructures( l_mesh );
 
-		for ( auto && l_submesh : *l_pMesh )
+		for ( auto && l_submesh : *l_mesh )
 		{
 			l_submesh->SetDefaultMaterial( l_material );
 		}
 
-		l_pMesh->ComputeNormals();
+		l_mesh->ComputeNormals();
 		GetEngine()->PostEvent( std::make_shared< InitialiseEvent< Material > >( *l_material ) );
 	}
 
 	DoCleanUp();
-	return l_pMesh;
+	return l_mesh;
 }
 
 void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
@@ -120,7 +125,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 		m_skins = new Md2Skin[m_header.m_numSkins];
 		m_pFile->Seek( m_header.m_offsetSkins );
 		l_uiRead = m_pFile->ReadArray( m_skins, m_header.m_numSkins );
-		Logger::LogDebug( StringStream() << cuT( "- Skins: ") << ( l_uiRead / sizeof( Md2Skin ) ) << cuT( "/") << m_header.m_numSkins << cuT( " (") << l_uiRead << cuT( " bytes, from ") << m_header.m_offsetSkins << cuT( ")" ) );
+		Logger::LogDebug( StringStream() << cuT( "- Skins: " ) << ( l_uiRead / sizeof( Md2Skin ) ) << cuT( "/" ) << m_header.m_numSkins << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << m_header.m_offsetSkins << cuT( ")" ) );
 
 		for ( int i = 0 ; i < m_header.m_numSkins && !l_pTexture ; i++ )
 		{
@@ -160,7 +165,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 		m_texCoords = new Md2TexCoord[m_header.m_numTexCoords];
 		m_pFile->Seek( m_header.m_offsetTexCoords );
 		l_uiRead = m_pFile->ReadArray( m_texCoords, m_header.m_numTexCoords );
-		Logger::LogDebug( StringStream() << cuT( "- TexCoords: ") << ( l_uiRead / sizeof( Md2TexCoord ) ) << cuT( "/") << m_header.m_numTexCoords << cuT( " (") << l_uiRead << cuT( " bytes, from ") << m_header.m_offsetTexCoords << cuT( ")" ) );
+		Logger::LogDebug( StringStream() << cuT( "- TexCoords: " ) << ( l_uiRead / sizeof( Md2TexCoord ) ) << cuT( "/" ) << m_header.m_numTexCoords << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << m_header.m_offsetTexCoords << cuT( ")" ) );
 	}
 
 	if ( m_header.m_numTriangles > 0 )
@@ -168,7 +173,7 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 		m_triangles = new Md2Face[m_header.m_numTriangles];
 		m_pFile->Seek( m_header.m_offsetTriangles );
 		l_uiRead = m_pFile->ReadArray( m_triangles, m_header.m_numTriangles );
-		Logger::LogDebug( StringStream() << cuT( "- Triangles: ") << ( l_uiRead / sizeof( Md2Face ) ) << cuT( "/") << m_header.m_numTriangles << cuT( " (") << l_uiRead << cuT( " bytes, from ") << m_header.m_offsetTriangles << cuT( ")" ) );
+		Logger::LogDebug( StringStream() << cuT( "- Triangles: " ) << ( l_uiRead / sizeof( Md2Face ) ) << cuT( "/" ) << m_header.m_numTriangles << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << m_header.m_offsetTriangles << cuT( ")" ) );
 	}
 
 	if ( m_header.m_numFrames > 0 )

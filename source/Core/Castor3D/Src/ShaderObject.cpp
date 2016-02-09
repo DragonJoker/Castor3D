@@ -305,7 +305,7 @@ namespace Castor3D
 		cuT( "pixel_program" ),
 	};
 
-	ShaderObjectBase::ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type )
+	ShaderObjectBase::ShaderObjectBase( ShaderProgram * p_parent, eSHADER_TYPE p_type )
 		: m_status( eSHADER_STATUS_NOTCOMPILED )
 		, m_type( p_type )
 		, m_parent( p_parent )

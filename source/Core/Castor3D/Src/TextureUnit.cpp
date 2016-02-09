@@ -208,7 +208,7 @@ namespace Castor3D
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_PASS_TEXTURE );
-		TextureBaseSPtr l_pTexture = p_unit.GetTexture();
+		TextureSPtr l_pTexture = p_unit.GetTexture();
 		bool l_written = false;
 
 		if ( l_return )
@@ -342,7 +342,7 @@ namespace Castor3D
 
 		if ( p_unit.IsTextured() && p_unit.GetTexture() )
 		{
-			TextureBaseSPtr l_texture = p_unit.GetTexture();
+			TextureSPtr l_texture = p_unit.GetTexture();
 
 			if ( l_texture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC || !p_unit.GetTexturePath().empty() )
 			{
@@ -484,7 +484,7 @@ namespace Castor3D
 		}
 	}
 
-	void TextureUnit::SetTexture( TextureBaseSPtr p_texture )
+	void TextureUnit::SetTexture( TextureSPtr p_texture )
 	{
 		m_pTexture = p_texture;
 		m_changed = true;

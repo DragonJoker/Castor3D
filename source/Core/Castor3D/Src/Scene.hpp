@@ -371,7 +371,7 @@ namespace Castor3D
 		 *\brief		Récupère l'image de fond de la scène
 		 *\return		La valeur
 		 */
-		inline TextureBaseSPtr GetBackgroundImage()const
+		inline TextureSPtr GetBackgroundImage()const
 		{
 			return m_backgroundImage;
 		}
@@ -544,7 +544,7 @@ namespace Castor3D
 		//!\~english The scene background colour	\~french La couleur de fond de la scène
 		Castor::Colour m_backgroundColour;
 		//!\~english The background image	\~french L'image de fond
-		TextureBaseSPtr m_backgroundImage;
+		TextureSPtr m_backgroundImage;
 	};
 }
 

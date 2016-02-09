@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\brief		Génère les normales et les tangentes.
 		 *\param[in]	p_mesh	Le maillage.
 		 */
-		virtual void ComputeNormals( Mesh & p_mesh, bool p_bReverted = false );
+		virtual void ComputeNormals( Mesh & p_mesh, bool p_reverted = false );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh type
@@ -94,6 +94,21 @@ namespace Castor3D
 		{
 			return m_eMeshType;
 		}
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Generates the mesh.
+		 *\param[in]	p_mesh			The mesh.
+		 *\param[in]	p_faces			The faces counts.
+		 *\param[in]	p_dimensions	The mesh dimensions.
+		 *\~french
+		 *\brief		Génère le maillage.
+		 *\param[in]	p_mesh			Le maillage.
+		 *\param[in]	p_faces			Les nombres de faces.
+		 *\param[in]	p_dimensions	Les dimensions du maillage.
+		 */
+		virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
 	private:
 		//!\~english The mesh type	\~french Le type de mesh

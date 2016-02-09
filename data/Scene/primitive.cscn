@@ -38,8 +38,8 @@ scene "Scene"
 		parent "FinalNode"
 		mesh "Mesh"
 		{
-			type plane 0 0 40 40
-			//type torus 40 40 25 50
+			//type plane 0 0 40 40
+			type torus 40 40 25 50
 		}
 		material "Silver"
 	}

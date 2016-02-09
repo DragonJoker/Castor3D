@@ -60,8 +60,8 @@ namespace GlRender
 				UBO_MATRIX( l_writer );
 
 				// Shader inputs
-				ATTRIBUTE( l_writer, Vec2, vertex );
-				ATTRIBUTE( l_writer, Vec2, texture );
+				Vec2 position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+				Vec2 texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
 				OUT( l_writer, Vec2, vtx_texture );
@@ -69,7 +69,7 @@ namespace GlRender
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
-					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.X, vertex.Y, 0.0, 1.0 );
+					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
 				} );
 				l_strVtxShader = l_writer.Finalise();
 			}
@@ -94,7 +94,7 @@ namespace GlRender
 			}
 
 			eSHADER_MODEL l_model = m_glRenderSystem->GetMaxShaderModel();
-			ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
+			ShaderProgramSPtr l_program = m_renderTextureProgram.lock();
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVtxShader );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPxlShader );
 

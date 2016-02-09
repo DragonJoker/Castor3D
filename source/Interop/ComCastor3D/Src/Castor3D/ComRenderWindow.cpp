@@ -93,6 +93,7 @@ namespace CastorCom
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
 #if HAS_CASTORGUI
+
 			try
 			{
 				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
@@ -101,6 +102,7 @@ namespace CastorCom
 			catch ( Castor::Exception & )
 			{
 			}
+
 #endif
 			hr = S_OK;
 		}
@@ -121,6 +123,7 @@ namespace CastorCom
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
 #if HAS_CASTORGUI
+
 			try
 			{
 				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
@@ -129,6 +132,7 @@ namespace CastorCom
 			catch ( Castor::Exception & )
 			{
 			}
+
 #endif
 			hr = S_OK;
 		}
@@ -149,6 +153,7 @@ namespace CastorCom
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
 #if HAS_CASTORGUI
+
 			try
 			{
 				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
@@ -157,6 +162,7 @@ namespace CastorCom
 			catch ( Castor::Exception & )
 			{
 			}
+
 #endif
 			hr = S_OK;
 		}
@@ -177,6 +183,7 @@ namespace CastorCom
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
 #if HAS_CASTORGUI
+
 			try
 			{
 				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
@@ -185,6 +192,7 @@ namespace CastorCom
 			catch ( Castor::Exception & )
 			{
 			}
+
 #endif
 			hr = S_OK;
 		}
@@ -205,6 +213,7 @@ namespace CastorCom
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
 #if HAS_CASTORGUI
+
 			try
 			{
 				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
@@ -213,6 +222,7 @@ namespace CastorCom
 			catch ( Castor::Exception & )
 			{
 			}
+
 #endif
 			hr = S_OK;
 		}
@@ -233,6 +243,7 @@ namespace CastorCom
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
 #if HAS_CASTORGUI
+
 			try
 			{
 				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
@@ -241,6 +252,7 @@ namespace CastorCom
 			catch ( Castor::Exception & )
 			{
 			}
+
 #endif
 			hr = S_OK;
 		}
@@ -261,6 +273,7 @@ namespace CastorCom
 			pos->get_X( &m_oldX );
 			pos->get_Y( &m_oldY );
 #if HAS_CASTORGUI
+
 			try
 			{
 				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
@@ -269,6 +282,7 @@ namespace CastorCom
 			catch ( Castor::Exception & )
 			{
 			}
+
 #endif
 			hr = S_OK;
 		}

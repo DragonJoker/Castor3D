@@ -7,9 +7,9 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	VertexBuffer::VertexBuffer( Engine & p_engine, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements )
+	VertexBuffer::VertexBuffer( Engine & p_engine, BufferDeclaration const & p_declaration )
 		: CpuBuffer< uint8_t >( p_engine )
-		, m_bufferDeclaration( p_pElements, p_uiNbElements )
+		, m_bufferDeclaration( p_declaration )
 	{
 	}
 
@@ -21,7 +21,7 @@ namespace Castor3D
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = GetEngine()->GetRenderSystem()->CreateVertexBuffer( m_bufferDeclaration, this );
+			m_pBuffer = GetEngine()->GetRenderSystem()->CreateVertexBuffer( this );
 		}
 
 		bool l_return = m_pBuffer != nullptr;

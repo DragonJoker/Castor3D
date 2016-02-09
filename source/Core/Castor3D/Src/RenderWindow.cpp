@@ -199,12 +199,12 @@ namespace Castor3D
 				m_context->SetCurrent();
 				m_backBuffers->Initialise( GetSize(), GetPixelFormat() );
 
-				SceneSPtr l_pScene = GetScene();
+				SceneSPtr l_scene = GetScene();
 				RenderTargetSPtr l_target = GetRenderTarget();
 
-				if ( l_pScene )
+				if ( l_scene )
 				{
-					m_backBuffers->SetClearColour( l_pScene->GetBackgroundColour() );
+					m_backBuffers->SetClearColour( l_scene->GetBackgroundColour() );
 				}
 				else
 				{

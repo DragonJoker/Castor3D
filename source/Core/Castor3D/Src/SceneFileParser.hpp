@@ -55,9 +55,7 @@ namespace Castor3D
 		eSECTION_TEXTURE_UNIT = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),			//!< TextureUnit subsection of a pass subsection
 		eSECTION_RENDER_TARGET = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),			//!< RenderTarget subsection of a texture unit or window subsection
 		eSECTION_GLSL_SHADER = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),				//!< GLSL Shader subsection of a pass subsection
-		eSECTION_HLSL_SHADER = MAKE_SECTION_NAME( 'H', 'L', 'S', 'L' ),				//!< HLSL Shader subsection of a pass subsection
 		eSECTION_SHADER_PROGRAM = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),			//!< Shader Program subsection of a shader subsection
-		eSECTION_SHADER_SAMPLER = MAKE_SECTION_NAME( 'S', 'S', 'P', 'R' ),			//!< Sampler shader variable subsection of a shader program subsection
 		eSECTION_SHADER_UBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),				//!< UBO subsection of a shader subsection
 		eSECTION_SHADER_UBO_VARIABLE = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),		//!< Variable subsection of a UBO subsection
 		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),				//!< Billboards list section
@@ -87,7 +85,7 @@ namespace Castor3D
 		RenderTargetSPtr pRenderTarget;
 		uint32_t uiPass;
 		TextureUnitSPtr pTextureUnit;
-		ShaderProgramBaseSPtr pShaderProgram;
+		ShaderProgramSPtr pShaderProgram;
 		eSHADER_TYPE eShaderObject;
 		FrameVariableBufferSPtr pFrameVariableBuffer;
 		FrameVariableSPtr pFrameVariable;

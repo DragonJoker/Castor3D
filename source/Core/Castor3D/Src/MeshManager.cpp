@@ -90,13 +90,13 @@ namespace Castor3D
 
 		for ( uint32_t i = 0; i < l_uiSize && l_return; i++ )
 		{
-			MeshSPtr l_pMesh = m_elements.find( cuEmptyString );
+			MeshSPtr l_mesh = m_elements.find( cuEmptyString );
 
-			if ( !l_pMesh )
+			if ( !l_mesh )
 			{
-				l_pMesh = std::make_shared< Mesh >( cuEmptyString, *GetEngine() );
-				l_return = Mesh::BinaryParser( p_file.GetFileFullPath() ).Parse( *l_pMesh, p_file );
-				m_elements.insert( cuEmptyString, l_pMesh );
+				l_mesh = std::make_shared< Mesh >( cuEmptyString, *GetEngine() );
+				l_return = Mesh::BinaryParser( p_file.GetFileFullPath() ).Parse( *l_mesh, p_file );
+				m_elements.insert( cuEmptyString, l_mesh );
 			}
 			else
 			{

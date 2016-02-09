@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
 		 */
-		C3D_API void BindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		C3D_API void BindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer );
 		/**
 		 *\~english
 		 *\brief		Unbinds the scene lights.
@@ -134,7 +134,7 @@ namespace Castor3D
 		 *\param[in]	p_program		Le programme shader.
 		 *\param[in]	p_sceneBuffer	Le tampon de constantes.
 		 */
-		C3D_API void UnbindLights( ShaderProgramBase & p_program, FrameVariableBuffer & p_sceneBuffer );
+		C3D_API void UnbindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer );
 		/**
 		 *\~english
 		 *\brief		Creates an object from a name.

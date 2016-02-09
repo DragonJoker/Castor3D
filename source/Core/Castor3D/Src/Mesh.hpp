@@ -226,14 +226,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void ComputeNormals( bool p_bReverted = false );
-		/**
-		 *\~english
-		 *\brief		Initialises vertex buffers
-		 *\~french
-		 *\brief		Initialise les tampons de sommets
-		 */
-		C3D_API void GenerateBuffers();
+		C3D_API void ComputeNormals( bool p_reverted = false );
 		/**
 		*\~english
 		*\brief		Increments submeshes' instance count

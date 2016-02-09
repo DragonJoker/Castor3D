@@ -554,7 +554,7 @@ interface IOverlay;
 interface IAnimable;
 interface IAnimatedObject;
 interface IAnimatedObjectGroup;
-interface ITextureBase;
+interface ITexture;
 interface IDynamicTexture;
 interface IStaticTexture;
 interface ITextureUnit;
@@ -1037,14 +1037,14 @@ interface ISampler
 	[id( 14 ), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
 };
 
-// ITextureBase
+// ITexture
 [
 	uuid( 8985F532-34C0-4996-882C-8850D45C53F1 ),
-	helpstring( "Castor3D TextureBase interface" ),
+	helpstring( "Castor3D Texture interface" ),
 	dual,
 	oleautomation
 ]
-interface ITextureBase
+interface ITexture
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT BaseType( [out, retval] eTEXTURE_BASE_TYPE * pVal );
@@ -1068,7 +1068,7 @@ interface ITextureBase
 	oleautomation
 ]
 interface IStaticTexture
-	: ITextureBase
+	: ITexture
 {
 	[id( 11 ), helpstring( "Sets a 1D or 2D image data" )] HRESULT SetImage( [in] IPixelBuffer * val );
 	[id( 12 ), helpstring( "Sets a 3D image data" )] HRESULT Set3DImage( [in] ISize * size, unsigned int depth, [in] IPixelBuffer * val );
@@ -1082,7 +1082,7 @@ interface IStaticTexture
 	oleautomation
 ]
 interface IDynamicTexture
-	: ITextureBase
+	: ITexture
 {
 	[propget, id( 11 ), helpstring( "The render target" )] HRESULT RenderTarget( [out, retval] IRenderTarget ** pVal );
 	[propput, id( 11 ), helpstring( "The render target" )] HRESULT RenderTarget( [in] IRenderTarget * val );
@@ -1104,8 +1104,8 @@ interface IDynamicTexture
 interface ITextureUnit
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITextureBase ** pVal );
-	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITextureBase * val );
+	[propget, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITexture ** pVal );
+	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITexture * val );
 	[propget, id( 2 ), helpstring( "The Alpha Test function" )] HRESULT AlphaFunc( [out, retval] eALPHA_FUNC * pVal );
 	[propput, id( 2 ), helpstring( "The Alpha Test function" )] HRESULT AlphaFunc( [in] eALPHA_FUNC val );
 	[propget, id( 3 ), helpstring( "The Alpha Test reference value" )] HRESULT AlphaValue( [out, retval] float * pVal );
@@ -1264,7 +1264,7 @@ interface IScene
 	[id( 22 ), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
 	[id( 23 ), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
 	[id( 24 ), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
-	[id( 30 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITextureBase ** pVal );
+	[id( 30 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITexture ** pVal );
 };
 
 // IRenderWindow
@@ -1844,13 +1844,13 @@ library Castor3D
 		[default] interface ISampler;
 	}
 
-	// TextureBase
+	// Texture
 	[
 		uuid( 0FF08968-9937-4771-8949-0E86E3615F98 )
 	]
-	coclass TextureBase
+	coclass Texture
 	{
-		[default] interface ITextureBase;
+		[default] interface ITexture;
 	}
 
 	// StaticTexture

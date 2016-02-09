@@ -77,7 +77,7 @@ namespace GuiCommon
 		UnloadVariables();
 	}
 
-	void FrameVariablesList::LoadVariables( eSHADER_TYPE p_type, ShaderProgramBaseSPtr p_program )
+	void FrameVariablesList::LoadVariables( eSHADER_TYPE p_type, ShaderProgramSPtr p_program )
 	{
 		m_program = p_program;
 		wxTreeItemId l_root = AddRoot( _( "Root" ) );

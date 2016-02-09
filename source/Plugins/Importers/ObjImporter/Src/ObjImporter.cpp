@@ -37,22 +37,27 @@ namespace Obj
 
 	SceneSPtr ObjImporter::DoImportScene()
 	{
-		MeshSPtr l_pMesh = DoImportMesh();
-		SceneSPtr l_pScene;
+		MeshSPtr l_mesh = DoImportMesh();
+		SceneSPtr l_scene;
 
-		if ( l_pMesh )
+		if ( l_mesh )
 		{
-			l_pMesh->GenerateBuffers();
-			l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetEngine() );
-			SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-			GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
-			l_pGeometry->AttachTo( l_pNode );
-			l_pGeometry->SetMesh( l_pMesh );
+			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetEngine() );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+			l_geometry->AttachTo( l_node );
+
+			for ( auto && l_submesh : *l_mesh )
+			{
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			}
+
+			l_geometry->SetMesh( l_mesh );
 		}
 
 		m_arrayLoadedMaterials.clear();
 		m_arrayTextures.clear();
-		return l_pScene;
+		return l_scene;
 	}
 
 	MeshSPtr ObjImporter::DoImportMesh()

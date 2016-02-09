@@ -11,7 +11,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	DynamicTexture::DynamicTexture( RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
-		: TextureBase( eTEXTURE_BASE_TYPE_DYNAMIC, p_renderSystem, p_cpuAccess, p_gpuAccess )
+		: Texture( eTEXTURE_BASE_TYPE_DYNAMIC, p_renderSystem, p_cpuAccess, p_gpuAccess )
 		, m_samplesCount( 0 )
 	{
 	}

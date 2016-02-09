@@ -109,11 +109,11 @@ namespace C3dAssimp
 
 			for ( uint32_t i = 0; i < p_animation->mNumChannels && !l_return; ++i )
 			{
-				const aiNodeAnim * l_pNodeAnim = p_animation->mChannels[i];
+				const aiNodeAnim * l_nodeAnim = p_animation->mChannels[i];
 
-				if ( string::string_cast< xchar >( l_pNodeAnim->mNodeName.data ) == p_nodeName )
+				if ( string::string_cast< xchar >( l_nodeAnim->mNodeName.data ) == p_nodeName )
 				{
-					l_return = l_pNodeAnim;
+					l_return = l_nodeAnim;
 				}
 			}
 
@@ -138,11 +138,16 @@ namespace C3dAssimp
 
 		if ( m_mesh )
 		{
-			m_mesh->GenerateBuffers();
 			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetEngine() );
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( m_mesh->GetName(), l_scene->GetObjectRootNode() );
-			GeometrySPtr l_pGeometry = l_scene->GetGeometryManager().Create( m_mesh->GetName(), l_node );
-			l_pGeometry->SetMesh( m_mesh );
+			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( m_mesh->GetName(), l_node );
+
+			for ( auto && l_submesh : *m_mesh )
+			{
+				m_mesh->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			}
+
+			l_geometry->SetMesh( m_mesh );
 			m_mesh.reset();
 		}
 

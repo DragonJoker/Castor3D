@@ -55,7 +55,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		OneFrameVariable( ShaderProgramBase * p_program );
+		OneFrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -64,7 +64,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_occurences		Les dimensions du tableau
 		 */
-		OneFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences );
+		OneFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor

@@ -179,11 +179,11 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 	BufferElementDeclaration l_skymapDeclaration[] =
 	{
-		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS )
+		BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS )
 	};
 	BufferElementDeclaration l_cloudsVertexDeclarationElements[] =
 	{
-		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
+		BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
 	};
 	Engine * l_pEngine = GetEngine();
 	m_pSamplerNearestClamp = l_pEngine->GetSamplerManager().Create( cuT( "NearestClamp" ) );
@@ -208,23 +208,19 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_pTexFFTA = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexFFTB = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 	m_pTexButterfly = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-	m_variancesFbo = m_renderTarget->CreateFrameBuffer();
-	m_fftFbo1 = m_renderTarget->CreateFrameBuffer();
-	m_fftFbo2 = m_renderTarget->CreateFrameBuffer();
-	m_pAttachFftA = m_renderTarget->CreateAttachment( m_pTexFFTA );
-	m_pAttachFftB = m_renderTarget->CreateAttachment( m_pTexFFTB );
-	VertexBufferSPtr l_pVtxBufferVar = std::make_shared< VertexBuffer >( GetEngine()->GetRenderSystem(), l_quadVertexDeclarationElements );
-	VertexBufferSPtr l_pVtxBufferIni = std::make_shared< VertexBuffer >( GetEngine()->GetRenderSystem(), l_quadVertexDeclarationElements );
-	VertexBufferSPtr l_pVtxBufferFtx = std::make_shared< VertexBuffer >( GetEngine()->GetRenderSystem(), l_quadVertexDeclarationElements );
-	VertexBufferSPtr l_pVtxBufferFty = std::make_shared< VertexBuffer >( GetEngine()->GetRenderSystem(), l_quadVertexDeclarationElements );
-	IndexBufferSPtr l_pIdxBufferVar = std::make_shared< IndexBuffer >( GetEngine()->GetRenderSystem() );
-	IndexBufferSPtr l_pIdxBufferIni = std::make_shared< IndexBuffer >( GetEngine()->GetRenderSystem() );
-	IndexBufferSPtr l_pIdxBufferFtx = std::make_shared< IndexBuffer >( GetEngine()->GetRenderSystem() );
-	IndexBufferSPtr l_pIdxBufferFty = std::make_shared< IndexBuffer >( GetEngine()->GetRenderSystem() );
-	m_variancesGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferVar ), std::move( l_pIdxBufferVar ), nullptr );
-	m_initGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferIni ), std::move( l_pIdxBufferIni ), nullptr );
-	m_fftxGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferFtx ), std::move( l_pIdxBufferFtx ), nullptr );
-	m_fftyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferFty ), std::move( l_pIdxBufferFty ), nullptr );
+	m_variancesFbo = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
+	m_fftFbo1 = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
+	m_fftFbo2 = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
+	m_pAttachFftA = m_fftFbo2->CreateAttachment( m_pTexFFTA );
+	m_pAttachFftB = m_fftFbo2->CreateAttachment( m_pTexFFTB );
+	m_variancesVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+	m_initVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+	m_fftxVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+	m_fftyVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+	m_variancesIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_initIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_fftxIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_fftyIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
 	real l_quadVertices[] =
 	{
 		-1.0, -1.0, 0.0, 0.0
@@ -237,33 +233,33 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 		0, 1, 2,
 		1, 3, 2
 	};
-	l_pVtxBufferVar->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
-	l_pVtxBufferIni->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
-	l_pVtxBufferFtx->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
-	l_pVtxBufferFty->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
-	l_pIdxBufferVar->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
-	l_pIdxBufferIni->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
-	l_pIdxBufferFtx->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
-	l_pIdxBufferFty->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
-	std::memcpy( l_pVtxBufferVar->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
-	std::memcpy( l_pVtxBufferIni->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
-	std::memcpy( l_pVtxBufferFtx->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
-	std::memcpy( l_pVtxBufferFty->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
-	std::memcpy( l_pIdxBufferVar->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
-	std::memcpy( l_pIdxBufferIni->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
-	std::memcpy( l_pIdxBufferFtx->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
-	std::memcpy( l_pIdxBufferFty->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
+	m_variancesVtxBuffer->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
+	m_initVtxBuffer->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
+	m_fftxVtxBuffer->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
+	m_fftyVtxBuffer->Resize( sizeof( l_quadVertices ) / sizeof( real ) );
+	m_variancesIdxBuffer->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
+	m_initIdxBuffer->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
+	m_fftxIdxBuffer->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
+	m_fftyIdxBuffer->Resize( sizeof( l_quadIndices ) / sizeof( uint32_t ) );
+	std::memcpy( m_variancesVtxBuffer->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
+	std::memcpy( m_initVtxBuffer->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
+	std::memcpy( m_fftxVtxBuffer->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
+	std::memcpy( m_fftyVtxBuffer->data(), &l_quadVertices[0], sizeof( l_quadVertices ) );
+	std::memcpy( m_variancesIdxBuffer->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
+	std::memcpy( m_initIdxBuffer->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
+	std::memcpy( m_fftxIdxBuffer->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
+	std::memcpy( m_fftyIdxBuffer->data(), &l_quadIndices[0], sizeof( l_quadIndices ) );
 #else
 	m_pTexWave = m_renderTarget->CreateDynamicTexture( 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 #endif
 	m_fbo = m_renderSystem->CreateFrameBuffer();
 	m_pAttachSky = m_fbo->CreateAttachment( m_pTexSky );
-	VertexBufferUPtr l_pVtxBufferSky = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
-	VertexBufferUPtr l_pVtxBufferMap = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
-	VertexBufferUPtr l_pVtxBufferClo = std::make_unique< VertexBuffer >( *GetEngine(), l_cloudsVertexDeclarationElements );
-	IndexBufferUPtr l_pIdxBufferSky = std::make_unique< IndexBuffer >( *GetEngine() );
-	IndexBufferUPtr l_pIdxBufferMap = std::make_unique< IndexBuffer >( *GetEngine() );
-	IndexBufferUPtr l_pIdxBufferClo = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_skyVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
+	m_skymapVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
+	m_cloudsVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_cloudsVertexDeclarationElements );
+	m_skyIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_skymapIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_cloudsIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
 	real l_skyVertices[] =
 	{
 		-1, -1
@@ -288,21 +284,18 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 		0, 1, 2,
 		1, 3, 2
 	};
-	l_pVtxBufferSky->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
-	l_pVtxBufferMap->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
-	l_pVtxBufferClo->Resize( sizeof( l_cloudsVertices ) / sizeof( real ) );
-	l_pIdxBufferSky->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
-	l_pIdxBufferMap->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
-	l_pIdxBufferClo->Resize( sizeof( l_cloudsIndices ) / sizeof( uint32_t ) );
-	std::memcpy( l_pVtxBufferSky->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
-	std::memcpy( l_pVtxBufferMap->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
-	std::memcpy( l_pVtxBufferClo->data(), &l_cloudsVertices[0], sizeof( l_cloudsVertices ) );
-	std::memcpy( l_pIdxBufferSky->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
-	std::memcpy( l_pIdxBufferMap->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
-	std::memcpy( l_pIdxBufferClo->data(), &l_cloudsIndices[0], sizeof( l_cloudsIndices ) );
-	m_skyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr, eTOPOLOGY_TRIANGLES );
-	m_skymapGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr, eTOPOLOGY_TRIANGLES );
-	m_cloudsGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr, eTOPOLOGY_TRIANGLES );
+	m_skyVtxBuffer->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
+	m_skymapVtxBuffer->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
+	m_cloudsVtxBuffer->Resize( sizeof( l_cloudsVertices ) / sizeof( real ) );
+	m_skyVtxBuffer->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
+	m_skymapIdxBuffer->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
+	m_cloudsIdxBuffer->Resize( sizeof( l_cloudsIndices ) / sizeof( uint32_t ) );
+	std::memcpy( m_skyVtxBuffer->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
+	std::memcpy( m_skymapVtxBuffer->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
+	std::memcpy( m_cloudsVtxBuffer->data(), &l_cloudsVertices[0], sizeof( l_cloudsVertices ) );
+	std::memcpy( m_skyVtxBuffer->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
+	std::memcpy( m_skymapIdxBuffer->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
+	std::memcpy( m_cloudsIdxBuffer->data(), &l_cloudsIndices[0], sizeof( l_cloudsIndices ) );
 	RasteriserStateSPtr l_pRasteriser = GetEngine()->GetRenderSystem()->GetEngine()->GetRasteriserStateManager().Create( cuT( "OceanLighting" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
@@ -632,17 +625,16 @@ void RenderTechnique::generateMesh()
 {
 	if ( m_renderGBuffers )
 	{
-		m_renderGBuffers->GetVertexBuffer().Cleanup();
-		m_renderGBuffers->GetIndexBuffer().Cleanup();
-		m_renderGBuffers->Cleanup();
-		m_renderGBuffers->GetVertexBuffer().Destroy();
-		m_renderGBuffers->GetIndexBuffer().Destroy();
+		m_renderVtxBuffer->Cleanup();
+		m_renderVtxBuffer->Destroy();
+		m_renderIdxBuffer->Cleanup();
+		m_renderIdxBuffer->Destroy();
 		m_renderGBuffers.reset();
 	}
 
 	BufferElementDeclaration l_meshDeclaration[] =
 	{
-		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_4FLOATS )
+		BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_4FLOATS )
 	};
 	float horizon = float( tan( m_cameraTheta / 180.0 * M_PI ) );
 	float s = std::min< float >( 1.1f, 0.5f + horizon * 0.5f );
@@ -695,9 +687,11 @@ void RenderTechnique::generateMesh()
 	IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
 	l_pIdxBuffer->Resize( n );
 	std::memcpy( l_pIdxBuffer->data(), &indices[0], n * sizeof( uint32_t ) );
-	m_renderGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
-	m_renderGBuffers->Create();
-	m_renderGBuffers->Initialise( m_render, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_renderVtxBuffer->Create();
+	m_renderIdxBuffer->Create();
+	m_renderVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_renderIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_renderGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_render, m_renderVtxBuffer.get(), m_renderIdxBuffer.get(), nullptr, nullptr );
 }
 
 bool RenderTechnique::DoCreate()
@@ -743,12 +737,12 @@ bool RenderTechnique::DoCreate()
 	m_pTexSky->Create();
 	m_pTexNoise->Create();
 	m_fbo->Create( 0 );
-	m_skyGBuffers->GetVertexBuffer().Create();
-	m_skyGBuffers->GetIndexBuffer().Create();
-	m_skymapGBuffers->GetVertexBuffer().Create();
-	m_skymapGBuffers->GetIndexBuffer().Create();
-	m_cloudsGBuffers->GetVertexBuffer().Create();
-	m_cloudsGBuffers->GetIndexBuffer().Create();
+	m_skyVtxBuffer->Create();
+	m_skymapVtxBuffer->Create();
+	m_cloudsVtxBuffer->Create();
+	m_skyIdxBuffer->Create();
+	m_skymapIdxBuffer->Create();
+	m_cloudsIdxBuffer->Create();
 #if ENABLE_FFT
 	m_pTexSpectrum_1_2->Create();
 	m_pTexSpectrum_3_4->Create();
@@ -759,14 +753,14 @@ bool RenderTechnique::DoCreate()
 	m_variancesFbo->Create( 0 );
 	m_fftFbo1->Create( 0 );
 	m_fftFbo2->Create( 0 );
-	m_variancesGBuffers->GetVertexBuffer().Create();
-	m_variancesGBuffers->GetIndexBuffer().Create();
-	m_initGBuffers->GetVertexBuffer().Create();
-	m_initGBuffers->GetIndexBuffer().Create();
-	m_fftxGBuffers->GetVertexBuffer().Create();
-	m_fftxGBuffers->GetIndexBuffer().Create();
-	m_fftyGBuffers->GetVertexBuffer().Create();
-	m_fftyGBuffers->GetIndexBuffer().Create();
+	m_variancesVtxBuffer->Create();
+	m_variancesIdxBuffer->Create();
+	m_initVtxBuffer->Create();
+	m_initIdxBuffer->Create();
+	m_fftxVtxBuffer->Create();
+	m_fftxIdxBuffer->Create();
+	m_fftyVtxBuffer->Create();
+	m_fftyIdxBuffer->Create();
 #else
 	m_pTexWave->Create();
 #endif
@@ -789,23 +783,23 @@ bool RenderTechnique::DoCreate()
 
 void RenderTechnique::DoDestroy()
 {
-	m_renderGBuffers->GetVertexBuffer().Destroy();
-	m_renderGBuffers->GetIndexBuffer().Destroy();
-	m_cloudsGBuffers->GetVertexBuffer().Destroy();
-	m_cloudsGBuffers->GetIndexBuffer().Destroy();
-	m_skyGBuffers->GetVertexBuffer().Destroy();
-	m_skyGBuffers->GetIndexBuffer().Destroy();
-	m_skymapGBuffers->GetVertexBuffer().Destroy();
-	m_skymapGBuffers->GetIndexBuffer().Destroy();
+	m_skyVtxBuffer->Destroy();
+	m_skymapVtxBuffer->Destroy();
+	m_cloudsVtxBuffer->Destroy();
+	m_skyIdxBuffer->Destroy();
+	m_skymapIdxBuffer->Destroy();
+	m_cloudsIdxBuffer->Destroy();
+	m_renderVtxBuffer->Destroy();
+	m_renderIdxBuffer->Destroy();
 #if ENABLE_FFT
-	m_variancesGBuffers->GetVertexBuffer().Destroy();
-	m_variancesGBuffers->GetIndexBuffer().Destroy();
-	m_initGBuffers->GetVertexBuffer().Destroy();
-	m_initGBuffers->GetIndexBuffer().Destroy();
-	m_fftxGBuffers->GetVertexBuffer().Destroy();
-	m_fftxGBuffers->GetIndexBuffer().Destroy();
-	m_fftyGBuffers->GetVertexBuffer().Destroy();
-	m_fftyGBuffers->GetIndexBuffer().Destroy();
+	m_variancesVtxBuffer->Destroy();
+	m_variancesIdxBuffer->Destroy();
+	m_initVtxBuffer->Destroy();
+	m_initIdxBuffer->Destroy();
+	m_fftxVtxBuffer->Destroy();
+	m_fftxIdxBuffer->Destroy();
+	m_fftyVtxBuffer->Destroy();
+	m_fftyIdxBuffer->Destroy();
 #endif
 	DoDestroyPrograms( true );
 	m_pTexIrradiance->Destroy();
@@ -957,11 +951,11 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 	for ( int i = 0; i < 5; ++i )
 	{
-		m_arrayFftAttaches.push_back( m_renderTarget->CreateAttachment( m_pTexFFTA ) );
+		m_arrayFftAttaches.push_back( m_fftFbo1->CreateAttachment( m_pTexFFTA ) );
 		m_fftFbo1->Attach( eATTACHMENT_POINT_COLOUR, i, m_arrayFftAttaches[i], eTEXTURE_TARGET_LAYER, i );
 	}
 
-	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
+	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR, 0 );
 	m_fftFbo1->SetDrawBuffers();
 	ENSURE( m_fftFbo1->IsComplete() );
 	m_fftFbo1->Unbind();
@@ -969,8 +963,8 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pAttachFftA, eTEXTURE_TARGET_2D );
 	m_fftFbo2->Attach( eATTACHMENT_POINT_COLOUR, 1, m_pAttachFftB, eTEXTURE_TARGET_2D );
 	ENSURE( m_fftFbo2->IsComplete() );
-	m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
-	m_fftFbo2->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
+	m_fftFbo2->SetDrawBuffer( m_pAttachFftA );
+	m_fftFbo2->SetReadBuffer( eATTACHMENT_POINT_COLOUR, 0 );
 	m_fftFbo2->Unbind();
 #else
 	m_pTexWave->SetType( eTEXTURE_TYPE_1D );
@@ -986,25 +980,39 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	generateMesh();
 	loadPrograms( true );
 #if ENABLE_FFT
-	m_variancesGBuffers->Initialise( m_variances, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW);
-	m_initGBuffers->Initialise( m_init, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW);
-	m_fftxGBuffers->Initialise( m_fftx, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW);
-	m_fftyGBuffers->Initialise( m_ffty, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW);
+	m_variancesVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_variancesIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_variancesGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_variances, m_variancesVtxBuffer.get(), m_variancesIdxBuffer.get(), nullptr, nullptr );
+	m_initVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_initIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_initGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_init, m_initVtxBuffer.get(), m_initIdxBuffer.get(), nullptr, nullptr );
+	m_fftxVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_fftxIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_fftxGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_fftx, m_fftxVtxBuffer.get(), m_fftxIdxBuffer.get(), nullptr, nullptr );
+	m_fftyVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_fftyIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_fftyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_ffty, m_fftyVtxBuffer.get(), m_fftyIdxBuffer.get(), nullptr, nullptr );
 #endif
-	m_skyGBuffers->Initialise( m_sky, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-	m_skymapGBuffers->Initialise( m_skymap, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-	m_cloudsGBuffers->Initialise( m_clouds, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skyVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skymapVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_cloudsVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skyIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skymapIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_cloudsIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_sky, m_skyVtxBuffer.get(), m_skyIdxBuffer.get(), nullptr, nullptr );
+	m_skymapGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_skymap, m_skymapVtxBuffer.get(), m_skymapIdxBuffer.get(), nullptr, nullptr );
+	m_cloudsGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_clouds, m_cloudsVtxBuffer.get(), m_cloudsIdxBuffer.get(), nullptr, nullptr );
 #if ENABLE_FFT
 	m_variancesFbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_variancesFbo->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
 
 	for ( int layer = 0; layer < m_N_SLOPE_VARIANCE; ++layer )
 	{
-		TextureAttachmentSPtr l_pAttach = m_renderTarget->CreateAttachment( m_pTexSlopeVariance );
+		TextureAttachmentSPtr l_pAttach = m_variancesFbo->CreateAttachment( m_pTexSlopeVariance );
 		m_arrayVarianceAttaches.push_back( l_pAttach );
 		m_variancesFbo->Attach( eATTACHMENT_POINT_COLOUR, l_pAttach, eTEXTURE_TARGET_3D, layer );
 	}
 
+	m_variancesFbo->SetDrawBuffer( m_arrayVarianceAttaches[0] );
 	ENSURE( m_variancesFbo->IsComplete() );
 	m_variancesFbo->Unbind();
 #else
@@ -1015,28 +1023,39 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 void RenderTechnique::DoCleanup()
 {
-	m_renderGBuffers->Cleanup();
-	m_skyGBuffers->Cleanup();
-	m_skymapGBuffers->Cleanup();
+	m_renderVtxBuffer->Cleanup();
+	m_renderIdxBuffer->Cleanup();
+	m_renderGBuffers.reset();
+	m_skyVtxBuffer->Cleanup();
+	m_skyIdxBuffer->Cleanup();
+	m_skyGBuffers.reset();
+	m_skymapVtxBuffer->Cleanup();
+	m_skymapIdxBuffer->Cleanup();
+	m_skymapGBuffers.reset();
+	m_cloudsVtxBuffer->Cleanup();
+	m_cloudsIdxBuffer->Cleanup();
+	m_cloudsGBuffers.reset();
 #if ENABLE_FFT
-	m_variancesGBuffers->Cleanup();
-	m_initGBuffers->Cleanup();
-	m_fftxGBuffers->Cleanup();
-	m_fftyGBuffers->Cleanup();
+	m_variancesVtxBuffer->Cleanup();
+	m_variancesIdxBuffer->Cleanup();
+	m_variancesGBuffers.reset();
+	m_initVtxBuffer->Cleanup();
+	m_initIdxBuffer->Cleanup();
+	m_initGBuffers.reset();
+	m_fftxVtxBuffer->Cleanup();
+	m_fftxIdxBuffer->Cleanup();
+	m_fftxGBuffers.reset();
+	m_fftyVtxBuffer->Cleanup();
+	m_fftyIdxBuffer->Cleanup();
+	m_fftyGBuffers.reset();
 	DoCleanupPrograms( true );
 	m_variancesFbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	m_variancesFbo->Unbind();
 	m_fftFbo1->Bind( eFRAMEBUFFER_MODE_CONFIG );
-
-	for ( int i = 0; i < 5; ++i )
-	{
-		m_arrayFftAttaches[i]->Detach();
-	}
-
+	m_fftFbo1->DetachAll();
 	m_fftFbo1->Unbind();
 	m_fftFbo2->Bind( eFRAMEBUFFER_MODE_CONFIG );
-	m_pAttachFftA->Detach();
-	m_pAttachFftB->Detach();
+	m_fftFbo2->DetachAll();
 	m_fftFbo2->Unbind();
 #endif
 	m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
@@ -1131,7 +1150,7 @@ bool RenderTechnique::DoRender( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_
 	m_skymapCloudsColor->SetValue( l_colour );
 	m_skymapBlendState.lock()->Apply();
 	m_skymap->Bind();
-	m_skymapGBuffers->Draw( m_skymap, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_skymapGBuffers->Draw( m_skymapIdxBuffer->GetSize(), 0 );
 	m_skymap->Unbind();
 	m_fbo->Unbind();
 	m_pTexSky->Bind();
@@ -1191,7 +1210,7 @@ void RenderTechnique::DoEndRender()
 	m_skyHdrExposure->SetValue( m_hdrExposure );
 	m_skyBlendState.lock()->Apply();
 	m_sky->Bind();
-	m_skyGBuffers->Draw( m_sky, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_skyGBuffers->Draw( m_skymapIdxBuffer->GetSize(), 0 );
 	m_sky->Unbind();
 
 	if ( m_cloudLayer && ch < 3000.0 )
@@ -1256,7 +1275,7 @@ void RenderTechnique::DoEndRender()
 	m_renderRasteriserState.lock()->Apply();
 	m_renderBlendState.lock()->Apply();
 	m_render->Bind();
-	m_renderGBuffers->Draw( m_render, m_renderGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_renderGBuffers->Draw( m_renderIdxBuffer->GetSize(), 0 );
 	m_render->Unbind();
 	m_renderTarget->GetRasteriserState()->Apply();
 
@@ -1497,22 +1516,22 @@ float RenderTechnique::spectrum( float kx, float ky, bool omnispectrum )
 
 void RenderTechnique::drawQuadVariances()
 {
-	m_variancesGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_variances, m_variancesGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_variancesGBuffers->Draw( m_variancesIdxBuffer->GetSize(), 0 );
 }
 
 void RenderTechnique::drawQuadInit()
 {
-	m_initGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_init, m_initGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_initGBuffers->Draw( m_initIdxBuffer->GetSize(), 0 );
 }
 
 void RenderTechnique::drawQuadFFTx()
 {
-	m_fftxGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_fftx, m_fftxGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_fftxGBuffers->Draw( m_fftxIdxBuffer->GetSize(), 0 );
 }
 
 void RenderTechnique::drawQuadFFTy()
 {
-	m_fftyGBuffers->Draw( eTOPOLOGY_TRIANGLES, m_ffty, m_fftyGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_fftyGBuffers->Draw( m_fftyIdxBuffer->GetSize(), 0 );
 }
 #endif
 
@@ -1537,7 +1556,7 @@ void RenderTechnique::drawClouds( const Point3f & sun, const Matrix4x4f & mat )
 	m_cloudsCloudsColor->SetValue( l_colour );
 	m_cloudsBlendState.lock()->Apply();
 	m_clouds->Bind();
-	m_cloudsGBuffers->Draw( m_clouds, m_cloudsGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_cloudsGBuffers->Draw( m_cloudsIdxBuffer->GetSize(), 0 );
 	m_clouds->Unbind();
 }
 
@@ -1697,7 +1716,7 @@ void RenderTechnique::computeSlopeVarianceTex( void * CU_PARAM_UNUSED( unused ) 
 	}
 
 	m_variancesFbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
-	GetEngine()->GetRenderSystem()->GetPipeline()->ApplyViewport( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE );
+	GetEngine()->GetRenderSystem()->GetPipeline().ApplyViewport( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE );
 	m_variancesGridSizes->SetValue( Point4f( m_GRID1_SIZE, m_GRID2_SIZE, m_GRID3_SIZE, m_GRID4_SIZE ) );
 	m_variancesSlopeVarianceDelta->SetValue( float( 0.5 * ( theoreticSlopeVariance - totalSlopeVariance ) ) );
 	m_variancesBlendState.lock()->Apply();
@@ -1705,9 +1724,9 @@ void RenderTechnique::computeSlopeVarianceTex( void * CU_PARAM_UNUSED( unused ) 
 	for ( int layer = 0; layer < m_N_SLOPE_VARIANCE; ++layer )
 	{
 		m_variancesC->SetValue( float( layer ) );
-		m_variances->Begin( 0, 1 );
+		m_variances->Bind();
 		drawQuadVariances();
-		m_variances->End();
+		m_variances->Unbind();
 	}
 
 //    TwDefine("Parameters color='17 109 143'");
@@ -1795,19 +1814,19 @@ float * RenderTechnique::computeButterflyLookupTexture()
 void RenderTechnique::simulateFFTWaves( float t )
 {
 	RenderSystem * l_pRS = GetEngine()->GetRenderSystem();
-	Pipeline * l_pPipeline = l_pRS->GetPipeline();
-	TextureBaseSPtr l_pTex;
+	Pipeline & l_pPipeline = l_pRS->GetPipeline();
+	TextureSPtr l_pTex;
 	// init
 	m_fftFbo1->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
-	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );
-	l_pPipeline->ApplyViewport( m_FFT_SIZE, m_FFT_SIZE );
+	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR, 0 );
+	l_pPipeline.ApplyViewport( m_FFT_SIZE, m_FFT_SIZE );
 	m_initFftSize->SetValue( float( m_FFT_SIZE ) );
 	m_initInverseGridSizes->SetValue( Point4f( 2.0 * M_PI * m_FFT_SIZE / m_GRID1_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID2_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID3_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID4_SIZE ) );
 	m_initT->SetValue( t );
 	m_initBlendState.lock()->Apply();
-	m_init->Begin( 0, 1 );
+	m_init->Bind();
 	drawQuadInit();
-	m_init->End();
+	m_init->Unbind();
 	m_fftFbo1->Unbind();
 	// fft passes
 	m_fftFbo2->Bind( eFRAMEBUFFER_MODE_MANUAL );
@@ -1821,18 +1840,18 @@ void RenderTechnique::simulateFFTWaves( float t )
 		if ( i % 2 == 0 )
 		{
 			m_fftxImgSampler->SetValue( m_pTexFFTA.get() );
-			m_fftx->Begin( 0, 1 );
-			m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR1 );
+			m_fftx->Bind();
+			m_fftFbo2->SetDrawBuffer( m_pAttachFftB );
 		}
 		else
 		{
 			m_fftxImgSampler->SetValue( m_pTexFFTB.get() );
-			m_fftx->Begin( 0, 1 );
-			m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
+			m_fftx->Bind();
+			m_fftFbo2->SetDrawBuffer( m_pAttachFftA );
 		}
 
 		drawQuadFFTx();
-		m_fftx->End();
+		m_fftx->Unbind();
 	}
 
 	m_fftyNLayers->SetValue( m_choppy ? 5 : 3 );
@@ -1845,18 +1864,18 @@ void RenderTechnique::simulateFFTWaves( float t )
 		if ( i % 2 == 0 )
 		{
 			m_fftyImgSampler->SetValue( m_pTexFFTA.get() );
-			m_ffty->Begin( 0, 1 );
-			m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR1 );
+			m_ffty->Bind();
+			m_fftFbo2->SetDrawBuffer( m_pAttachFftB );
 		}
 		else
 		{
 			m_fftyImgSampler->SetValue( m_pTexFFTB.get() );
-			m_ffty->Begin( 0, 1 );
-			m_fftFbo2->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
+			m_ffty->Bind();
+			m_fftFbo2->SetDrawBuffer( m_pAttachFftA );
 		}
 
 		drawQuadFFTy();
-		m_ffty->End();
+		m_ffty->Unbind();
 	}
 
 	m_fftFbo2->Unbind();

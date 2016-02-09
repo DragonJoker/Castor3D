@@ -1,5 +1,10 @@
 #include "Importer.hpp"
 
+#include "Engine.hpp"
+#include "InitialiseEvent.hpp"
+#include "Mesh.hpp"
+#include "Submesh.hpp"
+
 using namespace Castor3D;
 using namespace Castor;
 
@@ -26,5 +31,12 @@ MeshSPtr Importer::ImportMesh( Path const & p_fileName, Parameters const & p_par
 	m_parameters = p_parameters;
 	m_nodes.clear();
 	m_geometries.clear();
-	return DoImportMesh();
+	MeshSPtr l_mesh = DoImportMesh();
+
+	for ( auto && l_submesh : *l_mesh )
+	{
+		GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+	}
+
+	return l_mesh;
 }

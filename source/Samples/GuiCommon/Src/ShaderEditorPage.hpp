@@ -29,7 +29,7 @@ namespace GuiCommon
 		: public wxPanel
 	{
 	public:
-		ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramBaseSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_ptPosition = wxDefaultPosition, const wxSize p_ptSize = wxSize( 800, 600 ) );
+		ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_ptPosition = wxDefaultPosition, const wxSize p_ptSize = wxSize( 800, 600 ) );
 		~ShaderEditorPage();
 
 		bool LoadFile( wxString const & p_file );
@@ -67,7 +67,7 @@ namespace GuiCommon
 		PropertiesHolder * m_frameVariablesProperties;
 		wxString m_shaderFile;
 		wxString m_shaderSource;
-		Castor3D::ShaderProgramBaseWPtr m_shaderProgram;
+		Castor3D::ShaderProgramWPtr m_shaderProgram;
 		Castor3D::eSHADER_TYPE m_shaderType;
 		Castor3D::eSHADER_MODEL m_shaderModel;
 		bool m_canEdit;

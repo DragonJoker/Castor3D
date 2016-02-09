@@ -14,7 +14,7 @@ namespace GlRender
 
 	template<> struct GlVariableApplyer< eFRAME_VARIABLE_TYPE_SAMPLER > : public GlVariableApplyerBase
 	{
-		typedef TextureBaseRPtr	value_type;
+		typedef TextureRPtr	value_type;
 
 		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
@@ -396,7 +396,7 @@ namespace GlRender
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlOneFrameVariable< TextureBaseRPtr > >( p_gl, p_occurences, p_program );
+			return std::make_shared< GlOneFrameVariable< TextureRPtr > >( p_gl, p_occurences, p_program );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
@@ -675,7 +675,7 @@ namespace GlRender
 	{
 	}
 
-	FrameVariableSPtr GlFrameVariableBuffer::DoCreateVariable( ShaderProgramBase * p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences )
+	FrameVariableSPtr GlFrameVariableBuffer::DoCreateVariable( ShaderProgram * p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences )
 	{
 		FrameVariableSPtr l_return;
 		GlVariableApplyerBaseSPtr l_pApplyer;
@@ -867,7 +867,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlFrameVariableBuffer::DoInitialise( ShaderProgramBase * p_program )
+	bool GlFrameVariableBuffer::DoInitialise( ShaderProgram * p_program )
 	{
 		uint32_t l_index = m_glBuffer.GetGlName();
 		bool l_return = false;

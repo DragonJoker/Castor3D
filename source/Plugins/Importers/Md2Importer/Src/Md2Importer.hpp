@@ -126,9 +126,9 @@ namespace Castor3D
 		virtual SceneSPtr DoImportScene();
 		virtual MeshSPtr DoImportMesh();
 
-		void DoReadMD2Data				( PassSPtr p_pPass );
-		void DoConvertDataStructures	( MeshSPtr p_pMesh );
-		void DoCleanUp					();
+		void DoReadMD2Data( PassSPtr p_pPass );
+		void DoConvertDataStructures( MeshSPtr p_pMesh );
+		void DoCleanUp();
 	};
 }
 

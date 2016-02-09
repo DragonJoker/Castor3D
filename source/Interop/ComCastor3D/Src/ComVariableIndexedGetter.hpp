@@ -35,7 +35,7 @@ namespace CastorCom
 		HRESULT operator()( _Index index, _Value * value )
 		{
 			HRESULT hr = E_POINTER;
-			
+
 			if ( m_instance )
 			{
 				if ( value )
@@ -83,7 +83,7 @@ namespace CastorCom
 		HRESULT operator()( _Index index, _Value * value )
 		{
 			HRESULT hr = E_POINTER;
-			
+
 			if ( m_instance )
 			{
 				if ( value )

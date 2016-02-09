@@ -38,7 +38,7 @@ namespace CastorCom
 		HRESULT operator()( _Value value )
 		{
 			HRESULT hr = E_POINTER;
-			
+
 			if ( m_instance )
 			{
 				if ( value )

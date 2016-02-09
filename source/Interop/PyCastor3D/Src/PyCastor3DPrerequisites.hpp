@@ -224,7 +224,7 @@ namespace cpy
 			( p_instance->*( this->m_function ) )() = p_value;
 		}
 	};
-	
+
 	struct VectorNormaliser
 	{
 		void operator()( Castor::Point3r * p_arg )
@@ -232,7 +232,7 @@ namespace cpy
 			Castor::point::normalise( *p_arg );
 		}
 	};
-	
+
 	struct VectorNegater
 	{
 		void operator()( Castor::Point3r * p_arg )
@@ -240,7 +240,7 @@ namespace cpy
 			Castor::point::negate( *p_arg );
 		}
 	};
-	
+
 	struct VectorLengther
 	{
 		void operator()( Castor::Point3r * p_arg )
@@ -248,7 +248,7 @@ namespace cpy
 			Castor::point::distance( *p_arg );
 		}
 	};
-	
+
 	struct VectorDotter
 	{
 		Castor::real operator()( Castor::Point3r const & p_1, Castor::Point3r const & p_2 )
@@ -256,7 +256,7 @@ namespace cpy
 			return Castor::point::dot( p_1, p_2 );
 		}
 	};
-	
+
 	struct VectorCrosser
 	{
 		Castor::Point3r operator()( Castor::Point3r const & p_1, Castor::Point3r const & p_2 )
@@ -264,7 +264,7 @@ namespace cpy
 			return p_1 ^ p_2;
 		}
 	};
-	
+
 	struct PxBufferCreator
 	{
 		Castor::PxBufferBaseSPtr operator()( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat )
@@ -595,7 +595,7 @@ namespace cpy
 
 		static inline value_type & get( vector_type & x, int i )
 		{
-			if ( i<0 )
+			if ( i < 0 )
 			{
 				i += x.size();
 			}
@@ -652,16 +652,16 @@ namespace cpy
 	inline py::class_< Cont > make_vector_wrapper( std::string const & p_name, Func p_accessor )
 	{
 		return py::class_< Cont >( p_name.c_str() )
-		.def( "__len__", &Cont::size )
-		.def( "clear", &Cont::clear )
-		.def( "append", &std_vector_wrapper< Cont >::add,
-			py::with_custodian_and_ward<1,2>()) // to let container keep value
-		.def( "__getitem__", &std_vector_wrapper< Cont >::get,
-			py::return_value_policy< py::copy_non_const_reference >() )
-		.def( "__setitem__", &std_vector_wrapper< Cont >::set,
-			py::with_custodian_and_ward< 1, 2 >()) // to let container keep value
-		.def( "__delitem__", &std_vector_wrapper< Cont >::del )
-		;
+			   .def( "__len__", &Cont::size )
+			   .def( "clear", &Cont::clear )
+			   .def( "append", &std_vector_wrapper< Cont >::add,
+					 py::with_custodian_and_ward<1, 2>() ) // to let container keep value
+			   .def( "__getitem__", &std_vector_wrapper< Cont >::get,
+					 py::return_value_policy< py::copy_non_const_reference >() )
+			   .def( "__setitem__", &std_vector_wrapper< Cont >::set,
+					 py::with_custodian_and_ward< 1, 2 >() ) // to let container keep value
+			   .def( "__delitem__", &std_vector_wrapper< Cont >::del )
+			   ;
 	}
 
 	inline void KeyError()
@@ -680,7 +680,7 @@ namespace cpy
 		{
 			auto it = x.find( i );
 
-			if( it != x.end() ) 
+			if ( it != x.end() )
 			{
 				return it->second;
 			}
@@ -697,7 +697,7 @@ namespace cpy
 		{
 			auto it = x.find( i );
 
-			if( it != x.end() ) 
+			if ( it != x.end() )
 			{
 				x.erase( i );
 			}
@@ -712,14 +712,14 @@ namespace cpy
 	inline py::class_< Cont > make_map_wrapper( std::string const & p_name, Func p_accessor )
 	{
 		return py::class_< Cont >( p_name.c_str() )
-		.def( "__len__", &Cont::size )
-		.def( "clear", &Cont::clear )
-		.def( "__getitem__", &std_map_wrapper< Cont >::get,
-			py::return_value_policy< py::copy_non_const_reference >() )
-		.def( "__setitem__", &std_map_wrapper< Cont >::set,
-			py::with_custodian_and_ward< 1, 2 >() ) // to let container keep value
-		.def( "__delitem__", &std_map_wrapper< Cont >::del )
-		;
+			   .def( "__len__", &Cont::size )
+			   .def( "clear", &Cont::clear )
+			   .def( "__getitem__", &std_map_wrapper< Cont >::get,
+					 py::return_value_policy< py::copy_non_const_reference >() )
+			   .def( "__setitem__", &std_map_wrapper< Cont >::set,
+					 py::with_custodian_and_ward< 1, 2 >() ) // to let container keep value
+			   .def( "__delitem__", &std_map_wrapper< Cont >::del )
+			   ;
 	}
 }
 

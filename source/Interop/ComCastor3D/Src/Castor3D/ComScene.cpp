@@ -2,7 +2,7 @@
 #include "ComGeometry.hpp"
 #include "ComCamera.hpp"
 #include "ComLight.hpp"
-#include "ComTextureBase.hpp"
+#include "ComTexture.hpp"
 
 #include <BillboardManager.hpp>
 #include <CameraManager.hpp>
@@ -141,7 +141,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					auto l_camera = m_internal->GetCameraManager().Create( FromBstr( name ), node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr );
+					auto l_camera = m_internal->GetCameraManager().Create( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr );
 					l_camera->GetViewport().SetSize( Castor::Size( ww, wh ) );
 					static_cast< CCamera * >( *pVal )->SetInternal( l_camera );
 				}
@@ -173,7 +173,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightManager().Create( FromBstr( name ), node ? static_cast< CSceneNode* >( node )->GetInternal() : nullptr, Castor3D::eLIGHT_TYPE( type ) ) );
+					static_cast< CLight * >( *pVal )->SetInternal( m_internal->GetLightManager().Create( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr, Castor3D::eLIGHT_TYPE( type ) ) );
 				}
 			}
 		}
@@ -199,11 +199,11 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-                hr = CSceneNode::CreateInstance( pVal );
+				hr = CSceneNode::CreateInstance( pVal );
 
 				if ( hr == S_OK )
 				{
-                    static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeManager().Find( FromBstr( name ) ) );
+					static_cast< CSceneNode * >( *pVal )->SetInternal( m_internal->GetSceneNodeManager().Find( FromBstr( name ) ) );
 				}
 			}
 		}
@@ -415,7 +415,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::GetBackgroundImage( /* [out, retval] */ ITextureBase ** pVal )
+	STDMETHODIMP CScene::GetBackgroundImage( /* [out, retval] */ ITexture ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -423,11 +423,11 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				hr = CTextureBase::CreateInstance( pVal );
+				hr = CTexture::CreateInstance( pVal );
 
 				if ( hr == S_OK )
 				{
-					static_cast< CTextureBase * >( *pVal )->SetInternal( m_internal->GetBackgroundImage() );
+					static_cast< CTexture * >( *pVal )->SetInternal( m_internal->GetBackgroundImage() );
 				}
 			}
 		}

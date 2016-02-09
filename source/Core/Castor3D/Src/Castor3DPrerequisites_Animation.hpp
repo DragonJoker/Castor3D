@@ -81,15 +81,13 @@ namespace Castor3D
 	class AnimatedObjectGroup;
 	class Bone;
 	class Skeleton;
+	class BonedVertex;
 	struct stVERTEX_BONE_DATA;
 	template< typename T > class KeyFrame;
 
 	using AnimationStateMap = std::map< Castor::String, eANIMATION_STATE >;
-
 	using Point3rKeyFrame = KeyFrame< Castor::Point3r >;
 	using QuaternionKeyFrame = KeyFrame< Castor::Quaternion >;
-
-	using VertexWeight = std::pair< uint32_t, real >;//!<\~english Vertex weight, a simple pair of ID and weight	\~french Poids de vertice, simple paire d'un ID et du poids
 
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimationObjectBase );
@@ -101,6 +99,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Bone );
 	DECLARE_SMART_PTR( Skeleton );
 	DECLARE_SMART_PTR( Animable );
+	DECLARE_SMART_PTR( BonedVertex );
 
 	//! AnimatedObjectGroup pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
@@ -114,14 +113,14 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimationObjectBaseSPtr, AnimationObjectPtrStr );
-	//! VertexWeight pointer array
-	DECLARE_VECTOR( VertexWeight, VertexWeight );
 	//! Animation pointer array
 	DECLARE_VECTOR( AnimationSPtr, AnimationPtr );
 	//! Bone pointer array
 	DECLARE_VECTOR( BoneSPtr, BonePtr );
-	//! MovingObject pointer array
+	//! AnimationObjectBase pointer array
 	DECLARE_VECTOR( AnimationObjectBaseSPtr, AnimationObjectPtr );
+	//! BonedVertex pointer array
+	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
 
 	//@}
 }

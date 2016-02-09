@@ -36,7 +36,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlIndexBufferObject::AttachTo( ShaderProgramBaseSPtr )
+	bool GlIndexBufferObject::AttachTo( ShaderProgramSPtr )
 	{
 		return true;
 	}

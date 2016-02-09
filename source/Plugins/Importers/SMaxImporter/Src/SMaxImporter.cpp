@@ -38,25 +38,30 @@ SMaxImporter::SMaxImporter( Engine & p_pEngine )
 
 SceneSPtr SMaxImporter::DoImportScene()
 {
-	MeshSPtr l_pMesh = DoImportMesh();
-	SceneSPtr l_pScene;
+	MeshSPtr l_mesh = DoImportMesh();
+	SceneSPtr l_scene;
 
-	if ( l_pMesh )
+	if ( l_mesh )
 	{
-		l_pMesh->GenerateBuffers();
-		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetEngine() );
-		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
-		l_pGeometry->AttachTo( l_pNode );
-		l_pGeometry->SetMesh( l_pMesh );
+		l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetEngine() );
+		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+		l_geometry->AttachTo( l_node );
+
+		for ( auto && l_submesh : *l_mesh )
+		{
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+		}
+
+		l_geometry->SetMesh( l_mesh );
 	}
 
-	return l_pScene;
+	return l_scene;
 }
 
 MeshSPtr SMaxImporter::DoImportMesh()
 {
-	MeshSPtr l_pMesh;
+	MeshSPtr l_mesh;
 	UIntArray l_faces;
 	RealArray l_sizes;
 	String l_nodeName = m_fileName.GetFileName();
@@ -67,18 +72,18 @@ MeshSPtr SMaxImporter::DoImportMesh()
 
 	if ( m_pFile->IsOk() )
 	{
-		l_pMesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+		l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 		DoReadChunk( &l_currentChunk );
 
 		if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
 		{
-			DoProcessNextChunk( &l_currentChunk, l_pMesh );
-			l_pMesh->ComputeNormals();
+			DoProcessNextChunk( &l_currentChunk, l_mesh );
+			l_mesh->ComputeNormals();
 		}
 	}
 
 	delete m_pFile;
-	return l_pMesh;
+	return l_mesh;
 }
 
 void SMaxImporter::DoProcessNextChunk( SMaxChunk * p_pChunk, MeshSPtr p_pMesh )

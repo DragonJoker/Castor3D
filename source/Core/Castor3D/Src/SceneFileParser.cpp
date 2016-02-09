@@ -433,14 +433,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
 
-	AddParser( eSECTION_HLSL_SHADER, cuT( "vertex_program" ), Parser_VertexShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "pixel_program" ), Parser_PixelShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "geometry_program" ), Parser_GeometryShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "hull_program" ), Parser_HullShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "domain_program" ), Parser_DomainShader );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_HLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
-
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "file" ), Parser_ShaderProgramFile, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapModels, ePARAMETER_TYPE_PATH );
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "sampler" ), Parser_ShaderProgramSampler, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "input_type" ), Parser_GeometryInputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveTypes );
@@ -449,8 +441,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, 1, ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT, &l_pContext->m_mapShaderTypes );
 	AddParser( eSECTION_SHADER_UBO, cuT( "variable" ), Parser_ShaderUboVariable, 1, ePARAMETER_TYPE_NAME );
-
-	AddParser( eSECTION_SHADER_SAMPLER, cuT( "value" ), Parser_ShaderSamplerValue, 1, ePARAMETER_TYPE_INT32 );
 
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "count" ), Parser_ShaderVariableCount, 1, ePARAMETER_TYPE_UINT32 );
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapVariableTypes );

@@ -14,7 +14,7 @@ namespace Castor3D
 	const xchar * FrameVariableDataTyper< uint32_t >::DataTypeName = cuT( "uint" );
 	const xchar * FrameVariableDataTyper< float >::DataTypeName = cuT( "float" );
 	const xchar * FrameVariableDataTyper< double >::DataTypeName = cuT( "double" );
-	const xchar * FrameVariableDataTyper< TextureBase * >::DataTypeName = cuT( "sampler" );
+	const xchar * FrameVariableDataTyper< Texture * >::DataTypeName = cuT( "sampler" );
 
 	//*************************************************************************************************
 
@@ -23,7 +23,7 @@ namespace Castor3D
 	const xchar * OneFrameVariableDefinitions< uint32_t >::FullTypeName = cuT( "uint" );
 	const xchar * OneFrameVariableDefinitions< float >::FullTypeName = cuT( "float" );
 	const xchar * OneFrameVariableDefinitions< double >::FullTypeName = cuT( "double" );
-	const xchar * OneFrameVariableDefinitions< TextureBase * >::FullTypeName = cuT( "sampler" );
+	const xchar * OneFrameVariableDefinitions< Texture * >::FullTypeName = cuT( "sampler" );
 
 	//*************************************************************************************************
 
@@ -133,7 +133,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	FrameVariable::FrameVariable( ShaderProgramBase * p_program )
+	FrameVariable::FrameVariable( ShaderProgram * p_program )
 		: m_changed( true )
 		, m_occurences( 1 )
 		, m_strValue( 1 )
@@ -141,7 +141,7 @@ namespace Castor3D
 	{
 	}
 
-	FrameVariable::FrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences )
+	FrameVariable::FrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
 		: m_changed( true )
 		, m_occurences( p_occurences )
 		, m_strValue( m_occurences )

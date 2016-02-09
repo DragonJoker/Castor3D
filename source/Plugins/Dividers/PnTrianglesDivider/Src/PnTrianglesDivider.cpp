@@ -81,7 +81,7 @@ namespace PnTriangles
 			Castor3D::Vertex::GetNormal( l_point, l_normal );
 			l_posnml.insert( std::make_pair( i++, Castor::PlaneEquation< double >( Point3d( l_normal[0], l_normal[1], l_normal[2] ), Point3d( l_position[0], l_position[1], l_position[2] ) ) ) );
 		}
-		
+
 		for ( auto && l_face : l_facesArray )
 		{
 			DoComputeFaces( 0.0, 0.0, 1.0, 1.0, m_occurences, Patch( l_posnml[l_face->GetVertexIndex( 0 )], l_posnml[l_face->GetVertexIndex( 1 )], l_posnml[l_face->GetVertexIndex( 2 )] ) );
@@ -125,15 +125,15 @@ namespace PnTriangles
 		double w3 = double( w2 * w );
 
 		Point3r l_point = Point3r( p_patch.b300 * w3
-			+ p_patch.b030 * u3
-			+ p_patch.b003 * v3
-			+ p_patch.b210 * 3.0 * w2 * u
-			+ p_patch.b120 * 3.0 * w * u2
-			+ p_patch.b201 * 3.0 * w2 * v
-			+ p_patch.b021 * 3.0 * u2 * v
-			+ p_patch.b102 * 3.0 * w * v2
-			+ p_patch.b012 * 3.0 * u * v2
-			+ p_patch.b111 * 6.0 * w * u * v );
+								   + p_patch.b030 * u3
+								   + p_patch.b003 * v3
+								   + p_patch.b210 * 3.0 * w2 * u
+								   + p_patch.b120 * 3.0 * w * u2
+								   + p_patch.b201 * 3.0 * w2 * v
+								   + p_patch.b021 * 3.0 * u2 * v
+								   + p_patch.b102 * 3.0 * w * v2
+								   + p_patch.b012 * 3.0 * u * v2
+								   + p_patch.b111 * 6.0 * w * u * v );
 
 		return DoTryAddPoint( l_point );
 	}

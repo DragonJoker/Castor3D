@@ -44,19 +44,24 @@ namespace Lwo
 
 	SceneSPtr LwoImporter::DoImportScene()
 	{
-		MeshSPtr l_pMesh = DoImportMesh();
-		SceneSPtr l_pScene;
+		MeshSPtr l_mesh = DoImportMesh();
+		SceneSPtr l_scene;
 
-		if ( l_pMesh )
+		if ( l_mesh )
 		{
-			l_pMesh->GenerateBuffers();
-			l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetEngine() );
-			SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-			GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
-			l_pGeometry->SetMesh( l_pMesh );
+			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetEngine() );
+			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+
+			for ( auto && l_submesh : *l_mesh )
+			{
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+			}
+
+			l_geometry->SetMesh( l_mesh );
 		}
 
-		return l_pScene;
+		return l_scene;
 	}
 
 	MeshSPtr LwoImporter::DoImportMesh()
@@ -98,8 +103,8 @@ namespace Lwo
 		if ( l_bReturn )
 		{
 			p_pChunk->m_uiRead = 0;
-			m_pFile->Read(		p_pChunk->m_eId		);
-			SwitchEndianness( p_pChunk->m_eId		);
+			m_pFile->Read(	p_pChunk->m_eId	);
+			SwitchEndianness( p_pChunk->m_eId	);
 			l_bReturn = DoIsTagId( p_pChunk->m_eId ) && m_pFile->IsOk();
 			char l_szId[5];
 			StringStream l_strLog;
@@ -107,8 +112,8 @@ namespace Lwo
 
 			if ( l_bReturn )
 			{
-				m_pFile->Read(		p_pChunk->m_uiSize	);
-				SwitchEndianness( p_pChunk->m_uiSize 	);
+				m_pFile->Read(	p_pChunk->m_uiSize	);
+				SwitchEndianness( p_pChunk->m_uiSize	);
 				l_strLog << cuT( "Chunk : " ) << l_szId << cuT( ", " ) << p_pChunk->m_uiSize;
 				l_bReturn = m_pFile->IsOk();
 			}
@@ -351,8 +356,8 @@ namespace Lwo
 		if ( l_bReturn )
 		{
 			p_pSubchunk->m_usRead = 0;
-			m_pFile->Read(		p_pSubchunk->m_eId		);
-			SwitchEndianness( p_pSubchunk->m_eId		);
+			m_pFile->Read(	p_pSubchunk->m_eId	);
+			SwitchEndianness( p_pSubchunk->m_eId	);
 			l_bReturn = DoIsTagId( p_pSubchunk->m_eId ) && m_pFile->IsOk();
 			char l_szId[5];
 			StringStream l_strLog;
@@ -360,8 +365,8 @@ namespace Lwo
 
 			if ( l_bReturn )
 			{
-				m_pFile->Read(		p_pSubchunk->m_usSize	);
-				SwitchEndianness( p_pSubchunk->m_usSize 	);
+				m_pFile->Read(	p_pSubchunk->m_usSize	);
+				SwitchEndianness( p_pSubchunk->m_usSize	);
 				l_strLog << p_strTabs << cuT( "Subchunk : " ) << l_szId << cuT( ", " ) << p_pSubchunk->m_usSize;
 				l_bReturn = m_pFile->IsOk();
 			}
@@ -857,7 +862,7 @@ namespace Lwo
 				break;
 
 			case eTEX_CHANNEL_GLOS:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_GLOSS		);
+				p_pTexture->SetChannel( eTEXTURE_CHANNEL_GLOSS	);
 				break;
 
 			case eTEX_CHANNEL_TRAN:
@@ -865,7 +870,7 @@ namespace Lwo
 				break;
 
 			case eTEX_CHANNEL_BUMP:
-				p_pTexture->SetChannel( eTEXTURE_CHANNEL_NORMAL		);
+				p_pTexture->SetChannel( eTEXTURE_CHANNEL_NORMAL	);
 				break;
 			}
 		}
@@ -1136,25 +1141,25 @@ namespace Lwo
 				switch ( l_currentSubchunk.m_eId )
 				{
 				case eID_TAG_CLIP_STIL:
+				{
+					DoRead( l_strName );
+					l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
+					Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
+					l_pathImage = string::string_cast< xchar >( l_strName );
+
+					if ( !File::FileExists( l_pathImage ) )
 					{
-						DoRead( l_strName );
-						l_currentSubchunk.m_usRead += UI2( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
-						Logger::LogDebug( cuT( "		Image : " ) + string::string_cast< xchar >( l_strName ) );
-						l_pathImage = string::string_cast< xchar >( l_strName );
-
-						if ( !File::FileExists( l_pathImage ) )
-						{
-							l_pathImage = m_pFile->GetFilePath() / l_pathImage;
-						}
-
-						if ( !File::FileExists( l_pathImage ) )
-						{
-							l_pathImage = m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage;
-						}
-
-						ImageSPtr l_pImage = GetEngine()->GetImageManager().create( string::string_cast< xchar >( l_strName ), l_pathImage );
-						break;
+						l_pathImage = m_pFile->GetFilePath() / l_pathImage;
 					}
+
+					if ( !File::FileExists( l_pathImage ) )
+					{
+						l_pathImage = m_pFile->GetFilePath() / cuT( "Texture" ) / l_pathImage;
+					}
+
+					ImageSPtr l_pImage = GetEngine()->GetImageManager().create( string::string_cast< xchar >( l_strName ), l_pathImage );
+					break;
+				}
 
 				case eID_TAG_CLIP_ANIM:
 				case eID_TAG_CLIP_XREF:
@@ -1239,7 +1244,7 @@ namespace Lwo
 		if ( l_bContinue )
 		{
 			p_pChunk->m_uiRead += UI4( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
-			SwitchEndianness( l_eType		);
+			SwitchEndianness( l_eType	);
 			SwitchEndianness( l_usDimension	);
 		}
 
@@ -1422,7 +1427,7 @@ namespace Lwo
 		if ( l_bContinue )
 		{
 			SwitchEndianness( l_usNumber	);
-			SwitchEndianness( l_usFlags		);
+			SwitchEndianness( l_usFlags	);
 			SwitchEndianness( l_ptPivot[0]	);
 			SwitchEndianness( l_ptPivot[1]	);
 			SwitchEndianness( l_ptPivot[2]	);

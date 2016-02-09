@@ -148,17 +148,17 @@ namespace CastorViewer
 				GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
 				GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
 				m_pListener = p_window->GetListener();
-				SceneSPtr l_pScene = p_window->GetScene();
+				SceneSPtr l_scene = p_window->GetScene();
 				wxDisplay l_wxDisplay;
 				wxRect l_rect( 0, 0, l_sizeScreen.width(), l_sizeScreen.height() );
 
-				if ( l_pScene )
+				if ( l_scene )
 				{
 					m_cameraNode = p_window->GetCamera()->GetParent();
 
-					if ( l_pScene->GetSceneNodeManager().Has( cuT( "PointLightsNode" ) ) )
+					if ( l_scene->GetSceneNodeManager().Has( cuT( "PointLightsNode" ) ) )
 					{
-						m_lightsNode = l_pScene->GetSceneNodeManager().Find( cuT( "PointLightsNode" ) );
+						m_lightsNode = l_scene->GetSceneNodeManager().Find( cuT( "PointLightsNode" ) );
 					}
 
 					m_ptOriginalPosition = m_cameraNode->GetPosition();

@@ -86,13 +86,13 @@ namespace Castor
 		template< typename T >
 		SquareMatrix< T, 4 > & yaw( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle )
 		{
-			return rotate( p_matrix, p_angle, Point< T, 3 >( 0, 1, 0 ) );
+			return rotate( p_matrix, Quaternion( Point< T, 3 >( 0, 1, 0 ), p_angle ) );
 		}
 
 		template< typename T >
 		SquareMatrix< T, 4 > & pitch( SquareMatrix< T, 4 > & p_matrix, Angle const & p_angle )
 		{
-			return rotate( p_matrix, p_angle, Point< T, 3 >( 0, 0, 1 ) );
+			return rotate( p_matrix, Quaternion( Point< T, 3 >( 0, 0, 1 ), p_angle ) );
 		}
 
 		template< typename T >

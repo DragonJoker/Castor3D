@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_MATERIAL_H__
 #define __COMC3D_COM_MATERIAL_H__
 
-#include "ComTextureBase.hpp"
+#include "ComTexture.hpp"
 
 #include <Material.hpp>
 

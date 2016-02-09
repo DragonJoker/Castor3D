@@ -2067,7 +2067,7 @@ namespace Castor3D
 			SetTexCoord( p_element.ptr(), x, y, z );
 		}
 
-	protected:
+	private:
 		//!\~english Vertex position elements count	\~french Compte des élément de la position du vertex
 		static const uint32_t sm_uiCountPos = 3;
 		//!\~english Vertex normal elements count	\~french Compte des élément de la normale du vertex

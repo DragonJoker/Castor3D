@@ -25,7 +25,7 @@ MeshGeneratorSPtr Torus::Create()
 	return std::make_shared< Torus >();
 }
 
-void Torus::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Torus::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 {
 	m_rInternalRadius = std::abs( p_dimensions[0] );
 	m_rExternalRadius = std::abs( p_dimensions[1] );

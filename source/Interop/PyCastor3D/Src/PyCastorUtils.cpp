@@ -33,7 +33,7 @@ void ExportCastorUtils()
 	py::scope().attr( "utils" ) = l_module;
 	// Set the current scope to the new sub-module
 	py::scope l_scope = l_module;
-	
+
 	/**@group_name ePIXEL_FORMAT	*/
 	//@{
 	py::enum_< ePIXEL_FORMAT >( "PixelFormat" )
@@ -168,9 +168,9 @@ void ExportCastorUtils()
 	Point3f & ( Quaternion::*quaternionTransform )( Point3f const &, Point3f & )const = &Quaternion::transform;
 	void ( Quaternion::*quaternionToMatrix )( Matrix4x4r & )const = &Quaternion::to_matrix;
 	void ( Quaternion::*quaternionFromMatrix )( Matrix4x4r const & ) = &Quaternion::from_matrix;
-	Quaternion ( Quaternion::*quaternionLerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::lerp;
-	Quaternion ( Quaternion::*quaternionMix )( Quaternion const & p_target, float p_factor )const = &Quaternion::mix;
-	Quaternion ( Quaternion::*quaternionSlerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::slerp;
+	Quaternion( Quaternion::*quaternionLerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::lerp;
+	Quaternion( Quaternion::*quaternionMix )( Quaternion const & p_target, float p_factor )const = &Quaternion::mix;
+	Quaternion( Quaternion::*quaternionSlerp )( Quaternion const & p_target, float p_factor )const = &Quaternion::slerp;
 	py::class_< Quaternion >( "Quaternion", py::init< Point3r const &, Angle const & >() )
 	.add_property( "rotation_matrix", quaternionToMatrix, quaternionFromMatrix, "The quaternion's rotation matrix" )
 	.def( "transform", py::make_function( quaternionTransform, py::return_value_policy< py::reference_existing_object >() ) )

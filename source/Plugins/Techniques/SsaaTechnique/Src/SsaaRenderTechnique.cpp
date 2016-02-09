@@ -248,9 +248,9 @@ namespace Ssaa
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
-				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
-													 FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+													 FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 													 l_output );
 			}
 			ROF;
@@ -260,9 +260,9 @@ namespace Ssaa
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
-				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputePointLight( l_lighting->GetPointLight( i ), l_worldEye, l_fMatShininess,
-											   FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+											   FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											   l_output );
 			}
 			ROF;
@@ -272,9 +272,9 @@ namespace Ssaa
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
-				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeSpotLight( l_lighting->GetSpotLight( i ), l_worldEye, l_fMatShininess,
-											  FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+											  FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 											  l_output );
 			}
 			ROF;

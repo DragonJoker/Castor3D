@@ -132,7 +132,7 @@
  *<li>Passes now initialise their shaders in Pass::Initialiser instead of trying to do it at each frame.</li>
  *<li>Changed RenderTarget : now it only holds frame buffer and all needed for that. It is now a Renderable so TargetRenderer has been created.</li>
  *<li>RenderWindow no longer extends RenderTarget, but now it has a RenderTarget as a private class member.</li>
- *<li>Created TextureBase class, StaticTexture and DynamicTexture to help implementing render targets.</li>
+ *<li>Created Texture class, StaticTexture and DynamicTexture to help implementing render targets.</li>
  *<li>RenderTarget now uses RenderTechnique to make its rendering.</li>
  *<li>Created GeometryBuffers class which holds a Vertex buffer and an Index buffer, they are created by the RenderSystem.</li>
  *<li>Moved RenderTechnique basic frame buffer, texture and depth buffer into RenderTarget.</li>
@@ -395,7 +395,7 @@
  *<li>Ajout de la classe FrameVariableBuffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
  *<li>Ajout de la classe DepthStencilState pour gérer ces états à la mode Direct3D 11 (qui fait ça bien).</li>
  *<li>De même, ajout des classes BlendState et RasteriserState.</li>
- *<li>Création des classes TextureBase, StaticTexture et DynamicTexture pour faciliter l'implémentation des cibles de rendu.</li>
+ *<li>Création des classes Texture, StaticTexture et DynamicTexture pour faciliter l'implémentation des cibles de rendu.</li>
  *<li>Ajout de canaux pour les textures (couleur, ambiante, diffusion, speculaire, normale, hauteur, brillance).</li>
  *<li>Création de la classe TechniqueParameters pour passer des paramètres spécifiques aux techniques comme, par exemple, le nombre d'échantillons (pour le MSAA).</li>
  *<li>Introduction de la classe SamplerState pour grouper les appels à SetSamplerState et autres.</li>

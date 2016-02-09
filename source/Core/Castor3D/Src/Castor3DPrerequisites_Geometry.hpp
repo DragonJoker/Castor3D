@@ -60,6 +60,7 @@ namespace Castor3D
 	}	eNORMAL;
 
 	class Vertex;
+	class VertexLayout;
 	class BufferElementGroup;
 
 	DECLARE_SMART_PTR( Vertex );

@@ -62,7 +62,7 @@ namespace GuiCommon
 		}
 	}
 
-	wxPGProperty * SceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureBaseSPtr p_texture )
+	wxPGProperty * SceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureSPtr p_texture )
 	{
 		wxPGProperty * l_property = NULL;
 

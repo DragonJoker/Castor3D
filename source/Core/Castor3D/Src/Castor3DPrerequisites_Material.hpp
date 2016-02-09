@@ -351,7 +351,7 @@ namespace Castor3D
 		eLIGHT_INDEXES_COUNT,
 	}	eLIGHT_INDEXES;
 
-	class TextureBase;
+	class Texture;
 	class StaticTexture;
 	class DynamicTexture;
 	class TextureUnit;
@@ -359,7 +359,7 @@ namespace Castor3D
 	class Pass;
 	class Sampler;
 
-	DECLARE_SMART_PTR( TextureBase );
+	DECLARE_SMART_PTR( Texture );
 	DECLARE_SMART_PTR( StaticTexture );
 	DECLARE_SMART_PTR( DynamicTexture );
 	DECLARE_SMART_PTR( TextureUnit );

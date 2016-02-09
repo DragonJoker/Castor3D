@@ -33,7 +33,7 @@ namespace Castor3D
 	\remark		Une texture statique peut mettre à jour son buffer
 	*/
 	class DynamicTexture
-		: public TextureBase
+		: public Texture
 	{
 	public:
 		/**
@@ -57,19 +57,19 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~DynamicTexture();
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual bool Initialise( uint32_t p_index );
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual void Cleanup();
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual bool BindAt( uint32_t p_index );
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual void UnbindFrom( uint32_t p_index );
 		/**
@@ -184,7 +184,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
 
-		using TextureBase::SetImage;
+		using Texture::SetImage;
 
 	private:
 		//!\~english The texture render target	\~french La cible de rendu

@@ -26,7 +26,7 @@ namespace Castor3D
 		{
 			Point3r l_position = l_pCamera->GetParent()->GetDerivedPosition();
 			Point3rFrameVariableSPtr l_cameraPos;
-			p_sceneBuffer.GetVariable( ShaderProgramBase::CameraPos, l_cameraPos );
+			p_sceneBuffer.GetVariable( ShaderProgram::CameraPos, l_cameraPos );
 
 			if ( l_cameraPos )
 			{

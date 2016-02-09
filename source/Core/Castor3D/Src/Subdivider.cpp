@@ -141,7 +141,8 @@ namespace Castor3D
 	{
 		if ( m_bGenerateBuffers )
 		{
-			m_submesh->ResetGpuBuffers();
+			// TODO Replace by something appropriate:
+			// m_submesh->ResetGpuBuffers();
 		}
 	}
 
@@ -156,7 +157,6 @@ namespace Castor3D
 
 		if ( m_bGenerateBuffers && !m_bThreaded )
 		{
-			m_submesh->GenerateBuffers();
 			m_submesh->Initialise();
 		}
 

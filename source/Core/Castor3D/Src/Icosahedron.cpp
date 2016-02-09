@@ -25,7 +25,7 @@ MeshGeneratorSPtr Icosahedron::Create()
 	return std::make_shared< Icosahedron >();
 }
 
-void Icosahedron::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Icosahedron::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 {
 	m_radius = p_dimensions[0];
 

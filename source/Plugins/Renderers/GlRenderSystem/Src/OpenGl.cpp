@@ -13,14 +13,17 @@ using namespace Castor;
 #define DEF_USE_DIRECT_STATE_ACCESS 0
 
 
-#define GL_GET_FUNC( func, ext )\
-	if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ), m_pfn##func ) )\
-	{\
-		if( !gl_api::GetFunction( cuT( "gl" ) + string::string_cast< xchar >( #func ) + string::string_cast< xchar >( #ext ), m_pfn##func ) )\
-		{\
-			Logger::LogWarning( cuT( "Unable to retrieve function gl" ) + string::string_cast< xchar >( #func ) );\
-		}\
+template< typename T >
+inline void GetFunction( T & p_function, String const & p_name, String const & p_extension )
+{
+	if ( !gl_api::GetFunction( p_name, p_function ) )
+	{
+		if ( !gl_api::GetFunction( p_name + p_extension, p_function ) )
+		{
+			Logger::LogWarning( cuT( "Unable to retrieve function " ) + p_name );
+		}
 	}
+}
 
 //*************************************************************************************************
 
@@ -44,9 +47,9 @@ TexFunctions::TexFunctions( OpenGl & p_gl )
 	m_pfnTexParameteriv = &glTexParameteriv;
 	m_pfnTexParameterfv = &glTexParameterfv;
 	m_pfnGetTexImage = &glGetTexImage;
-	GL_GET_FUNC( TexImage3D, EXT );
-	GL_GET_FUNC( TexSubImage3D, EXT );
-	GL_GET_FUNC( GenerateMipmap, EXT );
+	GetFunction( m_pfnTexImage3D, cuT( "glTexImage3D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTexSubImage3D, cuT( "glTexSubImage3D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnGenerateMipmap, cuT( "glGenerateMipmap" ), cuT( "EXT" ) );
 }
 
 bool TexFunctions::GenerateMipmap( eGL_TEXDIM mode )
@@ -189,18 +192,18 @@ TexFunctionsDSA::TexFunctionsDSA( OpenGl & p_gl )
 	, m_pfnTextureImage2D()
 	, m_pfnTextureImage3D()
 {
-	GL_GET_FUNC( TextureSubImage1D, EXT );
-	GL_GET_FUNC( TextureSubImage2D, EXT );
-	GL_GET_FUNC( TextureSubImage3D, EXT );
-	GL_GET_FUNC( TextureImage1D, EXT );
-	GL_GET_FUNC( TextureImage2D, EXT );
-	GL_GET_FUNC( TextureImage3D, EXT );
-	GL_GET_FUNC( TextureParameteri, EXT );
-	GL_GET_FUNC( TextureParameterf, EXT );
-	GL_GET_FUNC( TextureParameteriv, EXT );
-	GL_GET_FUNC( TextureParameterfv, EXT );
-	GL_GET_FUNC( GetTextureImage, EXT );
-	GL_GET_FUNC( GenerateTextureMipmap, EXT );
+	GetFunction( m_pfnTextureSubImage1D, cuT( "glTextureSubImage1D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureSubImage2D, cuT( "glTextureSubImage2D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureSubImage3D, cuT( "glTextureSubImage3D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureImage1D, cuT( "glTextureImage1D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureImage2D, cuT( "glTextureImage2D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureImage3D, cuT( "glTextureImage3D" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureParameteri, cuT( "glTextureParameteri" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureParameterf, cuT( "glTextureParameterf" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureParameteriv, cuT( "glTextureParameteriv" ), cuT( "EXT" ) );
+	GetFunction( m_pfnTextureParameterfv, cuT( "glTextureParameterfv" ), cuT( "EXT" ) );
+	GetFunction( m_pfnGetTextureImage, cuT( "glGetTextureImage" ), cuT( "EXT" ) );
+	GetFunction( m_pfnGenerateTextureMipmap, cuT( "glGenerateTextureMipmap" ), cuT( "EXT" ) );
 }
 
 bool TexFunctionsDSA::GenerateMipmap( eGL_TEXDIM mode )
@@ -332,43 +335,31 @@ BufFunctionsBase::BufFunctionsBase( OpenGl & p_gl )
 {
 	if ( p_gl.HasExtension( NV_shader_buffer_load ) )
 	{
-		GL_GET_FUNC( MakeBufferResident, NV );
-		GL_GET_FUNC( MakeBufferNonResident, NV );
-		GL_GET_FUNC( IsBufferResident, NV );
-		GL_GET_FUNC( MakeNamedBufferResident, NV );
-		GL_GET_FUNC( MakeNamedBufferNonResident, NV );
-		GL_GET_FUNC( IsNamedBufferResident, NV );
-		GL_GET_FUNC( GetBufferParameterui64v, NV );
-		GL_GET_FUNC( GetNamedBufferParameterui64v, NV );
+		GetFunction( m_pfnMakeBufferResident, cuT( "glMakeBufferResident" ), cuT( "NV" ) );
+		GetFunction( m_pfnMakeBufferNonResident, cuT( "glMakeBufferNonResident" ), cuT( "NV" ) );
+		GetFunction( m_pfnIsBufferResident, cuT( "glIsBufferResident" ), cuT( "NV" ) );
+		GetFunction( m_pfnMakeNamedBufferResident, cuT( "glMakeNamedBufferResident" ), cuT( "NV" ) );
+		GetFunction( m_pfnMakeNamedBufferNonResident, cuT( "glMakeNamedBufferNonResident" ), cuT( "NV" ) );
+		GetFunction( m_pfnIsNamedBufferResident, cuT( "glIsNamedBufferResident" ), cuT( "NV" ) );
+		GetFunction( m_pfnGetBufferParameterui64v, cuT( "glGetBufferParameterui64v" ), cuT( "NV" ) );
+		GetFunction( m_pfnGetNamedBufferParameterui64v, cuT( "glGetNamedBufferParameterui64v" ), cuT( "NV" ) );
 	}
 
 	if ( p_gl.HasExtension( NV_vertex_buffer_unified_memory ) )
 	{
-		GL_GET_FUNC( BufferAddressRange, NV );
-		GL_GET_FUNC( VertexFormat, NV );
-		GL_GET_FUNC( NormalFormat, NV );
-		GL_GET_FUNC( ColorFormat, NV );
-		GL_GET_FUNC( IndexFormat, NV );
-		GL_GET_FUNC( TexCoordFormat, NV );
-		GL_GET_FUNC( EdgeFlagFormat, NV );
-		GL_GET_FUNC( SecondaryColorFormat, NV );
-		GL_GET_FUNC( FogCoordFormat, NV );
-		GL_GET_FUNC( VertexAttribFormat, NV );
-		GL_GET_FUNC( VertexAttribIFormat, NV );
+		GetFunction( m_pfnBufferAddressRange, cuT( "glBufferAddressRange" ), cuT( "NV" ) );
+		GetFunction( m_pfnVertexFormat, cuT( "glVertexFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnNormalFormat, cuT( "glNormalFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnColorFormat, cuT( "glColorFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnIndexFormat, cuT( "glIndexFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnTexCoordFormat, cuT( "glTexCoordFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnEdgeFlagFormat, cuT( "glEdgeFlagFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnSecondaryColorFormat, cuT( "glSecondaryColorFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnFogCoordFormat, cuT( "glFogCoordFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnVertexAttribFormat, cuT( "glVertexAttribFormat" ), cuT( "NV" ) );
+		GetFunction( m_pfnVertexAttribIFormat, cuT( "glVertexAttribIFormat" ), cuT( "NV" ) );
 	}
 
-}
-
-bool BufFunctionsBase::EnableClientState( eGL_BUFFER_USAGE p_eArray )
-{
-	m_pfnEnableClientState( p_eArray );
-	return glCheckError( GetOpenGl(), cuT( "glEnableClientState" ) );
-}
-
-bool BufFunctionsBase::DisableClientState( eGL_BUFFER_USAGE p_eArray )
-{
-	m_pfnDisableClientState( p_eArray );
-	return glCheckError( GetOpenGl(), cuT( "glDisableClientState" ) );
 }
 
 bool BufFunctionsBase::BufferAddressRange( eGL_ADDRESS pname, uint32_t index, uint64_t address, size_t length )
@@ -488,14 +479,14 @@ bool BufFunctionsBase::GetNamedBufferParameter( uint32_t buffer, eGL_BUFFER_PARA
 BufFunctions::BufFunctions( OpenGl & p_gl )
 	: BufFunctionsBase( p_gl )
 {
-	GL_GET_FUNC( BindBuffer, ARB );
-	GL_GET_FUNC( BufferData, ARB );
-	GL_GET_FUNC( BufferSubData, ARB );
-	GL_GET_FUNC( GetBufferParameteriv, ARB );
-	GL_GET_FUNC( MapBuffer, ARB );
-	GL_GET_FUNC( UnmapBuffer, ARB );
-	GL_GET_FUNC( MapBufferRange, );
-	GL_GET_FUNC( FlushMappedBufferRange, );
+	GetFunction( m_pfnBindBuffer, cuT( "glBindBuffer" ), cuT( "ARB" ) );
+	GetFunction( m_pfnBufferData, cuT( "glBufferData" ), cuT( "ARB" ) );
+	GetFunction( m_pfnBufferSubData, cuT( "glBufferSubData" ), cuT( "ARB" ) );
+	GetFunction( m_pfnGetBufferParameteriv, cuT( "glGetBufferParameteriv" ), cuT( "ARB" ) );
+	GetFunction( m_pfnMapBuffer, cuT( "glMapBuffer" ), cuT( "ARB" ) );
+	GetFunction( m_pfnUnmapBuffer, cuT( "glUnmapBuffer" ), cuT( "ARB" ) );
+	GetFunction( m_pfnMapBufferRange, cuT( "glMapBufferRange" ), cuT( "" ) );
+	GetFunction( m_pfnFlushMappedBufferRange, cuT( "glFlushMappedBufferRange" ), cuT( "" ) );
 }
 
 bool BufFunctions::BindBuffer( eGL_BUFFER_TARGET p_target, uint32_t buffer )
@@ -567,13 +558,13 @@ BufFunctionsDSA::BufFunctionsDSA( OpenGl & p_gl )
 	: BufFunctionsBase( p_gl )
 	, m_uiBuffer( 0 )
 {
-	GL_GET_FUNC( NamedBufferData, EXT );
-	GL_GET_FUNC( NamedBufferSubData, EXT );
-	GL_GET_FUNC( GetNamedBufferParameteriv, EXT );
-	GL_GET_FUNC( MapNamedBuffer, EXT );
-	GL_GET_FUNC( UnmapNamedBuffer, EXT );
-	GL_GET_FUNC( MapNamedBufferRange, EXT );
-	GL_GET_FUNC( FlushMappedNamedBufferRange, EXT );
+	GetFunction( m_pfnNamedBufferData, cuT( "glNamedBufferData" ), cuT( "EXT" ) );
+	GetFunction( m_pfnNamedBufferSubData, cuT( "glNamedBufferSubData" ), cuT( "EXT" ) );
+	GetFunction( m_pfnGetNamedBufferParameteriv, cuT( "glGetNamedBufferParameteriv" ), cuT( "EXT" ) );
+	GetFunction( m_pfnMapNamedBuffer, cuT( "glMapNamedBuffer" ), cuT( "EXT" ) );
+	GetFunction( m_pfnUnmapNamedBuffer, cuT( "glUnmapNamedBuffer" ), cuT( "EXT" ) );
+	GetFunction( m_pfnMapNamedBufferRange, cuT( "glMapNamedBufferRange" ), cuT( "EXT" ) );
+	GetFunction( m_pfnFlushMappedNamedBufferRange, cuT( "glFlushMappedNamedBufferRange" ), cuT( "EXT" ) );
 }
 
 bool BufFunctionsDSA::BufferData( eGL_BUFFER_TARGET p_target, ptrdiff_t size, void const * data, eGL_BUFFER_MODE usage )
@@ -729,16 +720,6 @@ OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
 	BlendFactors[eBLEND_INV_SRC1_COLOUR] = eGL_BLEND_FACTOR_ONE_MINUS_SRC1_COLOR;
 	BlendFactors[eBLEND_SRC1_ALPHA] = eGL_BLEND_FACTOR_SRC1_ALPHA;
 	BlendFactors[eBLEND_INV_SRC1_ALPHA] = eGL_BLEND_FACTOR_ONE_MINUS_SRC1_ALPHA;
-
-	Usages[eELEMENT_USAGE_POSITION] = eGL_BUFFER_USAGE_VERTEX_ARRAY;
-	Usages[eELEMENT_USAGE_NORMAL] = eGL_BUFFER_USAGE_NORMAL_ARRAY;
-	Usages[eELEMENT_USAGE_TANGENT] = eGL_BUFFER_USAGE_TANGENT_ARRAY;
-	Usages[eELEMENT_USAGE_BITANGENT] = eGL_BUFFER_USAGE_BINORMAL_ARRAY;
-	Usages[eELEMENT_USAGE_DIFFUSE] = eGL_BUFFER_USAGE_COLOR_ARRAY;
-	Usages[eELEMENT_USAGE_TEXCOORDS0] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
-	Usages[eELEMENT_USAGE_TEXCOORDS1] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
-	Usages[eELEMENT_USAGE_TEXCOORDS2] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
-	Usages[eELEMENT_USAGE_TEXCOORDS3] = eGL_BUFFER_USAGE_TEXTURE_COORD_ARRAY;
 
 	TextureArguments[eBLEND_SOURCE_TEXTURE] = eGL_BLEND_SOURCE_TEXTURE;
 	TextureArguments[eBLEND_SOURCE_TEXTURE0] = eGL_BLEND_SOURCE_TEXTURE0;
@@ -938,6 +919,62 @@ OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
 	Cleanup();
 }
 
+eELEMENT_TYPE OpenGl::Get( eGLSL_ATTRIBUTE_TYPE p_type )const
+{
+	switch ( p_type )
+	{
+	case eGLSL_ATTRIBUTE_TYPE_FLOAT:
+		return eELEMENT_TYPE_1FLOAT;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_FLOAT_VEC2:
+		return eELEMENT_TYPE_2FLOATS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_FLOAT_VEC3:
+		return eELEMENT_TYPE_3FLOATS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_FLOAT_VEC4:
+		return eELEMENT_TYPE_4FLOATS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_INT:
+		return eELEMENT_TYPE_1INT;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_INT_VEC2:
+		return eELEMENT_TYPE_2INTS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_INT_VEC3:
+		return eELEMENT_TYPE_3INTS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_INT_VEC4:
+		return eELEMENT_TYPE_4INTS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_FLOAT_MAT2:
+		return eELEMENT_TYPE_2x2FLOATS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_FLOAT_MAT3:
+		return eELEMENT_TYPE_3x3FLOATS;
+		break;
+
+	case eGLSL_ATTRIBUTE_TYPE_FLOAT_MAT4:
+		return eELEMENT_TYPE_4x4FLOATS;
+		break;
+
+	default:
+		assert( false && "Unsupported attribute type." );
+		break;
+	}
+
+	return eELEMENT_TYPE_COUNT;
+}
+
 OpenGl::~OpenGl()
 {
 }
@@ -1073,15 +1110,17 @@ bool OpenGl::Initialise()
 	m_pfnStencilOp = &glStencilOp;
 	m_pfnStencilFunc = &glStencilFunc;
 	m_pfnStencilMask = &glStencilMask;
-	GL_GET_FUNC( BlendEquation, EXT );
-	GL_GET_FUNC( BlendFuncSeparate, EXT );
-	GL_GET_FUNC( BlendColor, EXT );
-	GL_GET_FUNC( StencilOpSeparate, ATI );
-	GL_GET_FUNC( StencilFuncSeparate, ATI );
-	GL_GET_FUNC( StencilMaskSeparate, );
-	GL_GET_FUNC( ActiveTexture, ARB );
-	GL_GET_FUNC( ClientActiveTexture, ARB );
+	GetFunction( m_pfnBlendEquation, cuT( "glBlendEquation" ), cuT( "EXT" ) );
+	GetFunction( m_pfnBlendFuncSeparate, cuT( "glBlendFuncSeparate" ), cuT( "EXT" ) );
+	GetFunction( m_pfnBlendColor, cuT( "glBlendColor" ), cuT( "EXT" ) );
+	GetFunction( m_pfnStencilOpSeparate, cuT( "glStencilOpSeparate" ), cuT( "ATI" ) );
+	GetFunction( m_pfnStencilFuncSeparate, cuT( "glStencilFuncSeparate" ), cuT( "ATI" ) );
+	GetFunction( m_pfnStencilMaskSeparate, cuT( "glStencilMaskSeparate" ), cuT( "" ) );
+	GetFunction( m_pfnActiveTexture, cuT( "glActiveTexture" ), cuT( "ARB" ) );
+	GetFunction( m_pfnClientActiveTexture, cuT( "glClientActiveTexture" ), cuT( "ARB" ) );
+
 #if defined( _WIN32 )
+
 	m_pfnMakeCurrent = &wglMakeCurrent;
 	m_pfnSwapBuffers = &::SwapBuffers;
 	m_pfnCreateContext = &wglCreateContext;
@@ -1098,6 +1137,7 @@ bool OpenGl::Initialise()
 	}
 
 #elif defined( __linux__ )
+
 	m_pfnMakeCurrent = &glXMakeCurrent;
 	m_pfnSwapBuffers = &glXSwapBuffers;
 	m_pfnCreateContext = &glXCreateContext;
@@ -1140,17 +1180,15 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( NV_shader_buffer_load ) )
 	{
-		GL_GET_FUNC( GetIntegerui64v, NV );
+		GetFunction( m_pfnGetIntegerui64v, cuT( "glGetIntegerui64v" ), cuT( "NV" ) );
 	}
 
 	m_bBindVboToGpuAddress = HasExtension( NV_shader_buffer_load ) && HasExtension( NV_vertex_buffer_unified_memory );
-	m_pBufFunctions->m_pfnEnableClientState = &glEnableClientState;
-	m_pBufFunctions->m_pfnDisableClientState = &glDisableClientState;
 
 	if ( m_iVersion >= 40 || HasExtension( ARB_draw_buffers_blend ) )
 	{
-		GL_GET_FUNC( BlendEquationi, ARB );
-		GL_GET_FUNC( BlendFuncSeparatei, ARB );
+		GetFunction( m_pfnBlendEquationi, cuT( "glBlendEquationi" ), cuT( "ARB" ) );
+		GetFunction( m_pfnBlendFuncSeparatei, cuT( "glBlendFuncSeparatei" ), cuT( "ARB" ) );
 	}
 	else if ( HasExtension( AMD_draw_buffers_blend ) )
 	{
@@ -1163,8 +1201,8 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( ARB_texture_multisample ) )
 	{
-		GL_GET_FUNC( TexImage2DMultisample, );
-		GL_GET_FUNC( SampleCoverage, ARB );
+		GetFunction( m_pfnTexImage2DMultisample, cuT( "glTexImage2DMultisample" ), cuT( "" ) );
+		GetFunction( m_pfnSampleCoverage, cuT( "glSampleCoverage" ), cuT( "ARB" ) );
 	}
 
 	if ( HasExtension( ARB_imaging ) )
@@ -1173,24 +1211,24 @@ bool OpenGl::Initialise()
 
 	if ( HasExtension( ARB_debug_output ) )
 	{
-		GL_GET_FUNC( DebugMessageCallback, ARB );
+		GetFunction( m_pfnDebugMessageCallback, cuT( "glDebugMessageCallback" ), cuT( "ARB" ) );
 	}
 	else if ( HasExtension( AMDX_debug_output ) )
 	{
-		GL_GET_FUNC( DebugMessageCallbackAMD, );
+		GetFunction( m_pfnDebugMessageCallbackAMD, cuT( "glDebugMessageCallbackAMD" ), cuT( "" ) );
 	}
 
 	if ( HasExtension( ARB_vertex_buffer_object ) )
 	{
 		m_bHasVbo = true;
-		GL_GET_FUNC( GenBuffers, ARB );
-		GL_GET_FUNC( DeleteBuffers, ARB );
-		GL_GET_FUNC( IsBuffer, ARB );
+		GetFunction( m_pfnGenBuffers, cuT( "glGenBuffers" ), cuT( "ARB" ) );
+		GetFunction( m_pfnDeleteBuffers, cuT( "glDeleteBuffers" ), cuT( "ARB" ) );
+		GetFunction( m_pfnIsBuffer, cuT( "glIsBuffer" ), cuT( "ARB" ) );
 
 		if ( HasExtension( EXT_coordinate_frame ) )
 		{
-			GL_GET_FUNC( TangentPointer, EXT );
-			GL_GET_FUNC( BinormalPointer, EXT );
+			GetFunction( m_pfnTangentPointer, cuT( "glTangentPointer" ), cuT( "EXT" ) );
+			GetFunction( m_pfnBinormalPointer, cuT( "glBinormalPointer" ), cuT( "EXT" ) );
 		}
 
 		if ( HasExtension( ARB_pixel_buffer_object ) )
@@ -1202,82 +1240,82 @@ bool OpenGl::Initialise()
 	if ( HasExtension( ARB_vertex_array_object ) )
 	{
 		m_bHasVao = true;
-		GL_GET_FUNC( GenVertexArrays, );
-		GL_GET_FUNC( BindVertexArray, );
-		GL_GET_FUNC( IsVertexArray, );
-		GL_GET_FUNC( DeleteVertexArrays, );
+		GetFunction( m_pfnGenVertexArrays, cuT( "glGenVertexArrays" ), cuT( "ARB" ) );
+		GetFunction( m_pfnBindVertexArray, cuT( "glBindVertexArray" ), cuT( "ARB" ) );
+		GetFunction( m_pfnIsVertexArray, cuT( "glIsVertexArray" ), cuT( "ARB" ) );
+		GetFunction( m_pfnDeleteVertexArrays, cuT( "glDeleteVertexArrays" ), cuT( "ARB" ) );
 	}
 
 	if ( HasExtension( ARB_texture_buffer_object ) )
 	{
 		m_bHasTbo = true;
-		GL_GET_FUNC( TexBuffer, EXT );
+		GetFunction( m_pfnTexBuffer, cuT( "glTexBuffer" ), cuT( "EXT" ) );
 	}
 
 	if ( HasExtension( ARB_framebuffer_object ) )
 	{
 		m_bHasFbo = true;
-		GL_GET_FUNC( DrawBuffers, ARB );
-		GL_GET_FUNC( BlitFramebuffer, ARB );
-		GL_GET_FUNC( GenRenderbuffers, ARB );
-		GL_GET_FUNC( DeleteRenderbuffers, ARB );
-		GL_GET_FUNC( IsRenderbuffer, ARB );
-		GL_GET_FUNC( BindRenderbuffer, ARB );
-		GL_GET_FUNC( RenderbufferStorage, ARB );
-		GL_GET_FUNC( RenderbufferStorageMultisample, ARB );
-		GL_GET_FUNC( GetRenderbufferParameteriv, ARB );
-		GL_GET_FUNC( FramebufferRenderbuffer, ARB );
-		GL_GET_FUNC( GenFramebuffers, ARB );
-		GL_GET_FUNC( DeleteFramebuffers, ARB );
-		GL_GET_FUNC( IsFramebuffer, ARB );
-		GL_GET_FUNC( BindFramebuffer, ARB );
-		GL_GET_FUNC( FramebufferTexture, ARB );
-		GL_GET_FUNC( FramebufferTexture1D, ARB );
-		GL_GET_FUNC( FramebufferTexture2D, ARB );
-		GL_GET_FUNC( FramebufferTexture3D, ARB );
-		GL_GET_FUNC( FramebufferTextureLayer, ARB );
-		GL_GET_FUNC( CheckFramebufferStatus, ARB );
+		GetFunction( m_pfnDrawBuffers, cuT( "glDrawBuffers" ), cuT( "ARB" ) );
+		GetFunction( m_pfnBlitFramebuffer, cuT( "glBlitFramebuffer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGenRenderbuffers, cuT( "glGenRenderbuffers" ), cuT( "ARB" ) );
+		GetFunction( m_pfnDeleteRenderbuffers, cuT( "glDeleteRenderbuffers" ), cuT( "ARB" ) );
+		GetFunction( m_pfnIsRenderbuffer, cuT( "glIsRenderbuffer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnBindRenderbuffer, cuT( "glBindRenderbuffer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnRenderbufferStorage, cuT( "glRenderbufferStorage" ), cuT( "ARB" ) );
+		GetFunction( m_pfnRenderbufferStorageMultisample, cuT( "glRenderbufferStorageMultisample" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetRenderbufferParameteriv, cuT( "glGetRenderbufferParameteriv" ), cuT( "ARB" ) );
+		GetFunction( m_pfnFramebufferRenderbuffer, cuT( "glFramebufferRenderbuffer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGenFramebuffers, cuT( "glGenFramebuffers" ), cuT( "ARB" ) );
+		GetFunction( m_pfnDeleteFramebuffers, cuT( "glDeleteFramebuffers" ), cuT( "ARB" ) );
+		GetFunction( m_pfnIsFramebuffer, cuT( "glIsFramebuffer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnBindFramebuffer, cuT( "glBindFramebuffer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnFramebufferTexture, cuT( "glFramebufferTexture" ), cuT( "ARB" ) );
+		GetFunction( m_pfnFramebufferTexture1D, cuT( "glFramebufferTexture1D" ), cuT( "ARB" ) );
+		GetFunction( m_pfnFramebufferTexture2D, cuT( "glFramebufferTexture2D" ), cuT( "ARB" ) );
+		GetFunction( m_pfnFramebufferTexture3D, cuT( "glFramebufferTexture3D" ), cuT( "ARB" ) );
+		GetFunction( m_pfnFramebufferTextureLayer, cuT( "glFramebufferTextureLayer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnCheckFramebufferStatus, cuT( "glCheckFramebufferStatus" ), cuT( "ARB" ) );
 	}
 	else if ( HasExtension( EXT_framebuffer_object ) )
 	{
 		m_bHasFbo = true;
-		GL_GET_FUNC( DrawBuffers, EXT );
-		GL_GET_FUNC( BlitFramebuffer, EXT );
-		GL_GET_FUNC( GenRenderbuffers, EXT );
-		GL_GET_FUNC( DeleteRenderbuffers, EXT );
-		GL_GET_FUNC( IsRenderbuffer, EXT );
-		GL_GET_FUNC( BindRenderbuffer, EXT );
-		GL_GET_FUNC( RenderbufferStorage, EXT );
-		GL_GET_FUNC( RenderbufferStorageMultisample, EXT );
-		GL_GET_FUNC( GetRenderbufferParameteriv, EXT );
-		GL_GET_FUNC( FramebufferRenderbuffer, EXT );
-		GL_GET_FUNC( GenFramebuffers, EXT );
-		GL_GET_FUNC( DeleteFramebuffers, EXT );
-		GL_GET_FUNC( IsFramebuffer, EXT );
-		GL_GET_FUNC( BindFramebuffer, EXT );
-		GL_GET_FUNC( FramebufferTexture, EXT );
-		GL_GET_FUNC( FramebufferTexture1D, EXT );
-		GL_GET_FUNC( FramebufferTexture2D, EXT );
-		GL_GET_FUNC( FramebufferTexture3D, EXT );
-		GL_GET_FUNC( FramebufferTextureLayer, EXT );
-		GL_GET_FUNC( CheckFramebufferStatus, EXT );
+		GetFunction( m_pfnDrawBuffers, cuT( "glDrawBuffers" ), cuT( "EXT" ) );
+		GetFunction( m_pfnBlitFramebuffer, cuT( "glBlitFramebuffer" ), cuT( "EXT" ) );
+		GetFunction( m_pfnGenRenderbuffers, cuT( "glGenRenderbuffers" ), cuT( "EXT" ) );
+		GetFunction( m_pfnDeleteRenderbuffers, cuT( "glDeleteRenderbuffers" ), cuT( "EXT" ) );
+		GetFunction( m_pfnIsRenderbuffer, cuT( "glIsRenderbuffer" ), cuT( "EXT" ) );
+		GetFunction( m_pfnBindRenderbuffer, cuT( "glBindRenderbuffer" ), cuT( "EXT" ) );
+		GetFunction( m_pfnRenderbufferStorage, cuT( "glRenderbufferStorage" ), cuT( "EXT" ) );
+		GetFunction( m_pfnRenderbufferStorageMultisample, cuT( "glRenderbufferStorageMultisample" ), cuT( "EXT" ) );
+		GetFunction( m_pfnGetRenderbufferParameteriv, cuT( "glGetRenderbufferParameteriv" ), cuT( "EXT" ) );
+		GetFunction( m_pfnFramebufferRenderbuffer, cuT( "glFramebufferRenderbuffer" ), cuT( "EXT" ) );
+		GetFunction( m_pfnGenFramebuffers, cuT( "glGenFramebuffers" ), cuT( "EXT" ) );
+		GetFunction( m_pfnDeleteFramebuffers, cuT( "glDeleteFramebuffers" ), cuT( "EXT" ) );
+		GetFunction( m_pfnIsFramebuffer, cuT( "glIsFramebuffer" ), cuT( "EXT" ) );
+		GetFunction( m_pfnBindFramebuffer, cuT( "glBindFramebuffer" ), cuT( "EXT" ) );
+		GetFunction( m_pfnFramebufferTexture, cuT( "glFramebufferTexture" ), cuT( "EXT" ) );
+		GetFunction( m_pfnFramebufferTexture1D, cuT( "glFramebufferTexture1D" ), cuT( "EXT" ) );
+		GetFunction( m_pfnFramebufferTexture2D, cuT( "glFramebufferTexture2D" ), cuT( "EXT" ) );
+		GetFunction( m_pfnFramebufferTexture3D, cuT( "glFramebufferTexture3D" ), cuT( "EXT" ) );
+		GetFunction( m_pfnFramebufferTextureLayer, cuT( "glFramebufferTextureLayer" ), cuT( "EXT" ) );
+		GetFunction( m_pfnCheckFramebufferStatus, cuT( "glCheckFramebufferStatus" ), cuT( "EXT" ) );
 	}
 
 	if ( HasExtension( ARB_sampler_objects ) )
 	{
 		m_bHasSpl = true;
-		GL_GET_FUNC( GenSamplers, );
-		GL_GET_FUNC( DeleteSamplers, );
-		GL_GET_FUNC( IsSampler, );
-		GL_GET_FUNC( BindSampler, );
-		GL_GET_FUNC( GetSamplerParameteruiv, );
-		GL_GET_FUNC( GetSamplerParameterfv, );
-		GL_GET_FUNC( GetSamplerParameteriv, );
-		GL_GET_FUNC( SamplerParameteruiv, );
-		GL_GET_FUNC( SamplerParameterf, );
-		GL_GET_FUNC( SamplerParameterfv, );
-		GL_GET_FUNC( SamplerParameteri, );
-		GL_GET_FUNC( SamplerParameteriv, );
+		GetFunction( m_pfnGenSamplers, cuT( "glGenSamplers" ), cuT( "" ) );
+		GetFunction( m_pfnDeleteSamplers, cuT( "glDeleteSamplers" ), cuT( "" ) );
+		GetFunction( m_pfnIsSampler, cuT( "glIsSampler" ), cuT( "" ) );
+		GetFunction( m_pfnBindSampler, cuT( "glBindSampler" ), cuT( "" ) );
+		GetFunction( m_pfnGetSamplerParameteruiv, cuT( "glGetSamplerParameteruiv" ), cuT( "" ) );
+		GetFunction( m_pfnGetSamplerParameterfv, cuT( "glGetSamplerParameterfv" ), cuT( "" ) );
+		GetFunction( m_pfnGetSamplerParameteriv, cuT( "glGetSamplerParameteriv" ), cuT( "" ) );
+		GetFunction( m_pfnSamplerParameteruiv, cuT( "glSamplerParameteruiv" ), cuT( "" ) );
+		GetFunction( m_pfnSamplerParameterf, cuT( "glSamplerParameterf" ), cuT( "" ) );
+		GetFunction( m_pfnSamplerParameterfv, cuT( "glSamplerParameterfv" ), cuT( "" ) );
+		GetFunction( m_pfnSamplerParameteri, cuT( "glSamplerParameteri" ), cuT( "" ) );
+		GetFunction( m_pfnSamplerParameteriv, cuT( "glSamplerParameteriv" ), cuT( "" ) );
 
 		if ( HasExtension( EXT_texture_filter_anisotropic ) )
 		{
@@ -1288,118 +1326,119 @@ bool OpenGl::Initialise()
 	if ( HasExtension( ARB_draw_instanced ) )
 	{
 		m_bHasInstancedDraw = true;
-		GL_GET_FUNC( DrawArraysInstanced, ARB );
-		GL_GET_FUNC( DrawElementsInstanced, ARB );
+		GetFunction( m_pfnDrawArraysInstanced, cuT( "glDrawArraysInstanced" ), cuT( "ARB" ) );
+		GetFunction( m_pfnDrawElementsInstanced, cuT( "glDrawElementsInstanced" ), cuT( "ARB" ) );
 
 		if ( HasExtension( ARB_instanced_arrays ) )
 		{
 			m_bHasInstancedArrays = true;
-			GL_GET_FUNC( VertexAttribDivisor, ARB );
+			GetFunction( m_pfnVertexAttribDivisor, cuT( "glVertexAttribDivisor" ), cuT( "ARB" ) );
 		}
 	}
 	else if ( HasExtension( EXT_draw_instanced ) )
 	{
 		m_bHasInstancedDraw = true;
-		GL_GET_FUNC( DrawArraysInstanced, EXT );
-		GL_GET_FUNC( DrawElementsInstanced, EXT );
+		GetFunction( m_pfnDrawArraysInstanced, cuT( "glDrawArraysInstanced" ), cuT( "EXT" ) );
+		GetFunction( m_pfnDrawElementsInstanced, cuT( "glDrawElementsInstanced" ), cuT( "EXT" ) );
 
 		if ( HasExtension( EXT_instanced_arrays ) )
 		{
 			m_bHasInstancedArrays = true;
-			GL_GET_FUNC( VertexAttribDivisor, EXT );
+			GetFunction( m_pfnVertexAttribDivisor, cuT( "glVertexAttribDivisor" ), cuT( "EXT" ) );
 		}
 	}
 
 	if ( HasExtension( ARB_vertex_program ) )
 	{
 		m_bHasVSh = true;
-		GL_GET_FUNC( CreateShader, );
-		GL_GET_FUNC( DeleteShader, );
-		GL_GET_FUNC( IsShader, ARB );
-		GL_GET_FUNC( AttachShader, );
-		GL_GET_FUNC( DetachShader, );
-		GL_GET_FUNC( CompileShader, ARB );
-		GL_GET_FUNC( GetShaderiv, );
-		GL_GET_FUNC( GetShaderInfoLog, );
-		GL_GET_FUNC( ShaderSource, ARB );
-		GL_GET_FUNC( CreateProgram, );
-		GL_GET_FUNC( DeleteProgram, );
-		GL_GET_FUNC( LinkProgram, ARB );
-		GL_GET_FUNC( UseProgram, );
-		GL_GET_FUNC( GetProgramiv, ARB );
-		GL_GET_FUNC( GetProgramInfoLog, );
-		GL_GET_FUNC( GetAttribLocation, ARB );
-		GL_GET_FUNC( IsProgram, ARB );
-		GL_GET_FUNC( EnableVertexAttribArray, ARB );
-		GL_GET_FUNC( VertexAttribPointer, ARB );
-		GL_GET_FUNC( VertexAttribIPointer, ARB );
-		GL_GET_FUNC( DisableVertexAttribArray, ARB );
-		GL_GET_FUNC( ProgramParameteri, ARB );
-		GL_GET_FUNC( GetUniformLocation, ARB );
+		GetFunction( m_pfnCreateShader, cuT( "glCreateShader" ), cuT( "" ) );
+		GetFunction( m_pfnDeleteShader, cuT( "glDeleteShader" ), cuT( "" ) );
+		GetFunction( m_pfnIsShader, cuT( "glIsShader" ), cuT( "ARB" ) );
+		GetFunction( m_pfnAttachShader, cuT( "glAttachShader" ), cuT( "" ) );
+		GetFunction( m_pfnDetachShader, cuT( "glDetachShader" ), cuT( "" ) );
+		GetFunction( m_pfnCompileShader, cuT( "glCompileShader" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetShaderiv, cuT( "glGetShaderiv" ), cuT( "" ) );
+		GetFunction( m_pfnGetShaderInfoLog, cuT( "glGetShaderInfoLog" ), cuT( "" ) );
+		GetFunction( m_pfnShaderSource, cuT( "glShaderSource" ), cuT( "ARB" ) );
+		GetFunction( m_pfnCreateProgram, cuT( "glCreateProgram" ), cuT( "" ) );
+		GetFunction( m_pfnDeleteProgram, cuT( "glDeleteProgram" ), cuT( "" ) );
+		GetFunction( m_pfnLinkProgram, cuT( "glLinkProgram" ), cuT( "ARB" ) );
+		GetFunction( m_pfnUseProgram, cuT( "glUseProgram" ), cuT( "" ) );
+		GetFunction( m_pfnGetProgramiv, cuT( "glGetProgramiv" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetProgramInfoLog, cuT( "glGetProgramInfoLog" ), cuT( "" ) );
+		GetFunction( m_pfnGetAttribLocation, cuT( "glGetAttribLocation" ), cuT( "ARB" ) );
+		GetFunction( m_pfnIsProgram, cuT( "glIsProgram" ), cuT( "ARB" ) );
+		GetFunction( m_pfnEnableVertexAttribArray, cuT( "glEnableVertexAttribArray" ), cuT( "ARB" ) );
+		GetFunction( m_pfnVertexAttribPointer, cuT( "glVertexAttribPointer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnVertexAttribIPointer, cuT( "glVertexAttribIPointer" ), cuT( "ARB" ) );
+		GetFunction( m_pfnDisableVertexAttribArray, cuT( "glDisableVertexAttribArray" ), cuT( "ARB" ) );
+		GetFunction( m_pfnProgramParameteri, cuT( "glProgramParameteri" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetUniformLocation, cuT( "glGetUniformLocation" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetActiveAttrib, cuT( "glGetActiveAttrib" ), cuT( "ARB" ) );
 
 		if ( HasExtension( ARB_fragment_program ) )
 		{
 			m_bHasPSh = true;
-			GL_GET_FUNC( Uniform1i, ARB );
-			GL_GET_FUNC( Uniform2i, ARB );
-			GL_GET_FUNC( Uniform3i, ARB );
-			GL_GET_FUNC( Uniform4i, ARB );
-			GL_GET_FUNC( Uniform1iv, ARB );
-			GL_GET_FUNC( Uniform2iv, ARB );
-			GL_GET_FUNC( Uniform3iv, ARB );
-			GL_GET_FUNC( Uniform4iv, ARB );
-			GL_GET_FUNC( Uniform1ui, EXT );
-			GL_GET_FUNC( Uniform2ui, EXT );
-			GL_GET_FUNC( Uniform3ui, EXT );
-			GL_GET_FUNC( Uniform4ui, EXT );
-			GL_GET_FUNC( Uniform1uiv, EXT );
-			GL_GET_FUNC( Uniform2uiv, EXT );
-			GL_GET_FUNC( Uniform3uiv, EXT );
-			GL_GET_FUNC( Uniform4uiv, EXT );
-			GL_GET_FUNC( Uniform1f, ARB );
-			GL_GET_FUNC( Uniform2f, ARB );
-			GL_GET_FUNC( Uniform3f, ARB );
-			GL_GET_FUNC( Uniform4f, ARB );
-			GL_GET_FUNC( Uniform1fv, ARB );
-			GL_GET_FUNC( Uniform2fv, ARB );
-			GL_GET_FUNC( Uniform3fv, ARB );
-			GL_GET_FUNC( Uniform4fv, ARB );
-			GL_GET_FUNC( Uniform1d, );
-			GL_GET_FUNC( Uniform2d, );
-			GL_GET_FUNC( Uniform3d, );
-			GL_GET_FUNC( Uniform4d, );
-			GL_GET_FUNC( Uniform1dv, );
-			GL_GET_FUNC( Uniform2dv, );
-			GL_GET_FUNC( Uniform3dv, );
-			GL_GET_FUNC( Uniform4dv, );
-			GL_GET_FUNC( UniformMatrix2fv, ARB );
-			GL_GET_FUNC( UniformMatrix2x3fv, );
-			GL_GET_FUNC( UniformMatrix2x4fv, );
-			GL_GET_FUNC( UniformMatrix3fv, ARB );
-			GL_GET_FUNC( UniformMatrix3x2fv, );
-			GL_GET_FUNC( UniformMatrix3x4fv, );
-			GL_GET_FUNC( UniformMatrix4fv, ARB );
-			GL_GET_FUNC( UniformMatrix4x2fv, );
-			GL_GET_FUNC( UniformMatrix4x3fv, );
-			GL_GET_FUNC( UniformMatrix2dv, );
-			GL_GET_FUNC( UniformMatrix2x3dv, );
-			GL_GET_FUNC( UniformMatrix2x4dv, );
-			GL_GET_FUNC( UniformMatrix3dv, );
-			GL_GET_FUNC( UniformMatrix3x2dv, );
-			GL_GET_FUNC( UniformMatrix3x4dv, );
-			GL_GET_FUNC( UniformMatrix4dv, );
-			GL_GET_FUNC( UniformMatrix4x2dv, );
-			GL_GET_FUNC( UniformMatrix4x3dv, );
+			GetFunction( m_pfnUniform1i, cuT( "glUniform1i" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform2i, cuT( "glUniform2i" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform3i, cuT( "glUniform3i" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform4i, cuT( "glUniform4i" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform1iv, cuT( "glUniform1iv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform2iv, cuT( "glUniform2iv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform3iv, cuT( "glUniform3iv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform4iv, cuT( "glUniform4iv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform1ui, cuT( "glUniform1ui" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform2ui, cuT( "glUniform2ui" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform3ui, cuT( "glUniform3ui" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform4ui, cuT( "glUniform4ui" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform1uiv, cuT( "glUniform1uiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform2uiv, cuT( "glUniform2uiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform3uiv, cuT( "glUniform3uiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform4uiv, cuT( "glUniform4uiv" ), cuT( "EXT" ) );
+			GetFunction( m_pfnUniform1f, cuT( "glUniform1f" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform2f, cuT( "glUniform2f" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform3f, cuT( "glUniform3f" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform4f, cuT( "glUniform4f" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform1fv, cuT( "glUniform1fv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform2fv, cuT( "glUniform2fv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform3fv, cuT( "glUniform3fv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform4fv, cuT( "glUniform4fv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniform1d, cuT( "glUniform1d" ), cuT( "" ) );
+			GetFunction( m_pfnUniform2d, cuT( "glUniform2d" ), cuT( "" ) );
+			GetFunction( m_pfnUniform3d, cuT( "glUniform3d" ), cuT( "" ) );
+			GetFunction( m_pfnUniform4d, cuT( "glUniform4d" ), cuT( "" ) );
+			GetFunction( m_pfnUniform1dv, cuT( "glUniform1dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniform2dv, cuT( "glUniform2dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniform3dv, cuT( "glUniform3dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniform4dv, cuT( "glUniform4dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix2fv, cuT( "glUniformMatrix2fv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniformMatrix2x3fv, cuT( "glUniformMatrix2x3fv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix2x4fv, cuT( "glUniformMatrix2x4fv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix3fv, cuT( "glUniformMatrix3fv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniformMatrix3x2fv, cuT( "glUniformMatrix3x2fv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix3x4fv, cuT( "glUniformMatrix3x4fv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix4fv, cuT( "glUniformMatrix4fv" ), cuT( "ARB" ) );
+			GetFunction( m_pfnUniformMatrix4x2fv, cuT( "glUniformMatrix4x2fv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix4x3fv, cuT( "glUniformMatrix4x3fv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix2dv, cuT( "glUniformMatrix2dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix2x3dv, cuT( "glUniformMatrix2x3dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix2x4dv, cuT( "glUniformMatrix2x4dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix3dv, cuT( "glUniformMatrix3dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix3x2dv, cuT( "glUniformMatrix3x2dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix3x4dv, cuT( "glUniformMatrix3x4dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix4dv, cuT( "glUniformMatrix4dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix4x2dv, cuT( "glUniformMatrix4x2dv" ), cuT( "" ) );
+			GetFunction( m_pfnUniformMatrix4x3dv, cuT( "glUniformMatrix4x3dv" ), cuT( "" ) );
 
 			if ( HasExtension( ARB_uniform_buffer_object ) )
 			{
 				m_bHasUbo = m_iGlslVersion >= 140;
-				GL_GET_FUNC( GetUniformBlockIndex, );
-				GL_GET_FUNC( BindBufferBase, EXT );
-				GL_GET_FUNC( UniformBlockBinding, );
-				GL_GET_FUNC( GetUniformIndices, );
-				GL_GET_FUNC( GetActiveUniformsiv, );
-				GL_GET_FUNC( GetActiveUniformBlockiv, );
+				GetFunction( m_pfnGetUniformBlockIndex, cuT( "glGetUniformBlockIndex" ), cuT( "" ) );
+				GetFunction( m_pfnBindBufferBase, cuT( "glBindBufferBase" ), cuT( "EXT" ) );
+				GetFunction( m_pfnUniformBlockBinding, cuT( "glUniformBlockBinding" ), cuT( "" ) );
+				GetFunction( m_pfnGetUniformIndices, cuT( "glGetUniformIndices" ), cuT( "" ) );
+				GetFunction( m_pfnGetActiveUniformsiv, cuT( "glGetActiveUniformsiv" ), cuT( "" ) );
+				GetFunction( m_pfnGetActiveUniformBlockiv, cuT( "glGetActiveUniformBlockiv" ), cuT( "" ) );
 			}
 
 			if ( HasExtension( ARB_geometry_shader4 ) || HasExtension( EXT_geometry_shader4 ) )
@@ -1409,7 +1448,7 @@ bool OpenGl::Initialise()
 				if ( HasExtension( ARB_tessellation_shader ) )
 				{
 					m_bHasTSh = true;
-					GL_GET_FUNC( PatchParameteri, );
+					GetFunction( m_pfnPatchParameteri, cuT( "glPatchParameteri" ), cuT( "ARB" ) );
 
 					if ( HasExtension( ARB_compute_shader ) )
 					{
@@ -1421,17 +1460,26 @@ bool OpenGl::Initialise()
 	}
 
 	HasExtension( ARB_timer_query );
+	GetFunction( m_pfnGenQueries, cuT( "glGenQueries" ), cuT( "ARB" ) );
+	GetFunction( m_pfnDeleteQueries, cuT( "glDeleteQueries" ), cuT( "ARB" ) );
+	GetFunction( m_pfnIsQuery, cuT( "glIsQuery" ), cuT( "ARB" ) );
+	GetFunction( m_pfnBeginQuery, cuT( "glBeginQuery" ), cuT( "ARB" ) );
+	GetFunction( m_pfnEndQuery, cuT( "glEndQuery" ), cuT( "ARB" ) );
+	GetFunction( m_pfnQueryCounter, cuT( "glQueryCounter" ), cuT( "ARB" ) );
+	GetFunction( m_pfnGetQueryObjectiv, cuT( "glGetQueryObjectiv" ), cuT( "ARB" ) );
+	GetFunction( m_pfnGetQueryObjectuiv, cuT( "glGetQueryObjectuiv" ), cuT( "ARB" ) );
+	GetFunction( m_pfnGetQueryObjecti64v, cuT( "glGetQueryObjecti64v" ), cuT( "ARB" ) );
+	GetFunction( m_pfnGetQueryObjectui64v, cuT( "glGetQueryObjectui64v" ), cuT( "ARB" ) );
 
-	GL_GET_FUNC( GenQueries, ARB );
-	GL_GET_FUNC( DeleteQueries, ARB );
-	GL_GET_FUNC( IsQuery, ARB );
-	GL_GET_FUNC( BeginQuery, ARB );
-	GL_GET_FUNC( EndQuery, ARB );
-	GL_GET_FUNC( QueryCounter, ARB );
-	GL_GET_FUNC( GetQueryObjectiv, ARB );
-	GL_GET_FUNC( GetQueryObjectuiv, ARB );
-	GL_GET_FUNC( GetQueryObjecti64v, ARB );
-	GL_GET_FUNC( GetQueryObjectui64v, ARB );
+	if ( HasExtension( ARB_program_interface_query ) )
+	{
+		GetFunction( m_pfnGetProgramInterfaceiv, cuT( "glGetProgramInterfaceiv" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetProgramResourceIndex, cuT( "glGetProgramResourceIndex" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetProgramResourceLocation, cuT( "glGetProgramResourceLocation" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetProgramResourceLocationIndex, cuT( "glGetProgramResourceLocationIndex" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetProgramResourceName, cuT( "glGetProgramResourceName" ), cuT( "ARB" ) );
+		GetFunction( m_pfnGetProgramResourceiv, cuT( "glGetProgramResourceiv" ), cuT( "ARB" ) );
+	}
 
 	return true;
 }
@@ -2209,16 +2257,6 @@ bool OpenGl::TexBuffer( eGL_TEXDIM p_target, eGL_INTERNAL_FORMAT p_eInternalForm
 {
 	m_pfnTexBuffer( p_target, p_eInternalFormat, buffer );
 	return glCheckError( *this, "glTexBuffer" );
-}
-
-bool OpenGl::EnableClientState( eGL_BUFFER_USAGE p_eArray )const
-{
-	return m_pBufFunctions->EnableClientState( p_eArray );
-}
-
-bool OpenGl::DisableClientState( eGL_BUFFER_USAGE p_eArray )const
-{
-	return m_pBufFunctions->DisableClientState( p_eArray );
 }
 
 bool OpenGl::GenBuffers( int n, uint32_t * buffers )const
@@ -3129,6 +3167,12 @@ bool OpenGl::ShaderSource( uint32_t shader, int count, char const ** strings, in
 	return glCheckError( *this, "glShaderSource" );
 }
 
+bool OpenGl::GetActiveAttrib( uint32_t program, uint32_t index, int bufSize, int * length, int * size, uint32_t * type, char * name )const
+{
+	m_pfnGetActiveAttrib( program, index, bufSize, length, size, type, name );
+	return glCheckError( *this, "glGetActiveAttrib" );
+}
+
 uint32_t OpenGl::CreateProgram()const
 {
 	uint32_t l_uiReturn = m_pfnCreateProgram();
@@ -3193,6 +3237,42 @@ bool OpenGl::ProgramParameteri( uint32_t program, uint32_t pname, int value )con
 {
 	m_pfnProgramParameteri( program, pname, value );
 	return glCheckError( *this, "glProgramParameteri" );
+}
+
+bool OpenGl::GetProgramInterfaceInfos( uint32_t program, eGLSL_INTERFACE programInterface, eGLSL_DATA_NAME name, int * params )
+{
+	m_pfnGetProgramInterfaceiv( program, programInterface, name, params );
+	return glCheckError( *this, "glGetProgramInterfaceiv" );
+}
+
+int OpenGl::GetProgramResourceIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+{
+	m_pfnGetProgramResourceIndex( program, programInterface, name );
+	return glCheckError( *this, "glGetProgramResourceIndex" );
+}
+
+int OpenGl::GetProgramResourceLocation( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+{
+	m_pfnGetProgramResourceLocation( program, programInterface, name );
+	return glCheckError( *this, "glGetProgramResourceLocation" );
+}
+
+int OpenGl::GetProgramResourceLocationIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+{
+	m_pfnGetProgramResourceLocationIndex( program, programInterface, name );
+	return glCheckError( *this, "glGetProgramResourceLocationIndex" );
+}
+
+bool OpenGl::GetProgramResourceName( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int bufSize, int * length, char * name )
+{
+	m_pfnGetProgramResourceName( program, programInterface, index, bufSize, length, name );
+	return glCheckError( *this, "glGetProgramResourceName" );
+}
+
+bool OpenGl::GetProgramResourceInfos( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params )
+{
+	m_pfnGetProgramResourceiv( program, programInterface, index, propCount, props, bufSize, length, params );
+	return glCheckError( *this, "m_pfnGetProgramResourceiv" );
 }
 
 bool OpenGl::EnableVertexAttribArray( uint32_t index )const
@@ -3557,17 +3637,20 @@ void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SE
 	Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
 }
 
-bool OpenGl::HasExtension( Castor::String const & p_strExtName )const
+bool OpenGl::HasExtension( Castor::String const & p_strExtName, bool p_log )const
 {
 	bool l_return = m_extensions.find( p_strExtName ) != Castor::String::npos;
 
-	if ( l_return )
+	if ( p_log )
 	{
-		Logger::LogDebug( cuT( "Extension [" ) + p_strExtName + cuT( "] available" ) );
-	}
-	else
-	{
-		Logger::LogWarning( cuT( "Extension [" ) + p_strExtName + cuT( "] unavailable" ) );
+		if ( l_return )
+		{
+			Logger::LogDebug( cuT( "Extension [" ) + p_strExtName + cuT( "] available" ) );
+		}
+		else
+		{
+			Logger::LogWarning( cuT( "Extension [" ) + p_strExtName + cuT( "] unavailable" ) );
+		}
 	}
 
 	return l_return;

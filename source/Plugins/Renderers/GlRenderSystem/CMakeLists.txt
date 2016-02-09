@@ -118,11 +118,14 @@ if( OPENGL_FOUND )
 	file( GLOB ${PROJECT_NAME}_Shader_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Program*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Program*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.inl
 	)
 	file( GLOB ${PROJECT_NAME}_Shader_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Program*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.cpp
 	)
 	source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_Shader_HEADER_FILES} )

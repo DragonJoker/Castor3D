@@ -188,7 +188,7 @@ namespace Testing
 		template< typename Policy >
 		struct SFixedChecks
 		{
-			template< typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
+			template < typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
 			static void Run()
 			{
 				TimePoint time = Initialise< type, obj_count >();
@@ -216,7 +216,7 @@ namespace Testing
 		template< typename Policy >
 		struct SScatteredChecks
 		{
-			template< typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
+			template < typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
 			static void Run( std::vector< size_t > const & index )
 			{
 				TimePoint time = Initialise< type, obj_count >();
@@ -258,7 +258,7 @@ namespace Testing
 		template< typename Policy >
 		struct SVariableChecks
 		{
-			template< typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
+			template < typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
 			static void Run()
 			{
 				TimePoint time = Initialise< type, obj_count >();
@@ -302,7 +302,7 @@ namespace Testing
 	{
 		struct SFixedChecks
 		{
-			template< typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
+			template < typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
 			static void Run()
 			{
 				TimePoint time = Initialise< type, obj_count >();
@@ -332,7 +332,7 @@ namespace Testing
 
 		struct SScatteredChecks
 		{
-			template< typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
+			template < typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
 			static void Run( std::vector< size_t > const & index )
 			{
 				TimePoint time = Initialise< type, obj_count >();
@@ -376,7 +376,7 @@ namespace Testing
 
 		struct SVariableChecks
 		{
-			template< typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
+			template < typename type, size_t obj_count = MAX_SIZE / sizeof( type ) >
 			static void Run()
 			{
 				TimePoint time = Initialise< type, obj_count >();

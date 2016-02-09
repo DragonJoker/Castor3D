@@ -50,24 +50,6 @@ file( GLOB ${PROJECT_NAME}_Manager_SOURCE_FILES
 source_group( "Header Files\\Managers" FILES ${${PROJECT_NAME}_Manager_HEADER_FILES} )
 source_group( "Source Files\\Managers" FILES ${${PROJECT_NAME}_Manager_SOURCE_FILES} )
 
-file( GLOB ${PROJECT_NAME}_Scene_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.hpp
-)
-file( GLOB ${PROJECT_NAME}_Scene_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.cpp
-)
-source_group( "Header Files\\Scene" FILES ${${PROJECT_NAME}_Scene_HEADER_FILES} )
-source_group( "Source Files\\Scene" FILES ${${PROJECT_NAME}_Scene_SOURCE_FILES} )
-
 file( GLOB ${PROJECT_NAME}_Plugin_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Plugin*.inl
@@ -118,6 +100,8 @@ file( GLOB ${PROJECT_NAME}_VBO_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/MatrixBuffer*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexBuffer*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexBuffer*.inl
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexLayout*.hpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexLayout*.inl
 )
 file( GLOB ${PROJECT_NAME}_VBO_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/Buffer*.cpp
@@ -127,9 +111,28 @@ file( GLOB ${PROJECT_NAME}_VBO_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/IndexBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/MatrixBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexBuffer*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexLayout*.cpp
 )
 source_group( "Header Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_HEADER_FILES} )
 source_group( "Source Files\\VertexBuffer" FILES ${${PROJECT_NAME}_VBO_SOURCE_FILES} )
+
+file( GLOB ${PROJECT_NAME}_Scene_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.hpp
+)
+file( GLOB ${PROJECT_NAME}_Scene_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Scene*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Camera*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Geometry*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MovableObject*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Billboard*.cpp
+)
+source_group( "Header Files\\Scene" FILES ${${PROJECT_NAME}_Scene_HEADER_FILES} )
+source_group( "Source Files\\Scene" FILES ${${PROJECT_NAME}_Scene_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_FBO_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.hpp
@@ -216,11 +219,14 @@ source_group( "Source Files\\Event" FILES ${${PROJECT_NAME}_Event_SOURCE_FILES} 
 file( GLOB ${PROJECT_NAME}_Shader_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Program*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Program*.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.inl
 )
 file( GLOB ${PROJECT_NAME}_Shader_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Program*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Variable*.cpp
 )
 source_group( "Header Files\\Shader" FILES ${${PROJECT_NAME}_Shader_HEADER_FILES} )

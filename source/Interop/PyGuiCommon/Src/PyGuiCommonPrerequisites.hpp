@@ -30,7 +30,7 @@ namespace cpy
 			return GuiCommon::make_WindowHandle( p_window );
 		}
 	};
-		
+
 	struct WindowHandleCreatorFromFrame
 	{
 		Castor3D::WindowHandle operator()( wxFrame * p_window )

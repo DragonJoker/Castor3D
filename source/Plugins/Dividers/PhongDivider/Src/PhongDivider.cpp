@@ -73,7 +73,7 @@ namespace Phong
 			Castor3D::Vertex::GetNormal( l_point, l_normal );
 			l_posnml.insert( std::make_pair( i++, Castor::PlaneEquation< double >( Point3d( l_normal[0], l_normal[1], l_normal[2] ), Point3d( l_position[0], l_position[1], l_position[2] ) ) ) );
 		}
-		
+
 		for ( Castor3D::FacePtrArray::iterator l_it = l_facesArray.begin(); l_it != l_facesArray.end(); ++l_it )
 		{
 			Castor3D::FaceSPtr l_face = *l_it;

@@ -30,12 +30,12 @@ namespace Castor3D
 		}
 	}
 
-	ShaderProgramBase::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< ShaderProgramBase >( p_path )
+	ShaderProgram::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< ShaderProgram >( p_path )
 	{
 	}
 
-	bool ShaderProgramBase::BinaryParser::Fill( ShaderProgramBase const & p_object, BinaryChunk & p_chunk )const
+	bool ShaderProgram::BinaryParser::Fill( ShaderProgram const & p_object, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
@@ -65,7 +65,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool ShaderProgramBase::BinaryParser::Parse( ShaderProgramBase & p_object, BinaryChunk & p_chunk )const
+	bool ShaderProgram::BinaryParser::Parse( ShaderProgram & p_object, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		return l_return;
@@ -73,12 +73,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgramBase::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< ShaderProgramBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	ShaderProgram::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		: Loader< ShaderProgram, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
-	bool ShaderProgramBase::TextLoader::operator()( ShaderProgramBase const & p_shaderProgram, TextFile & p_file )
+	bool ShaderProgram::TextLoader::operator()( ShaderProgram const & p_shaderProgram, TextFile & p_file )
 	{
 		bool l_return = false;
 		bool l_hasFile = false;
@@ -152,44 +152,56 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const String ShaderProgramBase::CameraPos = cuT( "c3d_v3CameraPosition" );
-	const String ShaderProgramBase::AmbientLight = cuT( "c3d_v4AmbientLight" );
-	const String ShaderProgramBase::BackgroundColour = cuT( "c3d_v4BackgroundColour" );
-	const String ShaderProgramBase::LightsCount = cuT( "c3d_iLightsCount" );
-	const String ShaderProgramBase::Lights = cuT( "c3d_sLights" );
-	const String ShaderProgramBase::MatAmbient = cuT( "c3d_v4MatAmbient" );
-	const String ShaderProgramBase::MatDiffuse = cuT( "c3d_v4MatDiffuse" );
-	const String ShaderProgramBase::MatSpecular = cuT( "c3d_v4MatSpecular" );
-	const String ShaderProgramBase::MatEmissive = cuT( "c3d_v4MatEmissive" );
-	const String ShaderProgramBase::MatShininess = cuT( "c3d_fMatShininess" );
-	const String ShaderProgramBase::MatOpacity = cuT( "c3d_fMatOpacity" );
-	const String ShaderProgramBase::MapColour = cuT( "c3d_mapColour" );
-	const String ShaderProgramBase::MapAmbient = cuT( "c3d_mapAmbient" );
-	const String ShaderProgramBase::MapDiffuse = cuT( "c3d_mapDiffuse" );
-	const String ShaderProgramBase::MapSpecular = cuT( "c3d_mapSpecular" );
-	const String ShaderProgramBase::MapNormal = cuT( "c3d_mapNormal" );
-	const String ShaderProgramBase::MapOpacity = cuT( "c3d_mapOpacity" );
-	const String ShaderProgramBase::MapGloss = cuT( "c3d_mapGloss" );
-	const String ShaderProgramBase::MapHeight = cuT( "c3d_mapHeight" );
-	const String ShaderProgramBase::MapText = cuT( "c3d_mapText" );
-	const String ShaderProgramBase::BufferMatrix = cuT( "Matrices" );
-	const String ShaderProgramBase::BufferScene = cuT( "Scene" );
-	const String ShaderProgramBase::BufferPass = cuT( "Pass" );
+	const String ShaderProgram::Position = cuT( "position" );
+	const String ShaderProgram::Normal = cuT( "normal" );
+	const String ShaderProgram::Tangent = cuT( "tangent" );
+	const String ShaderProgram::Bitangent = cuT( "bitangent" );
+	const String ShaderProgram::Texture = cuT( "texture" );
+	const String ShaderProgram::Colour = cuT( "colour" );
+	const String ShaderProgram::BoneIds0 = cuT( "bone_ids0" );
+	const String ShaderProgram::BoneIds1 = cuT( "bone_ids1" );
+	const String ShaderProgram::Weights0 = cuT( "weights0" );
+	const String ShaderProgram::Weights1 = cuT( "weights1" );
+	const String ShaderProgram::Transform = cuT( "transform" );
+
+	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
+	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );
+	const String ShaderProgram::BackgroundColour = cuT( "c3d_v4BackgroundColour" );
+	const String ShaderProgram::LightsCount = cuT( "c3d_iLightsCount" );
+	const String ShaderProgram::Lights = cuT( "c3d_sLights" );
+	const String ShaderProgram::MatAmbient = cuT( "c3d_v4MatAmbient" );
+	const String ShaderProgram::MatDiffuse = cuT( "c3d_v4MatDiffuse" );
+	const String ShaderProgram::MatSpecular = cuT( "c3d_v4MatSpecular" );
+	const String ShaderProgram::MatEmissive = cuT( "c3d_v4MatEmissive" );
+	const String ShaderProgram::MatShininess = cuT( "c3d_fMatShininess" );
+	const String ShaderProgram::MatOpacity = cuT( "c3d_fMatOpacity" );
+	const String ShaderProgram::MapColour = cuT( "c3d_mapColour" );
+	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
+	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
+	const String ShaderProgram::MapSpecular = cuT( "c3d_mapSpecular" );
+	const String ShaderProgram::MapNormal = cuT( "c3d_mapNormal" );
+	const String ShaderProgram::MapOpacity = cuT( "c3d_mapOpacity" );
+	const String ShaderProgram::MapGloss = cuT( "c3d_mapGloss" );
+	const String ShaderProgram::MapHeight = cuT( "c3d_mapHeight" );
+	const String ShaderProgram::MapText = cuT( "c3d_mapText" );
+	const String ShaderProgram::BufferMatrix = cuT( "Matrices" );
+	const String ShaderProgram::BufferScene = cuT( "Scene" );
+	const String ShaderProgram::BufferPass = cuT( "Pass" );
 
 	//*************************************************************************************************
 
-	ShaderProgramBase::ShaderProgramBase( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage )
+	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_status( ePROGRAM_STATUS_NOTLINKED )
 		, m_eLanguage( p_eLanguage )
 	{
 	}
 
-	ShaderProgramBase::~ShaderProgramBase()
+	ShaderProgram::~ShaderProgram()
 	{
 	}
 
-	ShaderObjectBaseSPtr ShaderProgramBase::CreateObject( eSHADER_TYPE p_type )
+	ShaderObjectBaseSPtr ShaderProgram::CreateObject( eSHADER_TYPE p_type )
 	{
 		ShaderObjectBaseSPtr l_return;
 		REQUIRE( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT );
@@ -212,7 +224,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgramBase::DoCleanup()
+	void ShaderProgram::DoCleanup()
 	{
 		for ( auto l_shader : m_activeShaders )
 		{
@@ -240,7 +252,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderProgramBase::SetFile( eSHADER_MODEL p_eModel, Path const & p_path )
+	void ShaderProgram::SetFile( eSHADER_MODEL p_eModel, Path const & p_path )
 	{
 		m_arrayFiles[p_eModel] = p_path;
 		int i = eSHADER_TYPE_VERTEX;
@@ -256,12 +268,12 @@ namespace Castor3D
 		ResetToCompile();
 	}
 
-	void ShaderProgramBase::ResetToCompile()
+	void ShaderProgram::ResetToCompile()
 	{
 		m_status = ePROGRAM_STATUS_NOTLINKED;
 	}
 
-	void ShaderProgramBase::SetInputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
+	void ShaderProgram::SetInputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
 	{
 		if ( m_pShaders[p_target] )
 		{
@@ -269,7 +281,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderProgramBase::SetOutputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
+	void ShaderProgram::SetOutputType( eSHADER_TYPE p_target, eTOPOLOGY p_topology )
 	{
 		if ( m_pShaders[p_target] )
 		{
@@ -277,7 +289,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderProgramBase::SetOutputVtxCount( eSHADER_TYPE p_target, uint8_t p_count )
+	void ShaderProgram::SetOutputVtxCount( eSHADER_TYPE p_target, uint8_t p_count )
 	{
 		if ( m_pShaders[p_target] )
 		{
@@ -285,7 +297,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderProgramBase::SetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Path const & p_pathFile )
+	void ShaderProgram::SetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, Path const & p_pathFile )
 	{
 		if ( m_pShaders[p_target] )
 		{
@@ -308,7 +320,7 @@ namespace Castor3D
 		ResetToCompile();
 	}
 
-	Path ShaderProgramBase::GetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
+	Path ShaderProgram::GetFile( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
 	{
 		Path l_pathReturn;
 
@@ -320,7 +332,7 @@ namespace Castor3D
 		return l_pathReturn;
 	}
 
-	bool ShaderProgramBase::HasFile( eSHADER_TYPE p_target )const
+	bool ShaderProgram::HasFile( eSHADER_TYPE p_target )const
 	{
 		bool l_return = false;
 
@@ -332,7 +344,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgramBase::SetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, String const & p_strSource )
+	void ShaderProgram::SetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
 		if ( m_pShaders[p_target] )
 		{
@@ -355,7 +367,7 @@ namespace Castor3D
 		ResetToCompile();
 	}
 
-	String ShaderProgramBase::GetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
+	String ShaderProgram::GetSource( eSHADER_TYPE p_target, eSHADER_MODEL p_eModel )const
 	{
 		String l_strReturn;
 
@@ -367,7 +379,7 @@ namespace Castor3D
 		return l_strReturn;
 	}
 
-	bool ShaderProgramBase::HasSource( eSHADER_TYPE p_target )const
+	bool ShaderProgram::HasSource( eSHADER_TYPE p_target )const
 	{
 		bool l_return = false;
 
@@ -379,12 +391,12 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool ShaderProgramBase::HasObject( eSHADER_TYPE p_target )const
+	bool ShaderProgram::HasObject( eSHADER_TYPE p_target )const
 	{
 		return m_pShaders[p_target] && m_pShaders[p_target]->HasSource() && m_pShaders[p_target]->GetStatus() == eSHADER_STATUS_COMPILED;
 	}
 
-	eSHADER_STATUS ShaderProgramBase::GetObjectStatus( eSHADER_TYPE p_target )const
+	eSHADER_STATUS ShaderProgram::GetObjectStatus( eSHADER_TYPE p_target )const
 	{
 		eSHADER_STATUS l_return = eSHADER_STATUS_DONTEXIST;
 
@@ -396,7 +408,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OneTextureFrameVariableSPtr ShaderProgramBase::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
+	OneTextureFrameVariableSPtr ShaderProgram::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
 	{
 		OneTextureFrameVariableSPtr l_return = FindFrameVariable( p_name, p_type );
 
@@ -414,7 +426,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OneTextureFrameVariableSPtr ShaderProgramBase::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
+	OneTextureFrameVariableSPtr ShaderProgram::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
 	{
 		OneTextureFrameVariableSPtr l_return;
 
@@ -426,7 +438,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderProgramBase::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint64_t p_shaderMask )
+	void ShaderProgram::AddFrameVariableBuffer( FrameVariableBufferSPtr p_pVariableBuffer, uint64_t p_shaderMask )
 	{
 		auto l_it = m_frameVariableBuffersByName.find( p_pVariableBuffer->GetName() );
 
@@ -445,7 +457,7 @@ namespace Castor3D
 		}
 	}
 
-	FrameVariableBufferSPtr ShaderProgramBase::FindFrameVariableBuffer( Castor::String const & p_name )const
+	FrameVariableBufferSPtr ShaderProgram::FindFrameVariableBuffer( Castor::String const & p_name )const
 	{
 		FrameVariableBufferSPtr l_buffer;
 		auto l_it = m_frameVariableBuffersByName.find( p_name );
@@ -458,17 +470,17 @@ namespace Castor3D
 		return l_buffer;
 	}
 
-	FrameVariablePtrList & ShaderProgramBase::GetFrameVariables( eSHADER_TYPE p_type )
+	FrameVariablePtrList & ShaderProgram::GetFrameVariables( eSHADER_TYPE p_type )
 	{
 		return m_pShaders[p_type]->GetFrameVariables();
 	}
 
-	FrameVariablePtrList const & ShaderProgramBase::GetFrameVariables( eSHADER_TYPE p_type )const
+	FrameVariablePtrList const & ShaderProgram::GetFrameVariables( eSHADER_TYPE p_type )const
 	{
 		return m_pShaders[p_type]->GetFrameVariables();
 	}
 
-	bool ShaderProgramBase::DoInitialise()
+	bool ShaderProgram::DoInitialise()
 	{
 		if ( m_status == ePROGRAM_STATUS_NOTLINKED )
 		{
@@ -524,7 +536,7 @@ namespace Castor3D
 		return m_status == ePROGRAM_STATUS_LINKED;
 	}
 
-	void ShaderProgramBase::DoBind( bool p_bindUbo )
+	void ShaderProgram::DoBind( bool p_bindUbo )
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
@@ -545,7 +557,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderProgramBase::DoUnbind()
+	void ShaderProgram::DoUnbind()
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
@@ -563,7 +575,7 @@ namespace Castor3D
 		}
 	}
 
-	bool ShaderProgramBase::DoLink()
+	bool ShaderProgram::DoLink()
 	{
 		if ( m_status != ePROGRAM_STATUS_ERROR )
 		{

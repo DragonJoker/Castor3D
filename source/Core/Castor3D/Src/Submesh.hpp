@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SUBMESH_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "BufferDeclaration.hpp"
 #include "Mesh.hpp"
 #include "FaceIndices.hpp"
 #include "FaceInfos.hpp"
@@ -42,6 +43,8 @@ namespace Castor3D
 	class Submesh
 		: public Castor::OwnedBy< Engine >
 	{
+		friend class GeometryBuffers;
+
 	public:
 		/*!
 		\author		Sylvain DOREMUS
@@ -132,16 +135,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pMesh		The parent mesh
+		 *\param[in]	p_mesh		The parent mesh
 		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_uiID		The submesh ID
+		 *\param[in]	p_id		The submesh ID
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pMesh		Le mesh parent
+		 *\param[in]	p_mesh		Le mesh parent
 		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_uiID		L'ID du submesh
+		 *\param[in]	p_id		L'ID du submesh
 		 */
-		C3D_API Submesh( Engine & p_engine, MeshRPtr p_pMesh, uint32_t p_uiID = 1 );
+		C3D_API Submesh( Engine & p_engine, MeshRPtr p_mesh, uint32_t p_id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -268,42 +271,35 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_arrayFaces	The faces
-		 *\param[in]	p_uiNbFaces		The faces count
+		 *\param[in]	p_faces	The faces
+		 *\param[in]	p_count	The faces count
 		 *\~french
 		 *\brief		Crée et ajoute une face au submesh
-		 *\param[in]	p_arrayFaces	Les faces
-		 *\param[in]	p_uiNbFaces		Le nombre de faces
+		 *\param[in]	p_faces	Les faces
+		 *\param[in]	p_count	Le nombre de faces
 		 */
-		C3D_API void AddFaceGroup( stFACE_INDICES * p_pFaces, uint32_t p_uiNbFaces );
+		C3D_API void AddFaceGroup( stFACE_INDICES * p_faces, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a quad face to the submesh
-		 *\param[in]	a			The first face's vertex index
-		 *\param[in]	b			The second face's vertex index
-		 *\param[in]	c			The third face's vertex index
-		 *\param[in]	d			The fourth face's vertex index
-		 *\param[in]	p_ptMinUV	The UV of the bottom left corner
-		 *\param[in]	p_ptMaxUV	The UV of the top right corner
+		 *\param[in]	a		The first face's vertex index
+		 *\param[in]	b		The second face's vertex index
+		 *\param[in]	c		The third face's vertex index
+		 *\param[in]	d		The fourth face's vertex index
+		 *\param[in]	p_minUV	The UV of the bottom left corner
+		 *\param[in]	p_maxUV	The UV of the top right corner
 		 *\return		The created face
 		 *\~french
 		 *\brief		Crée et ajoute une face à 4 côtés au submesh
-		 *\param[in]	a			L'index du premier vertex
-		 *\param[in]	b			L'index du second vertex
-		 *\param[in]	c			L'index du troisième vertex
-		 *\param[in]	d			L'index du quatrième vertex
-		 *\param[in]	p_ptMinUV	L'UV du coin bas gauche
-		 *\param[in]	p_ptMaxUV	L'UV du coin haut droit
+		 *\param[in]	a		L'index du premier vertex
+		 *\param[in]	b		L'index du second vertex
+		 *\param[in]	c		L'index du troisième vertex
+		 *\param[in]	d		L'index du quatrième vertex
+		 *\param[in]	p_minUV	L'UV du coin bas gauche
+		 *\param[in]	p_maxUV	L'UV du coin haut droit
 		 *\return		La face créée
 		 */
-		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_ptMinUV = Castor::Point3r(), Castor::Point3r const & p_ptMaxUV = Castor::Point3r( 1, 1, 1 ) );
-		/**
-		 *\~english
-		 *\brief		Generates the 3D buffers
-		 *\~french
-		 *\brief		Genère les buffers 3D
-		 */
-		C3D_API void GenerateBuffers();
+		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_minUV = Castor::Point3r(), Castor::Point3r const & p_maxUV = Castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
 		 *\brief		Clones the submesh and returns the clone
@@ -344,25 +340,25 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void ComputeNormals( bool p_bReverted = false );
+		C3D_API void ComputeNormals( bool p_reverted = false );
 		/**
 		 *\~english
 		 *\brief		Computes normal and tangent for each vertex of the given face
-		 *\param[in]	p_pFace	The face
+		 *\param[in]	p_face	The face
 		 *\~french
 		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
-		 *\param[in]	p_pFace	La face
+		 *\param[in]	p_face	La face
 		 */
-		C3D_API void ComputeNormals( FaceSPtr p_pFace );
+		C3D_API void ComputeNormals( FaceSPtr p_face );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the given face
-		 *\param[in]	p_pFace	The face
+		 *\param[in]	p_face	The face
 		 *\~french
 		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
-		 *\param[in]	p_pFace	La face
+		 *\param[in]	p_face	La face
 		 */
-		C3D_API void ComputeTangents( FaceSPtr p_pFace );
+		C3D_API void ComputeTangents( FaceSPtr p_face );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
@@ -393,12 +389,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sorts the face from farthest to nearest from the camera
-		 *\param[in]	p_ptCamera	The camera position, relative to submesh
+		 *\param[in]	p_cameraPosition	The camera position, relative to submesh
 		 *\~french
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
-		 *\param[in]	p_ptCamera	La position de la caméra, relative au submesh
+		 *\param[in]	p_cameraPosition	La position de la caméra, relative au submesh
 		 */
-		C3D_API void SortFaces( Castor::Point3r const & p_ptCamera );
+		C3D_API void SortFaces( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Increments instance count
@@ -594,8 +590,8 @@ namespace Castor3D
 		 */
 		inline FaceSPtr GetFace( uint32_t p_index )const
 		{
-			REQUIRE( p_index < m_arrayFaces.size() );
-			return m_arrayFaces[p_index];
+			REQUIRE( p_index < m_faces.size() );
+			return m_faces[p_index];
 		}
 		/**
 		 *\~english
@@ -607,7 +603,7 @@ namespace Castor3D
 		 */
 		inline FacePtrArray const & GetFaces()const
 		{
-			return m_arrayFaces;
+			return m_faces;
 		}
 		/**
 		 *\~english
@@ -619,31 +615,127 @@ namespace Castor3D
 		 */
 		inline FacePtrArray & GetFaces()
 		{
-			return m_arrayFaces;
+			return m_faces;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the BufferDeclaration
-		 *\return		The BufferDeclaration
+		 *\return		The VertexBuffer.
 		 *\~french
-		 *\brief		Récupère la BufferDeclaration
-		 *\return		La BufferDeclaration
+		 *\return		Le VertexBuffer.
 		 */
-		inline BufferDeclarationSPtr GetDeclaration()
+		inline bool HasVertexBuffer()const
 		{
-			return m_declaration;
+			return bool( m_vertexBuffer );
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the IndexBuffer of wanted primitive type
-		 *\return		The IndexBuffer
+		 *\return		The IndexBuffer.
 		 *\~french
-		 *\brief		Récupère l'IndexBuffer pour le type de primitive voulu
-		 *\return		Le IndexBuffer
+		 *\return		L'IndexBuffer.
 		 */
-		inline GeometryBuffersSPtr GetGeometryBuffers()const
+		inline bool HasIndexBuffer()const
 		{
-			return m_geometryBuffers;
+			return bool( m_indexBuffer );
+		}
+		/**
+		 *\~english
+		 *\return		The bones VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer des bones.
+		 */
+		inline bool HasBonesBuffer()const
+		{
+			return bool( m_bonesBuffer );
+		}
+		/**
+		 *\~english
+		 *\return		The instantiation MatrixBuffer.
+		 *\~french
+		 *\return		Le MatrixBuffer d'instanciation.
+		 */
+		inline bool HasMatrixBuffer()const
+		{
+			return bool( m_matrixBuffer );
+		}
+		/**
+		 *\~english
+		 *\return		The VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer.
+		 */
+		inline VertexBuffer const & GetVertexBuffer()const
+		{
+			return *m_vertexBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer.
+		 */
+		inline VertexBuffer & GetVertexBuffer()
+		{
+			return *m_vertexBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The IndexBuffer.
+		 *\~french
+		 *\return		L'IndexBuffer.
+		 */
+		inline IndexBuffer const & GetIndexBuffer()const
+		{
+			return *m_indexBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The IndexBuffer.
+		 *\~french
+		 *\return		L'IndexBuffer.
+		 */
+		inline IndexBuffer & GetIndexBuffer()
+		{
+			return *m_indexBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The bones VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer des bones.
+		 */
+		inline VertexBuffer const & GetBonesBuffer()const
+		{
+			return *m_bonesBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The bones VertexBuffer.
+		 *\~french
+		 *\return		Le VertexBuffer des bones.
+		 */
+		inline VertexBuffer & GetBonesBuffer()
+		{
+			return *m_bonesBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The instantiation MatrixBuffer.
+		 *\~french
+		 *\return		Le MatrixBuffer d'instanciation.
+		 */
+		inline MatrixBuffer const & GetMatrixBuffer()const
+		{
+			return *m_matrixBuffer;
+		}
+		/**
+		 *\~english
+		 *\return		The instantiation MatrixBuffer.
+		 *\~french
+		 *\return		Le MatrixBuffer d'instanciation.
+		 */
+		inline MatrixBuffer & GetMatrixBuffer()
+		{
+			return *m_matrixBuffer;
 		}
 		/**
 		 *\~english
@@ -689,54 +781,67 @@ namespace Castor3D
 		 *\brief		Crée et ajoute une face au submesh
 		 *\param[in]	p_arrayFaces	Les faces
 		 */
-		template< uint32_t Count > void AddFaceGroup( stFACE_INDICES( & p_pFaces )[Count] )
+		template< uint32_t Count > void AddFaceGroup( stFACE_INDICES( & p_faces )[Count] )
 		{
-			AddFaceGroup( p_pFaces, Count );
+			AddFaceGroup( p_faces, Count );
 		}
 
 	private:
 		FaceSPtr DoAddFace( const FaceSPtr p_face );
+		void DoCreateBuffers();
+		void DoDestroyBuffers();
+		void DoGenerateBuffers();
 		void DoGenerateVertexBuffer();
 		void DoGenerateIndexBuffer();
+		void DoGenerateBonesBuffer();
 		void DoGenerateMatrixBuffer( uint32_t p_count );
-		void DoUpdateDeclaration();
-		void DoCleanupGeometryBuffers();
-		void DoCreateGeometryBuffers();
-		bool DoPrepareGeometryBuffers( Pass const & p_pass );
+		GeometryBuffers & DoPrepareGeometryBuffers( Pass const & p_pass );
 
 	private:
-		//!\~english The submesh ID	\~french L'id du sbmesh
+		//!\~english The submesh ID.	\~french L'id du sbmesh.
 		uint32_t m_id;
-		//!\~english The submesh instances count	\~french Le nombre d'instances du submesh
+		//!\~english The submesh instances count.	\~french Le nombre d'instances du submesh.
 		std::map< MaterialSPtr, uint32_t > m_instanceCount;
-		//!\~english The faces in the submesh	\~french Le tableau de faces
-		FacePtrArray m_arrayFaces;
-		//!\~english Tells if normals exist or need to be computed	\~french Dit si les normales existent ou doivent être calculées
+		//!\~english Vertex elements declaration, deduced from points.	\~french Déclaration des éléments d'un sommet, déduite à partir des points.
+		BufferDeclaration m_layout;
+		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		VertexBufferUPtr m_vertexBuffer;
+		//!\~english The index buffer.	\~french Le tampon d'indices.
+		IndexBufferUPtr m_indexBuffer;
+		//!\~english The bone data buffer (animation).	\~french Le tampon de données de bones (animation).
+		VertexBufferUPtr m_bonesBuffer;
+		//!\~english The matrix buffer (instantiation).	\~french Le tampon de matrices (instanciation).
+		MatrixBufferUPtr m_matrixBuffer;
+		//!\~english The faces in the submesh.	\~french Le tableau de faces.
+		FacePtrArray m_faces;
+		//!\~english Tells if normals exist or need to be computed.	\~french Dit si les normales existent ou doivent être calculées.
 		bool m_hasNormals;
-		//!\~english The Material assigned at creation	\~french Le Materiau affecté à la création
+		//!\~english The Material assigned at creation.	\~french Le Materiau affecté à la création.
 		MaterialWPtr m_defaultMaterial;
-		//!\~english The combo box container	\~french Le conteneur boîte
+		//!\~english The combo box container.	\~french Le conteneur boîte.
 		Castor::CubeBox m_box;
-		//!\~english The spheric container	\~french Le conteneur sphère
+		//!\~english The spheric container.	\~french Le conteneur sphère.
 		Castor::SphereBox m_sphere;
-		//!\~english The vertex data array	\~french Le tableau de données des sommets
+		//!\~english The vertex data array.	\~french Le tableau de données des sommets.
 		BytePtrList m_pointsData;
-		//!\~english The vertex pointer array	\~french Le tableau de sommets
+		//!\~english The vertex pointer array.	\~french Le tableau de sommets.
 		VertexPtrArray m_points;
-		//!\~english Vertex elements declaration	\~french Déclaration des éléments d'un sommet
-		BufferDeclarationSPtr m_declaration;
-		//!\~english The transformed camera position at last sort	\~french La position transformée de la caméra au dernier tri
+		//!\~english The bones data array.	\~french Le tableau de données des bones.
+		BytePtrList m_bonesData;
+		//!\~english The bones pointer array.	\~french Le tableau de bones.
+		VertexPtrArray m_bones;
+		//!\~english The transformed camera position at last sort.	\~french La position transformée de la caméra au dernier tri.
 		Castor::Point3r m_cameraPosition;
-		//!\~english The parent mesh	\~french Le mesh parent
+		//!\~english The parent mesh	\~french Le mesh parent.
 		MeshRPtr m_parentMesh;
-		//!\~english The shader program flags	\~french Les indicateurs pour le shader
+		//!\~english The shader program flags.	\~french Les indicateurs pour le shader.
 		uint32_t m_programFlags;
-		//!\~english Pointer over geometry buffers	\~french Pointeur sur les buffers de la géométrie
-		GeometryBuffersSPtr m_geometryBuffers;
-		//!\~english Tells the renderer has been initialised	\~french Dit que le renderer a été initialisé
+		//!\~english Tells the renderer has been initialised.	\~french Dit que le renderer a été initialisé.
 		bool m_initialised;
-		//!\~english Tells the VAO needs reininitialisation	\~french Dit que le VAO a besoin d'être réinitialisé
+		//!\~english Tells the VAO needs reininitialisation.	\~french Dit que le VAO a besoin d'être réinitialisé.
 		bool m_dirty;
+		//!\~english The GeometryBuffers with which this submesh is compatible.	\~french Les GeometryBuffers avec lesquel ce sous-maillage est compatible.
+		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
 	};
 }
 
