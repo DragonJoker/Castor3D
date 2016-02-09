@@ -73,11 +73,11 @@ namespace GlRender
 		ObjectType::Destroy();
 	}
 
-	bool GlGeometryBuffers::Draw( ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index )
+	bool GlGeometryBuffers::Draw( uint32_t p_uiSize, uint32_t p_index )
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
-		if ( p_program.HasObject( eSHADER_TYPE_HULL ) )
+		if ( m_program.HasObject( eSHADER_TYPE_HULL ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
 			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );
@@ -100,11 +100,11 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
+	bool GlGeometryBuffers::DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
-		if ( p_program.HasObject( eSHADER_TYPE_HULL ) )
+		if ( m_program.HasObject( eSHADER_TYPE_HULL ) )
 		{
 			l_eMode = eGL_PRIMITIVE_PATCHES;
 			GetOpenGl().PatchParameter( eGL_PATCH_PARAMETER_VERTICES, 3 );

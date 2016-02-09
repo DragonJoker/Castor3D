@@ -584,16 +584,16 @@ namespace Castor3D
 		{
 			if ( GetEngine()->GetRenderSystem()->HasInstancing() )
 			{
-				l_geometryBuffers.DrawInstanced( *l_program, l_uiSize, 0, l_count );
+				l_geometryBuffers.DrawInstanced( l_uiSize, 0, l_count );
 			}
 			else
 			{
-				l_geometryBuffers.Draw( *l_program, l_uiSize, 0 );
+				l_geometryBuffers.Draw( l_uiSize, 0 );
 			}
 		}
 		else
 		{
-			l_geometryBuffers.Draw( *l_program, l_uiSize, 0 );
+			l_geometryBuffers.Draw( l_uiSize, 0 );
 		}
 	}
 

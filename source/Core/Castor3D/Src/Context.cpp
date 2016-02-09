@@ -182,7 +182,7 @@ namespace Castor3D
 
 		if ( p_texture->BindAt( 0 ) )
 		{
-			p_geometryBuffers->Draw( *l_program, m_arrayVertex.size(), 0 );
+			p_geometryBuffers->Draw( m_arrayVertex.size(), 0 );
 			p_texture->UnbindFrom( 0 );
 		}
 

@@ -80,11 +80,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GeometryBuffers::Draw
 		 */
-		virtual bool Draw( Castor3D::ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index );
+		virtual bool Draw( uint32_t p_uiSize, uint32_t p_index );
 		/**
 		 *\copydoc		Castor3D::GeometryBuffers::DrawInstanced
 		 */
-		virtual bool DrawInstanced( Castor3D::ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count );
+		virtual bool DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count );
 
 	private:
 		Castor3D::BufferDeclaration::const_iterator DoFindElement( Castor3D::BufferDeclaration const & p_declaration, Castor3D::BufferElementDeclaration const & p_element )const;

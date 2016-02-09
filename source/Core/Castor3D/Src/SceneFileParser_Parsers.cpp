@@ -2610,23 +2610,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryOutputVtxCount )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderSamplerValue )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	int32_t l_value = 0;
-	p_params[0]->Get( l_value );
-
-	if ( l_pContext->pSamplerFrameVariable )
-	{
-		//l_pContext->pSamplerFrameVariable->SetValue( l_value );
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "Directive <variable::value>: Variable not initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboVariable )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
