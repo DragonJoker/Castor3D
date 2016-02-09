@@ -24,12 +24,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
-	//! Vertex Buffer Object class
 	/*!
-	Implements OpenGl VBO
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 03/01/2011
+	\author		Sylvain DOREMUS
+	\version 	0.6.1.0
+	\date 		03/01/2011
+	\~english
+	\brief 		Class implementing OpenGL VBO.
+	\~french
+	\brief 		Classe implémentant les VBO OpenGL.
 	*/
 	template< typename T >
 	class GlBuffer

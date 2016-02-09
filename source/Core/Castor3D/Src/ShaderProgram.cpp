@@ -162,6 +162,7 @@ namespace Castor3D
 	const String ShaderProgram::BoneIds1 = cuT( "bone_ids1" );
 	const String ShaderProgram::Weights0 = cuT( "weights0" );
 	const String ShaderProgram::Weights1 = cuT( "weights1" );
+	const String ShaderProgram::Transform = cuT( "transform" );
 
 	const String ShaderProgram::CameraPos = cuT( "c3d_v3CameraPosition" );
 	const String ShaderProgram::AmbientLight = cuT( "c3d_v4AmbientLight" );

@@ -86,7 +86,7 @@ namespace Castor3D
 			m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 			m_pDsStateNoDepth->Initialise();
 			m_pDsStateNoDepthWrite->Initialise();
 			EndCurrent();

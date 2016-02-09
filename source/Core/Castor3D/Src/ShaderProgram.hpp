@@ -152,6 +152,8 @@ namespace Castor3D
 		C3D_API static const Castor::String Weights0;
 		//!\~english Name of the second bones weight attribute.	\~french Nom du second attribut de poids des bones.
 		C3D_API static const Castor::String Weights1;
+		//!\~english Name of the instance transform attribute.	\~french Nom de l'attribut de transformation d'instance.
+		C3D_API static const Castor::String Transform;
 
 		//@}
 		/**@name Scene */

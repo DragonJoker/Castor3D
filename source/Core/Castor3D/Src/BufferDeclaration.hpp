@@ -36,6 +36,8 @@ namespace Castor3D
 	{
 	public:
 		DECLARE_VECTOR( BufferElementDeclaration, BufferElementDeclaration );
+		using iterator = BufferElementDeclarationArrayIt;
+		using const_iterator = BufferElementDeclarationArrayConstIt;
 
 	public:
 		/**

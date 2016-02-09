@@ -112,9 +112,9 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ProgramInputLayout const & p_layout, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst )
 	{
-		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_layout, p_vtx, p_idx, p_bones, p_inst );
+		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program, p_vtx, p_idx, p_bones, p_inst );
 	}
 
 	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()
@@ -191,16 +191,16 @@ namespace GlRender
 		GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
 		l_writer << GLSL::Version() << Endl();
 		// Vertex inputs
-		ATTRIBUTE( l_writer, Vec4, vertex );
-		ATTRIBUTE( l_writer, Vec3, normal );
-		ATTRIBUTE( l_writer, Vec3, tangent );
-		ATTRIBUTE( l_writer, Vec3, bitangent );
-		ATTRIBUTE( l_writer, Vec3, texture );
-		Optional< IVec3 > bone_ids0 = l_writer.GetAttribute< IVec3 >( cuT( "bone_ids0" ), CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< IVec3 > bone_ids1 = l_writer.GetAttribute< IVec3 >( cuT( "bone_ids1" ), CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec3 > weights0 = l_writer.GetAttribute< Vec3 >( cuT( "weights0" ), CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec3 > weights1 = l_writer.GetAttribute< Vec3 >( cuT( "weights1" ), CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( cuT( "transform" ), CHECK_FLAG( ePROGRAM_FLAG_INSTANCIATION ) );
+		Vec4 position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
+		Vec3 normal = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal );
+		Vec3 tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
+		Vec3 bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
+		Vec3 texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
+		Optional< IVec3 > bone_ids0 = l_writer.GetAttribute< IVec3 >( ShaderProgram::BoneIds0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< IVec3 > bone_ids1 = l_writer.GetAttribute< IVec3 >( ShaderProgram::BoneIds1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec3 > weights0 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Weights0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec3 > weights1 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Weights1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CHECK_FLAG( ePROGRAM_FLAG_INSTANCIATION ) );
 
 		UBO_MATRIX( l_writer );
 
@@ -213,7 +213,7 @@ namespace GlRender
 
 		std::function< void() > l_main = [&]()
 		{
-			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( vertex.XYZ, 1.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.XYZ, 1.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
 			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
@@ -291,8 +291,8 @@ namespace GlRender
 			UBO_MATRIX( l_writer );
 
 			// Shader inputs
-			ATTRIBUTE( l_writer, IVec2, vertex );
-			ATTRIBUTE( l_writer, Vec2, texture );
+			IVec2 position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
+			Vec2 texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 			// Shader outputs
 			OUT( l_writer, Vec2, vtx_texture );
@@ -300,7 +300,7 @@ namespace GlRender
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = texture;
-				BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.X, vertex.Y, 0.0, 1.0 );
+				BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
 			} );
 
 			l_strVs = l_writer.Finalise();
@@ -410,11 +410,11 @@ namespace GlRender
 			l_writer << Version() << Endl();
 
 			// Shader inputs
-			ATTRIBUTE( l_writer, IVec4, vertex );
+			IVec4 position = l_writer.GetAttribute< IVec4 >( ShaderProgram::Position );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				BUILTIN( l_writer, Vec4, gl_Position ) = vec4( vertex.XYZ, 1.0 );
+				BUILTIN( l_writer, Vec4, gl_Position ) = vec4( position.XYZ, 1.0 );
 			} );
 
 			l_strVtxShader = l_writer.Finalise();

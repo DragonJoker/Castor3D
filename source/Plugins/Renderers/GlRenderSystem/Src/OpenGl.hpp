@@ -948,6 +948,14 @@ namespace GlRender
 		{
 			return m_iGlslVersion;
 		}
+		inline GlRenderSystem & GetRenderSystem()
+		{
+			return m_renderSystem;
+		}
+		inline GlRenderSystem const & GetRenderSystem()const
+		{
+			return m_renderSystem;
+		}
 		C3D_Gl_API bool HasExtension( Castor::String const & p_strExtName, bool p_log = true )const;
 		inline eGL_BUFFER_MODE GetBufferFlags( uint32_t p_flags )const
 		{

@@ -203,15 +203,22 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a geometries buffer holder.
-		 *\param[in]	p_submesh	The submesh.
 		 *\param[in]	p_topology	The buffers topology.
-		 *\return		The created geometries buffer holder.
+		 *\param[in]	p_program	The shader program.
+		 *\param[in]	p_vtx		The vertex buffer.
+		 *\param[in]	p_idx		The index buffer.
+		 *\param[in]	p_bones		The bones data buffer.
+		 *\param[in]	p_inst		The instances matrices buffer.
 		 *\~french
 		 *\brief		Crée un conteneur de buffers de géométrie.
-		 *\param[in]	p_submesh	Le sous-maillage.
-		 *\return		Le conteneur de buffers de géométrie.
+		 *\param[in]	p_topology	La topologie des tampons.
+		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	p_vtx		Le tampon de sommets.
+		 *\param[in]	p_idx		Le tampon d'indices.
+		 *\param[in]	p_bones		Le tampon de données de bones.
+		 *\param[in]	p_inst		Le tampon de matrices d'instances.
 		 */
-		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( eTOPOLOGY p_topology, ProgramInputLayout const & p_layout, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst ) = 0;
+		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context

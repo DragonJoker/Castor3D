@@ -73,40 +73,23 @@ namespace Castor3D
 		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\return		\p true if successful
+		 *\return		An iterator to the beginning of the layout elements.
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\return		\p true si tout s'est bien passé
+		 *\return		Un itérateur sur le début des éléments du layout.
 		 */
-		C3D_API virtual bool Bind()const = 0;
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 */
-		C3D_API virtual void Unbind()const = 0;
-		/**
-		 *\~english
-		 *\brief		Defines the stride, from vertex buffer.
-		 *\param[in]	p_stride	The new value.
-		 *\~french
-		 *\brief		Définit l'espace entre deux sommets, tel que défini par le tampon de sommets.
-		 *\param[in]	p_stride	La nouvelle valeur.
-		 */
-		C3D_API virtual void SetStride( uint32_t p_stride ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the total elements byte count.
-		 *\return		The byte count.
-		 *\~french
-		 *\brief		Récupère la taille totale en octet des éléments.
-		 *\return		La taille en octets.
-		 */
-		inline uint32_t GetStride()const
+		inline std::vector< BufferElementDeclaration >::const_iterator begin()const
 		{
-			return m_stride;
+			return m_layout.begin();
+		}
+		/**
+		 *\~english
+		 *\return		An iterator to the end of the layout elements.
+		 *\~french
+		 *\return		Un itérateur sur la fin des éléments du layout.
+		 */
+		inline std::vector< BufferElementDeclaration >::const_iterator end()const
+		{
+			return m_layout.end();
 		}
 
 	protected:
@@ -128,8 +111,6 @@ namespace Castor3D
 		friend C3D_API bool operator==( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs );
 		//!\~english Buffer elements description.	\~french Description des élément du tampon.
 		std::vector< BufferElementDeclaration > m_layout;
-		//!\~english The elements declaration stride.	\~french Le stride des éléments de la déclaration.
-		uint32_t m_stride = 0;
 	};
 	/**
 	 *\~english

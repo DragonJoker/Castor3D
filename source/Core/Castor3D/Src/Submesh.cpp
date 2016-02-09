@@ -238,7 +238,7 @@ namespace Castor3D
 	{
 		if ( !m_vertexBuffer )
 		{
-			GenerateBuffers();
+			DoGenerateBuffers();
 		}
 
 		if ( !m_initialised )
@@ -527,28 +527,6 @@ namespace Castor3D
 		if ( m_indexBuffer )
 		{
 			m_indexBuffer->Clear();
-		}
-	}
-
-	void Submesh::GenerateBuffers()
-	{
-		DoCreateBuffers();
-		DoGenerateVertexBuffer();
-		DoGenerateIndexBuffer();
-		uint32_t l_count = 0;
-		l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
-		{
-			return p_count + p_pair.second;
-		} );
-
-		if ( l_count > 1 )
-		{
-			DoGenerateMatrixBuffer( l_count );
-		}
-
-		if ( !m_bones.empty() )
-		{
-			DoGenerateBonesBuffer();
 		}
 	}
 
@@ -1095,6 +1073,28 @@ namespace Castor3D
 		m_geometryBuffers.clear();
 	}
 
+	void Submesh::DoGenerateBuffers()
+	{
+		DoCreateBuffers();
+		DoGenerateVertexBuffer();
+		DoGenerateIndexBuffer();
+		uint32_t l_count = 0;
+		l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
+		{
+			return p_count + p_pair.second;
+		} );
+
+		if ( l_count > 1 )
+		{
+			DoGenerateMatrixBuffer( l_count );
+		}
+
+		if ( !m_bones.empty() )
+		{
+			DoGenerateBonesBuffer();
+		}
+	}
+
 	void Submesh::DoGenerateVertexBuffer()
 	{
 		if ( m_vertexBuffer )
@@ -1237,8 +1237,7 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_program->GetLayout().SetStride( m_layout.GetStride() );
-			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), m_vertexBuffer.get(), m_indexBuffer.get(), m_bonesBuffer.get(), m_matrixBuffer.get() );
+			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), m_indexBuffer.get(), m_bonesBuffer.get(), m_matrixBuffer.get() );
 			m_geometryBuffers.push_back( l_buffers );
 		}
 		else

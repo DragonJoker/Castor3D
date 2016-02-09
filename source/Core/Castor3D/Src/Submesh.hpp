@@ -302,13 +302,6 @@ namespace Castor3D
 		C3D_API void AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Castor::Point3r const & p_minUV = Castor::Point3r(), Castor::Point3r const & p_maxUV = Castor::Point3r( 1, 1, 1 ) );
 		/**
 		 *\~english
-		 *\brief		Generates the 3D buffers
-		 *\~french
-		 *\brief		Genère les buffers 3D
-		 */
-		C3D_API void GenerateBuffers();
-		/**
-		 *\~english
 		 *\brief		Clones the submesh and returns the clone
 		 *\return	The clone
 		 *\~french
@@ -797,6 +790,7 @@ namespace Castor3D
 		FaceSPtr DoAddFace( const FaceSPtr p_face );
 		void DoCreateBuffers();
 		void DoDestroyBuffers();
+		void DoGenerateBuffers();
 		void DoGenerateVertexBuffer();
 		void DoGenerateIndexBuffer();
 		void DoGenerateBonesBuffer();

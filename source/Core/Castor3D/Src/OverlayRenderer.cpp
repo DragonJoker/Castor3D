@@ -49,8 +49,8 @@ namespace Castor3D
 	{
 		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( cuT( "" ), eELEMENT_TYPE_2INTS ),
-			BufferElementDeclaration( cuT( "" ), eELEMENT_TYPE_2FLOATS ) }
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_2INTS ),
+			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_TYPE_2FLOATS ) }
 		);
 		m_wp2DBlendState = GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OVERLAY_BLEND" ) );
 		m_wp2DDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "OVERLAY_DS" ) );
@@ -88,7 +88,7 @@ namespace Castor3D
 			auto l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
 			m_panelVertexBuffer->Create();
 			m_panelVertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_panelGeometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), m_panelVertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_panelGeometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_panelVertexBuffer.get(), nullptr, nullptr, nullptr );
 		}
 
 		if ( !m_borderVertexBuffer )
@@ -108,7 +108,7 @@ namespace Castor3D
 			auto l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
 			m_borderVertexBuffer->Create();
 			m_borderVertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_borderGeometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), m_borderVertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_borderGeometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_borderVertexBuffer.get(), nullptr, nullptr, nullptr );
 		}
 
 		// Create one text overlays buffer
@@ -337,7 +337,7 @@ namespace Castor3D
 
 		l_vertexBuffer->Create();
 		l_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-		GeometryBuffersSPtr l_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), l_vertexBuffer.get(), nullptr, nullptr, nullptr );
+		GeometryBuffersSPtr l_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, l_vertexBuffer.get(), nullptr, nullptr, nullptr );
 
 		m_textsVertexBuffers.push_back( std::move( l_vertexBuffer ) );
 		m_textsGeometryBuffers.push_back( l_geometryBuffers );

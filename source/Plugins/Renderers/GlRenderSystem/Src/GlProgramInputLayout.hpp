@@ -56,28 +56,9 @@ namespace GlRender
 		 *\copydoc		Castor3D::ProgramInputLayout::Cleanup
 		 */
 		virtual void Cleanup();
-		/**
-		 *\copydoc		Castor3D::ProgramInputLayout::Bind
-		 */
-		virtual bool Bind()const;
-		/**
-		 *\copydoc		Castor3D::ProgramInputLayout::Unbind
-		 */
-		virtual void Unbind()const;
-		/**
-		 *\copydoc		Castor3D::ProgramInputLayout::SetStride
-		 */
-		virtual void SetStride( uint32_t p_stride );
 
 	private:
 		std::multimap< int, Castor3D::BufferElementDeclaration > DoListAttributes( Castor3D::ShaderProgram const & p_program );
-		bool DoCreateAttribute( Castor3D::BufferElementDeclaration const & p_element );
-
-	private:
-		//! Buffer elements description.
-		GlAttributePtrArray m_attributes;
-		//! The shader program.
-		Castor3D::ShaderProgramWPtr m_program;
 	};
 }
 

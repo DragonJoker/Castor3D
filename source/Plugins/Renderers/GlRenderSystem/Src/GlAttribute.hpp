@@ -29,12 +29,12 @@ namespace GlRender
 	\version 0.6.1.0
 	\date 03/01/2011
 	*/
-	template <typename T, uint32_t Count>
+	template< typename T, uint32_t Count >
 	class GlAttribute
 		: public GlAttributeBase
 	{
 	public:
-		GlAttribute( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_attributeName );
+		GlAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor::String const & p_attributeName );
 		virtual ~GlAttribute();
 	};
 }

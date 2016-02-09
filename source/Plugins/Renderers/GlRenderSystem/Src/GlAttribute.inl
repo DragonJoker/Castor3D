@@ -35,13 +35,13 @@ namespace GlRender
 		enum { Value = eGL_TYPE_DOUBLE };
 	};
 
-	template <typename T, uint32_t Count>
-	GlAttribute<T, Count>::GlAttribute( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_renderSystem, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Count )
+	template< typename T, uint32_t Count >
+	GlAttribute<T, Count>::GlAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor::String const & p_attributeName )
+		: GlAttributeBase( p_gl, p_program, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Count )
 	{
 	}
 
-	template <typename T, uint32_t Count>
+	template< typename T, uint32_t Count >
 	GlAttribute<T, Count>::~GlAttribute()
 	{
 	}
