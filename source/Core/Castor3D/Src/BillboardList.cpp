@@ -152,9 +152,8 @@ namespace Castor3D
 	BillboardList::BillboardList( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem )
 		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_BILLBOARD, p_parent )
 		, m_bNeedUpdate( false )
+		, m_declaration( { BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) } )
 	{
-		BufferElementDeclaration l_vertexDeclarationElements[] = { BufferElementDeclaration( cuT( "" ), eELEMENT_TYPE_3FLOATS ) };
-		m_declaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
 	}
 
 	BillboardList::~BillboardList()
@@ -163,8 +162,8 @@ namespace Castor3D
 
 	bool BillboardList::Initialise()
 	{
-		m_vertexBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), *m_declaration );
-		uint32_t l_stride = m_declaration->GetStride();
+		m_vertexBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), m_declaration );
+		uint32_t l_stride = m_declaration.GetStride();
 		m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
 		uint8_t * l_pBuffer = m_vertexBuffer->data();
 

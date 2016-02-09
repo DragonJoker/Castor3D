@@ -55,19 +55,10 @@ namespace GlRender
 
 			if ( m_matrixBuffer )
 			{
-				m_matrixAttribute = std::make_shared< GlAttribute< real, 16 > >( p_gl, p_program, ShaderProgram::Transform );
+				m_matrixAttribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( p_gl, p_program, ShaderProgram::Transform );
+				m_matrixAttribute->SetStride( 4 * 4 * sizeof( real ) );
 				m_matrixBuffer->Bind( true );
-				uint32_t l_location = m_matrixAttribute->GetLocation();
-
-				if ( l_location != eGL_INVALID_INDEX )
-				{
-					for ( int i = 0; i < 4 && l_return; ++i )
-					{
-						l_return = GetOpenGl().EnableVertexAttribArray( l_location + i );
-						l_return &= GetOpenGl().VertexAttribPointer( l_location + i, 4, eGL_TYPE_REAL, false, 16 * sizeof( real ), BUFFER_OFFSET( i * 4 * sizeof( real ) ) );
-						l_return &= GetOpenGl().VertexAttribDivisor( l_location + i, 1 );
-					}
-				}
+				m_matrixAttribute->Bind( true );
 			}
 
 			GetOpenGl().BindVertexArray( 0 );
@@ -149,10 +140,22 @@ namespace GlRender
 			return l_element.m_name == p_element.m_name;
 		} );
 
-		// If not found, try to find it using the type
 		if ( l_return == p_declaration.end() )
 		{
-			// TODO: Try to find the element using the type, and another thing not defined yet, that would restrain the lookup.
+			// We try to find an element with the same eELEMENT_USAGE as asked.
+			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
+			{
+				return l_element.m_usages == p_element.m_usages;
+			} );
+		}
+
+		if ( l_return == p_declaration.end() )
+		{
+			// We try to find an element with an eELEMENT_USAGE approqching the one asked.
+			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
+			{
+				return ( l_element.m_usages & p_element.m_usages ) != 0;
+			} );
 		}
 
 		return l_return;
@@ -199,6 +202,18 @@ namespace GlRender
 			break;
 
 		case eELEMENT_TYPE_4INTS:
+			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
+			break;
+
+		case eELEMENT_TYPE_2x2FLOATS:
+			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
+			break;
+
+		case eELEMENT_TYPE_3x3FLOATS:
+			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
+			break;
+
+		case eELEMENT_TYPE_4x4FLOATS:
 			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
 			break;
 

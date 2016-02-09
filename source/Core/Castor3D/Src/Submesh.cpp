@@ -220,11 +220,11 @@ namespace Castor3D
 		, m_initialised( false )
 		, m_dirty( true )
 		, m_layout( {
-						BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetPos() ),
-						BufferElementDeclaration( ShaderProgram::Normal, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetNml() ),
-						BufferElementDeclaration( ShaderProgram::Tangent, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTan() ),
-						BufferElementDeclaration( ShaderProgram::Bitangent, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetBin() ),
-						BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTex() ),
+						BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetPos() ),
+						BufferElementDeclaration( ShaderProgram::Normal, eELEMENT_USAGE_NORMAL, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetNml() ),
+						BufferElementDeclaration( ShaderProgram::Tangent, eELEMENT_USAGE_TANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTan() ),
+						BufferElementDeclaration( ShaderProgram::Bitangent, eELEMENT_USAGE_BITANGENT, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetBin() ),
+						BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_3FLOATS, Vertex::GetOffsetTex() ),
 					} )
 	{
 	}
@@ -1020,14 +1020,13 @@ namespace Castor3D
 		{
 			m_bonesBuffer = std::make_unique< VertexBuffer >( *GetEngine(), BufferDeclaration
 			{ {
-				BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_TYPE_3INTS, 0 },
-				BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_TYPE_3INTS, 0 },
-				BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_TYPE_3FLOATS, 0 },
-				BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_TYPE_3FLOATS, 0 },
+				BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_3INTS, 0 },
+				BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_3INTS, 0 },
+				BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_3FLOATS, 0 },
+				BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_3FLOATS, 0 },
 			} } );
 		}
-		else if ( GetEngine()->GetRenderSystem()->HasInstancing()
-				  && ( GetProgramFlags() & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
+		else if ( GetEngine()->GetRenderSystem()->HasInstancing() )
 		{
 			uint32_t l_count = 0;
 			l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )
@@ -1037,6 +1036,7 @@ namespace Castor3D
 
 			if ( l_count > 1 )
 			{
+				m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
 				m_matrixBuffer = std::make_unique< MatrixBuffer >( *GetEngine() );
 			}
 		}
@@ -1086,6 +1086,7 @@ namespace Castor3D
 
 		if ( l_count > 1 )
 		{
+			m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
 			DoGenerateMatrixBuffer( l_count );
 		}
 

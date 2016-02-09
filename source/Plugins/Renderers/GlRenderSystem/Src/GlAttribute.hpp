@@ -22,12 +22,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
-	//! Template vertex attribute class
 	/*!
-	Derivated from GlAttribsBase, allows to specify attribute type and count
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 03/01/2011
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		03/01/2011
+	\brief		Derivated from GlAttribsBase, allows to specify attribute type and count
 	*/
 	template< typename T, uint32_t Count >
 	class GlAttribute
@@ -36,6 +35,21 @@ namespace GlRender
 	public:
 		GlAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor::String const & p_attributeName );
 		virtual ~GlAttribute();
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		03/01/2011
+	\brief		Derivated from GlAttribsBase, allows to specify attribute type and count
+	*/
+	template< typename T, uint32_t Columns, uint32_t Rows >
+	class GlMatAttribute
+		: public GlAttributeBase
+	{
+	public:
+		GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor::String const & p_attributeName );
+		virtual ~GlMatAttribute();
+		virtual bool Bind( bool p_bNormalised = false );
 	};
 }
 

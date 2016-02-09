@@ -1204,6 +1204,7 @@ namespace GlRender
 
 	class GlRenderSystem;
 	class GlAttributeBase;
+	template< typename T, uint32_t Columns, uint32_t Rows > class GlMatAttribute;
 	template< typename T, uint32_t Count > class GlAttribute;
 	template< typename T > class GlBufferBase;
 	template< typename T > class GlBuffer;
@@ -1215,6 +1216,9 @@ namespace GlRender
 	class GlIndexBufferObject;
 	class GlMatrixBufferObject;
 	class GlTextureBufferObject;
+	typedef GlMatAttribute< real, 4, 4 > GlAttributeMat4;
+	typedef GlMatAttribute< real, 3, 3 > GlAttributeMat3;
+	typedef GlMatAttribute< real, 2, 2 > GlAttributeMat2;
 	typedef GlAttribute< real, 4 > GlAttribute4r;
 	typedef GlAttribute< real, 3 > GlAttribute3r;
 	typedef GlAttribute< real, 2 > GlAttribute2r;

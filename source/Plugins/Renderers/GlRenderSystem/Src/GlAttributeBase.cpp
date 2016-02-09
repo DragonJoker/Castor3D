@@ -8,14 +8,15 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, ShaderProgram const & p_program, String const & p_attributeName, eGL_TYPE p_glType, int p_count )
+	GlAttributeBase::GlAttributeBase( OpenGl & p_gl, ShaderProgram const & p_program, String const & p_attributeName, eGL_TYPE p_glType, uint32_t p_count, uint32_t p_divisor )
 		: Holder( p_gl )
 		, m_program( p_program )
 		, m_attributeName( p_attributeName )
-		, m_attributeLocation( uint32_t( eGL_INVALID_INDEX ) )
+		, m_attributeLocation( eGL_INVALID_INDEX )
 		, m_count( p_count )
-		, m_offset( 0 )
-		, m_stride( 0 )
+		, m_divisor( p_divisor )
+		, m_offset( 0u )
+		, m_stride( 0u )
 		, m_glType( p_glType )
 	{
 		if ( m_program.GetStatus() == ePROGRAM_STATUS_LINKED )

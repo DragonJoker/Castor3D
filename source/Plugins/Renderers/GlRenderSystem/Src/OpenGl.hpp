@@ -1049,7 +1049,6 @@ namespace GlRender
 		eGL_FUNC DepthFuncs[Castor3D::eDEPTH_FUNC_COUNT];
 		std::map< eGL_TEXTURE_ATTACHMENT, eGL_BUFFER > BuffersTA;
 		std::map< eGL_RENDERBUFFER_ATTACHMENT, eGL_BUFFER > BuffersRBA;
-		Castor3D::eELEMENT_TYPE ElementTypes[Castor3D::eELEMENT_TYPE_COUNT];
 
 		bool m_bHasVao;
 		bool m_bHasUbo;

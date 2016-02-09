@@ -49,9 +49,9 @@ namespace Castor3D
 	{
 		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_2INTS ),
-			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_TYPE_2FLOATS ) }
-		);
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2INTS ),
+			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS )
+		} );
 		m_wp2DBlendState = GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OVERLAY_BLEND" ) );
 		m_wp2DDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "OVERLAY_DS" ) );
 	}

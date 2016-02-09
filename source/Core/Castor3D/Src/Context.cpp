@@ -41,8 +41,8 @@ namespace Castor3D
 		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
 		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration{ ShaderProgram::Position, eELEMENT_TYPE_2FLOATS },
-			BufferElementDeclaration{ ShaderProgram::Texture, eELEMENT_TYPE_2FLOATS }
+			BufferElementDeclaration{ ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS },
+			BufferElementDeclaration{ ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS }
 		} );
 	}
 

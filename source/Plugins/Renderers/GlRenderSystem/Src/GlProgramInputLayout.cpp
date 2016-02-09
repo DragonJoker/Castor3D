@@ -66,7 +66,7 @@ namespace GlRender
 					l_elemType = eELEMENT_TYPE_3FLOATS;
 				}
 
-				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), l_elemType } } );
+				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), 0, l_elemType } } );
 			}
 		}
 		else
@@ -93,7 +93,7 @@ namespace GlRender
 					l_elemType = eELEMENT_TYPE_3FLOATS;
 				}
 
-				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), l_elemType } } );
+				l_attributes.insert( { l_loc, BufferElementDeclaration{ l_buffer.data(), 0, l_elemType } } );
 			}
 		}
 

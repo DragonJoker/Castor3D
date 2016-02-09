@@ -18,6 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_BILLBOARD_LIST_H___
 #define ___C3D_BILLBOARD_LIST_H___
 
+#include "BufferDeclaration.hpp"
 #include "MovableObject.hpp"
 
 #include <OwnedBy.hpp>
@@ -337,7 +338,7 @@ namespace Castor3D
 		//!\~english The positions list	\~french La liste des positions
 		Castor::Point3rArray m_arrayPositions;
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets
-		BufferDeclarationSPtr m_declaration;
+		BufferDeclaration m_declaration;
 		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
 		bool m_bNeedUpdate;
 		//!\~english  The shader program used to draw the billboards	\~french Le shader utilise pour rendre les billboards
