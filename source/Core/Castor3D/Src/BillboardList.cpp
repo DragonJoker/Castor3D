@@ -328,7 +328,7 @@ namespace Castor3D
 					}
 
 					l_pass->Render();
-					l_buffers.Draw( *l_program, l_uiSize, 0 );
+					l_buffers.Draw( l_uiSize, 0 );
 					l_pass->EndRender();
 				}
 			}

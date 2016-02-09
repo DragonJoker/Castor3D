@@ -109,8 +109,8 @@ namespace Deferred
 
 		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_2FLOATS ),
-			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_TYPE_2FLOATS ),
+		  BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
+		    BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS ),
 		} );
 
 		real l_data[] =
@@ -252,7 +252,7 @@ namespace Deferred
 		l_scene->GetVariable( ShaderProgram::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
 		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, m_lightPassShaderProgram->GetLayout(), m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_lightPassShaderProgram, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 		return l_return;
 	}
 
@@ -347,7 +347,7 @@ namespace Deferred
 
 			if ( l_return )
 			{
-				m_geometryBuffers->Draw( *m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
+				m_geometryBuffers->Draw( m_arrayVertex.size(), 0 );
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 				{

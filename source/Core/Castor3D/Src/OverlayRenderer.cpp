@@ -381,13 +381,13 @@ namespace Castor3D
 
 					l_pass->Render2D();
 					p_texture->BindAt( 0 );
-					p_geometryBuffers->Draw( *l_program, p_count, 0 );
+					p_geometryBuffers->Draw( p_count, 0 );
 					p_texture->UnbindFrom( 0 );
 				}
 				else
 				{
 					l_pass->Render2D();
-					p_geometryBuffers->Draw( *l_program, p_count, 0 );
+					p_geometryBuffers->Draw( p_count, 0 );
 				}
 
 				l_pass->EndRender();

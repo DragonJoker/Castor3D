@@ -273,7 +273,7 @@ namespace Bloom
 
 		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_2FLOATS ),
+		  BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
 		} );
 
 		real l_pBuffer[] =
@@ -374,7 +374,7 @@ namespace Bloom
 			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 		}
 
 		for ( auto && l_surface : m_hiPassSurfaces )
@@ -551,7 +551,7 @@ namespace Bloom
 			l_texture3->BindAt( 3 );
 			m_renderTarget.GetTexture()->BindAt( 4 );
 
-			m_geometryBuffers->Draw( *l_program, m_vertices.size(), 0 );
+			m_geometryBuffers->Draw( m_vertices.size(), 0 );
 
 			l_texture0->UnbindFrom( 0 );
 			l_texture1->UnbindFrom( 1 );

@@ -35,7 +35,7 @@ namespace Ase
 
 			for ( auto && l_submesh : *l_mesh )
 			{
-				l_submesh->GenerateBuffers();
+				GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 			}
 
 			l_mesh->ComputeNormals();

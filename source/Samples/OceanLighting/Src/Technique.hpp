@@ -17,7 +17,7 @@
 #include <Vertex.hpp>
 #include <BlendState.hpp>
 
-#define ENABLE_FFT	0
+#define ENABLE_FFT 1
 
 namespace OceanLighting
 {
@@ -571,6 +571,8 @@ namespace OceanLighting
 		Castor3D::OneFloatFrameVariableSPtr m_initFftSize;
 		Castor3D::Point4fFrameVariableSPtr m_initInverseGridSizes;
 		Castor3D::OneFloatFrameVariableSPtr m_initT;
+		Castor3D::VertexBufferUPtr m_initVtxBuffer;
+		Castor3D::IndexBufferUPtr m_initIdxBuffer;
 		Castor3D::GeometryBuffersSPtr m_initGBuffers;
 		Castor3D::BlendStateWPtr m_initBlendState;
 
@@ -582,6 +584,8 @@ namespace OceanLighting
 		Castor3D::Point4fFrameVariableSPtr m_variancesGridSizes;
 		Castor3D::OneFloatFrameVariableSPtr m_variancesSlopeVarianceDelta;
 		Castor3D::OneFloatFrameVariableSPtr m_variancesC;
+		Castor3D::IndexBufferUPtr m_variancesIdxBuffer;
+		Castor3D::VertexBufferUPtr m_variancesVtxBuffer;
 		Castor3D::GeometryBuffersSPtr m_variancesGBuffers;
 		Castor3D::BlendStateWPtr m_variancesBlendState;
 
@@ -590,6 +594,8 @@ namespace OceanLighting
 		Castor3D::OneIntFrameVariableSPtr m_fftxNLayers;
 		Castor3D::OneFloatFrameVariableSPtr m_fftxPass;
 		Castor3D::OneTextureFrameVariableSPtr m_fftxImgSampler;
+		Castor3D::VertexBufferUPtr m_fftxVtxBuffer;
+		Castor3D::IndexBufferUPtr m_fftxIdxBuffer;
 		Castor3D::GeometryBuffersSPtr m_fftxGBuffers;
 		Castor3D::BlendStateWPtr m_fftxBlendState;
 
@@ -598,6 +604,8 @@ namespace OceanLighting
 		Castor3D::OneIntFrameVariableSPtr m_fftyNLayers;
 		Castor3D::OneFloatFrameVariableSPtr m_fftyPass;
 		Castor3D::OneTextureFrameVariableSPtr m_fftyImgSampler;
+		Castor3D::VertexBufferUPtr m_fftyVtxBuffer;
+		Castor3D::IndexBufferUPtr m_fftyIdxBuffer;
 		Castor3D::GeometryBuffersSPtr m_fftyGBuffers;
 		Castor3D::BlendStateWPtr m_fftyBlendState;
 

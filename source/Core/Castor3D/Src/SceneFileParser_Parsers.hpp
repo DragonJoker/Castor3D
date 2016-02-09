@@ -172,9 +172,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryOutputType )
 	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryOutputVtxCount )
 
-	// Shader Program Sampler Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderSamplerValue )
-
 	// Shader Program UBO Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderUboShaders )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderUboVariable )
