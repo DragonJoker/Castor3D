@@ -41,8 +41,8 @@ namespace GlRender
 		virtual ~GlFrameVariableBuffer();
 
 	private:
-		virtual Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::ShaderProgramBase * p_program, Castor3D::eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
-		virtual bool DoInitialise( Castor3D::ShaderProgramBase * p_program );
+		virtual Castor3D::FrameVariableSPtr DoCreateVariable( Castor3D::ShaderProgram * p_program, Castor3D::eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
+		virtual bool DoInitialise( Castor3D::ShaderProgram * p_program );
 		virtual void DoCleanup();
 		virtual bool DoBind( uint32_t p_index );
 		virtual void DoUnbind( uint32_t p_index );

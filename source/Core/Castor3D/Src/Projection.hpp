@@ -58,10 +58,6 @@ namespace Castor3D
 		 */
 		C3D_API static MeshGeneratorSPtr Create();
 		/**
-		 *\copydoc		Castor3D::MeshGenerator::Generate
-		 */
-		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
-		/**
 		 *\~english
 		 *\brief		Defines the pattern used to build the projection
 		 *\param[in]	p_pPattern	The arc to project
@@ -84,6 +80,12 @@ namespace Castor3D
 		{
 			return m_uiNbFaces;
 		}
+
+	private:
+		/**
+		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*/
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
 	private:
 		Point3rPatternSPtr m_pPattern;

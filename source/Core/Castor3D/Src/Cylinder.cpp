@@ -25,7 +25,7 @@ namespace Castor3D
 		return std::make_shared< Cylinder >();
 	}
 
-	void Cylinder::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void Cylinder::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 	{
 		m_nbFaces = p_faces[0];
 		m_radius = p_dimensions[0];

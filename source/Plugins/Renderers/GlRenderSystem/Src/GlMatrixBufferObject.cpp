@@ -34,7 +34,7 @@ namespace GlRender
 		return GlBuffer< real >::DoInitialise( p_type, p_nature );
 	}
 
-	bool GlMatrixBufferObject::AttachTo( Castor3D::ShaderProgramBaseSPtr p_program )
+	bool GlMatrixBufferObject::AttachTo( Castor3D::ShaderProgramSPtr p_program )
 	{
 		bool l_return = true;
 		GlShaderProgramSPtr l_pNewProgram = std::static_pointer_cast< GlShaderProgram >( p_program );

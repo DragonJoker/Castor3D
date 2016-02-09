@@ -41,7 +41,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
 		 */
-		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer, Castor3D::eTOPOLOGY p_topology );
+		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ProgramInputLayout const & p_layout, Castor3D::VertexBuffer * p_vtx, Castor3D::IndexBuffer * p_idx, Castor3D::VertexBuffer * p_bones, Castor3D::MatrixBuffer * p_inst );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateDepthStencilState
 		 */
@@ -61,7 +61,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateShaderProgram
 		 */
-		virtual Castor3D::ShaderProgramBaseSPtr CreateShaderProgram();
+		virtual Castor3D::ShaderProgramSPtr CreateShaderProgram();
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateIndexBuffer
 		 */
@@ -69,7 +69,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateVertexBuffer
 		 */
-		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::BufferDeclaration const & p_declaration, Castor3D::CpuBuffer< uint8_t > * p_buffer );
+		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateMatrixBuffer
 		 */
@@ -97,11 +97,11 @@ namespace GlRender
 		/**
 		*\copydoc		Castor3D::RenderSystem::CreateOverlayProgram
 		*/
-		virtual Castor3D::ShaderProgramBaseSPtr CreateOverlayProgram( uint32_t p_flags );
+		virtual Castor3D::ShaderProgramSPtr CreateOverlayProgram( uint32_t p_flags );
 		/**
 		*\copydoc		Castor3D::RenderSystem::CreateBillboardsProgram
 		*/
-		virtual Castor3D::ShaderProgramBaseSPtr CreateBillboardsProgram( Castor3D::RenderTechniqueBase const & p_technique, uint32_t p_flags );
+		virtual Castor3D::ShaderProgramSPtr CreateBillboardsProgram( Castor3D::RenderTechniqueBase const & p_technique, uint32_t p_flags );
 		/**
 		*\copydoc		Castor3D::RenderSystem::GetVertexShaderSource
 		*/

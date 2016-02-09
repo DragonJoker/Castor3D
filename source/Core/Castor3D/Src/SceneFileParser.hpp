@@ -87,7 +87,7 @@ namespace Castor3D
 		RenderTargetSPtr pRenderTarget;
 		uint32_t uiPass;
 		TextureUnitSPtr pTextureUnit;
-		ShaderProgramBaseSPtr pShaderProgram;
+		ShaderProgramSPtr pShaderProgram;
 		eSHADER_TYPE eShaderObject;
 		FrameVariableBufferSPtr pFrameVariableBuffer;
 		FrameVariableSPtr pFrameVariable;

@@ -23,7 +23,7 @@ MeshGeneratorSPtr Plane::Create()
 	return std::make_shared< Plane >();
 }
 
-void Plane::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Plane::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 {
 	m_subDivisionsW = p_faces[0];
 	m_subDivisionsD = p_faces[1];

@@ -146,7 +146,7 @@ namespace GlRender
 		}
 	}
 
-	void GlShaderObject::AttachTo( ShaderProgramBase & p_program )
+	void GlShaderObject::AttachTo( ShaderProgram & p_program )
 	{
 		Detach();
 

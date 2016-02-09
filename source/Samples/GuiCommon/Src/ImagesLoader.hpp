@@ -38,8 +38,8 @@ namespace GuiCommon
 		~ImagesLoader();
 
 		static void Cleanup();
-		static void AddBitmap( uint32_t p_uiID, char const * const * p_pBits );
-		static wxImage * GetBitmap( uint32_t p_uiID );
+		static void AddBitmap( uint32_t p_id, char const * const * p_pBits );
+		static wxImage * GetBitmap( uint32_t p_id );
 		static void WaitAsyncLoads();
 	};
 }

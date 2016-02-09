@@ -32,7 +32,7 @@ void Projection::SetPoints( Point3rPatternSPtr p_pPattern, Point3r const & p_vAx
 	m_vAxis = m_vAxis * m_fDepth;
 }
 
-void Projection::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Projection::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 {
 	//m_uiNbFaces = p_faces[0];
 	//m_fDepth = p_dimensions[0];

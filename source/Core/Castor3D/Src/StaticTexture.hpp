@@ -33,7 +33,7 @@ namespace Castor3D
 	\remark		Une texture statique supprime son buffer de la ram quand elle est initialisée
 	*/
 	class StaticTexture
-		: public TextureBase
+		: public Texture
 	{
 	public:
 		/**
@@ -53,7 +53,7 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~StaticTexture();
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual bool Initialise( uint32_t p_index );
 		/**
@@ -68,19 +68,19 @@ namespace Castor3D
 		 */
 		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer );
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual void Cleanup();
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual bool BindAt( uint32_t p_index );
 		/**
-		 *\copydoc		Castor3D::TextureBase::Initialise
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual void UnbindFrom( uint32_t p_index );
 
-		using TextureBase::SetImage;
+		using Texture::SetImage;
 	};
 }
 

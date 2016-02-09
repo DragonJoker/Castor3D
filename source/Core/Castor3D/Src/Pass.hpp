@@ -171,7 +171,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\return
 		 */
-		C3D_API void BindToAutomaticProgram( ShaderProgramBaseSPtr p_program );
+		C3D_API void BindToAutomaticProgram( ShaderProgramSPtr p_program );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -254,7 +254,7 @@ namespace Castor3D
 		 *\brief		Définit le shader
 		 *\param[in]	p_program	Le programme
 		 */
-		C3D_API void SetShader( ShaderProgramBaseSPtr p_program );
+		C3D_API void SetShader( ShaderProgramSPtr p_program );
 		/**
 		 *\~english
 		 *\brief		Tells if the pass needs alpha blending
@@ -299,7 +299,7 @@ namespace Castor3D
 		 *\brief		Récupère le shader
 		 *\return		\p nullptr si aucun
 		 */
-		inline ShaderProgramBaseSPtr GetShader()const
+		inline ShaderProgramSPtr GetShader()const
 		{
 			return m_shaderProgram.lock();
 		}
@@ -730,7 +730,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\param[in,out]p_variable	Reçoit la variable shader
 		 */
-		C3D_API void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgramBase & p_program, OneTextureFrameVariableWPtr & p_variable );
+		C3D_API void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgram & p_program, OneTextureFrameVariableWPtr & p_variable );
 		/**
 		 *\~english
 		 *\brief		Retrieves the channeled textures shader variables
@@ -817,7 +817,7 @@ namespace Castor3D
 		//!\~english Tells if the pass is two sided	\~french Dit si la passe est sur 2 faces
 		bool m_bDoubleFace;
 		//!\~english The shader program, if any	\~french Le programme de shader
-		ShaderProgramBaseWPtr m_shaderProgram;
+		ShaderProgramWPtr m_shaderProgram;
 		//!\~english Texture units	\~french Les textures
 		TextureUnitPtrArray m_arrayTextureUnits;
 		//!\~english The parent material	\~french Le materiau parent

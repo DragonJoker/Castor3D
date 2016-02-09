@@ -207,10 +207,10 @@ namespace CastorViewer
 			StringStream l_strVT;
 			StringStream l_strVN;
 			StringStream l_strF;
-			VertexBuffer & l_vtxBuffer = l_submesh->GetGeometryBuffers()->GetVertexBuffer();
-			IndexBuffer & l_idxBuffer = l_submesh->GetGeometryBuffers()->GetIndexBuffer();
-			uint32_t l_uiStride = l_vtxBuffer.GetDeclaration().GetStride();
-			uint32_t l_uiNbPoints = l_vtxBuffer.GetSize() / l_uiStride;
+			VertexBuffer & l_vtxBuffer = l_submesh->GetVertexBuffer();
+			IndexBuffer & l_idxBuffer = l_submesh->GetIndexBuffer();
+			uint32_t l_stride = l_vtxBuffer.GetDeclaration().GetStride();
+			uint32_t l_uiNbPoints = l_vtxBuffer.GetSize() / l_stride;
 			uint32_t l_uiNbFaces = l_idxBuffer.GetSize() / 3;
 			uint8_t * l_pVtx = l_vtxBuffer.data();
 			uint32_t * l_pIdx = l_idxBuffer.data();
@@ -220,7 +220,7 @@ namespace CastorViewer
 
 			for ( uint32_t j = 0; j < l_uiNbPoints; j++ )
 			{
-				real * l_vertex = reinterpret_cast< real * >( &l_pVtx[j * l_uiStride] );
+				real * l_vertex = reinterpret_cast< real * >( &l_pVtx[j * l_stride] );
 				Vertex::GetPosition( l_vertex, l_ptPos );
 				Vertex::GetNormal( l_vertex, l_ptNml );
 				Vertex::GetTexCoord( l_vertex, l_ptTex );

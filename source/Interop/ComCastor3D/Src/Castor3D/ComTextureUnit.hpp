@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_TEXTURE_UNIT_H__
 #define __COMC3D_COM_TEXTURE_UNIT_H__
 
-#include "ComTextureBase.hpp"
+#include "ComTexture.hpp"
 #include "ComColour.hpp"
 
 #include <TextureUnit.hpp>
@@ -63,7 +63,7 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Texture, ITextureBase *, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetTexture ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetTexture ) );
+		COM_PROPERTY( Texture, ITexture *, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetTexture ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetTexture ) );
 		COM_PROPERTY( AlphaFunc, eALPHA_FUNC, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlphaFunc ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlphaFunc ) );
 		COM_PROPERTY( AlphaValue, float, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlphaValue ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlphaValue ) );
 		COM_PROPERTY( AlpFunction, eALPHA_BLEND_FUNC, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlpFunction ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlpFunction ) );

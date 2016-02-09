@@ -2,7 +2,7 @@
 #include "ComGeometry.hpp"
 #include "ComCamera.hpp"
 #include "ComLight.hpp"
-#include "ComTextureBase.hpp"
+#include "ComTexture.hpp"
 
 #include <BillboardManager.hpp>
 #include <CameraManager.hpp>
@@ -415,7 +415,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::GetBackgroundImage( /* [out, retval] */ ITextureBase ** pVal )
+	STDMETHODIMP CScene::GetBackgroundImage( /* [out, retval] */ ITexture ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -423,11 +423,11 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				hr = CTextureBase::CreateInstance( pVal );
+				hr = CTexture::CreateInstance( pVal );
 
 				if ( hr == S_OK )
 				{
-					static_cast< CTextureBase * >( *pVal )->SetInternal( m_internal->GetBackgroundImage() );
+					static_cast< CTexture * >( *pVal )->SetInternal( m_internal->GetBackgroundImage() );
 				}
 			}
 		}

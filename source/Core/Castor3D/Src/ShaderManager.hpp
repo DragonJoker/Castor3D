@@ -72,7 +72,7 @@ namespace Castor3D
 		 *\param[in]	p_eLanguage	Le langage de shader souhaité
 		 *\return		Le programme créé
 		 */
-		C3D_API ShaderProgramBaseSPtr GetNewProgram( eSHADER_LANGUAGE p_eLanguage = eSHADER_LANGUAGE_AUTO );
+		C3D_API ShaderProgramSPtr GetNewProgram( eSHADER_LANGUAGE p_eLanguage = eSHADER_LANGUAGE_AUTO );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags
@@ -88,7 +88,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG
 		 *\return		Le programme trouvé ou créé
 		 */
-		C3D_API ShaderProgramBaseSPtr GetAutomaticProgram( RenderTechniqueBase const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderTechniqueBase const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.
@@ -101,7 +101,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API ShaderProgramBaseSPtr GetBillboardProgram( uint32_t p_textureFlags, uint32_t p_programFlags )const;
+		C3D_API ShaderProgramSPtr GetBillboardProgram( uint32_t p_textureFlags, uint32_t p_programFlags )const;
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.
@@ -114,7 +114,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
 		 *\return		Le programme trouvé.
 		 */
-		C3D_API void AddBillboardProgram( ShaderProgramBaseSPtr p_program, uint32_t p_textureFlags, uint32_t p_programFlags );
+		C3D_API void AddBillboardProgram( ShaderProgramSPtr p_program, uint32_t p_textureFlags, uint32_t p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Creates a matrix frame variable buffer
@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 *\return		Le frame variable buffer
 		 */
-		C3D_API FrameVariableBufferSPtr CreateMatrixBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
+		C3D_API FrameVariableBufferSPtr CreateMatrixBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates a scene frame variable buffer
@@ -140,7 +140,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 *\return		Le frame variable buffer
 		 */
-		C3D_API FrameVariableBufferSPtr CreateSceneBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
+		C3D_API FrameVariableBufferSPtr CreateSceneBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates a pass frame variable buffer
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
 		 *\return		Le frame variable buffer
 		 */
-		C3D_API FrameVariableBufferSPtr CreatePassBuffer( ShaderProgramBase & p_program, uint32_t p_shaderMask );
+		C3D_API FrameVariableBufferSPtr CreatePassBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
 		/**
 		 *\~english
 		 *\brief		Creates the textures related frame variables
@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
 		 *\param[in]	p_program			Le programme auquel le buffer est lié
 		 */
-		C3D_API void CreateTextureVariables( ShaderProgramBase & p_program, uint32_t p_uiTextureFlags );
+		C3D_API void CreateTextureVariables( ShaderProgram & p_program, uint32_t p_uiTextureFlags );
 		/**
 		 *\~english
 		 *\brief		Locks the collection mutex
@@ -247,7 +247,7 @@ namespace Castor3D
 		}
 
 	private:
-		DECLARE_MAP( uint64_t, ShaderProgramBaseWPtr, ShaderProgramWPtrUInt64 );
+		DECLARE_MAP( uint64_t, ShaderProgramWPtr, ShaderProgramWPtrUInt64 );
 		mutable std::recursive_mutex m_mutex;
 		//!\~english The loaded shader programs	\~french Les programmes chargés
 		ShaderProgramPtrArray m_arrayPrograms;

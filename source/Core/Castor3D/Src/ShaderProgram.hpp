@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include "FrameVariable.hpp"
-#include "VertexLayout.hpp"
+#include "ProgramInputLayout.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -38,12 +38,13 @@ namespace Castor3D
 	\~french
 	\brief		Implémentation de base d'un programme de shader, utilisé afin d'exposer les fonctions communes aux langages de shader
 	*/
-	class ShaderProgramBase
+	class ShaderProgram
 		: public Castor::OwnedBy< RenderSystem >
+		, public std::enable_shared_from_this< ShaderProgram >
 	{
 		template< class Ty > friend struct FrameVariableCreator;
 		template< class Ty > friend struct ShaderObjectCreator;
-		friend class Castor::TextLoader< Castor3D::ShaderProgramBase >;
+		friend class Castor::TextLoader< Castor3D::ShaderProgram >;
 
 	public:
 		/*!
@@ -51,12 +52,12 @@ namespace Castor3D
 		\version	0.6.1.0
 		\date		19/10/2011
 		\~english
-		\brief		ShaderProgramBase loader
+		\brief		ShaderProgram loader
 		\~french
-		\brief		Loader de ShaderProgramBase
+		\brief		Loader de ShaderProgram
 		*/
 		class TextLoader
-			: public Castor::Loader< ShaderProgramBase, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::Loader< ShaderProgram, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**
@@ -76,19 +77,19 @@ namespace Castor3D
 			 *\param[in]		p_program	Le ShaderProgram
 			 *\param[in,out]	p_file		Le fichier
 			 */
-			C3D_API virtual bool operator()( ShaderProgramBase const & p_program, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( ShaderProgram const & p_program, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
 		\date		15/04/2013
 		\~english
-		\brief		ShaderProgramBase loader
+		\brief		ShaderProgram loader
 		\~french
-		\brief		Loader de ShaderProgramBase
+		\brief		Loader de ShaderProgram
 		*/
 		class BinaryParser
-			: public Castor3D::BinaryParser< ShaderProgramBase >
+			: public Castor3D::BinaryParser< ShaderProgram >
 		{
 		public:
 			/**
@@ -112,7 +113,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			C3D_API virtual bool Fill( ShaderProgramBase const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( ShaderProgram const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -125,9 +126,34 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			C3D_API virtual bool Parse( ShaderProgramBase & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( ShaderProgram & p_obj, BinaryChunk & p_chunk )const;
 		};
 
+		/**@name Attributes */
+		//@{
+
+		//!\~english Name of the position attribute.	\~french Nom de l'attribut position.
+		C3D_API static const Castor::String Position;
+		//!\~english Name of the normal attribute.	\~french Nom de l'attribut normale.
+		C3D_API static const Castor::String Normal;
+		//!\~english Name of the tangent attribute.	\~french Nom de l'attribut tangente.
+		C3D_API static const Castor::String Tangent;
+		//!\~english Name of the bitangent attribute.	\~french Nom de l'attribut bitangente.
+		C3D_API static const Castor::String Bitangent;
+		//!\~english Name of the texture attribute.	\~french Nom du de l'attribut texture.
+		C3D_API static const Castor::String Texture;
+		//!\~english Name of the colour attribute.	\~french Nom du de l'attribut couleur.
+		C3D_API static const Castor::String Colour;
+		//!\~english Name of the first bones ID attribute.	\~french Nom du premier attribut d'ID des bones.
+		C3D_API static const Castor::String BoneIds0;
+		//!\~english Name of the second bones ID attribute.	\~french Nom du second attribut d'ID des bones.
+		C3D_API static const Castor::String BoneIds1;
+		//!\~english Name of the first bones weight attribute.	\~french Nom du premier attribut de poids des bones.
+		C3D_API static const Castor::String Weights0;
+		//!\~english Name of the second bones weight attribute.	\~french Nom du second attribut de poids des bones.
+		C3D_API static const Castor::String Weights1;
+
+		//@}
 		/**@name Scene */
 		//@{
 
@@ -206,14 +232,14 @@ namespace Castor3D
 		 *\param[in]	p_renderSystem	L'instance du RenderSystem
 		 *\param[in]	p_eLanguage		Le langage du programme
 		 */
-		C3D_API ShaderProgramBase( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage );
+		C3D_API ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~ShaderProgramBase();
+		C3D_API virtual ~ShaderProgram();
 		/**
 		 *\~english
 		 *\brief		Creates the wanted shader object
@@ -481,6 +507,20 @@ namespace Castor3D
 		C3D_API virtual bool Link() = 0;
 		/**
 		 *\~english
+		 *\return		The program vertex layout.
+		 *\~french
+		 *\return		Le layout des sommets du programme.
+		 */
+		C3D_API virtual ProgramInputLayout const & GetLayout()const = 0;
+		/**
+		 *\~english
+		 *\return		The program vertex layout.
+		 *\~french
+		 *\return		Le layout des sommets du programme.
+		 */
+		C3D_API virtual ProgramInputLayout & GetLayout() = 0;
+		/**
+		 *\~english
 		 *\brief		Retrieves the frame variable buffers bound to one shader type
 		 *\param[in]	p_type	The shader type
 		 *\return		The list
@@ -554,16 +594,6 @@ namespace Castor3D
 		inline eSHADER_LANGUAGE GetLanguage()const
 		{
 			return m_eLanguage;
-		}
-		/**
-		 *\~english
-		 *\return		The program vertex layout.
-		 *\~french
-		 *\return		Le layout des sommets du programme.
-		 */
-		inline VertexLayout const & GetVertexLayout()const
-		{
-			return m_vertexLayout;
 		}
 
 	protected:
@@ -644,8 +674,6 @@ namespace Castor3D
 		std::array< FrameVariableBufferPtrList, eSHADER_TYPE_COUNT > m_frameVariableBuffers;
 		//!\~english The frame variable buffers map	\~french La liste des buffer de variables de frame
 		FrameVariableBufferPtrList m_listFrameVariableBuffers;
-		//!\~english The deduced vertex layout, from compiled program	\~french Le layout des vertex, déduit à la compilation.
-		VertexLayout m_vertexLayout;
 	};
 }
 

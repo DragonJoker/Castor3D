@@ -44,11 +44,11 @@ namespace OceanLighting
 		 *\param[in]	p_params		The technique parameters
 		 *\return		A clone of this object
 		 *\~french
-		 *\brief		Fonction d'instanciation, utilisée par la fabrique pour créer des objets d'un type donné
+		 *\brief		Fonction d'instanciation, utilisï¿½e par la fabrique pour crï¿½er des objets d'un type donnï¿½
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique
 		 *\param[in]	p_renderSystem	Le render system
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		Un clône de cet objet
+		 *\param[in]	p_params		Les paramï¿½tres de la technique
+		 *\return		Un clï¿½ne de cet objet
 		 */
 		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
@@ -410,7 +410,7 @@ namespace OceanLighting
 		int m_width;
 		int m_height;
 
-		Castor3D::ShaderProgramBaseSPtr m_render;
+		Castor3D::ShaderProgramSPtr m_render;
 		Castor3D::OneTextureFrameVariableSPtr m_renderSkyIrradianceSampler;
 		Castor3D::OneTextureFrameVariableSPtr m_renderInscatterSampler;
 		Castor3D::OneTextureFrameVariableSPtr m_renderTransmittanceSampler;
@@ -443,10 +443,12 @@ namespace OceanLighting
 		Castor3D::OneFloatFrameVariableSPtr m_renderNyquistMax;
 #endif
 		Castor3D::GeometryBuffersSPtr m_renderGBuffers;
+		Castor3D::VertexBufferUPtr m_renderVtxBuffer;
+		Castor3D::IndexBufferUPtr m_renderIdxBuffer;
 		Castor3D::BlendStateWPtr m_renderBlendState;
 		Castor3D::RasteriserStateWPtr m_renderRasteriserState;
 
-		Castor3D::ShaderProgramBaseSPtr m_sky;
+		Castor3D::ShaderProgramSPtr m_sky;
 		Castor3D::OneTextureFrameVariableSPtr m_skySkyIrradianceSampler;
 		Castor3D::OneTextureFrameVariableSPtr m_skyInscatterSampler;
 		Castor3D::OneTextureFrameVariableSPtr m_skyTransmittanceSampler;
@@ -457,9 +459,11 @@ namespace OceanLighting
 		Castor3D::Point3fFrameVariableSPtr m_skyWorldSunDir;
 		Castor3D::OneFloatFrameVariableSPtr m_skyHdrExposure;
 		Castor3D::GeometryBuffersSPtr m_skyGBuffers;
+		Castor3D::VertexBufferUPtr m_skyVtxBuffer;
+		Castor3D::IndexBufferUPtr m_skyIdxBuffer;
 		Castor3D::BlendStateWPtr m_skyBlendState;
 
-		Castor3D::ShaderProgramBaseSPtr m_skymap;
+		Castor3D::ShaderProgramSPtr m_skymap;
 		Castor3D::OneTextureFrameVariableSPtr m_skymapSkyIrradianceSampler;
 		Castor3D::OneTextureFrameVariableSPtr m_skymapInscatterSampler;
 		Castor3D::OneTextureFrameVariableSPtr m_skymapTransmittanceSampler;
@@ -473,9 +477,11 @@ namespace OceanLighting
 		Castor3D::OneFloatFrameVariableSPtr m_skymapClamp2;
 		Castor3D::Point4fFrameVariableSPtr m_skymapCloudsColor;
 		Castor3D::GeometryBuffersSPtr m_skymapGBuffers;
+		Castor3D::VertexBufferUPtr m_skymapVtxBuffer;
+		Castor3D::IndexBufferUPtr m_skymapIdxBuffer;
 		Castor3D::BlendStateWPtr m_skymapBlendState;
 
-		Castor3D::ShaderProgramBaseSPtr m_clouds;
+		Castor3D::ShaderProgramSPtr m_clouds;
 		Castor3D::Matrix4x4fFrameVariableSPtr m_cloudsWorldToScreen;
 		Castor3D::Point3fFrameVariableSPtr m_cloudsWorldCamera;
 		Castor3D::Point3fFrameVariableSPtr m_cloudsWorldSunDir;
@@ -492,6 +498,8 @@ namespace OceanLighting
 		Castor3D::OneTextureFrameVariableSPtr m_cloudsTransmittanceSampler;
 		Castor3D::OneTextureFrameVariableSPtr m_cloudsNoiseSampler;
 		Castor3D::GeometryBuffersSPtr m_cloudsGBuffers;
+		Castor3D::VertexBufferUPtr m_cloudsVtxBuffer;
+		Castor3D::IndexBufferUPtr m_cloudsIdxBuffer;
 		Castor3D::BlendStateWPtr m_cloudsBlendState;
 
 		uint32_t m_skyTexSize;
@@ -557,7 +565,7 @@ namespace OceanLighting
 		Castor3D::FrameBufferSPtr m_variancesFbo;
 		std::vector< Castor3D::TextureAttachmentSPtr > m_arrayVarianceAttaches;
 
-		Castor3D::ShaderProgramBaseSPtr m_init;
+		Castor3D::ShaderProgramSPtr m_init;
 		Castor3D::OneTextureFrameVariableSPtr m_initSpectrum_1_2_Sampler;
 		Castor3D::OneTextureFrameVariableSPtr m_initSpectrum_3_4_Sampler;
 		Castor3D::OneFloatFrameVariableSPtr m_initFftSize;
@@ -566,7 +574,7 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_initGBuffers;
 		Castor3D::BlendStateWPtr m_initBlendState;
 
-		Castor3D::ShaderProgramBaseSPtr m_variances;
+		Castor3D::ShaderProgramSPtr m_variances;
 		Castor3D::OneTextureFrameVariableSPtr m_variancesSpectrum_1_2_Sampler;
 		Castor3D::OneTextureFrameVariableSPtr m_variancesSpectrum_3_4_Sampler;
 		Castor3D::OneFloatFrameVariableSPtr m_variancesNSlopeVariance;
@@ -577,7 +585,7 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_variancesGBuffers;
 		Castor3D::BlendStateWPtr m_variancesBlendState;
 
-		Castor3D::ShaderProgramBaseSPtr m_fftx;
+		Castor3D::ShaderProgramSPtr m_fftx;
 		Castor3D::OneTextureFrameVariableSPtr m_fftxButterflySampler;
 		Castor3D::OneIntFrameVariableSPtr m_fftxNLayers;
 		Castor3D::OneFloatFrameVariableSPtr m_fftxPass;
@@ -585,7 +593,7 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_fftxGBuffers;
 		Castor3D::BlendStateWPtr m_fftxBlendState;
 
-		Castor3D::ShaderProgramBaseSPtr m_ffty;
+		Castor3D::ShaderProgramSPtr m_ffty;
 		Castor3D::OneTextureFrameVariableSPtr m_fftyButterflySampler;
 		Castor3D::OneIntFrameVariableSPtr m_fftyNLayers;
 		Castor3D::OneFloatFrameVariableSPtr m_fftyPass;

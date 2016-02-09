@@ -131,28 +131,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Loads attributes for the given program.
-		 *\param[in]	p_program	The program.
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Charge les attributs pour le programme donné.
-		 *\param[in]	p_program	Le programme.
-		 *\return		\p true si tout s'est bien passé
-		 */
-		inline bool AttachTo( ShaderProgramBaseSPtr p_program )
-		{
-			bool l_return = false;
-			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
-
-			if ( l_pBuffer )
-			{
-				l_return = l_pBuffer->AttachTo( p_program );
-			}
-
-			return l_return;
-		}
-		/**
-		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
 		 *\remark		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )]
 		 *\param[in]	p_offset	The start offset in the buffer

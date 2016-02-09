@@ -436,6 +436,10 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialTransparency )
 {
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
+	float l_value;
+	p_params[0]->Get( l_value );
+	l_pContext->pPass->SetAlpha( l_value );
 }
 END_ATTRIBUTE()
 
@@ -673,6 +677,12 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryEnd )
 {
+	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
+
+	for ( auto && l_submesh : *l_pContext->pMesh )
+	{
+		l_pContext->pMesh->GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+	}
 }
 END_ATTRIBUTE_POP()
 

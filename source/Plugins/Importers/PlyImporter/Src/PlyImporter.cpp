@@ -30,18 +30,24 @@ PlyImporter::PlyImporter( Engine & p_pEngine )
 
 SceneSPtr PlyImporter::DoImportScene()
 {
-	MeshSPtr l_pMesh = DoImportMesh();
-	SceneSPtr l_pScene;
+	MeshSPtr l_mesh = DoImportMesh();
+	SceneSPtr l_scene;
 
-	if ( l_pMesh )
+	if ( l_mesh )
 	{
-		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_PLY" ), *GetEngine() );
-		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
-		l_pGeometry->SetMesh( l_pMesh );
+		l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_PLY" ), *GetEngine() );
+		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+
+		for ( auto && l_submesh : *l_mesh )
+		{
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+		}
+
+		l_geometry->SetMesh( l_mesh );
 	}
 
-	return l_pScene;
+	return l_scene;
 }
 
 MeshSPtr PlyImporter::DoImportMesh()
@@ -51,7 +57,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 	String l_name = m_fileName.GetFileName();
 	String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 	String l_materialName = l_meshName;
-	MeshSPtr l_pMesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	std::ifstream l_isFile;
 	l_isFile.open( string::string_cast< char >( m_fileName ).c_str(), std::ios::in );
 	std::string l_strLine;
@@ -61,7 +67,7 @@ MeshSPtr PlyImporter::DoImportMesh()
 	VertexSPtr l_pVertex;
 	Coords3r l_ptNml;
 	Coords2r l_ptTex;
-	SubmeshSPtr l_pSubmesh = l_pMesh->CreateSubmesh();
+	SubmeshSPtr l_pSubmesh = l_mesh->CreateSubmesh();
 	MaterialSPtr l_pMaterial = GetEngine()->GetMaterialManager().Find( l_materialName );
 
 	if ( ! l_pMaterial )
@@ -248,9 +254,9 @@ MeshSPtr PlyImporter::DoImportMesh()
 
 	if ( l_iNbProperties < 6 )
 	{
-		l_pMesh->ComputeNormals( false );
+		l_mesh->ComputeNormals( false );
 	}
 
 	l_isFile.close();
-	return l_pMesh;
+	return l_mesh;
 }

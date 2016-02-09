@@ -1,4 +1,5 @@
 ﻿#include "Cone.hpp"
+
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 
@@ -25,7 +26,7 @@ namespace Castor3D
 		return std::make_shared< Cone >();
 	}
 
-	void Cone::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void Cone::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 	{
 		m_nbFaces = p_faces[0];
 		m_radius = std::abs( p_dimensions[0] );

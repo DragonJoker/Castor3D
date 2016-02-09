@@ -132,7 +132,7 @@ namespace Castor3D
 		 *\param[in]	p_parent	programme parent
 		 *\param[in]	p_type		Type de shader
 		 */
-		C3D_API ShaderObjectBase( ShaderProgramBase * p_parent, eSHADER_TYPE p_type );
+		C3D_API ShaderObjectBase( ShaderProgram * p_parent, eSHADER_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -169,7 +169,7 @@ namespace Castor3D
 		 *\brief		Attache ce shader au programme donné
 		 *\param[in]	p_program	Le programme
 		 */
-		C3D_API virtual void AttachTo( ShaderProgramBase & p_program ) = 0;
+		C3D_API virtual void AttachTo( ShaderProgram & p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Sets the shader file for given model
@@ -469,7 +469,7 @@ namespace Castor3D
 		 *\brief		Récupère le parent de l'objet
 		 *\return		Le parent
 		 */
-		inline ShaderProgramBase * GetParent()const
+		inline ShaderProgram * GetParent()const
 		{
 			return m_parent;
 		}
@@ -516,7 +516,7 @@ namespace Castor3D
 
 	protected:
 		//!\~english The parent shader program	\~french Le programme parent
-		ShaderProgramBase * m_parent;
+		ShaderProgram * m_parent;
 		//!<\~english The shader type	\~french Le type de shader
 		eSHADER_TYPE m_type;
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader

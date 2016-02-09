@@ -1235,6 +1235,7 @@ namespace GlRender
 
 	class GlShaderObject;
 	class GlShaderProgram;
+	class GlProgramInputLayout;
 	template< typename Type > struct OneVariableBinder;
 	template< typename Type, uint32_t Count > struct PointVariableBinder;
 	template< typename Type, uint32_t Rows, uint32_t Columns > struct MatrixVariableBinder;

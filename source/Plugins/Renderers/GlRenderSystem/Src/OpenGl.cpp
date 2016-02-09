@@ -3238,19 +3238,19 @@ bool OpenGl::GetProgramInterfaceInfos( uint32_t program, eGLSL_INTERFACE program
 	return glCheckError( *this, "glGetProgramInterfaceiv" );
 }
 
-bool OpenGl::GetProgramResourceIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+int OpenGl::GetProgramResourceIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
 {
 	m_pfnGetProgramResourceIndex( program, programInterface, name );
 	return glCheckError( *this, "glGetProgramResourceIndex" );
 }
 
-bool OpenGl::GetProgramResourceLocation( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+int OpenGl::GetProgramResourceLocation( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
 {
 	m_pfnGetProgramResourceLocation( program, programInterface, name );
 	return glCheckError( *this, "glGetProgramResourceLocation" );
 }
 
-bool OpenGl::GetProgramResourceLocationIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
+int OpenGl::GetProgramResourceLocationIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name )
 {
 	m_pfnGetProgramResourceLocationIndex( program, programInterface, name );
 	return glCheckError( *this, "glGetProgramResourceLocationIndex" );

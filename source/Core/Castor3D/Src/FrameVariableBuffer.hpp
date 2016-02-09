@@ -74,7 +74,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\return		\p false if any problem occured
 		 */
-		C3D_API bool Initialise( ShaderProgramBase & p_program );
+		C3D_API bool Initialise( ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated
@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		C3D_API FrameVariableSPtr CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
+		C3D_API FrameVariableSPtr CreateVariable( ShaderProgram & p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences = 1 );
 		/**
 		 *\~english
 		 *\brief		Removes a variable from this buffer
@@ -244,7 +244,7 @@ namespace Castor3D
 		 *\param[in]	p_occurences	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		C3D_API virtual FrameVariableSPtr DoCreateVariable( ShaderProgramBase * p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences = 1 ) = 0;
+		C3D_API virtual FrameVariableSPtr DoCreateVariable( ShaderProgram * p_program, eFRAME_VARIABLE_TYPE p_type, Castor::String const & p_name, uint32_t p_occurences = 1 ) = 0;
 		/**
 		 *\~english
 		 *\brief		Initialises all the variables and the GPU buffer associated
@@ -254,7 +254,7 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\return		\p false if any problem occured
 		 */
-		C3D_API virtual bool DoInitialise( ShaderProgramBase * p_program ) = 0;
+		C3D_API virtual bool DoInitialise( ShaderProgram * p_program ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans all the variables up and the GPU buffer associated

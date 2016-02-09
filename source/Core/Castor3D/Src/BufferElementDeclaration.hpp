@@ -73,6 +73,34 @@ namespace Castor3D
 		//!\~english Offset in buffer.	\~french Offset dans le tampon.
 		uint32_t m_offset;
 	};
+	/**
+	 *\~english
+	 *\brief		Equality operator.
+	 *\param[in]	p_obj1, p_obj2	The 2 objects to compare.
+	 *\~french
+	 *\brief		Opérateur d'égalité.
+	 *\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
+	 */
+	inline bool operator==( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
+	{
+		return p_lhs.m_dataType == p_rhs.m_dataType
+			&& p_lhs.m_name == p_rhs.m_name
+			&& p_lhs.m_offset == p_rhs.m_offset;
+	}
+	/**
+	*\~english
+	*\brief		Equality operator.
+	*\param[in]	p_obj1, p_obj2	The 2 objects to compare.
+	*\~french
+	*\brief		Opérateur d'égalité.
+	*\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
+	*/
+	inline bool operator!=( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
+	{
+		return p_lhs.m_dataType != p_rhs.m_dataType
+			|| p_lhs.m_name != p_rhs.m_name
+			|| p_lhs.m_offset != p_rhs.m_offset;
+	}
 }
 
 #endif

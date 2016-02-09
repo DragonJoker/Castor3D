@@ -39,7 +39,7 @@ namespace GlRender
 		GlAttributeBase( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_attributeName, eGL_TYPE p_glType, int p_count );
 		virtual ~GlAttributeBase();
 
-		virtual void SetShader( Castor3D::ShaderProgramBaseSPtr p_program );
+		virtual void SetShader( Castor3D::ShaderProgramSPtr p_program );
 		virtual void Cleanup();
 		virtual bool Initialise();
 		virtual bool Bind( bool p_bNormalised = false );
@@ -49,9 +49,10 @@ namespace GlRender
 		{
 			m_offset = p_offset;
 		}
-		inline void SetStride( int p_iStride )
+
+		inline void SetStride( uint32_t p_stride )
 		{
-			m_stride = p_iStride;
+			m_stride = p_stride;
 		}
 
 		inline uint32_t GetLocation()const
@@ -60,12 +61,12 @@ namespace GlRender
 		}
 
 	protected:
-		Castor3D::ShaderProgramBaseWPtr m_program;
+		Castor3D::ShaderProgramWPtr m_program;
 		Castor::String m_attributeName;
 		uint32_t m_attributeLocation;
 		int m_count;
 		uint32_t m_offset;
-		int m_stride;
+		uint32_t m_stride;
 		eGL_TYPE m_glType;
 		GlRenderSystem * m_renderSystem;
 	};

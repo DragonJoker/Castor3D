@@ -31,7 +31,7 @@ namespace GuiCommon
 		FrameVariablesList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize );
 		~FrameVariablesList();
 
-		void LoadVariables( Castor3D::eSHADER_TYPE p_type, Castor3D::ShaderProgramBaseSPtr p_program );
+		void LoadVariables( Castor3D::eSHADER_TYPE p_type, Castor3D::ShaderProgramSPtr p_program );
 		void UnloadVariables();
 
 	private:
@@ -45,7 +45,7 @@ namespace GuiCommon
 		void OnMouseRButtonUp( wxTreeEvent & p_event );
 
 	private:
-		Castor3D::ShaderProgramBaseWPtr m_program;
+		Castor3D::ShaderProgramWPtr m_program;
 		PropertiesHolder * m_propertiesHolder;
 	};
 }

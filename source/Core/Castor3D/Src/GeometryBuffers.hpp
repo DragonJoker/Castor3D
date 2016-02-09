@@ -45,18 +45,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_pVertexBuffer	The vertex buffer.
-		 *\param[in]	p_pIndexBuffer	The index buffer.
-		 *\param[in]	p_pMatrixBuffer	The matrix buffer.
-		 *\param[in]	p_topology		The buffers topology.
+		 *\param[in]	p_topology	The buffers topology.
+		 *\param[in]	p_layout	The program layout.
+		 *\param[in]	p_submesh	The submesh.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_pVertexBuffer	Le tampon de sommets.
-		 *\param[in]	p_pIndexBuffer	Le tampon d'indices.
-		 *\param[in]	p_pMatrixBuffer	Le tampon de matrices.
-		 *\param[in]	p_topology		La topologie des tampons.
+		 *\param[in]	p_topology	La topologie des tampons.
+		 *\param[in]	p_layout	Le layout fourni par le programme.
+		 *\param[in]	p_submesh	Le sous-maillage.
 		 */
-		C3D_API GeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology );
+		C3D_API GeometryBuffers( eTOPOLOGY p_topology, ProgramInputLayout const & p_layout, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -64,74 +62,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~GeometryBuffers();
-		/**
-		 *\~english
-		 *\brief		Creates the buffers on GPU
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Crée les tampons au niveau GPU
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Create();
-		/**
-		 *\~english
-		 *\brief		Destroys the buffers on GPU
-		 *\~french
-		 *\brief		Détruit les tampons au niveau GPU
-		 */
-		C3D_API void Destroy();
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_shader				The shader program
-		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_shader				Le programme shader
-		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature );
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_shader				The shader program
-		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
-		 *\param[in]	p_idxType, p_idxAccess	Index buffer access flags
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_shader				Le programme shader
-		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
-		 *\param[in]	p_idxType, p_idxAccess	Indicateurs d'accès pour le tampon d'indices
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature );
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_shader				The shader program
-		 *\param[in]	p_vtxType, p_vtxAccess	Vertex buffer access flags
-		 *\param[in]	p_idxType, p_idxAccess	Index buffer access flags
-		 *\param[in]	p_mtxType, p_mtxAccess	Matrix buffer access flags
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_shader				Le programme shader
-		 *\param[in]	p_vtxType, p_vtxAccess	Indicateurs d'accès pour le tampon de sommets
-		 *\param[in]	p_idxType, p_idxAccess	Indicateurs d'accès pour le tampon d'indices
-		 *\param[in]	p_mtxType, p_mtxAccess	Indicateurs d'accès pour le tampon de matrices
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Initialise( ShaderProgramBaseSPtr p_shader, eBUFFER_ACCESS_TYPE p_vtxType, eBUFFER_ACCESS_NATURE p_vtxNature, eBUFFER_ACCESS_TYPE p_idxType, eBUFFER_ACCESS_NATURE p_idxNature, eBUFFER_ACCESS_TYPE p_mtxType, eBUFFER_ACCESS_NATURE p_mtxNature );
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
@@ -144,7 +74,7 @@ namespace Castor3D
 		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Draw( ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index ) = 0;
+		C3D_API virtual bool Draw( ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
@@ -159,93 +89,22 @@ namespace Castor3D
 		 *\param[in]	p_count		Le nombre d'instances à dessiner
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DrawInstanced( ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count ) = 0;
 		/**
 		 *\~english
-		 *\brief		Binds the geometry buffers
-		 *\remark		If it fails they will be correctly unbound
-		 *\return		\p false if one buffer failed to be bound
+		 *\return		The buffers topology.
 		 *\~french
-		 *\brief		Active les buffers de la géométrie
-		 *\remark		Si ça échoue, les buffers seront correctement désactivés
-		 *\return		\p false si l'activation d'un tampon a échoué
+		 *\return		La topologie des tampons.
 		 */
-		C3D_API virtual bool Bind();
+		C3D_API virtual bool DrawInstanced( ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count ) = 0;
 		/**
 		 *\~english
-		 *\brief		Unbinds the geometry buffers
+		 *\return		The program layout.
 		 *\~french
-		 *\brief		Désactive les buffers de la géométrie
+		 *\return		Le layout du programme.
 		 */
-		C3D_API virtual void Unbind();
-		/**
-		 *\~english
-		 *\brief		Loads attributes for the given program.
-		 *\param[in]	p_program	The program.
-		 *\~french
-		 *\brief		Charge les attributs pour le programme donné.
-		 *\param[in]	p_program	Le programme.
-		 */
-		C3D_API bool AttachTo( ShaderProgramBaseSPtr p_program );
-		/**
-		 *\~english
-		 *\brief		Retrieves the indices buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le tampon d'indices
-		 *\return		La valeur
-		 */
-		inline IndexBuffer & GetIndexBuffer()
+		inline ProgramInputLayout const & GetLayout()const
 		{
-			return *m_pIndexBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertices buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le tampon de vertices
-		 *\return		La valeur
-		 */
-		inline VertexBuffer & GetVertexBuffer()
-		{
-			return *m_pVertexBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the matrix buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le tampon de matrices
-		 *\return		La valeur
-		 */
-		inline MatrixBuffer & GetMatrixBuffer()
-		{
-			return *m_pMatrixBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves if the geometry buffers has an indices buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le fait que le conteneur possède un tampon d'indices
-		 *\return		La valeur
-		 */
-		inline bool HasIndexBuffer()
-		{
-			return m_pIndexBuffer != nullptr;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves if the geometry buffers has a matrix buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le fait que le conteneur possède un tampon de matrices
-		 *\return		La valeur
-		 */
-		inline bool HasMatrixBuffer()
-		{
-			return m_pMatrixBuffer != nullptr;
+			return m_layout;
 		}
 		/**
 		 *\~english
@@ -269,58 +128,20 @@ namespace Castor3D
 		{
 			m_topology = p_value;
 		}
-		/**
-		 *\~english
-		 *\return		The geometry buffers initialisation status.
-		 *\~french
-		 *\return		Le statut d'initialisation des tampons de géométrie.
-		 */
-		inline bool IsInitialised()const
-		{
-			return m_initialised;
-		}
-		/**
-		 *\~english
-		 *\return		The geometry buffers initialisation status.
-		 *\~french
-		 *\return		Le statut d'initialisation des tampons de géométrie.
-		 */
-		inline ShaderProgramBaseSPtr GetProgram()const
-		{
-			return m_program.lock();
-		}
-
-	protected:
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		C3D_API virtual void DoCleanup() = 0;
 
 	protected:
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
-		VertexBufferUPtr m_pVertexBuffer;
+		VertexBuffer * m_vertexBuffer = nullptr;
 		//!\~english The index buffer.	\~french Le tampon d'indices.
-		IndexBufferUPtr m_pIndexBuffer;
+		IndexBuffer * m_indexBuffer = nullptr;
+		//!\~english The bones buffer.	\~french Le tampon de bones.
+		VertexBuffer * m_bonesBuffer = nullptr;
 		//!\~english The matrix buffer.	\~french Le tampon de matrices.
-		MatrixBufferUPtr m_pMatrixBuffer;
+		MatrixBuffer * m_matrixBuffer = nullptr;
 		//!\~english The shader program.	\~french Le programme de rendu.
-		ShaderProgramBaseWPtr m_program;
+		ProgramInputLayout const & m_layout;
 		//!\~english The buffers topology.	\~french La topologie des tampons.
 		eTOPOLOGY m_topology;
-		//!\~english The initialisation status.	\~french Le status d'initialisation.
-		bool m_initialised = false;
 	};
 }
 

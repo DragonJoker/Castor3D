@@ -33,7 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		Class de base d'une texture
 	*/
-	class TextureBase
+	class Texture
 		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
@@ -51,14 +51,14 @@ namespace Castor3D
 		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API TextureBase( eTEXTURE_BASE_TYPE p_type, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API Texture( eTEXTURE_BASE_TYPE p_type, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~TextureBase();
+		C3D_API virtual ~Texture();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -424,7 +424,7 @@ namespace Castor3D
 	 *\param[in]		p_texture	La texture
 	 *\return			Une référence sur le flux
 	 */
-	inline std::ostream & operator <<( std::ostream & p_streamOut, TextureBaseSPtr const & p_texture )
+	inline std::ostream & operator <<( std::ostream & p_streamOut, TextureSPtr const & p_texture )
 	{
 		p_streamOut << p_texture->GetIndex();
 		return p_streamOut;
@@ -441,7 +441,7 @@ namespace Castor3D
 	 *\param[in]		p_texture	La texture
 	 *\return			Une référence sur le flux
 	 */
-	inline std::ostream & operator<<( std::ostream & p_streamOut, TextureBaseRPtr const & p_texture )
+	inline std::ostream & operator<<( std::ostream & p_streamOut, TextureRPtr const & p_texture )
 	{
 		p_streamOut << p_texture->GetIndex();
 		return p_streamOut;
@@ -458,7 +458,7 @@ namespace Castor3D
 	 *\param[in]		p_texture	La texture
 	 *\return			Une référence sur le flux
 	 */
-	inline std::wostream & operator<<( std::wostream & p_streamOut, TextureBaseSPtr const & p_texture )
+	inline std::wostream & operator<<( std::wostream & p_streamOut, TextureSPtr const & p_texture )
 	{
 		p_streamOut << p_texture->GetIndex();
 		return p_streamOut;
@@ -475,7 +475,7 @@ namespace Castor3D
 	 *\param[in]		p_texture	La texture
 	 *\return			Une référence sur le flux
 	 */
-	inline std::wostream & operator<<( std::wostream & p_streamOut, TextureBaseRPtr const & p_texture )
+	inline std::wostream & operator<<( std::wostream & p_streamOut, TextureRPtr const & p_texture )
 	{
 		p_streamOut << p_texture->GetIndex();
 		return p_streamOut;

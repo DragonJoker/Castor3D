@@ -25,7 +25,7 @@ namespace Castor3D
 		return std::make_shared< Cube >();
 	}
 
-	void Cube::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+	void Cube::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 	{
 		m_width = p_dimensions[0];
 		m_height = p_dimensions[1];

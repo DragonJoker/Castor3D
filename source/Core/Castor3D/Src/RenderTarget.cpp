@@ -435,11 +435,11 @@ namespace Castor3D
 
 	void RenderTarget::Render( double p_dFrameTime )
 	{
-		SceneSPtr l_pScene = GetScene();
+		SceneSPtr l_scene = GetScene();
 
-		if ( l_pScene )
+		if ( l_scene )
 		{
-			l_pScene->Update();
+			l_scene->Update();
 
 			if ( m_initialised )
 			{
@@ -499,18 +499,18 @@ namespace Castor3D
 		String l_strLENodeName;
 		String l_strRENodeName;
 		String l_strIndex = cuT( "_RT" ) + string::to_string( m_index );
-		SceneSPtr l_pScene = GetScene();
+		SceneSPtr l_scene = GetScene();
 
-		if ( l_pScene )
+		if ( l_scene )
 		{
 			if ( GetCameraLEye() )
 			{
-				l_pScene->GetCameraManager().Remove( GetCameraLEye()->GetName() );
+				l_scene->GetCameraManager().Remove( GetCameraLEye()->GetName() );
 			}
 
 			if ( GetCameraREye() )
 			{
-				l_pScene->GetCameraManager().Remove( GetCameraREye()->GetName() );
+				l_scene->GetCameraManager().Remove( GetCameraREye()->GetName() );
 			}
 		}
 
@@ -522,10 +522,10 @@ namespace Castor3D
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strLENodeName ) );
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strRENodeName ) );
 
-			if ( l_pScene )
+			if ( l_scene )
 			{
-				l_pScene->GetSceneNodeManager().Remove( l_strLENodeName );
-				l_pScene->GetSceneNodeManager().Remove( l_strRENodeName );
+				l_scene->GetSceneNodeManager().Remove( l_strLENodeName );
+				l_scene->GetSceneNodeManager().Remove( l_strRENodeName );
 			}
 		}
 
@@ -535,16 +535,16 @@ namespace Castor3D
 		{
 			l_pCamNode = p_pCamera->GetParent();
 
-			if ( l_pScene )
+			if ( l_scene )
 			{
 				l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
 				l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
-				l_pLECamNode = l_pScene->GetSceneNodeManager().Create( l_strLENodeName, l_pScene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
-				l_pRECamNode = l_pScene->GetSceneNodeManager().Create( l_strRENodeName, l_pScene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
+				l_pLECamNode = l_scene->GetSceneNodeManager().Create( l_strLENodeName, l_scene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
+				l_pRECamNode = l_scene->GetSceneNodeManager().Create( l_strRENodeName, l_scene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
 				l_pLECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
 				l_pRECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
-				m_pCameraLEye = l_pScene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_LEye" ), l_pLECamNode, p_pCamera->GetViewport() );
-				m_pCameraREye = l_pScene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_REye" ), l_pRECamNode, p_pCamera->GetViewport() );
+				m_pCameraLEye = l_scene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_LEye" ), l_pLECamNode, p_pCamera->GetViewport() );
+				m_pCameraREye = l_scene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_REye" ), l_pRECamNode, p_pCamera->GetViewport() );
 			}
 		}
 	}

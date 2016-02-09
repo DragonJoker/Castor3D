@@ -272,8 +272,9 @@ namespace Castor3D
 #	define eFRAME_VARIABLE_TYPE_MAT4X4R	eFRAME_VARIABLE_TYPE_MAT4X4F
 #endif
 
-	class ShaderProgramBase;
+	class ShaderProgram;
 	class ShaderObjectBase;
+	class ProgramInputLayout;
 	class FrameVariable;
 	class FrameVariableBuffer;
 	class FrameVariableLink;
@@ -282,7 +283,7 @@ namespace Castor3D
 	template < typename T, uint32_t Count > class PointFrameVariable;
 	template < typename T, uint32_t Rows, uint32_t Columns > class MatrixFrameVariable;
 
-	typedef OneFrameVariable< TextureBase * > OneTextureFrameVariable;
+	typedef OneFrameVariable< Texture * > OneTextureFrameVariable;
 	typedef OneFrameVariable< bool > OneBoolFrameVariable;
 	typedef OneFrameVariable< int > OneIntFrameVariable;
 	typedef OneFrameVariable< uint32_t > OneUIntFrameVariable;
@@ -447,11 +448,11 @@ namespace Castor3D
 	DECLARE_SMART_PTR( FrameVariableBuffer );
 	DECLARE_SMART_PTR( FrameVariable );
 	DECLARE_SMART_PTR( ShaderObjectBase );
-	DECLARE_SMART_PTR( ShaderProgramBase );
+	DECLARE_SMART_PTR( ShaderProgram );
 
 	DECLARE_LIST( FrameVariableLinkSPtr, VariableLinkPtr );
-	DECLARE_MAP( ShaderProgramBase *, ProgramLinksSPtr, LinksPtrListProgram );
-	DECLARE_VECTOR( ShaderProgramBaseSPtr, ShaderProgramPtr );
+	DECLARE_MAP( ShaderProgram *, ProgramLinksSPtr, LinksPtrListProgram );
+	DECLARE_VECTOR( ShaderProgramSPtr, ShaderProgramPtr );
 	DECLARE_VECTOR( ShaderObjectBaseSPtr, ShaderObjectPtr );
 	DECLARE_LIST( FrameVariableSPtr, FrameVariablePtr );
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );

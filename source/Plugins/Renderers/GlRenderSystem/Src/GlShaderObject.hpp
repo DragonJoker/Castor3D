@@ -61,7 +61,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderObjectBase::AttachTo
 		 */
-		virtual void AttachTo( Castor3D::ShaderProgramBase & p_program );
+		virtual void AttachTo( Castor3D::ShaderProgram & p_program );
 		/**
 		 *\~english
 		 *\brief		Tells if the compiled shader has the given parameter

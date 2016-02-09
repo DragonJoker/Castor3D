@@ -18,8 +18,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_BONED_VERTEX_H___
 #define ___C3D_BONED_VERTEX_H___
 
-#include "Vertex.hpp"
+#include "BufferElementGroup.hpp"
+
 #include "VertexBoneData.hpp"
+
+#include <TextLoader.hpp>
+#include <Coords.hpp>
+#include <Point.hpp>
 
 namespace Castor3D
 {
@@ -35,7 +40,6 @@ namespace Castor3D
 	\remark		Spécialisation de Vertex ajoutant la récupération des informations des bones
 	*/
 	class BonedVertex
-		: public Vertex
 	{
 	public:
 		/**
@@ -58,15 +62,6 @@ namespace Castor3D
 		C3D_API BonedVertex( BonedVertex const & p_source );
 		/**
 		 *\~english
-		 *\brief		Constructor from Vertex
-		 *\param[in]	p_source		The source object
-		 *\~french
-		 *\brief		Constructeur à partir d'un Vertex
-		 *\param[in]	p_source		L'objet source
-		 */
-		C3D_API BonedVertex( Vertex const & p_source );
-		/**
-		 *\~english
 		 *\brief		Copy assignment operator
 		 *\param[in]	p_source		The source object
 		 *\return		A reference to this object
@@ -76,17 +71,6 @@ namespace Castor3D
 		 *\return		Une référence sur cet objet
 		 */
 		C3D_API BonedVertex & operator=( BonedVertex const & p_source );
-		/**
-		 *\~english
-		 *\brief		Assignment operator from a Vertex
-		 *\param[in]	p_source		The source object
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation à partir d'un Vertex
-		 *\param[in]	p_source		L'objet source
-		 *\return		Une référence sur cet objet
-		 */
-		C3D_API BonedVertex & operator=( Vertex const & p_source );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -121,18 +105,6 @@ namespace Castor3D
 		 *\param[in]	p_data		La nouvelle valeur
 		 */
 		C3D_API void SetBones( stVERTEX_BONE_DATA const & p_data );
-		/**
-		 *\~english
-		 *\brief		Cast operator to Vertex
-		 *\return		A Vertex
-		 *\~french
-		 *\brief		Opérateur de cast vers Vertex
-		 *\return		Un Vertex
-		 */
-		inline operator Vertex()
-		{
-			return *this;
-		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the group bones data
@@ -207,9 +179,9 @@ namespace Castor3D
 		 *\brief		Récupère l'offset dans le buffer des informations des bones
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetOffsetBon()
+		static inline const uint32_t GetOffsetIds()
 		{
-			return sm_uiOffsetBon;
+			return sm_uiOffsetIds;
 		}
 		/**
 		 *\~english
@@ -219,16 +191,51 @@ namespace Castor3D
 		 *\brief		Récupère la taille en octets des informations des bones
 		 *\return		La valeur
 		 */
-		static inline const uint32_t GetSizeBon()
+		static inline const uint32_t GetSizeIds()
 		{
-			return sm_uiSizeBon;
+			return sm_uiSizeIds;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves bones informations' buffer offset
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère l'offset dans le buffer des informations des bones
+		 *\return		La valeur
+		 */
+		static inline const uint32_t GetOffsetWeights()
+		{
+			return sm_uiOffsetWeights;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves bones informations binary size
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la taille en octets des informations des bones
+		 *\return		La valeur
+		 */
+		static inline const uint32_t GetSizeWeights()
+		{
+			return sm_uiSizeWeights;
 		}
 
-	protected:
+	private:
 		//!\~english Bones informations binary size	\~french Taille en octets des informations des bones
-		static const uint32_t sm_uiSizeBon = uint32_t( C3D_MAX_BONES_PER_VERTEX * ( sizeof( real ) + sizeof( uint32_t ) ) );
+		static const uint32_t sm_uiSizeIds = uint32_t( C3D_MAX_BONES_PER_VERTEX * sizeof( uint32_t ) );
 		//!\~english Bones informations buffer offset	\~french Offset dans le buffer des informations des bones
-		static const uint32_t sm_uiOffsetBon = sm_uiOffsetTex + sm_uiSizeTex;
+		static const uint32_t sm_uiOffsetIds = 0;
+		//!\~english Bones informations binary size	\~french Taille en octets des informations des bones
+		static const uint32_t sm_uiSizeWeights = uint32_t( C3D_MAX_BONES_PER_VERTEX * sizeof( real ) );
+		//!\~english Bones informations buffer offset	\~french Offset dans le buffer des informations des bones
+		static const uint32_t sm_uiOffsetWeights = sm_uiOffsetIds + sm_uiSizeIds;
+
+		//!\~english The wrapped group	\~french Le groupe encadré
+		BufferElementGroup & m_group;
+
+	public:
+		//!\~english The vertex bones data size.	\~french La taille des données de bones pour un sommet.
+		static const uint32_t Stride = sm_uiOffsetWeights + sm_uiSizeWeights;
 	};
 }
 

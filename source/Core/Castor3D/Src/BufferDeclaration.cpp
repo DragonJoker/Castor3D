@@ -4,51 +4,60 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	BufferDeclaration::BufferDeclaration( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements )
-	{
-		DoInitialise( p_pElements, p_uiNbElements );
-	}
-
-	BufferDeclaration::BufferDeclaration( BufferDeclaration const & p_declaration )
-		: m_arrayElements( p_declaration.m_arrayElements )
-		, m_uiStride( p_declaration.m_uiStride )
+	BufferDeclaration::BufferDeclaration()
+		: BufferDeclaration( NULL, 0 )
 	{
 	}
 
-	BufferDeclaration::BufferDeclaration( BufferDeclaration && p_declaration )
-		: m_arrayElements( std::move( p_declaration.m_arrayElements ) )
-		, m_uiStride( std::move( p_declaration.m_uiStride ) )
+	BufferDeclaration::BufferDeclaration( BufferElementDeclaration const * p_elements, uint32_t p_count )
+		: m_uiStride( 0 )
 	{
-		p_declaration.m_arrayElements.clear();
-		p_declaration.m_uiStride = 0;
+		for ( uint32_t i = 0; i < p_count; i++ )
+		{
+			m_arrayElements.push_back( p_elements[i] );
+			m_arrayElements[i].m_offset = m_uiStride;
+			m_uiStride += Castor3D::GetSize( m_arrayElements[i].m_dataType );
+		}
 	}
 
-	BufferDeclaration & BufferDeclaration::operator=( BufferDeclaration p_declaration )
+	BufferDeclaration::BufferDeclaration( std::vector< BufferElementDeclaration > const & p_elements )
+		: BufferDeclaration( p_elements.data(), p_elements.size() )
 	{
-		swap( *this, p_declaration );
-		return *this;
 	}
 
 	BufferDeclaration::~BufferDeclaration()
 	{
 	}
 
-	void BufferDeclaration::DoInitialise( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements )
+	bool operator==( BufferDeclaration const & p_lhs, BufferDeclaration const & p_rhs )
 	{
-		static const uint32_t s_uiSize[] = { 1 * sizeof( real ), 2 * sizeof( real ), 3 * sizeof( real ), 4 * sizeof( real ), sizeof( uint32_t ), 1 * sizeof( int32_t ), 2 * sizeof( int32_t ), 3 * sizeof( int32_t ), 4 * sizeof( int32_t ) };
-		m_uiStride = 0;
+		bool l_return = p_lhs.GetStride() == p_rhs.GetStride() && p_lhs.GetSize() == p_rhs.GetSize();
+		auto l_itl = p_lhs.begin();
+		auto l_itr = p_rhs.begin();
 
-		for ( uint32_t i = 0; i < p_uiNbElements; i++ )
+		while ( l_return && l_itl != p_lhs.end() )
 		{
-			m_arrayElements.push_back( p_pElements[i] );
-			m_arrayElements[i].m_offset = m_uiStride;
-			m_uiStride += s_uiSize[m_arrayElements[i].m_dataType];
+			l_return = *l_itl++ == *l_itr++;
+			++l_itl;
+			++l_itr;
 		}
+
+		return l_return;
 	}
 
-	void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 )
+	bool operator!=( BufferDeclaration const & p_lhs, BufferDeclaration const & p_rhs )
 	{
-		std::swap( p_obj1.m_arrayElements, p_obj2.m_arrayElements );
-		std::swap( p_obj1.m_uiStride, p_obj2.m_uiStride );
+		bool l_return = p_lhs.GetStride() != p_rhs.GetStride() || p_lhs.GetSize() != p_rhs.GetSize();
+		auto l_itl = p_lhs.begin();
+		auto l_itr = p_rhs.begin();
+
+		while ( !l_return && l_itl != p_lhs.end() )
+		{
+			l_return = *l_itl++ != *l_itr++;
+			++l_itl;
+			++l_itr;
+		}
+
+		return l_return;
 	}
 }

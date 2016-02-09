@@ -25,19 +25,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GlRender
 {
-	class GlGeometryBuffers;
-
-	class GlGeometryBuffersImpl
-		: public Castor::OwnedBy< GlGeometryBuffers >
-	{
-	public:
-		GlGeometryBuffersImpl( GlGeometryBuffers & p_buffers );
-		virtual ~GlGeometryBuffersImpl();
-
-		virtual bool Bind() = 0;
-		virtual void Unbind() = 0;
-	};
-
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0.0
@@ -51,23 +38,24 @@ namespace GlRender
 	*/
 	class GlGeometryBuffers
 		: public Castor3D::GeometryBuffers
-		, public Holder
+		, public Bindable <
+				 std::function< bool( int, uint32_t * ) >,
+				 std::function< bool( int, uint32_t const * ) >,
+				 std::function< bool( uint32_t ) >
+				 >
 	{
+		using ObjectType = Bindable <
+						   std::function< bool( int, uint32_t * ) >,
+						   std::function< bool( int, uint32_t const * ) >,
+						   std::function< bool( uint32_t ) >
+						   >;
+
 	public:
-		GlGeometryBuffers( OpenGl & p_gl, Castor3D::VertexBufferUPtr p_pVertexBuffer, Castor3D::IndexBufferUPtr p_pIndexBuffer, Castor3D::MatrixBufferUPtr p_pMatrixBuffer, Castor3D::eTOPOLOGY p_topology );
+		GlGeometryBuffers( OpenGl & p_gl, Castor3D::eTOPOLOGY p_topology, Castor3D::ProgramInputLayout const & p_layout, Castor3D::VertexBuffer * p_vtx, Castor3D::IndexBuffer * p_idx, Castor3D::VertexBuffer * p_bones, Castor3D::MatrixBuffer * p_inst );
 		virtual ~GlGeometryBuffers();
 
-		virtual bool Draw( Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index );
-		virtual bool DrawInstanced( Castor3D::ShaderProgramBaseSPtr p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count );
-		virtual bool Bind();
-		virtual void Unbind();
-
-	private:
-		virtual bool DoInitialise();
-		virtual void DoCleanup();
-
-	private:
-		std::unique_ptr< GlGeometryBuffersImpl > m_impl;
+		virtual bool Draw( Castor3D::ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index );
+		virtual bool DrawInstanced( Castor3D::ShaderProgram const & p_program, uint32_t p_uiSize, uint32_t p_index, uint32_t p_count );
 	};
 }
 

@@ -23,41 +23,41 @@ namespace Ase
 
 	SceneSPtr AseImporter::DoImportScene()
 	{
-		SceneSPtr l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASE" ), *GetEngine() );
+		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASE" ), *GetEngine() );
 		m_pFileParser = new AseFileParser( GetEngine() );
-		m_pFileParser->ParseFile( m_fileName, l_pScene );
-		MeshSPtr l_pMesh;
+		m_pFileParser->ParseFile( m_fileName, l_scene );
+		MeshSPtr l_mesh;
 
 		for ( auto && l_it : m_geometries )
 		{
-			l_pMesh = l_it.second->GetMesh();
-			l_pMesh->ComputeContainers();
+			l_mesh = l_it.second->GetMesh();
+			l_mesh->ComputeContainers();
 
-			for ( auto && l_submesh : *l_pMesh )
+			for ( auto && l_submesh : *l_mesh )
 			{
 				l_submesh->GenerateBuffers();
 			}
 
-			l_pMesh->ComputeNormals();
+			l_mesh->ComputeNormals();
 		}
 
 		delete m_pFileParser;
-		return l_pScene;
+		return l_scene;
 	}
 
 	MeshSPtr AseImporter::DoImportMesh()
 	{
 		m_pFileParser = new AseFileParser( GetEngine() );
 		m_pFileParser->ParseFile( m_fileName );
-		MeshSPtr l_pMesh = m_pFileParser->GetMesh();
+		MeshSPtr l_mesh = m_pFileParser->GetMesh();
 
-		if ( l_pMesh )
+		if ( l_mesh )
 		{
-			l_pMesh->ComputeContainers();
-			l_pMesh->ComputeNormals();
+			l_mesh->ComputeContainers();
+			l_mesh->ComputeNormals();
 		}
 
 		delete m_pFileParser;
-		return l_pMesh;
+		return l_mesh;
 	}
 }

@@ -260,11 +260,11 @@ namespace Castor3D
 		}
 	}
 
-	void Mesh::ComputeNormals( bool p_bReverted )
+	void Mesh::ComputeNormals( bool p_reverted )
 	{
 		for ( auto && l_submesh : m_submeshes )
 		{
-			l_submesh->ComputeNormals( p_bReverted );
+			l_submesh->ComputeNormals( p_reverted );
 		}
 	}
 

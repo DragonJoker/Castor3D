@@ -271,11 +271,10 @@ namespace Bloom
 			l_value /= l_sum;
 		}
 
-		BufferElementDeclaration l_vertexDeclarationElements[] =
+		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
-		};
-		m_declaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_2FLOATS ),
+		} );
 
 		real l_pBuffer[] =
 		{
@@ -292,7 +291,7 @@ namespace Bloom
 
 		for ( auto & l_vertex : m_vertices )
 		{
-			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_buffer )[i++ * m_declaration->GetStride()] );
+			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_buffer )[i++ * m_declaration.GetStride()] );
 		}
 	}
 
@@ -329,8 +328,8 @@ namespace Bloom
 
 		if ( !l_vertex.empty() && !l_hipass.empty() )
 		{
-			ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
-			m_hiPassMapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
+			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+			m_hiPassMapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 			l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vertex );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_hipass );
@@ -340,8 +339,8 @@ namespace Bloom
 
 		if ( !l_vertex.empty() && !l_blur.empty() )
 		{
-			ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
-			m_filterMapDiffuse = l_program->CreateFrameVariable( ShaderProgramBase::MapDiffuse, eSHADER_TYPE_PIXEL );
+			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+			m_filterMapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 			auto l_filterConfig = m_renderSystem->CreateFrameVariableBuffer( FilterConfig );
 			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigCoefficients, 3 ) );
 			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetX ) );
@@ -357,7 +356,7 @@ namespace Bloom
 
 		if ( !l_vertex.empty() && !l_combine.empty() )
 		{
-			ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
+			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 			m_combineMapPass0 = l_program->CreateFrameVariable( CombineMapPass0, eSHADER_TYPE_PIXEL );
 			m_combineMapPass1 = l_program->CreateFrameVariable( CombineMapPass1, eSHADER_TYPE_PIXEL );
 			m_combineMapPass2 = l_program->CreateFrameVariable( CombineMapPass2, eSHADER_TYPE_PIXEL );
@@ -370,12 +369,12 @@ namespace Bloom
 			l_program->Initialise();
 			m_combineProgram = l_program;
 
-			VertexBufferUPtr l_vtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), &( *m_declaration )[0], m_declaration->Size() );
-			l_vtxBuffer->Resize( m_vertices.size() * m_declaration->GetStride() );
-			l_vtxBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
-			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_vtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
-			m_geometryBuffers->Create();
-			m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_vertexBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), m_declaration );
+			m_vertexBuffer->Resize( m_vertices.size() * m_declaration.GetStride() );
+			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
+			m_vertexBuffer->Create();
+			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 		}
 
 		for ( auto && l_surface : m_hiPassSurfaces )
@@ -409,10 +408,10 @@ namespace Bloom
 		m_combineMapPass2.reset();
 		m_combineMapPass3.reset();
 		m_combineMapScene.reset();
-		m_declaration.reset();
 
-		m_geometryBuffers->Cleanup();
-		m_geometryBuffers->Destroy();
+		m_vertexBuffer->Cleanup();
+		m_vertexBuffer->Destroy();
+		m_vertexBuffer.reset();
 		m_geometryBuffers.reset();
 
 		for ( auto && l_surface : m_blurSurfaces )
@@ -512,7 +511,7 @@ namespace Bloom
 	{
 		if ( m_blurSurfaces[0].m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
-			ShaderProgramBaseSPtr l_program = m_combineProgram.lock();
+			ShaderProgramSPtr l_program = m_combineProgram.lock();
 			m_viewport.SetSize( m_renderTarget.GetSize() );
 			m_viewport.Render( m_renderSystem->GetPipeline() );
 
@@ -531,7 +530,7 @@ namespace Bloom
 
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
-				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
+				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 				m_combineMapPass0->SetValue( l_texture0.get() );
 				m_combineMapPass1->SetValue( l_texture1.get() );
 				m_combineMapPass2->SetValue( l_texture2.get() );
@@ -552,7 +551,7 @@ namespace Bloom
 			l_texture3->BindAt( 3 );
 			m_renderTarget.GetTexture()->BindAt( 4 );
 
-			m_geometryBuffers->Draw( l_program, m_vertices.size(), 0 );
+			m_geometryBuffers->Draw( *l_program, m_vertices.size(), 0 );
 
 			l_texture0->UnbindFrom( 0 );
 			l_texture1->UnbindFrom( 1 );

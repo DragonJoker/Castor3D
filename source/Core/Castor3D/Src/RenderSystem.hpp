@@ -117,7 +117,7 @@ namespace Castor3D
 		 *\param[in]	p_eLanguage	Le langage du shader
 		 *\return		Le ShaderProgram créé
 		 */
-		C3D_API ShaderProgramBaseSPtr CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage );
+		C3D_API ShaderProgramSPtr CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage );
 		/**
 		 *\~english
 		 *\brief		Renders the scene ambient lighting
@@ -203,20 +203,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a geometries buffer holder.
-		 *\param[in]	p_pVertexBuffer	The vertex buffer.
-		 *\param[in]	p_pIndexBuffer	The index buffer.
-		 *\param[in]	p_pMatrixBuffer	The matrix buffer.
-		 *\param[in]	p_topology		The buffers topology.
+		 *\param[in]	p_submesh	The submesh.
+		 *\param[in]	p_topology	The buffers topology.
 		 *\return		The created geometries buffer holder.
 		 *\~french
 		 *\brief		Crée un conteneur de buffers de géométrie.
-		 *\param[in]	p_pVertexBuffer	Le tampon de sommets.
-		 *\param[in]	p_pIndexBuffer	Le tampon d'indices.
-		 *\param[in]	p_pMatrixBuffer	Le tampon de matrices.
-		 *\param[in]	p_topology		La topologie des tampons.
+		 *\param[in]	p_submesh	Le sous-maillage.
 		 *\return		Le conteneur de buffers de géométrie.
 		 */
-		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology ) = 0;
+		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( eTOPOLOGY p_topology, ProgramInputLayout const & p_layout, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context
@@ -281,7 +276,7 @@ namespace Castor3D
 		 *\brief		Crée un ShaderProgram (GLSL ou HLSL seulement)
 		 *\return		Le ShaderProgram créé
 		 */
-		C3D_API virtual ShaderProgramBaseSPtr CreateShaderProgram() = 0;
+		C3D_API virtual ShaderProgramSPtr CreateShaderProgram() = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
@@ -306,19 +301,17 @@ namespace Castor3D
 		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a vertex buffer, given a buffer declaration
+		 *\brief		Creates a vertex buffer
 		 *\remarks		Only the render system can do that
-		 *\param[in]	p_elements	The buffer declaration
 		 *\param[in]	p_buffer	The hardware buffer to which the vertex buffer will be linked
 		 *\return		The created vertex buffer, dependant of current API
 		 *\~french
-		 *\brief		Crée un tampon de sommets, selon une déclaration de tampon
+		 *\brief		Crée un tampon de sommets
 		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_elements	La déclaration de tampon
 		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon de sommets
 		 *\return		Le tampon de sommets créé, dépendant de l'API actuelle
 		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer( BufferDeclaration const & p_elements, CpuBuffer< uint8_t > * p_buffer ) = 0;
+		C3D_API virtual std::shared_ptr< GpuBuffer< uint8_t > > CreateVertexBuffer( CpuBuffer< uint8_t > * p_buffer ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an index buffer
@@ -378,7 +371,7 @@ namespace Castor3D
 		 *\brief		Crée un programme shader pour les rendu d'incrustations
 		 *\return		Le programme créé.
 		 */
-		C3D_API virtual ShaderProgramBaseSPtr CreateOverlayProgram( uint32_t p_flags ) = 0;
+		C3D_API virtual ShaderProgramSPtr CreateOverlayProgram( uint32_t p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for billboards rendering use.
@@ -387,7 +380,7 @@ namespace Castor3D
 		 *\brief		Crée un programme shader pour les rendu de billboards.
 		 *\return		Le programme créé.
 		 */
-		C3D_API virtual ShaderProgramBaseSPtr CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
+		C3D_API virtual ShaderProgramSPtr CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags

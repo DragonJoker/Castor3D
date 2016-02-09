@@ -23,7 +23,7 @@ MeshGeneratorSPtr Sphere::Create()
 	return std::make_shared< Sphere >();
 }
 
-void Sphere::Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
+void Sphere::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions )
 {
 	m_nbFaces = p_faces[0];
 	m_radius = std::abs( p_dimensions[0] );

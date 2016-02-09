@@ -184,17 +184,17 @@ namespace Castor3D
 		if ( !m_listCreated )
 		{
 			Cleanup();
-			MeshSPtr l_pMesh = GetMesh();
+			MeshSPtr l_mesh = GetMesh();
 
-			if ( l_pMesh )
+			if ( l_mesh )
 			{
-				uint32_t l_nbFaces = l_pMesh->GetFaceCount();
-				uint32_t l_nbVertex = l_pMesh->GetVertexCount();
+				uint32_t l_nbFaces = l_mesh->GetFaceCount();
+				uint32_t l_nbVertex = l_mesh->GetVertexCount();
 				p_nbFaces += l_nbFaces;
 				p_nbVertex += l_nbVertex;
-				l_pMesh->ComputeContainers();
+				l_mesh->ComputeContainers();
 				Logger::LogInfo( StringStream() << cuT( "Geometry::CreateBuffers - NbVertex: " ) << l_nbVertex << cuT( ", NbFaces: " ) << l_nbFaces );
-				m_listCreated = l_pMesh->GetSubmeshCount() > 0;
+				m_listCreated = l_mesh->GetSubmeshCount() > 0;
 			}
 		}
 	}
@@ -208,16 +208,16 @@ namespace Castor3D
 		}
 	}
 
-	void Geometry::SetMesh( MeshSPtr p_pMesh )
+	void Geometry::SetMesh( MeshSPtr p_mesh )
 	{
 		m_submeshesMaterials.clear();
-		m_mesh = p_pMesh;
+		m_mesh = p_mesh;
 
-		if ( p_pMesh )
+		if ( p_mesh )
 		{
-			m_strMeshName = p_pMesh->GetName();
+			m_strMeshName = p_mesh->GetName();
 
-			for ( auto && l_submesh : *p_pMesh )
+			for ( auto && l_submesh : *p_mesh )
 			{
 				SetMaterial( l_submesh, l_submesh->GetDefaultMaterial() );
 			}

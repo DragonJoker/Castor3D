@@ -475,22 +475,22 @@ void ExportCastor3D()
 		.def( "cleanup", &Sampler::Cleanup )
 		;
 	//@}
-	/**@group_name TextureBase	*/
+	/**@group_name Texture	*/
 	//@{
-	py::class_< TextureBase, boost::noncopyable >( "Texture", py::no_init )
-		.add_property( "base_type", &TextureBase::GetBaseType, "The texture base type" )
-		.add_property( "type", &TextureBase::GetType, &TextureBase::SetType, "The texture type" )
-		.add_property( "sampler", &TextureBase::GetSampler, &TextureBase::SetSampler, "The texture sampler" )
-		.add_property( "mapping_mode", &TextureBase::GetMappingMode, &TextureBase::SetMappingMode, "The texture mapping mode" )
-		.add_property( "image", &TextureBase::GetBuffer, &TextureBase::SetImage, "The texture image buffer" )
-		.def( "initialise", &TextureBase::Initialise )
-		.def( "cleanup", &TextureBase::Cleanup )
+	py::class_< Texture, boost::noncopyable >( "Texture", py::no_init )
+		.add_property( "base_type", &Texture::GetBaseType, "The texture base type" )
+		.add_property( "type", &Texture::GetType, &Texture::SetType, "The texture type" )
+		.add_property( "sampler", &Texture::GetSampler, &Texture::SetSampler, "The texture sampler" )
+		.add_property( "mapping_mode", &Texture::GetMappingMode, &Texture::SetMappingMode, "The texture mapping mode" )
+		.add_property( "image", &Texture::GetBuffer, &Texture::SetImage, "The texture image buffer" )
+		.def( "initialise", &Texture::Initialise )
+		.def( "cleanup", &Texture::Cleanup )
 		;
 	//@}
 	/**@group_name StaticTexture	*/
 	//@{
 	void ( StaticTexture::*staticTexture2DImageSetter )( PxBufferBaseSPtr ) = &StaticTexture::SetImage;
-	py::class_< StaticTexture, py::bases< TextureBase >, boost::noncopyable >( "StaticTexture", py::no_init )
+	py::class_< StaticTexture, py::bases< Texture >, boost::noncopyable >( "StaticTexture", py::no_init )
 		.def( "set_image", staticTexture2DImageSetter, "Sets the texture 2D image" )
 		.def( "set_image", cpy::make_image_setter( &StaticTexture::SetImage ), "Sets the texture 3D image" )
 		;
@@ -501,7 +501,7 @@ void ExportCastor3D()
 	RenderTargetSPtr( DynamicTexture::*dynamicTextureTargetGetter )( )const = &DynamicTexture::GetRenderTarget;
 	void ( DynamicTexture::*texture2DImageSetter )( Size const &, ePIXEL_FORMAT ) = &DynamicTexture::SetImage;
 	void ( DynamicTexture::*resizer2d )( Size const & ) = &DynamicTexture::Resize;
-	py::class_< DynamicTexture, py::bases< TextureBase >, boost::noncopyable >( "DynamicTexture", py::no_init )
+	py::class_< DynamicTexture, py::bases< Texture >, boost::noncopyable >( "DynamicTexture", py::no_init )
 		.add_property( "samples_count", &DynamicTexture::GetSamplesCount, &DynamicTexture::SetSamplesCount, "The samples count" )
 		.def( "set_render_target", dynamicTextureTargetSetter, "Sets the render target" )
 		.def( "get_render_target", dynamicTextureTargetGetter, "Gets the render target" )
@@ -532,15 +532,15 @@ void ExportCastor3D()
 	//@}
 	/**@group_name ShaderProgram	*/
 	//@{
-	void( ShaderProgramBase::*shaderProgramFileSetter )( eSHADER_TYPE, eSHADER_MODEL, Path const & ) = &ShaderProgramBase::SetFile;
-	py::class_< ShaderProgramBase, boost::noncopyable >( "ShaderProgram", py::no_init )
-		.def( "get_file", &ShaderProgramBase::GetFile )
+	void( ShaderProgram::*shaderProgramFileSetter )( eSHADER_TYPE, eSHADER_MODEL, Path const & ) = &ShaderProgram::SetFile;
+	py::class_< ShaderProgram, boost::noncopyable >( "ShaderProgram", py::no_init )
+		.def( "get_file", &ShaderProgram::GetFile )
 		.def( "set_file", shaderProgramFileSetter )
-		.def( "get_source", &ShaderProgramBase::GetSource )
-		.def( "set_source", &ShaderProgramBase::SetSource )
-		.def( "initialise", &ShaderProgramBase::Initialise )
-		.def( "cleanup", &ShaderProgramBase::Cleanup )
-		.def( "create_object", &ShaderProgramBase::CreateObject )
+		.def( "get_source", &ShaderProgram::GetSource )
+		.def( "set_source", &ShaderProgram::SetSource )
+		.def( "initialise", &ShaderProgram::Initialise )
+		.def( "cleanup", &ShaderProgram::Cleanup )
+		.def( "create_object", &ShaderProgram::CreateObject )
 		;
 	//@}
 	/**@group_name Pass	*/
@@ -828,7 +828,7 @@ void ExportCastor3D()
 	typedef Castor::StrSetIt( AnimatedObjectGroup::*AnimatedObjectGroupAnimationsItFunc )( );
 	typedef AnimatedObjectPtrStrMapIt( AnimatedObjectGroup::*AnimatedObjectGroupObjectsItFunc )( );
 	py::class_< AnimatedObjectGroup >( "AnimatedObjectGroup", py::no_init )
-		.add_property( "scene", &AnimatedObjectGroup::GetScene )
+		.add_property( "scene", py::make_function( &AnimatedObjectGroup::GetScene, py::return_value_policy< py::reference_existing_object >() ) )
 		//.def( "objects", &AnimatedObjectGroup::GetObjects )
 		.def( "start_all_animations", &AnimatedObjectGroup::StartAllAnimations )
 		.def( "stop_all_animations", &AnimatedObjectGroup::StopAllAnimations )

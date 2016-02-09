@@ -226,7 +226,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		C3D_API void ComputeNormals( bool p_bReverted = false );
+		C3D_API void ComputeNormals( bool p_reverted = false );
 		/**
 		*\~english
 		*\brief		Increments submeshes' instance count

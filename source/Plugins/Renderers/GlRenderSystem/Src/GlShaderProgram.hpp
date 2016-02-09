@@ -19,66 +19,86 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_SHADER_PROGRAM_H___
 
 #include "GlObject.hpp"
+#include "GlProgramInputLayout.hpp"
 
 #include <ShaderProgram.hpp>
 
 namespace GlRender
 {
 	class GlShaderProgram
-		: public Castor3D::ShaderProgramBase
+		: public Castor3D::ShaderProgram
 		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
 	{
 		using ObjectType = Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >;
 
 	public:
+		/**
+		 *\brief		Constructor.
+		 *\param[in]	p_gl			The OpenGL APIs.
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 */
 		GlShaderProgram( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
+		/**
+		 *\brief		Destructor.
+		 */
 		virtual ~GlShaderProgram();
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::Initialise
+		 *\copydoc		Castor3D::ShaderProgram::Initialise
 		 */
 		virtual bool Initialise();
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::Cleanup
+		 *\copydoc		Castor3D::ShaderProgram::Cleanup
 		 */
 		virtual void Cleanup();
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::Bind
+		 *\copydoc		Castor3D::ShaderProgram::Bind
 		 */
 		virtual void Bind( bool p_bindUbo );
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::Unbind
+		 *\copydoc		Castor3D::ShaderProgram::Unbind
 		 */
 		virtual void Unbind();
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::Link
+		 *\copydoc		Castor3D::ShaderProgram::Link
 		 */
 		virtual bool Link();
 		/**
-		 *\~english
+		 *\copydoc		Castor3D::ShaderProgram::GetLayout
+		 */
+		virtual Castor3D::ProgramInputLayout const & GetLayout()const
+		{
+			return m_layout;
+		}
+		/**
+		 *\copydoc		Castor3D::ShaderProgram::GetLayout
+		 */
+		virtual Castor3D::ProgramInputLayout & GetLayout()
+		{
+			return m_layout;
+		}
+		/**
 		 *\param[in]	p_name	The attribute name.
 		 *\return		The given attribute location in program.
-		 *\french
-		 *\param[in]	p_name	Le nom de l'attribut.
-		 *\return		La position de l'attribut dans le programme.
 		 */
 		int GetAttributeLocation( Castor::String const & p_name )const;
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::DoCreateObject
+		 *\copydoc		Castor3D::ShaderProgram::DoCreateObject
 		 */
 		virtual Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::DoCreateTextureVariable
+		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
 		 */
 		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_occurences );
 		/**
-		 *\copydoc		Castor3D::ShaderProgramBase::DoGetVertexShaderSource
+		 *\copydoc		Castor3D::ShaderProgram::DoGetVertexShaderSource
 		 */
 		virtual Castor::String DoRetrieveLinkerLog();
 
 	private:
 		Castor::String m_linkerLog;
+		GlProgramInputLayout m_layout;
 	};
 }
 

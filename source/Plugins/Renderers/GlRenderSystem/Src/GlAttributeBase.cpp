@@ -24,7 +24,7 @@ namespace GlRender
 	{
 	}
 
-	void GlAttributeBase::SetShader( ShaderProgramBaseSPtr p_program )
+	void GlAttributeBase::SetShader( ShaderProgramSPtr p_program )
 	{
 		m_program = p_program;
 	}
@@ -32,7 +32,7 @@ namespace GlRender
 	bool GlAttributeBase::Initialise()
 	{
 		bool l_return = false;
-		ShaderProgramBaseSPtr l_program = m_program.lock();
+		ShaderProgramSPtr l_program = m_program.lock();
 
 		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{

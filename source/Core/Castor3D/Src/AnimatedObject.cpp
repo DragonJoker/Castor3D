@@ -151,10 +151,10 @@ namespace Castor3D
 		DoSetGeometry( p_object );
 	}
 
-	void AnimatedObject::SetMesh( MeshSPtr p_pMesh )
+	void AnimatedObject::SetMesh( MeshSPtr p_mesh )
 	{
 		m_animations.clear();
-		DoSetMesh( p_pMesh );
+		DoSetMesh( p_mesh );
 	}
 
 	void AnimatedObject::SetSkeleton( SkeletonSPtr p_pSkeleton )

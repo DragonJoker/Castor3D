@@ -31,13 +31,13 @@ bool SelectObjectFrameEvent::Apply()
 	bool l_wantGeo = !m_geometry.expired();
 	bool l_wantVertex = m_vertex != NULL;
 	FaceSPtr l_pFace = m_face.lock();
-	GeometrySPtr l_pGeometry = m_geometry.lock();
+	GeometrySPtr l_geometry = m_geometry.lock();
 	SubmeshSPtr l_submesh = m_submesh.lock();
-	//m_scene.lock()->Select( &l_ray, l_pGeometry, l_submesh, &l_pFace, m_vertex );
+	//m_scene.lock()->Select( &l_ray, l_geometry, l_submesh, &l_pFace, m_vertex );
 
 	if ( l_wantGeo )
 	{
-		m_panel->SelectGeometry( l_pGeometry );
+		m_panel->SelectGeometry( l_geometry );
 	}
 
 	if ( l_wantVertex )

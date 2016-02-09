@@ -289,6 +289,55 @@ namespace Castor3D
 		eELEMENT_TYPE_COUNT,
 	}	eELEMENT_TYPE;
 
+	inline uint32_t GetSize( eELEMENT_TYPE p_type )
+	{
+		switch ( p_type )
+		{
+		case eELEMENT_TYPE_1FLOAT:
+			return uint32_t( 1u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_2FLOATS:
+			return uint32_t( 2u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_3FLOATS:
+			return uint32_t( 3u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_4FLOATS:
+			return uint32_t( 4u * sizeof( real ) );
+			break;
+
+		case eELEMENT_TYPE_COLOUR:
+			return uint32_t( sizeof( uint32_t ) );
+			break;
+
+		case eELEMENT_TYPE_1INT:
+			return uint32_t( 1u * sizeof( int32_t ) );
+			break;
+
+		case eELEMENT_TYPE_2INTS:
+			return uint32_t( 2u * sizeof( int32_t ) );
+			break;
+
+		case eELEMENT_TYPE_3INTS:
+			return uint32_t( 3u * sizeof( int32_t ) );
+			break;
+
+		case eELEMENT_TYPE_4INTS:
+			return uint32_t( 4u * sizeof( int32_t ) );
+			break;
+
+		default:
+			assert( false && "Unsupported vertex buffer attribute type." );
+			break;
+		}
+
+		return 0;
+	}
+
+
 	template< typename T > class CpuBuffer;
 	class RenderSystem;
 	class RenderTechniqueBase;

@@ -78,7 +78,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		C3D_API FrameVariable( ShaderProgramBase * p_program );
+		C3D_API FrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -87,7 +87,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_occurences		Les dimensions du tableau
 		 */
-		C3D_API FrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences );
+		C3D_API FrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -321,7 +321,7 @@ namespace Castor3D
 		*\brief			Récupère le programme parent
 		*\return		La programme
 		*/
-		inline ShaderProgramBase * GetProgram()const
+		inline ShaderProgram * GetProgram()const
 		{
 			return m_program;
 		}
@@ -349,7 +349,7 @@ namespace Castor3D
 		//!\~english The value of the variable	\~french La valeur de la variable
 		Castor::StringArray m_strValue;
 		//!\~english The parent shader program	\~french Le programme parent
-		ShaderProgramBase * m_program;
+		ShaderProgram * m_program;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -382,7 +382,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TFrameVariable( ShaderProgramBase * p_program );
+		TFrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -391,7 +391,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_occurences		Les dimensions du tableau
 		 */
-		TFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences );
+		TFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor

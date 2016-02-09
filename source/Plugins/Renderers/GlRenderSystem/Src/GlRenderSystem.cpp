@@ -112,9 +112,9 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer, eTOPOLOGY p_topology )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ProgramInputLayout const & p_layout, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst )
 	{
-		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), std::move( p_pVertexBuffer ), std::move( p_pIndexBuffer ), std::move( p_pMatrixBuffer ), p_topology );
+		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_layout, p_vtx, p_idx, p_bones, p_inst );
 	}
 
 	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()
@@ -142,7 +142,7 @@ namespace GlRender
 		return std::make_shared< GlSampler >( GetOpenGl(), this, p_name );
 	}
 
-	ShaderProgramBaseSPtr GlRenderSystem::CreateShaderProgram()
+	ShaderProgramSPtr GlRenderSystem::CreateShaderProgram()
 	{
 		return std::make_shared< GlShaderProgram >( GetOpenGl(), *this );
 	}
@@ -152,9 +152,9 @@ namespace GlRender
 		return std::make_shared< GlIndexBufferObject >( *this, GetOpenGl(), p_buffer );
 	}
 
-	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateVertexBuffer( BufferDeclaration const & p_declaration, CpuBuffer< uint8_t > * p_buffer )
+	std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > GlRenderSystem::CreateVertexBuffer( CpuBuffer< uint8_t > * p_buffer )
 	{
-		return std::make_shared< GlVertexBufferObject >( *this, GetOpenGl(), p_declaration, p_buffer );
+		return std::make_shared< GlVertexBufferObject >( *this, GetOpenGl(), p_buffer );
 	}
 
 	std::shared_ptr< Castor3D::GpuBuffer< real > > GlRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_buffer )
@@ -272,13 +272,13 @@ namespace GlRender
 #undef CHECK_FLAG
 	}
 
-	ShaderProgramBaseSPtr GlRenderSystem::CreateOverlayProgram( uint32_t p_flags )
+	ShaderProgramSPtr GlRenderSystem::CreateOverlayProgram( uint32_t p_flags )
 	{
 		using namespace GLSL;
 
 		// Shader program
 		ShaderManager & l_manager = GetEngine()->GetShaderManager();
-		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
+		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
 
@@ -352,17 +352,17 @@ namespace GlRender
 
 		if ( ( p_flags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
 		{
-			l_program->CreateFrameVariable( ShaderProgramBase::MapText, eSHADER_TYPE_PIXEL );
+			l_program->CreateFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 		}
 
 		if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 		{
-			l_program->CreateFrameVariable( ShaderProgramBase::MapColour, eSHADER_TYPE_PIXEL );
+			l_program->CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
 		}
 
 		if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
 		{
-			l_program->CreateFrameVariable( ShaderProgramBase::MapOpacity, eSHADER_TYPE_PIXEL );
+			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
 		}
 
 		eSHADER_MODEL l_model = GetMaxShaderModel();
@@ -372,7 +372,7 @@ namespace GlRender
 		return l_program;
 	}
 
-	Castor3D::ShaderProgramBaseSPtr GlRenderSystem::CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags )
+	Castor3D::ShaderProgramSPtr GlRenderSystem::CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags )
 	{
 		using namespace GLSL;
 
@@ -391,7 +391,7 @@ namespace GlRender
 		};
 
 		ShaderManager & l_manager = GetEngine()->GetShaderManager();
-		ShaderProgramBaseSPtr l_program = l_manager.GetNewProgram();
+		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
 		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );

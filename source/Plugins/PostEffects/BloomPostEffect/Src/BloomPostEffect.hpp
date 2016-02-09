@@ -18,6 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SsaoPostEffect___
 #define ___C3D_SsaoPostEffect___
 
+#include <BufferDeclaration.hpp>
 #include <PostEffect.hpp>
 #include <Viewport.hpp>
 
@@ -67,16 +68,16 @@ namespace Bloom
 		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
 		void DoCombine();
 
-		Castor3D::ShaderProgramBaseWPtr m_hiPassProgram;
+		Castor3D::ShaderProgramWPtr m_hiPassProgram;
 		Castor3D::OneTextureFrameVariableSPtr m_hiPassMapDiffuse;
 
-		Castor3D::ShaderProgramBaseWPtr m_filterProgram;
+		Castor3D::ShaderProgramWPtr m_filterProgram;
 		Castor3D::OneTextureFrameVariableSPtr m_filterMapDiffuse;
 		Castor3D::OneFloatFrameVariableSPtr m_filterCoefficients;
 		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetX;
 		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetY;
 
-		Castor3D::ShaderProgramBaseWPtr m_combineProgram;
+		Castor3D::ShaderProgramWPtr m_combineProgram;
 		Castor3D::OneTextureFrameVariableSPtr m_combineMapPass0;
 		Castor3D::OneTextureFrameVariableSPtr m_combineMapPass1;
 		Castor3D::OneTextureFrameVariableSPtr m_combineMapPass2;
@@ -84,8 +85,9 @@ namespace Bloom
 		Castor3D::OneTextureFrameVariableSPtr m_combineMapScene;
 
 		Castor3D::Viewport m_viewport;
-		Castor3D::BufferDeclarationSPtr m_declaration;
+		Castor3D::BufferDeclaration m_declaration;
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_vertices;
+		Castor3D::VertexBufferUPtr m_vertexBuffer;
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		Castor::real m_buffer[12];
 		SurfaceArray m_hiPassSurfaces;

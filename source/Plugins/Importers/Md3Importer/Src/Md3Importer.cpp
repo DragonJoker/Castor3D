@@ -49,32 +49,37 @@ Md3Importer::Md3Importer( Engine & p_pEngine )
 
 SceneSPtr Md3Importer::DoImportScene()
 {
-	MeshSPtr l_pMesh = DoImportMesh();
-	SceneSPtr l_pScene;
+	MeshSPtr l_mesh = DoImportMesh();
+	SceneSPtr l_scene;
 
-	if ( l_pMesh )
+	if ( l_mesh )
 	{
-		l_pMesh->GenerateBuffers();
-		l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
-		SceneNodeSPtr l_pNode = l_pScene->GetSceneNodeManager().Create( l_pMesh->GetName(), l_pScene->GetObjectRootNode() );
-		GeometrySPtr l_pGeometry = l_pScene->GetGeometryManager().Create( l_pMesh->GetName(), l_pNode );
-		l_pGeometry->SetMesh( l_pMesh );
+		l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
+		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
+		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
+
+		for ( auto && l_submesh : *l_mesh )
+		{
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
+		}
+
+		l_geometry->SetMesh( l_mesh );
 	}
 
-	return l_pScene;
+	return l_scene;
 }
 
 MeshSPtr Md3Importer::DoImportMesh()
 {
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
-	SceneSPtr l_pScene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
+	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
 	UIntArray l_faces;
 	RealArray l_sizes;
 	MaterialSPtr		l_material;
 	PassSPtr			l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName	= m_fileName.GetFileName();
-	MeshSPtr l_pMesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 
@@ -95,19 +100,19 @@ MeshSPtr Md3Importer::DoImportMesh()
 		l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 		l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 		l_pass->SetShininess( 64.0f );
-		DoReadMD3Data( l_pMesh, l_pass );
+		DoReadMD3Data( l_mesh, l_pass );
 
-		for ( auto && l_submesh : *l_pMesh )
+		for ( auto && l_submesh : *l_mesh )
 		{
 			l_submesh->SetDefaultMaterial( l_material );
 		}
 
-		l_pMesh->ComputeNormals();
+		l_mesh->ComputeNormals();
 		DoCleanUp();
 	}
 
 	delete m_pFile;
-	return l_pMesh;
+	return l_mesh;
 }
 
 void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )

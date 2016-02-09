@@ -115,7 +115,7 @@ namespace GuiCommon
 
 	void ShaderDialog::DoLoadPages()
 	{
-		ShaderProgramBaseSPtr l_program = m_shaderProgram.lock();
+		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 		wxArrayString l_arrayTexts;
 		l_arrayTexts.push_back( _( "Vertex" ) );
 		l_arrayTexts.push_back( _( "Hull" ) );

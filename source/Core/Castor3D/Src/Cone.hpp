@@ -53,10 +53,6 @@ namespace Castor3D
 		 */
 		C3D_API static MeshGeneratorSPtr Create();
 		/**
-		 *\copydoc		Castor3D::MeshGenerator::Generate
-		 */
-		C3D_API virtual void Generate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
-		/**
 		 *\~english
 		 *\brief		Retrieves number of faces
 		 *\~french
@@ -86,6 +82,12 @@ namespace Castor3D
 		{
 			return m_radius;
 		}
+
+	private:
+		/**
+		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*/
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
 	private:
 		//!\~english The number of faces	\~french Nombre de faces

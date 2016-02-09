@@ -163,20 +163,18 @@ namespace Castor3D
 
 	bool BillboardList::Initialise()
 	{
-		VertexBufferUPtr l_pVtxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), *m_declaration );
-		uint32_t l_uiStride = m_declaration->GetStride();
-		l_pVtxBuffer->Resize( uint32_t( m_arrayPositions.size() * l_uiStride ) );
-		uint8_t * l_pBuffer = l_pVtxBuffer->data();
+		m_vertexBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), *m_declaration );
+		uint32_t l_stride = m_declaration->GetStride();
+		m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
+		uint8_t * l_pBuffer = m_vertexBuffer->data();
 
 		for ( auto & l_pos : m_arrayPositions )
 		{
 			l_pos[2] = -l_pos[2];
-			std::memcpy( l_pBuffer, l_pos.const_ptr(), l_uiStride );
-			l_pBuffer += l_uiStride;
+			std::memcpy( l_pBuffer, l_pos.const_ptr(), l_stride );
+			l_pBuffer += l_stride;
 		}
 
-		m_geometryBuffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_POINTS );
 		return true;
 	}
 
@@ -191,7 +189,7 @@ namespace Castor3D
 
 			for ( auto l_pass : *l_material )
 			{
-				ShaderProgramBaseSPtr l_program = l_manager.GetBillboardProgram( l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
+				ShaderProgramSPtr l_program = l_manager.GetBillboardProgram( l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
 
 				if ( !l_program )
 				{
@@ -230,9 +228,10 @@ namespace Castor3D
 					if ( l_return )
 					{
 						l_pass->Initialise();
+						m_vertexBuffer->Create();
+						m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 						m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
-						m_geometryBuffers->Create();
-						m_geometryBuffers->Initialise( l_program, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+						DoPrepareGeometryBuffers( *l_pass );
 						m_bNeedUpdate = false;
 					}
 				}
@@ -246,14 +245,44 @@ namespace Castor3D
 		return l_return;
 	}
 
+	GeometryBuffers & BillboardList::DoPrepareGeometryBuffers( Pass const & p_pass )
+	{
+		ShaderProgramSPtr l_program = p_pass.GetShader();
+
+		if ( !l_program || l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
+		{
+			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
+		}
+
+		GeometryBuffersSPtr l_buffers;
+		auto const & l_layout = l_program->GetLayout();
+		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&l_layout]( GeometryBuffersSPtr p_buffers )
+		{
+			return p_buffers->GetLayout() == l_layout;
+		} );
+
+		if ( l_it == m_geometryBuffers.end() )
+		{
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, l_program->GetLayout(), m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_geometryBuffers.push_back( l_buffers );
+		}
+		else
+		{
+			l_buffers = *l_it;
+		}
+
+		return *l_buffers;
+	}
+
 	void BillboardList::Cleanup()
 	{
 		m_pDimensionsUniform.reset();
-		ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
+		ShaderProgramSPtr l_program = m_wpProgram.lock();
 		l_program->Cleanup();
-		m_geometryBuffers->Cleanup();
-		m_geometryBuffers->Destroy();
-		m_geometryBuffers.reset();
+		m_geometryBuffers.clear();
+		m_vertexBuffer->Cleanup();
+		m_vertexBuffer->Destroy();
+		m_vertexBuffer.reset();
 	}
 
 	void BillboardList::RemovePoint( uint32_t p_index )
@@ -282,15 +311,15 @@ namespace Castor3D
 		if ( !m_bNeedUpdate )
 		{
 			Pipeline & l_pipeline = GetScene()->GetEngine()->GetRenderSystem()->GetPipeline();
-			ShaderProgramBaseSPtr l_program = m_wpProgram.lock();
+			ShaderProgramSPtr l_program = m_wpProgram.lock();
 			MaterialSPtr l_material = m_wpMaterial.lock();
-			VertexBuffer & l_vtxBuffer = m_geometryBuffers->GetVertexBuffer();
-			uint32_t l_uiSize = l_vtxBuffer.GetSize() / l_vtxBuffer.GetDeclaration().GetStride();
+			uint32_t l_uiSize = m_vertexBuffer->GetSize() / m_vertexBuffer->GetDeclaration().GetStride();
 
 			if ( l_program && l_material )
 			{
 				for ( auto && l_pass : *l_material )
 				{
+					auto & l_buffers = DoPrepareGeometryBuffers( *l_pass );
 					l_pass->BindToAutomaticProgram( l_program );
 					auto l_matrixBuffer = l_pass->GetMatrixBuffer();
 
@@ -300,7 +329,7 @@ namespace Castor3D
 					}
 
 					l_pass->Render();
-					m_geometryBuffers->Draw( l_program, l_uiSize, 0 );
+					l_buffers.Draw( *l_program, l_uiSize, 0 );
 					l_pass->EndRender();
 				}
 			}

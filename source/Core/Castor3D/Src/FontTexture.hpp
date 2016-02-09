@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture.
 		 *\return		La texture.
 		 */
-		inline TextureBaseSPtr GetTexture()const
+		inline TextureSPtr GetTexture()const
 		{
 			return m_texture;
 		}
@@ -148,7 +148,7 @@ namespace Castor3D
 		//!\~english The texture sampler.	\~french L'échantillonneur de la texture.
 		SamplerWPtr m_sampler;
 		//!\~english The texture that will receive the glyphs.	\~french La texture qui recevra les glyphes.
-		TextureBaseSPtr m_texture;
+		TextureSPtr m_texture;
 		//!\~english Glyphs positions in the texture.	\~french Position des glyphes.
 		GlyphPositionMap m_glyphsPositions;
 		//!\~english The signal used to notify clients that this texture has changed.	\~french Signal utilisé pour notifier les clients que cette texture a changé.

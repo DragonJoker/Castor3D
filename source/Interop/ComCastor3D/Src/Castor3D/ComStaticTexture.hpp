@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_STATIC_TEXTURE_H__
 #define __COMC3D_COM_STATIC_TEXTURE_H__
 
-#include "ComTextureBase.hpp"
+#include "ComTexture.hpp"
 
 #include <StaticTexture.hpp>
 
@@ -62,12 +62,12 @@ namespace CastorCom
 			m_internal = state;
 		}
 
-		COM_PROPERTY( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetType ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetType ) );
-		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &Castor3D::TextureBase::GetSampler ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetSampler ) );
-		COM_PROPERTY( MappingMode, eTEXTURE_MAP_MODE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetMappingMode ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetMappingMode ) );
-		COM_PROPERTY( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::TextureBase::GetBuffer ), make_putter( m_internal.get(), &Castor3D::TextureBase::SetImage ) );
+		COM_PROPERTY( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::Texture::GetType ), make_putter( m_internal.get(), &Castor3D::Texture::SetType ) );
+		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &Castor3D::Texture::GetSampler ), make_putter( m_internal.get(), &Castor3D::Texture::SetSampler ) );
+		COM_PROPERTY( MappingMode, eTEXTURE_MAP_MODE, make_getter( m_internal.get(), &Castor3D::Texture::GetMappingMode ), make_putter( m_internal.get(), &Castor3D::Texture::SetMappingMode ) );
+		COM_PROPERTY( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::Texture::GetBuffer ), make_putter( m_internal.get(), &Castor3D::Texture::SetImage ) );
 
-		COM_PROPERTY_GET( BaseType, eTEXTURE_BASE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureBase::GetBaseType ) );
+		COM_PROPERTY_GET( BaseType, eTEXTURE_BASE_TYPE, make_getter( m_internal.get(), &Castor3D::Texture::GetBaseType ) );
 
 		STDMETHOD( Initialise )( /* [in] */ unsigned int index );
 		STDMETHOD( Cleanup )();

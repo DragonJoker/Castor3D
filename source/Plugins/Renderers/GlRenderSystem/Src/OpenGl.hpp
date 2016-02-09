@@ -86,21 +86,12 @@ namespace GlRender
 		virtual bool GetTexImage( eGL_TEXDIM p_target, int level, eGL_FORMAT format, eGL_TYPE type, void * img );
 
 		std::function< void( uint32_t mode, uint32_t texture ) > m_pfnBindTexture;
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		std::function< void( uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage1D;
 		std::function< void( uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage2D;
 		std::function< void( uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data ) > m_pfnTexSubImage3D;
 		std::function< void( uint32_t target, int level, int internalFormat, int width, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage1D;
 		std::function< void( uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage2D;
 		std::function< void( uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTexImage3D;
-#else
-		void ( CALLBACK * m_pfnTexSubImage1D )( uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTexSubImage2D )( uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTexSubImage3D )( uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTexImage1D )( uint32_t target, int level, int internalFormat, int width, int border, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTexImage2D )( uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTexImage3D )( uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data );
-#endif
 		std::function< void( uint32_t target, int level, uint32_t format, uint32_t type, void * pixels ) > m_pfnGetTexImage;
 		std::function< void( uint32_t target, uint32_t pname, int param ) > m_pfnTexParameteri;
 		std::function< void( uint32_t target, uint32_t pname, float param ) > m_pfnTexParameterf;
@@ -136,7 +127,6 @@ namespace GlRender
 		virtual bool GetTexImage( eGL_TEXDIM p_target, int level, eGL_FORMAT format, eGL_TYPE type, void * img );
 
 		uint32_t m_uiTexture;
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage1D;
 		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage2D;
 		std::function< void( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureSubImage3D;
@@ -144,15 +134,6 @@ namespace GlRender
 		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage2D;
 		std::function< void( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data ) > m_pfnTextureImage3D;
 		std::function< void( uint32_t texture, uint32_t target, int level, uint32_t format, uint32_t type, void * pixels ) > m_pfnGetTextureImage;
-#else
-		void ( CALLBACK * m_pfnTextureSubImage1D )( uint32_t texture, uint32_t target, int level, int xoffset, int width, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTextureSubImage2D )( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int width, int height, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTextureSubImage3D )( uint32_t texture, uint32_t target, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTextureImage1D )( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int border, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTextureImage2D )( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int border, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnTextureImage3D )( uint32_t texture, uint32_t target, int level, int internalFormat, int width, int height, int depth, int border, uint32_t format, uint32_t type, void const * data );
-		void ( CALLBACK * m_pfnGetTextureImage )( uint32_t texture, uint32_t target, int level, uint32_t format, uint32_t type, void * pixels );
-#endif
 		std::function< void( uint32_t texture, uint32_t target, uint32_t pname, int param ) > m_pfnTextureParameteri;
 		std::function< void( uint32_t texture, uint32_t target, uint32_t pname, float param ) > m_pfnTextureParameterf;
 		std::function< void( uint32_t texture, uint32_t target, uint32_t pname, const int * params ) > m_pfnTextureParameteriv;
@@ -790,9 +771,9 @@ namespace GlRender
 		//@{
 
 		C3D_Gl_API bool GetProgramInterfaceInfos( uint32_t program, eGLSL_INTERFACE programInterface, eGLSL_DATA_NAME name, int * params );
-		C3D_Gl_API bool GetProgramResourceIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
-		C3D_Gl_API bool GetProgramResourceLocation( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
-		C3D_Gl_API bool GetProgramResourceLocationIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
+		C3D_Gl_API int GetProgramResourceIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
+		C3D_Gl_API int GetProgramResourceLocation( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
+		C3D_Gl_API int GetProgramResourceLocationIndex( uint32_t program, eGLSL_INTERFACE programInterface, char const * const name );
 		C3D_Gl_API bool GetProgramResourceName( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int bufSize, int * length, char * name );
 		C3D_Gl_API bool GetProgramResourceInfos( uint32_t program, eGLSL_INTERFACE programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params );
 
@@ -1203,11 +1184,7 @@ namespace GlRender
 		std::function< void( uint32_t target, uint32_t pname, float const * param ) > m_pfnTexEnvfv;
 		std::function< void( uint32_t coord, uint32_t pname, int param ) > m_pfnTexGeni;
 		std::function< void( uint32_t mode ) > m_pfnReadBuffer;
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		std::function< void( int x, int y, int width, int height, uint32_t format, uint32_t type, void * pixels ) > m_pfnReadPixels;
-#else
-		void ( CALLBACK * m_pfnReadPixels )( int x, int y, int width, int height, uint32_t format, uint32_t type, void * pixels );
-#endif
 		std::function< void( uint32_t mode ) > m_pfnDrawBuffer;
 		std::function< void( int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnDrawPixels;
 		std::function< void( uint32_t pname, int param ) > m_pfnPixelStorei;
@@ -1263,13 +1240,8 @@ namespace GlRender
 		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level ) > m_pfnFramebufferTexture1D;
 		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level ) > m_pfnFramebufferTexture2D;
 		std::function< void( uint32_t target, uint32_t attachment, uint32_t texture, int level, int layer ) > m_pfnFramebufferTextureLayer;
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		std::function< void( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level, int layer ) > m_pfnFramebufferTexture3D;
 		std::function< void( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, uint32_t filter ) > m_pfnBlitFramebuffer;
-#else
-		void ( CALLBACK * m_pfnFramebufferTexture3D )( uint32_t target, uint32_t attachment, uint32_t textarget, uint32_t texture, int level, int layer );
-		void ( CALLBACK * m_pfnBlitFramebuffer )( int srcX0, int srcY0, int srcX1, int srcY1, int dstX0, int dstY0, int dstX1, int dstY1, uint32_t mask, uint32_t filter );
-#endif
 		std::function< void( int n, uint32_t const * bufs ) > m_pfnDrawBuffers;
 
 		//@}
@@ -1283,11 +1255,7 @@ namespace GlRender
 		std::function< void( uint32_t target, uint32_t renderbuffer ) > m_pfnBindRenderbuffer;
 		std::function< void( uint32_t target, uint32_t internalFormat, int width, int height ) > m_pfnRenderbufferStorage;
 		std::function< void( uint32_t target, int isamples, uint32_t internalFormat, int width, int height ) > m_pfnRenderbufferStorageMultisample;
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		std::function< void( uint32_t target, int samples, int internalformat, int width, int height, uint8_t fixedsamplelocations ) > m_pfnTexImage2DMultisample;
-#else
-		void ( CALLBACK * m_pfnTexImage2DMultisample )( uint32_t target, int samples, int internalformat, int width, int height, uint8_t fixedsamplelocations );
-#endif
 		std::function< void( uint32_t target, uint32_t param, int * value ) > m_pfnGetRenderbufferParameteriv;
 
 		//@}
@@ -1295,11 +1263,7 @@ namespace GlRender
 		//@{
 
 		std::function< int( uint32_t program, char const * name ) > m_pfnGetUniformLocation;
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		std::function< void( uint32_t program, uint32_t index, int maxLength, int * length, int * size, uint32_t * type, char * name ) > m_pfnGetActiveUniform;
-#else
-		void ( CALLBACK * m_pfnGetActiveUniform )( uint32_t program, uint32_t index, int maxLength, int * length, int * size, uint32_t * type, char * name );
-#endif
 		std::function< void( int location, int v0 ) > m_pfnUniform1i;
 		std::function< void( int location, int v0, int v1 ) > m_pfnUniform2i;
 		std::function< void( int location, int v0, int v1, int v2 ) > m_pfnUniform3i;
@@ -1397,11 +1361,7 @@ namespace GlRender
 		//@{
 
 		std::function< void( uint32_t ) > m_pfnEnableVertexAttribArray;
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		std::function< void( uint32_t index, int size, uint32_t type, uint8_t normalized, int stride, void const * pointer ) > m_pfnVertexAttribPointer;
-#else
-		void ( CALLBACK * m_pfnVertexAttribPointer )( uint32_t index, int size, uint32_t type, uint8_t normalized, int stride, void const * pointer );
-#endif
 		std::function< void( uint32_t index, int size, uint32_t type, int stride, void const * pointer ) > m_pfnVertexAttribIPointer;
 		std::function< void( uint32_t ) > m_pfnDisableVertexAttribArray;
 
@@ -1424,26 +1384,72 @@ namespace GlRender
 		/*@name Queries */
 		//@{
 
+		/** see https://www.opengl.org/sdk/docs/man/html/glGenQueries.xhtml
+		*/
 		std::function< void( int n, uint32_t * queries ) > m_pfnGenQueries;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glDeleteQueries.xhtml
+		*/
 		std::function< void( int n, uint32_t const * queries ) > m_pfnDeleteQueries;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glIsQuery.xhtml
+		*/
 		std::function< uint8_t( uint32_t query ) > m_pfnIsQuery;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glBeginQuery.xhtml
+		*/
 		std::function< void( uint32_t target, uint32_t query ) > m_pfnBeginQuery;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glEndQuery.xhtml
+		*/
 		std::function< void( uint32_t target ) > m_pfnEndQuery;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glQueryCounter.xhtml
+		*/
 		std::function< void( uint32_t id, uint32_t target ) > m_pfnQueryCounter;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
+		*/
 		std::function< void( uint32_t id, uint32_t pname, int32_t * params ) > m_pfnGetQueryObjectiv;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
+		*/
 		std::function< void( uint32_t id, uint32_t pname, uint32_t * params ) > m_pfnGetQueryObjectuiv;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
+		*/
 		std::function< void( uint32_t id, uint32_t pname, int64_t * params ) > m_pfnGetQueryObjecti64v;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetQueryObject.xhtml
+		*/
 		std::function< void( uint32_t id, uint32_t pname, uint64_t * params ) > m_pfnGetQueryObjectui64v;
 
 		//@}
 		/*@name GL_ARB_program_interface_query */
 		//@{
 
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramInterface.xhtml
+		*/
 		std::function< void( uint32_t program, uint32_t programInterface, uint32_t name, int * params ) > m_pfnGetProgramInterfaceiv;
-		std::function< void( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceIndex;
-		std::function< void( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocation;
-		std::function< void( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocationIndex;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceIndex.xhtml
+		*/
+		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceIndex;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceLocation.xhtml
+		*/
+		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocation;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceLocationIndex.xhtml
+		*/
+		std::function< int( uint32_t program, uint32_t programInterface, char const * const name ) > m_pfnGetProgramResourceLocationIndex;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResourceName.xhtml
+		*/
 		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int bufSize, int * length, char * name ) > m_pfnGetProgramResourceName;
+
+		/** see https://www.opengl.org/sdk/docs/man/html/glGetProgramResource.xhtml
+		*/
 		std::function< void( uint32_t program, uint32_t programInterface, uint32_t index, int propCount, uint32_t * props, int bufSize, int * length, int * params ) > m_pfnGetProgramResourceiv;
 
 		//@}
@@ -1464,7 +1470,6 @@ namespace GlRender
 			return p_func != NULL;
 		}
 
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		template< typename Ret, typename ... Arguments >
 		bool GetFunction( Castor::String const & p_name, std::function< Ret( Arguments... ) > & p_func )
 		{
@@ -1478,161 +1483,6 @@ namespace GlRender
 
 			return l_pfnResult != NULL;
 		}
-#else
-		template< typename Ret >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret() > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )();
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3, typename T4 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7, T8 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8, T9 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7, T8, T9 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-
-		template< typename Ret, typename T1, typename T2, typename T3, typename T4, typename T5, typename T6, typename T7, typename T8, typename T9, typename T10 >
-		bool GetFunction( Castor::String const & p_name, std::function< Ret( T1, T2, T3, T4, T5, T6, T7, T8, T9, T10 ) > & p_func )
-		{
-			typedef Ret( CALLBACK * PFNType )( T1, T2, T3, T4, T5, T6, T7, T8, T9, T10 );
-			PFNType l_pfnResult = NULL;
-
-			if ( GetFunction( p_name, l_pfnResult ) )
-			{
-				p_func = l_pfnResult;
-			}
-
-			return l_pfnResult != NULL;
-		}
-#endif
 	}
 
 #	define MAKE_GL_EXTENSION( x )	static const Castor::String x = cuT( "GL_" ) cuT( #x );

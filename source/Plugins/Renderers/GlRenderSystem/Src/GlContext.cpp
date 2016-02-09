@@ -94,7 +94,7 @@ namespace GlRender
 			}
 
 			eSHADER_MODEL l_model = m_glRenderSystem->GetMaxShaderModel();
-			ShaderProgramBaseSPtr l_program = m_renderTextureProgram.lock();
+			ShaderProgramSPtr l_program = m_renderTextureProgram.lock();
 			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVtxShader );
 			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPxlShader );
 

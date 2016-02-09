@@ -107,16 +107,13 @@ namespace Deferred
 
 		m_lightPassBlendState = GetEngine()->GetBlendStateManager().Create( cuT( "LightPassState" ) );
 
-		BufferElementDeclaration l_vertexDeclarationElements[] =
+		m_declaration = BufferDeclaration(
 		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS ),
-			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
-		};
-		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_2FLOATS ),
+			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_TYPE_2FLOATS ),
+		} );
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), l_vertexDeclarationElements );
-
-		real l_pBuffer[] =
+		real l_data[] =
 		{
 			0, 0, 0, 0,
 			1, 1, 1, 1,
@@ -125,10 +122,12 @@ namespace Deferred
 			1, 0, 1, 0,
 			1, 1, 1, 1,
 		};
-		uint32_t l_stride = m_pDeclaration->GetStride();
-		l_pVtxBuffer->Resize( sizeof( l_pBuffer ) );
-		uint8_t * l_buffer = l_pVtxBuffer->data();
-		std::memcpy( l_buffer, l_pBuffer, sizeof( l_pBuffer ) );
+
+		m_vertexBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), m_declaration );
+		uint32_t l_stride = m_declaration.GetStride();
+		m_vertexBuffer->Resize( sizeof( l_data ) );
+		uint8_t * l_buffer = m_vertexBuffer->data();
+		std::memcpy( l_buffer, l_data, sizeof( l_data ) );
 
 		for ( auto && l_vertex : m_arrayVertex )
 		{
@@ -136,7 +135,6 @@ namespace Deferred
 			l_buffer += l_stride;
 		}
 
-		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), nullptr, nullptr, eTOPOLOGY_TRIANGLES );
 		GetEngine()->SetPerObjectLighting( false );
 	}
 
@@ -144,7 +142,6 @@ namespace Deferred
 	{
 		m_geometryBuffers.reset();
 		m_lightPassShaderProgram.reset();
-		m_pDeclaration.reset();
 	}
 
 	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
@@ -165,7 +162,7 @@ namespace Deferred
 
 		if ( l_return )
 		{
-			m_lightPassShaderProgram->CreateFrameVariable( ShaderProgramBase::Lights, eSHADER_TYPE_PIXEL );
+			m_lightPassShaderProgram->CreateFrameVariable( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
@@ -176,7 +173,7 @@ namespace Deferred
 			FrameVariableBufferSPtr l_scene = GetEngine()->GetShaderManager().CreateSceneBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL );
 			m_lightPassScene = l_scene;
 
-			m_geometryBuffers->Create();
+			m_vertexBuffer->Create();
 			eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetMaxShaderModel();
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX, l_model, DoGetLightPassVertexShaderSource( 0 ) );
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL, l_model, DoGetLightPassPixelShaderSource( 0 ) );
@@ -187,7 +184,7 @@ namespace Deferred
 
 	void RenderTechnique::DoDestroy()
 	{
-		m_geometryBuffers->Destroy();
+		m_vertexBuffer->Destroy();
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH; i++ )
 		{
@@ -250,21 +247,23 @@ namespace Deferred
 		m_lightPassBlendState->Initialise();
 
 		m_lightPassShaderProgram->Initialise();
-		m_lightPassMatrices = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferMatrix );
-		FrameVariableBufferSPtr l_scene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgramBase::BufferScene );
-		l_scene->GetVariable( ShaderProgramBase::CameraPos, m_pShaderCamera );
+		m_lightPassMatrices = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
+		FrameVariableBufferSPtr l_scene = m_lightPassShaderProgram->FindFrameVariableBuffer( ShaderProgram::BufferScene );
+		l_scene->GetVariable( ShaderProgram::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
-		m_geometryBuffers->Initialise( m_lightPassShaderProgram, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, m_lightPassShaderProgram->GetLayout(), m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 		return l_return;
 	}
 
 	void RenderTechnique::DoCleanup()
 	{
+		m_geometryBuffers.reset();
 		m_pShaderCamera.reset();
 		m_geometryPassDsState->Cleanup();
 		m_lightPassDsState->Cleanup();
 		m_lightPassBlendState->Cleanup();
-		m_geometryBuffers->Cleanup();
+		m_vertexBuffer->Cleanup();
 		m_lightPassShaderProgram->Cleanup();
 		m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
 		m_geometryPassFrameBuffer->DetachAll();
@@ -348,7 +347,7 @@ namespace Deferred
 
 			if ( l_return )
 			{
-				m_geometryBuffers->Draw( m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
+				m_geometryBuffers->Draw( *m_lightPassShaderProgram, m_arrayVertex.size(), 0 );
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 				{

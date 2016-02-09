@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\brief		Definit la texture
 		 *\param[in]	p_texture	La texture
 		 */
-		C3D_API void SetTexture( TextureBaseSPtr p_texture );
+		C3D_API void SetTexture( TextureSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit
@@ -323,7 +323,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture
 		 *\return		La valeur
 		 */
-		inline Castor3D::TextureBaseSPtr GetTexture()const
+		inline Castor3D::TextureSPtr GetTexture()const
 		{
 			return m_pTexture;
 		}
@@ -654,7 +654,7 @@ namespace Castor3D
 		//!\~english The unit transformations	\~french Les transformations de l'unité
 		Castor::Matrix4x4r m_mtxTransformations;
 		//!\~english The unit texture	\~french La texture de l'unité
-		TextureBaseSPtr m_pTexture;
+		TextureSPtr m_pTexture;
 		//!\~english The unit texture's path	\~french Le chemin de la texture de l'unité
 		Castor::Path m_pathTexture;
 		//!\~english The render target used to compute the texture, if this unit is a render target	\~french La render target utilisée pour générer la texture si cette unité est une render target

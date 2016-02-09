@@ -179,11 +179,11 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 	m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 	BufferElementDeclaration l_skymapDeclaration[] =
 	{
-		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS )
+		BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_2FLOATS )
 	};
 	BufferElementDeclaration l_cloudsVertexDeclarationElements[] =
 	{
-		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS )
+		BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_3FLOATS )
 	};
 	Engine * l_pEngine = GetEngine();
 	m_pSamplerNearestClamp = l_pEngine->GetSamplerManager().Create( cuT( "NearestClamp" ) );
@@ -258,12 +258,12 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 #endif
 	m_fbo = m_renderSystem->CreateFrameBuffer();
 	m_pAttachSky = m_fbo->CreateAttachment( m_pTexSky );
-	VertexBufferUPtr l_pVtxBufferSky = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
-	VertexBufferUPtr l_pVtxBufferMap = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
-	VertexBufferUPtr l_pVtxBufferClo = std::make_unique< VertexBuffer >( *GetEngine(), l_cloudsVertexDeclarationElements );
-	IndexBufferUPtr l_pIdxBufferSky = std::make_unique< IndexBuffer >( *GetEngine() );
-	IndexBufferUPtr l_pIdxBufferMap = std::make_unique< IndexBuffer >( *GetEngine() );
-	IndexBufferUPtr l_pIdxBufferClo = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_skyVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
+	m_skymapVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
+	m_cloudsVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_cloudsVertexDeclarationElements );
+	m_skyIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_skymapIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+	m_cloudsIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
 	real l_skyVertices[] =
 	{
 		-1, -1
@@ -288,21 +288,18 @@ RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * 
 		0, 1, 2,
 		1, 3, 2
 	};
-	l_pVtxBufferSky->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
-	l_pVtxBufferMap->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
-	l_pVtxBufferClo->Resize( sizeof( l_cloudsVertices ) / sizeof( real ) );
-	l_pIdxBufferSky->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
-	l_pIdxBufferMap->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
-	l_pIdxBufferClo->Resize( sizeof( l_cloudsIndices ) / sizeof( uint32_t ) );
-	std::memcpy( l_pVtxBufferSky->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
-	std::memcpy( l_pVtxBufferMap->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
-	std::memcpy( l_pVtxBufferClo->data(), &l_cloudsVertices[0], sizeof( l_cloudsVertices ) );
-	std::memcpy( l_pIdxBufferSky->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
-	std::memcpy( l_pIdxBufferMap->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
-	std::memcpy( l_pIdxBufferClo->data(), &l_cloudsIndices[0], sizeof( l_cloudsIndices ) );
-	m_skyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferSky ), std::move( l_pIdxBufferSky ), nullptr, eTOPOLOGY_TRIANGLES );
-	m_skymapGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferMap ), std::move( l_pIdxBufferMap ), nullptr, eTOPOLOGY_TRIANGLES );
-	m_cloudsGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBufferClo ), std::move( l_pIdxBufferClo ), nullptr, eTOPOLOGY_TRIANGLES );
+	m_skyVtxBuffer->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
+	m_skymapVtxBuffer->Resize( sizeof( l_skyVertices ) / sizeof( real ) );
+	m_cloudsVtxBuffer->Resize( sizeof( l_cloudsVertices ) / sizeof( real ) );
+	m_skyVtxBuffer->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
+	m_skymapIdxBuffer->Resize( sizeof( l_skyIndices ) / sizeof( uint32_t ) );
+	m_cloudsIdxBuffer->Resize( sizeof( l_cloudsIndices ) / sizeof( uint32_t ) );
+	std::memcpy( m_skyVtxBuffer->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
+	std::memcpy( m_skymapVtxBuffer->data(), &l_skyVertices[0], sizeof( l_skyVertices ) );
+	std::memcpy( m_cloudsVtxBuffer->data(), &l_cloudsVertices[0], sizeof( l_cloudsVertices ) );
+	std::memcpy( m_skyVtxBuffer->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
+	std::memcpy( m_skymapIdxBuffer->data(), &l_skyIndices[0], sizeof( l_skyIndices ) );
+	std::memcpy( m_cloudsIdxBuffer->data(), &l_cloudsIndices[0], sizeof( l_cloudsIndices ) );
 	RasteriserStateSPtr l_pRasteriser = GetEngine()->GetRenderSystem()->GetEngine()->GetRasteriserStateManager().Create( cuT( "OceanLighting" ) );
 	l_pRasteriser->SetCulledFaces( eFACE_NONE );
 	l_pRasteriser->SetFillMode( eFILL_MODE_SOLID );
@@ -632,17 +629,16 @@ void RenderTechnique::generateMesh()
 {
 	if ( m_renderGBuffers )
 	{
-		m_renderGBuffers->GetVertexBuffer().Cleanup();
-		m_renderGBuffers->GetIndexBuffer().Cleanup();
-		m_renderGBuffers->Cleanup();
-		m_renderGBuffers->GetVertexBuffer().Destroy();
-		m_renderGBuffers->GetIndexBuffer().Destroy();
+		m_renderVtxBuffer->Cleanup();
+		m_renderVtxBuffer->Destroy();
+		m_renderIdxBuffer->Cleanup();
+		m_renderIdxBuffer->Destroy();
 		m_renderGBuffers.reset();
 	}
 
 	BufferElementDeclaration l_meshDeclaration[] =
 	{
-		BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_4FLOATS )
+		BufferElementDeclaration( ShaderProgram::Position, eELEMENT_TYPE_4FLOATS )
 	};
 	float horizon = float( tan( m_cameraTheta / 180.0 * M_PI ) );
 	float s = std::min< float >( 1.1f, 0.5f + horizon * 0.5f );
@@ -695,9 +691,11 @@ void RenderTechnique::generateMesh()
 	IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
 	l_pIdxBuffer->Resize( n );
 	std::memcpy( l_pIdxBuffer->data(), &indices[0], n * sizeof( uint32_t ) );
-	m_renderGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr, eTOPOLOGY_TRIANGLES );
-	m_renderGBuffers->Create();
-	m_renderGBuffers->Initialise( m_render, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_renderVtxBuffer->Create();
+	m_renderIdxBuffer->Create();
+	m_renderVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_renderIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_renderGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, m_render->GetLayout(), m_renderVtxBuffer.get(), m_renderIdxBuffer.get(), nullptr, nullptr );
 }
 
 bool RenderTechnique::DoCreate()
@@ -743,12 +741,12 @@ bool RenderTechnique::DoCreate()
 	m_pTexSky->Create();
 	m_pTexNoise->Create();
 	m_fbo->Create( 0 );
-	m_skyGBuffers->GetVertexBuffer().Create();
-	m_skyGBuffers->GetIndexBuffer().Create();
-	m_skymapGBuffers->GetVertexBuffer().Create();
-	m_skymapGBuffers->GetIndexBuffer().Create();
-	m_cloudsGBuffers->GetVertexBuffer().Create();
-	m_cloudsGBuffers->GetIndexBuffer().Create();
+	m_skyVtxBuffer->Create();
+	m_skymapVtxBuffer->Create();
+	m_cloudsVtxBuffer->Create();
+	m_skyIdxBuffer->Create();
+	m_skymapIdxBuffer->Create();
+	m_cloudsIdxBuffer->Create();
 #if ENABLE_FFT
 	m_pTexSpectrum_1_2->Create();
 	m_pTexSpectrum_3_4->Create();
@@ -789,14 +787,14 @@ bool RenderTechnique::DoCreate()
 
 void RenderTechnique::DoDestroy()
 {
-	m_renderGBuffers->GetVertexBuffer().Destroy();
-	m_renderGBuffers->GetIndexBuffer().Destroy();
-	m_cloudsGBuffers->GetVertexBuffer().Destroy();
-	m_cloudsGBuffers->GetIndexBuffer().Destroy();
-	m_skyGBuffers->GetVertexBuffer().Destroy();
-	m_skyGBuffers->GetIndexBuffer().Destroy();
-	m_skymapGBuffers->GetVertexBuffer().Destroy();
-	m_skymapGBuffers->GetIndexBuffer().Destroy();
+	m_skyVtxBuffer->Destroy();
+	m_skymapVtxBuffer->Destroy();
+	m_cloudsVtxBuffer->Destroy();
+	m_skyIdxBuffer->Destroy();
+	m_skymapIdxBuffer->Destroy();
+	m_cloudsIdxBuffer->Destroy();
+	m_renderVtxBuffer->Destroy();
+	m_renderIdxBuffer->Destroy();
 #if ENABLE_FFT
 	m_variancesGBuffers->GetVertexBuffer().Destroy();
 	m_variancesGBuffers->GetIndexBuffer().Destroy();
@@ -991,9 +989,15 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 	m_fftxGBuffers->Initialise( m_fftx, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW);
 	m_fftyGBuffers->Initialise( m_ffty, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW);
 #endif
-	m_skyGBuffers->Initialise( m_sky, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-	m_skymapGBuffers->Initialise( m_skymap, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-	m_cloudsGBuffers->Initialise( m_clouds, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skyVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skymapVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_cloudsVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skyIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skymapIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_cloudsIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+	m_skyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, m_sky->GetLayout(), m_skyVtxBuffer.get(), m_skyIdxBuffer.get(), nullptr, nullptr );
+	m_skymapGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, m_skymap->GetLayout(), m_skymapVtxBuffer.get(), m_skymapIdxBuffer.get(), nullptr, nullptr );
+	m_cloudsGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, m_clouds->GetLayout(), m_cloudsVtxBuffer.get(), m_cloudsIdxBuffer.get(), nullptr, nullptr );
 #if ENABLE_FFT
 	m_variancesFbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
 	m_variancesFbo->SetDrawBuffer( eATTACHMENT_POINT_COLOUR0 );
@@ -1015,9 +1019,18 @@ bool RenderTechnique::DoInitialise( uint32_t & p_index )
 
 void RenderTechnique::DoCleanup()
 {
-	m_renderGBuffers->Cleanup();
-	m_skyGBuffers->Cleanup();
-	m_skymapGBuffers->Cleanup();
+	m_renderVtxBuffer->Cleanup();
+	m_renderIdxBuffer->Cleanup();
+	m_renderGBuffers.reset();
+	m_skyVtxBuffer->Cleanup();
+	m_skyIdxBuffer->Cleanup();
+	m_skyGBuffers.reset();
+	m_skymapVtxBuffer->Cleanup();
+	m_skymapIdxBuffer->Cleanup();
+	m_skymapGBuffers.reset();
+	m_cloudsVtxBuffer->Cleanup();
+	m_cloudsIdxBuffer->Cleanup();
+	m_cloudsGBuffers.reset();
 #if ENABLE_FFT
 	m_variancesGBuffers->Cleanup();
 	m_initGBuffers->Cleanup();
@@ -1131,7 +1144,7 @@ bool RenderTechnique::DoRender( Scene & CU_PARAM_UNUSED( p_scene ), Camera & CU_
 	m_skymapCloudsColor->SetValue( l_colour );
 	m_skymapBlendState.lock()->Apply();
 	m_skymap->Bind();
-	m_skymapGBuffers->Draw( m_skymap, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_skymapGBuffers->Draw( *m_skymap, m_skymapIdxBuffer->GetSize(), 0 );
 	m_skymap->Unbind();
 	m_fbo->Unbind();
 	m_pTexSky->Bind();
@@ -1191,7 +1204,7 @@ void RenderTechnique::DoEndRender()
 	m_skyHdrExposure->SetValue( m_hdrExposure );
 	m_skyBlendState.lock()->Apply();
 	m_sky->Bind();
-	m_skyGBuffers->Draw( m_sky, m_skymapGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_skyGBuffers->Draw( *m_sky, m_skymapIdxBuffer->GetSize(), 0 );
 	m_sky->Unbind();
 
 	if ( m_cloudLayer && ch < 3000.0 )
@@ -1256,7 +1269,7 @@ void RenderTechnique::DoEndRender()
 	m_renderRasteriserState.lock()->Apply();
 	m_renderBlendState.lock()->Apply();
 	m_render->Bind();
-	m_renderGBuffers->Draw( m_render, m_renderGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_renderGBuffers->Draw( *m_render, m_renderIdxBuffer->GetSize(), 0 );
 	m_render->Unbind();
 	m_renderTarget->GetRasteriserState()->Apply();
 
@@ -1537,7 +1550,7 @@ void RenderTechnique::drawClouds( const Point3f & sun, const Matrix4x4f & mat )
 	m_cloudsCloudsColor->SetValue( l_colour );
 	m_cloudsBlendState.lock()->Apply();
 	m_clouds->Bind();
-	m_cloudsGBuffers->Draw( m_clouds, m_cloudsGBuffers->GetIndexBuffer().GetSize(), 0 );
+	m_cloudsGBuffers->Draw( *m_clouds, m_cloudsIdxBuffer->GetSize(), 0 );
 	m_clouds->Unbind();
 }
 
@@ -1796,7 +1809,7 @@ void RenderTechnique::simulateFFTWaves( float t )
 {
 	RenderSystem * l_pRS = GetEngine()->GetRenderSystem();
 	Pipeline * l_pPipeline = l_pRS->GetPipeline();
-	TextureBaseSPtr l_pTex;
+	TextureSPtr l_pTex;
 	// init
 	m_fftFbo1->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
 	m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR0 );

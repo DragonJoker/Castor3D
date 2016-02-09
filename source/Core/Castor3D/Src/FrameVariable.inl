@@ -20,7 +20,7 @@
 	{
 		C3D_API static const xchar * DataTypeName;
 	};
-	template<> struct FrameVariableDataTyper< TextureBase * >
+	template<> struct FrameVariableDataTyper< Texture * >
 	{
 		C3D_API static const xchar * DataTypeName;
 	};
@@ -28,7 +28,7 @@
 	//*************************************************************************************************
 
 	template< typename T >
-	TFrameVariable< T >::TFrameVariable( ShaderProgramBase * p_program )
+	TFrameVariable< T >::TFrameVariable( ShaderProgram * p_program )
 		: FrameVariable( p_program )
 		, m_values( NULL )
 		, m_bOwnBuffer( true )
@@ -37,7 +37,7 @@
 	}
 
 	template< typename T >
-	TFrameVariable< T >::TFrameVariable( ShaderProgramBase * p_program, uint32_t p_occurences )
+	TFrameVariable< T >::TFrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
 		: FrameVariable( p_program, p_occurences )
 		, m_values( NULL )
 		, m_bOwnBuffer( true )
