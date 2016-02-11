@@ -567,7 +567,7 @@ namespace Castor
 
 	void FileParser::DoLeaveBlock()
 	{
-		if ( m_ignored )
+		if ( DoIsInIgnoredBlock() )
 		{
 			m_ignoreLevel--;
 
@@ -580,6 +580,7 @@ namespace Castor
 		}
 		else
 		{
+			m_ignored = false;
 			DoParseScriptBlockEnd();
 		}
 	}

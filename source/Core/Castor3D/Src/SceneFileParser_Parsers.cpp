@@ -2831,7 +2831,26 @@ END_ATTRIBUTE_PUSH( eSECTION_TEXT_OVERLAY )
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->pOverlay->SetVisible( true );
+
+	if ( l_pContext->pOverlay->GetType() == eOVERLAY_TYPE_TEXT )
+	{
+		auto l_textOverlay = l_pContext->pOverlay->GetTextOverlay();
+
+		if ( l_textOverlay->GetFontTexture() )
+		{
+			l_pContext->pOverlay->SetVisible( true );
+		}
+		else
+		{
+			l_pContext->pOverlay->SetVisible( false );
+			PARSING_ERROR( cuT( "TextOverlay's font has not been set, it will not be rendered" ) );
+		}
+	}
+	else
+	{
+		l_pContext->pOverlay->SetVisible( true );
+	}
+
 	l_pContext->pOverlay = l_pContext->pOverlay->GetParent();
 }
 END_ATTRIBUTE_POP()

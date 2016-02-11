@@ -208,7 +208,7 @@ namespace Castor3D
 
 		for ( auto l_it : m_elements )
 		{
-			if ( l_it.second->GetCategory()->GetType() == eOVERLAY_TYPE_TEXT )
+			if ( l_it.second->GetCategory()->GetType() == eOVERLAY_TYPE_TEXT && l_it.second->GetCategory()->IsVisible() )
 			{
 				l_it.second->GetTextOverlay()->LoadNewGlyphs();
 			}
