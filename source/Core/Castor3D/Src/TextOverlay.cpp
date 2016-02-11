@@ -191,6 +191,13 @@ namespace Castor3D
 	void TextOverlay::LoadNewGlyphs()
 	{
 		FontTextureSPtr l_fontTexture = GetFontTexture();
+
+		if ( !l_fontTexture )
+		{
+			SetVisible( false );
+			CASTOR_EXCEPTION( cuT( "The TextOverlay [" ) + GetOverlayName() + cuT( "] has no FontTexture. Did you set its font?" ) );
+		}
+
 		FontSPtr l_font = l_fontTexture->GetFont();
 		std::vector< char32_t > l_new;
 

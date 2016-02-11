@@ -252,21 +252,7 @@ namespace Castor
 
 				if ( p_bLeft )
 				{
-					l_index = p_str.find_first_not_of( cuT( ' ' ) );
-
-					if ( l_index > 0 )
-					{
-						if ( l_index != String::npos )
-						{
-							p_str = p_str.substr( l_index, String::npos );
-						}
-						else
-						{
-							p_str.clear();
-						}
-					}
-
-					l_index = p_str.find_first_not_of( cuT( '\t' ) );
+					l_index = p_str.find_first_not_of( cuT( " \t" ) );
 
 					if ( l_index > 0 )
 					{
@@ -283,24 +269,10 @@ namespace Castor
 
 				if ( p_bRight && p_str.size() > 0 )
 				{
-					l_index = p_str.find_last_not_of( cuT( ' ' ) );
+					l_index = p_str.find_last_not_of( cuT( " \t" ) );
 
 					if ( l_index < p_str.size() - 1 )
 					{
-						if ( l_index != String::npos )
-						{
-							p_str = p_str.substr( 0, l_index + 1 );
-						}
-						else
-						{
-							p_str.clear();
-						}
-					}
-
-					if ( p_str.size() > 0 )
-					{
-						l_index = p_str.find_last_not_of( cuT( '\t' ) );
-
 						if ( l_index != String::npos )
 						{
 							p_str = p_str.substr( 0, l_index + 1 );
