@@ -288,7 +288,7 @@ namespace CastorViewer
 		m_sceneObjectsList = new SceneObjectsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
 		m_sceneObjectsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 		m_sceneObjectsList->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-		m_sceneTabsContainer->AddPage( m_sceneObjectsList, _( "Scenes" ), true );
+		m_sceneTabsContainer->AddPage( m_sceneObjectsList, _( "Scene" ), true );
 
 		m_materialsList = new MaterialsList( m_propertiesContainer, m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize );
 		m_materialsList->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
