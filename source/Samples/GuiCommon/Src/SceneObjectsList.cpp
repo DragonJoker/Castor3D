@@ -147,7 +147,7 @@ namespace GuiCommon
 
 			for ( auto && l_overlay : p_engine->GetOverlayManager() )
 			{
-				if ( l_overlay->GetOverlayName() != cuT( "DebugPanel" ) )
+				if ( l_overlay->GetOverlayName().find( cuT( "DebugPanel" ) ) != 0 )
 				{
 					switch ( l_overlay->GetType() )
 					{
