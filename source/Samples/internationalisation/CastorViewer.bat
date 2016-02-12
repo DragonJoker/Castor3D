@@ -1,4 +1,4 @@
-REM @echo off
+@echo off
 setlocal enabledelayedexpansion enableextensions
 set LIST=
 for %%x in (..\GuiCommon\Src\*.cpp) do set LIST=!LIST! %%x
