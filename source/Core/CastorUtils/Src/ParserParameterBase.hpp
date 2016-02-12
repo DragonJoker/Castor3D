@@ -27,9 +27,9 @@ namespace Castor
 	\version	0.7.0.0
 	\date		04/02/2013
 	\~english
-	\brief		Parser function parameter types enumeration
+	\brief		Parser function parameter types enumeration.
 	\~french
-	\brief		Enumération des types de paramètres pour une fonction d'analyse
+	\brief		Enumération des types de paramètres pour une fonction d'analyse.
 	*/
 	typedef enum ePARAMETER_TYPE
 	CASTOR_TYPE( uint8_t )
@@ -38,7 +38,7 @@ namespace Castor
 		ePARAMETER_TYPE_NAME,
 		ePARAMETER_TYPE_PATH,
 		ePARAMETER_TYPE_CHECKED_TEXT,
-		ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT,
+		ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT,
 		ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT,
 		ePARAMETER_TYPE_BOOL,
 		ePARAMETER_TYPE_INT8,
@@ -73,41 +73,38 @@ namespace Castor
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		Template structure holding parameter specific data
+	\brief		Template structure holding parameter specific data.
 	\~french
-	\brief		Structure template contenant les données spécifiques du paramètre
+	\brief		Structure template contenant les données spécifiques du paramètre.
 	*/
 	class ParserParameterBase
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_context	The parsing context
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructor
-		 *\param[in]	p_context	Le contexte d'analyse
+		 *\brief		Constructor.
 		 */
-		CU_API ParserParameterBase( String const & p_functionName )
-			: m_functionName( p_functionName )
+		inline ParserParameterBase()
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter type
-		 *\return		The type
+		 *\brief		Retrieves the parameter type.
+		 *\return		The type.
 		 *\~french
-		 *\brief		Récupère le type du paramètre
-		 *\return		Le type
+		 *\brief		Récupère le type du paramètre.
+		 *\return		Le type.
 		 */
 		CU_API virtual ePARAMETER_TYPE GetType() = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME)
-		 *\return		The type
+		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME).
+		 *\return		The type.
 		 *\~french
-		 *\brief		Récupère le type de base du paramètre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME)
-		 *\return		Le type
+		 *\brief		Récupère le type de base du paramètre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME).
+		 *\return		Le type.
 		 */
 		CU_API virtual ePARAMETER_TYPE GetBaseType()
 		{
@@ -115,13 +112,13 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter string type
-		 *\return		The type
+		 *\brief		Retrieves the parameter string type.
+		 *\return		The type.
 		 *\~french
-		 *\brief		Récupère le type du chaîne paramètre
-		 *\return		Le type
+		 *\brief		Récupère le type du chaîne paramètre.
+		 *\return		Le type.
 		 */
-		CU_API virtual xchar const * GetStrType() = 0;
+		CU_API virtual xchar const * const GetStrType() = 0;
 		/**
 		 *\~english
 		 *\return		A copy of this parameter.
@@ -131,30 +128,26 @@ namespace Castor
 		CU_API virtual ParserParameterBaseSPtr Clone() = 0;
 		/**
 		 *\~english
-		 *\brief			Checks the parameter
-		 *\param[in,out]	p_strParams	The text containing the parameter value
-		 *\return			\p false if any error occured
+		 *\brief			Checks the parameter.
+		 *\param[in,out]	p_strParams	The text containing the parameter value.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief			Vérifie le paramètre
-		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramètre
-		 *\return			\p si un problème quelconque est arrivé
+		 *\brief			Vérifie le paramètre.
+		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramètre.
+		 *\return			\p si un problème quelconque est arrivé.
 		 */
 		CU_API virtual bool Parse( String & p_strParams ) = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter value
-		 *\param[out]	p_value		Receives the value
-		 *\return		The value
+		 *\brief		Retrieves the parameter value.
+		 *\param[out]	p_value		Receives the value.
+		 *\return		The value.
 		 *\~french
-		 *\brief		Récupère la valeur du paramètre
-		 *\param[out]	p_value		Reçoit la valeur
-		 *\return		La valeur
+		 *\brief		Récupère la valeur du paramètre.
+		 *\param[out]	p_value		Reçoit la valeur.
+		 *\return		La valeur.
 		 */
 		template< typename T > T const & Get( T & p_value );
-
-	protected:
-		//!\~english The parent function name.	\~french Le nom de la fonction parente.
-		String m_functionName;
 	};
 }
 

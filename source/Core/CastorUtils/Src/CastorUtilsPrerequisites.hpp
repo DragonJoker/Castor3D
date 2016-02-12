@@ -361,6 +361,7 @@ namespace Castor
 	DECLARE_MAP( String, bool, BoolStr );
 	DECLARE_MAP( String, String, StrStr );
 	DECLARE_SET( String, Str );
+	DECLARE_MAP( uint32_t, String, StrUInt );
 
 	typedef std::deque< std::unique_ptr< MessageBase > > MessageQueue;
 	/**

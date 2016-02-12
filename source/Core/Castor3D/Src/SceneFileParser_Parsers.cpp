@@ -39,6 +39,7 @@
 #include "Subdivider.hpp"
 #include "Submesh.hpp"
 #include "TargetManager.hpp"
+#include "TechniquePlugin.hpp"
 #include "TextOverlay.hpp"
 #include "Texture.hpp"
 #include "TextureUnit.hpp"
@@ -108,7 +109,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootWindow )
 
 	if ( l_pContext->pWindow )
 	{
-		PARSING_ERROR( cuT( "Directive <window> : Can't create more than one render window" ) );
+		PARSING_ERROR( cuT( "Can't create more than one render window" ) );
 	}
 	else
 	{
@@ -170,7 +171,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_WindowRenderTarget )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <window::render_target> : No window initialised." ) );
+		PARSING_ERROR( cuT( "No window initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_RENDER_TARGET )
@@ -187,7 +188,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_WindowVSync )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <window::vsync> : No window initialised." ) );
+		PARSING_ERROR( cuT( "No window initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -204,7 +205,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_WindowFullscreen )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <window::fullscreen> : No window initialised." ) );
+		PARSING_ERROR( cuT( "No window initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -224,12 +225,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetScene )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <render_target::scene> : No scene found with name : [" ) + l_name + cuT( "]." ) );
+			PARSING_ERROR( cuT( "No scene found with name : [" ) + l_name + cuT( "]." ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::scene> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -247,12 +248,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetCamera )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <render_target::camera> : No scene initialised for this window, set scene before camera." ) );
+			PARSING_ERROR( cuT( "No scene initialised for this window, set scene before camera." ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::camera> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -268,7 +269,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetSize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::size> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -288,12 +289,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetFormat )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <render_target::format> : Wrong format for colour" ) );
+			PARSING_ERROR( cuT( "Wrong format for colour" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::format> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -313,12 +314,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetDepth )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <render_target::depth> : Wrong format for depth/stencil" ) );
+			PARSING_ERROR( cuT( "Wrong format for depth/stencil" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::depth> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -349,11 +350,19 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetTechnique )
 			}
 		}
 
+		Engine * l_engine = l_pContext->m_pParser->GetEngine();
+
+		if ( !l_engine->GetTechniqueFactory().IsRegistered( string::lower_case( l_name ) ) )
+		{
+			PARSING_ERROR( cuT( "Technique [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
+			l_name = cuT( "direct" );
+		}
+
 		l_pContext->pRenderTarget->SetTechnique( l_name, l_parameters );
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::msaa> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -375,7 +384,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetStereo )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::stereo> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -411,7 +420,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 
 		for ( auto l_it : l_engine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_POSTFX ) )
 		{
-			l_plugin = std::static_pointer_cast< PostFxPlugin, PluginBase >( l_it.second );
+			l_plugin = std::static_pointer_cast< PostFxPlugin >( l_it.second );
 
 			if ( !l_effect && string::lower_case( l_plugin->GetPostEffectType() ) == string::lower_case( l_name ) )
 			{
@@ -421,7 +430,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 
 		if ( !l_effect )
 		{
-			PARSING_ERROR( cuT( "Directive <render_target::postfx> : PostEffect [" ) + l_name + cuT( "] not found, make sure the corresponding plugin is installed" ) );
+			PARSING_ERROR( cuT( "PostEffect [" ) + l_name + cuT( "] not found, make sure the corresponding plugin is installed" ) );
 		}
 		else
 		{
@@ -430,7 +439,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <render_target::postfx> : No target initialised." ) );
+		PARSING_ERROR( cuT( "No target initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -456,7 +465,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMinFilter )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::min_filter> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -473,7 +482,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMagFilter )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::mag_filter> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -490,7 +499,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMinLod )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::min_lod> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -503,7 +512,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMinLod )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <sampler_state::min_lod> : LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
+			PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
 		}
 	}
 }
@@ -515,7 +524,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMaxLod )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::max_lod> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -528,7 +537,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMaxLod )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <sampler_state::max_lod> : LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
+			PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
 		}
 	}
 }
@@ -540,7 +549,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerLodBias )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::lod_bias> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -553,7 +562,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerLodBias )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <sampler_state::lod_bias> : LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
+			PARSING_ERROR( cuT( "LOD out of bounds [-1000,1000] : " ) + string::to_string( l_rValue ) );
 		}
 	}
 }
@@ -565,7 +574,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerUWrapMode )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::u_wrap_mode> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -582,7 +591,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerVWrapMode )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::v_wrap_mode> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -599,7 +608,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerWWrapMode )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::w_wrap_mode> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -616,7 +625,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerBorderColour )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::border_colour> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -633,7 +642,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SamplerMaxAnisotropy )
 
 	if ( !l_pContext->pSampler )
 	{
-		PARSING_ERROR( cuT( "Directive <sampler_state::max_anisotropy> : No sampler initialised." ) );
+		PARSING_ERROR( cuT( "No sampler initialised." ) );
 	}
 	else
 	{
@@ -656,7 +665,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBkColour )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <background_colour> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -676,12 +685,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBkImage )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <background_image> : File [" ) + l_pathFile + cuT( "] does not exist" ) );
+			PARSING_ERROR( cuT( "File [" ) + l_pathFile + cuT( "] does not exist" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <background_image> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -699,7 +708,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneCamera )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <camera> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_CAMERA )
@@ -717,7 +726,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneLight )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_LIGHT )
@@ -735,7 +744,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneCameraNode )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <camera_node> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_NODE )
@@ -753,7 +762,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneSceneNode )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene_node> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_NODE )
@@ -771,7 +780,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneObject )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <object> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_OBJECT )
@@ -788,7 +797,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneAmbientLight )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <ambient_light> : No scene initialised." ) );
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -849,7 +858,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBillboard )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene::billboard> : Scene not initialised" ) );
+		PARSING_ERROR( cuT( "Scene not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_BILLBOARD )
@@ -866,7 +875,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneAnimatedObjectGroup )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene::animated_object_group> : Scene not initialised" ) );
+		PARSING_ERROR( cuT( "Scene not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_ANIMGROUP )
@@ -883,7 +892,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ScenePanelOverlay )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene::panel_overlay> : Scene not initialised" ) );
+		PARSING_ERROR( cuT( "Scene not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_PANEL_OVERLAY )
@@ -900,7 +909,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBorderPanelOverlay )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene::border_panel_overlay> : Scene not initialised" ) );
+		PARSING_ERROR( cuT( "Scene not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_BORDER_PANEL_OVERLAY )
@@ -917,7 +926,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneTextOverlay )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene::text_overlay> : Scene not initialised" ) );
+		PARSING_ERROR( cuT( "Scene not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXT_OVERLAY )
@@ -935,7 +944,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightParent )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::parent> : Node " ) + l_name + cuT( " does not exist" ) );
+		PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
 	}
 
 	if ( l_pContext->pLight )
@@ -968,7 +977,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightColour )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::colour> : Light not initialised. Have you set it's type ?" ) );
+		PARSING_ERROR( cuT( "Light not initialised. Have you set it's type ?" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -985,7 +994,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightIntensity )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::intensity> : Light not initialised. Have you set it's type ?" ) );
+		PARSING_ERROR( cuT( "Light not initialised. Have you set it's type ?" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1009,12 +1018,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightAttenuation )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <light::attenuation> : Wrong type of light to apply attenuation components, needs spotlight or pointlight" ) );
+			PARSING_ERROR( cuT( "Wrong type of light to apply attenuation components, needs spotlight or pointlight" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::attenuation> : Light not initialised. Have you set it's type ?" ) );
+		PARSING_ERROR( cuT( "Light not initialised. Have you set it's type ?" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1034,12 +1043,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightCutOff )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <light::cut_off> : Wrong type of light to apply a cut off, needs spotlight" ) );
+			PARSING_ERROR( cuT( "Wrong type of light to apply a cut off, needs spotlight" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::cut_off> : Light not initialised. Have you set it's type ?" ) );
+		PARSING_ERROR( cuT( "Light not initialised. Have you set it's type ?" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1059,12 +1068,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightExponent )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <light::exponent> : Wrong type of light to apply an exponent, needs spotlight" ) );
+			PARSING_ERROR( cuT( "Wrong type of light to apply an exponent, needs spotlight" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <light::exponent> : Light not initialised. Have you set it's type ?" ) );
+		PARSING_ERROR( cuT( "Light not initialised. Have you set it's type ?" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1085,12 +1094,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodeParent )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <scene_node::parent> : Node " ) + l_name + cuT( " does not exist" ) );
+			PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene_node::parent> : Scene node not initialised." ) );
+		PARSING_ERROR( cuT( "Scene node not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1107,7 +1116,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodePosition )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene_node::position> : Scene node not initialised." ) );
+		PARSING_ERROR( cuT( "Scene node not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1126,7 +1135,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodeOrientation )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene_node::orientation> : Scene node not initialised." ) );
+		PARSING_ERROR( cuT( "Scene node not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1143,7 +1152,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodeScale )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <scene_node::scale> : Scene node not initialised." ) );
+		PARSING_ERROR( cuT( "Scene node not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1164,12 +1173,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectParent )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <object::parent> : Node " ) + l_name + cuT( " does not exist" ) );
+			PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <object::parent> : Geometry not initialised." ) );
+		PARSING_ERROR( cuT( "Geometry not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1215,17 +1224,17 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterial )
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Directive <object::materials> : Material " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Material " ) + l_name + cuT( " does not exist" ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <object::materials> : Geometry's mesh not initialised" ) );
+			PARSING_ERROR( cuT( "Geometry's mesh not initialised" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <object::materials> : Geometry not initialised" ) );
+		PARSING_ERROR( cuT( "Geometry not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1265,17 +1274,17 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ObjectMaterialsMaterial )
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Directive <object::materials::material> : Material " ) + l_name + cuT( " does not exist" ) );
+				PARSING_ERROR( cuT( "Material " ) + l_name + cuT( " does not exist" ) );
 			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <object::materials::material> : Geometry's mesh not initialised" ) );
+			PARSING_ERROR( cuT( "Geometry's mesh not initialised" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <object::materials::material> : Geometry not initialised" ) );
+		PARSING_ERROR( cuT( "Geometry not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1353,7 +1362,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 			}
 			else
 			{
-				PARSING_ERROR( cuT( "Directive <mesh::type> : Unknown mesh type : " ) + l_strType );
+				PARSING_ERROR( cuT( "Unknown mesh type : " ) + l_strType );
 			}
 		}
 
@@ -1361,7 +1370,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 	}
 	else
 	{
-		PARSING_WARNING( cuT( "Directive <mesh::type> : Mesh already initialised => ignored" ) );
+		PARSING_WARNING( cuT( "Mesh already initialised => ignored" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1385,7 +1394,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshFile )
 
 	if ( !l_pContext->pMesh )
 	{
-		PARSING_ERROR( cuT( "Directive <mesh::file> : mesh isn't initialised" ) );
+		PARSING_ERROR( cuT( "mesh isn't initialised" ) );
 	}
 	else
 	{
@@ -1393,13 +1402,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshFile )
 
 		if ( !l_file.IsOk() )
 		{
-			PARSING_ERROR( cuT( "Directive <mesh::file> : file [" ) + l_path + cuT( "] doesn't exist" ) );
+			PARSING_ERROR( cuT( "file [" ) + l_path + cuT( "] doesn't exist" ) );
 		}
 		else
 		{
 			//if( !Mesh::BinaryLoader()( *l_pContext->pMesh, l_file ) )
 			//{
-			//	PARSING_ERROR( cuT( "Directive <mesh::file> : Can't load mesh file " ) + l_path );
+			//	PARSING_ERROR( cuT( "Can't load mesh file " ) + l_path );
 			//}
 		}
 	}
@@ -1421,7 +1430,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshSubmesh )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <mesh::submesh> : Mesh not initialised" ) );
+		PARSING_ERROR( cuT( "Mesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SUBMESH )
@@ -1497,7 +1506,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 		}
 		else
 		{
-			CASTOR_EXCEPTION( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
+			PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
 		}
 	}
 }
@@ -1529,7 +1538,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 
 		if ( !l_pDivider )
 		{
-			PARSING_ERROR( cuT( "Directive <mesh::division> : Divider [" ) + l_name + cuT( "] not found, make sure the corresponding plugin is installed" ) );
+			PARSING_ERROR( cuT( "Divider [" ) + l_name + cuT( "] not found, make sure the corresponding plugin is installed" ) );
 		}
 		else
 		{
@@ -1546,7 +1555,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <mesh::division> : Mesh not initialised" ) );
+		PARSING_ERROR( cuT( "Mesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1577,7 +1586,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshVertex )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::vertex> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1596,7 +1605,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshUV )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::uv> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1615,7 +1624,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshUVW )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::uvw> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1634,7 +1643,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshNormal )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::normal> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1653,7 +1662,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshTangent )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::tangent> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1697,7 +1706,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFace )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::face> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1741,7 +1750,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceUV )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::uv> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1791,7 +1800,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceUVW )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::uv> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1841,7 +1850,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceNormals )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::normals> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1891,7 +1900,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFaceTangents )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <submesh::tangents> : Submesh not initialised" ) );
+		PARSING_ERROR( cuT( "Submesh not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -1966,7 +1975,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MaterialPass )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <material::pass> : Material not initialised" ) );
+		PARSING_ERROR( cuT( "Material not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_PASS )
@@ -1988,7 +1997,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAmbient )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::ambient> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2005,7 +2014,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassDiffuse )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::diffuse> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2022,7 +2031,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassSpecular )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::specular> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2039,7 +2048,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassEmissive )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::emissive> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2056,7 +2065,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassShininess )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::shininess> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2073,7 +2082,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlpha )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::alpha> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2090,7 +2099,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassDoubleFace )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::double_face> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2111,7 +2120,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassBlendFunc )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::blend_func> : Pass not initialised." ) );
+		PARSING_ERROR( cuT( "Pass not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2127,7 +2136,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassTextureUnit )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::texture_unit> : Pass not initialised" ) );
+		PARSING_ERROR( cuT( "Pass not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXTURE_UNIT )
@@ -2151,7 +2160,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassGlShader )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::gl_shader> : Pass not initialised" ) );
+		PARSING_ERROR( cuT( "Pass not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_GLSL_SHADER )
@@ -2168,7 +2177,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlphaBlendMode )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::alpha_blend_mode> : Pass not initialised" ) );
+		PARSING_ERROR( cuT( "Pass not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2185,7 +2194,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassColourBlendMode )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <pass::colour_blend_mode> : Pass not initialised" ) );
+		PARSING_ERROR( cuT( "Pass not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2211,12 +2220,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitImage )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <texture_unit::image> : File [" ) + l_path + cuT( "] not found, check the relativeness of the path" ) );
+			PARSING_ERROR( cuT( "File [" ) + l_path + cuT( "] not found, check the relativeness of the path" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <texture_unit::image> : Texture Unit not initialised" ) );
+		PARSING_ERROR( cuT( "Texture Unit not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2231,7 +2240,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitRenderTarget )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <texture_unit::render_target> : No window initialised." ) );
+		PARSING_ERROR( cuT( "No window initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_RENDER_TARGET )
@@ -2248,7 +2257,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitMapType )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <texture_unit::map_type> : Texture Unit not initialised" ) );
+		PARSING_ERROR( cuT( "Texture Unit not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2268,7 +2277,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitAlphaFunc )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <texture_unit::alpha_func> : Texture Unit not initialised" ) );
+		PARSING_ERROR( cuT( "Texture Unit not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2291,7 +2300,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitRgbBlend )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <texture_unit::rgb_blend> : Texture Unit not initialised" ) );
+		PARSING_ERROR( cuT( "Texture Unit not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2314,7 +2323,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitAlphaBlend )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <texture_unit::alpha_blend> : Texture Unit not initialised" ) );
+		PARSING_ERROR( cuT( "Texture Unit not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2340,7 +2349,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitSampler )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <texture_unit::sampler> Unknown sampler : [" ) + l_name + cuT( "]" ) );
+		PARSING_ERROR( cuT( "Unknown sampler : [" ) + l_name + cuT( "]" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2365,7 +2374,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_VertexShader )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::vertex_program>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
@@ -2381,7 +2390,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PixelShader )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::pixel_program>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
@@ -2397,7 +2406,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryShader )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::geometry_program>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
@@ -2413,7 +2422,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_HullShader )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::hull_program>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
@@ -2429,7 +2438,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_DomainShader )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::domain_program>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SHADER_PROGRAM )
@@ -2445,7 +2454,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ConstantsBuffer )
 
 		if ( l_name.empty() )
 		{
-			PARSING_ERROR( cuT( "Directive <shader_program::constants_buffer>: Invalid empty name" ) );
+			PARSING_ERROR( cuT( "Invalid empty name" ) );
 		}
 		else
 		{
@@ -2454,7 +2463,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ConstantsBuffer )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::constants_buffer>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_SHADER_UBO )
@@ -2484,7 +2493,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramFile )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <program::file>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2503,12 +2512,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderProgramSampler )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <program::sampler>: Shader program not initialised" ) );
+			PARSING_ERROR( cuT( "Shader program not initialised" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <program::sampler>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2519,7 +2528,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboShaders )
 
 	if ( !l_pContext->pFrameVariableBuffer )
 	{
-		PARSING_ERROR( cuT( "Directive <constants_buffer::shaders>: Shader constants buffer not initialised" ) );
+		PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
 	}
 	else
 	{
@@ -2532,7 +2541,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboShaders )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <constants_buffer::shaders>: Unsupported shader type" ) );
+			PARSING_ERROR( cuT( "Unsupported shader type" ) );
 		}
 	}
 }
@@ -2552,12 +2561,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryInputType )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <shader_program::input_type>: Only valid for geometry shader" ) );
+			PARSING_ERROR( cuT( "Only valid for geometry shader" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::input_type>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2576,12 +2585,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryOutputType )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <shader_program::output_type>: Only valid for geometry shader" ) );
+			PARSING_ERROR( cuT( "Only valid for geometry shader" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::output_type>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2600,12 +2609,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GeometryOutputVtxCount )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <shader_program::output_vtx_count>: Only valid for geometry shader" ) );
+			PARSING_ERROR( cuT( "Only valid for geometry shader" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <shader_program::output_vtx_count>: Shader not initialised" ) );
+		PARSING_ERROR( cuT( "Shader not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2618,11 +2627,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderUboVariable )
 
 	if ( !l_pContext->pFrameVariableBuffer )
 	{
-		PARSING_ERROR( cuT( "Directive <constants_buffer::variable>: Shader constants buffer not initialised" ) );
+		PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
 	}
 	else if ( l_pContext->strName2.empty() )
 	{
-		PARSING_ERROR( cuT( "Directive <constants_buffer::variable>: Invalid empty name" ) );
+		PARSING_ERROR( cuT( "Invalid empty name" ) );
 	}
 	else
 	{
@@ -2643,7 +2652,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableCount )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <variable::count>: Shader constants buffer not initialised" ) );
+		PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2662,12 +2671,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableType )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <variable::type>: Variable type already set" ) );
+			PARSING_ERROR( cuT( "Variable type already set" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <variable::type>: Shader constants buffer not initialised" ) );
+		PARSING_ERROR( cuT( "Shader constants buffer not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2684,7 +2693,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderVariableValue )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <variable::value>: Variable not initialised" ) );
+		PARSING_ERROR( cuT( "Variable not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2727,7 +2736,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPosition )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <overlay::position> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2744,7 +2753,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlaySize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <overlay::size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2761,7 +2770,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPixelSize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <overlay::pxl_size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2778,7 +2787,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayPixelPosition )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <overlay::pxl_position> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2796,7 +2805,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_OverlayMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <overlay::material> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2868,7 +2877,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PanelOverlayUvs )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <panel_overlay::uv> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2886,7 +2895,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlaySizes )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::border_size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2904,7 +2913,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayPixelSizes )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::pxl_border_size> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2923,7 +2932,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::border_material> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2941,7 +2950,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayPosition )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::border_position> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2959,7 +2968,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayCenterUvs )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::center_uv> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2977,7 +2986,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayOuterUvs )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::border_outer_uv> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -2995,7 +3004,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BorderPanelOverlayInnerUvs )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <border_panel_overlay::border_inner_uv> : Overlay not initialised" ) );
+		PARSING_ERROR( cuT( "Overlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3017,12 +3026,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayFont )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <text_overlay::font> : Unknown font" ) );
+			PARSING_ERROR( cuT( "Unknown font" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <text_overlay::font> : TextOverlay not initialised" ) );
+		PARSING_ERROR( cuT( "TextOverlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3041,7 +3050,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayTextWrapping )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <text_overlay::font> : TextOverlay not initialised" ) );
+		PARSING_ERROR( cuT( "TextOverlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3060,7 +3069,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayVerticalAlign )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <text_overlay::vertical_align> : TextOverlay not initialised" ) );
+		PARSING_ERROR( cuT( "TextOverlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3079,7 +3088,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayHorizontalAlign )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <text_overlay::horizontal_align> : TextOverlay not initialised" ) );
+		PARSING_ERROR( cuT( "TextOverlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3097,7 +3106,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayText )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <text_overlay::text> : TextOverlay not initialised" ) );
+		PARSING_ERROR( cuT( "TextOverlay not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3124,7 +3133,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraParent )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <camera::parent> : Node " ) + l_name + cuT( " does not exist" ) );
+		PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3260,12 +3269,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardParent )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <billboard::parent> : Node " ) + l_name + cuT( " does not exist" ) );
+			PARSING_ERROR( cuT( "Node " ) + l_name + cuT( " does not exist" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <billboard::parent> : Geometry not initialised." ) );
+		PARSING_ERROR( cuT( "Geometry not initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3291,12 +3300,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardMaterial )
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <billboard::material> : Material " ) + l_name + cuT( " does not exist" ) );
+			PARSING_ERROR( cuT( "Material " ) + l_name + cuT( " does not exist" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <billboard::material> : Billboard not initialised" ) );
+		PARSING_ERROR( cuT( "Billboard not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3333,22 +3342,29 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimatedObject )
 	String l_name;
 	p_params[0]->Get( l_name );
 
-	if ( l_pContext->pScene && l_pContext->pGroup )
+	if ( l_pContext->pScene )
 	{
-		GeometrySPtr l_geometry = l_pContext->pScene->GetGeometryManager().Find( l_name );
-
-		if ( l_geometry )
+		if ( l_pContext->pGroup )
 		{
-			l_pContext->pGroup->AddObject( l_geometry );
+			GeometrySPtr l_geometry = l_pContext->pScene->GetGeometryManager().Find( l_name );
+
+			if ( l_geometry )
+			{
+				l_pContext->pGroup->AddObject( l_geometry );
+			}
+			else
+			{
+				PARSING_ERROR( cuT( "No geometry with name " ) + l_name );
+			}
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : No geometry with name " ) + l_name );
+			PARSING_ERROR( cuT( "Animated object group not initialised" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <animated_object_group::animated_object> : Scene not initialised" ) );
+		PARSING_ERROR( cuT( "Scene not initialised" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -3379,7 +3395,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <animated_object_group::animation> : No animated object group initialised" ) );
+		PARSING_ERROR( cuT( "No animated object group initialised" ) );
 	}
 }
 END_ATTRIBUTE()

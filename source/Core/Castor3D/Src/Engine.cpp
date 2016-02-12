@@ -312,6 +312,18 @@ namespace Castor3D
 		m_additionalParsers.insert( std::make_pair( p_name, p_parsers ) );
 	}
 
+	void Engine::RegisterSections( Castor::String const & p_name, Castor::StrUIntMap const & p_sections )
+	{
+		auto && l_it = m_additionalSections.find( p_name );
+
+		if ( l_it != m_additionalSections.end() )
+		{
+			CASTOR_EXCEPTION( "RegisterSections - Duplicate entry for " + p_name );
+		}
+
+		m_additionalSections.insert( std::make_pair( p_name, p_sections ) );
+	}
+
 	void Engine::UnregisterParsers( Castor::String const & p_name )
 	{
 		auto && l_it = m_additionalParsers.find( p_name );
@@ -322,6 +334,18 @@ namespace Castor3D
 		}
 
 		m_additionalParsers.erase( l_it );
+	}
+
+	void Engine::UnregisterSections( Castor::String const & p_name )
+	{
+		auto && l_it = m_additionalSections.find( p_name );
+
+		if ( l_it == m_additionalSections.end() )
+		{
+			CASTOR_EXCEPTION( "UnregisterSections - Unregistered entry " + p_name );
+		}
+
+		m_additionalSections.erase( l_it );
 	}
 
 	void Engine::DoLoadCoreData()

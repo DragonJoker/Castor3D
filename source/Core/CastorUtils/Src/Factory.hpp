@@ -100,6 +100,20 @@ namespace Castor
 				m_registered.erase( p_key );
 			}
 		}
+		/**
+		 *\~english
+		 *\brief		Checks if the given object type is registered.
+		 *\param[in]	p_key	The object type.
+		 *\return		\p true if registered.
+		 *\~french
+		 *\brief		Vérifie si un type d'objet est enregistré.
+		 *\param[in]	p_key	Le type d'objet.
+		 *\return		\p true si enregistré.
+		 */
+		bool IsRegistered( Key const & p_key )
+		{
+			return m_registered.find( p_key ) != m_registered.end();
+		}
 
 #if CASTOR_HAS_VARIADIC_TEMPLATES
 

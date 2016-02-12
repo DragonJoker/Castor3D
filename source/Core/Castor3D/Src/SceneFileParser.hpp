@@ -209,12 +209,13 @@ namespace Castor3D
 	private:
 		C3D_API virtual void DoInitialiseParser( Castor::TextFile & p_file );
 		C3D_API virtual void DoCleanupParser();
-		C3D_API virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
+		C3D_API virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_line ) )
 		{
 			return false;
 		}
-		C3D_API virtual bool DoDiscardParser( Castor::String const & p_strLine );
+		C3D_API virtual bool DoDiscardParser( Castor::String const & p_line );
 		C3D_API virtual void DoValidate();
+		C3D_API virtual Castor::String DoGetSectionName( uint32_t p_section );
 
 	private:
 		Castor::String m_strSceneFilePath;

@@ -62,7 +62,7 @@ namespace Castor
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_PUSH( section )\
 		DO_WRITE_PARSER_END( true )\
-		p_context->m_sections.push( section );\
+		p_context->m_sections.push_back( section );\
 		return l_return;\
 	}
 
@@ -75,7 +75,7 @@ namespace Castor
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_POP()\
 		DO_WRITE_PARSER_END( false )\
-		p_context->m_sections.pop();\
+		p_context->m_sections.pop_back();\
 		return l_return;\
 	}
 
@@ -266,23 +266,6 @@ namespace Castor
 		 *\param[in]	p_section	The parser section
 		 *\param[in]	p_name		The parser name
 		 *\param[in]	p_function	The parser function
-		 *\param[in]	p_count		The expected parameters list count
-		 *\param[in]	...			The expected parameters list
-		 *\~french
-		 *\brief		Ajoute une foncction d'analyse à la liste
-		 *\param[in]	p_section	La section
-		 *\param[in]	p_name		Le nom de la fonction
-		 *\param[in]	p_function	La fonction d'analyse
-		 *\param[in]	p_count		Le nombre de paramètres attendus
-		 *\param[in]	...			La liste des paramètres attendus
-		 */
-		CU_API void AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, uint32_t p_count = 0, ... );
-		/**
-		 *\~english
-		 *\brief		Adds a parser function to the parsers list
-		 *\param[in]	p_section	The parser section
-		 *\param[in]	p_name		The parser name
-		 *\param[in]	p_function	The parser function
 		 *\param[in]	p_params	The expected parameters
 		 *\~french
 		 *\brief		Ajoute une fonction d'analyse à la liste
@@ -291,7 +274,7 @@ namespace Castor
 		 *\param[in]	p_function	La fonction d'analyse
 		 *\param[in]	p_params	Les paramètres attendus
 		 */
-		CU_API void AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params );
+		CU_API void AddParser( uint32_t p_section, String const & p_name, ParserFunction p_function, ParserParameterArray && p_params = ParserParameterArray() );
 		/**
 		 *\~english
 		 *\brief		Tells if the read lines are to be ignored
@@ -343,25 +326,25 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Function called when \p m_iSection is out of bounds
-		 *\param[in]	p_strLine	The current line
+		 *\param[in]	p_line	The current line
 		 *\return		\p true if a brace is opened after this line, \false if not
 		 *\~french
 		 *\brief		Fonction appelée lorsque \p m_iSection est hors limites
-		 *\param[in]	p_strLine	La ligne en cours d'analyse
+		 *\param[in]	p_line	La ligne en cours d'analyse
 		 *\return		\p true si une accolade doit être ouverte à la ligne suivant, \p false sinon
 		 */
-		CU_API virtual bool DoDelegateParser( String const & p_strLine ) = 0;
+		CU_API virtual bool DoDelegateParser( String const & p_line ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when no parser is found for the line.
-		 *\param[in]	p_strLine	The current line.
+		 *\param[in]	p_error	The error text.
 		 *\return		false if the line must be ignored.
 		 *\~french
 		 *\brief		Fonction appelée si aucun analyseur n'est trouvé pour traiter la ligne.
-		 *\param[in]	p_strLine	La ligne en cours d'analyse.
+		 *\param[in]	p_error	Le texte de l'erreur.
 		 *\return		false si la ligne doit être ignorée.
 		 */
-		CU_API virtual bool DoDiscardParser( String const & p_strLine ) = 0;
+		CU_API virtual bool DoDiscardParser( String const & p_error ) = 0;
 		/**
 		 *\~english
 		 *\brief		Function called when file parsing is completed with no error
@@ -369,14 +352,26 @@ namespace Castor
 		 *\brief		Fonction appelée si l'analyse est complétée sans erreurs
 		 */
 		CU_API virtual void DoValidate() = 0;
+		/**
+		 *\~english
+		 *\brief		Gives the name associated to section ID.
+		 *\param[in]	p_section	The section ID.
+		 *\return		The name.
+		 *\~french
+		 *\brief		Donne le nom associé à l'ID de section.
+		 *\param[in]	p_section	L'ID de section
+		 *\return		Le nom.
+		 */
+		CU_API virtual Castor::String DoGetSectionName( uint32_t p_section ) = 0;
 
 	private:
-		bool DoParseScriptLine( String & p_strLine );
+		bool DoParseScriptLine( String & p_line );
 		bool DoParseScriptBlockEnd();
 		bool DoInvokeParser( Castor::String & p_line, AttributeParserMap const & p_parsers );
 		void DoEnterBlock();
 		void DoLeaveBlock();
 		bool DoIsInIgnoredBlock();
+		String DoGetSectionsStack();
 
 	private:
 		uint32_t m_rootSectionId;

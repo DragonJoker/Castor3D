@@ -127,6 +127,7 @@ namespace Ase
 		}
 		virtual bool DoDiscardParser( Castor::String const & p_strLine );
 		virtual void DoValidate();
+		virtual Castor::String DoGetSectionName( uint32_t p_section );
 
 	private:
 		Castor3D::SceneSPtr m_pScene;

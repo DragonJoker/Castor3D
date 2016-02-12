@@ -66,12 +66,13 @@ namespace GuiCommon
 	private:
 		virtual void DoInitialiseParser( Castor::TextFile & p_file );
 		virtual void DoCleanupParser();
-		virtual bool DoDiscardParser( Castor::String const & p_strLine );
-		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
+		virtual bool DoDiscardParser( Castor::String const & p_line );
+		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_line ) )
 		{
 			return false;
 		}
 		virtual void DoValidate();
+		virtual Castor::String DoGetSectionName( uint32_t p_section );
 	};
 
 	DECLARE_ATTRIBUTE_PARSER( Root_Language )

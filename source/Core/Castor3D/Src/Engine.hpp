@@ -171,6 +171,17 @@ namespace Castor3D
 		C3D_API void RegisterParsers( Castor::String const & p_name, Castor::FileParser::AttributeParsersBySection && p_parsers );
 		/**
 		 *\~english
+		 *\brief		Registers additional sections for SceneFileParser.
+		 *\param[in]	p_name		The registering name.
+		 *\param[in]	p_sections	The sections.
+		 *\~french
+		 *\brief		Enregistre des sections supplémentaires pour SceneFileParser.
+		 *\param[in]	p_name		Le nom d'enregistrement.
+		 *\param[in]	p_sections	Les sections.
+		 */
+		C3D_API void RegisterSections( Castor::String const & p_name, Castor::StrUIntMap const & p_sections );
+		/**
+		 *\~english
 		 *\brief		Unregisters parsers for SceneFileParser.
 		 *\param[in]	p_name		The registering name.
 		 *\~french
@@ -178,6 +189,15 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom d'enregistrement.
 		 */
 		C3D_API void UnregisterParsers( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Unregisters sections for SceneFileParser.
+		 *\param[in]	p_name		The registering name.
+		 *\~french
+		 *\brief		Désenregistre des sections pour SceneFileParser.
+		 *\param[in]	p_name		Le nom d'enregistrement.
+		 */
+		C3D_API void UnregisterSections( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Retrieves plugins path
@@ -331,11 +351,23 @@ namespace Castor3D
 		 *\return		The parsers.
 		 *\~french
 		 *\brief		Récupère les analyseurs supplémentaires pour SceneFileParser.
-		 *\return		Les analyseurs
+		 *\return		Les analyseurs.
 		 */
-		inline std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > GetAdditionalParsers()const
+		inline std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > const & GetAdditionalParsers()const
 		{
 			return m_additionalParsers;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the SceneFileParser additional sections.
+		 *\return		The sections.
+		 *\~french
+		 *\brief		Récupère les sections supplémentaires pour SceneFileParser.
+		 *\return		Les sections.
+		 */
+		inline std::map< Castor::String, Castor::StrUIntMap > const & GetAdditionalSections()const
+		{
+			return m_additionalSections;
 		}
 		/**
 		 *\~english
@@ -444,6 +476,8 @@ namespace Castor3D
 		Castor::ImageManager m_imageManager;
 		//!\~english The map holding the parsers, sorted by section, and plugin name	\~french La map de parseurs, triés par section, et nom de plugin
 		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
+		//!\~english The map holding the sections, sorted plugin name.	\~french La map de sections, triées par nom de plugin.
+		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
 		//!\~english The need for per object lighting.	\~french Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;
 	};

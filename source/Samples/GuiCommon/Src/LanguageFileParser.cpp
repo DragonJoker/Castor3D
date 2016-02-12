@@ -23,19 +23,19 @@ namespace GuiCommon
 	{
 		LanguageFileContextPtr l_pContext = std::make_shared< LanguageFileContext >( &p_file );
 		m_context = l_pContext;
-		AddParser( eSECTION_ROOT, cuT( "language" ), Root_Language, 1, ePARAMETER_TYPE_NAME );
-		AddParser( eSECTION_LANGUAGE, cuT( "pattern" ), Language_Pattern, 1, ePARAMETER_TYPE_TEXT );
-		AddParser( eSECTION_LANGUAGE, cuT( "lexer" ), Language_Lexer, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->mapLexers );
-		AddParser( eSECTION_LANGUAGE, cuT( "fold_flags" ), Language_FoldFlags, 1, ePARAMETER_TYPE_TEXT );
+		AddParser( eSECTION_ROOT, cuT( "language" ), Root_Language, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+		AddParser( eSECTION_LANGUAGE, cuT( "pattern" ), Language_Pattern, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+		AddParser( eSECTION_LANGUAGE, cuT( "lexer" ), Language_Lexer, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT>( l_pContext->mapLexers ) } );
+		AddParser( eSECTION_LANGUAGE, cuT( "fold_flags" ), Language_FoldFlags, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 		AddParser( eSECTION_LANGUAGE, cuT( "section" ), Language_Section );
 		AddParser( eSECTION_LANGUAGE, cuT( "style" ), Language_Style );
-		AddParser( eSECTION_STYLE, cuT( "type" ), Style_Type, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->mapTypes );
-		AddParser( eSECTION_STYLE, cuT( "fg_colour" ), Style_FgColour, 1, ePARAMETER_TYPE_NAME );
-		AddParser( eSECTION_STYLE, cuT( "bg_colour" ), Style_BgColour, 1, ePARAMETER_TYPE_NAME );
-		AddParser( eSECTION_STYLE, cuT( "font_name" ), Style_FontName, 1, ePARAMETER_TYPE_TEXT );
-		AddParser( eSECTION_STYLE, cuT( "font_style" ), Style_FontStyle, 1, ePARAMETER_TYPE_TEXT );
-		AddParser( eSECTION_STYLE, cuT( "font_size" ), Style_FontSize, 1, ePARAMETER_TYPE_INT32 );
-		AddParser( eSECTION_SECTION, cuT( "type" ), Section_Type, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->mapTypes );
+		AddParser( eSECTION_STYLE, cuT( "type" ), Style_Type, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT>( l_pContext->mapTypes ) } );
+		AddParser( eSECTION_STYLE, cuT( "fg_colour" ), Style_FgColour, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+		AddParser( eSECTION_STYLE, cuT( "bg_colour" ), Style_BgColour, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+		AddParser( eSECTION_STYLE, cuT( "font_name" ), Style_FontName, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+		AddParser( eSECTION_STYLE, cuT( "font_style" ), Style_FontStyle, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+		AddParser( eSECTION_STYLE, cuT( "font_size" ), Style_FontSize, { MakeParameter< ePARAMETER_TYPE_INT32 >() } );
+		AddParser( eSECTION_SECTION, cuT( "type" ), Section_Type, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->mapTypes ) } );
 		AddParser( eSECTION_SECTION, cuT( "list" ), Section_List );
 		AddParser( eSECTION_SECTION, cuT( "}" ), Section_End );
 		l_pContext->pCurrentLanguage.reset( new LanguageInfo );
@@ -46,13 +46,13 @@ namespace GuiCommon
 		std::static_pointer_cast< LanguageFileContext >( m_context )->pCurrentLanguage.reset();
 	}
 
-	bool LanguageFileParser::DoDiscardParser( String const & p_strLine )
+	bool LanguageFileParser::DoDiscardParser( String const & p_line )
 	{
 		bool l_return = false;
 
-		if ( m_context->m_sections.top() == eSECTION_LIST )
+		if ( m_context->m_sections.back() == eSECTION_LIST )
 		{
-			String l_strWords( p_strLine );
+			String l_strWords( p_line );
 			string::replace( l_strWords, cuT( "\\" ), cuT( "" ) );
 			StringArray l_arrayWords = string::split( string::trim( l_strWords ), cuT( "\t " ), 1000, false );
 			LanguageFileContextPtr l_pContext = std::static_pointer_cast< LanguageFileContext >( m_context );
@@ -61,7 +61,7 @@ namespace GuiCommon
 		}
 		else
 		{
-			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine );
+			Logger::LogWarning( cuT( "Parser not found @ line " ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_line );
 		}
 
 		return l_return;
@@ -70,6 +70,39 @@ namespace GuiCommon
 	void LanguageFileParser::DoValidate()
 	{
 		m_pStcContext->AddLanguage( std::static_pointer_cast< LanguageFileContext >( m_context )->pCurrentLanguage );
+	}
+
+	String LanguageFileParser::DoGetSectionName( uint32_t p_section )
+	{
+		String l_return;
+
+		switch ( p_section )
+		{
+		case eSECTION_ROOT:
+			break;
+
+		case eSECTION_LANGUAGE:
+			l_return = cuT( "language" );
+			break;
+
+		case eSECTION_SECTION:
+			l_return = cuT( "section" );
+			break;
+
+		case eSECTION_STYLE:
+			l_return = cuT( "style" );
+			break;
+
+		case eSECTION_LIST:
+			l_return = cuT( "list" );
+			break;
+
+		default:
+			assert( false );
+			break;
+		}
+
+		return l_return;
 	}
 }
 
@@ -105,7 +138,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_Pattern )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "directive <pattern> must be followed by a list of file patterns : pattern *.glsl [*.frag ...]" ) );
+		PARSING_ERROR( cuT( "Must be followed by a list of file patterns : pattern *.glsl [*.frag ...]" ) );
 	}
 }
 END_ATTRIBUTE()
@@ -137,7 +170,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Language_FoldFlags )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "directive <fold_flags> must be followed by a list of parameters : fold_flags <param1> <param2> ..." ) );
+		PARSING_ERROR( cuT( "Must be followed by a list of parameters : fold_flags <param1> <param2> ..." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -229,7 +262,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Style_FontStyle )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "directive <style::font_style> must be followed by a list of parameters : font_style <param1> <param2> ..." ) );
+		PARSING_ERROR( cuT( "Must be followed by a list of parameters : font_style <param1> <param2> ..." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -262,7 +295,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( GuiCommon, Section_End )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "directive <section> must contain a directive <type>" ) );
+		PARSING_ERROR( cuT( "Must contain a directive <type>" ) );
 	}
 }
 END_ATTRIBUTE_POP()

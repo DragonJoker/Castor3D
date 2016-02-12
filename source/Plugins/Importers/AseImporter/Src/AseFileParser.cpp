@@ -206,6 +206,83 @@ namespace Ase
 			m_pMesh = l_pContext->pMesh;
 		}
 	}
+
+	String AseFileParser::DoGetSectionName( uint32_t p_section )
+	{
+		String l_return;
+
+		switch ( p_section )
+		{
+		case eASE_SECTION_ROOT:
+			break;
+
+		case eASE_SECTION_SCENE:
+			l_return = cuT( "SCENE" );
+			break;
+
+		case eASE_SECTION_MATERIALS:
+			l_return = cuT( "MATERIALS" );
+			break;
+
+		case eASE_SECTION_MATERIAL:
+			l_return = cuT( "MATERIAL" );
+			break;
+
+		case eASE_SECTION_SUBMAT:
+			l_return = cuT( "SUBMAT" );
+			break;
+
+		case eASE_SECTION_MAPDIFFUSE:
+			l_return = cuT( "MAPDIFFUSE" );
+			break;
+
+		case eASE_SECTION_GEOMETRY:
+			l_return = cuT( "GEOMETRY" );
+			break;
+
+		case eASE_SECTION_GEONODE:
+			l_return = cuT( "GEONODE" );
+			break;
+
+		case eASE_SECTION_GEOMESH:
+			l_return = cuT( "GEOMESH" );
+			break;
+
+		case eASE_SECTION_VERTEXLIST:
+			l_return = cuT( "VERTEXLIST" );
+			break;
+
+		case eASE_SECTION_FACELIST:
+			l_return = cuT( "FACELIST" );
+			break;
+
+		case eASE_SECTION_TVERTEXLIST:
+			l_return = cuT( "TVERTEXLIST" );
+			break;
+
+		case eASE_SECTION_TFACELIST:
+			l_return = cuT( "TFACELIST" );
+			break;
+
+		case eASE_SECTION_CVERTEXLIST:
+			l_return = cuT( "CVERTEXLIST" );
+			break;
+
+		case eASE_SECTION_CFACELIST:
+			l_return = cuT( "CFACELIST" );
+			break;
+
+		case eASE_SECTION_NORMALSLIST:
+			l_return = cuT( "NORMALSLIST" );
+			break;
+
+		default:
+			assert( false );
+			break;
+		}
+
+		return l_return;
+	}
 }
 
 namespace

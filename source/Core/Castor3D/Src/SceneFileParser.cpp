@@ -307,219 +307,219 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 {
 	SceneFileContextSPtr l_pContext = std::make_shared< SceneFileContext >( this, &p_file );
 	m_context = l_pContext;
-	AddParser( eSECTION_ROOT, cuT( "mtl_file" ), Parser_RootMtlFile, 1, ePARAMETER_TYPE_PATH );
-	AddParser( eSECTION_ROOT, cuT( "scene" ), Parser_RootScene, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "font" ), Parser_RootFont, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "material" ), Parser_RootMaterial, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "window" ), Parser_RootWindow, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "panel_overlay" ), Parser_RootPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "border_panel_overlay" ), Parser_RootBorderPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "text_overlay" ), Parser_RootTextOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "sampler" ), Parser_RootSamplerState, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ROOT, cuT( "debug_overlays" ), Parser_RootDebugOverlays, 1, ePARAMETER_TYPE_BOOL );
+	AddParser( eSECTION_ROOT, cuT( "mtl_file" ), Parser_RootMtlFile, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_ROOT, cuT( "scene" ), Parser_RootScene, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "font" ), Parser_RootFont, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "material" ), Parser_RootMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "window" ), Parser_RootWindow, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "panel_overlay" ), Parser_RootPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "border_panel_overlay" ), Parser_RootBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "text_overlay" ), Parser_RootTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "sampler" ), Parser_RootSamplerState, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ROOT, cuT( "debug_overlays" ), Parser_RootDebugOverlays, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 
 	AddParser( eSECTION_WINDOW, cuT( "render_target" ), Parser_WindowRenderTarget );
-	AddParser( eSECTION_WINDOW, cuT( "vsync" ), Parser_WindowVSync, 1, ePARAMETER_TYPE_BOOL );
-	AddParser( eSECTION_WINDOW, cuT( "fullscreen" ), Parser_WindowFullscreen, 1, ePARAMETER_TYPE_BOOL );
+	AddParser( eSECTION_WINDOW, cuT( "vsync" ), Parser_WindowVSync, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
+	AddParser( eSECTION_WINDOW, cuT( "fullscreen" ), Parser_WindowFullscreen, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 
-	AddParser( eSECTION_RENDER_TARGET, cuT( "scene" ), Parser_RenderTargetScene, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "camera" ), Parser_RenderTargetCamera, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "size" ), Parser_RenderTargetSize, 1, ePARAMETER_TYPE_SIZE );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "format" ), Parser_RenderTargetFormat, 1, ePARAMETER_TYPE_PIXELFORMAT );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "depth" ), Parser_RenderTargetDepth, 1, ePARAMETER_TYPE_PIXELFORMAT );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "technique" ), Parser_RenderTargetTechnique, 2, ePARAMETER_TYPE_NAME, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "stereo" ), Parser_RenderTargetStereo, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "postfx" ), Parser_RenderTargetPostEffect, 2, ePARAMETER_TYPE_NAME, ePARAMETER_TYPE_TEXT );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "scene" ), Parser_RenderTargetScene, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "camera" ), Parser_RenderTargetCamera, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "size" ), Parser_RenderTargetSize, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "format" ), Parser_RenderTargetFormat, { MakeParameter< ePARAMETER_TYPE_PIXELFORMAT >() } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "depth" ), Parser_RenderTargetDepth, { MakeParameter< ePARAMETER_TYPE_PIXELFORMAT >() } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "technique" ), Parser_RenderTargetTechnique, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "stereo" ), Parser_RenderTargetStereo, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_RENDER_TARGET, cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "}" ), Parser_RenderTargetEnd );
 
-	AddParser( eSECTION_SAMPLER, cuT( "min_filter" ), Parser_SamplerMinFilter, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapInterpolationModes );
-	AddParser( eSECTION_SAMPLER, cuT( "mag_filter" ), Parser_SamplerMagFilter, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapInterpolationModes );
-	AddParser( eSECTION_SAMPLER, cuT( "min_lod" ), Parser_SamplerMinLod, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_SAMPLER, cuT( "max_lod" ), Parser_SamplerMaxLod, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_SAMPLER, cuT( "lod_bias" ), Parser_SamplerLodBias, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_SAMPLER, cuT( "u_wrap_mode" ), Parser_SamplerUWrapMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapWrappingModes );
-	AddParser( eSECTION_SAMPLER, cuT( "v_wrap_mode" ), Parser_SamplerVWrapMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapWrappingModes );
-	AddParser( eSECTION_SAMPLER, cuT( "w_wrap_mode" ), Parser_SamplerWWrapMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapWrappingModes );
-	AddParser( eSECTION_SAMPLER, cuT( "border_colour" ), Parser_SamplerBorderColour, 1, ePARAMETER_TYPE_COLOUR );
-	AddParser( eSECTION_SAMPLER, cuT( "max_anisotropy" ), Parser_SamplerMaxAnisotropy, 1, ePARAMETER_TYPE_FLOAT );
+	AddParser( eSECTION_SAMPLER, cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapInterpolationModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "mag_filter" ), Parser_SamplerMagFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapInterpolationModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "min_lod" ), Parser_SamplerMinLod, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_SAMPLER, cuT( "max_lod" ), Parser_SamplerMaxLod, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_SAMPLER, cuT( "lod_bias" ), Parser_SamplerLodBias, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_SAMPLER, cuT( "u_wrap_mode" ), Parser_SamplerUWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapWrappingModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "v_wrap_mode" ), Parser_SamplerVWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapWrappingModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "w_wrap_mode" ), Parser_SamplerWWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapWrappingModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "border_colour" ), Parser_SamplerBorderColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_SAMPLER, cuT( "max_anisotropy" ), Parser_SamplerMaxAnisotropy, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 
-	AddParser( eSECTION_SCENE, cuT( "background_colour" ), Parser_SceneBkColour, 1, ePARAMETER_TYPE_COLOUR );
-	AddParser( eSECTION_SCENE, cuT( "background_image" ), Parser_SceneBkImage, 1, ePARAMETER_TYPE_PATH );
-	AddParser( eSECTION_SCENE, cuT( "camera" ), Parser_SceneCamera, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "light" ), Parser_SceneLight, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "camera_node" ), Parser_SceneCameraNode, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "scene_node" ), Parser_SceneSceneNode, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "object" ), Parser_SceneObject, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "ambient_light" ), Parser_SceneAmbientLight, 1, ePARAMETER_TYPE_COLOUR );
-	AddParser( eSECTION_SCENE, cuT( "import" ), Parser_SceneImport, 2, ePARAMETER_TYPE_PATH, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_SCENE, cuT( "billboard" ), Parser_SceneBillboard, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "animated_object_group" ), Parser_SceneAnimatedObjectGroup, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "panel_overlay" ), Parser_ScenePanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "border_panel_overlay" ), Parser_SceneBorderPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SCENE, cuT( "text_overlay" ), Parser_SceneTextOverlay, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_SCENE, cuT( "background_colour" ), Parser_SceneBkColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_SCENE, cuT( "background_image" ), Parser_SceneBkImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SCENE, cuT( "camera" ), Parser_SceneCamera, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "light" ), Parser_SceneLight, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "camera_node" ), Parser_SceneCameraNode, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "scene_node" ), Parser_SceneSceneNode, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "object" ), Parser_SceneObject, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "ambient_light" ), Parser_SceneAmbientLight, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_SCENE, cuT( "import" ), Parser_SceneImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_SCENE, cuT( "billboard" ), Parser_SceneBillboard, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "animated_object_group" ), Parser_SceneAnimatedObjectGroup, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "panel_overlay" ), Parser_ScenePanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "border_panel_overlay" ), Parser_SceneBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "text_overlay" ), Parser_SceneTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 
-	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapLightTypes );
-	AddParser( eSECTION_LIGHT, cuT( "colour" ), Parser_LightColour, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_LIGHT, cuT( "intensity" ), Parser_LightIntensity, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_LIGHT, cuT( "cut_off" ), Parser_LightCutOff, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_LIGHT, cuT( "exponent" ), Parser_LightExponent, 1, ePARAMETER_TYPE_FLOAT );
+	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapLightTypes ) } );
+	AddParser( eSECTION_LIGHT, cuT( "colour" ), Parser_LightColour, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
+	AddParser( eSECTION_LIGHT, cuT( "intensity" ), Parser_LightIntensity, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
+	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
+	AddParser( eSECTION_LIGHT, cuT( "cut_off" ), Parser_LightCutOff, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_LIGHT, cuT( "exponent" ), Parser_LightExponent, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 
-	AddParser( eSECTION_NODE, cuT( "parent" ), Parser_NodeParent, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_NODE, cuT( "position" ), Parser_NodePosition, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_NODE, cuT( "orientation" ), Parser_NodeOrientation, 2, ePARAMETER_TYPE_POINT3F, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_NODE, cuT( "scale" ), Parser_NodeScale, 1, ePARAMETER_TYPE_POINT3F );
+	AddParser( eSECTION_NODE, cuT( "parent" ), Parser_NodeParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_NODE, cuT( "position" ), Parser_NodePosition, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
+	AddParser( eSECTION_NODE, cuT( "orientation" ), Parser_NodeOrientation, { MakeParameter< ePARAMETER_TYPE_POINT3F >(), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_NODE, cuT( "scale" ), Parser_NodeScale, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 
-	AddParser( eSECTION_OBJECT, cuT( "parent" ), Parser_ObjectParent, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_OBJECT, cuT( "mesh" ), Parser_ObjectMesh, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_OBJECT, cuT( "material" ), Parser_ObjectMaterial, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_OBJECT, cuT( "parent" ), Parser_ObjectParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_OBJECT, cuT( "mesh" ), Parser_ObjectMesh, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_OBJECT, cuT( "material" ), Parser_ObjectMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT, cuT( "materials" ), Parser_ObjectMaterials );
 	AddParser( eSECTION_OBJECT, cuT( "}" ), Parser_ObjectEnd );
 
-	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "material" ), Parser_ObjectMaterialsMaterial, 2, ePARAMETER_TYPE_UINT16, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "material" ), Parser_ObjectMaterialsMaterial, { MakeParameter< ePARAMETER_TYPE_UINT16 >(), MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "}" ), Parser_ObjectMaterialsEnd );
 
-	AddParser( eSECTION_MESH, cuT( "type" ), Parser_MeshType, 1, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapNormalModes );
+	AddParser( eSECTION_MESH, cuT( "type" ), Parser_MeshType, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapNormalModes ) } );
 	AddParser( eSECTION_MESH, cuT( "submesh" ), Parser_MeshSubmesh );
-	AddParser( eSECTION_MESH, cuT( "import" ), Parser_MeshImport, 2, ePARAMETER_TYPE_PATH, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_MESH, cuT( "division" ), Parser_MeshDivide, 2, ePARAMETER_TYPE_NAME, ePARAMETER_TYPE_UINT8 );
+	AddParser( eSECTION_MESH, cuT( "import" ), Parser_MeshImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_MESH, cuT( "division" ), Parser_MeshDivide, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_UINT8 >() } );
 	AddParser( eSECTION_MESH, cuT( "}" ), Parser_MeshEnd );
 
-	AddParser( eSECTION_SUBMESH, cuT( "vertex" ), Parser_SubmeshVertex, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_SUBMESH, cuT( "face" ), Parser_SubmeshFace, 1, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_SUBMESH, cuT( "face_uv" ), Parser_SubmeshFaceUV, 1, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_SUBMESH, cuT( "face_uvw" ), Parser_SubmeshFaceUVW, 1, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_SUBMESH, cuT( "face_normals" ), Parser_SubmeshFaceNormals, 1, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_SUBMESH, cuT( "face_tangents" ), Parser_SubmeshFaceTangents, 1, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_SUBMESH, cuT( "uv" ), Parser_SubmeshUV, 1, ePARAMETER_TYPE_POINT2F );
-	AddParser( eSECTION_SUBMESH, cuT( "uvw" ), Parser_SubmeshUVW, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_SUBMESH, cuT( "normal" ), Parser_SubmeshNormal, 1, ePARAMETER_TYPE_POINT3F );
-	AddParser( eSECTION_SUBMESH, cuT( "tangent" ), Parser_SubmeshTangent, 1, ePARAMETER_TYPE_POINT3F );
+	AddParser( eSECTION_SUBMESH, cuT( "vertex" ), Parser_SubmeshVertex, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "face" ), Parser_SubmeshFace, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "face_uv" ), Parser_SubmeshFaceUV, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "face_uvw" ), Parser_SubmeshFaceUVW, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "face_normals" ), Parser_SubmeshFaceNormals, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "face_tangents" ), Parser_SubmeshFaceTangents, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "uv" ), Parser_SubmeshUV, { MakeParameter< ePARAMETER_TYPE_POINT2F >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "uvw" ), Parser_SubmeshUVW, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "normal" ), Parser_SubmeshNormal, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
+	AddParser( eSECTION_SUBMESH, cuT( "tangent" ), Parser_SubmeshTangent, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 	AddParser( eSECTION_SUBMESH, cuT( "}" ), Parser_SubmeshEnd );
 
 	AddParser( eSECTION_MATERIAL, cuT( "pass" ), Parser_MaterialPass );
 	AddParser( eSECTION_MATERIAL, cuT( "}" ), Parser_MaterialEnd );
 
-	AddParser( eSECTION_PASS, cuT( "ambient" ), Parser_PassAmbient, 1, ePARAMETER_TYPE_COLOUR );
-	AddParser( eSECTION_PASS, cuT( "diffuse" ), Parser_PassDiffuse, 1, ePARAMETER_TYPE_COLOUR );
-	AddParser( eSECTION_PASS, cuT( "specular" ), Parser_PassSpecular, 1, ePARAMETER_TYPE_COLOUR );
-	AddParser( eSECTION_PASS, cuT( "emissive" ), Parser_PassEmissive, 1, ePARAMETER_TYPE_COLOUR );
-	AddParser( eSECTION_PASS, cuT( "shininess" ), Parser_PassShininess, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_PASS, cuT( "alpha" ), Parser_PassAlpha, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_PASS, cuT( "two_sided" ), Parser_PassDoubleFace, 1, ePARAMETER_TYPE_BOOL );
-	AddParser( eSECTION_PASS, cuT( "blend_func" ), Parser_PassBlendFunc, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendFactors, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendFactors );
+	AddParser( eSECTION_PASS, cuT( "ambient" ), Parser_PassAmbient, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_PASS, cuT( "diffuse" ), Parser_PassDiffuse, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_PASS, cuT( "specular" ), Parser_PassSpecular, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_PASS, cuT( "emissive" ), Parser_PassEmissive, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_PASS, cuT( "shininess" ), Parser_PassShininess, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_PASS, cuT( "alpha" ), Parser_PassAlpha, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_PASS, cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
+	AddParser( eSECTION_PASS, cuT( "blend_func" ), Parser_PassBlendFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendFactors ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendFactors ) } );
 	AddParser( eSECTION_PASS, cuT( "texture_unit" ), Parser_PassTextureUnit );
 	AddParser( eSECTION_PASS, cuT( "gl_shader_program" ), Parser_PassGlShader );
-	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
-	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBlendModes );
+	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendModes ) } );
+	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendModes ) } );
 
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, 1, ePARAMETER_TYPE_PATH );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "map_type" ), Parser_UnitMapType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapMapModes );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapAlphaFuncs, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "rgb_blend" ), Parser_UnitRgbBlend, 3, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextureRgbFunctions, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextureArguments, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextureArguments );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_blend" ), Parser_UnitAlphaBlend, 3, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextureAlphaFunctions, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextureArguments, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextureArguments );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "channel" ), Parser_UnitChannel, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextureChannels );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "sampler" ), Parser_UnitSampler, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "colour" ), Parser_UnitBlendColour, 1, ePARAMETER_TYPE_COLOUR );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "map_type" ), Parser_UnitMapType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapMapModes ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapAlphaFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureRgbFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureAlphaFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureChannels ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "sampler" ), Parser_UnitSampler, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "colour" ), Parser_UnitBlendColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 
 	AddParser( eSECTION_GLSL_SHADER, cuT( "vertex_program" ), Parser_VertexShader );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "pixel_program" ), Parser_PixelShader );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "geometry_program" ), Parser_GeometryShader );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "hull_program" ), Parser_HullShader );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "domain_program" ), Parser_DomainShader );
-	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
 
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "file" ), Parser_ShaderProgramFile, 2, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapModels, ePARAMETER_TYPE_PATH );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "sampler" ), Parser_ShaderProgramSampler, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "input_type" ), Parser_GeometryInputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveTypes );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_type" ), Parser_GeometryOutputType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveOutputTypes );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, 1, ePARAMETER_TYPE_UINT8 );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "file" ), Parser_ShaderProgramFile, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapModels ), MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "sampler" ), Parser_ShaderProgramSampler, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "input_type" ), Parser_GeometryInputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapPrimitiveTypes ) } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_type" ), Parser_GeometryOutputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapPrimitiveOutputTypes ) } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, { MakeParameter< ePARAMETER_TYPE_UINT8 >() } );
 
-	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, 1, ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT, &l_pContext->m_mapShaderTypes );
-	AddParser( eSECTION_SHADER_UBO, cuT( "variable" ), Parser_ShaderUboVariable, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, { MakeParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >( l_pContext->m_mapShaderTypes ) } );
+	AddParser( eSECTION_SHADER_UBO, cuT( "variable" ), Parser_ShaderUboVariable, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 
-	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "count" ), Parser_ShaderVariableCount, 1, ePARAMETER_TYPE_UINT32 );
-	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapVariableTypes );
-	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "value" ), Parser_ShaderVariableValue, 1, ePARAMETER_TYPE_TEXT );
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "count" ), Parser_ShaderVariableCount, { MakeParameter< ePARAMETER_TYPE_UINT32 >() } );
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapVariableTypes ) } );
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "value" ), Parser_ShaderVariableValue, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 
-	AddParser( eSECTION_FONT, cuT( "file" ), Parser_FontFile, 1, ePARAMETER_TYPE_PATH );
-	AddParser( eSECTION_FONT, cuT( "height" ), Parser_FontHeight, 1, ePARAMETER_TYPE_INT16 );
+	AddParser( eSECTION_FONT, cuT( "file" ), Parser_FontFile, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_FONT, cuT( "height" ), Parser_FontHeight, { MakeParameter< ePARAMETER_TYPE_INT16 >() } );
 	AddParser( eSECTION_FONT, cuT( "}" ), Parser_FontEnd );
 
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "material" ), Parser_OverlayMaterial, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "position" ), Parser_OverlayPosition, 1, ePARAMETER_TYPE_POINT2D );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "size" ), Parser_OverlaySize, 1, ePARAMETER_TYPE_POINT2D );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "pxl_size" ), Parser_OverlayPixelSize, 1, ePARAMETER_TYPE_SIZE );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "pxl_position" ), Parser_OverlayPixelPosition, 1, ePARAMETER_TYPE_POSITION );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "uv" ), Parser_PanelOverlayUvs, 1, ePARAMETER_TYPE_POINT4D );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_PANEL_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "material" ), Parser_OverlayMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "position" ), Parser_OverlayPosition, { MakeParameter< ePARAMETER_TYPE_POINT2D >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "size" ), Parser_OverlaySize, { MakeParameter< ePARAMETER_TYPE_POINT2D >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "pxl_size" ), Parser_OverlayPixelSize, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "pxl_position" ), Parser_OverlayPixelPosition, { MakeParameter< ePARAMETER_TYPE_POSITION >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "uv" ), Parser_PanelOverlayUvs, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_PANEL_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_PANEL_OVERLAY, cuT( "}" ), Parser_OverlayEnd );
 
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "material" ), Parser_OverlayMaterial, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "position" ), Parser_OverlayPosition, 1, ePARAMETER_TYPE_POINT2D );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "size" ), Parser_OverlaySize, 1, ePARAMETER_TYPE_POINT2D );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "pxl_size" ), Parser_OverlayPixelSize, 1, ePARAMETER_TYPE_SIZE );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "pxl_position" ), Parser_OverlayPixelPosition, 1, ePARAMETER_TYPE_POSITION );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "material" ), Parser_OverlayMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "position" ), Parser_OverlayPosition, { MakeParameter< ePARAMETER_TYPE_POINT2D >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "size" ), Parser_OverlaySize, { MakeParameter< ePARAMETER_TYPE_POINT2D >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "pxl_size" ), Parser_OverlayPixelSize, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "pxl_position" ), Parser_OverlayPixelPosition, { MakeParameter< ePARAMETER_TYPE_POSITION >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "}" ), Parser_OverlayEnd );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_material" ), Parser_BorderPanelOverlayMaterial, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_size" ), Parser_BorderPanelOverlaySizes, 1, ePARAMETER_TYPE_POINT4D );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "pxl_border_size" ), Parser_BorderPanelOverlayPixelSizes, 1, ePARAMETER_TYPE_RECTANGLE );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_position" ), Parser_BorderPanelOverlayPosition, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapBorderPositions );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "center_uv" ), Parser_BorderPanelOverlayCenterUvs, 1, ePARAMETER_TYPE_POINT4D );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_inner_uv" ), Parser_BorderPanelOverlayInnerUvs, 1, ePARAMETER_TYPE_POINT4D );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_outer_uv" ), Parser_BorderPanelOverlayOuterUvs, 1, ePARAMETER_TYPE_POINT4D );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_material" ), Parser_BorderPanelOverlayMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_size" ), Parser_BorderPanelOverlaySizes, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "pxl_border_size" ), Parser_BorderPanelOverlayPixelSizes, { MakeParameter< ePARAMETER_TYPE_RECTANGLE >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_position" ), Parser_BorderPanelOverlayPosition, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBorderPositions ) } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "center_uv" ), Parser_BorderPanelOverlayCenterUvs, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_inner_uv" ), Parser_BorderPanelOverlayInnerUvs, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_outer_uv" ), Parser_BorderPanelOverlayOuterUvs, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
 
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "material" ), Parser_OverlayMaterial, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "position" ), Parser_OverlayPosition, 1, ePARAMETER_TYPE_POINT2D );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "size" ), Parser_OverlaySize, 1, ePARAMETER_TYPE_POINT2D );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "pxl_size" ), Parser_OverlayPixelSize, 1, ePARAMETER_TYPE_SIZE );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "pxl_position" ), Parser_OverlayPixelPosition, 1, ePARAMETER_TYPE_POSITION );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "font" ), Parser_TextOverlayFont, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text" ), Parser_TextOverlayText, 1, ePARAMETER_TYPE_TEXT );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_wrapping" ), Parser_TextOverlayTextWrapping, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapTextWrappingModes );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "vertical_align" ), Parser_TextOverlayVerticalAlign, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapVerticalAligns );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "horizontal_align" ), Parser_TextOverlayHorizontalAlign, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapHorizontalAligns );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "material" ), Parser_OverlayMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "position" ), Parser_OverlayPosition, { MakeParameter< ePARAMETER_TYPE_POINT2D >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "size" ), Parser_OverlaySize, { MakeParameter< ePARAMETER_TYPE_POINT2D >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "pxl_size" ), Parser_OverlayPixelSize, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "pxl_position" ), Parser_OverlayPixelPosition, { MakeParameter< ePARAMETER_TYPE_POSITION >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "panel_overlay" ), Parser_OverlayPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "border_panel_overlay" ), Parser_OverlayBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "font" ), Parser_TextOverlayFont, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text" ), Parser_TextOverlayText, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_wrapping" ), Parser_TextOverlayTextWrapping, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextWrappingModes ) } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "vertical_align" ), Parser_TextOverlayVerticalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapVerticalAligns ) } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "horizontal_align" ), Parser_TextOverlayHorizontalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapHorizontalAligns ) } );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "}" ), Parser_OverlayEnd );
 
-	AddParser( eSECTION_CAMERA, cuT( "parent" ), Parser_CameraParent, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_CAMERA, cuT( "parent" ), Parser_CameraParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_CAMERA, cuT( "viewport" ), Parser_CameraViewport );
-	AddParser( eSECTION_CAMERA, cuT( "primitive" ), Parser_CameraPrimitive, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapPrimitiveTypes );
+	AddParser( eSECTION_CAMERA, cuT( "primitive" ), Parser_CameraPrimitive, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapPrimitiveTypes ) } );
 	AddParser( eSECTION_CAMERA, cuT( "}" ), Parser_CameraEnd );
 
-	AddParser( eSECTION_VIEWPORT, cuT( "type" ), Parser_ViewportType, 1, ePARAMETER_TYPE_CHECKED_TEXT, &l_pContext->m_mapViewportModes );
-	AddParser( eSECTION_VIEWPORT, cuT( "left" ), Parser_ViewportLeft, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_VIEWPORT, cuT( "right" ), Parser_ViewportRight, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_VIEWPORT, cuT( "top" ), Parser_ViewportTop, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_VIEWPORT, cuT( "bottom" ), Parser_ViewportBottom, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_VIEWPORT, cuT( "near" ), Parser_ViewportNear, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_VIEWPORT, cuT( "far" ), Parser_ViewportFar, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_VIEWPORT, cuT( "size" ), Parser_ViewportSize, 1, ePARAMETER_TYPE_SIZE );
-	AddParser( eSECTION_VIEWPORT, cuT( "fov_y" ), Parser_ViewportFovY, 1, ePARAMETER_TYPE_FLOAT );
-	AddParser( eSECTION_VIEWPORT, cuT( "aspect_ratio" ), Parser_ViewportAspectRatio, 1, ePARAMETER_TYPE_FLOAT );
+	AddParser( eSECTION_VIEWPORT, cuT( "type" ), Parser_ViewportType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapViewportModes ) } );
+	AddParser( eSECTION_VIEWPORT, cuT( "left" ), Parser_ViewportLeft, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "right" ), Parser_ViewportRight, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "top" ), Parser_ViewportTop, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "bottom" ), Parser_ViewportBottom, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "near" ), Parser_ViewportNear, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "far" ), Parser_ViewportFar, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "size" ), Parser_ViewportSize, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "fov_y" ), Parser_ViewportFovY, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_VIEWPORT, cuT( "aspect_ratio" ), Parser_ViewportAspectRatio, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 
-	AddParser( eSECTION_BILLBOARD, cuT( "parent" ), Parser_BillboardParent, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_BILLBOARD, cuT( "parent" ), Parser_BillboardParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_BILLBOARD, cuT( "positions" ), Parser_BillboardPositions );
-	AddParser( eSECTION_BILLBOARD, cuT( "material" ), Parser_BillboardMaterial, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_BILLBOARD, cuT( "dimensions" ), Parser_BillboardDimensions, 1, ePARAMETER_TYPE_SIZE );
+	AddParser( eSECTION_BILLBOARD, cuT( "material" ), Parser_BillboardMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_BILLBOARD, cuT( "dimensions" ), Parser_BillboardDimensions, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
 	AddParser( eSECTION_BILLBOARD, cuT( "}" ), Parser_BillboardEnd );
 
-	AddParser( eSECTION_BILLBOARD_LIST, cuT( "pos" ), Parser_BillboardPoint, 1, ePARAMETER_TYPE_POINT3F );
+	AddParser( eSECTION_BILLBOARD_LIST, cuT( "pos" ), Parser_BillboardPoint, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 
-	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
-	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_GroupStartAnimation, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_GroupStartAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 
 	for ( auto && l_it : GetEngine()->GetAdditionalParsers() )
 	{
@@ -527,7 +527,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 		{
 			for ( auto && l_itParsers : l_itSections.second )
 			{
-				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_itParsers.second.m_params ) );
+				auto l_params = l_itParsers.second.m_params;
+				AddParser( l_itSections.first, l_itParsers.first, l_itParsers.second.m_function, std::move( l_params ) );
 			}
 		}
 	}
@@ -551,14 +552,153 @@ void SceneFileParser::DoCleanupParser()
 	m_renderWindow = l_pContext->pWindow;
 }
 
-bool SceneFileParser::DoDiscardParser( String const & p_strLine )
+bool SceneFileParser::DoDiscardParser( String const & p_line )
 {
-	Logger::LogError( cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_strLine );
+	Logger::LogError( cuT( "Parser not found @ line #" ) + string::to_string( m_context->m_line ) + cuT( " : " ) + p_line );
 	return false;
 }
 
 void SceneFileParser::DoValidate()
 {
+}
+
+String SceneFileParser::DoGetSectionName( uint32_t p_section )
+{
+	String l_return;
+
+	switch ( p_section )
+	{
+	case eSECTION_ROOT:
+		break;
+
+	case eSECTION_SCENE:
+		l_return = cuT( "scene" );
+		break;
+
+	case eSECTION_WINDOW:
+		l_return = cuT( "window" );
+		break;
+
+	case eSECTION_SAMPLER:
+		l_return = cuT( "sampler" );
+		break;
+
+	case eSECTION_CAMERA:
+		l_return = cuT( "camera" );
+		break;
+
+	case eSECTION_VIEWPORT:
+		l_return = cuT( "viewport" );
+		break;
+
+	case eSECTION_LIGHT:
+		l_return = cuT( "light" );
+		break;
+
+	case eSECTION_NODE:
+		l_return = cuT( "scene_node" );
+		break;
+
+	case eSECTION_OBJECT:
+		l_return = cuT( "object" );
+		break;
+
+	case eSECTION_OBJECT_MATERIALS:
+		l_return = cuT( "materials" );
+		break;
+
+	case eSECTION_FONT:
+		l_return = cuT( "font" );
+		break;
+
+	case eSECTION_PANEL_OVERLAY:
+		l_return = cuT( "panel_overlay" );
+		break;
+
+	case eSECTION_BORDER_PANEL_OVERLAY:
+		l_return = cuT( "border_panel_overlay" );
+		break;
+
+	case eSECTION_TEXT_OVERLAY:
+		l_return = cuT( "text_overlay" );
+		break;
+
+	case eSECTION_MESH:
+		l_return = cuT( "mesh" );
+		break;
+
+	case eSECTION_SUBMESH:
+		l_return = cuT( "submesh" );
+		break;
+
+	case eSECTION_MATERIAL:
+		l_return = cuT( "material" );
+		break;
+
+	case eSECTION_PASS:
+		l_return = cuT( "pass" );
+		break;
+
+	case eSECTION_TEXTURE_UNIT:
+		l_return = cuT( "texture_unit" );
+		break;
+
+	case eSECTION_RENDER_TARGET:
+		l_return = cuT( "render_target" );
+		break;
+
+	case eSECTION_GLSL_SHADER:
+		l_return = cuT( "gl_shader_program" );
+		break;
+
+	case eSECTION_SHADER_PROGRAM:
+		l_return = cuT( "shader_object" );
+		break;
+
+	case eSECTION_SHADER_UBO:
+		l_return = cuT( "constants_buffer" );
+		break;
+
+	case eSECTION_SHADER_UBO_VARIABLE:
+		l_return = cuT( "variable" );
+		break;
+
+	case eSECTION_BILLBOARD:
+		l_return = cuT( "billboard" );
+		break;
+
+	case eSECTION_BILLBOARD_LIST:
+		l_return = cuT( "positions" );
+		break;
+
+	case eSECTION_ANIMGROUP:
+		l_return = cuT( "animated_object_group" );
+		break;
+
+	default:
+	{
+		for ( auto const & l_sections : GetEngine()->GetAdditionalSections() )
+		{
+			if ( l_return.empty() )
+			{
+				auto l_it = l_sections.second.find( p_section );
+
+				if ( l_it != l_sections.second.end() )
+				{
+					l_return = l_it->second;
+				}
+			}
+		}
+
+		if ( l_return.empty() )
+		{
+			assert( false );
+		}
+	}
+	break;
+	}
+
+	return l_return;
 }
 
 //****************************************************************************************************

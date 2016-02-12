@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_PARSER_PARAMETER_H___
 #define ___CASTOR_PARSER_PARAMETER_H___
 
-#include "ParserParameterBase.hpp"
+#include "ParserParameterHelpers.hpp"
 
 #include "Colour.hpp"
 #include "Path.hpp"
@@ -34,809 +34,310 @@ namespace Castor
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		Specified parser parameter
+	\brief		Specified parser parameter.
 	\~french
-	\brief		Parmètre de parseur spécifié
-	\remark
+	\brief		Parmètre de parseur spécifié.
 	*/
-	template< ePARAMETER_TYPE Type > class ParserParameter;
-
+	template< ePARAMETER_TYPE Type, typename Enable = void >
+	class ParserParameter;
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		12/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to parse a value.
+	\~french
+	\brief		Structure d'aide pour récupérer une valeur.
+	*/
+	template< ePARAMETER_TYPE Type, typename Enable = void >
+	struct ValueParser;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_TEXT
+	\brief		Specified parser parameter.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_TEXT
-	\remark
+	\brief		Parmètre de parseur spécifié.
 	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_TEXT >
+	template< ePARAMETER_TYPE Type >
+	class ParserParameter< Type, typename std::enable_if< !has_base_parameter_type< Type >::value >::type >
 		: public ParserParameterBase
 	{
 	public:
-		inline ParserParameter( String const & p_functionName );
-		virtual ePARAMETER_TYPE GetType();
-		virtual xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		virtual bool Parse( String & p_strParams );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		inline ParserParameter()
+		{
+		}
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetType
+		 */
+		inline ePARAMETER_TYPE GetType()
+		{
+			return ParserParameterHelper< Type >::ParameterType;
+		}
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 */
+		inline xchar const * const GetStrType()
+		{
+			return ParserParameterHelper< Type >::StringType;
+		}
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Clone
+		 */
+		inline ParserParameterBaseSPtr Clone()
+		{
+			return std::make_shared< ParserParameter< Type > >( *this );
+		}
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Parse
+		 */
+		inline bool Parse( String & p_params )
+		{
+			return ValueParser< Type >::Parse( p_params, m_value );
+		}
 
 	public:
-		typedef String value_type;
-		value_type m_value;
+		//!~english The parameter value type.	\~french Le type de valeur du paramètre.
+		using ValueType = typename ParserParameterHelper< Type >::ValueType;
+		//!~english The parameter value.	\~french La valeur du paramètre.
+		ValueType m_value;
 	};
-
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_NAME
+	\brief		ParserParameter specialisation for ePARAMETER_TYPE_NAME.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_NAME
+	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_NAME.
 	\remark
 	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_NAME >
+	template<>
+	class ParserParameter< ePARAMETER_TYPE_NAME >
 		: public ParserParameter< ePARAMETER_TYPE_TEXT >
 	{
 	public:
-		inline ParserParameter( String const & p_functionName );
-		virtual ePARAMETER_TYPE GetType();
-		virtual ePARAMETER_TYPE GetBaseType();
-		virtual xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		virtual bool Parse( String & p_strParams );
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_PATH
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_PATH
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_PATH >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		virtual ePARAMETER_TYPE GetType();
-		virtual xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		virtual bool Parse( String & p_strParams );
-
-	public:
-		typedef Path value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_BOOL
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_BOOL
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_BOOL >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructor.
+		 */
+		inline ParserParameter();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetType
+		 */
 		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 */
+		inline ePARAMETER_TYPE GetBaseType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 */
+		inline xchar const * const GetStrType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Clone
+		 */
+		inline ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Parse
+		 */
 		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef bool value_type;
-		value_type m_value;
 	};
-
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_INT8
+	\brief		ParserParameter specialisation for ePARAMETER_TYPE_CHECKED_TEXT.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_INT8
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_INT8 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef int8_t value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_INT16
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_INT16
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_INT16 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef int16_t value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_INT32
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_INT32
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_INT32 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef int32_t value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_INT64
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_INT64
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_INT64 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef int64_t value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_UINT8
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_UINT8
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT8 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef uint8_t value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_UINT16
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_UINT16
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT16 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef uint16_t value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_UINT32
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_UINT32
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT32 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef uint32_t value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_CHECKED_TEXT
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_CHECKED_TEXT
+	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_CHECKED_TEXT.
 	\remark
 	*/
 	template<> class ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >
 		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
 	{
 	public:
-		inline ParserParameter( String const & p_functionName, UIntStrMap const & p_mapValues );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_values	The values used to validate the parsed value.
+		 *\~french
+		 *\brief		Constructor.
+		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+		 */
+		inline ParserParameter( UIntStrMap const & p_values );
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetType
+		 */
 		inline ePARAMETER_TYPE GetType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 */
 		inline ePARAMETER_TYPE GetBaseType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 */
+		inline xchar const * const GetStrType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Clone
+		 */
+		inline ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Parse
+		 */
 		inline bool Parse( String & p_strParams );
 
 	public:
-		UIntStrMap m_mapValues;
+		UIntStrMap const & m_values;
 	};
-
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT
+	\brief		ParserParameter specialisation for ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT
+	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT.
 	\remark
 	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >
+	template<> class ParserParameter< ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT >
 		: public ParserParameter< ePARAMETER_TYPE_UINT32 >
 	{
 	public:
-		inline ParserParameter( String const & p_functionName, UIntStrMap const & p_mapValues );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_values	The values used to validate the parsed value.
+		 *\~french
+		 *\brief		Constructor.
+		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+		 */
+		inline ParserParameter( UIntStrMap const & p_values );
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetType
+		 */
 		inline ePARAMETER_TYPE GetType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 */
 		inline ePARAMETER_TYPE GetBaseType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 */
+		inline xchar const * const GetStrType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Clone
+		 */
+		inline ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Parse
+		 */
 		inline bool Parse( String & p_strParams );
 
 	public:
-		UIntStrMap m_mapValues;
+		UIntStrMap const & m_values;
 	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_UINT64
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_UINT64
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_UINT64 >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef uint64_t value_type;
-		value_type m_value;
-	};
-
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		10/12/2015
 	\version	0.8.0
 	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT
+	\brief		ParserParameter specialisation for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
 	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT
+	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT.
 	\remark
 	*/
 	template<> class ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >
 		: public ParserParameter< ePARAMETER_TYPE_UINT64 >
 	{
 	public:
-		inline ParserParameter( String const & p_functionName, UInt64StrMap const & p_mapValues );
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_values	The values used to validate the parsed value.
+		 *\~french
+		 *\brief		Constructor.
+		 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+		 */
+		inline ParserParameter( UInt64StrMap const & p_values );
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetType
+		 */
 		inline ePARAMETER_TYPE GetType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetBaseType
+		 */
 		inline ePARAMETER_TYPE GetBaseType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::GetStrType
+		 */
+		inline xchar const * const GetStrType();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Clone
+		 */
+		inline ParserParameterBaseSPtr Clone();
+		/**
+		 *\copydoc		Castor::ParserParameterBase::Parse
+		 */
 		inline bool Parse( String & p_strParams );
 
 	public:
-		UInt64StrMap m_mapValues;
+		UInt64StrMap const & m_values;
 	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_FLOAT
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_FLOAT
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_FLOAT >
-		: public ParserParameterBase
+	/**
+	 *\~english
+	 *\brief		Creates a parameter of given type.
+	 *\return		The created parameter.
+	 *\~french
+	 *\brief		Crée un paramètre du type donné.
+	 *\return		Le paramètre créé.
+	 */
+	template< ePARAMETER_TYPE Type >
+	ParserParameterBaseSPtr MakeParameter()
 	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef float value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_DOUBLE
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_DOUBLE
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_DOUBLE >
-		: public ParserParameterBase
+		return std::make_shared< ParserParameter< Type > >();
+	}
+	/**
+	 *\~english
+	 *\brief		Creates a parameter of given type.
+	 *\param[in]	p_values	The values used to validate the parsed value.
+	 *\return		The created parameter.
+	 *\~french
+	 *\brief		Crée un paramètre du type donné.
+	 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+	 *\return		Le paramètre créé.
+	 */
+	template< ePARAMETER_TYPE Type >
+	ParserParameterBaseSPtr MakeParameter( UIntStrMap const & p_values )
 	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef double value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_LONGDOUBLE
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_LONGDOUBLE
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >
-		: public ParserParameterBase
+		static_assert( Type == ePARAMETER_TYPE_CHECKED_TEXT || Type == ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT, "Only for ePARAMETER_TYPE_CHECKED_TEXT or ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT" );
+		return std::make_shared< ParserParameter< Type > >( p_values );
+	}
+	/**
+	 *\~english
+	 *\brief		Creates a parameter of given type.
+	 *\param[in]	p_values	The values used to validate the parsed value.
+	 *\return		The created parameter.
+	 *\~french
+	 *\brief		Crée un paramètre du type donné.
+	 *\param[in]	p_values	Les valeurs utilisées pour valider la valeur récupérée.
+	 *\return		Le paramètre créé.
+	 */
+	template< ePARAMETER_TYPE Type >
+	ParserParameterBaseSPtr MakeParameter( UInt64StrMap const & p_values )
 	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef long double value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_PIXELFORMAT
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_PIXELFORMAT
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef ePIXEL_FORMAT value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT2I
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT2I
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT2I >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point2i value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT3I
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT3I
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT3I >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point3i value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT4I
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT4I
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT4I >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point4i value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT2F
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT2F
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT2F >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point2f value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT3F
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT3F
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT3F >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point3f value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT4F
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT4F
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT4F >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point4f value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT2D
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT2D
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT2D >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point2d value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT3D
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT3D
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT3D >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point3d value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POINT4D
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POINT4D
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POINT4D >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Point4d value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_SIZE
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_SIZE
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_SIZE >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Size value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_POSITION
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_POSITION
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_POSITION >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Position value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_RECTANGLE
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_RECTANGLE
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_RECTANGLE >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Rectangle value_type;
-		value_type m_value;
-	};
-
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		26/03/2013
-	\version	0.7.0
-	\~english
-	\brief		ParserParameter specialisation for ePARAMETER_TYPE_COLOUR
-	\~french
-	\brief		Specialisation de ParserParameter pour ePARAMETER_TYPE_COLOUR
-	\remark
-	*/
-	template<> class ParserParameter< ePARAMETER_TYPE_COLOUR >
-		: public ParserParameterBase
-	{
-	public:
-		inline ParserParameter( String const & p_functionName );
-		inline ePARAMETER_TYPE GetType();
-		inline xchar const * GetStrType();
-		virtual ParserParameterBaseSPtr Clone();
-		inline bool Parse( String & p_strParams );
-
-	public:
-		typedef Colour value_type;
-		value_type m_value;
-	};
+		static_assert( Type == ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT, "Only for ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT" );
+		return std::make_shared< ParserParameter< Type > >( p_values );
+	}
 }
 
 #include "ParserParameter.inl"

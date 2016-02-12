@@ -38,17 +38,15 @@ namespace Castor
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_directive	The current directive
-		 *\param[in]	p_eGivenType	The type asked by the user
-		 *\param[in]	p_eExpectedType	The real parameter type
+		 *\brief		Constructor.
+		 *\param[in]	p_givenType		The type asked by the user.
+		 *\param[in]	p_expectedType	The real parameter type.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_directive	La directive courante
-		 *\param[in]	p_eGivenType	Le type demandé par l'utilisateur
-		 *\param[in]	p_eExpectedType	Le type réel du paramètre
+		 *\param[in]	p_givenType		Le type demandé par l'utilisateur.
+		 *\param[in]	p_expectedType	Le type réel du paramètre.
 		 */
-		CU_API ParserParameterTypeException( String const & p_directive, ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType );
+		CU_API ParserParameterTypeException( ePARAMETER_TYPE p_givenType, ePARAMETER_TYPE p_expectedType );
 	};
 }
 

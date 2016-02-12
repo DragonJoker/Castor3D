@@ -34,11 +34,13 @@ namespace GlRender
 	\brief		Tampon de rendu OpenGL.
 	*/
 	class GlRenderBuffer
-		: public Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-		  std::function< bool( uint32_t ) > >
+		: public Bindable< std::function< bool( int, uint32_t * ) >,
+						   std::function< bool( int, uint32_t const * ) >,
+						   std::function< bool( uint32_t ) > >
 	{
-		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) >,
-			  std::function< bool( uint32_t ) > >;
+		using BindableType = Bindable< std::function< bool( int, uint32_t * ) >,
+									   std::function< bool( int, uint32_t const * ) >,
+									   std::function< bool( uint32_t ) > >;
 
 	public:
 		/**

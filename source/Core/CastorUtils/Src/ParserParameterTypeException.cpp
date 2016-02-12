@@ -4,7 +4,7 @@
 
 namespace Castor
 {
-	ParserParameterTypeException::ParserParameterTypeException( String const & p_directive, ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType )
+	ParserParameterTypeException::ParserParameterTypeException( ePARAMETER_TYPE p_givenType, ePARAMETER_TYPE p_expectedType )
 		:	Exception( "", "", "", 0 )
 	{
 		static std::string StrParameterType[] =
@@ -13,7 +13,8 @@ namespace Castor
 			"name",
 			"path",
 			"checked_text",
-			"bitwise ORed checked_text",
+			"32 bits bitwise ORed checked_text",
+			"64 bits bitwise ORed checked_text",
 			"bool",
 			"int8",
 			"int16",
@@ -41,6 +42,6 @@ namespace Castor
 			"rectangle",
 			"colour",
 		};
-		m_description = "Wrong parameter type for directive " + string::string_cast< char >( p_directive ) + ", user gave " + StrParameterType[p_eGivenType] + " while parameter base type is " + StrParameterType[p_eExpectedType];
+		m_description = "Wrong parameter type: user gave " + StrParameterType[p_givenType] + " while parameter base type is " + StrParameterType[p_expectedType];
 	}
 }

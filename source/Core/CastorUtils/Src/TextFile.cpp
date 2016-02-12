@@ -104,7 +104,7 @@ namespace Castor
 		return l_uiReturn;
 	}
 
-	uint64_t TextFile::WriteText( String const & p_strLine )
+	uint64_t TextFile::WriteText( String const & p_line )
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( ( m_iMode & eOPEN_MODE_WRITE ) || ( m_iMode & eOPEN_MODE_APPEND ) );
@@ -114,11 +114,11 @@ namespace Castor
 		{
 			if ( m_eEncoding != eENCODING_MODE_ASCII )
 			{
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< wchar_t >( p_strLine ).c_str() ), sizeof( char ) * p_strLine.size() );
+				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< wchar_t >( p_line ).c_str() ), sizeof( char ) * p_line.size() );
 			}
 			else
 			{
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< char >( p_strLine ).c_str() ), sizeof( char ) * p_strLine.size() );
+				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< char >( p_line ).c_str() ), sizeof( char ) * p_line.size() );
 			}
 		}
 

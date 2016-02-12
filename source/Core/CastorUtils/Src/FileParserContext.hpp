@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_FILE_PARSER_CONTEXT_H___
 #define ___CASTOR_FILE_PARSER_CONTEXT_H___
 
-#include <stack>
+#include <deque>
 #include <limits>
 #include "File.hpp"
 
@@ -104,7 +104,7 @@ namespace Castor
 		//!\~english The current line	\~french La ligne en cours d'analyse
 		unsigned long long m_line;
 		//!\~english The sections stack	\~french La pile de sections
-		std::stack< int > m_sections;
+		std::deque< uint32_t > m_sections;
 		//!\~english The current function name	\~french Le nom de la fonction actuelle
 		String m_functionName;
 		//!\~english The user context data, useful in plug-ins.	\~french Les données de contexte utilisateur, utile dans les plug-ins.

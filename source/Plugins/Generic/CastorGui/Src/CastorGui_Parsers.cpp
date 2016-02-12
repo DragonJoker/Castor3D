@@ -13,6 +13,8 @@
 #include <ListenerManager.hpp>
 #include <MaterialManager.hpp>
 
+#include <stack>
+
 using namespace CastorGui;
 using namespace Castor3D;
 using namespace Castor;
@@ -141,7 +143,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_DefaultFont )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::default_font> : Unknown font: " ) + l_name );
+		PARSING_ERROR( cuT( "Unknown font: " ) + l_name );
 	}
 }
 END_ATTRIBUTE()
@@ -173,7 +175,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonFont )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::font> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -191,7 +193,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonCaption )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::caption> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -210,7 +212,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonTextMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::text_material> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -229,7 +231,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedBackgroundMateria
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::highlighted_background> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -248,7 +250,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedForegroundMateria
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::highlighted_foreground> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -267,7 +269,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonHighlightedTextMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::highlighted_text_material> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -286,7 +288,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedBackgroundMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::pushed_background> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -305,7 +307,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedForegroundMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::pushed_foreground> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -324,7 +326,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ButtonPushedTextMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::button::pushed_text_material> : no button initialised." ) );
+		PARSING_ERROR( cuT( "No button initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -358,7 +360,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxFont )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::combobox::font> : no combo box initialised." ) );
+		PARSING_ERROR( cuT( "No combo box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -376,7 +378,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxItem )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::combobox::item> : no combo box initialised." ) );
+		PARSING_ERROR( cuT( "No combo box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -395,7 +397,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemBackgroundMate
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::combobox::selected_item_background> : no combo box initialised." ) );
+		PARSING_ERROR( cuT( "No combo box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -414,7 +416,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxSelectedItemForegroundMate
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::combobox::selected_item_foreground> : no combo box initialised." ) );
+		PARSING_ERROR( cuT( "No combo box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -433,7 +435,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ComboBoxHighlightedItemBackgroundM
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::combobox::highlighted_item_background> : no combo box initialised." ) );
+		PARSING_ERROR( cuT( "No combo box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -467,7 +469,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_EditFont )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::edit::font> : no edit initialised." ) );
+		PARSING_ERROR( cuT( "No edit initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -485,7 +487,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_EditCaption )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::edit::caption> : no edit initialised." ) );
+		PARSING_ERROR( cuT( "No edit initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -503,7 +505,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_EditMultiLine )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::edit::multiline> : no edit initialised." ) );
+		PARSING_ERROR( cuT( "No edit initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -537,7 +539,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxFont )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::listbox::font> : no list box initialised." ) );
+		PARSING_ERROR( cuT( "No list box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -555,7 +557,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxItem )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::listbox::item> : no list box initialised." ) );
+		PARSING_ERROR( cuT( "No list box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -574,7 +576,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemBackgroundMater
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::listbox::selected_item_background> : no list box initialised." ) );
+		PARSING_ERROR( cuT( "No list box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -593,7 +595,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxHighlightedItemBackgroundMa
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::listbox::highlighted_item_background> : no list box initialised." ) );
+		PARSING_ERROR( cuT( "No list box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -612,7 +614,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ListBoxSelectedItemForegroundMater
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::listbox::selected_item_foreground> : no list box initialised." ) );
+		PARSING_ERROR( cuT( "No list box initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -661,7 +663,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_StaticFont )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::static::font> : no static initialised." ) );
+		PARSING_ERROR( cuT( "No static initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -679,7 +681,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_StaticCaption )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::static::caption> : no static initialised." ) );
+		PARSING_ERROR( cuT( "No static initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -705,7 +707,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlPixelPosition )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::pixel_position> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -723,7 +725,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlPixelSize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::pixel_size> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -741,7 +743,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlPixelBorderSize )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::pixel_border_size> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -760,7 +762,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBackgroundMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::background> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -779,7 +781,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBorderMaterial )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::foreground> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -797,7 +799,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBorderInnerUv )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::border_inner_uv> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -815,7 +817,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlBorderOuterUv )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::border_outer_uv> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
@@ -833,7 +835,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( CastorGui, Parser_ControlCenterUv )
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Directive <gui::control::center_uv> : no control initialised." ) );
+		PARSING_ERROR( cuT( "No control initialised." ) );
 	}
 }
 END_ATTRIBUTE()
