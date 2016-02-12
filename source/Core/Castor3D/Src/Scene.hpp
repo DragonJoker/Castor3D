@@ -434,35 +434,22 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Binds the given pass.
-		 *\param[in]	p_technique		The render technique.
-		 *\param[in]	p_pipeline		The render pipeline.
-		 *\param[in]	p_pass			The pass.
-		 *\param[in]	p_geometry		The geometry instance.
-		 *\param[in]	p_programFlags	The shader program flags (combination of ePROGRAM_FLAG).
-		 *\~french
-		 *\brief		Active la passe donnée.
-		 *\param[in]	p_technique		La technique de rendu.
-		 *\param[in]	p_pipeline		Le pipeline de rendu.
-		 *\param[in]	p_pass			La passe.
-		 *\param[in]	p_geometry		L'instance de géométrie.
-		 *\param[in]	p_programFlags	Les indicateurs du programme shader (combinaison de ePROGRAM_FLAG).
-		 */
-		void DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags );
-		/**
-		 *\~english
-		 *\brief		Applies geometry instance specific transformations.
-		 *\param[in]	p_matrixBuffer		The frame variable buffer holding matrices.
+		 *\param[in]	p_technique			The render technique.
 		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_pass				The pass.
 		 *\param[in]	p_geometry			The geometry instance.
+		 *\param[in]	p_programFlags		The shader program flags (combination of ePROGRAM_FLAG).
 		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
 		 *\~french
-		 *\brief		Applique les transformations liées à une instance de géométrie.
-		 *\param[in]	p_matrixBuffer		Le tampon de variables de programme contenant les matrices.
+		 *\brief		Active la passe donnée.
+		 *\param[in]	p_technique			La technique de rendu.
 		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_pass				La passe.
 		 *\param[in]	p_geometry			L'instance de géométrie.
+		 *\param[in]	p_programFlags		Les indicateurs du programme shader (combinaison de ePROGRAM_FLAG).
 		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
 		 */
-		void DoFillMatrixBuffer( Pass & p_pass, Pipeline & p_pipeline, Geometry const & p_geometry, uint64_t p_excludedMtxFlags );
+		void DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags, uint64_t p_excludedMtxFlags );
 		/**
 		 *\~english
 		 *\brief		Unbinds the given pass.

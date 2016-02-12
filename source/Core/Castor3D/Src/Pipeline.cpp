@@ -124,11 +124,6 @@ namespace Castor3D
 		if ( p_matrices & MASK_MTXMODE_PROJECTION )
 		{
 			ApplyProjection( p_matrixBuffer );
-
-			if ( ( p_matrices & MASK_MTXMODE_MODEL ) )
-			{
-				ApplyModel( p_matrixBuffer );
-			}
 		}
 
 		if ( p_matrices & MASK_MTXMODE_MODEL )

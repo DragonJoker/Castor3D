@@ -209,28 +209,41 @@ namespace Castor
 		Logger::LogWarning( l_strError.str() );
 	}
 
-	bool FileParser::CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd )
+	bool FileParser::CheckParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received )
 	{
 		bool l_return = true;
-		String l_strParams( p_strParams );
-		string::trim( l_strParams );
-		String l_strMissingParam;
-		std::for_each( p_itBegin, p_itEnd, [&]( ParserParameterBaseSPtr p_pParam )
+		String l_params( p_params );
+		string::trim( l_params );
+		String l_missingParam;
+
+		for ( auto l_param : p_expected )
 		{
 			if ( l_return )
 			{
-				l_return = p_pParam->Parse( l_strParams );
+				auto l_filled = l_param->Clone();
+				l_return = l_filled->Parse( l_params );
 
 				if ( !l_return )
 				{
-					l_strMissingParam = p_pParam->GetStrType();
+					l_missingParam = l_param->GetStrType();
+				}
+				else
+				{
+					p_received.push_back( l_filled );
 				}
 			}
-		} );
+		}
+
+		if ( !l_params.empty() )
+		{
+			auto l_param = std::make_shared< ParserParameter< ePARAMETER_TYPE_TEXT > >( m_context->m_functionName );
+			l_param->m_value = l_params;
+			p_received.push_back( l_param );
+		}
 
 		if ( !l_return )
 		{
-			ParseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + l_strMissingParam + cuT( "> param that is currently missing" ) );
+			ParseError( cuT( "Directive <" ) + m_context->m_functionName + cuT( "> needs a <" ) + l_missingParam + cuT( "> param that is currently missing" ) );
 		}
 
 		return l_return;
@@ -540,16 +553,18 @@ namespace Castor
 					l_strParameters = string::trim( l_splitCmd[1] );
 				}
 
-				if ( !CheckParams( l_strParameters, l_iter->second.m_params.begin(), l_iter->second.m_params.end() ) )
+				ParserParameterArray l_filled;
+
+				if ( !CheckParams( l_strParameters, l_iter->second.m_params, l_filled ) )
 				{
 					bool l_ignored = true;
 					std::swap( l_ignored, m_ignored );
-					l_return = l_iter->second.m_function( this, l_iter->second.m_params );
+					l_return = l_iter->second.m_function( this, l_filled );
 					std::swap( l_ignored, m_ignored );
 				}
 				else
 				{
-					l_return = l_iter->second.m_function( this, l_iter->second.m_params );
+					l_return = l_iter->second.m_function( this, l_filled );
 				}
 			}
 		}

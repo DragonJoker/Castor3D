@@ -120,7 +120,7 @@ namespace Castor
 			if ( l_arrayValues.size() >= 4 )
 			{
 				p_strParams.clear();
-				std::for_each( l_arrayValues.begin(), l_arrayValues.end(), [&]( String const & p_strParam )
+				std::for_each( l_arrayValues.begin() + 4, l_arrayValues.end(), [&]( String const & p_strParam )
 				{
 					p_strParams += p_strParam + cuT( " " );
 				} );
@@ -387,6 +387,11 @@ namespace Castor
 		return cuT( "text" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_TEXT >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_TEXT > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_TEXT >::Parse( String & p_strParams )
 	{
 		m_value = p_strParams;
@@ -431,6 +436,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_NAME >::GetStrType()
 	{
 		return cuT( "name" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_NAME >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_NAME > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_NAME >::Parse( String & p_strParams )
@@ -492,6 +502,11 @@ namespace Castor
 		return cuT( "path" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_PATH >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_PATH > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_PATH >::Parse( String & p_strParams )
 	{
 		m_value = p_strParams;
@@ -541,6 +556,11 @@ namespace Castor
 		return cuT( "boolean" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_BOOL >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_BOOL > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_BOOL >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -578,6 +598,11 @@ namespace Castor
 		return cuT( "8 bits signed integer" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_INT8 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_INT8 > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_INT8 >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -600,6 +625,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_INT16 >::GetStrType()
 	{
 		return cuT( "16 bits signed integer" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_INT16 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_INT16 > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_INT16 >::Parse( String & p_strParams )
@@ -626,6 +656,11 @@ namespace Castor
 		return cuT( "32 bits signed integer" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_INT32 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_INT32 > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_INT32 >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -648,6 +683,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_INT64 >::GetStrType()
 	{
 		return cuT( "64 bits signed integer" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_INT64 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_INT64 > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_INT64 >::Parse( String & p_strParams )
@@ -674,6 +714,11 @@ namespace Castor
 		return cuT( "8 bits unsigned integer" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_UINT8 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT8 > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT8 >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -698,6 +743,11 @@ namespace Castor
 		return cuT( "16 bits unsigned integer" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_UINT16 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT16 > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT16 >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -720,6 +770,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_UINT32 >::GetStrType()
 	{
 		return cuT( "32 bits unsigned integer" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_UINT32 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT32 > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT32 >::Parse( String & p_strParams )
@@ -750,6 +805,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::GetStrType()
 	{
 		return cuT( "checked text" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_CHECKED_TEXT >::Parse( String & p_strParams )
@@ -800,6 +860,11 @@ namespace Castor
 		return cuT( "32bits bitwise ORed checked texts" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -848,6 +913,11 @@ namespace Castor
 		return cuT( "64 bits unsigned integer" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_UINT64 >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_UINT64 > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_UINT64 >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -876,6 +946,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::GetStrType()
 	{
 		return cuT( "64 bits bitwise ORed checked texts" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >::Parse( String & p_strParams )
@@ -926,6 +1001,11 @@ namespace Castor
 		return cuT( "simple precision floating point" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_FLOAT >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_FLOAT > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_FLOAT >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -948,6 +1028,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_DOUBLE >::GetStrType()
 	{
 		return cuT( "double precision floating point" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_DOUBLE >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_DOUBLE > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_DOUBLE >::Parse( String & p_strParams )
@@ -974,6 +1059,11 @@ namespace Castor
 		return cuT( "long double precision floating point" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_LONGDOUBLE > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_LONGDOUBLE >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -996,6 +1086,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::GetStrType()
 	{
 		return cuT( "pixel format" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_PIXELFORMAT > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_PIXELFORMAT >::Parse( String & p_strParams )
@@ -1035,6 +1130,11 @@ namespace Castor
 		return cuT( "2 integers point" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT2I >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2I > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT2I >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -1057,6 +1157,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT3I >::GetStrType()
 	{
 		return cuT( "3 integers point" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT3I >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3I > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT3I >::Parse( String & p_strParams )
@@ -1083,6 +1188,11 @@ namespace Castor
 		return cuT( "4 integers point" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT4I >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4I > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT4I >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -1105,6 +1215,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT2F >::GetStrType()
 	{
 		return cuT( "2 simple precision floating point numbers point" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT2F >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2F > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT2F >::Parse( String & p_strParams )
@@ -1131,6 +1246,11 @@ namespace Castor
 		return cuT( "3 simple precision floating point numbers point" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT3F >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3F > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT3F >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -1153,6 +1273,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT4F >::GetStrType()
 	{
 		return cuT( "4 simple precision floating point numbers point" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT4F >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4F > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT4F >::Parse( String & p_strParams )
@@ -1179,6 +1304,11 @@ namespace Castor
 		return cuT( "2 double precision floating point numbers point" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT2D >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT2D > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT2D >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -1201,6 +1331,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_POINT3D >::GetStrType()
 	{
 		return cuT( "3 double precision floating point numbers point" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT3D >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT3D > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT3D >::Parse( String & p_strParams )
@@ -1227,6 +1362,11 @@ namespace Castor
 		return cuT( "4 double precision floating point numbers point" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POINT4D >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POINT4D > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_POINT4D >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -1249,6 +1389,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_SIZE >::GetStrType()
 	{
 		return cuT( "size" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_SIZE >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_SIZE > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_SIZE >::Parse( String & p_strParams )
@@ -1275,6 +1420,11 @@ namespace Castor
 		return cuT( "position" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_POSITION >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_POSITION > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_POSITION >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -1299,6 +1449,11 @@ namespace Castor
 		return cuT( "rectangle" );
 	}
 
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_RECTANGLE >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_RECTANGLE > >( *this );
+	}
+
 	inline bool ParserParameter< ePARAMETER_TYPE_RECTANGLE >::Parse( String & p_strParams )
 	{
 		bool l_return = false;
@@ -1321,6 +1476,11 @@ namespace Castor
 	inline xchar const * ParserParameter< ePARAMETER_TYPE_COLOUR >::GetStrType()
 	{
 		return cuT( "colour" );
+	}
+
+	inline ParserParameterBaseSPtr ParserParameter< ePARAMETER_TYPE_COLOUR >::Clone()
+	{
+		return std::make_shared< ParserParameter< ePARAMETER_TYPE_COLOUR > >( *this );
 	}
 
 	inline bool ParserParameter< ePARAMETER_TYPE_COLOUR >::Parse( String & p_strParams )

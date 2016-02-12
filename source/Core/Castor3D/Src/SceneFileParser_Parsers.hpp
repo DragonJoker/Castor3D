@@ -245,6 +245,7 @@ namespace Castor3D
 	// Animated object group parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimatedObject )
 	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GroupStartAnimation )
 }
 
 #endif

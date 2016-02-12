@@ -124,6 +124,13 @@ namespace Castor
 		CU_API virtual xchar const * GetStrType() = 0;
 		/**
 		 *\~english
+		 *\return		A copy of this parameter.
+		 *\~french
+		 *\return		Une copie de ce paramètre.
+		 */
+		CU_API virtual ParserParameterBaseSPtr Clone() = 0;
+		/**
+		 *\~english
 		 *\brief			Checks the parameter
 		 *\param[in,out]	p_strParams	The text containing the parameter value
 		 *\return			\p false if any error occured
