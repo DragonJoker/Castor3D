@@ -519,6 +519,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, 1, ePARAMETER_TYPE_NAME );
 	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, 1, ePARAMETER_TYPE_NAME );
+	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_GroupStartAnimation, 1, ePARAMETER_TYPE_NAME );
 
 	for ( auto && l_it : GetEngine()->GetAdditionalParsers() )
 	{

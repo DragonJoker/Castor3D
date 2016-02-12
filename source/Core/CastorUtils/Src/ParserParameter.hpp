@@ -58,6 +58,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		virtual ePARAMETER_TYPE GetType();
 		virtual xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		virtual bool Parse( String & p_strParams );
 
 	public:
@@ -83,6 +84,7 @@ namespace Castor
 		virtual ePARAMETER_TYPE GetType();
 		virtual ePARAMETER_TYPE GetBaseType();
 		virtual xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		virtual bool Parse( String & p_strParams );
 	};
 
@@ -103,6 +105,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		virtual ePARAMETER_TYPE GetType();
 		virtual xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		virtual bool Parse( String & p_strParams );
 
 	public:
@@ -127,6 +130,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -151,6 +155,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -175,6 +180,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -199,6 +205,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -223,6 +230,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -247,6 +255,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -271,6 +280,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -295,6 +305,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -320,6 +331,7 @@ namespace Castor
 		inline ePARAMETER_TYPE GetType();
 		inline ePARAMETER_TYPE GetBaseType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -344,6 +356,7 @@ namespace Castor
 		inline ePARAMETER_TYPE GetType();
 		inline ePARAMETER_TYPE GetBaseType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -367,6 +380,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -392,6 +406,7 @@ namespace Castor
 		inline ePARAMETER_TYPE GetType();
 		inline ePARAMETER_TYPE GetBaseType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -415,6 +430,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -439,6 +455,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -463,6 +480,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -487,6 +505,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -511,6 +530,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -535,6 +555,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -559,6 +580,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -583,6 +605,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -607,6 +630,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -631,6 +655,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -655,6 +680,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -679,6 +705,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -703,6 +730,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -727,6 +755,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -751,6 +780,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -775,6 +805,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:
@@ -799,6 +830,7 @@ namespace Castor
 		inline ParserParameter( String const & p_functionName );
 		inline ePARAMETER_TYPE GetType();
 		inline xchar const * GetStrType();
+		virtual ParserParameterBaseSPtr Clone();
 		inline bool Parse( String & p_strParams );
 
 	public:

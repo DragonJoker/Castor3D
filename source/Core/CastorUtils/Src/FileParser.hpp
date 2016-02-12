@@ -247,19 +247,19 @@ namespace Castor
 		CU_API void ParseWarning( String const & p_strWarning );
 		/**
 		 *\~english
-		 *\brief		Tests if the params given to the function will be appropriate
-		 *\param[in]	p_strParams		The given parameters
-		 *\param[in]	p_itBegin		An iterator to the first expected parameter
-		 *\param[in]	p_itEnd			An iterator to the end of the expected parameters
-		 *\return		\p false if \p p_strParams doesn't contain all expected parameters types
+		 *\brief		Tests if the params given to the function will be appropriate.
+		 *\param[in]	p_params		The given parameters.
+		 *\param[in]	p_expected		The expected parameters.
+		 *\param[in]	p_received		The filled parameters.
+		 *\return		\p false if \p p_strParams doesn't contain all expected parameters types.
 		 *\~french
-		 *\brief		Vérifie si les paramètres donnés à la fonction correspondent à ceux qu'elle attend
-		 *\param[in]	p_strParams		Les paramètres donnés
-		 *\param[in]	p_itBegin		Un itérateur sur le premier des paramètres attendus
-		 *\param[in]	p_itEnd			Un itérateur sur la fin des paramètres attendus
-		 *\return		\p false si \p p_strParams ne contient pas tous les types de paramètres attendus par la fonction
+		 *\brief		Vérifie si les paramètres donnés à la fonction correspondent à ceux qu'elle attend.
+		 *\param[in]	p_params		Les paramètres donnés.
+		 *\param[in]	p_expected		Les paramètres attendus.
+		 *\param[in]	p_received		Les paramètres remplis.
+		 *\return		\p false si \p p_strParams ne contient pas tous les types de paramètres attendus par la fonction.
 		 */
-		CU_API bool CheckParams( String const & p_strParams, ParserParameterArrayConstIt p_itBegin, ParserParameterArrayConstIt p_itEnd );
+		CU_API bool CheckParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received );
 		/**
 		 *\~english
 		 *\brief		Adds a parser function to the parsers list

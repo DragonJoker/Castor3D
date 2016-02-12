@@ -764,7 +764,7 @@ namespace Castor3D
 		}
 	}
 
-	void Scene::DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags )
+	void Scene::DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags, uint64_t p_excludedMtxFlags )
 	{
 		ShaderProgramSPtr l_program;
 
@@ -794,11 +794,6 @@ namespace Castor3D
 			m_cameraManager->BindCamera( *l_sceneBuffer );
 		}
 
-		p_pass.Render();
-	}
-
-	void Scene::DoFillMatrixBuffer( Pass & p_pass, Pipeline & p_pipeline, Geometry const & p_geometry, uint64_t p_excludedMtxFlags )
-	{
 		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
 
 		if ( l_matrixBuffer )
@@ -818,7 +813,7 @@ namespace Castor3D
 			}
 		}
 
-		//p_pass.FillShaderVariables();
+		p_pass.Render();
 	}
 
 	void Scene::DoUnbindPass( Pass & p_pass )
@@ -849,8 +844,7 @@ namespace Castor3D
 					for ( auto l_renderNode : l_itSubmeshes.second )
 					{
 						p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
-						DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags() );
+						DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags(), 0 );
 						l_renderNode.m_submesh->Draw( *l_pass );
 						DoUnbindPass( *l_pass );
 					}
@@ -884,8 +878,7 @@ namespace Castor3D
 							l_buffer += 16;
 						}
 
-						DoFillMatrixBuffer( *l_pass, p_pipeline, *l_itSubmeshes.second[0].m_geometry, MASK_MTXMODE_MODEL );
-						DoBindPass( p_technique, p_pipeline, *l_pass, *l_itSubmeshes.second[0].m_geometry, l_itSubmeshes.second[0].m_submesh->GetProgramFlags() | ePROGRAM_FLAG_INSTANCIATION );
+						DoBindPass( p_technique, p_pipeline, *l_pass, *l_itSubmeshes.second[0].m_geometry, l_itSubmeshes.second[0].m_submesh->GetProgramFlags() | ePROGRAM_FLAG_INSTANCIATION, MASK_MTXMODE_MODEL );
 						l_itSubmeshes.second[0].m_submesh->Draw( *l_pass );
 						DoUnbindPass( *l_pass );
 					}
@@ -894,8 +887,7 @@ namespace Castor3D
 						for ( auto l_renderNode : l_itSubmeshes.second )
 						{
 							p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-							DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
-							DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags() );
+							DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags(), 0 );
 							l_renderNode.m_submesh->Draw( *l_pass );
 							DoUnbindPass( *l_pass );
 						}
@@ -918,8 +910,7 @@ namespace Castor3D
 			for ( auto l_pass : *l_material )
 			{
 				p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-				DoFillMatrixBuffer( *l_pass, p_pipeline, *l_renderNode.m_geometry, 0 );
-				DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags() );
+				DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags(), 0 );
 				l_renderNode.m_submesh->Draw( *l_pass );
 				DoUnbindPass( *l_pass );
 			}

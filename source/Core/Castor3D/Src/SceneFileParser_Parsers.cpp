@@ -3362,10 +3362,41 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
 	if ( l_pContext->pGroup )
 	{
 		l_pContext->pGroup->AddAnimation( l_name );
+
+		if ( p_params.size() > 1 )
+		{
+			String l_tmp;
+			StringArray l_options = string::split( p_params[1]->Get( l_tmp ), cuT( " \t" ), 20, false );
+
+			for ( auto l_value : l_options )
+			{
+				if ( l_value == cuT( "looped" ) )
+				{
+					l_pContext->pGroup->SetAnimationLooped( l_name, true );
+				}
+			}
+		}
 	}
 	else
 	{
 		PARSING_ERROR( cuT( "Directive <animated_object_group::animation> : No animated object group initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupStartAnimation )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	String l_name;
+	p_params[0]->Get( l_name );
+
+	if ( l_pContext->pGroup )
+	{
+		l_pContext->pGroup->StartAnimation( l_name );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animated object group initialised" ) );
 	}
 }
 END_ATTRIBUTE()
