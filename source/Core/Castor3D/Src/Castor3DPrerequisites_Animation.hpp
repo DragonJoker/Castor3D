@@ -28,9 +28,9 @@ namespace Castor3D
 	\version	0.1
 	\date		09/02/2010
 	\~english
-	\brief		Interpolator modes enumeration.
+	\brief		Interpolation modes enumeration.
 	\~french
-	\brief		Enumération des modes d'înterpolateur.
+	\brief		Enumération des modes d'înterpolation.
 	*/
 	typedef enum eINTERPOLATOR_MODE
 	{
@@ -84,10 +84,16 @@ namespace Castor3D
 	class BonedVertex;
 	struct stVERTEX_BONE_DATA;
 	template< typename T > class KeyFrame;
+	template< typename T > class Interpolator;
+	template< typename T, eINTERPOLATOR_MODE > class InterpolatorT;
 
 	using AnimationStateMap = std::map< Castor::String, eANIMATION_STATE >;
 	using Point3rKeyFrame = KeyFrame< Castor::Point3r >;
 	using QuaternionKeyFrame = KeyFrame< Castor::Quaternion >;
+	using Point3rInterpolator = Interpolator< Castor::Point3r >;
+	using QuaternionInterpolator = Interpolator< Castor::Quaternion >;
+	template< typename T >
+	using KeyFrameRealMap = std::map< real, KeyFrame< T > >;
 
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimationObjectBase );

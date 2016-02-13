@@ -60,7 +60,9 @@ namespace Castor3D
 		eSECTION_SHADER_UBO_VARIABLE = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),		//!< Variable subsection of a UBO subsection
 		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),				//!< Billboards list section
 		eSECTION_BILLBOARD_LIST = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),			//!< Billboards points list subsection
-		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'M', 'G', 'P' ),				//!< Animated Objects Groups section
+		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),				//!< Animated Objects Groups section
+		eSECTION_ANIMATED_OBJECT = MAKE_SECTION_NAME( 'A', 'N', 'O', 'J' ),			//!< Animated Object section
+		eSECTION_ANIMATION = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),				//!< Animation section
 	}	eSECTION;
 	//! The context used into parsing functions
 	/*!
@@ -120,32 +122,9 @@ namespace Castor3D
 		RealArray vertexTan;
 		RealArray vertexTex;
 		UIntArray faces;
-		AnimatedObjectGroupSPtr pGroup;
-
-		UIntStrMap m_mapBlendFactors;
-		UIntStrMap m_mapTypes;
-		UIntStrMap m_mapMapModes;
-		UIntStrMap m_mapAlphaFuncs;
-		UIntStrMap m_mapTextureArguments;
-		UIntStrMap m_mapTextureRgbFunctions;
-		UIntStrMap m_mapTextureAlphaFunctions;
-		UIntStrMap m_mapTextureChannels;
-		UIntStrMap m_mapNormalModes;
-		UIntStrMap m_mapLightTypes;
-		UIntStrMap m_mapPrimitiveTypes;
-		UIntStrMap m_mapPrimitiveOutputTypes;
-		UIntStrMap m_mapModels;
-		UIntStrMap m_mapViewportModes;
-		UIntStrMap m_mapInterpolationModes;
-		UIntStrMap m_mapWrappingModes;
-		UInt64StrMap m_mapShaderTypes;
-		UIntStrMap m_mapVariableTypes;
-		UIntStrMap m_mapMovables;
-		UIntStrMap m_mapTextWrappingModes;
-		UIntStrMap m_mapBorderPositions;
-		UIntStrMap m_mapBlendModes;
-		UIntStrMap m_mapVerticalAligns;
-		UIntStrMap m_mapHorizontalAligns;
+		AnimatedObjectGroupSPtr pAnimGroup;
+		AnimatedObjectSPtr pAnimObject;
+		AnimationSPtr pAnimation;
 
 	public:
 		/**
@@ -222,6 +201,31 @@ namespace Castor3D
 		ScenePtrStrMap m_mapScenes;
 		RenderWindowSPtr m_renderWindow;
 
+		UIntStrMap m_mapBlendFactors;
+		UIntStrMap m_mapTypes;
+		UIntStrMap m_mapMapModes;
+		UIntStrMap m_mapAlphaFuncs;
+		UIntStrMap m_mapTextureArguments;
+		UIntStrMap m_mapTextureRgbFunctions;
+		UIntStrMap m_mapTextureAlphaFunctions;
+		UIntStrMap m_mapTextureChannels;
+		UIntStrMap m_mapNormalModes;
+		UIntStrMap m_mapLightTypes;
+		UIntStrMap m_mapPrimitiveTypes;
+		UIntStrMap m_mapPrimitiveOutputTypes;
+		UIntStrMap m_mapModels;
+		UIntStrMap m_mapViewportModes;
+		UIntStrMap m_mapInterpolationModes;
+		UIntStrMap m_mapWrappingModes;
+		UInt64StrMap m_mapShaderTypes;
+		UIntStrMap m_mapVariableTypes;
+		UIntStrMap m_mapMovables;
+		UIntStrMap m_mapTextWrappingModes;
+		UIntStrMap m_mapBorderPositions;
+		UIntStrMap m_mapBlendModes;
+		UIntStrMap m_mapVerticalAligns;
+		UIntStrMap m_mapHorizontalAligns;
+		UIntStrMap m_mapInterpolatorModes;
 	};
 }
 

@@ -355,6 +355,30 @@ namespace Castor3D
 		return l_return;
 	}
 
+	void Animation::SetScaleInterpolationMode( eINTERPOLATOR_MODE p_mode )
+	{
+		for ( auto l_moving : m_arrayMoving )
+		{
+			l_moving->SetScaleInterpolationMode( p_mode );
+		}
+	}
+
+	void Animation::SetRotateInterpolationMode( eINTERPOLATOR_MODE p_mode )
+	{
+		for ( auto l_moving : m_arrayMoving )
+		{
+			l_moving->SetRotateInterpolationMode( p_mode );
+		}
+	}
+
+	void Animation::SetTranslateInterpolationMode( eINTERPOLATOR_MODE p_mode )
+	{
+		for ( auto l_moving : m_arrayMoving )
+		{
+			l_moving->SetTranslateInterpolationMode( p_mode );
+		}
+	}
+
 	AnimationSPtr Animation::Clone()const
 	{
 		auto l_clone = std::make_shared< Animation >( GetName() );

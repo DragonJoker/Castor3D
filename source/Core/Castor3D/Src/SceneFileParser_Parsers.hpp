@@ -243,9 +243,23 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardPoint )
 
 	// Animated object group parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimatedObject )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimation )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupStartAnimation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimatedObject )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimationStart )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupEnd )
+
+	// Animated object parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectAnimation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectEnd )
+
+	// Animation parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationLooped )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationScale )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationScalesInterpolation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationTranslatesInterpolation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationRotatesInterpolation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationStart )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationEnd )
 }
 
 #endif

@@ -19,6 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_ANIMATION_OBJECT_BASE_H___
 
 #include "BinaryParser.hpp"
+#include "Interpolator.hpp"
 
 #include <SquareMatrix.hpp>
 #include <Quaternion.hpp>
@@ -87,6 +88,48 @@ namespace Castor3D
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
 			C3D_API virtual bool Parse( AnimationObjectBase & p_obj, BinaryChunk & p_chunk )const;
+		};
+
+	protected:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		Helper structure holding the keyframes and interpolation related stuff.
+		\~english
+		\brief		Structure d'aide contenant les keyframes et les trucs relatifs à l'interpolation.
+		*/
+		template< typename T >
+		struct KeyFrameInterpolation
+		{
+			/**
+			 *\~english
+			 *\brief		Copy assignment operator.
+			 *\param[in]	p_rhs	The object to copy.
+			 *\return		A reference to this object.
+			 *\~french
+			 *\brief		Opérateur d'affectation par copie.
+			 *\param[in]	p_rhs	L'objet à copier.
+			 *\return		Une référence sur cet objet.
+			 */
+			inline KeyFrameInterpolation< T > & operator=( KeyFrameInterpolation< T > const & p_rhs );
+			/**
+			 *\~english
+			 *\brief		Updates the interpolator.
+			 *\param[in]	p_mode	The new mode.
+			 *\~french
+			 *\brief		Met à jour l'interpolateur.
+			 *\param[in]	p_mode	Le nouveau mode.
+			 */
+			inline void SetInterpolationMode( eINTERPOLATOR_MODE p_mode );
+
+			//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
+			KeyFrameRealMap< T > m_keyframes;
+			//!\~english The interpolation mode.	\~french Le mode d'interpolation.
+			eINTERPOLATOR_MODE m_mode = eINTERPOLATOR_MODE_NONE;
+			//!\~english The interpolator.	\~french L'interpolateur.
+			std::unique_ptr< Interpolator< T > > m_interpolator;
 		};
 
 	protected:
@@ -227,13 +270,73 @@ namespace Castor3D
 		C3D_API AnimationObjectBaseSPtr Clone( Animation & p_animation );
 		/**
 		 *\~english
+		 *\return		The scaling key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
+		 */
+		inline eINTERPOLATOR_MODE GetScaleInterpolationMode()const
+		{
+			return m_scales.m_mode;
+		}
+		/**
+		 *\~english
+		 *\return		The rotation key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de rotation.
+		 */
+		inline eINTERPOLATOR_MODE GetRotateInterpolationMode()const
+		{
+			return m_rotates.m_mode;
+		}
+		/**
+		 *\~english
+		 *\return		The translation key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de translation.
+		 */
+		inline eINTERPOLATOR_MODE GetTranslateInterpolationMode()const
+		{
+			return m_translates.m_mode;
+		}
+		/**
+		 *\~english
+		 *\return		The scaling key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
+		 */
+		inline void SetScaleInterpolationMode( eINTERPOLATOR_MODE p_mode )
+		{
+			return m_scales.SetInterpolationMode( p_mode );
+		}
+		/**
+		 *\~english
+		 *\return		The rotation key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de rotation.
+		 */
+		inline void SetRotateInterpolationMode( eINTERPOLATOR_MODE p_mode )
+		{
+			return m_rotates.SetInterpolationMode( p_mode );
+		}
+		/**
+		 *\~english
+		 *\return		The translation key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de translation.
+		 */
+		inline void SetTranslateInterpolationMode( eINTERPOLATOR_MODE p_mode )
+		{
+			return m_translates.SetInterpolationMode( p_mode );
+		}
+		/**
+		 *\~english
 		 *\return		The scale key frames.
 		 *\~french
 		 *\return		Les key frames de mise à l'échelle.
 		 */
 		inline Point3rKeyFrameRealMap const & GetScales()const
 		{
-			return m_scales;
+			return m_scales.m_keyframes;
 		}
 		/**
 		 *\~english
@@ -243,7 +346,7 @@ namespace Castor3D
 		 */
 		inline Point3rKeyFrameRealMap const & GetTranslates()const
 		{
-			return m_translates;
+			return m_translates.m_keyframes;
 		}
 		/**
 		 *\~english
@@ -253,7 +356,7 @@ namespace Castor3D
 		 */
 		inline QuaternionKeyFrameRealMap const & GetRotates()const
 		{
-			return m_rotates;
+			return m_rotates.m_keyframes;
 		}
 		/**
 		 *\~english
@@ -331,7 +434,7 @@ namespace Castor3D
 		 */
 		inline bool HasKeyFrames()const
 		{
-			return !m_rotates.empty() || !m_scales.empty() || !m_translates.empty();
+			return !m_rotates.m_keyframes.empty() || !m_scales.m_keyframes.empty() || !m_translates.m_keyframes.empty();
 		}
 		/**
 		 *\~english
@@ -434,25 +537,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Computes the animation's value (translation, rotation or scaling) for this object.
-		 *\param[in]	p_time	The time index.
+		 *\param[in]	p_time		The time index.
+		 *\param[in]	p_keyframes	The keyframes.
+		 *\param[in]	p_default	Default value
 		 *\return		The value.
 		 *\~french
 		 *\brief		Calcule la valeur (translation, rotation ou mise à l'échelle) pour l'animation de cet objet.
 		 *\param[in]	p_time	L'index de temps.
+		 *\param[in]	p_keyframes	
+		 *\param[in]	p_default	
 		 *\return		La valeur.
 		 */
-		template< eINTERPOLATOR_MODE Mode, class ValueType, class KeyFrameType >
-		ValueType DoCompute( real p_time, std::map< real, KeyFrameType > const & p_map, ValueType const & p_default );
+		template< typename T >
+		T DoCompute( real p_time, KeyFrameInterpolation< T > const & p_keyframes, T const & p_default );
 
 	protected:
 		//!\~english The moving thing type.	\~french Le type du machin mouvant.
 		eANIMATION_OBJECT_TYPE m_type;
-		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
-		Point3rKeyFrameRealMap m_scales;
-		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
-		Point3rKeyFrameRealMap m_translates;
-		//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
-		QuaternionKeyFrameRealMap m_rotates;
+		//!\~english The scaling key frames.	\~french Les keyframes de mise à l'échelle.
+		KeyFrameInterpolation< Castor::Point3r > m_scales;
+		//!\~english The rotation key frames.	\~french Les keyframes de rotation.
+		KeyFrameInterpolation< Castor::Quaternion > m_rotates;
+		//!\~english The translation key frames.	\~french Les keyframes de translation.
+		KeyFrameInterpolation< Castor::Point3r > m_translates;
 		//!\~english Animation node transformations.	\~french Transformations du noeud d'animation.
 		Castor::Matrix4x4r m_nodeTransform;
 		//!\~english The animation length.	\~french La durée de l'animation.

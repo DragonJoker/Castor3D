@@ -2,6 +2,42 @@
 
 namespace Castor3D
 {
+	//*************************************************************************************************
+
+	template< typename T >
+	AnimationObjectBase::KeyFrameInterpolation< T > & AnimationObjectBase::KeyFrameInterpolation< T >::operator=( AnimationObjectBase::KeyFrameInterpolation< T > const & p_rhs )
+	{
+		m_keyframes = p_rhs.m_keyframes;
+		SetInterpolationMode( p_rhs.m_mode );
+		return *this;
+	}
+
+	template< typename T >
+	void AnimationObjectBase::KeyFrameInterpolation< T >::SetInterpolationMode( eINTERPOLATOR_MODE p_mode )
+	{
+		if ( p_mode != m_mode )
+		{
+			m_mode = p_mode;
+
+			switch ( m_mode )
+			{
+			case eINTERPOLATOR_MODE_NONE:
+				m_interpolator = std::make_unique < InterpolatorT< T, eINTERPOLATOR_MODE_NONE > >();
+				break;
+
+			case eINTERPOLATOR_MODE_LINEAR:
+				m_interpolator = std::make_unique < InterpolatorT< T, eINTERPOLATOR_MODE_LINEAR > >();
+				break;
+
+			default:
+				FAILURE( "Unsupported interpolator mode" );
+				break;
+			}
+		}
+	}
+
+	//*************************************************************************************************
+
 	template< class KeyFrameType, typename T >
 	KeyFrameType & AnimationObjectBase::DoAddKeyFrame( real p_from, std::map< real, KeyFrameType > & p_map, T const & p_value )
 	{
@@ -31,20 +67,20 @@ namespace Castor3D
 		}
 	}
 
-	template< eINTERPOLATOR_MODE Mode, class ValueType, class KeyFrameType >
-	ValueType AnimationObjectBase::DoCompute( real p_time, std::map< real, KeyFrameType > const & p_map, ValueType const & p_default )
+	template< class T >
+	T AnimationObjectBase::DoCompute( real p_time, KeyFrameInterpolation< T > const & p_keyframes, T const & p_default )
 	{
-		ValueType l_return( p_default );
-		auto l_itCur = std::find_if( p_map.begin(), p_map.end(), [&p_time]( std::pair< real, KeyFrameType > const & p_pair )
+		T l_return{ p_default };
+		auto l_itCur = std::find_if( p_keyframes.m_keyframes.begin(), p_keyframes.m_keyframes.end(), [&p_time]( KeyFrameRealMap< T >::value_type const & p_pair )
 		{
 			return p_pair.second.GetTimeIndex() >= p_time;
 		} );
 
-		if ( l_itCur != p_map.end() )
+		if ( l_itCur != p_keyframes.m_keyframes.end() )
 		{
 			auto l_itPrv = l_itCur;
 
-			if ( l_itPrv == p_map.begin() )
+			if ( l_itPrv == p_keyframes.m_keyframes.begin() )
 			{
 				l_return = l_itCur->second.GetValue();
 			}
@@ -53,10 +89,12 @@ namespace Castor3D
 				--l_itPrv;
 				real l_dt = l_itCur->first - l_itPrv->first;
 				real l_factor = ( p_time - l_itPrv->first ) / l_dt;
-				l_return = Interpolator< ValueType, Mode >( l_itPrv->second.GetValue(), l_itCur->second.GetValue() ).Interpolate( l_factor );
+				l_return = p_keyframes.m_interpolator->Interpolate( l_itPrv->second.GetValue(), l_itCur->second.GetValue(), l_factor );
 			}
 		}
 
 		return l_return;
 	}
+
+	//*************************************************************************************************
 }
