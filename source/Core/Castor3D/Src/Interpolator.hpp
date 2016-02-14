@@ -31,159 +31,17 @@ namespace Castor3D
 	\~french
 	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
 	*/
-	template< class Type, eINTERPOLATOR_MODE Mode > class Interpolator;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		24/01/2016
-	\~english
-	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_NONE.
-	\~french
-	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_NONE.
-	*/
 	template< class Type >
-	class Interpolator< Type, eINTERPOLATOR_MODE_NONE >
+	class Interpolator
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_src	The start.
-		 *\param[in]	p_dst	The end.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_src	Le départ.
-		 *\param[in]	p_dst	L'arrivée.
 		 */
-		Interpolator( Type const & p_src, Type const & CU_PARAM_UNUSED( p_dst ) )
-			: m_src( p_src )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~Interpolator()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Interpolation function.
-		 *\param[in]	p_percent	The percentage.
-		 *\~french
-		 *\brief		Fonction d'interpolation.
-		 *\param[in]	p_percent	Le pourcentage.
-		 */
-		Type const & Interpolate( real CU_PARAM_UNUSED( p_percent ) )
-		{
-			return m_src;
-		}
-
-	protected:
-		//!\~english The starting value.	\~french La valeur de départ.
-		Type m_src;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.8.0
-	\date		24/01/2016
-	\~english
-	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_LINEAR.
-	\~french
-	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_LINEAR.
-	*/
-	template< class Type >
-	class Interpolator< Type, eINTERPOLATOR_MODE_LINEAR >
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_src	The start.
-		 *\param[in]	p_dst	The end.
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_src	Le départ.
-		 *\param[in]	p_dst	L'arrivée.
-		 */
-		Interpolator( Type const & p_src, Type const & p_dst )
-			: m_src( p_src )
-			, m_cur( p_src )
-			, m_dst( p_dst )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Destructor.
-		 *\~french
-		 *\brief		Destructeur.
-		 */
-		~Interpolator()
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Interpolation function.
-		 *\param[in]	p_percent	The percentage.
-		 *\~french
-		 *\brief		Fonction d'interpolation.
-		 *\param[in]	p_percent	Le pourcentage.
-		 */
-		Type const & Interpolate( real p_percent )
-		{
-			if ( p_percent <= 0.0 )
-			{
-				m_cur = m_src;
-			}
-			else if ( p_percent >= 1.0 )
-			{
-				m_cur = m_dst;
-			}
-			else
-			{
-				m_cur = m_src + ( ( m_dst - m_src ) * p_percent );
-			}
-
-			return m_cur;
-		}
-
-	protected:
-		//!\~english The starting value.	\~french La valeur de départ.
-		Type m_src;
-		//!\~english The current value.	\~french La valeur courante.
-		Type m_cur;
-		//!\~english The ending value.	\~french La valeur d'arrivée.
-		Type m_dst;
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.1
-	\date		09/02/2010
-	\~english
-	\brief		Class which handles the Quaternion linear interpolations.
-	\~french
-	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
-	*/
-	template<>
-	class Interpolator< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor.
-		 *\param[in]	p_src	The start.
-		 *\param[in]	p_dst	The end.
-		 *\~french
-		 *\brief		Constructeur.
-		 *\param[in]	p_src	Le départ.
-		 *\param[in]	p_dst	L'arrivée.
-		 */
-		inline Interpolator( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst )
-			: m_src( p_src )
-			, m_cur( p_src )
-			, m_dst( p_dst )
+		inline Interpolator()
 		{
 		}
 		/**
@@ -198,36 +56,203 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\param[in]	p_dst		The end.
 		 *\param[in]	p_percent	The percentage.
 		 *\~french
 		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 *\param[in]	p_dst		L'arrivée.
 		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline Castor::Quaternion const & Interpolate( real p_percent )
+		C3D_API virtual Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const = 0;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.1
+	\date		09/02/2010
+	\~english
+	\brief		Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations
+	\~french
+	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
+	*/
+	template< class Type, eINTERPOLATOR_MODE Mode > class InterpolatorT;
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		24/01/2016
+	\~english
+	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_NONE.
+	\~french
+	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_NONE.
+	*/
+	template< class Type >
+	class InterpolatorT< Type, eINTERPOLATOR_MODE_NONE >
+		: public Interpolator< Type >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		inline InterpolatorT()
 		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\param[in]	p_dst		The end.
+		 *\param[in]	p_percent	The percentage.
+		 *\~french
+		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 *\param[in]	p_dst		L'arrivée.
+		 *\param[in]	p_percent	Le pourcentage.
+		 */
+		inline Type Interpolate( Type const & p_src, Type const & CU_PARAM_UNUSED( p_dst ), real CU_PARAM_UNUSED( p_percent ) )const
+		{
+			return p_src;
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		24/01/2016
+	\~english
+	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_LINEAR.
+	\~french
+	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_LINEAR.
+	*/
+	template< class Type >
+	class InterpolatorT< Type, eINTERPOLATOR_MODE_LINEAR >
+		: public Interpolator< Type >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		inline InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\param[in]	p_dst		The end.
+		 *\param[in]	p_percent	The percentage.
+		 *\~french
+		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 *\param[in]	p_dst		L'arrivée.
+		 *\param[in]	p_percent	Le pourcentage.
+		 */
+		inline Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const
+		{
+			Type l_return;
+
 			if ( p_percent <= 0.0 )
 			{
-				m_cur = m_src;
+				l_return = p_src;
 			}
 			else if ( p_percent >= 1.0 )
 			{
-				m_cur = m_dst;
+				l_return = p_dst;
 			}
 			else
 			{
-				m_cur = m_src.slerp( m_dst, p_percent );
+				l_return = p_src + ( ( p_dst - p_src ) * p_percent );
 			}
 
-			return m_cur;
+			return l_return;
 		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.1
+	\date		09/02/2010
+	\~english
+	\brief		Class which handles the Quaternion linear interpolations.
+	\~french
+	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
+	*/
+	template<>
+	class InterpolatorT< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
+		: public Interpolator< Castor::Quaternion >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructeur.
+		 */
+		inline InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\param[in]	p_dst		The end.
+		 *\param[in]	p_percent	The percentage.
+		 *\~french
+		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 *\param[in]	p_dst		L'arrivée.
+		 *\param[in]	p_percent	Le pourcentage.
+		 */
+		inline Castor::Quaternion Interpolate( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst, real p_percent )const
+		{
+			Castor::Quaternion l_return;
 
-	protected:
-		//!\~english The starting value.	\~french La valeur de départ.
-		Castor::Quaternion m_src;
-		//!\~english The current value.	\~french La valeur courante.
-		Castor::Quaternion m_cur;
-		//!\~english The ending value.	\~french La valeur d'arrivée.
-		Castor::Quaternion m_dst;
+			if ( p_percent <= 0.0 )
+			{
+				l_return = p_src;
+			}
+			else if ( p_percent >= 1.0 )
+			{
+				l_return = p_dst;
+			}
+			else
+			{
+				l_return = p_src.slerp( p_dst, p_percent );
+			}
+
+			return l_return;
+		}
 	};
 }
 

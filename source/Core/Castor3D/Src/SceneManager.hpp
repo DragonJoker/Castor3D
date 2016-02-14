@@ -56,6 +56,13 @@ namespace Castor3D
 		C3D_API virtual ~SceneManager();
 		/**
 		 *\~english
+		 *\brief		Updates all scenes.
+		 *\~french
+		 *\brief		Met à jout toutes les scènes.
+		 */
+		C3D_API void Update();
+		/**
+		 *\~english
 		 *\brief		Retrieves the Light factory.
 		 *\return		The factory.
 		 *\~french

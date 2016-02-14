@@ -148,7 +148,6 @@ namespace Castor
 			manip.apply( os );
 			return os;
 		}
-
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0

@@ -295,6 +295,8 @@ namespace Castor
 
 		if ( l_uiBlockEndIndex != String::npos )
 		{
+			m_context->m_functionName = cuT( "}" );
+
 			if ( l_uiBlockEndIndex == 0 )
 			{
 				// Block end at the beginning of the line, we treat it then we parse the line

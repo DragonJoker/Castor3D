@@ -59,6 +59,10 @@
 #include "xpms/viewport.xpm"
 #include "xpms/viewport_sel.xpm"
 
+#if defined( __WXGTK__ )
+#	include <X11/Xlib.h>
+#endif
+
 using namespace Castor;
 using namespace Castor3D;
 
@@ -82,6 +86,9 @@ namespace GuiCommon
 		, m_steps( p_steps + 4 )
 		, m_splashScreen( NULL )
 	{
+#if defined( __WXGTK__ )
+		XInitThreads();
+#endif
 	}
 
 	bool CastorApplication::OnInit()

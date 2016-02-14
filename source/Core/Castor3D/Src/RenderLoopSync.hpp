@@ -73,6 +73,10 @@ namespace Castor3D
 		 *\copydoc		Castor3D::RenderLoop::DoCreateMainContext
 		 */
 		C3D_API virtual ContextSPtr DoCreateMainContext( RenderWindow & p_window );
+
+	private:
+		//!\~english Tells if the render loop is active.	\~french Dit si la boucle de rendu est active.
+		bool m_active;
 	};
 }
 

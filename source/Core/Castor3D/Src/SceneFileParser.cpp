@@ -52,6 +52,50 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, m_pParser( p_pParser )
 	, eRendererType( eRENDERER_TYPE_UNDEFINED )
 {
+}
+
+void SceneFileContext::Initialise()
+{
+	pScene.reset();
+	uiPass = 0;
+	pOverlay = NULL;
+	iFace1 = -1;
+	iFace2 = -1;
+	eLightType = eLIGHT_TYPE_COUNT;
+	eMeshType = eMESH_TYPE_COUNT;
+	ePrimitiveType = eTOPOLOGY_COUNT;
+	uiUInt16 = 0;
+	uiUInt32 = 0;
+	uiUInt64 = 0;
+	bBool1 = false;
+	bBool2 = false;
+	m_pGeneralParentMaterial = NULL;
+	pViewport = NULL;
+	eRendererType = eRENDERER_TYPE_UNDEFINED;
+	eShaderObject = eSHADER_TYPE_COUNT;
+	pWindow.reset();
+	pSceneNode.reset();
+	pGeometry.reset();
+	pMesh.reset();
+	pSubmesh.reset();
+	pLight.reset();
+	pCamera.reset();
+	pMaterial.reset();
+	pTextureUnit.reset();
+	pShaderProgram.reset();
+	pFrameVariable.reset();
+	pSampler.reset();
+	strName.clear();
+	strName2.clear();
+	mapScenes.clear();
+}
+
+//****************************************************************************************************
+
+SceneFileParser::SceneFileParser( Engine & p_engine )
+	: OwnedBy< Engine >( p_engine )
+	, FileParser( eSECTION_ROOT )
+{
 	m_mapBlendFactors[cuT( "zero" )] = eBLEND_ZERO;
 	m_mapBlendFactors[cuT( "one" )] = eBLEND_ONE;
 	m_mapBlendFactors[cuT( "src_colour" )] = eBLEND_SRC_COLOUR;
@@ -207,50 +251,9 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	m_mapHorizontalAligns[cuT( "left" )] = eHALIGN_LEFT;
 	m_mapHorizontalAligns[cuT( "center" )] = eHALIGN_CENTER;
 	m_mapHorizontalAligns[cuT( "right" )] = eHALIGN_RIGHT;
-}
 
-void SceneFileContext::Initialise()
-{
-	pScene.reset();
-	uiPass = 0;
-	pOverlay = NULL;
-	iFace1 = -1;
-	iFace2 = -1;
-	eLightType = eLIGHT_TYPE_COUNT;
-	eMeshType = eMESH_TYPE_COUNT;
-	ePrimitiveType = eTOPOLOGY_COUNT;
-	uiUInt16 = 0;
-	uiUInt32 = 0;
-	uiUInt64 = 0;
-	bBool1 = false;
-	bBool2 = false;
-	m_pGeneralParentMaterial = NULL;
-	pViewport = NULL;
-	eRendererType = eRENDERER_TYPE_UNDEFINED;
-	eShaderObject = eSHADER_TYPE_COUNT;
-	pWindow.reset();
-	pSceneNode.reset();
-	pGeometry.reset();
-	pMesh.reset();
-	pSubmesh.reset();
-	pLight.reset();
-	pCamera.reset();
-	pMaterial.reset();
-	pTextureUnit.reset();
-	pShaderProgram.reset();
-	pFrameVariable.reset();
-	pSampler.reset();
-	strName.clear();
-	strName2.clear();
-	mapScenes.clear();
-}
-
-//****************************************************************************************************
-
-SceneFileParser::SceneFileParser( Engine & p_engine )
-	: OwnedBy< Engine >( p_engine )
-	, FileParser( eSECTION_ROOT )
-{
+	m_mapInterpolatorModes[cuT( "none" )] = eINTERPOLATOR_MODE_NONE;
+	m_mapInterpolatorModes[cuT( "linear" )] = eINTERPOLATOR_MODE_LINEAR;
 }
 
 SceneFileParser::~SceneFileParser()
@@ -332,14 +335,14 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_RENDER_TARGET, cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "}" ), Parser_RenderTargetEnd );
 
-	AddParser( eSECTION_SAMPLER, cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapInterpolationModes ) } );
-	AddParser( eSECTION_SAMPLER, cuT( "mag_filter" ), Parser_SamplerMagFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapInterpolationModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "min_filter" ), Parser_SamplerMinFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolationModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "mag_filter" ), Parser_SamplerMagFilter, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolationModes ) } );
 	AddParser( eSECTION_SAMPLER, cuT( "min_lod" ), Parser_SamplerMinLod, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "max_lod" ), Parser_SamplerMaxLod, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "lod_bias" ), Parser_SamplerLodBias, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_SAMPLER, cuT( "u_wrap_mode" ), Parser_SamplerUWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapWrappingModes ) } );
-	AddParser( eSECTION_SAMPLER, cuT( "v_wrap_mode" ), Parser_SamplerVWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapWrappingModes ) } );
-	AddParser( eSECTION_SAMPLER, cuT( "w_wrap_mode" ), Parser_SamplerWWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapWrappingModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "u_wrap_mode" ), Parser_SamplerUWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapWrappingModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "v_wrap_mode" ), Parser_SamplerVWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapWrappingModes ) } );
+	AddParser( eSECTION_SAMPLER, cuT( "w_wrap_mode" ), Parser_SamplerWWrapMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapWrappingModes ) } );
 	AddParser( eSECTION_SAMPLER, cuT( "border_colour" ), Parser_SamplerBorderColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_SAMPLER, cuT( "max_anisotropy" ), Parser_SamplerMaxAnisotropy, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 
@@ -359,7 +362,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SCENE, cuT( "text_overlay" ), Parser_SceneTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapLightTypes ) } );
+	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapLightTypes ) } );
 	AddParser( eSECTION_LIGHT, cuT( "colour" ), Parser_LightColour, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 	AddParser( eSECTION_LIGHT, cuT( "intensity" ), Parser_LightIntensity, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 	AddParser( eSECTION_LIGHT, cuT( "attenuation" ), Parser_LightAttenuation, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
@@ -381,7 +384,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_OBJECT_MATERIALS, cuT( "}" ), Parser_ObjectMaterialsEnd );
 
 	AddParser( eSECTION_MESH, cuT( "type" ), Parser_MeshType, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
-	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapNormalModes ) } );
+	AddParser( eSECTION_MESH, cuT( "normals" ), Parser_MeshNormals, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapNormalModes ) } );
 	AddParser( eSECTION_MESH, cuT( "submesh" ), Parser_MeshSubmesh );
 	AddParser( eSECTION_MESH, cuT( "import" ), Parser_MeshImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_MESH, cuT( "division" ), Parser_MeshDivide, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_UINT8 >() } );
@@ -409,19 +412,19 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_PASS, cuT( "shininess" ), Parser_PassShininess, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_PASS, cuT( "alpha" ), Parser_PassAlpha, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_PASS, cuT( "two_sided" ), Parser_PassDoubleFace, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
-	AddParser( eSECTION_PASS, cuT( "blend_func" ), Parser_PassBlendFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendFactors ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendFactors ) } );
+	AddParser( eSECTION_PASS, cuT( "blend_func" ), Parser_PassBlendFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendFactors ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendFactors ) } );
 	AddParser( eSECTION_PASS, cuT( "texture_unit" ), Parser_PassTextureUnit );
 	AddParser( eSECTION_PASS, cuT( "gl_shader_program" ), Parser_PassGlShader );
-	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendModes ) } );
-	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBlendModes ) } );
+	AddParser( eSECTION_PASS, cuT( "alpha_blend_mode" ), Parser_PassAlphaBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendModes ) } );
+	AddParser( eSECTION_PASS, cuT( "colour_blend_mode" ), Parser_PassColourBlendMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBlendModes ) } );
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "map_type" ), Parser_UnitMapType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapMapModes ) } );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapAlphaFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureRgbFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ) } );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureAlphaFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureArguments ) } );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextureChannels ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "map_type" ), Parser_UnitMapType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapMapModes ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapAlphaFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureRgbFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureAlphaFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureChannels ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "sampler" ), Parser_UnitSampler, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "colour" ), Parser_UnitBlendColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 
@@ -433,17 +436,17 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_GLSL_SHADER, cuT( "constants_buffer" ), Parser_ConstantsBuffer, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "}" ), Parser_ShaderEnd );
 
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "file" ), Parser_ShaderProgramFile, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapModels ), MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "file" ), Parser_ShaderProgramFile, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapModels ), MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "sampler" ), Parser_ShaderProgramSampler, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "input_type" ), Parser_GeometryInputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapPrimitiveTypes ) } );
-	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_type" ), Parser_GeometryOutputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapPrimitiveOutputTypes ) } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "input_type" ), Parser_GeometryInputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapPrimitiveTypes ) } );
+	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_type" ), Parser_GeometryOutputType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapPrimitiveOutputTypes ) } );
 	AddParser( eSECTION_SHADER_PROGRAM, cuT( "output_vtx_count" ), Parser_GeometryOutputVtxCount, { MakeParameter< ePARAMETER_TYPE_UINT8 >() } );
 
-	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, { MakeParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >( l_pContext->m_mapShaderTypes ) } );
+	AddParser( eSECTION_SHADER_UBO, cuT( "shaders" ), Parser_ShaderUboShaders, { MakeParameter< ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT >( m_mapShaderTypes ) } );
 	AddParser( eSECTION_SHADER_UBO, cuT( "variable" ), Parser_ShaderUboVariable, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "count" ), Parser_ShaderVariableCount, { MakeParameter< ePARAMETER_TYPE_UINT32 >() } );
-	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapVariableTypes ) } );
+	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "type" ), Parser_ShaderVariableType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapVariableTypes ) } );
 	AddParser( eSECTION_SHADER_UBO_VARIABLE, cuT( "value" ), Parser_ShaderVariableValue, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 
 	AddParser( eSECTION_FONT, cuT( "file" ), Parser_FontFile, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
@@ -473,7 +476,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_material" ), Parser_BorderPanelOverlayMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_size" ), Parser_BorderPanelOverlaySizes, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
 	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "pxl_border_size" ), Parser_BorderPanelOverlayPixelSizes, { MakeParameter< ePARAMETER_TYPE_RECTANGLE >() } );
-	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_position" ), Parser_BorderPanelOverlayPosition, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapBorderPositions ) } );
+	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_position" ), Parser_BorderPanelOverlayPosition, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapBorderPositions ) } );
 	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "center_uv" ), Parser_BorderPanelOverlayCenterUvs, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
 	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_inner_uv" ), Parser_BorderPanelOverlayInnerUvs, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
 	AddParser( eSECTION_BORDER_PANEL_OVERLAY, cuT( "border_outer_uv" ), Parser_BorderPanelOverlayOuterUvs, { MakeParameter< ePARAMETER_TYPE_POINT4D >() } );
@@ -488,17 +491,17 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_overlay" ), Parser_OverlayTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "font" ), Parser_TextOverlayFont, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text" ), Parser_TextOverlayText, { MakeParameter< ePARAMETER_TYPE_TEXT >() } );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_wrapping" ), Parser_TextOverlayTextWrapping, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapTextWrappingModes ) } );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "vertical_align" ), Parser_TextOverlayVerticalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapVerticalAligns ) } );
-	AddParser( eSECTION_TEXT_OVERLAY, cuT( "horizontal_align" ), Parser_TextOverlayHorizontalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapHorizontalAligns ) } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_wrapping" ), Parser_TextOverlayTextWrapping, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextWrappingModes ) } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "vertical_align" ), Parser_TextOverlayVerticalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapVerticalAligns ) } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "horizontal_align" ), Parser_TextOverlayHorizontalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapHorizontalAligns ) } );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "}" ), Parser_OverlayEnd );
 
 	AddParser( eSECTION_CAMERA, cuT( "parent" ), Parser_CameraParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_CAMERA, cuT( "viewport" ), Parser_CameraViewport );
-	AddParser( eSECTION_CAMERA, cuT( "primitive" ), Parser_CameraPrimitive, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapPrimitiveTypes ) } );
+	AddParser( eSECTION_CAMERA, cuT( "primitive" ), Parser_CameraPrimitive, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapPrimitiveTypes ) } );
 	AddParser( eSECTION_CAMERA, cuT( "}" ), Parser_CameraEnd );
 
-	AddParser( eSECTION_VIEWPORT, cuT( "type" ), Parser_ViewportType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( l_pContext->m_mapViewportModes ) } );
+	AddParser( eSECTION_VIEWPORT, cuT( "type" ), Parser_ViewportType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapViewportModes ) } );
 	AddParser( eSECTION_VIEWPORT, cuT( "left" ), Parser_ViewportLeft, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_VIEWPORT, cuT( "right" ), Parser_ViewportRight, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_VIEWPORT, cuT( "top" ), Parser_ViewportTop, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
@@ -517,9 +520,21 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_BILLBOARD_LIST, cuT( "pos" ), Parser_BillboardPoint, { MakeParameter< ePARAMETER_TYPE_POINT3F >() } );
 
-	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_GroupAnimatedObject, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_GroupAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
-	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_GroupStartAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ANIMGROUP, cuT( "animated_object" ), Parser_AnimatedObjectGroupAnimatedObject, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ANIMGROUP, cuT( "animation" ), Parser_AnimatedObjectGroupAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ANIMGROUP, cuT( "start_animation" ), Parser_AnimatedObjectGroupAnimationStart, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ANIMGROUP, cuT( "}" ), Parser_AnimatedObjectGroupEnd );
+
+	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "animation" ), Parser_AnimatedObjectAnimation, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_ANIMATED_OBJECT, cuT( "}" ), Parser_AnimatedObjectEnd );
+
+	AddParser( eSECTION_ANIMATION, cuT( "looped" ), Parser_AnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
+	AddParser( eSECTION_ANIMATION, cuT( "scale" ), Parser_AnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
+	AddParser( eSECTION_ANIMATION, cuT( "scales_interpolation" ), Parser_AnimationScalesInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
+	AddParser( eSECTION_ANIMATION, cuT( "translates_interpolation" ), Parser_AnimationTranslatesInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
+	AddParser( eSECTION_ANIMATION, cuT( "rotates_interpolation" ), Parser_AnimationRotatesInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
+	AddParser( eSECTION_ANIMATION, cuT( "start" ), Parser_AnimationStart );
+	AddParser( eSECTION_ANIMATION, cuT( "}" ), Parser_AnimationEnd );
 
 	for ( auto && l_it : GetEngine()->GetAdditionalParsers() )
 	{
@@ -675,6 +690,14 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 		l_return = cuT( "animated_object_group" );
 		break;
 
+	case eSECTION_ANIMATED_OBJECT:
+		l_return = cuT( "animated_object" );
+		break;
+
+	case eSECTION_ANIMATION:
+		l_return = cuT( "animation" );
+		break;
+
 	default:
 	{
 		for ( auto const & l_sections : GetEngine()->GetAdditionalSections() )
@@ -692,7 +715,7 @@ String SceneFileParser::DoGetSectionName( uint32_t p_section )
 
 		if ( l_return.empty() )
 		{
-			assert( false );
+			FAILURE( "Section not found" );
 		}
 	}
 	break;

@@ -56,7 +56,7 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const bool CASTOR3D_THREADED = false;
+		static const bool CASTOR3D_THREADED = true;
 #if defined( NDEBUG )
 		static const int CASTOR_WANTED_FPS = 60;
 #else
@@ -506,7 +506,7 @@ namespace CastorViewer
 	}
 
 	BEGIN_EVENT_TABLE( MainFrame, wxFrame )
-		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnTimer )
+		EVT_TIMER( eID_RENDER_TIMER, MainFrame::OnRenderTimer )
 		EVT_TIMER( eID_MSGLOG_TIMER, MainFrame::OnTimer )
 		EVT_TIMER( eID_ERRLOG_TIMER, MainFrame::OnTimer )
 		EVT_PAINT( MainFrame::OnPaint )
@@ -531,34 +531,35 @@ namespace CastorViewer
 		p_event.Skip();
 	}
 
-	void MainFrame::OnTimer( wxTimerEvent & p_event )
+	void MainFrame::OnRenderTimer( wxTimerEvent & p_event )
 	{
-		if ( p_event.GetId() == eID_RENDER_TIMER )
+		if ( wxGetApp().GetCastor() && !wxGetApp().GetCastor()->IsCleaned() )
 		{
-			if ( wxGetApp().GetCastor() && !wxGetApp().GetCastor()->IsCleaned() )
+			if ( m_pRenderPanel && m_recorder.IsRecording() && m_recorder.UpdateTime() )
 			{
-				if ( m_pRenderPanel && m_recorder.IsRecording() &&  m_recorder.UpdateTime() )
-				{
-					m_pRenderPanel->GetRenderWindow()->SaveFrame();
-					wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+				m_pRenderPanel->GetRenderWindow()->SaveFrame();
+				wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
 
-					try
-					{
-						m_recorder.RecordFrame( m_pRenderPanel->GetRenderWindow()->GetSavedFrame() );
-					}
-					catch ( std::exception & p_exc )
-					{
-						DoStopRecord();
-						wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
-					}
-				}
-				else
+				try
 				{
-					wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+					m_recorder.RecordFrame( m_pRenderPanel->GetRenderWindow()->GetSavedFrame() );
+				}
+				catch ( std::exception & p_exc )
+				{
+					DoStopRecord();
+					wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
 				}
 			}
+			else
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+			}
 		}
-		else if ( p_event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
+	}
+
+	void MainFrame::OnTimer( wxTimerEvent & p_event )
+	{
+		if ( p_event.GetId() == eID_MSGLOG_TIMER && m_messageLog )
 		{
 			wxArrayString l_flush;
 			{
@@ -637,9 +638,11 @@ namespace CastorViewer
 
 		if ( wxGetApp().GetCastor() )
 		{
-#if CASTOR3D_THREADED
-			wxGetApp().GetCastor()->EndRendering();
-#endif
+			if ( CASTOR3D_THREADED )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().EndRendering();
+			}
+
 			wxGetApp().GetCastor()->Cleanup();
 		}
 

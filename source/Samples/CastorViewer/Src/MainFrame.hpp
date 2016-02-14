@@ -54,6 +54,7 @@ namespace CastorViewer
 
 	private:
 		DECLARE_EVENT_TABLE()
+		void OnRenderTimer( wxTimerEvent  & p_event );
 		void OnTimer( wxTimerEvent  & p_event );
 		void OnPaint( wxPaintEvent  & p_event );
 		void OnSize( wxSizeEvent  & p_event );

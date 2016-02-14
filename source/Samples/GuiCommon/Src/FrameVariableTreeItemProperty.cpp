@@ -158,27 +158,27 @@ namespace GuiCommon
 				break;
 
 			case eFRAME_VARIABLE_TYPE_MAT2X2F:
-				l_return = new FloatMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, std::static_pointer_cast< Matrix2x2fFrameVariable >( p_variable )->GetValue() );
+				l_return = new FloatMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2f{ std::static_pointer_cast< Matrix2x2fFrameVariable >( p_variable )->GetValue() } );
 				break;
 
 			case eFRAME_VARIABLE_TYPE_MAT3X3F:
-				l_return = new FloatMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, std::static_pointer_cast< Matrix3x3fFrameVariable >( p_variable )->GetValue() );
+				l_return = new FloatMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3f{ std::static_pointer_cast< Matrix3x3fFrameVariable >( p_variable )->GetValue() } );
 				break;
 
 			case eFRAME_VARIABLE_TYPE_MAT4X4F:
-				l_return = new FloatMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, std::static_pointer_cast< Matrix4x4fFrameVariable >( p_variable )->GetValue() );
+				l_return = new FloatMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4f{ std::static_pointer_cast< Matrix4x4fFrameVariable >( p_variable )->GetValue() } );
 				break;
 
 			case eFRAME_VARIABLE_TYPE_MAT2X2D:
-				l_return = new DoubleMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, std::static_pointer_cast< Matrix2x2dFrameVariable >( p_variable )->GetValue() );
+				l_return = new DoubleMatrixProperty< 2 >( GC_POINT_12, GC_POINT_12, p_name, p_name, Matrix2x2d{ std::static_pointer_cast< Matrix2x2dFrameVariable >( p_variable )->GetValue() } );
 				break;
 
 			case eFRAME_VARIABLE_TYPE_MAT3X3D:
-				l_return = new DoubleMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, std::static_pointer_cast< Matrix3x3dFrameVariable >( p_variable )->GetValue() );
+				l_return = new DoubleMatrixProperty< 3 >( GC_POINT_123, GC_POINT_123, p_name, p_name, Matrix3x3d{ std::static_pointer_cast< Matrix3x3dFrameVariable >( p_variable )->GetValue() } );
 				break;
 
 			case eFRAME_VARIABLE_TYPE_MAT4X4D:
-				l_return = new DoubleMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, std::static_pointer_cast< Matrix4x4dFrameVariable >( p_variable )->GetValue() );
+				l_return = new DoubleMatrixProperty< 4 >( GC_POINT_1234, GC_POINT_1234, p_name, p_name, Matrix4x4d{ std::static_pointer_cast< Matrix4x4dFrameVariable >( p_variable )->GetValue() } );
 				break;
 			}
 

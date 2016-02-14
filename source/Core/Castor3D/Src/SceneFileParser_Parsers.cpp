@@ -2,6 +2,7 @@
 
 #include "AnimatedObjectGroupManager.hpp"
 #include "AnimatedObject.hpp"
+#include "Animation.hpp"
 #include "BillboardManager.hpp"
 #include "BlendStateManager.hpp"
 #include "BorderPanelOverlay.hpp"
@@ -871,7 +872,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneAnimatedObjectGroup )
 
 	if ( l_pContext->pScene )
 	{
-		l_pContext->pGroup = l_pContext->pScene->GetAnimatedObjectGroupManager().Create( l_name );
+		l_pContext->pAnimGroup = l_pContext->pScene->GetAnimatedObjectGroupManager().Create( l_name );
 	}
 	else
 	{
@@ -3336,83 +3337,236 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_BillboardPoint )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimatedObject )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimatedObject )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
 	p_params[0]->Get( l_name );
 
-	if ( l_pContext->pScene )
+	if ( l_pContext->pAnimGroup )
 	{
-		if ( l_pContext->pGroup )
-		{
-			GeometrySPtr l_geometry = l_pContext->pScene->GetGeometryManager().Find( l_name );
+		GeometrySPtr l_geometry = l_pContext->pScene->GetGeometryManager().Find( l_name );
 
-			if ( l_geometry )
-			{
-				l_pContext->pGroup->AddObject( l_geometry );
-			}
-			else
-			{
-				PARSING_ERROR( cuT( "No geometry with name " ) + l_name );
-			}
+		if ( l_geometry )
+		{
+			l_pContext->pAnimObject = l_pContext->pAnimGroup->AddObject( l_geometry );
 		}
 		else
 		{
-			PARSING_ERROR( cuT( "Animated object group not initialised" ) );
+			PARSING_ERROR( cuT( "No geometry with name " ) + l_name );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "Scene not initialised" ) );
+		PARSING_ERROR( cuT( "No animated object group not initialised" ) );
 	}
 }
-END_ATTRIBUTE()
+END_ATTRIBUTE_PUSH( eSECTION_ANIMATED_OBJECT )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupAnimation )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimation )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	String l_name;
 	p_params[0]->Get( l_name );
 
-	if ( l_pContext->pGroup )
+	if ( l_pContext->pAnimGroup )
 	{
-		l_pContext->pGroup->AddAnimation( l_name );
+		l_pContext->pAnimGroup->AddAnimation( l_name );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animated object group initialised" ) );
+	}
+}
+END_ATTRIBUTE()
 
-		if ( p_params.size() > 1 )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupAnimationStart )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	String l_name;
+	p_params[0]->Get( l_name );
+
+	if ( l_pContext->pAnimGroup )
+	{
+		l_pContext->pAnimGroup->StartAnimation( l_name );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animated object group initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectGroupEnd )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_pContext->pAnimGroup )
+	{
+		l_pContext->pAnimGroup.reset();
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animated object group initialised" ) );
+	}
+}
+END_ATTRIBUTE_POP()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectAnimation )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	String l_name;
+	p_params[0]->Get( l_name );
+
+	if ( l_pContext->pAnimObject )
+	{
+		l_pContext->pAnimation = l_pContext->pAnimObject->GetAnimation( l_name );
+
+		if ( !l_pContext->pAnimation )
 		{
-			String l_tmp;
-			StringArray l_options = string::split( p_params[1]->Get( l_tmp ), cuT( " \t" ), 20, false );
-
-			for ( auto l_value : l_options )
-			{
-				if ( l_value == cuT( "looped" ) )
-				{
-					l_pContext->pGroup->SetAnimationLooped( l_name, true );
-				}
-			}
+			PARSING_ERROR( cuT( "No animation named [" ) + l_name + cuT( "] in object [" ) + l_pContext->pAnimObject->GetName() + cuT( "]" ) );
 		}
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "No animated object group initialised" ) );
+		PARSING_ERROR( cuT( "No animated object initialised" ) );
 	}
 }
-END_ATTRIBUTE()
+END_ATTRIBUTE_PUSH( eSECTION_ANIMATION )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_GroupStartAnimation )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimatedObjectEnd )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	String l_name;
-	p_params[0]->Get( l_name );
 
-	if ( l_pContext->pGroup )
+	if ( l_pContext->pAnimObject )
 	{
-		l_pContext->pGroup->StartAnimation( l_name );
+		l_pContext->pAnimObject.reset();
 	}
 	else
 	{
-		PARSING_ERROR( cuT( "No animated object group initialised" ) );
+		PARSING_ERROR( cuT( "No animated object initialised" ) );
+	}
+}
+END_ATTRIBUTE_POP()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationLooped )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	bool l_value;
+	p_params[0]->Get( l_value );
+
+	if ( l_pContext->pAnimation )
+	{
+		l_pContext->pAnimation->SetLooped( l_value );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animation initialised" ) );
 	}
 }
 END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScale )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	float l_value;
+	p_params[0]->Get( l_value );
+
+	if ( l_pContext->pAnimation )
+	{
+		l_pContext->pAnimation->SetScale( l_value );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animation initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScalesInterpolation )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	uint32_t l_value;
+	p_params[0]->Get( l_value );
+
+	if ( l_pContext->pAnimation )
+	{
+		l_pContext->pAnimation->SetScaleInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animation initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationRotatesInterpolation )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	uint32_t l_value;
+	p_params[0]->Get( l_value );
+
+	if ( l_pContext->pAnimation )
+	{
+		l_pContext->pAnimation->SetRotateInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animation initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationTranslatesInterpolation )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	uint32_t l_value;
+	p_params[0]->Get( l_value );
+
+	if ( l_pContext->pAnimation )
+	{
+		l_pContext->pAnimation->SetTranslateInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animation initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationStart )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_pContext->pAnimObject )
+	{
+		if ( l_pContext->pAnimation )
+		{
+			l_pContext->pAnimObject->StartAnimation( l_pContext->pAnimation->GetName() );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "No animation initialised" ) );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animated object initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationEnd )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_pContext->pAnimation )
+	{
+		l_pContext->pAnimation.reset();
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No animation initialised" ) );
+	}
+}
+END_ATTRIBUTE_POP()

@@ -212,6 +212,27 @@ namespace Castor3D
 		C3D_API AnimationObjectBaseSPtr GetObject( BoneSPtr p_bone )const;
 		/**
 		 *\~english
+		 *\return		The scaling key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
+		 */
+		C3D_API void SetScaleInterpolationMode( eINTERPOLATOR_MODE p_mode );
+		/**
+		 *\~english
+		 *\return		The rotation key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de rotation.
+		 */
+		C3D_API void SetRotateInterpolationMode( eINTERPOLATOR_MODE p_mode );
+		/**
+		 *\~english
+		 *\return		The translation key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames de translation.
+		 */
+		C3D_API void SetTranslateInterpolationMode( eINTERPOLATOR_MODE p_mode );
+		/**
+		 *\~english
 		 *\brief		Clones this animation.
 		 *\return		The clone.
 		 *\~french

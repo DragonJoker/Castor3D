@@ -643,7 +643,7 @@ namespace C3dAssimp
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumRotationKeys; ++i )
 			{
 				Quaternion l_rotate;
-				l_rotate.from_matrix( Matrix3x3r( &l_aiNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 ) );
+				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_aiNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 } } );
 				l_object->AddRotateKeyFrame( real( l_aiNodeAnim->mRotationKeys[i].mTime ) / p_ticksPerSecond, l_rotate );
 			}
 		}
