@@ -48,7 +48,7 @@ namespace GuiCommon
 
 		if ( l_group )
 		{
-			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATION + make_wxString( l_group->GetName() ) ) );
+			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_ANIMATION + make_wxString( m_name ) ) );
 			p_grid->Append( CreateProperty< wxFloatProperty >( PROPERTY_ANIMATION_SPEED, wxVariant( m_scale ), _( "The animation time scale." ) ) );
 			p_grid->Append( CreateProperty< wxBoolProperty >( PROPERTY_ANIMATION_LOOPED, wxVariant( m_looped ), _( "Sets the animation looped or not" ) ) );
 			p_grid->Append( CreateProperty( PROPERTY_ANIMATION_STATE[m_state], PROPERTY_ANIMATION_STATE[m_state], static_cast< ButtonEventMethod >( &AnimationTreeItemProperty::OnStateChange ), this, p_editor ) );

@@ -56,7 +56,7 @@ namespace CastorViewer
 {
 	namespace
 	{
-		static const bool CASTOR3D_THREADED = false;
+		static const bool CASTOR3D_THREADED = true;
 #if defined( NDEBUG )
 		static const int CASTOR_WANTED_FPS = 60;
 #else
@@ -638,9 +638,11 @@ namespace CastorViewer
 
 		if ( wxGetApp().GetCastor() )
 		{
-#if CASTOR3D_THREADED
-			wxGetApp().GetCastor()->EndRendering();
-#endif
+			if ( CASTOR3D_THREADED )
+			{
+				wxGetApp().GetCastor()->GetRenderLoop().EndRendering();
+			}
+
 			wxGetApp().GetCastor()->Cleanup();
 		}
 
