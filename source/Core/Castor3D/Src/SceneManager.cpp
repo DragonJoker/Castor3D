@@ -12,4 +12,14 @@ namespace Castor3D
 	SceneManager::~SceneManager()
 	{
 	}
+
+	void SceneManager::Update()
+	{
+		auto l_lock = make_unique_lock( *this );
+
+		for ( auto l_it : *this )
+		{
+			l_it.second->Update();
+		}
+	}
 }

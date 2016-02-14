@@ -3469,7 +3469,7 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScale )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	bool l_value;
+	float l_value;
 	p_params[0]->Get( l_value );
 
 	if ( l_pContext->pAnimation )

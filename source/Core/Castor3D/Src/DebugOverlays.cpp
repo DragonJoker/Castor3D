@@ -7,6 +7,7 @@
 #include "TextOverlay.hpp"
 
 #include <algorithm>
+#include <iomanip>
 
 using namespace Castor;
 
@@ -49,9 +50,23 @@ namespace Castor3D
 		m_debugGpuTime = GetTextOverlay( p_manager, cuT( "DebugPanel-GpuTime-Value" ) );
 		m_debugTotalTime = GetTextOverlay( p_manager, cuT( "DebugPanel-TotalTime-Value" ) );
 		m_debugAverageFps = GetTextOverlay( p_manager, cuT( "DebugPanel-AverageFPS-Value" ) );
+		m_debugAverageTime = GetTextOverlay( p_manager, cuT( "DebugPanel-AverageTime-Value" ) );
 		m_debugVertexCount = GetTextOverlay( p_manager, cuT( "DebugPanel-VertexCount-Value" ) );
 		m_debugFaceCount = GetTextOverlay( p_manager, cuT( "DebugPanel-FaceCount-Value" ) );
 		m_debugObjectCount = GetTextOverlay( p_manager, cuT( "DebugPanel-ObjectCount-Value" ) );
+		m_debugTime = GetTextOverlay( p_manager, cuT( "DebugPanel-DebugTime-Value" ) );
+		m_externTime = GetTextOverlay( p_manager, cuT( "DebugPanel-ExternalTime-Value" ) );
+
+		m_visible = m_debugCpuTime
+					&& m_debugGpuTime
+					&& m_debugTotalTime
+					&& m_debugAverageFps
+					&& m_debugAverageTime
+					&& m_debugVertexCount
+					&& m_debugFaceCount
+					&& m_debugObjectCount
+					&& m_debugTime
+					&& m_externTime;
 
 		if ( l_panel )
 		{
@@ -66,9 +81,12 @@ namespace Castor3D
 		m_debugGpuTime.reset();
 		m_debugTotalTime.reset();
 		m_debugAverageFps.reset();
+		m_debugAverageTime.reset();
 		m_debugVertexCount.reset();
 		m_debugFaceCount.reset();
 		m_debugObjectCount.reset();
+		m_debugTime.reset();
+		m_externTime.reset();
 	}
 
 	void DebugOverlays::StartFrame()
@@ -78,6 +96,7 @@ namespace Castor3D
 			m_gpuTime = 0;
 			m_cpuTime = 0;
 			m_taskTimer.TimeMs();
+			m_externalTime = m_frameTimer.TimeMs();
 		}
 	}
 
@@ -85,61 +104,29 @@ namespace Castor3D
 	{
 		if ( m_visible )
 		{
-			double l_time = m_frameTimer.TimeMs();
+			double l_time = m_frameTimer.TimeMs() + m_externalTime;
+			m_debugTimer.TimeMs();
 			m_framesTimes[m_frameIndex] = l_time;
-			TextOverlaySPtr l_txt = m_debugCpuTime.lock();
+			m_debugTotalTime->SetCaption( StringStream() << std::setprecision( 2 ) << ( l_time ) << cuT( " ms" ) );
+			m_debugCpuTime->SetCaption( StringStream() << std::setprecision( 2 ) << m_cpuTime << cuT( " ms" ) );
+			m_externTime->SetCaption( StringStream() << std::setprecision( 2 ) << m_externalTime << cuT( " ms" ) );
+			m_debugVertexCount->SetCaption( string::to_string( p_vertices ) );
+			m_debugFaceCount->SetCaption( string::to_string( p_faces ) );
+			m_debugObjectCount->SetCaption( string::to_string( p_objects ) );
 
-			if ( l_txt )
-			{
-				l_txt->SetCaption( string::to_string( int( m_cpuTime ) ) + cuT( " ms" ) );
-			}
+			l_time = m_gpuTime + GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0;
+			GetEngine()->GetRenderSystem()->ResetGpuTime();
+			m_debugGpuTime->SetCaption( StringStream() << std::setprecision( 2 ) << l_time << cuT( " ms" ) );
 
-			l_txt = m_debugGpuTime.lock();
+			l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
+			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 2 ) << 1000.0 / l_time << cuT( " frames/s" ) );
+			m_debugAverageTime->SetCaption( StringStream() << std::setprecision( 2 ) << l_time << cuT( " ms" ) );
 
-			if ( l_txt )
-			{
-				double l_time = GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0;
-				GetEngine()->GetRenderSystem()->ResetGpuTime();
-				l_txt->SetCaption( string::to_string( int( l_time ) ) + cuT( " ms" ) );
-			}
+			m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
+			l_time = m_debugTimer.TimeMs();
+			m_debugTime->SetCaption( StringStream() << std::setprecision( 2 ) << l_time << cuT( " ms" ) );
 
-			l_txt = m_debugTotalTime.lock();
-
-			if ( l_txt )
-			{
-				l_txt->SetCaption( string::to_string( int( l_time ) ) + cuT( " ms" ) );
-			}
-
-			l_txt = m_debugAverageFps.lock();
-
-			if ( l_txt )
-			{
-				double l_avgTime = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
-				l_txt->SetCaption( string::to_string( int( 1000 / l_avgTime ) ) + cuT( " frames/s" ) );
-			}
-
-			l_txt = m_debugVertexCount.lock();
-
-			if ( l_txt )
-			{
-				l_txt->SetCaption( string::to_string( p_vertices ) );
-			}
-
-			l_txt = m_debugFaceCount.lock();
-
-			if ( l_txt )
-			{
-				l_txt->SetCaption( string::to_string( p_faces ) );
-			}
-
-			l_txt = m_debugObjectCount.lock();
-
-			if ( l_txt )
-			{
-				l_txt->SetCaption( string::to_string( p_objects ) );
-			}
-
-			m_frameIndex = ++m_frameIndex % 100;
+			m_frameTimer.TimeMs();
 		}
 	}
 

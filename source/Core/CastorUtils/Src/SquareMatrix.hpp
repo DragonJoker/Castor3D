@@ -83,7 +83,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_value	La matrice est initialisée comme une Jordan avec cette valeur
 		 */
-		SquareMatrix( T const & p_value );
+		explicit SquareMatrix( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -101,7 +101,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_matrix	L'objet Matrix à déplacer
 		 */
-		SquareMatrix( SquareMatrix< T, Count > && p_matrix );
+		explicit SquareMatrix( SquareMatrix< T, Count > && p_matrix );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -111,7 +111,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à déplacer
 		 */
 		template< uint32_t _Rows >
-		SquareMatrix( SquareMatrix< T, _Rows > const & p_matrix );
+		explicit SquareMatrix( SquareMatrix< T, _Rows > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy Constructor
@@ -121,7 +121,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
 		template< typename Type >
-		SquareMatrix( SquareMatrix< Type, Count > const & p_matrix );
+		explicit SquareMatrix( SquareMatrix< Type, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy Constructor
@@ -131,7 +131,7 @@ namespace Castor
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
 		template< typename Type >
-		SquareMatrix( Matrix< Type, Count, Count > const & p_matrix );
+		explicit SquareMatrix( Matrix< Type, Count, Count > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -141,7 +141,7 @@ namespace Castor
 		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
 		 */
 		template< typename Type >
-		SquareMatrix( Type const * p_matrix );
+		explicit SquareMatrix( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Destructor

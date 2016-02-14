@@ -8,6 +8,7 @@
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
 #include "SamplerManager.hpp"
+#include "SceneManager.hpp"
 #include "TargetManager.hpp"
 #include "WindowManager.hpp"
 
@@ -105,37 +106,23 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
+		GetEngine()->GetSceneManager().Update();
 		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
 	}
 
 	void RenderLoop::DoRenderFrame()
 	{
-		try
+		if ( m_renderSystem->GetMainContext() )
 		{
-			if ( m_renderSystem->GetMainContext() )
-			{
-				uint32_t l_vertices = 0;
-				uint32_t l_faces = 0;
-				uint32_t l_objects = 0;
-				m_debugOverlays->StartFrame();
-				DoGpuStep( l_vertices, l_faces, l_objects );
-				m_debugOverlays->EndGpuTask();
-				DoCpuStep();
-				m_debugOverlays->EndCpuTask();
-				m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
-			}
-		}
-		catch ( Exception & p_exc )
-		{
-			Logger::LogError( p_exc.GetFullDescription() );
-		}
-		catch ( std::exception & p_exc )
-		{
-			Logger::LogError( p_exc.what() );
-		}
-		catch ( ... )
-		{
-			Logger::LogError( C3D_UNKNOWN_EXCEPTION );
+			uint32_t l_vertices = 0;
+			uint32_t l_faces = 0;
+			uint32_t l_objects = 0;
+			m_debugOverlays->StartFrame();
+			DoGpuStep( l_vertices, l_faces, l_objects );
+			m_debugOverlays->EndGpuTask();
+			DoCpuStep();
+			m_debugOverlays->EndCpuTask();
+			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
 		}
 	}
 

@@ -123,13 +123,55 @@ namespace Castor3D
 			 *\param[in]	p_mode	Le nouveau mode.
 			 */
 			inline void SetInterpolationMode( eINTERPOLATOR_MODE p_mode );
+			/**
+			 *\~english
+			 *\brief		Creates a key frame and adds it to the list.
+			 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
+			 *\param[in]	p_from		The starting time.
+			 *\param[in]	p_value		The key frame value.
+			 *\param[in]	p_length	The current animation length.
+			 *\return		The created key frame.
+			 *\~french
+			 *\brief		Crée une key frame et l'ajoute à la liste.
+			 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
+			 *\param[in]	p_from		L'index de temps de début.
+			 *\param[in]	p_value		La valeur de la key frame.
+			 *\param[in]	p_length	La longueur courante de l'animation.
+			 *\return		La key frame créée.
+			 */
+			inline KeyFrame< T > & AddKeyFrame( real p_from, T const & p_value, real & p_length );
+			/**
+			 *\~english
+			 *\brief		Deletes the key frame at time index p_time.
+			 *\param[in]	p_time	The time index.
+			 *\~french
+			 *\brief		Supprime la key frame à l'index de temps donné.
+			 *\param[in]	p_time	L'index de temps.
+			 */
+			inline void RemoveKeyFrame( real p_time );
+			/**
+			 *\~english
+			 *\brief		Computes the animation's value (translation, rotation or scaling) for this object.
+			 *\param[in]	p_time	The time index.
+			 *\return		The interpolated value.
+			 *\~french
+			 *\brief		Calcule la valeur (translation, rotation ou mise à l'échelle) pour l'animation de cet objet.
+			 *\param[in]	p_time	L'index de temps.
+			 *\return		La valeur interpolée.
+			 */
+			T Compute( real p_time );
 
+			//!\~english The default value when the wanted value can't be interpolated.	\~french La valeur par défaut quand la valeur voulue n'a pas pu être interpolée.
+			T m_default;
 			//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
-			KeyFrameRealMap< T > m_keyframes;
+			KeyFrameArray< T > m_keyframes;
 			//!\~english The interpolation mode.	\~french Le mode d'interpolation.
 			eINTERPOLATOR_MODE m_mode = eINTERPOLATOR_MODE_NONE;
 			//!\~english The interpolator.	\~french L'interpolateur.
 			std::unique_ptr< Interpolator< T > > m_interpolator;
+
+			typename KeyFrameArray< T >::const_iterator m_prev = m_keyframes.end();
+			typename KeyFrameArray< T >::const_iterator m_curr = m_keyframes.end();
 		};
 
 	protected:
@@ -334,7 +376,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les key frames de mise à l'échelle.
 		 */
-		inline Point3rKeyFrameRealMap const & GetScales()const
+		inline Point3rKeyFrameArray const & GetScales()const
 		{
 			return m_scales.m_keyframes;
 		}
@@ -344,7 +386,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les key frames de déplacement.
 		 */
-		inline Point3rKeyFrameRealMap const & GetTranslates()const
+		inline Point3rKeyFrameArray const & GetTranslates()const
 		{
 			return m_translates.m_keyframes;
 		}
@@ -354,7 +396,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		Les key frames de rotation.
 		 */
-		inline QuaternionKeyFrameRealMap const & GetRotates()const
+		inline QuaternionKeyFrameArray const & GetRotates()const
 		{
 			return m_rotates.m_keyframes;
 		}
@@ -466,90 +508,6 @@ namespace Castor3D
 		 *\return		Le clône.
 		 */
 		C3D_API virtual AnimationObjectBaseSPtr DoClone( Animation & p_animation ) = 0;
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Computes the animation's matrix transformations for this object.
-		 *\param[in]	p_time	The time index.
-		 *\return		The transformation matrix.
-		 *\~french
-		 *\brief		Calcule la matrice de transformation pour l'animation de cet objet.
-		 *\param[in]	p_time	L'index de temps.
-		 *\return		La matrice de transformation.
-		 */
-		Castor::Matrix4x4r DoComputeTransform( real p_time );
-		/**
-		 *\~english
-		 *\brief		Computes the animation's scaling for this object.
-		 *\param[in]	p_time	The time index.
-		 *\return		The scaling.
-		 *\~french
-		 *\brief		Calcule la mise à l'échelle pour l'animation de cet objet.
-		 *\param[in]	p_time	L'index de temps.
-		 *\return		La mise à l'échelle.
-		 */
-		Castor::Point3r DoComputeScaling( real p_time );
-		/**
-		 *\~english
-		 *\brief		Computes the animation's tranlation for this object.
-		 *\param[in]	p_time	The time index.
-		 *\return		The tranlation.
-		 *\~french
-		 *\brief		Calcule la tranlation pour l'animation de cet objet.
-		 *\param[in]	p_time	L'index de temps.
-		 *\return		La tranlation.
-		 */
-		Castor::Point3r DoComputeTranslation( real p_time );
-		/**
-		 *\~english
-		 *\brief		Computes the animation's rotation for this object.
-		 *\param[in]	p_time	The time index.
-		 *\return		The rotation.
-		 *\~french
-		 *\brief		Calcule la rotation pour l'animation de cet objet.
-		 *\param[in]	p_time	L'index de temps.
-		 *\return		La rotation.
-		 */
-		Castor::Quaternion DoComputeRotation( real p_time );
-		/**
-		 *\~english
-		 *\brief		Creates a key frame and adds it to the list.
-		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
-		 *\param[in]	p_from	The starting time.
-		 *\~french
-		 *\brief		Crée une key frame et l'ajoute à la liste.
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		 *\param[in]	p_from	L'index de temps de début.
-		 */
-		template< class KeyFrameType, typename T >
-		KeyFrameType & DoAddKeyFrame( real p_from, std::map< real, KeyFrameType > & p_map, T const & p_value );
-		/**
-		 *\~english
-		 *\brief		Deletes the key frame at time index p_time.
-		 *\param[in]	p_time	The time index.
-		 *\~french
-		 *\brief		Supprime la key frame à l'index de temps donné.
-		 *\param[in]	p_time	L'index de temps.
-		 */
-		template< class KeyFrameType >
-		void DoRemoveKeyFrame( real p_time, std::map< real, KeyFrameType > & p_map );
-		/**
-		 *\~english
-		 *\brief		Computes the animation's value (translation, rotation or scaling) for this object.
-		 *\param[in]	p_time		The time index.
-		 *\param[in]	p_keyframes	The keyframes.
-		 *\param[in]	p_default	Default value
-		 *\return		The value.
-		 *\~french
-		 *\brief		Calcule la valeur (translation, rotation ou mise à l'échelle) pour l'animation de cet objet.
-		 *\param[in]	p_time	L'index de temps.
-		 *\param[in]	p_keyframes	
-		 *\param[in]	p_default	
-		 *\return		La valeur.
-		 */
-		template< typename T >
-		T DoCompute( real p_time, KeyFrameInterpolation< T > const & p_keyframes, T const & p_default );
 
 	protected:
 		//!\~english The moving thing type.	\~french Le type du machin mouvant.

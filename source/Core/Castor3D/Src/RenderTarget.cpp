@@ -439,8 +439,6 @@ namespace Castor3D
 
 		if ( l_scene )
 		{
-			l_scene->Update();
-
 			if ( m_initialised )
 			{
 				if ( m_bStereo && m_rIntraOcularDistance > 0 && GetEngine()->GetRenderSystem()->IsStereoAvailable() )

@@ -94,6 +94,8 @@ namespace Castor3D
 	using QuaternionInterpolator = Interpolator< Castor::Quaternion >;
 	template< typename T >
 	using KeyFrameRealMap = std::map< real, KeyFrame< T > >;
+	template< typename T >
+	using KeyFrameArray = std::vector< KeyFrame< T > >;
 
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimationObjectBase );
@@ -111,9 +113,9 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! Animation pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
-	//! KeyFrame pointer map, sorted by time index
+	//! KeyFrame map, sorted by time index
 	DECLARE_MAP( real, Point3rKeyFrame, Point3rKeyFrameReal );
-	//! KeyFrame pointer map, sorted by time index
+	//! KeyFrame map, sorted by time index
 	DECLARE_MAP( real, QuaternionKeyFrame, QuaternionKeyFrameReal );
 	//! AnimatedObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
@@ -127,6 +129,10 @@ namespace Castor3D
 	DECLARE_VECTOR( AnimationObjectBaseSPtr, AnimationObjectPtr );
 	//! BonedVertex pointer array
 	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
+	//! KeyFrame array
+	DECLARE_VECTOR( Point3rKeyFrame, Point3rKeyFrame );
+	//! KeyFrame array
+	DECLARE_VECTOR( QuaternionKeyFrame, QuaternionKeyFrame );
 
 	//@}
 }

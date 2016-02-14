@@ -240,6 +240,20 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Sets the overlay text
+		 *\param[in]	p_strCaption	The new value
+		 *\~french
+		 *\brief		Définit le texte de l'incrustation
+		 *\param[in]	p_strCaption	La nouvelle valeur
+		 */
+		inline void SetCaption( Castor::OutputStream const & p_caption )
+		{
+			Castor::StringStream l_ss;
+			l_ss << p_caption.rdbuf();
+			SetCaption( l_ss.str() );
+		}
+		/**
+		 *\~english
 		 *\brief		Sets text wrapping mode
 		 *\param[in]	p_mode	The new value
 		 *\~french

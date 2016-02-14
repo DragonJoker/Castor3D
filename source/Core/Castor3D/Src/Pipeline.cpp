@@ -109,7 +109,7 @@ namespace Castor3D
 
 	void Pipeline::ApplyNormal( FrameVariableBuffer & p_matrixBuffer )
 	{
-		m_mtxNormal = ( m_mtxModel * m_mtxView ).get_minor( 3, 3 ).invert().transpose();
+		m_mtxNormal = Matrix4x4r{ ( m_mtxModel * m_mtxView ).get_minor( 3, 3 ).invert().transpose() };
 		DoApplyMatrix( m_mtxNormal, MtxNormal, p_matrixBuffer );
 	}
 

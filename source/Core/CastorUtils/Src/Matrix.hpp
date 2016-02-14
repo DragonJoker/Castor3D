@@ -338,7 +338,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_value	La matrice est initialisée comme une Jordan avec cette valeur
 		 */
-		Matrix( T const & p_value );
+		explicit Matrix( T const & p_value );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -347,7 +347,7 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
 		 */
-		Matrix( T * p_matrix );
+		explicit Matrix( T * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -356,7 +356,8 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_matrix	Buffer de données à copier dans la matrice
 		 */
-		template< typename Type > Matrix( Type const * p_matrix );
+		template< typename Type >
+		explicit Matrix( Type const * p_matrix );
 		/**
 		 *\~english
 		 *\brief		Conversion Copy Constructor
@@ -365,7 +366,8 @@ namespace Castor
 		 *\brief		Constructeur par copie convertie
 		 *\param[in]	p_matrix	L'objet Matrix à copier
 		 */
-		template< typename Type > Matrix( Matrix< Type, Columns, Rows > const & p_matrix );
+		template< typename Type >
+		explicit Matrix( Matrix< Type, Columns, Rows > const & p_matrix );
 		/**
 		 *\~english
 		 *\brief		Destructor

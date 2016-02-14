@@ -29,20 +29,20 @@ namespace Castor3D
 
 		for ( auto const & l_kf : p_obj.m_scales.m_keyframes )
 		{
-			l_return = DoFillChunk( l_kf.second.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
-			l_return = DoFillChunk( l_kf.second.GetValue(), eCHUNK_TYPE_KEYFRAME_SCALE, p_chunk );
+			l_return = DoFillChunk( l_kf.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
+			l_return = DoFillChunk( l_kf.GetValue(), eCHUNK_TYPE_KEYFRAME_SCALE, p_chunk );
 		}
 
 		for ( auto const & l_kf : p_obj.m_translates.m_keyframes )
 		{
-			l_return = DoFillChunk( l_kf.second.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
-			l_return = DoFillChunk( l_kf.second.GetValue(), eCHUNK_TYPE_KEYFRAME_TRANSLATE, p_chunk );
+			l_return = DoFillChunk( l_kf.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
+			l_return = DoFillChunk( l_kf.GetValue(), eCHUNK_TYPE_KEYFRAME_TRANSLATE, p_chunk );
 		}
 
 		for ( auto const & l_kf : p_obj.m_rotates.m_keyframes )
 		{
-			l_return = DoFillChunk( l_kf.second.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
-			l_return = DoFillChunk( l_kf.second.GetValue(), eCHUNK_TYPE_KEYFRAME_ROTATE, p_chunk );
+			l_return = DoFillChunk( l_kf.GetTimeIndex(), eCHUNK_TYPE_KEYFRAME_TIME, p_chunk );
+			l_return = DoFillChunk( l_kf.GetValue(), eCHUNK_TYPE_KEYFRAME_ROTATE, p_chunk );
 		}
 
 		for ( auto const & l_moving : p_obj.m_children )
@@ -148,6 +148,7 @@ namespace Castor3D
 		m_scales.SetInterpolationMode( eINTERPOLATOR_MODE_LINEAR );
 		m_translates.SetInterpolationMode( eINTERPOLATOR_MODE_LINEAR );
 		m_rotates.SetInterpolationMode( eINTERPOLATOR_MODE_LINEAR );
+		m_scales.m_default = Point3r{ 1, 1, 1 };
 	}
 
 	AnimationObjectBase::AnimationObjectBase( AnimationObjectBase const & p_rhs )
@@ -165,7 +166,15 @@ namespace Castor3D
 
 	void AnimationObjectBase::Update( real p_time, bool p_looped, Matrix4x4r const & p_transformations )
 	{
-		m_cumulativeTransform = p_transformations * DoComputeTransform( p_time );
+		if ( HasKeyFrames() )
+		{
+			m_cumulativeTransform = p_transformations * matrix::set_transform( m_cumulativeTransform, m_translates.Compute( p_time ), m_scales.Compute( p_time ), m_rotates.Compute( p_time ) );
+		}
+		else
+		{
+			m_cumulativeTransform = p_transformations * m_nodeTransform;
+		}
+
 		DoApply();
 
 		for ( auto l_object : m_children )
@@ -176,63 +185,32 @@ namespace Castor3D
 
 	Point3rKeyFrame & AnimationObjectBase::AddScaleKeyFrame( real p_from, Point3r const & p_value )
 	{
-		return DoAddKeyFrame( p_from, m_scales.m_keyframes, p_value );
+		return m_scales.AddKeyFrame( p_from, p_value, m_length );
 	}
 
 	Point3rKeyFrame & AnimationObjectBase::AddTranslateKeyFrame( real p_from, Point3r const & p_value )
 	{
-		return DoAddKeyFrame( p_from, m_translates.m_keyframes, p_value );
+		return m_translates.AddKeyFrame( p_from, p_value, m_length );
 	}
 
 	QuaternionKeyFrame & AnimationObjectBase::AddRotateKeyFrame( real p_from, Quaternion const & p_value )
 	{
-		return DoAddKeyFrame( p_from, m_rotates.m_keyframes, p_value );
+		return m_rotates.AddKeyFrame( p_from, p_value, m_length );
 	}
 
 	void AnimationObjectBase::RemoveScaleKeyFrame( real p_time )
 	{
-		DoRemoveKeyFrame( p_time, m_scales.m_keyframes );
+		m_scales.RemoveKeyFrame( p_time );
 	}
 
 	void AnimationObjectBase::RemoveTranslateKeyFrame( real p_time )
 	{
-		DoRemoveKeyFrame( p_time, m_translates.m_keyframes );
+		m_translates.RemoveKeyFrame( p_time );
 	}
 
 	void AnimationObjectBase::RemoveRotateKeyFrame( real p_time )
 	{
-		DoRemoveKeyFrame( p_time, m_rotates.m_keyframes );
-	}
-
-	Matrix4x4r AnimationObjectBase::DoComputeTransform( real p_time )
-	{
-		Matrix4x4r l_return;
-
-		if ( HasKeyFrames() )
-		{
-			matrix::set_transform( l_return, DoComputeTranslation( p_time ), DoComputeScaling( p_time ), DoComputeRotation( p_time ) );
-		}
-		else
-		{
-			l_return = m_nodeTransform;
-		}
-
-		return l_return;
-	}
-
-	Point3r AnimationObjectBase::DoComputeScaling( real p_time )
-	{
-		return DoCompute( p_time, m_scales, Point3r( 1, 1, 1 ) );
-	}
-
-	Point3r AnimationObjectBase::DoComputeTranslation( real p_time )
-	{
-		return DoCompute( p_time, m_translates, Point3r() );
-	}
-
-	Quaternion AnimationObjectBase::DoComputeRotation( real p_time )
-	{
-		return DoCompute( p_time, m_rotates, Quaternion() );
+		m_rotates.RemoveKeyFrame( p_time );
 	}
 
 	AnimationObjectBaseSPtr AnimationObjectBase::Clone( Animation & p_animation )

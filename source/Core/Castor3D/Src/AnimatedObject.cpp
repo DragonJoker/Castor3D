@@ -52,7 +52,7 @@ namespace Castor3D
 					}
 				}
 
-				p_variable.SetValue( l_final.const_ptr(), i++ );
+				p_variable.SetValue( l_final, i++ );
 			}
 		}
 	}

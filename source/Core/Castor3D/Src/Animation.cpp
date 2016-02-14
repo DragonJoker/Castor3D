@@ -198,11 +198,15 @@ namespace Castor3D
 						m_currentTime = fmod( m_currentTime, m_length );
 					}
 				}
+				else if ( m_currentTime < 0 && m_looped )
+				{
+					m_currentTime = fmod( m_length + m_currentTime, m_length );
+				}
 			}
 
 			for ( auto l_moving : m_arrayMoving )
 			{
-				l_moving->Update( m_currentTime, m_looped, Matrix4x4r().get_identity() );
+				l_moving->Update( m_currentTime, m_looped, Matrix4x4r{ 1 } );
 			}
 		}
 	}
