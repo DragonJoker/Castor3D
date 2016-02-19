@@ -19,7 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_PARSER_PARAMETER_TYPE_EXCEPTION_H___
 
 #include "Exception.hpp"
-#include "ParserParameterBase.hpp"
+
+#include "ParserParameterHelpers.hpp"
 
 namespace Castor
 {
@@ -32,6 +33,7 @@ namespace Castor
 	\~french
 	\brief		Exception lancée lorsque l'utilisateur se trompe de type de paramètre
 	*/
+	template< ePARAMETER_TYPE GivenType >
 	class ParserParameterTypeException
 		: public Castor::Exception
 	{
@@ -39,14 +41,16 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_givenType		The type asked by the user.
 		 *\param[in]	p_expectedType	The real parameter type.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_givenType		Le type demandé par l'utilisateur.
 		 *\param[in]	p_expectedType	Le type réel du paramètre.
 		 */
-		CU_API ParserParameterTypeException( ePARAMETER_TYPE p_givenType, ePARAMETER_TYPE p_expectedType );
+		inline ParserParameterTypeException( ePARAMETER_TYPE p_expectedType )
+			: Castor::Exception( "", "", "", 0 )
+		{
+			m_description = "Wrong parameter type in parser: user gave " + string::string_cast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::string_cast< xchar >( GetTypeName( p_expectedType ) );
+		}
 	};
 }
 

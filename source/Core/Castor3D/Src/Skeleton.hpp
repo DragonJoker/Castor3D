@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 
 #include "Animable.hpp"
+#include "Bone.hpp"
 
 namespace Castor3D
 {
@@ -53,68 +54,42 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a bone to the skeleton
-		 *\param[in]	p_bone		The bone
+		 *\param[in]	p_bone	The bone.
 		 *\~french
 		 *\brief		Ajoute un os au squelette
-		 *\param[in]	p_bone		L'os
+		 *\param[in]	p_bone	L'os.
 		 */
 		C3D_API void AddBone( BoneSPtr p_bone );
 		/**
 		 *\~english
-		 *\brief		Adds an animation to the skeleton
-		 *\param[in]	p_animation	The animation
+		 *\brief		Adds a bone to another bone's children
+		 *\param[in]	p_bone		The bone.
+		 *\param[in]	p_parent	The parent bone.
 		 *\~french
-		 *\brief		Ajoute une animation au squelette
-		 *\param[in]	p_animation	L'animation
+		 *\brief		Ajoute un os aux enfants d'un autre os.
+		 *\param[in]	p_bone		L'os.
+		 *\param[in]	p_parent	L'os parent.
 		 */
-		C3D_API void AddAnimation( AnimationSPtr p_animation );
+		C3D_API void SetBoneParent( BoneSPtr p_bone, BoneSPtr p_parent );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first bone
-		 *\return		The value
+		 *\brief		Traverses bone hierarchy and applies given function to each bone.
+		 *\param[in]	p_function	The function to apply.
 		 *\~french
-		 *\brief		Récupère un itérateur sur le premier os
-		 *\return		La valeur
+		 *\brief		Traverse la hiérachie du skelette et applique la fonction à chaque os.
+		 *\param[in]	p_function	La fonction à appliquer.
 		 */
-		inline BonePtrArrayIt begin()
+		template< typename FuncT >
+		inline void TraverseHierarchy( FuncT p_function )
 		{
-			return m_bones.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first bone
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier os
-		 *\return		La valeur
-		 */
-		inline BonePtrArrayConstIt begin()const
-		{
-			return m_bones.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the bones array
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau d'os
-		 *\return		La valeur
-		 */
-		inline BonePtrArrayIt end()
-		{
-			return m_bones.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the bones array
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau d'os
-		 *\return		La valeur
-		 */
-		inline BonePtrArrayConstIt end()const
-		{
-			return m_bones.end();
+			for ( auto l_bone : m_bones )
+			{
+				if ( !l_bone->GetParent() )
+				{
+					p_function( l_bone );
+					l_bone->TraverseHierarchy( p_function );
+				}
+			}
 		}
 		/**
 		 *\~english
@@ -140,12 +115,58 @@ namespace Castor3D
 		{
 			m_globalInverse = p_transform;
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the first bone
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère un itérateur sur le premier os
+		 *\return		La valeur
+		 */
+		inline decltype( auto ) begin()
+		{
+			return m_bones.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the first bone
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère un itérateur sur le premier os
+		 *\return		La valeur
+		 */
+		inline decltype( auto ) begin()const
+		{
+			return m_bones.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the bones array
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère un itérateur sur la fin du tableau d'os
+		 *\return		La valeur
+		 */
+		inline decltype( auto ) end()
+		{
+			return m_bones.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the bones array
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère un itérateur sur la fin du tableau d'os
+		 *\return		La valeur
+		 */
+		inline decltype( auto ) end()const
+		{
+			return m_bones.end();
+		}
 
 	private:
 		//!\~english The bones	\~french Les bones
 		BonePtrArray m_bones;
-		//!\~english	This skeleton's animations	\~french	Les animations de ce squelette
-		AnimationPtrStrMap m_animations;
 		//!\~english	The global skeleton transform	\~french	La transformation globale du squelette
 		Castor::Matrix4x4r m_globalInverse;
 	};

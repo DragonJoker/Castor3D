@@ -41,10 +41,6 @@ namespace Castor
 	funcname( Castor::FileParser * p_parser, Castor::ParserParameterArray const & p_params )
 
 #define DO_WRITE_PARSER_END( retval )\
-		catch( Castor::ParserParameterTypeException p_exc )\
-		{\
-			PARSING_ERROR( Castor::string::string_cast< xchar >( p_exc.what() ) );\
-		}\
 		l_return = retval;
 
 	//!\~english Define to ease the declaration of a parser	\~french Un define pour faciliter la déclaration d'un analyseur
@@ -56,8 +52,7 @@ namespace Castor
 	bool nmspc::DO_WRITE_PARSER_NAME( funcname )\
 	{\
 		bool l_return = false;\
-		Castor::FileParserContextSPtr p_context = p_parser->GetContext();\
-		try\
+		Castor::FileParserContextSPtr p_context = p_parser->GetContext();
  
 	//!\~english Define to ease the implementation of a parser	\~french Un define pour faciliter l'implémentation d'un analyseur
 #define END_ATTRIBUTE_PUSH( section )\

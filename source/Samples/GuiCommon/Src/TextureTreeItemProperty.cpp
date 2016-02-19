@@ -25,6 +25,7 @@ namespace GuiCommon
 		static wxString PROPERTY_CHANNEL_HEIGHT = _( "Height" );
 		static wxString PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
 		static wxString PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
+		static wxString PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
 	}
 
 	TextureTreeItemProperty::TextureTreeItemProperty( bool p_editable, TextureUnitSPtr p_texture )
@@ -42,6 +43,7 @@ namespace GuiCommon
 		PROPERTY_CHANNEL_HEIGHT = _( "Height" );
 		PROPERTY_CHANNEL_AMBIENT = _( "Ambient" );
 		PROPERTY_CHANNEL_GLOSS = _( "Gloss" );
+		PROPERTY_CHANNEL_EMISSIVE = _( "Emissive" );
 
 		CreateTreeItemMenu();
 	}
@@ -87,6 +89,10 @@ namespace GuiCommon
 
 			case eTEXTURE_CHANNEL_SPECULAR:
 				l_selected = PROPERTY_CHANNEL_SPECULAR;
+				break;
+
+			case eTEXTURE_CHANNEL_EMISSIVE:
+				l_selected = PROPERTY_CHANNEL_EMISSIVE;
 				break;
 
 			case eTEXTURE_CHANNEL_HEIGHT:
@@ -144,6 +150,11 @@ namespace GuiCommon
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_SPECULAR )
 				{
 					OnChannelChange( eTEXTURE_CHANNEL_SPECULAR );
+				}
+
+				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_EMISSIVE )
+				{
+					OnChannelChange( eTEXTURE_CHANNEL_EMISSIVE );
 				}
 
 				if ( l_property->GetValueAsString() == PROPERTY_CHANNEL_HEIGHT )

@@ -290,6 +290,19 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	source_group( "Header Files\\Graphics" FILES ${CASTOR_Graphics_HEADER_FILES} )
 	source_group( "Source Files\\Graphics" FILES ${CASTOR_Graphics_SOURCE_FILES} )
 
+	file( GLOB CASTOR_FileParser_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.inl
+	)
+	file( GLOB CASTOR_FileParser_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.cpp
+	)
+	source_group( "Header Files\\FileParser" FILES ${CASTOR_FileParser_HEADER_FILES} )
+	source_group( "Source Files\\FileParser" FILES ${CASTOR_FileParser_SOURCE_FILES} )
+
 	file( GLOB CASTOR_Data_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.inl

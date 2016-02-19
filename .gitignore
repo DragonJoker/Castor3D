@@ -3,10 +3,9 @@
 /setup
 /doc/x86
 /doc/x64
+/source/Core/Castor3D/Src/Data/Core
 /source/Samples/CastorViewerSharp/Src/obj
 /source/CMake
-/.gitattributes
-/data/Ignored
 /data/Scene/Tests
 /data/Scene/Alpha
 /data/Scene/Anim
@@ -14,10 +13,11 @@
 /data/Scene/Lighting
 /data/Scene/Overlay
 /data/Scene/Parc
-/source/Core/Castor3D/Src/Data/Core
+/data/Scene/FbxScene
+/data/Scene/Sampler
+/.gitattributes
 *.csproj
 *.user
 *.suo
 *.gch
 *.*~
-/data/Scene/Sampler

@@ -26,6 +26,19 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to get an object type name.
+	\~french
+	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	*/
+	template<> struct ManagedObjectNamer< AnimatedObjectGroup >
+	{
+		C3D_API static const Castor::String Name;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
 	\version	0.8.0
 	\~english
@@ -88,13 +101,13 @@ namespace Castor3D
 			{
 				l_return = std::make_shared< AnimatedObjectGroup >( p_name, *this->GetScene(), std::forward< Parameters >( p_params )... );
 				m_elements.insert( p_name, l_return );
-				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 				GetScene()->SetChanged();
 			}
 			else
 			{
 				l_return = m_elements.find( p_name );
-				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return l_return;

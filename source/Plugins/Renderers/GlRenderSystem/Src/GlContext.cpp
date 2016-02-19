@@ -14,7 +14,6 @@
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
 #include <VertexBuffer.hpp>
-#include <MatrixBuffer.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

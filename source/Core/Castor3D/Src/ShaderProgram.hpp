@@ -201,6 +201,8 @@ namespace Castor3D
 		C3D_API static const Castor::String MapDiffuse;
 		//!\~english Name of the specular texture frame variable	\~french Nom de la frame variable contenant la texture de couleur spéculaire
 		C3D_API static const Castor::String MapSpecular;
+		//!\~english Name of the emissive texture frame variable	\~french Nom de la frame variable contenant la texture de couleur émissive
+		C3D_API static const Castor::String MapEmissive;
 		//!\~english Name of the emissive texture frame variable	\~french Nom de la frame variable contenant la texture de normales
 		C3D_API static const Castor::String MapNormal;
 		//!\~english Name of the opacity texture frame variable	\~french Nom de la frame variable contenant texture d'opacité

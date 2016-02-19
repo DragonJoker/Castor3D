@@ -2,6 +2,7 @@
 
 #include "Animable.hpp"
 #include "Animation.hpp"
+#include "Bone.hpp"
 #include "Geometry.hpp"
 #include "MatrixFrameVariable.hpp"
 #include "Mesh.hpp"
@@ -38,21 +39,31 @@ namespace Castor3D
 		{
 			int i = 0;
 
-			for ( auto l_bone : *l_skeleton )
+			if ( m_playingAnimations.empty() )
 			{
-				Matrix4x4r l_final( 1.0_r );
-
-				for ( auto l_animation : m_playingAnimations )
+				for ( auto l_bone : *l_skeleton )
 				{
-					auto l_moving = l_animation->GetObject( l_bone );
-
-					if ( l_moving )
-					{
-						l_final *= l_moving->GetFinalTransform();
-					}
+					p_variable.SetValue( l_skeleton->GetGlobalInverseTransform(), i++ );
 				}
+			}
+			else
+			{
+				for ( auto l_bone : *l_skeleton )
+				{
+					Matrix4x4r l_final{ 1.0_r };
 
-				p_variable.SetValue( l_final, i++ );
+					for ( auto l_animation : m_playingAnimations )
+					{
+						auto l_moving = l_animation->GetObject( l_bone );
+
+						if ( l_moving )
+						{
+							l_final *= l_moving->GetFinalTransform();
+						}
+					}
+
+					p_variable.SetValue( l_final, i++ );
+				}
 			}
 		}
 	}

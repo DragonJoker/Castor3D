@@ -517,7 +517,6 @@ namespace Castor3D
 	template< typename T > struct is_cleanable : std::false_type {};
 	template<> struct is_cleanable< Material > : std::true_type {};
 	template<> struct is_cleanable< Mesh > : std::true_type {};
-	template<> struct is_cleanable< Overlay > : std::true_type {};
 	template<> struct is_cleanable< RenderWindow > : std::true_type {};
 	template<> struct is_cleanable< Scene > : std::true_type {};
 	template<> struct is_cleanable< Sampler > : std::true_type {};
@@ -535,7 +534,6 @@ namespace Castor3D
 	*/
 	template< typename T > struct is_initialisable : std::false_type {};
 	template<> struct is_initialisable< Material > : std::true_type {};
-	template<> struct is_initialisable< Overlay > : std::true_type {};
 	template<> struct is_initialisable< Scene > : std::true_type {};
 	template<> struct is_initialisable< Sampler > : std::true_type {};
 	template<> struct is_initialisable< BlendState > : std::true_type {};

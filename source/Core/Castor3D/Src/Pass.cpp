@@ -350,7 +350,18 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME;
+	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME = 
+	{
+		{ eTEXTURE_CHANNEL_COLOUR, cuT( "Colour" ) },
+		{ eTEXTURE_CHANNEL_DIFFUSE, cuT( "Diffuse" ) },
+		{ eTEXTURE_CHANNEL_NORMAL, cuT( "Normal" ) },
+		{ eTEXTURE_CHANNEL_OPACITY, cuT( "Opacity" ) },
+		{ eTEXTURE_CHANNEL_SPECULAR, cuT( "Specular" ) },
+		{ eTEXTURE_CHANNEL_HEIGHT, cuT( "Height" ) },
+		{ eTEXTURE_CHANNEL_AMBIENT, cuT( "Ambient" ) },
+		{ eTEXTURE_CHANNEL_GLOSS, cuT( "Gloss" ) },
+		{ eTEXTURE_CHANNEL_EMISSIVE, cuT( "Emissive" ) },
+	};
 
 	//*********************************************************************************************
 
@@ -370,17 +381,6 @@ namespace Castor3D
 		, m_alphaBlendMode( eBLEND_MODE_ADDITIVE )
 		, m_colourBlendMode( eBLEND_MODE_ADDITIVE )
 	{
-		if ( TEXTURE_CHANNEL_NAME.empty() )
-		{
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_COLOUR] = cuT( "Colour" );
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_DIFFUSE] = cuT( "Diffuse" );
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_NORMAL] = cuT( "Normal" );
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_OPACITY] = cuT( "Opacity" );
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_SPECULAR] = cuT( "Specular" );
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_HEIGHT] = cuT( "Height" );
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_AMBIENT] = cuT( "Ambient" );
-			TEXTURE_CHANNEL_NAME[eTEXTURE_CHANNEL_GLOSS] = cuT( "Gloss" );
-		}
 	}
 
 	Pass::~Pass()
@@ -407,6 +407,7 @@ namespace Castor3D
 		TextureUnitSPtr l_pDiffuseMap = GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE );
 		TextureUnitSPtr l_pNormalMap = GetTextureUnit( eTEXTURE_CHANNEL_NORMAL );
 		TextureUnitSPtr l_pSpecularMap = GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR );
+		TextureUnitSPtr l_pEmissiveMap = GetTextureUnit( eTEXTURE_CHANNEL_EMISSIVE );
 		TextureUnitSPtr l_pOpacityMap = GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
 		TextureUnitSPtr l_pGlossMap = GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
 		TextureUnitSPtr l_pHeightMap = GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
@@ -417,6 +418,7 @@ namespace Castor3D
 
 		DoPrepareTexture( eTEXTURE_CHANNEL_NORMAL, l_pNormalMap, l_index );
 		DoPrepareTexture( eTEXTURE_CHANNEL_SPECULAR, l_pSpecularMap, l_index );
+		DoPrepareTexture( eTEXTURE_CHANNEL_EMISSIVE, l_pEmissiveMap, l_index );
 		DoPrepareTexture( eTEXTURE_CHANNEL_GLOSS, l_pGlossMap, l_index );
 		DoPrepareTexture( eTEXTURE_CHANNEL_HEIGHT, l_pHeightMap, l_index );
 
@@ -706,6 +708,7 @@ namespace Castor3D
 		DoGetTexture( eTEXTURE_CHANNEL_DIFFUSE, ShaderProgram::MapDiffuse, *l_program, m_pDiffuseMap );
 		DoGetTexture( eTEXTURE_CHANNEL_NORMAL, ShaderProgram::MapNormal, *l_program, m_pNormalMap );
 		DoGetTexture( eTEXTURE_CHANNEL_SPECULAR, ShaderProgram::MapSpecular, *l_program, m_pSpecularMap );
+		DoGetTexture( eTEXTURE_CHANNEL_EMISSIVE, ShaderProgram::MapEmissive, *l_program, m_pEmissiveMap );
 		DoGetTexture( eTEXTURE_CHANNEL_OPACITY, ShaderProgram::MapOpacity, *l_program, m_pOpacityMap );
 		DoGetTexture( eTEXTURE_CHANNEL_GLOSS, ShaderProgram::MapGloss, *l_program, m_pGlossMap );
 		DoGetTexture( eTEXTURE_CHANNEL_HEIGHT, ShaderProgram::MapHeight, *l_program, m_pHeightMap );

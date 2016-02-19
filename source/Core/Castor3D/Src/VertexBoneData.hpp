@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	static const uint32_t C3D_MAX_BONES_PER_VERTEX = 6;
+	static const uint32_t C3D_MAX_BONES_PER_VERTEX = 8;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.7.0

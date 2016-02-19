@@ -6,6 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< FrameListener >::Name = cuT( "FrameListener" );
+
 	ListenerManager::ListenerManager( Engine & p_engine )
 		: ResourceManager< String, FrameListener >( p_engine )
 	{

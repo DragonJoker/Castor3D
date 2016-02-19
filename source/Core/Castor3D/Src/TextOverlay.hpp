@@ -141,20 +141,6 @@ namespace Castor3D
 		C3D_API static OverlayCategorySPtr Create();
 		/**
 		 *\~english
-		 *\brief		Initialises the overlay
-		 *\~french
-		 *\brief		Initialise l'incrustation
-		 */
-		C3D_API virtual void Initialise();
-		/**
-		 *\~english
-		 *\brief		Flushes the overlay
-		 *\~french
-		 *\brief		Nettoie l'incrustation
-		 */
-		C3D_API virtual void Cleanup();
-		/**
-		 *\~english
 		 *\brief		Sets the text font
 		 *\param[in]	p_strFont	The new value
 		 *\~french
@@ -162,13 +148,6 @@ namespace Castor3D
 		 *\param[in]	p_strFont	La nouvelle valeur
 		 */
 		C3D_API void SetFont( Castor::String const & p_strFont );
-		/**
-		 *\~english
-		 *\brief		Loads new glyphs in the caption.
-		 *\~french
-		 *\brief		Charge les nouveaux glyphes dans le texte.
-		 */
-		C3D_API void LoadNewGlyphs();
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -356,6 +335,10 @@ namespace Castor3D
 		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
 		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
+		/**
+		 *\copydoc		Castor3D::OverlayCategory::DoUpdate.
+		 */
+		C3D_API virtual void DoUpdate();
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */

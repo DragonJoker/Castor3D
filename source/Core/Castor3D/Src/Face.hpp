@@ -185,7 +185,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index du vertex concerné
 		 *\return		L'indice
 		 */
-		inline uint32_t GetVertexIndex( uint32_t p_index )const
+		inline uint32_t operator[]( uint32_t p_index )const
 		{
 			REQUIRE( p_index < 3 );
 			return m_pIndex[p_index];

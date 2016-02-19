@@ -31,9 +31,19 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created object: " );
-	static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate object: " );
-	static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - NULL object: " );
+	static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created " );
+	static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate " );
+	static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - NULL " );
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to get an object type name.
+	\~french
+	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	*/
+	template< typename Elem > struct ManagedObjectNamer;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		13/10/2015
@@ -260,7 +270,7 @@ namespace Castor3D
 
 				if ( m_elements.has( p_name ) )
 				{
-					Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 				}
 				else
 				{
@@ -269,7 +279,7 @@ namespace Castor3D
 			}
 			else
 			{
-				Castor::Logger::LogWarning( WARNING_MANAGER_NULL_OBJECT );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_NULL_OBJECT << this->GetObjectTypeName() << cuT( ": " ) );
 			}
 		}
 		/**
@@ -313,6 +323,16 @@ namespace Castor3D
 		inline Engine * GetEngine()const
 		{
 			return EngineGetter::Get( *this );
+		}
+		/**
+		*\~english
+		*\return		The Engine.
+		*\~french
+		*\return		L'Engine.
+		*/
+		inline Castor::String const & GetObjectTypeName()const
+		{
+			return ManagedObjectNamer< Elem >::Name;
 		}
 		/**
 		 *\~english
@@ -431,12 +451,12 @@ namespace Castor3D
 				l_return = std::make_shared< Elem >( p_name, std::forward< Parameters >( p_params )... );
 				m_elements.insert( p_name, l_return );
 				ElementInitialiser< Elem >::Initialise( *GetEngine(), *l_return );
-				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 			else
 			{
 				l_return = m_elements.find( p_name );
-				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return l_return;

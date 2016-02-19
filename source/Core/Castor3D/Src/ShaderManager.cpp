@@ -188,6 +188,11 @@ namespace Castor3D
 			p_shader.CreateFrameVariable( ShaderProgram::MapSpecular, eSHADER_TYPE_PIXEL );
 		}
 
+		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_EMISSIVE )
+		{
+			p_shader.CreateFrameVariable( ShaderProgram::MapEmissive, eSHADER_TYPE_PIXEL );
+		}
+
 		if ( p_uiTextureFlags & eTEXTURE_CHANNEL_OPACITY )
 		{
 			p_shader.CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );

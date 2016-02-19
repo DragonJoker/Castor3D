@@ -179,6 +179,7 @@ namespace Castor3D
 	const String ShaderProgram::MapAmbient = cuT( "c3d_mapAmbient" );
 	const String ShaderProgram::MapDiffuse = cuT( "c3d_mapDiffuse" );
 	const String ShaderProgram::MapSpecular = cuT( "c3d_mapSpecular" );
+	const String ShaderProgram::MapEmissive = cuT( "c3d_mapEmissive" );
 	const String ShaderProgram::MapNormal = cuT( "c3d_mapNormal" );
 	const String ShaderProgram::MapOpacity = cuT( "c3d_mapOpacity" );
 	const String ShaderProgram::MapGloss = cuT( "c3d_mapGloss" );

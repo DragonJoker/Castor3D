@@ -264,13 +264,13 @@ namespace Castor3D
 				l_return = std::make_shared< Elem >( p_name, *this->GetScene(), p_parent, std::forward< Parameters >( p_params )... );
 				this->m_elements.insert( p_name, l_return );
 				ElementAttacher< Elem >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
-				Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 				this->GetScene()->SetChanged();
 			}
 			else
 			{
 				l_return = this->m_elements.find( p_name );
-				Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			}
 
 			return l_return;

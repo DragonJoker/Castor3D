@@ -88,83 +88,86 @@ namespace Castor
 
 	Path Path::GetPath()const
 	{
-		Path l_strReturn;
+		Path l_return;
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( 0, l_index );
+			l_return = substr( 0, l_index );
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
-	String Path::GetFileName()const
+	String Path::GetFileName( bool p_withExtension )const
 	{
-		String l_strReturn = ( * this );
+		String l_return = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( l_index + 1, String::npos );
+			l_return = substr( l_index + 1, String::npos );
 		}
 
-		l_index = l_strReturn.find_last_of( cuT( "." ) );
-
-		if ( l_index != String::npos )
+		if ( !p_withExtension )
 		{
-			l_strReturn = l_strReturn.substr( 0, l_index );
+			l_index = l_return.find_last_of( cuT( "." ) );
+
+			if ( l_index != String::npos )
+			{
+				l_return = l_return.substr( 0, l_index );
+			}
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
 	String Path::GetFullFileName()const
 	{
-		String l_strReturn = ( * this );
+		String l_return = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( l_index + 1, String::npos );
+			l_return = substr( l_index + 1, String::npos );
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
 	String Path::GetExtension()const
 	{
-		String l_strReturn = ( * this );
+		String l_return = ( * this );
 		std::size_t l_index = find_last_of( cuT( "." ) );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( l_index + 1, String::npos );
+			l_return = substr( l_index + 1, String::npos );
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
 	void Path::DoNormalise()
 	{
 		if ( !empty() )
 		{
-			String l_strBegin;
-			String l_strEnd;
+			String l_begin;
+			String l_end;
 
 			if ( substr( 0, 2 ) == cuT( "\\\\" ) )
 			{
-				l_strBegin = cuT( "\\\\" );
+				l_begin = cuT( "\\\\" );
 				assign( substr( 2 ) );
 			}
 			else if ( substr( 0, 2 ) == cuT( "//" ) )
 			{
-				l_strBegin = cuT( "/" );
+				l_begin = cuT( "/" );
 				assign( substr( 2 ) );
 			}
 			else if ( substr( 0, 1 ) == cuT( "/" ) )
 			{
-				l_strBegin = cuT( "/" );
+				l_begin = cuT( "/" );
 				assign( substr( 1 ) );
 			}
 
@@ -175,7 +178,7 @@ namespace Castor
 
 			if ( this->at( this->size() - 1 ) == Separator )
 			{
-				l_strEnd = Separator;
+				l_end = Separator;
 			}
 
 			StringArray l_folders = string::split( l_tmp, l_sep, 1000, false );
@@ -201,7 +204,7 @@ namespace Castor
 				}
 			}
 
-			l_tmp = l_strBegin;
+			l_tmp = l_begin;
 
 			for ( auto && l_folder : l_list )
 			{
@@ -213,7 +216,7 @@ namespace Castor
 				l_tmp += l_folder;
 			}
 
-			assign( l_tmp + l_strEnd );
+			assign( l_tmp + l_end );
 		}
 	}
 

@@ -16,6 +16,9 @@ namespace Castor3D
 
 	void Bone::AddChild( BoneSPtr p_bone )
 	{
-		m_children.push_back( p_bone );
+		if ( m_children.end() == std::find( m_children.begin(), m_children.end(), p_bone ) )
+		{
+			m_children.push_back( p_bone );
+		}
 	}
 }

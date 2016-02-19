@@ -68,8 +68,6 @@ namespace Castor
 			}
 		}
 
-#if CASTOR_HAS_VARIADIC_TEMPLATES
-
 		/** Raise the signal, calls every connected function
 		*\param[in]	p_params		The function parameter
 		*/
@@ -81,97 +79,6 @@ namespace Castor
 				it->second( std::move( p_params )... );
 			}
 		}
-
-#else
-
-		/** Raise the signal, calls every connected function
-		*\param[in]	param1		The function paramete
-		*/
-		template< typename Param1 >
-		void operator()( Param1 && param1 )const
-		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
-			{
-				it->second( std::move( param1 ) );
-			}
-		}
-
-		/** Raise the signal, calls every connected function
-		*\param[in]	param1		The first function paramete
-		*\param[in]	param2		The second function paramete
-		*/
-		template< typename Param1, typename Param2 >
-		void operator()( Param1 && param1, Param2 && param2 )const
-		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
-			{
-				it->second( std::move( param1 ), std::move( param2 ) );
-			}
-		}
-
-		/** Raise the signal, calls every connected function
-		*\param[in]	param1		The first function paramete
-		*\param[in]	param2		The second function paramete
-		*\param[in]	param3		The third function paramete
-		*/
-		template< typename Param1, typename Param2, typename Param3 >
-		void operator()( Param1 && param1, Param2 && param2, Param3 && param3 )const
-		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
-			{
-				it->second( std::move( param1 ), std::move( param2 ), std::move( param3 ) );
-			}
-		}
-
-		/** Raise the signal, calls every connected function
-		*\param[in]	param1		The first function paramete
-		*\param[in]	param2		The second function paramete
-		*\param[in]	param3		The third function paramete
-		*\param[in]	param4		The fourth function paramete
-		*/
-		template< typename Param1, typename Param2, typename Param3, typename Param4 >
-		void operator()( Param1 && param1, Param2 && param2, Param3 && param3, Param4 && param4 )const
-		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
-			{
-				it->second( std::move( param1 ), std::move( param2 ), std::move( param3 ), std::move( param4 ) );
-			}
-		}
-
-		/** Raise the signal, calls every connected function
-		*\param[in]	param1		The first function paramete
-		*\param[in]	param2		The second function paramete
-		*\param[in]	param3		The third function paramete
-		*\param[in]	param4		The fourth function paramete
-		*\param[in]	param5		The fifth function paramete
-		*/
-		template< typename Param1, typename Param2, typename Param3, typename Param4, typename Param5 >
-		void operator()( Param1 && param1, Param2 && param2, Param3 && param3, Param4 && param4, Param5 && param5 )const
-		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
-			{
-				it->second( std::move( param1 ), std::move( param2 ), std::move( param3 ), std::move( param4 ), std::move( param5 ) );
-			}
-		}
-
-		/** Raise the signal, calls every connected function
-		*\param[in]	param1		The first function paramete
-		*\param[in]	param2		The second function paramete
-		*\param[in]	param3		The third function paramete
-		*\param[in]	param4		The fourth function paramete
-		*\param[in]	param5		The fifth function paramete
-		*\param[in]	param6		The sixth function paramete
-		*/
-		template< typename Param1, typename Param2, typename Param3, typename Param4, typename Param5, typename Param6 >
-		void operator()( Param1 && param1, Param2 && param2, Param3 && param3, Param4 && param4, Param5 && param5, Param6 && param6 )const
-		{
-			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
-			{
-				it->second( std::move( param1 ), std::move( param2 ), std::move( param3 ), std::move( param4 ), std::move( param5 ), std::move( param6 ) );
-			}
-		}
-
-#endif
 
 	private:
 		std::map< uint32_t, Function > m_slots;

@@ -52,7 +52,6 @@ namespace Deferred
 	*/
 	class RenderTechnique
 		: public Castor3D::RenderTechniqueBase
-		, public Castor::Aligned< CASTOR_ALIGN_OF( Castor3D::Viewport ) >
 	{
 	protected:
 		typedef enum eDS_TEXTURE CASTOR_TYPE( uint8_t )

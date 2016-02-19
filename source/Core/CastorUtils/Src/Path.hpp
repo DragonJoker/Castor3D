@@ -161,13 +161,15 @@ namespace Castor
 		CU_API Path GetPath()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the leaf of this path
-		 *\return		The leaf
+		 *\brief		Retrieves the leaf of this path (filename and extension for files).
+		 *\param[in]	p_withExtension	Tells if we want extension or not, for files.
+		 *\return		The leaf.
 		 *\~french
-		 *\brief		Récupère la feuille de ce chemin
-		 *\return		La feuille
+		 *\brief		Récupère la feuille de ce chemin (nom du fichier et extension, pour les fichiers).
+		 *\param[in]	p_withExtension	Dit si on veur l'extension ou pas, pour les fichiers.
+		 *\return		La feuille.
 		 */
-		CU_API String GetFileName()const;
+		CU_API String GetFileName( bool p_withExtension = false )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the full path and leaf

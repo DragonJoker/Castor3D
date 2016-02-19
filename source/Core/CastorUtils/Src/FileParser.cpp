@@ -414,16 +414,7 @@ namespace Castor
 				{
 					bool l_ignored = true;
 					std::swap( l_ignored, m_ignored );
-
-					try
-					{
-						l_return = l_iter->second.m_function( this, l_filled );
-					}
-					catch ( ParserParameterTypeException & p_exc )
-					{
-						ParseError( p_exc.GetFullDescription() );
-					}
-
+					l_return = l_iter->second.m_function( this, l_filled );
 					std::swap( l_ignored, m_ignored );
 				}
 				else

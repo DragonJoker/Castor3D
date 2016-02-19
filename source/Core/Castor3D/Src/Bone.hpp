@@ -37,6 +37,8 @@ namespace Castor3D
 	*/
 	class Bone
 	{
+		friend class Skeleton;
+
 	public:
 		/**
 		 *\~english
@@ -56,13 +58,21 @@ namespace Castor3D
 		C3D_API ~Bone();
 		/**
 		 *\~english
-		 *\brief		Adds a child bone
-		 *\param[in]	p_bone	The bone
+		 *\brief		Traverses bone hierarchy and applies given function to each bone.
+		 *\param[in]	p_function	The function to apply.
 		 *\~french
-		 *\brief		Ajoute un os enfant
-		 *\param[in]	p_bone	L'os
+		 *\brief		Traverse la hiérachie du skelette et applique la fonction à chaque os.
+		 *\param[in]	p_function	La fonction à appliquer.
 		 */
-		C3D_API void AddChild( BoneSPtr p_bone );
+		template< typename FuncT >
+		inline void TraverseHierarchy( FuncT p_function )
+		{
+			for ( auto l_bone : m_children )
+			{
+				p_function( l_bone );
+				l_bone->TraverseHierarchy( p_function );
+			}
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the bone name
@@ -157,17 +167,52 @@ namespace Castor3D
 		{
 			return m_children;
 		}
+		/**
+		 *\~english
+		 *\return		The parent bone.
+		 *\~french
+		 *\return		L'os parent.
+		 */
+		BoneSPtr GetParent()const
+		{
+			return m_parent;
+		}
 
 	private:
-		//!\~english The bone name	\~french Le nom du bone
+		/**
+		 *\~english
+		 *\brief		Adds a child bone
+		 *\param[in]	p_bone	The bone
+		 *\~french
+		 *\brief		Ajoute un os enfant
+		 *\param[in]	p_bone	L'os
+		 */
+		void AddChild( BoneSPtr p_bone );
+		/**
+		 *\~english
+		 *\brief		Sets the parent bone.
+		 *\param[in]	p_bone	The bone.
+		 *\~french
+		 *\brief		Définit l'os parent.
+		 *\param[in]	p_bone	L'os.
+		 */
+		void SetParent( BoneSPtr p_bone )
+		{
+			m_parent = p_bone;
+		}
+
+	private:
+		//!\~english The bone name.	\~french Le nom du bone
 		Castor::String m_name;
-		//!\~english The matrix from mesh to bone space	\~french La matrice de transformation de l'espace mesh vers l'espace bone
+		//!\~english The parent bone.	\~french L'os parent.
+		BoneSPtr m_parent;
+		//!\~english The matrix from mesh to bone space.	\~french La matrice de transformation de l'espace mesh vers l'espace bone.
 		Castor::Matrix4x4r m_offset;
-		//!\~english The matrix holding bone transformation at current time	\~french La matrice de transformation complète du bone au temps courant de l'animation
+		//!\~english The matrix holding bone transformation at current time.	\~french La matrice de transformation complète du bone au temps courant de l'animation.
 		Castor::Matrix4x4r m_finalTransformation;
-		//!\~english The bones depending on this one	\~french Les bones dépendant de celui-ci
+		//!\~english The bones depending on this one.	\~french Les bones dépendant de celui-ci.
 		BonePtrArray m_children;
-		//!\~english The parent skeleton	\~french Le squelette parent
+		//!\~english The parent skeleton.	\~french Le squelette parent.
 		Skeleton & m_skeleton;
 	};
 }

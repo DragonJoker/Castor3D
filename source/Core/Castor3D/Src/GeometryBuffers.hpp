@@ -22,7 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <IndexBuffer.hpp>
 #include <VertexBuffer.hpp>
-#include <MatrixBuffer.hpp>
 
 namespace Castor3D
 {
@@ -60,7 +59,7 @@ namespace Castor3D
 		 *\param[in]	p_bones		Le tampon de données de bones.
 		 *\param[in]	p_inst		Le tampon de matrices d'instances.
 		 */
-		C3D_API GeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst );
+		C3D_API GeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -137,7 +136,7 @@ namespace Castor3D
 		//!\~english The bones buffer.	\~french Le tampon de bones.
 		VertexBuffer * m_bonesBuffer = nullptr;
 		//!\~english The matrix buffer.	\~french Le tampon de matrices.
-		MatrixBuffer * m_matrixBuffer = nullptr;
+		VertexBuffer * m_matrixBuffer = nullptr;
 		//!\~english The shader program.	\~french Le programme de rendu.
 		ProgramInputLayout const & m_layout;
 		//!\~english The buffers topology.	\~french La topologie des tampons.

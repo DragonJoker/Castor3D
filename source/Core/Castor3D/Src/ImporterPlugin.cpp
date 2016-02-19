@@ -17,24 +17,24 @@ namespace Castor3D
 	static const String CreateImporterFunctionABIName = cuT( "?Create@@YAXPEAVEngine@Castor3D@@PEAVImporterPlugin@2@@Z" );
 	static const String DestroyImporterFunctionABIName = cuT( "?Destroy@@YAXPEAVImporterPlugin@Castor3D@@@Z" );
 #		if CASTOR_USE_UNICODE
-	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@@2@@std@@XZ" );
+	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@XZ" );
 #		else
-	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@XZ" );
+	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@XZ" );
 #		endif
 #	else
 	static const String CreateImporterFunctionABIName = cuT( "?Create@@YAXPAVEngine@Castor3D@@PAVImporterPlugin@2@@Z" );
 	static const String DestroyImporterFunctionABIName = cuT( "?Destroy@@YAXPAVImporterPlugin@Castor3D@@@Z" );
 #		if CASTOR_USE_UNICODE
-	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@@2@@std@@XZ" );
+	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@XZ" );
 #else
-	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@XZ" );
+	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@Z" );
 #endif
 #	endif
 #elif defined( __GNUG__)
 #	if GCC_VERSION >= 50300
-	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsB5cxx11v" );
+	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsB5cxx11PN8Castor3D6EngineE" );
 #	else
-	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsv" );
+	static const String GetExtensionFunctionABIName = cuT( "_Z13GetExtensionsPN8Castor3D6EngineE" );
 #	endif
 	static const String CreateImporterFunctionABIName = cuT( "_Z6CreatePN8Castor3D6EngineEPNS_14ImporterPluginE" );
 	static const String DestroyImporterFunctionABIName = cuT( "_Z7DestroyPN8Castor3D14ImporterPluginE" );
@@ -90,7 +90,7 @@ namespace Castor3D
 
 		if ( m_pfnGetExtension )
 		{
-			l_arrayReturn = m_pfnGetExtension();
+			l_arrayReturn = m_pfnGetExtension( GetEngine() );
 		}
 
 		return l_arrayReturn;

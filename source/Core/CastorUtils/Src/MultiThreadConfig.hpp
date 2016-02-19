@@ -20,25 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Macros.hpp"
 
-#if CASTOR_HAS_STDTHREAD
-#	include <thread>
-#	include <mutex>
-#	include <condition_variable>
-#else
-#	include <boost/thread/thread.hpp>
-#	include <boost/thread/recursive_mutex.hpp>
-#	include <boost/thread/mutex.hpp>
-#	include <boost/thread/condition_variable.hpp>
-namespace std
-{
-	using boost::thread;
-	using boost::mutex;
-	using boost::recursive_mutex;
-	using boost::unique_lock;
-	using boost::condition_variable;
-	using namespace boost;
-}
-#endif
+#include <thread>
+#include <mutex>
+#include <condition_variable>
 
 namespace Castor
 {

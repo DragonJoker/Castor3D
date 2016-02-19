@@ -6,6 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< Mesh >::Name = cuT( "Mesh" );
+
 	MeshManager::MeshManager( Engine & p_engine )
 		: ResourceManager< Castor::String, Mesh >( p_engine )
 	{
@@ -35,12 +37,12 @@ namespace Castor3D
 			l_return = std::make_shared< Mesh >( p_name, *GetEngine() );
 			m_factory.Create( p_type )->Generate( *l_return, p_arrayFaces, p_arraySizes );
 			m_elements.insert( p_name, l_return );
-			Logger::LogInfo( cuT( "MeshManager::Create - Created Mesh: " ) + p_name + cuT( "" ) );
+			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 		else
 		{
 			l_return = m_elements.find( p_name );
-			Logger::LogWarning( cuT( "MeshManager::Create - Duplicate Mesh: " ) + p_name );
+			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 
 		return  l_return;

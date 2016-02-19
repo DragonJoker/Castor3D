@@ -8,29 +8,29 @@ using namespace Castor;
 
 namespace Loop
 {
-	FaceEdges::FaceEdges( Subdivider * p_pDivider, Castor3D::FaceSPtr p_face, VertexPtrUIntMap & p_mapVertex )
-		:	m_pDivider( p_pDivider	)
-		,	m_face( p_face	)
-		,	m_bOwnFace( true	)
-		,	m_pVertex0( p_mapVertex[p_face->GetVertexIndex( 0 )]	)
-		,	m_pVertex1( p_mapVertex[p_face->GetVertexIndex( 1 )]	)
-		,	m_pVertex2( p_mapVertex[p_face->GetVertexIndex( 2 )]	)
+	FaceEdges::FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face, VertexPtrUIntMap & p_mapVertex )
+		: m_pDivider( p_pDivider )
+		, m_face( p_face )
+		, m_bOwnFace( true )
+		, m_pVertex0( p_mapVertex[p_face[0]] )
+		, m_pVertex1( p_mapVertex[p_face[1]] )
+		, m_pVertex2( p_mapVertex[p_face[2]] )
 	{
 		m_edgeAB = DoAddEdge( m_pVertex0.lock(), m_pVertex1.lock(), true );
 		m_edgeBC = DoAddEdge( m_pVertex1.lock(), m_pVertex2.lock(), true );
 		m_edgeCA = DoAddEdge( m_pVertex2.lock(), m_pVertex0.lock(), true );
 	}
 
-	FaceEdges::FaceEdges( Subdivider * p_pDivider, Castor3D::FaceSPtr p_face, EdgeSPtr l_ab, EdgeSPtr l_bc, EdgeSPtr l_ca )
-		:	m_pDivider( p_pDivider	)
-		,	m_face( p_face	)
-		,	m_edgeAB( l_ab	)
-		,	m_edgeBC( l_bc	)
-		,	m_edgeCA( l_ca	)
-		,	m_bOwnFace( false	)
-		,	m_pVertex0( l_ab->GetVertex1()	)
-		,	m_pVertex1( l_bc->GetVertex1()	)
-		,	m_pVertex2( l_ca->GetVertex1()	)
+	FaceEdges::FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face, EdgeSPtr l_ab, EdgeSPtr l_bc, EdgeSPtr l_ca )
+		: m_pDivider( p_pDivider )
+		, m_face( p_face )
+		, m_edgeAB( l_ab )
+		, m_edgeBC( l_bc )
+		, m_edgeCA( l_ca )
+		, m_bOwnFace( false )
+		, m_pVertex0( l_ab->GetVertex1() )
+		, m_pVertex1( l_bc->GetVertex1() )
+		, m_pVertex2( l_ca->GetVertex1() )
 	{
 	}
 
@@ -38,9 +38,9 @@ namespace Loop
 	{
 		Point3r l_aTex, l_bTex, l_cTex, l_dTex, l_eTex, l_fTex;
 		//// We first retrieve the 3 face's vertices
-		VertexSPtr l_a = p_mapVertex[m_face->GetVertexIndex( 0 )];
-		VertexSPtr l_b = p_mapVertex[m_face->GetVertexIndex( 1 )];
-		VertexSPtr l_c = p_mapVertex[m_face->GetVertexIndex( 2 )];
+		VertexSPtr l_a = p_mapVertex[m_face[0]];
+		VertexSPtr l_b = p_mapVertex[m_face[1]];
+		VertexSPtr l_c = p_mapVertex[m_face[2]];
 		// We divide the 3 edges of the face and retrieve the resulting vertices
 		VertexSPtr l_d = m_edgeAB->Divide( m_pDivider, p_value );
 		VertexSPtr l_e = m_edgeBC->Divide( m_pDivider, p_value );
@@ -83,11 +83,11 @@ namespace Loop
 									   EdgeSPtr p_edgeAB, EdgeSPtr p_edgeBC, EdgeSPtr p_edgeCA,
 									   FaceEdgesPtrArray & p_newFaces )
 	{
-		Castor3D::FaceSPtr l_pFace = m_pDivider->AddFace( p_a->GetIndex(), p_b->GetIndex(), p_c->GetIndex() );
+		auto l_face = m_pDivider->AddFace( p_a->GetIndex(), p_b->GetIndex(), p_c->GetIndex() );
 		Castor3D::Vertex::SetTexCoord( p_a->GetPoint(), p_aTex );
 		Castor3D::Vertex::SetTexCoord( p_b->GetPoint(), p_bTex );
 		Castor3D::Vertex::SetTexCoord( p_c->GetPoint(), p_cTex );
-		p_newFaces.push_back( std::make_shared< FaceEdges >( m_pDivider, l_pFace, p_edgeAB, p_edgeBC, p_edgeCA ) );
+		p_newFaces.push_back( std::make_shared< FaceEdges >( m_pDivider, l_face, p_edgeAB, p_edgeBC, p_edgeCA ) );
 	}
 
 	EdgeSPtr FaceEdges::DoAddEdge( VertexSPtr p_v1, VertexSPtr p_v2, bool p_toDivide )

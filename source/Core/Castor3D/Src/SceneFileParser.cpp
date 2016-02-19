@@ -166,6 +166,7 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTextureChannels[cuT( "height" )] = eTEXTURE_CHANNEL_HEIGHT;
 	m_mapTextureChannels[cuT( "opacity" )] = eTEXTURE_CHANNEL_OPACITY;
 	m_mapTextureChannels[cuT( "gloss" )] = eTEXTURE_CHANNEL_GLOSS;
+	m_mapTextureChannels[cuT( "emissive" )] = eTEXTURE_CHANNEL_EMISSIVE;
 
 	m_mapNormalModes[cuT( "smooth" )] = eNORMAL_SMOOTH;
 	m_mapNormalModes[cuT( "flat" )] = eNORMAL_FLAT;
@@ -530,9 +531,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_ANIMATION, cuT( "looped" ), Parser_AnimationLooped, { MakeParameter< ePARAMETER_TYPE_BOOL >() } );
 	AddParser( eSECTION_ANIMATION, cuT( "scale" ), Parser_AnimationScale, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
-	AddParser( eSECTION_ANIMATION, cuT( "scales_interpolation" ), Parser_AnimationScalesInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
-	AddParser( eSECTION_ANIMATION, cuT( "translates_interpolation" ), Parser_AnimationTranslatesInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
-	AddParser( eSECTION_ANIMATION, cuT( "rotates_interpolation" ), Parser_AnimationRotatesInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
+	AddParser( eSECTION_ANIMATION, cuT( "interpolation" ), Parser_AnimationInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
 	AddParser( eSECTION_ANIMATION, cuT( "start" ), Parser_AnimationStart );
 	AddParser( eSECTION_ANIMATION, cuT( "}" ), Parser_AnimationEnd );
 

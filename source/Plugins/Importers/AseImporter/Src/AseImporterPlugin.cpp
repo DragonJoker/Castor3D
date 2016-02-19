@@ -21,7 +21,7 @@ C3D_Ase_API String GetName()
 	return cuT( "ASE Importer" );
 }
 
-C3D_Ase_API ImporterPlugin::ExtensionArray GetExtensions()
+C3D_Ase_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::Extension l_extension( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) );
 	ImporterPlugin::ExtensionArray l_arrayReturn( 1, l_extension );

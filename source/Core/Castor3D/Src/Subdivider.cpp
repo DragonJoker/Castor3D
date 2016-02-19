@@ -64,10 +64,10 @@ namespace Castor3D
 		return AddPoint( p_v[0], p_v[1], p_v[2] );
 	}
 
-	FaceSPtr Subdivider::AddFace( uint32_t a, uint32_t b, uint32_t c )
+	Face Subdivider::AddFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		REQUIRE( a < GetPointsCount() && b < GetPointsCount() && c < GetPointsCount() );
-		FaceSPtr l_return = std::make_shared< Face >( a, b, c );
+		Face l_return{ a, b, c };
 		m_arrayFaces.push_back( l_return );
 		return l_return;
 	}
@@ -148,9 +148,9 @@ namespace Castor3D
 
 	void Subdivider::DoSwapBuffers()
 	{
-		for ( auto && l_face : m_arrayFaces )
+		for ( auto const & l_face : m_arrayFaces )
 		{
-			m_submesh->AddFace( l_face->GetVertexIndex( 0 ), l_face->GetVertexIndex( 1 ), l_face->GetVertexIndex( 2 ) );
+			m_submesh->AddFace( l_face[0], l_face[1], l_face[2] );
 		}
 
 		m_submesh->ComputeNormals( true );

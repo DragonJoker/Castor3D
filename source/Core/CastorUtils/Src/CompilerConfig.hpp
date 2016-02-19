@@ -19,124 +19,30 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_COMPILER_CONFIG_H___
 
 #undef CASTOR_USE_UNICODE
-#undef CASTOR_HAS_NULLPTR
-#undef CASTOR_HAS_STDSMARTPTR
-#undef CASTOR_HAS_TR1SMARTPTR
-#undef CASTOR_HAS_STDARRAY
-#undef CASTOR_HAS_TR1ARRAY
-#undef CASTOR_HAS_DEFAULTED_FUNC
-#undef CASTOR_HAS_DELETED_FUNC
-#undef CASTOR_HAS_STDFUNCTIONAL
-#undef CASTOR_HAS_TR1FUNCTIONAL
-#undef CASTOR_HAS_STDTHREAD
-#undef CASTOR_HAS_VARIADIC_TEMPLATES
-#undef CASTOR_HAS_MAKE_UNIQUE
+#undef CASTOR_HAS_ALIGNAS
+#undef CASTOR_TYPE
 
 #if defined( _MSC_VER)
-#	if _MSC_VER >= 1900
-#		define CASTOR_HAS_ALIGNAS					1
-#		define CASTOR_HAS_STDTHREAD					1
-#		define CASTOR_TYPE( x )						: x
-#		define CASTOR_HAS_NULLPTR					1
-#		define CASTOR_HAS_STDSMARTPTR				1
-#		define CASTOR_HAS_STDFUNCTIONAL				1
-#		define CASTOR_HAS_TR1FUNCTIONAL				1
-#		define CASTOR_HAS_STDARRAY					1
-#		define CASTOR_HAS_DEFAULTED_FUNC			1
-#		define CASTOR_HAS_DELETED_FUNC				1
-#		define CASTOR_HAS_TR1SMARTPTR				1
-#		define CASTOR_HAS_TR1ARRAY					1
-#		define CASTOR_HAS_VARIADIC_TEMPLATES		1
-#		define CASTOR_HAS_MAKE_UNIQUE				1
-#	elif _MSC_VER >= 1800
-#		define CASTOR_HAS_ALIGNAS					0
-#		define CASTOR_HAS_STDTHREAD					1
-#		define CASTOR_TYPE( x )						: x
-#		define CASTOR_HAS_NULLPTR					1
-#		define CASTOR_HAS_STDSMARTPTR				1
-#		define CASTOR_HAS_STDFUNCTIONAL				1
-#		define CASTOR_HAS_TR1FUNCTIONAL				1
-#		define CASTOR_HAS_STDARRAY					1
-#		define CASTOR_HAS_DEFAULTED_FUNC			1
-#		define CASTOR_HAS_DELETED_FUNC				1
-#		define CASTOR_HAS_TR1SMARTPTR				1
-#		define CASTOR_HAS_TR1ARRAY					1
-#		define CASTOR_HAS_VARIADIC_TEMPLATES		1
-#		define CASTOR_HAS_MAKE_UNIQUE				1
-#	else
+#	if _MSC_VER < 1900
 #		error "Your compiler is too old, consider an upgrade."
 #	endif
 #elif defined( __clang__)
-#	define CASTOR_HAS_ALIGNAS						__has_feature(cxx_alignas)
-#	define CASTOR_HAS_STDTHREAD						1
-#	define CASTOR_TYPE( x )							: x
-#	define CASTOR_HAS_NULLPTR						__has_feature(cxx_nullptr)
-#	define CASTOR_HAS_STDSMARTPTR					1
-#	define CASTOR_HAS_STDARRAY						1
-#	define CASTOR_HAS_DEFAULTED_FUNC				__has_feature(cxx_defaulted_functions)
-#	define CASTOR_HAS_DELETED_FUNC					__has_feature(cxx_deleted_functions)
-#	define CASTOR_HAS_STDFUNCTIONAL					1
-#	define CASTOR_HAS_TR1FUNCTIONAL					0
-#	define CASTOR_HAS_TR1SMARTPTR					0
-#	define CASTOR_HAS_TR1ARRAY						0
-#	define CASTOR_HAS_VARIADIC_TEMPLATES			__has_feature(cxx_variadic_templates)
-#	define CASTOR_HAS_MAKE_UNIQUE					__has_feature(cxx_variadic_templates)
+#	if ( ! __has_feature(cxx_alignas)
+		|| !__has_feature( cxx_nullptr )
+		|| !__has_feature( cxx_defaulted_functions )
+		|| !__has_feature( cxx_deleted_functions )
+		|| !__has_feature( cxx_variadic_templates ) )
+#		error "Your compiler is too old, consider an upgrade."
+#	endif
 #elif defined( __GNUG__)
 #	define GCC_VERSION (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
-#	if defined( _WIN32 )
-#		if GCC_VERSION >= 40900
-#			define CASTOR_HAS_ALIGNAS				1
-#			define CASTOR_TYPE( x )					: x
-#			define CASTOR_HAS_STDTHREAD				0
-#			define CASTOR_HAS_NULLPTR				1
-#			define CASTOR_HAS_STDSMARTPTR			1
-#			define CASTOR_HAS_STDARRAY				1
-#			define CASTOR_HAS_DEFAULTED_FUNC		1
-#			define CASTOR_HAS_DELETED_FUNC			1
-#			define CASTOR_HAS_TR1SMARTPTR			1
-#			define CASTOR_HAS_TR1ARRAY				1
-#			define CASTOR_HAS_STDFUNCTIONAL			1
-#			define CASTOR_HAS_TR1FUNCTIONAL			1
-#			define CASTOR_HAS_VARIADIC_TEMPLATES	1
-#			define CASTOR_HAS_MAKE_UNIQUE			1
-#		else
-#			error "Your compiler is too old, consider an upgrade."
-#		endif
-#	else
-#		if GCC_VERSION >= 40800
-#			define CASTOR_HAS_ALIGNAS				1
-#			define CASTOR_TYPE( x )					: x
-#			define CASTOR_HAS_STDTHREAD				1
-#			define CASTOR_HAS_NULLPTR				1
-#			define CASTOR_HAS_STDSMARTPTR			1
-#			define CASTOR_HAS_STDARRAY				1
-#			define CASTOR_HAS_DEFAULTED_FUNC		1
-#			define CASTOR_HAS_DELETED_FUNC			1
-#			define CASTOR_HAS_TR1SMARTPTR			1
-#			define CASTOR_HAS_TR1ARRAY				1
-#			define CASTOR_HAS_STDFUNCTIONAL			1
-#			define CASTOR_HAS_TR1FUNCTIONAL			1
-#			define CASTOR_HAS_VARIADIC_TEMPLATES	1
-#			define CASTOR_HAS_MAKE_UNIQUE			1
-#		else
-#			error "Your compiler is too old, consider an upgrade."
-#		endif
+#	if GCC_VERSION < 40900
+#		error "Your compiler is too old, consider an upgrade."
 #	endif
 #elif defined( __BORLANDC__ )
 #	warning "Theoretically supported compiler, but untested yet"
-#	if __BORLANDC__ >= 0x621
-#		define CASTOR_HAS_STDTHREAD					0
-#		define CASTOR_HAS_NULLPTR					0
-#		define CASTOR_HAS_STDFUNCTIONAL				0
-#		define CASTOR_HAS_STDSMARTPTR				0
-#		define CASTOR_HAS_STDARRAY					0
-#		define CASTOR_HAS_DEFAULTED_FUNC			0
-#		define CASTOR_HAS_DELETED_FUNC				0
-#		define CASTOR_HAS_TR1SMARTPTR				0
-#		define CASTOR_HAS_TR1ARRAY					0
-#		define CASTOR_HAS_TR1FUNCTIONAL				0
-#		define CASTOR_HAS_VARIADIC_TEMPLATES		0
-#		define CASTOR_HAS_MAKE_UNIQUE				0
+#	if __BORLANDC__ <= 0x621
+#		error "Your compiler is too old, consider an upgrade."
 #	endif
 #else
 #	error "Yet unsupported compiler"

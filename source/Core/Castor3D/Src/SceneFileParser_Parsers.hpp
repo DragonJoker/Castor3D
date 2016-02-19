@@ -255,9 +255,7 @@ namespace Castor3D
 	// Animation parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationLooped )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationScale )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationScalesInterpolation )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationTranslatesInterpolation )
-	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationRotatesInterpolation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationInterpolation )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationStart )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationEnd )
 }

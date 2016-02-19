@@ -9,13 +9,14 @@ using namespace Castor;
 
 namespace Loop
 {
-	Edge::Edge( VertexSPtr p_v1, VertexSPtr p_v2, Castor3D::FaceSPtr p_f1, bool p_toDivide )
+	Edge::Edge( VertexSPtr p_v1, VertexSPtr p_v2, Castor3D::Face const & p_f1, bool p_toDivide )
 		: m_firstVertex( p_v1 )
 		, m_secondVertex( p_v2 )
-		, m_firstFace( p_f1 )
+		, m_firstFace( &p_f1 )
 		, m_divided( false )
 		, m_toDivide( p_toDivide )
 		, m_toDelete( false )
+		, m_secondFace( nullptr )
 	{
 	}
 
@@ -23,15 +24,15 @@ namespace Loop
 	{
 	}
 
-	void Edge::AddFace( Castor3D::FaceSPtr p_face )
+	void Edge::AddFace( Castor3D::Face const & p_face )
 	{
-		if ( m_firstFace.expired() )
+		if ( !m_firstFace )
 		{
-			m_firstFace = p_face;
+			m_firstFace = &p_face;
 		}
-		else if ( m_secondFace.expired() )
+		else if ( !m_secondFace )
 		{
-			m_secondFace = p_face;
+			m_secondFace = &p_face;
 		}
 	}
 

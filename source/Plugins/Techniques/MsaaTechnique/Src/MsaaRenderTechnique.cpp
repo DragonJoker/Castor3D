@@ -11,6 +11,7 @@
 #include <RasteriserStateManager.hpp>
 #include <Engine.hpp>
 #include <Parameter.hpp>
+#include <ShaderProgram.hpp>
 #include <DynamicTexture.hpp>
 
 #include <Image.hpp>
@@ -207,14 +208,15 @@ namespace Msaa
 			UNIFORM( l_writer, Sampler1D, c3d_sLights );
 		}
 
-		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
-		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ), CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
-		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ), CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
-		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ), CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
-		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ), CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
-		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ), CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
-		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ), CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
-		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ), CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
+		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
+		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
+		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
+		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
+		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
+		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
+		Optional< Sampler2D > c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CHECK_FLAG( eTEXTURE_CHANNEL_EMISSIVE ) ) );
+		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
+		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
@@ -229,7 +231,6 @@ namespace Msaa
 			LOCALE_ASSIGN( l_writer, Vec3, l_v3Emissive, c3d_v4MatEmissive.XYZ );
 			LOCALE_ASSIGN( l_writer, Vec3, l_worldEye, vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) );
 			pxl_v4FragColor = vec4( Float( 0.0f ), 0.0f, 0.0f, 0.0f );
-			Vec3 l_v3MapSpecular( &l_writer, cuT( "l_v3MapSpecular" ) );
 			Vec3 l_v3MapNormal( &l_writer, cuT( "l_v3MapNormal" ) );
 
 			if ( p_flags != 0 )
@@ -241,9 +242,9 @@ namespace Msaa
 					l_v3Normal = normalize( mat3( vtx_tangent, vtx_bitangent, vtx_normal ) * l_v3MapNormal );
 				}
 
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_EMISSIVE ) )
 				{
-					LOCALE_ASSIGN( l_writer, Vec3, l_v3MapSpecular, texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ );
+					l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.XY ).XYZ;
 				}
 
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) )
@@ -257,9 +258,9 @@ namespace Msaa
 
 			FOR( l_writer, Int, i, l_begin, cuT( "i < l_end" ), cuT( "++i" ) )
 			{
-				OutputComponents l_output { l_v3Ambient, l_v3Diffuse, l_v3Specular };
+				OutputComponents l_output{ l_v3Ambient, l_v3Diffuse, l_v3Specular };
 				l_lighting->ComputeDirectionalLight( l_lighting->GetDirectionalLight( i ), l_worldEye, l_fMatShininess,
-													 FragmentInput { vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
+													 FragmentInput{ vtx_vertex, l_v3Normal, vtx_tangent, vtx_bitangent },
 													 l_output );
 			}
 			ROF;
@@ -312,7 +313,7 @@ namespace Msaa
 
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) )
 				{
-					l_v3Specular *= l_v3MapSpecular;
+					l_v3Specular *= texture2D( c3d_mapSpecular, vtx_texture.XY ).XYZ;
 				}
 			}
 

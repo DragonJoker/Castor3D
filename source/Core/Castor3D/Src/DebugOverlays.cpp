@@ -47,7 +47,8 @@ namespace Castor3D
 		OverlaySPtr l_panel = p_manager.Find( cuT( "DebugPanel" ) );
 		m_debugPanel = l_panel;
 		m_debugCpuTime = GetTextOverlay( p_manager, cuT( "DebugPanel-CpuTime-Value" ) );
-		m_debugGpuTime = GetTextOverlay( p_manager, cuT( "DebugPanel-GpuTime-Value" ) );
+		m_debugGpuClientTime = GetTextOverlay( p_manager, cuT( "DebugPanel-GpuClientTime-Value" ) );
+		m_debugGpuServerTime = GetTextOverlay( p_manager, cuT( "DebugPanel-GpuServerTime-Value" ) );
 		m_debugTotalTime = GetTextOverlay( p_manager, cuT( "DebugPanel-TotalTime-Value" ) );
 		m_debugAverageFps = GetTextOverlay( p_manager, cuT( "DebugPanel-AverageFPS-Value" ) );
 		m_debugAverageTime = GetTextOverlay( p_manager, cuT( "DebugPanel-AverageTime-Value" ) );
@@ -58,7 +59,8 @@ namespace Castor3D
 		m_externTime = GetTextOverlay( p_manager, cuT( "DebugPanel-ExternalTime-Value" ) );
 
 		m_visible = m_debugCpuTime
-					&& m_debugGpuTime
+					&& m_debugGpuClientTime
+					&& m_debugGpuServerTime
 					&& m_debugTotalTime
 					&& m_debugAverageFps
 					&& m_debugAverageTime
@@ -78,7 +80,8 @@ namespace Castor3D
 	{
 		m_debugPanel.reset();
 		m_debugCpuTime.reset();
-		m_debugGpuTime.reset();
+		m_debugGpuClientTime.reset();
+		m_debugGpuServerTime.reset();
 		m_debugTotalTime.reset();
 		m_debugAverageFps.reset();
 		m_debugAverageTime.reset();
@@ -114,9 +117,9 @@ namespace Castor3D
 			m_debugFaceCount->SetCaption( string::to_string( p_faces ) );
 			m_debugObjectCount->SetCaption( string::to_string( p_objects ) );
 
-			l_time = m_gpuTime + GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0;
+			m_debugGpuClientTime->SetCaption( StringStream() << std::setprecision( 2 ) << m_gpuTime << cuT( " ms" ) );
+			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 2 ) << ( GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0 ) << cuT( " ms" ) );
 			GetEngine()->GetRenderSystem()->ResetGpuTime();
-			m_debugGpuTime->SetCaption( StringStream() << std::setprecision( 2 ) << l_time << cuT( " ms" ) );
 
 			l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
 			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 2 ) << 1000.0 / l_time << cuT( " frames/s" ) );

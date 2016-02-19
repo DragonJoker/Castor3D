@@ -66,12 +66,14 @@ namespace Ase
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The Castor3D engine
+		 *\param[in]	p_engine	The Castor3D engine
+		 *\param[in]	p_importer	The importer.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur
+		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_importer	L'importeur.
 		 */
-		AseFileParser( Castor3D::Engine * p_pEngine );
+		AseFileParser( Castor3D::Engine * p_engine, AseImporter & p_importer );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -133,6 +135,7 @@ namespace Ase
 		Castor3D::SceneSPtr m_pScene;
 		Castor3D::MeshSPtr m_pMesh;
 		Castor3D::Engine * m_engine;
+		AseImporter & m_importer;
 	};
 
 	DECLARE_ATTRIBUTE_PARSER( AseParser_RootFormat )

@@ -24,6 +24,6 @@ namespace Castor3D
 			}
 		}
 
-		ENSURE( l_done );
+		//ENSURE( l_done );
 	}
 }

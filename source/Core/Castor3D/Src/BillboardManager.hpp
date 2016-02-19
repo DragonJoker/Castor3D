@@ -26,6 +26,19 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to get an object type name.
+	\~french
+	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	*/
+	template<> struct ManagedObjectNamer< BillboardList >
+	{
+		C3D_API static const Castor::String Name;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\date 		29/01/2016
 	\version	0.8.0
 	\~english

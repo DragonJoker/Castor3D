@@ -22,7 +22,7 @@ C3D_Md2_API String GetName()
 	return cuT( "MD2 Importer" );
 }
 
-C3D_Md2_API ImporterPlugin::ExtensionArray GetExtensions()
+C3D_Md2_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::Extension l_extension( cuT( "MD2" ), cuT( "Quake II" ) );
 	ImporterPlugin::ExtensionArray l_arrayReturn( 1, l_extension );

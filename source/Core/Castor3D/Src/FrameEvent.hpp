@@ -38,7 +38,7 @@ namespace Castor3D
 				<br />La fonction de traitement doit être implémentée par les classes filles.
 	*/
 	class FrameEvent
-		: public Castor::Debug::Backtraced
+		//: public Castor::Debug::Backtraced
 	{
 	public:
 		/**

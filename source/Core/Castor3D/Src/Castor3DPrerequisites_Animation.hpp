@@ -83,19 +83,15 @@ namespace Castor3D
 	class Skeleton;
 	class BonedVertex;
 	struct stVERTEX_BONE_DATA;
-	template< typename T > class KeyFrame;
+	class KeyFrame;
 	template< typename T > class Interpolator;
 	template< typename T, eINTERPOLATOR_MODE > class InterpolatorT;
 
 	using AnimationStateMap = std::map< Castor::String, eANIMATION_STATE >;
-	using Point3rKeyFrame = KeyFrame< Castor::Point3r >;
-	using QuaternionKeyFrame = KeyFrame< Castor::Quaternion >;
 	using Point3rInterpolator = Interpolator< Castor::Point3r >;
 	using QuaternionInterpolator = Interpolator< Castor::Quaternion >;
-	template< typename T >
-	using KeyFrameRealMap = std::map< real, KeyFrame< T > >;
-	template< typename T >
-	using KeyFrameArray = std::vector< KeyFrame< T > >;
+	using KeyFrameRealMap = std::map< real, KeyFrame >;
+	using KeyFrameArray = std::vector< KeyFrame >;
 
 	DECLARE_SMART_PTR( AnimatedObject );
 	DECLARE_SMART_PTR( AnimationObjectBase );
@@ -113,10 +109,6 @@ namespace Castor3D
 	DECLARE_MAP( Castor::String, AnimatedObjectGroupSPtr, AnimatedObjectGroupPtrStr );
 	//! Animation pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimationSPtr, AnimationPtrStr );
-	//! KeyFrame map, sorted by time index
-	DECLARE_MAP( real, Point3rKeyFrame, Point3rKeyFrameReal );
-	//! KeyFrame map, sorted by time index
-	DECLARE_MAP( real, QuaternionKeyFrame, QuaternionKeyFrameReal );
 	//! AnimatedObject pointer map, sorted by name
 	DECLARE_MAP( Castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
 	//! MovingObject pointer map, sorted by name
@@ -129,10 +121,6 @@ namespace Castor3D
 	DECLARE_VECTOR( AnimationObjectBaseSPtr, AnimationObjectPtr );
 	//! BonedVertex pointer array
 	DECLARE_VECTOR( BonedVertexSPtr, BonedVertexPtr );
-	//! KeyFrame array
-	DECLARE_VECTOR( Point3rKeyFrame, Point3rKeyFrame );
-	//! KeyFrame array
-	DECLARE_VECTOR( QuaternionKeyFrame, QuaternionKeyFrame );
 
 	//@}
 }

@@ -74,6 +74,21 @@ namespace Castor3D
 		 *\return		Le Mesh importé
 		 */
 		C3D_API MeshSPtr ImportMesh( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		/**
+		 *\~english
+		 *\brief		Loads a texture and adds it to the given pass.
+		 *\param[in]	p_path		The image file path (can be relative or absolute).
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_channel	The channel affected.
+		 *\return		\p false if any error occured.
+		 *\~french
+		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\param[in]	p_path		Le chemin vers l'image (peut être relatif ou absolu).
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_channel	Le canal affecté à l'image.
+		 *\return		\p false en cas d'erreur.
+		 */
+		C3D_API TextureUnitSPtr LoadTexture( Castor::Path const & p_path, Pass & p_pass, eTEXTURE_CHANNEL p_channel );
 
 	protected:
 		/**

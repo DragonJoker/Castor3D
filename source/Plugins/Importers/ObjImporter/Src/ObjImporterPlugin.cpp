@@ -21,7 +21,7 @@ C3D_Obj_API String GetName()
 	return cuT( "OBJ Importer" );
 }
 
-C3D_Obj_API ImporterPlugin::ExtensionArray GetExtensions()
+C3D_Obj_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::ExtensionArray l_arrayReturn;
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "OBJ" ), cuT( "Wavefront Object" ) ) );

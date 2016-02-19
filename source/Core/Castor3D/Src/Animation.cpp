@@ -250,7 +250,7 @@ namespace Castor3D
 		}
 		else
 		{
-			CASTOR_EXCEPTION( "Can't add this node : already added" );
+			Logger::LogWarning( "Can't add this node : already added" );
 		}
 
 		return l_return;
@@ -292,6 +292,12 @@ namespace Castor3D
 		{
 			std::shared_ptr< SkeletonAnimationBone > l_moving = std::make_shared< SkeletonAnimationBone >();
 			l_moving->SetBone( p_bone );
+
+			if ( p_parent && p_parent->GetType() == eANIMATION_OBJECT_TYPE_BONE )
+			{
+				p_bone->SetFinalTransformation( std::static_pointer_cast< SkeletonAnimationBone >( p_parent )->GetBone()->GetFinalTransformation() * p_bone->GetOffsetMatrix() );
+			}
+
 			l_return = l_moving;
 			m_toMove.insert( std::make_pair( l_name, l_return ) );
 
@@ -359,27 +365,11 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Animation::SetScaleInterpolationMode( eINTERPOLATOR_MODE p_mode )
+	void Animation::SetInterpolationMode( eINTERPOLATOR_MODE p_mode )
 	{
 		for ( auto l_moving : m_arrayMoving )
 		{
-			l_moving->SetScaleInterpolationMode( p_mode );
-		}
-	}
-
-	void Animation::SetRotateInterpolationMode( eINTERPOLATOR_MODE p_mode )
-	{
-		for ( auto l_moving : m_arrayMoving )
-		{
-			l_moving->SetRotateInterpolationMode( p_mode );
-		}
-	}
-
-	void Animation::SetTranslateInterpolationMode( eINTERPOLATOR_MODE p_mode )
-	{
-		for ( auto l_moving : m_arrayMoving )
-		{
-			l_moving->SetTranslateInterpolationMode( p_mode );
+			l_moving->SetInterpolationMode( p_mode );
 		}
 	}
 

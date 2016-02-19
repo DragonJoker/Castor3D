@@ -2,7 +2,6 @@
 
 #include "GlAttribute.hpp"
 #include "GlIndexBufferObject.hpp"
-#include "GlMatrixBufferObject.hpp"
 #include "GlRenderSystem.hpp"
 #include "GlShaderProgram.hpp"
 #include "GlVertexBufferObject.hpp"
@@ -13,8 +12,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst )
-		: Castor3D::GeometryBuffers( p_topology, p_program, p_vtx, p_idx, p_bones, p_inst )
+	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst )
+		: GeometryBuffers( p_topology, p_program, p_vtx, p_idx, p_bones, p_inst )
 		, ObjectType( p_gl,
 					  "GlVertexArrayObjects",
 					  std::bind( &OpenGl::GenVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -55,10 +54,11 @@ namespace GlRender
 
 			if ( m_matrixBuffer )
 			{
-				m_matrixAttribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( p_gl, p_program, ShaderProgram::Transform );
-				m_matrixAttribute->SetStride( 4 * 4 * sizeof( real ) );
-				m_matrixBuffer->Bind( true );
-				m_matrixAttribute->Bind( true );
+				if ( DoCreateAttributes( p_program.GetLayout(), p_inst->GetDeclaration(), m_matrixAttributes ) )
+				{
+					m_matrixBuffer->Bind();
+					DoBindAttributes( m_matrixAttributes );
+				}
 			}
 
 			GetOpenGl().BindVertexArray( 0 );
@@ -68,7 +68,7 @@ namespace GlRender
 	GlGeometryBuffers::~GlGeometryBuffers()
 	{
 		m_vertexAttributes.clear();
-		m_matrixAttribute.reset();
+		m_matrixAttributes.clear();
 		m_bonesAttributes.clear();
 		ObjectType::Destroy();
 	}
@@ -161,7 +161,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	GlAttributeBaseSPtr GlGeometryBuffers::DoCreateAttribute( BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_stride )
+	GlAttributeBaseSPtr GlGeometryBuffers::DoCreateAttribute( BufferElementDeclaration const & p_element, uint32_t p_offset, BufferDeclaration const & p_declaration )
 	{
 		bool l_return = true;
 		auto const & l_renderSystem = GetOpenGl().GetRenderSystem();
@@ -170,51 +170,51 @@ namespace GlRender
 		switch ( p_element.m_dataType )
 		{
 		case eELEMENT_TYPE_1FLOAT:
-			l_attribute = std::make_shared< GlAttribute1r >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute1r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_2FLOATS:
-			l_attribute = std::make_shared< GlAttribute2r >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute2r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_3FLOATS:
-			l_attribute = std::make_shared< GlAttribute3r >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute3r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_4FLOATS:
-			l_attribute = std::make_shared< GlAttribute4r >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute4r >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_COLOUR:
-			l_attribute = std::make_shared< GlAttribute1ui >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute1ui >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_1INT:
-			l_attribute = std::make_shared< GlAttribute1i >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute1i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_2INTS:
-			l_attribute = std::make_shared< GlAttribute2i >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute2i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_3INTS:
-			l_attribute = std::make_shared< GlAttribute3i >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute3i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_4INTS:
-			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_2x2FLOATS:
-			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 2, 2 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_3x3FLOATS:
-			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 3, 3 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		case eELEMENT_TYPE_4x4FLOATS:
-			l_attribute = std::make_shared< GlAttribute4i >( GetOpenGl(), m_program, p_element.m_name );
+			l_attribute = std::make_shared< GlMatAttribute< real, 4, 4 > >( GetOpenGl(), m_program, p_declaration, p_element.m_name );
 			break;
 
 		default:
@@ -225,13 +225,12 @@ namespace GlRender
 		if ( l_attribute )
 		{
 			l_attribute->SetOffset( p_offset );
-			l_attribute->SetStride( p_stride );
 		}
 
 		return l_attribute;
 	}
 
-	bool GlGeometryBuffers::DoCreateAttributes( Castor3D::ProgramInputLayout const & p_layout, Castor3D::BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes )
+	bool GlGeometryBuffers::DoCreateAttributes( ProgramInputLayout const & p_layout, BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes )
 	{
 		for ( auto & l_element : p_layout )
 		{
@@ -239,7 +238,7 @@ namespace GlRender
 
 			if ( l_it != p_declaration.end() )
 			{
-				auto l_attribute = DoCreateAttribute( l_element, l_it->m_offset, p_declaration.GetStride() );
+				auto l_attribute = DoCreateAttribute( l_element, l_it->m_offset, p_declaration );
 
 				if ( l_attribute )
 				{

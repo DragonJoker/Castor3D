@@ -29,6 +29,19 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to get an object type name.
+	\~french
+	\brief		Structure permettant de récupérer le nom du type d'un objet.
+	*/
+	template<> struct ManagedObjectNamer< Overlay >
+	{
+		C3D_API static const Castor::String Name;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\date 		03/10/2015
 	\version	0.8.0
 	\~english
@@ -266,6 +279,13 @@ namespace Castor3D
 		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
 		 *\~french
 		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
+		 */
+		C3D_API void UpdateRenderer();
+		/**
+		 *\~english
+		 *\brief		Updates overlays.
+		 *\~french
+		 *\brief		Met à jour les incrustations.
 		 */
 		C3D_API void Update();
 		/**

@@ -22,7 +22,7 @@ C3D_SMax_API String GetName()
 	return cuT( "3DS Importer" );
 }
 
-C3D_SMax_API ImporterPlugin::ExtensionArray GetExtensions()
+C3D_SMax_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::Extension l_extension( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) );
 	ImporterPlugin::ExtensionArray l_arrayReturn( 1, l_extension );

@@ -11,6 +11,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< Light >::Name = cuT( "Light" );
+
 	LightManager::LightManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		: ObjectManager< Castor::String, Light >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
 		, m_lightFactory( GetEngine()->GetSceneManager().GetFactory() )
@@ -125,13 +127,13 @@ namespace Castor3D
 			m_elements.insert( p_name, l_return );
 			ElementAttacher< Light >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 			DoAddLight( l_return );
-			Castor::Logger::LogInfo( INFO_MANAGER_CREATED_OBJECT + Castor::string::to_string( p_name ) );
+			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 			GetScene()->SetChanged();
 		}
 		else
 		{
 			l_return = m_elements.find( p_name );
-			Castor::Logger::LogWarning( WARNING_MANAGER_DUPLICATE_OBJECT + Castor::string::to_string( p_name ) );
+			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 
 		return l_return;

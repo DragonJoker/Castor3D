@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "FontTexture.hpp"
-#include "InitialiseEvent.hpp"
+#include "FunctorEvent.hpp"
 #include "Overlay.hpp"
 #include "OverlayManager.hpp"
 #include "OverlayRenderer.hpp"
@@ -141,14 +141,6 @@ namespace Castor3D
 		return std::make_shared< TextOverlay >();
 	}
 
-	void TextOverlay::Initialise()
-	{
-	}
-
-	void TextOverlay::Cleanup()
-	{
-	}
-
 	void TextOverlay::SetFont( String const & p_strFont )
 	{
 		// Récupération / Création de la police
@@ -184,11 +176,10 @@ namespace Castor3D
 			CASTOR_EXCEPTION( "Font " + string::string_cast< char >( p_strFont ) + "not found" );
 		}
 
-		l_engine->PostEvent( MakeInitialiseEvent( *this ) );
 		m_textChanged = true;
 	}
 
-	void TextOverlay::LoadNewGlyphs()
+	void TextOverlay::DoUpdate()
 	{
 		FontTextureSPtr l_fontTexture = GetFontTexture();
 
@@ -209,16 +200,18 @@ namespace Castor3D
 			}
 		}
 
+		for ( auto l_char : l_new )
+		{
+			l_font->LoadGlyph( l_char );
+		}
+
 		if ( !l_new.empty() )
 		{
-			l_fontTexture->Cleanup();
-
-			for ( auto l_char : l_new )
+			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&l_fontTexture]()
 			{
-				l_font->LoadGlyph( l_char );
-			}
-
-			l_fontTexture->Initialise();
+				l_fontTexture->Cleanup();
+				l_fontTexture->Initialise();
+			} ) );
 		}
 	}
 

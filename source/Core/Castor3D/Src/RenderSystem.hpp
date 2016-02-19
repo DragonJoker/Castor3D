@@ -218,7 +218,7 @@ namespace Castor3D
 		 *\param[in]	p_bones		Le tampon de données de bones.
 		 *\param[in]	p_inst		Le tampon de matrices d'instances.
 		 */
-		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst ) = 0;
+		C3D_API virtual GeometryBuffersSPtr CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a rendering context
@@ -332,19 +332,6 @@ namespace Castor3D
 		 *\return		Le tampon d'indices créé, dépendant de l'API actuelle
 		 */
 		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a matrix buffer
-		 *\remarks		Only the render system can do that
-		 *\param[in]	p_buffer	The hardware buffer to which the buffer will be linked
-		 *\return		The created buffer, dependant of current API
-		 *\~french
-		 *\brief		Crée un tampon de matrices
-		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_buffer	Le tampon hardware auquel sera lié le tampon
-		 *\return		Le tampon créé, dépendant de l'API actuelle
-		 */
-		C3D_API virtual std::shared_ptr< GpuBuffer< real > > CreateMatrixBuffer( CpuBuffer< real > * p_buffer ) = 0;
 		/**
 		 *\~english
 		 *\return		A pipeline implementation, depending on loaded API

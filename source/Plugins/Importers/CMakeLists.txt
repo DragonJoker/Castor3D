@@ -1,6 +1,7 @@
 option( CASTOR_BUILDGRP_IMPORTER "Build Castor3D Importer plugins" TRUE )
 option( CASTOR_BUILD_IMPORTER_ASSIMP "Build Assimp Importer plugin (needs ASSIMP library)" TRUE )
 option( CASTOR_BUILD_IMPORTER_ASE "Build ASE Importer plugin" TRUE )
+option( CASTOR_BUILD_IMPORTER_FBX "Build FBX Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_LWO "Build LWO Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_MD2 "Build MD2 Importer plugin" TRUE )
 option( CASTOR_BUILD_IMPORTER_MD3 "Build MD3 Importer plugin" TRUE )
@@ -12,6 +13,7 @@ option( CASTOR_FORCE_ALL_IMPORTERS "Build every Importer plugin regardless of th
 function( ImportersInit )
 	set( Assimp "no (Not wanted)" PARENT_SCOPE )
 	set( Ase "no (Not wanted)" PARENT_SCOPE )
+	set( Fbx "no (Not wanted)" PARENT_SCOPE )
 	set( Md2 "no (Not wanted)" PARENT_SCOPE )
 	set( Md3 "no (Not wanted)" PARENT_SCOPE )
 	set( 3ds "no (Not wanted)" PARENT_SCOPE )
@@ -26,6 +28,12 @@ function( ImportersBuild )
 			set( Build ${Assimp} )
 			add_subdirectory( Plugins/Importers/AssimpImporter )
 			set( Assimp ${Build} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_IMPORTER_FBX} )
+			set( Build ${Fbx} )
+			add_subdirectory( Plugins/Importers/FbxImporter )
+			set( Fbx ${Build} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
@@ -99,6 +107,9 @@ function( ImportersSummary msg )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp              ${Assimp}" )
 		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_FBX} )
+			set( msg_tmp "${msg_tmp}\n    FBX                 ${Fbx}" )
+		endif ()
 		if( ${CASTOR_BUILD_IMPORTER_PLY} )
 			set( msg_tmp "${msg_tmp}\n    Built-in PLY        ${Ply}" )
 		endif ()
@@ -134,6 +145,16 @@ function( ImportersSetup )
 			cpack_add_component( AssimpImporter
 				DISPLAY_NAME "AssimpImporter"
 				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Full
+			)
+		endif ()
+
+		if( ${CASTOR_BUILD_IMPORTER_FBX} )
+			cpack_add_component( FbxImporter
+				DISPLAY_NAME "FbxImporter"
+				DESCRIPTION "Allows the FBX objects import in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Full

@@ -23,6 +23,170 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor
 {
 	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		Gives the regex format for given type.
+	\~french
+	\brief		Donne le format de regex pour le type donné.
+	*/
+	template< typename T > struct RegexFormat;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for uint8_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour uint8_t.
+	*/
+	template<>
+	struct RegexFormat< uint8_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for int8_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour int8_t.
+	*/
+	template<>
+	struct RegexFormat< int8_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for uint16_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour uint16_t.
+	*/
+	template<>
+	struct RegexFormat< uint16_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for int16_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour int16_t.
+	*/
+	template<>
+	struct RegexFormat< int16_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for uint32_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour uint32_t.
+	*/
+	template<>
+	struct RegexFormat< uint32_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for int32_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour int32_t.
+	*/
+	template<>
+	struct RegexFormat< int32_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for uint64_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour uint64_t.
+	*/
+	template<>
+	struct RegexFormat< uint64_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for int64_t.
+	\~french
+	\brief		Spécialisation de RegexFormat pour int64_t.
+	*/
+	template<>
+	struct RegexFormat< int64_t >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for float.
+	\~french
+	\brief		Spécialisation de RegexFormat pour float.
+	*/
+	template<>
+	struct RegexFormat< float >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for double.
+	\~french
+	\brief		Spécialisation de RegexFormat pour double.
+	*/
+	template<>
+	struct RegexFormat< double >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/02/2016
+	\~english
+	\brief		RegexFormat specialisation for long double.
+	\~french
+	\brief		Spécialisation de RegexFormat pour long double.
+	*/
+	template<>
+	struct RegexFormat< long double >
+	{
+		CU_API static xchar const * const Value;
+	};
+	/*!
 	\author 	Sylvain DOREMUS
 	\date 		12/02/2016
 	\version	0.8.0
@@ -686,6 +850,15 @@ namespace Castor
 		: public std::true_type
 	{
 	};
+	/**
+	 *\~english
+	 *\brief		Retrieves the given parameter type's name.
+	 *\param[in]	p_type	The parameter type.
+	 *\~french
+	 *\brief		Récupère le nom du type de paramètre donné.
+	 *\param[in]	p_type	Le type de paramètre.
+	 */
+	CU_API String const & GetTypeName( ePARAMETER_TYPE p_type );
 }
 
 #endif

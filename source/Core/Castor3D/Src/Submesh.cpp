@@ -55,7 +55,7 @@ namespace Castor3D
 
 		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
 		{
-			l_return = Face::TextLoader()( *p_submesh.GetFace( j ), p_file );
+			l_return = Face::TextLoader()( p_submesh.GetFace( j ), p_file );
 		}
 
 		if ( l_return )
@@ -113,7 +113,7 @@ namespace Castor3D
 
 		for ( uint32_t j = 0; j < l_uiNbFaces && l_return; j++ )
 		{
-			l_return = Face::BinaryParser( m_path ).Fill( *p_obj.GetFace( j ), l_chunk );
+			l_return = Face::BinaryParser( m_path ).Fill( p_obj.GetFace( j ), l_chunk );
 		}
 
 		if ( l_return )
@@ -182,7 +182,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						l_faces.push_back( { l_face.GetVertexIndex( 0 ), l_face.GetVertexIndex( 1 ), l_face.GetVertexIndex( 2 ) } );
+						l_faces.push_back( { l_face[0], l_face[1], l_face[2] } );
 					}
 
 					break;
@@ -387,7 +387,7 @@ namespace Castor3D
 		stVERTEX_GROUP l_vertices = p_vertices;
 		uint32_t l_stride = m_layout.GetStride();
 		m_pointsData.push_back( ByteArray( l_vertices.m_uiCount * l_stride ) );
-		uint8_t * l_pData = &( *m_pointsData.rbegin() )[0];
+		uint8_t * l_data = &( *m_pointsData.rbegin() )[0];
 		uint32_t l_uiVtxCount = uint32_t( m_points.size() );
 
 		if ( l_vertices.m_pVtx )
@@ -396,14 +396,14 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
 					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
 					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
 					Vertex::SetTangent( l_vertex, l_vertices.m_pTan );
 					Vertex::SetBitangent( l_vertex, l_vertices.m_pBin );
 					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
 					m_points.push_back( l_vertex );
-					l_pData += l_stride;
+					l_data += l_stride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
 					l_vertices.m_pTan += Vertex::GetCountTan();
@@ -415,12 +415,12 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
 					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
 					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
 					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
 					m_points.push_back( l_vertex );
-					l_pData += l_stride;
+					l_data += l_stride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
 					l_vertices.m_pTex += Vertex::GetCountTex();
@@ -430,11 +430,11 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
 					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
 					Vertex::SetNormal( l_vertex, l_vertices.m_pNml );
 					m_points.push_back( l_vertex );
-					l_pData += l_stride;
+					l_data += l_stride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pNml += Vertex::GetCountNml();
 				}
@@ -443,11 +443,11 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
 					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
 					Vertex::SetTexCoord( l_vertex, l_vertices.m_pTex );
 					m_points.push_back( l_vertex );
-					l_pData += l_stride;
+					l_data += l_stride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 					l_vertices.m_pTex += Vertex::GetCountTex();
 				}
@@ -456,47 +456,50 @@ namespace Castor3D
 			{
 				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
 				{
-					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_points.size() ) );
+					BufferElementGroupSPtr l_vertex = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_points.size() ) );
 					Vertex::SetPosition( l_vertex, l_vertices.m_pVtx );
 					m_points.push_back( l_vertex );
-					l_pData += l_stride;
+					l_data += l_stride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 				}
 			}
 
 			if ( l_vertices.m_pBones )
 			{
-				l_stride = BonedVertex::Stride;
-				m_bonesData.push_back( ByteArray( l_vertices.m_uiCount * l_stride ) );
-				l_pData = &( *m_bonesData.rbegin() )[0];
-
-				for ( uint32_t i = 0; i < l_vertices.m_uiCount; i++ )
-				{
-					BufferElementGroupSPtr l_bonesData = std::make_shared< BufferElementGroup >( l_pData, uint32_t( m_bones.size() ) );
-					BonedVertex::SetBones( l_bonesData, l_vertices.m_pBones );
-					m_bones.push_back( l_bonesData );
-					l_vertices.m_pBones++;
-					l_pData += l_stride;
-				}
-
-				m_programFlags |= ePROGRAM_FLAG_SKINNING;
+				AddBoneDatas( l_vertices.m_pBones, l_vertices.m_pBones + l_vertices.m_uiCount );
 			}
 		}
 	}
 
-	FaceSPtr Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
+	void Submesh::AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneDataBegin, stVERTEX_BONE_DATA const * const p_boneDataEnd )
 	{
-		FaceSPtr l_return;
+		uint32_t l_stride = BonedVertex::Stride;
+		m_bonesData.push_back( ByteArray( std::distance( p_boneDataBegin, p_boneDataEnd ) * l_stride ) );
+		auto l_data = &( *m_bonesData.rbegin() )[0];
+
+		std::for_each( p_boneDataBegin, p_boneDataEnd, [this, &l_data, &l_stride]( stVERTEX_BONE_DATA const & p_data )
+		{
+			BufferElementGroupSPtr l_bonesData = std::make_shared< BufferElementGroup >( l_data, uint32_t( m_bones.size() ) );
+			BonedVertex::SetBones( l_bonesData, p_data );
+			m_bones.push_back( l_bonesData );
+			l_data += l_stride;
+		} );
+
+		m_programFlags |= ePROGRAM_FLAG_SKINNING;
+	}
+
+	Face Submesh::AddFace( uint32_t a, uint32_t b, uint32_t c )
+	{
+		Face l_return{ a, b, c };
 
 		if ( a < m_points.size() && b < m_points.size() && c < m_points.size() )
 		{
-			l_return = std::make_shared< Face >( a, b, c );
 			m_faces.push_back( l_return );
 			m_hasNormals = false;
 		}
 		else
 		{
-			throw ( std::range_error( "Submesh::AddFace - One or more index out of bound" ) );
+			throw std::range_error( "Submesh::AddFace - One or more index out of bound" );
 		}
 
 		return l_return;
@@ -512,8 +515,8 @@ namespace Castor3D
 
 	void Submesh::AddQuadFace( uint32_t a, uint32_t b, uint32_t c, uint32_t d, Point3r const & p_minUV, Point3r const & p_maxUV )
 	{
-		FaceSPtr l_face1 = AddFace( a, b, c );
-		FaceSPtr l_face2 = AddFace( a, c, d );
+		AddFace( a, b, c );
+		AddFace( a, c, d );
 		Vertex::SetTexCoord( m_points[a], p_minUV[0], p_minUV[1] );
 		Vertex::SetTexCoord( m_points[b], p_maxUV[0], p_minUV[1] );
 		Vertex::SetTexCoord( m_points[c], p_maxUV[0], p_maxUV[1] );
@@ -547,8 +550,8 @@ namespace Castor3D
 
 		for ( uint32_t j = 0; j < GetFaceCount(); j++ )
 		{
-			FaceSPtr l_pFaceSrc = GetFace( j );
-			l_clone->AddFace( l_pFaceSrc->GetVertexIndex( 0 ), l_pFaceSrc->GetVertexIndex( 1 ), l_pFaceSrc->GetVertexIndex( 2 ) );
+			auto const & l_faceSrc = GetFace( j );
+			l_clone->AddFace( l_faceSrc[0], l_faceSrc[1], l_faceSrc[2] );
 		}
 
 		return l_clone;
@@ -604,7 +607,7 @@ namespace Castor3D
 			BufferElementGroupSPtr l_v1 = m_points[0];
 			BufferElementGroupSPtr l_v2 = m_points[1];
 			BufferElementGroupSPtr l_v3 = m_points[2];
-			FaceSPtr l_face = AddFace( 0, 1, 2 );
+			AddFace( 0, 1, 2 );
 			Vertex::SetTexCoord( l_v1, 0.0, 0.0 );
 			Vertex::SetTexCoord( l_v2, 0.0, 0.0 );
 			Vertex::SetTexCoord( l_v3, 0.0, 0.0 );
@@ -613,7 +616,7 @@ namespace Castor3D
 			{
 				l_v2 = m_points[i];
 				l_v3 = m_points[i + 1];
-				FaceSPtr l_faceA = AddFace( 0, i, i + 1 );
+				AddFace( 0, i, i + 1 );
 				Vertex::SetTexCoord( l_v2, 0.0, 0.0 );
 				Vertex::SetTexCoord( l_v3, 0.0, 0.0 );
 			}
@@ -653,12 +656,11 @@ namespace Castor3D
 			// Then we compute normals and tangents
 			if ( p_reverted )
 			{
-				for ( FacePtrArray::iterator l_it = m_faces.begin(); l_it != m_faces.end(); ++l_it )
+				for ( auto const & l_face : m_faces )
 				{
-					FaceSPtr l_pFace = ( *l_it );
-					l_pVtx1 = m_points[l_pFace->GetVertexIndex( 0 )];
-					l_pVtx2 = m_points[l_pFace->GetVertexIndex( 1 )];
-					l_pVtx3 = m_points[l_pFace->GetVertexIndex( 2 )];
+					l_pVtx1 = m_points[l_face[0]];
+					l_pVtx2 = m_points[l_face[1]];
+					l_pVtx3 = m_points[l_face[2]];
 					Vertex::GetPosition( l_pVtx1, l_pt1 );
 					Vertex::GetPosition( l_pVtx2, l_pt2 );
 					Vertex::GetPosition( l_pVtx3, l_pt3 );
@@ -681,12 +683,11 @@ namespace Castor3D
 			}
 			else
 			{
-				for ( FacePtrArray::iterator l_it = m_faces.begin(); l_it != m_faces.end(); ++l_it )
+				for ( auto const & l_face : m_faces )
 				{
-					FaceSPtr l_pFace = ( *l_it );
-					l_pVtx1 = m_points[l_pFace->GetVertexIndex( 0 )];
-					l_pVtx2 = m_points[l_pFace->GetVertexIndex( 1 )];
-					l_pVtx3 = m_points[l_pFace->GetVertexIndex( 2 )];
+					l_pVtx1 = m_points[l_face[0]];
+					l_pVtx2 = m_points[l_face[1]];
+					l_pVtx3 = m_points[l_face[2]];
 					Vertex::GetPosition( l_pVtx1, l_pt1 );
 					Vertex::GetPosition( l_pVtx2, l_pt2 );
 					Vertex::GetPosition( l_pVtx3, l_pt3 );
@@ -709,13 +710,12 @@ namespace Castor3D
 			}
 
 			// Eventually we normalize the normals and tangents
-			for ( VertexPtrArray::iterator l_it = m_points.begin(); l_it != m_points.end(); ++l_it )
+			for ( auto l_vtx : m_points )
 			{
-				l_pVtx1 = *l_it;
 				Coords3r l_value;
-				Vertex::GetNormal( l_pVtx1, l_value );
+				Vertex::GetNormal( l_vtx, l_value );
 				point::normalise( l_value );
-				Vertex::GetTangent( l_pVtx1, l_value );
+				Vertex::GetTangent( l_vtx, l_value );
 				point::normalise( l_value );
 			}
 
@@ -723,7 +723,7 @@ namespace Castor3D
 		}
 	}
 
-	void Submesh::ComputeNormals( FaceSPtr p_face )
+	void Submesh::ComputeNormals( Face const & p_face )
 	{
 		BufferElementGroupSPtr l_pVtx1, l_pVtx2, l_pVtx3;
 		Point3r l_vec2m1;
@@ -732,9 +732,9 @@ namespace Castor3D
 		Point3r l_pt1;
 		Point3r l_pt2;
 		Point3r l_pt3;
-		l_pVtx1 = m_points[p_face->GetVertexIndex( 0 )];
-		l_pVtx2 = m_points[p_face->GetVertexIndex( 1 )];
-		l_pVtx3 = m_points[p_face->GetVertexIndex( 2 )];
+		l_pVtx1 = m_points[p_face[0]];
+		l_pVtx2 = m_points[p_face[1]];
+		l_pVtx3 = m_points[p_face[2]];
 		Vertex::GetPosition( l_pVtx1, l_pt1 );
 		Vertex::GetPosition( l_pVtx2, l_pt2 );
 		Vertex::GetPosition( l_pVtx3, l_pt3 );
@@ -747,7 +747,7 @@ namespace Castor3D
 		ComputeTangents( p_face );
 	}
 
-	void Submesh::ComputeTangents( FaceSPtr p_face )
+	void Submesh::ComputeTangents( Face const & p_face )
 	{
 		BufferElementGroupSPtr l_pVtx1, l_pVtx2, l_pVtx3;
 		Point3r l_vec2m1;
@@ -761,9 +761,9 @@ namespace Castor3D
 		Point3r l_pt1;
 		Point3r l_pt2;
 		Point3r l_pt3;
-		l_pVtx1 = m_points[p_face->GetVertexIndex( 0 )];
-		l_pVtx2 = m_points[p_face->GetVertexIndex( 1 )];
-		l_pVtx3 = m_points[p_face->GetVertexIndex( 2 )];
+		l_pVtx1 = m_points[p_face[0]];
+		l_pVtx2 = m_points[p_face[1]];
+		l_pVtx3 = m_points[p_face[2]];
 		Vertex::GetPosition( l_pVtx1, l_pt1 );
 		Vertex::GetPosition( l_pVtx2, l_pt2 );
 		Vertex::GetPosition( l_pVtx3, l_pt3 );
@@ -785,12 +785,11 @@ namespace Castor3D
 		Point3rArray l_arrayTangents( m_points.size() );
 
 		// Pour chaque vertex, on stocke la somme des tangentes qui peuvent lui être affectées
-		for ( FacePtrArray::iterator l_it = m_faces.begin(); l_it != m_faces.end(); ++l_it )
+		for ( auto const & l_face : m_faces )
 		{
-			FaceSPtr l_pFace = ( *l_it );
-			BufferElementGroupSPtr	l_pVtx1 = m_points[l_pFace->GetVertexIndex( 0 )];
-			BufferElementGroupSPtr	l_pVtx2 = m_points[l_pFace->GetVertexIndex( 1 )];
-			BufferElementGroupSPtr	l_pVtx3 = m_points[l_pFace->GetVertexIndex( 2 )];
+			BufferElementGroupSPtr	l_pVtx1 = m_points[l_face[0]];
+			BufferElementGroupSPtr	l_pVtx2 = m_points[l_face[1]];
+			BufferElementGroupSPtr	l_pVtx3 = m_points[l_face[2]];
 			Point3r l_pt1;
 			Point3r l_pt2;
 			Point3r l_pt3;
@@ -821,9 +820,9 @@ namespace Castor3D
 				l_vFaceTangent[2] = l_rDirCorrection * ( ( l_vec2m1[2] * l_tex3m1[1] ) + ( l_vec3m1[2] * -l_tex2m1[1] ) );
 			}
 
-			l_arrayTangents[l_pFace->GetVertexIndex( 0 )] += l_vFaceTangent;
-			l_arrayTangents[l_pFace->GetVertexIndex( 1 )] += l_vFaceTangent;
-			l_arrayTangents[l_pFace->GetVertexIndex( 2 )] += l_vFaceTangent;
+			l_arrayTangents[l_face[0]] += l_vFaceTangent;
+			l_arrayTangents[l_face[1]] += l_vFaceTangent;
+			l_arrayTangents[l_face[2]] += l_vFaceTangent;
 		}
 
 		uint32_t i = 0;
@@ -1021,12 +1020,13 @@ namespace Castor3D
 			m_bonesBuffer = std::make_unique< VertexBuffer >( *GetEngine(), BufferDeclaration
 			{
 				{
-					BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_3INTS, 0 },
-					BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_3INTS, 0 },
-					BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_3FLOATS, 0 },
-					BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_3FLOATS, 0 },
+					BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_4INTS, 0 },
+					BufferElementDeclaration{ ShaderProgram::BoneIds1, eELEMENT_USAGE_BONE_IDS1, eELEMENT_TYPE_4INTS, 16 },
+					BufferElementDeclaration{ ShaderProgram::Weights0, eELEMENT_USAGE_BONE_WEIGHTS0, eELEMENT_TYPE_4FLOATS, 32 },
+					BufferElementDeclaration{ ShaderProgram::Weights1, eELEMENT_USAGE_BONE_WEIGHTS1, eELEMENT_TYPE_4FLOATS, 48 },
 				}
 			} );
+			ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
 		}
 		else if ( GetEngine()->GetRenderSystem()->HasInstancing() )
 		{
@@ -1039,7 +1039,12 @@ namespace Castor3D
 			if ( l_count > 1 )
 			{
 				m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
-				m_matrixBuffer = std::make_unique< MatrixBuffer >( *GetEngine() );
+				m_matrixBuffer = std::make_unique< VertexBuffer >( *GetEngine(), BufferDeclaration
+				{
+					{
+						BufferElementDeclaration{ ShaderProgram::Transform, eELEMENT_USAGE_TRANSFORM, eELEMENT_TYPE_4x4FLOATS, 0 },
+					}
+				} );
 			}
 		}
 	}
@@ -1153,15 +1158,11 @@ namespace Castor3D
 					l_indexBuffer.Resize( l_uiSize );
 				}
 
-				for ( FacePtrArray::iterator l_it = m_faces.begin(); l_it != m_faces.end(); ++l_it )
+				for ( auto const & l_face : m_faces )
 				{
-					if ( *l_it )
-					{
-						l_pFace = *l_it;
-						l_indexBuffer.SetElement( l_index++, l_pFace->GetVertexIndex( 0 ) );
-						l_indexBuffer.SetElement( l_index++, l_pFace->GetVertexIndex( 1 ) );
-						l_indexBuffer.SetElement( l_index++, l_pFace->GetVertexIndex( 2 ) );
-					}
+					l_indexBuffer.SetElement( l_index++, l_face[0] );
+					l_indexBuffer.SetElement( l_index++, l_face[1] );
+					l_indexBuffer.SetElement( l_index++, l_face[2] );
 				}
 
 				m_faces.clear();
@@ -1212,8 +1213,8 @@ namespace Castor3D
 	{
 		if ( m_matrixBuffer )
 		{
-			MatrixBuffer & l_matrixBuffer = *m_matrixBuffer;
-			uint32_t l_uiSize = p_count * 16;
+			VertexBuffer & l_matrixBuffer = *m_matrixBuffer;
+			uint32_t l_uiSize = p_count * 16 * sizeof( real );
 
 			if ( l_matrixBuffer.GetSize() != l_uiSize )
 			{

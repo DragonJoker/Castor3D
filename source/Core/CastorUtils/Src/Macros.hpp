@@ -123,67 +123,62 @@ typedef wchar_t ychar;
 #	error "Yet unsupported compiler"
 #endif
 
-#if CASTOR_HAS_DEFAULTED_FUNC
-#	define CASTOR_DEFAULT = default
-#else
-#	define CASTOR_DEFAULT
-#endif
-
-#if CASTOR_HAS_DELETED_FUNC
-#	define CASTOR_DELETED = delete
-#else
-#	define CASTOR_DELETED
-#endif
-
 #define DECLARE_SMART_PTR( class_name )\
-	typedef std::shared_ptr< class_name > class_name##SPtr;\
-	typedef std::weak_ptr< class_name > class_name##WPtr;\
-	typedef std::unique_ptr< class_name > class_name##UPtr;\
-	typedef class_name * class_name##RPtr
+	using class_name##SPtr = std::shared_ptr< class_name >;\
+	using class_name##WPtr = std::weak_ptr< class_name >;\
+	using class_name##UPtr = std::unique_ptr< class_name >;\
+	using class_name##RPtr = class_name *;
 
 #define DECLARE_MAP( key, value, name )\
-	typedef std::map< key, value > name##Map;\
-	typedef name##Map::iterator name##MapIt;\
-	typedef name##Map::reverse_iterator name##MapRIt;\
-	typedef name##Map::const_iterator name##MapConstIt;\
-	typedef name##Map::const_reverse_iterator name##MapConstRIt;\
-	typedef name##Map::value_type name##Pair
+	using name##Map = std::map< key, value >;\
+	using name##MapIt = name##Map::iterator;\
+	using name##MapRIt = name##Map::reverse_iterator;\
+	using name##MapConstIt = name##Map::const_iterator;\
+	using name##MapConstRIt = name##Map::const_reverse_iterator;\
+	using name##MapValueType = name##Map::value_type
 
 #define DECLARE_MULTIMAP( key, value, name )\
-	typedef std::multimap< key, value > name##MMap;\
-	typedef name##MMap::iterator name##MMapIt;\
-	typedef name##MMap::reverse_iterator name##MMapRIt;\
-	typedef name##MMap::const_iterator name##MMapConstIt;\
-	typedef name##MMap::const_reverse_iterator name##MMapConstRIt;\
-	typedef name##MMap::value_type name##Pair
+	using name##MMap = std::multimap< key, value >;\
+	using name##MMapIt = name##MMap::iterator;\
+	using name##MMapRIt = name##MMap::reverse_iterator;\
+	using name##MMapConstIt = name##MMap::const_iterator;\
+	using name##MMapConstRIt = name##MMap::const_reverse_iterator;\
+	using name##MapValueType = name##MMap::value_type
 
 #define DECLARE_SET( key, name )\
-	typedef std::set< key > name##Set;\
-	typedef name##Set::iterator name##SetIt;\
-	typedef name##Set::reverse_iterator name##SetRIt;\
-	typedef name##Set::const_iterator name##SetConstIt;\
-	typedef name##Set::const_reverse_iterator name##SetConstRIt
+	using name##Set = std::set< key >;\
+	using name##SetIt = name##Set::iterator;\
+	using name##SetRIt = name##Set::reverse_iterator;\
+	using name##SetConstIt = name##Set::const_iterator;\
+	using name##SetConstRIt = name##Set::const_reverse_iterator
+
+#define DECLARE_MULTISET( key, name )\
+	using name##MSet = std::multiset< key >;\
+	using name##MSetIt = name##MSet::iterator;\
+	using name##MSetRIt = name##MSet::reverse_iterator;\
+	using name##MSetConstIt = name##MSet::const_iterator;\
+	using name##MSetConstRIt = name##MSet::const_reverse_iterator
 
 #define DECLARE_VECTOR( key, name )\
-	typedef std::vector< key > name##Array;\
-	typedef name##Array::iterator name##ArrayIt;\
-	typedef name##Array::reverse_iterator name##ArrayRIt;\
-	typedef name##Array::const_iterator name##ArrayConstIt;\
-	typedef name##Array::const_reverse_iterator name##ArrayConstRIt
+	using name##Array = std::vector< key >;\
+	using name##ArrayIt = name##Array::iterator;\
+	using name##ArrayRIt = name##Array::reverse_iterator;\
+	using name##ArrayConstIt = name##Array::const_iterator;\
+	using name##ArrayConstRIt = name##Array::const_reverse_iterator
 
 #define DECLARE_ARRAY( key, count, name )\
-	typedef std::array< key, count > name##Array;\
-	typedef name##Array::iterator name##ArrayIt;\
-	typedef name##Array::reverse_iterator name##ArrayRIt;\
-	typedef name##Array::const_iterator name##ArrayConstIt;\
-	typedef name##Array::const_reverse_iterator name##ArrayConstRIt
+	using name##Array = std::array< key, count >;\
+	using name##ArrayIt = name##Array::iterator;\
+	using name##ArrayRIt = name##Array::reverse_iterator;\
+	using name##ArrayConstIt = name##Array::const_iterator;\
+	using name##ArrayConstRIt = name##Array::const_reverse_iterator
 
 #define DECLARE_LIST( key, name )\
-	typedef std::list< key > name##List;\
-	typedef name##List::iterator name##ListIt;\
-	typedef name##List::reverse_iterator name##ListRIt;\
-	typedef name##List::const_iterator name##ListConstIt;\
-	typedef name##List::const_reverse_iterator name##ListConstRIt
+	using name##List = std::list< key >;\
+	using name##ListIt = name##List::iterator;\
+	using name##ListRIt = name##List::reverse_iterator;\
+	using name##ListConstIt = name##List::const_iterator;\
+	using name##ListConstRIt = name##List::const_reverse_iterator
 
 #define DECLARE_TPL_MAP( key, value, name )\
 	typedef std::map< key, value > name##Map;\
@@ -215,16 +210,16 @@ typedef wchar_t ychar;
 	typedef typename name##Array::const_reverse_iterator name##ArrayConstRIt
 
 #define DECLARE_TPL_LIST( key, name )\
-	typedef std::list< key > name##List;\
-	typedef typename name##List::iterator name##ListIt;\
-	typedef typename name##List::reverse_iterator name##ListRIt;\
-	typedef typename name##List::const_iterator name##ListConstIt;\
-	typedef typename name##List::const_reverse_iterator name##ListConstRIt
+	using name##List = std::list< key >;\
+	using typename name##List::iterator name##ListIt;\
+	using typename name##List::reverse_iterator name##ListRIt;\
+	using typename name##List::const_iterator name##ListConstIt;\
+	using typename name##List::const_reverse_iterator name##ListConstRIt
 
 #define DECLARE_COLLECTION( elem, key, name )\
-	typedef Castor::Collection< elem, key > name##Collection;\
-	typedef name##Collection::TObjPtrMapIt name##CollectionIt;\
-	typedef name##Collection::TObjPtrMapConstIt name##CollectionConstIt;
+	using name##Collection = Castor::Collection< elem, key >;\
+	using name##CollectionIt = name##Collection::TObjPtrMapIt;\
+	using name##CollectionConstIt = name##Collection::TObjPtrMapConstIt;
 
 #define DECLARE_POINT( type, count, name )\
 	typedef Point< type, count > Point##count##name;\
@@ -261,6 +256,8 @@ typedef wchar_t ychar;
 #if !defined CU_PARAM_UNUSED
 #	define CU_PARAM_UNUSED( x )
 #endif
+
+#define CASTOR_TYPE( x ) :x
 
 #define CASTOR_ENUM_BOUNDS( EnumName, EnumMin )\
 	EnumName##_COUNT,\

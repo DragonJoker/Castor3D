@@ -58,34 +58,6 @@ namespace Castor3D
 		 *\brief		Enregistre tous les types d'objets
 		 */
 		C3D_API virtual void Initialise();
-
-#if !CASTOR_HAS_VARIADIC_TEMPLATES
-
-		/**
-		 *\~english
-		 *\brief		Creates an object from a key
-		 *\param[in]	p_key	The object type
-		 *\return		The created object
-		 *\~french
-		 *\brief		Crée un objet à partir d'une clef (type d'objet)
-		 *\param[in]	p_key	Le type d'objet
-		 *\return		L'objet créé
-		 */
-		ObjPtr Create( eLIGHT_TYPE const & p_key )
-		{
-			ObjPtr l_return;
-			ObjMap::iterator l_it = m_registered.find( p_key );
-
-			if ( l_it != m_registered.end() )
-			{
-				l_return = l_it->second();
-			}
-
-			return l_return;
-		}
-
-#endif
-
 	};
 }
 

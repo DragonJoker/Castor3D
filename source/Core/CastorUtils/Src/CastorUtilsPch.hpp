@@ -51,22 +51,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <sys/stat.h>
 #	include <wchar.h>
 
-#	if CASTOR_HAS_STDARRAY || CASTOR_HAS_TR1ARRAY
-#		include <array>
-#	else
-#		include <boost/array.hpp>
-#	endif
+#	include <array>
 
-#	if CASTOR_HAS_STDTHREAD
-#		include <condition_variable>
-#		include <mutex>
-#		include <thread>
-#	else
-#		include <boost/thread/condition_variable.hpp>
-#		include <boost/thread/mutex.hpp>
-#		include <boost/thread/recursive_mutex.hpp>
-#		include <boost/thread/thread.hpp>
-#	endif
+#	include <condition_variable>
+#	include <mutex>
+#	include <thread>
 
 #	include <ft2build.h>
 
