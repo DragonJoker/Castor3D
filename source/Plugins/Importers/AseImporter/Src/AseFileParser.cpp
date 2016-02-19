@@ -1,5 +1,6 @@
 #include "AseFileParser.hpp"
 #include "AseFileContext.hpp"
+#include "AseImporter.hpp"
 
 #include <RenderSystem.hpp>
 #include <Buffer.hpp>
@@ -33,10 +34,11 @@ using namespace Castor;
 
 namespace Ase
 {
-	AseFileParser::AseFileParser( Engine * p_pEngine )
+	AseFileParser::AseFileParser( Engine * p_pEngine, AseImporter & p_importer )
 		: FileParser( eASE_SECTION_ROOT )
 		, m_pScene( NULL )
 		, m_engine( p_pEngine )
+		, m_importer( p_importer )
 	{
 	}
 
@@ -179,7 +181,7 @@ namespace Ase
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "*MESH_FACENORMAL" ), AseParser_NormalsListFaceNormal );
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "*MESH_VERTEXNORMAL" ), AseParser_NormalsListVertexNormal );
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "}" ), AseParser_NormalsListEnd );
-		std::shared_ptr< AseFileContext > l_pContext = std::make_shared< AseFileContext >( this, &p_file );
+		std::shared_ptr< AseFileContext > l_pContext = std::make_shared< AseFileContext >( this, m_importer, &p_file );
 		m_context = std::static_pointer_cast< FileParserContext >( l_pContext );
 		l_pContext->Initialise();
 		l_pContext->strName.clear();
@@ -362,6 +364,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_RootGeometry )
 	if ( ( !l_pContext->pScene && l_pContext->pMesh ) )
 	{
 		p_parser->Ignore();
+		PARSING_WARNING( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_GEOMETRY )
@@ -598,30 +601,9 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MapDiffuseBitmap )
 {
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
-	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
-	PassSPtr l_pPass = l_pContext->pPass;
-	Path l_filePath = p_context->m_file->GetFileFullPath().GetPath();
-	String l_strName;
-	p_params[0]->Get( l_strName );
-	StaticTextureSPtr l_pTexture;
-	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
-	String l_strPath = l_strName;
-
-	if ( !File::FileExists( l_strPath ) )
-	{
-		l_strPath = l_filePath / l_strName;
-	}
-
-	ImageSPtr l_pImage = l_pEngine->GetImageManager().create( l_strName, l_strPath );
-
-	if ( l_pImage )
-	{
-		l_pTexture = l_pEngine->GetRenderSystem()->CreateStaticTexture();
-		l_pTexture->SetType( eTEXTURE_TYPE_2D );
-		l_pTexture->SetImage( l_pImage->GetPixels() );
-		l_pContext->pTextureUnit->SetTexture( l_pTexture );
-		l_pContext->pTextureUnit->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
-	}
+	Path l_path;
+	p_params[0]->Get( l_path );
+	l_pContext->m_importer.LoadTexture( l_path, *l_pContext->pPass, eTEXTURE_CHANNEL_DIFFUSE );
 }
 END_ATTRIBUTE()
 
@@ -1002,14 +984,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_TFaceListFace )
 {
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	int l_index[4];
-	FaceSPtr l_pFace;
 	String l_strParams;
 	p_params[0]->Get( l_strParams );
 	Read4Ints( l_index, l_strParams );
-	l_pFace = l_pContext->pSubmesh->GetFace( l_index[0] );
-	Vertex::SetTexCoord( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 0 ) ), l_pContext->m_arrayTexCoords[ l_index[1] ]->at( 0 ), l_pContext->m_arrayTexCoords[ l_index[1] ]->at( 1 ) );
-	Vertex::SetTexCoord( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 1 ) ), l_pContext->m_arrayTexCoords[ l_index[2] ]->at( 0 ), l_pContext->m_arrayTexCoords[ l_index[2] ]->at( 1 ) );
-	Vertex::SetTexCoord( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 2 ) ), l_pContext->m_arrayTexCoords[ l_index[3] ]->at( 0 ), l_pContext->m_arrayTexCoords[ l_index[3] ]->at( 1 ) );
+	Face l_face = l_pContext->pSubmesh->GetFace( l_index[0] );
+	Vertex::SetTexCoord( l_pContext->pSubmesh->GetPoint( l_face[0] ), l_pContext->m_arrayTexCoords[ l_index[1] ]->at( 0 ), l_pContext->m_arrayTexCoords[ l_index[1] ]->at( 1 ) );
+	Vertex::SetTexCoord( l_pContext->pSubmesh->GetPoint( l_face[1] ), l_pContext->m_arrayTexCoords[ l_index[2] ]->at( 0 ), l_pContext->m_arrayTexCoords[ l_index[2] ]->at( 1 ) );
+	Vertex::SetTexCoord( l_pContext->pSubmesh->GetPoint( l_face[2] ), l_pContext->m_arrayTexCoords[ l_index[3] ]->at( 0 ), l_pContext->m_arrayTexCoords[ l_index[3] ]->at( 1 ) );
 }
 END_ATTRIBUTE()
 
@@ -1043,14 +1024,13 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_NormalsListFaceNormal )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	uint32_t l_uiIndex;
 	float l_vertex[3];
-	FaceSPtr l_pFace;
 	String l_strParams;
 	p_params[0]->Get( l_strParams );
 	RetrieveVertex( l_uiIndex, l_vertex, l_strParams );
-	l_pFace = l_pContext->pSubmesh->GetFace( l_uiIndex );
-	Vertex::SetNormal( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 0 ) ), l_vertex[0], l_vertex[1], l_vertex[2] );
-	Vertex::SetNormal( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 1 ) ), l_vertex[0], l_vertex[1], l_vertex[2] );
-	Vertex::SetNormal( l_pContext->pSubmesh->GetPoint( l_pFace->GetVertexIndex( 2 ) ), l_vertex[0], l_vertex[1], l_vertex[2] );
+	Face  l_face = l_pContext->pSubmesh->GetFace( l_uiIndex );
+	Vertex::SetNormal( l_pContext->pSubmesh->GetPoint( l_face[0] ), l_vertex[0], l_vertex[1], l_vertex[2] );
+	Vertex::SetNormal( l_pContext->pSubmesh->GetPoint( l_face[1] ), l_vertex[0], l_vertex[1], l_vertex[2] );
+	Vertex::SetNormal( l_pContext->pSubmesh->GetPoint( l_face[2] ), l_vertex[0], l_vertex[1], l_vertex[2] );
 }
 END_ATTRIBUTE()
 

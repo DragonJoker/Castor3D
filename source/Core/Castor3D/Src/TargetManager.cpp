@@ -8,6 +8,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< RenderTarget >::Name = cuT( "RenderTarget" );
+
 	TargetManager::TargetManager( Engine & p_engine )
 		: ResourceManager< String, RenderTarget >( p_engine )
 	{

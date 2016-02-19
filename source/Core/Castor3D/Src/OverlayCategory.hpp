@@ -153,18 +153,11 @@ namespace Castor3D
 		C3D_API virtual ~OverlayCategory();
 		/**
 		 *\~english
-		 *\brief		Initialises the overlay.
+		 *\brief		Updates the overlay position, size...
 		 *\~french
-		 *\brief		Initialise l'incrustation.
+		 *\brief		Met à jour la position, taille...
 		 */
-		C3D_API virtual void Initialise() {}
-		/**
-		 *\~english
-		 *\brief		Cleanus the overlay up.
-		 *\~french
-		 *\brief		Nettoie l'incrustation.
-		 */
-		C3D_API virtual void Cleanup() {}
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Draws the overlay
@@ -583,6 +576,13 @@ namespace Castor3D
 		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
 		virtual void DoRender( OverlayRendererSPtr p_renderer ) = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the overlay position, size...
+		 *\~french
+		 *\brief		Met à jour la position, taille...
+		 */
+		virtual void DoUpdate() {}
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer.

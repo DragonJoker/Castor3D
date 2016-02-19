@@ -1685,7 +1685,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFace )
 		{
 			Point4i l_pt4Indices;
 
-			if ( Castor::ParseVector( l_strParams, l_pt4Indices ) )
+			if ( Castor::ParseValues( l_strParams, l_pt4Indices ) )
 			{
 				l_pContext->iFace1 = int( l_pContext->faces.size() );
 				l_pContext->faces.push_back( l_pt4Indices[0] );
@@ -1697,7 +1697,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshFace )
 				l_pContext->faces.push_back( l_pt4Indices[3] );
 			}
 		}
-		else if ( Castor::ParseVector( l_strParams, l_pt3Indices ) )
+		else if ( Castor::ParseValues( l_strParams, l_pt3Indices ) )
 		{
 			l_pContext->iFace1 = int( l_pContext->faces.size() );
 			l_pContext->faces.push_back( l_pt3Indices[0] );
@@ -3483,7 +3483,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScale )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScalesInterpolation )
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationInterpolation )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	uint32_t l_value;
@@ -3491,41 +3491,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationScalesInterpolation )
 
 	if ( l_pContext->pAnimation )
 	{
-		l_pContext->pAnimation->SetScaleInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animation initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationRotatesInterpolation )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	uint32_t l_value;
-	p_params[0]->Get( l_value );
-
-	if ( l_pContext->pAnimation )
-	{
-		l_pContext->pAnimation->SetRotateInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No animation initialised" ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationTranslatesInterpolation )
-{
-	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	uint32_t l_value;
-	p_params[0]->Get( l_value );
-
-	if ( l_pContext->pAnimation )
-	{
-		l_pContext->pAnimation->SetTranslateInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
+		l_pContext->pAnimation->SetInterpolationMode( eINTERPOLATOR_MODE( l_value ) );
 	}
 	else
 	{

@@ -155,6 +155,7 @@ namespace CastorViewer
 			TextureUnitSPtr l_pNormal = l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_NORMAL );
 			TextureUnitSPtr l_pOpacity = l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
 			TextureUnitSPtr l_pSpecular = l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR );
+			TextureUnitSPtr l_pEmissive = l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_EMISSIVE );
 			TextureUnitSPtr l_pGloss = l_pPass->GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
 			l_strReturn << cuT( "newmtl " ) << p_material.GetName() << cuT( "\n" );
 			l_strReturn << cuT( "	Ka " ) << l_clAmbient.red().value() << cuT( " " ) << l_clAmbient.green().value() << cuT( " " ) << l_clAmbient.blue().value() << cuT( "\n" );

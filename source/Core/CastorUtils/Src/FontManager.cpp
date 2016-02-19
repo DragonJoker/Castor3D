@@ -9,6 +9,13 @@
 
 namespace Castor
 {
+	namespace
+	{
+		static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created " );
+		static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate " );
+		static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - NULL " );
+	}
+
 	FontManager::BinaryLoader::BinaryLoader()
 		: Loader< FontManager, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
@@ -37,7 +44,7 @@ namespace Castor
 		if ( Collection< Font, String >::has( p_name ) )
 		{
 			l_return = Collection< Font, String >::find( p_name );
-			Logger::LogWarning( cuT( "Trying to create an already existing font : " ) + p_name );
+			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << cuT( "Font: " ) << p_name );
 		}
 		else
 		{
@@ -46,6 +53,7 @@ namespace Castor
 			if ( File::FileExists( p_path ) )
 			{
 				l_return = std::make_shared< Font >( p_path, p_name, p_height );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << cuT( "Font: " ) << p_name );
 				Collection< Font, String >::insert( p_name, l_return );
 
 				if ( m_paths.find( l_name ) == m_paths.end() )
@@ -74,15 +82,7 @@ namespace Castor
 
 	FontSPtr FontManager::get( Castor::String const & p_name )
 	{
-		auto l_lock = make_unique_lock( *this );
-		FontSPtr l_return = Collection< Font, String >::find( p_name );
-
-		if ( !l_return )
-		{
-			Logger::LogWarning( cuT( "Trying to retrieve a non existing font : " ) + p_name );
-		}
-
-		return l_return;
+		return Collection< Font, String >::find( p_name );
 	}
 
 	void FontManager::clear()

@@ -18,7 +18,7 @@ namespace Castor3D
 		, m_mainLoopThread( nullptr )
 	{
 		m_ended = false;
-		m_started = false;
+		m_rendering = false;
 		m_createContext = false;
 		m_created = false;
 		m_interrupted = false;
@@ -27,30 +27,10 @@ namespace Castor3D
 
 	RenderLoopAsync::~RenderLoopAsync()
 	{
-		Interrupt();
 		// We wait for the main loop to end (it makes a final render to clean the render system)
+		m_interrupted = true;
 		m_mainLoopThread->join();
 		m_mainLoopThread.reset();
-	}
-
-	bool RenderLoopAsync::IsEnded()const
-	{
-		return m_ended;
-	}
-
-	void RenderLoopAsync::SetEnded( bool p_value )
-	{
-		m_ended = p_value;
-	}
-
-	bool RenderLoopAsync::IsToCreate()const
-	{
-		return m_createContext;
-	}
-
-	void RenderLoopAsync::SetToCreate( bool p_value )
-	{
-		m_createContext = p_value;
 	}
 
 	bool RenderLoopAsync::IsCreated()const
@@ -58,19 +38,9 @@ namespace Castor3D
 		return m_created;
 	}
 
-	void RenderLoopAsync::SetCreated( bool p_value )
+	bool RenderLoopAsync::IsRendering()const
 	{
-		m_created = p_value;
-	}
-
-	bool RenderLoopAsync::IsStarted()const
-	{
-		return m_started;
-	}
-
-	void RenderLoopAsync::SetStarted( bool p_value )
-	{
-		m_started = p_value;
+		return m_rendering;
 	}
 
 	bool RenderLoopAsync::IsInterrupted()const
@@ -78,15 +48,14 @@ namespace Castor3D
 		return m_interrupted;
 	}
 
-	void RenderLoopAsync::Interrupt()
+	bool RenderLoopAsync::IsEnded()const
 	{
-		m_interrupted = true;
+		return m_ended;
 	}
 
 	void RenderLoopAsync::DoStartRendering()
 	{
-		m_ended = false;
-		m_started = true;
+		m_rendering = true;
 	}
 
 	void RenderLoopAsync::DoRenderSyncFrame()
@@ -96,25 +65,29 @@ namespace Castor3D
 
 	void RenderLoopAsync::DoEndRendering()
 	{
-		m_ended = true;
-		m_started = false;
+		m_rendering = false;
+
+		while ( !IsEnded() )
+		{
+			System::Sleep( 5 );
+		}
 	}
 
 	ContextSPtr RenderLoopAsync::DoCreateMainContext( RenderWindow & p_window )
 	{
 		ContextSPtr l_return;
 
-		if ( !IsToCreate() )
+		if ( !m_createContext )
 		{
 			DoSetWindow( &p_window );
-			SetToCreate( true );
+			m_createContext = true;
 
 			while ( !IsCreated() )
 			{
 				System::Sleep( 5 );
 			}
 
-			SetToCreate( false );
+			m_createContext = false;
 			DoSetWindow( NULL );
 			l_return = m_renderSystem->GetMainContext();
 		}
@@ -132,12 +105,12 @@ namespace Castor3D
 			while ( !IsInterrupted() )
 			{
 				// Tant qu'on n'a pas de contexte principal et qu'on ne nous a pas demandé de le créer, on attend.
-				while ( !IsInterrupted() && !IsToCreate() && !IsCreated() )
+				while ( !IsInterrupted() && !m_createContext && !IsCreated() )
 				{
 					System::Sleep( 10 );
 				}
 
-				if ( !IsInterrupted() && IsToCreate() && !IsCreated() )
+				if ( !IsInterrupted() && m_createContext && !IsCreated() )
 				{
 					// On nous a demandé de créer le contexte principal, on le crée
 					ContextSPtr l_context = DoCreateContext( *DoGetWindow() );
@@ -145,18 +118,18 @@ namespace Castor3D
 					if ( l_context )
 					{
 						m_renderSystem->SetMainContext( l_context );
-						SetCreated();
+						m_created = true;
 					}
 				}
 
 				// Tant qu'on n'a pas demandé le début du rendu, on attend.
-				while ( !IsInterrupted() && !IsStarted() )
+				while ( !IsInterrupted() && !IsRendering() )
 				{
 					System::Sleep( 10 );
 				}
 
 				// Le rendu est en cours
-				while ( !IsInterrupted() && !IsEnded() )
+				while ( !IsInterrupted() && IsRendering() )
 				{
 					double l_dFrameTime = GetFrameTime();
 					l_timer.TimeS();
@@ -173,6 +146,8 @@ namespace Castor3D
 						System::Sleep( 1 );
 					}
 				}
+
+				m_ended = true;
 			}
 		}
 		catch ( Castor::Exception & p_exc )

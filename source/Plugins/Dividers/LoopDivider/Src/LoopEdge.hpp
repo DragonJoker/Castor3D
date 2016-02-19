@@ -33,8 +33,8 @@ namespace Loop
 	private:
 		VertexWPtr m_firstVertex;
 		VertexWPtr m_secondVertex;
-		Castor3D::FaceWPtr m_firstFace;
-		Castor3D::FaceWPtr m_secondFace;
+		Castor3D::Face const * m_firstFace;
+		Castor3D::Face const * m_secondFace;
 		VertexSPtr m_createdVertex;
 		bool m_divided;
 		bool m_toDivide;
@@ -48,7 +48,7 @@ namespace Loop
 		 *\param[in]	p_f1	The 1st face of the edge
 		 *\param[in]	p_toDivide	Tells if the edge has to be divided
 		 */
-		Edge( VertexSPtr p_v1, VertexSPtr p_v2, Castor3D::FaceSPtr p_f1, bool p_toDivide );
+		Edge( VertexSPtr p_v1, VertexSPtr p_v2, Castor3D::Face const & p_f1, bool p_toDivide );
 		/**
 		 * Destructor
 		 */
@@ -57,7 +57,7 @@ namespace Loop
 		 * Adds a face to the edge (max 2 faces, 1 at each side of the edge)
 		 *\param[in]	p_face	Pointer to the face to add
 		 */
-		void AddFace( Castor3D::FaceSPtr p_face );
+		void AddFace( Castor3D::Face const & p_face );
 		/**
 		 * Divides the edge id est adds a vertex in a portion of the edge determined by p_value (0.5 = middle).
 		 * Doesn't divide the faces
@@ -82,13 +82,13 @@ namespace Loop
 		{
 			return m_secondVertex.lock();
 		}
-		inline Castor3D::FaceSPtr GetFace1()const
+		inline Castor3D::Face const * GetFace1()const
 		{
-			return m_firstFace.lock();
+			return m_firstFace;
 		}
-		inline Castor3D::FaceSPtr GetFace2()const
+		inline Castor3D::Face const * GetFace2()const
 		{
-			return m_secondFace.lock();
+			return m_secondFace;
 		}
 
 		inline void SetToDivide()

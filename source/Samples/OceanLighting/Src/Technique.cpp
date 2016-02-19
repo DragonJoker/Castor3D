@@ -1203,8 +1203,8 @@ void RenderTechnique::DoEndRender()
 	invView = view.get_inverse();
 	invProj = proj.get_inverse();
 	projview = proj * view;
-	m_skyScreenToCamera->SetValue( invProj.const_ptr() );
-	m_skyCameraToWorld->SetValue( invView.const_ptr() );
+	m_skyScreenToCamera->SetValue( Matrix4x4r{ invProj.const_ptr() } );
+	m_skyCameraToWorld->SetValue( Matrix4x4r{ invView.const_ptr() } );
 	m_skyWorldCamera->SetValue( Point3f( 0.0f, 0.0f, ch ) );
 	m_skyWorldSunDir->SetValue( sun );
 	m_skyHdrExposure->SetValue( m_hdrExposure );
@@ -1215,12 +1215,12 @@ void RenderTechnique::DoEndRender()
 
 	if ( m_cloudLayer && ch < 3000.0 )
 	{
-		drawClouds( sun, projview.const_ptr() );
+		drawClouds( sun, Matrix4x4r{ projview.const_ptr() } );
 	}
 
-	m_renderScreenToCamera->SetValue( invProj.const_ptr() );
-	m_renderCameraToWorld->SetValue( invView.const_ptr() );
-	m_renderWorldToScreen->SetValue( projview.const_ptr() );
+	m_renderScreenToCamera->SetValue( Matrix4x4r{ invProj.const_ptr() } );
+	m_renderCameraToWorld->SetValue( Matrix4x4r{ invView.const_ptr() } );
+	m_renderWorldToScreen->SetValue( Matrix4x4r{ projview.const_ptr() } );
 	m_renderWorldCamera->SetValue( Point3f( 0.0f, 0.0f, ch ) );
 	m_renderWorldSunDir->SetValue( sun );
 	m_renderHdrExposure->SetValue( m_hdrExposure );
@@ -1281,7 +1281,7 @@ void RenderTechnique::DoEndRender()
 
 	if ( m_cloudLayer && ch > 3000.0 )
 	{
-		drawClouds( sun, projview.const_ptr() );
+		drawClouds( sun, Matrix4x4r{ projview.const_ptr() } );
 	}
 
 	m_frameBuffer->Unbind();

@@ -23,6 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Mesh.hpp"
 #include "FaceIndices.hpp"
 #include "FaceInfos.hpp"
+#include "Face.hpp"
 #include "VertexBoneData.hpp"
 #include "VertexGroup.hpp"
 
@@ -248,6 +249,58 @@ namespace Castor3D
 		C3D_API void AddPoints( stVERTEX_GROUP const & p_vertices );
 		/**
 		 *\~english
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_boneDataBegin	The bone datas begin.
+		 *\param[in]	p_boneDataEnd	The bone datas end.
+		 *\~french
+		 *\brief		Ajoute des données de bones.
+		 *\param[in]	p_boneDataBegin	Le début des données de bones.
+		 *\param[in]	p_boneDataEnd	La fin des données de bones.
+		 */
+		C3D_API void AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneDataBegin, stVERTEX_BONE_DATA const * const p_boneDataEnd );
+		/**
+		 *\~english
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_boneData	The bone datas.
+		 *\param[in]	p_count		The data count.
+		 *\~french
+		 *\brief		Ajoute des données de bones.
+		 *\param[in]	p_boneData	Les données de bones.
+		 *\param[in]	p_count		Les compte des données.
+		 */
+		inline void AddBoneDatas( stVERTEX_BONE_DATA const * const p_boneData, uint32_t p_count )
+		{
+			AddBoneDatas( p_boneData, p_boneData + p_count );
+		}
+		/**
+		*\~english
+		*\brief		Adds bone datas.
+		*\param[in]	p_boneData	The bone datas.
+		*\~french
+		*\brief		Ajoute des données de bones.
+		*\param[in]	p_boneData	Les données de bones.
+		*/
+		inline void AddBoneDatas( std::vector< stVERTEX_BONE_DATA > const & p_boneData )
+		{
+			AddBoneDatas( p_boneData.data(), p_boneData.data() + p_boneData.size() );
+		}
+		/**
+		 *\~english
+		 *\brief		Adds bone datas.
+		 *\param[in]	p_boneData	The bone datas.
+		 *\param[in]	p_count		The data count.
+		 *\~french
+		 *\brief		Ajoute des données de bones.
+		 *\param[in]	p_boneData	Les données de bones.
+		 *\param[in]	p_count		Les compte des données.
+		 */
+		template< uint32_t Count >
+		inline void AddBoneDatas( stVERTEX_BONE_DATA const ( & p_boneData )[Count] )
+		{
+			AddBoneDatas( p_boneData, p_boneData + Count );
+		}
+		/**
+		 *\~english
 		 *\brief		Clears this submesh's face array
 		 *\~french
 		 *\brief		Vide le tableau de faces
@@ -267,7 +320,7 @@ namespace Castor3D
 		 *\param[in]	c			L'index du troisième vertex
 		 *\return		La face créée
 		 */
-		C3D_API FaceSPtr AddFace( uint32_t a, uint32_t b, uint32_t c );
+		C3D_API Face AddFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
@@ -349,7 +402,7 @@ namespace Castor3D
 		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_face	La face
 		 */
-		C3D_API void ComputeNormals( FaceSPtr p_face );
+		C3D_API void ComputeNormals( Face const & p_face );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the given face
@@ -358,7 +411,7 @@ namespace Castor3D
 		 *\brief		Calcule la tangente pour chaque vertex de la face donnée
 		 *\param[in]	p_face	La face
 		 */
-		C3D_API void ComputeTangents( FaceSPtr p_face );
+		C3D_API void ComputeTangents( Face const & p_face );
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
@@ -588,7 +641,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index
 		 *\return		La valeur
 		 */
-		inline FaceSPtr GetFace( uint32_t p_index )const
+		inline Face const & GetFace( uint32_t p_index )const
 		{
 			REQUIRE( p_index < m_faces.size() );
 			return m_faces[p_index];
@@ -601,7 +654,7 @@ namespace Castor3D
 		 *\brief		Récupère le tableau de faces
 		 *\return		La valeur
 		 */
-		inline FacePtrArray const & GetFaces()const
+		inline FaceArray const & GetFaces()const
 		{
 			return m_faces;
 		}
@@ -613,7 +666,7 @@ namespace Castor3D
 		 *\brief		Récupère le tableau de faces
 		 *\return		La valeur
 		 */
-		inline FacePtrArray & GetFaces()
+		inline FaceArray & GetFaces()
 		{
 			return m_faces;
 		}
@@ -649,9 +702,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The instantiation MatrixBuffer.
+		 *\return		The instantiation VertexBuffer.
 		 *\~french
-		 *\return		Le MatrixBuffer d'instanciation.
+		 *\return		Le VertexBuffer d'instanciation.
 		 */
 		inline bool HasMatrixBuffer()const
 		{
@@ -719,21 +772,21 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\return		The instantiation MatrixBuffer.
+		 *\return		The instantiation VertexBuffer.
 		 *\~french
-		 *\return		Le MatrixBuffer d'instanciation.
+		 *\return		Le VertexBuffer d'instanciation.
 		 */
-		inline MatrixBuffer const & GetMatrixBuffer()const
+		inline VertexBuffer const & GetMatrixBuffer()const
 		{
 			return *m_matrixBuffer;
 		}
 		/**
 		 *\~english
-		 *\return		The instantiation MatrixBuffer.
+		 *\return		The instantiation VertexBuffer.
 		 *\~french
-		 *\return		Le MatrixBuffer d'instanciation.
+		 *\return		Le VertexBuffer d'instanciation.
 		 */
-		inline MatrixBuffer & GetMatrixBuffer()
+		inline VertexBuffer & GetMatrixBuffer()
 		{
 			return *m_matrixBuffer;
 		}
@@ -787,7 +840,7 @@ namespace Castor3D
 		}
 
 	private:
-		FaceSPtr DoAddFace( const FaceSPtr p_face );
+		Face & DoAddFace( const Face & p_face );
 		void DoCreateBuffers();
 		void DoDestroyBuffers();
 		void DoGenerateBuffers();
@@ -811,9 +864,9 @@ namespace Castor3D
 		//!\~english The bone data buffer (animation).	\~french Le tampon de données de bones (animation).
 		VertexBufferUPtr m_bonesBuffer;
 		//!\~english The matrix buffer (instantiation).	\~french Le tampon de matrices (instanciation).
-		MatrixBufferUPtr m_matrixBuffer;
+		VertexBufferUPtr m_matrixBuffer;
 		//!\~english The faces in the submesh.	\~french Le tableau de faces.
-		FacePtrArray m_faces;
+		FaceArray m_faces;
 		//!\~english Tells if normals exist or need to be computed.	\~french Dit si les normales existent ou doivent être calculées.
 		bool m_hasNormals;
 		//!\~english The Material assigned at creation.	\~french Le Materiau affecté à la création.

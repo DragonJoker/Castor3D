@@ -84,7 +84,7 @@ namespace Castor3D
 		try
 		{
 			GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
-			GetEngine()->GetOverlayManager().Update();
+			GetEngine()->GetOverlayManager().UpdateRenderer();
 			GetEngine()->GetTargetManager().Render( m_frameTime, p_vtxCount, p_fceCount, p_objCount );
 		}
 		catch ( Exception & p_exc )
@@ -107,6 +107,7 @@ namespace Castor3D
 	void RenderLoop::DoCpuStep()
 	{
 		GetEngine()->GetSceneManager().Update();
+		GetEngine()->GetOverlayManager().Update();
 		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
 	}
 

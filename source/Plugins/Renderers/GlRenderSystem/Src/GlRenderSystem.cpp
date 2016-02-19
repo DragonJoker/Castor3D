@@ -9,7 +9,6 @@
 #include "GlContext.hpp"
 #include "GlVertexBufferObject.hpp"
 #include "GlIndexBufferObject.hpp"
-#include "GlMatrixBufferObject.hpp"
 #include "GlGeometryBuffers.hpp"
 #include "GlDynamicTexture.hpp"
 #include "GlStaticTexture.hpp"
@@ -112,7 +111,7 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, MatrixBuffer * p_inst )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst )
 	{
 		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program, p_vtx, p_idx, p_bones, p_inst );
 	}
@@ -157,11 +156,6 @@ namespace GlRender
 		return std::make_shared< GlVertexBufferObject >( *this, GetOpenGl(), p_buffer );
 	}
 
-	std::shared_ptr< Castor3D::GpuBuffer< real > > GlRenderSystem::CreateMatrixBuffer( CpuBuffer< real > * p_buffer )
-	{
-		return std::make_shared< GlMatrixBufferObject >( *this, GetOpenGl(), p_buffer );
-	}
-
 	StaticTextureSPtr GlRenderSystem::CreateStaticTexture()
 	{
 		return std::make_shared< GlStaticTexture >( GetOpenGl(), *this );
@@ -196,10 +190,10 @@ namespace GlRender
 		Vec3 tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
 		Vec3 bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
 		Vec3 texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
-		Optional< IVec3 > bone_ids0 = l_writer.GetAttribute< IVec3 >( ShaderProgram::BoneIds0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< IVec3 > bone_ids1 = l_writer.GetAttribute< IVec3 >( ShaderProgram::BoneIds1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec3 > weights0 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Weights0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
-		Optional< Vec3 > weights1 = l_writer.GetAttribute< Vec3 >( ShaderProgram::Weights1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
 		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CHECK_FLAG( ePROGRAM_FLAG_INSTANCIATION ) );
 
 		UBO_MATRIX( l_writer );
@@ -225,9 +219,11 @@ namespace GlRender
 				LOCALE_ASSIGN( l_writer, Mat4, l_mtxBoneTransform, c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )] );
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 2 )]] * weights0[Int( 2 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 3 )]] * weights0[Int( 3 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 0 )]] * weights1[Int( 0 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 1 )]] * weights1[Int( 1 )];
 				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 2 )]] * weights1[Int( 2 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
 				l_mtxModel = l_mtxBoneTransform;
 				l_set = true;
 			}

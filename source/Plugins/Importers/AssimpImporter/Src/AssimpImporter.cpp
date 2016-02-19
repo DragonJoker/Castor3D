@@ -7,13 +7,43 @@
 #include <ImporterPlugin.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
+#include <PluginManager.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
+#include <SkeletonAnimationBone.hpp>
 
 #include <Logger.hpp>
 
 using namespace Castor3D;
 using namespace Castor;
+
+//*************************************************************************************************
+
+C3D_Assimp_API String GetName();
+
+namespace
+{
+	bool HasExtension( Castor3D::PluginStrMap const & p_plugins, Castor::String const & p_extension )
+	{
+		bool l_return = false;
+
+		for ( auto const & l_it : p_plugins )
+		{
+			auto const l_importer = std::static_pointer_cast< ImporterPlugin >( l_it.second );
+
+			if ( !l_return && l_importer->GetName() != GetName() )
+			{
+				auto const l_extensions = l_importer->GetExtensions();
+				l_return = std::end( l_extensions ) != std::find_if( std::begin( l_extensions ), std::end( l_extensions ), [&p_extension]( ImporterPlugin::Extension const & p_pair )
+				{
+					return p_extension == p_pair.first;
+				} );
+			}
+		}
+
+		return l_return;
+	}
+}
 
 //*************************************************************************************************
 
@@ -32,49 +62,82 @@ C3D_Assimp_API String GetName()
 	return cuT( "ASSIMP Importer" );
 }
 
-C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions()
+C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
-	ImporterPlugin::ExtensionArray l_extensions;
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "DAE" ), cuT( "Collada" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "BLEND" ), cuT( "Blender" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "BVH" ), cuT( "3 Biovision BVH" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "OBJ" ), cuT( "Wavefront Object" ) ) );
-	//l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) ); // Crashes on big meshes.
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "MD2" ), cuT( "Quake II" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "MD3" ), cuT( "Quake III" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "LWO" ), cuT( "LightWave Model" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "IFC" ), cuT( "IFC-STEP, Industry Foundation Classes" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "NFF" ), cuT( "Sense8 WorldToolkit" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "SMD" ), cuT( "Valve Model" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "VTA" ), cuT( "Valve Model" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "MDL" ), cuT( "3 Quake I" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "PK3" ), cuT( "Quake 3 BSP" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "MDC" ), cuT( "1 RtCW" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "MD5MESH" ), cuT( "Doom 3" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "XML" ), cuT( "Ogre XML Mesh" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "X" ), cuT( "DirectX X" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "Q3O" ), cuT( "Quick3D" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "Q3S" ), cuT( "Quick3D" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "RAW" ), cuT( "Raw Triangles" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "AC" ), cuT( "AC3D" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "STL" ), cuT( "Stereolithography" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "DXF" ), cuT( "Autodesk DXF" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "IRRMESH" ), cuT( "Irrlicht Mesh" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "IRR" ), cuT( "Irrlicht Scene" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "OFF" ), cuT( "Object File Format" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "TER" ), cuT( "Terragen Terrain" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "MDL" ), cuT( "3D GameStudio Model" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "HMP" ), cuT( "3D GameStudio Terrain" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "MS3D" ), cuT( "3 Milkshape 3D" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "LWS" ), cuT( "LightWave Scene" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "LXO" ), cuT( "Modo Model" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "CSM" ), cuT( "CharacterStudio Motion" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "COB" ), cuT( "TrueSpace" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "SCN" ), cuT( "TrueSpace" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "XGL" ), cuT( "2 XGL" ) ) );
-	l_extensions.push_back( ImporterPlugin::Extension( cuT( "ZGL" ), cuT( "2 XGL" ) ) );
+	ImporterPlugin::ExtensionArray l_extensions =
+	{
+		ImporterPlugin::Extension{ cuT( "DAE" ), cuT( "Collada" ) },
+		ImporterPlugin::Extension{ cuT( "BLEND" ), cuT( "Blender" ) },
+		ImporterPlugin::Extension{ cuT( "BVH" ), cuT( "3 Biovision BVH" ) },
+		ImporterPlugin::Extension{ cuT( "IFC" ), cuT( "IFC-STEP, Industry Foundation Classes" ) },
+		ImporterPlugin::Extension{ cuT( "NFF" ), cuT( "Sense8 WorldToolkit" ) },
+		ImporterPlugin::Extension{ cuT( "SMD" ), cuT( "Valve Model" ) },
+		ImporterPlugin::Extension{ cuT( "VTA" ), cuT( "Valve Model" ) },
+		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "3 Quake I" ) },
+		ImporterPlugin::Extension{ cuT( "PK3" ), cuT( "Quake 3 BSP" ) },
+		ImporterPlugin::Extension{ cuT( "MDC" ), cuT( "1 RtCW" ) },
+		ImporterPlugin::Extension{ cuT( "MD5MESH" ), cuT( "Doom 3" ) },
+		ImporterPlugin::Extension{ cuT( "XML" ), cuT( "Ogre XML Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "X" ), cuT( "DirectX X" ) },
+		ImporterPlugin::Extension{ cuT( "Q3O" ), cuT( "Quick3D" ) },
+		ImporterPlugin::Extension{ cuT( "Q3S" ), cuT( "Quick3D" ) },
+		ImporterPlugin::Extension{ cuT( "RAW" ), cuT( "Raw Triangles" ) },
+		ImporterPlugin::Extension{ cuT( "AC" ), cuT( "AC3D" ) },
+		ImporterPlugin::Extension{ cuT( "STL" ), cuT( "Stereolithography" ) },
+		ImporterPlugin::Extension{ cuT( "DXF" ), cuT( "Autodesk DXF" ) },
+		ImporterPlugin::Extension{ cuT( "IRRMESH" ), cuT( "Irrlicht Mesh" ) },
+		ImporterPlugin::Extension{ cuT( "IRR" ), cuT( "Irrlicht Scene" ) },
+		ImporterPlugin::Extension{ cuT( "OFF" ), cuT( "Object File Format" ) },
+		ImporterPlugin::Extension{ cuT( "TER" ), cuT( "Terragen Terrain" ) },
+		ImporterPlugin::Extension{ cuT( "MDL" ), cuT( "3D GameStudio Model" ) },
+		ImporterPlugin::Extension{ cuT( "HMP" ), cuT( "3D GameStudio Terrain" ) },
+		ImporterPlugin::Extension{ cuT( "MS3D" ), cuT( "3 Milkshape 3D" ) },
+		ImporterPlugin::Extension{ cuT( "LWS" ), cuT( "LightWave Scene" ) },
+		ImporterPlugin::Extension{ cuT( "LXO" ), cuT( "Modo Model" ) },
+		ImporterPlugin::Extension{ cuT( "CSM" ), cuT( "CharacterStudio Motion" ) },
+		ImporterPlugin::Extension{ cuT( "COB" ), cuT( "TrueSpace" ) },
+		ImporterPlugin::Extension{ cuT( "SCN" ), cuT( "TrueSpace" ) },
+		ImporterPlugin::Extension{ cuT( "XGL" ), cuT( "2 XGL" ) },
+		ImporterPlugin::Extension{ cuT( "ZGL" ), cuT( "2 XGL" ) },
+	};
+
+	auto l_importers = p_engine->GetPluginManager().GetPlugins( Castor3D::ePLUGIN_TYPE_IMPORTER );
+
+	if ( !HasExtension( l_importers, cuT( "3DS" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) );
+	}
+
+	if ( !HasExtension( l_importers, cuT( "ASE" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) );
+	}
+
+	if ( !HasExtension( l_importers, cuT( "OBJ" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "OBJ" ), cuT( "Wavefront Object" ) );
+	}
+
+	if ( !HasExtension( l_importers, cuT( "PLY" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ); // Crashes on big meshes.
+	}
+
+	if ( !HasExtension( l_importers, cuT( "MD2" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "MD2" ), cuT( "Quake II" ) );
+	}
+
+	if ( !HasExtension( l_importers, cuT( "MD3" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "MD3" ), cuT( "Quake III" ) );
+	}
+
+	if ( !HasExtension( l_importers, cuT( "LWO" ) ) )
+	{
+		l_extensions.emplace_back( cuT( "LWO" ), cuT( "LightWave Model" ) );
+	}
+
 	return l_extensions;
 }
 
@@ -101,7 +164,7 @@ C3D_Assimp_API void OnUnload( Castor3D::Engine * p_engine )
 
 namespace C3dAssimp
 {
-	namespace detail
+	namespace
 	{
 		const aiNodeAnim * FindNodeAnim( const aiAnimation * p_animation, const String p_nodeName )
 		{
@@ -115,6 +178,61 @@ namespace C3dAssimp
 				{
 					l_return = l_nodeAnim;
 				}
+			}
+
+			return l_return;
+		}
+
+		template< typename T >
+		void DoFind( real p_time,
+					 typename std::map< real, T > const & p_map,
+					 typename std::map< real, T >::const_iterator & p_prv,
+					 typename std::map< real, T >::const_iterator & p_cur )
+		{
+			if ( p_map.empty() )
+			{
+				p_prv = p_cur = p_map.end();
+			}
+			else
+			{
+				p_cur = std::find_if( p_map.begin(), p_map.end(), [&p_time]( std::pair< real, T > const & p_pair )
+				{
+					return p_pair.first > p_time;
+				} );
+
+				if ( p_cur == p_map.end() )
+				{
+					--p_cur;
+				}
+
+				p_prv = p_cur;
+
+				if ( p_prv != p_map.begin() )
+				{
+					p_prv--;
+				}
+
+				ENSURE( p_prv != p_cur );
+			}
+		}
+
+		template< typename T >
+		T DoCompute( real p_from, Interpolator< T > const & p_interpolator, std::map< real, T > const & p_values )
+		{
+			T l_return;
+
+			if ( p_values.size() == 1 )
+			{
+				l_return = p_values.begin()->second;
+			}
+			else
+			{
+				auto l_prv = p_values.begin();
+				auto l_cur = p_values.begin();
+				DoFind( p_from, p_values, l_prv, l_cur );
+				real l_dt = l_cur->first - l_prv->first;
+				real l_factor = ( p_from - l_prv->first ) / l_dt;
+				l_return = p_interpolator.Interpolate( l_prv->second, l_cur->second, l_factor );
 			}
 
 			return l_return;
@@ -200,7 +318,6 @@ namespace C3dAssimp
 			{
 				SkeletonSPtr l_skeleton = std::make_shared< Skeleton >();
 				l_skeleton->SetGlobalInverseTransform( Matrix4x4r( &l_aiScene->mRootNode->mTransformation.Transpose().Inverse().a1 ) );
-				m_mesh->SetSkeleton( l_skeleton );
 
 				if ( l_aiScene->HasMeshes() )
 				{
@@ -216,20 +333,20 @@ namespace C3dAssimp
 						l_create = DoProcessMesh( l_skeleton, l_aiScene->mMeshes[i], l_aiScene, l_submesh );
 					}
 
-					if ( l_skeleton->begin() == l_skeleton->end() )
+					if ( m_arrayBones.empty() )
 					{
-						m_mesh->SetSkeleton( nullptr );
 						l_skeleton.reset();
+					}
+					else
+					{
+						m_mesh->SetSkeleton( l_skeleton );
 					}
 
 					if ( l_skeleton )
 					{
-						if ( l_aiScene->HasAnimations() )
+						for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
 						{
-							for ( uint32_t i = 0; i < l_aiScene->mNumAnimations; ++i )
-							{
-								DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] );
-							}
+							DoProcessAnimation( m_fileName.GetFileName(), l_skeleton, l_aiScene->mRootNode, l_aiScene->mAnimations[i] );
 						}
 
 						l_importer.FreeScene();
@@ -424,59 +541,66 @@ namespace C3dAssimp
 		return l_return;
 	}
 
+	void AssimpImporter::DoLoadTexture( aiString const & p_name, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	{
+		if ( p_name.length > 0 )
+		{
+			LoadTexture( string::string_cast< xchar >( p_name.C_Str() ), p_pass, p_channel );
+		}
+	}
+
 	MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial )
 	{
 		MaterialSPtr l_return;
-		PassSPtr l_pass;
-		MaterialManager & l_mtlManager = GetEngine()->GetMaterialManager();
+		MaterialManager & l_manager = GetEngine()->GetMaterialManager();
 		aiString l_mtlname;
 		p_pAiMaterial->Get( AI_MATKEY_NAME, l_mtlname );
 		String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
-		aiColor3D l_ambient( 1, 1, 1 );
-		aiColor3D l_diffuse( 1, 1, 1 );
-		aiColor3D l_specular( 1, 1, 1 );
-		aiColor3D l_emissive( 1, 1, 1 );
-		aiString l_ambTexName;
-		aiString l_difTexName;
-		aiString l_hgtTexName;
-		aiString l_nmlTexName;
-		aiString l_opaTexName;
-		aiString l_shnTexName;
-		aiString l_spcTexName;
 
 		if ( l_name.empty() )
 		{
 			l_name = m_fileName.GetFileName() + string::to_string( m_anonymous++ );
 		}
 
-		if ( l_mtlManager.Has( l_name ) )
+		if ( l_manager.Has( l_name ) )
 		{
-			l_return = l_mtlManager.Find( l_name );
+			l_return = l_manager.Find( l_name );
 		}
 		else
 		{
-			float l_opacity = 1;
-			float l_shininess = 0.5f;
-			float l_shininessStrength = 1.0f;
-			int l_twoSided = 0;
-			l_return = l_mtlManager.Create( l_name, *GetEngine() );
-			l_return->CreatePass();
-			l_pass = l_return->GetPass( 0 );
+			aiColor3D l_ambient( 1, 1, 1 );
 			p_pAiMaterial->Get( AI_MATKEY_COLOR_AMBIENT, l_ambient );
+			aiColor3D l_diffuse( 1, 1, 1 );
 			p_pAiMaterial->Get( AI_MATKEY_COLOR_DIFFUSE, l_diffuse );
+			aiColor3D l_specular( 1, 1, 1 );
 			p_pAiMaterial->Get( AI_MATKEY_COLOR_SPECULAR, l_specular );
+			aiColor3D l_emissive( 1, 1, 1 );
 			p_pAiMaterial->Get( AI_MATKEY_COLOR_EMISSIVE, l_emissive );
+			float l_opacity = 1;
 			p_pAiMaterial->Get( AI_MATKEY_OPACITY, l_opacity );
+			float l_shininess = 0.5f;
 			p_pAiMaterial->Get( AI_MATKEY_SHININESS, l_shininess );
+			float l_shininessStrength = 1.0f;
 			p_pAiMaterial->Get( AI_MATKEY_SHININESS_STRENGTH, l_shininessStrength );
+			int l_twoSided = 0;
 			p_pAiMaterial->Get( AI_MATKEY_TWOSIDED, l_twoSided );
+
+			aiString l_ambTexName;
 			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_AMBIENT, 0 ), l_ambTexName );
+			aiString l_difTexName;
 			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_DIFFUSE, 0 ), l_difTexName );
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
-			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
+			aiString l_spcTexName;
 			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SPECULAR, 0 ), l_spcTexName );
+			aiString l_emiTexName;
+			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_EMISSIVE, 0 ), l_emiTexName );
+			aiString l_nmlTexName;
+			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_NORMALS, 0 ), l_nmlTexName );
+			aiString l_hgtTexName;
+			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_HEIGHT, 0 ), l_hgtTexName );
+			aiString l_opaTexName;
+			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_OPACITY, 0 ), l_opaTexName );
+			aiString l_shnTexName;
+			p_pAiMaterial->Get( AI_MATKEY_TEXTURE( aiTextureType_SHININESS, 0 ), l_shnTexName );
 
 			if ( l_ambient.IsBlack() && l_diffuse.IsBlack() && l_specular.IsBlack() && l_emissive.IsBlack() )
 			{
@@ -485,6 +609,12 @@ namespace C3dAssimp
 				l_diffuse.b = 1.0;
 			}
 
+			l_return = l_manager.Create( l_name, *GetEngine() );
+			l_return->CreatePass();
+			auto l_pass = l_return->GetPass( 0 );
+
+			l_pass->SetAlpha( l_opacity );
+			l_pass->SetTwoSided( l_twoSided != 0 );
 			l_pass->SetAmbient( Colour::from_components( l_ambient.r, l_ambient.g, l_ambient.b, 1 ) );
 			l_pass->SetDiffuse( Colour::from_components( l_diffuse.r, l_diffuse.g, l_diffuse.b, 1 ) );
 			l_pass->SetSpecular( Colour::from_components( l_specular.r * l_shininessStrength, l_specular.g * l_shininessStrength, l_specular.b * l_shininessStrength, 1 ) );
@@ -495,61 +625,41 @@ namespace C3dAssimp
 				l_pass->SetShininess( l_shininess );
 			}
 
-			l_pass->SetAlpha( l_opacity );
-			l_pass->SetTwoSided( l_twoSided != 0 );
-
 			if ( l_difTexName.length > 0 && std::string( l_difTexName.C_Str() ).find( "_Cine_" ) != String::npos && std::string( l_difTexName.C_Str() ).find( "/MI_CH_" ) != String::npos )
 			{
+				// Workaround for Collada textures.
 				String l_strGlob = string::string_cast< xchar >( l_difTexName.C_Str() ) + cuT( ".tga" );
 				string::replace( l_strGlob, cuT( "/MI_CH_" ), cuT( "TX_CH_" ) );
 				String l_strDiff = l_strGlob;
 				String l_strNorm = l_strGlob;
 				String l_strSpec = l_strGlob;
 				String l_strOpac = l_strGlob;
-				DoAddTexture( string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), l_pass, eTEXTURE_CHANNEL_DIFFUSE );
-				DoAddTexture( string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), l_pass, eTEXTURE_CHANNEL_NORMAL );
-				DoAddTexture( string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), l_pass, eTEXTURE_CHANNEL_SPECULAR );
-				DoAddTexture( string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), l_pass, eTEXTURE_CHANNEL_OPACITY );
+				LoadTexture( string::replace( l_strDiff, cuT( "_Cine_" ), cuT( "_D_" ) ), *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
+				LoadTexture( string::replace( l_strNorm, cuT( "_Cine_" ), cuT( "_N_" ) ), *l_pass, eTEXTURE_CHANNEL_NORMAL );
+				LoadTexture( string::replace( l_strSpec, cuT( "_Cine_" ), cuT( "_S_" ) ), *l_pass, eTEXTURE_CHANNEL_SPECULAR );
+				LoadTexture( string::replace( l_strOpac, cuT( "_Cine_" ), cuT( "_A_" ) ), *l_pass, eTEXTURE_CHANNEL_OPACITY );
 			}
 			else
 			{
-				if ( l_ambTexName.length > 0 )
-				{
-					DoAddTexture( string::string_cast< xchar >( l_ambTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_AMBIENT );
-				}
-
-				if ( l_difTexName.length > 0 )
-				{
-					DoAddTexture( string::string_cast< xchar >( l_difTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_DIFFUSE );
-				}
-
-				if ( l_opaTexName.length > 0 )
-				{
-					DoAddTexture( string::string_cast< xchar >( l_opaTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_OPACITY );
-				}
-
-				if ( l_shnTexName.length > 0 )
-				{
-					DoAddTexture( string::string_cast< xchar >( l_shnTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_GLOSS );
-				}
-
-				if ( l_spcTexName.length > 0 )
-				{
-					DoAddTexture( string::string_cast< xchar >( l_spcTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_SPECULAR );
-				}
+				DoLoadTexture( l_ambTexName, *l_pass, eTEXTURE_CHANNEL_AMBIENT );
+				DoLoadTexture( l_difTexName, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
+				DoLoadTexture( l_spcTexName, *l_pass, eTEXTURE_CHANNEL_SPECULAR );
+				DoLoadTexture( l_emiTexName, *l_pass, eTEXTURE_CHANNEL_EMISSIVE );
+				DoLoadTexture( l_opaTexName, *l_pass, eTEXTURE_CHANNEL_OPACITY );
+				DoLoadTexture( l_shnTexName, *l_pass, eTEXTURE_CHANNEL_GLOSS );
 
 				if ( l_nmlTexName.length > 0 )
 				{
-					DoAddTexture( string::string_cast< xchar >( l_nmlTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_NORMAL );
+					DoLoadTexture( l_nmlTexName, *l_pass, eTEXTURE_CHANNEL_NORMAL );
 
 					if ( l_hgtTexName.length > 0 )
 					{
-						DoAddTexture( string::string_cast< xchar >( l_hgtTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_HEIGHT );
+						DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_HEIGHT );
 					}
 				}
 				else if ( l_hgtTexName.length > 0 )
 				{
-					DoAddTexture( string::string_cast< xchar >( l_hgtTexName.C_Str() ), l_pass, eTEXTURE_CHANNEL_NORMAL );
+					DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_NORMAL );
 				}
 			}
 		}
@@ -557,7 +667,7 @@ namespace C3dAssimp
 		return l_return;
 	}
 
-	void AssimpImporter::DoProcessBones( SkeletonSPtr p_pSkeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< stVERTEX_BONE_DATA > & p_arrayVertices )
+	void AssimpImporter::DoProcessBones( SkeletonSPtr p_skeleton, aiBone ** p_pBones, uint32_t p_count, std::vector< stVERTEX_BONE_DATA > & p_arrayVertices )
 	{
 		for ( uint32_t i = 0; i < p_count; ++i )
 		{
@@ -567,13 +677,13 @@ namespace C3dAssimp
 
 			if ( m_mapBoneByID.find( l_name ) == m_mapBoneByID.end() )
 			{
-				BoneSPtr l_bone = std::make_shared< Bone >( *p_pSkeleton );
+				BoneSPtr l_bone = std::make_shared< Bone >( *p_skeleton );
 				l_bone->SetName( l_name );
-				l_bone->SetOffsetMatrix( Matrix4x4r( &l_aiBone->mOffsetMatrix.Transpose().a1 ) );
+				l_bone->SetOffsetMatrix( Matrix4x4r{ &l_aiBone->mOffsetMatrix.Transpose().a1 } );
 				l_index = uint32_t( m_arrayBones.size() );
 				m_arrayBones.push_back( l_bone );
 				m_mapBoneByID[l_name] = l_index;
-				p_pSkeleton->AddBone( l_bone );
+				p_skeleton->AddBone( l_bone );
 			}
 			else
 			{
@@ -606,45 +716,67 @@ namespace C3dAssimp
 	void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectBaseSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode->mName.data );
-		const aiNodeAnim * l_aiNodeAnim = detail::FindNodeAnim( p_aiAnimation, l_name );
+		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
 		AnimationObjectBaseSPtr l_object;
 
 		if ( l_aiNodeAnim )
 		{
-			auto l_itBone = std::find_if( p_skeleton->begin(), p_skeleton->end(), [&]( BoneSPtr p_bone )
-			{
-				return p_bone->GetName() == l_name;
-			} );
+			auto l_itBone = m_mapBoneByID.find( l_name );
 
-			if ( l_itBone != p_skeleton->end() )
+			if ( l_itBone != m_mapBoneByID.end() )
 			{
-				l_object = p_animation->AddObject( *l_itBone, p_object );
+				auto l_bone = m_arrayBones[l_itBone->second];
+				l_object = p_animation->AddObject( l_bone, p_object );
+
+				if ( p_object->GetType() == eANIMATION_OBJECT_TYPE_BONE )
+				{
+					p_skeleton->SetBoneParent( l_bone, std::static_pointer_cast< SkeletonAnimationBone >( p_object )->GetBone() );
+				}
 			}
 			else
 			{
 				l_object = p_animation->AddObject( p_aiNode->mName.C_Str(), p_object );
 			}
 
-			// We treat translations
+			std::map< real, Point3r > l_translates;
+			std::map< real, Point3r > l_scales;
+			std::map< real, Quaternion > l_rotates;
+			std::set< real > l_times;
+
+			// We process translations
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumPositionKeys; ++i )
 			{
-				Point3r l_translate( l_aiNodeAnim->mPositionKeys[i].mValue.x, l_aiNodeAnim->mPositionKeys[i].mValue.y, l_aiNodeAnim->mPositionKeys[i].mValue.z );
-				l_object->AddTranslateKeyFrame( real( l_aiNodeAnim->mPositionKeys[i].mTime ) / p_ticksPerSecond, l_translate );
+				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime ) );
+				l_translates[real( l_aiNodeAnim->mPositionKeys[i].mTime )] = Point3r{ l_aiNodeAnim->mPositionKeys[i].mValue.x, l_aiNodeAnim->mPositionKeys[i].mValue.y, l_aiNodeAnim->mPositionKeys[i].mValue.z };
 			}
 
-			// Then we treat scalings
+			// Then we process scalings
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumScalingKeys; ++i )
 			{
-				Point3r l_scale( l_aiNodeAnim->mScalingKeys[i].mValue.x, l_aiNodeAnim->mScalingKeys[i].mValue.y, l_aiNodeAnim->mScalingKeys[i].mValue.z );
-				l_object->AddScaleKeyFrame( real( l_aiNodeAnim->mScalingKeys[i].mTime ) / p_ticksPerSecond, l_scale );
+				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime ) );
+				l_scales[real( l_aiNodeAnim->mScalingKeys[i].mTime )] = Point3r{ l_aiNodeAnim->mScalingKeys[i].mValue.x, l_aiNodeAnim->mScalingKeys[i].mValue.y, l_aiNodeAnim->mScalingKeys[i].mValue.z };
 			}
 
 			// And eventually the rotations
 			for ( uint32_t i = 0; i < l_aiNodeAnim->mNumRotationKeys; ++i )
 			{
+				l_times.insert( real( l_aiNodeAnim->mPositionKeys[i].mTime ) );
 				Quaternion l_rotate;
 				l_rotate.from_matrix( Matrix4x4r{ Matrix3x3r{ &l_aiNodeAnim->mRotationKeys[i].mValue.GetMatrix().Transpose().a1 } } );
-				l_object->AddRotateKeyFrame( real( l_aiNodeAnim->mRotationKeys[i].mTime ) / p_ticksPerSecond, l_rotate );
+				l_rotates[real( l_aiNodeAnim->mRotationKeys[i].mTime )] = l_rotate;
+			}
+
+			// We process translations
+			KeyFrameRealMap l_keyframes;
+			InterpolatorT< Point3r, eINTERPOLATOR_MODE_LINEAR > l_pointInterpolator;
+			InterpolatorT< Quaternion, eINTERPOLATOR_MODE_LINEAR > l_quatInterpolator;
+
+			for ( auto l_time : l_times )
+			{
+				Point3r l_translate = DoCompute( l_time, l_pointInterpolator, l_translates );
+				Point3r l_scale = DoCompute( l_time, l_pointInterpolator, l_scales );
+				Quaternion l_rotate = DoCompute( l_time, l_quatInterpolator, l_rotates );
+				l_object->AddKeyFrame( l_time / p_ticksPerSecond, l_translate, l_rotate, l_scale );
 			}
 		}
 
@@ -653,63 +785,22 @@ namespace C3dAssimp
 			l_object = p_animation->AddObject( p_aiNode->mName.C_Str(), p_object );
 		}
 
-		if ( p_object )
+		if ( l_object )
 		{
-			p_object->AddChild( l_object );
-		}
+			if ( p_object )
+			{
+				p_object->AddChild( l_object );
+			}
 
-		if ( !l_object->HasKeyFrames() )
-		{
-			l_object->SetNodeTransform( Matrix4x4r( &p_aiNode->mTransformation.a1 ) );
+			if ( !l_object->HasKeyFrames() )
+			{
+				l_object->SetNodeTransform( Matrix4x4r( &p_aiNode->mTransformation.a1 ) );
+			}
 		}
 
 		for ( uint32_t i = 0; i < p_aiNode->mNumChildren; i++ )
 		{
 			DoProcessAnimationNodes( p_animation, p_ticksPerSecond, p_skeleton, p_aiNode->mChildren[i], p_aiAnimation, l_object );
-		}
-	}
-
-	void AssimpImporter::DoAddTexture( String const & p_path, PassSPtr p_pass, eTEXTURE_CHANNEL p_channel )
-	{
-		if ( p_pass )
-		{
-			TextureUnitSPtr l_pTexture;
-			Path l_pathImage = m_filePath / p_path;
-
-			if ( !File::FileExists( l_pathImage ) )
-			{
-				l_pathImage = m_filePath / cuT( "Texture" ) / p_path;
-			}
-
-			if ( File::FileExists( l_pathImage ) )
-			{
-				l_pTexture = p_pass->AddTextureUnit();
-
-				try
-				{
-					l_pTexture->SetAutoMipmaps( true );
-
-					if ( !l_pTexture->LoadTexture( l_pathImage ) )
-					{
-						p_pass->DestroyTextureUnit( l_pTexture->GetIndex() - 1 );
-						l_pTexture.reset();
-					}
-					else
-					{
-						l_pTexture->SetChannel( p_channel );
-					}
-				}
-				catch ( ... )
-				{
-					p_pass->DestroyTextureUnit( l_pTexture->GetIndex() - 1 );
-					l_pTexture.reset();
-					Logger::LogWarning( cuT( "Error encountered while loading texture file " ) + p_path );
-				}
-			}
-			else
-			{
-				Logger::LogWarning( cuT( "Couldn't load texture file " ) + p_path );
-			}
 		}
 	}
 }

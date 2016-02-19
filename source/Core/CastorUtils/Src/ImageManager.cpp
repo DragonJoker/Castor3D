@@ -9,6 +9,13 @@
 
 namespace Castor
 {
+	namespace
+	{
+		static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created " );
+		static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate " );
+		static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - NULL " );
+	}
+
 	ImageManager::BinaryLoader::BinaryLoader()
 		: Loader< ImageManager, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
@@ -44,7 +51,7 @@ namespace Castor
 			}
 			else
 			{
-				Logger::LogWarning( cuT( "Trying to create an already existing image: " ) + p_name );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
 			}
 		}
 		else
@@ -55,6 +62,7 @@ namespace Castor
 			{
 				l_return = std::make_shared< Image >( p_name, p_path );
 				Collection< Image, String >::insert( p_name, l_return );
+				Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 			}
 			else
 			{
@@ -80,13 +88,14 @@ namespace Castor
 			}
 			else
 			{
-				Logger::LogWarning( cuT( "Trying to create an already existing image: " ) + p_name );
+				Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << cuT( "Image: " ) << p_name );
 			}
 		}
 		else
 		{
 			l_return = std::make_shared< Image >( p_name, p_size, p_format );
 			Collection< Image, String >::insert( p_name, l_return );
+			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << cuT( "Image: " ) << p_name );
 		}
 
 		return l_return;
@@ -94,14 +103,6 @@ namespace Castor
 
 	ImageSPtr ImageManager::get( String const & p_name )
 	{
-		auto l_lock = make_unique_lock( *this );
-		ImageSPtr l_return = Collection< Image, String >::find( p_name );
-
-		if ( !l_return )
-		{
-			Logger::LogWarning( cuT( "Trying to retrieve a non existing font : " ) + p_name );
-		}
-
-		return l_return;
+		return Collection< Image, String >::find( p_name );
 	}
 }

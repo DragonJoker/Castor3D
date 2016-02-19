@@ -285,6 +285,7 @@ namespace Castor3D
 		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
 		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
 		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
+		p_flags &= ~eTEXTURE_CHANNEL_EMISSIVE;
 
 		// Get shader
 		return DoGetProgram( p_flags, m_mapPanelPrograms );
@@ -299,6 +300,7 @@ namespace Castor3D
 		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
 		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
 		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
+		p_flags &= ~eTEXTURE_CHANNEL_EMISSIVE;
 		p_flags |= eTEXTURE_CHANNEL_TEXT;
 
 		// Get shader

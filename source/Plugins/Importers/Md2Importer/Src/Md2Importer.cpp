@@ -114,48 +114,34 @@ MeshSPtr Md2Importer::DoImportMesh()
 void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 {
 	uint64_t l_uiRead;
-	TextureUnitSPtr l_pTexture;
-	ImageSPtr l_pImage;
 	Logger::LogDebug( StringStream() << cuT( "MD2 File - size: " ) << m_pFile->GetLength() );
 	Logger::LogDebug( StringStream() << cuT( "- Vertices: " ) << m_header.m_numVertices );
 	Logger::LogDebug( StringStream() << cuT( "- Skins: " ) << m_header.m_numSkins );
+	m_skins = new Md2Skin[m_header.m_numSkins];
+	m_pFile->Seek( m_header.m_offsetSkins );
+	l_uiRead = m_pFile->ReadArray( m_skins, m_header.m_numSkins );
 
 	if ( m_header.m_numSkins > 0 )
 	{
-		m_skins = new Md2Skin[m_header.m_numSkins];
-		m_pFile->Seek( m_header.m_offsetSkins );
-		l_uiRead = m_pFile->ReadArray( m_skins, m_header.m_numSkins );
+		TextureUnitSPtr l_pTexture;
 		Logger::LogDebug( StringStream() << cuT( "- Skins: " ) << ( l_uiRead / sizeof( Md2Skin ) ) << cuT( "/" ) << m_header.m_numSkins << cuT( " (" ) << l_uiRead << cuT( " bytes, from " ) << m_header.m_offsetSkins << cuT( ")" ) );
 
-		for ( int i = 0 ; i < m_header.m_numSkins && !l_pTexture ; i++ )
+		for ( int i = 0; i < m_header.m_numSkins && !l_pTexture; i++ )
 		{
 			String l_strValue = string::string_cast< xchar >( m_skins[i] );
 
-			if ( !l_strValue.empty() )
+			if ( p_pPass && !l_strValue.empty() )
 			{
-				String l_strPath = m_filePath / l_strValue;
+				l_pTexture = LoadTexture( l_strValue, *p_pPass, eTEXTURE_CHANNEL_DIFFUSE );
 
-				if ( !File::FileExists( l_strPath ) )
+				if ( l_pTexture )
 				{
-					l_strPath = m_filePath / l_strValue;
+					Logger::LogDebug( cuT( "- Texture found : " ) + l_strValue );
 				}
-
-				l_pImage = GetEngine()->GetImageManager().create( l_strValue, l_strPath );
-			}
-
-			if ( l_pImage && p_pPass )
-			{
-				l_pTexture = p_pPass->AddTextureUnit();
-				StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-				l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-				l_pStaTexture->SetImage( l_pImage->GetPixels() );
-				l_pTexture->SetTexture( l_pStaTexture );
-				l_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
-				Logger::LogDebug( cuT( "- Texture found : " ) + l_strValue );
-			}
-			else
-			{
-				Logger::LogDebug( cuT( "- Texture not found : " ) + l_strValue );
+				else
+				{
+					Logger::LogDebug( cuT( "- Texture not found : " ) + l_strValue );
+				}
 			}
 		}
 	}
@@ -181,9 +167,9 @@ void Md2Importer::DoReadMD2Data( PassSPtr p_pPass )
 		uint8_t l_buffer[MD2_MAX_FRAMESIZE];
 		Logger::LogDebug( StringStream() << cuT( "- Frames: " ) << m_header.m_numFrames );
 		m_pFile->Seek( m_header.m_offsetFrames );
-		m_frames				= new Md2Frame[m_header.m_numFrames];
-		Md2AliasFrame * l_frame	= reinterpret_cast< Md2AliasFrame * >( l_buffer );
-		m_frames[0].m_vertices	= new Md2Vertex[m_header.m_numVertices];
+		m_frames = new Md2Frame[m_header.m_numFrames];
+		Md2AliasFrame * l_frame = reinterpret_cast< Md2AliasFrame * >( l_buffer );
+		m_frames[0].m_vertices = new Md2Vertex[m_header.m_numVertices];
 		m_pFile->ReadArray< char >( ( char * )l_frame, m_header.m_frameSize );
 		m_frames[0].m_strName = l_frame->m_name;
 		Md2Vertex * l_vertices = m_frames[0].m_vertices;

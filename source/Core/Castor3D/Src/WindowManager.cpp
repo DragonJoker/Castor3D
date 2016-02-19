@@ -7,6 +7,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< RenderWindow >::Name = cuT( "RenderWindow" );
+
 	WindowManager::WindowManager( Engine & p_engine )
 		: ResourceManager< uint32_t, RenderWindow >( p_engine )
 	{

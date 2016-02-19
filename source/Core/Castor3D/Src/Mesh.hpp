@@ -247,6 +247,15 @@ namespace Castor3D
 		C3D_API void UnRef( MaterialSPtr p_material );
 		/**
 		 *\~english
+		 *\brief		Sets the skeleton
+		 *\param[in]	p_skeleton	The new value
+		 *\~french
+		 *\brief		Définit le squelette
+		 *\param[in]	p_skeleton	La nouvelle valeur
+		 */
+		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
+		/**
+		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début des sous maillages
@@ -344,18 +353,6 @@ namespace Castor3D
 		inline SkeletonSPtr GetSkeleton()const
 		{
 			return m_skeleton;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the skeleton
-		 *\param[in]	p_skeleton	The new value
-		 *\~french
-		 *\brief		Définit le squelette
-		 *\param[in]	p_skeleton	La nouvelle valeur
-		 */
-		inline void SetSkeleton( SkeletonSPtr p_skeleton )
-		{
-			m_skeleton = p_skeleton;
 		}
 
 	protected:

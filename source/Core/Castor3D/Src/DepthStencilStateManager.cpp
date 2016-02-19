@@ -6,6 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< DepthStencilState >::Name = cuT( "DepthStencilState" );
+
 	DepthStencilStateManager::DepthStencilStateManager( Engine & p_engine )
 		: ResourceManager< String, DepthStencilState >( p_engine )
 	{
@@ -25,12 +27,12 @@ namespace Castor3D
 			l_return = m_renderSystem->CreateDepthStencilState();
 			m_elements.insert( p_name, l_return );
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
-			Logger::LogInfo( cuT( "DepthStencilStateManager::Create - Created DepthStencilState: " ) + p_name + cuT( "" ) );
+			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 		else
 		{
 			l_return = m_elements.find( p_name );
-			Logger::LogWarning( cuT( "DepthStencilStateManager::Create - Duplicate DepthStencilState: " ) + p_name );
+			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 
 		return l_return;

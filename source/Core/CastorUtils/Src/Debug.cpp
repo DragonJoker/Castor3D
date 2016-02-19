@@ -92,12 +92,20 @@ namespace Castor
 			template< typename CharU, typename CharT >
 			inline std::basic_string< CharU > Demangle( std::basic_string< CharT > const & p_name )
 			{
-				char l_real[1024] = { 0 };
 				std::string l_ret = string::string_cast< char >( p_name );
 
-				if ( ::UnDecorateSymbolName( l_ret.c_str(), l_real, sizeof( l_real ), UNDNAME_COMPLETE ) )
+				try
 				{
-					l_ret = l_real;
+					char l_real[2048] = { 0 };
+
+					if ( ::UnDecorateSymbolName( l_ret.c_str(), l_real, sizeof( l_real ), UNDNAME_COMPLETE ) )
+					{
+						l_ret = l_real;
+					}
+				}
+				catch ( ... )
+				{
+					// What to do...
 				}
 
 				return string::string_cast< CharU >( l_ret );

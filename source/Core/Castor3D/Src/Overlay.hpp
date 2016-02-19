@@ -190,20 +190,6 @@ namespace Castor3D
 		C3D_API bool AddChild( OverlaySPtr p_overlay );
 		/**
 		 *\~english
-		 *\brief		Initialises the overlay.
-		 *\~french
-		 *\brief		Initialise l'incrustation.
-		 */
-		C3D_API void Initialise();
-		/**
-		 *\~english
-		 *\brief		Cleanus the overlay up.
-		 *\~french
-		 *\brief		Nettoie l'incrustation.
-		 */
-		C3D_API void Cleanup();
-		/**
-		 *\~english
 		 *\brief		Retrieves the childs count at given level
 		 *\param[in]	p_level	The wanted level
 		 *\return		The count

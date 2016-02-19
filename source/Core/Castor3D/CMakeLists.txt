@@ -96,8 +96,6 @@ file( GLOB ${PROJECT_NAME}_VBO_HEADER_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/GeometryBuffer*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/IndexBuffer*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/IndexBuffer*.inl
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/MatrixBuffer*.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/MatrixBuffer*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexBuffer*.hpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexBuffer*.inl
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexLayout*.hpp
@@ -109,7 +107,6 @@ file( GLOB ${PROJECT_NAME}_VBO_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/GpuBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/GeometryBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/IndexBuffer*.cpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/Src/MatrixBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexBuffer*.cpp
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/VertexLayout*.cpp
 )

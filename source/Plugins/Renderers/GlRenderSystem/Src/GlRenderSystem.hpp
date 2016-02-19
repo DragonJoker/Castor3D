@@ -41,7 +41,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateGeometryBuffers
 		 */
-		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program, Castor3D::VertexBuffer * p_vtx, Castor3D::IndexBuffer * p_idx, Castor3D::VertexBuffer * p_bones, Castor3D::MatrixBuffer * p_inst );
+		virtual Castor3D::GeometryBuffersSPtr CreateGeometryBuffers( Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program, Castor3D::VertexBuffer * p_vtx, Castor3D::IndexBuffer * p_idx, Castor3D::VertexBuffer * p_bones, Castor3D::VertexBuffer * p_inst );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateDepthStencilState
 		 */
@@ -70,10 +70,6 @@ namespace GlRender
 		 *\copydoc		Castor3D::RenderSystem::CreateVertexBuffer
 		 */
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer );
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateMatrixBuffer
-		 */
-		virtual std::shared_ptr< Castor3D::GpuBuffer< real > > CreateMatrixBuffer( Castor3D::CpuBuffer< real > * p_buffer );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateStaticTexture
 		 */

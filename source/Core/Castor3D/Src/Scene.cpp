@@ -510,14 +510,7 @@ namespace Castor3D
 		m_transparentRenderNodes.clear();
 		m_distanceSortedTransparentRenderNodes.clear();
 		auto l_lock = Castor::make_unique_lock( m_mutex );
-
-		for ( auto && l_overlay : m_overlays )
-		{
-			GetEngine()->PostEvent( MakeCleanupEvent( *l_overlay ) );
-		}
-
 		m_overlays.clear();
-
 		m_animatedObjectGroupManager->Cleanup();
 		m_cameraManager->Cleanup();
 		m_billboardManager->Cleanup();
@@ -576,7 +569,6 @@ namespace Castor3D
 		{
 			if ( l_context->IsMultiSampling() )
 			{
-				l_context->GetNoDepthWriteState()->Apply();
 				l_context->CullFace( eFACE_FRONT );
 				RenderSubmeshes( p_technique, p_camera, l_pipeline, m_transparentRenderNodes );
 				l_context->CullFace( eFACE_BACK );
@@ -770,7 +762,7 @@ namespace Castor3D
 
 		if ( p_pass.HasAutomaticShader() )
 		{
-			if ( !p_geometry.GetAnimatedObject() || !p_geometry.GetAnimatedObject()->IsPlayingAnimation() )
+			if ( !p_geometry.GetAnimatedObject() )
 			{
 				p_programFlags &= ~ePROGRAM_FLAG_SKINNING;
 			}
@@ -801,7 +793,7 @@ namespace Castor3D
 			p_pipeline.ApplyMatrices( *l_matrixBuffer, ( 0xFFFFFFFFFFFFFFFF & ~p_excludedMtxFlags ) );
 			auto l_animated = p_geometry.GetAnimatedObject();
 
-			if ( l_animated && l_animated->IsPlayingAnimation() )
+			if ( l_animated )
 			{
 				Matrix4x4rFrameVariableSPtr l_variable;
 				l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_variable );
@@ -870,12 +862,13 @@ namespace Castor3D
 					if ( l_submesh->GetRefCount( l_material ) > 1 && l_submesh->HasMatrixBuffer()
 							&& ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) != ePROGRAM_FLAG_SKINNING )
 					{
-						real * l_buffer = l_submesh->GetMatrixBuffer().data();
+						uint8_t * l_buffer = l_submesh->GetMatrixBuffer().data();
+						const uint32_t l_size = 16 * sizeof( real );
 
 						for ( auto && l_renderNode : l_itSubmeshes.second )
 						{
-							std::memcpy( l_buffer, ( l_renderNode.m_node->GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), 16 * sizeof( real ) );
-							l_buffer += 16;
+							std::memcpy( l_buffer, ( l_renderNode.m_node->GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
+							l_buffer += l_size;
 						}
 
 						DoBindPass( p_technique, p_pipeline, *l_pass, *l_itSubmeshes.second[0].m_geometry, l_itSubmeshes.second[0].m_submesh->GetProgramFlags() | ePROGRAM_FLAG_INSTANCIATION, MASK_MTXMODE_MODEL );

@@ -40,8 +40,8 @@ namespace GlRender
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Count >
-	GlAttribute< T, Count >::GlAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Count, 0 )
+	GlAttribute< T, Count >::GlAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor3D::BufferDeclaration const & p_declaration, Castor::String const & p_attributeName )
+		: GlAttributeBase( p_gl, p_program, p_declaration, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Count, 0 )
 	{
 	}
 
@@ -53,8 +53,8 @@ namespace GlRender
 	//**********************************************************************************************
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
-	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor::String const & p_attributeName )
-		: GlAttributeBase( p_gl, p_program, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Columns, 1 )
+	GlMatAttribute< T, Columns, Rows >::GlMatAttribute( OpenGl & p_gl, Castor3D::ShaderProgram const & p_program, Castor3D::BufferDeclaration const & p_declaration, Castor::String const & p_attributeName )
+		: GlAttributeBase( p_gl, p_program, p_declaration, p_attributeName, eGL_TYPE( GlTyper< T >::Value ), Columns, 1 )
 	{
 	}
 
@@ -67,14 +67,17 @@ namespace GlRender
 	bool GlMatAttribute< T, Columns, Rows >::Bind( bool p_bNormalised )
 	{
 		bool l_return = true;
+		uint32_t l_offset = m_offset;
+		const uint32_t l_off = Columns * sizeof( T );
 
 		if ( m_glType == eGL_TYPE_INT )
 		{
 			for ( int i = 0; i < Rows && l_return; ++i )
 			{
 				l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation + i );
-				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Columns, m_glType, m_stride, BUFFER_OFFSET( m_offset + ( i * Columns * sizeof( T ) ) ) );
+				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Columns, m_glType, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
 				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, 1 );
+				l_offset += l_off;
 			}
 		}
 		else
@@ -82,8 +85,9 @@ namespace GlRender
 			for ( int i = 0; i < Rows && l_return; ++i )
 			{
 				l_return = GetOpenGl().EnableVertexAttribArray( m_attributeLocation + i );
-				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Columns, m_glType, p_bNormalised, m_stride, BUFFER_OFFSET( m_offset + ( i * Columns * sizeof( T ) ) ) );
+				l_return &= GetOpenGl().VertexAttribPointer( m_attributeLocation + i, Columns, m_glType, p_bNormalised, m_declaration.GetStride(), BUFFER_OFFSET( l_offset ) );
 				l_return &= GetOpenGl().VertexAttribDivisor( m_attributeLocation + i, 1 );
+				l_offset += l_off;
 			}
 		}
 

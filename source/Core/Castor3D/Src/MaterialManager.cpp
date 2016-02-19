@@ -13,6 +13,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< Material >::Name = cuT( "Material" );
+
 	MaterialManager::MaterialManager( Engine & p_engine )
 		: ResourceManager< Castor::String, Material >( p_engine )
 	{

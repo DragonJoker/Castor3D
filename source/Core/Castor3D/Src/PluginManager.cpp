@@ -14,6 +14,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< PluginBase >::Name = cuT( "Plugin" );
+
 #if defined( _MSC_VER)
 	static const String GetTypeFunctionABIName = cuT( "?GetType@@YA?AW4ePLUGIN_TYPE@Castor3D@@XZ" );
 #elif defined( __GNUG__)

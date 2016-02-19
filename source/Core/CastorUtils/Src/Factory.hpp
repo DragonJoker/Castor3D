@@ -114,9 +114,6 @@ namespace Castor
 		{
 			return m_registered.find( p_key ) != m_registered.end();
 		}
-
-#if CASTOR_HAS_VARIADIC_TEMPLATES
-
 		/**
 		 *\~english
 		 *\brief		Creates an object from a key
@@ -146,8 +143,6 @@ namespace Castor
 
 			return l_return;
 		}
-
-#endif
 
 	protected:
 		ObjMap m_registered;

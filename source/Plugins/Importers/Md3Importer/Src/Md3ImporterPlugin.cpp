@@ -22,7 +22,7 @@ C3D_Md3_API String GetName()
 	return cuT( "MD3 Importer" );
 }
 
-C3D_Md3_API ImporterPlugin::ExtensionArray GetExtensions()
+C3D_Md3_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::Extension l_extension( cuT( "MD3" ), cuT( "Quake III" ) );
 	ImporterPlugin::ExtensionArray l_arrayReturn( 1, l_extension );

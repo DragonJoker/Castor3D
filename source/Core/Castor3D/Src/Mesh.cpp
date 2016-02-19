@@ -8,6 +8,7 @@
 #include "Icosahedron.hpp"
 #include "Cube.hpp"
 #include "Plane.hpp"
+#include "Skeleton.hpp"
 #include "Sphere.hpp"
 #include "Torus.hpp"
 #include "Projection.hpp"
@@ -295,5 +296,22 @@ namespace Castor3D
 		{
 			l_submesh->UnRef( p_material );
 		}
+	}
+
+	void Mesh::SetSkeleton( SkeletonSPtr p_skeleton )
+	{
+		m_skeleton = p_skeleton;
+
+		m_skeleton->TraverseHierarchy( []( BoneSPtr p_bone )
+		{
+			if ( p_bone->GetParent() )
+			{
+				p_bone->SetFinalTransformation( p_bone->GetParent()->GetFinalTransformation() * p_bone->GetOffsetMatrix() );
+			}
+			else
+			{
+				p_bone->SetFinalTransformation( p_bone->GetOffsetMatrix() );
+			}
+		} );
 	}
 }

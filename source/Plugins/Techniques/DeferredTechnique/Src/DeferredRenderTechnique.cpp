@@ -16,7 +16,6 @@
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
 #include <LightManager.hpp>
-#include <MatrixBuffer.hpp>
 #include <OneFrameVariable.hpp>
 #include <Pipeline.hpp>
 #include <PointFrameVariable.hpp>
@@ -442,14 +441,15 @@ namespace Deferred
 		IN( l_writer, Vec3, vtx_bitangent );
 		IN( l_writer, Vec3, vtx_texture );
 
-		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
-		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ), CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
-		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ), CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
-		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormal" ), CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
-		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ), CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
-		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ), CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
-		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapHeight" ), CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
-		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapGloss" ), CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
+		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
+		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
+		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
+		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
+		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
+		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
+		Optional< Sampler2D > c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CHECK_FLAG( eTEXTURE_CHANNEL_EMISSIVE ) ) );
+		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
+		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
 
 		uint32_t l_index = 0;
 		FRAG_OUTPUT( l_writer, Vec4, out_c3dPosition, l_index++ );
@@ -483,17 +483,26 @@ namespace Deferred
 
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
 				{
-					l_v3Ambient *= texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
+					l_v3Ambient = texture2D( c3d_mapColour, vtx_texture.XY ).XYZ;
+
+					if ( CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) )
+					{
+						l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
+					}
+				}
+				else if ( CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) )
+				{
+					l_v3Ambient = texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
 				}
 
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_EMISSIVE ) )
 				{
-					l_v3Ambient *= texture2D( c3d_mapAmbient, vtx_texture.XY ).XYZ;
+					l_v3Emissive = texture2D( c3d_mapEmissive, vtx_texture.XY ).XYZ;
 				}
 
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) )
 				{
-					l_v3Diffuse *= texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
+					l_v3Diffuse = texture2D( c3d_mapDiffuse, vtx_texture.XY ).XYZ;
 				}
 
 				if ( CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) )

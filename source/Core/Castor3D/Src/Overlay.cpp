@@ -175,16 +175,6 @@ namespace Castor3D
 		return true;
 	}
 
-	void Overlay::Initialise()
-	{
-		m_category->Initialise();
-	}
-
-	void Overlay::Cleanup()
-	{
-		m_category->Cleanup();
-	}
-
 	int Overlay::GetChildsCount( int p_level )const
 	{
 		int l_return = 0;

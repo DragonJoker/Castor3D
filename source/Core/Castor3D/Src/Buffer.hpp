@@ -23,7 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BufferElementGroup.hpp"
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
-#include "MatrixBuffer.hpp"
 #include "GeometryBuffers.hpp"
 
 #endif

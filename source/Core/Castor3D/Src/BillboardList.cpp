@@ -93,6 +93,11 @@ namespace Castor3D
 			}
 		}
 
+		if ( l_return )
+		{
+			p_chunk.AddSubChunk( l_chunk );
+		}
+
 		return l_return;
 	}
 

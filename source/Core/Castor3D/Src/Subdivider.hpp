@@ -123,7 +123,7 @@ namespace Castor3D
 		 *\param[in]	c	L'indice du troisième sommet de la face
 		 *\return		La face créée
 		 */
-		C3D_API virtual FaceSPtr AddFace( uint32_t a, uint32_t b, uint32_t c );
+		C3D_API virtual Face AddFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
 		 *\~english
 		 *\brief		Tests if the given Point3r is in mine
@@ -261,7 +261,7 @@ namespace Castor3D
 		//!\~english The submesh being subdivided	\~french Le sous-maillage à diviser
 		SubmeshSPtr m_submesh;
 		//!\~english The faces	\~french Les faces
-		FacePtrArray m_arrayFaces;
+		FaceArray m_arrayFaces;
 		//!\~english Tells if the buffers must be generatef	\~french Dit si les tampons doivent être générés
 		bool m_bGenerateBuffers;
 		//!\~english The subdivision end callback	\~french Le callback de fin de subdivision

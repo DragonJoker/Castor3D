@@ -61,7 +61,7 @@ namespace Phong
 
 	void Subdivider::DoSubdivide()
 	{
-		Castor3D::FacePtrArray l_facesArray = m_submesh->GetFaces();
+		auto l_facesArray = m_submesh->GetFaces();
 		m_submesh->ClearFaces();
 		std::map< uint32_t, Castor::PlaneEquation< double > > l_posnml;
 		uint32_t i = 0;
@@ -74,10 +74,9 @@ namespace Phong
 			l_posnml.insert( std::make_pair( i++, Castor::PlaneEquation< double >( Point3d( l_normal[0], l_normal[1], l_normal[2] ), Point3d( l_position[0], l_position[1], l_position[2] ) ) ) );
 		}
 
-		for ( Castor3D::FacePtrArray::iterator l_it = l_facesArray.begin(); l_it != l_facesArray.end(); ++l_it )
+		for ( auto l_face : l_facesArray )
 		{
-			Castor3D::FaceSPtr l_face = *l_it;
-			DoComputeFaces( 0.0, 0.0, 1.0, 1.0, m_occurences, Patch( l_posnml[l_face->GetVertexIndex( 0 )], l_posnml[l_face->GetVertexIndex( 1 )], l_posnml[l_face->GetVertexIndex( 2 )] ) );
+			DoComputeFaces( 0.0, 0.0, 1.0, 1.0, m_occurences, Patch( l_posnml[l_face[0]], l_posnml[l_face[1]], l_posnml[l_face[2]] ) );
 		}
 
 		l_facesArray.clear();

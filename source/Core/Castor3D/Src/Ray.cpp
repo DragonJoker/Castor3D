@@ -97,7 +97,7 @@ real Ray::Intersects( Point3r const & p_pt1, Point3r const & p_pt2, Point3r cons
 real Ray::Intersects( Face const & p_face, Submesh const & p_submesh )
 {
 	Point3r l_pt1, l_pt2, l_pt3;
-	return Intersects( Vertex::GetPosition( p_submesh[p_face.GetVertexIndex( 0 )], l_pt1 ), Vertex::GetPosition( p_submesh[p_face.GetVertexIndex( 1 )], l_pt2 ), Vertex::GetPosition( p_submesh[p_face.GetVertexIndex( 2 )], l_pt3 ) );
+	return Intersects( Vertex::GetPosition( p_submesh[p_face[0]], l_pt1 ), Vertex::GetPosition( p_submesh[p_face[1]], l_pt2 ), Vertex::GetPosition( p_submesh[p_face[2]], l_pt3 ) );
 }
 
 real Ray::Intersects( Point3r const & p_vertex )

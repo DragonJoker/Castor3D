@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -91,90 +91,6 @@ namespace Castor3D
 		};
 
 	protected:
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.8.0
-		\date		26/01/2016
-		\~english
-		\brief		Helper structure holding the keyframes and interpolation related stuff.
-		\~english
-		\brief		Structure d'aide contenant les keyframes et les trucs relatifs à l'interpolation.
-		*/
-		template< typename T >
-		struct KeyFrameInterpolation
-		{
-			/**
-			 *\~english
-			 *\brief		Copy assignment operator.
-			 *\param[in]	p_rhs	The object to copy.
-			 *\return		A reference to this object.
-			 *\~french
-			 *\brief		Opérateur d'affectation par copie.
-			 *\param[in]	p_rhs	L'objet à copier.
-			 *\return		Une référence sur cet objet.
-			 */
-			inline KeyFrameInterpolation< T > & operator=( KeyFrameInterpolation< T > const & p_rhs );
-			/**
-			 *\~english
-			 *\brief		Updates the interpolator.
-			 *\param[in]	p_mode	The new mode.
-			 *\~french
-			 *\brief		Met à jour l'interpolateur.
-			 *\param[in]	p_mode	Le nouveau mode.
-			 */
-			inline void SetInterpolationMode( eINTERPOLATOR_MODE p_mode );
-			/**
-			 *\~english
-			 *\brief		Creates a key frame and adds it to the list.
-			 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
-			 *\param[in]	p_from		The starting time.
-			 *\param[in]	p_value		The key frame value.
-			 *\param[in]	p_length	The current animation length.
-			 *\return		The created key frame.
-			 *\~french
-			 *\brief		Crée une key frame et l'ajoute à la liste.
-			 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-			 *\param[in]	p_from		L'index de temps de début.
-			 *\param[in]	p_value		La valeur de la key frame.
-			 *\param[in]	p_length	La longueur courante de l'animation.
-			 *\return		La key frame créée.
-			 */
-			inline KeyFrame< T > & AddKeyFrame( real p_from, T const & p_value, real & p_length );
-			/**
-			 *\~english
-			 *\brief		Deletes the key frame at time index p_time.
-			 *\param[in]	p_time	The time index.
-			 *\~french
-			 *\brief		Supprime la key frame à l'index de temps donné.
-			 *\param[in]	p_time	L'index de temps.
-			 */
-			inline void RemoveKeyFrame( real p_time );
-			/**
-			 *\~english
-			 *\brief		Computes the animation's value (translation, rotation or scaling) for this object.
-			 *\param[in]	p_time	The time index.
-			 *\return		The interpolated value.
-			 *\~french
-			 *\brief		Calcule la valeur (translation, rotation ou mise à l'échelle) pour l'animation de cet objet.
-			 *\param[in]	p_time	L'index de temps.
-			 *\return		La valeur interpolée.
-			 */
-			T Compute( real p_time );
-
-			//!\~english The default value when the wanted value can't be interpolated.	\~french La valeur par défaut quand la valeur voulue n'a pas pu être interpolée.
-			T m_default;
-			//!\~english The key frames sorted by start time.	\~french Les keyframes, triées par index de temps de début.
-			KeyFrameArray< T > m_keyframes;
-			//!\~english The interpolation mode.	\~french Le mode d'interpolation.
-			eINTERPOLATOR_MODE m_mode = eINTERPOLATOR_MODE_NONE;
-			//!\~english The interpolator.	\~french L'interpolateur.
-			std::unique_ptr< Interpolator< T > > m_interpolator;
-
-			typename KeyFrameArray< T >::const_iterator m_prev = m_keyframes.end();
-			typename KeyFrameArray< T >::const_iterator m_curr = m_keyframes.end();
-		};
-
-	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -237,41 +153,19 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a scaling key frame and adds it to the list.
 		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
-		 *\param[in]	p_from	The starting time.
-		 *\param[in]	p_value	The key frame value.
+		 *\param[in]	p_from		The starting time.
+		 *\param[in]	p_translate	The translation at start time.
+		 *\param[in]	p_rotate	The rotation at start time.
+		 *\param[in]	p_scale		The scaling at start time.
 		 *\~french
 		 *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
 		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		 *\param[in]	p_from	L'index de temps de début.
-		 *\param[in]	p_value	La valeur de la key frame.
+		 *\param[in]	p_from		L'index de temps de début.
+		 *\param[in]	p_translate	La translation au temps de début.
+		 *\param[in]	p_rotate	La rotation au temps de début.
+		 *\param[in]	p_scale		L'échelle au temps de début.
 		 */
-		C3D_API Point3rKeyFrame & AddScaleKeyFrame( real p_from, Castor::Point3r const & p_value = Castor::Point3r( 1, 1, 1 ) );
-		/**
-		 *\~english
-		 *\brief		Creates a translation key frame and adds it to the list.
-		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
-		 *\param[in]	p_from	The starting time.
-		 *\param[in]	p_value	The key frame value.
-		 *\~french
-		 *\brief		Crée une key frame de translation et l'ajoute à la liste.
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		 *\param[in]	p_from	L'index de temps de début.
-		 *\param[in]	p_value	La valeur de la key frame.
-		 */
-		C3D_API Point3rKeyFrame & AddTranslateKeyFrame( real p_from, Castor::Point3r const & p_value = Castor::Point3r() );
-		/**
-		 *\~english
-		 *\brief		Creates a rotation key frame and adds it to the list.
-		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
-		 *\param[in]	p_from	The starting time.
-		 *\param[in]	p_value	The key frame value.
-		 *\~french
-		 *\brief		Crée une key frame de rotation et l'ajoute à la liste.
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
-		 *\param[in]	p_from	L'index de temps de début.
-		 *\param[in]	p_value	La valeur de la key frame.
-		 */
-		C3D_API QuaternionKeyFrame & AddRotateKeyFrame( real p_from, Castor::Quaternion const & p_value = Castor::Quaternion() );
+		C3D_API KeyFrame & AddKeyFrame( real p_from, Castor::Point3r const & p_translate = Castor::Point3r{}, Castor::Quaternion const & p_rotate = Castor::Quaternion{}, Castor::Point3r const & p_scale = Castor::Point3r{ 1.0_r, 1.0_r, 1.0_r } );
 		/**
 		 *\~english
 		 *\brief		Deletes the scaling key frame at time index p_time.
@@ -280,25 +174,14 @@ namespace Castor3D
 		 *\brief		Supprime la key frame de mise à l'échelle à l'index de temps donné.
 		 *\param[in]	p_time	L'index de temps.
 		 */
-		C3D_API void RemoveScaleKeyFrame( real p_time );
+		C3D_API void RemoveKeyFrame( real p_time );
 		/**
 		 *\~english
-		 *\brief		Deletes the translation key frame at time index p_time.
-		 *\param[in]	p_time	The time index.
+		 *\return		The scaling key frames interpolation mode.
 		 *\~french
-		 *\brief		Supprime la key frame de translation à l'index de temps donné.
-		 *\param[in]	p_time	L'index de temps.
+		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
-		C3D_API void RemoveTranslateKeyFrame( real p_time );
-		/**
-		 *\~english
-		 *\brief		Deletes the rotation key frame at time index p_time.
-		 *\param[in]	p_time	The time index.
-		 *\~french
-		 *\brief		Supprime la key frame de rotation à l'index de temps donné.
-		 *\param[in]	p_time	L'index de temps.
-		 */
-		C3D_API void RemoveRotateKeyFrame( real p_time );
+		C3D_API void SetInterpolationMode( eINTERPOLATOR_MODE p_mode );
 		/**
 		 *\~english
 		 *\brief		Clones this moving thing.
@@ -316,89 +199,19 @@ namespace Castor3D
 		 *\~french
 		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
 		 */
-		inline eINTERPOLATOR_MODE GetScaleInterpolationMode()const
+		inline eINTERPOLATOR_MODE GetInterpolationMode()const
 		{
-			return m_scales.m_mode;
+			return m_mode;
 		}
 		/**
 		 *\~english
-		 *\return		The rotation key frames interpolation mode.
+		 *\return		The key frames.
 		 *\~french
-		 *\return		Le mode d'interpolation des key frames de rotation.
+		 *\return		Les key frames.
 		 */
-		inline eINTERPOLATOR_MODE GetRotateInterpolationMode()const
+		inline KeyFrameArray const & GetKeyFrames()const
 		{
-			return m_rotates.m_mode;
-		}
-		/**
-		 *\~english
-		 *\return		The translation key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames de translation.
-		 */
-		inline eINTERPOLATOR_MODE GetTranslateInterpolationMode()const
-		{
-			return m_translates.m_mode;
-		}
-		/**
-		 *\~english
-		 *\return		The scaling key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames de mise à l'échelle.
-		 */
-		inline void SetScaleInterpolationMode( eINTERPOLATOR_MODE p_mode )
-		{
-			return m_scales.SetInterpolationMode( p_mode );
-		}
-		/**
-		 *\~english
-		 *\return		The rotation key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames de rotation.
-		 */
-		inline void SetRotateInterpolationMode( eINTERPOLATOR_MODE p_mode )
-		{
-			return m_rotates.SetInterpolationMode( p_mode );
-		}
-		/**
-		 *\~english
-		 *\return		The translation key frames interpolation mode.
-		 *\~french
-		 *\return		Le mode d'interpolation des key frames de translation.
-		 */
-		inline void SetTranslateInterpolationMode( eINTERPOLATOR_MODE p_mode )
-		{
-			return m_translates.SetInterpolationMode( p_mode );
-		}
-		/**
-		 *\~english
-		 *\return		The scale key frames.
-		 *\~french
-		 *\return		Les key frames de mise à l'échelle.
-		 */
-		inline Point3rKeyFrameArray const & GetScales()const
-		{
-			return m_scales.m_keyframes;
-		}
-		/**
-		 *\~english
-		 *\return		Translation key frames.
-		 *\~french
-		 *\return		Les key frames de déplacement.
-		 */
-		inline Point3rKeyFrameArray const & GetTranslates()const
-		{
-			return m_translates.m_keyframes;
-		}
-		/**
-		 *\~english
-		 *\return		The rotation key frames.
-		 *\~french
-		 *\return		Les key frames de rotation.
-		 */
-		inline QuaternionKeyFrameArray const & GetRotates()const
-		{
-			return m_rotates.m_keyframes;
+			return m_keyframes;
 		}
 		/**
 		 *\~english
@@ -476,7 +289,7 @@ namespace Castor3D
 		 */
 		inline bool HasKeyFrames()const
 		{
-			return !m_rotates.m_keyframes.empty() || !m_scales.m_keyframes.empty() || !m_translates.m_keyframes.empty();
+			return !m_keyframes.empty();
 		}
 		/**
 		 *\~english
@@ -512,12 +325,18 @@ namespace Castor3D
 	protected:
 		//!\~english The moving thing type.	\~french Le type du machin mouvant.
 		eANIMATION_OBJECT_TYPE m_type;
-		//!\~english The scaling key frames.	\~french Les keyframes de mise à l'échelle.
-		KeyFrameInterpolation< Castor::Point3r > m_scales;
-		//!\~english The rotation key frames.	\~french Les keyframes de rotation.
-		KeyFrameInterpolation< Castor::Quaternion > m_rotates;
-		//!\~english The translation key frames.	\~french Les keyframes de translation.
-		KeyFrameInterpolation< Castor::Point3r > m_translates;
+		//!\~english The interpolation mode.	\~french Le mode d'interpolation.
+		eINTERPOLATOR_MODE m_mode = eINTERPOLATOR_MODE_NONE;
+		//!\~english The point interpolator.	\~french L'interpolateur de points.
+		std::unique_ptr< Point3rInterpolator > m_pointInterpolator;
+		//!\~english The quaternion interpolator.	\~french L'interpolateur de quaternions.
+		std::unique_ptr< QuaternionInterpolator > m_quaternionInterpolator;
+		//!\~english The key frames.	\~french Les keyframes.
+		KeyFrameArray m_keyframes;
+		//!\~english Iterator to the previous keyframe (when playing the animation).	\~french Itérateur sur la key frame précédente (quand l'animation est jouée).
+		KeyFrameArray::const_iterator m_prev;
+		//!\~english Iterator to the current keyframe (when playing the animation).	\~french Itérateur sur la key frame courante (quand l'animation est jouée).
+		KeyFrameArray::const_iterator m_curr;
 		//!\~english Animation node transformations.	\~french Transformations du noeud d'animation.
 		Castor::Matrix4x4r m_nodeTransform;
 		//!\~english The animation length.	\~french La durée de l'animation.

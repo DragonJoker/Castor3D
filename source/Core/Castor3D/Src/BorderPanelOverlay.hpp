@@ -589,7 +589,7 @@ namespace Castor3D
 		//!\~english The border material name	\~french Le nom du matériau des bords
 		eBORDER_POSITION m_borderPosition;
 		//!\~english The borders vertex buffer data	\~french Les données du tampon de sommets pour la bordure
-		std::vector< OverlayCategory::Vertex > m_arrayVtxBorder;
+		OverlayCategory::VertexArray m_arrayVtxBorder;
 		//!\~english The UV for the outer part of the border	\~french Les UV de la partie extérieure de la bordure
 		Castor::Point4d m_borderOuterUv;
 		//!\~english The UV for the inner part of the border	\~french Les UV de la partie intérieure de la bordure

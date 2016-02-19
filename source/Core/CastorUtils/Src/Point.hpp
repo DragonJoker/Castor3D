@@ -294,7 +294,6 @@ namespace Castor
 		 */
 		template< typename U >
 		explicit Point( U const * p_pValues );
-#if CASTOR_HAS_VARIADIC_TEMPLATES
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -303,57 +302,6 @@ namespace Castor
 		 */
 		template< typename ValueA, typename ValueB, typename ... Values >
 		explicit Point( ValueA p_valueA, ValueB p_valueB, Values ... p_values );
-#else
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		Point();
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		Point( T const & p_vA, T const & p_vB );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		Point( T const & p_vA, T const & p_vB, T const & p_vC );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		Point( T const & p_vA, T const & p_vB, T const & p_vC, T const & p_vD );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		template< typename U, typename V > Point( U const & p_vA, V const & p_vB );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		template< typename U, typename V, typename W > Point( U const & p_vA, V const & p_vB, W const & p_vC );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		template< typename U, typename V, typename W, typename X > Point( U const & p_vA, V const & p_vB, W const & p_vC, X const & p_vD );
-#endif
 		/**
 		 *\~english
 		 *\brief		Destructor

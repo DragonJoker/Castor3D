@@ -61,46 +61,6 @@ namespace Castor3D
 		C3D_API ~RenderLoopAsync();
 		/**
 		 *\~english
-		 *\brief		Retrieves the end status.
-		 *\remark		Thread-safe.
-		 *\return		\p true if ended.
-		 *\~french
-		 *\brief		Récupère le statut de fin.
-		 *\remark		Thread-safe.
-		 *\return		\p true si arrêté.
-		 */
-		C3D_API bool IsEnded()const;
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render is ended.
-		 *\remark		Thread-safe.
-		 *\~french
-		 *\brief		Dit que le rendu est stoppé.
-		 *\remark		Thread-safe.
-		 */
-		C3D_API void SetEnded( bool p_value = true );
-		/**
-		 *\~english
-		 *\brief		Retrieves the render start status.
-		 *\remark		Thread-safe.
-		 *\return		\p true if started.
-		 *\~french
-		 *\brief		Récupère le statut de début de rendu.
-		 *\remark		Thread-safe.
-		 *\return		\p true si démarré.
-		 */
-		C3D_API bool IsStarted()const;
-		/**
-		 *\~english
-		 *\brief		Tells the engine the render is started.
-		 *\remark		Thread-safe.
-		 *\~french
-		 *\brief		Dit que le rendu est démarré.
-		 *\remark		Thread-safe.
-		 */
-		C3D_API void SetStarted( bool p_value = true );
-		/**
-		 *\~english
 		 *\brief		Retrieves the context creation status.
 		 *\remark		Thread-safe.
 		 *\return		\p true if created.
@@ -112,33 +72,15 @@ namespace Castor3D
 		C3D_API bool IsCreated()const;
 		/**
 		 *\~english
-		 *\brief		Tells the engine the render context is created.
+		 *\brief		Retrieves the render start status.
 		 *\remark		Thread-safe.
+		 *\return		\p true if started.
 		 *\~french
-		 *\brief		Dit que le contexte de rendu est créé.
+		 *\brief		Récupère le statut de début de rendu.
 		 *\remark		Thread-safe.
+		 *\return		\p true si démarré.
 		 */
-		C3D_API void SetCreated( bool p_value = true );
-		/**
-		 *\~english
-		 *\brief		Retrieves the render to-create status.
-		 *\remark		Thread-safe.
-		 *\return		\p true if the render context is to create.
-		 *\~french
-		 *\brief		Récupère le statut de demande de création du contexte.
-		 *\remark		Thread-safe.
-		 *\return		\p true si à créer.
-		 */
-		C3D_API bool IsToCreate()const;
-		/**
-		 *\~english
-		 *\brief		Tells if the engine the render context is to create.
-		 *\remark		Thread-safe.
-		 *\~french
-		 *\brief		Dit si le contexte de rendu est à créer.
-		 *\remark		Thread-safe.
-		 */
-		C3D_API void SetToCreate( bool p_value = true );
+		C3D_API bool IsRendering()const;
 		/**
 		 *\~english
 		 *\brief		Thread-safe
@@ -150,13 +92,15 @@ namespace Castor3D
 		C3D_API bool IsInterrupted()const;
 		/**
 		 *\~english
-		 *\brief		Interrupts the render loop.
+		 *\brief		Retrieves the render loop end status.
 		 *\remark		Thread-safe.
+		 *\return		\p true if created.
 		 *\~french
-		 *\brief		Interrompt la boucle de rendu.
+		 *\brief		Récupère le statut de fin de la boucle de rendu.
 		 *\remark		Thread-safe.
+		 *\return		\p true si créé.
 		 */
-		C3D_API void Interrupt();
+		C3D_API bool IsEnded()const;
 
 	private:
 		/**
@@ -193,7 +137,7 @@ namespace Castor3D
 		//!\~english Tells if render has ended, by any reason.	\~french Dit si le rendu est terminé, quelle qu'en soit la raison.
 		std::atomic_bool m_ended;
 		//!\~english Tells if render is running.	\~french Dit si le rendu est en cours.
-		std::atomic_bool m_started;
+		std::atomic_bool m_rendering;
 		//!\~english Tells if render context is to be created.	\~french Dit si le contexte de rendu est à créer.
 		std::atomic_bool m_createContext;
 		//!\~english Tells if render context is created.	\~french Dit si le contexte de rendu est créé.

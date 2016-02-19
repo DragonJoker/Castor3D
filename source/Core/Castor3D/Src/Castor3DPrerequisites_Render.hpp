@@ -394,7 +394,6 @@ namespace Castor3D
 	template< typename T > class GpuBuffer;
 	class VertexBuffer;
 	class IndexBuffer;
-	class MatrixBuffer;
 	class GeometryBuffers;
 	class TextureBuffer;
 
@@ -403,7 +402,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( BufferDeclaration );
 	DECLARE_SMART_PTR( VertexBuffer );
 	DECLARE_SMART_PTR( IndexBuffer );
-	DECLARE_SMART_PTR( MatrixBuffer );
 	DECLARE_SMART_PTR( TextureBuffer );
 	DECLARE_SMART_PTR( Context );
 	DECLARE_SMART_PTR( DepthStencilState );

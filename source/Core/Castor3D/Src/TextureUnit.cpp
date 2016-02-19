@@ -390,6 +390,10 @@ namespace Castor3D
 						l_return = p_file.WriteText( cuT( "\t\t\tchannel specular\n" ) ) > 0;
 						break;
 
+					case eTEXTURE_CHANNEL_EMISSIVE	:
+						l_return = p_file.WriteText( cuT( "\t\t\tchannel emissive\n" ) ) > 0;
+						break;
+
 					case eTEXTURE_CHANNEL_HEIGHT	:
 						l_return = p_file.WriteText( cuT( "\t\t\tchannel height\n" ) ) > 0;
 						break;

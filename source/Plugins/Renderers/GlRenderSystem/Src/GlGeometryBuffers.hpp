@@ -69,7 +69,7 @@ namespace GlRender
 		 *\param[in]	p_bones		Le tampon de données de bones.
 		 *\param[in]	p_inst		Le tampon de matrices d'instances.
 		 */
-		GlGeometryBuffers( OpenGl & p_gl, Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program, Castor3D::VertexBuffer * p_vtx, Castor3D::IndexBuffer * p_idx, Castor3D::VertexBuffer * p_bones, Castor3D::MatrixBuffer * p_inst );
+		GlGeometryBuffers( OpenGl & p_gl, Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program, Castor3D::VertexBuffer * p_vtx, Castor3D::IndexBuffer * p_idx, Castor3D::VertexBuffer * p_bones, Castor3D::VertexBuffer * p_inst );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -88,7 +88,7 @@ namespace GlRender
 
 	private:
 		Castor3D::BufferDeclaration::const_iterator DoFindElement( Castor3D::BufferDeclaration const & p_declaration, Castor3D::BufferElementDeclaration const & p_element )const;
-		GlAttributeBaseSPtr DoCreateAttribute( Castor3D::BufferElementDeclaration const & p_element, uint32_t p_offset, uint32_t p_stride );
+		GlAttributeBaseSPtr DoCreateAttribute( Castor3D::BufferElementDeclaration const & p_element, uint32_t p_offset, Castor3D::BufferDeclaration const & p_declaration );
 		bool DoCreateAttributes( Castor3D::ProgramInputLayout const & p_layout, Castor3D::BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes );
 		void DoBindAttributes( GlAttributePtrArray const & p_attributes )const;
 
@@ -98,7 +98,7 @@ namespace GlRender
 		//! The vertex attributes.
 		GlAttributePtrArray m_vertexAttributes;
 		//! The instantiation matrix attribute.
-		GlAttributeBaseSPtr m_matrixAttribute;
+		GlAttributePtrArray m_matrixAttributes;
 		//! The bones data attributes.
 		GlAttributePtrArray m_bonesAttributes;
 	};

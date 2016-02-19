@@ -1,6 +1,7 @@
 #include "Skeleton.hpp"
 
 #include "Animation.hpp"
+#include "Bone.hpp"
 
 using namespace Castor;
 
@@ -21,11 +22,19 @@ namespace Castor3D
 		m_bones.push_back( p_bone );
 	}
 
-	void Skeleton::AddAnimation( AnimationSPtr p_animation )
+	void Skeleton::SetBoneParent( BoneSPtr p_bone, BoneSPtr p_parent )
 	{
-		if ( m_animations.find( p_animation->GetName() ) == m_animations.end() )
+		if ( std::find( m_bones.begin(), m_bones.end(), p_bone ) == m_bones.end() )
 		{
-			m_animations.insert( std::make_pair( p_animation->GetName(), p_animation ) );
+			CASTOR_EXCEPTION( "Skeleton::SetBoneParent - Child bone is not in the Skeleton's nodes" );
 		}
+
+		if ( std::find( m_bones.begin(), m_bones.end(), p_parent ) == m_bones.end() )
+		{
+			CASTOR_EXCEPTION( "Skeleton::SetBoneParent - Parent bone is not in the Skeleton's nodes" );
+		}
+
+		p_parent->AddChild( p_bone );
+		p_bone->SetParent( p_parent );
 	}
 }

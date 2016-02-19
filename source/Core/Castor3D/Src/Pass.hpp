@@ -864,6 +864,8 @@ namespace Castor3D
 		OneTextureFrameVariableWPtr m_pNormalMap;
 		//!\~english  The specular texture frame variable	\~french La variable uniforme contenant la texture spéculaire
 		OneTextureFrameVariableWPtr m_pSpecularMap;
+		//!\~english  The emissive texture frame variable	\~french La variable uniforme contenant la texture émissive
+		OneTextureFrameVariableWPtr m_pEmissiveMap;
 		//!\~english  The opacity texture frame variable	\~french La variable uniforme contenant la texture d'opacité
 		OneTextureFrameVariableWPtr m_pOpacityMap;
 		//!\~english  The gloss texture frame variable	\~french La variable uniforme contenant la texture de brillance

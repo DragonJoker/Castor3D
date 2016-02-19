@@ -8,6 +8,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	const String ManagedObjectNamer< Camera >::Name = cuT( "Camera" );
+
 	CameraManager::CameraManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		: ObjectManager< Castor::String, Camera >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
 	{

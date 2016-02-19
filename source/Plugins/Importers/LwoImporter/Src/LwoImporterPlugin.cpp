@@ -18,7 +18,7 @@ C3D_Lwo_API Castor::String GetName()
 	return cuT( "LWO Importer" );
 }
 
-C3D_Lwo_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions()
+C3D_Lwo_API Castor3D::ImporterPlugin::ExtensionArray GetExtensions( Castor3D::Engine * p_engine )
 {
 	Castor3D::ImporterPlugin::Extension l_extension( cuT( "LWO" ), cuT( "LightWave Model" ) );
 	Castor3D::ImporterPlugin::ExtensionArray l_arrayReturn( 1, l_extension );

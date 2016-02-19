@@ -475,7 +475,10 @@ namespace Castor
 		template< typename T, uint32_t Count >
 		double distance_squared( Coords< T, Count > const & p_ptPoint )
 		{
-			return std::accumulate( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, 0.0, std::multiplies< double >() );
+			return std::accumulate( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, 0.0, []( double a, T const & b )
+			{
+				return a + double( b * b );
+			} );
 		}
 
 		template< typename T, uint32_t Count >

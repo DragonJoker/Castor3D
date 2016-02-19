@@ -41,13 +41,14 @@ namespace Ase
 		/**
 		 * Constructor
 		 */
-		AseFileContext( AseFileParser * p_pParser, Castor::TextFile * p_pFile );
+		AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, Castor::TextFile * p_pFile );
 		/**
 		 * Initialises all members
 		 */
 		void Initialise();
 
 	public:
+		AseImporter & m_importer;
 		AseFileParser * m_pParser;
 		Castor3D::SceneSPtr pScene;
 		Castor3D::LightSPtr pLight;

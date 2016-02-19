@@ -108,25 +108,12 @@ namespace Obj
 
 		if ( !l_strValue.empty() )
 		{
-			String l_strPath = m_filePath / l_strValue;
+			auto l_texture = LoadTexture( l_strValue, *p_pPass, p_channel );
 
-			if ( !File::FileExists( l_strPath ) )
+			if ( l_texture )
 			{
-				l_strPath = m_filePath / cuT( "Texture" ) / l_strValue;
+				m_arrayTextures.push_back(std::static_pointer_cast< StaticTexture >( l_texture->GetTexture() ) );
 			}
-
-			l_pImage = m_collImages.create( l_strValue, l_strPath );
-		}
-
-		if ( l_pImage && p_pPass )
-		{
-			TextureUnitSPtr l_pTexture = p_pPass->AddTextureUnit();
-			StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-			l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-			l_pStaTexture->SetImage( l_pImage->GetPixels() );
-			l_pTexture->SetTexture( l_pStaTexture );
-			l_pTexture->SetChannel( p_channel );
-			m_arrayTextures.push_back( l_pStaTexture );
 		}
 	}
 
@@ -683,7 +670,14 @@ namespace Obj
 							l_fAlpha = 1.0f;
 						}
 
-						l_pMaterial = l_mtlManager.Find( l_strValue );
+						if ( l_mtlManager.Has( l_strValue ) )
+						{
+							l_pMaterial = l_mtlManager.Find( l_strValue );
+						}
+						else
+						{
+							l_pMaterial.reset();
+						}
 
 						if ( !l_pMaterial )
 						{

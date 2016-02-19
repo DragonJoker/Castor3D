@@ -35,7 +35,7 @@ namespace Loop
 		VertexWPtr m_pVertex0;
 		VertexWPtr m_pVertex1;
 		VertexWPtr m_pVertex2;
-		Castor3D::FaceSPtr m_face;
+		Castor3D::Face m_face;
 		EdgeSPtr m_edgeAB;
 		EdgeSPtr m_edgeBC;
 		EdgeSPtr m_edgeCA;
@@ -50,7 +50,7 @@ namespace Loop
 		 *\param[in,out]	p_vertexNeighbourhood	The list of vertices neighbours
 		 *\param[in,out]	p_allEdges	All the edges
 		 */
-		FaceEdges( Subdivider * p_pDivider, Castor3D::FaceSPtr p_face,  VertexPtrUIntMap & p_mapVertex );
+		FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face,  VertexPtrUIntMap & p_mapVertex );
 		/**
 		 * Constructor
 		 *\param[in]	p_submesh	The submesh holding the face
@@ -59,7 +59,7 @@ namespace Loop
 		 *\param[in]	l_bc	Edge between 2nd and 3rd vertex
 		 *\param[in]	l_ca	Edge between 3rd and 1st vertex
 		 */
-		FaceEdges( Subdivider * p_pDivider, Castor3D::FaceSPtr p_face, EdgeSPtr l_ab, EdgeSPtr l_bc, EdgeSPtr l_ca );
+		FaceEdges( Subdivider * p_pDivider, Castor3D::Face p_face, EdgeSPtr l_ab, EdgeSPtr l_bc, EdgeSPtr l_ca );
 		/**
 		 * Divides the edges held, creates needed faces to complete the division
 		 *\param[in]	p_value	The weight of division (if 0.5, divides all edges in the middle)

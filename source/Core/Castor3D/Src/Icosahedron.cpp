@@ -114,46 +114,47 @@ void Icosahedron::DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArra
 	l_submesh->AddPoints( l_group );
 
 	// on construit toutes les faces de l'icosaèdre
-	FaceSPtr l_pFaces[20];
-	int l_iIndex = 0;
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 0,  1,  4 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 9,  0,  4 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 9,  4,  5 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 4,  8,  5 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 4,  1,  8 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 1, 10,  8 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 3,  8, 10 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 3,  5,  8 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 2,  5,  3 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 7,  2,  3 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 3, 10,  7 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 6,  7, 10 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 6, 11,  7 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 11, 6,  0 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 1,  0,  6 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 1,  6, 10 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 0,  9, 11 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 11, 9,  2 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 9,  5,  2 );
-	l_pFaces[l_iIndex++] = l_submesh->AddFace( 2,  7, 11 );
+	Face l_faces[20]
+	{
+		l_submesh->AddFace( 0, 1, 4 ),
+		l_submesh->AddFace( 9, 0, 4 ),
+		l_submesh->AddFace( 9, 4, 5 ),
+		l_submesh->AddFace( 4, 8, 5 ),
+		l_submesh->AddFace( 4, 1, 8 ),
+		l_submesh->AddFace( 1, 10, 8 ),
+		l_submesh->AddFace( 3, 8, 10 ),
+		l_submesh->AddFace( 3, 5, 8 ),
+		l_submesh->AddFace( 2, 5, 3 ),
+		l_submesh->AddFace( 7, 2, 3 ),
+		l_submesh->AddFace( 3, 10, 7 ),
+		l_submesh->AddFace( 6, 7, 10 ),
+		l_submesh->AddFace( 6, 11, 7 ),
+		l_submesh->AddFace( 11, 6, 0 ),
+		l_submesh->AddFace( 1, 0, 6 ),
+		l_submesh->AddFace( 1, 6, 10 ),
+		l_submesh->AddFace( 0, 9, 11 ),
+		l_submesh->AddFace( 11, 9, 2 ),
+		l_submesh->AddFace( 9, 5, 2 ),
+		l_submesh->AddFace( 2, 7, 11 ),
+	};
 
-	for ( int i = 0; i < 20; i++ )
+	for ( auto const & l_face : l_faces )
 	{
 		Point3r l_ptCoordsA;
 		Point3r l_ptCoordsB;
 		Point3r l_ptCoordsC;
-		Vertex::GetPosition( l_submesh->GetPoint( l_pFaces[i]->GetVertexIndex( 0 ) ), l_ptCoordsA );
-		Vertex::GetPosition( l_submesh->GetPoint( l_pFaces[i]->GetVertexIndex( 1 ) ), l_ptCoordsB );
-		Vertex::GetPosition( l_submesh->GetPoint( l_pFaces[i]->GetVertexIndex( 2 ) ), l_ptCoordsC );
+		Vertex::GetPosition( l_submesh->GetPoint( l_face[0] ), l_ptCoordsA );
+		Vertex::GetPosition( l_submesh->GetPoint( l_face[1] ), l_ptCoordsB );
+		Vertex::GetPosition( l_submesh->GetPoint( l_face[2] ), l_ptCoordsC );
 		real u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( l_ptCoordsA[2], l_ptCoordsA[0] ) * ( 1 / Angle::Pi ) ) );
 		real v = real( acos( l_ptCoordsA[1] ) * ( 1 / Angle::Pi ) );
-		Vertex::SetTexCoord( l_submesh->GetPoint( l_pFaces[i]->GetVertexIndex( 0 ) ), u, v );
+		Vertex::SetTexCoord( l_submesh->GetPoint( l_face[0] ), u, v );
 		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( l_ptCoordsB[2], l_ptCoordsB[0] ) * ( 1 / Angle::Pi ) ) );
 		v = real( acos( l_ptCoordsB[1] ) * ( 1 / Angle::Pi ) );
-		Vertex::SetTexCoord( l_submesh->GetPoint( l_pFaces[i]->GetVertexIndex( 1 ) ), u, v );
+		Vertex::SetTexCoord( l_submesh->GetPoint( l_face[1] ), u, v );
 		u = real( 0.5 ) * ( real( 1.0 ) + real( atan2( l_ptCoordsC[2], l_ptCoordsC[0] ) * ( 1 / Angle::Pi ) ) );
 		v = real( acos( l_ptCoordsC[1] ) * ( 1 / Angle::Pi ) );
-		Vertex::SetTexCoord( l_submesh->GetPoint( l_pFaces[i]->GetVertexIndex( 2 ) ), u, v );
+		Vertex::SetTexCoord( l_submesh->GetPoint( l_face[2] ), u, v );
 	}
 
 	for ( auto && l_vertex : l_submesh->GetPoints() )

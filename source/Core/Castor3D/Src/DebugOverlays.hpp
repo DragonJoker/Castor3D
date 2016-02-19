@@ -134,8 +134,10 @@ namespace Castor3D
 		OverlayWPtr m_debugPanel;
 		//!\~english The CPU time value overlay.	\~french L'incrustation contenant la valeur de temps CPU.
 		TextOverlaySPtr m_debugCpuTime;
-		//!\~english The GPU time value overlay.	\~french L'incrustation contenant la valeur de temps GPU.
-		TextOverlaySPtr m_debugGpuTime;
+		//!\~english The GPU client time value overlay.	\~french L'incrustation contenant la valeur de temps client GPU (Temps perdu).
+		TextOverlaySPtr m_debugGpuClientTime;
+		//!\~english The GPU server time value overlay.	\~french L'incrustation contenant la valeur de temps serveur GPU (Temps de rendu).
+		TextOverlaySPtr m_debugGpuServerTime;
 		//!\~english The debug time value overlay.	\~french L'incrustation contenant la valeur du temps de débogage.
 		TextOverlaySPtr m_debugTime;
 		//!\~english The external time value overlay.	\~french L'incrustation contenant la valeur du temps externe.

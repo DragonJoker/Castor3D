@@ -56,7 +56,6 @@ namespace Castor3D
 				i++;
 			}
 
-			FaceSPtr l_pFace;
 			BufferElementGroupSPtr l_ptBottomCenter	= l_submeshBase.AddPoint( 0.0, 0.0, 0.0 );
 			Vertex( *l_ptBottomCenter ).SetTexCoord( 0.5, 0.5 );
 
@@ -70,16 +69,16 @@ namespace Castor3D
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				l_pFace = l_submeshBase.AddFace( l_submeshBase[i]->GetIndex(), l_submeshBase[i + 1]->GetIndex(), l_ptBottomCenter->GetIndex() );
+				l_submeshBase.AddFace( l_submeshBase[i]->GetIndex(), l_submeshBase[i + 1]->GetIndex(), l_ptBottomCenter->GetIndex() );
 			}
 
 			//Composition du bas
-			l_pFace = l_submeshBase.AddFace( l_submeshBase[m_nbFaces - 1]->GetIndex(), l_submeshBase[0]->GetIndex(), l_ptBottomCenter->GetIndex() );
+			l_submeshBase.AddFace( l_submeshBase[m_nbFaces - 1]->GetIndex(), l_submeshBase[0]->GetIndex(), l_ptBottomCenter->GetIndex() );
 
 			//Composition des c�t�s
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				l_pFace = l_submeshSide.AddFace( l_submeshSide[i + 0]->GetIndex(), l_submeshSide[i + 1]->GetIndex(), l_submeshSide[i + 2]->GetIndex() );
+				l_submeshSide.AddFace( l_submeshSide[i + 0]->GetIndex(), l_submeshSide[i + 1]->GetIndex(), l_submeshSide[i + 2]->GetIndex() );
 			}
 
 			ComputeNormals( p_mesh, true );

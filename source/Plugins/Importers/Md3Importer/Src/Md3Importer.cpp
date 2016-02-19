@@ -75,10 +75,10 @@ MeshSPtr Md3Importer::DoImportMesh()
 	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
 	UIntArray l_faces;
 	RealArray l_sizes;
-	MaterialSPtr		l_material;
-	PassSPtr			l_pass;
+	MaterialSPtr l_material;
+	PassSPtr l_pass;
 	String l_meshName = m_fileName.GetFileName();
-	String l_materialName	= m_fileName.GetFileName();
+	String l_materialName = m_fileName.GetFileName();
 	MeshSPtr l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
@@ -164,31 +164,18 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 		{
 			String l_strValue = string::string_cast< xchar >( m_skins[i].m_strName );
 
-			if ( !l_strValue.empty() )
+			if ( p_pPass && !l_strValue.empty() )
 			{
-				String l_strPath = m_filePath / l_strValue;
+				l_pTexture = LoadTexture( l_strValue, *p_pPass, eTEXTURE_CHANNEL_DIFFUSE );
 
-				if ( !File::FileExists( l_strPath ) )
+				if ( l_pTexture )
 				{
-					l_strPath = m_filePath / cuT( "Texture" ) / l_strValue;
+					Logger::LogDebug( cuT( "- Texture found : " ) + l_strValue );
 				}
-
-				l_pImage = GetEngine()->GetImageManager().create( l_strValue, l_strPath );
-			}
-
-			if ( l_pImage && p_pPass )
-			{
-				l_pTexture = p_pPass->AddTextureUnit();
-				StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-				l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-				l_pStaTexture->SetImage( l_pImage->GetPixels() );
-				l_pTexture->SetTexture( l_pStaTexture );
-				l_pTexture->SetChannel( eTEXTURE_CHANNEL_DIFFUSE );
-				Logger::LogDebug( cuT( "- Texture found : " ) + l_strValue );
-			}
-			else
-			{
-				Logger::LogDebug( cuT( "- Texture not found : " ) + l_strValue );
+				else
+				{
+					Logger::LogDebug( cuT( "- Texture not found : " ) + l_strValue );
+				}
 			}
 		}
 

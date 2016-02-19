@@ -21,7 +21,7 @@ C3D_Ply_API String GetName()
 	return cuT( "PLY Importer" );
 }
 
-C3D_Ply_API ImporterPlugin::ExtensionArray GetExtensions()
+C3D_Ply_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 {
 	ImporterPlugin::ExtensionArray l_arrayReturn;
 	l_arrayReturn.push_back( ImporterPlugin::Extension( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ) );

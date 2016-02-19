@@ -1,4 +1,4 @@
-﻿#include "Utils.hpp"
+#include "Utils.hpp"
 #include "Logger.hpp"
 #include "PixelFormat.hpp"
 #include "FileParserContext.hpp"
@@ -10,6 +10,8 @@ namespace Castor
 
 	namespace
 	{
+		static xchar const * const VALUE_SEPARATOR = cuT( "[ \\t]*[ \\t,;][ \\t]*" );
+		static xchar const * const IGNORED_END = cuT( "([^\\r\\n]*)" );
 		/**
 		 *\~english
 		 *\brief		Parses a vector from a line.
@@ -25,29 +27,41 @@ namespace Castor
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		template< typename T >
-		inline bool ParseVector( String & p_params, size_t p_count, T * p_value )
+		inline bool ParseValues( String & p_params, size_t p_count, T * p_value )
 		{
-			bool l_return = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), p_count + 1, false );
+			String l_regexString = RegexFormat< T >::Value;
 
-			if ( l_values.size() >= p_count )
+			for ( size_t i = 1; i < p_count; ++i )
 			{
-				p_params.clear();
+				l_regexString += String( VALUE_SEPARATOR ) + RegexFormat< T >::Value;
+			}
 
-				std::for_each( l_values.begin() + p_count, l_values.end(), [&]( String const & p_param )
+			l_regexString += IGNORED_END;
+
+			const Regex l_regex{ l_regexString };
+			auto l_begin = std::begin( p_params );
+			auto l_end = std::end( p_params );
+			const SRegexIterator l_it( l_begin, l_end, l_regex );
+			const SRegexIterator l_endit;
+			String l_result;
+			bool l_return = l_it != l_endit && l_it->size() >= p_count;
+
+			if ( l_return )
+			{
+				for ( size_t i = 1; i <= p_count; ++i )
 				{
-					p_params += p_param + cuT( " " );
-				} );
-
-				string::trim( p_params );
-
-				for ( uint32_t i = 0; i < p_count; i++ )
-				{
-					std::basic_istringstream< xchar > l_stream( l_values[i] );
-					l_stream >> p_value[i];
+					std::basic_istringstream< xchar > l_stream( ( *l_it )[i] );
+					l_stream >> p_value[i - 1];
 				}
 
-				l_return = true;
+				if ( l_it->size() > p_count )
+				{
+					p_params = ( *l_it )[p_count + 1];
+				}
+			}
+			else
+			{
+				Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
 			}
 
 			return l_return;
@@ -65,9 +79,9 @@ namespace Castor
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		template< typename T, uint32_t Count >
-		inline bool ParseVector( String & p_params, Point< T, Count > & p_value )
+		inline bool ParseValues( String & p_params, Point< T, Count > & p_value )
 		{
-			return ParseVector( p_params, Count, p_value.ptr() );
+			return ParseValues( p_params, Count, p_value.ptr() );
 		}
 		/**
 		 *\~english
@@ -82,9 +96,60 @@ namespace Castor
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		template< typename T, uint32_t Count >
-		inline bool ParseVector( String & p_params, Coords< T, Count > & p_value )
+		inline bool ParseValues( String & p_params, Coords< T, Count > & p_value )
 		{
-			return ParseVector( p_params, Count, p_value.ptr() );
+			return ParseValues( p_params, Count, p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Parses a vector from a line.
+		 *\param[in]	p_params	The line containing the vector.
+		 *\param[out]	p_value		Receives the result.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Extrait un vecteur à partir d'une ligne.
+		 *\param[in]	p_params	La ligne contenant le vecteur.
+		 *\param[out]	p_value		Reçoit le résultat.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		template< typename T, uint32_t Count >
+		inline bool ParseValues( String & p_params, Size & p_value )
+		{
+			return ParseValues( p_params, Count, p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Parses a vector from a line.
+		 *\param[in]	p_params	The line containing the vector.
+		 *\param[out]	p_value		Receives the result.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Extrait un vecteur à partir d'une ligne.
+		 *\param[in]	p_params	La ligne contenant le vecteur.
+		 *\param[out]	p_value		Reçoit le résultat.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		template< typename T, uint32_t Count >
+		inline bool ParseValues( String & p_params, Position & p_value )
+		{
+			return ParseValues( p_params, Count, p_value.ptr() );
+		}
+		/**
+		 *\~english
+		 *\brief		Parses a vector from a line.
+		 *\param[in]	p_params	The line containing the vector.
+		 *\param[out]	p_value		Receives the result.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Extrait un vecteur à partir d'une ligne.
+		 *\param[in]	p_params	La ligne contenant le vecteur.
+		 *\param[out]	p_value		Reçoit le résultat.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		template< typename T, uint32_t Count >
+		inline bool ParseValues( String & p_params, Rectangle & p_value )
+		{
+			return ParseValues( p_params, Count, p_value.ptr() );
 		}
 	}
 
@@ -100,7 +165,7 @@ namespace Castor
 	\brief		Spécialisation de ValueParser pour les type entiers signés.
 	*/
 	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_INT8 && Type <= ePARAMETER_TYPE_INT64 ) >::type >
+	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_INT8 && Type <= ePARAMETER_TYPE_LONGDOUBLE ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -115,144 +180,7 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			bool l_return = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
-
-			if ( l_values.size() )
-			{
-				l_return = string::is_integer( l_values[0] );
-				int64_t l_value = 0;
-
-				if ( l_return )
-				{
-					l_value = string::to_long_long( l_values[0] );
-					l_return = ( l_value > std::numeric_limits< ValueType >::lowest() ) && ( l_value < std::numeric_limits< ValueType >::max() );
-				}
-
-				if ( l_return )
-				{
-					p_value = static_cast< ValueType >( l_value );
-				}
-
-				p_params.clear();
-
-				if ( l_values.size() > 1 )
-				{
-					p_params = l_values[1];
-				}
-			}
-
-			return l_return;
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
-	\~english
-	\brief		ValueParser specialisation for unsigned integer types.
-	\~french
-	\brief		Spécialisation de ValueParser pour les type entiers non signés.
-	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_UINT8 && Type <= ePARAMETER_TYPE_UINT64 ) >::type >
-	{
-		using ValueType = typename ParserParameterHelper< Type >::ValueType;
-		/**
-		 *\~english
-		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
-		 *\~french
-		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
-		{
-			bool l_return = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
-
-			if ( l_values.size() )
-			{
-				l_return = string::is_integer( l_values[0] );
-				uint64_t l_value = 0;
-
-				if ( l_return )
-				{
-					l_value = string::to_long_long( l_values[0] );
-					l_return = ( l_value > std::numeric_limits< ValueType >::lowest() ) && ( l_value < std::numeric_limits< ValueType >::max() );
-				}
-
-				if ( l_return )
-				{
-					p_value = static_cast< ValueType >( l_value );
-				}
-
-				p_params.clear();
-
-				if ( l_values.size() > 1 )
-				{
-					p_params = l_values[1];
-				}
-			}
-
-			return l_return;
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
-	\~english
-	\brief		ValueParser specialisation for floating point types.
-	\~french
-	\brief		Spécialisation de ValueParser pour les type en virgule flottante.
-	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_FLOAT && Type <= ePARAMETER_TYPE_LONGDOUBLE ) >::type >
-	{
-		using ValueType = typename ParserParameterHelper< Type >::ValueType;
-		/**
-		 *\~english
-		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
-		 *\~french
-		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
-		{
-			bool l_return = false;
-			StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
-
-			if ( l_values.size() )
-			{
-				l_return = string::is_floating( l_values[0] );
-				long double l_ldTmp = 0;
-
-				if ( l_return )
-				{
-					l_ldTmp = string::to_long_double( l_values[0] );
-					l_return = ( l_ldTmp > std::numeric_limits< ValueType >::lowest() ) && ( l_ldTmp < std::numeric_limits< ValueType >::max() );
-				}
-
-				if ( l_return )
-				{
-					p_value = static_cast< ValueType >( l_ldTmp );
-				}
-
-				p_params.clear();
-
-				if ( l_values.size() > 1 )
-				{
-					p_params = l_values[1];
-				}
-			}
-
-			return l_return;
+			return ParseValues( p_params, 1, &p_value );
 		}
 	};
 	/*!
@@ -265,7 +193,7 @@ namespace Castor
 	\brief		Spécialisation de ValueParser pour les type points.
 	*/
 	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_POINT2I && Type <= ePARAMETER_TYPE_POINT4D ) >::type >
+	struct ValueParser< Type, typename std::enable_if< ( Type >= ePARAMETER_TYPE_POINT2I && Type <= ePARAMETER_TYPE_RECTANGLE && Type != ePARAMETER_TYPE_SIZE ) >::type >
 	{
 		using ValueType = typename ParserParameterHelper< Type >::ValueType;
 		/**
@@ -280,7 +208,7 @@ namespace Castor
 		 */
 		static inline bool Parse( String & p_params, ValueType & p_value )
 		{
-			return ParseVector( p_params, p_value );
+			return ParseValues( p_params, p_value );
 		}
 	};
 	/*!
@@ -504,66 +432,10 @@ namespace Castor
 			}
 			else
 			{
-				l_return = ParseVector( p_params, 2, p_value.ptr() );
+				l_return = ParseValues( p_params, p_value );
 			}
 
 			return l_return;
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
-	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_POSITION.
-	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_POSITION.
-	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_POSITION >::type >
-	{
-		using ValueType = typename ParserParameterHelper< Type >::ValueType;
-		/**
-		 *\~english
-		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
-		 *\~french
-		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
-		{
-			return ParseVector( p_params, 2, p_value.ptr() );
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		12/02/2016
-	\version	0.8.0
-	\~english
-	\brief		ValueParser specialisation for ePARAMETER_TYPE_RECTANGLE.
-	\~french
-	\brief		Spécialisation de ValueParser pour ePARAMETER_TYPE_RECTANGLE.
-	*/
-	template< ePARAMETER_TYPE Type >
-	struct ValueParser< Type, typename std::enable_if< Type == ePARAMETER_TYPE_RECTANGLE >::type >
-	{
-		using ValueType = typename ParserParameterHelper< Type >::ValueType;
-		/**
-		 *\~english
-		 *\brief		Parses a value from a line.
-		 *\param[in]	p_params	The line containing the value.
-		 *\param[out]	p_value		Receives the result.
-		 *\~french
-		 *\brief		Extrait une valeur à partir d'une ligne.
-		 *\param[in]	p_params	La ligne contenant la valeur.
-		 *\param[out]	p_value		Reçoit le résultat.
-		 */
-		static inline bool Parse( String & p_params, ValueType & p_value )
-		{
-			return ParseVector( p_params, 4, p_value.ptr() );
 		}
 	};
 	/*!
@@ -664,41 +536,17 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_NAME >::Parse( String & p_params )
 	{
-		StringArray l_values = string::split( p_params, cuT( " \t,;" ), 1, false );
-		p_params.clear();
+		Regex l_regex{ cuT( "[^\"]*\"([^\"]*)\"([\\r\\n]*)" ) };
+		auto l_begin = std::begin( p_params );
+		auto l_end = std::end( p_params );
+		SRegexIterator l_it( l_begin, l_end, l_regex );
+		SRegexIterator l_endit;
+		String l_result;
 
-		if ( !l_values.empty() )
+		if ( l_it != l_endit && l_it->size() > 2 )
 		{
-			m_value = l_values[0];
-			string::trim( m_value );
-
-			if ( !m_value.empty() )
-			{
-				if ( m_value[0] == cuT( '\"' ) )
-				{
-					m_value = m_value.substr( 1 );
-
-					if ( !m_value.empty() )
-					{
-						size_t l_index = m_value.find( cuT( '\"' ) );
-
-						if ( l_index != String::npos )
-						{
-							if ( l_index != m_value.size() - 1 )
-							{
-								l_values[1] = m_value.substr( l_index + 1 ) + l_values[1];
-							}
-
-							m_value = m_value.substr( 0, l_index );
-						}
-					}
-				}
-			}
-
-			if ( l_values.size() > 1 )
-			{
-				p_params = l_values[1];
-			}
+			m_value = ( *l_it )[1];
+			p_params = ( *l_it )[2];
 		}
 
 		return !m_value.empty();
@@ -881,7 +729,7 @@ namespace Castor
 	T const & ParserParameterBase::Get( T & p_value )
 	{
 		static const ePARAMETER_TYPE l_given = ParserValueTyper< T >::Type;
-		ePARAMETER_TYPE l_expected = GetBaseType();
+		static const ePARAMETER_TYPE l_expected = GetBaseType();
 
 		if ( l_given == l_expected )
 		{
@@ -889,7 +737,7 @@ namespace Castor
 		}
 		else
 		{
-			throw ParserParameterTypeException( l_given, l_expected );
+			throw ParserParameterTypeException< l_given >( l_expected );
 		}
 
 		return p_value;

@@ -203,7 +203,7 @@ namespace Castor3D
 	{
 	}
 
-	void OverlayCategory::Render()
+	void OverlayCategory::Update()
 	{
 		OverlayRendererSPtr l_renderer = GetOverlay().GetOverlayManager().GetRenderer();
 
@@ -217,9 +217,12 @@ namespace Castor3D
 				m_sizeChanged = false;
 				m_positionChanged = false;
 			}
-
-			DoRender( l_renderer );
 		}
+	}
+
+	void OverlayCategory::Render()
+	{
+		DoRender( GetOverlay().GetOverlayManager().GetRenderer() );
 	}
 
 	void OverlayCategory::SetMaterial( MaterialSPtr p_pMaterial )

@@ -121,13 +121,12 @@ namespace Loop
 			l_position /= l_alpha + l_nbEdges;
 		}
 
-		for ( uint32_t j = 0; j < m_submesh->GetFaceCount(); j++ )
+		for ( auto l_face : m_submesh->GetFaces() )
 		{
 			Coords3r l_dump;
-			Castor3D::FaceSPtr l_pFace = m_submesh->GetFace( j );
-			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 0 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 0 )]->GetPoint(), l_dump ) );
-			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 1 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 1 )]->GetPoint(), l_dump ) );
-			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_pFace->GetVertexIndex( 2 ) ), Castor3D::Vertex::GetPosition( m_mapVertex[l_pFace->GetVertexIndex( 2 )]->GetPoint(), l_dump ) );
+			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_face[0] ), Castor3D::Vertex::GetPosition( m_mapVertex[l_face[0]]->GetPoint(), l_dump ) );
+			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_face[1] ), Castor3D::Vertex::GetPosition( m_mapVertex[l_face[1]]->GetPoint(), l_dump ) );
+			Castor3D::Vertex::SetPosition( m_submesh->GetPoint( l_face[2] ), Castor3D::Vertex::GetPosition( m_mapVertex[l_face[2]]->GetPoint(), l_dump ) );
 		}
 
 		m_mapVertex.clear();

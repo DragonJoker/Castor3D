@@ -20,21 +20,20 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Macros.hpp"
 
-#if CASTOR_HAS_STDARRAY || CASTOR_HAS_TR1ARRAY
-#	include <array>
-#else
-#	include <boost/array.hpp>
-#endif
-
-#include <vector>
+#include <array>
+#include <cstdint>
+#include <functional>
+#include <iostream>
 #include <list>
 #include <map>
+#include <map>
+#include <memory>
+#include <regex>
 #include <set>
 #include <string>
-#include <cstdint>
 #include <deque>
 #include <sstream>
-#include <iostream>
+#include <vector>
 
 #include "SmartPtr.hpp"
 #include "ELogType.hpp"
@@ -121,20 +120,10 @@ namespace Castor
 	typedef float real;
 #endif
 
-	constexpr real operator "" _r( long double p_value )
-	{
-		return real( p_value );
-	}
-
-	// static size array
-#if CASTOR_HAS_STDARRAY
-	using std::array;
-#elif CASTOR_HAS_TR1ARRAY
-	using std::tr1::array;
-#else
-	using boost::array;
-#endif
 	typedef std::basic_string< xchar > String;
+	typedef std::basic_regex< xchar > Regex;
+	typedef std::regex_iterator< String::const_iterator > SRegexIterator;
+	typedef std::match_results< String::const_iterator > MatchResults;
 	typedef std::basic_stringstream< xchar > StringStream;
 	typedef std::basic_ostream< xchar > OutputStream;
 
@@ -401,6 +390,11 @@ namespace Castor
 		eMEMDATA_TYPE_FIXED_GROWING,
 		eMEMDATA_TYPE_FIXED_GROWING_MARKED,
 	}	eMEMDATA_TYPE;
+}
+
+constexpr Castor::real operator "" _r( long double p_value )
+{
+	return Castor::real( p_value );
 }
 
 #include "Debug.hpp"

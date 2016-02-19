@@ -3,11 +3,43 @@
 
 namespace Castor
 {
-//*************************************************************************************************
+	//*************************************************************************************************
+
+	namespace
+	{
+		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values >
+		void construct( Point< T, Count > & p_result, U p_current, Values ... );
+
+		template< typename T, uint32_t Count, uint32_t Index >
+		void construct( Point< T, Count > & p_result )
+		{
+		}
+
+		template< typename T, uint32_t Count, uint32_t Index, typename U >
+		void construct( Point< T, Count > & p_result, U p_last )
+		{
+			if ( Index < Count )
+			{
+				p_result[Index] = T( p_last );
+			}
+		}
+
+		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values >
+		void construct( Point< T, Count > & p_result, U p_current, Values ... p_values )
+		{
+			if ( Index < Count )
+			{
+				p_result[Index] = T( p_current );
+				construct < T, Count, Index + 1, Values... >( p_result, p_values... );
+			}
+		}
+	}
+
+	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::BinaryLoader::BinaryLoader()
-		:	Loader< Point< T, Count >, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
+		: Loader< Point< T, Count >, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 
@@ -37,11 +69,11 @@ namespace Castor
 		return l_return;
 	}
 
-//*************************************************************************************************
+	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Point< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< Point< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -84,7 +116,7 @@ namespace Castor
 		return l_return;
 	}
 
-//*************************************************************************************************
+	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
 	Point< T, Count >::Point()
@@ -117,35 +149,11 @@ namespace Castor
 		{
 			for ( uint32_t i = 0; i < Count; i++ )
 			{
-				this->m_coords[i] = p_pValues[i];
+				this->m_coords[i] = T( p_pValues[i] );
 			}
 		}
 	}
 
-#if CASTOR_HAS_VARIADIC_TEMPLATES
-
-	namespace
-	{
-		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values > void construct( Point< T, Count > & p_result, U p_current, Values ... );
-		template< typename T, uint32_t Count, uint32_t Index > void construct( Point< T, Count > & p_result )
-		{
-		}
-		template< typename T, uint32_t Count, uint32_t Index, typename U > void construct( Point< T, Count > & p_result, U p_last )
-		{
-			if ( Index < Count )
-			{
-				p_result[Index] = T( p_last );
-			}
-		}
-		template< typename T, uint32_t Count, uint32_t Index, typename U, typename ... Values > void construct( Point< T, Count > & p_result, U p_current, Values ... p_values )
-		{
-			if ( Index < Count )
-			{
-				p_result[Index] = T( p_current );
-				construct < T, Count, Index + 1, Values... > ( p_result, p_values... );
-			}
-		}
-	}
 	template< typename T, uint32_t Count >
 	template< typename ValueA, typename ValueB, typename ... Values >
 	Point< T, Count >::Point( ValueA p_valueA, ValueB p_valueB, Values ... p_values )
@@ -153,73 +161,6 @@ namespace Castor
 		std::memset( this->m_coords, 0, binary_size );
 		construct< T, Count, 0, ValueA, ValueB, Values... >( *this, p_valueA, p_valueB, p_values... );
 	}
-
-#else
-
-	template< typename T, uint32_t Count >
-	Point< T, Count >::Point()
-	{
-		std::memset( this->m_coords, 0, binary_size );
-	}
-
-	template< typename T, uint32_t Count >
-	Point< T, Count >::Point( T const & p_vA, T const & p_vB )
-	{
-		std::memset( this->m_coords, 0, binary_size );
-		this->m_coords[0] = p_vA;
-		this->m_coords[1] = p_vB;
-	}
-
-	template< typename T, uint32_t Count >
-	Point< T, Count >::Point( T const & p_vA, T const & p_vB, T const & p_vC )
-	{
-		std::memset( this->m_coords, 0, binary_size );
-		this->m_coords[0] = p_vA;
-		this->m_coords[1] = p_vB;
-		this->m_coords[2] = p_vC;
-	}
-
-	template< typename T, uint32_t Count >
-	Point< T, Count >::Point( T const & p_vA, T const & p_vB, T const & p_vC, T const & p_vD )
-	{
-		std::memset( this->m_coords, 0, binary_size );
-		this->m_coords[0] = p_vA;
-		this->m_coords[1] = p_vB;
-		this->m_coords[2] = p_vC;
-		this->m_coords[3] = p_vD;
-	}
-
-	template< typename T, uint32_t Count >
-	template< typename U, typename V >
-	Point< T, Count >::Point( U const & p_vA, V const & p_vB )
-	{
-		std::memset( this->m_coords, 0, binary_size );
-		this->m_coords[0] = T( p_vA );
-		this->m_coords[1] = T( p_vB );
-	}
-
-	template< typename T, uint32_t Count >
-	template< typename U, typename V, typename W >
-	Point< T, Count >::Point( U const & p_vA, V const & p_vB, W const & p_vC )
-	{
-		std::memset( this->m_coords, 0, binary_size );
-		this->m_coords[0] = T( p_vA );
-		this->m_coords[1] = T( p_vB );
-		this->m_coords[2] = T( p_vC );
-	}
-
-	template< typename T, uint32_t Count >
-	template< typename U, typename V, typename W, typename X >
-	Point< T, Count >::Point( U const & p_vA, V const & p_vB, W const & p_vC, X const & p_vD )
-	{
-		std::memset( this->m_coords, 0, binary_size );
-		this->m_coords[0] = T( p_vA );
-		this->m_coords[1] = T( p_vB );
-		this->m_coords[2] = T( p_vC );
-		this->m_coords[3] = T( p_vD );
-	}
-
-#endif
 
 	template< typename T, uint32_t Count >
 	template< typename U >
@@ -266,19 +207,19 @@ namespace Castor
 	inline Point< T, Count > & Point< T, Count >::operator=( Point< T, Count > const & p_pt )
 	{
 		std::memcpy( this->m_coords, p_pt.m_coords, binary_size );
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > & Point< T, Count >::operator=( Point< T, Count > && p_pt )
 	{
-		if ( this != & p_pt )
+		if ( this != &p_pt )
 		{
 			std::memcpy( this->m_coords, p_pt.m_coords, binary_size );
 			std::memset( p_pt.m_coords, 0, binary_size );
 		}
 
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
@@ -418,7 +359,7 @@ namespace Castor
 		return this->m_coords[p_pos];
 	}
 
-//*************************************************************************************************
+	//*************************************************************************************************
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
 	inline bool operator==( Point< T, Count > const & p_ptA, Point< U, _Count > const & p_ptB )
@@ -461,10 +402,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Point< T, 3 > const & p_ptA, Point< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
+			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			);
 	}
 	template <typename T, uint32_t Count, typename U>
 	inline Point< T, Count > operator+( Point< T, Count > const & p_pt, U const * p_coords )
@@ -538,10 +479,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Point< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
+			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			);
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
@@ -585,10 +526,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Point< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			   );
+			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			);
 	}
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > operator-( Point< T, Count > const & p_pt )
@@ -604,6 +545,7 @@ namespace Castor
 	}
 
 	//*************************************************************************************************
+
 	namespace point
 	{
 		template< typename T, uint32_t Count >

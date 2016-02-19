@@ -22,31 +22,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Utils.hpp"
 
-#if CASTOR_HAS_ALIGNAS
-#	define CASTOR_ALIGNED( a ) alignas( a )
-#	define CASTOR_ALIGN_OF( t ) alignof( t )
-#	define CASTOR_ALIGNED_VAR( a, t, n ) t n CASTOR_ALIGNED( a )
-#	if defined( _MSC_VER )
-#		define CASTOR_ALIGNED_DECL( a ) CASTOR_ALIGNED( a )
-#	else
-#		define CASTOR_ALIGNED_DECL( a )
-#	endif
-#	define CASTOR_ALIGNED_ATTRIBUTE( a )
+#if defined( _MSC_VER )
+#	define CASTOR_ALIGNED_DECL( a ) alignas( a )
 #else
-#	if defined( __GNUG__)
-#		define CASTOR_ALIGNED( a ) __attribute__( ( aligned( a ) ) )
-#		define CASTOR_ALIGN_OF( t ) alignof( t )
-#		define CASTOR_ALIGNED_VAR( a, t, n ) t n CASTOR_ALIGNED( a )
-#		define CASTOR_ALIGNED_DECL( a )
-#		define CASTOR_ALIGNED_ATTRIBUTE( a ) __attribute__( ( aligned( a ) ) )
-#	elif defined( __clang__)
-#	elif defined( _MSC_VER )
-#		define CASTOR_ALIGNED( a ) __declspec( align( a ) )
-#		define CASTOR_ALIGN_OF( t ) __alignof( t )
-#		define CASTOR_ALIGNED_VAR( a, t, n ) CASTOR_ALIGNED( a ) t n
-#		define CASTOR_ALIGNED_DECL( a ) CASTOR_ALIGNED( a )
-#		define CASTOR_ALIGNED_ATTRIBUTE( a )
-#	endif
+#	define CASTOR_ALIGNED_DECL( a )
 #endif
 
 namespace Castor
@@ -143,8 +122,7 @@ namespace Castor
 		{
 			Castor::AlignedFree( p_memory );
 		}
-	}
-	CASTOR_ALIGNED_ATTRIBUTE( A );
+	};
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.8.0
@@ -155,10 +133,10 @@ namespace Castor
 	\brief		Classe template qui fournit le support de l'alignement.
 	*/
 	template< typename T >
-	class CASTOR_ALIGNED_DECL( CASTOR_ALIGN_OF( T ) ) AlignedFrom
+	class CASTOR_ALIGNED_DECL( alignof( T ) ) AlignedFrom
 	{
 	public:
-		static const size_t align_value = CASTOR_ALIGN_OF( T );
+		static const size_t align_value = alignof( T );
 
 		void * operator new( size_t p_size )
 		{
@@ -198,8 +176,7 @@ namespace Castor
 		{
 			Castor::AlignedFree( p_memory );
 		}
-	}
-	CASTOR_ALIGNED_ATTRIBUTE( CASTOR_ALIGN_OF( T ) );
+	};
 }
 
 #endif

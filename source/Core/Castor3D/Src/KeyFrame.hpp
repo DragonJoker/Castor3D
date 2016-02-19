@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_KEY_FRAME_H___
 #define ___C3D_KEY_FRAME_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "BinaryParser.hpp"
 
 namespace Castor3D
 {
@@ -33,23 +33,79 @@ namespace Castor3D
 	\brief		Classe qui gère une key frame
 	\remark		Les key frames sont les frames auxquelles une animation est dans un état précis
 	*/
-	template< typename T >
 	class KeyFrame
 	{
 	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
+		\~english
+		\brief		MovingObjectBase binary loader.
+		\~english
+		\brief		Loader binaire de MovingObjectBase.
+		*/
+		class BinaryParser
+			: public Castor3D::BinaryParser< KeyFrame >
+		{
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_path	The current folder path.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
+			 */
+			C3D_API BinaryParser( Castor::Path const & p_path );
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data.
+			 *\param[in]	p_obj	The object to write.
+			 *\param[out]	p_chunk	The chunk to fill.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			 *\param[in]	p_obj	L'objet à écrire.
+			 *\param[out]	p_chunk	Le chunk à remplir.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Fill( KeyFrame const & p_obj, BinaryChunk & p_chunk )const;
+			/**
+			 *\~english
+			 *\brief		Function used to retrieve specific data from the chunk.
+			 *\param[out]	p_obj	The object to read.
+			 *\param[in]	p_chunk	The chunk containing data.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+			 *\param[out]	p_obj	L'objet à lire.
+			 *\param[in]	p_chunk	Le chunk contenant les données.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Parse( KeyFrame & p_obj, BinaryChunk & p_chunk )const;
+		};
+
+	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_timeIndex	When the key frame starts
-		 *\param[in]	p_value		The wanted value
+		 *\brief		Constructor.
+		 *\param[in]	p_timeIndex	When the key frame starts.
+		 *\param[in]	p_translate	The translation at start time.
+		 *\param[in]	p_rotate	The rotation at start time.
+		 *\param[in]	p_scale		The scaling at start time.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_timeIndex	Quand la key frame commence
-		 *\param[in]	p_value		La valeur voulue
+		 *\brief		Constructeur.
+		 *\param[in]	p_timeIndex	Quand la key frame commence.
+		 *\param[in]	p_translate	La translation au temps de début.
+		 *\param[in]	p_rotate	La rotation au temps de début.
+		 *\param[in]	p_scale		L'échelle au temps de début.
 		 */
-		KeyFrame( real p_timeIndex = 0, T const & p_value = T() )
+		KeyFrame( real p_timeIndex = 0, Castor::Point3r const & p_translate = {}, Castor::Quaternion const & p_rotate = {}, Castor::Point3r const & p_scale = {} )
 			: m_timeIndex( p_timeIndex )
-			, m_value( p_value )
+			, m_translate( p_translate )
+			, m_rotate( p_rotate )
+			, m_scale( p_scale )
 		{
 		}
 		/**
@@ -63,27 +119,69 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the wanted value
+		 *\brief		Defines the wanted translation
 		 *\param[in]	p_value	The value
 		 *\~french
-		 *\brief		Définit la valeur voulue
+		 *\brief		Définit la translation voulue
 		 *\param[in]	p_value	La valeur
 		 */
-		inline void SetValue( T const & p_value )
+		inline void SetTranslate( Castor::Point3r const & p_value )
 		{
-			m_value = p_value;
+			m_translate = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the wanted value
-		 *\return		The value
+		 *\brief		Defines the wanted rotation
+		 *\param[in]	p_value	The value
 		 *\~french
-		 *\brief		Récupère la valeur voulue
-		 *\return		La valeur
+		 *\brief		Définit la rotation voulue
+		 *\param[in]	p_value	La valeur
 		 */
-		inline T const & GetValue()const
+		inline void SetRotate( Castor::Quaternion const & p_value )
 		{
-			return m_value;
+			m_rotate = p_value;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the wanted scaling
+		 *\param[in]	p_value	The value
+		 *\~french
+		 *\brief		Définit l'échelle voulue
+		 *\param[in]	p_value	La valeur
+		 */
+		inline void SetScale( Castor::Point3r const & p_value )
+		{
+			m_scale = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The translation.
+		 *\~french
+		 *\return		La translation.
+		 */
+		inline Castor::Point3r const & GetTranslate()const
+		{
+			return m_translate;
+		}
+		/**
+		 *\~english
+		 *\return		The rotation.
+		 *\~french
+		 *\return		La rotation.
+		 */
+		inline Castor::Quaternion const & GetRotate()const
+		{
+			return m_rotate;
+		}
+		/**
+		 *\~english
+		 *\return		The scaling.
+		 *\~french
+		 *\return		L'échelle.
+		 */
+		inline Castor::Point3r const & GetScale()const
+		{
+			return m_scale;
 		}
 		/**
 		 *\~english
@@ -111,10 +209,14 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The start time index	\~french L'index de temps de début
+		//!\~english The start time index.	\~french L'index de temps de début.
 		real m_timeIndex;
-		//!\~english The value at start time	\~french La valeur à l'index de temps de début
-		T m_value;
+		//!\~english The translation at start time.	\~french La translation à l'index de temps de début.
+		Castor::Point3r m_translate;
+		//!\~english The rotation at start time.	\~french La rotation à l'index de temps de début.
+		Castor::Quaternion m_rotate;
+		//!\~english The scaling at start time.	\~french L'échelle à l'index de temps de début.
+		Castor::Point3r m_scale;
 	};
 }
 

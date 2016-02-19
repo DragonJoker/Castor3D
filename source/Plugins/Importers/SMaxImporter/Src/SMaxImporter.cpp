@@ -334,25 +334,7 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 
 			if ( !l_strTexture.empty() )
 			{
-				String l_strPath = m_pFile->GetFilePath() / l_strTexture;
-
-				if ( !File::FileExists( l_strPath ) )
-				{
-					l_strPath = m_pFile->GetFilePath() / string::lower_case( l_strTexture );
-				}
-
-				ImageSPtr l_pImage = GetEngine()->GetImageManager().create( l_strPath, l_strPath );
-
-				if ( l_pImage )
-				{
-					TextureUnitSPtr l_unit = l_pPass->AddTextureUnit();
-					StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-					l_pStaTexture->SetImage( l_pImage->GetPixels() );
-					l_unit->SetTexture( l_pStaTexture );
-					l_unit->SetBlendColour( Colour::from_components( 1.0, 1.0, 1.0, 1.0 ) );
-					l_unit->SetChannel( eTEXTURE_CHANNEL( i ) );
-				}
+				LoadTexture( l_strTexture, *l_pPass, eTEXTURE_CHANNEL( i ) );
 			}
 		}
 
@@ -651,7 +633,7 @@ void SMaxImporter::DoReadVertexIndices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSub
 			l_pV1 = p_pSubmesh->GetPoint( l_uiV1 );
 			l_pV2 = p_pSubmesh->GetPoint( l_uiV2 );
 			l_pV3 = p_pSubmesh->GetPoint( l_uiV3 );
-			l_pFace = p_pSubmesh->AddFace( l_uiV1, l_uiV2, l_uiV3 );
+			p_pSubmesh->AddFace( l_uiV1, l_uiV2, l_uiV3 );
 
 			if ( m_arrayTexVerts.size() )
 			{

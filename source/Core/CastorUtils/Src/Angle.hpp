@@ -65,7 +65,7 @@ namespace Castor
 		 *\remark		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés
 		 */
 		template< typename T >
-		Angle( T p_radians )
+		explicit Angle( T p_radians )
 			: m_radians( double( p_radians ) )
 		{
 		}
