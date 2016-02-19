@@ -175,7 +175,7 @@ namespace Castor
 		cuT( "colour" ),
 	};
 
-	constexpr String const & GetTypeName( ePARAMETER_TYPE p_type )
+	String const & GetTypeName( ePARAMETER_TYPE p_type )
 	{
 		return TypeName[p_type];
 	}

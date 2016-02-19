@@ -858,7 +858,7 @@ namespace Castor
 	 *\brief		Récupère le nom du type de paramètre donné.
 	 *\param[in]	p_type	Le type de paramètre.
 	 */
-	CU_API constexpr String const & GetTypeName( ePARAMETER_TYPE p_type );
+	CU_API String const & GetTypeName( ePARAMETER_TYPE p_type );
 }
 
 #endif
