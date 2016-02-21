@@ -69,7 +69,7 @@ namespace Castor
 			String l_file;
 			p_file.CopyToString( l_file );
 			string::replace( l_file, cuT( "\r\n" ), cuT( "\n" ) );
-			StringArray l_lines = string::split( l_file, cuT( "\n" ), std::count( l_file.begin(), l_file.end(), '\n' ) + 1, true );
+			StringArray l_lines = string::split( l_file, cuT( "\n" ), uint32_t( std::count( l_file.begin(), l_file.end(), '\n' ) + 1 ), true );
 			auto l_it = l_lines.begin();
 
 			while ( l_it != l_lines.end() )

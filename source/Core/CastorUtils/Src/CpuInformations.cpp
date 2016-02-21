@@ -19,25 +19,12 @@ namespace Castor
 
 	void call_cpuid( uint32_t func, int32_t & p_a, int32_t & p_b, int32_t & p_c, int32_t & p_d )
 	{
-		int32_t l_a = 0;
-		int32_t l_b = 0;
-		int32_t l_c = 0;
-		int32_t l_d = 0;
-
-		__asm
-		{
-			mov	eax, func
-			cpuid
-			mov	l_a, eax
-			mov	l_b, ebx
-			mov	l_c, ecx
-			mov	l_d, edx
-		}
-
-		p_a = l_a;
-		p_b = l_b;
-		p_c = l_c;
-		p_d = l_d;
+		std::array< int32_t, 4 > l_values;
+		__cpuid( l_values.data(), func );
+		p_a = l_values[0];
+		p_b = l_values[1];
+		p_c = l_values[2];
+		p_d = l_values[3];
 	}
 
 #endif

@@ -608,7 +608,7 @@ namespace C3dFbx
 				l_bone = std::make_shared< Bone >( p_skeleton );
 				l_bone->SetName( l_name );
 				m_arrayBones.push_back( l_bone );
-				m_mapBoneByID[l_name] = m_mapBoneByID.size();
+				m_mapBoneByID[l_name] = uint32_t( m_mapBoneByID.size() );
 				p_skeleton.AddBone( l_bone );
 
 				if ( p_parent )

@@ -642,7 +642,7 @@ namespace Castor
 
 		if ( !l_values.empty() )
 		{
-			StringArray l_values = string::split( l_values[0], cuT( "|" ), std::count( l_values[0].begin(), l_values[0].end(), cuT( '|' ) ) + 1, false );
+			StringArray l_values = string::split( l_values[0], cuT( "|" ), uint32_t( std::count( l_values[0].begin(), l_values[0].end(), cuT( '|' ) ) + 1 ), false );
 
 			for ( auto && l_value : l_values )
 			{
@@ -701,7 +701,7 @@ namespace Castor
 
 		if ( !l_params.empty() )
 		{
-			StringArray l_values = string::split( l_params[0], cuT( "|" ), std::count( l_params[0].begin(), l_params[0].end(), cuT( '|' ) ) + 1, false );
+			StringArray l_values = string::split( l_params[0], cuT( "|" ), uint32_t( std::count( l_params[0].begin(), l_params[0].end(), cuT( '|' ) ) + 1 ), false );
 
 			for ( auto && l_value : l_values )
 			{

@@ -76,7 +76,7 @@ namespace Castor3D
 			// Panel Overlays buffers
 			m_panelVertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			uint32_t l_stride = m_declaration.GetStride();
-			m_panelVertexBuffer->Resize( m_panelVertex.size() * l_stride );
+			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_panelVertexBuffer->data();
 
 			for ( auto && l_vertex : m_panelVertex )
@@ -96,7 +96,7 @@ namespace Castor3D
 			// Border Overlays buffers
 			m_borderVertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			uint32_t l_stride = m_declaration.GetStride();
-			m_borderVertexBuffer->Resize( m_borderVertex.size() * l_stride );
+			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_borderVertexBuffer->data();
 
 			for ( auto && l_vertex : m_borderVertex )
@@ -186,7 +186,7 @@ namespace Castor3D
 		m_textsGeometryBuffers.clear();
 	}
 
-	uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator p_begin, size_t p_count, VertexBuffer & p_buffers )
+	uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator p_begin, uint32_t p_count, VertexBuffer & p_buffers )
 	{
 		OverlayCategory::Vertex const & l_vertex = *p_begin;
 		p_buffers.Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
@@ -199,7 +199,7 @@ namespace Castor3D
 
 		if ( l_pMaterial )
 		{
-			DoDrawItem( *l_pMaterial, m_panelGeometryBuffers, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), p_overlay.GetPanelVertex().size(), *m_panelVertexBuffer ) );
+			DoDrawItem( *l_pMaterial, m_panelGeometryBuffers, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
 		}
 	}
 
@@ -209,14 +209,14 @@ namespace Castor3D
 
 		if ( l_pMaterial )
 		{
-			DoDrawItem( *l_pMaterial, m_panelGeometryBuffers, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), p_overlay.GetPanelVertex().size(), *m_panelVertexBuffer ) );
+			DoDrawItem( *l_pMaterial, m_panelGeometryBuffers, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
 		}
 
 		l_pMaterial = p_overlay.GetBorderMaterial();
 
 		if ( l_pMaterial )
 		{
-			DoDrawItem( *l_pMaterial, m_borderGeometryBuffers, nullptr, FillBuffers( p_overlay.GetBorderVertex().begin(), p_overlay.GetBorderVertex().size(), *m_borderVertexBuffer ) );
+			DoDrawItem( *l_pMaterial, m_borderGeometryBuffers, nullptr, FillBuffers( p_overlay.GetBorderVertex().begin(), uint32_t( p_overlay.GetBorderVertex().size() ), *m_borderVertexBuffer ) );
 		}
 	}
 
@@ -231,7 +231,7 @@ namespace Castor3D
 			if ( l_pMaterial )
 			{
 				OverlayCategory::VertexArray l_arrayVtx = p_overlay.GetTextVertex();
-				int32_t l_count = l_arrayVtx.size();
+				int32_t l_count = uint32_t( l_arrayVtx.size() );
 				uint32_t l_index = 0;
 				std::vector< GeometryBuffersSPtr > l_geometryBuffers;
 				OverlayCategory::VertexArray::const_iterator l_it = l_arrayVtx.begin();
@@ -248,7 +248,7 @@ namespace Castor3D
 				}
 
 				TextureSPtr l_texture = p_overlay.GetFontTexture()->GetTexture();
-				l_count = l_arrayVtx.size();
+				l_count = uint32_t( l_arrayVtx.size() );
 
 				for ( auto l_geoBuffers : l_geometryBuffers )
 				{

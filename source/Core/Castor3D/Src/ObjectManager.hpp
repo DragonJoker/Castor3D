@@ -283,7 +283,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetObjectCount()const
 		{
-			return this->m_elements.size();
+			return uint32_t( this->m_elements.size() );
 		}
 
 	private:

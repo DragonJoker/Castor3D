@@ -51,7 +51,7 @@ namespace Obj
 		NormalArray m_arraySubNml;
 		FaceArray m_arrayFaces;
 		FaceArrayGrpMap m_mapIdx;
-		std::size_t m_uiGroupId;
+		uint32_t m_uiGroupId;
 		bool m_bHasNormals;
 
 		stGROUP()

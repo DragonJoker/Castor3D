@@ -370,7 +370,7 @@ namespace Bloom
 			m_combineProgram = l_program;
 
 			m_vertexBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), m_declaration );
-			m_vertexBuffer->Resize( m_vertices.size() * m_declaration.GetStride() );
+			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.GetStride() ) );
 			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
@@ -551,7 +551,7 @@ namespace Bloom
 			l_texture3->BindAt( 3 );
 			m_renderTarget.GetTexture()->BindAt( 4 );
 
-			m_geometryBuffers->Draw( m_vertices.size(), 0 );
+			m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
 
 			l_texture0->UnbindFrom( 0 );
 			l_texture1->UnbindFrom( 1 );

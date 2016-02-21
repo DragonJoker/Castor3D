@@ -310,7 +310,7 @@ namespace Castor3D
 	{
 		FontTextureSPtr l_fontTexture = GetFontTexture();
 		FontSPtr l_font = l_fontTexture->GetFont();
-		StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 );
+		StringArray l_lines = string::split( m_previousCaption, cuT( "\n" ), uint32_t( std::count( m_previousCaption.begin(), m_previousCaption.end(), cuT( '\n' ) ) + 1 ) );
 		DisplayableLineArray l_return;
 		DisplayableLine l_line;
 

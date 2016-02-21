@@ -180,13 +180,6 @@ if ( MSVC )
 			${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
 		)
 		
-		# Copy tlb files into Test directory.
-		add_custom_command( TARGET ${PROJECT_NAME}
-			POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${CMAKE_CURRENT_BINARY_DIR}/Test/Src/
-			VERBATIM
-		)
-		
 		# install tlb files
 		install(
 			FILES ${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb

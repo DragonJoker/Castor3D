@@ -18,6 +18,13 @@ if ( MSVC )
 		"ComCastor3DTestPch.cpp"
 	)
 
+	# Copy tlb files into Test directory.
+	add_custom_command( TARGET ${PROJECT_NAME}
+		POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/../Castor3D.tlb ${CMAKE_CURRENT_BINARY_DIR}/Src/
+		VERBATIM
+	)
+
 	set_property( TARGET ComCastor3DTest PROPERTY FOLDER "Interop/ComCastor3D" )
 	add_target_astyle( ComCastor3DTest ".hpp;.inl;.cpp" )
 	set( Build "yes (version ${CMCT_VERSION_MAJOR}.${CMCT_VERSION_MINOR}.${CMCT_VERSION_BUILD})" PARENT_SCOPE )

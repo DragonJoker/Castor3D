@@ -210,7 +210,7 @@ namespace CastorGui
 
 		if ( l_background )
 		{
-			l_background->SetPixelSize( Size( GetSize().width(), m_items.size() * DEFAULT_HEIGHT ) );
+			l_background->SetPixelSize( Size( GetSize().width(), uint32_t( m_items.size() * DEFAULT_HEIGHT ) ) );
 		}
 	}
 
@@ -274,7 +274,7 @@ namespace CastorGui
 		}
 
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		SetSize( Size( GetSize().width(), m_values.size() * DEFAULT_HEIGHT ) );
+		SetSize( Size( GetSize().width(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
 		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ListBoxCtrl::OnKeyDown, this, std::placeholders::_1 ) );
 
 		for ( auto && l_value : m_initialValues )

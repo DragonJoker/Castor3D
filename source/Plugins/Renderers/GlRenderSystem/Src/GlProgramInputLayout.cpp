@@ -53,7 +53,7 @@ namespace GlRender
 				int l_length = 0;
 				int l_value = 0;
 				uint32_t l_prop = eGLSL_PROPERTY_TYPE;
-				GetOpenGl().GetProgramResourceName( l_program.GetGlName(), eGLSL_INTERFACE_PROGRAM_INPUT, i, l_buffer.size(), &l_length, l_buffer.data() );
+				GetOpenGl().GetProgramResourceName( l_program.GetGlName(), eGLSL_INTERFACE_PROGRAM_INPUT, i, uint32_t( l_buffer.size() ), &l_length, l_buffer.data() );
 				std::string l_name( l_buffer.data(), l_length );
 				Logger::LogDebug( StringStream() << cuT( "   Attribute: " ) << string::string_cast< xchar >( l_name ) );
 				GetOpenGl().GetProgramResourceInfos( l_program.GetGlName(), eGLSL_INTERFACE_PROGRAM_INPUT, i, 1, &l_prop, 1, &l_length, &l_value );
@@ -81,7 +81,7 @@ namespace GlRender
 				int l_arraySize = 0;
 				uint32_t l_type = 0;
 				int l_actualLength = 0;
-				GetOpenGl().GetActiveAttrib( l_program.GetGlName(), i, l_buffer.size(), &l_actualLength, &l_arraySize, &l_type, l_buffer.data() );
+				GetOpenGl().GetActiveAttrib( l_program.GetGlName(), i, uint32_t( l_buffer.size() ), &l_actualLength, &l_arraySize, &l_type, l_buffer.data() );
 				std::string l_name( l_buffer.data(), l_actualLength );
 				Logger::LogDebug( StringStream() << cuT( "   Attribute: " ) << string::string_cast< xchar >( l_name ) );
 				eELEMENT_TYPE l_elemType = GetOpenGl().Get( eGLSL_ATTRIBUTE_TYPE( l_type ) );

@@ -82,7 +82,7 @@ namespace Castor3D
 			}
 
 			m_vertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
-			m_vertexBuffer->Resize( m_arrayVertex.size() * m_declaration.GetStride() );
+			m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
 			m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
@@ -182,7 +182,7 @@ namespace Castor3D
 
 		if ( p_texture->BindAt( 0 ) )
 		{
-			p_geometryBuffers->Draw( m_arrayVertex.size(), 0 );
+			p_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 			p_texture->UnbindFrom( 0 );
 		}
 

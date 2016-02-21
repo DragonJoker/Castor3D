@@ -17,7 +17,7 @@ namespace Castor3D
 #		if ( _MSC_VER < 1700 )
 	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@EAVRenderTarget@4@ABVParameters@4@@Z" );
 #		else
-	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@EAVRenderTarget@4@ABVParameters@4@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@AEAVRenderTarget@4@AEBVParameters@4@@Z" );
 #		endif
 #	else
 #		if ( _MSC_VER < 1700 )

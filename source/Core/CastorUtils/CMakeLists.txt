@@ -486,11 +486,11 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		else ()
 			get_filename_component( ZlibPath ${ZLIB_LIBRARY} PATH)
 			string( FIND ${ZlibPath} "Release" _FOUND )
-			if ( ${_FOUND} EQUAL -1 )
+			if ( NOT ${_FOUND} EQUAL -1 )
 				get_filename_component( ZlibPath ${ZlibPath} PATH)
 			endif ()
 			string( FIND ${ZlibPath} "Debug" _FOUND )
-			if ( ${_FOUND} EQUAL -1 )
+			if ( NOT ${_FOUND} EQUAL -1 )
 				get_filename_component( ZlibPath ${ZlibPath} PATH)
 			endif ()
 			get_filename_component( ZlibPath ${ZlibPath} PATH)
@@ -506,6 +506,21 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 				)
 				install(
 					FILES ${FreeTypePath}/bin/zlib1.dll
+					DESTINATION bin
+					COMPONENT ${PROJECT_NAME}
+				)
+			elseif ( EXISTS ${ZlibPath}/bin/zlib.dll )
+				add_custom_command(
+					TARGET ${PROJECT_NAME}
+					POST_BUILD
+					COMMAND
+						${CMAKE_COMMAND} -E
+							copy_if_different
+							${ZlibPath}/bin/zlib.dll
+							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+				)
+				install(
+					FILES ${FreeTypePath}/bin/zlib.dll
 					DESTINATION bin
 					COMPONENT ${PROJECT_NAME}
 				)

@@ -346,7 +346,7 @@ namespace Deferred
 
 			if ( l_return )
 			{
-				m_geometryBuffers->Draw( m_arrayVertex.size(), 0 );
+				m_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 				{
