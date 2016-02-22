@@ -158,6 +158,8 @@ namespace Castor3D
 		std::array< double, FRAME_SAMPLES_COUNT > m_framesTimes;
 		//!\~english The current frame index in m_framesTimes.	\~french L'index de la frame courante, dans m_framesTimes.
 		uint32_t m_frameIndex;
+		//!\~english Tells if the debug overlays are successfully loaded.	\~french Dit si les incrustations de débogage sont chargées correctement.
+		bool m_valid;
 		//!\~english Defines if the debug overlays are shown.	\~french Définit si les incrustations de débogage sont affichées ou cachées.
 		bool m_visible;
 		//!\~english The CPU time.	\~french Le temps CPU.

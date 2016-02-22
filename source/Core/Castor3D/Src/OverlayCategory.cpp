@@ -211,6 +211,7 @@ namespace Castor3D
 		{
 			if ( IsChanged() || IsPositionChanged() || IsSizeChanged() || l_renderer->IsSizeChanged() )
 			{
+				DoUpdate();
 				DoUpdatePosition();
 				DoUpdateSize();
 				DoUpdateBuffer( l_renderer->GetSize() );

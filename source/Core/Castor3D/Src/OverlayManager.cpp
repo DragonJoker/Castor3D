@@ -191,9 +191,9 @@ namespace Castor3D
 	{
 		auto l_lock = make_unique_lock( *this );
 
-		for ( auto l_it : m_elements )
+		for ( auto l_category : m_overlays )
 		{
-			l_it.second->GetCategory()->Update();
+			l_category->Update();
 		}
 	}
 

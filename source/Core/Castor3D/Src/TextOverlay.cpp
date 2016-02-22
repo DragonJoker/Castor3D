@@ -207,7 +207,7 @@ namespace Castor3D
 
 		if ( !l_new.empty() )
 		{
-			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [&l_fontTexture]()
+			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_fontTexture]()
 			{
 				l_fontTexture->Cleanup();
 				l_fontTexture->Initialise();
@@ -249,7 +249,7 @@ namespace Castor3D
 						double l_topCrop = std::max( 0.0, -l_line.m_position[1] );
 						double l_bottomCrop = std::max( 0.0, l_line.m_position[1] + l_maxHeight - l_size[1] );
 
-						if ( l_topCrop + l_bottomCrop < l_maxHeight )
+						if ( l_topCrop + l_bottomCrop <= l_maxHeight )
 						{
 							for ( auto l_char : l_line.m_characters )
 							{

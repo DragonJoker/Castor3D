@@ -31,6 +31,7 @@ namespace Castor3D
 
 	DebugOverlays::DebugOverlays( Engine & p_engine )
 		: OwnedBy< Engine >( p_engine )
+		, m_valid( false )
 		, m_visible( false )
 		, m_frameIndex( 0 )
 		, m_gpuTime( 0 )
@@ -58,21 +59,21 @@ namespace Castor3D
 		m_debugTime = GetTextOverlay( p_manager, cuT( "DebugPanel-DebugTime-Value" ) );
 		m_externTime = GetTextOverlay( p_manager, cuT( "DebugPanel-ExternalTime-Value" ) );
 
-		m_visible = m_debugCpuTime
-					&& m_debugGpuClientTime
-					&& m_debugGpuServerTime
-					&& m_debugTotalTime
-					&& m_debugAverageFps
-					&& m_debugAverageTime
-					&& m_debugVertexCount
-					&& m_debugFaceCount
-					&& m_debugObjectCount
-					&& m_debugTime
-					&& m_externTime;
+		m_valid = m_debugCpuTime
+			&& m_debugGpuClientTime
+			&& m_debugGpuServerTime
+			&& m_debugTotalTime
+			&& m_debugAverageFps
+			&& m_debugAverageTime
+			&& m_debugVertexCount
+			&& m_debugFaceCount
+			&& m_debugObjectCount
+			&& m_debugTime
+			&& m_externTime;
 
 		if ( l_panel )
 		{
-			l_panel->SetVisible( m_visible );
+			l_panel->SetVisible( m_valid && m_visible );
 		}
 	}
 
@@ -94,7 +95,7 @@ namespace Castor3D
 
 	void DebugOverlays::StartFrame()
 	{
-		if ( m_visible )
+		if ( m_valid && m_visible )
 		{
 			m_gpuTime = 0;
 			m_cpuTime = 0;
@@ -105,7 +106,7 @@ namespace Castor3D
 
 	void DebugOverlays::EndFrame( uint32_t p_vertices, uint32_t p_faces, uint32_t p_objects )
 	{
-		if ( m_visible )
+		if ( m_valid && m_visible )
 		{
 			double l_time = m_frameTimer.TimeMs() + m_externalTime;
 			m_debugTimer.TimeMs();
@@ -135,7 +136,7 @@ namespace Castor3D
 
 	void DebugOverlays::EndGpuTask()
 	{
-		if ( m_visible )
+		if ( m_valid && m_visible )
 		{
 			m_gpuTime += m_taskTimer.TimeMs();
 		}
@@ -143,7 +144,7 @@ namespace Castor3D
 
 	void DebugOverlays::EndCpuTask()
 	{
-		if ( m_visible )
+		if ( m_valid && m_visible )
 		{
 			m_cpuTime += m_taskTimer.TimeMs();
 		}
@@ -156,7 +157,7 @@ namespace Castor3D
 
 		if ( l_panel )
 		{
-			l_panel->SetVisible( m_visible );
+			l_panel->SetVisible( m_valid && m_visible );
 		}
 	}
 }

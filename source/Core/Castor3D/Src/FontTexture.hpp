@@ -56,21 +56,28 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~FontTexture();
+		C3D_API ~FontTexture();
 		/**
 		 *\~english
 		 *\brief		Initialises the texture.
 		 *\~french
 		 *\brief		Initialise la texture.
 		 */
-		C3D_API virtual void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Flushes the teture.
 		 *\~french
 		 *\brief		Nettoie la texture.
 		 */
-		C3D_API virtual void Cleanup();
+		C3D_API void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Updates the glyphs.
+		 *\~french
+		 *\brief		Met à jour les glyphes.
+		 */
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
