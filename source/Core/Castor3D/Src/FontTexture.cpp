@@ -36,6 +36,16 @@ namespace Castor3D
 
 	void FontTexture::Initialise()
 	{
+		m_texture->Create();
+		m_texture->Initialise( 0 );
+		m_texture->Bind();
+		m_texture->GenerateMipmaps();
+		m_texture->Unbind();
+		m_signal( *this );
+	}
+
+	void FontTexture::Update()
+	{
 		FontSPtr l_font = GetFont();
 
 		if ( l_font )
@@ -80,12 +90,6 @@ namespace Castor3D
 			}
 		}
 
-		m_texture->Create();
-		m_texture->Initialise( 0 );
-		m_texture->Bind();
-		m_texture->GenerateMipmaps();
-		m_texture->Unbind();
-		m_signal( *this );
 	}
 
 	void FontTexture::Cleanup()
