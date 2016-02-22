@@ -155,6 +155,7 @@ namespace Castor3D
 			if ( !l_fontTexture )
 			{
 				l_fontTexture = l_engine->GetOverlayManager().CreateFontTexture( l_pFont );
+				l_fontTexture->Update();
 			}
 
 			auto l_texture = m_fontTexture.lock();
@@ -200,13 +201,15 @@ namespace Castor3D
 			}
 		}
 
-		for ( auto l_char : l_new )
-		{
-			l_font->LoadGlyph( l_char );
-		}
-
 		if ( !l_new.empty() )
 		{
+			for ( auto l_char : l_new )
+			{
+				l_font->LoadGlyph( l_char );
+			}
+
+			l_fontTexture->Update();
+
 			GetOverlay().GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_fontTexture]()
 			{
 				l_fontTexture->Cleanup();
