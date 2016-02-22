@@ -97,7 +97,7 @@ namespace GlRender
 		/**
 		*\copydoc		Castor3D::RenderSystem::CreateBillboardsProgram
 		*/
-		virtual Castor3D::ShaderProgramSPtr CreateBillboardsProgram( Castor3D::RenderTechniqueBase const & p_technique, uint32_t p_flags );
+		virtual Castor3D::ShaderProgramSPtr CreateBillboardsProgram( Castor3D::RenderTechnique const & p_technique, uint32_t p_flags );
 		/**
 		*\copydoc		Castor3D::RenderSystem::GetVertexShaderSource
 		*/

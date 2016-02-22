@@ -5,7 +5,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	TechniqueFactory::TechniqueFactory()
-		:	Factory< RenderTechniqueBase, Castor::String, std::shared_ptr< RenderTechniqueBase >, std::function< RenderTechniqueBaseSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >()
+		:	Factory< RenderTechnique, Castor::String, std::shared_ptr< RenderTechnique >, std::function< RenderTechniqueSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >()
 	{
 		Initialise();
 	}

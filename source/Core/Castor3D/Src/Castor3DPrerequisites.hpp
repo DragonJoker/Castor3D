@@ -52,9 +52,9 @@ namespace Castor3D
 #include "Castor3DPrerequisites_Light.hpp"
 #include "Castor3DPrerequisites_Material.hpp"
 #include "Castor3DPrerequisites_Overlay.hpp"
-#include "Castor3DPrerequisites_Render.hpp"
 #include "Castor3DPrerequisites_Scene.hpp"
 #include "Castor3DPrerequisites_Shader.hpp"
+#include "Castor3DPrerequisites_Render.hpp"
 
 namespace Castor3D
 {
@@ -386,7 +386,7 @@ namespace Castor3D
 	class TextureAttachment;
 	class FrameBuffer;
 	class BackBuffers;
-	class RenderTechniqueBase;
+	class RenderTechnique;
 	class RenderWindow;
 	class IWindowHandle;
 	class DebugOverlays;
@@ -418,7 +418,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( TextureAttachment );
 	DECLARE_SMART_PTR( FrameBuffer );
 	DECLARE_SMART_PTR( BackBuffers );
-	DECLARE_SMART_PTR( RenderTechniqueBase );
+	DECLARE_SMART_PTR( RenderTechnique );
 	DECLARE_SMART_PTR( PostEffect );
 	DECLARE_SMART_PTR( Engine );
 	DECLARE_SMART_PTR( RendererServer );
@@ -454,6 +454,7 @@ namespace Castor3D
 	class AnimatedObjectGroupManager;
 	class SceneNodeManager;
 	class BillboardManager;
+	class RenderTechniqueManager;
 
 	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( ShaderManager );
@@ -475,6 +476,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( AnimatedObjectGroupManager );
 	DECLARE_SMART_PTR( SceneNodeManager );
 	DECLARE_SMART_PTR( BillboardManager );
+	DECLARE_SMART_PTR( RenderTechniqueManager );
 
 	class TechniqueFactory;
 	DECLARE_SMART_PTR( TechniqueFactory );

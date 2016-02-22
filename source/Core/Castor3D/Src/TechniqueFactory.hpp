@@ -34,7 +34,7 @@ namespace Castor3D
 	\brief		La fabrique de techniques de rendu
 	*/
 	class TechniqueFactory
-		: public Castor::Factory< RenderTechniqueBase, Castor::String, std::shared_ptr< RenderTechniqueBase >, std::function< RenderTechniqueBaseSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >
+		: public Castor::Factory< RenderTechnique, Castor::String, std::shared_ptr< RenderTechnique >, std::function< RenderTechniqueSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >
 	{
 	public:
 		/**

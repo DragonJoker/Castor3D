@@ -33,6 +33,7 @@ namespace Castor3D
 		: OwnedBy< Engine >( p_engine )
 		, m_valid( false )
 		, m_visible( false )
+		, m_valid( false )
 		, m_frameIndex( 0 )
 		, m_gpuTime( 0 )
 		, m_cpuTime( 0 )
@@ -139,6 +140,7 @@ namespace Castor3D
 		if ( m_valid && m_visible )
 		{
 			m_gpuTime += m_taskTimer.TimeMs();
+			std::cout << m_gpuTime << "ms\n";
 		}
 	}
 

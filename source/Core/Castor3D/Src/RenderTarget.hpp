@@ -337,7 +337,7 @@ namespace Castor3D
 		 *\brief		Récupère la RenderTechnique
 		 *\return		La RenderTechnique
 		 */
-		inline RenderTechniqueBaseSPtr GetTechnique()const
+		inline RenderTechniqueSPtr GetTechnique()const
 		{
 			return m_renderTechnique;
 		}
@@ -349,7 +349,7 @@ namespace Castor3D
 		 *\brief		Définit la RenderTechnique
 		 *\param[in]	p_pTechnique	La RenderTechnique
 		 */
-		inline void SetTechnique( RenderTechniqueBaseSPtr p_pTechnique )
+		inline void SetTechnique( RenderTechniqueSPtr p_pTechnique )
 		{
 			m_renderTechnique = p_pTechnique;
 		}
@@ -665,7 +665,7 @@ namespace Castor3D
 		//!\~english The target size	\~french Les dimensions de la cible
 		Castor::Size m_size;
 		//!\~english The technique used to render this target	\~french La technique utilisée pour rendre cette cible
-		RenderTechniqueBaseSPtr m_renderTechnique;
+		RenderTechniqueSPtr m_renderTechnique;
 		//!\~english Tells whether or not to use multisampling	\~french Dit si on utilise le multisampling ou pas
 		bool m_bMultisampling;
 		//!\~english Defines the samples count if multisampling is activated	\~french Le nombre de samples utilisés pour le multisampling

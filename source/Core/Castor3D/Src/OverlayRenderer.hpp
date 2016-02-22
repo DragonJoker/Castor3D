@@ -131,26 +131,26 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Retrieves a panel program compiled using given flags
-		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL
+		 *\brief		Retrieves a panel program compiled using given pass
+		 *\param[in]	p_pass	The pass.
 		 *\return		The program
 		 *\~french
-		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs donnés
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL
+		 *\brief		Récupère un programme de panneau compilé en utilisant la passe donnée
+		 *\param[in]	p_pass	La passe
 		 *\return		Le programme
 		 */
-		C3D_API ShaderProgramSPtr DoGetPanelProgram( uint32_t p_flags );
+		C3D_API RenderNode & DoGetPanelProgram( Pass & p_pass );
 		/**
 		 *\~english
-		 *\brief		Retrieves a text program compiled using given flags
-		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL
+		 *\brief		Retrieves a text program compiled using given pass
+		 *\param[in]	p_pass	The pass
 		 *\return		The program
 		 *\~french
-		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs donnés
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL
+		 *\brief		Récupère un programme de texte compilé en utilisant la passe donnée
+		 *\param[in]	p_pass	La passe
 		 *\return		Le programme
 		 */
-		C3D_API ShaderProgramSPtr DoGetTextProgram( uint32_t p_flags );
+		C3D_API RenderNode & DoGetTextProgram( Pass & p_pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a program compiled using given flags.
@@ -163,7 +163,7 @@ namespace Castor3D
 		 *\param[in,out]p_programs	Recherche un shader correspondant dans cette map. S'il n'y en a pas, crée le programme et l'ajoute à la map.
 		 *\return		Le programme
 		 */
-		C3D_API ShaderProgramSPtr DoGetProgram( uint32_t p_flags, std::map< uint32_t, ShaderProgramSPtr > & p_programs );
+		C3D_API RenderNode & DoGetProgram( Pass & p_pass, uint32_t p_flags, std::map< Pass *, RenderNode > & p_programs );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
@@ -224,9 +224,9 @@ namespace Castor3D
 		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
 		Castor::Size m_size;
 		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi)
-		std::map< uint32_t, ShaderProgramSPtr > m_mapPanelPrograms;
+		std::map< Pass *, RenderNode > m_mapPanelPrograms;
 		//!\~english The shader programs used to render texts	\~french Les programmes de shader utilisés pour rendre les textes
-		std::map< uint32_t, ShaderProgramSPtr > m_mapTextPrograms;
+		std::map< Pass *, RenderNode > m_mapTextPrograms;
 		//!\~english Text texture sampler	\~french Echantillonneur de la texture de texte
 		OneTextureFrameVariableSPtr m_mapText;
 		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du précedent BorderPanelOverlay rendu

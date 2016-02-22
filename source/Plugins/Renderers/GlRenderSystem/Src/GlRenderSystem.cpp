@@ -270,6 +270,8 @@ namespace GlRender
 
 	ShaderProgramSPtr GlRenderSystem::CreateOverlayProgram( uint32_t p_flags )
 	{
+#define CHECK_FLAG( flag ) ( ( p_flags & ( flag ) ) == ( flag ) )
+
 		using namespace GLSL;
 
 		// Shader program
@@ -313,9 +315,9 @@ namespace GlRender
 
 			// Shader inputs
 			IN( l_writer, Vec2, vtx_texture );
-			UNIFORM( l_writer, Sampler2D, c3d_mapText );
-			UNIFORM( l_writer, Sampler2D, c3d_mapColour );
-			UNIFORM( l_writer, Sampler2D, c3d_mapOpacity );
+			Optional< Sampler2D > c3d_mapText = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapText" ), CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
+			Optional< Sampler2D > c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			Optional< Sampler2D > c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ), CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) );
 
 			// Shader outputs
 			FRAG_OUTPUT( l_writer, Vec4, pxl_v4FragColor, 0 );
@@ -325,17 +327,17 @@ namespace GlRender
 				LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
 				LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
 				{
 					l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
 				{
 					l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.X, vtx_texture.Y ) );
 				}
 
-				if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
 				{
 					l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
 				}
@@ -346,17 +348,17 @@ namespace GlRender
 			l_strPs = l_writer.Finalise();
 		}
 
-		if ( ( p_flags & eTEXTURE_CHANNEL_TEXT ) == eTEXTURE_CHANNEL_TEXT )
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
 		{
 			l_program->CreateFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( ( p_flags & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
 		{
 			l_program->CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
 		}
 
-		if ( ( p_flags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
 		{
 			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
 		}
@@ -366,9 +368,11 @@ namespace GlRender
 		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
 
 		return l_program;
+
+#undef CHECK_FLAG
 	}
 
-	Castor3D::ShaderProgramSPtr GlRenderSystem::CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags )
+	Castor3D::ShaderProgramSPtr GlRenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags )
 	{
 		using namespace GLSL;
 

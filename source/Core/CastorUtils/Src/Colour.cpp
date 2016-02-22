@@ -487,100 +487,111 @@ namespace Castor
 	CHECK_INVARIANT( static_cast< double >( m_arrayValues[eCOMPONENT_ALPHA] ) >= 0.0 && static_cast< double >( m_arrayValues[eCOMPONENT_ALPHA] ) <= 1.0 );
 	END_INVARIANT_BLOCK()
 
-	void Colour::to_rgb( Point3ub & p_result )const
+	Point3ub & Colour::to_rgb( Point3ub & p_result )const
 	{
 		get( eCOMPONENT_RED ).convert_to( p_result[0] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_bgr( Point3ub & p_result )const
+	Point3ub & Colour::to_bgr( Point3ub & p_result )const
 	{
 		get( eCOMPONENT_BLUE ).convert_to( p_result[0] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
 		get( eCOMPONENT_RED ).convert_to( p_result[2] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_rgba( Point4ub & p_result )const
+	Point4ub & Colour::to_rgba( Point4ub & p_result )const
 	{
 		get( eCOMPONENT_RED ).convert_to( p_result[0] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_bgra( Point4ub & p_result )const
+	Point4ub & Colour::to_bgra( Point4ub & p_result )const
 	{
 		get( eCOMPONENT_BLUE ).convert_to( p_result[0] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
 		get( eCOMPONENT_RED ).convert_to( p_result[2] );
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_argb( Point4ub & p_result )const
+	Point4ub & Colour::to_argb( Point4ub & p_result )const
 	{
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
 		get( eCOMPONENT_RED ).convert_to( p_result[1] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_abgr( Point4ub & p_result )const
+	Point4ub & Colour::to_abgr( Point4ub & p_result )const
 	{
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[1] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
 		get( eCOMPONENT_RED ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_rgb( Point3f & p_result )const
+	Point3f & Colour::to_rgb( Point3f & p_result )const
 	{
 		get( eCOMPONENT_RED ).convert_to( p_result[0] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_rgba( Point4f & p_result )const
+	Point4f & Colour::to_rgba( Point4f & p_result )const
 	{
 		get( eCOMPONENT_RED ).convert_to( p_result[0] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_argb( Point4f & p_result )const
+	Point4f & Colour::to_argb( Point4f & p_result )const
 	{
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
 		get( eCOMPONENT_RED ).convert_to( p_result[1] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_abgr( Point4f & p_result )const
+	Point4f & Colour::to_abgr( Point4f & p_result )const
 	{
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
 		get( eCOMPONENT_BLUE ).convert_to( p_result[1] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
 		get( eCOMPONENT_RED ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
-	void Colour::to_bgra( Point4f & p_result )const
+	Point4f & Colour::to_bgra( Point4f & p_result )const
 	{
 		get( eCOMPONENT_BLUE ).convert_to( p_result[0] );
 		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
 		get( eCOMPONENT_RED ).convert_to( p_result[2] );
 		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
 		CHECK_INVARIANTS();
+		return p_result;
 	}
 
 	uint32_t Colour::to_rgb()const

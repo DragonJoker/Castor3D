@@ -374,7 +374,7 @@ namespace Castor3D
 		 *\brief		Crée un programme shader pour les rendu de billboards.
 		 *\return		Le programme créé.
 		 */
-		C3D_API virtual ShaderProgramSPtr CreateBillboardsProgram( RenderTechniqueBase const & p_technique, uint32_t p_flags ) = 0;
+		C3D_API virtual ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the vertex shader source matching the given flags
@@ -563,7 +563,7 @@ namespace Castor3D
 		template< class Rep, class Period >
 		inline void IncGpuTime( std::chrono::duration< Rep, Period > const & p_time )
 		{
-			m_gpuTime = std::chrono::duration_cast< std::chrono::milliseconds >( p_time );
+			m_gpuTime += std::chrono::duration_cast< std::chrono::milliseconds >( p_time );
 		}
 		/**
 		 *\~english

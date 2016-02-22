@@ -587,7 +587,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format RGB
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_rgb( Point3ub & p_result )const;
+		CU_API Point3ub & to_rgb( Point3ub & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in BGR form
@@ -596,7 +596,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format BGR
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_bgr( Point3ub & p_result )const;
+		CU_API Point3ub & to_bgr( Point3ub & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in RGBA form
@@ -605,7 +605,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format RGBA
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_rgba( Point4ub & p_result )const;
+		CU_API Point4ub & to_rgba( Point4ub & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in BGRA form
@@ -614,7 +614,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format BGRA
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_bgra( Point4ub & p_result )const;
+		CU_API Point4ub & to_bgra( Point4ub & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in ARGB form
@@ -623,7 +623,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format ARGB
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_argb( Point4ub & p_result )const;
+		CU_API Point4ub & to_argb( Point4ub & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in ABGR form
@@ -632,7 +632,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format ABGR
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_abgr( Point4ub & p_result )const;
+		CU_API Point4ub & to_abgr( Point4ub & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in RGB form
@@ -641,7 +641,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format RGB
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_rgb( Point3f & p_result )const;
+		CU_API Point3f & to_rgb( Point3f & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in BGR form
@@ -650,7 +650,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format BGR
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_bgr( Point3f & p_result )const;
+		CU_API Point3f & to_bgr( Point3f & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in RGBA form
@@ -659,7 +659,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format RGBA
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_rgba( Point4f & p_result )const;
+		CU_API Point4f & to_rgba( Point4f & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in ARGB form
@@ -668,7 +668,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format ARGB
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_argb( Point4f & p_result )const;
+		CU_API Point4f & to_argb( Point4f & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in ABGR form
@@ -677,7 +677,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format ABGR
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_abgr( Point4f & p_result )const;
+		CU_API Point4f & to_abgr( Point4f & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Stores this colour's components into a point in BGRA form
@@ -686,7 +686,7 @@ namespace Castor
 		 *\brief		Stoque les composantes de cette couleur dans un point, au format BGRA
 		 *\param[out]	p_result	Reçoit les composantes de la couleur
 		 */
-		CU_API void to_bgra( Point4f & p_result )const;
+		CU_API Point4f & to_bgra( Point4f & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Compiles the components into an uint32_t in the RGB format (0x00RRGGBB)

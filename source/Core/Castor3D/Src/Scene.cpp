@@ -505,10 +505,6 @@ namespace Castor3D
 
 	void Scene::Cleanup()
 	{
-		m_renderNodes.clear();
-		m_opaqueRenderNodes.clear();
-		m_transparentRenderNodes.clear();
-		m_distanceSortedTransparentRenderNodes.clear();
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 		m_overlays.clear();
 		m_animatedObjectGroupManager->Cleanup();
@@ -543,47 +539,16 @@ namespace Castor3D
 
 	void Scene::Update()
 	{
-		if ( m_changed )
-		{
-			DoSortRenderNodes();
-			m_changed = false;
-		}
-
 		m_animatedObjectGroupManager->Update();
+		m_changed = false;
 	}
 
-	void Scene::Render( RenderTechniqueBase & p_technique, Camera const & p_camera )
+	void Scene::Render( RenderTechnique & p_technique, Camera const & p_camera )
 	{
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
 		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
 		ContextRPtr l_context = l_renderSystem->GetCurrentContext();
 		auto l_lock = Castor::make_unique_lock( m_mutex );
-
-		if ( !m_opaqueRenderNodes.empty() )
-		{
-			l_context->CullFace( eFACE_BACK );
-			RenderSubmeshes( p_technique, p_camera, l_pipeline, m_opaqueRenderNodes );
-		}
-
-		if ( !m_transparentRenderNodes.empty() )
-		{
-			if ( l_context->IsMultiSampling() )
-			{
-				l_context->CullFace( eFACE_FRONT );
-				RenderSubmeshes( p_technique, p_camera, l_pipeline, m_transparentRenderNodes );
-				l_context->CullFace( eFACE_BACK );
-				RenderSubmeshes( p_technique, p_camera, l_pipeline, m_transparentRenderNodes );
-			}
-			else
-			{
-				l_context->GetNoDepthWriteState()->Apply();
-				DoResortAlpha( m_transparentRenderNodes, p_camera, 1, m_distanceSortedTransparentRenderNodes );
-				l_context->CullFace( eFACE_FRONT );
-				DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, m_distanceSortedTransparentRenderNodes );
-				l_context->CullFace( eFACE_BACK );
-				DoRenderSubmeshesNonInstanced( p_technique, p_camera, l_pipeline, m_distanceSortedTransparentRenderNodes );
-			}
-		}
 
 		if ( !m_billboardManager->IsEmpty() )
 		{
@@ -699,245 +664,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Scene::RenderSubmeshes( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByMaterialMap const & p_nodes )
-	{
-		if ( GetEngine()->GetRenderSystem()->HasInstancing() )
-		{
-			DoRenderSubmeshesInstanced( p_technique, p_camera, p_pipeline, p_nodes );
-		}
-		else
-		{
-			DoRenderSubmeshesNonInstanced( p_technique, p_camera, p_pipeline, p_nodes );
-		}
-	}
-
-	void Scene::DoSortRenderNodes()
-	{
-		m_renderNodes.clear();
-		m_opaqueRenderNodes.clear();
-		m_transparentRenderNodes.clear();
-
-		auto l_lock = make_unique_lock( GetGeometryManager() );
-
-		for ( auto && l_primitive : GetGeometryManager() )
-		{
-			MeshSPtr l_mesh = l_primitive.second->GetMesh();
-			SceneNodeSPtr l_sceneNode = l_primitive.second->GetParent();
-
-			if ( l_mesh )
-			{
-				for ( auto && l_submesh : *l_mesh )
-				{
-					MaterialSPtr l_material( l_primitive.second->GetMaterial( l_submesh ) );
-
-					if ( l_material )
-					{
-						stRENDER_NODE l_renderNode = { l_sceneNode, l_primitive.second, l_submesh, l_material };
-
-						if ( l_material->HasAlphaBlending() )
-						{
-							auto l_itMap = m_transparentRenderNodes.insert( std::make_pair( l_material, SubmeshRenderNodesMap() ) ).first;
-							auto l_itSubmesh = l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) ).first;
-							l_itSubmesh->second.push_back( l_renderNode );
-						}
-						else
-						{
-							auto l_itMap = m_opaqueRenderNodes.insert( std::make_pair( l_material, SubmeshRenderNodesMap() ) ).first;
-							auto l_itSubmesh = l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) ).first;
-							l_itSubmesh->second.push_back( l_renderNode );
-						}
-
-						auto l_itMap = m_renderNodes.insert( std::make_pair( l_material, SubmeshRenderNodesMap() ) ).first;
-						auto l_itSubmesh = l_itMap->second.insert( std::make_pair( l_submesh, RenderNodeArray() ) ).first;
-						l_itSubmesh->second.push_back( l_renderNode );
-					}
-				}
-			}
-		}
-	}
-
-	void Scene::DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags, uint64_t p_excludedMtxFlags )
-	{
-		ShaderProgramSPtr l_program;
-
-		if ( p_pass.HasAutomaticShader() )
-		{
-			if ( !p_geometry.GetAnimatedObject() )
-			{
-				p_programFlags &= ~ePROGRAM_FLAG_SKINNING;
-			}
-
-			l_program = GetEngine()->GetShaderManager().GetAutomaticProgram( p_technique, p_pass.GetTextureFlags(), p_programFlags );
-			l_program->Initialise();
-			p_pass.BindToAutomaticProgram( l_program );
-		}
-		else
-		{
-			l_program = p_pass.GetShader();
-		}
-
-		//p_pass.Bind();
-
-		FrameVariableBufferSPtr l_sceneBuffer = p_pass.GetSceneBuffer();
-
-		if ( l_sceneBuffer && GetEngine()->GetPerObjectLighting() )
-		{
-			m_lightManager->BindLights( *l_program, *l_sceneBuffer );
-			m_cameraManager->BindCamera( *l_sceneBuffer );
-		}
-
-		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
-
-		if ( l_matrixBuffer )
-		{
-			p_pipeline.ApplyMatrices( *l_matrixBuffer, ( 0xFFFFFFFFFFFFFFFF & ~p_excludedMtxFlags ) );
-			auto l_animated = p_geometry.GetAnimatedObject();
-
-			if ( l_animated )
-			{
-				Matrix4x4rFrameVariableSPtr l_variable;
-				l_matrixBuffer->GetVariable( Pipeline::MtxBones, l_variable );
-
-				if ( l_variable )
-				{
-					l_animated->FillShader( *l_variable );
-				}
-			}
-		}
-
-		p_pass.Render();
-	}
-
-	void Scene::DoUnbindPass( Pass & p_pass )
-	{
-		p_pass.EndRender();
-		FrameVariableBufferSPtr l_sceneBuffer = p_pass.GetSceneBuffer();
-
-		if ( l_sceneBuffer && GetEngine()->GetPerObjectLighting() )
-		{
-			m_lightManager->UnbindLights( *p_pass.GetShader(), *l_sceneBuffer );
-		}
-	}
-
-	void Scene::DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByMaterialMap const & p_nodes )
-	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-
-		for ( auto l_itNodes : p_nodes )
-		{
-			MaterialSPtr l_material = l_itNodes.first;
-
-			for ( auto l_itSubmeshes : l_itNodes.second )
-			{
-				SubmeshSPtr l_submesh = l_itSubmeshes.first;
-
-				for ( auto l_pass : *l_material )
-				{
-					for ( auto l_renderNode : l_itSubmeshes.second )
-					{
-						p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-						DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags(), 0 );
-						l_renderNode.m_submesh->Draw( *l_pass );
-						DoUnbindPass( *l_pass );
-					}
-				}
-			}
-		}
-	}
-
-	void Scene::DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByMaterialMap const & p_nodes )
-	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-
-		for ( auto l_itNodes : p_nodes )
-		{
-			MaterialSPtr l_material = l_itNodes.first;
-
-			for ( auto l_itSubmeshes : l_itNodes.second )
-			{
-				SubmeshSPtr l_submesh = l_itSubmeshes.first;
-
-				for ( auto l_pass : *l_material )
-				{
-					if ( l_submesh->GetRefCount( l_material ) > 1 && l_submesh->HasMatrixBuffer()
-							&& ( l_submesh->GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) != ePROGRAM_FLAG_SKINNING )
-					{
-						uint8_t * l_buffer = l_submesh->GetMatrixBuffer().data();
-						const uint32_t l_size = 16 * sizeof( real );
-
-						for ( auto && l_renderNode : l_itSubmeshes.second )
-						{
-							std::memcpy( l_buffer, ( l_renderNode.m_node->GetDerivedTransformationMatrix().get_inverse() ).const_ptr(), l_size );
-							l_buffer += l_size;
-						}
-
-						DoBindPass( p_technique, p_pipeline, *l_pass, *l_itSubmeshes.second[0].m_geometry, l_itSubmeshes.second[0].m_submesh->GetProgramFlags() | ePROGRAM_FLAG_INSTANCIATION, MASK_MTXMODE_MODEL );
-						l_itSubmeshes.second[0].m_submesh->Draw( *l_pass );
-						DoUnbindPass( *l_pass );
-					}
-					else
-					{
-						for ( auto l_renderNode : l_itSubmeshes.second )
-						{
-							p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-							DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags(), 0 );
-							l_renderNode.m_submesh->Draw( *l_pass );
-							DoUnbindPass( *l_pass );
-						}
-					}
-				}
-			}
-		}
-	}
-
-	void Scene::DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, RenderNodeByDistanceMMap const & p_nodes )
-	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-
-		for ( auto l_it : p_nodes )
-		{
-			stRENDER_NODE const & l_renderNode = l_it.second;
-			auto l_material = l_renderNode.m_material;
-			auto l_submesh = l_renderNode.m_submesh;
-
-			for ( auto l_pass : *l_material )
-			{
-				p_pipeline.SetModelMatrix( l_renderNode.m_node->GetDerivedTransformationMatrix() );
-				DoBindPass( p_technique, p_pipeline, *l_pass, *l_renderNode.m_geometry, l_renderNode.m_submesh->GetProgramFlags(), 0 );
-				l_renderNode.m_submesh->Draw( *l_pass );
-				DoUnbindPass( *l_pass );
-			}
-		}
-	}
-
-	void Scene::DoResortAlpha( SubmeshRenderNodesByMaterialMap p_input, Camera const & p_camera, int p_sign, RenderNodeByDistanceMMap & p_output )
-	{
-		p_output.clear();
-
-		for ( auto l_itMaterial : p_input )
-		{
-			for ( auto l_itSubmesh : l_itMaterial.second )
-			{
-				for ( auto l_renderNode : l_itSubmesh.second )
-				{
-					if ( l_renderNode.m_node && l_renderNode.m_node->IsDisplayable() && l_renderNode.m_node->IsVisible() )
-					{
-						if ( p_camera.IsVisible( l_renderNode.m_submesh->GetParent()->GetCollisionBox(), l_renderNode.m_node->GetDerivedTransformationMatrix() ) )
-						{
-							Matrix4x4r l_mtxMeshGlobal = l_renderNode.m_node->GetDerivedTransformationMatrix().get_inverse().transpose();
-							Point3r l_position = p_camera.GetParent()->GetDerivedPosition();
-							Point3r l_ptCameraLocal = l_mtxMeshGlobal * l_position;
-							l_renderNode.m_submesh->SortFaces( l_ptCameraLocal );
-							l_ptCameraLocal -= l_renderNode.m_submesh->GetCubeBox().GetCenter();
-							p_output.insert( std::make_pair( p_sign * point::distance_squared( l_ptCameraLocal ), l_renderNode ) );
-						}
-					}
-				}
-			}
-		}
-	}
-
-	void Scene::DoRenderBillboards( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd )
+	void Scene::DoRenderBillboards( RenderTechnique & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd )
 	{
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
 

@@ -563,41 +563,30 @@ namespace Castor3D
 		DoCreateBuffers();
 	}
 
-	void Submesh::Draw( Pass const & p_pass )
+	void Submesh::Draw( ShaderProgram const & p_program )
 	{
-		GeometryBuffers & l_geometryBuffers = DoPrepareGeometryBuffers( p_pass );
-		ShaderProgramSPtr l_program = p_pass.GetShader();
-		uint32_t l_uiSize = m_vertexBuffer->GetSize() / m_layout.GetStride();
-
-		auto l_matrixBuffer = p_pass.GetMatrixBuffer();
-
-		if ( l_program && l_matrixBuffer )
-		{
-			GetEngine()->GetRenderSystem()->GetPipeline().ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
-		}
+		GeometryBuffers & l_geometryBuffers = DoPrepareGeometryBuffers( p_program );
+		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
 
 		if ( m_indexBuffer )
 		{
-			l_uiSize = m_indexBuffer->GetSize();
+			l_size = m_indexBuffer->GetSize();
 		}
 
-		uint32_t l_count = GetRefCount( p_pass.GetParent() );
+		l_geometryBuffers.Draw( l_size, 0 );
+	}
 
-		if ( l_count > 1 )
+	void Submesh::DrawInstanced( ShaderProgram const & p_program, uint32_t p_count )
+	{
+		GeometryBuffers & l_geometryBuffers = DoPrepareGeometryBuffers( p_program );
+		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
+
+		if ( m_indexBuffer )
 		{
-			if ( GetEngine()->GetRenderSystem()->HasInstancing() )
-			{
-				l_geometryBuffers.DrawInstanced( l_uiSize, 0, l_count );
-			}
-			else
-			{
-				l_geometryBuffers.Draw( l_uiSize, 0 );
-			}
+			l_size = m_indexBuffer->GetSize();
 		}
-		else
-		{
-			l_geometryBuffers.Draw( l_uiSize, 0 );
-		}
+
+		l_geometryBuffers.DrawInstanced( l_size, 0, p_count );
 	}
 
 	void Submesh::ComputeFacesFromPolygonVertex()
@@ -1223,17 +1212,15 @@ namespace Castor3D
 		}
 	}
 
-	GeometryBuffers & Submesh::DoPrepareGeometryBuffers( Pass const & p_pass )
+	GeometryBuffers & Submesh::DoPrepareGeometryBuffers( ShaderProgram const & p_program )
 	{
-		ShaderProgramSPtr l_program = p_pass.GetShader();
-
-		if ( !l_program || l_program->GetStatus() != ePROGRAM_STATUS_LINKED )
+		if ( p_program.GetStatus() != ePROGRAM_STATUS_LINKED )
 		{
 			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
 		}
 
 		GeometryBuffersSPtr l_buffers;
-		auto const & l_layout = l_program->GetLayout();
+		auto const & l_layout = p_program.GetLayout();
 		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&l_layout]( GeometryBuffersSPtr p_buffers )
 		{
 			return p_buffers->GetLayout() == l_layout;
@@ -1241,7 +1228,7 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), m_indexBuffer.get(), m_bonesBuffer.get(), m_matrixBuffer.get() );
+			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program, m_vertexBuffer.get(), m_indexBuffer.get(), m_bonesBuffer.get(), m_matrixBuffer.get() );
 			m_geometryBuffers.push_back( l_buffers );
 		}
 		else

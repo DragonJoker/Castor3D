@@ -17,7 +17,7 @@
 #include "RenderLoopSync.hpp"
 #include "RendererPlugin.hpp"
 #include "RenderSystem.hpp"
-#include "RenderTechnique.hpp"
+#include "TechniqueManager.hpp"
 #include "SamplerManager.hpp"
 #include "SceneManager.hpp"
 #include "SceneFileParser.hpp"
@@ -67,6 +67,7 @@ namespace Castor3D
 		m_sceneManager = std::make_unique< SceneManager >( *this );
 		m_targetManager = std::make_unique< TargetManager >( *this );
 		m_listenerManager = std::make_unique< ListenerManager >( *this );
+		m_techniqueManager = std::make_unique< RenderTechniqueManager >( *this );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )
 		{
@@ -98,6 +99,7 @@ namespace Castor3D
 		m_materialManager->Clear();
 		m_windowManager->Clear();
 		m_listenerManager->Clear();
+		m_techniqueManager->Clear();
 
 		// Destroy the RenderSystem
 		if ( m_renderSystem )
@@ -134,6 +136,7 @@ namespace Castor3D
 			m_rasteriserStateManager->SetRenderSystem( m_renderSystem );
 			m_blendStateManager->SetRenderSystem( m_renderSystem );
 			m_windowManager->SetRenderSystem( m_renderSystem );
+			m_techniqueManager->SetRenderSystem( m_renderSystem );
 
 			m_defaultBlendState = m_blendStateManager->Create( cuT( "Default" ) );
 			m_defaultSampler = m_samplerManager->Create( cuT( "Default" ) );
@@ -211,6 +214,7 @@ namespace Castor3D
 			}
 
 			m_windowManager->Cleanup();
+			m_techniqueManager->Cleanup();
 			m_renderLoop.reset();
 			m_renderSystem->Cleanup();
 
@@ -229,6 +233,7 @@ namespace Castor3D
 			m_rasteriserStateManager->Clear();
 			m_blendStateManager->Clear();
 			m_windowManager->Clear();
+			m_techniqueManager->Clear();
 		}
 	}
 
@@ -271,11 +276,6 @@ namespace Castor3D
 		Path l_pathUsr = l_pathBin.GetPath();
 		l_pathReturn = l_pathUsr / cuT( "share" );
 		return l_pathReturn;
-	}
-
-	RenderTechniqueBaseSPtr Engine::CreateTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, Parameters const & p_params )
-	{
-		return m_techniqueFactory.Create( p_name, p_renderTarget, m_renderSystem, p_params );
 	}
 
 	bool Engine::IsCleaned()

@@ -40,6 +40,7 @@
 #include "Subdivider.hpp"
 #include "Submesh.hpp"
 #include "TargetManager.hpp"
+#include "TechniqueManager.hpp"
 #include "TechniquePlugin.hpp"
 #include "TextOverlay.hpp"
 #include "Texture.hpp"
@@ -353,7 +354,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetTechnique )
 
 		Engine * l_engine = l_pContext->m_pParser->GetEngine();
 
-		if ( !l_engine->GetTechniqueFactory().IsRegistered( string::lower_case( l_name ) ) )
+		if ( !l_engine->GetRenderTechniqueManager().GetTechniqueFactory().IsRegistered( string::lower_case( l_name ) ) )
 		{
 			PARSING_ERROR( cuT( "Technique [" ) + l_name + cuT( "] is not registered, make sure you've got the matching plug-in installed." ) );
 			l_name = cuT( "direct" );
@@ -1966,13 +1967,11 @@ END_ATTRIBUTE_POP()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MaterialPass )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_pContext->uiPass = 0xFFFFFFFF;
 	l_pContext->strName.clear();
 
 	if ( l_pContext->pMaterial )
 	{
-		l_pContext->pMaterial->CreatePass();
-		l_pContext->uiPass = l_pContext->pMaterial->GetPassCount() - 1;
+		l_pContext->pPass = l_pContext->pMaterial->CreatePass();
 	}
 	else
 	{
@@ -1990,11 +1989,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAmbient )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		Colour l_crColour;
 		p_params[0]->Get( l_crColour );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetAmbient( l_crColour );
+		l_pContext->pPass->SetAmbient( l_crColour );
 	}
 	else
 	{
@@ -2007,11 +2006,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassDiffuse )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		Colour l_crColour;
 		p_params[0]->Get( l_crColour );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetDiffuse( l_crColour );
+		l_pContext->pPass->SetDiffuse( l_crColour );
 	}
 	else
 	{
@@ -2024,11 +2023,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassSpecular )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		Colour l_crColour;
 		p_params[0]->Get( l_crColour );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetSpecular( l_crColour );
+		l_pContext->pPass->SetSpecular( l_crColour );
 	}
 	else
 	{
@@ -2041,11 +2040,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassEmissive )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		Colour l_crColour;
 		p_params[0]->Get( l_crColour );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetEmissive( l_crColour );
+		l_pContext->pPass->SetEmissive( l_crColour );
 	}
 	else
 	{
@@ -2058,11 +2057,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassShininess )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		float l_fFloat;
 		p_params[0]->Get( l_fFloat );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetShininess( l_fFloat );
+		l_pContext->pPass->SetShininess( l_fFloat );
 	}
 	else
 	{
@@ -2075,11 +2074,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlpha )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		float l_fFloat;
 		p_params[0]->Get( l_fFloat );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetAlpha( l_fFloat );
+		l_pContext->pPass->SetAlpha( l_fFloat );
 	}
 	else
 	{
@@ -2092,11 +2091,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassDoubleFace )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		bool l_bDouble;
 		p_params[0]->Get( l_bDouble );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetTwoSided( l_bDouble );
+		l_pContext->pPass->SetTwoSided( l_bDouble );
 	}
 	else
 	{
@@ -2109,9 +2108,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassBlendFunc )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
-		PassSPtr l_pPass = l_pContext->pMaterial->GetPass( l_pContext->uiPass );
+		PassSPtr l_pPass = l_pContext->pPass;
 		uint32_t l_uiSrcBlend;
 		uint32_t l_uiDstBlend;
 		p_params[0]->Get( l_uiSrcBlend );
@@ -2131,9 +2130,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassTextureUnit )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	l_pContext->pTextureUnit.reset();
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
-		l_pContext->pTextureUnit = l_pContext->pMaterial->GetPass( l_pContext->uiPass )->AddTextureUnit();
+		l_pContext->pTextureUnit = std::make_shared< TextureUnit >( *l_pContext->m_pParser->GetEngine() );
 	}
 	else
 	{
@@ -2148,7 +2147,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassGlShader )
 	l_pContext->pShaderProgram.reset();
 	l_pContext->eShaderObject = eSHADER_TYPE_COUNT;
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		if ( l_pContext->m_pParser->GetEngine()->GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
@@ -2170,11 +2169,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassAlphaBlendMode )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		uint32_t l_mode = 0;
 		p_params[0]->Get( l_mode );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetAlphaBlendMode( eBLEND_MODE( l_mode ) );
+		l_pContext->pPass->SetAlphaBlendMode( eBLEND_MODE( l_mode ) );
 	}
 	else
 	{
@@ -2187,11 +2186,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_PassColourBlendMode )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 
-	if ( l_pContext->uiPass >= 0 )
+	if ( l_pContext->pPass )
 	{
 		uint32_t l_mode = 0;
 		p_params[0]->Get( l_mode );
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetColourBlendMode( eBLEND_MODE( l_mode ) );
+		l_pContext->pPass->SetColourBlendMode( eBLEND_MODE( l_mode ) );
 	}
 	else
 	{
@@ -2364,6 +2363,28 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitBlendColour )
 }
 END_ATTRIBUTE()
 
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitEnd )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_pContext->pPass )
+	{
+		if ( l_pContext->pTextureUnit )
+		{
+			l_pContext->pPass->AddTextureUnit( l_pContext->pTextureUnit );
+		}
+		else
+		{
+			PARSING_ERROR( cuT( "TextureUnit not initialised" ) );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Pass not initialised" ) );
+	}
+}
+END_ATTRIBUTE_POP()
+
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_VertexShader )
 {
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -2475,7 +2496,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ShaderEnd )
 
 	if ( l_pContext->pShaderProgram )
 	{
-		l_pContext->pMaterial->GetPass( l_pContext->uiPass )->SetShader( l_pContext->pShaderProgram );
+		//l_pContext->pPass->SetShader( l_pContext->pShaderProgram );
 	}
 }
 END_ATTRIBUTE_POP()

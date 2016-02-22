@@ -28,18 +28,18 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, pLight()
 	, pCamera()
 	, pMaterial()
-	, uiPass( 0 )
+	, pPass()
 	, pTextureUnit()
 	, pShaderProgram()
 	, eShaderObject( eSHADER_TYPE_COUNT )
 	, pFrameVariable()
-	, pOverlay( NULL )
+	, pOverlay( nullptr )
 	, iFace1( -1 )
 	, iFace2( -1 )
 	, eLightType( eLIGHT_TYPE_COUNT )
 	, eMeshType( eMESH_TYPE_COUNT )
 	, ePrimitiveType( eTOPOLOGY_COUNT )
-	, pViewport( NULL )
+	, pViewport( nullptr )
 	, strName()
 	, strName2()
 	, uiUInt16( 0 )
@@ -47,7 +47,7 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 	, uiUInt64( 0 )
 	, bBool1( false )
 	, bBool2( false )
-	, m_pGeneralParentMaterial( NULL )
+	, m_pGeneralParentMaterial( nullptr )
 	, mapScenes()
 	, m_pParser( p_pParser )
 	, eRendererType( eRENDERER_TYPE_UNDEFINED )
@@ -57,8 +57,8 @@ SceneFileContext::SceneFileContext( SceneFileParser * p_pParser, TextFile * p_pF
 void SceneFileContext::Initialise()
 {
 	pScene.reset();
-	uiPass = 0;
-	pOverlay = NULL;
+	pPass.reset();
+	pOverlay = nullptr;
 	iFace1 = -1;
 	iFace2 = -1;
 	eLightType = eLIGHT_TYPE_COUNT;
@@ -69,8 +69,8 @@ void SceneFileContext::Initialise()
 	uiUInt64 = 0;
 	bBool1 = false;
 	bBool2 = false;
-	m_pGeneralParentMaterial = NULL;
-	pViewport = NULL;
+	m_pGeneralParentMaterial = nullptr;
+	pViewport = nullptr;
 	eRendererType = eRENDERER_TYPE_UNDEFINED;
 	eShaderObject = eSHADER_TYPE_COUNT;
 	pWindow.reset();
@@ -428,6 +428,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "channel" ), Parser_UnitChannel, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureChannels ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "sampler" ), Parser_UnitSampler, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "colour" ), Parser_UnitBlendColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
+	AddParser( eSECTION_TEXTURE_UNIT, cuT( "}" ), Parser_UnitEnd );
 
 	AddParser( eSECTION_GLSL_SHADER, cuT( "vertex_program" ), Parser_VertexShader );
 	AddParser( eSECTION_GLSL_SHADER, cuT( "pixel_program" ), Parser_PixelShader );

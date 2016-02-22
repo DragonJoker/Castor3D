@@ -1,7 +1,7 @@
 #include "SsaaRenderTechnique.hpp"
 
 #include <Engine.hpp>
-#include <TechniqueFactory.hpp>
+#include <TechniqueManager.hpp>
 #include <Version.hpp>
 
 #include <Logger.hpp>
@@ -26,10 +26,10 @@ C3D_SsaaTechnique_API Castor::String GetName()
 
 C3D_SsaaTechnique_API void OnLoad( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTechniqueFactory().Register( NAME, &RenderTechnique::CreateInstance );
+	p_engine->GetRenderTechniqueManager().GetTechniqueFactory().Register( NAME, &RenderTechnique::CreateInstance );
 }
 
 C3D_SsaaTechnique_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetTechniqueFactory().Unregister( NAME );
+	p_engine->GetRenderTechniqueManager().GetTechniqueFactory().Unregister( NAME );
 }

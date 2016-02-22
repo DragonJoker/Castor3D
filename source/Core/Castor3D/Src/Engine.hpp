@@ -134,21 +134,6 @@ namespace Castor3D
 		C3D_API void SetCleaned();
 		/**
 		 *\~english
-		 *\brief		Creates an RenderTechnique from a technique name
-		 *\param[in]	p_name		The technique name
-		 *\param[in]	p_renderTarget	The technique render target
-		 *\param[in]	p_params		The technique parameters
-		 *\return		The created RenderTechnique
-		 *\~french
-		 *\brief		Crée une RenderTechnique à partir d'un nom de technique
-		 *\param[in]	p_key			Le type d'objet
-		 *\param[in]	p_renderTarget	La cible de rendu de la technique
-		 *\param[in]	p_params		Les paramètres de la technique
-		 *\return		La RenderTechnique créée
-		 */
-		C3D_API RenderTechniqueBaseSPtr CreateTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, Parameters const & p_params );
-		/**
-		 *\~english
 		 *\brief		Checks the current support for given shader model
 		 *\param[in]	p_eShaderModel	The shader model
 		 *\return		\p true if the shader model is supported in actual configuration
@@ -225,30 +210,6 @@ namespace Castor3D
 		 *\return		Le chemin des données
 		 */
 		C3D_API static Castor::Path GetDataDirectory();
-		/**
-		 *\~english
-		 *\brief		Retrieves the RenderTechnique factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique de RenderTechnique
-		 *\return		La fabrique
-		 */
-		TechniqueFactory const & GetTechniqueFactory()const
-		{
-			return m_techniqueFactory;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the RenderTechnique factory
-		 *\return		The factory
-		 *\~french
-		 *\brief		Récupère la fabrique de RenderTechnique
-		 *\return		La fabrique
-		 */
-		TechniqueFactory & GetTechniqueFactory()
-		{
-			return m_techniqueFactory;
-		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the images collection
@@ -432,8 +393,6 @@ namespace Castor3D
 		RenderLoopUPtr m_renderLoop;
 		//!\~english The engine version	\~french La version du moteur
 		Version m_version;
-		//!\~english The RenderTechnique factory	\~french La fabrique de RenderTechnique
-		TechniqueFactory m_techniqueFactory;
 		//!\~english  The current RenderSystem	\~french Le RenderSystem courant
 		RenderSystem * m_renderSystem;
 		//!\~english Tells if engine is cleaned up	\~french Dit si le moteur est nettoyé
@@ -470,6 +429,8 @@ namespace Castor3D
 		DECLARE_MANAGER_MEMBER( target, Target );
 		//!\~english The frame listeners array	\~french Le tableau de frame listeners
 		DECLARE_MANAGER_MEMBER( listener, Listener );
+		//!\~english The render technique manager	\~french Le gestionnaire de techniques de rendu.
+		DECLARE_MANAGER_MEMBER( technique, RenderTechnique );
 		//!\~english The fonts collection	\~french La collection de polices
 		Castor::FontManager m_fontManager;
 		//!\~english The images collection	\~french La collection d'images

@@ -51,7 +51,7 @@ namespace Deferred
 				<br />puis on fait un rendu de ces tampons en ajoutant les lumières (Light Pass)
 	*/
 	class RenderTechnique
-		: public Castor3D::RenderTechniqueBase
+		: public Castor3D::RenderTechnique
 	{
 	protected:
 		typedef enum eDS_TEXTURE CASTOR_TYPE( uint8_t )
@@ -107,7 +107,7 @@ namespace Deferred
 		 *\param[in]	p_params		Les paramètres de la technique
 		 *\return		Un clône de cet objet
 		 */
-		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 	protected:
 		/**
@@ -167,7 +167,7 @@ namespace Deferred
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, double p_dFrameTime );
+		virtual bool DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function

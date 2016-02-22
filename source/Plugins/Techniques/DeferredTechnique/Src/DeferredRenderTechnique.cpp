@@ -61,7 +61,7 @@ namespace Deferred
 	};
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
-		: RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
+		: Castor3D::RenderTechnique( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
 		, m_viewport( Viewport::Ortho( *p_renderSystem->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
@@ -143,10 +143,10 @@ namespace Deferred
 		m_lightPassShaderProgram.reset();
 	}
 
-	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
-		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
+		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
 	bool RenderTechnique::DoCreate()
@@ -281,12 +281,12 @@ namespace Deferred
 		return m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
 	}
 
-	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
+	bool RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
 		m_renderTarget->GetRasteriserState()->Apply();
 		//m_geometryPassDsState->Apply();
-		return RenderTechniqueBase::DoRender( m_size, p_scene, p_camera, p_dFrameTime );
+		return Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
