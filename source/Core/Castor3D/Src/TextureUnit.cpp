@@ -513,7 +513,7 @@ namespace Castor3D
 		{
 			m_pTexture->SetSampler( l_pSampler );
 			m_pTexture->Create();
-			m_pTexture->Initialise( m_index );
+			m_pTexture->Initialise();
 		}
 	}
 
@@ -541,7 +541,7 @@ namespace Castor3D
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
 			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetPipeline();
-			m_pTexture->Bind();
+			m_pTexture->Bind( m_index );
 
 			if ( m_changed && ( m_bAutoMipmaps || m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC ) )
 			{
@@ -549,7 +549,7 @@ namespace Castor3D
 				m_changed = false;
 			}
 
-			l_pipeline.SetTextureMatrix( m_pTexture->GetIndex(), m_mtxTransformations );
+			l_pipeline.SetTextureMatrix( m_index, m_mtxTransformations );
 		}
 	}
 
@@ -557,7 +557,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			m_pTexture->Unbind();
+			m_pTexture->Unbind( m_index );
 		}
 	}
 

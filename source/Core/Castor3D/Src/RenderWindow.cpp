@@ -539,7 +539,7 @@ namespace Castor3D
 
 			m_wpDepthStencilState.lock()->Apply();
 			m_wpRasteriserState.lock()->Apply();
-			m_context->RenderTexture( m_size, p_texture );
+			m_context->RenderTexture( m_size, *p_texture );
 			m_backBuffers->Unbind();
 		}
 	}

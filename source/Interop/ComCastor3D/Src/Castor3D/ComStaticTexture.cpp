@@ -14,13 +14,13 @@ namespace CastorCom
 	{
 	}
 
-	STDMETHODIMP CStaticTexture::Initialise( /* [in] */ unsigned int index )
+	STDMETHODIMP CStaticTexture::Initialise()
 	{
 		HRESULT hr = E_POINTER;
 
 		if ( m_internal )
 		{
-			hr = m_internal->Initialise( index ) ? S_OK : E_FAIL;
+			hr = m_internal->Initialise() ? S_OK : E_FAIL;
 		}
 		else
 		{

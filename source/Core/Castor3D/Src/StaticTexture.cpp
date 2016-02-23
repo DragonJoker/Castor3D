@@ -19,22 +19,6 @@ namespace Castor3D
 	{
 	}
 
-	bool StaticTexture::Initialise( uint32_t p_index )
-	{
-		if ( !m_initialised )
-		{
-			m_index = p_index;
-			m_initialised = DoInitialise();
-		}
-		else
-		{
-			Logger::LogWarning( cuT( "Calling StaticTexture::Initialise on an already initialised texture" ) );
-		}
-
-		return m_initialised;
-	}
-
-
 	void StaticTexture::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer )
 	{
 		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
@@ -51,6 +35,20 @@ namespace Castor3D
 		}
 	}
 
+	bool StaticTexture::Initialise()
+	{
+		if ( !m_initialised )
+		{
+			m_initialised = DoInitialise();
+		}
+		else
+		{
+			Logger::LogWarning( cuT( "Calling StaticTexture::Initialise on an already initialised texture" ) );
+		}
+
+		return m_initialised;
+	}
+
 	void StaticTexture::Cleanup()
 	{
 		if ( m_initialised )
@@ -59,7 +57,7 @@ namespace Castor3D
 		}
 	}
 
-	bool StaticTexture::BindAt( uint32_t p_index )
+	bool StaticTexture::Bind( uint32_t p_index )
 	{
 		bool l_return = false;
 
@@ -84,7 +82,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void StaticTexture::UnbindFrom( uint32_t p_index )
+	void StaticTexture::Unbind( uint32_t p_index )
 	{
 		if ( GetSampler() )
 		{

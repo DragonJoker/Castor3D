@@ -56,7 +56,7 @@ namespace Castor3D
 		//!\~english The pass opacity.	\~french L'opacité de passe.
 		OneFloatFrameVariable & m_opacity;
 		//!\~english The pass textures.	\~french Les textures de la passe.
-		std::map< TextureSPtr, std::reference_wrapper< OneTextureFrameVariable > > m_textures;
+		std::map< uint32_t, std::reference_wrapper< OneIntFrameVariable > > m_textures;
 	};
 	/*!
 	\author 	Sylvain DOREMUS

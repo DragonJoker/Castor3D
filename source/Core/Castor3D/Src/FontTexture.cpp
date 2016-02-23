@@ -37,10 +37,10 @@ namespace Castor3D
 	void FontTexture::Initialise()
 	{
 		m_texture->Create();
-		m_texture->Initialise( 0 );
-		m_texture->Bind();
+		m_texture->Initialise();
+		m_texture->Bind( 0 );
 		m_texture->GenerateMipmaps();
-		m_texture->Unbind();
+		m_texture->Unbind( 0 );
 		m_signal( *this );
 	}
 

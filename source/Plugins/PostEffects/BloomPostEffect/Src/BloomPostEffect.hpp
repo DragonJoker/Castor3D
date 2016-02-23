@@ -69,20 +69,20 @@ namespace Bloom
 		void DoCombine();
 
 		Castor3D::ShaderProgramWPtr m_hiPassProgram;
-		Castor3D::OneTextureFrameVariableSPtr m_hiPassMapDiffuse;
+		Castor3D::OneIntFrameVariableSPtr m_hiPassMapDiffuse;
 
 		Castor3D::ShaderProgramWPtr m_filterProgram;
-		Castor3D::OneTextureFrameVariableSPtr m_filterMapDiffuse;
+		Castor3D::OneIntFrameVariableSPtr m_filterMapDiffuse;
 		Castor3D::OneFloatFrameVariableSPtr m_filterCoefficients;
 		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetX;
 		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetY;
 
 		Castor3D::ShaderProgramWPtr m_combineProgram;
-		Castor3D::OneTextureFrameVariableSPtr m_combineMapPass0;
-		Castor3D::OneTextureFrameVariableSPtr m_combineMapPass1;
-		Castor3D::OneTextureFrameVariableSPtr m_combineMapPass2;
-		Castor3D::OneTextureFrameVariableSPtr m_combineMapPass3;
-		Castor3D::OneTextureFrameVariableSPtr m_combineMapScene;
+		Castor3D::OneIntFrameVariableSPtr m_combineMapPass0;
+		Castor3D::OneIntFrameVariableSPtr m_combineMapPass1;
+		Castor3D::OneIntFrameVariableSPtr m_combineMapPass2;
+		Castor3D::OneIntFrameVariableSPtr m_combineMapPass3;
+		Castor3D::OneIntFrameVariableSPtr m_combineMapScene;
 
 		Castor3D::Viewport m_viewport;
 		Castor3D::BufferDeclaration m_declaration;

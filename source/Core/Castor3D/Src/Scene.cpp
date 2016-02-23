@@ -532,7 +532,7 @@ namespace Castor3D
 			{
 				ContextRPtr l_context = GetEngine()->GetRenderSystem()->GetCurrentContext();
 				l_context->GetNoDepthState()->Apply();
-				l_context->RenderTexture( p_size, m_backgroundImage );
+				l_context->RenderTexture( p_size, *m_backgroundImage );
 			}
 		}
 	}
@@ -579,10 +579,10 @@ namespace Castor3D
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
 				m_backgroundImage->Create();
-				m_backgroundImage->Initialise( 0 );
-				m_backgroundImage->Bind();
+				m_backgroundImage->Initialise();
+				m_backgroundImage->Bind( 0 );
 				m_backgroundImage->GenerateMipmaps();
-				m_backgroundImage->Unbind();
+				m_backgroundImage->Unbind( 0 );
 			} ) );
 			l_return = true;
 		}

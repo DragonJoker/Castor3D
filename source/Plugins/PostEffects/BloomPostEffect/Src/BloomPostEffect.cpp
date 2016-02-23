@@ -1,6 +1,7 @@
 #include "BloomPostEffect.hpp"
 
 #include <BackBuffers.hpp>
+#include <BlendStateManager.hpp>
 #include <BufferDeclaration.hpp>
 #include <BufferElementDeclaration.hpp>
 #include <Context.hpp>
@@ -24,6 +25,8 @@
 #	include <GlRenderSystem.hpp>
 using namespace GlRender;
 #endif
+
+#include <numeric>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -205,7 +208,7 @@ namespace Bloom
 		m_fbo->Create( 0 );
 		m_colourTexture->Create();
 
-		m_colourTexture->Initialise( 0 );
+		m_colourTexture->Initialise();
 		m_fbo->Initialise( p_size );
 
 		if ( m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
@@ -259,17 +262,11 @@ namespace Bloom
 		}
 
 		// Normalize kernel coefficients
-		float l_sum = 0;
-
-		for ( auto l_value : m_kernel )
+		float l_sum = std::accumulate( std::begin( m_kernel ), std::end( m_kernel ), 0.0f );
+		std::transform( std::begin( m_kernel ), std::end( m_kernel ), std::begin( m_kernel ), [&l_sum]( float & p_value )
 		{
-			l_sum += l_value;
-		}
-
-		for ( auto & l_value : m_kernel )
-		{
-			l_value /= l_sum;
-		}
+			return p_value /= l_sum;
+		} );
 
 		m_declaration = BufferDeclaration(
 		{
@@ -356,6 +353,7 @@ namespace Bloom
 
 		if ( !l_vertex.empty() && !l_combine.empty() )
 		{
+
 			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 			m_combineMapPass0 = l_program->CreateFrameVariable( CombineMapPass0, eSHADER_TYPE_PIXEL );
 			m_combineMapPass1 = l_program->CreateFrameVariable( CombineMapPass1, eSHADER_TYPE_PIXEL );
@@ -439,7 +437,7 @@ namespace Bloom
 
 		if ( m_renderTarget.GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
-			m_renderSystem->GetCurrentContext()->RenderTexture( m_renderTarget.GetSize(), m_blurSurfaces[0].m_colourTexture );
+			m_renderSystem->GetCurrentContext()->RenderTexture( m_renderTarget.GetSize(), *m_blurSurfaces[0].m_colourTexture );
 			m_renderTarget.GetFrameBuffer()->Unbind();
 		}
 
@@ -456,8 +454,8 @@ namespace Bloom
 			l_return = true;
 			auto l_context = m_renderSystem->GetCurrentContext();
 			l_source->m_fbo->Clear();
-			m_hiPassMapDiffuse->SetValue( m_renderTarget.GetTexture().get() );
-			l_context->RenderTexture( l_source->m_size, m_renderTarget.GetTexture(), m_hiPassProgram.lock() );
+			m_hiPassMapDiffuse->SetValue( 0 );
+			l_context->RenderTexture( l_source->m_size, *m_renderTarget.GetTexture(), m_hiPassProgram.lock() );
 			l_source->m_fbo->Unbind();
 		}
 
@@ -475,7 +473,7 @@ namespace Bloom
 
 			if ( l_destination->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
-				l_context->RenderTexture( l_destination->m_size, l_source->m_colourTexture );
+				l_context->RenderTexture( l_destination->m_size, *l_source->m_colourTexture );
 				l_destination->m_fbo->Unbind();
 			}
 
@@ -501,7 +499,7 @@ namespace Bloom
 			if ( l_destination->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
 				p_offset->SetValue( p_offsetValue / l_source->m_size.width() );
-				l_context->RenderTexture( l_source->m_size, l_source->m_colourTexture, m_filterProgram.lock() );
+				l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture, m_filterProgram.lock() );
 				l_destination->m_fbo->Unbind();
 			}
 		}
@@ -515,27 +513,19 @@ namespace Bloom
 			m_viewport.SetSize( m_renderTarget.GetSize() );
 			m_viewport.Render( m_renderSystem->GetPipeline() );
 
-			auto l_texture0 = m_hiPassSurfaces[0].m_colourTexture;
-			auto l_texture1 = m_hiPassSurfaces[1].m_colourTexture;
-			auto l_texture2 = m_hiPassSurfaces[2].m_colourTexture;
-			auto l_texture3 = m_hiPassSurfaces[3].m_colourTexture;
-
-			l_texture0->SetIndex( 0 );
-			l_texture1->SetIndex( 1 );
-			l_texture2->SetIndex( 2 );
-			l_texture3->SetIndex( 3 );
-
-			uint32_t l_id = m_renderTarget.GetTexture()->GetIndex();
-			m_renderTarget.GetTexture()->SetIndex( 4 );
+			auto l_texture0 = m_blurSurfaces[0].m_colourTexture;
+			auto l_texture1 = m_blurSurfaces[1].m_colourTexture;
+			auto l_texture2 = m_blurSurfaces[2].m_colourTexture;
+			auto l_texture3 = m_blurSurfaces[3].m_colourTexture;
 
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
 				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
-				m_combineMapPass0->SetValue( l_texture0.get() );
-				m_combineMapPass1->SetValue( l_texture1.get() );
-				m_combineMapPass2->SetValue( l_texture2.get() );
-				m_combineMapPass3->SetValue( l_texture3.get() );
-				m_combineMapScene->SetValue( m_renderTarget.GetTexture().get() );
+				m_combineMapPass0->SetValue( 0 );
+				m_combineMapPass1->SetValue( 1 );
+				m_combineMapPass2->SetValue( 2 );
+				m_combineMapPass3->SetValue( 3 );
+				m_combineMapScene->SetValue( 4 );
 
 				if ( l_matrices )
 				{
@@ -545,26 +535,25 @@ namespace Bloom
 				l_program->Bind();
 			}
 
-			l_texture0->BindAt( 0 );
-			l_texture1->BindAt( 1 );
-			l_texture2->BindAt( 2 );
-			l_texture3->BindAt( 3 );
-			m_renderTarget.GetTexture()->BindAt( 4 );
+			l_texture0->Bind( 0 );
+			l_texture1->Bind( 1 );
+			l_texture2->Bind( 2 );
+			l_texture3->Bind( 3 );
+			m_renderTarget.GetTexture()->Bind( 4 );
 
 			m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
 
-			l_texture0->UnbindFrom( 0 );
-			l_texture1->UnbindFrom( 1 );
-			l_texture2->UnbindFrom( 2 );
-			l_texture3->UnbindFrom( 3 );
-			m_renderTarget.GetTexture()->UnbindFrom( 4 );
+			l_texture0->Unbind( 0 );
+			l_texture1->Unbind( 1 );
+			l_texture2->Unbind( 2 );
+			l_texture3->Unbind( 3 );
+			m_renderTarget.GetTexture()->Unbind( 4 );
 
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
 				l_program->Unbind();
 			}
 
-			m_renderTarget.GetTexture()->SetIndex( l_id );
 			m_blurSurfaces[0].m_fbo->Unbind();
 		}
 	}

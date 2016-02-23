@@ -311,12 +311,13 @@ namespace Castor3D
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
 	{
 		bool l_return = false;
+		m_colourIndex = p_index;
 		m_pColorTexture->SetType( eTEXTURE_TYPE_2D );
 		m_pColorTexture->SetImage( p_size, m_renderTarget.GetPixelFormat() );
 		Size l_size = m_pColorTexture->GetDimensions();
 		m_frameBuffer->Create( 0 );
 		m_pColorTexture->Create();
-		m_pColorTexture->Initialise( p_index );
+		m_pColorTexture->Initialise();
 		m_pDepthBuffer->Create();
 		m_pDepthBuffer->Initialise( l_size );
 		m_frameBuffer->Initialise( l_size );

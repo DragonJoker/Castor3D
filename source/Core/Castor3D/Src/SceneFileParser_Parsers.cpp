@@ -1524,7 +1524,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 	if ( l_pContext->pMesh )
 	{
 		String l_name;
-		uint8_t l_count;
+		uint16_t l_count;
 		p_params[0]->Get( l_name );
 		p_params[1]->Get( l_count );
 
@@ -1960,6 +1960,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SubmeshEnd )
 		l_pContext->vertexTan.clear();
 		l_pContext->vertexTex.clear();
 		l_pContext->faces.clear();
+		l_pContext->m_pParser->GetEngine()->PostEvent( MakeInitialiseEvent( *l_pContext->pSubmesh ) );
 	}
 }
 END_ATTRIBUTE_POP()

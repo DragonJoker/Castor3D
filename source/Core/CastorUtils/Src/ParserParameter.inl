@@ -536,7 +536,7 @@ namespace Castor
 
 	inline bool ParserParameter< ePARAMETER_TYPE_NAME >::Parse( String & p_params )
 	{
-		Regex l_regex{ cuT( "[^\"]*\"([^\"]*)\"([\\r\\n]*)" ) };
+		Regex l_regex{ cuT( "[^\"]*\"([^\"]*)\"" ) + String{ IGNORED_END } };
 		auto l_begin = std::begin( p_params );
 		auto l_end = std::end( p_params );
 		SRegexIterator l_it( l_begin, l_end, l_regex );

@@ -755,7 +755,7 @@ namespace Castor3D
 		C3D_API void DoUpdateFlags();
 
 	protected:
-		typedef std::pair< TextureUnitWPtr, OneTextureFrameVariableWPtr > UnitVariablePair;
+		typedef std::pair< TextureUnitWPtr, OneIntFrameVariableWPtr > UnitVariablePair;
 		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
 		//!\~english Diffuse material colour	\~french La couleur diffuse

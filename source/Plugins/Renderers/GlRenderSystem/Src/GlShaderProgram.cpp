@@ -131,9 +131,9 @@ namespace GlRender
 		return l_return;
 	}
 
-	std::shared_ptr< OneTextureFrameVariable > GlShaderProgram::DoCreateTextureVariable( int p_occurences )
+	std::shared_ptr< OneIntFrameVariable > GlShaderProgram::DoCreateTextureVariable( int p_occurences )
 	{
-		return std::make_shared< GlOneFrameVariable< TextureRPtr > >( GetOpenGl(), p_occurences, this );
+		return std::make_shared< GlOneFrameVariable< int > >( GetOpenGl(), p_occurences, this );
 	}
 
 	String GlShaderProgram::DoRetrieveLinkerLog()

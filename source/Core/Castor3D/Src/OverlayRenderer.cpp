@@ -289,7 +289,6 @@ namespace Castor3D
 			auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
 			Point4rFrameVariableSPtr l_pt4r;
 			OneFloatFrameVariableSPtr l_1f;
-			OneTextureFrameVariableSPtr l_1tex;
 
 			l_it = m_mapPanelPrograms.insert( { &p_pass, RenderNode{
 									  p_pass,
@@ -321,7 +320,6 @@ namespace Castor3D
 			auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
 			Point4rFrameVariableSPtr l_pt4r;
 			OneFloatFrameVariableSPtr l_1f;
-			OneTextureFrameVariableSPtr l_1tex;
 
 			l_it = m_mapTextPrograms.insert( { &p_pass, RenderNode{
 									  p_pass,
@@ -430,19 +428,19 @@ namespace Castor3D
 
 			if ( p_texture )
 			{
-				OneTextureFrameVariableSPtr l_textureVariable = l_node->m_program.FindFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
+				OneIntFrameVariableSPtr l_textureVariable = l_node->m_program.FindFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 
 				if ( l_textureVariable )
 				{
-					l_textureVariable->SetValue( p_texture.get() );
+					l_textureVariable->SetValue( 0 );
 				}
 
 				p_pass.FillShaderVariables( *l_node );
 				l_node->m_program.Bind();
 				p_pass.Render2D();
-				p_texture->BindAt( 0 );
+				p_texture->Bind( 0 );
 				p_geometryBuffers->Draw( p_count, 0 );
-				p_texture->UnbindFrom( 0 );
+				p_texture->Unbind( 0 );
 			}
 			else
 			{

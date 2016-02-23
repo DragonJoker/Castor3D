@@ -593,7 +593,7 @@ namespace Castor3D
 
 			if ( l_texture )
 			{
-				l_variable.get().SetValue( l_texture.get() );
+				l_variable.get().SetValue( l_texture );
 			}
 		}
 
@@ -612,11 +612,11 @@ namespace Castor3D
 
 		if ( l_unit )
 		{
-			OneTextureFrameVariableSPtr l_variable = p_node.m_program.FindFrameVariable( p_name, eSHADER_TYPE_PIXEL );
+			auto l_variable = p_node.m_program.FindFrameVariable( p_name, eSHADER_TYPE_PIXEL );
 
 			if ( l_variable )
 			{
-				p_node.m_textures.insert( { l_unit->GetTexture(), *l_variable } );
+				p_node.m_textures.insert( { l_unit->GetIndex(), *l_variable } );
 			}
 		}
 	}

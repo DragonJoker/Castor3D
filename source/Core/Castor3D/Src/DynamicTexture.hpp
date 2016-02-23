@@ -59,19 +59,19 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::Texture::Initialise
 		 */
-		C3D_API virtual bool Initialise( uint32_t p_index );
+		C3D_API virtual bool Initialise();
 		/**
-		 *\copydoc		Castor3D::Texture::Initialise
+		 *\copydoc		Castor3D::Texture::Cleanup
 		 */
 		C3D_API virtual void Cleanup();
 		/**
-		 *\copydoc		Castor3D::Texture::Initialise
+		 *\copydoc		Castor3D::Texture::Bind
 		 */
-		C3D_API virtual bool BindAt( uint32_t p_index );
+		C3D_API virtual bool Bind( uint32_t p_index );
 		/**
-		 *\copydoc		Castor3D::Texture::Initialise
+		 *\copydoc		Castor3D::Texture::Unbind
 		 */
-		C3D_API virtual void UnbindFrom( uint32_t p_index );
+		C3D_API virtual void Unbind( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer
@@ -155,18 +155,6 @@ namespace Castor3D
 		inline void SetSamplesCount( int p_count )
 		{
 			m_samplesCount = p_count;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the unit index
-		 *\param[in]	p_index	The new value
-		 *\~french
-		 *\brief		Définit l'index de l'unité
-		 *\param[in]	p_index	La nouvelle valeur
-		 */
-		inline void SetIndex( uint32_t p_index )
-		{
-			m_index = p_index;
 		}
 		/**
 		 *\~english

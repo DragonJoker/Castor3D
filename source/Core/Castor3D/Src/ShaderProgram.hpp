@@ -427,7 +427,7 @@ namespace Castor3D
 		 *\param[in]	p_iNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		C3D_API OneTextureFrameVariableSPtr CreateFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc = 1 );
+		C3D_API OneIntFrameVariableSPtr CreateFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc = 1 );
 		/**
 		 *\~english
 		 *\brief		Looks for a variable
@@ -440,7 +440,7 @@ namespace Castor3D
 		 *\param[in]	p_type		Le type du shader
 		 *\return		La variable trouvé, nullptr en cas d'échec
 		 */
-		C3D_API OneTextureFrameVariableSPtr FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const;
+		C3D_API OneIntFrameVariableSPtr FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const;
 		/**
 		 *\~english
 		 *\brief		Finds a variable
@@ -659,7 +659,7 @@ namespace Castor3D
 		 *\param[in]	p_iNbOcc	Les dimensions du tableau
 		 *\return		La variable créée, nullptr en cas d'échec
 		 */
-		virtual OneTextureFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
+		virtual OneIntFrameVariableSPtr DoCreateTextureVariable( int p_iNbOcc ) = 0;
 
 	protected:
 		//!<\~english The program status	\~french Le statut du programme

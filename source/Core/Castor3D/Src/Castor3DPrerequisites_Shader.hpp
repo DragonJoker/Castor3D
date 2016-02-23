@@ -283,7 +283,6 @@ namespace Castor3D
 	template < typename T, uint32_t Count > class PointFrameVariable;
 	template < typename T, uint32_t Rows, uint32_t Columns > class MatrixFrameVariable;
 
-	typedef OneFrameVariable< Texture * > OneTextureFrameVariable;
 	typedef OneFrameVariable< bool > OneBoolFrameVariable;
 	typedef OneFrameVariable< int > OneIntFrameVariable;
 	typedef OneFrameVariable< uint32_t > OneUIntFrameVariable;
@@ -363,7 +362,6 @@ namespace Castor3D
 	typedef MatrixFrameVariable< real, 4, 3 > Matrix4x3rFrameVariable;
 	typedef MatrixFrameVariable< real, 4, 4 > Matrix4x4rFrameVariable;
 
-	DECLARE_SMART_PTR( OneTextureFrameVariable );
 	DECLARE_SMART_PTR( OneBoolFrameVariable );
 	DECLARE_SMART_PTR( OneIntFrameVariable );
 	DECLARE_SMART_PTR( OneUIntFrameVariable );

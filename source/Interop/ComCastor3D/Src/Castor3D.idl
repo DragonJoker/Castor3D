@@ -1056,7 +1056,7 @@ interface ITexture
 	[propput, id( 4 ), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [in] eTEXTURE_MAP_MODE val );
 	[propget, id( 5 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
 	[propput, id( 5 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [in] IPixelBuffer * val );
-	[id( 6 ), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] unsigned int index );
+	[id( 6 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
 	[id( 7 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
 };
 

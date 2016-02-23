@@ -60,22 +60,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~Texture();
 		/**
-		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool Bind();
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 */
-		C3D_API void Unbind();
-		/**
 		*\~english
 		*\brief		Defines the texture buffer
 		*\param[in]	p_buffer	The buffer
@@ -103,14 +87,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function.
-		 *\param[in]	p_index		The texture index.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
-		 *\param[in]	p_index		L'index de la texture.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Initialise( uint32_t p_index ) = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -148,7 +130,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool BindAt( uint32_t p_index ) = 0;
+		C3D_API virtual bool Bind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -157,7 +139,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		C3D_API virtual void UnbindFrom( uint32_t p_index ) = 0;
+		C3D_API virtual void Unbind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
@@ -311,30 +293,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture index
-		 *\return		The index
-		 *\~french
-		 *\brief		Récupère l'index de la texture
-		 *\return		L'index
-		 */
-		inline uint32_t const & GetIndex()const
-		{
-			return m_index;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the texture index
-		 *\param[in]	p_index	The index
-		 *\~french
-		 *\brief		Définit l'index de la texture
-		 *\param[in]	p_index	L'index
-		 */
-		inline void SetIndex( uint32_t p_index )
-		{
-			m_index = p_index;
-		}
-		/**
-		 *\~english
 		 *\brief		Defines the texture sampler
 		 *\param[in]	p_pSampler	The sampler
 		 *\~french
@@ -395,8 +353,6 @@ namespace Castor3D
 		eTEXTURE_TYPE m_type;
 		//!\~english Texture mapping modes	\~french Modes de mappage de la texture
 		eTEXTURE_MAP_MODE m_eMapMode;
-		//!\~english Texture index	\~french Index de la texture
-		uint32_t m_index;
 		//!\~english 3D Texture depth	\~french Profondeur de la texture 3D
 		uint32_t m_uiDepth;
 		//!\~english Texture pixels, at least at initialisation	\~french Pixels de la texture, au moins au moment de l'initialisation
@@ -412,74 +368,6 @@ namespace Castor3D
 		//!\~english The required GPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		uint8_t m_gpuAccess;
 	};
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamOut	The stream receiving texture's data
-	 *\param[in]		p_texture	The input texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la texture
-	 *\param[in]		p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::ostream & operator <<( std::ostream & p_streamOut, TextureSPtr const & p_texture )
-	{
-		p_streamOut << p_texture->GetIndex();
-		return p_streamOut;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamOut	The stream receiving texture's data
-	 *\param[in]		p_texture	The input texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la texture
-	 *\param[in]		p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::ostream & operator<<( std::ostream & p_streamOut, TextureRPtr const & p_texture )
-	{
-		p_streamOut << p_texture->GetIndex();
-		return p_streamOut;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamOut	The stream receiving texture's data
-	 *\param[in]		p_texture	The input texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la texture
-	 *\param[in]		p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::wostream & operator<<( std::wostream & p_streamOut, TextureSPtr const & p_texture )
-	{
-		p_streamOut << p_texture->GetIndex();
-		return p_streamOut;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamOut	The stream receiving texture's data
-	 *\param[in]		p_texture	The input texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la texture
-	 *\param[in]		p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::wostream & operator<<( std::wostream & p_streamOut, TextureRPtr const & p_texture )
-	{
-		p_streamOut << p_texture->GetIndex();
-		return p_streamOut;
-	}
 }
 
 #endif

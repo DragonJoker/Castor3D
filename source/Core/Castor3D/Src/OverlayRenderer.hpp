@@ -267,7 +267,7 @@ namespace Castor3D
 		//!\~english The shader programs.	\~french Les programmes de shader.
 		std::map< uint32_t, ShaderProgramSPtr > m_programs;
 		//!\~english Text texture sampler	\~french Echantillonneur de la texture de texte
-		OneTextureFrameVariableSPtr m_mapText;
+		OneIntFrameVariableSPtr m_mapText;
 		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du précedent BorderPanelOverlay rendu
 		int m_previousBorderZIndex;
 		//!\~english The previously rendered PanelOverlay z-index	\~french Le z-index du précedent PanelOverlay rendu

@@ -149,6 +149,8 @@ namespace Castor3D
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
 			DynamicTextureSPtr m_pColorTexture;
+			//!\~english The colour texture unit index.	\~french L'indice de l'unité de la texture de couleurs.
+			uint32_t m_colourIndex;
 			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
 			DepthStencilRenderBufferSPtr m_pDepthBuffer;
 			//!\~english The frame buffer	\~french Le tampon d'image

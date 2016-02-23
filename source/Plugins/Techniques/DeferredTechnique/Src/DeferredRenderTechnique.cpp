@@ -165,7 +165,7 @@ namespace Deferred
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				m_lightPassShaderProgram->CreateFrameVariable( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
+				m_lightPassShaderProgram->CreateFrameVariable( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( i );
 			}
 
 			m_lightPassMatrices = GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
@@ -201,14 +201,16 @@ namespace Deferred
 		{
 			m_lightPassTextures[i]->SetType( eTEXTURE_TYPE_2D );
 			m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
-			l_return = m_lightPassTextures[i]->Initialise( p_index++ );
+			l_return = m_lightPassTextures[i]->Initialise();
+			p_index++;
 		}
 
 		if ( l_return )
 		{
 			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetType( eTEXTURE_TYPE_2D );
 			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetImage( m_size, ePIXEL_FORMAT_DEPTH32 );
-			l_return = m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise( p_index++ );
+			l_return = m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise();
+			p_index++;
 		}
 
 		if ( l_return )
@@ -341,7 +343,7 @@ namespace Deferred
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				l_return = m_lightPassTextures[i]->Bind();
+				l_return = m_lightPassTextures[i]->Bind( i );
 			}
 
 			if ( l_return )
@@ -350,7 +352,7 @@ namespace Deferred
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 				{
-					m_lightPassTextures[i]->Unbind();
+					m_lightPassTextures[i]->Unbind( i );
 				}
 			}
 

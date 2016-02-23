@@ -82,7 +82,7 @@ namespace Ssaa
 
 		m_ssColorBuffer->SetType( eTEXTURE_TYPE_2D );
 		m_ssColorBuffer->SetImage( m_size, m_renderTarget->GetPixelFormat() );
-		l_return = m_ssColorBuffer->Initialise( 0 );
+		l_return = m_ssColorBuffer->Initialise();
 
 		if ( l_return )
 		{

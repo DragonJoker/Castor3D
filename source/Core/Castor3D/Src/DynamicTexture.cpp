@@ -20,7 +20,7 @@ namespace Castor3D
 	{
 	}
 
-	bool DynamicTexture::Initialise( uint32_t p_index )
+	bool DynamicTexture::Initialise()
 	{
 		if ( !m_initialised )
 		{
@@ -32,7 +32,6 @@ namespace Castor3D
 				m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
 			}
 
-			m_index = p_index;
 			m_initialised = DoInitialise();
 
 			if ( GetSampler() )
@@ -52,7 +51,7 @@ namespace Castor3D
 		}
 	}
 
-	bool DynamicTexture::BindAt( uint32_t p_index )
+	bool DynamicTexture::Bind( uint32_t p_index )
 	{
 		bool l_return = false;
 
@@ -69,7 +68,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void DynamicTexture::UnbindFrom( uint32_t p_index )
+	void DynamicTexture::Unbind( uint32_t p_index )
 	{
 		if ( GetSampler() && m_type != eTEXTURE_TYPE_BUFFER )
 		{

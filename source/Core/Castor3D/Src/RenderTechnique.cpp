@@ -187,7 +187,6 @@ namespace Castor3D
 							Point4rFrameVariableSPtr l_pt4r;
 							Point3rFrameVariableSPtr l_pt3r;
 							OneFloatFrameVariableSPtr l_1f;
-							OneTextureFrameVariableSPtr l_1tex;
 
 							GeometryRenderNode l_renderNode =
 							{

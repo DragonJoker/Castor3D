@@ -1,3 +1,5 @@
+debug_overlays true
+
 material "Silver"
 {
 	pass

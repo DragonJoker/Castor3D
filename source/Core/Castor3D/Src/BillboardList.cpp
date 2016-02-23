@@ -195,7 +195,7 @@ namespace Castor3D
 			Point3rFrameVariableSPtr l_pt3r;
 			Point4rFrameVariableSPtr l_pt4r;
 			OneFloatFrameVariableSPtr l_1f;
-			OneTextureFrameVariableSPtr l_1tex;
+			OneIntFrameVariableSPtr l_1tex;
 
 			for ( auto l_pass : *l_material )
 			{

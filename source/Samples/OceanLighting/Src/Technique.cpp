@@ -418,10 +418,10 @@ namespace OceanLighting
 		m_renderWorldSunDir = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_render, eFRAME_VARIABLE_TYPE_VEC3F, cuT( "worldSunDir" ) ) );
 		m_renderHdrExposure = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_render, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "hdrExposure" ) ) );
 		m_renderSeaColor = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_render, eFRAME_VARIABLE_TYPE_VEC3F, cuT( "seaColor" ) ) );
-		m_renderSkyIrradianceSampler->SetValue( m_pTexIrradiance.get() );
-		m_renderInscatterSampler->SetValue( m_pTexInscatter.get() );
-		m_renderTransmittanceSampler->SetValue( m_pTexTransmittance.get() );
-		m_renderSkySampler->SetValue( m_pTexSky.get() );
+		m_renderSkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
+		m_renderInscatterSampler->SetValue( INSCATTER_UNIT );
+		m_renderTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
+		m_renderSkySampler->SetValue( SKY_UNIT );
 #if ENABLE_FFT
 		m_renderSpectrum_1_2_Sampler = m_render->CreateFrameVariable( cuT( "spectrum_1_2_Sampler" ), eSHADER_TYPE_PIXEL );
 		m_renderSpectrum_3_4_Sampler = m_render->CreateFrameVariable( cuT( "spectrum_3_4_Sampler" ), eSHADER_TYPE_PIXEL );
@@ -467,10 +467,10 @@ namespace OceanLighting
 		m_skyWorldCamera = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_sky, eFRAME_VARIABLE_TYPE_VEC3F, cuT( "worldCamera" ) ) );
 		m_skyWorldSunDir = std::static_pointer_cast< Point3fFrameVariable >( l_pConstants->CreateVariable( *m_sky, eFRAME_VARIABLE_TYPE_VEC3F, cuT( "worldSunDir" ) ) );
 		m_skyHdrExposure = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_sky, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "hdrExposure" ) ) );
-		m_skySkyIrradianceSampler->SetValue( m_pTexIrradiance.get() );
-		m_skyInscatterSampler->SetValue( m_pTexInscatter.get() );
-		m_skyTransmittanceSampler->SetValue( m_pTexTransmittance.get() );
-		m_skySkySampler->SetValue( m_pTexSky.get() );
+		m_skySkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
+		m_skyInscatterSampler->SetValue( INSCATTER_UNIT );
+		m_skyTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
+		m_skySkySampler->SetValue( SKY_UNIT );
 		m_sky->Initialise();
 		l_strSrcV = l_strOpt + cuT( "\n" ) + l_strAtmV + cuT( "\n" ) + l_strMapV;
 		l_strSrcF = l_strOpt + cuT( "\n" ) + l_strAtmF + cuT( "\n" ) + l_strMapF;
@@ -492,10 +492,10 @@ namespace OceanLighting
 		m_skymapClamp1 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "clamp1" ) ) );
 		m_skymapClamp2 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_skymap, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "clamp2" ) ) );
 		m_skymapCloudsColor = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_skymap, eFRAME_VARIABLE_TYPE_VEC4F, cuT( "cloudsColor" ) ) );
-		m_skymapSkyIrradianceSampler->SetValue( m_pTexIrradiance.get() );
-		m_skymapInscatterSampler->SetValue( m_pTexInscatter.get() );
-		m_skymapTransmittanceSampler->SetValue( m_pTexTransmittance.get() );
-		m_skymapNoiseSampler->SetValue( m_pTexNoise.get() );
+		m_skymapSkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
+		m_skymapInscatterSampler->SetValue( INSCATTER_UNIT );
+		m_skymapTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
+		m_skymapNoiseSampler->SetValue( NOISE_UNIT );
 		m_skymap->Initialise();
 
 		if ( !m_clouds )
@@ -527,10 +527,10 @@ namespace OceanLighting
 			m_cloudsClamp1 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "clamp1" ) ) );
 			m_cloudsClamp2 = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_clouds, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "clamp2" ) ) );
 			m_cloudsCloudsColor = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_clouds, eFRAME_VARIABLE_TYPE_VEC4F, cuT( "cloudsColor" ) ) );
-			m_cloudsSkyIrradianceSampler->SetValue( m_pTexIrradiance.get() );
-			m_cloudsInscatterSampler->SetValue( m_pTexInscatter.get() );
-			m_cloudsTransmittanceSampler->SetValue( m_pTexTransmittance.get() );
-			m_cloudsNoiseSampler->SetValue( m_pTexNoise.get() );
+			m_cloudsSkyIrradianceSampler->SetValue( IRRADIANCE_UNIT );
+			m_cloudsInscatterSampler->SetValue( INSCATTER_UNIT );
+			m_cloudsTransmittanceSampler->SetValue( TRANSMITTANCE_UNIT );
+			m_cloudsNoiseSampler->SetValue( NOISE_UNIT );
 			m_clouds->Initialise();
 		}
 
@@ -564,8 +564,8 @@ namespace OceanLighting
 		m_initFftSize = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_init, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "FFT_SIZE" ) ) );
 		m_initInverseGridSizes = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_init, eFRAME_VARIABLE_TYPE_VEC4F, cuT( "INVERSE_GRID_SIZES" ) ) );
 		m_initT = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_init, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "t" ) ) );
-		m_initSpectrum_1_2_Sampler->SetValue( m_pTexSpectrum_1_2.get() );
-		m_initSpectrum_3_4_Sampler->SetValue( m_pTexSpectrum_3_4.get() );
+		m_initSpectrum_1_2_Sampler->SetValue( SPECTRUM_1_2_UNIT );
+		m_initSpectrum_3_4_Sampler->SetValue( SPECTRUM_3_4_UNIT );
 		m_init->Initialise();
 		l_strSrcV = l_strVarV;
 		l_strSrcF = l_strVarF;
@@ -582,8 +582,8 @@ namespace OceanLighting
 		m_variancesGridSizes = std::static_pointer_cast< Point4fFrameVariable >( l_pConstants->CreateVariable( *m_variances, eFRAME_VARIABLE_TYPE_VEC4F, cuT( "GRID_SIZES" ) ) );
 		m_variancesSlopeVarianceDelta = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_variances, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "slopeVarianceDelta" ) ) );
 		m_variancesC = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_variances, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "c" ) ) );
-		m_variancesSpectrum_1_2_Sampler->SetValue( m_pTexSpectrum_1_2.get() );
-		m_variancesSpectrum_3_4_Sampler->SetValue( m_pTexSpectrum_3_4.get() );
+		m_variancesSpectrum_1_2_Sampler->SetValue( SPECTRUM_1_2_UNIT );
+		m_variancesSpectrum_3_4_Sampler->SetValue( SPECTRUM_3_4_UNIT );
 		m_variancesNSlopeVariance->SetValue( float( m_N_SLOPE_VARIANCE ) );
 		m_variancesFFTSize->SetValue( m_FFT_SIZE );
 		m_variances->Initialise();
@@ -599,7 +599,7 @@ namespace OceanLighting
 		m_fftxImgSampler = m_fftx->CreateFrameVariable( cuT( "imgSampler" ), eSHADER_TYPE_PIXEL );
 		m_fftxNLayers = std::static_pointer_cast< OneIntFrameVariable >( l_pConstants->CreateVariable( *m_fftx, eFRAME_VARIABLE_TYPE_INT, cuT( "nLayers" ) ) );
 		m_fftxPass = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_fftx, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "pass" ) ) );
-		m_fftxButterflySampler->SetValue( m_pTexButterfly.get() );
+		m_fftxButterflySampler->SetValue( BUTTERFLY_UNIT );
 		m_fftx->Initialise();
 		l_strSrcV = l_strFtyV;
 		l_strSrcF = l_strFtyF;
@@ -613,7 +613,7 @@ namespace OceanLighting
 		m_fftyImgSampler = m_ffty->CreateFrameVariable( cuT( "imgSampler" ), eSHADER_TYPE_PIXEL );
 		m_fftyNLayers = std::static_pointer_cast< OneIntFrameVariable >( l_pConstants->CreateVariable( *m_ffty, eFRAME_VARIABLE_TYPE_INT, cuT( "nLayers" ) ) );
 		m_fftyPass = std::static_pointer_cast< OneFloatFrameVariable >( l_pConstants->CreateVariable( *m_ffty, eFRAME_VARIABLE_TYPE_FLOAT, cuT( "pass" ) ) );
-		m_fftyButterflySampler->SetValue( m_pTexButterfly.get() );
+		m_fftyButterflySampler->SetValue( BUTTERFLY_UNIT );
 		m_ffty->Initialise();
 #endif
 	}
@@ -860,7 +860,7 @@ namespace OceanLighting
 		}
 
 		m_pTexIrradiance->SetImage( buffer );
-		m_pTexIrradiance->Initialise( IRRADIANCE_UNIT );
+		m_pTexIrradiance->Initialise();
 		m_pTexIrradiance->SetSampler( m_pSamplerLinearClamp );
 		int res = 64;
 		int nr = res / 2;
@@ -877,7 +877,7 @@ namespace OceanLighting
 		}
 
 		m_pTexInscatter->SetImage( Point3ui( na * nb, nv, nr ), buffer );
-		m_pTexInscatter->Initialise( INSCATTER_UNIT );
+		m_pTexInscatter->Initialise();
 		m_pTexInscatter->SetSampler( m_pSamplerLinearClamp );
 		m_pTexTransmittance->SetType( eTEXTURE_TYPE_2D );
 		buffer = PxBufferBase::create( Size( 256, 64 ), ePIXEL_FORMAT_RGB16F32F );
@@ -889,7 +889,7 @@ namespace OceanLighting
 		}
 
 		m_pTexTransmittance->SetImage( buffer );
-		m_pTexTransmittance->Initialise( TRANSMITTANCE_UNIT );
+		m_pTexTransmittance->Initialise();
 		m_pTexTransmittance->SetSampler( m_pSamplerLinearClamp );
 		m_pTexNoise->SetType( eTEXTURE_TYPE_2D );
 		m_pTexNoise->SetImage( Size( 512, 512 ), ePIXEL_FORMAT_L8 );
@@ -903,49 +903,49 @@ namespace OceanLighting
 			delete[] img;
 		}
 
-		m_pTexNoise->Initialise( NOISE_UNIT );
-		m_pTexNoise->Bind();
+		m_pTexNoise->Initialise();
+		m_pTexNoise->Bind( NOISE_UNIT );
 		m_pTexNoise->GenerateMipmaps();
-		m_pTexNoise->Unbind();
+		m_pTexNoise->Unbind( NOISE_UNIT );
 		m_pTexNoise->SetSampler( m_pSamplerAnisotropicRepeat );
 		m_pTexSky->SetType( eTEXTURE_TYPE_2D );
 		m_pTexSky->SetImage( Size( m_skyTexSize, m_skyTexSize ), ePIXEL_FORMAT_ARGB16F32F );
-		m_pTexSky->Initialise( SKY_UNIT );
-		m_pTexSky->Bind();
+		m_pTexSky->Initialise();
+		m_pTexSky->Bind( SKY_UNIT );
 		m_pTexSky->GenerateMipmaps();
-		m_pTexSky->Unbind();
+		m_pTexSky->Unbind( SKY_UNIT );
 		m_pTexSky->SetSampler( m_pSamplerAnisotropicClamp );
 #if ENABLE_FFT
 		m_pTexSpectrum_1_2->SetType( eTEXTURE_TYPE_2D );
 		m_pTexSpectrum_1_2->SetImage( Size( m_FFT_SIZE, m_FFT_SIZE ), ePIXEL_FORMAT_ARGB32F );
-		m_pTexSpectrum_1_2->Initialise( SPECTRUM_1_2_UNIT );
+		m_pTexSpectrum_1_2->Initialise();
 		m_pTexSpectrum_1_2->SetSampler( m_pSamplerNearestRepeat );
 		m_pTexSpectrum_3_4->SetType( eTEXTURE_TYPE_2D );
 		m_pTexSpectrum_3_4->SetImage( Size( m_FFT_SIZE, m_FFT_SIZE ), ePIXEL_FORMAT_ARGB32F );
-		m_pTexSpectrum_3_4->Initialise( SPECTRUM_3_4_UNIT );
+		m_pTexSpectrum_3_4->Initialise();
 		m_pTexSpectrum_3_4->SetSampler( m_pSamplerNearestRepeat );
 		m_pTexSlopeVariance->SetType( eTEXTURE_TYPE_3D );
 		m_pTexSlopeVariance->SetImage( Point3ui( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ), ePIXEL_FORMAT_AL16F32F );
-		m_pTexSlopeVariance->Initialise( SLOPE_VARIANCE_UNIT );
+		m_pTexSlopeVariance->Initialise();
 		m_pTexSlopeVariance->SetSampler( m_pSamplerLinearClamp );
 		m_pTexFFTA->SetType( eTEXTURE_TYPE_2DARRAY );
 		m_pTexFFTA->SetImage( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), ePIXEL_FORMAT_RGB32F );
-		m_pTexFFTA->Initialise( FFT_A_UNIT );
+		m_pTexFFTA->Initialise();
 		m_pTexFFTA->SetSampler( m_pSamplerLinearRepeat );
-		m_pTexFFTA->Bind();
+		m_pTexFFTA->Bind( FFT_A_UNIT );
 		m_pTexFFTA->GenerateMipmaps();
-		m_pTexFFTA->Unbind();
+		m_pTexFFTA->Unbind( FFT_A_UNIT );
 		m_pTexFFTB->SetType( eTEXTURE_TYPE_2DARRAY );
 		m_pTexFFTB->SetImage( Point3ui( m_FFT_SIZE, m_FFT_SIZE, 5 ), ePIXEL_FORMAT_RGB32F );
-		m_pTexFFTB->Initialise( FFT_B_UNIT );
+		m_pTexFFTB->Initialise();
 		m_pTexFFTB->SetSampler( m_pSamplerLinearRepeat );
-		m_pTexFFTB->Bind();
+		m_pTexFFTB->Bind( FFT_B_UNIT );
 		m_pTexFFTB->GenerateMipmaps();
-		m_pTexFFTB->Unbind();
+		m_pTexFFTB->Unbind( FFT_B_UNIT );
 		m_pTexButterfly->SetType( eTEXTURE_TYPE_2D );
 		m_pTexButterfly->SetImage( Size( m_FFT_SIZE, m_PASSES ), ePIXEL_FORMAT_ARGB32F );
 		std::memcpy( m_pTexButterfly->GetBuffer()->ptr(), computeButterflyLookupTexture(), m_FFT_SIZE * m_PASSES * 4 * sizeof( float ) );
-		m_pTexButterfly->Initialise( BUTTERFLY_UNIT );
+		m_pTexButterfly->Initialise();
 		m_pTexButterfly->SetSampler( m_pSamplerNearestClamp );
 		generateWavesSpectrum();
 		m_fftFbo1->Bind( eFRAMEBUFFER_MODE_CONFIG );
@@ -1154,9 +1154,9 @@ namespace OceanLighting
 		m_skymapGBuffers->Draw( m_skymapIdxBuffer->GetSize(), 0 );
 		m_skymap->Unbind();
 		m_fbo->Unbind();
-		m_pTexSky->Bind();
+		m_pTexSky->Bind( SKY_UNIT );
 		m_pTexSky->GenerateMipmaps();
-		m_pTexSky->Unbind();
+		m_pTexSky->Unbind( SKY_UNIT );
 		Image l_image( cuT( "Skymap" ), *m_pAttachSky->DownloadBuffer() );
 		Image::BinaryLoader()( const_cast< const Image & >( l_image ), cuT( "Skymap.bmp" ) );
 		return true;
@@ -1227,10 +1227,10 @@ namespace OceanLighting
 		m_renderHdrExposure->SetValue( m_hdrExposure );
 		m_renderSeaColor->SetValue( Point3f( m_seaColor.red() * m_seaColor.alpha(), m_seaColor.green() * m_seaColor.alpha(), m_seaColor.blue() * m_seaColor.alpha() ) );
 #if ENABLE_FFT
-		m_renderSpectrum_1_2_Sampler->SetValue( m_pTexSpectrum_1_2.get() );
-		m_renderSpectrum_3_4_Sampler->SetValue( m_pTexSpectrum_3_4.get() );
-		m_renderFftWavesSampler->SetValue( m_pTexFFTA.get() );
-		m_renderSlopeVarianceSampler->SetValue( m_pTexSlopeVariance.get() );
+		m_renderSpectrum_1_2_Sampler->SetValue( SPECTRUM_1_2_UNIT );
+		m_renderSpectrum_3_4_Sampler->SetValue( SPECTRUM_3_4_UNIT );
+		m_renderFftWavesSampler->SetValue( FFT_A_UNIT );
+		m_renderSlopeVarianceSampler->SetValue( SLOPE_VARIANCE_UNIT );
 		m_renderGridSizes->SetValue( Point4f( m_GRID1_SIZE, m_GRID2_SIZE, m_GRID3_SIZE, m_GRID4_SIZE ) );
 		m_renderGridSize->SetValue( Point2f( m_gridSize / float( m_width ), m_gridSize / float( m_height ) ) );
 		m_renderChoppy->SetValue( m_choppy );
@@ -1658,16 +1658,16 @@ namespace OceanLighting
 			}
 		}
 
-		m_pTexSpectrum_1_2->Bind();
+		m_pTexSpectrum_1_2->Bind( SPECTRUM_1_2_UNIT );
 		uint8_t * l_pData = m_pTexSpectrum_1_2->Lock( eACCESS_TYPE_WRITE );
 		std::memcpy( l_pData, m_spectrum12, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 		m_pTexSpectrum_1_2->Unlock( true );
-		m_pTexSpectrum_1_2->Unbind();
-		m_pTexSpectrum_3_4->Bind();
+		m_pTexSpectrum_1_2->Unbind( SPECTRUM_1_2_UNIT );
+		m_pTexSpectrum_3_4->Bind( SPECTRUM_3_4_UNIT );
 		l_pData = m_pTexSpectrum_3_4->Lock( eACCESS_TYPE_WRITE );
 		std::memcpy( l_pData, m_spectrum34, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 		m_pTexSpectrum_3_4->Unlock( true );
-		m_pTexSpectrum_3_4->Unbind();
+		m_pTexSpectrum_3_4->Unbind( SPECTRUM_3_4_UNIT );
 		//TwDefine("Parameters color='255 0 0'");
 	}
 
@@ -1840,13 +1840,13 @@ namespace OceanLighting
 
 			if ( i % 2 == 0 )
 			{
-				m_fftxImgSampler->SetValue( m_pTexFFTA.get() );
+				m_fftxImgSampler->SetValue( FFT_A_UNIT );
 				m_fftx->Bind();
 				m_fftFbo2->SetDrawBuffer( m_pAttachFftB );
 			}
 			else
 			{
-				m_fftxImgSampler->SetValue( m_pTexFFTB.get() );
+				m_fftxImgSampler->SetValue( FFT_B_UNIT );
 				m_fftx->Bind();
 				m_fftFbo2->SetDrawBuffer( m_pAttachFftA );
 			}
@@ -1864,13 +1864,13 @@ namespace OceanLighting
 
 			if ( i % 2 == 0 )
 			{
-				m_fftyImgSampler->SetValue( m_pTexFFTA.get() );
+				m_fftyImgSampler->SetValue( FFT_A_UNIT );
 				m_ffty->Bind();
 				m_fftFbo2->SetDrawBuffer( m_pAttachFftB );
 			}
 			else
 			{
-				m_fftyImgSampler->SetValue( m_pTexFFTB.get() );
+				m_fftyImgSampler->SetValue( FFT_B_UNIT );
 				m_ffty->Bind();
 				m_fftFbo2->SetDrawBuffer( m_pAttachFftA );
 			}
@@ -1880,9 +1880,9 @@ namespace OceanLighting
 		}
 
 		m_fftFbo2->Unbind();
-		m_pTexFFTA->Bind();
+		m_pTexFFTA->Bind( FFT_A_UNIT );
 		m_pTexFFTA->GenerateMipmaps();
-		m_pTexFFTA->Unbind();
+		m_pTexFFTA->Unbind( FFT_A_UNIT );
 	}
 #else
 #	define srnd() (2*frandom(&seed) - 1)
