@@ -65,7 +65,7 @@ namespace GuiCommon
 
 	void ShaderDialog::DoInitialiseShaderLanguage()
 	{
-		m_shaderProgram = m_pPass.lock()->GetShader();
+		//m_shaderProgram = m_pPass.lock()->GetShader();
 
 		if ( m_shaderProgram.lock() )
 		{
@@ -80,7 +80,7 @@ namespace GuiCommon
 
 			if ( l_it != l_engine->GetWindowManager().end() && l_it->second->GetRenderTarget() )
 			{
-				RenderTechniqueBaseSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
+				RenderTechniqueSPtr l_technique = l_it->second->GetRenderTarget()->GetTechnique();
 
 				if ( l_technique )
 				{
@@ -170,8 +170,7 @@ namespace GuiCommon
 
 		if ( m_bOwnShader && !m_shaderProgram.expired() )
 		{
-			m_pPass.lock()->SetShader( nullptr );
-			//m_engine->GetShaderManager().RemoveProgram( m_shaderProgram.lock() );
+			//m_pPass.lock()->SetShader( nullptr );
 			m_shaderProgram.reset();
 		}
 	}
@@ -211,7 +210,7 @@ namespace GuiCommon
 				}
 			}
 
-			m_pPass.lock()->SetShader( m_shaderProgram.lock() );
+			//m_pPass.lock()->SetShader( m_shaderProgram.lock() );
 			m_bCompiled = true;
 		}
 	}

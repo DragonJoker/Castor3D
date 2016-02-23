@@ -35,11 +35,11 @@ namespace Castor3D
 	\author		Sylvain DOREMUS
 	\date		14/02/2010
 	\~english
-	\brief		The submesh representation
-	\remark		A submesh holds its buffers (vertex, normas and texture) its smoothgroups and its combobox
+	\brief		The submesh representation.
+	\remark		A submesh holds its buffers (vertex, normals and texture) and its combobox.
 	\~french
-	\brief		Representation d'un submesh
-	\remark		Un submesh est sous partie d'un mesh. Il possede ses propres tampons (vertex, normales et texture coords) ses smoothgroups et ses combobox
+	\brief		Representation d'un sous-maillage.
+	\remark		Un sous-maillage est sous partie d'un maillage. Il possede ses propres tampons (vertex, normales et texture coords) et ses combobox.
 	*/
 	class Submesh
 		: public Castor::OwnedBy< Engine >
@@ -74,8 +74,8 @@ namespace Castor3D
 			 *\return		\p true if OK
 			 *\~french
 			 *\brief		Opérateur fonction
-			 *\param[in]	p_submesh	Le submesh à écrire dans le fichier
-			 *\param[in]	p_file		Le fichier dans lequel le submesh est écrit
+			 *\param[in]	p_submesh	Le sous-maillage à écrire dans le fichier
+			 *\param[in]	p_file		Le fichier dans lequel le sous-maillage est écrit
 			 *\return		\p true si tout s'est bien passé
 			 */
 			C3D_API virtual bool operator()( Submesh const & p_submesh, Castor::TextFile & p_file );
@@ -143,7 +143,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_mesh		Le mesh parent
 		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_id		L'ID du submesh
+		 *\param[in]	p_id		L'ID du sous-maillage
 		 */
 		C3D_API Submesh( Engine & p_engine, MeshRPtr p_mesh, uint32_t p_id = 1 );
 		/**
@@ -157,14 +157,14 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialises the submesh
 		 *\~french
-		 *\brief		Initialise le submesh
+		 *\brief		Initialise le sous-maillage
 		 */
 		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans the submesh
 		 *\~french
-		 *\brief		Nettoie le submesh
+		 *\brief		Nettoie le sous-maillage
 		 */
 		C3D_API void Cleanup();
 		/**
@@ -185,7 +185,7 @@ namespace Castor3D
 		 *\~english
 		 *\return		The points count
 		 *\~french
-		 *\return		Le nombre de vertices de ce submesh
+		 *\return		Le nombre de vertices de ce sous-maillage
 		 */
 		C3D_API uint32_t GetPointsCount()const;
 		/**
@@ -195,7 +195,7 @@ namespace Castor3D
 		 *\param[in]	p_precision	The comparison precision
 		 *\return		The index of the vertex equal to parameter, -1 if not found
 		 *\~french
-		 *\brief		Teste si le point donné fait partie de ceux de ce submesh
+		 *\brief		Teste si le point donné fait partie de ceux de ce sous-maillage
 		 *\param[in]	p_vertex	Le point à tester
 		 *\param[in]	p_precision	La précision de comparaison
 		 *\return		L'index du point s'il a été trouvé, -1 sinon
@@ -314,7 +314,7 @@ namespace Castor3D
 		 *\param[in]	c			The third face's vertex index
 		 *\return		The created face
 		 *\~french
-		 *\brief		Crée et ajoute une face au submesh
+		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	a			L'index du premier vertex
 		 *\param[in]	b			L'index du second vertex
 		 *\param[in]	c			L'index du troisième vertex
@@ -327,7 +327,7 @@ namespace Castor3D
 		 *\param[in]	p_faces	The faces
 		 *\param[in]	p_count	The faces count
 		 *\~french
-		 *\brief		Crée et ajoute une face au submesh
+		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_faces	Les faces
 		 *\param[in]	p_count	Le nombre de faces
 		 */
@@ -343,7 +343,7 @@ namespace Castor3D
 		 *\param[in]	p_maxUV	The UV of the top right corner
 		 *\return		The created face
 		 *\~french
-		 *\brief		Crée et ajoute une face à 4 côtés au submesh
+		 *\brief		Crée et ajoute une face à 4 côtés au sous-maillage
 		 *\param[in]	a		L'index du premier vertex
 		 *\param[in]	b		L'index du second vertex
 		 *\param[in]	c		L'index du troisième vertex
@@ -356,10 +356,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Clones the submesh and returns the clone
-		 *\return	The clone
+		 *\return		The clone
 		 *\~french
-		 *\brief		Clône le submesh
-		 *\return	Le clône
+		 *\brief		Clône le sous-maillage
+		 *\return		Le clône
 		 */
 		C3D_API SubmeshSPtr Clone();
 		/**
@@ -371,13 +371,24 @@ namespace Castor3D
 		C3D_API void ResetGpuBuffers();
 		/**
 		 *\~english
-		 *\brief		Draws the submesh
-		 *\param[in]	p_pass	The Pass containing material informations
+		 *\brief		Draws the submesh.
+		 *\param[in]	p_program	The shader program.
 		 *\~french
-		 *\brief		Dessine le submesh
-		 *\param[in]	p_pass	La Pass contenant les informations de matériau
+		 *\brief		Dessine le sous-maillage.
+		 *\param[in]	p_program	Le programme shader.
 		 */
-		C3D_API void Draw( Pass const & p_pass );
+		C3D_API void Draw( ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Draws the submesh.
+		 *\param[in]	p_program	The shader program.
+		 *\param[in]	p_count		The instances count.
+		 *\~french
+		 *\brief		Dessine le sous-maillage.
+		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	p_count		Le nombre d'instances.
+		 */
+		C3D_API void DrawInstanced( ShaderProgram const & p_program, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points
@@ -417,7 +428,7 @@ namespace Castor3D
 		 *\brief		Computes tangent for each vertex of the submesh
 		 *\remark		This function supposes the normals are defined
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du submesh
+		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
 		 *\remark		Cette fonction suppose que les normales sont définies
 		 */
 		C3D_API void ComputeTangentsFromNormals();
@@ -426,7 +437,7 @@ namespace Castor3D
 		 *\brief		Computes tangent for each vertex of the submesh
 		 *\remark		This function supposes bitangents and normals are defined
 		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex du submesh
+		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
 		 *\remark		Cette fonction suppose que les bitangentes et les normales sont définies
 		 */
 		C3D_API void ComputeTangentsFromBitangents();
@@ -435,7 +446,7 @@ namespace Castor3D
 		 *\brief		Computes bitangent for each vertex of the submesh
 		 *\remark		This function supposes the tangents and normals are defined
 		 *\~french
-		 *\brief		Calcule la bitangente pour chaque vertex du submesh
+		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage
 		 *\remark		Cette fonction suppose que les tangentes et les normales sont définies
 		 */
 		C3D_API void ComputeBitangents();
@@ -445,7 +456,7 @@ namespace Castor3D
 		 *\param[in]	p_cameraPosition	The camera position, relative to submesh
 		 *\~french
 		 *\brief		Trie les faces des plus éloignées aux plus proches de la caméra
-		 *\param[in]	p_cameraPosition	La position de la caméra, relative au submesh
+		 *\param[in]	p_cameraPosition	La position de la caméra, relative au sous-maillage
 		 */
 		C3D_API void SortFaces( Castor::Point3r const & p_cameraPosition );
 		/**
@@ -831,7 +842,7 @@ namespace Castor3D
 		 *\brief		Creates and adds faces to the submesh
 		 *\param[in]	p_arrayFaces	The faces
 		 *\~french
-		 *\brief		Crée et ajoute une face au submesh
+		 *\brief		Crée et ajoute une face au sous-maillage
 		 *\param[in]	p_arrayFaces	Les faces
 		 */
 		template< uint32_t Count > void AddFaceGroup( stFACE_INDICES( & p_faces )[Count] )
@@ -848,12 +859,12 @@ namespace Castor3D
 		void DoGenerateIndexBuffer();
 		void DoGenerateBonesBuffer();
 		void DoGenerateMatrixBuffer( uint32_t p_count );
-		GeometryBuffers & DoPrepareGeometryBuffers( Pass const & p_pass );
+		GeometryBuffers & DoPrepareGeometryBuffers( ShaderProgram const & p_program );
 
 	private:
 		//!\~english The submesh ID.	\~french L'id du sbmesh.
 		uint32_t m_id;
-		//!\~english The submesh instances count.	\~french Le nombre d'instances du submesh.
+		//!\~english The submesh instances count.	\~french Le nombre d'instances du sous-maillage.
 		std::map< MaterialSPtr, uint32_t > m_instanceCount;
 		//!\~english Vertex elements declaration, deduced from points.	\~french Déclaration des éléments d'un sommet, déduite à partir des points.
 		BufferDeclaration m_layout;

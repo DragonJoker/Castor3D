@@ -90,7 +90,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
 		 */
-		virtual std::shared_ptr< Castor3D::OneTextureFrameVariable > DoCreateTextureVariable( int p_occurences );
+		virtual std::shared_ptr< Castor3D::OneIntFrameVariable > DoCreateTextureVariable( int p_occurences );
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoGetVertexShaderSource
 		 */

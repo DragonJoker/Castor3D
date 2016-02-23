@@ -14,7 +14,6 @@ namespace Castor3D
 	const xchar * FrameVariableDataTyper< uint32_t >::DataTypeName = cuT( "uint" );
 	const xchar * FrameVariableDataTyper< float >::DataTypeName = cuT( "float" );
 	const xchar * FrameVariableDataTyper< double >::DataTypeName = cuT( "double" );
-	const xchar * FrameVariableDataTyper< Texture * >::DataTypeName = cuT( "sampler" );
 
 	//*************************************************************************************************
 
@@ -23,7 +22,6 @@ namespace Castor3D
 	const xchar * OneFrameVariableDefinitions< uint32_t >::FullTypeName = cuT( "uint" );
 	const xchar * OneFrameVariableDefinitions< float >::FullTypeName = cuT( "float" );
 	const xchar * OneFrameVariableDefinitions< double >::FullTypeName = cuT( "double" );
-	const xchar * OneFrameVariableDefinitions< Texture * >::FullTypeName = cuT( "sampler" );
 
 	//*************************************************************************************************
 
@@ -94,7 +92,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	FrameVariable::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< FrameVariable, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		: Loader< FrameVariable, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 

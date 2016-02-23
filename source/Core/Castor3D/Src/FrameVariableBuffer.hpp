@@ -139,7 +139,7 @@ namespace Castor3D
 		 *\return		\p false en cas d'échec
 		 */
 		template< typename T >
-		bool GetVariable( Castor::String const & p_name, std::shared_ptr< OneFrameVariable< T > > & p_variable )const;
+		std::shared_ptr< OneFrameVariable< T > > GetVariable( Castor::String const & p_name, std::shared_ptr< OneFrameVariable< T > > & p_variable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
@@ -153,7 +153,7 @@ namespace Castor3D
 		 *\return		\p false en cas d'échec
 		 */
 		template< typename T, uint32_t Count >
-		bool GetVariable( Castor::String const & p_name, std::shared_ptr< PointFrameVariable< T, Count > > & p_variable )const;
+		std::shared_ptr< PointFrameVariable< T, Count > > GetVariable( Castor::String const & p_name, std::shared_ptr< PointFrameVariable< T, Count > > & p_variable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a variable by name
@@ -167,7 +167,7 @@ namespace Castor3D
 		 *\return		\p false en cas d'échec
 		 */
 		template< typename T, uint32_t Rows, uint32_t Columns >
-		bool GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_variable )const;
+		std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > GetVariable( Castor::String const & p_name, std::shared_ptr< MatrixFrameVariable< T, Rows, Columns > > & p_variable )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the variables buffer name

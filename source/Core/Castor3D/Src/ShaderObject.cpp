@@ -391,7 +391,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObjectBase::AddFrameVariable( OneTextureFrameVariableSPtr p_variable )
+	void ShaderObjectBase::AddFrameVariable( OneIntFrameVariableSPtr p_variable )
 	{
 		if ( p_variable )
 		{
@@ -400,18 +400,18 @@ namespace Castor3D
 		}
 	}
 
-	OneTextureFrameVariableSPtr ShaderObjectBase::FindFrameVariable( Castor::String const & p_name )const
+	OneIntFrameVariableSPtr ShaderObjectBase::FindFrameVariable( Castor::String const & p_name )const
 	{
-		OneTextureFrameVariableSPtr l_return;
+		OneIntFrameVariableSPtr l_return;
 		FrameVariablePtrStrMapConstIt l_it = m_mapFrameVariables.find( p_name );
 
 		if ( l_it != m_mapFrameVariables.end() )
 		{
 			FrameVariableSPtr l_pFound = l_it->second.lock();
 
-			if ( l_pFound && l_pFound->GetFullType() == OneTextureFrameVariable::GetFrameVariableType() )
+			if ( l_pFound && l_pFound->GetFullType() == OneIntFrameVariable::GetFrameVariableType() )
 			{
-				l_return = std::static_pointer_cast< OneTextureFrameVariable >( l_pFound );
+				l_return = std::static_pointer_cast< OneIntFrameVariable >( l_pFound );
 			}
 		}
 

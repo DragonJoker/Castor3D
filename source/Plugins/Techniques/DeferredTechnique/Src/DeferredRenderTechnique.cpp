@@ -61,7 +61,7 @@ namespace Deferred
 	};
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
-		: RenderTechniqueBase( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
+		: Castor3D::RenderTechnique( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
 		, m_viewport( Viewport::Ortho( *p_renderSystem->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 	{
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
@@ -143,10 +143,10 @@ namespace Deferred
 		m_lightPassShaderProgram.reset();
 	}
 
-	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
-		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
+		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
 	bool RenderTechnique::DoCreate()
@@ -165,7 +165,7 @@ namespace Deferred
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				m_lightPassShaderProgram->CreateFrameVariable( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( m_lightPassTextures[i].get() );
+				m_lightPassShaderProgram->CreateFrameVariable( DS_TEXTURE_NAME[i], eSHADER_TYPE_PIXEL )->SetValue( i );
 			}
 
 			m_lightPassMatrices = GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_lightPassShaderProgram, MASK_SHADER_TYPE_PIXEL | MASK_SHADER_TYPE_VERTEX );
@@ -201,14 +201,16 @@ namespace Deferred
 		{
 			m_lightPassTextures[i]->SetType( eTEXTURE_TYPE_2D );
 			m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
-			l_return = m_lightPassTextures[i]->Initialise( p_index++ );
+			l_return = m_lightPassTextures[i]->Initialise();
+			p_index++;
 		}
 
 		if ( l_return )
 		{
 			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetType( eTEXTURE_TYPE_2D );
 			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetImage( m_size, ePIXEL_FORMAT_DEPTH32 );
-			l_return = m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise( p_index++ );
+			l_return = m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise();
+			p_index++;
 		}
 
 		if ( l_return )
@@ -281,12 +283,12 @@ namespace Deferred
 		return m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
 	}
 
-	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
+	bool RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
 		m_renderTarget->GetRasteriserState()->Apply();
 		//m_geometryPassDsState->Apply();
-		return RenderTechniqueBase::DoRender( m_size, p_scene, p_camera, p_dFrameTime );
+		return Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
@@ -341,7 +343,7 @@ namespace Deferred
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				l_return = m_lightPassTextures[i]->Bind();
+				l_return = m_lightPassTextures[i]->Bind( i );
 			}
 
 			if ( l_return )
@@ -350,7 +352,7 @@ namespace Deferred
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 				{
-					m_lightPassTextures[i]->Unbind();
+					m_lightPassTextures[i]->Unbind( i );
 				}
 			}
 

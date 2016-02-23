@@ -87,14 +87,7 @@ namespace GuiCommon
 				break;
 
 			case eFRAME_VARIABLE_TYPE_SAMPLER:
-				l_return = new wxFloatProperty( p_name );
-
-				if ( std::static_pointer_cast< OneTextureFrameVariable >( p_variable )->GetValue() )
-				{
-					int l_index = std::static_pointer_cast< OneTextureFrameVariable >( p_variable )->GetValue()->GetIndex();
-					l_return->SetValue( l_index );
-				}
-
+				l_return = new wxFloatProperty( p_name, p_name, std::static_pointer_cast< OneIntFrameVariable >( p_variable )->GetValue() );
 				break;
 
 			case eFRAME_VARIABLE_TYPE_VEC2B:

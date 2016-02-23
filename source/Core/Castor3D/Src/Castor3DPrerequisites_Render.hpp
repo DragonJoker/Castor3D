@@ -380,7 +380,7 @@ namespace Castor3D
 
 	template< typename T > class CpuBuffer;
 	class RenderSystem;
-	class RenderTechniqueBase;
+	class RenderTechnique;
 	class Context;
 	class RenderWindow;
 	class IPipelineImpl;
@@ -388,6 +388,10 @@ namespace Castor3D
 	class DepthStencilState;
 	class RasteriserState;
 	class BlendState;
+	struct RenderNode;
+	struct SceneRenderNode;
+	struct GeometryRenderNode;
+	struct BillboardRenderNode;
 
 	struct BufferElementDeclaration;
 	class BufferDeclaration;
@@ -411,6 +415,8 @@ namespace Castor3D
 
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
+	//!\~english Multimap of RenderNodes sorted by distance.	\~french Multimap de RenderNodes triés par distance.
+	DECLARE_MULTIMAP( double, GeometryRenderNode, RenderNodeByDistance );
 
 	//@}
 }

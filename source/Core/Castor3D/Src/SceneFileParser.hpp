@@ -85,13 +85,13 @@ namespace Castor3D
 		MaterialSPtr pMaterial;
 		SamplerSPtr pSampler;
 		RenderTargetSPtr pRenderTarget;
-		uint32_t uiPass;
+		PassSPtr pPass;
 		TextureUnitSPtr pTextureUnit;
 		ShaderProgramSPtr pShaderProgram;
 		eSHADER_TYPE eShaderObject;
 		FrameVariableBufferSPtr pFrameVariableBuffer;
 		FrameVariableSPtr pFrameVariable;
-		OneTextureFrameVariableSPtr pSamplerFrameVariable;
+		OneIntFrameVariableSPtr pSamplerFrameVariable;
 		OverlaySPtr pOverlay;
 		BillboardListSPtr pBillboards;
 		int iFace1;

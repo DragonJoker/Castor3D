@@ -12,7 +12,7 @@
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
 #include <TargetManager.hpp>
-#include <TechniqueFactory.hpp>
+#include <TechniqueManager.hpp>
 #include <WindowManager.hpp>
 
 using namespace Castor;
@@ -330,7 +330,7 @@ namespace OceanLighting
 
 		Logger::LogInfo( cuT( "Initialising Castor3D" ) );
 		m_pCastor3D->Initialise( 30, false );
-		m_pCastor3D->GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::CreateInstance );
+		m_pCastor3D->GetRenderTechniqueManager().GetTechniqueFactory().Register( cuT( "ocean lighting" ), &RenderTechnique::CreateInstance );
 
 		if ( l_bReturn )
 		{
@@ -346,7 +346,7 @@ namespace OceanLighting
 			l_target->SetScene( l_scene );
 			l_target->SetCamera( l_pCamera );
 			Parameters l_params;
-			m_pTechnique = std::static_pointer_cast< RenderTechnique >( m_pCastor3D->CreateTechnique( cuT( "ocean lighting" ), *l_target, l_params ) );
+			m_pTechnique = std::static_pointer_cast< OceanLighting::RenderTechnique >( m_pCastor3D->GetRenderTechniqueManager().Create( cuT( "ocean lighting" ), *l_target, m_pCastor3D->GetRenderSystem(), l_params ) );
 			m_pTechnique->SetWidth( m_width );
 			m_pTechnique->SetHeight( m_height );
 			l_target->SetTechnique( m_pTechnique );

@@ -78,6 +78,46 @@ if ( WIN32 )
 						${OpenCV_DLLS}
 						${OpenCvLibPathName}
 					)
+				else ()
+					if ( ${OpenCvLibName} STREQUAL "debug" )
+						set( OpenCV_CONFIG "Debug" )
+					elseif ( ${OpenCvLibName} STREQUAL "optimized" )
+						set( OpenCV_CONFIG "Release" )
+					elseif ( ${OpenCV_CONFIG} STREQUAL "Debug" )
+						set( OpenCvLibPathName ${OpenCvLibPath}/bin/Debug/${OpenCvLibName}.dll )
+						if ( EXISTS ${OpenCvLibPathName} )
+							add_custom_command(
+								TARGET ${PROJECT_NAME}
+								POST_BUILD
+								COMMAND if 1==$<CONFIG:Debug>
+									${CMAKE_COMMAND} -E
+										copy_if_different
+										${OpenCvLibPathName}
+										${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+							)
+							set( OpenCVd_DLLS
+								${OpenCVd_DLLS}
+								${OpenCvLibPathName}
+							)
+						endif ()
+					elseif ( ${OpenCV_CONFIG} STREQUAL "Release" )
+						set( OpenCvLibPathName ${OpenCvLibPath}/bin/Release/${OpenCvLibName}.dll )
+						if ( EXISTS ${OpenCvLibPathName} )
+							add_custom_command(
+								TARGET ${PROJECT_NAME}
+								POST_BUILD
+								COMMAND if 1==$<CONFIG:Release>
+									${CMAKE_COMMAND} -E
+										copy_if_different
+										${OpenCvLibPathName}
+										${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+							)
+							set( OpenCV_DLLS
+								${OpenCV_DLLS}
+								${OpenCvLibPathName}
+							)
+						endif ()
+					endif ()
 				endif ()
 			endif ()
 			set( OpenCvLibPathNamed ${OpenCvLibPath}/bin/${OpenCvLibName}${Version}d.dll )

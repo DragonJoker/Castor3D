@@ -328,8 +328,8 @@ namespace Castor3D
 		eTEXTURE_CHANNEL_AMBIENT = 0x00000040,	//!< Ambient map
 		eTEXTURE_CHANNEL_GLOSS = 0x00000080,	//!< Gloss map
 		eTEXTURE_CHANNEL_EMISSIVE = 0x00000100,	//!< Gloss map
-		eTEXTURE_CHANNEL_TEXT = 0x00010000,		//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
 		eTEXTURE_CHANNEL_ALL = 0x0000FFFF,
+		eTEXTURE_CHANNEL_TEXT = 0x00010000,		//!< Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
 	}	eTEXTURE_CHANNEL;
 	/*!
 	\author 	Sylvain DOREMUS

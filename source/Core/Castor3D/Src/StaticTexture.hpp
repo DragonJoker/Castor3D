@@ -53,10 +53,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~StaticTexture();
 		/**
-		 *\copydoc		Castor3D::Texture::Initialise
-		 */
-		C3D_API virtual bool Initialise( uint32_t p_index );
-		/**
 		 *\~english
 		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array
 		 *\param[in]	p_dimensions	The texture dimensions
@@ -70,15 +66,19 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::Texture::Initialise
 		 */
+		C3D_API virtual bool Initialise();
+		/**
+		 *\copydoc		Castor3D::Texture::Cleanup
+		 */
 		C3D_API virtual void Cleanup();
 		/**
-		 *\copydoc		Castor3D::Texture::Initialise
+		 *\copydoc		Castor3D::Texture::Bind
 		 */
-		C3D_API virtual bool BindAt( uint32_t p_index );
+		C3D_API virtual bool Bind( uint32_t p_index );
 		/**
-		 *\copydoc		Castor3D::Texture::Initialise
+		 *\copydoc		Castor3D::Texture::Unbind
 		 */
-		C3D_API virtual void UnbindFrom( uint32_t p_index );
+		C3D_API virtual void Unbind( uint32_t p_index );
 
 		using Texture::SetImage;
 	};

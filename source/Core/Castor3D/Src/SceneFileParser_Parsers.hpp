@@ -155,6 +155,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitChannel )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitSampler )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitBlendColour )
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitEnd )
 
 	// Shader Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_VertexShader )

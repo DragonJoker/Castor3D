@@ -921,12 +921,13 @@ namespace Lwo
 					{
 						StringStream l_strLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
-						l_pTexture = p_pPass->AddTextureUnit();
+						l_pTexture = std::make_shared< TextureUnit >( *p_pPass->GetEngine() );
 						StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
 						l_pStaTexture->SetImage( l_it->second->GetPixels() );
 						l_pTexture->SetTexture( l_pStaTexture );
 						DoSetChannel( l_pTexture, l_eChannel );
+						p_pPass->AddTextureUnit( l_pTexture );
 					}
 					else
 					{

@@ -55,12 +55,13 @@ namespace Castor3D
 		if ( l_return )
 		{
 			m_arrayPrograms.push_back( l_return );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
 		}
 
 		return l_return;
 	}
 
-	ShaderProgramSPtr ShaderManager::GetAutomaticProgram( RenderTechniqueBase const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags )
+	ShaderProgramSPtr ShaderManager::GetAutomaticProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags )
 	{
 		ShaderProgramSPtr l_return;
 		uint64_t l_key = p_textureFlags | ( uint64_t( p_programFlags ) << 32 );

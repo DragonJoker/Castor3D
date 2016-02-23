@@ -160,18 +160,24 @@ namespace Castor3D
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Binds this pass to given program
-		 *\remark		Retrieves uniform variables, sets their values.
-						<br />Does nothing if the given program is the same as the currently bound one
-		 *\param[in]	p_program	The program
+		 *\brief		Binds this pass to given render node.
+		 *\param[in]	p_node	The render node.
 		 *\~french
-		 *\brief		Lie cette passe au programme donné
-		 *\remark		Récupère les variables uniformes, définit leur valeur.
-						<br />Ne fait rien si le programme donné ets le même que celui actuellement lié
-		 *\param[in]	p_program	Le programme
+		 *\brief		Lie cette passe au noeud de rendu donné.
+		 *\param[in]	p_node	Le noeud de rendu.
 		 *\return
 		 */
-		C3D_API void BindToAutomaticProgram( ShaderProgramSPtr p_program );
+		C3D_API void BindToNode( RenderNode & p_node );
+		/**
+		 *\~english
+		 *\brief		Binds this pass to given render node.
+		 *\param[in]	p_node	The render node.
+		 *\~french
+		 *\brief		Lie cette passe au noeud de rendu donné.
+		 *\param[in]	p_node	Le noeud de rendu.
+		 *\return
+		 */
+		C3D_API void BindToNode( SceneRenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Applies the pass
@@ -195,11 +201,13 @@ namespace Castor3D
 		C3D_API void EndRender();
 		/**
 		 *\~english
-		 *\brief		Creates and adds a TextureUnit
+		 *\brief		Adds a texture unit.
+		 *\param[in]	p_unit	The texture unit.
 		 *\~french
-		 *\brief		Crée et ajoute une unité de texture
+		 *\brief		Ajoute une unité de texture.
+		 *\param[in]	p_unit	L'unité de texture.
 		 */
-		C3D_API TextureUnitSPtr AddTextureUnit();
+		C3D_API void AddTextureUnit( TextureUnitSPtr p_unit );
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at wanted channel
@@ -248,15 +256,6 @@ namespace Castor3D
 		C3D_API Castor::String GetTexturePath( uint32_t p_index );
 		/**
 		 *\~english
-		 *\brief		Defines the shader program
-		 *\param[in]	p_program	The shader program
-		 *\~french
-		 *\brief		Définit le shader
-		 *\param[in]	p_program	Le programme
-		 */
-		C3D_API void SetShader( ShaderProgramSPtr p_program );
-		/**
-		 *\~english
 		 *\brief		Tells if the pass needs alpha blending
 		 *\return		\p true if at least one texture unit has an alpha channel
 		 *\~french
@@ -264,15 +263,6 @@ namespace Castor3D
 		 *\return		\p true si au moins une unité de texture a un canal alpha
 		 */
 		C3D_API bool HasAlphaBlending()const;
-		/**
-		*\~english
-		*\brief			Tells if the pass has a shader program
-		*\return		\p true if the shader program has been set, \p false if not
-		*\~french
-		*\brief			Dit si la passe a un shader
-		*\return		\p true si le programme a été défini, \p false sinon
-		 */
-		C3D_API bool HasShader()const;
 		/**
 		 *\~english
 		 *\brief		Binds the program and the textures.
@@ -290,19 +280,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Remplit les variables de shader.
 		 */
-		C3D_API void FillShaderVariables();
-		/**
-		 *\~english
-		 *\brief		Gives the current shader program
-		 *\return		The shader program, nullptr if none
-		 *\~french
-		 *\brief		Récupère le shader
-		 *\return		\p nullptr si aucun
-		 */
-		inline ShaderProgramSPtr GetShader()const
-		{
-			return m_shaderProgram.lock();
-		}
+		C3D_API void FillShaderVariables( RenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture channels flags combination
@@ -313,7 +291,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetTextureFlags()const
 		{
-			return m_uiTextureFlags;
+			return m_textureFlags;
 		}
 		/**
 		 *\~english
@@ -638,7 +616,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayConstIt begin()const
+		inline decltype( auto ) begin()const
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -650,7 +628,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur le début du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayIt begin()
+		inline decltype( auto ) begin()
 		{
 			return m_arrayTextureUnits.begin();
 		}
@@ -662,7 +640,7 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur constant sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayConstIt end()const
+		inline decltype( auto ) end()const
 		{
 			return m_arrayTextureUnits.end();
 		}
@@ -674,45 +652,9 @@ namespace Castor3D
 		 *\brief		Récupère un itérateur sur la fin du tableau de textures
 		 *\return		L'itérateur
 		 */
-		inline TextureUnitPtrArrayIt end()
+		inline decltype( auto ) end()
 		{
 			return m_arrayTextureUnits.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the pass variable buffer
-		 *\return		The variable buffer
-		 *\~french
-		 *\brief		Récupère le buffer de variables pour pass
-		 *\return		Le buffer de variables
-		 */
-		inline FrameVariableBufferSPtr GetPassBuffer()const
-		{
-			return m_passBuffer.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the scene variable buffer
-		 *\return		The variable buffer
-		 *\~french
-		 *\brief		Récupère le buffer de variables pour la scène
-		 *\return		Le buffer de variables
-		 */
-		inline FrameVariableBufferSPtr GetSceneBuffer()const
-		{
-			return m_sceneBuffer.lock();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the matrices variable buffer
-		 *\return		The variable buffer
-		 *\~french
-		 *\brief		Récupère le buffer de variables pour les matrices
-		 *\return		Le buffer de variables
-		 */
-		inline FrameVariableBufferSPtr GetMatrixBuffer()const
-		{
-			return m_matrixBuffer.lock();
 		}
 
 	private:
@@ -730,21 +672,28 @@ namespace Castor3D
 		 *\param[in]	p_program	Le programme
 		 *\param[in,out]p_variable	Reçoit la variable shader
 		 */
-		C3D_API void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, ShaderProgram & p_program, OneTextureFrameVariableWPtr & p_variable );
+		C3D_API void DoGetTexture( eTEXTURE_CHANNEL p_channel, Castor::String const & p_name, RenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the channeled textures shader variables
 		 *\~french
 		 *\brief		Récupère les variables associées aux texture affectées à un canal
 		 */
-		C3D_API void DoGetTextures();
+		C3D_API void DoGetTextures( RenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pass, scene, and matrix buffers, and needed variables
 		 *\~french
 		 *\brief		Récupère les tampons de variables de passe, scène et matrices, ainsi que les variables nécessaires
 		 */
-		C3D_API void DoGetBuffers();
+		C3D_API void DoGetBuffers( RenderNode & p_node );
+		/**
+		 *\~english
+		 *\brief		Retrieves the pass, scene, and matrix buffers, and needed variables
+		 *\~french
+		 *\brief		Récupère les tampons de variables de passe, scène et matrices, ainsi que les variables nécessaires
+		 */
+		C3D_API void DoGetBuffers( SceneRenderNode & p_node );
 		/**
 		 *\~english
 		 *\brief		Prepares a texture to be integrated to the pass.
@@ -797,9 +746,16 @@ namespace Castor3D
 		 *\brief		Désapplique la passe.
 		 */
 		C3D_API void DoEndRender();
+		/**
+		 *\~english
+		 *\brief		Updates the texture flags depending on the texture units.
+		 *\~french
+		 *\brief		Met à jour les indicateurs de texture en fonction des unités de texture.
+		 */
+		C3D_API void DoUpdateFlags();
 
 	protected:
-		typedef std::pair< TextureUnitWPtr, OneTextureFrameVariableWPtr > UnitVariablePair;
+		typedef std::pair< TextureUnitWPtr, OneIntFrameVariableWPtr > UnitVariablePair;
 		DECLARE_MAP( eTEXTURE_CHANNEL, UnitVariablePair, UnitVariableChannel );
 		friend class Material;
 		//!\~english Diffuse material colour	\~french La couleur diffuse
@@ -816,8 +772,6 @@ namespace Castor3D
 		float m_fAlpha;
 		//!\~english Tells if the pass is two sided	\~french Dit si la passe est sur 2 faces
 		bool m_bDoubleFace;
-		//!\~english The shader program, if any	\~french Le programme de shader
-		ShaderProgramWPtr m_shaderProgram;
 		//!\~english Texture units	\~french Les textures
 		TextureUnitPtrArray m_arrayTextureUnits;
 		//!\~english The parent material	\~french Le materiau parent
@@ -827,51 +781,13 @@ namespace Castor3D
 		//!\~english Blend states	\~french Etats de blend
 		BlendStateSPtr m_pBlendState;
 		//!\~english Bitwise ORed eTEXTURE_CHANNEL	\~french Combinaison des eTEXTURE_CHANNEL affectés à une texture pour cette passe
-		uint32_t m_uiTextureFlags;
+		uint32_t m_textureFlags;
 		//!\~english Tells the pass shader is an automatically generated one	\~french Dit que le shader de la passe a été généré automatiquement
 		bool m_bAutomaticShader;
 		//!\~english The alpha blend mode \~french Le mode de mélange alpha
 		eBLEND_MODE m_alphaBlendMode;
 		//!\~english The colour blend mode \~french Le mode de mélange couleur
 		eBLEND_MODE m_colourBlendMode;
-		//!\~english Holds The scene frame variables buffer	\~french Le buffer de variables, pour la scène
-		FrameVariableBufferWPtr m_sceneBuffer;
-		//!\~english Holds The pass frame variables buffer	\~french Le buffer de variables, pour la passe
-		FrameVariableBufferWPtr m_passBuffer;
-		//!\~english Holds The matrix frame variables buffer	\~french Le buffer de variables, pour les matrices
-		FrameVariableBufferWPtr m_matrixBuffer;
-		//!\~english  The ambient colour frame variable	\~french La variable uniforme contenant la couleur ambiante
-		Point4fFrameVariableWPtr m_pAmbient;
-		//!\~english  The diffuser colour frame variable	\~french La variable uniforme contenant la couleur diffuse
-		Point4fFrameVariableWPtr m_pDiffuse;
-		//!\~english  The specular colour frame variable	\~french La variable uniforme contenant la couleur spéculaire
-		Point4fFrameVariableWPtr m_pSpecular;
-		//!\~english  The emissive colour frame variable	\~french La variable uniforme contenant la couleur émise
-		Point4fFrameVariableWPtr m_pEmissive;
-		//!\~english  The shininess value frame variable	\~french La variable uniforme contenant l'exposant
-		OneFloatFrameVariableWPtr m_pShininess;
-		//!\~english  The opacity value frame variable	\~french La variable uniforme contenant l'opacité
-		OneFloatFrameVariableWPtr m_pOpacity;
-		//!\~english  The camera position frame variable	\~french La variable uniforme contenant la position de la caméra
-		Point3rFrameVariableWPtr m_pCameraPos;
-		//!\~english  The ambient texture frame variable	\~french La variable uniforme contenant la texture ambiante
-		OneTextureFrameVariableWPtr m_pAmbientMap;
-		//!\~english  The colour texture frame variable	\~french La variable uniforme contenant la texture couleur
-		OneTextureFrameVariableWPtr m_pColourMap;
-		//!\~english  The diffuse texture frame variable	\~french La variable uniforme contenant la texture diffuse
-		OneTextureFrameVariableWPtr m_pDiffuseMap;
-		//!\~english  The normal texture frame variable	\~french La variable uniforme contenant la texture de normales
-		OneTextureFrameVariableWPtr m_pNormalMap;
-		//!\~english  The specular texture frame variable	\~french La variable uniforme contenant la texture spéculaire
-		OneTextureFrameVariableWPtr m_pSpecularMap;
-		//!\~english  The emissive texture frame variable	\~french La variable uniforme contenant la texture émissive
-		OneTextureFrameVariableWPtr m_pEmissiveMap;
-		//!\~english  The opacity texture frame variable	\~french La variable uniforme contenant la texture d'opacité
-		OneTextureFrameVariableWPtr m_pOpacityMap;
-		//!\~english  The gloss texture frame variable	\~french La variable uniforme contenant la texture de brillance
-		OneTextureFrameVariableWPtr m_pGlossMap;
-		//!\~english  The height texture frame variable	\~french La variable uniforme contenant la texture de hauteurs
-		OneTextureFrameVariableWPtr m_pHeightMap;
 	};
 }
 

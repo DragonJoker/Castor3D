@@ -302,28 +302,9 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 				l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 				l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 
-				if ( ! l_strImage.empty() )
+				if ( !l_strImage.empty() )
 				{
-					TextureUnitSPtr l_unit = l_pass->AddTextureUnit();
-
-					if ( !File::FileExists( l_strImage ) )
-					{
-						l_strImage = l_fileIO.GetFilePath() / l_strImage;
-					}
-
-					ImageSPtr l_pImage = GetEngine()->GetImageManager().create( l_strImage, l_strImage );
-
-					if ( l_pImage )
-					{
-						StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-						l_pStaTexture->SetImage( l_pImage->GetPixels() );
-						l_unit->SetTexture( l_pStaTexture );
-					}
-					else
-					{
-						l_pass->DestroyTextureUnit( l_unit->GetIndex() );
-					}
+					LoadTexture( l_strImage, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
 				}
 
 				m_mapSubmeshesByName.find( l_strSection )->second->SetDefaultMaterial( l_material );
@@ -367,28 +348,9 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 			l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 			l_pass->SetTwoSided( true );
 
-			if ( ! l_strLine.empty() )
+			if ( !l_strLine.empty() )
 			{
-				TextureUnitSPtr l_unit = l_pass->AddTextureUnit();
-
-				if ( !File::FileExists( l_strLine ) )
-				{
-					l_strLine = l_fileIO.GetFilePath() / l_strLine;
-				}
-
-				ImageSPtr l_pImage = GetEngine()->GetImageManager().create( l_strLine, l_strLine );
-
-				if ( l_pImage )
-				{
-					StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-					l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-					l_pStaTexture->SetImage( l_pImage->GetPixels() );
-					l_unit->SetTexture( l_pStaTexture );
-				}
-				else
-				{
-					l_pass->DestroyTextureUnit( l_unit->GetIndex() );
-				}
+				LoadTexture( l_strLine, *l_pass, eTEXTURE_CHANNEL_DIFFUSE );
 			}
 
 			p_pMesh->GetSubmesh( l_uiIndex )->SetDefaultMaterial( l_material );

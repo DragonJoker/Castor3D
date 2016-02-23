@@ -409,9 +409,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OneTextureFrameVariableSPtr ShaderProgram::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
+	OneIntFrameVariableSPtr ShaderProgram::CreateFrameVariable( String const & p_name, eSHADER_TYPE p_type, int p_iNbOcc )
 	{
-		OneTextureFrameVariableSPtr l_return = FindFrameVariable( p_name, p_type );
+		OneIntFrameVariableSPtr l_return = FindFrameVariable( p_name, p_type );
 
 		if ( !l_return )
 		{
@@ -427,9 +427,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	OneTextureFrameVariableSPtr ShaderProgram::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
+	OneIntFrameVariableSPtr ShaderProgram::FindFrameVariable( Castor::String const & p_name, eSHADER_TYPE p_type )const
 	{
-		OneTextureFrameVariableSPtr l_return;
+		OneIntFrameVariableSPtr l_return;
 
 		if ( m_pShaders[p_type] )
 		{

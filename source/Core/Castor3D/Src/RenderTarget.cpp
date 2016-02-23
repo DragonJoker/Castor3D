@@ -17,11 +17,11 @@
 #include "RenderSystem.hpp"
 #include "RasteriserStateManager.hpp"
 #include "RenderBufferAttachment.hpp"
-#include "RenderTechnique.hpp"
 #include "SamplerManager.hpp"
 #include "SceneManager.hpp"
 #include "SceneNodeManager.hpp"
 #include "TargetManager.hpp"
+#include "TechniqueManager.hpp"
 #include "TextureAttachment.hpp"
 
 #include <Logger.hpp>
@@ -311,12 +311,13 @@ namespace Castor3D
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
 	{
 		bool l_return = false;
+		m_colourIndex = p_index;
 		m_pColorTexture->SetType( eTEXTURE_TYPE_2D );
 		m_pColorTexture->SetImage( p_size, m_renderTarget.GetPixelFormat() );
 		Size l_size = m_pColorTexture->GetDimensions();
 		m_frameBuffer->Create( 0 );
 		m_pColorTexture->Create();
-		m_pColorTexture->Initialise( p_index );
+		m_pColorTexture->Initialise();
 		m_pDepthBuffer->Create();
 		m_pDepthBuffer->Initialise( l_size );
 		m_frameBuffer->Initialise( l_size );
@@ -388,7 +389,7 @@ namespace Castor3D
 
 				try
 				{
-					m_renderTechnique = GetEngine()->CreateTechnique( m_techniqueName, *this, m_techniqueParameters );
+					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( m_techniqueName, *this, GetEngine()->GetRenderSystem(), m_techniqueParameters );
 				}
 				catch ( Exception & p_exc )
 				{
@@ -403,6 +404,13 @@ namespace Castor3D
 			m_renderTechnique->Create();
 			uint32_t l_index = p_index;
 			m_renderTechnique->Initialise( l_index );
+
+			SceneSPtr l_scene = GetScene();
+
+			if ( l_scene )
+			{
+				m_renderTechnique->AddScene( *l_scene );
+			}
 
 			for ( auto && l_effect : m_postEffects )
 			{

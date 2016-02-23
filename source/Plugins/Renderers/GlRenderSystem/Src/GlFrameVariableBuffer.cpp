@@ -14,7 +14,7 @@ namespace GlRender
 
 	template<> struct GlVariableApplyer< eFRAME_VARIABLE_TYPE_SAMPLER > : public GlVariableApplyerBase
 	{
-		typedef TextureRPtr	value_type;
+		typedef int	value_type;
 
 		inline void operator()( OpenGl & p_gl, uint32_t p_index, FrameVariableSPtr p_variable )
 		{
@@ -22,7 +22,7 @@ namespace GlRender
 
 			if ( l_variable->GetOccCount() <= 1 && l_variable->GetValue() )
 			{
-				p_gl.SetUniform1v( p_index, l_variable->GetOccCount(), ( int * )&l_variable->GetValue()->GetIndex() );
+				p_gl.SetUniform1v( p_index, l_variable->GetOccCount(), ( int * )&l_variable->GetValue() );
 			}
 		}
 	};
@@ -396,7 +396,7 @@ namespace GlRender
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_SAMPLER >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{
-			return std::make_shared< GlOneFrameVariable< TextureRPtr > >( p_gl, p_occurences, p_program );
+			return std::make_shared< GlOneFrameVariable< int > >( p_gl, p_occurences, p_program );
 		}
 		template<> FrameVariableSPtr GlFrameVariableCreator< eFRAME_VARIABLE_TYPE_VEC2I >( OpenGl & p_gl, GlShaderProgram * p_program, uint32_t p_occurences )
 		{

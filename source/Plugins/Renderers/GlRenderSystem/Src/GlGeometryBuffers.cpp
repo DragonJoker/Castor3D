@@ -151,7 +151,7 @@ namespace GlRender
 
 		if ( l_return == p_declaration.end() )
 		{
-			// We try to find an element with an eELEMENT_USAGE approqching the one asked.
+			// We try to find an element with an eELEMENT_USAGE approaching the one asked.
 			BufferDeclaration::const_iterator l_return = std::find_if( p_declaration.begin(), p_declaration.end(), [&p_element]( BufferElementDeclaration const & l_element )
 			{
 				return ( l_element.m_usages & p_element.m_usages ) != 0;

@@ -29,7 +29,7 @@ using namespace Castor3D;
 namespace Msaa
 {
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
-		: RenderTechniqueBase( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params )
+		: Castor3D::RenderTechnique( cuT( "msaa" ), p_renderTarget, p_renderSystem, p_params )
 		, m_samplesCount( 0 )
 	{
 		String l_count;
@@ -54,10 +54,10 @@ namespace Msaa
 	{
 	}
 
-	RenderTechniqueBaseSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
+	RenderTechniqueSPtr RenderTechnique::CreateInstance( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 	{
 		// No make_shared because ctor is protected;
-		return RenderTechniqueBaseSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
+		return RenderTechniqueSPtr( new RenderTechnique( p_renderTarget, p_renderSystem, p_params ) );
 	}
 
 	bool RenderTechnique::DoCreate()
@@ -132,7 +132,7 @@ namespace Msaa
 		return m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 	}
 
-	bool RenderTechnique::DoRender( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
+	bool RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
 
@@ -145,7 +145,7 @@ namespace Msaa
 			m_wpMsRasteriserState.lock()->Apply();
 		}
 
-		return RenderTechniqueBase::DoRender( m_size, p_scene, p_camera, p_dFrameTime );
+		return Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()

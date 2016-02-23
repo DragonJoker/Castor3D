@@ -61,6 +61,7 @@ namespace Castor3D
 		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 		m_renderTextureProgram = l_program;
 		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+		m_mapDiffuse->SetValue( 0 );
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
 		m_pDsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
@@ -149,24 +150,21 @@ namespace Castor3D
 		DoSetAlphaFunc( p_func, p_value );
 	}
 
-	void Context::RenderTexture( Castor::Size const & p_size, TextureSPtr p_texture )
+	void Context::RenderTexture( Castor::Size const & p_size, Texture & p_texture )
 	{
-		m_mapDiffuse->SetValue( p_texture.get() );
 		DoRenderTexture( p_size, p_texture, m_geometryBuffers, m_renderTextureProgram.lock() );
 	}
 
-	void Context::RenderTexture( Castor::Size const & p_size, TextureSPtr p_texture, ShaderProgramSPtr p_program )
+	void Context::RenderTexture( Castor::Size const & p_size, Texture & p_texture, ShaderProgramSPtr p_program )
 	{
 		DoRenderTexture( p_size, p_texture, m_geometryBuffers, p_program );
 	}
 
-	void Context::DoRenderTexture( Castor::Size const & p_size, TextureSPtr p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program )
+	void Context::DoRenderTexture( Castor::Size const & p_size, Texture & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program )
 	{
 		ShaderProgramSPtr l_program = p_program;
 		m_viewport.SetSize( p_size );
 		m_viewport.Render( GetRenderSystem()->GetPipeline() );
-		uint32_t l_id = p_texture->GetIndex();
-		p_texture->SetIndex( 0 );
 
 		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
@@ -178,19 +176,14 @@ namespace Castor3D
 			}
 
 			l_program->Bind();
-		}
 
-		if ( p_texture->BindAt( 0 ) )
-		{
-			p_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
-			p_texture->UnbindFrom( 0 );
-		}
+			if ( p_texture.Bind( 0 ) )
+			{
+				p_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
+				p_texture.Unbind( 0 );
+			}
 
-		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
-		{
 			l_program->Unbind();
 		}
-
-		p_texture->SetIndex( l_id );
 	}
 }

@@ -10,6 +10,7 @@
 #include "SamplerManager.hpp"
 #include "SceneManager.hpp"
 #include "TargetManager.hpp"
+#include "TechniqueManager.hpp"
 #include "WindowManager.hpp"
 
 using namespace Castor;
@@ -106,6 +107,7 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
+		GetEngine()->GetRenderTechniqueManager().Update();
 		GetEngine()->GetSceneManager().Update();
 		GetEngine()->GetOverlayManager().Update();
 		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );

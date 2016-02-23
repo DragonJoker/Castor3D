@@ -138,37 +138,6 @@ namespace Castor3D
 			C3D_API virtual bool Parse( Scene & p_obj, BinaryChunk & p_chunk )const;
 		};
 
-	private:
-		/*!
-		\author 	Sylvain DOREMUS
-		\date
-		\~english
-		\brief		Helper structure used to sort submeshes
-		\~french
-		\brief		Structure d'aide utilisée lors du tri des sous-maillages
-		*/
-		struct stRENDER_NODE
-		{
-			//!\~english The parent mesh node	\~french Le node du mesh parent
-			SceneNodeSPtr m_node;
-			//!\~english The geometry instanciating the submesh.	\~french La géométrie instanciant le submesh.
-			GeometrySPtr m_geometry;
-			//!\~english The submesh.	\~french Le sous-maillage.
-			SubmeshSPtr m_submesh;
-			//!\~english The material.	\~french Le matériau.
-			MaterialSPtr m_material;
-		};
-		//!\~english Multimap of stRENDER_NODEs sorted by distance	\~french Multimap de stRENDER_NODEs triés par distance
-		DECLARE_MULTIMAP( double, stRENDER_NODE, RenderNodeByDistance );
-		//!\~english stRENDER_NODE array	\~french tableau de stRENDER_NODE
-		DECLARE_VECTOR( stRENDER_NODE, RenderNode );
-		//!\~english SceneNode array	\~french Tableau de SceneNode
-		DECLARE_VECTOR( SceneNode *, SceneNode );
-		//!\~english Submesh multimap, with their nodes 	\~french Multimap de sous-maillages, avec leurs SceneNodes
-		DECLARE_MAP( SubmeshSPtr, RenderNodeArray, SubmeshRenderNodes );
-		//!\~english Pass sorted SubmeshMaterialMMap map	\~french Map de SubmeshMaterialMMap, triés par passe
-		DECLARE_MAP( MaterialSPtr, SubmeshRenderNodesMap, SubmeshRenderNodesByMaterial );
-
 	public:
 		/**
 		 *\~english
@@ -228,7 +197,7 @@ namespace Castor3D
 		 *\param[in]	p_technique	La technique de rendu courante, utilisee pour recuperer les bons shaders
 		 *\param[in]	p_camera	La caméra utilisée pour le rendu
 		 */
-		C3D_API void Render( RenderTechniqueBase & p_technique, Camera const & p_camera );
+		C3D_API void Render( RenderTechnique & p_technique, Camera const & p_camera );
 		/**
 		 *\~english
 		 *\brief		Sets the background image for the scene
@@ -288,21 +257,6 @@ namespace Castor3D
 		 *\return		La valeur
 		 */
 		C3D_API uint32_t GetFaceCount()const;
-		/**
-		 *\~english
-		 *\brief		Renders submeshes.
-		 *\param[in]	p_technique		The render technique.
-		 *\param[in]	p_pipeline		The render pipeline.
-		 *\param[in]	p_begin			The render nodes begin.
-		 *\param[in]	p_end			The render nodes end.
-		 *\~french
-		 *\brief		Dessine des sous maillages.
-		 *\param[in]	p_technique		La technique de rendu.
-		 *\param[in]	p_pipeline		Le pipeline de rendu.
-		 *\param[in]	p_begin			Le début des noeuds de rendu.
-		 *\param[in]	p_end			La fin des noeuds de rendu.
-		 */
-		C3D_API void RenderSubmeshes( RenderTechniqueBase & p_technique, Camera const & p_camera,  Pipeline & p_pipeline, SubmeshRenderNodesByMaterialMap const & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Sets the background colour
@@ -389,9 +343,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the scene change status to \p true.
+		 *\brief		Sets the scene changed status to \p true.
 		 *\~french
-		 *\brief		Définit le statut de changement de la scène à \p true.
+		 *\brief		Définit le statut de changement de la scène to \p true.
 		 */
 		inline void SetChanged()
 		{
@@ -399,7 +353,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the ambient light colour
 		 *\return		The ambient light colour
 		 *\~french
 		 *\return		La couleur de la lumière ambiante
@@ -411,87 +364,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the ambient light colour.
-		 *\param[in]	The new value.
+		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit la couleur de la lumière ambiante.
-		 *\param[in]	La nouvelle valeur.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline void SetAmbientLight( Castor::Colour const & val )
+		inline void SetAmbientLight( Castor::Colour const & p_value )
 		{
-			m_ambientLight = val;
+			m_ambientLight = p_value;
 		}
 
 		//@}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Sorts render nodes by material
-		 *\~french
-		 *\brief		Trie les noeuds de rendu par matériau.
-		 */
-		void DoSortRenderNodes();
-		/**
-		 *\~english
-		 *\brief		Binds the given pass.
-		 *\param[in]	p_technique			The render technique.
-		 *\param[in]	p_pipeline			The render pipeline.
-		 *\param[in]	p_pass				The pass.
-		 *\param[in]	p_geometry			The geometry instance.
-		 *\param[in]	p_programFlags		The shader program flags (combination of ePROGRAM_FLAG).
-		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
-		 *\~french
-		 *\brief		Active la passe donnée.
-		 *\param[in]	p_technique			La technique de rendu.
-		 *\param[in]	p_pipeline			Le pipeline de rendu.
-		 *\param[in]	p_pass				La passe.
-		 *\param[in]	p_geometry			L'instance de géométrie.
-		 *\param[in]	p_programFlags		Les indicateurs du programme shader (combinaison de ePROGRAM_FLAG).
-		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
-		 */
-		void DoBindPass( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, Pass & p_pass, Geometry const & p_geometry, uint32_t p_programFlags, uint64_t p_excludedMtxFlags );
-		/**
-		 *\~english
-		 *\brief		Unbinds the given pass.
-		 *\param[in]	p_pass			The pass.
-		 *\~french
-		 *\brief		Désctive la passe donnée.
-		 *\param[in]	p_pass			La passe.
-		 */
-		void DoUnbindPass( Pass & p_pass );
-		/**
-		 *\~english
-		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_technique		The render technique.
-		 *\param[in]	p_pipeline		The render pipeline.
-		 *\param[in]	p_begin			The render nodes begin.
-		 *\param[in]	p_end			The render nodes end.
-		 *\~french
-		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_technique		La technique de rendu.
-		 *\param[in]	p_pipeline		Le pipeline de rendu.
-		 *\param[in]	p_begin			Le début des noeuds de rendu.
-		 *\param[in]	p_end			La fin des noeuds de rendu.
-		 */
-		void DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByMaterialMap const & p_nodes );
-		/**
-		 *\~english
-		 *\brief		Renders instanced submeshes.
-		 *\param[in]	p_technique		The render technique.
-		 *\param[in]	p_pipeline		The render pipeline.
-		 *\param[in]	p_begin			The render nodes begin.
-		 *\param[in]	p_end			The render nodes end.
-		 *\~french
-		 *\brief		Dessine des sous maillages instanciés.
-		 *\param[in]	p_technique		La technique de rendu.
-		 *\param[in]	p_pipeline		Le pipeline de rendu.
-		 *\param[in]	p_begin			Le début des noeuds de rendu.
-		 *\param[in]	p_end			La fin des noeuds de rendu.
-		 */
-		void DoRenderSubmeshesInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByMaterialMap const & p_nodes );
-		void DoRenderSubmeshesNonInstanced( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline, RenderNodeByDistanceMMap const & p_nodes );
-		void DoResortAlpha( SubmeshRenderNodesByMaterialMap p_input, Camera const & p_camera, int p_sign, RenderNodeByDistanceMMap & p_output );
-		void DoRenderBillboards( RenderTechniqueBase & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
+		void DoRenderBillboards( RenderTechnique & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
 
 	private:
 		//!\~english The root node	\~french Le noeud père de tous les noeuds de la scène
@@ -520,14 +406,6 @@ namespace Castor3D
 		mutable std::recursive_mutex m_mutex;
 		//!\~english The overlays array	\~french Le tableau d'overlays
 		OverlayPtrArray m_overlays;
-		//!\~english The geometries, sorted by material.	\~french Les géométries, triées par matériau.
-		SubmeshRenderNodesByMaterialMap m_renderNodes;
-		//!\~english The geometries without alpha blending, sorted by material.	\~french Les géométries sans alpha blending, triées par matériau.
-		SubmeshRenderNodesByMaterialMap m_opaqueRenderNodes;
-		//!\~english The geometries with alpha blending, sorted by material.	\~french Les géométries avec de l'alpha blend, triées par matériau.
-		SubmeshRenderNodesByMaterialMap m_transparentRenderNodes;
-		//!\~english The geometries with alpha blending, sorted by distance to the camera	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra
-		RenderNodeByDistanceMMap m_distanceSortedTransparentRenderNodes;
 		//!\~english The scene background colour	\~french La couleur de fond de la scène
 		Castor::Colour m_backgroundColour;
 		//!\~english The background image	\~french L'image de fond

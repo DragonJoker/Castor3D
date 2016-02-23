@@ -69,7 +69,7 @@ namespace CastorCom
 
 		COM_PROPERTY_GET( BaseType, eTEXTURE_BASE_TYPE, make_getter( m_internal.get(), &Castor3D::Texture::GetBaseType ) );
 
-		STDMETHOD( Initialise )( /* [in] */ unsigned int index );
+		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
 		STDMETHOD( SetImage )( /* [in] */ IPixelBuffer * buffer );
 		STDMETHOD( Set3DImage )( /* [in] */ ISize * size, /* [in] */ unsigned int depth, /* [in] */ IPixelBuffer * buffer );

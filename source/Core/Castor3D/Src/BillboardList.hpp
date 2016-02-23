@@ -164,7 +164,7 @@ namespace Castor3D
 		 *\param[in]	p_technique	La technique de rendu courante, utilisee pour recuperer les bons shaders
 		 *\return		\p true si tout s'est bien passe
 		 */
-		C3D_API bool InitialiseShader( RenderTechniqueBase & p_technique );
+		C3D_API bool InitialiseShader( RenderTechnique & p_technique );
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -332,7 +332,7 @@ namespace Castor3D
 		}
 
 	private:
-		GeometryBuffers & DoPrepareGeometryBuffers( Pass const & p_pass );
+		GeometryBuffers & DoPrepareGeometryBuffers( RenderNode const & p_node );
 
 	private:
 		//!\~english The positions list	\~french La liste des positions
@@ -341,8 +341,8 @@ namespace Castor3D
 		BufferDeclaration m_declaration;
 		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
 		bool m_bNeedUpdate;
-		//!\~english  The shader program used to draw the billboards	\~french Le shader utilise pour rendre les billboards
-		ShaderProgramWPtr m_wpProgram;
+		//!\~english  The render nodes used to draw the billboards.	\~french Les noeuds de rendu utilisé pour rendre les billboards.
+		std::vector< BillboardRenderNode > m_nodes;
 		//!\~english The Material	\~french Le Material
 		MaterialWPtr m_wpMaterial;
 		//!\~english The billboards dimensions	\~french Les dimensions des billboards

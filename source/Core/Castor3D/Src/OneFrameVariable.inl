@@ -7,14 +7,6 @@
 		{
 			Castor::string::parse( p_strValue, p_value );
 		}
-
-		template<>
-		void Parse< Texture * >( Castor::String const & p_strValue, Texture *& p_value )
-		{
-			uint32_t p_index;
-			Castor::string::parse( p_strValue, p_index );
-			p_value->Initialise( p_index );
-		}
 	}
 
 	template<> struct OneFrameVariableDefinitions< bool >
@@ -55,13 +47,6 @@
 		static const uint32_t Size = uint32_t( sizeof( double ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
 		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_DOUBLE;
-		C3D_API static const xchar * FullTypeName;
-	};
-	template<> struct OneFrameVariableDefinitions< Texture * >
-	{
-		static const uint32_t Size = uint32_t( sizeof( Texture * ) * 1 * 1 );
-		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
-		static const eFRAME_VARIABLE_TYPE Full = eFRAME_VARIABLE_TYPE_SAMPLER;
 		C3D_API static const xchar * FullTypeName;
 	};
 

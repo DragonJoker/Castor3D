@@ -88,7 +88,7 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG
 		 *\return		Le programme trouvé ou créé
 		 */
-		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderTechniqueBase const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
 		/**
 		 *\~english
 		 *\brief		Looks for a billboards shader program corresponding to given flags.

@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\param[in]	p_size			La taille du viewport de rendu.
 		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, TextureSPtr p_texture );
+		C3D_API void RenderTexture( Castor::Size const & p_size, Texture & p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
@@ -140,7 +140,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, TextureSPtr p_texture, ShaderProgramSPtr p_program );
+		C3D_API void RenderTexture( Castor::Size const & p_size, Texture & p_texture, ShaderProgramSPtr p_program );
 		/**
 		 *\~english
 		 *\brief		Changes fullscreen status
@@ -306,7 +306,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureSPtr p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program );
 
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
@@ -318,7 +318,7 @@ namespace Castor3D
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre
 		ShaderProgramWPtr m_renderTextureProgram;
 		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
-		OneTextureFrameVariableSPtr m_mapDiffuse;
+		OneIntFrameVariableSPtr m_mapDiffuse;
 		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
 		GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english The Viewport used when rendering a texture into to a frame buffer.	\~french Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.

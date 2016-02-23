@@ -182,7 +182,7 @@ namespace Castor3D
 		return true;
 	}
 
-	bool BillboardList::InitialiseShader( RenderTechniqueBase & p_technique )
+	bool BillboardList::InitialiseShader( RenderTechnique & p_technique )
 	{
 		MaterialSPtr l_material = m_wpMaterial.lock();
 		bool l_return = false;
@@ -190,6 +190,12 @@ namespace Castor3D
 		if ( l_material && l_material->GetPassCount() )
 		{
 			auto & l_manager = GetScene()->GetEngine()->GetShaderManager();
+			m_nodes.clear();
+
+			Point3rFrameVariableSPtr l_pt3r;
+			Point4rFrameVariableSPtr l_pt4r;
+			OneFloatFrameVariableSPtr l_1f;
+			OneIntFrameVariableSPtr l_1tex;
 
 			for ( auto l_pass : *l_material )
 			{
@@ -201,32 +207,52 @@ namespace Castor3D
 					l_manager.AddBillboardProgram( l_program, l_pass->GetTextureFlags(), ePROGRAM_FLAG_BILLBOARDS );
 				}
 
-				if ( m_wpProgram.expired() || m_wpProgram.lock() != l_program )
+				l_pass->Cleanup();
+
+				if ( l_program )
 				{
-					l_pass->Cleanup();
-					m_wpProgram = l_program;
+					auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
+					auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
 
-					if ( l_program )
+					BillboardRenderNode l_node =
 					{
-						auto l_config = l_program->FindFrameVariableBuffer( cuT( "Billboard" ) );
-
-						if ( l_config )
+						*this,
+						*GetParent(),
+						*l_sceneBuffer,
+						*l_sceneBuffer->GetVariable( ShaderProgram::CameraPos, l_pt3r ),
 						{
-							l_config->GetVariable( cuT( "c3d_v2iDimensions" ), m_pDimensionsUniform );
-
-							if ( !m_pDimensionsUniform )
-							{
-								Logger::LogError( cuT( "Couldn't find Config UBO in billboard shader program" ) );
-							}
-							else
-							{
-								l_return = l_program->Initialise();
-							}
+							*l_pass,
+							*l_program,
+							*l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+							*l_passBuffer,
+							*l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
+							*l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
+							*l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
+							*l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
+							*l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
+							*l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
 						}
-						else
+					};
+					l_pass->BindToNode( l_node.m_scene );
+					m_nodes.push_back( l_node );
+					auto l_config = l_program->FindFrameVariableBuffer( cuT( "Billboard" ) );
+
+					if ( l_config )
+					{
+						l_config->GetVariable( cuT( "c3d_v2iDimensions" ), m_pDimensionsUniform );
+
+						if ( !m_pDimensionsUniform )
 						{
 							Logger::LogError( cuT( "Couldn't find Config UBO in billboard shader program" ) );
 						}
+						else
+						{
+							l_return = l_program->Initialise();
+						}
+					}
+					else
+					{
+						Logger::LogError( cuT( "Couldn't find Config UBO in billboard shader program" ) );
 					}
 
 					if ( l_return )
@@ -235,13 +261,9 @@ namespace Castor3D
 						m_vertexBuffer->Create();
 						m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 						m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
-						DoPrepareGeometryBuffers( *l_pass );
+						DoPrepareGeometryBuffers( l_node.m_scene.m_node );
 						m_bNeedUpdate = false;
 					}
-				}
-				else
-				{
-					l_return = true;
 				}
 			}
 		}
@@ -249,40 +271,10 @@ namespace Castor3D
 		return l_return;
 	}
 
-	GeometryBuffers & BillboardList::DoPrepareGeometryBuffers( Pass const & p_pass )
-	{
-		ShaderProgramSPtr l_program = p_pass.GetShader();
-
-		if ( !l_program || l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
-		{
-			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
-		}
-
-		GeometryBuffersSPtr l_buffers;
-		auto const & l_layout = l_program->GetLayout();
-		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&l_layout]( GeometryBuffersSPtr p_buffers )
-		{
-			return p_buffers->GetLayout() == l_layout;
-		} );
-
-		if ( l_it == m_geometryBuffers.end() )
-		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
-			m_geometryBuffers.push_back( l_buffers );
-		}
-		else
-		{
-			l_buffers = *l_it;
-		}
-
-		return *l_buffers;
-	}
-
 	void BillboardList::Cleanup()
 	{
 		m_pDimensionsUniform.reset();
-		ShaderProgramSPtr l_program = m_wpProgram.lock();
-		l_program->Cleanup();
+		m_nodes.clear();
 		m_geometryBuffers.clear();
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
@@ -315,26 +307,21 @@ namespace Castor3D
 		if ( !m_bNeedUpdate )
 		{
 			Pipeline & l_pipeline = GetScene()->GetEngine()->GetRenderSystem()->GetPipeline();
-			ShaderProgramSPtr l_program = m_wpProgram.lock();
 			MaterialSPtr l_material = m_wpMaterial.lock();
 			uint32_t l_uiSize = m_vertexBuffer->GetSize() / m_vertexBuffer->GetDeclaration().GetStride();
 
-			if ( l_program && l_material )
+			if ( l_material )
 			{
-				for ( auto && l_pass : *l_material )
+				for ( auto && l_node : m_nodes )
 				{
-					auto & l_buffers = DoPrepareGeometryBuffers( *l_pass );
-					l_pass->BindToAutomaticProgram( l_program );
-					auto l_matrixBuffer = l_pass->GetMatrixBuffer();
-
-					if ( l_matrixBuffer )
-					{
-						l_pipeline.ApplyMatrices( *l_matrixBuffer, 0xFFFFFFFFFFFFFFFF );
-					}
-
-					l_pass->Render();
+					auto & l_buffers = DoPrepareGeometryBuffers( l_node.m_scene.m_node );
+					l_pipeline.ApplyMatrices( l_node.m_scene.m_node.m_matrixUbo, 0xFFFFFFFFFFFFFFFF );
+					l_node.m_scene.m_node.m_pass.FillShaderVariables( l_node.m_scene.m_node );
+					l_node.m_scene.m_node.m_program.Bind();
+					l_node.m_scene.m_node.m_pass.Render();
 					l_buffers.Draw( l_uiSize, 0 );
-					l_pass->EndRender();
+					l_node.m_scene.m_node.m_pass.EndRender();
+					l_node.m_scene.m_node.m_program.Unbind();
 				}
 			}
 		}
@@ -353,5 +340,32 @@ namespace Castor3D
 		{
 			m_pDimensionsUniform->SetValue( Point2i( m_dimensions.width(), m_dimensions.height() ) );
 		}
+	}
+
+	GeometryBuffers & BillboardList::DoPrepareGeometryBuffers( RenderNode const & p_node )
+	{
+		if ( p_node.m_program.GetStatus() == ePROGRAM_STATUS_LINKED )
+		{
+			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
+		}
+
+		GeometryBuffersSPtr l_buffers;
+		auto const & l_layout = p_node.m_program.GetLayout();
+		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&l_layout]( GeometryBuffersSPtr p_buffers )
+		{
+			return p_buffers->GetLayout() == l_layout;
+		} );
+
+		if ( l_it == m_geometryBuffers.end() )
+		{
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_node.m_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_geometryBuffers.push_back( l_buffers );
+		}
+		else
+		{
+			l_buffers = *l_it;
+		}
+
+		return *l_buffers;
 	}
 }

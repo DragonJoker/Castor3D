@@ -79,31 +79,24 @@ namespace Castor3D
 
 		if ( File::FileExists( l_path ) )
 		{
-			TextureUnitSPtr l_unit = p_pass.AddTextureUnit();
-
 			try
 			{
+				TextureUnitSPtr l_unit = std::make_shared< TextureUnit >( *p_pass.GetEngine() );
 				l_unit->SetAutoMipmaps( true );
 
-				if ( !l_unit->LoadTexture( l_path ) )
-				{
-					p_pass.DestroyTextureUnit( l_unit->GetIndex() - 1 );
-					l_unit.reset();
-				}
-				else
+				if ( l_unit->LoadTexture( l_path ) )
 				{
 					l_unit->SetChannel( p_channel );
+					p_pass.AddTextureUnit( l_unit );
 				}
 			}
 			catch ( std::exception & p_exc )
 			{
-				p_pass.DestroyTextureUnit( l_unit->GetIndex() - 1 );
 				l_unit.reset();
 				Logger::LogWarning( StringStream() << cuT( "Error encountered while loading texture file " ) << p_path << cuT( ":\n" ) << p_exc.what() );
 			}
 			catch ( ... )
 			{
-				p_pass.DestroyTextureUnit( l_unit->GetIndex() - 1 );
 				l_unit.reset();
 				Logger::LogWarning( cuT( "Unknown error encountered while loading texture file " ) + p_path );
 			}
