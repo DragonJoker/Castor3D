@@ -162,8 +162,6 @@ namespace Castor3D
 		bool m_valid;
 		//!\~english Defines if the debug overlays are shown.	\~french Définit si les incrustations de débogage sont affichées ou cachées.
 		bool m_visible;
-		//!\~english Tells if the debug overlays are loaded successfully.	\~french Dit si les incrustations de débogage sont chargées correctement.
-		bool m_valid;
 		//!\~english The CPU time.	\~french Le temps CPU.
 		double m_cpuTime;
 		//!\~english The GPU time.	\~french Le temps GPU.

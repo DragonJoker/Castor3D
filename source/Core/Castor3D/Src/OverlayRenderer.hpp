@@ -131,39 +131,61 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\brief		Retrieves a panel program compiled using given pass
+		 *\brief		Retrieves a panel program compiled using given pass.
 		 *\param[in]	p_pass	The pass.
-		 *\return		The program
+		 *\return		The program.
 		 *\~french
-		 *\brief		Récupère un programme de panneau compilé en utilisant la passe donnée
-		 *\param[in]	p_pass	La passe
-		 *\return		Le programme
+		 *\brief		Récupère un programme de panneau compilé en utilisant la passe donnée.
+		 *\param[in]	p_pass	La passe.
+		 *\return		Le programme.
 		 */
 		C3D_API RenderNode & DoGetPanelProgram( Pass & p_pass );
 		/**
 		 *\~english
-		 *\brief		Retrieves a text program compiled using given pass
-		 *\param[in]	p_pass	The pass
-		 *\return		The program
+		 *\brief		Retrieves a text program compiled using given pass.
+		 *\param[in]	p_pass	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\return		The program.
 		 *\~french
-		 *\brief		Récupère un programme de texte compilé en utilisant la passe donnée
-		 *\param[in]	p_pass	La passe
-		 *\return		Le programme
+		 *\brief		Récupère un programme de texte compilé en utilisant la passe donnée.
+		 *\param[in]	p_pass	Combinaison de eTEXTURE_CHANNEL.
+		 *\return		Le programme.
 		 */
 		C3D_API RenderNode & DoGetTextProgram( Pass & p_pass );
 		/**
 		 *\~english
-		 *\brief		Retrieves a program compiled using given flags.
+		 *\brief		Retrieves a panel program compiled using given texture flags.
+		 *\param[in]	p_pass	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs de texture donnés.
+		 *\param[in]	p_pass	Combinaison de eTEXTURE_CHANNEL.
+		 *\return		Le programme.
+		 */
+		C3D_API ShaderProgramSPtr DoGetPanelProgram( uint32_t p_flags );
+		/**
+		 *\~english
+		 *\brief		Retrieves a text program compiled using given texture flags
 		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Récupère un programme de texte compilé en utilisant les indicateurs de texture donnés.
+		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL.
+		 *\return		Le programme.
+		 */
+		C3D_API ShaderProgramSPtr DoGetTextProgram( uint32_t p_flags );
+		/**
+		 *\~english
+		 *\brief		Retrieves a program compiled using given flags.
+		 *\param[in]	p_flags		Bitwise ORed eTEXTURE_CHANNEL.
 		 *\param[in,out]p_programs	Looks for a matching shader in this map, creates it if not found and add it to the map.
 		 *\return		The program
 		 *\~french
 		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés.
-		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags		Combinaison de eTEXTURE_CHANNEL.
 		 *\param[in,out]p_programs	Recherche un shader correspondant dans cette map. S'il n'y en a pas, crée le programme et l'ajoute à la map.
 		 *\return		Le programme
 		 */
-		C3D_API RenderNode & DoGetProgram( Pass & p_pass, uint32_t p_flags, std::map< Pass *, RenderNode > & p_programs );
+		C3D_API ShaderProgramSPtr DoGetProgram( uint32_t p_flags );
 		/**
 		 *\~english
 		 *\brief		Creates a GeometryBuffers that can contain 1000 characters.
@@ -177,19 +199,34 @@ namespace Castor3D
 		C3D_API GeometryBuffersSPtr DoCreateTextGeometryBuffers();
 		/**
 		 *\~english
-		 *\brief		Function to draw an overlay
-		 *\param[in]	p_material			The overlay material
-		 *\param[in]	p_geometryBuffers	The overlay geometry buffers
-		 *\param[in]	p_texture			An optional font texture
-		 *\param[in]	p_count				The vertex count
+		 *\brief		Function to draw an overlay.
+		 *\param[in]	p_material			The material.
+		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
+		 *\param[in]	p_texture			An optional font texture.
+		 *\param[in]	p_count				The vertex count.
 		 *\~french
-		 *\brief		Fonction de dessin d'une incrustation
-		 *\param[in]	p_material			The overlay material
-		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation
-		 *\param[in]	p_texture			Une texture de polices optionnelle
-		 *\param[in]	p_count				Le nombre de sommets
+		 *\brief		Fonction de dessin d'une incrustation.
+		 *\param[in]	p_material			Le matériau.
+		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
+		 *\param[in]	p_texture			Une texture de polices optionnelle.
+		 *\param[in]	p_count				Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Material & p_material, GeometryBuffersSPtr p_geometryBuffers, TextureSPtr p_texture, uint32_t p_count );
+		C3D_API void DoDrawItem( Material & p_material, std::array< GeometryBuffersSPtr, 2 > const & p_geometryBuffers, TextureSPtr p_texture, uint32_t p_count );
+		/**
+		 *\~english
+		 *\brief		Function to draw an overlay.
+		 *\param[in]	p_pass				The pass.
+		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
+		 *\param[in]	p_texture			An optional font texture.
+		 *\param[in]	p_count				The vertex count.
+		 *\~french
+		 *\brief		Fonction de dessin d'une incrustation.
+		 *\param[in]	p_pass				La passe.
+		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
+		 *\param[in]	p_texture			Une texture de polices optionnelle.
+		 *\param[in]	p_count				Le nombre de sommets.
+		 */
+		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, TextureSPtr p_texture, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array
@@ -214,9 +251,9 @@ namespace Castor3D
 		//!\~english The Vertex buffers used to render texts.	\~french Les tampons de sommets utilisés pour rendre les textes.
 		std::vector< VertexBufferUPtr > m_textsVertexBuffers;
 		//!\~english Geometry buffers for panels	\~french Tampons de géometrie pour les panneaux
-		GeometryBuffersSPtr m_panelGeometryBuffers;
+		std::array< GeometryBuffersSPtr, 2 > m_panelGeometryBuffers;
 		//!\~english Geometry buffers for borders	\~french Tampons de géometrie pour les bordures
-		GeometryBuffersSPtr m_borderGeometryBuffers;
+		std::array< GeometryBuffersSPtr, 2 > m_borderGeometryBuffers;
 		//!\~english The GeometryBuffers used to render texts	\~french Les GeometryBuffers utilisé pour rendre les textes
 		std::vector< GeometryBuffersSPtr > m_textsGeometryBuffers;
 		//!\~english The buffer elements declaration	\~french La déclaration des éléments du tampon
@@ -227,6 +264,8 @@ namespace Castor3D
 		std::map< Pass *, RenderNode > m_mapPanelPrograms;
 		//!\~english The shader programs used to render texts	\~french Les programmes de shader utilisés pour rendre les textes
 		std::map< Pass *, RenderNode > m_mapTextPrograms;
+		//!\~english The shader programs.	\~french Les programmes de shader.
+		std::map< uint32_t, ShaderProgramSPtr > m_programs;
 		//!\~english Text texture sampler	\~french Echantillonneur de la texture de texte
 		OneTextureFrameVariableSPtr m_mapText;
 		//!\~english The previously rendered BorderPanelOverlay z-index	\~french Le z-index du précedent BorderPanelOverlay rendu

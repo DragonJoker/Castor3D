@@ -45,6 +45,10 @@ if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER}/${PROJECTS_PLATFORM}
 	set( LIBZIP_ROOT_DIR ${DEPENDENCIES_DIR}/libzip )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
 	set( wxWidgets_ROOT_DIR ${DEPENDENCIES_DIR}/wxWidgets )
+	set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
+	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )
+	set( OpenCV_LIBRARY_DIR ${DEPENDENCIES_DIR}/opencv/lib )
+	set( OpenCV_LIB_DIR_OPT ${DEPENDENCIES_DIR}/opencv/lib )
 endif ()
 
 #--------------------------------------------------------------------------------------------------

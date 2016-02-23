@@ -21,7 +21,7 @@
 
 namespace OceanLighting
 {
-	class RenderTechnique : public Castor3D::RenderTechniqueBase
+	class RenderTechnique : public Castor3D::RenderTechnique
 	{
 	private:
 		RenderTechnique & operator =( RenderTechnique const & )
@@ -50,7 +50,7 @@ namespace OceanLighting
 		 *\param[in]	p_params		Les param�tres de la technique
 		 *\return		Un cl�ne de cet objet
 		 */
-		static Castor3D::RenderTechniqueBaseSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
+		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 		inline void SetReloadPrograms( bool p_bLayer )
 		{
@@ -305,42 +305,42 @@ namespace OceanLighting
 		}
 
 	protected:
-		/** \copydoc Castor3D::RenderTechniqueBase::DoCreate
+		/** \copydoc Castor3D::RenderTechnique::DoCreate
 		 */
 		virtual bool DoCreate();
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoDestroy
+		/** \copydoc Castor3D::RenderTechnique::DoDestroy
 		 */
 		virtual void DoDestroy();
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoInitialise
+		/** \copydoc Castor3D::RenderTechnique::DoInitialise
 		 */
 		virtual bool DoInitialise( uint32_t & p_index );
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoCleanup
+		/** \copydoc Castor3D::RenderTechnique::DoCleanup
 		 */
 		virtual void DoCleanup();
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoBeginRender
+		/** \copydoc Castor3D::RenderTechnique::DoBeginRender
 		 */
 		virtual bool DoBeginRender();
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoRender
+		/** \copydoc Castor3D::RenderTechnique::DoRender
 		*/
-		virtual bool DoRender( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, double p_dFrameTime );
+		virtual bool DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, double p_dFrameTime );
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoEndRender
+		/** \copydoc Castor3D::RenderTechnique::DoEndRender
 		 */
 		virtual void DoEndRender();
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoGetVertexShaderSource
+		/** \copydoc Castor3D::RenderTechnique::DoGetVertexShaderSource
 		 */
 		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
 		{
 			return Castor::String();
 		}
 
-		/** \copydoc Castor3D::RenderTechniqueBase::DoGetPixelShaderSource
+		/** \copydoc Castor3D::RenderTechnique::DoGetPixelShaderSource
 		 */
 		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const
 		{

@@ -315,9 +315,9 @@ namespace GlRender
 
 			// Shader inputs
 			IN( l_writer, Vec2, vtx_texture );
-			Optional< Sampler2D > c3d_mapText = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapText" ), CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
-			Optional< Sampler2D > c3d_mapColour = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapColour" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
-			Optional< Sampler2D > c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapOpacity" ), CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) );
+			Optional< Sampler2D > c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
+			Optional< Sampler2D > c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			Optional< Sampler2D > c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) );
 
 			// Shader outputs
 			FRAG_OUTPUT( l_writer, Vec4, pxl_v4FragColor, 0 );

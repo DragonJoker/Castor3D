@@ -341,7 +341,8 @@ namespace CastorShape
 		}
 		else
 		{
-			m_texture = m_pass->AddTextureUnit();
+			m_texture = std::make_shared< TextureUnit >( *m_pass->GetEngine() );
+			m_pass->AddTextureUnit( m_texture );
 			m_properties->SetPropertyValue( PROPERTY_CHANNEL, PROPERTY_CHANNEL_DIFFUSE );
 			m_properties->SetPropertyValue( PROPERTY_TEXTURE_IMAGE, wxString() );
 

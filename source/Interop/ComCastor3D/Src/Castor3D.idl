@@ -1168,13 +1168,11 @@ interface IPass
 	[propput, id( 6 ), helpstring( "The pass two sided status" )] HRESULT TwoSided( [in] boolean val );
 	[propget, id( 7 ), helpstring( "The pass global alpha value" )] HRESULT Alpha( [out, retval] float * pVal );
 	[propput, id( 7 ), helpstring( "The pass global alpha value" )] HRESULT Alpha( [in] float val );
-	[propget, id( 8 ), helpstring( "The pass shader" )] HRESULT Shader( [out, retval] IShaderProgram ** pVal );
-	[propput, id( 8 ), helpstring( "The pass shader" )] HRESULT Shader( [in] IShaderProgram * val );
-	[propget, id( 9 ), helpstring( "Retrieves the units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
-	[id( 10 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
-	[id( 11 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
-	[id( 12 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
-	[id( 13 ), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channe, [out, retval] ITextureUnit ** pVal );
+	[propget, id( 8 ), helpstring( "Retrieves the units count" )] HRESULT TextureUnitCount( [out, retval] unsigned int * pVal );
+	[id( 9 ), helpstring( "Creates a texture unit" )] HRESULT CreateTextureUnit( [out, retval] ITextureUnit ** pVal );
+	[id( 10 ), helpstring( "Retrieves the texture unit at given index" )] HRESULT GetTextureUnitByIndex( [in] unsigned int index, [out, retval] ITextureUnit ** pVal );
+	[id( 11 ), helpstring( "Destroys the texture unit" )] HRESULT DestroyTextureUnit( [in] ITextureUnit * val );
+	[id( 12 ), helpstring( "Retrieves the texture unit at given channel" )] HRESULT GetTextureUnitByChannel( [in] eTEXTURE_CHANNEL channe, [out, retval] ITextureUnit ** pVal );
 };
 
 // IMaterial
