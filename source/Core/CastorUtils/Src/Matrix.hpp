@@ -70,7 +70,7 @@ namespace Castor
 			: m_data( p_rhs.m_data )
 			, m_ownCoords( p_rhs.m_ownCoords )
 		{
-			p_rhs.m_data = NULL;
+			p_rhs.m_data = nullptr;
 			p_rhs.m_ownCoords = true;
 		}
 		/**
@@ -105,7 +105,7 @@ namespace Castor
 
 				m_data = p_rhs.m_data;
 				m_ownCoords = p_rhs.m_ownCoords;
-				p_rhs.m_data = NULL;
+				p_rhs.m_data = nullptr;
 				p_rhs.m_ownCoords = true;
 			}
 
@@ -124,7 +124,7 @@ namespace Castor
 			if ( m_ownCoords )
 			{
 				delete [] m_data;
-				m_data = NULL;
+				m_data = nullptr;
 			}
 
 			m_data = p_data;
@@ -188,7 +188,7 @@ namespace Castor
 			: m_data( p_rhs.m_data )
 			, m_ownCoords( p_rhs.m_ownCoords )
 		{
-			p_rhs.m_data = NULL;
+			p_rhs.m_data = nullptr;
 			p_rhs.m_ownCoords = true;
 		}
 		/**
@@ -223,7 +223,7 @@ namespace Castor
 
 				m_data = p_rhs.m_data;
 				m_ownCoords = p_rhs.m_ownCoords;
-				p_rhs.m_data = NULL;
+				p_rhs.m_data = nullptr;
 				p_rhs.m_ownCoords = true;
 			}
 
@@ -242,7 +242,7 @@ namespace Castor
 			if ( m_ownCoords )
 			{
 				AlignedFree( m_data );
-				m_data = NULL;
+				m_data = nullptr;
 			}
 
 			m_data = p_data;

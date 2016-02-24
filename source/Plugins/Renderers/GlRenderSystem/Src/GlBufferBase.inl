@@ -50,7 +50,7 @@ namespace GlRender
 	template< typename T >
 	T * GlBufferBase< T >::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
-		T * l_return = NULL;
+		T * l_return = nullptr;
 
 		if ( this->GetGlName() != eGL_INVALID_INDEX )
 		{
@@ -63,7 +63,7 @@ namespace GlRender
 	template< typename T >
 	T * GlBufferBase< T >::Lock( eGL_LOCK p_access )
 	{
-		T * l_return = NULL;
+		T * l_return = nullptr;
 
 		if ( this->GetGlName() != eGL_INVALID_INDEX )
 		{

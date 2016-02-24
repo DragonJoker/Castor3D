@@ -379,7 +379,7 @@ namespace Castor
 		 */
 		inline component_const_ptr const_ptr()const
 		{
-			return ( m_pComponents ? & m_pComponents.get()[0] : NULL );
+			return ( m_pComponents ? & m_pComponents.get()[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -391,7 +391,7 @@ namespace Castor
 		 */
 		inline component_ptr ptr()
 		{
-			return ( m_pComponents ? & m_pComponents.get()[0] : NULL );
+			return ( m_pComponents ? & m_pComponents.get()[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -403,7 +403,7 @@ namespace Castor
 		 */
 		inline iterator begin()
 		{
-			return ( m_pComponents ? & m_pComponents.get()[0] : NULL );
+			return ( m_pComponents ? & m_pComponents.get()[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -415,7 +415,7 @@ namespace Castor
 		 */
 		inline const_iterator begin()const
 		{
-			return ( m_pComponents ? & m_pComponents.get()[0] : NULL );
+			return ( m_pComponents ? & m_pComponents.get()[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -427,7 +427,7 @@ namespace Castor
 		 */
 		inline iterator end()
 		{
-			return ( m_pComponents ? m_pComponents.get() + pixel_definitions< FT >::Size : NULL );
+			return ( m_pComponents ? m_pComponents.get() + pixel_definitions< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english
@@ -439,7 +439,7 @@ namespace Castor
 		 */
 		inline const_iterator end()const
 		{
-			return ( m_pComponents ? m_pComponents.get() + pixel_definitions< FT >::Size : NULL );
+			return ( m_pComponents ? m_pComponents.get() + pixel_definitions< FT >::Size : nullptr );
 		}
 		/**
 		 *\~english

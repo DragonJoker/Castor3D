@@ -64,7 +64,7 @@ namespace Castor
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
 			stSCREEN l_screen = { p_screen, 0, p_size };
-			BOOL bRet = ::EnumDisplayMonitors( NULL, NULL, MonitorEnum, WPARAM( &l_screen ) );
+			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &l_screen ) );
 			return true;
 		}
 
@@ -75,9 +75,9 @@ namespace Castor
 
 			if ( l_dwError != ERROR_SUCCESS )
 			{
-				LPTSTR l_szError = NULL;
+				LPTSTR l_szError = nullptr;
 
-				if ( ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, l_dwError, 0, LPTSTR( &l_szError ), 0, NULL ) != 0 )
+				if ( ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, l_dwError, 0, LPTSTR( &l_szError ), 0, nullptr ) != 0 )
 				{
 					l_strReturn += cuT( " (" ) + String( l_szError ) + cuT( ")" );
 					string::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
@@ -119,9 +119,9 @@ namespace Castor
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
 			bool l_return = false;
-			Display * pdsp = NULL;
-			Screen * pscr = NULL;
-			pdsp = XOpenDisplay( NULL );
+			Display * pdsp = nullptr;
+			Screen * pscr = nullptr;
+			pdsp = XOpenDisplay( nullptr );
 
 			if ( !pdsp )
 			{
@@ -151,9 +151,9 @@ namespace Castor
 		{
 			String l_strReturn;
 			int l_error = errno;
-			char * l_szError = NULL;
+			char * l_szError = nullptr;
 
-			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != NULL )
+			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != nullptr )
 			{
 				l_strReturn = string::to_string( l_error ) + cuT( " (" ) + string::string_cast< xchar >( l_szError ) + cuT( ")" );
 				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );

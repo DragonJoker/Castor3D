@@ -34,7 +34,7 @@ namespace Castor
 				: public ZipArchive::ZipImpl
 		{
 			ZipImpl()
-				: m_zip( NULL )
+				: m_zip( nullptr )
 			{
 			}
 
@@ -85,7 +85,7 @@ namespace Castor
 					CASTOR_EXCEPTION( "Error while closing ZIP archive : " + l_error );
 				}
 
-				m_zip = NULL;
+				m_zip = nullptr;
 			}
 
 			virtual bool FindFolder( String const & p_folder )
@@ -324,7 +324,7 @@ namespace Castor
 
 	ZipArchive::Folder * ZipArchive::Folder::FindFolder( Path const & p_path )
 	{
-		ZipArchive::Folder * l_return = NULL;
+		ZipArchive::Folder * l_return = nullptr;
 
 		if ( name.empty() )
 		{

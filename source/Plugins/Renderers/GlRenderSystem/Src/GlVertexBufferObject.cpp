@@ -63,7 +63,7 @@ namespace GlRender
 
 	uint8_t * GlVertexBufferObject::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
-		uint8_t * l_return = NULL;
+		uint8_t * l_return = nullptr;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )

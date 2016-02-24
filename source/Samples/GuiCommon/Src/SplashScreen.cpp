@@ -12,7 +12,7 @@ using namespace Castor3D;
 using namespace Castor;
 
 SplashScreen::SplashScreen( wxString const & p_strTitle, wxPoint const & p_ptTitlePos, wxPoint const & p_ptCopyrightPos, wxPoint const & p_ptVersionPos, wxPoint p_ptPos, int p_iRange )
-	: wxFrame( NULL, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
+	: wxFrame( nullptr, wxID_ANY, p_strTitle, p_ptPos, wxSize( 512, 384 ), wxCLIP_CHILDREN | wxBORDER_NONE )
 	, m_bmpSplash( splash_xpm )
 	, m_ptTitlePosition( p_ptTitlePos )
 	, m_ptCopyrightPosition( p_ptCopyrightPos )

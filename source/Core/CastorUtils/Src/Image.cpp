@@ -79,7 +79,7 @@ namespace Castor
 		}
 
 		ePIXEL_FORMAT l_ePF = ePIXEL_FORMAT_R8G8B8;
-		FIBITMAP * l_pImage = NULL;
+		FIBITMAP * l_pImage = nullptr;
 		int l_iFlags = BMP_DEFAULT;
 		FREE_IMAGE_FORMAT l_fif = FreeImage_GetFileType( string::string_cast< char >( p_path ).c_str(), 0 );
 
@@ -104,7 +104,7 @@ namespace Castor
 			BinaryFile l_file( p_path, File::eOPEN_MODE_READ | File::eOPEN_MODE_BINARY );
 			FreeImageIO l_fiIo;
 			l_fiIo.read_proc = ReadProc;
-			l_fiIo.write_proc = NULL;
+			l_fiIo.write_proc = nullptr;
 			l_fiIo.seek_proc = SeekProc;
 			l_fiIo.tell_proc = TellProc;
 			l_pImage = FreeImage_LoadFromHandle( l_fif, & l_fiIo, fi_handle( & l_file ), l_iFlags );
@@ -167,7 +167,7 @@ namespace Castor
 	bool Image::BinaryLoader::operator()( Image const & p_image, Path const & p_path )
 	{
 		bool l_return = false;
-		FIBITMAP * l_pImage = NULL;
+		FIBITMAP * l_pImage = nullptr;
 		Size const & l_size = p_image.GetDimensions();
 		int32_t l_w = int32_t( l_size.width() );
 		int32_t l_h = int32_t( l_size.height() );
@@ -313,7 +313,7 @@ namespace Castor
 
 		if ( p_size != l_size )
 		{
-			FIBITMAP * l_pImage = NULL;
+			FIBITMAP * l_pImage = nullptr;
 			int32_t l_w = int32_t( l_size.width() );
 			int32_t l_h = int32_t( l_size.height() );
 			ePIXEL_FORMAT l_ePF = GetPixelFormat();

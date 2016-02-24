@@ -77,14 +77,14 @@ namespace Castor
 			if ( DoGetInstance() )
 			{
 				delete DoGetInstance();
-				DoGetInstance() = NULL;
+				DoGetInstance() = nullptr;
 			}
 		}
 
 	private:
 		static inline MyObjectPool *& DoGetInstance()
 		{
-			static MyObjectPool * s_instance = NULL;
+			static MyObjectPool * s_instance = nullptr;
 			return s_instance;
 		}
 	};
@@ -143,14 +143,14 @@ namespace Castor
 			if ( DoGetInstance() )
 			{
 				delete DoGetInstance();
-				DoGetInstance() = NULL;
+				DoGetInstance() = nullptr;
 			}
 		}
 
 	private:
 		static inline MyAlignedObjectPool *& DoGetInstance()
 		{
-			static MyAlignedObjectPool * s_instance = NULL;
+			static MyAlignedObjectPool * s_instance = nullptr;
 			return s_instance;
 		}
 	};

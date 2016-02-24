@@ -89,7 +89,7 @@ namespace Castor
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords()
-		: m_coords( NULL )
+		: m_coords( nullptr )
 	{
 	}
 
@@ -107,10 +107,10 @@ namespace Castor
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( Coords< T, Count > && p_pt )
-		: m_coords( NULL )
+		: m_coords( nullptr )
 	{
 		m_coords = std::move( p_pt.m_coords );
-		p_pt.m_coords = NULL;
+		p_pt.m_coords = nullptr;
 	}
 
 	template< typename T, uint32_t Count >
@@ -131,7 +131,7 @@ namespace Castor
 		if ( this != &p_pt )
 		{
 			m_coords = std::move( p_pt.m_coords );
-			p_pt.m_coords = NULL;
+			p_pt.m_coords = nullptr;
 		}
 
 		return *this;

@@ -44,7 +44,7 @@ namespace Castor3D
 		 *\param[in]	p_buffer		Le tampon de données
 		 *\param[in]	p_index		L'indice du groupe
 		 */
-		C3D_API BufferElementGroup( uint8_t * p_buffer = NULL, uint32_t p_index = 0 );
+		C3D_API BufferElementGroup( uint8_t * p_buffer = nullptr, uint32_t p_index = 0 );
 		/**
 		 *\~english
 		 *\brief		Destructor

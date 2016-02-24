@@ -116,7 +116,7 @@ namespace CastorViewer
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
 			delete m_pTimer[i];
-			m_pTimer[i] = NULL;
+			m_pTimer[i] = nullptr;
 		}
 	}
 

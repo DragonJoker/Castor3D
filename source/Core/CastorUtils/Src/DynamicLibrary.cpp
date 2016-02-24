@@ -12,13 +12,13 @@
 namespace Castor
 {
 	DynamicLibrary::DynamicLibrary()throw()
-		:	m_pLibrary( NULL	)
+		:	m_pLibrary( nullptr	)
 		,	m_pathLibrary(	)
 	{
 	}
 
 	DynamicLibrary::DynamicLibrary( DynamicLibrary const & p_lib )throw()
-		:	m_pLibrary( NULL	)
+		:	m_pLibrary( nullptr	)
 		,	m_pathLibrary(	)
 	{
 		if ( p_lib.m_pLibrary )
@@ -31,7 +31,7 @@ namespace Castor
 		:	m_pLibrary( std::move( p_lib.m_pLibrary )	)
 		,	m_pathLibrary( std::move( p_lib.m_pathLibrary )	)
 	{
-		p_lib.m_pLibrary = NULL;
+		p_lib.m_pLibrary = nullptr;
 		p_lib.m_pathLibrary.clear();
 	}
 
@@ -58,7 +58,7 @@ namespace Castor
 		{
 			m_pLibrary		= std::move( p_lib.m_pLibrary );
 			m_pathLibrary	= std::move( p_lib.m_pathLibrary );
-			p_lib.m_pLibrary = NULL;
+			p_lib.m_pLibrary = nullptr;
 			p_lib.m_pathLibrary.clear();
 		}
 
@@ -91,7 +91,7 @@ namespace Castor
 			catch ( ... )
 			{
 				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
-				m_pLibrary = NULL;
+				m_pLibrary = nullptr;
 			}
 
 			if ( !m_pLibrary )
@@ -112,18 +112,18 @@ namespace Castor
 			catch ( ... )
 			{
 				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
-				m_pLibrary = NULL;
+				m_pLibrary = nullptr;
 			}
 
 #endif
 		}
 
-		return m_pLibrary != NULL;
+		return m_pLibrary != nullptr;
 	}
 
 	void * DynamicLibrary::DoGetFunction( String const & p_name )throw()
 	{
-		void * l_return = NULL;
+		void * l_return = nullptr;
 
 		if ( m_pLibrary )
 		{
@@ -140,7 +140,7 @@ namespace Castor
 			}
 			catch ( ... )
 			{
-				l_return = NULL;
+				l_return = nullptr;
 				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]" ) );
 			}
 
@@ -174,7 +174,7 @@ namespace Castor
 			}
 
 #endif
-			m_pLibrary = NULL;
+			m_pLibrary = nullptr;
 		}
 	}
 }

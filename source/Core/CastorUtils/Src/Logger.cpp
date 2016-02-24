@@ -132,12 +132,12 @@ namespace Castor
 		}
 	};
 
-	Logger * Logger::m_singleton = NULL;
+	Logger * Logger::m_singleton = nullptr;
 	bool Logger::m_ownInstance = true;
 	uint32_t Logger::m_counter = 0;
 
 	Logger::Logger()
-		: m_impl( NULL )
+		: m_impl( nullptr )
 	{
 		std::unique_lock< std::mutex > lock( m_mutex );
 		m_headers[ELogType_DEBUG] = cuT( "***DEBUG*** " );
@@ -168,7 +168,7 @@ namespace Castor
 		{
 			m_impl->Cleanup();
 			delete m_impl;
-			m_impl = NULL;
+			m_impl = nullptr;
 		}
 	}
 
@@ -229,7 +229,7 @@ namespace Castor
 		{
 			m_counter--;
 			delete m_singleton;
-			m_singleton = NULL;
+			m_singleton = nullptr;
 		}
 	}
 

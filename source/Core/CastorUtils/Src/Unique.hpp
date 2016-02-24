@@ -85,19 +85,19 @@ namespace Castor
 		 */
 		inline ~Unique()
 		{
-			DoGetInstance() = NULL;
+			DoGetInstance() = nullptr;
 		}
 
 	private:
 		/**
 		 *\~english
-		 *\return		The unique instance, NULL if none.
+		 *\return		The unique instance, nullptr if none.
 		 *\~french
-		 *\return		L'instance unique, NULL s'il n'y en a pas.
+		 *\return		L'instance unique, nullptr s'il n'y en a pas.
 		 */
 		static inline T *& DoGetInstance()
 		{
-			static T * l_pInstance = NULL;
+			static T * l_pInstance = nullptr;
 			return l_pInstance;
 		}
 	};

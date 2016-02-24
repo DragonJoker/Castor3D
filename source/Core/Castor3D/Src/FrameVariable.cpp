@@ -164,7 +164,7 @@ namespace Castor3D
 		p_object.m_name.clear();
 		p_object.m_occurences = 0;
 		p_object.m_strValue.clear();
-		p_object.m_program = NULL;
+		p_object.m_program = nullptr;
 	}
 
 	FrameVariable & FrameVariable::operator =( FrameVariable const & p_object )
@@ -187,7 +187,7 @@ namespace Castor3D
 			p_object.m_name.clear();
 			p_object.m_occurences = 0;
 			p_object.m_strValue.clear();
-			p_object.m_program = NULL;
+			p_object.m_program = nullptr;
 		}
 
 		return *this;

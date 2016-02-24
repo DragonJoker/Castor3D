@@ -118,7 +118,7 @@ namespace Castor
 				const int MaxFnNameLen( 255 );
 
 				void * l_backTrace[CALLS_TO_CAPTURE - CALLS_TO_SKIP];
-				unsigned int l_num( ::RtlCaptureStackBackTrace( CALLS_TO_SKIP, CALLS_TO_CAPTURE - CALLS_TO_SKIP, l_backTrace, NULL ) );
+				unsigned int l_num( ::RtlCaptureStackBackTrace( CALLS_TO_SKIP, CALLS_TO_CAPTURE - CALLS_TO_SKIP, l_backTrace, nullptr ) );
 
 				::HANDLE l_process( ::GetCurrentProcess() );
 				p_stream << "CALL STACK:" << std::endl;
@@ -133,7 +133,7 @@ namespace Castor
 
 					if ( !SymbolsInitialised )
 					{
-						SymbolsInitialised = ::SymInitialize( l_process, NULL, TRUE ) == TRUE;
+						SymbolsInitialised = ::SymInitialize( l_process, nullptr, TRUE ) == TRUE;
 					}
 
 					if ( SymbolsInitialised )

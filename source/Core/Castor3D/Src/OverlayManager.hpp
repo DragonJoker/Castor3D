@@ -124,7 +124,7 @@ namespace Castor3D
 		 *\remark		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
 		 *\param[in]	p_type		The overlay type (panel, text ...)
 		 *\param[in]	p_name	The overlay name
-		 *\param[in]	p_parent	The parent overlay, NULL if none
+		 *\param[in]	p_parent	The parent overlay, nullptr if none
 		 *\param[in]	p_scene	The scene that holds the overlay
 		 *\return		The created overlay
 		 *\~french

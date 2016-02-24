@@ -50,6 +50,7 @@ namespace CastorViewer
 		void DoCleanupScene();
 		void DoSaveFrame();
 		bool DoStartRecord();
+		void DoRecordFrame();
 		void DoStopRecord();
 
 	private:

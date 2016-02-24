@@ -30,7 +30,7 @@
 	template< typename T >
 	TFrameVariable< T >::TFrameVariable( ShaderProgram * p_program )
 		: FrameVariable( p_program )
-		, m_values( NULL )
+		, m_values( nullptr )
 		, m_bOwnBuffer( true )
 	{
 		// m_values initialised in child classes
@@ -39,7 +39,7 @@
 	template< typename T >
 	TFrameVariable< T >::TFrameVariable( ShaderProgram * p_program, uint32_t p_occurences )
 		: FrameVariable( p_program, p_occurences )
-		, m_values( NULL )
+		, m_values( nullptr )
 		, m_bOwnBuffer( true )
 	{
 		// m_values initialised in child classes
@@ -48,7 +48,7 @@
 	template< typename T >
 	TFrameVariable< T >::TFrameVariable( TFrameVariable< T > const & p_rVariable )
 		: FrameVariable( p_rVariable )
-		, m_values( NULL )
+		, m_values( nullptr )
 		, m_bOwnBuffer( p_rVariable.m_bOwnBuffer )
 	{
 		if ( p_rVariable.m_bOwnBuffer )
@@ -80,7 +80,7 @@
 			p_rVariable.m_strValue[i].clear();
 		}
 
-		p_rVariable.m_values = NULL;
+		p_rVariable.m_values = nullptr;
 	}
 
 	template< typename T >

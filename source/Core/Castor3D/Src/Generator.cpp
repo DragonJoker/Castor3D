@@ -175,7 +175,7 @@ void Generator::ClearAllThreads()
 	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread *& p_pThread )
 	{
 		Generator::Thread * l_pThread = p_pThread;
-		p_pThread = NULL;
+		p_pThread = nullptr;
 
 		if ( l_pThread )
 		{
@@ -193,7 +193,7 @@ bool Generator::AllEnded()
 
 	for ( uint32_t i = 0; i < l_count && l_return; i++ )
 	{
-		l_return &= m_arraySlaveThreads[i] == NULL || m_arraySlaveThreads[i]->IsEnded();
+		l_return &= m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->IsEnded();
 	}
 
 	return l_return;

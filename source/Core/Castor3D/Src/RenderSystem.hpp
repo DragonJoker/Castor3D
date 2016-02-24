@@ -148,10 +148,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the top scene from the stack
-		 *\return		The scene, NULL if the stack is void
+		 *\return		The scene, nullptr if the stack is void
 		 *\~french
 		 *\brief		Récupère la scène du haut de la pile
-		 *\return		La scène, NULL si la pile est vide
+		 *\return		La scène, nullptr si la pile est vide
 		 */
 		C3D_API Scene * GetTopScene();
 		/**

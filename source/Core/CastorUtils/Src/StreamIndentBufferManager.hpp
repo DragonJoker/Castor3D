@@ -128,7 +128,7 @@ namespace Castor
 
 				if ( cb_iter == m_list.end() )
 				{
-					return NULL;
+					return nullptr;
 				}
 
 				return cb_iter->second;

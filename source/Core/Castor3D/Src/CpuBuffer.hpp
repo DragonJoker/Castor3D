@@ -147,7 +147,7 @@ namespace Castor3D
 		 */
 		inline T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 		{
-			T * l_return = NULL;
+			T * l_return = nullptr;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
@@ -406,7 +406,7 @@ namespace Castor3D
 		 */
 		inline T const * data()const
 		{
-			return ( m_arrayData.size() ? &m_arrayData[0] : NULL );
+			return ( m_arrayData.size() ? &m_arrayData[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -418,7 +418,7 @@ namespace Castor3D
 		 */
 		inline T * data()
 		{
-			return ( m_arrayData.size() ? &m_arrayData[0] : NULL );
+			return ( m_arrayData.size() ? &m_arrayData[0] : nullptr );
 		}
 
 	protected:

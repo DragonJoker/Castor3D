@@ -186,7 +186,7 @@ namespace GuiCommon
 	bool PassTreeItemProperty::OnEditShader( wxPGProperty * p_property )
 	{
 		PassSPtr l_pass = GetPass();
-		ShaderDialog * l_editor = new ShaderDialog( l_pass->GetEngine(), IsEditable(), NULL, l_pass );
+		ShaderDialog * l_editor = new ShaderDialog( l_pass->GetEngine(), IsEditable(), nullptr, l_pass );
 		l_editor->Show();
 		return false;
 	}

@@ -30,7 +30,7 @@ namespace GlRender
 		, public GlFrameVariableBase
 	{
 	public:
-		GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program = NULL );
+		GlMatrixFrameVariable( OpenGl & p_gl, uint32_t p_occurences, GlShaderProgram * p_program = nullptr );
 		GlMatrixFrameVariable( OpenGl & p_gl, Castor3D::MatrixFrameVariable<T, Rows, Columns> * p_variable );
 		virtual ~GlMatrixFrameVariable();
 

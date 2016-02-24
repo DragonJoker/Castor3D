@@ -164,11 +164,11 @@ namespace GuiCommon
 		 *\~english
 		 *\brief		Should contain the application main frame initialisation code.
 		 *\param[in]	p_splashScreen	The splash screen.
-		 *\return		The main frame. If NULL, the application will stop.
+		 *\return		The main frame. If nullptr, the application will stop.
 		 *\~french
 		 *\brief		Devrait contenir le code d'initialisation de la fenêtre principale de l'application.
 		 *\param[in]	p_splashScreen	Le splash screen.
-		 *\return		La fenêtre principale. Si NULL, l'application s'arrêtera.
+		 *\return		La fenêtre principale. Si nullptr, l'application s'arrêtera.
 		 */
 		virtual wxWindow * DoInitialiseMainFrame( SplashScreen * p_splashScreen ) = 0;
 

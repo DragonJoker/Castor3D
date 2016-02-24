@@ -59,7 +59,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 	}
 
 #define GC_IMPLEMENT_CLASS_COMMON1( name, basename, func )\
-    GC_IMPLEMENT_CLASS_COMMON( name, basename, NULL, func )
+    GC_IMPLEMENT_CLASS_COMMON( name, basename, nullptr, func )
 
 // Single inheritance with one base class
 #define GC_IMPLEMENT_DYNAMIC_CLASS( name, basename )\

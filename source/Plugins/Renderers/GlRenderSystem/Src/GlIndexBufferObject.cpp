@@ -66,7 +66,7 @@ namespace GlRender
 
 	uint32_t * GlIndexBufferObject::Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 	{
-		uint32_t * l_return = NULL;
+		uint32_t * l_return = nullptr;
 		HardwareBufferPtr l_pBuffer = GetCpuBuffer();
 
 		if ( l_pBuffer && l_pBuffer->IsAssigned() )

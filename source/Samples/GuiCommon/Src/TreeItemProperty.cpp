@@ -19,7 +19,7 @@ namespace GuiCommon
 		, m_type( p_type )
 		, m_editable( p_editable )
 		, m_engine( p_engine )
-		, m_menu( NULL )
+		, m_menu( nullptr )
 	{
 	}
 

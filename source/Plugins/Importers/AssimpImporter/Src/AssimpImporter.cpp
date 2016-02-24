@@ -168,7 +168,7 @@ namespace C3dAssimp
 	{
 		const aiNodeAnim * FindNodeAnim( const aiAnimation * p_animation, const String p_nodeName )
 		{
-			const aiNodeAnim * l_return = NULL;
+			const aiNodeAnim * l_return = nullptr;
 
 			for ( uint32_t i = 0; i < p_animation->mNumChannels && !l_return; ++i )
 			{

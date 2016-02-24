@@ -37,7 +37,7 @@ namespace GuiCommon
 {
 	MaterialsList::MaterialsList( PropertiesHolder * p_propertiesHolder, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxTreeCtrl( p_parent, wxID_ANY, p_ptPos, p_size, wxTR_DEFAULT_STYLE | wxTR_HIDE_ROOT | wxNO_BORDER )
-		, m_engine( NULL )
+		, m_engine( nullptr )
 		, m_propertiesHolder( p_propertiesHolder )
 	{
 		wxBusyCursor l_wait;
@@ -211,13 +211,13 @@ namespace GuiCommon
 	//
 	//wxImage * MaterialsList::CreatePassImage( PassSPtr p_pPass, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_return = NULL;
+	//	wxImage * l_return = nullptr;
 	//
 	//	if ( p_pPass )
 	//	{
 	//		wxBitmap l_bmpReturn( p_width, p_height, 32 );
 	//		wxMemoryDC l_dcReturn( l_bmpReturn );
-	//		wxImage * l_pMask = NULL;
+	//		wxImage * l_pMask = nullptr;
 	//		typedef uint32_t uint;
 	//		l_pMask = new wxImage( p_width, p_height );
 	//		l_pMask->InitAlpha();
@@ -312,7 +312,7 @@ namespace GuiCommon
 	//
 	//wxImage * MaterialsList::CreateTextureUnitImage( TextureUnitSPtr p_pUnit, uint32_t p_width, uint32_t p_height )
 	//{
-	//	wxImage * l_return = NULL;
+	//	wxImage * l_return = nullptr;
 	//
 	//	if ( p_pUnit )
 	//	{

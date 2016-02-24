@@ -34,7 +34,7 @@ namespace CastorViewer
 {
 	CastorViewerApp::CastorViewerApp()
 		: CastorApplication( cuT( "CastorViewer" ), cuT( "Castor Viewer" ), 7 )
-		, m_mainFrame( NULL )
+		, m_mainFrame( nullptr )
 	{
 	}
 
@@ -76,7 +76,7 @@ namespace CastorViewer
 		else
 		{
 			delete m_mainFrame;
-			m_mainFrame = NULL;
+			m_mainFrame = nullptr;
 		}
 
 		return m_mainFrame;

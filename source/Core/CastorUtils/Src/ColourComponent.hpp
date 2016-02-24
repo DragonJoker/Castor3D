@@ -48,7 +48,7 @@ namespace Castor
 		 *\brief		Constructeur par recopie
 		 *\param[in]	p_object	L'objet à copier
 		 */
-		ColourComponent()	: m_pfComponent( NULL ) {}
+		ColourComponent()	: m_pfComponent( nullptr ) {}
 
 	public:
 		/**

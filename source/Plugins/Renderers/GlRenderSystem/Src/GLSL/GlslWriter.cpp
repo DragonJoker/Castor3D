@@ -38,7 +38,7 @@ namespace GlRender
 		Ubo::Ubo( GlslWriter & p_writer, Castor::String const & p_name )
 			: m_writer( p_writer )
 			, m_name( p_name )
-			, m_block( NULL )
+			, m_block( nullptr )
 		{
 			if ( m_writer.GetOpenGl().HasUbo() )
 			{
@@ -52,7 +52,7 @@ namespace GlRender
 		void Ubo::End()
 		{
 			delete m_block;
-			m_block = NULL;
+			m_block = nullptr;
 			m_writer.m_uniform = cuT( "uniform " );
 
 			if ( m_writer.GetOpenGl().HasUbo() )
@@ -68,7 +68,7 @@ namespace GlRender
 		Struct::Struct( GlslWriter & p_writer, Castor::String const & p_name )
 			: m_writer( p_writer )
 			, m_name( p_name )
-			, m_block( NULL )
+			, m_block( nullptr )
 		{
 			m_writer << Endl();
 			m_writer << cuT( "struct " ) << p_name << Endl();
@@ -78,7 +78,7 @@ namespace GlRender
 		void Struct::End()
 		{
 			delete m_block;
-			m_block = NULL;
+			m_block = nullptr;
 			m_writer << cuT( ";" ) << Endl();
 		}
 

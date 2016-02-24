@@ -12,16 +12,20 @@ using namespace Castor;
 namespace Castor3D
 {
 	static const char * CALL_RENDER_SYNC_FRAME = "Can't call RenderSyncFrame in threaded render loop";
+	static const char * CALL_PAUSE_RENDERING = "Can't call Pause on a paused render loop";
+	static const char * CALL_RESUME_RENDERING = "Can't call Resume on a non paused render loop";
+	static const char * RLA_UNKNOWN_EXCEPTION = "Unknown exception";
 
 	RenderLoopAsync::RenderLoopAsync( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS )
 		: RenderLoop( p_engine, p_renderSystem, p_wantedFPS )
 		, m_mainLoopThread( nullptr )
+		, m_paused( false )
+		, m_ended( false )
+		, m_rendering( false )
+		, m_createContext( false )
+		, m_created( false )
+		, m_interrupted( false )
 	{
-		m_ended = false;
-		m_rendering = false;
-		m_createContext = false;
-		m_created = false;
-		m_interrupted = false;
 		m_mainLoopThread.reset( new std::thread( std::bind( &RenderLoopAsync::DoMainLoop, this ) ) );
 	}
 
@@ -53,6 +57,11 @@ namespace Castor3D
 		return m_ended;
 	}
 
+	bool RenderLoopAsync::IsPaused()const
+	{
+		return m_paused;
+	}
+
 	void RenderLoopAsync::DoStartRendering()
 	{
 		m_rendering = true;
@@ -60,7 +69,55 @@ namespace Castor3D
 
 	void RenderLoopAsync::DoRenderSyncFrame()
 	{
-		CASTOR_EXCEPTION( CALL_RENDER_SYNC_FRAME );
+		if ( !m_paused )
+		{
+			CASTOR_EXCEPTION( CALL_RENDER_SYNC_FRAME );
+		}
+
+		if ( m_rendering )
+		{
+			try
+			{
+				DoRenderFrame();
+			}
+			catch ( Exception & p_exc )
+			{
+				Logger::LogError( p_exc.GetFullDescription() );
+			}
+			catch ( std::exception & p_exc )
+			{
+				Logger::LogError( p_exc.what() );
+			}
+			catch ( ... )
+			{
+				Logger::LogError( RLA_UNKNOWN_EXCEPTION );
+			}
+		}
+	}
+
+	void RenderLoopAsync::DoPause()
+	{
+		if ( m_paused )
+		{
+			CASTOR_EXCEPTION( CALL_PAUSE_RENDERING );
+		}
+
+		m_paused = true;
+
+		while ( !m_frameEnded )
+		{
+			System::Sleep( 5 );
+		}
+	}
+
+	void RenderLoopAsync::DoResume()
+	{
+		if ( !m_paused )
+		{
+			CASTOR_EXCEPTION( CALL_RESUME_RENDERING );
+		}
+
+		m_paused = false;
 	}
 
 	void RenderLoopAsync::DoEndRendering()
@@ -88,7 +145,7 @@ namespace Castor3D
 			}
 
 			m_createContext = false;
-			DoSetWindow( NULL );
+			DoSetWindow( nullptr );
 			l_return = m_renderSystem->GetMainContext();
 		}
 
@@ -98,6 +155,7 @@ namespace Castor3D
 	void RenderLoopAsync::DoMainLoop()
 	{
 		PreciseTimer l_timer;
+		m_frameEnded = true;
 
 		try
 		{
@@ -129,12 +187,14 @@ namespace Castor3D
 				}
 
 				// Le rendu est en cours
-				while ( !IsInterrupted() && IsRendering() )
+				while ( !IsInterrupted() && IsRendering() && !IsPaused() )
 				{
+					m_frameEnded = false;
 					double l_dFrameTime = GetFrameTime();
 					l_timer.TimeS();
 					DoRenderFrame();
 					double l_dTimeDiff = l_timer.TimeS();
+					m_frameEnded = true;
 
 					if ( l_dTimeDiff < l_dFrameTime )
 					{
@@ -161,6 +221,7 @@ namespace Castor3D
 
 		// A final render to clean the renderers
 		DoRenderFrame();
+		m_renderSystem->Cleanup();
 	}
 
 	void RenderLoopAsync::DoSetWindow( RenderWindow * p_window )

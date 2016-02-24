@@ -8,24 +8,24 @@ namespace GlRender
 	namespace GLSL
 	{
 		Expr::Expr()
-			: m_writer( NULL )
+			: m_writer( nullptr )
 		{
 		}
 
 		Expr::Expr( int p_value )
-			: m_writer( NULL )
+			: m_writer( nullptr )
 		{
 			m_value << p_value;
 		}
 
 		Expr::Expr( float p_value )
-			: m_writer( NULL )
+			: m_writer( nullptr )
 		{
 			m_value << p_value;
 		}
 
 		Expr::Expr( double p_value )
-			: m_writer( NULL )
+			: m_writer( nullptr )
 		{
 			m_value << p_value;
 		}

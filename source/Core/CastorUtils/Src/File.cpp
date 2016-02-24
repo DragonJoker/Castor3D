@@ -83,7 +83,7 @@ namespace Castor
 
 			DIR * l_dir;
 
-			if ( ( l_dir = opendir( string::string_cast< char >( p_folderPath ).c_str() ) ) == NULL )
+			if ( ( l_dir = opendir( string::string_cast< char >( p_folderPath ).c_str() ) ) == nullptr )
 			{
 				switch ( errno )
 				{
@@ -127,7 +127,7 @@ namespace Castor
 				l_return = true;
 				dirent * l_dirent;
 
-				while ( l_return && ( l_dirent = readdir( l_dir ) ) != NULL )
+				while ( l_return && ( l_dirent = readdir( l_dir ) ) != nullptr )
 				{
 					String l_name = string::string_cast< xchar >( l_dirent->d_name );
 
@@ -226,14 +226,14 @@ namespace Castor
 	bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
 	{
 		p_pFile = fopen( p_pszPath, p_pszMode );
-		return p_pFile != NULL;
+		return p_pFile != nullptr;
 	}
 
 #	if !defined( _WIN32 )
 	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
 	{
 		p_pFile = fopen64( p_pszPath, p_pszMode );
-		return p_pFile != NULL;
+		return p_pFile != nullptr;
 	}
 
 	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin )
@@ -249,7 +249,7 @@ namespace Castor
 	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
 	{
 		p_pFile = fopen( p_pszPath, p_pszMode );
-		return p_pFile != NULL;
+		return p_pFile != nullptr;
 	}
 
 	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin )
@@ -271,7 +271,7 @@ namespace Castor
 		,	m_strFileFullPath( p_strFileName	)
 		,	m_ullCursor( 0	)
 		,	m_ullLength( 0	)
-		,	m_pFile( NULL	)
+		,	m_pFile( nullptr	)
 		,	m_bOwnFile( true	)
 	{
 		REQUIRE( ! p_strFileName.empty() );
@@ -353,7 +353,7 @@ namespace Castor
 
 	File::~File()
 	{
-		if ( m_pFile != NULL && m_bOwnFile )
+		if ( m_pFile != nullptr && m_bOwnFile )
 		{
 			fclose( m_pFile );
 		}
@@ -533,7 +533,7 @@ namespace Castor
 #if defined( _WIN32 )
 
 		xchar l_pPath[FILENAME_MAX];
-		DWORD dwResult = GetModuleFileName( NULL, l_pPath, _countof( l_pPath ) );
+		DWORD dwResult = GetModuleFileName( nullptr, l_pPath, _countof( l_pPath ) );
 
 		if ( dwResult != 0 )
 		{
@@ -568,7 +568,7 @@ namespace Castor
 #if defined( _WIN32 )
 
 		xchar l_path[FILENAME_MAX];
-		HRESULT l_hr = SHGetFolderPath( NULL, CSIDL_PROFILE, NULL, 0, l_path );
+		HRESULT l_hr = SHGetFolderPath( nullptr, CSIDL_PROFILE, nullptr, 0, l_path );
 
 		if ( SUCCEEDED( l_hr ) )
 		{
