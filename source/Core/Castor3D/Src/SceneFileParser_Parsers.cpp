@@ -1519,7 +1519,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
 	DividerPluginSPtr l_pPlugin;
-	Subdivider * l_pDivider = NULL;
+	Subdivider * l_pDivider = nullptr;
 
 	if ( l_pContext->pMesh )
 	{

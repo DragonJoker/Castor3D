@@ -329,14 +329,14 @@ namespace Castor3D
 		 *\param[out]	p_distance	Receives the distance of the met geometry
 		 *\param[out]	p_nearestFace	Receives the face of the met geometry
 		 *\param[out]	p_nearestSubmesh	Receives the submesh of the met geometry
-		 *\return		The geometry, NULL if none
+		 *\return		The geometry, nullptr if none
 		 *\~french
 		 *\brief		Récupère la géométrie la plus proche de ce noeud et de ses enfants, qui sera touchée par le rayon
 		 *\param[in]	p_ray		Le rayon
 		 *\param[out]	p_distance	Reçoit la distance de la géométrie rencontrée
 		 *\param[out]	p_nearestFace	Reçoit la face dans la géométrie rencontrée
 		 *\param[out]	p_nearestSubmesh	Reçoit le submesh de la géométrie rencontrée
-		 *\return		La géométrie, NULL si aucune
+		 *\return		La géométrie, nullptr si aucune
 		 */
 		C3D_API GeometrySPtr GetNearestGeometry( Ray * p_ray, real & p_distance, FaceSPtr * p_nearestFace, SubmeshSPtr * p_nearestSubmesh );
 		/**
@@ -594,11 +594,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves the child with given name
 		 *\param[in]	p_name	The child name
-		 *\return		The value, NULL if not found
+		 *\return		The value, nullptr if not found
 		 *\~french
 		 *\brief		Récupère l'enfant avec le nom donné
 		 *\param[in]	p_name	Le nom de l'enfant
-		 *\return		La valeur, NULL si non trouvé
+		 *\return		La valeur, nullptr si non trouvé
 		 */
 		inline SceneNodeSPtr GetChild( Castor::String const & p_name )
 		{

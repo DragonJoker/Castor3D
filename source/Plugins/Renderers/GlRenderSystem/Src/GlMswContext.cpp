@@ -28,72 +28,68 @@ namespace GlRender
 #endif
 
 	GlContextImpl::GlContextImpl( OpenGl & p_gl, GlContext * p_context )
-		: m_hDC( NULL )
-		, m_hContext( NULL )
-		, m_hWnd( NULL )
+		: m_hDC( nullptr )
+		, m_hContext( nullptr )
+		, m_hWnd( nullptr )
 		, m_context( p_context )
 		, m_initialised( false )
 		, Holder( p_gl )
 	{
 	}
 
+	GlContextImpl::~GlContextImpl()
+	{
+	}
+
 	bool GlContextImpl::Initialise( RenderWindow * p_window )
 	{
 		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
-		GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+		GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+		m_hWnd = p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
+		auto l_colour = p_window->GetPixelFormat();
+		auto l_depth = p_window->GetDepthFormat();
+		auto l_stereo = p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->IsStereoAvailable();
 		bool l_isMain = false;
 
-		if ( !l_pMainContext )
+		if ( !l_mainContext )
 		{
 			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
-			m_hDC = ::GetDC( p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd() );
 		}
-		else if ( l_pMainContext->GetImpl()->m_hWnd == m_hWnd )
+
+		if ( !l_mainContext || l_mainContext->GetImpl()->m_hWnd != m_hWnd )
+		{
+			m_hDC = ::GetDC( m_hWnd );
+		}
+		else if ( l_mainContext->GetImpl()->m_hWnd == m_hWnd )
 		{
 			l_isMain = true;
-			m_hContext = l_pMainContext->GetImpl()->m_hContext;
+			m_hContext = l_mainContext->GetImpl()->m_hContext;
+			m_hDC = l_mainContext->GetImpl()->m_hDC;
 		}
 
 		if ( !l_renderSystem->IsInitialised() && !l_isMain )
 		{
-			m_hContext = DoCreateDummyContext( p_window );
-			SetCurrent();
-			typedef const char * ( PFNWGLGETEXTENSIONSSTRINGEXTPROC )();
-			PFNWGLGETEXTENSIONSSTRINGEXTPROC * wglGetExtensionsStringEXT;
-			wglGetExtensionsStringEXT = ( PFNWGLGETEXTENSIONSSTRINGEXTPROC * )wglGetProcAddress( "wglGetExtensionsStringEXT" );
-
-			if ( wglGetExtensionsStringEXT() )
-			{
-				GetOpenGl().PreInitialise( string::string_cast< xchar >( wglGetExtensionsStringEXT() ) );
-			}
-			else
-			{
-				GetOpenGl().PreInitialise( String() );
-			}
-
-			EndCurrent();
-			GetOpenGl().DeleteContext( m_hContext );
-			m_hContext = NULL;
+			DoInitialiseOpenGL( l_colour, l_depth, l_stereo );
 		}
 
 		bool l_bHasPF = false;
 
-		if ( !l_pMainContext )
+		if ( !l_mainContext )
 		{
-			if ( p_window->IsUsingStereo() )
+			if ( l_stereo )
 			{
-				l_bHasPF = DoSelectStereoPixelFormat( p_window );
+				l_bHasPF = DoSelectStereoPixelFormat( l_colour, l_depth );
 			}
 			else
 			{
 				l_renderSystem->SetStereoAvailable( false );
-				l_bHasPF = DoSelectPixelFormat( p_window );
+				l_bHasPF = DoSelectPixelFormat( l_colour, l_depth, false );
 			}
 		}
 		else if ( !l_isMain )
 		{
-			l_bHasPF = DoSelectPixelFormat( p_window );
+			l_bHasPF = DoSelectPixelFormat( l_colour, l_depth, l_stereo );
 		}
 
 		if ( l_bHasPF )
@@ -102,13 +98,13 @@ namespace GlRender
 
 			if ( GetOpenGl().GetVersion() >= 30 )
 			{
-				m_initialised = DoCreateGl3Context( p_window );
+				m_initialised = DoCreateGl3Context();
 			}
 			else
 			{
-				if ( l_pMainContext )
+				if ( l_mainContext )
 				{
-					wglShareLists( m_hContext, l_pMainContext->GetImpl()->GetContext() );
+					wglShareLists( m_hContext, l_mainContext->GetImpl()->GetContext() );
 				}
 
 				m_initialised = true;
@@ -142,7 +138,7 @@ namespace GlRender
 			EndCurrent();
 			UpdateVSync( p_window->GetVSync() );
 
-			if ( !l_pMainContext )
+			if ( !l_mainContext )
 			{
 				Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
 				Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
@@ -150,10 +146,6 @@ namespace GlRender
 		}
 
 		return m_initialised;
-	}
-
-	GlContextImpl::~GlContextImpl()
-	{
 	}
 
 	void GlContextImpl::Cleanup()
@@ -165,6 +157,14 @@ namespace GlRender
 			if ( m_hDC )
 			{
 				GetOpenGl().DeleteContext( m_hContext );
+
+				GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
+				GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+
+				if ( !l_mainContext || l_mainContext->GetImpl()->m_hWnd == m_hWnd )
+				{
+					::ReleaseDC( m_hWnd, m_hDC );
+				}
 			}
 		}
 		catch ( ... )
@@ -179,7 +179,7 @@ namespace GlRender
 
 	void GlContextImpl::EndCurrent()
 	{
-		GetOpenGl().MakeCurrent( NULL, NULL );
+		GetOpenGl().MakeCurrent( nullptr, nullptr );
 	}
 
 	void GlContextImpl::SwapBuffers()
@@ -203,85 +203,33 @@ namespace GlRender
 		EndCurrent();
 	}
 
-	bool GlContextImpl::DoCreateGl3Context( RenderWindow * p_window )
+	void GlContextImpl::DoInitialiseOpenGL( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth, bool p_stereo )
 	{
-		bool l_return = false;
+		m_hContext = DoCreateDummyContext( p_colour, p_depth, p_stereo );
+		SetCurrent();
+		typedef const char * ( PFNWGLGETEXTENSIONSSTRINGEXTPROC )( );
+		PFNWGLGETEXTENSIONSSTRINGEXTPROC * wglGetExtensionsStringEXT;
+		wglGetExtensionsStringEXT = ( PFNWGLGETEXTENSIONSSTRINGEXTPROC * )wglGetProcAddress( "wglGetExtensionsStringEXT" );
 
-		try
+		if ( wglGetExtensionsStringEXT() )
 		{
-			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
-
-			if ( GetOpenGl().HasCreateContextAttribs() )
-			{
-				std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > glCreateContextAttribs;
-				HGLRC l_hContext = m_hContext;
-				IntArray l_attribList;
-				int l_major = GetOpenGl().GetVersion() / 10;
-				int l_minor = GetOpenGl().GetVersion() % 10;
-				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_MAJOR_VERSION );
-				l_attribList.push_back( l_major );
-				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_MINOR_VERSION );
-				l_attribList.push_back( l_minor );
-				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_FLAGS );
-				l_attribList.push_back( C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS );
-				l_attribList.push_back( eGL_PROFILE_ATTRIB_MASK );
-				l_attribList.push_back( C3D_GL_CONTEXT_CREATION_DEFAULT_MASK );
-				l_attribList.push_back( 0	);
-				GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
-				SetCurrent();
-
-				if ( GetOpenGl().HasExtension( ARB_create_context ) )
-				{
-					gl_api::GetFunction( cuT( "wglCreateContextAttribsARB" ), glCreateContextAttribs );
-				}
-				else
-				{
-					gl_api::GetFunction( cuT( "wglCreateContextAttribsEXT" ), glCreateContextAttribs );
-				}
-
-				if ( l_pMainContext )
-				{
-					m_hContext = glCreateContextAttribs( m_hDC, l_pMainContext->GetImpl()->GetContext(), &l_attribList[0] );
-				}
-				else
-				{
-					m_hContext = glCreateContextAttribs( m_hDC, NULL, &l_attribList[0] );
-				}
-
-				EndCurrent();
-				GetOpenGl().DeleteContext( l_hContext );
-				l_return = m_hContext != NULL;
-
-				if ( l_return )
-				{
-					Logger::LogInfo( StringStream() << cuT( "GlContext::Create - " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context created." ) );
-				}
-				else
-				{
-					Logger::LogError( StringStream() << cuT( "GlContext::Create - Failed to create a " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context." ) );
-				}
-			}
-			else
-			{
-				//It's not possible to make a GL 3[0] context. Use the old style context (GL 2.1 and before)
-				l_renderSystem->SetOpenGlVersion( 2, 1 );
-				Logger::LogWarning( cuT( "GlContext::Create - Can't create OpenGL 3.x/4.x context, since glCreateContextAttribs is not supported." ) );
-				l_return = true;
-			}
+			GetOpenGl().PreInitialise( string::string_cast< xchar >( wglGetExtensionsStringEXT() ) );
 		}
-		catch ( ... )
+		else
 		{
-			l_return = false;
+			GetOpenGl().PreInitialise( String() );
 		}
 
-		return l_return;
+		EndCurrent();
+		GetOpenGl().DeleteContext( m_hContext );
+		m_hContext = nullptr;
 	}
 
-	HGLRC GlContextImpl::DoCreateDummyContext( RenderWindow * p_window )
+	HGLRC GlContextImpl::DoCreateDummyContext( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth, bool p_stereo )
 	{
-		HGLRC l_hReturn = NULL;
+		HGLRC l_hReturn = nullptr;
 
-		if ( DoSelectPixelFormat( p_window ) )
+		if ( DoSelectPixelFormat( p_colour, p_depth, p_stereo ) )
 		{
 			l_hReturn = GetOpenGl().CreateContext( m_hDC );
 		}
@@ -289,7 +237,7 @@ namespace GlRender
 		return l_hReturn;
 	}
 
-	bool GlContextImpl::DoSelectPixelFormat( RenderWindow * p_window )
+	bool GlContextImpl::DoSelectPixelFormat( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth, bool p_stereo )
 	{
 		bool l_return = false;
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
@@ -298,35 +246,35 @@ namespace GlRender
 		l_pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
 		l_pfd.iPixelType = PFD_TYPE_RGBA;
 		l_pfd.iLayerType = PFD_MAIN_PLANE;
-		l_pfd.cColorBits = PF::GetBytesPerPixel( p_window->GetPixelFormat() ) * 8;
+		l_pfd.cColorBits = PF::GetBytesPerPixel( p_colour ) * 8;
 
-		if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH16 )
+		if ( p_depth == ePIXEL_FORMAT_DEPTH16 )
 		{
 			l_pfd.cDepthBits = 16;
 		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH32 )
+		else if ( p_depth == ePIXEL_FORMAT_DEPTH32 )
 		{
 			l_pfd.cDepthBits = 32;
 		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH24 )
+		else if ( p_depth == ePIXEL_FORMAT_DEPTH24 )
 		{
 			l_pfd.cDepthBits = 24;
 		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH24S8 )
+		else if ( p_depth == ePIXEL_FORMAT_DEPTH24S8 )
 		{
 			l_pfd.cDepthBits = 24;
 			l_pfd.cStencilBits = 8;
 		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_STENCIL8 )
+		else if ( p_depth == ePIXEL_FORMAT_STENCIL8 )
 		{
 			l_pfd.cStencilBits = 8;
 		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_STENCIL1 )
+		else if ( p_depth == ePIXEL_FORMAT_STENCIL1 )
 		{
 			l_pfd.cStencilBits = 1;
 		}
 
-		if ( p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->IsStereoAvailable() )
+		if ( p_stereo )
 		{
 			l_pfd.dwFlags	|= PFD_STEREO;
 		}
@@ -360,41 +308,41 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlContextImpl::DoSelectStereoPixelFormat( RenderWindow * p_window )
+	bool GlContextImpl::DoSelectStereoPixelFormat( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth )
 	{
 		bool l_return = false;
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
 		l_pfd.nSize = sizeof( PIXELFORMATDESCRIPTOR );
 		int l_iPixelFormat = ::DescribePixelFormat( m_hDC, 1, sizeof( PIXELFORMATDESCRIPTOR ), &l_pfd );
 		bool l_bStereoAvailable = false;
 
-		BYTE l_color = PF::GetBytesPerPixel( p_window->GetPixelFormat() ) * 8;
+		BYTE l_color = PF::GetBytesPerPixel( p_colour ) * 8;
 		BYTE l_depth = 0;
 		BYTE l_stencil = 0;
 
-		if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH16 )
+		if ( p_depth == ePIXEL_FORMAT_DEPTH16 )
 		{
 			l_depth = 16;
 		}
-		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH32 )
+		else if ( p_depth == ePIXEL_FORMAT_DEPTH32 )
 		{
 			l_depth = 32;
 		}
-		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24 )
+		else if ( p_depth == ePIXEL_FORMAT_DEPTH24 )
 		{
 			l_depth = 24;
 		}
-		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_DEPTH24S8 )
+		else if ( p_depth == ePIXEL_FORMAT_DEPTH24S8 )
 		{
 			l_depth = 24;
 			l_stencil = 8;
 		}
-		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL8 )
+		else if ( p_depth == ePIXEL_FORMAT_STENCIL8 )
 		{
 			l_stencil = 8;
 		}
-		else if ( p_window->GetPixelFormat() == ePIXEL_FORMAT_STENCIL1 )
+		else if ( p_depth == ePIXEL_FORMAT_STENCIL1 )
 		{
 			l_stencil = 1;
 		}
@@ -433,15 +381,89 @@ namespace GlRender
 			if ( !l_return )
 			{
 				l_bStereoAvailable = false;
-				l_return = DoSelectPixelFormat( p_window );
+				l_return = DoSelectPixelFormat( p_colour, p_depth, false );
 			}
 		}
 		else
 		{
-			l_return = DoSelectPixelFormat( p_window );
+			l_return = DoSelectPixelFormat( p_colour, p_depth, true );
 		}
 
 		l_renderSystem->SetStereoAvailable( l_bStereoAvailable );
+		return l_return;
+	}
+
+	bool GlContextImpl::DoCreateGl3Context()
+	{
+		bool l_return = false;
+
+		try
+		{
+			GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
+
+			if ( GetOpenGl().HasCreateContextAttribs() )
+			{
+				std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > glCreateContextAttribs;
+				HGLRC l_hContext = m_hContext;
+				IntArray l_attribList;
+				int l_major = GetOpenGl().GetVersion() / 10;
+				int l_minor = GetOpenGl().GetVersion() % 10;
+				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_MAJOR_VERSION );
+				l_attribList.push_back( l_major );
+				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_MINOR_VERSION );
+				l_attribList.push_back( l_minor );
+				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_FLAGS );
+				l_attribList.push_back( C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS );
+				l_attribList.push_back( eGL_PROFILE_ATTRIB_MASK );
+				l_attribList.push_back( C3D_GL_CONTEXT_CREATION_DEFAULT_MASK );
+				l_attribList.push_back( 0 );
+				GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+				SetCurrent();
+
+				if ( GetOpenGl().HasExtension( ARB_create_context ) )
+				{
+					gl_api::GetFunction( cuT( "wglCreateContextAttribsARB" ), glCreateContextAttribs );
+				}
+				else
+				{
+					gl_api::GetFunction( cuT( "wglCreateContextAttribsEXT" ), glCreateContextAttribs );
+				}
+
+				if ( l_mainContext )
+				{
+					m_hContext = glCreateContextAttribs( m_hDC, l_mainContext->GetImpl()->GetContext(), &l_attribList[0] );
+				}
+				else
+				{
+					m_hContext = glCreateContextAttribs( m_hDC, nullptr, &l_attribList[0] );
+				}
+
+				EndCurrent();
+				GetOpenGl().DeleteContext( l_hContext );
+				l_return = m_hContext != nullptr;
+
+				if ( l_return )
+				{
+					Logger::LogInfo( StringStream() << cuT( "GlContext::Create - " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context created." ) );
+				}
+				else
+				{
+					Logger::LogError( StringStream() << cuT( "GlContext::Create - Failed to create a " ) << l_major << cuT( "." ) << l_minor << cuT( " OpenGL context." ) );
+				}
+			}
+			else
+			{
+				//It's not possible to make a GL 3[0] context. Use the old style context (GL 2.1 and before)
+				l_renderSystem->SetOpenGlVersion( 2, 1 );
+				Logger::LogWarning( cuT( "GlContext::Create - Can't create OpenGL 3.x/4.x context, since glCreateContextAttribs is not supported." ) );
+				l_return = true;
+			}
+		}
+		catch ( ... )
+		{
+			l_return = false;
+		}
+
 		return l_return;
 	}
 }

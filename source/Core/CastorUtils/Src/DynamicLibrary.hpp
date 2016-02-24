@@ -174,7 +174,7 @@ namespace Castor
 		bool GetFunction( FuncType & p_pfnFunction, String const & p_name )throw()
 		{
 			p_pfnFunction = reinterpret_cast< FuncType >( DoGetFunction( p_name ) );
-			return p_pfnFunction != NULL;
+			return p_pfnFunction != nullptr;
 		}
 		/**
 		 *\~english
@@ -186,7 +186,7 @@ namespace Castor
 		 */
 		inline bool IsOpen()const
 		{
-			return m_pLibrary != NULL;
+			return m_pLibrary != nullptr;
 		}
 		/**
 		 *\~english

@@ -81,10 +81,10 @@ namespace GuiCommon
 	CastorApplication::CastorApplication( String const & p_internalName, String const & p_displayName, uint32_t p_steps )
 		: m_internalName( p_internalName )
 		, m_displayName( p_displayName )
-		, m_castor( NULL )
+		, m_castor( nullptr )
 		, m_rendererType( eRENDERER_TYPE_UNDEFINED )
 		, m_steps( p_steps + 4 )
-		, m_splashScreen( NULL )
+		, m_splashScreen( nullptr )
 	{
 #if defined( __WXGTK__ )
 		XInitThreads();
@@ -105,7 +105,7 @@ namespace GuiCommon
 		SplashScreen l_splashScreen( m_displayName, wxPoint( 10, 230 ), wxPoint( 200, 300 ), wxPoint( 180, 260 ), wxPoint( ( l_rect.width - 512 ) / 2, ( l_rect.height - 384 ) / 2 ), m_steps );
 		m_splashScreen = &l_splashScreen;
 		wxApp::SetTopWindow( m_splashScreen );
-		wxWindow * l_window = NULL;
+		wxWindow * l_window = nullptr;
 
 		if ( l_return )
 		{
@@ -122,7 +122,7 @@ namespace GuiCommon
 				if ( l_return )
 				{
 					l_window = DoInitialiseMainFrame( &l_splashScreen );
-					l_return = l_window != NULL;
+					l_return = l_window != nullptr;
 				}
 			}
 			catch ( Exception & exc )
@@ -139,7 +139,7 @@ namespace GuiCommon
 
 		wxApp::SetTopWindow( l_window );
 		l_splashScreen.Close();
-		m_splashScreen = NULL;
+		m_splashScreen = nullptr;
 
 		return l_return;
 	}
@@ -160,7 +160,7 @@ namespace GuiCommon
 		wxCmdLineParser l_parser( wxApp::argc, wxApp::argv );
 		l_parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help" ) );
 		l_parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
-		l_parser.AddOption( wxT( "f" ), wxT( "file" ), _( "Defines initial scene file" ), wxCMD_LINE_VAL_STRING );
+		l_parser.AddParam( _( "Defines initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		l_parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
 		l_parser.AddSwitch( wxT( "directx" ), wxEmptyString, _( "Defines the renderer to Direct3D (11)" ) );
 		bool l_return = l_parser.Parse( false ) == 0;
@@ -190,9 +190,9 @@ namespace GuiCommon
 
 			wxString l_strFileName;
 
-			if ( l_parser.Found( wxT( 'f' ), &l_strFileName ) )
+			if ( l_parser.GetParamCount() > 0 )
 			{
-				m_fileName = make_String( l_strFileName );
+				m_fileName = make_String( l_parser.GetParam( 0 ) );
 			}
 		}
 
@@ -272,7 +272,7 @@ namespace GuiCommon
 
 		if ( m_rendererType == eRENDERER_TYPE_UNDEFINED )
 		{
-			RendererSelector m_dialog( m_castor, NULL, m_displayName );
+			RendererSelector m_dialog( m_castor, nullptr, m_displayName );
 			int l_iReturn = m_dialog.ShowModal();
 
 			if ( l_iReturn == wxID_OK )
@@ -300,7 +300,7 @@ namespace GuiCommon
 	void CastorApplication::DoCleanupCastor()
 	{
 		delete m_castor;
-		m_castor = NULL;
+		m_castor = nullptr;
 	}
 
 	void CastorApplication::DoLoadPlugins( SplashScreen & p_splashScreen )

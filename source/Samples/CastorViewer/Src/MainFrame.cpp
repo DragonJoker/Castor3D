@@ -92,21 +92,21 @@ namespace CastorViewer
 	}
 
 	MainFrame::MainFrame( SplashScreen * p_splashScreen, wxString const & p_strTitle )
-		: wxFrame( NULL, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
-		, m_pRenderPanel( NULL )
-		, m_timer( NULL )
-		, m_timerMsg( NULL )
-		, m_timerErr( NULL )
-		, m_logTabsContainer( NULL )
-		, m_messageLog( NULL )
-		, m_errorLog( NULL )
+		: wxFrame( nullptr, wxID_ANY, p_strTitle, wxDefaultPosition, wxSize( 800, 700 ) )
+		, m_pRenderPanel( nullptr )
+		, m_timer( nullptr )
+		, m_timerMsg( nullptr )
+		, m_timerErr( nullptr )
+		, m_logTabsContainer( nullptr )
+		, m_messageLog( nullptr )
+		, m_errorLog( nullptr )
 		, m_iLogsHeight( 100 )
 		, m_iPropertiesWidth( 240 )
-		, m_sceneObjectsList( NULL )
-		, m_materialsList( NULL )
-		, m_propertiesContainer( NULL )
+		, m_sceneObjectsList( nullptr )
+		, m_materialsList( nullptr )
+		, m_propertiesContainer( nullptr )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
-		, m_toolBar( NULL )
+		, m_toolBar( nullptr )
 		, m_splashScreen( p_splashScreen )
 		, m_recorder()
 		, m_recordFps( CASTOR_WANTED_FPS / 3 )
@@ -210,9 +210,20 @@ namespace CastorViewer
 
 					m_sceneObjectsList->LoadScene( wxGetApp().GetCastor(), m_pMainScene.lock() );
 					m_materialsList->LoadMaterials( wxGetApp().GetCastor() );
+
 #if wxCHECK_VERSION( 2, 9, 0 )
+
 					wxSize l_size = GetClientSize();
 					SetMinClientSize( l_size );
+
+#endif
+
+					m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, true );
+
+#if defined( GUICOMMON_RECORDS )
+
+					m_toolBar->EnableTool( eID_TOOL_RECORD, true );
+
 #endif
 				}
 			}
@@ -248,9 +259,13 @@ namespace CastorViewer
 		SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 		SetClientSize( 800 + m_iPropertiesWidth, 600 + m_iLogsHeight );
 		wxSize l_size = GetClientSize();
+
 #if wxCHECK_VERSION( 2, 9, 0 )
+
 		SetMinClientSize( l_size );
+
 #endif
+
 		m_auiManager.SetArtProvider( new AuiDockArt );
 		m_pRenderPanel = new RenderPanel( this, wxID_ANY, wxDefaultPosition, wxSize( l_size.x - m_iPropertiesWidth, l_size.y - m_iLogsHeight ) );
 		m_logTabsContainer = new wxAuiNotebook( this, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
@@ -276,7 +291,7 @@ namespace CastorViewer
 
 		auto l_logCreator = [this, &l_size]( wxString const & p_name, wxListBox *& p_log )
 		{
-			p_log = new wxListBox( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, NULL, wxBORDER_NONE );
+			p_log = new wxListBox( m_logTabsContainer, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0, nullptr, wxBORDER_NONE );
 			p_log->SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 			p_log->SetForegroundColour( PANEL_FOREGROUND_COLOUR );
 			m_logTabsContainer->AddPage( p_log, p_name, true );
@@ -372,8 +387,10 @@ namespace CastorViewer
 		wxMemoryInputStream l_isPrint( print_screen_png, sizeof( print_screen_png ) );
 		wxImage l_imgPrint( l_isPrint, wxBITMAP_TYPE_PNG );
 		m_toolBar->AddTool( eID_TOOL_PRINT_SCREEN, _( "Snapshot" ), l_imgPrint.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Take a snapshot" ) );
+		m_toolBar->EnableTool( eID_TOOL_PRINT_SCREEN, false );
 
 #if defined( GUICOMMON_RECORDS )
+
 		wxImage l_imgRecord;
 		l_imgRecord.Create( record_xpm );
 		wxImage l_imgStop;
@@ -384,8 +401,11 @@ namespace CastorViewer
 		l_tool->SetDisabledBitmap( l_imgRecordDis.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
 		l_tool = m_toolBar->AddTool( eID_TOOL_STOP, _( "Stop" ), l_imgStop.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ), _( "Stop recording" ) );
 		l_tool->SetDisabledBitmap( l_imgStopDis.Rescale( 32, 32, wxIMAGE_QUALITY_HIGH ) );
+		m_toolBar->EnableTool( eID_TOOL_RECORD, false );
 		m_toolBar->EnableTool( eID_TOOL_STOP, false );
+
 #endif
+
 		m_toolBar->Realize();
 		m_auiManager.AddPane( m_toolBar, wxAuiPaneInfo().Name( wxT( "MainToolBar" ) ).ToolbarPane().Top().Row( 1 ).Dockable( false ).Gripper( false ) );
 	}
@@ -435,12 +455,27 @@ namespace CastorViewer
 	{
 		if ( m_pRenderPanel && m_pRenderPanel->GetRenderWindow() )
 		{
-			m_pRenderPanel->GetRenderWindow()->SaveFrame();
-			wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
-			auto l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
-			Size l_size = l_buffer->dimensions();
 			wxBitmap l_bitmap;
-			CreateBitmapFromBuffer( l_buffer, true, l_bitmap );
+			auto & l_castor = *wxGetApp().GetCastor();
+
+			if ( l_castor.IsThreaded() )
+			{
+				l_castor.GetRenderLoop().Pause();
+				m_pRenderPanel->GetRenderWindow()->SaveFrame();
+				l_castor.GetRenderLoop().RenderSyncFrame();
+				auto l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
+				l_castor.GetRenderLoop().Resume();
+				Size l_size = l_buffer->dimensions();
+				CreateBitmapFromBuffer( l_buffer, true, l_bitmap );
+			}
+			else
+			{
+				m_pRenderPanel->GetRenderWindow()->SaveFrame();
+				l_castor.GetRenderLoop().RenderSyncFrame();
+				auto l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
+				Size l_size = l_buffer->dimensions();
+				CreateBitmapFromBuffer( l_buffer, true, l_bitmap );
+			}
 
 			wxString l_strWildcard = _( "All supported files" );
 			l_strWildcard += wxT( " (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg|" );
@@ -481,14 +516,37 @@ namespace CastorViewer
 
 #if defined( GUICOMMON_RECORDS )
 
-		if ( l_bReturn )
+		if ( l_bReturn && !CASTOR3D_THREADED )
 		{
 			m_timer->Stop();
 			m_timer->Start( 1000 / m_recordFps );
 		}
+		else
+		{
+		}
 
 #endif
 		return l_bReturn;
+	}
+
+	void MainFrame::DoRecordFrame()
+	{
+#if defined( GUICOMMON_RECORDS )
+
+		m_pRenderPanel->GetRenderWindow()->SaveFrame();
+		wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+
+		try
+		{
+			m_recorder.RecordFrame( m_pRenderPanel->GetRenderWindow()->GetSavedFrame() );
+		}
+		catch ( std::exception & p_exc )
+		{
+			DoStopRecord();
+			wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
+		}
+
+#endif
 	}
 
 	void MainFrame::DoStopRecord()
@@ -499,8 +557,18 @@ namespace CastorViewer
 
 		m_toolBar->EnableTool( eID_TOOL_STOP, false );
 		m_toolBar->EnableTool( eID_TOOL_RECORD, true );
-		m_timer->Stop();
-		m_timer->Start( 1000 / CASTOR_WANTED_FPS );
+
+		if ( !CASTOR3D_THREADED )
+		{
+			m_timer->Stop();
+			m_timer->Start( 1000 / CASTOR_WANTED_FPS );
+		}
+		else if ( m_timer )
+		{
+			m_timer->Stop();
+			delete m_timer;
+			m_timer = nullptr;
+		}
 
 #endif
 	}
@@ -533,26 +601,29 @@ namespace CastorViewer
 
 	void MainFrame::OnRenderTimer( wxTimerEvent & p_event )
 	{
-		if ( wxGetApp().GetCastor() && !wxGetApp().GetCastor()->IsCleaned() )
+		if ( wxGetApp().GetCastor() )
 		{
-			if ( m_pRenderPanel && m_recorder.IsRecording() && m_recorder.UpdateTime() )
-			{
-				m_pRenderPanel->GetRenderWindow()->SaveFrame();
-				wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+			auto & l_castor = *wxGetApp().GetCastor();
 
-				try
-				{
-					m_recorder.RecordFrame( m_pRenderPanel->GetRenderWindow()->GetSavedFrame() );
-				}
-				catch ( std::exception & p_exc )
-				{
-					DoStopRecord();
-					wxMessageBox( wxString( p_exc.what(), wxMBConvLibc() ) );
-				}
-			}
-			else
+			if ( !l_castor.IsCleaned() )
 			{
-				wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+				if ( m_pRenderPanel && m_recorder.IsRecording() && m_recorder.UpdateTime() )
+				{
+					if ( l_castor.IsThreaded() )
+					{
+						l_castor.GetRenderLoop().Pause();
+						DoRecordFrame();
+						l_castor.GetRenderLoop().Resume();
+					}
+					else
+					{
+						DoRecordFrame();
+					}
+				}
+				else if ( !l_castor.IsThreaded() )
+				{
+					wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+				}
 			}
 		}
 	}
@@ -601,8 +672,8 @@ namespace CastorViewer
 		m_auiManager.DetachPane( m_logTabsContainer );
 		m_auiManager.DetachPane( m_pRenderPanel );
 		m_auiManager.DetachPane( m_toolBar );
-		m_messageLog = NULL;
-		m_errorLog = NULL;
+		m_messageLog = nullptr;
+		m_errorLog = nullptr;
 		Hide();
 
 		if ( m_timer )
@@ -633,16 +704,11 @@ namespace CastorViewer
 			m_pRenderPanel->SetRenderWindow( nullptr );
 			m_pRenderPanel->UnFocus();
 			m_pRenderPanel->Close( true );
-			m_pRenderPanel = NULL;
+			m_pRenderPanel = nullptr;
 		}
 
 		if ( wxGetApp().GetCastor() )
 		{
-			if ( CASTOR3D_THREADED )
-			{
-				wxGetApp().GetCastor()->GetRenderLoop().EndRendering();
-			}
-
 			wxGetApp().GetCastor()->Cleanup();
 		}
 
@@ -785,8 +851,10 @@ namespace CastorViewer
 		if ( DoStartRecord() )
 		{
 #if defined( GUICOMMON_RECORDS )
+
 			m_toolBar->EnableTool( eID_TOOL_STOP, true );
 			m_toolBar->EnableTool( eID_TOOL_RECORD, false );
+
 #endif
 		}
 

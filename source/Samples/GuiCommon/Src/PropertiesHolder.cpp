@@ -38,12 +38,12 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	wxPGEditor * PropertiesHolder::m_buttonEditor = NULL;
+	wxPGEditor * PropertiesHolder::m_buttonEditor = nullptr;
 
 	PropertiesHolder::PropertiesHolder( bool p_bCanEdit, wxWindow * p_parent, wxPoint const & p_ptPos, wxSize const & p_size )
 		: wxPropertyGrid( p_parent, wxID_ANY, p_ptPos, p_size, wxPG_BOLD_MODIFIED | wxPG_SPLITTER_AUTO_CENTER | wxPG_DEFAULT_STYLE )
 		, m_bCanEdit( p_bCanEdit )
-		, m_data( NULL )
+		, m_data( nullptr )
 	{
 		if ( !m_buttonEditor )
 		{

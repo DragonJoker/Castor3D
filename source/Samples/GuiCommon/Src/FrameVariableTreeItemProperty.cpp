@@ -62,7 +62,7 @@ namespace GuiCommon
 
 		wxPGProperty * DoBuildValueProperty( wxString const & p_name, FrameVariableSPtr p_variable )
 		{
-			wxPGProperty * l_return = NULL;
+			wxPGProperty * l_return = nullptr;
 
 			switch ( p_variable->GetFullType() )
 			{

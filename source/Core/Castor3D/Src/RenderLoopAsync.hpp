@@ -83,6 +83,17 @@ namespace Castor3D
 		C3D_API bool IsRendering()const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the render paused status.
+		 *\remark		Thread-safe.
+		 *\return		\p true if paused.
+		 *\~french
+		 *\brief		Récupère le statut de rendu en pause.
+		 *\remark		Thread-safe.
+		 *\return		\p true si en pause.
+		 */
+		C3D_API bool IsPaused()const;
+		/**
+		 *\~english
 		 *\brief		Thread-safe
 		 *\return		\p true if the render loop is interrupted.
 		 *\~french
@@ -112,6 +123,14 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoRenderSyncFrame();
 		/**
+		 *\copydoc		Castor3D::RenderLoop::DoPause
+		 */
+		C3D_API virtual void DoPause();
+		/**
+		 *\copydoc		Castor3D::RenderLoop::DoResume
+		 */
+		C3D_API virtual void DoResume();
+		/**
 		 *\copydoc		Castor3D::RenderLoop::DoEndRendering
 		 */
 		C3D_API virtual void DoEndRendering();
@@ -138,6 +157,10 @@ namespace Castor3D
 		std::atomic_bool m_ended;
 		//!\~english Tells if render is running.	\~french Dit si le rendu est en cours.
 		std::atomic_bool m_rendering;
+		//!\~english Tells the frame render is ended.	\~french Dit si le rendu de la frame courante est terminé.
+		std::atomic_bool m_frameEnded;
+		//!\~english Tells if render is paused.	\~french Dit si le rendu est en pause.
+		std::atomic_bool m_paused;
 		//!\~english Tells if render context is to be created.	\~french Dit si le contexte de rendu est à créer.
 		std::atomic_bool m_createContext;
 		//!\~english Tells if render context is created.	\~french Dit si le contexte de rendu est créé.

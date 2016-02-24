@@ -39,7 +39,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	define C3D_Gl_API
 #endif
 
-#define BUFFER_OFFSET( n ) ( ( uint8_t * )NULL + ( n ) )
+#define BUFFER_OFFSET( n ) ( ( uint8_t * )nullptr + ( n ) )
 
 using Castor::real;
 

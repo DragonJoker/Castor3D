@@ -51,13 +51,13 @@ namespace Castor3D
 
 	void RenderSystem::Cleanup()
 	{
-		DoCleanup();
-
 		if ( m_mainContext )
 		{
 			m_mainContext->Cleanup();
 			m_mainContext.reset();
 		}
+
+		DoCleanup();
 
 #if !defined( NDEBUG )
 
@@ -87,7 +87,7 @@ namespace Castor3D
 
 	Scene * RenderSystem::GetTopScene()
 	{
-		Scene * l_return = NULL;
+		Scene * l_return = nullptr;
 
 		if ( m_stackScenes.size() )
 		{

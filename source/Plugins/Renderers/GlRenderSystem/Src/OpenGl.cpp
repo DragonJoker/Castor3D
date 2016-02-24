@@ -519,7 +519,7 @@ void * BufFunctions::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )
 
 	if ( !glCheckError( GetOpenGl(), cuT( "glMapBuffer" ) ) )
 	{
-		l_return = NULL;
+		l_return = nullptr;
 	}
 
 	return l_return;
@@ -533,14 +533,14 @@ bool BufFunctions::UnmapBuffer( eGL_BUFFER_TARGET p_target )
 
 void * BufFunctions::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
 {
-	void * l_return = NULL;
+	void * l_return = nullptr;
 //	if( length + offset < GL_BUFFER_SIZE )
 	{
 		l_return = m_pfnMapBufferRange( p_target, offset, length, access );
 
 		if ( !glCheckError( GetOpenGl(), cuT( "glMapBufferRange" ) ) )
 		{
-			l_return = NULL;
+			l_return = nullptr;
 		}
 	}
 	return l_return;
@@ -591,7 +591,7 @@ void * BufFunctionsDSA::MapBuffer( eGL_BUFFER_TARGET p_target, eGL_LOCK access )
 
 	if ( !glCheckError( GetOpenGl(), cuT( "glMapBuffer" ) ) )
 	{
-		l_return = NULL;
+		l_return = nullptr;
 	}
 
 	return l_return;
@@ -605,14 +605,14 @@ bool BufFunctionsDSA::UnmapBuffer( eGL_BUFFER_TARGET p_target )
 
 void * BufFunctionsDSA::MapBufferRange( eGL_BUFFER_TARGET p_target, ptrdiff_t offset, ptrdiff_t length, uint32_t access )
 {
-	void * l_return = NULL;
+	void * l_return = nullptr;
 //	if( length + offset < GL_BUFFER_SIZE )
 	{
 		l_return = m_pfnMapNamedBufferRange( m_uiBuffer, offset, length, access );
 
 		if ( !glCheckError( GetOpenGl(), cuT( "glMapBufferRange" ) ) )
 		{
-			l_return = NULL;
+			l_return = nullptr;
 		}
 	}
 	return l_return;
@@ -632,8 +632,8 @@ OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
 	: m_bHasAnisotropic( false )
 	, m_bHasInstancedDraw( false )
 	, m_bHasInstancedArrays( false )
-	, m_pTexFunctions( NULL )
-	, m_pBufFunctions( NULL )
+	, m_pTexFunctions( nullptr )
+	, m_pBufFunctions( nullptr )
 	, m_pfnReadPixels()
 	, m_pfnBlitFramebuffer()
 	, m_pfnTexImage2DMultisample()
@@ -1487,9 +1487,9 @@ bool OpenGl::Initialise()
 void OpenGl::Cleanup()
 {
 	delete m_pTexFunctions;
-	m_pTexFunctions = NULL;
+	m_pTexFunctions = nullptr;
 	delete m_pBufFunctions;
-	m_pBufFunctions = NULL;
+	m_pBufFunctions = nullptr;
 	m_bHasVao = false;
 	m_bHasUbo = false;
 	m_bHasPbo = false;
@@ -1638,7 +1638,7 @@ HGLRC OpenGl::CreateContext( HDC hdc )const
 
 bool OpenGl::HasCreateContextAttribs()const
 {
-	return m_pfnCreateContextAttribs != NULL;
+	return m_pfnCreateContextAttribs != nullptr;
 }
 
 HGLRC OpenGl::CreateContextAttribs( HDC hDC, HGLRC hShareContext, int const * attribList )const
@@ -1685,7 +1685,7 @@ GLXContext OpenGl::CreateContext( Display * pDisplay, XVisualInfo * pVisualInfo,
 
 bool OpenGl::HasCreateContextAttribs()const
 {
-	return m_pfnCreateContextAttribs != NULL;
+	return m_pfnCreateContextAttribs != nullptr;
 }
 
 GLXContext OpenGl::CreateContextAttribs( Display * pDisplay, GLXFBConfig fbconfig, GLXContext shareList, Bool direct, int const * attribList )const
@@ -2355,12 +2355,12 @@ bool OpenGl::BinormalPointer( uint32_t type, uint32_t stride, void const * point
 
 bool OpenGl::HasTangentPointer()const
 {
-	return m_pfnTangentPointer != NULL;
+	return m_pfnTangentPointer != nullptr;
 }
 
 bool OpenGl::HasBinormalPointer()const
 {
-	return m_pfnBinormalPointer != NULL;
+	return m_pfnBinormalPointer != nullptr;
 }
 
 bool OpenGl::ColorPointer( int size, uint32_t type, uint32_t stride, void const * pointer )const

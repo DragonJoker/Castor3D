@@ -129,8 +129,8 @@ namespace Castor
 			SFreeTypeFontImpl( Path const & p_pathFile, uint32_t p_height )
 				: m_height( p_height )
 				, m_path( p_pathFile )
-				, m_library( NULL )
-				, m_face( NULL )
+				, m_library( nullptr )
+				, m_face( nullptr )
 			{
 			}
 
@@ -150,8 +150,8 @@ namespace Castor
 			{
 				CHECK_FT_ERR( FT_Done_Face, m_face );
 				CHECK_FT_ERR( FT_Done_FreeType, m_library );
-				m_library = NULL;
-				m_face = NULL;
+				m_library = nullptr;
+				m_face = nullptr;
 			}
 
 			virtual void LoadGlyph( Glyph & p_glyph )

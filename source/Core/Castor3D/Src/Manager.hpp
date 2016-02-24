@@ -33,7 +33,7 @@ namespace Castor3D
 {
 	static const xchar * INFO_MANAGER_CREATED_OBJECT = cuT( "Manager::Create - Created " );
 	static const xchar * WARNING_MANAGER_DUPLICATE_OBJECT = cuT( "Manager::Create - Duplicate " );
-	static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - NULL " );
+	static const xchar * WARNING_MANAGER_NULL_OBJECT = cuT( "Manager::Insert - nullptr " );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		04/02/2016

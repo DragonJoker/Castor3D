@@ -71,7 +71,7 @@ namespace Castor3D
 
 	RenderSystem * RendererPlugin::CreateRenderSystem( Engine * p_engine )
 	{
-		RenderSystem * l_return = NULL;
+		RenderSystem * l_return = nullptr;
 
 		if ( m_pfnCreateRenderSystem )
 		{

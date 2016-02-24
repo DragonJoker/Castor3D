@@ -5,7 +5,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	BufferDeclaration::BufferDeclaration()
-		: BufferDeclaration( NULL, 0 )
+		: BufferDeclaration( nullptr, 0 )
 	{
 	}
 

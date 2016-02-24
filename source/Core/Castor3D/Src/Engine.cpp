@@ -48,9 +48,10 @@ namespace Castor3D
 
 	Engine::Engine()
 		: Unique< Engine >( this )
-		, m_renderSystem( NULL )
+		, m_renderSystem( nullptr )
 		, m_cleaned( true )
 		, m_perObjectLighting( true )
+		, m_threaded( false )
 	{
 		std::locale::global( std::locale() );
 
@@ -109,7 +110,7 @@ namespace Castor3D
 			if ( l_plugin )
 			{
 				l_plugin->DestroyRenderSystem( m_renderSystem );
-				m_renderSystem = NULL;
+				m_renderSystem = nullptr;
 			}
 			else
 			{
@@ -122,6 +123,8 @@ namespace Castor3D
 
 	void Engine::Initialise( uint32_t p_wanted, bool p_threaded )
 	{
+		m_threaded = p_threaded;
+
 		if ( m_renderSystem )
 		{
 			m_targetManager->SetRenderSystem( m_renderSystem );
@@ -187,6 +190,12 @@ namespace Castor3D
 		if ( !IsCleaned() )
 		{
 			SetCleaned();
+
+			if ( m_threaded )
+			{
+				m_renderLoop->Pause();
+			}
+
 			m_listenerManager->Cleanup();
 			m_sceneManager->Cleanup();
 			m_depthStencilStateManager->Cleanup();
@@ -216,7 +225,6 @@ namespace Castor3D
 			m_windowManager->Cleanup();
 			m_techniqueManager->Cleanup();
 			m_renderLoop.reset();
-			m_renderSystem->Cleanup();
 
 			m_targetManager->Clear();
 			m_samplerManager->Clear();

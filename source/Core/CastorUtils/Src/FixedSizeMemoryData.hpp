@@ -82,25 +82,25 @@ namespace Castor
 
 			delete [] m_free;
 			MemoryAllocator::Deallocate( m_buffer );
-			m_free = NULL;
-			m_buffer = NULL;
+			m_free = nullptr;
+			m_buffer = nullptr;
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
 		}
 		/**
 		 *\~english
 		 *\brief		Gives the address an available chunk.
-		 *\return		NULL if no memory available, the memory address if not.
+		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Donne un chunk mémoire disponible.
-		 *\return		NULL s'il n'y a plus de place disponible, l'adresse mémoire sinon.
+		 *\return		nullptr s'il n'y a plus de place disponible, l'adresse mémoire sinon.
 		 */
 		Object * Allocate()noexcept
 		{
 			if ( m_freeIndex == m_free )
 			{
 				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
-				return NULL;
+				return nullptr;
 			}
 
 			return *--m_freeIndex;
@@ -110,7 +110,7 @@ namespace Castor
 		 *\brief		Frees the given memory.
 		 *\remarks		Checks if the given address comes from the pool.
 		 *\param[in]	p_space	The memory to free.
-		 *\return		NULL if no memory available, the memory address if not.
+		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Libère la mémoire donnée.
 		 *\remarks		Vérifie si la mémoire fait bien partie du pool.
@@ -144,15 +144,15 @@ namespace Castor
 
 	private:
 		//!\~english The buffer.	\~french Le tampon.
-		uint8_t * m_buffer = NULL;
+		uint8_t * m_buffer = nullptr;
 		//!\~english Pointer to the buffer's end.	\~french Pointeur sur la fin du tampon.
-		uint8_t * m_bufferEnd = NULL;
+		uint8_t * m_bufferEnd = nullptr;
 		//!\~english The free chunks.	\~french Les chunks libres.
-		Object ** m_free = NULL;
+		Object ** m_free = nullptr;
 		//!\~english The free chunks' end.	\~french La fin des chunks libres.
-		Object ** m_freeEnd = NULL;
+		Object ** m_freeEnd = nullptr;
 		//!\~english The las allocated chunk.	\~french Le dernier chunk alloué.
-		Object ** m_freeIndex = NULL;
+		Object ** m_freeIndex = nullptr;
 		//!\~english The total pool capacity.	\~french Le nombre total possible d'éléments.
 		size_t m_total = 0;
 	};

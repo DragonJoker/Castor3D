@@ -201,7 +201,7 @@ namespace Castor3D
 
 		if ( l_return && !l_pos.empty() )
 		{
-			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), NULL, l_tex.data(), NULL };
+			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), nullptr, l_tex.data(), nullptr };
 			p_obj.AddPoints( l_group );
 			p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
 		}

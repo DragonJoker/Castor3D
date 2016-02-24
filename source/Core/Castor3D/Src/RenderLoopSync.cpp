@@ -8,6 +8,8 @@ namespace Castor3D
 {
 	static const char * CALL_START_RENDERING = "Can't call StartRendering in a synchronous render loop";
 	static const char * CALL_END_RENDERING = "Can't call EndRendering in a synchronous render loop";
+	static const char * CALL_PAUSE_RENDERING = "Can't call Pause in a synchronous render loop";
+	static const char * CALL_RESUME_RENDERING = "Can't call Resume in a synchronous render loop";
 	static const char * RLS_UNKNOWN_EXCEPTION = "Unknown exception";
 
 	RenderLoopSync::RenderLoopSync( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS )
@@ -20,6 +22,7 @@ namespace Castor3D
 	{
 		// No render loop so we clean the render system ourselves with that single call.
 		DoRenderFrame();
+		m_renderSystem->Cleanup();
 	}
 
 	void RenderLoopSync::DoStartRendering()
@@ -51,6 +54,16 @@ namespace Castor3D
 				m_active = false;
 			}
 		}
+	}
+
+	void RenderLoopSync::DoPause()
+	{
+		CASTOR_EXCEPTION( CALL_PAUSE_RENDERING );
+	}
+
+	void RenderLoopSync::DoResume()
+	{
+		CASTOR_EXCEPTION( CALL_RESUME_RENDERING );
 	}
 
 	void RenderLoopSync::DoEndRendering()

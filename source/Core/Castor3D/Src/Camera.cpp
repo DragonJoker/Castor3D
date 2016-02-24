@@ -246,7 +246,7 @@ namespace Castor3D
 
 	void Camera::EndRender()
 	{
-		GetScene()->GetEngine()->GetRenderSystem()->SetCurrentCamera( NULL );
+		GetScene()->GetEngine()->GetRenderSystem()->SetCurrentCamera( nullptr );
 	}
 
 	void Camera::Resize( uint32_t p_width, uint32_t p_height )

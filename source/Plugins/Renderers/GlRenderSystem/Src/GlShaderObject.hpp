@@ -77,11 +77,11 @@ namespace GlRender
 		 *\~english
 		 *\brief		Gives the wanted parameter from compiled shader
 		 *\param[in]	p_name	The parameter name
-		 *\return		\p NULL if not found or if shader isn't compiled
+		 *\return		\p nullptr if not found or if shader isn't compiled
 		 *\~french
 		 *\brief		Récupère le paramètre à partir du shader compilé
 		 *\param[in]	p_name	Le nom du paramètre
-		 *\return		\p NULL si le paramètre n'a pas été trouvé ou si le shader n'est pas compilé
+		 *\return		\p nullptr si le paramètre n'a pas été trouvé ou si le shader n'est pas compilé
 		 */
 		uint32_t GetParameter( Castor::String const & p_name );
 		/**

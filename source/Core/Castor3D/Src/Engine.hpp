@@ -346,6 +346,16 @@ namespace Castor3D
 		 *\~french
 		 *\return		La boucle de rendu.
 		 */
+		inline bool HasRenderLoop()const
+		{
+			return m_renderLoop != nullptr;
+		}
+		/**
+		 *\~english
+		 *\return		The render loop.
+		 *\~french
+		 *\return		La boucle de rendu.
+		 */
 		inline RenderLoop const & GetRenderLoop()const
 		{
 			return *m_renderLoop;
@@ -382,6 +392,16 @@ namespace Castor3D
 		{
 			return m_perObjectLighting;
 		}
+		/**
+		 *\~english
+		 *\return		Tells if the engine uses an asynchronous render loop.
+		 *\~french
+		 *\return		Dit si le moteur utilise un boucle de rendu asynchrone.
+		 */
+		inline bool IsThreaded()
+		{
+			return m_threaded;
+		}
 
 	private:
 		void DoLoadCoreData();
@@ -397,6 +417,8 @@ namespace Castor3D
 		RenderSystem * m_renderSystem;
 		//!\~english Tells if engine is cleaned up	\~french Dit si le moteur est nettoyé
 		bool m_cleaned;
+		//!\~english Tells if engine uses an asynchronous render loop.	\~french Dit si le moteur utilise un boucle de rendu asynchrone.
+		bool m_threaded;
 		//!\~english Default blend states (no blend).	\~french Etats de blend par défaut (pas de blend).
 		BlendStateSPtr m_defaultBlendState;
 		//!\~english Default sampler.	\~french Le sampler par défaut.

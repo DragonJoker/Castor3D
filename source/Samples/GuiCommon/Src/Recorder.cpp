@@ -134,8 +134,8 @@ namespace GuiCommon
 		struct FFmpegFileWriter
 		{
 			FFmpegFileWriter()
-				: m_pAvCodecContext( NULL )
-				, m_pFile( NULL )
+				: m_pAvCodecContext( nullptr )
+				, m_pFile( nullptr )
 			{
 			}
 
@@ -162,7 +162,7 @@ namespace GuiCommon
 				{
 					avcodec_close( m_pAvCodecContext );
 					av_free( m_pAvCodecContext );
-					m_pAvCodecContext = NULL;
+					m_pAvCodecContext = nullptr;
 				}
 			}
 
@@ -182,7 +182,7 @@ namespace GuiCommon
 			bool Open( wxString const & p_name )
 			{
 				m_pFile = fopen( p_name.char_str().data(), "wb" );
-				return m_pFile != NULL;
+				return m_pFile != nullptr;
 			}
 
 			void Close()
@@ -190,7 +190,7 @@ namespace GuiCommon
 				if ( m_pFile )
 				{
 					fclose( m_pFile );
-					m_pFile = NULL;
+					m_pFile = nullptr;
 				}
 			}
 
@@ -201,8 +201,8 @@ namespace GuiCommon
 		struct FFmpegStreamWriter
 		{
 			FFmpegStreamWriter()
-				: m_pAvFormatContext( NULL )
-				, m_pAvStream( NULL )
+				: m_pAvFormatContext( nullptr )
+				, m_pAvStream( nullptr )
 			{
 			}
 
@@ -219,7 +219,7 @@ namespace GuiCommon
 
 			AVCodecContext * AllocateContext( AVCodec * p_codec, AVCodecID p_id )
 			{
-				AVCodecContext * pAvCodecContext = NULL;
+				AVCodecContext * pAvCodecContext = nullptr;
 				m_pAvStream = avformat_new_stream( m_pAvFormatContext, p_codec );
 
 				if ( m_pAvStream )
@@ -252,12 +252,12 @@ namespace GuiCommon
 
 			void PreOpen( wxString const & p_name )
 			{
-				avformat_alloc_output_context2( &m_pAvFormatContext, NULL, NULL, p_name.char_str().data() );
+				avformat_alloc_output_context2( &m_pAvFormatContext, nullptr, nullptr, p_name.char_str().data() );
 
 				if ( !m_pAvFormatContext )
 				{
 					//printf("Could not deduce output format from file extension: using MPEG.\n");
-					avformat_alloc_output_context2( &m_pAvFormatContext, NULL, "mpeg", p_name.char_str().data() );
+					avformat_alloc_output_context2( &m_pAvFormatContext, nullptr, "mpeg", p_name.char_str().data() );
 				}
 			}
 
@@ -276,7 +276,7 @@ namespace GuiCommon
 					}
 
 					avformat_free_context( m_pAvFormatContext );
-					m_pAvFormatContext = NULL;
+					m_pAvFormatContext = nullptr;
 				}
 			}
 
@@ -291,11 +291,11 @@ namespace GuiCommon
 		{
 		public:
 			FFmpegRecorderImpl()
-				: m_pAvCodec( NULL )
-				, m_pAvFrame( NULL )
-				, m_pAvCodecContext( NULL )
+				: m_pAvCodec( nullptr )
+				, m_pAvFrame( nullptr )
+				, m_pAvCodecContext( nullptr )
 			{
-				m_avEncodedPicture.data[0] = NULL;
+				m_avEncodedPicture.data[0] = nullptr;
 				av_register_all();
 			}
 
@@ -318,7 +318,7 @@ namespace GuiCommon
 
 					while ( l_iGotOutput )
 					{
-						int iRet = avcodec_encode_video2( m_pAvCodecContext, &l_pkt, NULL, &l_iGotOutput );
+						int iRet = avcodec_encode_video2( m_pAvCodecContext, &l_pkt, nullptr, &l_iGotOutput );
 
 						if ( iRet >= 0 && l_iGotOutput )
 						{
@@ -338,13 +338,13 @@ namespace GuiCommon
 				if ( m_avEncodedPicture.data[0] )
 				{
 					av_freep( &m_avEncodedPicture.data[0] );
-					m_avEncodedPicture.data[0] = NULL;
+					m_avEncodedPicture.data[0] = nullptr;
 				}
 
 				if ( m_pAvFrame )
 				{
 					av_frame_free( &m_pAvFrame );
-					m_pAvFrame = NULL;
+					m_pAvFrame = nullptr;
 				}
 
 				Writer::Close();
@@ -394,7 +394,7 @@ namespace GuiCommon
 				av_opt_set( m_pAvCodecContext->priv_data, "profile", "high", AV_OPT_SEARCH_CHILDREN );
 				av_opt_set( m_pAvCodecContext->priv_data, "level", "4,1", AV_OPT_SEARCH_CHILDREN );
 
-				if ( avcodec_open2( m_pAvCodecContext, m_pAvCodec, NULL ) < 0 )
+				if ( avcodec_open2( m_pAvCodecContext, m_pAvCodec, nullptr ) < 0 )
 				{
 					StopRecord();
 					throw std::runtime_error( ( char const * )wxString( _( "Could not open codec" ) ).mb_str( wxConvUTF8 ) );
@@ -426,13 +426,13 @@ namespace GuiCommon
 
 			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer )
 			{
-				static SwsContext * l_pSwsContext = NULL;
+				static SwsContext * l_pSwsContext = nullptr;
 
 				if ( !l_pSwsContext )
 				{
 					l_pSwsContext = sws_getContext( m_pAvCodecContext->width, m_pAvCodecContext->height, AV_PIX_FMT_RGBA,
 													m_pAvCodecContext->width, m_pAvCodecContext->height, m_pAvCodecContext->pix_fmt,
-													SWS_BICUBIC, NULL, NULL, NULL );
+													SWS_BICUBIC, nullptr, nullptr, nullptr );
 
 					if ( !l_pSwsContext )
 					{
@@ -518,17 +518,7 @@ namespace GuiCommon
 			{
 				if ( !m_writer.open( p_name.char_str().data(), MAKEFOURCC( 'X', '2', '6', '4' ), m_iWantedFPS, cv::Size( p_size.width(), p_size.height() ), true ) )
 				{
-#		if defined( _WIN32 )
-					wxMessageBox( _( "Can't open file with OpenCV, encoding: H264, please select another codec" ) );
-
-					if ( !m_writer.open( p_name.char_str().data(), -1, m_iWantedFPS, cv::Size( p_size.width(), p_size.height() ), true ) )
-					{
-						throw std::runtime_error( ( char const * )wxString( _( "Could not open file with OpenCV" ) ).mb_str( wxConvUTF8 ) );
-					}
-
-#		else
 					throw std::runtime_error( ( char const * )wxString( _( "Could not open file with OpenCV, encoding: H264" ) ).mb_str( wxConvUTF8 ) );
-#		endif
 				}
 
 				m_size = p_size;

@@ -40,6 +40,16 @@ namespace Castor3D
 		DoStartRendering();
 	}
 
+	void RenderLoop::Pause()
+	{
+		DoPause();
+	}
+
+	void RenderLoop::Resume()
+	{
+		DoResume();
+	}
+
 	void RenderLoop::RenderSyncFrame()
 	{
 		DoRenderSyncFrame();

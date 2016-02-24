@@ -1474,21 +1474,21 @@ namespace GlRender
 #else
 			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( ( GLubyte const * )Castor::string::string_cast< char >( p_name ).c_str() ) );
 #endif
-			return p_func != NULL;
+			return p_func != nullptr;
 		}
 
 		template< typename Ret, typename ... Arguments >
 		bool GetFunction( Castor::String const & p_name, std::function< Ret( Arguments... ) > & p_func )
 		{
 			typedef Ret( CALLBACK * PFNType )( Arguments... );
-			PFNType l_pfnResult = NULL;
+			PFNType l_pfnResult = nullptr;
 
 			if ( GetFunction( p_name, l_pfnResult ) )
 			{
 				p_func = l_pfnResult;
 			}
 
-			return l_pfnResult != NULL;
+			return l_pfnResult != nullptr;
 		}
 	}
 

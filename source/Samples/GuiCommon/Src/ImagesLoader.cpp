@@ -33,7 +33,7 @@ namespace GuiCommon
 
 	wxImage * ImagesLoader::GetBitmap( uint32_t p_id )
 	{
-		wxImage * l_return = NULL;
+		wxImage * l_return = nullptr;
 		m_mutex.lock();
 		ImageIdMapIt l_it = m_mapImages.find( p_id );
 		ImageIdMapConstIt l_itEnd = m_mapImages.end();

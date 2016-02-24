@@ -22,11 +22,11 @@ namespace Castor3D
 {
 	Context::Context( RenderSystem & p_renderSystem, bool p_invertFinal )
 		: OwnedBy< RenderSystem >( p_renderSystem )
-		, m_window( NULL )
+		, m_window( nullptr )
 		, m_initialised( false )
 		, m_bMultiSampling( false )
 		, m_viewport( Viewport::Ortho( *GetRenderSystem()->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
-		, m_declaration( NULL, 0 )
+		, m_declaration( nullptr, 0 )
 	{
 		real l_pBuffer[] =
 		{
@@ -120,7 +120,7 @@ namespace Castor3D
 		m_geometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_renderTextureProgram.reset();
-		m_window = NULL;
+		m_window = nullptr;
 	}
 
 	void Context::SetCurrent()
@@ -131,7 +131,7 @@ namespace Castor3D
 
 	void Context::EndCurrent()
 	{
-		GetRenderSystem()->SetCurrentContext( NULL );
+		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
 	}
 

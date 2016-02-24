@@ -101,8 +101,8 @@ namespace Castor
 
 			delete [] m_free;
 			delete [] m_buffer;
-			m_free = NULL;
-			m_buffer = NULL;
+			m_free = nullptr;
+			m_buffer = nullptr;
 			m_freeIndex = m_free;
 			m_bufferEnd = m_buffer;
 		}
@@ -110,18 +110,18 @@ namespace Castor
 		 *\~english
 		 *\brief		Gives the address an available chunk.
 		 *\remarks		Set the marked byte to "Allocated" state.
-		 *\return		NULL if no memory available, the memory address if not.
+		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Donne un chunk mémoire disponible.
 		 *\remarks		Met l'octet de marquage dans l'état "Alloué".
-		 *\return		NULL s'il n'y a plus de place disponible, l'adresse mémoire sinon.
+		 *\return		nullptr s'il n'y a plus de place disponible, l'adresse mémoire sinon.
 		 */
 		Object * Allocate()noexcept
 		{
 			if ( m_freeIndex == m_free )
 			{
 				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
-				return NULL;
+				return nullptr;
 			}
 
 			uint8_t * l_space = *--m_freeIndex;
@@ -134,7 +134,7 @@ namespace Castor
 		 *\remarks		Checks if the given address comes from the pool, and if it has been allocated by the pool, via the marked byte.
 		 *\remarks		Set the marked byte to "Free" state.
 		 *\param[in]	p_space	The memory to free.
-		 *\return		NULL if no memory available, the memory address if not.
+		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Libère la mémoire donnée.
 		 *\remarks		Vérifie si la mémoire fait bien partie du pool, et si elle a bien été allouée par le pool, via l'octet de marquage.
@@ -185,15 +185,15 @@ namespace Castor
 
 	private:
 		//!\~english The buffer.	\~french Le tampon.
-		uint8_t * m_buffer = NULL;
+		uint8_t * m_buffer = nullptr;
 		//!\~english Pointer to the buffer's end.	\~french Pointeur sur la fin du tampon.
-		uint8_t * m_bufferEnd = NULL;
+		uint8_t * m_bufferEnd = nullptr;
 		//!\~english The free chunks.	\~french Les chunks libres.
-		uint8_t ** m_free = NULL;
+		uint8_t ** m_free = nullptr;
 		//!\~english The free chunks' end.	\~french La fin des chunks libres.
-		uint8_t ** m_freeEnd = NULL;
+		uint8_t ** m_freeEnd = nullptr;
 		//!\~english The last allocated chunk.	\~french Le dernier chunk alloué.
-		uint8_t ** m_freeIndex = NULL;
+		uint8_t ** m_freeIndex = nullptr;
 		//!\~english The total pool capacity.	\~french Le nombre total possible d'éléments.
 		size_t m_total = 0;
 	};

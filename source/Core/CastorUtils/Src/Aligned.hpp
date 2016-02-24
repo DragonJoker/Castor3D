@@ -35,12 +35,12 @@ namespace Castor
 	 *\brief		Allocates aligned memory.
 	 *\param[in]	p_alignment	The alignment value, must be a power of two.
 	 *\param[in]	p_size		The wanted size.
-	 *\return		The allocated memory, NULL on error.
+	 *\return		The allocated memory, nullptr on error.
 	 *\~french
 	 *\brief		Alloue de la mémoire alignée.
 	 *\param[in]	p_alignment	La valeur d'alignement, doit être une puissance de deux.
 	 *\param[in]	p_size		La taille désirée.
-	 *\return		La mémoire allouée, NULL en cas d'erreur.
+	 *\return		La mémoire allouée, nullptr en cas d'erreur.
 	 */
 	CU_API void * AlignedAlloc( size_t p_alignment, size_t p_size );
 	/**
@@ -57,12 +57,12 @@ namespace Castor
 	 *\brief		Allocates aligned memory.
 	 *\param[in]	p_alignment	The alignment value, must be a power of two.
 	 *\param[in]	p_size		The wanted size.
-	 *\return		The allocated memory, NULL on error.
+	 *\return		The allocated memory, nullptr on error.
 	 *\~french
 	 *\brief		Alloue de la mémoire alignée.
 	 *\param[in]	p_alignment	La valeur d'alignement, doit être une puissance de deux.
 	 *\param[in]	p_size		La taille désirée.
-	 *\return		La mémoire allouée, NULL en cas d'erreur.
+	 *\return		La mémoire allouée, nullptr en cas d'erreur.
 	 */
 	template< typename T >
 	T * AlignedAlloc( size_t p_alignment, size_t p_size )

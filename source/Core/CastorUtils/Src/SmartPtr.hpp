@@ -28,10 +28,10 @@ namespace Castor
 	\date		08/12/2011
 	\~english
 	\brief		Dummy destructor
-	\remark		Used as a parameter to shared_ptr, to make deallocation dummy (only sets pointer to NULL)
+	\remark		Used as a parameter to shared_ptr, to make deallocation dummy (only sets pointer to nullptr)
 	\~french
 	\brief		Destructeur zombie
-	\remark		Utilisé en tant que paramètre à shared_ptr, afin d'avoir une désallocation zombie (ne fait que mettre le pointeur à NULL, sans le désallouer)
+	\remark		Utilisé en tant que paramètre à shared_ptr, afin d'avoir une désallocation zombie (ne fait que mettre le pointeur à nullptr, sans le désallouer)
 	*/
 	struct dummy_dtor
 	{

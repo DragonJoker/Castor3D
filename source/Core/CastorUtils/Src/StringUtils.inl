@@ -20,8 +20,8 @@ namespace Castor
 						const facet_type & facet = std::use_facet< facet_type >( p_locale );
 						std::mbstate_t state = std::mbstate_t();
 						std::vector< wchar_t > dst( p_strIn.size() * facet.max_length(), 0 );
-						const char * endSrc = NULL;
-						wchar_t * endDst = NULL;
+						const char * endSrc = nullptr;
+						wchar_t * endDst = nullptr;
 						facet.in( state,
 								  p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
 								  &dst[0], &dst[0] + dst.size(), endDst
@@ -41,8 +41,8 @@ namespace Castor
 						const facet_type & facet = std::use_facet< facet_type >( p_locale );
 						std::mbstate_t state = std::mbstate_t();
 						std::vector< char > dst( p_strIn.size() * facet.max_length(), 0 );
-						const wchar_t * endSrc = NULL;
-						char * endDst = NULL;
+						const wchar_t * endSrc = nullptr;
+						char * endDst = nullptr;
 						facet.out( state,
 								   p_strIn.data(), p_strIn.data() + p_strIn.size(), endSrc,
 								   &dst[0], &dst[0] + dst.size(), endDst

@@ -129,7 +129,7 @@ namespace Castor
 
 				if ( !l_text.empty() )
 				{
-					FILE * l_file = NULL;
+					FILE * l_file = nullptr;
 					FOpen( l_file, string::string_cast< char >( m_logFilePath[i++] ).c_str(), "a" );
 
 					if ( l_file )

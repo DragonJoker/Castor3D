@@ -101,11 +101,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Retrieves a shader plugin for given shader language
 		 *\param[in]	p_eLanguage	The shader language
-		 *\return		\p NULL if not found
+		 *\return		\p nullptr if not found
 		 *\~french
 		 *\brief		Récupère un ShaderPlugin pour le langage donné
 		 *\param[in]	p_eLanguage	Le langage
-		 *\return		\p NULL si non trouvé
+		 *\return		\p nullptr si non trouvé
 		 */
 		C3D_API PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
 		/**

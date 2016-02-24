@@ -19,7 +19,7 @@ namespace Castor
 		CMsvcConsoleInfo()
 			: m_oldCodePage( 0 )
 			, m_screenBuffer( INVALID_HANDLE_VALUE )
-			, m_oldInfos( NULL )
+			, m_oldInfos( nullptr )
 			, m_allocated( false )
 			, m_console( false )
 		{
@@ -106,7 +106,7 @@ namespace Castor
 				if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo ) )
 				{
 					csbiInfo.dwCursorPosition.X = 0;
-					::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, NULL );
+					::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, nullptr );
 					SHORT offsetY = SHORT( 1 + written / csbiInfo.dwSize.X );
 
 					if ( ( csbiInfo.dwSize.Y - offsetY ) <= csbiInfo.dwCursorPosition.Y )
@@ -127,7 +127,7 @@ namespace Castor
 						fill.Attributes = 0;
 						fill.Char.AsciiChar = char( ' ' );
 						// Scroll
-						::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, NULL, coordDest, &fill );
+						::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, nullptr, coordDest, &fill );
 					}
 					else
 					{
@@ -140,14 +140,14 @@ namespace Castor
 			}
 			else
 			{
-				::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, NULL );
+				::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, nullptr );
 			}
 		}
 
 	private:
 		void DoInitialiseConsole()
 		{
-			m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL );
+			m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
 
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( m_screenBuffer ) )
 			{
@@ -168,13 +168,13 @@ namespace Castor
 					if ( !::SetCurrentConsoleFontEx( m_screenBuffer, FALSE, &newInfos ) )
 					{
 						delete m_oldInfos;
-						m_oldInfos = NULL;
+						m_oldInfos = nullptr;
 					}
 				}
 				else
 				{
 					delete m_oldInfos;
-					m_oldInfos = NULL;
+					m_oldInfos = nullptr;
 				}
 
 				COORD coord = { 160, 9999 };
@@ -302,7 +302,7 @@ namespace Castor
 				if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo ) )
 				{
 					csbiInfo.dwCursorPosition.X = 0;
-					::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, NULL );
+					::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, nullptr );
 					SHORT offsetY = SHORT( 1 + written / csbiInfo.dwSize.X );
 
 					if ( ( csbiInfo.dwSize.Y - offsetY ) <= csbiInfo.dwCursorPosition.Y )
@@ -323,7 +323,7 @@ namespace Castor
 						fill.Attributes = 0;
 						fill.Char.AsciiChar = char( ' ' );
 						// Scroll
-						::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, NULL, coordDest, &fill );
+						::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, nullptr, coordDest, &fill );
 					}
 					else
 					{
@@ -336,14 +336,14 @@ namespace Castor
 			}
 			else
 			{
-				::WriteConsoleA( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, NULL );
+				::WriteConsoleA( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, nullptr );
 			}
 		}
 
 	private:
 		void DoInitialiseConsole()
 		{
-			m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, NULL, CONSOLE_TEXTMODE_BUFFER, NULL );
+			m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
 
 			if ( m_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( m_screenBuffer ) )
 			{

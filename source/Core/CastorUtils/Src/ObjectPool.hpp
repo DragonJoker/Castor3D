@@ -110,11 +110,11 @@ namespace Castor
 		 *\~english
 		 *\brief		Allocates and builds an object from the pool's memory.
 		 *\param[in]	p_params	The object's constructor parameters.
-		 *\return		The built object, or NULL.
+		 *\return		The built object, or nullptr.
 		 *\~french
 		 *\brief		Alloue et construit un objet à partir de la mémoire du pool.
 		 *\param[in]	p_params	Les paramètres du constructeur de l'objet.
-		 *\return		L'objet construit, ou NULL.
+		 *\return		L'objet construit, ou nullptr.
 		 */
 		template< typename ... TParams >
 		Object * Allocate( TParams ... p_params )
@@ -123,7 +123,7 @@ namespace Castor
 
 			if ( !l_space )
 			{
-				return NULL;
+				return nullptr;
 			}
 
 			return new( l_space )Object( p_params... );
@@ -222,11 +222,11 @@ namespace Castor
 		 *\~english
 		 *\brief		Allocates and builds an object from the pool's memory.
 		 *\param[in]	p_params	The object's constructor parameters.
-		 *\return		The built object, or NULL.
+		 *\return		The built object, or nullptr.
 		 *\~french
 		 *\brief		Alloue et construit un objet à partir de la mémoire du pool.
 		 *\param[in]	p_params	Les paramètres du constructeur de l'objet.
-		 *\return		L'objet construit, ou NULL.
+		 *\return		L'objet construit, ou nullptr.
 		 */
 		template< typename ... TParams >
 		Object * Allocate( TParams ... p_params )
@@ -235,7 +235,7 @@ namespace Castor
 
 			if ( !l_space )
 			{
-				return NULL;
+				return nullptr;
 			}
 
 			return NewDeletePolicy< Object >::Ctor( l_space );

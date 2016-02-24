@@ -120,7 +120,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat = ePIXEL_FORMAT_A8R8G8B8, uint8_t const * p_buffer = NULL, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat = ePIXEL_FORMAT_A8R8G8B8, uint8_t const * p_buffer = nullptr, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -147,7 +147,7 @@ namespace Castor
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 */
 		template< ePIXEL_FORMAT PFSrc, ePIXEL_FORMAT PFDst >
-		Image( String const & p_name, Size const & p_ptSize, uint8_t const * p_buffer = NULL )
+		Image( String const & p_name, Size const & p_ptSize, uint8_t const * p_buffer = nullptr )
 			: Resource< Image > ( p_name )
 			, m_pBuffer( std::make_shared< PxBuffer< PFDst > >( p_ptSize, p_buffer, PFSrc ) )
 		{

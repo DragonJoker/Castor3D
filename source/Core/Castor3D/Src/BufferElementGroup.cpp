@@ -7,7 +7,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	BufferElementGroup::BufferElementGroup( uint8_t * p_buffer, uint32_t p_index )
-		:	m_pBuffer( NULL )
+		:	m_pBuffer( nullptr )
 		,	m_index( p_index )
 	{
 		LinkCoords( p_buffer );

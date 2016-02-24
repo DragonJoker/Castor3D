@@ -66,6 +66,14 @@ namespace Castor3D
 		 */
 		C3D_API virtual void DoRenderSyncFrame();
 		/**
+		 *\copydoc		Castor3D::RenderLoop::DoPause
+		 */
+		C3D_API virtual void DoPause();
+		/**
+		 *\copydoc		Castor3D::RenderLoop::DoResume
+		 */
+		C3D_API virtual void DoResume();
+		/**
 		 *\copydoc		Castor3D::RenderLoop::DoEndRendering
 		 */
 		C3D_API virtual void DoEndRendering();

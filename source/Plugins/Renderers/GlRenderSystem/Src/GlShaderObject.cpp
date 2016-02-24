@@ -19,7 +19,7 @@ namespace GlRender
 				  std::bind( &OpenGl::DeleteShader, std::ref( p_gl ), std::placeholders::_1 ),
 				  std::bind( &OpenGl::IsShader, std::ref( p_gl ), std::placeholders::_1 )
 				)
-		, m_shaderProgram( NULL )
+		, m_shaderProgram( nullptr )
 	{
 	}
 
@@ -142,7 +142,7 @@ namespace GlRender
 		if ( m_status == eSHADER_STATUS_COMPILED && m_shaderProgram && m_parent->GetRenderSystem()->HasShaderType( m_type ) )
 		{
 			GetOpenGl().DetachShader( m_shaderProgram->GetGlName(), GetGlName() );
-			m_shaderProgram = NULL;
+			m_shaderProgram = nullptr;
 		}
 	}
 

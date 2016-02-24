@@ -395,8 +395,8 @@ namespace C3dFbx
 
 	SceneSPtr FbxSdkImporter::DoImportScene()
 	{
-		FbxManager * l_fbxManager = NULL;
-		FbxScene * l_fbxScene = NULL;
+		FbxManager * l_fbxManager = nullptr;
+		FbxScene * l_fbxScene = nullptr;
 
 		// Prepare the FBX SDK.
 		DoInitializeSdkObjects( l_fbxManager, l_fbxScene );
@@ -426,8 +426,8 @@ namespace C3dFbx
 
 		if ( !m_mesh->GetSubmeshCount() )
 		{
-			FbxManager * l_fbxManager = NULL;
-			FbxScene * l_fbxScene = NULL;
+			FbxManager * l_fbxManager = nullptr;
+			FbxScene * l_fbxScene = nullptr;
 
 			// Prepare the FBX SDK.
 			DoInitializeSdkObjects( l_fbxManager, l_fbxScene );
@@ -840,7 +840,7 @@ namespace C3dFbx
 	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
 	{
 		TextureUnitSPtr l_texture = nullptr;
-		FbxTexture * l_fbxtex = NULL;
+		FbxTexture * l_fbxtex = nullptr;
 		int l_index = 0;
 		FbxObject * l_object = p_property.GetSrcObject( l_index++ );
 

@@ -404,8 +404,8 @@
 		:	TFrameVariable< T >( std::move( p_rVariable ) )
 		,	m_mtxValue( std::move( p_rVariable.m_mtxValue ) )
 	{
-		p_rVariable.m_values = NULL;
-		p_rVariable.m_mtxValue = NULL;
+		p_rVariable.m_values = nullptr;
+		p_rVariable.m_mtxValue = nullptr;
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
@@ -425,8 +425,8 @@
 		{
 			delete [] m_mtxValue;
 			m_mtxValue	= std::move( p_rVariable.m_mtxValue );
-			p_rVariable.m_values = NULL;
-			p_rVariable.m_mtxValue = NULL;
+			p_rVariable.m_values = nullptr;
+			p_rVariable.m_mtxValue = nullptr;
 		}
 
 		return *this;

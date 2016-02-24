@@ -40,7 +40,7 @@ namespace Castor
 		uint32_t l_size = count() * l_bpp;
 		m_buffer.resize( l_size );
 
-		if ( p_buffer == NULL )
+		if ( p_buffer == nullptr )
 		{
 			memset( m_buffer.data(), 0, l_size );
 		}
@@ -60,7 +60,7 @@ namespace Castor
 	void PxBufferBase::init( Size const & p_size )
 	{
 		m_size = p_size;
-		init( NULL, ePIXEL_FORMAT_A8R8G8B8 );
+		init( nullptr, ePIXEL_FORMAT_A8R8G8B8 );
 	}
 
 	void PxBufferBase::swap( PxBufferBase & p_pixelBuffer )

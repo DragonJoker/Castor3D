@@ -573,7 +573,7 @@ namespace GuiCommon
 #elif defined( __linux__ )
 		GtkWidget * l_pGtkWidget = static_cast< GtkWidget * >( p_window->GetHandle() );
 		GLXDrawable l_drawable = None;
-		Display * l_pDisplay = NULL;
+		Display * l_pDisplay = nullptr;
 
 		if ( l_pGtkWidget && l_pGtkWidget->window )
 		{

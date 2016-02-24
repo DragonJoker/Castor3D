@@ -67,12 +67,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders one frame.
-		 *\remarks		Use only with a synchronous render loop.
+		 *\remarks		Use only with a synchronous render loop, or when the render loop is paused.
 		 *\~french
 		 *\brief		Dessine une image.
-		 *\remark		A utiliser uniquement avec une boucle de rendu synchrone.
+		 *\remark		A utiliser uniquement avec une boucle de rendu synchrone, ou quand la boucle de rendu est en pause.
 		 */
 		C3D_API void RenderSyncFrame();
+		/**
+		 *\~english
+		 *\brief		Pauses the render loop.
+		 *\remarks		Use only with a synchronous render loop.
+		 *\~french
+		 *\brief		Met la boucle de rendu en pause.
+		 *\remark		A utiliser uniquement avec une boucle de rendu synchrone.
+		 */
+		C3D_API void Pause();
+		/**
+		 *\~english
+		 *\brief		Resumes the render loop.
+		 *\remarks		Use only with a synchronous render loop.
+		 *\~french
+		 *\brief		Relance la boucle de rendu.
+		 *\remark		A utiliser uniquement avec une boucle de rendu synchrone.
+		 */
+		C3D_API void Resume();
 		/**
 		 *\~english
 		 *\brief		Ends the render.
@@ -154,6 +172,20 @@ namespace Castor3D
 		 *\brief		Rend une image, uniquement hors de la boucle de rendu.
 		 */
 		C3D_API virtual void DoRenderSyncFrame() = 0;
+		/**
+		 *\~english
+		 *\brief		Pauses the render loop.
+		 *\~french
+		 *\brief		Met la boucle de rendu en pause.
+		 */
+		C3D_API virtual void DoPause() = 0;
+		/**
+		 *\~english
+		 *\brief		Resumes the render loop.
+		 *\~french
+		 *\brief		Redémarre la boucle de rendu.
+		 */
+		C3D_API virtual void DoResume() = 0;
 		/**
 		 *\~english
 		 *\brief		Ends the render, cleans up engine.

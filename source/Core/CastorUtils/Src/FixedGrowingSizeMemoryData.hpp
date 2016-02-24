@@ -56,9 +56,9 @@ namespace Castor
 		{
 			m_step = p_count;
 			m_total = 0;
-			m_free = NULL;
+			m_free = nullptr;
 			m_freeIndex = m_free;
-			m_buffers = NULL;
+			m_buffers = nullptr;
 			m_buffersEnd = m_buffers;
 			DoCreateBuffer();
 		}
@@ -82,18 +82,18 @@ namespace Castor
 				MemoryAllocator::Deallocate( buffer->m_data );
 			}
 
-			m_free = NULL;
-			m_buffers = NULL;
+			m_free = nullptr;
+			m_buffers = nullptr;
 			m_freeIndex = m_free;
 			m_buffersEnd = m_buffers;
 		}
 		/**
 		 *\~english
 		 *\brief		Gives the address an available chunk.
-		 *\return		NULL if no memory available, the memory address if not.
+		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Donne un chunk mémoire disponible.
-		 *\return		NULL s'il n'y a plus de place disponible, l'adresse mémoire sinon.
+		 *\return		nullptr s'il n'y a plus de place disponible, l'adresse mémoire sinon.
 		 */
 		Object * Allocate()noexcept
 		{
@@ -105,7 +105,7 @@ namespace Castor
 			if ( m_freeIndex == m_free )
 			{
 				ReportError< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >( Namer::Name );
-				return NULL;
+				return nullptr;
 			}
 
 			return *--m_freeIndex;
@@ -115,7 +115,7 @@ namespace Castor
 		 *\brief		Frees the given memory.
 		 *\remarks		Checks if the given address comes from the pool.
 		 *\param[in]	p_space	The memory to free.
-		 *\return		NULL if no memory available, the memory address if not.
+		 *\return		nullptr if no memory available, the memory address if not.
 		 *\~french
 		 *\brief		Libère la mémoire donnée.
 		 *\remarks		Vérifie si la mémoire fait bien partie du pool.
@@ -163,7 +163,7 @@ namespace Castor
 			m_buffers = reinterpret_cast< buffer * >( realloc( m_buffers, ( count + 1 ) * sizeof( buffer ) ) );
 			m_buffersEnd = m_buffers + count;
 			m_buffersEnd->m_data = MemoryAllocator::Allocate( m_step * sizeof( Object ) );
-			m_buffersEnd->m_end = NULL;
+			m_buffersEnd->m_end = nullptr;
 			auto buffer = m_buffersEnd->m_data;
 			m_free = reinterpret_cast< Object ** >( realloc( m_free, m_total * sizeof( Object * ) ) );
 			m_freeEnd = m_free + m_total;
@@ -183,20 +183,20 @@ namespace Castor
 		struct buffer
 		{
 			//!\~english The buffer.	\~french Le tampon.
-			uint8_t * m_data = NULL;
+			uint8_t * m_data = nullptr;
 			//!\~english Pointer to the buffer's end.	\~french Pointeur sur la fin du tampon.
-			uint8_t * m_end = NULL;
+			uint8_t * m_end = nullptr;
 		};
 		//!\~english The buffers.	\~french Les tampons.
-		buffer * m_buffers = NULL;
+		buffer * m_buffers = nullptr;
 		//!\~english Pointer to the buffers' end.	\~french Pointeur sur la fin des tampons.
-		buffer * m_buffersEnd = NULL;
+		buffer * m_buffersEnd = nullptr;
 		//!\~english The free chunks.	\~french Les chunks libres.
-		Object ** m_free = NULL;
+		Object ** m_free = nullptr;
 		//!\~english The free chunks' end.	\~french La fin des chunks libres.
-		Object ** m_freeEnd = NULL;
+		Object ** m_freeEnd = nullptr;
 		//!\~english The las allocated chunk.	\~french Le dernier chunk alloué.
-		Object ** m_freeIndex = NULL;
+		Object ** m_freeIndex = nullptr;
 		//!\~english The size increment.	\~french L'incrément de taille.
 		size_t m_step = 0;
 		//!\~english The total allocated size.	\~french La taille totale allouée.

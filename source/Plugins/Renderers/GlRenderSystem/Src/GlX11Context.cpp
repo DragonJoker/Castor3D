@@ -28,16 +28,16 @@ typedef XVisualInfo * ( FnGlXGetVisualFromFBConfigProc	)( Display *, GLXFBConfig
 typedef FnGlXChooseFBConfigProc * PFnGlXChooseFBConfigProc;
 typedef FnGlXGetVisualFromFBConfigProc * PFnGlXGetVisualFromFBConfigProc;
 
-PFnGlXChooseFBConfigProc g_pfnGlXChooseFBConfig = NULL;
-PFnGlXGetVisualFromFBConfigProc g_pfnGlXGetVisualFromFBConfig = NULL;
+PFnGlXChooseFBConfigProc g_pfnGlXChooseFBConfig = nullptr;
+PFnGlXGetVisualFromFBConfigProc g_pfnGlXGetVisualFromFBConfig = nullptr;
 
 GlContextImpl::GlContextImpl( OpenGl & p_gl, GlContext * p_context )
 	: Holder( p_gl )
-	, m_display( NULL )
+	, m_display( nullptr )
 	, m_glxVersion( 10 )
-	, m_glxContext( NULL )
+	, m_glxContext( nullptr )
 	, m_drawable( None )
-	, m_fbConfig( NULL )
+	, m_fbConfig( nullptr )
 	, m_context( p_context )
 	, m_initialised( false )
 {
@@ -64,9 +64,9 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 	}
 
 	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
-	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+	GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
-	if ( l_pMainContext )
+	if ( l_mainContext )
 	{
 		Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 		Logger::LogInfo( cuT( "Initialising OpenGL" ) );
@@ -77,7 +77,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 		int l_screen = DefaultScreen( m_display );
 		int l_major, l_minor;
 		bool l_ok = glXQueryVersion( m_display, &l_major, &l_minor );
-		XVisualInfo * l_visualInfo = NULL;
+		XVisualInfo * l_visualInfo = nullptr;
 
 		if ( l_ok )
 		{
@@ -146,13 +146,13 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 
 		if ( l_visualInfo )
 		{
-			if ( l_pMainContext )
+			if ( l_mainContext )
 			{
-				m_glxContext = glXCreateContext( m_display, l_visualInfo, l_pMainContext->GetImpl()->GetContext(), GL_TRUE );
+				m_glxContext = glXCreateContext( m_display, l_visualInfo, l_mainContext->GetImpl()->GetContext(), GL_TRUE );
 			}
 			else
 			{
-				m_glxContext = glXCreateContext( m_display, l_visualInfo, NULL, GL_TRUE );
+				m_glxContext = glXCreateContext( m_display, l_visualInfo, nullptr, GL_TRUE );
 			}
 
 			if ( !m_glxContext )
@@ -167,7 +167,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 				{
 					glXMakeCurrent( m_display, m_drawable, m_glxContext );
 					GetOpenGl().PreInitialise( String() );
-					glXMakeCurrent( m_display, None, NULL );
+					glXMakeCurrent( m_display, None, nullptr );
 				}
 
 				if ( GetOpenGl().GetVersion() >= 30 )
@@ -184,7 +184,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 					glXMakeCurrent( m_display, m_drawable, m_glxContext );
 					l_renderSystem->Initialise();
 					p_window->GetEngine()->GetMaterialManager().Initialise();
-					glXMakeCurrent( m_display, None, NULL );
+					glXMakeCurrent( m_display, None, nullptr );
 				}
 			}
 
@@ -213,7 +213,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 #endif
 		UpdateVSync( p_window->GetVSync() );
 
-		if ( l_pMainContext )
+		if ( l_mainContext )
 		{
 			Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
 			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
@@ -269,7 +269,7 @@ void GlContextImpl::UpdateVSync( bool p_enable )
 XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_window, IntArray & p_arrayAttribs, int p_screen )
 {
 	Logger::LogDebug( cuT( "GlXContext::Create - Using FBConfig" ) );
-	XVisualInfo * l_return = NULL;
+	XVisualInfo * l_return = nullptr;
 	int l_result = 0;
 	m_fbConfig = g_pfnGlXChooseFBConfig( m_display, p_screen, &p_arrayAttribs[0], &l_result );
 
@@ -386,7 +386,7 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_window )
 {
 	bool l_return = false;
 	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
-	GlContextSPtr l_pMainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+	GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
 	if ( GetOpenGl().HasCreateContextAttribs() )
 	{
@@ -401,19 +401,19 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_window )
 		l_arrayAttribs.push_back( GLX_CONTEXT_FLAGS_ARB	);
 		l_arrayAttribs.push_back( GLX_CONTEXT_FORWARD_COMPATIBLE_BIT_ARB	);
 		l_arrayAttribs.push_back( None	);
-		glXMakeCurrent( m_display, None, NULL );
+		glXMakeCurrent( m_display, None, nullptr );
 		GetOpenGl().DeleteContext( m_display, m_glxContext );
 
-		if ( l_pMainContext )
+		if ( l_mainContext )
 		{
-			m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], l_pMainContext->GetImpl()->GetContext(), true, &l_arrayAttribs[0] );
+			m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], l_mainContext->GetImpl()->GetContext(), true, &l_arrayAttribs[0] );
 		}
 		else
 		{
-			m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], NULL, true, &l_arrayAttribs[0] );
+			m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], nullptr, true, &l_arrayAttribs[0] );
 		}
 
-		l_return = m_glxContext != NULL;
+		l_return = m_glxContext != nullptr;
 
 		if ( l_return )
 		{
