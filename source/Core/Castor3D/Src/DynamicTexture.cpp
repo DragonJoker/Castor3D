@@ -26,18 +26,13 @@ namespace Castor3D
 		{
 			if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
 			{
-				Castor::Image l_img( cuT( "Tmp" ), *m_pPixelBuffer );
-				Castor::Size l_size = m_pPixelBuffer->dimensions();
+				Castor::Image l_img( cuT( "Tmp" ), *m_pixelBuffer );
+				Castor::Size l_size = m_pixelBuffer->dimensions();
 				l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
-				m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
+				m_pixelBuffer = l_img.Resample( l_size ).GetPixels();
 			}
 
 			m_initialised = DoInitialise();
-
-			if ( GetSampler() )
-			{
-				GetSampler()->Initialise();
-			}
 		}
 
 		return m_initialised;
@@ -58,11 +53,6 @@ namespace Castor3D
 		if ( m_initialised )
 		{
 			l_return = DoBind( p_index );
-
-			if ( l_return && GetSampler() && m_type != eTEXTURE_TYPE_BUFFER )
-			{
-				l_return = GetSampler()->Bind( m_type, p_index );
-			}
 		}
 
 		return l_return;
@@ -70,19 +60,14 @@ namespace Castor3D
 
 	void DynamicTexture::Unbind( uint32_t p_index )
 	{
-		if ( GetSampler() && m_type != eTEXTURE_TYPE_BUFFER )
-		{
-			GetSampler()->Unbind();
-		}
-
 		DoUnbind( p_index );
 	}
 
 	void DynamicTexture::Resize( Castor::Size const & p_size )
 	{
-		m_uiDepth = 1;
+		m_depth = 1;
 
-		if ( m_pPixelBuffer && m_pPixelBuffer->dimensions() != p_size )
+		if ( m_pixelBuffer && m_pixelBuffer->dimensions() != p_size )
 		{
 			Castor::Size l_size = p_size;
 
@@ -91,7 +76,7 @@ namespace Castor3D
 				l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
 			}
 
-			m_pPixelBuffer = PxBufferBase::create( l_size, m_pPixelBuffer->format() );
+			m_pixelBuffer = PxBufferBase::create( l_size, m_pixelBuffer->format() );
 			Cleanup();
 			m_initialised = DoInitialise();
 		}
@@ -103,18 +88,18 @@ namespace Castor3D
 
 		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
 		{
-			m_uiDepth = GetNext2Pow( p_size[2] );
-			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_uiDepth );
+			m_depth = GetNext2Pow( p_size[2] );
+			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_depth );
 		}
 		else
 		{
-			m_uiDepth = p_size[2];
-			l_size.set( p_size[0], p_size[1] * m_uiDepth );
+			m_depth = p_size[2];
+			l_size.set( p_size[0], p_size[1] * m_depth );
 		}
 
-		if ( m_pPixelBuffer && m_pPixelBuffer->dimensions() != l_size )
+		if ( m_pixelBuffer && m_pixelBuffer->dimensions() != l_size )
 		{
-			m_pPixelBuffer = PxBufferBase::create( l_size, m_pPixelBuffer->format() );
+			m_pixelBuffer = PxBufferBase::create( l_size, m_pixelBuffer->format() );
 			Cleanup();
 			m_initialised = DoInitialise();
 		}
@@ -122,7 +107,7 @@ namespace Castor3D
 
 	void DynamicTexture::SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat )
 	{
-		m_uiDepth = 1;
+		m_depth = 1;
 		Castor::Size l_size = p_size;
 
 		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
@@ -130,7 +115,7 @@ namespace Castor3D
 			l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
 		}
 
-		m_pPixelBuffer = Castor::PxBufferBase::create( l_size, p_ePixelFormat );
+		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_ePixelFormat );
 	}
 
 	void DynamicTexture::SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat )
@@ -139,15 +124,15 @@ namespace Castor3D
 
 		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
 		{
-			m_uiDepth = GetNext2Pow( p_size[2] );
-			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_uiDepth );
+			m_depth = GetNext2Pow( p_size[2] );
+			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_depth );
 		}
 		else
 		{
-			m_uiDepth = p_size[2];
-			l_size.set( p_size[0], p_size[1] * m_uiDepth );
+			m_depth = p_size[2];
+			l_size.set( p_size[0], p_size[1] * m_depth );
 		}
 
-		m_pPixelBuffer = Castor::PxBufferBase::create( l_size, p_ePixelFormat );
+		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_ePixelFormat );
 	}
 }

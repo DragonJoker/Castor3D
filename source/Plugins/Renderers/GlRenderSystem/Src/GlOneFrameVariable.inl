@@ -45,7 +45,7 @@ namespace GlRender
 		if ( Castor3D::FrameVariable::m_changed )
 		{
 			GlFrameVariableBase::DoBind< T >( Castor3D::OneFrameVariable< T >::m_values, Castor3D::FrameVariable::m_occurences );
-			Castor3D::FrameVariable::m_changed = false;
+			//Castor3D::FrameVariable::m_changed = false;
 		}
 	}
 }

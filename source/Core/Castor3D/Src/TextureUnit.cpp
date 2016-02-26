@@ -333,11 +333,11 @@ namespace Castor3D
 
 	bool TextureUnit::TextLoader::operator()( TextureUnit const & p_unit, TextFile & p_file )
 	{
-		static const String l_strTextureArguments		[eBLEND_SOURCE_COUNT		]	= { cuT( "diffuse"	),	cuT( "texture"	),	cuT( "previous"	),	cuT( "constant"	) };
-		static const String l_strTextureAlphaFunctions	[eALPHA_BLEND_FUNC_COUNT	]	= { cuT( "none"	),	cuT( "first_arg"	),	cuT( "add"	),	cuT( "add_signed"	),	cuT( "modulate"	),	cuT( "interpolate"	),	cuT( "substract"	) };
-		static const String l_strAlphaFuncs				[eALPHA_FUNC_COUNT			]	= { cuT( "always"	),	cuT( "less"	),	cuT( "less_or_equal"	),	cuT( "equal"	),	cuT( "not_equal"	),	cuT( "greater_or_equal"	),	cuT( "greater"	),	cuT( "never"	) };
-		static const String l_strTextureRgbFunctions	[eRGB_BLEND_FUNC_COUNT		]	= { cuT( "none"	),	cuT( "first_arg"	),	cuT( "add"	),	cuT( "add_signed"	),	cuT( "modulate"	),	cuT( "interpolate"	),	cuT( "substract"	),	cuT( "dot3_rgb"	),	cuT( "dot3_rgba"	) };
-		static const String l_strFormats				[ePIXEL_FORMAT_COUNT		]	= { cuT( "l4"	),	cuT( "a4l4"	),	cuT( "l8"	),	cuT( "a8l8"	),	cuT( "a1r5g5b5"	),	cuT( "a4r4g4b4"	),	cuT( "r8g8b8"	),	cuT( "a8r8g8b8"	),	cuT( "dxtc1"	),	cuT( "dxtc3"	),	cuT( "dxtc5"	),	cuT( "yuy2"	),	cuT( "depth16"	),	cuT( "depth24" ),	cuT( "depth32" ) };
+		static const String l_strTextureArguments[eBLEND_SOURCE_COUNT] = { cuT( "diffuse" ), cuT( "texture" ), cuT( "previous" ), cuT( "constant" ) };
+		static const String l_strTextureAlphaFunctions[eALPHA_BLEND_FUNC_COUNT] = { cuT( "none" ), cuT( "first_arg" ), cuT( "add" ), cuT( "add_signed" ), cuT( "modulate" ), cuT( "interpolate" ), cuT( "substract" ) };
+		static const String l_strAlphaFuncs[eALPHA_FUNC_COUNT] = { cuT( "always" ), cuT( "less" ), cuT( "less_or_equal" ), cuT( "equal" ), cuT( "not_equal" ), cuT( "greater_or_equal" ), cuT( "greater" ), cuT( "never" ) };
+		static const String l_strTextureRgbFunctions[eRGB_BLEND_FUNC_COUNT] = { cuT( "none" ), cuT( "first_arg" ), cuT( "add" ), cuT( "add_signed" ), cuT( "modulate" ), cuT( "interpolate" ), cuT( "substract" ), cuT( "dot3_rgb" ), cuT( "dot3_rgba" ) };
+		static const String l_strFormats[ePIXEL_FORMAT_COUNT] = { cuT( "l4" ), cuT( "a4l4" ), cuT( "l8" ), cuT( "a8l8" ), cuT( "a1r5g5b5" ), cuT( "a4r4g4b4" ), cuT( "r8g8b8" ), cuT( "a8r8g8b8" ), cuT( "dxtc1" ), cuT( "dxtc3" ), cuT( "dxtc5" ), cuT( "yuy2" ), cuT( "depth16" ), cuT( "depth24" ), cuT( "depth32" ) };
 		bool l_return = true;
 
 		if ( p_unit.IsTextured() && p_unit.GetTexture() )
@@ -361,9 +361,9 @@ namespace Castor3D
 					l_return = p_file.Print( 256, cuT( "\t\t\tmap_type %i\n" ), p_unit.GetMappingMode() ) > 0;
 				}
 
-				if ( l_return && l_texture->GetSampler() && l_texture->GetSampler()->GetName() != cuT( "Default" ) )
+				if ( l_return && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
 				{
-					l_return = p_file.WriteText( cuT( "\t\t\tsampler \"" ) + l_texture->GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( cuT( "\t\t\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
 				}
 
 				if ( l_return && p_unit.GetChannel() != 0 )
@@ -471,13 +471,13 @@ namespace Castor3D
 		, m_eAlpFunction( eALPHA_BLEND_FUNC_NONE )
 		, m_bAutoMipmaps( false )
 		, m_changed( false )
+		, m_pSampler( p_engine.GetDefaultSampler() )
 	{
 		m_mtxTransformations.set_identity();
 		m_eRgbArguments[0] = eBLEND_SOURCE_COUNT;
 		m_eRgbArguments[1] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[0] = eBLEND_SOURCE_COUNT;
 		m_eAlpArguments[1] = eBLEND_SOURCE_COUNT;
-		m_pSampler = GetEngine()->GetDefaultSampler();
 	}
 
 	TextureUnit::~TextureUnit()
@@ -502,16 +502,10 @@ namespace Castor3D
 		if ( l_target )
 		{
 			l_target->Initialise( GetIndex() );
-			m_pTexture = l_target->GetTexture();
-
-			if ( l_pSampler && m_pTexture )
-			{
-				m_pTexture->SetSampler( l_pSampler );
-			}
+			m_pTexture = l_target->GetTexture().GetTexture();
 		}
 		else if ( m_pTexture )
 		{
-			m_pTexture->SetSampler( l_pSampler );
 			m_pTexture->Create();
 			m_pTexture->Initialise();
 		}
@@ -536,25 +530,38 @@ namespace Castor3D
 		m_fAlphaValue = 1.0f;
 	}
 
-	void TextureUnit::Bind()
+	void TextureUnit::Bind()const
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
 			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetPipeline();
-			m_pTexture->Bind( m_index );
+			auto l_return = m_pTexture->Bind( m_index );
 
-			if ( m_changed && ( m_bAutoMipmaps || m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC ) )
+			if ( l_return 
+				 && m_changed
+				 && ( m_bAutoMipmaps || m_pTexture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC )
+				 && m_pTexture->GetType() != eTEXTURE_TYPE_BUFFER )
 			{
 				m_pTexture->GenerateMipmaps();
 				m_changed = false;
+			}
+
+			if ( l_return && GetSampler() )
+			{
+				l_return = GetSampler()->Bind( GetTexture()->GetType(), m_index );
 			}
 
 			l_pipeline.SetTextureMatrix( m_index, m_mtxTransformations );
 		}
 	}
 
-	void TextureUnit::Unbind()
+	void TextureUnit::Unbind()const
 	{
+		if ( GetSampler() )
+		{
+			GetSampler()->Unbind();
+		}
+
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
 			m_pTexture->Unbind( m_index );
@@ -674,7 +681,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture )
 		{
-			uint8_t * l_pImage = m_pTexture->Lock( eACCESS_TYPE_WRITE );
+			uint8_t * l_pImage = m_pTexture->Lock( eACCESS_TYPE_READ );
 
 			if ( l_pImage && m_pTexture->GetBuffer() )
 			{

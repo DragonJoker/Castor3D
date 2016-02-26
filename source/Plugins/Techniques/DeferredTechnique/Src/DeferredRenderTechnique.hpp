@@ -235,7 +235,7 @@ namespace Deferred
 
 	protected:
 		//!\~english The various textures	\~french Les diverses textures
-		Castor3D::DynamicTextureSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];
+		Castor3D::TextureUnitSPtr m_lightPassTextures[eDS_TEXTURE_COUNT];
 		//!\~english The deferred shading frame buffer	\~french Le tampon d'image pour le deferred shading
 		Castor3D::FrameBufferSPtr m_geometryPassFrameBuffer;
 		//!\~english The attachments between textures and deferred shading frame buffer	\~french Les attaches entre les texture et le tampon deferred shading

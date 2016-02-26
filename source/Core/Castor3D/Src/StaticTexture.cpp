@@ -23,15 +23,15 @@ namespace Castor3D
 	{
 		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
 		{
-			m_uiDepth = GetNext2Pow( p_dimensions[2] );
-			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_uiDepth );
+			m_depth = GetNext2Pow( p_dimensions[2] );
+			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_depth );
 			Castor::Image l_img( cuT( "Tmp" ), *p_buffer );
-			m_pPixelBuffer = l_img.Resample( l_size ).GetPixels();
+			m_pixelBuffer = l_img.Resample( l_size ).GetPixels();
 		}
 		else
 		{
-			m_uiDepth = p_dimensions[2];
-			m_pPixelBuffer = p_buffer;
+			m_depth = p_dimensions[2];
+			m_pixelBuffer = p_buffer;
 		}
 	}
 
@@ -63,20 +63,15 @@ namespace Castor3D
 
 		if ( m_initialised )
 		{
-			if ( m_pPixelBuffer && m_pPixelBuffer->ptr() )
+			if ( m_pixelBuffer && m_pixelBuffer->ptr() )
 			{
-				m_size = m_pPixelBuffer->dimensions();
-				m_ePixelFormat = m_pPixelBuffer->format();
-				m_pPixelBuffer->clear();
-				m_pPixelBuffer.reset();
+				m_size = m_pixelBuffer->dimensions();
+				m_pixelFormat = m_pixelBuffer->format();
+				m_pixelBuffer->clear();
+				m_pixelBuffer.reset();
 			}
 
 			l_return = DoBind( p_index );
-
-			if ( l_return && GetSampler() )
-			{
-				l_return = GetSampler()->Bind( m_type, p_index );
-			}
 		}
 
 		return l_return;
@@ -84,11 +79,6 @@ namespace Castor3D
 
 	void StaticTexture::Unbind( uint32_t p_index )
 	{
-		if ( GetSampler() )
-		{
-			GetSampler()->Unbind();
-		}
-
 		DoUnbind( p_index );
 	}
 }

@@ -278,46 +278,47 @@ namespace Castor3D
 
 	RenderTarget::stFRAME_BUFFER::stFRAME_BUFFER( RenderTarget & p_renderTarget )
 		: m_renderTarget( p_renderTarget )
+		, m_colorTexture( *p_renderTarget.GetEngine() )
 	{
 	}
 
 	bool RenderTarget::stFRAME_BUFFER::Create()
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		m_pColorTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_pColorAttach = m_frameBuffer->CreateAttachment( m_pColorTexture );
 		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
 		m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
 		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
-		m_pColorTexture->SetSampler( l_pSampler );
-		m_pColorTexture->SetRenderTarget( m_renderTarget.shared_from_this() );
+		auto l_colourTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
+		l_colourTexture->SetRenderTarget( m_renderTarget.shared_from_this() );
+		m_colorTexture.SetTexture( l_colourTexture );
+		m_colorTexture.SetSampler( l_pSampler );
 		return true;
 	}
 
 	void RenderTarget::stFRAME_BUFFER::Destroy()
 	{
-		m_pColorTexture->Destroy();
 		m_pDepthBuffer->Destroy();
 		m_frameBuffer->Destroy();
 		m_pDepthAttach.reset();
 		m_pDepthBuffer.reset();
 		m_pColorAttach.reset();
-		m_pColorTexture.reset();
+		m_colorTexture.SetTexture( nullptr );
 		m_frameBuffer.reset();
 	}
 
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
 	{
 		bool l_return = false;
-		m_colourIndex = p_index;
-		m_pColorTexture->SetType( eTEXTURE_TYPE_2D );
-		m_pColorTexture->SetImage( p_size, m_renderTarget.GetPixelFormat() );
-		Size l_size = m_pColorTexture->GetDimensions();
+		m_colorTexture.SetIndex( p_index );
+		m_colorTexture.GetTexture()->SetType( eTEXTURE_TYPE_2D );
+		std::static_pointer_cast< DynamicTexture >( m_colorTexture.GetTexture() )->SetImage( p_size, m_renderTarget.GetPixelFormat() );
+		Size l_size = m_colorTexture.GetTexture()->GetDimensions();
 		m_frameBuffer->Create( 0 );
-		m_pColorTexture->Create();
-		m_pColorTexture->Initialise();
+		m_colorTexture.GetTexture()->Create();
+		m_colorTexture.GetTexture()->Initialise();
 		m_pDepthBuffer->Create();
 		m_pDepthBuffer->Initialise( l_size );
 		m_frameBuffer->Initialise( l_size );
@@ -339,7 +340,7 @@ namespace Castor3D
 		m_frameBuffer->DetachAll();
 		m_frameBuffer->Unbind();
 		m_frameBuffer->Cleanup();
-		m_pColorTexture->Cleanup();
+		m_colorTexture.Cleanup();
 		m_pDepthBuffer->Cleanup();
 	}
 
@@ -351,7 +352,7 @@ namespace Castor3D
 	RenderTarget::RenderTarget( Engine & p_engine, eTARGET_TYPE p_eTargetType )
 		: OwnedBy< Engine >( p_engine )
 		, m_eTargetType( p_eTargetType )
-		, m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
+		, m_pixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
 		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
 		, m_initialised( false )
 		, m_size( Size( 100, 100 ) )
@@ -399,7 +400,7 @@ namespace Castor3D
 			}
 
 			m_fbLeftEye.Initialise( p_index, m_size );
-			m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
+			m_size = m_fbLeftEye.m_colorTexture.GetTexture()->GetDimensions();
 			m_fbRightEye.Initialise( p_index, m_size );
 			m_renderTechnique->Create();
 			uint32_t l_index = p_index;

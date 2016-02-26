@@ -167,14 +167,14 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Applique la texture
 		 */
-		C3D_API void Bind();
+		C3D_API void Bind()const;
 		/**
 		 *\~english
 		 *\brief		Removes the texture unit from the stack, in order not to interfere with other ones
 		 *\~french
 		 *\brief		Desactive la texture
 		 */
-		C3D_API void Unbind();
+		C3D_API void Unbind()const;
 		/**
 		 *\~english
 		 *\brief		Uploads current image to the GPU
@@ -303,6 +303,15 @@ namespace Castor3D
 		 *\return		Le format des pixels
 		 */
 		C3D_API Castor::ePIXEL_FORMAT GetPixelFormat()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture initalisation status
+		 *\return		\p false if the texture is null or uninitialised
+		 *\~french
+		 *\brief		Récupère le statut d'initialisation de la texture
+		 *\return		\p false si la texture est nulle ou non initialisée
+		 */
+		C3D_API bool IsTextureInitialised()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture file path
@@ -509,15 +518,27 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the sampler
-		 *\param[in]	p_pSampler	The new value
+		 *\brief		Defines the texture sampler
+		 *\param[in]	p_pSampler	The sampler
 		 *\~french
-		 *\brief		Définit le sampler
-		 *\param[in]	p_pSampler	La nouvelle valeur
+		 *\brief		Définit le sampler de la texture
+		 *\param[in]	p_pSampler	Le sampler
 		 */
 		inline void SetSampler( SamplerSPtr p_pSampler )
 		{
 			m_pSampler = p_pSampler;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture sampler
+		 *\return		The sampler
+		 *\~french
+		 *\brief		Récupère le sampler de la texture
+		 *\return		Le buffer
+		 */
+		inline SamplerSPtr GetSampler()const
+		{
+			return m_pSampler.lock();
 		}
 		/**
 		 *\~english
@@ -575,15 +596,6 @@ namespace Castor3D
 		{
 			m_eAlpArguments[p_eIndex] = val;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture initalisation status
-		 *\return		\p false if the texture is null or uninitialised
-		 *\~french
-		 *\brief		Récupère le statut d'initialisation de la texture
-		 *\return		\p false si la texture est nulle ou non initialisée
-		 */
-		bool IsTextureInitialised()const;
 		/**
 		 *\~english
 		 *\brief		Tells if the unit has a texture
@@ -668,7 +680,7 @@ namespace Castor3D
 		//!\~english Tells mipmaps must be regenerated after each texture data change	\~french Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture
 		bool m_bAutoMipmaps;
 		//!\~english Tells the texture data has changed	\~french Dit que les données de la texture ont changé
-		bool m_changed;
+		mutable bool m_changed;
 	};
 	/**
 	 *\~english
@@ -686,61 +698,6 @@ namespace Castor3D
 	{
 		p_streamOut << p_texture->GetIndex();
 		return p_streamOut;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamIn	The stream holding texture's data
-	 *\param[in,out]	p_texture	The output texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les données de la texture
-	 *\param[in,out]	p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::istream & operator >>( std::istream & p_streamIn, TextureUnitSPtr & p_texture )
-	{
-		uint32_t l_index = 0;
-		p_streamIn >> l_index;
-		p_texture->SetIndex( l_index );
-		return p_streamIn;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamOut	The stream receiving texture's data
-	 *\param[in]		p_texture	The input texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la texture
-	 *\param[in]		p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::wostream & operator <<( std::wostream & p_streamOut, TextureUnitSPtr const & p_texture )
-	{
-		p_streamOut << p_texture->GetIndex();
-		return p_streamOut;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamIn	The stream holding texture's data
-	 *\param[in,out]	p_texture	The output texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les données de la texture
-	 *\param[in,out]	p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::wistream & operator >>( std::wistream & p_streamIn, TextureUnitSPtr & p_texture )
-	{
-		uint32_t l_index = 0;
-		p_streamIn >> l_index;
-		p_texture->SetIndex( l_index );
-		return p_streamIn;
 	}
 }
 

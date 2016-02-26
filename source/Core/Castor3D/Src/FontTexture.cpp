@@ -27,7 +27,6 @@ namespace Castor3D
 		m_sampler = l_pSampler;
 		m_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 		m_texture->SetType( eTEXTURE_TYPE_2D );
-		m_texture->SetSampler( l_pSampler );
 	}
 
 	FontTexture::~FontTexture()

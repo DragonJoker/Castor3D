@@ -69,9 +69,14 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			m_lightPassTextures[i] = m_renderSystem->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-			m_lightPassTextures[i]->SetRenderTarget( p_renderTarget.shared_from_this() );
-			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( m_lightPassTextures[i] );
+			auto l_texture = m_renderSystem->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+			l_texture->SetRenderTarget( p_renderTarget.shared_from_this() );
+			l_texture->SetType( eTEXTURE_TYPE_2D );
+			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
+			m_lightPassTextures[i] = std::make_shared< TextureUnit >( *GetEngine() );
+			m_lightPassTextures[i]->SetIndex( i );
+			m_lightPassTextures[i]->SetTexture( l_texture );
+			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
 		}
 
 		m_lightPassShaderProgram = GetEngine()->GetShaderManager().GetNewProgram();
@@ -153,12 +158,6 @@ namespace Deferred
 	{
 		bool l_return = m_geometryPassFrameBuffer->Create( 0 );
 
-		for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
-		{
-			l_return = m_lightPassTextures[i]->Create();
-			m_lightPassTextures[i]->SetSampler( GetEngine()->GetLightsSampler() );
-		}
-
 		if ( l_return )
 		{
 			m_lightPassShaderProgram->CreateFrameVariable( ShaderProgram::Lights, eSHADER_TYPE_PIXEL );
@@ -187,7 +186,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH; i++ )
 		{
-			m_lightPassTextures[i]->Destroy();
+			m_lightPassTextures[i]->Cleanup();
 		}
 
 		m_geometryPassFrameBuffer->Destroy();
@@ -199,17 +198,15 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
-			m_lightPassTextures[i]->SetType( eTEXTURE_TYPE_2D );
-			m_lightPassTextures[i]->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
-			l_return = m_lightPassTextures[i]->Initialise();
+			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[i]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
+			m_lightPassTextures[i]->Initialise();
 			p_index++;
 		}
 
 		if ( l_return )
 		{
-			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetType( eTEXTURE_TYPE_2D );
-			m_lightPassTextures[eDS_TEXTURE_DEPTH]->SetImage( m_size, ePIXEL_FORMAT_DEPTH32 );
-			l_return = m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise();
+			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[eDS_TEXTURE_DEPTH]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_DEPTH32 );
+			m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise();
 			p_index++;
 		}
 
@@ -343,7 +340,7 @@ namespace Deferred
 
 			for ( int i = 0; i < eDS_TEXTURE_COUNT && l_return; i++ )
 			{
-				l_return = m_lightPassTextures[i]->Bind( i );
+				m_lightPassTextures[i]->Bind();
 			}
 
 			if ( l_return )
@@ -352,7 +349,7 @@ namespace Deferred
 
 				for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 				{
-					m_lightPassTextures[i]->Unbind( i );
+					m_lightPassTextures[i]->Unbind();
 				}
 			}
 

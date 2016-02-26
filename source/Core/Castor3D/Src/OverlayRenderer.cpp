@@ -16,6 +16,7 @@
 #include "Pipeline.hpp"
 #include "PointFrameVariable.hpp"
 #include "RenderSystem.hpp"
+#include "Sampler.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
 #include "TextOverlay.hpp"
@@ -197,7 +198,7 @@ namespace Castor3D
 
 		if ( l_material )
 		{
-			DoDrawItem( *l_material, m_panelGeometryBuffers, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
+			DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
 		}
 	}
 
@@ -207,14 +208,14 @@ namespace Castor3D
 
 		if ( l_material )
 		{
-			DoDrawItem( *l_material, m_panelGeometryBuffers, nullptr, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
+			DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
 		}
 
 		l_material = p_overlay.GetBorderMaterial();
 
 		if ( l_material )
 		{
-			DoDrawItem( *l_material, m_borderGeometryBuffers, nullptr, FillBuffers( p_overlay.GetBorderVertex().begin(), uint32_t( p_overlay.GetBorderVertex().size() ), *m_borderVertexBuffer ) );
+			DoDrawItem( *l_material, m_borderGeometryBuffers, FillBuffers( p_overlay.GetBorderVertex().begin(), uint32_t( p_overlay.GetBorderVertex().size() ), *m_borderVertexBuffer ) );
 		}
 	}
 
@@ -245,14 +246,15 @@ namespace Castor3D
 					l_geometryBuffers.push_back( DoFillTextPart( l_count, l_it, l_index ) );
 				}
 
-				TextureSPtr l_texture = p_overlay.GetFontTexture()->GetTexture();
+				auto l_texture = p_overlay.GetFontTexture()->GetTexture();
+				auto l_sampler = p_overlay.GetFontTexture()->GetSampler();
 				l_count = uint32_t( l_arrayVtx.size() );
 
 				for ( auto l_pass : *l_material )
 				{
 					for ( auto l_geoBuffers : l_geometryBuffers )
 					{
-						DoDrawItem( *l_pass, l_geoBuffers, l_texture, std::min( l_count, C3D_MAX_CHARS_PER_BUFFER ) );
+						DoDrawItem( *l_pass, l_geoBuffers, l_texture, l_sampler, std::min( l_count, C3D_MAX_CHARS_PER_BUFFER ) );
 						l_count -= C3D_MAX_CHARS_PER_BUFFER;
 					}
 				}
@@ -408,65 +410,48 @@ namespace Castor3D
 		return l_geometryBuffers;
 	}
 
-	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, TextureSPtr p_texture, uint32_t p_count )
+	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, uint32_t p_count )
 	{
-		RenderNode * l_node = nullptr;
-
-		// The texture can only contain the font data, so this test is valid. :P
-		if ( p_texture )
-		{
-			l_node = &DoGetTextProgram( p_pass );
-		}
-		else
-		{
-			l_node = &DoGetPanelProgram( p_pass );
-		}
-
-		if ( l_node )
-		{
-			p_pass.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( l_node->m_matrixUbo );
-
-			if ( p_texture )
-			{
-				OneIntFrameVariableSPtr l_textureVariable = l_node->m_program.FindFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
-
-				if ( l_textureVariable )
-				{
-					l_textureVariable->SetValue( 0 );
-				}
-
-				p_pass.FillShaderVariables( *l_node );
-				l_node->m_program.Bind();
-				p_pass.Render2D();
-				p_texture->Bind( 0 );
-				p_geometryBuffers->Draw( p_count, 0 );
-				p_texture->Unbind( 0 );
-			}
-			else
-			{
-				p_pass.FillShaderVariables( *l_node );
-				l_node->m_program.Bind();
-				p_pass.Render2D();
-				p_geometryBuffers->Draw( p_count, 0 );
-			}
-
-			p_pass.EndRender();
-			l_node->m_program.Unbind();
-		}
+		RenderNode & l_node = DoGetPanelProgram( p_pass );
+		p_pass.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+		p_pass.FillShaderVariables( l_node );
+		l_node.m_program.Bind();
+		p_pass.Render2D();
+		p_geometryBuffers->Draw( p_count, 0 );
+		p_pass.EndRender();
+		l_node.m_program.Unbind();
 	}
 
-	void OverlayRenderer::DoDrawItem( Material & p_material, std::array< GeometryBuffersSPtr, 2 > const & p_geometryBuffers, TextureSPtr p_texture, uint32_t p_count )
+	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, TextureSPtr p_texture, SamplerSPtr p_sampler , uint32_t p_count )
+	{
+		RenderNode & l_node = DoGetTextProgram( p_pass );
+		p_pass.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+
+		OneIntFrameVariableSPtr l_textureVariable = l_node.m_program.FindFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
+
+		if ( l_textureVariable )
+		{
+			l_textureVariable->SetValue( 0 );
+		}
+
+		p_pass.FillShaderVariables( l_node );
+		l_node.m_program.Bind();
+		p_pass.Render2D();
+		p_texture->Bind( 0 );
+		p_sampler->Bind( p_texture->GetType(), 0 );
+		p_geometryBuffers->Draw( p_count, 0 );
+		p_sampler->Unbind();
+		p_texture->Unbind( 0 );
+
+		p_pass.EndRender();
+		l_node.m_program.Unbind();
+	}
+
+	void OverlayRenderer::DoDrawItem( Material & p_material, std::array< GeometryBuffersSPtr, 2 > const & p_geometryBuffers, uint32_t p_count )
 	{
 		for ( auto && l_pass : p_material )
 		{
-			if ( p_texture || l_pass->GetTextureUnit( eTEXTURE_CHANNEL_COLOUR ) )
-			{
-				DoDrawItem( *l_pass, p_geometryBuffers[1], p_texture, p_count );
-			}
-			else
-			{
-				DoDrawItem( *l_pass, p_geometryBuffers[0], p_texture, p_count );
-			}
+			DoDrawItem( *l_pass, p_geometryBuffers[0], p_count );
 		}
 	}
 

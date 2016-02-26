@@ -211,7 +211,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			Une texture de polices optionnelle.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Material & p_material, std::array< GeometryBuffersSPtr, 2 > const & p_geometryBuffers, TextureSPtr p_texture, uint32_t p_count );
+		C3D_API void DoDrawItem( Material & p_material, std::array< GeometryBuffersSPtr, 2 > const & p_geometryBuffers, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay.
@@ -226,7 +226,22 @@ namespace Castor3D
 		 *\param[in]	p_texture			Une texture de polices optionnelle.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, TextureSPtr p_texture, uint32_t p_count );
+		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, uint32_t p_count );
+		/**
+		 *\~english
+		 *\brief		Function to draw an overlay.
+		 *\param[in]	p_pass				The pass.
+		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
+		 *\param[in]	p_texture			An optional font texture.
+		 *\param[in]	p_count				The vertex count.
+		 *\~french
+		 *\brief		Fonction de dessin d'une incrustation.
+		 *\param[in]	p_pass				La passe.
+		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
+		 *\param[in]	p_texture			Une texture de polices optionnelle.
+		 *\param[in]	p_count				Le nombre de sommets.
+		 */
+		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, TextureSPtr p_texture, SamplerSPtr p_sampler, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array
