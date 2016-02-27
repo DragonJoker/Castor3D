@@ -65,7 +65,6 @@ namespace CastorCom
 
 		COM_PROPERTY( RenderTarget, IRenderTarget *, make_getter( m_internal.get(), &Castor3D::DynamicTexture::GetRenderTarget ), make_putter( m_internal.get(), &Castor3D::DynamicTexture::SetRenderTarget ) );
 		COM_PROPERTY( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::Texture::GetType ), make_putter( m_internal.get(), &Castor3D::Texture::SetType ) );
-		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &Castor3D::Texture::GetSampler ), make_putter( m_internal.get(), &Castor3D::Texture::SetSampler ) );
 		COM_PROPERTY( MappingMode, eTEXTURE_MAP_MODE, make_getter( m_internal.get(), &Castor3D::Texture::GetMappingMode ), make_putter( m_internal.get(), &Castor3D::Texture::SetMappingMode ) );
 		COM_PROPERTY( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::Texture::GetBuffer ), make_putter( m_internal.get(), &Castor3D::Texture::SetImage ) );
 		COM_PROPERTY( SamplesCount, unsigned int, make_getter( m_internal.get(), &Castor3D::DynamicTexture::GetSamplesCount ), make_putter( m_internal.get(), &Castor3D::DynamicTexture::SetSamplesCount ) );

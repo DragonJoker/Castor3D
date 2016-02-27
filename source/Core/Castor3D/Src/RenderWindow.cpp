@@ -511,16 +511,18 @@ namespace Castor3D
 		return l_strReturn;
 	}
 
-	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_texture )
+	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, TextureUnit const & p_texture )
 	{
+		auto l_texture = p_texture.GetTexture();
+
 		if ( m_toSave )
 		{
-			auto l_buffer = p_texture->Lock( eACCESS_TYPE_READ );
+			auto l_buffer = l_texture->Lock( eACCESS_TYPE_READ );
 
 			if ( l_buffer )
 			{
 				std::memcpy( m_saveBuffer->ptr(), l_buffer, m_saveBuffer->size() );
-				p_texture->Unlock( false );
+				l_texture->Unlock( false );
 			}
 
 			m_toSave = false;
@@ -539,7 +541,7 @@ namespace Castor3D
 
 			m_wpDepthStencilState.lock()->Apply();
 			m_wpRasteriserState.lock()->Apply();
-			m_context->RenderTexture( m_size, *p_texture );
+			m_context->RenderTexture( m_size, *l_texture );
 			m_backBuffers->Unbind();
 		}
 	}

@@ -127,7 +127,7 @@ namespace Castor3D
 		 */
 		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
 		{
-			return m_ePixelFormat;
+			return m_pixelFormat;
 		}
 		/**
 		 *\~english
@@ -210,7 +210,7 @@ namespace Castor3D
 		//!\~english The component to which this buffer is bound	\~french La composante à laquelle ce tampon est associé
 		eBUFFER_COMPONENT m_eComponent;
 		//!\~english The buffer pixel format	\~french Le format des pixels du tampon
-		Castor::ePIXEL_FORMAT m_ePixelFormat;
+		Castor::ePIXEL_FORMAT m_pixelFormat;
 		//!\~english The samples count, if multisampling is enabled	\~french Le nombre d'échantillons, en cas de multisampling
 		int m_samplesCount;
 	};

@@ -542,7 +542,7 @@ namespace Castor3D
 
 	private:
 		Castor::String DoGetName();
-		void DoRender( eBUFFER p_eTargetBuffer, DynamicTextureSPtr p_texture );
+		void DoRender( eBUFFER p_eTargetBuffer, TextureUnit const & p_texture );
 		void DoUpdateSize();
 
 	private:

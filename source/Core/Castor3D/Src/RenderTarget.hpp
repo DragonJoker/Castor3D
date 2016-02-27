@@ -21,6 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "BinaryParser.hpp"
 #include "Parameter.hpp"
+#include "TextureUnit.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -148,9 +149,7 @@ namespace Castor3D
 			void Cleanup();
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
-			DynamicTextureSPtr m_pColorTexture;
-			//!\~english The colour texture unit index.	\~french L'indice de l'unité de la texture de couleurs.
-			uint32_t m_colourIndex;
+			TextureUnit m_colorTexture;
 			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
 			DepthStencilRenderBufferSPtr m_pDepthBuffer;
 			//!\~english The frame buffer	\~french Le tampon d'image
@@ -471,9 +470,9 @@ namespace Castor3D
 		 *\brief		Récupère la texture
 		 *\return		La texture
 		 */
-		inline DynamicTextureSPtr GetTexture()const
+		inline TextureUnit const & GetTexture()const
 		{
-			return m_fbLeftEye.m_pColorTexture;
+			return m_fbLeftEye.m_colorTexture;
 		}
 		/**
 		 *\~english
@@ -495,9 +494,9 @@ namespace Castor3D
 		 *\brief		Récupère la texture oeil gauche
 		 *\return		La texture
 		 */
-		inline DynamicTextureSPtr GetTextureLEye()const
+		inline TextureUnit const & GetTextureLEye()const
 		{
-			return m_fbLeftEye.m_pColorTexture;
+			return m_fbLeftEye.m_colorTexture;
 		}
 		/**
 		 *\~english
@@ -519,9 +518,9 @@ namespace Castor3D
 		 *\brief		Récupère la texture oeil droit
 		 *\return		La texture
 		 */
-		inline DynamicTextureSPtr GetTextureREye()const
+		inline TextureUnit const & GetTextureREye()const
 		{
-			return m_fbRightEye.m_pColorTexture;
+			return m_fbRightEye.m_colorTexture;
 		}
 		/**
 		 *\~english
@@ -569,7 +568,7 @@ namespace Castor3D
 		 */
 		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
 		{
-			return m_ePixelFormat;
+			return m_pixelFormat;
 		}
 		/**
 		 *\~english
@@ -581,7 +580,7 @@ namespace Castor3D
 		 */
 		inline void SetPixelFormat( Castor::ePIXEL_FORMAT val )
 		{
-			m_ePixelFormat = val;
+			m_pixelFormat = val;
 		}
 		/**
 		 *\~english
@@ -693,7 +692,7 @@ namespace Castor3D
 		//!\~english The currently active camera (useful in stereoscopic rendering)	\~french La caméra actuellement active (utile en rendu stéréoscopique)
 		CameraWPtr m_pCurrentCamera;
 		//!\~english The target display format	\~french Le format des pixels de la cible
-		Castor::ePIXEL_FORMAT m_ePixelFormat;
+		Castor::ePIXEL_FORMAT m_pixelFormat;
 		//!\~english The target depth format	\~french Le format de profondeur de la cible
 		Castor::ePIXEL_FORMAT m_eDepthFormat;
 		//!\~english The number of actually created render targets	\~french Le compte de render target actuellement créées

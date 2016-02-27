@@ -205,7 +205,7 @@ namespace Castor3D
 		 */
 		inline eTEXTURE_MAP_MODE GetMappingMode()const
 		{
-			return m_eMapMode;
+			return m_mapMode;
 		}
 		/**
 		 *\~english
@@ -217,7 +217,7 @@ namespace Castor3D
 		 */
 		inline void SetMappingMode( eTEXTURE_MAP_MODE p_eMapMode )
 		{
-			m_eMapMode = p_eMapMode;
+			m_mapMode = p_eMapMode;
 		}
 		/**
 		 *\~english
@@ -241,7 +241,7 @@ namespace Castor3D
 		 */
 		inline uint32_t GetDepth()const
 		{
-			return m_uiDepth;
+			return m_depth;
 		}
 		/**
 		 *\~english
@@ -253,7 +253,7 @@ namespace Castor3D
 		 */
 		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
 		{
-			return ( m_pPixelBuffer ? m_pPixelBuffer->format() : m_ePixelFormat );
+			return ( m_pixelBuffer ? m_pixelBuffer->format() : m_pixelFormat );
 		}
 		/**
 		 *\~english
@@ -265,7 +265,7 @@ namespace Castor3D
 		 */
 		uint32_t GetWidth()const
 		{
-			return ( m_pPixelBuffer ? m_pPixelBuffer->dimensions().width() : m_size.width() );
+			return ( m_pixelBuffer ? m_pixelBuffer->dimensions().width() : m_size.width() );
 		}
 		/**
 		 *\~english
@@ -277,7 +277,7 @@ namespace Castor3D
 		 */
 		uint32_t GetHeight()const
 		{
-			return ( m_pPixelBuffer ? m_pPixelBuffer->dimensions().height() : m_size.height() ) / m_uiDepth;
+			return ( m_pixelBuffer ? m_pixelBuffer->dimensions().height() : m_size.height() ) / m_depth;
 		}
 		/**
 		 *\~english
@@ -289,31 +289,7 @@ namespace Castor3D
 		 */
 		inline Castor::PxBufferBaseSPtr GetBuffer()const
 		{
-			return m_pPixelBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the texture sampler
-		 *\param[in]	p_pSampler	The sampler
-		 *\~french
-		 *\brief		Définit le sampler de la texture
-		 *\param[in]	p_pSampler	Le sampler
-		 */
-		inline void SetSampler( SamplerSPtr p_pSampler )
-		{
-			m_pSampler = p_pSampler;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture sampler
-		 *\return		The sampler
-		 *\~french
-		 *\brief		Récupère le sampler de la texture
-		 *\return		Le buffer
-		 */
-		inline SamplerSPtr GetSampler()const
-		{
-			return m_pSampler.lock();
+			return m_pixelBuffer;
 		}
 
 	protected:
@@ -352,15 +328,13 @@ namespace Castor3D
 		//!\~english Texture type.	\~french Type de texture.
 		eTEXTURE_TYPE m_type;
 		//!\~english Texture mapping modes	\~french Modes de mappage de la texture
-		eTEXTURE_MAP_MODE m_eMapMode;
+		eTEXTURE_MAP_MODE m_mapMode;
 		//!\~english 3D Texture depth	\~french Profondeur de la texture 3D
-		uint32_t m_uiDepth;
+		uint32_t m_depth;
 		//!\~english Texture pixels, at least at initialisation	\~french Pixels de la texture, au moins au moment de l'initialisation
-		Castor::PxBufferBaseSPtr m_pPixelBuffer;
-		//!\~english Texture sampler	\~french Sampler de la texture
-		SamplerWPtr m_pSampler;
+		Castor::PxBufferBaseSPtr m_pixelBuffer;
 		//!\~english The pixel buffer format	\~french Le format du buffer de pixels
-		Castor::ePIXEL_FORMAT m_ePixelFormat;
+		Castor::ePIXEL_FORMAT m_pixelFormat;
 		//!\~english The pixel buffer dimensions	\~french Les dimensions du buffer de pixels
 		Castor::Size m_size;
 		//!\~english The required CPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le CPU (combinaison de eACCESS_TYPE).

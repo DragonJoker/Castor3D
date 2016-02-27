@@ -124,6 +124,18 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\brief		Retrieves the texture.
+		 *\return		The texture.
+		 *\~french
+		 *\brief		Récupère la texture.
+		 *\return		La texture.
+		 */
+		inline SamplerSPtr GetSampler()const
+		{
+			return m_sampler.lock();
+		}
+		/**
+		 *\~english
 		 *\brief		Connects a client to the changed notification signal.
 		 *\param[in]	p_function	The client function.
 		 *\return		The connection.

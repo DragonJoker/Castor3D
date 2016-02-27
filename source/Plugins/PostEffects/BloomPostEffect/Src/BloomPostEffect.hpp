@@ -20,6 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <BufferDeclaration.hpp>
 #include <PostEffect.hpp>
+#include <TextureUnit.hpp>
 #include <Viewport.hpp>
 
 #ifndef _WIN32
@@ -43,11 +44,11 @@ namespace Bloom
 		struct BloomPostEffectSurface
 		{
 			BloomPostEffectSurface();
-			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, bool p_linear );
+			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, bool p_linear );
 			void Cleanup();
 
 			Castor3D::FrameBufferSPtr m_fbo;
-			Castor3D::DynamicTextureSPtr m_colourTexture;
+			Castor3D::TextureUnitSPtr m_colourTexture;
 			Castor3D::TextureAttachmentSPtr m_colourAttach;
 			Castor::Size m_size;
 		};
@@ -78,11 +79,6 @@ namespace Bloom
 		Castor3D::OneFloatFrameVariableSPtr m_filterOffsetY;
 
 		Castor3D::ShaderProgramWPtr m_combineProgram;
-		Castor3D::OneIntFrameVariableSPtr m_combineMapPass0;
-		Castor3D::OneIntFrameVariableSPtr m_combineMapPass1;
-		Castor3D::OneIntFrameVariableSPtr m_combineMapPass2;
-		Castor3D::OneIntFrameVariableSPtr m_combineMapPass3;
-		Castor3D::OneIntFrameVariableSPtr m_combineMapScene;
 
 		Castor3D::Viewport m_viewport;
 		Castor3D::BufferDeclaration m_declaration;

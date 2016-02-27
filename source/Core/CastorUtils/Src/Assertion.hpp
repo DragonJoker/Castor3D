@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -21,11 +21,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "CastorUtils.hpp"
 
 #include "Exception.hpp"
+#include "Logger.hpp"
 
 #ifndef CASTOR_USE_ASSERT
 #	ifndef NDEBUG
 #		define CASTOR_USE_ASSERT 1
-#		define CASTOR_EXCEPT_ASSERT 1
+#		define CASTOR_EXCEPT_ASSERT 0
 #	else
 #		define CASTOR_USE_ASSERT 0
 #		define CASTOR_EXCEPT_ASSERT 0
@@ -57,37 +58,60 @@ namespace Castor
 	{
 	public:
 		/**
-		*\~english
-		*\brief		Specified constructor
-		*\param[in]	p_description	The exception description
-		*\param[in]	p_file			The file name
-		*\param[in]	p_function		The function name
-		*\param[in]	p_line			The line number
-		*\~french
-		*\brief		Constructeur spécifié
-		*\param[in]	p_description	La description de l'exception
-		*\param[in]	p_file			Le nom du fichier
-		*\param[in]	p_function		Le nom de la fonction
-		*\param[in]	p_line			Le numéro de ligne
-		*/
+		 *\~english
+		 *\brief		Specified constructor
+		 *\param[in]	p_description	The exception description
+		 *\param[in]	p_file			The file name
+		 *\param[in]	p_function		The function name
+		 *\param[in]	p_line			The line number
+		 *\~french
+		 *\brief		Constructeur spécifié
+		 *\param[in]	p_description	La description de l'exception
+		 *\param[in]	p_file			Le nom du fichier
+		 *\param[in]	p_function		Le nom de la fonction
+		 *\param[in]	p_line			Le numéro de ligne
+		 */
 		AssertException( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
 			: Debug::Backtraced()
 			, Exception( "Assertion failed: " + p_description + "\n" + m_callStack, p_file, p_function, p_line )
 		{
 		}
 		/**
-		*\~english
-		*\brief		Destructor
-		*\~french
-		*\brief		Destructeur
-		*/
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
 		virtual ~AssertException() throw()
 		{
 		}
 	};
+	/**
+	 *\~english
+	 *\brief		Specified constructor
+	 *\param[in]	p_description	The exception description
+	 *\param[in]	p_file			The file name
+	 *\param[in]	p_function		The function name
+	 *\param[in]	p_line			The line number
+	 *\~french
+	 *\brief		Constructeur spécifié
+	 *\param[in]	p_description	La description de l'exception
+	 *\param[in]	p_file			Le nom du fichier
+	 *\param[in]	p_function		Le nom de la fonction
+	 *\param[in]	p_line			Le numéro de ligne
+	 */
+	inline void Assert( bool p_expr, char const * const p_description )
+	{
+		if ( !p_expr )
+		{
+			Logger::LogError( std::stringstream() << "Assertion failed: " << p_description );
+			Logger::LogError( std::stringstream() << Debug::Backtrace{} );
+			assert( false );
+		}
+	}
 }
 
-#		define CASTOR_ASSERT( pred, text )\
+#		define CASTOR_ASSERT( pred, text )
 	if ( !( pred ) )\
 	{\
 		throw Castor::AssertException( ( text ), __FILE__, __FUNCTION__, __LINE__ );\
@@ -95,7 +119,31 @@ namespace Castor
 
 #	else
 
-#		define CASTOR_ASSERT( pred, text ) assert( pred )
+namespace Castor
+{
+	/**
+	 *\~english
+	 *\brief		Checks an assertion.
+	 *\param[in]	p_expr			The expression to test.
+	 *\param[in]	p_description	The assertion description.
+	 *\~french
+	 *\brief		Constructeur spécifié
+	 *\param[in]	p_expr			L'expression à tester
+	 *\param[in]	p_description	La description de l'assertion.
+	 */
+	template< typename Expr >
+	inline void Assert( Expr const & p_expr, char const * const p_description )
+	{
+		if ( !p_expr )
+		{
+			Logger::LogError( std::stringstream() << "Assertion failed: " << p_description );
+			Logger::LogError( std::stringstream() << Debug::Backtrace{} );
+			assert( false );
+		}
+	}
+}
+
+#		define CASTOR_ASSERT( pred, text ) Castor::Assert( pred, text )
 
 #	endif
 #else

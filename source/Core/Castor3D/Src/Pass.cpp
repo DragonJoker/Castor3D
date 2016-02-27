@@ -408,7 +408,7 @@ namespace Castor3D
 			StaticTextureSPtr l_pTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 			l_pTexture->SetType( eTEXTURE_TYPE_2D );
 			l_pTexture->SetImage( l_pImageOpa );
-			l_pTexture->SetSampler( l_pOpaSrc->GetTexture()->GetSampler() );
+			l_pOpacityMap->SetSampler( l_pOpaSrc->GetSampler() );
 			l_pOpacityMap->SetTexture( l_pTexture );
 			AddTextureUnit( l_pOpacityMap );
 			l_pImageOpa.reset();
