@@ -1,3 +1,9 @@
+#include <Logger.hpp>
+#include <Position.hpp>
+#include <Rectangle.hpp>
+#include <Size.hpp>
+#include <Utils.hpp>
+
 namespace GlRender
 {
 	//*************************************************************************************************
