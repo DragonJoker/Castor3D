@@ -45,6 +45,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #	include <CastorUtils.hpp>
 #	include <Angle.hpp>
+#	include <BlockTimer.hpp>
 #	include <Collection.hpp>
 #	include <Colour.hpp>
 #	include <CubeBox.hpp>

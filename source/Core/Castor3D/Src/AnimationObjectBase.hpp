@@ -131,15 +131,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time.
 		 *\param[in]	p_time				Current time index.
-		 *\param[in]	p_looped			Tells if the animation is looped.
 		 *\param[în]	p_transformations	The current transformation matrix.
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
 		 *\param[in]	p_time				Index de temps courant.
-		 *\param[in]	p_looped			Dit si l'animation est bouclée.
 		 *\param[în]	p_transformations	La matrice de transformation courante.
 		 */
-		C3D_API void Update( real p_time, bool p_looped, Castor::Matrix4x4r const & p_transformations );
+		C3D_API void Update( real p_time, Castor::Matrix4x4r const & p_transformations );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name.

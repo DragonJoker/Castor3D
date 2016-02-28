@@ -27,9 +27,9 @@ namespace GlRender
 	{
 	}
 
-	void GlShaderObject::Create()
+	bool GlShaderObject::Create()
 	{
-		ObjectType::Create();
+		return ObjectType::Create();
 	}
 
 	void GlShaderObject::Destroy()

@@ -548,7 +548,7 @@ namespace Castor3D
 
 			if ( l_return && GetSampler() )
 			{
-				l_return = GetSampler()->Bind( GetTexture()->GetType(), m_index );
+				l_return = GetSampler()->Bind( m_index );
 			}
 
 			l_pipeline.SetTextureMatrix( m_index, m_mtxTransformations );
@@ -559,7 +559,7 @@ namespace Castor3D
 	{
 		if ( GetSampler() )
 		{
-			GetSampler()->Unbind();
+			GetSampler()->Unbind( m_index );
 		}
 
 		if ( m_pTexture && m_pTexture->IsInitialised() )

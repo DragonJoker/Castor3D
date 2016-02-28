@@ -1144,7 +1144,7 @@ namespace OceanLighting
 		m_skymap->Unbind();
 		m_fbo->Unbind();
 		m_pTexSky->Bind( SKY_UNIT );
-		m_pSamplerAnisotropicClamp->Bind( m_pTexSky->GetType(), SKY_UNIT );
+		m_pSamplerAnisotropicClamp->Bind( SKY_UNIT );
 		m_pTexSky->GenerateMipmaps();
 		m_pTexSky->Unbind( SKY_UNIT );
 		Image l_image( cuT( "Skymap" ), *m_pAttachSky->DownloadBuffer() );
@@ -1649,13 +1649,13 @@ namespace OceanLighting
 		}
 
 		m_pTexSpectrum_1_2->Bind( SPECTRUM_1_2_UNIT );
-		m_pSamplerNearestRepeat->Bind( m_pTexSpectrum_1_2->GetType(), SPECTRUM_1_2_UNIT );
+		m_pSamplerNearestRepeat->Bind( SPECTRUM_1_2_UNIT );
 		uint8_t * l_pData = m_pTexSpectrum_1_2->Lock( eACCESS_TYPE_WRITE );
 		std::memcpy( l_pData, m_spectrum12, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 		m_pTexSpectrum_1_2->Unlock( true );
 		m_pTexSpectrum_1_2->Unbind( SPECTRUM_1_2_UNIT );
 		m_pTexSpectrum_3_4->Bind( SPECTRUM_3_4_UNIT );
-		m_pSamplerNearestRepeat->Bind( m_pTexSpectrum_3_4->GetType(), SPECTRUM_3_4_UNIT );
+		m_pSamplerNearestRepeat->Bind( SPECTRUM_3_4_UNIT );
 		l_pData = m_pTexSpectrum_3_4->Lock( eACCESS_TYPE_WRITE );
 		std::memcpy( l_pData, m_spectrum34, sizeof( float ) * m_FFT_SIZE * m_FFT_SIZE * 4 );
 		m_pTexSpectrum_3_4->Unlock( true );
@@ -1873,7 +1873,7 @@ namespace OceanLighting
 
 		m_fftFbo2->Unbind();
 		m_pTexFFTA->Bind( FFT_A_UNIT );
-		m_pSamplerLinearRepeat->Bind( m_pTexFFTA->GetType(), FFT_A_UNIT );
+		m_pSamplerLinearRepeat->Bind( FFT_A_UNIT );
 		m_pTexFFTA->GenerateMipmaps();
 		m_pTexFFTA->Unbind( FFT_A_UNIT );
 	}

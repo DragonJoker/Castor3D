@@ -201,7 +201,7 @@ namespace Castor3D
 
 		if ( l_return && !l_pos.empty() )
 		{
-			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), nullptr, l_tex.data(), nullptr };
+			stVERTEX_GROUP l_group = { uint32_t( l_pos.size() / 3 ), l_pos.data(), l_nml.data(), l_tan.data(), nullptr, l_tex.data() };
 			p_obj.AddPoints( l_group );
 			p_obj.AddFaceGroup( l_faces.data(), uint32_t( l_faces.size() ) );
 		}
@@ -462,11 +462,6 @@ namespace Castor3D
 					l_data += l_stride;
 					l_vertices.m_pVtx += Vertex::GetCountPos();
 				}
-			}
-
-			if ( l_vertices.m_pBones )
-			{
-				AddBoneDatas( l_vertices.m_pBones, l_vertices.m_pBones + l_vertices.m_uiCount );
 			}
 		}
 	}

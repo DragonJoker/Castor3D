@@ -66,7 +66,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 	GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
-	if ( l_mainContext )
+	if ( !l_mainContext )
 	{
 		Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 		Logger::LogInfo( cuT( "Initialising OpenGL" ) );
@@ -213,7 +213,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 #endif
 		UpdateVSync( p_window->GetVSync() );
 
-		if ( l_mainContext )
+		if ( !l_mainContext )
 		{
 			Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
 			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );

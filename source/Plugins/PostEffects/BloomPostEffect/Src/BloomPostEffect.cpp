@@ -531,7 +531,7 @@ namespace Bloom
 				l_texture2.Bind();
 				l_texture3.Bind();
 				l_texture4.GetTexture()->Bind( 4 );
-				l_texture4.GetSampler()->Bind( eTEXTURE_TYPE_2D, 4 );
+				l_texture4.GetSampler()->Bind( 4 );
 
 				m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
 
@@ -540,7 +540,7 @@ namespace Bloom
 				l_texture2.Unbind();
 				l_texture3.Unbind();
 				l_texture4.GetTexture()->Unbind( 4 );
-				l_texture4.GetSampler()->Unbind();
+				l_texture4.GetSampler()->Unbind( 4 );
 
 				l_program->Unbind();
 			}

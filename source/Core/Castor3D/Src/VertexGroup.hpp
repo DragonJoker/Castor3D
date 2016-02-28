@@ -44,8 +44,6 @@ namespace Castor3D
 		real * m_pBin;
 		//!\~english The vertices texture coordinates	\~french Les coordonnées de texture des vertices
 		real * m_pTex;
-		//!\~english The vertices bones datas	\~french Les données des bones des vertices
-		stVERTEX_BONE_DATA * m_pBones;
 	};
 }
 

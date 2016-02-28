@@ -159,23 +159,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the sampler
-		 *\param[in]	p_dimension	The texture dimension
-		 *\param[in]	p_index		The sampler index
+		 *\param[in]	p_index	The sampler index
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Applique le sampler
-		 *\param[in]	p_dimension	La dimension de la texture
-		 *\param[in]	p_index		L'index du sampler
+		 *\param[in]	p_index	L'index du sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Bind( eTEXTURE_TYPE p_dimension, uint32_t p_index ) = 0;
+		C3D_API virtual bool Bind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
+		 *\param[in]	p_index	The sampler index
 		 *\~french
 		 *\brief		Enlève le sampler
+		 *\param[in]	p_index	L'index du sampler
 		 */
-		C3D_API virtual void Unbind() = 0;
+		C3D_API virtual void Unbind( uint32_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the interpolation mode for given filter

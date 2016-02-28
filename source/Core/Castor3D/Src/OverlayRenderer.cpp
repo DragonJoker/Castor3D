@@ -438,9 +438,9 @@ namespace Castor3D
 		l_node.m_program.Bind();
 		p_pass.Render2D();
 		p_texture->Bind( 0 );
-		p_sampler->Bind( p_texture->GetType(), 0 );
+		p_sampler->Bind( 0 );
 		p_geometryBuffers->Draw( p_count, 0 );
-		p_sampler->Unbind();
+		p_sampler->Unbind( 0 );
 		p_texture->Unbind( 0 );
 
 		p_pass.EndRender();

@@ -18,35 +18,21 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_SAMPLER_H___
 #define ___GL_SAMPLER_H___
 
-#include "GlHolder.hpp"
+#include "GlObject.hpp"
 
 #include <Sampler.hpp>
 
 namespace GlRender
 {
-	class GlSampler;
-
-	class GlSamplerImpl
-		: public Castor::OwnedBy< GlSampler >
-	{
-	public:
-		GlSamplerImpl( GlSampler & p_sampler );
-		virtual ~GlSamplerImpl();
-
-		virtual bool Bind( eGL_TEXDIM p_dimension, uint32_t p_index ) = 0;
-		virtual void Unbind() = 0;
-
-	protected:
-		void DoAdjustMinMipModes( GlSampler const & p_sampler, OpenGl const & p_gl, eGL_INTERPOLATION_MODE & p_min, eGL_INTERPOLATION_MODE & p_mip );
-	};
-
 	class GlSampler
 		: public Castor3D::Sampler
-		, public Holder
+		, private Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >
 	{
+		using ObjectType = Object< std::function< bool( int, uint32_t * ) >, std::function< bool( int, uint32_t const * ) > >;
+
 	private:
 		typedef std::function< void() > PUnbindFunction;
-		typedef std::function< bool( eGL_TEXDIM p_dimension, uint32_t p_index ) > PBindFunction;
+		typedef std::function< bool( uint32_t p_index ) > PBindFunction;
 
 	public:
 		GlSampler( OpenGl & p_gl, GlRenderSystem * p_renderSystem, Castor::String const & p_name );
@@ -54,11 +40,13 @@ namespace GlRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Bind( Castor3D::eTEXTURE_TYPE p_dimension, uint32_t p_index );
-		virtual void Unbind();
+		virtual bool Bind( uint32_t p_index );
+		virtual void Unbind( uint32_t p_index );
 
 	private:
-		std::unique_ptr< GlSamplerImpl > m_impl;
+		void DoAdjustMinMipModes( eGL_INTERPOLATION_MODE & p_min, eGL_INTERPOLATION_MODE & p_mip );
+
+	private:
 		eGL_TEXDIM m_glDimension;
 	};
 }

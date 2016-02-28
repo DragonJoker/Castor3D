@@ -111,24 +111,24 @@ namespace Castor3D
 			double l_time = m_frameTimer.TimeMs() + m_externalTime;
 			m_debugTimer.TimeMs();
 			m_framesTimes[m_frameIndex] = l_time;
-			m_debugTotalTime->SetCaption( StringStream() << std::setprecision( 2 ) << ( l_time ) << cuT( " ms" ) );
-			m_debugCpuTime->SetCaption( StringStream() << std::setprecision( 2 ) << m_cpuTime << cuT( " ms" ) );
-			m_externTime->SetCaption( StringStream() << std::setprecision( 2 ) << m_externalTime << cuT( " ms" ) );
+			m_debugTotalTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( l_time ) << cuT( " ms" ) );
+			m_debugCpuTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_cpuTime << cuT( " ms" ) );
+			m_externTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_externalTime << cuT( " ms" ) );
 			m_debugVertexCount->SetCaption( string::to_string( p_vertices ) );
 			m_debugFaceCount->SetCaption( string::to_string( p_faces ) );
 			m_debugObjectCount->SetCaption( string::to_string( p_objects ) );
 
-			m_debugGpuClientTime->SetCaption( StringStream() << std::setprecision( 2 ) << m_gpuTime << cuT( " ms" ) );
-			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 2 ) << ( GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0 ) << cuT( " ms" ) );
+			m_debugGpuClientTime->SetCaption( StringStream() << std::setprecision( 3 ) << m_gpuTime << cuT( " ms" ) );
+			m_debugGpuServerTime->SetCaption( StringStream() << std::setprecision( 3 ) << ( GetEngine()->GetRenderSystem()->GetGpuTime().count() / 1000.0 ) << cuT( " ms" ) );
 			GetEngine()->GetRenderSystem()->ResetGpuTime();
 
 			l_time = std::accumulate( m_framesTimes.begin(), m_framesTimes.end(), 0.0 ) / m_framesTimes.size();
-			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 2 ) << 1000.0 / l_time << cuT( " frames/s" ) );
-			m_debugAverageTime->SetCaption( StringStream() << std::setprecision( 2 ) << l_time << cuT( " ms" ) );
+			m_debugAverageFps->SetCaption( StringStream() << std::setprecision( 3 ) << 1000.0 / l_time << cuT( " frames/s" ) );
+			m_debugAverageTime->SetCaption( StringStream() << std::setprecision( 3 ) << l_time << cuT( " ms" ) );
 
 			m_frameIndex = ++m_frameIndex % FRAME_SAMPLES_COUNT;
 			l_time = m_debugTimer.TimeMs();
-			m_debugTime->SetCaption( StringStream() << std::setprecision( 2 ) << l_time << cuT( " ms" ) );
+			m_debugTime->SetCaption( StringStream() << std::setprecision( 3 ) << l_time << cuT( " ms" ) );
 
 			m_frameTimer.TimeMs();
 		}

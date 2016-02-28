@@ -58,7 +58,7 @@ namespace CastorViewer
 	{
 		static const bool CASTOR3D_THREADED = true;
 #if defined( NDEBUG )
-		static const int CASTOR_WANTED_FPS = 60;
+		static const int CASTOR_WANTED_FPS = 120;
 #else
 		static const int CASTOR_WANTED_FPS = 30;
 #endif

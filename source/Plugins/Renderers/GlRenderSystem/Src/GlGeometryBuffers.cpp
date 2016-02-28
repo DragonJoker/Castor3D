@@ -235,7 +235,6 @@ namespace GlRender
 		for ( auto & l_element : p_layout )
 		{
 			BufferDeclaration::const_iterator l_it = DoFindElement( p_declaration, l_element );
-			CASTOR_ASSERT( l_it != p_declaration.end(), "Layout element was not found in the Declaration" );
 
 			if ( l_it != p_declaration.end() )
 			{

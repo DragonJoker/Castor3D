@@ -45,7 +45,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderObjectBase::Create
 		 */
-		virtual void Create();
+		virtual bool Create();
 		/**
 		 *\copydoc		Castor3D::ShaderObjectBase::Destroy
 		 */

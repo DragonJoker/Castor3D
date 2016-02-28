@@ -168,7 +168,7 @@ namespace Castor3D
 		m_children.push_back( p_object );
 	}
 
-	void AnimationObjectBase::Update( real p_time, bool p_looped, Matrix4x4r const & p_transformations )
+	void AnimationObjectBase::Update( real p_time,Matrix4x4r const & p_transformations )
 	{
 		if ( HasKeyFrames() )
 		{
@@ -203,7 +203,7 @@ namespace Castor3D
 
 		for ( auto l_object : m_children )
 		{
-			l_object->Update( p_time, p_looped, m_cumulativeTransform );
+			l_object->Update( p_time, m_cumulativeTransform );
 		}
 	}
 

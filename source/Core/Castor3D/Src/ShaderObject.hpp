@@ -146,7 +146,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Crée le programme sur le GPU
 		 */
-		C3D_API virtual void Create() = 0;
+		C3D_API virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the program on GPU

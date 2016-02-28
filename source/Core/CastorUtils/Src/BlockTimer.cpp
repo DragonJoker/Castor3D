@@ -9,15 +9,12 @@ namespace Castor
 		, m_strFile( string::string_cast< xchar >( p_szFile ) )
 		, m_uiLine( p_uiLine )
 	{
-#if CASTOR_USE_TRACK
-		Logger::LogInfo( StringStream() << cuT( "BlockTimer::Entered Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
-#endif
 	}
 
 	BlockTimer::~BlockTimer()
 	{
 #if CASTOR_USE_TRACK
-		Logger::LogInfo( StirngStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine << cuT( " - time : " ) << m_timer.TimeS() );
+		Logger::LogInfo( StringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine << cuT( " - time: " ) << m_timer.TimeMs() << cuT( " ms" ) );
 #endif
 	}
 }

@@ -506,15 +506,15 @@ namespace C3dAssimp
 
 #endif
 
+			p_submesh->AddPoints( l_vertices );
+
 			std::vector< stVERTEX_BONE_DATA > l_arrayBones( p_aiMesh->mNumVertices );
 
 			if ( p_aiMesh->HasBones() && p_skeleton )
 			{
 				DoProcessBones( p_skeleton, p_aiMesh->mBones, p_aiMesh->mNumBones, l_arrayBones );
-				l_vertices.m_pBones = &l_arrayBones[0];
+				p_submesh->AddBoneDatas( l_arrayBones );
 			}
-
-			p_submesh->AddPoints( l_vertices );
 
 			for ( uint32_t l_index = 0; l_index < p_aiMesh->mNumFaces; l_index++ )
 			{

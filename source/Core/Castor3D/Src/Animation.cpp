@@ -195,18 +195,34 @@ namespace Castor3D
 					}
 					else
 					{
-						m_currentTime = fmod( m_currentTime, m_length );
+						do
+						{
+							m_currentTime -= m_length;
+						}
+						while ( m_currentTime >= m_length );
 					}
 				}
-				else if ( m_currentTime < 0 && m_looped )
+				else if ( m_currentTime < 0.0_r )
 				{
-					m_currentTime = fmod( m_length + m_currentTime, m_length );
+					if ( !m_looped )
+					{
+						m_state = eANIMATION_STATE_PAUSED;
+						m_currentTime = 0.0_r;
+					}
+					else
+					{
+						do
+						{
+							m_currentTime += m_length;
+						}
+						while ( m_currentTime < 0.0_r );
+					}
 				}
 			}
 
 			for ( auto l_moving : m_arrayMoving )
 			{
-				l_moving->Update( m_currentTime, m_looped, Matrix4x4r{ 1 } );
+				l_moving->Update( m_currentTime, Matrix4x4r{ 1 } );
 			}
 		}
 	}
