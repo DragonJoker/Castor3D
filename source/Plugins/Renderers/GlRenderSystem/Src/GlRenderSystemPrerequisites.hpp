@@ -1308,11 +1308,6 @@ namespace GlRender
 	class GlRenderTarget;
 	class GlRenderWindow;
 	class OpenGl;
-
-	namespace GLSL
-	{
-		class GlslWriter;
-	}
 }
 
 #	if !defined( NDEBUG )

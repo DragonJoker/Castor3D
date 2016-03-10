@@ -587,6 +587,36 @@ namespace Castor3D
 		{
 			return m_gpuTime;
 		}
+		/**
+		 *\~english
+		 *\return		The shader language version.
+		 *\~french
+		 *\return		La version du langage shader.
+		 */
+		inline uint32_t GetShaderLanguageVersion()const
+		{
+			return m_shaderLanguageVersion;
+		}
+		/**
+		 *\~english
+		 *\return		The constant buffers support status.
+		 *\~french
+		 *\return		Le statut du support des tampons de constantes.
+		 */
+		inline bool HasConstantsBuffers()const
+		{
+			return m_hasConstantsBuffers;
+		}
+		/**
+		 *\~english
+		 *\return		The texture buffers support status.
+		 *\~french
+		 *\return		Le statut du support des tampons de textures.
+		 */
+		inline bool HasTextureBuffers()const
+		{
+			return m_hasTextureBuffers;
+		}
 
 	protected:
 		/**
@@ -637,6 +667,12 @@ namespace Castor3D
 		CameraRPtr m_pCurrentCamera;
 		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
 		std::chrono::milliseconds m_gpuTime;
+		//!\~english The shader language version.	\~french La version du langage de shader.
+		uint32_t m_shaderLanguageVersion;
+		//!\~english The constants buffers support status.	\~french Le statut du support de tampons de constantes.
+		bool m_hasConstantsBuffers;
+		//!\~english The texture buffers support status.	\~french Le statut du support de tampons de textures.
+		bool m_hasTextureBuffers;
 
 #if C3D_TRACE_OBJECTS
 

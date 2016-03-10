@@ -60,10 +60,13 @@ namespace GlRender
 			}
 			else
 			{
-				Logger::LogInfo( cuT( "Vendor : " ) + GetOpenGl().GetVendor()	);
-				Logger::LogInfo( cuT( "Renderer : " ) + GetOpenGl().GetRenderer()	);
-				Logger::LogInfo( cuT( "OpenGL Version : " ) + GetOpenGl().GetStrVersion()	);
+				Logger::LogInfo( cuT( "Vendor: " ) + GetOpenGl().GetVendor() );
+				Logger::LogInfo( cuT( "Renderer: " ) + GetOpenGl().GetRenderer() );
+				Logger::LogInfo( cuT( "OpenGL Version: " ) + GetOpenGl().GetStrVersion() );
 				m_extensionsInit = true;
+				m_shaderLanguageVersion = GetOpenGl().GetGlslVersion();
+				m_hasConstantsBuffers = GetOpenGl().HasUbo();
+				m_hasTextureBuffers = GetOpenGl().HasTbo();
 				m_instancing = GetOpenGl().HasInstancing();
 
 				m_openGlMajor = GetOpenGl().GetVersion() / 10;
@@ -181,9 +184,7 @@ namespace GlRender
 #define CHECK_FLAG( flag ) ( ( p_programFlags & ( flag ) ) == ( flag ) )
 
 		using namespace GLSL;
-
-		GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
-		l_writer << GLSL::Version() << Endl();
+		auto l_writer = GetOpenGl().CreateGlslWriter();
 		// Vertex inputs
 		Vec4 position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
 		Vec3 normal = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal );
@@ -283,8 +284,7 @@ namespace GlRender
 		// Vertex shader
 		String l_strVs;
 		{
-			GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
-			l_writer << Version() << Endl();
+			auto l_writer = GetOpenGl().CreateGlslWriter();
 
 			UBO_MATRIX( l_writer );
 
@@ -307,9 +307,7 @@ namespace GlRender
 		// Pixel shader
 		String l_strPs;
 		{
-			// Vertex shader
-			GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
-			l_writer << Version() << Endl();
+			auto l_writer = GetOpenGl().CreateGlslWriter();
 
 			UBO_PASS( l_writer );
 
@@ -406,8 +404,7 @@ namespace GlRender
 
 		String l_strVtxShader;
 		{
-			GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
-			l_writer << Version() << Endl();
+			auto l_writer = GetOpenGl().CreateGlslWriter();
 
 			// Shader inputs
 			IVec4 position = l_writer.GetAttribute< IVec4 >( ShaderProgram::Position );
@@ -422,8 +419,7 @@ namespace GlRender
 
 		String l_strGeoShader;
 		{
-			GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_GEOMETRY );
-			l_writer << Version() << Endl();
+			auto l_writer = GetOpenGl().CreateGlslWriter();
 
 			l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetInputType()] << cuT( " ) in;" ) << Endl();
 			l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetOutputType()] << cuT( " ) out;" ) << Endl();

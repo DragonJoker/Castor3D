@@ -28,6 +28,9 @@ namespace Castor3D
 		, m_nonPowerOfTwoTextures( false )
 		, m_currentContext( nullptr )
 		, m_pCurrentCamera( nullptr )
+		, m_shaderLanguageVersion( 0 )
+		, m_hasConstantsBuffers( false )
+		, m_hasTextureBuffers( false )
 	{
 		m_useShader[eSHADER_TYPE_VERTEX] = false;
 		m_useShader[eSHADER_TYPE_PIXEL] = false;

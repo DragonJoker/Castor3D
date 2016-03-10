@@ -6,6 +6,8 @@
 #include <Logger.hpp>
 #include <Utils.hpp>
 
+#include <GlslWriter.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 
@@ -1011,6 +1013,11 @@ namespace GlRender
 	void OpenGl::StDebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int length, const char * message, void * userParam )
 	{
 		reinterpret_cast< OpenGl * >( userParam )->DebugLogAMD( id, category, severity, length, message );
+	}
+
+	GLSL::GlslWriter OpenGl::CreateGlslWriter()const
+	{
+		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ uint32_t( m_iGlslVersion ), m_bHasUbo, m_bHasTbo } };
 	}
 
 	bool OpenGl::DoGlCheckError( String const & p_text )const

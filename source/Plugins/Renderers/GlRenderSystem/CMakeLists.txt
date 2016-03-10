@@ -24,9 +24,9 @@ if( OPENGL_FOUND )
 	set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 	
 	include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
+	include_directories( ${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src )
 	include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 	include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderSystem/Src )
-	include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderSystem/Src/GLSL )
 	include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 	
 	add_target(
@@ -37,16 +37,6 @@ if( OPENGL_FOUND )
 		"GlRenderSystemPch.hpp"
 		"GlRenderSystemPch.cpp"
 	)
-
-	file( GLOB ${PROJECT_NAME}_GLSL_HEADER_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/GLSL/*.hpp
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/GLSL/*.inl
-	)
-	file( GLOB ${PROJECT_NAME}_GLSL_SOURCE_FILES
-		${CMAKE_CURRENT_SOURCE_DIR}/Src/GLSL/*.cpp
-	)
-	source_group( "Header Files\\GLSL" FILES ${${PROJECT_NAME}_GLSL_HEADER_FILES} )
-	source_group( "Source Files\\GLSL" FILES ${${PROJECT_NAME}_GLSL_SOURCE_FILES} )
 
 	file( GLOB ${PROJECT_NAME}_FBO_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameBuffer*.hpp

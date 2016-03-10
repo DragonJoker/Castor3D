@@ -7,7 +7,8 @@
 #endif
 
 #include "GlRenderSystem.hpp"
-#include "GlslSource.hpp"
+
+#include <GlslSource.hpp>
 
 #include <RenderWindow.hpp>
 #include <ShaderProgram.hpp>
@@ -53,8 +54,7 @@ namespace GlRender
 			String l_strVtxShader;
 			{
 				// Vertex shader
-				GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
-				l_writer << Version() << Endl();
+				auto l_writer = GetOpenGl().CreateGlslWriter();
 
 				UBO_MATRIX( l_writer );
 
@@ -75,8 +75,7 @@ namespace GlRender
 
 			String l_strPxlShader;
 			{
-				GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_PIXEL );
-				l_writer << Version() << Endl();
+				auto l_writer = GetOpenGl().CreateGlslWriter();
 
 				// Shader inputs
 				UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );

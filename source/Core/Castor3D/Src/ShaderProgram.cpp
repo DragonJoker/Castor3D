@@ -450,7 +450,7 @@ namespace Castor3D
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT; ++i )
 			{
-				if ( p_shaderMask & uint64_t( 0x1 << i ) )
+				if ( p_shaderMask & ( uint64_t( 0x1 ) << i ) )
 				{
 					m_frameVariableBuffers[i].push_back( p_pVariableBuffer );
 				}
