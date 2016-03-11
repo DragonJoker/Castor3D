@@ -24,26 +24,26 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Viewport.hpp>
 
 #ifndef _WIN32
-#	define C3D_Bloom_API
+#	define C3D_HdrBloom_API
 #else
-#	ifdef BloomPostEffect_EXPORTS
-#		define C3D_Bloom_API __declspec( dllexport )
+#	ifdef HdrBloomPostEffect_EXPORTS
+#		define C3D_HdrBloom_API __declspec( dllexport )
 #	else
-#		define C3D_Bloom_API __declspec( dllimport )
+#		define C3D_HdrBloom_API __declspec( dllimport )
 #	endif
 #endif
 
-namespace Bloom
+namespace HdrBloom
 {
 	static const uint32_t FILTER_COUNT = 4;
 	static const uint32_t KERNEL_SIZE = 3;
 
-	class BloomPostEffect
+	class HdrBloomPostEffect
 		: public Castor3D::PostEffect
 	{
-		struct BloomPostEffectSurface
+		struct Surface
 		{
-			BloomPostEffectSurface();
+			Surface();
 			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, bool p_linear );
 			void Cleanup();
 
@@ -53,11 +53,11 @@ namespace Bloom
 			Castor::Size m_size;
 		};
 
-		using SurfaceArray = std::array< BloomPostEffectSurface, FILTER_COUNT >;
+		using SurfaceArray = std::array< Surface, FILTER_COUNT >;
 
 	public:
-		BloomPostEffect( Castor3D::RenderSystem * p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
-		virtual ~BloomPostEffect();
+		HdrBloomPostEffect( Castor3D::RenderSystem * p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_param );
+		virtual ~HdrBloomPostEffect();
 
 		virtual bool Initialise();
 		virtual void Cleanup();
