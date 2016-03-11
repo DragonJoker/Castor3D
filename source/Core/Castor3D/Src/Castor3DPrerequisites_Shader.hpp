@@ -273,7 +273,7 @@ namespace Castor3D
 #endif
 
 	class ShaderProgram;
-	class ShaderObjectBase;
+	class ShaderObject;
 	class ProgramInputLayout;
 	class FrameVariable;
 	class FrameVariableBuffer;
@@ -445,13 +445,13 @@ namespace Castor3D
 	DECLARE_SMART_PTR( ProgramLinks );
 	DECLARE_SMART_PTR( FrameVariableBuffer );
 	DECLARE_SMART_PTR( FrameVariable );
-	DECLARE_SMART_PTR( ShaderObjectBase );
+	DECLARE_SMART_PTR( ShaderObject );
 	DECLARE_SMART_PTR( ShaderProgram );
 
 	DECLARE_LIST( FrameVariableLinkSPtr, VariableLinkPtr );
 	DECLARE_MAP( ShaderProgram *, ProgramLinksSPtr, LinksPtrListProgram );
 	DECLARE_VECTOR( ShaderProgramSPtr, ShaderProgramPtr );
-	DECLARE_VECTOR( ShaderObjectBaseSPtr, ShaderObjectPtr );
+	DECLARE_VECTOR( ShaderObjectSPtr, ShaderObjectPtr );
 	DECLARE_LIST( FrameVariableSPtr, FrameVariablePtr );
 	DECLARE_LIST( FrameVariableBufferSPtr, FrameVariableBufferPtr );
 	DECLARE_MAP( Castor::String, FrameVariableWPtr, FrameVariablePtrStr );

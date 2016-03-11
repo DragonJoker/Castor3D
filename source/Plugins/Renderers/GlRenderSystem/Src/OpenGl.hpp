@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlObject.hpp"
 
+#include <GlslWriterPrerequisites.hpp>
+
 #include <TextureUnit.hpp>
 
 #if !defined( CALLBACK )

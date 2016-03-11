@@ -7,12 +7,15 @@
 #include "Plugin.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
+#include "ShaderObject.hpp"
 #include "FrameVariable.hpp"
 #include "Submesh.hpp"
 #include "Sampler.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "Viewport.hpp"
+
+#include <GlslSource.hpp>
 
 using namespace Castor;
 
@@ -28,6 +31,9 @@ namespace Castor3D
 		, m_nonPowerOfTwoTextures( false )
 		, m_currentContext( nullptr )
 		, m_pCurrentCamera( nullptr )
+		, m_shaderLanguageVersion( 0 )
+		, m_hasConstantsBuffers( false )
+		, m_hasTextureBuffers( false )
 	{
 		m_useShader[eSHADER_TYPE_VERTEX] = false;
 		m_useShader[eSHADER_TYPE_PIXEL] = false;
@@ -112,6 +118,372 @@ namespace Castor3D
 	void RenderSystem::SetCurrentCamera( Camera * p_pCamera )
 	{
 		m_pCurrentCamera = p_pCamera;
+	}
+
+	GLSL::GlslWriter RenderSystem::CreateGlslWriter()
+	{
+		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ GetShaderLanguageVersion(), HasConstantsBuffers(), HasTextureBuffers() } };
+	}
+
+	String RenderSystem::GetVertexShaderSource( uint32_t p_programFlags )
+	{
+#define CHECK_FLAG( flag ) ( ( p_programFlags & ( flag ) ) == ( flag ) )
+
+		using namespace GLSL;
+		auto l_writer = CreateGlslWriter();
+		// Vertex inputs
+		Vec4 position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
+		Vec3 normal = l_writer.GetAttribute< Vec3 >( ShaderProgram::Normal );
+		Vec3 tangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Tangent );
+		Vec3 bitangent = l_writer.GetAttribute< Vec3 >( ShaderProgram::Bitangent );
+		Vec3 texture = l_writer.GetAttribute< Vec3 >( ShaderProgram::Texture );
+		Optional< IVec4 > bone_ids0 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< IVec4 > bone_ids1 = l_writer.GetAttribute< IVec4 >( ShaderProgram::BoneIds1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights0 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights0, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Vec4 > weights1 = l_writer.GetAttribute< Vec4 >( ShaderProgram::Weights1, CHECK_FLAG( ePROGRAM_FLAG_SKINNING ) );
+		Optional< Mat4 > transform = l_writer.GetAttribute< Mat4 >( ShaderProgram::Transform, CHECK_FLAG( ePROGRAM_FLAG_INSTANCIATION ) );
+
+		UBO_MATRIX( l_writer );
+
+		// Outputs
+		auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
+		auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
+		auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
+		auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
+		auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
+		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+		std::function< void() > l_main = [&]()
+		{
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Vertex, vec4( position.XYZ, 1.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Normal, vec4( normal, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Tangent, vec4( tangent, 0.0 ) );
+			LOCALE_ASSIGN( l_writer, Vec4, l_v4Bitangent, vec4( bitangent, 0.0 ) );
+			auto l_mtxModel = l_writer.GetLocale< Mat4 >( cuT( "l_mtxModel" ) );
+			bool l_set = false;
+
+			if ( ( p_programFlags & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
+			{
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxBoneTransform, c3d_mtxBones[bone_ids0[Int( 0 )]] * weights0[Int( 0 )] );
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 1 )]] * weights0[Int( 1 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 2 )]] * weights0[Int( 2 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids0[Int( 3 )]] * weights0[Int( 3 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 0 )]] * weights1[Int( 0 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 1 )]] * weights1[Int( 1 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 2 )]] * weights1[Int( 2 )];
+				l_mtxBoneTransform += c3d_mtxBones[bone_ids1[Int( 3 )]] * weights1[Int( 3 )];
+				l_mtxModel = l_mtxBoneTransform;
+				l_set = true;
+			}
+
+			if ( ( p_programFlags & ePROGRAM_FLAG_INSTANCIATION ) == ePROGRAM_FLAG_INSTANCIATION )
+			{
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMV, transform );
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxN, transpose( inverse( l_mtxMV ) ) );
+
+				if ( l_set )
+				{
+					l_mtxModel = l_mtxMV * l_mtxModel;
+				}
+				else
+				{
+					l_mtxModel = l_mtxMV;
+				}
+			}
+			else
+			{
+				if ( l_set )
+				{
+					l_mtxModel = c3d_mtxModel * l_mtxModel;
+				}
+				else
+				{
+					l_mtxModel = c3d_mtxModel;
+				}
+			}
+
+			vtx_texture = texture;
+			vtx_vertex = l_writer.Paren( l_mtxModel * l_v4Vertex ).XYZ;
+			vtx_normal = normalize( l_writer.Paren( l_mtxModel * l_v4Normal ).XYZ );
+			vtx_tangent = normalize( l_writer.Paren( l_mtxModel * l_v4Tangent ).XYZ );
+			vtx_bitangent = normalize( l_writer.Paren( l_mtxModel * l_v4Bitangent ).XYZ );
+			gl_Position = c3d_mtxProjection * c3d_mtxView * l_mtxModel * l_v4Vertex;
+		};
+
+		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
+		return l_writer.Finalise();
+
+#undef CHECK_FLAG
+	}
+
+	ShaderProgramSPtr RenderSystem::CreateOverlayProgram( uint32_t p_flags )
+	{
+#define CHECK_FLAG( flag ) ( ( p_flags & ( flag ) ) == ( flag ) )
+
+		using namespace GLSL;
+
+		// Shader program
+		ShaderManager & l_manager = GetEngine()->GetShaderManager();
+		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+
+		// Vertex shader
+		String l_strVs;
+		{
+			auto l_writer = CreateGlslWriter();
+
+			UBO_MATRIX( l_writer );
+
+			// Shader inputs
+			auto position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
+			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+
+			// Shader outputs
+			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				vtx_texture = texture;
+				gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+			} );
+
+			l_strVs = l_writer.Finalise();
+		}
+
+		// Pixel shader
+		String l_strPs;
+		{
+			auto l_writer = CreateGlslWriter();
+
+			UBO_PASS( l_writer );
+
+			// Shader inputs
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
+			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) );
+
+			// Shader outputs
+			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
+				LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+				{
+					l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+				{
+					l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.X, vtx_texture.Y ) );
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
+				{
+					l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
+				}
+
+				pxl_v4FragColor = vec4( l_v4Ambient.XYZ, l_fAlpha );
+			} );
+
+			l_strPs = l_writer.Finalise();
+		}
+
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+		{
+			l_program->CreateFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
+		}
+
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+		{
+			l_program->CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
+		}
+
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
+		{
+			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
+		}
+
+		eSHADER_MODEL l_model = GetMaxShaderModel();
+		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVs );
+		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
+
+		return l_program;
+
+#undef CHECK_FLAG
+	}
+
+	ShaderProgramSPtr RenderSystem::CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags )
+	{
+		using namespace GLSL;
+
+		static String PRIMITIVES[] =
+		{
+			cuT( "points" ),//eTOPOLOGY_POINTS
+			cuT( "lines" ),//eTOPOLOGY_LINES
+			cuT( "line_loop" ),//eTOPOLOGY_LINE_LOOP
+			cuT( "line_strip" ),//eTOPOLOGY_LINE_STRIP
+			cuT( "triangles" ),//eTOPOLOGY_TRIANGLES
+			cuT( "triangle_strip" ),//eTOPOLOGY_TRIANGLE_STRIPS
+			cuT( "triangle_fan" ),//eTOPOLOGY_TRIANGLE_FAN
+			cuT( "quads" ),//eTOPOLOGY_QUADS
+			cuT( "quad_strip" ),//eTOPOLOGY_QUAD_STRIPS
+			cuT( "polygon" ),//eTOPOLOGY_POLYGON
+		};
+
+		ShaderManager & l_manager = GetEngine()->GetShaderManager();
+		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+		l_manager.CreateSceneBuffer( *l_program, MASK_SHADER_TYPE_VERTEX | MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
+		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+		l_manager.CreateTextureVariables( *l_program, p_flags );
+		FrameVariableBufferSPtr l_billboardUbo = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( cuT( "Billboard" ) );
+		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
+
+		ShaderObjectSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
+		l_object->SetInputType( eTOPOLOGY_POINTS );
+		l_object->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
+		l_object->SetOutputVtxCount( 4 );
+
+		String l_strVtxShader;
+		{
+			auto l_writer = CreateGlslWriter();
+
+			// Shader inputs
+			IVec4 position = l_writer.GetAttribute< IVec4 >( ShaderProgram::Position );
+
+			// Shader outputs
+			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				gl_Position = vec4( position.XYZ, 1.0 );
+			} );
+
+			l_strVtxShader = l_writer.Finalise();
+		}
+
+		String l_strGeoShader;
+		{
+			auto l_writer = CreateGlslWriter();
+
+			l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetInputType()] << cuT( " ) in;" ) << Endl();
+			l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetOutputType()] << cuT( " ) out;" ) << Endl();
+			l_writer << cuT( "layout( max_vertices = " ) << l_object->GetOutputVtxCount() << cuT( " ) out;" ) << Endl();
+
+			UBO_MATRIX( l_writer );
+			UBO_SCENE( l_writer );
+			UBO_BILLBOARD( l_writer );
+
+			auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
+			auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
+			auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
+			auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
+			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
+
+			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+			auto gl_in = l_writer.GetBuiltin< gl_PerVertex >( cuT( "gl_in" ), 8u );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMVP, c3d_mtxProjection * c3d_mtxView * c3d_mtxModel );
+				LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( l_mtxMVP * gl_in[0].gl_Position() ).XYZ );
+				l_position.Y = c3d_v3CameraPosition.Y;
+				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, c3d_v3CameraPosition - l_position );
+				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0.0f ), 1.0, 0.0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( l_mtxMVP * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).XYZ );
+				l_v3Normal = l_writer.Paren( l_mtxMVP * vec4( l_v3Normal, 0.0 ) ).XYZ;
+
+				LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_position1, l_position0 + vec3( Float( 0.0f ), l_writer.Cast< Float >( c3d_v2iDimensions.Y ), 0.0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture1, vec3( Float( 0.0f ), 1.0, 0.0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_position2, l_position0 + l_right );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture2, vec3( Float( 1.0f ), 0.0, 0.0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_position3, l_position2 + vec3( Float( 0.0f ), l_writer.Cast< Float >( c3d_v2iDimensions.Y ), 0.0 ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture3, vec3( Float( 1.0f ), 1.0, 0.0 ) );
+
+				LOCALE_ASSIGN( l_writer, Vec3, l_vec2m1, l_position1 - l_position0 );
+				LOCALE_ASSIGN( l_writer, Vec3, l_vec3m1, l_position2 - l_position0 );
+				LOCALE_ASSIGN( l_writer, Vec3, l_tex2m1, l_v2Texture1 - l_v2Texture0 );
+				LOCALE_ASSIGN( l_writer, Vec3, l_tex3m1, l_v2Texture2 - l_v2Texture0 );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( ( l_vec2m1 * l_tex3m1.X ) - ( l_vec3m1 * l_tex2m1.Y ) ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent, l_v3Normal ) );
+
+				{
+					IndentBlock l_block( l_writer );
+					l_writer << Endl();
+					gl_Position = vec4( l_position0, 1.0 );
+					vtx_vertex = l_position0;
+					vtx_normal = l_v3Normal;
+					vtx_tangent = l_v3Tangent;
+					vtx_bitangent = l_v3Bitangent;
+					vtx_texture = l_v2Texture0;
+					l_writer.EmitVertex();
+				}
+				l_writer << Endl();
+
+				{
+					IndentBlock l_block( l_writer );
+					l_writer << Endl();
+					gl_Position = vec4( l_position1, 1.0 );
+					vtx_vertex = l_position1;
+					vtx_normal = l_v3Normal;
+					vtx_tangent = l_v3Tangent;
+					vtx_bitangent = l_v3Bitangent;
+					vtx_texture = l_v2Texture1;
+					l_writer.EmitVertex();
+				}
+				l_writer << Endl();
+
+				{
+					IndentBlock l_block( l_writer );
+					l_writer << Endl();
+					gl_Position = vec4( l_position2, 1.0 );
+					vtx_vertex = l_position2;
+					vtx_normal = l_v3Normal;
+					vtx_tangent = l_v3Tangent;
+					vtx_bitangent = l_v3Bitangent;
+					vtx_texture = l_v2Texture2;
+					l_writer.EmitVertex();
+				}
+				l_writer << Endl();
+
+				{
+					IndentBlock l_block( l_writer );
+					l_writer << Endl();
+					gl_Position = vec4( l_position3, 1.0 );
+					vtx_vertex = l_position3;
+					vtx_normal = l_v3Normal;
+					vtx_tangent = l_v3Tangent;
+					vtx_bitangent = l_v3Bitangent;
+					vtx_texture = l_v2Texture3;
+					l_writer.EmitVertex();
+				}
+				l_writer << Endl();
+				l_writer.EndPrimitive();
+			} );
+
+			l_strGeoShader = l_writer.Finalise();
+		}
+
+		String l_strPxlShader = p_technique.GetPixelShaderSource( p_flags );
+
+		std::static_pointer_cast< Point2iFrameVariable >( l_billboardUbo->CreateVariable( *l_program.get(), eFRAME_VARIABLE_TYPE_VEC2I, cuT( "c3d_v2iDimensions" ) ) );
+		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_3, l_strVtxShader );
+		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_3, l_strGeoShader );
+		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_3, l_strPxlShader );
+		l_program->SetSource( eSHADER_TYPE_VERTEX, eSHADER_MODEL_4, l_strVtxShader );
+		l_program->SetSource( eSHADER_TYPE_GEOMETRY, eSHADER_MODEL_4, l_strGeoShader );
+		l_program->SetSource( eSHADER_TYPE_PIXEL, eSHADER_MODEL_4, l_strPxlShader );
+
+		return l_program;
 	}
 
 #if C3D_TRACE_OBJECTS

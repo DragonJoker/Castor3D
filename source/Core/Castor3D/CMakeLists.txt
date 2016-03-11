@@ -20,11 +20,12 @@ set( CastorBinsDependencies
 include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+include_directories( ${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src )
 
 add_target(
 	${PROJECT_NAME}
 	api_dll
-	"CastorUtils"
+	"CastorUtils;GlslWriter"
 	"${CastorMinLibraries}"
 	"Castor3DPch.hpp"
 	"Castor3DPch.cpp"

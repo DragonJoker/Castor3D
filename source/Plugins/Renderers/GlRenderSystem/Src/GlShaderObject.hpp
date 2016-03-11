@@ -25,7 +25,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GlRender
 {
 	class GlShaderObject
-		: public Castor3D::ShaderObjectBase
+		: public Castor3D::ShaderObject
 		, public Object< std::function< uint32_t() >, std::function< bool( uint32_t ) > >
 	{
 		friend class GlShaderProgram;
@@ -43,23 +43,23 @@ namespace GlRender
 		 */
 		virtual ~GlShaderObject();
 		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::Create
+		 *\copydoc		Castor3D::ShaderObject::Create
 		 */
 		virtual bool Create();
 		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::Destroy
+		 *\copydoc		Castor3D::ShaderObject::Destroy
 		 */
 		virtual void Destroy();
 		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::Compile
+		 *\copydoc		Castor3D::ShaderObject::Compile
 		 */
 		virtual bool Compile();
 		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::Detach
+		 *\copydoc		Castor3D::ShaderObject::Detach
 		 */
 		virtual void Detach();
 		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::AttachTo
+		 *\copydoc		Castor3D::ShaderObject::AttachTo
 		 */
 		virtual void AttachTo( Castor3D::ShaderProgram & p_program );
 		/**
@@ -109,7 +109,7 @@ namespace GlRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::ShaderObjectBase::DoRetrieveCompilerLog
+		 *\copydoc		Castor3D::ShaderObject::DoRetrieveCompilerLog
 		 */
 		virtual Castor::String DoRetrieveCompilerLog();
 

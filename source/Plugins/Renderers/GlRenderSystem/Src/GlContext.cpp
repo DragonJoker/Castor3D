@@ -7,7 +7,8 @@
 #endif
 
 #include "GlRenderSystem.hpp"
-#include "GlslSource.hpp"
+
+#include <GlslSource.hpp>
 
 #include <RenderWindow.hpp>
 #include <ShaderProgram.hpp>
@@ -53,37 +54,36 @@ namespace GlRender
 			String l_strVtxShader;
 			{
 				// Vertex shader
-				GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_VERTEX );
-				l_writer << Version() << Endl();
+				auto l_writer = GetRenderSystem()->CreateGlslWriter();
 
 				UBO_MATRIX( l_writer );
 
 				// Shader inputs
-				Vec2 position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
-				Vec2 texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 				// Shader outputs
-				OUT( l_writer, Vec2, vtx_texture );
+				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
 					vtx_texture = texture;
-					BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+					gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
 				} );
 				l_strVtxShader = l_writer.Finalise();
 			}
 
 			String l_strPxlShader;
 			{
-				GlslWriter l_writer( GetOpenGl(), eSHADER_TYPE_PIXEL );
-				l_writer << Version() << Endl();
+				auto l_writer = GetRenderSystem()->CreateGlslWriter();
 
 				// Shader inputs
-				UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
-				IN( l_writer, Vec2, vtx_texture );
+				auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 				// Shader outputs
-				FRAG_OUTPUT( l_writer, Vec4, plx_v4FragColor, 0 );
+				auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{

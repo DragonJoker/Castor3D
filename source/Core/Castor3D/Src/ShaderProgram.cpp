@@ -42,7 +42,7 @@ namespace Castor3D
 
 		for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; ++i )
 		{
-			ShaderObjectBaseSPtr l_obj = p_object.m_pShaders[i];
+			ShaderObjectSPtr l_obj = p_object.m_pShaders[i];
 
 			if ( l_obj )
 			{
@@ -51,7 +51,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					l_return = ShaderObjectBase::BinaryParser( m_path ).Fill( *l_obj, l_chunk );
+					l_return = ShaderObject::BinaryParser( m_path ).Fill( *l_obj, l_chunk );
 				}
 
 				if ( l_return )
@@ -99,7 +99,7 @@ namespace Castor3D
 		if ( l_hasFile )
 		{
 			String l_strTabs = cuT( "\t\t" );
-			ShaderObjectBaseSPtr l_object;
+			ShaderObjectSPtr l_object;
 
 			switch ( p_shaderProgram.GetLanguage() )
 			{
@@ -123,7 +123,7 @@ namespace Castor3D
 
 				if ( l_object )
 				{
-					l_return = ShaderObjectBase::TextLoader()( *l_object, p_file );
+					l_return = ShaderObject::TextLoader()( *l_object, p_file );
 				}
 			}
 
@@ -202,9 +202,9 @@ namespace Castor3D
 	{
 	}
 
-	ShaderObjectBaseSPtr ShaderProgram::CreateObject( eSHADER_TYPE p_type )
+	ShaderObjectSPtr ShaderProgram::CreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_return;
+		ShaderObjectSPtr l_return;
 		REQUIRE( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT );
 
 		if ( p_type > eSHADER_TYPE_NONE && p_type < eSHADER_TYPE_COUNT )
@@ -450,7 +450,7 @@ namespace Castor3D
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT; ++i )
 			{
-				if ( p_shaderMask & uint64_t( 0x1 << i ) )
+				if ( p_shaderMask & ( uint64_t( 0x1 ) << i ) )
 				{
 					m_frameVariableBuffers[i].push_back( p_pVariableBuffer );
 				}

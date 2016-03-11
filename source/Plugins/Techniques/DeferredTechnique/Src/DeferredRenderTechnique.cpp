@@ -1,4 +1,4 @@
-﻿#include "DeferredRenderTechnique.hpp"
+#include "DeferredRenderTechnique.hpp"
 
 #include <BlendStateManager.hpp>
 #include <BufferDeclaration.hpp>
@@ -32,13 +32,7 @@
 
 #include <Logger.hpp>
 
-#if C3D_HAS_GL_RENDERER
-
-#	include <GlslSource.hpp>
-#	include <GlRenderSystem.hpp>
-using namespace GlRender;
-
-#endif
+#include <GlslSource.hpp>
 
 #define DEBUG_BUFFERS 0
 
@@ -362,71 +356,15 @@ namespace Deferred
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const
 	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
-#if C3D_HAS_GL_RENDERER
-
-		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			return DoGetGlPixelShaderSource( p_flags );
-		}
-
-#endif
-
-		CASTOR_EXCEPTION( "No renderer selected" );
-	}
-
-	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
-	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
-#if C3D_HAS_GL_RENDERER
-
-		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			return DoGetGlLightPassVertexShaderSource( p_uiProgramFlags );
-		}
-
-#endif
-
-		CASTOR_EXCEPTION( "No renderer selected" );
-	}
-
-	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_flags )const
-	{
-		if ( !m_renderSystem )
-		{
-			CASTOR_EXCEPTION( "No renderer selected" );
-		}
-
-#if C3D_HAS_GL_RENDERER
-
-		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
-		{
-			return DoGetGlLightPassPixelShaderSource( p_flags );
-		}
-
-#endif
-
-		CASTOR_EXCEPTION( "No renderer selected" );
-	}
-
-#if C3D_HAS_GL_RENDERER
-
-	String RenderTechnique::DoGetGlPixelShaderSource( uint32_t p_flags )const
-	{
 #define CHECK_FLAG( channel ) ( ( p_flags & ( channel ) ) == ( channel ) )
 
-		using namespace GLSL;
+		if ( !m_renderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
 
-		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
-		l_writer << GLSL::Version() << Endl();
+		using namespace GLSL;
+		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// UBOs
 		UBO_MATRIX( l_writer );
@@ -434,31 +372,31 @@ namespace Deferred
 		UBO_PASS( l_writer );
 
 		// Fragment Intputs
-		IN( l_writer, Vec3, vtx_vertex );
-		IN( l_writer, Vec3, vtx_normal );
-		IN( l_writer, Vec3, vtx_tangent );
-		IN( l_writer, Vec3, vtx_bitangent );
-		IN( l_writer, Vec3, vtx_texture );
+		auto vtx_vertex( l_writer.GetInput< Vec3 >( cuT( "vtx_vertex" ) ) );
+		auto vtx_normal( l_writer.GetInput< Vec3 >( cuT( "vtx_normal" ) ) );
+		auto vtx_tangent( l_writer.GetInput< Vec3 >( cuT( "vtx_tangent" ) ) );
+		auto vtx_bitangent( l_writer.GetInput< Vec3 >( cuT( "vtx_bitangent" ) ) );
+		auto vtx_texture = l_writer.GetInput< Vec3 >( cuT( "vtx_texture" ) );
 
-		Optional< Sampler2D > c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
-		Optional< Sampler2D > c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
-		Optional< Sampler2D > c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
-		Optional< Sampler2D > c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
-		Optional< Sampler2D > c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
-		Optional< Sampler2D > c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
-		Optional< Sampler2D > c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CHECK_FLAG( eTEXTURE_CHANNEL_EMISSIVE ) ) );
-		Optional< Sampler2D > c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
-		Optional< Sampler2D > c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
+		auto c3d_mapColour( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) ) );
+		auto c3d_mapAmbient( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapAmbient, CHECK_FLAG( eTEXTURE_CHANNEL_AMBIENT ) ) );
+		auto c3d_mapDiffuse( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse, CHECK_FLAG( eTEXTURE_CHANNEL_DIFFUSE ) ) );
+		auto c3d_mapNormal( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapNormal, CHECK_FLAG( eTEXTURE_CHANNEL_NORMAL ) ) );
+		auto c3d_mapOpacity( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) ) );
+		auto c3d_mapSpecular( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapSpecular, CHECK_FLAG( eTEXTURE_CHANNEL_SPECULAR ) ) );
+		auto c3d_mapEmissive( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapEmissive, CHECK_FLAG( eTEXTURE_CHANNEL_EMISSIVE ) ) );
+		auto c3d_mapHeight( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapHeight, CHECK_FLAG( eTEXTURE_CHANNEL_HEIGHT ) ) );
+		auto c3d_mapGloss( l_writer.GetUniform< Sampler2D >( ShaderProgram::MapGloss, CHECK_FLAG( eTEXTURE_CHANNEL_GLOSS ) ) );
 
 		uint32_t l_index = 0;
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dPosition, l_index++ );
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dAmbient, l_index++ );
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dDiffuse, l_index++ );
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dNormal, l_index++ );
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dTangent, l_index++ );
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dBitangent, l_index++ );
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dSpecular, l_index++ );
-		FRAG_OUTPUT( l_writer, Vec4, out_c3dEmissive, l_index++ );
+		auto out_c3dPosition = l_writer.GetFragData< Vec4 >( cuT( "out_c3dPosition" ), l_index++ );
+		auto out_c3dAmbient = l_writer.GetFragData< Vec4 >( cuT( "out_c3dAmbient" ), l_index++ );
+		auto out_c3dDiffuse = l_writer.GetFragData< Vec4 >( cuT( "out_c3dDiffuse" ), l_index++ );
+		auto out_c3dNormal = l_writer.GetFragData< Vec4 >( cuT( "out_c3dNormal" ), l_index++ );
+		auto out_c3dTangent = l_writer.GetFragData< Vec4 >( cuT( "out_c3dTangent" ), l_index++ );
+		auto out_c3dBitangent = l_writer.GetFragData< Vec4 >( cuT( "out_c3dBitangent" ), l_index++ );
+		auto out_c3dSpecular = l_writer.GetFragData< Vec4 >( cuT( "out_c3dSpecular" ), l_index++ );
+		auto out_c3dEmissive = l_writer.GetFragData< Vec4 >( cuT( "out_c3dEmissive" ), l_index++ );
 
 		std::function< void() > l_main = [&]()
 		{
@@ -558,60 +496,69 @@ namespace Deferred
 #undef CHECK_FLAG
 	}
 
-	String RenderTechnique::DoGetGlLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
+	String RenderTechnique::DoGetLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const
 	{
-		using namespace GLSL;
+		if ( !m_renderSystem )
+		{
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
 
-		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
-		l_writer << GLSL::Version() << Endl();
+		using namespace GLSL;
+		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 		// Shader inputs
-		ATTRIBUTE( l_writer, Vec2, vertex );
-		ATTRIBUTE( l_writer, Vec2, texture );
 		UBO_MATRIX( l_writer );
+		auto vertex = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+		auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
 
 		// Shader outputs
-		OUT( l_writer, Vec2, vtx_texture );
+		auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+		auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 		{
 			vtx_texture = texture;
-			BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( vertex.X, vertex.Y, 0.0, 1.0 );
+			gl_Position = c3d_mtxProjection * vec4( vertex.X, vertex.Y, 0.0, 1.0 );
 		} );
 
 		return l_writer.Finalise();
 	}
 
-	String RenderTechnique::DoGetGlLightPassPixelShaderSource( uint32_t p_flags )const
+	String RenderTechnique::DoGetLightPassPixelShaderSource( uint32_t p_flags )const
 	{
-		using namespace GLSL;
-
-		GlslWriter l_writer( static_cast< GlRenderSystem * >( m_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
-		l_writer << GLSL::Version() << Endl();
-
-		IN( l_writer, Vec2, vtx_texture );
-
-		if ( l_writer.GetOpenGl().HasTbo() )
+		if ( !m_renderSystem )
 		{
-			UNIFORM( l_writer, SamplerBuffer, c3d_sLights );
+			CASTOR_EXCEPTION( "No renderer selected" );
+		}
+
+		using namespace GLSL;
+		GlslWriter l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
+
+		// Shader inputs
+		UBO_SCENE( l_writer );
+		auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+
+		if ( l_writer.HasTextureBuffers() )
+		{
+			auto c3d_sLights = l_writer.GetUniform< SamplerBuffer >( ShaderProgram::Lights );
 		}
 		else
 		{
-			UNIFORM( l_writer, Sampler1D, c3d_sLights );
+			auto c3d_sLights = l_writer.GetUniform< Sampler1D >( ShaderProgram::Lights );
 		}
 
-		UNIFORM( l_writer, Sampler2D, c3d_mapPosition );
-		UNIFORM( l_writer, Sampler2D, c3d_mapAmbient );
-		UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
-		UNIFORM( l_writer, Sampler2D, c3d_mapNormals );
-		UNIFORM( l_writer, Sampler2D, c3d_mapTangent );
-		UNIFORM( l_writer, Sampler2D, c3d_mapBitangent );
-		UNIFORM( l_writer, Sampler2D, c3d_mapSpecular );
-		UNIFORM( l_writer, Sampler2D, c3d_mapEmissive );
-		UNIFORM( l_writer, Sampler2D, c3d_mapDepth );
-		UBO_SCENE( l_writer );
+		auto c3d_mapPosition = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapPosition" ) );
+		auto c3d_mapAmbient = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapAmbient" ) );
+		auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDiffuse" ) );
+		auto c3d_mapNormals = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapNormals" ) );
+		auto c3d_mapTangent = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapTangent" ) );
+		auto c3d_mapBitangent = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapBitangent" ) );
+		auto c3d_mapSpecular = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapSpecular" ) );
+		auto c3d_mapEmissive = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapEmissive" ) );
+		auto c3d_mapDepth = l_writer.GetUniform< Sampler2D >( cuT( "c3d_mapDepth" ) );
 
-		FRAG_OUTPUT( l_writer, Vec4, pxl_v4FragColor, 0 );
+		// Shader outputs
+		auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
 
 		std::unique_ptr< LightingModel > l_lighting = l_writer.CreateLightingModel( PhongLightingModel::Name, p_flags );
 
@@ -685,6 +632,4 @@ namespace Deferred
 
 		return l_writer.Finalise();
 	}
-
-#endif
 }

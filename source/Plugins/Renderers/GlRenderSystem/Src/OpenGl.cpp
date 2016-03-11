@@ -6,6 +6,8 @@
 #include <Logger.hpp>
 #include <Utils.hpp>
 
+#include <GlslWriter.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 

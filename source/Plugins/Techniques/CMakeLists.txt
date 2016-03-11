@@ -12,14 +12,13 @@ endfunction( TechniquesInit )
 
 function( TechniquesBuild )
 	set( TechniqueLibraries ${CastorMinLibraries} )
-	
-	if( ${CASTOR_BUILD_RENDERER_OGL} )
-		set( TechniqueLibraries
-			${TechniqueLibraries}
-			${OpenGlLibraries}
-			GlRenderSystem
-		)
-	endif ()
+
+	set( TechniqueIncludes
+		${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
+		${CMAKE_SOURCE_DIR}/Core/Castor3D/Src
+		${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
+		${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
+	)
 
 	set( Build ${Drct} )
 	add_subdirectory( Plugins/Techniques/DirectTechnique )

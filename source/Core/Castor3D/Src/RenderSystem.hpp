@@ -174,6 +174,42 @@ namespace Castor3D
 		C3D_API void SetCurrentCamera( Camera * p_pCamera );
 		/**
 		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
+		 *\param[in]	p_programFlags	Combinaison de ePROGRAM_FLAG
+		 */
+		C3D_API GLSL::GlslWriter CreateGlslWriter();
+		/**
+		 *\~english
+		 *\brief		Creates a shader program for overlays rendering use.
+		 *\return		The created program.
+		 *\~french
+		 *\brief		Crée un programme shader pour les rendu d'incrustations
+		 *\return		Le programme créé.
+		 */
+		C3D_API ShaderProgramSPtr CreateOverlayProgram( uint32_t p_flags );
+		/**
+		 *\~english
+		 *\brief		Creates a shader program for billboards rendering use.
+		 *\return		The created program.
+		 *\~french
+		 *\brief		Crée un programme shader pour les rendu de billboards.
+		 *\return		Le programme créé.
+		 */
+		C3D_API ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags );
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertex shader source matching the given flags
+		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\~french
+		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
+		 *\param[in]	p_programFlags	Combinaison de ePROGRAM_FLAG
+		 */
+		C3D_API Castor::String GetVertexShaderSource( uint32_t p_programFlags );
+		/**
+		 *\~english
 		 *\brief		Checks support for given shader model
 		 *\param[in]	p_eProfile	The shader model
 		 *\return		\p false if the given model is not supported by current API
@@ -357,33 +393,6 @@ namespace Castor3D
 		 *\return		Les tampons d'image créés.
 		 */
 		C3D_API virtual BackBuffersSPtr CreateBackBuffers() = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a shader program for overlays rendering use.
-		 *\return		The created program.
-		 *\~french
-		 *\brief		Crée un programme shader pour les rendu d'incrustations
-		 *\return		Le programme créé.
-		 */
-		C3D_API virtual ShaderProgramSPtr CreateOverlayProgram( uint32_t p_flags ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a shader program for billboards rendering use.
-		 *\return		The created program.
-		 *\~french
-		 *\brief		Crée un programme shader pour les rendu de billboards.
-		 *\return		Le programme créé.
-		 */
-		C3D_API virtual ShaderProgramSPtr CreateBillboardsProgram( RenderTechnique const & p_technique, uint32_t p_flags ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
-		 *\param[in]	p_programFlags	Combinaison de ePROGRAM_FLAG
-		 */
-		C3D_API virtual Castor::String GetVertexShaderSource( uint32_t p_programFlags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type
@@ -587,6 +596,36 @@ namespace Castor3D
 		{
 			return m_gpuTime;
 		}
+		/**
+		 *\~english
+		 *\return		The shader language version.
+		 *\~french
+		 *\return		La version du langage shader.
+		 */
+		inline uint32_t GetShaderLanguageVersion()const
+		{
+			return m_shaderLanguageVersion;
+		}
+		/**
+		 *\~english
+		 *\return		The constant buffers support status.
+		 *\~french
+		 *\return		Le statut du support des tampons de constantes.
+		 */
+		inline bool HasConstantsBuffers()const
+		{
+			return m_hasConstantsBuffers;
+		}
+		/**
+		 *\~english
+		 *\return		The texture buffers support status.
+		 *\~french
+		 *\return		Le statut du support des tampons de textures.
+		 */
+		inline bool HasTextureBuffers()const
+		{
+			return m_hasTextureBuffers;
+		}
 
 	protected:
 		/**
@@ -637,6 +676,12 @@ namespace Castor3D
 		CameraRPtr m_pCurrentCamera;
 		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
 		std::chrono::milliseconds m_gpuTime;
+		//!\~english The shader language version.	\~french La version du langage de shader.
+		uint32_t m_shaderLanguageVersion;
+		//!\~english The constants buffers support status.	\~french Le statut du support de tampons de constantes.
+		bool m_hasConstantsBuffers;
+		//!\~english The texture buffers support status.	\~french Le statut du support de tampons de textures.
+		bool m_hasTextureBuffers;
 
 #if C3D_TRACE_OBJECTS
 

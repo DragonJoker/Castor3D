@@ -12,7 +12,7 @@ using namespace Castor;
 namespace GlRender
 {
 	GlShaderObject::GlShaderObject( OpenGl & p_gl, GlShaderProgram * p_parent, eSHADER_TYPE p_type )
-		: ShaderObjectBase( p_parent, p_type )
+		: ShaderObject( p_parent, p_type )
 		, Object( p_gl,
 				  "GlShaderObject",
 				  std::bind( &OpenGl::CreateShader, std::ref( p_gl ), p_gl.Get( p_type ) ),

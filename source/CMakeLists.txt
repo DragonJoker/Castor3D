@@ -87,6 +87,7 @@ find_package( Doxygen )
 #--------------------------------------------------------------------------------------------------
 include_directories( Core/CastorUtils/Src )
 include_directories( Core/Castor3D/Src )
+include_directories( Core/GlslWriter/Src )
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src )
 
 if( Boost_FOUND AND Boost_NEEDED )

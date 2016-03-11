@@ -34,7 +34,7 @@ namespace Castor3D
 	\brief		Classe de base pour les shaders
 	\remark		Utilisée pour exposer les fonctions communes aux différents langages de shader
 	*/
-	class ShaderObjectBase
+	class ShaderObject
 	{
 	public:
 		/*!
@@ -42,12 +42,12 @@ namespace Castor3D
 		\version 0.6.1.0
 		\date 19/10/2011
 		\~english
-		\brief ShaderObjectBase loader
+		\brief ShaderObject loader
 		\~french
-		\brief Loader de ShaderObjectBase
+		\brief Loader de ShaderObject
 		*/
 		class TextLoader
-			: public Castor::Loader< ShaderObjectBase, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::Loader< ShaderObject, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**
@@ -67,19 +67,19 @@ namespace Castor3D
 			 *\param[in]		p_shaderObject	Le ShaderObject
 			 *\param[in,out]	p_file			Le fichier
 			 */
-			C3D_API virtual bool operator()( ShaderObjectBase const & p_shaderObject, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( ShaderObject const & p_shaderObject, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
 		\date		15/04/2013
 		\~english
-		\brief		ShaderObjectBase loader
+		\brief		ShaderObject loader
 		\~french
-		\brief		Loader de ShaderObjectBase
+		\brief		Loader de ShaderObject
 		*/
 		class BinaryParser
-			: public Castor3D::BinaryParser< ShaderObjectBase >
+			: public Castor3D::BinaryParser< ShaderObject >
 		{
 		public:
 			/**
@@ -103,7 +103,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			C3D_API virtual bool Fill( ShaderObjectBase const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( ShaderObject const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -116,7 +116,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			C3D_API virtual bool Parse( ShaderObjectBase & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( ShaderObject & p_obj, BinaryChunk & p_chunk )const;
 		};
 	private:
 		static const std::array< Castor::String, eSHADER_TYPE_COUNT >	string_type;
@@ -132,14 +132,14 @@ namespace Castor3D
 		 *\param[in]	p_parent	programme parent
 		 *\param[in]	p_type		Type de shader
 		 */
-		C3D_API ShaderObjectBase( ShaderProgram * p_parent, eSHADER_TYPE p_type );
+		C3D_API ShaderObject( ShaderProgram * p_parent, eSHADER_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~ShaderObjectBase();
+		C3D_API virtual ~ShaderObject();
 		/**
 		 *\~english
 		 *\brief		Creates the program on GPU

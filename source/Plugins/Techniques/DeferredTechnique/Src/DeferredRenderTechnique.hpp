@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -202,36 +202,6 @@ namespace Deferred
 		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
 		 */
 		Castor::String DoGetLightPassPixelShaderSource( uint32_t p_flags )const;
-
-#if C3D_HAS_GL_RENDERER
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String DoGetGlPixelShaderSource( uint32_t p_flags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
-		 *\~french
-		 *\brief		Récupère le source du vertex shader correspondant aux flags donnés
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
-		 */
-		Castor::String DoGetGlLightPassVertexShaderSource( uint32_t p_uiProgramFlags )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String DoGetGlLightPassPixelShaderSource( uint32_t p_flags )const;
-#endif
 
 	protected:
 		//!\~english The various textures	\~french Les diverses textures
