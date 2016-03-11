@@ -33,12 +33,12 @@ namespace Castor3D
 		}
 	}
 
-	ShaderObjectBase::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< ShaderObjectBase >( p_path )
+	ShaderObject::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< ShaderObject >( p_path )
 	{
 	}
 
-	bool ShaderObjectBase::BinaryParser::Fill( ShaderObjectBase const & p_object, BinaryChunk & p_chunk )const
+	bool ShaderObject::BinaryParser::Fill( ShaderObject const & p_object, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
@@ -107,7 +107,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool ShaderObjectBase::BinaryParser::Parse( ShaderObjectBase & p_object, BinaryChunk & p_chunk )const
+	bool ShaderObject::BinaryParser::Parse( ShaderObject & p_object, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		String l_strText;
@@ -238,12 +238,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderObjectBase::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< ShaderObjectBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	ShaderObject::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		: Loader< ShaderObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
-	bool ShaderObjectBase::TextLoader::operator()( ShaderObjectBase const & p_shaderObject, TextFile & p_file )
+	bool ShaderObject::TextLoader::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
 		String l_strTabs = cuT( "\t\t\t" );
 		bool l_return = p_file.WriteText( l_strTabs + p_shaderObject.GetStrType() ) > 0;
@@ -296,7 +296,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	const std::array< String, eSHADER_TYPE_COUNT > ShaderObjectBase::string_type =
+	const std::array< String, eSHADER_TYPE_COUNT > ShaderObject::string_type =
 	{
 		cuT( "vertex_program" ),
 		cuT( "hull_program" ),
@@ -305,7 +305,7 @@ namespace Castor3D
 		cuT( "pixel_program" ),
 	};
 
-	ShaderObjectBase::ShaderObjectBase( ShaderProgram * p_parent, eSHADER_TYPE p_type )
+	ShaderObject::ShaderObject( ShaderProgram * p_parent, eSHADER_TYPE p_type )
 		: m_status( eSHADER_STATUS_NOTCOMPILED )
 		, m_type( p_type )
 		, m_parent( p_parent )
@@ -315,16 +315,16 @@ namespace Castor3D
 	{
 	}
 
-	ShaderObjectBase::~ShaderObjectBase()
+	ShaderObject::~ShaderObject()
 	{
 	}
 
-	bool ShaderObjectBase::Compile()
+	bool ShaderObject::Compile()
 	{
 		return true;
 	}
 
-	void ShaderObjectBase::Bind()
+	void ShaderObject::Bind()
 	{
 		for ( auto && l_variable : m_listFrameVariables )
 		{
@@ -332,7 +332,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderObjectBase::Unbind()
+	void ShaderObject::Unbind()
 	{
 		for ( auto && l_variable : m_listFrameVariables )
 		{
@@ -340,7 +340,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderObjectBase::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )
+	void ShaderObject::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )
 	{
 		m_status = eSHADER_STATUS_NOTCOMPILED;
 		m_arrayFiles[p_eModel].clear();
@@ -361,7 +361,7 @@ namespace Castor3D
 		}
 	}
 
-	bool ShaderObjectBase::HasFile()const
+	bool ShaderObject::HasFile()const
 	{
 		bool l_return = false;
 
@@ -373,13 +373,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObjectBase::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
+	void ShaderObject::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
 	{
 		m_status = eSHADER_STATUS_NOTCOMPILED;
 		m_arraySources[p_eModel] = p_strSource;
 	}
 
-	bool ShaderObjectBase::HasSource()const
+	bool ShaderObject::HasSource()const
 	{
 		bool l_return = false;
 
@@ -391,7 +391,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObjectBase::AddFrameVariable( OneIntFrameVariableSPtr p_variable )
+	void ShaderObject::AddFrameVariable( OneIntFrameVariableSPtr p_variable )
 	{
 		if ( p_variable )
 		{
@@ -400,7 +400,7 @@ namespace Castor3D
 		}
 	}
 
-	OneIntFrameVariableSPtr ShaderObjectBase::FindFrameVariable( Castor::String const & p_name )const
+	OneIntFrameVariableSPtr ShaderObject::FindFrameVariable( Castor::String const & p_name )const
 	{
 		OneIntFrameVariableSPtr l_return;
 		FrameVariablePtrStrMapConstIt l_it = m_mapFrameVariables.find( p_name );
@@ -418,13 +418,13 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ShaderObjectBase::FlushFrameVariables()
+	void ShaderObject::FlushFrameVariables()
 	{
 		clear_container( m_mapFrameVariables );
 		clear_container( m_listFrameVariables );
 	}
 
-	bool ShaderObjectBase::DoCheckErrors()
+	bool ShaderObject::DoCheckErrors()
 	{
 		String l_compilerLog = DoRetrieveCompilerLog();
 

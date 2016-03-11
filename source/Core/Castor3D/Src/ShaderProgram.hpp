@@ -252,7 +252,7 @@ namespace Castor3D
 		 *\brief		Crée le shader object voulu
 		 *\param[in]	p_type		Le shader object concerné
 		 */
-		C3D_API ShaderObjectBaseSPtr CreateObject( eSHADER_TYPE p_type );
+		C3D_API ShaderObjectSPtr CreateObject( eSHADER_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Sets all objects file
@@ -648,7 +648,7 @@ namespace Castor3D
 		 *\brief		Crée le shader object voulu
 		 *\param[in]	p_type		Le shader object concerné
 		 */
-		virtual ShaderObjectBaseSPtr DoCreateObject( eSHADER_TYPE p_type ) = 0;
+		virtual ShaderObjectSPtr DoCreateObject( eSHADER_TYPE p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture frame variable
@@ -667,9 +667,9 @@ namespace Castor3D
 		//!<\~english The program language	\~french Le langage du programme
 		eSHADER_LANGUAGE m_eLanguage;
 		//!\~english The shaders array	\~french Le tableau de shaders
-		std::array< ShaderObjectBaseSPtr, eSHADER_TYPE_COUNT > m_pShaders;
+		std::array< ShaderObjectSPtr, eSHADER_TYPE_COUNT > m_pShaders;
 		//!\~english The active shaders array	\~french Le tableau de shaders actifs
-		std::vector< ShaderObjectBaseSPtr > m_activeShaders;
+		std::vector< ShaderObjectSPtr > m_activeShaders;
 		//!\~english Array of files path, sorted by shader model	\~french Tableau des chemins de fichiers, triés par modèle de shader
 		std::array< Castor::Path, eSHADER_MODEL_COUNT > m_arrayFiles;
 		//!\~english The frame variable buffers map, ordered by name	\~french La liste des buffers de variable de frame, triés par nom

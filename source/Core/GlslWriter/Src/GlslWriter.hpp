@@ -149,8 +149,8 @@ namespace GLSL
 		template< typename ExprType > ExprType Ternary( Type const & p_condition, Type const & p_left, Type const & p_right );
 		template< typename T > inline T Cast( Type const & p_from );
 		template< typename T > inline T GetAttribute( Castor::String const & p_name );
-		template< typename T > inline T GetOut( Castor::String const & p_name );
-		template< typename T > inline T GetIn( Castor::String const & p_name );
+		template< typename T > inline T GetOutput( Castor::String const & p_name );
+		template< typename T > inline T GetInput( Castor::String const & p_name );
 		template< typename T > inline T GetLocale( Castor::String const & p_name );
 		template< typename T > inline T GetLocale( Castor::String const & p_name, Expr const & p_rhs );
 		template< typename T > inline T GetLocale( Castor::String const & p_name, Type const & p_rhs );
@@ -158,16 +158,16 @@ namespace GLSL
 		template< typename T > inline T GetUniform( Castor::String const & p_name );
 		template< typename T > inline T GetFragData( Castor::String const & p_name, uint32_t p_index );
 		template< typename T > inline Array< T > GetAttribute( Castor::String const & p_name, uint32_t p_dimension );
-		template< typename T > inline Array< T > GetOut( Castor::String const & p_name, uint32_t p_dimension );
-		template< typename T > inline Array< T > GetIn( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > GetOutput( Castor::String const & p_name, uint32_t p_dimension );
+		template< typename T > inline Array< T > GetInput( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, Expr const & p_rhs );
 		template< typename T > inline Array< T > GetLocale( Castor::String const & p_name, uint32_t p_dimension, Type const & p_rhs );
 		template< typename T > inline Array< T > GetBuiltin( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Array< T > GetUniform( Castor::String const & p_name, uint32_t p_dimension );
 		template< typename T > inline Optional< T > GetAttribute( Castor::String const & p_name, bool p_enabled );
-		template< typename T > inline Optional< T > GetOut( Castor::String const & p_name, bool p_enabled );
-		template< typename T > inline Optional< T > GetIn( Castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< T > GetOutput( Castor::String const & p_name, bool p_enabled );
+		template< typename T > inline Optional< T > GetInput( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled );
 		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, Expr const & p_rhs );
 		template< typename T > inline Optional< T > GetLocale( Castor::String const & p_name, bool p_enabled, Type const & p_rhs );
@@ -222,91 +222,46 @@ namespace GLSL
 #define FI\
 	);
 
-#define LOCALE( Writer, Type, Name )\
-	Type Name = ( Writer ).GetLocale< Type >( cuT( #Name ) )
-
-#define LOCALE_ARRAY( Writer, Type, Name, Dimension )\
-	Array< Type > Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension )
-
 #define LOCALE_ASSIGN( Writer, Type, Name, Assign )\
-	Type Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Assign )
+	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Assign )
 
 #define LOCALE_ASSIGN_ARRAY( Writer, Type, Name, Dimension, Assign )\
-	Array< Type > Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension, Assign )
-
-#define BUILTIN( Writer, Type, Name )\
-	Type Name = ( Writer ).GetBuiltin< Type >( cuT( #Name ) )
-
-#define BUILTIN_ARRAY( Writer, Type, Name, Dimension )\
-	Array< Type > Name = ( Writer ).GetBuiltin< Type >( cuT( #Name ), Dimension )
-
-#define FRAG_OUTPUT( Writer, Type, Name, Index )\
-	Type Name = ( Writer ).GetFragData< Type >( cuT( #Name ), Index )
-
-#define FRAG_OUTPUT_ARRAY( Writer, Type, Name, Index, Dimension )\
-	Type Name = ( Writer ).GetFragData< Type >( cuT( #Name ), Index, Dimension )
-
-#define OUT( Writer, Type, Name )\
-	Type Name = ( Writer ).GetOut< Type >( cuT( #Name ) )
-
-#define OUT_ARRAY( Writer, Type, Name, Dimension )\
-	Array< Type > Name = ( Writer ).GetOut< Type >( cuT( #Name ), Dimension )
-
-#define IN( Writer, Type, Name )\
-	Type Name = ( Writer ).GetIn< Type >( cuT( #Name ) )
-
-#define IN_ARRAY( Writer, Type, Name, Dimension )\
-	Array< Type > Name = ( Writer ).GetIn< Type >( cuT( #Name ), Dimension )
-
-#define ATTRIBUTE( Writer, Type, Name )\
-	Type Name = ( Writer ).GetAttribute< Type >( cuT( #Name ) )
-
-#define ATTRIBUTE_ARRAY( Writer, Type, Name, Dimension )\
-	Array< Type > Name = ( Writer ).GetAttribute< Type >( cuT( #Name ), Dimension )
-
-#define UNIFORM( Writer, Type, Name )\
-	Type Name = ( Writer ).GetUniform< Type >( cuT( #Name ) )
-
-#define UNIFORM_ARRAY( Writer, Type, Name, Dimension )\
-	Array< Type > Name = ( Writer ).GetUniform< Type >( cuT( #Name ), Dimension )
-
-#define CAST( Writer, NewType, OldType )\
-	( Writer ).Cast< NewType >( OldType )
+	auto Name = ( Writer ).GetLocale< Type >( cuT( #Name ), Dimension, Assign )
 
 #define UBO_MATRIX( Writer )\
 	Ubo l_matrices = l_writer.GetUbo( cuT( "Matrices" ) );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxProjection );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxModel );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxView );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxNormal );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxTexture0 );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxTexture1 );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxTexture2 );\
-	UNIFORM( l_matrices, Mat4, c3d_mtxTexture3 );\
-	UNIFORM_ARRAY( l_matrices, Mat4, c3d_mtxBones, 400 );\
-	l_matrices.End();
+	auto c3d_mtxProjection = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxProjection" ) );\
+	auto c3d_mtxModel = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxModel" ) );\
+	auto c3d_mtxView = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxView" ) );\
+	auto c3d_mtxNormal = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxNormal" ) );\
+	auto c3d_mtxTexture0 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture0" ) );\
+	auto c3d_mtxTexture1 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture1" ) );\
+	auto c3d_mtxTexture2 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture2" ) );\
+	auto c3d_mtxTexture3 = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxTexture3" ) );\
+	auto c3d_mtxBones = l_matrices.GetUniform< Mat4 >( cuT( "c3d_mtxBones" ), 400 );\
+	l_matrices.End()
 
 #define UBO_PASS( Writer )\
 	Ubo l_pass = l_writer.GetUbo( cuT( "Pass" ) );\
-	UNIFORM( l_pass, Vec4, c3d_v4MatAmbient );\
-	UNIFORM( l_pass, Vec4, c3d_v4MatDiffuse );\
-	UNIFORM( l_pass, Vec4, c3d_v4MatEmissive );\
-	UNIFORM( l_pass, Vec4, c3d_v4MatSpecular );\
-	UNIFORM( l_pass, Float, c3d_fMatShininess );\
-	UNIFORM( l_pass, Float, c3d_fMatOpacity );\
-	l_pass.End();
+	auto c3d_v4MatAmbient = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatAmbient" ) );\
+	auto c3d_v4MatDiffuse = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatDiffuse" ) );\
+	auto c3d_v4MatEmissive = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatEmissive" ) );\
+	auto c3d_v4MatSpecular = l_pass.GetUniform< Vec4 >( cuT( "c3d_v4MatSpecular" ) );\
+	auto c3d_fMatShininess = l_pass.GetUniform< Float >( cuT( "c3d_fMatShininess" ) );\
+	auto c3d_fMatOpacity = l_pass.GetUniform< Float >( cuT( "c3d_fMatOpacity" ) );\
+	l_pass.End()
 
 #define UBO_SCENE( Writer )\
 	Ubo l_scene = l_writer.GetUbo( cuT( "Scene" ) );\
-	UNIFORM( l_scene, Vec4, c3d_v4AmbientLight );\
-	UNIFORM( l_scene, Vec4, c3d_v4BackgroundColour );\
-	UNIFORM( l_scene, IVec4, c3d_iLightsCount );\
-	UNIFORM( l_scene, Vec3, c3d_v3CameraPosition );\
-	l_scene.End();
+	auto c3d_v4AmbientLight = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4AmbientLight" ) );\
+	auto c3d_v4BackgroundColour = l_scene.GetUniform< Vec4 >( cuT( "c3d_v4BackgroundColour" ) );\
+	auto c3d_iLightsCount = l_scene.GetUniform< IVec4 >( cuT( "c3d_iLightsCount" ) );\
+	auto c3d_v3CameraPosition = l_scene.GetUniform< Vec3 >( cuT( "c3d_v3CameraPosition" ) );\
+	l_scene.End()
 
 #define UBO_BILLBOARD( Writer )\
 	Ubo l_billboard = l_writer.GetUbo( cuT( "Billboard" ) );\
-	UNIFORM( l_billboard, IVec2, c3d_v2iDimensions );\
+	auto c3d_v2iDimensions = l_billboard.GetUniform< IVec2 >( cuT( "c3d_v2iDimensions" ) );\
 	l_billboard.End();
 }
 

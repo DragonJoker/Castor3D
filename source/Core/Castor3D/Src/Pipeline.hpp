@@ -185,7 +185,7 @@ namespace Castor3D
 
 	private:
 		typedef std::stack< Castor::Matrix4x4r > MatrixStack;
-		typedef std::set< ShaderObjectBaseSPtr > ShaderObjectSet;
+		typedef std::set< ShaderObjectSPtr > ShaderObjectSet;
 
 	public:
 		/**

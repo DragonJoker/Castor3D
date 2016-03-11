@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -38,6 +38,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Point.hpp>
 #include <SquareMatrix.hpp>
 #include <StringUtils.hpp>
+
+#include <GlslWriterPrerequisites.hpp>
 
 namespace Castor3D
 {

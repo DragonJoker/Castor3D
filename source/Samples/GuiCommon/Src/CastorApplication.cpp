@@ -160,7 +160,7 @@ namespace GuiCommon
 		wxCmdLineParser l_parser( wxApp::argc, wxApp::argv );
 		l_parser.AddSwitch( wxT( "h" ), wxT( "help" ), _( "Displays this help" ) );
 		l_parser.AddOption( wxT( "l" ), wxT( "log" ), _( "Defines log level" ), wxCMD_LINE_VAL_NUMBER );
-		l_parser.AddParam( _( "Defines initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
+		l_parser.AddParam( _( "The initial scene file" ), wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 		l_parser.AddSwitch( wxT( "opengl" ), wxEmptyString, _( "Defines the renderer to OpenGl" ) );
 		l_parser.AddSwitch( wxT( "directx" ), wxEmptyString, _( "Defines the renderer to Direct3D (11)" ) );
 		bool l_return = l_parser.Parse( false ) == 0;

@@ -298,7 +298,6 @@ namespace GlRender
 		C3D_Gl_API bool PreInitialise( Castor::String const & p_strExtensions );
 		C3D_Gl_API bool Initialise();
 		C3D_Gl_API void Cleanup();
-		C3D_Gl_API GLSL::GlslWriter CreateGlslWriter()const;
 		C3D_Gl_API bool GlCheckError( std::string const & p_strText )const;
 		C3D_Gl_API bool GlCheckError( std::wstring const & p_strText )const;
 

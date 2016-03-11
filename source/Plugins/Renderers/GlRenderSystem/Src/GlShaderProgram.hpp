@@ -86,7 +86,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateObject
 		 */
-		virtual Castor3D::ShaderObjectBaseSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
+		virtual Castor3D::ShaderObjectSPtr DoCreateObject( Castor3D::eSHADER_TYPE p_type );
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::DoCreateTextureVariable
 		 */

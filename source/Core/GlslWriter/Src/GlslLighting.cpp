@@ -83,34 +83,34 @@ namespace GLSL
 	{
 		m_writer.ImplementFunction< Light >( cuT( "GetLightColourAndPosition" ), [this]( Int const & p_index )
 		{
-			LOCALE( m_writer, Light, l_lightReturn );
+			auto l_lightReturn = m_writer.GetLocale< Light >( cuT( "l_lightReturn" ) );
 
 			if ( m_writer.HasTexelFetch() )
 			{
 				if ( m_writer.HasTextureBuffers() )
 				{
-					BUILTIN( m_writer, SamplerBuffer, c3d_sLights );
+					auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 					LOCALE_ASSIGN( m_writer, Int, l_offset, p_index * Int( 10 ) );
 					l_lightReturn.m_v3Colour() = texelFetch( c3d_sLights, l_offset++ ).RGB;
 					l_lightReturn.m_v3Intensity() = texelFetch( c3d_sLights, l_offset++ ).RGB;
 					LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++ ) );
 					l_lightReturn.m_v3Position() = l_v4Position.XYZ;
-					l_lightReturn.m_iType() = CAST( m_writer, Int, l_v4Position.W );
+					l_lightReturn.m_iType() = m_writer.Cast< Int >( l_v4Position.W );
 				}
 				else
 				{
-					BUILTIN( m_writer, Sampler1D, c3d_sLights );
+					auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 					LOCALE_ASSIGN( m_writer, Int, l_offset, p_index * Int( 10 ) );
 					l_lightReturn.m_v3Colour() = texelFetch( c3d_sLights, l_offset++, 0 ).RGB;
 					l_lightReturn.m_v3Intensity() = texelFetch( c3d_sLights, l_offset++, 0 ).RGB;
 					LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texelFetch( c3d_sLights, l_offset++, 0 ) );
 					l_lightReturn.m_v3Position() = l_v4Position.XYZ;
-					l_lightReturn.m_iType() = CAST( m_writer, Int, l_v4Position.W );
+					l_lightReturn.m_iType() = m_writer.Cast< Int >( l_v4Position.W );
 				}
 			}
 			else
 			{
-				BUILTIN( m_writer, Sampler1D, c3d_sLights );
+				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 				LOCALE_ASSIGN( m_writer, Float, l_fFactor, p_index * Float( 0.01f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_fOffset, Float( 0 ) );
 				LOCALE_ASSIGN( m_writer, Float, l_fDecal, Float( 0.0005f ) );
@@ -121,7 +121,7 @@ namespace GLSL
 				l_fOffset += l_fMult;
 				LOCALE_ASSIGN( m_writer, Vec4, l_v4Position, texture1D( c3d_sLights, l_fFactor + l_fOffset + l_fDecal ) );
 				l_lightReturn.m_v3Position() = l_v4Position.XYZ;
-				l_lightReturn.m_iType() = CAST( m_writer, Int, l_v4Position.W );
+				l_lightReturn.m_iType() = m_writer.Cast< Int >( l_v4Position.W );
 			}
 
 			m_writer.Return( l_lightReturn );
@@ -147,13 +147,13 @@ namespace GLSL
 
 			if ( m_writer.HasTexelFetch() && m_writer.HasTextureBuffers() )
 			{
-				BUILTIN( m_writer, SamplerBuffer, c3d_sLights );
+				auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 				LOCALE_ASSIGN( m_writer, Int, l_offset, p_index * Int( 10 ) + Int( 3 ) );
 				l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).XYZ;
 			}
 			else
 			{
-				BUILTIN( m_writer, Sampler1D, c3d_sLights );
+				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 				LOCALE_ASSIGN( m_writer, Float, l_factor, p_index * Float( 0.01f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_mult, Float( 0.001f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_offset, l_mult * Float( 3 ) );
@@ -174,7 +174,7 @@ namespace GLSL
 
 			if ( m_writer.HasTexelFetch() && m_writer.HasTextureBuffers() )
 			{
-				BUILTIN( m_writer, SamplerBuffer, c3d_sLights );
+				auto c3d_sLights = m_writer.GetBuiltin< SamplerBuffer >( cuT( "c3d_sLights" ) );
 				LOCALE_ASSIGN( m_writer, Int, l_offset, p_index * Int( 10 ) + Int( 3 ) );
 				l_lightReturn.m_v3Attenuation() = texelFetch( c3d_sLights, l_offset++ ).XYZ;
 				l_lightReturn.m_v3Direction() = texelFetch( c3d_sLights, l_offset++ ).XYZ;
@@ -184,7 +184,7 @@ namespace GLSL
 			}
 			else
 			{
-				BUILTIN( m_writer, Sampler1D, c3d_sLights );
+				auto c3d_sLights = m_writer.GetBuiltin< Sampler1D >( cuT( "c3d_sLights" ) );
 				LOCALE_ASSIGN( m_writer, Float, l_factor, p_index * Float( 0.01f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_mult, Float( 0.001f ) );
 				LOCALE_ASSIGN( m_writer, Float, l_offset, l_mult * Float( 3 ) );
@@ -266,9 +266,9 @@ namespace GLSL
 		m_writer.ImplementFunction< Void >( cuT( "ComputeDirectionalLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
 											FragmentInput const & p_fragmentIn, OutputComponents & p_output )
 		{
-			LOCALE( m_writer, Vec3, l_ambient );
-			LOCALE( m_writer, Vec3, l_diffuse );
-			LOCALE( m_writer, Vec3, l_specular );
+			auto l_ambient = m_writer.GetLocale< Vec3 >( cuT( "l_ambient" ) );
+			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse" ) );
+			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular" ) );
 			OutputComponents l_output = { l_ambient, l_diffuse, l_specular };
 			DoComputeLight( p_light, p_worldEye, normalize( p_light.m_v3Position().XYZ ), p_shininess, p_fragmentIn, l_output );
 			p_output.m_v3Ambient += l_ambient;
@@ -286,9 +286,9 @@ namespace GLSL
 		m_writer.ImplementFunction< Void >( cuT( "ComputePointLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
 											FragmentInput const & p_fragmentIn, OutputComponents & p_output )
 		{
-			LOCALE( m_writer, Vec3, l_ambient );
-			LOCALE( m_writer, Vec3, l_diffuse );
-			LOCALE( m_writer, Vec3, l_specular );
+			auto l_ambient = m_writer.GetLocale< Vec3 >( cuT( "l_ambient" ) );
+			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse" ) );
+			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular" ) );
 			OutputComponents l_output = { l_ambient, l_diffuse, l_specular };
 			LOCALE_ASSIGN( m_writer, Vec3, l_lightDirection, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().XYZ );
 			LOCALE_ASSIGN( m_writer, Float, l_distance, length( l_lightDirection ) );
@@ -310,9 +310,9 @@ namespace GLSL
 		m_writer.ImplementFunction< Void >( cuT( "ComputeSpotLight" ), [this]( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
 											FragmentInput const & p_fragmentIn, OutputComponents & p_output )
 		{
-			LOCALE( m_writer, Vec3, l_ambient );
-			LOCALE( m_writer, Vec3, l_diffuse );
-			LOCALE( m_writer, Vec3, l_specular );
+			auto l_ambient = m_writer.GetLocale< Vec3 >( cuT( "l_ambient" ) );
+			auto l_diffuse = m_writer.GetLocale< Vec3 >( cuT( "l_diffuse" ) );
+			auto l_specular = m_writer.GetLocale< Vec3 >( cuT( "l_specular" ) );
 			OutputComponents l_output = { l_ambient, l_diffuse, l_specular };
 			LOCALE_ASSIGN( m_writer, Vec3, l_lightToPixel, p_fragmentIn.m_v3Vertex - p_light.m_v3Position().XYZ );
 			LOCALE_ASSIGN( m_writer, Float, l_spotFactor, dot( l_lightToPixel, p_light.m_v3Direction() ) );

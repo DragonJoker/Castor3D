@@ -91,18 +91,6 @@ namespace GlRender
 		 */
 		virtual Castor3D::BackBuffersSPtr CreateBackBuffers();
 		/**
-		*\copydoc		Castor3D::RenderSystem::CreateOverlayProgram
-		*/
-		virtual Castor3D::ShaderProgramSPtr CreateOverlayProgram( uint32_t p_flags );
-		/**
-		*\copydoc		Castor3D::RenderSystem::CreateBillboardsProgram
-		*/
-		virtual Castor3D::ShaderProgramSPtr CreateBillboardsProgram( Castor3D::RenderTechnique const & p_technique, uint32_t p_flags );
-		/**
-		*\copydoc		Castor3D::RenderSystem::GetVertexShaderSource
-		*/
-		virtual Castor::String GetVertexShaderSource( uint32_t p_programFlags );
-		/**
 		 *\copydoc		Castor3D::RenderSystem::GetPipelineImpl
 		 */
 		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()

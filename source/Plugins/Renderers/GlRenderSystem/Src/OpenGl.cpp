@@ -1015,11 +1015,6 @@ namespace GlRender
 		reinterpret_cast< OpenGl * >( userParam )->DebugLogAMD( id, category, severity, length, message );
 	}
 
-	GLSL::GlslWriter OpenGl::CreateGlslWriter()const
-	{
-		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ uint32_t( m_iGlslVersion ), m_bHasUbo, m_bHasTbo } };
-	}
-
 	bool OpenGl::DoGlCheckError( String const & p_text )const
 	{
 		bool l_return = true;

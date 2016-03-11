@@ -157,29 +157,6 @@ namespace Msaa
 		 *\brief		Fonction de fin de rendu
 		 */
 		virtual void DoEndRender();
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
-
-#if C3D_HAS_GL_RENDERER
-
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		Castor::String DoGetGlPixelShaderSource( uint32_t p_flags )const;
-
-#endif
 
 	protected:
 		//!\~english The multisampled frame buffer	\~french Le tampon d'image multisamplé

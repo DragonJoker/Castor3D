@@ -210,6 +210,15 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
+		/**
+		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
@@ -277,15 +286,6 @@ namespace Castor3D
 		 *\remarks		A la sortie de cette méthode, le tampon d'image de la cible de rendu doit être activé.
 		 */
 		C3D_API virtual void DoEndRender() = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
-		 */
-		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const = 0;
 
 	protected:
 		/**

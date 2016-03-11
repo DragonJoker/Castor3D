@@ -11,6 +11,7 @@
 #include <GeometryBuffers.hpp>
 #include <OneFrameVariable.hpp>
 #include <Parameter.hpp>
+#include <Pipeline.hpp>
 #include <RenderSystem.hpp>
 #include <RenderTarget.hpp>
 #include <RenderWindow.hpp>
@@ -21,13 +22,9 @@
 #include <VertexBuffer.hpp>
 #include <Viewport.hpp>
 
-#if C3D_HAS_GL_RENDERER
-#	include <GlslSource.hpp>
-#	include <GlRenderSystem.hpp>
-using namespace GlRender;
-#endif
-
 #include <numeric>
+
+#include <GlslSource.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -46,13 +43,10 @@ namespace Bloom
 		static const String CombineMapPass3 = cuT( "c3d_mapPass3" );
 		static const String CombineMapScene = cuT( "c3d_mapScene" );
 
-#if defined( C3D_HAS_GL_RENDERER )
-
 		Castor::String GetGlslVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter l_writer( static_cast< GlRenderSystem * >( p_renderSystem )->GetOpenGl(), eSHADER_TYPE_VERTEX );
-			l_writer << GLSL::Version() << Endl();
+			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			UBO_MATRIX( l_writer );
 
@@ -60,12 +54,13 @@ namespace Bloom
 			Vec2 position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
 
 			// Shader outputs
-			OUT( l_writer, Vec2, vtx_texture );
+			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				vtx_texture = position;
-				BUILTIN( l_writer, Vec4, gl_Position ) = c3d_mtxProjection * vec4( position.XY, 0.0, 1.0 );
+				gl_Position = c3d_mtxProjection * vec4( position.XY, 0.0, 1.0 );
 			} );
 			return l_writer.Finalise();
 		}
@@ -73,15 +68,14 @@ namespace Bloom
 		Castor::String GetGlslHiPassProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter l_writer( static_cast< GlRenderSystem * >( p_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
-			l_writer << GLSL::Version() << Endl();
+			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
-			IN( l_writer, Vec2, vtx_texture );
+			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			FRAG_OUTPUT( l_writer, Vec4, plx_v4FragColor, 0 );
+			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -97,21 +91,20 @@ namespace Bloom
 		Castor::String GetGlslBlurProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter l_writer( static_cast< GlRenderSystem * >( p_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
-			l_writer << GLSL::Version() << Endl();
+			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			UNIFORM( l_writer, Sampler2D, c3d_mapDiffuse );
-			IN( l_writer, Vec2, vtx_texture );
+			auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
-			Ubo l_config = l_writer.GetUbo( cuT( "FilterConfig" ) );
-			UNIFORM_ARRAY( l_config, Float, c3d_fCoefficients, 3 );
-			UNIFORM( l_config, Float, c3d_fOffsetX );
-			UNIFORM( l_config, Float, c3d_fOffsetY );
+			Ubo l_config = l_writer.GetUbo( FilterConfig );
+			auto c3d_fCoefficients = l_writer.GetUniform< Float >( FilterConfigCoefficients, 3u );
+			auto c3d_fOffsetX = l_writer.GetUniform< Float >( FilterConfigOffsetX );
+			auto c3d_fOffsetY = l_writer.GetUniform< Float >( FilterConfigOffsetY );
 			l_config.End();
 
 			// Shader outputs
-			FRAG_OUTPUT( l_writer, Vec4, plx_v4FragColor, 0 );
+			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -126,20 +119,18 @@ namespace Bloom
 		Castor::String GetGlslCombineProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
-			GlslWriter l_writer( static_cast< GlRenderSystem * >( p_renderSystem )->GetOpenGl(), eSHADER_TYPE_PIXEL );
-			l_writer << GLSL::Version() << Endl();
+			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
 
 			// Shader inputs
-			UNIFORM( l_writer, Sampler2D, c3d_mapPass0 );
-			UNIFORM( l_writer, Sampler2D, c3d_mapPass1 );
-			UNIFORM( l_writer, Sampler2D, c3d_mapPass2 );
-			UNIFORM( l_writer, Sampler2D, c3d_mapPass3 );
-			UNIFORM( l_writer, Sampler2D, c3d_mapScene );
-
-			IN( l_writer, Vec2, vtx_texture );
+			auto c3d_mapPass0 = l_writer.GetUniform< Sampler2D >( CombineMapPass0 );
+			auto c3d_mapPass1 = l_writer.GetUniform< Sampler2D >( CombineMapPass1 );
+			auto c3d_mapPass2 = l_writer.GetUniform< Sampler2D >( CombineMapPass2 );
+			auto c3d_mapPass3 = l_writer.GetUniform< Sampler2D >( CombineMapPass3 );
+			auto c3d_mapScene = l_writer.GetUniform< Sampler2D >( CombineMapScene );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
 			// Shader outputs
-			FRAG_OUTPUT( l_writer, Vec4, plx_v4FragColor, 0 );
+			auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
@@ -151,9 +142,6 @@ namespace Bloom
 			} );
 			return l_writer.Finalise();
 		}
-
-#endif
-
 	}
 
 	//*********************************************************************************************
@@ -304,8 +292,6 @@ namespace Bloom
 		String l_blur;
 		String l_combine;
 
-#if defined( C3D_HAS_GL_RENDERER )
-
 		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
 			l_vertex = GetGlslVertexProgram( m_renderSystem );
@@ -314,9 +300,6 @@ namespace Bloom
 			l_combine = GetGlslCombineProgram( m_renderSystem );
 		}
 		else
-
-#endif
-
 		{
 			CASTOR_EXCEPTION( "Unsupported renderer type" );
 		}

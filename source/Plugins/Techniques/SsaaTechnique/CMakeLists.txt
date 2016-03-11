@@ -11,15 +11,8 @@ set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
 set( ${PROJECT_NAME}_VERSION_MINOR	8 )
 set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
-if( ${CASTOR_BUILD_RENDERER_OGL} )
-	add_definitions( "-DC3D_HAS_GL_RENDERER" )
-	include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderSystem/Src )
-	include_directories( ${CMAKE_SOURCE_DIR}/Plugins/Renderers/GlRenderSystem/Src/GLSL )
-endif ()
-
-include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
-include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
-include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
+add_definitions( ${TechniqueDefinitions} )
+include_directories( ${TechniqueIncludes} )
 
 add_target(
 	${PROJECT_NAME}

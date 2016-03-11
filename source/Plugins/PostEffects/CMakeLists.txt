@@ -9,13 +9,12 @@ function( PostEffectsBuild )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
 		set( PostEffectLibraries ${CastorMinLibraries} )
 
-		if( ${CASTOR_BUILD_RENDERER_OGL} )
-			set( PostEffectLibraries
-				${PostEffectLibraries}
-				${OpenGlLibraries}
-				GlRenderSystem
-			)
-		endif ()
+		set( PostEffectIncludes
+			${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src
+			${CMAKE_SOURCE_DIR}/Core/Castor3D/Src
+			${CMAKE_BINARY_DIR}/Core/CastorUtils/Src
+			${CMAKE_SOURCE_DIR}/Core/GlslWriter/Src
+		)
 
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			set( Build ${Bloom} )

@@ -62,15 +62,17 @@ namespace GlRender
 	bool GlShaderProgram::Link()
 	{
 		bool l_return = false;
-		int l_iLinked = 0;
 		ENSURE( GetGlName() != eGL_INVALID_INDEX );
-		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << uint32_t( m_activeShaders.size() ) );
+		int l_attached = 0;
+		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_ATTACHED_SHADERS, &l_attached );
+		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Programs attached : " ) << l_attached );
 		l_return &= GetOpenGl().LinkProgram( GetGlName() );
-		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_iLinked );
-		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_iLinked );
+		int l_linked = 0;
+		l_return &= GetOpenGl().GetProgramiv( GetGlName(), eGL_SHADER_STATUS_LINK, &l_linked );
+		Logger::LogDebug( StringStream() << cuT( "GlShaderProgram::Link - Program link status : " ) << l_linked );
 		m_linkerLog = DoRetrieveLinkerLog();
 
-		if ( l_iLinked && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
+		if ( l_linked && l_attached == int( m_activeShaders.size() ) && m_linkerLog.find( cuT( "ERROR" ) ) == String::npos )
 		{
 			if ( !m_linkerLog.empty() )
 			{
@@ -81,7 +83,16 @@ namespace GlRender
 		}
 		else
 		{
-			Logger::LogError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+			if ( !m_linkerLog.empty() )
+			{
+				Logger::LogError( cuT( "GlShaderProgram::Link - " ) + m_linkerLog );
+			}
+
+			if ( l_attached != int( m_activeShaders.size() ) )
+			{
+				Logger::LogError( cuT( "GlShaderProgram::Link - The linked shaders count doesn't match the active shaders count." ) );
+			}
+
 			m_status = ePROGRAM_STATUS_ERROR;
 		}
 
@@ -125,9 +136,9 @@ namespace GlRender
 		return l_iReturn;
 	}
 
-	ShaderObjectBaseSPtr GlShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
+	ShaderObjectSPtr GlShaderProgram::DoCreateObject( eSHADER_TYPE p_type )
 	{
-		ShaderObjectBaseSPtr l_return = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
+		ShaderObjectSPtr l_return = std::make_shared< GlShaderObject >( GetOpenGl(), this, p_type );
 		return l_return;
 	}
 
