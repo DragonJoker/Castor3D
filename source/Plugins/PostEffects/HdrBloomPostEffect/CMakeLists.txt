@@ -1,4 +1,4 @@
-project( BloomPostEffect )
+project( HdrBloomPostEffect )
 
 set( CastorBinsDependencies 
 	${CastorBinsDependencies}
@@ -6,7 +6,7 @@ set( CastorBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "Bloom Post Effect" )
+set( ${PROJECT_NAME}_DESCRIPTION "HDR Bloom Post Effect" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
 set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )

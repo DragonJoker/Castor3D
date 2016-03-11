@@ -1,4 +1,4 @@
-#include "BloomPostEffect.hpp"
+#include "HdrBloomPostEffect.hpp"
 
 #include <BackBuffers.hpp>
 #include <BlendStateManager.hpp>
@@ -29,7 +29,7 @@
 using namespace Castor;
 using namespace Castor3D;
 
-namespace Bloom
+namespace HdrBloom
 {
 	namespace
 	{
@@ -43,7 +43,7 @@ namespace Bloom
 		static const String CombineMapPass3 = cuT( "c3d_mapPass3" );
 		static const String CombineMapScene = cuT( "c3d_mapScene" );
 
-		Castor::String GetGlslVertexProgram( RenderSystem * p_renderSystem )
+		String GetGlslVertexProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -65,7 +65,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslHiPassProgram( RenderSystem * p_renderSystem )
+		String GetGlslHiPassProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -88,7 +88,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslBlurProgram( RenderSystem * p_renderSystem )
+		String GetGlslBlurProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -116,7 +116,7 @@ namespace Bloom
 			return l_writer.Finalise();
 		}
 
-		Castor::String GetGlslCombineProgram( RenderSystem * p_renderSystem )
+		String GetGlslCombineProgram( RenderSystem * p_renderSystem )
 		{
 			using namespace GLSL;
 			GlslWriter l_writer = p_renderSystem->CreateGlslWriter();
@@ -146,18 +146,18 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	BloomPostEffect::BloomPostEffectSurface::BloomPostEffectSurface()
+	HdrBloomPostEffect::Surface::Surface()
 	{
 	}
 
-	bool BloomPostEffect::BloomPostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, bool p_linear )
+	bool HdrBloomPostEffect::Surface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, bool p_linear )
 	{
 		bool l_return = false;
 		m_size = p_size;
 		m_colourTexture = std::make_shared< TextureUnit >( *p_renderTarget.GetEngine() );
 		m_colourTexture->SetIndex( p_index );
 
-		String l_name = cuT( "BloomSampler_" );
+		String l_name = cuT( "HdrBloomSampler_" );
 		eINTERPOLATION_MODE l_mode;
 
 		if ( p_linear )
@@ -211,7 +211,7 @@ namespace Bloom
 		return l_return;
 	}
 
-	void BloomPostEffect::BloomPostEffectSurface::Cleanup()
+	void HdrBloomPostEffect::Surface::Cleanup()
 	{
 		m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
 		m_fbo->DetachAll();
@@ -228,7 +228,7 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	BloomPostEffect::BloomPostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
+	HdrBloomPostEffect::HdrBloomPostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
 		: PostEffect( p_renderSystem, p_renderTarget, p_param )
 		, m_viewport( Viewport::Ortho( *p_renderSystem->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 		, m_offsetX( 1.2f )
@@ -277,11 +277,11 @@ namespace Bloom
 		}
 	}
 
-	BloomPostEffect::~BloomPostEffect()
+	HdrBloomPostEffect::~HdrBloomPostEffect()
 	{
 	}
 
-	bool BloomPostEffect::Initialise()
+	bool HdrBloomPostEffect::Initialise()
 	{
 		bool l_return = false;
 		ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
@@ -378,7 +378,7 @@ namespace Bloom
 		return l_return;
 	}
 
-	void BloomPostEffect::Cleanup()
+	void HdrBloomPostEffect::Cleanup()
 	{
 		m_hiPassMapDiffuse.reset();
 		m_filterMapDiffuse.reset();
@@ -402,7 +402,7 @@ namespace Bloom
 		}
 	}
 
-	bool BloomPostEffect::Apply()
+	bool HdrBloomPostEffect::Apply()
 	{
 		m_renderTarget.GetFrameBuffer()->Unbind();
 
@@ -423,7 +423,7 @@ namespace Bloom
 		return m_renderTarget.GetFrameBuffer()->Bind();
 	}
 
-	bool BloomPostEffect::DoHiPassFilter()
+	bool HdrBloomPostEffect::DoHiPassFilter()
 	{
 		bool l_return = false;
 		auto l_source = &m_hiPassSurfaces[0];
@@ -441,7 +441,7 @@ namespace Bloom
 		return l_return;
 	}
 
-	void BloomPostEffect::DoDownSample()
+	void HdrBloomPostEffect::DoDownSample()
 	{
 		auto l_context = m_renderSystem->GetCurrentContext();
 		auto l_source = &m_hiPassSurfaces[0];
@@ -460,7 +460,7 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
+	void HdrBloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
 	{
 		auto l_context = m_renderSystem->GetCurrentContext();
 
@@ -484,7 +484,7 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoCombine()
+	void HdrBloomPostEffect::DoCombine()
 	{
 		if ( m_blurSurfaces[0].m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
