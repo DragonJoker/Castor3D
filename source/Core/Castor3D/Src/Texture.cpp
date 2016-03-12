@@ -27,4 +27,21 @@ namespace Castor3D
 		m_depth = 1;
 		m_pixelBuffer = p_buffer;
 	}
+
+	bool Texture::Bind( uint32_t p_index )const
+	{
+		bool l_return = false;
+
+		if ( m_initialised )
+		{
+			l_return = DoBind( p_index );
+		}
+
+		return l_return;
+	}
+
+	void Texture::Unbind( uint32_t p_index )const
+	{
+		DoUnbind( p_index );
+	}
 }

@@ -47,8 +47,10 @@ namespace GLSL
 		inline Float( Type const & p_value );
 		inline Float( int p_value );
 		inline Float( float p_value );
+		inline Float( double p_value );
 		inline Float( GlslWriter * p_writer, int p_value );
 		inline Float( GlslWriter * p_writer, float p_value );
+		inline Float( GlslWriter * p_writer, double p_value );
 		inline Float( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline Float & operator=( Float const & p_rhs );
 		template< typename T > inline Float & operator=( T const & p_rhs );

@@ -46,17 +46,17 @@ namespace GlRender
 		m_texture.Unlock( p_modified );
 	}
 
-	void GlStaticTexture::GenerateMipmaps()
+	void GlStaticTexture::GenerateMipmaps()const
 	{
 		m_texture.GenerateMipmaps();
 	}
 
-	bool GlStaticTexture::DoBind( uint32_t p_index )
+	bool GlStaticTexture::DoBind( uint32_t p_index )const
 	{
 		return m_texture.Bind( p_index );
 	}
 
-	void GlStaticTexture::DoUnbind( uint32_t p_index )
+	void GlStaticTexture::DoUnbind( uint32_t p_index )const
 	{
 		m_texture.Unbind( p_index );
 	}

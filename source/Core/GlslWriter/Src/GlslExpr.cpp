@@ -1,5 +1,7 @@
 #include "GlslExpr.hpp"
 
+#include "GlslBaseTypes.hpp"
+
 using namespace Castor;
 
 namespace GLSL
@@ -73,16 +75,16 @@ namespace GLSL
 
 	String ToString( int const & p_value )
 	{
-		return string::to_string( p_value );
+		return String( Int( p_value ) );
 	}
 
 	String ToString( double const & p_value )
 	{
-		return string::to_string( p_value );
+		return String( Float( p_value ) );
 	}
 
 	String ToString( float const & p_value )
 	{
-		return string::to_string( p_value );
+		return String( Float( p_value ) );
 	}
 }

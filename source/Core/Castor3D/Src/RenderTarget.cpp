@@ -593,8 +593,6 @@ namespace Castor3D
 		{
 			if ( m_renderTechnique->BeginRender() )
 			{
-				p_fb.m_frameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
-				p_fb.m_frameBuffer->Clear();
 				l_scene->RenderBackground( m_renderTechnique->GetSize() );
 				m_renderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
 				m_renderTechnique->EndRender();

@@ -70,6 +70,26 @@ namespace Castor3D
 		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
+		 *\brief		Activation function, to tell the GPU it is active
+		 *\param[in]	p_index	The texture index
+		 *\return		\p true if successful
+		 *\~french
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
+		 *\param[in]	p_index	L'index de texture
+		 *\return		\p true si tout s'est bien passé
+		 */
+		C3D_API bool Bind( uint32_t p_index )const;
+		/**
+		 *\~english
+		 *\brief		Deactivation function, to tell the GPU it is inactive
+		 *\param[in]	p_index	The texture index
+		 *\~french
+		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
+		 *\param[in]	p_index	L'index de texture
+		 */
+		C3D_API void Unbind( uint32_t p_index )const;
+		/**
+		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
@@ -122,31 +142,11 @@ namespace Castor3D
 		C3D_API virtual void Unlock( bool p_bModified ) = 0;
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_index	The texture index
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_index	L'index de texture
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool Bind( uint32_t p_index ) = 0;
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	p_index	The texture index
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 *\param[in]	p_index	L'index de texture
-		 */
-		C3D_API virtual void Unbind( uint32_t p_index ) = 0;
-		/**
-		 *\~english
 		 *\brief		Generate texture mipmaps
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
 		 */
-		C3D_API virtual void GenerateMipmaps() = 0;
+		C3D_API virtual void GenerateMipmaps()const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the initialisation status
@@ -310,14 +310,14 @@ namespace Castor3D
 		 *\brief		Activation spécifique selon l'API
 		 *\return		\p si tout s'est bien passé
 		 */
-		C3D_API virtual bool DoBind( uint32_t p_index ) = 0;
+		C3D_API virtual bool DoBind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		API specific unbinding function
 		 *\~french
 		 *\brief		Désactivation spécifique selon l'API
 		 */
-		C3D_API virtual void DoUnbind( uint32_t p_index ) = 0;
+		C3D_API virtual void DoUnbind( uint32_t p_index )const = 0;
 
 	protected:
 		DECLARE_VECTOR( Castor::PxBufferBaseSPtr, PxBuffer );

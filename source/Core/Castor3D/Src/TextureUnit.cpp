@@ -497,7 +497,6 @@ namespace Castor3D
 	void TextureUnit::Initialise()
 	{
 		RenderTargetSPtr l_target = m_renderTarget.lock();
-		SamplerSPtr l_pSampler = m_pSampler.lock();
 
 		if ( l_target )
 		{

@@ -18,7 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RENDER_TECHNIQUE_H___
 #define ___C3D_RENDER_TECHNIQUE_H___
 
+#include "ReinhardToneMapping.hpp"
 #include "RenderNode.hpp"
+#include "TextureUnit.hpp"
 
 #include <Rectangle.hpp>
 #include <OwnedBy.hpp>
@@ -67,6 +69,36 @@ namespace Castor3D
 			SubmeshRenderNodesByProgramMap m_transparentRenderNodes;
 			//!\~english The geometries with alpha blending, sorted by distance to the camera.	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra.
 			RenderNodeByDistanceMMap m_distanceSortedTransparentRenderNodes;
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.7.0.0
+		\date		19/12/2012
+		\~english
+		\brief		Internal struct holding a complete frame buffer
+		\~french
+		\brief		Structure interne contenant un tampon d'image complet
+		*/
+		struct stFRAME_BUFFER
+		{
+		public:
+			stFRAME_BUFFER( RenderTechnique & p_technique );
+			bool Initialise( Castor::Size p_size );
+			void Cleanup();
+
+			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
+			TextureUnit m_colorTexture;
+			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
+			DepthStencilRenderBufferSPtr m_pDepthBuffer;
+			//!\~english The frame buffer	\~french Le tampon d'image
+			FrameBufferSPtr m_frameBuffer;
+			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
+			TextureAttachmentSPtr m_pColorAttach;
+			//!\~english The attach between depth buffer and main frame buffer	\~french L'attache entre le tampon profondeur et le tampon principal
+			RenderBufferAttachmentSPtr m_pDepthAttach;
+
+		private:
+			RenderTechnique & m_technique;
 		};
 
 	protected:
@@ -413,6 +445,10 @@ namespace Castor3D
 		Castor::Size m_size;
 		//!\~english The scenes rendered through this technique.	\~french Les scènes dessinées via cette technique.
 		std::map < Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
+		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
+		stFRAME_BUFFER m_frameBuffer;
+		//!\~english The tone mapping algorithm.	\~french L'algorithme de mappage de ton.
+		ReinhardToneMapping m_toneMapping;
 	};
 }
 

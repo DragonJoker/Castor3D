@@ -270,6 +270,12 @@ namespace GLSL
 		return WriteFunctionCall< Output >( p_value.m_input->m_writer, cuT( "-" ), static_cast< Output >( p_value ) );
 	}
 
+	template< typename Value >
+	inline Value exp( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "exp" ), p_value );
+	}
+
 	//***********************************************************************************************
 
 	template< typename ... Values >

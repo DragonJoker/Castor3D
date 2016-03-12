@@ -46,23 +46,6 @@ namespace Castor3D
 		}
 	}
 
-	bool DynamicTexture::Bind( uint32_t p_index )
-	{
-		bool l_return = false;
-
-		if ( m_initialised )
-		{
-			l_return = DoBind( p_index );
-		}
-
-		return l_return;
-	}
-
-	void DynamicTexture::Unbind( uint32_t p_index )
-	{
-		DoUnbind( p_index );
-	}
-
 	void DynamicTexture::Resize( Castor::Size const & p_size )
 	{
 		m_depth = 1;

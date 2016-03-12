@@ -78,7 +78,7 @@ namespace GlRender
 		m_storage->Fill( p_buffer, p_size, p_format );
 	}
 
-	bool GlTexture::Bind( uint32_t p_index )
+	bool GlTexture::Bind( uint32_t p_index )const
 	{
 		REQUIRE( m_storage );
 
@@ -97,7 +97,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlTexture::Unbind( uint32_t p_index )
+	void GlTexture::Unbind( uint32_t p_index )const
 	{
 		REQUIRE( m_storage );
 		m_storage->Unbind( p_index );
@@ -118,7 +118,7 @@ namespace GlRender
 		GetOpenGl().BindTexture( m_glDimension, 0 );
 	}
 
-	void GlTexture::GenerateMipmaps()
+	void GlTexture::GenerateMipmaps()const
 	{
 		if ( GetGlName() != eGL_INVALID_INDEX && m_glDimension != eGL_TEXDIM_2DMS && m_glDimension != eGL_TEXDIM_BUFFER )
 		{
@@ -137,7 +137,7 @@ namespace GlRender
 
 		if ( !m_storage )
 		{
-			if ( m_static )
+			if ( true )//m_static )
 			{
 				m_storage = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, *m_glRenderSystem, p_cpuAccess, p_gpuAccess );
 			}

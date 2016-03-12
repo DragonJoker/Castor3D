@@ -37,7 +37,7 @@ namespace GlRender
 		virtual void Cleanup();
 		virtual uint8_t * Lock( uint32_t p_uiLock );
 		virtual void Unlock( bool p_bModified );
-		virtual void GenerateMipmaps();
+		virtual void GenerateMipmaps()const;
 		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 
 		inline uint32_t GetGlName()const
@@ -46,8 +46,8 @@ namespace GlRender
 		}
 
 	private:
-		virtual bool DoBind( uint32_t p_index );
-		virtual void DoUnbind( uint32_t p_index );
+		virtual bool DoBind( uint32_t p_index )const;
+		virtual void DoUnbind( uint32_t p_index )const;
 		virtual bool DoInitialise();
 
 	private:

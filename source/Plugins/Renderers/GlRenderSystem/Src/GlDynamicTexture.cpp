@@ -46,7 +46,7 @@ namespace GlRender
 		m_texture.Unlock( p_modified );
 	}
 
-	void GlDynamicTexture::GenerateMipmaps()
+	void GlDynamicTexture::GenerateMipmaps()const
 	{
 		m_texture.GenerateMipmaps();
 	}
@@ -56,12 +56,12 @@ namespace GlRender
 		m_texture.Fill( p_buffer, p_size, p_format );
 	}
 
-	bool GlDynamicTexture::DoBind( uint32_t p_index )
+	bool GlDynamicTexture::DoBind( uint32_t p_index )const
 	{
 		return m_texture.Bind( p_index );
 	}
 
-	void GlDynamicTexture::DoUnbind( uint32_t p_index )
+	void GlDynamicTexture::DoUnbind( uint32_t p_index )const
 	{
 		m_texture.Unbind( p_index );
 	}

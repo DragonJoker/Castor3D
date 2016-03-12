@@ -192,7 +192,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
-			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[i]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
+			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[i]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_ARGB16F32F );
 			m_lightPassTextures[i]->Initialise();
 			p_index++;
 		}

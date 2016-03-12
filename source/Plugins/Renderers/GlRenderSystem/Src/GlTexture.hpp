@@ -71,12 +71,12 @@ namespace GlRender
 		 *\param[in]	p_index	The texture unit index.
 		 *\return		true on success.
 		 */
-		bool Bind( uint32_t p_index );
+		bool Bind( uint32_t p_index )const;
 		/**
 		 *\brief		Unbinds this texture.
 		 *\param[in]	p_index	The texture unit index.
 		 */
-		void Unbind( uint32_t p_index );
+		void Unbind( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
@@ -100,7 +100,7 @@ namespace GlRender
 		/**
 		*\brief		Forces mipmaps generation.
 		*/
-		void GenerateMipmaps();
+		void GenerateMipmaps()const;
 		/**
 		*\return	The OpenGL texture dimension.
 		*/
