@@ -105,10 +105,6 @@ namespace GlRender
 		 */
 		virtual void DoCleanup();
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoUpdateClearColour
-		 */
-		virtual void DoUpdateClearColour();
-		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoClear
 		 */
 		virtual void DoClear( uint32_t p_targets );

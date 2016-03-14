@@ -109,6 +109,7 @@ namespace Castor
 		ePIXEL_FORMAT_DEPTH24,		//!< Depth 24 bits
 		ePIXEL_FORMAT_DEPTH24S8,	//!< Depth 24 bits, Stencil 8 bits
 		ePIXEL_FORMAT_DEPTH32,		//!< Depth 32 bits
+		ePIXEL_FORMAT_DEPTH32F,		//!< Depth 32 bits floating point
 		ePIXEL_FORMAT_STENCIL1,		//!< Stencil 1 bit
 		ePIXEL_FORMAT_STENCIL8,		//!< Stencil 8 bits
 		ePIXEL_FORMAT_COUNT,

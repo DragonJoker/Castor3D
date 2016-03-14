@@ -530,15 +530,7 @@ namespace Castor3D
 
 		if ( m_backBuffers->Bind( p_eTargetBuffer, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
-#if !defined( NDEBUG )
-			Colour l_save = m_backBuffers->GetClearColour();
-			m_backBuffers->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_RED ) );
-#endif
 			m_backBuffers->Clear();
-#if !defined( NDEBUG )
-			m_backBuffers->SetClearColour( l_save );
-#endif
-
 			m_wpDepthStencilState.lock()->Apply();
 			m_wpRasteriserState.lock()->Apply();
 			m_context->RenderTexture( m_size, *l_texture );

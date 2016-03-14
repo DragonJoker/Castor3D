@@ -300,6 +300,7 @@ namespace GlRender
 		C3D_Gl_API void Cleanup();
 		C3D_Gl_API bool GlCheckError( std::string const & p_strText )const;
 		C3D_Gl_API bool GlCheckError( std::wstring const & p_strText )const;
+		C3D_Gl_API void DisplayExtensions()const;
 
 		inline bool HasMultiTexturing()const;
 		inline bool HasVao()const;

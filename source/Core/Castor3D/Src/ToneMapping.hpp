@@ -33,7 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		Implémente l'algorithme de mappage de ton de Reinhard
 	*/
-	class ReinhardToneMapping
+	class ToneMapping
 		: Castor::OwnedBy< Engine >
 	{
 	public:
@@ -45,14 +45,14 @@ namespace Castor3D
 		 * Constructeur spécifié
 		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API ReinhardToneMapping( Engine & p_engine );
+		C3D_API ToneMapping( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API ~ReinhardToneMapping();
+		C3D_API ~ToneMapping();
 		/**
 		 *\~english
 		 *\brief		Initialises Reinhard tone mapping shader.
@@ -80,6 +80,14 @@ namespace Castor3D
 	protected:
 		//!\~english The Reinhard tone mapping shader program.	\~french Le shader de mappage de ton de Reinhard
 		ShaderProgramSPtr m_program;
+		//!\~english The exposure value.	\~french La valeur d'exposition.
+		float m_exposure;
+		//!\~english The exposure shader variable.	\~french La variable shader pour l'exposition.
+		OneFloatFrameVariableSPtr m_exposureVar;
+		//!\~english The gamma correction value.	\~french La valeur de correction gamma.
+		float m_gamma;
+		//!\~english The gamma correction shader variable.	\~french La variable shader pour la correction gamma.
+		OneFloatFrameVariableSPtr m_gammaVar;
 	};
 }
 

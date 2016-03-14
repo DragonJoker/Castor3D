@@ -3,6 +3,7 @@
 #include "Rectangle.hpp"
 #include "BinaryFile.hpp"
 #include "Logger.hpp"
+#include "HdrLoader.hpp"
 
 extern "C"
 {
@@ -78,6 +79,7 @@ namespace Castor
 			LOADER_ERROR( "Can't load image : path is empty" );
 		}
 
+		p_image.m_pBuffer.reset();
 		ePIXEL_FORMAT l_ePF = ePIXEL_FORMAT_R8G8B8;
 		FIBITMAP * l_pImage = nullptr;
 		int l_iFlags = BMP_DEFAULT;
@@ -115,7 +117,7 @@ namespace Castor
 			}
 		}
 
-		FREE_IMAGE_COLOR_TYPE	l_type		= FreeImage_GetColorType(	l_pImage );
+		FREE_IMAGE_COLOR_TYPE l_type = FreeImage_GetColorType( l_pImage );
 		uint32_t l_width = FreeImage_GetWidth( l_pImage );
 		uint32_t l_height = FreeImage_GetHeight( l_pImage );
 		Size l_size( l_width, l_height );
@@ -123,21 +125,25 @@ namespace Castor
 		if ( l_type == FIC_RGBALPHA )
 		{
 			l_ePF = ePIXEL_FORMAT_A8R8G8B8;
-			FIBITMAP * l_dib32 = FreeImage_ConvertTo32Bits( l_pImage );
+			FIBITMAP * l_dib = FreeImage_ConvertTo32Bits( l_pImage );
 			FreeImage_Unload( l_pImage );
-			l_pImage = l_dib32;
+			l_pImage = l_dib;
 
 			if ( !l_pImage )
 			{
 				LOADER_ERROR( "Can't convert image to 32 bits with alpha : " + string::string_cast< char >( p_path ) );
 			}
 		}
+		else if ( l_fif == FIF_HDR )
+		{
+			p_image.m_pBuffer = HdrLoader::Load( p_path );
+		}
 		else
 		{
 			l_ePF = ePIXEL_FORMAT_R8G8B8;
-			FIBITMAP * l_dib24 = FreeImage_ConvertTo24Bits( l_pImage );
+			FIBITMAP * l_dib = FreeImage_ConvertTo24Bits( l_pImage );
 			FreeImage_Unload( l_pImage );
-			l_pImage = l_dib24;
+			l_pImage = l_dib;
 
 			if ( !l_pImage )
 			{
@@ -145,23 +151,26 @@ namespace Castor
 			}
 		}
 
-		uint8_t * l_pixels = FreeImage_GetBits( l_pImage );
-		//0=Blue, 1=Green, 2=Red, 3=Alpha
-#if FREEIMAGE_COLORORDER != FREEIMAGE_COLORORDER_BGR
-		uint8_t * l_pTmp = l_pixels;
-		uint32_t l_uiSize = l_width * l_height;
-
-		for ( uint32_t i = 0; i < l_uiSize; i++ )
+		if ( !p_image.m_pBuffer )
 		{
-			std::swap( l_pTmp[0], l_pTmp[2] );
-			l_pTmp += 4;
-		}
+			uint8_t * l_pixels = FreeImage_GetBits( l_pImage );
+			//0=Blue, 1=Green, 2=Red, 3=Alpha
+#if FREEIMAGE_COLORORDER != FREEIMAGE_COLORORDER_BGR
+			uint8_t * l_pTmp = l_pixels;
+			uint32_t l_uiSize = l_width * l_height;
+
+			for ( uint32_t i = 0; i < l_uiSize; i++ )
+			{
+				std::swap( l_pTmp[0], l_pTmp[2] );
+				l_pTmp += 4;
+			}
 
 #endif
-		p_image.m_pBuffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
-		FreeImage_Unload( l_pImage );
+			p_image.m_pBuffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
+			FreeImage_Unload( l_pImage );
+		}
 
-		return true;
+		return p_image.m_pBuffer != nullptr;
 	}
 
 	bool Image::BinaryLoader::operator()( Image const & p_image, Path const & p_path )

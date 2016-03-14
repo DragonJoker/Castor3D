@@ -44,7 +44,7 @@ namespace Bloom
 		struct BloomPostEffectSurface
 		{
 			BloomPostEffectSurface();
-			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, bool p_linear );
+			bool Initialise( Castor3D::RenderTarget & p_renderTarget, Castor::Size const & p_size, uint32_t p_index, Castor3D::SamplerSPtr p_sampler );
 			void Cleanup();
 
 			Castor3D::FrameBufferSPtr m_fbo;
@@ -61,13 +61,18 @@ namespace Bloom
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Apply();
+		virtual bool Apply( Castor3D::FrameBuffer & p_framebuffer );
 
 	private:
 		bool DoHiPassFilter();
 		void DoDownSample();
 		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
 		void DoCombine();
+		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
+
+		Castor3D::DynamicTextureSPtr m_colourTexture;
+		Castor3D::SamplerSPtr m_linearSampler;
+		Castor3D::SamplerSPtr m_nearestSampler;
 
 		Castor3D::ShaderProgramWPtr m_hiPassProgram;
 		Castor3D::OneIntFrameVariableSPtr m_hiPassMapDiffuse;

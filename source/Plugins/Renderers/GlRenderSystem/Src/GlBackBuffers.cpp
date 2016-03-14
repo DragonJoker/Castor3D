@@ -94,14 +94,9 @@ namespace GlRender
 	{
 	}
 
-	void GlBackBuffers::DoUpdateClearColour()
-	{
-		uint8_t l_r, l_g, l_b, l_a;
-		GetOpenGl().ClearColor( GetClearColour().red().convert_to( l_r ), GetClearColour().green().convert_to( l_g ), GetClearColour().blue().convert_to( l_b ), GetClearColour().alpha().convert_to( l_a ) );
-	}
-
 	void GlBackBuffers::DoClear( uint32_t p_uiTargets )
 	{
+		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
 		GetOpenGl().Clear( GetOpenGl().GetComponents( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL ) );
 	}
 

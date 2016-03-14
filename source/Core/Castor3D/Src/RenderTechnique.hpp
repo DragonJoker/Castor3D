@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RENDER_TECHNIQUE_H___
 #define ___C3D_RENDER_TECHNIQUE_H___
 
-#include "ReinhardToneMapping.hpp"
+#include "ToneMapping.hpp"
 #include "RenderNode.hpp"
 #include "TextureUnit.hpp"
 
@@ -87,15 +87,15 @@ namespace Castor3D
 			void Cleanup();
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
-			TextureUnit m_colorTexture;
+			DynamicTextureSPtr m_colourTexture;
 			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
-			DepthStencilRenderBufferSPtr m_pDepthBuffer;
+			DepthStencilRenderBufferSPtr m_depthBuffer;
 			//!\~english The frame buffer	\~french Le tampon d'image
 			FrameBufferSPtr m_frameBuffer;
 			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
-			TextureAttachmentSPtr m_pColorAttach;
+			TextureAttachmentSPtr m_colourAttach;
 			//!\~english The attach between depth buffer and main frame buffer	\~french L'attache entre le tampon profondeur et le tampon principal
-			RenderBufferAttachmentSPtr m_pDepthAttach;
+			RenderBufferAttachmentSPtr m_depthAttach;
 
 		private:
 			RenderTechnique & m_technique;
@@ -180,35 +180,17 @@ namespace Castor3D
 		C3D_API void AddScene( Scene & p_scene );
 		/**
 		 *\~english
-		 *\brief		Render begin function
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API bool BeginRender();
-		/**
-		 *\~english
 		 *\brief		Render function
 		 *\param[in]	p_scene			The scene to render
 		 *\param[in]	p_camera		The camera through which the scene is viewed
 		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered
-		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
 		 *\param[in]	p_scene			La scène à rendre
 		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
-		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime );
-		/**
-		 *\~english
-		 *\brief		Render end function
-		 *\~french
-		 *\brief		Fonction de fin de rendu
-		 */
-		C3D_API void EndRender();
+		C3D_API void Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -308,7 +290,7 @@ namespace Castor3D
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime ) = 0;
+		C3D_API virtual void DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime ) = 0;
 		/**
 		 *\~english
 		 *\brief		Render end function
@@ -430,7 +412,7 @@ namespace Castor3D
 		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoRender( Castor::Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime );
+		C3D_API void DoRender( Castor::Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime );
 
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique
@@ -448,7 +430,7 @@ namespace Castor3D
 		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
 		//!\~english The tone mapping algorithm.	\~french L'algorithme de mappage de ton.
-		ReinhardToneMapping m_toneMapping;
+		ToneMapping m_toneMapping;
 	};
 }
 

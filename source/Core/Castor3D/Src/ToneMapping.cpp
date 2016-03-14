@@ -1,7 +1,8 @@
-#include "ReinhardToneMapping.hpp"
+#include "ToneMapping.hpp"
 
 #include "Context.hpp"
 #include "Engine.hpp"
+#include "FrameVariableBuffer.hpp"
 #include "RenderSystem.hpp"
 #include "ShaderManager.hpp"
 #include "Texture.hpp"
@@ -13,16 +14,22 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	ReinhardToneMapping::ReinhardToneMapping( Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+	static const String HdrConfig = cuT( "HdrConfig" );
+	static const String Exposure = cuT( "c3d_exposure" );
+	static const String Gamma = cuT( "c3d_gamma" );
+
+	ToneMapping::ToneMapping( Engine & p_engine )
+		: OwnedBy< Engine >{ p_engine }
+		, m_exposure{ 1.0f }
+		, m_gamma{ 1.5f }
 	{
 	}
 
-	ReinhardToneMapping::~ReinhardToneMapping()
+	ToneMapping::~ToneMapping()
 	{
 	}
 
-	bool ReinhardToneMapping::Initialise()
+	bool ToneMapping::Initialise()
 	{
 		bool l_return = false;
 
@@ -30,6 +37,14 @@ namespace Castor3D
 
 		if ( m_program )
 		{
+			GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_program, MASK_SHADER_TYPE_VERTEX );
+			auto l_configBuffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( HdrConfig );
+			l_configBuffer->CreateVariable( *m_program, eFRAME_VARIABLE_TYPE_FLOAT, Exposure );
+			l_configBuffer->CreateVariable( *m_program, eFRAME_VARIABLE_TYPE_FLOAT, Gamma );
+			m_program->AddFrameVariableBuffer( l_configBuffer, MASK_SHADER_TYPE_PIXEL );
+			l_configBuffer->GetVariable( Exposure, m_exposureVar );
+			l_configBuffer->GetVariable( Gamma, m_gammaVar );
+
 			String l_vtx;
 			{
 				auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -58,7 +73,10 @@ namespace Castor3D
 				auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
 
 				// Shader inputs
-				auto c3d_exposure = l_writer.GetUniform< Float >( cuT( "c3d_exposure" ) );
+				Ubo l_config = l_writer.GetUbo( HdrConfig );
+				auto c3d_exposure = l_config.GetUniform< Float >( Exposure );
+				auto c3d_gamma = l_config.GetUniform< Float >( Gamma );
+				l_config.End();
 				auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
 				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
 
@@ -67,16 +85,12 @@ namespace Castor3D
 
 				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 				{
-					LOCALE_ASSIGN( l_writer, Float, l_gamma, Float( 2.2f ) );
 					LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).RGB );
-
 					// Exposure tone mapping
 					LOCALE_ASSIGN( l_writer, Vec3, l_mapped, vec3( Float( 1.0f ) ) - exp( -l_hdrColor * c3d_exposure ) );
 					// Gamma correction 
-					l_mapped = pow( l_mapped, vec3( 1.0f / l_gamma ) );
-
-					//plx_v4FragColor = vec4( l_mapped, 1.0 );
-					plx_v4FragColor = vec4( Float( 1.0 ), 0.0, 0.0, 1.0 );
+					l_mapped = pow( l_mapped, vec3( 1.0f / c3d_gamma ) );
+					plx_v4FragColor = vec4( l_mapped, 1.0 );
 				} );
 
 				l_pxl = l_writer.Finalise();
@@ -91,17 +105,16 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void ReinhardToneMapping::Cleanup()
+	void ToneMapping::Cleanup()
 	{
 		m_program->Cleanup();
 		m_program.reset();
 	}
 
-	void ReinhardToneMapping::Apply( Size const & p_size, Texture const & p_texture )
+	void ToneMapping::Apply( Size const & p_size, Texture const & p_texture )
 	{
-		p_texture.Bind( 0 );
-		p_texture.GenerateMipmaps();
-		p_texture.Unbind( 0 );
+		m_exposureVar->SetValue( m_exposure );
+		m_gammaVar->SetValue( m_gamma );
 		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, p_texture, m_program );
 	}
 }

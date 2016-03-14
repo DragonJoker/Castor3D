@@ -202,6 +202,10 @@ namespace Castor
 				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::Alpha;
 				break;
 
+			case ePIXEL_FORMAT_DEPTH32F:
+				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::Alpha;
+				break;
+
 			case ePIXEL_FORMAT_STENCIL1:
 				l_return = pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::Alpha;
 				break;
@@ -322,6 +326,10 @@ namespace Castor
 
 			case ePIXEL_FORMAT_DEPTH32:
 				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::Compressed;
+				break;
+
+			case ePIXEL_FORMAT_DEPTH32F:
+				l_return = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::Compressed;
 				break;
 
 			case ePIXEL_FORMAT_STENCIL1:
@@ -491,6 +499,10 @@ namespace Castor
 				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::Size;
 				break;
 
+			case ePIXEL_FORMAT_DEPTH32F:
+				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::Size;
+				break;
+
 			case ePIXEL_FORMAT_STENCIL1:
 				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_STENCIL1 >::Size;
 				break;
@@ -607,6 +619,10 @@ namespace Castor
 				pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
+			case ePIXEL_FORMAT_DEPTH32F:
+				pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
 			case ePIXEL_FORMAT_STENCIL1:
 				pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
@@ -719,6 +735,10 @@ namespace Castor
 
 			case ePIXEL_FORMAT_DEPTH32:
 				pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case ePIXEL_FORMAT_DEPTH32F:
+				pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case ePIXEL_FORMAT_STENCIL1:
@@ -839,6 +859,10 @@ namespace Castor
 					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
 					break;
 
+				case ePIXEL_FORMAT_DEPTH32F:
+					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+					break;
+
 				case ePIXEL_FORMAT_STENCIL1:
 					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_STENCIL1 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
 					break;
@@ -956,6 +980,10 @@ namespace Castor
 
 			case ePIXEL_FORMAT_DEPTH32:
 				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32 >::to_str();
+				break;
+
+			case ePIXEL_FORMAT_DEPTH32F:
+				l_strReturn = pixel_definitions< ePIXEL_FORMAT_DEPTH32F >::to_str();
 				break;
 
 			case ePIXEL_FORMAT_STENCIL1:

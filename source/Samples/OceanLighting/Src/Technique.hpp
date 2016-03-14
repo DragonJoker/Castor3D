@@ -327,7 +327,7 @@ namespace OceanLighting
 
 		/** \copydoc Castor3D::RenderTechnique::DoRender
 		*/
-		virtual bool DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, double p_dFrameTime );
+		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, double p_dFrameTime );
 
 		/** \copydoc Castor3D::RenderTechnique::DoEndRender
 		 */

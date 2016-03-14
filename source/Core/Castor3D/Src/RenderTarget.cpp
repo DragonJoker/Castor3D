@@ -1,16 +1,17 @@
 ﻿#include "RenderTarget.hpp"
 
 #include "BlendState.hpp"
+#include "Buffer.hpp"
 #include "CameraManager.hpp"
 #include "ColourRenderBuffer.hpp"
+#include "Context.hpp"
 #include "DepthStencilRenderBuffer.hpp"
 #include "DepthStencilStateManager.hpp"
 #include "DynamicTexture.hpp"
-#include "Buffer.hpp"
-#include "Context.hpp"
 #include "Engine.hpp"
 #include "FrameBuffer.hpp"
 #include "Material.hpp"
+#include "OverlayManager.hpp"
 #include "Parameter.hpp"
 #include "Pipeline.hpp"
 #include "PostEffect.hpp"
@@ -588,15 +589,14 @@ namespace Castor3D
 		m_pCurrentFrameBuffer = p_fb.m_frameBuffer;
 		m_pCurrentCamera = p_pCamera;
 		SceneSPtr l_scene = GetScene();
+		p_fb.m_frameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
 
 		if ( l_scene )
 		{
-			if ( m_renderTechnique->BeginRender() )
-			{
-				l_scene->RenderBackground( m_renderTechnique->GetSize() );
-				m_renderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
-				m_renderTechnique->EndRender();
-			}
+			m_renderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
+			p_fb.m_frameBuffer->Bind();
+			GetEngine()->GetOverlayManager().Render( *l_scene, m_size );
+			p_fb.m_frameBuffer->Unbind();
 		}
 
 		m_pCurrentFrameBuffer.reset();
