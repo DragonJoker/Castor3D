@@ -262,7 +262,7 @@ namespace Castor3D
 			MeshSPtr l_mesh = l_primitive.second->GetMesh();
 			SceneNodeSPtr l_sceneNode = l_primitive.second->GetParent();
 
-			if ( l_mesh )
+			if ( l_mesh && l_sceneNode )
 			{
 				for ( auto && l_submesh : *l_mesh )
 				{

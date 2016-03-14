@@ -54,6 +54,21 @@ namespace CastorViewer
 			return l_result;
 		}
 
+		bool ParseManager( Engine * p_engine, SamplerManager & p_manager, BinaryChunk & p_chunk, typename Sampler::BinaryParser p_parser )
+		{
+			bool l_result = true;
+			auto l_lock = make_unique_lock( p_manager );
+			auto l_it = p_manager.begin();
+
+			while ( l_result && l_it != p_manager.end() )
+			{
+				l_result = p_parser.Fill( *l_it->second, p_chunk );
+				++l_it;
+			}
+
+			return l_result;
+		}
+
 		Path GetTextureNewPath( Path const & p_pathSrcFile, Path const & p_pathFolder )
 		{
 			Path l_pathReturn( cuT( "Texture" ) );

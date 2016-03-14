@@ -22,9 +22,9 @@
 #include "Importer.hpp"
 #include "InitialiseEvent.hpp"
 #include "LightManager.hpp"
-#include "Material.hpp"
+#include "ManagerView.hpp"
+#include "MaterialManager.hpp"
 #include "MatrixFrameVariable.hpp"
-#include "Mesh.hpp"
 #include "MeshManager.hpp"
 #include "OneFrameVariable.hpp"
 #include "Overlay.hpp"
@@ -34,6 +34,7 @@
 #include "PointLight.hpp"
 #include "Ray.hpp"
 #include "RenderSystem.hpp"
+#include "SamplerManager.hpp"
 #include "SceneNodeManager.hpp"
 #include "ShaderManager.hpp"
 #include "ShaderProgram.hpp"
@@ -43,6 +44,7 @@
 #include "Submesh.hpp"
 #include "TextureUnit.hpp"
 #include "Vertex.hpp"
+#include "WindowManager.hpp"
 
 #include <Image.hpp>
 #include <Logger.hpp>
@@ -462,6 +464,11 @@ namespace Castor3D
 		m_lightManager = std::make_unique< LightManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_sceneNodeManager = std::make_unique< SceneNodeManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 
+		m_meshManagerView = std::make_unique< ManagerView< Mesh, MeshManager > >( GetName(), GetEngine()->GetMeshManager() );
+		m_materialManagerView = std::make_unique< ManagerView< Material, MaterialManager > >( GetName(), GetEngine()->GetMaterialManager() );
+		m_samplerManagerView = std::make_unique< ManagerView< Sampler, SamplerManager > >( GetName(), GetEngine()->GetSamplerManager() );
+		m_windowManagerView = std::make_unique< ManagerView< RenderWindow, WindowManager > >( GetName(), GetEngine()->GetWindowManager() );
+
 		auto l_notify = [this]()
 		{
 			m_changed = true;
@@ -478,6 +485,11 @@ namespace Castor3D
 		m_geometryManager.reset();
 		m_lightManager.reset();
 		m_sceneNodeManager.reset();
+
+		m_meshManagerView.reset();
+		m_materialManagerView.reset();
+		m_samplerManagerView.reset();
+		m_windowManagerView.reset();
 
 		if ( m_rootCameraNode )
 		{
@@ -513,6 +525,10 @@ namespace Castor3D
 		m_geometryManager->Cleanup();
 		m_lightManager->Cleanup();
 		m_sceneNodeManager->Cleanup();
+		m_meshManagerView->Clear();
+		m_materialManagerView->Clear();
+		m_samplerManagerView->Clear();
+		m_windowManagerView->Clear();
 
 		if ( m_backgroundImage )
 		{
@@ -619,6 +635,18 @@ namespace Castor3D
 			Merge( l_scene );
 			m_changed = true;
 			l_return = true;
+		}
+
+		return l_return;
+	}
+
+	MeshSPtr Scene::ImportMesh( Castor::Path const & p_fileName, Importer & p_importer, Parameters const & p_parameters )
+	{
+		auto l_return = p_importer.ImportMesh( p_fileName, p_parameters );
+
+		if ( l_return )
+		{
+			m_meshManagerView->Insert( l_return->GetName(), l_return );
 		}
 
 		return l_return;

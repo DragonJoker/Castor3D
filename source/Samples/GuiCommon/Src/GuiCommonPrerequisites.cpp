@@ -130,6 +130,13 @@ namespace GuiCommon
 			return p_manager.Create( String() );
 		}
 
+		template<>
+		std::shared_ptr< RenderWindow > CreateObject< RenderWindow, WindowManager >( Engine & p_engine, WindowManager & p_manager )
+		{
+			return p_manager.Create( String() );
+		}
+
+
 		template< typename TObj >
 		void InitialiseObject( std::shared_ptr< TObj > p_object, Engine & p_engine )
 		{
@@ -184,6 +191,11 @@ namespace GuiCommon
 		bool DoFillManager( Engine & p_engine, SamplerManager & p_manager, BinaryChunk & p_chunk, Sampler::BinaryParser p_parser )
 		{
 			return DoParse< Sampler >( *CreateObject< Sampler >( p_engine, p_manager ), p_chunk, p_parser );
+		}
+
+		bool DoFillManager( Engine & p_engine, WindowManager & p_manager, BinaryChunk & p_chunk, RenderWindow::BinaryParser p_parser )
+		{
+			return DoParse< RenderWindow >( *CreateObject< RenderWindow >( p_engine, p_manager ), p_chunk, p_parser );
 		}
 
 		bool DoLoadMeshFile( Engine & p_engine, Path const & p_fileName )
@@ -268,8 +280,7 @@ namespace GuiCommon
 						break;
 
 					case eCHUNK_TYPE_WINDOW:
-						l_return = p_engine.GetWindowManager().Create();
-						l_continue = RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
+						l_continue = DoFillManager( p_engine, p_engine.GetWindowManager(), l_chunk, RenderWindow::BinaryParser( l_path ) );
 						break;
 					}
 
@@ -474,22 +485,12 @@ namespace GuiCommon
 		if ( !p_fileName.empty() )
 		{
 			String l_strLowered = string::lower_case( p_fileName );
-			p_engine.Cleanup();
 
 			bool l_continue = true;
 			Logger::LogDebug( cuT( "GuiCommon::LoadSceneFile - Engine cleared" ) );
 
 			if ( DoLoadMeshFile( p_engine, p_fileName ) )
 			{
-				try
-				{
-					p_engine.Initialise( p_wantedFps, p_threaded );
-				}
-				catch ( std::exception & exc )
-				{
-					wxMessageBox( _( "Castor initialisation failed with following error:" ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ) );
-				}
-
 				l_return = DoLoadSceneFile( p_engine, p_fileName );
 			}
 		}

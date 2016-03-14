@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,6 +36,32 @@ http://www.gnu.org/copyleft/lesser.txt.
 		}\
 	private:\
 		className##ManagerUPtr m_##memberName##Manager
+
+#define DECLARE_MANAGER_VIEW_MEMBER( memberName, className )\
+	public:\
+		inline ManagerView< className, className##Manager > & Get##className##View()\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+		inline ManagerView< className, className##Manager > const & Get##className##View()const\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+	private:\
+		std::unique_ptr< ManagerView< className, className##Manager > > m_##memberName##ManagerView
+
+#define DECLARE_MANAGER_VIEW_MEMBER_EX( memberName, mgrName, className )\
+	public:\
+		inline ManagerView< className, mgrName##Manager > & Get##className##View()\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+		inline ManagerView< className, mgrName##Manager > const & Get##className##View()const\
+		{\
+			return *m_##memberName##ManagerView;\
+		}\
+	private:\
+		std::unique_ptr< ManagerView< className, mgrName##Manager > > m_##memberName##ManagerView
 
 namespace Castor3D
 {
@@ -222,6 +248,21 @@ namespace Castor3D
 		C3D_API bool ImportExternal( Castor::String const & p_fileName, Importer & p_importer );
 		/**
 		 *\~english
+		 *\brief		Mesh import Function.
+		 *\param[in]	p_fileName		The location of the file to import.
+		 *\param[in]	p_importer		The importer.
+		 *\param[in]	p_parameters	Import configuration parameters.
+		 *\return		The imported Mesh
+		 *\~french
+		 *\brief		Fonction d'import de Mesh.
+		 *\param[in]	p_fileName		Le chemin vers le fichier à importer.
+		 *\param[in]	p_importer		L'importeur.
+		 *\param[in]	p_parameters	Paramètres de configuration de l'import.
+		 *\return		Le Mesh importé
+		 */
+		C3D_API MeshSPtr ImportMesh( Castor::Path const & p_fileName, Importer & p_importer, Parameters const & p_parameters );
+		/**
+		 *\~english
 		 *\brief		Merges the content of the given scene to this scene
 		 *\param[in]	p_scene	The scene to merge into this one
 		 *\~french
@@ -398,6 +439,14 @@ namespace Castor3D
 		DECLARE_MANAGER_MEMBER( billboard, Billboard );
 		//!\~english The animated objects groups manager.	\~french Le gestionnaire de groupes d'objets animés.
 		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
+		//!\~english The scene meshes view.	\~french La vue sur les maillages de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER( mesh, Mesh );
+		//!\~english The scene materials view.	\~french La vue sur les matériaux de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER( material, Material );
+		//!\~english The scene samplers view.	\~french La vue sur les échantillonneurs de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler );
+		//!\~english The scene render windows view.	\~french La vue sur les fenêtres de rendu de la scène.
+		DECLARE_MANAGER_VIEW_MEMBER_EX( window, Window, RenderWindow );
 		//!\~english Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated	\~french Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;
 		//!\~english Ambient light color	\~french Couleur de la lumière ambiante

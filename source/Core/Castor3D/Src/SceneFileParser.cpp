@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser.hpp"
+#include "SceneFileParser.hpp"
 
 #include "Engine.hpp"
 #include "GenericPlugin.hpp"
@@ -356,6 +356,8 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_SCENE, cuT( "background_colour" ), Parser_SceneBkColour, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_SCENE, cuT( "background_image" ), Parser_SceneBkImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SCENE, cuT( "material" ), Parser_SceneMaterial, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "sampler" ), Parser_SceneSamplerState, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "camera" ), Parser_SceneCamera, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "light" ), Parser_SceneLight, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "camera_node" ), Parser_SceneCameraNode, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
@@ -364,6 +366,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SCENE, cuT( "ambient_light" ), Parser_SceneAmbientLight, { MakeParameter< ePARAMETER_TYPE_COLOUR >() } );
 	AddParser( eSECTION_SCENE, cuT( "import" ), Parser_SceneImport, { MakeParameter< ePARAMETER_TYPE_PATH >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_SCENE, cuT( "billboard" ), Parser_SceneBillboard, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "window" ), Parser_SceneWindow, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "animated_object_group" ), Parser_SceneAnimatedObjectGroup, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "panel_overlay" ), Parser_ScenePanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "border_panel_overlay" ), Parser_SceneBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );

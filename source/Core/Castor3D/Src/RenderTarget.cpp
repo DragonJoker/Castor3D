@@ -1,4 +1,4 @@
-﻿#include "RenderTarget.hpp"
+#include "RenderTarget.hpp"
 
 #include "BlendState.hpp"
 #include "Buffer.hpp"
@@ -549,7 +549,7 @@ namespace Castor3D
 		{
 			l_pCamNode = p_pCamera->GetParent();
 
-			if ( l_scene )
+			if ( l_scene && l_pCamNode )
 			{
 				l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
 				l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );

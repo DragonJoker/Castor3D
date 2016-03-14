@@ -457,6 +457,8 @@ namespace Castor3D
 	class SceneNodeManager;
 	class BillboardManager;
 	class RenderTechniqueManager;
+	template< typename ResourceType, typename ManagerType >
+	class ManagerView;
 
 	DECLARE_SMART_PTR( OverlayManager );
 	DECLARE_SMART_PTR( ShaderManager );

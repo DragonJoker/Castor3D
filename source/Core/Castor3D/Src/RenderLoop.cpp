@@ -1,4 +1,4 @@
-﻿#include "RenderLoop.hpp"
+#include "RenderLoop.hpp"
 
 #include "BlendStateManager.hpp"
 #include "DebugOverlays.hpp"
@@ -117,9 +117,6 @@ namespace Castor3D
 
 	void RenderLoop::DoCpuStep()
 	{
-		GetEngine()->GetRenderTechniqueManager().Update();
-		GetEngine()->GetSceneManager().Update();
-		GetEngine()->GetOverlayManager().Update();
 		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
 	}
 
@@ -131,6 +128,10 @@ namespace Castor3D
 			uint32_t l_faces = 0;
 			uint32_t l_objects = 0;
 			m_debugOverlays->StartFrame();
+			GetEngine()->GetRenderTechniqueManager().Update();
+			GetEngine()->GetSceneManager().Update();
+			GetEngine()->GetOverlayManager().Update();
+			m_debugOverlays->EndCpuTask();
 			DoGpuStep( l_vertices, l_faces, l_objects );
 			m_debugOverlays->EndGpuTask();
 			DoCpuStep();

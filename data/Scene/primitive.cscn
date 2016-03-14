@@ -61,18 +61,18 @@ scene "Scene"
 			far 20000.0
 		}
 	}
-}
 
-window "Window"
-{
-	render_target
+	window "Window"
 	{
-		format argb32
-		depth depth24s8
-		size screen_size
-		scene "Scene"
-		camera "MainCamera"
+		render_target
+		{
+			format argb32
+			depth depth24s8
+			size screen_size
+			scene "Scene"
+			camera "MainCamera"
+		}
+		fullscreen false
+		vsync true
 	}
-	fullscreen false
-	vsync true
 }

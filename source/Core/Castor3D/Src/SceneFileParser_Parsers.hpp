@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -67,6 +67,8 @@ namespace Castor3D
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkColour )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkImage )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneMaterial )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneSamplerState )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneCamera )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneLight )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneCameraNode )
@@ -75,6 +77,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneAmbientLight )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneImport )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBillboard )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneWindow )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneAnimatedObjectGroup )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ScenePanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBorderPanelOverlay )

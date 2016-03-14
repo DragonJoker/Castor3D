@@ -1,4 +1,4 @@
-﻿#include "RenderWindow.hpp"
+#include "RenderWindow.hpp"
 
 #include "BackBuffers.hpp"
 #include "BlendState.hpp"
@@ -156,9 +156,9 @@ namespace Castor3D
 
 	uint32_t RenderWindow::s_nbRenderWindows = 0;
 
-	RenderWindow::RenderWindow( Engine & p_engine )
+	RenderWindow::RenderWindow( Engine & p_engine, String const & p_name )
 		: OwnedBy< Engine >( p_engine )
-		, m_name( DoGetName() )
+		, Named( p_name )
 		, m_index( s_nbRenderWindows )
 		, m_wpListener( p_engine.GetListenerManager().Create( cuT( "RenderWindow_" ) + string::to_string( s_nbRenderWindows ) ) )
 		, m_initialised( false )
@@ -502,13 +502,6 @@ namespace Castor3D
 	Size RenderWindow::GetSize()const
 	{
 		return m_size;
-	}
-
-	String RenderWindow::DoGetName()
-	{
-		String l_strReturn = cuT( "RenderWindow_" );
-		l_strReturn += string::to_string( m_index );
-		return l_strReturn;
 	}
 
 	void RenderWindow::DoRender( eBUFFER p_eTargetBuffer, TextureUnit const & p_texture )

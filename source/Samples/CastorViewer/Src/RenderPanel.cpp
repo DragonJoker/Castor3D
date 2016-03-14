@@ -161,11 +161,15 @@ namespace CastorViewer
 						m_lightsNode = l_scene->GetSceneNodeManager().Find( cuT( "PointLightsNode" ) );
 					}
 
-					m_ptOriginalPosition = m_cameraNode->GetPosition();
-					m_qOriginalOrientation = m_cameraNode->GetOrientation();
+					if ( m_cameraNode )
+					{
+						m_ptOriginalPosition = m_cameraNode->GetPosition();
+						m_qOriginalOrientation = m_cameraNode->GetOrientation();
+						m_currentNode = m_cameraNode;
+					}
+
 					m_pRenderWindow = p_window;
 					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_window );
-					m_currentNode = m_cameraNode;
 				}
 
 #if HAS_CASTORGUI
