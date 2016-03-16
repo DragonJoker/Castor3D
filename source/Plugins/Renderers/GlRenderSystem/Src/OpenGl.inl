@@ -777,6 +777,16 @@ namespace GlRender
 		return DepthFuncs[p_func];
 	}
 
+	inline eGL_QUERY OpenGl::Get( Castor3D::eQUERY_TYPE p_value )const
+	{
+		return Queries[p_value];
+	}
+
+	inline eGL_QUERY_INFO OpenGl::Get( Castor3D::eQUERY_INFO p_value )const
+	{
+		return QueryInfos[p_value];
+	}
+
 	inline bool OpenGl::Get( Castor3D::eWRITING_MASK p_eMask )const
 	{
 		return WriteMasks[p_eMask];

@@ -11,6 +11,7 @@
 #include "GlIndexBufferObject.hpp"
 #include "GlGeometryBuffers.hpp"
 #include "GlDynamicTexture.hpp"
+#include "GlQuery.hpp"
 #include "GlStaticTexture.hpp"
 #include "GlBlendState.hpp"
 #include "GlDepthStencilState.hpp"
@@ -177,6 +178,11 @@ namespace GlRender
 	Castor3D::BackBuffersSPtr GlRenderSystem::CreateBackBuffers()
 	{
 		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetEngine() );
+	}
+
+	Castor3D::GpuQuerySPtr GlRenderSystem::CreateQuery( eQUERY_TYPE p_type )
+	{
+		return std::make_shared< GlQuery >( *this, p_type );
 	}
 
 	void GlRenderSystem::DoInitialise()

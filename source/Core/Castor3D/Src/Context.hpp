@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -253,6 +253,13 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
+		 *\brief		Destroys the context on GPU.
+		 *\~french
+		 *\brief		Détruit le contexte sur le GPU.
+		 */
+		C3D_API virtual void DoDestroy() = 0;
+		/**
+		 *\~english
 		 *\brief		Defines this context to be the current rendering context
 		 *\param[in]	p_window	The RenderWindow
 		 *\~french
@@ -335,6 +342,10 @@ namespace Castor3D
 		DepthStencilStateSPtr m_pDsStateNoDepthWrite;
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
 		VertexBufferUPtr m_vertexBuffer;
+		//!\~english The GPU time elapsed queries.	\~french Les requêtes GPU de temps écoulé.
+		std::array< GpuQuerySPtr, 2 > m_timerQuery;
+		//!\~english The active query index.	\~french L'index de la requête active.
+		uint32_t m_queryIndex = 0;
 	};
 }
 

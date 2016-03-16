@@ -377,6 +377,42 @@ namespace Castor3D
 		eFILL_MODE_SOLID,	//!<\~english The interior of the polygon is filled	\~french L'intérieur du polygone est rempli
 		eFILL_MODE_COUNT,	//!<\~english Fill modes count	\~french Compte des modes de rastérisation
 	}   eFILL_MODE;
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/03/2016
+	\~english
+	\brief		GPU query supported types enumeration.
+	\~french
+	\brief		Enumération des types de requêtes GPU supportés.
+	*/
+	typedef enum eQUERY_TYPE CASTOR_TYPE( uint32_t )
+	{
+		eQUERY_TYPE_TIME_ELAPSED,
+		eQUERY_TYPE_SAMPLES_PASSED,
+		eQUERY_TYPE_ANY_SAMPLES_PASSED,
+		eQUERY_TYPE_PRIMITIVES_GENERATED,
+		eQUERY_TYPE_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN,
+		eQUERY_TYPE_ANY_SAMPLES_PASSED_CONSERVATIVE,
+		eQUERY_TYPE_TIMESTAMP,
+		CASTOR_ENUM_BOUNDS( eQUERY_TYPE, eQUERY_TYPE_TIME_ELAPSED )
+	}	eQUERY_TYPE;
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		16/03/2016
+	\~english
+	\brief		GPU query supported informations enumeration.
+	\~french
+	\brief		Enumération des informations de requêtes GPU supportés.
+	*/
+	typedef enum eQUERY_INFO CASTOR_TYPE( uint32_t )
+	{
+		eQUERY_INFO_RESULT,
+		eQUERY_INFO_RESULT_AVAILABLE,
+		eQUERY_INFO_RESULT_NO_WAIT,
+		CASTOR_ENUM_BOUNDS( eQUERY_INFO, eQUERY_INFO_RESULT )
+	}	eQUERY_INFO;
 
 	class WindowHandle;
 	class RenderTarget;
@@ -409,6 +445,7 @@ namespace Castor3D
 	class RenderLoop;
 	class RenderLoopAsync;
 	class RenderLoopSync;
+	class GpuQuery;
 
 	DECLARE_SMART_PTR( RenderWindow );
 	DECLARE_SMART_PTR( RenderTarget );
@@ -435,6 +472,7 @@ namespace Castor3D
 	DECLARE_SMART_PTR( IWindowHandle );
 	DECLARE_SMART_PTR( BillboardList );
 	DECLARE_SMART_PTR( RenderLoop );
+	DECLARE_SMART_PTR( GpuQuery );
 
 	class OverlayManager;
 	class ShaderManager;

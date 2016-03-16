@@ -91,6 +91,10 @@ namespace GlRender
 		 */
 		virtual Castor3D::BackBuffersSPtr CreateBackBuffers();
 		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateQuery
+		 */
+		virtual Castor3D::GpuQuerySPtr CreateQuery( Castor3D::eQUERY_TYPE p_type );
+		/**
 		 *\copydoc		Castor3D::RenderSystem::GetPipelineImpl
 		 */
 		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()

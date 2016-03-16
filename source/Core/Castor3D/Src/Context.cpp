@@ -1,10 +1,11 @@
-﻿#include "Context.hpp"
+#include "Context.hpp"
 
 #include "BlendStateManager.hpp"
 #include "Buffer.hpp"
 #include "DepthStencilStateManager.hpp"
 #include "Engine.hpp"
 #include "FrameVariableBuffer.hpp"
+#include "GpuQuery.hpp"
 #include "MatrixFrameVariable.hpp"
 #include "OneFrameVariable.hpp"
 #include "Pipeline.hpp"
@@ -59,6 +60,8 @@ namespace Castor3D
 	bool Context::Initialise( RenderWindow * p_window )
 	{
 		m_window = p_window;
+		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
+		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
 		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 		m_renderTextureProgram = l_program;
@@ -124,7 +127,11 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			SetCurrent();
+			DoSetCurrent();
+			m_timerQuery[0]->Create();
+			m_timerQuery[1]->Create();
+			m_timerQuery[1 - m_queryIndex]->Begin();
+			m_timerQuery[1 - m_queryIndex]->End();
 			l_program->Initialise();
 			uint32_t i = 0;
 
@@ -141,7 +148,7 @@ namespace Castor3D
 			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 			m_pDsStateNoDepth->Initialise();
 			m_pDsStateNoDepthWrite->Initialise();
-			EndCurrent();
+			DoEndCurrent();
 		}
 
 		return l_return;
@@ -150,7 +157,8 @@ namespace Castor3D
 	void Context::Cleanup()
 	{
 		m_initialised = false;
-		SetCurrent();
+		DoSetCurrent();
+		DoCleanup();
 		m_pDsStateNoDepth->Cleanup();
 		m_pDsStateNoDepthWrite->Cleanup();
 		m_vertexBuffer->Cleanup();
@@ -164,13 +172,16 @@ namespace Castor3D
 			l_program->Cleanup();
 		}
 
-		EndCurrent();
-		DoCleanup();
+		m_timerQuery[0]->Destroy();
+		m_timerQuery[1]->Destroy();
+		DoEndCurrent();
 		m_pDsStateNoDepth.reset();
 		m_pDsStateNoDepthWrite.reset();
 		m_geometryBuffers.reset();
 		m_bMultiSampling = false;
 		m_renderTextureProgram.reset();
+		m_timerQuery[0].reset();
+		m_timerQuery[1].reset();
 		m_window = nullptr;
 	}
 
@@ -178,10 +189,16 @@ namespace Castor3D
 	{
 		DoSetCurrent();
 		GetRenderSystem()->SetCurrentContext( this );
+		m_timerQuery[m_queryIndex]->Begin();
 	}
 
 	void Context::EndCurrent()
 	{
+		m_timerQuery[m_queryIndex]->End();
+		m_queryIndex = 1 - m_queryIndex;
+		uint64_t l_time = 0;
+		m_timerQuery[m_queryIndex]->GetInfos( eQUERY_INFO_RESULT, l_time );
+		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
 		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
 	}
