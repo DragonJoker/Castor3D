@@ -156,13 +156,12 @@ namespace GlRender
 
 			if ( m_hDC )
 			{
-				GetOpenGl().DeleteContext( m_hContext );
-
 				GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
 				GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
-				if ( !l_mainContext || l_mainContext->GetImpl()->m_hWnd == m_hWnd )
+				if ( l_mainContext.get() == m_context || !l_mainContext || l_mainContext->GetImpl()->m_hWnd != m_hWnd )
 				{
+					GetOpenGl().DeleteContext( m_hContext );
 					::ReleaseDC( m_hWnd, m_hDC );
 				}
 			}

@@ -175,6 +175,7 @@ namespace Castor3D
 		m_timerQuery[0]->Destroy();
 		m_timerQuery[1]->Destroy();
 		DoEndCurrent();
+		DoDestroy();
 		m_pDsStateNoDepth.reset();
 		m_pDsStateNoDepthWrite.reset();
 		m_geometryBuffers.reset();
