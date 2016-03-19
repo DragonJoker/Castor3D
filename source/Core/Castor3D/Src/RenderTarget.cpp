@@ -10,7 +10,7 @@
 #include "DynamicTexture.hpp"
 #include "Engine.hpp"
 #include "FrameBuffer.hpp"
-#include "FUnctorEvent.hpp"
+#include "FunctorEvent.hpp"
 #include "Material.hpp"
 #include "OverlayManager.hpp"
 #include "Parameter.hpp"
