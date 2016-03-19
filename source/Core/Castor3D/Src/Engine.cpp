@@ -28,14 +28,15 @@
 #include "VersionException.hpp"
 #include "WindowManager.hpp"
 
-#include <Logger.hpp>
+#include <DynamicLibrary.hpp>
 #include <Factory.hpp>
 #include <File.hpp>
-#include <Utils.hpp>
-#include <DynamicLibrary.hpp>
+#include <Image.hpp>
+#include <Logger.hpp>
 #include <PreciseTimer.hpp>
 #include <Templates.hpp>
 #include <UniqueObjectPool.hpp>
+#include <Utils.hpp>
 
 using namespace Castor;
 
