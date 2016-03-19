@@ -52,12 +52,105 @@ namespace Castor3D
 		}
 	}
 
+	//*************************************************************************************************
+
+	RenderTechnique::stFRAME_BUFFER::stFRAME_BUFFER( RenderTechnique & p_technique )
+		: m_technique( p_technique )
+	{
+	}
+
+	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
+	{
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_colourTexture->SetType( eTEXTURE_TYPE_2D );
+		m_colourTexture->SetImage( p_size, ePIXEL_FORMAT_ARGB16F32F );
+		p_size = m_colourTexture->GetDimensions();
+
+		bool l_return = m_colourTexture->Create();
+
+		if ( l_return )
+		{
+			l_return = m_colourTexture->Initialise();
+
+			if ( !l_return )
+			{
+				m_colourTexture->Destroy();
+			}
+		}
+
+		if ( l_return )
+		{
+			m_frameBuffer = m_technique.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
+			m_depthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32F );
+			l_return = m_depthBuffer->Create();
+		}
+
+		if ( l_return )
+		{
+			l_return = m_depthBuffer->Initialise( p_size );
+
+			if ( !l_return )
+			{
+				m_depthBuffer->Destroy();
+			}
+		}
+
+		if ( l_return )
+		{
+			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
+			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
+			l_return = m_frameBuffer->Create( 0 );
+		}
+
+		if ( l_return )
+		{
+			l_return = m_frameBuffer->Initialise( p_size );
+
+			if ( l_return && m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
+			{
+				m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, eTEXTURE_TARGET_2D );
+				m_frameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_depthAttach );
+				l_return = m_frameBuffer->IsComplete();
+				m_frameBuffer->Unbind();
+			}
+			else
+			{
+				m_frameBuffer->Destroy();
+			}
+		}
+
+		return l_return;
+	}
+
+	void RenderTechnique::stFRAME_BUFFER::Cleanup()
+	{
+		m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_frameBuffer->DetachAll();
+		m_frameBuffer->Unbind();
+		m_frameBuffer->Cleanup();
+		m_colourTexture->Cleanup();
+		m_depthBuffer->Cleanup();
+
+		m_colourTexture->Destroy();
+		m_depthBuffer->Destroy();
+		m_frameBuffer->Destroy();
+
+		m_depthAttach.reset();
+		m_depthBuffer.reset();
+		m_colourAttach.reset();
+		m_colourTexture.reset();
+		m_frameBuffer.reset();
+	}
+
+	//*************************************************************************************************
+
 	RenderTechnique::RenderTechnique( String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
-		: OwnedBy< Engine >( *p_renderSystem->GetEngine() )
-		, m_renderTarget( &p_renderTarget )
-		, m_renderSystem( p_renderSystem )
-		, m_name( p_name )
-		, m_initialised( false )
+		: OwnedBy< Engine >{ *p_renderSystem->GetEngine() }
+		, m_renderTarget{ &p_renderTarget }
+		, m_renderSystem{ p_renderSystem }
+		, m_name{ p_name }
+		, m_initialised{ false }
+		, m_frameBuffer{ *this }
 	{
 	}
 
@@ -67,14 +160,7 @@ namespace Castor3D
 
 	bool RenderTechnique::Create()
 	{
-		bool l_return = true;
-
-		if ( l_return )
-		{
-			l_return = DoCreate();
-		}
-
-		return l_return;
+		return DoCreate();
 	}
 
 	void RenderTechnique::Destroy()
@@ -88,6 +174,11 @@ namespace Castor3D
 		{
 			m_size = m_renderTarget->GetSize();
 			m_initialised = DoInitialise( p_index );
+
+			if ( m_initialised )
+			{
+				m_initialised = m_frameBuffer.Initialise( m_size );
+			}
 		}
 
 		return m_initialised;
@@ -97,6 +188,7 @@ namespace Castor3D
 	{
 		m_scenesRenderNodes.clear();
 		m_initialised = false;
+		m_frameBuffer.Cleanup();
 		DoCleanup();
 	}
 
@@ -121,28 +213,34 @@ namespace Castor3D
 		}
 	}
 
-	bool RenderTechnique::BeginRender()
-	{
-		return DoBeginRender();
-	}
-
-	bool RenderTechnique::Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
+	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
 	{
 		m_renderSystem->PushScene( &p_scene );
-		return DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_dFrameTime );
-	}
+		m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
+		m_frameBuffer.m_frameBuffer->Clear();
 
-	void RenderTechnique::EndRender()
-	{
-		DoEndRender();
+		if ( DoBeginRender() )
+		{
+			p_scene.RenderBackground( GetSize() );
+			DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_dFrameTime );
+			DoEndRender();
+		}
+
+		m_frameBuffer.m_frameBuffer->Unbind();
 
 		for ( auto && l_effect : m_renderTarget->GetPostEffects() )
 		{
-			l_effect->Apply();
+			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 		}
 
-		GetEngine()->GetOverlayManager().Render( *m_renderSystem->GetTopScene(), m_renderTarget->GetSize() );
-		m_renderTarget->GetFrameBuffer()->Unbind();
+		m_renderTarget->GetDepthStencilState()->Apply();
+		m_renderTarget->GetRasteriserState()->Apply();
+		auto & l_fb = *m_renderTarget->GetFrameBuffer();
+		l_fb.Bind();
+		l_fb.Clear();
+		m_renderTarget->GetToneMapping()->Apply( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
+		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
 		m_renderSystem->PopScene();
 	}
 
@@ -247,7 +345,7 @@ namespace Castor3D
 			p_scene.GetCameraManager().BindCamera( p_node.m_scene.m_sceneUbo );
 		}
 
-		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ( 0xFFFFFFFFFFFFFFFF & ~p_excludedMtxFlags ) );
+		p_pipeline.ApplyMatrices( p_node.m_scene.m_node.m_matrixUbo, ~p_excludedMtxFlags );
 		auto l_animated = p_node.m_geometry.GetAnimatedObject();
 
 		if ( l_animated )
@@ -339,6 +437,18 @@ namespace Castor3D
 		}
 	}
 
+	void RenderTechnique::DoRenderSubmeshes( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes )
+	{
+		if ( GetEngine()->GetRenderSystem()->HasInstancing() )
+		{
+			DoRenderSubmeshesInstanced( p_scene, p_camera, p_pipeline, p_nodes );
+		}
+		else
+		{
+			DoRenderSubmeshesNonInstanced( p_scene, p_camera, p_pipeline, p_nodes );
+		}
+	}
+
 	void RenderTechnique::DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, RenderNodeByDistanceMMap & p_output )
 	{
 		p_output.clear();
@@ -363,19 +473,7 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderTechnique::DoRenderSubmeshes( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes )
-	{
-		if ( GetEngine()->GetRenderSystem()->HasInstancing() )
-		{
-			DoRenderSubmeshesInstanced( p_scene, p_camera, p_pipeline, p_nodes );
-		}
-		else
-		{
-			DoRenderSubmeshesNonInstanced( p_scene, p_camera, p_pipeline, p_nodes );
-		}
-	}
-
-	bool RenderTechnique::DoRender( Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
+	void RenderTechnique::DoRender( Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
 	{
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
 		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
@@ -411,7 +509,6 @@ namespace Castor3D
 		}
 
 		p_camera.EndRender();
-		return true;
 	}
 
 	String RenderTechnique::DoGetPixelShaderSource( uint32_t p_flags )const

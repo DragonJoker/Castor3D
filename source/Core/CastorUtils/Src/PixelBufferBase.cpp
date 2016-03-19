@@ -34,7 +34,7 @@ namespace Castor
 		m_buffer.clear();
 	}
 
-	void PxBufferBase::init( uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
+	void PxBufferBase::init( uint8_t const * p_buffer, ePIXEL_FORMAT p_bufferFormat )
 	{
 		uint8_t l_bpp = PF::GetBytesPerPixel( format() );
 		uint32_t l_size = count() * l_bpp;
@@ -46,13 +46,13 @@ namespace Castor
 		}
 		else
 		{
-			if ( p_eBufferFormat == m_pixelFormat )
+			if ( p_bufferFormat == m_pixelFormat )
 			{
 				memcpy( m_buffer.data(), p_buffer, l_size );
 			}
 			else
 			{
-				PF::ConvertBuffer( p_eBufferFormat, p_buffer, count() * PF::GetBytesPerPixel( p_eBufferFormat ), format(), m_buffer.data(), size() );
+				PF::ConvertBuffer( p_bufferFormat, p_buffer, count() * PF::GetBytesPerPixel( p_bufferFormat ), format(), m_buffer.data(), size() );
 			}
 		}
 	}
@@ -147,6 +147,14 @@ namespace Castor
 
 		case ePIXEL_FORMAT_A8B8G8R8:
 			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_A8B8G8R8 > >( p_size, p_buffer, p_eBufferFormat );
+			break;
+
+		case ePIXEL_FORMAT_RGB16F:
+			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_RGB16F > >( p_size, p_buffer, p_eBufferFormat );
+			break;
+
+		case ePIXEL_FORMAT_ARGB16F:
+			l_return = std::make_shared< PxBuffer< ePIXEL_FORMAT_ARGB16F > >( p_size, p_buffer, p_eBufferFormat );
 			break;
 
 		case ePIXEL_FORMAT_RGB16F32F:

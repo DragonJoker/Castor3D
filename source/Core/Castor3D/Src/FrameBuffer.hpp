@@ -180,66 +180,79 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
-		 *\param[in]	p_index			The attachment index
-		 *\param[in]	p_texture		The texture
-		 *\param[in]	p_target		The dimension to which the texture must be attached
-		 *\param[in]	p_layer			The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_point		The attachment point
+		 *\param[in]	p_index		The attachment index
+		 *\param[in]	p_texture	The texture
+		 *\param[in]	p_target	The dimension to which the texture must be attached
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
-		 *\param[in]	p_index			L'index d'attache
-		 *\param[in]	p_target		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer			La couche associée, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_point		Le point d'attache
+		 *\param[in]	p_index		L'index d'attache
+		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
-		 *\param[in]	p_texture		The texture
-		 *\param[in]	p_target		The dimension to which the texture must be attached
-		 *\param[in]	p_layer			The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_point		The attachment point
+		 *\param[in]	p_texture	The texture
+		 *\param[in]	p_target	The dimension to which the texture must be attached
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
-		 *\param[in]	p_texture		La texture
-		 *\param[in]	p_target		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer			La couche associée, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_point		Le point d'attache
+		 *\param[in]	p_texture	La texture
+		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
+		 *\param[in]	p_point			The attachment point
 		 *\param[in]	p_index			The attachment index
 		 *\param[in]	p_renderBuffer	The render buffer
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache un tampon de rendu à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
+		 *\param[in]	p_point			Le point d'attache
 		 *\param[in]	p_index			L'index d'attache
 		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
-		 *\param[in]	p_attachment	The attachment point
+		 *\param[in]	p_point			The attachment point
 		 *\param[in]	p_renderBuffer	The render buffer
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache un tampon de rendu à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_attachment	Le point d'attache
+		 *\param[in]	p_point			Le point d'attache
 		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_attachment, RenderBufferAttachmentSPtr p_renderBuffer );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, RenderBufferAttachmentSPtr p_renderBuffer );
+		/**
+		 *\~english
+		 *\brief		Retrieves a buffer attached at given attachment point and index.
+		 *\param[in]	p_point	The attachment point.
+		 *\param[in]	p_index	The attachment index.
+		 *\return		The attachment, \p nullptr if not found.
+		 *\~french
+		 *\brief		Récupère un tampon attaché au point et à l'index d'attache donnés.
+		 *\param[in]	p_point	Le point d'attache.
+		 *\param[in]	p_index	L'index d'attache.
+		 *\return		L'attache, \p nullptr si non trouvé.
+		 */
+		C3D_API FrameBufferAttachmentSPtr GetAttachment( eATTACHMENT_POINT p_point, uint8_t p_index );
 		/**
 		 *\~english
 		 *\brief		Detaches all attached objects
@@ -286,14 +299,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer source for pixels
-		 *\param[in]	p_attach	The color buffer
-		 *\param[in]	p_index		The attachment index
+		 *\param[in]	p_point	The color buffer
+		 *\param[in]	p_index	The attachment index
 		 *\~french
 		 *\brief		Définit le tampon de couleur source pour la lecture de pixels
-		 *\param[in]	p_attach	Le tampon de couleur
-		 *\param[in]	p_index		L'index d'attache
+		 *\param[in]	p_point	Le tampon de couleur
+		 *\param[in]	p_index	L'index d'attache
 		 */
-		C3D_API virtual void SetReadBuffer( eATTACHMENT_POINT p_attach, uint8_t p_index ) = 0;
+		C3D_API virtual void SetReadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a colour render buffer
@@ -346,14 +359,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Downloads the render buffer data.
-		 *\param[in]	p_attachment	The attachment point.
-		 *\param[in]	p_index			The attachment index.
-		 *\param[in]	p_buffer		Receives the data.
+		 *\param[in]	p_point		The attachment point.
+		 *\param[in]	p_index		The attachment index.
+		 *\param[in]	p_buffer	Receives the data.
 		 *\~french
 		 *\brief		Récupère les données du tampon de rendu.
-		 *\param[in]	p_attachment	Le point d'attache.
-		 *\param[in]	p_index			L'index d'attache.
-		 *\param[in]	p_buffer		Reçoit les données.
+		 *\param[in]	p_point		Le point d'attache.
+		 *\param[in]	p_index		L'index d'attache.
+		 *\param[in]	p_buffer	Reçoit les données.
 		 */
 		C3D_API virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer ) = 0;
 		/**
@@ -370,33 +383,26 @@ namespace Castor3D
 	protected:
 		/**
 		 *\~english
-		 *\param[in]	p_attachment	The attachment point.
+		 *\param[in]	p_point	The attachment point.
 		 *\param[in]	p_index			The attachment index.
 		 *\return		The samples count for attachment.
 		 *\~french
-		 *\param[in]	p_attachment	Le point d'attache.
+		 *\param[in]	p_point	Le point d'attache.
 		 *\param[in]	p_index			L'index d'attache.
 		 *\return		Le nombre d'échantillons pour l'attache.
 		 */
 		C3D_API uint32_t DoGetSamplesCount( eATTACHMENT_POINT p_point, uint8_t p_index );
 		/**
 		 *\~english
-		 *\param[in]	p_attachment	The attachment point.
+		 *\param[in]	p_point	The attachment point.
 		 *\param[in]	p_index			The attachment index.
 		 *\return		The pixel format for attachment.
 		 *\~french
-		 *\param[in]	p_attachment	Le point d'attache.
+		 *\param[in]	p_point	Le point d'attache.
 		 *\param[in]	p_index			L'index d'attache.
 		 *\return		Le format des pixels pour l'attache.
 		 */
 		C3D_API Castor::ePIXEL_FORMAT DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index );
-		/**
-		 *\~english
-		 *\brief		Defines the colour used when Context::Clear is called on the color buffer.
-		 *\~french
-		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur.
-		 */
-		C3D_API virtual void DoUpdateClearColour() = 0;
 		/**
 		 *\~english
 		 *\brief		Clears the given buffers components.

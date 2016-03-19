@@ -117,60 +117,6 @@ namespace Castor
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
-	\brief		Exponential recursive case
-	\remark		Valid for positive numbers
-	\~french
-	\brief		Cas récursif pour Exponentielle
-	\remark		Valide pour les nombres positifs
-	*/
-	template <int N, typename T> struct expPos
-	{
-		inline double operator()( T x )
-		{
-			return expPos < N - 1, T > ()( x ) + power<T, N>()( x ) / fact<double, N>()();
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Exponential end case
-	\remark		Valid for positive numbers
-	\~french
-	\brief		Cas d'arrêt pour Exponentielle
-	\remark		Valide pour les nombres positifs
-	*/
-	template< typename T > struct expPos<0, T>
-	{
-		inline double operator()( T x )
-		{
-			return 1.0;
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Exponential using template implementation
-	\~french
-	\brief		Exponentielle utilisant une implémentation template
-	*/
-	template< typename T > struct exp
-	{
-	private:
-		enum
-		{
-			Precision = 40
-		};
-	public:
-		inline double operator()( T x )
-		{
-			return ( x < 0.0 ? 1.0 / expPos<Precision, T>()( -x ) : expPos<Precision, T>()( x ) );
-//			return power<double, Precision>()( 1.0 + double( x) / double( Precision));
-		}
-	};
-	//************************************************************************************************
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
 	\brief		Neperian Logarithm recursive case
 	\~french
 	\brief		Cas récursif pour Logarithme Népérien

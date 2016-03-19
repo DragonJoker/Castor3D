@@ -65,14 +65,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual void Cleanup();
 		/**
-		 *\copydoc		Castor3D::Texture::Bind
-		 */
-		C3D_API virtual bool Bind( uint32_t p_index );
-		/**
-		 *\copydoc		Castor3D::Texture::Unbind
-		 */
-		C3D_API virtual void Unbind( uint32_t p_index );
-		/**
 		 *\~english
 		 *\brief		Defines the texture buffer
 		 *\param[in]	p_buffer	The buffer

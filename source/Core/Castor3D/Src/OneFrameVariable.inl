@@ -114,7 +114,16 @@
 	template< typename T >
 	inline void OneFrameVariable< T >::SetValue( T const & p_value, uint32_t p_index )
 	{
+		REQUIRE( p_index < this->m_occurences );
 		policy::assign( this->m_values[p_index], p_value );
+		TFrameVariable< T >::m_changed = true;
+	}
+
+	template< typename T >
+	inline void OneFrameVariable< T >::SetValues( T const * p_values, uint32_t p_size )
+	{
+		REQUIRE( p_size <= this->m_occurences );
+		std::memcpy( this->m_values, p_values, p_size * sizeof( T ) );
 		TFrameVariable< T >::m_changed = true;
 	}
 

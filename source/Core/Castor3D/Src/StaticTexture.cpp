@@ -40,6 +40,15 @@ namespace Castor3D
 		if ( !m_initialised )
 		{
 			m_initialised = DoInitialise();
+
+			if ( m_initialised && m_pixelBuffer && m_pixelBuffer->ptr() )
+			{
+				m_size = m_pixelBuffer->dimensions();
+				m_pixelFormat = m_pixelBuffer->format();
+				m_pixelBuffer->clear();
+				m_pixelBuffer.reset();
+			}
+
 		}
 		else
 		{
@@ -55,30 +64,5 @@ namespace Castor3D
 		{
 			m_initialised = false;
 		}
-	}
-
-	bool StaticTexture::Bind( uint32_t p_index )
-	{
-		bool l_return = false;
-
-		if ( m_initialised )
-		{
-			if ( m_pixelBuffer && m_pixelBuffer->ptr() )
-			{
-				m_size = m_pixelBuffer->dimensions();
-				m_pixelFormat = m_pixelBuffer->format();
-				m_pixelBuffer->clear();
-				m_pixelBuffer.reset();
-			}
-
-			l_return = DoBind( p_index );
-		}
-
-		return l_return;
-	}
-
-	void StaticTexture::Unbind( uint32_t p_index )
-	{
-		DoUnbind( p_index );
 	}
 }

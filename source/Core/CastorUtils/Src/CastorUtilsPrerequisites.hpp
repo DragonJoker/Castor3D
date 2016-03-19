@@ -97,6 +97,8 @@ namespace Castor
 		ePIXEL_FORMAT_B8G8R8,		//!< 24 bits 888 BGR
 		ePIXEL_FORMAT_A8R8G8B8,		//!< 32 bits 8888 ARGB
 		ePIXEL_FORMAT_A8B8G8R8,		//!< 32 bits 8888 ABGR
+		ePIXEL_FORMAT_RGB16F,		//!< Half float RGB
+		ePIXEL_FORMAT_ARGB16F,		//!< Half float ARGB
 		ePIXEL_FORMAT_RGB16F32F,	//!< Half float RGB on GPU, Float RGB on CPU
 		ePIXEL_FORMAT_ARGB16F32F,	//!< Half float ARGB on GPU, Float ARGB on CPU
 		ePIXEL_FORMAT_RGB32F,		//!< Float RGB
@@ -109,6 +111,7 @@ namespace Castor
 		ePIXEL_FORMAT_DEPTH24,		//!< Depth 24 bits
 		ePIXEL_FORMAT_DEPTH24S8,	//!< Depth 24 bits, Stencil 8 bits
 		ePIXEL_FORMAT_DEPTH32,		//!< Depth 32 bits
+		ePIXEL_FORMAT_DEPTH32F,		//!< Depth 32 bits floating point
 		ePIXEL_FORMAT_STENCIL1,		//!< Stencil 1 bit
 		ePIXEL_FORMAT_STENCIL8,		//!< Stencil 8 bits
 		ePIXEL_FORMAT_COUNT,

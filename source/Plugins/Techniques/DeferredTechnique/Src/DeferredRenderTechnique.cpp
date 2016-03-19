@@ -192,7 +192,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
-			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[i]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_ARGB32F );
+			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[i]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_ARGB16F32F );
 			m_lightPassTextures[i]->Initialise();
 			p_index++;
 		}
@@ -274,12 +274,12 @@ namespace Deferred
 		return m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
 	}
 
-	bool RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
+	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
 		m_renderTarget->GetRasteriserState()->Apply();
 		//m_geometryPassDsState->Apply();
-		return Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
+		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()

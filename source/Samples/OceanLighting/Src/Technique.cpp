@@ -1120,7 +1120,7 @@ namespace OceanLighting
 		return true;
 	}
 
-	bool RenderTechnique::DoRender( RenderTechnique::stSCENE_RENDER_NODES & CU_PARAM_UNUSED( p_nodes ), Camera & CU_PARAM_UNUSED( p_camera ), double CU_PARAM_UNUSED( p_dFrameTime ) )
+	void RenderTechnique::DoRender( RenderTechnique::stSCENE_RENDER_NODES & CU_PARAM_UNUSED( p_nodes ), Camera & CU_PARAM_UNUSED( p_camera ), double CU_PARAM_UNUSED( p_dFrameTime ) )
 	{
 		Pipeline & l_pPipeline = GetEngine()->GetRenderSystem()->GetPipeline();
 		Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
@@ -1149,7 +1149,6 @@ namespace OceanLighting
 		m_pTexSky->Unbind( SKY_UNIT );
 		Image l_image( cuT( "Skymap" ), *m_pAttachSky->DownloadBuffer() );
 		Image::BinaryLoader()( const_cast< const Image & >( l_image ), cuT( "Skymap.bmp" ) );
-		return true;
 	}
 
 	void RenderTechnique::DoEndRender()

@@ -178,6 +178,55 @@ namespace Castor3D
 		inline void SetValue( T const & p_value, uint32_t p_index );
 		/**
 		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\param[in]	p_size		The values count.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 *\param[in]	p_size		Le nombre de valeurs.
+		 */
+		inline void SetValues( T const * p_values, uint32_t p_size );
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		template< uint32_t N >
+		inline void SetValues( T const ( & p_values )[N] )
+		{
+			SetValues( p_values, N );
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		template< uint32_t N >
+		inline void SetValues( std::array< T, N > const & p_values )
+		{
+			SetValues( p_values.data(), N );
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		inline void SetValues( std::vector< T > const & p_values )
+		{
+			SetValues( p_values.data(), uint32_t( p_values.size() ) );
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the byte size of the variable
 		 *\return		The size
 		 *\~french

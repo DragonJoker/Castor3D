@@ -74,13 +74,15 @@ namespace Castor3D
 		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render function, applies the effect to its render target.
+		 *\brief		Render function, applies the effect to the given framebuffer.
+		 *\param[in,out]p_framebuffer	The framebuffer.
 		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction de rendu, applique l'effet sur sa render target.
+		 *\brief		Fonction de rendu, applique l'effet au tampon d'image donné.
+		 *\param[in,out]p_framebuffer	Le tampon d'image.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Apply() = 0;
+		C3D_API virtual bool Apply( FrameBuffer & p_framebuffer ) = 0;
 
 	protected:
 		//!\~english The render system.	\~french Le render system.

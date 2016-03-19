@@ -36,7 +36,6 @@ namespace Castor3D
 	void FrameBuffer::SetClearColour( Castor::Colour const & p_clrClear )
 	{
 		m_clearColour = p_clrClear;
-		DoUpdateClearColour();
 	}
 
 	void FrameBuffer::Clear()
@@ -101,26 +100,43 @@ namespace Castor3D
 		DoUnbind();
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
 	{
 		p_texture->SetTarget( p_target );
 		p_texture->SetLayer( p_layer );
-		return DoAttach( p_attachment, p_index, p_texture );
+		return DoAttach( p_point, p_index, p_texture );
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
 	{
-		return Attach( p_attachment, 0, p_texture, p_target, p_layer );
+		return Attach( p_point, 0, p_texture, p_target, p_layer );
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		return DoAttach( p_attachment, p_index, p_renderBuffer );
+		return DoAttach( p_point, p_index, p_renderBuffer );
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_attachment, RenderBufferAttachmentSPtr p_renderBuffer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		return Attach( p_attachment, 0, p_renderBuffer );
+		return Attach( p_point, 0, p_renderBuffer );
+	}
+
+	FrameBufferAttachmentSPtr FrameBuffer::GetAttachment( eATTACHMENT_POINT p_point, uint8_t p_index )
+	{
+		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point, &p_index]( FrameBufferAttachmentSPtr p_attach )
+		{
+			return p_attach->GetAttachmentIndex() == p_index && p_attach->GetAttachmentPoint() == p_point;
+		} );
+
+		FrameBufferAttachmentSPtr l_return;
+
+		if ( l_it != m_attaches.end() )
+		{
+			l_return = *l_it;
+		}
+
+		return l_return;
 	}
 
 	void FrameBuffer::DetachAll()

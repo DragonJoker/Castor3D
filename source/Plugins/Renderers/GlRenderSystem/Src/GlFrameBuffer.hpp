@@ -121,10 +121,6 @@ namespace GlRender
 		 */
 		virtual bool DoStretchInto( Castor3D::FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, Castor3D::eINTERPOLATION_MODE p_interpolation );
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::DoUpdateClearColour
-		 */
-		virtual void DoUpdateClearColour();
-		/**
 		 *\copydoc		Castor3D::FrameBuffer::DoClear
 		 */
 		virtual void DoClear( uint32_t p_targets );

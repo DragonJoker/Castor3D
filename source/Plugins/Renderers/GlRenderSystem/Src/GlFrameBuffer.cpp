@@ -121,13 +121,9 @@ namespace GlRender
 		return std::make_shared< GlTextureAttachment >( GetOpenGl(), p_texture );
 	}
 
-	void GlFrameBuffer::DoUpdateClearColour()
-	{
-		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
-	}
-
 	void GlFrameBuffer::DoClear( uint32_t p_uiTargets )
 	{
+		GetOpenGl().ClearColor( GetClearColour().red(), GetClearColour().green(), GetClearColour().blue(), GetClearColour().alpha() );
 		GetOpenGl().Clear( GetOpenGl().GetComponents( p_uiTargets ) );
 	}
 

@@ -7,6 +7,7 @@
 #include <Context.hpp>
 #include <DynamicTexture.hpp>
 #include <Engine.hpp>
+#include <FrameBufferAttachment.hpp>
 #include <FrameVariableBuffer.hpp>
 #include <GeometryBuffers.hpp>
 #include <OneFrameVariable.hpp>
@@ -17,6 +18,7 @@
 #include <RenderWindow.hpp>
 #include <SamplerManager.hpp>
 #include <ShaderManager.hpp>
+#include <TextureAttachment.hpp>
 #include <TextureUnit.hpp>
 #include <Vertex.hpp>
 #include <VertexBuffer.hpp>
@@ -109,9 +111,14 @@ namespace Bloom
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				LOCALE_ASSIGN( l_writer, Vec2, l_offset, vec2( c3d_fOffsetX, c3d_fOffsetY ) );
-				plx_v4FragColor  = c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture - l_offset );
-				plx_v4FragColor += c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture );
-				plx_v4FragColor += c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture + l_offset );
+				plx_v4FragColor = c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture );
+
+				FOR( l_writer, Int, i, 0, cuT( "i < 3" ), cuT( "++i" ) )
+				{
+					plx_v4FragColor += c3d_fCoefficients[i] * texture2D( c3d_mapDiffuse, vtx_texture - l_offset );
+					plx_v4FragColor += c3d_fCoefficients[i] * texture2D( c3d_mapDiffuse, vtx_texture + l_offset );
+				}
+				ROF;
 			} );
 			return l_writer.Finalise();
 		}
@@ -150,56 +157,27 @@ namespace Bloom
 	{
 	}
 
-	bool BloomPostEffect::BloomPostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, bool p_linear )
+	bool BloomPostEffect::BloomPostEffectSurface::Initialise( RenderTarget & p_renderTarget, Size const & p_size, uint32_t p_index, SamplerSPtr p_sampler )
 	{
 		bool l_return = false;
 		m_size = p_size;
 		m_colourTexture = std::make_shared< TextureUnit >( *p_renderTarget.GetEngine() );
 		m_colourTexture->SetIndex( p_index );
 
-		String l_name = cuT( "BloomSampler_" );
-		eINTERPOLATION_MODE l_mode;
-
-		if ( p_linear )
-		{
-			l_name += cuT( "Linear" );
-			l_mode = eINTERPOLATION_MODE_ANISOTROPIC;
-		}
-		else
-		{
-			l_name += cuT( "Nearest" );
-			l_mode = eINTERPOLATION_MODE_NEAREST;
-		}
-
-		SamplerSPtr l_sampler;
-
-		if ( !p_renderTarget.GetEngine()->GetSamplerManager().Has( l_name ) )
-		{
-			l_sampler = p_renderTarget.GetEngine()->GetSamplerManager().Create( l_name );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, l_mode );
-			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, l_mode );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_BORDER );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_BORDER );
-			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_BORDER );
-		}
-		else
-		{
-			l_sampler = p_renderTarget.GetEngine()->GetSamplerManager().Find( l_name );
-		}
-
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		auto l_colourTexture = p_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
-		m_colourTexture->SetSampler( l_sampler );
+		m_colourTexture->SetSampler( p_sampler );
 		l_colourTexture->SetRenderTarget( p_renderTarget.shared_from_this() );
 		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
 
 		l_colourTexture->SetType( eTEXTURE_TYPE_2D );
-		l_colourTexture->SetImage( p_size, ePIXEL_FORMAT_R8G8B8 );
+		l_colourTexture->SetImage( p_size, ePIXEL_FORMAT_A8R8G8B8 );
 		m_fbo->Create( 0 );
 		m_colourTexture->SetTexture( l_colourTexture );
 		m_colourTexture->Initialise();
 		m_fbo->Initialise( p_size );
+		m_fbo->SetClearColour( Colour::from_predef( Colour::ePREDEFINED_FULLALPHA_BLACK ) );
 
 		if ( m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
@@ -275,6 +253,9 @@ namespace Bloom
 		{
 			l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_buffer )[i++ * m_declaration.GetStride()] );
 		}
+
+		m_linearSampler = DoCreateSampler( true );
+		m_nearestSampler = DoCreateSampler( false );
 	}
 
 	BloomPostEffect::~BloomPostEffect()
@@ -320,7 +301,7 @@ namespace Bloom
 			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 			m_filterMapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 			auto l_filterConfig = m_renderSystem->CreateFrameVariableBuffer( FilterConfig );
-			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigCoefficients, 3 ) );
+			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigCoefficients, KERNEL_SIZE ) );
 			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetX ) );
 			m_filterOffsetY = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetY ) );
 			l_program->AddFrameVariableBuffer( l_filterConfig, MASK_SHADER_TYPE_PIXEL );
@@ -360,7 +341,7 @@ namespace Bloom
 
 		for ( auto && l_surface : m_hiPassSurfaces )
 		{
-			l_surface.Initialise( m_renderTarget, l_size, l_index++, true );
+			l_surface.Initialise( m_renderTarget, l_size, l_index++, m_linearSampler );
 			l_size.width() >>= 1;
 			l_size.height() >>= 1;
 		}
@@ -370,7 +351,7 @@ namespace Bloom
 
 		for ( auto && l_surface : m_blurSurfaces )
 		{
-			l_surface.Initialise( m_renderTarget, l_size, l_index++, false );
+			l_surface.Initialise( m_renderTarget, l_size, l_index++, m_nearestSampler );
 			l_size.width() >>= 1;
 			l_size.height() >>= 1;
 		}
@@ -402,39 +383,42 @@ namespace Bloom
 		}
 	}
 
-	bool BloomPostEffect::Apply()
+	bool BloomPostEffect::Apply( FrameBuffer & p_framebuffer )
 	{
-		m_renderTarget.GetFrameBuffer()->Unbind();
+		auto l_attach = p_framebuffer.GetAttachment( eATTACHMENT_POINT_COLOUR, 0 );
 
-		if ( DoHiPassFilter() )
+		if ( l_attach && l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 		{
-			DoDownSample();
-			DoBlur( m_hiPassSurfaces, m_blurSurfaces, FILTER_COUNT, m_filterOffsetX, m_offsetX );
-			DoBlur( m_blurSurfaces, m_hiPassSurfaces, FILTER_COUNT, m_filterOffsetY, m_offsetY );
-			DoCombine();
+			m_colourTexture = std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture();
+
+			if ( DoHiPassFilter() )
+			{
+				DoDownSample();
+				DoBlur( m_hiPassSurfaces, m_blurSurfaces, m_filterOffsetX, m_offsetX );
+				DoBlur( m_blurSurfaces, m_hiPassSurfaces, m_filterOffsetY, m_offsetY );
+				DoCombine();
+			}
+
+			if ( p_framebuffer.Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
+			{
+				m_renderSystem->GetCurrentContext()->RenderTexture( m_colourTexture->GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
+				p_framebuffer.Unbind();
+			}
 		}
 
-		if ( m_renderTarget.GetFrameBuffer()->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
-		{
-			m_renderSystem->GetCurrentContext()->RenderTexture( m_renderTarget.GetSize(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
-			m_renderTarget.GetFrameBuffer()->Unbind();
-		}
-
-		return m_renderTarget.GetFrameBuffer()->Bind();
+		return true;
 	}
 
 	bool BloomPostEffect::DoHiPassFilter()
 	{
-		bool l_return = false;
 		auto l_source = &m_hiPassSurfaces[0];
+		bool l_return = l_source->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 
-		if ( l_source->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
+		if ( l_return )
 		{
-			l_return = true;
-			auto l_context = m_renderSystem->GetCurrentContext();
 			l_source->m_fbo->Clear();
 			m_hiPassMapDiffuse->SetValue( 0 );
-			l_context->RenderTexture( l_source->m_size, *m_renderTarget.GetTexture().GetTexture(), m_hiPassProgram.lock() );
+			m_renderSystem->GetCurrentContext()->RenderTexture( l_source->m_size, *m_colourTexture, m_hiPassProgram.lock() );
 			l_source->m_fbo->Unbind();
 		}
 
@@ -452,6 +436,7 @@ namespace Bloom
 
 			if ( l_destination->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
+				l_destination->m_fbo->Clear();
 				l_context->RenderTexture( l_destination->m_size, *l_source->m_colourTexture->GetTexture() );
 				l_destination->m_fbo->Unbind();
 			}
@@ -460,23 +445,21 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
+	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
 	{
 		auto l_context = m_renderSystem->GetCurrentContext();
-
-		m_filterCoefficients->SetValue( m_kernel[0], 0 );
-		m_filterCoefficients->SetValue( m_kernel[1], 1 );
-		m_filterCoefficients->SetValue( m_kernel[2], 2 );
+		m_filterCoefficients->SetValues( m_kernel );
 		m_filterOffsetX->SetValue( 0 );
 		m_filterOffsetY->SetValue( 0 );
 
-		for ( uint32_t i = 0; i < p_count; ++i )
+		for ( uint32_t i = 0; i < FILTER_COUNT; ++i )
 		{
 			auto l_source = &p_sources[i];
 			auto l_destination = &p_destinations[i];
 
 			if ( l_destination->m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
+				l_destination->m_fbo->Clear();
 				p_offset->SetValue( p_offsetValue / l_source->m_size.width() );
 				l_context->RenderTexture( l_source->m_size, *l_source->m_colourTexture->GetTexture(), m_filterProgram.lock() );
 				l_destination->m_fbo->Unbind();
@@ -488,18 +471,19 @@ namespace Bloom
 	{
 		if ( m_blurSurfaces[0].m_fbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
+			m_blurSurfaces[0].m_fbo->Clear();
 			ShaderProgramSPtr l_program = m_combineProgram.lock();
 
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
-				m_viewport.SetSize( m_renderTarget.GetSize() );
+				m_viewport.SetSize( m_colourTexture->GetDimensions() );
 				m_viewport.Render( m_renderSystem->GetPipeline() );
 
 				auto const & l_texture0 = *m_hiPassSurfaces[0].m_colourTexture;
 				auto const & l_texture1 = *m_hiPassSurfaces[1].m_colourTexture;
 				auto const & l_texture2 = *m_hiPassSurfaces[2].m_colourTexture;
 				auto const & l_texture3 = *m_hiPassSurfaces[3].m_colourTexture;
-				auto const & l_texture4 = m_renderTarget.GetTexture();
+				auto const & l_texture4 = m_colourTexture;
 				FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 
 				if ( l_matrices )
@@ -513,8 +497,8 @@ namespace Bloom
 				l_texture1.Bind();
 				l_texture2.Bind();
 				l_texture3.Bind();
-				l_texture4.GetTexture()->Bind( 4 );
-				l_texture4.GetSampler()->Bind( 4 );
+				m_colourTexture->Bind( 4 );
+				m_linearSampler->Bind( 4 );
 
 				m_geometryBuffers->Draw( uint32_t( m_vertices.size() ), 0 );
 
@@ -522,8 +506,8 @@ namespace Bloom
 				l_texture1.Unbind();
 				l_texture2.Unbind();
 				l_texture3.Unbind();
-				l_texture4.GetTexture()->Unbind( 4 );
-				l_texture4.GetSampler()->Unbind( 4 );
+				m_colourTexture->Unbind( 4 );
+				m_linearSampler->Unbind( 4 );
 
 				l_program->Unbind();
 			}
@@ -534,5 +518,36 @@ namespace Bloom
 			m_blurSurfaces[0].m_colourTexture->GetTexture()->GenerateMipmaps();
 			m_blurSurfaces[0].m_colourTexture->Unbind();
 		}
+	}
+
+	SamplerSPtr BloomPostEffect::DoCreateSampler( bool p_linear )
+	{
+		String l_name = cuT( "BloomSampler_" );
+		eINTERPOLATION_MODE l_mode;
+
+		if ( p_linear )
+		{
+			l_name += cuT( "Linear" );
+			l_mode = eINTERPOLATION_MODE_ANISOTROPIC;
+		}
+		else
+		{
+			l_name += cuT( "Nearest" );
+			l_mode = eINTERPOLATION_MODE_NEAREST;
+		}
+
+		SamplerSPtr l_sampler;
+
+		if ( !m_renderTarget.GetEngine()->GetSamplerManager().Has( l_name ) )
+		{
+			l_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Create( l_name );
+			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, l_mode );
+			l_sampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, l_mode );
+			l_sampler->SetWrappingMode( eTEXTURE_UVW_U, eWRAP_MODE_CLAMP_TO_BORDER );
+			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_BORDER );
+			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_BORDER );
+		}
+
+		return l_sampler;
 	}
 }

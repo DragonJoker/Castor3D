@@ -326,6 +326,16 @@ file( GLOB ${PROJECT_NAME}_Binary_SOURCE_FILES
 source_group( "Header Files\\Binary" FILES ${${PROJECT_NAME}_Binary_HEADER_FILES} )
 source_group( "Source Files\\Binary" FILES ${${PROJECT_NAME}_Binary_SOURCE_FILES} )
 
+file( GLOB ${PROJECT_NAME}_HDR_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*ToneMapping*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*ToneMapping*.inl
+)
+file( GLOB ${PROJECT_NAME}_HDR_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*ToneMapping*.cpp
+)
+source_group( "Header Files\\HDR" FILES ${${PROJECT_NAME}_HDR_HEADER_FILES} )
+source_group( "Source Files\\HDR" FILES ${${PROJECT_NAME}_HDR_SOURCE_FILES} )
+
 file( GLOB ${PROJECT_NAME}_Miscellaneous_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Generator*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parameter*.hpp

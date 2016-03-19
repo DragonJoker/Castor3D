@@ -28,14 +28,15 @@
 #include "VersionException.hpp"
 #include "WindowManager.hpp"
 
-#include <Logger.hpp>
+#include <DynamicLibrary.hpp>
 #include <Factory.hpp>
 #include <File.hpp>
-#include <Utils.hpp>
-#include <DynamicLibrary.hpp>
+#include <Image.hpp>
+#include <Logger.hpp>
 #include <PreciseTimer.hpp>
 #include <Templates.hpp>
 #include <UniqueObjectPool.hpp>
+#include <Utils.hpp>
 
 using namespace Castor;
 
@@ -54,6 +55,7 @@ namespace Castor3D
 		, m_threaded( false )
 	{
 		std::locale::global( std::locale() );
+		Image::BinaryLoader::InitialiseImageLib();
 
 		m_shaderManager = std::make_unique< ShaderManager >( *this );
 		m_samplerManager = std::make_unique< SamplerManager >( *this );
@@ -119,6 +121,7 @@ namespace Castor3D
 		}
 
 		m_pluginManager->Clear();
+		Image::BinaryLoader::CleanupImageLib();
 	}
 
 	void Engine::Initialise( uint32_t p_wanted, bool p_threaded )

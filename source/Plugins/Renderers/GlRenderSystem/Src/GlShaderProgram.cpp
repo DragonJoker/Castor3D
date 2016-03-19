@@ -112,13 +112,6 @@ namespace GlRender
 	{
 		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
 		{
-			uint32_t l_index = 0;
-
-			for ( auto l_variableBuffer : m_listFrameVariableBuffers )
-			{
-				l_variableBuffer->Unbind( l_index++ );
-			}
-
 			DoUnbind();
 			GetOpenGl().UseProgram( 0 );
 		}

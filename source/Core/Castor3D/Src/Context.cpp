@@ -16,6 +16,8 @@
 #include "Vertex.hpp"
 #include "Viewport.hpp"
 
+#include <GlslSource.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
@@ -70,6 +72,55 @@ namespace Castor3D
 		m_pDsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthWriterState" ) );
 		m_pDsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
 		bool l_return = DoInitialise();
+
+		{
+			using namespace GLSL;
+			String l_strVtxShader;
+			{
+				// Vertex shader
+				auto l_writer = GetRenderSystem()->CreateGlslWriter();
+
+				UBO_MATRIX( l_writer );
+
+				// Shader inputs
+				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+
+				// Shader outputs
+				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+				{
+					vtx_texture = texture;
+					gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+				} );
+				l_strVtxShader = l_writer.Finalise();
+			}
+
+			String l_strPxlShader;
+			{
+				auto l_writer = GetRenderSystem()->CreateGlslWriter();
+
+				// Shader inputs
+				auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+
+				// Shader outputs
+				auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+				{
+					plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.X, vtx_texture.Y ) ).XYZ, 1.0 );
+				} );
+				l_strPxlShader = l_writer.Finalise();
+			}
+
+			eSHADER_MODEL l_model = GetRenderSystem()->GetMaxShaderModel();
+			ShaderProgramSPtr l_program = m_renderTextureProgram.lock();
+			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVtxShader );
+			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPxlShader );
+		}
 
 		if ( l_return )
 		{
@@ -150,17 +201,17 @@ namespace Castor3D
 		DoSetAlphaFunc( p_func, p_value );
 	}
 
-	void Context::RenderTexture( Castor::Size const & p_size, Texture & p_texture )
+	void Context::RenderTexture( Castor::Size const & p_size, Texture const & p_texture )
 	{
 		DoRenderTexture( p_size, p_texture, m_geometryBuffers, m_renderTextureProgram.lock() );
 	}
 
-	void Context::RenderTexture( Castor::Size const & p_size, Texture & p_texture, ShaderProgramSPtr p_program )
+	void Context::RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program )
 	{
 		DoRenderTexture( p_size, p_texture, m_geometryBuffers, p_program );
 	}
 
-	void Context::DoRenderTexture( Castor::Size const & p_size, Texture & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program )
+	void Context::DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program )
 	{
 		ShaderProgramSPtr l_program = p_program;
 		m_viewport.SetSize( p_size );

@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\param[in]	p_size			La taille du viewport de rendu.
 		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, Texture & p_texture );
+		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
@@ -140,7 +140,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, Texture & p_texture, ShaderProgramSPtr p_program );
+		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program );
 		/**
 		 *\~english
 		 *\brief		Changes fullscreen status
@@ -306,7 +306,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program );
 
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte

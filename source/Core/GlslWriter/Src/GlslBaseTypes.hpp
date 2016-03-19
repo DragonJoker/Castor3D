@@ -26,6 +26,8 @@ namespace GLSL
 			: public Type
 	{
 		inline Int();
+		inline Int( Int && p_value );
+		inline Int( Int const & p_value );
 		inline Int( Type const & p_value );
 		inline Int( int p_value );
 		inline Int( float p_value );
@@ -44,11 +46,15 @@ namespace GLSL
 			: public Type
 	{
 		inline Float();
+		inline Float( Float && p_value );
+		inline Float( Float const & p_value );
 		inline Float( Type const & p_value );
 		inline Float( int p_value );
 		inline Float( float p_value );
+		inline Float( double p_value );
 		inline Float( GlslWriter * p_writer, int p_value );
 		inline Float( GlslWriter * p_writer, float p_value );
+		inline Float( GlslWriter * p_writer, double p_value );
 		inline Float( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
 		inline Float & operator=( Float const & p_rhs );
 		template< typename T > inline Float & operator=( T const & p_rhs );

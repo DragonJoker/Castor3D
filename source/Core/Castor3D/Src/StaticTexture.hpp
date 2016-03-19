@@ -71,14 +71,6 @@ namespace Castor3D
 		 *\copydoc		Castor3D::Texture::Cleanup
 		 */
 		C3D_API virtual void Cleanup();
-		/**
-		 *\copydoc		Castor3D::Texture::Bind
-		 */
-		C3D_API virtual bool Bind( uint32_t p_index );
-		/**
-		 *\copydoc		Castor3D::Texture::Unbind
-		 */
-		C3D_API virtual void Unbind( uint32_t p_index );
 
 		using Texture::SetImage;
 	};

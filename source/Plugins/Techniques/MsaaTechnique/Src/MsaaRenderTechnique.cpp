@@ -11,6 +11,7 @@
 #include <RasteriserStateManager.hpp>
 #include <RenderSystem.hpp>
 #include <Engine.hpp>
+#include <Scene.hpp>
 #include <Parameter.hpp>
 #include <ShaderProgram.hpp>
 #include <DynamicTexture.hpp>
@@ -36,8 +37,8 @@ namespace Msaa
 
 		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 		m_msFrameBuffer = m_renderSystem->CreateFrameBuffer();
-		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( m_renderTarget->GetPixelFormat() );
-		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget->GetDepthFormat() );
+		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_ARGB16F32F );
+		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32 );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
 		RasteriserStateSPtr l_pRasteriser = GetEngine()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
@@ -124,10 +125,18 @@ namespace Msaa
 
 	bool RenderTechnique::DoBeginRender()
 	{
-		return m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+		bool l_return = m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+
+		if ( l_return )
+		{
+			m_msFrameBuffer->SetClearColour( GetEngine()->GetRenderSystem()->GetTopScene()->GetBackgroundColour() );
+			m_msFrameBuffer->Clear();
+		}
+
+		return l_return;
 	}
 
-	bool RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
+	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
 
@@ -140,13 +149,13 @@ namespace Msaa
 			m_wpMsRasteriserState.lock()->Apply();
 		}
 
-		return Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
+		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
 	{
 		m_msFrameBuffer->Unbind();
-		m_msFrameBuffer->BlitInto( m_renderTarget->GetFrameBuffer(), m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
-		m_renderTarget->GetFrameBuffer()->Bind();
+		m_msFrameBuffer->BlitInto( m_frameBuffer.m_frameBuffer, m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
+		m_frameBuffer.m_frameBuffer->Bind();
 	}
 }

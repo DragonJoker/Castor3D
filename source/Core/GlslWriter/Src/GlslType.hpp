@@ -31,6 +31,7 @@ namespace GLSL
 	{
 		GlslWriter_API Type( Castor::String const & p_type );
 		GlslWriter_API Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		GlslWriter_API Type( Type && p_rhs );
 		GlslWriter_API Type( Type const & p_rhs );
 		GlslWriter_API virtual ~Type();
 		GlslWriter_API Type & operator=( Type const & p_rhs );

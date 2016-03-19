@@ -28,6 +28,13 @@ namespace GLSL
 	{
 	}
 
+	Type::Type( Type && p_value )
+		: Expr( std::move( p_value ) )
+		, m_name( std::move( p_value.m_name ) )
+		, m_type( std::move( p_value.m_type ) )
+	{
+	}
+
 	Type::~Type()
 	{
 	}

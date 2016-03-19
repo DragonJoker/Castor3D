@@ -286,6 +286,8 @@ namespace GlRender
 		PixelFormats[ePIXEL_FORMAT_B8G8R8] = PixelFmt( eGL_FORMAT_RGB, eGL_INTERNAL_RGB8, eGL_TYPE_UNSIGNED_BYTE );
 		PixelFormats[ePIXEL_FORMAT_A8R8G8B8] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
 		PixelFormats[ePIXEL_FORMAT_A8B8G8R8] = PixelFmt( eGL_FORMAT_RGBA, eGL_INTERNAL_RGBA8, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[ePIXEL_FORMAT_RGB16F] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB16F, eGL_TYPE_HALF_FLOAT );
+		PixelFormats[ePIXEL_FORMAT_ARGB16F] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA16F, eGL_TYPE_HALF_FLOAT );
 		PixelFormats[ePIXEL_FORMAT_RGB16F32F] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB16F, eGL_TYPE_FLOAT );
 		PixelFormats[ePIXEL_FORMAT_ARGB16F32F] = PixelFmt( eGL_FORMAT_BGRA, eGL_INTERNAL_RGBA16F, eGL_TYPE_FLOAT );
 		PixelFormats[ePIXEL_FORMAT_RGB32F] = PixelFmt( eGL_FORMAT_BGR, eGL_INTERNAL_RGB32F, eGL_TYPE_FLOAT );
@@ -298,6 +300,7 @@ namespace GlRender
 		PixelFormats[ePIXEL_FORMAT_DEPTH24] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT24, eGL_TYPE_UNSIGNED_BYTE );
 		PixelFormats[ePIXEL_FORMAT_DEPTH24S8] = PixelFmt( eGL_FORMAT_DEPTH_STENCIL, eGL_INTERNAL_DEPTH24_STENCIL8, eGL_TYPE_UNSIGNED_INT_24_8 );
 		PixelFormats[ePIXEL_FORMAT_DEPTH32] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT32, eGL_TYPE_UNSIGNED_BYTE );
+		PixelFormats[ePIXEL_FORMAT_DEPTH32F] = PixelFmt( eGL_FORMAT_DEPTH, eGL_INTERNAL_DEPTH_COMPONENT32, eGL_TYPE_FLOAT );
 		PixelFormats[ePIXEL_FORMAT_STENCIL1] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX1, eGL_TYPE_UNSIGNED_BYTE );
 		PixelFormats[ePIXEL_FORMAT_STENCIL8] = PixelFmt( eGL_FORMAT_STENCIL, eGL_INTERNAL_STENCIL_INDEX8, eGL_TYPE_UNSIGNED_BYTE );
 
@@ -321,6 +324,8 @@ namespace GlRender
 		Internals[ePIXEL_FORMAT_B8G8R8] = eGL_INTERNAL_FORMAT_RGBA32UI;
 		Internals[ePIXEL_FORMAT_A8R8G8B8] = eGL_INTERNAL_FORMAT_RGBA32UI;
 		Internals[ePIXEL_FORMAT_A8B8G8R8] = eGL_INTERNAL_FORMAT_RGBA32UI;
+		Internals[ePIXEL_FORMAT_RGB16F] = eGL_INTERNAL_FORMAT_RGBA16F;
+		Internals[ePIXEL_FORMAT_ARGB16F] = eGL_INTERNAL_FORMAT_RGBA16F;
 		Internals[ePIXEL_FORMAT_RGB16F32F] = eGL_INTERNAL_FORMAT_RGBA16F;
 		Internals[ePIXEL_FORMAT_ARGB16F32F] = eGL_INTERNAL_FORMAT_RGBA16F;
 		Internals[ePIXEL_FORMAT_RGB32F] = eGL_INTERNAL_FORMAT_RGBA32F;
@@ -353,6 +358,8 @@ namespace GlRender
 		RboStorages[ePIXEL_FORMAT_B8G8R8] = eGL_RENDERBUFFER_STORAGE_RGB8;
 		RboStorages[ePIXEL_FORMAT_A8R8G8B8] = eGL_RENDERBUFFER_STORAGE_RGBA8;
 		RboStorages[ePIXEL_FORMAT_A8B8G8R8] = eGL_RENDERBUFFER_STORAGE_RGBA8;
+		RboStorages[ePIXEL_FORMAT_RGB16F] = eGL_RENDERBUFFER_STORAGE_RGB16F;
+		RboStorages[ePIXEL_FORMAT_ARGB16F] = eGL_RENDERBUFFER_STORAGE_RGBA16F;
 		RboStorages[ePIXEL_FORMAT_RGB16F32F] = eGL_RENDERBUFFER_STORAGE_RGB16F;
 		RboStorages[ePIXEL_FORMAT_ARGB16F32F] = eGL_RENDERBUFFER_STORAGE_RGBA16F;
 		RboStorages[ePIXEL_FORMAT_RGB32F] = eGL_RENDERBUFFER_STORAGE_RGB32F;
@@ -365,6 +372,7 @@ namespace GlRender
 		RboStorages[ePIXEL_FORMAT_DEPTH24] = eGL_RENDERBUFFER_STORAGE_DEPTH24;
 		RboStorages[ePIXEL_FORMAT_DEPTH24S8] = eGL_RENDERBUFFER_STORAGE_DEPTH24;
 		RboStorages[ePIXEL_FORMAT_DEPTH32] = eGL_RENDERBUFFER_STORAGE_DEPTH32;
+		RboStorages[ePIXEL_FORMAT_DEPTH32F] = eGL_RENDERBUFFER_STORAGE_DEPTH32F;
 		RboStorages[ePIXEL_FORMAT_STENCIL1] = eGL_RENDERBUFFER_STORAGE_STENCIL1;
 		RboStorages[ePIXEL_FORMAT_STENCIL8] = eGL_RENDERBUFFER_STORAGE_STENCIL8;
 
@@ -469,7 +477,6 @@ namespace GlRender
 		m_vendor = string::string_cast< xchar >( ( char const * )glGetString( GL_VENDOR ) );
 		m_renderer = string::string_cast< xchar >( ( char const * )glGetString( GL_RENDERER ) );
 		m_version = string::string_cast< xchar >( ( char const * )glGetString( GL_VERSION ) );
-		String l_strExtensions = m_extensions;
 		double l_version;
 		StringStream l_stream( m_version );
 		l_stream >> l_version;
@@ -1176,6 +1183,17 @@ namespace GlRender
 		}
 
 		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+	}
+
+	void OpenGl::DisplayExtensions()const
+	{
+		auto l_array = string::split( m_extensions, cuT( " " ), 0xFFFFFFFF, false );
+		std::sort( l_array.begin(), l_array.end() );
+
+		for ( auto l_extension : l_array )
+		{
+			Logger::LogDebug( l_extension );
+		}
 	}
 
 //*************************************************************************************************

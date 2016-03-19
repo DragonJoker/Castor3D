@@ -50,11 +50,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		inline FunctorEvent( FunctorEvent const & p_copy )
-			: FrameEvent( p_copy )
-			, m_functor( p_copy.m_functor )
-		{
-		}
+		inline FunctorEvent( FunctorEvent const & p_copy ) = delete;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -63,13 +59,7 @@ namespace Castor3D
 		 *\brief		Opérateur d'affectation par copie
 		 *\param[in]	p_copy	L'objet à copier
 		 */
-		inline FunctorEvent & operator=( FunctorEvent const & p_copy )
-		{
-			FunctorEvent l_evt( p_copy );
-			std::swap( m_functor, l_evt.m_functor );
-			std::swap( m_type, l_evt.m_type );
-			return *this;
-		}
+		inline FunctorEvent & operator=( FunctorEvent const & p_copy ) = delete;
 
 	public:
 		/**
