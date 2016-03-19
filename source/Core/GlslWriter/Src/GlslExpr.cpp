@@ -46,10 +46,10 @@ namespace GLSL
 		m_value << p_rhs.m_value.rdbuf();
 	}
 
-	Expr::Expr( Expr && p_value )
-		: m_writer( std::move( p_value.m_writer ) )
-		, m_value( std::move( p_value.m_value ) )
+	Expr::Expr( Expr && p_rhs )
+		: m_writer( std::move( p_rhs.m_writer ) )
 	{
+		m_value << p_rhs.m_value.rdbuf();
 	}
 
 	Expr::~Expr()
