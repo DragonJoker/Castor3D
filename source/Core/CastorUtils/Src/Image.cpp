@@ -3,7 +3,6 @@
 #include "Rectangle.hpp"
 #include "BinaryFile.hpp"
 #include "Logger.hpp"
-#include "HdrLoader.hpp"
 
 extern "C"
 {
