@@ -28,56 +28,56 @@ namespace GLSL
 	Float operator+( float p_a, Float const & p_b )
 	{
 		Float l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " + " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " + " ) << String( p_b );
 		return l_return;
 	}
 
 	Float operator-( float p_a, Float const & p_b )
 	{
 		Float l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " - " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " - " ) << String( p_b );
 		return l_return;
 	}
 
 	Float operator*( float p_a, Float const & p_b )
 	{
 		Float l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " * " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " * " ) << String( p_b );
 		return l_return;
 	}
 
 	Float operator/( float p_a, Float const & p_b )
 	{
 		Float l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " / " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " / " ) << String( p_b );
 		return l_return;
 	}
 
 	Int operator+( int p_a, Int const & p_b )
 	{
 		Int l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " + " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " + " ) << String( p_b );
 		return l_return;
 	}
 
 	Int operator-( int p_a, Int const & p_b )
 	{
 		Int l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " - " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " - " ) << String( p_b );
 		return l_return;
 	}
 
 	Int operator*( int p_a, Int const & p_b )
 	{
 		Int l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " * " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " * " ) << String( p_b );
 		return l_return;
 	}
 
 	Int operator/( int p_a, Int const & p_b )
 	{
 		Int l_return( p_b.m_writer );
-		l_return.m_value << string::to_string( p_a ) << cuT( " / " ) << String( p_b );
+		l_return.m_value << ToString( p_a ) << cuT( " / " ) << String( p_b );
 		return l_return;
 	}
 

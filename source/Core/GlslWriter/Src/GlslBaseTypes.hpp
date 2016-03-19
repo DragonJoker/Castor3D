@@ -26,6 +26,8 @@ namespace GLSL
 			: public Type
 	{
 		inline Int();
+		inline Int( Int && p_value );
+		inline Int( Int const & p_value );
 		inline Int( Type const & p_value );
 		inline Int( int p_value );
 		inline Int( float p_value );
@@ -44,6 +46,8 @@ namespace GLSL
 			: public Type
 	{
 		inline Float();
+		inline Float( Float && p_value );
+		inline Float( Float const & p_value );
 		inline Float( Type const & p_value );
 		inline Float( int p_value );
 		inline Float( float p_value );

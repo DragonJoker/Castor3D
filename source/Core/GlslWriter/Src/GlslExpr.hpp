@@ -31,6 +31,7 @@ namespace GLSL
 		GlslWriter_API Expr( GlslWriter * p_writer );
 		GlslWriter_API Expr( GlslWriter * p_writer, Castor::String const & p_init );
 		GlslWriter_API Expr( Expr const & p_rhs );
+		GlslWriter_API Expr( Expr && p_rhs );
 		GlslWriter_API virtual ~Expr();
 		GlslWriter_API Expr & operator=( Expr const & p_rhs );
 		GlslWriter_API void UpdateWriter( Expr const & p_expr );

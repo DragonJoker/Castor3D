@@ -72,9 +72,13 @@ namespace GLSL
 	template< typename Value, typename ... Values > inline Value clamp( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value min( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value max( Value const & p_value, Values const & ... p_values );
+	template< typename Value, typename ... Values > inline Value mix( Value const & p_value, Values const & ... p_values );
 	template< typename Value, typename ... Values > inline Value reflect( Type const & p_value, Values const & ... p_values );
-	template< typename Value > inline Value exp( Value const & p_value );
 	template< typename Value > inline Value neg( Value const & p_value );
+	template< typename Value > inline Value log( Value const & p_value );
+	template< typename Value > inline Value exp( Value const & p_value );
+	template< typename Value > inline Value log2( Value const & p_value );
+	template< typename Value > inline Value exp2( Value const & p_value );
 	template< typename Input, typename Output > inline Output neg( Swizzle< Input, Output > const & p_value );
 	template< typename Value > inline Value normalize( Value const & p_value );
 	template< typename Input, typename Output > inline Output normalize( Swizzle< Input, Output > const & p_value );

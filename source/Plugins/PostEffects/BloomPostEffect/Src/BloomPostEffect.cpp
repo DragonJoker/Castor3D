@@ -111,9 +111,14 @@ namespace Bloom
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
 				LOCALE_ASSIGN( l_writer, Vec2, l_offset, vec2( c3d_fOffsetX, c3d_fOffsetY ) );
-				plx_v4FragColor  = c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture - l_offset );
-				plx_v4FragColor += c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture );
-				plx_v4FragColor += c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture + l_offset );
+				plx_v4FragColor = c3d_fCoefficients[0] * texture2D( c3d_mapDiffuse, vtx_texture );
+
+				FOR( l_writer, Int, i, 0, cuT( "i < 3" ), cuT( "++i" ) )
+				{
+					plx_v4FragColor += c3d_fCoefficients[i] * texture2D( c3d_mapDiffuse, vtx_texture - l_offset );
+					plx_v4FragColor += c3d_fCoefficients[i] * texture2D( c3d_mapDiffuse, vtx_texture + l_offset );
+				}
+				ROF;
 			} );
 			return l_writer.Finalise();
 		}
@@ -296,7 +301,7 @@ namespace Bloom
 			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 			m_filterMapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
 			auto l_filterConfig = m_renderSystem->CreateFrameVariableBuffer( FilterConfig );
-			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigCoefficients, 3 ) );
+			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigCoefficients, KERNEL_SIZE ) );
 			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetX ) );
 			m_filterOffsetY = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetY ) );
 			l_program->AddFrameVariableBuffer( l_filterConfig, MASK_SHADER_TYPE_PIXEL );
@@ -389,8 +394,8 @@ namespace Bloom
 			if ( DoHiPassFilter() )
 			{
 				DoDownSample();
-				DoBlur( m_hiPassSurfaces, m_blurSurfaces, FILTER_COUNT, m_filterOffsetX, m_offsetX );
-				DoBlur( m_blurSurfaces, m_hiPassSurfaces, FILTER_COUNT, m_filterOffsetY, m_offsetY );
+				DoBlur( m_hiPassSurfaces, m_blurSurfaces, m_filterOffsetX, m_offsetX );
+				DoBlur( m_blurSurfaces, m_hiPassSurfaces, m_filterOffsetY, m_offsetY );
 				DoCombine();
 			}
 
@@ -440,17 +445,14 @@ namespace Bloom
 		}
 	}
 
-	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
+	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
 	{
 		auto l_context = m_renderSystem->GetCurrentContext();
-
-		m_filterCoefficients->SetValue( m_kernel[0], 0 );
-		m_filterCoefficients->SetValue( m_kernel[1], 1 );
-		m_filterCoefficients->SetValue( m_kernel[2], 2 );
+		m_filterCoefficients->SetValues( m_kernel );
 		m_filterOffsetX->SetValue( 0 );
 		m_filterOffsetY->SetValue( 0 );
 
-		for ( uint32_t i = 0; i < p_count; ++i )
+		for ( uint32_t i = 0; i < FILTER_COUNT; ++i )
 		{
 			auto l_source = &p_sources[i];
 			auto l_destination = &p_destinations[i];

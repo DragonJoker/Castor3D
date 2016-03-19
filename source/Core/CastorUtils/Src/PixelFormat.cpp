@@ -3,7 +3,6 @@
 
 namespace Castor
 {
-
 #if defined( _X64 )
 
 	namespace detail
@@ -154,6 +153,14 @@ namespace Castor
 				l_return = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Alpha;
 				break;
 
+			case ePIXEL_FORMAT_RGB16F:
+				l_return = pixel_definitions< ePIXEL_FORMAT_RGB16F >::Alpha;
+				break;
+
+			case ePIXEL_FORMAT_ARGB16F:
+				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB16F >::Alpha;
+				break;
+
 			case ePIXEL_FORMAT_RGB16F32F:
 				l_return = pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::Alpha;
 				break;
@@ -278,6 +285,14 @@ namespace Castor
 
 			case ePIXEL_FORMAT_A8B8G8R8:
 				l_return = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Compressed;
+				break;
+
+			case ePIXEL_FORMAT_RGB16F:
+				l_return = pixel_definitions< ePIXEL_FORMAT_RGB16F >::Compressed;
+				break;
+
+			case ePIXEL_FORMAT_ARGB16F:
+				l_return = pixel_definitions< ePIXEL_FORMAT_ARGB16F >::Compressed;
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:
@@ -451,6 +466,14 @@ namespace Castor
 				l_uiReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::Size;
 				break;
 
+			case ePIXEL_FORMAT_RGB16F:
+				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_RGB16F >::Size;
+				break;
+
+			case ePIXEL_FORMAT_ARGB16F:
+				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_ARGB16F >::Size;
+				break;
+
 			case ePIXEL_FORMAT_RGB16F32F:
 				l_uiReturn = pixel_definitions<	ePIXEL_FORMAT_RGB16F32F >::Size;
 				break;
@@ -571,6 +594,14 @@ namespace Castor
 				pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
 
+			case ePIXEL_FORMAT_RGB16F:
+				pixel_definitions< ePIXEL_FORMAT_RGB16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
+			case ePIXEL_FORMAT_ARGB16F:
+				pixel_definitions< ePIXEL_FORMAT_ARGB16F >::convert( p_pSrc, p_pDest, p_eDestFmt );
+				break;
+
 			case ePIXEL_FORMAT_RGB16F32F:
 				pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::convert( p_pSrc, p_pDest, p_eDestFmt );
 				break;
@@ -689,8 +720,16 @@ namespace Castor
 				pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
+			case ePIXEL_FORMAT_RGB16F:
+				pixel_definitions< ePIXEL_FORMAT_RGB16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
+			case ePIXEL_FORMAT_ARGB16F:
+				pixel_definitions< ePIXEL_FORMAT_ARGB16F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				break;
+
 			case ePIXEL_FORMAT_RGB16F32F:
-				pixel_definitions<	ePIXEL_FORMAT_RGB16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
+				pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::convert( p_pSrcBuffer, p_uiSrcSize, p_eDstFormat, p_pDstBuffer, p_uiDstSize );
 				break;
 
 			case ePIXEL_FORMAT_ARGB16F32F:
@@ -811,12 +850,20 @@ namespace Castor
 					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
 					break;
 
-				case ePIXEL_FORMAT_RGB16F32F	:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_RGB16F32F		>::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case ePIXEL_FORMAT_RGB16F:
+					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_RGB16F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
 					break;
 
-				case ePIXEL_FORMAT_ARGB16F32F	:
-					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_ARGB16F32F	>::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+				case ePIXEL_FORMAT_ARGB16F:
+					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_ARGB16F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+					break;
+
+				case ePIXEL_FORMAT_RGB16F32F:
+					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_RGB16F32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
+					break;
+
+				case ePIXEL_FORMAT_ARGB16F32F:
+					l_eReturn = ( p_strFormat == pixel_definitions< ePIXEL_FORMAT_ARGB16F32F >::to_str() ? ePIXEL_FORMAT( i ) : ePIXEL_FORMAT_COUNT );
 					break;
 
 				case ePIXEL_FORMAT_RGB32F:
@@ -932,6 +979,14 @@ namespace Castor
 
 			case ePIXEL_FORMAT_A8B8G8R8:
 				l_strReturn = pixel_definitions< ePIXEL_FORMAT_A8B8G8R8 >::to_str();
+				break;
+
+			case ePIXEL_FORMAT_RGB16F:
+				l_strReturn = pixel_definitions< ePIXEL_FORMAT_RGB16F >::to_str();
+				break;
+
+			case ePIXEL_FORMAT_ARGB16F:
+				l_strReturn = pixel_definitions< ePIXEL_FORMAT_ARGB16F >::to_str();
 				break;
 
 			case ePIXEL_FORMAT_RGB16F32F:

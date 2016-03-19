@@ -145,13 +145,13 @@ namespace GLSL
 		m_stream << Castor::String( p_lhs ) << cuT( " = " ) << Castor::string::to_string( p_rhs ) << cuT( ";" ) << std::endl;
 	}
 
-	void GlslWriter::For( Type const & p_init, Expr const & p_cond, Expr const & p_incr, std::function< void( Type const & ) > p_function )
+	void GlslWriter::For( Type && p_init, Expr const & p_cond, Expr const & p_incr, std::function< void() > p_function )
 	{
 		m_stream << std::endl;
 		m_stream << cuT( "for( " ) << Castor::String( p_init ) << cuT( "; " ) << p_cond.m_value.rdbuf() << cuT( "; " ) << p_incr.m_value.rdbuf() << cuT( " )" ) << std::endl;
 		{
 			IndentBlock l_block( *this );
-			p_function( p_init );
+			p_function();
 		}
 		m_stream << std::endl;
 	}

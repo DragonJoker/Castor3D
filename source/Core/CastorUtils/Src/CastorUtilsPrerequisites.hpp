@@ -97,6 +97,8 @@ namespace Castor
 		ePIXEL_FORMAT_B8G8R8,		//!< 24 bits 888 BGR
 		ePIXEL_FORMAT_A8R8G8B8,		//!< 32 bits 8888 ARGB
 		ePIXEL_FORMAT_A8B8G8R8,		//!< 32 bits 8888 ABGR
+		ePIXEL_FORMAT_RGB16F,		//!< Half float RGB
+		ePIXEL_FORMAT_ARGB16F,		//!< Half float ARGB
 		ePIXEL_FORMAT_RGB16F32F,	//!< Half float RGB on GPU, Float RGB on CPU
 		ePIXEL_FORMAT_ARGB16F32F,	//!< Half float ARGB on GPU, Float ARGB on CPU
 		ePIXEL_FORMAT_RGB32F,		//!< Float RGB

@@ -51,6 +51,20 @@ namespace Castor
 		public:
 			/**
 			 *\~english
+			 *\brief		Initialises the image loading library.
+			 *\~french
+			 *\brief		Initialise la bibliothèque de chargement d'images.
+			 */
+			CU_API static void InitialiseImageLib();
+			/**
+			 *\~english
+			 *\brief		Cleans up the image loading library.
+			 *\~french
+			 *\brief		Nettoie la bibliothèque de chargement d'images.
+			 */
+			CU_API static void CleanupImageLib();
+			/**
+			 *\~english
 			 *\brief		Constructor
 			 *\~french
 			 *\brief		Constructeur

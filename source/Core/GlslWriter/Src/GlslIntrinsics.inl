@@ -229,6 +229,12 @@ namespace GLSL
 	}
 
 	template< typename Value, typename ... Values >
+	inline Value mix( Value const & p_value, Values const & ... p_values )
+	{
+		return WriteFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "mix" ), p_value, p_values... );
+	}
+
+	template< typename Value, typename ... Values >
 	inline Value reflect( Type const & p_value, Values const & ... p_values )
 	{
 		return WriteFunctionCall< Value, Type, Values... >( p_value.m_writer, cuT( "reflect" ), p_value, p_values... );
@@ -271,9 +277,27 @@ namespace GLSL
 	}
 
 	template< typename Value >
+	inline Value log( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_input->m_writer, cuT( "log" ), p_value );
+	}
+
+	template< typename Value >
 	inline Value exp( Value const & p_value )
 	{
 		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "exp" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value log2( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "log2" ), p_value );
+	}
+
+	template< typename Value >
+	inline Value exp2( Value const & p_value )
+	{
+		return WriteFunctionCall< Value >( p_value.m_writer, cuT( "exp2" ), p_value );
 	}
 
 	//***********************************************************************************************

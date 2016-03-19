@@ -3,9 +3,10 @@
 #include "Context.hpp"
 #include "Engine.hpp"
 #include "FrameVariableBuffer.hpp"
+#include "OneFrameVariable.hpp"
+#include "Parameter.hpp"
 #include "RenderSystem.hpp"
 #include "ShaderManager.hpp"
-#include "Texture.hpp"
 
 #include <GlslSource.hpp>
 
@@ -14,15 +15,20 @@ using namespace GLSL;
 
 namespace Castor3D
 {
-	static const String HdrConfig = cuT( "HdrConfig" );
-	static const String Exposure = cuT( "c3d_exposure" );
-	static const String Gamma = cuT( "c3d_gamma" );
+	String const ToneMapping::HdrConfig = cuT( "HdrConfig" );
+	String const ToneMapping::Exposure = cuT( "c3d_exposure" );
 
-	ToneMapping::ToneMapping( Engine & p_engine )
+	ToneMapping::ToneMapping( eTONE_MAPPING_TYPE p_type, Engine & p_engine, Parameters const & p_parameters )
 		: OwnedBy< Engine >{ p_engine }
+		, m_type{ p_type }
 		, m_exposure{ 1.0f }
-		, m_gamma{ 1.5f }
 	{
+		String l_param;
+
+		if ( p_parameters.Get( cuT( "Exposure" ), l_param ) )
+		{
+			m_exposure = string::to_float( l_param );
+		}
 	}
 
 	ToneMapping::~ToneMapping()
@@ -31,20 +37,11 @@ namespace Castor3D
 
 	bool ToneMapping::Initialise()
 	{
-		bool l_return = false;
-
 		m_program = GetEngine()->GetShaderManager().GetNewProgram();
+		bool l_return = m_program != nullptr;
 
-		if ( m_program )
+		if ( l_return )
 		{
-			GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_program, MASK_SHADER_TYPE_VERTEX );
-			auto l_configBuffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( HdrConfig );
-			l_configBuffer->CreateVariable( *m_program, eFRAME_VARIABLE_TYPE_FLOAT, Exposure );
-			l_configBuffer->CreateVariable( *m_program, eFRAME_VARIABLE_TYPE_FLOAT, Gamma );
-			m_program->AddFrameVariableBuffer( l_configBuffer, MASK_SHADER_TYPE_PIXEL );
-			l_configBuffer->GetVariable( Exposure, m_exposureVar );
-			l_configBuffer->GetVariable( Gamma, m_gammaVar );
-
 			String l_vtx;
 			{
 				auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
@@ -68,34 +65,12 @@ namespace Castor3D
 				l_vtx = l_writer.Finalise();
 			}
 
-			String l_pxl;
-			{
-				auto l_writer = GetEngine()->GetRenderSystem()->CreateGlslWriter();
-
-				// Shader inputs
-				Ubo l_config = l_writer.GetUbo( HdrConfig );
-				auto c3d_exposure = l_config.GetUniform< Float >( Exposure );
-				auto c3d_gamma = l_config.GetUniform< Float >( Gamma );
-				l_config.End();
-				auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
-				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-
-				// Shader outputs
-				auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
-
-				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-				{
-					LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).RGB );
-					// Exposure tone mapping
-					LOCALE_ASSIGN( l_writer, Vec3, l_mapped, vec3( Float( 1.0f ) ) - exp( -l_hdrColor * c3d_exposure ) );
-					// Gamma correction 
-					l_mapped = pow( l_mapped, vec3( 1.0f / c3d_gamma ) );
-					plx_v4FragColor = vec4( l_mapped, 1.0 );
-				} );
-
-				l_pxl = l_writer.Finalise();
-			}
-
+			GetEngine()->GetShaderManager().CreateMatrixBuffer( *m_program, MASK_SHADER_TYPE_VERTEX );
+			auto l_configBuffer = GetEngine()->GetRenderSystem()->CreateFrameVariableBuffer( ToneMapping::HdrConfig );
+			m_program->AddFrameVariableBuffer( l_configBuffer, MASK_SHADER_TYPE_PIXEL );
+			l_configBuffer->CreateVariable( *m_program, eFRAME_VARIABLE_TYPE_FLOAT, ToneMapping::Exposure );
+			l_configBuffer->GetVariable( Exposure, m_exposureVar );
+			String l_pxl = DoCreate();
 			auto l_model = GetEngine()->GetRenderSystem()->GetMaxShaderModel();
 			m_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_vtx );
 			m_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_pxl );
@@ -107,14 +82,20 @@ namespace Castor3D
 
 	void ToneMapping::Cleanup()
 	{
-		m_program->Cleanup();
-		m_program.reset();
+		DoDestroy();
+		m_exposureVar.reset();
+
+		if ( m_program )
+		{
+			m_program->Cleanup();
+			m_program.reset();
+		}
 	}
 
 	void ToneMapping::Apply( Size const & p_size, Texture const & p_texture )
 	{
 		m_exposureVar->SetValue( m_exposure );
-		m_gammaVar->SetValue( m_gamma );
+		DoUpdate();
 		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( p_size, p_texture, m_program );
 	}
 }

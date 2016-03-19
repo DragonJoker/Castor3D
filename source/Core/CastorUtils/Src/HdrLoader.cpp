@@ -37,7 +37,7 @@ namespace Castor
 			}
 		}
 
-		bool DoOldDecrunch( RGBE * p_scanline, int p_len, FILE * p_file )
+		bool DoOldDecrunch( RGBE * p_scanline, uint16_t p_len, FILE * p_file )
 		{
 			int l_rshift = 0;
 
@@ -112,15 +112,15 @@ namespace Castor
 					if ( l_code > 128 )
 					{ // run
 						l_code &= 127;
-						uint8_t val = fgetc( p_file );
+						uint8_t l_val = fgetc( p_file );
 
 						while ( l_code-- )
 						{
-							p_scanline[j++][i] = val;
+							p_scanline[j++][i] = l_val;
 						}
 					}
 					else
-					{	// non-run
+					{ // non-run
 						while ( l_code-- )
 						{
 							p_scanline[j++][i] = fgetc( p_file );
@@ -155,10 +155,46 @@ namespace Castor
 
 		fseek( l_file, 1, SEEK_CUR );
 
-		char l_cmd[200];
+		char l_cmd[200] = { 0 };
 		uint32_t i = 0;
 		char l_curc = 0;
 		char l_oldc = 0;
+
+		while ( true )
+		{
+			l_oldc = l_curc;
+			l_curc = fgetc( l_file );
+
+			if ( l_curc == 0xa )
+			{
+				break;
+			}
+
+			l_cmd[i++] = l_curc;
+		}
+
+		char l_fmt[200] = { 0 };
+		l_curc = 0;
+		l_oldc = 0;
+		i = 0;
+
+		while ( true )
+		{
+			l_oldc = l_curc;
+			l_curc = fgetc( l_file );
+
+			if ( l_curc == 0xa )
+			{
+				break;
+			}
+
+			l_fmt[i++] = l_curc;
+		}
+
+		char l_exp[200] = { 0 };
+		l_curc = 0;
+		l_oldc = 0;
+		i = 0;
 
 		while ( true )
 		{
@@ -170,7 +206,7 @@ namespace Castor
 				break;
 			}
 
-			l_cmd[i++] = l_curc;
+			l_exp[i++] = l_curc;
 		}
 
 		char l_reso[200];
@@ -189,8 +225,10 @@ namespace Castor
 
 		uint32_t l_width{ 0 };
 		uint32_t l_height{ 0 };
+		char l_hsign{ 0 };
+		char l_wsign{ 0 };
 
-		if ( !sscanf( l_reso, "-Y %ld +X %ld", &l_height, &l_width ) )
+		if ( !sscanf( l_reso, "%cY %ld %cX %ld", &l_hsign, &l_height, &l_wsign, &l_width ) )
 		{
 			fclose( l_file );
 			return nullptr;
@@ -204,7 +242,7 @@ namespace Castor
 		// convert image 
 		for ( int y = l_height - 1; y >= 0; y-- )
 		{
-			if ( DoDecrunch( l_scanline.data(), l_width, l_file ) == false )
+			if ( !DoDecrunch( l_scanline.data(), l_width, l_file ) )
 			{
 				break;
 			}

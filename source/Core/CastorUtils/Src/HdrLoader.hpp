@@ -22,9 +22,28 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		15/03/2016
+	\~english
+	\brief		HDR image loader.
+	\~french
+	\brief		Loader d'images HDR.
+	*/
 	class HdrLoader
 	{
 	public:
+		/**
+		 *\~english
+		 *\brief		Loads the image at given file path.
+		 *\param[in]	p_fileName	The image file path.
+		 *\return		The image buffer.
+		 *\~french
+		 *\brief		Charge l'image au chemin donné.
+		 *\param[in]	p_fileName	Le chemin d'accès à l'image.
+		 *\return		Le tampon de l'image.
+		 */
 		static PxBufferBaseSPtr Load( Path const & p_fileName );
 	};
 }

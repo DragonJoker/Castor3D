@@ -10,6 +10,7 @@
 #include "DynamicTexture.hpp"
 #include "Engine.hpp"
 #include "FrameBuffer.hpp"
+#include "FUnctorEvent.hpp"
 #include "Material.hpp"
 #include "OverlayManager.hpp"
 #include "Parameter.hpp"
@@ -278,8 +279,8 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	RenderTarget::stFRAME_BUFFER::stFRAME_BUFFER( RenderTarget & p_renderTarget )
-		: m_renderTarget( p_renderTarget )
-		, m_colorTexture( *p_renderTarget.GetEngine() )
+		: m_renderTarget{ p_renderTarget }
+		, m_colorTexture{ *p_renderTarget.GetEngine() }
 	{
 	}
 
@@ -351,22 +352,24 @@ namespace Castor3D
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
 	RenderTarget::RenderTarget( Engine & p_engine, eTARGET_TYPE p_eTargetType )
-		: OwnedBy< Engine >( p_engine )
-		, m_eTargetType( p_eTargetType )
-		, m_pixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
-		, m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
-		, m_initialised( false )
-		, m_size( Size( 100, 100 ) )
-		, m_renderTechnique( )
-		, m_bMultisampling( false )
-		, m_samplesCount( 0 )
-		, m_bStereo( false )
-		, m_rIntraOcularDistance( 0 )
-		, m_index( ++sm_uiCount )
-		, m_techniqueName( cuT( "direct" ) )
-		, m_fbLeftEye( *this )
-		, m_fbRightEye( *this )
+		: OwnedBy< Engine >{ p_engine }
+		, m_eTargetType{ p_eTargetType }
+		, m_pixelFormat{ ePIXEL_FORMAT_A8R8G8B8 }
+		, m_eDepthFormat{ ePIXEL_FORMAT_DEPTH24S8 }
+		, m_initialised{ false }
+		, m_size{ Size{ 100u, 100u } }
+		, m_renderTechnique{}
+		, m_bMultisampling{ false }
+		, m_samplesCount{ 0 }
+		, m_bStereo{ false }
+		, m_rIntraOcularDistance{ 0 }
+		, m_index{ ++sm_uiCount }
+		, m_techniqueName{ cuT( "direct" ) }
+		, m_fbLeftEye{ *this }
+		, m_fbRightEye{ *this }
 	{
+		m_toneMappingFactory.Initialise();
+		m_toneMapping = m_toneMappingFactory.Create( eTONE_MAPPING_TYPE_LINEAR, *GetEngine(), Parameters{} );
 		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 	}
@@ -419,7 +422,7 @@ namespace Castor3D
 				l_effect->Initialise();
 			}
 
-			m_initialised = true;
+			m_initialised = m_toneMapping->Initialise();
 		}
 	}
 
@@ -427,6 +430,9 @@ namespace Castor3D
 	{
 		if ( m_initialised )
 		{
+			m_toneMapping->Cleanup();
+			m_toneMapping.reset();
+
 			for ( auto && l_effect : m_postEffects )
 			{
 				l_effect->Cleanup();
@@ -570,6 +576,20 @@ namespace Castor3D
 		}
 
 		m_rIntraOcularDistance = p_rIod;
+	}
+
+	void RenderTarget::SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters )
+	{
+		if ( m_toneMapping )
+		{
+			auto l_toneMapping = m_toneMapping;
+			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_toneMapping]()
+			{
+				l_toneMapping->Cleanup();
+			} ) );
+		}
+
+		m_toneMapping = m_toneMappingFactory.Create( p_type, *GetEngine(), p_parameters );
 	}
 
 	void RenderTarget::SetSize( Size const & p_size )

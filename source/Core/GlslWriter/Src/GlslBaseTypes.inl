@@ -25,6 +25,17 @@ namespace GLSL
 	{
 	}
 
+	Int::Int( Int && p_value )
+		: Type( std::move( p_value ) )
+	{
+	}
+
+	Int::Int( Int const & p_value )
+		: Type( cuT( "int " ), p_value.m_writer )
+	{
+		m_value << Castor::String( p_value );
+	}
+
 	Int::Int( Type const & p_value )
 		: Type( cuT( "int " ), p_value.m_writer )
 	{
@@ -113,6 +124,17 @@ namespace GLSL
 	Float::Float()
 		: Type( cuT( "float " ) )
 	{
+	}
+
+	Float::Float( Float && p_value )
+		: Type( std::move( p_value ) )
+	{
+	}
+
+	Float::Float( Float const & p_value )
+		: Type( cuT( "float " ) )
+	{
+		m_value << Castor::String( p_value );
 	}
 
 	Float::Float( Type const & p_value )

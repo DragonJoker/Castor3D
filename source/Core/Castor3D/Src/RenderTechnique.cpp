@@ -145,13 +145,12 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	RenderTechnique::RenderTechnique( String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & CU_PARAM_UNUSED( p_params ) )
-		: OwnedBy< Engine >( *p_renderSystem->GetEngine() )
-		, m_renderTarget( &p_renderTarget )
-		, m_renderSystem( p_renderSystem )
-		, m_name( p_name )
-		, m_initialised( false )
-		, m_frameBuffer( *this )
-		, m_toneMapping( *p_renderSystem->GetEngine() )
+		: OwnedBy< Engine >{ *p_renderSystem->GetEngine() }
+		, m_renderTarget{ &p_renderTarget }
+		, m_renderSystem{ p_renderSystem }
+		, m_name{ p_name }
+		, m_initialised{ false }
+		, m_frameBuffer{ *this }
 	{
 	}
 
@@ -178,12 +177,7 @@ namespace Castor3D
 
 			if ( m_initialised )
 			{
-				m_frameBuffer.Initialise( m_size );
-			}
-
-			if ( m_initialised )
-			{
-				m_toneMapping.Initialise();
+				m_initialised = m_frameBuffer.Initialise( m_size );
 			}
 		}
 
@@ -194,7 +188,6 @@ namespace Castor3D
 	{
 		m_scenesRenderNodes.clear();
 		m_initialised = false;
-		m_toneMapping.Cleanup();
 		m_frameBuffer.Cleanup();
 		DoCleanup();
 	}
@@ -246,7 +239,7 @@ namespace Castor3D
 		auto & l_fb = *m_renderTarget->GetFrameBuffer();
 		l_fb.Bind();
 		l_fb.Clear();
-		//m_toneMapping.Apply( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
+		m_renderTarget->GetToneMapping()->Apply( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
 		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
 		m_renderSystem->PopScene();
 	}

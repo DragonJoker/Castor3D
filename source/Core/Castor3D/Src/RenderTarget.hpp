@@ -22,6 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BinaryParser.hpp"
 #include "Parameter.hpp"
 #include "TextureUnit.hpp"
+#include "ToneMappingFactory.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -282,6 +283,17 @@ namespace Castor3D
 		 *\param[in]	p_rIod	La distance inter oculaire
 		 */
 		C3D_API void SetIntraOcularDistance( real p_rIod );
+		/**
+		 *\~english
+		 *\brief		Sets the tone mapping implementation type.
+		 *\param[in]	p_type			The type.
+		 *\param[in]	p_parameters	The parameters.
+		 *\~french
+		 *\brief		Définit le type d'implémentation de mappage de tons.
+		 *\param[in]	p_type			Le type.
+		 *\param[in]	p_parameters	Les paramètres.
+		 */
+		C3D_API void SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status
@@ -650,6 +662,16 @@ namespace Castor3D
 		{
 			return m_postEffects;
 		}
+		/**
+		 *\~english
+		 *\return		The tone mapping implementation.
+		 *\~french
+		 *\return		L'implémentation de mappage de tons.
+		 */
+		inline ToneMappingSPtr GetToneMapping()const
+		{
+			return m_toneMapping;
+		}
 
 	private:
 		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime );
@@ -709,6 +731,10 @@ namespace Castor3D
 		RasteriserStateWPtr m_wpRasteriserState;
 		//!\~english The post effects.	\~french Les effets post rendu.
 		PostEffectPtrArray m_postEffects;
+		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
+		ToneMappingSPtr m_toneMapping;
+		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
+		ToneMappingFactory m_toneMappingFactory;
 	};
 }
 

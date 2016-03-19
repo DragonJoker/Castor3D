@@ -59,17 +59,20 @@ namespace Castor
 		}
 	}
 
-	static bool FreeImageInitialised = false;
-
-	Image::BinaryLoader::BinaryLoader()
-		: Loader< Image, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
+	void Image::BinaryLoader::InitialiseImageLib()
 	{
-		if ( !FreeImageInitialised )
-		{
-			FreeImage_Initialise();
-			FreeImage_SetOutputMessage( FreeImageErrorHandler );
-			FreeImageInitialised = true;
-		}
+		FreeImage_Initialise();
+		FreeImage_SetOutputMessage( FreeImageErrorHandler );
+	}
+
+	void Image::BinaryLoader::CleanupImageLib()
+	{
+		FreeImage_DeInitialise();
+	}
+	
+	Image::BinaryLoader::BinaryLoader()
+		: Loader< Image, eFILE_TYPE_BINARY, BinaryFile >{ File::eOPEN_MODE_DUMMY }
+	{
 	}
 
 	bool Image::BinaryLoader::operator()( Image & p_image, Path const & p_path )
@@ -81,27 +84,26 @@ namespace Castor
 
 		p_image.m_pBuffer.reset();
 		ePIXEL_FORMAT l_ePF = ePIXEL_FORMAT_R8G8B8;
-		FIBITMAP * l_pImage = nullptr;
-		int l_iFlags = BMP_DEFAULT;
-		FREE_IMAGE_FORMAT l_fif = FreeImage_GetFileType( string::string_cast< char >( p_path ).c_str(), 0 );
+		int l_flags = BMP_DEFAULT;
+		FREE_IMAGE_FORMAT l_fiFormat = FreeImage_GetFileType( string::string_cast< char >( p_path ).c_str(), 0 );
 
-		if ( l_fif == FIF_UNKNOWN )
+		if ( l_fiFormat == FIF_UNKNOWN )
 		{
-			l_fif = FreeImage_GetFIFFromFilename( string::string_cast< char >( p_path ).c_str() );
+			l_fiFormat = FreeImage_GetFIFFromFilename( string::string_cast< char >( p_path ).c_str() );
 		}
-		else if ( l_fif == FIF_TIFF )
+		else if ( l_fiFormat == FIF_TIFF )
 		{
-			l_iFlags = TIFF_DEFAULT;
+			l_flags = TIFF_DEFAULT;
 		}
 
-		if ( l_fif == FIF_UNKNOWN || !FreeImage_FIFSupportsReading( l_fif ) )
+		if ( l_fiFormat == FIF_UNKNOWN || !FreeImage_FIFSupportsReading( l_fiFormat ) )
 		{
 			LOADER_ERROR( "Can't load image : unsupported image format" );
 		}
 
-		l_pImage = FreeImage_Load( l_fif, string::string_cast< char >( p_path ).c_str() );
+		auto l_fiImage = FreeImage_Load( l_fiFormat, string::string_cast< char >( p_path ).c_str() );
 
-		if ( !l_pImage )
+		if ( !l_fiImage )
 		{
 			BinaryFile l_file( p_path, File::eOPEN_MODE_READ | File::eOPEN_MODE_BINARY );
 			FreeImageIO l_fiIo;
@@ -109,43 +111,56 @@ namespace Castor
 			l_fiIo.write_proc = nullptr;
 			l_fiIo.seek_proc = SeekProc;
 			l_fiIo.tell_proc = TellProc;
-			l_pImage = FreeImage_LoadFromHandle( l_fif, & l_fiIo, fi_handle( & l_file ), l_iFlags );
+			l_fiImage = FreeImage_LoadFromHandle( l_fiFormat, & l_fiIo, fi_handle( & l_file ), l_flags );
 
-			if ( !l_pImage )
+			if ( !l_fiImage )
 			{
 				LOADER_ERROR( "Can't load image : " + string::string_cast< char >( p_path ) );
 			}
 		}
 
-		FREE_IMAGE_COLOR_TYPE l_type = FreeImage_GetColorType( l_pImage );
-		uint32_t l_width = FreeImage_GetWidth( l_pImage );
-		uint32_t l_height = FreeImage_GetHeight( l_pImage );
+		FREE_IMAGE_COLOR_TYPE l_type = FreeImage_GetColorType( l_fiImage );
+		uint32_t l_width = FreeImage_GetWidth( l_fiImage );
+		uint32_t l_height = FreeImage_GetHeight( l_fiImage );
 		Size l_size( l_width, l_height );
 
 		if ( l_type == FIC_RGBALPHA )
 		{
 			l_ePF = ePIXEL_FORMAT_A8R8G8B8;
-			FIBITMAP * l_dib = FreeImage_ConvertTo32Bits( l_pImage );
-			FreeImage_Unload( l_pImage );
-			l_pImage = l_dib;
+			FIBITMAP * l_dib = FreeImage_ConvertTo32Bits( l_fiImage );
+			FreeImage_Unload( l_fiImage );
+			l_fiImage = l_dib;
 
-			if ( !l_pImage )
+			if ( !l_fiImage )
 			{
 				LOADER_ERROR( "Can't convert image to 32 bits with alpha : " + string::string_cast< char >( p_path ) );
 			}
 		}
-		else if ( l_fif == FIF_HDR )
+		else if ( l_fiFormat == FIF_HDR )
 		{
-			p_image.m_pBuffer = HdrLoader::Load( p_path );
+			auto l_bpp = FreeImage_GetBPP( l_fiImage ) / 8;
+
+			if ( l_bpp == pixel_definitions< ePIXEL_FORMAT_RGB16F >::Size )
+			{
+				l_ePF = ePIXEL_FORMAT_RGB16F;
+			}
+			else if ( l_bpp == pixel_definitions< ePIXEL_FORMAT_RGB32F >::Size )
+			{
+				l_ePF = ePIXEL_FORMAT_RGB32F;
+			}
+			else
+			{
+				LOADER_ERROR( "Unsupported HDR image format" );
+			}
 		}
 		else
 		{
 			l_ePF = ePIXEL_FORMAT_R8G8B8;
-			FIBITMAP * l_dib = FreeImage_ConvertTo24Bits( l_pImage );
-			FreeImage_Unload( l_pImage );
-			l_pImage = l_dib;
+			FIBITMAP * l_dib = FreeImage_ConvertTo24Bits( l_fiImage );
+			FreeImage_Unload( l_fiImage );
+			l_fiImage = l_dib;
 
-			if ( !l_pImage )
+			if ( !l_fiImage )
 			{
 				LOADER_ERROR( "Can't convert image to 24 bits : " + string::string_cast< char >( p_path ) );
 			}
@@ -153,7 +168,7 @@ namespace Castor
 
 		if ( !p_image.m_pBuffer )
 		{
-			uint8_t * l_pixels = FreeImage_GetBits( l_pImage );
+			uint8_t * l_pixels = FreeImage_GetBits( l_fiImage );
 			//0=Blue, 1=Green, 2=Red, 3=Alpha
 #if FREEIMAGE_COLORORDER != FREEIMAGE_COLORORDER_BGR
 			uint8_t * l_pTmp = l_pixels;
@@ -167,7 +182,7 @@ namespace Castor
 
 #endif
 			p_image.m_pBuffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
-			FreeImage_Unload( l_pImage );
+			FreeImage_Unload( l_fiImage );
 		}
 
 		return p_image.m_pBuffer != nullptr;
@@ -176,22 +191,22 @@ namespace Castor
 	bool Image::BinaryLoader::operator()( Image const & p_image, Path const & p_path )
 	{
 		bool l_return = false;
-		FIBITMAP * l_pImage = nullptr;
+		FIBITMAP * l_fiImage = nullptr;
 		Size const & l_size = p_image.GetDimensions();
 		int32_t l_w = int32_t( l_size.width() );
 		int32_t l_h = int32_t( l_size.height() );
 
 		if ( p_path.GetExtension() == cuT( "png" ) )
 		{
-			l_pImage = FreeImage_Allocate( l_w, l_h, 32 );
+			l_fiImage = FreeImage_Allocate( l_w, l_h, 32 );
 			PxBufferBaseSPtr l_pBufferRGB = PxBufferBase::create( l_size, ePIXEL_FORMAT_A8R8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
 
-			if ( l_pImage )
+			if ( l_fiImage )
 			{
-				memcpy( FreeImage_GetBits( l_pImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
+				memcpy( FreeImage_GetBits( l_fiImage ), l_pBufferRGB->const_ptr(), l_pBufferRGB->size() );
 				FREE_IMAGE_FORMAT l_fif = FIF_PNG;
-				l_return = FreeImage_Save( l_fif, l_pImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
-				FreeImage_Unload( l_pImage );
+				l_return = FreeImage_Save( l_fif, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
+				FreeImage_Unload( l_fiImage );
 			}
 		}
 		else
@@ -200,19 +215,19 @@ namespace Castor
 
 			if ( p_image.GetPixelFormat() != ePIXEL_FORMAT_L8 )
 			{
-				l_pImage = FreeImage_Allocate( l_w, l_h, 24 );
+				l_fiImage = FreeImage_Allocate( l_w, l_h, 24 );
 				l_pBuffer = PxBufferBase::create( l_size, ePIXEL_FORMAT_R8G8B8, p_image.GetBuffer(), p_image.GetPixelFormat() );
 			}
 			else
 			{
-				l_pImage = FreeImage_Allocate( l_w, l_h, 8 );
+				l_fiImage = FreeImage_Allocate( l_w, l_h, 8 );
 				l_pBuffer = p_image.GetPixels();
 			}
 
-			if ( l_pImage && l_pBuffer )
+			if ( l_fiImage && l_pBuffer )
 			{
-				uint32_t l_pitch = FreeImage_GetPitch( l_pImage );
-				uint8_t * l_dst = FreeImage_GetBits( l_pImage );
+				uint32_t l_pitch = FreeImage_GetPitch( l_fiImage );
+				uint8_t * l_dst = FreeImage_GetBits( l_fiImage );
 				uint8_t const * l_src = l_pBuffer->const_ptr();
 
 				if ( !( l_pitch % l_w ) )
@@ -229,8 +244,8 @@ namespace Castor
 					}
 				}
 
-				l_return = FreeImage_Save( FIF_BMP, l_pImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
-				FreeImage_Unload( l_pImage );
+				l_return = FreeImage_Save( FIF_BMP, l_fiImage, string::string_cast< char >( p_path ).c_str(), 0 ) != 0;
+				FreeImage_Unload( l_fiImage );
 			}
 		}
 
@@ -322,7 +337,7 @@ namespace Castor
 
 		if ( p_size != l_size )
 		{
-			FIBITMAP * l_pImage = nullptr;
+			FIBITMAP * l_fiImage = nullptr;
 			int32_t l_w = int32_t( l_size.width() );
 			int32_t l_h = int32_t( l_size.height() );
 			ePIXEL_FORMAT l_ePF = GetPixelFormat();
@@ -331,29 +346,29 @@ namespace Castor
 			switch ( l_ePF )
 			{
 			case ePIXEL_FORMAT_R8G8B8:
-				l_pImage = FreeImage_AllocateT( FIT_BITMAP, l_w, l_h, 24 );
+				l_fiImage = FreeImage_AllocateT( FIT_BITMAP, l_w, l_h, 24 );
 				break;
 
 			case ePIXEL_FORMAT_A8R8G8B8:
-				l_pImage = FreeImage_AllocateT( FIT_BITMAP, l_w, l_h, 32 );
+				l_fiImage = FreeImage_AllocateT( FIT_BITMAP, l_w, l_h, 32 );
 				break;
 			}
 
-			if ( l_pImage )
+			if ( l_fiImage )
 			{
-				memcpy( FreeImage_GetBits( l_pImage ), m_pBuffer->const_ptr(), m_pBuffer->size() );
+				memcpy( FreeImage_GetBits( l_fiImage ), m_pBuffer->const_ptr(), m_pBuffer->size() );
 				uint32_t l_width = p_size.width();
 				uint32_t l_height = p_size.height();
-				FREE_IMAGE_COLOR_TYPE l_type = FreeImage_GetColorType( l_pImage );
-				FIBITMAP * l_pRescaled = FreeImage_Rescale( l_pImage, l_width, l_height, FILTER_BICUBIC );
+				FREE_IMAGE_COLOR_TYPE l_type = FreeImage_GetColorType( l_fiImage );
+				FIBITMAP * l_pRescaled = FreeImage_Rescale( l_fiImage, l_width, l_height, FILTER_BICUBIC );
 
 				if ( l_pRescaled )
 				{
-					FreeImage_Unload( l_pImage );
-					l_pImage = l_pRescaled;
-					l_width = FreeImage_GetWidth( l_pImage );
-					l_height = FreeImage_GetHeight( l_pImage );
-					uint8_t * l_pixels = FreeImage_GetBits( l_pImage );
+					FreeImage_Unload( l_fiImage );
+					l_fiImage = l_pRescaled;
+					l_width = FreeImage_GetWidth( l_fiImage );
+					l_height = FreeImage_GetHeight( l_fiImage );
+					uint8_t * l_pixels = FreeImage_GetBits( l_fiImage );
 					//0=Blue, 1=Green, 2=Red, 3=Alpha
 #if FREEIMAGE_COLORORDER != FREEIMAGE_COLORORDER_BGR
 					uint8_t * l_pTmp = l_pixels;
@@ -369,7 +384,7 @@ namespace Castor
 					m_pBuffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
 				}
 
-				FreeImage_Unload( l_pImage );
+				FreeImage_Unload( l_fiImage );
 			}
 		}
 

@@ -66,7 +66,7 @@ namespace Bloom
 	private:
 		bool DoHiPassFilter();
 		void DoDownSample();
-		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, uint32_t p_count, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
+		void DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue );
 		void DoCombine();
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 

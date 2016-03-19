@@ -429,8 +429,6 @@ namespace Castor3D
 		std::map < Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
 		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
-		//!\~english The tone mapping algorithm.	\~french L'algorithme de mappage de ton.
-		ToneMapping m_toneMapping;
 	};
 }
 
