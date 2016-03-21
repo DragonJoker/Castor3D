@@ -350,7 +350,7 @@ namespace OceanLighting
 			m_pTechnique->SetWidth( m_width );
 			m_pTechnique->SetHeight( m_height );
 			l_target->SetTechnique( m_pTechnique );
-			m_window = m_pCastor3D->GetWindowManager().Create();
+			m_window = m_pCastor3D->GetWindowManager().Create( cuT( "OceanLighting" ) );
 			m_window->SetRenderTarget( l_target );
 #if defined( _WIN32 )
 			WindowHandle l_handle( std::make_shared< IMswWindowHandle >( p_parent->GetHandle() ) );
