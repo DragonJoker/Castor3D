@@ -746,7 +746,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneMaterial )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		l_pContext->pMaterial = l_parsingContext->pScene->GetMaterialView().Create( l_name, *l_parsingContext->m_pParser->GetEngine() );
+		l_parsingContext->pMaterial = l_parsingContext->pScene->GetMaterialView().Create( l_name, *l_parsingContext->m_pParser->GetEngine() );
 	}
 	else
 	{
