@@ -1415,50 +1415,50 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 			if ( l_strType == cuT( "cube" ) )
 			{
 				l_type = eMESH_TYPE_CUBE;
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "cone" ) )
 			{
 				l_type = eMESH_TYPE_CONE;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "cylinder" ) )
 			{
 				l_type = eMESH_TYPE_CYLINDER;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "sphere" ) )
 			{
 				l_type = eMESH_TYPE_SPHERE;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
 			}
 			else if ( l_strType == cuT( "icosahedron" ) )
 			{
 				l_type = eMESH_TYPE_ICOSAHEDRON;
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
 			}
 			else if ( l_strType == cuT( "plane" ) )
 			{
 				l_type = eMESH_TYPE_PLANE;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[4] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
 			}
 			else if ( l_strType == cuT( "torus" ) )
 			{
 				l_type = eMESH_TYPE_TORUS;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[4] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
 			}
 			else
 			{
@@ -1466,7 +1466,14 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 			}
 		}
 
-		l_parsingContext->pMesh = l_parsingContext->m_pParser->GetEngine()->GetMeshManager().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+		if ( l_parsingContext->pScene )
+		{
+			l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshView().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+		}
+		else
+		{
+			l_parsingContext->pMesh = l_parsingContext->m_pParser->GetEngine()->GetMeshManager().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+		}
 	}
 	else
 	{
@@ -1482,36 +1489,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshNormals )
 	p_params[0]->Get( l_uiMode );
 	l_parsingContext->pMesh->ComputeNormals();
 	l_parsingContext->bBool1 = true;
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshFile )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_parsingContext->pMesh = l_parsingContext->m_pParser->GetEngine()->GetMeshManager().Create( cuEmptyString, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
-	Path l_path;
-	p_params[0]->Get( l_path );
-
-	if ( !l_parsingContext->pMesh )
-	{
-		PARSING_ERROR( cuT( "mesh isn't initialised" ) );
-	}
-	else
-	{
-		BinaryFile l_file( p_context->m_file->GetFilePath() / l_path, File::eOPEN_MODE_READ );
-
-		if ( !l_file.IsOk() )
-		{
-			PARSING_ERROR( cuT( "file [" ) + l_path + cuT( "] doesn't exist" ) );
-		}
-		else
-		{
-			//if( !Mesh::BinaryLoader()( *l_parsingContext->pMesh, l_file ) )
-			//{
-			//	PARSING_ERROR( cuT( "Can't load mesh file " ) + l_path );
-			//}
-		}
-	}
 }
 END_ATTRIBUTE()
 

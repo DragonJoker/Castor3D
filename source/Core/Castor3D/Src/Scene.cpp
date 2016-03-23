@@ -445,7 +445,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	Scene::Scene( String const & p_name, Engine & p_engine )
-		: OwnedBy< Engine >( p_engine )
+		: OwnedBy< Engine >{ p_engine }
 		, Named( p_name )
 		, m_rootCameraNode()
 		, m_rootObjectNode()
@@ -464,10 +464,10 @@ namespace Castor3D
 		m_lightManager = std::make_unique< LightManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 		m_sceneNodeManager = std::make_unique< SceneNodeManager >( *this, m_rootNode, m_rootCameraNode, m_rootObjectNode );
 
-		m_meshManagerView = std::make_unique< ManagerView< Mesh, MeshManager > >( GetName(), GetEngine()->GetMeshManager() );
-		m_materialManagerView = std::make_unique< ManagerView< Material, MaterialManager > >( GetName(), GetEngine()->GetMaterialManager() );
-		m_samplerManagerView = std::make_unique< ManagerView< Sampler, SamplerManager > >( GetName(), GetEngine()->GetSamplerManager() );
-		m_windowManagerView = std::make_unique< ManagerView< RenderWindow, WindowManager > >( GetName(), GetEngine()->GetWindowManager() );
+		m_meshManagerView = std::make_unique< ManagerView< Mesh, MeshManager, eEVENT_TYPE_PRE_RENDER > >( GetName(), GetEngine()->GetMeshManager() );
+		m_materialManagerView = std::make_unique< ManagerView< Material, MaterialManager, eEVENT_TYPE_PRE_RENDER > >( GetName(), GetEngine()->GetMaterialManager() );
+		m_samplerManagerView = std::make_unique< ManagerView< Sampler, SamplerManager, eEVENT_TYPE_PRE_RENDER > >( GetName(), GetEngine()->GetSamplerManager() );
+		m_windowManagerView = std::make_unique< ManagerView< RenderWindow, WindowManager, eEVENT_TYPE_POST_RENDER > >( GetName(), GetEngine()->GetWindowManager() );
 
 		auto l_notify = [this]()
 		{

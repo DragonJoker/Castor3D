@@ -438,6 +438,7 @@ namespace Castor3D
 				l_effect->Cleanup();
 			}
 
+			m_postEffects.clear();
 			m_initialised = false;
 			m_renderTechnique->Cleanup();
 			m_fbLeftEye.Cleanup();

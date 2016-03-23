@@ -57,6 +57,13 @@ namespace Castor3D
 		C3D_API virtual ~RenderLoop();
 		/**
 		 *\~english
+		 *\brief		Cleans up the render loop.
+		 *\~french
+		 *\brief		Nettoie la boucle de rendu.
+		 */
+		C3D_API void Cleanup();
+		/**
+		 *\~english
 		 *\brief		Starts render loop.
 		 *\remarks		Use only with an asynchronous render loop.
 		 *\~french

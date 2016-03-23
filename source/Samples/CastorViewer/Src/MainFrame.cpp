@@ -151,7 +151,7 @@ namespace CastorViewer
 			m_pMainCamera.reset();
 			m_pSceneNode.reset();
 			l_scene->Cleanup();
-			wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+			wxGetApp().GetCastor()->GetRenderLoop().Cleanup();
 			wxGetApp().GetCastor()->GetSceneManager().Remove( l_scene->GetName() );
 			Logger::LogDebug( cuT( "MainFrame::DoCleanupScene - Scene related objects unloaded." ) );
 			l_scene.reset();

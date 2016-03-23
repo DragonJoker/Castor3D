@@ -37,31 +37,31 @@ http://www.gnu.org/copyleft/lesser.txt.
 	private:\
 		className##ManagerUPtr m_##memberName##Manager
 
-#define DECLARE_MANAGER_VIEW_MEMBER( memberName, className )\
+#define DECLARE_MANAGER_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		inline ManagerView< className, className##Manager > & Get##className##View()\
+		inline ManagerView< className, className##Manager, eventType > & Get##className##View()\
 		{\
 			return *m_##memberName##ManagerView;\
 		}\
-		inline ManagerView< className, className##Manager > const & Get##className##View()const\
+		inline ManagerView< className, className##Manager, eventType > const & Get##className##View()const\
 		{\
 			return *m_##memberName##ManagerView;\
 		}\
 	private:\
-		std::unique_ptr< ManagerView< className, className##Manager > > m_##memberName##ManagerView
+		std::unique_ptr< ManagerView< className, className##Manager, eventType > > m_##memberName##ManagerView
 
-#define DECLARE_MANAGER_VIEW_MEMBER_EX( memberName, mgrName, className )\
+#define DECLARE_MANAGER_VIEW_MEMBER_EX( memberName, mgrName, className, eventType )\
 	public:\
-		inline ManagerView< className, mgrName##Manager > & Get##className##View()\
+		inline ManagerView< className, mgrName##Manager, eventType > & Get##className##View()\
 		{\
 			return *m_##memberName##ManagerView;\
 		}\
-		inline ManagerView< className, mgrName##Manager > const & Get##className##View()const\
+		inline ManagerView< className, mgrName##Manager, eventType > const & Get##className##View()const\
 		{\
 			return *m_##memberName##ManagerView;\
 		}\
 	private:\
-		std::unique_ptr< ManagerView< className, mgrName##Manager > > m_##memberName##ManagerView
+		std::unique_ptr< ManagerView< className, mgrName##Manager, eventType > > m_##memberName##ManagerView
 
 namespace Castor3D
 {
@@ -440,13 +440,13 @@ namespace Castor3D
 		//!\~english The animated objects groups manager.	\~french Le gestionnaire de groupes d'objets animés.
 		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
 		//!\~english The scene meshes view.	\~french La vue sur les maillages de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( mesh, Mesh );
+		DECLARE_MANAGER_VIEW_MEMBER( mesh, Mesh, eEVENT_TYPE_PRE_RENDER );
 		//!\~english The scene materials view.	\~french La vue sur les matériaux de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( material, Material );
+		DECLARE_MANAGER_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
 		//!\~english The scene samplers view.	\~french La vue sur les échantillonneurs de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler );
+		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
 		//!\~english The scene render windows view.	\~french La vue sur les fenêtres de rendu de la scène.
-		DECLARE_MANAGER_VIEW_MEMBER_EX( window, Window, RenderWindow );
+		DECLARE_MANAGER_VIEW_MEMBER_EX( window, Window, RenderWindow, eEVENT_TYPE_POST_RENDER );
 		//!\~english Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated	\~french Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;
 		//!\~english Ambient light color	\~french Couleur de la lumière ambiante

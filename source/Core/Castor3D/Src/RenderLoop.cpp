@@ -35,6 +35,15 @@ namespace Castor3D
 		m_debugOverlays.reset();
 	}
 
+	void RenderLoop::Cleanup()
+	{
+		m_renderSystem->GetMainContext()->SetCurrent();
+		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
+		GetEngine()->GetOverlayManager().UpdateRenderer();
+		m_renderSystem->GetMainContext()->EndCurrent();
+		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
+	}
+
 	void RenderLoop::StartRendering()
 	{
 		DoStartRendering();

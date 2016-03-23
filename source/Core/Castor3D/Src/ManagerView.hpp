@@ -35,7 +35,7 @@ namespace Castor3D
 	\brief		Vue sur un gestionnaire de ressources.
 	\remarks	Permet de supprimer tous les éléments créés via la vue et uniquement ceux là.
 	*/
-	template< typename ResourceType, typename ManagerType >
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
 	class ManagerView
 		: public Castor::Named
 	{

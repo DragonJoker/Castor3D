@@ -547,6 +547,10 @@ namespace Bloom
 			l_sampler->SetWrappingMode( eTEXTURE_UVW_V, eWRAP_MODE_CLAMP_TO_BORDER );
 			l_sampler->SetWrappingMode( eTEXTURE_UVW_W, eWRAP_MODE_CLAMP_TO_BORDER );
 		}
+		else
+		{
+			l_sampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( l_name );
+		}
 
 		return l_sampler;
 	}

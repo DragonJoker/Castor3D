@@ -227,6 +227,7 @@ namespace Castor3D
 
 	void RenderWindow::Cleanup()
 	{
+		m_context->SetCurrent();
 		RenderTargetSPtr l_target = GetRenderTarget();
 
 		if ( l_target )
@@ -234,6 +235,7 @@ namespace Castor3D
 			l_target->Cleanup();
 		}
 
+		m_context->EndCurrent();
 		if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
 		{
 			m_context->Cleanup();

@@ -3,21 +3,21 @@
 
 namespace Castor3D
 {
-	template< typename ResourceType, typename ManagerType >
-	inline ManagerView< ResourceType, ManagerType >::ManagerView( Castor::String const & p_name, ManagerType & p_manager )
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
+	inline ManagerView< ResourceType, ManagerType, EventType >::ManagerView( Castor::String const & p_name, ManagerType & p_manager )
 		: Castor::Named( p_name )
 		, m_manager( p_manager )
 	{
 	}
 
-	template< typename ResourceType, typename ManagerType >
-	inline ManagerView< ResourceType, ManagerType >::~ManagerView()
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
+	inline ManagerView< ResourceType, ManagerType, EventType >::~ManagerView()
 	{
 	}
 
-	template< typename ResourceType, typename ManagerType >
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
 	template< typename ... Params >
-	inline std::shared_ptr< ResourceType > ManagerView< ResourceType, ManagerType >::Create( Castor::String const & p_name, Params && ... p_params )
+	inline std::shared_ptr< ResourceType > ManagerView< ResourceType, ManagerType, EventType >::Create( Castor::String const & p_name, Params && ... p_params )
 	{
 		std::shared_ptr< ResourceType > l_resource = m_manager.Create( p_name, std::forward< Params >( p_params )... );
 
@@ -29,14 +29,14 @@ namespace Castor3D
 		return l_resource;
 	}
 
-	template< typename ResourceType, typename ManagerType >
-	void ManagerView< ResourceType, ManagerType >::Insert( Castor::String const & p_name, std::shared_ptr< ResourceType > p_element )
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
+	void ManagerView< ResourceType, ManagerType, EventType >::Insert( Castor::String const & p_name, std::shared_ptr< ResourceType > p_element )
 	{
 		m_createdElements.insert( p_name );
 	}
 
-	template< typename ResourceType, typename ManagerType >
-	inline void ManagerView< ResourceType, ManagerType >::Clear()
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
+	inline void ManagerView< ResourceType, ManagerType, EventType >::Clear()
 	{
 		for ( auto l_name : m_createdElements )
 		{
@@ -45,7 +45,7 @@ namespace Castor3D
 			if ( l_resource )
 			{
 				m_manager.Remove( l_name );
-				m_manager.GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_resource]()
+				m_manager.GetEngine()->PostEvent( MakeFunctorEvent( EventType, [l_resource]()
 				{
 					l_resource->Cleanup();
 				} ) );
