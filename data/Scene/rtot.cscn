@@ -1,20 +1,20 @@
-material "Gold"
-{
-	pass
-	{
-		ambient 0.24725	0.1995	0.0745 1.0
-		diffuse 0.75164	0.60648	0.22648 1.0
-		emissive 0.0 0.0 0.0 1.0
-		specular 0.628281 0.555802 0.366065 1.0
-		shininess 51.2
-		two_sided true
-	}
-}
-
 scene "TextureScene"
 {
 	background_colour 0.5 0.0 0.0 1.0
 	ambient_light 0.5 0.5 0.5 1.0
+
+	material "Gold"
+	{
+		pass
+		{
+			ambient 0.24725	0.1995	0.0745 1.0
+			diffuse 0.75164	0.60648	0.22648 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.628281 0.555802 0.366065 1.0
+			shininess 51.2
+			two_sided true
+		}
+	}
 
 	camera_node "TextureCameraNode"
 	{
@@ -76,50 +76,50 @@ scene "TextureScene"
 	}
 }
 
-sampler "Linear"
-{
-	min_filter		linear
-	mag_filter		linear
-	min_lod			-500.0
-	max_lod			500.0
-	lod_bias		0.0
-	u_wrap_mode		clamp_to_edge
-	v_wrap_mode		clamp_to_edge
-	w_wrap_mode		clamp_to_edge
-	border_colour	0.0 0.0 0.0 0.0
-}
-
-material "RToTMaterial"
-{
-	pass
-	{
-		ambient 0.0 0.0 0.0 1.0
-		diffuse 1.0 1.0 1.0 1.0
-		emissive 0.0 0.0 0.0 1.0
-		specular 0.0 0.0 0.0 1.0
-		shininess 51.2
-		two_sided true
-		
-		texture_unit
-		{
-			render_target
-			{
-				format rgb24
-				size 1024 1024
-				scene "TextureScene"
-				camera "TextureCamera"
-			}
-			colour 1.0 1.0 1.0 1.0
-			channel diffuse
-			sampler "Linear"
-		}
-	}
-}
-
 scene "FinalScene"
 {
 	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0.5 0.5 0.5 1.0
+
+	sampler "Linear"
+	{
+		min_filter		linear
+		mag_filter		linear
+		min_lod			-500.0
+		max_lod			500.0
+		lod_bias		0.0
+		u_wrap_mode		clamp_to_edge
+		v_wrap_mode		clamp_to_edge
+		w_wrap_mode		clamp_to_edge
+		border_colour	0.0 0.0 0.0 0.0
+	}
+
+	material "RToTMaterial"
+	{
+		pass
+		{
+			ambient 0.0 0.0 0.0 1.0
+			diffuse 1.0 1.0 1.0 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.0 0.0 0.0 1.0
+			shininess 51.2
+			two_sided true
+			
+			texture_unit
+			{
+				render_target
+				{
+					format rgb24
+					size 1024 1024
+					scene "TextureScene"
+					camera "TextureCamera"
+				}
+				colour 1.0 1.0 1.0 1.0
+				channel diffuse
+				sampler "Linear"
+			}
+		}
+	}
 
 	scene_node "FinalGeometryNode"
 	{
@@ -165,16 +165,16 @@ scene "FinalScene"
 			far 20000.0
 		}
 	}
-}
 
-window "MyWindow"
-{
-	render_target
+	window "MyWindow"
 	{
-		format argb32
-		depth depth24s8
-		size 1125 600
-		scene "FinalScene"
-		camera "MainCamera"
+		render_target
+		{
+			format argb32
+			depth depth24s8
+			size 1125 600
+			scene "FinalScene"
+			camera "MainCamera"
+		}
 	}
 }
