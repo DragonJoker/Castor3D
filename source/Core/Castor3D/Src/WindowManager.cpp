@@ -1,7 +1,4 @@
-﻿#include "WindowManager.hpp"
-
-#include "RenderSystem.hpp"
-#include "RenderWindow.hpp"
+#include "WindowManager.hpp"
 
 using namespace Castor;
 
@@ -10,7 +7,7 @@ namespace Castor3D
 	const String ManagedObjectNamer< RenderWindow >::Name = cuT( "RenderWindow" );
 
 	WindowManager::WindowManager( Engine & p_engine )
-		: ResourceManager< uint32_t, RenderWindow >( p_engine )
+		: ResourceManager< String, RenderWindow >( p_engine )
 	{
 	}
 
@@ -18,14 +15,14 @@ namespace Castor3D
 	{
 	}
 
-	RenderWindowSPtr WindowManager::Create()
+	RenderWindowSPtr WindowManager::Create( String const & p_name )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
-		RenderWindowSPtr l_return = std::make_shared< RenderWindow >( *GetEngine() );
+		RenderWindowSPtr l_return = std::make_shared< RenderWindow >( *GetEngine(), p_name );
 
 		if ( l_return )
 		{
-			m_elements.insert( l_return->GetIndex(), l_return );
+			m_elements.insert( l_return->GetName(), l_return );
 		}
 
 		return l_return;

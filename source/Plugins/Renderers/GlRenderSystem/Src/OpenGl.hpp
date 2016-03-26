@@ -347,6 +347,8 @@ namespace GlRender
 		inline eGL_STENCIL_OP Get( Castor3D::eSTENCIL_OP p_eOp )const;
 		inline eGL_BLEND_OP Get( Castor3D::eBLEND_OP p_eOp )const;
 		inline eGL_FUNC Get( Castor3D::eDEPTH_FUNC p_func )const;
+		inline eGL_QUERY Get( Castor3D::eQUERY_TYPE p_value )const;
+		inline eGL_QUERY_INFO Get( Castor3D::eQUERY_INFO p_value )const;
 		inline bool Get( Castor3D::eWRITING_MASK p_eMask )const;
 		inline bool HasDebugOutput()const;
 		inline Castor::String const & GetVendor()const;
@@ -835,6 +837,8 @@ namespace GlRender
 		eGL_FILL_MODE FillModes[3];
 		eGL_STENCIL_OP StencilOps[Castor3D::eSTENCIL_OP_COUNT];
 		eGL_FUNC StencilFuncs[Castor3D::eSTENCIL_FUNC_COUNT];
+		eGL_QUERY Queries[Castor3D::eQUERY_TYPE_COUNT];
+		eGL_QUERY_INFO QueryInfos[Castor3D::eQUERY_INFO_COUNT];
 		bool WriteMasks[Castor3D::eWRITING_MASK_COUNT];
 		eGL_FUNC DepthFuncs[Castor3D::eDEPTH_FUNC_COUNT];
 		std::map< eGL_TEXTURE_ATTACHMENT, eGL_BUFFER > BuffersTA;

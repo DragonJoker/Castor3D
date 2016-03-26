@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -46,7 +46,7 @@ namespace Castor3D
 	\brief		Gestionnaire de fenêtres de rendu.
 	*/
 	class WindowManager
-		: public ResourceManager< uint32_t, RenderWindow >
+		: private ResourceManager< Castor::String, RenderWindow >
 	{
 	public:
 		/**
@@ -68,7 +68,7 @@ namespace Castor3D
 		/**
 		*\copydoc		Castor3D::Manager::Create
 		*/
-		C3D_API RenderWindowSPtr Create();
+		C3D_API RenderWindowSPtr Create( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Renders one frame for each window.
@@ -79,8 +79,19 @@ namespace Castor3D
 		 */
 		C3D_API void Render( bool p_force );
 
-	private:
-		using ResourceManager< uint32_t, RenderWindow >::Create;
+	public:
+		using ResourceManager< Castor::String, RenderWindow >::lock;
+		using ResourceManager< Castor::String, RenderWindow >::unlock;
+		using ResourceManager< Castor::String, RenderWindow >::begin;
+		using ResourceManager< Castor::String, RenderWindow >::end;
+		using ResourceManager< Castor::String, RenderWindow >::Has;
+		using ResourceManager< Castor::String, RenderWindow >::Find;
+		using ResourceManager< Castor::String, RenderWindow >::Insert;
+		using ResourceManager< Castor::String, RenderWindow >::Remove;
+		using ResourceManager< Castor::String, RenderWindow >::Cleanup;
+		using ResourceManager< Castor::String, RenderWindow >::Clear;
+		using ResourceManager< Castor::String, RenderWindow >::GetEngine;
+		using ResourceManager< Castor::String, RenderWindow >::SetRenderSystem;
 	};
 }
 

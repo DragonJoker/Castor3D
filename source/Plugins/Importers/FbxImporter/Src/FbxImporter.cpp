@@ -5,6 +5,7 @@
 #include <GeometryManager.hpp>
 #include <InitialiseEvent.hpp>
 #include <ImporterPlugin.hpp>
+#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <SamplerManager.hpp>
@@ -408,20 +409,20 @@ namespace C3dFbx
 		return l_scene;
 	}
 
-	MeshSPtr FbxSdkImporter::DoImportMesh()
+	MeshSPtr FbxSdkImporter::DoImportMesh( Scene & p_scene )
 	{
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
 
-		if ( GetEngine()->GetMeshManager().Has( l_meshName ) )
+		if ( p_scene.GetMeshView().Has( l_meshName ) )
 		{
-			m_mesh = GetEngine()->GetMeshManager().Find( l_meshName );
+			m_mesh = p_scene.GetMeshView().Find( l_meshName );
 		}
 		else
 		{
-			m_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
+			m_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
 		}
 
 		if ( !m_mesh->GetSubmeshCount() )
@@ -441,9 +442,9 @@ namespace C3dFbx
 					
 					if ( l_converter.Triangulate( l_fbxScene, true ) )
 					{
-						DoLoadMaterials( l_fbxScene );
+						DoLoadMaterials( p_scene, l_fbxScene );
 						DoLoadSkeleton( l_fbxScene->GetRootNode() );
-						DoLoadMeshes( l_fbxScene->GetRootNode() );
+						DoLoadMeshes( p_scene, l_fbxScene->GetRootNode() );
 
 						if ( m_mesh->GetSkeleton() )
 						{
@@ -455,7 +456,7 @@ namespace C3dFbx
 			else
 			{
 				// The import failed.
-				GetEngine()->GetMeshManager().Remove( l_meshName );
+				p_scene.GetMeshView().Remove( l_meshName );
 				m_mesh.reset();
 			}
 
@@ -464,7 +465,7 @@ namespace C3dFbx
 		else
 		{
 			// The import failed.
-			GetEngine()->GetMeshManager().Remove( l_meshName );
+			p_scene.GetMeshView().Remove( l_meshName );
 			m_mesh.reset();
 		}
 
@@ -473,16 +474,16 @@ namespace C3dFbx
 		return l_return;
 	}
 
-	void FbxSdkImporter::DoLoadMeshes( FbxNode * p_node )
+	void FbxSdkImporter::DoLoadMeshes( Scene & p_scene, FbxNode * p_node )
 	{
-		DoTraverseDepthFirst< FbxMesh >( p_node, FbxNodeAttribute::eMesh, [this]( FbxNode * p_node, FbxMesh * p_mesh )
+		DoTraverseDepthFirst< FbxMesh >( p_node, FbxNodeAttribute::eMesh, [this, &p_scene]( FbxNode * p_node, FbxMesh * p_mesh )
 		{
 			SubmeshSPtr l_submesh = DoProcessMesh( p_mesh );
 			auto l_material = p_node->GetMaterial( 0 );
 
 			if ( l_material )
 			{
-				l_submesh->SetDefaultMaterial( GetEngine()->GetMaterialManager().Find( l_material->GetName() ) );
+				l_submesh->SetDefaultMaterial( p_scene.GetMaterialView().Find( l_material->GetName() ) );
 			}
 
 			if ( m_mesh->GetSkeleton() )
@@ -668,14 +669,14 @@ namespace C3dFbx
 		}
 	}
 
-	void FbxSdkImporter::DoLoadMaterials( FbxScene * p_scene )
+	void FbxSdkImporter::DoLoadMaterials( Scene & p_scene, FbxScene * p_fbxScene )
 	{
-		MaterialManager & l_manager = GetEngine()->GetMaterialManager();
+		auto & l_manager = p_scene.GetMaterialView();
 		FbxArray< FbxSurfaceMaterial * > l_mats;
-		p_scene->FillMaterialArray( l_mats );
+		p_fbxScene->FillMaterialArray( l_mats );
 		MaterialPtrStrMap l_materials;
 
-		auto l_parseLambert = [this]( FbxSurfaceLambert * p_lambert, Pass & p_pass )
+		auto l_parseLambert = [this, &p_scene]( FbxSurfaceLambert * p_lambert, Pass & p_pass )
 		{
 			auto l_lambert = static_cast< FbxSurfaceLambert * >( p_lambert );
 			//p_pass.SetAlpha( float( l_lambert->TransparencyFactor ) );
@@ -686,11 +687,11 @@ namespace C3dFbx
 			FbxDouble3 l_emissive = l_lambert->Emissive;
 			p_pass.SetEmissive( Colour::from_rgb( { float( l_emissive[0] ), float( l_emissive[1] ), float( l_emissive[2] ) } ) * l_lambert->EmissiveFactor );
 
-			DoLoadTexture( l_lambert->Ambient, p_pass, eTEXTURE_CHANNEL_AMBIENT );
-			DoLoadTexture( l_lambert->Diffuse, p_pass, eTEXTURE_CHANNEL_DIFFUSE );
-			DoLoadTexture( l_lambert->Emissive, p_pass, eTEXTURE_CHANNEL_EMISSIVE );
-			DoLoadTexture( l_lambert->NormalMap, p_pass, eTEXTURE_CHANNEL_NORMAL );
-			DoLoadTexture( l_lambert->TransparentColor, p_pass, eTEXTURE_CHANNEL_OPACITY );
+			DoLoadTexture( p_scene, l_lambert->Ambient, p_pass, eTEXTURE_CHANNEL_AMBIENT );
+			DoLoadTexture( p_scene, l_lambert->Diffuse, p_pass, eTEXTURE_CHANNEL_DIFFUSE );
+			DoLoadTexture( p_scene, l_lambert->Emissive, p_pass, eTEXTURE_CHANNEL_EMISSIVE );
+			DoLoadTexture( p_scene, l_lambert->NormalMap, p_pass, eTEXTURE_CHANNEL_NORMAL );
+			DoLoadTexture( p_scene, l_lambert->TransparentColor, p_pass, eTEXTURE_CHANNEL_OPACITY );
 		};
 
 		for ( int i = 0; i < l_mats.Size(); ++i )
@@ -716,8 +717,8 @@ namespace C3dFbx
 					l_pass->SetShininess( float( l_phong->Shininess ) );
 					FbxDouble3 l_specular = l_phong->Specular;
 					l_pass->SetSpecular( Colour::from_rgb( { float( l_specular[0] ), float( l_specular[1] ), float( l_specular[2] ) } ) * l_phong->SpecularFactor );
-					DoLoadTexture( l_phong->Specular, *l_pass, eTEXTURE_CHANNEL_SPECULAR );
-					DoLoadTexture( l_phong->Shininess, *l_pass, eTEXTURE_CHANNEL_GLOSS );
+					DoLoadTexture( p_scene, l_phong->Specular, *l_pass, eTEXTURE_CHANNEL_SPECULAR );
+					DoLoadTexture( p_scene, l_phong->Shininess, *l_pass, eTEXTURE_CHANNEL_GLOSS );
 				}
 			}
 		}
@@ -837,7 +838,7 @@ namespace C3dFbx
 		{ eTEXTURE_CHANNEL_EMISSIVE, cuT( "Emissive" ) },
 	};
 
-	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
+	TextureUnitSPtr FbxSdkImporter::DoLoadTexture( Scene & p_scene, FbxPropertyT< FbxDouble3 > const & p_property, Pass & p_pass, eTEXTURE_CHANNEL p_channel )
 	{
 		TextureUnitSPtr l_texture = nullptr;
 		FbxTexture * l_fbxtex = nullptr;
@@ -879,15 +880,15 @@ namespace C3dFbx
 
 			SamplerSPtr l_sampler;
 
-			if ( !GetEngine()->GetSamplerManager().Has( l_fbxtex->GetName() ) )
+			if ( !p_scene.GetSamplerView().Has( l_fbxtex->GetName() ) )
 			{
-				l_sampler = GetEngine()->GetSamplerManager().Create( l_fbxtex->GetName() );
+				l_sampler = p_scene.GetSamplerView().Create( l_fbxtex->GetName() );
 				l_sampler->SetWrappingMode( eTEXTURE_UVW_U, l_mode[l_fbxtex->WrapModeU] );
 				l_sampler->SetWrappingMode( eTEXTURE_UVW_U, l_mode[l_fbxtex->WrapModeV] );
 			}
 			else
 			{
-				l_sampler = GetEngine()->GetSamplerManager().Find( l_fbxtex->GetName() );
+				l_sampler = p_scene.GetSamplerView().Find( l_fbxtex->GetName() );
 			}
 
 			l_texture->SetSampler( l_sampler );

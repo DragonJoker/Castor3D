@@ -111,20 +111,20 @@ namespace Castor3D
 		typedef char Md2Skin[64];
 
 	private:
-		Md2Header				m_header;
-		Md2Skin 		*		m_skins;
-		Md2TexCoord 	*		m_texCoords;
-		Md2Face 		*		m_triangles;
-		Md2Frame 		*		m_frames;
-		Castor::String			m_textureName;
-		Castor::BinaryFile *	m_pFile;
+		Md2Header m_header;
+		Md2Skin * m_skins;
+		Md2TexCoord * m_texCoords;
+		Md2Face * m_triangles;
+		Md2Frame * m_frames;
+		Castor::String m_textureName;
+		Castor::BinaryFile * m_pFile;
 
 	public:
 		Md2Importer( Engine & p_pEngine, Castor::String const & p_textureName = Castor::cuEmptyString );
 
 	private:
 		virtual SceneSPtr DoImportScene();
-		virtual MeshSPtr DoImportMesh();
+		virtual MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
 
 		void DoReadMD2Data( PassSPtr p_pPass );
 		void DoConvertDataStructures( MeshSPtr p_pMesh );

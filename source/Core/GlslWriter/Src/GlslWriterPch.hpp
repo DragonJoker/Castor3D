@@ -24,8 +24,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <Logger.hpp>
 #	include <Pixel.hpp>
 
-#	include <RenderSystem.hpp>
-
 #	include "GlslWriterPrerequisites.hpp"
 
 #endif

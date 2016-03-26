@@ -219,8 +219,7 @@ namespace Castor3D
 			Logger::LogError( std::string( "RenderLoop - " ) + p_exc.what() );
 		}
 
-		// A final render to clean the renderers
-		DoRenderFrame();
+		Cleanup();
 		m_renderSystem->Cleanup();
 	}
 

@@ -443,6 +443,18 @@ namespace GlRender
 		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_NONE] = eGL_BUFFER_NONE;
 		BuffersRBA[eGL_RENDERBUFFER_ATTACHMENT_COLOR0] = eGL_BUFFER_COLOR0;
 
+		Queries[eQUERY_TYPE_TIME_ELAPSED] = eGL_QUERY_TIME_ELAPSED;
+		Queries[eQUERY_TYPE_SAMPLES_PASSED] = eGL_QUERY_SAMPLES_PASSED;
+		Queries[eQUERY_TYPE_ANY_SAMPLES_PASSED] = eGL_QUERY_ANY_SAMPLES_PASSED;
+		Queries[eQUERY_TYPE_PRIMITIVES_GENERATED] = eGL_QUERY_PRIMITIVES_GENERATED;
+		Queries[eQUERY_TYPE_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN] = eGL_QUERY_TRANSFORM_FEEDBACK_PRIMITIVES_WRITTEN;
+		Queries[eQUERY_TYPE_ANY_SAMPLES_PASSED_CONSERVATIVE] = eGL_QUERY_ANY_SAMPLES_PASSED_CONSERVATIVE;
+		Queries[eQUERY_TYPE_TIMESTAMP];
+
+		QueryInfos[eQUERY_INFO_RESULT] = eGL_QUERY_INFO_RESULT;
+		QueryInfos[eQUERY_INFO_RESULT_AVAILABLE] = eGL_QUERY_INFO_RESULT_AVAILABLE;
+		QueryInfos[eQUERY_INFO_RESULT_NO_WAIT] = eGL_QUERY_INFO_RESULT_NO_WAIT;
+
 		Cleanup();
 
 	#if defined( _WIN32 )
@@ -1049,140 +1061,158 @@ namespace GlRender
 	{
 		if ( id != 131185 )
 		{
-			String l_strToLog = cuT( "OpenGl Debug - " );
+			bool l_error = false;
+			String l_toLog = cuT( "OpenGl Debug - " );
 
 			switch ( source )
 			{
 			case eGL_DEBUG_SOURCE_API:
-				l_strToLog += cuT( "Source:OpenGL\t" );
+				l_toLog += cuT( "Source:OpenGL\t" );
 				break;
 
 			case eGL_DEBUG_SOURCE_WINDOW_SYSTEM:
-				l_strToLog += cuT( "Source:Windows\t" );
+				l_toLog += cuT( "Source:Windows\t" );
 				break;
 
 			case eGL_DEBUG_SOURCE_SHADER_COMPILER:
-				l_strToLog += cuT( "Source:Shader compiler\t" );
+				l_toLog += cuT( "Source:Shader compiler\t" );
 				break;
 
 			case eGL_DEBUG_SOURCE_THIRD_PARTY:
-				l_strToLog += cuT( "Source:Third party\t" );
+				l_toLog += cuT( "Source:Third party\t" );
 				break;
 
 			case eGL_DEBUG_SOURCE_APPLICATION:
-				l_strToLog += cuT( "Source:Application\t" );
+				l_toLog += cuT( "Source:Application\t" );
 				break;
 
 			case eGL_DEBUG_SOURCE_OTHER:
-				l_strToLog += cuT( "Source:Other\t" );
+				l_toLog += cuT( "Source:Other\t" );
 				break;
 			}
 
 			switch ( type )
 			{
 			case eGL_DEBUG_TYPE_ERROR:
-				l_strToLog += cuT( "Type:Error\t" );
+				l_toLog += cuT( "Type:Error\t" );
 				break;
 
 			case eGL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-				l_strToLog += cuT( "Type:Deprecated behavior\t" );
+				l_toLog += cuT( "Type:Deprecated behavior\t" );
 				break;
 
 			case eGL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-				l_strToLog += cuT( "Type:Undefined behavior\t" );
+				l_toLog += cuT( "Type:Undefined behavior\t" );
 				break;
 
 			case eGL_DEBUG_TYPE_PORTABILITY:
-				l_strToLog += cuT( "Type:Portability\t" );
+				l_toLog += cuT( "Type:Portability\t" );
 				break;
 
 			case eGL_DEBUG_TYPE_PERFORMANCE:
-				l_strToLog += cuT( "Type:Performance\t" );
+				l_toLog += cuT( "Type:Performance\t" );
 				break;
 
 			case eGL_DEBUG_TYPE_OTHER:
-				l_strToLog += cuT( "Type:Other\t" );
+				l_toLog += cuT( "Type:Other\t" );
 				break;
 			}
 
-			l_strToLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
+			l_toLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
 
 			switch ( severity )
 			{
 			case eGL_DEBUG_SEVERITY_HIGH:
-				l_strToLog += cuT( "Severity:High\t" );
+				l_error = true;
+				l_toLog += cuT( "Severity:High\t" );
 				break;
 
 			case eGL_DEBUG_SEVERITY_MEDIUM:
-				l_strToLog += cuT( "Severity:Medium\t" );
+				l_toLog += cuT( "Severity:Medium\t" );
 				break;
 
 			case eGL_DEBUG_SEVERITY_LOW:
-				l_strToLog += cuT( "Severity:Low\t" );
+				l_toLog += cuT( "Severity:Low\t" );
 				break;
 			}
 
-			Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+			if ( l_error )
+			{
+				Logger::LogError( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+			}
+			else
+			{
+				Logger::LogWarning( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+			}
 		}
 	}
 
 	void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )const
 	{
-		String l_strToLog = cuT( "OpenGl Debug - " );
+		bool l_error = false;
+		String l_toLog = cuT( "OpenGl Debug - " );
 
 		switch ( category )
 		{
 		case eGL_DEBUG_CATEGORY_API_ERROR:
-			l_strToLog += cuT( "Category:OpenGL\t" );
+			l_toLog += cuT( "Category:OpenGL\t" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_WINDOW_SYSTEM:
-			l_strToLog += cuT( "Category:Windows\t" );
+			l_toLog += cuT( "Category:Windows\t" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_DEPRECATION:
-			l_strToLog += cuT( "Category:Deprecated behavior\t" );
+			l_toLog += cuT( "Category:Deprecated behavior\t" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_UNDEFINED_BEHAVIOR:
-			l_strToLog += cuT( "Category:Undefined behavior\t" );
+			l_toLog += cuT( "Category:Undefined behavior\t" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_PERFORMANCE:
-			l_strToLog += cuT( "Category:Performance\t" );
+			l_toLog += cuT( "Category:Performance\t" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_SHADER_COMPILER:
-			l_strToLog += cuT( "Category:Shader compiler\t" );
+			l_toLog += cuT( "Category:Shader compiler\t" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_APPLICATION:
-			l_strToLog += cuT( "Category:Application\t" );
+			l_toLog += cuT( "Category:Application\t" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_OTHER:
-			l_strToLog += cuT( "Category:Other\t" );
+			l_toLog += cuT( "Category:Other\t" );
 			break;
 		}
 
-		l_strToLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
+		l_toLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
 
 		switch ( severity )
 		{
 		case eGL_DEBUG_SEVERITY_HIGH:
-			l_strToLog += cuT( "Severity:High\t" );
+			l_error = true;
+			l_toLog += cuT( "Severity:High\t" );
 			break;
 
 		case eGL_DEBUG_SEVERITY_MEDIUM:
-			l_strToLog += cuT( "Severity:Medium\t" );
+			l_toLog += cuT( "Severity:Medium\t" );
 			break;
 
 		case eGL_DEBUG_SEVERITY_LOW:
-			l_strToLog += cuT( "Severity:Low\t" );
+			l_toLog += cuT( "Severity:Low\t" );
 			break;
 		}
 
-		Logger::LogWarning(	l_strToLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+		if ( l_error )
+		{
+			Logger::LogError( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+		}
+		else
+		{
+			Logger::LogWarning( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+		}
 	}
 
 	void OpenGl::DisplayExtensions()const

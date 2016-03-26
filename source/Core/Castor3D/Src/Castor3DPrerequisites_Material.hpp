@@ -225,6 +225,7 @@ namespace Castor3D
 		eBLEND_MODE_NONE,			//!< Order dependent blending.
 		eBLEND_MODE_ADDITIVE,		//!< Order independent, add the components.
 		eBLEND_MODE_MULTIPLICATIVE,	//!< Order independent, multiply the components.
+		eBLEND_MODE_INTERPOLATIVE,	//!< Order dependent, interpolate the components.
 		eBLEND_MODE_A_BUFFER,		//!< Order independent, using A-buffer, not implemented yet.
 		eBLEND_MODE_DEPTH_PEELING,	//!< Order independent, using depth peeling, not implemented yet.
 		eBLEND_MODE_COUNT,

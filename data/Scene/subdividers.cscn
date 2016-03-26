@@ -1,21 +1,21 @@
 debug_overlays true
 
-material "Silver"
-{
-	pass
-	{
-		ambient 0.0745 0.0745 0.0745 1.0
-		diffuse 0.75164 0.75164 0.75164 1.0
-		emissive 0.0 0.0 0.0 1.0
-		specular 0.628281 0.628281 0.628281 1.0
-		shininess 51.2
-	}
-}
-
 scene "Scene"
 {
 	background_colour 0.5 0.5 0.5 1.0
 	ambient_light 0.5 0.5 0.5 1.0
+
+	material "Silver"
+	{
+		pass
+		{
+			ambient 0.0745 0.0745 0.0745 1.0
+			diffuse 0.75164 0.75164 0.75164 1.0
+			emissive 0.0 0.0 0.0 1.0
+			specular 0.628281 0.628281 0.628281 1.0
+			shininess 51.2
+		}
+	}
 
 	scene_node "SunLightNode1"
 	{
@@ -434,17 +434,16 @@ scene "Scene"
 			far 20000
 		}
 	}
-}
 
-window "MyWindow"
-{
-	render_target
+	window "MyWindow"
 	{
-		format argb32
-		depth depth32
-		size screen_size
-		scene "Scene"
-		camera "MainCamera"
+		render_target
+		{
+			format argb32
+			size screen_size
+			scene "Scene"
+			camera "MainCamera"
+		}
+		vsync true
 	}
-	vsync true
 }

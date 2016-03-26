@@ -58,10 +58,10 @@ namespace GuiCommon
 		if ( l_pass )
 		{
 			p_grid->Append( new wxPropertyCategory( PROPERTY_CATEGORY_PASS + wxString( l_pass->GetParent()->GetName() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( l_pass->GetAmbient().to_bgr() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( l_pass->GetDiffuse().to_bgr() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( l_pass->GetSpecular().to_bgr() ) ) );
-			p_grid->Append( new wxColourProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( wxColour( l_pass->GetEmissive().to_bgr() ) ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_PASS_DIFFUSE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetAmbient() ) ) ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_PASS_AMBIENT ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetDiffuse() ) ) ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_PASS_SPECULAR ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetSpecular() ) ) ) );
+			p_grid->Append( new wxColourProperty( PROPERTY_PASS_EMISSIVE ) )->SetValue( WXVARIANT( wxColour( bgr_packed( l_pass->GetEmissive() ) ) ) );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_EXPONENT ) )->SetValue( l_pass->GetShininess() );
 			p_grid->Append( new wxBoolProperty( PROPERTY_PASS_TWO_SIDED, wxPG_BOOL_USE_CHECKBOX ) )->SetValue( l_pass->IsTwoSided() );
 			p_grid->Append( new wxFloatProperty( PROPERTY_PASS_OPACITY ) )->SetValue( l_pass->GetAlpha() );

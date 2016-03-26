@@ -54,18 +54,28 @@ namespace Castor3D
 
 		for ( auto l_target : m_renderTargets[eTARGET_TYPE_TEXTURE] )
 		{
-			p_objCount += l_target->GetScene()->GetGeometryManager().GetObjectCount();
-			p_fceCount += l_target->GetScene()->GetGeometryManager().GetFaceCount();
-			p_vtxCount += l_target->GetScene()->GetGeometryManager().GetVertexCount();
-			l_target->Render( p_time );
+			auto l_scene = l_target->GetScene();
+
+			if ( l_scene )
+			{
+				p_objCount += l_scene->GetGeometryManager().GetObjectCount();
+				p_fceCount += l_scene->GetGeometryManager().GetFaceCount();
+				p_vtxCount += l_scene->GetGeometryManager().GetVertexCount();
+				l_target->Render( p_time );
+			}
 		}
 
 		for ( auto l_target : m_renderTargets[eTARGET_TYPE_WINDOW] )
 		{
-			p_objCount += l_target->GetScene()->GetGeometryManager().GetObjectCount();
-			p_fceCount += l_target->GetScene()->GetGeometryManager().GetFaceCount();
-			p_vtxCount += l_target->GetScene()->GetGeometryManager().GetVertexCount();
-			l_target->Render( p_time );
+			auto l_scene = l_target->GetScene();
+
+			if ( l_scene )
+			{
+				p_objCount += l_scene->GetGeometryManager().GetObjectCount();
+				p_fceCount += l_scene->GetGeometryManager().GetFaceCount();
+				p_vtxCount += l_scene->GetGeometryManager().GetVertexCount();
+				l_target->Render( p_time );
+			}
 		}
 	}
 }

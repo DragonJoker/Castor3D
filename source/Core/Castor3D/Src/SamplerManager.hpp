@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,6 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SAMPLER_MANAGER_H___
 #define ___C3D_SAMPLER_MANAGER_H___
 
+#include "RenderSystem.hpp"
 #include "ResourceManager.hpp"
 #include "Sampler.hpp"
 
@@ -46,7 +47,7 @@ namespace Castor3D
 	\brief		Gestionnaire de Sampler.
 	*/
 	class SamplerManager
-		: public ResourceManager< Castor::String, Sampler >
+		: private ResourceManager< Castor::String, Sampler >
 	{
 	public:
 		/**
@@ -77,10 +78,48 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du Sampler
 		 *\return		Le Sampler créé ou existant
 		 */
-		C3D_API SamplerSPtr Create( Castor::String const & p_name );
+		template< typename ... Parameters >
+		inline std::shared_ptr< Sampler > Create( Castor::String const & p_name, Parameters && ... p_params )
+		{
+			std::unique_lock< Collection > l_lock( m_elements );
+			SamplerSPtr l_return;
 
-	private:
-		using ResourceManager< Castor::String, Sampler >::Create;
+			if ( p_name.empty() )
+			{
+				l_return = m_renderSystem->CreateSampler( p_name );
+			}
+			else
+			{
+				if ( !m_elements.has( p_name ) )
+				{
+					l_return = m_renderSystem->CreateSampler( p_name );
+					m_elements.insert( p_name, l_return );
+					GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
+					Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				}
+				else
+				{
+					l_return = m_elements.find( p_name );
+					Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
+				}
+			}
+
+			return l_return;
+		}
+
+	public:
+		using ResourceManager< Castor::String, Sampler >::lock;
+		using ResourceManager< Castor::String, Sampler >::unlock;
+		using ResourceManager< Castor::String, Sampler >::begin;
+		using ResourceManager< Castor::String, Sampler >::end;
+		using ResourceManager< Castor::String, Sampler >::Has;
+		using ResourceManager< Castor::String, Sampler >::Find;
+		using ResourceManager< Castor::String, Sampler >::Insert;
+		using ResourceManager< Castor::String, Sampler >::Remove;
+		using ResourceManager< Castor::String, Sampler >::Cleanup;
+		using ResourceManager< Castor::String, Sampler >::Clear;
+		using ResourceManager< Castor::String, Sampler >::GetEngine;
+		using ResourceManager< Castor::String, Sampler >::SetRenderSystem;
 	};
 }
 

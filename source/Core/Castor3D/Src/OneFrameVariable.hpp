@@ -186,7 +186,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 *\param[in]	p_size		Le nombre de valeurs.
 		 */
-		inline void SetValues( T const * p_values, uint32_t p_size );
+		inline void SetValues( T const * p_values, size_t p_size );
 		/**
 		 *\~english
 		 *\brief		Defines the values of the variable.
@@ -195,7 +195,7 @@ namespace Castor3D
 		 *\brief		Définit les valeurs de la variable.
 		 *\param[in]	p_values	Les valeurs.
 		 */
-		template< uint32_t N >
+		template< size_t N >
 		inline void SetValues( T const ( & p_values )[N] )
 		{
 			SetValues( p_values, N );
@@ -208,7 +208,7 @@ namespace Castor3D
 		 *\brief		Définit les valeurs de la variable.
 		 *\param[in]	p_values	Les valeurs.
 		 */
-		template< uint32_t N >
+		template< size_t N >
 		inline void SetValues( std::array< T, N > const & p_values )
 		{
 			SetValues( p_values.data(), N );

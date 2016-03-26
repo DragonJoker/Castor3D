@@ -1,4 +1,4 @@
-﻿#include "SceneFileParser_Parsers.hpp"
+#include "SceneFileParser_Parsers.hpp"
 
 #include "AnimatedObjectGroupManager.hpp"
 #include "AnimatedObject.hpp"
@@ -18,6 +18,7 @@
 #include "ImporterPlugin.hpp"
 #include "InitialiseEvent.hpp"
 #include "LightManager.hpp"
+#include "ManagerView.hpp"
 #include "MaterialManager.hpp"
 #include "MeshManager.hpp"
 #include "OneFrameVariable.hpp"
@@ -115,7 +116,9 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RootWindow )
 	}
 	else
 	{
-		l_parsingContext->pWindow = l_parsingContext->m_pParser->GetEngine()->GetWindowManager().Create();
+		String l_name;
+		p_params[0]->Get( l_name );
+		l_parsingContext->pWindow = l_parsingContext->m_pParser->GetEngine()->GetWindowManager().Create( l_name );
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_WINDOW )
@@ -292,31 +295,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetFormat )
 		else
 		{
 			PARSING_ERROR( cuT( "Wrong format for colour" ) );
-		}
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No target initialised." ) );
-	}
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetDepth )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_parsingContext->pRenderTarget )
-	{
-		ePIXEL_FORMAT l_ePF;
-		p_params[0]->Get( l_ePF );
-
-		if ( l_ePF >= ePIXEL_FORMAT_DEPTH16 )
-		{
-			l_parsingContext->pRenderTarget->SetDepthFormat( l_ePF );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Wrong format for depth/stencil" ) );
 		}
 	}
 	else
@@ -735,6 +713,39 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBkImage )
 }
 END_ATTRIBUTE()
 
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneMaterial )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pScene )
+	{
+		String l_name;
+		p_params[0]->Get( l_name );
+		l_parsingContext->pMaterial = l_parsingContext->pScene->GetMaterialView().Create( l_name, *l_parsingContext->m_pParser->GetEngine() );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No scene initialised." ) );
+	}
+}
+END_ATTRIBUTE_PUSH( eSECTION_MATERIAL )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneSamplerState )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pScene )
+	{
+		String l_name;
+		l_parsingContext->pSampler = l_parsingContext->pScene->GetSamplerView().Create( p_params[0]->Get( l_name ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No scene initialised." ) );
+	}
+}
+END_ATTRIBUTE_PUSH( eSECTION_SAMPLER )
+
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneCamera )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
@@ -902,6 +913,30 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBillboard )
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_BILLBOARD )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneWindow )
+{
+	SceneFileContextSPtr l_pContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_pContext->pScene )
+	{
+		if ( l_pContext->pWindow )
+		{
+			PARSING_ERROR( cuT( "Can't create more than one render window" ) );
+		}
+		else
+		{
+			String l_name;
+			p_params[0]->Get( l_name );
+			l_pContext->pWindow = l_pContext->pScene->GetRenderWindowView().Create( l_name );
+		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "Scene not initialised" ) );
+	}
+}
+END_ATTRIBUTE_PUSH( eSECTION_WINDOW )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneAnimatedObjectGroup )
 {
@@ -1355,50 +1390,50 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 			if ( l_strType == cuT( "cube" ) )
 			{
 				l_type = eMESH_TYPE_CUBE;
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "cone" ) )
 			{
 				l_type = eMESH_TYPE_CONE;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "cylinder" ) )
 			{
 				l_type = eMESH_TYPE_CYLINDER;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
 			}
 			else if ( l_strType == cuT( "sphere" ) )
 			{
 				l_type = eMESH_TYPE_SPHERE;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[2] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[2] ) );
 			}
 			else if ( l_strType == cuT( "icosahedron" ) )
 			{
 				l_type = eMESH_TYPE_ICOSAHEDRON;
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[1] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[1] ) );
 			}
 			else if ( l_strType == cuT( "plane" ) )
 			{
 				l_type = eMESH_TYPE_PLANE;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[4] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
 			}
 			else if ( l_strType == cuT( "torus" ) )
 			{
 				l_type = eMESH_TYPE_TORUS;
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[1] ) );
-				l_arrayFaces.push_back( string::to_int(	l_arrayMeshInfos[2] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[3] ) );
-				l_arraySizes.push_back( string::to_real(	l_arrayMeshInfos[4] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[1] ) );
+				l_arrayFaces.push_back( string::to_int( l_arrayMeshInfos[2] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[3] ) );
+				l_arraySizes.push_back( string::to_real( l_arrayMeshInfos[4] ) );
 			}
 			else
 			{
@@ -1406,7 +1441,14 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshType )
 			}
 		}
 
-		l_parsingContext->pMesh = l_parsingContext->m_pParser->GetEngine()->GetMeshManager().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+		if ( l_parsingContext->pScene )
+		{
+			l_parsingContext->pMesh = l_parsingContext->pScene->GetMeshView().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+		}
+		else
+		{
+			l_parsingContext->pMesh = l_parsingContext->m_pParser->GetEngine()->GetMeshManager().Create( l_parsingContext->strName2, l_type, l_arrayFaces, l_arraySizes );
+		}
 	}
 	else
 	{
@@ -1422,36 +1464,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshNormals )
 	p_params[0]->Get( l_uiMode );
 	l_parsingContext->pMesh->ComputeNormals();
 	l_parsingContext->bBool1 = true;
-}
-END_ATTRIBUTE()
-
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshFile )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_parsingContext->pMesh = l_parsingContext->m_pParser->GetEngine()->GetMeshManager().Create( cuEmptyString, eMESH_TYPE_CUSTOM, UIntArray(), RealArray() );
-	Path l_path;
-	p_params[0]->Get( l_path );
-
-	if ( !l_parsingContext->pMesh )
-	{
-		PARSING_ERROR( cuT( "mesh isn't initialised" ) );
-	}
-	else
-	{
-		BinaryFile l_file( p_context->m_file->GetFilePath() / l_path, File::eOPEN_MODE_READ );
-
-		if ( !l_file.IsOk() )
-		{
-			PARSING_ERROR( cuT( "file [" ) + l_path + cuT( "] doesn't exist" ) );
-		}
-		else
-		{
-			//if( !Mesh::BinaryLoader()( *l_parsingContext->pMesh, l_file ) )
-			//{
-			//	PARSING_ERROR( cuT( "Can't load mesh file " ) + l_path );
-			//}
-		}
-	}
 }
 END_ATTRIBUTE()
 
@@ -1478,76 +1490,84 @@ END_ATTRIBUTE_PUSH( eSECTION_SUBMESH )
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	Path l_path;
-	Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
-	Parameters l_parameters;
 
-	if ( p_params.size() > 1 )
+	if ( l_parsingContext->pScene )
 	{
-		String l_tmp;
-		StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
+		Path l_path;
+		Path l_pathFile = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		Parameters l_parameters;
 
-		if ( l_arrayStrParams.size() )
+		if ( p_params.size() > 1 )
 		{
-			for ( StringArrayConstIt l_it = l_arrayStrParams.begin(); l_it != l_arrayStrParams.end(); ++l_it )
+			String l_tmp;
+			StringArray l_arrayStrParams = string::split( p_params[1]->Get( l_tmp ), cuT( "-" ), 20, false );
+
+			if ( l_arrayStrParams.size() )
 			{
-				if ( l_it->find( cuT( "smooth_normals" ) ) == 0 )
+				for ( StringArrayConstIt l_it = l_arrayStrParams.begin(); l_it != l_arrayStrParams.end(); ++l_it )
 				{
-					String l_strNml = cuT( "smooth" );
-					l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
-				}
-				else if ( l_it->find( cuT( "flat_normals" ) ) == 0 )
-				{
-					String l_strNml = cuT( "flat" );
-					l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
-				}
-				else if ( l_it->find( cuT( "tangent_space" ) ) == 0 )
-				{
-					bool l_bValue = true;
-					l_parameters.Add( cuT( "tangent_space" ), l_bValue );
-				}
-			}
-		}
-	}
-
-	if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
-	{
-		BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
-//		Mesh::BinaryLoader()( *l_parsingContext->pMesh, l_file );
-	}
-	else
-	{
-		Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
-		ImporterPluginSPtr l_pPlugin;
-		ImporterSPtr l_pImporter;
-		ImporterPlugin::ExtensionArray l_arrayExtensions;
-
-		for ( auto l_it : l_pEngine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
-		{
-			l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
-
-			if ( !l_pImporter && l_pPlugin )
-			{
-				l_arrayExtensions = l_pPlugin->GetExtensions();
-
-				for ( auto l_itExt : l_arrayExtensions )
-				{
-					if ( !l_pImporter && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
+					if ( l_it->find( cuT( "smooth_normals" ) ) == 0 )
 					{
-						l_pImporter = l_pPlugin->GetImporter();
+						String l_strNml = cuT( "smooth" );
+						l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+					}
+					else if ( l_it->find( cuT( "flat_normals" ) ) == 0 )
+					{
+						String l_strNml = cuT( "flat" );
+						l_parameters.Add( cuT( "normals" ), l_strNml.c_str(), uint32_t( l_strNml.size() ) );
+					}
+					else if ( l_it->find( cuT( "tangent_space" ) ) == 0 )
+					{
+						bool l_bValue = true;
+						l_parameters.Add( cuT( "tangent_space" ), l_bValue );
 					}
 				}
 			}
 		}
 
-		if ( l_pImporter )
+		if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
 		{
-			l_parsingContext->pMesh = l_pImporter->ImportMesh( l_pathFile, l_parameters );
+			BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
+			//Mesh::BinaryLoader()( *l_parsingContext->pMesh, l_file );
 		}
 		else
 		{
-			PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
+			Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
+			ImporterPluginSPtr l_pPlugin;
+			ImporterSPtr l_pImporter;
+			ImporterPlugin::ExtensionArray l_arrayExtensions;
+
+			for ( auto l_it : l_pEngine->GetPluginManager().GetPlugins( ePLUGIN_TYPE_IMPORTER ) )
+			{
+				l_pPlugin = std::static_pointer_cast< ImporterPlugin, PluginBase >( l_it.second );
+
+				if ( !l_pImporter && l_pPlugin )
+				{
+					l_arrayExtensions = l_pPlugin->GetExtensions();
+
+					for ( auto l_itExt : l_arrayExtensions )
+					{
+						if ( !l_pImporter && string::lower_case( l_pathFile.GetExtension() ) == string::lower_case( l_itExt.first ) )
+						{
+							l_pImporter = l_pPlugin->GetImporter();
+						}
+					}
+				}
+			}
+
+			if ( l_pImporter )
+			{
+				l_parsingContext->pMesh = l_parsingContext->pScene->ImportMesh( l_pathFile, *l_pImporter, l_parameters );
+			}
+			else
+			{
+				PARSING_WARNING( cuT( "No importer for mesh type file extension : " ) + l_pathFile.GetExtension() );
+			}
 		}
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No scene initialised." ) );
 	}
 }
 END_ATTRIBUTE()

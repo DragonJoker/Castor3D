@@ -283,6 +283,13 @@ namespace Castor3D
 		C3D_API void FillShaderVariables( RenderNode & p_node );
 		/**
 		 *\~english
+		 *\brief		Reduces the textures.
+		 *\~french
+		 *\brief		Réduit les textures.
+		 */
+		C3D_API void PrepareTextures();
+		/**
+		 *\~english
 		 *\brief		Retrieves the texture channels flags combination
 		 *\return		The value
 		 *\~french
@@ -788,6 +795,8 @@ namespace Castor3D
 		eBLEND_MODE m_alphaBlendMode;
 		//!\~english The colour blend mode \~french Le mode de mélange couleur
 		eBLEND_MODE m_colourBlendMode;
+		//!\~english Tells if the pass' textures are reduced. \~french Dit si les textures de la passe sont réduites.
+		bool m_texturesReduced;
 	};
 }
 

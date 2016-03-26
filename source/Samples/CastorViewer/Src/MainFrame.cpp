@@ -11,6 +11,7 @@
 #include <wx/renderer.h>
 
 #include <RenderTarget.hpp>
+#include <RenderLoop.hpp>
 #include <ImagesLoader.hpp>
 #include <FunctorEvent.hpp>
 #include <InitialiseEvent.hpp>
@@ -30,7 +31,7 @@
 #include <RenderLoop.hpp>
 #include <RenderWindow.hpp>
 #include <Sampler.hpp>
-#include <Scene.hpp>
+#include <SceneManager.hpp>
 #include <SceneFileParser.hpp>
 #include <Submesh.hpp>
 #include <TextureUnit.hpp>
@@ -149,8 +150,11 @@ namespace CastorViewer
 			m_sceneObjectsList->UnloadScene();
 			m_pMainCamera.reset();
 			m_pSceneNode.reset();
-			l_scene.reset();
+			l_scene->Cleanup();
+			wxGetApp().GetCastor()->GetRenderLoop().Cleanup();
+			wxGetApp().GetCastor()->GetSceneManager().Remove( l_scene->GetName() );
 			Logger::LogDebug( cuT( "MainFrame::DoCleanupScene - Scene related objects unloaded." ) );
+			l_scene.reset();
 		}
 
 	}
@@ -166,6 +170,11 @@ namespace CastorViewer
 
 			if ( !m_strFilePath.empty() )
 			{
+				if ( wxGetApp().GetCastor()->IsThreaded() )
+				{
+					wxGetApp().GetCastor()->GetRenderLoop().Pause();
+				}
+
 				Logger::LogDebug( cuT( "MainFrame::LoadScene - " ) + m_strFilePath );
 				DoCleanupScene();
 
@@ -225,6 +234,11 @@ namespace CastorViewer
 					m_toolBar->EnableTool( eID_TOOL_RECORD, true );
 
 #endif
+				}
+
+				if ( wxGetApp().GetCastor()->IsThreaded() )
+				{
+					wxGetApp().GetCastor()->GetRenderLoop().Resume();
 				}
 			}
 			else
@@ -320,29 +334,32 @@ namespace CastorViewer
 
 		try
 		{
+			wxGetApp().GetCastor()->Initialise( CASTOR_WANTED_FPS, CASTOR3D_THREADED );
 
-			if ( l_return )
+			Logger::LogInfo( cuT( "Castor3D Initialised" ) );
+
+			if ( !CASTOR3D_THREADED && !m_timer )
 			{
-				Logger::LogInfo( cuT( "Castor3D Initialised" ) );
-
-				if ( !CASTOR3D_THREADED && !m_timer )
-				{
-					m_timer = new wxTimer( this, eID_RENDER_TIMER );
-					m_timer->Start( 1000 / CASTOR_WANTED_FPS );
-				}
-
-				if ( !m_timerMsg )
-				{
-					m_timerMsg = new wxTimer( this, eID_MSGLOG_TIMER );
-					m_timerMsg->Start( 100 );
-				}
-
-				if ( !m_timerErr )
-				{
-					m_timerErr = new wxTimer( this, eID_ERRLOG_TIMER );
-					m_timerErr->Start( 100 );
-				}
+				m_timer = new wxTimer( this, eID_RENDER_TIMER );
+				m_timer->Start( 1000 / CASTOR_WANTED_FPS );
 			}
+
+			if ( !m_timerMsg )
+			{
+				m_timerMsg = new wxTimer( this, eID_MSGLOG_TIMER );
+				m_timerMsg->Start( 100 );
+			}
+
+			if ( !m_timerErr )
+			{
+				m_timerErr = new wxTimer( this, eID_ERRLOG_TIMER );
+				m_timerErr->Start( 100 );
+			}
+		}
+		catch ( std::exception & exc )
+		{
+			wxMessageBox( _( "Problem occured while initialising Castor3D." ) + wxString( wxT( "\n" ) ) + wxString( exc.what(), wxMBConvLibc() ), _( "Exception" ), wxOK | wxCENTRE | wxICON_ERROR );
+			l_return = false;
 		}
 		catch ( ... )
 		{

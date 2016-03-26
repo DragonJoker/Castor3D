@@ -5,17 +5,17 @@ using namespace Castor;
 
 namespace Ase
 {
-	AseFileContext::AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, TextFile * p_pFile )
+	AseFileContext::AseFileContext( AseFileParser * p_pParser, AseImporter & p_importer, TextFile * p_pFile, Scene & p_scene )
 		: FileParserContext( p_pFile )
 		, m_pParser( p_pParser )
 		, m_importer( p_importer )
+		, scene( p_scene )
 	{
 		Initialise();
 	}
 
 	void AseFileContext::Initialise()
 	{
-		pScene = NULL;
 		uiUInt16 = 0;
 		uiUInt32 = 0;
 		uiUInt64 = 0;

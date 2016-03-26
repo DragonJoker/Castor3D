@@ -191,4 +191,3 @@ namespace Castor
 		stream << timestamp << cuT( " - " ) << m_headers[logLevel] << line << std::endl;
 	}
 }
-

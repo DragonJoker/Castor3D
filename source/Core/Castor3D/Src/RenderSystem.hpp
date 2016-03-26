@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -181,15 +181,6 @@ namespace Castor3D
 		 *\param[in]	p_programFlags	Combinaison de ePROGRAM_FLAG
 		 */
 		C3D_API GLSL::GlslWriter CreateGlslWriter();
-		/**
-		 *\~english
-		 *\brief		Creates a shader program for overlays rendering use.
-		 *\return		The created program.
-		 *\~french
-		 *\brief		Crée un programme shader pour les rendu d'incrustations
-		 *\return		Le programme créé.
-		 */
-		C3D_API ShaderProgramSPtr CreateOverlayProgram( uint32_t p_flags );
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for billboards rendering use.
@@ -393,6 +384,17 @@ namespace Castor3D
 		 *\return		Les tampons d'image créés.
 		 */
 		C3D_API virtual BackBuffersSPtr CreateBackBuffers() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a GPU query.
+		 *\param[in]	p_type	The query type.
+		 *\return		The created GPU query.
+		 *\~french
+		 *\brief		Crée une requête GPU.
+		 *\param[in]	p_type	Le type de requête.
+		 *\return		La requête GPU créée.
+		 */
+		C3D_API virtual GpuQuerySPtr CreateQuery( eQUERY_TYPE p_type ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type

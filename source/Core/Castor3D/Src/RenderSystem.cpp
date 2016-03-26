@@ -76,9 +76,7 @@ namespace Castor3D
 	{
 		Point4fFrameVariableSPtr l_variable;
 		p_variableBuffer.GetVariable( ShaderProgram::AmbientLight, l_variable );
-		Point4f l_ptColour;
-		p_clColour.to_rgba( l_ptColour );
-		l_variable->SetValue( l_ptColour );
+		l_variable->SetValue( rgba_float( p_clColour ) );
 	}
 
 	void RenderSystem::PushScene( Scene * p_scene )
@@ -212,108 +210,6 @@ namespace Castor3D
 
 		l_writer.ImplementFunction< void >( cuT( "main" ), l_main );
 		return l_writer.Finalise();
-
-#undef CHECK_FLAG
-	}
-
-	ShaderProgramSPtr RenderSystem::CreateOverlayProgram( uint32_t p_flags )
-	{
-#define CHECK_FLAG( flag ) ( ( p_flags & ( flag ) ) == ( flag ) )
-
-		using namespace GLSL;
-
-		// Shader program
-		ShaderManager & l_manager = GetEngine()->GetShaderManager();
-		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
-		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
-		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
-
-		// Vertex shader
-		String l_strVs;
-		{
-			auto l_writer = CreateGlslWriter();
-
-			UBO_MATRIX( l_writer );
-
-			// Shader inputs
-			auto position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
-			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
-
-			// Shader outputs
-			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
-			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-			{
-				vtx_texture = texture;
-				gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
-			} );
-
-			l_strVs = l_writer.Finalise();
-		}
-
-		// Pixel shader
-		String l_strPs;
-		{
-			auto l_writer = CreateGlslWriter();
-
-			UBO_PASS( l_writer );
-
-			// Shader inputs
-			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
-			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
-			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
-			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) );
-
-			// Shader outputs
-			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
-
-			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
-			{
-				LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
-				LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
-
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
-				{
-					l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
-				}
-
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
-				{
-					l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.X, vtx_texture.Y ) );
-				}
-
-				if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
-				{
-					l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
-				}
-
-				pxl_v4FragColor = vec4( l_v4Ambient.XYZ, l_fAlpha );
-			} );
-
-			l_strPs = l_writer.Finalise();
-		}
-
-		if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
-		{
-			l_program->CreateFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
-		}
-
-		if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
-		{
-			l_program->CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
-		}
-
-		if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
-		{
-			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
-		}
-
-		eSHADER_MODEL l_model = GetMaxShaderModel();
-		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVs );
-		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
-
-		return l_program;
 
 #undef CHECK_FLAG
 	}

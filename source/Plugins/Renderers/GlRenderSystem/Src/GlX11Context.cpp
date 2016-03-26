@@ -99,34 +99,6 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 		l_attribList.push_back( GLX_BLUE_SIZE );
 		l_attribList.push_back( 1 );
 
-		if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH32 )
-		{
-			l_attribList.push_back( GLX_DEPTH_SIZE );
-			l_attribList.push_back( 32 );
-		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH24 )
-		{
-			l_attribList.push_back( GLX_DEPTH_SIZE );
-			l_attribList.push_back( 24 );
-		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_DEPTH24S8 )
-		{
-			l_attribList.push_back( GLX_DEPTH_SIZE );
-			l_attribList.push_back( 24 );
-			l_attribList.push_back( GLX_STENCIL_SIZE );
-			l_attribList.push_back( 8 );
-		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_STENCIL8 )
-		{
-			l_attribList.push_back( GLX_STENCIL_SIZE );
-			l_attribList.push_back( 8 );
-		}
-		else if ( p_window->GetDepthFormat() == ePIXEL_FORMAT_STENCIL1 )
-		{
-			l_attribList.push_back( GLX_STENCIL_SIZE );
-			l_attribList.push_back( 1 );
-		}
-
 		if ( p_window->IsUsingStereo() )
 		{
 			l_attribList.push_back( GLX_STEREO );

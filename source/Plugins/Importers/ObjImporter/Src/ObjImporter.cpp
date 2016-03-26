@@ -1,25 +1,26 @@
 ﻿#include "ObjImporter.hpp"
 #include "ObjGroup.hpp"
 
+#include <Buffer.hpp>
+#include <Colour.hpp>
+#include <Engine.hpp>
+#include <Face.hpp>
+#include <GeometryManager.hpp>
+#include <InitialiseEvent.hpp>
+#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <Mesh.hpp>
-#include <Submesh.hpp>
-#include <Vertex.hpp>
-#include <Buffer.hpp>
-#include <GeometryManager.hpp>
-#include <Face.hpp>
+#include <Plugin.hpp>
 #include <RenderSystem.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <Version.hpp>
-#include <Plugin.hpp>
-#include <Engine.hpp>
 #include <StaticTexture.hpp>
+#include <Submesh.hpp>
+#include <Texture.hpp>
+#include <TextureUnit.hpp>
+#include <Version.hpp>
 #include <Vertex.hpp>
-#include <InitialiseEvent.hpp>
 
 #include <Image.hpp>
 
@@ -37,12 +38,11 @@ namespace Obj
 
 	SceneSPtr ObjImporter::DoImportScene()
 	{
-		MeshSPtr l_mesh = DoImportMesh();
-		SceneSPtr l_scene;
+		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetEngine() );
+		MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 		if ( l_mesh )
 		{
-			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_OBJ" ), *GetEngine() );
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 			l_geometry->AttachTo( l_node );
@@ -60,7 +60,7 @@ namespace Obj
 		return l_scene;
 	}
 
-	MeshSPtr ObjImporter::DoImportMesh()
+	MeshSPtr ObjImporter::DoImportMesh( Scene & p_scene )
 	{
 		MeshSPtr l_return;
 
@@ -71,7 +71,7 @@ namespace Obj
 			if ( l_file.IsOk() )
 			{
 				m_pFile = &l_file;
-				l_return = DoReadObjFile();
+				l_return = DoReadObjFile( p_scene );
 				m_arrayLoadedMaterials.clear();
 				m_arrayTextures.clear();
 			}
@@ -117,11 +117,11 @@ namespace Obj
 		}
 	}
 
-	MeshSPtr ObjImporter::DoReadObjFile()
+	MeshSPtr ObjImporter::DoReadObjFile( Scene & p_scene )
 	{
 		String l_name = m_fileName.GetFileName();
 		String l_meshName = l_name.substr( 0, l_name.find_last_of( '.' ) );
-		MeshSPtr l_return = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM );
+		MeshSPtr l_return = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM );
 		String l_strSection;
 		String l_strValue;
 		String l_strLine;
@@ -140,7 +140,7 @@ namespace Obj
 		stUV l_uv;
 		stNORMAL l_normal;
 		stGROUP * l_pGroup = NULL;
-		MaterialManager & l_mtlManager = GetEngine()->GetMaterialManager();
+		auto & l_mtlManager = p_scene.GetMaterialView();
 		FaceArray * l_pArrayIndex = NULL;
 
 		while ( m_pFile->IsOk() )
@@ -172,7 +172,7 @@ namespace Obj
 						// Material description file
 						if ( File::FileExists( m_filePath / l_strValue ) )
 						{
-							DoReadMaterials( m_filePath / l_strValue );
+							DoReadMaterials( p_scene, m_filePath / l_strValue );
 						}
 					}
 					else if ( l_strSection == cuT( "usemtl" ) )
@@ -619,7 +619,7 @@ namespace Obj
 		return l_bReturn;
 	}
 
-	void ObjImporter::DoReadMaterials( Path const & p_pathMatFile )
+	void ObjImporter::DoReadMaterials( Scene & p_scene, Path const & p_pathMatFile )
 	{
 		String l_strLine;
 		String l_strSection;
@@ -630,7 +630,7 @@ namespace Obj
 		float l_components[3];
 		float l_fAlpha = 1.0f;
 		bool l_bOpaFound = false;
-		MaterialManager & l_mtlManager = GetEngine()->GetMaterialManager();
+		auto & l_mtlManager = p_scene.GetMaterialView();
 		TextFile l_matFile( p_pathMatFile, File::eOPEN_MODE_READ );
 
 		while ( l_matFile.IsOk() )

@@ -5,6 +5,7 @@
 #include <GeometryManager.hpp>
 #include <InitialiseEvent.hpp>
 #include <ImporterPlugin.hpp>
+#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <PluginManager.hpp>
@@ -251,12 +252,11 @@ namespace C3dAssimp
 
 	SceneSPtr AssimpImporter::DoImportScene()
 	{
-		DoImportMesh();
-		SceneSPtr l_scene;
+		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetEngine() );
+		DoImportMesh( *l_scene );
 
 		if ( m_mesh )
 		{
-			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASSIMP" ), *GetEngine() );
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( m_mesh->GetName(), l_scene->GetObjectRootNode() );
 			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( m_mesh->GetName(), l_node );
 
@@ -272,7 +272,7 @@ namespace C3dAssimp
 		return l_scene;
 	}
 
-	MeshSPtr AssimpImporter::DoImportMesh()
+	MeshSPtr AssimpImporter::DoImportMesh( Scene & p_scene )
 	{
 		m_mapBoneByID.clear();
 		m_arrayBones.clear();
@@ -330,7 +330,7 @@ namespace C3dAssimp
 							l_submesh = m_mesh->CreateSubmesh();
 						}
 
-						l_create = DoProcessMesh( l_skeleton, l_aiScene->mMeshes[i], l_aiScene, l_submesh );
+						l_create = DoProcessMesh( p_scene, l_skeleton, l_aiScene->mMeshes[i], l_aiScene, l_submesh );
 					}
 
 					if ( m_arrayBones.empty() )
@@ -404,14 +404,14 @@ namespace C3dAssimp
 	}
 
 
-	bool AssimpImporter::DoProcessMesh( SkeletonSPtr p_skeleton, aiMesh const * p_aiMesh, aiScene const * p_aiScene, SubmeshSPtr p_submesh )
+	bool AssimpImporter::DoProcessMesh( Scene & p_scene, SkeletonSPtr p_skeleton, aiMesh const * p_aiMesh, aiScene const * p_aiScene, SubmeshSPtr p_submesh )
 	{
 		bool l_return = false;
 		MaterialSPtr l_material;
 
 		if ( p_aiMesh->mMaterialIndex < p_aiScene->mNumMaterials )
 		{
-			l_material = DoProcessMaterial( p_aiScene->mMaterials[p_aiMesh->mMaterialIndex] );
+			l_material = DoProcessMaterial( p_scene, p_aiScene->mMaterials[p_aiMesh->mMaterialIndex] );
 		}
 
 		if ( p_aiMesh->HasFaces() && p_aiMesh->HasPositions() && l_material )
@@ -549,10 +549,10 @@ namespace C3dAssimp
 		}
 	}
 
-	MaterialSPtr AssimpImporter::DoProcessMaterial( aiMaterial const * p_pAiMaterial )
+	MaterialSPtr AssimpImporter::DoProcessMaterial( Scene & p_scene, aiMaterial const * p_pAiMaterial )
 	{
 		MaterialSPtr l_return;
-		MaterialManager & l_manager = GetEngine()->GetMaterialManager();
+		auto & l_manager = p_scene.GetMaterialView();
 		aiString l_mtlname;
 		p_pAiMaterial->Get( AI_MATKEY_NAME, l_mtlname );
 		String l_name = string::string_cast< xchar >( l_mtlname.C_Str() );
@@ -652,10 +652,10 @@ namespace C3dAssimp
 				{
 					DoLoadTexture( l_nmlTexName, *l_pass, eTEXTURE_CHANNEL_NORMAL );
 
-					if ( l_hgtTexName.length > 0 )
-					{
-						DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_HEIGHT );
-					}
+					//if ( l_hgtTexName.length > 0 )
+					//{
+					//	DoLoadTexture( l_hgtTexName, *l_pass, eTEXTURE_CHANNEL_HEIGHT );
+					//}
 				}
 				else if ( l_hgtTexName.length > 0 )
 				{

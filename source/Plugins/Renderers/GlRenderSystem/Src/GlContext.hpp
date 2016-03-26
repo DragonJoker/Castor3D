@@ -42,6 +42,7 @@ namespace GlRender
 	private:
 		virtual bool DoInitialise();
 		virtual void DoCleanup();
+		virtual void DoDestroy();
 		virtual void DoSetCurrent();
 		virtual void DoEndCurrent();
 		virtual void DoSwapBuffers();
@@ -51,8 +52,6 @@ namespace GlRender
 	private:
 		GlContextImpl * m_implementation;
 		GlRenderSystem * m_glRenderSystem;
-		GlQuery m_timerQuery[2];
-		uint32_t m_queryIndex = 0;
 	};
 }
 

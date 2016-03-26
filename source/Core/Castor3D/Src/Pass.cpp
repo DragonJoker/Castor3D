@@ -337,20 +337,21 @@ namespace Castor3D
 	//*********************************************************************************************
 
 	Pass::Pass( Engine & p_engine, MaterialSPtr p_parent )
-		: OwnedBy< Engine >( p_engine )
-		, m_fShininess( 50.0 )
-		, m_bDoubleFace( false )
-		, m_parent( p_parent )
-		, m_clrDiffuse( Colour::from_rgba( 0xFFFFFFFF ) )
-		, m_clrAmbient( Colour::from_rgba( 0x000000FF ) )
-		, m_clrSpecular( Colour::from_rgba( 0xFFFFFFFF ) )
-		, m_clrEmissive( Colour::from_rgba( 0x000000FF ) )
-		, m_fAlpha( 1.0f )
-		, m_pBlendState( p_engine.GetRenderSystem()->CreateBlendState() )
-		, m_textureFlags( 0 )
-		, m_bAutomaticShader( true )
-		, m_alphaBlendMode( eBLEND_MODE_ADDITIVE )
-		, m_colourBlendMode( eBLEND_MODE_ADDITIVE )
+		: OwnedBy< Engine >{ p_engine }
+		, m_fShininess{ 50.0 }
+		, m_bDoubleFace{ false }
+		, m_parent{ p_parent }
+		, m_clrDiffuse{ Colour::from_rgba( 0xFFFFFFFF ) }
+		, m_clrAmbient{ Colour::from_rgba( 0x000000FF ) }
+		, m_clrSpecular{ Colour::from_rgba( 0xFFFFFFFF ) }
+		, m_clrEmissive{ Colour::from_rgba( 0x000000FF ) }
+		, m_fAlpha{ 1.0f }
+		, m_pBlendState{ p_engine.GetRenderSystem()->CreateBlendState() }
+		, m_textureFlags{ 0 }
+		, m_bAutomaticShader{ true }
+		, m_alphaBlendMode{ eBLEND_MODE_INTERPOLATIVE }
+		, m_colourBlendMode{ eBLEND_MODE_INTERPOLATIVE }
+		, m_texturesReduced{ false }
 	{
 	}
 
@@ -361,66 +362,12 @@ namespace Castor3D
 
 	void Pass::Initialise()
 	{
-		TextureUnitSPtr l_pOpaSrc;
-		PxBufferBaseSPtr l_pImageOpa;
-		bool l_bHasAlpha = m_fAlpha < 1;
+		PrepareTextures();
+		bool l_bHasAlpha = m_fAlpha < 1 || GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
 
 		for ( auto l_unit : m_arrayTextureUnits )
 		{
-			l_unit->SetIndex( 0 );
-		}
-
-		// Lights texture is at index 0, so start at index 1
-		uint32_t l_index = 1;
-		TextureUnitSPtr l_pAmbientMap = GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT );
-		TextureUnitSPtr l_pColourMap = GetTextureUnit( eTEXTURE_CHANNEL_COLOUR );
-		TextureUnitSPtr l_pDiffuseMap = GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE );
-		TextureUnitSPtr l_pNormalMap = GetTextureUnit( eTEXTURE_CHANNEL_NORMAL );
-		TextureUnitSPtr l_pSpecularMap = GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR );
-		TextureUnitSPtr l_pEmissiveMap = GetTextureUnit( eTEXTURE_CHANNEL_EMISSIVE );
-		TextureUnitSPtr l_pOpacityMap = GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
-		TextureUnitSPtr l_pGlossMap = GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
-		TextureUnitSPtr l_pHeightMap = GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
-
-		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_AMBIENT, l_pAmbientMap, l_index, l_pOpaSrc, l_pImageOpa );
-		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_COLOUR, l_pColourMap, l_index, l_pOpaSrc, l_pImageOpa );
-		l_bHasAlpha |= DoPrepareTexture( eTEXTURE_CHANNEL_DIFFUSE, l_pDiffuseMap, l_index, l_pOpaSrc, l_pImageOpa );
-
-		DoPrepareTexture( eTEXTURE_CHANNEL_NORMAL, l_pNormalMap, l_index );
-		DoPrepareTexture( eTEXTURE_CHANNEL_SPECULAR, l_pSpecularMap, l_index );
-		DoPrepareTexture( eTEXTURE_CHANNEL_EMISSIVE, l_pEmissiveMap, l_index );
-		DoPrepareTexture( eTEXTURE_CHANNEL_GLOSS, l_pGlossMap, l_index );
-		DoPrepareTexture( eTEXTURE_CHANNEL_HEIGHT, l_pHeightMap, l_index );
-
-		if ( l_pOpacityMap && l_pOpacityMap->GetImagePixels() )
-		{
-			PxBufferBaseSPtr l_pReducted = l_pOpacityMap->GetImagePixels();
-			PF::ReduceToAlpha( l_pReducted );
-			l_pOpacityMap->GetTexture()->SetImage( l_pReducted );
-			l_bHasAlpha = true;
-			l_pImageOpa.reset();
-		}
-		else if ( l_pImageOpa )
-		{
-			l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
-			l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
-			l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
-			StaticTextureSPtr l_pTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-			l_pTexture->SetType( eTEXTURE_TYPE_2D );
-			l_pTexture->SetImage( l_pImageOpa );
-			l_pOpacityMap->SetSampler( l_pOpaSrc->GetSampler() );
-			l_pOpacityMap->SetTexture( l_pTexture );
-			AddTextureUnit( l_pOpacityMap );
-			l_pImageOpa.reset();
-		}
-
-		if ( l_pOpacityMap )
-		{
-			l_pOpacityMap->SetIndex( l_index++ );
-			Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << l_pOpacityMap->GetIndex() );
-			m_textureFlags |= eTEXTURE_CHANNEL_OPACITY;
-			l_pOpacityMap->Initialise();
-			l_bHasAlpha = true;
+			l_unit->Initialise();
 		}
 
 		if ( l_bHasAlpha && !m_pBlendState->IsBlendEnabled() )
@@ -439,33 +386,41 @@ namespace Castor3D
 			{
 				switch ( m_alphaBlendMode )
 				{
+				case eBLEND_MODE_NONE:
+					m_pBlendState->SetAlphaSrcBlend( eBLEND_ONE );
+					m_pBlendState->SetAlphaDstBlend( eBLEND_ZERO );
+					m_pBlendState->SetRgbSrcBlend( eBLEND_ONE );
+					m_pBlendState->SetRgbDstBlend( eBLEND_ZERO );
+					break;
+
 				case eBLEND_MODE_ADDITIVE:
 					m_pBlendState->SetAlphaSrcBlend( eBLEND_ONE );
 					m_pBlendState->SetAlphaDstBlend( eBLEND_ONE );
+					m_pBlendState->SetRgbSrcBlend( eBLEND_ONE );
+					m_pBlendState->SetRgbDstBlend( eBLEND_ONE );
 					break;
 
 				case eBLEND_MODE_MULTIPLICATIVE:
 					m_pBlendState->SetAlphaSrcBlend( eBLEND_ZERO );
-					m_pBlendState->SetAlphaDstBlend( eBLEND_SRC_COLOUR );
+					m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+					m_pBlendState->SetRgbSrcBlend( eBLEND_ZERO );
+					m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+					break;
+
+				case eBLEND_MODE_INTERPOLATIVE:
+					m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
+					m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+					m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
+					m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
 					break;
 
 				default:
 					m_pBlendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
 					m_pBlendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+					m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
+					m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
 					break;
 				}
-
-				m_pBlendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
-				m_pBlendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
-			}
-		}
-
-		for ( auto l_unit : m_arrayTextureUnits )
-		{
-			if ( l_unit->GetIndex() == 0 )
-			{
-				l_unit->SetIndex( l_index++ );
-				l_unit->Initialise();
 			}
 		}
 
@@ -518,6 +473,7 @@ namespace Castor3D
 		p_unit->SetIndex( l_uiID );
 		m_arrayTextureUnits.push_back( p_unit );
 		DoUpdateFlags();
+		m_texturesReduced;
 	}
 
 	TextureUnitSPtr Pass::GetTextureUnit( eTEXTURE_CHANNEL p_channel )
@@ -599,13 +555,85 @@ namespace Castor3D
 			}
 		}
 
-		Point4f l_colour;
-		p_node.m_ambient.SetValue( GetAmbient().to_rgba( l_colour ) );
-		p_node.m_diffuse.SetValue( GetDiffuse().to_rgba( l_colour ) );
-		p_node.m_specular.SetValue( GetSpecular().to_rgba( l_colour ) );
-		p_node.m_emissive.SetValue( GetEmissive().to_rgba( l_colour ) );
+		p_node.m_ambient.SetValue( rgba_float( GetAmbient() ) );
+		p_node.m_diffuse.SetValue( rgba_float( GetDiffuse() ) );
+		p_node.m_specular.SetValue( rgba_float( GetSpecular() ) );
+		p_node.m_emissive.SetValue( rgba_float( GetEmissive() ) );
 		p_node.m_shininess.SetValue( GetShininess() );
 		p_node.m_opacity.SetValue( GetAlpha() );
+	}
+
+	void Pass::PrepareTextures()
+	{
+		if ( !m_texturesReduced )
+		{
+			for ( auto l_unit : m_arrayTextureUnits )
+			{
+				l_unit->SetIndex( 0 );
+			}
+
+			// Lights texture is at index 0, so start at index 1
+			uint32_t l_index = 1;
+			TextureUnitSPtr l_pOpaSrc;
+			PxBufferBaseSPtr l_pImageOpa;
+			TextureUnitSPtr l_pAmbientMap = GetTextureUnit( eTEXTURE_CHANNEL_AMBIENT );
+			TextureUnitSPtr l_pColourMap = GetTextureUnit( eTEXTURE_CHANNEL_COLOUR );
+			TextureUnitSPtr l_pDiffuseMap = GetTextureUnit( eTEXTURE_CHANNEL_DIFFUSE );
+			TextureUnitSPtr l_pNormalMap = GetTextureUnit( eTEXTURE_CHANNEL_NORMAL );
+			TextureUnitSPtr l_pSpecularMap = GetTextureUnit( eTEXTURE_CHANNEL_SPECULAR );
+			TextureUnitSPtr l_pEmissiveMap = GetTextureUnit( eTEXTURE_CHANNEL_EMISSIVE );
+			TextureUnitSPtr l_pOpacityMap = GetTextureUnit( eTEXTURE_CHANNEL_OPACITY );
+			TextureUnitSPtr l_pGlossMap = GetTextureUnit( eTEXTURE_CHANNEL_GLOSS );
+			TextureUnitSPtr l_pHeightMap = GetTextureUnit( eTEXTURE_CHANNEL_HEIGHT );
+
+			DoPrepareTexture( eTEXTURE_CHANNEL_AMBIENT, l_pAmbientMap, l_index, l_pOpaSrc, l_pImageOpa );
+			DoPrepareTexture( eTEXTURE_CHANNEL_COLOUR, l_pColourMap, l_index, l_pOpaSrc, l_pImageOpa );
+			DoPrepareTexture( eTEXTURE_CHANNEL_DIFFUSE, l_pDiffuseMap, l_index, l_pOpaSrc, l_pImageOpa );
+
+			DoPrepareTexture( eTEXTURE_CHANNEL_NORMAL, l_pNormalMap, l_index );
+			DoPrepareTexture( eTEXTURE_CHANNEL_SPECULAR, l_pSpecularMap, l_index );
+			DoPrepareTexture( eTEXTURE_CHANNEL_EMISSIVE, l_pEmissiveMap, l_index );
+			DoPrepareTexture( eTEXTURE_CHANNEL_GLOSS, l_pGlossMap, l_index );
+			DoPrepareTexture( eTEXTURE_CHANNEL_HEIGHT, l_pHeightMap, l_index );
+
+			if ( l_pOpacityMap && l_pOpacityMap->GetImagePixels() )
+			{
+				PxBufferBaseSPtr l_pReducted = l_pOpacityMap->GetImagePixels();
+				PF::ReduceToAlpha( l_pReducted );
+				l_pOpacityMap->GetTexture()->SetImage( l_pReducted );
+				l_pImageOpa.reset();
+			}
+			else if ( l_pImageOpa )
+			{
+				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
+				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
+				l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
+				StaticTextureSPtr l_pTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
+				l_pTexture->SetType( eTEXTURE_TYPE_2D );
+				l_pTexture->SetImage( l_pImageOpa );
+				l_pOpacityMap->SetSampler( l_pOpaSrc->GetSampler() );
+				l_pOpacityMap->SetTexture( l_pTexture );
+				AddTextureUnit( l_pOpacityMap );
+				l_pImageOpa.reset();
+			}
+
+			if ( l_pOpacityMap )
+			{
+				l_pOpacityMap->SetIndex( l_index++ );
+				Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << l_pOpacityMap->GetIndex() );
+				m_textureFlags |= eTEXTURE_CHANNEL_OPACITY;
+			}
+
+			for ( auto l_unit : m_arrayTextureUnits )
+			{
+				if ( l_unit->GetIndex() == 0 )
+				{
+					l_unit->SetIndex( l_index++ );
+				}
+			}
+
+			m_texturesReduced = true;
+		}
 	}
 
 	void Pass::DoGetTexture( eTEXTURE_CHANNEL p_channel, String const & p_name, RenderNode & p_node )
@@ -681,7 +709,6 @@ namespace Castor3D
 
 			p_unit->SetIndex( p_index++ );
 			Logger::LogDebug( cuT( "	" ) + TEXTURE_CHANNEL_NAME[p_channel] + cuT( " map at index " ) + string::to_string( p_unit->GetIndex() ) );
-			p_unit->Initialise();
 		}
 
 		return l_return;

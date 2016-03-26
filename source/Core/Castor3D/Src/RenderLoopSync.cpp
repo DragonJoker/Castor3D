@@ -20,8 +20,7 @@ namespace Castor3D
 
 	RenderLoopSync::~RenderLoopSync()
 	{
-		// No render loop so we clean the render system ourselves with that single call.
-		DoRenderFrame();
+		Cleanup();
 		m_renderSystem->Cleanup();
 	}
 

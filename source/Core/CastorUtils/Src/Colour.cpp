@@ -487,222 +487,7 @@ namespace Castor
 	CHECK_INVARIANT( static_cast< double >( m_arrayValues[eCOMPONENT_ALPHA] ) >= 0.0 && static_cast< double >( m_arrayValues[eCOMPONENT_ALPHA] ) <= 1.0 );
 	END_INVARIANT_BLOCK()
 
-	Point3ub & Colour::to_rgb( Point3ub & p_result )const
-	{
-		get( eCOMPONENT_RED ).convert_to( p_result[0] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point3ub & Colour::to_bgr( Point3ub & p_result )const
-	{
-		get( eCOMPONENT_BLUE ).convert_to( p_result[0] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
-		get( eCOMPONENT_RED ).convert_to( p_result[2] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4ub & Colour::to_rgba( Point4ub & p_result )const
-	{
-		get( eCOMPONENT_RED ).convert_to( p_result[0] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4ub & Colour::to_bgra( Point4ub & p_result )const
-	{
-		get( eCOMPONENT_BLUE ).convert_to( p_result[0] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
-		get( eCOMPONENT_RED ).convert_to( p_result[2] );
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4ub & Colour::to_argb( Point4ub & p_result )const
-	{
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
-		get( eCOMPONENT_RED ).convert_to( p_result[1] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4ub & Colour::to_abgr( Point4ub & p_result )const
-	{
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[1] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
-		get( eCOMPONENT_RED ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point3f & Colour::to_rgb( Point3f & p_result )const
-	{
-		get( eCOMPONENT_RED ).convert_to( p_result[0] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4f & Colour::to_rgba( Point4f & p_result )const
-	{
-		get( eCOMPONENT_RED ).convert_to( p_result[0] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[2] );
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4f & Colour::to_argb( Point4f & p_result )const
-	{
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
-		get( eCOMPONENT_RED ).convert_to( p_result[1] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4f & Colour::to_abgr( Point4f & p_result )const
-	{
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[0] );
-		get( eCOMPONENT_BLUE ).convert_to( p_result[1] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[2] );
-		get( eCOMPONENT_RED ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	Point4f & Colour::to_bgra( Point4f & p_result )const
-	{
-		get( eCOMPONENT_BLUE ).convert_to( p_result[0] );
-		get( eCOMPONENT_GREEN ).convert_to( p_result[1] );
-		get( eCOMPONENT_RED ).convert_to( p_result[2] );
-		get( eCOMPONENT_ALPHA ).convert_to( p_result[3] );
-		CHECK_INVARIANTS();
-		return p_result;
-	}
-
-	uint32_t Colour::to_rgb()const
-	{
-		uint32_t l_ulR = 0;
-		uint32_t l_ulG = 0;
-		uint32_t l_ulB = 0;
-		get( eCOMPONENT_RED ).convert_to( l_ulR );
-		get( eCOMPONENT_GREEN ).convert_to( l_ulG );
-		get( eCOMPONENT_BLUE ).convert_to( l_ulB );
-		l_ulR = static_cast< uint32_t >( l_ulR ) << 16;
-		l_ulG = static_cast< uint32_t >( l_ulG ) << 8;
-		l_ulB = static_cast< uint32_t >( l_ulB ) << 0;
-		uint32_t l_ulReturn = l_ulR | l_ulG | l_ulB;
-		CHECK_INVARIANTS();
-		return l_ulReturn;
-	}
-
-	uint32_t Colour::to_bgr()const
-	{
-		uint32_t l_ulR = 0;
-		uint32_t l_ulG = 0;
-		uint32_t l_ulB = 0;
-		get( eCOMPONENT_RED ).convert_to( l_ulR );
-		get( eCOMPONENT_GREEN ).convert_to( l_ulG );
-		get( eCOMPONENT_BLUE ).convert_to( l_ulB );
-		l_ulR = static_cast< uint32_t >( l_ulR ) << 0;
-		l_ulG = static_cast< uint32_t >( l_ulG ) << 8;
-		l_ulB = static_cast< uint32_t >( l_ulB ) << 16;
-		uint32_t l_ulReturn = l_ulR | l_ulG | l_ulB;
-		CHECK_INVARIANTS();
-		return l_ulReturn;
-	}
-
-	uint32_t Colour::to_argb()const
-	{
-		uint32_t l_ulR = 0;
-		uint32_t l_ulG = 0;
-		uint32_t l_ulB = 0;
-		uint32_t l_ulA = 0;
-		get( eCOMPONENT_ALPHA ).convert_to( l_ulA );
-		get( eCOMPONENT_RED ).convert_to( l_ulR );
-		get( eCOMPONENT_GREEN ).convert_to( l_ulG );
-		get( eCOMPONENT_BLUE ).convert_to( l_ulB );
-		l_ulA = static_cast< uint32_t >( l_ulA ) << 24;
-		l_ulR = static_cast< uint32_t >( l_ulR ) << 16;
-		l_ulG = static_cast< uint32_t >( l_ulG ) << 8;
-		l_ulB = static_cast< uint32_t >( l_ulB ) << 0;
-		uint32_t l_ulReturn = l_ulR | l_ulG | l_ulB | l_ulA;
-		CHECK_INVARIANTS();
-		return l_ulReturn;
-	}
-
-	uint32_t Colour::to_rgba()const
-	{
-		uint32_t l_ulR = 0;
-		uint32_t l_ulG = 0;
-		uint32_t l_ulB = 0;
-		uint32_t l_ulA = 0;
-		get( eCOMPONENT_RED ).convert_to( l_ulR );
-		get( eCOMPONENT_GREEN ).convert_to( l_ulG );
-		get( eCOMPONENT_BLUE ).convert_to( l_ulB );
-		get( eCOMPONENT_ALPHA ).convert_to( l_ulA );
-		l_ulR = static_cast< uint32_t >( l_ulR ) << 24;
-		l_ulG = static_cast< uint32_t >( l_ulG ) << 16;
-		l_ulB = static_cast< uint32_t >( l_ulB ) << 8;
-		l_ulA = static_cast< uint32_t >( l_ulA ) << 0;
-		uint32_t l_ulReturn = l_ulR | l_ulG | l_ulB | l_ulA;
-		CHECK_INVARIANTS();
-		return l_ulReturn;
-	}
-
-	uint32_t Colour::to_abgr()const
-	{
-		uint32_t l_ulR = 0;
-		uint32_t l_ulG = 0;
-		uint32_t l_ulB = 0;
-		uint32_t l_ulA = 0;
-		get( eCOMPONENT_ALPHA ).convert_to( l_ulA );
-		get( eCOMPONENT_BLUE ).convert_to( l_ulB );
-		get( eCOMPONENT_GREEN ).convert_to( l_ulG );
-		get( eCOMPONENT_RED ).convert_to( l_ulR );
-		l_ulA = static_cast< uint32_t >( l_ulA ) << 24;
-		l_ulB = static_cast< uint32_t >( l_ulB ) << 16;
-		l_ulG = static_cast< uint32_t >( l_ulG ) << 8;
-		l_ulR = static_cast< uint32_t >( l_ulR ) << 0;
-		uint32_t l_ulReturn = l_ulR | l_ulG | l_ulB | l_ulA;
-		CHECK_INVARIANTS();
-		return l_ulReturn;
-	}
-
-	uint32_t Colour::to_bgra()const
-	{
-		uint32_t l_ulR = 0;
-		uint32_t l_ulG = 0;
-		uint32_t l_ulB = 0;
-		uint32_t l_ulA = 0;
-		get( eCOMPONENT_BLUE ).convert_to( l_ulB );
-		get( eCOMPONENT_GREEN ).convert_to( l_ulG );
-		get( eCOMPONENT_RED ).convert_to( l_ulR );
-		get( eCOMPONENT_ALPHA ).convert_to( l_ulA );
-		l_ulB = static_cast< uint32_t >( l_ulB ) << 24;
-		l_ulG = static_cast< uint32_t >( l_ulG ) << 16;
-		l_ulR = static_cast< uint32_t >( l_ulR ) << 8;
-		l_ulA = static_cast< uint32_t >( l_ulA ) << 0;
-		uint32_t l_ulReturn = l_ulR | l_ulG | l_ulB | l_ulA;
-		CHECK_INVARIANTS();
-		return l_ulReturn;
-	}
-
-	Colour & Colour::operator +=( Colour const & p_clrB )
+	Colour & Colour::operator+=( Colour const & p_clrB )
 	{
 		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
 		{
@@ -712,7 +497,7 @@ namespace Castor
 		return *this;
 	}
 
-	Colour & Colour::operator -=( Colour const & p_clrB )
+	Colour & Colour::operator-=( Colour const & p_clrB )
 	{
 		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
 		{
@@ -722,7 +507,7 @@ namespace Castor
 		return *this;
 	}
 
-	Colour & Colour::operator +=( ColourComponent const & p_component )
+	Colour & Colour::operator+=( ColourComponent const & p_component )
 	{
 		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
 		{
@@ -732,7 +517,7 @@ namespace Castor
 		return *this;
 	}
 
-	Colour & Colour::operator -=( ColourComponent const & p_component )
+	Colour & Colour::operator-=( ColourComponent const & p_component )
 	{
 		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
 		{
@@ -742,7 +527,7 @@ namespace Castor
 		return *this;
 	}
 
-	Colour & Colour::operator *=( ColourComponent const & p_component )
+	Colour & Colour::operator*=( ColourComponent const & p_component )
 	{
 		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
 		{
@@ -752,7 +537,7 @@ namespace Castor
 		return *this;
 	}
 
-	Colour & Colour::operator /=( ColourComponent const & p_component )
+	Colour & Colour::operator/=( ColourComponent const & p_component )
 	{
 		for ( uint8_t i = 0; i < eCOMPONENT_COUNT; i++ )
 		{
@@ -764,7 +549,7 @@ namespace Castor
 
 	//*************************************************************************************************
 
-	bool operator ==( Colour const & p_clrA, Colour const & p_clrB )
+	bool operator==( Colour const & p_clrA, Colour const & p_clrB )
 	{
 		bool l_return = true;
 
@@ -776,23 +561,213 @@ namespace Castor
 		return l_return;
 	}
 
-	bool operator !=( Colour const & p_clrA, Colour const & p_clrB )
+	bool operator!=( Colour const & p_clrA, Colour const & p_clrB )
 	{
-		return !operator ==( p_clrA, p_clrB );
+		return !operator==( p_clrA, p_clrB );
 	}
 
-	Colour operator +( Colour const & p_clrA, Colour const & p_clrB )
+	Colour operator+( Colour const & p_clrA, Colour const & p_clrB )
 	{
 		Colour l_clrResult( p_clrA );
 		l_clrResult += p_clrB;
 		return l_clrResult;
 	}
 
-	Colour operator -( Colour const & p_clrA, Colour const & p_clrB )
+	Colour operator-( Colour const & p_clrA, Colour const & p_clrB )
 	{
 		Colour l_clrResult( p_clrA );
 		l_clrResult -= p_clrB;
 		return l_clrResult;
+	}
+
+	Point3ub rgb_byte( Colour const & p_colour )
+	{
+		Point3ub l_return;
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
+		return l_return;
+	}
+
+	Point3ub bgr_byte( Colour const & p_colour )
+	{
+		Point3ub l_return;
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
+		return l_return;
+	}
+
+	Point4ub rgba_byte( Colour const & p_colour )
+	{
+		Point4ub l_return;
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	Point4ub bgra_byte( Colour const & p_colour )
+	{
+		Point4ub l_return;
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	Point4ub argb_byte( Colour const & p_colour )
+	{
+		Point4ub l_return;
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	Point4ub abgr_byte( Colour const & p_colour )
+	{
+		Point4ub l_return;
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	Point3f rgb_float( Colour const & p_colour )
+	{
+		Point3f l_return;
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
+		return l_return;
+	}
+
+	Point3f bgr_float( Colour const & p_colour )
+	{
+		Point3f l_return;
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
+		return l_return;
+	}
+
+	Point4f rgba_float( Colour const & p_colour )
+	{
+		Point4f l_return;
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	Point4f argb_float( Colour const & p_colour )
+	{
+		Point4f l_return;
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	Point4f abgr_float( Colour const & p_colour )
+	{
+		Point4f l_return;
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	Point4f bgra_float( Colour const & p_colour )
+	{
+		Point4f l_return;
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_return[0] );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_return[1] );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_return[2] );
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_return[3] );
+		return l_return;
+	}
+
+	uint32_t rgb_packed( Colour const & p_colour )
+	{
+		uint32_t l_r = 0;
+		uint32_t l_g = 0;
+		uint32_t l_b = 0;
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		return ( l_r << 16 ) | ( l_g << 8 ) | ( l_b << 0 );
+	}
+
+	uint32_t bgr_packed( Colour const & p_colour )
+	{
+		uint32_t l_r = 0;
+		uint32_t l_g = 0;
+		uint32_t l_b = 0;
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		return ( l_r << 0 ) | ( l_g << 8 ) | ( l_b << 16 );
+	}
+
+	uint32_t argb_packed( Colour const & p_colour )
+	{
+		uint32_t l_r = 0;
+		uint32_t l_g = 0;
+		uint32_t l_b = 0;
+		uint32_t l_a = 0;
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		return ( l_a << 24 ) | ( l_r << 16 ) | ( l_g << 8 ) | ( l_b << 0 );
+	}
+
+	uint32_t rgba_packed( Colour const & p_colour )
+	{
+		uint32_t l_r = 0;
+		uint32_t l_g = 0;
+		uint32_t l_b = 0;
+		uint32_t l_a = 0;
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
+		return ( l_r << 24 ) | ( l_g << 16 ) | ( l_b << 8 ) | ( l_a << 0 );
+	}
+
+	uint32_t abgr_packed( Colour const & p_colour )
+	{
+		uint32_t l_r = 0;
+		uint32_t l_g = 0;
+		uint32_t l_b = 0;
+		uint32_t l_a = 0;
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
+		return ( l_a << 24 ) | ( l_b << 16 ) | ( l_g << 8 ) | ( l_r << 0 );
+	}
+
+	uint32_t bgra_packed( Colour const & p_colour )
+	{
+		uint32_t l_r = 0;
+		uint32_t l_g = 0;
+		uint32_t l_b = 0;
+		uint32_t l_a = 0;
+		p_colour.get( Colour::eCOMPONENT_BLUE ).convert_to( l_b );
+		p_colour.get( Colour::eCOMPONENT_GREEN ).convert_to( l_g );
+		p_colour.get( Colour::eCOMPONENT_RED ).convert_to( l_r );
+		p_colour.get( Colour::eCOMPONENT_ALPHA ).convert_to( l_a );
+		return ( l_b << 24 ) | ( l_g << 16 ) | ( l_r << 8 ) | ( l_a << 0 );
 	}
 
 	//*************************************************************************************************

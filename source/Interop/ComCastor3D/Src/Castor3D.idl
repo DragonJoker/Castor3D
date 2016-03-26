@@ -1659,7 +1659,7 @@ interface IEngine
 	[id( 19 ), helpstring( "Loads a plugin from its path" )] HRESULT LoadPlugin( [in] BSTR path );
 	[id( 20 ), helpstring( "Creates a mesh" )] HRESULT CreateMesh( [in] eMESH_TYPE type, [in] BSTR name, [out, retval] IMesh ** pVal );
 	[id( 21 ), helpstring( "Creates an overlay" )] HRESULT CreateOverlay( [in] eOVERLAY_TYPE type, [in] BSTR name, [in] IOverlay * parent, [in] IScene * scene, [out, retval] IOverlay ** pVal );
-	[id( 22 ), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [out, retval] IRenderWindow ** pVal );
+	[id( 22 ), helpstring( "Creates a render window" )] HRESULT CreateRenderWindow( [in] BSTR name, [out, retval] IRenderWindow ** pVal );
 	[id( 23 ), helpstring( "Removes a render window" )] HRESULT RemoveWindow( [in] IRenderWindow * val );
 	[id( 24 ), helpstring( "Creates a sampler" )] HRESULT CreateSampler( [in] BSTR name, [out, retval] ISampler ** pVal );
 	[id( 25 ), helpstring( "Creates a blend state" )] HRESULT CreateBlendState( [in] BSTR name, [out, retval] IBlendState ** pVal );

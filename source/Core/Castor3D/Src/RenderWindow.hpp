@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -40,6 +40,7 @@ namespace Castor3D
 	*/
 	class RenderWindow
 		: public Castor::OwnedBy< Engine >
+		, public Castor::Named
 	{
 	public:
 		/*!
@@ -126,12 +127,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRoot			The engine
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructor
-		 *\param[in]	p_pRoot			Le moteur
+		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API RenderWindow( Engine & p_pRoot );
+		C3D_API RenderWindow( Engine & p_engine, Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -341,24 +342,6 @@ namespace Castor3D
 		C3D_API void SetPixelFormat( Castor::ePIXEL_FORMAT val );
 		/**
 		 *\~english
-		 *\brief		Retrieves the window depth format
-		 *\return		The window depth format
-		 *\~french
-		 *\brief		Récupère le format de profondeur de la fenêtre
-		 *\return		Le format de profondeur de la fenêtre
-		 */
-		C3D_API Castor::ePIXEL_FORMAT GetDepthFormat()const;
-		/**
-		 *\~english
-		 *\brief		Sets the window depth format
-		 *\param[in]	val	The new window depth format
-		 *\~french
-		 *\brief		Définit le format de profondeur de la fenêtre
-		 *\param[in]	val	Le nouveau format de profondeur de la fenêtre
-		 */
-		C3D_API void SetDepthFormat( Castor::ePIXEL_FORMAT val );
-		/**
-		 *\~english
 		 *\brief		Retrieves the window index
 		 *\return		The window index
 		 *\~french
@@ -499,18 +482,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the window name
-		 *\return		The name
-		 *\~french
-		 *\brief		Récupère le nom de la fenêtre
-		 *\return		Le nom
-		 */
-		Castor::String const & GetName()const
-		{
-			return m_name;
-		}
-		/**
-		 *\~english
 		 *\return		The window's back buffers.
 		 *\~french
 		 *\return		Les tampons de rendu de la fenêtre.
@@ -541,7 +512,6 @@ namespace Castor3D
 		}
 
 	private:
-		Castor::String DoGetName();
 		void DoRender( eBUFFER p_eTargetBuffer, TextureUnit const & p_texture );
 		void DoUpdateSize();
 
@@ -558,8 +528,6 @@ namespace Castor3D
 		FrameListenerWPtr m_wpListener;
 		//!\~english Tells if the window is initalised	\~french Dit si la fenêtre est initialisée
 		bool m_initialised;
-		//!\~english The name	\~french Nom de cette RenderTarget
-		Castor::String m_name;
 		//!\~english The rendering context	\~french Le contexte de rendu
 		ContextSPtr m_context;
 		//!\~english Tells VSync is activated	\~french Dit si la VSync est activée
