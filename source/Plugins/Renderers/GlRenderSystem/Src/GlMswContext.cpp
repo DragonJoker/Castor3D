@@ -47,7 +47,6 @@ namespace GlRender
 		GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		m_hWnd = p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
 		auto l_colour = p_window->GetPixelFormat();
-		auto l_depth = p_window->GetDepthFormat();
 		auto l_stereo = p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->IsStereoAvailable();
 		bool l_isMain = false;
 
@@ -70,7 +69,7 @@ namespace GlRender
 
 		if ( !l_renderSystem->IsInitialised() && !l_isMain )
 		{
-			DoInitialiseOpenGL( l_colour, l_depth, l_stereo );
+			DoInitialiseOpenGL( l_colour, l_stereo );
 		}
 
 		bool l_bHasPF = false;
@@ -79,17 +78,17 @@ namespace GlRender
 		{
 			if ( l_stereo )
 			{
-				l_bHasPF = DoSelectStereoPixelFormat( l_colour, l_depth );
+				l_bHasPF = DoSelectStereoPixelFormat( l_colour );
 			}
 			else
 			{
 				l_renderSystem->SetStereoAvailable( false );
-				l_bHasPF = DoSelectPixelFormat( l_colour, l_depth, false );
+				l_bHasPF = DoSelectPixelFormat( l_colour, false );
 			}
 		}
 		else if ( !l_isMain )
 		{
-			l_bHasPF = DoSelectPixelFormat( l_colour, l_depth, l_stereo );
+			l_bHasPF = DoSelectPixelFormat( l_colour, l_stereo );
 		}
 
 		if ( l_bHasPF )
@@ -202,9 +201,9 @@ namespace GlRender
 		EndCurrent();
 	}
 
-	void GlContextImpl::DoInitialiseOpenGL( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth, bool p_stereo )
+	void GlContextImpl::DoInitialiseOpenGL( ePIXEL_FORMAT p_colour, bool p_stereo )
 	{
-		m_hContext = DoCreateDummyContext( p_colour, p_depth, p_stereo );
+		m_hContext = DoCreateDummyContext( p_colour, p_stereo );
 		SetCurrent();
 		typedef const char * ( PFNWGLGETEXTENSIONSSTRINGEXTPROC )( );
 		PFNWGLGETEXTENSIONSSTRINGEXTPROC * wglGetExtensionsStringEXT;
@@ -224,11 +223,11 @@ namespace GlRender
 		m_hContext = nullptr;
 	}
 
-	HGLRC GlContextImpl::DoCreateDummyContext( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth, bool p_stereo )
+	HGLRC GlContextImpl::DoCreateDummyContext( ePIXEL_FORMAT p_colour, bool p_stereo )
 	{
 		HGLRC l_hReturn = nullptr;
 
-		if ( DoSelectPixelFormat( p_colour, p_depth, p_stereo ) )
+		if ( DoSelectPixelFormat( p_colour, p_stereo ) )
 		{
 			l_hReturn = GetOpenGl().CreateContext( m_hDC );
 		}
@@ -236,7 +235,7 @@ namespace GlRender
 		return l_hReturn;
 	}
 
-	bool GlContextImpl::DoSelectPixelFormat( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth, bool p_stereo )
+	bool GlContextImpl::DoSelectPixelFormat( ePIXEL_FORMAT p_colour, bool p_stereo )
 	{
 		bool l_return = false;
 		PIXELFORMATDESCRIPTOR l_pfd = { 0 };
@@ -247,35 +246,9 @@ namespace GlRender
 		l_pfd.iLayerType = PFD_MAIN_PLANE;
 		l_pfd.cColorBits = PF::GetBytesPerPixel( p_colour ) * 8;
 
-		if ( p_depth == ePIXEL_FORMAT_DEPTH16 )
-		{
-			l_pfd.cDepthBits = 16;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_DEPTH32 )
-		{
-			l_pfd.cDepthBits = 32;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_DEPTH24 )
-		{
-			l_pfd.cDepthBits = 24;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_DEPTH24S8 )
-		{
-			l_pfd.cDepthBits = 24;
-			l_pfd.cStencilBits = 8;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_STENCIL8 )
-		{
-			l_pfd.cStencilBits = 8;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_STENCIL1 )
-		{
-			l_pfd.cStencilBits = 1;
-		}
-
 		if ( p_stereo )
 		{
-			l_pfd.dwFlags	|= PFD_STEREO;
+			l_pfd.dwFlags |= PFD_STEREO;
 		}
 
 		int l_iPixelFormats = ::ChoosePixelFormat( m_hDC, &l_pfd );
@@ -307,7 +280,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool GlContextImpl::DoSelectStereoPixelFormat( ePIXEL_FORMAT p_colour, ePIXEL_FORMAT p_depth )
+	bool GlContextImpl::DoSelectStereoPixelFormat( ePIXEL_FORMAT p_colour )
 	{
 		bool l_return = false;
 		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
@@ -319,32 +292,6 @@ namespace GlRender
 		BYTE l_color = PF::GetBytesPerPixel( p_colour ) * 8;
 		BYTE l_depth = 0;
 		BYTE l_stencil = 0;
-
-		if ( p_depth == ePIXEL_FORMAT_DEPTH16 )
-		{
-			l_depth = 16;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_DEPTH32 )
-		{
-			l_depth = 32;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_DEPTH24 )
-		{
-			l_depth = 24;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_DEPTH24S8 )
-		{
-			l_depth = 24;
-			l_stencil = 8;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_STENCIL8 )
-		{
-			l_stencil = 8;
-		}
-		else if ( p_depth == ePIXEL_FORMAT_STENCIL1 )
-		{
-			l_stencil = 1;
-		}
 
 		while ( l_iPixelFormat && !l_bStereoAvailable )
 		{
@@ -380,12 +327,12 @@ namespace GlRender
 			if ( !l_return )
 			{
 				l_bStereoAvailable = false;
-				l_return = DoSelectPixelFormat( p_colour, p_depth, false );
+				l_return = DoSelectPixelFormat( p_colour, false );
 			}
 		}
 		else
 		{
-			l_return = DoSelectPixelFormat( p_colour, p_depth, true );
+			l_return = DoSelectPixelFormat( p_colour, true );
 		}
 
 		l_renderSystem->SetStereoAvailable( l_bStereoAvailable );

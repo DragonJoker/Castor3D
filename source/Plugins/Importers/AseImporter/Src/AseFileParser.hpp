@@ -65,15 +65,17 @@ namespace Ase
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_engine	The Castor3D engine
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The Castor3D engine.
 		 *\param[in]	p_importer	The importer.
+		 *\param[in]	p_scene		The scene.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
 		 *\param[in]	p_importer	L'importeur.
+		 *\param[in]	p_scene		La scène.
 		 */
-		AseFileParser( Castor3D::Engine * p_engine, AseImporter & p_importer );
+		AseFileParser( Castor3D::Engine * p_engine, AseImporter & p_importer, Castor3D::Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -84,17 +86,15 @@ namespace Ase
 		/**
 		 * Parses the given file (expecting it to be in ESCN file format)
 		 *\param[in,out]	p_file	The file
-		 *\param[in]		p_pScene	The scene where all objects will be put
 		 *\return	the parsed scene
 		 */
-		bool ParseFile( Castor::TextFile & p_file, Castor3D::SceneSPtr p_pScene = nullptr );
+		bool ParseFile( Castor::TextFile & p_file );
 		/**
 		 * Parses the given file (expecting it to be in ESCN file format)
 		 *\param[in]	p_pathFile	The file path
-		 *\param[in]	p_pScene	The scene where all objects will be put
 		 *\return	true if successful, false if not
 		 */
-		bool ParseFile( Castor::Path const & p_pathFile, Castor3D::SceneSPtr p_pScene = nullptr );
+		bool ParseFile( Castor::Path const & p_pathFile );
 		/**
 		 *\~english
 		 *\brief		Retrieves the Castor3D engine
@@ -132,10 +132,10 @@ namespace Ase
 		virtual Castor::String DoGetSectionName( uint32_t p_section );
 
 	private:
-		Castor3D::SceneSPtr m_pScene;
 		Castor3D::MeshSPtr m_pMesh;
 		Castor3D::Engine * m_engine;
 		AseImporter & m_importer;
+		Castor3D::Scene & m_scene;
 	};
 
 	DECLARE_ATTRIBUTE_PARSER( AseParser_RootFormat )

@@ -1,27 +1,27 @@
-#include <RenderSystem.hpp>
+#include "SMaxImporter.hpp"
+
 #include <Buffer.hpp>
-#include <SceneNodeManager.hpp>
-#include <SceneManager.hpp>
-#include <Camera.hpp>
-#include <Viewport.hpp>
+#include <Colour.hpp>
+#include <Engine.hpp>
+#include <Face.hpp>
+#include <GeometryManager.hpp>
+#include <InitialiseEvent.hpp>
+#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <GeometryManager.hpp>
-#include <Mesh.hpp>
-#include <Submesh.hpp>
-#include <Face.hpp>
-#include <Version.hpp>
 #include <Plugin.hpp>
-#include <Engine.hpp>
+#include <RenderSystem.hpp>
+#include <SceneManager.hpp>
+#include <SceneNodeManager.hpp>
 #include <StaticTexture.hpp>
+#include <Submesh.hpp>
+#include <Texture.hpp>
+#include <TextureUnit.hpp>
+#include <Version.hpp>
 #include <Vertex.hpp>
-#include <InitialiseEvent.hpp>
 
 #include <Image.hpp>
-
-#include "SMaxImporter.hpp"
 
 using namespace SMax;
 using namespace Castor3D;
@@ -38,17 +38,16 @@ SMaxImporter::SMaxImporter( Engine & p_pEngine )
 
 SceneSPtr SMaxImporter::DoImportScene()
 {
-	MeshSPtr l_mesh = DoImportMesh();
-	SceneSPtr l_scene;
+	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetEngine() );
+	MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 	if ( l_mesh )
 	{
-		l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_3DS" ), *GetEngine() );
 		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 		l_geometry->AttachTo( l_node );
 
-		for ( auto && l_submesh : *l_mesh )
+		for ( auto && l_submesh: *l_mesh )
 		{
 			GetEngine()->PostEvent( MakeInitialiseEvent( *l_submesh ) );
 		}
@@ -59,7 +58,7 @@ SceneSPtr SMaxImporter::DoImportScene()
 	return l_scene;
 }
 
-MeshSPtr SMaxImporter::DoImportMesh()
+MeshSPtr SMaxImporter::DoImportMesh( Scene & p_scene )
 {
 	MeshSPtr l_mesh;
 	UIntArray l_faces;
@@ -77,7 +76,7 @@ MeshSPtr SMaxImporter::DoImportMesh()
 
 		if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_M3DMAGIC )
 		{
-			DoProcessNextChunk( &l_currentChunk, l_mesh );
+			DoProcessNextChunk( p_scene, &l_currentChunk, l_mesh );
 			l_mesh->ComputeNormals();
 		}
 	}
@@ -86,7 +85,7 @@ MeshSPtr SMaxImporter::DoImportMesh()
 	return l_mesh;
 }
 
-void SMaxImporter::DoProcessNextChunk( SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
+void SMaxImporter::DoProcessNextChunk( Scene & p_scene, SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
 {
 	std::vector< uint8_t > l_buffer;
 	SMaxChunk l_currentChunk;
@@ -125,12 +124,12 @@ void SMaxImporter::DoProcessNextChunk( SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
 				break;
 
 			case eSMAX_CHUNK_MDATA:
-				DoProcessNextChunk( &l_currentChunk, p_pMesh );
+				DoProcessNextChunk( p_scene, &l_currentChunk, p_pMesh );
 				break;
 
 			case eSMAX_CHUNK_MAT_ENTRY:
 				m_iNumOfMaterials++;
-				DoProcessNextMaterialChunk( &l_currentChunk );
+				DoProcessNextMaterialChunk( p_scene, &l_currentChunk );
 				break;
 
 			case eSMAX_CHUNK_NAMED_OBJECT:
@@ -139,7 +138,7 @@ void SMaxImporter::DoProcessNextChunk( SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
 				break;
 
 			case eSMAX_CHUNK_N_TRI_OBJECT:
-				DoProcessNextObjectChunk( &l_currentChunk, p_pMesh );
+				DoProcessNextObjectChunk( p_scene, &l_currentChunk, p_pMesh );
 				break;
 
 			case eSMAX_CHUNK_KFDATA:
@@ -161,7 +160,7 @@ void SMaxImporter::DoProcessNextChunk( SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
 	}
 }
 
-void SMaxImporter::DoProcessNextObjectChunk( SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
+void SMaxImporter::DoProcessNextObjectChunk( Scene & p_scene, SMaxChunk * p_pChunk, MeshSPtr p_pMesh )
 {
 	SMaxChunk l_currentChunk;
 	bool l_bContinue = true;
@@ -184,11 +183,11 @@ void SMaxImporter::DoProcessNextObjectChunk( SMaxChunk * p_pChunk, MeshSPtr p_pM
 				break;
 
 			case eSMAX_CHUNK_FACE_ARRAY:
-				DoReadVertexIndices( &l_currentChunk, l_pSubmesh );
+				DoReadVertexIndices( p_scene, &l_currentChunk, l_pSubmesh );
 				break;
 
 			case eSMAX_CHUNK_MSH_MAT_GROUP:
-				DoReadObjectMaterial( &l_currentChunk, l_pSubmesh );
+				DoReadObjectMaterial( p_scene, &l_currentChunk, l_pSubmesh );
 				break;
 
 			case eSMAX_CHUNK_TEX_VERTS:
@@ -222,7 +221,7 @@ void SMaxImporter::DoProcessNextObjectChunk( SMaxChunk * p_pChunk, MeshSPtr p_pM
 	}
 }
 
-void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
+void SMaxImporter::DoProcessNextMaterialChunk( Scene & p_scene, SMaxChunk * p_pChunk )
 {
 	SMaxChunk l_currentChunk;
 	MaterialSPtr l_pMaterial;
@@ -272,28 +271,28 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 
 			case eSMAX_CHUNK_MAT_TEXMAP:
 				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
-				Logger::LogDebug( cuT( "Diffuse map : " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				Logger::LogDebug( cuT( "Diffuse map: " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
 				break;
 
 			case eSMAX_CHUNK_MAT_SPECMAP:
 				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_SPECULAR] );
-				Logger::LogDebug( cuT( "Specular map : " ) + l_strTextures[eTEXTURE_CHANNEL_SPECULAR] );
+				Logger::LogDebug( cuT( "Specular map: " ) + l_strTextures[eTEXTURE_CHANNEL_SPECULAR] );
 				break;
 
 			case eSMAX_CHUNK_MAT_OPACMAP:
 				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_OPACITY] );
-				Logger::LogDebug( cuT( "Opacity map : " ) + l_strTextures[eTEXTURE_CHANNEL_OPACITY] );
+				Logger::LogDebug( cuT( "Opacity map: " ) + l_strTextures[eTEXTURE_CHANNEL_OPACITY] );
 				break;
 
 			case eSMAX_CHUNK_MAT_BUMPMAP:
 				DoProcessMaterialMapChunk( &l_currentChunk, l_strTextures[eTEXTURE_CHANNEL_NORMAL] );
-				Logger::LogDebug( cuT( "Normal map : " ) + l_strTextures[eTEXTURE_CHANNEL_NORMAL] );
+				Logger::LogDebug( cuT( "Normal map: " ) + l_strTextures[eTEXTURE_CHANNEL_NORMAL] );
 				break;
 
 			case eSMAX_CHUNK_MAT_MAPNAME:
 				l_currentChunk.m_ulBytesRead += DoGetString( l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
 				l_currentChunk.m_ulBytesRead = l_currentChunk.m_ulLength;
-				Logger::LogDebug( cuT( "Texture : " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
+				Logger::LogDebug( cuT( "Texture: " ) + l_strTextures[eTEXTURE_CHANNEL_DIFFUSE] );
 				break;
 
 			default:
@@ -312,12 +311,12 @@ void SMaxImporter::DoProcessNextMaterialChunk( SMaxChunk * p_pChunk )
 
 	if ( !l_strMatName.empty() )
 	{
-		MaterialManager * l_pMtlManager = &GetEngine()->GetMaterialManager();
-		l_pMaterial = l_pMtlManager->Find( l_strMatName );
+		auto & l_mtlManager = p_scene.GetMaterialView();
+		l_pMaterial = l_mtlManager.Find( l_strMatName );
 
 		if ( ! l_pMaterial )
 		{
-			l_pMaterial = l_pMtlManager->Create( l_strMatName, *GetEngine() );
+			l_pMaterial = l_mtlManager.Create( l_strMatName, *GetEngine() );
 			l_pMaterial->CreatePass();
 		}
 
@@ -452,7 +451,7 @@ void SMaxImporter::DoReadColorChunk( SMaxChunk * p_pChunk, Colour & p_colour )
 	}
 }
 
-void SMaxImporter::DoReadVertexIndices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh )
+void SMaxImporter::DoReadVertexIndices( Scene & p_scene, SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh )
 {
 	std::vector< uint32_t > l_arrayGroups;
 	std::vector< stFACE_INDICES > l_arrayFaces;
@@ -584,7 +583,7 @@ void SMaxImporter::DoReadVertexIndices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSub
 					}
 					else if ( l_currentChunk.m_eChunkId == eSMAX_CHUNK_MSH_MAT_GROUP )
 					{
-						DoReadObjectMaterial( &l_currentChunk, p_pSubmesh );
+						DoReadObjectMaterial( p_scene, &l_currentChunk, p_pSubmesh );
 						p_pChunk->m_ulBytesRead += l_currentChunk.m_ulBytesRead;
 
 						if ( p_pChunk->m_ulBytesRead + 6 < p_pChunk->m_ulLength )
@@ -716,14 +715,13 @@ void SMaxImporter::DoReadVertices( SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh 
 	}
 }
 
-void SMaxImporter::DoReadObjectMaterial( SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh )
+void SMaxImporter::DoReadObjectMaterial( Scene & p_scene, SMaxChunk * p_pChunk, SubmeshSPtr p_pSubmesh )
 {
 	String l_materialName;
 	MaterialSPtr l_pMaterial;
-	MaterialManager * l_pMtlManager;
 	p_pChunk->m_ulBytesRead += DoGetString( l_materialName );
-	l_pMtlManager = &GetEngine()->GetMaterialManager();
-	l_pMaterial = l_pMtlManager->Find( l_materialName );
+	auto & l_mtlManager = p_scene.GetMaterialView();
+	l_pMaterial = l_mtlManager.Find( l_materialName );
 
 	if ( l_pMaterial && !p_pSubmesh->GetDefaultMaterial() )
 	{
@@ -775,597 +773,597 @@ bool SMaxImporter::DoIsValidChunk( SMaxChunk * p_pChunk, SMaxChunk * p_pParent )
 		l_bReturn = false;
 		break;
 
-	case	eSMAX_CHUNK_NULL_CHUNK 				:
-	case	eSMAX_CHUNK_UNKNOWN_CHUNK			:
-	case	eSMAX_CHUNK_M3D_VERSION				:
-	case	eSMAX_CHUNK_M3D_KFVERSION 			:
-	case	eSMAX_CHUNK_COLOR_F					:
-	case	eSMAX_CHUNK_COLOR_24				:
-	case	eSMAX_CHUNK_LIN_COLOR_24			:
-	case	eSMAX_CHUNK_LIN_COLOR_F				:
-	case	eSMAX_CHUNK_INT_PERCENTAGE			:
-	case	eSMAX_CHUNK_FLOAT_PERCENTAGE		:
-	case	eSMAX_CHUNK_MASTER_SCALE			:
-	case	eSMAX_CHUNK_CHUNKTYPE 				:
-	case	eSMAX_CHUNK_CHUNKUNIQUE 			:
-	case	eSMAX_CHUNK_NOTCHUNK 				:
-	case	eSMAX_CHUNK_CONTAINER 				:
-	case	eSMAX_CHUNK_ISCHUNK 				:
-	case	eSMAX_CHUNK_C_SXP_SELFI_MASKDATA	:
-	case	eSMAX_CHUNK_BIT_MAP					:
-	case	eSMAX_CHUNK_USE_BIT_MAP 			:
-	case	eSMAX_CHUNK_SOLID_BGND				:
-	case	eSMAX_CHUNK_USE_SOLID_BGND 			:
-	case	eSMAX_CHUNK_V_GRADIENT				:
-	case	eSMAX_CHUNK_USE_V_GRADIENT 			:
-	case	eSMAX_CHUNK_LO_SHADOW_BIAS			:
-	case	eSMAX_CHUNK_HI_SHADOW_BIAS 			:
-	case	eSMAX_CHUNK_SHADOW_MAP_SIZE			:
-	case	eSMAX_CHUNK_SHADOW_SAMPLES 			:
-	case	eSMAX_CHUNK_SHADOW_RANGE 			:
-	case	eSMAX_CHUNK_SHADOW_FILTER			:
-	case	eSMAX_CHUNK_RAY_BIAS				:
-	case	eSMAX_CHUNK_O_CONSTS				:
-	case	eSMAX_CHUNK_AMBIENT_LIGHT 			:
-	case	eSMAX_CHUNK_FOG						:
-	case	eSMAX_CHUNK_USE_FOG 				:
-	case	eSMAX_CHUNK_FOG_BGND 				:
-	case	eSMAX_CHUNK_DISTANCE_CUE			:
-	case	eSMAX_CHUNK_USE_DISTANCE_CUE 		:
-	case	eSMAX_CHUNK_LAYER_FOG				:
-	case	eSMAX_CHUNK_USE_LAYER_FOG 			:
-	case	eSMAX_CHUNK_DCUE_BGND 				:
-	case	eSMAX_CHUNK_SMAGIC 					:
-	case	eSMAX_CHUNK_LMAGIC					:
-	case	eSMAX_CHUNK_DEFAULT_VIEW			:
-	case	eSMAX_CHUNK_VIEW_TOP				:
-	case	eSMAX_CHUNK_VIEW_BOTTOM				:
-	case	eSMAX_CHUNK_VIEW_LEFT				:
-	case	eSMAX_CHUNK_VIEW_RIGHT				:
-	case	eSMAX_CHUNK_VIEW_FRONT				:
-	case	eSMAX_CHUNK_VIEW_BACK				:
-	case	eSMAX_CHUNK_VIEW_USER				:
-	case	eSMAX_CHUNK_VIEW_CAMERA				:
-	case	eSMAX_CHUNK_VIEW_WINDOW 			:
-	case	eSMAX_CHUNK_MDATA					:
-	case	eSMAX_CHUNK_MESH_VERSION 			:
-	case	eSMAX_CHUNK_MLIBMAGIC				:
-	case	eSMAX_CHUNK_PRJMAGIC				:
-	case	eSMAX_CHUNK_MATMAGIC				:
-	case	eSMAX_CHUNK_NAMED_OBJECT			:
-	case	eSMAX_CHUNK_OBJ_HIDDEN 				:
-	case	eSMAX_CHUNK_OBJ_VIS_LOFTER 			:
-	case	eSMAX_CHUNK_OBJ_DOESNT_CAST 		:
-	case	eSMAX_CHUNK_OBJ_MATTE 				:
-	case	eSMAX_CHUNK_OBJ_FAST 				:
-	case	eSMAX_CHUNK_OBJ_PROCEDURAL 			:
-	case	eSMAX_CHUNK_OBJ_FROZEN 				:
-	case	eSMAX_CHUNK_OBJ_DONT_RCVSHADOW 		:
-	case	eSMAX_CHUNK_N_TRI_OBJECT			:
-	case	eSMAX_CHUNK_POINT_ARRAY				:
-	case	eSMAX_CHUNK_POINT_FLAG_ARRAY		:
-	case	eSMAX_CHUNK_FACE_ARRAY				:
-	case	eSMAX_CHUNK_MSH_MAT_GROUP			:
-	case	eSMAX_CHUNK_OLD_MAT_GROUP 			:
-	case	eSMAX_CHUNK_TEX_VERTS				:
-	case	eSMAX_CHUNK_SMOOTH_GROUP			:
-	case	eSMAX_CHUNK_MESH_MATRIX				:
-	case	eSMAX_CHUNK_MESH_COLOR				:
-	case	eSMAX_CHUNK_MESH_TEXTURE_INFO		:
-	case	eSMAX_CHUNK_PROC_NAME 				:
-	case	eSMAX_CHUNK_PROC_DATA 				:
-	case	eSMAX_CHUNK_MSH_BOXMAP 				:
-	case	eSMAX_CHUNK_N_D_L_OLD 				:
-	case	eSMAX_CHUNK_N_CAM_OLD 				:
-	case	eSMAX_CHUNK_N_DIRECT_LIGHT			:
-	case	eSMAX_CHUNK_DL_SPOTLIGHT			:
-	case	eSMAX_CHUNK_DL_OFF 					:
-	case	eSMAX_CHUNK_DL_ATTENUATE 			:
-	case	eSMAX_CHUNK_DL_RAYSHAD 				:
-	case	eSMAX_CHUNK_DL_SHADOWED 			:
-	case	eSMAX_CHUNK_DL_LOCAL_SHADOW 		:
-	case	eSMAX_CHUNK_DL_LOCAL_SHADOW2 		:
-	case	eSMAX_CHUNK_DL_SEE_CONE 			:
-	case	eSMAX_CHUNK_DL_SPOT_RECTANGULAR 	:
-	case	eSMAX_CHUNK_DL_SPOT_OVERSHOOT 		:
-	case	eSMAX_CHUNK_DL_SPOT_PROJECTOR 		:
-	case	eSMAX_CHUNK_DL_EXCLUDE 				:
-	case	eSMAX_CHUNK_DL_RANGE 				:
-	case	eSMAX_CHUNK_DL_SPOT_ROLL			:
-	case	eSMAX_CHUNK_DL_SPOT_ASPECT 			:
-	case	eSMAX_CHUNK_DL_RAY_BIAS				:
-	case	eSMAX_CHUNK_DL_INNER_RANGE			:
-	case	eSMAX_CHUNK_DL_OUTER_RANGE			:
-	case	eSMAX_CHUNK_DL_MULTIPLIER			:
-	case	eSMAX_CHUNK_N_AMBIENT_LIGHT 		:
-	case	eSMAX_CHUNK_N_CAMERA				:
-	case	eSMAX_CHUNK_CAM_SEE_CONE 			:
-	case	eSMAX_CHUNK_CAM_RANGES				:
-	case	eSMAX_CHUNK_M3DMAGIC				:
-	case	eSMAX_CHUNK_HIERARCHY 				:
-	case	eSMAX_CHUNK_PARENT_OBJECT 			:
-	case	eSMAX_CHUNK_PIVOT_OBJECT 			:
-	case	eSMAX_CHUNK_PIVOT_LIMITS 			:
-	case	eSMAX_CHUNK_PIVOT_ORDER 			:
-	case	eSMAX_CHUNK_XLATE_RANGE				:
-	case	eSMAX_CHUNK_POLY_2D					:
-	case	eSMAX_CHUNK_SHAPE_OK				:
-	case	eSMAX_CHUNK_SHAPE_NOT_OK			:
-	case	eSMAX_CHUNK_SHAPE_HOOK				:
-	case	eSMAX_CHUNK_PATH_3D					:
-	case	eSMAX_CHUNK_PATH_MATRIX				:
-	case	eSMAX_CHUNK_SHAPE_2D				:
-	case	eSMAX_CHUNK_M_SCALE					:
-	case	eSMAX_CHUNK_M_TWIST					:
-	case	eSMAX_CHUNK_M_TEETER				:
-	case	eSMAX_CHUNK_M_FIT					:
-	case	eSMAX_CHUNK_M_BEVEL					:
-	case	eSMAX_CHUNK_XZ_CURVE				:
-	case	eSMAX_CHUNK_YZ_CURVE				:
-	case	eSMAX_CHUNK_INTERPCT				:
-	case	eSMAX_CHUNK_DEFORM_LIMIT			:
-	case	eSMAX_CHUNK_USE_CONTOUR				:
-	case	eSMAX_CHUNK_USE_TWEEN				:
-	case	eSMAX_CHUNK_USE_SCALE				:
-	case	eSMAX_CHUNK_USE_TWIST				:
-	case	eSMAX_CHUNK_USE_TEETER				:
-	case	eSMAX_CHUNK_USE_FIT					:
-	case	eSMAX_CHUNK_USE_BEVEL				:
-	case	eSMAX_CHUNK_VIEWPORT_LAYOUT_OLD		:
-	case	eSMAX_CHUNK_VIEWPORT_LAYOUT			:
-	case	eSMAX_CHUNK_VIEWPORT_DATA_OLD		:
-	case	eSMAX_CHUNK_VIEWPORT_DATA			:
-	case	eSMAX_CHUNK_VIEWPORT_DATA_3			:
-	case	eSMAX_CHUNK_VIEWPORT_SIZE			:
-	case	eSMAX_CHUNK_NETWORK_VIEW			:
-	case	eSMAX_CHUNK_XDATA_SECTION 			:
-	case	eSMAX_CHUNK_XDATA_ENTRY 			:
-	case	eSMAX_CHUNK_XDATA_APPNAME 			:
-	case	eSMAX_CHUNK_XDATA_STRING 			:
-	case	eSMAX_CHUNK_XDATA_FLOAT 			:
-	case	eSMAX_CHUNK_XDATA_DOUBLE 			:
-	case	eSMAX_CHUNK_XDATA_SHORT 			:
-	case	eSMAX_CHUNK_XDATA_LONG 				:
-	case	eSMAX_CHUNK_XDATA_VOID 				:
-	case	eSMAX_CHUNK_XDATA_GROUP 			:
-	case	eSMAX_CHUNK_XDATA_RFU6 				:
-	case	eSMAX_CHUNK_XDATA_RFU5 				:
-	case	eSMAX_CHUNK_XDATA_RFU4 				:
-	case	eSMAX_CHUNK_XDATA_RFU3 				:
-	case	eSMAX_CHUNK_XDATA_RFU2 				:
-	case	eSMAX_CHUNK_XDATA_RFU1 				:
-	case	eSMAX_CHUNK_PARENT_NAME				:
-	case	eSMAX_CHUNK_MAT_NAME				:
-	case	eSMAX_CHUNK_MAT_AMBIENT				:
-	case	eSMAX_CHUNK_MAT_DIFFUSE				:
-	case	eSMAX_CHUNK_MAT_SPECULAR			:
-	case	eSMAX_CHUNK_MAT_SHININESS			:
-	case	eSMAX_CHUNK_MAT_SHIN2PCT			:
-	case	eSMAX_CHUNK_MAT_SHIN3PCT			:
-	case	eSMAX_CHUNK_MAT_TRANSPARENCY		:
-	case	eSMAX_CHUNK_MAT_XPFALL				:
-	case	eSMAX_CHUNK_MAT_REFBLUR				:
-	case	eSMAX_CHUNK_MAT_SELF_ILLUM 			:
-	case	eSMAX_CHUNK_MAT_TWO_SIDE 			:
-	case	eSMAX_CHUNK_MAT_DECAL 				:
-	case	eSMAX_CHUNK_MAT_ADDITIVE 			:
-	case	eSMAX_CHUNK_MAT_SELF_ILPCT			:
-	case	eSMAX_CHUNK_MAT_WIRE 				:
-	case	eSMAX_CHUNK_MAT_SUPERSMP 			:
-	case	eSMAX_CHUNK_MAT_WIRESIZE			:
-	case	eSMAX_CHUNK_MAT_FACEMAP 			:
-	case	eSMAX_CHUNK_MAT_XPFALLIN 			:
-	case	eSMAX_CHUNK_MAT_PHONGSOFT 			:
-	case	eSMAX_CHUNK_MAT_WIREABS 			:
-	case	eSMAX_CHUNK_MAT_SHADING				:
-	case	eSMAX_CHUNK_MAT_TEXMAP				:
-	case	eSMAX_CHUNK_MAT_SPECMAP				:
-	case	eSMAX_CHUNK_MAT_OPACMAP				:
-	case	eSMAX_CHUNK_MAT_REFLMAP				:
-	case	eSMAX_CHUNK_MAT_BUMPMAP				:
-	case	eSMAX_CHUNK_MAT_USE_XPFALL 			:
-	case	eSMAX_CHUNK_MAT_USE_REFBLUR 		:
-	case	eSMAX_CHUNK_MAT_BUMP_PERCENT 		:
-	case	eSMAX_CHUNK_MAT_MAPNAME				:
-	case	eSMAX_CHUNK_MAT_ACUBIC 				:
-	case	eSMAX_CHUNK_MAT_SXP_TEXT_DATA 		:
-	case	eSMAX_CHUNK_MAT_SXP_TEXT2_DATA 		:
-	case	eSMAX_CHUNK_MAT_SXP_OPAC_DATA 		:
-	case	eSMAX_CHUNK_MAT_SXP_BUMP_DATA 		:
-	case	eSMAX_CHUNK_MAT_SXP_SPEC_DATA 		:
-	case	eSMAX_CHUNK_MAT_SXP_SHIN_DATA 		:
-	case	eSMAX_CHUNK_MAT_SXP_SELFI_DATA 		:
-	case	eSMAX_CHUNK_MAT_SXP_TEXT_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_SXP_TEXT2_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_SXP_OPAC_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_SXP_BUMP_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_SXP_SPEC_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_SXP_SHIN_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_SXP_SELFI_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_SXP_REFL_MASKDATA 	:
-	case	eSMAX_CHUNK_MAT_TEX2MAP 			:
-	case	eSMAX_CHUNK_MAT_SHINMAP 			:
-	case	eSMAX_CHUNK_MAT_SELFIMAP 			:
-	case	eSMAX_CHUNK_MAT_TEXMASK 			:
-	case	eSMAX_CHUNK_MAT_TEX2MASK 			:
-	case	eSMAX_CHUNK_MAT_OPACMASK 			:
-	case	eSMAX_CHUNK_MAT_BUMPMASK 			:
-	case	eSMAX_CHUNK_MAT_SHINMASK 			:
-	case	eSMAX_CHUNK_MAT_SPECMASK 			:
-	case	eSMAX_CHUNK_MAT_SELFIMASK 			:
-	case	eSMAX_CHUNK_MAT_REFLMASK 			:
-	case	eSMAX_CHUNK_MAT_MAP_TILINGOLD 		:
-	case	eSMAX_CHUNK_MAT_MAP_TILING			:
-	case	eSMAX_CHUNK_MAT_MAP_TEXBLUR_OLD 	:
-	case	eSMAX_CHUNK_MAT_MAP_TEXBLUR			:
-	case	eSMAX_CHUNK_MAT_MAP_USCALE 			:
-	case	eSMAX_CHUNK_MAT_MAP_VSCALE 			:
-	case	eSMAX_CHUNK_MAT_MAP_UOFFSET 		:
-	case	eSMAX_CHUNK_MAT_MAP_VOFFSET 		:
-	case	eSMAX_CHUNK_MAT_MAP_ANG 			:
-	case	eSMAX_CHUNK_MAT_MAP_COL1 			:
-	case	eSMAX_CHUNK_MAT_MAP_COL2 			:
-	case	eSMAX_CHUNK_MAT_MAP_RCOL 			:
-	case	eSMAX_CHUNK_MAT_MAP_GCOL 			:
-	case	eSMAX_CHUNK_MAT_MAP_BCOL 			:
-	case	eSMAX_CHUNK_MAT_ENTRY				:
-	case	eSMAX_CHUNK_KFDATA					:
-	case	eSMAX_CHUNK_AMBIENT_NODE_TAG 		:
-	case	eSMAX_CHUNK_OBJECT_NODE_TAG			:
-	case	eSMAX_CHUNK_CAMERA_NODE_TAG			:
-	case	eSMAX_CHUNK_TARGET_NODE_TAG			:
-	case	eSMAX_CHUNK_LIGHT_NODE_TAG			:
-	case	eSMAX_CHUNK_L_TARGET_NODE_TAG		:
-	case	eSMAX_CHUNK_SPOTLIGHT_NODE_TAG		:
-	case	eSMAX_CHUNK_KFSEG					:
-	case	eSMAX_CHUNK_KFCURTIME				:
-	case	eSMAX_CHUNK_KFHDR					:
-	case	eSMAX_CHUNK_NODE_HDR				:
-	case	eSMAX_CHUNK_INSTANCE_NAME 			:
-	case	eSMAX_CHUNK_PRESCALE 				:
-	case	eSMAX_CHUNK_PIVOT					:
-	case	eSMAX_CHUNK_BOUNDBOX 				:
-	case	eSMAX_CHUNK_MORPH_SMOOTH			:
-	case	eSMAX_CHUNK_POS_TRACK_TAG			:
-	case	eSMAX_CHUNK_ROT_TRACK_TAG			:
-	case	eSMAX_CHUNK_SCL_TRACK_TAG			:
-	case	eSMAX_CHUNK_FOV_TRACK_TAG			:
-	case	eSMAX_CHUNK_ROLL_TRACK_TAG			:
-	case	eSMAX_CHUNK_COL_TRACK_TAG			:
-	case	eSMAX_CHUNK_MORPH_TRACK_TAG			:
-	case	eSMAX_CHUNK_HOT_TRACK_TAG			:
-	case	eSMAX_CHUNK_FALL_TRACK_TAG			:
-	case	eSMAX_CHUNK_HIDE_TRACK_TAG 			:
-	case	eSMAX_CHUNK_NODE_ID					:
-	case	eSMAX_CHUNK_C_MDRAWER 				:
-	case	eSMAX_CHUNK_C_TDRAWER 				:
-	case	eSMAX_CHUNK_C_SHPDRAWER 			:
-	case	eSMAX_CHUNK_C_MODDRAWER 			:
-	case	eSMAX_CHUNK_C_RIPDRAWER 			:
-	case	eSMAX_CHUNK_C_TXDRAWER 				:
-	case	eSMAX_CHUNK_C_PDRAWER 				:
-	case	eSMAX_CHUNK_C_MTLDRAWER 			:
-	case	eSMAX_CHUNK_C_FLIDRAWER 			:
-	case	eSMAX_CHUNK_C_CUBDRAWER 			:
-	case	eSMAX_CHUNK_C_MFILE 				:
-	case	eSMAX_CHUNK_C_SHPFILE 				:
-	case	eSMAX_CHUNK_C_MODFILE 				:
-	case	eSMAX_CHUNK_C_RIPFILE 				:
-	case	eSMAX_CHUNK_C_TXFILE 				:
-	case	eSMAX_CHUNK_C_PFILE 				:
-	case	eSMAX_CHUNK_C_MTLFILE 				:
-	case	eSMAX_CHUNK_C_FLIFILE 				:
-	case	eSMAX_CHUNK_C_PALFILE 				:
-	case	eSMAX_CHUNK_C_TX_STRING 			:
-	case	eSMAX_CHUNK_C_CONSTS 				:
-	case	eSMAX_CHUNK_C_SNAPS 				:
-	case	eSMAX_CHUNK_C_GRIDS 				:
-	case	eSMAX_CHUNK_C_ASNAPS 				:
-	case	eSMAX_CHUNK_C_GRID_RANGE 			:
-	case	eSMAX_CHUNK_C_RENDTYPE 				:
-	case	eSMAX_CHUNK_C_PROGMODE 				:
-	case	eSMAX_CHUNK_C_PREVMODE 				:
-	case	eSMAX_CHUNK_C_MODWMODE 				:
-	case	eSMAX_CHUNK_C_MODMODEL 				:
-	case	eSMAX_CHUNK_C_ALL_LINES 			:
-	case	eSMAX_CHUNK_C_BACK_TYPE 			:
-	case	eSMAX_CHUNK_C_MD_CS 				:
-	case	eSMAX_CHUNK_C_MD_CE 				:
-	case	eSMAX_CHUNK_C_MD_SML 				:
-	case	eSMAX_CHUNK_C_MD_SMW 				:
-	case	eSMAX_CHUNK_C_LOFT_WITH_TEXTURE 	:
-	case	eSMAX_CHUNK_C_LOFT_L_REPEAT 		:
-	case	eSMAX_CHUNK_C_LOFT_W_REPEAT 		:
-	case	eSMAX_CHUNK_C_LOFT_UV_NORMALIZE 	:
-	case	eSMAX_CHUNK_C_WELD_LOFT 			:
-	case	eSMAX_CHUNK_C_MD_PDET 				:
-	case	eSMAX_CHUNK_C_MD_SDET 				:
-	case	eSMAX_CHUNK_C_RGB_RMODE 			:
-	case	eSMAX_CHUNK_C_RGB_HIDE 				:
-	case	eSMAX_CHUNK_C_RGB_MAPSW 			:
-	case	eSMAX_CHUNK_C_RGB_TWOSIDE 			:
-	case	eSMAX_CHUNK_C_RGB_SHADOW 			:
-	case	eSMAX_CHUNK_C_RGB_AA 				:
-	case	eSMAX_CHUNK_C_RGB_OVW 				:
-	case	eSMAX_CHUNK_C_RGB_OVH 				:
-	case	eSMAX_CHUNK_CMAGIC 					:
-	case	eSMAX_CHUNK_C_RGB_PICTYPE 			:
-	case	eSMAX_CHUNK_C_RGB_OUTPUT 			:
-	case	eSMAX_CHUNK_C_RGB_TODISK 			:
-	case	eSMAX_CHUNK_C_RGB_COMPRESS 			:
-	case	eSMAX_CHUNK_C_JPEG_COMPRESSION 		:
-	case	eSMAX_CHUNK_C_RGB_DISPDEV 			:
-	case	eSMAX_CHUNK_C_RGB_HARDDEV 			:
-	case	eSMAX_CHUNK_C_RGB_PATH 				:
-	case	eSMAX_CHUNK_C_BITMAP_DRAWER 		:
-	case	eSMAX_CHUNK_C_RGB_FILE 				:
-	case	eSMAX_CHUNK_C_RGB_OVASPECT 			:
-	case	eSMAX_CHUNK_C_RGB_ANIMTYPE 			:
-	case	eSMAX_CHUNK_C_RENDER_ALL 			:
-	case	eSMAX_CHUNK_C_REND_FROM 			:
-	case	eSMAX_CHUNK_C_REND_TO 				:
-	case	eSMAX_CHUNK_C_REND_NTH 				:
-	case	eSMAX_CHUNK_C_PAL_TYPE 				:
-	case	eSMAX_CHUNK_C_RND_TURBO 			:
-	case	eSMAX_CHUNK_C_RND_MIP 				:
-	case	eSMAX_CHUNK_C_BGND_METHOD 			:
-	case	eSMAX_CHUNK_C_AUTO_REFLECT 			:
-	case	eSMAX_CHUNK_C_VP_FROM 				:
-	case	eSMAX_CHUNK_C_VP_TO 				:
-	case	eSMAX_CHUNK_C_VP_NTH 				:
-	case	eSMAX_CHUNK_C_REND_TSTEP 			:
-	case	eSMAX_CHUNK_C_VP_TSTEP 				:
-	case	eSMAX_CHUNK_C_SRDIAM 				:
-	case	eSMAX_CHUNK_C_SRDEG 				:
-	case	eSMAX_CHUNK_C_SRSEG 				:
-	case	eSMAX_CHUNK_C_SRDIR 				:
-	case	eSMAX_CHUNK_C_HETOP 				:
-	case	eSMAX_CHUNK_C_HEBOT 				:
-	case	eSMAX_CHUNK_C_HEHT 					:
-	case	eSMAX_CHUNK_C_HETURNS 				:
-	case	eSMAX_CHUNK_C_HEDEG 				:
-	case	eSMAX_CHUNK_C_HESEG 				:
-	case	eSMAX_CHUNK_C_HEDIR 				:
-	case	eSMAX_CHUNK_C_QUIKSTUFF 			:
-	case	eSMAX_CHUNK_C_SEE_LIGHTS 			:
-	case	eSMAX_CHUNK_C_SEE_CAMERAS 			:
-	case	eSMAX_CHUNK_C_SEE_3D 				:
-	case	eSMAX_CHUNK_C_MESHSEL 				:
-	case	eSMAX_CHUNK_C_MESHUNSEL 			:
-	case	eSMAX_CHUNK_C_POLYSEL 				:
-	case	eSMAX_CHUNK_C_POLYUNSEL 			:
-	case	eSMAX_CHUNK_C_SHPLOCAL 				:
-	case	eSMAX_CHUNK_C_MSHLOCAL 				:
-	case	eSMAX_CHUNK_C_NUM_FORMAT 			:
-	case	eSMAX_CHUNK_C_ARCH_DENOM 			:
-	case	eSMAX_CHUNK_C_IN_DEVICE 			:
-	case	eSMAX_CHUNK_C_MSCALE 				:
-	case	eSMAX_CHUNK_C_COMM_PORT 			:
-	case	eSMAX_CHUNK_C_TAB_BASES 			:
-	case	eSMAX_CHUNK_C_TAB_DIVS 				:
-	case	eSMAX_CHUNK_C_MASTER_SCALES 		:
-	case	eSMAX_CHUNK_C_SHOW_1STVERT 			:
-	case	eSMAX_CHUNK_C_SHAPER_OK 			:
-	case	eSMAX_CHUNK_C_LOFTER_OK 			:
-	case	eSMAX_CHUNK_C_EDITOR_OK 			:
-	case	eSMAX_CHUNK_C_KEYFRAMER_OK 			:
-	case	eSMAX_CHUNK_C_PICKSIZE 				:
-	case	eSMAX_CHUNK_C_MAPTYPE 				:
-	case	eSMAX_CHUNK_C_MAP_DISPLAY 			:
-	case	eSMAX_CHUNK_C_TILE_XY 				:
-	case	eSMAX_CHUNK_C_MAP_XYZ 				:
-	case	eSMAX_CHUNK_C_MAP_SCALE 			:
-	case	eSMAX_CHUNK_C_MAP_MATRIX_OLD 		:
-	case	eSMAX_CHUNK_C_MAP_MATRIX 			:
-	case	eSMAX_CHUNK_C_MAP_WID_HT 			:
-	case	eSMAX_CHUNK_C_OBNAME 				:
-	case	eSMAX_CHUNK_C_CAMNAME 				:
-	case	eSMAX_CHUNK_C_LTNAME 				:
-	case	eSMAX_CHUNK_C_CUR_MNAME 			:
-	case	eSMAX_CHUNK_C_CURMTL_FROM_MESH 		:
-	case	eSMAX_CHUNK_C_GET_SHAPE_MAKE_FACES	:
-	case	eSMAX_CHUNK_C_DETAIL 				:
-	case	eSMAX_CHUNK_C_VERTMARK 				:
-	case	eSMAX_CHUNK_C_MSHAX 				:
-	case	eSMAX_CHUNK_C_MSHCP 				:
-	case	eSMAX_CHUNK_C_USERAX 				:
-	case	eSMAX_CHUNK_C_SHOOK 				:
-	case	eSMAX_CHUNK_C_RAX 					:
-	case	eSMAX_CHUNK_C_STAPE 				:
-	case	eSMAX_CHUNK_C_LTAPE 				:
-	case	eSMAX_CHUNK_C_ETAPE 				:
-	case	eSMAX_CHUNK_C_KTAPE 				:
-	case	eSMAX_CHUNK_C_SPHSEGS 				:
-	case	eSMAX_CHUNK_C_GEOSMOOTH 			:
-	case	eSMAX_CHUNK_C_HEMISEGS 				:
-	case	eSMAX_CHUNK_C_PRISMSEGS 			:
-	case	eSMAX_CHUNK_C_PRISMSIDES 			:
-	case	eSMAX_CHUNK_C_TUBESEGS 				:
-	case	eSMAX_CHUNK_C_TUBESIDES 			:
-	case	eSMAX_CHUNK_C_TORSEGS 				:
-	case	eSMAX_CHUNK_C_TORSIDES 				:
-	case	eSMAX_CHUNK_C_CONESIDES 			:
-	case	eSMAX_CHUNK_C_CONESEGS 				:
-	case	eSMAX_CHUNK_C_NGPARMS 				:
-	case	eSMAX_CHUNK_C_PTHLEVEL 				:
-	case	eSMAX_CHUNK_C_MSCSYM 				:
-	case	eSMAX_CHUNK_C_MFTSYM 				:
-	case	eSMAX_CHUNK_C_MTTSYM 				:
-	case	eSMAX_CHUNK_C_SMOOTHING 			:
-	case	eSMAX_CHUNK_C_MODICOUNT 			:
-	case	eSMAX_CHUNK_C_FONTSEL 				:
-	case	eSMAX_CHUNK_C_TESS_TYPE 			:
-	case	eSMAX_CHUNK_C_TESS_TENSION 			:
-	case	eSMAX_CHUNK_C_SEG_START 			:
-	case	eSMAX_CHUNK_C_SEG_END 				:
-	case	eSMAX_CHUNK_C_CURTIME 				:
-	case	eSMAX_CHUNK_C_ANIMLENGTH 			:
-	case	eSMAX_CHUNK_C_PV_FROM 				:
-	case	eSMAX_CHUNK_C_PV_TO 				:
-	case	eSMAX_CHUNK_C_PV_DOFNUM 			:
-	case	eSMAX_CHUNK_C_PV_RNG 				:
-	case	eSMAX_CHUNK_C_PV_NTH 				:
-	case	eSMAX_CHUNK_C_PV_TYPE 				:
-	case	eSMAX_CHUNK_C_PV_METHOD 			:
-	case	eSMAX_CHUNK_C_PV_FPS 				:
-	case	eSMAX_CHUNK_C_VTR_FRAMES 			:
-	case	eSMAX_CHUNK_C_VTR_HDTL 				:
-	case	eSMAX_CHUNK_C_VTR_HD 				:
-	case	eSMAX_CHUNK_C_VTR_TL 				:
-	case	eSMAX_CHUNK_C_VTR_IN 				:
-	case	eSMAX_CHUNK_C_VTR_PK 				:
-	case	eSMAX_CHUNK_C_VTR_SH 				:
-	case	eSMAX_CHUNK_C_WORK_MTLS 			:
-	case	eSMAX_CHUNK_C_WORK_MTLS_2 			:
-	case	eSMAX_CHUNK_C_WORK_MTLS_3 			:
-	case	eSMAX_CHUNK_C_WORK_MTLS_4 			:
-	case	eSMAX_CHUNK_C_BGTYPE 				:
-	case	eSMAX_CHUNK_C_MEDTILE 				:
-	case	eSMAX_CHUNK_C_LO_CONTRAST 			:
-	case	eSMAX_CHUNK_C_HI_CONTRAST 			:
-	case	eSMAX_CHUNK_C_FROZ_DISPLAY 			:
-	case	eSMAX_CHUNK_C_BOOLWELD 				:
-	case	eSMAX_CHUNK_C_BOOLTYPE 				:
-	case	eSMAX_CHUNK_C_ANG_THRESH 			:
-	case	eSMAX_CHUNK_C_SS_THRESH 			:
-	case	eSMAX_CHUNK_C_TEXTURE_BLUR_DEFAULT	:
-	case	eSMAX_CHUNK_C_MAPDRAWER 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER1 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER2 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER3 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER4 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER5 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER6 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER7 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER8 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER9 			:
-	case	eSMAX_CHUNK_C_MAPDRAWER_ENTRY 		:
-	case	eSMAX_CHUNK_C_BACKUP_FILE 			:
-	case	eSMAX_CHUNK_C_DITHER_256 			:
-	case	eSMAX_CHUNK_C_SAVE_LAST 			:
-	case	eSMAX_CHUNK_C_USE_ALPHA 			:
-	case	eSMAX_CHUNK_C_TGA_DEPTH 			:
-	case	eSMAX_CHUNK_C_REND_FIELDS 			:
-	case	eSMAX_CHUNK_C_REFLIP 				:
-	case	eSMAX_CHUNK_C_SEL_ITEMTOG 			:
-	case	eSMAX_CHUNK_C_SEL_RESET 			:
-	case	eSMAX_CHUNK_C_STICKY_KEYINF 		:
-	case	eSMAX_CHUNK_C_WELD_THRESHOLD 		:
-	case	eSMAX_CHUNK_C_ZCLIP_POINT 			:
-	case	eSMAX_CHUNK_C_ALPHA_SPLIT 			:
-	case	eSMAX_CHUNK_C_KF_SHOW_BACKFACE 		:
-	case	eSMAX_CHUNK_C_OPTIMIZE_LOFT 		:
-	case	eSMAX_CHUNK_C_TENS_DEFAULT 			:
-	case	eSMAX_CHUNK_C_CONT_DEFAULT 			:
-	case	eSMAX_CHUNK_C_BIAS_DEFAULT 			:
-	case	eSMAX_CHUNK_C_DXFNAME_SRC 			:
-	case	eSMAX_CHUNK_C_AUTO_WELD 			:
-	case	eSMAX_CHUNK_C_AUTO_UNIFY 			:
-	case	eSMAX_CHUNK_C_AUTO_SMOOTH 			:
-	case	eSMAX_CHUNK_C_DXF_SMOOTH_ANG 		:
-	case	eSMAX_CHUNK_C_SMOOTH_ANG 			:
-	case	eSMAX_CHUNK_C_WORK_MTLS_5 			:
-	case	eSMAX_CHUNK_C_WORK_MTLS_6 			:
-	case	eSMAX_CHUNK_C_WORK_MTLS_7 			:
-	case	eSMAX_CHUNK_C_WORK_MTLS_8 			:
-	case	eSMAX_CHUNK_C_WORKMTL 				:
-	case	eSMAX_CHUNK_C_SXP_TEXT_DATA 		:
-	case	eSMAX_CHUNK_C_SXP_OPAC_DATA 		:
-	case	eSMAX_CHUNK_C_SXP_BUMP_DATA 		:
-	case	eSMAX_CHUNK_C_SXP_SHIN_DATA 		:
-	case	eSMAX_CHUNK_C_SXP_TEXT2_DATA 		:
-	case	eSMAX_CHUNK_C_SXP_SPEC_DATA 		:
-	case	eSMAX_CHUNK_C_SXP_SELFI_DATA 		:
-	case	eSMAX_CHUNK_C_SXP_TEXT_MASKDATA 	:
-	case	eSMAX_CHUNK_C_SXP_TEXT2_MASKDATA	:
-	case	eSMAX_CHUNK_C_SXP_OPAC_MASKDATA 	:
-	case	eSMAX_CHUNK_C_SXP_BUMP_MASKDATA 	:
-	case	eSMAX_CHUNK_C_SXP_SPEC_MASKDATA 	:
-	case	eSMAX_CHUNK_C_SXP_SHIN_MASKDATA 	:
-	case	eSMAX_CHUNK_C_SXP_REFL_MASKDATA 	:
-	case	eSMAX_CHUNK_C_NET_USE_VPOST 		:
-	case	eSMAX_CHUNK_C_NET_USE_GAMMA 		:
-	case	eSMAX_CHUNK_C_NET_FIELD_ORDER 		:
-	case	eSMAX_CHUNK_C_BLUR_FRAMES 			:
-	case	eSMAX_CHUNK_C_BLUR_SAMPLES 			:
-	case	eSMAX_CHUNK_C_BLUR_DUR 				:
-	case	eSMAX_CHUNK_C_HOT_METHOD 			:
-	case	eSMAX_CHUNK_C_HOT_CHECK 			:
-	case	eSMAX_CHUNK_C_PIXEL_SIZE 			:
-	case	eSMAX_CHUNK_C_DISP_GAMMA 			:
-	case	eSMAX_CHUNK_C_FBUF_GAMMA 			:
-	case	eSMAX_CHUNK_C_FILE_OUT_GAMMA 		:
-	case	eSMAX_CHUNK_C_FILE_IN_GAMMA 		:
-	case	eSMAX_CHUNK_C_GAMMA_CORRECT 		:
-	case	eSMAX_CHUNK_C_APPLY_DISP_GAMMA 		:
-	case	eSMAX_CHUNK_C_APPLY_FBUF_GAMMA 		:
-	case	eSMAX_CHUNK_C_APPLY_FILE_GAMMA 		:
-	case	eSMAX_CHUNK_C_FORCE_WIRE 			:
-	case	eSMAX_CHUNK_C_RAY_SHADOWS 			:
-	case	eSMAX_CHUNK_C_MASTER_AMBIENT 		:
-	case	eSMAX_CHUNK_C_SUPER_SAMPLE 			:
-	case	eSMAX_CHUNK_C_OBJECT_MBLUR 			:
-	case	eSMAX_CHUNK_C_MBLUR_DITHER 			:
-	case	eSMAX_CHUNK_C_DITHER_24 			:
-	case	eSMAX_CHUNK_C_SUPER_BLACK 			:
-	case	eSMAX_CHUNK_C_SAFE_FRAME 			:
-	case	eSMAX_CHUNK_C_VIEW_PRES_RATIO 		:
-	case	eSMAX_CHUNK_C_BGND_PRES_RATIO 		:
-	case	eSMAX_CHUNK_C_NTH_SERIAL_NUM		:
-	case	eSMAX_CHUNK_VPDATA					:
-	case	eSMAX_CHUNK_P_QUEUE_ENTRY 			:
-	case	eSMAX_CHUNK_P_QUEUE_IMAGE 			:
-	case	eSMAX_CHUNK_P_QUEUE_USEIGAMMA 		:
-	case	eSMAX_CHUNK_P_QUEUE_PROC 			:
-	case	eSMAX_CHUNK_P_QUEUE_SOLID 			:
-	case	eSMAX_CHUNK_P_QUEUE_GRADIENT 		:
-	case	eSMAX_CHUNK_P_QUEUE_KF 				:
-	case	eSMAX_CHUNK_P_QUEUE_MOTBLUR 		:
-	case	eSMAX_CHUNK_P_QUEUE_MB_REPEAT 		:
-	case	eSMAX_CHUNK_P_QUEUE_NONE 			:
-	case	eSMAX_CHUNK_P_QUEUE_RESIZE 			:
-	case	eSMAX_CHUNK_P_QUEUE_OFFSET 			:
-	case	eSMAX_CHUNK_P_QUEUE_ALIGN 			:
-	case	eSMAX_CHUNK_P_CUSTOM_SIZE 			:
-	case	eSMAX_CHUNK_P_ALPH_NONE 			:
-	case	eSMAX_CHUNK_P_ALPH_PSEUDO 			:
-	case	eSMAX_CHUNK_P_ALPH_OP_PSEUDO 		:
-	case	eSMAX_CHUNK_P_ALPH_BLUR 			:
-	case	eSMAX_CHUNK_P_ALPH_PCOL 			:
-	case	eSMAX_CHUNK_P_ALPH_C0 				:
-	case	eSMAX_CHUNK_P_ALPH_OP_KEY 			:
-	case	eSMAX_CHUNK_P_ALPH_KCOL 			:
-	case	eSMAX_CHUNK_P_ALPH_OP_NOCONV 		:
-	case	eSMAX_CHUNK_P_ALPH_IMAGE 			:
-	case	eSMAX_CHUNK_P_ALPH_ALPHA 			:
-	case	eSMAX_CHUNK_P_ALPH_QUES 			:
-	case	eSMAX_CHUNK_P_ALPH_QUEIMG 			:
-	case	eSMAX_CHUNK_P_ALPH_CUTOFF 			:
-	case	eSMAX_CHUNK_P_ALPHANEG 				:
-	case	eSMAX_CHUNK_P_TRAN_NONE 			:
-	case	eSMAX_CHUNK_P_TRAN_IMAGE 			:
-	case	eSMAX_CHUNK_P_TRAN_FRAMES 			:
-	case	eSMAX_CHUNK_P_TRAN_FADEIN 			:
-	case	eSMAX_CHUNK_P_TRAN_FADEOUT 			:
-	case	eSMAX_CHUNK_P_TRANNEG 				:
-	case	eSMAX_CHUNK_P_RANGES 				:
-	case	eSMAX_CHUNK_P_PROC_DATA				:
-	case	eSMAX_CHUNK_POS_TRACK_TAG_KEY		:
-	case	eSMAX_CHUNK_ROT_TRACK_TAG_KEY 		:
-	case	eSMAX_CHUNK_SCL_TRACK_TAG_KEY 		:
-	case	eSMAX_CHUNK_FOV_TRACK_TAG_KEY 		:
-	case	eSMAX_CHUNK_ROLL_TRACK_TAG_KEY 		:
-	case	eSMAX_CHUNK_COL_TRACK_TAG_KEY 		:
-	case	eSMAX_CHUNK_MORPH_TRACK_TAG_KEY 	:
-	case	eSMAX_CHUNK_HOT_TRACK_TAG_KEY 		:
-	case	eSMAX_CHUNK_FALL_TRACK_TAG_KEY 		:
-	case	eSMAX_CHUNK_POINT_ARRAY_ENTRY 		:
-	case	eSMAX_CHUNK_POINT_FLAG_ARRAY_ENTRY 	:
-	case	eSMAX_CHUNK_FACE_ARRAY_ENTRY 		:
-	case	eSMAX_CHUNK_MSH_MAT_GROUP_ENTRY 	:
-	case	eSMAX_CHUNK_TEX_VERTS_ENTRY 		:
-	case	eSMAX_CHUNK_SMOOTH_GROUP_ENTRY 		:
-	case	eSMAX_CHUNK_DUMMY					:
+	case eSMAX_CHUNK_NULL_CHUNK:
+	case eSMAX_CHUNK_UNKNOWN_CHUNK:
+	case eSMAX_CHUNK_M3D_VERSION:
+	case eSMAX_CHUNK_M3D_KFVERSION:
+	case eSMAX_CHUNK_COLOR_F:
+	case eSMAX_CHUNK_COLOR_24:
+	case eSMAX_CHUNK_LIN_COLOR_24:
+	case eSMAX_CHUNK_LIN_COLOR_F:
+	case eSMAX_CHUNK_INT_PERCENTAGE:
+	case eSMAX_CHUNK_FLOAT_PERCENTAGE:
+	case eSMAX_CHUNK_MASTER_SCALE:
+	case eSMAX_CHUNK_CHUNKTYPE:
+	case eSMAX_CHUNK_CHUNKUNIQUE:
+	case eSMAX_CHUNK_NOTCHUNK:
+	case eSMAX_CHUNK_CONTAINER:
+	case eSMAX_CHUNK_ISCHUNK:
+	case eSMAX_CHUNK_C_SXP_SELFI_MASKDATA:
+	case eSMAX_CHUNK_BIT_MAP:
+	case eSMAX_CHUNK_USE_BIT_MAP:
+	case eSMAX_CHUNK_SOLID_BGND:
+	case eSMAX_CHUNK_USE_SOLID_BGND:
+	case eSMAX_CHUNK_V_GRADIENT:
+	case eSMAX_CHUNK_USE_V_GRADIENT:
+	case eSMAX_CHUNK_LO_SHADOW_BIAS:
+	case eSMAX_CHUNK_HI_SHADOW_BIAS:
+	case eSMAX_CHUNK_SHADOW_MAP_SIZE:
+	case eSMAX_CHUNK_SHADOW_SAMPLES:
+	case eSMAX_CHUNK_SHADOW_RANGE:
+	case eSMAX_CHUNK_SHADOW_FILTER:
+	case eSMAX_CHUNK_RAY_BIAS:
+	case eSMAX_CHUNK_O_CONSTS:
+	case eSMAX_CHUNK_AMBIENT_LIGHT:
+	case eSMAX_CHUNK_FOG:
+	case eSMAX_CHUNK_USE_FOG:
+	case eSMAX_CHUNK_FOG_BGND:
+	case eSMAX_CHUNK_DISTANCE_CUE:
+	case eSMAX_CHUNK_USE_DISTANCE_CUE:
+	case eSMAX_CHUNK_LAYER_FOG:
+	case eSMAX_CHUNK_USE_LAYER_FOG:
+	case eSMAX_CHUNK_DCUE_BGND:
+	case eSMAX_CHUNK_SMAGIC:
+	case eSMAX_CHUNK_LMAGIC:
+	case eSMAX_CHUNK_DEFAULT_VIEW:
+	case eSMAX_CHUNK_VIEW_TOP:
+	case eSMAX_CHUNK_VIEW_BOTTOM:
+	case eSMAX_CHUNK_VIEW_LEFT:
+	case eSMAX_CHUNK_VIEW_RIGHT:
+	case eSMAX_CHUNK_VIEW_FRONT:
+	case eSMAX_CHUNK_VIEW_BACK:
+	case eSMAX_CHUNK_VIEW_USER:
+	case eSMAX_CHUNK_VIEW_CAMERA:
+	case eSMAX_CHUNK_VIEW_WINDOW:
+	case eSMAX_CHUNK_MDATA:
+	case eSMAX_CHUNK_MESH_VERSION:
+	case eSMAX_CHUNK_MLIBMAGIC:
+	case eSMAX_CHUNK_PRJMAGIC:
+	case eSMAX_CHUNK_MATMAGIC:
+	case eSMAX_CHUNK_NAMED_OBJECT:
+	case eSMAX_CHUNK_OBJ_HIDDEN:
+	case eSMAX_CHUNK_OBJ_VIS_LOFTER:
+	case eSMAX_CHUNK_OBJ_DOESNT_CAST:
+	case eSMAX_CHUNK_OBJ_MATTE:
+	case eSMAX_CHUNK_OBJ_FAST:
+	case eSMAX_CHUNK_OBJ_PROCEDURAL:
+	case eSMAX_CHUNK_OBJ_FROZEN:
+	case eSMAX_CHUNK_OBJ_DONT_RCVSHADOW:
+	case eSMAX_CHUNK_N_TRI_OBJECT:
+	case eSMAX_CHUNK_POINT_ARRAY:
+	case eSMAX_CHUNK_POINT_FLAG_ARRAY:
+	case eSMAX_CHUNK_FACE_ARRAY:
+	case eSMAX_CHUNK_MSH_MAT_GROUP:
+	case eSMAX_CHUNK_OLD_MAT_GROUP:
+	case eSMAX_CHUNK_TEX_VERTS:
+	case eSMAX_CHUNK_SMOOTH_GROUP:
+	case eSMAX_CHUNK_MESH_MATRIX:
+	case eSMAX_CHUNK_MESH_COLOR:
+	case eSMAX_CHUNK_MESH_TEXTURE_INFO:
+	case eSMAX_CHUNK_PROC_NAME:
+	case eSMAX_CHUNK_PROC_DATA:
+	case eSMAX_CHUNK_MSH_BOXMAP:
+	case eSMAX_CHUNK_N_D_L_OLD:
+	case eSMAX_CHUNK_N_CAM_OLD:
+	case eSMAX_CHUNK_N_DIRECT_LIGHT:
+	case eSMAX_CHUNK_DL_SPOTLIGHT:
+	case eSMAX_CHUNK_DL_OFF:
+	case eSMAX_CHUNK_DL_ATTENUATE:
+	case eSMAX_CHUNK_DL_RAYSHAD:
+	case eSMAX_CHUNK_DL_SHADOWED:
+	case eSMAX_CHUNK_DL_LOCAL_SHADOW:
+	case eSMAX_CHUNK_DL_LOCAL_SHADOW2:
+	case eSMAX_CHUNK_DL_SEE_CONE:
+	case eSMAX_CHUNK_DL_SPOT_RECTANGULAR:
+	case eSMAX_CHUNK_DL_SPOT_OVERSHOOT:
+	case eSMAX_CHUNK_DL_SPOT_PROJECTOR:
+	case eSMAX_CHUNK_DL_EXCLUDE:
+	case eSMAX_CHUNK_DL_RANGE:
+	case eSMAX_CHUNK_DL_SPOT_ROLL:
+	case eSMAX_CHUNK_DL_SPOT_ASPECT:
+	case eSMAX_CHUNK_DL_RAY_BIAS:
+	case eSMAX_CHUNK_DL_INNER_RANGE:
+	case eSMAX_CHUNK_DL_OUTER_RANGE:
+	case eSMAX_CHUNK_DL_MULTIPLIER:
+	case eSMAX_CHUNK_N_AMBIENT_LIGHT:
+	case eSMAX_CHUNK_N_CAMERA:
+	case eSMAX_CHUNK_CAM_SEE_CONE:
+	case eSMAX_CHUNK_CAM_RANGES:
+	case eSMAX_CHUNK_M3DMAGIC:
+	case eSMAX_CHUNK_HIERARCHY:
+	case eSMAX_CHUNK_PARENT_OBJECT:
+	case eSMAX_CHUNK_PIVOT_OBJECT:
+	case eSMAX_CHUNK_PIVOT_LIMITS:
+	case eSMAX_CHUNK_PIVOT_ORDER:
+	case eSMAX_CHUNK_XLATE_RANGE:
+	case eSMAX_CHUNK_POLY_2D:
+	case eSMAX_CHUNK_SHAPE_OK:
+	case eSMAX_CHUNK_SHAPE_NOT_OK:
+	case eSMAX_CHUNK_SHAPE_HOOK:
+	case eSMAX_CHUNK_PATH_3D:
+	case eSMAX_CHUNK_PATH_MATRIX:
+	case eSMAX_CHUNK_SHAPE_2D:
+	case eSMAX_CHUNK_M_SCALE:
+	case eSMAX_CHUNK_M_TWIST:
+	case eSMAX_CHUNK_M_TEETER:
+	case eSMAX_CHUNK_M_FIT:
+	case eSMAX_CHUNK_M_BEVEL:
+	case eSMAX_CHUNK_XZ_CURVE:
+	case eSMAX_CHUNK_YZ_CURVE:
+	case eSMAX_CHUNK_INTERPCT:
+	case eSMAX_CHUNK_DEFORM_LIMIT:
+	case eSMAX_CHUNK_USE_CONTOUR:
+	case eSMAX_CHUNK_USE_TWEEN:
+	case eSMAX_CHUNK_USE_SCALE:
+	case eSMAX_CHUNK_USE_TWIST:
+	case eSMAX_CHUNK_USE_TEETER:
+	case eSMAX_CHUNK_USE_FIT:
+	case eSMAX_CHUNK_USE_BEVEL:
+	case eSMAX_CHUNK_VIEWPORT_LAYOUT_OLD:
+	case eSMAX_CHUNK_VIEWPORT_LAYOUT:
+	case eSMAX_CHUNK_VIEWPORT_DATA_OLD:
+	case eSMAX_CHUNK_VIEWPORT_DATA:
+	case eSMAX_CHUNK_VIEWPORT_DATA_3:
+	case eSMAX_CHUNK_VIEWPORT_SIZE:
+	case eSMAX_CHUNK_NETWORK_VIEW:
+	case eSMAX_CHUNK_XDATA_SECTION:
+	case eSMAX_CHUNK_XDATA_ENTRY:
+	case eSMAX_CHUNK_XDATA_APPNAME:
+	case eSMAX_CHUNK_XDATA_STRING:
+	case eSMAX_CHUNK_XDATA_FLOAT:
+	case eSMAX_CHUNK_XDATA_DOUBLE:
+	case eSMAX_CHUNK_XDATA_SHORT:
+	case eSMAX_CHUNK_XDATA_LONG:
+	case eSMAX_CHUNK_XDATA_VOID:
+	case eSMAX_CHUNK_XDATA_GROUP:
+	case eSMAX_CHUNK_XDATA_RFU6:
+	case eSMAX_CHUNK_XDATA_RFU5:
+	case eSMAX_CHUNK_XDATA_RFU4:
+	case eSMAX_CHUNK_XDATA_RFU3:
+	case eSMAX_CHUNK_XDATA_RFU2:
+	case eSMAX_CHUNK_XDATA_RFU1:
+	case eSMAX_CHUNK_PARENT_NAME:
+	case eSMAX_CHUNK_MAT_NAME:
+	case eSMAX_CHUNK_MAT_AMBIENT:
+	case eSMAX_CHUNK_MAT_DIFFUSE:
+	case eSMAX_CHUNK_MAT_SPECULAR:
+	case eSMAX_CHUNK_MAT_SHININESS:
+	case eSMAX_CHUNK_MAT_SHIN2PCT:
+	case eSMAX_CHUNK_MAT_SHIN3PCT:
+	case eSMAX_CHUNK_MAT_TRANSPARENCY:
+	case eSMAX_CHUNK_MAT_XPFALL:
+	case eSMAX_CHUNK_MAT_REFBLUR:
+	case eSMAX_CHUNK_MAT_SELF_ILLUM:
+	case eSMAX_CHUNK_MAT_TWO_SIDE:
+	case eSMAX_CHUNK_MAT_DECAL:
+	case eSMAX_CHUNK_MAT_ADDITIVE:
+	case eSMAX_CHUNK_MAT_SELF_ILPCT:
+	case eSMAX_CHUNK_MAT_WIRE:
+	case eSMAX_CHUNK_MAT_SUPERSMP:
+	case eSMAX_CHUNK_MAT_WIRESIZE:
+	case eSMAX_CHUNK_MAT_FACEMAP:
+	case eSMAX_CHUNK_MAT_XPFALLIN:
+	case eSMAX_CHUNK_MAT_PHONGSOFT:
+	case eSMAX_CHUNK_MAT_WIREABS:
+	case eSMAX_CHUNK_MAT_SHADING:
+	case eSMAX_CHUNK_MAT_TEXMAP:
+	case eSMAX_CHUNK_MAT_SPECMAP:
+	case eSMAX_CHUNK_MAT_OPACMAP:
+	case eSMAX_CHUNK_MAT_REFLMAP:
+	case eSMAX_CHUNK_MAT_BUMPMAP:
+	case eSMAX_CHUNK_MAT_USE_XPFALL:
+	case eSMAX_CHUNK_MAT_USE_REFBLUR:
+	case eSMAX_CHUNK_MAT_BUMP_PERCENT:
+	case eSMAX_CHUNK_MAT_MAPNAME:
+	case eSMAX_CHUNK_MAT_ACUBIC:
+	case eSMAX_CHUNK_MAT_SXP_TEXT_DATA:
+	case eSMAX_CHUNK_MAT_SXP_TEXT2_DATA:
+	case eSMAX_CHUNK_MAT_SXP_OPAC_DATA:
+	case eSMAX_CHUNK_MAT_SXP_BUMP_DATA:
+	case eSMAX_CHUNK_MAT_SXP_SPEC_DATA:
+	case eSMAX_CHUNK_MAT_SXP_SHIN_DATA:
+	case eSMAX_CHUNK_MAT_SXP_SELFI_DATA:
+	case eSMAX_CHUNK_MAT_SXP_TEXT_MASKDATA:
+	case eSMAX_CHUNK_MAT_SXP_TEXT2_MASKDATA:
+	case eSMAX_CHUNK_MAT_SXP_OPAC_MASKDATA:
+	case eSMAX_CHUNK_MAT_SXP_BUMP_MASKDATA:
+	case eSMAX_CHUNK_MAT_SXP_SPEC_MASKDATA:
+	case eSMAX_CHUNK_MAT_SXP_SHIN_MASKDATA:
+	case eSMAX_CHUNK_MAT_SXP_SELFI_MASKDATA:
+	case eSMAX_CHUNK_MAT_SXP_REFL_MASKDATA:
+	case eSMAX_CHUNK_MAT_TEX2MAP:
+	case eSMAX_CHUNK_MAT_SHINMAP:
+	case eSMAX_CHUNK_MAT_SELFIMAP:
+	case eSMAX_CHUNK_MAT_TEXMASK:
+	case eSMAX_CHUNK_MAT_TEX2MASK:
+	case eSMAX_CHUNK_MAT_OPACMASK:
+	case eSMAX_CHUNK_MAT_BUMPMASK:
+	case eSMAX_CHUNK_MAT_SHINMASK:
+	case eSMAX_CHUNK_MAT_SPECMASK:
+	case eSMAX_CHUNK_MAT_SELFIMASK:
+	case eSMAX_CHUNK_MAT_REFLMASK:
+	case eSMAX_CHUNK_MAT_MAP_TILINGOLD:
+	case eSMAX_CHUNK_MAT_MAP_TILING:
+	case eSMAX_CHUNK_MAT_MAP_TEXBLUR_OLD:
+	case eSMAX_CHUNK_MAT_MAP_TEXBLUR:
+	case eSMAX_CHUNK_MAT_MAP_USCALE:
+	case eSMAX_CHUNK_MAT_MAP_VSCALE:
+	case eSMAX_CHUNK_MAT_MAP_UOFFSET:
+	case eSMAX_CHUNK_MAT_MAP_VOFFSET:
+	case eSMAX_CHUNK_MAT_MAP_ANG:
+	case eSMAX_CHUNK_MAT_MAP_COL1:
+	case eSMAX_CHUNK_MAT_MAP_COL2:
+	case eSMAX_CHUNK_MAT_MAP_RCOL:
+	case eSMAX_CHUNK_MAT_MAP_GCOL:
+	case eSMAX_CHUNK_MAT_MAP_BCOL:
+	case eSMAX_CHUNK_MAT_ENTRY:
+	case eSMAX_CHUNK_KFDATA:
+	case eSMAX_CHUNK_AMBIENT_NODE_TAG:
+	case eSMAX_CHUNK_OBJECT_NODE_TAG:
+	case eSMAX_CHUNK_CAMERA_NODE_TAG:
+	case eSMAX_CHUNK_TARGET_NODE_TAG:
+	case eSMAX_CHUNK_LIGHT_NODE_TAG:
+	case eSMAX_CHUNK_L_TARGET_NODE_TAG:
+	case eSMAX_CHUNK_SPOTLIGHT_NODE_TAG:
+	case eSMAX_CHUNK_KFSEG:
+	case eSMAX_CHUNK_KFCURTIME:
+	case eSMAX_CHUNK_KFHDR:
+	case eSMAX_CHUNK_NODE_HDR:
+	case eSMAX_CHUNK_INSTANCE_NAME:
+	case eSMAX_CHUNK_PRESCALE:
+	case eSMAX_CHUNK_PIVOT:
+	case eSMAX_CHUNK_BOUNDBOX:
+	case eSMAX_CHUNK_MORPH_SMOOTH:
+	case eSMAX_CHUNK_POS_TRACK_TAG:
+	case eSMAX_CHUNK_ROT_TRACK_TAG:
+	case eSMAX_CHUNK_SCL_TRACK_TAG:
+	case eSMAX_CHUNK_FOV_TRACK_TAG:
+	case eSMAX_CHUNK_ROLL_TRACK_TAG:
+	case eSMAX_CHUNK_COL_TRACK_TAG:
+	case eSMAX_CHUNK_MORPH_TRACK_TAG:
+	case eSMAX_CHUNK_HOT_TRACK_TAG:
+	case eSMAX_CHUNK_FALL_TRACK_TAG:
+	case eSMAX_CHUNK_HIDE_TRACK_TAG:
+	case eSMAX_CHUNK_NODE_ID:
+	case eSMAX_CHUNK_C_MDRAWER:
+	case eSMAX_CHUNK_C_TDRAWER:
+	case eSMAX_CHUNK_C_SHPDRAWER:
+	case eSMAX_CHUNK_C_MODDRAWER:
+	case eSMAX_CHUNK_C_RIPDRAWER:
+	case eSMAX_CHUNK_C_TXDRAWER:
+	case eSMAX_CHUNK_C_PDRAWER:
+	case eSMAX_CHUNK_C_MTLDRAWER:
+	case eSMAX_CHUNK_C_FLIDRAWER:
+	case eSMAX_CHUNK_C_CUBDRAWER:
+	case eSMAX_CHUNK_C_MFILE:
+	case eSMAX_CHUNK_C_SHPFILE:
+	case eSMAX_CHUNK_C_MODFILE:
+	case eSMAX_CHUNK_C_RIPFILE:
+	case eSMAX_CHUNK_C_TXFILE:
+	case eSMAX_CHUNK_C_PFILE:
+	case eSMAX_CHUNK_C_MTLFILE:
+	case eSMAX_CHUNK_C_FLIFILE:
+	case eSMAX_CHUNK_C_PALFILE:
+	case eSMAX_CHUNK_C_TX_STRING:
+	case eSMAX_CHUNK_C_CONSTS:
+	case eSMAX_CHUNK_C_SNAPS:
+	case eSMAX_CHUNK_C_GRIDS:
+	case eSMAX_CHUNK_C_ASNAPS:
+	case eSMAX_CHUNK_C_GRID_RANGE:
+	case eSMAX_CHUNK_C_RENDTYPE:
+	case eSMAX_CHUNK_C_PROGMODE:
+	case eSMAX_CHUNK_C_PREVMODE:
+	case eSMAX_CHUNK_C_MODWMODE:
+	case eSMAX_CHUNK_C_MODMODEL:
+	case eSMAX_CHUNK_C_ALL_LINES:
+	case eSMAX_CHUNK_C_BACK_TYPE:
+	case eSMAX_CHUNK_C_MD_CS:
+	case eSMAX_CHUNK_C_MD_CE:
+	case eSMAX_CHUNK_C_MD_SML:
+	case eSMAX_CHUNK_C_MD_SMW:
+	case eSMAX_CHUNK_C_LOFT_WITH_TEXTURE:
+	case eSMAX_CHUNK_C_LOFT_L_REPEAT:
+	case eSMAX_CHUNK_C_LOFT_W_REPEAT:
+	case eSMAX_CHUNK_C_LOFT_UV_NORMALIZE:
+	case eSMAX_CHUNK_C_WELD_LOFT:
+	case eSMAX_CHUNK_C_MD_PDET:
+	case eSMAX_CHUNK_C_MD_SDET:
+	case eSMAX_CHUNK_C_RGB_RMODE:
+	case eSMAX_CHUNK_C_RGB_HIDE:
+	case eSMAX_CHUNK_C_RGB_MAPSW:
+	case eSMAX_CHUNK_C_RGB_TWOSIDE:
+	case eSMAX_CHUNK_C_RGB_SHADOW:
+	case eSMAX_CHUNK_C_RGB_AA:
+	case eSMAX_CHUNK_C_RGB_OVW:
+	case eSMAX_CHUNK_C_RGB_OVH:
+	case eSMAX_CHUNK_CMAGIC:
+	case eSMAX_CHUNK_C_RGB_PICTYPE:
+	case eSMAX_CHUNK_C_RGB_OUTPUT:
+	case eSMAX_CHUNK_C_RGB_TODISK:
+	case eSMAX_CHUNK_C_RGB_COMPRESS:
+	case eSMAX_CHUNK_C_JPEG_COMPRESSION:
+	case eSMAX_CHUNK_C_RGB_DISPDEV:
+	case eSMAX_CHUNK_C_RGB_HARDDEV:
+	case eSMAX_CHUNK_C_RGB_PATH:
+	case eSMAX_CHUNK_C_BITMAP_DRAWER:
+	case eSMAX_CHUNK_C_RGB_FILE:
+	case eSMAX_CHUNK_C_RGB_OVASPECT:
+	case eSMAX_CHUNK_C_RGB_ANIMTYPE:
+	case eSMAX_CHUNK_C_RENDER_ALL:
+	case eSMAX_CHUNK_C_REND_FROM:
+	case eSMAX_CHUNK_C_REND_TO:
+	case eSMAX_CHUNK_C_REND_NTH:
+	case eSMAX_CHUNK_C_PAL_TYPE:
+	case eSMAX_CHUNK_C_RND_TURBO:
+	case eSMAX_CHUNK_C_RND_MIP:
+	case eSMAX_CHUNK_C_BGND_METHOD:
+	case eSMAX_CHUNK_C_AUTO_REFLECT:
+	case eSMAX_CHUNK_C_VP_FROM:
+	case eSMAX_CHUNK_C_VP_TO:
+	case eSMAX_CHUNK_C_VP_NTH:
+	case eSMAX_CHUNK_C_REND_TSTEP:
+	case eSMAX_CHUNK_C_VP_TSTEP:
+	case eSMAX_CHUNK_C_SRDIAM:
+	case eSMAX_CHUNK_C_SRDEG:
+	case eSMAX_CHUNK_C_SRSEG:
+	case eSMAX_CHUNK_C_SRDIR:
+	case eSMAX_CHUNK_C_HETOP:
+	case eSMAX_CHUNK_C_HEBOT:
+	case eSMAX_CHUNK_C_HEHT:
+	case eSMAX_CHUNK_C_HETURNS:
+	case eSMAX_CHUNK_C_HEDEG:
+	case eSMAX_CHUNK_C_HESEG:
+	case eSMAX_CHUNK_C_HEDIR:
+	case eSMAX_CHUNK_C_QUIKSTUFF:
+	case eSMAX_CHUNK_C_SEE_LIGHTS:
+	case eSMAX_CHUNK_C_SEE_CAMERAS:
+	case eSMAX_CHUNK_C_SEE_3D:
+	case eSMAX_CHUNK_C_MESHSEL:
+	case eSMAX_CHUNK_C_MESHUNSEL:
+	case eSMAX_CHUNK_C_POLYSEL:
+	case eSMAX_CHUNK_C_POLYUNSEL:
+	case eSMAX_CHUNK_C_SHPLOCAL:
+	case eSMAX_CHUNK_C_MSHLOCAL:
+	case eSMAX_CHUNK_C_NUM_FORMAT:
+	case eSMAX_CHUNK_C_ARCH_DENOM:
+	case eSMAX_CHUNK_C_IN_DEVICE:
+	case eSMAX_CHUNK_C_MSCALE:
+	case eSMAX_CHUNK_C_COMM_PORT:
+	case eSMAX_CHUNK_C_TAB_BASES:
+	case eSMAX_CHUNK_C_TAB_DIVS:
+	case eSMAX_CHUNK_C_MASTER_SCALES:
+	case eSMAX_CHUNK_C_SHOW_1STVERT:
+	case eSMAX_CHUNK_C_SHAPER_OK:
+	case eSMAX_CHUNK_C_LOFTER_OK:
+	case eSMAX_CHUNK_C_EDITOR_OK:
+	case eSMAX_CHUNK_C_KEYFRAMER_OK:
+	case eSMAX_CHUNK_C_PICKSIZE:
+	case eSMAX_CHUNK_C_MAPTYPE:
+	case eSMAX_CHUNK_C_MAP_DISPLAY:
+	case eSMAX_CHUNK_C_TILE_XY:
+	case eSMAX_CHUNK_C_MAP_XYZ:
+	case eSMAX_CHUNK_C_MAP_SCALE:
+	case eSMAX_CHUNK_C_MAP_MATRIX_OLD:
+	case eSMAX_CHUNK_C_MAP_MATRIX:
+	case eSMAX_CHUNK_C_MAP_WID_HT:
+	case eSMAX_CHUNK_C_OBNAME:
+	case eSMAX_CHUNK_C_CAMNAME:
+	case eSMAX_CHUNK_C_LTNAME:
+	case eSMAX_CHUNK_C_CUR_MNAME:
+	case eSMAX_CHUNK_C_CURMTL_FROM_MESH:
+	case eSMAX_CHUNK_C_GET_SHAPE_MAKE_FACES:
+	case eSMAX_CHUNK_C_DETAIL:
+	case eSMAX_CHUNK_C_VERTMARK:
+	case eSMAX_CHUNK_C_MSHAX:
+	case eSMAX_CHUNK_C_MSHCP:
+	case eSMAX_CHUNK_C_USERAX:
+	case eSMAX_CHUNK_C_SHOOK:
+	case eSMAX_CHUNK_C_RAX:
+	case eSMAX_CHUNK_C_STAPE:
+	case eSMAX_CHUNK_C_LTAPE:
+	case eSMAX_CHUNK_C_ETAPE:
+	case eSMAX_CHUNK_C_KTAPE:
+	case eSMAX_CHUNK_C_SPHSEGS:
+	case eSMAX_CHUNK_C_GEOSMOOTH:
+	case eSMAX_CHUNK_C_HEMISEGS:
+	case eSMAX_CHUNK_C_PRISMSEGS:
+	case eSMAX_CHUNK_C_PRISMSIDES:
+	case eSMAX_CHUNK_C_TUBESEGS:
+	case eSMAX_CHUNK_C_TUBESIDES:
+	case eSMAX_CHUNK_C_TORSEGS:
+	case eSMAX_CHUNK_C_TORSIDES:
+	case eSMAX_CHUNK_C_CONESIDES:
+	case eSMAX_CHUNK_C_CONESEGS:
+	case eSMAX_CHUNK_C_NGPARMS:
+	case eSMAX_CHUNK_C_PTHLEVEL:
+	case eSMAX_CHUNK_C_MSCSYM:
+	case eSMAX_CHUNK_C_MFTSYM:
+	case eSMAX_CHUNK_C_MTTSYM:
+	case eSMAX_CHUNK_C_SMOOTHING:
+	case eSMAX_CHUNK_C_MODICOUNT:
+	case eSMAX_CHUNK_C_FONTSEL:
+	case eSMAX_CHUNK_C_TESS_TYPE:
+	case eSMAX_CHUNK_C_TESS_TENSION:
+	case eSMAX_CHUNK_C_SEG_START:
+	case eSMAX_CHUNK_C_SEG_END:
+	case eSMAX_CHUNK_C_CURTIME:
+	case eSMAX_CHUNK_C_ANIMLENGTH:
+	case eSMAX_CHUNK_C_PV_FROM:
+	case eSMAX_CHUNK_C_PV_TO:
+	case eSMAX_CHUNK_C_PV_DOFNUM:
+	case eSMAX_CHUNK_C_PV_RNG:
+	case eSMAX_CHUNK_C_PV_NTH:
+	case eSMAX_CHUNK_C_PV_TYPE:
+	case eSMAX_CHUNK_C_PV_METHOD:
+	case eSMAX_CHUNK_C_PV_FPS:
+	case eSMAX_CHUNK_C_VTR_FRAMES:
+	case eSMAX_CHUNK_C_VTR_HDTL:
+	case eSMAX_CHUNK_C_VTR_HD:
+	case eSMAX_CHUNK_C_VTR_TL:
+	case eSMAX_CHUNK_C_VTR_IN:
+	case eSMAX_CHUNK_C_VTR_PK:
+	case eSMAX_CHUNK_C_VTR_SH:
+	case eSMAX_CHUNK_C_WORK_MTLS:
+	case eSMAX_CHUNK_C_WORK_MTLS_2:
+	case eSMAX_CHUNK_C_WORK_MTLS_3:
+	case eSMAX_CHUNK_C_WORK_MTLS_4:
+	case eSMAX_CHUNK_C_BGTYPE:
+	case eSMAX_CHUNK_C_MEDTILE:
+	case eSMAX_CHUNK_C_LO_CONTRAST:
+	case eSMAX_CHUNK_C_HI_CONTRAST:
+	case eSMAX_CHUNK_C_FROZ_DISPLAY:
+	case eSMAX_CHUNK_C_BOOLWELD:
+	case eSMAX_CHUNK_C_BOOLTYPE:
+	case eSMAX_CHUNK_C_ANG_THRESH:
+	case eSMAX_CHUNK_C_SS_THRESH:
+	case eSMAX_CHUNK_C_TEXTURE_BLUR_DEFAULT:
+	case eSMAX_CHUNK_C_MAPDRAWER:
+	case eSMAX_CHUNK_C_MAPDRAWER1:
+	case eSMAX_CHUNK_C_MAPDRAWER2:
+	case eSMAX_CHUNK_C_MAPDRAWER3:
+	case eSMAX_CHUNK_C_MAPDRAWER4:
+	case eSMAX_CHUNK_C_MAPDRAWER5:
+	case eSMAX_CHUNK_C_MAPDRAWER6:
+	case eSMAX_CHUNK_C_MAPDRAWER7:
+	case eSMAX_CHUNK_C_MAPDRAWER8:
+	case eSMAX_CHUNK_C_MAPDRAWER9:
+	case eSMAX_CHUNK_C_MAPDRAWER_ENTRY:
+	case eSMAX_CHUNK_C_BACKUP_FILE:
+	case eSMAX_CHUNK_C_DITHER_256:
+	case eSMAX_CHUNK_C_SAVE_LAST:
+	case eSMAX_CHUNK_C_USE_ALPHA:
+	case eSMAX_CHUNK_C_TGA_DEPTH:
+	case eSMAX_CHUNK_C_REND_FIELDS:
+	case eSMAX_CHUNK_C_REFLIP:
+	case eSMAX_CHUNK_C_SEL_ITEMTOG:
+	case eSMAX_CHUNK_C_SEL_RESET:
+	case eSMAX_CHUNK_C_STICKY_KEYINF:
+	case eSMAX_CHUNK_C_WELD_THRESHOLD:
+	case eSMAX_CHUNK_C_ZCLIP_POINT:
+	case eSMAX_CHUNK_C_ALPHA_SPLIT:
+	case eSMAX_CHUNK_C_KF_SHOW_BACKFACE:
+	case eSMAX_CHUNK_C_OPTIMIZE_LOFT:
+	case eSMAX_CHUNK_C_TENS_DEFAULT:
+	case eSMAX_CHUNK_C_CONT_DEFAULT:
+	case eSMAX_CHUNK_C_BIAS_DEFAULT:
+	case eSMAX_CHUNK_C_DXFNAME_SRC:
+	case eSMAX_CHUNK_C_AUTO_WELD:
+	case eSMAX_CHUNK_C_AUTO_UNIFY:
+	case eSMAX_CHUNK_C_AUTO_SMOOTH:
+	case eSMAX_CHUNK_C_DXF_SMOOTH_ANG:
+	case eSMAX_CHUNK_C_SMOOTH_ANG:
+	case eSMAX_CHUNK_C_WORK_MTLS_5:
+	case eSMAX_CHUNK_C_WORK_MTLS_6:
+	case eSMAX_CHUNK_C_WORK_MTLS_7:
+	case eSMAX_CHUNK_C_WORK_MTLS_8:
+	case eSMAX_CHUNK_C_WORKMTL:
+	case eSMAX_CHUNK_C_SXP_TEXT_DATA:
+	case eSMAX_CHUNK_C_SXP_OPAC_DATA:
+	case eSMAX_CHUNK_C_SXP_BUMP_DATA:
+	case eSMAX_CHUNK_C_SXP_SHIN_DATA:
+	case eSMAX_CHUNK_C_SXP_TEXT2_DATA:
+	case eSMAX_CHUNK_C_SXP_SPEC_DATA:
+	case eSMAX_CHUNK_C_SXP_SELFI_DATA:
+	case eSMAX_CHUNK_C_SXP_TEXT_MASKDATA:
+	case eSMAX_CHUNK_C_SXP_TEXT2_MASKDATA:
+	case eSMAX_CHUNK_C_SXP_OPAC_MASKDATA:
+	case eSMAX_CHUNK_C_SXP_BUMP_MASKDATA:
+	case eSMAX_CHUNK_C_SXP_SPEC_MASKDATA:
+	case eSMAX_CHUNK_C_SXP_SHIN_MASKDATA:
+	case eSMAX_CHUNK_C_SXP_REFL_MASKDATA:
+	case eSMAX_CHUNK_C_NET_USE_VPOST:
+	case eSMAX_CHUNK_C_NET_USE_GAMMA:
+	case eSMAX_CHUNK_C_NET_FIELD_ORDER:
+	case eSMAX_CHUNK_C_BLUR_FRAMES:
+	case eSMAX_CHUNK_C_BLUR_SAMPLES:
+	case eSMAX_CHUNK_C_BLUR_DUR:
+	case eSMAX_CHUNK_C_HOT_METHOD:
+	case eSMAX_CHUNK_C_HOT_CHECK:
+	case eSMAX_CHUNK_C_PIXEL_SIZE:
+	case eSMAX_CHUNK_C_DISP_GAMMA:
+	case eSMAX_CHUNK_C_FBUF_GAMMA:
+	case eSMAX_CHUNK_C_FILE_OUT_GAMMA:
+	case eSMAX_CHUNK_C_FILE_IN_GAMMA:
+	case eSMAX_CHUNK_C_GAMMA_CORRECT:
+	case eSMAX_CHUNK_C_APPLY_DISP_GAMMA:
+	case eSMAX_CHUNK_C_APPLY_FBUF_GAMMA:
+	case eSMAX_CHUNK_C_APPLY_FILE_GAMMA:
+	case eSMAX_CHUNK_C_FORCE_WIRE:
+	case eSMAX_CHUNK_C_RAY_SHADOWS:
+	case eSMAX_CHUNK_C_MASTER_AMBIENT:
+	case eSMAX_CHUNK_C_SUPER_SAMPLE:
+	case eSMAX_CHUNK_C_OBJECT_MBLUR:
+	case eSMAX_CHUNK_C_MBLUR_DITHER:
+	case eSMAX_CHUNK_C_DITHER_24:
+	case eSMAX_CHUNK_C_SUPER_BLACK:
+	case eSMAX_CHUNK_C_SAFE_FRAME:
+	case eSMAX_CHUNK_C_VIEW_PRES_RATIO:
+	case eSMAX_CHUNK_C_BGND_PRES_RATIO:
+	case eSMAX_CHUNK_C_NTH_SERIAL_NUM:
+	case eSMAX_CHUNK_VPDATA:
+	case eSMAX_CHUNK_P_QUEUE_ENTRY:
+	case eSMAX_CHUNK_P_QUEUE_IMAGE:
+	case eSMAX_CHUNK_P_QUEUE_USEIGAMMA:
+	case eSMAX_CHUNK_P_QUEUE_PROC:
+	case eSMAX_CHUNK_P_QUEUE_SOLID:
+	case eSMAX_CHUNK_P_QUEUE_GRADIENT:
+	case eSMAX_CHUNK_P_QUEUE_KF:
+	case eSMAX_CHUNK_P_QUEUE_MOTBLUR:
+	case eSMAX_CHUNK_P_QUEUE_MB_REPEAT:
+	case eSMAX_CHUNK_P_QUEUE_NONE:
+	case eSMAX_CHUNK_P_QUEUE_RESIZE:
+	case eSMAX_CHUNK_P_QUEUE_OFFSET:
+	case eSMAX_CHUNK_P_QUEUE_ALIGN:
+	case eSMAX_CHUNK_P_CUSTOM_SIZE:
+	case eSMAX_CHUNK_P_ALPH_NONE:
+	case eSMAX_CHUNK_P_ALPH_PSEUDO:
+	case eSMAX_CHUNK_P_ALPH_OP_PSEUDO:
+	case eSMAX_CHUNK_P_ALPH_BLUR:
+	case eSMAX_CHUNK_P_ALPH_PCOL:
+	case eSMAX_CHUNK_P_ALPH_C0:
+	case eSMAX_CHUNK_P_ALPH_OP_KEY:
+	case eSMAX_CHUNK_P_ALPH_KCOL:
+	case eSMAX_CHUNK_P_ALPH_OP_NOCONV:
+	case eSMAX_CHUNK_P_ALPH_IMAGE:
+	case eSMAX_CHUNK_P_ALPH_ALPHA:
+	case eSMAX_CHUNK_P_ALPH_QUES:
+	case eSMAX_CHUNK_P_ALPH_QUEIMG:
+	case eSMAX_CHUNK_P_ALPH_CUTOFF:
+	case eSMAX_CHUNK_P_ALPHANEG:
+	case eSMAX_CHUNK_P_TRAN_NONE:
+	case eSMAX_CHUNK_P_TRAN_IMAGE:
+	case eSMAX_CHUNK_P_TRAN_FRAMES:
+	case eSMAX_CHUNK_P_TRAN_FADEIN:
+	case eSMAX_CHUNK_P_TRAN_FADEOUT:
+	case eSMAX_CHUNK_P_TRANNEG:
+	case eSMAX_CHUNK_P_RANGES:
+	case eSMAX_CHUNK_P_PROC_DATA:
+	case eSMAX_CHUNK_POS_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_ROT_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_SCL_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_FOV_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_ROLL_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_COL_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_MORPH_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_HOT_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_FALL_TRACK_TAG_KEY:
+	case eSMAX_CHUNK_POINT_ARRAY_ENTRY:
+	case eSMAX_CHUNK_POINT_FLAG_ARRAY_ENTRY:
+	case eSMAX_CHUNK_FACE_ARRAY_ENTRY:
+	case eSMAX_CHUNK_MSH_MAT_GROUP_ENTRY:
+	case eSMAX_CHUNK_TEX_VERTS_ENTRY:
+	case eSMAX_CHUNK_SMOOTH_GROUP_ENTRY:
+	case eSMAX_CHUNK_DUMMY:
 		l_bReturn = true;
 		break;
 	}

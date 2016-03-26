@@ -1,23 +1,27 @@
-#include <MaterialManager.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <RenderSystem.hpp>
-#include <MeshManager.hpp>
-#include <Submesh.hpp>
+#include "Md3Importer.hpp"
+
+#include <Buffer.hpp>
+#include <Colour.hpp>
+#include <Engine.hpp>
 #include <Face.hpp>
 #include <GeometryManager.hpp>
-#include <Version.hpp>
+#include <InitialiseEvent.hpp>
+#include <ManagerView.hpp>
+#include <MaterialManager.hpp>
+#include <MeshManager.hpp>
+#include <Pass.hpp>
+#include <Plugin.hpp>
+#include <RenderSystem.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <Plugin.hpp>
-#include <Engine.hpp>
 #include <StaticTexture.hpp>
+#include <Submesh.hpp>
+#include <Texture.hpp>
+#include <TextureUnit.hpp>
+#include <Version.hpp>
 #include <Vertex.hpp>
-#include <InitialiseEvent.hpp>
 
 #include <Image.hpp>
-
-#include "Md3Importer.hpp"
 
 using namespace Castor3D;
 using namespace Castor;
@@ -49,12 +53,11 @@ Md3Importer::Md3Importer( Engine & p_pEngine )
 
 SceneSPtr Md3Importer::DoImportScene()
 {
-	MeshSPtr l_mesh = DoImportMesh();
-	SceneSPtr l_scene;
+	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
+	MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 	if ( l_mesh )
 	{
-		l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
 		SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 		GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 
@@ -69,7 +72,7 @@ SceneSPtr Md3Importer::DoImportScene()
 	return l_scene;
 }
 
-MeshSPtr Md3Importer::DoImportMesh()
+MeshSPtr Md3Importer::DoImportMesh( Scene & p_scene )
 {
 	m_pFile = new BinaryFile( m_fileName, File::eOPEN_MODE_READ );
 	SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_MD3" ), *GetEngine() );
@@ -79,7 +82,7 @@ MeshSPtr Md3Importer::DoImportMesh()
 	PassSPtr l_pass;
 	String l_meshName = m_fileName.GetFileName();
 	String l_materialName = m_fileName.GetFileName();
-	MeshSPtr l_mesh = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+	MeshSPtr l_mesh = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 	m_pFile->Read( m_header );
 	char * l_id = m_header.m_fileID;
 
@@ -88,11 +91,11 @@ MeshSPtr Md3Importer::DoImportMesh()
 	}
 	else
 	{
-		l_material = GetEngine()->GetMaterialManager().Find( l_materialName );
+		l_material = p_scene.GetMaterialView().Find( l_materialName );
 
 		if ( !l_material )
 		{
-			l_material = GetEngine()->GetMaterialManager().Create( l_materialName, *GetEngine() );
+			l_material = p_scene.GetMaterialView().Create( l_materialName, *GetEngine() );
 			l_material->CreatePass();
 		}
 
@@ -100,7 +103,7 @@ MeshSPtr Md3Importer::DoImportMesh()
 		l_pass->SetAmbient( Castor::Colour::from_components( 0.0f, 0.0f, 0.0f, 1.0f ) );
 		l_pass->SetEmissive( Castor::Colour::from_components( 0.5f, 0.5f, 0.5f, 1.0f ) );
 		l_pass->SetShininess( 64.0f );
-		DoReadMD3Data( l_mesh, l_pass );
+		DoReadMD3Data( p_scene, l_mesh, l_pass );
 
 		for ( auto && l_submesh : *l_mesh )
 		{
@@ -115,7 +118,7 @@ MeshSPtr Md3Importer::DoImportMesh()
 	return l_mesh;
 }
 
-void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
+void Md3Importer::DoReadMD3Data( Scene & p_scene, MeshSPtr p_pMesh, PassSPtr p_pPass )
 {
 	int i = 0;
 	uint64_t l_uiRead;
@@ -140,12 +143,13 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 	}
 
 	m_links = new MeshSPtr[m_header.m_numTags];
-// 	m_links = (MeshPtr *) malloc( sizeof( Mesh) * m_header.m_numTags);
-//
-// 	for (i = 0 ; i < m_header.m_numTags ; i++)
-// 	{
-// 		m_links[i].reset();
-// 	}
+ 	//m_links = (MeshPtr *) malloc( sizeof( Mesh) * m_header.m_numTags);
+	//
+ 	//for (i = 0 ; i < m_header.m_numTags ; i++)
+ 	//{
+ 	//	m_links[i].reset();
+ 	//}
+
 	long long l_meshOffset = m_pFile->Tell();
 	String l_strFileName = m_pFile->GetFileFullPath();
 	l_strFileName = l_strFileName.substr( 0, l_strFileName.find_last_of( '.' ) );
@@ -201,8 +205,8 @@ void Md3Importer::DoReadMD3Data( MeshSPtr p_pMesh, PassSPtr p_pPass )
 
 	p_pMesh->ComputeContainers();
 	p_pMesh->ComputeNormals();
-	DoLoadSkin( l_strFileName + cuT( ".skin" ) );
-	DoLoadShader( p_pMesh, l_strFileName + cuT( ".shader" ) );
+	DoLoadSkin( p_scene, l_strFileName + cuT( ".skin" ) );
+	DoLoadShader( p_scene, p_pMesh, l_strFileName + cuT( ".shader" ) );
 	delete [] m_links;
 }
 
@@ -226,48 +230,47 @@ void Md3Importer::DoConvertDataStructures( MeshSPtr p_pMesh, Md3MeshInfo p_meshH
 		}
 	}
 
-	/*
-		for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
-		{
-			if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
-			{
-				l_pSubmesh->AddPoint( m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[2] / 64.0f )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) ) );
-				l_pSubmesh->AddPoint( m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[2] / 64.0f )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) ) );
-				l_pSubmesh->AddPoint( m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[2] / 64.0f )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) ) );
-				l_pSubmesh->AddFace( i * 3 + 0, i * 3 + 1, i * 3 + 2 );
-			}
-		}
-	/*
-		Point2rArray l_texVerts;
+	//for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
+	//{
+	//	if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
+	//	{
+	//		l_pSubmesh->AddPoint( m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[0]].m_vertex[2] / 64.0f )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[0]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[0]].v ) ) );
+	//		l_pSubmesh->AddPoint( m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[1]].m_vertex[2] / 64.0f )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[1]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[1]].v ) ) );
+	//		l_pSubmesh->AddPoint( m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[0] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[1] / 64.0f, m_vertices[m_triangles[i].m_vertexIndices[2]].m_vertex[2] / 64.0f )->SetTexCoord( real( m_texCoords[m_triangles[i].m_textureIndices[2]].u ), real( 1.0 ) - real( m_texCoords[m_triangles[i].m_textureIndices[2]].v ) ) );
+	//		l_pSubmesh->AddFace( i * 3 + 0, i * 3 + 1, i * 3 + 2 );
+	//	}
+	//}
 
-		for (int i = 0 ; i < p_meshHeader.m_numVertices ; i++)
-		{
-			l_texVerts.push_back( Point2r( m_texCoords[i].m_textureCoord[0], 1-m_texCoords[i].m_textureCoord[1] ) );
-		}
+	////Point2rArray l_texVerts;
 
-		std::vector< stFACE_INDICES >	l_arrayFaces( p_meshHeader.m_numTriangles );
-		std::vector< float >			l_arrayTex;
-		for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
-		{
-			if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
-			{
-				l_arrayFaces[i].m_uiVertexIndex[0] = m_triangles[i].m_vertexIndices[0];
-				l_arrayFaces[i].m_uiVertexIndex[1] = m_triangles[i].m_vertexIndices[1];
-				l_arrayFaces[i].m_uiVertexIndex[2] = m_triangles[i].m_vertexIndices[2];
-				l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[0]][0] );
-				l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[0]][1] );
-				l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[1]][0] );
-				l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[1]][1] );
-				l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[2]][0] );
-				l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[2]][1] );
-			}
-		}
+	////for (int i = 0 ; i < p_meshHeader.m_numVertices ; i++)
+	////{
+	////	l_texVerts.push_back( Point2r( m_texCoords[i].m_textureCoord[0], 1-m_texCoords[i].m_textureCoord[1] ) );
+	////}
 
-		l_pSubmesh->AddFaceGroup( &l_arrayFaces[0], p_meshHeader.m_numTriangles, NULL, &l_arrayTex[0] );
-	/**/
+	////std::vector< stFACE_INDICES > l_arrayFaces( p_meshHeader.m_numTriangles );
+	////std::vector< float > l_arrayTex;
+
+	////for (int i = 0 ; i < p_meshHeader.m_numTriangles ; i++)
+	////{
+	////	if (m_triangles[i].m_vertexIndices[0] >= 0 && m_triangles[i].m_vertexIndices[1] >= 0 && m_triangles[i].m_vertexIndices[2] >= 0)
+	////	{
+	////		l_arrayFaces[i].m_uiVertexIndex[0] = m_triangles[i].m_vertexIndices[0];
+	////		l_arrayFaces[i].m_uiVertexIndex[1] = m_triangles[i].m_vertexIndices[1];
+	////		l_arrayFaces[i].m_uiVertexIndex[2] = m_triangles[i].m_vertexIndices[2];
+	////		l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[0]][0] );
+	////		l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[0]][1] );
+	////		l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[1]][0] );
+	////		l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[1]][1] );
+	////		l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[2]][0] );
+	////		l_arrayTex.push_back( l_texVerts[m_triangles[i].m_vertexIndices[2]][1] );
+	////	}
+	////}
+
+	////l_pSubmesh->AddFaceGroup( &l_arrayFaces[0], p_meshHeader.m_numTriangles, NULL, &l_arrayTex[0] );
 }
 
-bool Md3Importer::DoLoadSkin( String const & p_strSkin )
+bool Md3Importer::DoLoadSkin( Scene & p_scene, String const & p_strSkin )
 {
 	bool l_bReturn = false;
 
@@ -290,11 +293,11 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 			{
 				l_strImage = l_strLine.substr( l_strLine.find_last_of( ',' ) + 1 );
 				l_strImage = l_strImage.substr( l_strImage.find_last_of( '/' ) + 1 );
-				MaterialSPtr l_material = GetEngine()->GetMaterialManager().Find( l_strSection );
+				MaterialSPtr l_material = p_scene.GetMaterialView().Find( l_strSection );
 
 				if ( ! l_material )
 				{
-					l_material = GetEngine()->GetMaterialManager().Create( l_strSection, *GetEngine() );
+					l_material = p_scene.GetMaterialView().Create( l_strSection, *GetEngine() );
 					l_material->CreatePass();
 				}
 
@@ -318,7 +321,7 @@ bool Md3Importer::DoLoadSkin( String const & p_strSkin )
 	return l_bReturn;
 }
 
-bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
+bool Md3Importer::DoLoadShader( Scene & p_scene, MeshSPtr p_pMesh, String const & p_strShader )
 {
 	bool l_bReturn = false;
 
@@ -335,11 +338,11 @@ bool Md3Importer::DoLoadShader( MeshSPtr p_pMesh, String const & p_strShader )
 			l_fileIO.ReadLine( l_strLine, 255 );
 			StringStream l_strMatName( l_strName );
 			l_strMatName << "_" << l_uiIndex;
-			MaterialSPtr l_material = GetEngine()->GetMaterialManager().Find( l_strMatName.str() );
+			MaterialSPtr l_material = p_scene.GetMaterialView().Find( l_strMatName.str() );
 
 			if ( ! l_material )
 			{
-				l_material = GetEngine()->GetMaterialManager().Create( l_strMatName.str(), *GetEngine() );
+				l_material = p_scene.GetMaterialView().Create( l_strMatName.str(), *GetEngine() );
 				l_material->CreatePass();
 			}
 

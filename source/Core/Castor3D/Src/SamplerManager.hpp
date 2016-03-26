@@ -18,6 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SAMPLER_MANAGER_H___
 #define ___C3D_SAMPLER_MANAGER_H___
 
+#include "RenderSystem.hpp"
 #include "ResourceManager.hpp"
 #include "Sampler.hpp"
 

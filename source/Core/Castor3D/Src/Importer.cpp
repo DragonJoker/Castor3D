@@ -27,14 +27,14 @@ namespace Castor3D
 		return DoImportScene();
 	}
 
-	MeshSPtr Importer::ImportMesh( Path const & p_fileName, Parameters const & p_parameters )
+	MeshSPtr Importer::ImportMesh( Scene & p_scene, Path const & p_fileName, Parameters const & p_parameters )
 	{
 		m_fileName = p_fileName;
 		m_filePath = m_fileName.GetPath();
 		m_parameters = p_parameters;
 		m_nodes.clear();
 		m_geometries.clear();
-		MeshSPtr l_mesh = DoImportMesh();
+		MeshSPtr l_mesh = DoImportMesh( p_scene );
 
 		if ( !l_mesh )
 		{

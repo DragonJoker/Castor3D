@@ -304,31 +304,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetFormat )
 }
 END_ATTRIBUTE()
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetDepth )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( l_parsingContext->pRenderTarget )
-	{
-		ePIXEL_FORMAT l_ePF;
-		p_params[0]->Get( l_ePF );
-
-		if ( l_ePF >= ePIXEL_FORMAT_DEPTH16 )
-		{
-			l_parsingContext->pRenderTarget->SetDepthFormat( l_ePF );
-		}
-		else
-		{
-			PARSING_ERROR( cuT( "Wrong format for depth/stencil" ) );
-		}
-	}
-	else
-	{
-		PARSING_ERROR( cuT( "No target initialised." ) );
-	}
-}
-END_ATTRIBUTE()
-
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetTechnique )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

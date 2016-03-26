@@ -342,24 +342,6 @@ namespace Castor3D
 		C3D_API void SetPixelFormat( Castor::ePIXEL_FORMAT val );
 		/**
 		 *\~english
-		 *\brief		Retrieves the window depth format
-		 *\return		The window depth format
-		 *\~french
-		 *\brief		Récupère le format de profondeur de la fenêtre
-		 *\return		Le format de profondeur de la fenêtre
-		 */
-		C3D_API Castor::ePIXEL_FORMAT GetDepthFormat()const;
-		/**
-		 *\~english
-		 *\brief		Sets the window depth format
-		 *\param[in]	val	The new window depth format
-		 *\~french
-		 *\brief		Définit le format de profondeur de la fenêtre
-		 *\param[in]	val	Le nouveau format de profondeur de la fenêtre
-		 */
-		C3D_API void SetDepthFormat( Castor::ePIXEL_FORMAT val );
-		/**
-		 *\~english
 		 *\brief		Retrieves the window index
 		 *\return		The window index
 		 *\~french

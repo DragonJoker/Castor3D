@@ -171,7 +171,6 @@ scene "FinalScene"
 		render_target
 		{
 			format argb32
-			depth depth24s8
 			size 1125 600
 			scene "FinalScene"
 			camera "MainCamera"

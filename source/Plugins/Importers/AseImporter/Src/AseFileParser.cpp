@@ -2,25 +2,25 @@
 #include "AseFileContext.hpp"
 #include "AseImporter.hpp"
 
-#include <RenderSystem.hpp>
 #include <Buffer.hpp>
-#include <SceneNodeManager.hpp>
-#include <Scene.hpp>
 #include <Camera.hpp>
-#include <Viewport.hpp>
+#include <Engine.hpp>
+#include <Face.hpp>
+#include <Geometry.hpp>
+#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <Pass.hpp>
+#include <Plugin.hpp>
+#include <RenderSystem.hpp>
+#include <SceneManager.hpp>
+#include <SceneNodeManager.hpp>
+#include <StaticTexture.hpp>
+#include <Submesh.hpp>
 #include <TextureUnit.hpp>
 #include <Version.hpp>
-#include <Geometry.hpp>
-#include <Mesh.hpp>
-#include <Engine.hpp>
-#include <Submesh.hpp>
-#include <StaticTexture.hpp>
-#include <Plugin.hpp>
-#include <Face.hpp>
 #include <Vertex.hpp>
+#include <Viewport.hpp>
 
 #include <Image.hpp>
 
@@ -34,11 +34,11 @@ using namespace Castor;
 
 namespace Ase
 {
-	AseFileParser::AseFileParser( Engine * p_pEngine, AseImporter & p_importer )
+	AseFileParser::AseFileParser( Engine * p_pEngine, AseImporter & p_importer, Castor3D::Scene & p_scene )
 		: FileParser( eASE_SECTION_ROOT )
-		, m_pScene( NULL )
 		, m_engine( p_pEngine )
 		, m_importer( p_importer )
+		, m_scene( p_scene )
 	{
 	}
 
@@ -46,15 +46,13 @@ namespace Ase
 	{
 	}
 
-	bool AseFileParser::ParseFile( TextFile & p_file, SceneSPtr p_pScene )
+	bool AseFileParser::ParseFile( TextFile & p_file )
 	{
-		m_pScene = p_pScene;
 		return FileParser::ParseFile( p_file );
 	}
 
-	bool AseFileParser::ParseFile( Path const & p_pathFile, SceneSPtr p_pScene )
+	bool AseFileParser::ParseFile( Path const & p_pathFile )
 	{
-		m_pScene = p_pScene;
 		return FileParser::ParseFile( p_pathFile );
 	}
 
@@ -181,11 +179,10 @@ namespace Ase
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "*MESH_FACENORMAL" ), AseParser_NormalsListFaceNormal );
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "*MESH_VERTEXNORMAL" ), AseParser_NormalsListVertexNormal );
 		AddParser( eASE_SECTION_NORMALSLIST, cuT( "}" ), AseParser_NormalsListEnd );
-		std::shared_ptr< AseFileContext > l_pContext = std::make_shared< AseFileContext >( this, m_importer, &p_file );
+		std::shared_ptr< AseFileContext > l_pContext = std::make_shared< AseFileContext >( this, m_importer, &p_file, m_scene );
 		m_context = std::static_pointer_cast< FileParserContext >( l_pContext );
 		l_pContext->Initialise();
 		l_pContext->strName.clear();
-		l_pContext->pScene = m_pScene;
 	}
 
 	void AseFileParser::DoCleanupParser()
@@ -202,11 +199,7 @@ namespace Ase
 	void AseFileParser::DoValidate()
 	{
 		std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( m_context );
-
-		if ( !m_pScene )
-		{
-			m_pMesh = l_pContext->pMesh;
-		}
+		m_pMesh = l_pContext->pMesh;
 	}
 
 	String AseFileParser::DoGetSectionName( uint32_t p_section )
@@ -345,10 +338,6 @@ END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_RootScene )
 {
-	if ( !std::static_pointer_cast< AseFileContext >( p_context )->pScene )
-	{
-		p_parser->Ignore();
-	}
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_SCENE )
 
@@ -361,7 +350,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_RootGeometry )
 {
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 
-	if ( ( !l_pContext->pScene && l_pContext->pMesh ) )
+	if ( ( l_pContext->pMesh ) )
 	{
 		p_parser->Ignore();
 		PARSING_WARNING( cuT( "No scene initialised." ) );
@@ -405,7 +394,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_SceneAmbientLight )
 	Point3f l_ptColour;
 	p_params[0]->Get( l_ptColour );
 	l_colour.from_rgb( l_ptColour );
-	std::static_pointer_cast< AseFileContext >( p_context )->pScene->SetAmbientLight( l_colour );
+	std::static_pointer_cast< AseFileContext >( p_context )->scene.SetAmbientLight( l_colour );
 }
 END_ATTRIBUTE()
 
@@ -442,12 +431,11 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_MaterialName )
 {
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
-	MaterialManager & l_manager = l_pEngine->GetMaterialManager();
-	MaterialSPtr l_pMaterial;
+	auto & l_manager = l_pContext->scene.GetMaterialView();
 	String l_strName;
 	p_params[0]->Get( l_strName );
 	string::replace( l_strName, cuT( "\"" ), cuT( "" ) );
-	l_pMaterial = l_manager.Find( l_strName );
+	MaterialSPtr l_pMaterial = l_manager.Find( l_strName );
 
 	if ( !l_pMaterial )
 	{
@@ -682,16 +670,12 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryNodeName )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	Engine * l_pEngine = l_pContext->m_pParser->GetEngine();
 	p_params[0]->Get( l_pContext->strName );
-	l_pContext->pMesh = l_pEngine->GetMeshManager().Create( l_pContext->strName, eMESH_TYPE_CUSTOM );
+	l_pContext->pMesh = l_pContext->scene.GetMeshView().Create( l_pContext->strName, eMESH_TYPE_CUSTOM );
 }
 END_ATTRIBUTE()
 
 IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeometryNodeTM )
 {
-	if ( !std::static_pointer_cast< AseFileContext >( p_context )->pScene )
-	{
-		p_parser->Ignore();
-	}
 }
 END_ATTRIBUTE_PUSH( eASE_SECTION_GEONODE )
 
@@ -750,7 +734,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Ase, AseParser_GeoNodeName )
 	std::shared_ptr< AseFileContext > l_pContext = std::static_pointer_cast< AseFileContext >( p_context );
 	String l_strValue;
 	p_params[0]->Get( l_strValue );
-	l_pContext->pSceneNode = l_pContext->pScene->GetSceneNodeManager().Create( l_strValue, nullptr );
+	l_pContext->pSceneNode = l_pContext->scene.GetSceneNodeManager().Create( l_strValue, nullptr );
 }
 END_ATTRIBUTE()
 

@@ -52,4 +52,22 @@ namespace Castor3D
 			}
 		}
 	}
+
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
+	inline bool ManagerView< ResourceType, ManagerType, EventType >::Has( Castor::String const & p_name )const
+	{
+		return m_manager.Has( p_name );
+	}
+
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
+	inline std::shared_ptr< ResourceType > ManagerView< ResourceType, ManagerType, EventType >::Find( Castor::String const & p_name )const
+	{
+		return m_manager.Find( p_name );
+	}
+
+	template< typename ResourceType, typename ManagerType, eEVENT_TYPE EventType >
+	inline void ManagerView< ResourceType, ManagerType, EventType >::Remove( Castor::String const & p_name )
+	{
+		return m_manager.Remove( p_name );
+	}
 }

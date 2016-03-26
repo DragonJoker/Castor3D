@@ -79,7 +79,7 @@ void RenderPanel::InitialiseRenderWindow()
 	StringStream l_streamName;
 	l_streamName << cuT( "RenderPanel_" ) << GetId();
 	SceneNodeSPtr l_node;
-	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->GetWindowManager().Create();
+	RenderWindowSPtr l_pRenderWindow = wxGetApp().GetCastor()->GetWindowManager().Create( cuT( "CastorShape" ) );
 	RenderTargetSPtr l_pRenderTarget = wxGetApp().GetCastor()->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 	SceneNodeSPtr l_pCamBaseNode = m_mainScene->GetSceneNodeManager().Create( l_streamName.str() + cuT( "_CamNode" ), m_mainScene->GetCameraRootNode()	);
 	l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );

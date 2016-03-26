@@ -1135,9 +1135,7 @@ namespace OceanLighting
 		m_skymapNorm->SetValue( m_norm );
 		m_skymapClamp1->SetValue( m_clamp1 );
 		m_skymapClamp2->SetValue( m_clamp2 );
-		Point4f l_colour;
-		m_cloudColor.to_bgra( l_colour );
-		m_skymapCloudsColor->SetValue( l_colour );
+		m_skymapCloudsColor->SetValue( bgra_float( m_cloudColor ) );
 		m_skymapBlendState.lock()->Apply();
 		m_skymap->Bind();
 		m_skymapGBuffers->Draw( m_skymapIdxBuffer->GetSize(), 0 );
@@ -1541,9 +1539,7 @@ namespace OceanLighting
 		m_cloudsNorm->SetValue( m_norm );
 		m_cloudsClamp1->SetValue( m_clamp1 );
 		m_cloudsClamp2->SetValue( m_clamp2 );
-		Point4f l_colour;
-		m_cloudColor.to_bgra( l_colour );
-		m_cloudsCloudsColor->SetValue( l_colour );
+		m_cloudsCloudsColor->SetValue( bgra_float( m_cloudColor ) );
 		m_cloudsBlendState.lock()->Apply();
 		m_clouds->Bind();
 		m_cloudsGBuffers->Draw( m_cloudsIdxBuffer->GetSize(), 0 );

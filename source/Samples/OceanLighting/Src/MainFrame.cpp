@@ -341,7 +341,6 @@ namespace OceanLighting
 			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
 			RenderTargetSPtr l_target = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 			l_target->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
-			l_target->SetDepthFormat( ePIXEL_FORMAT_DEPTH24S8 );
 			l_target->SetSize( Size( m_width, m_height ) );
 			l_target->SetScene( l_scene );
 			l_target->SetCamera( l_pCamera );

@@ -183,15 +183,6 @@ namespace Castor3D
 		C3D_API GLSL::GlslWriter CreateGlslWriter();
 		/**
 		 *\~english
-		 *\brief		Creates a shader program for overlays rendering use.
-		 *\return		The created program.
-		 *\~french
-		 *\brief		Crée un programme shader pour les rendu d'incrustations
-		 *\return		Le programme créé.
-		 */
-		C3D_API ShaderProgramSPtr CreateOverlayProgram( uint32_t p_flags );
-		/**
-		 *\~english
 		 *\brief		Creates a shader program for billboards rendering use.
 		 *\return		The created program.
 		 *\~french

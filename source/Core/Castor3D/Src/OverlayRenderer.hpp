@@ -257,6 +257,15 @@ namespace Castor3D
 		 *\return		Le GeometryBuffers utilisé.
 		 */
 		C3D_API GeometryBuffersSPtr DoFillTextPart( int32_t p_count, OverlayCategory::VertexArray::const_iterator & p_it, uint32_t & p_index );
+		/**
+		 *\~english
+		 *\brief		Creates a shader program for overlays rendering use.
+		 *\return		The created program.
+		 *\~french
+		 *\brief		Crée un programme shader pour les rendu d'incrustations
+		 *\return		Le programme créé.
+		 */
+		C3D_API ShaderProgramSPtr DoCreateOverlayProgram( uint32_t p_flags );
 
 	protected:
 		//!\~english Vertex buffers for panels.	\~french Tampons de sommets pour les panneaux.

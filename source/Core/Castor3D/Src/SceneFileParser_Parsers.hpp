@@ -45,7 +45,6 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetCamera )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetSize )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetFormat )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetDepth )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetTechnique )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetStereo )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetPostEffect )

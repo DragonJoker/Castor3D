@@ -422,29 +422,6 @@ namespace Castor3D
 		}
 	}
 
-	ePIXEL_FORMAT RenderWindow::GetDepthFormat()const
-	{
-		ePIXEL_FORMAT l_return = ePIXEL_FORMAT( -1 );
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_return = l_target->GetDepthFormat();
-		}
-
-		return l_return;
-	}
-
-	void RenderWindow::SetDepthFormat( ePIXEL_FORMAT val )
-	{
-		RenderTargetSPtr l_target = GetRenderTarget();
-
-		if ( l_target )
-		{
-			l_target->SetDepthFormat( val );
-		}
-	}
-
 	void RenderWindow::SetScene( SceneSPtr p_scene )
 	{
 		RenderTargetSPtr l_target = GetRenderTarget();

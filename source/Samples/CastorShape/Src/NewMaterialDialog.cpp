@@ -177,10 +177,10 @@ namespace CastorShape
 		if ( p_value != wxCOMBO_NEW )
 		{
 			m_pass = m_material->GetPass( string::to_int( p_value ) );
-			m_properties->SetPropertyValue( PROPERTY_PASS_DIFFUSE, wxVariant( wxColour( m_pass->GetAmbient().to_bgr() ) ) );
-			m_properties->SetPropertyValue( PROPERTY_PASS_AMBIENT, wxVariant( wxColour( m_pass->GetDiffuse().to_bgr() ) ) );
-			m_properties->SetPropertyValue( PROPERTY_PASS_SPECULAR, wxVariant( wxColour( m_pass->GetSpecular().to_bgr() ) ) );
-			m_properties->SetPropertyValue( PROPERTY_PASS_EMISSIVE, wxVariant( wxColour( m_pass->GetEmissive().to_bgr() ) ) );
+			m_properties->SetPropertyValue( PROPERTY_PASS_DIFFUSE, wxVariant( wxColour( bgr_packed( m_pass->GetAmbient() ) ) ) );
+			m_properties->SetPropertyValue( PROPERTY_PASS_AMBIENT, wxVariant( wxColour( bgr_packed( m_pass->GetDiffuse() ) ) ) );
+			m_properties->SetPropertyValue( PROPERTY_PASS_SPECULAR, wxVariant( wxColour( bgr_packed( m_pass->GetSpecular() ) ) ) );
+			m_properties->SetPropertyValue( PROPERTY_PASS_EMISSIVE, wxVariant( wxColour( bgr_packed( m_pass->GetEmissive() ) ) ) );
 			m_properties->SetPropertyValue( PROPERTY_PASS_EXPONENT, m_pass->GetShininess() );
 			m_properties->SetPropertyValue( PROPERTY_PASS_TWO_SIDED, m_pass->IsTwoSided() );
 			m_properties->SetPropertyValue( PROPERTY_PASS_OPACITY, m_pass->GetAlpha() );

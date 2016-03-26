@@ -262,7 +262,7 @@ namespace Castor3D
 		 */
 		inline void SetColour( Castor::Colour const & p_colour )
 		{
-			p_colour.to_rgb( m_pCategory->GetColour() );
+			m_pCategory->SetColour( rgb_float( p_colour ) );
 		}
 		/**
 		 *\~english

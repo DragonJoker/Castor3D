@@ -72,7 +72,7 @@ namespace CastorCom
 		STDMETHOD( LoadPlugin )( /* [in] */ BSTR path );
 		STDMETHOD( CreateMesh )( /* [in] */ eMESH_TYPE type, /* [in] */ BSTR name, /* [out, retval] */ IMesh ** pVal );
 		STDMETHOD( CreateOverlay )( /* [in] */ eOVERLAY_TYPE type, /* [in] */ BSTR name, /* [in] */ IOverlay * parent, /* [in] */ IScene * scene, /* [out, retval] */ IOverlay ** pVal );
-		STDMETHOD( CreateRenderWindow )( /* [out, retval] */ IRenderWindow ** pVal );
+		STDMETHOD( CreateRenderWindow )( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal );
 		STDMETHOD( RemoveWindow )( /* [in] */ IRenderWindow * val );
 		STDMETHOD( CreateSampler )( /* [in] */ BSTR name, /* [out, retval] */ ISampler ** pVal );
 		STDMETHOD( CreateBlendState )( /* [in] */ BSTR name, /* [out, retval] */ IBlendState ** pVal );

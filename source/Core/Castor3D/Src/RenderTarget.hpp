@@ -151,14 +151,10 @@ namespace Castor3D
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
 			TextureUnit m_colorTexture;
-			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
-			DepthStencilRenderBufferSPtr m_pDepthBuffer;
 			//!\~english The frame buffer	\~french Le tampon d'image
 			FrameBufferSPtr m_frameBuffer;
 			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
 			TextureAttachmentSPtr m_pColorAttach;
-			//!\~english The attach between depth buffer and main frame buffer	\~french L'attache entre le tampon profondeur et le tampon principal
-			RenderBufferAttachmentSPtr m_pDepthAttach;
 
 		private:
 			RenderTarget & m_renderTarget;
@@ -596,30 +592,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the target depth format
-		 *\return		The target depth format
-		 *\~french
-		 *\brief		Récupère le format de profondeur de la cible
-		 *\return		Le format de profondeur de la cible
-		 */
-		inline Castor::ePIXEL_FORMAT GetDepthFormat()const
-		{
-			return m_eDepthFormat;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the target depth format
-		 *\param[in]	val	The new target depth format
-		 *\~french
-		 *\brief		Définit le format de profondeur de la cible
-		 *\param[in]	val	Le nouveau format de profondeur de la cible
-		 */
-		inline void SetDepthFormat( Castor::ePIXEL_FORMAT val )
-		{
-			m_eDepthFormat = val;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the target type
 		 *\return		The value
 		 *\~french
@@ -715,8 +687,6 @@ namespace Castor3D
 		CameraWPtr m_pCurrentCamera;
 		//!\~english The target display format	\~french Le format des pixels de la cible
 		Castor::ePIXEL_FORMAT m_pixelFormat;
-		//!\~english The target depth format	\~french Le format de profondeur de la cible
-		Castor::ePIXEL_FORMAT m_eDepthFormat;
 		//!\~english The number of actually created render targets	\~french Le compte de render target actuellement créées
 		static uint32_t sm_uiCount;
 		//!\~english This render target's index	\~french L'index de cette render target

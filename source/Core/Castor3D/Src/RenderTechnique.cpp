@@ -240,7 +240,6 @@ namespace Castor3D
 		l_fb.Bind();
 		l_fb.Clear();
 		m_renderTarget->GetToneMapping()->Apply( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
-		GetEngine()->GetRenderSystem()->GetCurrentContext()->RenderTexture( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
 		m_renderSystem->PopScene();
 	}
 
@@ -278,8 +277,14 @@ namespace Castor3D
 							if ( !l_primitive.second->GetAnimatedObject() )
 							{
 								l_programFlags &= ~ePROGRAM_FLAG_SKINNING;
+
+								if ( l_submesh->GetRefCount( l_material ) > 1 )
+								{
+									l_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
+								}
 							}
 
+							l_pass->PrepareTextures();
 							l_program = GetEngine()->GetShaderManager().GetAutomaticProgram( *this, l_pass->GetTextureFlags(), l_programFlags );
 
 							auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
@@ -311,7 +316,7 @@ namespace Castor3D
 
 							l_pass->BindToNode( l_renderNode.m_scene );
 
-							if ( l_material->HasAlphaBlending() )
+							if ( l_pass->HasAlphaBlending() )
 							{
 								auto l_itProgram = p_nodes.m_transparentRenderNodes.insert( { l_program, SubmeshRenderNodesByPassMap() } ).first;
 								auto l_itMap = l_itProgram->second.insert( { l_pass, SubmeshRenderNodesMap() } ).first;

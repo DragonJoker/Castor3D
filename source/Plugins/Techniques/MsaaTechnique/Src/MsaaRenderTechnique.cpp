@@ -38,7 +38,7 @@ namespace Msaa
 		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 		m_msFrameBuffer = m_renderSystem->CreateFrameBuffer();
 		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_ARGB16F32F );
-		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32 );
+		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32F );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
 		RasteriserStateSPtr l_pRasteriser = GetEngine()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );

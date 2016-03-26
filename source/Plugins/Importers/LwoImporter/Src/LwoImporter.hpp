@@ -55,12 +55,10 @@ namespace Lwo
 
 	private:
 		virtual Castor3D::SceneSPtr	DoImportScene();
-		virtual Castor3D::MeshSPtr	DoImportMesh();
+		virtual Castor3D::MeshSPtr	DoImportMesh( Castor3D::Scene & p_scene );
 
-		bool DoReadStart();
 		bool DoRead( stLWO_CHUNK *	p_pChunk );
-		void DoProcess( stLWO_CHUNK *	p_pChunk, Castor3D::MeshSPtr p_pMesh );
-		void DoDiscardChunk( stLWO_CHUNK *	p_pChunk );
+		void DoProcess( Castor3D::Scene & p_scene, stLWO_CHUNK * p_pChunk, Castor3D::MeshSPtr p_pMesh );
 		void DoDiscard( stLWO_CHUNK * p_pChunk );
 		void DoDiscard( stLWO_SUBCHUNK * p_pChunk );
 		bool DoIsValidChunk( stLWO_CHUNK * p_pChunk, stLWO_CHUNK * p_pParent );

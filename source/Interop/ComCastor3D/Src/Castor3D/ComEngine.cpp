@@ -50,6 +50,12 @@ namespace CastorCom
 			return p_manager.Create( Castor::String() );
 		}
 
+		template<>
+		std::shared_ptr< Castor3D::RenderWindow > CreateObject< Castor3D::RenderWindow, Castor3D::WindowManager >( Castor3D::Engine & p_engine, Castor3D::WindowManager & p_manager )
+		{
+			return p_manager.Create( Castor::String() );
+		}
+
 		template< typename TObj >
 		bool DoParse( TObj & p_obj, Castor3D::BinaryChunk & p_chunk, typename TObj::BinaryParser & p_parser )
 		{
@@ -65,6 +71,11 @@ namespace CastorCom
 		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::SamplerManager & p_manager, Castor3D::BinaryChunk & p_chunk, Castor3D::Sampler::BinaryParser p_parser )
 		{
 			return DoParse< Castor3D::Sampler >( *CreateObject< Castor3D::Sampler >( p_engine, p_manager ), p_chunk, p_parser );
+		}
+
+		bool DoFillManager( Castor3D::Engine & p_engine, Castor3D::WindowManager & p_manager, Castor3D::BinaryChunk & p_chunk, Castor3D::RenderWindow::BinaryParser p_parser )
+		{
+			return DoParse< Castor3D::RenderWindow >( *CreateObject< Castor3D::RenderWindow >( p_engine, p_manager ), p_chunk, p_parser );
 		}
 
 		bool DoLoadMeshFile( Castor3D::Engine & p_engine, Castor::Path const & p_fileName )
@@ -149,8 +160,7 @@ namespace CastorCom
 						break;
 
 					case Castor3D::eCHUNK_TYPE_WINDOW:
-						l_return = p_engine.GetWindowManager().Create();
-						l_continue = Castor3D::RenderWindow::BinaryParser( l_path ).Parse( *l_window, l_chunk );
+						l_continue = DoFillManager( p_engine, p_engine.GetWindowManager(), l_chunk, Castor3D::RenderWindow::BinaryParser( l_path ) );
 						break;
 					}
 
@@ -432,7 +442,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CEngine::CreateRenderWindow( /* [out, retval] */ IRenderWindow ** pVal )
+	STDMETHODIMP CEngine::CreateRenderWindow( /* [in] */ BSTR name, /* [out, retval] */ IRenderWindow ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -444,7 +454,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetWindowManager().Create() );
+					static_cast< CRenderWindow * >( *pVal )->SetInternal( m_internal->GetWindowManager().Create( FromBstr( name ) ) );
 				}
 			}
 		}

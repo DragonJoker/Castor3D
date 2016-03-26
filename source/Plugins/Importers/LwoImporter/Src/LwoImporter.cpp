@@ -2,26 +2,26 @@
 #include "LwoChunk.hpp"
 #include "LwoSubChunk.hpp"
 
-#include <Colour.hpp>
-#include <MeshManager.hpp>
-#include <MaterialManager.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <Submesh.hpp>
-#include <Vertex.hpp>
 #include <Buffer.hpp>
-#include <GeometryManager.hpp>
+#include <Colour.hpp>
+#include <Engine.hpp>
 #include <Face.hpp>
+#include <GeometryManager.hpp>
+#include <InitialiseEvent.hpp>
+#include <ManagerView.hpp>
+#include <MaterialManager.hpp>
+#include <MeshManager.hpp>
+#include <Pass.hpp>
+#include <Plugin.hpp>
 #include <RenderSystem.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <Version.hpp>
-#include <Plugin.hpp>
-#include <Engine.hpp>
-#include <Texture.hpp>
-#include <Vertex.hpp>
-#include <InitialiseEvent.hpp>
 #include <StaticTexture.hpp>
+#include <Submesh.hpp>
+#include <Texture.hpp>
+#include <TextureUnit.hpp>
+#include <Version.hpp>
+#include <Vertex.hpp>
 
 #include <Image.hpp>
 
@@ -44,12 +44,11 @@ namespace Lwo
 
 	SceneSPtr LwoImporter::DoImportScene()
 	{
-		MeshSPtr l_mesh = DoImportMesh();
-		SceneSPtr l_scene;
+		auto l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetEngine() );
+		MeshSPtr l_mesh = DoImportMesh( *l_scene );
 
 		if ( l_mesh )
 		{
-			l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_LWO" ), *GetEngine() );
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( l_mesh->GetName(), l_scene->GetObjectRootNode() );
 			GeometrySPtr l_geometry = l_scene->GetGeometryManager().Create( l_mesh->GetName(), l_node );
 
@@ -64,7 +63,7 @@ namespace Lwo
 		return l_scene;
 	}
 
-	MeshSPtr LwoImporter::DoImportMesh()
+	MeshSPtr LwoImporter::DoImportMesh( Scene & p_scene )
 	{
 		MeshSPtr l_return;
 		UIntArray l_faces;
@@ -79,14 +78,14 @@ namespace Lwo
 		{
 			Logger::LogDebug( cuT( "**************************************************" ) );
 			Logger::LogDebug( cuT( "Importing mesh from file : [" ) + m_fileName + cuT( "]" ) );
-			l_return = GetEngine()->GetMeshManager().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
+			l_return = p_scene.GetMeshView().Create( l_meshName, eMESH_TYPE_CUSTOM, l_faces, l_sizes );
 			DoRead( &l_currentChunk );
 			char l_szName[5] = { 0, 0, 0, 0 , 0 };
 			l_currentChunk.m_uiRead += UI4( m_pFile->ReadArray(	l_szName, 4 ) );
 
 			if ( l_currentChunk.m_eId == eID_TAG_FORM && l_currentChunk.m_uiSize == m_pFile->GetLength() - 8 && std::string( l_szName ) == "LWO2" )
 			{
-				DoProcess( &l_currentChunk, l_return );
+				DoProcess( p_scene, &l_currentChunk, l_return );
 				l_return->ComputeNormals();
 			}
 
@@ -129,18 +128,18 @@ namespace Lwo
 		return l_bReturn;
 	}
 
-	void LwoImporter::DoProcess( stLWO_CHUNK * p_pChunk, MeshSPtr p_pMesh )
+	void LwoImporter::DoProcess( Scene & p_scene, stLWO_CHUNK * p_pChunk, MeshSPtr p_pMesh )
 	{
 		stLWO_CHUNK l_currentChunk;
-		bool l_bContinue = m_pFile->IsOk();
+		bool l_continue = m_pFile->IsOk();
 
-		while ( p_pChunk->m_uiRead < p_pChunk->m_uiSize && l_bContinue )
+		while ( p_pChunk->m_uiRead < p_pChunk->m_uiSize && l_continue )
 		{
 			if ( DoRead( &l_currentChunk ) )
 			{
 				if ( !DoIsValidChunk( &l_currentChunk, p_pChunk ) )
 				{
-					l_bContinue = false;
+					l_continue = false;
 				}
 				else
 				{
@@ -206,15 +205,15 @@ namespace Lwo
 				}
 
 				p_pChunk->m_uiRead += l_currentChunk.m_uiRead + sizeof( eID_TAG ) + sizeof( UI4 );
-				l_bContinue = m_pFile->IsOk();
+				l_continue = m_pFile->IsOk();
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pChunk );
 		}
@@ -223,7 +222,7 @@ namespace Lwo
 
 		for ( std::vector< SubmeshPtrStrPair >::iterator l_it = m_arraySubmeshByMatName.begin() ; l_it != m_arraySubmeshByMatName.end() ; ++l_it )
 		{
-			l_pMaterial = GetEngine()->GetMaterialManager().Find( string::string_cast< xchar >( l_it->first ) );
+			l_pMaterial = p_scene.GetMaterialView().Find( string::string_cast< xchar >( l_it->first ) );
 
 			if ( l_pMaterial )
 			{
@@ -581,15 +580,15 @@ namespace Lwo
 	void LwoImporter::DoParsePTag( stLWO_CHUNK * p_pChunk )
 	{
 		ePTAG_TYPE l_eType;
-		bool l_bContinue = m_pFile->IsOk();
+		bool l_continue = m_pFile->IsOk();
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( m_pFile->Read( l_eType ) );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			char l_szType[5];
 			SwitchEndianness( l_eType );
@@ -598,20 +597,20 @@ namespace Lwo
 
 			if ( l_eType == ePTAG_TYPE_SURF )
 			{
-				while ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+				while ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 				{
 					UI2 l_usTag;
 					UI4 l_uiVx;
 					p_pChunk->m_uiRead += DoReadVX( l_uiVx );
-					l_bContinue = m_pFile->IsOk();
+					l_continue = m_pFile->IsOk();
 
-					if ( l_bContinue )
+					if ( l_continue )
 					{
 						p_pChunk->m_uiRead += UI4( m_pFile->Read( l_usTag ) );
-						l_bContinue = m_pFile->IsOk();
+						l_continue = m_pFile->IsOk();
 					}
 
-					if ( l_bContinue )
+					if ( l_continue )
 					{
 						SwitchEndianness( l_usTag );
 						//Logger::LogDebug( cuT( "\tPOLS Index : %d" ), l_uiVx );
@@ -628,11 +627,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pChunk );
 		}
@@ -640,24 +639,24 @@ namespace Lwo
 
 	UI2 LwoImporter::DoReadBlockHeader( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel )
 	{
-		std::string	l_strOrdinal;
-		stLWO_SUBCHUNK	l_currentSubchunk;
-		UI2			l_usReturn 			= 0;
-		bool l_bContinue = DoRead( cuT( "		" ), p_pSubchunk );
+		std::string l_strOrdinal;
+		stLWO_SUBCHUNK l_currentSubchunk;
+		UI2 l_usReturn = 0;
+		bool l_continue = DoRead( cuT( "		" ), p_pSubchunk );
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			l_usReturn += sizeof( eID_TAG ) + sizeof( UI2 );
-			l_bContinue	= DoRead( l_strOrdinal );
+			l_continue	= DoRead( l_strOrdinal );
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pSubchunk->m_usRead += UI2( l_strOrdinal.size() + 1 + ( 1 - l_strOrdinal.size() % 2 ) );
 			Logger::LogDebug( StringStream() << cuT( "			Header ordinal: 0x" ) << std::hex << int( l_strOrdinal[0] ) );
 		}
 
-		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
+		while ( l_continue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
@@ -678,11 +677,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pSubchunk );
 		}
@@ -693,10 +692,10 @@ namespace Lwo
 
 	void LwoImporter::DoReadTMap( stLWO_SUBCHUNK * p_pSubchunk )
 	{
-		stLWO_SUBCHUNK	l_currentSubchunk;
-		bool 		l_bContinue			= true;
+		stLWO_SUBCHUNK l_currentSubchunk;
+		bool l_continue = true;
 
-		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
+		while ( l_continue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
@@ -710,11 +709,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pSubchunk );
 		}
@@ -722,10 +721,10 @@ namespace Lwo
 
 	void LwoImporter::DoReadIMap( stLWO_SUBCHUNK * p_pSubchunk, eTEX_CHANNEL & p_channel )
 	{
-		stLWO_SUBCHUNK	l_currentSubchunk;
-		bool 		l_bContinue			= true;
+		stLWO_SUBCHUNK l_currentSubchunk;
+		bool l_continue = true;
 
-		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
+		while ( l_continue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
@@ -746,11 +745,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pSubchunk );
 		}
@@ -758,10 +757,10 @@ namespace Lwo
 
 	void LwoImporter::DoReadProc( stLWO_SUBCHUNK * p_pSubchunk )
 	{
-		stLWO_SUBCHUNK	l_currentSubchunk;
-		bool 		l_bContinue			= true;
+		stLWO_SUBCHUNK l_currentSubchunk;
+		bool l_continue = true;
 
-		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
+		while ( l_continue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
@@ -775,11 +774,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pSubchunk );
 		}
@@ -787,10 +786,10 @@ namespace Lwo
 
 	void LwoImporter::DoReadGrad( stLWO_SUBCHUNK * p_pSubchunk )
 	{
-		stLWO_SUBCHUNK	l_currentSubchunk;
-		bool 		l_bContinue			= true;
+		stLWO_SUBCHUNK l_currentSubchunk;
+		bool l_continue = true;
 
-		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
+		while ( l_continue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
@@ -804,11 +803,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pSubchunk );
 		}
@@ -816,10 +815,10 @@ namespace Lwo
 
 	void LwoImporter::DoReadShdr( stLWO_SUBCHUNK * p_pSubchunk )
 	{
-		stLWO_SUBCHUNK	l_currentSubchunk;
-		bool 		l_bContinue			= true;
+		stLWO_SUBCHUNK l_currentSubchunk;
+		bool l_continue = true;
 
-		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
+		while ( l_continue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
 		{
 			if ( DoRead( cuT( "			" ), &l_currentSubchunk ) )
 			{
@@ -833,11 +832,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pSubchunk );
 		}
@@ -882,12 +881,12 @@ namespace Lwo
 		stLWO_SUBCHUNK l_blockHeader;
 		UI4 l_uiVx;
 		eTEX_CHANNEL l_eChannel = eTEX_CHANNEL_COLR;
-		bool l_bContinue = true;
+		bool l_continue = true;
 		TextureUnitSPtr l_pTexture;
 		ImageVxMap::iterator l_it;
 		p_pSubchunk->m_usRead += DoReadBlockHeader( &l_blockHeader, l_eChannel );
 
-		while ( l_bContinue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
+		while ( l_continue && p_pSubchunk->m_usRead < p_pSubchunk->m_usSize )
 		{
 			if ( DoRead( cuT( "		" ), &l_currentSubchunk ) )
 			{
@@ -978,11 +977,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pSubchunk );
 		}
@@ -990,14 +989,14 @@ namespace Lwo
 
 	void LwoImporter::DoParseTags( stLWO_CHUNK * p_pChunk )
 	{
-		std::string	l_strTag;
-		bool		l_bContinue	= m_pFile->IsOk();
+		std::string l_strTag;
+		bool l_continue = m_pFile->IsOk();
 
-		while ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+		while ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 		{
-			l_bContinue = DoRead( l_strTag );
+			l_continue = DoRead( l_strTag );
 
-			if ( l_bContinue )
+			if ( l_continue )
 			{
 				p_pChunk->m_uiRead += UI4( l_strTag.size() + 1 + ( 1 - l_strTag.size() % 2 ) );
 				m_arrayTags.push_back( l_strTag );
@@ -1006,7 +1005,7 @@ namespace Lwo
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pChunk );
 		}
@@ -1024,15 +1023,15 @@ namespace Lwo
 		float l_fSpec = 0;
 		float l_fGlos = 0;
 		UI2 l_usSide = 1;
-		bool l_bContinue = DoRead( m_strName );
+		bool l_continue = DoRead( m_strName );
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( m_strName.size() + 1 + ( 1 - m_strName.size() % 2 ) );
-			l_bContinue = DoRead( m_strSource );
+			l_continue = DoRead( m_strSource );
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( m_strSource.size() + 1 + ( 1 - m_strSource.size() % 2 ) );
 			Logger::LogDebug( cuT( "	Name : " ) + string::string_cast< xchar >( m_strName ) );
@@ -1041,7 +1040,7 @@ namespace Lwo
 			l_pPass = l_pMaterial->GetPass( 0 );
 		}
 
-		while ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+		while ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 		{
 			if ( DoRead( cuT( "	" ), &l_currentSubchunk ) )
 			{
@@ -1102,11 +1101,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			l_pPass->SetDiffuse( l_clrBase * l_fDiff );
 			l_pPass->SetSpecular( l_clrBase * l_fSpec );
@@ -1123,19 +1122,19 @@ namespace Lwo
 	{
 		UI4	l_uiIndex;
 		stLWO_SUBCHUNK l_currentSubchunk;
-		bool l_bContinue = m_pFile->Read( l_uiIndex ) == sizeof( UI4 );
+		bool l_continue = m_pFile->Read( l_uiIndex ) == sizeof( UI4 );
 		std::string l_strName;
 		Path l_pathImage;
 		ImageSPtr l_pImage;
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			SwitchEndianness( l_uiIndex );
 			p_pChunk->m_uiRead += sizeof( UI4 );
 			Logger::LogDebug( StringStream() << cuT( "	Index: 0x" ) << std::hex << l_uiIndex );
 		}
 
-		while ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+		while ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 		{
 			if ( DoRead( cuT( "	" ), &l_currentSubchunk ) )
 			{
@@ -1187,11 +1186,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pChunk );
 		}
@@ -1223,33 +1222,33 @@ namespace Lwo
 		eVMAP_TYPE l_eType = eVMAP_TYPE( 0 );
 		UI2 l_usDimension;
 		std::string l_strName;
-		bool l_bContinue = m_pFile->IsOk();
+		bool l_continue = m_pFile->IsOk();
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( m_pFile->Read( l_eType ) );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( m_pFile->Read( l_usDimension ) );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
-			l_bContinue = DoRead( l_strName );
+			l_continue = DoRead( l_strName );
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
 			SwitchEndianness( l_eType );
 			SwitchEndianness( l_usDimension );
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			char l_szType[5];
 			DoToStr( l_szType, l_eType );
@@ -1262,19 +1261,19 @@ namespace Lwo
 				F4	l_fUv[2];
 				UI4 i = 0;
 
-				while ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+				while ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 				{
 					UI4 l_uiVx;
 					p_pChunk->m_uiRead += DoReadVX( l_uiVx );
-					l_bContinue = m_pFile->IsOk();
+					l_continue = m_pFile->IsOk();
 
-					if ( l_bContinue )
+					if ( l_continue )
 					{
 						p_pChunk->m_uiRead += UI4( m_pFile->ReadArray( l_fUv, 2 ) );
-						l_bContinue = m_pFile->IsOk();
+						l_continue = m_pFile->IsOk();
 					}
 
-					if ( l_bContinue )
+					if ( l_continue )
 					{
 						SwitchEndianness( l_fUv[0] );
 						SwitchEndianness( l_fUv[1] );
@@ -1290,11 +1289,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pChunk );
 		}
@@ -1305,16 +1304,16 @@ namespace Lwo
 		std::vector< Lwo::Face > l_arrayFaces;
 		std::set< UI4 > l_setPntsIds;
 		ePOLS_TYPE l_eType;
-		bool l_bContinue = m_pFile->IsOk();
+		bool l_continue = m_pFile->IsOk();
 		UI4 l_uiCount = 0;
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( m_pFile->Read( l_eType ) );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			char l_szType[5];
 			SwitchEndianness( l_eType );
@@ -1324,23 +1323,23 @@ namespace Lwo
 
 			if ( l_eType == ePOLS_TYPE_FACE )
 			{
-				while ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+				while ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 				{
 					UI2 l_usCountFlags = 0;
 					p_pChunk->m_uiRead += UI4( m_pFile->Read( l_usCountFlags ) );
 					UI2 l_usCount = l_usCountFlags & 0xFFC0;
 					SwitchEndianness( l_usCount );
 					Lwo::Face l_face( l_usCount );
-					l_bContinue = m_pFile->IsOk();
+					l_continue = m_pFile->IsOk();
 
-					for ( UI2 i = 0 ; i < l_usCount && l_bContinue ; i++ )
+					for ( UI2 i = 0 ; i < l_usCount && l_continue ; i++ )
 					{
 						p_pChunk->m_uiRead += DoReadVX( l_face[i] );
 						l_setPntsIds.insert( l_face[i] );
-						l_bContinue = m_pFile->IsOk();
+						l_continue = m_pFile->IsOk();
 					}
 
-					if ( l_bContinue )
+					if ( l_continue )
 					{
 						l_arrayFaces.push_back( l_face );
 						l_uiCount++;
@@ -1351,11 +1350,11 @@ namespace Lwo
 			}
 			else
 			{
-				l_bContinue = false;
+				l_continue = false;
 			}
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			if ( m_pSubmesh )
 			{
@@ -1383,49 +1382,49 @@ namespace Lwo
 
 	void LwoImporter::DoParseLayr( stLWO_CHUNK * p_pChunk )
 	{
-		bool l_bContinue = m_pFile->IsOk();
+		bool l_continue = m_pFile->IsOk();
 		UI2 l_usNumber;
 		UI2 l_usFlags;
 		Point3f l_ptPivot;
 		std::string l_strName;
 		UI2 l_usParent;
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( m_pFile->Read( l_usNumber ) );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+		if ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 		{
 			p_pChunk->m_uiRead += UI4( m_pFile->Read( l_usFlags ) );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+		if ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 		{
 			p_pChunk->m_uiRead += UI4( m_pFile->ReadArray( l_ptPivot.ptr(), 3 ) );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
+		if ( l_continue && p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 		{
 			DoRead( l_strName );
-			l_bContinue = m_pFile->IsOk();
+			l_continue = m_pFile->IsOk();
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			p_pChunk->m_uiRead += UI4( l_strName.size() + 1 + ( 1 - l_strName.size() % 2 ) );
 
 			if ( p_pChunk->m_uiRead < p_pChunk->m_uiSize )
 			{
 				p_pChunk->m_uiRead += UI4( m_pFile->Read( l_usParent ) );
-				l_bContinue = m_pFile->IsOk();
+				l_continue = m_pFile->IsOk();
 			}
 		}
 
-		if ( l_bContinue )
+		if ( l_continue )
 		{
 			SwitchEndianness( l_usNumber );
 			SwitchEndianness( l_usFlags );
@@ -1452,7 +1451,7 @@ namespace Lwo
 			}
 		}
 
-		if ( !l_bContinue )
+		if ( !l_continue )
 		{
 			DoDiscard( p_pChunk );
 		}

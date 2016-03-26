@@ -41,7 +41,7 @@ namespace Ase
 
 	private:
 		virtual Castor3D::SceneSPtr DoImportScene();
-		virtual Castor3D::MeshSPtr DoImportMesh();
+		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
 	};
 }
 

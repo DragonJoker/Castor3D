@@ -90,6 +90,35 @@ namespace Castor3D
 		 *\brief		Supprime du gestionnaire les éléments créés via cette vue.
 		 */
 		inline void Clear();
+		/**
+		 *\~english
+		 *\param[in]	p_name	The object name.
+		 *\return		\p true if an element with given name exists.
+		 *\~french
+		 *\param[in]	p_name	Le nom d'objet.
+		 *\return		\p true Si un élément avec le nom donné existe.
+		 */
+		inline bool Has( Castor::String const & p_name )const;
+		/**
+		 *\~english
+		 *\biref		Looks for an element with given name.
+		 *\param[in]	p_name	The object name.
+		 *\return		The found element, nullptr if not found.
+		 *\~french
+		 *\biref		Cherche un élément par son nom.
+		 *\param[in]	p_name	Le nom d'objet.
+		 *\return		L'élément trouvé, nullptr si non trouvé.
+		 */
+		inline std::shared_ptr< ResourceType > Find( Castor::String const & p_name )const;
+		/**
+		 *\~english
+		 *\brief		Removes an object, given a name.
+		 *\param[in]	p_name	The object name.
+		 *\~french
+		 *\brief		Retire un objet à partir d'un nom.
+		 *\param[in]	p_name	Le nom d'objet.
+		 */
+		inline void Remove( Castor::String const & p_name );
 
 	private:
 		//!\~english The viewed manager.	\~french Le gestionnaire vu.

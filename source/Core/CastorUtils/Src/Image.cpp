@@ -418,8 +418,7 @@ namespace Castor
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( x < GetWidth() && y < GetHeight() );
-		Point4ub l_ptComponents;
-		p_clrColour.to_bgra( l_ptComponents );
+		Point4ub l_ptComponents = bgra_byte( p_clrColour );
 		uint8_t const * l_pSrc = l_ptComponents.const_ptr();
 		uint8_t * l_pDst = &( *m_pBuffer->get_at( x, y ) );
 		PF::ConvertPixel( ePIXEL_FORMAT_A8R8G8B8, l_pSrc, GetPixelFormat(), l_pDst );

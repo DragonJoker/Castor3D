@@ -64,11 +64,6 @@ namespace Castor3D
 			l_return = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_return )
-		{
-			l_return = p_file.WriteText( m_tabs + cuT( "\tdepth " ) + Castor::PF::GetFormatName( p_target.GetDepthFormat() ) + cuT( "\n" ) ) > 0;
-		}
-
 		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "MSAA" ) )
 		{
 			l_return = p_file.WriteText( m_tabs + cuT( "\tmsaa true\n" ) ) > 0;
@@ -123,11 +118,6 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = DoFillChunk( p_obj.GetPixelFormat(), eCHUNK_TYPE_TARGET_FORMAT, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_return = DoFillChunk( p_obj.GetDepthFormat(), eCHUNK_TYPE_TARGET_DEPTH, l_chunk );
 		}
 
 		if ( l_return )
@@ -221,16 +211,6 @@ namespace Castor3D
 
 					break;
 
-				case eCHUNK_TYPE_TARGET_DEPTH:
-					l_return = DoParseChunk( l_format, l_chunk );
-
-					if ( l_return )
-					{
-						p_obj.SetDepthFormat( l_format );
-					}
-
-					break;
-
 				case eCHUNK_TYPE_TARGET_TECHNIQUE:
 					l_return = DoParseChunk( l_name, l_chunk );
 
@@ -287,11 +267,7 @@ namespace Castor3D
 	bool RenderTarget::stFRAME_BUFFER::Create()
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		m_pDepthBuffer = m_frameBuffer->CreateDepthStencilRenderBuffer( m_renderTarget.GetDepthFormat() );
-		m_pDepthAttach = m_frameBuffer->CreateAttachment( m_pDepthBuffer );
-		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
+		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
 		auto l_colourTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
 		l_colourTexture->SetRenderTarget( m_renderTarget.shared_from_this() );
@@ -302,10 +278,7 @@ namespace Castor3D
 
 	void RenderTarget::stFRAME_BUFFER::Destroy()
 	{
-		m_pDepthBuffer->Destroy();
 		m_frameBuffer->Destroy();
-		m_pDepthAttach.reset();
-		m_pDepthBuffer.reset();
 		m_pColorAttach.reset();
 		m_colorTexture.SetTexture( nullptr );
 		m_frameBuffer.reset();
@@ -321,14 +294,11 @@ namespace Castor3D
 		m_frameBuffer->Create( 0 );
 		m_colorTexture.GetTexture()->Create();
 		m_colorTexture.GetTexture()->Initialise();
-		m_pDepthBuffer->Create();
-		m_pDepthBuffer->Initialise( l_size );
 		m_frameBuffer->Initialise( l_size );
 
 		if ( m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
 			m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
-			m_frameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_pDepthAttach );
 			l_return = m_frameBuffer->IsComplete();
 			m_frameBuffer->Unbind();
 		}
@@ -343,7 +313,6 @@ namespace Castor3D
 		m_frameBuffer->Unbind();
 		m_frameBuffer->Cleanup();
 		m_colorTexture.Cleanup();
-		m_pDepthBuffer->Cleanup();
 	}
 
 	//*************************************************************************************************
@@ -355,7 +324,6 @@ namespace Castor3D
 		: OwnedBy< Engine >{ p_engine }
 		, m_eTargetType{ p_eTargetType }
 		, m_pixelFormat{ ePIXEL_FORMAT_A8R8G8B8 }
-		, m_eDepthFormat{ ePIXEL_FORMAT_DEPTH24S8 }
 		, m_initialised{ false }
 		, m_size{ Size{ 100u, 100u } }
 		, m_renderTechnique{}
@@ -372,6 +340,9 @@ namespace Castor3D
 		m_toneMapping = m_toneMappingFactory.Create( eTONE_MAPPING_TYPE_LINEAR, *GetEngine(), Parameters{} );
 		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
+		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
+		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
 	}
 
 	RenderTarget::~RenderTarget()

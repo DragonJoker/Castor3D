@@ -86,12 +86,11 @@ namespace Castor
 	private:\
 		OwnedBy & operator=( OwnedBy< owner > const & p_rhs ) = delete;\
 		OwnedBy & operator=( OwnedBy< owner > && p_rhs ) = delete;\
-	protected:\
-		~OwnedBy();\
 	public:\
 		OwnedBy( owner & p_owner );\
 		OwnedBy( OwnedBy< owner > const & p_rhs );\
 		OwnedBy( OwnedBy< owner > && p_rhs );\
+		~OwnedBy();\
 		owner * Get##name()const;\
 	private:\
 		owner & m_owner;\

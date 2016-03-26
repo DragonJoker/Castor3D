@@ -24,8 +24,8 @@ namespace Ase
 	SceneSPtr AseImporter::DoImportScene()
 	{
 		SceneSPtr l_scene = GetEngine()->GetSceneManager().Create( cuT( "Scene_ASE" ), *GetEngine() );
-		m_pFileParser = new AseFileParser( GetEngine(), *this );
-		m_pFileParser->ParseFile( m_fileName, l_scene );
+		m_pFileParser = new AseFileParser( GetEngine(), *this, *l_scene );
+		m_pFileParser->ParseFile( m_fileName );
 		MeshSPtr l_mesh;
 
 		for ( auto && l_it : m_geometries )
@@ -45,9 +45,9 @@ namespace Ase
 		return l_scene;
 	}
 
-	MeshSPtr AseImporter::DoImportMesh()
+	MeshSPtr AseImporter::DoImportMesh( Castor3D::Scene & p_scene )
 	{
-		m_pFileParser = new AseFileParser( GetEngine(), *this );
+		m_pFileParser = new AseFileParser( GetEngine(), *this, p_scene );
 		m_pFileParser->ParseFile( m_fileName );
 		MeshSPtr l_mesh = m_pFileParser->GetMesh();
 

@@ -336,7 +336,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_RENDER_TARGET, cuT( "camera" ), Parser_RenderTargetCamera, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "size" ), Parser_RenderTargetSize, { MakeParameter< ePARAMETER_TYPE_SIZE >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "format" ), Parser_RenderTargetFormat, { MakeParameter< ePARAMETER_TYPE_PIXELFORMAT >() } );
-	AddParser( eSECTION_RENDER_TARGET, cuT( "depth" ), Parser_RenderTargetDepth, { MakeParameter< ePARAMETER_TYPE_PIXELFORMAT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "technique" ), Parser_RenderTargetTechnique, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "stereo" ), Parser_RenderTargetStereo, { MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_RENDER_TARGET, cuT( "postfx" ), Parser_RenderTargetPostEffect, { MakeParameter< ePARAMETER_TYPE_NAME >(), MakeParameter< ePARAMETER_TYPE_TEXT >() } );

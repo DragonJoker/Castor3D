@@ -64,16 +64,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Mesh import Function
+		 *\param[in]	p_scene			The scene into which the Mesh is loaded.
 		 *\param[in]	p_pathFile		The location of the file to import
 		 *\param[in]	p_parameters	Import configuration parameters
 		 *\return		The imported Mesh
 		 *\~french
 		 *\brief		Fonction d'import de Mesh
+		 *\param[in]	p_scene			La scène dans laquelle le maillage est chargé
 		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import
 		 *\return		Le Mesh importé
 		 */
-		C3D_API MeshSPtr ImportMesh( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API MeshSPtr ImportMesh( Scene & p_scene, Castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Loads a texture and adds it to the given pass.
@@ -102,13 +104,15 @@ namespace Castor3D
 		C3D_API virtual SceneSPtr DoImportScene() = 0;
 		/**
 		 *\~english
-		 *\brief		Mesh import Function
+		 *\brief		Mesh import Function.
+		 *\param[in]	p_scene	The scene into which the Mesh is loaded.
 		 *\return		The imported Mesh
 		 *\~french
-		 *\brief		Fonction d'import de Mesh
-		 *\return		Le Mesh importé
+		 *\brief		Fonction d'import de maillage.
+		 *\param[in]	p_scene	La scène dans laquelle le maillage est chargé
+		 *\return		Le maillage importé.
 		 */
-		C3D_API virtual MeshSPtr DoImportMesh() = 0;
+		C3D_API virtual MeshSPtr DoImportMesh( Scene & p_scene ) = 0;
 
 	protected:
 		//!\~english The file name	\~french Le nom du fichier

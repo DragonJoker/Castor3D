@@ -642,7 +642,7 @@ namespace Castor3D
 
 	MeshSPtr Scene::ImportMesh( Castor::Path const & p_fileName, Importer & p_importer, Parameters const & p_parameters )
 	{
-		auto l_return = p_importer.ImportMesh( p_fileName, p_parameters );
+		auto l_return = p_importer.ImportMesh( *this, p_fileName, p_parameters );
 
 		if ( l_return )
 		{

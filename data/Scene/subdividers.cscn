@@ -440,7 +440,6 @@ scene "Scene"
 		render_target
 		{
 			format argb32
-			depth depth32
 			size screen_size
 			scene "Scene"
 			camera "MainCamera"

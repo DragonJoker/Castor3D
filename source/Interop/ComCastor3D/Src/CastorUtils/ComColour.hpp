@@ -60,9 +60,7 @@ namespace CastorCom
 		*/
 		inline operator Castor::Point4f()const
 		{
-			Castor::Point4f l_return;
-			this->to_bgra( l_return );
-			return l_return;
+			return bgra_float( *this );
 		}
 
 		COM_PROPERTY( R, FLOAT, make_getter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ), make_putter( this, &Castor::Colour::get, Castor::Colour::eCOMPONENT_RED ) );

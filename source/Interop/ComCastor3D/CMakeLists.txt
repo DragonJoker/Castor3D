@@ -148,7 +148,7 @@ if ( MSVC )
 			""
 			"${CMAKE_CURRENT_BINARY_DIR}/Src/ComCastorUtils.hpp;${COMCASTOR3D_ADDITIONAL_FILES}"
 		)
-		
+
 		file( GLOB COMCASTOR_HEADER_FILES
 			Src/CastorUtils/*.hpp
 			Src/CastorUtils/*.h
@@ -172,21 +172,24 @@ if ( MSVC )
 		)
 		source_group( "Source Files\\Castor3D" FILES ${COMCASTOR3D_SOURCE_FILES} )
 		source_group( "Header Files\\Castor3D" FILES ${COMCASTOR3D_HEADER_FILES} )
-		
+
 		# Copy tlb files into binaries directory.
 		add_custom_command( TARGET ${PROJECT_NAME}
 			POST_BUILD
 			COMMAND ${CMAKE_COMMAND} -E copy_if_different
 			${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb ${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin/
 		)
-		
+
 		# install tlb files
 		install(
 			FILES ${CMAKE_CURRENT_BINARY_DIR}/Castor3D.tlb
 			DESTINATION bin
 			COMPONENT ${PROJECT_NAME}
 		)
-		
+
+		register_target( ${PROJECT_NAME} Debug )
+		register_target( ${PROJECT_NAME} Release )
+
 		set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Interop/ComCastor3D" )
 		add_target_astyle( ${PROJECT_NAME} ".hpp;.inl;.cpp" )
 		set( Build "yes (version ${CMC_VERSION_MAJOR}.${CMC_VERSION_MINOR}.${CMC_VERSION_BUILD})" PARENT_SCOPE )

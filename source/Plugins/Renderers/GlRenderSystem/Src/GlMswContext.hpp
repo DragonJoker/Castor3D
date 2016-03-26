@@ -52,10 +52,10 @@ namespace GlRender
 		}
 
 	protected:
-		void DoInitialiseOpenGL( Castor::ePIXEL_FORMAT p_colour, Castor::ePIXEL_FORMAT p_depth, bool p_stereo );
-		HGLRC DoCreateDummyContext( Castor::ePIXEL_FORMAT p_colour, Castor::ePIXEL_FORMAT p_depth, bool p_stereo );
-		bool DoSelectPixelFormat( Castor::ePIXEL_FORMAT p_colour, Castor::ePIXEL_FORMAT p_depth, bool p_stereo );
-		bool DoSelectStereoPixelFormat( Castor::ePIXEL_FORMAT p_colour, Castor::ePIXEL_FORMAT p_depth );
+		void DoInitialiseOpenGL( Castor::ePIXEL_FORMAT p_colour, bool p_stereo );
+		HGLRC DoCreateDummyContext( Castor::ePIXEL_FORMAT p_colour, bool p_stereo );
+		bool DoSelectPixelFormat( Castor::ePIXEL_FORMAT p_colour, bool p_stereo );
+		bool DoSelectStereoPixelFormat( Castor::ePIXEL_FORMAT p_colour );
 		bool DoCreateGl3Context();
 
 	protected:
