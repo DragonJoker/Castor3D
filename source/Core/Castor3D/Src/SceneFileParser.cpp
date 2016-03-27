@@ -261,6 +261,9 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapToneMappings[cuT( "haarm" )] = eTONE_MAPPING_TYPE_HAARM_PETER_DUIKER;
 	m_mapToneMappings[cuT( "hejl" )] = eTONE_MAPPING_TYPE_HEJL_BURGESS_DAWSON;
 	m_mapToneMappings[cuT( "hable" )] = eTONE_MAPPING_TYPE_HABLE;
+
+	m_mapTextTexturingMode[cuT( "letter" )] = eTEXT_TEXTURING_MODE_LETTER;
+	m_mapTextTexturingMode[cuT( "text" )] = eTEXT_TEXTURING_MODE_TEXT;
 }
 
 SceneFileParser::~SceneFileParser()
@@ -505,6 +508,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "text_wrapping" ), Parser_TextOverlayTextWrapping, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextWrappingModes ) } );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "vertical_align" ), Parser_TextOverlayVerticalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapVerticalAligns ) } );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "horizontal_align" ), Parser_TextOverlayHorizontalAlign, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapHorizontalAligns ) } );
+	AddParser( eSECTION_TEXT_OVERLAY, cuT( "texturing_mode" ), Parser_TextOverlayTexturingMode, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextTexturingMode ) } );
 	AddParser( eSECTION_TEXT_OVERLAY, cuT( "}" ), Parser_OverlayEnd );
 
 	AddParser( eSECTION_CAMERA, cuT( "parent" ), Parser_CameraParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );

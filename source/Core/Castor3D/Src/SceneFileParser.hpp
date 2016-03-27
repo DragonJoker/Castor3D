@@ -227,6 +227,7 @@ namespace Castor3D
 		UIntStrMap m_mapHorizontalAligns;
 		UIntStrMap m_mapInterpolatorModes;
 		UIntStrMap m_mapToneMappings;
+		UIntStrMap m_mapTextTexturingMode;
 	};
 }
 

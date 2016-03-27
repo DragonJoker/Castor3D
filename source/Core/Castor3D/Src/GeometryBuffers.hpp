@@ -79,7 +79,7 @@ namespace Castor3D
 		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Draw( uint32_t p_uiSize, uint32_t p_index ) = 0;
+		C3D_API virtual bool Draw( uint32_t p_uiSize, uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
@@ -94,7 +94,7 @@ namespace Castor3D
 		 *\param[in]	p_count		Le nombre d'instances à dessiner
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count ) = 0;
+		C3D_API virtual bool DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )const = 0;
 		/**
 		 *\~english
 		 *\return		The program layout.

@@ -213,7 +213,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime )
+	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderSystem->PushScene( &p_scene );
 		m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
@@ -223,7 +223,7 @@ namespace Castor3D
 		if ( DoBeginRender() )
 		{
 			p_scene.RenderBackground( GetSize() );
-			DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_dFrameTime );
+			DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_frameTime );
 			DoEndRender();
 		}
 
@@ -478,7 +478,7 @@ namespace Castor3D
 		} );
 	}
 
-	void RenderTechnique::DoRender( Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
+	void RenderTechnique::DoRender( Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
 		Pipeline & l_pipeline = l_renderSystem->GetPipeline();

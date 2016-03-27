@@ -179,7 +179,7 @@ namespace CastorViewer
 				DoCleanupScene();
 
 				m_pRenderPanel->SetRenderWindow( nullptr );
-				RenderWindowSPtr l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor(), m_strFilePath, CASTOR_WANTED_FPS, CASTOR3D_THREADED );
+				RenderWindowSPtr l_window = GuiCommon::LoadScene( *wxGetApp().GetCastor(), m_strFilePath, wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps(), wxGetApp().GetCastor()->IsThreaded() );
 
 				if ( l_window )
 				{
@@ -341,7 +341,7 @@ namespace CastorViewer
 			if ( !CASTOR3D_THREADED && !m_timer )
 			{
 				m_timer = new wxTimer( this, eID_RENDER_TIMER );
-				m_timer->Start( 1000 / CASTOR_WANTED_FPS );
+				m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps() );
 			}
 
 			if ( !m_timerMsg )
@@ -578,7 +578,7 @@ namespace CastorViewer
 		if ( !CASTOR3D_THREADED )
 		{
 			m_timer->Stop();
-			m_timer->Start( 1000 / CASTOR_WANTED_FPS );
+			m_timer->Start( 1000 / wxGetApp().GetCastor()->GetRenderLoop().GetWantedFps() );
 		}
 		else if ( m_timer )
 		{

@@ -616,8 +616,6 @@ namespace Castor3D
 		Castor::String m_strMatName;
 		//!\~english The overlay type	\~french Le type de l'incrustation
 		eOVERLAY_TYPE m_type;
-		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
-		VertexArray m_arrayVtx;
 		//!\~english Tells if this overlay's size has changed.	\~french Dit si les dimensions de cette incrustation ont changé.
 		bool m_sizeChanged;
 		//!\~english Tells if this overlay's position has changed.	\~french Dit si la position de cette incrustation a changé.

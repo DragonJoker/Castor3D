@@ -48,7 +48,7 @@ namespace Castor3D
 		}
 	}
 
-	void TargetManager::Render( double & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
+	void TargetManager::Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 

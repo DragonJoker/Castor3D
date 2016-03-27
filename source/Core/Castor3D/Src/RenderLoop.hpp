@@ -110,12 +110,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the wanted frame time.
-		 *\return		The time, in seconds.
+		 *\return		The time, in milliseconds.
 		 *\~french
 		 *\brief		Récupère le temps voulu pour une frame.
-		 *\return		Le temps, en secondes.
+		 *\return		Le temps, en millisecondes.
 		 */
-		C3D_API double GetFrameTime();
+		C3D_API uint32_t GetFrameTime();
 		/**
 		 *\~english
 		 *\return		The wanted refresh rate.
@@ -145,6 +145,15 @@ namespace Castor3D
 		 *\param[in]	p_show	Le statut.
 		 */
 		C3D_API void ShowDebugOverlays( bool p_show );
+		/**
+		 *\~english
+		 *\brief		Updates the V-Sync status.
+		 *\param[in]	p_enable	The status.
+		 *\~french
+		 *\brief		Met à jour le statut de synchronisation verticale.
+		 *\param[in]	p_enable	Le statut.
+		 */
+		C3D_API virtual void UpdateVSync( bool p_enable );
 
 	protected:
 		/**
@@ -222,7 +231,7 @@ namespace Castor3D
 		//!\~english The wanted FPS, used in threaded render mode.	\~french Le nombre de FPS souhaité, utilisé en rendu threadé.
 		uint32_t m_wantedFPS;
 		//!\~english The wanted time for a frame.	\~french Le temps voulu pour une frame.
-		double m_frameTime;
+		uint32_t m_frameTime;
 		//!\~english The debug overlays.	\~french Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
 	};

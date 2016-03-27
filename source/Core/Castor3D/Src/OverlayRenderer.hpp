@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 #include "BufferDeclaration.hpp"
-#include "OverlayCategory.hpp"
+#include "TextOverlay.hpp"
 
 #include <OwnedBy.hpp>
 
@@ -129,6 +129,20 @@ namespace Castor3D
 		}
 
 	protected:
+		/*!
+		\author 	Sylvain DOREMUS
+		\date 		26/03/2016
+		\version	0.8.0
+		\~english
+		\brief		Holds the two geometry buffers used to render overlays.
+		\~french
+		\brief		Contient les deux geometry buffers utilisés pour dessiner les overlays.
+		*/
+		struct OverlayGeometryBuffers
+		{
+			GeometryBuffersSPtr m_noTexture;
+			GeometryBuffersSPtr m_textured;
+		};
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given pass.
@@ -196,7 +210,7 @@ namespace Castor3D
 		 *\remarks		Ajoute de GeometryBuffers au tableau de GeometryBuffers de texte.
 		 *\return		Le GeometryBuffers créé.
 		 */
-		C3D_API GeometryBuffersSPtr DoCreateTextGeometryBuffers();
+		C3D_API OverlayGeometryBuffers DoCreateTextGeometryBuffers();
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay.
@@ -211,7 +225,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			Une texture de polices optionnelle.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Material & p_material, std::array< GeometryBuffersSPtr, 2 > const & p_geometryBuffers, uint32_t p_count );
+		C3D_API void DoDrawItem( Material & p_material, OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay.
@@ -226,7 +240,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			Une texture de polices optionnelle.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, uint32_t p_count );
+		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Function to draw an overlay.
@@ -241,7 +255,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			Une texture de polices optionnelle.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffersSPtr p_geometryBuffers, TextureSPtr p_texture, SamplerSPtr p_sampler, uint32_t p_count );
+		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, Texture const & p_texture, Sampler const & p_sampler, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array
@@ -256,7 +270,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice courant dans le tableau de GeometryBuffers de texte
 		 *\return		Le GeometryBuffers utilisé.
 		 */
-		C3D_API GeometryBuffersSPtr DoFillTextPart( int32_t p_count, OverlayCategory::VertexArray::const_iterator & p_it, uint32_t & p_index );
+		C3D_API OverlayGeometryBuffers DoFillTextPart( int32_t p_count, TextOverlay::VertexArray::const_iterator & p_it, uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Creates a shader program for overlays rendering use.
@@ -275,13 +289,15 @@ namespace Castor3D
 		//!\~english The Vertex buffers used to render texts.	\~french Les tampons de sommets utilisés pour rendre les textes.
 		std::vector< VertexBufferUPtr > m_textsVertexBuffers;
 		//!\~english Geometry buffers for panels	\~french Tampons de géometrie pour les panneaux
-		std::array< GeometryBuffersSPtr, 2 > m_panelGeometryBuffers;
+		OverlayGeometryBuffers m_panelGeometryBuffers;
 		//!\~english Geometry buffers for borders	\~french Tampons de géometrie pour les bordures
-		std::array< GeometryBuffersSPtr, 2 > m_borderGeometryBuffers;
+		OverlayGeometryBuffers m_borderGeometryBuffers;
 		//!\~english The GeometryBuffers used to render texts	\~french Les GeometryBuffers utilisé pour rendre les textes
-		std::vector< GeometryBuffersSPtr > m_textsGeometryBuffers;
+		std::vector< OverlayGeometryBuffers > m_textsGeometryBuffers;
 		//!\~english The buffer elements declaration	\~french La déclaration des éléments du tampon
 		BufferDeclaration m_declaration;
+		//!\~english The text overlay buffer elements declaration.	\~french La déclaration des éléments du tampon, pour les textes.
+		BufferDeclaration m_textDeclaration;
 		//!\~english The current render target size	\~french Les dimensions de la cible du rendu courant
 		Castor::Size m_size;
 		//!\~english The shader programs used to render a panel (used for borders too)	\~french Les programmes de shader utilisés pour rendre un panneau (utilisé pour les bords aussi)

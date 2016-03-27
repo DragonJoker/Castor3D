@@ -56,6 +56,21 @@ namespace Castor3D
 		eTEXT_WRAPPING_MODE_BREAK_WORDS,
 	}	eTEXT_WRAPPING_MODE;
 	/*!
+	\author 	Sylvain DOREMUS
+	\date 		26/03/2016
+	\~english
+	\brief		Text texturing modes, handles the way textures are appied to text overlays.
+	\~french
+	\brief		Modes de texturage du texte, gère la manière dont les textures sont appliquées aux incrustations texte.
+	*/
+	typedef enum eTEXT_TEXTURING_MODE
+	{
+		//!\~english The texture is repeated on each character of the text.	\~french La texture est répétée sut chaque caractère du texte.
+		eTEXT_TEXTURING_MODE_LETTER,
+		//!\~english The texture is applied on the whole text.	\~french La texture est appliquée sur tout le texte.
+		eTEXT_TEXTURING_MODE_TEXT,
+	}	eTEXT_TEXTURING_MODE;
+	/*!
 	\author		Sylvain DOREMUS
 	\date		23/09/2015
 	\version	0.8.0

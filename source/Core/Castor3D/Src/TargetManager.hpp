@@ -101,7 +101,7 @@ namespace Castor3D
 		 *\param[in,out]	p_fceCount	Reçoit le nombre de faces dessinées.
 		 *\param[in,out]	p_objCount	Reçoit le nombre d'objets dessinés.
 		 */
-		C3D_API void Render( double & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
+		C3D_API void Render( uint32_t & p_time, uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
 
 	private:
 		using ResourceManager< Castor::String, RenderTarget >::Create;

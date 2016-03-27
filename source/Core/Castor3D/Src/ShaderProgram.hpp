@@ -144,6 +144,8 @@ namespace Castor3D
 		C3D_API static const Castor::String Texture;
 		//!\~english Name of the colour attribute.	\~french Nom du de l'attribut couleur.
 		C3D_API static const Castor::String Colour;
+		//!\~english Name of the text overlay texture attribute.	\~french Nom du de l'attribut texture pour les incrustations texte.
+		C3D_API static const Castor::String Text;
 		//!\~english Name of the first bones ID attribute.	\~french Nom du premier attribut d'ID des bones.
 		C3D_API static const Castor::String BoneIds0;
 		//!\~english Name of the second bones ID attribute.	\~french Nom du second attribut d'ID des bones.

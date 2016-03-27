@@ -118,6 +118,12 @@ namespace GLSL
 		p_writer->WriteAssign( p_lhs, p_rhs );
 	}
 
+	template< typename T1, typename T2 >
+	void WriteAssign( GlslWriter * p_writer, Optional< T1 > const & p_lhs, T2 const & p_rhs )
+	{
+		p_writer->WriteAssign( p_lhs, p_rhs );
+	}
+
 	//***********************************************************************************************
 
 	template< typename T >

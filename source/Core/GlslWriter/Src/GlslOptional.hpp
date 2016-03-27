@@ -29,6 +29,7 @@ namespace GLSL
 		Optional( GlslWriter * p_writer, Castor::String const & p_name, bool p_enabled );
 		Optional( TypeT const & p_other, bool p_enabled );
 		template< typename T > Optional( Castor::String const & p_name, T const & p_rhs, bool p_enabled );
+		inline Optional< TypeT > operator=( Optional< TypeT > const & p_rhs );
 		template< typename T > inline Optional< TypeT > operator=( T const & p_rhs );
 		inline bool IsEnabled()const;
 

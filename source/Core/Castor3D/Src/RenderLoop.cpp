@@ -23,7 +23,7 @@ namespace Castor3D
 	RenderLoop::RenderLoop( Engine & p_engine, RenderSystem * p_renderSystem, uint32_t p_wantedFPS )
 		: OwnedBy< Engine >( p_engine )
 		, m_wantedFPS( p_wantedFPS )
-		, m_frameTime( 1.0 / p_wantedFPS )
+		, m_frameTime( 1000 / p_wantedFPS )
 		, m_renderSystem( p_renderSystem )
 		, m_debugOverlays( std::make_unique< DebugOverlays >( p_engine ) )
 	{
@@ -37,10 +37,14 @@ namespace Castor3D
 
 	void RenderLoop::Cleanup()
 	{
-		m_renderSystem->GetMainContext()->SetCurrent();
-		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
-		GetEngine()->GetOverlayManager().UpdateRenderer();
-		m_renderSystem->GetMainContext()->EndCurrent();
+		if ( m_renderSystem->GetMainContext() )
+		{
+			m_renderSystem->GetMainContext()->SetCurrent();
+			GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_PRE_RENDER );
+			GetEngine()->GetOverlayManager().UpdateRenderer();
+			m_renderSystem->GetMainContext()->EndCurrent();
+		}
+
 		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
 	}
 
@@ -69,7 +73,7 @@ namespace Castor3D
 		DoEndRendering();
 	}
 
-	double RenderLoop::GetFrameTime()
+	uint32_t RenderLoop::GetFrameTime()
 	{
 		return m_frameTime;
 	}
@@ -94,6 +98,10 @@ namespace Castor3D
 	void RenderLoop::ShowDebugOverlays( bool p_show )
 	{
 		m_debugOverlays->Show( p_show );
+	}
+	
+	void RenderLoop::UpdateVSync( bool p_enable )
+	{
 	}
 
 	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
