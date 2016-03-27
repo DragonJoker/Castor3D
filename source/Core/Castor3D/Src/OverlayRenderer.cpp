@@ -248,7 +248,7 @@ namespace Castor3D
 				int32_t l_count = uint32_t( l_arrayVtx.size() );
 				uint32_t l_index = 0;
 				std::vector< OverlayGeometryBuffers > l_geometryBuffers;
-				auto l_it = l_arrayVtx.begin();
+				TextOverlay::VertexArray::const_iterator l_it = l_arrayVtx.begin();
 
 				while ( l_count > C3D_MAX_CHARS_PER_BUFFER )
 				{
