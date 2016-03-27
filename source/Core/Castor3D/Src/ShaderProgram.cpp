@@ -158,6 +158,7 @@ namespace Castor3D
 	const String ShaderProgram::Bitangent = cuT( "bitangent" );
 	const String ShaderProgram::Texture = cuT( "texture" );
 	const String ShaderProgram::Colour = cuT( "colour" );
+	const String ShaderProgram::Text = cuT( "text" );
 	const String ShaderProgram::BoneIds0 = cuT( "bone_ids0" );
 	const String ShaderProgram::BoneIds1 = cuT( "bone_ids1" );
 	const String ShaderProgram::Weights0 = cuT( "weights0" );

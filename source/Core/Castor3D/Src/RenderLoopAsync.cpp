@@ -62,6 +62,20 @@ namespace Castor3D
 		return m_paused;
 	}
 
+	void RenderLoopAsync::UpdateVSync( bool p_enable )
+	{
+		if ( p_enable && m_savedTime )
+		{
+			m_frameTime = m_savedTime;
+			m_savedTime = 0;
+		}
+		else if ( !m_savedTime )
+		{
+			m_savedTime = m_frameTime;
+			m_frameTime = 1;
+		}
+	}
+
 	void RenderLoopAsync::DoStartRendering()
 	{
 		m_rendering = true;
@@ -190,15 +204,15 @@ namespace Castor3D
 				while ( !IsInterrupted() && IsRendering() && !IsPaused() )
 				{
 					m_frameEnded = false;
-					double l_dFrameTime = GetFrameTime();
+					uint32_t l_frameTime = GetFrameTime();
 					l_timer.TimeS();
 					DoRenderFrame();
-					double l_dTimeDiff = l_timer.TimeS();
+					uint32_t l_timeDiff = uint32_t( l_timer.TimeMs() );
 					m_frameEnded = true;
 
-					if ( l_dTimeDiff < l_dFrameTime )
+					if ( l_timeDiff < l_frameTime )
 					{
-						System::Sleep( uint32_t( ( l_dFrameTime - l_dTimeDiff ) * 1000 ) );
+						System::Sleep( l_frameTime - l_timeDiff );
 					}
 					else
 					{

@@ -40,7 +40,7 @@ namespace CastorGui
 
 		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
-		l_text->SetVAlign( eVALIGN_TOP );
+		l_text->SetVAlign( eVALIGN_BOTTOM );
 		l_text->SetVisible( DoIsVisible() );
 		m_text = l_text;
 

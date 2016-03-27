@@ -18,9 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GLSL
 {
-	template< typename T >
-	void WriteAssign( GlslWriter * p_writer, Type & p_lhs, T const & p_rhs );
-
 	inline GlslBool::GlslBool()
 		: Type( cuT( "bool " ) )
 	{

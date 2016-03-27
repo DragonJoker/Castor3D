@@ -63,7 +63,8 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 		m_display = p_window->GetHandle().GetInternal< IXWindowHandle >()->GetDisplay();
 	}
 
-	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
+	Engine * l_engine = p_window->GetEngine();
+	GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( l_engine->GetRenderSystem() );
 	GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
 	if ( !l_mainContext )
@@ -184,6 +185,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 
 #endif
 		UpdateVSync( p_window->GetVSync() );
+		l_engine->GetRenderLoop().UpdateVSync( p_window->GetVSync() );
 
 		if ( !l_mainContext )
 		{

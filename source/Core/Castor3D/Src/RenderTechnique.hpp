@@ -181,16 +181,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[in]	p_scene			The scene to render
-		 *\param[in]	p_camera		The camera through which the scene is viewed
-		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered
+		 *\param[in]	p_scene		The scene to render
+		 *\param[in]	p_camera	The camera through which the scene is viewed
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La scène à rendre
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
+		 *\param[in]	p_scene		La scène à rendre
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 */
-		C3D_API void Render( Scene & p_scene, Camera & p_camera, double p_dFrameTime );
+		C3D_API void Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime );
 		/**
 		 *\~english
 		 *\brief		Retrieves the pixel shader source matching the given flags
@@ -279,18 +279,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[in]	p_nodes			The nodes to render.
-		 *\param[in]	p_camera		The camera through which the scene is viewed.
-		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered.
+		 *\param[in]	p_nodes		The nodes to render.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			Les noeuds à dessiner.
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue.
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\param[in]	p_scene		Les noeuds à dessiner.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual void DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime ) = 0;
+		C3D_API virtual void DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime ) = 0;
 		/**
 		 *\~english
 		 *\brief		Render end function
@@ -399,20 +399,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render function.
-		 *\param[in]	p_size			The render target dimensions.
-		 *\param[in]	p_nodes			The scene render nodes.
-		 *\param[in]	p_camera		The camera through which the scene is viewed.
-		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered.
+		 *\param[in]	p_size		The render target dimensions.
+		 *\param[in]	p_nodes		The scene render nodes.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu.
-		 *\param[in]	p_size			Les dimensions de la cible de rendu.
-		 *\param[in]	p_nodes			Les noeuds de rendu de la scène.
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue.
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\param[in]	p_size		Les dimensions de la cible de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API void DoRender( Castor::Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime );
+		C3D_API void DoRender( Castor::Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime );
 
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique

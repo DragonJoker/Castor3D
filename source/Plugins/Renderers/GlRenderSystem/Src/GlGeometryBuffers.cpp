@@ -73,7 +73,7 @@ namespace GlRender
 		ObjectType::Destroy();
 	}
 
-	bool GlGeometryBuffers::Draw( uint32_t p_uiSize, uint32_t p_index )
+	bool GlGeometryBuffers::Draw( uint32_t p_uiSize, uint32_t p_index )const
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
@@ -100,7 +100,7 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )
+	bool GlGeometryBuffers::DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )const
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
@@ -234,7 +234,7 @@ namespace GlRender
 	{
 		for ( auto & l_element : p_layout )
 		{
-			BufferDeclaration::const_iterator l_it = DoFindElement( p_declaration, l_element );
+			auto l_it = DoFindElement( p_declaration, l_element );
 
 			if ( l_it != p_declaration.end() )
 			{

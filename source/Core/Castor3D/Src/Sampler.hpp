@@ -166,7 +166,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index du sampler
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Bind( uint32_t p_index ) = 0;
+		C3D_API virtual bool Bind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Removes the sampler
@@ -175,7 +175,7 @@ namespace Castor3D
 		 *\brief		Enlève le sampler
 		 *\param[in]	p_index	L'index du sampler
 		 */
-		C3D_API virtual void Unbind( uint32_t p_index ) = 0;
+		C3D_API virtual void Unbind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the interpolation mode for given filter

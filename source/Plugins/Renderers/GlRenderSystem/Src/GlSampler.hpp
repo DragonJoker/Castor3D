@@ -40,8 +40,8 @@ namespace GlRender
 
 		virtual bool Initialise();
 		virtual void Cleanup();
-		virtual bool Bind( uint32_t p_index );
-		virtual void Unbind( uint32_t p_index );
+		virtual bool Bind( uint32_t p_index )const;
+		virtual void Unbind( uint32_t p_index )const;
 
 	private:
 		void DoAdjustMinMipModes( eGL_INTERPOLATION_MODE & p_min, eGL_INTERPOLATION_MODE & p_mip );

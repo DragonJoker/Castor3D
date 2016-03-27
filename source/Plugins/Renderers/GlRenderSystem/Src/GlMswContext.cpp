@@ -7,6 +7,7 @@
 
 #include <PlatformWindowHandle.hpp>
 #include <Material.hpp>
+#include <RenderLoop.hpp>
 #include <RenderWindow.hpp>
 #include <Logger.hpp>
 #include <PixelFormat.hpp>
@@ -43,6 +44,7 @@ namespace GlRender
 
 	bool GlContextImpl::Initialise( RenderWindow * p_window )
 	{
+		Engine * l_engine = p_window->GetEngine();
 		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
 		GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		m_hWnd = p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
@@ -136,6 +138,7 @@ namespace GlRender
 #endif
 			EndCurrent();
 			UpdateVSync( p_window->GetVSync() );
+			l_engine->GetRenderLoop().UpdateVSync( p_window->GetVSync() );
 
 			if ( !l_mainContext )
 			{

@@ -157,6 +157,10 @@ namespace Castor3D
 		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
 		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_screenSize );
+
+	protected:
+		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
+		VertexArray m_arrayVtx;
 	};
 }
 

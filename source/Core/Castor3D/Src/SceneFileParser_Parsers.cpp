@@ -3174,6 +3174,25 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayHorizontalAlign )
 }
 END_ATTRIBUTE()
 
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayTexturingMode )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+	OverlaySPtr l_overlay = l_parsingContext->pOverlay;
+
+	if ( l_overlay && l_overlay->GetType() == eOVERLAY_TYPE_TEXT )
+	{
+		uint32_t l_value;
+		p_params[0]->Get( l_value );
+
+		l_overlay->GetTextOverlay()->SetTexturingMode( eTEXT_TEXTURING_MODE( l_value ) );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "TextOverlay not initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_TextOverlayText )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

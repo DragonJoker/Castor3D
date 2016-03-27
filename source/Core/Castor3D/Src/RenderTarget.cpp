@@ -421,7 +421,7 @@ namespace Castor3D
 		}
 	}
 
-	void RenderTarget::Render( double p_dFrameTime )
+	void RenderTarget::Render( uint32_t p_frameTime )
 	{
 		SceneSPtr l_scene = GetScene();
 
@@ -433,8 +433,8 @@ namespace Castor3D
 				{
 					if ( GetCameraLEye() && GetCameraREye() )
 					{
-						DoRender( m_fbLeftEye, GetCameraLEye(), p_dFrameTime );
-						DoRender( m_fbRightEye, GetCameraREye(), p_dFrameTime );
+						DoRender( m_fbLeftEye, GetCameraLEye(), p_frameTime );
+						DoRender( m_fbRightEye, GetCameraREye(), p_frameTime );
 					}
 					else
 					{
@@ -442,7 +442,7 @@ namespace Castor3D
 
 						if ( l_pCamera )
 						{
-							DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
+							DoRender( m_fbLeftEye, GetCamera(), p_frameTime );
 						}
 					}
 				}
@@ -452,7 +452,7 @@ namespace Castor3D
 
 					if ( l_pCamera )
 					{
-						DoRender( m_fbLeftEye, GetCamera(), p_dFrameTime );
+						DoRender( m_fbLeftEye, GetCamera(), p_frameTime );
 					}
 				}
 			}
@@ -576,7 +576,7 @@ namespace Castor3D
 		m_bMultisampling = p_name == cuT( "msaa" );
 	}
 
-	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )
+	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, uint32_t p_frameTime )
 	{
 		m_pCurrentFrameBuffer = p_fb.m_frameBuffer;
 		m_pCurrentCamera = p_pCamera;
@@ -585,7 +585,7 @@ namespace Castor3D
 
 		if ( l_scene )
 		{
-			m_renderTechnique->Render( *l_scene, *p_pCamera, p_dFrameTime );
+			m_renderTechnique->Render( *l_scene, *p_pCamera, p_frameTime );
 			p_fb.m_frameBuffer->Bind();
 			GetEngine()->GetOverlayManager().Render( *l_scene, m_size );
 			p_fb.m_frameBuffer->Unbind();

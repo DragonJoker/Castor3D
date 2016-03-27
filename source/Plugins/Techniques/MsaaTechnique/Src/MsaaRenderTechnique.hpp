@@ -136,20 +136,18 @@ namespace Msaa
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[in]	p_scene			The scene to render
-		 *\param[in]	p_camera		The camera through which the scene is viewed
-		 *\param[in]	p_ePrimitives	The display mode
-		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered
+		 *\param[in]	p_scene		The scene to render
+		 *\param[in]	p_camera	The camera through which the scene is viewed
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La scène à rendre
-		 *\param[in]	p_camera		La caméra à travers laquelle la scène est vue
-		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps écoulé depuis le rendu de la dernière frame
+		 *\param[in]	p_scene		La scène à rendre
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, double p_dFrameTime );
+		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
 		/**
 		 *\~english
 		 *\brief		Render end function

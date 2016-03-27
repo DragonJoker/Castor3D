@@ -33,6 +33,7 @@ namespace CastorGui
 		m_text = l_text;
 		l_text->SetCaption( m_caption );
 		l_text->SetVisible( DoIsVisible() );
+		l_text->SetVAlign( eVALIGN_CENTER );
 		DoUpdateStyle();
 	}
 

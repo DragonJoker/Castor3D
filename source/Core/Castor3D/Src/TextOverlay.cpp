@@ -3,6 +3,7 @@
 #include "Engine.hpp"
 #include "FontTexture.hpp"
 #include "FunctorEvent.hpp"
+#include "Material.hpp"
 #include "Overlay.hpp"
 #include "OverlayManager.hpp"
 #include "OverlayRenderer.hpp"
@@ -124,11 +125,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	TextOverlay::TextOverlay()
-		: OverlayCategory( eOVERLAY_TYPE_TEXT )
-		, m_wrappingMode( eTEXT_WRAPPING_MODE_NONE )
-		, m_hAlign( eHALIGN_LEFT )
-		, m_vAlign( eVALIGN_CENTER )
-		, m_textChanged( true )
+		: OverlayCategory{ eOVERLAY_TYPE_TEXT }
 	{
 	}
 
@@ -223,7 +220,8 @@ namespace Castor3D
 		p_renderer->DrawText( *this );
 	}
 
-	void TextOverlay::DoUpdateBuffer( Size const & p_size )
+	void TextOverlay::DoUpdateBuffer( Size const & p_size, std::function< void( Point2d const & p_size, Rectangle const & p_absolute, Point4r const & p_fontUV,
+																				real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom ) > p_generateUvs )
 	{
 		FontTextureSPtr l_fontTexture = GetFontTexture();
 
@@ -258,8 +256,8 @@ namespace Castor3D
 							{
 								l_topCrop = std::max( 0.0, -l_line.m_position[1] - ( l_maxHeight - l_char.m_glyph->GetPosition().y() ) );
 								l_bottomCrop = std::max( 0.0, l_line.m_position[1] + l_maxHeight - l_size[1] );
-								double l_uvTopCrop = l_topCrop / l_texDim.height();
-								double l_uvBottomCrop = l_bottomCrop / l_texDim.height();
+								double l_fontUvTopCrop = l_topCrop / l_texDim.height();
+								double l_fontUvBottomCrop = l_bottomCrop / l_texDim.height();
 
 								double l_leftUncropped = l_char.m_left + l_line.m_position[0];
 								double l_leftCrop = std::max( 0.0, -l_leftUncropped );
@@ -267,29 +265,49 @@ namespace Castor3D
 
 								if ( l_leftCrop + l_rightCrop < l_char.m_size[0] )
 								{
-									double l_uvLeftCrop = l_leftCrop / l_texDim.height();
-									double l_uvRightCrop = l_rightCrop / l_texDim.height();
-
+									//
+									// Compute Letter's Position.
+									//
 									double l_topUncropped = l_line.m_position[1] + l_font->GetMaxHeight() - l_char.m_glyph->GetPosition().y();
-									Position l_uvPosition = l_fontTexture->GetGlyphPosition( l_char.m_glyph->GetCharacter() );
-									double l_uvLeftUncropped = double( l_uvPosition.x() ) / l_texDim.width();
-									double l_uvTopUncropped = double( l_uvPosition.y() ) / l_texDim.height();
-
 									int32_t l_left = l_ovPosition.x() + std::max( 0, int32_t( l_leftUncropped + l_leftCrop ) );
-									int32_t l_right = l_ovPosition.x() + int32_t( std::min( l_leftUncropped + l_char.m_size[0] - l_rightCrop, l_size[0] ) );
 									int32_t l_top = l_ovPosition.y() + std::max( 0, int32_t( l_topUncropped + l_topCrop ) );
+									int32_t l_right = l_ovPosition.x() + int32_t( std::min( l_leftUncropped + l_char.m_size[0] - l_rightCrop, l_size[0] ) );
 									int32_t l_bottom = l_ovPosition.y() + int32_t( std::min( l_topUncropped + l_char.m_size[1] - l_bottomCrop, l_size[1] ) );
 
-									real l_uvLeft = real( l_uvLeftUncropped + l_uvLeftCrop );
-									real l_uvRight = real( l_uvLeftUncropped + ( l_char.m_size[0] / l_texDim.width() ) - l_uvRightCrop );
+									//
+									// Compute Letter's Font UV.
+									//
+									Position l_fontUvPosition = l_fontTexture->GetGlyphPosition( l_char.m_glyph->GetCharacter() );
+									double l_fontUvLeftCrop = l_leftCrop / l_texDim.height();
+									double l_fontUvRightCrop = l_rightCrop / l_texDim.height();
+									double l_fontUvLeftUncropped = double( l_fontUvPosition.x() ) / l_texDim.width();
+									double l_fontUvTopUncropped = double( l_fontUvPosition.y() ) / l_texDim.height();
+									real l_fontUvLeft = real( l_fontUvLeftUncropped + l_fontUvLeftCrop );
+									real l_fontUvRight = real( l_fontUvLeftUncropped + ( l_char.m_size[0] / l_texDim.width() ) - l_fontUvRightCrop );
 									// The UV is vertically inverted since the image is top-bottom, and the overlay is drawn bottom-up.
-									real l_uvBottom = real( l_uvTopUncropped + l_uvBottomCrop );
-									real l_uvTop = real( l_uvTopUncropped + ( l_char.m_size[1] / l_texDim.height() ) - l_uvTopCrop );
+									real l_fontUvBottom = real( l_fontUvTopUncropped + l_fontUvBottomCrop );
+									real l_fontUvTop = real( l_fontUvTopUncropped + ( l_char.m_size[1] / l_texDim.height() ) - l_fontUvTopCrop );
 
-									OverlayCategory::Vertex l_vertexTR = { { l_right, l_top },    { l_uvRight, l_uvTop } };
-									OverlayCategory::Vertex l_vertexTL = { { l_left,  l_top },    { l_uvLeft,  l_uvTop } };
-									OverlayCategory::Vertex l_vertexBL = { { l_left,  l_bottom }, { l_uvLeft,  l_uvBottom } };
-									OverlayCategory::Vertex l_vertexBR = { { l_right, l_bottom }, { l_uvRight, l_uvBottom } };
+									//
+									// Compute Letter's Texture UV.
+									//
+									real l_texUvLeft{};
+									real l_texUvRight{};
+									real l_texUvBottom{};
+									real l_texUvTop{};
+									p_generateUvs( l_size,
+												   Castor::Rectangle{ l_left, l_top, l_right, l_bottom },
+												   Point4r{ l_fontUvLeft, l_fontUvTop, l_fontUvRight, l_fontUvBottom },
+												   l_texUvLeft, l_texUvTop, l_texUvRight, l_texUvBottom );
+
+
+									//
+									// Fill buffer
+									//
+									TextOverlay::Vertex l_vertexTR = { { l_right, l_top },    { l_fontUvRight, l_fontUvTop },    { l_texUvRight, l_texUvTop } };
+									TextOverlay::Vertex l_vertexTL = { { l_left,  l_top },    { l_fontUvLeft,  l_fontUvTop },    { l_texUvLeft,  l_texUvTop } };
+									TextOverlay::Vertex l_vertexBL = { { l_left,  l_bottom }, { l_fontUvLeft,  l_fontUvBottom }, { l_texUvLeft,  l_texUvBottom } };
+									TextOverlay::Vertex l_vertexBR = { { l_right, l_bottom }, { l_fontUvRight, l_fontUvBottom }, { l_texUvRight, l_texUvBottom } };
 
 									m_arrayVtx.push_back( l_vertexBL );
 									m_arrayVtx.push_back( l_vertexBR );
@@ -306,6 +324,34 @@ namespace Castor3D
 					m_textChanged = false;
 				}
 			}
+		}
+	}
+
+	void TextOverlay::DoUpdateBuffer( Size const & p_size )
+	{
+		switch ( m_texturingMode )
+		{
+		case eTEXT_TEXTURING_MODE_LETTER:
+			DoUpdateBuffer( p_size, [this]( Point2d const & p_size, Rectangle const & p_absolute, Point4r const & p_fontUV,
+											real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom )
+			{
+				p_uvLeft = 0.0_r;
+				p_uvTop = 0.0_r;
+				p_uvRight = 1.0_r;
+				p_uvBottom = 1.0_r;
+			} );
+			break;
+
+		case eTEXT_TEXTURING_MODE_TEXT:
+			DoUpdateBuffer( p_size, [this]( Point2d const & p_size, Rectangle const & p_absolute, Point4r const & p_fontUV,
+											real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom )
+			{
+				p_uvLeft = real( p_absolute[0] / p_size[0] );
+				p_uvTop = real( p_absolute[1] / p_size[1] );
+				p_uvRight = real( p_absolute[2] / p_size[0] );
+				p_uvBottom = real( p_absolute[3] / p_size[1] );
+			} );
+			break;
 		}
 	}
 

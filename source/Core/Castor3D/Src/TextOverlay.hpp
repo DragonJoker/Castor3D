@@ -37,6 +37,22 @@ namespace Castor3D
 	public:
 		/*!
 		\author 	Sylvain DOREMUS
+		\date 		26/03/2016
+		\version	0.8.0
+		\~english
+		\brief		Holds specific vertex data for a TextOverlay.
+		\~french
+		\brief		Contient les données spécifiques de sommet pour un TextOverlay.
+		*/
+		struct Vertex
+		{
+			int32_t coords[2];
+			float text[2];
+			float texture[2];
+		};
+		DECLARE_VECTOR( Vertex, Vertex );
+		/*!
+		\author 	Sylvain DOREMUS
 		\date 		14/02/2010
 		\~english
 		\brief		TextOverlay loader
@@ -188,7 +204,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon de sommets du panneau
 		 *\return		Le tampon
 		 */
-		inline OverlayCategory::VertexArray const & GetTextVertex()const
+		inline VertexArray const & GetTextVertex()const
 		{
 			return m_arrayVtx;
 		}
@@ -294,6 +310,19 @@ namespace Castor3D
 			m_textChanged |= m_vAlign != p_align;
 			m_vAlign = p_align;
 		}
+		/**
+		 *\~english
+		 *\brief		Defines the text texture mapping mode.
+		 *\param[in]	p_mode	The new value.
+		 *\~french
+		 *\brief		Définit le mode de mappage de texture du texte.
+		 *\param[in]	p_mode	La nouvelle valeur.
+		*/
+		inline void SetTexturingMode( eTEXT_TEXTURING_MODE p_mode )
+		{
+			m_textChanged |= m_texturingMode != p_mode;
+			m_texturingMode = p_mode;
+		}
 
 	private:
 		/*!
@@ -331,6 +360,8 @@ namespace Castor3D
 			double m_width;
 		};
 		using DisplayableLineArray = std::vector< DisplayableLine >;
+		using TextureCoordinates = std::array< float, 2 >;
+		DECLARE_VECTOR( TextureCoordinates, TextureCoords );
 		/**
 		 *\copydoc		Castor3D::OverlayCategory::DoRender.
 		 */
@@ -343,6 +374,11 @@ namespace Castor3D
 		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
 		 */
 		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
+		/**
+		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
+		 */
+		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size, std::function< void( Castor::Point2d const & p_size, Castor::Rectangle const & p_absolute, Castor::Point4r const & p_fontUV,
+																							   real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom ) > p_generateUvs );
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.
@@ -422,6 +458,8 @@ namespace Castor3D
 		C3D_API void DoAlignVertically( double p_height, double p_linesHeight, DisplayableLineArray & p_lines );
 
 	protected:
+		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
+		VertexArray m_arrayVtx;
 		//!\~english The current overlay caption	\~french Le texte courant de l'incrustation
 		Castor::String m_currentCaption;
 		//!\~english The previous overlay caption	\~french Le texte précédent de l'incrustation
@@ -429,17 +467,21 @@ namespace Castor3D
 		//!\~english The texture associated to the overlay font.	\~french La texture associée à la police de l'incrustation.
 		FontTextureWPtr m_fontTexture;
 		//!\~english The wrapping mode	\~french Le mode de découpe du texte
-		eTEXT_WRAPPING_MODE m_wrappingMode;
+		eTEXT_WRAPPING_MODE m_wrappingMode{ eTEXT_WRAPPING_MODE_NONE };
 		//!\~english The horizontal alignment.	\~french L'alignement horizontal du texte.
-		eHALIGN m_hAlign;
+		eHALIGN m_hAlign{ eHALIGN_LEFT };
 		//!\~english The vertical alignment.	\~french L'alignement vertical du texte.
-		eVALIGN m_vAlign;
+		eVALIGN m_vAlign{ eVALIGN_CENTER };
 		//!\~english Tells if the text (caption, wrap mode, or alignments) has changed.	\~french Dit si le texte (contenu, mode de découpe, alignements) a changé.
-		bool m_textChanged;
+		bool m_textChanged{ true };
 		//!\~english The size (in spaces) of tabulation character.	\~french La taille (en espaces) du caractère de tabulation.
-		uint32_t m_tabSize = 4;
+		uint32_t m_tabSize{ 4 };
 		//!\~english The connection to the FontTexture changed notification signal.	\~french La connexion au signal de notification de changement de la texture.
-		uint32_t m_connection = 0;
+		uint32_t m_connection{ 0 };
+		//!\~english The text texture mapping mode.	\~french Le mode de mappage de texture du texte.
+		eTEXT_TEXTURING_MODE m_texturingMode{ eTEXT_TEXTURING_MODE_TEXT };
+		//!\~english The text texture coordinates buffer data.	\~french Les données du tampon de coordonnées de texture du texte.
+		TextureCoordsArray m_arrayTextTexture;
 	};
 }
 

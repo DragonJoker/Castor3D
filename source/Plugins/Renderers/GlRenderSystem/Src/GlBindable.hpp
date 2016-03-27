@@ -136,7 +136,7 @@ namespace GlRender
 		@return
 			false if not bound successfully
 		*/
-		inline bool Bind()
+		inline bool Bind()const
 		{
 			REQUIRE( IsValid() );
 			return m_binder( GetGlName() );
@@ -144,7 +144,7 @@ namespace GlRender
 
 		/** Unbinds the object on GPU
 		*/
-		inline void Unbind()
+		inline void Unbind()const
 		{
 			m_unbinder( 0u );
 		}

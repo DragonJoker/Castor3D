@@ -1120,7 +1120,7 @@ namespace OceanLighting
 		return true;
 	}
 
-	void RenderTechnique::DoRender( RenderTechnique::stSCENE_RENDER_NODES & CU_PARAM_UNUSED( p_nodes ), Camera & CU_PARAM_UNUSED( p_camera ), double CU_PARAM_UNUSED( p_dFrameTime ) )
+	void RenderTechnique::DoRender( RenderTechnique::stSCENE_RENDER_NODES & CU_PARAM_UNUSED( p_nodes ), Camera & CU_PARAM_UNUSED( p_camera ), uint32_t CU_PARAM_UNUSED( p_frameTime ) )
 	{
 		Pipeline & l_pPipeline = GetEngine()->GetRenderSystem()->GetPipeline();
 		Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );

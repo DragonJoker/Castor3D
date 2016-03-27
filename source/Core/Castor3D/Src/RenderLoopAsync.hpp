@@ -112,6 +112,15 @@ namespace Castor3D
 		 *\return		\p true si créé.
 		 */
 		C3D_API bool IsEnded()const;
+		/**
+		 *\~english
+		 *\brief		Updates the V-Sync status.
+		 *\param[in]	p_enable	The status.
+		 *\~french
+		 *\brief		Met à jour le statut de synchronisation verticale.
+		 *\param[in]	p_enable	Le statut.
+		 */
+		C3D_API virtual void UpdateVSync( bool p_enable );
 
 	private:
 		/**
@@ -171,6 +180,8 @@ namespace Castor3D
 		mutable std::mutex m_mutexWindow;
 		//!\~english The render window used to initalise the main rendering context	\~french La render window utilisée pour initialiser le contexte de rendu principal
 		RenderWindowRPtr m_window;
+		//!\~english The saved frame time, if V-Sync is disabled.	\~french Le temps par frame sauvegardé, si la synchronisation verticale est désactivée.
+		uint32_t m_savedTime{ 0 };
 	};
 }
 

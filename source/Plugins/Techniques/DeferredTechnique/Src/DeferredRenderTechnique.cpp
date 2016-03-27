@@ -274,12 +274,12 @@ namespace Deferred
 		return m_geometryPassFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );;
 	}
 
-	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, double p_dFrameTime )
+	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
 		m_renderTarget->GetRasteriserState()->Apply();
 		//m_geometryPassDsState->Apply();
-		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_dFrameTime );
+		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 
 	void RenderTechnique::DoEndRender()
