@@ -14,6 +14,7 @@
 #	include <PlatformWindowHandle.hpp>
 #	include <Material.hpp>
 #	include <MaterialManager.hpp>
+#	include <RenderLoop.hpp>
 #	include <RenderWindow.hpp>
 
 #	include <Logger.hpp>
