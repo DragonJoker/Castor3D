@@ -1,4 +1,4 @@
-﻿#include "RenderSystem.hpp"
+#include "RenderSystem.hpp"
 #include "CleanupEvent.hpp"
 #include "FrameVariableBuffer.hpp"
 #include "PointFrameVariable.hpp"
@@ -232,6 +232,10 @@ namespace Castor3D
 			cuT( "polygon" ),//eTOPOLOGY_POLYGON
 		};
 
+		eTOPOLOGY l_input = eTOPOLOGY_POINTS;
+		eTOPOLOGY l_output = eTOPOLOGY_TRIANGLE_STRIPS;
+		uint32_t l_count = 4;
+
 		ShaderManager & l_manager = GetEngine()->GetShaderManager();
 		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_GEOMETRY | MASK_SHADER_TYPE_PIXEL );
@@ -242,16 +246,16 @@ namespace Castor3D
 		l_program->AddFrameVariableBuffer( l_billboardUbo, MASK_SHADER_TYPE_GEOMETRY );
 
 		ShaderObjectSPtr l_object = l_program->CreateObject( eSHADER_TYPE_GEOMETRY );
-		l_object->SetInputType( eTOPOLOGY_POINTS );
-		l_object->SetOutputType( eTOPOLOGY_TRIANGLE_STRIPS );
-		l_object->SetOutputVtxCount( 4 );
+		l_object->SetInputType( l_input );
+		l_object->SetOutputType( l_output );
+		l_object->SetOutputVtxCount( l_count );
 
 		String l_strVtxShader;
 		{
 			auto l_writer = CreateGlslWriter();
 
 			// Shader inputs
-			IVec4 position = l_writer.GetAttribute< IVec4 >( ShaderProgram::Position );
+			Vec4 position = l_writer.GetAttribute< Vec4 >( ShaderProgram::Position );
 
 			// Shader outputs
 			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
@@ -268,98 +272,82 @@ namespace Castor3D
 		{
 			auto l_writer = CreateGlslWriter();
 
-			l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetInputType()] << cuT( " ) in;" ) << Endl();
-			l_writer << cuT( "layout( " ) << PRIMITIVES[l_object->GetOutputType()] << cuT( " ) out;" ) << Endl();
-			l_writer << cuT( "layout( max_vertices = " ) << l_object->GetOutputVtxCount() << cuT( " ) out;" ) << Endl();
+			l_writer.InputGeometryLayout( PRIMITIVES[l_input] );
+			l_writer.OutputGeometryLayout( PRIMITIVES[l_output] );
+			l_writer.OutputVertexCount( l_count );
 
+			// Shader inputs
 			UBO_MATRIX( l_writer );
 			UBO_SCENE( l_writer );
 			UBO_BILLBOARD( l_writer );
+			auto gl_in = l_writer.GetBuiltin< gl_PerVertex >( cuT( "gl_in" ), 8u );
 
+			// Shader outputs
 			auto vtx_vertex = l_writer.GetOutput< Vec3 >( cuT( "vtx_vertex" ) );
 			auto vtx_normal = l_writer.GetOutput< Vec3 >( cuT( "vtx_normal" ) );
 			auto vtx_tangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_tangent" ) );
 			auto vtx_bitangent = l_writer.GetOutput< Vec3 >( cuT( "vtx_bitangent" ) );
 			auto vtx_texture = l_writer.GetOutput< Vec3 >( cuT( "vtx_texture" ) );
-
 			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
-			auto gl_in = l_writer.GetBuiltin< gl_PerVertex >( cuT( "gl_in" ), 8u );
 
 			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
 			{
-				LOCALE_ASSIGN( l_writer, Mat4, l_mtxMVP, c3d_mtxProjection * c3d_mtxView * c3d_mtxModel );
-				LOCALE_ASSIGN( l_writer, Vec3, l_position, l_writer.Paren( l_mtxMVP * gl_in[0].gl_Position() ).XYZ );
-				l_position.Y = c3d_v3CameraPosition.Y;
-				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, c3d_v3CameraPosition - l_position );
-				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0.0f ), 1.0, 0.0 ) );
+				LOCALE_ASSIGN( l_writer, Mat4, l_mtxVP, c3d_mtxProjection * c3d_mtxView );
+
+				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) - l_pos ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0 ), 1.0, 0.0 ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( l_mtxMVP * vec4( Float( 0.0f ), 0.0, -1.0, 0.0 ) ).XYZ );
-				l_v3Normal = l_writer.Paren( l_mtxMVP * vec4( l_v3Normal, 0.0 ) ).XYZ;
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_position0, l_position - ( l_right * 0.5 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture0, vec3( Float( 0.0f ), 0.0, 0.0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_position1, l_position0 + vec3( Float( 0.0f ), l_writer.Cast< Float >( c3d_v2iDimensions.Y ), 0.0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture1, vec3( Float( 0.0f ), 1.0, 0.0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_position2, l_position0 + l_right );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture2, vec3( Float( 1.0f ), 0.0, 0.0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_position3, l_position2 + vec3( Float( 0.0f ), l_writer.Cast< Float >( c3d_v2iDimensions.Y ), 0.0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v2Texture3, vec3( Float( 1.0f ), 1.0, 0.0 ) );
-
-				LOCALE_ASSIGN( l_writer, Vec3, l_vec2m1, l_position1 - l_position0 );
-				LOCALE_ASSIGN( l_writer, Vec3, l_vec3m1, l_position2 - l_position0 );
-				LOCALE_ASSIGN( l_writer, Vec3, l_tex2m1, l_v2Texture1 - l_v2Texture0 );
-				LOCALE_ASSIGN( l_writer, Vec3, l_tex3m1, l_v2Texture2 - l_v2Texture0 );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, normalize( ( l_vec2m1 * l_tex3m1.X ) - ( l_vec3m1 * l_tex2m1.Y ) ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, cross( l_v3Tangent, l_v3Normal ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( vec4( l_toCamera, 0.0 ) ).XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_writer.Paren( vec4( l_up, 0.0 ) ).XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_writer.Paren( vec4( l_right, 0.0 ) ).XYZ );
 
 				{
-					IndentBlock l_block( l_writer );
-					l_writer << Endl();
-					gl_Position = vec4( l_position0, 1.0 );
-					vtx_vertex = l_position0;
+					l_pos -= ( l_right * 0.5 );
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = l_v2Texture0;
+					vtx_texture = vec3( Float( 0 ), 0.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
 
 				{
-					IndentBlock l_block( l_writer );
-					l_writer << Endl();
-					gl_Position = vec4( l_position1, 1.0 );
-					vtx_vertex = l_position1;
+					l_pos.Y += Float( 1 );
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = l_v2Texture1;
+					vtx_texture = vec3( Float( 0 ), 1.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
 
 				{
-					IndentBlock l_block( l_writer );
-					l_writer << Endl();
-					gl_Position = vec4( l_position2, 1.0 );
-					vtx_vertex = l_position2;
+					l_pos.Y -= Float( 1 );
+					l_pos += l_right;
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = l_v2Texture2;
+					vtx_texture = vec3( Float( 1 ), 0.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
 
 				{
-					IndentBlock l_block( l_writer );
-					l_writer << Endl();
-					gl_Position = vec4( l_position3, 1.0 );
-					vtx_vertex = l_position3;
+					l_pos.Y += Float( 1 );
+					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
+					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = l_v2Texture3;
+					vtx_texture = vec3( Float( 1 ), 1.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();

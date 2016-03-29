@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -67,6 +67,8 @@ namespace Castor3D
 			SubmeshRenderNodesByProgramMap m_opaqueRenderNodes;
 			//!\~english The geometries with alpha blending, sorted by shader program.	\~french Les géométries avec de l'alpha blend, triées par programme shader.
 			SubmeshRenderNodesByProgramMap m_transparentRenderNodes;
+			//!\~english The billboards render nodes, sorted by shader program.	\~french Les noeuds de rendu de billboards, triés par programme shader.
+			BillboardRenderNodesByProgramMap m_billboardsRenderNodes;
 			//!\~english The geometries with alpha blending, sorted by distance to the camera.	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra.
 			RenderNodeByDistanceMMap m_distanceSortedTransparentRenderNodes;
 		};
@@ -337,6 +339,30 @@ namespace Castor3D
 		C3D_API void DoUnbindPass( Scene & p_scene, GeometryRenderNode & p_renderNode );
 		/**
 		 *\~english
+		 *\brief		Binds the given pass.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_node				The render node.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_node				Le noeud de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, BillboardRenderNode & p_node, uint64_t p_excludedMtxFlags );
+		/**
+		 *\~english
+		 *\brief		Unbinds the given pass.
+		 *\param[in]	p_pass			The pass.
+		 *\~french
+		 *\brief		Désctive la passe donnée.
+		 *\param[in]	p_pass			La passe.
+		 */
+		C3D_API void DoUnbindPass( Scene & p_scene, BillboardRenderNode & p_renderNode );
+		/**
+		 *\~english
 		 *\brief		Renders non instanced submeshes.
 		 *\param[in]	p_scene			The rendered scene.
 		 *\param[in]	p_pipeline		The render pipeline.
@@ -395,6 +421,21 @@ namespace Castor3D
 		 *\param[in]	p_end		La fin des noeuds de rendu.
 		 */
 		C3D_API void DoRenderSubmeshes( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_begin		The render nodes begin.
+		 *\param[in]	p_end		The render nodes end.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_begin		Le début des noeuds de rendu.
+		 *\param[in]	p_end		La fin des noeuds de rendu.
+		 */
+		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes );
 		C3D_API void DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, RenderNodeByDistanceMMap & p_output );
 		/**
 		 *\~english

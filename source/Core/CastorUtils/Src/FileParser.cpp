@@ -1,4 +1,4 @@
-﻿#include "FileParser.hpp"
+#include "FileParser.hpp"
 #include "FileParserContext.hpp"
 #include "Colour.hpp"
 #include "Pixel.hpp"
@@ -419,7 +419,7 @@ namespace Castor
 					{
 						l_return = l_iter->second.m_function( this, l_filled );
 					}
-					catch ( ParserParameterTypeException & p_exc )
+					catch ( Exception & p_exc )
 					{
 						ParseError( p_exc.GetFullDescription() );
 					}

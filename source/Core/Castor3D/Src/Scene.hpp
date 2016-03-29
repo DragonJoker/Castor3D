@@ -215,17 +215,6 @@ namespace Castor3D
 		C3D_API void Update();
 		/**
 		 *\~english
-		 *\brief		Renders the scene in a given display mode
-		 *\param[in]	p_technique	The current rendering technique, used to select appropriate shaders
-		 *\param[in]	p_camera	The camera from which the render is made
-		 *\~french
-		 *\brief		Rend la scène dans un mode d'affichage donné
-		 *\param[in]	p_technique	La technique de rendu courante, utilisee pour recuperer les bons shaders
-		 *\param[in]	p_camera	La caméra utilisée pour le rendu
-		 */
-		C3D_API void Render( RenderTechnique & p_technique, Camera const & p_camera );
-		/**
-		 *\~english
 		 *\brief		Sets the background image for the scene
 		 *\param[in]	p_pathFile	The image file path
 		 *\~french
@@ -416,21 +405,6 @@ namespace Castor3D
 		}
 
 		//@}
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Renders the billboards.
-		 *\param[in]	p_technique		The render technique.
-		 *\param[in]	p_camera		The rendering camera.
-		 *\param[in]	p_pipeline		The render pipeline.
-		 *\~french
-		 *\brief		Dessine les billboards.
-		 *\param[in]	p_technique		La technique de rendu.
-		 *\param[in]	p_camera		La caméra utilisée pour le rendu.
-		 *\param[in]	p_pipeline		Le pipeline de rendu.
-		 */
-		void DoRenderBillboards( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline );
 
 	private:
 		//!\~english The root node	\~french Le noeud père de tous les noeuds de la scène

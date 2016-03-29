@@ -1,4 +1,4 @@
-﻿#include "GlProgramInputLayout.hpp"
+#include "GlProgramInputLayout.hpp"
 
 #include "GlRenderSystem.hpp"
 #include "GlShaderProgram.hpp"
@@ -61,7 +61,7 @@ namespace GlRender
 				eELEMENT_TYPE l_elemType = GetOpenGl().Get( eGLSL_ATTRIBUTE_TYPE( l_value ) );
 				string::to_lower_case( l_name );
 
-				if ( l_elemType == eELEMENT_TYPE_4FLOATS && ( l_name.find( "vertex" ) != std::string::npos || l_name.find( "position" ) != std::string::npos ) )
+				if ( l_elemType == eELEMENT_TYPE_4FLOATS && l_name == string::string_cast< char >( ShaderProgram::Position ) )
 				{
 					l_elemType = eELEMENT_TYPE_3FLOATS;
 				}
@@ -88,7 +88,7 @@ namespace GlRender
 				int l_loc = GetOpenGl().GetAttribLocation( l_program.GetGlName(), l_buffer.data() );
 				string::to_lower_case( l_name );
 
-				if ( l_elemType == eELEMENT_TYPE_4FLOATS && ( l_name.find( "vertex" ) != std::string::npos || l_name.find( "position" ) != std::string::npos ) )
+				if ( l_elemType == eELEMENT_TYPE_4FLOATS && l_name == string::string_cast< char >( ShaderProgram::Position ) )
 				{
 					l_elemType = eELEMENT_TYPE_3FLOATS;
 				}

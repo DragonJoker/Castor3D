@@ -559,21 +559,6 @@ namespace Castor3D
 		m_changed = false;
 	}
 
-	void Scene::Render( RenderTechnique & p_technique, Camera const & p_camera )
-	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
-		ContextRPtr l_context = l_renderSystem->GetCurrentContext();
-		auto l_lock = Castor::make_unique_lock( m_mutex );
-
-		if ( !m_billboardManager->IsEmpty() )
-		{
-			auto l_lock = make_unique_lock( *m_billboardManager );
-			l_context->CullFace( eFACE_NONE );
-			DoRenderBillboards( p_technique, p_camera, l_pipeline );
-		}
-	}
-
 	bool Scene::SetBackgroundImage( Path const & p_pathFile )
 	{
 		bool l_return = false;
@@ -690,20 +675,5 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	void Scene::DoRenderBillboards( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline )
-	{
-		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-		auto l_lock = make_unique_lock( *m_billboardManager );
-
-		for ( auto l_it : *m_billboardManager )
-		{
-			if ( l_it.second->InitialiseShader( p_technique ) )
-			{
-				p_pipeline.SetModelMatrix( l_it.second->GetParent()->GetDerivedTransformationMatrix() );
-				l_it.second->Render();
-			}
-		}
 	}
 }

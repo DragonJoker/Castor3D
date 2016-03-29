@@ -127,6 +127,9 @@ namespace GLSL
 		GlslWriter_API void EmitVertex();
 		GlslWriter_API void EndPrimitive();
 		GlslWriter_API void Discard();
+		GlslWriter_API void InputGeometryLayout( Castor::String const & p_layout );
+		GlslWriter_API void OutputGeometryLayout( Castor::String const & p_layout );
+		GlslWriter_API void OutputVertexCount( uint32_t p_count );
 		GlslWriter_API Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
 		GlslWriter_API Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
 		GlslWriter_API Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
