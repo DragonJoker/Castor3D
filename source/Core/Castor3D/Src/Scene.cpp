@@ -569,10 +569,8 @@ namespace Castor3D
 		if ( !m_billboardManager->IsEmpty() )
 		{
 			auto l_lock = make_unique_lock( *m_billboardManager );
-			l_context->CullFace( eFACE_FRONT );
-			DoRenderBillboards( p_technique, l_pipeline, m_billboardManager->begin(), m_billboardManager->end() );
-			l_context->CullFace( eFACE_BACK );
-			DoRenderBillboards( p_technique, l_pipeline, m_billboardManager->begin(), m_billboardManager->end() );
+			l_context->CullFace( eFACE_NONE );
+			DoRenderBillboards( p_technique, p_camera, l_pipeline );
 		}
 	}
 
@@ -661,6 +659,7 @@ namespace Castor3D
 	uint32_t Scene::GetVertexCount()const
 	{
 		uint32_t l_return = 0;
+		auto l_lock = make_unique_lock( *m_geometryManager );
 
 		for ( auto && l_pair : *m_geometryManager )
 		{
@@ -678,6 +677,7 @@ namespace Castor3D
 	uint32_t Scene::GetFaceCount()const
 	{
 		uint32_t l_return = 0;
+		auto l_lock = make_unique_lock( *m_geometryManager );
 
 		for ( auto && l_pair : *m_geometryManager )
 		{
@@ -692,16 +692,17 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Scene::DoRenderBillboards( RenderTechnique & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd )
+	void Scene::DoRenderBillboards( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline )
 	{
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
+		auto l_lock = make_unique_lock( *m_billboardManager );
 
-		for ( auto l_it = p_itBegin; l_it != p_itEnd; ++l_it )
+		for ( auto l_it : *m_billboardManager )
 		{
-			if ( l_it->second->InitialiseShader( p_technique ) )
+			if ( l_it.second->InitialiseShader( p_technique ) )
 			{
-				p_pipeline.SetModelMatrix( l_it->second->GetParent()->GetDerivedTransformationMatrix() );
-				l_it->second->Render();
+				p_pipeline.SetModelMatrix( l_it.second->GetParent()->GetDerivedTransformationMatrix() );
+				l_it.second->Render();
 			}
 		}
 	}

@@ -90,19 +90,21 @@ namespace Castor3D
 		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
 		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
 		 */
-		inline BillboardManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-			: ObjectManager< Castor::String, BillboardList >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
-		{
-		}
+		C3D_API BillboardManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode );
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		inline ~BillboardManager()
-		{
-		}
+		C3D_API ~BillboardManager();
+		/**
+		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
+		 */
+		C3D_API void Cleanup();
 	};
 }
 

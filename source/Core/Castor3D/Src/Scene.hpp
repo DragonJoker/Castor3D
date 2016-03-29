@@ -418,7 +418,19 @@ namespace Castor3D
 		//@}
 
 	private:
-		void DoRenderBillboards( RenderTechnique & p_technique, Pipeline & p_pipeline, BillboardListStrMapIt p_itBegin, BillboardListStrMapIt p_itEnd );
+		/**
+		 *\~english
+		 *\brief		Renders the billboards.
+		 *\param[in]	p_technique		The render technique.
+		 *\param[in]	p_camera		The rendering camera.
+		 *\param[in]	p_pipeline		The render pipeline.
+		 *\~french
+		 *\brief		Dessine les billboards.
+		 *\param[in]	p_technique		La technique de rendu.
+		 *\param[in]	p_camera		La caméra utilisée pour le rendu.
+		 *\param[in]	p_pipeline		Le pipeline de rendu.
+		 */
+		void DoRenderBillboards( RenderTechniqueBase & p_technique, Camera const & p_camera, Pipeline & p_pipeline );
 
 	private:
 		//!\~english The root node	\~french Le noeud père de tous les noeuds de la scène

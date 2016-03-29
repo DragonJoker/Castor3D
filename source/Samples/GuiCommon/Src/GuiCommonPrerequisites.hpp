@@ -114,6 +114,8 @@ namespace GuiCommon
 		eBMP_PASS_SEL,
 		eBMP_TEXTURE,
 		eBMP_TEXTURE_SEL,
+		eBMP_BILLBOARD,
+		eBMP_BILLBOARD_SEL,
 		eBMP_COUNT,
 	}	eBMP;
 

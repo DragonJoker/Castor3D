@@ -174,12 +174,22 @@ namespace Castor3D
 
 		for ( auto & l_pos : m_arrayPositions )
 		{
-			l_pos[2] = -l_pos[2];
 			std::memcpy( l_pBuffer, l_pos.const_ptr(), l_stride );
 			l_pBuffer += l_stride;
 		}
 
 		return true;
+	}
+
+	void BillboardList::Cleanup()
+	{
+		m_pDimensionsUniform.reset();
+		ShaderProgramSPtr l_program = m_wpProgram.lock();
+		l_program->Cleanup();
+		m_geometryBuffers.clear();
+		m_vertexBuffer->Cleanup();
+		m_vertexBuffer->Destroy();
+		m_vertexBuffer.reset();
 	}
 
 	bool BillboardList::InitialiseShader( RenderTechnique & p_technique )
@@ -243,7 +253,7 @@ namespace Castor3D
 
 						if ( !m_pDimensionsUniform )
 						{
-							Logger::LogError( cuT( "Couldn't find Config UBO in billboard shader program" ) );
+							Logger::LogError( cuT( "Couldn't find c3d_v2iDimensions variable in Billboard UBO" ) );
 						}
 						else
 						{
@@ -252,7 +262,7 @@ namespace Castor3D
 					}
 					else
 					{
-						Logger::LogError( cuT( "Couldn't find Config UBO in billboard shader program" ) );
+						Logger::LogError( cuT( "Couldn't find Billboard UBO in billboard shader program" ) );
 					}
 
 					if ( l_return )
@@ -269,16 +279,6 @@ namespace Castor3D
 		}
 
 		return l_return;
-	}
-
-	void BillboardList::Cleanup()
-	{
-		m_pDimensionsUniform.reset();
-		m_nodes.clear();
-		m_geometryBuffers.clear();
-		m_vertexBuffer->Cleanup();
-		m_vertexBuffer->Destroy();
-		m_vertexBuffer.reset();
 	}
 
 	void BillboardList::RemovePoint( uint32_t p_index )
@@ -358,7 +358,7 @@ namespace Castor3D
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_node.m_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_POINTS, p_node.m_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 			m_geometryBuffers.push_back( l_buffers );
 		}
 		else

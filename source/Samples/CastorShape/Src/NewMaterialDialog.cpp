@@ -230,7 +230,6 @@ namespace CastorShape
 		m_properties->HideProperty( PROPERTY_CHANNEL, true );
 
 		m_properties->HideProperty( PROPERTY_TEXTURE_IMAGE, true );
-
 		m_properties->HideProperty( PROPERTY_CATEGORY_PASS, false );
 
 		m_properties->HideProperty( PROPERTY_PASS_DIFFUSE, false );
