@@ -297,57 +297,61 @@ namespace Castor3D
 				LOCALE_ASSIGN( l_writer, Vec3, l_pos, gl_in[0].gl_Position().XYZ );
 				LOCALE_ASSIGN( l_writer, Vec3, l_toCamera, normalize( vec3( c3d_v3CameraPosition.X, c3d_v3CameraPosition.Y, c3d_v3CameraPosition.Z ) - l_pos ) );
 				LOCALE_ASSIGN( l_writer, Vec3, l_up, vec3( Float( 0 ), 1.0, 0.0 ) );
-				LOCALE_ASSIGN( l_writer, Vec3, l_right, cross( l_toCamera, l_up ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_left, cross( l_toCamera, l_up ) );
 
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, l_writer.Paren( vec4( l_toCamera, 0.0 ) ).XYZ );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_writer.Paren( vec4( l_up, 0.0 ) ).XYZ );
-				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_writer.Paren( vec4( l_right, 0.0 ) ).XYZ );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Normal, normalize( vec3( l_toCamera.X, 0.0, l_toCamera.Z ) ) );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Tangent, l_up );
+				LOCALE_ASSIGN( l_writer, Vec3, l_v3Bitangent, l_left );
+
+				l_left *= c3d_v2iDimensions.X;
+				l_up *= c3d_v2iDimensions.Y;
+				l_writer << Endl();
 
 				{
-					l_pos -= ( l_right * 0.5 );
+					l_pos -= ( l_left * 0.5 );
 					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = vec3( Float( 0 ), 0.0, 0.0 );
+					vtx_texture = vec3( Float( 1.0 ), 0.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
 
 				{
-					l_pos.Y += Float( 1 );
+					l_pos += l_up;
 					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = vec3( Float( 0 ), 1.0, 0.0 );
+					vtx_texture = vec3( Float( 1.0 ), 1.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
 
 				{
-					l_pos.Y -= Float( 1 );
-					l_pos += l_right;
+					l_pos -= l_up;
+					l_pos += l_left;
 					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = vec3( Float( 1 ), 0.0, 0.0 );
+					vtx_texture = vec3( Float( 0.0 ), 0.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
 
 				{
-					l_pos.Y += Float( 1 );
+					l_pos += l_up;
 					vtx_vertex = l_writer.Paren( c3d_mtxModel * vec4( l_pos, 1.0 ) ).XYZ;
 					gl_Position = l_mtxVP * vec4( vtx_vertex, 1.0 );
 					vtx_normal = l_v3Normal;
 					vtx_tangent = l_v3Tangent;
 					vtx_bitangent = l_v3Bitangent;
-					vtx_texture = vec3( Float( 1 ), 1.0, 0.0 );
+					vtx_texture = vec3( Float( 0.0 ), 1.0, 0.0 );
 					l_writer.EmitVertex();
 				}
 				l_writer << Endl();
