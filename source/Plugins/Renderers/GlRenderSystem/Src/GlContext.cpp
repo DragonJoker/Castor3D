@@ -75,22 +75,4 @@ namespace GlRender
 	{
 		GetImpl()->SwapBuffers();
 	}
-
-	void GlContext::DoSetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value )
-	{
-		GetOpenGl().AlphaFunc( GetOpenGl().Get( p_func ), p_value / 255.0f );
-	}
-
-	void GlContext::DoCullFace( eFACE p_eCullFace )
-	{
-		if ( p_eCullFace == eFACE_NONE )
-		{
-			GetOpenGl().Disable( eGL_TWEAK_CULL_FACE );
-		}
-		else
-		{
-			GetOpenGl().Enable( eGL_TWEAK_CULL_FACE );
-			GetOpenGl().CullFace( GetOpenGl().Get( p_eCullFace ) );
-		}
-	}
 }

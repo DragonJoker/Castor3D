@@ -1,4 +1,4 @@
-﻿#include "OverlayManager.hpp"
+#include "OverlayManager.hpp"
 
 #include "BorderPanelOverlay.hpp"
 #include "Engine.hpp"
@@ -205,7 +205,6 @@ namespace Castor3D
 
 		if ( l_context && m_pRenderer )
 		{
-			l_context->CullFace( eFACE_BACK );
 			m_viewport.SetSize( p_size );
 			m_viewport.SetRight( real( p_size.width() ) );
 			m_viewport.SetBottom( real( p_size.height() ) );

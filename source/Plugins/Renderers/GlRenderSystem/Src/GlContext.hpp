@@ -34,10 +34,6 @@ namespace GlRender
 
 		GlContextImpl * GetImpl();
 		virtual void UpdateFullScreen( bool p_value );
-		virtual Castor::Size GetMaxSize( Castor::Size const & p_size )
-		{
-			return p_size;
-		}
 
 	private:
 		virtual bool DoInitialise();
@@ -46,8 +42,6 @@ namespace GlRender
 		virtual void DoSetCurrent();
 		virtual void DoEndCurrent();
 		virtual void DoSwapBuffers();
-		virtual void DoSetAlphaFunc( Castor3D::eALPHA_FUNC p_func, uint8_t p_value );
-		virtual void DoCullFace( Castor3D::eFACE p_eCullFace );
 
 	private:
 		GlContextImpl * m_implementation;

@@ -239,6 +239,16 @@ namespace Castor3D
 		{
 			return m_size;
 		}
+		/**
+		 *\~english
+		 *\return		The colour texture holding the render's result.
+		 *\~french
+		 *\return		La texture de couleurs contenant le résultat du rendu.
+		 */
+		inline DynamicTexture const & GetResult()const
+		{
+			return *m_frameBuffer.m_colourTexture;
+		}
 
 	protected:
 		/**
@@ -488,6 +498,10 @@ namespace Castor3D
 		std::map < Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
 		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
+		//!\~english The rasteriser state to cull front faces.	\~french L'état de rastérisation pour masquer les faces avant.
+		RasteriserStateWPtr m_wpFrontRasteriserState;
+		//!\~english The rasteriser state to cull back faces.	\~french L'état de rastérisation pour masquer les faces arrière.
+		RasteriserStateWPtr m_wpBackRasteriserState;
 	};
 }
 

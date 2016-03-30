@@ -41,9 +41,12 @@ namespace Msaa
 		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32F );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
-		RasteriserStateSPtr l_pRasteriser = GetEngine()->GetRasteriserStateManager().Create( cuT( "MSAA_RT" ) );
-		l_pRasteriser->SetMultisample( true );
-		m_wpMsRasteriserState = l_pRasteriser;
+
+		if ( m_samplesCount )
+		{
+			m_wpFrontRasteriserState.lock()->SetMultisample( true );
+			m_wpBackRasteriserState.lock()->SetMultisample( true );
+		}
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -139,16 +142,6 @@ namespace Msaa
 	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
-
-		if ( !m_samplesCount )
-		{
-			m_renderTarget->GetRasteriserState()->Apply();
-		}
-		else
-		{
-			m_wpMsRasteriserState.lock()->Apply();
-		}
-
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 

@@ -204,19 +204,9 @@ namespace Castor3D
 		DoEndCurrent();
 	}
 
-	void Context::CullFace( eFACE p_eCullFace )
-	{
-		DoCullFace( p_eCullFace );
-	}
-
 	void Context::SwapBuffers()
 	{
 		DoSwapBuffers();
-	}
-
-	void Context::SetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value )
-	{
-		DoSetAlphaFunc( p_func, p_value );
 	}
 
 	void Context::RenderTexture( Castor::Size const & p_size, Texture const & p_texture )

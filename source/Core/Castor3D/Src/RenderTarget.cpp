@@ -585,10 +585,20 @@ namespace Castor3D
 
 		if ( l_scene )
 		{
+			// Render the scene through the RenderTechnique.
 			m_renderTechnique->Render( *l_scene, *p_pCamera, p_frameTime );
-			p_fb.m_frameBuffer->Bind();
-			GetEngine()->GetOverlayManager().Render( *l_scene, m_size );
-			p_fb.m_frameBuffer->Unbind();
+
+			// Then draw the render's result to the RenderTarget's frame buffer.
+			if ( p_fb.m_frameBuffer->Bind() )
+			{
+				p_fb.m_frameBuffer->Clear();
+				GetDepthStencilState()->Apply();
+				GetRasteriserState()->Apply();
+				GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
+				// We also render overlays.
+				GetEngine()->GetOverlayManager().Render( *l_scene, m_size );
+				p_fb.m_frameBuffer->Unbind();
+			}
 		}
 
 		m_pCurrentFrameBuffer.reset();

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -169,8 +169,6 @@ namespace Msaa
 		Castor3D::RenderBufferAttachmentSPtr m_pMsDepthAttach;
 		//!\~english The samples count	\~french Le nombre de samples
 		int m_samplesCount;
-		//!\~english Multisampled rasteriser states	\~french Etats du rasteriser pour le multisample
-		Castor3D::RasteriserStateWPtr m_wpMsRasteriserState;
 		//!\~english The technique blit rectangle	\~french Le rectangle de blit de la technique
 		Castor::Rectangle m_rect;
 	};
