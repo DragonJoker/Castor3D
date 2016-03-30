@@ -277,14 +277,7 @@ namespace Castor3D
 
 	void RenderWindow::Resize( Size const & p_size )
 	{
-		if ( m_context )
-		{
-			m_size = m_context->GetMaxSize( p_size );
-		}
-		else
-		{
-			m_size = p_size;
-		}
+		m_size = p_size;
 
 		if ( m_initialised )
 		{

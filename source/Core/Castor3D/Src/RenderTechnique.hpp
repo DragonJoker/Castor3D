@@ -239,6 +239,16 @@ namespace Castor3D
 		{
 			return m_size;
 		}
+		/**
+		 *\~english
+		 *\return		The colour texture holding the render's result.
+		 *\~french
+		 *\return		La texture de couleurs contenant le résultat du rendu.
+		 */
+		inline DynamicTexture const & GetResult()const
+		{
+			return *m_frameBuffer.m_colourTexture;
+		}
 
 	protected:
 		/**
@@ -452,6 +462,21 @@ namespace Castor3D
 		 *\param[in]	p_begin		Le début des noeuds de rendu.
 		 *\param[in]	p_end		La fin des noeuds de rendu.
 		 */
+		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodeByDistanceMMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_begin		The render nodes begin.
+		 *\param[in]	p_end		The render nodes end.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_begin		Le début des noeuds de rendu.
+		 *\param[in]	p_end		La fin des noeuds de rendu.
+		 */
 		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes );
 		C3D_API void DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, GeometryRenderNodeByDistanceMMap & p_output );
 		C3D_API void DoResortAlpha( BillboardRenderNodesByProgramMap p_input, Camera const & p_camera, BillboardRenderNodeByDistanceMMap & p_output );
@@ -488,6 +513,10 @@ namespace Castor3D
 		std::map < Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
 		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
+		//!\~english The rasteriser state to cull front faces.	\~french L'état de rastérisation pour masquer les faces avant.
+		RasteriserStateWPtr m_wpFrontRasteriserState;
+		//!\~english The rasteriser state to cull back faces.	\~french L'état de rastérisation pour masquer les faces arrière.
+		RasteriserStateWPtr m_wpBackRasteriserState;
 	};
 }
 

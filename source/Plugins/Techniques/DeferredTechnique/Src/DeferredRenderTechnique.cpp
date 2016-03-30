@@ -277,7 +277,6 @@ namespace Deferred
 	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderTarget->GetDepthStencilState()->Apply();
-		m_renderTarget->GetRasteriserState()->Apply();
 		//m_geometryPassDsState->Apply();
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
@@ -319,7 +318,6 @@ namespace Deferred
 
 		m_viewport.SetSize( m_size );
 		m_viewport.Render( l_pipeline );
-		l_pContext->CullFace( eFACE_BACK );
 
 		if ( m_pShaderCamera )
 		{

@@ -92,31 +92,11 @@ namespace Castor3D
 		C3D_API void EndCurrent();
 		/**
 		 *\~english
-		 *\brief		Defines the culling option for current render
-		 *\param[in]	p_eCullFace	The culling option
-		 *\~french
-		 *\brief		Définit l'option de culling pour le rendu courant
-		 *\param[in]	p_eCullFace	L'option de culling
-		 */
-		C3D_API void CullFace( eFACE p_eCullFace );
-		/**
-		 *\~english
 		 *\brief		Swaps render buffers
 		 *\~french
 		 *\brief		Echange les buffers de rendu
 		 */
 		C3D_API void SwapBuffers();
-		/**
-		 *\~english
-		 *\brief		Defines the alpha text function
-		 *\param[in]	p_func		The function
-		 *\param[in]	p_value	The comparison value
-		 *\~french
-		 *\brief		Définit la fonction de test alpha
-		 *\param[in]	p_func		La fonction
-		 *\param[in]	p_value	La valeur de comparaison
-		 */
-		C3D_API void SetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
@@ -150,17 +130,6 @@ namespace Castor3D
 		 *\param[in]	val	Le nouveau statut de plein écran
 		 */
 		C3D_API virtual void UpdateFullScreen( bool val ) = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the maximal supported size, given a wanted size
-		 *\param[in]	p_size	The wanted size
-		 *\return		The maximal supported size less than or equal to p_size
-		 *\~french
-		 *\brief		Récupère la taille maximale supportée, en fonction d'une taille données
-		 *\param[in]	p_size	La taille voulue
-		 *\return		La taille maximale supportée inférieure ou égale à p_size
-		 */
-		C3D_API virtual Castor::Size GetMaxSize( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells the context is initialised
@@ -281,26 +250,6 @@ namespace Castor3D
 		 *\brief		Echange les buffers de rendu
 		 */
 		C3D_API virtual void DoSwapBuffers() = 0;
-		/**
-		 *\~english
-		 *\brief		Defines the alpha text function
-		 *\param[in]	p_func		The function
-		 *\param[in]	p_value	The comparison value
-		 *\~french
-		 *\brief		Définit la fonction de test alpha
-		 *\param[in]	p_func		La fonction
-		 *\param[in]	p_value	La valeur de comparaison
-		 */
-		C3D_API virtual void DoSetAlphaFunc( eALPHA_FUNC p_func, uint8_t p_value ) = 0;
-		/**
-		 *\~english
-		 *\brief		Defines the culling option for current render
-		 *\param[in]	p_eCullFace	The culling option
-		 *\~french
-		 *\brief		Définit l'option de culling pour le rendu courant
-		 *\param[in]	p_eCullFace	L'option de culling
-		 */
-		C3D_API virtual void DoCullFace( eFACE p_eCullFace ) = 0;
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.

@@ -18,7 +18,7 @@
 #include "Pass.hpp"
 #include "Pipeline.hpp"
 #include "PostEffect.hpp"
-#include "RasteriserState.hpp"
+#include "RasteriserStateManager.hpp"
 #include "RenderBufferAttachment.hpp"
 #include "RenderSystem.hpp"
 #include "RenderTarget.hpp"
@@ -325,6 +325,12 @@ namespace Castor3D
 		, m_initialised{ false }
 		, m_frameBuffer{ *this }
 	{
+		auto l_rsState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Front" ) );
+		l_rsState->SetCulledFaces( eFACE_FRONT );
+		m_wpFrontRasteriserState = l_rsState;
+		l_rsState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTechnique_" ) + p_name + cuT( "_Back" ) );
+		l_rsState->SetCulledFaces( eFACE_BACK );
+		m_wpBackRasteriserState = l_rsState;
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -352,6 +358,16 @@ namespace Castor3D
 			{
 				m_initialised = m_frameBuffer.Initialise( m_size );
 			}
+
+			if ( m_initialised )
+			{
+				m_initialised = m_wpFrontRasteriserState.lock()->Initialise();
+			}
+
+			if ( m_initialised )
+			{
+				m_initialised = m_wpBackRasteriserState.lock()->Initialise();
+			}
 		}
 
 		return m_initialised;
@@ -359,8 +375,10 @@ namespace Castor3D
 
 	void RenderTechnique::Cleanup()
 	{
-		m_scenesRenderNodes.clear();
 		m_initialised = false;
+		m_scenesRenderNodes.clear();
+		m_wpBackRasteriserState.lock()->Cleanup();
+		m_wpBackRasteriserState.lock()->Cleanup();
 		m_frameBuffer.Cleanup();
 		DoCleanup();
 	}
@@ -407,12 +425,6 @@ namespace Castor3D
 			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
 		}
 
-		m_renderTarget->GetDepthStencilState()->Apply();
-		m_renderTarget->GetRasteriserState()->Apply();
-		auto & l_fb = *m_renderTarget->GetFrameBuffer();
-		l_fb.Bind();
-		l_fb.Clear();
-		m_renderTarget->GetToneMapping()->Apply( m_renderTarget->GetSize(), *m_frameBuffer.m_colourTexture );
 		m_renderSystem->PopScene();
 	}
 
@@ -566,6 +578,19 @@ namespace Castor3D
 		}
 	}
 
+	void RenderTechnique::DoRenderBillboards( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, BillboardRenderNodeByDistanceMMap & p_nodes )
+	{
+		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
+
+		for ( auto l_it : p_nodes )
+		{
+			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
+			DoBindPass( p_scene, p_pipeline, l_it.second, 0 );
+			l_it.second.m_billboard.Draw( l_it.second.m_scene.m_node.m_program );
+			DoUnbindPass( p_scene, l_it.second );
+		}
+	}
+
 	void RenderTechnique::DoRenderBillboards( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes )
 	{
 		DoTraverseNodes( p_nodes, [this, &p_scene, &p_camera, &p_pipeline]( ShaderProgram & p_program, Pass & p_pass, BillboardList & p_billboard, BillboardRenderNodeArray & p_renderNodes )
@@ -630,48 +655,65 @@ namespace Castor3D
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
 		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
 		ContextRPtr l_context = l_renderSystem->GetCurrentContext();
+		auto l_rsFront = m_wpFrontRasteriserState.lock();
+		auto l_rsBack = m_wpBackRasteriserState.lock();
 
 		p_camera.GetViewport().SetSize( p_size );
 		p_camera.Render();
 
-		if ( !p_nodes.m_geometries.m_opaqueRenderNodes.empty() )
+		if ( !p_nodes.m_geometries.m_opaqueRenderNodes.empty() || !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
 		{
-			l_context->CullFace( eFACE_BACK );
-			DoRenderSubmeshes( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_opaqueRenderNodes );
+			l_rsBack->Apply();
+
+			if ( !p_nodes.m_geometries.m_opaqueRenderNodes.empty() )
+			{
+				DoRenderSubmeshes( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_opaqueRenderNodes );
+			}
+
+			if ( !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
+			{
+				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_opaqueRenderNodes );
+			}
 		}
 
 		if ( !p_nodes.m_geometries.m_transparentRenderNodes.empty() )
 		{
-			if ( !l_context->IsMultiSampling() )
+			if ( l_context->IsMultiSampling() )
+			{
+				l_rsFront->Apply();
+				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_transparentRenderNodes );
+				l_rsBack->Apply();
+				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_transparentRenderNodes );
+			}
+			else
 			{
 				l_context->GetNoDepthWriteState()->Apply();
 				DoResortAlpha( p_nodes.m_geometries.m_transparentRenderNodes, p_camera, p_nodes.m_geometries.m_distanceSortedRenderNodes );
+				l_rsFront->Apply();
+				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_distanceSortedRenderNodes );
+				l_rsBack->Apply();
+				DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_distanceSortedRenderNodes );
 			}
-
-			l_context->CullFace( eFACE_FRONT );
-			DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_distanceSortedRenderNodes );
-			l_context->CullFace( eFACE_BACK );
-			DoRenderSubmeshesNonInstanced( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_geometries.m_distanceSortedRenderNodes );
-		}
-
-		if ( !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
-		{
-			l_context->CullFace( eFACE_BACK );
-			DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_opaqueRenderNodes );
 		}
 
 		if ( !p_nodes.m_billboards.m_transparentRenderNodes.empty() )
 		{
-			if ( !l_context->IsMultiSampling() )
+			if ( l_context->IsMultiSampling() )
+			{
+				l_rsFront->Apply();
+				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
+				l_rsBack->Apply();
+				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
+			}
+			else
 			{
 				l_context->GetNoDepthWriteState()->Apply();
 				DoResortAlpha( p_nodes.m_billboards.m_transparentRenderNodes, p_camera, p_nodes.m_billboards.m_distanceSortedRenderNodes );
+				l_rsFront->Apply();
+				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_distanceSortedRenderNodes );
+				l_rsBack->Apply();
+				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_distanceSortedRenderNodes );
 			}
-
-			l_context->CullFace( eFACE_FRONT );
-			DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
-			l_context->CullFace( eFACE_BACK );
-			DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_transparentRenderNodes );
 		}
 
 		p_camera.EndRender();
