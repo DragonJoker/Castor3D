@@ -214,6 +214,21 @@ namespace GLSL
 		m_stream << cuT( "discard;" ) << std::endl;
 	}
 
+	void GlslWriter::InputGeometryLayout( Castor::String const & p_layout )
+	{
+		m_stream << cuT( "layout( " ) << p_layout << cuT( " ) in;" ) << std::endl;
+	}
+
+	void GlslWriter::OutputGeometryLayout( Castor::String const & p_layout )
+	{
+		m_stream << cuT( "layout( " ) << p_layout << cuT( " ) out;" ) << std::endl;
+	}
+
+	void GlslWriter::OutputVertexCount( uint32_t p_count )
+	{
+		m_stream << cuT( "layout( max_vertices = " ) << p_count << cuT( " ) out;" ) << std::endl;
+	}
+
 	Vec4 GlslWriter::Texture1D( Sampler1D const & p_sampler, Type const & p_value )
 	{
 		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture1D(), p_sampler, p_value );

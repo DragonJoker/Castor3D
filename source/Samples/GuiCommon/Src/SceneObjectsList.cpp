@@ -3,6 +3,7 @@
 #include "AnimatedObjectGroupTreeItemProperty.hpp"
 #include "AnimatedObjectTreeItemProperty.hpp"
 #include "AnimationTreeItemProperty.hpp"
+#include "BillboardTreeItemProperty.hpp"
 #include "CameraTreeItemProperty.hpp"
 #include "GeometryTreeItemProperty.hpp"
 #include "LightTreeItemProperty.hpp"
@@ -24,6 +25,7 @@
 #include <AnimatedObjectGroupManager.hpp>
 #include <AnimatedObject.hpp>
 #include <Animation.hpp>
+#include <BillboardManager.hpp>
 #include <CameraManager.hpp>
 #include <GeometryManager.hpp>
 #include <Engine.hpp>
@@ -90,6 +92,8 @@ namespace GuiCommon
 			ImagesLoader::GetBitmap( eBMP_PASS_SEL ),
 			ImagesLoader::GetBitmap( eBMP_TEXTURE ),
 			ImagesLoader::GetBitmap( eBMP_TEXTURE_SEL ),
+			ImagesLoader::GetBitmap( eBMP_BILLBOARD ),
+			ImagesLoader::GetBitmap( eBMP_BILLBOARD_SEL ),
 		};
 
 		wxImageList * l_imageList = new wxImageList( GC_IMG_SIZE, GC_IMG_SIZE, true );
@@ -211,6 +215,12 @@ namespace GuiCommon
 		AppendItem( l_id, _( "Viewport" ), eBMP_VIEWPORT, eBMP_VIEWPORT_SEL, new ViewportTreeItemProperty( m_propertiesHolder->IsEditable(), *l_camera->GetScene()->GetEngine(), l_camera->GetViewport() ) );
 	}
 
+	void SceneObjectsList::DoAddBillboard( wxTreeItemId p_id, MovableObjectSPtr p_object )
+	{
+		BillboardListSPtr l_billboard = std::static_pointer_cast< BillboardList >( p_object );
+		wxTreeItemId l_id = AppendItem( p_id, l_billboard->GetName(), eBMP_BILLBOARD, eBMP_BILLBOARD_SEL, new BillboardTreeItemProperty( m_propertiesHolder->IsEditable(), l_billboard ) );
+	}
+
 	void SceneObjectsList::DoAddLight( wxTreeItemId p_id, MovableObjectSPtr p_light )
 	{
 		LightSPtr l_light = std::static_pointer_cast< Light >( p_light );
@@ -249,6 +259,10 @@ namespace GuiCommon
 
 			case eMOVABLE_TYPE_LIGHT:
 				DoAddLight( p_id, l_object );
+				break;
+
+			case eMOVABLE_TYPE_BILLBOARD:
+				DoAddBillboard( p_id, l_object );
 				break;
 			}
 		}

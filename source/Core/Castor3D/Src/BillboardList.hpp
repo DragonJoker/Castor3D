@@ -127,7 +127,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom.
 		 *\param[in]	p_scene			La scene parente.
-		 *\param[in]	p_parent		Le noeud de sc�ne parent.
+		 *\param[in]	p_parent		Le noeud de sc�ne parent.
 		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 */
 		C3D_API BillboardList( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem );
@@ -154,17 +154,6 @@ namespace Castor3D
 		 *\brief		Nettoie les elements GPU
 		 */
 		C3D_API void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Initialises shader program
-		 *\param[in]	p_technique	The current rendering technique, used to select appropriate shaders
-		 *\return		\p true if all is OK
-		 *\~french
-		 *\brief		Initialise le shader
-		 *\param[in]	p_technique	La technique de rendu courante, utilisee pour recuperer les bons shaders
-		 *\return		\p true si tout s'est bien passe
-		 */
-		C3D_API bool InitialiseShader( RenderTechnique & p_technique );
 		/**
 		 *\~english
 		 *\brief		Sets the material
@@ -203,11 +192,13 @@ namespace Castor3D
 		C3D_API void AddPoints( Castor::Point3rArray const & p_ptPositions );
 		/**
 		 *\~english
-		 *\brief		Renders the billboards
+		 *\brief		Renders the billboards.
+		 *\param[in]	p_program	The shader program.
 		 *\~french
-		 *\brief		Rend les billboards
+		 *\brief		Rend les billboards.
+		 *\param[in]	p_program	Le programme shader.
 		 */
-		C3D_API void Render();
+		C3D_API void Draw( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Sets the billboards dimensions
@@ -217,6 +208,15 @@ namespace Castor3D
 		 *\param[in]	p_dimensions	La nouvelle valeur
 		 */
 		C3D_API void SetDimensions( Castor::Size const & p_dimensions );
+		/**
+		 *\~english
+		 *\brief		Sorts the points from farthest to nearest from the camera.
+		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
+		 *\~french
+		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
+		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
+		 */
+		C3D_API void SortPoints( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Gets a point from the list
@@ -255,7 +255,7 @@ namespace Castor3D
 		 */
 		inline void SetAt( uint32_t p_index, Castor::Point3r const & p_ptPosition )
 		{
-			m_bNeedUpdate = true;
+			m_needUpdate = true;
 			m_arrayPositions[p_index] = p_ptPosition;
 		}
 		/**
@@ -332,7 +332,14 @@ namespace Castor3D
 		}
 
 	private:
-		GeometryBuffers & DoPrepareGeometryBuffers( RenderNode const & p_node );
+		GeometryBuffers & DoPrepareGeometryBuffers( ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Updates the vertex buffer, if needed.
+		 *\~french
+		 *\brief		Met � jour le tampon de sommets si n�cessaire.
+		 */
+		void DoUpdate();
 
 	private:
 		//!\~english The positions list	\~french La liste des positions
@@ -340,19 +347,17 @@ namespace Castor3D
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets
 		BufferDeclaration m_declaration;
 		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
-		bool m_bNeedUpdate;
-		//!\~english  The render nodes used to draw the billboards.	\~french Les noeuds de rendu utilis� pour rendre les billboards.
-		std::vector< BillboardRenderNode > m_nodes;
+		bool m_needUpdate;
 		//!\~english The Material	\~french Le Material
 		MaterialWPtr m_wpMaterial;
 		//!\~english The billboards dimensions	\~french Les dimensions des billboards
 		Castor::Size m_dimensions;
-		//!\~english The dimensions uniform variable	\~french La variable uniforme des dimensions
-		Point2iFrameVariableSPtr m_pDimensionsUniform;
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
 		VertexBufferUPtr m_vertexBuffer;
 		//!\~english The GeometryBuffers with which this billboards list is compatible.	\~french Les GeometryBuffers avec lesquel ce billboards list est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english The transformed camera position at last sort.	\~french La position transformée de la caméra au dernier tri.
+		Castor::Point3r m_cameraPosition;
 	};
 }
 

@@ -1,4 +1,4 @@
-﻿#include "FileParser.hpp"
+#include "FileParser.hpp"
 #include "FileParserContext.hpp"
 #include "Colour.hpp"
 #include "Pixel.hpp"
@@ -414,7 +414,16 @@ namespace Castor
 				{
 					bool l_ignored = true;
 					std::swap( l_ignored, m_ignored );
-					l_return = l_iter->second.m_function( this, l_filled );
+
+					try
+					{
+						l_return = l_iter->second.m_function( this, l_filled );
+					}
+					catch ( Exception & p_exc )
+					{
+						ParseError( p_exc.GetFullDescription() );
+					}
+
 					std::swap( l_ignored, m_ignored );
 				}
 				else

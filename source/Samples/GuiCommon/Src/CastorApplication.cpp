@@ -20,6 +20,8 @@
 #include "xpms/animated_object_sel.xpm"
 #include "xpms/animation.xpm"
 #include "xpms/animation_sel.xpm"
+#include "xpms/billboard.xpm"
+#include "xpms/billboard_sel.xpm"
 #include "xpms/border_panel.xpm"
 #include "xpms/border_panel_sel.xpm"
 #include "xpms/camera.xpm"
@@ -347,6 +349,8 @@ namespace GuiCommon
 		ImagesLoader::AddBitmap( eBMP_PASS_SEL, pass_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_TEXTURE, texture_xpm );
 		ImagesLoader::AddBitmap( eBMP_TEXTURE_SEL, texture_sel_xpm );
+		ImagesLoader::AddBitmap( eBMP_BILLBOARD, billboard_xpm );
+		ImagesLoader::AddBitmap( eBMP_BILLBOARD_SEL, billboard_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_VIEWPORT, viewport_xpm );
 		ImagesLoader::AddBitmap( eBMP_VIEWPORT_SEL, viewport_sel_xpm );
 		ImagesLoader::AddBitmap( eBMP_RENDER_TARGET, render_target_xpm );

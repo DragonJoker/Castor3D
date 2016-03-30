@@ -1,4 +1,4 @@
-﻿#include "ShaderManager.hpp"
+#include "ShaderManager.hpp"
 
 #include "Engine.hpp"
 #include "FrameVariableBuffer.hpp"
@@ -115,6 +115,7 @@ namespace Castor3D
 		{
 			m_mapBillboards.insert( std::make_pair( l_key, p_program ) );
 			m_arrayPrograms.push_back( p_program );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *p_program ) );
 		}
 	}
 

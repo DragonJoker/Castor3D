@@ -108,16 +108,25 @@ namespace Castor3D
 		BillboardList & m_billboard;
 		//!\~english The parent scene node.	\~french Le scene node parent.
 		SceneNode & m_sceneNode;
+		//!\~english The billboard UBO.	\~french L'UBO de billboard.
+		FrameVariableBuffer & m_billboardUbo;
+		//!\~english The dimensions uniform variable	\~french La variable uniforme des dimensions
+		Point2iFrameVariable & m_dimensions;
 		//!\~english The base render node.	\~french Le noeud de rendu.
 		SceneRenderNode m_scene;
 	};
 
-	//!\~english stRENDER_NODE array.	\~french Tableau de stRENDER_NODE.
+	//!\~english GeometryRenderNode array.	\~french Tableau de GeometryRenderNode.
 	DECLARE_VECTOR( GeometryRenderNode, GeometryRenderNode );
-	//!\~english Submesh sorted RenderNodeArray. 	\~french Map RenderNodeArray, triés par sous-maillage.
+	//!\~english Submesh sorted GeometryRenderNodeArray. 	\~french Map GeometryRenderNodeArray, triés par sous-maillage.
 	DECLARE_MAP( SubmeshSPtr, GeometryRenderNodeArray, SubmeshRenderNodes );
+	//!\~english BillboardRenderNode array.	\~french Tableau de BillboardRenderNode.
+	DECLARE_VECTOR( BillboardRenderNode, BillboardRenderNode );
+	//!\~english Billboard sorted BillboardRenderNodeArray. 	\~french Map BillboardRenderNodeArray, triés par billboard.
+	DECLARE_MAP( BillboardListSPtr, BillboardRenderNodeArray, BillboardRenderNodes );
 	//!\~english Pass sorted SubmeshRenderNodesMap map.	\~french Map de SubmeshRenderNodesMap, triés par passe.
-	struct SubmeshRenderNodesByPassMap
+	template< typename T >
+	struct TypeRenderNodesByPassMap
 	{
 		inline decltype( auto ) begin()const
 		{
@@ -144,16 +153,26 @@ namespace Castor3D
 			return m_map.find( p_pass );
 		}
 
-		inline decltype( auto ) insert( std::pair< PassSPtr, SubmeshRenderNodesMap > p_pair )
+		inline decltype( auto ) insert( std::pair< PassSPtr, T > p_pair )
 		{
 			return m_map.insert( p_pair );
 		}
 
+	public:
+		using mapped_type = typename std::map< PassSPtr, T >::mapped_type;
+		using key_type = typename std::map< PassSPtr, T >::key_type;
+		using value_type = typename std::map< PassSPtr, T >::value_type;
+
 	private:
-		std::map< PassSPtr, SubmeshRenderNodesMap > m_map;
+		std::map< PassSPtr, T > m_map;
 	};
-	//!\~english Shader program sorted SubmeshRenderNodesByMaterialMap map	\~french Map de SubmeshRenderNodesByMaterialMap, triés par programme shader.
+	using SubmeshRenderNodesByPassMap = TypeRenderNodesByPassMap< SubmeshRenderNodesMap >;
+	using BillboardRenderNodesByPassMap = TypeRenderNodesByPassMap< BillboardRenderNodesMap >;
+
+	//!\~english Shader program sorted SubmeshRenderNodesMap map	\~french Map de SubmeshRenderNodesMap, triés par programme shader.
 	DECLARE_MAP( ShaderProgramSPtr, SubmeshRenderNodesByPassMap, SubmeshRenderNodesByProgram );
+	//!\~english Shader program sorted BillboardRenderNodesMap map	\~french Map de BillboardRenderNodesMap, triés par programme shader.
+	DECLARE_MAP( ShaderProgramSPtr, BillboardRenderNodesByPassMap, BillboardRenderNodesByProgram );
 
 	//@}
 }
