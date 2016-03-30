@@ -55,24 +55,28 @@ namespace Castor3D
 		template< typename MapT, typename NodeT, typename ObjT >
 		void DoAddRenderNode( PassSPtr p_pass, ShaderProgramSPtr p_program, std::shared_ptr< ObjT > p_object, NodeT const & p_node, RenderTechnique::stRENDER_NODES< MapT, NodeT > & p_nodes )
 		{
+			typedef typename MapT::mapped_type ObjectRenderNodesByProgramMap;
+			typedef typename ObjectRenderNodesByProgramMap::mapped_type ObjectRenderNodesByPassMap;
+			typedef typename ObjectRenderNodesByPassMap::mapped_type ObjectRenderNodesArray;
+
 			if ( p_pass->HasAlphaBlending() )
 			{
-				auto l_itProgram = p_nodes.m_transparentRenderNodes.insert( { p_program, MapT::mapped_type() } ).first;
-				auto l_itMap = l_itProgram->second.insert( { p_pass, MapT::mapped_type::mapped_type() } ).first;
-				auto l_itObject = l_itMap->second.insert( { p_object, MapT::mapped_type::mapped_type::mapped_type() } ).first;
+				auto l_itProgram = p_nodes.m_transparentRenderNodes.insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
+				auto l_itMap = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
+				auto l_itObject = l_itMap->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
 				l_itObject->second.push_back( p_node );
 			}
 			else
 			{
-				auto l_itProgram = p_nodes.m_opaqueRenderNodes.insert( { p_program, MapT::mapped_type() } ).first;
-				auto l_itMap = l_itProgram->second.insert( { p_pass, MapT::mapped_type::mapped_type() } ).first;
-				auto l_itObject = l_itMap->second.insert( { p_object, MapT::mapped_type::mapped_type::mapped_type() } ).first;
+				auto l_itProgram = p_nodes.m_opaqueRenderNodes.insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
+				auto l_itMap = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
+				auto l_itObject = l_itMap->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
 				l_itObject->second.push_back( p_node );
 			}
 
-			auto l_itProgram = p_nodes.m_renderNodes.insert( { p_program, MapT::mapped_type() } ).first;
-			auto l_itMap = l_itProgram->second.insert( { p_pass, MapT::mapped_type::mapped_type() } ).first;
-			auto l_itObject = l_itMap->second.insert( { p_object, MapT::mapped_type::mapped_type::mapped_type() } ).first;
+			auto l_itProgram = p_nodes.m_renderNodes.insert( { p_program, ObjectRenderNodesByProgramMap() } ).first;
+			auto l_itMap = l_itProgram->second.insert( { p_pass, ObjectRenderNodesByPassMap() } ).first;
+			auto l_itObject = l_itMap->second.insert( { p_object, ObjectRenderNodesArray() } ).first;
 			l_itObject->second.push_back( p_node );
 		}
 
