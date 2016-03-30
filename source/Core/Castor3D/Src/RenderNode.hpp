@@ -158,6 +158,11 @@ namespace Castor3D
 			return m_map.insert( p_pair );
 		}
 
+	public:
+		using mapped_type = typename std::map< PassSPtr, T >::mapped_type;
+		using key_type = typename std::map< PassSPtr, T >::key_type;
+		using value_type = typename std::map< PassSPtr, T >::value_type;
+
 	private:
 		std::map< PassSPtr, T > m_map;
 	};

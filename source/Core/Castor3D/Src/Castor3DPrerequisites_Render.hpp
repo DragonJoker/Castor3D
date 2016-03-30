@@ -437,7 +437,8 @@ namespace Castor3D
 	DECLARE_MAP( RenderWindow *, ContextSPtr, ContextPtr );
 	DECLARE_MAP( std::thread::id, ContextPtrMap, ContextPtrMapId );
 	//!\~english Multimap of RenderNodes sorted by distance.	\~french Multimap de RenderNodes triés par distance.
-	DECLARE_MULTIMAP( double, GeometryRenderNode, RenderNodeByDistance );
+	DECLARE_MULTIMAP( double, GeometryRenderNode, GeometryRenderNodeByDistance );
+	DECLARE_MULTIMAP( double, BillboardRenderNode, BillboardRenderNodeByDistance );
 
 	//@}
 }

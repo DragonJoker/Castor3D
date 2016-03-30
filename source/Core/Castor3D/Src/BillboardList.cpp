@@ -156,7 +156,7 @@ namespace Castor3D
 
 	BillboardList::BillboardList( String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem )
 		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_BILLBOARD, p_parent )
-		, m_bNeedUpdate( false )
+		, m_needUpdate( false )
 		, m_declaration( { BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3FLOATS ) } )
 	{
 	}
@@ -195,20 +195,20 @@ namespace Castor3D
 		if ( p_index < m_arrayPositions.size() )
 		{
 			m_arrayPositions.erase( m_arrayPositions.begin() + p_index );
-			m_bNeedUpdate = true;
+			m_needUpdate = true;
 		}
 	}
 
 	void BillboardList::AddPoint( Castor::Point3r const & p_ptPosition )
 	{
 		m_arrayPositions.push_back( p_ptPosition );
-		m_bNeedUpdate = true;
+		m_needUpdate = true;
 	}
 
 	void BillboardList::AddPoints( Castor::Point3rArray const & p_ptPositions )
 	{
 		m_arrayPositions.insert( m_arrayPositions.end(), p_ptPositions.begin(), p_ptPositions.end() );
-		m_bNeedUpdate = true;
+		m_needUpdate = true;
 	}
 
 	void BillboardList::Draw( ShaderProgram const & p_program )
@@ -227,6 +227,28 @@ namespace Castor3D
 	void BillboardList::SetDimensions( Size const & p_dimensions )
 	{
 		m_dimensions = p_dimensions;
+	}
+
+	void BillboardList::SortPoints( Point3r const & p_cameraPosition )
+	{
+		try
+		{
+			if ( m_cameraPosition != p_cameraPosition )
+			{
+				m_cameraPosition = p_cameraPosition;
+
+				std::sort( std::begin( m_arrayPositions ), std::end( m_arrayPositions ), [&p_cameraPosition]( Point3r const & p_a, Point3r const & p_b )
+				{
+					return point::distance_squared( p_a - p_cameraPosition ) > point::distance_squared( p_b - p_cameraPosition );
+				} );
+
+				m_needUpdate = true;
+			}
+		}
+		catch ( Exception const & p_exc )
+		{
+			Logger::LogError( std::stringstream() << "Submesh::SortFaces - Error: " << p_exc.what() );
+		}
 	}
 
 	GeometryBuffers & BillboardList::DoPrepareGeometryBuffers( ShaderProgram const & p_program )
@@ -258,7 +280,7 @@ namespace Castor3D
 
 	void BillboardList::DoUpdate()
 	{
-		if ( m_bNeedUpdate )
+		if ( m_needUpdate )
 		{
 			uint32_t l_stride = m_declaration.GetStride();
 			m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
@@ -271,7 +293,7 @@ namespace Castor3D
 			}
 
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_bNeedUpdate = false;
+			m_needUpdate = false;
 		}
 	}
 }

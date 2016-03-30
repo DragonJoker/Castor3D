@@ -210,6 +210,15 @@ namespace Castor3D
 		C3D_API void SetDimensions( Castor::Size const & p_dimensions );
 		/**
 		 *\~english
+		 *\brief		Sorts the points from farthest to nearest from the camera.
+		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
+		 *\~french
+		 *\brief		Trie les points des plus éloignés aux plus proches de la caméra.
+		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
+		 */
+		C3D_API void SortPoints( Castor::Point3r const & p_cameraPosition );
+		/**
+		 *\~english
 		 *\brief		Gets a point from the list
 		 *\param[in]	p_index	The point index
 		 *\return		The point
@@ -246,7 +255,7 @@ namespace Castor3D
 		 */
 		inline void SetAt( uint32_t p_index, Castor::Point3r const & p_ptPosition )
 		{
-			m_bNeedUpdate = true;
+			m_needUpdate = true;
 			m_arrayPositions[p_index] = p_ptPosition;
 		}
 		/**
@@ -338,7 +347,7 @@ namespace Castor3D
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets
 		BufferDeclaration m_declaration;
 		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
-		bool m_bNeedUpdate;
+		bool m_needUpdate;
 		//!\~english The Material	\~french Le Material
 		MaterialWPtr m_wpMaterial;
 		//!\~english The billboards dimensions	\~french Les dimensions des billboards
@@ -347,6 +356,8 @@ namespace Castor3D
 		VertexBufferUPtr m_vertexBuffer;
 		//!\~english The GeometryBuffers with which this billboards list is compatible.	\~french Les GeometryBuffers avec lesquel ce billboards list est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english The transformed camera position at last sort.	\~french La position transformée de la caméra au dernier tri.
+		Castor::Point3r m_cameraPosition;
 	};
 }
 

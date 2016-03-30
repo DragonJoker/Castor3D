@@ -47,6 +47,29 @@ namespace Castor3D
 	class RenderTechnique
 		: public Castor::OwnedBy< Engine >
 	{
+	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		21/02/2016
+		\~english
+		\brief		The render nodes for a specific scene.
+		\~french
+		\brief		Les noeuds de rendu pour une scène spécifique.
+		*/
+		template< typename MapT, typename NodeT >
+		struct stRENDER_NODES
+		{
+			//!\~english The render nodes, sorted by shader program.	\~french Les noeuds de rendu, triés par programme shader.
+			MapT m_renderNodes;
+			//!\~english The geometries without alpha blending, sorted by shader program.	\~french Les géométries sans alpha blending, triées par programme shader.
+			MapT m_opaqueRenderNodes;
+			//!\~english The geometries with alpha blending, sorted by shader program.	\~french Les géométries avec de l'alpha blend, triées par programme shader.
+			MapT m_transparentRenderNodes;
+			//!\~english The geometries with alpha blending, sorted by distance to the camera.	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra.
+			std::multimap< double, NodeT > m_distanceSortedRenderNodes;
+		};
+
 	protected:
 		/*!
 		\author		Sylvain DOREMUS
@@ -62,15 +85,9 @@ namespace Castor3D
 			//!\~english The scene.	\~french La scène.
 			Scene & m_scene;
 			//!\~english The render nodes, sorted by shader program.	\~french Les noeuds de rendu, triés par programme shader.
-			SubmeshRenderNodesByProgramMap m_renderNodes;
-			//!\~english The geometries without alpha blending, sorted by shader program.	\~french Les géométries sans alpha blending, triées par programme shader.
-			SubmeshRenderNodesByProgramMap m_opaqueRenderNodes;
-			//!\~english The geometries with alpha blending, sorted by shader program.	\~french Les géométries avec de l'alpha blend, triées par programme shader.
-			SubmeshRenderNodesByProgramMap m_transparentRenderNodes;
+			stRENDER_NODES< SubmeshRenderNodesByProgramMap, GeometryRenderNode > m_geometries;
 			//!\~english The billboards render nodes, sorted by shader program.	\~french Les noeuds de rendu de billboards, triés par programme shader.
-			BillboardRenderNodesByProgramMap m_billboardsRenderNodes;
-			//!\~english The geometries with alpha blending, sorted by distance to the camera.	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra.
-			RenderNodeByDistanceMMap m_distanceSortedTransparentRenderNodes;
+			stRENDER_NODES< BillboardRenderNodesByProgramMap, BillboardRenderNode > m_billboards;
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -405,7 +422,7 @@ namespace Castor3D
 		 *\param[in]	p_begin		Le début des noeuds de rendu.
 		 *\param[in]	p_end		La fin des noeuds de rendu.
 		 */
-		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, RenderNodeByDistanceMMap & p_nodes );
+		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, GeometryRenderNodeByDistanceMMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders submeshes.
@@ -436,7 +453,8 @@ namespace Castor3D
 		 *\param[in]	p_end		La fin des noeuds de rendu.
 		 */
 		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes );
-		C3D_API void DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, RenderNodeByDistanceMMap & p_output );
+		C3D_API void DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, GeometryRenderNodeByDistanceMMap & p_output );
+		C3D_API void DoResortAlpha( BillboardRenderNodesByProgramMap p_input, Camera const & p_camera, BillboardRenderNodeByDistanceMMap & p_output );
 		/**
 		 *\~english
 		 *\brief		Render function.
