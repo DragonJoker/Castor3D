@@ -1,4 +1,4 @@
-Copyright 2011, 2012, 2013, 2014 dragonjoker
+Copyright 2011, 2012, 2013, 2014, 2015, 2016 dragonjoker
 
 Verbatim copying and distribution of this entire article is permitted in any
 medium, provided this notice is preserved.
@@ -11,11 +11,12 @@ Changes between version 0.8.0 and 0.7.0
   *   Fixed transformation matrices.
   *
   * Castor3D
-  *   Fixed hardware instantiation.
-  *   Fixed hardware instantiation, for meshes with different materials.
+  *   Fixed hardware instantiation, and instantiation, for meshes with
+  *   different materials.
   *   Fixed a bug in border panel overlays material management.
   *   Fixed an overlays bug, on Intel GPU (was due to a real bug in AMD driver
   *   that hid the bug).
+  *   The billboards are now fixed.
   *
   * Subdividers
   *   Fixed PN Triangles subdivider, to use Bezier patches.
@@ -41,7 +42,7 @@ Changes between version 0.8.0 and 0.7.0
   *   create elements, collect them, and retrieve them.
   *   SceneFileParser has been extended, to be able to use parsers from
   *   external plugins.
-  *   The back frame buffers are retrieved and bindable like othe FrameBuffers
+  *   The back frame buffers are retrieved and bindable like other FrameBuffers
   *   though you can't create or add attachments to it.
   *   Added a debug GPU objects tracking system, to ensure their destruction is
   *   made before context destruction.
@@ -50,6 +51,13 @@ Changes between version 0.8.0 and 0.7.0
   *   Added an initial zip data folder, Core.zip, which contains basic materials
   *   and debug overlays.
   *   The shader lighting has been reviewed and fixed.
+  *   The Scene class has been reworked, to use ObjectManager classes, and 
+  *   ResourceManager views.
+  *   Now, the ShaderProgram retrieves the vertex inputs layout. This layout is
+  *   used in Submesh, to create the appropriate GeometryBuffers.
+  *   Castor3D now renders the scenes using HDR and tone mapping. The default
+  *   tone mapping configuration will make the render look like there were no
+  *   HDR enabled.
   *
   * GlRenderSystem
   *   Lights texture now uses Texture Buffer Objects.
@@ -61,6 +69,9 @@ Changes between version 0.8.0 and 0.7.0
   * Subdividers
   *   Implemented a Phong tessellation subdivider.
   *
+  * Importers
+  *   Implemented a FBX importer plug-in.
+  *
   * Techniques
   *   Each render technique is now implemented in its own plugin.
   *
@@ -71,8 +82,9 @@ Changes between version 0.8.0 and 0.7.0
   *   New plugin, allowing creation of GUIs inside Castor3D scenes.
   *
   * GuiCommon
-  *   The whole look and feel has been reworked, using wxTreeCtrl and
-  *   wxPropertyGrid, to list objects and view their properties.
+  *   The whole look and feel has been reworked, using wxAuiManager
+  *   Properties are displayed through wxTreeCtrl and wxPropertyGrid, to list
+  *   objects and view their properties.
 
 
 Changes between version 0.7.0.0 and 0.6.5.0
