@@ -202,7 +202,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 
 	m_mapInterpolationModes[cuT( "nearest" )] = eINTERPOLATION_MODE_NEAREST;
 	m_mapInterpolationModes[cuT( "linear" )] = eINTERPOLATION_MODE_LINEAR;
-	m_mapInterpolationModes[cuT( "anisotropic" )] = eINTERPOLATION_MODE_ANISOTROPIC;
 
 	m_mapWrappingModes[cuT( "repeat" )] = eWRAP_MODE_REPEAT;
 	m_mapWrappingModes[cuT( "mirrored_repeat" )] = eWRAP_MODE_MIRRORED_REPEAT;

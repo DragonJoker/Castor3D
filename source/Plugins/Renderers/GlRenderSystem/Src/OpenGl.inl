@@ -727,11 +727,6 @@ namespace GlRender
 		return RboStorages[p_pixelFormat];
 	}
 
-	inline eGL_TWEAK OpenGl::Get( Castor3D::eTWEAK p_eTweak )const
-	{
-		return Tweaks[p_eTweak];
-	}
-
 	inline eGL_BUFFER OpenGl::Get( Castor3D::eBUFFER p_buffer )const
 	{
 		return Buffers[p_buffer];

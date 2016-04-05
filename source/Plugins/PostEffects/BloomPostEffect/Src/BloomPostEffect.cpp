@@ -528,7 +528,7 @@ namespace Bloom
 		if ( p_linear )
 		{
 			l_name += cuT( "Linear" );
-			l_mode = eINTERPOLATION_MODE_ANISOTROPIC;
+			l_mode = eINTERPOLATION_MODE_LINEAR;
 		}
 		else
 		{

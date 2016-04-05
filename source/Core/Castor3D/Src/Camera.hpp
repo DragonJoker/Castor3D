@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -27,45 +27,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date
-	\~english
-	\brief		The selection mode enumeration
-	\~french
-	\brief		Enumération des modes de sélection
-	*/
-	typedef enum eSELECTION_MODE CASTOR_TYPE( uint8_t )
-	{
-		eSELECTION_MODE_VERTEX,		//!< Vertex selection mode
-		eSELECTION_MODE_EDGE,		//!< Edge selection mode
-		eSELECTION_MODE_FACE,		//!< Face selection mode
-		eSELECTION_MODE_SUBMESH,	//!< Submesh selection mode
-		eSELECTION_MODE_OBJECT,		//!< Geometry selection mode
-		eSELECTION_MODE_COUNT
-	}	eSELECTION_MODE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		27/02/2013
-	\~english
-	\brief		Struct holding a selection result
-	\~french
-	\brief		Structure contenant le résultat d'une sélection
-	*/
-	struct stSELECT_RESULT
-	{
-		//!\~english A selection can be a vertex	\~french Une sélection peut être un vertex
-		VertexWPtr m_pVertex;
-		//!\~english A selection can be a face	\~french Une sélection peut être une face
-		FaceWPtr m_pFace;
-		//!\~english A selection can be a submesh	\~french Une sélection peut être un sous-maillage
-		SubmeshWPtr m_pSubmesh;
-		//!\~english A selection can be a mesh	\~french Une sélection peut être un maillage
-		MeshWPtr m_mesh;
-		//!\~english A selection can be a geometry	\~french Une sélection peut être une géométrie
-		GeometryWPtr m_pGeometry;
-	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.1
@@ -241,24 +202,6 @@ namespace Castor3D
 		 *\brief		Réinitialise la position
 		 */
 		C3D_API void ResetPosition();
-		/**
-		 *\~english
-		 *\brief		Returns the first object at mouse coords x and y
-		 *\param[in]	p_scene	The scene used for the selection
-		 *\param[in]	p_mode		The selection mode (vertex, face, submesh, geometry)
-		 *\param[in]	p_x			The x mouse coordinate
-		 *\param[in]	p_y			The y mouse coordinate
-		 *\param[out]	p_stFound	The selection result
-		 *\return		\p true if something was found, false if not
-		 *\~french
-		 *\brief		Récupère l'objet le plus proche aux coordonnées souris x et y
-		 *\param[in]	p_scene		La scène où on doit sélectionner un objet
-		 *\param[in]	p_mode		Le mode de sélection (vertex, face, submesh, geometry)
-		 *\param[in]	p_x, p_y	Les coordonnées de la souris
-		 *\param[out]	p_stFound	Le résultat de la sélection
-		 *\return		\p false si aucun objet n'a été trouvé
-		*/
-		C3D_API bool Select( SceneSPtr p_scene, eSELECTION_MODE p_mode, int p_x, int p_y, stSELECT_RESULT & p_stFound );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport type

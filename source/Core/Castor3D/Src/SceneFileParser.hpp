@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -32,37 +32,38 @@ namespace Castor3D
 	/*!
 	The enumeration which defines all the sections and subsections of a scene file
 	*/
-	typedef enum eSECTION CASTOR_TYPE( uint32_t )
+	typedef enum eSECTION
+		: uint32_t
 	{
-		eSECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),					//!< No section id est root
-		eSECTION_SCENE = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),					//!< Scene section
-		eSECTION_WINDOW = MAKE_SECTION_NAME( 'W', 'N', 'D', 'W' ),					//!< Window section
-		eSECTION_SAMPLER = MAKE_SECTION_NAME( 'S', 'M', 'P', 'R' ),					//!< Sampler state section
-		eSECTION_CAMERA = MAKE_SECTION_NAME( 'C', 'A', 'M', 'R' ),					//!< Camera section
-		eSECTION_VIEWPORT = MAKE_SECTION_NAME( 'V', 'W', 'P', 'T' ),				//!< Viewport section
-		eSECTION_LIGHT = MAKE_SECTION_NAME( 'L', 'G', 'H', 'T' ),					//!< Light section
-		eSECTION_NODE = MAKE_SECTION_NAME( 'N', 'O', 'D', 'E' ),					//!< SceneNode section
-		eSECTION_OBJECT = MAKE_SECTION_NAME( 'O', 'B', 'J', 'T' ),					//!< Geometry section
-		eSECTION_OBJECT_MATERIALS = MAKE_SECTION_NAME( 'O', 'M', 'T', 'L' ),		//!< Geometry materials section
-		eSECTION_FONT = MAKE_SECTION_NAME( 'F', 'O', 'N', 'T' ),					//!< Font section
-		eSECTION_PANEL_OVERLAY = MAKE_SECTION_NAME( 'P', 'O', 'V', 'L' ),			//!< Panel Overlay sections
-		eSECTION_BORDER_PANEL_OVERLAY = MAKE_SECTION_NAME( 'B', 'O', 'V', 'L' ),	//!< Border Panel Overlay sections
-		eSECTION_TEXT_OVERLAY = MAKE_SECTION_NAME( 'T', 'O', 'V', 'L' ),			//!< Text Overlay sections
-		eSECTION_MESH = MAKE_SECTION_NAME( 'M', 'E', 'S', 'H' ),					//!< Mesh subsection of a geometry section
-		eSECTION_SUBMESH = MAKE_SECTION_NAME( 'S', 'M', 'S', 'H' ),					//!< Submesh subsection of a Mesh subsection
-		eSECTION_MATERIAL = MAKE_SECTION_NAME( 'M', 'T', 'R', 'L' ),				//!< Material section
-		eSECTION_PASS = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ),					//!< Pass subsection of a material section
-		eSECTION_TEXTURE_UNIT = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),			//!< TextureUnit subsection of a pass subsection
-		eSECTION_RENDER_TARGET = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),			//!< RenderTarget subsection of a texture unit or window subsection
-		eSECTION_GLSL_SHADER = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),				//!< GLSL Shader subsection of a pass subsection
-		eSECTION_SHADER_PROGRAM = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),			//!< Shader Program subsection of a shader subsection
-		eSECTION_SHADER_UBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),				//!< UBO subsection of a shader subsection
-		eSECTION_SHADER_UBO_VARIABLE = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),		//!< Variable subsection of a UBO subsection
-		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),				//!< Billboards list section
-		eSECTION_BILLBOARD_LIST = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),			//!< Billboards points list subsection
-		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),				//!< Animated Objects Groups section
-		eSECTION_ANIMATED_OBJECT = MAKE_SECTION_NAME( 'A', 'N', 'O', 'J' ),			//!< Animated Object section
-		eSECTION_ANIMATION = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),				//!< Animation section
+		eSECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
+		eSECTION_SCENE = MAKE_SECTION_NAME( 'S', 'C', 'N', 'E' ),
+		eSECTION_WINDOW = MAKE_SECTION_NAME( 'W', 'N', 'D', 'W' ),
+		eSECTION_SAMPLER = MAKE_SECTION_NAME( 'S', 'M', 'P', 'R' ),
+		eSECTION_CAMERA = MAKE_SECTION_NAME( 'C', 'A', 'M', 'R' ),
+		eSECTION_VIEWPORT = MAKE_SECTION_NAME( 'V', 'W', 'P', 'T' ),
+		eSECTION_LIGHT = MAKE_SECTION_NAME( 'L', 'G', 'H', 'T' ),
+		eSECTION_NODE = MAKE_SECTION_NAME( 'N', 'O', 'D', 'E' ),
+		eSECTION_OBJECT = MAKE_SECTION_NAME( 'O', 'B', 'J', 'T' ),
+		eSECTION_OBJECT_MATERIALS = MAKE_SECTION_NAME( 'O', 'M', 'T', 'L' ),
+		eSECTION_FONT = MAKE_SECTION_NAME( 'F', 'O', 'N', 'T' ),
+		eSECTION_PANEL_OVERLAY = MAKE_SECTION_NAME( 'P', 'O', 'V', 'L' ),
+		eSECTION_BORDER_PANEL_OVERLAY = MAKE_SECTION_NAME( 'B', 'O', 'V', 'L' ),
+		eSECTION_TEXT_OVERLAY = MAKE_SECTION_NAME( 'T', 'O', 'V', 'L' ),
+		eSECTION_MESH = MAKE_SECTION_NAME( 'M', 'E', 'S', 'H' ),
+		eSECTION_SUBMESH = MAKE_SECTION_NAME( 'S', 'M', 'S', 'H' ),
+		eSECTION_MATERIAL = MAKE_SECTION_NAME( 'M', 'T', 'R', 'L' ),
+		eSECTION_PASS = MAKE_SECTION_NAME( 'P', 'A', 'S', 'S' ),
+		eSECTION_TEXTURE_UNIT = MAKE_SECTION_NAME( 'U', 'N', 'I', 'T' ),
+		eSECTION_RENDER_TARGET = MAKE_SECTION_NAME( 'R', 'T', 'G', 'R' ),
+		eSECTION_GLSL_SHADER = MAKE_SECTION_NAME( 'G', 'L', 'S', 'L' ),
+		eSECTION_SHADER_PROGRAM = MAKE_SECTION_NAME( 'S', 'P', 'G', 'M' ),
+		eSECTION_SHADER_UBO = MAKE_SECTION_NAME( 'S', 'U', 'B', 'O' ),
+		eSECTION_SHADER_UBO_VARIABLE = MAKE_SECTION_NAME( 'S', 'U', 'B', 'V' ),
+		eSECTION_BILLBOARD = MAKE_SECTION_NAME( 'B', 'L', 'B', 'd' ),
+		eSECTION_BILLBOARD_LIST = MAKE_SECTION_NAME( 'B', 'L', 'B', 'L' ),
+		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),
+		eSECTION_ANIMATED_OBJECT = MAKE_SECTION_NAME( 'A', 'N', 'O', 'J' ),
+		eSECTION_ANIMATION = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),
 	}	eSECTION;
 	//! The context used into parsing functions
 	/*!

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,18 +31,27 @@ namespace Castor3D
 	\brief		Enumération des types de maillages
 	*/
 	typedef enum eMESH_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eMESH_TYPE_CUSTOM,		//!< Custom mesh type = > User defined vertex...
-		eMESH_TYPE_CONE,		//!< Cone mesh type
-		eMESH_TYPE_CYLINDER,	//!< Cylinder mesh type
-		eMESH_TYPE_SPHERE,		//!< Rectangular faces sphere mesh type
-		eMESH_TYPE_CUBE,		//!< Cube mesh type
-		eMESH_TYPE_TORUS,		//!< Torus mesh type
-		eMESH_TYPE_PLANE,		//!< Plane mesh type
-		eMESH_TYPE_ICOSAHEDRON,	//!< Triangular faces sphere mesh type
-		eMESH_TYPE_PROJECTION,	//!< Projection mesh type
-		eMESH_TYPE_COUNT,
+		//!\~english Custom mesh type => User defined vertex, imported mesh...	\~french Type personnalisé => Défini par l'utilisateur, importé...
+		eMESH_TYPE_CUSTOM,
+		//!\~english Cone mesh type	\~french Cône
+		eMESH_TYPE_CONE,
+		//!\~english Cylinder mesh type	\~french Cylindre
+		eMESH_TYPE_CYLINDER,
+		//!\~english Rectangular faces sphere mesh type	\~french Sphère à faces rectanglaires
+		eMESH_TYPE_SPHERE,
+		//!\~english Cube mesh type	\~french Cube
+		eMESH_TYPE_CUBE,
+		//!\~english Torus mesh type	\~french Torre
+		eMESH_TYPE_TORUS,
+		//!\~english Plane mesh type	\~french Plan
+		eMESH_TYPE_PLANE,
+		//!\~english Triangular faces sphere mesh type	\~french Sphère à faces triangulaires
+		eMESH_TYPE_ICOSAHEDRON,
+		//!\~english Projection mesh type	\~french Projection
+		eMESH_TYPE_PROJECTION,
+		CASTOR_ENUM_BOUNDS( eMESH_TYPE, eMESH_TYPE_CUSTOM )
 	}	eMESH_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -52,11 +61,13 @@ namespace Castor3D
 	\brief		Enumération des types de génération de normales supportés
 	*/
 	typedef enum eNORMAL
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eNORMAL_FLAT,	//!<\~english Flat (face) normals	\~french Normales plates (par face)
-		eNORMAL_SMOOTH,	//!<\~english Smooth normals	\~french Normales smooth
-		eNORMAL_COUNT,	//!<\~english Count	\~french Compte
+		//!\~english Flat (face) normals	\~french Normales plates (par face)
+		eNORMAL_FLAT,
+		//!\~english Smooth normals	\~french Normales smooth
+		eNORMAL_SMOOTH,
+		CASTOR_ENUM_BOUNDS( eNORMAL, eNORMAL_FLAT )
 	}	eNORMAL;
 
 	class Vertex;

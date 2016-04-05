@@ -1,89 +1,93 @@
-﻿/*!
+/*!
  *\~english
  *\mainpage Castor3D Engine
  *\section intro_sec Change log
- *This page is here to inform about the changes since the earliest versions of the engine
+ *This page is here to inform about the changes since the earliest versions of the engine.
  *
  *\section version_0_8_0 Version 0.8.0
  *\subsection feat_0_8_0 Features
  *\subsubsection feat_0_8_0_gen General
- *   Compiles now with VS >= 2013 and GCC >= 4.9.
- *   Direct3D support has eventually been dropped, I don't have time for it.
- *
+ *<ul>
+ *<li>Compiles now with VS >= 2013 and GCC >= 4.9.
+ *<li>Direct3D support has eventually been dropped, I don't have time for it.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_cu CastorUtils
- *   Point4f and Matrix4x4f can now use SSE2 instructions for computations.
- *   All Castor projects are now using UTF-8 texts, using std::string.
- *
+ *<ul>
+ *<li>Point4f and Matrix4x4f can now use SSE2 instructions for computations.</li>
+ *<li>All Castor projects are now using UTF-8 texts, using std::string.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_c3d Castor3D
- *   The skeleton animation system is now finished and working.
- *   Removed every XxxRenderer class, except for OverlayRenderer.
- *   The topology type is no longer in Camera, but in GeometryBuffers.
- *   Engine has been splitted, creating a RenderLoop class, and Managers to
- *   create elements, collect them, and retrieve them.
- *   SceneFileParser has been extended, to be able to use parsers from
- *   external plug-ins.
- *   The back frame buffers are retrieved and bindable like other FrameBuffers
- *   though you can't create or add attachments to it.
- *   Added a debug GPU objects tracking system, to ensure their destruction is
- *   made before context destruction.
- *   Can now read scenes from zip archive files.
- *   The text overlays now can have a horizontal and a vertical alignment.
- *   Added an initial zip data folder, Core.zip, which contains basic materials
- *   and debug overlays.
- *   The shader lighting has been reviewed and fixed.
- *   The Scene class has been reworked, to use ObjectManager classes, and
- *   ResourceManager views.
- *   Now, the ShaderProgram retrieves the vertex inputs layout. This layout is
- *   used in Submesh, to create the appropriate GeometryBuffers.
- *   Castor3D now renders the scenes using HDR and tone mapping. The default
- *   tone mapping configuration will make the render look like there were no
- *   HDR enabled.
- *
+ *<ul>
+ *<li>The skeleton animation system is now finished and working.</li>
+ *<li>Removed every XxxRenderer class, except for OverlayRenderer.</li>
+ *<li>The topology type is no longer in Camera, but in GeometryBuffers.</li>
+ *<li>Engine has been splitted, creating a RenderLoop class, and Managers to create elements, collect them, and retrieve them.</li>
+ *<li>SceneFileParser has been extended, to be able to use parsers from external plug-ins.</li>
+ *<li>The back frame buffers are retrieved and bindable like other FrameBuffers though you can't create or add attachments to it.</li>
+ *<li>Added a debug GPU objects tracking system, to ensure their destruction is made before context destruction.</li>
+ *<li>Can now read scenes from zip archive files.</li>
+ *<li>The text overlays now can have a horizontal and a vertical alignment.</li>
+ *<li>Added an initial zip data folder, Core.zip, which contains basic materials and debug overlays.</li>
+ *<li>The shader lighting has been reviewed and fixed.</li>
+ *<li>The Scene class has been reworked, to use ObjectManager classes, and ResourceManager views.</li>
+ *<li>Now, the ShaderProgram retrieves the vertex inputs layout. This layout is used in Submesh, to create the appropriate GeometryBuffers.</li>
+ *<li>Castor3D now renders the scenes using HDR and tone mapping. The default tone mapping configuration will make the render look like there were no HDR enabled.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_gl  GlRenderSystem
- *   Lights texture now uses Texture Buffer Objects.
- *   Removed every GlXxxRenderer class, except for GlOverlayRenderer.
- *   Support for OpenGL 1.x has been removed.
- *   Support for OpenGL 3.x has been enforced, forcing UBOs, for example.
- *   Implemented a GlslWriter, to write GLSL code from C++ source.
- *
+ *<ul>
+ *<li>Lights texture now uses Texture Buffer Objects.</li>
+ *<li>Removed every GlXxxRenderer class, except for GlOverlayRenderer.</li>
+ *<li>Support for OpenGL 1.x has been removed.</li>
+ *<li>Support for OpenGL 3.x has been enforced, forcing UBOs, for example.</li>
+ *<li>Implemented a GlslWriter, to write GLSL code from C++ source.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_sub Subdividers
- *   Implemented a Phong tessellation subdivider.
- *
+ *<ul>
+ *<li>Implemented a Phong tessellation subdivider.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_imp Importers
- *   Implemented a FBX importer plug-in.
- *
+ *<ul>
+ *<li>Implemented a FBX importer plug-in.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_tec Techniques
- *   Each render technique is now implemented in its own plug-in.
- *
+ *<ul>
+ *<li>Each render technique is now implemented in its own plug-in.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_pos PostEffects
- *   The first post effect plug-in has been implemented: Bloom.
- *
+ *<ul>
+ *<li>The first post effect plug-in has been implemented: Bloom.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_cgui CastorGUI
- *   New plug-in, allowing creation of GUIs inside Castor3D scenes.
- *
+ *<ul>
+ *<li>New plug-in, allowing creation of GUIs inside Castor3D scenes.</li>
+ *</ul>
  *\subsubsection feat_0_8_0_gui GuiCommon
- *   The whole look and feel has been reworked, using wxAuiManager
- *   Properties are displayed through wxTreeCtrl and wxPropertyGrid, to list
- *   objects and view their properties.
+ *<ul>
+ *<li>The whole look and feel has been reworked, using wxAuiManager.</li>
+ *<li>Properties are displayed through wxTreeCtrl and wxPropertyGrid, to list objects and view their properties.</li>
+ *</ul>
  *
  \subsection bugs_0_8_0 Fixed Bugs
  *\subsubsection bugs_0_8_0_cu CastorUtils
- *   Fixed transformation matrices.
- *
+ *<ul>
+ *<li>Fixed transformation matrices.</li>
+ *</ul>
  *\subsubsection bugs_0_8_0_c3d Castor3D
- *   Fixed hardware instantiation, and instantiation, for meshes with
- *   different materials.
- *   Fixed a bug in border panel overlays material management.
- *   Fixed an overlays bug, on Intel GPU (was due to a real bug in AMD driver
- *   that hid the bug).
- *   The billboards are now fixed.
- *
+ *<ul>
+ *<li>Fixed hardware instantiation, and instantiation, for meshes with different materials.</li>
+ *<li>Fixed a bug in border panel overlays material management.</li>
+ *<li>Fixed an overlays bug, on Intel GPU (was due to a real bug in AMD driver that hid the bug).</li>
+ *<li>The billboards are now fixed.</li>
+ *</ul>
  *\subsubsection bugs_0_8_0_sub Subdividers
- *   Fixed PN Triangles subdivider, to use Bezier patches.
- *   Updated Loop subdivider.
- *
+ *<ul>
+ *<li>Fixed PN Triangles subdivider, to use Bezier patches.</li>
+ *<li>Updated Loop subdivider.</li>
+ *</ul>
  *\subsubsection bugs_0_8_0_gl GlRenderSystem
- *   Fixed a crash on Linux, with Intel GPUs.
+ *<ul>
+ *<li>Fixed a crash on Linux, with Intel GPUs.</li>
+ *</ul>
  *
  *\section version_0_7_0 Version 0.7.0
  *
@@ -407,7 +411,94 @@
  *\~french
  *\mainpage Moteur Castor3D
  *\section intro_sec Suivi de versions
- *Cette page sert à informer des évolutions du moteur depuis les premières versions
+ *Cette page sert à informer des évolutions du moteur depuis les premières versions.
+ *
+ *\section version_0_8_0 Version 0.8.0
+ *\subsection feat_0_8_0 Modifications
+ *\subsubsection feat_0_8_0_gen Général
+ *<ul>
+ *<li>Compile maintenant avec VS >= 2013 et GCC >= 4.9.</li>
+ *<li>Le support de Direct3D a été abandonné, n'ayant pas le temps pour l'implémenter correctement.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_cu CastorUtils
+ *<ul>
+ *<li>Les opérations pour les Point4f et les Matrix4x4f peuvent maintenant utiliser les instructions SSE2.</li>
+ *<li>Tous les projets du Castor utilisent maintenant des textes UTF-8, stockés dans des std::string.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_c3d Castor3D
+ *<ul>
+ *<li>Le système d'animations par squelette est maintenant finalisé et fonctionnel.</li>
+ *<li>Suppression de toutes les classes XxxRenderer, sauf OverlayRenderer.</li>
+ *<li>Le type de topologie de dessin n'est plus dans la classe Camera, mais dans GeometryBuffers.</li>
+ *<li>Engine a été retravaillée, en ajoutant des classes RenderLoop, ainsi que des Managers, s'occupant de la création des éléments, leur stockage et leur récupération.</li>
+ *<li>SceneFileParser a été étendue, pour pouvoir utiliser des directives d'analyse depuis des plug-ins externes.</li>
+ *<li>Les tampons d'image de la fenêtre sont maintenant récupérés, et liables comme les autres tampons d'image, il n'est cependant pas possible de leur créer ou ajouter des attaches.</li>
+ *<li>Ajout d'un système de traçage des objets GPU créés, pour s'assurer que leur destruction s'effectue avant la destruction de leur contexte.</li>
+ *<li>Les incrustations texte peuvent maintenant avoir un alignement vertical et/ou horizontal.</li>
+ *<li>Castor3D peut maintenant lire les scènes depuis des archives ZIP.</li>
+ *<li>Ajout d'une archive ZIP, Core.zip, contenant des matériaux basiques, ainsi que les incrustations de débogage.</li>
+ *<li>Cette archive est chargée lors de la sélection de l'API de rendu.</li>
+ *<li>Le code shader de l'éclairage a été revu et corrigé.</li>
+ *<li>La clase Scene a été retravaillée, pour utiliser la classe ObjectManager, ainsi que les vues sur les ResourceManagers.</li>
+ *<li>Maintenant ShaderProgram récupère la configuration des attributs de sommets en enrée du vertex shader.</li>
+ *<li>Cette configuration est utilisée par la classe Submesh, pour créer les GeometryBuffers qui vont bien.</li>
+ *<li>Castor3D utilise le High Dynamic Range pour dessiner les scènes. Le mappage de tons par défaut permet d'avoir un rendu similaire à un rendu sans HDR.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_gl  GlRenderSystem
+ *<ul>
+ *<li>La texture de lumières utilise maintenant les Texture Buffer Objects.</li>
+ *<li>Suppression des classes GlXxxRenderer.</li>
+ *<li>Le support d'OpenGL 1.x a été supprimé.</li>
+ *<li>Le support d'OpenGL 3.x a été renforcé, en forçant l'utilisation des UBOs, par exemple.</li>
+ *<li>Implémentation de GlslWriter, pour pouvoir écrire les shaders depuis un fichier source C++.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_sub Subdiviseurs
+ *<ul>
+ *<li>Implémentation d'un subdiviseur tessellation de Phong.</li>
+ *<li>Mise à jour du subdiviseur Loop.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_imp Importeurs
+ *<ul>
+ *<li>Implémentation d'un plug-in d'importation de fichiers FBX.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_tec Techniques
+ *<ul>
+ *<li>Chaque technique de rendu est maintenant implémentée dans son propre plug-in.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_pos PostEffects
+ *<ul>
+ *<li>Le premier plug-in d'effet post rendu a été implémenté: HDR Bloom.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_cgui CastorGUI
+ *<ul>
+ *<li>Nouveau plug-in, permettant la création d'IHM au sein des scènes Castor3D.</li>
+ *</ul>
+ *\subsubsection feat_0_8_0_gui GuiCommon
+ *<ul>
+ *<li>L'aspect global des application avec IHM a été retravaillé, en utilisant wxAuiManager.</li>
+ *<li>Utilisation de wxTreeCtrl et des wxPropertyGrid, pour lister les objets, et visualiser leurs propriétés.</li>
+ *</ul>
+ *
+ \subsection bugs_0_8_0 Fixed Bugs
+ *\subsubsection bugs_0_8_0_cu CastorUtils
+ *<ul>
+ *<li>Les matrices de transformation ont été corrigées.</li>
+ *</ul>
+ *\subsubsection bugs_0_8_0_c3d Castor3D
+ *<ul>
+ *<li>Correction de l'instanciation GPU.</li>
+ *<li>Correction d'un bug dans la gestion des matériaux des incrustations panneaux bordurés.</li>
+ *<li>Correction d'un bug pour les incrustations, révélé sur les GPU Intel (était dû à un bug du driver AMD qui cachait ce bug).</li>
+ *<li>Correction des billboards.</li>
+ *</ul>
+ *\subsubsection bugs_0_8_0_sub Subdividers
+ *<ul>
+ *<li>Correction du sudiviseur PN Triangles, en utilisant des patches Bézier.</li>
+ *</ul>
+ *\subsubsection bugs_0_8_0_gl GlRenderSystem
+ *<ul>
+ *<li>Correction d'un crash sous Linux, avec GPU Intel.</li>
+ *</ul>
  *
  *\section version_0_7_0 Version 0.7.0
  *

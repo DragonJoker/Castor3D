@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,44 +31,79 @@ namespace Castor3D
 	\brief		Enumération des types de matrices
 	*/
 	typedef enum eMTXMODE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eMTXMODE_PROJECTION,	//<!\~english Eye to Clip transform	\~french Transformations de Vue vers Clip
-		eMTXMODE_MODEL,			//!<\~english Object to World transform	\~french Transformations de Objet vers Monde
-		eMTXMODE_VIEW,			//!<\~english World to Eye transform	\~french Transformations de Monde vers Vue
-		eMTXMODE_TEXTURE0,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE1,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE2,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE3,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE4,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE5,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE6,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE7,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE8,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE9,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE10,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE11,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE12,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE13,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE14,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE15,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE16,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE17,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE18,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE19,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE20,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE21,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE22,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE23,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE24,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE25,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE26,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE27,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE28,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE29,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE30,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_TEXTURE31,		//!<\~english Texture transforms	\~french Transformations de texture
-		eMTXMODE_COUNT
+		//<\~english Eye to Clip transform	\~french Transformations de Vue vers Clip
+		eMTXMODE_PROJECTION,
+		//!\~english Object to World transform	\~french Transformations de Objet vers Monde
+		eMTXMODE_MODEL,
+		//!\~english World to Eye transform	\~french Transformations de Monde vers Vue
+		eMTXMODE_VIEW,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE0,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE1,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE2,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE3,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE4,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE5,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE6,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE7,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE8,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE9,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE10,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE11,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE12,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE13,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE14,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE15,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE16,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE17,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE18,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE19,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE20,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE21,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE22,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE23,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE24,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE25,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE26,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE27,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE28,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE29,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE30,
+		//!\~english Texture transforms	\~french Transformations de texture
+		eMTXMODE_TEXTURE31,
+		CASTOR_ENUM_BOUNDS( eMTXMODE, eMTXMODE_PROJECTION )
 	}	eMTXMODE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -122,10 +157,12 @@ namespace Castor3D
 	\brief		Enumération des types d'accès.
 	*/
 	typedef enum eACCESS_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eACCESS_TYPE_READ = 1 << 0,		//!< Read access type.
-		eACCESS_TYPE_WRITE = 1 << 1,	//!< Write access type.
+		//! Read access type.
+		eACCESS_TYPE_READ = 1 << 0,
+		//! Write access type.
+		eACCESS_TYPE_WRITE = 1 << 1,
 	}	eACCESS_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -138,11 +175,14 @@ namespace Castor3D
 	\remark		Fait pour être combiné avec eBUFFER_ACCESS_NATURE
 	*/
 	typedef enum eBUFFER_ACCESS_TYPE
-	CASTOR_TYPE( uint32_t )
+		: uint32_t
 	{
-		eBUFFER_ACCESS_TYPE_STATIC = 1 << 0,	//!< Modified once and used many times
-		eBUFFER_ACCESS_TYPE_DYNAMIC = 1 << 1,	//!< Modified many times and used many times
-		eBUFFER_ACCESS_TYPE_STREAM = 1 << 2,	//!< Modified oncce and used at most a few times
+		//! Modified once and used many times
+		eBUFFER_ACCESS_TYPE_STATIC = 1 << 0,
+		//! Modified many times and used many times
+		eBUFFER_ACCESS_TYPE_DYNAMIC = 1 << 1,
+		//! Modified oncce and used at most a few times
+		eBUFFER_ACCESS_TYPE_STREAM = 1 << 2,
 	}	eBUFFER_ACCESS_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -155,11 +195,14 @@ namespace Castor3D
 	\remark		Fait pour être combiné avec eBUFFER_ACCESS_TYPE
 	*/
 	typedef enum eBUFFER_ACCESS_NATURE
-	CASTOR_TYPE( uint32_t )
+		: uint32_t
 	{
-		eBUFFER_ACCESS_NATURE_DRAW = 1 << 4,	//!< Modified by CPU and used by GPU
-		eBUFFER_ACCESS_NATURE_READ = 1 << 5,	//!< Modified by GPU and used by CPU
-		eBUFFER_ACCESS_NATURE_COPY = 1 << 6,	//!< Modified by GPU and used by GPU
+		//! Modified by CPU and used by GPU
+		eBUFFER_ACCESS_NATURE_DRAW = 1 << 4,
+		//! Modified by GPU and used by CPU
+		eBUFFER_ACCESS_NATURE_READ = 1 << 5,
+		//! Modified by GPU and used by GPU
+		eBUFFER_ACCESS_NATURE_COPY = 1 << 6,
 	}	eBUFFER_ACCESS_NATURE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -169,19 +212,29 @@ namespace Castor3D
 	\brief		Enumération des type de primitive dessinées
 	*/
 	typedef enum eTOPOLOGY
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eTOPOLOGY_POINTS,			//!< Display textured points
-		eTOPOLOGY_LINES,			//!< Display textured edges
-		eTOPOLOGY_LINE_LOOP,		//!< Display textured edge loops
-		eTOPOLOGY_LINE_STRIP,		//!< Display textured edge strips
-		eTOPOLOGY_TRIANGLES,		//!< Display textured triangles
-		eTOPOLOGY_TRIANGLE_STRIPS,	//!< Display triangle strips
-		eTOPOLOGY_TRIANGLE_FAN,		//!< Display triangle fan
-		eTOPOLOGY_QUADS,			//!< Display quads
-		eTOPOLOGY_QUAD_STRIPS,		//!< Display quad strips
-		eTOPOLOGY_POLYGON,			//!< Display quad strips
-		eTOPOLOGY_COUNT,
+		//! Display textured points
+		eTOPOLOGY_POINTS,
+		//! Display textured edges
+		eTOPOLOGY_LINES,
+		//! Display textured edge loops
+		eTOPOLOGY_LINE_LOOP,
+		//! Display textured edge strips
+		eTOPOLOGY_LINE_STRIP,
+		//! Display textured triangles
+		eTOPOLOGY_TRIANGLES,
+		//! Display triangle strips
+		eTOPOLOGY_TRIANGLE_STRIPS,
+		//! Display triangle fan
+		eTOPOLOGY_TRIANGLE_FAN,
+		//! Display quads
+		eTOPOLOGY_QUADS,
+		//! Display quad strips
+		eTOPOLOGY_QUAD_STRIPS,
+		//! Display quad strips
+		eTOPOLOGY_POLYGON,
+		CASTOR_ENUM_BOUNDS( eTOPOLOGY, eTOPOLOGY_POINTS )
 	}	eTOPOLOGY;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -193,17 +246,25 @@ namespace Castor3D
 	\brief		Enumération des fonctions de profondeur
 	*/
 	typedef enum eDEPTH_FUNC
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eDEPTH_FUNC_NEVER,		//!< Never passes.
-		eDEPTH_FUNC_LESS,		//!< Passes if the incoming depth value is less than the stored depth value.
-		eDEPTH_FUNC_EQUAL,		//!< Passes if the incoming depth value is equal to the stored depth value.
-		eDEPTH_FUNC_LEQUAL,		//!< Passes if the incoming depth value is less than or equal to the stored depth value.
-		eDEPTH_FUNC_GREATER,	//!< Passes if the incoming depth value is greater than the stored depth value.
-		eDEPTH_FUNC_NOTEQUAL,	//!< Passes if the incoming depth value is not equal to the stored depth value.
-		eDEPTH_FUNC_GEQUAL,		//!< Passes if the incoming depth value is greater than or equal to the stored depth value.
-		eDEPTH_FUNC_ALWAYS,		//!< Always passes.
-		eDEPTH_FUNC_COUNT,		//!< Functions count.
+		//! Never passes.
+		eDEPTH_FUNC_NEVER,
+		//! Passes if the incoming depth value is less than the stored depth value.
+		eDEPTH_FUNC_LESS,
+		//! Passes if the incoming depth value is equal to the stored depth value.
+		eDEPTH_FUNC_EQUAL,
+		//! Passes if the incoming depth value is less than or equal to the stored depth value.
+		eDEPTH_FUNC_LEQUAL,
+		//! Passes if the incoming depth value is greater than the stored depth value.
+		eDEPTH_FUNC_GREATER,
+		//! Passes if the incoming depth value is not equal to the stored depth value.
+		eDEPTH_FUNC_NOTEQUAL,
+		//! Passes if the incoming depth value is greater than or equal to the stored depth value.
+		eDEPTH_FUNC_GEQUAL,
+		//! Always passes.
+		eDEPTH_FUNC_ALWAYS,
+		CASTOR_ENUM_BOUNDS( eDEPTH_FUNC, eDEPTH_FUNC_NEVER )
 	}	eDEPTH_FUNC;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -215,11 +276,13 @@ namespace Castor3D
 	\brief		Enumération des masques d'écriture
 	*/
 	typedef enum eWRITING_MASK
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eWRITING_MASK_ZERO,		//!< Writing disabled
-		eWRITING_MASK_ALL,		//!< Writing enabled
-		eWRITING_MASK_COUNT,	//!< Masks count
+		//! Writing disabled
+		eWRITING_MASK_ZERO,
+		//! Writing enabled
+		eWRITING_MASK_ALL,
+		CASTOR_ENUM_BOUNDS( eWRITING_MASK, eWRITING_MASK_ZERO )
 	}	eWRITING_MASK;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -231,17 +294,25 @@ namespace Castor3D
 	\brief		Enumération des fonctions de stencil
 	*/
 	typedef enum eSTENCIL_FUNC
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eSTENCIL_FUNC_NEVER,	//!< Never passes.
-		eSTENCIL_FUNC_LESS,		//!< Passes if the incoming stencil value is less than the stored stencil value.
-		eSTENCIL_FUNC_EQUAL,	//!< Passes if the incoming stencil value is equal to the stored stencil value.
-		eSTENCIL_FUNC_LEQUAL,	//!< Passes if the incoming stencil value is less than or equal to the stored stencil value.
-		eSTENCIL_FUNC_GREATER,	//!< Passes if the incoming stencil value is greater than the stored stencil value.
-		eSTENCIL_FUNC_NOTEQUAL,	//!< Passes if the incoming stencil value is not equal to the stored stencil value.
-		eSTENCIL_FUNC_GEQUAL,	//!< Passes if the incoming stencil value is greater than or equal to the stored stencil value.
-		eSTENCIL_FUNC_ALWAYS,	//!< Always passes.
-		eSTENCIL_FUNC_COUNT,	//!< Functions count.
+		//! Never passes.
+		eSTENCIL_FUNC_NEVER,
+		//! Passes if the incoming stencil value is less than the stored stencil value.
+		eSTENCIL_FUNC_LESS,
+		//! Passes if the incoming stencil value is equal to the stored stencil value.
+		eSTENCIL_FUNC_EQUAL,
+		//! Passes if the incoming stencil value is less than or equal to the stored stencil value.
+		eSTENCIL_FUNC_LEQUAL,
+		//! Passes if the incoming stencil value is greater than the stored stencil value.
+		eSTENCIL_FUNC_GREATER,
+		//! Passes if the incoming stencil value is not equal to the stored stencil value.
+		eSTENCIL_FUNC_NOTEQUAL,
+		//! Passes if the incoming stencil value is greater than or equal to the stored stencil value.
+		eSTENCIL_FUNC_GEQUAL,
+		//! Always passes.
+		eSTENCIL_FUNC_ALWAYS,
+		CASTOR_ENUM_BOUNDS( eSTENCIL_FUNC, eSTENCIL_FUNC_NEVER )
 	}	eSTENCIL_FUNC;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -253,17 +324,25 @@ namespace Castor3D
 	\brief		Enumération des fonctions de stencil
 	*/
 	typedef enum eSTENCIL_OP
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eSTENCIL_OP_KEEP,		//!< Keeps the current value.
-		eSTENCIL_OP_ZERO,		//!< Sets the stencil buffer value to 0.
-		eSTENCIL_OP_REPLACE,	//!< Sets the stencil buffer value by the one given
-		eSTENCIL_OP_INCR,		//!< Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.
-		eSTENCIL_OP_INCR_WRAP,	//!< Increments the current stencil buffer value. Wraps stencil buffer value to zero when incrementing the maximum representable unsigned value.
-		eSTENCIL_OP_DECR,		//!< Decrements the current stencil buffer value. Clamps to 0.
-		eSTENCIL_OP_DECR_WRAP,	//!< Decrements the current stencil buffer value. Wraps stencil buffer value to the maximum representable unsigned value when decrementing a stencil buffer value of zero.
-		eSTENCIL_OP_INVERT,		//!< Bitwise inverts the current stencil buffer value.
-		eSTENCIL_OP_COUNT,		//!< Ops count.
+		//! Keeps the current value.
+		eSTENCIL_OP_KEEP,
+		//! Sets the stencil buffer value to 0.
+		eSTENCIL_OP_ZERO,
+		//! Sets the stencil buffer value by the one given
+		eSTENCIL_OP_REPLACE,
+		//! Increments the current stencil buffer value. Clamps to the maximum representable unsigned value.
+		eSTENCIL_OP_INCR,
+		//! Increments the current stencil buffer value. Wraps stencil buffer value to zero when incrementing the maximum representable unsigned value.
+		eSTENCIL_OP_INCR_WRAP,
+		//! Decrements the current stencil buffer value. Clamps to 0.
+		eSTENCIL_OP_DECR,
+		//! Decrements the current stencil buffer value. Wraps stencil buffer value to the maximum representable unsigned value when decrementing a stencil buffer value of zero.
+		eSTENCIL_OP_DECR_WRAP,
+		//! Bitwise inverts the current stencil buffer value.
+		eSTENCIL_OP_INVERT,
+		CASTOR_ENUM_BOUNDS( eSTENCIL_OP, eSTENCIL_OP_KEEP )
 	}	eSTENCIL_OP;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -275,20 +354,32 @@ namespace Castor3D
 	\brief		Enumération des utilisations d'éléments de tampon
 	*/
 	typedef enum eELEMENT_USAGE
-	CASTOR_TYPE( uint32_t )
+		: uint32_t
 	{
-		eELEMENT_USAGE_UNKNOWN = 0x000,			//!< Position coords
-		eELEMENT_USAGE_POSITION = 0x001,		//!< Position coords
-		eELEMENT_USAGE_NORMAL = 0x002,			//!< Normal coords
-		eELEMENT_USAGE_TANGENT = 0x004,			//!< Tangent coords
-		eELEMENT_USAGE_BITANGENT = 0x008,		//!< Bitangent coords
-		eELEMENT_USAGE_DIFFUSE = 0x010,			//!< Diffuse colour
-		eELEMENT_USAGE_TEXCOORDS = 0x020,		//!< Texture coordinates
-		eELEMENT_USAGE_BONE_IDS0 = 0x040,		//!< Bone IDs 0
-		eELEMENT_USAGE_BONE_IDS1 = 0x080,		//!< Bone IDs 1
-		eELEMENT_USAGE_BONE_WEIGHTS0 = 0x100,	//!< Bone weights 0
-		eELEMENT_USAGE_BONE_WEIGHTS1 = 0x200,	//!< Bone weights 1
-		eELEMENT_USAGE_TRANSFORM = 0x400,		//!< Instantiation matrix
+		//! Position coords
+		eELEMENT_USAGE_UNKNOWN = 0x000,
+		//! Position coords
+		eELEMENT_USAGE_POSITION = 0x001,
+		//! Normal coords
+		eELEMENT_USAGE_NORMAL = 0x002,
+		//! Tangent coords
+		eELEMENT_USAGE_TANGENT = 0x004,
+		//! Bitangent coords
+		eELEMENT_USAGE_BITANGENT = 0x008,
+		//! Diffuse colour
+		eELEMENT_USAGE_DIFFUSE = 0x010,
+		//! Texture coordinates
+		eELEMENT_USAGE_TEXCOORDS = 0x020,
+		//! Bone IDs 0
+		eELEMENT_USAGE_BONE_IDS0 = 0x040,
+		//! Bone IDs 1
+		eELEMENT_USAGE_BONE_IDS1 = 0x080,
+		//! Bone weights 0
+		eELEMENT_USAGE_BONE_WEIGHTS0 = 0x100,
+		//! Bone weights 1
+		eELEMENT_USAGE_BONE_WEIGHTS1 = 0x200,
+		//! Instantiation matrix
+		eELEMENT_USAGE_TRANSFORM = 0x400,
 	}	eELEMENT_USAGE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -300,21 +391,33 @@ namespace Castor3D
 	\brief		Enumération des types pour les éléments de tampon
 	*/
 	typedef enum eELEMENT_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eELEMENT_TYPE_1FLOAT,		//!< 1 float (GLSL float)
-		eELEMENT_TYPE_2FLOATS,		//!< 2 floats (GLSL vec2)
-		eELEMENT_TYPE_3FLOATS,		//!< 3 floats (GLSL vec3)
-		eELEMENT_TYPE_4FLOATS,		//!< 4 floats (GLSL vec4)
-		eELEMENT_TYPE_COLOUR,		//!< colour (uint32_t)
-		eELEMENT_TYPE_1INT,			//!< 1 int (4 bytes each, GLSL int)
-		eELEMENT_TYPE_2INTS,		//!< 2 ints (4 bytes each, GLSL ivec2)
-		eELEMENT_TYPE_3INTS,		//!< 3 ints (4 bytes each, GLSL ivec3)
-		eELEMENT_TYPE_4INTS,		//!< 4 ints (4 bytes each, GLSL ivec4)
-		eELEMENT_TYPE_2x2FLOATS,	//!< 2x2 floats (GLSL mat2)
-		eELEMENT_TYPE_3x3FLOATS,	//!< 3x3 floats (GLSL mat3)
-		eELEMENT_TYPE_4x4FLOATS,	//!< 4x4 floats (GLSL mat4)
-		eELEMENT_TYPE_COUNT,
+		//! 1 float (GLSL float)
+		eELEMENT_TYPE_1FLOAT,
+		//! 2 floats (GLSL vec2)
+		eELEMENT_TYPE_2FLOATS,
+		//! 3 floats (GLSL vec3)
+		eELEMENT_TYPE_3FLOATS,
+		//! 4 floats (GLSL vec4)
+		eELEMENT_TYPE_4FLOATS,
+		//! colour (uint32_t)
+		eELEMENT_TYPE_COLOUR,
+		//! 1 int (4 bytes each, GLSL int)
+		eELEMENT_TYPE_1INT,
+		//! 2 ints (4 bytes each, GLSL ivec2)
+		eELEMENT_TYPE_2INTS,
+		//! 3 ints (4 bytes each, GLSL ivec3)
+		eELEMENT_TYPE_3INTS,
+		//! 4 ints (4 bytes each, GLSL ivec4)
+		eELEMENT_TYPE_4INTS,
+		//! 2x2 floats (GLSL mat2)
+		eELEMENT_TYPE_2x2FLOATS,
+		//! 3x3 floats (GLSL mat3)
+		eELEMENT_TYPE_3x3FLOATS,
+		//! 4x4 floats (GLSL mat4)
+		eELEMENT_TYPE_4x4FLOATS,
+		CASTOR_ENUM_BOUNDS( eELEMENT_TYPE, eELEMENT_TYPE_1FLOAT )
 	}	eELEMENT_TYPE;
 
 	inline uint32_t GetSize( eELEMENT_TYPE p_type )
@@ -386,7 +489,7 @@ namespace Castor3D
 	\brief		Enumération des types de mappage de tons.
 	*/
 	typedef enum eTONE_MAPPING_TYPE
-		CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		eTONE_MAPPING_TYPE_LINEAR,
 		eTONE_MAPPING_TYPE_REINHARD,

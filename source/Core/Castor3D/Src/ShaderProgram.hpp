@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -27,8 +27,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor3D
 {
-	template< class Ty > struct FrameVariableCreator;
-	template< class Ty > struct ShaderObjectCreator;
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.6.1.2
@@ -42,8 +40,6 @@ namespace Castor3D
 		: public Castor::OwnedBy< RenderSystem >
 		, public std::enable_shared_from_this< ShaderProgram >
 	{
-		template< class Ty > friend struct FrameVariableCreator;
-		template< class Ty > friend struct ShaderObjectCreator;
 		friend class Castor::TextLoader< Castor3D::ShaderProgram >;
 
 	public:

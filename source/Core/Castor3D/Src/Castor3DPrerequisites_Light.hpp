@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,12 +31,15 @@ namespace Castor3D
 	\brief		Enumération des types de lumières
 	*/
 	typedef enum eLIGHT_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eLIGHT_TYPE_DIRECTIONAL,	//!< Directional light type
-		eLIGHT_TYPE_POINT,			//!< Point light type
-		eLIGHT_TYPE_SPOT,			//!< Spot light type
-		eLIGHT_TYPE_COUNT,
+		//!\~english Directional light type	\~french Lumière directionnelle
+		eLIGHT_TYPE_DIRECTIONAL,
+		//!\~english Point light type	\~french Lumière ponctuelle
+		eLIGHT_TYPE_POINT,
+		//!\~english Spot light type	\~french Lumière projecteur
+		eLIGHT_TYPE_SPOT,
+		CASTOR_ENUM_BOUNDS( eLIGHT_TYPE, eLIGHT_TYPE_DIRECTIONAL )
 	}	eLIGHT_TYPE;
 
 	class Light;

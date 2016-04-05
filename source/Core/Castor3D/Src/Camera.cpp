@@ -259,13 +259,6 @@ namespace Castor3D
 		m_viewport.SetSize( p_size );
 	}
 
-	bool Camera::Select( SceneSPtr p_scene, eSELECTION_MODE p_mode, int p_x, int p_y, stSELECT_RESULT & p_result )
-	{
-		bool l_return = false;
-
-		return l_return;
-	}
-
 	eVIEWPORT_TYPE Camera::GetViewportType()const
 	{
 		return m_viewport.GetType();

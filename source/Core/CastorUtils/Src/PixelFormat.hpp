@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,13 +36,21 @@ namespace Castor
 	typedef enum ePIXEL_COMPONENT
 	: uint8_t
 	{
-		ePIXEL_COMPONENT_RED,		//!< Red
-		ePIXEL_COMPONENT_GREEN,		//!< Green
-		ePIXEL_COMPONENT_BLUE,		//!< Blue
-		ePIXEL_COMPONENT_ALPHA,		//!< Alpha
-		ePIXEL_COMPONENT_LUMINANCE,	//!< Luminance
-		ePIXEL_COMPONENT_DEPTH,		//!< Depth
-		ePIXEL_COMPONENT_STENCIL,	//!< Stencil
+		//!\~english Red	\~french Rouge
+		ePIXEL_COMPONENT_RED,
+		//!\~english Green	\~french Vert
+		ePIXEL_COMPONENT_GREEN,
+		//!\~english Blue	\~french Bleu
+		ePIXEL_COMPONENT_BLUE,
+		//!\~english Alpha	\~french Alpha
+		ePIXEL_COMPONENT_ALPHA,
+		//!\~english Luminance	\~french Luminance
+		ePIXEL_COMPONENT_LUMINANCE,
+		//!\~english Depth	\~french Profondeur
+		ePIXEL_COMPONENT_DEPTH,
+		//!\~english Stencil	\~french Stencil
+		ePIXEL_COMPONENT_STENCIL,
+		CASTOR_ENUM_BOUNDS( ePIXEL_COMPONENT, ePIXEL_COMPONENT_RED )
 	}	ePIXEL_COMPONENT;
 	/*!
 	\author 	Sylvain DOREMUS

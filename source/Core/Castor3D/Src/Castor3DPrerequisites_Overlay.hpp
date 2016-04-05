@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,12 +31,12 @@ namespace Castor3D
 	\brief		Enumération des types d'overlays
 	*/
 	typedef enum eOVERLAY_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		eOVERLAY_TYPE_PANEL,
 		eOVERLAY_TYPE_BORDER_PANEL,
 		eOVERLAY_TYPE_TEXT,
-		eOVERLAY_TYPE_COUNT,
+		CASTOR_ENUM_BOUNDS( eOVERLAY_TYPE, eOVERLAY_TYPE_PANEL )
 	}	eOVERLAY_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -54,6 +54,7 @@ namespace Castor3D
 		eTEXT_WRAPPING_MODE_BREAK,
 		//!\~english The text jumps to next line without cutting words	\~french Le texte passe à la ligne suivante, sans découper les mots
 		eTEXT_WRAPPING_MODE_BREAK_WORDS,
+		CASTOR_ENUM_BOUNDS( eTEXT_WRAPPING_MODE, eTEXT_WRAPPING_MODE_NONE )
 	}	eTEXT_WRAPPING_MODE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -69,6 +70,7 @@ namespace Castor3D
 		eTEXT_TEXTURING_MODE_LETTER,
 		//!\~english The texture is applied on the whole text.	\~french La texture est appliquée sur tout le texte.
 		eTEXT_TEXTURING_MODE_TEXT,
+		CASTOR_ENUM_BOUNDS( eTEXT_TEXTURING_MODE, eTEXT_TEXTURING_MODE_LETTER )
 	}	eTEXT_TEXTURING_MODE;
 	/*!
 	\author		Sylvain DOREMUS
@@ -87,6 +89,7 @@ namespace Castor3D
 		eHALIGN_CENTER,
 		//!\~english Aligned on the right.	\~french Aligné à droite.
 		eHALIGN_RIGHT,
+		CASTOR_ENUM_BOUNDS( eHALIGN, eHALIGN_LEFT )
 	}	eHALIGN;
 	/*!
 	\author		Sylvain DOREMUS
@@ -105,6 +108,7 @@ namespace Castor3D
 		eVALIGN_CENTER,
 		//!\~english Aligned on the bottom.	\~french Aligné en bas.
 		eVALIGN_BOTTOM,
+		CASTOR_ENUM_BOUNDS( eVALIGN, eVALIGN_TOP )
 	}	eVALIGN;
 
 	/*!
@@ -123,6 +127,7 @@ namespace Castor3D
 		eBORDER_POSITION_MIDDLE,
 		//!\~english The border is outside the overlay	\~french La bordure est à l'extérieur de l'incrustation
 		eBORDER_POSITION_EXTERNAL,
+		CASTOR_ENUM_BOUNDS( eBORDER_POSITION, eBORDER_POSITION_INTERNAL )
 	}	eBORDER_POSITION;
 
 	class Overlay;

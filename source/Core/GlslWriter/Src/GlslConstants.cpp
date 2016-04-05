@@ -3,7 +3,6 @@
 #include "GlslWriter.hpp"
 
 using namespace Castor;
-using namespace Castor3D;
 
 namespace GLSL
 {

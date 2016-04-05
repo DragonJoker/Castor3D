@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -38,7 +38,7 @@ namespace Castor
 	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
 	template< typename Object, eMEMDATA_TYPE MemDataType >
-	class ManagedObject
+	class PoolManagedObject
 		: public Object
 	{
 	public:
@@ -54,7 +54,7 @@ namespace Castor
 		 *\param[in]	p_params	Les paramètre du constructeur de Object.
 		 */
 		template< typename ... Params >
-		ManagedObject( Params ... p_params )noexcept
+		PoolManagedObject( Params ... p_params )noexcept
 			: Object( p_params... )
 		{
 		}
@@ -66,7 +66,7 @@ namespace Castor
 		 *\brief		Constructeur par copie.
 		 *\param[in]	p_rhs	L'autre objet.
 		 */
-		ManagedObject( ManagedObject const & p_rhs )noexcept
+		PoolManagedObject( PoolManagedObject const & p_rhs )noexcept
 			: Object( p_rhs )
 		{
 		}
@@ -78,7 +78,7 @@ namespace Castor
 		 *\brief		Constructeur par copie.
 		 *\param[in]	p_rhs	L'autre objet.
 		 */
-		ManagedObject( Object const & p_rhs )noexcept
+		PoolManagedObject( Object const & p_rhs )noexcept
 			: Object( p_rhs )
 		{
 		}
@@ -88,7 +88,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		~ManagedObject()noexcept
+		~PoolManagedObject()noexcept
 		{
 		}
 		/**

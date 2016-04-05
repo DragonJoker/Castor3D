@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_COMPILER_CONFIG_H___
 
 #undef CASTOR_HAS_ALIGNAS
-#undef CASTOR_TYPE
 
 #if defined( _MSC_VER)
 #	if _MSC_VER < 1900

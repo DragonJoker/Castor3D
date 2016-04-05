@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -150,13 +150,23 @@ namespace Castor3D
 
 	protected:
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::DoRender.
+		 *\~english
+		 *\brief		Draws the overlay
+		 *\param[in]	p_renderer	The renderer used to draw this overlay
+		 *\~french
+		 *\brief		Dessine l'incrustation
+		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
 		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
+		 *\~english
+		 *\brief		Updates the vertex buffer.
+		 *\param[in]	p_size	The render target size.
+		 *\~french
+		 *\brief		Met à jour le tampon de sommets.
+		 *\param[in]	p_size	Les dimensions de la cible de rendu.
 		 */
-		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_screenSize );
+		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
 
 	protected:
 		//!\~english The vertex buffer data	\~french Les données du tampon de sommets

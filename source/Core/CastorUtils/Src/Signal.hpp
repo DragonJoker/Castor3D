@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/ )
 
 This program is free software; you can redistribute it and/or modify it under
@@ -25,29 +25,42 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace Castor
 {
 	/*!
-	 *\author		Sylvain Doremu
-	 *\version		0.1.
-	 *\date		10/02/201
-	 *\brief		Basic signal clas
+	*\author	Sylvain Doremus
+	*\version	0.8.0
+	*\date		10/02/2016
+	\~english
+	*\brief		Basic signal class
+	\~french
+	*\brief		Classe basique de signal
 	*/
 	template< typename Function >
 	class Signal
 	{
 	public:
-		/** Connects a new function that will be called if the signal is raised
-		*\param[in]	p_function		The functio
+		/**
+		 *\~english
+		 *\brief		Connects a new function that will be called if the signal is emitted
+		 *\param[in]	p_function	The function
 		 *\return		The function index, in order to be able to disconnect it
-		*/
+		 *\~french
+		 *\brief		Connecte une nouvelle fonction, qui sera appelée lorsque le signal est émis
+		 *\param[in]	p_function	La fonction
+		 *\return		L'indice de la fonction, afin de pouvoir la déconnecter
+		 */
 		uint32_t connect( Function p_function )
 		{
 			uint32_t l_return = uint32_t( m_slots.size() ) + 1;
 			m_slots.insert( std::make_pair( l_return, p_function ) );
 			return l_return;
 		}
-
-		/** Disconnects a function
-		*\param[in]	p_index		The function inde
-		*/
+		/**
+		 *\~english
+		 *\brief		Disconnects a function
+		 *\param[in]	p_index		The function index
+		 *\~french
+		 *\brief		Déconnecte une fonction
+		 *\param[in]	p_index		L'indice de la fonction
+		 */
 		void disconnect( uint32_t p_index )
 		{
 			auto it = m_slots.find( p_index );
@@ -57,9 +70,12 @@ namespace Castor
 				m_slots.erase( it );
 			}
 		}
-
-		/** Raise the signal, calls every connected function
-		*/
+		/**
+		 *\~english
+		 *\brief		Emits the signal, calls every connected function
+		 *\~french
+		 *\brief		Emet le signal, appelant toutes les fonctions connectées
+		 */
 		void operator()()const
 		{
 			for ( auto it = m_slots.begin(); it != m_slots.end(); ++it )
@@ -67,10 +83,14 @@ namespace Castor
 				it->second();
 			}
 		}
-
-		/** Raise the signal, calls every connected function
-		*\param[in]	p_params		The function parameter
-		*/
+		/**
+		 *\~english
+		 *\brief		Emits the signal, calls every connected function
+		 *\param[in]	p_params	The functions parameters
+		 *\~french
+		 *\brief		Emet le signal, appelant toutes les fonctions connectées
+		 *\param[in]	p_params	Les paramètres des fonctions
+		 */
 		template< typename ... Params >
 		void operator()( Params && ... p_params )const
 		{

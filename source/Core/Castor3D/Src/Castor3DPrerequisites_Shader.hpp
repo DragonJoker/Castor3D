@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -32,14 +32,19 @@ namespace Castor3D
 	\remark
 	*/
 	typedef enum eSHADER_MODEL
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eSHADER_MODEL_1,		//!< Vertex shaders
-		eSHADER_MODEL_2,		//!< Pixel shaders
-		eSHADER_MODEL_3,		//!< Geometry shaders
-		eSHADER_MODEL_4,		//!< Tessellation shaders
-		eSHADER_MODEL_5,		//!< Compute shaders
-		eSHADER_MODEL_COUNT,	//!< A count
+		//!\~english Vertex shaders \~french Vertex shaders
+		eSHADER_MODEL_1,
+		//!\~english Pixel shaders \~french Pixel shaders
+		eSHADER_MODEL_2,
+		//!\~english Geometry shaders \~french Geometry shaders
+		eSHADER_MODEL_3,
+		//!\~english Tessellation shaders \~french Tessellation shaders
+		eSHADER_MODEL_4,
+		//!\~english Compute shaders \~french Compute shaders
+		eSHADER_MODEL_5,
+		CASTOR_ENUM_BOUNDS( eSHADER_MODEL, eSHADER_MODEL_1 )
 	}	eSHADER_MODEL;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -50,11 +55,11 @@ namespace Castor3D
 	\remark
 	*/
 	typedef enum eSHADER_LANGUAGE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		eSHADER_LANGUAGE_GLSL,
 		eSHADER_LANGUAGE_AUTO,
-		eSHADER_LANGUAGE_COUNT,
+		CASTOR_ENUM_BOUNDS( eSHADER_LANGUAGE, eSHADER_LANGUAGE_GLSL )
 	}	eSHADER_LANGUAGE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -66,12 +71,13 @@ namespace Castor3D
 	\brief		Enumération des statuts de shader
 	*/
 	typedef enum eSHADER_STATUS
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		eSHADER_STATUS_DONTEXIST,
 		eSHADER_STATUS_NOTCOMPILED,
 		eSHADER_STATUS_ERROR,
 		eSHADER_STATUS_COMPILED,
+		CASTOR_ENUM_BOUNDS( eSHADER_STATUS, eSHADER_STATUS_DONTEXIST )
 	}	eSHADER_STATUS;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -83,11 +89,12 @@ namespace Castor3D
 	\brief		Enumération des statuts de programme
 	*/
 	typedef enum ePROGRAM_STATUS
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		ePROGRAM_STATUS_NOTLINKED,
 		ePROGRAM_STATUS_ERROR,
 		ePROGRAM_STATUS_LINKED,
+		CASTOR_ENUM_BOUNDS( ePROGRAM_STATUS, ePROGRAM_STATUS_NOTLINKED )
 	}	ePROGRAM_STATUS;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -97,7 +104,7 @@ namespace Castor3D
 	\brief		Enumération des types de shader object
 	*/
 	typedef enum eSHADER_TYPE
-	CASTOR_TYPE( int8_t )
+		: int8_t
 	{
 		eSHADER_TYPE_NONE = -1,
 		eSHADER_TYPE_VERTEX,
@@ -106,7 +113,7 @@ namespace Castor3D
 		eSHADER_TYPE_GEOMETRY,
 		eSHADER_TYPE_PIXEL,
 		eSHADER_TYPE_COMPUTE,
-		eSHADER_TYPE_COUNT,
+		CASTOR_ENUM_BOUNDS( eSHADER_TYPE, eSHADER_TYPE_NONE )
 	}	eSHADER_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -131,11 +138,14 @@ namespace Castor3D
 	\brief		Indicateurs à utiliser lors de la recherche de programme généré automatiquement
 	*/
 	typedef enum ePROGRAM_FLAG
-	CASTOR_TYPE( uint32_t )
+		: uint32_t
 	{
-		ePROGRAM_FLAG_INSTANCIATION = 0x01,	//!<\~english Program using instanciation	\~french Programme utilisant l'instanciation
-		ePROGRAM_FLAG_SKINNING = 0x02,		//!<\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
-		ePROGRAM_FLAG_BILLBOARDS = 0x04,	//!<\~english Program used by billboards	\~french Programme utilisé par des billboards
+		//!\~english Program using instanciation	\~french Programme utilisant l'instanciation
+		ePROGRAM_FLAG_INSTANCIATION = 0x01,
+		//!\~english Program using skeleton animations	\~french Programme utilisant les animations par squelette
+		ePROGRAM_FLAG_SKINNING = 0x02,
+		//!\~english Program used by billboards	\~french Programme utilisé par des billboards
+		ePROGRAM_FLAG_BILLBOARDS = 0x04,
 	}	ePROGRAM_FLAG;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -145,24 +155,39 @@ namespace Castor3D
 	\brief		Enumération des dimensions de variable supportées
 	*/
 	typedef enum eVARIABLE_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eVARIABLE_TYPE_ONE,		//!< One variable
-		eVARIABLE_TYPE_VEC1,	//!< 1 variable array
-		eVARIABLE_TYPE_VEC2,	//!< 2 variables array
-		eVARIABLE_TYPE_VEC3,	//!< 3 variables array
-		eVARIABLE_TYPE_VEC4,	//!< 4 variables array
-		eVARIABLE_TYPE_MAT1,	//!< 1x1 matrix
-		eVARIABLE_TYPE_MAT2X2,	//!< 2x2 matrix
-		eVARIABLE_TYPE_MAT2X3,	//!< 2x3 matrix
-		eVARIABLE_TYPE_MAT2X4,	//!< 2x4 matrix
-		eVARIABLE_TYPE_MAT3X2,	//!< 3x2 matrix
-		eVARIABLE_TYPE_MAT3X3,	//!< 3x3 matrix
-		eVARIABLE_TYPE_MAT3X4,	//!< 3x4 matrix
-		eVARIABLE_TYPE_MAT4X2,	//!< 4x2 matrix
-		eVARIABLE_TYPE_MAT4X3,	//!< 4x3 matrix
-		eVARIABLE_TYPE_MAT4X4,	//!< 4x4 matrix
-		eVARIABLE_TYPE_COUNT,
+		//!\~english One variable	\~french Une variable
+		eVARIABLE_TYPE_ONE,
+		//!\~english 1 variable array	\~french Tableau de 1 variable
+		eVARIABLE_TYPE_VEC1,
+		//!\~english 2 variables array	\~french Tableau de 2 variables
+		eVARIABLE_TYPE_VEC2,
+		//!\~english 3 variables array	\~french Tableau de 3 variables
+		eVARIABLE_TYPE_VEC3,
+		//!\~english 4 variables array	\~french Tableau de 4 variables
+		eVARIABLE_TYPE_VEC4,
+		//!\~english 1x1 matrix	\~french Matrice 1x1
+		eVARIABLE_TYPE_MAT1,
+		//!\~english 2x2 matrix	\~french Matrice 2x2
+		eVARIABLE_TYPE_MAT2X2,
+		//!\~english 2x3 matrix	\~french Matrice 2x3
+		eVARIABLE_TYPE_MAT2X3,
+		//!\~english 2x4 matrix	\~french Matrice 2x4
+		eVARIABLE_TYPE_MAT2X4,
+		//!\~english 3x2 matrix	\~french Matrice 3x2
+		eVARIABLE_TYPE_MAT3X2,
+		//!\~english 3x3 matrix	\~french Matrice 3x3
+		eVARIABLE_TYPE_MAT3X3,
+		//!\~english 3x4 matrix	\~french Matrice 3x4
+		eVARIABLE_TYPE_MAT3X4,
+		//!\~english 4x2 matrix	\~french Matrice 4x2
+		eVARIABLE_TYPE_MAT4X2,
+		//!\~english 4x3 matrix	\~french Matrice 4x3
+		eVARIABLE_TYPE_MAT4X3,
+		//!\~english 4x4 matrix	\~french Matrice 4x4
+		eVARIABLE_TYPE_MAT4X4,
+		CASTOR_ENUM_BOUNDS( eVARIABLE_TYPE, eVARIABLE_TYPE_ONE )
 	}	eVARIABLE_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -172,7 +197,7 @@ namespace Castor3D
 	\brief		Enumération des types complets de variable supportées
 	*/
 	typedef enum eFRAME_VARIABLE_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		eFRAME_VARIABLE_TYPE_BOOL,
 		eFRAME_VARIABLE_TYPE_INT,
@@ -240,6 +265,7 @@ namespace Castor3D
 		eFRAME_VARIABLE_TYPE_MAT4X2D,
 		eFRAME_VARIABLE_TYPE_MAT4X3D,
 		eFRAME_VARIABLE_TYPE_MAT4X4D,
+		CASTOR_ENUM_BOUNDS( eFRAME_VARIABLE_TYPE, eFRAME_VARIABLE_TYPE_BOOL )
 	}	eFRAME_VARIABLE_TYPE;
 
 #if CASTOR_USE_DOUBLE

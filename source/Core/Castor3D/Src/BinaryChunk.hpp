@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -35,7 +35,8 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des types de chunks de données binaires
 	*/
-	typedef enum eCHUNK_TYPE CASTOR_TYPE( uint32_t )
+	typedef enum eCHUNK_TYPE
+		: uint32_t
 	{
 		eCHUNK_TYPE_UNKNOWN = MAKE_CHUNK_ID( ' ', ' ', ' ', ' ' ),
 		eCHUNK_TYPE_CBSN_FILE = MAKE_CHUNK_ID( 'C', 'B', 'S', 'N' ),

@@ -24,7 +24,6 @@ namespace Castor3D
 			{
 				l_mapInterpolationModes[ eINTERPOLATION_MODE_NEAREST] = cuT( "nearest" );
 				l_mapInterpolationModes[ eINTERPOLATION_MODE_LINEAR] = cuT( "linear" );
-				l_mapInterpolationModes[ eINTERPOLATION_MODE_ANISOTROPIC] = cuT( "anisotropic" );
 			}
 
 			if ( l_mapWrappingModes.empty() )

@@ -337,7 +337,6 @@ namespace GlRender
 		inline eGL_FRAMEBUFFER_MODE Get( Castor3D::eFRAMEBUFFER_TARGET p_target )const;
 		inline eGL_RENDERBUFFER_ATTACHMENT GetRboAttachment( Castor3D::eATTACHMENT_POINT p_eAttachment )const;
 		inline eGL_RENDERBUFFER_STORAGE GetRboStorage( Castor::ePIXEL_FORMAT p_pixelFormat )const;
-		inline eGL_TWEAK Get( Castor3D::eTWEAK p_eTweak )const;
 		inline eGL_BUFFER Get( Castor3D::eBUFFER p_buffer )const;
 		inline eGL_BUFFER Get( eGL_TEXTURE_ATTACHMENT p_buffer )const;
 		inline eGL_BUFFER Get( eGL_RENDERBUFFER_ATTACHMENT p_buffer )const;
@@ -831,7 +830,6 @@ namespace GlRender
 		eGL_FRAMEBUFFER_MODE FramebufferModes[Castor3D::eFRAMEBUFFER_MODE_COUNT];
 		eGL_RENDERBUFFER_ATTACHMENT RboAttachments[Castor3D::eATTACHMENT_POINT_COUNT];
 		eGL_RENDERBUFFER_STORAGE RboStorages[Castor::ePIXEL_FORMAT_COUNT];
-		eGL_TWEAK Tweaks[Castor3D::eTWEAK_COUNT];
 		eGL_BUFFER Buffers[Castor3D::eBUFFER_COUNT];
 		eGL_FACE Faces[Castor3D::eFACE_COUNT];
 		eGL_FILL_MODE FillModes[3];

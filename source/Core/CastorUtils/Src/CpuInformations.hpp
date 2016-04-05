@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -24,6 +24,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		09/02/2016
+	\~english
+	\brief		Retrieves the basic CPU informations.
+	\~french
+	\brief		Récupère les informations sur le CPU.
+	*/
 	class CpuInformations
 	{
 	public:

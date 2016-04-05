@@ -29,7 +29,8 @@ namespace CastorGui
 	/*!
 	The enumeration which defines all the sections and subsections of a scene file
 	*/
-	typedef enum eSECTION CASTOR_TYPE( uint32_t )
+	typedef enum eSECTION
+		: uint32_t
 	{
 		eSECTION_GUI = MAKE_SECTION_NAME( 'C', 'G', 'U', 'I' ),
 		eSECTION_BUTTON = MAKE_SECTION_NAME( 'B', 'U', 'T', 'N' ),

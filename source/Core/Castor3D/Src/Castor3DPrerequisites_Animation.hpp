@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -34,9 +34,11 @@ namespace Castor3D
 	*/
 	typedef enum eINTERPOLATOR_MODE
 	{
-		eINTERPOLATOR_MODE_NONE,	//!<\~english No interpolation.	\~french Pas d'interpolation.
-		eINTERPOLATOR_MODE_LINEAR,	//!<\~english Linear mode.	\~french Mode linéaire.
-		eINTERPOLATOR_MODE_COUNT
+		//!\~english No interpolation.	\~french Pas d'interpolation.
+		eINTERPOLATOR_MODE_NONE,
+		//!\~english Linear mode.	\~french Mode linéaire.
+		eINTERPOLATOR_MODE_LINEAR,
+		CASTOR_ENUM_BOUNDS( eINTERPOLATOR_MODE, eINTERPOLATOR_MODE_NONE )
 	}	eINTERPOLATOR_MODE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -46,12 +48,16 @@ namespace Castor3D
 	\~french
 	\brief		Enumération des états d'une animation.
 	*/
-	typedef enum eANIMATION_STATE CASTOR_TYPE( uint8_t )
+	typedef enum eANIMATION_STATE
+		: uint8_t
 	{
-		eANIMATION_STATE_PLAYING,	//!< Playing animation state.
-		eANIMATION_STATE_STOPPED,	//!< Stopped animation state.
-		eANIMATION_STATE_PAUSED,	//!< Paused animation state.
-		eANIMATION_STATE_COUNT
+		//!\~english Playing animation state.	\~french Animation en cours de lecture.
+		eANIMATION_STATE_PLAYING,
+		//!\~english Stopped animation state.	\~french Animation stoppée.
+		eANIMATION_STATE_STOPPED,
+		//!\~english Paused animation state.	\~french Animation en pause.
+		eANIMATION_STATE_PAUSED,
+		CASTOR_ENUM_BOUNDS( eANIMATION_STATE, eANIMATION_STATE_PLAYING )
 	}	eANIMATION_STATE;
 	/*!
 	\author 	Sylvain DOREMUS
@@ -64,11 +70,13 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	typedef enum eANIMATION_OBJECT_TYPE CASTOR_TYPE( uint8_t )
+	typedef enum eANIMATION_OBJECT_TYPE
+		: uint8_t
 	{
 		eANIMATION_OBJECT_TYPE_NODE,
 		eANIMATION_OBJECT_TYPE_OBJECT,
 		eANIMATION_OBJECT_TYPE_BONE,
+		CASTOR_ENUM_BOUNDS( eANIMATION_OBJECT_TYPE, eANIMATION_OBJECT_TYPE_NODE )
 	}	eANIMATION_OBJECT_TYPE;
 
 	class Animable;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -363,19 +363,39 @@ namespace Castor3D
 		using TextureCoordinates = std::array< float, 2 >;
 		DECLARE_VECTOR( TextureCoordinates, TextureCoords );
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::DoRender.
+		 *\~english
+		 *\brief		Draws the overlay
+		 *\param[in]	p_renderer	The renderer used to draw this overlay
+		 *\~french
+		 *\brief		Dessine l'incrustation
+		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
 		 */
 		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::DoUpdate.
+		 *\~english
+		 *\brief		Updates the overlay position, size...
+		 *\~french
+		 *\brief		Met à jour la position, taille...
 		 */
 		C3D_API virtual void DoUpdate();
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
+		 *\~english
+		 *\brief		Updates the vertex buffer.
+		 *\param[in]	p_size	The render target size.
+		 *\~french
+		 *\brief		Met à jour le tampon de sommets.
+		 *\param[in]	p_size	Les dimensions de la cible de rendu.
 		 */
 		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
 		/**
-		 *\copydoc		Castor3D::OverlayCategory::DoUpdateBuffer.
+		 *\~english
+		 *\brief		Updates the vertex buffer.
+		 *\param[in]	p_size			The render target size.
+		 *\param[in]	p_generateUvs	The UV generator function.
+		 *\~french
+		 *\brief		Met à jour le tampon de sommets.
+		 *\param[in]	p_size			Les dimensions de la cible de rendu.
+		 *\param[in]	p_generateUvs	La fonction de génération d'UV.
 		 */
 		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size, std::function< void( Castor::Point2d const & p_size, Castor::Rectangle const & p_absolute, Castor::Point4r const & p_fontUV,
 																							   real & p_uvLeft, real & p_uvTop, real & p_uvRight, real & p_uvBottom ) > p_generateUvs );

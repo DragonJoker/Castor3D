@@ -341,8 +341,8 @@ namespace Castor3D
 		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
 		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
+		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
+		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 	}
 
 	RenderTarget::~RenderTarget()

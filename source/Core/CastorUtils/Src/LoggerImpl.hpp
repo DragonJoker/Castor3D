@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -27,27 +27,46 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
-	/** Base class for a message representation
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		27/08/2012
+	\version	0.7.0.0
+	\~english
+	\brief		Base class for a message representation
+	\~french
+	\brief		Classe de base pour la représentation d'un message
 	*/
 	struct MessageBase
 	{
-		/** Constructor.
-		 *\param[in]	type	The message type.
-		 *\param[in]	message	The message text.
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_type		The message type.
+		 *\param[in]	p_message	The message text.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_type		Le type de message.
+		 *\param[in]	p_message	Le texte du message.
 		 */
-		inline MessageBase( ELogType type, std::string const & message )
-			: m_type( type )
-			, m_message( message )
+		inline MessageBase( ELogType p_type, std::string const & p_message )
+			: m_type( p_type )
+			, m_message( p_message )
 		{
 		}
-		/** Destructor.
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructor.
 		 */
 		virtual ~MessageBase()
 		{
 		}
-
-		/** Retrieves the message content.
-		 *\return		The message text.
+		/**
+		 *\~english
+		 *\return		The message content.
+		 *\~french
+		 *\return		Le contenu du message.
 		 */
 		inline std::string const & GetMessage()const
 		{
@@ -59,21 +78,32 @@ namespace Castor
 		//! The message text.
 		std::string m_message;
 	};
-
-	/** Template class, holding character type dependant message text
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		27/08/2012
+	\version	0.7.0.0
+	\~english
+	\brief		Template class, holding character type dependant message text
+	\~french
+	\brief		Classe template contenant le texte du message en fonction du type de caractère
 	*/
 	template< typename Char >
 	struct BasicMessage
 			: public MessageBase
 	{
 		typedef std::basic_string< Char > string_type;
-
-		/** Constructor
-		 *\param[in]	type	The message type.
-		 *\param[in]	message	The message text.
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_type		The message type.
+		 *\param[in]	p_message	The message text.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_type		Le type de message.
+		 *\param[in]	p_message	Le texte du message.
 		 */
-		inline BasicMessage( ELogType type, string_type const & message )
-			: MessageBase( type, string::string_cast< char >( message ) )
+		inline BasicMessage( ELogType p_type, string_type const & p_message )
+			: MessageBase( p_type, string::string_cast< char >( p_message ) )
 		{
 		}
 	};
@@ -92,83 +122,143 @@ namespace Castor
 	\~french
 	\brief		Classe d'aide pour Logger, dépendante du niveau de log
 	*/
-
 	class LoggerImpl
 	{
 	private:
 		DECLARE_MAP( void *, LogCallback, LoggerCallback );
 
 	public:
-		/** Constructor
-		*/
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
 		LoggerImpl();
-
-		/** Destructor
-		*/
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
 		virtual ~LoggerImpl();
-
-		/** Initialises the headers, from the given logger
-		*\param[in]	logger		The logge
-		*/
-		void Initialise( Logger const & logger );
-
-		/** Cleans up the class
-		*/
+		/**
+		 *\~english
+		 *\brief		Initialises the headers, from the given logger
+		 *\param[in]	p_logger	The logger
+		 *\~french
+		 *\brief		Initialise les en-têtes, depuis le logger donné
+		 *\param[in]	p_logger	Le logger
+		 */
+		void Initialise( Logger const & p_logger );
+		/**
+		 *\~english
+		 *\brief		Cleans up the instance
+		 *\~french
+		 *\brief		Nettoie l'instance
+		 */
 		void Cleanup();
-
-		/** Registers a callback
-		*/
-		void RegisterCallback( LogCallback p_pfnCallback, void * p_pCaller );
-
-		/** Unregisters a callback
-		*/
-		void UnregisterCallback( void * p_pCaller );
-
-		/** Sets the file for given log level
-		*\param[in]	logFilePath		The file pat
-		*\param[in]	logLevel		The log level
-			If ELogType_COUNT, sets the file for every log level
-		*/
-		void SetFileName( String const & logFilePath, ELogType logLevel );
-
-		/** Prints a message to the console
-		*\param[in]	logLevel		The log level
-		*\param[in]	message		The message
-		*/
-		void PrintMessage( ELogType logLevel, std::string const & message );
-
-		/** Prints a message to the console
-		*\param[in]	logLevel		The log level
-		*\param[in]	message		The message
-		*/
-		void PrintMessage( ELogType logLevel, std::wstring const & message );
-
-		/** Logs a message queue
-		*\param[in]	queue		The message
-		*/
-		void LogMessageQueue( MessageQueue const & queue );
+		/**
+		 *\~english
+		 *\brief		Registers a callback
+		 *\param[in]	p_callback	The callback
+		 *\param[in]	p_caller	The caller
+		 *\~french
+		 *\brief		Enregistre un callback
+		 *\param[in]	p_callback	Le callback
+		 *\param[in]	p_caller	L'appelant
+		 */
+		void RegisterCallback( LogCallback p_callback, void * p_caller );
+		/**
+		 *\~english
+		 *\brief		Unregisters a callback
+		 *\param[in]	p_caller	The caller
+		 *\~french
+		 *\brief		Désenregistre un callback
+		 *\param[in]	p_caller	L'appelant
+		 */
+		void UnregisterCallback( void * p_caller );
+		/**
+		 *\~english
+		 *\brief		Sets the file for given log level
+		 *\param[in]	p_logFilePath	The file path
+		 *\param[in]	p_logLevel		The log level. If ELogType_COUNT, sets the file for every log level
+		 *\~french
+		 *\brief		Définit le fichier pour le niveau de log donné
+		 *\param[in]	p_logFilePath	Le chemin du fichier
+		 *\param[in]	p_logLevel		Le niveau de log. Si ELogType_COUNT, définit le fichier pour tous les niveaux
+		 */
+		void SetFileName( String const & p_logFilePath, ELogType p_logLevel );
+		/**
+		 *\~english
+		 *\brief		Prints a message to the console
+		 *\param[in]	p_logLevel	The log level
+		 *\param[in]	p_message	The message
+		 *\~french
+		 *\brief		Affiche un message dans la console
+		 *\param[in]	p_logLevel	Le niveau de log
+		 *\param[in]	p_message	Le message
+		 */
+		void PrintMessage( ELogType p_logLevel, std::string const & p_message );
+		/**
+		 *\~english
+		 *\brief		Prints a message to the console
+		 *\param[in]	p_logLevel	The log level
+		 *\param[in]	p_message	The message
+		 *\~french
+		 *\brief		Affiche un message dans la console
+		 *\param[in]	p_logLevel	Le niveau de log
+		 *\param[in]	p_message	Le message
+		 */
+		void PrintMessage( ELogType p_logLevel, std::wstring const & p_message );
+		/**
+		 *\~english
+		 *\brief		Logs a message queue
+		 *\param[in]	p_queue	The message queue
+		 *\~french
+		 *\brief		Logge une file de messages
+		 *\param[in]	p_queue	La file de messages
+		 */
+		void LogMessageQueue( MessageQueue const & p_queue );
 
 	private:
-		/** Prints a message to the console
-		*\param[in]	logLevel		The log level
-		*\param[in]	message		The message
-		*/
-		void DoPrintMessage( ELogType logLevel, String const & message );
-
-		/** Prints a line to the console
-		*\param[in]	line		The lin
-		*\param[in]	logType		The log leve
-		*/
-		void DoPrintLine( String const & line, ELogType logType );
-
-		/** Logs a line in the given stream
-		*\param[in]	timestamp		The line timestam
-		*\param[in]	line		The lin
-		@param stream
-			The stream
-		*\param[in]	logType		The log leve
-		*/
-		void DoLogLine( String const & timestamp, String const & line, StringStream & stream, ELogType logType );
+		/**
+		 *\~english
+		 *\brief		Prints a message to the console
+		 *\param[in]	p_logLevel	The log level
+		 *\param[in]	p_message	The message
+		 *\~french
+		 *\brief		Affiche un message dans la console
+		 *\param[in]	p_logLevel	Le niveau de log
+		 *\param[in]	p_message	Le message
+		 */
+		void DoPrintMessage( ELogType p_logLevel, String const & p_message );
+		/**
+		 *\~english
+		 *\brief		Prints a line to the console
+		 *\param[in]	p_line		The line
+		 *\param[in]	p_logLevel	The log level
+		 *\~french
+		 *\brief		Affiche une ligne de texte sur la console
+		 *\param[in]	p_line		La ligne de texte
+		 *\param[in]	p_logLevel	Le niveau de log
+		 */
+		void DoPrintLine( String const & p_line, ELogType p_logLevel );
+		/**
+		 *\~english
+		 *\brief		Logs a line in the given stream
+		 *\param[in]	p_timestamp	The line timestamp
+		 *\param[in]	p_line		The line
+		 *\param[in]	p_stream	The stream
+		 *\param[in]	p_logLevel	The log level
+		 *\~french
+		 *\brief		Affiche une ligne de texte dans le flux donné
+		 *\param[in]	p_timestamp	Le timestamp de la ligne
+		 *\param[in]	p_line		La ligne de texte
+		 *\param[in]	p_stream	Le flux
+		 *\param[in]	p_logLevel	Le niveau de log
+		 */
+		void DoLogLine( String const & p_timestamp, String const & p_line, StringStream & p_stream, ELogType p_logLevel );
 
 	private:
 		//! The files paths, per log level

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -66,11 +66,17 @@ namespace Castor3D
 		 */
 		C3D_API ~PluginManager();
 		/**
-		 *\copydoc		Castor::Manager::Cleanup
+		 *\~english
+		 *\brief		Sets all the elements to be cleaned up.
+		 *\~french
+		 *\brief		Met tous les éléments à nettoyer.
 		 */
 		C3D_API void Cleanup();
 		/**
-		 *\copydoc		Castor::Manager::Clear
+		 *\~english
+		 *\brief		Flushes the collection.
+		 *\~french
+		 *\brief		Vide la collection.
 		 */
 		C3D_API void Clear();
 		/**

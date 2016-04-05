@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -32,7 +32,7 @@ namespace Castor
 	\brief		Enumération des types de paramètres pour une fonction d'analyse.
 	*/
 	typedef enum ePARAMETER_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		ePARAMETER_TYPE_TEXT,
 		ePARAMETER_TYPE_NAME,
@@ -66,7 +66,7 @@ namespace Castor
 		ePARAMETER_TYPE_POSITION,
 		ePARAMETER_TYPE_RECTANGLE,
 		ePARAMETER_TYPE_COLOUR,
-		ePARAMETER_TYPE_COUNT,
+		CASTOR_ENUM_BOUNDS( ePARAMETER_TYPE, ePARAMETER_TYPE_TEXT )
 	}	ePARAMETER_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS

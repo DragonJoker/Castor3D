@@ -19,7 +19,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GLSL_WRITER_PREREQUISITES_H___
 
 #include <CastorUtils.hpp>
-#include <Castor3DPrerequisites.hpp>
 
 #ifdef _WIN32
 #	ifdef GlslWriter_EXPORTS

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -206,8 +206,6 @@ typedef wchar_t ychar;
 #if !defined CU_PARAM_UNUSED
 #	define CU_PARAM_UNUSED( x )
 #endif
-
-#define CASTOR_TYPE( x ) :x
 
 #define CASTOR_ENUM_BOUNDS( EnumName, EnumMin )\
 	EnumName##_COUNT,\

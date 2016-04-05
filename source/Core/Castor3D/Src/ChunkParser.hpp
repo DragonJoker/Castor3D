@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -36,8 +36,9 @@ namespace Castor3D
 	\~french
 	\brief		Videur de chunk
 	*/
-	struct ChunkParserBase
+	class ChunkParserBase
 	{
+	public:
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
@@ -73,54 +74,56 @@ namespace Castor3D
 	\~french
 	\brief		Videur de chunk
 	*/
-	template< typename T > struct ChunkParser
-			:	public ChunkParserBase
+	template< typename T >
+	class ChunkParser
+		: public ChunkParserBase
 	{
+	public:
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_pValues	Receives the parsed values
-		 *\param[out]	p_count	The values count
+		 *\param[out]	p_values	Receives the parsed values
+		 *\param[out]	p_count		The values count
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_pValues	Reçoit les valeurs
-		 *\param[out]	p_count	Le compte des valeurs
+		 *\param[out]	p_values	Reçoit les valeurs
+		 *\param[out]	p_count		Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		inline bool operator()( T * p_pValues, uint32_t p_count, BinaryChunk & p_chunk )
+		inline bool operator()( T * p_values, uint32_t p_count, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_pValues ), p_count * sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_values ), p_count * sizeof( T ), p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_value	Receives the parsed values
+		 *\param[out]	p_values	Receives the parsed values
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_value	Reçoit les valeurs
+		 *\param[out]	p_values	Reçoit les valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< uint32_t Count >
-		inline bool operator()( T( & p_value )[Count], BinaryChunk & p_chunk )
+		inline bool operator()( T( & p_values )[Count], BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value ), Count * sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_values ), Count * sizeof( T ), p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
 		 *\param[out]	p_value	Receives the parsed value
-		 *\param[in]	p_chunk		The chunk containing the value
+		 *\param[in]	p_chunk	The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Récupère une valeur à partir d'un chunk
 		 *\param[out]	p_value	Reçoit la valeur
-		 *\param[in]	p_chunk		Le chunk contenant la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( T & p_value, BinaryChunk & p_chunk )
@@ -129,13 +132,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::String
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::String
 	*/
-	template<> struct ChunkParser< Castor::String >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::String >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::String & p_value, BinaryChunk & p_chunk )
 		{
@@ -157,13 +177,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Path
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Path
 	*/
-	template<> struct ChunkParser< Castor::Path >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Path >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Path & p_value, BinaryChunk & p_chunk )
 		{
@@ -185,13 +222,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2f
 	*/
-	template<> struct ChunkParser< Castor::Point2f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point2f & p_value, BinaryChunk & p_chunk )
 		{
@@ -199,13 +253,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3f
 	*/
-	template<> struct ChunkParser< Castor::Point3f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point3f & p_value, BinaryChunk & p_chunk )
 		{
@@ -213,13 +284,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4f
 	*/
-	template<> struct ChunkParser< Castor::Point4f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point4f & p_value, BinaryChunk & p_chunk )
 		{
@@ -227,13 +315,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2d
 	*/
-	template<> struct ChunkParser< Castor::Point2d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point2d & p_value, BinaryChunk & p_chunk )
 		{
@@ -241,13 +346,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3d
 	*/
-	template<> struct ChunkParser< Castor::Point3d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point3d & p_value, BinaryChunk & p_chunk )
 		{
@@ -255,13 +377,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4d
 	*/
-	template<> struct ChunkParser< Castor::Point4d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point4d & p_value, BinaryChunk & p_chunk )
 		{
@@ -269,13 +408,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2i
 	*/
-	template<> struct ChunkParser< Castor::Point2i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point2i & p_value, BinaryChunk & p_chunk )
 		{
@@ -283,13 +439,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3i
 	*/
-	template<> struct ChunkParser< Castor::Point3i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point3i & p_value, BinaryChunk & p_chunk )
 		{
@@ -297,13 +470,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4i
 	*/
-	template<> struct ChunkParser< Castor::Point4i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point4i & p_value, BinaryChunk & p_chunk )
 		{
@@ -311,13 +501,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2ui
 	*/
-	template<> struct ChunkParser< Castor::Point2ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point2ui & p_value, BinaryChunk & p_chunk )
 		{
@@ -325,13 +532,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3ui
 	*/
-	template<> struct ChunkParser< Castor::Point3ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point3ui & p_value, BinaryChunk & p_chunk )
 		{
@@ -339,13 +563,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4ui
 	*/
-	template<> struct ChunkParser< Castor::Point4ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Point4ui & p_value, BinaryChunk & p_chunk )
 		{
@@ -353,13 +594,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2f
 	*/
-	template<> struct ChunkParser< Castor::Coords2f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords2f & p_value, BinaryChunk & p_chunk )
 		{
@@ -367,13 +625,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3f
 	*/
-	template<> struct ChunkParser< Castor::Coords3f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords3f & p_value, BinaryChunk & p_chunk )
 		{
@@ -381,13 +656,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4f
 	*/
-	template<> struct ChunkParser< Castor::Coords4f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords4f & p_value, BinaryChunk & p_chunk )
 		{
@@ -395,13 +687,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2d
 	*/
-	template<> struct ChunkParser< Castor::Coords2d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords2d & p_value, BinaryChunk & p_chunk )
 		{
@@ -409,13 +718,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3d
 	*/
-	template<> struct ChunkParser< Castor::Coords3d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords3d & p_value, BinaryChunk & p_chunk )
 		{
@@ -423,13 +749,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4d
 	*/
-	template<> struct ChunkParser< Castor::Coords4d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords4d & p_value, BinaryChunk & p_chunk )
 		{
@@ -437,13 +780,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2i
 	*/
-	template<> struct ChunkParser< Castor::Coords2i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords2i & p_value, BinaryChunk & p_chunk )
 		{
@@ -451,13 +811,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3i
 	*/
-	template<> struct ChunkParser< Castor::Coords3i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords3i & p_value, BinaryChunk & p_chunk )
 		{
@@ -465,13 +842,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4i
 	*/
-	template<> struct ChunkParser< Castor::Coords4i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords4i & p_value, BinaryChunk & p_chunk )
 		{
@@ -479,13 +873,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2ui
 	*/
-	template<> struct ChunkParser< Castor::Coords2ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords2ui & p_value, BinaryChunk & p_chunk )
 		{
@@ -493,13 +904,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3ui
 	*/
-	template<> struct ChunkParser< Castor::Coords3ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords3ui & p_value, BinaryChunk & p_chunk )
 		{
@@ -507,13 +935,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4ui
 	*/
-	template<> struct ChunkParser< Castor::Coords4ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Coords4ui & p_value, BinaryChunk & p_chunk )
 		{
@@ -521,13 +966,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix2x2f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix2x2f
 	*/
-	template<> struct ChunkParser< Castor::Matrix2x2f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix2x2f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Matrix2x2f & p_value, BinaryChunk & p_chunk )
 		{
@@ -535,13 +997,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix3x3f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix3x3f
 	*/
-	template<> struct ChunkParser< Castor::Matrix3x3f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix3x3f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Matrix3x3f & p_value, BinaryChunk & p_chunk )
 		{
@@ -549,13 +1028,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix4x4f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix4x4f
 	*/
-	template<> struct ChunkParser< Castor::Matrix4x4f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix4x4f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Matrix4x4f & p_value, BinaryChunk & p_chunk )
 		{
@@ -563,13 +1059,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix2x2d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix2x2d
 	*/
-	template<> struct ChunkParser< Castor::Matrix2x2d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix2x2d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Matrix2x2d & p_value, BinaryChunk & p_chunk )
 		{
@@ -577,13 +1090,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix3x3d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix3x3d
 	*/
-	template<> struct ChunkParser< Castor::Matrix3x3d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix3x3d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Matrix3x3d & p_value, BinaryChunk & p_chunk )
 		{
@@ -591,13 +1121,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix4x4d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix4x4d
 	*/
-	template<> struct ChunkParser< Castor::Matrix4x4d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix4x4d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Matrix4x4d & p_value, BinaryChunk & p_chunk )
 		{
@@ -605,13 +1152,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Colour
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Colour
 	*/
-	template<> struct ChunkParser< Castor::Colour >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Colour >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Colour & p_value, BinaryChunk & p_chunk )
 		{
@@ -619,13 +1183,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Size
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Size
 	*/
-	template<> struct ChunkParser< Castor::Size >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Size >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Size & p_value, BinaryChunk & p_chunk )
 		{
@@ -633,13 +1214,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Position
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Position
 	*/
-	template<> struct ChunkParser< Castor::Position >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Position >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Position & p_value, BinaryChunk & p_chunk )
 		{
@@ -647,13 +1245,30 @@ namespace Castor3D
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkFiller
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Quaternion
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Quaternion
 	*/
-	template<> struct ChunkParser< Castor::Quaternion >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Quaternion >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkFiller::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		inline bool operator()( Castor::Quaternion & p_value, BinaryChunk & p_chunk )
 		{

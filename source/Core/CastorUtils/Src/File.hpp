@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -131,17 +131,26 @@ namespace Castor
 		\brief Enumérateur des modes d'ouverture
 		*/
 		typedef enum eCREATE_MODE
-		CASTOR_TYPE( uint32_t )
+			: uint32_t
 		{
-			eCREATE_MODE_USER_READ = 0x00000001,	//!<\~english Owner can read	\~french Le propriétaire peut lire
-			eCREATE_MODE_USER_WRITE = 0x00000002,	//!<\~english Owner can write	\~french Le propriétaire peut écrire
-			eCREATE_MODE_USER_EXEC = 0x00000004,	//!<\~english Owner can execute	\~french Le propriétaire peut exécuter
-			eCREATE_MODE_GROUP_READ = 0x00000010,	//!<\~english Owner group can read	\~french Le groupe du propriétaire peut lire
-			eCREATE_MODE_GROUP_WRITE = 0x00000020,	//!<\~english Owner group can write	\~french Le groupe du propriétaire peut écrire
-			eCREATE_MODE_GROUP_EXEC = 0x00000040,	//!<\~english Owner group can execute	\~french Le groupe du propriétaire peut exécuter
-			eCREATE_MODE_OTHERS_READ = 0x00000100,	//!<\~english Others can read	\~french Les autres peuvent lire
-			eCREATE_MODE_OTHERS_WRITE = 0x00000200,	//!<\~english Others can write	\~french Les autres peuvent écrire
-			eCREATE_MODE_OTHERS_EXEC = 0x00000400,	//!<\~english Others can execute	\~french Les autres peuvent exécuter
+			//!\~english Owner can read	\~french Le propriétaire peut lire
+			eCREATE_MODE_USER_READ = 0x00000001,
+			//!\~english Owner can write	\~french Le propriétaire peut écrire
+			eCREATE_MODE_USER_WRITE = 0x00000002,
+			//!\~english Owner can execute	\~french Le propriétaire peut exécuter
+			eCREATE_MODE_USER_EXEC = 0x00000004,
+			//!\~english Owner group can read	\~french Le groupe du propriétaire peut lire
+			eCREATE_MODE_GROUP_READ = 0x00000010,
+			//!\~english Owner group can write	\~french Le groupe du propriétaire peut écrire
+			eCREATE_MODE_GROUP_WRITE = 0x00000020,
+			//!\~english Owner group can execute	\~french Le groupe du propriétaire peut exécuter
+			eCREATE_MODE_GROUP_EXEC = 0x00000040,
+			//!\~english Others can read	\~french Les autres peuvent lire
+			eCREATE_MODE_OTHERS_READ = 0x00000100,
+			//!\~english Others can write	\~french Les autres peuvent écrire
+			eCREATE_MODE_OTHERS_WRITE = 0x00000200,
+			//!\~english Others can execute	\~french Les autres peuvent exécuter
+			eCREATE_MODE_OTHERS_EXEC = 0x00000400,
 		}	eCREATE_MODE;
 		//!\~english Read, write and execution rights for owner	\~french Droits en lecture, écriture et exécution pour le propriétaire
 		static const uint32_t eCREATE_MODE_USER_RWX = eCREATE_MODE_USER_READ | eCREATE_MODE_USER_WRITE | eCREATE_MODE_USER_EXEC;
@@ -156,14 +165,18 @@ namespace Castor
 		\brief Enumérateur des modes d'ouverture
 		*/
 		typedef enum eOPEN_MODE
-		CASTOR_TYPE( uint32_t )
+			: uint32_t
 		{
-			eOPEN_MODE_DUMMY = 0x00000000,	//!<\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
-			eOPEN_MODE_READ = 0x00000001,	//!<\~english Read open mode					\~french Mode d'ouverture en lecture
-			eOPEN_MODE_WRITE = 0x00000002,	//!<\~english Write open mode					\~french Mode d'ouverture en création / écriture
-			eOPEN_MODE_APPEND = 0x00000004,	//!<\~english Append open mode					\~french Mode d'ouverture en écriture en fin de fichier
-			eOPEN_MODE_BINARY = 0x00000008,	//!<\~english Binary open mode					\~french Mode d'ouverture en binaire
-			eOPEN_MODE_COUNT
+			//!\~english Dummy open mode, not to be used	\~french Mode d'ouverture 'dummy', à ne pas utiliser
+			eOPEN_MODE_DUMMY = 0x00000000,
+			//!\~english Read open mode	\~french Mode d'ouverture en lecture
+			eOPEN_MODE_READ = 0x00000001,
+			//!\~english Write open mode	\~french Mode d'ouverture en création / écriture
+			eOPEN_MODE_WRITE = 0x00000002,
+			//!\~english Append open mode	\~french Mode d'ouverture en écriture en fin de fichier
+			eOPEN_MODE_APPEND = 0x00000004,
+			//!\~english Binary open mode	\~french Mode d'ouverture en binaire
+			eOPEN_MODE_BINARY = 0x00000008,
 		}	eOPEN_MODE;
 		/*!
 		\~english
@@ -172,11 +185,15 @@ namespace Castor
 		\brief Modes d'offset pour la fonction seek
 		*/
 		typedef enum eOFFSET_MODE
-		CASTOR_TYPE( uint8_t )
+			: uint8_t
 		{
-			eOFFSET_MODE_BEGINNING,	//!<\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
-			eOFFSET_MODE_CURRENT,	//!<\~english The offset is set from the current position		\~french L'offset est défini par rapport à la position actuelle
-			eOFFSET_MODE_END,		//!<\~english The offset is set from the end of the file		\~french L'offset est défini par rapport à la fin du fichier
+			//!\~english The offset is set from the beginning of the file	\~french L'offset est défini par rapport au début du fichier
+			eOFFSET_MODE_BEGINNING,
+			//!\~english The offset is set from the current position	\~french L'offset est défini par rapport à la position actuelle
+			eOFFSET_MODE_CURRENT,
+			//!\~english The offset is set from the end of the file	\~french L'offset est défini par rapport à la fin du fichier
+			eOFFSET_MODE_END,
+			CASTOR_ENUM_BOUNDS( eOFFSET_MODE, eOFFSET_MODE_BEGINNING )
 		}	eOFFSET_MODE;
 		/*!
 		\~english
@@ -185,12 +202,17 @@ namespace Castor
 		\brief Mode d'encodage des fichiers texte
 		*/
 		typedef enum eENCODING_MODE
-		CASTOR_TYPE( uint8_t )
+			: uint8_t
 		{
-			eENCODING_MODE_AUTO,	//!<\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
-			eENCODING_MODE_ASCII,	//!<\~english ASCII text encoding		\~french Encodage de texte en ASCII
-			eENCODING_MODE_UTF8,	//!<\~english UTF8 text encoding		\~french Encodage de texte en UTF8
-			eENCODING_MODE_UTF16,	//!<\~english UTF16 text encoding		\~french Encodage de texte en UTF16
+			//!\~english Auto select text encoding	\~french Encodage de texte en sélection automatique
+			eENCODING_MODE_AUTO,
+			//!\~english ASCII text encoding	\~french Encodage de texte en ASCII
+			eENCODING_MODE_ASCII,
+			//!\~english UTF8 text encoding	\~french Encodage de texte en UTF8
+			eENCODING_MODE_UTF8,
+			//!\~english UTF16 text encoding	\~french Encodage de texte en UTF16
+			eENCODING_MODE_UTF16,
+			CASTOR_ENUM_BOUNDS( eENCODING_MODE, eENCODING_MODE_AUTO )
 		}	eENCODING_MODE;
 
 	protected:

@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -27,13 +27,18 @@ namespace Castor
 	\brief		Définit les différents types de log
 	*/
 	typedef enum ELogType
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		ELogType_DEBUG,		//!<\~english Debug type log		\~french Log de type debug
-		ELogType_INFO,		//!<\~english Information type log	\~french Log de type information
-		ELogType_WARNING,	//!<\~english Warning type log		\~french Log de type avertissement
-		ELogType_ERROR,		//!<\~english Error type log		\~french Log de type erreur
-		ELogType_COUNT,		//!<\~english Log types count		\~french Compte des logs
+		//!\~english Debug type log	\~french Log de type debug
+		ELogType_DEBUG,
+		//!\~english Information type log	\~french Log de type information
+		ELogType_INFO,
+		//!\~english Warning type log	\~french Log de type avertissement
+		ELogType_WARNING,
+		//!\~english Error type log	\~french Log de type erreur
+		ELogType_ERROR,
+		//!\~english Log types count	\~french Compte des logs
+		ELogType_COUNT,
 	}	ELogType;
 }
 

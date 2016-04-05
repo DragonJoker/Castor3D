@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -22,7 +22,16 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
-	template< typename T1, typename T2, uint32_t C1, uint32_t C2 > struct PtOperators
+	/*!
+	\author		Sylvain DOREMUS
+	\date		15/01/2016
+	\~english
+	\brief		Point operators.
+	\~french
+	\brief		Opérateurs de Point.
+	*/
+	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
+	struct PtOperators
 	{
 		template< typename PtType1 >
 		static inline Point< T1, C1 > add( PtType1 const & p_ptA, T2 const & p_scalar );
@@ -60,8 +69,16 @@ namespace Castor
 		template< typename PtType1, typename PtType2 >
 		static inline Point< T1, C1 > div( PtType1 const & p_ptA, PtType2 const & p_ptB );
 	};
-
-	template< typename T1, typename T2, uint32_t C1, uint32_t C2 > struct PtAssignOperators
+	/*!
+	\author		Sylvain DOREMUS
+	\date		15/01/2016
+	\~english
+	\brief		Point assignment operators.
+	\~french
+	\brief		Opérateurs d'affectation de Point.
+	*/
+	template< typename T1, typename T2, uint32_t C1, uint32_t C2 >
+	struct PtAssignOperators
 	{
 		template< typename PtType1 >
 		static inline PtType1 & add( PtType1 & p_ptA, T2 const & p_scalar );

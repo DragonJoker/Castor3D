@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -35,12 +35,15 @@ namespace Castor
 	\remark		Enumère les différents types d'intersection entre 2 rectangles
 	*/
 	typedef enum eINTERSECTION
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eINTERSECTION_IN,			//!<\~english Completely inside		\~french Complètement à l'intérieur
-		eINTERSECTION_OUT,			//!<\~english Completely outside	\~french Complètement à l'extérieur
-		eINTERSECTION_INTERSECT,	//!<\~english Intersection			\~french Intersection
-		eINTERSECTION_COUNT,
+		//!\~english Completely inside	\~french Complètement à l'intérieur
+		eINTERSECTION_IN,
+		//!\~english Completely outside	\~french Complètement à l'extérieur
+		eINTERSECTION_OUT,
+		//!\~english Intersection	\~french Intersection
+		eINTERSECTION_INTERSECT,
+		CASTOR_ENUM_BOUNDS( eINTERSECTION, eINTERSECTION_IN )
 	}	eINTERSECTION;
 	//!
 	/*!

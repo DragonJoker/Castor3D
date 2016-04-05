@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -44,7 +44,8 @@ namespace Castor
 		ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL,
 		ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES,
 		ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE,
-	}	eERROR_TYPE;
+		CASTOR_ENUM_BOUNDS( ePOOL_ERROR_TYPE, ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY )
+	}	ePOOL_ERROR_TYPE;
 
 	/*!
 	\author		Sylvain DOREMUS
@@ -55,7 +56,7 @@ namespace Castor
 	\~french
 	\brief		Texte et fonction de report d'erreur.
 	*/
-	template< eERROR_TYPE ErrorType > struct Error;
+	template< ePOOL_ERROR_TYPE ErrorType > struct Error;
 
 	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.
 	template<>
@@ -242,7 +243,7 @@ namespace Castor
 	 *\param[in]	p_name		Le texte de l'erreur.
 	 *\param[in]	p_params	Les paramètres de l'erreur.
 	 */
-	template< eERROR_TYPE ErrorType, typename ... Params >
+	template< ePOOL_ERROR_TYPE ErrorType, typename ... Params >
 	static inline void ReportError( char const * const p_name, Params ... p_params )
 	{
 		std::cerr << "*** " << p_name << " *** ";
@@ -257,7 +258,7 @@ namespace Castor
 	\~french
 	\brief		Exception de pool.
 	*/
-	template< eERROR_TYPE ErrorType >
+	template< ePOOL_ERROR_TYPE ErrorType >
 	class PoolMemoryException
 		: public Exception
 	{
