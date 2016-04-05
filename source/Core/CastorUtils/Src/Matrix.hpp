@@ -114,10 +114,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Links the data pointer to the one given in parameter
-		 *\remark		The matrix loses ownership of it's data
+		 *\remarks		The matrix loses ownership of it's data
 		 *\~french
 		 *\brief		Lie les données de cette matrice à celles données en paramètre
-		 *\remark		La matrice perd la responsabilité de ses données
+		 *\remarks		La matrice perd la responsabilité de ses données
 		 */
 		void link( T * p_data )
 		{
@@ -232,10 +232,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Links the data pointer to the one given in parameter
-		 *\remark		The matrix loses ownership of it's data
+		 *\remarks		The matrix loses ownership of it's data
 		 *\~french
 		 *\brief		Lie les données de cette matrice à celles données en paramètre
-		 *\remark		La matrice perd la responsabilité de ses données
+		 *\remarks		La matrice perd la responsabilité de ses données
 		 */
 		void link( float * p_data )
 		{
@@ -422,11 +422,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves a row
-		 *\param[in]	p_row		The row index
+		 *\param[in]	p_index		The row index
 		 *\param[out]	p_result	Receives the row values
 		 *\~french
 		 *\brief		Récupère une ligne
-		 *\param[in]	p_row		L'index de la ligne
+		 *\param[in]	p_index		L'index de la ligne
 		 *\param[out]	p_result	Reçoit les valeurs de la ligne
 		 */
 		void get_row( uint32_t p_index, row_type & p_result )const;
@@ -444,12 +444,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Sets the values for the given column
-		 *\param[in]	p_column	The column to affect
-		 *\param[in]	p_col		The values
+		 *\param[in]	p_index	The column to affect
+		 *\param[in]	p_col	The values
 		 *\~french
 		 *\brief		Définit les valeurs d'une colonne donnée
-		 *\param[in]	p_column	La colonne à affecter
-		 *\param[in]	p_col		Les valeurs
+		 *\param[in]	p_index	La colonne à affecter
+		 *\param[in]	p_col	Les valeurs
 		 */
 		void set_column( uint32_t p_index, Point< value_type, Rows > const & p_col );
 		/**
@@ -561,10 +561,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Links the data pointer to the one given in parameter
-		 *\remark		The matrix loses ownership of it's data
+		 *\remarks		The matrix loses ownership of it's data
 		 *\~french
 		 *\brief		Lie les données de cette matrice à celles données en paramètre
-		 *\remark		La matrice perd la maîtrise de ses données
+		 *\remarks		La matrice perd la maîtrise de ses données
 		 */
 		void link( T * p_coords );
 		/**

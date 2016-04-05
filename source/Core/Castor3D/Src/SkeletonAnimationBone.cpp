@@ -26,7 +26,7 @@ namespace Castor3D
 
 		if ( l_return )
 		{
-			l_return = AnimationObjectBase::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = AnimationObject::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
 		if ( l_return )
@@ -58,7 +58,7 @@ namespace Castor3D
 					break;
 
 				default:
-					l_return = AnimationObjectBase::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+					l_return = AnimationObject::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 					break;
 				}
 			}
@@ -75,7 +75,7 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	SkeletonAnimationBone::SkeletonAnimationBone()
-		: AnimationObjectBase( eANIMATION_OBJECT_TYPE_BONE )
+		: AnimationObject( eANIMATION_OBJECT_TYPE_BONE )
 	{
 	}
 
@@ -98,7 +98,7 @@ namespace Castor3D
 		}
 	}
 
-	AnimationObjectBaseSPtr SkeletonAnimationBone::DoClone( Animation & p_animation )
+	AnimationObjectSPtr SkeletonAnimationBone::DoClone( Animation & p_animation )
 	{
 		auto l_return = std::make_shared< SkeletonAnimationBone >();
 		l_return->m_bone = m_bone;

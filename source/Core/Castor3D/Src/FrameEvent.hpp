@@ -100,11 +100,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the event
-		 *\remark		Must be implemented by children classes
+		 *\remarks		Must be implemented by children classes
 		 *\return		\p true if the event was applied successfully
 		 *\~french
 		 *\brief		Traite l'évènement
-		 *\remark		Doit être implémentée dans les classes filles
+		 *\remarks		Doit être implémentée dans les classes filles
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
 		C3D_API virtual bool Apply() = 0;

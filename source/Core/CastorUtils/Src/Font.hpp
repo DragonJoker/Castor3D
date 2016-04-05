@@ -304,10 +304,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Sets the glyph loader
-		 *\param[in]	p_iWidth	The new width
+		 *\param[in]	p_loader	The value
 		 *\~french
-		 *\brief		Définit la largeur maximale des glyphes
-		 *\param[in]	p_iWidth	La nouvelle largeur
+		 *\brief		Définit le chargeur de glyphes
+		 *\param[in]	p_loader	La valeur
 		 */
 		inline void SetGlyphLoader( std::unique_ptr< SFontImpl > && p_loader )
 		{

@@ -31,7 +31,7 @@ namespace Castor3D
 	\brief		Generic Plugin class.
 	\remarks	Allows general specialisations for Castor3D.
 	\~french
-	\brief		Classe de plugin générique.
+	\brief		Classe de plug-in générique.
 	\remarks	Permet des spécialisation générales pour Castor3D.
 	*/
 	class GenericPlugin
@@ -48,14 +48,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_library	The shared library holding the plug-in
 		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API GenericPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API GenericPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -59,10 +59,12 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Constructor
-			 *\param[in]	p_tabs	The tabulations to put at the beginning of each line
+			 *\param[in]	p_tabs			The tabulations to put at the beginning of each line
+			 *\param[in]	p_encodingMode	The file encoding mode
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
+			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
+			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
 			 */
 			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
@@ -191,11 +193,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function
-		 *\remark		Initialises the buffers
+		 *\remarks		Initialises the buffers
 		 *\param[in]	p_index	The base texture index
 		 *\~french
 		 *\brief		Fonction d'initialisation
-		 *\remark		Initialise les buffers
+		 *\remarks		Initialise les buffers
 		 *\param[in]	p_index	L'index de texture de base
 		 */
 		C3D_API void Initialise( uint32_t p_index );
@@ -262,11 +264,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the camera
-		 *\remark		Defines also LEye and REye cameras
+		 *\remarks		Defines also LEye and REye cameras
 		 *\param[in]	p_pCamera	The new camera
 		 *\~french
 		 *\brief		Définit la caméra
-		 *\remark		Définit aussi les caméras des yeux gauche et droit
+		 *\remarks		Définit aussi les caméras des yeux gauche et droit
 		 *\param[in]	p_pCamera	La nouvelle caméra
 		 */
 		C3D_API void SetCamera( CameraSPtr p_pCamera );

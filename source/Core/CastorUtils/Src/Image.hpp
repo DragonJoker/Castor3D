@@ -105,36 +105,36 @@ namespace Castor
 		 *\~english
 		 *\brief		Creates the image with given params
 		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_ptSize		The wanted image dimensions
-		 *\param[in]	p_ePixelFormat	The wanted image pixel format
+		 *\param[in]	p_size		The wanted image dimensions
+		 *\param[in]	p_format	The wanted image pixel format
 		 *\param[in]	p_buffer		A buffer containing pixels
 		 *\param[in]	p_eBufferFormat	The buffer pixel format
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés
 		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_ptSize		Les dimensions voulues pour l'image
-		 *\param[in]	p_ePixelFormat	Le format de pixel voulu pour l'image
+		 *\param[in]	p_size		Les dimensions voulues pour l'image
+		 *\param[in]	p_format	Le format de pixel voulu pour l'image
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat );
+		CU_API Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
 		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_ptSize		The wanted image dimensions
-		 *\param[in]	p_ePixelFormat	The wanted image pixel format
+		 *\param[in]	p_size		The wanted image dimensions
+		 *\param[in]	p_format	The wanted image pixel format
 		 *\param[in]	p_buffer		A buffer containing pixels
 		 *\param[in]	p_eBufferFormat	The buffer pixel format
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés
 		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_ptSize		Les dimensions voulues pour l'image
-		 *\param[in]	p_ePixelFormat	Le format de pixel voulu pour l'image
+		 *\param[in]	p_size		Les dimensions voulues pour l'image
+		 *\param[in]	p_format	Le format de pixel voulu pour l'image
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 *\param[in]	p_eBufferFormat	Le format des pixels du buffer
 		 */
-		CU_API Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat = ePIXEL_FORMAT_A8R8G8B8, uint8_t const * p_buffer = nullptr, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
+		CU_API Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format = ePIXEL_FORMAT_A8R8G8B8, uint8_t const * p_buffer = nullptr, ePIXEL_FORMAT p_eBufferFormat = ePIXEL_FORMAT_A8R8G8B8 );
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
@@ -149,21 +149,21 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Creates the image with given params
-		 *\remark		The wanted pixel format and buffer pixel format are the template params
+		 *\remarks		The wanted pixel format and buffer pixel format are the template params
 		 *\param[in]	p_name		The resource name
-		 *\param[in]	p_ptSize		The wanted image dimensions
+		 *\param[in]	p_size		The wanted image dimensions
 		 *\param[in]	p_buffer		A buffer containing pixels
 		 *\~french
 		 *\brief		Crée l'image avec les paramètres donnés
-		 *\remark		Le format voulu ainsi que le format du buffer sont les arguments template
+		 *\remarks		Le format voulu ainsi que le format du buffer sont les arguments template
 		 *\param[in]	p_name		Le nom de ressource
-		 *\param[in]	p_ptSize		Les dimensions voulues pour l'image
+		 *\param[in]	p_size		Les dimensions voulues pour l'image
 		 *\param[in]	p_buffer		Un buffer de pixels
 		 */
 		template< ePIXEL_FORMAT PFSrc, ePIXEL_FORMAT PFDst >
-		Image( String const & p_name, Size const & p_ptSize, uint8_t const * p_buffer = nullptr )
+		Image( String const & p_name, Size const & p_size, uint8_t const * p_buffer = nullptr )
 			: Resource< Image > ( p_name )
-			, m_pBuffer( std::make_shared< PxBuffer< PFDst > >( p_ptSize, p_buffer, PFSrc ) )
+			, m_pBuffer( std::make_shared< PxBuffer< PFDst > >( p_size, p_buffer, PFSrc ) )
 		{
 			CHECK_INVARIANTS();
 		}

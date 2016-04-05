@@ -2,8 +2,8 @@
 
 namespace Castor
 {
-	PxBufferBase::PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_ePixelFormat )
-		: m_pixelFormat( p_ePixelFormat )
+	PxBufferBase::PxBufferBase( Size const & p_size, ePIXEL_FORMAT p_format )
+		: m_pixelFormat( p_format )
 		, m_size( p_size )
 		, m_buffer( 0 )
 	{

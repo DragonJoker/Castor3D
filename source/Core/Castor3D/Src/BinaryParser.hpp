@@ -180,61 +180,61 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_value		The values
+		 *\param[in]	p_values	The values
 		 *\param[in]	p_count		The values count
-		 *\param[in]	p_eChunkType	The subchunk type
-		 *\param[in]	p_chunk			The chunk
+		 *\param[in]	p_chunkType	The subchunk type
+		 *\param[in]	p_chunk		The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_value		Les valeurs
+		 *\param[in]	p_values	Les valeurs
 		 *\param[in]	p_count		Le nombre de valeurs
-		 *\param[in]	p_eChunkType	Le type du subchunk
-		 *\param[in]	p_chunk			Le chunk
+		 *\param[in]	p_chunkType	Le type du subchunk
+		 *\param[in]	p_chunk		Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoFillChunk( T const * p_pValues, uint32_t p_count, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const * p_values, uint32_t p_count, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_pValues, p_count, p_eChunkType, p_chunk );
+			return ChunkFiller< T >()( p_values, p_count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
 		 *\param[in]	p_value		The values
-		 *\param[in]	p_eChunkType	The subchunk type
+		 *\param[in]	p_chunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
 		 *\param[in]	p_value		Les valeurs
-		 *\param[in]	p_eChunkType	Le type du subchunk
+		 *\param[in]	p_chunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T, uint32_t Count >
-		inline bool DoFillChunk( T const( & p_value )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const( & p_value )[Count], eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_value, Count, p_eChunkType, p_chunk );
+			return ChunkFiller< T >()( p_value, Count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
 		 *\param[in]	p_value		The value
-		 *\param[in]	p_eChunkType	The subchunk type
+		 *\param[in]	p_chunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
 		 *\param[in]	p_value		La valeur
-		 *\param[in]	p_eChunkType	Le type du subchunk
+		 *\param[in]	p_chunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
 		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< typename T >
-		inline bool DoFillChunk( T const & p_value, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_value, p_eChunkType, p_chunk );
+			return ChunkFiller< T >()( p_value, p_chunkType, p_chunk );
 		}
 
 		//!\~english The current folder path	\~french Le chemin d'accès au dossiercourant

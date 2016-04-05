@@ -96,11 +96,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the event
-		 *\remark		Cleans the object up
+		 *\remarks		Cleans the object up
 		 *\return		\p true if the event was applied successfully
 		 *\~french
 		 *\brief		Traite l'évènement
-		 *\remark		Nettoie l'objet
+		 *\remarks		Nettoie l'objet
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
 		virtual bool Apply()

@@ -39,15 +39,15 @@ namespace Castor
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
 		 *\param[in]	p_fileName	The file path
-		 *\param[in]	p_iMode		The opening mode, combination of one or more eOPEN_MODE
+		 *\param[in]	p_mode		The opening mode, combination of one or more eOPEN_MODE
 		 *\param[in]	p_eEncoding	The text encoding mode
 		 *\~french
 		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
 		 *\param[in]	p_fileName	Le chemin du fichier
-		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
+		 *\param[in]	p_mode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
 		 *\param[in]	p_eEncoding	L'encodage pour un fichier en mode texte
 		 */
-		CU_API TextFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
+		CU_API TextFile( Path const & p_fileName, int p_mode, eENCODING_MODE p_eEncoding = eENCODING_MODE_ASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
@@ -133,25 +133,29 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Open mode dependant write function
-	 *\param[in]	p_toWrite	The data to write in this file
+	 *\param[in]	p_file		The file
+	 *\param[in]	p_toWrite	The data to write in the file
 	 *\return		A reference to this file
 	 *\~french
 	 *\brief		Fonction d'écriture dépendant du mode d'ouverture
+	 *\param[in]	p_file		Le fichier
 	 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
 	 *\return		Une référence sur ce fichier
 	 */
-	template< typename T > TextFile & operator <<( TextFile & p_file, T const & p_toWrite );
+	template< typename T > TextFile & operator<<( TextFile & p_file, T const & p_toWrite );
 	/**
 	 *\~english
 	 *\brief		Open mode dependant read function
-	 *\param[out]	p_toRead	The data to read from this file
+	 *\param[in]	p_file		The file
+	 *\param[out]	p_toRead	The data to read from the file
 	 *\return		A reference to this file
 	 *\~french
 	 *\brief		Fonction de lecture dépendant du mode d'ouverture
+	 *\param[in]	p_file		Le fichier
 	 *\param[out]	p_toRead	La donnée à lire à partir du fichier
 	 *\return		Une référence sur ce fichier
 	 */
-	template< typename T > TextFile & operator >>( TextFile & p_file, T & p_toRead );
+	template< typename T > TextFile & operator>>( TextFile & p_file, T & p_toRead );
 }
 
 #include "TextFile.inl"

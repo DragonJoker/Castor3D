@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -65,11 +65,11 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Writes a render window into a text file
-			 *\param[in]	p_target	the render window
+			 *\param[in]	p_window	the render window
 			 *\param[in]	p_file		the file
 			 *\~french
 			 *\brief		Ecrit une fenêtre de rendu dans un fichier texte
-			 *\param[in]	p_target	La fenêtre de rendu
+			 *\param[in]	p_window	La fenêtre de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
 			C3D_API virtual bool operator()( RenderWindow const & p_window, Castor::TextFile & p_file );
@@ -128,9 +128,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_engine	The engine
+		 *\param[in]	p_name		The window name
 		 *\~french
 		 *\brief		Constructor
 		 *\param[in]	p_engine	Le moteur
+		 *\param[in]	p_name		Le nom de la fenêtre
 		 */
 		C3D_API RenderWindow( Engine & p_engine, Castor::String const & p_name );
 		/**

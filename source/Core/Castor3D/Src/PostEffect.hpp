@@ -43,12 +43,14 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_renderSystem	The render system.
 		 *\param[in]	p_renderTarget	The render target to which is attached this effect.
+		 *\param[in]	p_params		The optional parameters.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le render system.
-		 *\param[in]	p_renderTarget	La cible de rendu à laquelle est affectée cet effet.
+		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	p_params		Les paramètres optionnels.
 		 */
-		C3D_API PostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param );
+		C3D_API PostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -74,13 +76,13 @@ namespace Castor3D
 		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render function, applies the effect to the given framebuffer.
-		 *\param[in,out]p_framebuffer	The framebuffer.
-		 *\return		\p true if ok.
+		 *\brief			Render function, applies the effect to the given framebuffer.
+		 *\param[in,out]	p_framebuffer	The framebuffer.
+		 *\return			\p true if ok.
 		 *\~french
-		 *\brief		Fonction de rendu, applique l'effet au tampon d'image donné.
-		 *\param[in,out]p_framebuffer	Le tampon d'image.
-		 *\return		\p true si tout s'est bien passé.
+		 *\brief			Fonction de rendu, applique l'effet au tampon d'image donné.
+		 *\param[in,out]	p_framebuffer	Le tampon d'image.
+		 *\return			\p true si tout s'est bien passé.
 		 */
 		C3D_API virtual bool Apply( FrameBuffer & p_framebuffer ) = 0;
 

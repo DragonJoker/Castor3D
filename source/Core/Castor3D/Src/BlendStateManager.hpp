@@ -68,12 +68,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and returns a BlendState, given a name
-		 *\remark		If a BlendState with the same name exists, none is created
+		 *\remarks		If a BlendState with the same name exists, none is created
 		 *\param[in]	p_name	The BlendState name
 		 *\return		The created or existing BlendState
 		 *\~french
 		 *\brief		Crée et renvoie un BlendState, avec le nom donné
-		 *\remark		Si un BlendState avec le même nom existe, aucun n'est créé
+		 *\remarks		Si un BlendState avec le même nom existe, aucun n'est créé
 		 *\param[in]	p_name	Le nom du BlendState
 		 *\return		Le BlendState créé ou existant
 		 */

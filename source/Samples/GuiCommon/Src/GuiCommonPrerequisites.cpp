@@ -504,7 +504,7 @@ namespace GuiCommon
 		File::ListDirectoryFiles( Engine::GetPluginsDirectory(), l_arrayFiles );
 		PathArray l_arrayKept;
 
-		// Exclude debug plugin in release builds, and release plugins in debug builds
+		// Exclude debug plug-in in release builds, and release plug-ins in debug builds
 		for ( auto && l_file : l_arrayFiles )
 		{
 #if defined( NDEBUG )
@@ -542,7 +542,7 @@ namespace GuiCommon
 				}
 			}
 
-			// Then we load other plugins
+			// Then we load other plug-ins
 			for ( auto && l_file : l_otherPlugins )
 			{
 				if ( !p_engine.GetPluginManager().LoadPlugin( l_file ) )
@@ -553,7 +553,7 @@ namespace GuiCommon
 
 			if ( !l_arrayFailed.empty() )
 			{
-				Logger::LogWarning( cuT( "Some plugins couldn't be loaded :" ) );
+				Logger::LogWarning( cuT( "Some plug-ins couldn't be loaded :" ) );
 
 				for ( auto && l_file : l_arrayFailed )
 				{

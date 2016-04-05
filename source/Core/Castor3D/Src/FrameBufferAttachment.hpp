@@ -61,7 +61,7 @@ namespace Castor3D
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
+		 *\param[in]	p_attachment	Le point d'attache
 		 *\param[in]	p_index			L'index d'attache
 		 *\param[in]	p_frameBuffer	Le tampon d'image
 		 *\return		\p true si tout s'est bien passé
@@ -108,7 +108,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Blit this attachment's buffer into the given one
-		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
+		 *\remarks		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
 		 *\param[in]	p_buffer		The destination buffer
 		 *\param[in]	p_rectSrc		The source rectangle
 		 *\param[in]	p_rectDst		The destination rectangle
@@ -116,7 +116,7 @@ namespace Castor3D
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Blitte le tampon de cette attache dans celui donné
-		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
+		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
 		 *\param[in]	p_buffer		Le tampon destination
 		 *\param[in]	p_rectSrc		Le rectangle source
 		 *\param[in]	p_rectDst		Le rectangle destination
@@ -159,15 +159,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_index			The attachment index
 		 *\param[in]	p_frameBuffer	The frame buffer
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
 		 *\param[in]	p_frameBuffer	Le tampon d'image
-		 *\param[in]	p_index			L'index d'attache
 		 *\return		\p true si tout s'est bien passé
 		 */
 		C3D_API virtual bool DoAttach( FrameBufferSPtr p_frameBuffer ) = 0;

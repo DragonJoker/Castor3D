@@ -51,6 +51,22 @@ namespace Castor3D
 	template<>
 	struct ElementAttacher< Camera >
 	{
+		/**
+		 *\~english
+		 *\brief		Attaches an element to the appropriate parent node.
+		 *\param[in]	p_element			The scene node.
+		 *\param[in]	p_parent			The parent scene node.
+		 *\param[in]	p_rootNode			The root node.
+		 *\param[in]	p_rootCameraNode	The cameras root node.
+		 *\param[in]	p_rootObjectNode	The objects root node.
+		 *\~french
+		 *\brief		Attache un élément au parent approprié.
+		 *\param[in]	p_element			Le noeud de scène.
+		 *\param[in]	p_parent			Le noeud de scène parent.
+		 *\param[in]	p_rootNode			Le noeud racine.
+		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
+		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
+		 */
 		static void Attach( std::shared_ptr< Camera > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		{
 			if ( p_parent )

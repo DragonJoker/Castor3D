@@ -127,12 +127,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Used by Material, don't use it.
+		 *\remarks		Used by Material, don't use it.
 		 *\param[in]	p_engine	The core engine
 		 *\param[in]	p_parent	The parent material
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		A ne pas utiliser autrement que via la classe Material
+		 *\remarks		A ne pas utiliser autrement que via la classe Material
 		 *\param[in]	p_engine	Le moteur
 		 *\param[in]	p_parent	Le matériau parent
 		 */
@@ -211,12 +211,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the TextureUnit at wanted channel
-		 *\remark		If more than one TextureUnits are found at given channel, the first one is returned
+		 *\remarks		If more than one TextureUnits are found at given channel, the first one is returned
 		 *\param[in]	p_channel	The channel
 		 *\return		\p nullptr if no TextureUnit at wanted channel
 		 *\~french
 		 *\brief		Récupère la TextureUnit au canal demandé
-		 *\remark		Si plus d'une TextureUnit est trouvée pour le canal demandé, la première est retournée
+		 *\remarks		Si plus d'une TextureUnit est trouvée pour le canal demandé, la première est retournée
 		 *\param[in]	p_channel	Le canal
 		 *\return		\p nullptr si pas de TextureUnit au canal voulu
 		 */
@@ -465,7 +465,7 @@ namespace Castor3D
 		 *\brief		Tells if the pass is two sided
 		 *\~french
 		 *\brief
-		 *\remark		Dit si la passe est double face
+		 *\remarks		Dit si la passe est double face
 		 */
 		inline bool IsTwoSided()const
 		{

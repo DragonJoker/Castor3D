@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -109,15 +109,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Creates a ShaderProgram in a given language
 		 *\remarks		Only the render system can do that
-		 *\param[in]	p_eLanguage	The shader language
+		 *\param[in]	p_langage	The shader language
 		 *\return		The created ShaderProgram
 		 *\~french
 		 *\brief		Crée un ShaderProgram dans un langage donné
 		 *\remarks		Seul le render system peut faire ça
-		 *\param[in]	p_eLanguage	Le langage du shader
+		 *\param[in]	p_langage	Le langage du shader
 		 *\return		Le ShaderProgram créé
 		 */
-		C3D_API ShaderProgramSPtr CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage );
+		C3D_API ShaderProgramSPtr CreateShaderProgram( eSHADER_LANGUAGE p_langage );
 		/**
 		 *\~english
 		 *\brief		Renders the scene ambient lighting
@@ -174,11 +174,9 @@ namespace Castor3D
 		C3D_API void SetCurrentCamera( Camera * p_pCamera );
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags
-		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\return		A pre-configured GlslWriter instance.
 		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux flags donnés
-		 *\param[in]	p_programFlags	Combinaison de ePROGRAM_FLAG
+		 *\brief		Une instance pré-configurée de GlslWriter.
 		 */
 		C3D_API GLSL::GlslWriter CreateGlslWriter();
 		/**
@@ -202,11 +200,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Checks support for given shader model
-		 *\param[in]	p_eProfile	The shader model
+		 *\param[in]	p_model	The shader model
 		 *\return		\p false if the given model is not supported by current API
 		 *\~french
 		 *\brief		Vérifie le support d'un modèle de shaders
-		 *\param[in]	p_eProfile	Le modèle de shaders
+		 *\param[in]	p_model	Le modèle de shaders
 		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle
 		 */
 		inline bool CheckSupport( eSHADER_MODEL p_model )
@@ -215,13 +213,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Checks support for given shader model
-		 *\param[in]	p_eProfile	The shader model
-		 *\return		\p false if the given model is not supported by current API
+		 *\return		The maximum supported shader model.
 		 *\~french
-		 *\brief		Vérifie le support d'un modèle de shaders
-		 *\param[in]	p_eProfile	Le modèle de shaders
-		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle
+		 *\return		Le modèle de shader maximal supporté.
 		 */
 		inline eSHADER_MODEL GetMaxShaderModel()
 		{

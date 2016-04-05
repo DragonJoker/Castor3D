@@ -192,10 +192,10 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_eLanguage )
+	ShaderProgram::ShaderProgram( RenderSystem & p_renderSystem, eSHADER_LANGUAGE p_langage )
 		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_status( ePROGRAM_STATUS_NOTLINKED )
-		, m_eLanguage( p_eLanguage )
+		, m_eLanguage( p_langage )
 	{
 	}
 

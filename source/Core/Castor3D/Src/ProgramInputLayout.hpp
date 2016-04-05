@@ -128,20 +128,20 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Equality operator.
-	 *\param[in]	p_obj1, p_obj2	The 2 objects to compare.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
 	 *\~french
 	 *\brief		Opérateur d'égalité.
-	 *\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets à comparer
 	 */
 	C3D_API bool operator==( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs );
 	/**
-	*\~english
-	*\brief		Equality operator.
-	*\param[in]	p_obj1, p_obj2	The 2 objects to compare.
-	*\~french
-	*\brief		Opérateur d'égalité.
-	*\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
-	*/
+	 *\~english
+	 *\brief		Equality operator.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
+	 *\~french
+	 *\brief		Opérateur d'égalité.
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets à comparer
+	 */
 	C3D_API bool operator!=( ProgramInputLayout const & p_lhs, ProgramInputLayout const & p_rhs );
 }
 

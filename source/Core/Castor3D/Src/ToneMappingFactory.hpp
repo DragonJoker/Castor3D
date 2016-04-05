@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -41,7 +41,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Registers tone mapping impolementations.
 		 *\~french
-		 *\brief		Enregistre les impl�mentations de mappage de tons.
+		 *\brief		Enregistre les implémentations de mappage de tons.
 		 */
 		C3D_API virtual void Initialise();
 	};

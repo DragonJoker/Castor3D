@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -113,12 +113,12 @@ namespace Castor3D
 		 *\brief		Renders the given texture.
 		 *\param[in]	p_size				The render viewport size.
 		 *\param[in]	p_texture			The texture.
-		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
 		 *\brief		Dessine la texture donnée.
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
-		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
 		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program );
 		/**
@@ -230,10 +230,8 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines this context to be the current rendering context
-		 *\param[in]	p_window	The RenderWindow
 		 *\~french
 		 *\brief		Définit le contexte pour être celui de rendu actuel
-		 *\param[in]	p_window	La RenderWindow
 		 */
 		C3D_API virtual void DoSetCurrent() = 0;
 		/**
@@ -256,11 +254,13 @@ namespace Castor3D
 		 *\param[in]	p_size				The render viewport size.
 		 *\param[in]	p_texture			The texture.
 		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
 		 *\brief		Dessine la texture donnée.
 		 *\param[in]	p_size				La taille du viewport de rendu.
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
 		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program );
 
@@ -273,7 +273,7 @@ namespace Castor3D
 		bool m_bMultiSampling;
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre
 		ShaderProgramWPtr m_renderTextureProgram;
-		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
+		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\~french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
 		OneIntFrameVariableSPtr m_mapDiffuse;
 		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
 		GeometryBuffersSPtr m_geometryBuffers;

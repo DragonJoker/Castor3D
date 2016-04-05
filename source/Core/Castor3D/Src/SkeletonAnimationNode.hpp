@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SKELETON_ANIMATION_NODE___
 #define ___C3D_SKELETON_ANIMATION_NODE___
 
-#include "AnimationObjectBase.hpp"
+#include "AnimationObject.hpp"
 
 namespace Castor3D
 {
@@ -34,7 +34,7 @@ namespace Castor3D
 	\remark		Utilisé afin de décomposer le modèle et ajouter des animatiobns intermédiaires
 	*/
 	class SkeletonAnimationNode
-		: public AnimationObjectBase
+		: public AnimationObject
 	{
 	public:
 		/*!
@@ -119,7 +119,7 @@ namespace Castor3D
 
 	private:
 		virtual void DoApply();
-		virtual AnimationObjectBaseSPtr DoClone( Animation & p_animation );
+		virtual AnimationObjectSPtr DoClone( Animation & p_animation );
 
 	private:
 		Castor::String m_name;

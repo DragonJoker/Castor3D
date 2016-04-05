@@ -221,38 +221,34 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Logs an error in the log file
-		 *\param[in]	p_strError	The error text
-		 *\param[in]	p_context	The current parsing context
+		 *\param[in]	p_error	The error text
 		 *\~french
 		 *\brief		Log une erreur dans le fichier de log
-		 *\param[in]	p_strError	Le texte de l'erreur
-		 *\param[in]	p_context	Le context d'analyse
+		 *\param[in]	p_error	Le texte de l'erreur
 		 */
-		CU_API void ParseError( String const & p_strError );
+		CU_API void ParseError( String const & p_error );
 		/**
 		 *\~english
 		 *\brief		Logs a warning in the log file
-		 *\param[in]	p_strWarning	The warning text
-		 *\param[in]	p_context		The current parsing context
+		 *\param[in]	p_warning	The warning text
 		 *\~french
 		 *\brief		Log un avertissement dans le fichier de log
-		 *\param[in]	p_strWarning	Le texte de l'avertissement
-		 *\param[in]	p_context		Le context d'analyse
+		 *\param[in]	p_warning	Le texte de l'avertissement
 		 */
-		CU_API void ParseWarning( String const & p_strWarning );
+		CU_API void ParseWarning( String const & p_warning );
 		/**
 		 *\~english
 		 *\brief		Tests if the params given to the function will be appropriate.
 		 *\param[in]	p_params		The given parameters.
 		 *\param[in]	p_expected		The expected parameters.
 		 *\param[in]	p_received		The filled parameters.
-		 *\return		\p false if \p p_strParams doesn't contain all expected parameters types.
+		 *\return		\p false if \p p_params doesn't contain all expected parameters types.
 		 *\~french
 		 *\brief		Vérifie si les paramètres donnés à la fonction correspondent à ceux qu'elle attend.
 		 *\param[in]	p_params		Les paramètres donnés.
 		 *\param[in]	p_expected		Les paramètres attendus.
 		 *\param[in]	p_received		Les paramètres remplis.
-		 *\return		\p false si \p p_strParams ne contient pas tous les types de paramètres attendus par la fonction.
+		 *\return		\p false si \p p_params ne contient pas tous les types de paramètres attendus par la fonction.
 		 */
 		CU_API bool CheckParams( String const & p_params, ParserParameterArray const & p_expected, ParserParameterArray & p_received );
 		/**
@@ -322,7 +318,7 @@ namespace Castor
 		 *\~english
 		 *\brief		Function called when \p m_iSection is out of bounds
 		 *\param[in]	p_line	The current line
-		 *\return		\p true if a brace is opened after this line, \false if not
+		 *\return		\p true if a brace is opened after this line, \p false if not
 		 *\~french
 		 *\brief		Fonction appelée lorsque \p m_iSection est hors limites
 		 *\param[in]	p_line	La ligne en cours d'analyse

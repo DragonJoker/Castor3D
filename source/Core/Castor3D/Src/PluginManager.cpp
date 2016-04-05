@@ -60,9 +60,9 @@ namespace Castor3D
 		m_mutexLoadedPlugins.unlock();
 	}
 
-	PluginBaseSPtr PluginManager::LoadPlugin( String const & p_strPluginName, Path const & p_pathFolder )throw( )
+	PluginBaseSPtr PluginManager::LoadPlugin( String const & p_pluginName, Path const & p_pathFolder )throw( )
 	{
-		Path l_strFilePath = CASTOR_DLL_PREFIX + p_strPluginName + cuT( "." ) + CASTOR_DLL_EXT;
+		Path l_strFilePath = CASTOR_DLL_PREFIX + p_pluginName + cuT( "." ) + CASTOR_DLL_EXT;
 		PluginBaseSPtr l_return;
 
 		try
@@ -145,10 +145,10 @@ namespace Castor3D
 		return m_renderSystem;
 	}
 
-	void PluginManager::LoadAllPlugins( Path const & p_strFolder )
+	void PluginManager::LoadAllPlugins( Path const & p_folder )
 	{
 		PathArray l_arrayFiles;
-		File::ListDirectoryFiles( p_strFolder, l_arrayFiles );
+		File::ListDirectoryFiles( p_folder, l_arrayFiles );
 
 		if ( l_arrayFiles.size() > 0 )
 		{
@@ -164,16 +164,16 @@ namespace Castor3D
 					}
 					catch ( ... )
 					{
-						Logger::LogInfo( cuT( "Can't load plugin : " ) + l_file );
+						Logger::LogInfo( cuT( "Can't load plug-in : " ) + l_file );
 					}
 				}
 			}
 		}
 	}
 
-	PluginBaseSPtr PluginManager::LoadRendererPlugin( DynamicLibrarySPtr p_pLibrary )
+	PluginBaseSPtr PluginManager::LoadRendererPlugin( DynamicLibrarySPtr p_library )
 	{
-		RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( p_pLibrary, GetEngine() );
+		RendererPluginSPtr l_pRenderer = std::make_shared< RendererPlugin >( p_library, GetEngine() );
 		PluginBaseSPtr l_return = std::static_pointer_cast<PluginBase, RendererPlugin>( l_pRenderer );
 		eRENDERER_TYPE l_eRendererType = l_pRenderer->GetRendererType();
 
@@ -191,9 +191,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	PluginBaseSPtr PluginManager::LoadTechniquePlugin( DynamicLibrarySPtr p_pLibrary )
+	PluginBaseSPtr PluginManager::LoadTechniquePlugin( DynamicLibrarySPtr p_library )
 	{
-		return std::make_shared< TechniquePlugin >( p_pLibrary, GetEngine() );
+		return std::make_shared< TechniquePlugin >( p_library, GetEngine() );
 	}
 
 	PluginBaseSPtr PluginManager::InternalLoadPlugin( Path const & p_pathFile )
@@ -219,7 +219,7 @@ namespace Castor3D
 
 				if ( !l_pLibrary->GetFunction( l_pfnGetType, GetTypeFunctionABIName ) )
 				{
-					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile.GetFileName() + cuT( "] GetType plugin function => Not a Castor3D plugin" );
+					String l_strError = cuT( "Error encountered while loading file [" ) + p_pathFile.GetFileName() + cuT( "] GetType plug-in function => Not a Castor3D plug-in" );
 					CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 				}
 

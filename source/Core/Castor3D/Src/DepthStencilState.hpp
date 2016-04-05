@@ -150,17 +150,19 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the depth function
-		 *\param[in]	p_func The function
+		 *\brief		Defines the depth range
+		 *\param[in]	p_near	The near bound
+		 *\param[in]	p_far	The far bound
 		 *\~french
-		 *\brief		Définit la fonction de profondeur
-		 *\param[in]	p_func	La fonction
+		 *\brief		Définit l'intervalle profondeur
+		 *\param[in]	p_near	La borne inférieure
+		 *\param[in]	p_far	La borne supérieure
 		 */
-		inline void SetDepthRange( double p_dNear, double p_dFar )
+		inline void SetDepthRange( double p_near, double p_far )
 		{
-			m_changed |= p_dNear != m_dDepthNear || p_dFar != m_dDepthFar;
-			m_dDepthNear = p_dNear;
-			m_dDepthFar = p_dFar;
+			m_changed |= p_near != m_dDepthNear || p_far != m_dDepthFar;
+			m_dDepthNear = p_near;
+			m_dDepthFar = p_far;
 		}
 		/**
 		 *\~english

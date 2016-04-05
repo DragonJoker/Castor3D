@@ -343,14 +343,14 @@ namespace Castor
 		 *\~english
 		 *\brief		Retrieves a value from the given String
 		 *\param[in]	p_str		The String supposedly containing the value
-		 *\param[in]	p_locale	The locale used in the conversion
 		 *\param[out]	p_val		Receives the retrieved value
+		 *\param[in]	p_locale	The locale used in the conversion
 		 *\~french
 		 *\brief
 		 *\brief		Récupère une valeur à partir d'un String
 		 *\param[in]	p_str		Le String contenant normalement la valeur
-		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\param[out]	p_val		Reçoit la valeur récupérée
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return
 		 */
 		template< typename T >
@@ -358,11 +358,15 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Puts a value into a String
-		 *\param[in]	p_value	The value
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_base		The numeric base
+		 *\param[in]	p_locale	The locale used in the conversion
 		 *\return		The String containing the value
 		 *\~french
 		 *\brief		Met une valeur dans un String
-		 *\param[in]	p_value	La valeur
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_base		La base numérique
+		 *\param[in]	p_locale	La locale utilisée dans la conversion
 		 *\return		Le String contenant la valeur
 		 */
 		template< typename T >

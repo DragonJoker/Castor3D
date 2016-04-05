@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -168,11 +168,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a panel program compiled using given texture flags.
-		 *\param[in]	p_pass	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Bitwise ORed eTEXTURE_CHANNEL.
 		 *\return		The program.
 		 *\~french
 		 *\brief		Récupère un programme de panneau compilé en utilisant les indicateurs de texture donnés.
-		 *\param[in]	p_pass	Combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_flags	Combinaison de eTEXTURE_CHANNEL.
 		 *\return		Le programme.
 		 */
 		C3D_API ShaderProgramSPtr DoGetPanelProgram( uint32_t p_flags );
@@ -189,15 +189,13 @@ namespace Castor3D
 		C3D_API ShaderProgramSPtr DoGetTextProgram( uint32_t p_flags );
 		/**
 		 *\~english
-		 *\brief		Retrieves a program compiled using given flags.
-		 *\param[in]	p_flags		Bitwise ORed eTEXTURE_CHANNEL.
-		 *\param[in,out]p_programs	Looks for a matching shader in this map, creates it if not found and add it to the map.
-		 *\return		The program
+		 *\brief			Retrieves a program compiled using given flags.
+		 *\param[in]		p_flags		Bitwise ORed eTEXTURE_CHANNEL.
+		 *\return			The program
 		 *\~french
-		 *\brief		Récupère un programme compilé en utilisant les indicateurs donnés.
-		 *\param[in]	p_flags		Combinaison de eTEXTURE_CHANNEL.
-		 *\param[in,out]p_programs	Recherche un shader correspondant dans cette map. S'il n'y en a pas, crée le programme et l'ajoute à la map.
-		 *\return		Le programme
+		 *\brief			Récupère un programme compilé en utilisant les indicateurs donnés.
+		 *\param[in]		p_flags		Combinaison de eTEXTURE_CHANNEL.
+		 *\return			Le programme
 		 */
 		C3D_API ShaderProgramSPtr DoGetProgram( uint32_t p_flags );
 		/**
@@ -216,13 +214,11 @@ namespace Castor3D
 		 *\brief		Function to draw an overlay.
 		 *\param[in]	p_material			The material.
 		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
-		 *\param[in]	p_texture			An optional font texture.
 		 *\param[in]	p_count				The vertex count.
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation.
 		 *\param[in]	p_material			Le matériau.
 		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
-		 *\param[in]	p_texture			Une texture de polices optionnelle.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
 		C3D_API void DoDrawItem( Material & p_material, OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count );
@@ -231,28 +227,28 @@ namespace Castor3D
 		 *\brief		Function to draw an overlay.
 		 *\param[in]	p_pass				The pass.
 		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
-		 *\param[in]	p_texture			An optional font texture.
 		 *\param[in]	p_count				The vertex count.
 		 *\~french
 		 *\brief		Fonction de dessin d'une incrustation.
 		 *\param[in]	p_pass				La passe.
 		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
-		 *\param[in]	p_texture			Une texture de polices optionnelle.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
 		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
 		/**
 		 *\~english
-		 *\brief		Function to draw an overlay.
+		 *\brief		Function to draw a text overlay.
 		 *\param[in]	p_pass				The pass.
 		 *\param[in]	p_geometryBuffers	The overlay geometry buffers.
-		 *\param[in]	p_texture			An optional font texture.
+		 *\param[in]	p_texture			The font texture.
+		 *\param[in]	p_sampler			The texture sampler.
 		 *\param[in]	p_count				The vertex count.
 		 *\~french
-		 *\brief		Fonction de dessin d'une incrustation.
+		 *\brief		Fonction de dessin d'une incrustation texte.
 		 *\param[in]	p_pass				La passe.
 		 *\param[in]	p_geometryBuffers	Les buffer de la géométrie de l'incrustation.
-		 *\param[in]	p_texture			Une texture de polices optionnelle.
+		 *\param[in]	p_texture			La texture de polices.
+		 *\param[in]	p_sampler			L'échantillonneur de la texture.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
 		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, Texture const & p_texture, Sampler const & p_sampler, uint32_t p_count );

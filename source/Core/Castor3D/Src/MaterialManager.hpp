@@ -72,7 +72,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Materials initialisation function.
-		 *\remark		Intialises the default material, a renderer must have been loaded.
+		 *\remarks		Intialises the default material, a renderer must have been loaded.
 		 */
 		C3D_API void Initialise();
 		/**

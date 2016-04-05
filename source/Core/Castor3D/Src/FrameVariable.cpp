@@ -197,20 +197,20 @@ namespace Castor3D
 	{
 	}
 
-	void FrameVariable::SetValueStr( String const & p_strValue )
+	void FrameVariable::SetValueStr( String const & p_value )
 	{
-		SetValueStr( p_strValue, 0 );
+		SetValueStr( p_value, 0 );
 	}
 
-	void FrameVariable::SetValueStr( String const & p_strValue, uint32_t p_index )
+	void FrameVariable::SetValueStr( String const & p_value, uint32_t p_index )
 	{
 		REQUIRE( p_index < m_occurences );
 
 		if ( p_index < m_occurences )
 		{
-			m_strValue[p_index] = p_strValue;
+			m_strValue[p_index] = p_value;
 			m_changed = true;
-			DoSetValueStr( p_strValue, p_index );
+			DoSetValueStr( p_value, p_index );
 		}
 	}
 }

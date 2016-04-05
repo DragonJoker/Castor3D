@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -44,10 +44,10 @@ namespace Castor3D
 		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
-		 *\brief		Constructeur spécifié.
+		 *\brief		Constructeur spÃ©cifiÃ©.
 		 *\param[in]	p_type			Le type de mappage de tons.
 		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
+		 *\param[in]	p_parameters	Les paramÃ¨tres spÃ©cifiques Ã  l'implÃ©mentation.
 		 */
 		C3D_API ToneMapping( eTONE_MAPPING_TYPE p_type, Engine & p_engine, Parameters const & p_parameters );
 		/**
@@ -74,9 +74,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the tone mapping for given HDR texture.
+		 *\param[in]	p_size		The target dimensions.
 		 *\param[in]	p_texture	The HDR texture.
 		 *\~english
-		 *\brief		Applique le mappage de tons pour la texture HDR donnée.
+		 *\brief		Applique le mappage de tons pour la texture HDR donnÃ©e.
+		 *\param[in]	p_size		Les dimensions de la cible.
 		 *\param[in]	p_texture	La texture HDR.
 		 */
 		C3D_API void Apply( Castor::Size const & p_size, Texture const & p_texture );
@@ -87,7 +89,7 @@ namespace Castor3D
 		 *\brief		Creates tone mapping shader, and the shader variables.
 		 *\return		The pixel shader program.
 		 *\~french
-		 *\brief		Crée le shader de mappage de tons, ainsi que les variables shader.
+		 *\brief		CrÃ©e le shader de mappage de tons, ainsi que les variables shader.
 		 *\return		Le pixel shader program.
 		 */
 		C3D_API virtual Castor::String DoCreate() = 0;
@@ -102,7 +104,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Updates the tone mapping shader variables.
 		 *\~english
-		 *\brief		Met à jour les variables shader du mappage de tons.
+		 *\brief		Met Ã  jour les variables shader du mappage de tons.
 		 */
 		C3D_API virtual void DoUpdate() = 0;
 

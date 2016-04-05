@@ -31,26 +31,26 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		: PluginBase( ePLUGIN_TYPE_RENDERER, p_pLibrary, *p_engine )
+	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_RENDERER, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetRendererType plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetRendererType plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnCreateRenderSystem, CreateRenderSystemFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateRenderSystem, CreateRenderSystemFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateRenderSystem plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateRenderSystem plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnDestroyRenderSystem, DestroyRenderSystemFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnDestroyRenderSystem, DestroyRenderSystemFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyRenderSystem plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] DestroyRenderSystem plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}

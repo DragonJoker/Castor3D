@@ -235,12 +235,12 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Tests if a double is a number
-	 *\remark		It is a number as long as x==x
+	 *\remarks		It is a number as long as x==x
 	 *\param[in]	x	Number to test
 	 *\return		The result
 	 *\~french
 	 *\brief		Teste si un double est un nombre
-	 *\remark		C'est un nombre tant que x==x
+	 *\remarks		C'est un nombre tant que x==x
 	 *\param[in]	x	Le nombre à tester
 	 *\return		Le résultat
 	 */
@@ -252,12 +252,12 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Tests if a double is infinite
-	 *\remark		It is infinite if x==x and x-x!=0
+	 *\remarks		It is infinite if x==x and x-x!=0
 	 *\param[in]	x	Number to test
 	 *\return		-1 if negative infinite, 1 if positive infinite, 0 if not infinite
 	 *\~french
 	 *\brief		Teste si un double est infini
-	 *\remark		Il est infini si x==x et x-x!=0
+	 *\remarks		Il est infini si x==x et x-x!=0
 	 *\param[in]	x	Le nombre à tester
 	 *\return		-1 si infini négatif, 1 si infini positif, 0 si fini
 	 */

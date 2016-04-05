@@ -116,10 +116,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Not to be used by the user, use Scene::CreateLight function instead
+		 *\remarks		Not to be used by the user, use Scene::CreateLight function instead
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
+		 *\remarks		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
 		 */
 		C3D_API SpotLight();
 		/**

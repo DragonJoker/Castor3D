@@ -71,13 +71,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations.
-		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created.
+		 *\remarks		If a mesh with the given name already exists, it is returned and no mesh is created.
 		 *\param[in]	p_type		Mesh type.
 		 *\param[in]	p_name		The wanted name.
 		 *\return		The created mesh.
 		 *\~french.=
 		 *\brief		Crée un mesh avec les informations données.
-		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé.
+		 *\remarks		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé.
 		 *\param[in]	p_type		Le type de mesh.
 		 *\param[in]	p_name		Le nom du mesh.
 		 *\return		Le mesh créé.
@@ -86,14 +86,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations.
-		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created.
+		 *\remarks		If a mesh with the given name already exists, it is returned and no mesh is created.
 		 *\param[in]	p_type			Mesh type.
 		 *\param[in]	p_name			The wanted name.
 		 *\param[in]	p_arrayFaces	The array of faces (for non custom meshes).
 		 *\return		The created mesh.
 		 *\~french
 		 *\brief		Crée un mesh avec les informations données.
-		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé.
+		 *\remarks		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé.
 		 *\param[in]	p_type			Le type de mesh.
 		 *\param[in]	p_name			Le nom du mesh.
 		 *\param[in]	p_arrayFaces	Le tableau de faces (pour les mesh non custom).
@@ -103,7 +103,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a mesh with the given informations.
-		 *\remark		If a mesh with the given name already exists, it is returned and no mesh is created.
+		 *\remarks		If a mesh with the given name already exists, it is returned and no mesh is created.
 		 *\param[in]	p_type			Mesh type.
 		 *\param[in]	p_name			The wanted name.
 		 *\param[in]	p_arrayFaces	The array of faces (for non custom meshes).
@@ -111,7 +111,7 @@ namespace Castor3D
 		 *\return		The created mesh.
 		 *\~french
 		 *\brief		Crée un mesh avec les informations données.
-		 *\remark		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé.
+		 *\remarks		Si un mesh avec le nom donné existe déjà, il est retourné et aucun mesh n'est créé.
 		 *\param[in]	p_type			Le type de mesh.
 		 *\param[in]	p_name			Le nom du mesh.
 		 *\param[in]	p_arrayFaces	Le tableau de faces (pour les mesh non custom).

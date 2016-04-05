@@ -156,11 +156,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Modifies the size
-		 *\remark		If width+cx < 0 (or height+cy < 0) then width=0 (respectively height=0)
+		 *\remarks		If width+cx < 0 (or height+cy < 0) then width=0 (respectively height=0)
 		 *\param[in]	p_cx, p_cy	The size modifications
 		 *\~french
 		 *\brief		Modifie la taille
-		 *\remark		Si width+cx < 0 (ou height+cy < 0) alors width=0 (respectivement height=0)
+		 *\remarks		Si width+cx < 0 (ou height+cy < 0) alors width=0 (respectivement height=0)
 		 *\param[in]	p_cx, p_cy	Les valeurs de modification
 		 */
 		CU_API void grow( int32_t p_cx, int32_t p_cy );

@@ -74,15 +74,17 @@ namespace Castor3D
 		C3D_API void Update();
 		/**
 		 *\~english
-		 *\brief		Creates a RenderTechnique from a technique name.
+		 *\brief		Creates a RenderTechnique.
 		 *\param[in]	p_name			The technique name.
 		 *\param[in]	p_renderTarget	The technique render target.
+		 *\param[in]	p_renderSystem	The render system.
 		 *\param[in]	p_params		The technique parameters.
 		 *\return		The created RenderTechnique.
 		 *\~french
-		 *\brief		Crée une RenderTechnique à partir d'un nom de technique.
-		 *\param[in]	p_key			Le type d'objet.
+		 *\brief		Crée une RenderTechnique.
+		 *\param[in]	p_name			Le nom de la technique.
 		 *\param[in]	p_renderTarget	La cible de rendu de la technique.
+		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 *\param[in]	p_params		Les paramètres de la technique.
 		 *\return		La RenderTechnique créée.
 		 */

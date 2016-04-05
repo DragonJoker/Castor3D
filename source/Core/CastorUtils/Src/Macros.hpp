@@ -30,23 +30,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 /**@name Unicode support */
 //@{
 
-#if CASTOR_USE_UNICODE
-//!\~english The macro to use with constant strings, id est : cuT( "a string")\~french Macro à utiliser pour les chaînes constantes, id est : cuT( "une chaîne")
-#	define cuT( x ) L##x
-typedef wchar_t xchar;
-typedef char ychar;
-#	define xout wcout
-#	define xerr wcerr
-#	define xlog wclog
-#else
-//!\~english The macro to use with constant strings, id est : cuT( "a string")\~french Macro à utiliser pour les chaînes constantes, id est : cuT( "une chaîne")
-#	define cuT( x ) x
+//!\~english The macro to use with constant strings, id est : cuT( "a string")	\~french Macro à utiliser pour les chaînes constantes, id est : cuT( "une chaîne")
+#define cuT( x ) x
 typedef char xchar;
 typedef wchar_t ychar;
-#	define xout cout
-#	define xerr cerr
-#	define xlog clog
-#endif
 
 //@}
 
@@ -55,69 +42,32 @@ typedef wchar_t ychar;
 #if defined( _MSC_VER )
 #	include <tchar.h>
 #	define cvsnprintf _vsntprintf_s
-#	define ccsncpy( x, y, z ) _tcsncpy_s( x, z, y, z )
 #	if _MSC_VER < 1900
 #		define sscanf sscanf_s
 #	endif
 #elif defined( __clang__)
 #	if !defined( _WIN32 )
 #		define _FILE_OFFSET_BITS 64
-#		if !CASTOR_USE_UNICODE
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) strncpy_s( x, y, z )
-#		else
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vswprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) wcsncpy_s( x, y, z )
-#		endif
+#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
-#		if !CASTOR_USE_UNICODE
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) strncpy_s( x, y, z )
-#		else
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnwprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) wcsncpy_s( x, y, z )
-#		endif
+#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
 #elif defined( __GNUG__)
 #	if !defined( _WIN32 )
 #		define _FILE_OFFSET_BITS 64
-#		if !CASTOR_USE_UNICODE
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) strncpy_s( x, y, z )
-#		else
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vswprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) wcsncpy_s( x, y, z )
-#		endif
+#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
-#		if !CASTOR_USE_UNICODE
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) strncpy_s( x, y, z )
-#		else
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnwprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) wcsncpy_s( x, y, z )
-#		endif
+#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
 #elif defined( __BORLANDC__ )
 #	if !defined( _WIN32 )
 #		define _FILE_OFFSET_BITS 64
-#		if !CASTOR_USE_UNICODE
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) strncpy_s( x, y, z )
-#		else
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vswprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) wcsncpy_s( x, y, z )
-#		endif
+#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	else
 #		define _FILE_OFFSET_BITS 64
-#		if !CASTOR_USE_UNICODE
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) strncpy_s( x, y, z )
-#		else
-#			define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnwprintf( buf, cnt, fmt, arg )
-#			define ccsncpy( x, y, z ) wcsncpy_s( x, y, z )
-#		endif
+#		define cvsnprintf( buf, sz, cnt, fmt, arg ) vsnprintf( buf, cnt, fmt, arg )
 #	endif
 #else
 #	error "Yet unsupported compiler"

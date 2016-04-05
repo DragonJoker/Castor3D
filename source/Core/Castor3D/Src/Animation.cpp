@@ -66,7 +66,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void RecursiveAddChildren( Animation & p_animation, AnimationObjectBaseSPtr p_moving, AnimationObjectBaseSPtr p_parent )
+	void RecursiveAddChildren( Animation & p_animation, AnimationObjectSPtr p_moving, AnimationObjectSPtr p_parent )
 	{
 		if ( !p_animation.HasObject( p_moving->GetType(), p_moving->GetName() ) )
 		{
@@ -249,7 +249,7 @@ namespace Castor3D
 		}
 	}
 
-	AnimationObjectBaseSPtr Animation::AddObject( Castor::String const & p_name, AnimationObjectBaseSPtr p_parent )
+	AnimationObjectSPtr Animation::AddObject( Castor::String const & p_name, AnimationObjectSPtr p_parent )
 	{
 		std::shared_ptr< SkeletonAnimationNode > l_return = std::make_shared< SkeletonAnimationNode >( p_name );
 		String l_name = MovingName[eANIMATION_OBJECT_TYPE_NODE] + p_name;
@@ -272,9 +272,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	AnimationObjectBaseSPtr Animation::AddObject( GeometrySPtr p_object, AnimationObjectBaseSPtr p_parent )
+	AnimationObjectSPtr Animation::AddObject( GeometrySPtr p_object, AnimationObjectSPtr p_parent )
 	{
-		AnimationObjectBaseSPtr l_return;
+		AnimationObjectSPtr l_return;
 		String l_name = MovingName[eANIMATION_OBJECT_TYPE_OBJECT] + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
 
@@ -298,9 +298,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	AnimationObjectBaseSPtr Animation::AddObject( BoneSPtr p_bone, AnimationObjectBaseSPtr p_parent )
+	AnimationObjectSPtr Animation::AddObject( BoneSPtr p_bone, AnimationObjectSPtr p_parent )
 	{
-		AnimationObjectBaseSPtr l_return;
+		AnimationObjectSPtr l_return;
 		String l_name = MovingName[eANIMATION_OBJECT_TYPE_BONE] + p_bone->GetName();
 		auto l_it = m_toMove.find( l_name );
 
@@ -330,7 +330,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Animation::AddObject( AnimationObjectBaseSPtr p_object, AnimationObjectBaseSPtr p_parent )
+	void Animation::AddObject( AnimationObjectSPtr p_object, AnimationObjectSPtr p_parent )
 	{
 		String l_name = MovingName[p_object->GetType()] + p_object->GetName();
 		auto l_it = m_toMove.find( l_name );
@@ -355,9 +355,9 @@ namespace Castor3D
 		return m_toMove.find( MovingName[p_type] + p_name ) != m_toMove.end();
 	}
 
-	AnimationObjectBaseSPtr Animation::GetObject( MovableObjectSPtr p_object )const
+	AnimationObjectSPtr Animation::GetObject( MovableObjectSPtr p_object )const
 	{
-		AnimationObjectBaseSPtr l_return;
+		AnimationObjectSPtr l_return;
 		auto l_it = m_toMove.find( MovingName[eANIMATION_OBJECT_TYPE_OBJECT] + p_object->GetName() );
 
 		if ( l_it != m_toMove.end() )
@@ -368,9 +368,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	AnimationObjectBaseSPtr Animation::GetObject( BoneSPtr p_bone )const
+	AnimationObjectSPtr Animation::GetObject( BoneSPtr p_bone )const
 	{
-		AnimationObjectBaseSPtr l_return;
+		AnimationObjectSPtr l_return;
 		auto l_it = m_toMove.find( MovingName[eANIMATION_OBJECT_TYPE_BONE] + p_bone->GetName() );
 
 		if ( l_it != m_toMove.end() )

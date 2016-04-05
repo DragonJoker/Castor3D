@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -288,11 +288,9 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds bone datas.
 		 *\param[in]	p_boneData	The bone datas.
-		 *\param[in]	p_count		The data count.
 		 *\~french
 		 *\brief		Ajoute des données de bones.
 		 *\param[in]	p_boneData	Les données de bones.
-		 *\param[in]	p_count		Les compte des données.
 		 */
 		template< uint32_t Count >
 		inline void AddBoneDatas( stVERTEX_BONE_DATA const ( & p_boneData )[Count] )
@@ -392,10 +390,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points
-		 *\remark		This function assumes the points are sorted like triangles fan
+		 *\remarks		This function assumes the points are sorted like triangles fan
 		 *\~french
 		 *\brief		Crée les faces à partir des points
-		 *\remark		Cette fonction suppose que les points sont tirés à la manière triangles fan
+		 *\remarks		Cette fonction suppose que les points sont tirés à la manière triangles fan
 		 */
 		C3D_API void ComputeFacesFromPolygonVertex();
 		/**
@@ -426,28 +424,28 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remark		This function supposes the normals are defined
+		 *\remarks		This function supposes the normals are defined
 		 *\~french
 		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
-		 *\remark		Cette fonction suppose que les normales sont définies
+		 *\remarks		Cette fonction suppose que les normales sont définies
 		 */
 		C3D_API void ComputeTangentsFromNormals();
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh
-		 *\remark		This function supposes bitangents and normals are defined
+		 *\remarks		This function supposes bitangents and normals are defined
 		 *\~french
 		 *\brief		Calcule la tangente pour chaque vertex du sous-maillage
-		 *\remark		Cette fonction suppose que les bitangentes et les normales sont définies
+		 *\remarks		Cette fonction suppose que les bitangentes et les normales sont définies
 		 */
 		C3D_API void ComputeTangentsFromBitangents();
 		/**
 		 *\~english
 		 *\brief		Computes bitangent for each vertex of the submesh
-		 *\remark		This function supposes the tangents and normals are defined
+		 *\remarks		This function supposes the tangents and normals are defined
 		 *\~french
 		 *\brief		Calcule la bitangente pour chaque vertex du sous-maillage
-		 *\remark		Cette fonction suppose que les tangentes et les normales sont définies
+		 *\remarks		Cette fonction suppose que les tangentes et les normales sont définies
 		 */
 		C3D_API void ComputeBitangents();
 		/**
@@ -519,10 +517,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the material
-		 *\param[in]	The new value
+		 *\param[in]	p_mat	The new value
 		 *\~french
 		 *\brief		Définit le material
-		 *\param[in]	La nouvelle valeur
+		 *\param[in]	p_mat	La nouvelle valeur
 		 */
 		inline void SetDefaultMaterial( MaterialSPtr p_mat )
 		{
@@ -840,10 +838,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and adds faces to the submesh
-		 *\param[in]	p_arrayFaces	The faces
+		 *\param[in]	p_faces	The faces
 		 *\~french
 		 *\brief		Crée et ajoute une face au sous-maillage
-		 *\param[in]	p_arrayFaces	Les faces
+		 *\param[in]	p_faces	Les faces
 		 */
 		template< uint32_t Count > void AddFaceGroup( stFACE_INDICES( & p_faces )[Count] )
 		{

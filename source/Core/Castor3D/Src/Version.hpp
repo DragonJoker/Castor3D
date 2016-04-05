@@ -30,10 +30,10 @@ namespace Castor3D
 	\date		14/01/2011
 	\~english
 	\brief		Version management class
-	\remark		Class used to manage versions and versions dependencies for plugins
+	\remark		Class used to manage versions and versions dependencies for plug-ins
 	\~french
 	\brief		Classe de gestion de version
-	\remark		Classe utilisee pour gerer les versions et dependances de version pour les plugins
+	\remark		Classe utilisee pour gerer les versions et dependances de version pour les plug-ins
 	*/
 	class Version
 	{

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,26 +30,26 @@ namespace Castor
 	{
 	public:
 		/** Constructor
-		*/
+		 */
 		IConsole()
 		{
 		}
 
 		/** Destructor
-		*/
+		 */
 		virtual ~IConsole()
 		{
 		}
 
 		/** Configures console info for the given log type
-		*\param[in]	logLevel		 	The log leve
-		*/
+		 *\param[in]	p_logLevel		The log level
+		 */
 		virtual void BeginLog( ELogType p_logLevel ) = 0;
 
 		/** Prints a text in the console, adds the line end character if asked
-		*\param[in]	toLog		The text to lo
-		*\param[in]	newLine		 	Tells if the line end character must be adde
-		*/
+		 *\param[in]	toLog		The text to log
+		 *\param[in]	newLine		Tells if the line end character must be added
+		 */
 		virtual void Print( String const & toLog, bool newLine ) = 0;
 	};
 
@@ -59,26 +59,26 @@ namespace Castor
 	{
 	public:
 		/** Constructor
-		*/
+		 */
 		ProgramConsole()
 		{
 		}
 
 		/** Destructor
-		*/
+		 */
 		virtual ~ProgramConsole()
 		{
 		}
 
 		/** Configures console info for the given log type
-		*\param[in]	logLevel		The log typ
-		*/
+		 *\param[in]	logLevel		The log typ
+		 */
 		virtual void BeginLog( ELogType logLevel ) = 0;
 
 		/** Prints a text in the console, adds the line end character if asked
-		*\param[in]	toLog		The text to lo
-		*\param[in]	newLine		Tells if the line end character must be adde
-		*/
+		 *\param[in]	toLog		The text to lo
+		 *\param[in]	newLine		Tells if the line end character must be adde
+		 */
 		virtual void Print( String const & toLog, bool newLine ) = 0;
 
 	protected:

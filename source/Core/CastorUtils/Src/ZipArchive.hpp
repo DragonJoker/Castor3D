@@ -84,10 +84,8 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Deflates an archive
-		 *\param[in]	p_archive	The archive path
 		 *\~french
 		 *\brief		Compresse une archive
-		 *\param[in]	p_archive	Le chemin de l'archive
 		 */
 		CU_API bool Deflate()const;
 		/**
@@ -116,7 +114,7 @@ namespace Castor
 		 *\brief		Retire un fichier de l'archive
 		 *\param[in]	p_fileName	Le chemin du fichier
 		 */
-		CU_API void RemoveFile( Path const & p_file );
+		CU_API void RemoveFile( Path const & p_fileName );
 		/**
 		 *\~english
 		 *\brief		Looks for a folder into the archive

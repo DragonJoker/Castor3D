@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -37,10 +37,10 @@ namespace Castor
 	 *\param[in]	p_size		The wanted size.
 	 *\return		The allocated memory, nullptr on error.
 	 *\~french
-	 *\brief		Alloue de la mémoire alignée.
-	 *\param[in]	p_alignment	La valeur d'alignement, doit être une puissance de deux.
-	 *\param[in]	p_size		La taille désirée.
-	 *\return		La mémoire allouée, nullptr en cas d'erreur.
+	 *\brief		Alloue de la mÃ©moire alignÃ©e.
+	 *\param[in]	p_alignment	La valeur d'alignement, doit Ãªtre une puissance de deux.
+	 *\param[in]	p_size		La taille dÃ©sirÃ©e.
+	 *\return		La mÃ©moire allouÃ©e, nullptr en cas d'erreur.
 	 */
 	CU_API void * AlignedAlloc( size_t p_alignment, size_t p_size );
 	/**
@@ -48,8 +48,8 @@ namespace Castor
 	 *\brief		Deallocates aligned memory.
 	 *\param[in]	p_memory	The memory.
 	 *\~french
-	 *\brief		Désalloue de la mémoire alignée.
-	 *\param[in]	p_memory	La mémoire.
+	 *\brief		DÃ©salloue de la mÃ©moire alignÃ©e.
+	 *\param[in]	p_memory	La mÃ©moire.
 	 */
 	CU_API void AlignedFree( void * p_memory );
 	/**
@@ -59,10 +59,10 @@ namespace Castor
 	 *\param[in]	p_size		The wanted size.
 	 *\return		The allocated memory, nullptr on error.
 	 *\~french
-	 *\brief		Alloue de la mémoire alignée.
-	 *\param[in]	p_alignment	La valeur d'alignement, doit être une puissance de deux.
-	 *\param[in]	p_size		La taille désirée.
-	 *\return		La mémoire allouée, nullptr en cas d'erreur.
+	 *\brief		Alloue de la mÃ©moire alignÃ©e.
+	 *\param[in]	p_alignment	La valeur d'alignement, doit Ãªtre une puissance de deux.
+	 *\param[in]	p_size		La taille dÃ©sirÃ©e.
+	 *\return		La mÃ©moire allouÃ©e, nullptr en cas d'erreur.
 	 */
 	template< typename T >
 	T * AlignedAlloc( size_t p_alignment, size_t p_size )

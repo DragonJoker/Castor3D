@@ -123,12 +123,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		The constructor, used by clone function
-		 *\param[in]	p_eLightType	The light category type
+		 *\param[in]	p_lightType	The light category type
 		 *\~french
 		 *\brief		Le constructeur utilisé par la fonction de clonage
-		 *\param[in]	p_eLightType	Le type de catégorie de lumière
+		 *\param[in]	p_lightType	Le type de catégorie de lumière
 		 */
-		C3D_API LightCategory( eLIGHT_TYPE p_eLightType );
+		C3D_API LightCategory( eLIGHT_TYPE p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -139,8 +139,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
+		 *\param[out]	p_texture	The texture that receives the light's data.
+		 *\param[in]	p_index		The light index.
 		 *\~french
 		 *\brief		Met la lumière dans la texture donnée.
+		 *\param[out]	p_texture	La texture recevant les données de la source lumineuse.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
 		 */
 		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const = 0;
 		/**
@@ -332,32 +336,32 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the light's type and position
-		 *\param[in]	The new value
+		 *\param[in]	p_position	The new value
 		 *\~french
 		 *\brief		Définit le type de la lumière et sa position
-		 *\param[in]	La nouvelle valeur
+		 *\param[in]	p_position	La nouvelle valeur
 		 */
-		virtual void SetPositionType( Castor::Point4f const & p_ptPosition )
+		virtual void SetPositionType( Castor::Point4f const & p_position )
 		{
-			m_positionType[0] = float( p_ptPosition[0] );
-			m_positionType[1] = float( p_ptPosition[1] );
-			m_positionType[2] = float( -p_ptPosition[2] );
-			m_positionType[3] = float( p_ptPosition[3] );
+			m_positionType[0] = float( p_position[0] );
+			m_positionType[1] = float( p_position[1] );
+			m_positionType[2] = float( -p_position[2] );
+			m_positionType[3] = float( p_position[3] );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the light's type and position
-		 *\param[in]	The new value
+		 *\param[in]	p_position	The new value
 		 *\~french
 		 *\brief		Définit le type de la lumière et sa position
-		 *\param[in]	La nouvelle valeur
+		 *\param[in]	p_position	La nouvelle valeur
 		 */
-		virtual void SetPositionType( Castor::Point4d const & p_ptPosition )
+		virtual void SetPositionType( Castor::Point4d const & p_position )
 		{
-			m_positionType[0] = float( p_ptPosition[0] );
-			m_positionType[1] = float( p_ptPosition[1] );
-			m_positionType[2] = float( -p_ptPosition[2] );
-			m_positionType[3] = float( p_ptPosition[3] );
+			m_positionType[0] = float( p_position[0] );
+			m_positionType[1] = float( p_position[1] );
+			m_positionType[2] = float( -p_position[2] );
+			m_positionType[3] = float( p_position[3] );
 		}
 
 	protected:

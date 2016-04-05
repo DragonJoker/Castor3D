@@ -29,7 +29,7 @@ namespace Castor3D
 	\~english
 	\brief		Importer Plugin class
 	\~french
-	\brief		Classe de plugin d'import
+	\brief		Classe de plug-in d'import
 	*/
 	class ImporterPlugin
 		: public PluginBase
@@ -53,14 +53,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_library	The shared library holding the plug-in
 		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API ImporterPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API ImporterPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -70,10 +70,10 @@ namespace Castor3D
 		C3D_API virtual ~ImporterPlugin();
 		/**
 		 *\~english
-		 *\brief		Attaches the plugin to the given Importer
+		 *\brief		Attaches the plug-in to the given Importer
 		 *\param[in]	p_pImporter	The Importer
 		 *\~french
-		 *\brief		Attache le plugin à l'Importer donné
+		 *\brief		Attache le plug-in à l'Importer donné
 		 *\param[in]	p_pImporter	L'Importer
 		 */
 		inline void AttachImporter( ImporterSPtr p_pImporter )
@@ -82,10 +82,10 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Detaches the plugin from the attached Importer
+		 *\brief		Detaches the plug-in from the attached Importer
 		 *\return		The attached Importer
 		 *\~french
-		 *\brief		Detache le plugin de l'Importer attaché
+		 *\brief		Detache le plug-in de l'Importer attaché
 		 *\return		L'Importer attaché
 		 */
 		inline void DetachImporter()

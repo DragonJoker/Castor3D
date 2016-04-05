@@ -68,12 +68,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and returns a DepthStencilState, given a name
-		 *\remark		If a DepthStencilState with the same name exists, none is created
+		 *\remarks		If a DepthStencilState with the same name exists, none is created
 		 *\param[in]	p_name	The DepthStencilState name
 		 *\return		The created or existing DepthStencilState
 		 *\~french
 		 *\brief		Crée et renvoie un DepthStencilState, avec le nom donné
-		 *\remark		Si un DepthStencilState avec le même nom existe, aucun n'est créé
+		 *\remarks		Si un DepthStencilState avec le même nom existe, aucun n'est créé
 		 *\param[in]	p_name	Le nom du DepthStencilState
 		 *\return		Le DepthStencilState créé ou existant
 		 */

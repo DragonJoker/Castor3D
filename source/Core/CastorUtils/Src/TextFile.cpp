@@ -2,8 +2,8 @@
 
 namespace Castor
 {
-	TextFile::TextFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_encodingMode )
-		:	File( p_fileName, p_iMode & ( ~eOPEN_MODE_BINARY ), p_encodingMode	)
+	TextFile::TextFile( Path const & p_fileName, int p_mode, eENCODING_MODE p_encodingMode )
+		:	File( p_fileName, p_mode & ( ~eOPEN_MODE_BINARY ), p_encodingMode	)
 	{
 	}
 

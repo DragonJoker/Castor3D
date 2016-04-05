@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor3D
 	\~english
 	\brief		Implements Jim Hejl and Richard Burgess-Dawson tone mapping algorithm.
 	\~french
-	\brief		Implémente l'algorithme de mappage de ton de Jim Hejl et Richard Burgess-Dawson.
+	\brief		ImplÃ©mente l'algorithme de mappage de ton de Jim Hejl et Richard Burgess-Dawson.
 	*/
 	class HejlBurgessDawsonToneMapping
 		: public ToneMapping
@@ -43,9 +43,9 @@ namespace Castor3D
 		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
-		 * Constructeur spécifié
+		 * Constructeur spÃ©cifiÃ©
 		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
+		 *\param[in]	p_parameters	Les paramÃ¨tres spÃ©cifiques Ã  l'implÃ©mentation.
 		 */
 		C3D_API HejlBurgessDawsonToneMapping( Engine & p_engine, Parameters const & p_parameters );
 		/**
@@ -61,9 +61,9 @@ namespace Castor3D
 		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
-		 *\brief		Fonction de création, pour la fabrique.
+		 *\brief		Fonction de crÃ©ation, pour la fabrique.
 		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_parameters	Les paramètres spécifiques à l'implémentation.
+		 *\param[in]	p_parameters	Les paramÃ¨tres spÃ©cifiques Ã  l'implÃ©mentation.
 		 */
 		C3D_API static ToneMappingSPtr Create( Engine & p_engine, Parameters const & p_parameters );
 

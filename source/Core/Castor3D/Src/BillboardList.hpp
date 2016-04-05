@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -175,12 +175,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Adds a point to the list
-		 *\param[in]	p_ptPosition	The point
+		 *\param[in]	p_position	The point
 		 *\~french
 		 *\brief		Ajoute un point a la liste
-		 *\param[in]	p_ptPosition	Le point
+		 *\param[in]	p_position	Le point
 		 */
-		C3D_API void AddPoint( Castor::Point3r const & p_ptPosition );
+		C3D_API void AddPoint( Castor::Point3r const & p_position );
 		/**
 		 *\~english
 		 *\brief		Adds a points list to the list
@@ -247,16 +247,16 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets a point in the list
 		 *\param[in]	p_index		The point index
-		 *\param[in]	p_ptPosition	The point
+		 *\param[in]	p_position	The point
 		 *\~french
 		 *\brief		Definit un point de la liste
 		 *\param[in]	p_index		L'index du point
-		 *\param[in]	p_ptPosition	Le point
+		 *\param[in]	p_position	Le point
 		 */
-		inline void SetAt( uint32_t p_index, Castor::Point3r const & p_ptPosition )
+		inline void SetAt( uint32_t p_index, Castor::Point3r const & p_position )
 		{
 			m_needUpdate = true;
-			m_arrayPositions[p_index] = p_ptPosition;
+			m_arrayPositions[p_index] = p_position;
 		}
 		/**
 		 *\~english

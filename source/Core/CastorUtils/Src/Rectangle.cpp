@@ -3,13 +3,13 @@
 
 namespace Castor
 {
-	Rectangle::Rectangle( Position const & p_ptStart, Size const & p_ptSize )
+	Rectangle::Rectangle( Position const & p_ptStart, Size const & p_size )
 		: Coords4i( m_data.buffer )
 	{
 		m_data.rect.left = p_ptStart.x();
 		m_data.rect.top = p_ptStart.y();
-		m_data.rect.right = m_data.rect.left + int32_t( p_ptSize.width() );
-		m_data.rect.bottom = m_data.rect.top + int32_t( p_ptSize.height() );
+		m_data.rect.right = m_data.rect.left + int32_t( p_size.width() );
+		m_data.rect.bottom = m_data.rect.top + int32_t( p_size.height() );
 	}
 
 	Rectangle::Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom )

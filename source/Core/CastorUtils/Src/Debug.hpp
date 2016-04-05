@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -35,7 +35,7 @@ namespace Castor
 		 *\brief			Transmet la pile d'appels dans un flux
 		 *\param[in,out]	p_stream	Le flux
 		 */
-		CU_API std::wostream & operator<<( std::wostream & p_stream, Backtrace const & p_backtrace );
+		CU_API std::wostream & operator<<( std::wostream & p_stream, Backtrace const & );
 		/**
 		 *\~english
 		 *\brief			Puts the backtrace into a stream
@@ -44,7 +44,7 @@ namespace Castor
 		 *\brief			Transmet la pile d'appels dans un flux
 		 *\param[in,out]	p_stream	Le flux
 		 */
-		CU_API std::ostream & operator<<( std::ostream & p_stream, Backtrace const & p_backtrace );
+		CU_API std::ostream & operator<<( std::ostream & p_stream, Backtrace const & );
 
 		/*!
 		\author 	Sylvain DOREMUS
@@ -53,7 +53,7 @@ namespace Castor
 		\~english
 		\brief		Helper class used to enable allocation backtrace retrieval.
 		\~french
-		\brief		Classe d'aide permettant la récupération de la pile d'appels d'allocation.
+		\brief		Classe d'aide permettant la rÃ©cupÃ©ration de la pile d'appels d'allocation.
 		*/
 		class Backtraced
 		{

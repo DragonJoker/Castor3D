@@ -113,9 +113,9 @@ namespace Castor3D
 		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
 	}
 
-	void PointLight::SetPosition( Castor::Point3r const & p_ptPosition )
+	void PointLight::SetPosition( Castor::Point3r const & p_position )
 	{
-		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 1.0f ) );
+		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 1.0f ) );
 	}
 
 	Castor::Point3f PointLight::GetPosition()const

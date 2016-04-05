@@ -36,8 +36,8 @@ namespace GuiCommon
 		eID_MENU_PREFS,
 	}	eID;
 
-	ShaderDialog::ShaderDialog( Engine * p_engine, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pPass, wxPoint const & p_ptPosition, const wxSize p_ptSize )
-		: wxFrame( p_parent, wxID_ANY, _( "Shaders" ), p_ptPosition, p_ptSize, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
+	ShaderDialog::ShaderDialog( Engine * p_engine, bool p_bCanEdit, wxWindow * p_parent, PassSPtr p_pPass, wxPoint const & p_position, const wxSize p_size )
+		: wxFrame( p_parent, wxID_ANY, _( "Shaders" ), p_position, p_size, wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxMAXIMIZE_BOX )
 		, m_pPass( p_pPass )
 		, m_bCompiled( true )
 		, m_bOwnShader( true )

@@ -78,7 +78,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Tells if the pattern is closed (first element is also the last)
-		 *\return		\pt true if closed, \p false if not
+		 *\return		\p true if closed, \p false if not
 		 *\~french
 		 *\brief		Dit si le chemin est fermé (le premier élément est aussi le dernier)
 		 *\return		\p true si fermé, \p false sinon

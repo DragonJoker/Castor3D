@@ -40,14 +40,16 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Opens the file at the given path with the given mode and encoding
-		 *\param[in]	p_fileName	The file path
-		 *\param[in]	p_iMode		The opening mode, combination of one or more eOPEN_MODE
+		 *\param[in]	p_fileName		The file path
+		 *\param[in]	p_mode			The opening mode, combination of one or more eOPEN_MODE
+		 *\param[in]	p_encodingMode	The encoding mode
 		 *\~french
 		 *\brief		Ouvre le fichier situé au chemin donné, avec le mode et l'encodage donnés
-		 *\param[in]	p_fileName	Le chemin du fichier
-		 *\param[in]	p_iMode		Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
+		 *\param[in]	p_fileName		Le chemin du fichier
+		 *\param[in]	p_mode			Le mode d'ouverture, combinaison d'un ou plusieurs eOPEN_MODE
+		 *\param[in]	p_encodingMode	Le mode d'encodage
 		 */
-		CU_API BinaryFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_encodingMode = eENCODING_MODE_ASCII );
+		CU_API BinaryFile( Path const & p_fileName, int p_mode, eENCODING_MODE p_encodingMode = eENCODING_MODE_ASCII );
 		/**
 		 *\~english
 		 *\brief		Destructor, closes the file
@@ -58,25 +60,25 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Writes a string into the file (binary, so writes size then content, without '\0')
-		 *\param[in]	p_strToWrite	The string
+		 *\param[in]	p_toWrite	The string
 		 *\return		\p true if written correctly
 		 *\~french
 		 *\brief		Ecrit une chaîne de caractères dans le fichier (en binaire, donc écrit d'abord la taille puis le contenu, sans le '\0')
-		 *\param[in]	p_strToWrite	La chaîne
+		 *\param[in]	p_toWrite	La chaîne
 		 *\return		\p true si l'écriture s'est bien déroulée
 		 */
-		CU_API bool Write( String const & p_strToWrite );
+		CU_API bool Write( String const & p_toWrite );
 		/**
 		 *\~english
 		 *\brief		Reads a string from the file (binary, so reads size then content)
-		 *\param[out]	p_strToRead	The string
+		 *\param[out]	p_toRead	The string
 		 *\return		\p true if read correctly
 		 *\~french
 		 *\brief		Lit une chaîne de caractères à partir du fichier (en binaire, donc lit d'abord la taille puis le contenu)
-		 *\param[out]	p_strToRead	La chaîne
+		 *\param[out]	p_toRead	La chaîne
 		 *\return		\p true si la lecture s'est bien déroulée
 		 */
-		CU_API bool Read( String & p_strToRead );
+		CU_API bool Read( String & p_toRead );
 		/**
 		 *\~english
 		 *\brief		Writes an object into the file
@@ -115,12 +117,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Writes a static array of objects into the file
-		 *\remark		Array size is deduced from parameter
+		 *\remarks		Array size is deduced from parameter
 		 *\param[in]	p_toWrite	The object array
 		 *\return		The bytes written
 		 *\~french
 		 *\brief		Ecrit un tableau statique d'objets dans du fichier
-		 *\remark		La taille du tableau est déduite à partir du paramètre
+		 *\remarks		La taille du tableau est déduite à partir du paramètre
 		 *\param[in]	p_toWrite	Le tableau d'objets
 		 *\return		Le nombre d'octets écrits
 		 */
@@ -142,12 +144,12 @@ namespace Castor
 		 *\~english
 		 *\brief		Reads a static array of objects from the file
 		 *\param[out]	p_toRead	The objects array
-		 *\remark		Array size is deduced from parameter
+		 *\remarks		Array size is deduced from parameter
 		 *\return		The bytes read
 		 *\~french
 		 *\brief		Lit un tableau statique d'objets à partir du fichier
 		 *\param[out]	p_toRead	Le tableau d'objets
-		 *\remark		La taille du tableau est déduite à partir du paramètre
+		 *\remarks		La taille du tableau est déduite à partir du paramètre
 		 *\return		Le nombre d'octets lus
 		 */
 		template< typename T, uint64_t N > uint64_t ReadArray( T( & p_toRead )[N] );
@@ -155,25 +157,29 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Open mode dependant write function
-	 *\param[in]	p_toWrite	The data to write in this file
+	 *\param[in]	p_file		The file
+	 *\param[in]	p_toWrite	The data to write in the file
 	 *\return		A reference to this file
 	 *\~french
 	 *\brief		Fonction d'écriture dépendant du mode d'ouverture
+	 *\param[in]	p_file		Le fichier
 	 *\param[in]	p_toWrite	La donnée à écrire dans le fichier
 	 *\return		Une référence sur ce fichier
 	 */
-	template< typename T > BinaryFile & operator <<( BinaryFile & p_file, T const & p_toWrite );
+	template< typename T > BinaryFile & operator<<( BinaryFile & p_file, T const & p_toWrite );
 	/**
 	 *\~english
 	 *\brief		Open mode dependant read function
-	 *\param[out]	p_toRead	The data to read from this file
+	 *\param[in]	p_file		The file
+	 *\param[out]	p_toRead	The data to read from the file
 	 *\return		A reference to this file
 	 *\~french
 	 *\brief		Fonction de lecture dépendant du mode d'ouverture
+	 *\param[in]	p_file		Le fichier
 	 *\param[out]	p_toRead	La donnée à lire à partir du fichier
 	 *\return		Une référence sur ce fichier
 	 */
-	template< typename T > BinaryFile & operator >>( BinaryFile & p_file, T & p_toRead );
+	template< typename T > BinaryFile & operator>>( BinaryFile & p_file, T & p_toRead );
 }
 
 #include "BinaryFile.inl"

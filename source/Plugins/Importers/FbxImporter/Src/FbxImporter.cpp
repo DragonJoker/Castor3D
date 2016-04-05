@@ -1,6 +1,6 @@
 #include "FbxImporter.hpp"
 
-#include <AnimationObjectBase.hpp>
+#include <AnimationObject.hpp>
 #include <Bone.hpp>
 #include <GeometryManager.hpp>
 #include <InitialiseEvent.hpp>
@@ -82,7 +82,7 @@ namespace C3dFbx
 			FbxIOSettings* ios = FbxIOSettings::Create( p_fbxManager, IOSROOT );
 			p_fbxManager->SetIOSettings( ios );
 
-			//Load plugins from the executable directory (optional)
+			//Load plug-ins from the executable directory (optional)
 			FbxString lPath = FbxGetApplicationDirectory();
 			p_fbxManager->LoadPluginsDirectory( lPath.Buffer() );
 
@@ -558,7 +558,7 @@ namespace C3dFbx
 				uint64_t l_start = l_takeInfo->mLocalTimeSpan.GetStart().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_finish = l_takeInfo->mLocalTimeSpan.GetStop().GetFrameCount( FbxTime::eFrames24 );
 				uint64_t l_animationLength = l_finish - l_start + 1;
-				AnimationObjectBaseSPtr l_object;
+				AnimationObjectSPtr l_object;
 
 				if ( l_bone->GetParent() )
 				{

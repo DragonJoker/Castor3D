@@ -624,26 +624,26 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the relative position of the overlay
-		 *\param[in]	p_ptPosition	The new position
+		 *\param[in]	p_position	The new position
 		 *\~french
 		 *\brief		Définit la position relative de l'incrustation
-		 *\param[in]	p_ptPosition	La nouvelle position
+		 *\param[in]	p_position	La nouvelle position
 		 */
-		inline void SetPosition( Castor::Point2d const & p_ptPosition )
+		inline void SetPosition( Castor::Point2d const & p_position )
 		{
-			m_category->SetPosition( p_ptPosition );
+			m_category->SetPosition( p_position );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the relative size of the overlay
-		 *\param[in]	p_ptSize	The new size
+		 *\param[in]	p_size	The new size
 		 *\~french
 		 *\brief		Définit les dimensions relatives de l'incrustation
-		 *\param[in]	p_ptSize	Les nouvelles dimensions
+		 *\param[in]	p_size	Les nouvelles dimensions
 		 */
-		inline void SetSize( Castor::Point2d const & p_ptSize )
+		inline void SetSize( Castor::Point2d const & p_size )
 		{
-			m_category->SetSize( p_ptSize );
+			m_category->SetSize( p_size );
 		}
 		/**
 		 *\~english

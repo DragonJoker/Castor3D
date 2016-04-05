@@ -26,11 +26,7 @@ namespace Castor3D
 	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PAVRenderSystem@Castor3D@@AAVRenderTarget@4@ABVParameters@4@@Z" );
 #		endif
 #	endif
-#	if CASTOR_USE_UNICODE
-	static const String GetPostEffectTypeFunctionABIName = cuT( "?GetPostEffectType@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@XZ" );
-#	else
 	static const String GetPostEffectTypeFunctionABIName = cuT( "?GetPostEffectType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
-#	endif
 #elif defined( __GNUG__)
 	static const String CreateEffectFunctionABIName = cuT( "_Z12CreateEffectPN8Castor3D12RenderSystemERNS_12RenderTargetERKNS_10ParametersE" );
 #	if GCC_VERSION >= 50300
@@ -42,19 +38,19 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		: PluginBase( ePLUGIN_TYPE_POSTFX, p_pLibrary, *p_engine )
+	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_POSTFX, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateEffect plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateEffect plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnGetPostEffectType, GetPostEffectTypeFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetPostEffectType, GetPostEffectTypeFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetPostEffectType plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetPostEffectType plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}

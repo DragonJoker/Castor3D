@@ -348,11 +348,11 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\biref		Looks for an element with given name.
+		 *\brief		Looks for an element with given name.
 		 *\param[in]	p_name		The object name.
 		 *\return		The found element, nullptr if not found.
 		 *\~french
-		 *\biref		Cherche un élément par son nom.
+		 *\brief		Cherche un élément par son nom.
 		 *\param[in]	p_name		Le nom d'objet.
 		 *\return		L'élément trouvé, nullptr si non trouvé.
 		 */
@@ -430,12 +430,12 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Creates an object from a name.
+		 *\brief		Creates an object.
 		 *\param[in]	p_name		The object name.
 		 *\param[in]	p_params	The other constructor parameters.
 		 *\return		The created object.
 		 *\~french
-		 *\brief		Crée un objet à partir d'un nom.
+		 *\brief		Crée un objet.
 		 *\param[in]	p_name		Le nom d'objet.
 		 *\param[in]	p_params	Les autres paramètres de construction.
 		 *\return		L'objet créé.

@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor3D
 	\~english
 	\brief		Implements linear tone mapping algorithm.
 	\~french
-	\brief		ImplÈmente l'algorithme de mappage de ton linÈaire.
+	\brief		Impl√©mente l'algorithme de mappage de ton lin√©aire.
 	*/
 	class LinearToneMapping
 		: public ToneMapping
@@ -40,10 +40,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 * Specified constructor
-		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_engine		The engine.
+		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
-		 * Constructeur spÈcifiÈ
-		 *\param[in]	p_engine	Le moteur.
+		 * Constructeur sp√©cifi√©
+		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	p_parameters	Les param√®tres sp√©cifiques √† l'impl√©mentation.
 		 */
 		C3D_API LinearToneMapping( Engine & p_engine, Parameters const & p_parameters );
 		/**
@@ -59,9 +61,9 @@ namespace Castor3D
 		 *\param[in]	p_engine		The engine.
 		 *\param[in]	p_parameters	The implementation specific parameters.
 		 *\~french
-		 *\brief		Fonction de crÈation, pour la fabrique.
+		 *\brief		Fonction de cr√©ation, pour la fabrique.
 		 *\param[in]	p_engine		Le moteur.
-		 *\param[in]	p_parameters	Les paramËtres spÈcifiques ‡ l'implÈmentation.
+		 *\param[in]	p_parameters	Les param√®tres sp√©cifiques √† l'impl√©mentation.
 		 */
 		C3D_API static ToneMappingSPtr Create( Engine & p_engine, Parameters const & p_parameters );
 

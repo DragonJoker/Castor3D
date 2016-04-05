@@ -113,15 +113,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Interpolation function.
 		 *\param[in]	p_src		The start.
-		 *\param[in]	p_dst		The end.
-		 *\param[in]	p_percent	The percentage.
 		 *\~french
 		 *\brief		Fonction d'interpolation.
 		 *\param[in]	p_src		Le départ.
-		 *\param[in]	p_dst		L'arrivée.
-		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		inline Type Interpolate( Type const & p_src, Type const & CU_PARAM_UNUSED( p_dst ), real CU_PARAM_UNUSED( p_percent ) )const
+		inline Type Interpolate( Type const & p_src, Type const &, real )const
 		{
 			return p_src;
 		}

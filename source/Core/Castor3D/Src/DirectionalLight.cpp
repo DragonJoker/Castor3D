@@ -92,9 +92,9 @@ namespace Castor3D
 		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
 	}
 
-	void DirectionalLight::SetDirection( Castor::Point3f const & p_ptPosition )
+	void DirectionalLight::SetDirection( Castor::Point3f const & p_position )
 	{
-		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 0.0f ) );
+		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 0.0f ) );
 	}
 
 	Castor::Point3f DirectionalLight::GetDirection()const

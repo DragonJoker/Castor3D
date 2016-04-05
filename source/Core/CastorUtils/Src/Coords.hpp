@@ -191,10 +191,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Destructor
-		 *\remark		Not virtual but it should be ok to derive Coords because destructor is dummy
+		 *\remarks		Not virtual but it should be ok to derive Coords because destructor is dummy
 		 *\~french
 		 *\brief		Destructeur
-		 *\remark		Non virtuel mais il devrait être possible de dériver Coords car le destructeur ne fait rien
+		 *\remarks		Non virtuel mais il devrait être possible de dériver Coords car le destructeur ne fait rien
 		 */
 		~Coords();
 		/**
@@ -407,10 +407,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Inverts data in the point
-		 *\remark		The first becomes last and so on
+		 *\remarks		The first becomes last and so on
 		 *\~french
 		 *\brief		Inverse les données dans ce point
-		 *\remark		Les premiers deviennent les derniers
+		 *\remarks		Les premiers deviennent les derniers
 		 */
 		void flip();
 		/**
@@ -461,11 +461,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		No check is made, if you make an index error, expect a crash
+		 *\remarks		No check is made, if you make an index error, expect a crash
 		 *\return		A constant reference on data at wanted index
 		 *\~french
 		 *\brief		Récupère la donnée à l'index donné
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
+		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence constante sur la donnée à l'index voulu
 		 */
 		inline T const & operator[]( uint32_t p_pos )const
@@ -475,11 +475,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		No check is made, if you make an index error, expect a crash
+		 *\remarks		No check is made, if you make an index error, expect a crash
 		 *\return		A reference on data at wanted index
 		 *\~french
 		 *\brief		Récupère la donnée à l'index donné
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
+		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence sur la donnée à l'index voulu
 		 */
 		inline T & operator[]( uint32_t p_pos )
@@ -489,22 +489,22 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
+		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
 		 *\return		A constant reference on data at wanted index
 		 *\~french
 		 *\brief		Récupère la donnée à l'index donné
-		 *\remark		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
+		 *\remarks		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
 		 *\return		Une référence constante sur la donnée à l'index voulu
 		 */
 		T const & at( uint32_t p_pos )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
+		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
 		 *\return		A reference on data at wanted index
 		 *\~french
 		 *\brief		Récupère la donnée à l'index donné
-		 *\remark		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
+		 *\remarks		Cette fonction vérifie l'index et lance une exception s'il est hors bornes
 		 *\return		Une référence sur la donnée à l'index voulu
 		 */
 		T & at( uint32_t p_pos );
@@ -762,12 +762,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Normalises the point
-		 *\remark		A point is normalised when it's length equals 1.0
+		 *\remarks		A point is normalised when it's length equals 1.0
 						<br />So each data is divided by the point's length
 		 *\param[in]	p_ptPoint	The point
 		 *\~french
 		 *\brief		Normalise le point
-		 *\remark		Un point est normalisé quand sa longueur vaut 1.0
+		 *\remarks		Un point est normalisé quand sa longueur vaut 1.0
 						<br />Chaque donnée est donc divisée par la longueur du point
 		 *\param[in]	p_ptPoint	Le point
 						*/

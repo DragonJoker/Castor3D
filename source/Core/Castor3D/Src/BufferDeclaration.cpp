@@ -20,11 +20,6 @@ namespace Castor3D
 		}
 	}
 
-	BufferDeclaration::BufferDeclaration( std::vector< BufferElementDeclaration > const & p_elements )
-		: BufferDeclaration( p_elements.data(), uint32_t( p_elements.size() ) )
-	{
-	}
-
 	BufferDeclaration::~BufferDeclaration()
 	{
 	}

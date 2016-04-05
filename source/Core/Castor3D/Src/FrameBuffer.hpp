@@ -48,10 +48,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\para[in]		p_engine	The core engine
+		 *\param[in]	p_engine	The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\para[in]		p_engine	Le moteur
+		 *\param[in]	p_engine	Le moteur
 		 */
 		C3D_API FrameBuffer( Engine & p_engine );
 		/**
@@ -133,7 +133,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Stretches this frame buffer into the given one.
-		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\remarks		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
 		 *\param[in]	p_buffer		The buffer receiving this one.
 		 *\param[in]	p_rectSrc		The source rectangle.
 		 *\param[in]	p_rectDst		The destination rectangle.
@@ -153,10 +153,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Specifies the buffers to be drawn into
-		 *\remark		All buffers attached are selected
+		 *\remarks		All buffers attached are selected
 		 *\~french
 		 *\brief		Définit les buffers dans lesquels le dessin doit être effectué
-		 *\remark		Tous les buffers attachés sont sélectionnés
+		 *\remarks		Tous les buffers attachés sont sélectionnés
 		 */
 		C3D_API void SetDrawBuffers();
 		/**
@@ -190,6 +190,7 @@ namespace Castor3D
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point		Le point d'attache
 		 *\param[in]	p_index		L'index d'attache
+		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
 		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
 		 *\return		\p true si tout s'est bien passé
@@ -290,10 +291,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Uses given attachments to this framebuffer for next draw call.
-		 *\param[in]	p_texs	The attachments.
+		 *\param[in]	p_attaches	The attachments.
 		 *\~french
 		 *\brief		Utilise les attaches données pour ce framebuffer, lors du prochain dessin.
-		 *\param[in]	p_texs	Les attaches.
+		 *\param[in]	p_attaches	Les attaches.
 		 */
 		C3D_API virtual void SetDrawBuffers( AttachArray const & p_attaches ) = 0;
 		/**
@@ -310,21 +311,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a colour render buffer
-		 *\param[in]	p_ePixelFormat	The buffer's pixel format
+		 *\param[in]	p_format	The buffer's pixel format
 		 *\~french
 		 *\brief		Crée un tampon de rendu couleur
-		 *\param[in]	p_ePixelFormat	Le fromat de pixels du tampon
+		 *\param[in]	p_format	Le fromat de pixels du tampon
 		 */
-		C3D_API virtual ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat ) = 0;
+		C3D_API virtual ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a depth/stencil render buffer
-		 *\param[in]	p_ePixelFormat	The buffer's pixel format
+		 *\param[in]	p_format	The buffer's pixel format
 		 *\~french
 		 *\brief		Crée un tampon de rendu profondeur/stencil
-		 *\param[in]	p_ePixelFormat	Le fromat de pixels du tampon
+		 *\param[in]	p_format	Le fromat de pixels du tampon
 		 */
-		C3D_API virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat ) = 0;
+		C3D_API virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates an attachment to a render buffer
@@ -448,7 +449,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one.
-		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\remarks		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
 		 *\param[in]	p_buffer		The buffer receiving this one.
 		 *\param[in]	p_rectSrc		The source rectangle.
 		 *\param[in]	p_rectDst		The destination rectangle.
@@ -457,7 +458,7 @@ namespace Castor3D
 		 *\return		\p true if successful.
 		 *\~french
 		 *\brief		Blitte ce tampon dans celui donné.
-		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST.
+		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST.
 		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
 		 *\param[in]	p_rectSrc		Le rectangle source.
 		 *\param[in]	p_rectDst		Le rectangle destination.
@@ -474,7 +475,7 @@ namespace Castor3D
 	protected:
 		//!\~english All attachments.	\~french Toutes les attaches.
 		AttachArray m_attaches;
-		//!\~english The background colour	\french La couleur de fond
+		//!\~english The background colour	\~french La couleur de fond
 		Castor::Colour m_clearColour;
 	};
 }

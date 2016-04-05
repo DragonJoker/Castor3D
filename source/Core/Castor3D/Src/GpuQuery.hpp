@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -29,7 +29,7 @@ namespace Castor3D
 	\~english
 	\brief		GPU query implementation.
 	\~french
-	\brief		Implémentation d'une requête GPU.
+	\brief		ImplÃ©mentation d'une requÃªte GPU.
 	*/
 	class GpuQuery
 		: public Castor::OwnedBy< RenderSystem >
@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le RenderSystem.
-		 *\param[in]	p_query			Le type de requête.
+		 *\param[in]	p_query			Le type de requÃªte.
 		 */
 		C3D_API GpuQuery( RenderSystem & p_renderSystem, eQUERY_TYPE p_query );
 		/**
@@ -58,15 +58,15 @@ namespace Castor3D
 		 *\brief		Creates the query on GPU.
 		 *\return		\p true if everything is OK.
 		 *\~french
-		 *\brief		Crée la requête sur le GPU.
-		 *\return		\p true si tout s'est bien passé.
+		 *\brief		CrÃ©e la requÃªte sur le GPU.
+		 *\return		\p true si tout s'est bien passÃ©.
 		 */
 		C3D_API bool Create();
 		/**
 		 *\~english
 		 *\brief		Destroys the query on GPU.
 		 *\~french
-		 *\brief		Détruit la requête sur le GPU.
+		 *\brief		DÃ©truit la requÃªte sur le GPU.
 		 */
 		C3D_API void Destroy();
 		/**
@@ -74,15 +74,15 @@ namespace Castor3D
 		 *\brief		Begins the query.
 		 *\return		\p true if everything is OK.
 		 *\~french
-		 *\brief		Démarre la requête.
-		 *\return		\p true si tout s'est bien passé.
+		 *\brief		DÃ©marre la requÃªte.
+		 *\return		\p true si tout s'est bien passÃ©.
 		 */
 		C3D_API bool Begin();
 		/**
 		 *\~english
 		 *\brief		Ends the query.
 		 *\~french
-		 *\brief		Termine la requête.
+		 *\brief		Termine la requÃªte.
 		 */
 		C3D_API void End();
 		/**
@@ -92,10 +92,10 @@ namespace Castor3D
 		 *\param[out]	p_param	Receives the result.
 		 *\return		\p true if the information was retrieved.
 		 *\~french
-		 *\brief		Récupère une information sur la requête.
-		 *\param[in]	p_infos	L'information à récupérer.
-		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
+		 *\brief		RÃ©cupÃ¨re une information sur la requÃªte.
+		 *\param[in]	p_infos	L'information Ã  rÃ©cupÃ©rer.
+		 *\param[out]	p_param	ReÃ§oit le rÃ©sultat.
+		 *\return		\p true si l'information a Ã©tÃ© rÃ©cupÃ©rÃ©e.
 		 */
 		template< typename T >
 		inline bool GetInfos( eQUERY_INFO p_infos, T & p_param )const
@@ -109,15 +109,15 @@ namespace Castor3D
 		 *\brief		Creates the query on GPU.
 		 *\return		\p true if everything is OK.
 		 *\~french
-		 *\brief		Crée la requête sur le GPU.
-		 *\return		\p true si tout s'est bien passé.
+		 *\brief		CrÃ©e la requÃªte sur le GPU.
+		 *\return		\p true si tout s'est bien passÃ©.
 		 */
 		C3D_API virtual bool DoCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Destroys the query on GPU.
 		 *\~french
-		 *\brief		Détruit la requête sur le GPU.
+		 *\brief		DÃ©truit la requÃªte sur le GPU.
 		 */
 		C3D_API virtual void DoDestroy() = 0;
 		/**
@@ -125,15 +125,15 @@ namespace Castor3D
 		 *\brief		Begins the query.
 		 *\return		\p true if everything is OK.
 		 *\~french
-		 *\brief		Démarre la requête.
-		 *\return		\p true si tout s'est bien passé.
+		 *\brief		DÃ©marre la requÃªte.
+		 *\return		\p true si tout s'est bien passÃ©.
 		 */
 		C3D_API virtual bool DoBegin()const = 0;
 		/**
 		 *\~english
 		 *\brief		Ends the query.
 		 *\~french
-		 *\brief		Termine la requête.
+		 *\brief		Termine la requÃªte.
 		 */
 		C3D_API virtual void DoEnd()const = 0;
 		/**
@@ -143,10 +143,10 @@ namespace Castor3D
 		 *\param[out]	p_param	Receives the result.
 		 *\return		\p true if the information was retrieved.
 		 *\~french
-		 *\brief		Récupère une information sur la requête.
-		 *\param[in]	p_infos	L'information à récupérer.
-		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
+		 *\brief		RÃ©cupÃ¨re une information sur la requÃªte.
+		 *\param[in]	p_infos	L'information Ã  rÃ©cupÃ©rer.
+		 *\param[out]	p_param	ReÃ§oit le rÃ©sultat.
+		 *\return		\p true si l'information a Ã©tÃ© rÃ©cupÃ©rÃ©e.
 		 */
 		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, int32_t & p_param )const = 0;
 		/**
@@ -156,10 +156,10 @@ namespace Castor3D
 		 *\param[out]	p_param	Receives the result.
 		 *\return		\p true if the information was retrieved.
 		 *\~french
-		 *\brief		Récupère une information sur la requête.
-		 *\param[in]	p_infos	L'information à récupérer.
-		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
+		 *\brief		RÃ©cupÃ¨re une information sur la requÃªte.
+		 *\param[in]	p_infos	L'information Ã  rÃ©cupÃ©rer.
+		 *\param[out]	p_param	ReÃ§oit le rÃ©sultat.
+		 *\return		\p true si l'information a Ã©tÃ© rÃ©cupÃ©rÃ©e.
 		 */
 		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, uint32_t & p_param )const = 0;
 		/**
@@ -169,10 +169,10 @@ namespace Castor3D
 		 *\param[out]	p_param	Receives the result.
 		 *\return		\p true if the information was retrieved.
 		 *\~french
-		 *\brief		Récupère une information sur la requête.
-		 *\param[in]	p_infos	L'information à récupérer.
-		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
+		 *\brief		RÃ©cupÃ¨re une information sur la requÃªte.
+		 *\param[in]	p_infos	L'information Ã  rÃ©cupÃ©rer.
+		 *\param[out]	p_param	ReÃ§oit le rÃ©sultat.
+		 *\return		\p true si l'information a Ã©tÃ© rÃ©cupÃ©rÃ©e.
 		 */
 		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, int64_t & p_param )const = 0;
 		/**
@@ -182,17 +182,17 @@ namespace Castor3D
 		 *\param[out]	p_param	Receives the result.
 		 *\return		\p true if the information was retrieved.
 		 *\~french
-		 *\brief		Récupère une information sur la requête.
-		 *\param[in]	p_infos	L'information à récupérer.
-		 *\param[out]	p_param	Reçoit le résultat.
-		 *\return		\p true si l'information a été récupérée.
+		 *\brief		RÃ©cupÃ¨re une information sur la requÃªte.
+		 *\param[in]	p_infos	L'information Ã  rÃ©cupÃ©rer.
+		 *\param[out]	p_param	ReÃ§oit le rÃ©sultat.
+		 *\return		\p true si l'information a Ã©tÃ© rÃ©cupÃ©rÃ©e.
 		 */
 		C3D_API virtual bool DoGetInfos( eQUERY_INFO p_infos, uint64_t & p_param )const = 0;
 
 	protected:
-		//!\~english Tells if the query is active.	\~french Dit si la requête est active.
+		//!\~english Tells if the query is active.	\~french Dit si la requÃªte est active.
 		bool m_active{ false };
-		//!\~english The query type.	\~french Le type de requête.
+		//!\~english The query type.	\~french Le type de requÃªte.
 		eQUERY_TYPE m_type;
 	};
 }

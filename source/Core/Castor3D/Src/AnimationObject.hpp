@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -37,7 +37,7 @@ namespace Castor3D
 	\brief		Classe de représentation de choses mouvantes.
 	\remark		Gère les translations, mises à l'échelle, rotations de la chose.
 	*/
-	class AnimationObjectBase
+	class AnimationObject
 	{
 	public:
 		/*!
@@ -50,7 +50,7 @@ namespace Castor3D
 		\brief		Loader binaire de MovingObjectBase.
 		*/
 		class BinaryParser
-			: public Castor3D::BinaryParser< AnimationObjectBase >
+			: public Castor3D::BinaryParser< AnimationObject >
 		{
 		public:
 			/**
@@ -74,7 +74,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Fill( AnimationObjectBase const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( AnimationObject const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk.
@@ -87,7 +87,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données.
 			 *\return		\p false si une erreur quelconque est arrivée.
 			 */
-			C3D_API virtual bool Parse( AnimationObjectBase & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( AnimationObject & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	protected:
@@ -99,14 +99,14 @@ namespace Castor3D
 		 *\brief		Constructeur.
 		 *\param[in]	p_type	Le type du machin mouvant.
 		 */
-		C3D_API AnimationObjectBase( eANIMATION_OBJECT_TYPE p_type );
+		C3D_API AnimationObject( eANIMATION_OBJECT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor.
 		 *\~french
 		 *\brief		Constructeur par copie.
 		 */
-		C3D_API AnimationObjectBase( AnimationObjectBase const & p_rhs );
+		C3D_API AnimationObject( AnimationObject const & p_rhs );
 
 	public:
 		/**
@@ -115,27 +115,27 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		C3D_API virtual ~AnimationObjectBase();
+		C3D_API virtual ~AnimationObject();
 		/**
 		 *\~english
 		 *\brief		Adds a child to this object.
-		 *\remark		The child's transformations are affected by this object's ones.
+		 *\remarks		The child's transformations are affected by this object's ones.
 		 *\param[in]	p_object	The child.
 		 *\~french
 		 *\brief		Ajoute un objet enfant à celui-ci.
-		 *\remark		Les transformations de l'enfant sont affectées par celles de cet objet.
+		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	p_object	L'enfant.
 		 */
-		C3D_API void AddChild( AnimationObjectBaseSPtr p_object );
+		C3D_API void AddChild( AnimationObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations at given time.
 		 *\param[in]	p_time				Current time index.
-		 *\param[în]	p_transformations	The current transformation matrix.
+		 *\param[in]	p_transformations	The current transformation matrix.
 		 *\~french
 		 *\brief		Met à jour les transformations appliquées à l'objet, l'index de temps donné.
 		 *\param[in]	p_time				Index de temps courant.
-		 *\param[în]	p_transformations	La matrice de transformation courante.
+		 *\param[in]	p_transformations	La matrice de transformation courante.
 		 */
 		C3D_API void Update( real p_time, Castor::Matrix4x4r const & p_transformations );
 		/**
@@ -150,14 +150,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a scaling key frame and adds it to the list.
-		 *\remark		If a key frame with the same starting time already exists, it is returned, but not modified.
+		 *\remarks		If a key frame with the same starting time already exists, it is returned, but not modified.
 		 *\param[in]	p_from		The starting time.
 		 *\param[in]	p_translate	The translation at start time.
 		 *\param[in]	p_rotate	The rotation at start time.
 		 *\param[in]	p_scale		The scaling at start time.
 		 *\~french
 		 *\brief		Crée une key frame de mise à l'échelle et l'ajoute à la liste.
-		 *\remark		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
+		 *\remarks		Si une key frame avec le même index de temps de début existe, elle est retournée sans être modifiée.
 		 *\param[in]	p_from		L'index de temps de début.
 		 *\param[in]	p_translate	La translation au temps de début.
 		 *\param[in]	p_rotate	La rotation au temps de début.
@@ -190,7 +190,7 @@ namespace Castor3D
 		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
 		 *\return		Le clône.
 		 */
-		C3D_API AnimationObjectBaseSPtr Clone( Animation & p_animation );
+		C3D_API AnimationObjectSPtr Clone( Animation & p_animation );
 		/**
 		 *\~english
 		 *\return		The scaling key frames interpolation mode.
@@ -318,7 +318,7 @@ namespace Castor3D
 		 *\param[out]	p_animation	Le clône est ajouté à cette animation.
 		 *\return		Le clône.
 		 */
-		C3D_API virtual AnimationObjectBaseSPtr DoClone( Animation & p_animation ) = 0;
+		C3D_API virtual AnimationObjectSPtr DoClone( Animation & p_animation ) = 0;
 
 	protected:
 		//!\~english The moving thing type.	\~french Le type du machin mouvant.
@@ -347,7 +347,5 @@ namespace Castor3D
 		Castor::Matrix4x4r m_finalTransform;
 	};
 }
-
-#include "AnimationObjectBase.inl"
 
 #endif

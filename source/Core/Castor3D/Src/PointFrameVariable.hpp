@@ -52,17 +52,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_program	The program
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_program	Le programme
 		 */
 		PointFrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_occurences		The array dimension
+		 *\param[in]	p_program		The program
+		 *\param[in]	p_occurences	The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_occurences		Les dimensions du tableau
+		 *\param[in]	p_program		Le programme
+		 *\param[in]	p_occurences	Les dimensions du tableau
 		 */
 		PointFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
 		/**
@@ -133,12 +137,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
-		 *\remark		Check the index bounds
+		 *\remarks		Check the index bounds
 		 *\param[in]	p_index	The index
 		 *\return		A Coords containing the value at given index
 		 *\~french
 		 *\brief		Récupère la valeur à l'index donné
-		 *\remark		Vérifie que l'index est dans les bornes
+		 *\remarks		Vérifie que l'index est dans les bornes
 		 *\param[in]	p_index	L'indice
 		 *\return		Un Coords contenant la valeur à l'index donné
 		 */
@@ -146,12 +150,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
-		 *\remark		Check the index bounds
+		 *\remarks		Check the index bounds
 		 *\param[in]	p_index	The index
 		 *\return		A Point containing the value at given index
 		 *\~french
 		 *\brief		Récupère la valeur à l'index donné
-		 *\remark		Vérifie que l'index est dans les bornes
+		 *\remarks		Vérifie que l'index est dans les bornes
 		 *\param[in]	p_index	L'indice
 		 *\return		Un Point contenant la valeur à l'index donné
 		 */
@@ -215,12 +219,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
-		 *\remark		Doesn't check the index bounds
+		 *\remarks		Doesn't check the index bounds
 		 *\param[in]	p_index	The index
 		 *\return		A reference to the value at given index
 		 *\~french
 		 *\brief		Opérateur d'accès de type tableau
-		 *\remark		Ne vérifie pas que l'index est dans les bornes
+		 *\remarks		Ne vérifie pas que l'index est dans les bornes
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
@@ -231,12 +235,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Array subscript operator
-		 *\remark		Doesn't check the index bounds
+		 *\remarks		Doesn't check the index bounds
 		 *\param[in]	p_index	The index
 		 *\return		A constant reference to the value at given index
 		 *\~french
 		 *\brief		Opérateur d'accès de type tableau
-		 *\remark		Ne vérifie pas que l'index est dans les bornes
+		 *\remarks		Ne vérifie pas que l'index est dans les bornes
 		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
@@ -285,14 +289,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_strValue	The string containing the value
+		 *\param[in]	p_value	The string containing the value
 		 *\param[in]	p_index	The index of the value
 		 *\~french
 		 *\brief		Définit la valeur de la variable à partir d'une chaîne
-		 *\param[in]	p_strValue	La chaîne
+		 *\param[in]	p_value	La chaîne
 		 *\param[in]	p_index	L'index de la valeur à modifier
 		 */
-		inline void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index );
+		inline void DoSetValueStr( Castor::String const & p_value, uint32_t p_index );
 	};
 }
 

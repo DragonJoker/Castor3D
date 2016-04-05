@@ -1,4 +1,4 @@
-#include "GpuQuery.hpp"
+﻿#include "GpuQuery.hpp"
 
 using namespace Castor;
 

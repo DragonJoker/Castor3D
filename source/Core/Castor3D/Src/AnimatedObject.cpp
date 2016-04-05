@@ -7,7 +7,7 @@
 #include "MatrixFrameVariable.hpp"
 #include "Mesh.hpp"
 #include "MovableObject.hpp"
-#include "AnimationObjectBase.hpp"
+#include "AnimationObject.hpp"
 #include "Skeleton.hpp"
 
 using namespace Castor;

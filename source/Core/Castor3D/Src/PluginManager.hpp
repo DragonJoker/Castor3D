@@ -75,65 +75,65 @@ namespace Castor3D
 		C3D_API void Clear();
 		/**
 		 *\~english
-		 *\brief		Loads a plugin, given the plugin name (ex: libGlRenderSystem.dll => GlRenderSystem)
-		 *\param[in]	p_strPluginName	The plugin name
-		 *\param[in]	p_pathFolder	Optional path where the plugin may be looked for
-		 *\return		The loaded plugin, \p nullptr if name was incorrect or path was not valid
+		 *\brief		Loads a plug-in, given the plug-in name (ex: libGlRenderSystem.dll => GlRenderSystem)
+		 *\param[in]	p_pluginName	The plug-in name
+		 *\param[in]	p_pathFolder	Optional path where the plug-in may be looked for
+		 *\return		The loaded plug-in, \p nullptr if name was incorrect or path was not valid
 		 *\~french
-		 *\brief		Charge un plugin, selon son nom (ex : libGlRenderSystem.dll => GlRenderSystem)
-		 *\param[in]	p_strPluginName	Le nom du plugin
-		 *\param[in]	p_pathFolder	Un chemin optionnel, pour y trouver le plugin
-		 *\return		Le plugin chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
+		 *\brief		Charge un plug-in, selon son nom (ex : libGlRenderSystem.dll => GlRenderSystem)
+		 *\param[in]	p_pluginName	Le nom du plug-in
+		 *\param[in]	p_pathFolder	Un chemin optionnel, pour y trouver le plug-in
+		 *\return		Le plug-in chargé, \p nullptr si non trouvé (nom incorrect ou non trouvé dans le chemin donné ou le chemin principal)
 		 */
-		C3D_API PluginBaseSPtr LoadPlugin( Castor::String const & p_strPluginName, Castor::Path const & p_pathFolder )throw();
+		C3D_API PluginBaseSPtr LoadPlugin( Castor::String const & p_pluginName, Castor::Path const & p_pathFolder )throw();
 		/**
 		 *\~english
-		 *\brief		Loads a plugin, given the plugin file's full path
-		 *\param[in]	p_filePath	The plugin file path
-		 *\return		The loaded plugin, \p nullptr if path was incorrect or if it wasn't a valid plugin
+		 *\brief		Loads a plug-in, given the plug-in file's full path
+		 *\param[in]	p_fileFullPath	The plug-in file path
+		 *\return		The loaded plug-in, \p nullptr if path was incorrect or if it wasn't a valid plug-in
 		 *\~french
-		 *\brief		Charge un plugin dont le chemin est donné
-		 *\param[in]	p_filePath	Le chemin du plugin
-		 *\return		Le plugin chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plugin valide
+		 *\brief		Charge un plug-in dont le chemin est donné
+		 *\param[in]	p_fileFullPath	Le chemin du plug-in
+		 *\return		Le plug-in chargé, \p nullptr si le chemin était incorrect ou s'il ne représentait pas un plug-in valide
 		 */
 		C3D_API PluginBaseSPtr LoadPlugin( Castor::Path const & p_fileFullPath )throw();
 		/**
 		 *\~english
-		 *\brief		Retrieves a shader plugin for given shader language
-		 *\param[in]	p_eLanguage	The shader language
+		 *\brief		Retrieves the plug-ins of given type
+		 *\param[in]	p_type	The plug-ins type
 		 *\return		\p nullptr if not found
 		 *\~french
-		 *\brief		Récupère un ShaderPlugin pour le langage donné
-		 *\param[in]	p_eLanguage	Le langage
+		 *\brief		Récupère les plug-ins du type donné
+		 *\param[in]	p_type	Le type de plu-ins
 		 *\return		\p nullptr si non trouvé
 		 */
 		C3D_API PluginStrMap GetPlugins( ePLUGIN_TYPE p_type );
 		/**
 		 *\~english
-		 *\brief		Loads a renderer plugin, given the renderer type
+		 *\brief		Loads a renderer plug-in, given the renderer type
 		 *\param[in]	p_type	The renderer type
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Charge un plugin de rendu, selon le type de rendu
+		 *\brief		Charge un plug-in de rendu, selon le type de rendu
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
 		C3D_API RenderSystem * LoadRenderer( eRENDERER_TYPE p_type );
 		/**
 		 *\~english
-		 *\brief		Loads all the plugins located in working folder
-		 *\param[in]	p_strFolder	The plugins' folder
+		 *\brief		Loads all the plug-ins located in working folder
+		 *\param[in]	p_folder	The plug-ins' folder
 		 *\~french
-		 *\brief		Charge tous les plugins d'un dossier donné
-		 *\param[in]	p_strFolder	Le dossier
+		 *\brief		Charge tous les plug-ins d'un dossier donné
+		 *\param[in]	p_folder	Le dossier
 		 */
-		C3D_API void LoadAllPlugins( Castor::Path const & p_strFolder );
+		C3D_API void LoadAllPlugins( Castor::Path const & p_folder );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator on the renderer plugins array
+		 *\brief		Retrieves an iterator on the renderer plug-ins array
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur sur le tableau des plugins de rendu
+		 *\brief		Récupère un itérateur sur le tableau des plug-ins de rendu
 		 *\return		L'itérateur
 		 */
 		inline RendererPtrArray const & GetRenderersList()const
@@ -142,8 +142,8 @@ namespace Castor3D
 		}
 
 	private:
-		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
-		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		PluginBaseSPtr LoadRendererPlugin( Castor::DynamicLibrarySPtr p_library );
+		PluginBaseSPtr LoadTechniquePlugin( Castor::DynamicLibrarySPtr p_library );
 		PluginBaseSPtr InternalLoadPlugin( Castor::Path const & p_pathFile );
 
 	private:
@@ -154,17 +154,17 @@ namespace Castor3D
 		DynamicLibraryPtrPathMapArray m_libraries;
 		//!\~english The mutex protecting the loaded shared libraries map	\~french Le mutex protégeant la map des shared libraries chargées
 		std::recursive_mutex m_mutexLibraries;
-		//!\~english The loaded plugins map	\~french La map des plugins chargés
+		//!\~english The loaded plug-ins map	\~french La map des plug-ins chargés
 		PluginStrMapArray m_loadedPlugins;
-		//!\~english The mutex protecting the loaded plugins map	\~french Le mutex protégeant la map des plugins chargés
+		//!\~english The mutex protecting the loaded plug-ins map	\~french Le mutex protégeant la map des plug-ins chargés
 		std::recursive_mutex m_mutexLoadedPlugins;
-		//!\~english The loaded plugins map, sorted by plugin type	\~french La map des plugins chargés, triés par type de plugin
+		//!\~english The loaded plug-ins map, sorted by plug-in type	\~french La map des plug-ins chargés, triés par type de plug-in
 		PluginTypePathMap m_loadedPluginTypes;
-		//!\~english The mutex protecting the loaded plugins map sorted by type	\~french Le mutex protégeant la map de plugins chargés triés par type
+		//!\~english The mutex protecting the loaded plug-ins map sorted by type	\~french Le mutex protégeant la map de plug-ins chargés triés par type
 		std::recursive_mutex m_mutexLoadedPluginTypes;
-		//!\~english The renderer plugins array	\~french Le tableau des plugins de rendu
+		//!\~english The renderer plug-ins array	\~french Le tableau des plug-ins de rendu
 		RendererPtrArray m_renderers;
-		//!\~english The mutex protecting the renderer plugins array	\~french Le mutex protégeant le tableau des plugins de rendu
+		//!\~english The mutex protecting the renderer plug-ins array	\~french Le mutex protégeant le tableau des plug-ins de rendu
 		std::recursive_mutex m_mutexRenderers;
 	};
 }

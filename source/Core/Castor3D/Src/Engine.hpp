@@ -49,10 +49,10 @@ namespace Castor3D
 	\version	0.1
 	\~english
 	\brief		Main System
-	\remark		Holds the render windows, the plugins, the render drivers...
+	\remark		Holds the render windows, the plug-ins, the render drivers...
 	\~french
 	\brief		Moteur principal
-	\remark		Contient les fenêtres de rendu, les plugins, drivers de rendu...
+	\remark		Contient les fenêtres de rendu, les plug-ins, drivers de rendu...
 	*/
 	class Engine
 		: Castor::Unique< Engine >
@@ -76,29 +76,29 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Initialisation function, sets the wanted frame rate
 		 *\param[in]	p_wantedFPS		The wanted FPS count
-		 *\param[in]	p_bThreaded		If \p false, the render can't be threaded
+		 *\param[in]	p_threaded		If \p false, the render can't be threaded
 		 *\~french
 		 *\brief		Fonction d'initialisation, définit le frame rate voulu
-		 *\param[in]	p_wantedTBEF	Le nombre voulu du FPS
-		 *\param[in]	p_bThreaded		Si \p false, le rendu ne peut pas être threadé
+		 *\param[in]	p_wantedFPS		Le nombre voulu de FPS
+		 *\param[in]	p_threaded		Si \p false, le rendu ne peut pas être threadé
 		 */
-		C3D_API void Initialise( uint32_t p_wantedFPS = 100, bool p_bThreaded = false );
+		C3D_API void Initialise( uint32_t p_wantedFPS = 100, bool p_threaded = false );
 		/**
 		 *\~english
 		 *\brief		Cleanup function, destroys everything created from the beginning
-		 *\remark		Destroys also RenderWindows, the only things left after that is RenderSystem and loaded plugins
+		 *\remarks		Destroys also RenderWindows, the only things left after that is RenderSystem and loaded plug-ins
 		 *\~french
 		 *\brief		Fonction de nettoyage, détruit tout ce qui a été créé depuis le début
-		 *\remark		Détruit aussi les RenderWindows, les seules choses restantes après ça sont le RenderSystem et les plugins chargés
+		 *\remarks		Détruit aussi les RenderWindows, les seules choses restantes après ça sont le RenderSystem et les plug-ins chargés
 		 */
 		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Loads a renderer plugin, given the renderer type
+		 *\brief		Loads a renderer plug-in, given the renderer type
 		 *\param[in]	p_type	The renderer type
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Charge un plugin de rendu, selon le type de rendu
+		 *\brief		Charge un plug-in de rendu, selon le type de rendu
 		 *\param[in]	p_type	Le type de rendu
 		 *\return		\p true si tout s'est bien passé
 		 */
@@ -115,21 +115,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status
-		 *\remark		Thread-safe
+		 *\remarks		Thread-safe
 		 *\return		\p true if cleaned up
 		 *\~french
 		 *\brief		Récupère le statut de nettoyage
-		 *\remark		Thread-safe
+		 *\remarks		Thread-safe
 		 *\return		\p true si nettoyé
 		 */
 		C3D_API bool IsCleaned();
 		/**
 		 *\~english
 		 *\brief		Tells the engine is cleaned up
-		 *\remark		Thread-safe
+		 *\remarks		Thread-safe
 		 *\~french
 		 *\brief		Dit que le moteur est nettoyé
-		 *\remark		Thread-safe
+		 *\remarks		Thread-safe
 		 */
 		C3D_API void SetCleaned();
 		/**
@@ -185,11 +185,11 @@ namespace Castor3D
 		C3D_API void UnregisterSections( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Retrieves plugins path
-		 *\return		The plugins path
+		 *\brief		Retrieves plug-ins path
+		 *\return		The plug-ins path
 		 *\~french
-		 *\brief		Récupère le chemin des plugins
-		 *\return		Le chemin des plugins
+		 *\brief		Récupère le chemin des plug-ins
+		 *\return		Le chemin des plug-ins
 		 */
 		C3D_API static Castor::Path GetPluginsDirectory();
 		/**
@@ -457,9 +457,9 @@ namespace Castor3D
 		Castor::FontManager m_fontManager;
 		//!\~english The images collection	\~french La collection d'images
 		Castor::ImageManager m_imageManager;
-		//!\~english The map holding the parsers, sorted by section, and plugin name	\~french La map de parseurs, triés par section, et nom de plugin
+		//!\~english The map holding the parsers, sorted by section, and plug-in name	\~french La map de parseurs, triés par section, et nom de plug-in
 		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
-		//!\~english The map holding the sections, sorted plugin name.	\~french La map de sections, triées par nom de plugin.
+		//!\~english The map holding the sections, sorted plug-in name.	\~french La map de sections, triées par nom de plug-in.
 		std::map< Castor::String, Castor::StrUIntMap > m_additionalSections;
 		//!\~english The need for per object lighting.	\~french Le besoin d'un éclairage par objet.
 		bool m_perObjectLighting;

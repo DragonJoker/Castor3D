@@ -72,7 +72,6 @@ namespace Castor
 				static int indentIndex = std::ios_base::xalloc();
 				return ios.iword( indentIndex );
 			}
-
 			/**
 			 *\~english
 			 *\brief		Retrieves the indentation value for the given stream
@@ -87,7 +86,6 @@ namespace Castor
 			{
 				return indent_value( ios );
 			}
-
 			/**
 			 *\~english
 			 *\brief		Defines the indentation value for given stream
@@ -102,7 +100,6 @@ namespace Castor
 			{
 				indent_value( ios ) = val;
 			}
-
 			/**
 			 *\~english
 			 *\brief		Initializes the stream in order to indent it
@@ -119,7 +116,6 @@ namespace Castor
 				stream.rdbuf( sbuf );
 				return sbuf;
 			}
-
 			/**
 			 *\~english
 			 *\brief		The stream events callback
@@ -153,18 +149,17 @@ namespace Castor
 			}
 		}
 	}
-
 	/**
 	 *\~english
 	 *\brief		Stream operator
 	 *\remarks		Initializes the stream in order to indent it
 	 *\param[in]	stream	The stream
-	 *\param[in]	inf		The indent
+	 *\param[in]	ind		The indent
 	 *\~french
 	 *\brief		Opérateur de flux
 	 *\remarks		Initialise le flux afin de pouvoir l'indenter
 	 *\param[in]	stream	Le flux
-	 *\param[in]	inf		La valeur d'indentation
+	 *\param[in]	ind		La valeur d'indentation
 	 */
 	template< typename CharType >
 	inline std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & stream, format::indent const & ind )

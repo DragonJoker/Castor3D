@@ -138,11 +138,11 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Initialises the application.
-		 *\remarks		Parses the command line, loads language file, displays splash screen, loads the plugins.
+		 *\remarks		Parses the command line, loads language file, displays splash screen, loads the plug-ins.
 		 *\return		If false, the application will stop.
 		 *\~french
 		 *\brief		Initialise l'application.
-		 *\remarks		Analyse la ligne de commande, chage le fichier de langage, affiche le splash screen, charge les plugins.
+		 *\remarks		Analyse la ligne de commande, chage le fichier de langage, affiche le splash screen, charge les plug-ins.
 		 *\return		Si false, l'application s'arrêtera.
 		 */
 		virtual bool OnInit();

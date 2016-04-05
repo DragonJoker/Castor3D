@@ -46,17 +46,17 @@ namespace PnTriangles
 		Castor3D::Subdivider::Cleanup();
 	}
 
-	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers, bool p_bThreaded )
+	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
 	{
 		m_occurences = p_occurences;
 		m_submesh = p_pSubmesh;
-		m_bGenerateBuffers = p_bGenerateBuffers;
+		m_bGenerateBuffers = p_generateBuffers;
 		m_submesh->ComputeContainers();
 
 		DoInitialise();
-		m_bThreaded = p_bThreaded;
+		m_bThreaded = p_threaded;
 
-		if ( p_bThreaded )
+		if ( p_threaded )
 		{
 			m_pThread = std::make_shared< std::thread >( std::bind( &Subdivider::DoSubdivideThreaded, this ) );
 		}

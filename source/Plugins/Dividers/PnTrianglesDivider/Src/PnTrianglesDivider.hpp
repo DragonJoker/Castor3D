@@ -77,7 +77,7 @@ namespace PnTriangles
 		Subdivider();
 		virtual ~Subdivider();
 		virtual void Cleanup();
-		virtual void Subdivide( Castor3D::SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers = true, bool p_bThreaded = false );
+		virtual void Subdivide( Castor3D::SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false );
 
 	private:
 		virtual void DoSubdivide();

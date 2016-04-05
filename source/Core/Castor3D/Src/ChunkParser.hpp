@@ -137,7 +137,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		inline bool operator()( Castor::String & p_strValue, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::String & p_value, BinaryChunk & p_chunk )
 		{
 			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
@@ -149,7 +149,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					p_strValue = Castor::string::string_cast< xchar >( l_pChar.data() );
+					p_value = Castor::string::string_cast< xchar >( l_pChar.data() );
 				}
 			}
 
@@ -165,7 +165,7 @@ namespace Castor3D
 		/**
 		 *\copydoc		Castor3D::ChunkParser::operator()
 		 */
-		inline bool operator()( Castor::Path & p_strValue, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Path & p_value, BinaryChunk & p_chunk )
 		{
 			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
@@ -177,7 +177,7 @@ namespace Castor3D
 
 				if ( l_return )
 				{
-					p_strValue = Castor::string::string_cast< xchar >( l_pChar.data() );
+					p_value = Castor::string::string_cast< xchar >( l_pChar.data() );
 				}
 			}
 

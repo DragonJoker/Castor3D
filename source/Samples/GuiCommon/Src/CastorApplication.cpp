@@ -265,7 +265,7 @@ namespace GuiCommon
 
 		if ( l_renderers.empty() )
 		{
-			CASTOR_EXCEPTION( "No renderer plugins" );
+			CASTOR_EXCEPTION( "No renderer plug-ins" );
 		}
 		else if ( l_renderers.size() == 1 )
 		{
@@ -307,7 +307,7 @@ namespace GuiCommon
 
 	void CastorApplication::DoLoadPlugins( SplashScreen & p_splashScreen )
 	{
-		p_splashScreen.Step( _( "Loading plugins" ), 1 );
+		p_splashScreen.Step( _( "Loading plug-ins" ), 1 );
 		GuiCommon::LoadPlugins( *m_castor );
 	}
 

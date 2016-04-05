@@ -75,17 +75,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_program	The program
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_program	Le programme
 		 */
 		C3D_API FrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_occurences		The array dimension
+		 *\param[in]	p_program		The program
+		 *\param[in]	p_occurences	The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_occurences		Les dimensions du tableau
+		 *\param[in]	p_program		Le programme
+		 *\param[in]	p_occurences	Les dimensions du tableau
 		 */
 		C3D_API FrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
 		/**
@@ -204,23 +208,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_strValue	The string containing the value
+		 *\param[in]	p_value	The string containing the value
 		 *\~french
 		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
-		 *\param[in]	p_strValue	La chaîne contenant la valeur
+		 *\param[in]	p_value	La chaîne contenant la valeur
 		 */
-		C3D_API virtual void SetValueStr( Castor::String const & p_strValue );
+		C3D_API virtual void SetValueStr( Castor::String const & p_value );
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
 		 *\param[in]	p_index	The index of the value
-		 *\param[in]	p_strValue	The string containing the value
+		 *\param[in]	p_value	The string containing the value
 		 *\~french
 		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
 		 *\param[in]	p_index	L'index de la valeur
-		 *\param[in]	p_strValue	La chaîne contenant la valeur
+		 *\param[in]	p_value	La chaîne contenant la valeur
 		 */
-		C3D_API virtual void SetValueStr( Castor::String const & p_strValue, uint32_t p_index );
+		C3D_API virtual void SetValueStr( Castor::String const & p_value, uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Defines the name of the variable, as it appears in the shader program
@@ -293,11 +297,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the buffer holding the frame variable.
-		 *\remark		The variable no longer owns it's buffer
+		 *\remarks		The variable no longer owns it's buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\~french
 		 *\brief		Définit le buffer de cette variable
-		 *\remark		La variable perd la responsabilité de son buffer
+		 *\remarks		La variable perd la responsabilité de son buffer
 		 *\param[in]	p_buffer	Le buffer
 		 */
 		virtual void link( uint8_t * p_buffer ) = 0;
@@ -331,13 +335,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
 		 *\param[in]	p_index	The index of the value
-		 *\param[in]	p_strValue	The string containing the value
+		 *\param[in]	p_value	The string containing the value
 		 *\~french
 		 *\brief		Définit la valeur de cette variable à partir d'une chaîne
 		 *\param[in]	p_index	L'index de la valeur
-		 *\param[in]	p_strValue	La chaîne contenant la valeur
+		 *\param[in]	p_value	La chaîne contenant la valeur
 		 */
-		C3D_API virtual void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index ) = 0;
+		C3D_API virtual void DoSetValueStr( Castor::String const & p_value, uint32_t p_index ) = 0;
 
 	protected:
 		//!\~english The variable name as it appears in the shader program	\~french Le nom de la variable tel qu'il apparaît dans le shader
@@ -379,17 +383,21 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_program	The program
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_program	Le programme
 		 */
 		TFrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_occurences		The array dimension
+		 *\param[in]	p_program		The program
+		 *\param[in]	p_occurences	The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_occurences		Les dimensions du tableau
+		 *\param[in]	p_occurences	Les dimensions du tableau
+		 *\param[in]	p_program		Le programme
 		 */
 		TFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
 		/**
@@ -460,11 +468,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the buffer holding the frame variable.
-		 *\remark		The variable no longer owns it's buffer
+		 *\remarks		The variable no longer owns it's buffer
 		 *\param[in]	p_buffer	The buffer
 		 *\~french
 		 *\brief		Définit le buffer de cette variable
-		 *\remark		La variable perd la responsabilité de son buffer
+		 *\remarks		La variable perd la responsabilité de son buffer
 		 *\param[in]	p_buffer	Le buffer
 		 */
 		virtual void link( uint8_t * p_buffer );

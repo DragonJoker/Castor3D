@@ -64,12 +64,12 @@ namespace Castor3D
 			/**
 			 *\~english
 			 *\brief		Writes a movable object into a text file
-			 *\param[in]	p_file	the file to save the movable object in
 			 *\param[in]	p_object	the movable object to save
+			 *\param[in]	p_file		The file to save the movable object in
 			 *\~french
 			 *\brief		Ecrit un MovableObject dans un fichier texte
-			 *\param[in]	p_scene	Le MovableObject
-			 *\param[in]	p_file	Le fichier
+			 *\param[in]	p_object	Le MovableObject
+			 *\param[in]	p_file		Le fichier
 			 */
 			C3D_API virtual bool operator()( MovableObject const & p_object, Castor::TextFile & p_file );
 		};

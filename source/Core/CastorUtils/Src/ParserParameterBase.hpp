@@ -129,14 +129,14 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Checks the parameter.
-		 *\param[in,out]	p_strParams	The text containing the parameter value.
+		 *\param[in,out]	p_params	The text containing the parameter value.
 		 *\return			\p false if any error occured.
 		 *\~french
 		 *\brief			Vérifie le paramètre.
-		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramètre.
+		 *\param[in,out]	p_params	Le texte contenant la valeur du paramètre.
 		 *\return			\p si un problème quelconque est arrivé.
 		 */
-		CU_API virtual bool Parse( String & p_strParams ) = 0;
+		CU_API virtual bool Parse( String & p_params ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the parameter value.

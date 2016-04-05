@@ -1,4 +1,4 @@
-#include "Quaternion.hpp"
+﻿#include "Quaternion.hpp"
 
 namespace Castor
 {
@@ -170,7 +170,7 @@ namespace Castor
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & set_transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptPosition, Point< U, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
+		SquareMatrix< T, 4 > & set_transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
 		{
 			// Ordering:
 			//    1. Scale
@@ -189,17 +189,17 @@ namespace Castor
 			p_matrix[2][1] *= T( p_ptScale[2] );
 			p_matrix[2][2] *= T( p_ptScale[2] );
 
-			p_matrix[3][0] = T( p_ptPosition[0] );
-			p_matrix[3][1] = T( p_ptPosition[1] );
-			p_matrix[3][2] = T( p_ptPosition[2] );
+			p_matrix[3][0] = T( p_position[0] );
+			p_matrix[3][1] = T( p_position[1] );
+			p_matrix[3][2] = T( p_position[2] );
 			return p_matrix;
 		}
 
 		template< typename T, typename U >
-		SquareMatrix< T, 4 > & transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptPosition, Point< U, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
+		SquareMatrix< T, 4 > & transform( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_position, Point< U, 3 > const & p_ptScale, Quaternion const & p_qOrientation )
 		{
 			SquareMatrix< T, 4 > l_transform;
-			set_transform( l_transform, p_ptPosition, p_ptScale, p_qOrientation );
+			set_transform( l_transform, p_position, p_ptScale, p_qOrientation );
 			p_matrix *= l_transform;
 			return p_matrix;
 		}

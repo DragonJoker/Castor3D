@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -121,7 +121,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates an overlay, given a type and the overlay definitions
-		 *\remark		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
+		 *\remarks		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
 		 *\param[in]	p_type		The overlay type (panel, text ...)
 		 *\param[in]	p_name	The overlay name
 		 *\param[in]	p_parent	The parent overlay, nullptr if none
@@ -129,7 +129,7 @@ namespace Castor3D
 		 *\return		The created overlay
 		 *\~french
 		 *\brief		Crée un overlay
-		 *\remark		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
+		 *\remarks		Si un overlay avec le même nom existe déjà, aucune création n'est faite, l'existant est retourné
 		 *\param[in]	p_type		Le type d'overlay
 		 *\param[in]	p_name	Le nom voulu pour l'overlay
 		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun

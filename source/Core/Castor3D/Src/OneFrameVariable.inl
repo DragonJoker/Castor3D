@@ -3,9 +3,9 @@
 	namespace
 	{
 		template< typename T >
-		void Parse( Castor::String const & p_strValue, T & p_value )
+		void Parse( Castor::String const & p_text, T & p_value )
 		{
-			Castor::string::parse( p_strValue, p_value );
+			Castor::string::parse( p_text, p_value );
 		}
 	}
 
@@ -184,8 +184,8 @@
 	}
 
 	template< typename T >
-	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index )
+	inline void OneFrameVariable< T >::DoSetValueStr( Castor::String const & p_value, uint32_t p_index )
 	{
-		Parse( p_strValue, this->m_values[p_index] );
+		Parse( p_value, this->m_values[p_index] );
 	}
 }

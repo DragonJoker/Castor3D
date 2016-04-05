@@ -410,7 +410,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_RenderTargetPostEffect )
 
 		if ( !l_effect )
 		{
-			PARSING_ERROR( cuT( "PostEffect [" ) + l_name + cuT( "] not found, make sure the corresponding plugin is installed" ) );
+			PARSING_ERROR( cuT( "PostEffect [" ) + l_name + cuT( "] not found, make sure the corresponding plug-in is installed" ) );
 		}
 		else
 		{
@@ -1598,7 +1598,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshDivide )
 
 		if ( !l_pDivider )
 		{
-			PARSING_ERROR( cuT( "Divider [" ) + l_name + cuT( "] not found, make sure the corresponding plugin is installed" ) );
+			PARSING_ERROR( cuT( "Divider [" ) + l_name + cuT( "] not found, make sure the corresponding plug-in is installed" ) );
 		}
 		else
 		{

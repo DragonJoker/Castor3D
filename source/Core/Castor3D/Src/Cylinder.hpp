@@ -39,10 +39,8 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_factory	The factory used to clone this MeshGenerator
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_factory	La fabrique utilisée pour cloner cette MeshGenerator
 		 */
 		C3D_API Cylinder();
 		/**

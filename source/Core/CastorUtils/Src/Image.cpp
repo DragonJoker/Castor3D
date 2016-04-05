@@ -251,16 +251,16 @@ namespace Castor
 		return l_return;
 	}
 
-	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
+	Image::Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format, ByteArray const & p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 		: Resource< Image >( p_name )
-		, m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, &p_buffer[0], p_eBufferFormat ) )
+		, m_pBuffer( PxBufferBase::create( p_size, p_format, &p_buffer[0], p_eBufferFormat ) )
 	{
 		CHECK_INVARIANTS();
 	}
 
-	Image::Image( String const & p_name, Size const & p_ptSize, ePIXEL_FORMAT p_ePixelFormat, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
+	Image::Image( String const & p_name, Size const & p_size, ePIXEL_FORMAT p_format, uint8_t const * p_buffer, ePIXEL_FORMAT p_eBufferFormat )
 		: Resource< Image >( p_name )
-		, m_pBuffer( PxBufferBase::create( p_ptSize, p_ePixelFormat, p_buffer, p_eBufferFormat ) )
+		, m_pBuffer( PxBufferBase::create( p_size, p_format, p_buffer, p_eBufferFormat ) )
 	{
 		CHECK_INVARIANTS();
 	}

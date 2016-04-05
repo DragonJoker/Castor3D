@@ -419,11 +419,7 @@ namespace Castor
 
 		void Print( String const & toLog, bool newLine )
 		{
-#if CASTOR_USE_UNICODE
-			printf( "%ls%ls\033[0m", m_header.c_str(), toLog.c_str() );
-#else
 			printf( "%s%s\033[0m", m_header.c_str(), toLog.c_str() );
-#endif
 
 			if ( newLine )
 			{
@@ -455,11 +451,7 @@ namespace Castor
 
 		void Print( String const & toLog, bool newLine )
 		{
-#if CASTOR_USE_UNICODE
-			printf( "%ls", toLog.c_str() );
-#else
 			printf( "%s", toLog.c_str() );
-#endif
 
 			if ( newLine )
 			{

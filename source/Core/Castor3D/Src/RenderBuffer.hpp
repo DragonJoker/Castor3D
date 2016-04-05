@@ -42,13 +42,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_type			The buffer component
-		 *\param[in]	p_ePixelFormat	The buffer pixel format
+		 *\param[in]	p_format	The buffer pixel format
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_type			La composante du tampon
-		 *\param[in]	p_ePixelFormat	Le format des pixels du tampon
+		 *\param[in]	p_format	Le format des pixels du tampon
 		 */
-		C3D_API RenderBuffer( eBUFFER_COMPONENT p_type, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API RenderBuffer( eBUFFER_COMPONENT p_type, Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor

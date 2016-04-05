@@ -159,28 +159,32 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
-		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
+		 *\remarks		Not to be used by the user, use Scene::CreateCamera instead
 		 *\param[in]	p_name		The camera name
+		 *\param[in]	p_scene		The parent scene
 		 *\param[in]	p_node		The parent scene node
 		 *\param[in]	p_viewport	Viewport to copy
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
+		 *\remarks		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
 		 *\param[in]	p_name		Le nom de la caméra
-		 *\param[in]	p_node		SceneNode parent
+		 *\param[in]	p_scene		La scène parente
+		 *\param[in]	p_node		Le noeud de scène parent
 		 *\param[in]	p_viewport	Viewport à copier
 		 */
 		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport const & p_viewport );
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
-		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
+		 *\remarks		Not to be used by the user, use Scene::CreateCamera instead
 		 *\param[in]	p_name	The camera name
+		 *\param[in]	p_scene	The parent scene
 		 *\param[in]	p_node	The parent scene node
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
+		 *\remarks		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
 		 *\param[in]	p_name	Le nom de la caméra
+		 *\param[in]	p_scene	La scène parente
 		 *\param[in]	p_node	SceneNode parent
 		 */
 		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node );

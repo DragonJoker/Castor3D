@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -223,23 +223,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the overlay text
-		 *\param[in]	p_strCaption	The new value
+		 *\param[in]	p_caption	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	p_strCaption	La nouvelle valeur
+		 *\param[in]	p_caption	La nouvelle valeur
 		 */
-		inline void SetCaption( Castor::String const & p_strCaption )
+		inline void SetCaption( Castor::String const & p_caption )
 		{
-			m_currentCaption = p_strCaption;
+			m_currentCaption = p_caption;
 			m_textChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the overlay text
-		 *\param[in]	p_strCaption	The new value
+		 *\param[in]	p_caption	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	p_strCaption	La nouvelle valeur
+		 *\param[in]	p_caption	La nouvelle valeur
 		 */
 		inline void SetCaption( Castor::OutputStream const & p_caption )
 		{

@@ -3383,13 +3383,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format
-		 *\remark			Only for colour pixel formats, offsets source and destination by respective pixel format sizes
+		 *\remarks			Only for colour pixel formats, offsets source and destination by respective pixel format sizes
 		 *\param[in,out]	p_pSrc			The source pixel
 		 *\param[in,out]	p_pDst			The destination pixel
 		 *\param[in]		p_ePixelFmtDst	The destination pixel format
 		 *\~french
 		 *\brief			Conversion d'une source statique vers une destination dynamique
-		 *\remark			Uniquement pour les formats de pixel couleurs, décale la source et la destination par la taille respective de leur format de pixel
+		 *\remarks			Uniquement pour les formats de pixel couleurs, décale la source et la destination par la taille respective de leur format de pixel
 		 *\param[in,out]	p_pSrc			Le pixel source
 		 *\param[in,out]	p_pDst			Le pixel destination
 		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
@@ -3486,13 +3486,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format
-		 *\remark			Only for depth pixel formats, offsets source and destination by respective pixel format sizes
+		 *\remarks			Only for depth pixel formats, offsets source and destination by respective pixel format sizes
 		 *\param[in,out]	p_pSrc			The source pixel
 		 *\param[in,out]	p_pDst			The destination pixel
 		 *\param[in]		p_ePixelFmtDst	The destination pixel format
 		 *\~french
 		 *\brief			Conversion d'une source statique vers une destination dynamique
-		 *\remark			Uniquement pour les formats de pixel profondeurs, décale la source et la destination par la taille respective de leur format de pixel
+		 *\remarks			Uniquement pour les formats de pixel profondeurs, décale la source et la destination par la taille respective de leur format de pixel
 		 *\param[in,out]	p_pSrc			Le pixel source
 		 *\param[in,out]	p_pDst			Le pixel destination
 		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination
@@ -3529,13 +3529,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Conversion from static source format to dynamic destination format
-		 *\remark			Only for stencil pixel formats, offsets source and destination by respective pixel format sizes
+		 *\remarks			Only for stencil pixel formats, offsets source and destination by respective pixel format sizes
 		 *\param[in,out]	p_pSrc			The source pixel
 		 *\param[in,out]	p_pDst			The destination pixel
 		 *\param[in]		p_ePixelFmtDst	The destination pixel format
 		 *\~french
 		 *\brief			Conversion d'une source statique vers une destination dynamique
-		 *\remark			Uniquement pour les formats de pixel stencil, décale la source et la destination par la taille respective de leur format de pixel
+		 *\remarks			Uniquement pour les formats de pixel stencil, décale la source et la destination par la taille respective de leur format de pixel
 		 *\param[in,out]	p_pSrc			Le pixel source
 		 *\param[in,out]	p_pDst			Le pixel destination
 		 *\param[in]		p_ePixelFmtDst	Le format du pixel destination

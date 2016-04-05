@@ -60,12 +60,12 @@ namespace Castor
 			CU_API BinaryLoader();
 			/**
 			 *\~english
-			 *\brief			Loads the font manager.
+			 *\brief			Loads the image manager.
 			 *\param[in,out]	p_manager	The manager to load.
 			 *\param[in]		p_file		The source file.
 			 *\~french
-			 *\brief			Charge le gestionnaire de polices.
-			 *\param[in,out]	p_font		Le gestionnaire à charger.
+			 *\brief			Charge le gestionnaire d'images.
+			 *\param[in,out]	p_manager	Le gestionnaire à charger.
 			 *\param[in]		p_file		Le fichier source.
 			 */
 			CU_API virtual bool operator()( ImageManager & p_manager, BinaryFile & p_file );

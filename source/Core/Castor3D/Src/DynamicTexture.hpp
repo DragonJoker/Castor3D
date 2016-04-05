@@ -67,21 +67,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer
-		 *\param[in]	p_buffer	The buffer
+		 *\param[in]	p_size		The buffer dimensions
+		 *\param[in]	p_format	The buffer format
 		 *\~french
 		 *\brief		Définit le buffer de la texture
-		 *\param[in]	p_buffer	The buffer
+		 *\param[in]	p_size		La taille du tampon
+		 *\param[in]	p_format	Le format du tampon
 		 */
-		C3D_API void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Defines the 3D texture buffer
-		 *\param[in]	p_buffer	The buffer
+		 *\param[in]	p_size		The buffer dimensions
+		 *\param[in]	p_format	The buffer format
 		 *\~french
 		 *\brief		Définit le buffer de la texture 3D
-		 *\param[in]	p_buffer	The buffer
+		 *\param[in]	p_size		La taille du tampon
+		 *\param[in]	p_format	Le format du tampon
 		 */
-		C3D_API void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Resizes the texture buffer
@@ -139,10 +143,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the samples count
-		 *\param[in]	val	The samples count
+		 *\param[in]	p_count	The samples count
 		 *\~french
 		 *\brief		Définit le nombre de samples
-		 *\param[in]	val	Le nombre de samples
+		 *\param[in]	p_count	Le nombre de samples
 		 */
 		inline void SetSamplesCount( int p_count )
 		{
@@ -151,13 +155,13 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sends the given image buffer to the driver
-		 *\remark		Doesn't update the internal buffer, so either never use it or always use it
+		 *\remarks		Doesn't update the internal buffer, so either never use it or always use it
 		 *\param[in]	p_buffer	The image buffer
 		 *\param[in]	p_size		The image resolution
 		 *\param[in]	p_format	The image pixel format
 		 *\~french
 		 *\brief		Envoie le buffer d'image au driver
-		 *\remark		Ne met pas à jour le buffer interne, donc ne l'utilisez jamais ou utilisez la tout le temps
+		 *\remarks		Ne met pas à jour le buffer interne, donc ne l'utilisez jamais ou utilisez la tout le temps
 		 *\param[in]	p_buffer	Le buffer d'image
 		 *\param[in]	p_size		Les dimensions de l'image
 		 *\param[in]	p_format	Le format des pixels de l'image

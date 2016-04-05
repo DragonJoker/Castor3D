@@ -1,4 +1,4 @@
-namespace Castor
+﻿namespace Castor
 {
 	namespace
 	{

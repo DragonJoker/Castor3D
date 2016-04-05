@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -28,12 +28,12 @@ namespace Castor
 	\date		08/01/2016
 	\~english
 	\brief		Unique pool instance.
-	\args		Object		The pool objects type.
-	\args		MemDataType	The allocation/deallocation policy type.
+	\param		Object		The pool objects type.
+	\param		MemDataType	The allocation/deallocation policy type.
 	\~french
 	\brief		Instance unique de pool.
-	\args		Object		Le type des objets du pool.
-	\args		MemDataType	Le type de la politique d'allocation/désallocation.
+	\param		Object		Le type des objets du pool.
+	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
 	template< typename Object, eMEMDATA_TYPE MemDataType >
 	class UniqueObjectPool
@@ -94,12 +94,12 @@ namespace Castor
 	\date		08/01/2016
 	\~english
 	\brief		Unique pool instance.
-	\args		Object		The pool objects type.
-	\args		MemDataType	The allocation/deallocation policy type.
+	\param		Object		The pool objects type.
+	\param		MemDataType	The allocation/deallocation policy type.
 	\~french
 	\brief		Instance unique de pool.
-	\args		Object		Le type des objets du pool.
-	\args		MemDataType	Le type de la politique d'allocation/désallocation.
+	\param		Object		Le type des objets du pool.
+	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
 	template< typename Object, eMEMDATA_TYPE MemDataType, uint32_t Align >
 	class UniqueAlignedObjectPool

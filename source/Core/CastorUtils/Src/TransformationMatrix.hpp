@@ -209,34 +209,34 @@ namespace Castor
 		 *\~english
 		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
 		 *\param[out]	p_matrix		Receives the transformation
-		 *\param[in]	p_ptPosition	The translation value
+		 *\param[in]	p_position	The translation value
 		 *\param[in]	p_ptScale		The scaling value
 		 *\param[in]	p_qOrientation	The rotation value
 		 *\~french
 		 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
 		 *\param[out]	p_matrix		Reçoit la transformation
-		 *\param[in]	p_ptPosition	La valeur de translation
+		 *\param[in]	p_position	La valeur de translation
 		 *\param[in]	p_ptScale		La valeur de mise à l'échelle
 		 *\param[in]	p_qOrientation	La valeur de rotation
 		 */
 		template< typename T, typename U >
-		static SquareMatrix< T, 4 > & set_transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_ptPosition, Castor::Point< U, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		static SquareMatrix< T, 4 > & set_transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
 		/**
 		 *\~english
 		 *\brief		Retrieves transformation matrix from translation, scaling and rotation
 		 *\param[out]	p_matrix		Receives the transformation
-		 *\param[in]	p_ptPosition	The translation value
+		 *\param[in]	p_position	The translation value
 		 *\param[in]	p_ptScale		The scaling value
 		 *\param[in]	p_qOrientation	The rotation value
 		 *\~french
 		 *\brief		Récupère la matrice de transformation à partir de la translation, la mise à l'échelle et la rotation
 		 *\param[out]	p_matrix		Reçoit la transformation
-		 *\param[in]	p_ptPosition	La valeur de translation
+		 *\param[in]	p_position	La valeur de translation
 		 *\param[in]	p_ptScale		La valeur de mise à l'échelle
 		 *\param[in]	p_qOrientation	La valeur de rotation
 		 */
 		template< typename T, typename U >
-		static SquareMatrix< T, 4 > & transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_ptPosition, Castor::Point< U, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
+		static SquareMatrix< T, 4 > & transform( Castor::SquareMatrix< T, 4 > & p_matrix, Castor::Point< U, 3 > const & p_position, Castor::Point< U, 3 > const & p_ptScale, Castor::Quaternion const & p_qOrientation );
 		/**
 		 *\~english
 		 *\brief		Transforms the position/scale through a transformation matrix.
@@ -345,13 +345,13 @@ namespace Castor
 		static SquareMatrix< T, 4 > & look_at( SquareMatrix< T, 4 > & p_matrix, Point< U, 3 > const & p_ptEye, Point< U, 3 > const & p_ptCenter, Point< U, 3 > const & p_ptUp );
 		/**
 		 *\~english
-		 *\brief		Switches the handness of a matrix (from right to left or left to right)
-		 *\param[in,out]p_matrix	The matrix to switch, receives the switched matrix
-		 *\return		The switched matrix
+		 *\brief			Switches the handness of a matrix (from right to left or left to right)
+		 *\param[in,out]	p_matrix	The matrix to switch, receives the switched matrix
+		 *\return			The switched matrix
 		 *\~french
-		 *\brief		Change la main de la matrice (de main gauche à droite et inversement)
-		 *\param[in,out]p_matrix	La matrice à changer, reçoit la matrice changée
-		 *\return		La matrice changée
+		 *\brief			Change la main de la matrice (de main gauche à droite et inversement)
+		 *\param[in,out]	p_matrix	La matrice à changer, reçoit la matrice changée
+		 *\return			La matrice changée
 		 */
 		template< typename T >
 		static SquareMatrix< T, 4 > & switch_hand( SquareMatrix< T, 4 > & p_matrix );

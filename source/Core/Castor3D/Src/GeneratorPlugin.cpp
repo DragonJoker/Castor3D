@@ -22,19 +22,19 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		: PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary, *p_engine )
+	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_DIVIDER, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnCreateGenerator, CreateGeneratorFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateGenerator, CreateGeneratorFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateGenerator plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateGenerator plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnDestroyGenerator, DestroyGeneratorFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnDestroyGenerator, DestroyGeneratorFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyGenerator plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] DestroyGenerator plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}

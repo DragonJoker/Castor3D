@@ -125,10 +125,10 @@ namespace Castor
 		 *\param[in]	stream	Le flux
 		 *\param[in]	manip	Le manipulateur
 		 */
-		inline std::ostream & operator<<( std::ostream & os, const manip::base_manip & manip )
+		inline std::ostream & operator<<( std::ostream & stream, const manip::base_manip & manip )
 		{
-			manip.apply( os );
-			return os;
+			manip.apply( stream );
+			return stream;
 		}
 
 		/**
@@ -143,10 +143,10 @@ namespace Castor
 		 *\param[in]	stream	Le flux
 		 *\param[in]	manip	Le manipulateur
 		 */
-		inline std::wostream & operator<<( std::wostream & os, const manip::wbase_manip & manip )
+		inline std::wostream & operator<<( std::wostream & stream, const manip::wbase_manip & manip )
 		{
-			manip.apply( os );
-			return os;
+			manip.apply( stream );
+			return stream;
 		}
 		/*!
 		\author		Sylvain DOREMUS

@@ -89,11 +89,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Applies the event
-		 *\remark		Executes the function
+		 *\remarks		Executes the function
 		 *\return		\p true if the event was applied successfully
 		 *\~french
 		 *\brief		Traite l'évènement
-		 *\remark		Exécute la fonction
+		 *\remarks		Exécute la fonction
 		 *\return		\p true si l'évènement a été traité avec succès
 		 */
 		virtual bool Apply()

@@ -1,4 +1,4 @@
-#include <locale>
+﻿#include <locale>
 
 namespace Castor
 {

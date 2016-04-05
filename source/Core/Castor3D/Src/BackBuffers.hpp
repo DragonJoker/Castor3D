@@ -40,10 +40,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\para[in]		p_engine	The engine.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\para[in]		p_engine	Le moteur.
+		 *\param[in]	p_engine	Le moteur.
 		 */
 		C3D_API BackBuffers( Engine & p_engine );
 		/**

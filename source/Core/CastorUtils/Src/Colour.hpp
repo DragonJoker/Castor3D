@@ -182,39 +182,43 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
+		 *\param[in]	p_rhs	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
+		 *\param[in]	p_rhs	Couleur à copier
 		 */
-		CU_API Colour( Colour const & p_colour );
+		CU_API Colour( Colour const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
+		 *\param[in]	p_rhs	The object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
+		 *\param[in]	p_rhs	Couleur à déplacer
 		 */
-		CU_API Colour( Colour && p_colour );
+		CU_API Colour( Colour && p_rhs );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	p_rhs	The object to copy
 		 *\return		A reference to this object
 		 *\~french
 		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	p_rhs	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		CU_API Colour & operator=( Colour const & p_colour );
+		CU_API Colour & operator=( Colour const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
-		 *\param[in]	p_colour	Colour to copy
+		 *\param[in]	p_rhs	The object to copy
 		 *\return		Reference to this colour
 		 *\~french
 		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_colour	Couleur à copier
+		 *\param[in]	p_rhs	Couleur à déplacer
 		 *\return		Référence sur cette couleur
 		 */
-		CU_API Colour & operator=( Colour && p_colour );
+		CU_API Colour & operator=( Colour && p_rhs );
 		/**
 		 *\~english
 		 *\brief		Constructor from components
@@ -229,10 +233,10 @@ namespace Castor
 		static Colour from_components( T1 const & p_r, T2 const & p_g, T3 const & p_b, T4 const & p_a )
 		{
 			Colour l_clrReturn;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_RED]	= p_r;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_GREEN]	= p_g;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_BLUE]	= p_b;
-			l_clrReturn.m_arrayComponents[eCOMPONENT_ALPHA]	= p_a;
+			l_clrReturn.m_arrayComponents[eCOMPONENT_RED] = p_r;
+			l_clrReturn.m_arrayComponents[eCOMPONENT_GREEN] = p_g;
+			l_clrReturn.m_arrayComponents[eCOMPONENT_BLUE] = p_b;
+			l_clrReturn.m_arrayComponents[eCOMPONENT_ALPHA] = p_a;
 			return l_clrReturn;
 		}
 		/**
@@ -963,12 +967,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves predefined colour from a name
-		 *\param[in]	p_predefined	The predefined colour
-		 *\return		The colour name
+		 *\param[in]	p_name	The predefined colour name
+		 *\return		The predefined colour
 		 *\~french
 		 *\brief		Récupère une couleur prédéfinie à partir de son nom
-		 *\param[in]	p_predefined	La couleur prédéfinie
-		 *\return		Le nom de la couleur
+		 *\param[in]	p_name	Le nom de la couleur prédéfinie
+		 *\return		La couleur prédéfinie
 		 */
 		CU_API static ePREDEFINED get_predefined( String const & p_name );
 
@@ -980,112 +984,111 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Equality operator
-	 *\param[in]	p_clrA,p_clrB	The colours to compare
+	 *\param[in]	p_lhs, p_rhs	The colours to compare
 	 *\~french
 	 *\brief		Opérateur d'égalité
-	 *\param[in]	p_clrA,p_clrB	Les couleurs à comparer
+	 *\param[in]	p_lhs, p_rhs	Les couleurs à comparer
 	 */
-	CU_API bool operator==( Colour const & p_clrA, Colour const & p_clrB );
+	CU_API bool operator==( Colour const & p_lhs, Colour const & p_rhs );
 	/**
 	 *\~english
 	 *\brief		Inequality operator
-	 *\param[in]	p_clrA,p_clrB	The colours to compare
+	 *\param[in]	p_lhs, p_rhs	The colours to compare
 	 *\~french
 	 *\brief		Opérateur de différence
-	 *\param[in]	p_clrA,p_clrB	Les couleurs à comparer
+	 *\param[in]	p_lhs, p_rhs	Les couleurs à comparer
 	 */
-	CU_API bool operator!=( Colour const & p_clrA, Colour const & p_clrB );
+	CU_API bool operator!=( Colour const & p_lhs, Colour const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Addition assignment operator
-	 *\param[in]	p_clrA,p_clrB	The colours to add
-	 *\return		Result of p_clrA + p_clrB
+	 *\brief		Addition operator
+	 *\param[in]	p_lhs, p_rhs	The colours to add
+	 *\return		Result of p_lhs + p_rhs
 	 *\~french
-	 *\brief		Opérateur d'affectation par addition
-	 *\param[in]	p_clrA,p_clrB	Les couleurs à ajouter
-	 *\return		Resultat de p_clrA + p_clrB
+	 *\brief		Opérateur d'addition
+	 *\param[in]	p_lhs, p_rhs	Les couleurs à ajouter
+	 *\return		Resultat de p_lhs + p_rhs
 	 */
-	CU_API Colour operator+( Colour const & p_clrA, Colour const & p_clrB );
+	CU_API Colour operator+( Colour const & p_lhs, Colour const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Substraction assignment operator
-	 *\param[in]	p_clrA,p_clrB	The colours to substract
-	 *\return		Result of p_clrA - p_clrB
+	 *\brief		Substraction operator
+	 *\param[in]	p_lhs, p_rhs	The colours to substract
+	 *\return		Result of p_lhs - p_rhs
 	 *\~french
-	 *\brief		Opérateur d'affectation par soustraction
-	 *\param[in]	p_clrA,p_clrB	Les couleurs à soustraire
-	 *\return		Resultat de p_clrA - p_clrB
+	 *\brief		Opérateur de soustraction
+	 *\param[in]	p_lhs, p_rhs	Les couleurs à soustraire
+	 *\return		Resultat de p_lhs - p_rhs
 	 */
-	CU_API Colour operator-( Colour const & p_clrA, Colour const & p_clrB );
+	CU_API Colour operator-( Colour const & p_lhs, Colour const & p_rhs );
 	/**
 	 *\~english
-	 *\brief		Addition assignment operator
-	 *\param[in]	p_fScalar	The value to add
-	 *\return		Result of p_clrA + p_fScalar
+	 *\brief		Addition operator
+	 *\param[in]	p_lhs, p_rhs	The values to add
+	 *\return		Result of p_lhs + p_rhs
 	 *\~french
-	 *\brief		Opérateur d'affectation par addition
-	 *\param[in]	p_fScalar	La valeur à ajouter
-	 *\return		Resultat de p_clrA + p_fScalar
+	 *\brief		Opérateur d'addition
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à ajouter
+	 *\return		Resultat de p_lhs + p_rhs
 	 */
 	template< typename T >
-	Colour operator+( Colour const & p_clrA, T p_fScalar )
+	Colour operator+( Colour const & p_lhs, T p_rhs )
 	{
-		Colour l_clrResult( p_clrA );
-		l_clrResult += p_fScalar;
+		Colour l_clrResult( p_lhs );
+		l_clrResult += p_rhs;
+		return l_clrResult;
+	}
+	/**
+	 *\~english
+	 *\brief		Subtraction operator
+	 *\param[in]	p_lhs, p_rhs	The values to subtract
+	 *\return		Result of p_lhs - p_rhs
+	 *\~french
+	 *\brief		Opérateur de soustraction
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à soustraire
+	 *\return		Resultat de p_lhs - p_rhs
+	 */
+	template< typename T >
+	Colour operator-( Colour const & p_lhs, T p_rhs )
+	{
+		Colour l_clrResult( p_lhs );
+		l_clrResult -= p_rhs;
 		return l_clrResult;
 	}
 
 	/**
 	 *\~english
-	 *\brief		Substraction assignment operator
-	 *\param[in]	p_fScalar	The value to substract
-	 *\return		Result of p_clrA - p_fScalar
+	 *\brief		Multiplication operator
+	 *\param[in]	p_lhs, p_rhs	The values to multiply
+	 *\return		Result of p_lhs * p_rhs
 	 *\~french
-	 *\brief		Opérateur d'affectation par soustraction
-	 *\param[in]	p_fScalar	La valeur à soustraire
-	 *\return		Resultat de p_clrA - p_fScalar
+	 *\brief		Opérateur de multiplication
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à multiplier
+	 *\return		Resultat de p_lhs * p_rhs
 	 */
 	template< typename T >
-	Colour operator-( Colour const & p_clrA, T p_fScalar )
+	Colour operator*( Colour const & p_lhs, T p_rhs )
 	{
-		Colour l_clrResult( p_clrA );
-		l_clrResult -= p_fScalar;
+		Colour l_clrResult( p_lhs );
+		l_clrResult *= p_rhs;
 		return l_clrResult;
 	}
 
 	/**
 	 *\~english
-	 *\brief		Multiplication assignment operator
-	 *\param[in]	p_fScalar	The value to multiply
-	 *\return		Result of p_clrA * p_fScalar
+	 *\brief		Division operator
+	 *\param[in]	p_lhs, p_rhs	The values to divide
+	 *\return		Result of p_lhs / p_rhs
 	 *\~french
-	 *\brief		Opérateur d'affectation par multiplication
-	 *\param[in]	p_fScalar	La valeur à multiplier
-	 *\return		Resultat de p_clrA * p_fScalar
+	 *\brief		Opérateur de division
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à diviser
+	 *\return		Resultat de p_lhs / p_rhs
 	 */
 	template< typename T >
-	Colour operator*( Colour const & p_clrA, T p_fScalar )
+	Colour operator/( Colour const & p_lhs, T p_rhs )
 	{
-		Colour l_clrResult( p_clrA );
-		l_clrResult *= p_fScalar;
-		return l_clrResult;
-	}
-
-	/**
-	 *\~english
-	 *\brief		Division assignment operator
-	 *\param[in]	p_fScalar	The value to divide
-	 *\return		Result of p_clrA / p_fScalar
-	 *\~french
-	 *\brief		Opérateur d'affectation par division
-	 *\param[in]	p_fScalar	La valeur à diviser
-	 *\return		Resultat de p_clrA / p_fScalar
-	 */
-	template< typename T >
-	Colour operator/( Colour const & p_clrA, T p_fScalar )
-	{
-		Colour l_clrResult( p_clrA );
-		l_clrResult /= p_fScalar;
+		Colour l_clrResult( p_lhs );
+		l_clrResult /= p_rhs;
 		return l_clrResult;
 	}
 	/**

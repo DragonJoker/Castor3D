@@ -101,7 +101,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	ShaderProgramSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_eLanguage )
+	ShaderProgramSPtr RenderSystem::CreateShaderProgram( eSHADER_LANGUAGE p_langage )
 	{
 		auto l_lock = Castor::make_unique_lock( m_mutex );
 

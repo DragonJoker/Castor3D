@@ -116,7 +116,7 @@ namespace Castor3D
 			}
 			else
 			{
-				Logger::LogError( cuT( "RenderSystem still exists while it's plugin doesn't exist anymore" ) );
+				Logger::LogError( cuT( "RenderSystem still exists while it's plug-in doesn't exist anymore" ) );
 			}
 		}
 

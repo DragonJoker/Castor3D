@@ -1,6 +1,6 @@
 #include "AssimpImporter.hpp"
 
-#include <AnimationObjectBase.hpp>
+#include <AnimationObject.hpp>
 #include <Bone.hpp>
 #include <GeometryManager.hpp>
 #include <InitialiseEvent.hpp>
@@ -713,11 +713,11 @@ namespace C3dAssimp
 		return l_animation;
 	}
 
-	void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectBaseSPtr p_object )
+	void AssimpImporter::DoProcessAnimationNodes( AnimationSPtr p_animation, real p_ticksPerSecond, SkeletonSPtr p_skeleton, aiNode * p_aiNode, aiAnimation * p_aiAnimation, AnimationObjectSPtr p_object )
 	{
 		String l_name = string::string_cast< xchar >( p_aiNode->mName.data );
 		const aiNodeAnim * l_aiNodeAnim = FindNodeAnim( p_aiAnimation, l_name );
-		AnimationObjectBaseSPtr l_object;
+		AnimationObjectSPtr l_object;
 
 		if ( l_aiNodeAnim )
 		{

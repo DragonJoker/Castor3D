@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -52,6 +52,22 @@ namespace Castor3D
 	template<>
 	struct ElementAttacher< Light >
 	{
+		/**
+		 *\~english
+		 *\brief		Attaches an element to the appropriate parent node.
+		 *\param[in]	p_element			The scene node.
+		 *\param[in]	p_parent			The parent scene node.
+		 *\param[in]	p_rootNode			The root node.
+		 *\param[in]	p_rootCameraNode	The cameras root node.
+		 *\param[in]	p_rootObjectNode	The objects root node.
+		 *\~french
+		 *\brief		Attache un élément au parent approprié.
+		 *\param[in]	p_element			Le noeud de scène.
+		 *\param[in]	p_parent			Le noeud de scène parent.
+		 *\param[in]	p_rootNode			Le noeud racine.
+		 *\param[in]	p_rootCameraNode	Le noeud racine des caméras.
+		 *\param[in]	p_rootObjectNode	Le noeud racine des objets.
+		 */
 		static void Attach( std::shared_ptr< Light > p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		{
 			if ( p_parent )
@@ -150,17 +166,19 @@ namespace Castor3D
 		C3D_API void UnbindLights( ShaderProgram & p_program, FrameVariableBuffer & p_sceneBuffer );
 		/**
 		 *\~english
-		 *\brief		Creates an object from a name.
+		 *\brief		Creates a light.
 		 *\param[in]	p_name		The object name.
-		 *\param[in]	p_params	The other constructor parameters.
+		 *\param[in]	p_parent	The parent scene node.
+		 *\param[in]	p_lightType	The light source type.
 		 *\return		The created object.
 		 *\~french
-		 *\brief		Crée un objet à partir d'un nom.
+		 *\brief		Crée une source lumineuse.
 		 *\param[in]	p_name		Le nom d'objet.
-		 *\param[in]	p_params	Les autres paramètres de construction.
+		 *\param[in]	p_parent	Le noeud de scène parent.
+		 *\param[in]	p_lightType	Le type de source lumineuse.
 		 *\return		L'objet créé.
 		 */
-		C3D_API std::shared_ptr< Light > Create( Castor::String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_eLightType );
+		C3D_API std::shared_ptr< Light > Create( Castor::String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_lightType );
 
 	private:
 		C3D_API void DoAddLight( LightSPtr p_light );

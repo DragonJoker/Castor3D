@@ -51,6 +51,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_elements	The elements array
+		 *\param[in]	p_count		Elements array size
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_elements	Tableau d'éléments
+		 *\param[in]	p_count		Taille du tableau d'éléments
+		 */
+		C3D_API BufferDeclaration( BufferElementDeclaration const * p_elements, uint32_t p_count );
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_elements	The elements array
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_elements	Tableau des éléments
@@ -63,25 +74,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pElements		The elements array
-		 *\param[in]	p_uiNbElements	Elements array size
+		 *\param[in]	p_elements		The elements array
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pElements		Tableau d'éléments
-		 *\param[in]	p_uiNbElements	Taille du tableau d'éléments
+		 *\param[in]	p_elements		Tableau d'éléments
 		 */
-		C3D_API BufferDeclaration( BufferElementDeclaration const * p_elements, uint32_t p_count );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pElements		The elements array
-		 *\param[in]	p_uiNbElements	Elements array size
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pElements		Tableau d'éléments
-		 *\param[in]	p_uiNbElements	Taille du tableau d'éléments
-		 */
-		C3D_API BufferDeclaration( std::vector< BufferElementDeclaration > const & p_elements );
+		inline BufferDeclaration( std::vector< BufferElementDeclaration > const & p_elements )
+			: BufferDeclaration( p_elements.data(), uint32_t( p_elements.size() ) )
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -155,7 +156,7 @@ namespace Castor3D
 		}
 
 	private:
-		C3D_API void DoInitialise( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		C3D_API void DoInitialise( BufferElementDeclaration const * p_elements, uint32_t p_count );
 
 	protected:
 		//!\~english Element description array	\~french Tableau de descriptions d'éléments
@@ -166,20 +167,20 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Equality operator.
-	 *\param[in]	p_obj1, p_obj2	The 2 objects to compare.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
 	 *\~french
 	 *\brief		Opérateur d'égalité.
-	 *\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets à comparer
 	 */
 	C3D_API bool operator==( BufferDeclaration & p_lhs, BufferDeclaration & p_rhs );
 	/**
-	*\~english
-	*\brief		Equality operator.
-	*\param[in]	p_obj1, p_obj2	The 2 objects to compare.
-	*\~french
-	*\brief		Opérateur d'égalité.
-	*\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
-	*/
+	 *\~english
+	 *\brief		Equality operator.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
+	 *\~french
+	 *\brief		Opérateur d'égalité.
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets à comparer
+	 */
 	C3D_API bool operator!=( BufferDeclaration & p_lhs, BufferDeclaration & p_rhs );
 }
 

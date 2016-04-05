@@ -543,58 +543,58 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB blend parameter
-		 *\param[in]	p_eIndex	The parameter index
+		 *\param[in]	p_index	The parameter index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le paramètre de mélange RGB
-		 *\param[in]	p_eIndex	L'index du paramètre
+		 *\param[in]	p_index	L'index du paramètre
 		 *\return		La valeur
 		 */
-		inline eBLEND_SOURCE GetRgbArgument( eBLEND_SRC_INDEX p_eIndex )const
+		inline eBLEND_SOURCE GetRgbArgument( eBLEND_SRC_INDEX p_index )const
 		{
-			return m_eRgbArguments[p_eIndex];
+			return m_eRgbArguments[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the RGB blend parameter
-		 *\param[in]	p_eIndex	The parameter index
-		 *\param[in]	p_eVal		The new value
+		 *\param[in]	p_index	The parameter index
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le paramètre de mélange RGB
-		 *\param[in]	p_eIndex	L'index du paramètre
-		 *\param[in]	p_eVal		La nouvelle valeur
+		 *\param[in]	p_index	L'index du paramètre
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetRgbArgument( eBLEND_SRC_INDEX p_eIndex, eBLEND_SOURCE p_eVal )
+		inline void SetRgbArgument( eBLEND_SRC_INDEX p_index, eBLEND_SOURCE p_value )
 		{
-			m_eRgbArguments[p_eIndex] = p_eVal;
+			m_eRgbArguments[p_index] = p_value;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the Alpha blend parameter
-		 *\param[in]	p_eIndex	The parameter index
+		 *\param[in]	p_index	The parameter index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le paramètre de mélange Alpha
-		 *\param[in]	p_eIndex	L'index du paramètre
+		 *\param[in]	p_index	L'index du paramètre
 		 *\return		La valeur
 		 */
-		inline eBLEND_SOURCE GetAlpArgument( eBLEND_SRC_INDEX p_eIndex )const
+		inline eBLEND_SOURCE GetAlpArgument( eBLEND_SRC_INDEX p_index )const
 		{
-			return m_eAlpArguments[p_eIndex];
+			return m_eAlpArguments[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the Alpha blend parameter
-		 *\param[in]	p_eIndex	The parameter index
-		 *\param[in]	p_eVal		The new value
+		 *\param[in]	p_index	The parameter index
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le paramètre de mélange Alpha
-		 *\param[in]	p_eIndex	L'index du paramètre
-		 *\param[in]	p_eVal		La nouvelle valeur
+		 *\param[in]	p_index	L'index du paramètre
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetAlpArgument( eBLEND_SRC_INDEX p_eIndex, eBLEND_SOURCE val )
+		inline void SetAlpArgument( eBLEND_SRC_INDEX p_index, eBLEND_SOURCE p_value )
 		{
-			m_eAlpArguments[p_eIndex] = val;
+			m_eAlpArguments[p_index] = p_value;
 		}
 		/**
 		 *\~english

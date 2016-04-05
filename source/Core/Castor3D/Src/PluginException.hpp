@@ -30,7 +30,7 @@ namespace Castor3D
 	\~english
 	\brief		Plugin loading exception
 	\~french
-	\brief		Exception de chargement de plugin
+	\brief		Exception de chargement de plug-in
 	*/
 	class PluginException
 		: public Castor::Exception
@@ -41,16 +41,16 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_critical		Tells if the exception is critical
 		 *\param[in]	p_description	The exception description
-		 *\param[in]	p_strFile		The file
-		 *\param[in]	p_strFunction	The function
-		 *\param[in]	p_uiLine		The file line
+		 *\param[in]	p_file			The file
+		 *\param[in]	p_function		The function
+		 *\param[in]	p_line			The file line
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_critical		Dit si l'exception est critique
 		 *\param[in]	p_description	La description de l'exception
-		 *\param[in]	p_strFile		Le fichier
-		 *\param[in]	p_strFunction	La fonction
-		 *\param[in]	p_uiLine		La ligne dans le fichier
+		 *\param[in]	p_file			Le fichier
+		 *\param[in]	p_function		La fonction
+		 *\param[in]	p_line			La ligne dans le fichier
 		 */
 		C3D_API PluginException( bool p_critical, std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line );
 		/**

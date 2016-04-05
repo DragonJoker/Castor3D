@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -69,13 +69,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and returns a Sampler, given a name
-		 *\remark		If a Sampler with the same name exists, none is created
-		 *\param[in]	p_name	The Sampler name
+		 *\remarks		If a Sampler with the same name exists, none is created
+		 *\param[in]	p_name		The Sampler name
+		 *\param[in]	p_params	The other constructor parameters
 		 *\return		The created or existing Sampler
 		 *\~french
 		 *\brief		Crée et renvoie un Sampler, avec le nom donné
-		 *\remark		Si un Sampler avec le même nom existe, aucun n'est créé
-		 *\param[in]	p_name	Le nom du Sampler
+		 *\remarks		Si un Sampler avec le même nom existe, aucun n'est créé
+		 *\param[in]	p_name		Le nom du Sampler
+		 *\param[in]	p_params	Les autres paramètres du constructeur
 		 *\return		Le Sampler créé ou existant
 		 */
 		template< typename ... Parameters >

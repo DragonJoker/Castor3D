@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -297,7 +297,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render begin function.
-		 *\remakrs		At the end of this method, the frame buffer that will receive draw calls must be bound.
+		 *\remarks		At the end of this method, the frame buffer that will receive draw calls must be bound.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction de début de rendu.
@@ -314,7 +314,7 @@ namespace Castor3D
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene		Les noeuds à dessiner.
+		 *\param[in]	p_nodes		Les noeuds à dessiner.
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
 		 *\return		\p true si tout s'est bien passé.
@@ -323,7 +323,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render end function
-		 *\remakrs		At the end of this method, the render target frame buffer must be bound.
+		 *\remarks		At the end of this method, the render target frame buffer must be bound.
 		 *\~french
 		 *\brief		Fonction de fin de rendu
 		 *\remarks		A la sortie de cette méthode, le tampon d'image de la cible de rendu doit être activé.
@@ -357,11 +357,13 @@ namespace Castor3D
 		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, GeometryRenderNode & p_node, uint64_t p_excludedMtxFlags );
 		/**
 		 *\~english
-		 *\brief		Unbinds the given pass.
-		 *\param[in]	p_pass			The pass.
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\param[in]	p_renderNode	The render node.
 		 *\~french
-		 *\brief		Désctive la passe donnée.
-		 *\param[in]	p_pass			La passe.
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 *\param[in]	p_renderNode	Le noeud de rendu.
 		 */
 		C3D_API void DoUnbindPass( Scene & p_scene, GeometryRenderNode & p_renderNode );
 		/**
@@ -381,104 +383,130 @@ namespace Castor3D
 		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, BillboardRenderNode & p_node, uint64_t p_excludedMtxFlags );
 		/**
 		 *\~english
-		 *\brief		Unbinds the given pass.
-		 *\param[in]	p_pass			The pass.
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\param[in]	p_renderNode	The render node.
 		 *\~french
-		 *\brief		Désctive la passe donnée.
-		 *\param[in]	p_pass			La passe.
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 *\param[in]	p_renderNode	Le noeud de rendu.
 		 */
 		C3D_API void DoUnbindPass( Scene & p_scene, BillboardRenderNode & p_renderNode );
 		/**
 		 *\~english
 		 *\brief		Renders non instanced submeshes.
-		 *\param[in]	p_scene			The rendered scene.
-		 *\param[in]	p_pipeline		The render pipeline.
-		 *\param[in]	p_begin			The render nodes begin.
-		 *\param[in]	p_end			The render nodes end.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages non instanciés.
-		 *\param[in]	p_scene			La scène rendue.
-		 *\param[in]	p_pipeline		Le pipeline de rendu.
-		 *\param[in]	p_begin			Le début des noeuds de rendu.
-		 *\param[in]	p_end			La fin des noeuds de rendu.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders instanced submeshes.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_begin		The render nodes begin.
-		 *\param[in]	p_end		The render nodes end.
+		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages instanciés.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_begin		Le début des noeuds de rendu.
-		 *\param[in]	p_end		La fin des noeuds de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders distance sorted submeshes.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_begin		The render nodes begin.
-		 *\param[in]	p_end		The render nodes end.
+		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages triés par distance.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_begin		Le début des noeuds de rendu.
-		 *\param[in]	p_end		La fin des noeuds de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, GeometryRenderNodeByDistanceMMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders submeshes.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_begin		The render nodes begin.
-		 *\param[in]	p_end		The render nodes end.
+		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des sous maillages.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_begin		Le début des noeuds de rendu.
-		 *\param[in]	p_end		La fin des noeuds de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderSubmeshes( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_begin		The render nodes begin.
-		 *\param[in]	p_end		The render nodes end.
+		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des billboards.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_begin		Le début des noeuds de rendu.
-		 *\param[in]	p_end		La fin des noeuds de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodeByDistanceMMap & p_nodes );
 		/**
 		 *\~english
 		 *\brief		Renders billboards.
 		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
 		 *\param[in]	p_pipeline	The render pipeline.
-		 *\param[in]	p_begin		The render nodes begin.
-		 *\param[in]	p_end		The render nodes end.
+		 *\param[in]	p_nodes		The render nodes.
 		 *\~french
 		 *\brief		Dessine des billboards.
 		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
 		 *\param[in]	p_pipeline	Le pipeline de rendu.
-		 *\param[in]	p_begin		Le début des noeuds de rendu.
-		 *\param[in]	p_end		La fin des noeuds de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
 		 */
 		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Sorts the given render nodes by distance to the camera.
+		 *\param[in]	p_input		The unsorted render nodes.
+		 *\param[in]	p_camera	The camera.
+		 *\param[out]	p_output	The sorted render nodes.
+		 *\~french
+		 *\brief		Trie les noeuds de rendu donnés par distance à la caméra.
+		 *\param[in]	p_input		Les noeuds de rendu non triés.
+		 *\param[in]	p_camera	La caméra.
+		 *\param[out]	p_output	Les noeuds de rendu triés.
+		 */
 		C3D_API void DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, GeometryRenderNodeByDistanceMMap & p_output );
+		/**
+		 *\~english
+		 *\brief		Sorts the given render nodes by distance to the camera.
+		 *\param[in]	p_input		The unsorted render nodes.
+		 *\param[in]	p_camera	The camera.
+		 *\param[out]	p_output	The sorted render nodes.
+		 *\~french
+		 *\brief		Trie les noeuds de rendu donnés par distance à la caméra.
+		 *\param[in]	p_input		Les noeuds de rendu non triés.
+		 *\param[in]	p_camera	La caméra.
+		 *\param[out]	p_output	Les noeuds de rendu triés.
+		 */
 		C3D_API void DoResortAlpha( BillboardRenderNodesByProgramMap p_input, Camera const & p_camera, BillboardRenderNodeByDistanceMMap & p_output );
 		/**
 		 *\~english

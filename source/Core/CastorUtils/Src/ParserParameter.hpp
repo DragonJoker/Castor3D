@@ -150,7 +150,7 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::Parse
 		 */
-		inline bool Parse( String & p_strParams );
+		inline bool Parse( String & p_params );
 	};
 	/*!
 	\author 	Sylvain DOREMUS
@@ -194,7 +194,7 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::Parse
 		 */
-		inline bool Parse( String & p_strParams );
+		inline bool Parse( String & p_params );
 
 	public:
 		UIntStrMap const & m_values;
@@ -241,7 +241,7 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::Parse
 		 */
-		inline bool Parse( String & p_strParams );
+		inline bool Parse( String & p_params );
 
 	public:
 		UIntStrMap const & m_values;
@@ -288,7 +288,7 @@ namespace Castor
 		/**
 		 *\copydoc		Castor::ParserParameterBase::Parse
 		 */
-		inline bool Parse( String & p_strParams );
+		inline bool Parse( String & p_params );
 
 	public:
 		UInt64StrMap const & m_values;

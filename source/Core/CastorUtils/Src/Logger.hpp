@@ -294,7 +294,7 @@ namespace Castor
 		 *\brief		Log un avertissement, à partir d'un std::wostream
 		 *\param[in]	p_msg	The line to log
 		 */
-		CU_API static void LogWarning( std::wostream const & msg );
+		CU_API static void LogWarning( std::wostream const & p_msg );
 		/**
 		 *\~english
 		 *\brief		Logs an error, from a std::string

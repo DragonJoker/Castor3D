@@ -241,21 +241,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the viewport specifics
-		 *\remark		Applies the perspective
+		 *\remarks		Applies the perspective
 		 *\return		\p true if the frustum view has been modified
 		 *\~french
 		 *\brief		Rend le viewport
-		 *\remark		Applique la perspective
+		 *\remarks		Applique la perspective
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
 		C3D_API bool Render( Pipeline & p_pipeline );
 		/**
 		 *\~english
-		 *\brief		Retrieves the viewport render size
-		 *\return		The value
+		 *\return		The viewport render size
 		 *\~french
-		 *\brief		Récupère les dimensions de rendu du viewport
-		 *\return		La valeur
+		 *\return		Les dimensions de rendu du viewport
 		 */
 		inline const Castor::Size & GetSize()const
 		{
@@ -263,11 +261,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the viewport projection type
-		 *\return		The new value
+		 *\return		The viewport projection type
 		 *\~french
-		 *\brief		Définit le type de projection du viewport
-		 *\return		La nouvelle valeur
+		 *\return		Le type de projection du viewport
 		 */
 		inline eVIEWPORT_TYPE GetType()const
 		{
@@ -275,11 +271,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the aspect ratio
-		 *\return		The new value
+		 *\return		The aspect ratio
 		 *\~french
-		 *\brief		Définit le ratio d'aspect
-		 *\return		La nouvelle valeur
+		 *\return		Le ratio d'aspect
 		 */
 		inline real GetRatio()const
 		{
@@ -287,11 +281,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the near plane position
-		 *\param[in]	The new value
+		 *\return		The near plane position
 		 *\~french
-		 *\brief		Définit la position du plan proche
-		 *\param[in]	La nouvelle valeur
+		 *\return		La position du plan proche
 		 */
 		inline real GetNear()const
 		{
@@ -299,11 +291,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the far plane position
-		 *\param[in]	The new value
+		 *\return		The far plane position
 		 *\~french
-		 *\brief		Définit la position du plan lointain
-		 *\param[in]	La nouvelle valeur
+		 *\return		La position du plan lointain
 		 */
 		inline real GetFar()const
 		{
@@ -311,11 +301,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the view vertical angle
-		 *\param[in]	The new value
+		 *\return		The view vertical angle
 		 *\~french
-		 *\brief		Définit l'angle de vue vertical
-		 *\param[in]	La nouvelle valeur
+		 *\return		L'angle de vue vertical
 		 */
 		inline Castor::Angle GetFovY()const
 		{
@@ -323,11 +311,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the left plane position
-		 *\param[in]	The new value
+		 *\return		The left plane position
 		 *\~french
-		 *\brief		Définit la position du plan gauche
-		 *\param[in]	La nouvelle valeur
+		 *\return		La position du plan gauche
 		 */
 		inline real GetLeft()const
 		{
@@ -335,11 +321,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the right plane position
-		 *\param[in]	The new value
+		 *\return		The right plane position
 		 *\~french
-		 *\brief		Définit la position du plan droit
-		 *\param[in]	La nouvelle valeur
+		 *\return		La position du plan droit
 		 */
 		inline real GetRight()const
 		{
@@ -347,11 +331,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the top plane position
-		 *\param[in]	The new value
+		 *\return		The top plane position
 		 *\~french
-		 *\brief		Définit la position du plan haut
-		 *\param[in]	La nouvelle valeur
+		 *\return		La position du plan haut
 		 */
 		inline real GetTop()const
 		{
@@ -359,11 +341,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the bottom plane position
-		 *\param[in]	The new value
+		 *\return		The bottom plane position
 		 *\~french
-		 *\brief		Définit la position du plan bas
-		 *\param[in]	La nouvelle valeur
+		 *\return		La position du plan bas
 		 */
 		inline real GetBottom()const
 		{
@@ -371,11 +351,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the viewport width
-		 *\return		The value
+		 *\return		The viewport width
 		 *\~french
-		 *\brief		Récupère la largeur du viewport
-		 *\return		La valeur
+		 *\return		La largeur du viewport
 		 */
 		inline uint32_t GetWidth()const
 		{
@@ -383,11 +361,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the viewport height
-		 *\return		The value
+		 *\return		The viewport height
 		 *\~french
-		 *\brief		Récupère la hauteur du viewport
-		 *\return		La valeur
+		 *\return		La hauteur du viewport
 		 */
 		inline uint32_t GetHeight()const
 		{
@@ -395,11 +371,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the viewport modificiation status
-		 *\return		The value
+		 *\return		The viewport modificiation status
 		 *\~french
-		 *\brief		Récupère le statut de modification du viewport
-		 *\return		La valeur
+		 *\return		Le statut de modification du viewport
 		 */
 		inline bool IsModified()const
 		{
@@ -550,11 +524,9 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the projection matrix
-		 *\return		The matrix
+		 *\return		The projection matrix
 		 *\~french
-		 *\brief		Récupère la matrice de projection
-		 *\return		La matrice
+		 *\return		La matrice de projection
 		 */
 		inline Castor::Matrix4x4r const & GetProjection()const
 		{

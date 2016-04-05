@@ -15,10 +15,10 @@ namespace CastorGui
 {
 	namespace
 	{
-		void ParseError( String const & p_strError )
+		void ParseError( String const & p_error )
 		{
 			StringStream l_strError;
-			l_strError << cuT( "Error, : " ) << p_strError;
+			l_strError << cuT( "Error, : " ) << p_error;
 			Logger::LogError( l_strError.str() );
 		}
 

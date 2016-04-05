@@ -12,8 +12,8 @@ using namespace Castor3D;
 using namespace Castor;
 namespace GuiCommon
 {
-	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_ptPosition, const wxSize p_ptSize )
-		: wxPanel( p_parent, wxID_ANY, p_ptPosition, p_ptSize )
+	ShaderEditorPage::ShaderEditorPage( bool p_bCanEdit, StcContext & p_stcContext, Castor3D::ShaderProgramSPtr p_shader, Castor3D::eSHADER_TYPE p_type, wxWindow * p_parent, wxPoint const & p_position, const wxSize p_size )
+		: wxPanel( p_parent, wxID_ANY, p_position, p_size )
 		, m_shaderProgram( p_shader )
 		, m_stcContext( p_stcContext )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )

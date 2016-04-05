@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -376,8 +376,7 @@ namespace Castor
 		 *\param[in]	p_x, p_y, p_z	The axes
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
-		 *\param[in]	p_vector	L'axe
-		 *\param[in]	p_angle		L'angle
+		 *\param[in]	p_x, p_y, p_z	Les axes
 		 */
 		inline void from_axes( Point3f const & p_x, Point3f const & p_y, Point3f const & p_z );
 		/**
@@ -386,8 +385,7 @@ namespace Castor
 		 *\param[in]	p_x, p_y, p_z	The axes
 		 *\~french
 		 *\brief		Met à jour ce Quaternion à partir de 3 axes
-		 *\param[in]	p_vector	L'axe
-		 *\param[in]	p_angle		L'angle
+		 *\param[in]	p_x, p_y, p_z	Les axes
 		 */
 		inline void from_axes( Point3d const & p_x, Point3d const & p_y, Point3d const & p_z );
 		/**
@@ -712,15 +710,15 @@ namespace Castor
 	inline QuaternionT< T > operator-( QuaternionT< T > const & p_quat );
 	/**
 	 *\~english
-	 *\brief		Stream operator.
-	 *\param[in,out]p_stream	The stream.
-	 *\param[in]	p_quat		The Quaternion object to put in stream.
-	 *\return		The stream.
+	 *\brief			Stream operator.
+	 *\param[in,out]	p_stream	The stream.
+	 *\param[in]		p_quat		The Quaternion object to put in stream.
+	 *\return			The stream.
 	 *\~french
-	 *\brief		Opérateur de flux.
-	 *\param[in,out]p_stream	Le flux.
-	 *\param[in]	p_quat		L'objet Quaternion à mettre dans le flux
-	 *\return		Le flux.
+	 *\brief			Opérateur de flux.
+	 *\param[in,out]	p_stream	Le flux.
+	 *\param[in]		p_quat		L'objet Quaternion à mettre dans le flux
+	 *\return			Le flux.
 	 */
 	template< typename CharT, typename T >
 	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & p_stream, QuaternionT< T > const & p_quat )

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SKELETON_ANIMATION_BONE___
 #define ___C3D_SKELETON_ANIMATION_BONE___
 
-#include "AnimationObjectBase.hpp"
+#include "AnimationObject.hpp"
 
 namespace Castor3D
 {
@@ -32,7 +32,7 @@ namespace Castor3D
 	\brief		Implémentation de MovingObjectBase pour les Bones.
 	*/
 	class SkeletonAnimationBone
-		: public AnimationObjectBase
+		: public AnimationObject
 	{
 	public:
 		/*!
@@ -136,7 +136,7 @@ namespace Castor3D
 
 	private:
 		virtual void DoApply();
-		virtual AnimationObjectBaseSPtr DoClone( Animation & p_animation );
+		virtual AnimationObjectSPtr DoClone( Animation & p_animation );
 
 	private:
 		//!\~english	The bone affected by the animations	\~french	L'os affecté par les animations

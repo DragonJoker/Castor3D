@@ -16,19 +16,11 @@ namespace Castor3D
 #	if defined( _WIN64 )
 	static const String CreateImporterFunctionABIName = cuT( "?Create@@YAXPEAVEngine@Castor3D@@PEAVImporterPlugin@2@@Z" );
 	static const String DestroyImporterFunctionABIName = cuT( "?Destroy@@YAXPEAVImporterPlugin@Castor3D@@@Z" );
-#		if CASTOR_USE_UNICODE
-	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@XZ" );
-#		else
 	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@PEAVEngine@Castor3D@@@Z" );
-#		endif
 #	else
 	static const String CreateImporterFunctionABIName = cuT( "?Create@@YAXPAVEngine@Castor3D@@PAVImporterPlugin@2@@Z" );
 	static const String DestroyImporterFunctionABIName = cuT( "?Destroy@@YAXPAVImporterPlugin@Castor3D@@@Z" );
-#		if CASTOR_USE_UNICODE
-	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@XZ" );
-#else
 	static const String GetExtensionFunctionABIName = cuT( "?GetExtensions@@YA?AV?$vector@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@V?$allocator@U?$pair@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V12@@std@@@2@@std@@PAVEngine@Castor3D@@@Z" );
-#endif
 #	endif
 #elif defined( __GNUG__)
 #	if GCC_VERSION >= 50300
@@ -42,26 +34,26 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_pLibrary, *p_engine )
+	ImporterPlugin::ImporterPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		:	PluginBase( ePLUGIN_TYPE_IMPORTER, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnCreateImporter, CreateImporterFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateImporter, CreateImporterFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateImporter plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateImporter plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnDestroyImporter, DestroyImporterFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnDestroyImporter, DestroyImporterFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyImporter plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] DestroyImporter plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnGetExtension, GetExtensionFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetExtension, GetExtensionFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetExtension plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetExtension plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}

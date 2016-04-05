@@ -178,9 +178,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the blending activation status
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le statut d'activation du blending
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline bool IsBlendEnabled( uint8_t p_index = 0 )const
@@ -191,9 +193,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the blending activation status
 		 *\param[in]	p_enable	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
 		 *\brief		Définit le statut d'activation du blending
 		 *\param[in]	p_enable	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
 		inline void EnableBlend( bool p_enable, uint8_t p_index = 0 )
 		{
@@ -203,9 +207,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB source blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le facteur source RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline eBLEND GetRgbSrcBlend( uint8_t p_index = 0 )const
@@ -216,9 +222,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the RGB source blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
 		 *\brief		Définit le facteur source RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
 		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
@@ -228,9 +236,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB destination blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le facteur destination RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline eBLEND GetRgbDstBlend( uint8_t p_index = 0 )const
@@ -241,9 +251,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the RGB destination blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
 		 *\brief		Définit le facteur destination RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
 		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
@@ -253,9 +265,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB blending operation
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère l'opération de blend RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline eBLEND_OP GetRgbBlendOp( uint8_t p_index = 0 )const
@@ -266,9 +280,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the RGB blending operation
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
 		 *\brief		Définit l'opération de blend RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
 		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
 		{
@@ -278,9 +294,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha source blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le facteur source alpha
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline eBLEND GetAlphaSrcBlend( uint8_t p_index = 0 )const
@@ -291,9 +309,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the alpha source blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
 		 *\brief		Définit le facteur source alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
 		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
@@ -303,9 +323,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha destination blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le facteur destination alpha
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline eBLEND GetAlphaDstBlend( uint8_t p_index = 0 )const
@@ -316,9 +338,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the alpha destination blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
 		 *\brief		Définit le facteur destination alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
 		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
@@ -328,9 +352,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB blending operation
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère l'opération de blend RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline eBLEND_OP GetAlphaBlendOp( uint8_t p_index = 0 )const
@@ -340,22 +366,26 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the RGB blending operation
-		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_value	The new value
+		 *\param[in]	p_index	The value index
 		 *\~french
 		 *\brief		Définit l'opération de blend RGB
-		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	p_index	L'indice de la valeur
 		 */
-		inline void SetAlphaBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
+		inline void SetAlphaBlendOp( eBLEND_OP p_value, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_eAlphaBlendOp != p_eValue;
-			m_rtStates[p_index].m_eAlphaBlendOp = p_eValue;
+			m_changed |= m_rtStates[p_index].m_eAlphaBlendOp != p_value;
+			m_rtStates[p_index].m_eAlphaBlendOp = p_value;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the render target write mask
+		 *\param[in]	p_index	The value index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le masque d'écriture de la cible de rendu
+		 *\param[in]	p_index	L'indice de la valeur
 		 *\return		La valeur
 		 */
 		inline uint8_t GetWriteMask( uint8_t p_index = 0 )const
@@ -365,15 +395,17 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the render target write mask
-		 *\param[in]	p_byMask	The new value
+		 *\param[in]	p_value	The new value
+		 *\param[in]	p_index	The value index
 		 *\~french
 		 *\brief		Définit le masque d'écriture de la cible de rendu
-		 *\param[in]	p_byMask	La nouvelle valeur
+		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	p_index	L'indice de la valeur
 		 */
-		inline void SetWriteMask( uint8_t p_byMask, uint8_t p_index = 0 )
+		inline void SetWriteMask( uint8_t p_value, uint8_t p_index = 0 )
 		{
-			m_changed |= m_rtStates[p_index].m_uiWriteMask != p_byMask;
-			m_rtStates[p_index].m_uiWriteMask = p_byMask;
+			m_changed |= m_rtStates[p_index].m_uiWriteMask != p_value;
+			m_rtStates[p_index].m_uiWriteMask = p_value;
 		}
 		/**
 		 *\~english

@@ -1,4 +1,3 @@
-option( CASTOR_USE_UNICODE "Use UNICODE strings (not recommended)" FALSE)
 option( CASTOR_USE_SSE2 "Use SSE2 instructions for Point4f and Matrix4x4f operations" TRUE)
 
 project( CastorUtils )
@@ -42,7 +41,6 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 
 	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
 	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
-	option( CASTOR_USE_LOG_TRACK "Enable function tracking to be written in log file" FALSE )
 
 	#FreeImage Libs
 	set( FreeImageLibraries "")

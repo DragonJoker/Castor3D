@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -29,13 +29,13 @@ namespace Castor
 	\~english
 	\brief		Pool managed object.
 	\remarks	Uses a policy to change behaviour easily.
-	\args		Object		The pool objects type.
-	\args		MemDataType	The allocation/deallocation policy type.
+	\param		Object		The pool objects type.
+	\param		MemDataType	The allocation/deallocation policy type.
 	\~french
 	\brief		Objet géré par un pool.
 	\remarks	Utilisation d'une politique pour permettre de changer le comportement assez facilement.
-	\args		Object		Le type d'objet.
-	\args		MemDataType	Le type de la politique d'allocation/désallocation.
+	\param		Object		Le type d'objet.
+	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
 	template< typename Object, eMEMDATA_TYPE MemDataType >
 	class ManagedObject
@@ -109,10 +109,12 @@ namespace Castor
 		 *\~english
 		 *\brief		Delete operator overload.
 		 *\remarks		Uses the objects pool to deallocate memory.
+		 *\param[in]	p_ptr	The pointer to deallocate.
 		 *\param[in]	p_size	The deallocation size.
 		 *\~french
 		 *\brief		Surcharge de l'opérateur delete.
 		 *\remarks		Utilise le pool d'objets pour désallouer la mémoire.
+		 *\param[in]	p_ptr	Le pointeur à désallouer.
 		 *\param[in]	p_size	La taille à désallouer.
 		 */
 		static void operator delete( void * p_ptr, std::size_t p_size )
@@ -123,10 +125,12 @@ namespace Castor
 		 *\~english
 		 *\brief		Delete array operator overload.
 		 *\remarks		Uses the objects pool to deallocate memory.
+		 *\param[in]	p_ptr	The pointer to deallocate.
 		 *\param[in]	p_size	The deallocation size.
 		 *\~french
 		 *\brief		Surcharge de l'opérateur delete de tableau.
 		 *\remarks		Utilise le pool d'objets pour désallouer la mémoire.
+		 *\param[in]	p_ptr	Le pointeur à désallouer.
 		 *\param[in]	p_size	La taille à désallouer.
 		 */
 		static void operator delete[]( void * p_ptr, std::size_t p_size )

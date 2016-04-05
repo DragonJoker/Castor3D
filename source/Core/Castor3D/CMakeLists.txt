@@ -343,6 +343,7 @@ file( GLOB ${PROJECT_NAME}_Miscellaneous_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Handle*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Effect*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Version*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*GpuQuery*.hpp
 )
 file( GLOB ${PROJECT_NAME}_Miscellaneous_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Generator*.cpp
@@ -351,6 +352,7 @@ file( GLOB ${PROJECT_NAME}_Miscellaneous_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Handle*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Effect*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Version*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*GpuQuery*.cpp
 )
 source_group( "Header Files\\Miscellaneous" FILES ${${PROJECT_NAME}_Miscellaneous_HEADER_FILES} )
 source_group( "Source Files\\Miscellaneous" FILES ${${PROJECT_NAME}_Miscellaneous_SOURCE_FILES} )

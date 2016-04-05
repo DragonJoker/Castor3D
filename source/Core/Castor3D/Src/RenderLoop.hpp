@@ -68,7 +68,7 @@ namespace Castor3D
 		 *\remarks		Use only with an asynchronous render loop.
 		 *\~french
 		 *\brief		Commence le rendu.
-		 *\remark		A utiliser uniquement avec une boucle de rendu asynchrone.
+		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
 		 */
 		C3D_API void StartRendering();
 		/**
@@ -77,7 +77,7 @@ namespace Castor3D
 		 *\remarks		Use only with a synchronous render loop, or when the render loop is paused.
 		 *\~french
 		 *\brief		Dessine une image.
-		 *\remark		A utiliser uniquement avec une boucle de rendu synchrone, ou quand la boucle de rendu est en pause.
+		 *\remarks		A utiliser uniquement avec une boucle de rendu synchrone, ou quand la boucle de rendu est en pause.
 		 */
 		C3D_API void RenderSyncFrame();
 		/**
@@ -86,7 +86,7 @@ namespace Castor3D
 		 *\remarks		Use only with a synchronous render loop.
 		 *\~french
 		 *\brief		Met la boucle de rendu en pause.
-		 *\remark		A utiliser uniquement avec une boucle de rendu synchrone.
+		 *\remarks		A utiliser uniquement avec une boucle de rendu synchrone.
 		 */
 		C3D_API void Pause();
 		/**
@@ -95,7 +95,7 @@ namespace Castor3D
 		 *\remarks		Use only with a synchronous render loop.
 		 *\~french
 		 *\brief		Relance la boucle de rendu.
-		 *\remark		A utiliser uniquement avec une boucle de rendu synchrone.
+		 *\remarks		A utiliser uniquement avec une boucle de rendu synchrone.
 		 */
 		C3D_API void Resume();
 		/**
@@ -104,7 +104,7 @@ namespace Castor3D
 		 *\remarks		Use only with an asynchronous render loop.
 		 *\~french
 		 *\brief		Termine le rendu.
-		 *\remark		A utiliser uniquement avec une boucle de rendu asynchrone.
+		 *\remarks		A utiliser uniquement avec une boucle de rendu asynchrone.
 		 */
 		C3D_API void EndRendering();
 		/**
@@ -205,10 +205,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Ends the render, cleans up engine.
-		 *\remark		Ends the threaded render loop, if any.
+		 *\remarks		Ends the threaded render loop, if any.
 		 *\~french
 		 *\brief		Termine le rendu, nettoie le moteur.
-		 *\remark		Arrête la boucle de rendu threadé, si elle existe.
+		 *\remarks		Arrête la boucle de rendu threadé, si elle existe.
 		 */
 		C3D_API virtual void DoEndRendering() = 0;
 		/**

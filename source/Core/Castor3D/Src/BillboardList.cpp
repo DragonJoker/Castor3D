@@ -199,9 +199,9 @@ namespace Castor3D
 		}
 	}
 
-	void BillboardList::AddPoint( Castor::Point3r const & p_ptPosition )
+	void BillboardList::AddPoint( Castor::Point3r const & p_position )
 	{
-		m_arrayPositions.push_back( p_ptPosition );
+		m_arrayPositions.push_back( p_position );
 		m_needUpdate = true;
 	}
 

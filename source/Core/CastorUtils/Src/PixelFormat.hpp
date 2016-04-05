@@ -795,15 +795,15 @@ namespace Castor
 		 *\~english
 		 *\brief		Function to perform convertion without templates
 		 *\param[in]		p_eSrcFmt	The source format
-		 *\param[in/out]	p_pSrc		The source pixel
+		 *\param[in,out]	p_pSrc		The source pixel
 		 *\param[in]		p_eDestFmt	The destination format
-		 *\param[in/out]	p_pDest		The destination pixel
+		 *\param[in,out]	p_pDest		The destination pixel
 		 *\~french
 		 *\brief		Fonction de conversion sans templates
 		 *\param[in]		p_eSrcFmt	Le format de la source
-		 *\param[in/out]	p_pSrc		Le pixel source
+		 *\param[in,out]	p_pSrc		Le pixel source
 		 *\param[in]		p_eDestFmt	Le format de la destination
-		 *\param[in/out]	p_pDest		Le pixel destination
+		 *\param[in,out]	p_pDest		Le pixel destination
 		 */
 		CU_API void ConvertPixel( ePIXEL_FORMAT p_eSrcFmt, uint8_t const *& p_pSrc, ePIXEL_FORMAT p_eDestFmt, uint8_t *& p_pDest );
 		/**
@@ -828,12 +828,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Extracts alpha values from a source buffer holding alpha and puts it in a destination buffer
-		 *\remark		Destination buffer will be a L8 pixel format buffer and alpha channel from source buffer will be removed
+		 *\remarks		Destination buffer will be a L8 pixel format buffer and alpha channel from source buffer will be removed
 		 *\param[in]	p_pSrc	The source buffer
 		 *\return		The destination buffer, \p nullptr if source didn't have alpha
 		 *\~french
 		 *\brief		Extrait les valeurs alpha d'un tampon source pour les mettre dans un tampon à part
-		 *\remark		Le tampon contenant les valeurs alpha sera au format L8 et le canal alpha du tampon source sera supprimé
+		 *\remarks		Le tampon contenant les valeurs alpha sera au format L8 et le canal alpha du tampon source sera supprimé
 		 *\param[in]	p_pSrc	Le tampon source
 		 *\return		Le tampon alpha, \p nullptr si la source n'avait pas d'alpha
 		 */

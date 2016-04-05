@@ -27,8 +27,8 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	TechniquePlugin::TechniquePlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		: PluginBase( ePLUGIN_TYPE_TECHNIQUE, p_pLibrary, *p_engine )
+	TechniquePlugin::TechniquePlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_TECHNIQUE, p_library, *p_engine )
 	{
 		if ( m_pfnOnLoad )
 		{

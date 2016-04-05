@@ -38,10 +38,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_ePixelFormat	The buffer pixel format
+		 *\param[in]	p_format	The buffer pixel format
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_ePixelFormat	Le format des pixels du tampon
+		 *\param[in]	p_format	Le format des pixels du tampon
 		 */
 		C3D_API ColourRenderBuffer( Castor::ePIXEL_FORMAT p_format );
 		/**

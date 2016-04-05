@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -24,7 +24,7 @@ namespace Castor
 	\~english
 	\brief		Defines the various log types
 	\~french
-	\brief		Définit les différents types de log
+	\brief		DÃ©finit les diffÃ©rents types de log
 	*/
 	typedef enum ELogType
 	CASTOR_TYPE( uint8_t )

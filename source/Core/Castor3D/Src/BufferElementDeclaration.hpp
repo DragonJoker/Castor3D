@@ -52,11 +52,13 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_name		The associated variable name.
+		 *\param[in]	p_usages	Element possible usages (eELEMENT_USAGE combination).
 		 *\param[in]	p_type		Element type.
 		 *\param[in]	p_offset	Offset in the stream.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_name		Le nom de la variable associée.
+		 *\param[in]	p_usages	Les utilisations possibles de l'élément (combinaison de eELEMENT_USAGE)
 		 *\param[in]	p_type		Type de l'élément.
 		 *\param[in]	p_offset	Offset dans le tampon.
 		 */
@@ -80,10 +82,10 @@ namespace Castor3D
 	/**
 	 *\~english
 	 *\brief		Equality operator.
-	 *\param[in]	p_obj1, p_obj2	The 2 objects to compare.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
 	 *\~french
 	 *\brief		Opérateur d'égalité.
-	 *\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets à comparer
 	 */
 	inline bool operator==( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
 	{
@@ -93,13 +95,13 @@ namespace Castor3D
 			   && p_lhs.m_usages == p_rhs.m_usages;
 	}
 	/**
-	*\~english
-	*\brief		Equality operator.
-	*\param[in]	p_obj1, p_obj2	The 2 objects to compare.
-	*\~french
-	*\brief		Opérateur d'égalité.
-	*\param[in]	p_obj1, p_obj2	Les 2 objets à comparer
-	*/
+	 *\~english
+	 *\brief		Equality operator.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
+	 *\~french
+	 *\brief		Opérateur d'égalité.
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets à comparer
+	 */
 	inline bool operator!=( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
 	{
 		return p_lhs.m_dataType != p_rhs.m_dataType

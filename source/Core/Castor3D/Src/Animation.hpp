@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "AnimationObjectBase.hpp"
+#include "AnimationObject.hpp"
 
 namespace Castor3D
 {
@@ -147,7 +147,7 @@ namespace Castor3D
 		 *\param[in]	p_name		Le nom du noeud.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API AnimationObjectBaseSPtr AddObject( Castor::String const & p_name, AnimationObjectBaseSPtr p_parent );
+		C3D_API AnimationObjectSPtr AddObject( Castor::String const & p_name, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving object.
@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet déplaçable.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API AnimationObjectBaseSPtr AddObject( GeometrySPtr p_object, AnimationObjectBaseSPtr p_parent );
+		C3D_API AnimationObjectSPtr AddObject( GeometrySPtr p_object, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving bone.
@@ -169,7 +169,7 @@ namespace Castor3D
 		 *\param[in]	p_bone		L'os.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API AnimationObjectBaseSPtr AddObject( BoneSPtr p_bone, AnimationObjectBaseSPtr p_parent );
+		C3D_API AnimationObjectSPtr AddObject( BoneSPtr p_bone, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Adds an animated object.
@@ -180,7 +180,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet animé.
 		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API void AddObject( AnimationObjectBaseSPtr p_object, AnimationObjectBaseSPtr p_parent );
+		C3D_API void AddObject( AnimationObjectSPtr p_object, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.
@@ -200,7 +200,7 @@ namespace Castor3D
 		 *\brief		Récupère un objet animé.
 		 *\param[in]	p_object	L'objet déplaçable.
 		 */
-		C3D_API AnimationObjectBaseSPtr GetObject( MovableObjectSPtr p_object )const;
+		C3D_API AnimationObjectSPtr GetObject( MovableObjectSPtr p_object )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone.
@@ -209,7 +209,7 @@ namespace Castor3D
 		 *\brief		Récupère un os animé.
 		 *\param[in]	p_bone	L'os.
 		 */
-		C3D_API AnimationObjectBaseSPtr GetObject( BoneSPtr p_bone )const;
+		C3D_API AnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
 		/**
 		 *\~english
 		 *\return		The key frames interpolation mode.

@@ -162,9 +162,9 @@ namespace Castor3D
 		DoBindComponent( GetExponent(), GetCutOff(), p_index, l_offset, p_texture );
 	}
 
-	void SpotLight::SetPosition( Castor::Point3r const & p_ptPosition )
+	void SpotLight::SetPosition( Castor::Point3r const & p_position )
 	{
-		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 2.0f ) );
+		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 2.0f ) );
 	}
 
 	Castor::Point3f SpotLight::GetPosition()const

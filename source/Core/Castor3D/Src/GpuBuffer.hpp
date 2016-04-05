@@ -105,14 +105,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
-		 *\remark		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )]
+		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )]
 		 *\param[in]	p_offset	The start offset in the buffer
 		 *\param[in]	p_count	The mapped elements count
 		 *\param[in]	p_flags	The lock flags
 		 *\return		The mapped buffer address
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications
-		 *\remark		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )]
+		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )]
 		 *\param[in]	p_offset	L'offset de départ
 		 *\param[in]	p_count	Le nombre d'éléments à mapper
 		 *\param[in]	p_flags	Les flags de lock
@@ -122,10 +122,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that
-		 *\remark		All modifications made in the mapped buffer are put into GPU memory
+		 *\remarks		All modifications made in the mapped buffer are put into GPU memory
 		 *\~french
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus
-		 *\remark		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU
+		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU
 		 */
 		virtual void Unlock() = 0;
 		/**
@@ -140,12 +140,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\remark		Used for instanciation
+		 *\remarks		Used for instanciation
 		 *\param[in]	p_instantiated	Tells if the buffer is instantiated
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\remark		Utilisé pour l'instanciation
+		 *\remarks		Utilisé pour l'instanciation
 		 *\param[in]	p_instantiated	Dit si le tampon est instantié
 		 *\return		\p true si tout s'est bien passé
 		 */

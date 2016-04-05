@@ -75,13 +75,13 @@ namespace Castor
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_ptOrigin	Position
-		 *\param[in]	p_ptSize	Size
+		 *\param[in]	p_size	Size
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_ptOrigin	Position
-		 *\param[in]	p_ptSize	Dimensions
+		 *\param[in]	p_size	Dimensions
 		 */
-		CU_API Rectangle( Position const & p_ptOrigin = Position(), Size const & p_ptSize = Size() );
+		CU_API Rectangle( Position const & p_ptOrigin = Position(), Size const & p_size = Size() );
 		/**
 		 *\~english
 		 *\brief		Constructor

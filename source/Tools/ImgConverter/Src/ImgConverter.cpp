@@ -30,9 +30,9 @@ bool ImgToIcoApp::OnInit()
 		m_pLocale->AddCatalogLookupPathPrefix( l_strShare );
 #if defined( _MSC_VER )
 #	if defined( NDEBUG )
-		l_strPlugins = wxFileName( l_strCurrent.GetPath() ).GetPath() + l_strSeparator + wxT( "plugins" ) + l_strSeparator + wxT( "Release" ) + l_strSeparator + wxT( "ImgConverter" );
+		l_strPlugins = wxFileName( l_strCurrent.GetPath() ).GetPath() + l_strSeparator + wxT( "plug-ins" ) + l_strSeparator + wxT( "Release" ) + l_strSeparator + wxT( "ImgConverter" );
 #	else
-		l_strPlugins = wxFileName( l_strCurrent.GetPath() ).GetPath() + l_strSeparator + wxT( "plugins" ) + l_strSeparator + wxT( "Debug" ) + l_strSeparator + wxT( "ImgConverter" );
+		l_strPlugins = wxFileName( l_strCurrent.GetPath() ).GetPath() + l_strSeparator + wxT( "plug-ins" ) + l_strSeparator + wxT( "Debug" ) + l_strSeparator + wxT( "ImgConverter" );
 #	endif
 		m_pLocale->AddCatalogLookupPathPrefix( l_strPlugins );
 #endif

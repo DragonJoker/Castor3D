@@ -174,7 +174,7 @@ namespace GuiCommon
 	/**
 	 *\~english
 	 *\brief		Copies the buffer into the bitmap.
-	 *\remark		The buffer must be in BGRA 32bits.
+	 *\remarks		The buffer must be in BGRA 32bits.
 	 *\param[in]	p_buffer	The buffer.
 	 *\param[in]	p_width		The buffer image's width.
 	 *\param[in]	p_height	The buffer image's height.
@@ -182,7 +182,7 @@ namespace GuiCommon
 	 *\param[out]	p_bitmap	Receives the generated bitmap.
 	 *\~french
 	 *\brief		Copie le buffer donné dans un bitmap.
-	 *\remark		Le buffer doit être en format BGRA 32bits.
+	 *\remarks		Le buffer doit être en format BGRA 32bits.
 	 *\param[in]	p_buffer	Le buffer.
 	 *\param[in]	p_width		La largeur de l'image.
 	 *\param[in]	p_height	La hauteur de l'image.
@@ -193,13 +193,13 @@ namespace GuiCommon
 	/**
 	 *\~english
 	 *\brief		Copies the pixel buffer into the bitmap.
-	 *\remark		The buffer will be copied in a BGRA 32bits buffer, if needed.
+	 *\remarks		The buffer will be copied in a BGRA 32bits buffer, if needed.
 	 *\param[in]	p_buffer	The pixel buffer.
 	 *\param[in]	p_flip		Dit si l'image doit être flippée.
 	 *\param[out]	p_bitmap	Receives the generated bitmap.
 	 *\~french
 	 *\brief		Copie le tampon de pixels dans un bitmap.
-	 *\remark		Le buffer va être copié dans un buffer BGRA 32bits, si nécessaire.
+	 *\remarks		Le buffer va être copié dans un buffer BGRA 32bits, si nécessaire.
 	 *\param[in]	p_pUnit		Le tampon de pixels.
 	 *\param[in]	p_flip		Tells if the image mut be flipped.
 	 *\param[out]	p_bitmap	Reçoit le bitmap généré.
@@ -208,13 +208,13 @@ namespace GuiCommon
 	/**
 	 *\~english
 	 *\brief		Copies the unit texture into the bitmap.
-	 *\remark		The image buffer will be copied in a BGRA 32bits buffer, if needed.
+	 *\remarks		The image buffer will be copied in a BGRA 32bits buffer, if needed.
 	 *\param[in]	p_unit		The unit.
 	 *\param[in]	p_flip		Dit si l'image doit être flippée.
 	 *\param[out]	p_bitmap	Receives the generated bitmap.
 	 *\~french
 	 *\brief		Copie la texture de l'unité dans un bitmap.
-	 *\remark		Le buffer de l'image va être copié dans un buffer BGRA 32bits, si nécessaire.
+	 *\remarks		Le buffer de l'image va être copié dans un buffer BGRA 32bits, si nécessaire.
 	 *\param[in]	p_unit		L'unité.
 	 *\param[in]	p_flip		Tells if the image must be flipped.
 	 *\param[out]	p_bitmap	Reçoit le bitmap généré.
@@ -239,10 +239,10 @@ namespace GuiCommon
 	Castor3D::RenderWindowSPtr LoadScene( Castor3D::Engine & p_engine, Castor::String const & p_fileName, uint32_t p_wantedFps, bool p_threaded );
 	/**
 	 *\~english
-	 *\brief		Loads the eingine plugins.
+	 *\brief		Loads the eingine plug-ins.
 	 *\param[in]	p_engine	The engine.
 	 *\~french
-	 *\brief		Charge les plugins du moteur.
+	 *\brief		Charge les plug-ins du moteur.
 	 *\param[in]	p_engine	Le moteur.
 	 */
 	void LoadPlugins( Castor3D::Engine & p_engine );
@@ -260,13 +260,13 @@ namespace GuiCommon
 	/**
 	 *\~english
 	 *\brief		Loads a font glyphs using wxWidgets
-	 *\remark		Uses a custom SFontImpl
+	 *\remarks		Uses a custom SFontImpl
 	 *\param[in]	p_engine	The Castor3D engine, to check for font existence
 	 *\param[in]	p_font		The wxWidgets font
 	 *\return		The loaded font
 	 *\~french
 	 *\brief		Charge les glyphes de la police en utilisant wxWidgets
-	 *\remark		Utilise une version personnalisée de SFontImpl
+	 *\remarks		Utilise une version personnalisée de SFontImpl
 	 *\param[in]	p_engine	Le moteur, pour vérifier l'existance de la police
 	 *\param[in]	p_font		La police wxWidgets
 	 *\return		La police chargée

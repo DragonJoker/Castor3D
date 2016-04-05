@@ -30,10 +30,10 @@ namespace Castor3D
 	\version	0.1
 	\~english
 	\brief		Main System
-	\remark		Holds the render windows, the plugins, the render drivers...
+	\remark		Holds the render windows, the plug-ins, the render drivers...
 	\~french
 	\brief		Moteur principal
-	\remark		Contient les fenêtres de rendu, les plugins, drivers de rendu...
+	\remark		Contient les fenêtres de rendu, les plug-ins, drivers de rendu...
 	*/
 	class RenderLoopAsync
 		: public RenderLoop
@@ -62,33 +62,33 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the context creation status.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true if created.
 		 *\~french
 		 *\brief		Récupère le statut de création du contexte de rendu.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true si créé.
 		 */
 		C3D_API bool IsCreated()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render start status.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true if started.
 		 *\~french
 		 *\brief		Récupère le statut de début de rendu.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true si démarré.
 		 */
 		C3D_API bool IsRendering()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render paused status.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true if paused.
 		 *\~french
 		 *\brief		Récupère le statut de rendu en pause.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true si en pause.
 		 */
 		C3D_API bool IsPaused()const;
@@ -104,11 +104,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the render loop end status.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true if created.
 		 *\~french
 		 *\brief		Récupère le statut de fin de la boucle de rendu.
-		 *\remark		Thread-safe.
+		 *\remarks		Thread-safe.
 		 *\return		\p true si créé.
 		 */
 		C3D_API bool IsEnded()const;
@@ -150,10 +150,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		The threaded render loop.
-		 *\remark		The main context is created here, since OpenGL needs each thread to have its context.
+		 *\remarks		The main context is created here, since OpenGL needs each thread to have its context.
 		 *\~french
 		 *\brief		La boucle de rendu threadée.
-		 *\remark		Le contexte principal est créé ici, car OpenGL demande à chaque thread d'avoir son contexte.
+		 *\remarks		Le contexte principal est créé ici, car OpenGL demande à chaque thread d'avoir son contexte.
 		 */
 		C3D_API void DoMainLoop();
 		C3D_API void DoSetWindow( RenderWindow * p_window );

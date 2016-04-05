@@ -214,33 +214,33 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Projects the given screen point to 3D scene point.
-		 *\param[in]	p_ptObj			The screen coordinates.
-		 *\param[in]	p_ptViewport	The viewport.
-		 *\param[out]	p_result		Receives the scene coordinates.
+		 *\param[in]	p_screen	The screen coordinates.
+		 *\param[in]	p_viewport	The viewport.
+		 *\param[out]	p_result	Receives the scene coordinates.
 		 *\return		\p false if the current mode is not valid.
 		 *\~french
 		 *\brief		Projette le point écran donné en point 3D.
-		 *\param[in]	p_ptObj			Les coordonnées écran.
-		 *\param[in]	p_ptViewport	Le viewport.
-		 *\param[in]	p_result		Reçoit coordonnées dans la scène.
+		 *\param[in]	p_screen	Les coordonnées écran.
+		 *\param[in]	p_viewport	Le viewport.
+		 *\param[out]	p_result	Reçoit coordonnées dans la scène.
 		 *\return		\p false si le mode courant est invalide.
 		 */
-		C3D_API bool Project( Castor::Point3r const & p_ptObj, Castor::Point4r const & p_ptViewport, Castor::Point3r & p_result );
+		C3D_API bool Project( Castor::Point3r const & p_screen, Castor::Point4r const & p_viewport, Castor::Point3r & p_result );
 		/**
 		 *\~english
 		 *\brief		Unprojects the given scene point to screen point.
-		 *\param[in]	p_ptObj			The scene coordinates.
-		 *\param[in]	p_ptViewport	The viewport.
-		 *\param[out]	p_result		Receives the screen coordinates.
+		 *\param[in]	p_scene		The scene coordinates.
+		 *\param[in]	p_viewport	The viewport.
+		 *\param[out]	p_result	Receives the screen coordinates.
 		 *\return		\p false if the current mode is not valid.
 		 *\~french
 		 *\brief		Dé-projette le point dans la scène donné en point écran.
-		 *\param[in]	p_ptObj			Les coordonnées dans la scène.
-		 *\param[in]	p_ptViewport	Le viewport.
-		 *\param[in]	p_result		Reçoit les coordonnées écran.
+		 *\param[in]	p_scene		Les coordonnées dans la scène.
+		 *\param[in]	p_viewport	Le viewport.
+		 *\param[out]	p_result	Reçoit les coordonnées écran.
 		 *\return		\p false si le mode courant est invalide.
 		 */
-		C3D_API bool UnProject( Castor::Point3i const & p_ptWin, Castor::Point4r const & p_ptViewport, Castor::Point3r & p_result );
+		C3D_API bool UnProject( Castor::Point3i const & p_scene, Castor::Point4r const & p_viewport, Castor::Point3r & p_result );
 		/**
 		 *\~english
 		 *\brief		Puts the current projection matrix into the given frame variables buffer.

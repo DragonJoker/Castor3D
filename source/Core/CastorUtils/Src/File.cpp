@@ -265,8 +265,8 @@ namespace Castor
 #	endif
 #endif
 
-	File::File( Path const & p_strFileName, int p_iMode, eENCODING_MODE p_eEncoding )
-		:	m_iMode( p_iMode	)
+	File::File( Path const & p_strFileName, int p_mode, eENCODING_MODE p_eEncoding )
+		:	m_iMode( p_mode	)
 		,	m_eEncoding( p_eEncoding	)
 		,	m_strFileFullPath( p_strFileName	)
 		,	m_ullCursor( 0	)
@@ -277,7 +277,7 @@ namespace Castor
 		REQUIRE( ! p_strFileName.empty() );
 		String l_strMode;
 
-		switch ( p_iMode )
+		switch ( p_mode )
 		{
 		case eOPEN_MODE_READ:
 			l_strMode = cuT( "r" );
@@ -316,7 +316,7 @@ namespace Castor
 			break;
 		}
 
-		if ( ( p_iMode & eOPEN_MODE_BINARY ) == 0 )
+		if ( ( p_mode & eOPEN_MODE_BINARY ) == 0 )
 		{
 			switch ( p_eEncoding )
 			{

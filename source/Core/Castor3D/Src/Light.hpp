@@ -42,20 +42,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_name			The light name
-		 *\param[in]	p_scene			Parent scene
-		 *\param[in]	p_pFactory		Factory used to create the LightCategory
-		 *\param[in]	p_eLightType	The light type
-		 *\param[in]	p_node			The parent scene node
+		 *\param[in]	p_name		The light name
+		 *\param[in]	p_scene		Parent scene
+		 *\param[in]	p_factory	Factory used to create the LightCategory
+		 *\param[in]	p_lightType	The light type
+		 *\param[in]	p_node		The parent scene node
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom de la lumière
-		 *\param[in]	p_scene			La scène parente
-		 *\param[in]	p_pFactory		La fabrique de LightCategory
-		 *\param[in]	p_eLightType	Le type de lumière
-		 *\param[in]	p_node			Le scene node parent
+		 *\param[in]	p_name		Le nom de la lumière
+		 *\param[in]	p_scene		La scène parente
+		 *\param[in]	p_factory	La fabrique de LightCategory
+		 *\param[in]	p_lightType	Le type de lumière
+		 *\param[in]	p_node		Le scene node parent
 		 */
-		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_eLightType );
+		C3D_API Light( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_lightType );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -66,8 +66,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Puts the light into the given texture.
+		 *\param[out]	p_texture	The texture that receives the light's data.
+		 *\param[in]	p_index		The light index.
 		 *\~french
 		 *\brief		Met la lumière dans la texture donnée.
+		 *\param[out]	p_texture	La texture recevant les données de la source lumineuse.
+		 *\param[in]	p_index		L'indice de la source lumineuse.
 		 */
 		C3D_API void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index );
 		/**

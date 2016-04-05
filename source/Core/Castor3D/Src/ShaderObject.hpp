@@ -173,12 +173,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the shader file for given model
-		 *\remark		The loaded file will be the one of the highest supported profile
+		 *\remarks		The loaded file will be the one of the highest supported profile
 		 *\param[in]	p_eModel	The shader model
 		 *\param[in]	p_pathFile	The file name
 		 *\~french
 		 *\brief		Définit le fichier du shader pour le modèle donné
-		 *\remark		Le fichier chargé sera celui du plus haut profil supporté
+		 *\remarks		Le fichier chargé sera celui du plus haut profil supporté
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_pathFile	Le nom du fichier
 		 */
@@ -195,12 +195,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the shader source for given model
-		 *\remark		The loaded source will be the one of the highest supported profile
+		 *\remarks		The loaded source will be the one of the highest supported profile
 		 *\param[in]	p_eModel	The shader model
 		 *\param[in]	p_strSource	The source code
 		 *\~french
 		 *\brief		Définit la source du shader pour le modèle donné
-		 *\remark		La source chargée sera celle du plus haut profil supporté
+		 *\remarks		La source chargée sera celle du plus haut profil supporté
 		 *\param[in]	p_eModel	Le modèle de shader
 		 *\param[in]	p_strSource	Le code de la source
 		 */
@@ -277,7 +277,6 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame variables bound to this shader
-		 *\param[in]	p_type	The shader type
 		 *\return		The list
 		 *\~french
 		 *\brief		Récupère les variables de frame liées à ce shader
@@ -297,7 +296,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du paramètre
 		 *\return		\p true si le paramètre a été trouvé
 		 */
-		virtual bool HasParameter( Castor::String const & CU_PARAM_UNUSED( p_name ) )
+		virtual bool HasParameter( Castor::String const & p_name )
 		{
 			return false;
 		}
@@ -385,9 +384,9 @@ namespace Castor3D
 		 *\brief		Définit le type des primitives en entrée
 		 *\param[in]	p_topology	Le type des primitives en entrée
 		 */
-		inline void SetInputType( eTOPOLOGY val )
+		inline void SetInputType( eTOPOLOGY p_topology )
 		{
-			m_eInputType = val;
+			m_eInputType = p_topology;
 		}
 		/**
 		 *\~english
@@ -409,9 +408,9 @@ namespace Castor3D
 		 *\brief		Définit le type des primitives en sortie
 		 *\param[in]	p_topology	Le type des primitives
 		 */
-		inline void SetOutputType( eTOPOLOGY val )
+		inline void SetOutputType( eTOPOLOGY p_topology )
 		{
-			m_eOutputType = val;
+			m_eOutputType = p_topology;
 		}
 		/**
 		 *\~english
@@ -483,7 +482,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du paramètre
 		 *\param[in]	p_value	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix4x4r const & CU_PARAM_UNUSED( p_value ) ) {}
+		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix4x4r const & p_value ) {}
 		/**
 		 *\~english
 		 *\brief		Defines the given parameter value
@@ -494,7 +493,7 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du paramètre
 		 *\param[in]	p_value	La valeur du paramètre
 		 */
-		virtual void SetParameter( Castor::String const & CU_PARAM_UNUSED( p_name ), Castor::Matrix3x3r const & CU_PARAM_UNUSED( p_value ) ) {}
+		virtual void SetParameter( Castor::String const & p_name, Castor::Matrix3x3r const & p_value ) {}
 
 	protected:
 		/**

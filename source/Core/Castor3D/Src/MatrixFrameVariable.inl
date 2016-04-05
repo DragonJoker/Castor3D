@@ -528,9 +528,9 @@
 	}
 
 	template< typename T, uint32_t Rows, uint32_t Columns >
-	inline void MatrixFrameVariable< T, Rows, Columns >::DoSetValueStr( Castor::String const & p_strValue, uint32_t p_index )
+	inline void MatrixFrameVariable< T, Rows, Columns >::DoSetValueStr( Castor::String const & p_value, uint32_t p_index )
 	{
-		Castor::StringArray l_arrayLines = Castor::string::split( p_strValue, cuT( ";" ) );
+		Castor::StringArray l_arrayLines = Castor::string::split( p_value, cuT( ";" ) );
 
 		if ( l_arrayLines.size() == Rows )
 		{

@@ -76,10 +76,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents.
-		 *\param[in]	p_mesh	The mesh.
+		 *\param[in]	p_mesh		The mesh.
+		 *\param[in]	p_reverted	Tells if the generated tangent space must be inverted.
 		 *\~french
 		 *\brief		Génère les normales et les tangentes.
-		 *\param[in]	p_mesh	Le maillage.
+		 *\param[in]	p_mesh		Le maillage.
+		 *\param[in]	p_reverted	Dit si l'espace tangent généré doit être inversé.
 		 */
 		virtual void ComputeNormals( Mesh & p_mesh, bool p_reverted = false );
 		/**

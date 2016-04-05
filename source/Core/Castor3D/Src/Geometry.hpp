@@ -115,14 +115,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Not to be used by the user, use Scene::CreatePrimitive function
+		 *\remarks		Not to be used by the user, use Scene::CreatePrimitive function
 		 *\param[in]	p_name		The geometry name
 		 *\param[in]	p_scene		The parent scene
 		 *\param[in]	p_mesh		The mesh, default is nullptr
 		 *\param[in]	p_sn		The scene node to which the geometry is attached
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		A ne pas utiliser directement, utilisez Scene::CreatePrimitive
+		 *\remarks		A ne pas utiliser directement, utilisez Scene::CreatePrimitive
 		 *\param[in]	p_name		Nom de la géométrie
 		 *\param[in]	p_scene		La scène parente
 		 *\param[in]	p_mesh		Le maillage, par défaut nullptr
@@ -262,10 +262,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the animated skeleton instance
-		 *\param[in]	p_pSkeleton	The new value
+		 *\param[in]	p_object	The new value
 		 *\~french
 		 *\brief		Définit l'instance animée du squelette
-		 *\param[in]	p_pSkeleton	La nouvelle valeur
+		 *\param[in]	p_object	La nouvelle valeur
 		 */
 		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
 		{

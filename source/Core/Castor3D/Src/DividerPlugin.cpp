@@ -13,11 +13,7 @@ using namespace Castor;
 namespace Castor3D
 {
 #if defined( _MSC_VER)
-#	if CASTOR_USE_UNICODE
-	static const String GetDividerTypeFunctionABIName = cuT( "?GetDividerType@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@XZ" );
-#	else
 	static const String GetDividerTypeFunctionABIName = cuT( "?GetDividerType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
-#	endif
 #	if defined( _WIN64 )
 	static const String CreateDividerFunctionABIName = cuT( "?CreateDivider@@YAPEAVSubdivider@Castor3D@@XZ" );
 	static const String DestroyDividerFunctionABIName = cuT( "?DestroyDivider@@YAXPEAVSubdivider@Castor3D@@@Z" );
@@ -37,26 +33,26 @@ namespace Castor3D
 #	error "Implement ABI names for this compiler"
 #endif
 
-	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_pLibrary, Engine * p_engine )
-		: PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary, *p_engine )
+	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_DIVIDER, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnGetDividerType, GetDividerTypeFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetDividerType, GetDividerTypeFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetDividerType plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetDividerType plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnCreateDivider, CreateDividerFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateDivider, CreateDividerFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateDivider plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateDivider plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnDestroyDivider, DestroyDividerFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnDestroyDivider, DestroyDividerFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyDivider plugin function : " );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] DestroyDivider plug-in function : " );
 			l_strError += System::GetLastErrorText();
 			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}

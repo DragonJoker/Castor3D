@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,7 +31,7 @@ namespace Castor
 	\~english
 	\brief		Pool errors enumeration.
 	\~french
-	\brief		Enumération des erreurs de pool.
+	\brief		EnumÃ©ration des erreurs de pool.
 	*/
 	typedef enum ePOOL_ERROR_TYPE
 	{
@@ -57,7 +57,7 @@ namespace Castor
 	*/
 	template< eERROR_TYPE ErrorType > struct Error;
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_COMMON_OUT_OF_MEMORY >
 	{
@@ -75,7 +75,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_COMMON_POOL_IS_FULL >
 	{
@@ -87,7 +87,7 @@ namespace Castor
 		 *\param[in]	p_space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	p_space	L'espace mÃ©moire.
 		 */
 		static inline void Report( void * p_space )
 		{
@@ -95,7 +95,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_COMMON_MEMORY_LEAKS_DETECTED >
 	{
@@ -107,7 +107,7 @@ namespace Castor
 		 *\param[in]	p_size	The memory size.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_size	La taille mémoire.
+		 *\param[in]	p_size	La taille mÃ©moire.
 		 */
 		static inline void Report( size_t p_size )
 		{
@@ -115,7 +115,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE.	\~french Spécialisation pour ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_COMMON_NOT_FROM_RANGE >
 	{
@@ -127,7 +127,7 @@ namespace Castor
 		 *\param[in]	p_space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	p_space	L'espace mÃ©moire.
 		 */
 		static inline void Report( void * p_space )
 		{
@@ -135,7 +135,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS.	\~french Spécialisation pour ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_MARKED_LEAK_ADDRESS >
 	{
@@ -147,7 +147,7 @@ namespace Castor
 		 *\param[in]	p_space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	p_space	L'espace mÃ©moire.
 		 */
 		static inline void Report( void * p_space )
 		{
@@ -155,7 +155,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE.	\~french Spécialisation pour ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_MARKED_DOUBLE_DELETE >
 	{
@@ -167,7 +167,7 @@ namespace Castor
 		 *\param[in]	p_space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	p_space	L'espace mÃ©moire.
 		 */
 		static inline void Report( void * p_space )
 		{
@@ -175,7 +175,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL.	\~french Spécialisation pour ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_MARKED_NOT_FROM_POOL >
 	{
@@ -187,7 +187,7 @@ namespace Castor
 		 *\param[in]	p_space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	p_space	L'espace mÃ©moire.
 		 */
 		static inline void Report( void * p_space )
 		{
@@ -195,7 +195,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES.	\~french Spécialisation pour ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_GROWING_NOT_FROM_RANGES >
 	{
@@ -207,7 +207,7 @@ namespace Castor
 		 *\param[in]	p_space	The memory space.
 		 *\~french
 		 *\brief		Rapporte une erreur de pool.
-		 *\param[in]	p_space	L'espace mémoire.
+		 *\param[in]	p_space	L'espace mÃ©moire.
 		 */
 		static inline void Report( void * p_space )
 		{
@@ -215,7 +215,7 @@ namespace Castor
 		}
 	};
 
-	//!\~english Specialisation for ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE.	\~french Spécialisation pour ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE.
+	//!\~english Specialisation for ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE.	\~french SpÃ©cialisation pour ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE.
 	template<>
 	struct Error< ePOOL_ERROR_TYPE_STL_ALLOCATOR_UNIQUE >
 	{
@@ -240,7 +240,7 @@ namespace Castor
 	 *\~french
 	 *\brief		Rapporte une erreur de pool.
 	 *\param[in]	p_name		Le texte de l'erreur.
-	 *\param[in]	p_params	Les paramètres de l'erreur.
+	 *\param[in]	p_params	Les paramÃ¨tres de l'erreur.
 	 */
 	template< eERROR_TYPE ErrorType, typename ... Params >
 	static inline void ReportError( char const * const p_name, Params ... p_params )
@@ -269,10 +269,10 @@ namespace Castor
 		 *\param[in]	p_function	The function name
 		 *\param[in]	p_line		The line number
 		 *\~french
-		 *\brief		Constructeur spécifié
+		 *\brief		Constructeur spÃ©cifiÃ©
 		 *\param[in]	p_file		Le nom du fichier
 		 *\param[in]	p_function	Le nom de la fonction
-		 *\param[in]	p_line		Le numéro de ligne
+		 *\param[in]	p_line		Le numÃ©ro de ligne
 		 */
 		PoolMemoryException( char const * p_file, char const * p_function, uint32_t p_line )
 			: Exception( Error< ErrorType >::Text, p_file, p_function, p_line )
@@ -286,7 +286,7 @@ namespace Castor
 \~english
 \brief		Macro to ease the use of Castor::PoolException
 \~french
-\brief		Macro définie pour faciliter l'utilisation de Castor::PoolException
+\brief		Macro dÃ©finie pour faciliter l'utilisation de Castor::PoolException
 */
 #define POOL_EXCEPTION( error ) throw Castor::PoolMemoryException< error >( __FILE__, __FUNCTION__, __LINE__ )
 

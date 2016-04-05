@@ -68,12 +68,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates and returns a RasteriserState, given a name
-		 *\remark		If a RasteriserState with the same name exists, none is created
+		 *\remarks		If a RasteriserState with the same name exists, none is created
 		 *\param[in]	p_name	The RasteriserState name
 		 *\return		The created or existing RasteriserState
 		 *\~french
 		 *\brief		Crée et renvoie un RasteriserState, avec le nom donné
-		 *\remark		Si un RasteriserState avec le même nom existe, aucun n'est créé
+		 *\remarks		Si un RasteriserState avec le même nom existe, aucun n'est créé
 		 *\param[in]	p_name	Le nom du RasteriserState
 		 *\return		Le RasteriserState créé ou existant
 		 */

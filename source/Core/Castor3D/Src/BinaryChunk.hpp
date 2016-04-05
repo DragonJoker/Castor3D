@@ -277,30 +277,26 @@ namespace Castor3D
 		 */
 		C3D_API bool AddSubChunk( BinaryChunk const & p_subchunk );
 		/**
-		*\~english
-		*\brief		To chunk writer function
-		*\param[in]	p_obj	The object to write
-		*\param[in]	p_file	The file
-		*\return		\p false if any error occured
-		*\~french
-		*\brief		Fonction d'écriture dans un fichier
-		*\param[in]	p_obj	L'objet à écrire
-		*\param[in]	p_file	Le fichier
-		*\return		\p false si une erreur quelconque est arrivée
-		*/
+		 *\~english
+		 *\brief		To chunk writer function
+		 *\param[in]	p_file	The file
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction d'écriture dans un fichier
+		 *\param[in]	p_file	Le fichier
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
 		C3D_API bool Write( Castor::BinaryFile & p_file );
 		/**
-		*\~english
-		*\brief		From file reader function
-		*\param[out]	p_obj	The object to read
-		*\param[in]	p_file	The file containing the chunk
-		*\return		\p false if any error occured
-		*\~french
-		*\brief		Fonction de lecture à partir d'un fichier
-		*\param[out]	p_obj	L'objet à lire
-		*\param[in]	p_file	Le fichier qui contient le chunk
-		*\return		\p false si une erreur quelconque est arrivée
-		*/
+		 *\~english
+		 *\brief		From file reader function
+		 *\param[in]	p_file	The file containing the chunk
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Fonction de lecture à partir d'un fichier
+		 *\param[in]	p_file	Le fichier qui contient le chunk
+		 *\return		\p false si une erreur quelconque est arrivée
+		 */
 		C3D_API bool Read( Castor::BinaryFile & p_file );
 		/**
 		 *\~english
@@ -354,6 +350,7 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Sets the chunk's data
 		 *\param[in]	p_data	The data buffer
+		 *\param[in]	p_size	The buffer size
 		 *\~french
 		 *\brief		Définit les données du chunk
 		 *\param[in]	p_data	Le tampon de données

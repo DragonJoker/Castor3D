@@ -62,14 +62,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Links the element values to the ones in parameter.
-		 *\remark		Replace buffer values by element values
+		 *\remarks		Replace buffer values by element values
 		 *\param[in]	p_buffer	The values buffer
+		 *\param[in]	p_stride	The element binay size
 		 *\~french
 		 *\brief		Lie les valeurs de l'élément à celles données en paramètre.
-		 *\remark		Remplace les valeurs du tampon par celles de l'élément
+		 *\remarks		Remplace les valeurs du tampon par celles de l'élément
 		 *\param[in]	p_buffer	Le tampon de valeurs
+		 *\param[in]	p_stride	La taille binaire de l'élément
 		 */
-		C3D_API void LinkCoords( uint8_t * p_buffer, uint32_t p_uiSize );
+		C3D_API void LinkCoords( uint8_t * p_buffer, uint32_t p_stride );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pointer on the data buffer

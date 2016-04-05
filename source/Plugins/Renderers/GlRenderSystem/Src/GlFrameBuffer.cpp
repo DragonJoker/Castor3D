@@ -101,14 +101,14 @@ namespace GlRender
 		return l_return;
 	}
 
-	ColourRenderBufferSPtr GlFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
+	ColourRenderBufferSPtr GlFrameBuffer::CreateColourRenderBuffer( ePIXEL_FORMAT p_format )
 	{
-		return std::make_shared< GlColourRenderBuffer >( GetOpenGl(), p_ePixelFormat );
+		return std::make_shared< GlColourRenderBuffer >( GetOpenGl(), p_format );
 	}
 
-	DepthStencilRenderBufferSPtr GlFrameBuffer::CreateDepthStencilRenderBuffer( ePIXEL_FORMAT p_ePixelFormat )
+	DepthStencilRenderBufferSPtr GlFrameBuffer::CreateDepthStencilRenderBuffer( ePIXEL_FORMAT p_format )
 	{
-		return std::make_shared< GlDepthStencilRenderBuffer >( GetOpenGl(), p_ePixelFormat );
+		return std::make_shared< GlDepthStencilRenderBuffer >( GetOpenGl(), p_format );
 	}
 
 	RenderBufferAttachmentSPtr GlFrameBuffer::CreateAttachment( RenderBufferSPtr p_renderBuffer )

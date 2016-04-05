@@ -31,24 +31,24 @@ namespace Castor3D
 	\date		09/02/2010
 	\~english
 	\brief		Plugin Base class
-	\remark		Manages the base plugin functions, allows plugins to check versions and to register themselves
+	\remark		Manages the base plug-in functions, allows plug-ins to check versions and to register themselves
 	\~french
-	\brief		Classe de base des plugins
-	\remark		Gère les fonctions de base d'un plugin, permet aux plugins de faire des vérifications de version et  de s'enregistrer auprès du moteur
+	\brief		Classe de base des plug-ins
+	\remark		Gère les fonctions de base d'un plug-in, permet aux plug-ins de faire des vérifications de version et  de s'enregistrer auprès du moteur
 	*/
 	class PluginBase
 		: public Castor::OwnedBy< Engine >
 	{
 	private:
-		//!< Signature for the plugin's loading function
+		//!< Signature for the plug-in's loading function
 		typedef void OnLoadFunction( Engine * );
-		//!< Signature for the plugin's unloading function
+		//!< Signature for the plug-in's unloading function
 		typedef void OnUnloadFunction( Engine * );
-		//!< Signature for the plugin's type retrieval function
+		//!< Signature for the plug-in's type retrieval function
 		typedef ePLUGIN_TYPE GetTypeFunction();
-		//!< Signature for the plugin's version checking function
+		//!< Signature for the plug-in's version checking function
 		typedef void GetRequiredVersionFunction( Version & p_version );
-		//!< Signature for the plugin's name retrieval function
+		//!< Signature for the plug-in's name retrieval function
 		typedef Castor::String GetNameFunction();
 
 	public:
@@ -62,16 +62,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_type		The plugin type
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_type		The plug-in type
+		 *\param[in]	p_library	The shared library holding the plug-in
 		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_type		Le type du plugin
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_type		Le type du plug-in
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_pLibrary, Engine & p_engine );
+		C3D_API PluginBase( ePLUGIN_TYPE p_type, Castor::DynamicLibrarySPtr p_library, Engine & p_engine );
 
 	public:
 		/**
@@ -83,28 +83,28 @@ namespace Castor3D
 		C3D_API virtual ~PluginBase() = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the required version for the plugin to work correctly
+		 *\brief		Retrieves the required version for the plug-in to work correctly
 		 *\return		The version
 		 *\~french
-		 *\brief		Récupère la version nécessaire au bon fonctionnement du plugin
+		 *\brief		Récupère la version nécessaire au bon fonctionnement du plug-in
 		 *\return		La version
 		 */
 		C3D_API void GetRequiredVersion( Version & p_version )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the plugin name
+		 *\brief		Retrieves the plug-in name
 		 *\return		The name
 		 *\~french
-		 *\brief		Récupère le nom du plugin
+		 *\brief		Récupère le nom du plug-in
 		 *\return		Le nom
 		 */
 		C3D_API Castor::String GetName()const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the plugin type
+		 *\brief		Retrieves the plug-in type
 		 *\return		The type
 		 *\~french
-		 *\brief		Récupère le type du plugin
+		 *\brief		Récupère le type du plug-in
 		 *\return		Le type
 		 */
 		inline ePLUGIN_TYPE GetType()const
@@ -113,15 +113,15 @@ namespace Castor3D
 		}
 
 	protected:
-		//!\~english The plugin's version checking function	\~french La fonction de récupération de la version requise
+		//!\~english The plug-in's version checking function	\~french La fonction de récupération de la version requise
 		PGetRequiredVersionFunction m_pfnGetRequiredVersion;
-		//!\~english The plugin's name retrieval function	\~french La fonction de récupération du nom du plugin
+		//!\~english The plug-in's name retrieval function	\~french La fonction de récupération du nom du plug-in
 		PGetNameFunction m_pfnGetName;
-		//!\~english The plugin's loading function	\~french La fonction de chargement du plugin
+		//!\~english The plug-in's loading function	\~french La fonction de chargement du plug-in
 		POnLoadFunction m_pfnOnLoad;
-		//!\~english The plugin's unloading function	\~french La fonction de déchargement du plugin
+		//!\~english The plug-in's unloading function	\~french La fonction de déchargement du plug-in
 		POnUnloadFunction m_pfnOnUnload;
-		//!\~english The plugin type	\~french Le type du plugin
+		//!\~english The plug-in type	\~french Le type du plug-in
 		ePLUGIN_TYPE m_type;
 	};
 }

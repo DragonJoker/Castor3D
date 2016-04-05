@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -113,18 +113,18 @@ namespace Castor3D
 	\~english
 	\brief		Plugin types enumeration
 	\~french
-	\brief		Enumération des types de plugins
+	\brief		Enumération des types de plug-ins
 	*/
 	typedef enum ePLUGIN_TYPE
 	CASTOR_TYPE( uint8_t )
 	{
-		ePLUGIN_TYPE_RENDERER,	//!< Renderer plugin (OpenGl2, 3 or Direct3D)
-		ePLUGIN_TYPE_IMPORTER,	//!< Importer plugin
-		ePLUGIN_TYPE_DIVIDER,	//!< Mesh Divider plugin
+		ePLUGIN_TYPE_RENDERER,	//!< Renderer plug-in (OpenGl2, 3 or Direct3D)
+		ePLUGIN_TYPE_IMPORTER,	//!< Importer plug-in
+		ePLUGIN_TYPE_DIVIDER,	//!< Mesh Divider plug-in
 		ePLUGIN_TYPE_GENERATOR,	//!< Procedural generator
-		ePLUGIN_TYPE_TECHNIQUE,	//!< Render technique plugin
-		ePLUGIN_TYPE_POSTFX,	//!< Post effect plugin
-		ePLUGIN_TYPE_GENERIC,	//!< Generic plugin
+		ePLUGIN_TYPE_TECHNIQUE,	//!< Render technique plug-in
+		ePLUGIN_TYPE_POSTFX,	//!< Post effect plug-in
+		ePLUGIN_TYPE_GENERIC,	//!< Generic plug-in
 		ePLUGIN_TYPE_COUNT,
 	}	ePLUGIN_TYPE;
 	/*!

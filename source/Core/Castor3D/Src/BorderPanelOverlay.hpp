@@ -142,12 +142,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the border material
-		 *\param[in]	p_pMaterial	The new value
+		 *\param[in]	p_material	The new value
 		 *\~french
 		 *\brief		Définit le matériau des bords
-		 *\param[in]	p_pMaterial	La nouvelle valeur
+		 *\param[in]	p_material	La nouvelle valeur
 		 */
-		C3D_API void SetBorderMaterial( MaterialSPtr p_pMaterial );
+		C3D_API void SetBorderMaterial( MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the absolute overlay borders size, in pixels
@@ -278,66 +278,66 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the left border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
-		inline void SetLeftBorderSize( double p_fSize )
+		inline void SetLeftBorderSize( double p_size )
 		{
-			m_ptBorderSize[0] = p_fSize;
+			m_ptBorderSize[0] = p_size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the top border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
-		inline void SetTopBorderSize( double p_fSize )
+		inline void SetTopBorderSize( double p_size )
 		{
-			m_ptBorderSize[1] = p_fSize;
+			m_ptBorderSize[1] = p_size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the right border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
-		inline void SetRightBorderSize( double p_fSize )
+		inline void SetRightBorderSize( double p_size )
 		{
-			m_ptBorderSize[2] = p_fSize;
+			m_ptBorderSize[2] = p_size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the bottom border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
-		inline void SetBottomBorderSize( double p_fSize )
+		inline void SetBottomBorderSize( double p_size )
 		{
-			m_ptBorderSize[3] = p_fSize;
+			m_ptBorderSize[3] = p_size;
 			m_borderChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the borders thicknesses
-		 *\param[in]	p_ptSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
-		 *\param[in]	p_ptSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
-		inline void SetBorderSize( Castor::Point4d const & p_ptSize )
+		inline void SetBorderSize( Castor::Point4d const & p_size )
 		{
-			m_ptBorderSize = p_ptSize;
+			m_ptBorderSize = p_size;
 			m_borderChanged = true;
 		}
 		/**
@@ -416,10 +416,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the left border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord gauche
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
 		inline void SetLeftBorderPixelSize( int p_size )
 		{
@@ -429,10 +429,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the top border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord haut
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
 		inline void SetTopBorderPixelSize( int p_size )
 		{
@@ -442,10 +442,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the right border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord droit
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
 		inline void SetRightBorderPixelSize( int p_size )
 		{
@@ -455,10 +455,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the bottom border thickness
-		 *\param[in]	p_fSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur du bord bas
-		 *\param[in]	p_fSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
 		inline void SetBottomBorderPixelSize( int p_size )
 		{
@@ -468,10 +468,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the borders thicknesses
-		 *\param[in]	p_ptSize	The new value
+		 *\param[in]	p_size	The new value
 		 *\~french
 		 *\brief		Définit l'épaisseur des bords
-		 *\param[in]	p_ptSize	La nouvelle valeur
+		 *\param[in]	p_size	La nouvelle valeur
 		 */
 		inline void SetBorderPixelSize( Castor::Rectangle const & p_size )
 		{
@@ -517,14 +517,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the borders outer part UV
-		 *\param[in]	val	The new value (left, top, right and bottom)
+		 *\param[in]	p_value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie extérieure de la bordure
-		 *\param[in]	val	La nouvelle valeur (gauche, haut, droite, bas)
+		 *\param[in]	p_value	La nouvelle valeur (gauche, haut, droite, bas)
 		 */
-		inline void SetBorderOuterUV( Castor::Point4d const & val )
+		inline void SetBorderOuterUV( Castor::Point4d const & p_value )
 		{
-			m_borderOuterUv = val;
+			m_borderOuterUv = p_value;
 		}
 		/**
 		 *\~english
@@ -541,14 +541,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the borders inner part UV
-		 *\param[in]	val	The new value (left, top, right and bottom)
+		 *\param[in]	p_value	The new value (left, top, right and bottom)
 		 *\~french
 		 *\brief		Définit Les UV de la partie intérieure de la bordure
-		 *\param[in]	val	La nouvelle valeur (gauche, haut, droite, bas)
+		 *\param[in]	p_value	La nouvelle valeur (gauche, haut, droite, bas)
 		 */
-		inline void SetBorderInnerUV( Castor::Point4d const & val )
+		inline void SetBorderInnerUV( Castor::Point4d const & p_value )
 		{
-			m_borderInnerUv = val;
+			m_borderInnerUv = p_value;
 		}
 		/**
 		 *\~english

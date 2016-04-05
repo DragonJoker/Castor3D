@@ -1,4 +1,4 @@
-#include "AnimationObjectBase.hpp"
+#include "AnimationObject.hpp"
 
 #include "Animation.hpp"
 #include "KeyFrame.hpp"
@@ -48,12 +48,12 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	AnimationObjectBase::BinaryParser::BinaryParser( Path const & p_path )
-		: Castor3D::BinaryParser< AnimationObjectBase >( p_path )
+	AnimationObject::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< AnimationObject >( p_path )
 	{
 	}
 
-	bool AnimationObjectBase::BinaryParser::Fill( AnimationObjectBase const & p_obj, BinaryChunk & p_chunk )const
+	bool AnimationObject::BinaryParser::Fill( AnimationObject const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 
@@ -88,7 +88,7 @@ namespace Castor3D
 		return l_return;
 	}
 
-	bool AnimationObjectBase::BinaryParser::Parse( AnimationObjectBase & p_obj, BinaryChunk & p_chunk )const
+	bool AnimationObject::BinaryParser::Parse( AnimationObject & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
 		Matrix4x4r l_transform;
@@ -147,7 +147,7 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	AnimationObjectBase::AnimationObjectBase( eANIMATION_OBJECT_TYPE p_type )
+	AnimationObject::AnimationObject( eANIMATION_OBJECT_TYPE p_type )
 		: m_length( 0 )
 		, m_type( p_type )
 		, m_mode( eINTERPOLATOR_MODE_COUNT )
@@ -155,20 +155,20 @@ namespace Castor3D
 		SetInterpolationMode( eINTERPOLATOR_MODE_LINEAR );
 	}
 
-	AnimationObjectBase::AnimationObjectBase( AnimationObjectBase const & p_rhs )
+	AnimationObject::AnimationObject( AnimationObject const & p_rhs )
 	{
 	}
 
-	AnimationObjectBase::~AnimationObjectBase()
+	AnimationObject::~AnimationObject()
 	{
 	}
 
-	void AnimationObjectBase::AddChild( AnimationObjectBaseSPtr p_object )
+	void AnimationObject::AddChild( AnimationObjectSPtr p_object )
 	{
 		m_children.push_back( p_object );
 	}
 
-	void AnimationObjectBase::Update( real p_time,Matrix4x4r const & p_transformations )
+	void AnimationObject::Update( real p_time,Matrix4x4r const & p_transformations )
 	{
 		if ( HasKeyFrames() )
 		{
@@ -207,7 +207,7 @@ namespace Castor3D
 		}
 	}
 
-	KeyFrame & AnimationObjectBase::AddKeyFrame( real p_from, Point3r const & p_translate, Quaternion const & p_rotate, Point3r const & p_scale )
+	KeyFrame & AnimationObject::AddKeyFrame( real p_from, Point3r const & p_translate, Quaternion const & p_rotate, Point3r const & p_scale )
 	{
 		auto l_it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_from]( KeyFrame & p_keyframe )
 		{
@@ -232,7 +232,7 @@ namespace Castor3D
 		return *l_it;
 	}
 
-	void AnimationObjectBase::RemoveKeyFrame( real p_time )
+	void AnimationObject::RemoveKeyFrame( real p_time )
 	{
 		auto l_it = std::find_if( m_keyframes.begin(), m_keyframes.end(), [&p_time]( KeyFrame const & p_keyframe )
 		{
@@ -245,7 +245,7 @@ namespace Castor3D
 		}
 	}
 
-	void AnimationObjectBase::SetInterpolationMode( eINTERPOLATOR_MODE p_mode )
+	void AnimationObject::SetInterpolationMode( eINTERPOLATOR_MODE p_mode )
 	{
 		if ( p_mode != m_mode )
 		{
@@ -270,9 +270,9 @@ namespace Castor3D
 		}
 	}
 
-	AnimationObjectBaseSPtr AnimationObjectBase::Clone( Animation & p_animation )
+	AnimationObjectSPtr AnimationObject::Clone( Animation & p_animation )
 	{
-		AnimationObjectBaseSPtr l_return;
+		AnimationObjectSPtr l_return;
 
 		if ( !p_animation.HasObject( GetType(), GetName() ) )
 		{

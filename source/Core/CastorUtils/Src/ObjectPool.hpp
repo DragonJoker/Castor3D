@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -57,13 +57,13 @@ namespace Castor
 	\~english
 	\brief		The objects pool.
 	\remarks	Uses a policy to change behaviour easily.
-	\args		Object		The pool objects type.
-	\args		MemDataType	The allocation/deallocation policy type.
+	\param		Object		The pool objects type.
+	\param		MemDataType	The allocation/deallocation policy type.
 	\~french
 	\brief		Le pool d'objets.
 	\remarks	Utilisation d'une politique pour permettre de changer le comportement assez facilement.
-	\args		Object		Le type des objets du pool.
-	\args		MemDataType	Le type de la politique d'allocation/désallocation.
+	\param		Object		Le type des objets du pool.
+	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
 	template< typename Object, eMEMDATA_TYPE MemDataType >
 	class ObjectPool
@@ -169,13 +169,13 @@ namespace Castor
 	\~english
 	\brief		The aligned objects pool.
 	\remarks	Uses a policy to change behaviour easily.
-	\args		Object		The pool objects type.
-	\args		MemDataType	The allocation/deallocation policy type.
+	\param		Object		The pool objects type.
+	\param		MemDataType	The allocation/deallocation policy type.
 	\~french
 	\brief		Le pool d'objets alignés.
 	\remarks	Utilisation d'une politique pour permettre de changer le comportement assez facilement.
-	\args		Object		Le type des objets du pool.
-	\args		MemDataType	Le type de la politique d'allocation/désallocation.
+	\param		Object		Le type des objets du pool.
+	\param		MemDataType	Le type de la politique d'allocation/désallocation.
 	*/
 	template< typename Object, eMEMDATA_TYPE MemDataType, uint32_t Align >
 	class AlignedObjectPool
@@ -250,11 +250,11 @@ namespace Castor
 		 *\param[in]	p_object	L'objet à désallouer.
 		 *\return		\p true Si l'objet provenait du pool.
 		 */
-		bool Deallocate( Object * object )noexcept
+		bool Deallocate( Object * p_object )noexcept
 		{
-			if ( MemoryData::Deallocate( object ) )
+			if ( MemoryData::Deallocate( p_object ) )
 			{
-				NewDeletePolicy< Object >::Dtor( object );
+				NewDeletePolicy< Object >::Dtor( p_object );
 				return true;
 			}
 

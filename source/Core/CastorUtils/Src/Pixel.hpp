@@ -64,11 +64,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		This Pixel doesn't own it's data
+		 *\remarks		This Pixel doesn't own it's data
 		 *\param[in]	p_components	Initialises the data to this one
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		Le Pixel ne gère pas ses données
+		 *\remarks		Le Pixel ne gère pas ses données
 		 *\param[in]	p_components	Initialise les données à celles-ci
 		 */
 		Pixel( uint8_t * p_components );
@@ -93,11 +93,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		This Pixel owns it's data
+		 *\remarks		This Pixel owns it's data
 		 *\param[in]	p_components	Initialises the data to this one
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		Le Pixel gère ses données
+		 *\remarks		Le Pixel gère ses données
 		 *\param[in]	p_components	Initialise les données à celles-ci
 		 */
 		template< TPL_PIXEL_FORMAT FU >
@@ -293,19 +293,19 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Links the data pointer to the one given in parameter
-		 *\remark		The pixel loses ownership of it's data
+		 *\remarks		The pixel loses ownership of it's data
 		 *\~french
 		 *\brief		Lie les données de ce pixel à celles données en paramètre
-		 *\remark		Le pixel perd la responsabilité de ses données
+		 *\remarks		Le pixel perd la responsabilité de ses données
 		 */
 		void link( uint8_t * p_pComponents );
 		/**
 		 *\~english
 		 *\brief		Unlinks the data pointer from the ones previously given
-		 *\remark		The pixel regains ownership of it's data
+		 *\remarks		The pixel regains ownership of it's data
 		 *\~french
 		 *\brief		Délie les données de ce pixel de celles données précédemment
-		 *\remark		Le pixel regagne la responsabilité de ses données
+		 *\remarks		Le pixel regagne la responsabilité de ses données
 		 */
 		void unlink();
 		/**
@@ -344,11 +344,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		No check is made, if you make an index error, expect a crash
+		 *\remarks		No check is made, if you make an index error, expect a crash
 		 *\return		A reference on data at wanted index
 		 *\~french
 		 *\brief		Récupère la donnée à l'index donné
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
+		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence sur la donnée à l'index voulu
 		 */
 		inline component_ref operator[]( uint8_t p_index )
@@ -358,11 +358,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		No check is made, if you make an index error, expect a crash
+		 *\remarks		No check is made, if you make an index error, expect a crash
 		 *\return		A constant reference on data at wanted index
 		 *\~french
 		 *\brief		Récupère la donnée à l'index donné
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
+		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous à un crash
 		 *\return		Une référence constante sur la donnée à l'index voulu
 		 */
 		inline component_const_ref operator[]( uint8_t p_index )const

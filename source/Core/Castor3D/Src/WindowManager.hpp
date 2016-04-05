@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -66,8 +66,15 @@ namespace Castor3D
 		 */
 		C3D_API ~WindowManager();
 		/**
-		*\copydoc		Castor3D::Manager::Create
-		*/
+		 *\~english
+		 *\brief		Creates an object.
+		 *\param[in]	p_name		The object name.
+		 *\return		The created object.
+		 *\~french
+		 *\brief		Crée un objet.
+		 *\param[in]	p_name		Le nom de l'objet.
+		 *\return		L'objet créé.
+		 */
 		C3D_API RenderWindowSPtr Create( Castor::String const & p_name );
 		/**
 		 *\~english

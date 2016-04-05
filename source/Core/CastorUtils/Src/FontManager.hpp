@@ -69,7 +69,7 @@ namespace Castor
 			 *\param[in]		p_file		The source file.
 			 *\~french
 			 *\brief			Charge le gestionnaire de polices.
-			 *\param[in,out]	p_font		Le gestionnaire à charger.
+			 *\param[in,out]	p_manager	Le gestionnaire à charger.
 			 *\param[in]		p_file		Le fichier source.
 			 */
 			CU_API virtual bool operator()( FontManager & p_manager, BinaryFile & p_file );
@@ -135,10 +135,9 @@ namespace Castor
 		using Collection< Font, String >::unlock;
 
 	protected:
-		//!\~english The font files paths sorted by <file_name>.<file_extension>	\~french Les fichiers des polices, triés par <file_name>.<file_extension>
+		//!\~english The font files paths sorted by file_name.file_extension	\~french Les fichiers des polices, triés par file_name.file_extension
 		PathNameMap m_paths;
 	};
 }
 
 #endif
-

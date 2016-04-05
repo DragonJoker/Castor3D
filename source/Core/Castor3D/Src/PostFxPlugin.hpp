@@ -27,9 +27,9 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date		19/08/2012
 	\~english
-	\brief		Post effect plugin class
+	\brief		Post effect plug-in class
 	\~french
-	\brief		Classe de plugin d'effets post rendu
+	\brief		Classe de plug-in d'effets post rendu
 	*/
 	class PostFxPlugin
 		: public PluginBase
@@ -46,14 +46,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_library	The shared library holding the plug-in
 		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API PostFxPlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API PostFxPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,13 +63,17 @@ namespace Castor3D
 		C3D_API virtual ~PostFxPlugin();
 		/**
 		 *\~english
-		 *\brief		Creates a PostEffect object
-		 *\param[in]	p_renderSystem	The render system
-		 *\return		The created PostEffect instance
+		 *\brief		Creates a PostEffect object.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_renderTarget	The render target to which is attached the effect.
+		 *\param[in]	p_params		The optional parameters.
+		 *\return		The created PostEffect instance.
 		 *\~french
-		 *\brief		Crée un objet PostEffect
-		 *\param[in]	p_renderSystem	Le render system
-		 *\return		L'instance de PostEffect créée
+		 *\brief		Crée un objet PostEffect.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle l'effet s'applique.
+		 *\param[in]	p_params		Les paramètres optionnels.
+		 *\return		L'instance de PostEffect créée.
 		 */
 		C3D_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
 		/**

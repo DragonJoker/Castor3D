@@ -26,11 +26,11 @@ namespace Castor3D
 		Cleanup();
 	}
 
-	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers, bool p_bThreaded )
+	void Subdivider::Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_generateBuffers, bool p_threaded )
 	{
 		for ( int i = 0; i < p_occurences; ++i )
 		{
-			DoSubdivide( p_pSubmesh, p_bGenerateBuffers, p_bThreaded );
+			DoSubdivide( p_pSubmesh, p_generateBuffers, p_threaded );
 		}
 	}
 
@@ -117,16 +117,16 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void Subdivider::DoSubdivide( SubmeshSPtr p_pSubmesh, bool p_bGenerateBuffers, bool p_bThreaded )
+	void Subdivider::DoSubdivide( SubmeshSPtr p_pSubmesh, bool p_generateBuffers, bool p_threaded )
 	{
 		m_submesh = p_pSubmesh;
-		m_bGenerateBuffers = p_bGenerateBuffers;
+		m_bGenerateBuffers = p_generateBuffers;
 		m_submesh->ComputeContainers();
 
 		DoInitialise();
-		m_bThreaded = p_bThreaded;
+		m_bThreaded = p_threaded;
 
-		if ( p_bThreaded )
+		if ( p_threaded )
 		{
 			m_pThread = std::make_shared< std::thread >( std::bind( &Subdivider::DoSubdivideThreaded, this ) );
 		}

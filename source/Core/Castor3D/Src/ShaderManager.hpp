@@ -37,8 +37,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_engine	Le moteur
 		 */
 		C3D_API ShaderManager( Engine & p_engine );
 		/**
@@ -65,14 +67,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a new program
-		 *\param[in]	p_eLanguage	The wanted shader language
+		 *\param[in]	p_langage	The wanted shader language
 		 *\return		The newly created program
 		 *\~french
 		 *\brief		Crée un nouveau programme
-		 *\param[in]	p_eLanguage	Le langage de shader souhaité
+		 *\param[in]	p_langage	Le langage de shader souhaité
 		 *\return		Le programme créé
 		 */
-		C3D_API ShaderProgramSPtr GetNewProgram( eSHADER_LANGUAGE p_eLanguage = eSHADER_LANGUAGE_AUTO );
+		C3D_API ShaderProgramSPtr GetNewProgram( eSHADER_LANGUAGE p_langage = eSHADER_LANGUAGE_AUTO );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags
@@ -104,12 +106,14 @@ namespace Castor3D
 		C3D_API ShaderProgramSPtr GetBillboardProgram( uint32_t p_textureFlags, uint32_t p_programFlags )const;
 		/**
 		 *\~english
-		 *\brief		Looks for a billboards shader program corresponding to given flags.
+		 *\brief		Adds a billboards shader program corresponding to given flags.
+		 *\param[in]	p_program		The program to add.
 		 *\param[in]	p_textureFlags	Bitwise ORed eTEXTURE_CHANNEL.
 		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG.
 		 *\return		The found program.
 		 *\~french
-		 *\brief		Cherche un programme de billboards correspondant aux flags donnés.
+		 *\brief		Ajoute un programme de billboards correspondant aux flags donnés.
+		 *\param[in]	p_program		Le programme à ajouter.
 		 *\param[in]	p_textureFlags	Une combinaison de eTEXTURE_CHANNEL.
 		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
 		 *\return		Le programme trouvé.

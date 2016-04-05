@@ -130,11 +130,11 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	LightCategory::LightCategory( eLIGHT_TYPE p_eLightType )
-		: m_eLightType( p_eLightType )
+	LightCategory::LightCategory( eLIGHT_TYPE p_lightType )
+		: m_eLightType( p_lightType )
 		, m_colour( 1.0, 1.0, 1.0 )
 		, m_intensity( 0.0, 1.0, 1.0 )
-		, m_positionType( 0.0, 0.0, 1.0, float( p_eLightType ) )
+		, m_positionType( 0.0, 0.0, 1.0, float( p_lightType ) )
 	{
 	}
 

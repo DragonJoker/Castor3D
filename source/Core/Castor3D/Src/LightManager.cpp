@@ -116,14 +116,14 @@ namespace Castor3D
 		}
 	}
 
-	LightSPtr LightManager::Create( Castor::String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_eLightType )
+	LightSPtr LightManager::Create( Castor::String const & p_name, SceneNodeSPtr p_parent, eLIGHT_TYPE p_lightType )
 	{
 		std::unique_lock< Collection > l_lock( m_elements );
 		LightSPtr l_return;
 
 		if ( !m_elements.has( p_name ) )
 		{
-			l_return = std::make_shared< Light >( p_name, *this->GetScene(), p_parent, m_lightFactory, p_eLightType );
+			l_return = std::make_shared< Light >( p_name, *this->GetScene(), p_parent, m_lightFactory, p_lightType );
 			m_elements.insert( p_name, l_return );
 			ElementAttacher< Light >::Attach( l_return, p_parent, m_rootNode.lock(), m_rootCameraNode.lock(), m_rootObjectNode.lock() );
 			DoAddLight( l_return );

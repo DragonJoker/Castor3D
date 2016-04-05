@@ -90,12 +90,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer to the given one
-		 *\remark		Conversions are made if needed
+		 *\remarks		Conversions are made if needed
 		 *\param[in]	p_buffer		Data buffer
 		 *\param[in]	p_pixelFormat	Data buffer's pixels format
 		 *\~french
 		 *\brief		Initialise le buffer de données à celui donné
-		 *\remark		Des conversions sont faites si besoin est
+		 *\remarks		Des conversions sont faites si besoin est
 		 *\param[in]	p_buffer		Buffer de données
 		 *\param[in]	p_pixelFormat	Format des pixels du buffer de données
 		 */
@@ -103,11 +103,11 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Initialises the data buffer at the given size
-		 *\remark		Conversions are made if needed
+		 *\remarks		Conversions are made if needed
 		 *\param[in]	p_size		Buffer dimensions
 		 *\~french
 		 *\brief		Initialise le buffer de données à la taille donnée
-		 *\remark		Des conversions sont faites si besoin est
+		 *\remarks		Des conversions sont faites si besoin est
 		 *\param[in]	p_size		Les dimensions du buffer
 		 */
 		CU_API virtual void init( Size const & p_size );

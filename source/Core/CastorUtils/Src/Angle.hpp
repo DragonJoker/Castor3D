@@ -59,10 +59,10 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Specified Constructor
-		 *\remark		Private so specified construction only available through named ctors
+		 *\remarks		Private so specified construction only available through named ctors
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\remark		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés
+		 *\remarks		Privé afin que la construction spécifiée ne soit accessible qu'à partir des constructeurs nommés
 		 */
 		template< typename T >
 		explicit Angle( T p_radians )
@@ -133,21 +133,21 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Copy constructor
-		 *\param[in]	p_copy	The object to copy
+		 *\param[in]	p_rhs	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_copy	L'objet à copier
+		 *\param[in]	p_rhs	L'objet à copier
 		 */
-		CU_API Angle( Angle const & p_angle );
+		CU_API Angle( Angle const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Move constructor
-		 *\param[in]	p_copy	The object to move
+		 *\param[in]	p_rhs	The object to move
 		 *\~french
 		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_copy	L'objet à déplacer
+		 *\param[in]	p_rhs	L'objet à déplacer
 		 */
-		CU_API Angle( Angle && p_angle );
+		CU_API Angle( Angle && p_rhs );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator

@@ -117,10 +117,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Not to be used by the user, use Scene::CreateLight function instead
+		 *\remarks		Not to be used by the user, use Scene::CreateLight function instead
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
+		 *\remarks		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
 		 */
 		C3D_API DirectionalLight();
 		/**
@@ -149,10 +149,10 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the light source direction
-		 *\param[in]	p_position	The new value
+		 *\param[in]	p_direction	The new value
 		 *\~french
 		 *\brief		Définit la direction de la source
-		 *\param[in]	p_position	La nouvelle valeur
+		 *\param[in]	p_direction	La nouvelle valeur
 		 */
 		C3D_API virtual void SetDirection( Castor::Point3f const & p_direction );
 		/**

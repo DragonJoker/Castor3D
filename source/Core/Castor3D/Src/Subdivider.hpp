@@ -59,16 +59,16 @@ namespace Castor3D
 		 *\brief		Main subdivision function
 		 *\param[in]	p_submesh			The submesh to subdivide
 		 *\param[in]	p_occurences		The subdivisions occurences
-		 *\param[in]	p_bGenerateBuffers	Tells if the buffers must be generated after subdivision
-		 *\param[in]	p_bThreaded			Tells if subdivision must be threaded
+		 *\param[in]	p_generateBuffers	Tells if the buffers must be generated after subdivision
+		 *\param[in]	p_threaded			Tells if subdivision must be threaded
 		 *\~french
 		 *\brief		Fonction de subdivision
 		 *\param[in]	p_submesh			Le sous maillage à subdiviser
 		 *\param[in]	p_occurences		Le nombre de subdivisions à effectuer
-		 *\param[in]	p_bGenerateBuffers	Dit si les tampons doivent être générés
-		 *\param[in]	p_bThreaded			Dit si la subdivision doit être threadée
+		 *\param[in]	p_generateBuffers	Dit si les tampons doivent être générés
+		 *\param[in]	p_threaded			Dit si la subdivision doit être threadée
 		 */
-		C3D_API virtual void Subdivide( SubmeshSPtr p_pSubmesh, int p_occurences, bool p_bGenerateBuffers = true, bool p_bThreaded = false );
+		C3D_API virtual void Subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false );
 		/**
 		 *\~english
 		 *\brief		Cleans all member variables
@@ -169,12 +169,10 @@ namespace Castor3D
 		 *\brief		Defines a function to execute when the threaded subdivision ends
 		 *\remarks		That function *MUST NEITHER* destroy the thread *NOR* the subdivider
 		 *\param[in]	p_pfnSubdivisionEnd	Pointer over the function to execute
-		 *\param[in]	p_pArg				Optional parameter for the function
 		 *\~french
 		 *\brief		Définit une fonction qui sera appelée lors de la fin de la subdivision
-		 *\remarks		Cette fonction ne doit pas détruire le thread ni le subdiviseur
+		 *\remarks		Cette fonction *NE DOIT PAS* détruire le thread *NI* le subdiviseur
 		 *\param[in]	p_pfnSubdivisionEnd	Pointeur de la fonction à exécuter
-		 *\param[in]	p_pArg				Paramètre optionnel de la fonction
 		 */
 		inline void SetSubdivisionEndCallback( SubdivisionEndFunction p_pfnSubdivisionEnd )
 		{
@@ -192,11 +190,11 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Checks if the given point is in my list and if not creates and adds it
-		 *\param[in]	p_v	The vertex coordinates
+		 *\param[in]	p_point	The vertex coordinates
 		 *\return		The created vertex
 		 *\~french
 		 *\brief		Vérifie si le point donnée est déjà dans la liste, et sinon le crée et l'ajoute
-		 *\param[in]	p_v	Les coordonnées de la position du sommet à ajouter
+		 *\param[in]	p_point	Les coordonnées de la position du sommet à ajouter
 		 *\return		Le sommet créé
 		 */
 		C3D_API Castor3D::BufferElementGroupSPtr DoTryAddPoint( Castor::Point3r const & p_point );
@@ -204,15 +202,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Main subdivision function
 		 *\param[in]	p_submesh			The submesh to subdivide
-		 *\param[in]	p_bGenerateBuffers	Tells if the buffers must be generated after subdivision
-		 *\param[in]	p_bThreaded			Tells if subdivision must be threaded
+		 *\param[in]	p_generateBuffers	Tells if the buffers must be generated after subdivision
+		 *\param[in]	p_threaded			Tells if subdivision must be threaded
 		 *\~french
 		 *\brief		Fonction de subdivision
 		 *\param[in]	p_submesh			Le sous maillage à subdiviser
-		 *\param[in]	p_bGenerateBuffers	Dit si les tampons doivent être générés
-		 *\param[in]	p_bThreaded			Dit si la subdivision doit être threadée
+		 *\param[in]	p_generateBuffers	Dit si les tampons doivent être générés
+		 *\param[in]	p_threaded			Dit si la subdivision doit être threadée
 		 */
-		C3D_API virtual void DoSubdivide( SubmeshSPtr p_pSubmesh, bool p_bGenerateBuffers, bool p_bThreaded );
+		C3D_API virtual void DoSubdivide( SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded );
 		/**
 		 *\~english
 		 *\brief		Initialisation function

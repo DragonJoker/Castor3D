@@ -123,23 +123,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
-		 *\param[in]	p_eLock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE
 		 *\return		The image buffer
 		 *\~french
 		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus
-		 *\param[in]	p_eLock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
 		 *\return		Le buffer de l'image
 		 */
-		C3D_API virtual uint8_t * Lock( uint32_t p_uiLock ) = 0;
+		C3D_API virtual uint8_t * Lock( uint32_t p_lock ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU
-		 *\param[in]	p_bModified	Tells if the buffer has been modified, so modifications are uploaded to GPU
+		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU
 		 *\~french
 		 *\brief		Délocke le buffer de l'image à partir du GPU
-		 *\param[in]	p_bModified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
+		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
 		 */
-		C3D_API virtual void Unlock( bool p_bModified ) = 0;
+		C3D_API virtual void Unlock( bool p_modified ) = 0;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps

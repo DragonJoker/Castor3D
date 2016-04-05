@@ -149,12 +149,10 @@ namespace Castor3D
 		 *\brief		Constructor
 		 *\param[in]	p_name		The node's name.
 		 *\param[in]	p_scene		The parent scene.
-		 *\param[in]	p_parent	The parent scene node.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name		Le nom du noeud.
 		 *\param[in]	p_scene		La scène parente.
-		 *\param[in]	p_parent	Le noeud de scène parent.
 		 */
 		C3D_API SceneNode( Castor::String const & p_name, Scene & p_scene );
 		/**
@@ -645,7 +643,7 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Unregisters an object from the changes notification.
-		 *\param[in]	p_function	The connection index.
+		 *\param[in]	p_index	The connection index.
 		 *\~french
 		 *\brief		Désnregistre un objet de la notification des changements.
 		 *\param[in]	p_index	L'indice de connexion.

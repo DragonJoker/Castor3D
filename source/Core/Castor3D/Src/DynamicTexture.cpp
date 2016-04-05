@@ -88,7 +88,7 @@ namespace Castor3D
 		}
 	}
 
-	void DynamicTexture::SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat )
+	void DynamicTexture::SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
 	{
 		m_depth = 1;
 		Castor::Size l_size = p_size;
@@ -98,10 +98,10 @@ namespace Castor3D
 			l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
 		}
 
-		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_ePixelFormat );
+		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_format );
 	}
 
-	void DynamicTexture::SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat )
+	void DynamicTexture::SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format )
 	{
 		Size l_size;
 
@@ -116,6 +116,6 @@ namespace Castor3D
 			l_size.set( p_size[0], p_size[1] * m_depth );
 		}
 
-		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_ePixelFormat );
+		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_format );
 	}
 }

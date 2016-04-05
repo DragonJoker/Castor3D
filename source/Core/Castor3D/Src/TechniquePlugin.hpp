@@ -27,9 +27,9 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date		19/08/2012
 	\~english
-	\brief		Render technique plugin class
+	\brief		Render technique plug-in class
 	\~french
-	\brief		Classe de plugin de techniques de rendu
+	\brief		Classe de plug-in de techniques de rendu
 	*/
 	class TechniquePlugin
 		: public PluginBase
@@ -41,14 +41,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_library	The shared library holding the plug-in
 		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
 		 *\param[in]	p_engine	Le moteur
 		 */
-		C3D_API TechniquePlugin( Castor::DynamicLibrarySPtr p_pLibrary, Engine * p_engine );
+		C3D_API TechniquePlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
