@@ -52,7 +52,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::Create
 		 */
-		virtual bool Create( int p_iSamplesCount );
+		virtual bool Create();
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::Destroy
 		 */

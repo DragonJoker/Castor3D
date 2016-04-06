@@ -291,7 +291,7 @@ namespace Castor3D
 		m_colorTexture.GetTexture()->SetType( eTEXTURE_TYPE_2D );
 		std::static_pointer_cast< DynamicTexture >( m_colorTexture.GetTexture() )->SetImage( p_size, m_renderTarget.GetPixelFormat() );
 		Size l_size = m_colorTexture.GetTexture()->GetDimensions();
-		m_frameBuffer->Create( 0 );
+		m_frameBuffer->Create();
 		m_colorTexture.GetTexture()->Create();
 		m_colorTexture.GetTexture()->Initialise();
 		m_frameBuffer->Initialise( l_size );

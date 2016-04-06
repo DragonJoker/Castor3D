@@ -57,9 +57,17 @@ namespace Direct
 	{
 	}
 
-	bool RenderTechnique::DoBeginRender()
+	bool RenderTechnique::DoBeginRender( Scene & p_scene )
 	{
-		return true;
+		bool l_return = m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
+
+		if ( l_return )
+		{
+			m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
+			m_frameBuffer.m_frameBuffer->Clear();
+		}
+
+		return l_return;
 	}
 
 	void RenderTechnique::DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
@@ -68,7 +76,8 @@ namespace Direct
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 
-	void RenderTechnique::DoEndRender()
+	void RenderTechnique::DoEndRender( Scene & p_scene )
 	{
+		m_frameBuffer.m_frameBuffer->Unbind();
 	}
 }

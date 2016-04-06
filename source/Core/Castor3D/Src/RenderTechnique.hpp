@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -205,7 +205,7 @@ namespace Castor3D
 		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene		La scène à rendre
+		 *\param[in]	p_scene		La scène à dessiner
 		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue
 		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 */
@@ -298,13 +298,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Render begin function.
 		 *\remarks		At the end of this method, the frame buffer that will receive draw calls must be bound.
+		 *\param[in]	p_scene		The scene to render
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction de début de rendu.
 		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
+		 *\param[in]	p_scene		La scène à dessiner
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool DoBeginRender() = 0;
+		C3D_API virtual bool DoBeginRender( Scene & p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Render function
@@ -323,12 +325,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Render end function
-		 *\remarks		At the end of this method, the render target frame buffer must be bound.
+		 *\remarks		At the end of this method, no frame buffer must be bound.
+		 *\param[in]	p_scene		The scene to render
 		 *\~french
 		 *\brief		Fonction de fin de rendu
-		 *\remarks		A la sortie de cette méthode, le tampon d'image de la cible de rendu doit être activé.
+		 *\remarks		A la sortie de cette méthode, aucun tampon d'image ne doit être activé.
+		 *\param[in]	p_scene		La scène à dessiner
 		 */
-		C3D_API virtual void DoEndRender() = 0;
+		C3D_API virtual void DoEndRender( Scene & p_scene ) = 0;
 
 	protected:
 		/**

@@ -30,7 +30,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlFrameBuffer::Create( int CU_PARAM_UNUSED( p_iSamplesCount ) )
+	bool GlFrameBuffer::Create()
 	{
 		return BindableType::Create( false );
 	}

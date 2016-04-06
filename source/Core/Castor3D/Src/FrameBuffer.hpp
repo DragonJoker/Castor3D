@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -273,14 +273,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creation function
-		 *\param[in]	p_iSamplesCount	Samples count, if the frame buffer must support multisampling
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction de création
-		 *\param[in]	p_iSamplesCount	Nombre de samples, si le tampon d'image doit supporter le multisampling
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Create( int p_iSamplesCount ) = 0;
+		C3D_API virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function

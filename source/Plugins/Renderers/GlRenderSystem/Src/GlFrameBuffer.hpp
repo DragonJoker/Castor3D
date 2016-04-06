@@ -58,11 +58,11 @@ namespace GlRender
 		 */
 		virtual ~GlFrameBuffer();
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::Create
 		 */
-		virtual bool Create( int p_iSamplesCount );
+		virtual bool Create();
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::Destroy
 		 */
 		virtual void Destroy();
 		/**
@@ -70,11 +70,11 @@ namespace GlRender
 		 */
 		virtual void SetDrawBuffers( AttachArray const & p_attaches );
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::SetReadBuffer
 		 */
 		virtual void SetReadBuffer( Castor3D::eATTACHMENT_POINT p_eAttach, uint8_t p_index );
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::IsComplete
 		 */
 		virtual bool IsComplete()const;
 		/**
@@ -82,11 +82,11 @@ namespace GlRender
 		 */
 		virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer );
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::CreateColourRenderBuffer
 		 */
 		virtual Castor3D::ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_format );
 		/**
-		 *\copydoc		Castor3D::FrameBuffer::SetDrawBuffers
+		 *\copydoc		Castor3D::FrameBuffer::CreateDepthStencilRenderBuffer
 		 */
 		virtual Castor3D::DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_format );
 		/**

@@ -173,7 +173,7 @@ namespace Bloom
 
 		l_colourTexture->SetType( eTEXTURE_TYPE_2D );
 		l_colourTexture->SetImage( p_size, ePIXEL_FORMAT_A8R8G8B8 );
-		m_fbo->Create( 0 );
+		m_fbo->Create();
 		m_colourTexture->SetTexture( l_colourTexture );
 		m_colourTexture->Initialise();
 		m_fbo->Initialise( p_size );

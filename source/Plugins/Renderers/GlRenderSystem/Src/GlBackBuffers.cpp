@@ -19,7 +19,7 @@ namespace GlRender
 	{
 	}
 
-	bool GlBackBuffers::Create( int CU_PARAM_UNUSED( p_iSamplesCount ) )
+	bool GlBackBuffers::Create()
 	{
 		return true;
 	}

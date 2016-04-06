@@ -54,7 +54,8 @@ namespace Deferred
 		: public Castor3D::RenderTechnique
 	{
 	protected:
-		typedef enum eDS_TEXTURE CASTOR_TYPE( uint8_t )
+		typedef enum eDS_TEXTURE
+			: uint8_t
 		{
 			eDS_TEXTURE_POSITION,
 			eDS_TEXTURE_AMBIENT,
@@ -111,77 +112,35 @@ namespace Deferred
 
 	protected:
 		/**
-		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::RenderTechnique::DoCreate
 		 */
 		virtual bool DoCreate();
 		/**
-		 *\~english
-		 *\brief		Destruction function
-		 *\~french
-		 *\brief		Fonction de destruction
+		 *\copydoc		Castor3D::RenderTechnique::DoDestroy
 		 */
 		virtual void DoDestroy();
 		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_index	The base texture index
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_index	L'index de texture de base
-		 *\return		\p true if ok
+		 *\copydoc		Castor3D::RenderTechnique::DoInitialise
 		 */
 		virtual bool DoInitialise( uint32_t & p_index );
 		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\copydoc		Castor3D::RenderTechnique::DoCleanup
 		 */
 		virtual void DoCleanup();
 		/**
-		 *\~english
-		 *\brief		Render begin function
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction de début de rendu
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::RenderTechnique::DoBeginRender
 		 */
-		virtual bool DoBeginRender();
+		virtual bool DoBeginRender( Castor3D::Scene & p_scene );
 		/**
-		 *\~english
-		 *\brief		Render function
-		 *\param[in]	p_scene		The scene to render
-		 *\param[in]	p_camera	The camera through which the scene is viewed
-		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered
-		 *\return		\p true if ok
-		 *\~french
-		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene		La scène à rendre
-		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue
-		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::RenderTechnique::DoRender
 		 */
 		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
 		/**
-		 *\~english
-		 *\brief		Render end function
-		 *\~french
-		 *\brief		Fonction de fin de rendu
+		 *\copydoc		Castor3D::RenderTechnique::DoEndRender
 		 */
-		virtual void DoEndRender();
+		virtual void DoEndRender( Castor3D::Scene & p_scene );
 		/**
-		 *\~english
-		 *\brief		Retrieves the pixel shader source matching the given flags
-		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
-		 *\~french
-		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
-		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
+		 *\copydoc		Castor3D::RenderTechnique::DoGetPixelShaderSource
 		 */
 		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
 		/**

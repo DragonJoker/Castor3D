@@ -35,18 +35,23 @@ namespace Msaa
 			m_samplesCount = string::to_int( l_count );
 		}
 
-		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 		m_msFrameBuffer = m_renderSystem->CreateFrameBuffer();
 		m_pMsColorBuffer = m_msFrameBuffer->CreateColourRenderBuffer( ePIXEL_FORMAT_ARGB16F32F );
 		m_pMsDepthBuffer = m_msFrameBuffer->CreateDepthStencilRenderBuffer( ePIXEL_FORMAT_DEPTH32F );
 		m_pMsColorAttach = m_msFrameBuffer->CreateAttachment( m_pMsColorBuffer );
 		m_pMsDepthAttach = m_msFrameBuffer->CreateAttachment( m_pMsDepthBuffer );
 
-		if ( m_samplesCount )
+		if ( m_samplesCount > 1 )
 		{
 			m_wpFrontRasteriserState.lock()->SetMultisample( true );
 			m_wpBackRasteriserState.lock()->SetMultisample( true );
 		}
+		else
+		{
+			m_samplesCount = 0;
+		}
+
+		Logger::LogInfo( StringStream() << cuT( "Using MSAA, " ) << m_samplesCount << cuT( " samples" ) );
 	}
 
 	RenderTechnique::~RenderTechnique()
@@ -61,7 +66,7 @@ namespace Msaa
 
 	bool RenderTechnique::DoCreate()
 	{
-		bool l_bReturn = m_msFrameBuffer->Create( m_samplesCount );
+		bool l_bReturn = m_msFrameBuffer->Create();
 		m_pMsColorBuffer->SetSamplesCount( m_samplesCount );
 		m_pMsDepthBuffer->SetSamplesCount( m_samplesCount );
 		l_bReturn &= m_pMsColorBuffer->Create();
@@ -126,13 +131,13 @@ namespace Msaa
 		m_pMsDepthBuffer->Cleanup();
 	}
 
-	bool RenderTechnique::DoBeginRender()
+	bool RenderTechnique::DoBeginRender( Scene & p_scene )
 	{
 		bool l_return = m_msFrameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 
 		if ( l_return )
 		{
-			m_msFrameBuffer->SetClearColour( GetEngine()->GetRenderSystem()->GetTopScene()->GetBackgroundColour() );
+			m_msFrameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
 			m_msFrameBuffer->Clear();
 		}
 
@@ -145,10 +150,9 @@ namespace Msaa
 		Castor3D::RenderTechnique::DoRender( m_size, p_nodes, p_camera, p_frameTime );
 	}
 
-	void RenderTechnique::DoEndRender()
+	void RenderTechnique::DoEndRender( Scene & p_scene )
 	{
 		m_msFrameBuffer->Unbind();
 		m_msFrameBuffer->BlitInto( m_frameBuffer.m_frameBuffer, m_rect, eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH );
-		m_frameBuffer.m_frameBuffer->Bind();
 	}
 }

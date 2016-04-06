@@ -272,7 +272,7 @@ namespace Castor3D
 		{
 			m_colourAttach = m_frameBuffer->CreateAttachment( m_colourTexture );
 			m_depthAttach = m_frameBuffer->CreateAttachment( m_depthBuffer );
-			l_return = m_frameBuffer->Create( 0 );
+			l_return = m_frameBuffer->Create();
 		}
 
 		if ( l_return )
@@ -407,18 +407,13 @@ namespace Castor3D
 	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime )
 	{
 		m_renderSystem->PushScene( &p_scene );
-		m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
-		m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
-		m_frameBuffer.m_frameBuffer->Clear();
 
-		if ( DoBeginRender() )
+		if ( DoBeginRender( p_scene ) )
 		{
 			p_scene.RenderBackground( GetSize() );
 			DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_frameTime );
-			DoEndRender();
+			DoEndRender( p_scene );
 		}
-
-		m_frameBuffer.m_frameBuffer->Unbind();
 
 		for ( auto && l_effect : m_renderTarget->GetPostEffects() )
 		{

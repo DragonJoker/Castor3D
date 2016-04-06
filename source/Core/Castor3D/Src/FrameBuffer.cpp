@@ -1,4 +1,4 @@
-﻿#include "FrameBuffer.hpp"
+#include "FrameBuffer.hpp"
 #include "RenderBufferAttachment.hpp"
 #include "TextureAttachment.hpp"
 #include "RenderBuffer.hpp"
@@ -171,11 +171,13 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
-		}
 
-		if ( l_return )
-		{
-			l_return = DoBlitInto( p_buffer, p_rectSrcDst, p_components );
+			if ( l_return )
+			{
+				l_return = DoBlitInto( p_buffer, p_rectSrcDst, p_components );
+				Unbind();
+			}
+
 			p_buffer->Unbind();
 		}
 
@@ -189,11 +191,13 @@ namespace Castor3D
 		if ( l_return )
 		{
 			l_return = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
-		}
 
-		if ( l_return )
-		{
-			l_return = DoStretchInto( p_buffer, p_rectSrc, p_rectDst, p_components, p_interpolation );
+			if ( l_return )
+			{
+				l_return = DoStretchInto( p_buffer, p_rectSrc, p_rectDst, p_components, p_interpolation );
+				Unbind();
+			}
+
 			p_buffer->Unbind();
 		}
 
