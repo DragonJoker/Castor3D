@@ -2330,7 +2330,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitRenderTarget )
 	{
 		PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
 	}
-	else if ( !p_params.empty() )
+	else
 	{
 		l_parsingContext->pRenderTarget = l_parsingContext->m_pParser->GetEngine()->GetTargetManager().Create( eTARGET_TYPE_TEXTURE );
 	}
