@@ -37,9 +37,10 @@ namespace GlRender
 
 		if ( m_eCulledFaces != eFACE_NONE )
 		{
+			l_return &= GetOpenGl().Enable( eGL_TWEAK_CULL_FACE );
+
 			if ( m_currentState->GetCulledFaces() == eFACE_NONE )
 			{
-				l_return &= GetOpenGl().Enable( eGL_TWEAK_CULL_FACE );
 				l_return &= GetOpenGl().CullFace( GetOpenGl().Get( GetCulledFaces() ) );
 				m_currentState->SetCulledFaces( GetCulledFaces() );
 

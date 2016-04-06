@@ -20,34 +20,6 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-C3D_Assimp_API String GetName();
-
-namespace
-{
-	bool HasExtension( Castor3D::PluginStrMap const & p_plugins, Castor::String const & p_extension )
-	{
-		bool l_return = false;
-
-		for ( auto const & l_it : p_plugins )
-		{
-			auto const l_importer = std::static_pointer_cast< ImporterPlugin >( l_it.second );
-
-			if ( !l_return && l_importer->GetName() != GetName() )
-			{
-				auto const l_extensions = l_importer->GetExtensions();
-				l_return = std::end( l_extensions ) != std::find_if( std::begin( l_extensions ), std::end( l_extensions ), [&p_extension]( ImporterPlugin::Extension const & p_pair )
-				{
-					return p_extension == p_pair.first;
-				} );
-			}
-		}
-
-		return l_return;
-	}
-}
-
-//*************************************************************************************************
-
 C3D_Assimp_API void GetRequiredVersion( Version & p_version )
 {
 	p_version = Version();
@@ -102,39 +74,53 @@ C3D_Assimp_API ImporterPlugin::ExtensionArray GetExtensions( Engine * p_engine )
 		ImporterPlugin::Extension{ cuT( "ZGL" ), cuT( "2 XGL" ) },
 	};
 
-	auto l_importers = p_engine->GetPluginManager().GetPlugins( Castor3D::ePLUGIN_TYPE_IMPORTER );
+	std::set< String > l_alreadyLoaded;
 
-	if ( !HasExtension( l_importers, cuT( "3DS" ) ) )
+	for ( auto l_it : p_engine->GetPluginManager().GetPlugins( Castor3D::ePLUGIN_TYPE_IMPORTER ) )
+	{
+		auto const l_importer = std::static_pointer_cast< ImporterPlugin >( l_it.second );
+
+		if ( l_importer->GetName() != GetName() )
+		{
+			for ( auto l_extension : l_importer->GetExtensions() )
+			{
+				l_alreadyLoaded.insert( l_extension.first );
+			}
+		}
+	}
+
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "3DS" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "3DS" ), cuT( "3D Studio Max 3DS" ) );
 	}
 
-	if ( !HasExtension( l_importers, cuT( "ASE" ) ) )
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "ASE" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "ASE" ), cuT( "3D Studio Max ASE" ) );
 	}
 
-	if ( !HasExtension( l_importers, cuT( "OBJ" ) ) )
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "OBJ" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "OBJ" ), cuT( "Wavefront Object" ) );
 	}
 
-	if ( !HasExtension( l_importers, cuT( "PLY" ) ) )
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "PLY" ) ) )
 	{
-		l_extensions.emplace_back( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) ); // Crashes on big meshes.
+		// Assimp's implementation crashes on big meshes.
+		l_extensions.emplace_back( cuT( "PLY" ), cuT( "Stanford Polygon Library" ) );
 	}
 
-	if ( !HasExtension( l_importers, cuT( "MD2" ) ) )
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "MD2" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "MD2" ), cuT( "Quake II" ) );
 	}
 
-	if ( !HasExtension( l_importers, cuT( "MD3" ) ) )
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "MD3" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "MD3" ), cuT( "Quake III" ) );
 	}
 
-	if ( !HasExtension( l_importers, cuT( "LWO" ) ) )
+	if ( l_alreadyLoaded.end() == l_alreadyLoaded.find( cuT( "LWO" ) ) )
 	{
 		l_extensions.emplace_back( cuT( "LWO" ), cuT( "LightWave Model" ) );
 	}

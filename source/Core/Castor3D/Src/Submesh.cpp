@@ -887,15 +887,12 @@ namespace Castor3D
 									for ( uint32_t * l_it = l_pIdx + 0; l_it < l_pIdx + l_uiIdxSize; l_it += 3 )
 									{
 										double l_dDistance = 0.0;
-										Point3r l_pVtx1( reinterpret_cast< real const * >( &l_pVtx[l_it[0] * l_stride] ) );
-										l_pVtx1 -= p_ptCameraPosition;
-										l_dDistance += point::distance_squared( l_pVtx1 );
-										Point3r l_pVtx2( reinterpret_cast< real const * >( &l_pVtx[l_it[1] * l_stride] ) );
-										l_pVtx2 -= p_ptCameraPosition;
-										l_dDistance += point::distance_squared( l_pVtx2 );
-										Point3r l_pVtx3( reinterpret_cast< real const * >( &l_pVtx[l_it[2] * l_stride] ) );
-										l_pVtx3 -= p_ptCameraPosition;
-										l_dDistance += point::distance_squared( l_pVtx3 );
+										Coords3r l_pVtx1( reinterpret_cast< real * >( &l_pVtx[l_it[0] * l_stride] ) );
+										l_dDistance += point::distance_squared( l_pVtx1 - p_ptCameraPosition );
+										Coords3r l_pVtx2( reinterpret_cast< real * >( &l_pVtx[l_it[1] * l_stride] ) );
+										l_dDistance += point::distance_squared( l_pVtx2 - p_ptCameraPosition );
+										Coords3r l_pVtx3( reinterpret_cast< real * >( &l_pVtx[l_it[2] * l_stride] ) );
+										l_dDistance += point::distance_squared( l_pVtx3 - p_ptCameraPosition );
 										stFACE_DISTANCE l_face = { {l_it[0], l_it[1], l_it[2]}, l_dDistance };
 										l_arraySorted.push_back( l_face );
 									}

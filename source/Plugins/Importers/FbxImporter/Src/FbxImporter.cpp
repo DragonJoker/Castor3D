@@ -229,7 +229,7 @@ namespace C3dFbx
 		template< typename T >
 		inline void DoFillBufferFromValue( T const & p_value, real *& p_buffer )
 		{
-			static_assert( false && "Missing buffer filler from FBX value" );
+			CASTOR_EXCEPTION( "Missing buffer filler from FBX value" );
 		}
 
 		template<>
@@ -332,7 +332,7 @@ namespace C3dFbx
 		{
 			if ( !p_node )
 			{
-				throw std::exception( "Null for mesh geometry" );
+				CASTOR_EXCEPTION( "Null for mesh geometry" );
 			}
 
 			const FbxVector4 l_translate = p_node->GetGeometricTranslation( FbxNode::eSourcePivot );

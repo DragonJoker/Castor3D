@@ -469,11 +469,9 @@ namespace Castor3D
 
 	void Pass::AddTextureUnit( TextureUnitSPtr p_unit )
 	{
-		uint32_t l_uiID = uint32_t( m_arrayTextureUnits.size() + 1 );
-		p_unit->SetIndex( l_uiID );
 		m_arrayTextureUnits.push_back( p_unit );
-		DoUpdateFlags();
-		m_texturesReduced;
+		m_textureFlags |= p_unit->GetChannel();
+		m_texturesReduced = false;
 	}
 
 	TextureUnitSPtr Pass::GetTextureUnit( eTEXTURE_CHANNEL p_channel )
@@ -499,7 +497,6 @@ namespace Castor3D
 	bool Pass::DestroyTextureUnit( uint32_t p_index )
 	{
 		REQUIRE( p_index < m_arrayTextureUnits.size() );
-		bool l_return = false;
 		Logger::LogInfo( StringStream() << cuT( "Destroying TextureUnit " ) << p_index );
 		TextureUnitPtrArray::iterator l_it = m_arrayTextureUnits.begin();
 		m_arrayTextureUnits.erase( l_it + p_index );
@@ -511,8 +508,8 @@ namespace Castor3D
 		}
 
 		DoUpdateFlags();
-		l_return = true;
-		return l_return;
+		m_texturesReduced = false;
+		return true;
 	}
 
 	TextureUnitSPtr Pass::GetTextureUnit( uint32_t p_index )const
@@ -598,23 +595,28 @@ namespace Castor3D
 
 			if ( l_pOpacityMap && l_pOpacityMap->GetImagePixels() )
 			{
-				PxBufferBaseSPtr l_pReducted = l_pOpacityMap->GetImagePixels();
-				PF::ReduceToAlpha( l_pReducted );
-				l_pOpacityMap->GetTexture()->SetImage( l_pReducted );
+				PxBufferBaseSPtr l_pReduced = l_pOpacityMap->GetImagePixels();
+				PF::ReduceToAlpha( l_pReduced );
+				l_pOpacityMap->GetTexture()->SetImage( l_pReduced );
 				l_pImageOpa.reset();
 			}
 			else if ( l_pImageOpa )
 			{
-				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
-				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
-				l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
 				StaticTextureSPtr l_pTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
 				l_pTexture->SetType( eTEXTURE_TYPE_2D );
 				l_pTexture->SetImage( l_pImageOpa );
+				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
+				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
+				l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
 				l_pOpacityMap->SetSampler( l_pOpaSrc->GetSampler() );
 				l_pOpacityMap->SetTexture( l_pTexture );
 				AddTextureUnit( l_pOpacityMap );
 				l_pImageOpa.reset();
+			}
+			else if ( l_pOpacityMap )
+			{
+				DestroyTextureUnit( l_pOpacityMap->GetIndex() );
+				l_pOpacityMap.reset();
 			}
 
 			if ( l_pOpacityMap )
@@ -622,6 +624,10 @@ namespace Castor3D
 				l_pOpacityMap->SetIndex( l_index++ );
 				Logger::LogDebug( StringStream() << cuT( "	Opacity map at index " ) << l_pOpacityMap->GetIndex() );
 				m_textureFlags |= eTEXTURE_CHANNEL_OPACITY;
+			}
+			else
+			{
+				m_textureFlags &= ~eTEXTURE_CHANNEL_OPACITY;
 			}
 
 			for ( auto l_unit : m_arrayTextureUnits )

@@ -432,12 +432,6 @@ namespace Castor
 		*/
 		namespace utf8
 		{
-			static const unsigned char FirstBitMask = 0x80; // 1000000
-			static const unsigned char SecondBitMask = 0x40; // 0100000
-			static const unsigned char ThirdBitMask = 0x20; // 0010000
-			static const unsigned char FourthBitMask = 0x10; // 0001000
-			static const unsigned char FifthBitMask = 0x08; // 0000100
-
 			/**
 			 *\~english
 			 *\brief		Retrieves an UTF-8 char32_t from a char array iterator.

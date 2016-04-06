@@ -129,6 +129,12 @@ namespace Castor
 			template< typename IteratorType >
 			inline char32_t to_utf8( IteratorType p_value )
 			{
+				static const unsigned char FirstBitMask = 0x80; // 1000000
+				static const unsigned char SecondBitMask = 0x40; // 0100000
+				static const unsigned char ThirdBitMask = 0x20; // 0010000
+				static const unsigned char FourthBitMask = 0x10; // 0001000
+				static const unsigned char FifthBitMask = 0x08; // 0000100
+
 				char32_t l_return;
 				char l_firstByte = *p_value;
 
@@ -227,6 +233,12 @@ namespace Castor
 
 			iterator & iterator::operator++()
 			{
+				static const unsigned char FirstBitMask = 0x80; // 1000000
+				static const unsigned char SecondBitMask = 0x40; // 0100000
+				static const unsigned char ThirdBitMask = 0x20; // 0010000
+				static const unsigned char FourthBitMask = 0x10; // 0001000
+				static const unsigned char FifthBitMask = 0x08; // 0000100
+
 				char l_firstByte = *m_it;
 				++m_it;
 
@@ -258,6 +270,12 @@ namespace Castor
 
 			iterator & iterator::operator--()
 			{
+				static const unsigned char FirstBitMask = 0x80; // 1000000
+				static const unsigned char SecondBitMask = 0x40; // 0100000
+				static const unsigned char ThirdBitMask = 0x20; // 0010000
+				static const unsigned char FourthBitMask = 0x10; // 0001000
+				static const unsigned char FifthBitMask = 0x08; // 0000100
+
 				--m_it;
 
 				if ( *m_it & FirstBitMask ) // This means that the previous byte is not an ASCII character.
@@ -400,6 +418,12 @@ namespace Castor
 
 			const_iterator & const_iterator::operator++()
 			{
+				static const unsigned char FirstBitMask = 0x80; // 1000000
+				static const unsigned char SecondBitMask = 0x40; // 0100000
+				static const unsigned char ThirdBitMask = 0x20; // 0010000
+				static const unsigned char FourthBitMask = 0x10; // 0001000
+				static const unsigned char FifthBitMask = 0x08; // 0000100
+
 				char l_firstByte = *m_it;
 				++m_it;
 
@@ -431,6 +455,12 @@ namespace Castor
 
 			const_iterator & const_iterator::operator--()
 			{
+				static const unsigned char FirstBitMask = 0x80; // 1000000
+				static const unsigned char SecondBitMask = 0x40; // 0100000
+				static const unsigned char ThirdBitMask = 0x20; // 0010000
+				static const unsigned char FourthBitMask = 0x10; // 0001000
+				static const unsigned char FifthBitMask = 0x08; // 0000100
+
 				--m_it;
 
 				if ( *m_it & FirstBitMask ) // This means that the previous byte is not an ASCII character.
