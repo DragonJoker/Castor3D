@@ -55,28 +55,28 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur par copie privé, afin d'en interdire la possiblité
 		 */
-		NonCopyable( NonCopyable const & );
+		NonCopyable( NonCopyable const & ) = delete;
 		/**
 		 *\~english
 		 *\brief		Private copy assignment operator, to forbid assignment copy
 		 *\~french
 		 *\brief		Operateur d'affectation par copie privé, afin d'en interdire la possibilité
 		 */
-		NonCopyable & operator =( NonCopyable const & );
+		NonCopyable & operator =( NonCopyable const & ) = delete;
 		/**
 		 *\~english
 		 *\brief		Private move constructor, to forbid move by construction
 		 *\~french
 		 *\brief		Constructeur par déplacement privé, afin d'en interdire la possiblité
 		 */
-		NonCopyable( NonCopyable && /*src*/ );
+		NonCopyable( NonCopyable && /*src*/ ) = delete;
 		/**
 		 *\~english
 		 *\brief		Private move assignment operator, to forbid assignment move
 		 *\~french
 		 *\brief		Operateur d'affectation par déplacement privé, afin d'en interdire la possibilité
 		 */
-		NonCopyable & operator =( NonCopyable && );
+		NonCopyable & operator =( NonCopyable && ) = delete;
 	};
 }
 

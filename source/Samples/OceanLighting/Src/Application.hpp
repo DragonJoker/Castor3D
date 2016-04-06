@@ -2,14 +2,18 @@
 #define ___C3D_OCEAN_LIGHTING_APPLICATION_H___
 
 #include "Technique.hpp"
+#include "MainFrame.hpp"
+
+#include <wx/app.h>
 
 namespace OceanLighting
 {
-	class Application : public wxApp
+	class Application
+		: public wxApp
 	{
 	private:
-		MainFrame *	m_pMainFrame;
-		wxLocale *	m_pLocale;
+		MainFrame * m_pMainFrame;
+		wxLocale * m_pLocale;
 
 	public:
 		Application() {}

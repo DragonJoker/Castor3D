@@ -5,12 +5,6 @@
 #	define TW_CALL
 #endif
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
 #include <wx/app.h>
 #include <wx/button.h>
 #include <wx/bmpbuttn.h>
@@ -50,9 +44,6 @@
 #include <wx/treectrl.h>
 #include <wx/valtext.h>
 #include <wx/aui/framemanager.h>
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
 
 #include "Technique.hpp"
 
@@ -70,7 +61,7 @@ namespace OceanLighting
 		int							m_height;
 		wxTimer  		*			m_timer;
 		Castor3D::Engine 	*		m_pCastor3D;
-		Castor3D::RenderWindowSPtr	m_pWindow;
+		Castor3D::RenderWindowSPtr	m_window;
 		RenderTechniqueSPtr			m_pTechnique;
 
 	public:
@@ -80,7 +71,7 @@ namespace OceanLighting
 		bool Initialise();
 
 	private:
-		bool DoInitialise3D( wxWindow * p_pParent );
+		bool DoInitialise3D( wxWindow * p_parent );
 
 		DECLARE_EVENT_TABLE()
 		void OnPaint( wxPaintEvent & p_event );

@@ -21,14 +21,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "Animable.hpp"
 #include "BinaryParser.hpp"
-#include "MeshCategory.hpp"
+#include "MeshGenerator.hpp"
 
 #include <CubeBox.hpp>
 #include <SphereBox.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -42,10 +39,10 @@ namespace Castor3D
 	\brief		Représentation d'un maillage
 	\remark		Un maillage est une collectionde sous maillages.
 	*/
-	class C3D_API Mesh
-		:	public Castor::Resource< Mesh >
-		,	public Animable
-		,	public Castor::NonCopyable
+	class Mesh
+		: public Castor::Resource< Mesh >
+		, public Castor::OwnedBy< Engine >
+		, public Animable
 	{
 	public:
 		/*!
@@ -57,9 +54,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Mesh
 		*/
-		class C3D_API TextLoader
+		class TextLoader
 			:	public Castor::Loader< Mesh, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
 		{
 		public:
 			/**
@@ -68,7 +64,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a mesh into a text file
@@ -79,7 +75,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_mesh	Le maillage
 			 */
-			virtual bool operator()( Mesh const & p_mesh, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Mesh const & p_mesh, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -89,7 +85,7 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
-		class C3D_API BinaryParser
+		class BinaryParser
 			:	public Castor3D::BinaryParser< Mesh >
 		{
 		public:
@@ -101,7 +97,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -114,7 +110,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Mesh const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Mesh const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -127,66 +123,45 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Mesh & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Mesh & p_obj, BinaryChunk & p_chunk )const;
+
+			using Castor3D::BinaryParser< Mesh >::Fill;
+			using Castor3D::BinaryParser< Mesh >::Parse;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The parent engine
-		 *\param[in]	p_eMeshType	The mesh type
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur parent
-		 *\param[in]	p_eMeshType	Le type de maillage
-		 */
-		Mesh( Engine * p_pEngine, eMESH_TYPE p_eMeshType = eMESH_TYPE_CUSTOM );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pEngine	The parent engine
 		 *\param[in]	p_name		This mesh name
-		 *\param[in]	p_eMeshType	The mesh type
+		 *\param[in]	p_engine	The parent engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine	Le moteur parent
 		 *\param[in]	p_name		Le nom du maillage
-		 *\param[in]	p_eMeshType	Le type de maillage
+		 *\param[in]	p_engine	Le moteur parent
 		 */
-		Mesh( Engine * p_pEngine, Castor::String const & p_name, eMESH_TYPE p_eType );
+		C3D_API Mesh( Castor::String const & p_name, Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Mesh();
+		C3D_API ~Mesh();
 		/**
 		 *\~english
 		 *\brief		Clears all submeshes
 		 *\~french
 		 *\brief		Supprime les sous maillages
 		 */
-		void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Initialises mesh's vertex and faces
-		 *\param[in]	p_arrayFaces		The faces counts
-		 *\param[in]	p_arrayDimensions	The mesh dimensions
-		 *\~french
-		 *\brief		Initialise les sommets et faces du maillage
-		 *\param[in]	p_arrayFaces		Les nombres de faces
-		 *\param[in]	p_arrayDimensions	Les dimensions du maillage
-		 */
-		void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Computes the collision box and sphere.
 		 *\~french
 		 *\brief		Calcule la boîte et la sphère de collision.
 		 */
-		void ComputeContainers();
+		C3D_API void ComputeContainers();
 		/**
 		 *\~english
 		 *\brief		Returns the total faces count
@@ -195,7 +170,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre total de faces
 		 *\return		Le compte
 		 */
-		uint32_t GetFaceCount()const;
+		C3D_API uint32_t GetFaceCount()const;
 		/**
 		 *\~english
 		 *\brief		Returns the total vertex count
@@ -204,7 +179,7 @@ namespace Castor3D
 		 *\brief		Récupère le nombre total de sommets
 		 *\return		Le compte
 		 */
-		uint32_t GetVertexCount()const;
+		C3D_API uint32_t GetVertexCount()const;
 		/**
 		 *\~english
 		 *\brief		Tries to retrieve the submesh at the given index
@@ -215,7 +190,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'indice du sous maillage voulu
 		 *\return		Le sous maillage trouvé, nullptr si non trouvé
 		 */
-		SubmeshSPtr GetSubmesh( uint32_t p_index )const;
+		C3D_API SubmeshSPtr GetSubmesh( uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Creates a submesh
@@ -224,7 +199,7 @@ namespace Castor3D
 		 *\brief		Crée un sous maillage
 		 *\return		Le sous maillage créé
 		 */
-		SubmeshSPtr CreateSubmesh();
+		C3D_API SubmeshSPtr CreateSubmesh();
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
@@ -233,7 +208,7 @@ namespace Castor3D
 		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
 		 *\param[in]	p_pSubmesh	Le submesh à supprimer
 		 */
-		void DeleteSubmesh( SubmeshSPtr & p_pSubmesh );
+		C3D_API void DeleteSubmesh( SubmeshSPtr & p_pSubmesh );
 		/**
 		 *\~english
 		 *\brief		Clones the mesh, with a new name
@@ -244,28 +219,48 @@ namespace Castor3D
 		 *\param[in]	p_name	Le nom du clone
 		 *\return		Le clone
 		 */
-		MeshSPtr Clone( Castor::String const & p_name );
+		C3D_API MeshSPtr Clone( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents
 		 *\~french
 		 *\brief		Génère les normales et les tangentes
 		 */
-		void ComputeNormals( bool p_bReverted = false );
+		C3D_API void ComputeNormals( bool p_reverted = false );
+		/**
+		*\~english
+		*\brief		Increments submeshes' instance count
+		*\param[in]	p_material	The material for which the instance count is incremented
+		*\~french
+		*\brief		Incrémente le compte d'instances des sous maillages
+		*\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
+		*/
+		C3D_API void Ref( MaterialSPtr p_material );
+		/**
+		*\~english
+		*\brief		Decrements submeshes' instance count
+		*\param[in]	p_material	The material for which the instance count is decremented
+		*\~french
+		*\brief		Décrémente le compte d'instances des sous maillages
+		*\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
+		*/
+		C3D_API void UnRef( MaterialSPtr p_material );
 		/**
 		 *\~english
-		 *\brief		Initialises vertex buffers
+		 *\brief		Sets the skeleton
+		 *\param[in]	p_skeleton	The new value
 		 *\~french
-		 *\brief		Initialise les tampons de sommets
+		 *\brief		Définit le squelette
+		 *\param[in]	p_skeleton	La nouvelle valeur
 		 */
-		void GenerateBuffers();
+		C3D_API void SetSkeleton( SkeletonSPtr p_skeleton );
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the begin of the submeshes
 		 *\~french
 		 *\brief		Récupère un itérateur sur le début des sous maillages
 		 */
-		SubmeshPtrArrayIt Begin()
+		inline SubmeshPtrArrayIt begin()
 		{
 			return m_submeshes.begin();
 		}
@@ -275,7 +270,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère un itérateur constant sur le début des sous maillages
 		 */
-		SubmeshPtrArrayConstIt Begin()const
+		inline SubmeshPtrArrayConstIt begin()const
 		{
 			return m_submeshes.begin();
 		}
@@ -285,7 +280,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère un itérateur sur la fin des sous maillages
 		 */
-		SubmeshPtrArrayIt End()
+		inline SubmeshPtrArrayIt end()
 		{
 			return m_submeshes.end();
 		}
@@ -295,7 +290,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Récupère un itérateur constant sur la fin des sous maillages
 		 */
-		SubmeshPtrArrayConstIt End()const
+		inline SubmeshPtrArrayConstIt end()const
 		{
 			return m_submeshes.end();
 		}
@@ -322,18 +317,6 @@ namespace Castor3D
 		inline uint32_t GetSubmeshCount()const
 		{
 			return uint32_t( m_submeshes.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh category type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type de la catégorie de maillage
-		 *\return		La valeur
-		 */
-		inline eMESH_TYPE GetMeshType()const
-		{
-			return m_pMeshCategory->GetMeshType();
 		}
 		/**
 		 *\~english
@@ -369,44 +352,12 @@ namespace Castor3D
 		 */
 		inline SkeletonSPtr GetSkeleton()const
 		{
-			return m_pSkeleton;
+			return m_skeleton;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the skeleton
-		 *\param[in]	p_pSkeleton	The new value
-		 *\~french
-		 *\brief		Définit le squelette
-		 *\param[in]	p_pSkeleton	La nouvelle valeur
-		 */
-		inline void SetSkeleton( SkeletonSPtr p_pSkeleton )
-		{
-			m_pSkeleton = p_pSkeleton;
-		}
-		/**
-		 *\~english
-		 *\brief		Increments submeshes' instance count
-		 *\param[in]	p_material	The material for which the instance count is incremented
-		 *\~french
-		 *\brief		Incrémente le compte d'instances des sous maillages
-		 *\param[in]	p_material	Le matériau pour lequel le compte est incrémenté
-		 */
-		void Ref( MaterialSPtr p_material );
-		/**
-		 *\~english
-		 *\brief		Decrements submeshes' instance count
-		 *\param[in]	p_material	The material for which the instance count is decremented
-		 *\~french
-		 *\brief		Décrémente le compte d'instances des sous maillages
-		 *\param[in]	p_material	Le matériau pour lequel le compte est décrémenté
-		 */
-		void UnRef( MaterialSPtr p_material );
 
 	protected:
-		friend class MeshCategory;
+		friend class MeshGenerator;
 		DECLARE_VECTOR( AnimationPtrStrMap, AnimationMap );
-		//!\~english The mesh category	\~french La catégorie de maillage
-		MeshCategorySPtr m_pMeshCategory;
 		//!\~english Tells whether or not the mesh is modified	\~french Dit si le maillage est modifié
 		bool m_modified;
 		//!\~english The collision box	\~french La boîte de collision
@@ -415,15 +366,9 @@ namespace Castor3D
 		Castor::SphereBox m_sphere;
 		//!\~english The submeshes array	\~french Le tableau de sous maillages
 		SubmeshPtrArray m_submeshes;
-		//!\~english The MeshCategory factory	\~french la fabrique de MeshCategory
-		MeshFactory & m_factory;
-		//!\~english The parent engine	\~french Le moteur parent
-		Engine * m_pEngine;
 		//!\~english The skeleton	\~french Le squelette
-		SkeletonSPtr m_pSkeleton;
+		SkeletonSPtr m_skeleton;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

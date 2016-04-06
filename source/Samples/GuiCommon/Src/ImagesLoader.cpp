@@ -4,75 +4,78 @@ using namespace Castor;
 
 namespace GuiCommon
 {
-	ImageIdMap		wxImagesLoader::m_mapImages;
-	std::mutex		wxImagesLoader::m_mutex;
-	ThreadPtrArray	wxImagesLoader::m_arrayCurrentLoads;
+	ImageIdMap		ImagesLoader::m_mapImages;
+	std::mutex		ImagesLoader::m_mutex;
+	ThreadPtrArray	ImagesLoader::m_arrayCurrentLoads;
 
-	wxImagesLoader::wxImagesLoader()
+	ImagesLoader::ImagesLoader()
 	{
 	}
 
-	wxImagesLoader::~wxImagesLoader()
+	ImagesLoader::~ImagesLoader()
 	{
 		Cleanup();
 	}
 
-	void wxImagesLoader::Cleanup()
+	void ImagesLoader::Cleanup()
 	{
 		WaitAsyncLoads();
 		m_mutex.lock();
-		std::for_each( m_mapImages.begin(), m_mapImages.end(), [&]( std::pair< uint32_t, wxImage * > p_pair )
+
+		for ( auto && l_pair : m_mapImages )
 		{
-			delete p_pair.second;
-		} );
+			delete l_pair.second;
+		}
+
 		m_mapImages.clear();
 		m_mutex.unlock();
 	}
 
-	wxImage * wxImagesLoader::GetBitmap( uint32_t p_uiID )
+	wxImage * ImagesLoader::GetBitmap( uint32_t p_id )
 	{
-		wxImage * l_pReturn = NULL;
+		wxImage * l_return = nullptr;
 		m_mutex.lock();
-		ImageIdMapIt l_it = m_mapImages.find( p_uiID );
+		ImageIdMapIt l_it = m_mapImages.find( p_id );
 		ImageIdMapConstIt l_itEnd = m_mapImages.end();
 		m_mutex.unlock();
 
 		if ( l_it != l_itEnd )
 		{
-			l_pReturn = l_it->second;
+			l_return = l_it->second;
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
-	void wxImagesLoader::AddBitmap( uint32_t p_uiID, char const * const * p_pBits )
+	void ImagesLoader::AddBitmap( uint32_t p_id, char const * const * p_pBits )
 	{
 		m_mutex.lock();
-		ImageIdMapIt l_it = m_mapImages.find( p_uiID );
+		ImageIdMapIt l_it = m_mapImages.find( p_id );
 		ImageIdMapConstIt l_itEnd = m_mapImages.end();
 		m_mutex.unlock();
 
 		if ( l_it == l_itEnd )
 		{
-			thread_sptr l_threadLoad = std::make_shared< std::thread >( [ = ]()
+			thread_sptr l_threadLoad = std::make_shared< std::thread >( [p_pBits, p_id]()
 			{
 				wxImage * l_pImage = new wxImage;
 				l_pImage->Create( p_pBits );
 				m_mutex.lock();
-				m_mapImages.insert( std::make_pair( p_uiID, l_pImage ) );
+				m_mapImages.insert( std::make_pair( p_id, l_pImage ) );
 				m_mutex.unlock();
 			} );
 			m_arrayCurrentLoads.push_back( l_threadLoad );
 		}
 	}
 
-	void wxImagesLoader::WaitAsyncLoads()
+	void ImagesLoader::WaitAsyncLoads()
 	{
-		std::for_each( m_arrayCurrentLoads.begin(), m_arrayCurrentLoads.end(), [&]( thread_sptr p_pThread )
+		for ( auto && l_thread : m_arrayCurrentLoads )
 		{
-			p_pThread->join();
-			p_pThread.reset();
-		} );
+			l_thread->join();
+			l_thread.reset();
+		}
+
 		m_arrayCurrentLoads.clear();
 	}
 }

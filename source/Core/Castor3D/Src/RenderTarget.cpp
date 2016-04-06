@@ -1,23 +1,30 @@
 #include "RenderTarget.hpp"
-#include "RenderTechnique.hpp"
-#include "DynamicTexture.hpp"
-#include "FrameBuffer.hpp"
-#include "ColourRenderBuffer.hpp"
-#include "DepthStencilRenderBuffer.hpp"
-#include "RenderBufferAttachment.hpp"
-#include "TextureAttachment.hpp"
-#include "Engine.hpp"
-#include "Scene.hpp"
-#include "Camera.hpp"
-#include "Material.hpp"
-#include "Pipeline.hpp"
-#include "Buffer.hpp"
-#include "Context.hpp"
-#include "Sampler.hpp"
-#include "DepthStencilState.hpp"
-#include "RasteriserState.hpp"
+
 #include "BlendState.hpp"
+#include "Buffer.hpp"
+#include "CameraManager.hpp"
+#include "ColourRenderBuffer.hpp"
+#include "Context.hpp"
+#include "DepthStencilRenderBuffer.hpp"
+#include "DepthStencilStateManager.hpp"
+#include "DynamicTexture.hpp"
+#include "Engine.hpp"
+#include "FrameBuffer.hpp"
+#include "FunctorEvent.hpp"
+#include "Material.hpp"
+#include "OverlayManager.hpp"
 #include "Parameter.hpp"
+#include "Pipeline.hpp"
+#include "PostEffect.hpp"
+#include "RenderSystem.hpp"
+#include "RasteriserStateManager.hpp"
+#include "RenderBufferAttachment.hpp"
+#include "SamplerManager.hpp"
+#include "SceneManager.hpp"
+#include "SceneNodeManager.hpp"
+#include "TargetManager.hpp"
+#include "TechniqueManager.hpp"
+#include "TextureAttachment.hpp"
 
 #include <Logger.hpp>
 #include <Image.hpp>
@@ -26,131 +33,121 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
-		,	m_tabs( p_tabs )
+	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		, m_tabs( p_tabs )
 	{
 	}
 
 	bool RenderTarget::TextLoader::operator()( RenderTarget const & p_target, TextFile & p_file )
 	{
-		Logger::LogMessage( cuT( "RenderTarget::Write" ) );
-		bool l_bReturn = p_file.WriteText( m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
+		Logger::LogInfo( cuT( "RenderTarget::Write" ) );
+		bool l_return = p_file.WriteText( m_tabs + cuT( "render_target\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_bReturn && p_target.GetScene() )
+		if ( l_return && p_target.GetScene() )
 		{
-			l_bReturn = p_file.WriteText( m_tabs + cuT( "\tscene \"" ) + p_target.GetScene()->GetName() + cuT( "\"\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tscene \"" ) + p_target.GetScene()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
-		if ( l_bReturn && p_target.GetCamera() )
+		if ( l_return && p_target.GetCamera() )
 		{
-			l_bReturn = p_file.WriteText( m_tabs + cuT( "\tcamera \"" ) + p_target.GetCamera()->GetName() + cuT( "\"\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tcamera \"" ) + p_target.GetCamera()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), p_target.GetSize().width(), p_target.GetSize().height() ) > 0;
+			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tsize %d %d\n" ) ).c_str(), p_target.GetSize().width(), p_target.GetSize().height() ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tformat " ) + Castor::PF::GetFormatName( p_target.GetPixelFormat() ) + cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "MSAA" ) )
 		{
-			l_bReturn = p_file.WriteText( m_tabs + cuT( "\tdepth " ) + Castor::PF::GetFormatName( p_target.GetDepthFormat() ) + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmsaa true\n" ) ) > 0;
 		}
 
-		if ( l_bReturn && p_target.GetTechnique()->GetName() == cuT( "MSAA" ) )
+		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "SSAA" ) )
 		{
-			l_bReturn = p_file.WriteText( m_tabs + cuT( "\tmsaa true\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tssaa true\n" ) ) > 0;
 		}
 
-		if ( l_bReturn && p_target.GetTechnique()->GetName() == cuT( "SSAA" ) )
+		if ( l_return && p_target.GetTechnique()->GetName() == cuT( "deferred" ) )
 		{
-			l_bReturn = p_file.WriteText( m_tabs + cuT( "\tssaa true\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tdeferred true\n" ) ) > 0;
 		}
 
-		if ( l_bReturn && p_target.GetTechnique()->GetName() == cuT( "deferred" ) )
+		if ( l_return && p_target.IsUsingStereo() )
 		{
-			l_bReturn = p_file.WriteText( m_tabs + cuT( "\tdeferred true\n" ) ) > 0;
-		}
-
-		if ( l_bReturn && p_target.IsUsingStereo() )
-		{
-			l_bReturn = p_file.Print( 256, ( m_tabs + cuT( "\tstereo %.2f\n" ) ).c_str(), p_target.GetIntraOcularDistance() ) > 0;
+			l_return = p_file.Print( 256, ( m_tabs + cuT( "\tstereo %.2f\n" ) ).c_str(), p_target.GetIntraOcularDistance() ) > 0;
 		}
 
 		p_file.WriteText( m_tabs + cuT( "}\n" ) );
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
 	RenderTarget::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< RenderTarget >( p_path )
+		: Castor3D::BinaryParser< RenderTarget >( p_path )
 	{
 	}
 
 	bool RenderTarget::BinaryParser::Fill( RenderTarget const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_TARGET );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetScene()->GetName(), eCHUNK_TYPE_TARGET_SCENE, l_chunk );
+			l_return = DoFillChunk( p_obj.GetScene()->GetName(), eCHUNK_TYPE_TARGET_SCENE, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetCamera()->GetName(), eCHUNK_TYPE_TARGET_CAMERA, l_chunk );
+			l_return = DoFillChunk( p_obj.GetCamera()->GetName(), eCHUNK_TYPE_TARGET_CAMERA, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetSize(), eCHUNK_TYPE_TARGET_SIZE, l_chunk );
+			l_return = DoFillChunk( p_obj.GetSize(), eCHUNK_TYPE_TARGET_SIZE, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetPixelFormat(), eCHUNK_TYPE_TARGET_FORMAT, l_chunk );
+			l_return = DoFillChunk( p_obj.GetPixelFormat(), eCHUNK_TYPE_TARGET_FORMAT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetDepthFormat(), eCHUNK_TYPE_TARGET_DEPTH, l_chunk );
+			l_return = DoFillChunk( p_obj.GetTechnique()->GetName(), eCHUNK_TYPE_TARGET_TECHNIQUE, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return && ( p_obj.GetTechnique()->GetName() == cuT( "MSAA" ) || p_obj.GetTechnique()->GetName() == cuT( "SSAA" ) ) )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetTechnique()->GetName(), eCHUNK_TYPE_TARGET_TECHNIQUE, l_chunk );
+			l_return = DoFillChunk( p_obj.GetSamplesCount(), eCHUNK_TYPE_TARGET_SAMPLES, l_chunk );
 		}
 
-		if ( l_bReturn && ( p_obj.GetTechnique()->GetName() == cuT( "MSAA" ) || p_obj.GetTechnique()->GetName() == cuT( "SSAA" ) ) )
-		{
-			l_bReturn = DoFillChunk( p_obj.GetSamplesCount(), eCHUNK_TYPE_TARGET_SAMPLES, l_chunk );
-		}
-
-		if ( l_bReturn && p_obj.IsUsingStereo() )
+		if ( l_return && p_obj.IsUsingStereo() )
 		{
 			float l_dist = float( p_obj.GetIntraOcularDistance() );
-			l_bReturn = DoFillChunk( l_dist, eCHUNK_TYPE_TARGET_STEREO, l_chunk );
+			l_return = DoFillChunk( l_dist, eCHUNK_TYPE_TARGET_STEREO, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool RenderTarget::BinaryParser::Parse( RenderTarget & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 		String l_camName;
 		SceneSPtr l_scene;
@@ -162,42 +159,42 @@ namespace Castor3D
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_TARGET_SCENE:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
-						l_scene = p_obj.GetEngine()->GetSceneManager().find( l_name );
+						l_scene = p_obj.GetEngine()->GetSceneManager().Find( l_name );
 						p_obj.SetScene( l_scene );
 
 						if ( l_scene && !l_camName.empty() )
 						{
-							p_obj.SetCamera( l_scene->GetCamera( l_camName ) );
+							p_obj.SetCamera( l_scene->GetCameraManager().Find( l_camName ) );
 						}
 					}
 
 					break;
 
 				case eCHUNK_TYPE_TARGET_CAMERA:
-					l_bReturn = DoParseChunk( l_camName, l_chunk );
+					l_return = DoParseChunk( l_camName, l_chunk );
 
-					if ( l_bReturn && l_scene )
+					if ( l_return && l_scene )
 					{
-						p_obj.SetCamera( l_scene->GetCamera( l_camName ) );
+						p_obj.SetCamera( l_scene->GetCameraManager().Find( l_camName ) );
 					}
 
 					break;
 
 				case eCHUNK_TYPE_TARGET_SIZE:
-					l_bReturn = DoParseChunk( l_size, l_chunk );
+					l_return = DoParseChunk( l_size, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetSize( l_size );
 					}
@@ -205,39 +202,29 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TARGET_FORMAT:
-					l_bReturn = DoParseChunk( l_format, l_chunk );
+					l_return = DoParseChunk( l_format, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetPixelFormat( l_format );
 					}
 
 					break;
 
-				case eCHUNK_TYPE_TARGET_DEPTH:
-					l_bReturn = DoParseChunk( l_format, l_chunk );
-
-					if ( l_bReturn )
-					{
-						p_obj.SetDepthFormat( l_format );
-					}
-
-					break;
-
 				case eCHUNK_TYPE_TARGET_TECHNIQUE:
-					l_bReturn = DoParseChunk( l_name, l_chunk );
+					l_return = DoParseChunk( l_name, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
-						p_obj.SetTechnique( l_name );
+						p_obj.SetTechnique( l_name, Parameters() );
 					}
 
 					break;
 
 				case eCHUNK_TYPE_TARGET_SAMPLES:
-					l_bReturn = DoParseChunk( l_samples, l_chunk );
+					l_return = DoParseChunk( l_samples, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetSamplesCount( l_samples );
 					}
@@ -245,9 +232,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_TARGET_STEREO:
-					l_bReturn = DoParseChunk( l_dist, l_chunk );
+					l_return = DoParseChunk( l_dist, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetIntraOcularDistance( real( l_dist ) );
 					}
@@ -255,82 +242,77 @@ namespace Castor3D
 					break;
 
 				default:
-					l_bReturn = false;
+					l_return = false;
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	bool RenderTarget::stFRAME_BUFFER::Create( RenderTarget * p_renderTarget )
+	RenderTarget::stFRAME_BUFFER::stFRAME_BUFFER( RenderTarget & p_renderTarget )
+		: m_renderTarget{ p_renderTarget }
+		, m_colorTexture{ *p_renderTarget.GetEngine() }
 	{
-		m_pRenderTarget	= p_renderTarget;
-		m_pFrameBuffer	= m_pRenderTarget->CreateFrameBuffer();
-		m_pColorTexture	= m_pRenderTarget->CreateDynamicTexture();
-		m_pColorAttach	= m_pRenderTarget->CreateAttachment( m_pColorTexture );
-		m_pDepthBuffer	= m_pFrameBuffer->CreateDepthStencilRenderBuffer( m_pRenderTarget->GetDepthFormat() );
-		m_pDepthAttach	= m_pRenderTarget->CreateAttachment( m_pDepthBuffer );
-		SamplerSPtr l_pSampler = m_pRenderTarget->GetEngine()->CreateSampler( RenderTarget::DefaultSamplerName );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_ANISOTROPIC );
-		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_ANISOTROPIC );
-		m_pColorTexture->SetSampler( l_pSampler );
-		m_pColorTexture->SetRenderTarget( true );
+	}
+
+	bool RenderTarget::stFRAME_BUFFER::Create()
+	{
+		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
+		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
+		auto l_colourTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
+		l_colourTexture->SetRenderTarget( m_renderTarget.shared_from_this() );
+		m_colorTexture.SetTexture( l_colourTexture );
+		m_colorTexture.SetSampler( l_pSampler );
 		return true;
 	}
 
 	void RenderTarget::stFRAME_BUFFER::Destroy()
 	{
-		m_pColorTexture->Destroy();
-		m_pDepthBuffer->Destroy();
-		m_pFrameBuffer->Destroy();
-		m_pDepthAttach.reset();
-		m_pDepthBuffer.reset();
+		m_frameBuffer->Destroy();
 		m_pColorAttach.reset();
-		m_pColorTexture.reset();
-		m_pFrameBuffer.reset();
-		m_pRenderTarget = NULL;
+		m_colorTexture.SetTexture( nullptr );
+		m_frameBuffer.reset();
 	}
 
 	bool RenderTarget::stFRAME_BUFFER::Initialise( uint32_t p_index, Size const & p_size )
 	{
-		bool l_bReturn = false;
-		m_pColorTexture->SetDimension( eTEXTURE_DIMENSION_2D );
-		m_pColorTexture->SetImage( p_size, m_pRenderTarget->GetPixelFormat() );
-		Size l_size = m_pColorTexture->GetDimensions();
-		m_pFrameBuffer->Create( 0 );
-		m_pColorTexture->Create();
-		m_pColorTexture->Initialise( p_index );
-		m_pDepthBuffer->Create();
-		m_pDepthBuffer->Initialise( l_size );
+		bool l_return = false;
+		m_colorTexture.SetIndex( p_index );
+		m_colorTexture.GetTexture()->SetType( eTEXTURE_TYPE_2D );
+		std::static_pointer_cast< DynamicTexture >( m_colorTexture.GetTexture() )->SetImage( p_size, m_renderTarget.GetPixelFormat() );
+		Size l_size = m_colorTexture.GetTexture()->GetDimensions();
+		m_frameBuffer->Create();
+		m_colorTexture.GetTexture()->Create();
+		m_colorTexture.GetTexture()->Initialise();
+		m_frameBuffer->Initialise( l_size );
 
-		if ( m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
+		if ( m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
-			m_pColorAttach->Attach( eATTACHMENT_POINT_COLOUR0,	m_pFrameBuffer, eTEXTURE_TARGET_2D );
-			m_pDepthAttach->Attach( eATTACHMENT_POINT_DEPTH,	m_pFrameBuffer );
-			m_pFrameBuffer->Unbind();
-			l_bReturn = true;
+			m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
+			l_return = m_frameBuffer->IsComplete();
+			m_frameBuffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void RenderTarget::stFRAME_BUFFER::Cleanup()
 	{
-		m_pFrameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_pColorAttach->Detach();
-		m_pDepthAttach->Detach();
-		m_pFrameBuffer->Unbind();
-		m_pColorTexture->Cleanup();
-		m_pDepthBuffer->Cleanup();
+		m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+		m_frameBuffer->DetachAll();
+		m_frameBuffer->Unbind();
+		m_frameBuffer->Cleanup();
+		m_colorTexture.Cleanup();
 	}
 
 	//*************************************************************************************************
@@ -338,24 +320,29 @@ namespace Castor3D
 	uint32_t RenderTarget::sm_uiCount = 0;
 	const Castor::String RenderTarget::DefaultSamplerName = cuT( "DefaultRTSampler" );
 
-	RenderTarget::RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType )
-		:	Renderable< RenderTarget, TargetRenderer >( p_pRoot )
-		,	m_eTargetType( p_eTargetType )
-		,	m_ePixelFormat( ePIXEL_FORMAT_A8R8G8B8 )
-		,	m_eDepthFormat( ePIXEL_FORMAT_DEPTH24S8 )
-		,	m_bInitialised( false )
-		,	m_size( Size( 100, 100 ) )
-		,	m_pRenderTechnique( )
-		,	m_bMultisampling( false )
-		,	m_iSamplesCount( 0 )
-		,	m_bStereo( false )
-		,	m_rIntraOcularDistance( 0 )
-		,	m_bDeferredRendering( false )
-		,	m_uiIndex( ++sm_uiCount )
-		,	m_strTechniqueName( cuT( "direct" ) )
+	RenderTarget::RenderTarget( Engine & p_engine, eTARGET_TYPE p_eTargetType )
+		: OwnedBy< Engine >{ p_engine }
+		, m_eTargetType{ p_eTargetType }
+		, m_pixelFormat{ ePIXEL_FORMAT_A8R8G8B8 }
+		, m_initialised{ false }
+		, m_size{ Size{ 100u, 100u } }
+		, m_renderTechnique{}
+		, m_bMultisampling{ false }
+		, m_samplesCount{ 0 }
+		, m_bStereo{ false }
+		, m_rIntraOcularDistance{ 0 }
+		, m_index{ ++sm_uiCount }
+		, m_techniqueName{ cuT( "direct" ) }
+		, m_fbLeftEye{ *this }
+		, m_fbRightEye{ *this }
 	{
-		m_wpDepthStencilState	= p_pRoot->CreateDepthStencilState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
-		m_wpRasteriserState		= p_pRoot->CreateRasteriserState( cuT( "RenderTargetState_" ) + str_utils::to_string( m_uiIndex ) );
+		m_toneMappingFactory.Initialise();
+		m_toneMapping = m_toneMappingFactory.Create( eTONE_MAPPING_TYPE_LINEAR, *GetEngine(), Parameters{} );
+		m_wpDepthStencilState = GetEngine()->GetDepthStencilStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		m_wpRasteriserState = GetEngine()->GetRasteriserStateManager().Create( cuT( "RenderTargetState_" ) + string::to_string( m_index ) );
+		SamplerSPtr l_pSampler = GetEngine()->GetSamplerManager().Create( RenderTarget::DefaultSamplerName + string::to_string( m_index ) );
+		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
+		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 	}
 
 	RenderTarget::~RenderTarget()
@@ -364,143 +351,122 @@ namespace Castor3D
 
 	void RenderTarget::Initialise( uint32_t p_index )
 	{
-		m_fbLeftEye.Create( this );
-		m_fbRightEye.Create( this );
-		GetRenderer()->Initialise();
-
-		if ( !m_pRenderTechnique )
+		if ( !m_initialised )
 		{
-			Parameters l_params;
+			m_fbLeftEye.Create();
+			m_fbRightEye.Create();
 
-			if ( m_strTechniqueName == cuT( "msaa" ) )
+			if ( !m_renderTechnique )
 			{
-				m_bMultisampling = true;
-				l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
-			}
-			else if ( m_strTechniqueName == cuT( "ssaa" ) )
-			{
-				l_params.Add( cuT( "samples_count" ), m_iSamplesCount );
-			}
-			else if ( m_strTechniqueName == cuT( "deferred" ) )
-			{
-				m_bDeferredRendering = true;
+				if ( m_techniqueName == cuT( "msaa" ) )
+				{
+					m_bMultisampling = true;
+				}
+
+				try
+				{
+					m_renderTechnique = GetEngine()->GetRenderTechniqueManager().Create( m_techniqueName, *this, GetEngine()->GetRenderSystem(), m_techniqueParameters );
+				}
+				catch ( Exception & p_exc )
+				{
+					Logger::LogError( cuT( "Couldn't load technique " ) + m_techniqueName + cuT( ": " ) + string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+					throw;
+				}
 			}
 
-			m_pRenderTechnique = m_pEngine->CreateTechnique( m_strTechniqueName, *this, l_params );
+			m_fbLeftEye.Initialise( p_index, m_size );
+			m_size = m_fbLeftEye.m_colorTexture.GetTexture()->GetDimensions();
+			m_fbRightEye.Initialise( p_index, m_size );
+			m_renderTechnique->Create();
+			uint32_t l_index = p_index;
+			m_renderTechnique->Initialise( l_index );
+
+			SceneSPtr l_scene = GetScene();
+
+			if ( l_scene )
+			{
+				m_renderTechnique->AddScene( *l_scene );
+			}
+
+			for ( auto && l_effect : m_postEffects )
+			{
+				l_effect->Initialise();
+			}
+
+			m_initialised = m_toneMapping->Initialise();
 		}
-
-		m_fbLeftEye.Initialise( p_index, m_size );
-		m_size = m_fbLeftEye.m_pColorTexture->GetDimensions();
-		m_fbRightEye.Initialise( p_index, m_size );
-		m_pRenderTechnique->Create();
-		uint32_t l_index = p_index + 1;
-		m_pRenderTechnique->Initialise( l_index );
-		m_bInitialised = true;
 	}
 
 	void RenderTarget::Cleanup()
 	{
-		m_bInitialised = false;
-		m_pRenderTechnique->Cleanup();
-		m_fbLeftEye.Cleanup();
-		m_fbRightEye.Cleanup();
-		m_pRenderTechnique->Destroy();
-		m_fbLeftEye.Destroy();
-		m_fbRightEye.Destroy();
-		GetRenderer()->Cleanup();
-		m_pRenderTechnique.reset();
+		if ( m_initialised )
+		{
+			m_toneMapping->Cleanup();
+			m_toneMapping.reset();
+
+			for ( auto && l_effect : m_postEffects )
+			{
+				l_effect->Cleanup();
+			}
+
+			m_postEffects.clear();
+			m_initialised = false;
+			m_renderTechnique->Cleanup();
+			m_fbLeftEye.Cleanup();
+			m_fbRightEye.Cleanup();
+			m_renderTechnique->Destroy();
+			m_fbLeftEye.Destroy();
+			m_fbRightEye.Destroy();
+			m_renderTechnique.reset();
+		}
 	}
 
-	void RenderTarget::Render( double p_dFrameTime )
+	void RenderTarget::Render( uint32_t p_frameTime )
 	{
-		Engine 	*		l_pEngine		= GetEngine();
-		SceneSPtr			l_pScene		= GetScene();
-		RenderSystem 	*	l_pRenderSystem	= l_pEngine->GetRenderSystem();
+		SceneSPtr l_scene = GetScene();
 
-		if ( l_pScene && l_pScene->HasChanged() )
+		if ( l_scene )
 		{
-			l_pScene->InitialiseGeometries();
-		}
-
-		if ( m_bInitialised && l_pScene )
-		{
-			CameraSPtr l_pCamera = GetCamera();
-
-			if ( m_bStereo && m_rIntraOcularDistance > 0 && l_pRenderSystem->IsStereoAvailable() )
+			if ( m_initialised )
 			{
-				if ( GetCameraLEye() && GetCameraREye() )
+				if ( m_bStereo && m_rIntraOcularDistance > 0 && GetEngine()->GetRenderSystem()->IsStereoAvailable() )
 				{
-					DoRender( m_fbLeftEye, GetCameraLEye(), p_dFrameTime );
-					DoRender( m_fbRightEye, GetCameraREye(), p_dFrameTime );
+					if ( GetCameraLEye() && GetCameraREye() )
+					{
+						DoRender( m_fbLeftEye, GetCameraLEye(), p_frameTime );
+						DoRender( m_fbRightEye, GetCameraREye(), p_frameTime );
+					}
+					else
+					{
+						CameraSPtr l_pCamera = GetCamera();
+
+						if ( l_pCamera )
+						{
+							DoRender( m_fbLeftEye, GetCamera(), p_frameTime );
+						}
+					}
+				}
+				else
+				{
+					CameraSPtr l_pCamera = GetCamera();
+
+					if ( l_pCamera )
+					{
+						DoRender( m_fbLeftEye, GetCamera(), p_frameTime );
+					}
 				}
 			}
-			else if ( l_pCamera )
-			{
-				DoRender( m_fbLeftEye, l_pCamera, p_dFrameTime );
-			}
 		}
 	}
 
-	DynamicTextureSPtr RenderTarget::CreateDynamicTexture()const
+	DynamicTextureSPtr RenderTarget::CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )const
 	{
-		return m_pEngine->GetRenderSystem()->CreateDynamicTexture();
-	}
-
-	RenderBufferAttachmentSPtr RenderTarget::CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const
-	{
-		RenderBufferAttachmentSPtr	l_pReturn;
-		TargetRendererSPtr			l_pRenderer	= GetRenderer();
-
-		if ( l_pRenderer )
-		{
-			l_pReturn = l_pRenderer->CreateAttachment( p_pRenderBuffer );
-		}
-
-		return l_pReturn;
-	}
-
-	TextureAttachmentSPtr RenderTarget::CreateAttachment( DynamicTextureSPtr p_pTexture )const
-	{
-		TextureAttachmentSPtr	l_pReturn;
-		TargetRendererSPtr		l_pRenderer	= GetRenderer();
-
-		if ( l_pRenderer )
-		{
-			l_pReturn = l_pRenderer->CreateAttachment( p_pTexture );
-		}
-
-		return l_pReturn;
-	}
-
-	FrameBufferSPtr RenderTarget::CreateFrameBuffer()const
-	{
-		FrameBufferSPtr		l_pReturn;
-		TargetRendererSPtr	l_pRenderer	= GetRenderer();
-
-		if ( l_pRenderer )
-		{
-			l_pReturn = l_pRenderer->CreateFrameBuffer();
-		}
-
-		return l_pReturn;
-	}
-
-	eTOPOLOGY RenderTarget::GetPrimitiveType()const
-	{
-		return ( GetCamera() ? GetCamera()->GetPrimitiveType() : eTOPOLOGY_COUNT );
+		return GetEngine()->GetRenderSystem()->CreateDynamicTexture( p_cpuAccess, p_gpuAccess );
 	}
 
 	eVIEWPORT_TYPE RenderTarget::GetViewportType()const
 	{
 		return ( GetCamera() ? GetCamera()->GetViewportType() : eVIEWPORT_TYPE_COUNT );
-	}
-
-	void RenderTarget::SetPrimitiveType( eTOPOLOGY val )
-	{
-		if ( GetCamera() )
-		{
-			GetCamera()->SetPrimitiveType( val );
-		}
 	}
 
 	void RenderTarget::SetViewportType( eVIEWPORT_TYPE val )
@@ -513,39 +479,39 @@ namespace Castor3D
 
 	void RenderTarget::SetCamera( CameraSPtr p_pCamera )
 	{
-		SceneNode 	*	l_pCamNode;
-		SceneNodeSPtr	l_pLECamNode;
-		SceneNodeSPtr	l_pRECamNode;
-		String			l_strLENodeName;
-		String			l_strRENodeName;
-		String			l_strIndex = cuT( "_RT" ) + str_utils::to_string( m_uiIndex );
-		SceneSPtr		l_pScene = GetScene();
+		SceneNodeSPtr l_pCamNode;
+		SceneNodeSPtr l_pLECamNode;
+		SceneNodeSPtr l_pRECamNode;
+		String l_strLENodeName;
+		String l_strRENodeName;
+		String l_strIndex = cuT( "_RT" ) + string::to_string( m_index );
+		SceneSPtr l_scene = GetScene();
 
-		if ( l_pScene )
+		if ( l_scene )
 		{
 			if ( GetCameraLEye() )
 			{
-				l_pScene->RemoveCamera( GetCameraLEye() );
+				l_scene->GetCameraManager().Remove( GetCameraLEye()->GetName() );
 			}
 
 			if ( GetCameraREye() )
 			{
-				l_pScene->RemoveCamera( GetCameraREye() );
+				l_scene->GetCameraManager().Remove( GetCameraREye()->GetName() );
 			}
 		}
 
 		if ( GetCamera() )
 		{
-			l_pCamNode		= GetCamera()->GetParent();
-			l_strLENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
-			l_strRENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
+			l_pCamNode = GetCamera()->GetParent();
+			l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
+			l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strLENodeName ) );
 			l_pCamNode->DetachChild( l_pCamNode->GetChild( l_strRENodeName ) );
 
-			if ( l_pScene )
+			if ( l_scene )
 			{
-				l_pScene->RemoveNode( l_pScene->GetNode( l_strLENodeName ) );
-				l_pScene->RemoveNode( l_pScene->GetNode( l_strRENodeName ) );
+				l_scene->GetSceneNodeManager().Remove( l_strLENodeName );
+				l_scene->GetSceneNodeManager().Remove( l_strRENodeName );
 			}
 		}
 
@@ -555,16 +521,16 @@ namespace Castor3D
 		{
 			l_pCamNode = p_pCamera->GetParent();
 
-			if ( l_pScene )
+			if ( l_scene && l_pCamNode )
 			{
-				l_strLENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
-				l_strRENodeName	= l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
-				l_pLECamNode = l_pScene->CreateSceneNode( l_strLENodeName, l_pScene->GetNode( l_pCamNode->GetName() ) );
-				l_pRECamNode = l_pScene->CreateSceneNode( l_strRENodeName, l_pScene->GetNode( l_pCamNode->GetName() ) );
+				l_strLENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_LEye" );
+				l_strRENodeName = l_pCamNode->GetName() + l_strIndex + cuT( "_REye" );
+				l_pLECamNode = l_scene->GetSceneNodeManager().Create( l_strLENodeName, l_scene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
+				l_pRECamNode = l_scene->GetSceneNodeManager().Create( l_strRENodeName, l_scene->GetSceneNodeManager().Find( l_pCamNode->GetName() ) );
 				l_pLECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
 				l_pRECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
-				m_pCameraLEye = l_pScene->CreateCamera( p_pCamera->GetName() + l_strIndex + cuT( "_LEye" ), l_pLECamNode, p_pCamera->GetViewport() );
-				m_pCameraREye = l_pScene->CreateCamera( p_pCamera->GetName() + l_strIndex + cuT( "_REye" ), l_pRECamNode, p_pCamera->GetViewport() );
+				m_pCameraLEye = l_scene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_LEye" ), l_pLECamNode, p_pCamera->GetViewport() );
+				m_pCameraREye = l_scene->GetCameraManager().Create( p_pCamera->GetName() + l_strIndex + cuT( "_REye" ), l_pRECamNode, p_pCamera->GetViewport() );
 			}
 		}
 	}
@@ -573,8 +539,8 @@ namespace Castor3D
 	{
 		if ( GetCameraLEye() && GetCameraREye() )
 		{
-			SceneNode * l_pLECamNode = GetCameraLEye()->GetParent();
-			SceneNode * l_pRECamNode = GetCameraREye()->GetParent();
+			SceneNodeSPtr l_pLECamNode = GetCameraLEye()->GetParent();
+			SceneNodeSPtr l_pRECamNode = GetCameraREye()->GetParent();
 			l_pLECamNode->Translate( Point3r( m_rIntraOcularDistance / 2, 0, 0 ) );
 			l_pRECamNode->Translate( Point3r( -m_rIntraOcularDistance / 2, 0, 0 ) );
 			l_pLECamNode->Translate( Point3r( -p_rIod / 2, 0, 0 ) );
@@ -584,52 +550,67 @@ namespace Castor3D
 		m_rIntraOcularDistance = p_rIod;
 	}
 
+	void RenderTarget::SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters )
+	{
+		if ( m_toneMapping )
+		{
+			auto l_toneMapping = m_toneMapping;
+			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [l_toneMapping]()
+			{
+				l_toneMapping->Cleanup();
+			} ) );
+		}
+
+		m_toneMapping = m_toneMappingFactory.Create( p_type, *GetEngine(), p_parameters );
+	}
+
 	void RenderTarget::SetSize( Size const & p_size )
 	{
 		m_size = p_size;
 	}
 
-	void RenderTarget::Resize()
+	void RenderTarget::SetTechnique( Castor::String const & p_name, Parameters const & p_parameters )
 	{
-		m_fbLeftEye.m_pFrameBuffer->Resize( m_size );
-		m_fbRightEye.m_pFrameBuffer->Resize( m_size );
+		m_techniqueName = p_name;
+		m_techniqueParameters = p_parameters;
+		m_bMultisampling = p_name == cuT( "msaa" );
 	}
 
-	void RenderTarget::SetTechnique( Castor::String const & p_strName )
+	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, uint32_t p_frameTime )
 	{
-		m_strTechniqueName = p_strName;
-		m_bDeferredRendering = p_strName == cuT( "deferred" );
-		m_bMultisampling = p_strName == cuT( "msaa" );
-	}
-
-	void RenderTarget::DoRender( RenderTarget::stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime )
-	{
-		Engine 		*		l_pEngine		= GetEngine();
-		SceneSPtr			l_pScene		= GetScene();
-		TargetRendererSPtr	l_pRenderer		= GetRenderer();
-		RenderSystem 	*	l_pRenderSystem	= l_pEngine->GetRenderSystem();
-		ContextRPtr			l_pContext		= l_pRenderSystem->GetCurrentContext();
-		m_pCurrentFrameBuffer = p_fb.m_pFrameBuffer;
+		m_pCurrentFrameBuffer = p_fb.m_frameBuffer;
 		m_pCurrentCamera = p_pCamera;
-		l_pRenderer->BeginScene();
+		SceneSPtr l_scene = GetScene();
+		p_fb.m_frameBuffer->SetClearColour( l_scene->GetBackgroundColour() );
 
-		if ( m_pRenderTechnique->BeginRender() )
+		if ( l_scene )
 		{
-			l_pContext->Clear( eBUFFER_COMPONENT_COLOUR | eBUFFER_COMPONENT_DEPTH | eBUFFER_COMPONENT_STENCIL );
-			p_pCamera->Render();
-			l_pScene->RenderBackground( *p_pCamera );
-			p_pCamera->EndRender();
-			m_pRenderTechnique->Render( *l_pScene, *p_pCamera, GetPrimitiveType(), p_dFrameTime );
-			m_pRenderTechnique->EndRender();
+			// Render the scene through the RenderTechnique.
+			m_renderTechnique->Render( *l_scene, *p_pCamera, p_frameTime );
+
+			// Then draw the render's result to the RenderTarget's frame buffer.
+			if ( p_fb.m_frameBuffer->Bind() )
+			{
+				p_fb.m_frameBuffer->Clear();
+				GetDepthStencilState()->Apply();
+				GetRasteriserState()->Apply();
+				GetToneMapping()->Apply( GetSize(), m_renderTechnique->GetResult() );
+				// We also render overlays.
+				GetEngine()->GetOverlayManager().Render( *l_scene, m_size );
+				p_fb.m_frameBuffer->Unbind();
+			}
 		}
 
-		l_pRenderer->EndScene();
 		m_pCurrentFrameBuffer.reset();
 		m_pCurrentCamera.reset();
+
 #if DEBUG_BUFFERS
-		p_fb.m_pColorAttach->DownloadBuffer( p_fb.m_pColorTexture->GetBuffer() );
+
+		p_fb.m_pColorAttach->DownloadBuffer();
 		const Image l_tmp( cuT( "tmp" ), *p_fb.m_pColorTexture->GetBuffer() );
-		Image::BinaryLoader()( l_tmp, File::GetUserDirectory() / cuT( "RenderTargetTexture_" ) + str_utils::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".bmp" ) );
+		Image::BinaryLoader()( l_tmp, Engine::GetEngineDirectory() / cuT( "RenderTargetTexture_" ) + string::to_string( ptrdiff_t( p_fb.m_pColorTexture.get() ), 16 ) + cuT( ".png" ) );
+
 #endif
+
 	}
 }

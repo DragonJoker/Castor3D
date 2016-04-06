@@ -1,12 +1,12 @@
-#include "Size.hpp"
+﻿#include "Size.hpp"
 
 namespace Castor
 {
-	Size::Size( uint32_t p_uiWidth, uint32_t p_uiHeight )
+	Size::Size( uint32_t p_width, uint32_t p_height )
 		:	BaseType( m_data.buffer )
 	{
-		m_data.size.cx	= p_uiWidth;
-		m_data.size.cy	= p_uiHeight;
+		m_data.size.cx	= p_width;
+		m_data.size.cy	= p_height;
 	}
 
 	Size::Size( Size const & p_obj )
@@ -49,10 +49,10 @@ namespace Castor
 		return *this;
 	}
 
-	void Size::set( uint32_t p_uiWidth, uint32_t p_uiHeight )
+	void Size::set( uint32_t p_width, uint32_t p_height )
 	{
-		m_data.size.cx	= p_uiWidth;
-		m_data.size.cy	= p_uiHeight;
+		m_data.size.cx	= p_width;
+		m_data.size.cy	= p_height;
 	}
 
 	void Size::grow( int32_t p_cx, int32_t p_cy )

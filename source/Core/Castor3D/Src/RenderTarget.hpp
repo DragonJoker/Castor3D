@@ -19,13 +19,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_RENDER_TARGET_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Renderable.hpp"
-#include "TargetRenderer.hpp"
 #include "BinaryParser.hpp"
+#include "Parameter.hpp"
+#include "TextureUnit.hpp"
+#include "ToneMappingFactory.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -40,8 +39,9 @@ namespace Castor3D
 	\brief		Classe de cible de rendu (render target)
 	\remark		Une render target dessine une scène dans un tampon d'image qui peut ensuite être utilisé dans une fenêtre pour un rendu direct, ou une texture pour un rendu hors écran
 	*/
-	class C3D_API RenderTarget
-		:	public Renderable< RenderTarget, TargetRenderer >
+	class RenderTarget
+		: public std::enable_shared_from_this< RenderTarget >
+		, public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -52,20 +52,21 @@ namespace Castor3D
 		\~english
 		\brief		Loader de RenderTarget
 		*/
-		class C3D_API TextLoader
-			:	public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-			,	public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**
 			 *\~english
 			 *\brief		Constructor
-			 *\param[in]	p_tabs	The tabulations to put at the beginning of each line
+			 *\param[in]	p_tabs			The tabulations to put at the beginning of each line
+			 *\param[in]	p_encodingMode	The file encoding mode
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_tabs	Les tabulations à mettre à chaque début de ligne
+			 *\param[in]	p_tabs			Les tabulations à mettre à chaque début de ligne
+			 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
 			 */
-			TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a render target into a text file
@@ -76,7 +77,7 @@ namespace Castor3D
 			 *\param[in]	p_target	La cible de rendu
 			 *\param[in]	p_file		Le fichier
 			 */
-			virtual bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file );
 
 		private:
 			//!\~english The tabulations to put at the beginning of each line	\~french Les tabulations à mettre à chaque début de ligne
@@ -90,8 +91,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de RenderTarget
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< RenderTarget >
+		class BinaryParser
+			: public Castor3D::BinaryParser< RenderTarget >
 		{
 		public:
 			/**
@@ -102,7 +103,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -115,7 +116,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( RenderTarget const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( RenderTarget const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -128,7 +129,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( RenderTarget & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( RenderTarget & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:
@@ -144,24 +145,21 @@ namespace Castor3D
 		struct stFRAME_BUFFER
 		{
 		public:
-			bool Create( RenderTarget * p_renderTarget );
+			stFRAME_BUFFER( RenderTarget & p_renderTarget );
+			bool Create();
 			void Destroy();
 			bool Initialise( uint32_t p_index, Castor::Size const & p_size );
 			void Cleanup();
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
-			DynamicTextureSPtr m_pColorTexture;
-			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
-			DepthStencilRenderBufferSPtr m_pDepthBuffer;
+			TextureUnit m_colorTexture;
 			//!\~english The frame buffer	\~french Le tampon d'image
-			FrameBufferSPtr m_pFrameBuffer;
+			FrameBufferSPtr m_frameBuffer;
 			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
 			TextureAttachmentSPtr m_pColorAttach;
-			//!\~english The attach between depth buffer and main frame buffer	\~french L'attache entre le tampon profondeur et le tampon principal
-			RenderBufferAttachmentSPtr m_pDepthAttach;
 
 		private:
-			RenderTargetRPtr m_pRenderTarget;
+			RenderTarget & m_renderTarget;
 		};
 
 	public:
@@ -175,23 +173,14 @@ namespace Castor3D
 		 *\param[in]	p_pRoot			Le moteur
 		 *\param[in]	p_eTargetType	Le type de render target
 		 */
-		RenderTarget( Engine * p_pRoot, eTARGET_TYPE p_eTargetType = eTARGET_TYPE_WINDOW );
+		C3D_API RenderTarget( Engine & p_pRoot, eTARGET_TYPE p_eTargetType = eTARGET_TYPE_WINDOW );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderTarget();
-		/**
-		 *\~english
-		 *\brief		Main render function
-		 *\param[in]	p_displayMode	Information about the draw type (triangles, lines, ...)
-		 *\~french
-		 *\brief		Fonction de rendu
-		 *\param[in]	p_displayMode	Mode de rendu
-		 */
-		virtual void Render() {}
+		C3D_API ~RenderTarget();
 		/**
 		 *\~english
 		 *\brief		Renders one frame
@@ -200,25 +189,109 @@ namespace Castor3D
 		 *\brief		Rend une image
 		 *\param[in]	p_dFrameTime		Le temps écoulé depuis le rendu de la dernière frame
 		 */
-		virtual void Render( double p_dFrameTime );
+		C3D_API void Render( uint32_t p_dFrameTime );
 		/**
 		 *\~english
 		 *\brief		Initialisation function
-		 *\remark		Initialises the buffers
+		 *\remarks		Initialises the buffers
 		 *\param[in]	p_index	The base texture index
 		 *\~french
 		 *\brief		Fonction d'initialisation
-		 *\remark		Initialise les buffers
+		 *\remarks		Initialise les buffers
 		 *\param[in]	p_index	L'index de texture de base
 		 */
-		void Initialise( uint32_t p_index );
+		C3D_API void Initialise( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Sets the target dimensions.
+		 *\remarks		This method must be called before initialisation, otherwise it will have no effect.
+		 *\param[in]	p_size	The new dimensions.
+		 *\~english
+		 *\brief		Définit les dimensions la cible.
+		 *\remarks		Cette méthode doit être appelée avant l'initialisation, sinon elle n'aura aucun effet.
+		 *\param[in]	p_size	Les nouvelles dimensions.
+		 */
+		C3D_API void SetSize( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Creates a dynamic texture.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
+		 *\return		The texture.
+		 *\~french
+		 *\brief		Crée une texture dynamique.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\return		La texture.
+		 */
+		C3D_API DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )const;
+		/**
+		 *\~english
+		 *\brief		Defines the RenderTechnique.
+		 *\param[in]	p_name			The RenderTechnique name.
+		 *\param[in]	p_parameters	The RenderTechnique parameters.
+		 *\~french
+		 *\brief		Définit la RenderTechnique.
+		 *\param[in]	p_name			Le nom de la RenderTechnique.
+		 *\param[in]	p_parameters	Les paramètres de la RenderTechnique.
+		 */
+		C3D_API void SetTechnique( Castor::String const & p_name, Parameters const & p_parameters );
+		/**
+		 *\~english
+		 *\brief		Retrieves the eVIEWPORT_TYPE
+		 *\return		The eVIEWPORT_TYPE
+		 *\~french
+		 *\brief		Récupère le eVIEWPORT_TYPE
+		 *\return		Le eVIEWPORT_TYPE
+		 */
+		C3D_API eVIEWPORT_TYPE GetViewportType()const;
+		/**
+		 *\~english
+		 *\brief		Sets the eVIEWPORT_TYPE
+		 *\param[in]	val	The new eVIEWPORT_TYPE
+		 *\~french
+		 *\brief		Définit le eVIEWPORT_TYPE
+		 *\param[in]	val	Le nouveau eVIEWPORT_TYPE
+		 */
+		C3D_API void SetViewportType( eVIEWPORT_TYPE val );
+		/**
+		 *\~english
+		 *\brief		Sets the camera
+		 *\remarks		Defines also LEye and REye cameras
+		 *\param[in]	p_pCamera	The new camera
+		 *\~french
+		 *\brief		Définit la caméra
+		 *\remarks		Définit aussi les caméras des yeux gauche et droit
+		 *\param[in]	p_pCamera	La nouvelle caméra
+		 */
+		C3D_API void SetCamera( CameraSPtr p_pCamera );
+		/**
+		 *\~english
+		 *\brief		Defines the intra ocular distance
+		 *\param[in]	p_rIod	The intra ocular distance
+		 *\~french
+		 *\brief		Définit la distance inter oculaire
+		 *\param[in]	p_rIod	La distance inter oculaire
+		 */
+		C3D_API void SetIntraOcularDistance( real p_rIod );
+		/**
+		 *\~english
+		 *\brief		Sets the tone mapping implementation type.
+		 *\param[in]	p_type			The type.
+		 *\param[in]	p_parameters	The parameters.
+		 *\~french
+		 *\brief		Définit le type d'implémentation de mappage de tons.
+		 *\param[in]	p_type			Le type.
+		 *\param[in]	p_parameters	Les paramètres.
+		 */
+		C3D_API void SetToneMappingType( eTONE_MAPPING_TYPE p_type, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Retrieves the intialisation status
@@ -229,24 +302,8 @@ namespace Castor3D
 		 */
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
+			return m_initialised;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the target dimensions
-		 *\param[in]	p_size	The new dimensions
-		 *\~english
-		 *\brief		Définit les dimensions la cible
-		 *\param[in]	p_size	Les nouvelles dimensions
-		 */
-		void SetSize( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Updates the target dimensions on GPU side
-		 *\~french
-		 *\brief		Met à jour les dimensions de la cible du côté GPU
-		 */
-		void Resize();
 		/**
 		 *\~english
 		 *\brief		Retrieves the target size
@@ -259,46 +316,6 @@ namespace Castor3D
 		{
 			return m_size;
 		}
-		/**
-		 *\~english
-		 *\brief		Creates a dynamic texture
-		 *\return		The texture
-		 *\~french
-		 *\brief		Crée une texture dynamique
-		 *\return		La texture
-		 */
-		DynamicTextureSPtr CreateDynamicTexture()const;
-		/**
-		 *\~english
-		 *\brief		Creates an attachment to a render buffer
-		 *\param[in]	p_pRenderBuffer	The render buffer
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à un tampon de rendu
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
-		 *\return		L'attache créée
-		 */
-		RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_pRenderBuffer )const;
-		/**
-		 *\~english
-		 *\brief		Creates an attachment to a texture
-		 *\param[in]	p_pTexture	The texture
-		 *\return		The created attachment
-		 *\~french
-		 *\brief		Crée une attache à une texture
-		 *\param[in]	p_pTexture	La texture
-		 *\return		L'attache créée
-		 */
-		TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_pTexture )const;
-		/**
-		 *\~english
-		 *\brief		Creates a frame buffer
-		 *\return		The created frame buffer
-		 *\~french
-		 *\brief		Crée un tampon d'image
-		 *\return		Le tampon d'image créé
-		 */
-		FrameBufferSPtr CreateFrameBuffer()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the DepthStencilState
@@ -331,9 +348,9 @@ namespace Castor3D
 		 *\brief		Récupère la RenderTechnique
 		 *\return		La RenderTechnique
 		 */
-		inline RenderTechniqueBaseSPtr GetTechnique()const
+		inline RenderTechniqueSPtr GetTechnique()const
 		{
-			return m_pRenderTechnique;
+			return m_renderTechnique;
 		}
 		/**
 		 *\~english
@@ -343,19 +360,10 @@ namespace Castor3D
 		 *\brief		Définit la RenderTechnique
 		 *\param[in]	p_pTechnique	La RenderTechnique
 		 */
-		inline void SetTechnique( RenderTechniqueBaseSPtr p_pTechnique )
+		inline void SetTechnique( RenderTechniqueSPtr p_pTechnique )
 		{
-			m_pRenderTechnique = p_pTechnique;
+			m_renderTechnique = p_pTechnique;
 		}
-		/**
-		 *\~english
-		 *\brief		Defines the RenderTechnique
-		 *\param[in]	p_strName	The RenderTechnique name
-		 *\~french
-		 *\brief		Définit la RenderTechnique
-		 *\param[in]	p_strName	La RenderTechnique name
-		 */
-		void SetTechnique( Castor::String const & p_strName );
 		/**
 		 *\~english
 		 *\brief		Retrieves the multisampling status
@@ -378,7 +386,7 @@ namespace Castor3D
 		 */
 		inline int32_t GetSamplesCount()const
 		{
-			return m_iSamplesCount;
+			return m_samplesCount;
 		}
 		/**
 		 *\~english
@@ -390,7 +398,7 @@ namespace Castor3D
 		 */
 		inline void	SetSamplesCount( int32_t val )
 		{
-			m_iSamplesCount = val;
+			m_samplesCount = val;
 		}
 		/**
 		 *\~english
@@ -442,63 +450,16 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the eTOPOLOGY
-		 *\return		The eTOPOLOGY
-		 *\~french
-		 *\brief		Récupère le eTOPOLOGY
-		 *\return		Le eTOPOLOGY
-		 */
-		eTOPOLOGY GetPrimitiveType()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the eVIEWPORT_TYPE
-		 *\return		The eVIEWPORT_TYPE
-		 *\~french
-		 *\brief		Récupère le eVIEWPORT_TYPE
-		 *\return		Le eVIEWPORT_TYPE
-		 */
-		eVIEWPORT_TYPE GetViewportType()const;
-		/**
-		 *\~english
-		 *\brief		Sets the eTOPOLOGY
-		 *\param[in]	val	The new eTOPOLOGY
-		 *\~french
-		 *\brief		Définit le eTOPOLOGY
-		 *\param[in]	val	Le nouveau eTOPOLOGY
-		 */
-		void SetPrimitiveType( eTOPOLOGY val );
-		/**
-		 *\~english
-		 *\brief		Sets the eVIEWPORT_TYPE
-		 *\param[in]	val	The new eVIEWPORT_TYPE
-		 *\~french
-		 *\brief		Définit le eVIEWPORT_TYPE
-		 *\param[in]	val	Le nouveau eVIEWPORT_TYPE
-		 */
-		void SetViewportType( eVIEWPORT_TYPE val );
-		/**
-		 *\~english
 		 *\brief		Sets the Scene
-		 *\param[in]	p_pScene	The new Scene
+		 *\param[in]	p_scene	The new Scene
 		 *\~french
 		 *\brief		Définit la Scene
-		 *\param[in]	p_pScene	La nouvelle Scene
+		 *\param[in]	p_scene	La nouvelle Scene
 		 */
-		inline void	SetScene( SceneSPtr p_pScene )
+		inline void	SetScene( SceneSPtr p_scene )
 		{
-			m_pScene = p_pScene;
+			m_pScene = p_scene;
 		}
-		/**
-		 *\~english
-		 *\brief		Sets the camera
-		 *\remark		Defines also LEye and REye cameras
-		 *\param[in]	p_pCamera	The new camera
-		 *\~french
-		 *\brief		Définit la caméra
-		 *\remark		Définit aussi les caméras des yeux gauche et droit
-		 *\param[in]	p_pCamera	La nouvelle caméra
-		 */
-		void SetCamera( CameraSPtr p_pCamera );
 		/**
 		 *\~english
 		 *\brief		Retrieves the frame buffer
@@ -519,9 +480,9 @@ namespace Castor3D
 		 *\brief		Récupère la texture
 		 *\return		La texture
 		 */
-		inline DynamicTextureSPtr GetTexture()const
+		inline TextureUnit const & GetTexture()const
 		{
-			return m_fbLeftEye.m_pColorTexture;
+			return m_fbLeftEye.m_colorTexture;
 		}
 		/**
 		 *\~english
@@ -533,7 +494,7 @@ namespace Castor3D
 		 */
 		inline FrameBufferSPtr GetFrameBufferLEye()const
 		{
-			return m_fbLeftEye.m_pFrameBuffer;
+			return m_fbLeftEye.m_frameBuffer;
 		}
 		/**
 		 *\~english
@@ -543,9 +504,9 @@ namespace Castor3D
 		 *\brief		Récupère la texture oeil gauche
 		 *\return		La texture
 		 */
-		inline DynamicTextureSPtr GetTextureLEye()const
+		inline TextureUnit const & GetTextureLEye()const
 		{
-			return m_fbLeftEye.m_pColorTexture;
+			return m_fbLeftEye.m_colorTexture;
 		}
 		/**
 		 *\~english
@@ -557,7 +518,7 @@ namespace Castor3D
 		 */
 		inline FrameBufferSPtr GetFrameBufferREye()const
 		{
-			return m_fbRightEye.m_pFrameBuffer;
+			return m_fbRightEye.m_frameBuffer;
 		}
 		/**
 		 *\~english
@@ -567,9 +528,9 @@ namespace Castor3D
 		 *\brief		Récupère la texture oeil droit
 		 *\return		La texture
 		 */
-		inline DynamicTextureSPtr GetTextureREye()const
+		inline TextureUnit const & GetTextureREye()const
 		{
-			return m_fbRightEye.m_pColorTexture;
+			return m_fbRightEye.m_colorTexture;
 		}
 		/**
 		 *\~english
@@ -609,27 +570,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the intra ocular distance
-		 *\param[in]	p_rIod	The intra ocular distance
-		 *\~french
-		 *\brief		Définit la distance inter oculaire
-		 *\param[in]	p_rIod	La distance inter oculaire
-		 */
-		void SetIntraOcularDistance( real p_rIod );
-		/**
-		 *\~english
-		 *\brief		Retrieves the stereo status
-		 *\return		\p true if stereo is used
-		 *\~french
-		 *\brief		Récupère le statut d'utilisation stéréo
-		 *\return		\p true si le rendu stéréo est utilisé
-		 */
-		inline bool IsUsingDeferredRendering()const
-		{
-			return m_bDeferredRendering;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the window pixel format
 		 *\return		The window pixel format
 		 *\~french
@@ -638,7 +578,7 @@ namespace Castor3D
 		 */
 		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
 		{
-			return m_ePixelFormat;
+			return m_pixelFormat;
 		}
 		/**
 		 *\~english
@@ -650,31 +590,7 @@ namespace Castor3D
 		 */
 		inline void SetPixelFormat( Castor::ePIXEL_FORMAT val )
 		{
-			m_ePixelFormat = val;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the target depth format
-		 *\return		The target depth format
-		 *\~french
-		 *\brief		Récupère le format de profondeur de la cible
-		 *\return		Le format de profondeur de la cible
-		 */
-		inline Castor::ePIXEL_FORMAT GetDepthFormat()const
-		{
-			return m_eDepthFormat;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the target depth format
-		 *\param[in]	val	The new target depth format
-		 *\~french
-		 *\brief		Définit le format de profondeur de la cible
-		 *\param[in]	val	Le nouveau format de profondeur de la cible
-		 */
-		inline void SetDepthFormat( Castor::ePIXEL_FORMAT val )
-		{
-			m_eDepthFormat = val;
+			m_pixelFormat = val;
 		}
 		/**
 		 *\~english
@@ -688,29 +604,69 @@ namespace Castor3D
 		{
 			return m_eTargetType;
 		}
-
-		using Renderable::GetEngine;
+		/**
+		 *\~english
+		 *\brief		Adds a post effect to the list.
+		 *\param[in]	p_effect	The effect.
+		 *\~french
+		 *\brief		Ajoute un effet post rendu à la liste.
+		 *\param[in]	p_effect	L'effet.
+		 */
+		inline void AddPostEffect( PostEffectSPtr p_effect )
+		{
+			m_postEffects.push_back( p_effect );
+		}
+		/**
+		 *\~english
+		 *\return		The target index.
+		 *\~french
+		 *\return		L'indice de la cible.
+		 */
+		inline uint32_t GetIndex()const
+		{
+			return m_index;
+		}
+		/**
+		 *\~english
+		 *\return		The post effects array.
+		 *\~french
+		 *\return		Le tableau d'effets de post rendu.
+		 */
+		inline PostEffectPtrArray const & GetPostEffects()const
+		{
+			return m_postEffects;
+		}
+		/**
+		 *\~english
+		 *\return		The tone mapping implementation.
+		 *\~french
+		 *\return		L'implémentation de mappage de tons.
+		 */
+		inline ToneMappingSPtr GetToneMapping()const
+		{
+			return m_toneMapping;
+		}
 
 	private:
-		void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, double p_dFrameTime );
+		C3D_API void DoRender( stFRAME_BUFFER & p_fb, CameraSPtr p_pCamera, uint32_t p_frameTime );
 
 	public:
 		//!\~english The render target default sampler name	\~french Le nom du sampler par défaut pour la cible de rendu
-		static const Castor::String DefaultSamplerName;
+		C3D_API static const Castor::String DefaultSamplerName;
 
 	protected:
 		//!\~english The render target type	\~french Type de RenderTarget
 		eTARGET_TYPE m_eTargetType;
 		//!\~english Tells if the target is initalised	\~french Dit si la cible est initialisée
-		bool m_bInitialised;
+		bool m_initialised;
 		//!\~english The target size	\~french Les dimensions de la cible
 		Castor::Size m_size;
 		//!\~english The technique used to render this target	\~french La technique utilisée pour rendre cette cible
-		RenderTechniqueBaseSPtr m_pRenderTechnique;
+		RenderTechniqueSPtr m_renderTechnique;
 		//!\~english Tells whether or not to use multisampling	\~french Dit si on utilise le multisampling ou pas
 		bool m_bMultisampling;
 		//!\~english Defines the samples count if multisampling is activated	\~french Le nombre de samples utilisés pour le multisampling
-		int32_t m_iSamplesCount;
+		int32_t m_samplesCount;
 		//!\~english The scene rendered in this render target	\~french La scène rendue par cette RenderTarget
 		SceneWPtr m_pScene;
 		//!\~english The camera used to render the scene	\~french La caméra utilisée pour rendre la scène
@@ -727,29 +683,31 @@ namespace Castor3D
 		stFRAME_BUFFER m_fbLeftEye;
 		//!\~english Frame buffer for right eye	\~french Le tampon d'image pour l'oeil droit
 		stFRAME_BUFFER m_fbRightEye;
-		//!\~english Tells the window uses deferred rendering (only if MSAA is deactivated)	\~french Dit si la fenêtre utilise le deferred rendering (uniquement si le MSAA est désactivé)
-		bool m_bDeferredRendering;
 		//!\~english The currently active frame buffer (useful in stereoscopic rendering)	\~french Le tampon d'image actuellement actif (utile en rendu stéréoscopique)
 		FrameBufferWPtr m_pCurrentFrameBuffer;
 		//!\~english The currently active camera (useful in stereoscopic rendering)	\~french La caméra actuellement active (utile en rendu stéréoscopique)
 		CameraWPtr m_pCurrentCamera;
 		//!\~english The target display format	\~french Le format des pixels de la cible
-		Castor::ePIXEL_FORMAT m_ePixelFormat;
-		//!\~english The target depth format	\~french Le format de profondeur de la cible
-		Castor::ePIXEL_FORMAT m_eDepthFormat;
+		Castor::ePIXEL_FORMAT m_pixelFormat;
 		//!\~english The number of actually created render targets	\~french Le compte de render target actuellement créées
 		static uint32_t sm_uiCount;
 		//!\~english This render target's index	\~french L'index de cette render target
-		uint32_t m_uiIndex;
-		//!\~english This render target's render technique name	\~french Le nom de la technique de rendu de cette render target
-		Castor::String m_strTechniqueName;
+		uint32_t m_index;
+		//!\~english The render technique name.	\~french Le nom de la technique de rendu.
+		Castor::String m_techniqueName;
+		//!\~english The render technique parameters.	\~french Les paramètres de la technique de rendu.
+		Parameters m_techniqueParameters;
 		//!\~english Depth and stencil buffers states	\~french Etats des buffers de profondeur et stencil
 		DepthStencilStateWPtr m_wpDepthStencilState;
 		//!\~english Rasteriser states	\~french Etats du rasteriser
 		RasteriserStateWPtr m_wpRasteriserState;
+		//!\~english The post effects.	\~french Les effets post rendu.
+		PostEffectPtrArray m_postEffects;
+		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
+		ToneMappingSPtr m_toneMapping;
+		//!\~english The tone mapping implementation.	\~french L'implémentation de mappage de ton.
+		ToneMappingFactory m_toneMappingFactory;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RequiredVersion___
 #define ___C3D_RequiredVersion___
 
-#define CASTOR_VERSION_MAJOR	${C3D_VERSION_MAJOR}
-#define CASTOR_VERSION_MINOR	${C3D_VERSION_MINOR}
-#define CASTOR_VERSION_BUILD	${C3D_VERSION_BUILD}
+#define CASTOR_VERSION_MAJOR	${${PROJECT_NAME}_VERSION_MAJOR}
+#define CASTOR_VERSION_MINOR	${${PROJECT_NAME}_VERSION_MINOR}
+#define CASTOR_VERSION_BUILD	${${PROJECT_NAME}_VERSION_BUILD}
 
 #endif

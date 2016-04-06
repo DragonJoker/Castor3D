@@ -2,16 +2,18 @@ project( CastorShape )
 
 include_directories( ../GuiCommon/Src )
 
-set( CS_VERSION_MAJOR	0 )
-set( CS_VERSION_MINOR	6 )
-set( CS_VERSION_BUILD	5 )
+set( ${PROJECT_NAME}_WXWIDGET 1 )
+set( ${PROJECT_NAME}_DESCRIPTION "Scene Editor for ${MAIN_PROJECT_NAME}" )
+set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+set( ${PROJECT_NAME}_VERSION_BUILD	0 )
 
 include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )
 include_directories( ${CMAKE_SOURCE_DIR}/Core/Castor3D/Src )
 include_directories( ${CMAKE_BINARY_DIR}/Core/CastorUtils/Src )
 
 add_target(
-	CastorShape
+	${PROJECT_NAME}
 	bin
 	"${CastorBinsDependencies}"
 	"${CastorBinLibraries}"
@@ -21,8 +23,8 @@ add_target(
 	"${wxWidgets_CXXFLAGS}"
 )
 # Copying internationalisation files (french, for now) for CastorShape
-copy_languages( CastorShape ../internationalisation CastorShape "fr" )
+copy_languages( ${PROJECT_NAME} ../internationalisation ${PROJECT_NAME} "fr" )
 
-set_property( TARGET CastorShape PROPERTY FOLDER "Samples" )
-set( Build "yes (version ${CS_VERSION_MAJOR}.${CS_VERSION_MINOR}.${CS_VERSION_BUILD})" PARENT_SCOPE )
-add_target_astyle( CastorShape ".h;.hpp;.inl;.cpp" )
+set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Samples" )
+set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
+add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )

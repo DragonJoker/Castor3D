@@ -1,9 +1,8 @@
 #include "AnimatedObjectGroup.hpp"
+
 #include "AnimatedObject.hpp"
 #include "Animation.hpp"
-#include "MovableObject.hpp"
-#include "Mesh.hpp"
-#include "Skeleton.hpp"
+#include "Geometry.hpp"
 
 #include <Logger.hpp>
 
@@ -16,211 +15,238 @@ using namespace Castor;
 namespace Castor3D
 {
 	AnimatedObjectGroup::BinaryLoader::BinaryLoader()
-		:	Loader< AnimatedObjectGroup, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
+		: Loader< AnimatedObjectGroup, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 
-	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file, Scene * p_pScene )
+	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file, Scene * p_scene )
 	{
-		m_pScene = p_pScene;
+		m_scene = p_scene;
 		return operator()( p_group, p_file );
 	}
 
 	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file )
 	{
-		Collection<AnimatedObjectGroup, String> l_collection;
-		bool l_bResult = false;
+		Collection< AnimatedObjectGroup, String > l_collection;
+		bool l_result = false;
 
-		if ( ! l_bResult || l_collection.has( p_group.GetName() ) )
+		if ( !l_result || l_collection.has( p_group.GetName() ) )
 		{
-			Logger::LogMessage( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
+			Logger::LogWarning( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
 		}
 		else
 		{
-			Logger::LogMessage( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
+			Logger::LogInfo( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
 		}
 
-		return l_bResult;
+		return l_result;
 	}
 
 	//*************************************************************************************************
 
-	AnimatedObjectGroup::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< AnimatedObjectGroup, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	AnimatedObjectGroup::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		: Loader< AnimatedObjectGroup, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
 	bool AnimatedObjectGroup::TextLoader::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
 	{
-		bool l_bReturn = p_file.WriteText( cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
 
-		for ( StrSet::const_iterator l_it = p_group.AnimationsBegin(); l_it != p_group.AnimationsEnd() && l_bReturn; ++l_it )
+		for ( auto l_it : p_group.GetAnimations() )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\tanimation " ) + *l_it + cuT( "\n" ) ) > 0;
+			l_return &= p_file.WriteText( cuT( "\tanimation " ) + l_it.first + cuT( "\n" ) ) > 0;
 		}
 
-		for ( AnimatedObjectPtrStrMap::const_iterator l_it = p_group.ObjectsBegin(); l_it != p_group.ObjectsEnd() && l_bReturn; ++l_it )
+		for ( auto l_it : p_group.GetObjects() )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\tanimated_object " ) + l_it->first + cuT( "\n" ) ) > 0;
+			if ( l_it.second->GetGeometry() )
+			{
+				l_return &= p_file.WriteText( cuT( "\tanimated_object " ) + l_it.second->GetName() + cuT( "\n" ) ) > 0;
+			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "}\n\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "}\n\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	AnimatedObjectGroup::AnimatedObjectGroup()
-		:	Named( cuT( "" ) )
-		,	m_pScene( NULL )
-	{
-		m_timer.TimeS();
-	}
-
-	AnimatedObjectGroup::AnimatedObjectGroup( AnimatedObjectGroup const & p_src )
-		:	Named( p_src.GetName() )
-		,	m_pScene( p_src.m_pScene )
-		,	m_setAnimations( p_src.m_setAnimations )
-		,	m_mapObjects( p_src.m_mapObjects )
-	{
-		m_timer.TimeS();
-	}
-
-	AnimatedObjectGroup::AnimatedObjectGroup( Scene * p_pScene, String const & p_strName )
-		:	Named( p_strName )
-		,	m_pScene( p_pScene )
+	AnimatedObjectGroup::AnimatedObjectGroup( String const & p_name, Scene & p_scene )
+		: Named( p_name )
+		, OwnedBy< Scene >( p_scene )
 	{
 		m_timer.TimeS();
 	}
 
 	AnimatedObjectGroup::~AnimatedObjectGroup()
 	{
-		m_mapObjects.clear();
-		m_setAnimations.clear();
+		m_objects.clear();
+		m_animations.clear();
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::CreateObject( String const & p_strName )
+	AnimatedObjectSPtr AnimatedObjectGroup::AddObject( GeometrySPtr p_object )
 	{
-		AnimatedObjectSPtr l_pReturn;
+		AnimatedObjectSPtr l_return;
 
-		if ( m_mapObjects.find( p_strName ) == m_mapObjects.end() )
+		if ( p_object && m_objects.find( p_object->GetName() ) == m_objects.end() )
 		{
-			l_pReturn = std::make_shared< AnimatedObject >( p_strName );
-			m_mapObjects.insert( std::make_pair( p_strName, l_pReturn ) );
+			l_return = std::make_shared< AnimatedObject >( p_object->GetName() );
+			l_return->SetGeometry( p_object );
+			p_object->SetAnimatedObject( l_return );
+			m_objects.insert( std::make_pair( p_object->GetName(), l_return ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
-	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_pObject )
+	bool AnimatedObjectGroup::AddObject( AnimatedObjectSPtr p_object )
 	{
-		bool l_bReturn = p_pObject && m_mapObjects.find( p_pObject->GetName() ) == m_mapObjects.end();
+		bool l_return = p_object && m_objects.find( p_object->GetName() ) == m_objects.end();
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			m_mapObjects.insert( std::make_pair( p_pObject->GetName(), p_pObject ) );
+			m_objects.insert( std::make_pair( p_object->GetName(), p_object ) );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
-	void AnimatedObjectGroup::AddAnimation( String const & p_strName )
+	void AnimatedObjectGroup::AddAnimation( String const & p_name )
 	{
-		if ( m_setAnimations.find( p_strName ) == m_setAnimations.end() )
+		if ( m_animations.find( p_name ) == m_animations.end() )
 		{
-			m_setAnimations.insert( p_strName );
+			m_animations.insert( std::make_pair( p_name, eANIMATION_STATE_STOPPED ) );
 		}
 	}
 
 	void AnimatedObjectGroup::Update()
 	{
-		real l_rTslf = real( m_timer.TimeS() );
-		std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+		real l_tslf = real( m_timer.TimeS() );
+
+		for ( auto l_it : m_objects )
 		{
-			p_pair.second->Update( l_rTslf );
-		} );
+			l_it.second->Update( l_tslf );
+		}
 	}
 
-	void AnimatedObjectGroup::SetAnimationLooped( Castor::String const & p_strName, bool p_bLooped )
+	void AnimatedObjectGroup::SetAnimationLooped( Castor::String const & p_name, bool p_looped )
 	{
-		if ( m_setAnimations.find( p_strName ) != m_setAnimations.end() )
+		if ( m_animations.find( p_name ) != m_animations.end() )
 		{
-			std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+			for ( auto l_it : m_objects )
 			{
-				AnimationSPtr l_pAnim = p_pair.second->GetAnimation( p_strName );
+				AnimationSPtr l_animation = l_it.second->GetAnimation( p_name );
 
-				if ( l_pAnim )
+				if ( l_animation )
 				{
-					l_pAnim->SetLooped( p_bLooped );
+					l_animation->SetLooped( p_looped );
 				}
-			} );
+			}
 		}
 	}
 
-	void AnimatedObjectGroup::StartAnimation( String const & p_strName )
+	void AnimatedObjectGroup::SetAnimationScale( Castor::String const & p_name, float p_scale )
 	{
-		StrSet::iterator l_it = m_setAnimations.find( p_strName );
-
-		if ( l_it != m_setAnimations.end() )
+		if ( m_animations.find( p_name ) != m_animations.end() )
 		{
-			std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+			for ( auto l_it : m_objects )
 			{
-				p_pair.second->StartAnimation( p_strName );
-			} );
+				AnimationSPtr l_animation = l_it.second->GetAnimation( p_name );
+
+				if ( l_animation )
+				{
+					l_animation->SetScale( p_scale );
+				}
+			}
 		}
 	}
 
-	void AnimatedObjectGroup::StopAnimation( String const & p_strName )
+	void AnimatedObjectGroup::StartAnimation( String const & p_name )
 	{
-		StrSet::iterator l_it = m_setAnimations.find( p_strName );
+		auto l_itAnim = m_animations.find( p_name );
 
-		if ( l_it != m_setAnimations.end() )
+		if ( l_itAnim != m_animations.end() )
 		{
-			std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+			for ( auto l_it : m_objects )
 			{
-				p_pair.second->StopAnimation( p_strName );
-			} );
+				l_it.second->StartAnimation( p_name );
+			}
+
+			l_itAnim->second = eANIMATION_STATE_PLAYING;
 		}
 	}
 
-	void AnimatedObjectGroup::PauseAnimation( String const & p_strName )
+	void AnimatedObjectGroup::StopAnimation( String const & p_name )
 	{
-		StrSet::iterator l_it = m_setAnimations.find( p_strName );
+		auto l_itAnim = m_animations.find( p_name );
 
-		if ( l_it != m_setAnimations.end() )
+		if ( l_itAnim != m_animations.end() )
 		{
-			std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+			for ( auto l_it : m_objects )
 			{
-				p_pair.second->PauseAnimation( p_strName );
-			} );
+				l_it.second->StopAnimation( p_name );
+			}
+
+			l_itAnim->second = eANIMATION_STATE_STOPPED;
+		}
+	}
+
+	void AnimatedObjectGroup::PauseAnimation( String const & p_name )
+	{
+		auto l_itAnim = m_animations.find( p_name );
+
+		if ( l_itAnim != m_animations.end() )
+		{
+			for ( auto l_it : m_objects )
+			{
+				l_it.second->PauseAnimation( p_name );
+			}
+
+			l_itAnim->second = eANIMATION_STATE_PAUSED;
 		}
 	}
 
 	void AnimatedObjectGroup::StartAllAnimations()
 	{
-		std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+		for ( auto l_it : m_objects )
 		{
-			p_pair.second->StartAllAnimations();
-		} );
+			l_it.second->StartAllAnimations();
+		}
+
+		for ( auto l_it : m_animations )
+		{
+			l_it.second = eANIMATION_STATE_PLAYING;
+		}
 	}
 
 	void AnimatedObjectGroup::StopAllAnimations()
 	{
-		std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+		for ( auto l_it : m_objects )
 		{
-			p_pair.second->StopAllAnimations();
-		} );
+			l_it.second->StopAllAnimations();
+		}
+
+		for ( auto l_it : m_animations )
+		{
+			l_it.second = eANIMATION_STATE_STOPPED;
+		}
 	}
 
 	void AnimatedObjectGroup::PauseAllAnimations()
 	{
-		std::for_each( m_mapObjects.begin(), m_mapObjects.end(), [&]( std::pair< String, AnimatedObjectSPtr > p_pair )
+		for ( auto l_it : m_objects )
 		{
-			p_pair.second->PauseAllAnimations();
-		} );
+			l_it.second->PauseAllAnimations();
+		}
+
+		for ( auto l_it : m_animations )
+		{
+			l_it.second = eANIMATION_STATE_PAUSED;
+		}
 	}
 }

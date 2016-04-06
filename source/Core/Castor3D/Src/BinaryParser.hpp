@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ChunkParser.hpp"
 #include "ChunkFiller.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -34,10 +30,10 @@ namespace Castor3D
 	\~english
 	\brief		Binary data chunk writer/reader base class
 	\~french
-	\brief		Classe de base de lecture/écriture d'un chunk de données binaires
+	\brief		Classe de base de lecture/Ã©criture d'un chunk de donnÃ©es binaires
 	*/
 	template< class TParsed >
-	class C3D_API BinaryParser
+	class BinaryParser
 	{
 	public:
 		/**
@@ -46,10 +42,10 @@ namespace Castor3D
 		 *\param[in]	p_path	The current folder path
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_path	Le chemin d'accès au dossier courant
+		 *\param[in]	p_path	Le chemin d'accÃ¨s au dossier courant
 		 */
-		BinaryParser( Castor::Path const & p_path )
-			:	m_path( p_path )
+		C3D_API BinaryParser( Castor::Path const & p_path )
+			: m_path( p_path )
 		{
 		}
 		/**
@@ -59,22 +55,22 @@ namespace Castor3D
 		 *\param[in]	p_file	The file
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction d'écriture dans un fichier
-		 *\param[in]	p_obj	L'objet à écrire
+		 *\brief		Fonction d'Ã©criture dans un fichier
+		 *\param[in]	p_obj	L'objet Ã  Ã©crire
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
-		virtual bool Fill( TParsed const & p_obj, Castor::BinaryFile & p_file )const
+		C3D_API virtual bool Fill( TParsed const & p_obj, Castor::BinaryFile & p_file )const
 		{
 			BinaryChunk l_chunk;
-			bool l_bReturn = Fill( p_obj, l_chunk );
+			bool l_return = Fill( p_obj, l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = l_chunk.Write( p_file );
+				l_return = l_chunk.Write( p_file );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -83,22 +79,22 @@ namespace Castor3D
 		 *\param[in]	p_file	The file containing the chunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction de lecture à partir d'un fichier
-		 *\param[out]	p_obj	L'objet à lire
+		 *\brief		Fonction de lecture Ã  partir d'un fichier
+		 *\param[out]	p_obj	L'objet Ã  lire
 		 *\param[in]	p_file	Le fichier qui contient le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
-		virtual bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )const
+		C3D_API virtual bool Parse( TParsed & p_obj, Castor::BinaryFile & p_file )const
 		{
 			BinaryChunk l_chunk;
-			bool l_bReturn = l_chunk.Read( p_file );
+			bool l_return = l_chunk.Read( p_file );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = Parse( p_obj, l_chunk );
+				l_return = Parse( p_obj, l_chunk );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -107,12 +103,12 @@ namespace Castor3D
 		 *\param[in]	p_chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction d'écriture dans un chunk
-		 *\param[in]	p_obj	L'objet à écrire
+		 *\brief		Fonction d'Ã©criture dans un chunk
+		 *\param[in]	p_obj	L'objet Ã  Ã©crire
 		 *\param[in]	p_chunk	Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
-		virtual bool Fill( TParsed const & p_obj, BinaryChunk & p_chunk )const = 0;
+		C3D_API virtual bool Fill( TParsed const & p_obj, BinaryChunk & p_chunk )const = 0;
 		/**
 		 *\~english
 		 *\brief		From chunk reader function
@@ -120,132 +116,130 @@ namespace Castor3D
 		 *\param[in]	p_chunk	The chunk
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Fonction de lecture à partir d'un chunk
-		 *\param[out]	p_obj	L'objet à lire
+		 *\brief		Fonction de lecture Ã  partir d'un chunk
+		 *\param[out]	p_obj	L'objet Ã  lire
 		 *\param[in]	p_chunk	Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
-		virtual bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )const = 0;
+		C3D_API virtual bool Parse( TParsed & p_obj, BinaryChunk & p_chunk )const = 0;
 
 	protected:
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
 		 *\param[out]	p_pValues	Receives the parsed values
-		 *\param[out]	p_uiCount	The values count
+		 *\param[out]	p_count	The values count
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_pValues	Reçoit les valeurs
-		 *\param[out]	p_uiCount	Le compte des valeurs
+		 *\brief		RÃ©cupÃ¨re un tableau de valeurs Ã  partir d'un chunk
+		 *\param[out]	p_pValues	ReÃ§oit les valeurs
+		 *\param[out]	p_count	Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
-		bool DoParseChunk( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T * p_pValues, uint32_t p_count, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >()( p_pValues, p_uiCount, p_chunk );
+			return ChunkParser< T >()( p_pValues, p_count, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_tValue	Receives the parsed values
+		 *\param[out]	p_value	Receives the parsed values
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit les valeurs
+		 *\brief		RÃ©cupÃ¨re un tableau de valeurs Ã  partir d'un chunk
+		 *\param[out]	p_value	ReÃ§oit les valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T, uint32_t Count >
-		bool DoParseChunk( T( & p_tValue )[Count], BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T( & p_value )[Count], BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >()( p_tValue, Count, p_chunk );
+			return ChunkParser< T >()( p_value, Count, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
-		 *\param[out]	p_tValue	Receives the parsed value
+		 *\param[out]	p_value	Receives the parsed value
 		 *\param[in]	p_chunk		The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		Récupère une valeur à partir d'un chunk
-		 *\param[out]	p_tValue	Reçoit la valeur
+		 *\brief		RÃ©cupÃ¨re une valeur Ã  partir d'un chunk
+		 *\param[out]	p_value	ReÃ§oit la valeur
 		 *\param[in]	p_chunk		Le chunk contenant la valeur
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
-		bool DoParseChunk( T & p_tValue, BinaryChunk & p_chunk )const
+		inline bool DoParseChunk( T & p_value, BinaryChunk & p_chunk )const
 		{
-			return ChunkParser< T >()( p_tValue, p_chunk );
+			return ChunkParser< T >()( p_value, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_tValue		The values
-		 *\param[in]	p_uiCount		The values count
-		 *\param[in]	p_eChunkType	The subchunk type
-		 *\param[in]	p_chunk			The chunk
+		 *\param[in]	p_values	The values
+		 *\param[in]	p_count		The values count
+		 *\param[in]	p_chunkType	The subchunk type
+		 *\param[in]	p_chunk		The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_tValue		Les valeurs
-		 *\param[in]	p_uiCount		Le nombre de valeurs
-		 *\param[in]	p_eChunkType	Le type du subchunk
-		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\param[in]	p_values	Les valeurs
+		 *\param[in]	p_count		Le nombre de valeurs
+		 *\param[in]	p_chunkType	Le type du subchunk
+		 *\param[in]	p_chunk		Le chunk
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
-		bool DoFillChunk( T const * p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const * p_values, uint32_t p_count, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_pValues, p_uiCount, p_eChunkType, p_chunk );
+			return ChunkFiller< T >()( p_values, p_count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_tValue		The values
-		 *\param[in]	p_eChunkType	The subchunk type
+		 *\param[in]	p_value		The values
+		 *\param[in]	p_chunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_tValue		Les valeurs
-		 *\param[in]	p_eChunkType	Le type du subchunk
+		 *\param[in]	p_value		Les valeurs
+		 *\param[in]	p_chunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T, uint32_t Count >
-		bool DoFillChunk( T const( & p_tValue )[Count], eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const( & p_value )[Count], eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_tValue, Count, p_eChunkType, p_chunk );
+			return ChunkFiller< T >()( p_value, Count, p_chunkType, p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Writes a subchunk value into a chunk
-		 *\param[in]	p_tValue		The value
-		 *\param[in]	p_eChunkType	The subchunk type
+		 *\param[in]	p_value		The value
+		 *\param[in]	p_chunkType	The subchunk type
 		 *\param[in]	p_chunk			The chunk
 		 *\return		\p false if any error occured
 		 *\~french
 		 *\brief		Ecrit une valeur d'un subchunk dans un chunk
-		 *\param[in]	p_tValue		La valeur
-		 *\param[in]	p_eChunkType	Le type du subchunk
+		 *\param[in]	p_value		La valeur
+		 *\param[in]	p_chunkType	Le type du subchunk
 		 *\param[in]	p_chunk			Le chunk
-		 *\return		\p false si une erreur quelconque est arrivée
+		 *\return		\p false si une erreur quelconque est arrivÃ©e
 		 */
 		template< typename T >
-		bool DoFillChunk( T const & p_tValue, eCHUNK_TYPE p_eChunkType, BinaryChunk & p_chunk )const
+		inline bool DoFillChunk( T const & p_value, eCHUNK_TYPE p_chunkType, BinaryChunk & p_chunk )const
 		{
-			return ChunkFiller< T >()( p_tValue, p_eChunkType, p_chunk );
+			return ChunkFiller< T >()( p_value, p_chunkType, p_chunk );
 		}
 
-		//!\~english The current folder path	\~french Le chemin d'accès au dossiercourant
+		//!\~english The current folder path	\~french Le chemin d'accÃ¨s au dossiercourant
 		Castor::Path m_path;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

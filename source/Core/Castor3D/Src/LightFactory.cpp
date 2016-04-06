@@ -1,4 +1,4 @@
-//#include "Light.hpp"
+﻿//#include "Light.hpp"
 #include "LightFactory.hpp"
 
 #include "DirectionalLight.hpp"
@@ -10,7 +10,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	LightFactory::LightFactory()
-		:	Factory< LightCategory, eLIGHT_TYPE, std::function< std::shared_ptr< LightCategory >() > >()
+		:	Factory< LightCategory, eLIGHT_TYPE >()
 	{
 		Initialise();
 	}

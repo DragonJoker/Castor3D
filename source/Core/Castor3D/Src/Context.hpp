@@ -19,12 +19,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_CONTEXT_H___
 
 #include "Castor3DPrerequisites.hpp"
+#include "Viewport.hpp"
+#include "BufferDeclaration.hpp"
 
 #include <Colour.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -37,23 +36,28 @@ namespace Castor3D
 	\~french
 	\brief		Classe contenant le contexte de rendu
 	*/
-	class C3D_API Context
+	class Context
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_invertFinal	Tells if the final render is to be inverted.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	p_invertFinal	Dit si on inverse l'image du rendu final.
 		 */
-		Context();
+		C3D_API Context( RenderSystem & p_renderSystem, bool p_invertFinal );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Context();
+		C3D_API virtual ~Context();
 		/**
 		 *\~english
 		 *\brief		Initialises this context
@@ -64,62 +68,68 @@ namespace Castor3D
 		 *\param[in]	p_window	La RenderWindow
 		 *\return		\p true si initialisé correctement
 		 */
-		bool Initialise( RenderWindow * p_window );
+		C3D_API bool Initialise( RenderWindow * p_window );
 		/**
 		 *\~english
 		 *\brief		Cleans this context up
 		 *\~french
 		 *\brief		Nettoie le contexte
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Defines this context to be the current rendering context
 		 *\~french
 		 *\brief		Définit le contexte pour être celui de rendu actuel
 		 */
-		void SetCurrent();
+		C3D_API void SetCurrent();
 		/**
 		 *\~english
 		 *\brief		Defines this context not to be the current rendering context
 		 *\~french
 		 *\brief		Définit ce contexte pour ne pas être l'actuel
 		 */
-		void EndCurrent();
-		/**
-		 *\~english
-		 *\brief		Defines the culling option for current render
-		 *\param[in]	p_eCullFace	The culling option
-		 *\~french
-		 *\brief		Définit l'option de culling pour le rendu courant
-		 *\param[in]	p_eCullFace	L'option de culling
-		 */
-		void CullFace( eFACE p_eCullFace );
+		C3D_API void EndCurrent();
 		/**
 		 *\~english
 		 *\brief		Swaps render buffers
 		 *\~french
 		 *\brief		Echange les buffers de rendu
 		 */
-		void SwapBuffers();
+		C3D_API void SwapBuffers();
 		/**
 		 *\~english
-		 *\brief		Defines the colour used when Context::Clear is called on the color buffer
-		 *\param[in]	p_clrClear	The colour
+		 *\brief		Renders the given texture to the currently draw-bound frame buffer.
+		 *\param[in]	p_size			The render viewport size.
+		 *\param[in]	p_texture		The texture.
 		 *\~french
-		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur
-		 *\param[in]	p_clrClear	La couleur
+		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin.
+		 *\param[in]	p_size			La taille du viewport de rendu.
+		 *\param[in]	p_texture		La texture.
 		 */
-		void SetClearColour( Castor::Colour const & p_clrClear );
+		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture );
 		/**
 		 *\~english
-		 *\brief		Clears the wanted buffers
-		 *\param[in]	p_uiTargets	The buffers
+		 *\brief		Renders the given texture.
+		 *\param[in]	p_size				The render viewport size.
+		 *\param[in]	p_texture			The texture.
+		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
-		 *\brief		Vide le(s) tampon(s) voulu(s)
-		 *\param[in]	p_uiTargets	Le(s) tampon(s)
+		 *\brief		Dessine la texture donnée.
+		 *\param[in]	p_size				La taille du viewport de rendu.
+		 *\param[in]	p_texture			La texture.
+		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		void Clear( uint32_t p_uiTargets );
+		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program );
+		/**
+		 *\~english
+		 *\brief		Changes fullscreen status
+		 *\param[in]	val	The new fullscreen status
+		 *\~french
+		 *\brief		Change le statut de plein écran
+		 *\param[in]	val	Le nouveau statut de plein écran
+		 */
+		C3D_API virtual void UpdateFullScreen( bool val ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tells the context is initialised
@@ -128,29 +138,7 @@ namespace Castor3D
 		 */
 		inline bool IsInitialised()const
 		{
-			return m_bInitialised;
-		}
-		/**
-		 *\~english
-		 *\brief		Tells the context is using deferred shading
-		 *\~french
-		 *\brief		Dit si le contexte utilise le deferred shading
-		 */
-		inline bool IsDeferredShadingSet()const
-		{
-			return m_bDeferredShadingSet;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the deferred shading status
-		 *\param[in]	p_bVal	The status
-		 *\~french
-		 *\brief		Définit le statut du deferred shading
-		 *\param[in]	p_bVal	Le statut
-		 */
-		inline void SetDeferredShading( bool p_bVal )
-		{
-			m_bDeferredShadingSet = p_bVal;
+			return m_initialised;
 		}
 		/**
 		 *\~english
@@ -165,80 +153,55 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Defines the multisampling status
-		 *\param[in]	p_bVal	The status
+		 *\param[in]	p_value	The status
 		 *\~french
 		 *\brief		Définit le statut du multisampling
-		 *\param[in]	p_bVal	Le statut
+		 *\param[in]	p_value	Le statut
 		 */
-		inline void SetMultiSampling( bool p_bVal )
+		inline void SetMultiSampling( bool p_value )
 		{
-			m_bMultiSampling = p_bVal;
+			m_bMultiSampling = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieve the background DepthStencilState
+		 *\brief		Retrieve the DepthStencilState with no depth write and test.
 		 *\~french
-		 *\brief		Récupère le DepthStencilState de fond d'écran
+		 *\brief		Récupère le DepthStencilState sans test de profondeur ni écriture dans le tampon de profondeur.
 		 */
-		inline DepthStencilStateSPtr GetBackgroundDSState()const
+		inline DepthStencilStateSPtr GetNoDepthState()const
 		{
-			return m_pDsStateBackground;
+			return m_pDsStateNoDepth;
 		}
 		/**
 		 *\~english
-		 *\brief		Binds given system frame buffer to given mode
-		 *\param[in]	p_eBuffer	The buffer
-		 *\param[in]	p_eTarget	The target
+		 *\brief		Retrieve the DepthStencilState without depth write.
 		 *\~french
-		 *\brief		Associe le tampon d'image système donné dans le mode donné
-		 *\param[in]	p_eBuffer	Le tampon
-		 *\param[in]	p_eTarget	La cible
+		 *\brief		Récupère le DepthStencilState sans écriture dans le tampon de profondeur.
 		 */
-		void Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget );
+		inline DepthStencilStateSPtr GetNoDepthWriteState()const
+		{
+			return m_pDsStateNoDepthWrite;
+		}
 		/**
 		 *\~english
-		 *\brief		Defines the alpha text function
-		 *\param[in]	p_eFunc		The function
-		 *\param[in]	p_byValue	The comparison value
+		 *\return		The render window.
 		 *\~french
-		 *\brief		Définit la fonction de test alpha
-		 *\param[in]	p_eFunc		La fonction
-		 *\param[in]	p_byValue	La valeur de comparaison
+		 *\return		La fenêtre de rendu.
 		 */
-		void SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue );
+		inline RenderWindow const & GetWindow()const
+		{
+			return *m_window;
+		}
 		/**
 		 *\~english
-		 *\brief		Changes fullscreen status
-		 *\param[in]	val	The new fullscreen status
+		 *\return		The render window.
 		 *\~french
-		 *\brief		Change le statut de plein écran
-		 *\param[in]	val	Le nouveau statut de plein écran
+		 *\return		La fenêtre de rendu.
 		 */
-		virtual void UpdateFullScreen( bool val ) = 0;
-		/**
-		 *\~english
-		 *\brief		Renders the given texture to the currently draw-bound frame buffer
-		 *\param[in]	p_size			The render viewport size
-		 *\param[in]	p_pTexture		The texture
-		 *\param[in]	p_uiComponents	The render target components (bitwise combination of eBUFFER_COMPONENT)
-		 *\~french
-		 *\brief		Rend la texture donnée dans le tampon d'image actuellement activé en dessin
-		 *\param[in]	p_size			La taille du viewport de rendu
-		 *\param[in]	p_pTexture		La texture
-		 *\param[in]	p_uiComponents	Les composantes cibles du rendu (combinaison binaire de eBUFFER_COMPONENT)
-		 */
-		void BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents );
-		/**
-		 *\~english
-		 *\brief		Retrieves the maximal supported size, given a wanted size
-		 *\param[in]	p_size	The wanted size
-		 *\return		The maximal supported size less than or equal to p_size
-		 *\~french
-		 *\brief		Récupère la taille maximale supportée, en fonction d'une taille données
-		 *\param[in]	p_size	La taille voulue
-		 *\return		La taille maximale supportée inférieure ou égale à p_size
-		 */
-		virtual Castor::Size GetMaxSize( Castor::Size const & p_size ) = 0;
+		inline RenderWindow & GetWindow()
+		{
+			return *m_window;
+		}
 
 	protected:
 		/**
@@ -249,115 +212,90 @@ namespace Castor3D
 		 *\brief		Initialise le contexte
 		 *\return		\p true si initialisé correctement
 		 */
-		virtual bool DoInitialise() = 0;
+		C3D_API virtual bool DoInitialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans this context up
 		 *\~french
 		 *\brief		Nettoie le contexte
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
+		/**
+		 *\~english
+		 *\brief		Destroys the context on GPU.
+		 *\~french
+		 *\brief		Détruit le contexte sur le GPU.
+		 */
+		C3D_API virtual void DoDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines this context to be the current rendering context
-		 *\param[in]	p_window	The RenderWindow
 		 *\~french
 		 *\brief		Définit le contexte pour être celui de rendu actuel
-		 *\param[in]	p_window	La RenderWindow
 		 */
-		virtual void DoSetCurrent() = 0;
+		C3D_API virtual void DoSetCurrent() = 0;
 		/**
 		 *\~english
 		 *\brief		Defines this context not to be the current rendering context
 		 *\~french
 		 *\brief		Définit ce contexte pour ne pas être l'actuel
 		 */
-		virtual void DoEndCurrent() = 0;
+		C3D_API virtual void DoEndCurrent() = 0;
 		/**
 		 *\~english
 		 *\brief		Swaps render buffers
 		 *\~french
 		 *\brief		Echange les buffers de rendu
 		 */
-		virtual void DoSwapBuffers() = 0;
+		C3D_API virtual void DoSwapBuffers() = 0;
 		/**
 		 *\~english
-		 *\brief		Defines the colour used when Context::Clear is called on the color buffer
-		 *\param[in]	p_clrClear	The colour
+		 *\brief		Renders the given texture.
+		 *\param[in]	p_size				The render viewport size.
+		 *\param[in]	p_texture			The texture.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to render the texture.
+		 *\param[in]	p_program			The program used to render the texture.
 		 *\~french
-		 *\brief		Définit la couleur utilisée quand Context::Clear est appelée sur le tampon couleur
-		 *\param[in]	p_clrClear	La couleur
+		 *\brief		Dessine la texture donnée.
+		 *\param[in]	p_size				La taille du viewport de rendu.
+		 *\param[in]	p_texture			La texture.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
+		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		virtual void DoSetClearColour( Castor::Colour const & p_clrClear ) = 0;
-		/**
-		 *\~english
-		 *\brief		Clears the wanted buffers
-		 *\param[in]	p_uiTargets	The buffers
-		 *\~french
-		 *\brief		Vide le(s) buffer(s) voulu(s)
-		 *\param[in]	p_uiTargets	Le(s) tampon(s)
-		 */
-		virtual void DoClear( uint32_t p_uiTargets ) = 0;
-		/**
-		 *\~english
-		 *\brief		Binds given system frame buffer to given mode
-		 *\param[in]	p_eBuffer	The buffer
-		 *\param[in]	p_eTarget	The target
-		 *\~french
-		 *\brief		Associe le tampon d'image système donné dans le mode donné
-		 *\param[in]	p_eBuffer	Le tampon
-		 *\param[in]	p_eTarget	La cible
-		 */
-		virtual void DoBind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget ) = 0;
-		/**
-		 *\~english
-		 *\brief		Defines the alpha text function
-		 *\param[in]	p_eFunc		The function
-		 *\param[in]	p_byValue	The comparison value
-		 *\~french
-		 *\brief		Définit la fonction de test alpha
-		 *\param[in]	p_eFunc		La fonction
-		 *\param[in]	p_byValue	La valeur de comparaison
-		 */
-		virtual void DoSetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue ) = 0;
-		/**
-		 *\~english
-		 *\brief		Defines the culling option for current render
-		 *\param[in]	p_eCullFace	The culling option
-		 *\~french
-		 *\brief		Définit l'option de culling pour le rendu courant
-		 *\param[in]	p_eCullFace	L'option de culling
-		 */
-		virtual void DoCullFace( eFACE p_eCullFace ) = 0;
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program );
 
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
-		RenderWindow * m_pWindow;
-		//!\~english The render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
+		RenderWindow * m_window;
 		//!\~english Tells if the context is initialised	\~french Dit si le contexte est initialisé
-		bool m_bInitialised;
-		//!\~english Tells the context is currently set to use deferred shading	\~french Dit si le contexte est actuellement configuré pour utiliser le deferred shading
-		bool m_bDeferredShadingSet;
+		bool m_initialised;
 		//!\~english Tells the context is currently set to use multisampling	\~french Dit si le contexte est actuellement configuré pour utiliser le multisampling
 		bool m_bMultiSampling;
 		//!\~english The ShaderProgram used when rendering from a buffer to another one	\~french Le ShaderProgram utilisé lors du rendu d'un tampon vers un autre
-		ShaderProgramBaseWPtr m_pBtoBShaderProgram;
-		//!\~english The GeometryBuffers used when rendering from a buffer to another one	\~french Le GeometryBuffers utilisé lors du rendu d'un tampon vers un autre
-		GeometryBuffersSPtr m_pGeometryBuffers;
-		//!\~english The Viewport used when rendering from a buffer to another one	\~french Le Viewport utilisé lors du rendu d'un tampon vers un autre
-		ViewportSPtr m_pViewport;
+		ShaderProgramWPtr m_renderTextureProgram;
+		//!\~english The diffuse map frame variable, in the buffer-to-buffer shader program	\~french La frame variable de l'image diffuse, dans le shader buffer-to-buffer
+		OneIntFrameVariableSPtr m_mapDiffuse;
+		//!\~english The GeometryBuffers used when rendering a texture to the current frame buffer.	\~french Le GeometryBuffers utilisé lors du dessin d'une texture dans le tampon d'image courant.
+		GeometryBuffersSPtr m_geometryBuffers;
+		//!\~english The Viewport used when rendering a texture into to a frame buffer.	\~french Le Viewport utilisé lors du dessin d'une texture dans un tampon d'image.
+		Viewport m_viewport;
 		//!\~english Buffer elements declaration	\~french Déclaration des éléments d'un vertex
-		Castor3D::BufferDeclarationSPtr m_pDeclaration;
+		Castor3D::BufferDeclaration m_declaration;
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
-		Castor::real m_pBuffer[16];
-		//!\~english DepthStencilState used while rendering background image	\~french DepthStencilState utilisé pour le rendu de l'image de fond
-		DepthStencilStateSPtr m_pDsStateBackground;
+		Castor::real m_pBuffer[24];
+		//!\~english The DepthStencilState without depth write and test.	\~french Le DepthStencilState sans test ni écriture de profondeur.
+		DepthStencilStateSPtr m_pDsStateNoDepth;
+		//!\~english The DepthStencilState without depth write.	\~french Le DepthStencilState sans écriture de profondeur.
+		DepthStencilStateSPtr m_pDsStateNoDepthWrite;
+		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		VertexBufferUPtr m_vertexBuffer;
+		//!\~english The GPU time elapsed queries.	\~french Les requêtes GPU de temps écoulé.
+		std::array< GpuQuerySPtr, 2 > m_timerQuery;
+		//!\~english The active query index.	\~french L'index de la requête active.
+		uint32_t m_queryIndex = 0;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

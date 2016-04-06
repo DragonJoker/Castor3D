@@ -34,7 +34,7 @@ namespace Castor
 		 *\brief		Récupère le nombre de CPU (physiques + coeurs)
 		 *\return		Le compte
 		 */
-		uint8_t GetCPUCount();
+		CU_API uint8_t GetCPUCount();
 		/**
 		 *\~english
 		 *\brief		Suspends the execution of the calling thread for a given time
@@ -43,7 +43,7 @@ namespace Castor
 		 *\brief		Suspend l'exécution du thread courant pour un temps donné
 		 *\param[in]	p_uiTime	Le temps de suspension en millisecondes
 		 */
-		void Sleep( uint32_t p_uiTime );
+		CU_API void Sleep( uint32_t p_uiTime );
 		/**
 		 *\~english
 		 *\brief		Retrieves the given screen size
@@ -56,7 +56,7 @@ namespace Castor
 		 *\param[out]	p_size		Reçoit la taille
 		 *\return		\p true si la taille a été récupérée
 		 */
-		bool GetScreenSize( uint32_t p_screen, Size & p_size );
+		CU_API bool GetScreenSize( uint32_t p_screen, Size & p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves the last system error text
@@ -65,7 +65,7 @@ namespace Castor
 		 *\brief		Récupère le texte de la dernière erreur système
 		 *\return		Le texte
 		 */
-		String GetLastErrorText();
+		CU_API String GetLastErrorText();
 	}
 	/**
 	 *\see			localtime

@@ -1,21 +1,26 @@
-#include "Path.hpp"
+﻿#include "Path.hpp"
 
 #include <algorithm>
 
 namespace Castor
 {
+#if defined( _WIN32 )
+	const xchar Path::Separator = cuT( '\\' );
+#else
+	const xchar Path::Separator = cuT( '/' );
+#endif
 	Path::Path()
 	{
 	}
 
 	Path::Path( char const * p_data )
-		:	String( str_utils::from_str( p_data ) )
+		:	String( string::string_cast< xchar >( p_data ) )
 	{
 		DoNormalise();
 	}
 
 	Path::Path( wchar_t const * p_data )
-		:	String( str_utils::from_wstr( p_data ) )
+		:	String( string::string_cast< xchar >( p_data ) )
 	{
 		DoNormalise();
 	}
@@ -65,115 +70,118 @@ namespace Castor
 		return *this;
 	}
 
-	Path & Path::operator /=( char const * p_pBuffer )
+	Path & Path::operator /=( char const * p_buffer )
 	{
 		push_back( Separator );
-		String::operator+=( str_utils::from_str( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_buffer ) );
 		DoNormalise();
 		return *this;
 	}
 
-	Path & Path::operator /=( wchar_t const * p_pBuffer )
+	Path & Path::operator /=( wchar_t const * p_buffer )
 	{
 		push_back( Separator );
-		String::operator+=( str_utils::from_wstr( p_pBuffer ) );
+		String::operator+=( string::string_cast< xchar >( p_buffer ) );
 		DoNormalise();
 		return *this;
 	}
 
 	Path Path::GetPath()const
 	{
-		Path l_strReturn;
+		Path l_return;
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( 0, l_index );
+			l_return = substr( 0, l_index );
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
-	String Path::GetFileName()const
+	String Path::GetFileName( bool p_withExtension )const
 	{
-		String l_strReturn = ( * this );
+		String l_return = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( l_index + 1, String::npos );
+			l_return = substr( l_index + 1, String::npos );
 		}
 
-		l_index = l_strReturn.find_last_of( cuT( "." ) );
-
-		if ( l_index != String::npos )
+		if ( !p_withExtension )
 		{
-			l_strReturn = l_strReturn.substr( 0, l_index );
+			l_index = l_return.find_last_of( cuT( "." ) );
+
+			if ( l_index != String::npos )
+			{
+				l_return = l_return.substr( 0, l_index );
+			}
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
 	String Path::GetFullFileName()const
 	{
-		String l_strReturn = ( * this );
+		String l_return = ( * this );
 		std::size_t l_index = find_last_of( Separator );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( l_index + 1, String::npos );
+			l_return = substr( l_index + 1, String::npos );
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
 	String Path::GetExtension()const
 	{
-		String l_strReturn = ( * this );
+		String l_return = ( * this );
 		std::size_t l_index = find_last_of( cuT( "." ) );
 
 		if ( l_index != String::npos )
 		{
-			l_strReturn = substr( l_index + 1, String::npos );
+			l_return = substr( l_index + 1, String::npos );
 		}
 
-		return l_strReturn;
+		return l_return;
 	}
 
 	void Path::DoNormalise()
 	{
 		if ( !empty() )
 		{
-			String l_strBegin;
-			String l_strEnd;
+			String l_begin;
+			String l_end;
 
 			if ( substr( 0, 2 ) == cuT( "\\\\" ) )
 			{
-				l_strBegin = cuT( "\\\\" );
+				l_begin = cuT( "\\\\" );
 				assign( substr( 2 ) );
 			}
 			else if ( substr( 0, 2 ) == cuT( "//" ) )
 			{
-				l_strBegin = cuT( "/" );
+				l_begin = cuT( "/" );
 				assign( substr( 2 ) );
 			}
 			else if ( substr( 0, 1 ) == cuT( "/" ) )
 			{
-				l_strBegin = cuT( "/" );
+				l_begin = cuT( "/" );
 				assign( substr( 1 ) );
 			}
 
 			xchar l_sep[3] = { Separator, 0 };
 			String l_tmp( *this );
-			str_utils::replace( l_tmp, cuT( "/" ), l_sep );
-			str_utils::replace( l_tmp, cuT( "\\" ), l_sep );
+			string::replace( l_tmp, cuT( "/" ), l_sep );
+			string::replace( l_tmp, cuT( "\\" ), l_sep );
 
 			if ( this->at( this->size() - 1 ) == Separator )
 			{
-				l_strEnd = Separator;
+				l_end = Separator;
 			}
 
-			StringArray l_folders = str_utils::split( l_tmp, l_sep, 1000, false );
+			StringArray l_folders = string::split( l_tmp, l_sep, 1000, false );
 			std::list< String > l_list( l_folders.begin(), l_folders.end() );
 			l_tmp.clear();
 			std::list< String >::iterator l_it = std::find( l_list.begin(), l_list.end(), cuT( ".." ) );
@@ -196,19 +204,19 @@ namespace Castor
 				}
 			}
 
-			l_tmp = l_strBegin;
+			l_tmp = l_begin;
 
-			for ( std::list< String >::iterator l_it = l_list.begin(); l_it != l_list.end(); ++l_it )
+			for ( auto && l_folder : l_list )
 			{
 				if ( !l_tmp.empty() )
 				{
 					l_tmp += Separator;
 				}
 
-				l_tmp += *l_it;
+				l_tmp += l_folder;
 			}
 
-			assign( l_tmp + l_strEnd );
+			assign( l_tmp + l_end );
 		}
 	}
 
@@ -226,17 +234,17 @@ namespace Castor
 		return l_path;
 	}
 
-	Path operator /( Path const & p_path, char const * p_pBuffer )
+	Path operator /( Path const & p_path, char const * p_buffer )
 	{
 		Path l_path( p_path );
-		l_path /= p_pBuffer;
+		l_path /= p_buffer;
 		return l_path;
 	}
 
-	Path operator /( Path const & p_path, wchar_t const * p_pBuffer )
+	Path operator /( Path const & p_path, wchar_t const * p_buffer )
 	{
 		Path l_path( p_path );
-		l_path /= p_pBuffer;
+		l_path /= p_buffer;
 		return l_path;
 	}
 
@@ -247,16 +255,16 @@ namespace Castor
 		return l_path;
 	}
 
-	Path operator /( char const * p_pBuffer, Path const & p_path )
+	Path operator /( char const * p_buffer, Path const & p_path )
 	{
-		Path l_path( p_pBuffer );
+		Path l_path( p_buffer );
 		l_path /= p_path;
 		return l_path;
 	}
 
-	Path operator /( wchar_t const * p_pBuffer, Path const & p_path )
+	Path operator /( wchar_t const * p_buffer, Path const & p_path )
 	{
-		Path l_path( p_pBuffer );
+		Path l_path( p_buffer );
 		l_path /= p_path;
 		return l_path;
 	}

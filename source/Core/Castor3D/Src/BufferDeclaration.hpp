@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,107 +30,75 @@ namespace Castor3D
 	\~english
 	\brief		Description of all elements in a vertex buffer
 	\~french
-	\brief		Description de tous les éléments dans un tampon de sommets
+	\brief		Description de tous les Ã©lÃ©ments dans un tampon de sommets
 	*/
-	class C3D_API BufferDeclaration
+	class BufferDeclaration
 	{
 	public:
 		DECLARE_VECTOR( BufferElementDeclaration, BufferElementDeclaration );
+		using iterator = BufferElementDeclarationArrayIt;
+		using const_iterator = BufferElementDeclarationArrayConstIt;
 
 	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructeur.
+		 */
+		C3D_API BufferDeclaration();
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_elements	The elements array
+		 *\param[in]	p_count		Elements array size
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_elements	Tableau d'Ã©lÃ©ments
+		 *\param[in]	p_count		Taille du tableau d'Ã©lÃ©ments
+		 */
+		C3D_API BufferDeclaration( BufferElementDeclaration const * p_elements, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_elements	The elements array
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_elements	Tableau des éléments
+		 *\param[in]	p_elements	Tableau des Ã©lÃ©ments
 		 */
 		template< uint32_t N >
-		BufferDeclaration( BufferElementDeclaration const( & p_elements )[N] )
+		inline BufferDeclaration( BufferElementDeclaration const( & p_elements )[N] )
+			: BufferDeclaration( p_elements, N )
 		{
-			DoInitialise( p_elements, N );
 		}
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pElements		The elements array
-		 *\param[in]	p_uiNbElements	Elements array size
+		 *\param[in]	p_elements		The elements array
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pElements		Tableau d'éléments
-		 *\param[in]	p_uiNbElements	Taille du tableau d'éléments
+		 *\param[in]	p_elements		Tableau d'Ã©lÃ©ments
 		 */
-		BufferDeclaration( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
-		/**
-		 *\~english
-		 *\brief		Copy Constructor
-		 *\param[in]	p_declaration	The BufferDeclaration object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_declaration	L'objet BufferDeclaration à copier
-		 */
-		BufferDeclaration( BufferDeclaration const & p_declaration );
-		/**
-		 *\~english
-		 *\brief		Move Constructor
-		 *\param[in]	p_declaration	The BufferDeclaration object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_declaration	L'objet BufferDeclaration à déplacer
-		 */
-		BufferDeclaration( BufferDeclaration && p_declaration );
-		/**
-		 *\~english
-		 *\brief		Assignment operator
-		 *\param[in]	p_declaration	The BufferDeclaration object to copy
-		 *\return		A reference to this6.5.0 BufferDeclaration object
-		 *\~french
-		 *\brief		Opérateur d'affectation
-		 *\param[in]	p_declaration	L'objet BufferDeclaration à copier
-		 *\return		Une référence sur cet objet BufferDeclaration
-		 */
-		BufferDeclaration & operator =( BufferDeclaration p_declaration );
+		inline BufferDeclaration( std::vector< BufferElementDeclaration > const & p_elements )
+			: BufferDeclaration( p_elements.data(), uint32_t( p_elements.size() ) )
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BufferDeclaration();
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the begin of the elements array
-		 *\return		Constant iterator to the begin of the elements array
-		 *\~french
-		 *\brief		Récupère un itérateur sur le début du tableau d'éléments
-		 *\return		Itérateur constant sur le début du tableau d'éléments
-		 */
-		inline BufferElementDeclarationArrayConstIt	Begin()const
-		{
-			return m_arrayElements.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the elements array
-		 *\return		Constant iterator to the end of the elements array
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin du tableau d'éléments
-		 *\return		Itérateur constant sur la fin du tableau d'éléments
-		 */
-		inline BufferElementDeclarationArrayConstIt	End()const
-		{
-			return m_arrayElements.end();
-		}
+		C3D_API ~BufferDeclaration();
 		/**
 		 *\~english
 		 *\brief		Retrieves the elements count
 		 *\return		The elements count
 		 *\~french
-		 *\brief		Récupère le compte des éléments
-		 *\return		Le compte des éléments
+		 *\brief		RÃ©cupÃ¨re le compte des Ã©lÃ©ments
+		 *\return		Le compte des Ã©lÃ©ments
 		 */
-		inline uint32_t Size()const
+		inline uint32_t GetSize()const
 		{
 			return uint32_t( m_arrayElements.size() );
 		}
@@ -139,7 +107,7 @@ namespace Castor3D
 		 *\brief		Retrieves the total elements byte count
 		 *\return		The byte count
 		 *\~french
-		 *\brief		Récupère la taille totale en octet des éléments
+		 *\brief		RÃ©cupÃ¨re la taille totale en octet des Ã©lÃ©ments
 		 *\return		La taille en octets
 		 */
 		inline uint32_t GetStride()const
@@ -148,56 +116,72 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Array accessor
-		 *\remark		That function doesn't check if index is out of bound so expect crashes if used incorrectly
-		 *\param[in]	p_uiIndex	The index
-		 *\return		The element at given index
+		 *\return		An iterator to the beginning of the elements.
 		 *\~french
-		 *\brief		Accesseur de type tableau
-		 *\remark		Cette fonction ne vérifie pas la validité de l'index donné, donc attention aux crashes si mal utilisée
-		 *\param[in]	p_uiIndex	L'index
-		 *\return		L'élément à l'index donné
+		 *\return		Un itÃ©rateur sur le dÃ©but des Ã©lÃ©ments.
 		 */
-		inline BufferElementDeclaration const & operator []( uint32_t p_uiIndex )const
+		inline BufferElementDeclarationArray::iterator begin()
 		{
-			return m_arrayElements[p_uiIndex];
+			return m_arrayElements.begin();
 		}
 		/**
 		 *\~english
-		 *\brief		Array accessor
-		 *\remark		That function doesn't check if index is out of bound so expect crashes if used incorrectly
-		 *\param[in]	p_uiIndex	The index
-		 *\return		The element at given index
+		 *\return		An iterator to the beginning of the elements.
 		 *\~french
-		 *\brief		Accesseur de type tableau
-		 *\remark		Cette fonction ne vérifie pas la validité de l'index donné, donc attention aux crashes si mal utilisée
-		 *\param[in]	p_uiIndex	L'index
-		 *\return		L'élément à l'index donné
+		 *\return		Un itÃ©rateur sur le dÃ©but des Ã©lÃ©ments.
 		 */
-		inline BufferElementDeclaration & operator []( uint32_t p_uiIndex )
+		inline BufferElementDeclarationArray::const_iterator begin()const
 		{
-			return m_arrayElements[p_uiIndex];
+			return m_arrayElements.begin();
+		}
+		/**
+		 *\~english
+		 *\return		An iterator to the end of the elements.
+		 *\~french
+		 *\return		Un itÃ©rateur sur la fin des Ã©lÃ©ments.
+		 */
+		inline BufferElementDeclarationArray::iterator end()
+		{
+			return m_arrayElements.end();
+		}
+		/**
+		 *\~english
+		 *\return		An iterator to the end of the elements.
+		 *\~french
+		 *\return		Un itÃ©rateur sur la fin des Ã©lÃ©ments.
+		 */
+		inline BufferElementDeclarationArray::const_iterator end()const
+		{
+			return m_arrayElements.end();
 		}
 
 	private:
-		void DoInitialise( BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		C3D_API void DoInitialise( BufferElementDeclaration const * p_elements, uint32_t p_count );
 
 	protected:
-		friend void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
-		//!\~english Element description array	\~french Tableau de descriptions d'éléments
+		//!\~english Element description array	\~french Tableau de descriptions d'Ã©lÃ©ments
 		BufferElementDeclarationArray m_arrayElements;
-		//!\~english Byte size of the element	\~french Taille de l'élément, en octets
+		//!\~english Byte size of the element	\~french Taille de l'Ã©lÃ©ment, en octets
 		uint32_t m_uiStride;
 	};
 	/**
 	 *\~english
-	 *\brief		Swapping function
-	 *\param[in]	p_obj1, p_obj2	The 2 objects to swap
+	 *\brief		Equality operator.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
 	 *\~french
-	 *\brief		Fonction d'échange
-	 *\param[in]	p_obj1, p_obj2	Les 2 objets à échanger
+	 *\brief		OpÃ©rateur d'Ã©galitÃ©.
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets Ã  comparer
 	 */
-	void swap( BufferDeclaration & p_obj1, BufferDeclaration & p_obj2 );
+	C3D_API bool operator==( BufferDeclaration & p_lhs, BufferDeclaration & p_rhs );
+	/**
+	 *\~english
+	 *\brief		Equality operator.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
+	 *\~french
+	 *\brief		OpÃ©rateur d'Ã©galitÃ©.
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets Ã  comparer
+	 */
+	C3D_API bool operator!=( BufferDeclaration & p_lhs, BufferDeclaration & p_rhs );
 }
 
 #endif

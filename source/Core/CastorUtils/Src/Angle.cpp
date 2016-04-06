@@ -1,218 +1,215 @@
-#include "Angle.hpp"
+﻿#include "Angle.hpp"
 
 namespace Castor
 {
-	const double	Angle::PiDouble		= 3.1415926535897932384626433832795028841968;
-	const real		Angle::Pi				= real( PiDouble );
-	const float		Angle::PiFloat		= float( PiDouble );
-	const real		Angle::PiDiv2			= Angle::Pi / 2;
-	const real		Angle::PiMult2		= Angle::Pi * 2;
-	const double	Angle::RadianToDegree	= 180 / Angle::PiDouble;
-	const double	Angle::RadianToGrad	= 200 / Angle::PiDouble;
-	const double	Angle::DegreeToRadian	= Angle::PiDouble / 180;
-	const double	Angle::DegreeToGrad	= 200.0 / 180.0;
-	const double	Angle::GradToRadian	= Angle::PiDouble / 200;
-	const double	Angle::GradToDegree	= 180.0 / 200.0;
+	const double Angle::Pi = 3.1415926535897932384626433832795028841968;
+	const double Angle::PiDiv2 = Angle::Pi / 2;
+	const double Angle::PiMult2 = Angle::Pi * 2;
+	const double Angle::RadianToDegree = 57.295779513082320876798154814105;
+	const double Angle::RadianToGrad = 200 / Angle::Pi;
+	const double Angle::DegreeToRadian = 0.01745329251994329576923690768489;
+	const double Angle::DegreeToGrad = 200.0 / 180.0;
+	const double Angle::GradToRadian = Angle::Pi / 200;
+	const double Angle::GradToDegree = 180.0 / 200.0;
 
 	Angle::Angle()
-		:	m_rAngle( 0	)
+		: Angle( 0 )
 	{
 	}
 
 	Angle::Angle( Angle const & p_angle )
-		:	m_rAngle( p_angle.m_rAngle	)
+		: Angle( p_angle.m_radians )
 	{
 	}
 
 	Angle::Angle( Angle && p_angle )
-		:	m_rAngle( 0	)
+		: m_radians( 0 )
 	{
-		m_rAngle = std::move( p_angle.m_rAngle );
-		p_angle.m_rAngle = 0;
+		m_radians = std::move( p_angle.m_radians );
+		p_angle.m_radians = 0;
 	}
 
 	Angle::~Angle()
 	{
 	}
 
-	real Angle::Degrees()const
+	double Angle::degrees()const
 	{
-		return m_rAngle * real( RadianToDegree );
+		return m_radians * RadianToDegree;
 	}
 
-	real Angle::Radians()const
+	double Angle::radians()const
 	{
-		return m_rAngle;
+		return m_radians;
 	}
 
-	real Angle::Grads()const
+	double Angle::grads()const
 	{
-		return m_rAngle * real( RadianToGrad );
+		return m_radians * RadianToGrad;
 	}
 
-	void Angle::Degrees( real p_rAngle )
+	void Angle::degrees( double p_rAngle )
 	{
-		m_rAngle = p_rAngle * real( DegreeToRadian );
+		m_radians = p_rAngle * DegreeToRadian;
 	}
 
-	void Angle::Radians( real p_rAngle )
+	void Angle::radians( double p_rAngle )
 	{
-		m_rAngle = p_rAngle;
+		m_radians = p_rAngle;
 	}
 
-	void Angle::Grads( real p_rAngle )
+	void Angle::grads( double p_rAngle )
 	{
-		m_rAngle = p_rAngle * real( GradToRadian );
+		m_radians = p_rAngle * GradToRadian;
 	}
 
-	real Angle::Cos()const
+	double Angle::cos()const
 	{
-		return cos( m_rAngle );
+		return ::cos( m_radians );
 	}
 
-	real Angle::Sin()const
+	double Angle::sin()const
 	{
-		return sin( m_rAngle );
+		return ::sin( m_radians );
 	}
 
-	real Angle::Tan()const
+	double Angle::tan()const
 	{
-		return tan( m_rAngle );
+		return ::tan( m_radians );
 	}
 
-	real Angle::Cosh()const
+	double Angle::cosh()const
 	{
-		return cosh( m_rAngle );
+		return ::cosh( m_radians );
 	}
 
-	real Angle::Sinh()const
+	double Angle::sinh()const
 	{
-		return sinh( m_rAngle );
+		return ::sinh( m_radians );
 	}
 
-	real Angle::Tanh()const
+	double Angle::tanh()const
 	{
-		return tanh( m_rAngle );
+		return ::tanh( m_radians );
 	}
 
-	void Angle::ACos( real p_rValue )
+	void Angle::acos( double p_rValue )
 	{
-		m_rAngle = acos( p_rValue );
+		m_radians = ::acos( p_rValue );
 	}
 
-	void Angle::ASin( real p_rValue )
+	void Angle::asin( double p_rValue )
 	{
-		m_rAngle = asin( p_rValue );
+		m_radians = ::asin( p_rValue );
 	}
 
-	void Angle::ATan( real p_rValue )
+	void Angle::atan( double p_rValue )
 	{
-		m_rAngle = atan( p_rValue );
+		m_radians = ::atan( p_rValue );
 	}
 
-	Angle & Angle::operator =( Angle const & p_angle )
+	Angle & Angle::operator=( Angle const & p_rhs )
 	{
-		m_rAngle = p_angle.m_rAngle;
+		m_radians = p_rhs.m_radians;
 		return *this;
 	}
 
-	Angle & Angle::operator =( Angle && p_angle )
+	Angle & Angle::operator=( Angle && p_rhs )
 	{
-		if ( this != &p_angle )
+		if ( this != &p_rhs )
 		{
-			m_rAngle = p_angle.m_rAngle;
-			p_angle.m_rAngle = 0;
+			m_radians = p_rhs.m_radians;
+			p_rhs.m_radians = 0;
 		}
 
 		return *this;
 	}
 
-	Angle & Angle::operator +=( Angle const & p_angle )
+	Angle & Angle::operator+=( Angle const & p_rhs )
 	{
-		m_rAngle += p_angle.m_rAngle;
+		m_radians += p_rhs.m_radians;
 		return *this;
 	}
 
-	Angle & Angle::operator -=( Angle const & p_angle )
+	Angle & Angle::operator-=( Angle const & p_rhs )
 	{
-		m_rAngle -= p_angle.m_rAngle;
+		m_radians -= p_rhs.m_radians;
 		return *this;
 	}
 
-	Angle & Angle::operator *=( Angle const & p_angle )
+	Angle & Angle::operator*=( Angle const & p_rhs )
 	{
-		m_rAngle *= p_angle.m_rAngle;
+		m_radians *= p_rhs.m_radians;
 		return *this;
 	}
 
-	Angle & Angle::operator /=( Angle const & p_angle )
+	Angle & Angle::operator/=( Angle const & p_rhs )
 	{
-		m_rAngle /= p_angle.m_rAngle;
+		m_radians /= p_rhs.m_radians;
 		return *this;
 	}
 
-	Angle & Angle::operator *=( real p_scalar )
+	Angle & Angle::operator*=( double p_rhs )
 	{
-		m_rAngle *= p_scalar;
+		m_radians *= p_rhs;
 		return *this;
 	}
 
-	Angle & Angle::operator /=( real p_scalar )
+	Angle & Angle::operator/=( double p_rhs )
 	{
-		m_rAngle /= p_scalar;
+		m_radians /= p_rhs;
 		return *this;
 	}
 
-	bool operator ==( Angle const & p_angleA, Angle const & p_angleB )
+	bool operator==( Angle const & p_lhs, Angle const & p_rhs )
 	{
-		return std::abs( p_angleA.m_rAngle - p_angleB.m_rAngle ) < std::numeric_limits< real >::epsilon();
+		return std::abs( p_lhs.m_radians - p_rhs.m_radians ) < std::numeric_limits< double >::epsilon();
 	}
 
-	bool operator !=( Angle const & p_angleA, Angle const & p_angleB )
+	bool operator!=( Angle const & p_lhs, Angle const & p_rhs )
 	{
-		return !( p_angleA == p_angleB );
+		return !( p_lhs == p_rhs );
 	}
 
-	Angle operator +( Angle const & p_angleA, Angle const & p_angleB )
+	Angle operator+( Angle const & p_lhs, Angle const & p_rhs )
 	{
-		Angle l_return( p_angleA );
-		l_return += p_angleB;
+		Angle l_return( p_lhs );
+		l_return += p_rhs;
 		return l_return;
 	}
 
-	Angle operator -( Angle const & p_angleA, Angle const & p_angleB )
+	Angle operator-( Angle const & p_lhs, Angle const & p_rhs )
 	{
-		Angle l_return( p_angleA );
-		l_return -= p_angleB;
+		Angle l_return( p_lhs );
+		l_return -= p_rhs;
 		return l_return;
 	}
 
-	Angle operator *( Angle const & p_angleA, Angle const & p_angleB )
+	Angle operator*( Angle const & p_lhs, Angle const & p_rhs )
 	{
-		Angle l_return( p_angleA );
-		l_return *= p_angleB;
+		Angle l_return( p_lhs );
+		l_return *= p_rhs;
 		return l_return;
 	}
 
-	Angle operator /( Angle const & p_angleA, Angle const & p_angleB )
+	Angle operator/( Angle const & p_lhs, Angle const & p_rhs )
 	{
-		Angle l_return( p_angleA );
-		l_return /= p_angleB;
+		Angle l_return( p_lhs );
+		l_return /= p_rhs;
 		return l_return;
 	}
 
-	Angle operator *( Angle const & p_angle, real p_scalar )
+	Angle operator*( Angle const & p_lhs, double p_rhs )
 	{
-		Angle l_return( p_angle );
-		l_return *= p_scalar;
+		Angle l_return( p_lhs );
+		l_return *= p_rhs;
 		return l_return;
 	}
 
-	Angle operator /( Angle const & p_angle, real p_scalar )
+	Angle operator/( Angle const & p_lhs, double p_rhs )
 	{
-		Angle l_return( p_angle );
-		l_return /= p_scalar;
+		Angle l_return( p_lhs );
+		l_return /= p_rhs;
 		return l_return;
 	}
 }
-

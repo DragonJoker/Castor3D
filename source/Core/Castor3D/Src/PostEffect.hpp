@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -31,67 +27,71 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date		20/11/2012
 	\~english
-	\brief		Post render effect base class
-	\remark		A post render effect is an effect applied after 3D rendering and before 2D rendering
-				<br />Post render effects are applied in a cumulative way
+	\brief		Post render effect base class.
+	\remark		A post render effect is an effect applied after 3D rendering and before 2D rendering.
+				<br />Post render effects are applied in a cumulative way.
 	\~french
-	\brief		Classe de base d'effet post rendu
-	\remark		Une effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D
-				<br />Les effets post rendu sont appliqués de manière cumulative
+	\brief		Classe de base d'effet post rendu.
+	\remark		Une effet post rendu est un effet appliqué après le rendu 3D et avant le rendu 2D.
+				<br />Les effets post rendu sont appliqués de manière cumulative.
 	*/
-	class C3D_API PostEffect
+	class PostEffect
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_renderTarget	The render target to which is attached this effect.
+		 *\param[in]	p_params		The optional parameters.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
+		 *\param[in]	p_params		Les paramètres optionnels.
 		 */
-		PostEffect( RenderSystem * p_pRenderSystem );
+		C3D_API PostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		virtual ~PostEffect();
+		C3D_API virtual ~PostEffect();
 		/**
 		 *\~english
-		 *\brief		Initialisation function
-		 *\return		\p true if ok
+		 *\brief		Initialisation function.
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\return		\p true if ok
+		 *\brief		Fonction d'initialisation.
+		 *\return		\p true if ok.
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
-		 *\brief		Cleanup function
+		 *\brief		Cleanup function.
 		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\brief		Fonction de nettoyage.
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render function, applies the effect to a render target
-		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\return		\p true if ok
+		 *\brief			Render function, applies the effect to the given framebuffer.
+		 *\param[in,out]	p_framebuffer	The framebuffer.
+		 *\return			\p true if ok.
 		 *\~french
-		 *\brief		Fonction de rendu, applique l'effet sur une render target
-		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\return		\p true si tout s'est bien passé
+		 *\brief			Fonction de rendu, applique l'effet au tampon d'image donné.
+		 *\param[in,out]	p_framebuffer	Le tampon d'image.
+		 *\return			\p true si tout s'est bien passé.
 		 */
-		virtual bool Apply( RenderTarget * p_pRenderTarget ) = 0;
+		C3D_API virtual bool Apply( FrameBuffer & p_framebuffer ) = 0;
 
 	protected:
-		//!\~english The	render system	\~french Le render system
-		RenderSystem *	m_pRenderSystem;
+		//!\~english The render system.	\~french Le render system.
+		RenderSystem * m_renderSystem;
+		//!\~english The render target to which this effect is attached.	\~french La cible de rendu à laquelle est attachée cet effet.
+		RenderTarget & m_renderTarget;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

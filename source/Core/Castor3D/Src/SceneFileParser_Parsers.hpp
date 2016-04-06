@@ -21,10 +21,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Castor3DPrerequisites.hpp"
 #include "SceneFileParser.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	// Root parsers
@@ -37,6 +33,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RootTextOverlay )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RootDebugOverlays )
 
 	//Window parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_WindowRenderTarget )
@@ -48,11 +45,10 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetCamera )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetSize )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetFormat )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetDepth )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetMsaa )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetSsaa )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetTechnique )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetStereo )
-	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetDeferred )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetPostEffect )
+	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetToneMapping )
 	DECLARE_ATTRIBUTE_PARSER( Parser_RenderTargetEnd )
 
 	// Sampler parsers
@@ -70,6 +66,8 @@ namespace Castor3D
 	// Scene parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkColour )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBkImage )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneMaterial )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneSamplerState )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneCamera )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneLight )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneCameraNode )
@@ -78,6 +76,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneAmbientLight )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneImport )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBillboard )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneWindow )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneAnimatedObjectGroup )
 	DECLARE_ATTRIBUTE_PARSER( Parser_ScenePanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBorderPanelOverlay )
@@ -86,9 +85,8 @@ namespace Castor3D
 	// Light parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightParent )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_LightAmbient )
-	DECLARE_ATTRIBUTE_PARSER( Parser_LightDiffuse )
-	DECLARE_ATTRIBUTE_PARSER( Parser_LightSpecular )
+	DECLARE_ATTRIBUTE_PARSER( Parser_LightColour )
+	DECLARE_ATTRIBUTE_PARSER( Parser_LightIntensity )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightAttenuation )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightCutOff )
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightExponent )
@@ -113,7 +111,6 @@ namespace Castor3D
 	// Mesh Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshType )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshNormals )
-	DECLARE_ATTRIBUTE_PARSER( Parser_MeshFile )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshSubmesh )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshImport )
 	DECLARE_ATTRIBUTE_PARSER( Parser_MeshDivide )
@@ -147,8 +144,8 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassBlendFunc )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassTextureUnit )
 	DECLARE_ATTRIBUTE_PARSER( Parser_PassGlShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassCgShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_PassHlShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassAlphaBlendMode )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PassColourBlendMode )
 
 	// Texture Unit Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitImage )
@@ -160,46 +157,32 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitChannel )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitSampler )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitBlendColour )
+	DECLARE_ATTRIBUTE_PARSER( Parser_UnitEnd )
 
-	// GLSL Shader Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlVertexShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlPixelShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlHullShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlDomainShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderEnd )
+	// Shader Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_VertexShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_PixelShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_HullShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_DomainShader )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ConstantsBuffer )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderEnd )
 
-	// GLSL Shader Program Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramFile )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderProgramVariable )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryInputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryOutputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlGeometryOutputVtxCount )
+	// Shader Program Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramFile )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderProgramSampler )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryInputType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryOutputType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_GeometryOutputVtxCount )
 
-	// GLSL Shader Variables Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GlShaderVariableValue )
+	// Shader Program UBO Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderUboShaders )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderUboVariable )
 
-	// HLSL Shader Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlVertexShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlPixelShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlHullShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlDomainShader )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlFile )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderEnd )
-
-	// HLSL Shader Program Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramFile )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramVariable )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderProgramEntry )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryInputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryOutputType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlGeometryOutputVtxCount )
-
-	// HLSL Shader Variables Parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableType )
-	DECLARE_ATTRIBUTE_PARSER( Parser_HlShaderVariableValue )
+	// Shader UBO Variables Parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableType )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableCount )
+	DECLARE_ATTRIBUTE_PARSER( Parser_ShaderVariableValue )
 
 	// Font Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_FontFile )
@@ -210,6 +193,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPosition )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlaySize )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPixelSize )
+	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPixelPosition )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayMaterial )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayEnd )
 	DECLARE_ATTRIBUTE_PARSER( Parser_OverlayPanelOverlay )
@@ -232,6 +216,9 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayFont )
 	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayText )
 	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayTextWrapping )
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayVerticalAlign )
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayHorizontalAlign )
+	DECLARE_ATTRIBUTE_PARSER( Parser_TextOverlayTexturingMode )
 
 	// Camera parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_CameraParent )
@@ -260,10 +247,21 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_BillboardPoint )
 
 	// Animated object group parsers
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimatedObject )
-	DECLARE_ATTRIBUTE_PARSER( Parser_GroupAnimation )
-}
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimatedObject )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupAnimationStart )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectGroupEnd )
 
-#pragma warning( pop )
+	// Animated object parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectAnimation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimatedObjectEnd )
+
+	// Animation parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationLooped )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationScale )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationInterpolation )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationStart )
+	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationEnd )
+}
 
 #endif

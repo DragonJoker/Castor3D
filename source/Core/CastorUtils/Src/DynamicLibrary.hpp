@@ -43,7 +43,7 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur par défaut
 		 */
-		DynamicLibrary()throw();
+		CU_API DynamicLibrary()throw();
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -52,7 +52,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_lib	La DynamicLibrary à copier
 		 */
-		DynamicLibrary( DynamicLibrary const & p_lib )throw();
+		CU_API DynamicLibrary( DynamicLibrary const & p_lib )throw();
 		/**
 		 *\~english
 		 *\brief		Move constructor
@@ -61,14 +61,14 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_lib	La DynamicLibrary à déplacer
 		 */
-		DynamicLibrary( DynamicLibrary && p_lib )throw();
+		CU_API DynamicLibrary( DynamicLibrary && p_lib )throw();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~DynamicLibrary()throw();
+		CU_API ~DynamicLibrary()throw();
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -79,7 +79,7 @@ namespace Castor
 		 *\param[in]	p_lib	La DynamicLibrary à copier
 		 *\return		Une référence sur cette DynamicLibrary
 		 */
-		DynamicLibrary & operator =( DynamicLibrary const & p_lib );
+		CU_API DynamicLibrary & operator =( DynamicLibrary const & p_lib );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -90,7 +90,7 @@ namespace Castor
 		 *\param[in]	p_lib	La DynamicLibrary à déplacer
 		 *\return		Une référence sur cette DynamicLibrary
 		 */
-		DynamicLibrary & operator =( DynamicLibrary && p_lib );
+		CU_API DynamicLibrary & operator =( DynamicLibrary && p_lib );
 		/**
 		 *\~english
 		 *\brief		Opens a library from a path
@@ -101,7 +101,7 @@ namespace Castor
 		 *\param[in]	p_szPath	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
-		bool Open( xchar const * p_szPath )throw();
+		CU_API bool Open( xchar const * p_szPath )throw();
 		/**
 		 *\~english
 		 *\brief		Opens a library from a path
@@ -112,7 +112,7 @@ namespace Castor
 		 *\param[in]	p_strPath	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
-		bool Open( String const & p_strPath )throw();
+		CU_API bool Open( String const & p_strPath )throw();
 		/**
 		 *\~english
 		 *\brief		Opens a library from a path
@@ -123,7 +123,7 @@ namespace Castor
 		 *\param[in]	p_pathFile	Le chemin du fichier
 		 *\return		\p true si la librarie s'est chargée correctement
 		 */
-		bool Open( Path const & p_pathFile )throw();
+		CU_API bool Open( Path const & p_pathFile )throw();
 		/**
 		 *\~english
 		 *\brief		Retrieves a function
@@ -139,7 +139,7 @@ namespace Castor
 		template< typename FuncType >
 		bool GetFunction( FuncType & p_pfnFunction, char const * p_szName )throw()
 		{
-			return GetFunction( p_pfnFunction, str_utils::from_str( p_szName ) );
+			return GetFunction( p_pfnFunction, string::string_cast< xchar >( p_szName ) );
 		}
 		/**
 		 *\~english
@@ -156,25 +156,25 @@ namespace Castor
 		template< typename FuncType >
 		bool GetFunction( FuncType & p_pfnFunction, wchar_t const * p_wszName )throw()
 		{
-			return GetFunction( p_pfnFunction, str_utils::from_wstr( p_wszName ) );
+			return GetFunction( p_pfnFunction, string::string_cast< xchar >( p_wszName ) );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a function
 		 *\param[in]	p_pfnFunction	Receives the function
-		 *\param[in]	p_strName		The function name
+		 *\param[in]	p_name		The function name
 		 *\return		\p true if the function was correctly retrieved
 		 *\~french
 		 *\brief		Récupère une fonction
 		 *\param[in]	p_pfnFunction	Reçoit la fonction
-		 *\param[in]	p_strName		Le nom de la fonction
+		 *\param[in]	p_name		Le nom de la fonction
 		 *\return		\p true si la fonction a été correctement récupérée
 		 */
 		template< typename FuncType >
-		bool GetFunction( FuncType & p_pfnFunction, String const & p_strName )throw()
+		bool GetFunction( FuncType & p_pfnFunction, String const & p_name )throw()
 		{
-			p_pfnFunction = reinterpret_cast< FuncType >( DoGetFunction( p_strName ) );
-			return p_pfnFunction != NULL;
+			p_pfnFunction = reinterpret_cast< FuncType >( DoGetFunction( p_name ) );
+			return p_pfnFunction != nullptr;
 		}
 		/**
 		 *\~english
@@ -186,7 +186,7 @@ namespace Castor
 		 */
 		inline bool IsOpen()const
 		{
-			return m_pLibrary != NULL;
+			return m_pLibrary != nullptr;
 		}
 		/**
 		 *\~english
@@ -202,8 +202,8 @@ namespace Castor
 		}
 
 	private:
-		void DoClose()throw();
-		void * DoGetFunction( String const & p_strName )throw();
+		CU_API void DoClose()throw();
+		CU_API void * DoGetFunction( String const & p_name )throw();
 
 	private:
 		void * m_pLibrary;

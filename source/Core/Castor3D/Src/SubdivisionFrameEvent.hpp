@@ -33,17 +33,39 @@ namespace Castor3D
 	\brief		Threaded Subdivision Frame event
 	\remark		A la fin d'une subdivision de submesh, les tampons peuvent être regénérés, cette action est effectuée dans cet évènement
 	*/
-	class C3D_API SubdivisionFrameEvent
-		:	public FrameEvent
+	class SubdivisionFrameEvent
+		: public FrameEvent
 	{
-	private:
-		SubmeshSPtr m_pSubmesh;
-
 	public:
-		SubdivisionFrameEvent( SubmeshSPtr p_pSubmesh );
-		virtual ~SubdivisionFrameEvent();
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_pSubmesh	The subdivision target
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_pSubmesh	La cible de la subdivision
+		 */
+		C3D_API SubdivisionFrameEvent( SubmeshSPtr p_pSubmesh );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		C3D_API virtual ~SubdivisionFrameEvent();
+		/**
+		 *\~english
+		 *\brief		Applies the event : computes normals, generates buffers, initialises the renderer
+		 *\return		\p true if the event was applied successfully
+		 *\~french
+		 *\brief		Traite l'évènement : génère les normales et les tampons, initialise le renderer
+		 *\return		\p true si l'évènement a été traité avec succès
+		 */
+		C3D_API virtual bool Apply();
 
-		virtual bool Apply();
+	private:
+		//!\~english The subdivision target	\~french La cible de la subdivision
+		SubmeshSPtr m_pSubmesh;
 	};
 }
 

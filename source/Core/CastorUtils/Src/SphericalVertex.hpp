@@ -46,7 +46,7 @@ namespace Castor
 		 *\param[in]	p_phi		Angle Phi
 		 *\param[in]	p_theta		Angle Theta
 		 */
-		SphericalVertex( real p_radius = 0, real p_phi = 0, real p_theta = 0 );
+		CU_API SphericalVertex( real p_radius = 0, real p_phi = 0, real p_theta = 0 );
 		/**
 		 *\~english
 		 *\brief		Copy Constructor
@@ -55,7 +55,7 @@ namespace Castor
 		 *\brief		Constructeur par recopie
 		 *\param[in]	p_vertex	Le vertex à copier
 		 */
-		SphericalVertex( SphericalVertex const & p_vertex );
+		CU_API SphericalVertex( SphericalVertex const & p_vertex );
 		/**
 		 *\~english
 		 *\brief		Move Constructor
@@ -64,7 +64,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_vertex	Le vertex à déplacer
 		 */
-		SphericalVertex( SphericalVertex && p_vertex );
+		CU_API SphericalVertex( SphericalVertex && p_vertex );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -75,7 +75,7 @@ namespace Castor
 		 *\param[in]	p_vertex	Le vertex à copier
 		 *\return		Une référence sur ce SphericalVertex
 		 */
-		SphericalVertex & operator =( SphericalVertex const & p_vertex );
+		CU_API SphericalVertex & operator =( SphericalVertex const & p_vertex );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -86,7 +86,7 @@ namespace Castor
 		 *\param[in]	p_vertex	Le vertex à déplacer
 		 *\return		Une référence sur ce SphericalVertex
 		 */
-		SphericalVertex & operator =( SphericalVertex && p_vertex );
+		CU_API SphericalVertex & operator =( SphericalVertex && p_vertex );
 		/**
 		 *\~english
 		 *\brief		Constructor from a cartesian point
@@ -95,14 +95,14 @@ namespace Castor
 		 *\brief		Constructeur à partir d'un point cartésien
 		 *\param[in]	p_vertex	Le vertex à convertir
 		 */
-		SphericalVertex( Point3r const & p_vertex );
+		CU_API SphericalVertex( Point3r const & p_vertex );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~SphericalVertex();
+		CU_API ~SphericalVertex();
 
 	public:
 		//!\~english The radius (distance to origin)	\~french Rayon (distance à l'origine)

@@ -37,11 +37,7 @@ namespace Castor
 	{
 	private:
 		typedef Castor::Policy< T > policy;
-		typedef Castor::Point< T, 3 > point;
-
-	private:
-		point m_normal;
-		real m_d;
+		typedef Castor::Point3< T > point;
 
 	public:
 		/**
@@ -82,22 +78,6 @@ namespace Castor
 		 *\brief		Destructeur
 		 */
 		virtual ~PlaneEquation();
-		/**
-		 *\~english
-		 *\brief		Checks if this plane is equal to another one.
-		 \remark		A plane is equal to another one if it is parallel to it and if normals and d coeff are equal
-		 *\~french
-		 *\brief		Vérifie si un plan est égal à un autre
-		 *\remark		Deux plans sont égaux si ils sont parallèles et si leurs normales et coeff sont égaux
-		 */
-		bool operator ==( PlaneEquation const & p_plane )const;
-		/**
-		 *\~english
-		 *\brief		Checks if this plane is different from another one
-		 *\~french
-		 *\brief		Vérifie si ce plan est différent d'un autre
-		 */
-		bool operator !=( PlaneEquation const & p_plane )const;
 		/**
 		 *\~english
 		 *\brief		Compute plane's equation from 3 points
@@ -141,7 +121,7 @@ namespace Castor
 		 *\param[in]	p_point	Le point
 		 *\return		La distance, positive si le point est du même côté que la normale du plan
 		 */
-		T Distance( Point< T, 3 > const & p_point )const;
+		T Distance( point const & p_point )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the projection of a point on this plane
@@ -152,7 +132,7 @@ namespace Castor
 		 *\param[in]	p_point	Le point à projeter
 		 *\return		Le résultat de la projection
 		 */
-		Point< T, 3 > Project( Point< T, 3 > const & p_point )const;
+		point Project( point const & p_point )const;
 		/**
 		 *\todo			Find origin point
 		 *\~english
@@ -201,7 +181,7 @@ namespace Castor
 		 *\brief		Récupère la normale du plan
 		 *\return		La valeur
 		 */
-		inline Point< T, 3 > const & GetNormal()const
+		inline point const & GetNormal()const
 		{
 			return m_normal;
 		}
@@ -213,11 +193,35 @@ namespace Castor
 		 *\brief		Récupère le point d'origine du plan
 		 *\return		La valeur
 		 */
-		inline Point< T, 3 > const & GetPoint()const
+		inline point const & GetPoint()const
 		{
-			return m_d;
+			return m_point;
 		}
+
+	private:
+		point m_normal;
+		point m_point;
+		template< typename U > friend bool operator==( PlaneEquation< U > const & p_a, PlaneEquation< U > const & p_b );
+		template< typename U > friend bool operator!=( PlaneEquation< U > const & p_a, PlaneEquation< U > const & p_b );
 	};
+	/**
+	 *\~english
+	 *\brief		Checks if this plane is equal to another one.
+	 *\remarks		A plane is equal to another one if it is parallel to it and if normals and d coeff are equal
+	 *\~french
+	 *\brief		Vérifie si un plan est égal à un autre
+	 *\remarks		Deux plans sont égaux si ils sont parallèles et si leurs normales et coeff sont égaux
+	 */
+	template< typename T >
+	bool operator==( PlaneEquation< T > const & p_a, PlaneEquation< T > const & p_b );
+	/**
+	 *\~english
+	 *\brief		Checks if this plane is different from another one
+	 *\~french
+	 *\brief		Vérifie si ce plan est différent d'un autre
+	 */
+	template< typename T >
+	bool operator!=( PlaneEquation< T > const & p_a, PlaneEquation< T > const & p_b );
 }
 
 #include "PlaneEquation.inl"

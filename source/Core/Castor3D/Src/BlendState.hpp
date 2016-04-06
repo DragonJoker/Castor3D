@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,11 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_BLEND_STATE_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include <Colour.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <Colour.hpp>
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -36,50 +34,53 @@ namespace Castor3D
 	\~french
 	\brief		Classe regroupant les configurations de blend
 	*/
-	class C3D_API BlendState
+	class BlendState
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
 		 */
-		BlendState();
+		C3D_API BlendState( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BlendState();
+		C3D_API virtual ~BlendState();
 		/**
 		 *\~english
 		 *\brief		Initialises the states
 		 *\~french
-		 *\brief		Initialise les Ã¯Â¿Â½tats
+		 *\brief		Initialise les états
 		 */
-		virtual bool Initialise() = 0;
+		C3D_API virtual bool Initialise() = 0;
 		/**
 		 *\~english
 		 *\brief		Cleans the states
 		 *\~french
-		 *\brief		Nettoie les Ã¯Â¿Â½tats
+		 *\brief		Nettoie les états
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Applies the states
 		 *\~french
-		 *\brief		Applique les Ã¯Â¿Â½tats
+		 *\brief		Applique les états
 		 */
-		virtual bool Apply() = 0;
+		C3D_API virtual bool Apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha to coverage activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le statut d'activation de l'alpha to coverage
+		 *\brief		Récupère le statut d'activation de l'alpha to coverage
 		 *\return		La valeur
 		 */
 		inline bool IsAlphaToCoverageEnabled()const
@@ -89,22 +90,22 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the alpha to coverage activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
-		 *\brief		DÃ©finit le statut d'activation de l'alpha to coverage
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\brief		Définit le statut d'activation de l'alpha to coverage
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void EnableAlphaToCoverage( bool p_bEnable )
+		inline void EnableAlphaToCoverage( bool p_enable )
 		{
-			m_bChanged |= m_bEnableAlphaToCoverage != p_bEnable;
-			m_bEnableAlphaToCoverage = p_bEnable;
+			m_changed |= m_bEnableAlphaToCoverage != p_enable;
+			m_bEnableAlphaToCoverage = p_enable;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the independant blending activation status
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le statut d'activation du blending indÃ¯Â¿Â½pendant
+		 *\brief		Récupère le statut d'activation du blending indépendant
 		 *\return		La valeur
 		 */
 		inline bool IsIndependantBlendEnabled()const
@@ -114,22 +115,22 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the independant blending activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
 		 *\~french
-		 *\brief		DÃ©finit le statut d'activation du blending indÃ¯Â¿Â½pendant
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\brief		Définit le statut d'activation du blending indépendant
+		 *\param[in]	p_enable	La nouvelle valeur
 		 */
-		inline void EnableIndependantBlend( bool p_bEnable )
+		inline void EnableIndependantBlend( bool p_enable )
 		{
-			m_bChanged |= m_bIndependantBlend != p_bEnable;
-			m_bIndependantBlend = p_bEnable;
+			m_changed |= m_bIndependantBlend != p_enable;
+			m_bIndependantBlend = p_enable;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the blend factors
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re les facteurs de blend
+		 *\brief		Récupère les facteurs de blend
 		 *\return		La valeur
 		 */
 		inline const Castor::Colour & GetBlendFactors()const
@@ -141,12 +142,12 @@ namespace Castor3D
 		 *\brief		Sets the blend factors
 		 *\param[in]	p_clFactors	The new value
 		 *\~french
-		 *\brief		DÃ©finit les facteurs de blend
+		 *\brief		Définit les facteurs de blend
 		 *\param[in]	p_clFactors	La nouvelle valeur
 		 */
 		inline void SetBlendFactors( const Castor::Colour & p_clFactors )
 		{
-			m_bChanged |= m_blendFactors != p_clFactors;
+			m_changed |= m_blendFactors != p_clFactors;
 			m_blendFactors = p_clFactors;
 		}
 		/**
@@ -154,7 +155,7 @@ namespace Castor3D
 		 *\brief		Retrieves the sample coverage mask
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le masque de couverture de samples
+		 *\brief		Récupère le masque de couverture de samples
 		 *\return		La valeur
 		 */
 		inline uint32_t GetSampleCoverageMask()const
@@ -166,213 +167,245 @@ namespace Castor3D
 		 *\brief		Sets the sample coverage mask
 		 *\param[in]	p_uiMask	The new value
 		 *\~french
-		 *\brief		DÃ©finit le masque de couverture de samples
+		 *\brief		Définit le masque de couverture de samples
 		 *\param[in]	p_uiMask	La nouvelle valeur
 		 */
 		inline void SetSampleCoverageMask( uint32_t p_uiMask )
 		{
-			m_bChanged |= m_uiSampleMask != p_uiMask;
+			m_changed |= m_uiSampleMask != p_uiMask;
 			m_uiSampleMask = p_uiMask;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the blending activation status
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le statut d'activation du blending
+		 *\brief		Récupère le statut d'activation du blending
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline bool IsBlendEnabled( uint8_t p_uiIndex = 0 )const
+		inline bool IsBlendEnabled( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_bEnableBlend;
+			return m_rtStates[p_index].m_bEnableBlend;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the blending activation status
-		 *\param[in]	p_bEnable	The new value
+		 *\param[in]	p_enable	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
-		 *\brief		DÃ©finit le statut d'activation du blending
-		 *\param[in]	p_bEnable	La nouvelle valeur
+		 *\brief		Définit le statut d'activation du blending
+		 *\param[in]	p_enable	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void EnableBlend( bool p_bEnable, uint8_t p_uiIndex = 0 )
+		inline void EnableBlend( bool p_enable, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_bEnableBlend != p_bEnable;
-			m_rtStates[p_uiIndex].m_bEnableBlend = p_bEnable;
+			m_changed |= m_rtStates[p_index].m_bEnableBlend != p_enable;
+			m_rtStates[p_index].m_bEnableBlend = p_enable;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB source blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur source RGB
+		 *\brief		Récupère le facteur source RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetRgbSrcBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetRgbSrcBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eRgbSrcBlend;
+			return m_rtStates[p_index].m_eRgbSrcBlend;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the RGB source blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
-		 *\brief		DÃ©finit le facteur source RGB
+		 *\brief		Définit le facteur source RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetRgbSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eRgbSrcBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eRgbSrcBlend = p_eValue;
+			m_changed |= m_rtStates[p_index].m_eRgbSrcBlend != p_eValue;
+			m_rtStates[p_index].m_eRgbSrcBlend = p_eValue;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB destination blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur destination RGB
+		 *\brief		Récupère le facteur destination RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetRgbDstBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetRgbDstBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eRgbDstBlend;
+			return m_rtStates[p_index].m_eRgbDstBlend;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the RGB destination blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
-		 *\brief		DÃ©finit le facteur destination RGB
+		 *\brief		Définit le facteur destination RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetRgbDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eRgbDstBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eRgbDstBlend = p_eValue;
+			m_changed |= m_rtStates[p_index].m_eRgbDstBlend != p_eValue;
+			m_rtStates[p_index].m_eRgbDstBlend = p_eValue;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB blending operation
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re l'opÃ©ration de blend RGB
+		 *\brief		Récupère l'opération de blend RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND_OP GetRgbBlendOp( uint8_t p_uiIndex = 0 )const
+		inline eBLEND_OP GetRgbBlendOp( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eRgbBlendOp;
+			return m_rtStates[p_index].m_eRgbBlendOp;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the RGB blending operation
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
-		 *\brief		DÃ©finit l'opÃ©ration de blend RGB
+		 *\brief		Définit l'opération de blend RGB
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetRgbBlendOp( eBLEND_OP p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eRgbBlendOp != p_eValue;
-			m_rtStates[p_uiIndex].m_eRgbBlendOp = p_eValue;
+			m_changed |= m_rtStates[p_index].m_eRgbBlendOp != p_eValue;
+			m_rtStates[p_index].m_eRgbBlendOp = p_eValue;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha source blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur source alpha
+		 *\brief		Récupère le facteur source alpha
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetAlphaSrcBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetAlphaSrcBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eAlphaSrcBlend;
+			return m_rtStates[p_index].m_eAlphaSrcBlend;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the alpha source blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
-		 *\brief		DÃ©finit le facteur source alpha
+		 *\brief		Définit le facteur source alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetAlphaSrcBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eAlphaSrcBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eAlphaSrcBlend = p_eValue;
+			m_changed |= m_rtStates[p_index].m_eAlphaSrcBlend != p_eValue;
+			m_rtStates[p_index].m_eAlphaSrcBlend = p_eValue;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the alpha destination blending factor
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le facteur destination alpha
+		 *\brief		Récupère le facteur destination alpha
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND GetAlphaDstBlend( uint8_t p_uiIndex = 0 )const
+		inline eBLEND GetAlphaDstBlend( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eAlphaDstBlend;
+			return m_rtStates[p_index].m_eAlphaDstBlend;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the alpha destination blending factor
 		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_index		The value index
 		 *\~french
-		 *\brief		DÃ©finit le facteur destination alpha
+		 *\brief		Définit le facteur destination alpha
 		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\param[in]	p_index		L'indice de la valeur
 		 */
-		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetAlphaDstBlend( eBLEND p_eValue, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eAlphaDstBlend != p_eValue;
-			m_rtStates[p_uiIndex].m_eAlphaDstBlend = p_eValue;
+			m_changed |= m_rtStates[p_index].m_eAlphaDstBlend != p_eValue;
+			m_rtStates[p_index].m_eAlphaDstBlend = p_eValue;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB blending operation
+		 *\param[in]	p_index		The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re l'opÃ©ration de blend RGB
+		 *\brief		Récupère l'opération de blend RGB
+		 *\param[in]	p_index		L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline eBLEND_OP GetAlphaBlendOp( uint8_t p_uiIndex = 0 )const
+		inline eBLEND_OP GetAlphaBlendOp( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_eAlphaBlendOp;
+			return m_rtStates[p_index].m_eAlphaBlendOp;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the RGB blending operation
-		 *\param[in]	p_eValue	The new value
+		 *\param[in]	p_value	The new value
+		 *\param[in]	p_index	The value index
 		 *\~french
-		 *\brief		DÃ©finit l'opÃ©ration de blend RGB
-		 *\param[in]	p_eValue	La nouvelle valeur
+		 *\brief		Définit l'opération de blend RGB
+		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	p_index	L'indice de la valeur
 		 */
-		inline void SetAlphaBlendOp( eBLEND_OP p_eValue, uint8_t p_uiIndex = 0 )
+		inline void SetAlphaBlendOp( eBLEND_OP p_value, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_eAlphaBlendOp != p_eValue;
-			m_rtStates[p_uiIndex].m_eAlphaBlendOp = p_eValue;
+			m_changed |= m_rtStates[p_index].m_eAlphaBlendOp != p_value;
+			m_rtStates[p_index].m_eAlphaBlendOp = p_value;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the render target write mask
+		 *\param[in]	p_index	The value index
 		 *\return		The value
 		 *\~french
-		 *\brief		RÃ©cupÃ¨re le masque d'Ã©criture de la cible de rendu
+		 *\brief		Récupère le masque d'écriture de la cible de rendu
+		 *\param[in]	p_index	L'indice de la valeur
 		 *\return		La valeur
 		 */
-		inline uint8_t GetWriteMask( uint8_t p_uiIndex = 0 )const
+		inline uint8_t GetWriteMask( uint8_t p_index = 0 )const
 		{
-			return m_rtStates[p_uiIndex].m_uiWriteMask;
+			return m_rtStates[p_index].m_uiWriteMask;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the render target write mask
-		 *\param[in]	p_byMask	The new value
+		 *\param[in]	p_value	The new value
+		 *\param[in]	p_index	The value index
 		 *\~french
-		 *\brief		DÃ©finit le masque d'Ã©criture de la cible de rendu
-		 *\param[in]	p_byMask	La nouvelle valeur
+		 *\brief		Définit le masque d'écriture de la cible de rendu
+		 *\param[in]	p_value	La nouvelle valeur
+		 *\param[in]	p_index	L'indice de la valeur
 		 */
-		inline void SetWriteMask( uint8_t p_byMask, uint8_t p_uiIndex = 0 )
+		inline void SetWriteMask( uint8_t p_value, uint8_t p_index = 0 )
 		{
-			m_bChanged |= m_rtStates[p_uiIndex].m_uiWriteMask != p_byMask;
-			m_rtStates[p_uiIndex].m_uiWriteMask = p_byMask;
+			m_changed |= m_rtStates[p_index].m_uiWriteMask != p_value;
+			m_rtStates[p_index].m_uiWriteMask = p_value;
 		}
 		/**
 		 *\~english
@@ -384,10 +417,10 @@ namespace Castor3D
 		 */
 		inline void SetColourMask( eWRITING_MASK p_r, eWRITING_MASK p_g, eWRITING_MASK p_b, eWRITING_MASK p_a )
 		{
-			m_bChanged |= m_eColourMask[0] != p_r;
-			m_bChanged |= m_eColourMask[1] != p_g;
-			m_bChanged |= m_eColourMask[2] != p_b;
-			m_bChanged |= m_eColourMask[3] != p_a;
+			m_changed |= m_eColourMask[0] != p_r;
+			m_changed |= m_eColourMask[1] != p_g;
+			m_changed |= m_eColourMask[2] != p_b;
+			m_changed |= m_eColourMask[3] != p_a;
 			m_eColourMask[0] = p_r;
 			m_eColourMask[1] = p_g;
 			m_eColourMask[2] = p_b;
@@ -445,34 +478,57 @@ namespace Castor3D
 	protected:
 		struct C3D_API stRT_BLEND_STATE
 		{
-			bool		m_bEnableBlend;
-			eBLEND		m_eRgbSrcBlend;
-			eBLEND		m_eRgbDstBlend;
-			eBLEND_OP	m_eRgbBlendOp;
-			eBLEND		m_eAlphaSrcBlend;
-			eBLEND		m_eAlphaDstBlend;
-			eBLEND_OP	m_eAlphaBlendOp;
-			uint8_t		m_uiWriteMask;
+			bool m_bEnableBlend;
+			eBLEND m_eRgbSrcBlend;
+			eBLEND m_eRgbDstBlend;
+			eBLEND_OP m_eRgbBlendOp;
+			eBLEND m_eAlphaSrcBlend;
+			eBLEND m_eAlphaDstBlend;
+			eBLEND_OP m_eAlphaBlendOp;
+			uint8_t m_uiWriteMask;
 		};
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		C3D_API void CreateCurrent();
+		/**
+		 *\~english
+		 *\brief		Destroys the state used to save the current state
+		 *\~french
+		 *\brief		Détruit l'état utilisé pour stocker l'état courant
+		 */
+		C3D_API void DestroyCurrent();
+		/**
+		 *\~english
+		 *\brief		Creates the state used to save the current state
+		 *\~french
+		 *\brief		Crée l'état utilisé pour stocker l'état courant
+		 */
+		C3D_API virtual BlendStateSPtr DoCreateCurrent() = 0;
 
 	protected:
-		//!\~english Tells if the blend state has changed	\~french Dit que l'Ã©tat a changÃ©
-		bool m_bChanged;
-		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activÃ©
+		//!\~english Tells if the blend state has changed	\~french Dit que l'état a changé
+		bool m_changed;
+		//!\~english Tells if the alpha to coveage is enabled	\~french Dit si l'alpha to coverage est activé
 		bool m_bEnableAlphaToCoverage;
-		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les Ã©tats indÃ©pendants de mÃ©lange sont activÃ©s
+		//!\~english Tells ifthe independant blend states are activated	\~french Dit si les états indépendants de mélange sont activés
 		bool m_bIndependantBlend;
-		//!\~english Le blend colour	\~french La couleur de mÃ©lange
+		//!\~english Le blend colour	\~french La couleur de mélange
 		Castor::Colour m_blendFactors;
-		//!\~english The sample mask	\~french Le masque d'Ã©chantillonage
+		//!\~english The sample mask	\~french Le masque d'échantillonage
 		uint32_t m_uiSampleMask;
-		//!\~english the blend states	\~french Les Ã©tats de mÃ©lange
+		//!\~english the blend states	\~french Les états de mélange
 		std::array< stRT_BLEND_STATE, 8 > m_rtStates;
 		//!\~english	Colours writing mask	\~french	Masque d'écriture des couleurs
 		eWRITING_MASK m_eColourMask[4];
+		//!\~english	The internal global state used to commit only the changed states.	\~french	Etat interne global, utilisé pour n'appliquer que les changements d'état.
+		static BlendStateWPtr m_wCurrentState;
+		//!\~english	Shared_pointer to the internal global state, to use reference counting for this static member.	\~french	Pointeur partag2 sur l'état interne global, utilisé pour avoir le comptage de références pour ce membre statique.
+		BlendStateSPtr m_currentState;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

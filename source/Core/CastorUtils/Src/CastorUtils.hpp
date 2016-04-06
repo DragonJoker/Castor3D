@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -26,9 +26,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
-	Point3r operator *( Matrix4x4r const & p_mtx, Point3r const & p_pt );
-	Point3r operator *( Point3r const & p_pt, Matrix4x4r const & p_mtx );
-	uint32_t GetNext2Pow( uint32_t p_uiDim );
+	CU_API Point3r operator *( Matrix4x4r const & p_mtx, Point3r const & p_pt );
+	CU_API Point3r operator *( Point3r const & p_pt, Matrix4x4r const & p_mtx );
+	CU_API uint32_t GetNext2Pow( uint32_t p_uiDim );
 }
 
 #endif

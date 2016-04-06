@@ -1,44 +1,46 @@
+﻿#include "PointOperators.hpp"
 #include <cstring>
+#include <numeric>
 
 namespace Castor
 {
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::BinaryLoader::BinaryLoader()
-		:	Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
+		: Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	bool Coords< T, Count >::BinaryLoader::operator()( Coords< T, Count > & p_object, BinaryFile & p_file )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; ++i )
+		for ( uint32_t i = 0; i < Count && l_return; ++i )
 		{
-			l_bReturn = p_file.Read( p_object[i] ) == sizeof( T );
+			l_return = p_file.Read( p_object[i] ) == sizeof( T );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	template< typename T, uint32_t Count >
 	bool Coords< T, Count >::BinaryLoader::operator()( Coords< T, Count > const & p_object, BinaryFile & p_file )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; ++i )
+		for ( uint32_t i = 0; i < Count && l_return; ++i )
 		{
-			l_bReturn = p_file.Write( p_object[i] ) == sizeof( T );
+			l_return = p_file.Write( p_object[i] ) == sizeof( T );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
-//*************************************************************************************************
+	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
-	Coords< T, Count >::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	Coords< T, Count >::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		: Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
@@ -79,36 +81,36 @@ namespace Castor
 			l_streamWord << p_object[i];
 		}
 
-		bool l_bReturn = p_file.Print( 1024, cuT( "%s" ), l_streamWord.str().c_str() ) > 0;
-		return l_bReturn;
+		bool l_return = p_file.Print( 1024, cuT( "%s" ), l_streamWord.str().c_str() ) > 0;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords()
-		:	m_coords( NULL	)
+		: m_coords( nullptr )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( T * p_pValues )
-		:	m_coords( p_pValues	)
+		: m_coords( p_pValues )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( Coords< T, Count > const & p_pt )
-		:	m_coords( p_pt.m_coords )
+		: m_coords( p_pt.m_coords )
 	{
 	}
 
 	template< typename T, uint32_t Count >
 	Coords< T, Count >::Coords( Coords< T, Count > && p_pt )
-		:	m_coords( NULL	)
+		: m_coords( nullptr )
 	{
-		m_coords		= std::move( p_pt.m_coords );
-		p_pt.m_coords	= NULL;
+		m_coords = std::move( p_pt.m_coords );
+		p_pt.m_coords = nullptr;
 	}
 
 	template< typename T, uint32_t Count >
@@ -117,146 +119,132 @@ namespace Castor
 	}
 
 	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator =( Coords< T, Count > const & p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator=( Coords< T, Count > const & p_pt )
 	{
 		m_coords = p_pt.m_coords;
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator =( Coords< T, Count > && p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator=( Coords< T, Count > && p_pt )
 	{
-		if ( this != & p_pt )
+		if ( this != &p_pt )
 		{
-			m_coords		= std::move( p_pt.m_coords );
-			p_pt.m_coords	= NULL;
+			m_coords = std::move( p_pt.m_coords );
+			p_pt.m_coords = nullptr;
 		}
 
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator =( Point< T, Count > const & p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator=( Point< T, Count > const & p_pt )
 	{
 		memcpy( m_coords, p_pt.const_ptr(), binary_size );
-		return * this;
+		return *this;
 	}
 
 	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator =( T * p_pValues )
+	inline Coords< T, Count > & Coords< T, Count >::operator=( T * p_pValues )
 	{
 		m_coords = p_pValues;
-		return * this;
-	}
-
-	template< typename T, uint32_t Count >
-	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator +=( Coords< U, _Count > const & p_pt )
-	{
-		*this = ( *this + p_pt );
-		return * this;
-	}
-
-	template< typename T, uint32_t Count >
-	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator -=( Coords< U, _Count > const & p_pt )
-	{
-		*this = ( *this - p_pt );
-		return * this;
-	}
-
-	template< typename T, uint32_t Count >
-	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator *=( Coords< U, _Count > const & p_pt )
-	{
-		*this = ( *this * p_pt );
 		return *this;
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator /=( Coords< U, _Count > const & p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator+=( Coords< U, _Count > const & p_pt )
 	{
-		*this = ( *this / p_pt );
-		return * this;
+		return PtAssignOperators< T, U, Count, _Count >::add( *this, p_pt );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator +=( Point< U, _Count > const & p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator-=( Coords< U, _Count > const & p_pt )
 	{
-		*this = ( *this + p_pt );
-		return * this;
+		return PtAssignOperators< T, U, Count, _Count >::sub( *this, p_pt );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator -=( Point< U, _Count > const & p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator*=( Coords< U, _Count > const & p_pt )
 	{
-		*this = ( *this - p_pt );
-		return * this;
+		return PtAssignOperators< T, U, Count, _Count >::mul( *this, p_pt );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator *=( Point< U, _Count > const & p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator/=( Coords< U, _Count > const & p_pt )
 	{
-		*this = ( *this * p_pt );
-		return * this;
+		return PtAssignOperators< T, U, Count, _Count >::div( *this, p_pt );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U, uint32_t _Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator /=( Point< U, _Count > const & p_pt )
+	inline Coords< T, Count > & Coords< T, Count >::operator+=( Point< U, _Count > const & p_pt )
 	{
-		*this = ( *this / p_pt );
-		return * this;
+		return PtAssignOperators< T, U, Count, _Count >::add( *this, p_pt );
+	}
+
+	template< typename T, uint32_t Count >
+	template< typename U, uint32_t _Count >
+	inline Coords< T, Count > & Coords< T, Count >::operator-=( Point< U, _Count > const & p_pt )
+	{
+		return PtAssignOperators< T, U, Count, _Count >::sub( *this, p_pt );
+	}
+
+	template< typename T, uint32_t Count >
+	template< typename U, uint32_t _Count >
+	inline Coords< T, Count > & Coords< T, Count >::operator*=( Point< U, _Count > const & p_pt )
+	{
+		return PtAssignOperators< T, U, Count, _Count >::mul( *this, p_pt );
+	}
+
+	template< typename T, uint32_t Count >
+	template< typename U, uint32_t _Count >
+	inline Coords< T, Count > & Coords< T, Count >::operator/=( Point< U, _Count > const & p_pt )
+	{
+		return PtAssignOperators< T, U, Count, _Count >::div( *this, p_pt );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U >
-	inline Coords< T, Count > & Coords< T, Count >::operator +=( U const * p_coords )
+	inline Coords< T, Count > & Coords< T, Count >::operator+=( U const * p_coords )
 	{
-		*this = ( *this + p_coords );
-		return * this;
+		return PtAssignOperators< T, U, Count, Count >::add( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U >
-	inline Coords< T, Count > & Coords< T, Count >::operator -=( U const * p_coords )
+	inline Coords< T, Count > & Coords< T, Count >::operator-=( U const * p_coords )
 	{
-		*this = ( *this - p_coords );
-		return * this;
+		return PtAssignOperators< T, U, Count, Count >::sub( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U >
-	inline Coords< T, Count > & Coords< T, Count >::operator *=( U const * p_coords )
+	inline Coords< T, Count > & Coords< T, Count >::operator*=( U const * p_coords )
 	{
-		*this = ( *this * p_coords );
-		return * this;
+		return PtAssignOperators< T, U, Count, Count >::mul( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >
 	template< typename U >
-	inline Coords< T, Count > & Coords< T, Count >::operator /=( U const * p_coords )
+	inline Coords< T, Count > & Coords< T, Count >::operator/=( U const * p_coords )
 	{
-		*this = ( *this / p_coords );
-		return * this;
+		return PtAssignOperators< T, U, Count, Count >::div( *this, p_coords );
 	}
 
 	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator *=( T const & p_coord )
+	inline Coords< T, Count > & Coords< T, Count >::operator*=( T const & p_coord )
 	{
-		*this = ( *this * p_coord );
-		return * this;
+		return PtAssignOperators< T, T, Count, Count >::mul( *this, p_coord );
 	}
 
 	template< typename T, uint32_t Count >
-	inline Coords< T, Count > & Coords< T, Count >::operator /=( T const & p_coord )
+	inline Coords< T, Count > & Coords< T, Count >::operator/=( T const & p_coord )
 	{
-		*this = ( *this / p_coord );
-		return * this;
+		return PtAssignOperators< T, T, Count, Count >::div( *this, p_coord );
 	}
 
 	template< typename T, uint32_t Count >
@@ -289,59 +277,159 @@ namespace Castor
 	template< typename T, uint32_t Count >
 	T const & Coords< T, Count >::at( uint32_t p_pos )const
 	{
-		if ( p_pos >= Count )
-		{
-			CASTOR_ASSERT( false );
-			throw std::range_error( "Coords subscript out of range" );
-		}
-
+		REQUIRE( p_pos < Count );
 		return m_coords[p_pos];
 	}
 
 	template< typename T, uint32_t Count >
 	T & Coords< T, Count >::at( uint32_t p_pos )
 	{
-		if ( p_pos >= Count )
-		{
-			CASTOR_ASSERT( false );
-			throw std::range_error( "Coords subscript out of range" );
-		}
-
+		REQUIRE( p_pos < Count );
 		return m_coords[p_pos];
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator ==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline bool operator==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
-		bool l_bReturn = ( Count == _Count );
+		bool l_return = ( Count == _Count );
 
-		for ( uint32_t i = 0; i < Count && l_bReturn; i++ )
+		for ( uint32_t i = 0; i < Count && l_return; i++ )
 		{
-			l_bReturn = Policy< T >::equals( p_ptA[i], p_ptB[i] );
+			l_return = Policy< T >::equals( p_ptA[i], p_ptB[i] );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
+
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
-	inline bool operator !=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	inline bool operator!=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
 	{
 		return !( p_ptA == p_ptB );
 	}
 
+	template< typename T, uint32_t Count, typename U, uint32_t _Count >
+	inline Point< T, Count > operator+( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	{
+		return PtOperators< T, U, Count, _Count >::add( p_ptA, p_ptB );
+	}
+
+	template< typename T, uint32_t Count, typename U, uint32_t _Count >
+	inline Point< T, Count > operator-( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	{
+		return PtOperators< T, U, Count, _Count >::sub( p_ptA, p_ptB );
+	}
+
+	template< typename T, uint32_t Count, typename U, uint32_t _Count >
+	inline Point< T, Count > operator*( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	{
+		return PtOperators< T, U, Count, _Count >::mul( p_ptA, p_ptB );
+	}
+
+	template< typename T, uint32_t Count, typename U, uint32_t _Count >
+	inline Point< T, Count > operator/( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB )
+	{
+		return PtOperators< T, U, Count, Count >::div( p_ptA, p_ptB );
+	}
+
+	template <typename T, uint32_t Count, typename U>
+	inline Point< T, Count > operator+( Coords< T, Count > const & p_pt, U const * p_coords )
+	{
+		return PtOperators< T, U, Count, Count >::add( p_pt, p_coords );
+	}
+
+	template <typename T, uint32_t Count, typename U>
+	inline Point< T, Count > operator-( Coords< T, Count > const & p_pt, U const * p_coords )
+	{
+		return PtOperators< T, U, Count, Count >::sub( p_pt, p_coords );
+	}
+
+	template <typename T, uint32_t Count, typename U>
+	inline Point< T, Count > operator*( Coords< T, Count > const & p_pt, U const * p_coords )
+	{
+		return PtOperators< T, U, Count, Count >::mul( p_pt, p_coords );
+	}
+
+	template <typename T, uint32_t Count, typename U>
+	inline Point< T, Count > operator/( Coords< T, Count > const & p_pt, U const * p_coords )
+	{
+		return PtOperators< T, U, Count, Count >::div( p_pt, p_coords );
+	}
+
+	template< typename T, uint32_t Count >
+	inline Point< T, Count > operator*( Coords< T, Count > const & p_pt, T const & p_coord )
+	{
+		return PtOperators< T, T, Count, Count >::mul( p_pt, p_coord );
+	}
+
+	template< typename T, uint32_t Count >
+	inline Point< T, Count > operator/( Coords< T, Count > const & p_pt, T const & p_coord )
+	{
+		return PtOperators< T, T, Count, Count >::div( p_pt, p_coord );
+	}
+
+	template< typename T, typename U >
+	inline Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB )
+	{
+		return Point< T, 3 >(
+				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			   );
+	}
+
 	namespace point
 	{
+		namespace
+		{
+			template< typename T, uint32_t Count >
+			struct ComputeDot
+			{
+				static T Calc( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
+				{
+					T l_tReturn;
+					Policy< T >::init( l_tReturn );
+
+					for ( uint32_t i = 0; i < Count; i++ )
+					{
+						l_tReturn += p_ptA[i] * p_ptB[i];
+					}
+
+					return l_tReturn;
+				}
+			};
+
+			template< typename T >
+			struct ComputeDot< T, 2 >
+			{
+				static T Calc( Coords< T, 2 > const & p_ptA, Coords< T, 2 > const & p_ptB )
+				{
+					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] );
+				}
+			};
+
+			template< typename T >
+			struct ComputeDot< T, 3 >
+			{
+				static T Calc( Coords< T, 3 > const & p_ptA, Coords< T, 3 > const & p_ptB )
+				{
+					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] ) + ( p_ptA[2] * p_ptB[2] );
+				}
+			};
+
+			template< typename T >
+			struct ComputeDot< T, 4 >
+			{
+				static T Calc( Coords< T, 4 > const & p_ptA, Coords< T, 4 > const & p_ptB )
+				{
+					return ( p_ptA[0] * p_ptB[0] ) + ( p_ptA[1] * p_ptB[1] ) + ( p_ptA[2] * p_ptB[2] ) + ( p_ptA[3] * p_ptB[3] );
+				}
+			};
+		}
+
 		template< typename T, uint32_t Count >
 		T dot( Coords< T, Count > const & p_ptA, Coords< T, Count > const & p_ptB )
 		{
-			T l_tReturn;
-			Policy< T >::init( l_tReturn );
-
-			for ( uint32_t i = 0; i < Count; i++ )
-			{
-				l_tReturn += p_ptA[i] * p_ptB[i];
-			}
-
-			return l_tReturn;
+			return ComputeDot< T, Count >::Calc( p_ptA, p_ptB );
 		}
 
 		template< typename T, uint32_t Count >
@@ -375,23 +463,22 @@ namespace Castor
 		{
 			T l_tLength = T( distance( p_ptPoint ) );
 
-			if ( ! Policy< T >::is_null( l_tLength ) )
+			if ( !Policy< T >::is_null( l_tLength ) )
 			{
-				p_ptPoint /= l_tLength;
+				std::transform( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, p_ptPoint.ptr(), [l_tLength]( T const & p_value )
+				{
+					return p_value / l_tLength;
+				} );
 			}
 		}
 
 		template< typename T, uint32_t Count >
 		double distance_squared( Coords< T, Count > const & p_ptPoint )
 		{
-			double l_dReturn = 0.0;
-
-			for ( uint32_t i = 0; i < Count; i++ )
+			return std::accumulate( p_ptPoint.const_ptr(), p_ptPoint.const_ptr() + Count, 0.0, []( double a, T const & b )
 			{
-				l_dReturn += p_ptPoint[i] * p_ptPoint[i];
-			}
-
-			return l_dReturn;
+				return a + double( b * b );
+			} );
 		}
 
 		template< typename T, uint32_t Count >
@@ -445,7 +532,7 @@ namespace Castor
 //*************************************************************************************************
 
 template< typename T, uint32_t Count >
-inline Castor::String & operator << ( Castor::String & p_strOut, Castor::Coords< T, Count > const & p_pt )
+inline Castor::String & operator<< ( Castor::String & p_strOut, Castor::Coords< T, Count > const & p_pt )
 {
 	Castor::StringStream l_streamOut;
 
@@ -464,7 +551,7 @@ inline Castor::String & operator << ( Castor::String & p_strOut, Castor::Coords<
 }
 
 template< typename T, uint32_t Count >
-inline Castor::String & operator >> ( Castor::String & p_strIn, Castor::Coords< T, Count > & p_pt )
+inline Castor::String & operator>> ( Castor::String & p_strIn, Castor::Coords< T, Count > & p_pt )
 {
 	Castor::StringStream l_streamIn( p_strIn );
 
@@ -478,7 +565,7 @@ inline Castor::String & operator >> ( Castor::String & p_strIn, Castor::Coords< 
 }
 
 template< typename T, uint32_t Count, typename CharType >
-inline std::basic_ostream< CharType > & operator << ( std::basic_ostream< CharType > & p_streamOut, Castor::Coords< T, Count > const & p_pt )
+inline std::basic_ostream< CharType > & operator<< ( std::basic_ostream< CharType > & p_streamOut, Castor::Coords< T, Count > const & p_pt )
 {
 	if ( Count )
 	{
@@ -494,7 +581,7 @@ inline std::basic_ostream< CharType > & operator << ( std::basic_ostream< CharTy
 }
 
 template< typename T, uint32_t Count, typename CharType >
-inline std::basic_istream< CharType > & operator >> ( std::basic_istream< CharType > & p_streamIn, Castor::Coords< T, Count > & p_pt )
+inline std::basic_istream< CharType > & operator>> ( std::basic_istream< CharType > & p_streamIn, Castor::Coords< T, Count > & p_pt )
 {
 	for ( uint32_t i = 0; i < Count; i++ )
 	{

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -30,37 +30,38 @@ namespace Castor3D
 	\brief		Index buffer representation
 	\remark		Holds the index of the submesh vertices
 	\~french
-	\brief		Repr�sentation d'un tampon d'indices
+	\brief		Représentation d'un tampon d'indices
 	\remark		Contient les indices des vertex d'un submesh
 	*/
-	class C3D_API IndexBuffer : public CpuBuffer< uint32_t >
+	class IndexBuffer
+		: public CpuBuffer< uint32_t >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_engine		Le moteur
 		 */
-		IndexBuffer( RenderSystem * p_pRenderSystem );
+		C3D_API IndexBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~IndexBuffer();
-
-	private:
+		C3D_API ~IndexBuffer();
 		/**
 		 *\~english
-		 *\brief		Initialisation function
+		 *\brief		Creation function
+		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction d'initialisation
+		 *\brief		Fonction de création
+		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoCreateBuffer();
+		C3D_API bool Create();
 	};
 }
 

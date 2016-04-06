@@ -1,12 +1,6 @@
 #ifndef ___C3D_OCEAN_LIGHTING_TECHNIQUE_H___
 #define ___C3D_OCEAN_LIGHTING_TECHNIQUE_H___
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
 #include <Castor3DPrerequisites.hpp>
 #include <Buffer.hpp>
 #include <Context.hpp>
@@ -23,258 +17,12 @@
 #include <Vertex.hpp>
 #include <BlendState.hpp>
 
-#if defined( _MSC_VER )
-#	pragma warning( pop )
-#endif
-
-#define ENABLE_FFT	0
+#define ENABLE_FFT 1
 
 namespace OceanLighting
 {
-	class RenderTechnique : public Castor3D::RenderTechniqueBase
+	class RenderTechnique : public Castor3D::RenderTechnique
 	{
-	private:
-		//!\~english The attach between colour buffer and frame buffer	\~french L'attache entre le buffer couleur et le frame buffer
-		Castor3D::TextureAttachmentSPtr					m_pColorAttach;
-		//!\~english The attach between depth buffer and frame buffer	\~french L'attache entre le buffer profondeur et le frame buffer
-		Castor3D::RenderBufferAttachmentSPtr			m_pDepthAttach;
-
-	private:
-		int												m_width;
-		int												m_height;
-
-		Castor3D::ShaderProgramBaseSPtr					m_render;
-		Castor3D::OneTextureFrameVariableSPtr			m_renderSkyIrradianceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_renderInscatterSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_renderTransmittanceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_renderSkySampler;
-		Castor3D::Matrix4x4fFrameVariableSPtr			m_renderScreenToCamera;
-		Castor3D::Matrix4x4fFrameVariableSPtr			m_renderCameraToWorld;
-		Castor3D::Matrix4x4fFrameVariableSPtr			m_renderWorldToScreen;
-		Castor3D::Point3fFrameVariableSPtr				m_renderWorldCamera;
-		Castor3D::Point3fFrameVariableSPtr				m_renderWorldSunDir;
-		Castor3D::OneFloatFrameVariableSPtr				m_renderHdrExposure;
-		Castor3D::Point3fFrameVariableSPtr				m_renderSeaColor;
-#if ENABLE_FFT
-		Castor3D::OneTextureFrameVariableSPtr			m_renderSpectrum_1_2_Sampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_renderSpectrum_3_4_Sampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_renderFftWavesSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_renderSlopeVarianceSampler;
-		Castor3D::Point4fFrameVariableSPtr				m_renderGridSizes;
-		Castor3D::Point2fFrameVariableSPtr				m_renderGridSize;
-		Castor3D::OneFloatFrameVariableSPtr				m_renderChoppy;
-#else
-		Castor3D::OneTextureFrameVariableSPtr			m_renderWavesSampler;
-		Castor3D::Matrix2x2fFrameVariableSPtr			m_renderWorldToWind;
-		Castor3D::Matrix2x2fFrameVariableSPtr			m_renderWindToWorld;
-		Castor3D::OneFloatFrameVariableSPtr				m_renderNbWaves;
-		Castor3D::OneFloatFrameVariableSPtr				m_renderHeightOffset;
-		Castor3D::Point2fFrameVariableSPtr				m_renderSigmaSqTotal;
-		Castor3D::OneFloatFrameVariableSPtr				m_renderTime;
-		Castor3D::Point4fFrameVariableSPtr				m_renderLods;
-		Castor3D::OneFloatFrameVariableSPtr				m_renderNyquistMin;
-		Castor3D::OneFloatFrameVariableSPtr				m_renderNyquistMax;
-#endif
-		Castor3D::GeometryBuffersSPtr					m_renderGBuffers;
-		Castor3D::BlendStateWPtr						m_renderBlendState;
-		Castor3D::RasteriserStateWPtr					m_renderRasteriserState;
-
-		Castor3D::ShaderProgramBaseSPtr					m_sky;
-		Castor3D::OneTextureFrameVariableSPtr			m_skySkyIrradianceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_skyInscatterSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_skyTransmittanceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_skySkySampler;
-		Castor3D::Matrix4x4fFrameVariableSPtr			m_skyScreenToCamera;
-		Castor3D::Matrix4x4fFrameVariableSPtr			m_skyCameraToWorld;
-		Castor3D::Point3fFrameVariableSPtr				m_skyWorldCamera;
-		Castor3D::Point3fFrameVariableSPtr				m_skyWorldSunDir;
-		Castor3D::OneFloatFrameVariableSPtr				m_skyHdrExposure;
-		Castor3D::GeometryBuffersSPtr					m_skyGBuffers;
-		Castor3D::BlendStateWPtr						m_skyBlendState;
-
-		Castor3D::ShaderProgramBaseSPtr					m_skymap;
-		Castor3D::OneTextureFrameVariableSPtr			m_skymapSkyIrradianceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_skymapInscatterSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_skymapTransmittanceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_skymapNoiseSampler;
-		Castor3D::Point3fFrameVariableSPtr				m_skymapSunDir;
-		Castor3D::OneFloatFrameVariableSPtr				m_skymapOctaves;
-		Castor3D::OneFloatFrameVariableSPtr				m_skymapLacunarity;
-		Castor3D::OneFloatFrameVariableSPtr				m_skymapGain;
-		Castor3D::OneFloatFrameVariableSPtr				m_skymapNorm;
-		Castor3D::OneFloatFrameVariableSPtr				m_skymapClamp1;
-		Castor3D::OneFloatFrameVariableSPtr				m_skymapClamp2;
-		Castor3D::Point4fFrameVariableSPtr				m_skymapCloudsColor;
-		Castor3D::GeometryBuffersSPtr					m_skymapGBuffers;
-		Castor3D::BlendStateWPtr						m_skymapBlendState;
-
-		Castor3D::ShaderProgramBaseSPtr					m_clouds;
-		Castor3D::Matrix4x4fFrameVariableSPtr			m_cloudsWorldToScreen;
-		Castor3D::Point3fFrameVariableSPtr				m_cloudsWorldCamera;
-		Castor3D::Point3fFrameVariableSPtr				m_cloudsWorldSunDir;
-		Castor3D::OneFloatFrameVariableSPtr				m_cloudsHdrExposure;
-		Castor3D::OneFloatFrameVariableSPtr				m_cloudsOctaves;
-		Castor3D::OneFloatFrameVariableSPtr				m_cloudsLacunarity;
-		Castor3D::OneFloatFrameVariableSPtr				m_cloudsGain;
-		Castor3D::OneFloatFrameVariableSPtr				m_cloudsNorm;
-		Castor3D::OneFloatFrameVariableSPtr				m_cloudsClamp1;
-		Castor3D::OneFloatFrameVariableSPtr				m_cloudsClamp2;
-		Castor3D::Point4fFrameVariableSPtr				m_cloudsCloudsColor;
-		Castor3D::OneTextureFrameVariableSPtr			m_cloudsSkyIrradianceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_cloudsInscatterSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_cloudsTransmittanceSampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_cloudsNoiseSampler;
-		Castor3D::GeometryBuffersSPtr					m_cloudsGBuffers;
-		Castor3D::BlendStateWPtr						m_cloudsBlendState;
-
-		uint32_t										m_skyTexSize;
-		bool											m_cloudLayer;
-		float											m_octaves;
-		float											m_lacunarity;
-		float											m_gain;
-		float											m_norm;
-		float											m_clamp1;
-		float											m_clamp2;
-		Castor::Point4f									m_cloudColor;
-		Castor3D::FrameBufferSPtr						m_fbo;
-		Castor3D::TextureAttachmentSPtr					m_pAttachSky;
-		Castor::Point4f									m_vboParams;
-		float											m_sunTheta;
-		float											m_sunPhi;
-		float											m_cameraHeight;
-		float											m_cameraTheta;
-		float											m_cameraPhi;
-
-		// RENDERING OPTIONS
-		float											m_gridSize;
-		Castor::Point4f									m_seaColor;
-		float											m_hdrExposure;
-		bool											m_grid;
-		bool											m_animate;
-		bool											m_seaContrib;
-		bool											m_sunContrib;
-		bool											m_skyContrib;
-		bool											m_manualFilter;
-#if ENABLE_FFT
-		bool											m_choppy;
-		// WAVES SPECTRUM
-		// using "A unified directional spectrum for long and short wind-driven waves"
-		// T. Elfouhaily, B. Chapron, K. Katsaros, D. Vandemark
-		// Journal of Geophysical Research vol 102, p781-796, 1997
-		const int										m_N_SLOPE_VARIANCE;	// size of the 3d texture containing precomputed filtered slope m_variances
-		const float										m_cm;				// Eq 59
-		const float										m_km;				// Eq 59
-		float											m_GRID1_SIZE;		// size in meters (i.e. in spatial domain) of the first m_grid
-		float											m_GRID2_SIZE;		// size in meters (i.e. in spatial domain) of the second m_grid
-		float											m_GRID3_SIZE;		// size in meters (i.e. in spatial domain) of the third m_grid
-		float											m_GRID4_SIZE;		// size in meters (i.e. in spatial domain) of the fourth m_grid
-		float											m_WIND;				// wind speed in meters per second (at 10m above surface)
-		float											m_OMEGA;			// sea state (inverse wave age)
-		float											m_A;				// wave amplitude factor (should be one)
-		// FFT WAVES
-		const int										m_PASSES;			// number of passes needed for the FFT 6 -> 64, 7 -> 128, 8 -> 256, etc
-		const int										m_FFT_SIZE;			// size of the textures storing the waves in frequency and spatial domains
-		float 					*						m_spectrum12;
-		float 					*						m_spectrum34;
-
-		Castor3D::FrameBufferSPtr						m_fftFbo1;
-		std::vector< Castor3D::TextureAttachmentSPtr >	m_arrayFftAttaches;
-
-		Castor3D::FrameBufferSPtr						m_fftFbo2;
-		Castor3D::DynamicTextureSPtr					m_pTexFFTA;
-		Castor3D::DynamicTextureSPtr					m_pTexFFTB;
-		Castor3D::TextureAttachmentSPtr					m_pAttachFftA;
-		Castor3D::TextureAttachmentSPtr					m_pAttachFftB;
-
-		Castor3D::FrameBufferSPtr						m_variancesFbo;
-		std::vector< Castor3D::TextureAttachmentSPtr >	m_arrayVarianceAttaches;
-
-		Castor3D::ShaderProgramBaseSPtr					m_init;
-		Castor3D::OneTextureFrameVariableSPtr			m_initSpectrum_1_2_Sampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_initSpectrum_3_4_Sampler;
-		Castor3D::OneFloatFrameVariableSPtr				m_initFftSize;
-		Castor3D::Point4fFrameVariableSPtr				m_initInverseGridSizes;
-		Castor3D::OneFloatFrameVariableSPtr				m_initT;
-		Castor3D::GeometryBuffersSPtr					m_initGBuffers;
-		Castor3D::BlendStateWPtr						m_initBlendState;
-
-		Castor3D::ShaderProgramBaseSPtr					m_variances;
-		Castor3D::OneTextureFrameVariableSPtr			m_variancesSpectrum_1_2_Sampler;
-		Castor3D::OneTextureFrameVariableSPtr			m_variancesSpectrum_3_4_Sampler;
-		Castor3D::OneFloatFrameVariableSPtr				m_variancesNSlopeVariance;
-		Castor3D::OneIntFrameVariableSPtr				m_variancesFFTSize;
-		Castor3D::Point4fFrameVariableSPtr				m_variancesGridSizes;
-		Castor3D::OneFloatFrameVariableSPtr				m_variancesSlopeVarianceDelta;
-		Castor3D::OneFloatFrameVariableSPtr				m_variancesC;
-		Castor3D::GeometryBuffersSPtr					m_variancesGBuffers;
-		Castor3D::BlendStateWPtr						m_variancesBlendState;
-
-		Castor3D::ShaderProgramBaseSPtr					m_fftx;
-		Castor3D::OneTextureFrameVariableSPtr			m_fftxButterflySampler;
-		Castor3D::OneIntFrameVariableSPtr				m_fftxNLayers;
-		Castor3D::OneFloatFrameVariableSPtr				m_fftxPass;
-		Castor3D::OneTextureFrameVariableSPtr			m_fftxImgSampler;
-		Castor3D::GeometryBuffersSPtr					m_fftxGBuffers;
-		Castor3D::BlendStateWPtr						m_fftxBlendState;
-
-		Castor3D::ShaderProgramBaseSPtr					m_ffty;
-		Castor3D::OneTextureFrameVariableSPtr			m_fftyButterflySampler;
-		Castor3D::OneIntFrameVariableSPtr				m_fftyNLayers;
-		Castor3D::OneFloatFrameVariableSPtr				m_fftyPass;
-		Castor3D::OneTextureFrameVariableSPtr			m_fftyImgSampler;
-		Castor3D::GeometryBuffersSPtr					m_fftyGBuffers;
-		Castor3D::BlendStateWPtr						m_fftyBlendState;
-
-		Castor3D::DynamicTextureSPtr					m_pTexSpectrum_1_2;
-		Castor3D::DynamicTextureSPtr					m_pTexSpectrum_3_4;
-		Castor3D::DynamicTextureSPtr					m_pTexSlopeVariance;	// the 3d texture containing precomputed filtered slope m_variances
-		Castor3D::DynamicTextureSPtr					m_pTexButterfly;
-#else
-		float											m_nyquistMin;
-		float											m_nyquistMax;
-
-		// WAVES PARAMETERS (INPUT)
-		Castor3D::DynamicTextureSPtr					m_pTexWave;
-		int												m_nbWaves;
-		Castor::Coords4f 				*				m_waves;
-		float 					*						m_pWaves;
-		float											m_lambdaMin;
-		float											m_lambdaMax;
-		float											m_heightMax;
-		float											m_waveDirection;
-		float											m_U0;
-		float											m_waveDispersion;
-
-		// WAVE STATISTICS (OUTPUT)
-		float											m_sigmaXsq;
-		float											m_sigmaYsq;
-		float											m_meanHeight;
-		float											m_heightVariance;
-		float											m_amplitudeMax;
-#endif
-		Castor3D::SamplerSPtr							m_pSamplerNearestClamp;
-		Castor3D::SamplerSPtr							m_pSamplerNearestRepeat;
-		Castor3D::SamplerSPtr							m_pSamplerLinearClamp;
-		Castor3D::SamplerSPtr							m_pSamplerLinearRepeat;
-		Castor3D::SamplerSPtr							m_pSamplerAnisotropicClamp;
-		Castor3D::SamplerSPtr							m_pSamplerAnisotropicRepeat;
-
-		Castor3D::StaticTextureSPtr						m_pTexIrradiance;
-		Castor3D::StaticTextureSPtr						m_pTexInscatter;
-		Castor3D::StaticTextureSPtr						m_pTexTransmittance;
-		Castor3D::DynamicTextureSPtr					m_pTexSky;
-		Castor3D::DynamicTextureSPtr					m_pTexNoise;
-
-		bool											m_bReloadPrograms;
-		bool											m_bLayer;
-		bool											m_bComputeSlopeVarianceTex;
-		bool											m_bGenerateWavesSpectrum;
-		bool											m_bGenerateMesh;
-		bool											m_bGenerateWaves;
-
-		Castor3D::RasteriserStateWPtr					m_pRasteriserState;
-		Castor3D::DepthStencilStateWPtr					m_pDepthStencilState;
-
 	private:
 		RenderTechnique & operator =( RenderTechnique const & )
 		{
@@ -284,15 +32,25 @@ namespace OceanLighting
 	protected:
 		friend class Castor3D::TechniqueFactory;
 
-		RenderTechnique();
-		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
-
-		virtual bool Render( Castor3D::Scene & p_scene, Castor3D::Camera & p_camera, Castor3D::eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		RenderTechnique( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 	public:
 		virtual ~RenderTechnique();
-
-		virtual Castor3D::RenderTechniqueBaseSPtr Clone( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_pRenderSystem, Castor3D::Parameters const & p_params );
+		/**
+		 *\~english
+		 *\brief		Instantiation function, used by the factory to create objects of a wanted type
+		 *\param[in]	p_renderTarget	The technique render target
+		 *\param[in]	p_renderSystem	The render system
+		 *\param[in]	p_params		The technique parameters
+		 *\return		A clone of this object
+		 *\~french
+		 *\brief		Fonction d'instanciation, utilis�e par la fabrique pour cr�er des objets d'un type donn�
+		 *\param[in]	p_renderTarget	La cible de rendu de la technique
+		 *\param[in]	p_renderSystem	Le render system
+		 *\param[in]	p_params		Les param�tres de la technique
+		 *\return		Un cl�ne de cet objet
+		 */
+		static Castor3D::RenderTechniqueSPtr CreateInstance( Castor3D::RenderTarget & p_renderTarget, Castor3D::RenderSystem * p_renderSystem, Castor3D::Parameters const & p_params );
 
 		inline void SetReloadPrograms( bool p_bLayer )
 		{
@@ -417,11 +175,11 @@ namespace OceanLighting
 		{
 			return m_gridSize;
 		}
-		inline Castor::Point4f & GetSeaColour()
+		inline Castor::Colour & GetSeaColour()
 		{
 			return m_seaColor;
 		}
-		inline Castor::Point4f const & GetSeaColour()const
+		inline Castor::Colour const & GetSeaColour()const
 		{
 			return m_seaColor;
 		}
@@ -489,11 +247,11 @@ namespace OceanLighting
 		{
 			return m_cloudLayer;
 		}
-		inline Castor::Point4f & GetColour()
+		inline Castor::Colour & GetColour()
 		{
 			return m_cloudColor;
 		}
-		inline Castor::Point4f const & GetColour()const
+		inline Castor::Colour const & GetColour()const
 		{
 			return m_cloudColor;
 		}
@@ -547,12 +305,47 @@ namespace OceanLighting
 		}
 
 	protected:
+		/** \copydoc Castor3D::RenderTechnique::DoCreate
+		 */
 		virtual bool DoCreate();
+
+		/** \copydoc Castor3D::RenderTechnique::DoDestroy
+		 */
 		virtual void DoDestroy();
-		virtual bool DoInitialise();
+
+		/** \copydoc Castor3D::RenderTechnique::DoInitialise
+		 */
+		virtual bool DoInitialise( uint32_t & p_index );
+
+		/** \copydoc Castor3D::RenderTechnique::DoCleanup
+		 */
 		virtual void DoCleanup();
+
+		/** \copydoc Castor3D::RenderTechnique::DoBeginRender
+		 */
 		virtual bool DoBeginRender();
+
+		/** \copydoc Castor3D::RenderTechnique::DoRender
+		*/
+		virtual void DoRender( Castor3D::RenderTechnique::stSCENE_RENDER_NODES & p_nodes, Castor3D::Camera & p_camera, uint32_t p_frameTime );
+
+		/** \copydoc Castor3D::RenderTechnique::DoEndRender
+		 */
 		virtual void DoEndRender();
+
+		/** \copydoc Castor3D::RenderTechnique::DoGetVertexShaderSource
+		 */
+		virtual Castor::String DoGetVertexShaderSource( uint32_t p_uiProgramFlags )const
+		{
+			return Castor::String();
+		}
+
+		/** \copydoc Castor3D::RenderTechnique::DoGetPixelShaderSource
+		 */
+		virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const
+		{
+			return Castor::String();
+		}
 
 	private:
 		void DoCleanupPrograms( bool all );
@@ -606,6 +399,271 @@ namespace OceanLighting
 #else
 		void generateWaves();
 #endif
+
+	private:
+		//!\~english The frame buffer	\~french Le tampon d'image
+		Castor3D::FrameBufferSPtr m_frameBuffer;
+		//!\~english The buffer receiving the color render	\~french Le tampon recevant le rendu couleur
+		Castor3D::DynamicTextureSPtr m_pColorBuffer;
+		//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
+		Castor3D::DepthStencilRenderBufferSPtr m_pDepthBuffer;
+		//!\~english The attach between colour buffer and frame buffer	\~french L'attache entre le buffer couleur et le frame buffer
+		Castor3D::TextureAttachmentSPtr m_pColorAttach;
+		//!\~english The attach between depth buffer and frame buffer	\~french L'attache entre le buffer profondeur et le frame buffer
+		Castor3D::RenderBufferAttachmentSPtr m_pDepthAttach;
+
+	private:
+		int m_width;
+		int m_height;
+
+		Castor3D::ShaderProgramSPtr m_render;
+		Castor3D::OneIntFrameVariableSPtr m_renderSkyIrradianceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_renderInscatterSampler;
+		Castor3D::OneIntFrameVariableSPtr m_renderTransmittanceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_renderSkySampler;
+		Castor3D::Matrix4x4fFrameVariableSPtr m_renderScreenToCamera;
+		Castor3D::Matrix4x4fFrameVariableSPtr m_renderCameraToWorld;
+		Castor3D::Matrix4x4fFrameVariableSPtr m_renderWorldToScreen;
+		Castor3D::Point3fFrameVariableSPtr m_renderWorldCamera;
+		Castor3D::Point3fFrameVariableSPtr m_renderWorldSunDir;
+		Castor3D::OneFloatFrameVariableSPtr m_renderHdrExposure;
+		Castor3D::Point3fFrameVariableSPtr m_renderSeaColor;
+#if ENABLE_FFT
+		Castor3D::OneIntFrameVariableSPtr m_renderSpectrum_1_2_Sampler;
+		Castor3D::OneIntFrameVariableSPtr m_renderSpectrum_3_4_Sampler;
+		Castor3D::OneIntFrameVariableSPtr m_renderFftWavesSampler;
+		Castor3D::OneIntFrameVariableSPtr m_renderSlopeVarianceSampler;
+		Castor3D::Point4fFrameVariableSPtr m_renderGridSizes;
+		Castor3D::Point2fFrameVariableSPtr m_renderGridSize;
+		Castor3D::OneFloatFrameVariableSPtr m_renderChoppy;
+#else
+		Castor3D::OneTextureFrameVariableSPtr m_renderWavesSampler;
+		Castor3D::Matrix2x2fFrameVariableSPtr m_renderWorldToWind;
+		Castor3D::Matrix2x2fFrameVariableSPtr m_renderWindToWorld;
+		Castor3D::OneFloatFrameVariableSPtr m_renderNbWaves;
+		Castor3D::OneFloatFrameVariableSPtr m_renderHeightOffset;
+		Castor3D::Point2fFrameVariableSPtr m_renderSigmaSqTotal;
+		Castor3D::OneFloatFrameVariableSPtr m_renderTime;
+		Castor3D::Point4fFrameVariableSPtr m_renderLods;
+		Castor3D::OneFloatFrameVariableSPtr m_renderNyquistMin;
+		Castor3D::OneFloatFrameVariableSPtr m_renderNyquistMax;
+#endif
+		Castor3D::GeometryBuffersSPtr m_renderGBuffers;
+		Castor3D::VertexBufferUPtr m_renderVtxBuffer;
+		Castor3D::IndexBufferUPtr m_renderIdxBuffer;
+		Castor3D::BlendStateWPtr m_renderBlendState;
+		Castor3D::RasteriserStateWPtr m_renderRasteriserState;
+
+		Castor3D::ShaderProgramSPtr m_sky;
+		Castor3D::OneIntFrameVariableSPtr m_skySkyIrradianceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_skyInscatterSampler;
+		Castor3D::OneIntFrameVariableSPtr m_skyTransmittanceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_skySkySampler;
+		Castor3D::Matrix4x4fFrameVariableSPtr m_skyScreenToCamera;
+		Castor3D::Matrix4x4fFrameVariableSPtr m_skyCameraToWorld;
+		Castor3D::Point3fFrameVariableSPtr m_skyWorldCamera;
+		Castor3D::Point3fFrameVariableSPtr m_skyWorldSunDir;
+		Castor3D::OneFloatFrameVariableSPtr m_skyHdrExposure;
+		Castor3D::GeometryBuffersSPtr m_skyGBuffers;
+		Castor3D::VertexBufferUPtr m_skyVtxBuffer;
+		Castor3D::IndexBufferUPtr m_skyIdxBuffer;
+		Castor3D::BlendStateWPtr m_skyBlendState;
+
+		Castor3D::ShaderProgramSPtr m_skymap;
+		Castor3D::OneIntFrameVariableSPtr m_skymapSkyIrradianceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_skymapInscatterSampler;
+		Castor3D::OneIntFrameVariableSPtr m_skymapTransmittanceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_skymapNoiseSampler;
+		Castor3D::Point3fFrameVariableSPtr m_skymapSunDir;
+		Castor3D::OneFloatFrameVariableSPtr m_skymapOctaves;
+		Castor3D::OneFloatFrameVariableSPtr m_skymapLacunarity;
+		Castor3D::OneFloatFrameVariableSPtr m_skymapGain;
+		Castor3D::OneFloatFrameVariableSPtr m_skymapNorm;
+		Castor3D::OneFloatFrameVariableSPtr m_skymapClamp1;
+		Castor3D::OneFloatFrameVariableSPtr m_skymapClamp2;
+		Castor3D::Point4fFrameVariableSPtr m_skymapCloudsColor;
+		Castor3D::GeometryBuffersSPtr m_skymapGBuffers;
+		Castor3D::VertexBufferUPtr m_skymapVtxBuffer;
+		Castor3D::IndexBufferUPtr m_skymapIdxBuffer;
+		Castor3D::BlendStateWPtr m_skymapBlendState;
+
+		Castor3D::ShaderProgramSPtr m_clouds;
+		Castor3D::Matrix4x4fFrameVariableSPtr m_cloudsWorldToScreen;
+		Castor3D::Point3fFrameVariableSPtr m_cloudsWorldCamera;
+		Castor3D::Point3fFrameVariableSPtr m_cloudsWorldSunDir;
+		Castor3D::OneFloatFrameVariableSPtr m_cloudsHdrExposure;
+		Castor3D::OneFloatFrameVariableSPtr m_cloudsOctaves;
+		Castor3D::OneFloatFrameVariableSPtr m_cloudsLacunarity;
+		Castor3D::OneFloatFrameVariableSPtr m_cloudsGain;
+		Castor3D::OneFloatFrameVariableSPtr m_cloudsNorm;
+		Castor3D::OneFloatFrameVariableSPtr m_cloudsClamp1;
+		Castor3D::OneFloatFrameVariableSPtr m_cloudsClamp2;
+		Castor3D::Point4fFrameVariableSPtr m_cloudsCloudsColor;
+		Castor3D::OneIntFrameVariableSPtr m_cloudsSkyIrradianceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_cloudsInscatterSampler;
+		Castor3D::OneIntFrameVariableSPtr m_cloudsTransmittanceSampler;
+		Castor3D::OneIntFrameVariableSPtr m_cloudsNoiseSampler;
+		Castor3D::GeometryBuffersSPtr m_cloudsGBuffers;
+		Castor3D::VertexBufferUPtr m_cloudsVtxBuffer;
+		Castor3D::IndexBufferUPtr m_cloudsIdxBuffer;
+		Castor3D::BlendStateWPtr m_cloudsBlendState;
+
+		uint32_t m_skyTexSize;
+		bool m_cloudLayer;
+		float m_octaves;
+		float m_lacunarity;
+		float m_gain;
+		float m_norm;
+		float m_clamp1;
+		float m_clamp2;
+		Castor::Colour m_cloudColor;
+		Castor3D::FrameBufferSPtr m_fbo;
+		Castor3D::TextureAttachmentSPtr m_pAttachSky;
+		float m_vboBuffer[4];
+		Castor::Coords4f m_vboParams;
+		float m_sunTheta;
+		float m_sunPhi;
+		float m_cameraHeight;
+		float m_cameraTheta;
+		float m_cameraPhi;
+
+		// RENDERING OPTIONS
+		float m_gridSize;
+		Castor::Colour m_seaColor;
+		float m_hdrExposure;
+		bool m_grid;
+		bool m_animate;
+		bool m_seaContrib;
+		bool m_sunContrib;
+		bool m_skyContrib;
+		bool m_manualFilter;
+#if ENABLE_FFT
+		bool m_choppy;
+		// WAVES SPECTRUM
+		// using "A unified directional spectrum for long and short wind-driven waves"
+		// T. Elfouhaily, B. Chapron, K. Katsaros, D. Vandemark
+		// Journal of Geophysical Research vol 102, p781-796, 1997
+		const int m_N_SLOPE_VARIANCE;	// size of the 3d texture containing precomputed filtered slope m_variances
+		const float m_cm;				// Eq 59
+		const float m_km;				// Eq 59
+		float m_GRID1_SIZE;		// size in meters (i.e. in spatial domain) of the first m_grid
+		float m_GRID2_SIZE;		// size in meters (i.e. in spatial domain) of the second m_grid
+		float m_GRID3_SIZE;		// size in meters (i.e. in spatial domain) of the third m_grid
+		float m_GRID4_SIZE;		// size in meters (i.e. in spatial domain) of the fourth m_grid
+		float m_WIND;				// wind speed in meters per second (at 10m above surface)
+		float m_OMEGA;			// sea state (inverse wave age)
+		float m_A;				// wave amplitude factor (should be one)
+		// FFT WAVES
+		const int m_PASSES;			// number of passes needed for the FFT 6 -> 64, 7 -> 128, 8 -> 256, etc
+		const int m_FFT_SIZE;			// size of the textures storing the waves in frequency and spatial domains
+		float * m_spectrum12;
+		float * m_spectrum34;
+
+		Castor3D::FrameBufferSPtr m_fftFbo1;
+		std::vector< Castor3D::TextureAttachmentSPtr > m_arrayFftAttaches;
+
+		Castor3D::FrameBufferSPtr m_fftFbo2;
+		Castor3D::DynamicTextureSPtr m_pTexFFTA;
+		Castor3D::DynamicTextureSPtr m_pTexFFTB;
+		Castor3D::TextureAttachmentSPtr m_pAttachFftA;
+		Castor3D::TextureAttachmentSPtr m_pAttachFftB;
+
+		Castor3D::FrameBufferSPtr m_variancesFbo;
+		std::vector< Castor3D::TextureAttachmentSPtr > m_arrayVarianceAttaches;
+
+		Castor3D::ShaderProgramSPtr m_init;
+		Castor3D::OneIntFrameVariableSPtr m_initSpectrum_1_2_Sampler;
+		Castor3D::OneIntFrameVariableSPtr m_initSpectrum_3_4_Sampler;
+		Castor3D::OneFloatFrameVariableSPtr m_initFftSize;
+		Castor3D::Point4fFrameVariableSPtr m_initInverseGridSizes;
+		Castor3D::OneFloatFrameVariableSPtr m_initT;
+		Castor3D::VertexBufferUPtr m_initVtxBuffer;
+		Castor3D::IndexBufferUPtr m_initIdxBuffer;
+		Castor3D::GeometryBuffersSPtr m_initGBuffers;
+		Castor3D::BlendStateWPtr m_initBlendState;
+
+		Castor3D::ShaderProgramSPtr m_variances;
+		Castor3D::OneIntFrameVariableSPtr m_variancesSpectrum_1_2_Sampler;
+		Castor3D::OneIntFrameVariableSPtr m_variancesSpectrum_3_4_Sampler;
+		Castor3D::OneFloatFrameVariableSPtr m_variancesNSlopeVariance;
+		Castor3D::OneIntFrameVariableSPtr m_variancesFFTSize;
+		Castor3D::Point4fFrameVariableSPtr m_variancesGridSizes;
+		Castor3D::OneFloatFrameVariableSPtr m_variancesSlopeVarianceDelta;
+		Castor3D::OneFloatFrameVariableSPtr m_variancesC;
+		Castor3D::IndexBufferUPtr m_variancesIdxBuffer;
+		Castor3D::VertexBufferUPtr m_variancesVtxBuffer;
+		Castor3D::GeometryBuffersSPtr m_variancesGBuffers;
+		Castor3D::BlendStateWPtr m_variancesBlendState;
+
+		Castor3D::ShaderProgramSPtr m_fftx;
+		Castor3D::OneIntFrameVariableSPtr m_fftxButterflySampler;
+		Castor3D::OneIntFrameVariableSPtr m_fftxNLayers;
+		Castor3D::OneFloatFrameVariableSPtr m_fftxPass;
+		Castor3D::OneIntFrameVariableSPtr m_fftxImgSampler;
+		Castor3D::VertexBufferUPtr m_fftxVtxBuffer;
+		Castor3D::IndexBufferUPtr m_fftxIdxBuffer;
+		Castor3D::GeometryBuffersSPtr m_fftxGBuffers;
+		Castor3D::BlendStateWPtr m_fftxBlendState;
+
+		Castor3D::ShaderProgramSPtr m_ffty;
+		Castor3D::OneIntFrameVariableSPtr m_fftyButterflySampler;
+		Castor3D::OneIntFrameVariableSPtr m_fftyNLayers;
+		Castor3D::OneFloatFrameVariableSPtr m_fftyPass;
+		Castor3D::OneIntFrameVariableSPtr m_fftyImgSampler;
+		Castor3D::VertexBufferUPtr m_fftyVtxBuffer;
+		Castor3D::IndexBufferUPtr m_fftyIdxBuffer;
+		Castor3D::GeometryBuffersSPtr m_fftyGBuffers;
+		Castor3D::BlendStateWPtr m_fftyBlendState;
+
+		Castor3D::DynamicTextureSPtr m_pTexSpectrum_1_2;
+		Castor3D::DynamicTextureSPtr m_pTexSpectrum_3_4;
+		Castor3D::DynamicTextureSPtr m_pTexSlopeVariance;	// the 3d texture containing precomputed filtered slope m_variances
+		Castor3D::DynamicTextureSPtr m_pTexButterfly;
+#else
+		float m_nyquistMin;
+		float m_nyquistMax;
+
+		// WAVES PARAMETERS (INPUT)
+		Castor3D::DynamicTextureSPtr m_pTexWave;
+		int m_nbWaves;
+		Castor::Coords4f * m_waves;
+		float * m_pWaves;
+		float m_lambdaMin;
+		float m_lambdaMax;
+		float m_heightMax;
+		float m_waveDirection;
+		float m_U0;
+		float m_waveDispersion;
+
+		// WAVE STATISTICS (OUTPUT)
+		float m_sigmaXsq;
+		float m_sigmaYsq;
+		float m_meanHeight;
+		float m_heightVariance;
+		float m_amplitudeMax;
+#endif
+		Castor3D::SamplerSPtr m_pSamplerNearestClamp;
+		Castor3D::SamplerSPtr m_pSamplerNearestRepeat;
+		Castor3D::SamplerSPtr m_pSamplerLinearClamp;
+		Castor3D::SamplerSPtr m_pSamplerLinearRepeat;
+		Castor3D::SamplerSPtr m_pSamplerAnisotropicClamp;
+		Castor3D::SamplerSPtr m_pSamplerAnisotropicRepeat;
+
+		Castor3D::StaticTextureSPtr m_pTexIrradiance;
+		Castor3D::StaticTextureSPtr m_pTexInscatter;
+		Castor3D::StaticTextureSPtr m_pTexTransmittance;
+		Castor3D::DynamicTextureSPtr m_pTexSky;
+		Castor3D::DynamicTextureSPtr m_pTexNoise;
+
+		bool m_bReloadPrograms;
+		bool m_bLayer;
+		bool m_bComputeSlopeVarianceTex;
+		bool m_bGenerateWavesSpectrum;
+		bool m_bGenerateMesh;
+		bool m_bGenerateWaves;
+
+		Castor3D::RasteriserStateWPtr m_pRasteriserState;
+		Castor3D::DepthStencilStateWPtr m_pDepthStencilState;
 	};
 }
 

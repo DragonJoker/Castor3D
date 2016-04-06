@@ -36,8 +36,9 @@ namespace Castor3D
 	\brief		Représente un groupe d'objets animés
 	\remark		Un groupe d'objets animés est la liste d'objets partageant les mêmes animations et nécessitant des animations synchronisées
 	*/
-	class C3D_API AnimatedObjectGroup
-		:	public Castor::Named
+	class AnimatedObjectGroup
+		: public Castor::Named
+		, public Castor::OwnedBy< Scene >
 	{
 	public:
 		/*!
@@ -49,7 +50,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class C3D_API BinaryLoader : public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_BINARY, Castor::BinaryFile >, public Castor::NonCopyable
+		class BinaryLoader
+			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_BINARY, Castor::BinaryFile >
 		{
 		public:
 			/**
@@ -58,28 +60,28 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			BinaryLoader();
+			C3D_API BinaryLoader();
 			/**
 			 *\~english
 			 *\brief		Loads an AnimatedObjectGroup from a binary file
-			 *\param[in]	p_file		The file to load the AnimatedObjectGroup from
-			 *\param[in]	p_group		The AnimatedObjectGroup to load
-			 *\param[in]	p_pScene	The scene which holds the AnimatedObjectGroup
+			 *\param[in]	p_file	The file to load the AnimatedObjectGroup from
+			 *\param[in]	p_group	The AnimatedObjectGroup to load
+			 *\param[in]	p_scene	The scene which holds the AnimatedObjectGroup
 			 *\return		\p true if OK
 			 *\~french
 			 *\brief		Charge un AnimatedObjectGroup à partir d'un fichier binaire
-			 *\param[in]	p_file		Le fichier où charger le AnimatedObjectGroup
-			 *\param[in]	p_group		Le AnimatedObjectGroup à charger
-			 *\param[in]	p_pScene	La scène qui contient le AnimatedObjectGroup
+			 *\param[in]	p_file	Le fichier où charger le AnimatedObjectGroup
+			 *\param[in]	p_group	Le AnimatedObjectGroup à charger
+			 *\param[in]	p_scene	La scène qui contient le AnimatedObjectGroup
 			 *\return		\p true si tout s'est bien passé
 			 */
-			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file, Scene * p_pScene );
+			C3D_API virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file, Scene * p_scene );
 
 		private:
 			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file );
 
 		private:
-			Scene * m_pScene;
+			Scene * m_scene;
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -90,7 +92,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class C3D_API TextLoader : public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**
@@ -99,7 +102,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes an animated object group into a text file
@@ -110,286 +113,166 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier où écrire le AnimatedObjectGroup
 			 *\param[in]	p_group	Le AnimatedObjectGroup à écrire
 			 */
-			virtual bool operator()( AnimatedObjectGroup const & p_group, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( AnimatedObjectGroup const & p_group, Castor::TextFile & p_file );
 		};
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		AnimatedObjectGroup();
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Specified constructor
-		 *\param[in]	p_pScene	The scene
-		 *\param[in]	p_strName	The group name
+		 *\param[in]	p_name	The group name
+		 *\param[in]	p_scene	The scene
 		 *\~french
 		 *\brief		Constructeur spécifié
-		 *\param[in]	p_pScene	La scène
-		 *\param[in]	p_strName	Le nom du groupe
+		 *\param[in]	p_name	Le nom du groupe
+		 *\param[in]	p_scene	La scène
 		 */
-		AnimatedObjectGroup( Scene * p_pScene, Castor::String const & p_strName );
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_src	The source
-		 *\~french
-		 *\brief		Constructeur par recopier
-		 *\param[in]	p_src	La source
-		 */
-		AnimatedObjectGroup( AnimatedObjectGroup const & src );
+		C3D_API AnimatedObjectGroup( Castor::String const & p_name, Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~AnimatedObjectGroup();
+		C3D_API ~AnimatedObjectGroup();
 		/**
 		 *\~english
 		 *\brief		Creates an AnimatedObject from the MovableObject given as a parameter, adds it to the list
-		 *\param[in]	p_strName	The name
+		 *\param[in]	p_object	The Geometry from which AnimatedObject is created
 		 *\return		The created AnimatedObject
 		 *\~french
 		 *\brief		Crée un AnimatedObject à partir du MovableObject donné, l'ajoute à la liste
-		 *\param[in]	p_strName	Le nom
+		 *\param[in]	p_object	La Geometry à partir duquel l'AnimatedObject est créé
 		 *\return		L'AnimatedObject créé
 		 */
-		AnimatedObjectSPtr CreateObject( Castor::String const & p_strName );
+		C3D_API AnimatedObjectSPtr AddObject( GeometrySPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Adds an AnimatedObject to this group.
-		 *\remark		This function assumes the object has already been created in order to be put in this group (with the good scene and animations map)
-		 *\param[in]	p_pObject	The AnimatedObject to add
+		 *\remarks		This function assumes the object has already been created in order to be put in this group (with the good scene and animations map)
+		 *\param[in]	p_object	The AnimatedObject to add
 		 *\~french
 		 *\brief		Ajoute un AnimatedObject à ce groupe.
-		 *\remark		Cette fonction considère que l'objet a préalablement été créé afin d'être intégré à ce groupe (avec donc les bonnes scène et map d'animations)
-		 *\param[in]	p_pObject	Le AnimatedObject à ajouter
+		 *\remarks		Cette fonction considère que l'objet a préalablement été créé afin d'être intégré à ce groupe (avec donc les bonnes scène et map d'animations)
+		 *\param[in]	p_object	Le AnimatedObject à ajouter
 		 */
-		bool AddObject( AnimatedObjectSPtr p_pObject );
+		C3D_API bool AddObject( AnimatedObjectSPtr p_object );
 		/**
 		 *\~english
 		 *\brief		Adds the animation to the list
-		 *\param[in]	p_strName	The animation to add
+		 *\param[in]	p_name	The animation to add
 		 *\~english
 		 *\brief		Ajoute une animation à la liste
-		 *\param[in]	p_strName	L'animation à ajouter
+		 *\param[in]	p_name	L'animation à ajouter
 		 */
-		void AddAnimation( Castor::String const & p_strName );
+		C3D_API void AddAnimation( Castor::String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Sets the loop status of wanted animation.
+		 *\param[in]	p_name		The name of the animation.
+		 *\param[in]	p_looped	The status.
+		 *\~french
+		 *\brief		Définit le statut de bouclage de l'animation voulue.
+		 *\param[in]	p_name		Le nom de l'animation.
+		 *\param[in]	p_looped	Le statut.
+		 */
+		C3D_API void SetAnimationLooped( Castor::String const & p_name, bool p_looped );
+		/**
+		 *\~english
+		 *\brief		Sets the time scale of wanted animation.
+		 *\param[in]	p_name	The name of the animation.
+		 *\param[in]	p_scale	The scale.
+		 *\~french
+		 *\brief		Définit le multiplicateur de temps de l'animation voulue.
+		 *\param[in]	p_name	Le nom de l'animation.
+		 *\param[in]	p_scale	Le multiplicateur.
+		 */
+		C3D_API void SetAnimationScale( Castor::String const & p_name, float p_scale );
 		/**
 		 *\~english
 		 *\brief		Updates all animated objects
 		 *\~french
 		 *\brief		Met à jour toutes les animations
 		 */
-		void Update();
-		/**
-		 *\~english
-		 *\brief		Sets the loop status of wanted animation
-		 *\param[in]	p_strName	The name of the animation
-		 *\param[in]	p_bLooped	The status
-		 *\~french
-		 *\brief		Définit le statut de bouclage de l'animation voulue
-		 *\param[in]	p_strName	Le nom de l'animation
-		 *\param[in]	p_bLooped	Le statut
-		 */
-		void SetAnimationLooped( Castor::String const & p_strName, bool p_bLooped );
+		C3D_API void Update();
 		/**
 		 *\~english
 		 *\brief		Starts the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Démarre l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StartAnimation( Castor::String const & p_strName );
+		C3D_API void StartAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Stops the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Stoppe l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void StopAnimation( Castor::String const & p_strName );
+		C3D_API void StopAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Pauses the animation identified by the given name
-		 *\param[in]	p_strName	The name of the animation
+		 *\param[in]	p_name	The name of the animation
 		 *\~french
 		 *\brief		Met en pause l'animation identifiée par le nom donné
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\param[in]	p_name	Le nom de l'animation
 		 */
-		void PauseAnimation( Castor::String const & p_strName );
+		C3D_API void PauseAnimation( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Starts all animations
 		 *\~french
 		 *\brief		Démarre toutes les animations
 		 */
-		void StartAllAnimations();
+		C3D_API void StartAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Stops all animations
 		 *\~french
 		 *\brief		Stoppe toutes les animations
 		 */
-		void StopAllAnimations();
+		C3D_API void StopAllAnimations();
 		/**
 		 *\~english
 		 *\brief		Pauses all animations
 		 *\~french
 		 *\brief		Met en pause toutes les animations
 		 */
-		void PauseAllAnimations();
+		C3D_API void PauseAllAnimations();
 		/**
 		 *\~english
-		 *\brief		Retrieves the animations count
-		 *\return		The animations count
+		 *\return		The animations map.
 		 *\~french
-		 *\brief		Récupère le compte des animations
-		 *\return		Le compte des animations
+		 *\return		La map d'animations.
 		 */
-		inline uint32_t GetAnimationCount()const
+		inline AnimationStateMap const & GetAnimations()const
 		{
-			return uint32_t( m_setAnimations.size() );
+			return m_animations;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the objects count
-		 *\return		The objects count
+		 *\return		The animated objects.
 		 *\~french
-		 *\brief		Récupère le compte des objets
-		 *\return		Le compte des objets
+		 *\return		Les objets animés.
 		 */
-		inline uint32_t GetObjectCount()const
+		inline AnimatedObjectPtrStrMap const & GetObjects()const
 		{
-			return uint32_t( m_mapObjects.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		Iterator to the first animation
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		Itérateur sur la première animation
-		 */
-		inline Castor::StrSetIt AnimationsBegin()
-		{
-			return m_setAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first animation
-		 *\return		Constant iterator to the first animation
-		 *\~french
-		 *\brief		Récupère un itérateur sur la première animation
-		 *\return		Itérateur constant sur la première animation
-		 */
-		inline Castor::StrSetConstIt AnimationsBegin()const
-		{
-			return m_setAnimations.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animation map
-		 *\return		Iiterator to the end of the animation map
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		Itérateur sur la fin de la map d'animations
-		 */
-		inline Castor::StrSetIt AnimationsEnd()
-		{
-			return m_setAnimations.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the animation map
-		 *\return		Constant iterator to the end of the animation map
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'animations
-		 *\return		Itérateur constant sur la fin de la map d'animations
-		 */
-		inline Castor::StrSetConstIt AnimationsEnd()const
-		{
-			return m_setAnimations.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first object
-		 *\return		Iterator to the first object
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier objet
-		 *\return		Itérateur sur le premier objet
-		 */
-		inline AnimatedObjectPtrStrMapIt ObjectsBegin()
-		{
-			return m_mapObjects.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first object
-		 *\return		Constant iterator to the first object
-		 *\~french
-		 *\brief		Récupère un itérateur sur le premier objet
-		 *\return		Itérateur constant sur le premier objet
-		 */
-		inline AnimatedObjectPtrStrMapConstIt ObjectsBegin()const
-		{
-			return m_mapObjects.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the objects map
-		 *\return		Iterator to the end of the objects map
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'objets
-		 *\return		Itérateur sur la fin de la map d'objets
-		 */
-		inline AnimatedObjectPtrStrMapIt ObjectsEnd()
-		{
-			return m_mapObjects.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the objects map
-		 *\return		Constant iterator to the end of the objects map
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'objets
-		 *\return		Itérateur constant sur la fin de la map d'objets
-		 */
-		inline AnimatedObjectPtrStrMapConstIt ObjectsEnd()const
-		{
-			return m_mapObjects.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Scene
-		 *\return		The Scene
-		 *\~french
-		 *\brief		Récupère la Scene
-		 *\return		La Scene
-		 */
-		inline Scene * GetScene()const
-		{
-			return m_pScene;
+			return m_objects;
 		}
 
-	protected:
-		//!<\~english The list of group animations	\~french La liste des animations du groupe
-		Castor::StrSet m_setAnimations;
+	private:
+		//!<\~english The list of animations	\~french La liste des animations
+		AnimationStateMap m_animations;
 		//!<\~english The list of AnimatedObjects	\~french La liste des AnimatedObject
-		AnimatedObjectPtrStrMap m_mapObjects;
-		//!<\~english The scene that updates animations	\~french La scène qui met à jour les animations
-		Scene * m_pScene;
+		AnimatedObjectPtrStrMap m_objects;
 		//!<\~english A timer, usefull for animation handling	\~french Un timer, pour mettre à jour précisément les animations
 		Castor::PreciseTimer m_timer;
 	};
 }
 
 #endif
+

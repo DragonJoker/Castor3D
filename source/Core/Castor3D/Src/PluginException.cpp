@@ -1,10 +1,8 @@
-#include "PluginException.hpp"
+﻿#include "PluginException.hpp"
 
 #include <Logger.hpp>
 
 using namespace Castor;
-
-#pragma warning( disable:4290 )
 
 namespace Castor3D
 {

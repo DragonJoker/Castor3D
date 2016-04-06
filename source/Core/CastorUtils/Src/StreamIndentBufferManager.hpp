@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -33,8 +33,8 @@ namespace Castor
 		\~french
 		\brief		Garde les associations flux/tampon de flux
 		*/
-		template< typename char_type, typename traits >
-		class basic_buffer_manager
+		template< typename char_type, typename traits = std::char_traits< char_type > >
+		class basic_indent_buffer_manager
 		{
 		private:
 			typedef std::ios_base bos;
@@ -52,7 +52,7 @@ namespace Castor
 			 */
 			/** Default constructor
 			*/
-			basic_buffer_manager()
+			basic_indent_buffer_manager()
 			{
 				++sm_instances;
 			}
@@ -65,7 +65,7 @@ namespace Castor
 			 *\brief		Constructeur par copie
 			 *\remarks		Non implémenté afin de le désactiver
 			 */
-			basic_buffer_manager( basic_buffer_manager< char_type, traits > & obj );
+			basic_indent_buffer_manager( basic_indent_buffer_manager< char_type, traits > & obj );
 
 		public:
 			/**
@@ -74,7 +74,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Destructeur
 			 */
-			~basic_buffer_manager()
+			~basic_indent_buffer_manager()
 			{
 				--sm_instances;
 
@@ -128,7 +128,7 @@ namespace Castor
 
 				if ( cb_iter == m_list.end() )
 				{
-					return NULL;
+					return nullptr;
 				}
 
 				return cb_iter->second;
@@ -165,13 +165,13 @@ namespace Castor
 
 			/**
 			 *\~english
-			 *\brief		Retrieves an instance of the basic_buffer_manager
+			 *\brief		Retrieves an instance of the basic_indent_buffer_manager
 			 *\~french
-			 *\brief		Récupère une instance du basic_buffer_manager
+			 *\brief		Récupère une instance du basic_indent_buffer_manager
 			 */
-			static basic_buffer_manager< char_type, traits > * instance()
+			static basic_indent_buffer_manager< char_type, traits > * instance()
 			{
-				static basic_buffer_manager< char_type, traits > ibm;
+				static basic_indent_buffer_manager< char_type, traits > ibm;
 				return &ibm;
 			}
 
@@ -183,10 +183,10 @@ namespace Castor
 		};
 
 		template< typename char_type, typename traits >
-		int basic_buffer_manager< char_type, traits >::sm_instances = 0;
+		int basic_indent_buffer_manager< char_type, traits >::sm_instances = 0;
 
-		typedef basic_buffer_manager< char, std::char_traits< char > > wbuffer_manager;
-		typedef basic_buffer_manager< wchar_t, std::char_traits< wchar_t > > wbuffer_manager;
+		typedef basic_indent_buffer_manager< char, std::char_traits< char > > indent_buffer_manager;
+		typedef basic_indent_buffer_manager< wchar_t, std::char_traits< wchar_t > > windent_buffer_manager;
 	}
 }
 

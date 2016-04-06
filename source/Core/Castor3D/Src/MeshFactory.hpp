@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MESH_FACTORY_H___
 #define ___C3D_MESH_FACTORY_H___
 
-#include "MeshCategory.hpp"
+#include "MeshGenerator.hpp"
 
 #include <Factory.hpp>
 
@@ -33,8 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique de maillages
 	*/
-	class C3D_API MeshFactory
-		:	public Castor::Factory< MeshCategory, eMESH_TYPE >
+	class MeshFactory
+		: public Castor::Factory< MeshGenerator, eMESH_TYPE >
 	{
 	public:
 		/**
@@ -43,45 +43,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		MeshFactory();
+		C3D_API MeshFactory();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~MeshFactory();
+		C3D_API virtual ~MeshFactory();
 		/**
 		 *\~english
 		 *\brief		Registers all objects types
 		 *\~french
 		 *\brief		Enregistre tous les types d'objets
 		 */
-		virtual void Initialise();
-#if !CASTOR_HAS_VARIADIC_TEMPLATES
-		/**
-		 *\~english
-		 *\brief		Creates an object from a key
-		 *\param[in]	p_key	The object type
-		 *\return		The created object
-		 *\~french
-		 *\brief		Crée un objet à partir d'une clef (type d'objet)
-		 *\param[in]	p_key	Le type d'objet
-		 *\return		L'objet créé
-		 */
-		ObjPtr Create( eMESH_TYPE const & p_key )
-		{
-			ObjPtr l_return;
-			ObjMap::iterator l_it = m_registered.find( p_key );
-
-			if ( l_it != m_registered.end() )
-			{
-				l_return = l_it->second();
-			}
-
-			return l_return;
-		}
-#endif
+		C3D_API virtual void Initialise();
 	};
 }
 

@@ -117,60 +117,6 @@ namespace Castor
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
-	\brief		Exponential recursive case
-	\remark		Valid for positive numbers
-	\~french
-	\brief		Cas récursif pour Exponentielle
-	\remark		Valide pour les nombres positifs
-	*/
-	template <int N, typename T> struct expPos
-	{
-		inline double operator()( T x )
-		{
-			return expPos < N - 1, T > ()( x ) + power<T, N>()( x ) / fact<double, N>()();
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Exponential end case
-	\remark		Valid for positive numbers
-	\~french
-	\brief		Cas d'arrêt pour Exponentielle
-	\remark		Valide pour les nombres positifs
-	*/
-	template <typename T> struct expPos<0, T>
-	{
-		inline double operator()( T x )
-		{
-			return 1.0;
-		}
-	};
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Exponential using template implementation
-	\~french
-	\brief		Exponentielle utilisant une implémentation template
-	*/
-	template <typename T> struct exp
-	{
-	private:
-		enum
-		{
-			Precision = 40
-		};
-	public:
-		inline double operator()( T x )
-		{
-			return ( x < 0.0 ? 1.0 / expPos<Precision, T>()( -x ) : expPos<Precision, T>()( x ) );
-//			return power<double, Precision>()( 1.0 + double( x) / double( Precision));
-		}
-	};
-	//************************************************************************************************
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
 	\brief		Neperian Logarithm recursive case
 	\~french
 	\brief		Cas récursif pour Logarithme Népérien
@@ -189,7 +135,7 @@ namespace Castor
 	\~french
 	\brief		Cas d'arrêt pour Logarithme Népérien
 	*/
-	template <typename T> struct lnN<0, T>
+	template< typename T > struct lnN<0, T>
 	{
 		inline double operator()( T x )
 		{
@@ -203,7 +149,7 @@ namespace Castor
 	\~french
 	\brief		Logarithme Népérien utilisant une implémentation template
 	*/
-	template <typename T> struct ln
+	template< typename T > struct ln
 	{
 	private:
 		enum
@@ -219,33 +165,6 @@ namespace Castor
 	//************************************************************************************************
 	/**
 	 *\~english
-	 *\brief		Returns p_value if it is in the range [p_min,p_max], p_min if lower than p_min, p_max if larger than p_max
-	 *\param[in]	p_min, p_max	The range
-	 *\param[in]	p_value			The value to test
-	 *\return		The result
-	 *\~french
-	 *\brief		Renvoie la valeur si elle est dans l'ensemble [p_min,p_max], p_min si elle lui est inférieure, p_max si elle lui est supérieure
-	 *\param[in]	p_min, p_max	Les bornes
-	 *\param[in]	p_value			La valeur à tester
-	 *\return		Le résultat
-	 */
-	template <typename T>
-	inline T const & minmax( T const & p_min, T const & p_value, T const & p_max )
-	{
-		if ( p_value < p_min )
-		{
-			return p_min;
-		}
-
-		if ( p_value > p_max )
-		{
-			return p_max;
-		}
-
-		return p_value;
-	}
-	/**
-	 *\~english
 	 *\brief		Puts the value in the range [min, max]
 	 *\param[in]	p_min, p_max	The range
 	 *\param[in]	p_value			The value to clamp
@@ -256,8 +175,8 @@ namespace Castor
 	 *\param[in]	p_value			La valeur à clamper
 	 *\return		Le résultat
 	 */
-	template <typename T>
-	inline void clamp( T const & p_min, T & p_value, T const & p_max )
+	template< typename T >
+	inline void clamp( T & p_value, T const & p_min, T const & p_max )
 	{
 		if ( p_value < p_min )
 		{
@@ -282,8 +201,8 @@ namespace Castor
 	 *\param[in]	p_value			La valeur à clamper
 	 *\return		Le résultat
 	 */
-	template <typename T>
-	inline T clamp( T const & p_min, T const & p_value, T const & p_max )
+	template< typename T >
+	inline T clamp( T const & p_value, T const & p_min, T const & p_max )
 	{
 		T l_tReturn = p_value;
 
@@ -311,20 +230,17 @@ namespace Castor
 	template< typename T >
 	inline T abs( T const & p_val )
 	{
-#pragma warning( push )
-#pragma warning( disable:4146 )
 		return ( p_val >= 0 ? p_val : -p_val );
-#pragma warning( pop )
 	}
 	/**
 	 *\~english
 	 *\brief		Tests if a double is a number
-	 *\remark		It is a number as long as x==x
+	 *\remarks		It is a number as long as x==x
 	 *\param[in]	x	Number to test
 	 *\return		The result
 	 *\~french
 	 *\brief		Teste si un double est un nombre
-	 *\remark		C'est un nombre tant que x==x
+	 *\remarks		C'est un nombre tant que x==x
 	 *\param[in]	x	Le nombre à tester
 	 *\return		Le résultat
 	 */
@@ -336,12 +252,12 @@ namespace Castor
 	/**
 	 *\~english
 	 *\brief		Tests if a double is infinite
-	 *\remark		It is infinite if x==x and x-x!=0
+	 *\remarks		It is infinite if x==x and x-x!=0
 	 *\param[in]	x	Number to test
 	 *\return		-1 if negative infinite, 1 if positive infinite, 0 if not infinite
 	 *\~french
 	 *\brief		Teste si un double est infini
-	 *\remark		Il est infini si x==x et x-x!=0
+	 *\remarks		Il est infini si x==x et x-x!=0
 	 *\param[in]	x	Le nombre à tester
 	 *\return		-1 si infini négatif, 1 si infini positif, 0 si fini
 	 */

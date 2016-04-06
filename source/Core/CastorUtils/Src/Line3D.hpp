@@ -168,7 +168,7 @@ namespace Castor
 		 */
 		bool Intersects( Line3D const & p_line, Point< T, 3 > & p_point )
 		{
-			bool l_bReturn;
+			bool l_return;
 			double a = m_origin[0];
 			double b = m_origin[1];
 			double c = m_origin[2];
@@ -194,12 +194,12 @@ namespace Castor
 					p_point[0] = T( m_slope[0] * t + m_origin[0] );
 					p_point[1] = T( m_slope[1] * t + m_origin[1] );
 					p_point[2] = T( m_slope[2] * t + m_origin[2] );
-					l_bReturn = true;
+					l_return = true;
 				}
 				else
 				{
 					//invalid couple, no intersection
-					l_bReturn = false;
+					l_return = false;
 				}
 			}
 			else if ( std::abs( rp ) > std::numeric_limits< double >::epsilon() && std::abs( p * rp - pp * r ) > std::numeric_limits< double >::epsilon() )
@@ -212,21 +212,21 @@ namespace Castor
 					p_point[0] = T( m_slope[0] * t + m_origin[0] );
 					p_point[1] = T( m_slope[1] * t + m_origin[1] );
 					p_point[2] = T( m_slope[2] * t + m_origin[2] );
-					l_bReturn = true;
+					l_return = true;
 				}
 				else
 				{
 					//invalid couple, no intersection
-					l_bReturn = false;
+					l_return = false;
 				}
 			}
 			else
 			{
 				// The 2 lines are parallel, no intersection
-				l_bReturn = false;
+				l_return = false;
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -246,7 +246,7 @@ namespace Castor
 		}
 
 	public:
-		//!\~english The slope point		\~french Le point de pente
+		//!\~english The slope point	\~french Le point de pente
 		Point< T, 3 > m_slope;
 		//!\~english The origin point	\~french Le point d'origine
 		Point< T, 3 > m_origin;

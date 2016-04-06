@@ -1,12 +1,14 @@
-#include "IndexBuffer.hpp"
+﻿#include "IndexBuffer.hpp"
+
+#include "Engine.hpp"
 #include "RenderSystem.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	IndexBuffer::IndexBuffer( RenderSystem * p_pRenderSystem )
-		:	CpuBuffer< uint32_t >( p_pRenderSystem )
+	IndexBuffer::IndexBuffer( Engine & p_engine )
+		: CpuBuffer< uint32_t >( p_engine )
 	{
 	}
 
@@ -14,13 +16,20 @@ namespace Castor3D
 	{
 	}
 
-	bool IndexBuffer::DoCreateBuffer()
+	bool IndexBuffer::Create()
 	{
 		if ( !m_pBuffer )
 		{
-			m_pBuffer = m_pRenderSystem->CreateIndexBuffer( this );
+			m_pBuffer = GetEngine()->GetRenderSystem()->CreateIndexBuffer( this );
 		}
 
-		return m_pBuffer != nullptr;
+		bool l_return = m_pBuffer != nullptr;
+
+		if ( l_return )
+		{
+			l_return = GetGpuBuffer()->Create();
+		}
+
+		return l_return;
 	}
 }

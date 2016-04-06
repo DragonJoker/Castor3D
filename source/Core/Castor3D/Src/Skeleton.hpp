@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,11 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_SKELETON_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Mesh.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "Animable.hpp"
+#include "Bone.hpp"
 
 namespace Castor3D
 {
@@ -35,131 +33,143 @@ namespace Castor3D
 	\~french
 	\brief		Le squelette, contient chaque bone
 	*/
-	class C3D_API Skeleton
-		:	public Animable
+	class Skeleton
+		: public Animable
 	{
-	private:
-		//!\~english The mesh	\~french Le maillage
-		MeshWPtr m_wpMesh;
-		//!\~english The bones	\~french Les bones
-		BonePtrArray m_arrayBones;
-		//!\~english The global skeleton transform	\~french La transformation globale du squelette
-		Castor::Matrix4x4r m_mtxGlobalInverse;
-
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pMesh	The parent mesh
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pMesh	Le maillage parent
 		 */
-		Skeleton( MeshSPtr p_pMesh );
+		C3D_API Skeleton();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Skeleton();
+		C3D_API ~Skeleton();
 		/**
 		 *\~english
 		 *\brief		Adds a bone to the skeleton
-		 *\param[in]	p_pBone		The bone
-		 *\return
+		 *\param[in]	p_bone	The bone.
 		 *\~french
 		 *\brief		Ajoute un os au squelette
-		 *\param[in]	p_pBone		L'os
+		 *\param[in]	p_bone	L'os.
 		 */
-		void AddBone( BoneSPtr p_pBone );
+		C3D_API void AddBone( BoneSPtr p_bone );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first bone
-		 *\return		The value
+		 *\brief		Adds a bone to another bone's children
+		 *\param[in]	p_bone		The bone.
+		 *\param[in]	p_parent	The parent bone.
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur le premier os
-		 *\return		La valeur
+		 *\brief		Ajoute un os aux enfants d'un autre os.
+		 *\param[in]	p_bone		L'os.
+		 *\param[in]	p_parent	L'os parent.
 		 */
-		inline BonePtrArrayIt Begin()
-		{
-			return m_arrayBones.begin();
-		}
+		C3D_API void SetBoneParent( BoneSPtr p_bone, BoneSPtr p_parent );
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to the first bone
-		 *\return		The value
+		 *\brief		Traverses bone hierarchy and applies given function to each bone.
+		 *\param[in]	p_function	The function to apply.
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur le premier os
-		 *\return		La valeur
+		 *\brief		Traverse la hi√©rachie du skelette et applique la fonction √† chaque os.
+		 *\param[in]	p_function	La fonction √† appliquer.
 		 */
-		inline BonePtrArrayConstIt Begin()const
+		template< typename FuncT >
+		inline void TraverseHierarchy( FuncT p_function )
 		{
-			return m_arrayBones.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the bones array
-		 *\return		The value
-		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur la fin du tableau d'os
-		 *\return		La valeur
-		 */
-		inline BonePtrArrayIt End()
-		{
-			return m_arrayBones.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the end of the bones array
-		 *\return		The value
-		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur la fin du tableau d'os
-		 *\return		La valeur
-		 */
-		inline BonePtrArrayConstIt End()const
-		{
-			return m_arrayBones.end();
+			for ( auto l_bone : m_bones )
+			{
+				if ( !l_bone->GetParent() )
+				{
+					p_function( l_bone );
+					l_bone->TraverseHierarchy( p_function );
+				}
+			}
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the global inverse transform
 		 *\return		The value
 		 *\~french
-		 *\brief		RÈcupËre la transformation globale inversÈe
+		 *\brief		R√©cup√®re la transformation globale invers√©e
 		 *\return		La valeur
 		 */
 		inline Castor::Matrix4x4r const & GetGlobalInverseTransform()const
 		{
-			return m_mtxGlobalInverse;
+			return m_globalInverse;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the global inverse transform
-		 *\param[in]	p_mtxTransform	The new value
+		 *\param[in]	p_transform	The new value
 		 *\~french
-		 *\brief		DÈfinit la transformation globale inversÈe
-		 *\param[in]	p_mtxTransform	La nouvelle valeur
+		 *\brief		D√©finit la transformation globale invers√©e
+		 *\param[in]	p_transform	La nouvelle valeur
 		 */
-		inline void SetGlobalInverseTransform( Castor::Matrix4x4r const & p_mtxTransform )
+		inline void SetGlobalInverseTransform( Castor::Matrix4x4r const & p_transform )
 		{
-			m_mtxGlobalInverse = p_mtxTransform;
+			m_globalInverse = p_transform;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the mesh name
+		 *\brief		Retrieves an iterator to the first bone
 		 *\return		The value
 		 *\~french
-		 *\brief		RÈcupËre le nom du maillage
+		 *\brief		R√©cup√®re un it√©rateur sur le premier os
 		 *\return		La valeur
 		 */
-		inline Castor::String const & GetMeshName()const
+		inline decltype( auto ) begin()
 		{
-			return m_wpMesh.lock()->GetName();
+			return m_bones.begin();
 		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the first bone
+		 *\return		The value
+		 *\~french
+		 *\brief		R√©cup√®re un it√©rateur sur le premier os
+		 *\return		La valeur
+		 */
+		inline decltype( auto ) begin()const
+		{
+			return m_bones.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the bones array
+		 *\return		The value
+		 *\~french
+		 *\brief		R√©cup√®re un it√©rateur sur la fin du tableau d'os
+		 *\return		La valeur
+		 */
+		inline decltype( auto ) end()
+		{
+			return m_bones.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the bones array
+		 *\return		The value
+		 *\~french
+		 *\brief		R√©cup√®re un it√©rateur sur la fin du tableau d'os
+		 *\return		La valeur
+		 */
+		inline decltype( auto ) end()const
+		{
+			return m_bones.end();
+		}
+
+	private:
+		//!\~english The bones	\~french Les bones
+		BonePtrArray m_bones;
+		//!\~english	The global skeleton transform	\~french	La transformation globale du squelette
+		Castor::Matrix4x4r m_globalInverse;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

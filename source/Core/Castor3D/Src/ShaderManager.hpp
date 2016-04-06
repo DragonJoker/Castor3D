@@ -18,11 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SHADER_MANAGER_H___
 #define ___C3D_SHADER_MANAGER_H___
 
-#include "Castor3DPrerequisites.hpp"
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "ShaderProgram.hpp"
 
 namespace Castor3D
 {
@@ -34,99 +30,240 @@ namespace Castor3D
 	\~french
 	\brief		Manager utilisé pour garder les programmes de shaders. Il les garde et permet leur destruction au cours d'une boucle de rendu
 	*/
-	class C3D_API ShaderManager
+	class ShaderManager
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_engine	Le moteur
 		 */
-		ShaderManager();
+		C3D_API ShaderManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~ShaderManager();
+		C3D_API ~ShaderManager();
 		/**
 		 *\~english
 		 *\brief		Destroys all the shaders of the array of shaders to destroy
 		 *\~french
 		 *\brief		Détruit tous les shaders du tableau de shaders à détruire
 		 */
-		void Update();
+		C3D_API void Clear();
 		/**
 		 *\~english
-		 *\brief		Flushes the active shaders list and adds all it's shaders to the array of shaders to destroy
-		 *\remark		Calls Update
+		 *\brief		Cleans up all the shaders.
 		 *\~french
-		 *\brief		Vide la liste des shaders actifs dans celle des shaders à détruire
-		 *\remark		Appelle Update
+		 *\brief		Nettoie tous les shaders.
 		 */
-		void Clear();
-		/**
-		 *\~english
-		 *\brief		Flushes the active shaders list and adds all it's shaders to the array of shaders to destroy
-		 *\~french
-		 *\brief		Vide la liste des shaders actifs dans celle des shaders à détruire
-		 */
-		void ClearShaders();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Creates a new program
-		 *\param[in]	p_eLanguage	The wanted shader language
+		 *\param[in]	p_langage	The wanted shader language
 		 *\return		The newly created program
 		 *\~french
 		 *\brief		Crée un nouveau programme
-		 *\param[in]	p_eLanguage	Le langage de shader souhaité
+		 *\param[in]	p_langage	Le langage de shader souhaité
 		 *\return		Le programme créé
 		 */
-		ShaderProgramBaseSPtr GetNewProgram( eSHADER_LANGUAGE p_eLanguage = eSHADER_LANGUAGE_AUTO );
+		C3D_API ShaderProgramSPtr GetNewProgram( eSHADER_LANGUAGE p_langage = eSHADER_LANGUAGE_AUTO );
 		/**
 		 *\~english
 		 *\brief		Looks for an automatically generated program corresponding to given flags
-		 *\remark		If none exists it is created
-		 *\param[in]	p_uiTextureFlags	Bitwise ORed eTEXTURE_CHANNEL
-		 *\param[in]	p_uiProgramFlags	Bitwise ORed ePROGRAM_FLAG
+		 *\remarks		If none exists it is created
+		 *\param[in]	p_technique		The technique from witch the program code is retrieved
+		 *\param[in]	p_textureFlags	Bitwise ORed eTEXTURE_CHANNEL
+		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG
 		 *\return		The found or created program
 		 *\~french
 		 *\brief		Cherche un programme automatiquement généré correspondant aux flags donnés
-		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
-		 *\param[in]	p_uiProgramFlags	Une combinaison de ePROGRAM_FLAG
+		 *\param[in]	p_technique		La technique a pqrtir de laquelle est recuperee le code du programme
+		 *\param[in]	p_textureFlags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG
 		 *\return		Le programme trouvé ou créé
 		 */
-		ShaderProgramBaseSPtr GetAutomaticProgram( uint32_t p_uiTextureFlags, uint32_t p_uiProgramFlags );
+		C3D_API ShaderProgramSPtr GetAutomaticProgram( RenderTechnique const & p_technique, uint32_t p_textureFlags, uint32_t p_programFlags );
+		/**
+		 *\~english
+		 *\brief		Looks for a billboards shader program corresponding to given flags.
+		 *\param[in]	p_textureFlags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG.
+		 *\return		The found program.
+		 *\~french
+		 *\brief		Cherche un programme de billboards correspondant aux flags donnés.
+		 *\param[in]	p_textureFlags	Une combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
+		 *\return		Le programme trouvé.
+		 */
+		C3D_API ShaderProgramSPtr GetBillboardProgram( uint32_t p_textureFlags, uint32_t p_programFlags )const;
+		/**
+		 *\~english
+		 *\brief		Adds a billboards shader program corresponding to given flags.
+		 *\param[in]	p_program		The program to add.
+		 *\param[in]	p_textureFlags	Bitwise ORed eTEXTURE_CHANNEL.
+		 *\param[in]	p_programFlags	Bitwise ORed ePROGRAM_FLAG.
+		 *\return		The found program.
+		 *\~french
+		 *\brief		Ajoute un programme de billboards correspondant aux flags donnés.
+		 *\param[in]	p_program		Le programme à ajouter.
+		 *\param[in]	p_textureFlags	Une combinaison de eTEXTURE_CHANNEL.
+		 *\param[in]	p_programFlags	Une combinaison de ePROGRAM_FLAG.
+		 *\return		Le programme trouvé.
+		 */
+		C3D_API void AddBillboardProgram( ShaderProgramSPtr p_program, uint32_t p_textureFlags, uint32_t p_programFlags );
+		/**
+		 *\~english
+		 *\brief		Creates a matrix frame variable buffer
+		 *\param[in]	p_program		The programme to which the buffer is bound
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
+		 *\return		The frame variable buffer
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les matrices
+		 *\param[in]	p_program		Le programme auquel le buffer est lié
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
+		 *\return		Le frame variable buffer
+		 */
+		C3D_API FrameVariableBufferSPtr CreateMatrixBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Creates a scene frame variable buffer
+		 *\param[in]	p_program		The program to which the buffer is bound
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
+		 *\return		The frame variable buffer
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données de scène
+		 *\param[in]	p_program		Le programme auquel le buffer est lié
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
+		 *\return		Le frame variable buffer
+		 */
+		C3D_API FrameVariableBufferSPtr CreateSceneBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Creates a pass frame variable buffer
+		 *\param[in]	p_program		The program to which the buffer is bound
+		 *\param[in]	p_shaderMask	MASK_SHADER_TYPE combination, to set at what shaders it is to be bound
+		 *\return		The frame variable buffer
+		 *\~french
+		 *\brief		Crée un frame variable buffer pour les données de passe
+		 *\param[in]	p_program		Le programme auquel le buffer est lié
+		 *\param[in]	p_shaderMask	Combinaison de MASK_SHADER_TYPE, pour déterminer les shaders auxquels il doit être lié
+		 *\return		Le frame variable buffer
+		 */
+		C3D_API FrameVariableBufferSPtr CreatePassBuffer( ShaderProgram & p_program, uint32_t p_shaderMask );
+		/**
+		 *\~english
+		 *\brief		Creates the textures related frame variables
+		 *\param[in]	p_uiTextureFlags	Bitwise ORed eTEXTURE_CHANNEL
+		 *\param[in]	p_program			The program to which the buffer is bound
+		 *\~french
+		 *\brief		Crée les frame variables relatives aux textures
+		 *\param[in]	p_uiTextureFlags	Une combinaison de eTEXTURE_CHANNEL
+		 *\param[in]	p_program			Le programme auquel le buffer est lié
+		 */
+		C3D_API void CreateTextureVariables( ShaderProgram & p_program, uint32_t p_uiTextureFlags );
+		/**
+		 *\~english
+		 *\brief		Locks the collection mutex
+		 *\~french
+		 *\brief		Locke le mutex de la collection
+		 */
+		inline void lock()const
+		{
+			m_mutex.lock();
+		}
+		/**
+		 *\~english
+		 *\brief		Unlocks the collection mutex
+		 *\~french
+		 *\brief		Délocke le mutex de la collection
+		 */
+		inline void unlock()const
+		{
+			m_mutex.unlock();
+		}
 		/**
 		 *\~english
 		 *\brief		Sets the RenderSystem
-		 *\param[in]	p_pRenderSystem	The new value
+		 *\param[in]	p_renderSystem	The new value
 		 *\~french
 		 *\brief		Définit le RenderSystem
-		 *\param[in]	p_pRenderSystem	La nouvelle valeur
+		 *\param[in]	p_renderSystem	La nouvelle valeur
 		 */
-		inline void SetRenderSystem( RenderSystem * const & p_pRenderSystem )
+		inline void SetRenderSystem( RenderSystem * const & p_renderSystem )
 		{
-			m_pRenderSystem = p_pRenderSystem;
+			m_renderSystem = p_renderSystem;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the beginning of the shaders list.
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur le début de la liste de shaders.
+		 *\return		L4itérateur
+		 */
+		inline ShaderProgramPtrArray::iterator begin()
+		{
+			return m_arrayPrograms.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the beginning of the shaders list.
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur le début de la liste de shaders.
+		 *\return		L4itérateur
+		 */
+		inline ShaderProgramPtrArray::const_iterator begin()const
+		{
+			return m_arrayPrograms.begin();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the shaders list.
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur la fin de la liste de shaders.
+		 *\return		L4itérateur
+		 */
+		inline ShaderProgramPtrArray::iterator end()
+		{
+			return m_arrayPrograms.end();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves an iterator to the end of the shaders list.
+		 *\return		The iterator
+		 *\~french
+		 *\brief		Récupère un itérateur sur la fin de la liste de shaders.
+		 *\return		L4itérateur
+		 */
+		inline ShaderProgramPtrArray::const_iterator end()const
+		{
+			return m_arrayPrograms.end();
 		}
 
 	private:
-		DECLARE_MAP( uint64_t, ShaderProgramBaseWPtr, ShaderProgramWPtrUInt64 );
+		DECLARE_MAP( uint64_t, ShaderProgramWPtr, ShaderProgramWPtrUInt64 );
+		mutable std::recursive_mutex m_mutex;
 		//!\~english The loaded shader programs	\~french Les programmes chargés
 		ShaderProgramPtrArray m_arrayPrograms;
-		//!\~english The array of shaders to destroy	\~french Les programmes à détruire
-		ShaderProgramPtrArray m_arrayToDelete;
 		//!\~english Automatically generated shader programs, sorted by texture flags	\~french Programmes auto-générés, triés par flags de texture
 		ShaderProgramWPtrUInt64Map m_mapAutogenerated;
+		//!\~english Billboards shader programs, sorted by texture flags.	\~french Programmes shader pour billboards, triés par flags de texture.
+		ShaderProgramWPtrUInt64Map m_mapBillboards;
 		//!\~english The maximal number of vertices the geometry shader can output	\~french Nombre maximale de vertex qu'un shader géométrique peut sortir
 		int m_nbVerticesOut;
 		//!\~english The RenderSystem used to create programs	\~french Le RenderSystem utilisé pour la création des programmes
-		RenderSystem * m_pRenderSystem;
+		RenderSystem * m_renderSystem;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

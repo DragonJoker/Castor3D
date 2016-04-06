@@ -1,4 +1,4 @@
-#include "Plugin.hpp"
+﻿#include "Plugin.hpp"
 #include "Version.hpp"
 
 #if defined( _WIN32 )
@@ -13,83 +13,56 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#pragma warning( disable:4290 )
 #if defined( _MSC_VER)
-	static const String GetNameFunctionABIName				= cuT( "?GetName@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@XZ" );
+	static const String GetNameFunctionABIName = cuT( "?GetName@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
 #	if defined( _WIN64 )
-	static const String GetRequiredVersionFunctionABIName	= cuT( "?GetRequiredVersion@@YAXAEAVVersion@Castor3D@@@Z" );
+	static const String GetRequiredVersionFunctionABIName = cuT( "?GetRequiredVersion@@YAXAEAVVersion@Castor3D@@@Z" );
+	static const String GetOnLoadFunctionABIName = cuT( "?OnLoad@@YAXPEAVEngine@Castor3D@@@Z" );
+	static const String GetOnUnloadFunctionABIName = cuT( "?OnUnload@@YAXPEAVEngine@Castor3D@@@Z" );
 #	else
-	static const String GetRequiredVersionFunctionABIName	= cuT( "?GetRequiredVersion@@YAXAAVVersion@Castor3D@@@Z" );
+	static const String GetRequiredVersionFunctionABIName = cuT( "?GetRequiredVersion@@YAXAAVVersion@Castor3D@@@Z" );
+	static const String GetOnLoadFunctionABIName = cuT( "?OnLoad@@YAXPAVEngine@Castor3D@@@Z" );
+	static const String GetOnUnloadFunctionABIName = cuT( "?OnUnload@@YAXPAVEngine@Castor3D@@@Z" );
 #	endif
 #elif defined( __GNUG__)
-	static const String GetNameFunctionABIName				= cuT( "_Z7GetNamev" );
-	static const String GetRequiredVersionFunctionABIName	= cuT( "_Z18GetRequiredVersionRN8Castor3D7VersionE" );
+#	if GCC_VERSION >= 50300
+	static const String GetNameFunctionABIName = cuT( "_Z7GetNameB5cxx11v" );
+#	else
+	static const String GetNameFunctionABIName = cuT( "_Z7GetNamev" );
+#	endif
+	static const String GetRequiredVersionFunctionABIName = cuT( "_Z18GetRequiredVersionRN8Castor3D7VersionE" );
+	static const String GetOnLoadFunctionABIName = cuT( "_Z6OnLoadPN8Castor3D6EngineE" );
+	static const String GetOnUnloadFunctionABIName = cuT( "_Z8OnUnloadPN8Castor3D6EngineE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
 
-	PluginBase::PluginBase( ePLUGIN_TYPE p_eType, DynamicLibrarySPtr p_pLibrary )
-		:	m_pfnGetRequiredVersion( 0 )
-		,	m_pfnGetName( 0 )
-		,	m_eType( p_eType )
+	PluginBase::PluginBase( ePLUGIN_TYPE p_type, DynamicLibrarySPtr p_library, Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
+		, m_pfnGetRequiredVersion( 0 )
+		, m_pfnGetName( 0 )
+		, m_type( p_type )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnGetName, GetNameFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetName, GetNameFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] plugin name function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), true );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in GetName function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnGetRequiredVersion, GetRequiredVersionFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetRequiredVersion, GetRequiredVersionFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] plugin version function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), true );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] plug-in GetRequiredVersion function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), true );
 		}
-	}
 
-	PluginBase::PluginBase( PluginBase const & p_plugin )
-		:	m_pfnGetRequiredVersion( p_plugin.m_pfnGetRequiredVersion )
-		,	m_pfnGetName( p_plugin.m_pfnGetName )
-		,	m_eType( p_plugin.m_eType )
-	{
-	}
-
-	PluginBase::PluginBase( PluginBase && p_plugin )
-		:	m_pfnGetRequiredVersion( std::move( p_plugin.m_pfnGetRequiredVersion ) )
-		,	m_pfnGetName( std::move( p_plugin.m_pfnGetName ) )
-		,	m_eType( std::move( p_plugin.m_eType ) )
-	{
-		p_plugin.m_pfnGetRequiredVersion	= NULL;
-		p_plugin.m_pfnGetName				= NULL;
-		p_plugin.m_eType					= ePLUGIN_TYPE_COUNT;
+		p_library->GetFunction( m_pfnOnLoad, GetOnLoadFunctionABIName );
+		p_library->GetFunction( m_pfnOnUnload, GetOnUnloadFunctionABIName );
 	}
 
 	PluginBase::~PluginBase()
 	{
-	}
-
-	PluginBase & PluginBase::operator =( PluginBase const & p_plugin )
-	{
-		m_pfnGetRequiredVersion	= p_plugin.m_pfnGetRequiredVersion;
-		m_pfnGetName			= p_plugin.m_pfnGetName;
-		m_eType					= p_plugin.m_eType;
-		return *this;
-	}
-
-	PluginBase & PluginBase::operator =( PluginBase && p_plugin )
-	{
-		if ( this != & p_plugin )
-		{
-			m_pfnGetRequiredVersion	= std::move( p_plugin.m_pfnGetRequiredVersion );
-			m_pfnGetName			= std::move( p_plugin.m_pfnGetName );
-			m_eType					= std::move( p_plugin.m_eType );
-			p_plugin.m_pfnGetRequiredVersion	= NULL;
-			p_plugin.m_pfnGetName				= NULL;
-			p_plugin.m_eType					= ePLUGIN_TYPE_COUNT;
-		}
-
-		return *this;
 	}
 
 	void PluginBase::GetRequiredVersion( Version & p_version )const

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of ProceduralGenerator (https://sourceforge.net/projects/proceduralgene/)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -22,12 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <vector>
 #include <algorithm>
 #include <numeric>
-
-#if defined( _MSC_VER )
-#	define TPL_PIXEL_FORMAT	uint32_t
-#else
-#	define TPL_PIXEL_FORMAT	ePIXEL_FORMAT
-#endif
 
 namespace Castor
 {
@@ -59,7 +53,7 @@ namespace Castor
 		 *\param[in]	p_line			Ligne dans la fonction
 		 */
 		UnsupportedFormatException(	std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
-			:	Exception( p_description, p_file, p_function, p_line )
+			: Exception( p_description, p_file, p_function, p_line )
 		{
 		}
 	};
@@ -68,7 +62,7 @@ namespace Castor
 	\~english
 	\brief		english Helper macro to use UnsupportedFormatException
 	\~french
-	\brief		Macro �crite pour faciliter l'utilisation de UnsupportedFormatException
+	\brief		Macro écrite pour faciliter l'utilisation de UnsupportedFormatException
 	*/
 #	define UNSUPPORTED_ERROR( p_text) throw UnsupportedFormatException( p_text, __FILE__, __FUNCTION__, __LINE__)
 }

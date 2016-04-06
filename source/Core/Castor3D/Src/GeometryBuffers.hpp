@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -22,7 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <IndexBuffer.hpp>
 #include <VertexBuffer.hpp>
-#include <MatrixBuffer.hpp>
 
 namespace Castor3D
 {
@@ -35,171 +34,113 @@ namespace Castor3D
 	\remark		Allows implementations to use API specific optimisations (like OpenGL Vertex array objects)
 				<br />Acquires it's buffers responsibility when constructed
 	\~french
-	\brief		Conteneur de buffers de géométries
-	\remark		Permet aux implémentations d'utiliser les optimisations spécifiques aux API (comme les Vertex arrays objects OpenGL)
-				<br />Acquiert la responsabilité de ses buffers à la création
+	\brief		Conteneur de buffers de gÃ©omÃ©tries
+	\remark		Permet aux implÃ©mentations d'utiliser les optimisations spÃ©cifiques aux API (comme les Vertex arrays objects OpenGL)
+				<br />Acquiert la responsabilitÃ© de ses buffers Ã  la crÃ©ation
 	*/
-	class C3D_API GeometryBuffers
+	class GeometryBuffers
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pVertexBuffer	The vertex buffer
-		 *\param[in]	p_pIndexBuffer	The index buffer
-		 *\param[in]	p_pMatrixBuffer	The matrix buffer
+		 *\brief		Constructor.
+		 *\param[in]	p_topology	The buffers topology.
+		 *\param[in]	p_program	The shader program.
+		 *\param[in]	p_vtx		The vertex buffer.
+		 *\param[in]	p_idx		The index buffer.
+		 *\param[in]	p_bones		The bones data buffer.
+		 *\param[in]	p_inst		The instances matrices buffer.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pVertexBuffer	Le tampon de sommets
-		 *\param[in]	p_pIndexBuffer	Le tampon d'indices
-		 *\param[in]	p_pMatrixBuffer	Le tampon de matrices
+		 *\brief		Constructeur.
+		 *\param[in]	p_topology	La topologie des tampons.
+		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	p_vtx		Le tampon de sommets.
+		 *\param[in]	p_idx		Le tampon d'indices.
+		 *\param[in]	p_bones		Le tampon de donnÃ©es de bones.
+		 *\param[in]	p_inst		Le tampon de matrices d'instances.
 		 */
-		GeometryBuffers( VertexBufferUPtr p_pVertexBuffer, IndexBufferUPtr p_pIndexBuffer, MatrixBufferUPtr p_pMatrixBuffer );
+		C3D_API GeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~GeometryBuffers();
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool Initialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual ~GeometryBuffers();
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
-		 *\param[in]	p_eTopology	The wanted topology
 		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_uiIndex	Specifies the starting index in the enabled arrays
+		 *\param[in]	p_index		Specifies the starting index in the enabled arrays
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Dessine la géométrie contenue dans les buffers
-		 *\param[in]	p_eTopology	La topologie voulue
-		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
-		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Dessine la gÃ©omÃ©trie contenue dans les buffers
+		 *\param[in]	p_uiSize	SpÃ©cifie le nombre de vertices Ã  rendre
+		 *\param[in]	p_index	SpÃ©cifie l'indice du premier vertice
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool Draw( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex ) = 0;
+		C3D_API virtual bool Draw( uint32_t p_uiSize, uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
-		 *\param[in]	p_eTopology	The wanted topology
 		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_uiIndex	Specifies the starting index in the enabled arrays
-		 *\param[in]	p_uiCount	The instances count
+		 *\param[in]	p_index		Specifies the starting index in the enabled arrays
+		 *\param[in]	p_count		The instances count
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Dessine la géométrie contenue dans les buffers
-		 *\param[in]	p_eTopology	La topologie voulue
-		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
-		 *\param[in]	p_uiIndex	Spécifie l'indice du premier vertice
-		 *\param[in]	p_uiCount	Le nombre d'instances à dessiner
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Dessine la gÃ©omÃ©trie contenue dans les buffers
+		 *\param[in]	p_uiSize	SpÃ©cifie le nombre de vertices Ã  rendre
+		 *\param[in]	p_index		SpÃ©cifie l'indice du premier vertice
+		 *\param[in]	p_count		Le nombre d'instances Ã  dessiner
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool DrawInstanced( eTOPOLOGY p_eTopology, ShaderProgramBaseSPtr p_pProgram, uint32_t p_uiSize, uint32_t p_uiIndex, uint32_t p_uiCount ) = 0;
+		C3D_API virtual bool DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )const = 0;
 		/**
 		 *\~english
-		 *\brief		Binds the geometry buffers
-		 *\remark		If it fails they will be correctly unbound
-		 *\return		\p false if one buffer failed to be bound
+		 *\return		The program layout.
 		 *\~french
-		 *\brief		Active les buffers de la géométrie
-		 *\remark		Si ça échoue, les buffers seront correctement désactivés
-		 *\return		\p false si l'activation d'un tampon a échoué
+		 *\return		Le layout du programme.
 		 */
-		virtual bool Bind();
-		/**
-		 *\~english
-		 *\brief		Unbinds the geometry buffers
-		 *\~french
-		 *\brief		Désactive les buffers de la géométrie
-		 */
-		virtual void Unbind();
-		/**
-		 *\~english
-		 *\brief		Retrieves the indices buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le tampon d'indices
-		 *\return		La valeur
-		 */
-		inline IndexBuffer & GetIndexBuffer()
+		inline ProgramInputLayout const & GetLayout()const
 		{
-			return *m_pIndexBuffer;
+			return m_layout;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertices buffer
-		 *\return		The value
+		 *\return		The buffers topology.
 		 *\~french
-		 *\brief		Récupère le tampon de vertices
-		 *\return		La valeur
+		 *\return		La topologie des tampons.
 		 */
-		inline VertexBuffer & GetVertexBuffer()
+		inline eTOPOLOGY GetTopology()const
 		{
-			return *m_pVertexBuffer;
+			return m_topology;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the matrix buffer
-		 *\return		The value
+		 *\brief		Sets the buffers topology.
+		 *\param[in]	p_value	The new value
 		 *\~french
-		 *\brief		Récupère le tampon de matrices
-		 *\return		La valeur
+		 *\brief		DÃ©finit la topologie des tampons.
+		 *\param[in]	p_value	La nouvelle valeur.
 		 */
-		inline MatrixBuffer & GetMatrixBuffer()
+		inline void SetTopology( eTOPOLOGY p_value )
 		{
-			return *m_pMatrixBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves if the geometry buffers has an indices buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le fait que le conteneur possède un tampon d'indices
-		 *\return		La valeur
-		 */
-		inline bool HasIndexBuffer()
-		{
-			return m_bIndexBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves if the geometry buffers has a matrix buffer
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le fait que le conteneur possède un tampon de matrices
-		 *\return		La valeur
-		 */
-		inline bool HasMatrixBuffer()
-		{
-			return m_bMatrixBuffer;
+			m_topology = p_value;
 		}
 
 	protected:
-		//!\~english The vertex buffer	\~french Le tampon de sommets
-		VertexBufferUPtr m_pVertexBuffer;
-		//!\~english The index buffer	\~french Le tampon d'indices
-		IndexBufferUPtr m_pIndexBuffer;
-		//!\~english The matrix buffer	\~french Le tampon de matrices
-		MatrixBufferUPtr m_pMatrixBuffer;
-		//!\~english Tells the geometry buffers has an index buffer	\~french Dit si le conteneur possède un tampon d'indices
-		bool m_bIndexBuffer;
-		//!\~english Tells the geometry buffers has a matrix buffer	\~french Dit si le conteneur possède un tampon de matrices
-		bool m_bMatrixBuffer;
+		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		VertexBuffer * m_vertexBuffer = nullptr;
+		//!\~english The index buffer.	\~french Le tampon d'indices.
+		IndexBuffer * m_indexBuffer = nullptr;
+		//!\~english The bones buffer.	\~french Le tampon de bones.
+		VertexBuffer * m_bonesBuffer = nullptr;
+		//!\~english The matrix buffer.	\~french Le tampon de matrices.
+		VertexBuffer * m_matrixBuffer = nullptr;
+		//!\~english The shader program.	\~french Le programme de rendu.
+		ProgramInputLayout const & m_layout;
+		//!\~english The buffers topology.	\~french La topologie des tampons.
+		eTOPOLOGY m_topology;
 	};
 }
 

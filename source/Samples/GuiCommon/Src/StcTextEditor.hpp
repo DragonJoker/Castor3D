@@ -18,9 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_STC_TEXT_EDITOR_H___
 #define ___GUICOMMON_STC_TEXT_EDITOR_H___
 
-#pragma warning( push )
-#pragma warning( disable:4996 )
-
 #include <wx/stc/stc.h>
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
 #	include <wx/textcompleter.h>
@@ -32,7 +29,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxStcTextEditor : public wxStyledTextCtrl
+	class StcTextEditor
+		: public wxStyledTextCtrl
 	{
 	private:
 		typedef enum gcID
@@ -83,11 +81,11 @@ namespace GuiCommon
 		}	gcID;
 
 #if wxMAJOR_VERSION >= 3 || ( wxMAJOR_VERSION == 2 && wxMINOR_VERSION >= 9 )
-		class wxTextAutoCompleter
+		class TextAutoCompleter
 			: public wxTextCompleter
 		{
 		public:
-			wxTextAutoCompleter( wxArrayString const & p_keywords );
+			TextAutoCompleter( wxArrayString const & p_keywords );
 			virtual bool Start( wxString const & p_prefix );
 			virtual wxString GetNext();
 
@@ -98,24 +96,9 @@ namespace GuiCommon
 		};
 #endif
 
-	private:
-		wxString m_strFilename;
-		wxString m_strCurrentWord;
-		LanguageInfoPtr m_pLanguage;
-		int m_iLineNrID;
-		int m_iLineNrMargin;
-		int m_iFoldingID;
-		int m_iFoldingMargin;
-		int m_iDividerID;
-		StcContext * m_pContext;
-		int m_iTabSpaces;
-		bool m_bUseTabs;
-		bool m_bTabIndents;
-		bool m_bBackspaceUnindents;
-
 	public:
-		wxStcTextEditor( StcContext * p_pContext, wxWindow * p_pParent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_lStyle = wxVSCROLL );
-		virtual ~wxStcTextEditor();
+		StcTextEditor( StcContext & p_context, wxWindow * p_parent, wxWindowID p_id = wxID_ANY, wxPoint const & p_ptPos = wxDefaultPosition, wxSize const & p_size = wxDefaultSize, long p_lStyle = wxVSCROLL );
+		virtual ~StcTextEditor();
 
 		bool LoadFile();
 		bool LoadFile( wxString const & p_strFilename );
@@ -125,14 +108,17 @@ namespace GuiCommon
 		bool IsModified();
 		wxString DeterminePrefs( wxString const & p_strFilename );
 		bool InitializePrefs( wxString const & p_strFilename );
+
 		inline wxString GetFilename()
 		{
 			return m_strFilename;
 		}
+
 		inline void SetFilename( wxString const & p_strFilename )
 		{
 			m_strFilename = p_strFilename;
 		}
+
 		inline LanguageInfoPtr GetLanguageInfo()
 		{
 			return m_pLanguage;
@@ -176,9 +162,22 @@ namespace GuiCommon
 		void OnMarginClick( wxStyledTextEvent & p_event );
 		void OnCharAdded( wxStyledTextEvent & p_event );
 		void OnKey( wxStyledTextEvent & p_event );
+
+	private:
+		wxString m_strFilename;
+		wxString m_strCurrentWord;
+		LanguageInfoPtr m_pLanguage;
+		int m_iLineNrID;
+		int m_iLineNrMargin;
+		int m_iFoldingID;
+		int m_iFoldingMargin;
+		int m_iDividerID;
+		StcContext & m_context;
+		int m_iTabSpaces;
+		bool m_bUseTabs;
+		bool m_bTabIndents;
+		bool m_bBackspaceUnindents;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -1,4 +1,4 @@
-#include "Generator.hpp"
+﻿#include "Generator.hpp"
 #include "Engine.hpp"
 
 #include <Utils.hpp>
@@ -9,18 +9,18 @@ using namespace Castor;
 
 //*************************************************************************************************
 
-Generator::Thread::Thread( Generator * p_pParent, uint32_t p_uiIndex, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
-	:	m_pParent( p_pParent )
-	,	m_uiIndex( p_uiIndex )
-	,	m_iWidth( iWidth )
-	,	m_iBottom( iBottom )
-	,	m_iTop( iTop )
-	,	m_iHeight( iTotalHeight )
-	,	m_pxColour( p_pxColour )
-	,	m_bEnded( true )
-	,	m_bLaunched( false )
-	,	m_bStopped( false )
-	,	m_pThread( )
+Generator::Thread::Thread( Generator * p_parent, uint32_t p_index, int iWidth, int iTop, int iBottom, int iTotalHeight, UbPixel const & p_pxColour )
+	: m_parent( p_parent )
+	, m_index( p_index )
+	, m_iWidth( iWidth )
+	, m_iBottom( iBottom )
+	, m_iTop( iTop )
+	, m_iHeight( iTotalHeight )
+	, m_pxColour( p_pxColour )
+	, m_bEnded( true )
+	, m_bLaunched( false )
+	, m_bStopped( false )
+	, m_pThread( )
 {
 }
 
@@ -54,7 +54,7 @@ int Generator::Thread::Entry()
 	{
 		if ( m_bEnded && m_bLaunched && !IsStopped() )
 		{
-			CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+			auto l_lock = Castor::make_unique_lock( m_mutex );
 			m_bEnded = false;
 			Step();
 			m_bEnded = true;
@@ -69,18 +69,18 @@ int Generator::Thread::Entry()
 
 //*************************************************************************************************
 
-Generator::Generator( Engine * p_pEngine, int p_width, int p_height )
-	:	m_iWidth( p_width )
-	,	m_iHeight( p_height )
-	,	m_ullStep( 0 )
-	,	m_bInitialised( false )
-	,	m_bEnded( true )
-	,	m_frontBuffer( Size( p_width, p_height ) )
-	,	m_backBuffer( Size( p_width, p_height ) )
-	,	m_pEngine( p_pEngine )
+Generator::Generator( Engine * p_engine, int p_width, int p_height )
+	: m_iWidth( p_width )
+	, m_iHeight( p_height )
+	, m_ullStep( 0 )
+	, m_initialised( false )
+	, m_bEnded( true )
+	, m_frontBuffer( Size( p_width, p_height ) )
+	, m_backBuffer( Size( p_width, p_height ) )
+	, m_engine( p_engine )
 {
-//	uint8_t l_tmp[] = { 255, 255, 255, 255 };
-//	m_pxColour.set<ePIXEL_FORMAT_A8R8G8B8>( l_tmp);
+	//uint8_t l_tmp[] = { 255, 255, 255, 255 };
+	//m_pxColour.set<ePIXEL_FORMAT_A8R8G8B8>( l_tmp);
 	m_uiThreadCount = System::GetCPUCount() * 2;
 }
 
@@ -91,9 +91,9 @@ Generator::~Generator()
 
 bool Generator::Step()
 {
-	bool l_bReturn = false;
+	bool l_return = false;
 
-	if ( m_bInitialised )
+	if ( m_initialised )
 	{
 		if ( m_arraySlaveThreads.size() > 0 )
 		{
@@ -106,16 +106,16 @@ bool Generator::Step()
 			{
 				SwapBuffers();
 				m_bEnded = true;
-				l_bReturn = true;
+				l_return = true;
 			}
 		}
 		else
 		{
-			l_bReturn = false;
+			l_return = false;
 		}
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 void Generator::SetRed( uint8_t val )
@@ -175,7 +175,7 @@ void Generator::ClearAllThreads()
 	std::for_each( m_arraySlaveThreads.begin(), m_arraySlaveThreads.end(), [&]( Thread *& p_pThread )
 	{
 		Generator::Thread * l_pThread = p_pThread;
-		p_pThread = NULL;
+		p_pThread = nullptr;
 
 		if ( l_pThread )
 		{
@@ -188,20 +188,20 @@ void Generator::ClearAllThreads()
 
 bool Generator::AllEnded()
 {
-	bool l_bReturn = true;
-	uint32_t l_uiCount = DoGetThreadsCount();
+	bool l_return = true;
+	uint32_t l_count = DoGetThreadsCount();
 
-	for ( uint32_t i = 0; i < l_uiCount && l_bReturn; i++ )
+	for ( uint32_t i = 0; i < l_count && l_return; i++ )
 	{
-		l_bReturn &= m_arraySlaveThreads[i] == NULL || m_arraySlaveThreads[i]->IsEnded();
+		l_return &= m_arraySlaveThreads[i] == nullptr || m_arraySlaveThreads[i]->IsEnded();
 	}
 
-	return l_bReturn;
+	return l_return;
 }
 
 void Generator::Suspend()
 {
-	m_bInitialised = false;
+	m_initialised = false;
 	ClearAllThreads();
 }
 
@@ -214,15 +214,7 @@ void Generator::DoCleanup()
 
 Point2i Generator::_loadImage( String const & p_strImagePath, Image & CU_PARAM_UNUSED( p_image ) )
 {
-	ImageCollection & l_imgCollection = m_pEngine->GetImageManager();
-	ImageSPtr l_pImage = l_imgCollection.find( p_strImagePath );
-
-	if ( !l_pImage )
-	{
-		l_pImage = std::make_shared< Image >( p_strImagePath, p_strImagePath );
-		l_imgCollection.insert( p_strImagePath, l_pImage );
-	}
-
+	ImageSPtr l_pImage = m_engine->GetImageManager().create( p_strImagePath, p_strImagePath );
 	return Point2i( l_pImage->GetWidth(), l_pImage->GetHeight() );
 }
 

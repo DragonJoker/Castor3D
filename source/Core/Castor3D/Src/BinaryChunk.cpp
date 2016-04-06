@@ -1,4 +1,4 @@
-#include "BinaryChunk.hpp"
+﻿#include "BinaryChunk.hpp"
 
 #include <numeric>
 
@@ -10,13 +10,13 @@ namespace Castor3D
 {
 	BinaryChunk::BinaryChunk()
 		:	m_eChunkType( eCHUNK_TYPE_UNKNOWN )
-		,	m_uiIndex( 0 )
+		,	m_index( 0 )
 	{
 	}
 
-	BinaryChunk::BinaryChunk( eCHUNK_TYPE p_eType )
-		:	m_eChunkType( p_eType )
-		,	m_uiIndex( 0 )
+	BinaryChunk::BinaryChunk( eCHUNK_TYPE p_type )
+		:	m_eChunkType( p_type )
+		,	m_index( 0 )
 	{
 	}
 
@@ -43,46 +43,46 @@ namespace Castor3D
 
 	void BinaryChunk::Get( uint8_t * p_data, uint32_t p_size )
 	{
-		std::memcpy( p_data, &m_pData[m_uiIndex], p_size );
-		m_uiIndex += p_size;
+		std::memcpy( p_data, &m_pData[m_index], p_size );
+		m_index += p_size;
 	}
 
 	bool BinaryChunk::CheckAvailable( uint32_t p_size )const
 	{
-		return m_uiIndex + p_size <= m_pData.size();
+		return m_index + p_size <= m_pData.size();
 	}
 
 	uint32_t BinaryChunk::GetRemaining()const
 	{
-		return uint32_t( m_pData.size() - m_uiIndex );
+		return uint32_t( m_pData.size() - m_index );
 	}
 
 	bool BinaryChunk::GetSubChunk( BinaryChunk & p_chunkDst )
 	{
 		uint32_t l_uiDataSize = 0;
 		// First we retrieve the chunk type
-		bool l_bReturn = DoRead( &p_chunkDst.m_eChunkType, 1 );
+		bool l_return = DoRead( &p_chunkDst.m_eChunkType, 1 );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			// Then the chunk data size
-			l_bReturn = DoRead( &l_uiDataSize, 1 );
+			l_return = DoRead( &l_uiDataSize, 1 );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = m_uiIndex + l_uiDataSize <= m_pData.size();
+			l_return = m_index + l_uiDataSize <= m_pData.size();
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			// Eventually we retrieve the chunk data
-			p_chunkDst.m_pData.insert( p_chunkDst.m_pData.end(), m_pData.begin() + m_uiIndex, m_pData.begin() + m_uiIndex + l_uiDataSize );
-			p_chunkDst.m_uiIndex = 0;
-			m_uiIndex += l_uiDataSize;
+			p_chunkDst.m_pData.insert( p_chunkDst.m_pData.end(), m_pData.begin() + m_index, m_pData.begin() + m_index + l_uiDataSize );
+			p_chunkDst.m_index = 0;
+			m_index += l_uiDataSize;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool BinaryChunk::AddSubChunk( BinaryChunk const & p_subchunk )
@@ -101,43 +101,43 @@ namespace Castor3D
 
 	bool BinaryChunk::Write( Castor::BinaryFile & p_file )
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Write( m_eChunkType ) == sizeof( eCHUNK_TYPE );
+			l_return = p_file.Write( m_eChunkType ) == sizeof( eCHUNK_TYPE );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			Finalise();
-			l_bReturn = p_file.Write( GetDataSize() ) == sizeof( uint32_t );
+			l_return = p_file.Write( GetDataSize() ) == sizeof( uint32_t );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteArray( m_pData.data(), m_pData.size() ) == m_pData.size();
+			l_return = p_file.WriteArray( m_pData.data(), m_pData.size() ) == m_pData.size();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool BinaryChunk::Read( Castor::BinaryFile & p_file )
 	{
 		uint32_t l_uiDataSize = 0;
-		bool l_bReturn = p_file.Read( m_eChunkType ) == sizeof( eCHUNK_TYPE );
+		bool l_return = p_file.Read( m_eChunkType ) == sizeof( eCHUNK_TYPE );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Read( l_uiDataSize ) == sizeof( uint32_t );
+			l_return = p_file.Read( l_uiDataSize ) == sizeof( uint32_t );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			m_pData.resize( l_uiDataSize );
-			l_bReturn = p_file.ReadArray( m_pData.data(), m_pData.size() ) == m_pData.size();
+			l_return = p_file.ReadArray( m_pData.data(), m_pData.size() ) == m_pData.size();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

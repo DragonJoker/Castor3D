@@ -35,7 +35,8 @@ namespace Castor3D
 	\remark		A ne pas utiliser pour gérer des buffers de données, utiliser Castor::Buffer pour cela
 	*/
 	template< typename T >
-	class C3D_API CpuBuffer
+	class CpuBuffer
+		: public Castor::OwnedBy< Engine >
 	{
 	protected:
 		typedef typename std::shared_ptr< GpuBuffer< T > > GpuBufferSPtr;
@@ -43,24 +44,22 @@ namespace Castor3D
 		typedef typename std::weak_ptr< CpuBuffer< T > > CpuBufferWPtr;
 		DECLARE_TPL_VECTOR( T, T );
 
-	public:
+	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_uiCount		The elements count
+		 *\param[in]	p_engine		The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_uiCount		Le compte des éléments
+		 *\param[in]	p_engine		Le moteur
 		 */
-		CpuBuffer( RenderSystem * p_pRenderSystem )
-			:	m_bAssigned( false )
-			,	m_bToDelete( false )
-			,	m_pBuffer( )
-			,	m_arrayData( )
-			,	m_pRenderSystem( p_pRenderSystem )
-			,	m_uiSavedSize( 0 )
+		inline CpuBuffer( Engine & p_engine )
+			: Castor::OwnedBy< Engine >( p_engine )
+			, m_bAssigned( false )
+			, m_bToDelete( false )
+			, m_pBuffer()
+			, m_arrayData()
+			, m_uiSavedSize( 0 )
 
 		{
 		}
@@ -70,35 +69,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~CpuBuffer()
+		inline ~CpuBuffer()
 		{
 		}
-		/**
-		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool Create()
-		{
-			bool l_bReturn = DoCreateBuffer();
 
-			if ( l_bReturn )
-			{
-				l_bReturn = GetGpuBuffer()->Create();
-			}
-
-			return l_bReturn;
-		}
+	public:
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy()
+		inline void Destroy()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -114,7 +96,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup()
+		inline void Cleanup()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -126,64 +108,64 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function, initialises GPU buffer
-		 *\param[in]	p_eType		Buffer access type
-		 *\param[in]	p_eNature	Buffer access nature
-		 *\param[in]	p_pProgram	The shader program
+		 *\param[in]	p_type		Buffer access type
+		 *\param[in]	p_nature	Buffer access nature
+		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Fonction d'initialisation, initialise le GPU tampon
-		 *\param[in]	p_eType		Type d'accès du tampon
-		 *\param[in]	p_eNature	Nature d'accès du tampon
-		 *\param[in]	p_pProgram	Le programme shader
+		 *\param[in]	p_type		Type d'accès du tampon
+		 *\param[in]	p_nature	Nature d'accès du tampon
+		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr )
+		inline bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature )
 		{
-			bool l_bReturn	= false;
+			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_bReturn = l_pBuffer->Initialise( p_eType, p_eNature, p_pProgram );
+				l_return = l_pBuffer->Initialise( p_type, p_nature );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
-		 *\remark		Maps from buffer[p_uiOffset*sizeof( T )] to buffer[(p_uiOffset+p_uiSize-1)*sizeof( T )]
-		 *\param[in]	p_uiOffset	The start offset in the buffer
-		 *\param[in]	p_uiCount	The mapped elements count
-		 *\param[in]	p_uiFlags	The lock flags
+		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )]
+		 *\param[in]	p_offset	The start offset in the buffer
+		 *\param[in]	p_count	The mapped elements count
+		 *\param[in]	p_flags	The lock flags
 		 *\return		The mapped buffer address
 		 *\~french
 		 *\brief		Locke le tampon, càd le mappe en mémoire ram afin d'y autoriser des modifications
-		 *\remark		Mappe de tampon[p_uiOffset*sizeof( T )] à tampon[(p_uiOffset+p_uiSize-1) * sizeof( T )]
-		 *\param[in]	p_uiOffset	L'offset de départ
-		 *\param[in]	p_uiCount	Le nombre d'éléments à mapper
-		 *\param[in]	p_uiFlags	Les flags de lock
+		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] à tampon[(p_offset+p_uiSize-1) * sizeof( T )]
+		 *\param[in]	p_offset	L'offset de départ
+		 *\param[in]	p_count	Le nombre d'éléments à mapper
+		 *\param[in]	p_flags	Les flags de lock
 		 *\return		L'adresse du tampon mappé
 		 */
-		virtual T * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags )
+		inline T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags )
 		{
-			T * l_pReturn = NULL;
+			T * l_return = nullptr;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_pReturn = l_pBuffer->Lock( p_uiOffset, p_uiCount, p_uiFlags );
+				l_return = l_pBuffer->Lock( p_offset, p_count, p_flags );
 			}
 
-			return l_pReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that
-		 *\remark		All modifications made in the mapped buffer are put into GPU memory
+		 *\remarks		All modifications made in the mapped buffer are put into GPU memory
 		 *\~french
 		 *\brief		Un locke le tampon, càd l'unmappe de la mémoire ram afin de ne plus autoriser de modifications dessus
-		 *\remark		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU
+		 *\remarks		Toutes les modifications qui avaient été effectuées sur le tampon mappé sont rapatriées dans la mémoire GPU
 		 */
-		virtual void Unlock()
+		inline void Unlock()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -195,30 +177,30 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Transmits data to the GPU buffer from RAM
-		 *\param[in]	p_pBuffer	The data
-		 *\param[in]	p_iSize		Data buffer size
-		 *\param[in]	p_eType		Transfer type
-		 *\param[in]	p_eNature	Transfer nature
+		 *\param[in]	p_buffer	The data
+		 *\param[in]	p_size		Data buffer size
+		 *\param[in]	p_type		Transfer type
+		 *\param[in]	p_nature	Transfer nature
 		 *\return		\p true if successful
 		 *\~french
 		 *\brief		Transfère des données au tampon GPU à partir de la ram
-		 *\param[in]	p_pBuffer	Les données
-		 *\param[in]	p_iSize		Taille du tampon de données
-		 *\param[in]	p_eType		Type de transfert
-		 *\param[in]	p_eNature	Nature du transfert
+		 *\param[in]	p_buffer	Les données
+		 *\param[in]	p_size		Taille du tampon de données
+		 *\param[in]	p_type		Type de transfert
+		 *\param[in]	p_nature	Nature du transfert
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature )
+		inline bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature )
 		{
-			bool l_bReturn = false;
+			bool l_return = false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_bReturn = l_pBuffer->Fill( p_pBuffer, p_iSize, p_eType, p_eNature );
+				l_return = l_pBuffer->Fill( p_buffer, p_size, p_type, p_nature );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -228,17 +210,17 @@ namespace Castor3D
 		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool Bind()
+		inline bool Bind()
 		{
-			bool l_bReturn	= false;
+			bool l_return	= false;
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
 			if ( l_pBuffer )
 			{
-				l_bReturn = l_pBuffer->Bind();
+				l_return = l_pBuffer->Bind();
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
@@ -248,7 +230,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual void Unbind()
+		inline void Unbind()
 		{
 			GpuBufferSPtr l_pBuffer = GetGpuBuffer();
 
@@ -260,29 +242,29 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets element value at given index
-		 *\param[in]	p_uiIndex	The index
-		 *\param[in]	p_tValue	The value
+		 *\param[in]	p_index	The index
+		 *\param[in]	p_value	The value
 		 *\~french
 		 *\brief		Définit la valeur de l'élément à l'index donné
-		 *\param[in]	p_uiIndex	L'index
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_index	L'index
+		 *\param[in]	p_value	La valeur
 		 */
-		virtual void SetElement( uint32_t p_uiIndex, T const & p_tValue )
+		inline void SetElement( uint32_t p_index, T const & p_value )
 		{
-			CASTOR_ASSERT( p_uiIndex < m_arrayData.size() );
-			m_arrayData[p_uiIndex] = p_tValue;
+			REQUIRE( p_index < m_arrayData.size() );
+			m_arrayData[p_index] = p_value;
 		}
 		/**
 		 *\~english
 		 *\brief		Adds a value at the end of the buffer
-		 *\param[in]	p_tValue	The value
+		 *\param[in]	p_value	The value
 		 *\~french
 		 *\brief		Ajoute une valeur à la fin du tampon
-		 *\param[in]	p_tValue	La valeur
+		 *\param[in]	p_value	La valeur
 		 */
-		virtual void AddElement( T const & p_tValue )
+		inline void AddElement( T const & p_value )
 		{
-			m_arrayData.push_back( p_tValue );
+			m_arrayData.push_back( p_value );
 		}
 		/**
 		 *\~english
@@ -292,7 +274,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille remplie du tampon
 		 *\return		La taille
 		 */
-		virtual uint32_t GetSize()const
+		inline uint32_t GetSize()const
 		{
 			uint32_t l_uiReturn = m_uiSavedSize;
 
@@ -311,7 +293,7 @@ namespace Castor3D
 		 *\brief		Récupère la taille allouée du tampon
 		 *\return		La taille
 		 */
-		virtual uint32_t GetCapacity()const
+		inline uint32_t GetCapacity()const
 		{
 			// Safe cast since I limit a buffer size to uint32_t
 			return uint32_t( m_arrayData.capacity() );
@@ -324,7 +306,7 @@ namespace Castor3D
 		 *\brief		Définit la taille allouée du tampon
 		 *\param[in]	p_uiNewSize	La nouvelle taille
 		 */
-		virtual void Resize( uint32_t p_uiNewSize )
+		inline void Resize( uint32_t p_uiNewSize )
 		{
 			m_arrayData.resize( p_uiNewSize, 0 );
 		}
@@ -336,7 +318,7 @@ namespace Castor3D
 		 *\brief		Augmente la taille allouée du tampon
 		 *\param[in]	p_uiIncrement	L'incrément de taille
 		 */
-		virtual void Reserve( uint32_t p_uiIncrement )
+		inline void Reserve( uint32_t p_uiIncrement )
 		{
 			if ( p_uiIncrement + GetCapacity() < p_uiIncrement )
 			{
@@ -353,7 +335,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Vide le tampon
 		 */
-		virtual void Clear()
+		inline void Clear()
 		{
 			m_uiSavedSize = uint32_t( m_arrayData.size() );
 			m_arrayData.clear();
@@ -366,7 +348,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut de suppression du tampon
 		 *\return		Le statut de suppression
 		 */
-		virtual bool IsToDelete()const
+		inline bool IsToDelete()const
 		{
 			return m_bToDelete;
 		}
@@ -378,7 +360,7 @@ namespace Castor3D
 		 *\brief		Récupère le statut d'affectation du tampon
 		 *\return		Le statut d'affectation
 		 */
-		virtual bool IsAssigned()const
+		inline bool IsAssigned()const
 		{
 			return m_bAssigned;
 		}
@@ -390,7 +372,7 @@ namespace Castor3D
 		 *\brief		Récupère le tampon GPU
 		 *\return		Le tampon GPU
 		 */
-		virtual GpuBufferSPtr GetGpuBuffer()const
+		inline GpuBufferSPtr GetGpuBuffer()const
 		{
 			return m_pBuffer;
 		}
@@ -400,7 +382,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Définit le status d'affectation à \p true
 		 */
-		virtual void Assign()
+		inline void Assign()
 		{
 			m_bAssigned = true;
 		}
@@ -410,21 +392,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Définit le status d'affectation à \p false
 		 */
-		virtual void Unassign()
+		inline void Unassign()
 		{
 			m_bAssigned = false;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the RenderSystem
-		 *\return		The RenderSystem
+		 *\brief		Retrieves the data pointer
+		 *\return		The data pointer
 		 *\~french
-		 *\brief		Récupère le RenderSystem
-		 *\return		Le RenderSystem
+		 *\brief		Récupère le pointeur sur les données
+		 *\return		Le pointeur sur les données
 		 */
-		virtual RenderSystem * GetRenderSystem()const
+		inline T const * data()const
 		{
-			return m_pRenderSystem;
+			return ( m_arrayData.size() ? &m_arrayData[0] : nullptr );
 		}
 		/**
 		 *\~english
@@ -434,43 +416,10 @@ namespace Castor3D
 		 *\brief		Récupère le pointeur sur les données
 		 *\return		Le pointeur sur les données
 		 */
-		virtual T const * data()const
+		inline T * data()
 		{
-			return ( m_arrayData.size() ? &m_arrayData[0] : NULL );
+			return ( m_arrayData.size() ? &m_arrayData[0] : nullptr );
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the data pointer
-		 *\return		The data pointer
-		 *\~french
-		 *\brief		Récupère le pointeur sur les données
-		 *\return		Le pointeur sur les données
-		 */
-		virtual T * data()
-		{
-			return ( m_arrayData.size() ? &m_arrayData[0] : NULL );
-		}
-		///**
-		// *\~english
-		// *\brief		Retrieves the shared pointer holding this
-		// *\return		The shared pointer
-		// *\~french
-		// *\brief		Récupère le shared pointer sur this
-		// *\return		Le shared pointer
-		// */
-		//virtual std::shared_ptr< CpuBuffer< T > > GetShared()
-		//{
-		//	return shared_from_this();
-		//}
-
-	protected:
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 */
-		virtual bool DoCreateBuffer() = 0;
 
 	protected:
 		//!\~english Tells the buffer is to be deleted at next render loop	\~french Dit que le tampon doit être détruit à la prochaîne boucle de rendu
@@ -481,8 +430,6 @@ namespace Castor3D
 		GpuBufferSPtr m_pBuffer;
 		//!\~english The buffer data	\~french Les données du tampon
 		TArray m_arrayData;
-		//!\~english The RenderSystem, used to assign a GPU buffer	\~french Le RenderSystem, utilisée pour affecter un tampon GPU
-		RenderSystem * m_pRenderSystem;
 		//!<\~english The saved buffer size (to still have a size after clear)	\~french La taille sauvegardée, afin de toujours l'avoir après un clear
 		uint32_t m_uiSavedSize;
 	};

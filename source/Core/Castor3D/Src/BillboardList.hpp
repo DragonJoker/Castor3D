@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,11 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_BILLBOARD_LIST_H___
 #define ___C3D_BILLBOARD_LIST_H___
 
+#include "BufferDeclaration.hpp"
 #include "MovableObject.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -32,13 +31,13 @@ namespace Castor3D
 	\date		04/11/2013
 	\~english
 	\brief		Billboards list
-	\remark		All billboards from this list shares the same texture
+	\remarks	All billboards from this list shares the same texture
 	\~french
 	\brief		Liste de billboards
-	\remark		Tous les billboards de cette liste ont la mï¿½me texture
+	\remarks	Tous les billboards de cette liste ont la meme texture
 	*/
-	class C3D_API BillboardList
-		:	public MovableObject
+	class BillboardList
+		: public MovableObject
 	{
 	public:
 		/*!
@@ -50,8 +49,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Camera
 		*/
-		class C3D_API TextLoader
-			:	public MovableObject::TextLoader
+		class TextLoader
+			: public MovableObject::TextLoader
 		{
 		public:
 			/**
@@ -60,11 +59,11 @@ namespace Castor3D
 			 *\param[in]	p_file	The file to save the object in
 			 *\param[in]	p_obj	The object to save
 			 *\~french
-			 *\brief		Ecrit une caméra dans un fichier texte
+			 *\brief		Ecrit une camera dans un fichier texte
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_obj	L'objet
 			 */
-			virtual bool operator()( BillboardList const & p_obj, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( BillboardList const & p_obj, Castor::TextFile & p_file );
 		};
 
 		/*!
@@ -75,8 +74,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de BillboardList
 		*/
-		class C3D_API BinaryParser
-			:	public MovableObject::BinaryParser
+		class BinaryParser
+			: public MovableObject::BinaryParser
 		{
 		public:
 			/**
@@ -85,9 +84,9 @@ namespace Castor3D
 			 *\param[in]	p_path	The current folder path
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 *\param[in]	p_path	Le chemin d'acces au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -95,12 +94,12 @@ namespace Castor3D
 			 *\param[out]	p_chunk	The chunk to fill
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisee afin de remplir le chunk de donnees specifiques
+			 *\param[in]	p_obj	L'objet a ecrire
+			 *\param[out]	p_chunk	Le chunk a remplir
+			 *\return		\p false si une erreur quelconque est arrivee
 			 */
-			virtual bool Fill( BillboardList const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( BillboardList const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -108,95 +107,163 @@ namespace Castor3D
 			 *\param[in]	p_chunk	The chunk containing data
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisee afin de recuperer des donnees specifiques a partir d'un chunk
+			 *\param[out]	p_obj	L'objet a lire
+			 *\param[in]	p_chunk	Le chunk contenant les donnees
+			 *\return		\p false si une erreur quelconque est arrivee
 			 */
-			virtual bool Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( BillboardList & p_obj, BinaryChunk & p_chunk )const;
 		};
+
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pScene		The parent scene
-		 *\param[in]	p_pRenderSystem	The RenderSystem
+		 *\param[in]	p_name			The name.
+		 *\param[in]	p_scene			The parent scene.
+		 *\param[in]	p_parent		The parent scene node.
+		 *\param[in]	p_renderSystem	The RenderSystem.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pScene		La scï¿½ne parente
-		 *\param[in]	p_pRenderSystem	Le RenderSystem
+		 *\param[in]	p_name			Le nom.
+		 *\param[in]	p_scene			La scene parente.
+		 *\param[in]	p_parent		Le noeud de scï¿½ne parent.
+		 *\param[in]	p_renderSystem	Le RenderSystem.
 		 */
-		BillboardList( Scene * p_pScene, RenderSystem * p_pRenderSystem );
+		C3D_API BillboardList( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_parent, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BillboardList();
+		C3D_API ~BillboardList();
 		/**
 		 *\~english
 		 *\brief		Initialises GPU side elements
 		 *\return		\p true if all is OK
 		 *\~french
-		 *\brief		Initialise les ï¿½lï¿½ments GPU
-		 *\return		\p true si tout s'est bien passï¿½
+		 *\brief		Initialise les elements GPU
+		 *\return		\p true si tout s'est bien passe
 		 */
-		bool Initialise();
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans GPU side elements up
 		 *\~french
-		 *\brief		Nettoie les ï¿½lï¿½ments GPU
+		 *\brief		Nettoie les elements GPU
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Sets the material
+		 *\param[in]	p_pMaterial	The new value
+		 *\~french
+		 *\brief		Definit le materiau
+		 *\param[in]	p_pMaterial	La nouvelle valeur
+		 */
+		C3D_API void SetMaterial( MaterialSPtr p_pMaterial );
+		/**
+		 *\~english
+		 *\brief		Removes a point from the list
+		 *\param[in]	p_index	The point index
+		 *\~french
+		 *\brief		Retire un point de la liste
+		 *\param[in]	p_index	L'index du point
+		 */
+		C3D_API void RemovePoint( uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Adds a point to the list
+		 *\param[in]	p_position	The point
+		 *\~french
+		 *\brief		Ajoute un point a la liste
+		 *\param[in]	p_position	Le point
+		 */
+		C3D_API void AddPoint( Castor::Point3r const & p_position );
+		/**
+		 *\~english
+		 *\brief		Adds a points list to the list
+		 *\param[in]	p_ptPositions	The points list
+		 *\~french
+		 *\brief		Ajoute une liste de points a la liste
+		 *\param[in]	p_ptPositions	La liste de points
+		 */
+		C3D_API void AddPoints( Castor::Point3rArray const & p_ptPositions );
+		/**
+		 *\~english
+		 *\brief		Renders the billboards.
+		 *\param[in]	p_program	The shader program.
+		 *\~french
+		 *\brief		Rend les billboards.
+		 *\param[in]	p_program	Le programme shader.
+		 */
+		C3D_API void Draw( ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Sets the billboards dimensions
+		 *\param[in]	p_dimensions	The new value
+		 *\~french
+		 *\brief		Definit les dimensios des billboards
+		 *\param[in]	p_dimensions	La nouvelle valeur
+		 */
+		C3D_API void SetDimensions( Castor::Size const & p_dimensions );
+		/**
+		 *\~english
+		 *\brief		Sorts the points from farthest to nearest from the camera.
+		 *\param[in]	p_cameraPosition	The camera position, relative to billboard.
+		 *\~french
+		 *\brief		Trie les points des plus Ã©loignÃ©s aux plus proches de la camÃ©ra.
+		 *\param[in]	p_cameraPosition	La position de la camÃ©ra, relative au billboard.
+		 */
+		C3D_API void SortPoints( Castor::Point3r const & p_cameraPosition );
 		/**
 		 *\~english
 		 *\brief		Gets a point from the list
-		 *\param[in]	p_uiIndex	The point index
+		 *\param[in]	p_index	The point index
 		 *\return		The point
 		 *\~french
-		 *\brief		Rï¿½cupï¿½re un point de la liste
-		 *\param[in]	p_uiIndex	L'index du point
+		 *\brief		Recupere un point de la liste
+		 *\param[in]	p_index	L'index du point
 		 *\return		Le point
 		 */
-		Castor::Point3r const & GetAt( uint32_t p_uiIndex )const
+		inline Castor::Point3r const & GetAt( uint32_t p_index )const
 		{
-			return m_arrayPositions[p_uiIndex];
+			return m_arrayPositions[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Gets the list size
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère la taille de la liste
+		 *\brief		Recupere la taille de la liste
 		 *\return		La valeur
 		 */
-		uint32_t GetCount()const
+		inline uint32_t GetCount()const
 		{
 			return uint32_t( m_arrayPositions.size() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets a point in the list
-		 *\param[in]	p_uiIndex		The point index
-		 *\param[in]	p_ptPosition	The point
+		 *\param[in]	p_index		The point index
+		 *\param[in]	p_position	The point
 		 *\~french
-		 *\brief		Dï¿½finit un point de la liste
-		 *\param[in]	p_uiIndex		L'index du point
-		 *\param[in]	p_ptPosition	Le point
+		 *\brief		Definit un point de la liste
+		 *\param[in]	p_index		L'index du point
+		 *\param[in]	p_position	Le point
 		 */
-		void SetAt( uint32_t p_uiIndex, Castor::Point3r const & p_ptPosition )
+		inline void SetAt( uint32_t p_index, Castor::Point3r const & p_position )
 		{
-			m_bNeedUpdate = true;
-			m_arrayPositions[p_uiIndex] = p_ptPosition;
+			m_needUpdate = true;
+			m_arrayPositions[p_index] = p_position;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the material
 		 *\return		The value
 		 *\~french
-		 *\brief		Récupère le matériau
+		 *\brief		Recupere le materiau
 		 *\return		La valeur
 		 */
 		inline MaterialSPtr GetMaterial()const
@@ -205,53 +272,10 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the material
-		 *\param[in]	p_pMaterial	The new value
-		 *\~french
-		 *\brief		Définit le materiau
-		 *\param[in]	p_pMaterial	La nouvelle valeur
-		 */
-		void SetMaterial( MaterialSPtr p_pMaterial );
-		/**
-		 *\~english
-		 *\brief		Removes a point from the list
-		 *\param[in]	p_uiIndex	The point index
-		 *\~french
-		 *\brief		Retire un point de la liste
-		 *\param[in]	p_uiIndex	L'index du point
-		 */
-		void RemovePoint( uint32_t p_uiIndex );
-		/**
-		 *\~english
-		 *\brief		Adds a point to the list
-		 *\param[in]	p_ptPosition	The point
-		 *\~french
-		 *\brief		Ajoute un point ï¿½ la liste
-		 *\param[in]	p_ptPosition	Le point
-		 */
-		void AddPoint( Castor::Point3r const & p_ptPosition );
-		/**
-		 *\~english
-		 *\brief		Adds a points list to the list
-		 *\param[in]	p_ptPositions	The points list
-		 *\~french
-		 *\brief		Ajoute une liste de points ï¿½ la liste
-		 *\param[in]	p_ptPositions	La liste de points
-		 */
-		void AddPoints( Castor::Point3rArray const & p_ptPositions );
-		/**
-		 *\~english
-		 *\brief		Renders the billboards
-		 *\~french
-		 *\brief		Rend les billboards
-		 */
-		void Render();
-		/**
-		 *\~english
 		 *\brief		Retrieves the billboards dimensions
 		 *\return		The value
 		 *\~french
-		 *\brief		Rï¿½cupï¿½re les dimensios des billboards
+		 *\brief		Recupere les dimensions des billboards
 		 *\return		La valeur
 		 */
 		inline Castor::Size const & GetDimensions()const
@@ -260,22 +284,13 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the billboards dimensions
-		 *\param[in]	p_dimensions	The new value
-		 *\~french
-		 *\brief		Dï¿½finit les dimensios des billboards
-		 *\param[in]	p_dimensions	La nouvelle valeur
-		 */
-		void SetDimensions( Castor::Size const & p_dimensions );
-		/**
-		 *\~english
 		 *\brief		Gets an iterator to the beginning of the list
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la liste
-		 *\return		L'itérateur
+		 *\brief		Recupere un iterateur sur le debut de la liste
+		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayIt Begin()
+		inline Castor::Point3rArrayIt begin()
 		{
 			return m_arrayPositions.begin();
 		}
@@ -284,10 +299,10 @@ namespace Castor3D
 		 *\brief		Gets an iterator to the beginning of the list
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur sur le début de la liste
-		 *\return		L'itérateur
+		 *\brief		Recupere un iterateur sur le debut de la liste
+		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayConstIt Begin()const
+		inline Castor::Point3rArrayConstIt begin()const
 		{
 			return m_arrayPositions.begin();
 		}
@@ -296,10 +311,10 @@ namespace Castor3D
 		 *\brief		Gets an iterator to the end of the list
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la liste
-		 *\return		L'itérateur
+		 *\brief		Recupere un iterateur sur la fin de la liste
+		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayIt End()
+		inline Castor::Point3rArrayIt end()
 		{
 			return m_arrayPositions.end();
 		}
@@ -308,47 +323,42 @@ namespace Castor3D
 		 *\brief		Gets an iterator to the end of the list
 		 *\return		The iterator
 		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la liste
-		 *\return		L'itérateur
+		 *\brief		Recupere un iterateur sur la fin de la liste
+		 *\return		L'iterateur
 		 */
-		Castor::Point3rArrayConstIt End()const
+		inline Castor::Point3rArrayConstIt end()const
 		{
 			return m_arrayPositions.end();
 		}
 
-	protected:
+	private:
+		GeometryBuffers & DoPrepareGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
-		 *\brief		Initialises the shader program
-		 *\return		\p true if all is OK
+		 *\brief		Updates the vertex buffer, if needed.
 		 *\~french
-		 *\brief		Initialise le shader
-		 *\return		\p true si tout s'est bien passï¿½
+		 *\brief		Met ï¿½ jour le tampon de sommets si nï¿½cessaire.
 		 */
-		virtual bool DoInitialise() = 0;
+		void DoUpdate();
 
-	protected:
-		//!\~english  The RenderSystem	\~french La RenderSystem
-		RenderSystem * m_pRenderSystem;
+	private:
 		//!\~english The positions list	\~french La liste des positions
 		Castor::Point3rArray m_arrayPositions;
 		//!\~english The Vertex buffer's description	\~french La description du tampon de sommets
-		BufferDeclarationSPtr m_pDeclaration;
-		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont changé et doivent être renvoyées au GPU
-		bool m_bNeedUpdate;
-		//!\~english The positions GPU buffers	\~french Les tampon GPU de positions
-		GeometryBuffersSPtr m_pGeometryBuffers;
-		//!\~english  The shader program used to draw the billboards	\~french Le shader utilisé pour rendre les billboards
-		ShaderProgramBaseWPtr m_wpProgram;
+		BufferDeclaration m_declaration;
+		//!\~english Tells the positions have changed and needs to be sent again to GPU	\~french Dit que les positions ont change et doivent etre renvoyees au GPU
+		bool m_needUpdate;
 		//!\~english The Material	\~french Le Material
 		MaterialWPtr m_wpMaterial;
 		//!\~english The billboards dimensions	\~french Les dimensions des billboards
 		Castor::Size m_dimensions;
-		//!\~english The dimensions uniform variable	\~french La variable uniforme des dimensions
-		Point2iFrameVariableSPtr m_pDimensionsUniform;
+		//!\~english The vertex buffer.	\~french Le tampon de sommets.
+		VertexBufferUPtr m_vertexBuffer;
+		//!\~english The GeometryBuffers with which this billboards list is compatible.	\~french Les GeometryBuffers avec lesquel ce billboards list est compatible.
+		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
+		//!\~english The transformed camera position at last sort.	\~french La position transformÃ©e de la camÃ©ra au dernier tri.
+		Castor::Point3r m_cameraPosition;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

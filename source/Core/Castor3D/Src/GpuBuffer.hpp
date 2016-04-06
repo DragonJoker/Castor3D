@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <OwnedBy.hpp>
+
 #include <cstddef>
 
 namespace Castor3D
@@ -31,11 +33,12 @@ namespace Castor3D
 	\~english
 	\brief		Base class for renderer dependant buffers
 	\~french
-	\brief		Classe de base pour les tampons dÈpendants du renderer
+	\brief		Classe de base pour les tampons d√©pendants du renderer
 	\remark
 	*/
 	template< typename T >
 	class GpuBuffer
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	protected:
 		typedef Castor3D::CpuBuffer< T > * HardwareBufferPtr;
@@ -47,21 +50,26 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		GpuBuffer() {}
+		GpuBuffer( RenderSystem & p_renderSystem )
+			: Castor::OwnedBy< RenderSystem >( p_renderSystem )
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~GpuBuffer() {}
+		virtual ~GpuBuffer()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de crÈation
-		 *\return		\p true si tout s'est bien passÈ
+		 *\brief		Fonction de cr√©ation
+		 *\return		\p true si tout s'est bien pass√©
 		 */
 		virtual bool Create()
 		{
@@ -77,18 +85,16 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Initialisation function, used by VBOs
-		 *\param[in]	p_eType		Buffer access type
-		 *\param[in]	p_eNature	Buffer access nature
-		 *\param[in]	p_pProgram	The shader program
+		 *\param[in]	p_type		Buffer access type
+		 *\param[in]	p_nature	Buffer access nature
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction d'initialisation, utilisÈe par les VBOs
-		 *\param[in]	p_eType		Type d'accËs du tampon
-		 *\param[in]	p_eNature	Nature d'accËs du tampon
-		 *\param[in]	p_pProgram	Le programme de shader
-		 *\return		\p true si tout s'est bien passÈ
+		 *\brief		Fonction d'initialisation, utilis√©e par les VBOs
+		 *\param[in]	p_type		Type d'acc√®s du tampon
+		 *\param[in]	p_nature	Nature d'acc√®s du tampon
+		 *\return		\p true si tout s'est bien pass√©
 		 */
-		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_eType, eBUFFER_ACCESS_NATURE p_eNature, Castor3D::ShaderProgramBaseSPtr p_pProgram = nullptr ) = 0;
+		virtual bool Initialise( eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -99,27 +105,27 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Locks the buffer, id est maps it into memory so we can modify it
-		 *\remark		Maps from buffer[p_uiOffset*sizeof( T )] to buffer[(p_uiOffset+p_uiSize-1)*sizeof( T )]
-		 *\param[in]	p_uiOffset	The start offset in the buffer
-		 *\param[in]	p_uiCount	The mapped elements count
-		 *\param[in]	p_uiFlags	The lock flags
+		 *\remarks		Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )]
+		 *\param[in]	p_offset	The start offset in the buffer
+		 *\param[in]	p_count	The mapped elements count
+		 *\param[in]	p_flags	The lock flags
 		 *\return		The mapped buffer address
 		 *\~french
-		 *\brief		Locke le tampon, c‡d le mappe en mÈmoire ram afin d'y autoriser des modifications
-		 *\remark		Mappe de tampon[p_uiOffset*sizeof( T )] ‡ tampon[(p_uiOffset+p_uiSize-1) * sizeof( T )]
-		 *\param[in]	p_uiOffset	L'offset de dÈpart
-		 *\param[in]	p_uiCount	Le nombre d'ÈlÈments ‡ mapper
-		 *\param[in]	p_uiFlags	Les flags de lock
-		 *\return		L'adresse du tampon mappÈ
+		 *\brief		Locke le tampon, c√†d le mappe en m√©moire ram afin d'y autoriser des modifications
+		 *\remarks		Mappe de tampon[p_offset*sizeof( T )] √† tampon[(p_offset+p_uiSize-1) * sizeof( T )]
+		 *\param[in]	p_offset	L'offset de d√©part
+		 *\param[in]	p_count	Le nombre d'√©l√©ments √† mapper
+		 *\param[in]	p_flags	Les flags de lock
+		 *\return		L'adresse du tampon mapp√©
 		 */
-		virtual T * Lock( uint32_t p_uiOffset, uint32_t p_uiCount, uint32_t p_uiFlags ) = 0;
+		virtual T * Lock( uint32_t p_offset, uint32_t p_count, uint32_t p_flags ) = 0;
 		/**
 		 *\~english
 		 *\brief		Unlocks the buffer, id est unmaps it from memory so no modification can be made after that
-		 *\remark		All modifications made in the mapped buffer are put into GPU memory
+		 *\remarks		All modifications made in the mapped buffer are put into GPU memory
 		 *\~french
-		 *\brief		Un locke le tampon, c‡d l'unmappe de la mÈmoire ram afin de ne plus autoriser de modifications dessus
-		 *\remark		Toutes les modifications qui avaient ÈtÈ effectuÈes sur le tampon mappÈ sont rapatriÈes dans la mÈmoire GPU
+		 *\brief		Un locke le tampon, c√†d l'unmappe de la m√©moire ram afin de ne plus autoriser de modifications dessus
+		 *\remarks		Toutes les modifications qui avaient √©t√© effectu√©es sur le tampon mapp√© sont rapatri√©es dans la m√©moire GPU
 		 */
 		virtual void Unlock() = 0;
 		/**
@@ -127,23 +133,23 @@ namespace Castor3D
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÈ
-		 *\return		\p true si tout s'est bien passÈ
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activ√©
+		 *\return		\p true si tout s'est bien pass√©
 		 */
 		virtual bool Bind() = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\remark		Used for instanciation
-		 *\param[in]	p_uiCount	Instances count
+		 *\remarks		Used for instanciation
+		 *\param[in]	p_instantiated	Tells if the buffer is instantiated
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÈ
-		 *\remark		UtilisÈ pour l'instanciation
-		 *\param[in]	p_uiCount	Nombre d'instances
-		 *\return		\p true si tout s'est bien passÈ
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activ√©
+		 *\remarks		Utilis√© pour l'instanciation
+		 *\param[in]	p_instantiated	Dit si le tampon est instanti√©
+		 *\return		\p true si tout s'est bien pass√©
 		 */
-		virtual bool Bind( uint32_t p_uiCount )
+		virtual bool Bind( bool p_instantiated )
 		{
 			return false;
 		}
@@ -151,26 +157,26 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
-		 *\brief		Fonction de dÈsactivation, pour dire au GPU qu'il est dÈsactivÈ
+		 *\brief		Fonction de d√©sactivation, pour dire au GPU qu'il est d√©sactiv√©
 		 */
 		virtual void Unbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Transmits data to the GPU buffer from RAM
-		 *\param[in]	p_pBuffer	The data
-		 *\param[in]	p_iSize		Data buffer size
-		 *\param[in]	p_eType		Transfer type
-		 *\param[in]	p_eNature	Transfer nature
+		 *\param[in]	p_buffer	The data
+		 *\param[in]	p_size		Data buffer size
+		 *\param[in]	p_type		Transfer type
+		 *\param[in]	p_nature	Transfer nature
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		TransfËre des donnÈes au tampon GPU ‡ partir de la ram
-		 *\param[in]	p_pBuffer	Les donnÈes
-		 *\param[in]	p_iSize		Taille du tampon de donnÈes
-		 *\param[in]	p_eType		Type de transfert
-		 *\param[in]	p_eNature	Nature du transfert
-		 *\return		\p true si tout s'est bien passÈ
+		 *\brief		Transf√®re des donn√©es au tampon GPU √† partir de la ram
+		 *\param[in]	p_buffer	Les donn√©es
+		 *\param[in]	p_size		Taille du tampon de donn√©es
+		 *\param[in]	p_type		Type de transfert
+		 *\param[in]	p_nature	Nature du transfert
+		 *\return		\p true si tout s'est bien pass√©
 		 */
-		virtual bool Fill( T const * p_pBuffer, ptrdiff_t p_iSize, Castor3D::eBUFFER_ACCESS_TYPE p_eType, Castor3D::eBUFFER_ACCESS_NATURE p_eNature ) = 0;
+		virtual bool Fill( T const * p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature ) = 0;
 	};
 }
 

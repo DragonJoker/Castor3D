@@ -27,92 +27,66 @@ namespace Castor3D
 	\version	0.7.0.0
 	\date		19/08/2012
 	\~english
-	\brief		Post effect plugin class
+	\brief		Post effect plug-in class
 	\~french
-	\brief		Classe de plugin d'effets post rendu
+	\brief		Classe de plug-in d'effets post rendu
 	*/
-	class C3D_API PostFxPlugin
+	class PostFxPlugin
 		: public PluginBase
 	{
 	private:
 		friend class PluginBase;
-		typedef PostEffectSPtr	CreateEffectFunction( RenderSystem * p_pRenderSystem );
+		typedef PostEffectSPtr CreateEffectFunction( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
+		typedef Castor::String GetPostEffectTypeFunction();
 
-		typedef CreateEffectFunction		*	PCreateEffectFunction;
+		typedef CreateEffectFunction * PCreateEffectFunction;
+		typedef GetPostEffectTypeFunction * PGetPostEffectTypeFunction;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_library	The shared library holding the plug-in
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
+		 *\param[in]	p_engine	Le moteur
 		 */
-		PostFxPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		C3D_API PostFxPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~PostFxPlugin();
+		C3D_API virtual ~PostFxPlugin();
 		/**
 		 *\~english
-		 *\brief		Creates a PostEffect object
-		 *\param[in]	p_pRenderSystem	The render system
-		 *\return		The created PostEffect instance
+		 *\brief		Creates a PostEffect object.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_renderTarget	The render target to which is attached the effect.
+		 *\param[in]	p_params		The optional parameters.
+		 *\return		The created PostEffect instance.
 		 *\~french
-		 *\brief		Crée un objet PostEffect
-		 *\param[in]	p_pRenderSystem	Le render system
-		 *\return		L'instance de PostEffect créée
+		 *\brief		Crée un objet PostEffect.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle l'effet s'applique.
+		 *\param[in]	p_params		Les paramètres optionnels.
+		 *\return		L'instance de PostEffect créée.
 		 */
-		PostEffectSPtr CreateEffect( RenderSystem * p_pRenderSystem );
-
-	private:
+		C3D_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_plugin	The Plugin object to copy
+		 *\brief		Tells the effect short name
 		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
+		 *\brief		Donne le nom court de l'effet
 		 */
-		PostFxPlugin( PostFxPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 */
-		PostFxPlugin( PostFxPlugin && p_plugin );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		PostFxPlugin & operator =( PostFxPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		PostFxPlugin & operator =( PostFxPlugin && p_plugin );
+		C3D_API Castor::String GetPostEffectType();
 
 	private:
 		PCreateEffectFunction m_pfnCreateEffect;
+		PGetPostEffectTypeFunction m_pfnGetPostEffectType;
 	};
 }
 

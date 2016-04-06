@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,52 +31,36 @@ namespace Castor3D
 	\~french
 	\brief		Description d'une liaison entre un tampon d'image et un tampon de rendu
 	*/
-	class C3D_API RenderBufferAttachment
-		:	public FrameBufferAttachment
+	class RenderBufferAttachment
+		: public FrameBufferAttachment
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pRenderBuffer	The render buffer
+		 *\param[in]	p_renderBuffer	The render buffer
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
 		 */
-		RenderBufferAttachment( RenderBufferSPtr p_pRenderBuffer );
+		C3D_API RenderBufferAttachment( RenderBufferSPtr p_renderBuffer );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderBufferAttachment();
+		C3D_API virtual ~RenderBufferAttachment();
 		/**
-		 *\~english
-		 *\brief		Attaches the render buffer to the given frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_pFrameBuffer	The frame buffer
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache le tampon de rendu au tampon d'image donné, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
-		 *\param[in]	p_pFrameBuffer	Le tampon d'image
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::FrameBufferAttachment::GetBuffer
 		 */
-		bool Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer );
-		/**
-		 *\~english
-		 *\brief		Detaches the render buffer from the frame buffer
-		 *\~french
-		 *\brief		Détache le tampon de rendu du tampon d'image
-		 */
-		void Detach();
+		C3D_API virtual Castor::PxBufferBaseSPtr GetBuffer()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the render buffer
 		 *\return		The render buffer
 		 *\~french
-		 *\brief		Récupère le tampon de rendu
+		 *\brief		RÃ©cupÃ¨re le tampon de rendu
 		 *\return		Le tampon de rendu
 		 */
 		inline RenderBufferSPtr GetRenderBuffer()const
@@ -85,7 +69,7 @@ namespace Castor3D
 		}
 
 	private:
-		//!\~english The Attached RenderBuffer	\~french Le RenderBuffer attaché
+		//!\~english The Attached RenderBuffer	\~french Le RenderBuffer attachÃ©
 		RenderBufferWPtr m_pRenderBuffer;
 	};
 }

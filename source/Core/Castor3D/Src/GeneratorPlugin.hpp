@@ -29,48 +29,50 @@ namespace Castor3D
 	\~english
 	\brief		Generator Plugin class
 	\~french
-	\brief		Classe de plugin de générateur procédural
+	\brief		Classe de plug-in de générateur procédural
 	*/
-	class C3D_API GeneratorPlugin
+	class GeneratorPlugin
 		: public PluginBase
 	{
 	private:
 		friend class PluginBase;
 		friend class Engine;
-		typedef Subdivider * CreateGeneratorFunction( TextureUnit * p_pTexture );
+		typedef Subdivider * CreateGeneratorFunction( TextureUnit * p_texture );
 		typedef Subdivider * DestroyGeneratorFunction( Subdivider * p_pGenerator );
 
-		typedef CreateGeneratorFunction *	PCreateGeneratorFunction;
-		typedef DestroyGeneratorFunction *	PDestroyGeneratorFunction;
+		typedef CreateGeneratorFunction * PCreateGeneratorFunction;
+		typedef DestroyGeneratorFunction * PDestroyGeneratorFunction;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_library	The shared library holding the plug-in
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
+		 *\param[in]	p_engine	Le moteur
 		 */
-		GeneratorPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		C3D_API GeneratorPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~GeneratorPlugin();
+		C3D_API virtual ~GeneratorPlugin();
 		/**
 		 *\~english
 		 *\brief		Creates the Importer
-		 *\param[in]	p_pTexture	The texture modified by the generator
+		 *\param[in]	p_texture	The texture modified by the generator
 		 *\return		The created ProceduralGenerator instance
 		 *\~french
 		 *\brief		Crée l'Importer
-		 *\param[in]	p_pTexture	La texture modifiée par le générateur
+		 *\param[in]	p_texture	La texture modifiée par le générateur
 		 *\return		L'instance de ProceduralGenerator créée
 		 */
-		Subdivider * CreateGenerator( TextureUnit * p_pTexture );
+		C3D_API Subdivider * CreateGenerator( TextureUnit * p_texture );
 		/**
 		 *\~english
 		 *\brief		Destroys the given ProceduralGenerator
@@ -79,49 +81,7 @@ namespace Castor3D
 		 *\brief		Détruit le ProceduralGenerator donné
 		 *\param[in]	p_pGenerator	Le ProceduralGenerator
 		 */
-		void DestroyGenerator( Subdivider * p_pGenerator );
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 */
-		GeneratorPlugin( GeneratorPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 */
-		GeneratorPlugin( GeneratorPlugin && p_plugin );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		GeneratorPlugin & operator =( GeneratorPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		GeneratorPlugin & operator =( GeneratorPlugin && p_plugin );
+		C3D_API void DestroyGenerator( Subdivider * p_pGenerator );
 
 	private:
 		PCreateGeneratorFunction m_pfnCreateGenerator;

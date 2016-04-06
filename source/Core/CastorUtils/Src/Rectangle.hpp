@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -35,12 +35,15 @@ namespace Castor
 	\remark		Enumère les différents types d'intersection entre 2 rectangles
 	*/
 	typedef enum eINTERSECTION
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
-		eINTERSECTION_IN,			//!<\~english Completely inside		\~french Complètement à l'intérieur
-		eINTERSECTION_OUT,			//!<\~english Completely outside	\~french Complètement à l'extérieur
-		eINTERSECTION_INTERSECT,	//!<\~english Intersection			\~french Intersection
-		eINTERSECTION_COUNT,
+		//!\~english Completely inside	\~french Complètement à l'intérieur
+		eINTERSECTION_IN,
+		//!\~english Completely outside	\~french Complètement à l'extérieur
+		eINTERSECTION_OUT,
+		//!\~english Intersection	\~french Intersection
+		eINTERSECTION_INTERSECT,
+		CASTOR_ENUM_BOUNDS( eINTERSECTION, eINTERSECTION_IN )
 	}	eINTERSECTION;
 	//!
 	/*!
@@ -75,13 +78,13 @@ namespace Castor
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_ptOrigin	Position
-		 *\param[in]	p_ptSize	Size
+		 *\param[in]	p_size	Size
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_ptOrigin	Position
-		 *\param[in]	p_ptSize	Dimensions
+		 *\param[in]	p_size	Dimensions
 		 */
-		Rectangle( Position const & p_ptOrigin = Position(), Size const & p_ptSize = Size() );
+		CU_API Rectangle( Position const & p_ptOrigin = Position(), Size const & p_size = Size() );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -92,7 +95,25 @@ namespace Castor
 		 *\param[in]	p_iLeft, p_iTop		Point haut gauche
 		 *\param[in]	p_iRight, p_iBottom	Point bas droit
 		 */
-		Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
+		CU_API Rectangle( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
+		/**
+		 *\~english
+		 *\brief		Copy constructor
+		 *\param[in]	p_rhs	The other object
+		 *\~french
+		 *\brief		Constructeur par copie
+		 *\param[in]	p_rhs	l'autre object
+		 */
+		CU_API Rectangle( Rectangle const & p_rhs );
+		/**
+		 *\~english
+		 *\brief		Copy assignment operator
+		 *\param[in]	p_rhs	The other object
+		 *\~french
+		 *\brief		Opérateur d'affectation par copie
+		 *\param[in]	p_rhs	l'autre object
+		 */
+		CU_API Rectangle & operator=( Rectangle const & p_rhs );
 		/**
 		 *\~english
 		 *\brief		Test if the givent point is onto or into this rectangle
@@ -103,7 +124,7 @@ namespace Castor
 		 *\param[in]	p_ptPoint	Le point à tester
 		 *\return		\p eINTERSECTION_IN si sur ou dedans, \p eINTERSECTION_OUT sinon
 		 */
-		eINTERSECTION intersects( Position const & p_ptPoint )const;
+		CU_API eINTERSECTION intersects( Position const & p_ptPoint )const;
 		/**
 		 *\~english
 		 *\brief		Test if the givent rectangle intersects this rectangle
@@ -114,7 +135,7 @@ namespace Castor
 		 *\param[in]	p_rcRect	Le rectangle à tester
 		 *\return		Le type d'intersection entre les 2 rectangles
 		 */
-		eINTERSECTION intersects( Rectangle const & p_rcRect )const;
+		CU_API eINTERSECTION intersects( Rectangle const & p_rcRect )const;
 		/**
 		 *\~english
 		 *\brief		Sets the rectangle values
@@ -125,16 +146,16 @@ namespace Castor
 		 *\param[in]	p_iLeft, p_iTop		Point haut gauche
 		 *\param[in]	p_iRight, p_iBottom	Point bas droit
 		 */
-		void set( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
+		CU_API void set( int32_t p_iLeft, int32_t p_iTop, int32_t p_iRight, int32_t p_iBottom );
 		/**
 		 *\~english
 		 *\brief		Retrieves the rectangle size
-		 *\param[out]	p_ptResult	The rectangle size
+		 *\param[out]	p_result	The rectangle size
 		 *\~french
 		 *\brief		Récupère les dimensions du rectangle
-		 *\param[out]	p_ptResult	Les dimensions du rectangle
+		 *\param[out]	p_result	Les dimensions du rectangle
 		 */
-		void size( Size & p_ptResult )const;
+		CU_API void size( Size & p_result )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the left coordinate

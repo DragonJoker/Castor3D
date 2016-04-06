@@ -1,0 +1,453 @@
+font "Arial20"
+{
+	file "arial.ttf"
+	height 16
+}
+
+material "Black"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+	}
+}
+
+material "White"
+{
+	pass
+	{
+		ambient 1.0 1.0 1.0 1.0
+	}
+}
+
+material "DarkGray"
+{
+	pass
+	{
+		ambient 0.25 0.25 0.25 1.0
+	}
+}
+
+material "Gray"
+{
+	pass
+	{
+		ambient 0.5 0.5 0.5 1.0
+	}
+}
+
+material "LightGray"
+{
+	pass
+	{
+		ambient 0.75 0.75 0.75 1.0
+	}
+}
+
+material "DarkRed"
+{
+	pass
+	{
+		ambient 0.5 0.0 0.0 1.0
+	}
+}
+
+material "Red"
+{
+	pass
+	{
+		ambient 1.0 0.0 0.0 1.0
+	}
+}
+
+material "LightRed"
+{
+	pass
+	{
+		ambient 1.0 0.5 0.5 1.0
+	}
+}
+
+material "DarkGreen"
+{
+	pass
+	{
+		ambient 0.0 0.5 0.0 1.0
+	}
+}
+
+material "Green"
+{
+	pass
+	{
+		ambient 0.0 1.0 0.0 1.0
+	}
+}
+
+material "LightGreen"
+{
+	pass
+	{
+		ambient 0.5 1.0 0.5 1.0
+	}
+}
+
+material "DarkBlue"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.5 1.0
+	}
+}
+
+material "Blue"
+{
+	pass
+	{
+		ambient 0.0 0.0 1.0 1.0
+	}
+}
+
+material "LightBlue"
+{
+	pass
+	{
+		ambient 0.5 0.5 1.0 1.0
+	}
+}
+
+material "DarkTeal"
+{
+	pass
+	{
+		ambient 0.0 0.5 0.5 1.0
+	}
+}
+
+material "Teal"
+{
+	pass
+	{
+		ambient 0.0 1.0 1.0 1.0
+	}
+}
+
+material "LightTeal"
+{
+	pass
+	{
+		ambient 0.5 1.0 1.0 1.0
+	}
+}
+
+material "DarkYellow"
+{
+	pass
+	{
+		ambient 0.5 0.5 0.0 1.0
+	}
+}
+
+material "Yellow"
+{
+	pass
+	{
+		ambient 1.0 1.0 0.0 1.0
+	}
+}
+
+material "LightYellow"
+{
+	pass
+	{
+		ambient 1.0 1.0 0.5 1.0
+	}
+}
+
+material "DarkMagenta"
+{
+	pass
+	{
+		ambient 0.5 0.0 0.5 1.0
+	}
+}
+
+material "Magenta"
+{
+	pass
+	{
+		ambient 1.0 0.0 1.0 1.0
+	}
+}
+
+material "LightMagenta"
+{
+	pass
+	{
+		ambient 1.0 0.5 1.0 1.0
+	}
+}
+
+material "ShowNormals"
+{
+	pass
+	{
+		ambient 0.0 0.0 0.0 1.0
+		diffuse 1.0 1.0 1.0 1.0
+		emissive 0.0 0.0 0.0 1.0
+		specular 1.0 1.0 1.0 1.0
+		blend_func src_alpha inv_src_alpha
+		shininess 50.0
+
+		gl_shader_program
+		{
+			vertex_program
+			{
+				file sm_4 "ShowNormals/show_normals.vert"
+			}
+
+			geometry_program
+			{
+				file sm_4 "ShowNormals/show_normals.geom"
+				input_type triangles
+				output_type line_strip
+				output_vtx_count 22
+			}
+
+			pixel_program
+			{
+				file sm_4 "ShowNormals/show_normals.frag"
+			}
+
+			constants_buffer "Matrices"
+			{
+				shaders geometry
+
+				variable "c3d_mtxProjection"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxModel"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxView"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxModelView"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxProjectionView"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxProjectionModelView"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxNormal"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxTexture0"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxTexture1"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxTexture2"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxTexture3"
+				{
+					type mat4x4f
+					value 1
+				}
+
+				variable "c3d_mtxBones"
+				{
+					type mat4x4f
+					count 100
+					value 1
+				}
+			}
+
+			constants_buffer "Config"
+			{
+				shaders geometry
+
+				variable "p_bShowNormals"
+				{
+					type int
+					value 1
+				}
+
+				variable "p_bShowTangents"
+				{
+					type int
+					value 1
+				}
+
+				variable "p_bShowBitangents"
+				{
+					type int
+					value 1
+				}
+			}
+		}
+	}
+}
+
+border_panel_overlay "DebugPanel"
+{
+	pxl_size 350 230
+	pxl_position 0.0 0.0
+	material "Gray"
+	pxl_border_size 5 5 5 5
+	border_position internal
+	border_material "DarkRed"
+
+	text_overlay "DebugPanel-CpuTime-Label"
+	{
+		pxl_size 200 20
+		pxl_position 10 10
+		material "DarkBlue"
+		font "Arial20"
+		text "Frame CPU Time : "
+	}
+
+	text_overlay "DebugPanel-GpuTime-Label"
+	{
+		pxl_size 200 20
+		pxl_position 10 40
+		material "DarkBlue"
+		font "Arial20"
+		text "Frame GPU Time : "
+	}
+
+	text_overlay "DebugPanel-TotalTime-Label"
+	{
+		pxl_size 200 20
+		pxl_position 10 70
+		material "DarkBlue"
+		font "Arial20"
+		text "Frame Total Time : "
+	}
+
+	text_overlay "DebugPanel-AverageFPS-Label"
+	{
+		pxl_size 200 20
+		pxl_position 10 100
+		material "DarkBlue"
+		font "Arial20"
+		text "Average FPS : "
+	}
+
+	text_overlay "DebugPanel-VertexCount-Label"
+	{
+		pxl_size 200 20
+		pxl_position 10 130
+		material "DarkBlue"
+		font "Arial20"
+		text "Vertex Count : "
+	}
+
+	text_overlay "DebugPanel-FaceCount-Label"
+	{
+		pxl_size 200 20
+		pxl_position 10 160
+		material "DarkBlue"
+		font "Arial20"
+		text "Face Count : "
+	}
+
+	text_overlay "DebugPanel-ObjectCount-Label"
+	{
+		pxl_size 200 20
+		pxl_position 10 190
+		material "DarkBlue"
+		font "Arial20"
+		text "Objects Count : "
+	}
+
+	text_overlay "DebugPanel-CpuTime-Value"
+	{
+		pxl_size 120 20
+		pxl_position 200 10
+		material "DarkBlue"
+		font "Arial20"
+	}
+
+	text_overlay "DebugPanel-GpuTime-Value"
+	{
+		pxl_size 120 20
+		pxl_position 200 40
+		material "DarkBlue"
+		font "Arial20"
+	}
+
+	text_overlay "DebugPanel-TotalTime-Value"
+	{
+		pxl_size 120 20
+		pxl_position 200 70
+		material "DarkBlue"
+		font "Arial20"
+	}
+
+	text_overlay "DebugPanel-AverageFPS-Value"
+	{
+		pxl_size 120 20
+		pxl_position 200 100
+		material "DarkBlue"
+		font "Arial20"
+	}
+
+	text_overlay "DebugPanel-VertexCount-Value"
+	{
+		pxl_size 120 20
+		pxl_position 200 130
+		material "DarkBlue"
+		font "Arial20"
+	}
+
+	text_overlay "DebugPanel-FaceCount-Value"
+	{
+		pxl_size 120 20
+		pxl_position 200 160
+		material "DarkBlue"
+		font "Arial20"
+	}
+
+	text_overlay "DebugPanel-ObjectCount-Value"
+	{
+		pxl_size 120 20
+		pxl_position 200 190
+		material "DarkBlue"
+		font "Arial20"
+	}
+}

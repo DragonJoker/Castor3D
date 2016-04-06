@@ -132,7 +132,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est dans le container
 		 */
-		virtual bool IsWithin( Point< real, Dimension > const & p_v ) = 0;
+		CU_API virtual bool IsWithin( Point< real, Dimension > const & p_v ) = 0;
 		/**
 		 *\~english
 		 *\brief		Tests if a vertex is on the limits of this container, and not within
@@ -143,7 +143,7 @@ namespace Castor
 		 *\param[in]	p_v	Le point à tester
 		 *\return		\p true si le point est sur la limite
 		 */
-		virtual bool IsOnLimits( Point< real, Dimension > const & p_v ) = 0;
+		CU_API virtual bool IsOnLimits( Point< real, Dimension > const & p_v ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the center of this container

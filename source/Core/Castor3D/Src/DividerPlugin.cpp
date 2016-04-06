@@ -1,4 +1,4 @@
-#include "DividerPlugin.hpp"
+﻿#include "DividerPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -12,103 +12,75 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#pragma warning( disable:4290 )
 #if defined( _MSC_VER)
-	static const String GetDividerTypeFunctionABIName		= cuT( "?GetDividerType@@YA?AV?$basic_string@_WU?$char_traits@_W@std@@V?$allocator@_W@2@@std@@XZ" );
-	static const String CreateDividerFunctionABIName		= cuT( "?CreateDivider@@YAPAVSubdivider@Castor3D@@XZ" );
-	static const String DestroyDividerFunctionABIName		= cuT( "?DestroyDivider@@YAXPAVSubdivider@Castor3D@@@Z" );
+	static const String GetDividerTypeFunctionABIName = cuT( "?GetDividerType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
+#	if defined( _WIN64 )
+	static const String CreateDividerFunctionABIName = cuT( "?CreateDivider@@YAPEAVSubdivider@Castor3D@@XZ" );
+	static const String DestroyDividerFunctionABIName = cuT( "?DestroyDivider@@YAXPEAVSubdivider@Castor3D@@@Z" );
+# else
+	static const String CreateDividerFunctionABIName = cuT( "?CreateDivider@@YAPAVSubdivider@Castor3D@@XZ" );
+	static const String DestroyDividerFunctionABIName = cuT( "?DestroyDivider@@YAXPAVSubdivider@Castor3D@@@Z" );
+# endif
 #elif defined( __GNUG__)
-	static const String GetDividerTypeFunctionABIName		= cuT( "_Z14GetDividerTypev" );
-	static const String CreateDividerFunctionABIName		= cuT( "_Z13CreateDividerv" );
-	static const String DestroyDividerFunctionABIName		= cuT( "_Z14DestroyDividerPN8Castor3D10SubdividerE" );
+#	if GCC_VERSION >= 50300
+	static const String GetDividerTypeFunctionABIName = cuT( "_Z14GetDividerTypeB5cxx11v" );
+#	else
+	static const String GetDividerTypeFunctionABIName = cuT( "_Z14GetDividerTypev" );
+#	endif
+	static const String CreateDividerFunctionABIName = cuT( "_Z13CreateDividerv" );
+	static const String DestroyDividerFunctionABIName = cuT( "_Z14DestroyDividerPN8Castor3D10SubdividerE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
 
-	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary )
+	DividerPlugin::DividerPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_DIVIDER, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnGetDividerType, GetDividerTypeFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetDividerType, GetDividerTypeFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetDividerType plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetDividerType plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnCreateDivider, CreateDividerFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateDivider, CreateDividerFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateDivider plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateDivider plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnDestroyDivider, DestroyDividerFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnDestroyDivider, DestroyDividerFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyDivider plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] DestroyDivider plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
-	}
 
-	DividerPlugin::DividerPlugin( DividerPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateDivider( p_plugin.m_pfnCreateDivider )
-		,	m_pfnDestroyDivider( p_plugin.m_pfnDestroyDivider )
-		,	m_pfnGetDividerType( p_plugin.m_pfnGetDividerType )
-	{
-	}
-
-	DividerPlugin::DividerPlugin( DividerPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateDivider( std::move( p_plugin.m_pfnCreateDivider ) )
-		,	m_pfnDestroyDivider( std::move( p_plugin.m_pfnDestroyDivider ) )
-		,	m_pfnGetDividerType( std::move( p_plugin.m_pfnGetDividerType ) )
-	{
-		p_plugin.m_pfnCreateDivider		= NULL;
-		p_plugin.m_pfnDestroyDivider	= NULL;
-		p_plugin.m_pfnGetDividerType	= NULL;
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( GetEngine() );
+		}
 	}
 
 	DividerPlugin::~DividerPlugin()
 	{
-	}
-
-	DividerPlugin & DividerPlugin::operator =( DividerPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateDivider	= p_plugin.m_pfnCreateDivider;
-		m_pfnDestroyDivider	= p_plugin.m_pfnDestroyDivider;
-		m_pfnGetDividerType	= p_plugin.m_pfnGetDividerType;
-		return * this;
-	}
-
-	DividerPlugin & DividerPlugin::operator =( DividerPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
+		if ( m_pfnOnUnload )
 		{
-			m_pfnCreateDivider	= std::move( p_plugin.m_pfnCreateDivider );
-			m_pfnDestroyDivider	= std::move( p_plugin.m_pfnDestroyDivider );
-			m_pfnGetDividerType	= std::move( p_plugin.m_pfnGetDividerType );
-			p_plugin.m_pfnCreateDivider		= NULL;
-			p_plugin.m_pfnDestroyDivider	= NULL;
-			p_plugin.m_pfnGetDividerType	= NULL;
+			m_pfnOnUnload( GetEngine() );
 		}
-
-		return * this;
 	}
 
 	Subdivider * DividerPlugin::CreateDivider()
 	{
-		Subdivider * l_pReturn = nullptr;
+		Subdivider * l_return = nullptr;
 
 		if ( m_pfnCreateDivider )
 		{
-			l_pReturn = m_pfnCreateDivider();
+			l_return = m_pfnCreateDivider();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void DividerPlugin::DestroyDivider( Subdivider * p_pDivider )

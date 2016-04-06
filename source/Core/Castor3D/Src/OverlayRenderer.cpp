@@ -1,23 +1,31 @@
 #include "OverlayRenderer.hpp"
+
+#include "BlendStateManager.hpp"
+#include "BorderPanelOverlay.hpp"
+#include "Buffer.hpp"
+#include "DepthStencilStateManager.hpp"
+#include "DynamicTexture.hpp"
+#include "Engine.hpp"
+#include "FrameVariableBuffer.hpp"
+#include "MaterialManager.hpp"
+#include "MatrixFrameVariable.hpp"
+#include "OneFrameVariable.hpp"
 #include "Overlay.hpp"
 #include "PanelOverlay.hpp"
-#include "BorderPanelOverlay.hpp"
-#include "TextOverlay.hpp"
-#include "ShaderProgram.hpp"
-#include "ShaderManager.hpp"
-#include "Material.hpp"
-#include "Buffer.hpp"
-#include "Viewport.hpp"
 #include "Pass.hpp"
-#include "RenderSystem.hpp"
 #include "Pipeline.hpp"
-#include "BlendState.hpp"
-#include "OneFrameVariable.hpp"
 #include "PointFrameVariable.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "DynamicTexture.hpp"
+#include "RasteriserStateManager.hpp"
+#include "RenderSystem.hpp"
+#include "Sampler.hpp"
+#include "ShaderManager.hpp"
+#include "ShaderProgram.hpp"
+#include "TextOverlay.hpp"
+#include "Viewport.hpp"
 
 #include <Font.hpp>
+
+#include <GlslSource.hpp>
 
 using namespace Castor;
 
@@ -27,328 +35,609 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	static const int32_t C3D_MAX_CHARS_PER_BUFFER = 6000;
+
 	namespace
 	{
-		template< typename T >
-		size_t count_of( T * p_buffer )
+		uint32_t FillBuffers( OverlayCategory::VertexArray::const_iterator p_begin, uint32_t p_count, VertexBuffer & p_buffers )
 		{
-			return sizeof( p_buffer ) / sizeof( p_buffer[0] );
+			OverlayCategory::Vertex const & l_vertex = *p_begin;
+			p_buffers.Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			return p_count;
+		}
+
+		uint32_t FillBuffers( TextOverlay::VertexArray::const_iterator p_begin, uint32_t p_count, VertexBuffer & p_buffers )
+		{
+			TextOverlay::Vertex const & l_vertex = *p_begin;
+			p_buffers.Fill( reinterpret_cast< uint8_t const * >( &l_vertex ), p_count * sizeof( TextOverlay::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+			return p_count;
 		}
 	}
 
-	OverlayRenderer::OverlayRenderer( RenderSystem * p_pRenderSystem )
-		: m_pRenderSystem( p_pRenderSystem )
+	OverlayRenderer::OverlayRenderer( RenderSystem & p_renderSystem )
+		: OwnedBy< RenderSystem >( p_renderSystem )
 		, m_previousPanelZIndex( 0 )
 		, m_previousBorderZIndex( 0 )
 	{
-		BufferElementDeclaration l_vertexDeclarationElements[] =
+		m_declaration = BufferDeclaration{
 		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_3INTS ),
-			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0, eELEMENT_TYPE_2FLOATS ),
-		};
-
-		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2INTS ),
+			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS )
+		} };
+		m_textDeclaration = BufferDeclaration{
+		{
+			BufferElementDeclaration( ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2INTS ),
+			BufferElementDeclaration( ShaderProgram::Text, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS, 0 ),
+			BufferElementDeclaration( ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS, 1 )
+		} };
+		m_wpBlendState = GetRenderSystem()->GetEngine()->GetBlendStateManager().Create( cuT( "OVERLAY_BLEND" ) );
+		m_wpDepthStencilState = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "OVERLAY_DS" ) );
+		m_wpRasteriserState = GetRenderSystem()->GetEngine()->GetRasteriserStateManager().Create( cuT( "OVERLAY_RS" ) );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
 	{
+		for ( auto & l_vertex : m_borderVertex )
+		{
+			l_vertex.reset();
+		}
+
+		for ( auto & l_vertex : m_panelVertex )
+		{
+			l_vertex.reset();
+		}
 	}
 
 	void OverlayRenderer::Initialise()
 	{
-		if ( !m_pPanelGeometryBuffer )
+		if ( !m_panelVertexBuffer )
 		{
-			// Panel Overlays
-			VertexBufferUPtr l_pPanelVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-			m_pPanelGeometryBuffer = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pPanelVtxBuffer ), nullptr, nullptr );
-			m_pPanelGeometryBuffer->GetVertexBuffer().Create();
-			m_pPanelGeometryBuffer->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, GetPanelProgram( eTEXTURE_CHANNEL_COLOUR ) );
-			m_pPanelGeometryBuffer->Initialise();
+			// Panel Overlays buffers
+			m_panelVertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			uint32_t l_stride = m_declaration.GetStride();
+			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * l_stride ) );
+			uint8_t * l_buffer = m_panelVertexBuffer->data();
 
-			// Border Overlays
-			VertexBufferUPtr l_pBorderVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-			m_pBorderGeometryBuffer = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pBorderVtxBuffer ), nullptr, nullptr );
-			m_pBorderGeometryBuffer->GetVertexBuffer().Create();
-			m_pBorderGeometryBuffer->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, GetPanelProgram( eTEXTURE_CHANNEL_COLOUR ) );
-			m_pBorderGeometryBuffer->Initialise();
+			for ( auto && l_vertex : m_panelVertex )
+			{
+				l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
+				l_buffer += l_stride;
+			}
 
-			// Text Overlays
-			VertexBufferUPtr l_pTextVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-			m_pTextGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pTextVtxBuffer ), nullptr, nullptr );
-			m_pTextGeometryBuffers->GetVertexBuffer().Create();
-			m_pTextGeometryBuffers->GetVertexBuffer().Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, GetTextProgram( eTEXTURE_CHANNEL_COLOUR ) );
-			m_pTextGeometryBuffers->Initialise();
+			m_panelVertexBuffer->Create();
+			m_panelVertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 
-			// Driver specific
-			DoInitialise();
+			auto l_program = DoGetPanelProgram( 0 );
+			m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_panelVertexBuffer.get(), nullptr, nullptr, nullptr );
+			l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
+			m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_panelVertexBuffer.get(), nullptr, nullptr, nullptr );
 		}
+
+		if ( !m_borderVertexBuffer )
+		{
+			// Border Overlays buffers
+			m_borderVertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			uint32_t l_stride = m_declaration.GetStride();
+			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * l_stride ) );
+			uint8_t * l_buffer = m_borderVertexBuffer->data();
+
+			for ( auto && l_vertex : m_borderVertex )
+			{
+				l_vertex = std::make_shared< BufferElementGroup >( l_buffer );
+				l_buffer += l_stride;
+			}
+
+			m_borderVertexBuffer->Create();
+			m_borderVertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+
+			auto l_program = DoGetPanelProgram( 0 );
+			m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_borderVertexBuffer.get(), nullptr, nullptr, nullptr );
+			l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
+			m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_borderVertexBuffer.get(), nullptr, nullptr, nullptr );
+		}
+
+		// Create one text overlays buffer
+		DoCreateTextGeometryBuffers();
+
+		auto l_blendState = m_wpBlendState.lock();
+		l_blendState->EnableAlphaToCoverage( false );
+		l_blendState->SetAlphaSrcBlend( eBLEND_SRC_ALPHA );
+		l_blendState->SetAlphaDstBlend( eBLEND_INV_SRC_ALPHA );
+		l_blendState->SetRgbSrcBlend( eBLEND_SRC_ALPHA );
+		l_blendState->SetRgbDstBlend( eBLEND_INV_SRC_ALPHA );
+		l_blendState->EnableBlend( true );
+		l_blendState->Initialise();
+
+		auto l_dsState = m_wpDepthStencilState.lock();
+		l_dsState->SetDepthTest( false );
+		l_dsState->Initialise();
+
+		auto l_rsState = m_wpRasteriserState.lock();
+		l_rsState->SetCulledFaces( eFACE_BACK );
+		l_rsState->Initialise();
 	}
 
 	void OverlayRenderer::Cleanup()
 	{
-		DoCleanup();
+		auto l_blendState = m_wpBlendState.lock();
+		l_blendState->Cleanup();
 
-		std::for_each( m_mapPanelPrograms.begin(), m_mapPanelPrograms.end(), [&]( std::pair< uint32_t, ShaderProgramBaseSPtr > p_pair )
+		auto l_dsState = m_wpDepthStencilState.lock();
+		l_dsState->Cleanup();
+
+		auto l_rsState = m_wpRasteriserState.lock();
+		l_rsState->Cleanup();
+
+		for ( auto && l_vertex : m_borderVertex )
 		{
-			if ( p_pair.second )
-			{
-				p_pair.second->Cleanup();
-			}
-		} );
+			l_vertex.reset();
+		}
 
-		std::for_each( m_mapTextPrograms.begin(), m_mapTextPrograms.end(), [&]( std::pair< uint32_t, ShaderProgramBaseSPtr > p_pair )
+		for ( auto && l_vertex : m_panelVertex )
 		{
-			if ( p_pair.second )
-			{
-				p_pair.second->Cleanup();
-			}
-		} );
+			l_vertex.reset();
+		}
 
+		for ( auto && l_pair : m_programs )
+		{
+			l_pair.second->Cleanup();
+		}
+
+		m_programs.clear();
 		m_mapPanelPrograms.clear();
 		m_mapTextPrograms.clear();
 
-		if ( m_pPanelGeometryBuffer )
+		if ( m_panelVertexBuffer )
 		{
-			m_pPanelGeometryBuffer->GetVertexBuffer().Cleanup();
-			m_pPanelGeometryBuffer->Cleanup();
-			m_pPanelGeometryBuffer.reset();
+			m_panelVertexBuffer->Cleanup();
+			m_panelVertexBuffer->Destroy();
+			m_panelVertexBuffer.reset();
+			m_panelGeometryBuffers.m_noTexture.reset();
+			m_panelGeometryBuffers.m_textured.reset();
 		}
 
-		if ( m_pBorderGeometryBuffer )
+		if ( m_borderVertexBuffer )
 		{
-			m_pBorderGeometryBuffer->GetVertexBuffer().Cleanup();
-			m_pBorderGeometryBuffer->Cleanup();
-			m_pBorderGeometryBuffer.reset();
+			m_borderVertexBuffer->Cleanup();
+			m_borderVertexBuffer->Destroy();
+			m_borderVertexBuffer.reset();
+			m_borderGeometryBuffers.m_noTexture.reset();
+			m_borderGeometryBuffers.m_textured.reset();
 		}
 
-		if ( m_pTextGeometryBuffers )
+		for ( auto && l_buffer : m_textsVertexBuffers )
 		{
-			m_pTextGeometryBuffers->GetVertexBuffer().Cleanup();
-			m_pTextGeometryBuffers->Cleanup();
-			m_pTextGeometryBuffers.reset();
+			l_buffer->Cleanup();
+			l_buffer->Destroy();
+			l_buffer.reset();
+		}
+
+		m_textsVertexBuffers.clear();
+		m_textsGeometryBuffers.clear();
+	}
+
+	void OverlayRenderer::DrawPanel( PanelOverlay & p_overlay )
+	{
+		MaterialSPtr l_material = p_overlay.GetMaterial();
+
+		if ( l_material )
+		{
+			DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
 		}
 	}
 
-	void OverlayRenderer::DrawPanel( PanelOverlay & p_panelOverlay )
+	void OverlayRenderer::DrawBorderPanel( BorderPanelOverlay & p_overlay )
 	{
-		MaterialSPtr l_pMaterial = p_panelOverlay.GetMaterial();
-		int iZIndex = 1000 - p_panelOverlay.GetOverlay().GetZIndex();
+		MaterialSPtr l_material = p_overlay.GetMaterial();
 
-		if ( l_pMaterial )
+		if ( l_material )
 		{
-			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_panelOverlay.GetVertexBuffer();
-			size_t l_count = l_arrayVtx.size();
+			DoDrawItem( *l_material, m_panelGeometryBuffers, FillBuffers( p_overlay.GetPanelVertex().begin(), uint32_t( p_overlay.GetPanelVertex().size() ), *m_panelVertexBuffer ) );
+		}
 
-			if ( m_previousPanelZIndex != iZIndex )
-			{
-				m_previousPanelZIndex = iZIndex;
-				VertexBuffer & l_vtxBuffer = m_pPanelGeometryBuffer->GetVertexBuffer();
-				l_vtxBuffer.Bind();
-				l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-				l_vtxBuffer.Unbind();
-			}
+		l_material = p_overlay.GetBorderMaterial();
 
-			uint8_t l_byIndex = 0;
-			uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-			std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
-			{
-				ShaderProgramBaseSPtr l_pProgram = GetPanelProgram( p_pPass->GetTextureFlags() );
-
-				if ( l_pProgram )
-				{
-					p_pPass->BindToProgram( l_pProgram );
-					m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
-					p_pPass->Render2D( l_byIndex++, l_byCount );
-					m_pPanelGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-					p_pPass->EndRender();
-				}
-			} );
+		if ( l_material )
+		{
+			DoDrawItem( *l_material, m_borderGeometryBuffers, FillBuffers( p_overlay.GetBorderVertex().begin(), uint32_t( p_overlay.GetBorderVertex().size() ), *m_borderVertexBuffer ) );
 		}
 	}
 
-	void OverlayRenderer::DrawBorderPanel( BorderPanelOverlay & p_borderPanelOverlay )
+	void OverlayRenderer::DrawText( TextOverlay & p_overlay )
 	{
-		MaterialSPtr l_pMaterial = p_borderPanelOverlay.GetMaterial();
-		int iZIndex = 1000 - p_borderPanelOverlay.GetOverlay().GetZIndex();
-
-		if ( l_pMaterial )
-		{
-			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_borderPanelOverlay.GetVertexBuffer();
-			size_t l_count = l_arrayVtx.size();
-
-			if ( m_previousPanelZIndex != iZIndex )
-			{
-				m_previousPanelZIndex = iZIndex;
-				VertexBuffer & l_vtxBuffer = m_pPanelGeometryBuffer->GetVertexBuffer();
-				l_vtxBuffer.Bind();
-				l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-				l_vtxBuffer.Unbind();
-			}
-
-			uint8_t l_byIndex = 0;
-			uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-			std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
-			{
-				ShaderProgramBaseSPtr l_pProgram = GetPanelProgram( p_pPass->GetTextureFlags() );
-
-				if ( l_pProgram )
-				{
-					p_pPass->BindToProgram( l_pProgram );
-					m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
-					p_pPass->Render2D( l_byIndex++, l_byCount );
-					m_pPanelGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-					p_pPass->EndRender();
-				}
-			} );
-		}
-
-		l_pMaterial = p_borderPanelOverlay.GetBorderMaterial();
-
-		if ( l_pMaterial )
-		{
-			std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_borderPanelOverlay.GetBorderVertexBuffer();
-			size_t l_count = l_arrayVtx.size();
-
-			if ( m_previousBorderZIndex != iZIndex )
-			{
-				m_previousBorderZIndex = iZIndex;
-				VertexBuffer & l_vtxBuffer = m_pBorderGeometryBuffer->GetVertexBuffer();
-				l_vtxBuffer.Bind();
-				l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-				l_vtxBuffer.Unbind();
-			}
-
-			uint8_t l_byIndex = 0;
-			uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-			std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
-			{
-				ShaderProgramBaseSPtr l_pProgram = GetPanelProgram( p_pPass->GetTextureFlags() );
-
-				if ( l_pProgram )
-				{
-					p_pPass->BindToProgram( l_pProgram );
-					m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
-					p_pPass->Render2D( l_byIndex++, l_byCount );
-					m_pBorderGeometryBuffer->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-					p_pPass->EndRender();
-				}
-			} );
-		}
-	}
-
-	void OverlayRenderer::DrawText( TextOverlay & p_textOverlay )
-	{
-		FontSPtr l_pFont = p_textOverlay.GetFont();
-		int iZIndex = 1000 - p_textOverlay.GetOverlay().GetZIndex();
+		FontSPtr l_pFont = p_overlay.GetFontTexture()->GetFont();
 
 		if ( l_pFont )
 		{
-			MaterialSPtr l_pMaterial = p_textOverlay.GetMaterial();
-			VertexBuffer & l_vtxBuffer = m_pTextGeometryBuffers->GetVertexBuffer();
-			DynamicTextureSPtr l_texture = p_textOverlay.GetTexture();
+			MaterialSPtr l_material = p_overlay.GetMaterial();
 
-			if ( l_pMaterial )
+			if ( l_material )
 			{
-				std::vector< OverlayCategory::Vertex > const & l_arrayVtx = p_textOverlay.GetVertexBuffer();
-				size_t l_count = l_arrayVtx.size();
+				TextOverlay::VertexArray l_arrayVtx = p_overlay.GetTextVertex();
+				int32_t l_count = uint32_t( l_arrayVtx.size() );
+				uint32_t l_index = 0;
+				std::vector< OverlayGeometryBuffers > l_geometryBuffers;
+				TextOverlay::VertexArray::const_iterator l_it = l_arrayVtx.begin();
 
-				if ( m_previousCaption != p_textOverlay.GetCaption() || m_previousTextZIndex != iZIndex )
+				while ( l_count > C3D_MAX_CHARS_PER_BUFFER )
 				{
-					m_previousTextZIndex = iZIndex;
-					m_previousCaption = p_textOverlay.GetCaption();
-					l_vtxBuffer.Bind();
-					l_vtxBuffer.Fill( reinterpret_cast< uint8_t const * >( l_arrayVtx.data() ), l_count * sizeof( OverlayCategory::Vertex ), eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
-					l_vtxBuffer.Unbind();
+					l_geometryBuffers.push_back( DoFillTextPart( l_count, l_it, l_index ) );
+					l_count -= C3D_MAX_CHARS_PER_BUFFER;
 				}
 
-				uint8_t l_byIndex = 0;
-				uint8_t l_byCount = uint8_t( l_pMaterial->GetPassCount() );
-
-				std::for_each( l_pMaterial->Begin(), l_pMaterial->End(), [&]( PassSPtr p_pPass )
+				if ( l_count > 0 )
 				{
-					ShaderProgramBaseSPtr l_pProgram = GetTextProgram( p_pPass->GetTextureFlags() );
+					l_geometryBuffers.push_back( DoFillTextPart( l_count, l_it, l_index ) );
+				}
 
-					if ( l_pProgram )
+				auto l_texture = p_overlay.GetFontTexture()->GetTexture();
+				auto l_sampler = p_overlay.GetFontTexture()->GetSampler();
+				l_count = uint32_t( l_arrayVtx.size() );
+
+				for ( auto l_pass : *l_material )
+				{
+					if ( ( l_pass->GetTextureFlags() & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
 					{
-						l_vtxBuffer.Bind();
-						l_vtxBuffer.Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW, l_pProgram );
-						l_vtxBuffer.Unbind();
-						p_pPass->BindToProgram( l_pProgram );
-						m_pRenderSystem->GetPipeline()->ApplyMatrices( *l_pProgram );
-						p_pPass->Render2D( l_byIndex++, l_byCount );
-						l_texture->Bind();
-						m_pTextGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, l_count, 0 );
-						l_texture->Unbind();
-						p_pPass->EndRender();
+						for ( auto l_geoBuffers : l_geometryBuffers )
+						{
+							DoDrawItem( *l_pass, *l_geoBuffers.m_textured, *l_texture, *l_sampler, std::min( l_count, C3D_MAX_CHARS_PER_BUFFER ) );
+							l_count -= C3D_MAX_CHARS_PER_BUFFER;
+						}
 					}
-				} );
+					else
+					{
+						for ( auto l_geoBuffers : l_geometryBuffers )
+						{
+							DoDrawItem( *l_pass, *l_geoBuffers.m_noTexture, *l_texture, *l_sampler, std::min( l_count, C3D_MAX_CHARS_PER_BUFFER ) );
+							l_count -= C3D_MAX_CHARS_PER_BUFFER;
+						}
+					}
+				}
 			}
 		}
 	}
 
 	void OverlayRenderer::BeginRender( Size const & p_size )
 	{
-		m_size = p_size;
+		if ( m_size != p_size )
+		{
+			m_sizeChanged = true;
+			m_size = p_size;
+		}
+
+		m_wpBlendState.lock()->Apply();
+		m_wpDepthStencilState.lock()->Apply();
+		m_wpRasteriserState.lock()->Apply();
 	}
 
 	void OverlayRenderer::EndRender()
 	{
+		m_sizeChanged = false;
 	}
 
-	ShaderProgramBaseSPtr OverlayRenderer::GetPanelProgram( uint32_t p_uiFlags )
+	RenderNode & OverlayRenderer::DoGetPanelProgram( Pass & p_pass )
 	{
-		p_uiFlags &= ~eTEXTURE_CHANNEL_AMBIENT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_DIFFUSE;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_NORMAL;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_SPECULAR;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_GLOSS;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_HEIGHT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_LGHTPASS;
-		std::map< uint32_t, ShaderProgramBaseSPtr >::const_iterator l_it = m_mapPanelPrograms.find( p_uiFlags );
-		ShaderProgramBaseSPtr l_pReturn;
+		auto && l_it = m_mapPanelPrograms.find( &p_pass );
 
-		if ( l_it != m_mapPanelPrograms.end() )
+		if ( l_it == m_mapPanelPrograms.end() )
 		{
-			l_pReturn = l_it->second;
+			auto l_program = DoGetPanelProgram( p_pass.GetTextureFlags() );
+
+			auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
+			auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
+			Point4rFrameVariableSPtr l_pt4r;
+			OneFloatFrameVariableSPtr l_1f;
+
+			l_it = m_mapPanelPrograms.insert( { &p_pass, RenderNode{
+									  p_pass,
+									  *l_program,
+									  *l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+									  *l_passBuffer,
+									  *l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+									} } ).first;
+			p_pass.BindToNode( l_it->second );
+		}
+
+		return l_it->second;
+	}
+
+	RenderNode & OverlayRenderer::DoGetTextProgram( Pass & p_pass )
+	{
+		auto && l_it = m_mapTextPrograms.find( &p_pass );
+
+		if ( l_it == m_mapTextPrograms.end() )
+		{
+			auto l_program = DoGetTextProgram( p_pass.GetTextureFlags() );
+
+			auto l_sceneBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferScene );
+			auto l_passBuffer = l_program->FindFrameVariableBuffer( ShaderProgram::BufferPass );
+			Point4rFrameVariableSPtr l_pt4r;
+			OneFloatFrameVariableSPtr l_1f;
+
+			l_it = m_mapTextPrograms.insert( { &p_pass, RenderNode{
+									  p_pass,
+									  *l_program,
+									  *l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix ),
+									  *l_passBuffer,
+									  *l_passBuffer->GetVariable( ShaderProgram::MatAmbient, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatDiffuse, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatSpecular, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatEmissive, l_pt4r ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatShininess, l_1f ),
+									  *l_passBuffer->GetVariable( ShaderProgram::MatOpacity, l_1f ),
+									} } ).first;
+			p_pass.BindToNode( l_it->second );
+		}
+
+		return l_it->second;
+	}
+
+	ShaderProgramSPtr OverlayRenderer::DoGetPanelProgram( uint32_t p_flags )
+	{
+		// Remove unwanted flags
+		p_flags &= ~eTEXTURE_CHANNEL_AMBIENT;
+		p_flags &= ~eTEXTURE_CHANNEL_DIFFUSE;
+		p_flags &= ~eTEXTURE_CHANNEL_NORMAL;
+		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
+		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
+		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
+		p_flags &= ~eTEXTURE_CHANNEL_EMISSIVE;
+
+		// Get shader
+		return DoGetProgram( p_flags );
+	}
+
+	ShaderProgramSPtr OverlayRenderer::DoGetTextProgram( uint32_t p_flags )
+	{
+		// Remove unwanted flags
+		p_flags &= ~eTEXTURE_CHANNEL_AMBIENT;
+		p_flags &= ~eTEXTURE_CHANNEL_DIFFUSE;
+		p_flags &= ~eTEXTURE_CHANNEL_NORMAL;
+		p_flags &= ~eTEXTURE_CHANNEL_SPECULAR;
+		p_flags &= ~eTEXTURE_CHANNEL_GLOSS;
+		p_flags &= ~eTEXTURE_CHANNEL_HEIGHT;
+		p_flags &= ~eTEXTURE_CHANNEL_EMISSIVE;
+		p_flags |= eTEXTURE_CHANNEL_TEXT;
+
+		// Get shader
+		return DoGetProgram( p_flags );
+	}
+
+	ShaderProgramSPtr OverlayRenderer::DoGetProgram( uint32_t p_flags )
+	{
+		auto && l_it = m_programs.find( p_flags );
+
+		if ( l_it == m_programs.end() )
+		{
+			// Since it does not exist yet, create it and initialise it
+			auto l_program = DoCreateOverlayProgram( p_flags );
+
+			if ( l_program )
+			{
+				l_program->Initialise();
+				l_it = m_programs.insert( { p_flags, l_program } ).first;
+			}
+			else
+			{
+				CASTOR_EXCEPTION( "Couldn't create an overaly shader program" );
+			}
+		}
+
+		return l_it->second;
+	}
+
+	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoCreateTextGeometryBuffers()
+	{
+		VertexBufferUPtr l_vertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_textDeclaration );
+		l_vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.GetStride() );
+		l_vertexBuffer->Create();
+		l_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
+
+		OverlayGeometryBuffers l_geometryBuffers;
+		auto l_program = DoGetTextProgram( 0 );
+		l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, l_vertexBuffer.get(), nullptr, nullptr, nullptr );
+		l_program = DoGetTextProgram( eTEXTURE_CHANNEL_COLOUR );
+		l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, l_vertexBuffer.get(), nullptr, nullptr, nullptr );
+
+		m_textsVertexBuffers.push_back( std::move( l_vertexBuffer ) );
+		m_textsGeometryBuffers.push_back( l_geometryBuffers );
+		return l_geometryBuffers;
+	}
+
+	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
+	{
+		RenderNode & l_node = DoGetPanelProgram( p_pass );
+		p_pass.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+		p_pass.FillShaderVariables( l_node );
+		l_node.m_program.Bind();
+		p_pass.Render2D();
+		p_geometryBuffers.Draw( p_count, 0 );
+		p_pass.EndRender();
+		l_node.m_program.Unbind();
+	}
+
+	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, Texture const & p_texture, Sampler const & p_sampler , uint32_t p_count )
+	{
+		RenderNode & l_node = DoGetTextProgram( p_pass );
+		p_pass.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+
+		OneIntFrameVariableSPtr l_textureVariable = l_node.m_program.FindFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
+
+		if ( l_textureVariable )
+		{
+			l_textureVariable->SetValue( 0 );
+		}
+
+		p_pass.FillShaderVariables( l_node );
+		l_node.m_program.Bind();
+		p_pass.Render2D();
+		p_texture.Bind( 0 );
+		p_sampler.Bind( 0 );
+		p_geometryBuffers.Draw( p_count, 0 );
+		p_sampler.Unbind( 0 );
+		p_texture.Unbind( 0 );
+
+		p_pass.EndRender();
+		l_node.m_program.Unbind();
+	}
+
+	void OverlayRenderer::DoDrawItem( Material & p_material, OverlayRenderer::OverlayGeometryBuffers const & p_geometryBuffers, uint32_t p_count )
+	{
+		for ( auto && l_pass : p_material )
+		{
+			if ( ( l_pass->GetTextureFlags() & eTEXTURE_CHANNEL_COLOUR ) == eTEXTURE_CHANNEL_COLOUR )
+			{
+				DoDrawItem( *l_pass, *p_geometryBuffers.m_textured, p_count );
+			}
+			else
+			{
+				DoDrawItem( *l_pass, *p_geometryBuffers.m_noTexture, p_count );
+			}
+		}
+	}
+
+	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoFillTextPart( int32_t p_count, TextOverlay::VertexArray::const_iterator & p_it, uint32_t & p_index )
+	{
+		OverlayGeometryBuffers l_geometryBuffers;
+
+		if ( m_textsGeometryBuffers.size() <= p_index )
+		{
+			DoCreateTextGeometryBuffers();
+		}
+
+		if ( m_textsGeometryBuffers.size() > p_index )
+		{
+			l_geometryBuffers = m_textsGeometryBuffers[p_index];
+			auto & l_vertexBuffer = m_textsVertexBuffers[p_index];
+			p_count = std::min( p_count, C3D_MAX_CHARS_PER_BUFFER );
+			FillBuffers( p_it, p_count, *l_vertexBuffer );
+			p_it += p_count;
+			p_index++;
 		}
 		else
 		{
-			l_pReturn = DoGetProgram( p_uiFlags );
-			l_pReturn->Initialise();
-			m_mapPanelPrograms.insert( std::make_pair( p_uiFlags, l_pReturn ) );
+			CASTOR_EXCEPTION( "Bad index for geometry buffers" );
 		}
 
-		return l_pReturn;
+		return l_geometryBuffers;
 	}
 
-	ShaderProgramBaseSPtr OverlayRenderer::GetTextProgram( uint32_t p_uiFlags )
+	ShaderProgramSPtr OverlayRenderer::DoCreateOverlayProgram( uint32_t p_flags )
 	{
-		p_uiFlags &= ~eTEXTURE_CHANNEL_AMBIENT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_DIFFUSE;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_NORMAL;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_SPECULAR;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_GLOSS;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_HEIGHT;
-		p_uiFlags &= ~eTEXTURE_CHANNEL_LGHTPASS;
-		p_uiFlags |= eTEXTURE_CHANNEL_TEXT;
-		std::map< uint32_t, ShaderProgramBaseSPtr >::const_iterator l_it = m_mapTextPrograms.find( p_uiFlags );
-		ShaderProgramBaseSPtr l_pReturn;
+#define CHECK_FLAG( flag ) ( ( p_flags & ( flag ) ) == ( flag ) )
 
-		if ( l_it != m_mapTextPrograms.end() )
+		using namespace GLSL;
+
+		// Shader program
+		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
+		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
+		l_manager.CreatePassBuffer( *l_program, MASK_SHADER_TYPE_PIXEL );
+
+		// Vertex shader
+		String l_strVs;
 		{
-			l_pReturn = l_it->second;
-		}
-		else
-		{
-			l_pReturn = DoGetProgram( p_uiFlags );
-			m_mapText = l_pReturn->CreateFrameVariable( cuT( "c3d_mapText" ), eSHADER_TYPE_PIXEL );
-			l_pReturn->Initialise();
-			m_mapTextPrograms.insert( std::make_pair( p_uiFlags, l_pReturn ) );
+			auto l_writer = GetRenderSystem()->CreateGlslWriter();
+
+			UBO_MATRIX( l_writer );
+
+			// Shader inputs
+			auto position = l_writer.GetAttribute< IVec2 >( ShaderProgram::Position );
+			auto text = l_writer.GetAttribute< Vec2 >( ShaderProgram::Text, CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
+			auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+
+			// Shader outputs
+			auto vtx_text = l_writer.GetOutput< Vec2 >( cuT( "vtx_text" ), CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
+			auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+				{
+					vtx_text = text;
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+				{
+					vtx_texture = texture;
+				}
+
+				gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+			} );
+
+			l_strVs = l_writer.Finalise();
 		}
 
-		return l_pReturn;
+		// Pixel shader
+		String l_strPs;
+		{
+			auto l_writer = GetRenderSystem()->CreateGlslWriter();
+
+			UBO_PASS( l_writer );
+
+			// Shader inputs
+			auto vtx_text = l_writer.GetInput< Vec2 >( cuT( "vtx_text" ), CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
+			auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ), CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			auto c3d_mapText = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapText, CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) );
+			auto c3d_mapColour = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapColour, CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) );
+			auto c3d_mapOpacity = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapOpacity, CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) );
+
+			// Shader outputs
+			auto pxl_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "pxl_v4FragColor" ), 0 );
+
+			l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+			{
+				LOCALE_ASSIGN( l_writer, Vec4, l_v4Ambient, c3d_v4MatAmbient );
+				LOCALE_ASSIGN( l_writer, Float, l_fAlpha, c3d_fMatOpacity );
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+				{
+					l_fAlpha *= texture2D( c3d_mapText, vec2( vtx_text.X, vtx_text.Y ) ).R;
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+				{
+					l_v4Ambient = texture2D( c3d_mapColour, vec2( vtx_texture.X, vtx_texture.Y ) );
+				}
+
+				if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
+				{
+					l_fAlpha *= texture2D( c3d_mapOpacity, vec2( vtx_texture.X, vtx_texture.Y ) ).R;
+				}
+
+				pxl_v4FragColor = vec4( l_v4Ambient.XYZ, l_fAlpha );
+			} );
+
+			l_strPs = l_writer.Finalise();
+		}
+
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_TEXT ) )
+		{
+			l_program->CreateFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
+		}
+
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_COLOUR ) )
+		{
+			l_program->CreateFrameVariable( ShaderProgram::MapColour, eSHADER_TYPE_PIXEL );
+		}
+
+		if ( CHECK_FLAG( eTEXTURE_CHANNEL_OPACITY ) )
+		{
+			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
+		}
+
+		eSHADER_MODEL l_model = GetRenderSystem()->GetMaxShaderModel();
+		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVs );
+		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
+
+		return l_program;
+
+#undef CHECK_FLAG
 	}
 }

@@ -19,7 +19,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_FRAME_BUFFER_H___
 
 #include "Castor3DPrerequisites.hpp"
+
+#include <Colour.hpp>
+#include <OwnedBy.hpp>
 #include <Rectangle.hpp>
+
+#include <memory>
 
 namespace Castor3D
 {
@@ -32,434 +37,444 @@ namespace Castor3D
 	\remark		A frame buffer is where a render target makes its render
 	\~french
 	\brief		Classe de tampon d'image
-	\remark		Un tampon d'image est là où une cible de rendu fait son rendu
+	\remark		Un tampon d'image est lÃ  oÃ¹ une cible de rendu fait son rendu
 	*/
-	class C3D_API FrameBuffer
+	class FrameBuffer
+		: public Castor::OwnedBy< Engine >
+		, public std::enable_shared_from_this< FrameBuffer >
 	{
 	public:
+		DECLARE_VECTOR( FrameBufferAttachmentSPtr, Attach );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\para[in]		p_pEngine	The core engine
+		 *\param[in]	p_engine	The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\para[in]		p_pEngine	Le moteur
+		 *\param[in]	p_engine	Le moteur
 		 */
-		FrameBuffer( Engine * p_pEngine );
+		C3D_API FrameBuffer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FrameBuffer();
+		C3D_API virtual ~FrameBuffer();
+		/**
+		 *\~english
+		 *\brief		Initialises color and depth cache buffers.
+		 *\param[in]	p_size	The frame buffer size.
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Initialise les tampons de cache de couleur de profondeur.
+		 *\param[in]	p_size	La taille du tampon d'image.
+		 *\return		\p true si tout s'est bien passÃ©.
+		 */
+		C3D_API bool Initialise( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Cleans up cache buffers.
+		 *\~french
+		 *\brief		Nettoie les tampons de cache.
+		 */
+		C3D_API void Cleanup();
+		/**
+		 *\~english
+		 *\brief		Defines the colour used when Clear is called on the color buffer.
+		 *\param[in]	p_colour	The colour.
+		 *\~french
+		 *\brief		DÃ©finit la couleur utilisÃ©e quand Clear est appelÃ©e sur le tampon couleur.
+		 *\param[in]	p_colour	La couleur.
+		 */
+		C3D_API void SetClearColour( Castor::Colour const & p_colour );
+		/**
+		 *\~english
+		 *\brief		Clears the buffers.
+		 *\~french
+		 *\brief		Vide les tampons.
+		 */
+		C3D_API void Clear();
+		/**
+		 *\~english
+		 *\brief		Activation function, to tell the GPU it is active
+		 *\param[in]	p_target	The frame buffer binding target
+		 *\param[in]	p_mode		The frame buffer binding mode
+		 *\return		\p true if successful
+		 *\~french
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÃ©
+		 *\param[in]	p_target	La cible d'activation du tampon d'image
+		 *\param[in]	p_mode		Le mode d'activation du tampon d'image
+		 *\return		\p true si tout s'est bien passÃ©
+		 */
+		C3D_API bool Bind( eFRAMEBUFFER_MODE p_mode = eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET p_target = eFRAMEBUFFER_TARGET_BOTH );
+		/**
+		 *\~english
+		 *\brief		Deactivation function, to tell the GPU it is inactive
+		 *\~french
+		 *\brief		Fonction de dÃ©sactivation, pour dire au GPU qu'il est dÃ©sactivÃ©
+		 */
+		C3D_API void Unbind();
+		/**
+		 *\~english
+		 *\brief		Blit this frame buffer into the given one
+		 *\param[in]	p_buffer		The buffer receiving this one
+		 *\param[in]	p_rect			The rectangle
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
+		 *\return		\p true if successful
+		 *\~french
+		 *\brief		Blitte ce tampon dans celui donnÃ©
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci
+		 *\param[in]	p_rect			Le rectangle
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers Ã  copier
+		 *\return		\p true si tout s'est bien passÃ©
+		 */
+		C3D_API bool BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components );
+		/**
+		 *\~english
+		 *\brief		Stretches this frame buffer into the given one.
+		 *\remarks		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\param[in]	p_buffer		The buffer receiving this one.
+		 *\param[in]	p_rectSrc		The source rectangle.
+		 *\param[in]	p_rectDst		The destination rectangle.
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied.
+		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Stretche ce tampon dans celui donnÃ©.
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
+		 *\param[in]	p_rectSrc		Le rectangle source.
+		 *\param[in]	p_rectDst		Le rectangle destination.
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers Ã  copier.
+		 *\param[in]	p_interpolation	L'interpolation Ã  appliquer si l'image est redimensionnÃ©e.
+		 *\return		\p true si tout s'est bien passÃ©.
+		 */
+		C3D_API bool StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation );
+		/**
+		 *\~english
+		 *\brief		Specifies the buffers to be drawn into
+		 *\remarks		All buffers attached are selected
+		 *\~french
+		 *\brief		DÃ©finit les buffers dans lesquels le dessin doit Ãªtre effectuÃ©
+		 *\remarks		Tous les buffers attachÃ©s sont sÃ©lectionnÃ©s
+		 */
+		C3D_API void SetDrawBuffers();
+		/**
+		 *\~english
+		 *\brief		Specifies the color buffer to be drawn into
+		 *\param[in]	p_attach	The color buffer
+		 *\~french
+		 *\brief		DÃ©finit le tampon de couleur dans lequel le dessin doit Ãªtre effectuÃ©
+		 *\param[in]	p_attach	Le tampon de couleur
+		 */
+		C3D_API void SetDrawBuffer( TextureAttachmentSPtr p_attach );
+		/**
+		 *\~english
+		 *\brief		Specifies the color buffer to be drawn into
+		 *\param[in]	p_attach	The color buffer
+		 *\~french
+		 *\brief		DÃ©finit le tampon de couleur dans lequel le dessin doit Ãªtre effectuÃ©
+		 *\param[in]	p_attach	Le tampon de couleur
+		 */
+		C3D_API void SetDrawBuffer( RenderBufferAttachmentSPtr p_attach );
+		/**
+		 *\~english
+		 *\brief		Attaches a texture to this frame buffer, at given attachment point
+		 *\param[in]	p_point		The attachment point
+		 *\param[in]	p_index		The attachment index
+		 *\param[in]	p_texture	The texture
+		 *\param[in]	p_target	The dimension to which the texture must be attached
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Attache une texture Ã  ce tampon d'image, au point d'attache voulu
+		 *\param[in]	p_point		Le point d'attache
+		 *\param[in]	p_index		L'index d'attache
+		 *\param[in]	p_texture	La texture
+		 *\param[in]	p_target	La dimension Ã  laquelle la texture doit Ãªtre attachÃ©e
+		 *\param[in]	p_layer		La couche associÃ©e, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\return		\p true si tout s'est bien passÃ©
+		 */
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
+		/**
+		 *\~english
+		 *\brief		Attaches a texture to this frame buffer, at given attachment point
+		 *\param[in]	p_point		The attachment point
+		 *\param[in]	p_texture	The texture
+		 *\param[in]	p_target	The dimension to which the texture must be attached
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Attache une texture Ã  ce tampon d'image, au point d'attache voulu
+		 *\param[in]	p_point		Le point d'attache
+		 *\param[in]	p_texture	La texture
+		 *\param[in]	p_target	La dimension Ã  laquelle la texture doit Ãªtre attachÃ©e
+		 *\param[in]	p_layer		La couche associÃ©e, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\return		\p true si tout s'est bien passÃ©
+		 */
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
+		/**
+		 *\~english
+		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
+		 *\param[in]	p_point			The attachment point
+		 *\param[in]	p_index			The attachment index
+		 *\param[in]	p_renderBuffer	The render buffer
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Attache un tampon de rendu Ã  ce tampon d'image, au point d'attache voulu
+		 *\param[in]	p_point			Le point d'attache
+		 *\param[in]	p_index			L'index d'attache
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
+		 *\return		\p true si tout s'est bien passÃ©
+		 */
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer );
+		/**
+		 *\~english
+		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
+		 *\param[in]	p_point			The attachment point
+		 *\param[in]	p_renderBuffer	The render buffer
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Attache un tampon de rendu Ã  ce tampon d'image, au point d'attache voulu
+		 *\param[in]	p_point			Le point d'attache
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
+		 *\return		\p true si tout s'est bien passÃ©
+		 */
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, RenderBufferAttachmentSPtr p_renderBuffer );
+		/**
+		 *\~english
+		 *\brief		Retrieves a buffer attached at given attachment point and index.
+		 *\param[in]	p_point	The attachment point.
+		 *\param[in]	p_index	The attachment index.
+		 *\return		The attachment, \p nullptr if not found.
+		 *\~french
+		 *\brief		RÃ©cupÃ¨re un tampon attachÃ© au point et Ã  l'index d'attache donnÃ©s.
+		 *\param[in]	p_point	Le point d'attache.
+		 *\param[in]	p_index	L'index d'attache.
+		 *\return		L'attache, \p nullptr si non trouvÃ©.
+		 */
+		C3D_API FrameBufferAttachmentSPtr GetAttachment( eATTACHMENT_POINT p_point, uint8_t p_index );
+		/**
+		 *\~english
+		 *\brief		Detaches all attached objects
+		 *\~french
+		 *\brief		DÃ©tache tous les objets attachÃ©s
+		 */
+		C3D_API void DetachAll();
+		/**
+		 *\~english
+		 *\brief		Resizes each attached buffer
+		 *\param[in]	p_size	The new dimensions
+		 *\~french
+		 *\brief		Redimensionne tous les tampons attachÃ©s
+		 *\param[in]	p_size	Les nouvelles dimensions
+		 */
+		C3D_API void Resize( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Creation function
-		 *\param[in]	p_iSamplesCount	Samples count, if the frame buffer must support multisampling
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de création
-		 *\param[in]	p_iSamplesCount	Nombre de samples, si le tampon d'image doit supporter le multisampling
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de crÃ©ation
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool Create( int p_iSamplesCount ) = 0;
+		C3D_API virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy() = 0;
+		C3D_API virtual void Destroy() = 0;
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_eTarget	The frame buffer binding target
-		 *\param[in]	p_eMode		The frame buffer binding mode
-		 *\return		\p true if successful
+		 *\brief		Uses given attachments to this framebuffer for next draw call.
+		 *\param[in]	p_attaches	The attachments.
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_eTarget	La cible d'activation du tampon d'image
-		 *\param[in]	p_eMode		Le mode d'activation du tampon d'image
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Utilise les attaches donnÃ©es pour ce framebuffer, lors du prochain dessin.
+		 *\param[in]	p_attaches	Les attaches.
 		 */
-		bool Bind( eFRAMEBUFFER_MODE p_eMode = eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET p_eTarget = eFRAMEBUFFER_TARGET_BOTH );
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 */
-		void Unbind();
-		/**
-		 *\~english
-		 *\brief		Blit this frame buffer into the given one
-		 *\param[in]	p_pBuffer			The buffer receiving this one
-		 *\param[in]	p_rectSrcDst		The rectangle
-		 *\param[in]	p_uiComponents		Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Blitte ce tampon dans celui donné
-		 *\param[in]	p_pBuffer			Le tampon recevant celui-ci
-		 *\param[in]	p_rectSrcDst		Le rectangle
-		 *\param[in]	p_uiComponents		OU logique de eBUFFER_COMPONENT indiquant les buffers à copier
-		 *\return		\p true si tout s'est bien passé
-		 */
-		bool BlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_uiComponents );
-		/**
-		 *\~english
-		 *\brief		Blit this frame buffer into the given one
-		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			The buffer receiving this one
-		 *\param[in]	p_rectSrc			The source rectangle
-		 *\param[in]	p_rectDst			The destination rectangle
-		 *\param[in]	p_uiComponents		Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
-		 *\param[in]	p_eInterpolation	The interpolation to apply if the image is stretched
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Blitte ce tampon dans celui donné
-		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			Le tampon recevant celui-ci
-		 *\param[in]	p_rectSrc			Le rectangle source
-		 *\param[in]	p_rectDst			Le rectangle destination
-		 *\param[in]	p_uiComponents		OU logique de eBUFFER_COMPONENT indiquant les buffers à copier
-		 *\param[in]	p_eInterpolation	L'interpolation à appliquer si l'image est redimensionnée
-		 *\return		\p true si tout s'est bien passé
-		 */
-		bool StretchInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolation );
-		/**
-		 *\~english
-		 *\brief		Renders this buffer into another buffer's selected components
-		 *\param[in]	p_pBuffer		The buffer receiving the render
-		 *\param[in]	p_sizeDst		The destination dimensions
-		 *\param[in]	p_uiComponents	Bitwise OR of eBUFFER_COMPONENT indicating the selected destination buffer's components
-		 *\~french
-		 *\brief		Rend ce tampon dans les composantes choisies d'un autre tampon
-		 *\param[in]	p_pBuffer		Le tampon recevant le rendu
-		 *\param[in]	p_sizeDst		Les dimensions de la destination
-		 *\param[in]	p_uiComponents	OU logique de eBUFFER_COMPONENT indiquant les composantes du tampon destination
-		 */
-		virtual void RenderToBuffer( FrameBufferSPtr p_pBuffer, Castor::Size const & p_sizeDst, uint32_t p_uiComponents, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState );
-		/**
-		 *\~english
-		 *\brief		Specifies the color buffer to be drawn into
-		 *\param[in]	p_eAttach	The color buffer
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Définit le tampon de couleur dans lequel le dessin doit être effectué
-		 *\param[in]	p_eAttach	Le tampon de couleur
-		 *\return		\p true si tout s'est bien passé
-		 */
-		bool SetDrawBuffer( eATTACHMENT_POINT p_eAttach )
-		{
-			return SetDrawBuffers( 1, &p_eAttach );
-		}
-		/**
-		 *\~english
-		 *\brief		Specifies the color buffers to be drawn into
-		 *\param[in]	p_uiSize	The buffers count
-		 *\param[in]	p_eAttach	The color buffers
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Définit les buffers de couleur dans lesquel le dessin doit être effectué
-		 *\param[in]	p_uiSize	Le nombre de buffers
-		 *\param[in]	p_eAttach	Les buffers de couleur
-		 *\return		\p true si tout s'est bien passé
-		 */
-		template< uint32_t N > bool SetDrawBuffers( eATTACHMENT_POINT p_eAttach[N] )
-		{
-			return SetDrawBuffers( N, p_eAttach );
-		}
-		/**
-		 *\~english
-		 *\brief		Specifies the color buffers to be drawn into
-		 *\param[in]	p_arrayAttaches	The color buffers
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Définit les buffers de couleur dans lesquel le dessin doit être effectué
-		 *\param[in]	p_arrayAttaches	Les buffers de couleur
-		 *\return		\p true si tout s'est bien passé
-		 */
-		inline bool SetDrawBuffers( std::vector< eATTACHMENT_POINT > const & p_arrayAttaches )
-		{
-			return SetDrawBuffers( uint32_t( p_arrayAttaches.size() ), &p_arrayAttaches[0] );
-		}
-		/**
-		 *\~english
-		 *\brief		Specifies the color buffers to be drawn into
-		 *\param[in]	p_uiSize	The buffers count
-		 *\param[in]	p_eAttach	The color buffers
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Définit les buffers de couleur dans lesquel le dessin doit être effectué
-		 *\param[in]	p_uiSize	Le nombre de buffers
-		 *\param[in]	p_eAttach	Les buffers de couleur
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool SetDrawBuffers( uint32_t p_uiSize, eATTACHMENT_POINT const * p_eAttach ) = 0;
-		/**
-		 *\~english
-		 *\brief		Specifies the buffers to be drawn into
-		 *\remark		All buffers attached are selected
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Définit les buffers dans lesquels le dessin doit être effectué
-		 *\remark		Tous les buffers attachés sont sélectionnés
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool SetDrawBuffers() = 0;
+		C3D_API virtual void SetDrawBuffers( AttachArray const & p_attaches ) = 0;
 		/**
 		 *\~english
 		 *\brief		Specifies the color buffer source for pixels
-		 *\param[in]	p_eAttach	The color buffer
-		 *\return		\p true if successful
+		 *\param[in]	p_point	The color buffer
+		 *\param[in]	p_index	The attachment index
 		 *\~french
-		 *\brief		Définit le tampon de couleur source pour la lecture de pixels
-		 *\param[in]	p_eAttach	Le tampon de couleur
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		DÃ©finit le tampon de couleur source pour la lecture de pixels
+		 *\param[in]	p_point	Le tampon de couleur
+		 *\param[in]	p_index	L'index d'attache
 		 */
-		virtual bool SetReadBuffer( eATTACHMENT_POINT p_eAttach ) = 0;
+		C3D_API virtual void SetReadBuffer( eATTACHMENT_POINT p_point, uint8_t p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a colour render buffer
-		 *\param[in]	p_ePixelFormat	The buffer's pixel format
+		 *\param[in]	p_format	The buffer's pixel format
 		 *\~french
-		 *\brief		Crée un tampon de rendu couleur
-		 *\param[in]	p_ePixelFormat	Le fromat de pixels du tampon
+		 *\brief		CrÃ©e un tampon de rendu couleur
+		 *\param[in]	p_format	Le fromat de pixels du tampon
 		 */
-		virtual ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat ) = 0;
+		C3D_API virtual ColourRenderBufferSPtr CreateColourRenderBuffer( Castor::ePIXEL_FORMAT p_format ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a depth/stencil render buffer
-		 *\param[in]	p_ePixelFormat	The buffer's pixel format
+		 *\param[in]	p_format	The buffer's pixel format
 		 *\~french
-		 *\brief		Crée un tampon de rendu profondeur/stencil
-		 *\param[in]	p_ePixelFormat	Le fromat de pixels du tampon
+		 *\brief		CrÃ©e un tampon de rendu profondeur/stencil
+		 *\param[in]	p_format	Le fromat de pixels du tampon
 		 */
-		virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_ePixelFormat ) = 0;
+		C3D_API virtual DepthStencilRenderBufferSPtr CreateDepthStencilRenderBuffer( Castor::ePIXEL_FORMAT p_format ) = 0;
 		/**
 		 *\~english
-		 *\brief		Attaches a render buffer to this frame buffer
-		 *\param[in]	p_pAttach	The attachment
+		 *\brief		Creates an attachment to a render buffer
+		 *\param[in]	p_renderBuffer	The render buffer
+		 *\return		The created attachment
 		 *\~french
-		 *\brief		Attache un tampon de rendu à ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
+		 *\brief		CrÃ©e une attache Ã  un tampon de rendu
+		 *\param[in]	p_renderBuffer	Le tampon de rendu
+		 *\return		L'attache crÃ©Ã©e
 		 */
-		void Attach( RenderBufferAttachmentRPtr p_pAttach );
+		C3D_API virtual RenderBufferAttachmentSPtr CreateAttachment( RenderBufferSPtr p_renderBuffer ) = 0;
 		/**
 		 *\~english
-		 *\brief		Detaches a render buffer from this frame buffer
-		 *\param[in]	p_pAttach	The attachment
+		 *\brief		Creates an attachment to a texture
+		 *\param[in]	p_texture	The texture
+		 *\return		The created attachment
 		 *\~french
-		 *\brief		Détache un tampon de rendu de ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
+		 *\brief		CrÃ©e une attache Ã  une texture
+		 *\param[in]	p_texture	La texture
+		 *\return		L'attache crÃ©Ã©e
 		 */
-		void Detach( RenderBufferAttachmentRPtr p_pAttach );
-		/**
-		 *\~english
-		 *\brief		Attaches a texture to this frame buffer
-		 *\param[in]	p_pAttach	The attachment
-		 *\~french
-		 *\brief		Attache une texture à ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
-		 */
-		void Attach( TextureAttachmentRPtr p_pAttach );
-		/**
-		 *\~english
-		 *\brief		Detaches a texture from this frame buffer
-		 *\param[in]	p_pAttach	The attachment
-		 *\~french
-		 *\brief		Détache une texture de ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
-		 */
-		void Detach( TextureAttachmentRPtr p_pAttach );
-		/**
-		 *\~english
-		 *\brief		Attaches a texture to this frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_pTexture		The texture
-		 *\param[in]	p_eTarget		The dimension to which the texture must be attached
-		 *\param[in]	p_iLayer		The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
-		 *\param[in]	p_pTexture		La texture
-		 *\param[in]	p_eTarget		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_iLayer		La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true si tout s'est bien passé
-		 */
-		bool Attach( eATTACHMENT_POINT p_eAttachment, DynamicTextureSPtr p_pTexture, eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 );
-		/**
-		 *\~english
-		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_pRenderBuffer	The render buffer
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache un tampon de rendu à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
-		 *\return		\p true si tout s'est bien passé
-		 */
-		bool Attach( eATTACHMENT_POINT p_eAttachment, RenderBufferSPtr p_pRenderBuffer );
-		/**
-		 *\~english
-		 *\brief		Detaches all attached objects
-		 *\~french
-		 *\brief		Détache tous les objets attachés
-		 */
-		void DetachAll();
-		/**
-		 *\~english
-		 *\brief		Resizes each attached buffer
-		 *\param[in]	p_size	The new dimensions
-		 *\~french
-		 *\brief		Redimensionne tous les tampons attachés
-		 *\param[in]	p_size	Les nouvelles dimensions
-		 */
-		virtual void Resize( Castor::Size const & p_size );
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture ) = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if the FBO is complete
 		 *\return		\p false if the buffer is in error if there is an attachment missing
 		 *\~french
-		 *\brief		Vérifies i le FBO est complet
+		 *\brief		VÃ©rifies i le FBO est complet
 		 *\return		\p false si le tampon est en erreur ou s'il manque une attache.
 		 */
-		virtual bool IsComplete() = 0;
+		C3D_API virtual bool IsComplete()const = 0;
+		/**
+		 *\~english
+		 *\brief		Downloads the render buffer data.
+		 *\param[in]	p_point		The attachment point.
+		 *\param[in]	p_index		The attachment index.
+		 *\param[in]	p_buffer	Receives the data.
+		 *\~french
+		 *\brief		RÃ©cupÃ¨re les donnÃ©es du tampon de rendu.
+		 *\param[in]	p_point		Le point d'attache.
+		 *\param[in]	p_index		L'index d'attache.
+		 *\param[in]	p_buffer	ReÃ§oit les donnÃ©es.
+		 */
+		C3D_API virtual bool DownloadBuffer( Castor3D::eATTACHMENT_POINT p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer ) = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the background colour
+		 *\~french
+		 *\brief		RÃ©cupÃ¨re la couleur de fond
+		 */
+		inline Castor::Colour GetClearColour()const
+		{
+			return m_clearColour;
+		}
 
 	protected:
 		/**
 		 *\~english
+		 *\param[in]	p_point	The attachment point.
+		 *\param[in]	p_index			The attachment index.
+		 *\return		The samples count for attachment.
+		 *\~french
+		 *\param[in]	p_point	Le point d'attache.
+		 *\param[in]	p_index			L'index d'attache.
+		 *\return		Le nombre d'Ã©chantillons pour l'attache.
+		 */
+		C3D_API uint32_t DoGetSamplesCount( eATTACHMENT_POINT p_point, uint8_t p_index );
+		/**
+		 *\~english
+		 *\param[in]	p_point	The attachment point.
+		 *\param[in]	p_index			The attachment index.
+		 *\return		The pixel format for attachment.
+		 *\~french
+		 *\param[in]	p_point	Le point d'attache.
+		 *\param[in]	p_index			L'index d'attache.
+		 *\return		Le format des pixels pour l'attache.
+		 */
+		C3D_API Castor::ePIXEL_FORMAT DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index );
+		/**
+		 *\~english
+		 *\brief		Clears the given buffers components.
+		 *\param[in]	p_targets	The buffer components, combination of eBUFFER_COMPONENT.
+		 *\~french
+		 *\brief		Vide les composantes de tampon donnÃ©es.
+		 *\param[in]	p_targets	Les composantes, combinaison de eBUFFER_COMPONENT.
+		 */
+		C3D_API virtual void DoClear( uint32_t p_targets ) = 0;
+		/**
+		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_eTarget	The frame buffer binding target
+		 *\param[in]	p_target	The frame buffer binding target
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_eTarget	La cible d'activation du tampon d'image
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÃ©
+		 *\param[in]	p_target	La cible d'activation du tampon d'image
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool DoBind( eFRAMEBUFFER_TARGET p_eTarget ) = 0;
+		C3D_API virtual bool DoBind( eFRAMEBUFFER_TARGET p_target ) = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
+		 *\brief		Fonction de dÃ©sactivation, pour dire au GPU qu'il est dÃ©sactivÃ©
 		 */
-		virtual void DoUnbind() = 0;
-		/**
-		 *\~english
-		 *\brief		Attaches a render buffer to this frame buffer
-		 *\param[in]	p_pAttach	The attachment
-		 *\~french
-		 *\brief		Attache un tampon de rendu à ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
-		 */
-		virtual void DoAttach( RenderBufferAttachmentRPtr p_pAttach ) = 0;
-		/**
-		 *\~english
-		 *\brief		Detaches a render buffer from this frame buffer
-		 *\param[in]	p_pAttach	The attachment
-		 *\~french
-		 *\brief		Détache un tampon de rendu de ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
-		 */
-		virtual void DoDetach( RenderBufferAttachmentRPtr p_pAttach ) = 0;
-		/**
-		 *\~english
-		 *\brief		Attaches a texture to this frame buffer
-		 *\param[in]	p_pAttach	The attachment
-		 *\~french
-		 *\brief		Attache un texture à ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
-		 */
-		virtual void DoAttach( TextureAttachmentRPtr p_pAttach ) = 0;
-		/**
-		 *\~english
-		 *\brief		Detaches a texture from this frame buffer
-		 *\param[in]	p_pAttach	The attachment
-		 *\~french
-		 *\brief		Détache une texture de ce tampon d'image
-		 *\param[in]	p_pAttach	L'attache
-		 */
-		virtual void DoDetach( TextureAttachmentRPtr p_pAttach ) = 0;
-		/**
-		 *\~english
-		 *\brief		Attaches a texture to this frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_pTexture		The texture
-		 *\param[in]	p_eTarget		The dimension to which the texture must be attached
-		 *\param[in]	p_iLayer		The associated layer, if p_eDimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
-		 *\param[in]	p_pTexture		La texture
-		 *\param[in]	p_eTarget		La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_iLayer		La couche associée, si p_eDimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool DoAttach( eATTACHMENT_POINT p_eAttachment, DynamicTextureSPtr p_pTexture, eTEXTURE_TARGET p_eTarget, int p_iLayer = 0 ) = 0;
-		/**
-		 *\~english
-		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point
-		 *\param[in]	p_eAttachment	The attachment point
-		 *\param[in]	p_pRenderBuffer	The tampon de rendu
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Attache un tampon de rendu à ce tampon d'image, au point d'attache voulu
-		 *\param[in]	p_eAttachment	Le point d'attache
-		 *\param[in]	p_pRenderBuffer	Le tampon de rendu
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool DoAttach( eATTACHMENT_POINT p_eAttachment, RenderBufferSPtr p_pRenderBuffer ) = 0;
-		/**
-		 *\~english
-		 *\brief		Detaches all attached objects
-		 *\~french
-		 *\brief		Détache tous les objets attachés
-		 */
-		virtual void DoDetachAll() = 0;
+		C3D_API virtual void DoUnbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Blit this frame buffer into the given one
-		 *\remark		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			The buffer receiving this one
-		 *\param[in]	p_rectSrc			The source rectangle
-		 *\param[in]	p_rectDst			The destination rectangle
-		 *\param[in]	p_uiComponents		Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
-		 *\param[in]	p_eInterpolation	The interpolation to apply if the image is stretched
+		 *\param[in]	p_buffer		The buffer receiving this one
+		 *\param[in]	p_rect			The destination rectangle
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Blitte ce tampon dans celui donné
-		 *\remark		L'interpolation pour un tampon stencil ou profondeur doit être eINTERPOLATION_MODE_NEAREST
-		 *\param[in]	p_pBuffer			Le tampon recevant celui-ci
-		 *\param[in]	p_rectSrc			Le rectangle source
-		 *\param[in]	p_rectDst			Le rectangle destination
-		 *\param[in]	p_uiComponents		OU logique de eBUFFER_COMPONENT indiquant les buffers à copier
-		 *\param[in]	p_eInterpolation	L'interpolation à appliquer si l'image est redimensionnée
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Blitte ce tampon dans celui donnÃ©
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci
+		 *\param[in]	p_rect			Le rectangle destination
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers Ã  copier
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool DoStretchInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolation ) = 0;
+		C3D_API virtual bool DoBlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rect, uint32_t p_components ) = 0;
+		/**
+		 *\~english
+		 *\brief		Blit this frame buffer into the given one.
+		 *\remarks		Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST.
+		 *\param[in]	p_buffer		The buffer receiving this one.
+		 *\param[in]	p_rectSrc		The source rectangle.
+		 *\param[in]	p_rectDst		The destination rectangle.
+		 *\param[in]	p_components	Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied.
+		 *\param[in]	p_interpolation	The interpolation to apply if the image is stretched.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Blitte ce tampon dans celui donnÃ©.
+		 *\remarks		L'interpolation pour un tampon stencil ou profondeur doit Ãªtre eINTERPOLATION_MODE_NEAREST.
+		 *\param[in]	p_buffer		Le tampon recevant celui-ci.
+		 *\param[in]	p_rectSrc		Le rectangle source.
+		 *\param[in]	p_rectDst		Le rectangle destination.
+		 *\param[in]	p_components	OU logique de eBUFFER_COMPONENT indiquant les buffers Ã  copier.
+		 *\param[in]	p_interpolation	L'interpolation Ã  appliquer si l'image est redimensionnÃ©e.
+		 *\return		\p true si tout s'est bien passÃ©.
+		 */
+		C3D_API virtual bool DoStretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation ) = 0;
 
 	private:
-		void DoTexAttach( eATTACHMENT_POINT p_eAttach, DynamicTextureSPtr p_pTexture );
-		void DoRboAttach( eATTACHMENT_POINT p_eAttach, RenderBufferSPtr p_pRenderBuffer );
-		void DoDetach( eATTACHMENT_POINT p_eAttach );
+		C3D_API bool DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach );
+		C3D_API void DoDetach( eATTACHMENT_POINT p_point, uint8_t p_index );
 
 	protected:
-		DECLARE_MAP( eATTACHMENT_POINT,	RenderBufferSPtr, RboAttach );
-		DECLARE_MAP( eATTACHMENT_POINT,	DynamicTextureSPtr, TexAttach );
-		DECLARE_VECTOR( eATTACHMENT_POINT, Attach );
-		//!\~english Attached render buffers map	\~french Map des tampons de rendu attachés
-		RboAttachMap m_mapRbo;
-		//!\~english Attached textures map	\~french Map des textures attachées
-		TexAttachMap m_mapTex;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_pEngine;
-		//!\~english All attchments	\~french Toutes les attaches
-		AttachArray m_arrayAttaches;
+		//!\~english All attachments.	\~french Toutes les attaches.
+		AttachArray m_attaches;
+		//!\~english The background colour	\~french La couleur de fond
+		Castor::Colour m_clearColour;
 	};
 }
 

@@ -1,4 +1,4 @@
-#include "ShaderObject.hpp"
+﻿#include "ShaderObject.hpp"
 #include "ShaderProgram.hpp"
 #include "FrameVariable.hpp"
 #include "OneFrameVariable.hpp"
@@ -10,126 +10,123 @@
 #	include <sys/stat.h>
 #endif
 
+#include <StreamPrefixManipulators.hpp>
+
 using namespace Castor;
 
 namespace Castor3D
 {
-	ShaderObjectBase::BinaryParser::BinaryParser( Path const & p_path )
-		:	Castor3D::BinaryParser< ShaderObjectBase >( p_path )
+	namespace
+	{
+		template< typename CharType, typename PrefixType >
+		inline std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & stream, format::base_prefixer< CharType, PrefixType > const & prefix )
+		{
+			format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * sbuf = dynamic_cast< format::basic_prefix_buffer< format::base_prefixer< CharType, PrefixType >, CharType > * >( stream.rdbuf() );
+
+			if ( !sbuf )
+			{
+				sbuf = format::install_prefix_buffer< PrefixType >( stream );
+				stream.register_callback( format::callback< PrefixType, CharType >, 0 );
+			}
+
+			return stream;
+		}
+	}
+
+	ShaderObject::BinaryParser::BinaryParser( Path const & p_path )
+		: Castor3D::BinaryParser< ShaderObject >( p_path )
 	{
 	}
 
-	bool ShaderObjectBase::BinaryParser::Fill( ShaderObjectBase const & p_object, BinaryChunk & p_chunk )const
+	bool ShaderObject::BinaryParser::Fill( ShaderObject const & p_object, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_SHADER_PROGRAM );
 
-		if ( p_object.GetParent()->GetLanguage() == eSHADER_LANGUAGE_GLSL )
+		if ( l_return )
 		{
-			// One source for each object
-			if ( l_bReturn )
-			{
-				l_bReturn = DoFillChunk( p_object.GetLoadedSource(), eCHUNK_TYPE_SHADER_OBJECT_SOURCE, l_chunk );
-			}
-		}
-		else
-		{
-			// One source for all program but entries for objects
-			if ( l_bReturn )
-			{
-				l_bReturn = DoFillChunk( p_object.GetEntryPoint(), eCHUNK_TYPE_SHADER_OBJECT_ENTRY, l_chunk );
-			}
+			l_return = DoFillChunk( p_object.GetLoadedSource(), eCHUNK_TYPE_SHADER_OBJECT_SOURCE, l_chunk );
 		}
 
 		if ( p_object.GetType() == eSHADER_TYPE_GEOMETRY )
 		{
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( p_object.GetInputType(), eCHUNK_TYPE_SHADER_OBJECT_INPUT, l_chunk );
+				l_return = DoFillChunk( p_object.GetInputType(), eCHUNK_TYPE_SHADER_OBJECT_INPUT, l_chunk );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( p_object.GetOutputType(), eCHUNK_TYPE_SHADER_OBJECT_OUTPUT, l_chunk );
+				l_return = DoFillChunk( p_object.GetOutputType(), eCHUNK_TYPE_SHADER_OBJECT_OUTPUT, l_chunk );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( p_object.GetOutputVtxCount(), eCHUNK_TYPE_SHADER_OBJECT_OUTCOUNT, l_chunk );
+				l_return = DoFillChunk( p_object.GetOutputVtxCount(), eCHUNK_TYPE_SHADER_OBJECT_OUTCOUNT, l_chunk );
 			}
 		}
 
-		for ( FrameVariablePtrStrMapConstIt l_it = p_object.GetFrameVariablesBegin(); l_it != p_object.GetFrameVariablesEnd() && l_bReturn; ++l_it )
+		for ( auto && l_it : p_object.GetFrameVariables() )
 		{
-			FrameVariableSPtr l_pVariable = l_it->second.lock();
+			FrameVariableSPtr l_variable = l_it;
 			BinaryChunk l_chunkVariable( eCHUNK_TYPE_PROGRAM_VARIABLE );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( l_pVariable->GetOccCount(), eCHUNK_TYPE_VARIABLE_COUNT, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetOccCount(), eCHUNK_TYPE_VARIABLE_COUNT, l_chunkVariable );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( l_pVariable->GetFullType(), eCHUNK_TYPE_VARIABLE_TYPE, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetFullType(), eCHUNK_TYPE_VARIABLE_TYPE, l_chunkVariable );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( l_pVariable->GetName(), eCHUNK_TYPE_NAME, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetName(), eCHUNK_TYPE_NAME, l_chunkVariable );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = DoFillChunk( l_pVariable->GetStrValue(), eCHUNK_TYPE_VARIABLE_VALUE, l_chunkVariable );
+				l_return = DoFillChunk( l_variable->GetStrValue(), eCHUNK_TYPE_VARIABLE_VALUE, l_chunkVariable );
 			}
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				l_chunkVariable.Finalise();
-				l_bReturn = l_chunk.AddSubChunk( l_chunkVariable );
+				l_return = l_chunk.AddSubChunk( l_chunkVariable );
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
-			l_bReturn = p_chunk.AddSubChunk( l_chunk );
+			l_return = p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
-	bool ShaderObjectBase::BinaryParser::Parse( ShaderObjectBase & p_object, BinaryChunk & p_chunk )const
+	bool ShaderObject::BinaryParser::Parse( ShaderObject & p_object, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_strText;
 		eTOPOLOGY l_ePrimType;
-		eFRAME_VARIABLE_TYPE l_eType;
-		FrameVariableSPtr l_pVariable;
-		uint8_t l_uiCount;
+		eFRAME_VARIABLE_TYPE l_type;
+		FrameVariableSPtr l_variable;
+		uint8_t l_count;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
 			switch ( l_chunk.GetChunkType() )
 			{
-			case eCHUNK_TYPE_SHADER_OBJECT_ENTRY:
-				l_bReturn = DoParseChunk( l_strText, l_chunk );
-
-				if ( l_bReturn )
-				{
-					p_object.SetEntryPoint( l_strText );
-				}
-
-				break;
-
 			case eCHUNK_TYPE_SHADER_OBJECT_SOURCE:
-				l_bReturn = DoParseChunk( l_strText, l_chunk );
+				l_return = DoParseChunk( l_strText, l_chunk );
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
 					p_object.SetSource( eSHADER_MODEL_5, l_strText );
 					p_object.SetSource( eSHADER_MODEL_4, l_strText );
@@ -141,51 +138,51 @@ namespace Castor3D
 				break;
 
 			case eCHUNK_TYPE_PROGRAM_VARIABLE:
-				l_uiCount = 0;
-				l_eType = eFRAME_VARIABLE_TYPE( -1 );
+				l_count = 0;
+				l_type = eFRAME_VARIABLE_TYPE( -1 );
 				l_strText.clear();
-				l_pVariable.reset();
+				l_variable.reset();
 
 				while ( l_chunk.CheckAvailable( 1 ) )
 				{
 					BinaryChunk l_chunkVariable;
-					l_bReturn = l_chunk.GetSubChunk( l_chunkVariable );
+					l_return = l_chunk.GetSubChunk( l_chunkVariable );
 
 					switch ( l_chunkVariable.GetChunkType() )
 					{
 					case eCHUNK_TYPE_VARIABLE_COUNT:
-						l_bReturn = DoParseChunk( l_uiCount, l_chunkVariable );
+						l_return = DoParseChunk( l_count, l_chunkVariable );
 						break;
 
 					case eCHUNK_TYPE_NAME:
-						l_bReturn = DoParseChunk( l_strText, l_chunkVariable );
+						l_return = DoParseChunk( l_strText, l_chunkVariable );
 						break;
 
 					case eCHUNK_TYPE_VARIABLE_TYPE:
-						l_bReturn = DoParseChunk( l_eType, l_chunkVariable );
+						l_return = DoParseChunk( l_type, l_chunkVariable );
 						break;
 
 					case eCHUNK_TYPE_VARIABLE_VALUE:
-						l_bReturn = DoParseChunk( l_strText, l_chunkVariable );
+						l_return = DoParseChunk( l_strText, l_chunkVariable );
 
-						if ( l_bReturn )
+						if ( l_return )
 						{
-							l_pVariable->SetValueStr( l_strText );
+							l_variable->SetValueStr( l_strText );
 						}
 
 						break;
 					}
 
-					if ( l_bReturn && !l_pVariable )
-					{
-						if ( l_uiCount && l_eType != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
-						{
-							FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
-							l_pVariable = l_buffer->CreateVariable( *p_object.GetParent(), l_eType, l_strText, l_uiCount );
-						}
-					}
+					//if ( l_return && !l_variable )
+					//{
+					//	if ( l_count && l_type != eFRAME_VARIABLE_TYPE( -1 ) && !l_strText.empty() )
+					//	{
+					//		FrameVariableBufferSPtr l_buffer = p_object.GetParent()->GetUserBuffer();
+					//		l_variable = l_buffer->CreateVariable( *p_object.GetParent(), l_type, l_strText, l_count );
+					//	}
+					//}
 
-					if ( !l_bReturn )
+					if ( !l_return )
 					{
 						p_chunk.EndParse();
 					}
@@ -199,9 +196,9 @@ namespace Castor3D
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_SHADER_OBJECT_INPUT:
-					l_bReturn = DoParseChunk( l_ePrimType, l_chunk );
+					l_return = DoParseChunk( l_ePrimType, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_object.SetInputType( l_ePrimType );
 					}
@@ -209,9 +206,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SHADER_OBJECT_OUTPUT:
-					l_bReturn = DoParseChunk( l_ePrimType, l_chunk );
+					l_return = DoParseChunk( l_ePrimType, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_object.SetOutputType( l_ePrimType );
 					}
@@ -219,37 +216,37 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_SHADER_OBJECT_OUTCOUNT:
-					l_bReturn = DoParseChunk( l_uiCount, l_chunk );
+					l_return = DoParseChunk( l_count, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
-						p_object.SetOutputVtxCount( l_uiCount );
+						p_object.SetOutputVtxCount( l_count );
 					}
 
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	ShaderObjectBase::TextLoader::TextLoader( File::eENCODING_MODE p_eEncodingMode )
-		:	Loader< ShaderObjectBase, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_eEncodingMode )
+	ShaderObject::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
+		: Loader< ShaderObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
 	{
 	}
 
-	bool ShaderObjectBase::TextLoader::operator()( ShaderObjectBase const & p_shaderObject, TextFile & p_file )
+	bool ShaderObject::TextLoader::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
 		String l_strTabs = cuT( "\t\t\t" );
-		bool l_bReturn = p_file.WriteText( l_strTabs + p_shaderObject.GetStrType() ) > 0;
+		bool l_return = p_file.WriteText( l_strTabs + p_shaderObject.GetStrType() ) > 0;
 		static std::array< String, eSHADER_MODEL_COUNT > l_arrayModels;
 		l_arrayModels[eSHADER_MODEL_1] = cuT( "sm_1" );
 		l_arrayModels[eSHADER_MODEL_2] = cuT( "sm_2" );
@@ -257,16 +254,16 @@ namespace Castor3D
 		l_arrayModels[eSHADER_MODEL_4] = cuT( "sm_4" );
 		l_arrayModels[eSHADER_MODEL_5] = cuT( "sm_5" );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "\n{\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "\n{\n" ) ) > 0;
 		}
 
 		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
 		File::DirectoryCreate( l_pathFile );
 		bool l_hasFile = false;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			for ( int i = 0; i < eSHADER_MODEL_COUNT; i++ )
 			{
@@ -276,30 +273,30 @@ namespace Castor3D
 				{
 					File::CopyFile( l_file, l_pathFile );
 					l_file = Path( cuT( "Shaders" ) ) / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
-					l_bReturn = p_file.WriteText( l_strTabs + cuT( "\tfile \"" ) + l_arrayModels[i] + cuT( " " ) + l_file + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( l_strTabs + cuT( "\tfile \"" ) + l_arrayModels[i] + cuT( " " ) + l_file + cuT( "\"\n" ) ) > 0;
 				}
 			}
 		}
 
 		if ( l_hasFile )
 		{
-			for ( FrameVariablePtrStrMapConstIt l_it = p_shaderObject.GetFrameVariablesBegin(); l_it != p_shaderObject.GetFrameVariablesEnd() && l_bReturn; ++l_it )
+			for ( auto && l_it : p_shaderObject.GetFrameVariables() )
 			{
-				l_bReturn = FrameVariable::TextLoader()( *l_it->second.lock(), p_file );
+				l_return = FrameVariable::TextLoader()( *l_it, p_file );
 			}
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
-	const std::array< String, eSHADER_TYPE_COUNT >	ShaderObjectBase::string_type =
+	const std::array< String, eSHADER_TYPE_COUNT > ShaderObject::string_type =
 	{
 		cuT( "vertex_program" ),
 		cuT( "hull_program" ),
@@ -308,44 +305,44 @@ namespace Castor3D
 		cuT( "pixel_program" ),
 	};
 
-	ShaderObjectBase::ShaderObjectBase( ShaderProgramBase * p_pParent, eSHADER_TYPE p_eType )
-		:	m_eStatus( eSHADER_STATUS_NOTCOMPILED )
-		,	m_eType( p_eType )
-		,	m_pParent( p_pParent )
-		,	m_eInputType( eTOPOLOGY_TRIANGLES )
-		,	m_eOutputType( eTOPOLOGY_TRIANGLES )
-		,	m_eShaderModel( eSHADER_MODEL_1 )
+	ShaderObject::ShaderObject( ShaderProgram * p_parent, eSHADER_TYPE p_type )
+		: m_status( eSHADER_STATUS_NOTCOMPILED )
+		, m_type( p_type )
+		, m_parent( p_parent )
+		, m_eInputType( eTOPOLOGY_TRIANGLES )
+		, m_eOutputType( eTOPOLOGY_TRIANGLES )
+		, m_eShaderModel( eSHADER_MODEL_1 )
 	{
 	}
 
-	ShaderObjectBase::~ShaderObjectBase()
+	ShaderObject::~ShaderObject()
 	{
 	}
 
-	bool ShaderObjectBase::Compile()
+	bool ShaderObject::Compile()
 	{
-		std::for_each( m_listFrameVariables.begin(), m_listFrameVariables.end(), [&]( FrameVariableSPtr p_pVariable )
-		{
-			p_pVariable->Bind();
-		} );
 		return true;
 	}
 
-	void ShaderObjectBase::Bind()
+	void ShaderObject::Bind()
 	{
-		std::for_each( m_listFrameVariables.begin(), m_listFrameVariables.end(), [&]( FrameVariableSPtr p_pVariable )
+		for ( auto && l_variable : m_listFrameVariables )
 		{
-			p_pVariable->Apply();
-		} );
+			l_variable->Bind();
+		}
 	}
 
-	void ShaderObjectBase::Unbind()
+	void ShaderObject::Unbind()
 	{
+		for ( auto && l_variable : m_listFrameVariables )
+		{
+			l_variable->Unbind();
+		}
 	}
 
-	void ShaderObjectBase::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )
+	void ShaderObject::SetFile( eSHADER_MODEL p_eModel, Path const & p_filename )
 	{
-		m_eStatus = eSHADER_STATUS_NOTCOMPILED;
+		m_status = eSHADER_STATUS_NOTCOMPILED;
 		m_arrayFiles[p_eModel].clear();
 		m_arraySources[p_eModel].clear();
 
@@ -364,54 +361,100 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderObjectBase::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
+	bool ShaderObject::HasFile()const
 	{
-		m_eStatus = eSHADER_STATUS_NOTCOMPILED;
+		bool l_return = false;
+
+		for ( int i = 0; i < eSHADER_MODEL_COUNT && !l_return; i++ )
+		{
+			l_return = !m_arrayFiles[i].empty();
+		}
+
+		return l_return;
+	}
+
+	void ShaderObject::SetSource( eSHADER_MODEL p_eModel, String const & p_strSource )
+	{
+		m_status = eSHADER_STATUS_NOTCOMPILED;
 		m_arraySources[p_eModel] = p_strSource;
 	}
 
-	bool ShaderObjectBase::HasSource()
+	bool ShaderObject::HasSource()const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
-		for ( int i = 0; i < eSHADER_MODEL_COUNT && !l_bReturn; i++ )
+		for ( int i = 0; i < eSHADER_MODEL_COUNT && !l_return; i++ )
 		{
-			l_bReturn = !m_arraySources[i].empty();
+			l_return = !m_arraySources[i].empty();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
-	void ShaderObjectBase::AddFrameVariable( OneTextureFrameVariableSPtr p_pVariable )
+	void ShaderObject::AddFrameVariable( OneIntFrameVariableSPtr p_variable )
 	{
-		if ( p_pVariable )
+		if ( p_variable )
 		{
-			m_listFrameVariables.push_back( p_pVariable );
-			m_mapFrameVariables.insert( std::make_pair( p_pVariable->GetName(), p_pVariable ) );
+			m_listFrameVariables.push_back( p_variable );
+			m_mapFrameVariables.insert( std::make_pair( p_variable->GetName(), p_variable ) );
 		}
 	}
 
-	OneTextureFrameVariableSPtr ShaderObjectBase::FindFrameVariable( Castor::String const & p_strName )const
+	OneIntFrameVariableSPtr ShaderObject::FindFrameVariable( Castor::String const & p_name )const
 	{
-		OneTextureFrameVariableSPtr l_pReturn;
-		FrameVariablePtrStrMapConstIt l_it = m_mapFrameVariables.find( p_strName );
+		OneIntFrameVariableSPtr l_return;
+		FrameVariablePtrStrMapConstIt l_it = m_mapFrameVariables.find( p_name );
 
 		if ( l_it != m_mapFrameVariables.end() )
 		{
 			FrameVariableSPtr l_pFound = l_it->second.lock();
 
-			if ( l_pFound && l_pFound->GetFullType() == OneTextureFrameVariable::GetFrameVariableType() )
+			if ( l_pFound && l_pFound->GetFullType() == OneIntFrameVariable::GetFrameVariableType() )
 			{
-				l_pReturn = std::static_pointer_cast< OneTextureFrameVariable >( l_pFound );
+				l_return = std::static_pointer_cast< OneIntFrameVariable >( l_pFound );
 			}
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
-	void ShaderObjectBase::FlushFrameVariables()
+	void ShaderObject::FlushFrameVariables()
 	{
 		clear_container( m_mapFrameVariables );
 		clear_container( m_listFrameVariables );
+	}
+
+	bool ShaderObject::DoCheckErrors()
+	{
+		String l_compilerLog = DoRetrieveCompilerLog();
+
+		if ( !l_compilerLog.empty() )
+		{
+			if ( m_status == eSHADER_STATUS_ERROR )
+			{
+				Logger::LogError( l_compilerLog );
+			}
+			else
+			{
+				Logger::LogWarning( l_compilerLog );
+			}
+
+			StringStream l_source;
+			l_source << format::line_prefix();
+			l_source << m_loadedSource;
+			Logger::LogDebug( l_source.str() );
+			m_loadedSource.clear();
+		}
+		else if ( m_status == eSHADER_STATUS_ERROR )
+		{
+			Logger::LogWarning( cuT( "ShaderObject::Compile - Compilaton failed but shader may be usable to link." ) );
+			StringStream l_source;
+			l_source << format::line_prefix();
+			l_source << m_loadedSource;
+			Logger::LogDebug( l_source.str() );
+			m_status = eSHADER_STATUS_NOTCOMPILED;
+		}
+
+		return m_status != eSHADER_STATUS_ERROR;
 	}
 }

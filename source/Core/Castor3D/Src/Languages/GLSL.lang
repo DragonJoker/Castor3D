@@ -1,4 +1,4 @@
-language glsl
+language "glsl"
 {
 	pattern		*.glsl *.vert *.frag *.geom *.vs *.fs *.gs
 	lexer		C/C++
@@ -223,11 +223,13 @@ language glsl
 			c3d_mapColour
 			c3d_mapAmbient
 			c3d_mapDiffuse
+			c3d_mapSpecular
+			c3d_mapEmissive
 			c3d_mapNormal
 			c3d_mapOpacity
-			c3d_mapSpecular
 			c3d_mapHeight
 			c3d_mapGloss
+			c3d_mapText
 			c3d_mapPosition
 			c3d_mapNormals
 			c3d_mapTangent
@@ -235,21 +237,25 @@ language glsl
 			c3d_v3CameraPosition
 			c3d_v4AmbientLight
 			c3d_v4BackgroundColour
-			c3d_v3CameraPos
 			c3d_v4MatAmbient
-			c3d_v4MatEmissive
 			c3d_v4MatDiffuse
-			c3d_v4MatEmissive
 			c3d_v4MatSpecular
+			c3d_v4MatEmissive
 			c3d_fMatShininess
 			c3d_fMatOpacity
 			c3d_sLights
 			c3d_iLightsCount
-			vertex
+			position
 			normal
 			bitangent
 			tangent
 			texture
+			colour
+			bone_ids0
+			bone_ids1
+			weights0
+			weights1
+			transform
 			c3d_mtxProjection
 			c3d_mtxModel
 			c3d_mtxView
@@ -262,6 +268,7 @@ language glsl
 			c3d_mtxTexture1
 			c3d_mtxTexture2
 			c3d_mtxTexture3
+			c3d_mtxBones
 			c3d_v4Camera;
 			vtx_vertex
 			vtx_normal
