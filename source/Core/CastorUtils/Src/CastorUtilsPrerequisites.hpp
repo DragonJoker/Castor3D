@@ -399,16 +399,6 @@ namespace Castor
 	 */
 	typedef std::function< void ( String const & p_strLog, ELogType p_eLogType ) > LogCallback;
 
-	template< typename Pool > class PoolManagedObject;
-
-	class NonAlignedMemoryAllocator;
-	template< size_t Align > class AlignedMemoryAllocator;
-
-	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedSizeMemoryData;
-	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedGrowingSizeMemoryData;
-	template< typename Object > class FixedSizeMarkedMemoryData;
-	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
-
 	/*!
 	\~english
 	\brief		Supported MemoryData types.
@@ -423,6 +413,16 @@ namespace Castor
 		eMEMDATA_TYPE_FIXED_GROWING_MARKED,
 		CASTOR_ENUM_BOUNDS( eMEMDATA_TYPE, eMEMDATA_TYPE_FIXED )
 	}	eMEMDATA_TYPE;
+
+	template< typename Object, eMEMDATA_TYPE MemDataType > class PoolManagedObject;
+
+	class NonAlignedMemoryAllocator;
+	template< size_t Align > class AlignedMemoryAllocator;
+
+	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedSizeMemoryData;
+	template< typename Object, typename MemoryAllocator = NonAlignedMemoryAllocator > class FixedGrowingSizeMemoryData;
+	template< typename Object > class FixedSizeMarkedMemoryData;
+	template< typename Object > class FixedGrowingSizeMarkedMemoryData;
 }
 
 constexpr Castor::real operator "" _r( long double p_value )

@@ -150,7 +150,7 @@ namespace Testing
 		struct SUniqueFixedChecks
 		{
 			template< typename type >
-			using ManagedObject = Castor::ManagedObject< type, MemDataType >;
+			using ManagedObject = Castor::PoolManagedObject< type, MemDataType >;
 
 			template< typename type, size_t obj_count = AllocPolicies::PoolPolicy< type, ManagedObject< type > * >::Count >
 			static void Run()

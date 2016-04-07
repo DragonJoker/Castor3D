@@ -160,7 +160,7 @@ namespace Castor
 		}
 
 	private:
-		uint32_t m_count;
+		size_t m_count;
 	};
 	/*!
 	\author		Sylvain DOREMUS
@@ -272,7 +272,7 @@ namespace Castor
 		}
 
 	private:
-		uint32_t m_count;
+		size_t m_count;
 	};
 }
 

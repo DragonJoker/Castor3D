@@ -10,7 +10,7 @@
 #include "CastorUtilsStringTest.hpp"
 #include "CastorUtilsZipTest.hpp"
 #include "CastorUtilsUniqueTest.hpp"
-//#include "CastorUtilsObjectsPoolTest.hpp"
+#include "CastorUtilsObjectsPoolTest.hpp"
 
 int main( int argc, char const * argv[] )
 {
@@ -39,7 +39,7 @@ int main( int argc, char const * argv[] )
 	Testing::Register( std::make_shared< Testing::CastorUtilsPixelFormatTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsStringTest >() );
 	Testing::Register( std::make_shared< Testing::CastorUtilsZipTest >() );
-	//Testing::Register( std::make_shared< Testing::CastorUtilsObjectsPoolTest >() );
+	Testing::Register( std::make_shared< Testing::CastorUtilsObjectsPoolTest >() );
 	BENCHLOOP( l_iCount, l_iReturn );
 	Castor::Logger::Cleanup();
 	return l_iReturn;

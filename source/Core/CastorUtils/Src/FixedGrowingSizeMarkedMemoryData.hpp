@@ -237,7 +237,7 @@ namespace Castor
 		//!\~english The last allocated chunk.	\~french Le dernier chunk alloué.
 		uint8_t ** m_freeIndex = nullptr;
 		//!\~english The allocated object size	\~french La taille d'un objet alloué.
-		size_t m_objectSize = nullptr;
+		size_t m_objectSize = 0;
 		//!\~english The size increment.	\~french L'incrément de taille.
 		size_t m_step = 0;
 		//!\~english The total allocated size.	\~french La taille totale allouée.

@@ -45,7 +45,7 @@ namespace Castor
 		 *\brief		Alloue de la mémoire.
 		 *\return		L'adresse mémoire de l'espace alloué.
 		 */
-		static uint8_t * Allocate( uint32_t p_size )
+		static uint8_t * Allocate( size_t p_size )
 		{
 			return reinterpret_cast< uint8_t * >( AlignedAlloc( Align, p_size ) );
 		}
