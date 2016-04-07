@@ -1,4 +1,4 @@
-option( CASTOR_BUILDGRP_INTEROP "Build Castor3D binding plugins" TRUE )
+option( CASTOR_BUILDGRP_INTEROP "Build Castor3D binding plugins" FALSE )
 option( CASTOR_BUILD_INTEROP_PYCASTOR3D "Build Python Castor3D binding" TRUE )
 option( CASTOR_BUILD_INTEROP_PYGUICOMMON "Build Python GuiCommon binding" TRUE )
 option( CASTOR_BUILD_INTEROP_COM "Build COM Castor3D binding" TRUE )

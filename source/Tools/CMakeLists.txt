@@ -52,6 +52,10 @@ function( ToolsBuild )
 
 				set( Build ${ImgConv} )
 				add_subdirectory( Tools/ImgConverter )
+				set( CPACK_PACKAGE_EXECUTABLES
+					${CPACK_PACKAGE_EXECUTABLES}
+					ImgConverter "ImgConverter"
+					PARENT_SCOPE )
 				set( ImgConv ${Build} PARENT_SCOPE )
 			else()
 				if( NOT wxWidgets_FOUND )

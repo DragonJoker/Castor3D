@@ -127,22 +127,12 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	else()
 		set( CASTOR_USE_TRACK 0 )
 	endif()
-	if( CASTOR_USE_LOG_TRACK )
-		set( CASTOR_USE_LOG_TRACK 1 )
-	else()
-		set( CASTOR_USE_LOG_TRACK 0 )
-	endif()
-	if( CASTOR_USE_UNICODE )
-		set( CASTOR_USE_UNICODE 1 )
-	else()
-		set( CASTOR_USE_UNICODE 0 )
-	endif()
 	if( CASTOR_USE_SSE2 )
 		set( CASTOR_USE_SSE2 1 )
 	else()
 		set( CASTOR_USE_SSE2 0 )
 	endif()
-	
+
 	configure_file( 
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/config.hpp.in
 		${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
@@ -165,13 +155,13 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		""
 		"${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp"
 	)
-	
+
 	if ( WIN32 )
 		target_link_libraries( ${PROJECT_NAME} Dbghelp )
 	else ()
 		target_link_libraries( ${PROJECT_NAME} dl )
 	endif ()
-	
+
 	file( GLOB CASTOR_Pool_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.inl
@@ -184,7 +174,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	)
 	source_group( "Header Files\\Pool" FILES ${CASTOR_Pool_HEADER_FILES} )
 	source_group( "Source Files\\Pool" FILES ${CASTOR_Pool_SOURCE_FILES} )
-	
+
 	file( GLOB CASTOR_Math_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.inl
@@ -394,7 +384,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		DESTINATION include/${PROJECT_NAME}
 		COMPONENT ${PROJECT_NAME}_dev
 	)
-	
+
 	if ( WIN32 )
 		include( InstallRequiredSystemLibraries )
 		# Preparing FreeImage and freetype dlls installation
@@ -402,14 +392,18 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		get_filename_component( FreeTypePath ${FreeTypePath} PATH)
 		get_filename_component( LibZipPath ${LIBZIP_LIBRARY} PATH)
 		get_filename_component( LibZipPath ${LibZipPath} PATH)
+
 		if ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
 			if ( ZLIB_LIBRARY_RELEASE )
 				get_filename_component( ZlibPath ${ZLIB_LIBRARY_RELEASE} PATH)
 				string( FIND ${ZlibPath} "Release" _FOUND )
+
 				if ( ${_FOUND} EQUAL -1 )
 					get_filename_component( ZlibPath ${ZlibPath} PATH)
 				endif ()
+
 				get_filename_component( ZlibPath ${ZlibPath} PATH)
+
 				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
 					add_custom_command(
 						TARGET ${PROJECT_NAME}
@@ -421,7 +415,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
 					)
 					install(
-						FILES ${FreeTypePath}/bin/zlib1.dll
+						FILES ${ZlibPath}/bin/zlib1.dll
 						DESTINATION bin
 						COMPONENT ${PROJECT_NAME}
 					)
@@ -445,10 +439,13 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			if ( ZLIB_LIBRARY_DEBUG )
 				get_filename_component( ZlibPath ${ZLIB_LIBRARY_DEBUG} PATH)
 				string( FIND ${ZlibPath} "Release" _FOUND )
+
 				if ( ${_FOUND} EQUAL -1 )
 					get_filename_component( ZlibPath ${ZlibPath} PATH)
 				endif ()
+
 				get_filename_component( ZlibPath ${ZlibPath} PATH)
+
 				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
 					add_custom_command(
 						TARGET ${PROJECT_NAME}
@@ -460,7 +457,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
 					)
 					install(
-						FILES ${FreeTypePath}/bin/zlib1.dll
+						FILES ${ZlibPath}/bin/zlib1.dll
 						DESTINATION bin
 						COMPONENT ${PROJECT_NAME}
 					)
@@ -484,14 +481,19 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 		else ()
 			get_filename_component( ZlibPath ${ZLIB_LIBRARY} PATH)
 			string( FIND ${ZlibPath} "Release" _FOUND )
+
 			if ( NOT ${_FOUND} EQUAL -1 )
 				get_filename_component( ZlibPath ${ZlibPath} PATH)
 			endif ()
+
 			string( FIND ${ZlibPath} "Debug" _FOUND )
+
 			if ( NOT ${_FOUND} EQUAL -1 )
 				get_filename_component( ZlibPath ${ZlibPath} PATH)
 			endif ()
+
 			get_filename_component( ZlibPath ${ZlibPath} PATH)
+
 			if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
 				add_custom_command(
 					TARGET ${PROJECT_NAME}
@@ -503,7 +505,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
 				)
 				install(
-					FILES ${FreeTypePath}/bin/zlib1.dll
+					FILES ${ZlibPath}/bin/zlib1.dll
 					DESTINATION bin
 					COMPONENT ${PROJECT_NAME}
 				)
@@ -518,7 +520,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
 				)
 				install(
-					FILES ${FreeTypePath}/bin/zlib.dll
+					FILES ${ZlibPath}/bin/zlib.dll
 					DESTINATION bin
 					COMPONENT ${PROJECT_NAME}
 				)
@@ -539,6 +541,21 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 				)
 			endif ()
 		endif ()
+
+		add_custom_command(
+			TARGET ${PROJECT_NAME}
+			POST_BUILD
+			COMMAND
+				${CMAKE_COMMAND} -E
+					copy_if_different
+					${LibZipPath}/bin/zip.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+			COMMAND
+				${CMAKE_COMMAND} -E
+					copy_if_different
+					${FreeImage_LIBRARY_DIR}/FreeImage.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+		)
 		install(
 			FILES
 				${FreeImage_LIBRARY_DIR}/FreeImage.dll
@@ -546,6 +563,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 			DESTINATION bin
 			COMPONENT ${PROJECT_NAME}
 		)
+
 		if ( EXISTS ${FreeTypePath}/bin/freetype6.dll )
 			add_custom_command(
 				TARGET ${PROJECT_NAME}
@@ -562,31 +580,13 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 				COMPONENT ${PROJECT_NAME}
 			)
 		endif ()
-		add_custom_command(
-			TARGET ${PROJECT_NAME}
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${FreeImage_LIBRARY_DIR}/FreeImage.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-		)
-		add_custom_command(
-			TARGET ${PROJECT_NAME}
-			POST_BUILD
-			COMMAND
-				${CMAKE_COMMAND} -E
-					copy_if_different
-					${LibZipPath}/bin/zip.dll
-					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
-		)
 	endif ()
-	
+
 	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core/CastorUtils" )
 	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
 	add_target_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
 	add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
-	
+
 	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else ()
 	set( msg "no (missing :" )

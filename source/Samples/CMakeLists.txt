@@ -132,12 +132,20 @@ function( SamplesBuild )
 					if( ${CASTOR_BUILD_SAMPLE_CASTOR_VIEWER} )
 						set( Build ${CViewer} )
 						add_subdirectory( Samples/CastorViewer )
+						set( CPACK_PACKAGE_EXECUTABLES
+							${CPACK_PACKAGE_EXECUTABLES}
+							CastorViewer "CastorViewer"
+							PARENT_SCOPE )
 						set( CViewer ${Build} PARENT_SCOPE )
 					endif()
 
 					if( ${CASTOR_BUILD_SAMPLE_CASTOR_SHAPE} )
 						set( Build ${CShape} )
 						add_subdirectory( Samples/CastorShape )
+						set( CPACK_PACKAGE_EXECUTABLES
+							${CPACK_PACKAGE_EXECUTABLES}
+							CastorShape "CastorShape"
+							PARENT_SCOPE )
 						set( CShape ${Build} PARENT_SCOPE )
 					endif()
 				elseif ( ${CASTOR_BUILD_SAMPLE_CASTOR_SHAPE} )
@@ -150,6 +158,10 @@ function( SamplesBuild )
 					set( Build ${Ocean} )
 					add_subdirectory( Samples/OceanLighting )
 					set( Ocean ${Build} PARENT_SCOPE )
+					set( CPACK_PACKAGE_EXECUTABLES
+						${CPACK_PACKAGE_EXECUTABLES}
+						OceanLighting "OceanLighting"
+						PARENT_SCOPE )
 				endif()
 			else()
 				if( NOT wxWidgets_FOUND )
@@ -170,6 +182,10 @@ function( SamplesBuild )
 				if ( ${CASTOR_BUILDGRP_INTEROP} AND ${CASTOR_BUILD_INTEROP_COM} )
 					set( Build ${CViewSh} )
 					add_subdirectory( Samples/CastorViewerSharp )
+					set( CPACK_PACKAGE_EXECUTABLES
+						${CPACK_PACKAGE_EXECUTABLES}
+						CastorViewerSharp "CastorViewer #"
+						PARENT_SCOPE )
 					set( CViewSh ${Build} PARENT_SCOPE )
 				else ()
 					set( CViewSh "no (ComCastor3D not built)" PARENT_SCOPE )

@@ -30,11 +30,16 @@ endfunction( RenderersSummary )
 
 function( RenderersSetup )
 	if( ${CASTOR_BUILD_RENDERER_OGL} )
+		cpack_add_component_group( Renderers
+			DISPLAY_NAME "Renderers"
+			DESCRIPTION "Renderer plugins usable in Castor3D."
+			PARENT_GROUP Plugins
+		)
 		cpack_add_component( GlRenderSystem
 			DISPLAY_NAME "GlRenderSystem"
 			DESCRIPTION "Enables OpenGL rendering API in Castor3D."
 			REQUIRED
-			GROUP Plugins
+			GROUP Renderers
 			DEPENDS Castor3D
 			INSTALL_TYPES Minimal Full
 		)

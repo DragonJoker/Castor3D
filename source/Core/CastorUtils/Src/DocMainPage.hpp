@@ -11,7 +11,7 @@
  *<li>FileParser, a brace file parser, along with its FileParserContext</li>
  *<li>Loader base class</li>
  *<li>BinaryLoader and TextLoader specialisations</li>
- *<li>ZipArchive <b>(new in 0.7.1)</b></li>
+ *<li>ZipArchive <b>(new in 0.8.0)</b></li>
  *</ul>
  *\subsection dsgn Design
  *<ul>
@@ -33,8 +33,8 @@
  *\subsection math Mathematics
  *<ul>
  *<li>Angle conversions</li>
- *<li>Coords, to have a point class which doesn't hold its data</li>
- *<li>Point, to have a point class which holds its data</li>
+ *<li>Coords, to have a point class which doesn't own its data</li>
+ *<li>Point, to have a point class which owns its data</li>
  *<li>Line (2D and 3D) equations</li>
  *<li>Matrix and SquareMatrix</li>
  *<li>Plane equations</li>
@@ -72,16 +72,14 @@
  *\section summ Résumé
  *\subsection data Données
  *<ul>
- *<li>File management base class</li>
- *<li>BinaryFile and TextFile specialisations</li>
- *<li>FileParser, a brace file parser, along with its FileParserContext</li>
- *<li>Loader base class</li>
- *<li>BinaryLoader and TextLoader specialisations</li>
- *<li>ZipArchive <b>(new in 0.7.1)</b></li>
+ *<li>Gestion de fichiers, binaires ou texte (BinaryFile et TextFile)</li>
+ *<li>FileParser, un analayseur de brace file, avec son FileParserContext</li>
+ *<li>Classes de chargement de données binaires ou texte (BinaryLoader et TextLoader)</li>
+ *<li>ZipArchive<b>(0.8.0)</b></li>
  *</ul>
  *\subsection dsgn Concepts
  *<ul>
- *<li>Collection, a thread-safe container</li>
+ *<li>Collection, un conteneur thread-safe</li>
  *<li>Factory</li>
  *<li>Named</li>
  *<li>NonCopyable</li>
@@ -89,30 +87,29 @@
  *</ul>
  *\subsection gfx Graphisme
  *<ul>
- *<li>Colour and ColourComponent</li>
- *<li>ContainerBox, CubeBox and SphereBox</li>
+ *<li>Colour et ColourComponent</li>
+ *<li>ContainerBox, CubeBox et SphereBox</li>
  *<li>Font, Glyph</li>
  *<li>Image</li>
- *<li>PixelFormat, Pixel and PxBuffer, to manage pixel conversions</li>
+ *<li>PixelFormat, Pixel et PxBuffer, pour les conversions de pixels</li>
  *<li>Position, Size</li>
  *</ul>
  *\subsection math Mathématiques
  *<ul>
- *<li>Angle conversions</li>
- *<li>Coords, to have a point class which doesn't hold its data</li>
- *<li>Point, to have a point class which holds its data</li>
- *<li>Line (2D and 3D) equations</li>
- *<li>Matrix and SquareMatrix</li>
- *<li>Plane equations</li>
+ *<li>conversions d'angle</li>
+ *<li>Coords, une classe de point non propriétaire de ses données</li>
+ *<li>Point, une classe de point propriétaire de ses données</li>
+ *<li>Equations de droites (2D et 3D)</li>
+ *<li>Equations de plans</li>
+ *<li>Matrix et SquareMatrix</li>
  *<li>Quaternion</li>
  *<li>SphericalVertex</li>
  *<li>Rectangle</li>
- *<li>Template math functions (such as exp, ln, ...)</li>
  *</ul>
  *\subsection misc Divers
  *<ul>
- *<li>BlockTracker and BlockTimer</li>
- *<li>Console and Logger</li>
+ *<li>BlockTracker et BlockTimer</li>
+ *<li>Console et Logger</li>
  *<li>PreciseTimer</li>
  *<li>DynamicLibrary</li>
  *<li>Resource</li>

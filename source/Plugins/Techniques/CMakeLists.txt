@@ -1,5 +1,5 @@
 option( CASTOR_BUILDGRP_TECHNIQUE "Build Castor3D RenderTechnique plugins" TRUE )
-option( CASTOR_BUILD_TECHNIQUE_DEFERRED "Build Deferred Lighting RenderTechnique plugin" TRUE )
+option( CASTOR_BUILD_TECHNIQUE_DEFERRED "Build Deferred Lighting RenderTechnique plugin" FALSE )
 option( CASTOR_BUILD_TECHNIQUE_MSAA "Build MSAA RenderTechnique plugin" TRUE )
 
 function( TechniquesInit )
@@ -63,6 +63,11 @@ function( TechniquesSummary msg )
 endfunction( TechniquesSummary )
 
 function( TechniquesSetup )
+	cpack_add_component_group( Techniques
+		DISPLAY_NAME "Techniques"
+		DESCRIPTION "Render technique plugins usable in Castor3D."
+		PARENT_GROUP Plugins
+	)
 	cpack_add_component( DirectTechnique
 		DISPLAY_NAME "DirectTechnique"
 		DESCRIPTION "Default direct rendering technique"
@@ -76,7 +81,7 @@ function( TechniquesSetup )
 			cpack_add_component( DeferredTechnique
 				DISPLAY_NAME "DeferredTechnique"
 				DESCRIPTION "Allows rendering with Deferred Lighting technique."
-				GROUP Plugins
+				GROUP Techniques
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)
@@ -85,7 +90,7 @@ function( TechniquesSetup )
 			cpack_add_component( MsaaTechnique
 				DISPLAY_NAME "MsaaTechnique"
 				DESCRIPTION "Allows rendering with MSAA technique."
-				GROUP Plugins
+				GROUP Techniques
 				DEPENDS Castor3D
 				INSTALL_TYPES Full
 			)

@@ -46,6 +46,11 @@ endfunction( PostEffectsSummary )
 
 function( PostEffectsSetup )
 	if ( ${CASTOR_BUILDGRP_POSTFX} )
+		cpack_add_component_group( PostEffects
+			DISPLAY_NAME "PostEffects"
+			DESCRIPTION "Post effect plugins usable in Castor3D."
+			PARENT_GROUP Plugins
+		)
 		if( ${CASTOR_BUILD_POSTFX_BLOOM} )
 			cpack_add_component( BloomPostEffect
 				DISPLAY_NAME "BloomPostEffect"

@@ -51,26 +51,8 @@ function( CoreSummary msg )
 endfunction( CoreSummary )
 
 function( CoreSetup )
-	cpack_add_component_group( Core
-		EXPANDED
-		DISPLAY_NAME "Core libraries"
-		DESCRIPTION "Base libraries needed to use Castor3D."
-	)
-	cpack_add_component_group( Development
-		DISPLAY_NAME "Development"
-		DESCRIPTION "All the tools needed to develop a project using Castor3D."
-	)
-	cpack_add_component_group( Documentation
-		DISPLAY_NAME "Documentation"
-		DESCRIPTION "Projects documentations"
-	)
-	cpack_add_component_group( Samples
-		DISPLAY_NAME "Samples"
-		DESCRIPTION "Sample applications and scenes using Castor3D."
-	)
-
 	cpack_add_component( CastorUtils
-		DISPLAY_NAME "CastorUtils library"
+		DISPLAY_NAME "CastorUtils"
 		DESCRIPTION "Base utilities library used in Castor3D."
 		REQUIRED
 		GROUP Core
@@ -84,7 +66,7 @@ function( CoreSetup )
 		INSTALL_TYPES Developer Full
 	)
 	cpack_add_component( CastorUtilsTest
-		DISPLAY_NAME "CastorUtilsTest"
+		DISPLAY_NAME "CastorUtils test"
 		DESCRIPTION "Test application for CastorUtils."
 		REQUIRED
 		GROUP Test
@@ -115,7 +97,7 @@ function( CoreSetup )
 		)
 
 		cpack_add_component( Castor3D
-			DISPLAY_NAME "Castor3D Engine"
+			DISPLAY_NAME "Castor3D"
 			DESCRIPTION "The main Castor3D shared library, including the necessary files to be able to build projects using Castor3D."
 			REQUIRED
 			GROUP Core
@@ -135,9 +117,8 @@ function( CoreSetup )
 			GROUP Documentation
 			INSTALL_TYPES Developer Full
 		)
-
 		cpack_add_component( Castor3D_Samples
-			DISPLAY_NAME "Sample scenes"
+			DISPLAY_NAME "Castor3D scenes"
 			DESCRIPTION "Sample scenes and data used to demonstrate the usage of Castor3D."
 			GROUP Samples
 			DEPENDS Castor3D

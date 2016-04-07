@@ -53,31 +53,26 @@ endif ()
 #--------------------------------------------------------------------------------------------------
 #	Looking for needed libraries
 #--------------------------------------------------------------------------------------------------
-set( Boost_NEEDED TRUE )
-
 if ( CMAKE_COMPILER_IS_GNUCXX )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "GCC version : ${Castor_COMPILER_VERSION}" )
-	if ( ${Castor_COMPILER_VERSION} LESS "46" )
-		find_package( Boost REQUIRED thread system chrono )
-	elseif ( ( ${Castor_COMPILER_VERSION} LESS "48" ) AND WIN32 )
-		find_package( Boost REQUIRED thread system )
+	if ( ${Castor_COMPILER_VERSION} LESS "49" )
+		message( FATAL_ERROR "Your compiler is too old, consider an update." )
 	else ()
-		set( Boost_NEEDED FALSE )
 		set( Boost_FOUND TRUE )
 	endif ()
 elseif ( ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang" )
 	DumpCompilerVersion( Castor_COMPILER_VERSION )
 	msg_debug( "clang version : ${Castor_COMPILER_VERSION}" )
-	set( Boost_NEEDED FALSE )
 	set( Boost_FOUND TRUE )
-elseif ( BORLAND )
-	find_package( Boost REQUIRED thread system )
-elseif ( NOT MSVC11 AND NOT MSVC12 AND NOT MSVC14 )
-	find_package( Boost REQUIRED thread system chrono )
+elseif ( MSVC )
+	if ( MSVC60 OR MSVC70 OR MSVC71 OR MSVC80 OR MSVC10 OR MSVC11 OR MSVC12 )
+		message( FATAL_ERROR "Your compiler is too old, consider an update." )
+	else ()
+		set( Boost_FOUND TRUE )
+	endif ()
 else ()
-	set( Boost_NEEDED FALSE )
-	set( Boost_FOUND TRUE )
+	message( FATAL_ERROR "Unsupported compiler." )
 endif ()
 
 find_package( Doxygen )
@@ -90,7 +85,7 @@ include_directories( Core/Castor3D/Src )
 include_directories( Core/GlslWriter/Src )
 include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Core/Castor3D/Src )
 
-if( Boost_FOUND AND Boost_NEEDED )
+if( Boost_FOUND )
 	include_directories( ${Boost_INCLUDE_DIRS} )
 	message( STATUS "+ Found Boost" )
 endif()
@@ -190,7 +185,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 				if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )
 					set( CPACK_GENERATOR "WIX" )
 					set( CPACK_PACKAGE_INSTALL_DIRECTORY "Castor3D" )
-					set( CPACK_WIX_UPGRADE_GUID "6B17505B-A8B5-4EEC-8978-1BF24715A8A1" )
+					set( CPACK_WIX_UPGRADE_GUID "42BDC578-D000-4995-A2F7-3C94B618CBF3" )
 					set( CPACK_WIX_PRODUCT_GUID "02ACFE05-CFCE-4E1D-85DA-59A068DDCF70" )
 					set( CPACK_WIX_PRODUCT_ICON "${PARENT_DIR}/install/castor.ico" )
 					set( CPACK_WIX_UI_DIALOG "${PARENT_DIR}/install/dialog.bmp" )
@@ -227,24 +222,51 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			cpack_add_install_type( Developer )
 			cpack_add_install_type( Full )
 
-			cpack_add_component_group( Test
-				DISPLAY_NAME "Test"
-				DESCRIPTION "Applications used to perform regression and performance tests."
+			cpack_add_component_group( Main
+				EXPANDED
+				DISPLAY_NAME "Main"
+				DESCRIPTION "Main components to run Castor3D."
+			)
+
+			cpack_add_component_group( Core
+				DISPLAY_NAME "Core libraries"
+				DESCRIPTION "Base libraries needed to use Castor3D."
+				PARENT_GROUP Main
 			)
 
 			cpack_add_component_group( Plugins
 				DISPLAY_NAME "Plugins"
 				DESCRIPTION "Plugins usable in Castor3D."
+				PARENT_GROUP Main
 			)
 
 			cpack_add_component_group( Tools
 				DISPLAY_NAME "Tools"
 				DESCRIPTION "Some tools"
+				PARENT_GROUP Main
 			)
 
 			cpack_add_component_group( Samples
 				DISPLAY_NAME "Samples"
-				DESCRIPTION "Samples scenes and applications, to demonstrate Castor3D."
+				DESCRIPTION "Sample applications and scenes using Castor3D."
+				PARENT_GROUP Main
+			)
+
+			cpack_add_component_group( Development
+				DISPLAY_NAME "Development"
+				DESCRIPTION "All the tools needed to develop a project using Castor3D."
+			)
+
+			cpack_add_component_group( Test
+				DISPLAY_NAME "Test"
+				DESCRIPTION "Applications used to perform regression and performance tests."
+				PARENT_GROUP Development
+			)
+
+			cpack_add_component_group( Documentation
+				DISPLAY_NAME "Documentation"
+				DESCRIPTION "Projects documentations"
+				PARENT_GROUP Development
 			)
 
 			CoreSetup()
