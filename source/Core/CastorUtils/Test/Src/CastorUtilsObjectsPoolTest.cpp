@@ -129,7 +129,7 @@ namespace Testing
 
 	void CastorUtilsObjectsPoolTest::FixedSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		FixedSizePerformance::Checks< PlacementNew::SFixedChecks >();
+		FixedSizePerformance::Checks< PlacementNew::SFixedChecks< AllocPolicies::SPlacementNewPolicy > >();
 		FixedSizePerformance::Checks< Castor::eMEMDATA_TYPE_FIXED >();
 		FixedSizePerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_MARKED >();
 		FixedSizePerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING >();
@@ -138,10 +138,21 @@ namespace Testing
 		FixedSizePerformance::Checks< Traditional::SFixedChecks< AllocPolicies::SMallocFreePolicy > >();
 	}
 
+	void CastorUtilsObjectsPoolTest::AllDeallPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
+	{
+		AllDeallPerformance::Checks< PlacementNew::SAllDeallChecks< AllocPolicies::SPlacementNewPolicy > >();
+		AllDeallPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED >();
+		AllDeallPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_MARKED >();
+		AllDeallPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING >();
+		AllDeallPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING_MARKED >();
+		AllDeallPerformance::Checks< Traditional::SAllDeallChecks< AllocPolicies::SNewDeletePolicy > >();
+		AllDeallPerformance::Checks< Traditional::SVariableChecks< AllocPolicies::SMallocFreePolicy > >();
+	}
+
 	void CastorUtilsObjectsPoolTest::ScatteredMemoryPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
 		ScatteredMemoryPerformance::Index index;
-		ScatteredMemoryPerformance::Checks< PlacementNew::SScatteredChecks >( index );
+		ScatteredMemoryPerformance::Checks< PlacementNew::SScatteredChecks< AllocPolicies::SPlacementNewPolicy > >( index );
 		ScatteredMemoryPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED >( index );
 		ScatteredMemoryPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_MARKED >( index );
 		ScatteredMemoryPerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING >( index );
@@ -152,7 +163,7 @@ namespace Testing
 
 	void CastorUtilsObjectsPoolTest::VariableSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount )
 	{
-		VariableSizePerformance::Checks< PlacementNew::SVariableChecks >();
+		VariableSizePerformance::Checks< PlacementNew::SVariableChecks< AllocPolicies::SPlacementNewPolicy > >();
 		VariableSizePerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING >();
 		VariableSizePerformance::Checks< Castor::eMEMDATA_TYPE_FIXED_GROWING_MARKED >();
 		VariableSizePerformance::Checks< Traditional::SVariableChecks< AllocPolicies::SNewDeletePolicy > >();

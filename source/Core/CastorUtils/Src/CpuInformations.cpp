@@ -6,14 +6,25 @@
 #	include <Windows.h>
 #else
 #	include <X11/Xlib.h>
+#	include <cpuid.h>
 #endif
 
 namespace Castor
 {
 #if defined( __GNUG__ )
 
-#	define call_cpuid( func, ax, bx, cx, dx )\
-	__asm__ __volatile__ ( "cpuid": "=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
+	void call_cpuid( uint32_t func, int32_t & p_a, int32_t & p_b, int32_t & p_c, int32_t & p_d )
+	{
+		uint32_t l_a;
+		uint32_t l_b;
+		uint32_t l_c;
+		uint32_t l_d;
+		__get_cpuid( func, &l_a, &l_b, &l_c, &l_d );
+		p_a = int32_t( l_a );
+		p_b = int32_t( l_b );
+		p_c = int32_t( l_c );
+		p_d = int32_t( l_d );
+	}
 
 #elif defined( _MSC_VER )
 

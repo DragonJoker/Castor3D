@@ -36,7 +36,7 @@ struct TinyObj
 	int valueA;
 };
 
-/** Petit objet, d�rivant de TinyObj et contenant en plus un double, et un float
+/** Petit objet, dérivant de TinyObj et contenant en plus un double, et un float
 */
 struct SmallObj
 		: public TinyObj
@@ -45,7 +45,7 @@ struct SmallObj
 	float valueC;
 };
 
-/** Objet, d�rivant de SmallObj et contenant en plus un double, un float, et un tableau de 1 KO
+/** Objet, dérivant de SmallObj et contenant en plus un double, un float, et un tableau de 1 KO
 */
 struct Obj
 		: public SmallObj
@@ -55,7 +55,7 @@ struct Obj
 	uint8_t valueF[1024];
 };
 
-/** Gros objet, d�rivant de Obj et contenant en plus un tableau de 1 MO
+/** Gros objet, dérivant de Obj et contenant en plus un tableau de 1 MO
 */
 struct BigObj
 		: public Obj
@@ -84,17 +84,17 @@ static const size_t MAX_SIZE = 1024;
 static const size_t MAX_SIZE = 1024 * 1024 * 128;
 #endif
 
-//! Nombre de int allou�s
+//! Nombre de int alloués
 static const size_t INT_COUNT = MAX_SIZE / sizeof( int );
-//! Nombre de TinyObj allou�s
+//! Nombre de TinyObj alloués
 static const size_t TINYOBJ_COUNT = MAX_SIZE / sizeof( TinyObj );
-//! Nombre de SmallObj allou�s
+//! Nombre de SmallObj alloués
 static const size_t SMALLOBJ_COUNT = MAX_SIZE / sizeof( SmallObj );
-//! Nombre de Obj allou�s
+//! Nombre de Obj alloués
 static const size_t OBJ_COUNT = MAX_SIZE / sizeof( Obj );
-//! Nombre de BigObj allou�s
+//! Nombre de BigObj alloués
 static const size_t BIGOBJ_COUNT = MAX_SIZE / sizeof( BigObj );
-//! Nombre de BigObject allou�s
+//! Nombre de BigObject alloués
 static const size_t BIGOBJECT_COUNT = MAX_SIZE / sizeof( BigObject );
 
 typedef std::chrono::high_resolution_clock Clock;
@@ -114,11 +114,11 @@ inline TimePoint Initialise()
 	return time;
 }
 
-/** Compl�te le temps de l'�tape courante, et affiche le message de l'�tape suivante
+/** Complàte le temps de l'étape courante, et affiche le message de l'étape suivante
 @param[in] message
-Le message de l'�tape suivante
+Le message de l'étape suivante
 @param[in, out] time
-L'index de temps courant, re�oit le nouvel index
+L'index de temps courant, reçoit le nouvel index
 */
 inline void NextStep( char const * message, TimePoint & time )
 {
@@ -129,14 +129,14 @@ inline void NextStep( char const * message, TimePoint & time )
 
 /** Affiche simplement le message de finalisation
 @param[in, out] time
-L'index de temps courant, re�oit le nouvel index
+L'index de temps courant, reçoit le nouvel index
 */
 inline void Finalise( TimePoint & time )
 {
 	std::cout << std::chrono::duration_cast< std::chrono::milliseconds >( Clock::now() - time ).count() << "ms" << std::endl;
 }
 
-//! Macro pour r�duire l'�criture de tout ce bloc
+//! Macro pour réduire l'écriture de tout ce bloc
 #define MAKE_POOL_CHECKS( checks, type )\
 	checks< type >::Run< int >();\
 	checks< type >::Run< TinyObj >();\
@@ -144,7 +144,7 @@ inline void Finalise( TimePoint & time )
 	checks< type >::Run< Obj >();\
 	checks< type >::Run< BigObject >();
 
-//! Macro pour r�duire l'�criture de tout ce bloc
+//! Macro pour réduire l'écriture de tout ce bloc
 #define MAKE_POOL_PTR_CHECKS( checks, type )\
 	checks< type >::Run< int *, int * >();\
 	checks< type >::Run< TinyObj *, TinyObj * >();\
@@ -152,7 +152,7 @@ inline void Finalise( TimePoint & time )
 	checks< type >::Run< Obj *, Obj * >();\
 	checks< type >::Run< BigObject *, BigObject * >();
 
-//! Macro pour r�duire l'�criture de tout ce bloc, utilis� pour les tests en m�moire trou�e
+//! Macro pour réduire l'écriture de tout ce bloc, utilisé pour les tests en mémoire trouée
 #define MAKE_POOL_SCATTERED_CHECKS( checks, type, index )\
 	checks< type >::Run< int >( index.m_intIndex );\
 	checks< type >::Run< TinyObj >( index.m_tinyObjIndex );\
@@ -160,7 +160,7 @@ inline void Finalise( TimePoint & time )
 	checks< type >::Run< Obj >( index.m_objIndex );\
 	checks< type >::Run< BigObject >( index.m_bigObjIndex );
 
-//! Macro pour r�duire l'�criture de tout ce bloc, utilis� pour les tests en m�moire trou�e
+//! Macro pour réduire l'écriture de tout ce bloc, utilisé pour les tests en mémoire trouée
 #define MAKE_POOL_PTR_SCATTERED_CHECKS( checks, type, index )\
 	checks< type >::Run< int *, int * >( index.m_intIndex );\
 	checks< type >::Run< TinyObj *, TinyObj * >( index.m_tinyObjIndex );\
@@ -181,7 +181,7 @@ namespace AllocPolicies
 		@param[in] pool
 		Le pool d'objets
 		@param[in] params
-		Les param�tres de construction d'un objet
+		Les paramètres de construction d'un objet
 		*/
 		template< typename Pool, typename ... Params >
 		static inline Stored Allocate( Pool & pool, Params ... params )
@@ -189,11 +189,11 @@ namespace AllocPolicies
 			return pool.Allocate( params... );
 		}
 
-		/** D�salloue un objet
+		/** Désalloue un objet
 		@param[in] pool
 		Le pool d'objets
 		@param[in] param
-		L'objet � d�sallouer
+		L'objet à désallouer
 		*/
 		template< typename Pool >
 		static inline void Deallocate( Pool & pool, Stored param )
@@ -211,7 +211,7 @@ namespace AllocPolicies
 	{
 		/** Alloue un objet, retourne un pointeur sur cet objet
 		@param[in] params
-		Les param�tres de construction d'un objet
+		Les paramètres de construction d'un objet
 		*/
 		template< typename type, typename ... Params >
 		static inline type * Allocate( Params ... params )
@@ -219,9 +219,9 @@ namespace AllocPolicies
 			return new type( params... );
 		}
 
-		/** D�salloue un objet
+		/** Désalloue un objet
 		@param[in] param
-		L'objet � d�sallouer
+		L'objet à désallouer
 		*/
 		template< typename type >
 		static inline void Deallocate( type * param )
@@ -236,7 +236,7 @@ namespace AllocPolicies
 	{
 		/** Alloue un objet, retourne un pointeur sur cet objet
 		@param[in] params
-		Les param�tres de construction d'un objet
+		Les paramètres de construction d'un objet
 		*/
 		template< typename type, typename ... Params >
 		static inline type * Allocate( Params ... params )
@@ -244,14 +244,39 @@ namespace AllocPolicies
 			return new( malloc( sizeof( type ) ) )type( params... );
 		}
 
-		/** D�salloue un objet
+		/** Désalloue un objet
 		@param[in] param
-		L'objet � d�sallouer
+		L'objet à désallouer
 		*/
 		template< typename type >
 		static inline void Deallocate( type * param )
 		{
 			free( param );
+		}
+	};
+
+	/** Politique d'allocation, en utilisant le couple new/delete
+	*/
+	struct SPlacementNewPolicy
+	{
+		/** Alloue un objet, retourne un pointeur sur cet objet
+		@param[in] params
+		Les paramètres de construction d'un objet
+		*/
+		template< typename type, typename ... Params >
+		static inline type * Allocate( void * mem, Params ... params )
+		{
+			return new ( mem ) type( params... );
+		}
+
+		/** Désalloue un objet
+		@param[in] param
+		L'objet à désallouer
+		*/
+		template< typename type >
+		static inline void Deallocate( type * param )
+		{
+			param->~type();
 		}
 	};
 }

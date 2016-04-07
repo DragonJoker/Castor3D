@@ -35,6 +35,7 @@ namespace Testing
 		void ObjectPoolTest( uint32_t & p_errCount, uint32_t & p_testCount );
 		void AlignedObjectPoolTest( uint32_t & p_errCount, uint32_t & p_testCount );
 		void FixedSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
+		void AllDeallPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
 		void ScatteredMemoryPerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
 		void VariableSizePerformanceTest( uint32_t & p_errCount, uint32_t & p_testCount );
 		void UniquePoolTest( uint32_t & p_errCount, uint32_t & p_testCount );
