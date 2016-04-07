@@ -1,4 +1,11 @@
-<map id="Castor3D::PostFxPlugin" name="Castor3D::PostFxPlugin">
-<area shape="rect" id="node1" title="Post effect plugin class." alt="" coords="5,80,168,107"/>
-<area shape="rect" id="node2" href="$d4/dd1/a01797.html" title="Plugin Base class." alt="" coords="11,5,162,32"/>
+<map id="Castor3D::Generator" name="Castor3D::Generator">
+<area shape="rect" id="node1" title=" " alt="" coords="515,94,656,121"/>
+<area shape="rect" id="node5" href="$df/dee/a01825.html" title=" " alt="" coords="773,35,915,76"/>
+<area shape="rect" id="node2" href="$db/d6a/a02613.html" title="Texture unit representation." alt="" coords="243,82,393,109"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,82,193,109"/>
+<area shape="rect" id="node4" title=" " alt="" coords="1020,69,1175,111"/>
+<area shape="rect" id="node6" title=" " alt="" coords="516,5,655,47"/>
+<area shape="rect" id="node7" title="STL class." alt="" coords="276,13,360,39"/>
+<area shape="rect" id="node8" href="$d5/d77/a01749.html" title="Main System." alt="" coords="256,133,380,159"/>
+<area shape="rect" id="node9" title=" " alt="" coords="13,133,185,159"/>
 </map>

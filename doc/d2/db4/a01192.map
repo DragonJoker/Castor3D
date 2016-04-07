@@ -1,4 +1,4 @@
-<map id="Castor3D::ChunkFiller&lt; Castor::Point2ui &gt;" name="Castor3D::ChunkFiller&lt; Castor::Point2ui &gt;">
-<area shape="rect" id="node1" title="Chunk filler." alt="" coords="20,80,169,121"/>
-<area shape="rect" id="node2" href="$de/df6/a01141.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
+<map id="Castor3D::BorderPanelOverlay" name="Castor3D::BorderPanelOverlay">
+<area shape="rect" id="node1" title="A rectangular overlay with a border." alt="" coords="5,80,204,107"/>
+<area shape="rect" id="node2" href="$d8/db2/a02125.html" title="Holds specific members for an overlay category." alt="" coords="15,5,194,32"/>
 </map>

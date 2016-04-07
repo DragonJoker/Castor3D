@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::SamplerRenderer Class Reference</title>
+<title>Castor3D: Castor3D::ElementInitialiser&lt; Elem, typename std::enable_if&lt; is_initialisable&lt; Elem &gt;::value &amp;&amp;is_instant&lt; Elem &gt;::value &gt;::type &gt; Struct Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,183 +39,58 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/d92/a01977.html">SamplerRenderer</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/d92/a01977.html">ElementInitialiser&lt; Elem, typename std::enable_if&lt; is_initialisable&lt; Elem &gt;::value &amp;&amp;is_instant&lt; Elem &gt;::value &gt;::type &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="../../d0/db6/a01974.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::SamplerRenderer Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">Castor3D::ElementInitialiser&lt; Elem, typename std::enable_if&lt; is_initialisable&lt; Elem &gt;::value &amp;&amp;is_instant&lt; Elem &gt;::value &gt;::type &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="../../d6/d9a/a01965.html" title="Defines a sampler for a texture.">Sampler</a> renderer.  
+<p>Helper structure to enable cleanup if a type supports it.  
  <a href="../../d5/d92/a01977.html#details">More...</a></p>
-<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::SamplerRenderer:</div>
-<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d9/da1/a01976.png" border="0" usemap="#Castor3D_1_1SamplerRenderer_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1SamplerRenderer_inherit__map" id="Castor3D_1_1SamplerRenderer_inherit__map">
-<area shape="rect"  title="Sampler renderer." alt="" coords="15,95,199,121"/>
-<area shape="rect"  href="../../d8/ded/a01113.html" title=" " alt="" coords="5,5,208,47"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
-<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::SamplerRenderer:</div>
-<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
-</div>
-<div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../dd/d4e/a01975.png" border="0" usemap="#Castor3D_1_1SamplerRenderer_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1SamplerRenderer_coll__map" id="Castor3D_1_1SamplerRenderer_coll__map">
-<area shape="rect"  title="Sampler renderer." alt="" coords="5,9,189,36"/>
-<area shape="rect"  title=" " alt="" coords="257,43,481,69"/>
-<area shape="rect"  href="../../d8/ded/a01113.html" title=" " alt="" coords="1311,27,1513,69"/>
-<area shape="rect"  href="../../d6/d56/a01861.html" title="The render system representation." alt="" coords="968,125,1139,152"/>
-<area shape="rect"  href="../../d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="1347,193,1477,220"/>
-<area shape="rect"  href="../../d6/d53/a01789.html" title=" " alt="" coords="1661,193,1819,220"/>
-<area shape="rect"  title=" " alt="" coords="973,216,1134,243"/>
-<area shape="rect"  title=" " alt="" coords="960,298,1147,339"/>
-<area shape="rect"  title=" " alt="" coords="629,125,795,152"/>
-<area shape="rect"  href="../../d6/d9a/a01965.html" title="Defines a sampler for a texture." alt="" coords="987,44,1119,71"/>
-<area shape="rect"  href="../../d6/d8b/a01117.html" title=" " alt="" coords="611,43,813,85"/>
-<area shape="rect"  href="../../db/d06/a01509.html" title="Main System." alt="" coords="307,93,431,120"/>
-<area shape="rect"  title=" " alt="" coords="11,93,183,120"/>
-</map>
-<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
-Public Member Functions</h2></td></tr>
-<tr class="memitem:affd91c912c20f1968b4b1bfbe6b1aca6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d92/a01977.html#affd91c912c20f1968b4b1bfbe6b1aca6">SamplerRenderer</a> (<a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *p_pRenderSystem)</td></tr>
-<tr class="memdesc:affd91c912c20f1968b4b1bfbe6b1aca6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#affd91c912c20f1968b4b1bfbe6b1aca6">More...</a><br /></td></tr>
-<tr class="separator:affd91c912c20f1968b4b1bfbe6b1aca6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25b4ce355f88f2944b7fcd3f2b5ddced"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d92/a01977.html#a25b4ce355f88f2944b7fcd3f2b5ddced">~SamplerRenderer</a> ()</td></tr>
-<tr class="memdesc:a25b4ce355f88f2944b7fcd3f2b5ddced"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a25b4ce355f88f2944b7fcd3f2b5ddced">More...</a><br /></td></tr>
-<tr class="separator:a25b4ce355f88f2944b7fcd3f2b5ddced"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae31affb11aee91598907abc35e76c129"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d92/a01977.html#ae31affb11aee91598907abc35e76c129">Initialise</a> ()=0</td></tr>
-<tr class="memdesc:ae31affb11aee91598907abc35e76c129"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises the sampler.  <a href="#ae31affb11aee91598907abc35e76c129">More...</a><br /></td></tr>
-<tr class="separator:ae31affb11aee91598907abc35e76c129"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af43ad1e75ff1c883b5c93c1b2bad82ec"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d92/a01977.html#af43ad1e75ff1c883b5c93c1b2bad82ec">Cleanup</a> ()=0</td></tr>
-<tr class="memdesc:af43ad1e75ff1c883b5c93c1b2bad82ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanups the sampler.  <a href="#af43ad1e75ff1c883b5c93c1b2bad82ec">More...</a><br /></td></tr>
-<tr class="separator:af43ad1e75ff1c883b5c93c1b2bad82ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3049111de56065160748dce9bd3b83a1"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d92/a01977.html#a3049111de56065160748dce9bd3b83a1">Bind</a> (<a class="el" href="../../dd/d47/a00445.html#add6386b2870c589d9964084f90ec8695">eTEXTURE_DIMENSION</a> p_eDimension, uint32_t p_uiIndex)=0</td></tr>
-<tr class="memdesc:a3049111de56065160748dce9bd3b83a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the sampler.  <a href="#a3049111de56065160748dce9bd3b83a1">More...</a><br /></td></tr>
-<tr class="separator:a3049111de56065160748dce9bd3b83a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af3d4ac7e1ab05e791f547a3d028c9487"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d92/a01977.html#af3d4ac7e1ab05e791f547a3d028c9487">Unbind</a> ()=0</td></tr>
-<tr class="memdesc:af3d4ac7e1ab05e791f547a3d028c9487"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes the sampler.  <a href="#af3d4ac7e1ab05e791f547a3d028c9487">More...</a><br /></td></tr>
-<tr class="separator:af3d4ac7e1ab05e791f547a3d028c9487"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a01113"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01113')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Sampler, SamplerRenderer &gt;</a></td></tr>
-<tr class="memitem:a62b24499bdbfd09f5126e37d135227bf inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a62b24499bdbfd09f5126e37d135227bf">~Renderer</a> ()</td></tr>
-<tr class="memdesc:a62b24499bdbfd09f5126e37d135227bf inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d8/ded/a01113.html#a62b24499bdbfd09f5126e37d135227bf">More...</a><br /></td></tr>
-<tr class="separator:a62b24499bdbfd09f5126e37d135227bf inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d3871f157dcdd6d1c76f2a56f7e5778 inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a6d3871f157dcdd6d1c76f2a56f7e5778">GetRenderSystem</a> () const</td></tr>
-<tr class="memdesc:a6d3871f157dcdd6d1c76f2a56f7e5778 inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the RenderSystem.  <a href="../../d8/ded/a01113.html#a6d3871f157dcdd6d1c76f2a56f7e5778">More...</a><br /></td></tr>
-<tr class="separator:a6d3871f157dcdd6d1c76f2a56f7e5778 inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad720e3b3c527baf75da63859142628c9 inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#ad720e3b3c527baf75da63859142628c9">GetTarget</a> () const</td></tr>
-<tr class="memdesc:ad720e3b3c527baf75da63859142628c9 inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the Renderable.  <a href="../../d8/ded/a01113.html#ad720e3b3c527baf75da63859142628c9">More...</a><br /></td></tr>
-<tr class="separator:ad720e3b3c527baf75da63859142628c9 inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adce7499d06169f5c1cf97240f5bd76d7 inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#adce7499d06169f5c1cf97240f5bd76d7">SetTarget</a> (<a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a> p_target)</td></tr>
-<tr class="memdesc:adce7499d06169f5c1cf97240f5bd76d7 inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Renderable.  <a href="../../d8/ded/a01113.html#adce7499d06169f5c1cf97240f5bd76d7">More...</a><br /></td></tr>
-<tr class="separator:adce7499d06169f5c1cf97240f5bd76d7 inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_types_a01113"><td colspan="2" onclick="javascript:toggleInherit('pro_types_a01113')"><img src="../../closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Sampler, SamplerRenderer &gt;</a></td></tr>
-<tr class="memitem:a99351028f5f38f61d008225dcf176d65 inherit pro_types_a01113"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="../../d6/d9a/a01965.html">Sampler</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a></td></tr>
-<tr class="separator:a99351028f5f38f61d008225dcf176d65 inherit pro_types_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a01113"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a01113')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Sampler, SamplerRenderer &gt;</a></td></tr>
-<tr class="memitem:a0599157b1085db1955655f59d1cddc06 inherit pro_methods_a01113"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a0599157b1085db1955655f59d1cddc06">Renderer</a> (<a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *p_pRenderSystem)</td></tr>
-<tr class="memdesc:a0599157b1085db1955655f59d1cddc06 inherit pro_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d8/ded/a01113.html#a0599157b1085db1955655f59d1cddc06">More...</a><br /></td></tr>
-<tr class="separator:a0599157b1085db1955655f59d1cddc06 inherit pro_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a01113"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a01113')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Sampler, SamplerRenderer &gt;</a></td></tr>
-<tr class="memitem:a507f8959589242f9f48f80708f587618 inherit pro_attribs_a01113"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a507f8959589242f9f48f80708f587618">m_target</a></td></tr>
-<tr class="separator:a507f8959589242f9f48f80708f587618 inherit pro_attribs_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cad8ba2930f7cd90e08ef6d016e5f0f inherit pro_attribs_a01113"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a3cad8ba2930f7cd90e08ef6d016e5f0f">m_pRenderSystem</a></td></tr>
-<tr class="separator:a3cad8ba2930f7cd90e08ef6d016e5f0f inherit pro_attribs_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:aa7ebfc8d5c927795f8c96d2ac2158c81"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/d92/a01977.html#aa7ebfc8d5c927795f8c96d2ac2158c81">Initialise</a> (<a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;p_engine, Elem &amp;p_element)</td></tr>
+<tr class="separator:aa7ebfc8d5c927795f8c96d2ac2158c81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../d6/d9a/a01965.html" title="Defines a sampler for a texture.">Sampler</a> renderer. </p>
+<div class="textblock"><h3>template&lt;typename Elem&gt;<br />
+struct Castor3D::ElementInitialiser&lt; Elem, typename std::enable_if&lt; is_initialisable&lt; Elem &gt;::value &amp;&amp;is_instant&lt; Elem &gt;::value &gt;::type &gt;</h3>
+
+<p>Helper structure to enable cleanup if a type supports it. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>25/03/2013 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.0 </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="affd91c912c20f1968b4b1bfbe6b1aca6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#affd91c912c20f1968b4b1bfbe6b1aca6">&#9670;&nbsp;</a></span>SamplerRenderer()</h2>
+<dl class="section date"><dt>Date</dt><dd>13/10/2015 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8.0</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Specialisation for types that support cleanup. </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa7ebfc8d5c927795f8c96d2ac2158c81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7ebfc8d5c927795f8c96d2ac2158c81">&#9670;&nbsp;</a></span>Initialise()</h2>
 
 <div class="memitem">
 <div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor3D::SamplerRenderer::SamplerRenderer </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td>
-          <td class="paramname"><em>p_pRenderSystem</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Constructor. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p_pRenderSystem</td><td>The render system </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a25b4ce355f88f2944b7fcd3f2b5ddced"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a25b4ce355f88f2944b7fcd3f2b5ddced">&#9670;&nbsp;</a></span>~SamplerRenderer()</h2>
-
-<div class="memitem">
-<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Elem &gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual Castor3D::SamplerRenderer::~SamplerRenderer </td>
+          <td class="memname">static void <a class="el" href="../../db/d49/a01969.html">Castor3D::ElementInitialiser</a>&lt; Elem, typename std::enable_if&lt; <a class="el" href="../../d5/d6f/a01281.html">is_initialisable</a>&lt; Elem &gt;::value &amp;&amp;<a class="el" href="../../db/d4b/a01309.html">is_instant</a>&lt; Elem &gt;::value &gt;::type &gt;::Initialise </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Destructor. </p>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3049111de56065160748dce9bd3b83a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3049111de56065160748dce9bd3b83a1">&#9670;&nbsp;</a></span>Bind()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::SamplerRenderer::Bind </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/d47/a00445.html#add6386b2870c589d9964084f90ec8695">eTEXTURE_DIMENSION</a>&#160;</td>
-          <td class="paramname"><em>p_eDimension</em>, </td>
+          <td class="paramtype"><a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_engine</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>p_uiIndex</em>&#160;</td>
+          <td class="paramtype">Elem &amp;&#160;</td>
+          <td class="paramname"><em>p_element</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -225,112 +100,20 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Applies the sampler. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_eDimension</td><td>The texture dimension </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_uiIndex</td><td>The sampler index </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
-
 </div>
 </div>
-<a id="af43ad1e75ff1c883b5c93c1b2bad82ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af43ad1e75ff1c883b5c93c1b2bad82ec">&#9670;&nbsp;</a></span>Cleanup()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Castor3D::SamplerRenderer::Cleanup </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Cleanups the sampler. </p>
-
-</div>
-</div>
-<a id="ae31affb11aee91598907abc35e76c129"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae31affb11aee91598907abc35e76c129">&#9670;&nbsp;</a></span>Initialise()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::SamplerRenderer::Initialise </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Initialises the sampler. </p>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
-
-</div>
-</div>
-<a id="af3d4ac7e1ab05e791f547a3d028c9487"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af3d4ac7e1ab05e791f547a3d028c9487">&#9670;&nbsp;</a></span>Unbind()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Castor3D::SamplerRenderer::Unbind </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Removes the sampler. </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../dd/d4e/a00329.html">SamplerRenderer.hpp</a></li>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d9/d39/a00257.html">Manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:10 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:34 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

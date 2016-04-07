@@ -1,4 +1,5 @@
-<map id="Castor3D::OverlayFactory" name="Castor3D::OverlayFactory">
-<area shape="rect" id="node1" title="The mesh factory." alt="" coords="22,95,193,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,209,47"/>
+<map id="Castor3D::DividerPlugin" name="Castor3D::DividerPlugin">
+<area shape="rect" id="node1" title="Divider Plugin class." alt="" coords="20,155,179,181"/>
+<area shape="rect" id="node2" href="$dc/d43/a02205.html" title="Plugin Base class." alt="" coords="24,80,175,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,193,32"/>
 </map>

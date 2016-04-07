@@ -1,5 +1,12 @@
-<map id="Castor3D::MovingBone" name="Castor3D::MovingBone">
-<area shape="rect" id="node1" title="Implementation of MovingObjectBase for Bones." alt="" coords="24,171,179,197"/>
-<area shape="rect" id="node2" href="$d9/dc5/a01705.html" title="Class which represents the moving things." alt="" coords="5,95,197,121"/>
-<area shape="rect" id="node3" title=" " alt="" coords="80,5,123,32"/>
+<map id="Castor3D::Context" name="Castor3D::Context">
+<area shape="rect" id="node1" title="Class which holds the rendering context." alt="" coords="615,157,744,184"/>
+<area shape="rect" id="node2" title=" " alt="" coords="243,5,477,32"/>
+<area shape="rect" id="node3" href="$d0/dc0/a02365.html" title="Render window representation." alt="" coords="275,56,445,83"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,31,193,57"/>
+<area shape="rect" id="node5" title=" " alt="" coords="68,81,131,108"/>
+<area shape="rect" id="node6" href="$de/d61/a01205.html" title="Description of all elements in a vertex buffer." alt="" coords="269,107,451,133"/>
+<area shape="rect" id="node7" title=" " alt="" coords="259,157,461,184"/>
+<area shape="rect" id="node8" title=" " alt="" coords="339,208,381,235"/>
+<area shape="rect" id="node9" href="$d3/d32/a02665.html" title="Class to represent a viewport." alt="" coords="293,259,427,285"/>
+<area shape="rect" id="node10" title=" " alt="" coords="261,310,459,351"/>
 </map>

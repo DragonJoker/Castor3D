@@ -1,4 +1,10 @@
-<map id="Castor3D::Skeleton" name="Castor3D::Skeleton">
-<area shape="rect" id="node1" title="The skeleton, holds each bone." alt="" coords="7,80,142,107"/>
-<area shape="rect" id="node2" href="$d0/d28/a00997.html" title="Animable public interface." alt="" coords="5,5,144,32"/>
+<map id="Castor3D::MovableObject" name="Castor3D::MovableObject">
+<area shape="rect" id="node1" title="Movable object class." alt="" coords="244,81,413,108"/>
+<area shape="rect" id="node5" href="$d6/d6e/a01137.html" title="Billboards list." alt="" coords="461,5,616,32"/>
+<area shape="rect" id="node6" href="$da/d19/a01217.html" title="Class which represents a Camera." alt="" coords="474,56,603,83"/>
+<area shape="rect" id="node7" href="$d7/db1/a01837.html" title="Geometry handler class." alt="" coords="468,107,609,133"/>
+<area shape="rect" id="node8" href="$d2/d54/a01917.html" title="Light source implementation." alt="" coords="483,157,595,184"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,15,196,57"/>
+<area shape="rect" id="node3" title=" " alt="" coords="8,81,193,108"/>
+<area shape="rect" id="node4" href="$d2/df3/a01085.html" title="Animable public interface." alt="" coords="31,132,170,159"/>
 </map>

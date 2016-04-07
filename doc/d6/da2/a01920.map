@@ -1,0 +1,6 @@
+<map id="Castor3D::LightCategory" name="Castor3D::LightCategory">
+<area shape="rect" id="node1" title="Holds light components." alt="" coords="193,5,357,32"/>
+<area shape="rect" id="node2" href="$d2/d70/a01729.html" title="Class which represents a Directional Light." alt="" coords="5,80,179,107"/>
+<area shape="rect" id="node3" href="$d4/dc0/a02225.html" title="Class which represents a PointLight." alt="" coords="203,80,346,107"/>
+<area shape="rect" id="node4" href="$d0/dbf/a02521.html" title="Class which represents a SpotLight." alt="" coords="371,80,509,107"/>
+</map>

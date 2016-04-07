@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::PassRenderer Class Reference</title>
+<title>Castor3D: Castor3D::FrameBuffer Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,7 +39,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d6/d27/a01781.html">PassRenderer</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d6/d27/a01781.html">FrameBuffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -49,147 +49,202 @@ $(function() {
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../df/d21/a01778.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::PassRenderer Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
+<div class="title">Castor3D::FrameBuffer Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="../../d7/d6d/a01769.html" title="Definition of a material pass.">Pass</a> renderer.  
+<p>Frame buffer class.  
  <a href="../../d6/d27/a01781.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::PassRenderer:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::FrameBuffer:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d0/dce/a01780.png" border="0" usemap="#Castor3D_1_1PassRenderer_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1PassRenderer_inherit__map" id="Castor3D_1_1PassRenderer_inherit__map">
-<area shape="rect"  title="The Pass renderer." alt="" coords="5,95,172,121"/>
-<area shape="rect"  href="../../d8/ded/a01113.html" title=" " alt="" coords="5,5,172,47"/>
+<div class="center"><img src="../../d0/dce/a01780.png" border="0" usemap="#Castor3D_1_1FrameBuffer_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1FrameBuffer_inherit__map" id="Castor3D_1_1FrameBuffer_inherit__map">
+<area shape="rect"  title="Frame buffer class." alt="" coords="125,95,279,121"/>
+<area shape="rect"  href="../../db/d28/a01133.html" title="Back buffers class." alt="" coords="125,169,279,196"/>
+<area shape="rect"  title=" " alt="" coords="5,13,193,39"/>
+<area shape="rect"  title=" " alt="" coords="218,5,394,47"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::PassRenderer:</div>
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::FrameBuffer:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d5/df4/a01779.png" border="0" usemap="#Castor3D_1_1PassRenderer_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1PassRenderer_coll__map" id="Castor3D_1_1PassRenderer_coll__map">
-<area shape="rect"  title="The Pass renderer." alt="" coords="8,9,175,36"/>
-<area shape="rect"  title=" " alt="" coords="245,43,452,69"/>
-<area shape="rect"  href="../../d8/ded/a01113.html" title=" " alt="" coords="1245,27,1412,69"/>
-<area shape="rect"  href="../../d6/d56/a01861.html" title="The render system representation." alt="" coords="903,125,1073,152"/>
-<area shape="rect"  href="../../d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="1263,193,1394,220"/>
-<area shape="rect"  href="../../d6/d53/a01789.html" title=" " alt="" coords="1560,193,1717,220"/>
-<area shape="rect"  title=" " alt="" coords="907,216,1069,243"/>
-<area shape="rect"  title=" " alt="" coords="895,298,1081,339"/>
-<area shape="rect"  title=" " alt="" coords="581,125,748,152"/>
-<area shape="rect"  href="../../d7/d6d/a01769.html" title="Definition of a material pass." alt="" coords="931,44,1045,71"/>
-<area shape="rect"  href="../../d6/d8b/a01117.html" title=" " alt="" coords="581,43,748,85"/>
-<area shape="rect"  href="../../db/d06/a01509.html" title="Main System." alt="" coords="287,93,411,120"/>
-<area shape="rect"  title=" " alt="" coords="5,93,177,120"/>
+<div class="center"><img src="../../d5/df4/a01779.png" border="0" usemap="#Castor3D_1_1FrameBuffer_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1FrameBuffer_coll__map" id="Castor3D_1_1FrameBuffer_coll__map">
+<area shape="rect"  title="Frame buffer class." alt="" coords="125,95,279,121"/>
+<area shape="rect"  title=" " alt="" coords="5,13,193,39"/>
+<area shape="rect"  title=" " alt="" coords="218,5,394,47"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aac2549634d06aed49c2539b35ff5cba1"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#aac2549634d06aed49c2539b35ff5cba1">~PassRenderer</a> ()</td></tr>
-<tr class="separator:aac2549634d06aed49c2539b35ff5cba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeff0805c958c1b3c8692a4d6e931c701"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#aeff0805c958c1b3c8692a4d6e931c701">Cleanup</a> ()</td></tr>
-<tr class="separator:aeff0805c958c1b3c8692a4d6e931c701"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc36943709a2e9e71269bdbab0293575"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#afc36943709a2e9e71269bdbab0293575">Initialise</a> ()=0</td></tr>
-<tr class="separator:afc36943709a2e9e71269bdbab0293575"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1875f43821aa3517c5d62744d841a4b"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ac1875f43821aa3517c5d62744d841a4b">Render</a> ()</td></tr>
-<tr class="separator:ac1875f43821aa3517c5d62744d841a4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac05c86fd675eb6f1963e77e8068d9e51"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ac05c86fd675eb6f1963e77e8068d9e51">Render2D</a> ()</td></tr>
-<tr class="separator:ac05c86fd675eb6f1963e77e8068d9e51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a055aaf7c6e0e02bec8e7669adbd7d66d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a055aaf7c6e0e02bec8e7669adbd7d66d">EndRender</a> ()=0</td></tr>
-<tr class="separator:a055aaf7c6e0e02bec8e7669adbd7d66d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a01113"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01113')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Pass, PassRenderer &gt;</a></td></tr>
-<tr class="memitem:a62b24499bdbfd09f5126e37d135227bf inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a62b24499bdbfd09f5126e37d135227bf">~Renderer</a> ()</td></tr>
-<tr class="memdesc:a62b24499bdbfd09f5126e37d135227bf inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d8/ded/a01113.html#a62b24499bdbfd09f5126e37d135227bf">More...</a><br /></td></tr>
-<tr class="separator:a62b24499bdbfd09f5126e37d135227bf inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6d3871f157dcdd6d1c76f2a56f7e5778 inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a6d3871f157dcdd6d1c76f2a56f7e5778">GetRenderSystem</a> () const</td></tr>
-<tr class="memdesc:a6d3871f157dcdd6d1c76f2a56f7e5778 inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the RenderSystem.  <a href="../../d8/ded/a01113.html#a6d3871f157dcdd6d1c76f2a56f7e5778">More...</a><br /></td></tr>
-<tr class="separator:a6d3871f157dcdd6d1c76f2a56f7e5778 inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad720e3b3c527baf75da63859142628c9 inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#ad720e3b3c527baf75da63859142628c9">GetTarget</a> () const</td></tr>
-<tr class="memdesc:ad720e3b3c527baf75da63859142628c9 inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the Renderable.  <a href="../../d8/ded/a01113.html#ad720e3b3c527baf75da63859142628c9">More...</a><br /></td></tr>
-<tr class="separator:ad720e3b3c527baf75da63859142628c9 inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adce7499d06169f5c1cf97240f5bd76d7 inherit pub_methods_a01113"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#adce7499d06169f5c1cf97240f5bd76d7">SetTarget</a> (<a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a> p_target)</td></tr>
-<tr class="memdesc:adce7499d06169f5c1cf97240f5bd76d7 inherit pub_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the Renderable.  <a href="../../d8/ded/a01113.html#adce7499d06169f5c1cf97240f5bd76d7">More...</a><br /></td></tr>
-<tr class="separator:adce7499d06169f5c1cf97240f5bd76d7 inherit pub_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affb50091199262d74fd6051ac36a3842"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#affb50091199262d74fd6051ac36a3842">DECLARE_VECTOR</a> (FrameBufferAttachmentSPtr, <a class="el" href="../../d6/d27/a01781.html#a6fccd07332650b3bdbfa976d7664feeb">Attach</a>)</td></tr>
+<tr class="separator:affb50091199262d74fd6051ac36a3842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d96d4f7cbc6816fb4f2572a6fcda83e"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a6d96d4f7cbc6816fb4f2572a6fcda83e">FrameBuffer</a> (<a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;p_engine)</td></tr>
+<tr class="memdesc:a6d96d4f7cbc6816fb4f2572a6fcda83e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a6d96d4f7cbc6816fb4f2572a6fcda83e">More...</a><br /></td></tr>
+<tr class="separator:a6d96d4f7cbc6816fb4f2572a6fcda83e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4834369fd7dad67894b5158dee3f9507"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a4834369fd7dad67894b5158dee3f9507">~FrameBuffer</a> ()</td></tr>
+<tr class="memdesc:a4834369fd7dad67894b5158dee3f9507"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a4834369fd7dad67894b5158dee3f9507">More...</a><br /></td></tr>
+<tr class="separator:a4834369fd7dad67894b5158dee3f9507"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7673836c87200b7c12e47fa78f6062ee"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a7673836c87200b7c12e47fa78f6062ee">Initialise</a> (Castor::Size const &amp;p_size)</td></tr>
+<tr class="memdesc:a7673836c87200b7c12e47fa78f6062ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises color and depth cache buffers.  <a href="#a7673836c87200b7c12e47fa78f6062ee">More...</a><br /></td></tr>
+<tr class="separator:a7673836c87200b7c12e47fa78f6062ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55260cd844387ebc403a1797ad40e326"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a55260cd844387ebc403a1797ad40e326">Cleanup</a> ()</td></tr>
+<tr class="memdesc:a55260cd844387ebc403a1797ad40e326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans up cache buffers.  <a href="#a55260cd844387ebc403a1797ad40e326">More...</a><br /></td></tr>
+<tr class="separator:a55260cd844387ebc403a1797ad40e326"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a759945f043fc85cddb54e3809847be20"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a759945f043fc85cddb54e3809847be20">SetClearColour</a> (Castor::Colour const &amp;p_colour)</td></tr>
+<tr class="memdesc:a759945f043fc85cddb54e3809847be20"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the colour used when Clear is called on the color buffer.  <a href="#a759945f043fc85cddb54e3809847be20">More...</a><br /></td></tr>
+<tr class="separator:a759945f043fc85cddb54e3809847be20"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adff077493870c6970f4bdacc7ffcbece"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#adff077493870c6970f4bdacc7ffcbece">Clear</a> ()</td></tr>
+<tr class="memdesc:adff077493870c6970f4bdacc7ffcbece"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the buffers.  <a href="#adff077493870c6970f4bdacc7ffcbece">More...</a><br /></td></tr>
+<tr class="separator:adff077493870c6970f4bdacc7ffcbece"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d2ba4c17b08652876aee0e943901979"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a8d2ba4c17b08652876aee0e943901979">Bind</a> (<a class="el" href="../../d7/d41/a00532.html#a9e3f008a90b3b4ebb76a761bcc4764f3">eFRAMEBUFFER_MODE</a> p_mode=<a class="el" href="../../d7/d41/a00532.html#a9e3f008a90b3b4ebb76a761bcc4764f3aa1180d9197b08985a78a0fee09f7bf26">eFRAMEBUFFER_MODE_AUTOMATIC</a>, <a class="el" href="../../d7/d41/a00532.html#a2029c4da03078dced7334a80f91d0984">eFRAMEBUFFER_TARGET</a> p_target=<a class="el" href="../../d7/d41/a00532.html#a2029c4da03078dced7334a80f91d0984afa602194ce8ef62946bbf89a86d9165c">eFRAMEBUFFER_TARGET_BOTH</a>)</td></tr>
+<tr class="memdesc:a8d2ba4c17b08652876aee0e943901979"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activation function, to tell the GPU it is active.  <a href="#a8d2ba4c17b08652876aee0e943901979">More...</a><br /></td></tr>
+<tr class="separator:a8d2ba4c17b08652876aee0e943901979"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab665abf01e3b2859eabd0f7ef562ffda"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ab665abf01e3b2859eabd0f7ef562ffda">Unbind</a> ()</td></tr>
+<tr class="memdesc:ab665abf01e3b2859eabd0f7ef562ffda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deactivation function, to tell the GPU it is inactive.  <a href="#ab665abf01e3b2859eabd0f7ef562ffda">More...</a><br /></td></tr>
+<tr class="separator:ab665abf01e3b2859eabd0f7ef562ffda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41b39eabfae35579fdb81aec03cde606"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a41b39eabfae35579fdb81aec03cde606">BlitInto</a> (FrameBufferSPtr p_buffer, Castor::Rectangle const &amp;p_rect, uint32_t p_components)</td></tr>
+<tr class="memdesc:a41b39eabfae35579fdb81aec03cde606"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit this frame buffer into the given one.  <a href="#a41b39eabfae35579fdb81aec03cde606">More...</a><br /></td></tr>
+<tr class="separator:a41b39eabfae35579fdb81aec03cde606"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a772e6dbb07ebb4146389ae8d17b8526e"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a772e6dbb07ebb4146389ae8d17b8526e">StretchInto</a> (FrameBufferSPtr p_buffer, Castor::Rectangle const &amp;p_rectSrc, Castor::Rectangle const &amp;p_rectDst, uint32_t p_components, <a class="el" href="../../d7/d41/a00532.html#a0c78b7214e98a23339f3971f431512f0">eINTERPOLATION_MODE</a> p_interpolation)</td></tr>
+<tr class="memdesc:a772e6dbb07ebb4146389ae8d17b8526e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Stretches this frame buffer into the given one.  <a href="#a772e6dbb07ebb4146389ae8d17b8526e">More...</a><br /></td></tr>
+<tr class="separator:a772e6dbb07ebb4146389ae8d17b8526e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cb4bcbed6b4c34578901f7d8c242376"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a6cb4bcbed6b4c34578901f7d8c242376">SetDrawBuffers</a> ()</td></tr>
+<tr class="memdesc:a6cb4bcbed6b4c34578901f7d8c242376"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the buffers to be drawn into.  <a href="#a6cb4bcbed6b4c34578901f7d8c242376">More...</a><br /></td></tr>
+<tr class="separator:a6cb4bcbed6b4c34578901f7d8c242376"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1884520bacc5c7aa99bb12641d214a3"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ae1884520bacc5c7aa99bb12641d214a3">SetDrawBuffer</a> (TextureAttachmentSPtr p_attach)</td></tr>
+<tr class="memdesc:ae1884520bacc5c7aa99bb12641d214a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the color buffer to be drawn into.  <a href="#ae1884520bacc5c7aa99bb12641d214a3">More...</a><br /></td></tr>
+<tr class="separator:ae1884520bacc5c7aa99bb12641d214a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3b9f8fd3d166a56030d8652e83a8d708"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a3b9f8fd3d166a56030d8652e83a8d708">SetDrawBuffer</a> (RenderBufferAttachmentSPtr p_attach)</td></tr>
+<tr class="memdesc:a3b9f8fd3d166a56030d8652e83a8d708"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the color buffer to be drawn into.  <a href="#a3b9f8fd3d166a56030d8652e83a8d708">More...</a><br /></td></tr>
+<tr class="separator:a3b9f8fd3d166a56030d8652e83a8d708"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6fccd07332650b3bdbfa976d7664feeb"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a6fccd07332650b3bdbfa976d7664feeb">Attach</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, <a class="el" href="../../d7/d41/a00532.html#aad45525514940ecf3374543e2b45ea2e">eTEXTURE_TARGET</a> p_target, int p_layer=0)</td></tr>
+<tr class="memdesc:a6fccd07332650b3bdbfa976d7664feeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches a texture to this frame buffer, at given attachment point.  <a href="#a6fccd07332650b3bdbfa976d7664feeb">More...</a><br /></td></tr>
+<tr class="separator:a6fccd07332650b3bdbfa976d7664feeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81ec463362d60e8a5a42b0aefb952689"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a81ec463362d60e8a5a42b0aefb952689">Attach</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, TextureAttachmentSPtr p_texture, <a class="el" href="../../d7/d41/a00532.html#aad45525514940ecf3374543e2b45ea2e">eTEXTURE_TARGET</a> p_target, int p_layer=0)</td></tr>
+<tr class="memdesc:a81ec463362d60e8a5a42b0aefb952689"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches a texture to this frame buffer, at given attachment point.  <a href="#a81ec463362d60e8a5a42b0aefb952689">More...</a><br /></td></tr>
+<tr class="separator:a81ec463362d60e8a5a42b0aefb952689"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a662414351c66138e5151fa2f8872b28b"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a662414351c66138e5151fa2f8872b28b">Attach</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer)</td></tr>
+<tr class="memdesc:a662414351c66138e5151fa2f8872b28b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches a render buffer to this frame buffer, at given attachment point.  <a href="#a662414351c66138e5151fa2f8872b28b">More...</a><br /></td></tr>
+<tr class="separator:a662414351c66138e5151fa2f8872b28b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22d2ea85c115f16c0f7701537e061560"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a22d2ea85c115f16c0f7701537e061560">Attach</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, RenderBufferAttachmentSPtr p_renderBuffer)</td></tr>
+<tr class="memdesc:a22d2ea85c115f16c0f7701537e061560"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches a render buffer to this frame buffer, at given attachment point.  <a href="#a22d2ea85c115f16c0f7701537e061560">More...</a><br /></td></tr>
+<tr class="separator:a22d2ea85c115f16c0f7701537e061560"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29297237a3311139b5d8e297f387796f"><td class="memItemLeft" align="right" valign="top">C3D_API FrameBufferAttachmentSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a29297237a3311139b5d8e297f387796f">GetAttachment</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, uint8_t p_index)</td></tr>
+<tr class="memdesc:a29297237a3311139b5d8e297f387796f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a buffer attached at given attachment point and index.  <a href="#a29297237a3311139b5d8e297f387796f">More...</a><br /></td></tr>
+<tr class="separator:a29297237a3311139b5d8e297f387796f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f34a4f16f8e6f10c20cf3f5277d9175"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a7f34a4f16f8e6f10c20cf3f5277d9175">DetachAll</a> ()</td></tr>
+<tr class="memdesc:a7f34a4f16f8e6f10c20cf3f5277d9175"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detaches all attached objects.  <a href="#a7f34a4f16f8e6f10c20cf3f5277d9175">More...</a><br /></td></tr>
+<tr class="separator:a7f34a4f16f8e6f10c20cf3f5277d9175"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff2d33ad8c8049174361d7d6228662cc"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#aff2d33ad8c8049174361d7d6228662cc">Resize</a> (Castor::Size const &amp;p_size)</td></tr>
+<tr class="memdesc:aff2d33ad8c8049174361d7d6228662cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes each attached buffer.  <a href="#aff2d33ad8c8049174361d7d6228662cc">More...</a><br /></td></tr>
+<tr class="separator:aff2d33ad8c8049174361d7d6228662cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae75e9ab0c3116cb9333d52d8a0ea1d70"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ae75e9ab0c3116cb9333d52d8a0ea1d70">Create</a> ()=0</td></tr>
+<tr class="memdesc:ae75e9ab0c3116cb9333d52d8a0ea1d70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creation function.  <a href="#ae75e9ab0c3116cb9333d52d8a0ea1d70">More...</a><br /></td></tr>
+<tr class="separator:ae75e9ab0c3116cb9333d52d8a0ea1d70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a63f7d4b66633080643ec80b9a18564e1"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a63f7d4b66633080643ec80b9a18564e1">Destroy</a> ()=0</td></tr>
+<tr class="memdesc:a63f7d4b66633080643ec80b9a18564e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destruction function.  <a href="#a63f7d4b66633080643ec80b9a18564e1">More...</a><br /></td></tr>
+<tr class="separator:a63f7d4b66633080643ec80b9a18564e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acaeb4e168bbbe880b76a3e186dd894f2"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#acaeb4e168bbbe880b76a3e186dd894f2">SetDrawBuffers</a> (AttachArray const &amp;p_attaches)=0</td></tr>
+<tr class="memdesc:acaeb4e168bbbe880b76a3e186dd894f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Uses given attachments to this framebuffer for next draw call.  <a href="#acaeb4e168bbbe880b76a3e186dd894f2">More...</a><br /></td></tr>
+<tr class="separator:acaeb4e168bbbe880b76a3e186dd894f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae736793f4fc8985ef82bf261a403a839"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ae736793f4fc8985ef82bf261a403a839">SetReadBuffer</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, uint8_t p_index)=0</td></tr>
+<tr class="memdesc:ae736793f4fc8985ef82bf261a403a839"><td class="mdescLeft">&#160;</td><td class="mdescRight">Specifies the color buffer source for pixels.  <a href="#ae736793f4fc8985ef82bf261a403a839">More...</a><br /></td></tr>
+<tr class="separator:ae736793f4fc8985ef82bf261a403a839"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac5b939d6d635f568307d0966d8f7619e"><td class="memItemLeft" align="right" valign="top">virtual C3D_API ColourRenderBufferSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ac5b939d6d635f568307d0966d8f7619e">CreateColourRenderBuffer</a> (Castor::ePIXEL_FORMAT p_format)=0</td></tr>
+<tr class="memdesc:ac5b939d6d635f568307d0966d8f7619e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a colour render buffer.  <a href="#ac5b939d6d635f568307d0966d8f7619e">More...</a><br /></td></tr>
+<tr class="separator:ac5b939d6d635f568307d0966d8f7619e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29868ecfd8bce720d2513bbc13996097"><td class="memItemLeft" align="right" valign="top">virtual C3D_API DepthStencilRenderBufferSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a29868ecfd8bce720d2513bbc13996097">CreateDepthStencilRenderBuffer</a> (Castor::ePIXEL_FORMAT p_format)=0</td></tr>
+<tr class="memdesc:a29868ecfd8bce720d2513bbc13996097"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a depth/stencil render buffer.  <a href="#a29868ecfd8bce720d2513bbc13996097">More...</a><br /></td></tr>
+<tr class="separator:a29868ecfd8bce720d2513bbc13996097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73c48fe75a477e3354b91d3d360b105f"><td class="memItemLeft" align="right" valign="top">virtual C3D_API RenderBufferAttachmentSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a73c48fe75a477e3354b91d3d360b105f">CreateAttachment</a> (RenderBufferSPtr p_renderBuffer)=0</td></tr>
+<tr class="memdesc:a73c48fe75a477e3354b91d3d360b105f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an attachment to a render buffer.  <a href="#a73c48fe75a477e3354b91d3d360b105f">More...</a><br /></td></tr>
+<tr class="separator:a73c48fe75a477e3354b91d3d360b105f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a01cb4480f55b8f547ba2ab377bf2b27e"><td class="memItemLeft" align="right" valign="top">virtual C3D_API TextureAttachmentSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a01cb4480f55b8f547ba2ab377bf2b27e">CreateAttachment</a> (DynamicTextureSPtr p_texture)=0</td></tr>
+<tr class="memdesc:a01cb4480f55b8f547ba2ab377bf2b27e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an attachment to a texture.  <a href="#a01cb4480f55b8f547ba2ab377bf2b27e">More...</a><br /></td></tr>
+<tr class="separator:a01cb4480f55b8f547ba2ab377bf2b27e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4491bdd922ef329fd0d1ed43995941bf"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a4491bdd922ef329fd0d1ed43995941bf">IsComplete</a> () const =0</td></tr>
+<tr class="memdesc:a4491bdd922ef329fd0d1ed43995941bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if the FBO is complete.  <a href="#a4491bdd922ef329fd0d1ed43995941bf">More...</a><br /></td></tr>
+<tr class="separator:a4491bdd922ef329fd0d1ed43995941bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af49ff627bb1c977a7a5af3550e8e7ecb"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#af49ff627bb1c977a7a5af3550e8e7ecb">DownloadBuffer</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">Castor3D::eATTACHMENT_POINT</a> p_point, uint8_t p_index, Castor::PxBufferBaseSPtr p_buffer)=0</td></tr>
+<tr class="memdesc:af49ff627bb1c977a7a5af3550e8e7ecb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Downloads the render buffer data.  <a href="#af49ff627bb1c977a7a5af3550e8e7ecb">More...</a><br /></td></tr>
+<tr class="separator:af49ff627bb1c977a7a5af3550e8e7ecb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d65cdf481d363c7a5c9f3d843a4fb66"><td class="memItemLeft" align="right" valign="top">Castor::Colour&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a7d65cdf481d363c7a5c9f3d843a4fb66">GetClearColour</a> () const</td></tr>
+<tr class="memdesc:a7d65cdf481d363c7a5c9f3d843a4fb66"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the background colour.  <a href="#a7d65cdf481d363c7a5c9f3d843a4fb66">More...</a><br /></td></tr>
+<tr class="separator:a7d65cdf481d363c7a5c9f3d843a4fb66"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:a60deb988442384ad11dc87b45d412d7d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a60deb988442384ad11dc87b45d412d7d">PassRenderer</a> (<a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *p_pRenderSystem)</td></tr>
-<tr class="separator:a60deb988442384ad11dc87b45d412d7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1ad75455b81ef5a5670b0de588506ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#aa1ad75455b81ef5a5670b0de588506ce">DoFillShader</a> ()</td></tr>
-<tr class="memdesc:aa1ad75455b81ef5a5670b0de588506ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fills shader frame variables with pass values.  <a href="#aa1ad75455b81ef5a5670b0de588506ce">More...</a><br /></td></tr>
-<tr class="separator:aa1ad75455b81ef5a5670b0de588506ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_methods_a01113"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a01113')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Pass, PassRenderer &gt;</a></td></tr>
-<tr class="memitem:a0599157b1085db1955655f59d1cddc06 inherit pro_methods_a01113"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a0599157b1085db1955655f59d1cddc06">Renderer</a> (<a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *p_pRenderSystem)</td></tr>
-<tr class="memdesc:a0599157b1085db1955655f59d1cddc06 inherit pro_methods_a01113"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d8/ded/a01113.html#a0599157b1085db1955655f59d1cddc06">More...</a><br /></td></tr>
-<tr class="separator:a0599157b1085db1955655f59d1cddc06 inherit pro_methods_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7873141b72fdf97cf015e86f220b8fb"><td class="memItemLeft" align="right" valign="top">C3D_API uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#aa7873141b72fdf97cf015e86f220b8fb">DoGetSamplesCount</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, uint8_t p_index)</td></tr>
+<tr class="separator:aa7873141b72fdf97cf015e86f220b8fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2cdaf49f2438c6b3e6de094cb2a2e05e"><td class="memItemLeft" align="right" valign="top">C3D_API Castor::ePIXEL_FORMAT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a2cdaf49f2438c6b3e6de094cb2a2e05e">DoGetPixelFormat</a> (<a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a> p_point, uint8_t p_index)</td></tr>
+<tr class="separator:a2cdaf49f2438c6b3e6de094cb2a2e05e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34ef3cb2f746ce17a8f518b1ee5463bc"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a34ef3cb2f746ce17a8f518b1ee5463bc">DoClear</a> (uint32_t p_targets)=0</td></tr>
+<tr class="memdesc:a34ef3cb2f746ce17a8f518b1ee5463bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the given buffers components.  <a href="#a34ef3cb2f746ce17a8f518b1ee5463bc">More...</a><br /></td></tr>
+<tr class="separator:a34ef3cb2f746ce17a8f518b1ee5463bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae55e50f1d4df67c70424b18c6ed29e34"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#ae55e50f1d4df67c70424b18c6ed29e34">DoBind</a> (<a class="el" href="../../d7/d41/a00532.html#a2029c4da03078dced7334a80f91d0984">eFRAMEBUFFER_TARGET</a> p_target)=0</td></tr>
+<tr class="memdesc:ae55e50f1d4df67c70424b18c6ed29e34"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activation function, to tell the GPU it is active.  <a href="#ae55e50f1d4df67c70424b18c6ed29e34">More...</a><br /></td></tr>
+<tr class="separator:ae55e50f1d4df67c70424b18c6ed29e34"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:affee878dd07da6514a8835cbb3331883"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#affee878dd07da6514a8835cbb3331883">DoUnbind</a> ()=0</td></tr>
+<tr class="memdesc:affee878dd07da6514a8835cbb3331883"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deactivation function, to tell the GPU it is inactive.  <a href="#affee878dd07da6514a8835cbb3331883">More...</a><br /></td></tr>
+<tr class="separator:affee878dd07da6514a8835cbb3331883"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9aebc9001271a15839cfb1ec64c398e0"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a9aebc9001271a15839cfb1ec64c398e0">DoBlitInto</a> (FrameBufferSPtr p_buffer, Castor::Rectangle const &amp;p_rect, uint32_t p_components)=0</td></tr>
+<tr class="memdesc:a9aebc9001271a15839cfb1ec64c398e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit this frame buffer into the given one.  <a href="#a9aebc9001271a15839cfb1ec64c398e0">More...</a><br /></td></tr>
+<tr class="separator:a9aebc9001271a15839cfb1ec64c398e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2f1c30ec8a219873bc0f8e4c4921c7b4"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a2f1c30ec8a219873bc0f8e4c4921c7b4">DoStretchInto</a> (FrameBufferSPtr p_buffer, Castor::Rectangle const &amp;p_rectSrc, Castor::Rectangle const &amp;p_rectDst, uint32_t p_components, <a class="el" href="../../d7/d41/a00532.html#a0c78b7214e98a23339f3971f431512f0">eINTERPOLATION_MODE</a> p_interpolation)=0</td></tr>
+<tr class="memdesc:a2f1c30ec8a219873bc0f8e4c4921c7b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Blit this frame buffer into the given one.  <a href="#a2f1c30ec8a219873bc0f8e4c4921c7b4">More...</a><br /></td></tr>
+<tr class="separator:a2f1c30ec8a219873bc0f8e4c4921c7b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a886de53c89e9e740146fd72736efcc02"><td class="memItemLeft" align="right" valign="top">ShaderProgramBaseWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a886de53c89e9e740146fd72736efcc02">m_pProgram</a></td></tr>
-<tr class="memdesc:a886de53c89e9e740146fd72736efcc02"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shader program.  <a href="#a886de53c89e9e740146fd72736efcc02">More...</a><br /></td></tr>
-<tr class="separator:a886de53c89e9e740146fd72736efcc02"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9d06ae4c70adaa24995c9643715ab788"><td class="memItemLeft" align="right" valign="top">Point4fFrameVariableWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a9d06ae4c70adaa24995c9643715ab788">m_pAmbient</a></td></tr>
-<tr class="memdesc:a9d06ae4c70adaa24995c9643715ab788"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ambient colour frame variable.  <a href="#a9d06ae4c70adaa24995c9643715ab788">More...</a><br /></td></tr>
-<tr class="separator:a9d06ae4c70adaa24995c9643715ab788"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b3731d154a76f63b8d247bb114dc452"><td class="memItemLeft" align="right" valign="top">Point4fFrameVariableWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a5b3731d154a76f63b8d247bb114dc452">m_pDiffuse</a></td></tr>
-<tr class="memdesc:a5b3731d154a76f63b8d247bb114dc452"><td class="mdescLeft">&#160;</td><td class="mdescRight">The diffuser colour frame variable.  <a href="#a5b3731d154a76f63b8d247bb114dc452">More...</a><br /></td></tr>
-<tr class="separator:a5b3731d154a76f63b8d247bb114dc452"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0eba142a24057492213fa3c80a0f2457"><td class="memItemLeft" align="right" valign="top">Point4fFrameVariableWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a0eba142a24057492213fa3c80a0f2457">m_pSpecular</a></td></tr>
-<tr class="memdesc:a0eba142a24057492213fa3c80a0f2457"><td class="mdescLeft">&#160;</td><td class="mdescRight">The specular colour frame variable.  <a href="#a0eba142a24057492213fa3c80a0f2457">More...</a><br /></td></tr>
-<tr class="separator:a0eba142a24057492213fa3c80a0f2457"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a60ca8419129ddce77109f3d700b642d8"><td class="memItemLeft" align="right" valign="top">Point4fFrameVariableWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a60ca8419129ddce77109f3d700b642d8">m_pEmissive</a></td></tr>
-<tr class="memdesc:a60ca8419129ddce77109f3d700b642d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">The emissive colour frame variable.  <a href="#a60ca8419129ddce77109f3d700b642d8">More...</a><br /></td></tr>
-<tr class="separator:a60ca8419129ddce77109f3d700b642d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeeb7dc724ba3722541a1d06a7f71ebb0"><td class="memItemLeft" align="right" valign="top">OneFloatFrameVariableWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#aeeb7dc724ba3722541a1d06a7f71ebb0">m_pShininess</a></td></tr>
-<tr class="memdesc:aeeb7dc724ba3722541a1d06a7f71ebb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The shininess value frame variable.  <a href="#aeeb7dc724ba3722541a1d06a7f71ebb0">More...</a><br /></td></tr>
-<tr class="separator:aeeb7dc724ba3722541a1d06a7f71ebb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58c67bd8bf71daccca3a497182485889"><td class="memItemLeft" align="right" valign="top">OneFloatFrameVariableWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a58c67bd8bf71daccca3a497182485889">m_pOpacity</a></td></tr>
-<tr class="memdesc:a58c67bd8bf71daccca3a497182485889"><td class="mdescLeft">&#160;</td><td class="mdescRight">The opacity value frame variable.  <a href="#a58c67bd8bf71daccca3a497182485889">More...</a><br /></td></tr>
-<tr class="separator:a58c67bd8bf71daccca3a497182485889"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c675acaabee222540c230cf7da90a53"><td class="memItemLeft" align="right" valign="top">Point3rFrameVariableWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a1c675acaabee222540c230cf7da90a53">m_pCameraPos</a></td></tr>
-<tr class="memdesc:a1c675acaabee222540c230cf7da90a53"><td class="mdescLeft">&#160;</td><td class="mdescRight">The camera position frame variable.  <a href="#a1c675acaabee222540c230cf7da90a53">More...</a><br /></td></tr>
-<tr class="separator:a1c675acaabee222540c230cf7da90a53"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a351a4e8be34acff6aaf104a967a9a775"><td class="memItemLeft" align="right" valign="top">Castor::Point4f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a351a4e8be34acff6aaf104a967a9a775">m_ptAmbient</a></td></tr>
-<tr class="memdesc:a351a4e8be34acff6aaf104a967a9a775"><td class="mdescLeft">&#160;</td><td class="mdescRight">The ambient colour value.  <a href="#a351a4e8be34acff6aaf104a967a9a775">More...</a><br /></td></tr>
-<tr class="separator:a351a4e8be34acff6aaf104a967a9a775"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a785f3dcbaeb70c8ace058c1596049195"><td class="memItemLeft" align="right" valign="top">Castor::Point4f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a785f3dcbaeb70c8ace058c1596049195">m_ptDiffuse</a></td></tr>
-<tr class="memdesc:a785f3dcbaeb70c8ace058c1596049195"><td class="mdescLeft">&#160;</td><td class="mdescRight">The diffuse colour value.  <a href="#a785f3dcbaeb70c8ace058c1596049195">More...</a><br /></td></tr>
-<tr class="separator:a785f3dcbaeb70c8ace058c1596049195"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aad32af78f828ad3d6004515f0923f640"><td class="memItemLeft" align="right" valign="top">Castor::Point4f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#aad32af78f828ad3d6004515f0923f640">m_ptSpecular</a></td></tr>
-<tr class="memdesc:aad32af78f828ad3d6004515f0923f640"><td class="mdescLeft">&#160;</td><td class="mdescRight">The specular colour value.  <a href="#aad32af78f828ad3d6004515f0923f640">More...</a><br /></td></tr>
-<tr class="separator:aad32af78f828ad3d6004515f0923f640"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2e830c64520e6d604dc58d123bcbb63e"><td class="memItemLeft" align="right" valign="top">Castor::Point4f&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a2e830c64520e6d604dc58d123bcbb63e">m_ptEmissive</a></td></tr>
-<tr class="memdesc:a2e830c64520e6d604dc58d123bcbb63e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The emissive colour value.  <a href="#a2e830c64520e6d604dc58d123bcbb63e">More...</a><br /></td></tr>
-<tr class="separator:a2e830c64520e6d604dc58d123bcbb63e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c3d8a7ffba74bc03098c6a3ad250793"><td class="memItemLeft" align="right" valign="top">Castor::Point3r&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a5c3d8a7ffba74bc03098c6a3ad250793">m_ptCameraPos</a></td></tr>
-<tr class="memdesc:a5c3d8a7ffba74bc03098c6a3ad250793"><td class="mdescLeft">&#160;</td><td class="mdescRight">The camera position value.  <a href="#a5c3d8a7ffba74bc03098c6a3ad250793">More...</a><br /></td></tr>
-<tr class="separator:a5c3d8a7ffba74bc03098c6a3ad250793"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a01113"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a01113')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Pass, PassRenderer &gt;</a></td></tr>
-<tr class="memitem:a507f8959589242f9f48f80708f587618 inherit pro_attribs_a01113"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a507f8959589242f9f48f80708f587618">m_target</a></td></tr>
-<tr class="separator:a507f8959589242f9f48f80708f587618 inherit pro_attribs_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3cad8ba2930f7cd90e08ef6d016e5f0f inherit pro_attribs_a01113"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a3cad8ba2930f7cd90e08ef6d016e5f0f">m_pRenderSystem</a></td></tr>
-<tr class="separator:a3cad8ba2930f7cd90e08ef6d016e5f0f inherit pro_attribs_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_types_a01113"><td colspan="2" onclick="javascript:toggleInherit('pro_types_a01113')"><img src="../../closed.png" alt="-"/>&#160;Protected Types inherited from <a class="el" href="../../d8/ded/a01113.html">Castor3D::Renderer&lt; Pass, PassRenderer &gt;</a></td></tr>
-<tr class="memitem:a99351028f5f38f61d008225dcf176d65 inherit pro_types_a01113"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="../../d7/d6d/a01769.html">Pass</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/ded/a01113.html#a99351028f5f38f61d008225dcf176d65">target_ptr</a></td></tr>
-<tr class="separator:a99351028f5f38f61d008225dcf176d65 inherit pro_types_a01113"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41b6ffbd6168292dede126f4e2d7b329"><td class="memItemLeft" align="right" valign="top">AttachArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#a41b6ffbd6168292dede126f4e2d7b329">m_attaches</a></td></tr>
+<tr class="memdesc:a41b6ffbd6168292dede126f4e2d7b329"><td class="mdescLeft">&#160;</td><td class="mdescRight">All attachments.  <a href="#a41b6ffbd6168292dede126f4e2d7b329">More...</a><br /></td></tr>
+<tr class="separator:a41b6ffbd6168292dede126f4e2d7b329"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdc290021c9821027f9d8d1270ea3653"><td class="memItemLeft" align="right" valign="top">Castor::Colour&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d27/a01781.html#abdc290021c9821027f9d8d1270ea3653">m_clearColour</a></td></tr>
+<tr class="memdesc:abdc290021c9821027f9d8d1270ea3653"><td class="mdescLeft">&#160;</td><td class="mdescRight">The background colour.  <a href="#abdc290021c9821027f9d8d1270ea3653">More...</a><br /></td></tr>
+<tr class="separator:abdc290021c9821027f9d8d1270ea3653"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="../../d7/d6d/a01769.html" title="Definition of a material pass.">Pass</a> renderer. </p>
-<p>Initialises a pass, draws it, removes it </p><dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>09/02/2010 </dd></dl>
+<div class="textblock"><p>Frame buffer class. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.7.0.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>12/11/2012</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>A frame buffer is where a render target makes its render </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="aac2549634d06aed49c2539b35ff5cba1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aac2549634d06aed49c2539b35ff5cba1">&#9670;&nbsp;</a></span>~PassRenderer()</h2>
+<a id="a6d96d4f7cbc6816fb4f2572a6fcda83e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d96d4f7cbc6816fb4f2572a6fcda83e">&#9670;&nbsp;</a></span>FrameBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::FrameBuffer::FrameBuffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_engine</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_engine</td><td>The core engine </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4834369fd7dad67894b5158dee3f9507"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4834369fd7dad67894b5158dee3f9507">&#9670;&nbsp;</a></span>~FrameBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +253,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual Castor3D::PassRenderer::~PassRenderer </td>
+          <td class="memname">virtual C3D_API Castor3D::FrameBuffer::~FrameBuffer </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -210,40 +265,329 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Destructor </p>
 
-</div>
-</div>
-<a id="a60deb988442384ad11dc87b45d412d7d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60deb988442384ad11dc87b45d412d7d">&#9670;&nbsp;</a></span>PassRenderer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor3D::PassRenderer::PassRenderer </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td>
-          <td class="paramname"><em>p_pRenderSystem</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Constructor, only <a class="el" href="../../d6/d56/a01861.html" title="The render system representation.">RenderSystem</a> can use it </p>
+<p>Destructor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="aeff0805c958c1b3c8692a4d6e931c701"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeff0805c958c1b3c8692a4d6e931c701">&#9670;&nbsp;</a></span>Cleanup()</h2>
+<a id="a6fccd07332650b3bdbfa976d7664feeb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6fccd07332650b3bdbfa976d7664feeb">&#9670;&nbsp;</a></span>Attach() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::Attach </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TextureAttachmentSPtr&#160;</td>
+          <td class="paramname"><em>p_texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#aad45525514940ecf3374543e2b45ea2e">eTEXTURE_TARGET</a>&#160;</td>
+          <td class="paramname"><em>p_target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_layer</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attaches a texture to this frame buffer, at given attachment point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_texture</td><td>The texture </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_target</td><td>The dimension to which the texture must be attached </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_layer</td><td>The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK </dd></dl>
+
+</div>
+</div>
+<a id="a81ec463362d60e8a5a42b0aefb952689"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81ec463362d60e8a5a42b0aefb952689">&#9670;&nbsp;</a></span>Attach() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::Attach </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">TextureAttachmentSPtr&#160;</td>
+          <td class="paramname"><em>p_texture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#aad45525514940ecf3374543e2b45ea2e">eTEXTURE_TARGET</a>&#160;</td>
+          <td class="paramname"><em>p_target</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_layer</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attaches a texture to this frame buffer, at given attachment point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_texture</td><td>The texture </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_target</td><td>The dimension to which the texture must be attached </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_layer</td><td>The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK </dd></dl>
+
+</div>
+</div>
+<a id="a662414351c66138e5151fa2f8872b28b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a662414351c66138e5151fa2f8872b28b">&#9670;&nbsp;</a></span>Attach() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::Attach </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">RenderBufferAttachmentSPtr&#160;</td>
+          <td class="paramname"><em>p_renderBuffer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attaches a render buffer to this frame buffer, at given attachment point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_renderBuffer</td><td>The render buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK </dd></dl>
+
+</div>
+</div>
+<a id="a22d2ea85c115f16c0f7701537e061560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22d2ea85c115f16c0f7701537e061560">&#9670;&nbsp;</a></span>Attach() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::Attach </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">RenderBufferAttachmentSPtr&#160;</td>
+          <td class="paramname"><em>p_renderBuffer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Attaches a render buffer to this frame buffer, at given attachment point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_renderBuffer</td><td>The render buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK </dd></dl>
+
+</div>
+</div>
+<a id="a8d2ba4c17b08652876aee0e943901979"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d2ba4c17b08652876aee0e943901979">&#9670;&nbsp;</a></span>Bind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::Bind </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a9e3f008a90b3b4ebb76a761bcc4764f3">eFRAMEBUFFER_MODE</a>&#160;</td>
+          <td class="paramname"><em>p_mode</em> = <code><a class="el" href="../../d7/d41/a00532.html#a9e3f008a90b3b4ebb76a761bcc4764f3aa1180d9197b08985a78a0fee09f7bf26">eFRAMEBUFFER_MODE_AUTOMATIC</a></code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a2029c4da03078dced7334a80f91d0984">eFRAMEBUFFER_TARGET</a>&#160;</td>
+          <td class="paramname"><em>p_target</em> = <code><a class="el" href="../../d7/d41/a00532.html#a2029c4da03078dced7334a80f91d0984afa602194ce8ef62946bbf89a86d9165c">eFRAMEBUFFER_TARGET_BOTH</a></code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Activation function, to tell the GPU it is active. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_target</td><td>The frame buffer binding target </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_mode</td><td>The frame buffer binding mode </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful </dd></dl>
+
+</div>
+</div>
+<a id="a41b39eabfae35579fdb81aec03cde606"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41b39eabfae35579fdb81aec03cde606">&#9670;&nbsp;</a></span>BlitInto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::BlitInto </td>
+          <td>(</td>
+          <td class="paramtype">FrameBufferSPtr&#160;</td>
+          <td class="paramname"><em>p_buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Rectangle const &amp;&#160;</td>
+          <td class="paramname"><em>p_rect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_components</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Blit this frame buffer into the given one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>The buffer receiving this one </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rect</td><td>The rectangle </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_components</td><td>Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful </dd></dl>
+
+</div>
+</div>
+<a id="a55260cd844387ebc403a1797ad40e326"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55260cd844387ebc403a1797ad40e326">&#9670;&nbsp;</a></span>Cleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::Cleanup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleans up cache buffers. </p>
+
+</div>
+</div>
+<a id="adff077493870c6970f4bdacc7ffcbece"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adff077493870c6970f4bdacc7ffcbece">&#9670;&nbsp;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::Clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Clears the buffers. </p>
+
+</div>
+</div>
+<a id="ae75e9ab0c3116cb9333d52d8a0ea1d70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae75e9ab0c3116cb9333d52d8a0ea1d70">&#9670;&nbsp;</a></span>Create()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -252,7 +596,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Castor3D::PassRenderer::Cleanup </td>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameBuffer::Create </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -260,16 +604,18 @@ Additional Inherited Members</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Cleans up the renderer </p>
+
+<p>Creation function. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK </dd></dl>
 
 </div>
 </div>
-<a id="aa1ad75455b81ef5a5670b0de588506ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa1ad75455b81ef5a5670b0de588506ce">&#9670;&nbsp;</a></span>DoFillShader()</h2>
+<a id="a73c48fe75a477e3354b91d3d360b105f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73c48fe75a477e3354b91d3d360b105f">&#9670;&nbsp;</a></span>CreateAttachment() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -278,10 +624,359 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Castor3D::PassRenderer::DoFillShader </td>
+          <td class="memname">virtual C3D_API RenderBufferAttachmentSPtr Castor3D::FrameBuffer::CreateAttachment </td>
+          <td>(</td>
+          <td class="paramtype">RenderBufferSPtr&#160;</td>
+          <td class="paramname"><em>p_renderBuffer</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates an attachment to a render buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_renderBuffer</td><td>The render buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The created attachment </dd></dl>
+
+<p>Implemented in <a class="el" href="../../db/d28/a01133.html#a2fc82d0799b8ed91ae968542d34b7c87">Castor3D::BackBuffers</a>.</p>
+
+</div>
+</div>
+<a id="a01cb4480f55b8f547ba2ab377bf2b27e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a01cb4480f55b8f547ba2ab377bf2b27e">&#9670;&nbsp;</a></span>CreateAttachment() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API TextureAttachmentSPtr Castor3D::FrameBuffer::CreateAttachment </td>
+          <td>(</td>
+          <td class="paramtype">DynamicTextureSPtr&#160;</td>
+          <td class="paramname"><em>p_texture</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates an attachment to a texture. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_texture</td><td>The texture </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The created attachment </dd></dl>
+
+<p>Implemented in <a class="el" href="../../db/d28/a01133.html#a5be85fe541dcca7a1ffe8e0f6f47db79">Castor3D::BackBuffers</a>.</p>
+
+</div>
+</div>
+<a id="ac5b939d6d635f568307d0966d8f7619e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac5b939d6d635f568307d0966d8f7619e">&#9670;&nbsp;</a></span>CreateColourRenderBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API ColourRenderBufferSPtr Castor3D::FrameBuffer::CreateColourRenderBuffer </td>
+          <td>(</td>
+          <td class="paramtype">Castor::ePIXEL_FORMAT&#160;</td>
+          <td class="paramname"><em>p_format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a colour render buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_format</td><td>The buffer's pixel format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a29868ecfd8bce720d2513bbc13996097"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29868ecfd8bce720d2513bbc13996097">&#9670;&nbsp;</a></span>CreateDepthStencilRenderBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API DepthStencilRenderBufferSPtr Castor3D::FrameBuffer::CreateDepthStencilRenderBuffer </td>
+          <td>(</td>
+          <td class="paramtype">Castor::ePIXEL_FORMAT&#160;</td>
+          <td class="paramname"><em>p_format</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a depth/stencil render buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_format</td><td>The buffer's pixel format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="affb50091199262d74fd6051ac36a3842"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affb50091199262d74fd6051ac36a3842">&#9670;&nbsp;</a></span>DECLARE_VECTOR()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor3D::FrameBuffer::DECLARE_VECTOR </td>
+          <td>(</td>
+          <td class="paramtype">FrameBufferAttachmentSPtr&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d6/d27/a01781.html#a6fccd07332650b3bdbfa976d7664feeb">Attach</a>&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a63f7d4b66633080643ec80b9a18564e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63f7d4b66633080643ec80b9a18564e1">&#9670;&nbsp;</a></span>Destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::FrameBuffer::Destroy </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destruction function. </p>
+
+</div>
+</div>
+<a id="a7f34a4f16f8e6f10c20cf3f5277d9175"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f34a4f16f8e6f10c20cf3f5277d9175">&#9670;&nbsp;</a></span>DetachAll()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::DetachAll </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Detaches all attached objects. </p>
+
+</div>
+</div>
+<a id="ae55e50f1d4df67c70424b18c6ed29e34"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae55e50f1d4df67c70424b18c6ed29e34">&#9670;&nbsp;</a></span>DoBind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameBuffer::DoBind </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a2029c4da03078dced7334a80f91d0984">eFRAMEBUFFER_TARGET</a>&#160;</td>
+          <td class="paramname"><em>p_target</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Activation function, to tell the GPU it is active. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_target</td><td>The frame buffer binding target </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful </dd></dl>
+
+</div>
+</div>
+<a id="a9aebc9001271a15839cfb1ec64c398e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9aebc9001271a15839cfb1ec64c398e0">&#9670;&nbsp;</a></span>DoBlitInto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameBuffer::DoBlitInto </td>
+          <td>(</td>
+          <td class="paramtype">FrameBufferSPtr&#160;</td>
+          <td class="paramname"><em>p_buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Rectangle const &amp;&#160;</td>
+          <td class="paramname"><em>p_rect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_components</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Blit this frame buffer into the given one. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>The buffer receiving this one </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rect</td><td>The destination rectangle </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_components</td><td>Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful </dd></dl>
+
+</div>
+</div>
+<a id="a34ef3cb2f746ce17a8f518b1ee5463bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34ef3cb2f746ce17a8f518b1ee5463bc">&#9670;&nbsp;</a></span>DoClear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::FrameBuffer::DoClear </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_targets</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the given buffers components. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_targets</td><td>The buffer components, combination of eBUFFER_COMPONENT. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2cdaf49f2438c6b3e6de094cb2a2e05e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cdaf49f2438c6b3e6de094cb2a2e05e">&#9670;&nbsp;</a></span>DoGetPixelFormat()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor::ePIXEL_FORMAT Castor3D::FrameBuffer::DoGetPixelFormat </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -290,13 +985,19 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-
-<p>Fills shader frame variables with pass values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The pixel format for attachment. </dd></dl>
 
 </div>
 </div>
-<a id="a055aaf7c6e0e02bec8e7669adbd7d66d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a055aaf7c6e0e02bec8e7669adbd7d66d">&#9670;&nbsp;</a></span>EndRender()</h2>
+<a id="aa7873141b72fdf97cf015e86f220b8fb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7873141b72fdf97cf015e86f220b8fb">&#9670;&nbsp;</a></span>DoGetSamplesCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -305,9 +1006,449 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Castor3D::PassRenderer::EndRender </td>
+          <td class="memname">C3D_API uint32_t Castor3D::FrameBuffer::DoGetSamplesCount </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The samples count for attachment. </dd></dl>
+
+</div>
+</div>
+<a id="a2f1c30ec8a219873bc0f8e4c4921c7b4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f1c30ec8a219873bc0f8e4c4921c7b4">&#9670;&nbsp;</a></span>DoStretchInto()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameBuffer::DoStretchInto </td>
+          <td>(</td>
+          <td class="paramtype">FrameBufferSPtr&#160;</td>
+          <td class="paramname"><em>p_buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Rectangle const &amp;&#160;</td>
+          <td class="paramname"><em>p_rectSrc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Rectangle const &amp;&#160;</td>
+          <td class="paramname"><em>p_rectDst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_components</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a0c78b7214e98a23339f3971f431512f0">eINTERPOLATION_MODE</a>&#160;</td>
+          <td class="paramname"><em>p_interpolation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Blit this frame buffer into the given one. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>The buffer receiving this one. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rectSrc</td><td>The source rectangle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rectDst</td><td>The destination rectangle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_components</td><td>Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_interpolation</td><td>The interpolation to apply if the image is stretched. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful. </dd></dl>
+
+</div>
+</div>
+<a id="affee878dd07da6514a8835cbb3331883"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#affee878dd07da6514a8835cbb3331883">&#9670;&nbsp;</a></span>DoUnbind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::FrameBuffer::DoUnbind </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deactivation function, to tell the GPU it is inactive. </p>
+
+</div>
+</div>
+<a id="af49ff627bb1c977a7a5af3550e8e7ecb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af49ff627bb1c977a7a5af3550e8e7ecb">&#9670;&nbsp;</a></span>DownloadBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameBuffer::DownloadBuffer </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">Castor3D::eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::PxBufferBaseSPtr&#160;</td>
+          <td class="paramname"><em>p_buffer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Downloads the render buffer data. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>Receives the data. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a29297237a3311139b5d8e297f387796f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a29297237a3311139b5d8e297f387796f">&#9670;&nbsp;</a></span>GetAttachment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API FrameBufferAttachmentSPtr Castor3D::FrameBuffer::GetAttachment </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves a buffer attached at given attachment point and index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The attachment point. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The attachment, <code>nullptr</code> if not found. </dd></dl>
+
+</div>
+</div>
+<a id="a7d65cdf481d363c7a5c9f3d843a4fb66"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d65cdf481d363c7a5c9f3d843a4fb66">&#9670;&nbsp;</a></span>GetClearColour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::Colour Castor3D::FrameBuffer::GetClearColour </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the background colour. </p>
+
+<p class="reference">References <a class="el" href="../../d6/d27/a01781.html#abdc290021c9821027f9d8d1270ea3653">m_clearColour</a>.</p>
+
+</div>
+</div>
+<a id="a7673836c87200b7c12e47fa78f6062ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7673836c87200b7c12e47fa78f6062ee">&#9670;&nbsp;</a></span>Initialise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::Initialise </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises color and depth cache buffers. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The frame buffer size. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK. </dd></dl>
+
+</div>
+</div>
+<a id="a4491bdd922ef329fd0d1ed43995941bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4491bdd922ef329fd0d1ed43995941bf">&#9670;&nbsp;</a></span>IsComplete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameBuffer::IsComplete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Checks if the FBO is complete. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if the buffer is in error if there is an attachment missing </dd></dl>
+
+<p>Implemented in <a class="el" href="../../db/d28/a01133.html#a15aa5c53482753eac2d3981055225f24">Castor3D::BackBuffers</a>.</p>
+
+</div>
+</div>
+<a id="aff2d33ad8c8049174361d7d6228662cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff2d33ad8c8049174361d7d6228662cc">&#9670;&nbsp;</a></span>Resize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::Resize </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Resizes each attached buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The new dimensions </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a759945f043fc85cddb54e3809847be20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a759945f043fc85cddb54e3809847be20">&#9670;&nbsp;</a></span>SetClearColour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::SetClearColour </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Colour const &amp;&#160;</td>
+          <td class="paramname"><em>p_colour</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines the colour used when Clear is called on the color buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_colour</td><td>The colour. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae1884520bacc5c7aa99bb12641d214a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1884520bacc5c7aa99bb12641d214a3">&#9670;&nbsp;</a></span>SetDrawBuffer() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::SetDrawBuffer </td>
+          <td>(</td>
+          <td class="paramtype">TextureAttachmentSPtr&#160;</td>
+          <td class="paramname"><em>p_attach</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specifies the color buffer to be drawn into. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_attach</td><td>The color buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a3b9f8fd3d166a56030d8652e83a8d708"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b9f8fd3d166a56030d8652e83a8d708">&#9670;&nbsp;</a></span>SetDrawBuffer() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::SetDrawBuffer </td>
+          <td>(</td>
+          <td class="paramtype">RenderBufferAttachmentSPtr&#160;</td>
+          <td class="paramname"><em>p_attach</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specifies the color buffer to be drawn into. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_attach</td><td>The color buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6cb4bcbed6b4c34578901f7d8c242376"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cb4bcbed6b4c34578901f7d8c242376">&#9670;&nbsp;</a></span>SetDrawBuffers() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::SetDrawBuffers </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Specifies the buffers to be drawn into. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>All buffers attached are selected </dd></dl>
+
+</div>
+</div>
+<a id="acaeb4e168bbbe880b76a3e186dd894f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acaeb4e168bbbe880b76a3e186dd894f2">&#9670;&nbsp;</a></span>SetDrawBuffers() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::FrameBuffer::SetDrawBuffers </td>
+          <td>(</td>
+          <td class="paramtype">AttachArray const &amp;&#160;</td>
+          <td class="paramname"><em>p_attaches</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -317,12 +1458,19 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Removes the material </p>
+
+<p>Uses given attachments to this framebuffer for next draw call. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_attaches</td><td>The attachments. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="afc36943709a2e9e71269bdbab0293575"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afc36943709a2e9e71269bdbab0293575">&#9670;&nbsp;</a></span>Initialise()</h2>
+<a id="ae736793f4fc8985ef82bf261a403a839"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae736793f4fc8985ef82bf261a403a839">&#9670;&nbsp;</a></span>SetReadBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -331,10 +1479,21 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Castor3D::PassRenderer::Initialise </td>
+          <td class="memname">virtual C3D_API void Castor3D::FrameBuffer::SetReadBuffer </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#acd57acc3698e4eacd134a1c24c31079c">eATTACHMENT_POINT</a>&#160;</td>
+          <td class="paramname"><em>p_point</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
@@ -343,65 +1502,100 @@ Additional Inherited Members</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Initialises the material </p>
+
+<p>Specifies the color buffer source for pixels. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_point</td><td>The color buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The attachment index </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="ac1875f43821aa3517c5d62744d841a4b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1875f43821aa3517c5d62744d841a4b">&#9670;&nbsp;</a></span>Render()</h2>
+<a id="a772e6dbb07ebb4146389ae8d17b8526e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a772e6dbb07ebb4146389ae8d17b8526e">&#9670;&nbsp;</a></span>StretchInto()</h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Castor3D::PassRenderer::Render </td>
+          <td class="memname">C3D_API bool Castor3D::FrameBuffer::StretchInto </td>
+          <td>(</td>
+          <td class="paramtype">FrameBufferSPtr&#160;</td>
+          <td class="paramname"><em>p_buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Rectangle const &amp;&#160;</td>
+          <td class="paramname"><em>p_rectSrc</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Rectangle const &amp;&#160;</td>
+          <td class="paramname"><em>p_rectDst</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_components</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a0c78b7214e98a23339f3971f431512f0">eINTERPOLATION_MODE</a>&#160;</td>
+          <td class="paramname"><em>p_interpolation</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Stretches this frame buffer into the given one. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Interpolation for depth or stencil buffer must be eINTERPOLATION_MODE_NEAREST. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>The buffer receiving this one. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rectSrc</td><td>The source rectangle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rectDst</td><td>The destination rectangle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_components</td><td>Bitwise OR of eBUFFER_COMPONENT indicating which buffers are to be copied. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_interpolation</td><td>The interpolation to apply if the image is stretched. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful. </dd></dl>
+
+</div>
+</div>
+<a id="ab665abf01e3b2859eabd0f7ef562ffda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab665abf01e3b2859eabd0f7ef562ffda">&#9670;&nbsp;</a></span>Unbind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameBuffer::Unbind </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
-<p>Applies the material </p>
 
-</div>
-</div>
-<a id="ac05c86fd675eb6f1963e77e8068d9e51"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac05c86fd675eb6f1963e77e8068d9e51">&#9670;&nbsp;</a></span>Render2D()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Castor3D::PassRenderer::Render2D </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Applies the material </p>
+<p>Deactivation function, to tell the GPU it is inactive. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a9d06ae4c70adaa24995c9643715ab788"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9d06ae4c70adaa24995c9643715ab788">&#9670;&nbsp;</a></span>m_pAmbient</h2>
+<a id="a41b6ffbd6168292dede126f4e2d7b329"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41b6ffbd6168292dede126f4e2d7b329">&#9670;&nbsp;</a></span>m_attaches</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -410,7 +1604,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Point4fFrameVariableWPtr Castor3D::PassRenderer::m_pAmbient</td>
+          <td class="memname">AttachArray Castor3D::FrameBuffer::m_attaches</td>
         </tr>
       </table>
   </td>
@@ -420,12 +1614,12 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The ambient colour frame variable. </p>
+<p>All attachments. </p>
 
 </div>
 </div>
-<a id="a1c675acaabee222540c230cf7da90a53"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c675acaabee222540c230cf7da90a53">&#9670;&nbsp;</a></span>m_pCameraPos</h2>
+<a id="abdc290021c9821027f9d8d1270ea3653"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdc290021c9821027f9d8d1270ea3653">&#9670;&nbsp;</a></span>m_clearColour</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -434,7 +1628,7 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Point3rFrameVariableWPtr Castor3D::PassRenderer::m_pCameraPos</td>
+          <td class="memname">Castor::Colour Castor3D::FrameBuffer::m_clearColour</td>
         </tr>
       </table>
   </td>
@@ -444,281 +1638,19 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>The camera position frame variable. </p>
+<p>The background colour. </p>
 
-</div>
-</div>
-<a id="a5b3731d154a76f63b8d247bb114dc452"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b3731d154a76f63b8d247bb114dc452">&#9670;&nbsp;</a></span>m_pDiffuse</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Point4fFrameVariableWPtr Castor3D::PassRenderer::m_pDiffuse</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The diffuser colour frame variable. </p>
-
-</div>
-</div>
-<a id="a60ca8419129ddce77109f3d700b642d8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60ca8419129ddce77109f3d700b642d8">&#9670;&nbsp;</a></span>m_pEmissive</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Point4fFrameVariableWPtr Castor3D::PassRenderer::m_pEmissive</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The emissive colour frame variable. </p>
-
-</div>
-</div>
-<a id="a58c67bd8bf71daccca3a497182485889"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58c67bd8bf71daccca3a497182485889">&#9670;&nbsp;</a></span>m_pOpacity</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OneFloatFrameVariableWPtr Castor3D::PassRenderer::m_pOpacity</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The opacity value frame variable. </p>
-
-</div>
-</div>
-<a id="a886de53c89e9e740146fd72736efcc02"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a886de53c89e9e740146fd72736efcc02">&#9670;&nbsp;</a></span>m_pProgram</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">ShaderProgramBaseWPtr Castor3D::PassRenderer::m_pProgram</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The shader program. </p>
-
-</div>
-</div>
-<a id="aeeb7dc724ba3722541a1d06a7f71ebb0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeeb7dc724ba3722541a1d06a7f71ebb0">&#9670;&nbsp;</a></span>m_pShininess</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OneFloatFrameVariableWPtr Castor3D::PassRenderer::m_pShininess</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The shininess value frame variable. </p>
-
-</div>
-</div>
-<a id="a0eba142a24057492213fa3c80a0f2457"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0eba142a24057492213fa3c80a0f2457">&#9670;&nbsp;</a></span>m_pSpecular</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Point4fFrameVariableWPtr Castor3D::PassRenderer::m_pSpecular</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The specular colour frame variable. </p>
-
-</div>
-</div>
-<a id="a351a4e8be34acff6aaf104a967a9a775"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a351a4e8be34acff6aaf104a967a9a775">&#9670;&nbsp;</a></span>m_ptAmbient</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor::Point4f Castor3D::PassRenderer::m_ptAmbient</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The ambient colour value. </p>
-
-</div>
-</div>
-<a id="a5c3d8a7ffba74bc03098c6a3ad250793"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c3d8a7ffba74bc03098c6a3ad250793">&#9670;&nbsp;</a></span>m_ptCameraPos</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor::Point3r Castor3D::PassRenderer::m_ptCameraPos</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The camera position value. </p>
-
-</div>
-</div>
-<a id="a785f3dcbaeb70c8ace058c1596049195"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a785f3dcbaeb70c8ace058c1596049195">&#9670;&nbsp;</a></span>m_ptDiffuse</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor::Point4f Castor3D::PassRenderer::m_ptDiffuse</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The diffuse colour value. </p>
-
-</div>
-</div>
-<a id="a2e830c64520e6d604dc58d123bcbb63e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e830c64520e6d604dc58d123bcbb63e">&#9670;&nbsp;</a></span>m_ptEmissive</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor::Point4f Castor3D::PassRenderer::m_ptEmissive</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The emissive colour value. </p>
-
-</div>
-</div>
-<a id="aad32af78f828ad3d6004515f0923f640"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aad32af78f828ad3d6004515f0923f640">&#9670;&nbsp;</a></span>m_ptSpecular</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor::Point4f Castor3D::PassRenderer::m_ptSpecular</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>The specular colour value. </p>
+<p class="reference">Referenced by <a class="el" href="../../d6/d27/a01781.html#a7d65cdf481d363c7a5c9f3d843a4fb66">GetClearColour()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d3/d1a/a00251.html">PassRenderer.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../dc/de6/a00167.html">FrameBuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:06 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:35 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

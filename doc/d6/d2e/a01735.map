@@ -1,4 +1,5 @@
-<map id="Castor3D::OverlayCategory::BinaryParser" name="Castor3D::OverlayCategory::BinaryParser">
-<area shape="rect" id="node1" title="OverlayCategory loader." alt="" coords="5,95,184,136"/>
-<area shape="rect" id="node2" href="$d2/d41/a01037.html" title=" " alt="" coords="15,5,174,47"/>
+<map id="Castor3D::DirectionalLight::BinaryParser" name="Castor3D::DirectionalLight::BinaryParser">
+<area shape="rect" id="node1" title="DirectionalLight loader." alt="" coords="5,184,179,225"/>
+<area shape="rect" id="node2" href="$dc/dc8/a01929.html" title="LightCategory loader." alt="" coords="10,95,174,136"/>
+<area shape="rect" id="node3" href="$d8/d92/a01165.html" title=" " alt="" coords="13,5,171,47"/>
 </map>

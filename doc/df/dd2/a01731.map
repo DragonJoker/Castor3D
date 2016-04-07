@@ -1,5 +1,5 @@
-<map id="Castor3D::OverlayCategory::TextLoader" name="Castor3D::OverlayCategory::TextLoader">
-<area shape="rect" id="node1" title="OverlayCategory loader." alt="" coords="272,46,451,87"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,224,61"/>
-<area shape="rect" id="node3" title=" " alt="" coords="65,85,164,112"/>
+<map id="Castor3D::DirectionalLight::TextLoader" name="Castor3D::DirectionalLight::TextLoader">
+<area shape="rect" id="node1" title="DirectionalLight loader." alt="" coords="20,199,193,240"/>
+<area shape="rect" id="node2" href="$d6/d18/a01925.html" title="LightCategory loader." alt="" coords="25,109,189,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,208,61"/>
 </map>

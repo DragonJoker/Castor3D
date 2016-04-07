@@ -1,4 +1,4 @@
-<map id="Castor3D::ChunkParser&lt; Castor::Point4f &gt;" name="Castor3D::ChunkParser&lt; Castor::Point4f &gt;">
-<area shape="rect" id="node1" title="Chunk parser." alt="" coords="21,80,179,121"/>
-<area shape="rect" id="node2" href="$dc/dd5/a01293.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
+<map id="Castor3D::is_detachable&lt; T &gt;" name="Castor3D::is_detachable&lt; T &gt;">
+<area shape="rect" id="node1" title="Helper class, telling if the template parameter has the method Detach." alt="" coords="5,80,200,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="62,5,143,32"/>
 </map>

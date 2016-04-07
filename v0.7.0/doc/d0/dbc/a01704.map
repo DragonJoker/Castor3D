@@ -1,0 +1,6 @@
+<map id="Castor3D::MovingObjectBase" name="Castor3D::MovingObjectBase">
+<area shape="rect" id="node1" title="Class which represents the moving things." alt="" coords="165,5,357,32"/>
+<area shape="rect" id="node2" href="$dd/db4/a01693.html" title="Implementation of MovingObjectBase for Bones." alt="" coords="5,80,160,107"/>
+<area shape="rect" id="node3" href="$d6/d15/a01697.html" title="Implementation of MovingObjectBase for abstract nodes." alt="" coords="184,80,339,107"/>
+<area shape="rect" id="node4" href="$d1/db5/a01701.html" title="Implementation of MovingObjectBase for MovableObject." alt="" coords="363,80,525,107"/>
+</map>

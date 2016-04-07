@@ -1,4 +1,4 @@
-<map id="Castor3D::ShaderPlugin" name="Castor3D::ShaderPlugin">
-<area shape="rect" id="node1" title="Shader program Plugin class." alt="" coords="5,80,167,107"/>
-<area shape="rect" id="node2" href="$d4/dd1/a01797.html" title="Plugin Base class." alt="" coords="11,5,161,32"/>
+<map id="Castor3D::Mesh::TextLoader" name="Castor3D::Mesh::TextLoader">
+<area shape="rect" id="node1" title="Mesh loader." alt="" coords="5,109,193,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,61"/>
 </map>

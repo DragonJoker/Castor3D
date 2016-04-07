@@ -1,3 +1,40 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d0/d62/a01513.html" title="Face implementation." alt="" coords="5,5,119,32"/>
+<area shape="rect" id="node1" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,1175,195,1201"/>
+<area shape="rect" id="node2" href="$d1/d62/a01533.html" title="Chunk parser." alt="" coords="243,5,433,32"/>
+<area shape="rect" id="node3" href="$d9/d45/a01665.html" title="ChunkParser specialisation for Castor::Colour." alt="" coords="259,57,417,98"/>
+<area shape="rect" id="node4" href="$d5/d75/a01605.html" title="ChunkParser specialisation for Castor::Coords2d." alt="" coords="259,122,417,163"/>
+<area shape="rect" id="node5" href="$d9/dc8/a01593.html" title="ChunkParser specialisation for Castor::Coords2f." alt="" coords="259,187,417,229"/>
+<area shape="rect" id="node6" href="$d6/d6d/a01617.html" title="ChunkParser specialisation for Castor::Coords2i." alt="" coords="259,253,417,294"/>
+<area shape="rect" id="node7" href="$dc/d62/a01629.html" title="ChunkParser specialisation for Castor::Coords2ui." alt="" coords="259,318,417,359"/>
+<area shape="rect" id="node8" href="$da/d24/a01609.html" title="ChunkParser specialisation for Castor::Coords3d." alt="" coords="259,383,417,425"/>
+<area shape="rect" id="node9" href="$d0/d1d/a01597.html" title="ChunkParser specialisation for Castor::Coords3f." alt="" coords="259,449,417,490"/>
+<area shape="rect" id="node10" href="$dd/dda/a01621.html" title="ChunkParser specialisation for Castor::Coords3i." alt="" coords="259,514,417,555"/>
+<area shape="rect" id="node11" href="$d6/dd6/a01633.html" title="ChunkParser specialisation for Castor::Coords3ui." alt="" coords="259,579,417,621"/>
+<area shape="rect" id="node12" href="$d3/da1/a01613.html" title="ChunkParser specialisation for Castor::Coords4d." alt="" coords="259,645,417,686"/>
+<area shape="rect" id="node13" href="$d7/d82/a01601.html" title="ChunkParser specialisation for Castor::Coords4f." alt="" coords="259,710,417,751"/>
+<area shape="rect" id="node14" href="$d3/d2d/a01625.html" title="ChunkParser specialisation for Castor::Coords4i." alt="" coords="259,775,417,817"/>
+<area shape="rect" id="node15" href="$db/d95/a01637.html" title="ChunkParser specialisation for Castor::Coords4ui." alt="" coords="259,841,417,882"/>
+<area shape="rect" id="node16" href="$d1/d03/a01653.html" title="ChunkParser specialisation for Castor::Matrix2x2d." alt="" coords="259,906,417,947"/>
+<area shape="rect" id="node17" href="$d0/d90/a01641.html" title="ChunkParser specialisation for Castor::Matrix2x2f." alt="" coords="259,971,417,1013"/>
+<area shape="rect" id="node18" href="$d3/d21/a01657.html" title="ChunkParser specialisation for Castor::Matrix3x3d." alt="" coords="259,1037,417,1078"/>
+<area shape="rect" id="node19" href="$d7/d53/a01645.html" title="ChunkParser specialisation for Castor::Matrix3x3f." alt="" coords="259,1102,417,1143"/>
+<area shape="rect" id="node20" href="$d4/d41/a01661.html" title="ChunkParser specialisation for Castor::Matrix4x4d." alt="" coords="259,1167,417,1209"/>
+<area shape="rect" id="node21" href="$dc/d87/a01649.html" title="ChunkParser specialisation for Castor::Matrix4x4f." alt="" coords="259,1233,417,1274"/>
+<area shape="rect" id="node22" href="$d5/dc8/a01541.html" title="ChunkParser specialisation for Castor::Path." alt="" coords="259,1298,417,1339"/>
+<area shape="rect" id="node23" href="$d9/dac/a01557.html" title="ChunkParser specialisation for Castor::Point2d." alt="" coords="259,1363,417,1405"/>
+<area shape="rect" id="node24" href="$dd/dba/a01545.html" title="ChunkParser specialisation for Castor::Point2f." alt="" coords="259,1429,417,1470"/>
+<area shape="rect" id="node25" href="$d9/d32/a01569.html" title="ChunkParser specialisation for Castor::Point2i." alt="" coords="259,1494,417,1535"/>
+<area shape="rect" id="node26" href="$da/df3/a01581.html" title="ChunkParser specialisation for Castor::Point2ui." alt="" coords="259,1559,417,1601"/>
+<area shape="rect" id="node27" href="$d2/d49/a01561.html" title="ChunkParser specialisation for Castor::Point3d." alt="" coords="259,1625,417,1666"/>
+<area shape="rect" id="node28" href="$d3/d1b/a01549.html" title="ChunkParser specialisation for Castor::Point3f." alt="" coords="259,1690,417,1731"/>
+<area shape="rect" id="node29" href="$d6/db5/a01573.html" title="ChunkParser specialisation for Castor::Point3i." alt="" coords="259,1755,417,1797"/>
+<area shape="rect" id="node30" href="$da/de2/a01585.html" title="ChunkParser specialisation for Castor::Point3ui." alt="" coords="259,1821,417,1862"/>
+<area shape="rect" id="node31" href="$d6/d82/a01565.html" title="ChunkParser specialisation for Castor::Point4d." alt="" coords="259,1886,417,1927"/>
+<area shape="rect" id="node32" href="$de/d2c/a01553.html" title="ChunkParser specialisation for Castor::Point4f." alt="" coords="259,1951,417,1993"/>
+<area shape="rect" id="node33" href="$d3/daa/a01577.html" title="ChunkParser specialisation for Castor::Point4i." alt="" coords="259,2017,417,2058"/>
+<area shape="rect" id="node34" href="$d7/d29/a01589.html" title="ChunkParser specialisation for Castor::Point4ui." alt="" coords="259,2082,417,2123"/>
+<area shape="rect" id="node35" href="$d9/df5/a01673.html" title="ChunkParser specialisation for Castor::Position." alt="" coords="259,2147,417,2189"/>
+<area shape="rect" id="node36" href="$d2/d44/a01677.html" title="ChunkParser specialisation for Castor::Quaternion." alt="" coords="259,2213,417,2254"/>
+<area shape="rect" id="node37" href="$dc/dec/a01669.html" title="ChunkParser specialisation for Castor::Size." alt="" coords="259,2278,417,2319"/>
+<area shape="rect" id="node38" href="$df/d3f/a01537.html" title="ChunkParser specialisation for Castor::String." alt="" coords="259,2343,417,2385"/>
 </map>

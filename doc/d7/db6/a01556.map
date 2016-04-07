@@ -1,5 +1,4 @@
-<map id="Castor3D::FrameVariable::TextLoader" name="Castor3D::FrameVariable::TextLoader">
-<area shape="rect" id="node1" title="FrameVariable loader." alt="" coords="260,46,428,87"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,212,61"/>
-<area shape="rect" id="node3" title=" " alt="" coords="59,85,158,112"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Point2d &gt;" name="Castor3D::ChunkParser&lt; Castor::Point2d &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Point2d." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

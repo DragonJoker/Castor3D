@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::RendererCreator&lt; SubmeshRenderer &gt; Struct Template Reference</title>
+<title>Castor3D: Castor3D::GpuQuery Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,26 +39,151 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/da8/a01865.html">RendererCreator&lt; SubmeshRenderer &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/da8/a01865.html">GpuQuery</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d0/d4a/a01862.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::RendererCreator&lt; SubmeshRenderer &gt; Struct Template Reference</div>  </div>
+<div class="title">Castor3D::GpuQuery Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>GPU query implementation.  
+ <a href="../../d5/da8/a01865.html#details">More...</a></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::GpuQuery:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../dd/d87/a01864.png" border="0" usemap="#Castor3D_1_1GpuQuery_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1GpuQuery_inherit__map" id="Castor3D_1_1GpuQuery_inherit__map">
+<area shape="rect"  title="GPU query implementation." alt="" coords="51,80,194,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,240,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::GpuQuery:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d4/d12/a01863.png" border="0" usemap="#Castor3D_1_1GpuQuery_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1GpuQuery_coll__map" id="Castor3D_1_1GpuQuery_coll__map">
+<area shape="rect"  title="GPU query implementation." alt="" coords="51,80,194,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,240,32"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6dfa2a13c1b52325c57a971756967b1c"><td class="memItemLeft" align="right" valign="top">SubmeshRendererSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a6dfa2a13c1b52325c57a971756967b1c">operator()</a> (<a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *p_pRS)</td></tr>
-<tr class="separator:a6dfa2a13c1b52325c57a971756967b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5573e069e2210706da1e0da74311c89"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#ad5573e069e2210706da1e0da74311c89">GpuQuery</a> (<a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> &amp;p_renderSystem, <a class="el" href="../../d7/d41/a00532.html#ac077acf4676f5b286a9749bc5f780ed2">eQUERY_TYPE</a> p_query)</td></tr>
+<tr class="memdesc:ad5573e069e2210706da1e0da74311c89"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#ad5573e069e2210706da1e0da74311c89">More...</a><br /></td></tr>
+<tr class="separator:ad5573e069e2210706da1e0da74311c89"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4311df23ac58ba7e9e9321b1cd5b6872"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a4311df23ac58ba7e9e9321b1cd5b6872">~GpuQuery</a> ()</td></tr>
+<tr class="memdesc:a4311df23ac58ba7e9e9321b1cd5b6872"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a4311df23ac58ba7e9e9321b1cd5b6872">More...</a><br /></td></tr>
+<tr class="separator:a4311df23ac58ba7e9e9321b1cd5b6872"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a33d4760bf04b482d9dd280b648c4d0ba"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a33d4760bf04b482d9dd280b648c4d0ba">Create</a> ()</td></tr>
+<tr class="memdesc:a33d4760bf04b482d9dd280b648c4d0ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the query on GPU.  <a href="#a33d4760bf04b482d9dd280b648c4d0ba">More...</a><br /></td></tr>
+<tr class="separator:a33d4760bf04b482d9dd280b648c4d0ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a967c8c37e90ac2912af9fb68b906dffc"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a967c8c37e90ac2912af9fb68b906dffc">Destroy</a> ()</td></tr>
+<tr class="memdesc:a967c8c37e90ac2912af9fb68b906dffc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the query on GPU.  <a href="#a967c8c37e90ac2912af9fb68b906dffc">More...</a><br /></td></tr>
+<tr class="separator:a967c8c37e90ac2912af9fb68b906dffc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff4c0c5e17bf8eec3381701218c8f0fd"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#aff4c0c5e17bf8eec3381701218c8f0fd">Begin</a> ()</td></tr>
+<tr class="memdesc:aff4c0c5e17bf8eec3381701218c8f0fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins the query.  <a href="#aff4c0c5e17bf8eec3381701218c8f0fd">More...</a><br /></td></tr>
+<tr class="separator:aff4c0c5e17bf8eec3381701218c8f0fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f827e8dc99c11dd43d742c80558a009"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a0f827e8dc99c11dd43d742c80558a009">End</a> ()</td></tr>
+<tr class="memdesc:a0f827e8dc99c11dd43d742c80558a009"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the query.  <a href="#a0f827e8dc99c11dd43d742c80558a009">More...</a><br /></td></tr>
+<tr class="separator:a0f827e8dc99c11dd43d742c80558a009"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08cafe9c3a15fa541fc9e9cfbc66d4d5"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a08cafe9c3a15fa541fc9e9cfbc66d4d5"><td class="memTemplItemLeft" align="right" valign="top">bool&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a08cafe9c3a15fa541fc9e9cfbc66d4d5">GetInfos</a> (<a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a> p_infos, T &amp;p_param) const</td></tr>
+<tr class="memdesc:a08cafe9c3a15fa541fc9e9cfbc66d4d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves query information.  <a href="#a08cafe9c3a15fa541fc9e9cfbc66d4d5">More...</a><br /></td></tr>
+<tr class="separator:a08cafe9c3a15fa541fc9e9cfbc66d4d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:abc9c5caa2ba8465d543ac3fc13092d5f"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#abc9c5caa2ba8465d543ac3fc13092d5f">DoCreate</a> ()=0</td></tr>
+<tr class="memdesc:abc9c5caa2ba8465d543ac3fc13092d5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates the query on GPU.  <a href="#abc9c5caa2ba8465d543ac3fc13092d5f">More...</a><br /></td></tr>
+<tr class="separator:abc9c5caa2ba8465d543ac3fc13092d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0871782ff09f76b6478f9bf11a81fe61"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a0871782ff09f76b6478f9bf11a81fe61">DoDestroy</a> ()=0</td></tr>
+<tr class="memdesc:a0871782ff09f76b6478f9bf11a81fe61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destroys the query on GPU.  <a href="#a0871782ff09f76b6478f9bf11a81fe61">More...</a><br /></td></tr>
+<tr class="separator:a0871782ff09f76b6478f9bf11a81fe61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22b8ced3e1425cb758fcf785ebff909d"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a22b8ced3e1425cb758fcf785ebff909d">DoBegin</a> () const =0</td></tr>
+<tr class="memdesc:a22b8ced3e1425cb758fcf785ebff909d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins the query.  <a href="#a22b8ced3e1425cb758fcf785ebff909d">More...</a><br /></td></tr>
+<tr class="separator:a22b8ced3e1425cb758fcf785ebff909d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa64776c0580c82978467b65352e43cda"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#aa64776c0580c82978467b65352e43cda">DoEnd</a> () const =0</td></tr>
+<tr class="memdesc:aa64776c0580c82978467b65352e43cda"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the query.  <a href="#aa64776c0580c82978467b65352e43cda">More...</a><br /></td></tr>
+<tr class="separator:aa64776c0580c82978467b65352e43cda"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aafbb287e43523f23bebb46894d65952b"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#aafbb287e43523f23bebb46894d65952b">DoGetInfos</a> (<a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a> p_infos, int32_t &amp;p_param) const =0</td></tr>
+<tr class="memdesc:aafbb287e43523f23bebb46894d65952b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves query information.  <a href="#aafbb287e43523f23bebb46894d65952b">More...</a><br /></td></tr>
+<tr class="separator:aafbb287e43523f23bebb46894d65952b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f2608593d6d82f24e07827e7b90de1b"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a7f2608593d6d82f24e07827e7b90de1b">DoGetInfos</a> (<a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a> p_infos, uint32_t &amp;p_param) const =0</td></tr>
+<tr class="memdesc:a7f2608593d6d82f24e07827e7b90de1b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves query information.  <a href="#a7f2608593d6d82f24e07827e7b90de1b">More...</a><br /></td></tr>
+<tr class="separator:a7f2608593d6d82f24e07827e7b90de1b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c326b0c34538143c88cbcb88bcb06c"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a25c326b0c34538143c88cbcb88bcb06c">DoGetInfos</a> (<a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a> p_infos, int64_t &amp;p_param) const =0</td></tr>
+<tr class="memdesc:a25c326b0c34538143c88cbcb88bcb06c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves query information.  <a href="#a25c326b0c34538143c88cbcb88bcb06c">More...</a><br /></td></tr>
+<tr class="separator:a25c326b0c34538143c88cbcb88bcb06c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a929b49c8eb1fae5e40980f383b7944"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a5a929b49c8eb1fae5e40980f383b7944">DoGetInfos</a> (<a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a> p_infos, uint64_t &amp;p_param) const =0</td></tr>
+<tr class="memdesc:a5a929b49c8eb1fae5e40980f383b7944"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves query information.  <a href="#a5a929b49c8eb1fae5e40980f383b7944">More...</a><br /></td></tr>
+<tr class="separator:a5a929b49c8eb1fae5e40980f383b7944"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:acd7908183cead3f9c18d3baf0cc9cc54"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#acd7908183cead3f9c18d3baf0cc9cc54">m_active</a> { false }</td></tr>
+<tr class="memdesc:acd7908183cead3f9c18d3baf0cc9cc54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the query is active.  <a href="#acd7908183cead3f9c18d3baf0cc9cc54">More...</a><br /></td></tr>
+<tr class="separator:acd7908183cead3f9c18d3baf0cc9cc54"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e3693f3946f256f7dd1819238cb9a49"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#ac077acf4676f5b286a9749bc5f780ed2">eQUERY_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/da8/a01865.html#a5e3693f3946f256f7dd1819238cb9a49">m_type</a></td></tr>
+<tr class="memdesc:a5e3693f3946f256f7dd1819238cb9a49"><td class="mdescLeft">&#160;</td><td class="mdescRight">The query type.  <a href="#a5e3693f3946f256f7dd1819238cb9a49">More...</a><br /></td></tr>
+<tr class="separator:a5e3693f3946f256f7dd1819238cb9a49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Member Function Documentation</h2>
-<a id="a6dfa2a13c1b52325c57a971756967b1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6dfa2a13c1b52325c57a971756967b1c">&#9670;&nbsp;</a></span>operator()()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>GPU query implementation. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>16/03/2016 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ad5573e069e2210706da1e0da74311c89"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5573e069e2210706da1e0da74311c89">&#9670;&nbsp;</a></span>GpuQuery()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::GpuQuery::GpuQuery </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_renderSystem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#ac077acf4676f5b286a9749bc5f780ed2">eQUERY_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_query</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_renderSystem</td><td>The <a class="el" href="../../db/d2a/a02325.html" title="The render system representation.">RenderSystem</a>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_query</td><td>The query type. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4311df23ac58ba7e9e9321b1cd5b6872"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4311df23ac58ba7e9e9321b1cd5b6872">&#9670;&nbsp;</a></span>~GpuQuery()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -67,11 +192,436 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">SubmeshRendererSPtr <a class="el" href="../../db/d6b/a01853.html">Castor3D::RendererCreator</a>&lt; <a class="el" href="../../d7/d16/a02109.html">SubmeshRenderer</a> &gt;::operator() </td>
+          <td class="memname">virtual C3D_API Castor3D::GpuQuery::~GpuQuery </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td>
-          <td class="paramname"><em>p_pRS</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aff4c0c5e17bf8eec3381701218c8f0fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff4c0c5e17bf8eec3381701218c8f0fd">&#9670;&nbsp;</a></span>Begin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::GpuQuery::Begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Begins the query. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if everything is OK. </dd></dl>
+
+</div>
+</div>
+<a id="a33d4760bf04b482d9dd280b648c4d0ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a33d4760bf04b482d9dd280b648c4d0ba">&#9670;&nbsp;</a></span>Create()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::GpuQuery::Create </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates the query on GPU. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if everything is OK. </dd></dl>
+
+</div>
+</div>
+<a id="a967c8c37e90ac2912af9fb68b906dffc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a967c8c37e90ac2912af9fb68b906dffc">&#9670;&nbsp;</a></span>Destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::GpuQuery::Destroy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destroys the query on GPU. </p>
+
+</div>
+</div>
+<a id="a22b8ced3e1425cb758fcf785ebff909d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22b8ced3e1425cb758fcf785ebff909d">&#9670;&nbsp;</a></span>DoBegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::GpuQuery::DoBegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Begins the query. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if everything is OK. </dd></dl>
+
+</div>
+</div>
+<a id="abc9c5caa2ba8465d543ac3fc13092d5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc9c5caa2ba8465d543ac3fc13092d5f">&#9670;&nbsp;</a></span>DoCreate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::GpuQuery::DoCreate </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates the query on GPU. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if everything is OK. </dd></dl>
+
+</div>
+</div>
+<a id="a0871782ff09f76b6478f9bf11a81fe61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0871782ff09f76b6478f9bf11a81fe61">&#9670;&nbsp;</a></span>DoDestroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::GpuQuery::DoDestroy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destroys the query on GPU. </p>
+
+</div>
+</div>
+<a id="aa64776c0580c82978467b65352e43cda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa64776c0580c82978467b65352e43cda">&#9670;&nbsp;</a></span>DoEnd()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::GpuQuery::DoEnd </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Ends the query. </p>
+
+</div>
+</div>
+<a id="aafbb287e43523f23bebb46894d65952b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aafbb287e43523f23bebb46894d65952b">&#9670;&nbsp;</a></span>DoGetInfos() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::GpuQuery::DoGetInfos </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a>&#160;</td>
+          <td class="paramname"><em>p_infos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t &amp;&#160;</td>
+          <td class="paramname"><em>p_param</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves query information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_infos</td><td>The information to retrieve. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_param</td><td>Receives the result. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the information was retrieved. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d5/da8/a01865.html#a08cafe9c3a15fa541fc9e9cfbc66d4d5">GetInfos()</a>.</p>
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d5/da8/a01865_aafbb287e43523f23bebb46894d65952b_icgraph.png" border="0" usemap="#d5/da8/a01865_aafbb287e43523f23bebb46894d65952b_icgraph" alt=""/></div>
+<map name="d5/da8/a01865_aafbb287e43523f23bebb46894d65952b_icgraph" id="d5/da8/a01865_aafbb287e43523f23bebb46894d65952b_icgraph">
+<area shape="rect"  title="Retrieves query information." alt="" coords="196,5,339,47"/>
+<area shape="rect"  href="../../d5/da8/a01865.html#a08cafe9c3a15fa541fc9e9cfbc66d4d5" title="Retrieves query information." alt="" coords="5,5,148,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a7f2608593d6d82f24e07827e7b90de1b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f2608593d6d82f24e07827e7b90de1b">&#9670;&nbsp;</a></span>DoGetInfos() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::GpuQuery::DoGetInfos </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a>&#160;</td>
+          <td class="paramname"><em>p_infos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t &amp;&#160;</td>
+          <td class="paramname"><em>p_param</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves query information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_infos</td><td>The information to retrieve. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_param</td><td>Receives the result. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the information was retrieved. </dd></dl>
+
+</div>
+</div>
+<a id="a25c326b0c34538143c88cbcb88bcb06c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25c326b0c34538143c88cbcb88bcb06c">&#9670;&nbsp;</a></span>DoGetInfos() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::GpuQuery::DoGetInfos </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a>&#160;</td>
+          <td class="paramname"><em>p_infos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int64_t &amp;&#160;</td>
+          <td class="paramname"><em>p_param</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves query information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_infos</td><td>The information to retrieve. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_param</td><td>Receives the result. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the information was retrieved. </dd></dl>
+
+</div>
+</div>
+<a id="a5a929b49c8eb1fae5e40980f383b7944"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a929b49c8eb1fae5e40980f383b7944">&#9670;&nbsp;</a></span>DoGetInfos() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::GpuQuery::DoGetInfos </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a>&#160;</td>
+          <td class="paramname"><em>p_infos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t &amp;&#160;</td>
+          <td class="paramname"><em>p_param</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves query information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_infos</td><td>The information to retrieve. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_param</td><td>Receives the result. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the information was retrieved. </dd></dl>
+
+</div>
+</div>
+<a id="a0f827e8dc99c11dd43d742c80558a009"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f827e8dc99c11dd43d742c80558a009">&#9670;&nbsp;</a></span>End()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::GpuQuery::End </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Ends the query. </p>
+
+</div>
+</div>
+<a id="a08cafe9c3a15fa541fc9e9cfbc66d4d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08cafe9c3a15fa541fc9e9cfbc66d4d5">&#9670;&nbsp;</a></span>GetInfos()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Castor3D::GpuQuery::GetInfos </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af24caf20b4e4c0d1299572d2473e270d">eQUERY_INFO</a>&#160;</td>
+          <td class="paramname"><em>p_infos</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T &amp;&#160;</td>
+          <td class="paramname"><em>p_param</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
         </tr>
       </table>
   </td>
@@ -81,15 +631,87 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves query information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_infos</td><td>The information to retrieve. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_param</td><td>Receives the result. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the information was retrieved. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d5/da8/a01865.html#aafbb287e43523f23bebb46894d65952b">DoGetInfos()</a>.</p>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d5/da8/a01865_a08cafe9c3a15fa541fc9e9cfbc66d4d5_cgraph.png" border="0" usemap="#d5/da8/a01865_a08cafe9c3a15fa541fc9e9cfbc66d4d5_cgraph" alt=""/></div>
+<map name="d5/da8/a01865_a08cafe9c3a15fa541fc9e9cfbc66d4d5_cgraph" id="d5/da8/a01865_a08cafe9c3a15fa541fc9e9cfbc66d4d5_cgraph">
+<area shape="rect"  title="Retrieves query information." alt="" coords="5,5,148,47"/>
+<area shape="rect"  href="../../d5/da8/a01865.html#aafbb287e43523f23bebb46894d65952b" title="Retrieves query information." alt="" coords="196,5,339,47"/>
+</map>
+</div>
+
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d1/d5d/a00311.html">RenderSystem.hpp</a></li>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="acd7908183cead3f9c18d3baf0cc9cc54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd7908183cead3f9c18d3baf0cc9cc54">&#9670;&nbsp;</a></span>m_active</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Castor3D::GpuQuery::m_active { false }</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells if the query is active. </p>
+
+</div>
+</div>
+<a id="a5e3693f3946f256f7dd1819238cb9a49"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e3693f3946f256f7dd1819238cb9a49">&#9670;&nbsp;</a></span>m_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/d41/a00532.html#ac077acf4676f5b286a9749bc5f780ed2">eQUERY_TYPE</a> Castor3D::GpuQuery::m_type</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The query type. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d3/de5/a00209.html">GpuQuery.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:08 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:35 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

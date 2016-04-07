@@ -1,4 +1,5 @@
-<map id="Castor3D::RenderBufferAttachment" name="Castor3D::RenderBufferAttachment">
-<area shape="rect" id="node1" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="5,80,231,107"/>
-<area shape="rect" id="node2" href="$d5/dc8/a01541.html" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="7,5,229,32"/>
+<map id="Castor3D::Geometry::BinaryParser" name="Castor3D::Geometry::BinaryParser">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="19,184,161,225"/>
+<area shape="rect" id="node2" href="$d0/d67/a02065.html" title="MovableObject loader." alt="" coords="5,95,175,136"/>
+<area shape="rect" id="node3" href="$d8/d92/a01165.html" title=" " alt="" coords="11,5,169,47"/>
 </map>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::RendererAdder&lt; WindowRenderer &gt; Struct Template Reference</title>
+<title>Castor3D: Castor3D::Light Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,26 +39,303 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d2/d54/a01917.html">RendererAdder&lt; WindowRenderer &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d2/d54/a01917.html">Light</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../dc/d18/a01914.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::RendererAdder&lt; WindowRenderer &gt; Struct Template Reference</div>  </div>
+<div class="title">Castor3D::Light Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><a class="el" href="../../d2/d54/a01917.html" title="Light source implementation.">Light</a> source implementation.  
+ <a href="../../d2/d54/a01917.html#details">More...</a></p>
+<div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::Light:</div>
+<div id="dynsection-0-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-0-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d0/d36/a01916.png" border="0" usemap="#Castor3D_1_1Light_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1Light_inherit__map" id="Castor3D_1_1Light_inherit__map">
+<area shape="rect"  title="Light source implementation." alt="" coords="461,71,573,98"/>
+<area shape="rect"  href="../../d2/dea/a02057.html" title="Movable object class." alt="" coords="244,71,413,98"/>
+<area shape="rect"  title=" " alt="" coords="5,5,196,47"/>
+<area shape="rect"  title=" " alt="" coords="8,71,193,98"/>
+<area shape="rect"  href="../../d2/df3/a01085.html" title="Animable public interface." alt="" coords="31,122,170,149"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
+<div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::Light:</div>
+<div id="dynsection-1-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-1-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../df/d11/a01915.png" border="0" usemap="#Castor3D_1_1Light_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1Light_coll__map" id="Castor3D_1_1Light_coll__map">
+<area shape="rect"  title="Light source implementation." alt="" coords="461,71,573,98"/>
+<area shape="rect"  href="../../d2/dea/a02057.html" title="Movable object class." alt="" coords="244,71,413,98"/>
+<area shape="rect"  title=" " alt="" coords="5,5,196,47"/>
+<area shape="rect"  title=" " alt="" coords="8,71,193,98"/>
+<area shape="rect"  href="../../d2/df3/a01085.html" title="Animable public interface." alt="" coords="31,122,170,149"/>
+</map>
+<center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3341931dda5ba6119b5016d6e3dd9b4e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a3341931dda5ba6119b5016d6e3dd9b4e">operator()</a> (<a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *p_pRS, WindowRendererSPtr p_pRenderer)</td></tr>
-<tr class="separator:a3341931dda5ba6119b5016d6e3dd9b4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0a9ba1909b0463cfed5d65ccc4abdce6"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a0a9ba1909b0463cfed5d65ccc4abdce6">Light</a> (Castor::String const &amp;p_name, <a class="el" href="../../d7/d18/a02409.html">Scene</a> &amp;p_scene, SceneNodeSPtr p_node, <a class="el" href="../../dc/da7/a01933.html">LightFactory</a> &amp;p_factory, <a class="el" href="../../d7/d41/a00532.html#a358b96ee778c8b1bc60769e84b252875">eLIGHT_TYPE</a> p_lightType)</td></tr>
+<tr class="memdesc:a0a9ba1909b0463cfed5d65ccc4abdce6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a0a9ba1909b0463cfed5d65ccc4abdce6">More...</a><br /></td></tr>
+<tr class="separator:a0a9ba1909b0463cfed5d65ccc4abdce6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c95a4d198a9f423e2fae9cfa11f1711"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a7c95a4d198a9f423e2fae9cfa11f1711">~Light</a> ()</td></tr>
+<tr class="memdesc:a7c95a4d198a9f423e2fae9cfa11f1711"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a7c95a4d198a9f423e2fae9cfa11f1711">More...</a><br /></td></tr>
+<tr class="separator:a7c95a4d198a9f423e2fae9cfa11f1711"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7cd2a2d7a71eddc13efbb6d10a9e958d"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a7cd2a2d7a71eddc13efbb6d10a9e958d">Bind</a> (Castor::PxBufferBase &amp;p_texture, uint32_t p_index)</td></tr>
+<tr class="memdesc:a7cd2a2d7a71eddc13efbb6d10a9e958d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts the light into the given texture.  <a href="#a7cd2a2d7a71eddc13efbb6d10a9e958d">More...</a><br /></td></tr>
+<tr class="separator:a7cd2a2d7a71eddc13efbb6d10a9e958d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0ffbafba3c3dbaf618ba67abbe39e4f"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#ab0ffbafba3c3dbaf618ba67abbe39e4f">AttachTo</a> (SceneNodeSPtr p_node)</td></tr>
+<tr class="memdesc:ab0ffbafba3c3dbaf618ba67abbe39e4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches this light to a <a class="el" href="../../d3/d39/a02005.html" title="Definition of a material.">Material</a>.  <a href="#ab0ffbafba3c3dbaf618ba67abbe39e4f">More...</a><br /></td></tr>
+<tr class="separator:ab0ffbafba3c3dbaf618ba67abbe39e4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa223e00a5bf8319e5d06cca7c3f1907f"><td class="memItemLeft" align="right" valign="top">C3D_API DirectionalLightSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#aa223e00a5bf8319e5d06cca7c3f1907f">GetDirectionalLight</a> () const</td></tr>
+<tr class="memdesc:aa223e00a5bf8319e5d06cca7c3f1907f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="../../d2/d70/a01729.html" title="Class which represents a Directional Light.">DirectionalLight</a> category.  <a href="#aa223e00a5bf8319e5d06cca7c3f1907f">More...</a><br /></td></tr>
+<tr class="separator:aa223e00a5bf8319e5d06cca7c3f1907f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61294b261475da600cef727cf657a4ec"><td class="memItemLeft" align="right" valign="top">C3D_API PointLightSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a61294b261475da600cef727cf657a4ec">GetPointLight</a> () const</td></tr>
+<tr class="memdesc:a61294b261475da600cef727cf657a4ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="../../d4/dc0/a02225.html" title="Class which represents a PointLight.">PointLight</a> category.  <a href="#a61294b261475da600cef727cf657a4ec">More...</a><br /></td></tr>
+<tr class="separator:a61294b261475da600cef727cf657a4ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace7a393f4084155cf65f567ef3d84fe5"><td class="memItemLeft" align="right" valign="top">C3D_API SpotLightSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#ace7a393f4084155cf65f567ef3d84fe5">GetSpotLight</a> () const</td></tr>
+<tr class="memdesc:ace7a393f4084155cf65f567ef3d84fe5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the <a class="el" href="../../d0/dbf/a02521.html" title="Class which represents a SpotLight.">SpotLight</a> category.  <a href="#ace7a393f4084155cf65f567ef3d84fe5">More...</a><br /></td></tr>
+<tr class="separator:ace7a393f4084155cf65f567ef3d84fe5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a942e5918beead3d2cc66cf5464789efb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a358b96ee778c8b1bc60769e84b252875">eLIGHT_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a942e5918beead3d2cc66cf5464789efb">GetLightType</a> () const</td></tr>
+<tr class="memdesc:a942e5918beead3d2cc66cf5464789efb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the light type.  <a href="#a942e5918beead3d2cc66cf5464789efb">More...</a><br /></td></tr>
+<tr class="separator:a942e5918beead3d2cc66cf5464789efb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6bee8e084242b3bac078e514230d9af8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a6bee8e084242b3bac078e514230d9af8">IsEnabled</a> () const</td></tr>
+<tr class="memdesc:a6bee8e084242b3bac078e514230d9af8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the light enabled status.  <a href="#a6bee8e084242b3bac078e514230d9af8">More...</a><br /></td></tr>
+<tr class="separator:a6bee8e084242b3bac078e514230d9af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bffe864702936527b0da562947f077b"><td class="memItemLeft" align="right" valign="top">Castor::Point3f const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a4bffe864702936527b0da562947f077b">GetColour</a> () const</td></tr>
+<tr class="separator:a4bffe864702936527b0da562947f077b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6866be17f208f48b037b5a0e2490eac6"><td class="memItemLeft" align="right" valign="top">Castor::Point3f const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a6866be17f208f48b037b5a0e2490eac6">GetIntensity</a> () const</td></tr>
+<tr class="separator:a6866be17f208f48b037b5a0e2490eac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae87a2823417af0fb5c1f169b40c1c6cd"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#ae87a2823417af0fb5c1f169b40c1c6cd">GetAmbientIntensity</a> () const</td></tr>
+<tr class="separator:ae87a2823417af0fb5c1f169b40c1c6cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4ea01515570dbe08d8e3e03aa9b8335"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#ad4ea01515570dbe08d8e3e03aa9b8335">GetDiffuseIntensity</a> () const</td></tr>
+<tr class="separator:ad4ea01515570dbe08d8e3e03aa9b8335"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a072843945d7cede44c879e2ce961f202"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a072843945d7cede44c879e2ce961f202">GetSpecularIntensity</a> () const</td></tr>
+<tr class="separator:a072843945d7cede44c879e2ce961f202"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fb647398654d1e4184a2ceab9975aea"><td class="memItemLeft" align="right" valign="top">Castor::Point4f const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a1fb647398654d1e4184a2ceab9975aea">GetPositionType</a> () const</td></tr>
+<tr class="memdesc:a1fb647398654d1e4184a2ceab9975aea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the light position and type.  <a href="#a1fb647398654d1e4184a2ceab9975aea">More...</a><br /></td></tr>
+<tr class="separator:a1fb647398654d1e4184a2ceab9975aea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80ba891f9a65da646568a75b2793fbd9"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a80ba891f9a65da646568a75b2793fbd9">GetIndex</a> () const</td></tr>
+<tr class="memdesc:a80ba891f9a65da646568a75b2793fbd9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the light index.  <a href="#a80ba891f9a65da646568a75b2793fbd9">More...</a><br /></td></tr>
+<tr class="separator:a80ba891f9a65da646568a75b2793fbd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace5ba849b3437f1df0a16e37eb5eed61"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#ace5ba849b3437f1df0a16e37eb5eed61">SetIndex</a> (int p_value)</td></tr>
+<tr class="memdesc:ace5ba849b3437f1df0a16e37eb5eed61"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the light index.  <a href="#ace5ba849b3437f1df0a16e37eb5eed61">More...</a><br /></td></tr>
+<tr class="separator:ace5ba849b3437f1df0a16e37eb5eed61"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6069f02b4fa2189397ed24d1b79b365a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a6069f02b4fa2189397ed24d1b79b365a">SetColour</a> (float *p_values)</td></tr>
+<tr class="memdesc:a6069f02b4fa2189397ed24d1b79b365a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the colour.  <a href="#a6069f02b4fa2189397ed24d1b79b365a">More...</a><br /></td></tr>
+<tr class="separator:a6069f02b4fa2189397ed24d1b79b365a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96c290d16aa975a1bae52ffe827a94f5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a96c290d16aa975a1bae52ffe827a94f5">SetColour</a> (float r, float g, float b)</td></tr>
+<tr class="memdesc:a96c290d16aa975a1bae52ffe827a94f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the colour.  <a href="#a96c290d16aa975a1bae52ffe827a94f5">More...</a><br /></td></tr>
+<tr class="separator:a96c290d16aa975a1bae52ffe827a94f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70dab1ae6b9c7c730f7e22b44bcf1524"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a70dab1ae6b9c7c730f7e22b44bcf1524">SetColour</a> (Castor::Point3f const &amp;p_colour)</td></tr>
+<tr class="memdesc:a70dab1ae6b9c7c730f7e22b44bcf1524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the colour.  <a href="#a70dab1ae6b9c7c730f7e22b44bcf1524">More...</a><br /></td></tr>
+<tr class="separator:a70dab1ae6b9c7c730f7e22b44bcf1524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af86e283148360a65a38fc17af01de0f3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#af86e283148360a65a38fc17af01de0f3">SetColour</a> (Castor::Colour const &amp;p_colour)</td></tr>
+<tr class="memdesc:af86e283148360a65a38fc17af01de0f3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the colour.  <a href="#af86e283148360a65a38fc17af01de0f3">More...</a><br /></td></tr>
+<tr class="separator:af86e283148360a65a38fc17af01de0f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79c121058d487a667c4754168f67a67b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a79c121058d487a667c4754168f67a67b">SetIntensity</a> (float *p_values)</td></tr>
+<tr class="memdesc:a79c121058d487a667c4754168f67a67b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the light's intensity values.  <a href="#a79c121058d487a667c4754168f67a67b">More...</a><br /></td></tr>
+<tr class="separator:a79c121058d487a667c4754168f67a67b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5203a27779d6c1828324d9854591d893"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a5203a27779d6c1828324d9854591d893">SetIntensity</a> (float a, float d, float s)</td></tr>
+<tr class="memdesc:a5203a27779d6c1828324d9854591d893"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the light's intensity values.  <a href="#a5203a27779d6c1828324d9854591d893">More...</a><br /></td></tr>
+<tr class="separator:a5203a27779d6c1828324d9854591d893"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf31c154b3ef5ff32a6261a4f33980d9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#acf31c154b3ef5ff32a6261a4f33980d9">SetIntensity</a> (Castor::Point3f const &amp;p_intensity)</td></tr>
+<tr class="memdesc:acf31c154b3ef5ff32a6261a4f33980d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the light's intensity values.  <a href="#acf31c154b3ef5ff32a6261a4f33980d9">More...</a><br /></td></tr>
+<tr class="separator:acf31c154b3ef5ff32a6261a4f33980d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6dab7de8c76292d9ef2792757b8722f0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a6dab7de8c76292d9ef2792757b8722f0">SetAmbientIntensity</a> (float p_intensity)</td></tr>
+<tr class="memdesc:a6dab7de8c76292d9ef2792757b8722f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the ambient intensity.  <a href="#a6dab7de8c76292d9ef2792757b8722f0">More...</a><br /></td></tr>
+<tr class="separator:a6dab7de8c76292d9ef2792757b8722f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a048db820841ba27c530c004d553eae5f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a048db820841ba27c530c004d553eae5f">SetDiffuseIntensity</a> (float p_intensity)</td></tr>
+<tr class="memdesc:a048db820841ba27c530c004d553eae5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the diffuse intensity.  <a href="#a048db820841ba27c530c004d553eae5f">More...</a><br /></td></tr>
+<tr class="separator:a048db820841ba27c530c004d553eae5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a072da52e8321d262f083d6d8cc9ff614"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a072da52e8321d262f083d6d8cc9ff614">SetSpecularIntensity</a> (float p_intensity)</td></tr>
+<tr class="memdesc:a072da52e8321d262f083d6d8cc9ff614"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the specular intensity.  <a href="#a072da52e8321d262f083d6d8cc9ff614">More...</a><br /></td></tr>
+<tr class="separator:a072da52e8321d262f083d6d8cc9ff614"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a14b02504be5e1509c012984bc0e0c124"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a14b02504be5e1509c012984bc0e0c124">SetEnabled</a> (bool p_enabled)</td></tr>
+<tr class="memdesc:a14b02504be5e1509c012984bc0e0c124"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the light enabled status.  <a href="#a14b02504be5e1509c012984bc0e0c124">More...</a><br /></td></tr>
+<tr class="separator:a14b02504be5e1509c012984bc0e0c124"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e49ac1d559d3a4d1e81197bb4ea233d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a0e49ac1d559d3a4d1e81197bb4ea233d">Enable</a> ()</td></tr>
+<tr class="memdesc:a0e49ac1d559d3a4d1e81197bb4ea233d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enables the light.  <a href="#a0e49ac1d559d3a4d1e81197bb4ea233d">More...</a><br /></td></tr>
+<tr class="separator:a0e49ac1d559d3a4d1e81197bb4ea233d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fd579fe0ce5b25d5c1dd5a87bc1a2a0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a8fd579fe0ce5b25d5c1dd5a87bc1a2a0">Disable</a> ()</td></tr>
+<tr class="memdesc:a8fd579fe0ce5b25d5c1dd5a87bc1a2a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disables the light.  <a href="#a8fd579fe0ce5b25d5c1dd5a87bc1a2a0">More...</a><br /></td></tr>
+<tr class="separator:a8fd579fe0ce5b25d5c1dd5a87bc1a2a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a02057"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02057')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d2/dea/a02057.html">Castor3D::MovableObject</a></td></tr>
+<tr class="memitem:aae7e0dc016fe769e27cb8701dff3ba47 inherit pub_methods_a02057"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#aae7e0dc016fe769e27cb8701dff3ba47">MovableObject</a> (Castor::String const &amp;p_name, <a class="el" href="../../d7/d18/a02409.html">Scene</a> &amp;p_scene, <a class="el" href="../../d7/d41/a00532.html#a4cd3ef9dd1eb5d4d82056fed20e291f7">eMOVABLE_TYPE</a> p_type, SceneNodeSPtr p_sn)</td></tr>
+<tr class="memdesc:aae7e0dc016fe769e27cb8701dff3ba47 inherit pub_methods_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d2/dea/a02057.html#aae7e0dc016fe769e27cb8701dff3ba47">More...</a><br /></td></tr>
+<tr class="separator:aae7e0dc016fe769e27cb8701dff3ba47 inherit pub_methods_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae6c940c08fd7d375cd33455ae08e6dcc inherit pub_methods_a02057"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#ae6c940c08fd7d375cd33455ae08e6dcc">~MovableObject</a> ()</td></tr>
+<tr class="memdesc:ae6c940c08fd7d375cd33455ae08e6dcc inherit pub_methods_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d2/dea/a02057.html#ae6c940c08fd7d375cd33455ae08e6dcc">More...</a><br /></td></tr>
+<tr class="separator:ae6c940c08fd7d375cd33455ae08e6dcc inherit pub_methods_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d3dcd1807662239571e6a4a478e447c inherit pub_methods_a02057"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a4d3dcd1807662239571e6a4a478e447c">Detach</a> ()</td></tr>
+<tr class="memdesc:a4d3dcd1807662239571e6a4a478e447c inherit pub_methods_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Detaches the movable object from it's parent.  <a href="../../d2/dea/a02057.html#a4d3dcd1807662239571e6a4a478e447c">More...</a><br /></td></tr>
+<tr class="separator:a4d3dcd1807662239571e6a4a478e447c inherit pub_methods_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fc7836a8fe5b423e52f13374124c4b3 inherit pub_methods_a02057"><td class="memItemLeft" align="right" valign="top">Castor::String const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a8fc7836a8fe5b423e52f13374124c4b3">GetName</a> () const</td></tr>
+<tr class="memdesc:a8fc7836a8fe5b423e52f13374124c4b3 inherit pub_methods_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the object name.  <a href="../../d2/dea/a02057.html#a8fc7836a8fe5b423e52f13374124c4b3">More...</a><br /></td></tr>
+<tr class="separator:a8fc7836a8fe5b423e52f13374124c4b3 inherit pub_methods_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0998167a4c90234acbfe4e04669cdff9 inherit pub_methods_a02057"><td class="memItemLeft" align="right" valign="top">SceneNodeSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a0998167a4c90234acbfe4e04669cdff9">GetParent</a> () const</td></tr>
+<tr class="memdesc:a0998167a4c90234acbfe4e04669cdff9 inherit pub_methods_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the parent node.  <a href="../../d2/dea/a02057.html#a0998167a4c90234acbfe4e04669cdff9">More...</a><br /></td></tr>
+<tr class="separator:a0998167a4c90234acbfe4e04669cdff9 inherit pub_methods_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7389fcb8fa5ec28edec1624b2a3e1f32 inherit pub_methods_a02057"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a4cd3ef9dd1eb5d4d82056fed20e291f7">eMOVABLE_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a7389fcb8fa5ec28edec1624b2a3e1f32">GetType</a> () const</td></tr>
+<tr class="memdesc:a7389fcb8fa5ec28edec1624b2a3e1f32 inherit pub_methods_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the object type.  <a href="../../d2/dea/a02057.html#a7389fcb8fa5ec28edec1624b2a3e1f32">More...</a><br /></td></tr>
+<tr class="separator:a7389fcb8fa5ec28edec1624b2a3e1f32 inherit pub_methods_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9783a3254ad5635db9e1ab15338fbe1 inherit pub_methods_a02057"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#af9783a3254ad5635db9e1ab15338fbe1">SetName</a> (Castor::String const &amp;p_name)</td></tr>
+<tr class="memdesc:af9783a3254ad5635db9e1ab15338fbe1 inherit pub_methods_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the object name.  <a href="../../d2/dea/a02057.html#af9783a3254ad5635db9e1ab15338fbe1">More...</a><br /></td></tr>
+<tr class="separator:af9783a3254ad5635db9e1ab15338fbe1 inherit pub_methods_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a01085"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01085')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d2/df3/a01085.html">Castor3D::Animable</a></td></tr>
+<tr class="memitem:ad60f44efaf1aedaefae14ad4a4ee20db inherit pub_methods_a01085"><td class="memItemLeft" align="right" valign="top">C3D_API AnimationSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/df3/a01085.html#ad60f44efaf1aedaefae14ad4a4ee20db">CreateAnimation</a> (Castor::String const &amp;p_name)</td></tr>
+<tr class="memdesc:ad60f44efaf1aedaefae14ad4a4ee20db inherit pub_methods_a01085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an animation.  <a href="../../d2/df3/a01085.html#ad60f44efaf1aedaefae14ad4a4ee20db">More...</a><br /></td></tr>
+<tr class="separator:ad60f44efaf1aedaefae14ad4a4ee20db inherit pub_methods_a01085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8410e010f7bb15552e0205ba2e911499 inherit pub_methods_a01085"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/df3/a01085.html#a8410e010f7bb15552e0205ba2e911499">CleanupAnimations</a> ()</td></tr>
+<tr class="memdesc:a8410e010f7bb15552e0205ba2e911499 inherit pub_methods_a01085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Empties the animations map.  <a href="../../d2/df3/a01085.html#a8410e010f7bb15552e0205ba2e911499">More...</a><br /></td></tr>
+<tr class="separator:a8410e010f7bb15552e0205ba2e911499 inherit pub_methods_a01085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa634503d7ddcec723d437109afdde1af inherit pub_methods_a01085"><td class="memItemLeft" align="right" valign="top">C3D_API AnimationSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/df3/a01085.html#aa634503d7ddcec723d437109afdde1af">GetAnimation</a> (Castor::String const &amp;p_name)</td></tr>
+<tr class="memdesc:aa634503d7ddcec723d437109afdde1af inherit pub_methods_a01085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an animation.  <a href="../../d2/df3/a01085.html#aa634503d7ddcec723d437109afdde1af">More...</a><br /></td></tr>
+<tr class="separator:aa634503d7ddcec723d437109afdde1af inherit pub_methods_a01085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aec3dbd58b741f8351bc3997c79e23adc inherit pub_methods_a01085"><td class="memItemLeft" align="right" valign="top">AnimationPtrStrMap const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/df3/a01085.html#aec3dbd58b741f8351bc3997c79e23adc">GetAnimations</a> () const</td></tr>
+<tr class="separator:aec3dbd58b741f8351bc3997c79e23adc inherit pub_methods_a01085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ad8f41ab39de949f1a364b0e2dfa9377b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#ad8f41ab39de949f1a364b0e2dfa9377b">OnNodeChanged</a> ()</td></tr>
+<tr class="separator:ad8f41ab39de949f1a364b0e2dfa9377b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a01085"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a01085')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d2/df3/a01085.html">Castor3D::Animable</a></td></tr>
+<tr class="memitem:afbc891fac4ad4136340057cb07a12e16 inherit pro_methods_a01085"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/df3/a01085.html#afbc891fac4ad4136340057cb07a12e16">Animable</a> ()</td></tr>
+<tr class="memdesc:afbc891fac4ad4136340057cb07a12e16 inherit pro_methods_a01085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d2/df3/a01085.html#afbc891fac4ad4136340057cb07a12e16">More...</a><br /></td></tr>
+<tr class="separator:afbc891fac4ad4136340057cb07a12e16 inherit pro_methods_a01085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5538ba3ec1eee5e8d58fabe5f13cbcd3 inherit pro_methods_a01085"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/df3/a01085.html#a5538ba3ec1eee5e8d58fabe5f13cbcd3">~Animable</a> ()</td></tr>
+<tr class="memdesc:a5538ba3ec1eee5e8d58fabe5f13cbcd3 inherit pro_methods_a01085"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d2/df3/a01085.html#a5538ba3ec1eee5e8d58fabe5f13cbcd3">More...</a><br /></td></tr>
+<tr class="separator:a5538ba3ec1eee5e8d58fabe5f13cbcd3 inherit pro_methods_a01085"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a8383c3ef2d6d2338f68bd3e6d9b3d495"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a8383c3ef2d6d2338f68bd3e6d9b3d495">m_enabled</a></td></tr>
+<tr class="memdesc:a8383c3ef2d6d2338f68bd3e6d9b3d495"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the light is enabled.  <a href="#a8383c3ef2d6d2338f68bd3e6d9b3d495">More...</a><br /></td></tr>
+<tr class="separator:a8383c3ef2d6d2338f68bd3e6d9b3d495"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a538749b77b0cfb5626b8c7d8570c1387"><td class="memItemLeft" align="right" valign="top">LightCategorySPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a></td></tr>
+<tr class="memdesc:a538749b77b0cfb5626b8c7d8570c1387"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="../../d2/d54/a01917.html" title="Light source implementation.">Light</a> category that effectively holds light data.  <a href="#a538749b77b0cfb5626b8c7d8570c1387">More...</a><br /></td></tr>
+<tr class="separator:a538749b77b0cfb5626b8c7d8570c1387"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d6b9f9f5cafc6934dcc13fe6262ce4d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d54/a01917.html#a8d6b9f9f5cafc6934dcc13fe6262ce4d">m_iIndex</a></td></tr>
+<tr class="memdesc:a8d6b9f9f5cafc6934dcc13fe6262ce4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The light index.  <a href="#a8d6b9f9f5cafc6934dcc13fe6262ce4d">More...</a><br /></td></tr>
+<tr class="separator:a8d6b9f9f5cafc6934dcc13fe6262ce4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a02057"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02057')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d2/dea/a02057.html">Castor3D::MovableObject</a></td></tr>
+<tr class="memitem:a3e7e59d6e183daa72a6b6f6b2f7b5295 inherit pro_attribs_a02057"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a4cd3ef9dd1eb5d4d82056fed20e291f7">eMOVABLE_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a3e7e59d6e183daa72a6b6f6b2f7b5295">m_type</a></td></tr>
+<tr class="memdesc:a3e7e59d6e183daa72a6b6f6b2f7b5295 inherit pro_attribs_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">Movable object type.  <a href="../../d2/dea/a02057.html#a3e7e59d6e183daa72a6b6f6b2f7b5295">More...</a><br /></td></tr>
+<tr class="separator:a3e7e59d6e183daa72a6b6f6b2f7b5295 inherit pro_attribs_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a862ed4721279c6184f75a4b56f9ab333 inherit pro_attribs_a02057"><td class="memItemLeft" align="right" valign="top">Castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a862ed4721279c6184f75a4b56f9ab333">m_name</a></td></tr>
+<tr class="memdesc:a862ed4721279c6184f75a4b56f9ab333 inherit pro_attribs_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">The object name.  <a href="../../d2/dea/a02057.html#a862ed4721279c6184f75a4b56f9ab333">More...</a><br /></td></tr>
+<tr class="separator:a862ed4721279c6184f75a4b56f9ab333 inherit pro_attribs_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a9d1499217926e8920d3622cfeffa62 inherit pro_attribs_a02057"><td class="memItemLeft" align="right" valign="top">Castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a7a9d1499217926e8920d3622cfeffa62">m_strNodeName</a></td></tr>
+<tr class="memdesc:a7a9d1499217926e8920d3622cfeffa62 inherit pro_attribs_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">The parent node name.  <a href="../../d2/dea/a02057.html#a7a9d1499217926e8920d3622cfeffa62">More...</a><br /></td></tr>
+<tr class="separator:a7a9d1499217926e8920d3622cfeffa62 inherit pro_attribs_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1993a0e7a9609335f3cf35327ac50a23 inherit pro_attribs_a02057"><td class="memItemLeft" align="right" valign="top">SceneNodeWPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#a1993a0e7a9609335f3cf35327ac50a23">m_pSceneNode</a></td></tr>
+<tr class="memdesc:a1993a0e7a9609335f3cf35327ac50a23 inherit pro_attribs_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">The parent scene node.  <a href="../../d2/dea/a02057.html#a1993a0e7a9609335f3cf35327ac50a23">More...</a><br /></td></tr>
+<tr class="separator:a1993a0e7a9609335f3cf35327ac50a23 inherit pro_attribs_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab62821a985bdb791b740c5c7925ece9c inherit pro_attribs_a02057"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/dea/a02057.html#ab62821a985bdb791b740c5c7925ece9c">m_notifyIndex</a> = 0</td></tr>
+<tr class="memdesc:ab62821a985bdb791b740c5c7925ece9c inherit pro_attribs_a02057"><td class="mdescLeft">&#160;</td><td class="mdescRight">The node change notification index.  <a href="../../d2/dea/a02057.html#ab62821a985bdb791b740c5c7925ece9c">More...</a><br /></td></tr>
+<tr class="separator:ab62821a985bdb791b740c5c7925ece9c inherit pro_attribs_a02057"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a01085"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a01085')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d2/df3/a01085.html">Castor3D::Animable</a></td></tr>
+<tr class="memitem:a3f441f0f11f8e99066ac93f0c1cef12d inherit pro_attribs_a01085"><td class="memItemLeft" align="right" valign="top">AnimationPtrStrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/df3/a01085.html#a3f441f0f11f8e99066ac93f0c1cef12d">m_animations</a></td></tr>
+<tr class="memdesc:a3f441f0f11f8e99066ac93f0c1cef12d inherit pro_attribs_a01085"><td class="mdescLeft">&#160;</td><td class="mdescRight">All animations.  <a href="../../d2/df3/a01085.html#a3f441f0f11f8e99066ac93f0c1cef12d">More...</a><br /></td></tr>
+<tr class="separator:a3f441f0f11f8e99066ac93f0c1cef12d inherit pro_attribs_a01085"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p><a class="el" href="../../d2/d54/a01917.html" title="Light source implementation.">Light</a> source implementation. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>09/02/2010 </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0a9ba1909b0463cfed5d65ccc4abdce6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a9ba1909b0463cfed5d65ccc4abdce6">&#9670;&nbsp;</a></span>Light()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::Light::Light </td>
+          <td>(</td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d18/a02409.html">Scene</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_scene</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SceneNodeSPtr&#160;</td>
+          <td class="paramname"><em>p_node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../dc/da7/a01933.html">LightFactory</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_factory</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a358b96ee778c8b1bc60769e84b252875">eLIGHT_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_lightType</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The light name </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_scene</td><td>Parent scene </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_factory</td><td>Factory used to create the <a class="el" href="../../da/d6c/a01921.html" title="Holds light components.">LightCategory</a> </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_lightType</td><td>The light type </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_node</td><td>The parent scene node </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7c95a4d198a9f423e2fae9cfa11f1711"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c95a4d198a9f423e2fae9cfa11f1711">&#9670;&nbsp;</a></span>~Light()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::Light::~Light </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3341931dda5ba6119b5016d6e3dd9b4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3341931dda5ba6119b5016d6e3dd9b4e">&#9670;&nbsp;</a></span>operator()()</h2>
+<a id="ab0ffbafba3c3dbaf618ba67abbe39e4f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0ffbafba3c3dbaf618ba67abbe39e4f">&#9670;&nbsp;</a></span>AttachTo()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -67,16 +344,592 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="../../de/d51/a01857.html">Castor3D::RendererAdder</a>&lt; <a class="el" href="../../da/da2/a02217.html">WindowRenderer</a> &gt;::operator() </td>
+          <td class="memname">virtual C3D_API void Castor3D::Light::AttachTo </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d6/d56/a01861.html">RenderSystem</a> *&#160;</td>
-          <td class="paramname"><em>p_pRS</em>, </td>
+          <td class="paramtype">SceneNodeSPtr&#160;</td>
+          <td class="paramname"><em>p_node</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Attaches this light to a <a class="el" href="../../d3/d39/a02005.html" title="Definition of a material.">Material</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_node</td><td>The new light's parent node </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p>Reimplemented from <a class="el" href="../../d2/dea/a02057.html#a5ad76548c24c091d642d395c07a99e4c">Castor3D::MovableObject</a>.</p>
+
+</div>
+</div>
+<a id="a7cd2a2d7a71eddc13efbb6d10a9e958d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7cd2a2d7a71eddc13efbb6d10a9e958d">&#9670;&nbsp;</a></span>Bind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::Light::Bind </td>
+          <td>(</td>
+          <td class="paramtype">Castor::PxBufferBase &amp;&#160;</td>
+          <td class="paramname"><em>p_texture</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">WindowRendererSPtr&#160;</td>
-          <td class="paramname"><em>p_pRenderer</em>&#160;</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Puts the light into the given texture. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_texture</td><td>The texture that receives the light's data. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The light index. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8fd579fe0ce5b25d5c1dd5a87bc1a2a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fd579fe0ce5b25d5c1dd5a87bc1a2a0">&#9670;&nbsp;</a></span>Disable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::Disable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Disables the light. </p>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a14b02504be5e1509c012984bc0e0c124">SetEnabled()</a>.</p>
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d2/d54/a01917_a8fd579fe0ce5b25d5c1dd5a87bc1a2a0_cgraph.png" border="0" usemap="#d2/d54/a01917_a8fd579fe0ce5b25d5c1dd5a87bc1a2a0_cgraph" alt=""/></div>
+<map name="d2/d54/a01917_a8fd579fe0ce5b25d5c1dd5a87bc1a2a0_cgraph" id="d2/d54/a01917_a8fd579fe0ce5b25d5c1dd5a87bc1a2a0_cgraph">
+<area shape="rect"  title="Disables the light." alt="" coords="5,5,168,32"/>
+<area shape="rect"  href="../../d2/d54/a01917.html#a14b02504be5e1509c012984bc0e0c124" title="Sets the light enabled status." alt="" coords="216,5,403,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a0e49ac1d559d3a4d1e81197bb4ea233d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e49ac1d559d3a4d1e81197bb4ea233d">&#9670;&nbsp;</a></span>Enable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::Enable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Enables the light. </p>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a14b02504be5e1509c012984bc0e0c124">SetEnabled()</a>.</p>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d2/d54/a01917_a0e49ac1d559d3a4d1e81197bb4ea233d_cgraph.png" border="0" usemap="#d2/d54/a01917_a0e49ac1d559d3a4d1e81197bb4ea233d_cgraph" alt=""/></div>
+<map name="d2/d54/a01917_a0e49ac1d559d3a4d1e81197bb4ea233d_cgraph" id="d2/d54/a01917_a0e49ac1d559d3a4d1e81197bb4ea233d_cgraph">
+<area shape="rect"  title="Enables the light." alt="" coords="5,5,165,32"/>
+<area shape="rect"  href="../../d2/d54/a01917.html#a14b02504be5e1509c012984bc0e0c124" title="Sets the light enabled status." alt="" coords="213,5,400,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae87a2823417af0fb5c1f169b40c1c6cd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae87a2823417af0fb5c1f169b40c1c6cd">&#9670;&nbsp;</a></span>GetAmbientIntensity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Castor3D::Light::GetAmbientIntensity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The ambient intensity. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a4bffe864702936527b0da562947f077b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bffe864702936527b0da562947f077b">&#9670;&nbsp;</a></span>GetColour()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::Point3f const&amp; Castor3D::Light::GetColour </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The light colour. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="ad4ea01515570dbe08d8e3e03aa9b8335"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4ea01515570dbe08d8e3e03aa9b8335">&#9670;&nbsp;</a></span>GetDiffuseIntensity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Castor3D::Light::GetDiffuseIntensity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The diffuse intensity. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="aa223e00a5bf8319e5d06cca7c3f1907f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa223e00a5bf8319e5d06cca7c3f1907f">&#9670;&nbsp;</a></span>GetDirectionalLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API DirectionalLightSPtr Castor3D::Light::GetDirectionalLight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the <a class="el" href="../../d2/d70/a01729.html" title="Class which represents a Directional Light.">DirectionalLight</a> category. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+
+</div>
+</div>
+<a id="a80ba891f9a65da646568a75b2793fbd9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80ba891f9a65da646568a75b2793fbd9">&#9670;&nbsp;</a></span>GetIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Castor3D::Light::GetIndex </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the light index. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a8d6b9f9f5cafc6934dcc13fe6262ce4d">m_iIndex</a>.</p>
+
+</div>
+</div>
+<a id="a6866be17f208f48b037b5a0e2490eac6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6866be17f208f48b037b5a0e2490eac6">&#9670;&nbsp;</a></span>GetIntensity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::Point3f const&amp; Castor3D::Light::GetIntensity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The intensity values. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a942e5918beead3d2cc66cf5464789efb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a942e5918beead3d2cc66cf5464789efb">&#9670;&nbsp;</a></span>GetLightType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/d41/a00532.html#a358b96ee778c8b1bc60769e84b252875">eLIGHT_TYPE</a> Castor3D::Light::GetLightType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the light type. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a61294b261475da600cef727cf657a4ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61294b261475da600cef727cf657a4ec">&#9670;&nbsp;</a></span>GetPointLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API PointLightSPtr Castor3D::Light::GetPointLight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the <a class="el" href="../../d4/dc0/a02225.html" title="Class which represents a PointLight.">PointLight</a> category. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+
+</div>
+</div>
+<a id="a1fb647398654d1e4184a2ceab9975aea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fb647398654d1e4184a2ceab9975aea">&#9670;&nbsp;</a></span>GetPositionType()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::Point4f const&amp; Castor3D::Light::GetPositionType </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the light position and type. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a072843945d7cede44c879e2ce961f202"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a072843945d7cede44c879e2ce961f202">&#9670;&nbsp;</a></span>GetSpecularIntensity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float Castor3D::Light::GetSpecularIntensity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The specular intensity. </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="ace7a393f4084155cf65f567ef3d84fe5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace7a393f4084155cf65f567ef3d84fe5">&#9670;&nbsp;</a></span>GetSpotLight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API SpotLightSPtr Castor3D::Light::GetSpotLight </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the <a class="el" href="../../d0/dbf/a02521.html" title="Class which represents a SpotLight.">SpotLight</a> category. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+
+</div>
+</div>
+<a id="a6bee8e084242b3bac078e514230d9af8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6bee8e084242b3bac078e514230d9af8">&#9670;&nbsp;</a></span>IsEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Castor3D::Light::IsEnabled </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the light enabled status. </p>
+<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a8383c3ef2d6d2338f68bd3e6d9b3d495">m_enabled</a>.</p>
+
+</div>
+</div>
+<a id="ad8f41ab39de949f1a364b0e2dfa9377b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8f41ab39de949f1a364b0e2dfa9377b">&#9670;&nbsp;</a></span>OnNodeChanged()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::OnNodeChanged </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6dab7de8c76292d9ef2792757b8722f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dab7de8c76292d9ef2792757b8722f0">&#9670;&nbsp;</a></span>SetAmbientIntensity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetAmbientIntensity </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>p_intensity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the ambient intensity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_intensity</td><td>The new value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a6069f02b4fa2189397ed24d1b79b365a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6069f02b4fa2189397ed24d1b79b365a">&#9670;&nbsp;</a></span>SetColour() <span class="overload">[1/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetColour </td>
+          <td>(</td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>p_values</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the colour. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_values</td><td>The new value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a96c290d16aa975a1bae52ffe827a94f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96c290d16aa975a1bae52ffe827a94f5">&#9670;&nbsp;</a></span>SetColour() <span class="overload">[2/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetColour </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>r</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -91,15 +944,458 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Sets the colour. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">r,g,b</td><td>The RGB components. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d1/d5d/a00311.html">RenderSystem.hpp</a></li>
+<a id="a70dab1ae6b9c7c730f7e22b44bcf1524"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70dab1ae6b9c7c730f7e22b44bcf1524">&#9670;&nbsp;</a></span>SetColour() <span class="overload">[3/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetColour </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Point3f const &amp;&#160;</td>
+          <td class="paramname"><em>p_colour</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the colour. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_colour</td><td>The new value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="af86e283148360a65a38fc17af01de0f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af86e283148360a65a38fc17af01de0f3">&#9670;&nbsp;</a></span>SetColour() <span class="overload">[4/4]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetColour </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Colour const &amp;&#160;</td>
+          <td class="paramname"><em>p_colour</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the colour. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_colour</td><td>The new value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a048db820841ba27c530c004d553eae5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a048db820841ba27c530c004d553eae5f">&#9670;&nbsp;</a></span>SetDiffuseIntensity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetDiffuseIntensity </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>p_intensity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the diffuse intensity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_intensity</td><td>The new value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a14b02504be5e1509c012984bc0e0c124"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14b02504be5e1509c012984bc0e0c124">&#9670;&nbsp;</a></span>SetEnabled()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetEnabled </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>p_enabled</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the light enabled status. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_enabled</td><td>The new value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a8383c3ef2d6d2338f68bd3e6d9b3d495">m_enabled</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d54/a01917.html#a8fd579fe0ce5b25d5c1dd5a87bc1a2a0">Disable()</a>, and <a class="el" href="../../d2/d54/a01917.html#a0e49ac1d559d3a4d1e81197bb4ea233d">Enable()</a>.</p>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d2/d54/a01917_a14b02504be5e1509c012984bc0e0c124_icgraph.png" border="0" usemap="#d2/d54/a01917_a14b02504be5e1509c012984bc0e0c124_icgraph" alt=""/></div>
+<map name="d2/d54/a01917_a14b02504be5e1509c012984bc0e0c124_icgraph" id="d2/d54/a01917_a14b02504be5e1509c012984bc0e0c124_icgraph">
+<area shape="rect"  title="Sets the light enabled status." alt="" coords="216,31,403,57"/>
+<area shape="rect"  href="../../d2/d54/a01917.html#a8fd579fe0ce5b25d5c1dd5a87bc1a2a0" title="Disables the light." alt="" coords="5,5,168,32"/>
+<area shape="rect"  href="../../d2/d54/a01917.html#a0e49ac1d559d3a4d1e81197bb4ea233d" title="Enables the light." alt="" coords="7,56,167,83"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ace5ba849b3437f1df0a16e37eb5eed61"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace5ba849b3437f1df0a16e37eb5eed61">&#9670;&nbsp;</a></span>SetIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetIndex </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the light index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_value</td><td>The new value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a8d6b9f9f5cafc6934dcc13fe6262ce4d">m_iIndex</a>.</p>
+
+</div>
+</div>
+<a id="a79c121058d487a667c4754168f67a67b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79c121058d487a667c4754168f67a67b">&#9670;&nbsp;</a></span>SetIntensity() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetIntensity </td>
+          <td>(</td>
+          <td class="paramtype">float *&#160;</td>
+          <td class="paramname"><em>p_values</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the light's intensity values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_values</td><td>The new values. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a5203a27779d6c1828324d9854591d893"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5203a27779d6c1828324d9854591d893">&#9670;&nbsp;</a></span>SetIntensity() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetIntensity </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>s</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the light's intensity values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">a,d,s</td><td>The new values. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="acf31c154b3ef5ff32a6261a4f33980d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf31c154b3ef5ff32a6261a4f33980d9">&#9670;&nbsp;</a></span>SetIntensity() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetIntensity </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Point3f const &amp;&#160;</td>
+          <td class="paramname"><em>p_intensity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the light's intensity values. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_intensity</td><td>The new values. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<a id="a072da52e8321d262f083d6d8cc9ff614"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a072da52e8321d262f083d6d8cc9ff614">&#9670;&nbsp;</a></span>SetSpecularIntensity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::Light::SetSpecularIntensity </td>
+          <td>(</td>
+          <td class="paramtype">float&#160;</td>
+          <td class="paramname"><em>p_intensity</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the specular intensity. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_intensity</td><td>The new value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="reference">References <a class="el" href="../../d2/d54/a01917.html#a538749b77b0cfb5626b8c7d8570c1387">m_pCategory</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a8383c3ef2d6d2338f68bd3e6d9b3d495"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8383c3ef2d6d2338f68bd3e6d9b3d495">&#9670;&nbsp;</a></span>m_enabled</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Castor3D::Light::m_enabled</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells the light is enabled. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d54/a01917.html#a6bee8e084242b3bac078e514230d9af8">IsEnabled()</a>, and <a class="el" href="../../d2/d54/a01917.html#a14b02504be5e1509c012984bc0e0c124">SetEnabled()</a>.</p>
+
+</div>
+</div>
+<a id="a8d6b9f9f5cafc6934dcc13fe6262ce4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d6b9f9f5cafc6934dcc13fe6262ce4d">&#9670;&nbsp;</a></span>m_iIndex</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int Castor3D::Light::m_iIndex</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The light index. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d54/a01917.html#a80ba891f9a65da646568a75b2793fbd9">GetIndex()</a>, and <a class="el" href="../../d2/d54/a01917.html#ace5ba849b3437f1df0a16e37eb5eed61">SetIndex()</a>.</p>
+
+</div>
+</div>
+<a id="a538749b77b0cfb5626b8c7d8570c1387"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a538749b77b0cfb5626b8c7d8570c1387">&#9670;&nbsp;</a></span>m_pCategory</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">LightCategorySPtr Castor3D::Light::m_pCategory</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="../../d2/d54/a01917.html" title="Light source implementation.">Light</a> category that effectively holds light data. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d2/d54/a01917.html#ae87a2823417af0fb5c1f169b40c1c6cd">GetAmbientIntensity()</a>, <a class="el" href="../../d2/d54/a01917.html#a4bffe864702936527b0da562947f077b">GetColour()</a>, <a class="el" href="../../d2/d54/a01917.html#ad4ea01515570dbe08d8e3e03aa9b8335">GetDiffuseIntensity()</a>, <a class="el" href="../../d2/d54/a01917.html#a6866be17f208f48b037b5a0e2490eac6">GetIntensity()</a>, <a class="el" href="../../d2/d54/a01917.html#a942e5918beead3d2cc66cf5464789efb">GetLightType()</a>, <a class="el" href="../../d2/d54/a01917.html#a1fb647398654d1e4184a2ceab9975aea">GetPositionType()</a>, <a class="el" href="../../d2/d54/a01917.html#a072843945d7cede44c879e2ce961f202">GetSpecularIntensity()</a>, <a class="el" href="../../d2/d54/a01917.html#a6dab7de8c76292d9ef2792757b8722f0">SetAmbientIntensity()</a>, <a class="el" href="../../d2/d54/a01917.html#a6069f02b4fa2189397ed24d1b79b365a">SetColour()</a>, <a class="el" href="../../d2/d54/a01917.html#a048db820841ba27c530c004d553eae5f">SetDiffuseIntensity()</a>, <a class="el" href="../../d2/d54/a01917.html#a79c121058d487a667c4754168f67a67b">SetIntensity()</a>, and <a class="el" href="../../d2/d54/a01917.html#a072da52e8321d262f083d6d8cc9ff614">SetSpecularIntensity()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d0/d27/a00239.html">Light.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:08 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:38 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

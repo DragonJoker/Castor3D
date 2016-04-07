@@ -1,4 +1,4 @@
-<map id="Castor3D::LightFactory" name="Castor3D::LightFactory">
-<area shape="rect" id="node1" title="The light source factory." alt="" coords="31,95,187,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,213,47"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Coords3ui &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords3ui &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Coords3ui." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

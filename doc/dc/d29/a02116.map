@@ -1,4 +1,4 @@
-<map id="Castor3D::TechniqueFactory" name="Castor3D::TechniqueFactory">
-<area shape="rect" id="node1" title="Render technique factory." alt="" coords="296,35,483,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,248,91"/>
+<map id="Castor3D::Overlay::TextLoader" name="Castor3D::Overlay::TextLoader">
+<area shape="rect" id="node1" title="Overlay loader." alt="" coords="32,109,167,151"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,61"/>
 </map>

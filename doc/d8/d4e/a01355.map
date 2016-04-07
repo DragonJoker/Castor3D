@@ -1,4 +1,5 @@
-<map id="Castor3D::ChunkParser&lt; Castor::Coords2f &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords2f &gt;">
-<area shape="rect" id="node1" title="Chunk parser." alt="" coords="21,80,179,121"/>
-<area shape="rect" id="node2" href="$dc/dd5/a01293.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
+<map id="Castor3D::CpuBuffer&lt; T &gt;" name="Castor3D::CpuBuffer&lt; T &gt;">
+<area shape="rect" id="node1" title="3D Buffer management class" alt="" coords="118,109,289,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,13,193,39"/>
+<area shape="rect" id="node3" title=" " alt="" coords="218,5,397,47"/>
 </map>

@@ -1,4 +1,4 @@
-<map id="Castor3D::Torus" name="Castor3D::Torus">
-<area shape="rect" id="node1" title="The torus representation." alt="" coords="31,80,147,107"/>
-<area shape="rect" id="node2" href="$d9/df5/a01673.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,173,32"/>
+<map id="Castor3D::PanelOverlay" name="Castor3D::PanelOverlay">
+<area shape="rect" id="node1" title="A simple rectangular overlay." alt="" coords="15,80,175,107"/>
+<area shape="rect" id="node2" href="$d8/db2/a02125.html" title="Holds specific members for an overlay category." alt="" coords="5,5,184,32"/>
 </map>

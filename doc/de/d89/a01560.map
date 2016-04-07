@@ -1,7 +1,4 @@
-<map id="Castor3D::TFrameVariable&lt; T &gt;" name="Castor3D::TFrameVariable&lt; T &gt;">
-<area shape="rect" id="node1" title="Shader variable representation with variable type." alt="" coords="221,56,428,83"/>
-<area shape="rect" id="node3" href="$d6/d6e/a01137.html" title="Matrix shader variable with variable type and dimensions." alt="" coords="476,5,711,32"/>
-<area shape="rect" id="node4" href="$d9/d17/a01129.html" title="Single shader variable with variable type." alt="" coords="482,56,705,83"/>
-<area shape="rect" id="node5" href="$db/d28/a01133.html" title="Point shader variable with variable type and dimensions." alt="" coords="479,107,708,133"/>
-<area shape="rect" id="node2" href="$de/d2c/a01553.html" title="Shader variable representation." alt="" coords="5,56,173,83"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Point3d &gt;" name="Castor3D::ChunkParser&lt; Castor::Point3d &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Point3d." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

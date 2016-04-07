@@ -1,7 +1,6 @@
-<map id="Castor3D::RenderTechniqueBase" name="Castor3D::RenderTechniqueBase">
-<area shape="rect" id="node1" title="Render technique base class." alt="" coords="5,97,220,123"/>
-<area shape="rect" id="node2" href="$d9/d8b/a01469.html" title="Deferred lighting Render technique class." alt="" coords="288,5,467,47"/>
-<area shape="rect" id="node3" href="$db/d1e/a01497.html" title="Basic render technique class." alt="" coords="268,71,487,98"/>
-<area shape="rect" id="node4" href="$d1/da7/a01709.html" title="MSAA Render technique class." alt="" coords="269,122,485,149"/>
-<area shape="rect" id="node5" href="$db/dac/a02077.html" title="SSAA Render technique class." alt="" coords="270,173,485,199"/>
+<map id="Castor3D::LightManager" name="Castor3D::LightManager">
+<area shape="rect" id="node1" title="Light manager." alt="" coords="47,273,210,300"/>
+<area shape="rect" id="node2" href="$d4/dbb/a02097.html" title=" " alt="" coords="43,184,215,225"/>
+<area shape="rect" id="node3" href="$d8/d24/a02001.html" title=" " alt="" coords="5,80,252,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="36,5,221,32"/>
 </map>

@@ -1,11 +1,4 @@
-<map id="Castor3D::Geometry" name="Castor3D::Geometry">
-<area shape="rect" id="node1" title="Geometry handler class." alt="" coords="636,251,777,278"/>
-<area shape="rect" id="node2" href="$df/d5a/a01681.html" title="Movable object class." alt="" coords="259,155,429,182"/>
-<area shape="rect" id="node8" title=" " alt="" coords="622,185,791,227"/>
-<area shape="rect" id="node3" href="$d0/d28/a00997.html" title="Animable public interface." alt="" coords="5,155,144,182"/>
-<area shape="rect" id="node4" href="$d3/d39/a02005.html" title="The scene node handler class." alt="" coords="987,98,1137,125"/>
-<area shape="rect" id="node6" title=" " alt="" coords="1269,91,1439,132"/>
-<area shape="rect" id="node5" title=" " alt="" coords="620,5,793,47"/>
-<area shape="rect" id="node7" href="$df/db2/a01981.html" title="Scene handler class." alt="" coords="14,89,135,115"/>
-<area shape="rect" id="node9" title=" " alt="" coords="259,244,429,285"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Point2ui &gt;" name="Castor3D::ChunkParser&lt; Castor::Point2ui &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Point2ui." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

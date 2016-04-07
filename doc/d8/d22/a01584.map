@@ -1,6 +1,4 @@
-<map id="Castor3D::Geometry::TextLoader" name="Castor3D::Geometry::TextLoader">
-<area shape="rect" id="node1" title="Geometry loader." alt="" coords="479,46,620,87"/>
-<area shape="rect" id="node2" href="$de/d96/a01685.html" title="MovableObject loader." alt="" coords="261,46,431,87"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,213,61"/>
-<area shape="rect" id="node4" title=" " alt="" coords="60,85,159,112"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Point3ui &gt;" name="Castor3D::ChunkParser&lt; Castor::Point3ui &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Point3ui." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

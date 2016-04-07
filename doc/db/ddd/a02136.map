@@ -1,5 +1,7 @@
-<map id="Castor3D::TextureBase" name="Castor3D::TextureBase">
-<area shape="rect" id="node1" title="Texture base class." alt="" coords="113,5,271,32"/>
-<area shape="rect" id="node2" href="$dc/dce/a01505.html" title="Dynamic texture class." alt="" coords="5,80,184,107"/>
-<area shape="rect" id="node3" href="$d2/d50/a02081.html" title="Static texture class." alt="" coords="209,80,370,107"/>
+<map id="Castor3D::OverlayCategory::BinaryParser" name="Castor3D::OverlayCategory::BinaryParser">
+<area shape="rect" id="node1" title="OverlayCategory loader." alt="" coords="212,71,391,112"/>
+<area shape="rect" id="node3" href="$de/df7/a01201.html" title="BorderPanelOverlay loader." alt="" coords="439,5,637,47"/>
+<area shape="rect" id="node4" href="$d4/d63/a02173.html" title="PanelOverlay loader." alt="" coords="458,71,618,112"/>
+<area shape="rect" id="node5" href="$d6/dfc/a02593.html" title="TextOverlay loader." alt="" coords="462,136,614,177"/>
+<area shape="rect" id="node2" href="$d8/d92/a01165.html" title=" " alt="" coords="5,71,164,112"/>
 </map>

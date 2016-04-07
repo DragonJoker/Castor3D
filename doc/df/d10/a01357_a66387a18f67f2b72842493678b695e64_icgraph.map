@@ -1,0 +1,11 @@
+<map id="Castor3D::CpuBuffer::GetGpuBuffer" name="Castor3D::CpuBuffer::GetGpuBuffer">
+<area shape="rect" id="node1" title="Retrieves the GPU buffer." alt="" coords="193,235,333,276"/>
+<area shape="rect" id="node2" href="$df/d10/a01357.html#ae110e35cf9d056d849830db5588eda95" title="Activation function, to tell the GPU it is active." alt="" coords="5,5,145,47"/>
+<area shape="rect" id="node3" href="$df/d10/a01357.html#aeb4181074710fb17f4de5871c6ed7dd3" title="Cleanup function." alt="" coords="5,71,145,112"/>
+<area shape="rect" id="node4" href="$df/d10/a01357.html#ac3aba9975c6d7382201a0f7b660939c4" title="Destruction function." alt="" coords="5,136,145,177"/>
+<area shape="rect" id="node5" href="$df/d10/a01357.html#a1500d5b50dd96ff5f94b1af578e07433" title="Transmits data to the GPU buffer from RAM." alt="" coords="5,201,145,243"/>
+<area shape="rect" id="node6" href="$df/d10/a01357.html#a0f1459f57c3955e5a8a6d4e4df9b7240" title="Initialisation function, initialises GPU buffer." alt="" coords="5,267,145,308"/>
+<area shape="rect" id="node7" href="$df/d10/a01357.html#ac3015080e4dd298edea564c54c0bf6db" title="Locks the buffer, id est maps it into memory so we can modify it." alt="" coords="5,332,145,373"/>
+<area shape="rect" id="node8" href="$df/d10/a01357.html#a91e10b24516b48380e7b10de6aea7441" title="Deactivation function, to tell the GPU it is inactive." alt="" coords="5,397,145,439"/>
+<area shape="rect" id="node9" href="$df/d10/a01357.html#a951bdd33f9ccb710c475774d81e0819b" title="Unlocks the buffer, id est unmaps it from memory so no modification can be made after that." alt="" coords="5,463,145,504"/>
+</map>

@@ -1,7 +1,4 @@
-<map id="Castor3D::LightCategory::BinaryParser" name="Castor3D::LightCategory::BinaryParser">
-<area shape="rect" id="node1" title="LightCategory loader." alt="" coords="212,71,376,112"/>
-<area shape="rect" id="node3" href="$d2/d41/a01493.html" title="DirectionalLight loader." alt="" coords="424,5,597,47"/>
-<area shape="rect" id="node4" href="$d1/d20/a01813.html" title="PointLight loader." alt="" coords="439,71,582,112"/>
-<area shape="rect" id="node5" href="$de/df8/a02073.html" title="SpotLight loader." alt="" coords="441,136,580,177"/>
-<area shape="rect" id="node2" href="$d2/d41/a01037.html" title=" " alt="" coords="5,71,164,112"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Coords2ui &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords2ui &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Coords2ui." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

@@ -1,4 +1,4 @@
-<map id="Castor3D::ChunkParser&lt; Castor::Size &gt;" name="Castor3D::ChunkParser&lt; Castor::Size &gt;">
-<area shape="rect" id="node1" title="Chunk parser." alt="" coords="21,80,179,121"/>
-<area shape="rect" id="node2" href="$dc/dd5/a01293.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
+<map id="Castor3D::ChunkFiller&lt; Castor::Point3ui &gt;" name="Castor3D::ChunkFiller&lt; Castor::Point3ui &gt;">
+<area shape="rect" id="node1" title="ChunkFiller specialisation for Castor::Point3ui." alt="" coords="20,80,169,121"/>
+<area shape="rect" id="node2" href="$d3/dea/a01377.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
 </map>

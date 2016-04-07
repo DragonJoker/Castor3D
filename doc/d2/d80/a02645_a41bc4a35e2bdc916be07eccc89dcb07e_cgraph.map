@@ -1,0 +1,6 @@
+<map id="Castor3D::Vertex::GetNormal" name="Castor3D::Vertex::GetNormal">
+<area shape="rect" id="node1" title="Retrieves the group normal." alt="" coords="5,42,197,69"/>
+<area shape="rect" id="node2" href="$d5/d54/a01213.html#aa161551bdeec990fd4637e8084ceb1ab" title="Retrieves a constant pointer on the data buffer." alt="" coords="245,5,445,47"/>
+<area shape="rect" id="node3" href="$d2/d80/a02645.html#a5916d836c4637992ac45a74ccae2af93" title="Retrieves the vertex normal." alt="" coords="249,71,441,98"/>
+<area shape="rect" id="node4" href="$d5/d54/a01213.html#a5bb436e893d310f65b464bd746fff5d7" title="Retrieves a pointer on the data buffer." alt="" coords="493,71,716,98"/>
+</map>

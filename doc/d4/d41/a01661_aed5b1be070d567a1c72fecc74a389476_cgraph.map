@@ -1,0 +1,6 @@
+<map id="Castor3D::ChunkParser&lt; Castor::Matrix4x4d &gt;::operator()" name="Castor3D::ChunkParser&lt; Castor::Matrix4x4d &gt;::operator()">
+<area shape="rect" id="node1" title="Retrieves a value from a chunk." alt="" coords="5,27,164,83"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html#a16366550ba054e571ecea89055b3a6b9" title="Retrieves a value array from a chunk." alt="" coords="212,35,401,76"/>
+<area shape="rect" id="node3" href="$dc/d81/a01161.html#ab7b82ef1b8850a5af09962c268a2e148" title="Checks that the remaining place can hold the given size." alt="" coords="463,5,622,47"/>
+<area shape="rect" id="node4" href="$dc/d81/a01161.html#abed5013d5a2efb2d3c8d865aa90f18bc" title="Retrieves data from the chunk." alt="" coords="449,71,636,98"/>
+</map>

@@ -1,15 +1,5 @@
-<map id="Castor3D::Overlay" name="Castor3D::Overlay">
-<area shape="rect" id="node1" title="The overlay class." alt="" coords="709,107,835,133"/>
-<area shape="rect" id="node2" title=" " alt="" coords="375,158,524,199"/>
-<area shape="rect" id="node3" title=" " alt="" coords="400,5,499,32"/>
-<area shape="rect" id="node4" href="$d6/d56/a01861.html" title="The render system representation." alt="" coords="364,237,535,264"/>
-<area shape="rect" id="node5" href="$d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="707,305,837,332"/>
-<area shape="rect" id="node8" href="$d6/d53/a01789.html" title=" " alt="" coords="985,305,1143,332"/>
-<area shape="rect" id="node6" title=" " alt="" coords="369,328,530,355"/>
-<area shape="rect" id="node7" title=" " alt="" coords="356,410,543,451"/>
-<area shape="rect" id="node9" title=" " alt="" coords="24,237,191,264"/>
-<area shape="rect" id="node10" href="$d0/d4e/a01741.html" title="The mesh factory." alt="" coords="364,56,535,83"/>
-<area shape="rect" id="node11" title=" " alt="" coords="5,45,209,86"/>
-<area shape="rect" id="node12" href="$db/d06/a01509.html" title="Main System." alt="" coords="387,107,511,133"/>
-<area shape="rect" id="node13" title=" " alt="" coords="21,111,193,137"/>
+<map id="Castor3D::DepthStencilState" name="Castor3D::DepthStencilState">
+<area shape="rect" id="node1" title="Depth and stencil buffers configurations class." alt="" coords="111,124,301,151"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,13,193,39"/>
+<area shape="rect" id="node3" href="$dd/ddb/a01717.html" title="Stencil function and operations description." alt="" coords="218,5,407,47"/>
 </map>

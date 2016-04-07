@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::stVERTEX_GROUP Struct Reference</title>
+<title>Castor3D: Castor3D::IPipelineImpl Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,181 +39,608 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/dbb/a02193.html">stVERTEX_GROUP</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/dbb/a02193.html">IPipelineImpl</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="../../dc/dc3/a02190.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::stVERTEX_GROUP Struct Reference</div>  </div>
+<div class="title">Castor3D::IPipelineImpl Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Holds the all components of a vertex array.  
+<p>Implementation of the rendering pipeline.  
  <a href="../../d5/dbb/a02193.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::stVERTEX_GROUP:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::IPipelineImpl:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../dd/daf/a02191.png" border="0" usemap="#Castor3D_1_1stVERTEX__GROUP_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1stVERTEX__GROUP_coll__map" id="Castor3D_1_1stVERTEX__GROUP_coll__map">
-<area shape="rect"  title="Holds the all components of a vertex array." alt="" coords="5,231,151,272"/>
-<area shape="rect"  href="../../dd/d02/a02185.html" title="Holds bone data for one vertex." alt="" coords="108,111,253,152"/>
-<area shape="rect"  title=" " alt="" coords="57,5,99,32"/>
+<div class="center"><img src="../../dd/daf/a02191.png" border="0" usemap="#Castor3D_1_1IPipelineImpl_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1IPipelineImpl_coll__map" id="Castor3D_1_1IPipelineImpl_coll__map">
+<area shape="rect"  title="Implementation of the rendering pipeline." alt="" coords="44,171,201,197"/>
+<area shape="rect"  href="../../de/df6/a02197.html" title="The rendering pipeline." alt="" coords="57,81,188,108"/>
+<area shape="rect"  title=" " alt="" coords="5,5,240,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a1d08afe801e11fcc44a5dec6995b5888"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a1d08afe801e11fcc44a5dec6995b5888">m_uiCount</a></td></tr>
-<tr class="memdesc:a1d08afe801e11fcc44a5dec6995b5888"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vertices count.  <a href="#a1d08afe801e11fcc44a5dec6995b5888">More...</a><br /></td></tr>
-<tr class="separator:a1d08afe801e11fcc44a5dec6995b5888"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ad8ff6c40aac33d04c4a56147a230b1"><td class="memItemLeft" align="right" valign="top">real *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a9ad8ff6c40aac33d04c4a56147a230b1">m_pVtx</a></td></tr>
-<tr class="memdesc:a9ad8ff6c40aac33d04c4a56147a230b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vertices coordinates.  <a href="#a9ad8ff6c40aac33d04c4a56147a230b1">More...</a><br /></td></tr>
-<tr class="separator:a9ad8ff6c40aac33d04c4a56147a230b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad494cbc4d1f1e4e232f0e674f40ff060"><td class="memItemLeft" align="right" valign="top">real *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#ad494cbc4d1f1e4e232f0e674f40ff060">m_pNml</a></td></tr>
-<tr class="memdesc:ad494cbc4d1f1e4e232f0e674f40ff060"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vertices normals.  <a href="#ad494cbc4d1f1e4e232f0e674f40ff060">More...</a><br /></td></tr>
-<tr class="separator:ad494cbc4d1f1e4e232f0e674f40ff060"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ada91554e6627abb744904e7dfb9ab09d"><td class="memItemLeft" align="right" valign="top">real *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#ada91554e6627abb744904e7dfb9ab09d">m_pTan</a></td></tr>
-<tr class="memdesc:ada91554e6627abb744904e7dfb9ab09d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vertices tangents.  <a href="#ada91554e6627abb744904e7dfb9ab09d">More...</a><br /></td></tr>
-<tr class="separator:ada91554e6627abb744904e7dfb9ab09d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85bf74c1127541211da16bf35e36cd4e"><td class="memItemLeft" align="right" valign="top">real *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a85bf74c1127541211da16bf35e36cd4e">m_pBin</a></td></tr>
-<tr class="memdesc:a85bf74c1127541211da16bf35e36cd4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vertices bitangents.  <a href="#a85bf74c1127541211da16bf35e36cd4e">More...</a><br /></td></tr>
-<tr class="separator:a85bf74c1127541211da16bf35e36cd4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50f0e18d0ac980f696d837070cb5c3de"><td class="memItemLeft" align="right" valign="top">real *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a50f0e18d0ac980f696d837070cb5c3de">m_pTex</a></td></tr>
-<tr class="memdesc:a50f0e18d0ac980f696d837070cb5c3de"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vertices texture coordinates.  <a href="#a50f0e18d0ac980f696d837070cb5c3de">More...</a><br /></td></tr>
-<tr class="separator:a50f0e18d0ac980f696d837070cb5c3de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7108ddcde9ccbb65d846f2c30def4e75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d02/a02185.html">stVERTEX_BONE_DATA</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a7108ddcde9ccbb65d846f2c30def4e75">m_pBones</a></td></tr>
-<tr class="memdesc:a7108ddcde9ccbb65d846f2c30def4e75"><td class="mdescLeft">&#160;</td><td class="mdescRight">The vertices bones datas.  <a href="#a7108ddcde9ccbb65d846f2c30def4e75">More...</a><br /></td></tr>
-<tr class="separator:a7108ddcde9ccbb65d846f2c30def4e75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:acbc911b1d4ea6e01b326a2cc111654f6"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#acbc911b1d4ea6e01b326a2cc111654f6">IPipelineImpl</a> (<a class="el" href="../../de/df6/a02197.html">Pipeline</a> &amp;p_pipeline, bool p_rightHanded)</td></tr>
+<tr class="memdesc:acbc911b1d4ea6e01b326a2cc111654f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#acbc911b1d4ea6e01b326a2cc111654f6">More...</a><br /></td></tr>
+<tr class="separator:acbc911b1d4ea6e01b326a2cc111654f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8841967abd179941ae5637d3be939a7"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#ad8841967abd179941ae5637d3be939a7">~IPipelineImpl</a> ()</td></tr>
+<tr class="memdesc:ad8841967abd179941ae5637d3be939a7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#ad8841967abd179941ae5637d3be939a7">More...</a><br /></td></tr>
+<tr class="separator:ad8841967abd179941ae5637d3be939a7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4fc7a88057fe9ae198b3f5d0f9e8b35"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#aa4fc7a88057fe9ae198b3f5d0f9e8b35">ApplyMatrix</a> (Castor::Matrix4x4r const &amp;p_matrix, Castor::String const &amp;p_name, <a class="el" href="../../d1/d20/a01813.html">FrameVariableBuffer</a> &amp;p_matrixBuffer)</td></tr>
+<tr class="memdesc:aa4fc7a88057fe9ae198b3f5d0f9e8b35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Puts the given matrix in the given frame variables buffer.  <a href="#aa4fc7a88057fe9ae198b3f5d0f9e8b35">More...</a><br /></td></tr>
+<tr class="separator:aa4fc7a88057fe9ae198b3f5d0f9e8b35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1c8b64b29fdf48ec6502a4343da9943"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#ab1c8b64b29fdf48ec6502a4343da9943">ApplyViewport</a> (int p_windowWidth, int p_windowHeight)=0</td></tr>
+<tr class="memdesc:ab1c8b64b29fdf48ec6502a4343da9943"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the given viewport dimension.  <a href="#ab1c8b64b29fdf48ec6502a4343da9943">More...</a><br /></td></tr>
+<tr class="separator:ab1c8b64b29fdf48ec6502a4343da9943"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8830668b015c3baddcc61683373f899"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#aa8830668b015c3baddcc61683373f899">Perspective</a> (Castor::Matrix4x4r &amp;p_result, Castor::Angle const &amp;p_fovy, real p_aspect, real p_near, real p_far)=0</td></tr>
+<tr class="memdesc:aa8830668b015c3baddcc61683373f899"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a matrix that sets a centered perspective projection from the given parameters.  <a href="#aa8830668b015c3baddcc61683373f899">More...</a><br /></td></tr>
+<tr class="separator:aa8830668b015c3baddcc61683373f899"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a812a71f2b581cee5b84e6f790048747c"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a812a71f2b581cee5b84e6f790048747c">Frustum</a> (Castor::Matrix4x4r &amp;p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far)=0</td></tr>
+<tr class="memdesc:a812a71f2b581cee5b84e6f790048747c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a matrix that sets a non centered perspective projection from the given parameters.  <a href="#a812a71f2b581cee5b84e6f790048747c">More...</a><br /></td></tr>
+<tr class="separator:a812a71f2b581cee5b84e6f790048747c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad10209df73e90943ff2ba046311b2ea4"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#ad10209df73e90943ff2ba046311b2ea4">Ortho</a> (Castor::Matrix4x4r &amp;p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far)=0</td></tr>
+<tr class="memdesc:ad10209df73e90943ff2ba046311b2ea4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a matrix that sets an orthogonal projection.  <a href="#ad10209df73e90943ff2ba046311b2ea4">More...</a><br /></td></tr>
+<tr class="separator:ad10209df73e90943ff2ba046311b2ea4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a98eccd409a343ca96640ea5b7f276afb"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a98eccd409a343ca96640ea5b7f276afb">LookAt</a> (Castor::Matrix4x4r &amp;p_result, Castor::Point3r const &amp;p_eye, Castor::Point3r const &amp;p_center, Castor::Point3r const &amp;p_up)=0</td></tr>
+<tr class="memdesc:a98eccd409a343ca96640ea5b7f276afb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Builds a view matrix that looks at a given point.  <a href="#a98eccd409a343ca96640ea5b7f276afb">More...</a><br /></td></tr>
+<tr class="separator:a98eccd409a343ca96640ea5b7f276afb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:ad62f629029194f7f717a911f2ef31e0d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../de/df6/a02197.html">Pipeline</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#ad62f629029194f7f717a911f2ef31e0d">m_pipeline</a></td></tr>
+<tr class="memdesc:ad62f629029194f7f717a911f2ef31e0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The parent pipeline.  <a href="#ad62f629029194f7f717a911f2ef31e0d">More...</a><br /></td></tr>
+<tr class="separator:ad62f629029194f7f717a911f2ef31e0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34a3cca3bc98ba0837aa42e0b23b3cf4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#a34a3cca3bc98ba0837aa42e0b23b3cf4">m_rightHanded</a></td></tr>
+<tr class="memdesc:a34a3cca3bc98ba0837aa42e0b23b3cf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells if the pipeline is right handed (true) or left handed (false).  <a href="#a34a3cca3bc98ba0837aa42e0b23b3cf4">More...</a><br /></td></tr>
+<tr class="separator:a34a3cca3bc98ba0837aa42e0b23b3cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:af9f0f1adbd5baee7830839447205af8d"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d5/dbb/a02193.html#af9f0f1adbd5baee7830839447205af8d">Pipeline</a></td></tr>
+<tr class="separator:af9f0f1adbd5baee7830839447205af8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Holds the all components of a vertex array. </p>
+<div class="textblock"><p>Implementation of the rendering pipeline. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>23/07/2012 </dd></dl>
-</div><h2 class="groupheader">Member Data Documentation</h2>
-<a id="a85bf74c1127541211da16bf35e36cd4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a85bf74c1127541211da16bf35e36cd4e">&#9670;&nbsp;</a></span>m_pBin</h2>
+<dl class="section version"><dt>Version</dt><dd>0.6.1.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>03/01/2011</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Defines the various matrices, applies the transformations it can support. </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="acbc911b1d4ea6e01b326a2cc111654f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbc911b1d4ea6e01b326a2cc111654f6">&#9670;&nbsp;</a></span>IPipelineImpl()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">real* Castor3D::stVERTEX_GROUP::m_pBin</td>
+          <td class="memname">C3D_API Castor3D::IPipelineImpl::IPipelineImpl </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../de/df6/a02197.html">Pipeline</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_pipeline</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>p_rightHanded</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>The vertices bitangents. </p>
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_pipeline</td><td>The parent pipeline. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rightHanded</td><td>Tells if the pipeline is right handed (true) or left handed (false). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a7108ddcde9ccbb65d846f2c30def4e75"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7108ddcde9ccbb65d846f2c30def4e75">&#9670;&nbsp;</a></span>m_pBones</h2>
+<a id="ad8841967abd179941ae5637d3be939a7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8841967abd179941ae5637d3be939a7">&#9670;&nbsp;</a></span>~IPipelineImpl()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/d02/a02185.html">stVERTEX_BONE_DATA</a>* Castor3D::stVERTEX_GROUP::m_pBones</td>
+          <td class="memname">virtual C3D_API Castor3D::IPipelineImpl::~IPipelineImpl </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>The vertices bones datas. </p>
+<p>Destructor. </p>
 
 </div>
 </div>
-<a id="ad494cbc4d1f1e4e232f0e674f40ff060"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad494cbc4d1f1e4e232f0e674f40ff060">&#9670;&nbsp;</a></span>m_pNml</h2>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="aa4fc7a88057fe9ae198b3f5d0f9e8b35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4fc7a88057fe9ae198b3f5d0f9e8b35">&#9670;&nbsp;</a></span>ApplyMatrix()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real* Castor3D::stVERTEX_GROUP::m_pNml</td>
+          <td class="memname">virtual C3D_API void Castor3D::IPipelineImpl::ApplyMatrix </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Matrix4x4r const &amp;&#160;</td>
+          <td class="paramname"><em>p_matrix</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d1/d20/a01813.html">FrameVariableBuffer</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_matrixBuffer</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>The vertices normals. </p>
+<p>Puts the given matrix in the given frame variables buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_matrix</td><td>The matrix. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The shader variable name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_matrixBuffer</td><td>The matrix variables buffer. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="ada91554e6627abb744904e7dfb9ab09d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ada91554e6627abb744904e7dfb9ab09d">&#9670;&nbsp;</a></span>m_pTan</h2>
+<a id="ab1c8b64b29fdf48ec6502a4343da9943"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1c8b64b29fdf48ec6502a4343da9943">&#9670;&nbsp;</a></span>ApplyViewport()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real* Castor3D::stVERTEX_GROUP::m_pTan</td>
+          <td class="memname">virtual C3D_API void Castor3D::IPipelineImpl::ApplyViewport </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_windowWidth</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>p_windowHeight</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>The vertices tangents. </p>
+<p>Applies the given viewport dimension. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_windowWidth,p_windowHeight</td><td>The dimensions. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a50f0e18d0ac980f696d837070cb5c3de"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a50f0e18d0ac980f696d837070cb5c3de">&#9670;&nbsp;</a></span>m_pTex</h2>
+<a id="a812a71f2b581cee5b84e6f790048747c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a812a71f2b581cee5b84e6f790048747c">&#9670;&nbsp;</a></span>Frustum()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real* Castor3D::stVERTEX_GROUP::m_pTex</td>
+          <td class="memname">virtual C3D_API void Castor3D::IPipelineImpl::Frustum </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Matrix4x4r &amp;&#160;</td>
+          <td class="paramname"><em>p_result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_bottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_near</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_far</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>The vertices texture coordinates. </p>
+<p>Builds a matrix that sets a non centered perspective projection from the given parameters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_result</td><td>The matrix that will receive the result. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_left</td><td>Left clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_right</td><td>Right clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_bottom</td><td>Bottom clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_top</td><td>Top clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_near</td><td>Near clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_far</td><td>Far clipping plane value. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a9ad8ff6c40aac33d04c4a56147a230b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9ad8ff6c40aac33d04c4a56147a230b1">&#9670;&nbsp;</a></span>m_pVtx</h2>
+<a id="a98eccd409a343ca96640ea5b7f276afb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a98eccd409a343ca96640ea5b7f276afb">&#9670;&nbsp;</a></span>LookAt()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">real* Castor3D::stVERTEX_GROUP::m_pVtx</td>
+          <td class="memname">virtual C3D_API void Castor3D::IPipelineImpl::LookAt </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Matrix4x4r &amp;&#160;</td>
+          <td class="paramname"><em>p_result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Point3r const &amp;&#160;</td>
+          <td class="paramname"><em>p_eye</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Point3r const &amp;&#160;</td>
+          <td class="paramname"><em>p_center</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Point3r const &amp;&#160;</td>
+          <td class="paramname"><em>p_up</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>The vertices coordinates. </p>
+<p>Builds a view matrix that looks at a given point. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_result</td><td>The matrix that will receive the result. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_eye</td><td>The eye position. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_center</td><td>The point to look at. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_up</td><td>The up direction.. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a1d08afe801e11fcc44a5dec6995b5888"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d08afe801e11fcc44a5dec6995b5888">&#9670;&nbsp;</a></span>m_uiCount</h2>
+<a id="ad10209df73e90943ff2ba046311b2ea4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad10209df73e90943ff2ba046311b2ea4">&#9670;&nbsp;</a></span>Ortho()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t Castor3D::stVERTEX_GROUP::m_uiCount</td>
+          <td class="memname">virtual C3D_API void Castor3D::IPipelineImpl::Ortho </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Matrix4x4r &amp;&#160;</td>
+          <td class="paramname"><em>p_result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_left</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_right</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_bottom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_top</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_near</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_far</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>The vertices count. </p>
+<p>Builds a matrix that sets an orthogonal projection. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_result</td><td>The matrix that will receive the result. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_left</td><td>Left clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_right</td><td>Right clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_bottom</td><td>Bottom clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_top</td><td>Top clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_near</td><td>Near clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_far</td><td>Far clipping plane value. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d4/dd3/a00428.html">VertexGroup.hpp</a></li>
+<a id="aa8830668b015c3baddcc61683373f899"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8830668b015c3baddcc61683373f899">&#9670;&nbsp;</a></span>Perspective()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::IPipelineImpl::Perspective </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Matrix4x4r &amp;&#160;</td>
+          <td class="paramname"><em>p_result</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Angle const &amp;&#160;</td>
+          <td class="paramname"><em>p_fovy</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_aspect</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_near</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">real&#160;</td>
+          <td class="paramname"><em>p_far</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Builds a matrix that sets a centered perspective projection from the given parameters. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_result</td><td>The matrix that will receive the result. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_fovy</td><td>Y Field of View. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_aspect</td><td>Width / Height ratio. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_near</td><td>Near clipping plane value. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_far</td><td>Far clipping plane value. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Function Documentation</h2>
+<a id="af9f0f1adbd5baee7830839447205af8d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9f0f1adbd5baee7830839447205af8d">&#9670;&nbsp;</a></span>Pipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="../../de/df6/a02197.html">Pipeline</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="ad62f629029194f7f717a911f2ef31e0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad62f629029194f7f717a911f2ef31e0d">&#9670;&nbsp;</a></span>m_pipeline</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../de/df6/a02197.html">Pipeline</a>&amp; Castor3D::IPipelineImpl::m_pipeline</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The parent pipeline. </p>
+
+</div>
+</div>
+<a id="a34a3cca3bc98ba0837aa42e0b23b3cf4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34a3cca3bc98ba0837aa42e0b23b3cf4">&#9670;&nbsp;</a></span>m_rightHanded</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Castor3D::IPipelineImpl::m_rightHanded</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells if the pipeline is right handed (true) or left handed (false). </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../dd/de2/a00320.html">Pipeline.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:36 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

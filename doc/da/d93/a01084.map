@@ -1,6 +1,10 @@
-<map id="Castor3D::Camera" name="Castor3D::Camera">
-<area shape="rect" id="node1" title="Class which represents a Camera." alt="" coords="128,169,257,196"/>
-<area shape="rect" id="node2" href="$df/d5a/a01681.html" title="Movable object class." alt="" coords="5,87,175,114"/>
-<area shape="rect" id="node3" href="$d0/d28/a00997.html" title="Animable public interface." alt="" coords="21,5,159,32"/>
-<area shape="rect" id="node4" href="$d6/d8b/a01117.html" title=" " alt="" coords="199,80,395,121"/>
+<map id="Castor3D::Animable" name="Castor3D::Animable">
+<area shape="rect" id="node1" title="Animable public interface." alt="" coords="260,5,399,32"/>
+<area shape="rect" id="node2" href="$d6/d19/a02029.html" title="The mesh representation." alt="" coords="105,80,221,107"/>
+<area shape="rect" id="node3" href="$d2/dea/a02057.html" title="Movable object class." alt="" coords="245,80,414,107"/>
+<area shape="rect" id="node8" href="$da/dbe/a02489.html" title="The skeleton, holds each bone." alt="" coords="438,80,573,107"/>
+<area shape="rect" id="node4" href="$d6/d6e/a01137.html" title="Billboards list." alt="" coords="5,155,160,181"/>
+<area shape="rect" id="node5" href="$da/d19/a01217.html" title="Class which represents a Camera." alt="" coords="185,155,314,181"/>
+<area shape="rect" id="node6" href="$d7/db1/a01837.html" title="Geometry handler class." alt="" coords="339,155,480,181"/>
+<area shape="rect" id="node7" href="$d2/d54/a01917.html" title="Light source implementation." alt="" coords="504,155,616,181"/>
 </map>

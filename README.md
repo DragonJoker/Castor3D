@@ -9,8 +9,10 @@ Features
 --------
 
 - Normal mapping.
+- Screen Space Ambient Occlusion.
+- Shadow Mapping.
+- HDR rendering with various tone mapping operators.
 - Scene graph.
-- Various rendering techniques : Forward, Forward SSAA, Forward MSAA.
 - Modular architecture through plug-ins.
 - Shaders are generated automatically from material and pass configuration.
 - Shaders are writable directly from C++ code.
@@ -23,6 +25,7 @@ Implemented Plug-ins
 
 **Importers**
 - ASSIMP: Multiple format mesh importer.
+- FBX: Maya FBX scene importer.
 - LWO: LightWave Object importer.
 - ASE: ASCII Scene Export importer.
 - MD2: Quake 2 Model importer.
@@ -33,7 +36,25 @@ Implemented Plug-ins
 
 **Dividers**
 - Loop subdivision surfaces.
+- Phong tessellation.
 - PN-Triangles surfaces.
+
+**PostEffects**
+- Bloom: HDR Bloom implementation.
+
+**Generic**
+- CastorGUI: to build GUIs inside Castor3D scenes.
+
+**ToneMappings**
+- LinearToneMapping: Default tone mapping.
+- HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
+- HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
+- ReinhardToneMapping: Reinhard tone mapping.
+
+**Techniques**
+- Direct: Default one, forward rendering.
+- MSAA: Forward rendering with MSAA.
+- Deferred: Deferred rendering technique using forward rendering for transparent meshes.
 
 Links
 -----
@@ -41,3 +62,8 @@ Links
 - [Building Castor3D](https://dragonjoker.github.com/Castor3D/pages/build)
 - [API Documentation](https://dragonjoker.github.com/Castor3D/doc)
 - [Playlist on YouTube](https://www.youtube.com/playlist?list=PLKA1SVXuAbMNaFbSJyAN_4yD2bzNlgES3)
+
+Older Versions
+--------------
+
+- [v0.7.0](https://dragonjoker.github.com/Castor3D/v0.7.0/)

@@ -1,4 +1,4 @@
-<map id="Castor3D::DeferredShadingRenderTechnique" name="Castor3D::DeferredShadingRenderTechnique">
-<area shape="rect" id="node1" title="Deferred lighting Render technique class." alt="" coords="23,80,202,121"/>
-<area shape="rect" id="node2" href="$d5/d39/a01945.html" title="Render technique base class." alt="" coords="5,5,220,32"/>
+<map id="Castor3D::ChunkFiller&lt; Castor::Coords3i &gt;" name="Castor3D::ChunkFiller&lt; Castor::Coords3i &gt;">
+<area shape="rect" id="node1" title="ChunkFiller specialisation for Castor::Coords3i." alt="" coords="20,80,169,121"/>
+<area shape="rect" id="node2" href="$d3/dea/a01377.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
 </map>

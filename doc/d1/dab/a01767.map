@@ -1,15 +1,5 @@
-<map id="Castor3D::Pass" name="Castor3D::Pass">
-<area shape="rect" id="node1" title="Definition of a material pass." alt="" coords="5,102,120,129"/>
-<area shape="rect" id="node5" href="$d8/ded/a01113.html" title=" " alt="" coords="89,243,255,284"/>
-<area shape="rect" id="node2" href="$d6/d8b/a01117.html" title=" " alt="" coords="95,525,262,567"/>
-<area shape="rect" id="node3" title=" " alt="" coords="75,436,282,463"/>
-<area shape="rect" id="node4" href="$d6/d27/a01781.html" title="The Pass renderer." alt="" coords="91,347,258,373"/>
-<area shape="rect" id="node6" href="$d6/d56/a01861.html" title="The render system representation." alt="" coords="233,102,404,129"/>
-<area shape="rect" id="node7" href="$d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="492,250,623,277"/>
-<area shape="rect" id="node10" href="$d6/d53/a01789.html" title=" " alt="" coords="493,347,651,373"/>
-<area shape="rect" id="node8" title=" " alt="" coords="491,102,653,129"/>
-<area shape="rect" id="node9" title=" " alt="" coords="677,95,864,136"/>
-<area shape="rect" id="node11" title=" " alt="" coords="235,5,402,32"/>
-<area shape="rect" id="node12" href="$db/d06/a01509.html" title="Main System." alt="" coords="306,436,430,463"/>
-<area shape="rect" id="node13" title=" " alt="" coords="282,347,454,373"/>
+<map id="Castor3D::stFACE_INFOS" name="Castor3D::stFACE_INFOS">
+<area shape="rect" id="node1" title="Holds face informations." alt="" coords="5,213,181,240"/>
+<area shape="rect" id="node2" href="$d5/d36/a01773.html" title="Holds vertex informations." alt="" coords="5,109,181,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="72,5,115,32"/>
 </map>

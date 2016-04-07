@@ -1,6 +1,4 @@
-<map id="Castor3D::PanelOverlay::TextLoader" name="Castor3D::PanelOverlay::TextLoader">
-<area shape="rect" id="node1" title="PanelOverlay loader." alt="" coords="499,46,659,87"/>
-<area shape="rect" id="node2" href="$d8/d9c/a01733.html" title="OverlayCategory loader." alt="" coords="272,46,451,87"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,224,61"/>
-<area shape="rect" id="node4" title=" " alt="" coords="65,85,164,112"/>
+<map id="Castor3D::Face::TextLoader" name="Castor3D::Face::TextLoader">
+<area shape="rect" id="node1" title="Face loader." alt="" coords="7,109,192,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,61"/>
 </map>

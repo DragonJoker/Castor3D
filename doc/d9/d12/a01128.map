@@ -1,5 +1,4 @@
-<map id="Castor3D::OneFrameVariable&lt; T &gt;" name="Castor3D::OneFrameVariable&lt; T &gt;">
-<area shape="rect" id="node1" title="Single shader variable with variable type." alt="" coords="5,155,228,181"/>
-<area shape="rect" id="node2" href="$d2/d49/a01561.html" title="Shader variable representation with variable type." alt="" coords="13,80,220,107"/>
-<area shape="rect" id="node3" href="$de/d2c/a01553.html" title="Shader variable representation." alt="" coords="33,5,201,32"/>
+<map id="Castor3D::AnimationObject::BinaryParser" name="Castor3D::AnimationObject::BinaryParser">
+<area shape="rect" id="node1" title="MovingObjectBase binary loader." alt="" coords="5,95,185,136"/>
+<area shape="rect" id="node2" href="$d8/d92/a01165.html" title=" " alt="" coords="16,5,175,47"/>
 </map>

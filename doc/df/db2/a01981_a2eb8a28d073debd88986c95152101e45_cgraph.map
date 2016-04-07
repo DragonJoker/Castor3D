@@ -1,0 +1,5 @@
+<map id="Castor3D::ElementInitialiser&lt; Elem, typename std::enable_if&lt; is_initialisable&lt; Elem &gt;::value &amp;&amp;!is_instant&lt; Elem &gt;::value &gt;::type &gt;::Initialise" name="Castor3D::ElementInitialiser&lt; Elem, typename std::enable_if&lt; is_initialisable&lt; Elem &gt;::value &amp;&amp;!is_instant&lt; Elem &gt;::value &gt;::type &gt;::Initialise">
+<area shape="rect" id="node1" title=" " alt="" coords="5,13,203,98"/>
+<area shape="rect" id="node2" href="$d7/d41/a00532.html#a5edf0e5716e4a22abdf8a09c9cc9dfa3" title="Helper function to create an initialise event." alt="" coords="265,5,427,47"/>
+<area shape="rect" id="node3" href="$d5/d77/a01749.html#a7c328845d51afb8b40390c873753f215" title="Posts a frame event to the default frame listener." alt="" coords="251,71,441,98"/>
+</map>

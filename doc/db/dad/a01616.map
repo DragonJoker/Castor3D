@@ -1,6 +1,4 @@
-<map id="Castor3D::Light" name="Castor3D::Light">
-<area shape="rect" id="node1" title="Light source implementation." alt="" coords="129,169,241,196"/>
-<area shape="rect" id="node2" href="$df/d5a/a01681.html" title="Movable object class." alt="" coords="5,87,175,114"/>
-<area shape="rect" id="node3" href="$d0/d28/a00997.html" title="Animable public interface." alt="" coords="21,5,159,32"/>
-<area shape="rect" id="node4" href="$d6/d8b/a01117.html" title=" " alt="" coords="199,80,362,121"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Coords2i &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords2i &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Coords2i." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

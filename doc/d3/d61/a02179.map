@@ -1,5 +1,4 @@
-<map id="Castor3D::Vertex::TextLoader" name="Castor3D::Vertex::TextLoader">
-<area shape="rect" id="node1" title="Vertex loader." alt="" coords="241,53,436,80"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,61"/>
-<area shape="rect" id="node3" title=" " alt="" coords="27,85,172,112"/>
+<map id="Castor3D::Pass" name="Castor3D::Pass">
+<area shape="rect" id="node1" title="Definition of a material pass." alt="" coords="42,80,157,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,32"/>
 </map>

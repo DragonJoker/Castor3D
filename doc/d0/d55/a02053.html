@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::ShaderProgramBase::BinaryParser Class Reference</title>
+<title>Castor3D: Castor3D::MeshManager Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,7 +39,7 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a></li><li class="navelem"><a class="el" href="../../d0/d55/a02053.html">BinaryParser</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d0/d55/a02053.html">MeshManager</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
@@ -47,100 +47,165 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="../../d0/d3d/a02050.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::ShaderProgramBase::BinaryParser Class Reference</div>  </div>
+<div class="title">Castor3D::MeshManager Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="../../d7/d13/a02045.html" title="Base shader program implementation, used to share functions through the supported shader languages.">ShaderProgramBase</a> loader.  
+<p>Meshes manager.  
  <a href="../../d0/d55/a02053.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::ShaderProgramBase::BinaryParser:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::MeshManager:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d3/df9/a02052.png" border="0" usemap="#Castor3D_1_1ShaderProgramBase_1_1BinaryParser_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1ShaderProgramBase_1_1BinaryParser_inherit__map" id="Castor3D_1_1ShaderProgramBase_1_1BinaryParser_inherit__map">
-<area shape="rect"  title="ShaderProgramBase loader." alt="" coords="5,95,209,136"/>
-<area shape="rect"  href="../../d2/d41/a01037.html" title=" " alt="" coords="24,5,191,47"/>
+<div class="center"><img src="../../d3/df9/a02052.png" border="0" usemap="#Castor3D_1_1MeshManager_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1MeshManager_inherit__map" id="Castor3D_1_1MeshManager_inherit__map">
+<area shape="rect"  title="Meshes manager." alt="" coords="31,288,198,315"/>
+<area shape="rect"  href="../../dd/da3/a02385.html" title=" " alt="" coords="20,199,209,240"/>
+<area shape="rect"  href="../../d8/d24/a02001.html" title=" " alt="" coords="5,80,224,151"/>
+<area shape="rect"  title=" " alt="" coords="21,5,209,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::ShaderProgramBase::BinaryParser:</div>
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::MeshManager:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d4/d2e/a02051.png" border="0" usemap="#Castor3D_1_1ShaderProgramBase_1_1BinaryParser_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1ShaderProgramBase_1_1BinaryParser_coll__map" id="Castor3D_1_1ShaderProgramBase_1_1BinaryParser_coll__map">
-<area shape="rect"  title="ShaderProgramBase loader." alt="" coords="5,95,209,136"/>
-<area shape="rect"  href="../../d2/d41/a01037.html" title=" " alt="" coords="24,5,191,47"/>
+<div class="center"><img src="../../d4/d2e/a02051.png" border="0" usemap="#Castor3D_1_1MeshManager_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1MeshManager_coll__map" id="Castor3D_1_1MeshManager_coll__map">
+<area shape="rect"  title="Meshes manager." alt="" coords="2009,31,2176,57"/>
+<area shape="rect"  href="../../dd/da3/a02385.html" title=" " alt="" coords="1771,23,1960,65"/>
+<area shape="rect"  href="../../d8/d24/a02001.html" title=" " alt="" coords="1503,9,1721,79"/>
+<area shape="rect"  title=" " alt="" coords="820,5,1008,32"/>
+<area shape="rect"  href="../../db/d2a/a02325.html" title="The render system representation." alt="" coords="1180,73,1351,100"/>
+<area shape="rect"  title=" " alt="" coords="831,57,997,98"/>
+<area shape="rect"  href="../../de/df6/a02197.html" title="The rendering pipeline." alt="" coords="539,64,669,91"/>
+<area shape="rect"  title=" " alt="" coords="181,64,416,91"/>
+<area shape="rect"  title=" " alt="" coords="831,123,997,149"/>
+<area shape="rect"  title=" " alt="" coords="795,174,1033,215"/>
+<area shape="rect"  href="../../d0/d71/a02329.html" title=" " alt="" coords="519,174,689,215"/>
+<area shape="rect"  title="STL class." alt="" coords="259,181,339,208"/>
+<area shape="rect"  title="STL class." alt="" coords="5,174,132,215"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a046d321473324a60b49e12077c8d373f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#a046d321473324a60b49e12077c8d373f">BinaryParser</a> (Castor::Path const &amp;p_path)</td></tr>
-<tr class="memdesc:a046d321473324a60b49e12077c8d373f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a046d321473324a60b49e12077c8d373f">More...</a><br /></td></tr>
-<tr class="separator:a046d321473324a60b49e12077c8d373f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af8a5ae1cc81d3cd8f3999f91a3ed04ed"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#af8a5ae1cc81d3cd8f3999f91a3ed04ed">Fill</a> (<a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> const &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:af8a5ae1cc81d3cd8f3999f91a3ed04ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to fill the chunk from specific data.  <a href="#af8a5ae1cc81d3cd8f3999f91a3ed04ed">More...</a><br /></td></tr>
-<tr class="separator:af8a5ae1cc81d3cd8f3999f91a3ed04ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa47d2788c05a8240e5a1cfc9a3c5303f"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#aa47d2788c05a8240e5a1cfc9a3c5303f">Parse</a> (<a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:aa47d2788c05a8240e5a1cfc9a3c5303f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to retrieve specific data from the chunk.  <a href="#aa47d2788c05a8240e5a1cfc9a3c5303f">More...</a><br /></td></tr>
-<tr class="separator:aa47d2788c05a8240e5a1cfc9a3c5303f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a01037"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01037')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; ShaderProgramBase &gt;</a></td></tr>
-<tr class="memitem:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a26de8559eb86423f92eb9b516172ab83">BinaryParser</a> (Castor::Path const &amp;p_path)</td></tr>
-<tr class="memdesc:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d2/d41/a01037.html#a26de8559eb86423f92eb9b516172ab83">More...</a><br /></td></tr>
-<tr class="separator:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a6bccc937cfb595734be323a4a71ddf46">Fill</a> (<a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> const &amp;p_obj, Castor::BinaryFile &amp;p_file) const</td></tr>
-<tr class="memdesc:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">To chunk writer function.  <a href="../../d2/d41/a01037.html#a6bccc937cfb595734be323a4a71ddf46">More...</a><br /></td></tr>
-<tr class="separator:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a42e485b9af37022b62291c228559f252">Parse</a> (<a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> &amp;p_obj, Castor::BinaryFile &amp;p_file) const</td></tr>
-<tr class="memdesc:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">From file reader function.  <a href="../../d2/d41/a01037.html#a42e485b9af37022b62291c228559f252">More...</a><br /></td></tr>
-<tr class="separator:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a730c74e48a9c57e522d23a932eec84cf"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#a730c74e48a9c57e522d23a932eec84cf">MeshManager</a> (<a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;p_engine)</td></tr>
+<tr class="memdesc:a730c74e48a9c57e522d23a932eec84cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a730c74e48a9c57e522d23a932eec84cf">More...</a><br /></td></tr>
+<tr class="separator:a730c74e48a9c57e522d23a932eec84cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb616f04ea440d02e06034925261110f"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#aeb616f04ea440d02e06034925261110f">~MeshManager</a> ()</td></tr>
+<tr class="memdesc:aeb616f04ea440d02e06034925261110f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#aeb616f04ea440d02e06034925261110f">More...</a><br /></td></tr>
+<tr class="separator:aeb616f04ea440d02e06034925261110f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af56d9633fb86cec1ee97507397aa9240"><td class="memItemLeft" align="right" valign="top">C3D_API MeshSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#af56d9633fb86cec1ee97507397aa9240">Create</a> (Castor::String const &amp;p_name, <a class="el" href="../../d7/d41/a00532.html#af3131e742b2c01e193e22b5482f70d3d">eMESH_TYPE</a> p_type)</td></tr>
+<tr class="memdesc:af56d9633fb86cec1ee97507397aa9240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mesh with the given informations.  <a href="#af56d9633fb86cec1ee97507397aa9240">More...</a><br /></td></tr>
+<tr class="separator:af56d9633fb86cec1ee97507397aa9240"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96e3eba2081097172729330503b64818"><td class="memItemLeft" align="right" valign="top">C3D_API MeshSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#a96e3eba2081097172729330503b64818">Create</a> (Castor::String const &amp;p_name, <a class="el" href="../../d7/d41/a00532.html#af3131e742b2c01e193e22b5482f70d3d">eMESH_TYPE</a> p_type, UIntArray const &amp;p_arrayFaces)</td></tr>
+<tr class="memdesc:a96e3eba2081097172729330503b64818"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mesh with the given informations.  <a href="#a96e3eba2081097172729330503b64818">More...</a><br /></td></tr>
+<tr class="separator:a96e3eba2081097172729330503b64818"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f898c26af66e5e869e20713c713534c"><td class="memItemLeft" align="right" valign="top">C3D_API MeshSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#a1f898c26af66e5e869e20713c713534c">Create</a> (Castor::String const &amp;p_name, <a class="el" href="../../d7/d41/a00532.html#af3131e742b2c01e193e22b5482f70d3d">eMESH_TYPE</a> p_type, UIntArray const &amp;p_arrayFaces, RealArray const &amp;p_arraySizes)</td></tr>
+<tr class="memdesc:a1f898c26af66e5e869e20713c713534c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a mesh with the given informations.  <a href="#a1f898c26af66e5e869e20713c713534c">More...</a><br /></td></tr>
+<tr class="separator:a1f898c26af66e5e869e20713c713534c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad14aaf8c4a7aa1fd503615b46f3e8234"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#ad14aaf8c4a7aa1fd503615b46f3e8234">Save</a> (Castor::BinaryFile &amp;p_file)</td></tr>
+<tr class="memdesc:ad14aaf8c4a7aa1fd503615b46f3e8234"><td class="mdescLeft">&#160;</td><td class="mdescRight">Saves in a file all currently loaded meshes.  <a href="#ad14aaf8c4a7aa1fd503615b46f3e8234">More...</a><br /></td></tr>
+<tr class="separator:ad14aaf8c4a7aa1fd503615b46f3e8234"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab71ff82e5bb3baff3d78b3b4f43fe45f"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d55/a02053.html#ab71ff82e5bb3baff3d78b3b4f43fe45f">Load</a> (Castor::BinaryFile &amp;p_file)</td></tr>
+<tr class="memdesc:ab71ff82e5bb3baff3d78b3b4f43fe45f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loads all meshes contained in the given file.  <a href="#ab71ff82e5bb3baff3d78b3b4f43fe45f">More...</a><br /></td></tr>
+<tr class="separator:ab71ff82e5bb3baff3d78b3b4f43fe45f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a02001"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02001')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager&lt; Castor::String, Mesh, Engine, ResourceManagerEngineGetter &gt;</a></td></tr>
+<tr class="memitem:a36c86d799edb45fb92f274582fc4a2e3 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a36c86d799edb45fb92f274582fc4a2e3">Cleanup</a> ()</td></tr>
+<tr class="memdesc:a36c86d799edb45fb92f274582fc4a2e3 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets all the elements to be cleaned up.  <a href="../../d8/d24/a02001.html#a36c86d799edb45fb92f274582fc4a2e3">More...</a><br /></td></tr>
+<tr class="separator:a36c86d799edb45fb92f274582fc4a2e3 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70517fbd2702b99752ccdae527b16258 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a70517fbd2702b99752ccdae527b16258">Clear</a> ()</td></tr>
+<tr class="memdesc:a70517fbd2702b99752ccdae527b16258 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flushes the collection.  <a href="../../d8/d24/a02001.html#a70517fbd2702b99752ccdae527b16258">More...</a><br /></td></tr>
+<tr class="separator:a70517fbd2702b99752ccdae527b16258 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6fb03dd83751524ba738d42dba2c73a inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#af6fb03dd83751524ba738d42dba2c73a">IsEmpty</a> ()</td></tr>
+<tr class="separator:af6fb03dd83751524ba738d42dba2c73a inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ee70a8066ec27844cfea6ac8118a039 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a0ee70a8066ec27844cfea6ac8118a039">Insert</a> (Castor::String const &amp;p_name, std::shared_ptr&lt; <a class="el" href="../../d6/d19/a02029.html">Mesh</a> &gt; p_element)</td></tr>
+<tr class="memdesc:a0ee70a8066ec27844cfea6ac8118a039 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an object, given a name.  <a href="../../d8/d24/a02001.html#a0ee70a8066ec27844cfea6ac8118a039">More...</a><br /></td></tr>
+<tr class="separator:a0ee70a8066ec27844cfea6ac8118a039 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1419e38cf672631195cf326faee4791f inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a1419e38cf672631195cf326faee4791f">Remove</a> (Castor::String const &amp;p_name)</td></tr>
+<tr class="memdesc:a1419e38cf672631195cf326faee4791f inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an object, given a name.  <a href="../../d8/d24/a02001.html#a1419e38cf672631195cf326faee4791f">More...</a><br /></td></tr>
+<tr class="separator:a1419e38cf672631195cf326faee4791f inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e5b612c3660a1e729a7c122a94f8a95 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a1e5b612c3660a1e729a7c122a94f8a95">SetRenderSystem</a> (<a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> *p_renderSystem)</td></tr>
+<tr class="separator:a1e5b612c3660a1e729a7c122a94f8a95 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce546af639f29a5b3cf9df45d3857e6 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a5ce546af639f29a5b3cf9df45d3857e6">SetRenderSystem</a> () const</td></tr>
+<tr class="separator:a5ce546af639f29a5b3cf9df45d3857e6 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac03e5ff0379d0862715c30a01b85cdb1 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d77/a01749.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#ac03e5ff0379d0862715c30a01b85cdb1">GetEngine</a> () const</td></tr>
+<tr class="separator:ac03e5ff0379d0862715c30a01b85cdb1 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf33341df9bde085a88bf3609b2e97c inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">Castor::String const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#accf33341df9bde085a88bf3609b2e97c">GetObjectTypeName</a> () const</td></tr>
+<tr class="separator:accf33341df9bde085a88bf3609b2e97c inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3cfaa82644c5b14a93ae40da6a90e8c inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#aa3cfaa82644c5b14a93ae40da6a90e8c">Has</a> (Castor::String const &amp;p_name) const</td></tr>
+<tr class="separator:aa3cfaa82644c5b14a93ae40da6a90e8c inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41767d5d95465e41467b7ecc0211387a inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d6/d19/a02029.html">Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a41767d5d95465e41467b7ecc0211387a">Find</a> (Castor::String const &amp;p_name) const</td></tr>
+<tr class="memdesc:a41767d5d95465e41467b7ecc0211387a inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Looks for an element with given name.  <a href="../../d8/d24/a02001.html#a41767d5d95465e41467b7ecc0211387a">More...</a><br /></td></tr>
+<tr class="separator:a41767d5d95465e41467b7ecc0211387a inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d42b76b53f3917843a9078ab91a09d8 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a9d42b76b53f3917843a9078ab91a09d8">lock</a> () const</td></tr>
+<tr class="memdesc:a9d42b76b53f3917843a9078ab91a09d8 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locks the collection mutex.  <a href="../../d8/d24/a02001.html#a9d42b76b53f3917843a9078ab91a09d8">More...</a><br /></td></tr>
+<tr class="separator:a9d42b76b53f3917843a9078ab91a09d8 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44a2913ba8219d6997f84b60c8937103 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a44a2913ba8219d6997f84b60c8937103">unlock</a> () const</td></tr>
+<tr class="memdesc:a44a2913ba8219d6997f84b60c8937103 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlocks the collection mutex.  <a href="../../d8/d24/a02001.html#a44a2913ba8219d6997f84b60c8937103">More...</a><br /></td></tr>
+<tr class="separator:a44a2913ba8219d6997f84b60c8937103 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab28a3c72ceb239fabb8560e648b9cddd inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#ab28a3c72ceb239fabb8560e648b9cddd">begin</a> ()</td></tr>
+<tr class="memdesc:ab28a3c72ceb239fabb8560e648b9cddd inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the first element of the collection.  <a href="../../d8/d24/a02001.html#ab28a3c72ceb239fabb8560e648b9cddd">More...</a><br /></td></tr>
+<tr class="separator:ab28a3c72ceb239fabb8560e648b9cddd inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af92acd0c659ed9e79ac7f32b03a6acea inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapConstIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#af92acd0c659ed9e79ac7f32b03a6acea">begin</a> () const</td></tr>
+<tr class="memdesc:af92acd0c659ed9e79ac7f32b03a6acea inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an constant iterator to the first element of the collection.  <a href="../../d8/d24/a02001.html#af92acd0c659ed9e79ac7f32b03a6acea">More...</a><br /></td></tr>
+<tr class="separator:af92acd0c659ed9e79ac7f32b03a6acea inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82ed08f2bf4254e01c16e053c5cb3512 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a82ed08f2bf4254e01c16e053c5cb3512">end</a> ()</td></tr>
+<tr class="memdesc:a82ed08f2bf4254e01c16e053c5cb3512 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the after last element of the collection.  <a href="../../d8/d24/a02001.html#a82ed08f2bf4254e01c16e053c5cb3512">More...</a><br /></td></tr>
+<tr class="separator:a82ed08f2bf4254e01c16e053c5cb3512 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a327e1e45a0fec66b5234d2bed8db1763 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapConstIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a327e1e45a0fec66b5234d2bed8db1763">end</a> () const</td></tr>
+<tr class="memdesc:a327e1e45a0fec66b5234d2bed8db1763 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an constant iterator to the after last element of the collection.  <a href="../../d8/d24/a02001.html#a327e1e45a0fec66b5234d2bed8db1763">More...</a><br /></td></tr>
+<tr class="separator:a327e1e45a0fec66b5234d2bed8db1763 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad61a8b6fe78e7b1e8a76b23a1f62af05 inherit pub_methods_a02001"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d6/d19/a02029.html">Mesh</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05">Create</a> (Castor::String const &amp;p_name, <a class="el" href="../../d3/d90/a02177.html">Parameters</a> &amp;&amp;... p_params)</td></tr>
+<tr class="memdesc:ad61a8b6fe78e7b1e8a76b23a1f62af05 inherit pub_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an object.  <a href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05">More...</a><br /></td></tr>
+<tr class="separator:ad61a8b6fe78e7b1e8a76b23a1f62af05 inherit pub_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_a01037"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a01037')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; ShaderProgramBase &gt;</a></td></tr>
-<tr class="memitem:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a617a98ba40cfc192d969777abea15d0f">DoParseChunk</a> (T *p_pValues, uint32_t p_uiCount, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d41/a01037.html#a617a98ba40cfc192d969777abea15d0f">More...</a><br /></td></tr>
-<tr class="separator:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a387140b7ac1982efa36de5bc14973233">DoParseChunk</a> (T(&amp;p_tValue)[Count], <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d41/a01037.html#a387140b7ac1982efa36de5bc14973233">More...</a><br /></td></tr>
-<tr class="separator:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a352c9172ec8e23150804941cb7cad726">DoParseChunk</a> (T &amp;p_tValue, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from a chunk.  <a href="../../d2/d41/a01037.html#a352c9172ec8e23150804941cb7cad726">More...</a><br /></td></tr>
-<tr class="separator:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a9ff27bbe92b8fba306d4e3747e5f0f13">DoFillChunk</a> (T const *p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a9ff27bbe92b8fba306d4e3747e5f0f13">More...</a><br /></td></tr>
-<tr class="separator:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a91213c480d37565285161f7992903a34">DoFillChunk</a> (T const (&amp;p_tValue)[Count], eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a91213c480d37565285161f7992903a34">More...</a><br /></td></tr>
-<tr class="separator:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a80ecb2631276ad87cd2cec5e49fb854f">DoFillChunk</a> (T const &amp;p_tValue, eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a80ecb2631276ad87cd2cec5e49fb854f">More...</a><br /></td></tr>
-<tr class="separator:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a01037"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a01037')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; ShaderProgramBase &gt;</a></td></tr>
-<tr class="memitem:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="memItemLeft" align="right" valign="top">Castor::Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a61ad0329195bec54bb009a9f759a79be">m_path</a></td></tr>
-<tr class="memdesc:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current folder path.  <a href="../../d2/d41/a01037.html#a61ad0329195bec54bb009a9f759a79be">More...</a><br /></td></tr>
-<tr class="separator:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_types_a02001"><td colspan="2" onclick="javascript:toggleInherit('pub_types_a02001')"><img src="../../closed.png" alt="-"/>&#160;Public Types inherited from <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager&lt; Castor::String, Mesh, Engine, ResourceManagerEngineGetter &gt;</a></td></tr>
+<tr class="memitem:acfac309c191dd8ebfa36e142db8802af inherit pub_types_a02001"><td class="memItemLeft" align="right" valign="top">typedef Castor::Collection&lt; <a class="el" href="../../d6/d19/a02029.html">Mesh</a>, Castor::String &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#acfac309c191dd8ebfa36e142db8802af">Collection</a></td></tr>
+<tr class="separator:acfac309c191dd8ebfa36e142db8802af inherit pub_types_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a02385"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02385')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../dd/da3/a02385.html">Castor3D::ResourceManager&lt; Castor::String, Mesh &gt;</a></td></tr>
+<tr class="memitem:a22eb865255a2539ed4368769f9fa45df inherit pro_methods_a02385"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/da3/a02385.html#a22eb865255a2539ed4368769f9fa45df">ResourceManager</a> (<a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;p_owner)</td></tr>
+<tr class="memdesc:a22eb865255a2539ed4368769f9fa45df inherit pro_methods_a02385"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../dd/da3/a02385.html#a22eb865255a2539ed4368769f9fa45df">More...</a><br /></td></tr>
+<tr class="separator:a22eb865255a2539ed4368769f9fa45df inherit pro_methods_a02385"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e92201b0a8fc2838903cdde56c4954f inherit pro_methods_a02385"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/da3/a02385.html#a7e92201b0a8fc2838903cdde56c4954f">~ResourceManager</a> ()</td></tr>
+<tr class="memdesc:a7e92201b0a8fc2838903cdde56c4954f inherit pro_methods_a02385"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../dd/da3/a02385.html#a7e92201b0a8fc2838903cdde56c4954f">More...</a><br /></td></tr>
+<tr class="separator:a7e92201b0a8fc2838903cdde56c4954f inherit pro_methods_a02385"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_a02001"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02001')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager&lt; Castor::String, Mesh, Engine, ResourceManagerEngineGetter &gt;</a></td></tr>
+<tr class="memitem:a4d79a3f327a12f01bdee2728bcfda5a5 inherit pro_methods_a02001"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a4d79a3f327a12f01bdee2728bcfda5a5">Manager</a> (<a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;p_owner)</td></tr>
+<tr class="memdesc:a4d79a3f327a12f01bdee2728bcfda5a5 inherit pro_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d8/d24/a02001.html#a4d79a3f327a12f01bdee2728bcfda5a5">More...</a><br /></td></tr>
+<tr class="separator:a4d79a3f327a12f01bdee2728bcfda5a5 inherit pro_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c625d211ac1b3ff030a842fca134815 inherit pro_methods_a02001"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a0c625d211ac1b3ff030a842fca134815">~Manager</a> ()</td></tr>
+<tr class="memdesc:a0c625d211ac1b3ff030a842fca134815 inherit pro_methods_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../d8/d24/a02001.html#a0c625d211ac1b3ff030a842fca134815">More...</a><br /></td></tr>
+<tr class="separator:a0c625d211ac1b3ff030a842fca134815 inherit pro_methods_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a02001"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02001')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager&lt; Castor::String, Mesh, Engine, ResourceManagerEngineGetter &gt;</a></td></tr>
+<tr class="memitem:a0b40e01ec5a7ab9052d302eb218a13df inherit pro_attribs_a02001"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a0b40e01ec5a7ab9052d302eb218a13df">m_renderSystem</a></td></tr>
+<tr class="memdesc:a0b40e01ec5a7ab9052d302eb218a13df inherit pro_attribs_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">The RenderSystem.  <a href="../../d8/d24/a02001.html#a0b40e01ec5a7ab9052d302eb218a13df">More...</a><br /></td></tr>
+<tr class="separator:a0b40e01ec5a7ab9052d302eb218a13df inherit pro_attribs_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ccf0226ae1d2164e0e6e14c5ad899e7 inherit pro_attribs_a02001"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d24/a02001.html#acfac309c191dd8ebfa36e142db8802af">Collection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a9ccf0226ae1d2164e0e6e14c5ad899e7">m_elements</a></td></tr>
+<tr class="memdesc:a9ccf0226ae1d2164e0e6e14c5ad899e7 inherit pro_attribs_a02001"><td class="mdescLeft">&#160;</td><td class="mdescRight">The elements collection.  <a href="../../d8/d24/a02001.html#a9ccf0226ae1d2164e0e6e14c5ad899e7">More...</a><br /></td></tr>
+<tr class="separator:a9ccf0226ae1d2164e0e6e14c5ad899e7 inherit pro_attribs_a02001"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../d7/d13/a02045.html" title="Base shader program implementation, used to share functions through the supported shader languages.">ShaderProgramBase</a> loader. </p>
+<div class="textblock"><p>Meshes manager. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.0.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>15/04/2013 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>13/10/2015 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a046d321473324a60b49e12077c8d373f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a046d321473324a60b49e12077c8d373f">&#9670;&nbsp;</a></span>BinaryParser()</h2>
+<a id="a730c74e48a9c57e522d23a932eec84cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a730c74e48a9c57e522d23a932eec84cf">&#9670;&nbsp;</a></span>MeshManager()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Castor3D::ShaderProgramBase::BinaryParser::BinaryParser </td>
+          <td class="memname">C3D_API Castor3D::MeshManager::MeshManager </td>
           <td>(</td>
-          <td class="paramtype">Castor::Path const &amp;&#160;</td>
-          <td class="paramname"><em>p_path</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_engine</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -149,117 +214,232 @@ Additional Inherited Members</h2></td></tr>
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_path</td><td>The current folder path </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_engine</td><td>The engine. </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aeb616f04ea440d02e06034925261110f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb616f04ea440d02e06034925261110f">&#9670;&nbsp;</a></span>~MeshManager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::MeshManager::~MeshManager </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af8a5ae1cc81d3cd8f3999f91a3ed04ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8a5ae1cc81d3cd8f3999f91a3ed04ed">&#9670;&nbsp;</a></span>Fill()</h2>
+<a id="af56d9633fb86cec1ee97507397aa9240"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af56d9633fb86cec1ee97507397aa9240">&#9670;&nbsp;</a></span>Create() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Castor3D::ShaderProgramBase::BinaryParser::Fill </td>
+          <td class="memname">C3D_API MeshSPtr Castor3D::MeshManager::Create </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_obj</em>, </td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_chunk</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af3131e742b2c01e193e22b5482f70d3d">eMESH_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Function used to fill the chunk from specific data. </p>
+<p>Creates a mesh with the given informations. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>If a mesh with the given name already exists, it is returned and no mesh is created. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_obj</td><td>The object to write </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_chunk</td><td>The chunk to fill </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td><a class="el" href="../../d6/d19/a02029.html" title="The mesh representation.">Mesh</a> type. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The wanted name. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
-
-<p>Implements <a class="el" href="../../d2/d41/a01037.html#a7fb6c4e09f73eb8135a1ba9ce7e9bdd9">Castor3D::BinaryParser&lt; ShaderProgramBase &gt;</a>.</p>
+<dl class="section return"><dt>Returns</dt><dd>The created mesh. </dd></dl>
 
 </div>
 </div>
-<a id="aa47d2788c05a8240e5a1cfc9a3c5303f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa47d2788c05a8240e5a1cfc9a3c5303f">&#9670;&nbsp;</a></span>Parse()</h2>
+<a id="a96e3eba2081097172729330503b64818"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96e3eba2081097172729330503b64818">&#9670;&nbsp;</a></span>Create() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Castor3D::ShaderProgramBase::BinaryParser::Parse </td>
+          <td class="memname">C3D_API MeshSPtr Castor3D::MeshManager::Create </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_obj</em>, </td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_chunk</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af3131e742b2c01e193e22b5482f70d3d">eMESH_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UIntArray const &amp;&#160;</td>
+          <td class="paramname"><em>p_arrayFaces</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
           <td>)</td>
-          <td></td><td> const</td>
+          <td></td><td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-<p>Function used to retrieve specific data from the chunk. </p>
+<p>Creates a mesh with the given informations. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>If a mesh with the given name already exists, it is returned and no mesh is created. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_obj</td><td>The object to read </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_chunk</td><td>The chunk containing data </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td><a class="el" href="../../d6/d19/a02029.html" title="The mesh representation.">Mesh</a> type. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The wanted name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_arrayFaces</td><td>The array of faces (for non custom meshes). </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The created mesh. </dd></dl>
 
-<p>Implements <a class="el" href="../../d2/d41/a01037.html#a412c1ba4502f03b01d1e63879f203a95">Castor3D::BinaryParser&lt; ShaderProgramBase &gt;</a>.</p>
+</div>
+</div>
+<a id="a1f898c26af66e5e869e20713c713534c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f898c26af66e5e869e20713c713534c">&#9670;&nbsp;</a></span>Create() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API MeshSPtr Castor3D::MeshManager::Create </td>
+          <td>(</td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#af3131e742b2c01e193e22b5482f70d3d">eMESH_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UIntArray const &amp;&#160;</td>
+          <td class="paramname"><em>p_arrayFaces</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">RealArray const &amp;&#160;</td>
+          <td class="paramname"><em>p_arraySizes</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a mesh with the given informations. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>If a mesh with the given name already exists, it is returned and no mesh is created. </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td><a class="el" href="../../d6/d19/a02029.html" title="The mesh representation.">Mesh</a> type. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The wanted name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_arrayFaces</td><td>The array of faces (for non custom meshes). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_arraySizes</td><td>The array of dimensions (for non custom meshes). </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The created mesh. </dd></dl>
+
+</div>
+</div>
+<a id="ab71ff82e5bb3baff3d78b3b4f43fe45f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab71ff82e5bb3baff3d78b3b4f43fe45f">&#9670;&nbsp;</a></span>Load()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::MeshManager::Load </td>
+          <td>(</td>
+          <td class="paramtype">Castor::BinaryFile &amp;&#160;</td>
+          <td class="paramname"><em>p_file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Loads all meshes contained in the given file. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_file</td><td>The file </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
+
+</div>
+</div>
+<a id="ad14aaf8c4a7aa1fd503615b46f3e8234"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad14aaf8c4a7aa1fd503615b46f3e8234">&#9670;&nbsp;</a></span>Save()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::MeshManager::Save </td>
+          <td>(</td>
+          <td class="paramtype">Castor::BinaryFile &amp;&#160;</td>
+          <td class="paramname"><em>p_file</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Saves in a file all currently loaded meshes. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_file</td><td>The file </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../db/ddc/a00353.html">ShaderProgram.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d2/d04/a00281.html">MeshManager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:11 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:40 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

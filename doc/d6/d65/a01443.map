@@ -1,4 +1,4 @@
-<map id="Castor3D::CleanupEvent&lt; T &gt;" name="Castor3D::CleanupEvent&lt; T &gt;">
-<area shape="rect" id="node1" title="Cleaner event." alt="" coords="5,80,200,107"/>
-<area shape="rect" id="node2" href="$dd/dba/a01545.html" title="The interface which represents a frame event." alt="" coords="26,5,179,32"/>
+<map id="Castor3D::ChunkFiller&lt; Castor::Coords3f &gt;" name="Castor3D::ChunkFiller&lt; Castor::Coords3f &gt;">
+<area shape="rect" id="node1" title="ChunkFiller specialisation for Castor::Coords3f." alt="" coords="20,80,169,121"/>
+<area shape="rect" id="node2" href="$d3/dea/a01377.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
 </map>

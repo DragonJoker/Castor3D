@@ -1,4 +1,4 @@
-<map id="Castor3D::Pass::BinaryParser" name="Castor3D::Pass::BinaryParser">
-<area shape="rect" id="node1" title="Pass loader." alt="" coords="5,95,203,121"/>
-<area shape="rect" id="node2" href="$d2/d41/a01037.html" title=" " alt="" coords="25,5,183,47"/>
+<map id="Castor3D::FontTexture" name="Castor3D::FontTexture">
+<area shape="rect" id="node1" title="Contains the font and the texture assiated to this font." alt="" coords="23,80,176,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,32"/>
 </map>

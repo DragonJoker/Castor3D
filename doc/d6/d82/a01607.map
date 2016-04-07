@@ -1,12 +1,4 @@
-<map id="Castor3D::IndexBuffer" name="Castor3D::IndexBuffer">
-<area shape="rect" id="node1" title="Index buffer representation." alt="" coords="681,361,829,388"/>
-<area shape="rect" id="node2" href="$dd/de4/a01121.html" title=" " alt="" coords="685,257,825,299"/>
-<area shape="rect" id="node3" href="$d6/d56/a01861.html" title="The render system representation." alt="" coords="490,117,661,143"/>
-<area shape="rect" id="node4" href="$d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="291,265,422,291"/>
-<area shape="rect" id="node7" href="$d6/d53/a01789.html" title=" " alt="" coords="278,361,435,388"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,117,167,143"/>
-<area shape="rect" id="node6" title=" " alt="" coords="191,109,378,151"/>
-<area shape="rect" id="node8" title=" " alt="" coords="492,13,659,39"/>
-<area shape="rect" id="node9" title=" " alt="" coords="739,109,918,151"/>
-<area shape="rect" id="node10" href="$d6/dc4/a01125.html" title=" " alt="" coords="758,5,899,47"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Coords3d &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords3d &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Coords3d." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

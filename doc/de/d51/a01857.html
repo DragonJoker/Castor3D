@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::RendererAdder&lt; Ty &gt; Struct Template Reference</title>
+<title>Castor3D: Castor3D::ElementAttacher&lt; Geometry &gt; Struct Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,32 +39,110 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../de/d51/a01857.html">RendererAdder</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../de/d51/a01857.html">ElementAttacher&lt; Geometry &gt;</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
+<a href="../../d7/d97/a01854.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::RendererAdder&lt; Ty &gt; Struct Template Reference</div>  </div>
+<div class="title">Castor3D::ElementAttacher&lt; Geometry &gt; Struct Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Template class used to add a renderer to the list.  
+<p>Helper structure to enable attaching if a type supports it.  
  <a href="../../de/d51/a01857.html#details">More...</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a7b0e11af08671031037681f2c2599b0e"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../de/d51/a01857.html#a7b0e11af08671031037681f2c2599b0e">Attach</a> (std::shared_ptr&lt; <a class="el" href="../../d7/db1/a01837.html">Geometry</a> &gt; p_element, SceneNodeSPtr p_parent, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode)</td></tr>
+<tr class="memdesc:a7b0e11af08671031037681f2c2599b0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Attaches an element to the appropriate parent node.  <a href="#a7b0e11af08671031037681f2c2599b0e">More...</a><br /></td></tr>
+<tr class="separator:a7b0e11af08671031037681f2c2599b0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;class Ty&gt;<br />
-struct Castor3D::RendererAdder&lt; Ty &gt;</h3>
+<div class="textblock"><h3>template&lt;&gt;<br />
+struct Castor3D::ElementAttacher&lt; Geometry &gt;</h3>
 
-<p>Template class used to add a renderer to the list. </p>
+<p>Helper structure to enable attaching if a type supports it. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>09/02/2010 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
-</div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d1/d5d/a00311.html">RenderSystem.hpp</a></li>
+<dl class="section date"><dt>Date</dt><dd>29/01/2016 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8.0</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Specialisation for <a class="el" href="../../d7/db1/a01837.html" title="Geometry handler class.">Geometry</a>. </dd></dl>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a7b0e11af08671031037681f2c2599b0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b0e11af08671031037681f2c2599b0e">&#9670;&nbsp;</a></span>Attach()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static void <a class="el" href="../../d3/d48/a02069.html">Castor3D::ElementAttacher</a>&lt; <a class="el" href="../../d7/db1/a01837.html">Geometry</a> &gt;::Attach </td>
+          <td>(</td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="../../d7/db1/a01837.html">Geometry</a> &gt;&#160;</td>
+          <td class="paramname"><em>p_element</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SceneNodeSPtr&#160;</td>
+          <td class="paramname"><em>p_parent</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SceneNodeSPtr&#160;</td>
+          <td class="paramname"><em>p_rootNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SceneNodeSPtr&#160;</td>
+          <td class="paramname"><em>p_rootCameraNode</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">SceneNodeSPtr&#160;</td>
+          <td class="paramname"><em>p_rootObjectNode</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Attaches an element to the appropriate parent node. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_element</td><td>The scene node. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_parent</td><td>The parent scene node. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rootNode</td><td>The root node. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rootCameraNode</td><td>The cameras root node. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_rootObjectNode</td><td>The objects root node. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../de/d79/a00203.html">GeometryManager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:08 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:34 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

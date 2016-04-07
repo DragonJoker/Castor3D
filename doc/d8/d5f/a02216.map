@@ -1,4 +1,6 @@
-<map id="Castor3D::WindowRenderer" name="Castor3D::WindowRenderer">
-<area shape="rect" id="node1" title="A window renderer." alt="" coords="33,95,216,121"/>
-<area shape="rect" id="node2" href="$d8/ded/a01113.html" title=" " alt="" coords="5,5,244,47"/>
+<map id="Castor3D::PluginManager" name="Castor3D::PluginManager">
+<area shape="rect" id="node1" title="Plug&#45;ins manager." alt="" coords="797,20,968,47"/>
+<area shape="rect" id="node2" href="$dd/da3/a02385.html" title=" " alt="" coords="556,13,749,54"/>
+<area shape="rect" id="node3" href="$d8/d24/a02001.html" title=" " alt="" coords="241,5,508,61"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,20,193,47"/>
 </map>

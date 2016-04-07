@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::PointLight::BinaryParser Class Reference</title>
+<title>Castor3D: Castor3D::FrameVariableBuffer Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,121 +39,176 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d7/d62/a01805.html">PointLight</a></li><li class="navelem"><a class="el" href="../../d1/d20/a01813.html">BinaryParser</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d1/d20/a01813.html">FrameVariableBuffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
+<a href="#pro-static-attribs">Static Protected Attributes</a> &#124;
 <a href="../../df/d3a/a01810.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::PointLight::BinaryParser Class Reference</div>  </div>
+<div class="title">Castor3D::FrameVariableBuffer Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="../../d7/d62/a01805.html" title="Class which represents a PointLight.">PointLight</a> loader.  
+<p>Shader variables buffer.  
  <a href="../../d1/d20/a01813.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::PointLight::BinaryParser:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::FrameVariableBuffer:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../dc/d5b/a01812.png" border="0" usemap="#Castor3D_1_1PointLight_1_1BinaryParser_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1PointLight_1_1BinaryParser_inherit__map" id="Castor3D_1_1PointLight_1_1BinaryParser_inherit__map">
-<area shape="rect"  title="PointLight loader." alt="" coords="16,184,159,225"/>
-<area shape="rect"  href="../../dc/d62/a01629.html" title="LightCategory loader." alt="" coords="5,95,169,136"/>
-<area shape="rect"  href="../../d2/d41/a01037.html" title=" " alt="" coords="8,5,167,47"/>
+<div class="center"><img src="../../dc/d5b/a01812.png" border="0" usemap="#Castor3D_1_1FrameVariableBuffer_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1FrameVariableBuffer_inherit__map" id="Castor3D_1_1FrameVariableBuffer_inherit__map">
+<area shape="rect"  title="Shader variables buffer." alt="" coords="22,80,223,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,240,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::PointLight::BinaryParser:</div>
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::FrameVariableBuffer:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d2/d31/a01811.png" border="0" usemap="#Castor3D_1_1PointLight_1_1BinaryParser_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1PointLight_1_1BinaryParser_coll__map" id="Castor3D_1_1PointLight_1_1BinaryParser_coll__map">
-<area shape="rect"  title="PointLight loader." alt="" coords="16,184,159,225"/>
-<area shape="rect"  href="../../dc/d62/a01629.html" title="LightCategory loader." alt="" coords="5,95,169,136"/>
-<area shape="rect"  href="../../d2/d41/a01037.html" title=" " alt="" coords="8,5,167,47"/>
+<div class="center"><img src="../../d2/d31/a01811.png" border="0" usemap="#Castor3D_1_1FrameVariableBuffer_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1FrameVariableBuffer_coll__map" id="Castor3D_1_1FrameVariableBuffer_coll__map">
+<area shape="rect"  title="Shader variables buffer." alt="" coords="22,80,223,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,240,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3e1c38a59e4fb861b82bc616f6e51ac7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a3e1c38a59e4fb861b82bc616f6e51ac7">BinaryParser</a> (Castor::Path const &amp;p_path)</td></tr>
-<tr class="memdesc:a3e1c38a59e4fb861b82bc616f6e51ac7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a3e1c38a59e4fb861b82bc616f6e51ac7">More...</a><br /></td></tr>
-<tr class="separator:a3e1c38a59e4fb861b82bc616f6e51ac7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7079fd6404d13bcc1a85f881f90354e1"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a7079fd6404d13bcc1a85f881f90354e1">Fill</a> (<a class="el" href="../../d7/d62/a01805.html">PointLight</a> const &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a7079fd6404d13bcc1a85f881f90354e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to fill the chunk from specific data.  <a href="#a7079fd6404d13bcc1a85f881f90354e1">More...</a><br /></td></tr>
-<tr class="separator:a7079fd6404d13bcc1a85f881f90354e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe3bbd994f80ffb544dbf1aaf068054a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#abe3bbd994f80ffb544dbf1aaf068054a">Parse</a> (<a class="el" href="../../d7/d62/a01805.html">PointLight</a> &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:abe3bbd994f80ffb544dbf1aaf068054a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to retrieve specific data from the chunk.  <a href="#abe3bbd994f80ffb544dbf1aaf068054a">More...</a><br /></td></tr>
-<tr class="separator:abe3bbd994f80ffb544dbf1aaf068054a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a01629"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01629')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../dc/d62/a01629.html">Castor3D::LightCategory::BinaryParser</a></td></tr>
-<tr class="memitem:a2434b542e9c3b1e9e2de2547495fc3e2 inherit pub_methods_a01629"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d62/a01629.html#a2434b542e9c3b1e9e2de2547495fc3e2">BinaryParser</a> (Castor::Path const &amp;p_path)</td></tr>
-<tr class="memdesc:a2434b542e9c3b1e9e2de2547495fc3e2 inherit pub_methods_a01629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../dc/d62/a01629.html#a2434b542e9c3b1e9e2de2547495fc3e2">More...</a><br /></td></tr>
-<tr class="separator:a2434b542e9c3b1e9e2de2547495fc3e2 inherit pub_methods_a01629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc611c25f0e50ae13e0f342a6203099a inherit pub_methods_a01629"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d62/a01629.html#abc611c25f0e50ae13e0f342a6203099a">Fill</a> (<a class="el" href="../../dd/dda/a01621.html">LightCategory</a> const &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:abc611c25f0e50ae13e0f342a6203099a inherit pub_methods_a01629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to fill the chunk from specific data.  <a href="../../dc/d62/a01629.html#abc611c25f0e50ae13e0f342a6203099a">More...</a><br /></td></tr>
-<tr class="separator:abc611c25f0e50ae13e0f342a6203099a inherit pub_methods_a01629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f451a55ed3d79674881b2b980a70cea inherit pub_methods_a01629"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d62/a01629.html#a4f451a55ed3d79674881b2b980a70cea">Parse</a> (<a class="el" href="../../dd/dda/a01621.html">LightCategory</a> &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a4f451a55ed3d79674881b2b980a70cea inherit pub_methods_a01629"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to retrieve specific data from the chunk.  <a href="../../dc/d62/a01629.html#a4f451a55ed3d79674881b2b980a70cea">More...</a><br /></td></tr>
-<tr class="separator:a4f451a55ed3d79674881b2b980a70cea inherit pub_methods_a01629"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a01037"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01037')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; LightCategory &gt;</a></td></tr>
-<tr class="memitem:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a26de8559eb86423f92eb9b516172ab83">BinaryParser</a> (Castor::Path const &amp;p_path)</td></tr>
-<tr class="memdesc:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d2/d41/a01037.html#a26de8559eb86423f92eb9b516172ab83">More...</a><br /></td></tr>
-<tr class="separator:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a6bccc937cfb595734be323a4a71ddf46">Fill</a> (<a class="el" href="../../dd/dda/a01621.html">LightCategory</a> const &amp;p_obj, Castor::BinaryFile &amp;p_file) const</td></tr>
-<tr class="memdesc:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">To chunk writer function.  <a href="../../d2/d41/a01037.html#a6bccc937cfb595734be323a4a71ddf46">More...</a><br /></td></tr>
-<tr class="separator:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a42e485b9af37022b62291c228559f252">Parse</a> (<a class="el" href="../../dd/dda/a01621.html">LightCategory</a> &amp;p_obj, Castor::BinaryFile &amp;p_file) const</td></tr>
-<tr class="memdesc:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">From file reader function.  <a href="../../d2/d41/a01037.html#a42e485b9af37022b62291c228559f252">More...</a><br /></td></tr>
-<tr class="separator:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aee99dc31817b2b52484fddf6113eafd8"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#aee99dc31817b2b52484fddf6113eafd8">FrameVariableBuffer</a> (Castor::String const &amp;p_name, <a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> &amp;p_renderSystem)</td></tr>
+<tr class="memdesc:aee99dc31817b2b52484fddf6113eafd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#aee99dc31817b2b52484fddf6113eafd8">More...</a><br /></td></tr>
+<tr class="separator:aee99dc31817b2b52484fddf6113eafd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9c6c7bf2766ce5329b2d8d9d97ef688"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#aa9c6c7bf2766ce5329b2d8d9d97ef688">~FrameVariableBuffer</a> ()</td></tr>
+<tr class="memdesc:aa9c6c7bf2766ce5329b2d8d9d97ef688"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#aa9c6c7bf2766ce5329b2d8d9d97ef688">More...</a><br /></td></tr>
+<tr class="separator:aa9c6c7bf2766ce5329b2d8d9d97ef688"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a772e607cb51aca93cdff8593795af684"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a772e607cb51aca93cdff8593795af684">Initialise</a> (<a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> &amp;p_program)</td></tr>
+<tr class="memdesc:a772e607cb51aca93cdff8593795af684"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises all the variables and the GPU buffer associated.  <a href="#a772e607cb51aca93cdff8593795af684">More...</a><br /></td></tr>
+<tr class="separator:a772e607cb51aca93cdff8593795af684"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f56b0cdbac95ed91f982a81de9101ba"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a0f56b0cdbac95ed91f982a81de9101ba">Cleanup</a> ()</td></tr>
+<tr class="memdesc:a0f56b0cdbac95ed91f982a81de9101ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans all the variables up and the GPU buffer associated.  <a href="#a0f56b0cdbac95ed91f982a81de9101ba">More...</a><br /></td></tr>
+<tr class="separator:a0f56b0cdbac95ed91f982a81de9101ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9b92b87ae3114e9ece619c3e72423f1"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#aa9b92b87ae3114e9ece619c3e72423f1">Bind</a> (uint32_t p_index)</td></tr>
+<tr class="memdesc:aa9b92b87ae3114e9ece619c3e72423f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)  <a href="#aa9b92b87ae3114e9ece619c3e72423f1">More...</a><br /></td></tr>
+<tr class="separator:aa9b92b87ae3114e9ece619c3e72423f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab400326fb3e355359001e9dd0c9858f5"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#ab400326fb3e355359001e9dd0c9858f5">Unbind</a> (uint32_t p_index)</td></tr>
+<tr class="memdesc:ab400326fb3e355359001e9dd0c9858f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unbinds all variables.  <a href="#ab400326fb3e355359001e9dd0c9858f5">More...</a><br /></td></tr>
+<tr class="separator:ab400326fb3e355359001e9dd0c9858f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a813bc0fb23d98bdc3540f54cc4c41b5d"><td class="memItemLeft" align="right" valign="top">C3D_API FrameVariableSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a813bc0fb23d98bdc3540f54cc4c41b5d">CreateVariable</a> (<a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> &amp;p_program, <a class="el" href="../../d7/d41/a00532.html#a6fb19734cf6f1dedcabb613f8decea1f">eFRAME_VARIABLE_TYPE</a> p_type, Castor::String const &amp;p_name, uint32_t p_occurences=1)</td></tr>
+<tr class="memdesc:a813bc0fb23d98bdc3540f54cc4c41b5d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a variable of the wanted type.  <a href="#a813bc0fb23d98bdc3540f54cc4c41b5d">More...</a><br /></td></tr>
+<tr class="separator:a813bc0fb23d98bdc3540f54cc4c41b5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cc5313dc330065464b728f5c88ae464"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a8cc5313dc330065464b728f5c88ae464">RemoveVariable</a> (Castor::String const &amp;p_name)</td></tr>
+<tr class="memdesc:a8cc5313dc330065464b728f5c88ae464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes a variable from this buffer.  <a href="#a8cc5313dc330065464b728f5c88ae464">More...</a><br /></td></tr>
+<tr class="separator:a8cc5313dc330065464b728f5c88ae464"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abc628f6f795742c592b1dd4f2d5744f6"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
+<tr class="memitem:abc628f6f795742c592b1dd4f2d5744f6"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d7/d81/a01365.html">OneFrameVariable</a>&lt; T &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#abc628f6f795742c592b1dd4f2d5744f6">GetVariable</a> (Castor::String const &amp;p_name, std::shared_ptr&lt; <a class="el" href="../../d7/d81/a01365.html">OneFrameVariable</a>&lt; T &gt; &gt; &amp;p_variable) const</td></tr>
+<tr class="memdesc:abc628f6f795742c592b1dd4f2d5744f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a variable by name.  <a href="#abc628f6f795742c592b1dd4f2d5744f6">More...</a><br /></td></tr>
+<tr class="separator:abc628f6f795742c592b1dd4f2d5744f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6051a9685763e58ee1764c260089d165"><td class="memTemplParams" colspan="2">template&lt;typename T , uint32_t Count&gt; </td></tr>
+<tr class="memitem:a6051a9685763e58ee1764c260089d165"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d1/d17/a01369.html">PointFrameVariable</a>&lt; T, Count &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a6051a9685763e58ee1764c260089d165">GetVariable</a> (Castor::String const &amp;p_name, std::shared_ptr&lt; <a class="el" href="../../d1/d17/a01369.html">PointFrameVariable</a>&lt; T, Count &gt; &gt; &amp;p_variable) const</td></tr>
+<tr class="memdesc:a6051a9685763e58ee1764c260089d165"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a variable by name.  <a href="#a6051a9685763e58ee1764c260089d165">More...</a><br /></td></tr>
+<tr class="separator:a6051a9685763e58ee1764c260089d165"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b7dbbd42558e6dfabc97877ee42ccd0"><td class="memTemplParams" colspan="2">template&lt;typename T , uint32_t Rows, uint32_t Columns&gt; </td></tr>
+<tr class="memitem:a9b7dbbd42558e6dfabc97877ee42ccd0"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="../../d7/d38/a01373.html">MatrixFrameVariable</a>&lt; T, Rows, Columns &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a9b7dbbd42558e6dfabc97877ee42ccd0">GetVariable</a> (Castor::String const &amp;p_name, std::shared_ptr&lt; <a class="el" href="../../d7/d38/a01373.html">MatrixFrameVariable</a>&lt; T, Rows, Columns &gt; &gt; &amp;p_variable) const</td></tr>
+<tr class="memdesc:a9b7dbbd42558e6dfabc97877ee42ccd0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a variable by name.  <a href="#a9b7dbbd42558e6dfabc97877ee42ccd0">More...</a><br /></td></tr>
+<tr class="separator:a9b7dbbd42558e6dfabc97877ee42ccd0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a006d3ce5dba8c197096f23b14c662de1"><td class="memItemLeft" align="right" valign="top">Castor::String const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a006d3ce5dba8c197096f23b14c662de1">GetName</a> () const</td></tr>
+<tr class="memdesc:a006d3ce5dba8c197096f23b14c662de1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the variables buffer name.  <a href="#a006d3ce5dba8c197096f23b14c662de1">More...</a><br /></td></tr>
+<tr class="separator:a006d3ce5dba8c197096f23b14c662de1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88b7c7fde1bb8f875946f58427138945"><td class="memItemLeft" align="right" valign="top">FrameVariablePtrList::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a88b7c7fde1bb8f875946f58427138945">begin</a> ()</td></tr>
+<tr class="memdesc:a88b7c7fde1bb8f875946f58427138945"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the beginnning of the variables list.  <a href="#a88b7c7fde1bb8f875946f58427138945">More...</a><br /></td></tr>
+<tr class="separator:a88b7c7fde1bb8f875946f58427138945"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af2804fa5de6c8d5e71c5c9d1ba684f3e"><td class="memItemLeft" align="right" valign="top">FrameVariablePtrList::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#af2804fa5de6c8d5e71c5c9d1ba684f3e">begin</a> () const</td></tr>
+<tr class="memdesc:af2804fa5de6c8d5e71c5c9d1ba684f3e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the beginnning of the variables list.  <a href="#af2804fa5de6c8d5e71c5c9d1ba684f3e">More...</a><br /></td></tr>
+<tr class="separator:af2804fa5de6c8d5e71c5c9d1ba684f3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb3c458d18d7b237c2b2e1013b371a7b"><td class="memItemLeft" align="right" valign="top">FrameVariablePtrList::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#adb3c458d18d7b237c2b2e1013b371a7b">end</a> ()</td></tr>
+<tr class="memdesc:adb3c458d18d7b237c2b2e1013b371a7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the end of the variables list.  <a href="#adb3c458d18d7b237c2b2e1013b371a7b">More...</a><br /></td></tr>
+<tr class="separator:adb3c458d18d7b237c2b2e1013b371a7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3616b9192672abe86a303b1a4cff6dd6"><td class="memItemLeft" align="right" valign="top">FrameVariablePtrList::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a3616b9192672abe86a303b1a4cff6dd6">end</a> () const</td></tr>
+<tr class="memdesc:a3616b9192672abe86a303b1a4cff6dd6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the end of the variables list.  <a href="#a3616b9192672abe86a303b1a4cff6dd6">More...</a><br /></td></tr>
+<tr class="separator:a3616b9192672abe86a303b1a4cff6dd6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_a01037"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a01037')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; LightCategory &gt;</a></td></tr>
-<tr class="memitem:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a617a98ba40cfc192d969777abea15d0f">DoParseChunk</a> (T *p_pValues, uint32_t p_uiCount, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d41/a01037.html#a617a98ba40cfc192d969777abea15d0f">More...</a><br /></td></tr>
-<tr class="separator:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a387140b7ac1982efa36de5bc14973233">DoParseChunk</a> (T(&amp;p_tValue)[Count], <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d41/a01037.html#a387140b7ac1982efa36de5bc14973233">More...</a><br /></td></tr>
-<tr class="separator:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a352c9172ec8e23150804941cb7cad726">DoParseChunk</a> (T &amp;p_tValue, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from a chunk.  <a href="../../d2/d41/a01037.html#a352c9172ec8e23150804941cb7cad726">More...</a><br /></td></tr>
-<tr class="separator:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a9ff27bbe92b8fba306d4e3747e5f0f13">DoFillChunk</a> (T const *p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a9ff27bbe92b8fba306d4e3747e5f0f13">More...</a><br /></td></tr>
-<tr class="separator:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a91213c480d37565285161f7992903a34">DoFillChunk</a> (T const (&amp;p_tValue)[Count], eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a91213c480d37565285161f7992903a34">More...</a><br /></td></tr>
-<tr class="separator:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a80ecb2631276ad87cd2cec5e49fb854f">DoFillChunk</a> (T const &amp;p_tValue, eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a80ecb2631276ad87cd2cec5e49fb854f">More...</a><br /></td></tr>
-<tr class="separator:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a01037"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a01037')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; LightCategory &gt;</a></td></tr>
-<tr class="memitem:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="memItemLeft" align="right" valign="top">Castor::Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a61ad0329195bec54bb009a9f759a79be">m_path</a></td></tr>
-<tr class="memdesc:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current folder path.  <a href="../../d2/d41/a01037.html#a61ad0329195bec54bb009a9f759a79be">More...</a><br /></td></tr>
-<tr class="separator:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a483fa7e825fbd19c0ffbff2abeb11e94"><td class="memItemLeft" align="right" valign="top">virtual C3D_API FrameVariableSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a483fa7e825fbd19c0ffbff2abeb11e94">DoCreateVariable</a> (<a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> *p_program, <a class="el" href="../../d7/d41/a00532.html#a6fb19734cf6f1dedcabb613f8decea1f">eFRAME_VARIABLE_TYPE</a> p_type, Castor::String const &amp;p_name, uint32_t p_occurences=1)=0</td></tr>
+<tr class="memdesc:a483fa7e825fbd19c0ffbff2abeb11e94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a variable of the wanted type.  <a href="#a483fa7e825fbd19c0ffbff2abeb11e94">More...</a><br /></td></tr>
+<tr class="separator:a483fa7e825fbd19c0ffbff2abeb11e94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1af93467b79ed70f058fded959fd1f2f"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a1af93467b79ed70f058fded959fd1f2f">DoInitialise</a> (<a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> *p_program)=0</td></tr>
+<tr class="memdesc:a1af93467b79ed70f058fded959fd1f2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises all the variables and the GPU buffer associated.  <a href="#a1af93467b79ed70f058fded959fd1f2f">More...</a><br /></td></tr>
+<tr class="separator:a1af93467b79ed70f058fded959fd1f2f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2c672fd073145eeffa3c4d8c61a909b0"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a2c672fd073145eeffa3c4d8c61a909b0">DoCleanup</a> ()=0</td></tr>
+<tr class="memdesc:a2c672fd073145eeffa3c4d8c61a909b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleans all the variables up and the GPU buffer associated.  <a href="#a2c672fd073145eeffa3c4d8c61a909b0">More...</a><br /></td></tr>
+<tr class="separator:a2c672fd073145eeffa3c4d8c61a909b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab61647fcbc3b0532c599118dac492d2e"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#ab61647fcbc3b0532c599118dac492d2e">DoBind</a> (uint32_t p_index)=0</td></tr>
+<tr class="memdesc:ab61647fcbc3b0532c599118dac492d2e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers)  <a href="#ab61647fcbc3b0532c599118dac492d2e">More...</a><br /></td></tr>
+<tr class="separator:ab61647fcbc3b0532c599118dac492d2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae2feb915fc958cbe8781080b557e93c6"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#ae2feb915fc958cbe8781080b557e93c6">DoUnbind</a> (uint32_t p_index)=0</td></tr>
+<tr class="memdesc:ae2feb915fc958cbe8781080b557e93c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unbinds all variables.  <a href="#ae2feb915fc958cbe8781080b557e93c6">More...</a><br /></td></tr>
+<tr class="separator:ae2feb915fc958cbe8781080b557e93c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:af34ab5864a9667fb4b07bb1773a186fe"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#af34ab5864a9667fb4b07bb1773a186fe">m_index</a></td></tr>
+<tr class="memdesc:af34ab5864a9667fb4b07bb1773a186fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">The buffer's index.  <a href="#af34ab5864a9667fb4b07bb1773a186fe">More...</a><br /></td></tr>
+<tr class="separator:af34ab5864a9667fb4b07bb1773a186fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace65c19c6bf9324936e08726e0b0d3af"><td class="memItemLeft" align="right" valign="top">FrameVariablePtrList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#ace65c19c6bf9324936e08726e0b0d3af">m_listVariables</a></td></tr>
+<tr class="memdesc:ace65c19c6bf9324936e08726e0b0d3af"><td class="mdescLeft">&#160;</td><td class="mdescRight">The variables list.  <a href="#ace65c19c6bf9324936e08726e0b0d3af">More...</a><br /></td></tr>
+<tr class="separator:ace65c19c6bf9324936e08726e0b0d3af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af76f1756e2fb8f9f689dc9de0c8d921a"><td class="memItemLeft" align="right" valign="top">FrameVariablePtrList&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#af76f1756e2fb8f9f689dc9de0c8d921a">m_listInitialised</a></td></tr>
+<tr class="memdesc:af76f1756e2fb8f9f689dc9de0c8d921a"><td class="mdescLeft">&#160;</td><td class="mdescRight">The initialised variables list.  <a href="#af76f1756e2fb8f9f689dc9de0c8d921a">More...</a><br /></td></tr>
+<tr class="separator:af76f1756e2fb8f9f689dc9de0c8d921a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ea9072e7142d14c16d0973ae9dd9713"><td class="memItemLeft" align="right" valign="top">FrameVariablePtrStrMap&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a0ea9072e7142d14c16d0973ae9dd9713">m_mapVariables</a></td></tr>
+<tr class="memdesc:a0ea9072e7142d14c16d0973ae9dd9713"><td class="mdescLeft">&#160;</td><td class="mdescRight">The variables ordered by name.  <a href="#a0ea9072e7142d14c16d0973ae9dd9713">More...</a><br /></td></tr>
+<tr class="separator:a0ea9072e7142d14c16d0973ae9dd9713"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adf287f9592278f6159988c9ba3dd1a5e"><td class="memItemLeft" align="right" valign="top">Castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#adf287f9592278f6159988c9ba3dd1a5e">m_name</a></td></tr>
+<tr class="memdesc:adf287f9592278f6159988c9ba3dd1a5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The buffer name.  <a href="#adf287f9592278f6159988c9ba3dd1a5e">More...</a><br /></td></tr>
+<tr class="separator:adf287f9592278f6159988c9ba3dd1a5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9acea6fd9b742620b71a7b134c0b2ff0"><td class="memItemLeft" align="right" valign="top">Castor::ByteArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#a9acea6fd9b742620b71a7b134c0b2ff0">m_buffer</a></td></tr>
+<tr class="memdesc:a9acea6fd9b742620b71a7b134c0b2ff0"><td class="mdescLeft">&#160;</td><td class="mdescRight">The data buffer.  <a href="#a9acea6fd9b742620b71a7b134c0b2ff0">More...</a><br /></td></tr>
+<tr class="separator:a9acea6fd9b742620b71a7b134c0b2ff0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-attribs"></a>
+Static Protected Attributes</h2></td></tr>
+<tr class="memitem:ad3274e059f25cdf5ee5d98890c1d7c43"><td class="memItemLeft" align="right" valign="top">static uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d1/d20/a01813.html#ad3274e059f25cdf5ee5d98890c1d7c43">sm_uiCount</a></td></tr>
+<tr class="memdesc:ad3274e059f25cdf5ee5d98890c1d7c43"><td class="mdescLeft">&#160;</td><td class="mdescRight">The buffers count.  <a href="#ad3274e059f25cdf5ee5d98890c1d7c43">More...</a><br /></td></tr>
+<tr class="separator:ad3274e059f25cdf5ee5d98890c1d7c43"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../d7/d62/a01805.html" title="Class which represents a PointLight.">PointLight</a> loader. </p>
+<div class="textblock"><p>Shader variables buffer. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>14/02/2010</dd></dl>
-<p>Loader de <a class="el" href="../../d7/d62/a01805.html" title="Class which represents a PointLight.">PointLight</a> </p>
+<dl class="section version"><dt>Version</dt><dd>0.7.0.0 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>19/04/2013</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>It stores all variables held by a <a class="el" href="../../d0/dc2/a02477.html" title="Base shader program implementation, used to share functions through the supported shader languages.">ShaderProgram</a> or a <a class="el" href="../../d4/d73/a02465.html" title="Base shader class.">ShaderObject</a> <br />
+It is also in charge of the creation of the variables <br />
+Uses GPU buffers if supported (OpenGL Uniform Buffer Objects, Direct3D Constants buffers) </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3e1c38a59e4fb861b82bc616f6e51ac7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3e1c38a59e4fb861b82bc616f6e51ac7">&#9670;&nbsp;</a></span>BinaryParser()</h2>
+<a id="aee99dc31817b2b52484fddf6113eafd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee99dc31817b2b52484fddf6113eafd8">&#9670;&nbsp;</a></span>FrameVariableBuffer()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Castor3D::PointLight::BinaryParser::BinaryParser </td>
+          <td class="memname">C3D_API Castor3D::FrameVariableBuffer::FrameVariableBuffer </td>
           <td>(</td>
-          <td class="paramtype">Castor::Path const &amp;&#160;</td>
-          <td class="paramname"><em>p_path</em></td><td>)</td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_renderSystem</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -161,16 +216,44 @@ Additional Inherited Members</h2></td></tr>
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_path</td><td>The current folder path </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The buffer name </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_renderSystem</td><td>The render system </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="aa9c6c7bf2766ce5329b2d8d9d97ef688"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9c6c7bf2766ce5329b2d8d9d97ef688">&#9670;&nbsp;</a></span>~FrameVariableBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API Castor3D::FrameVariableBuffer::~FrameVariableBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a7079fd6404d13bcc1a85f881f90354e1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7079fd6404d13bcc1a85f881f90354e1">&#9670;&nbsp;</a></span>Fill()</h2>
+<a id="a88b7c7fde1bb8f875946f58427138945"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a88b7c7fde1bb8f875946f58427138945">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -179,44 +262,28 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Castor3D::PointLight::BinaryParser::Fill </td>
+          <td class="memname">FrameVariablePtrList::iterator Castor3D::FrameVariableBuffer::begin </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d62/a01805.html">PointLight</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_obj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_chunk</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function used to fill the chunk from specific data. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_obj</td><td>The object to write </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_chunk</td><td>The chunk to fill </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+<p>Retrieves an iterator to the beginnning of the variables list. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d20/a01813.html#ace65c19c6bf9324936e08726e0b0d3af">m_listVariables</a>.</p>
 
 </div>
 </div>
-<a id="abe3bbd994f80ffb544dbf1aaf068054a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe3bbd994f80ffb544dbf1aaf068054a">&#9670;&nbsp;</a></span>Parse()</h2>
+<a id="af2804fa5de6c8d5e71c5c9d1ba684f3e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2804fa5de6c8d5e71c5c9d1ba684f3e">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -225,16 +292,424 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Castor3D::PointLight::BinaryParser::Parse </td>
+          <td class="memname">FrameVariablePtrList::const_iterator Castor3D::FrameVariableBuffer::begin </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d62/a01805.html">PointLight</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_obj</em>, </td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves an iterator to the beginnning of the variables list. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d20/a01813.html#ace65c19c6bf9324936e08726e0b0d3af">m_listVariables</a>.</p>
+
+</div>
+</div>
+<a id="aa9b92b87ae3114e9ece619c3e72423f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9b92b87ae3114e9ece619c3e72423f1">&#9670;&nbsp;</a></span>Bind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameVariableBuffer::Bind </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The buffer index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any problem occured </dd></dl>
+
+</div>
+</div>
+<a id="a0f56b0cdbac95ed91f982a81de9101ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f56b0cdbac95ed91f982a81de9101ba">&#9670;&nbsp;</a></span>Cleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameVariableBuffer::Cleanup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Cleans all the variables up and the GPU buffer associated. </p>
+
+</div>
+</div>
+<a id="a813bc0fb23d98bdc3540f54cc4c41b5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a813bc0fb23d98bdc3540f54cc4c41b5d">&#9670;&nbsp;</a></span>CreateVariable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API FrameVariableSPtr Castor3D::FrameVariableBuffer::CreateVariable </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_program</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_chunk</em>&#160;</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a6fb19734cf6f1dedcabb613f8decea1f">eFRAME_VARIABLE_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_occurences</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Creates a variable of the wanted type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_program</td><td>The program </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td>The wanted type </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The variable name </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_occurences</td><td>The array dimension </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The created variable, nullptr if failed </dd></dl>
+
+</div>
+</div>
+<a id="ab61647fcbc3b0532c599118dac492d2e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab61647fcbc3b0532c599118dac492d2e">&#9670;&nbsp;</a></span>DoBind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameVariableBuffer::DoBind </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Binds all the variables, through the GPU buffer if supported (OpenGL UBO, Direct3D Constants buffers) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The buffer index </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any problem occured </dd></dl>
+
+</div>
+</div>
+<a id="a2c672fd073145eeffa3c4d8c61a909b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2c672fd073145eeffa3c4d8c61a909b0">&#9670;&nbsp;</a></span>DoCleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::FrameVariableBuffer::DoCleanup </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cleans all the variables up and the GPU buffer associated. </p>
+
+</div>
+</div>
+<a id="a483fa7e825fbd19c0ffbff2abeb11e94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a483fa7e825fbd19c0ffbff2abeb11e94">&#9670;&nbsp;</a></span>DoCreateVariable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API FrameVariableSPtr Castor3D::FrameVariableBuffer::DoCreateVariable </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> *&#160;</td>
+          <td class="paramname"><em>p_program</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a6fb19734cf6f1dedcabb613f8decea1f">eFRAME_VARIABLE_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_occurences</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a variable of the wanted type. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_program</td><td>The program </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td>The wanted type </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The variable name </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_occurences</td><td>The array dimension </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The created variable, nullptr if failed </dd></dl>
+
+</div>
+</div>
+<a id="a1af93467b79ed70f058fded959fd1f2f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1af93467b79ed70f058fded959fd1f2f">&#9670;&nbsp;</a></span>DoInitialise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameVariableBuffer::DoInitialise </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> *&#160;</td>
+          <td class="paramname"><em>p_program</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialises all the variables and the GPU buffer associated. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_program</td><td>The program </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any problem occured </dd></dl>
+
+</div>
+</div>
+<a id="ae2feb915fc958cbe8781080b557e93c6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2feb915fc958cbe8781080b557e93c6">&#9670;&nbsp;</a></span>DoUnbind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::FrameVariableBuffer::DoUnbind </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unbinds all variables. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The buffer index </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="adb3c458d18d7b237c2b2e1013b371a7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb3c458d18d7b237c2b2e1013b371a7b">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">FrameVariablePtrList::iterator Castor3D::FrameVariableBuffer::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves an iterator to the end of the variables list. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d20/a01813.html#ace65c19c6bf9324936e08726e0b0d3af">m_listVariables</a>.</p>
+
+</div>
+</div>
+<a id="a3616b9192672abe86a303b1a4cff6dd6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3616b9192672abe86a303b1a4cff6dd6">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">FrameVariablePtrList::const_iterator Castor3D::FrameVariableBuffer::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves an iterator to the end of the variables list. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d20/a01813.html#ace65c19c6bf9324936e08726e0b0d3af">m_listVariables</a>.</p>
+
+</div>
+</div>
+<a id="a006d3ce5dba8c197096f23b14c662de1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a006d3ce5dba8c197096f23b14c662de1">&#9670;&nbsp;</a></span>GetName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::String const&amp; Castor3D::FrameVariableBuffer::GetName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the variables buffer name. </p>
+<dl class="section return"><dt>Returns</dt><dd>The name </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d1/d20/a01813.html#adf287f9592278f6159988c9ba3dd1a5e">m_name</a>.</p>
+
+</div>
+</div>
+<a id="abc628f6f795742c592b1dd4f2d5744f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abc628f6f795742c592b1dd4f2d5744f6">&#9670;&nbsp;</a></span>GetVariable() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T &gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="../../d7/d81/a01365.html">OneFrameVariable</a>&lt; T &gt; &gt; Castor3D::FrameVariableBuffer::GetVariable </td>
+          <td>(</td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="../../d7/d81/a01365.html">OneFrameVariable</a>&lt; T &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p_variable</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -242,32 +717,359 @@ Additional Inherited Members</h2></td></tr>
           <td></td><td> const</td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+<p>Retrieves a variable by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The variable name </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_variable</td><td>Receives the found variable, nullptr if failed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if failed </dd></dl>
+
+</div>
+</div>
+<a id="a6051a9685763e58ee1764c260089d165"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6051a9685763e58ee1764c260089d165">&#9670;&nbsp;</a></span>GetVariable() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , uint32_t Count&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="../../d1/d17/a01369.html">PointFrameVariable</a>&lt; T, Count &gt; &gt; Castor3D::FrameVariableBuffer::GetVariable </td>
+          <td>(</td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="../../d1/d17/a01369.html">PointFrameVariable</a>&lt; T, Count &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p_variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves a variable by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The variable name </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_variable</td><td>Receives the found variable, nullptr if failed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if failed </dd></dl>
+
+</div>
+</div>
+<a id="a9b7dbbd42558e6dfabc97877ee42ccd0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9b7dbbd42558e6dfabc97877ee42ccd0">&#9670;&nbsp;</a></span>GetVariable() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , uint32_t Rows, uint32_t Columns&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; <a class="el" href="../../d7/d38/a01373.html">MatrixFrameVariable</a>&lt; T, Rows, Columns &gt; &gt; Castor3D::FrameVariableBuffer::GetVariable </td>
+          <td>(</td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; <a class="el" href="../../d7/d38/a01373.html">MatrixFrameVariable</a>&lt; T, Rows, Columns &gt; &gt; &amp;&#160;</td>
+          <td class="paramname"><em>p_variable</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves a variable by name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The variable name </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">p_variable</td><td>Receives the found variable, nullptr if failed </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if failed </dd></dl>
+
+</div>
+</div>
+<a id="a772e607cb51aca93cdff8593795af684"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a772e607cb51aca93cdff8593795af684">&#9670;&nbsp;</a></span>Initialise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API bool Castor3D::FrameVariableBuffer::Initialise </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d0/dc2/a02477.html">ShaderProgram</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_program</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialises all the variables and the GPU buffer associated. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_program</td><td>The program </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any problem occured </dd></dl>
+
+</div>
+</div>
+<a id="a8cc5313dc330065464b728f5c88ae464"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cc5313dc330065464b728f5c88ae464">&#9670;&nbsp;</a></span>RemoveVariable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameVariableBuffer::RemoveVariable </td>
+          <td>(</td>
+          <td class="paramtype">Castor::String const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Removes a variable from this buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The variable name </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab400326fb3e355359001e9dd0c9858f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab400326fb3e355359001e9dd0c9858f5">&#9670;&nbsp;</a></span>Unbind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::FrameVariableBuffer::Unbind </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_index</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unbinds all variables. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The buffer index </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9acea6fd9b742620b71a7b134c0b2ff0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9acea6fd9b742620b71a7b134c0b2ff0">&#9670;&nbsp;</a></span>m_buffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::ByteArray Castor3D::FrameVariableBuffer::m_buffer</td>
+        </tr>
+      </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function used to retrieve specific data from the chunk. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_obj</td><td>The object to read </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_chunk</td><td>The chunk containing data </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+<p>The data buffer. </p>
+
+</div>
+</div>
+<a id="af34ab5864a9667fb4b07bb1773a186fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af34ab5864a9667fb4b07bb1773a186fe">&#9670;&nbsp;</a></span>m_index</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Castor3D::FrameVariableBuffer::m_index</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The buffer's index. </p>
+
+</div>
+</div>
+<a id="af76f1756e2fb8f9f689dc9de0c8d921a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af76f1756e2fb8f9f689dc9de0c8d921a">&#9670;&nbsp;</a></span>m_listInitialised</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">FrameVariablePtrList Castor3D::FrameVariableBuffer::m_listInitialised</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The initialised variables list. </p>
+
+</div>
+</div>
+<a id="ace65c19c6bf9324936e08726e0b0d3af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace65c19c6bf9324936e08726e0b0d3af">&#9670;&nbsp;</a></span>m_listVariables</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">FrameVariablePtrList Castor3D::FrameVariableBuffer::m_listVariables</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The variables list. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d1/d20/a01813.html#a88b7c7fde1bb8f875946f58427138945">begin()</a>, and <a class="el" href="../../d1/d20/a01813.html#adb3c458d18d7b237c2b2e1013b371a7b">end()</a>.</p>
+
+</div>
+</div>
+<a id="a0ea9072e7142d14c16d0973ae9dd9713"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ea9072e7142d14c16d0973ae9dd9713">&#9670;&nbsp;</a></span>m_mapVariables</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">FrameVariablePtrStrMap Castor3D::FrameVariableBuffer::m_mapVariables</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The variables ordered by name. </p>
+
+</div>
+</div>
+<a id="adf287f9592278f6159988c9ba3dd1a5e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf287f9592278f6159988c9ba3dd1a5e">&#9670;&nbsp;</a></span>m_name</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::String Castor3D::FrameVariableBuffer::m_name</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The buffer name. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d1/d20/a01813.html#a006d3ce5dba8c197096f23b14c662de1">GetName()</a>.</p>
+
+</div>
+</div>
+<a id="ad3274e059f25cdf5ee5d98890c1d7c43"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3274e059f25cdf5ee5d98890c1d7c43">&#9670;&nbsp;</a></span>sm_uiCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t Castor3D::FrameVariableBuffer::sm_uiCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The buffers count. </p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d3/d5e/a00275.html">PointLight.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d7/d25/a00182.html">FrameVariableBuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:07 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:35 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

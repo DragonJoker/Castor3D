@@ -1,4 +1,4 @@
-<map id="Castor3D::Cube" name="Castor3D::Cube">
-<area shape="rect" id="node1" title="The cube representation." alt="" coords="32,80,147,107"/>
-<area shape="rect" id="node2" href="$d9/df5/a01673.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,173,32"/>
+<map id="Castor3D::ChunkFiller&lt; Castor::Coords4d &gt;" name="Castor3D::ChunkFiller&lt; Castor::Coords4d &gt;">
+<area shape="rect" id="node1" title="ChunkFiller specialisation for Castor::Coords4d." alt="" coords="20,80,169,121"/>
+<area shape="rect" id="node2" href="$d3/dea/a01377.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
 </map>

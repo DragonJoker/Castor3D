@@ -1,0 +1,5 @@
+<map id="Castor3D::ElementCleaner&lt; Elem, typename std::enable_if&lt; is_cleanable&lt; Elem &gt;::value &amp;&amp;!is_instant&lt; Elem &gt;::value &gt;::type &gt;::Cleanup" name="Castor3D::ElementCleaner&lt; Elem, typename std::enable_if&lt; is_cleanable&lt; Elem &gt;::value &amp;&amp;!is_instant&lt; Elem &gt;::value &gt;::type &gt;::Cleanup">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,203,91"/>
+<area shape="rect" id="node2" href="$d7/d41/a00532.html#a5564219fda574092663bfcd55f9d348d" title="Helper function to create a cleanup event." alt="" coords="251,9,445,36"/>
+<area shape="rect" id="node3" href="$d5/d77/a01749.html#a7c328845d51afb8b40390c873753f215" title="Posts a frame event to the default frame listener." alt="" coords="253,60,443,87"/>
+</map>

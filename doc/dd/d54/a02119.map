@@ -1,4 +1,6 @@
-<map id="Castor3D::TechniquePlugin" name="Castor3D::TechniquePlugin">
-<area shape="rect" id="node1" title="Render technique plugin class." alt="" coords="5,80,184,107"/>
-<area shape="rect" id="node2" href="$d4/dd1/a01797.html" title="Plugin Base class." alt="" coords="19,5,170,32"/>
+<map id="Castor3D::Overlay::BinaryParser" name="Castor3D::Overlay::BinaryParser">
+<area shape="rect" id="node1" title="Overlay loader." alt="" coords="69,185,204,227"/>
+<area shape="rect" id="node2" href="$d8/d92/a01165.html" title=" " alt="" coords="5,81,164,123"/>
+<area shape="rect" id="node3" href="$d5/d77/a01749.html" title="Main System." alt="" coords="188,89,312,115"/>
+<area shape="rect" id="node4" title=" " alt="" coords="164,5,336,32"/>
 </map>

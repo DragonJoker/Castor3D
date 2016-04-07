@@ -1,4 +1,5 @@
-<map id="Castor3D::ChunkParser&lt; Castor::Coords4f &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords4f &gt;">
-<area shape="rect" id="node1" title="Chunk parser." alt="" coords="21,80,179,121"/>
-<area shape="rect" id="node2" href="$dc/dd5/a01293.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
+<map id="Castor3D::OneFrameVariable&lt; T &gt;" name="Castor3D::OneFrameVariable&lt; T &gt;">
+<area shape="rect" id="node1" title="Single shader variable with variable type." alt="" coords="5,155,228,181"/>
+<area shape="rect" id="node2" href="$de/d3c/a01809.html" title="Shader variable representation with variable type." alt="" coords="13,80,220,107"/>
+<area shape="rect" id="node3" href="$d4/dd1/a01797.html" title="Shader variable representation." alt="" coords="33,5,201,32"/>
 </map>

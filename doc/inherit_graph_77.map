@@ -1,4 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d6/d8b/a01117.html" title=" " alt="" coords="5,5,224,47"/>
-<area shape="rect" id="node2" href="$dc/dc8/a01929.html" title="Render target class." alt="" coords="272,13,433,39"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,81,87,108"/>
+<area shape="rect" id="node2" href="$d1/d31/a01245.html" title="Helper class, telling if the template parameter has a Cleanup(void) method." alt="" coords="139,5,326,32"/>
+<area shape="rect" id="node3" href="$df/db8/a01317.html" title="Helper class, telling if the template parameter has the method Detach." alt="" coords="135,56,330,83"/>
+<area shape="rect" id="node4" href="$d5/d6f/a01281.html" title="Helper class, telling if the template parameter has an Initialise(void) method." alt="" coords="135,107,331,133"/>
+<area shape="rect" id="node5" href="$db/d4b/a01309.html" title="Helper class, telling if the template parameter Initialise() and Cleanup() methods must be called ins..." alt="" coords="147,157,318,184"/>
 </map>

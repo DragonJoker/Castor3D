@@ -1,6 +1,4 @@
-<map id="Castor3D::DirectionalLight::TextLoader" name="Castor3D::DirectionalLight::TextLoader">
-<area shape="rect" id="node1" title="DirectionalLight loader." alt="" coords="468,46,641,87"/>
-<area shape="rect" id="node2" href="$d3/d2d/a01625.html" title="LightCategory loader." alt="" coords="256,46,420,87"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,208,61"/>
-<area shape="rect" id="node4" title=" " alt="" coords="57,85,156,112"/>
+<map id="Castor3D::ChunkFiller&lt; Castor::Matrix2x2f &gt;" name="Castor3D::ChunkFiller&lt; Castor::Matrix2x2f &gt;">
+<area shape="rect" id="node1" title="ChunkFiller specialisation for Castor::Matrix2x2f." alt="" coords="19,80,171,121"/>
+<area shape="rect" id="node2" href="$d3/dea/a01377.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
 </map>

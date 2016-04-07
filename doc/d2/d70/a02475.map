@@ -1,0 +1,9 @@
+<map id="Castor3D::ShaderProgram" name="Castor3D::ShaderProgram">
+<area shape="rect" id="node1" title="Base shader program implementation, used to share functions through the supported shader languages." alt="" coords="429,167,604,193"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,240,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="25,57,221,98"/>
+<area shape="rect" id="node4" title=" " alt="" coords="12,122,233,163"/>
+<area shape="rect" id="node5" title=" " alt="" coords="36,188,209,244"/>
+<area shape="rect" id="node6" title=" " alt="" coords="33,268,212,324"/>
+<area shape="rect" id="node7" title=" " alt="" coords="36,349,209,390"/>
+</map>

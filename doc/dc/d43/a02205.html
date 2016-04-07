@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::Viewport::BinaryParser Class Reference</title>
+<title>Castor3D: Castor3D::PluginBase Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,126 +39,306 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../de/df6/a02197.html">Viewport</a></li><li class="navelem"><a class="el" href="../../dc/d43/a02205.html">BinaryParser</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../dc/d43/a02205.html">PluginBase</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d0/d9d/a02202.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::Viewport::BinaryParser Class Reference</div>  </div>
+<div class="title">Castor3D::PluginBase Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="../../de/df6/a02197.html" title="Class to represent a viewport.">Viewport</a> loader.  
+<p>Plugin Base class.  
  <a href="../../dc/d43/a02205.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::Viewport::BinaryParser:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::PluginBase:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../df/d4a/a02204.png" border="0" usemap="#Castor3D_1_1Viewport_1_1BinaryParser_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1Viewport_1_1BinaryParser_inherit__map" id="Castor3D_1_1Viewport_1_1BinaryParser_inherit__map">
-<area shape="rect"  title="Viewport loader." alt="" coords="17,95,152,136"/>
-<area shape="rect"  href="../../d2/d41/a01037.html" title=" " alt="" coords="5,5,164,47"/>
+<div class="center"><img src="../../df/d4a/a02204.png" border="0" usemap="#Castor3D_1_1PluginBase_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1PluginBase_inherit__map" id="Castor3D_1_1PluginBase_inherit__map">
+<area shape="rect"  title="Plugin Base class." alt="" coords="241,157,392,184"/>
+<area shape="rect"  href="../../d0/d4e/a01741.html" title="Divider Plugin class." alt="" coords="450,5,609,32"/>
+<area shape="rect"  href="../../d6/dbd/a01829.html" title="Generator Plugin class." alt="" coords="441,56,618,83"/>
+<area shape="rect"  href="../../db/dd5/a01833.html" title="Generic Plugin class." alt="" coords="447,107,612,133"/>
+<area shape="rect"  href="../../d7/d9c/a01885.html" title="Importer Plugin class." alt="" coords="446,157,613,184"/>
+<area shape="rect"  href="../../df/de4/a02241.html" title="Post effect plug&#45;in class." alt="" coords="448,208,611,235"/>
+<area shape="rect"  href="../../d0/d80/a02281.html" title="Renderer Plugin class." alt="" coords="443,259,615,285"/>
+<area shape="rect"  href="../../da/d03/a02577.html" title="Render technique plug&#45;in class." alt="" coords="440,309,619,336"/>
+<area shape="rect"  title=" " alt="" coords="5,157,193,184"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::Viewport::BinaryParser:</div>
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::PluginBase:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d3/d0f/a02203.png" border="0" usemap="#Castor3D_1_1Viewport_1_1BinaryParser_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1Viewport_1_1BinaryParser_coll__map" id="Castor3D_1_1Viewport_1_1BinaryParser_coll__map">
-<area shape="rect"  title="Viewport loader." alt="" coords="17,95,152,136"/>
-<area shape="rect"  href="../../d2/d41/a01037.html" title=" " alt="" coords="5,5,164,47"/>
+<div class="center"><img src="../../d3/d0f/a02203.png" border="0" usemap="#Castor3D_1_1PluginBase_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1PluginBase_coll__map" id="Castor3D_1_1PluginBase_coll__map">
+<area shape="rect"  title="Plugin Base class." alt="" coords="24,80,175,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,193,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:a13f12deafddbbb7dddf1d776637cca2c"><td class="memItemLeft" align="right" valign="top">typedef OnLoadFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a13f12deafddbbb7dddf1d776637cca2c">POnLoadFunction</a></td></tr>
+<tr class="separator:a13f12deafddbbb7dddf1d776637cca2c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab37375e4c6486fcc1a06f3e708af208b"><td class="memItemLeft" align="right" valign="top">typedef OnUnloadFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#ab37375e4c6486fcc1a06f3e708af208b">POnUnloadFunction</a></td></tr>
+<tr class="separator:ab37375e4c6486fcc1a06f3e708af208b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55960d4a4a372e54ce7445895b56e5d9"><td class="memItemLeft" align="right" valign="top">typedef GetTypeFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a55960d4a4a372e54ce7445895b56e5d9">PGetTypeFunction</a></td></tr>
+<tr class="separator:a55960d4a4a372e54ce7445895b56e5d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa762d961147a5218511de77eaeb4a7ea"><td class="memItemLeft" align="right" valign="top">typedef GetRequiredVersionFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#aa762d961147a5218511de77eaeb4a7ea">PGetRequiredVersionFunction</a></td></tr>
+<tr class="separator:aa762d961147a5218511de77eaeb4a7ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02e83a92f07e2ebc2208f501ba65cdc8"><td class="memItemLeft" align="right" valign="top">typedef GetNameFunction *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a02e83a92f07e2ebc2208f501ba65cdc8">PGetNameFunction</a></td></tr>
+<tr class="separator:a02e83a92f07e2ebc2208f501ba65cdc8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a87921023f9e408deb1f90823c0270910"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a87921023f9e408deb1f90823c0270910">BinaryParser</a> (Castor::Path const &amp;p_path)</td></tr>
-<tr class="memdesc:a87921023f9e408deb1f90823c0270910"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a87921023f9e408deb1f90823c0270910">More...</a><br /></td></tr>
-<tr class="separator:a87921023f9e408deb1f90823c0270910"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5b449d054eed42790617afd5e8cfd1c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#af5b449d054eed42790617afd5e8cfd1c">Fill</a> (<a class="el" href="../../de/df6/a02197.html">Viewport</a> const &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:af5b449d054eed42790617afd5e8cfd1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to fill the chunk from specific data.  <a href="#af5b449d054eed42790617afd5e8cfd1c">More...</a><br /></td></tr>
-<tr class="separator:af5b449d054eed42790617afd5e8cfd1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a81c77d0877d99a71bbfadc3b95714c4d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a81c77d0877d99a71bbfadc3b95714c4d">Parse</a> (<a class="el" href="../../de/df6/a02197.html">Viewport</a> &amp;p_obj, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a81c77d0877d99a71bbfadc3b95714c4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function used to retrieve specific data from the chunk.  <a href="#a81c77d0877d99a71bbfadc3b95714c4d">More...</a><br /></td></tr>
-<tr class="separator:a81c77d0877d99a71bbfadc3b95714c4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a01037"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01037')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; Viewport &gt;</a></td></tr>
-<tr class="memitem:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a26de8559eb86423f92eb9b516172ab83">BinaryParser</a> (Castor::Path const &amp;p_path)</td></tr>
-<tr class="memdesc:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../d2/d41/a01037.html#a26de8559eb86423f92eb9b516172ab83">More...</a><br /></td></tr>
-<tr class="separator:a26de8559eb86423f92eb9b516172ab83 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a6bccc937cfb595734be323a4a71ddf46">Fill</a> (<a class="el" href="../../de/df6/a02197.html">Viewport</a> const &amp;p_obj, Castor::BinaryFile &amp;p_file) const</td></tr>
-<tr class="memdesc:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">To chunk writer function.  <a href="../../d2/d41/a01037.html#a6bccc937cfb595734be323a4a71ddf46">More...</a><br /></td></tr>
-<tr class="separator:a6bccc937cfb595734be323a4a71ddf46 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a42e485b9af37022b62291c228559f252">Parse</a> (<a class="el" href="../../de/df6/a02197.html">Viewport</a> &amp;p_obj, Castor::BinaryFile &amp;p_file) const</td></tr>
-<tr class="memdesc:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">From file reader function.  <a href="../../d2/d41/a01037.html#a42e485b9af37022b62291c228559f252">More...</a><br /></td></tr>
-<tr class="separator:a42e485b9af37022b62291c228559f252 inherit pub_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add24ae4825fc625bf0f01a8322eed0b3"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#add24ae4825fc625bf0f01a8322eed0b3">~PluginBase</a> ()=0</td></tr>
+<tr class="memdesc:add24ae4825fc625bf0f01a8322eed0b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#add24ae4825fc625bf0f01a8322eed0b3">More...</a><br /></td></tr>
+<tr class="separator:add24ae4825fc625bf0f01a8322eed0b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3a8f58078401fd1f536e97ae42d1a05a"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a3a8f58078401fd1f536e97ae42d1a05a">GetRequiredVersion</a> (<a class="el" href="../../d2/de3/a02637.html">Version</a> &amp;p_version) const</td></tr>
+<tr class="memdesc:a3a8f58078401fd1f536e97ae42d1a05a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the required version for the plug-in to work correctly.  <a href="#a3a8f58078401fd1f536e97ae42d1a05a">More...</a><br /></td></tr>
+<tr class="separator:a3a8f58078401fd1f536e97ae42d1a05a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a48cfdc7eb34a59e87d8508fbc6670630"><td class="memItemLeft" align="right" valign="top">C3D_API Castor::String&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a48cfdc7eb34a59e87d8508fbc6670630">GetName</a> () const</td></tr>
+<tr class="memdesc:a48cfdc7eb34a59e87d8508fbc6670630"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the plug-in name.  <a href="#a48cfdc7eb34a59e87d8508fbc6670630">More...</a><br /></td></tr>
+<tr class="separator:a48cfdc7eb34a59e87d8508fbc6670630"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af63dd05d58c7855b425dfd435b2159dc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#ab0e5b51c53a473a00d483e06a3077a2b">ePLUGIN_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#af63dd05d58c7855b425dfd435b2159dc">GetType</a> () const</td></tr>
+<tr class="memdesc:af63dd05d58c7855b425dfd435b2159dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the plug-in type.  <a href="#af63dd05d58c7855b425dfd435b2159dc">More...</a><br /></td></tr>
+<tr class="separator:af63dd05d58c7855b425dfd435b2159dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pro_methods_a01037"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a01037')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; Viewport &gt;</a></td></tr>
-<tr class="memitem:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a617a98ba40cfc192d969777abea15d0f">DoParseChunk</a> (T *p_pValues, uint32_t p_uiCount, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d41/a01037.html#a617a98ba40cfc192d969777abea15d0f">More...</a><br /></td></tr>
-<tr class="separator:a617a98ba40cfc192d969777abea15d0f inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a387140b7ac1982efa36de5bc14973233">DoParseChunk</a> (T(&amp;p_tValue)[Count], <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../d2/d41/a01037.html#a387140b7ac1982efa36de5bc14973233">More...</a><br /></td></tr>
-<tr class="separator:a387140b7ac1982efa36de5bc14973233 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a352c9172ec8e23150804941cb7cad726">DoParseChunk</a> (T &amp;p_tValue, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value from a chunk.  <a href="../../d2/d41/a01037.html#a352c9172ec8e23150804941cb7cad726">More...</a><br /></td></tr>
-<tr class="separator:a352c9172ec8e23150804941cb7cad726 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a9ff27bbe92b8fba306d4e3747e5f0f13">DoFillChunk</a> (T const *p_pValues, uint32_t p_uiCount, eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a9ff27bbe92b8fba306d4e3747e5f0f13">More...</a><br /></td></tr>
-<tr class="separator:a9ff27bbe92b8fba306d4e3747e5f0f13 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a91213c480d37565285161f7992903a34">DoFillChunk</a> (T const (&amp;p_tValue)[Count], eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a91213c480d37565285161f7992903a34">More...</a><br /></td></tr>
-<tr class="separator:a91213c480d37565285161f7992903a34 inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a80ecb2631276ad87cd2cec5e49fb854f">DoFillChunk</a> (T const &amp;p_tValue, eCHUNK_TYPE p_eChunkType, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk) const</td></tr>
-<tr class="memdesc:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes a subchunk value into a chunk.  <a href="../../d2/d41/a01037.html#a80ecb2631276ad87cd2cec5e49fb854f">More...</a><br /></td></tr>
-<tr class="separator:a80ecb2631276ad87cd2cec5e49fb854f inherit pro_methods_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_attribs_a01037"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a01037')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../d2/d41/a01037.html">Castor3D::BinaryParser&lt; Viewport &gt;</a></td></tr>
-<tr class="memitem:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="memItemLeft" align="right" valign="top">Castor::Path&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d2/d41/a01037.html#a61ad0329195bec54bb009a9f759a79be">m_path</a></td></tr>
-<tr class="memdesc:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="mdescLeft">&#160;</td><td class="mdescRight">The current folder path.  <a href="../../d2/d41/a01037.html#a61ad0329195bec54bb009a9f759a79be">More...</a><br /></td></tr>
-<tr class="separator:a61ad0329195bec54bb009a9f759a79be inherit pro_attribs_a01037"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a394b904f0fcefd9afbff56db5f298034"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a394b904f0fcefd9afbff56db5f298034">PluginBase</a> (<a class="el" href="../../d7/d41/a00532.html#ab0e5b51c53a473a00d483e06a3077a2b">ePLUGIN_TYPE</a> p_type, Castor::DynamicLibrarySPtr p_library, <a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;p_engine)</td></tr>
+<tr class="memdesc:a394b904f0fcefd9afbff56db5f298034"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a394b904f0fcefd9afbff56db5f298034">More...</a><br /></td></tr>
+<tr class="separator:a394b904f0fcefd9afbff56db5f298034"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a32178790e5cd7bd61fbc9c1a1618912d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d43/a02205.html#aa762d961147a5218511de77eaeb4a7ea">PGetRequiredVersionFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a32178790e5cd7bd61fbc9c1a1618912d">m_pfnGetRequiredVersion</a></td></tr>
+<tr class="memdesc:a32178790e5cd7bd61fbc9c1a1618912d"><td class="mdescLeft">&#160;</td><td class="mdescRight">The plug-in's version checking function.  <a href="#a32178790e5cd7bd61fbc9c1a1618912d">More...</a><br /></td></tr>
+<tr class="separator:a32178790e5cd7bd61fbc9c1a1618912d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84ef59cfd22118574958cb1eb1895824"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d43/a02205.html#a02e83a92f07e2ebc2208f501ba65cdc8">PGetNameFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a84ef59cfd22118574958cb1eb1895824">m_pfnGetName</a></td></tr>
+<tr class="memdesc:a84ef59cfd22118574958cb1eb1895824"><td class="mdescLeft">&#160;</td><td class="mdescRight">The plug-in's name retrieval function.  <a href="#a84ef59cfd22118574958cb1eb1895824">More...</a><br /></td></tr>
+<tr class="separator:a84ef59cfd22118574958cb1eb1895824"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c405b48064e5b564c0df16a5aff1283"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d43/a02205.html#a13f12deafddbbb7dddf1d776637cca2c">POnLoadFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a6c405b48064e5b564c0df16a5aff1283">m_pfnOnLoad</a></td></tr>
+<tr class="memdesc:a6c405b48064e5b564c0df16a5aff1283"><td class="mdescLeft">&#160;</td><td class="mdescRight">The plug-in's loading function.  <a href="#a6c405b48064e5b564c0df16a5aff1283">More...</a><br /></td></tr>
+<tr class="separator:a6c405b48064e5b564c0df16a5aff1283"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a040ed26f87a1ae0bbf664ba9c694f8e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dc/d43/a02205.html#ab37375e4c6486fcc1a06f3e708af208b">POnUnloadFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#a040ed26f87a1ae0bbf664ba9c694f8e6">m_pfnOnUnload</a></td></tr>
+<tr class="memdesc:a040ed26f87a1ae0bbf664ba9c694f8e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">The plug-in's unloading function.  <a href="#a040ed26f87a1ae0bbf664ba9c694f8e6">More...</a><br /></td></tr>
+<tr class="separator:a040ed26f87a1ae0bbf664ba9c694f8e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa99f3b1d1775d5425a5801a638674c53"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#ab0e5b51c53a473a00d483e06a3077a2b">ePLUGIN_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/d43/a02205.html#aa99f3b1d1775d5425a5801a638674c53">m_type</a></td></tr>
+<tr class="memdesc:aa99f3b1d1775d5425a5801a638674c53"><td class="mdescLeft">&#160;</td><td class="mdescRight">The plug-in type.  <a href="#aa99f3b1d1775d5425a5801a638674c53">More...</a><br /></td></tr>
+<tr class="separator:aa99f3b1d1775d5425a5801a638674c53"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../de/df6/a02197.html" title="Class to represent a viewport.">Viewport</a> loader. </p>
+<div class="textblock"><p>Plugin Base class. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.0.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>15/04/2013 </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a87921023f9e408deb1f90823c0270910"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a87921023f9e408deb1f90823c0270910">&#9670;&nbsp;</a></span>BinaryParser()</h2>
+<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>09/02/2010</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Manages the base plug-in functions, allows plug-ins to check versions and to register themselves </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a02e83a92f07e2ebc2208f501ba65cdc8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02e83a92f07e2ebc2208f501ba65cdc8">&#9670;&nbsp;</a></span>PGetNameFunction</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Castor3D::Viewport::BinaryParser::BinaryParser </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Path const &amp;&#160;</td>
-          <td class="paramname"><em>p_path</em></td><td>)</td>
-          <td></td>
+          <td class="memname">typedef GetNameFunction* <a class="el" href="../../dc/d43/a02205.html#a02e83a92f07e2ebc2208f501ba65cdc8">Castor3D::PluginBase::PGetNameFunction</a></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa762d961147a5218511de77eaeb4a7ea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa762d961147a5218511de77eaeb4a7ea">&#9670;&nbsp;</a></span>PGetRequiredVersionFunction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef GetRequiredVersionFunction* <a class="el" href="../../dc/d43/a02205.html#aa762d961147a5218511de77eaeb4a7ea">Castor3D::PluginBase::PGetRequiredVersionFunction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a55960d4a4a372e54ce7445895b56e5d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a55960d4a4a372e54ce7445895b56e5d9">&#9670;&nbsp;</a></span>PGetTypeFunction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef GetTypeFunction* <a class="el" href="../../dc/d43/a02205.html#a55960d4a4a372e54ce7445895b56e5d9">Castor3D::PluginBase::PGetTypeFunction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a13f12deafddbbb7dddf1d776637cca2c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a13f12deafddbbb7dddf1d776637cca2c">&#9670;&nbsp;</a></span>POnLoadFunction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef OnLoadFunction* <a class="el" href="../../dc/d43/a02205.html#a13f12deafddbbb7dddf1d776637cca2c">Castor3D::PluginBase::POnLoadFunction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab37375e4c6486fcc1a06f3e708af208b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab37375e4c6486fcc1a06f3e708af208b">&#9670;&nbsp;</a></span>POnUnloadFunction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef OnUnloadFunction* <a class="el" href="../../dc/d43/a02205.html#ab37375e4c6486fcc1a06f3e708af208b">Castor3D::PluginBase::POnUnloadFunction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a394b904f0fcefd9afbff56db5f298034"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a394b904f0fcefd9afbff56db5f298034">&#9670;&nbsp;</a></span>PluginBase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::PluginBase::PluginBase </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#ab0e5b51c53a473a00d483e06a3077a2b">ePLUGIN_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::DynamicLibrarySPtr&#160;</td>
+          <td class="paramname"><em>p_library</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_engine</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_path</td><td>The current folder path </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td>The plug-in type </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_library</td><td>The shared library holding the plug-in </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_engine</td><td>The engine </td></tr>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="add24ae4825fc625bf0f01a8322eed0b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add24ae4825fc625bf0f01a8322eed0b3">&#9670;&nbsp;</a></span>~PluginBase()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API Castor3D::PluginBase::~PluginBase </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af5b449d054eed42790617afd5e8cfd1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5b449d054eed42790617afd5e8cfd1c">&#9670;&nbsp;</a></span>Fill()</h2>
+<a id="a48cfdc7eb34a59e87d8508fbc6670630"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48cfdc7eb34a59e87d8508fbc6670630">&#9670;&nbsp;</a></span>GetName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor::String Castor3D::PluginBase::GetName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the plug-in name. </p>
+<dl class="section return"><dt>Returns</dt><dd>The name </dd></dl>
+
+</div>
+</div>
+<a id="a3a8f58078401fd1f536e97ae42d1a05a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3a8f58078401fd1f536e97ae42d1a05a">&#9670;&nbsp;</a></span>GetRequiredVersion()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::PluginBase::GetRequiredVersion </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d2/de3/a02637.html">Version</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_version</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Retrieves the required version for the plug-in to work correctly. </p>
+<dl class="section return"><dt>Returns</dt><dd>The version </dd></dl>
+
+</div>
+</div>
+<a id="af63dd05d58c7855b425dfd435b2159dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af63dd05d58c7855b425dfd435b2159dc">&#9670;&nbsp;</a></span>GetType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -167,46 +347,29 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Castor3D::Viewport::BinaryParser::Fill </td>
+          <td class="memname"><a class="el" href="../../d7/d41/a00532.html#ab0e5b51c53a473a00d483e06a3077a2b">ePLUGIN_TYPE</a> Castor3D::PluginBase::GetType </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../de/df6/a02197.html">Viewport</a> const &amp;&#160;</td>
-          <td class="paramname"><em>p_obj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_chunk</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function used to fill the chunk from specific data. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_obj</td><td>The object to write </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_chunk</td><td>The chunk to fill </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+<p>Retrieves the plug-in type. </p>
+<dl class="section return"><dt>Returns</dt><dd>The type </dd></dl>
 
-<p>Implements <a class="el" href="../../d2/d41/a01037.html#a7fb6c4e09f73eb8135a1ba9ce7e9bdd9">Castor3D::BinaryParser&lt; Viewport &gt;</a>.</p>
+<p class="reference">References <a class="el" href="../../dc/d43/a02205.html#aa99f3b1d1775d5425a5801a638674c53">m_type</a>.</p>
 
 </div>
 </div>
-<a id="a81c77d0877d99a71bbfadc3b95714c4d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81c77d0877d99a71bbfadc3b95714c4d">&#9670;&nbsp;</a></span>Parse()</h2>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a84ef59cfd22118574958cb1eb1895824"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84ef59cfd22118574958cb1eb1895824">&#9670;&nbsp;</a></span>m_pfnGetName</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -215,51 +378,125 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual bool Castor3D::Viewport::BinaryParser::Parse </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../de/df6/a02197.html">Viewport</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_obj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_chunk</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td> const</td>
+          <td class="memname"><a class="el" href="../../dc/d43/a02205.html#a02e83a92f07e2ebc2208f501ba65cdc8">PGetNameFunction</a> Castor3D::PluginBase::m_pfnGetName</td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Function used to retrieve specific data from the chunk. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_obj</td><td>The object to read </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_chunk</td><td>The chunk containing data </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>false</code> if any error occured </dd></dl>
+<p>The plug-in's name retrieval function. </p>
 
-<p>Implements <a class="el" href="../../d2/d41/a01037.html#a412c1ba4502f03b01d1e63879f203a95">Castor3D::BinaryParser&lt; Viewport &gt;</a>.</p>
+</div>
+</div>
+<a id="a32178790e5cd7bd61fbc9c1a1618912d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32178790e5cd7bd61fbc9c1a1618912d">&#9670;&nbsp;</a></span>m_pfnGetRequiredVersion</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dc/d43/a02205.html#aa762d961147a5218511de77eaeb4a7ea">PGetRequiredVersionFunction</a> Castor3D::PluginBase::m_pfnGetRequiredVersion</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The plug-in's version checking function. </p>
+
+</div>
+</div>
+<a id="a6c405b48064e5b564c0df16a5aff1283"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c405b48064e5b564c0df16a5aff1283">&#9670;&nbsp;</a></span>m_pfnOnLoad</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dc/d43/a02205.html#a13f12deafddbbb7dddf1d776637cca2c">POnLoadFunction</a> Castor3D::PluginBase::m_pfnOnLoad</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The plug-in's loading function. </p>
+
+</div>
+</div>
+<a id="a040ed26f87a1ae0bbf664ba9c694f8e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a040ed26f87a1ae0bbf664ba9c694f8e6">&#9670;&nbsp;</a></span>m_pfnOnUnload</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../dc/d43/a02205.html#ab37375e4c6486fcc1a06f3e708af208b">POnUnloadFunction</a> Castor3D::PluginBase::m_pfnOnUnload</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The plug-in's unloading function. </p>
+
+</div>
+</div>
+<a id="aa99f3b1d1775d5425a5801a638674c53"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa99f3b1d1775d5425a5801a638674c53">&#9670;&nbsp;</a></span>m_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d7/d41/a00532.html#ab0e5b51c53a473a00d483e06a3077a2b">ePLUGIN_TYPE</a> Castor3D::PluginBase::m_type</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The plug-in type. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../dc/d43/a02205.html#af63dd05d58c7855b425dfd435b2159dc">GetType()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../df/d70/a00431.html">Viewport.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../dd/d4e/a00329.html">Plugin.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:16 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:44 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

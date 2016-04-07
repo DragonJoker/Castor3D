@@ -1,5 +1,4 @@
-<map id="Castor3D::Geometry::BinaryParser" name="Castor3D::Geometry::BinaryParser">
-<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="19,184,161,225"/>
-<area shape="rect" id="node2" href="$da/d20/a01689.html" title="MovableObject loader." alt="" coords="5,95,175,136"/>
-<area shape="rect" id="node3" href="$d2/d41/a01037.html" title=" " alt="" coords="11,5,169,47"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Point4ui &gt;" name="Castor3D::ChunkParser&lt; Castor::Point4ui &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Point4ui." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

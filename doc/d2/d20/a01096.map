@@ -1,4 +1,5 @@
-<map id="Castor3D::CameraRenderer" name="Castor3D::CameraRenderer">
-<area shape="rect" id="node1" title="The Camera renderer." alt="" coords="13,95,194,121"/>
-<area shape="rect" id="node2" href="$d8/ded/a01113.html" title=" " alt="" coords="5,5,201,47"/>
+<map id="Castor3D::AnimatedObjectGroup" name="Castor3D::AnimatedObjectGroup">
+<area shape="rect" id="node1" title="Class which represents the animated object groups." alt="" coords="21,80,199,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,68,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="92,5,277,32"/>
 </map>

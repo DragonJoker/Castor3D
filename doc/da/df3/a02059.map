@@ -1,4 +1,4 @@
-<map id="Castor3D::Sphere" name="Castor3D::Sphere">
-<area shape="rect" id="node1" title="The sphere primitive." alt="" coords="27,80,152,107"/>
-<area shape="rect" id="node2" href="$d9/df5/a01673.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,173,32"/>
+<map id="Castor3D::MovableObject::TextLoader" name="Castor3D::MovableObject::TextLoader">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="25,109,194,151"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,213,61"/>
 </map>

@@ -1,0 +1,4 @@
+<map id="Castor3D::ShaderManager" name="Castor3D::ShaderManager">
+<area shape="rect" id="node1" title="Manager used to hold the shader programs. Holds it, destroys it during a rendering loop." alt="" coords="12,80,187,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,32"/>
+</map>

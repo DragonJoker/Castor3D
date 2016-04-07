@@ -1,5 +1,4 @@
-<map id="Castor3D::Material" name="Castor3D::Material">
-<area shape="rect" id="node1" title="Definition of a material." alt="" coords="135,95,266,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,13,199,39"/>
-<area shape="rect" id="node3" title=" " alt="" coords="223,5,375,47"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Matrix2x2f &gt;" name="Castor3D::ChunkParser&lt; Castor::Matrix2x2f &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Matrix2x2f." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

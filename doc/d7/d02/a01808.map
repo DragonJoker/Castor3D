@@ -1,6 +1,7 @@
-<map id="Castor3D::PointLight::TextLoader" name="Castor3D::PointLight::TextLoader">
-<area shape="rect" id="node1" title="PointLight loader." alt="" coords="468,46,611,87"/>
-<area shape="rect" id="node2" href="$d3/d2d/a01625.html" title="LightCategory loader." alt="" coords="256,46,420,87"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,208,61"/>
-<area shape="rect" id="node4" title=" " alt="" coords="57,85,156,112"/>
+<map id="Castor3D::TFrameVariable&lt; T &gt;" name="Castor3D::TFrameVariable&lt; T &gt;">
+<area shape="rect" id="node1" title="Shader variable representation with variable type." alt="" coords="221,56,428,83"/>
+<area shape="rect" id="node3" href="$d7/d38/a01373.html" title="Matrix shader variable with variable type and dimensions." alt="" coords="476,5,711,32"/>
+<area shape="rect" id="node4" href="$d7/d81/a01365.html" title="Single shader variable with variable type." alt="" coords="482,56,705,83"/>
+<area shape="rect" id="node5" href="$d1/d17/a01369.html" title="Point shader variable with variable type and dimensions." alt="" coords="479,107,708,133"/>
+<area shape="rect" id="node2" href="$d4/dd1/a01797.html" title="Shader variable representation." alt="" coords="5,56,173,83"/>
 </map>

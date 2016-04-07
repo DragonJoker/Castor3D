@@ -1,4 +1,6 @@
-<map id="Castor3D::TextureUnit" name="Castor3D::TextureUnit">
-<area shape="rect" id="node1" title="Texture unit representation." alt="" coords="37,95,188,121"/>
-<area shape="rect" id="node2" href="$d6/d8b/a01117.html" title=" " alt="" coords="5,5,220,47"/>
+<map id="Castor3D::OverlayManager" name="Castor3D::OverlayManager">
+<area shape="rect" id="node1" title="Overlay collection, with additional add and remove functions to manage Z&#45;Index." alt="" coords="745,27,923,54"/>
+<area shape="rect" id="node2" href="$dd/da3/a02385.html" title=" " alt="" coords="508,20,697,61"/>
+<area shape="rect" id="node3" href="$d8/d24/a02001.html" title=" " alt="" coords="241,5,460,76"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,27,193,54"/>
 </map>

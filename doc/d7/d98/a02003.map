@@ -1,9 +1,6 @@
-<map id="Castor3D::SceneNode" name="Castor3D::SceneNode">
-<area shape="rect" id="node1" title="The scene node handler class." alt="" coords="293,60,444,87"/>
-<area shape="rect" id="node3" title=" " alt="" coords="589,47,759,89"/>
-<area shape="rect" id="node6" href="$df/d5a/a01681.html" title="Movable object class." alt="" coords="589,133,759,160"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,53,179,94"/>
-<area shape="rect" id="node4" href="$df/db2/a01981.html" title="Scene handler class." alt="" coords="31,135,153,161"/>
-<area shape="rect" id="node5" title=" " alt="" coords="864,19,1033,61"/>
-<area shape="rect" id="node7" href="$d0/d28/a00997.html" title="Animable public interface." alt="" coords="299,211,438,237"/>
+<map id="Castor3D::Material" name="Castor3D::Material">
+<area shape="rect" id="node1" title="Definition of a material." alt="" coords="247,64,377,91"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,199,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="26,57,178,98"/>
+<area shape="rect" id="node4" title=" " alt="" coords="8,123,196,149"/>
 </map>

@@ -1,4 +1,4 @@
-<map id="Castor3D::DividerPlugin" name="Castor3D::DividerPlugin">
-<area shape="rect" id="node1" title="Divider Plugin class." alt="" coords="5,80,164,107"/>
-<area shape="rect" id="node2" href="$d4/dd1/a01797.html" title="Plugin Base class." alt="" coords="9,5,160,32"/>
+<map id="Castor3D::ChunkFiller&lt; Castor::Matrix2x2d &gt;" name="Castor3D::ChunkFiller&lt; Castor::Matrix2x2d &gt;">
+<area shape="rect" id="node1" title="ChunkFiller specialisation for Castor::Matrix2x2d." alt="" coords="17,80,173,121"/>
+<area shape="rect" id="node2" href="$d3/dea/a01377.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
 </map>

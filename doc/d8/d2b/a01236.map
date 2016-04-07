@@ -1,4 +1,6 @@
-<map id="Castor3D::ChunkFiller&lt; Castor::Coords4i &gt;" name="Castor3D::ChunkFiller&lt; Castor::Coords4i &gt;">
-<area shape="rect" id="node1" title="Chunk filler." alt="" coords="20,80,169,121"/>
-<area shape="rect" id="node2" href="$de/df6/a01141.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
+<map id="Castor3D::CameraManager" name="Castor3D::CameraManager">
+<area shape="rect" id="node1" title="Camera manager." alt="" coords="39,273,218,300"/>
+<area shape="rect" id="node2" href="$d4/dbb/a02097.html" title=" " alt="" coords="39,184,218,225"/>
+<area shape="rect" id="node3" href="$d8/d24/a02001.html" title=" " alt="" coords="5,80,252,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="36,5,221,32"/>
 </map>

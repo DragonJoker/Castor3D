@@ -1,0 +1,5 @@
+<map id="Castor3D::Vertex::GetTangent" name="Castor3D::Vertex::GetTangent">
+<area shape="rect" id="node1" title="Retrieves the group tangent." alt="" coords="5,31,203,57"/>
+<area shape="rect" id="node2" href="$d2/d80/a02645.html#af71e6bc3f48435122423e6a59fd55b79" title="Retrieves the vertex tangent." alt="" coords="251,5,448,32"/>
+<area shape="rect" id="node3" href="$d5/d54/a01213.html#a5bb436e893d310f65b464bd746fff5d7" title="Retrieves a pointer on the data buffer." alt="" coords="496,31,719,57"/>
+</map>

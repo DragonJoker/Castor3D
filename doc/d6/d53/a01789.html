@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::IPipelineImpl Class Reference</title>
+<title>Castor3D: Castor3D::FrameEvent Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,166 +39,158 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d6/d53/a01789.html">IPipelineImpl</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d6/d53/a01789.html">FrameEvent</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pro-types">Protected Types</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../db/d4b/a01786.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::IPipelineImpl Class Reference</div>  </div>
+<div class="title">Castor3D::FrameEvent Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>The interface which represents a frame event.  
+ <a href="../../d6/d53/a01789.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::IPipelineImpl:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::FrameEvent:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../de/dc3/a01787.png" border="0" usemap="#Castor3D_1_1IPipelineImpl_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1IPipelineImpl_coll__map" id="Castor3D_1_1IPipelineImpl_coll__map">
-<area shape="rect"  title=" " alt="" coords="5,13,163,39"/>
-<area shape="rect"  href="../../d7/d10/a01785.html" title="Implementation of the rendering pipeline." alt="" coords="176,153,307,180"/>
-<area shape="rect"  href="../../d6/d56/a01861.html" title="The render system representation." alt="" coords="223,243,393,269"/>
-<area shape="rect"  title=" " alt="" coords="371,153,538,180"/>
-<area shape="rect"  title=" " alt="" coords="214,13,375,39"/>
-<area shape="rect"  title=" " alt="" coords="400,5,587,47"/>
+<div class="center"><img src="../../d4/d77/a01788.png" border="0" usemap="#Castor3D_1_1FrameEvent_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1FrameEvent_inherit__map" id="Castor3D_1_1FrameEvent_inherit__map">
+<area shape="rect"  title="The interface which represents a frame event." alt="" coords="5,123,159,149"/>
+<area shape="rect"  href="../../df/d5a/a01681.html" title="Cleaner event." alt="" coords="211,5,405,32"/>
+<area shape="rect"  href="../../d4/d29/a01817.html" title="Functor event." alt="" coords="228,57,388,98"/>
+<area shape="rect"  href="../../dd/d80/a01893.html" title="Initialiser event." alt="" coords="211,123,405,149"/>
+<area shape="rect"  href="../../dd/d75/a02377.html" title="Event used to resize a RenderWindow before rendering it." alt="" coords="207,173,409,200"/>
+<area shape="rect"  href="../../de/dd4/a02541.html" title="Threaded Subdivision Frame event." alt="" coords="215,225,401,266"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a58e007f4e607c4bfe4fd12cf5de317e9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a58e007f4e607c4bfe4fd12cf5de317e9">IPipelineImpl</a> (<a class="el" href="../../d7/d10/a01785.html">Pipeline</a> *p_pPipeline)</td></tr>
-<tr class="separator:a58e007f4e607c4bfe4fd12cf5de317e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a988a28f4bbe899d87182835cf181d6bb"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a988a28f4bbe899d87182835cf181d6bb">~IPipelineImpl</a> ()</td></tr>
-<tr class="separator:a988a28f4bbe899d87182835cf181d6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a62c9bd58c27bd2fd411b57861775a01c"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a62c9bd58c27bd2fd411b57861775a01c">Initialise</a> ()</td></tr>
-<tr class="separator:a62c9bd58c27bd2fd411b57861775a01c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45b4dd4e7b05a06caccacbb194847e38"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="../../dd/d47/a00445.html#a31ea9ce98e15cff2ef05ea3b013989c8">eMTXMODE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a45b4dd4e7b05a06caccacbb194847e38">MatrixMode</a> (<a class="el" href="../../dd/d47/a00445.html#a31ea9ce98e15cff2ef05ea3b013989c8">eMTXMODE</a> p_eMode)</td></tr>
-<tr class="separator:a45b4dd4e7b05a06caccacbb194847e38"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9aef851cddc55000e3c806fde9df89c3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a9aef851cddc55000e3c806fde9df89c3">LoadIdentity</a> ()</td></tr>
-<tr class="separator:a9aef851cddc55000e3c806fde9df89c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae20f4a5ee219469cf04e54996438059c"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ae20f4a5ee219469cf04e54996438059c">PushMatrix</a> ()</td></tr>
-<tr class="separator:ae20f4a5ee219469cf04e54996438059c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a652a0aeac0d4fd94f43d449f047c79f0"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a652a0aeac0d4fd94f43d449f047c79f0">PopMatrix</a> ()</td></tr>
-<tr class="separator:a652a0aeac0d4fd94f43d449f047c79f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a73d8fa6e1b299feff0b1a47b9d0cd23d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a73d8fa6e1b299feff0b1a47b9d0cd23d">Translate</a> (Castor::Point3r const &amp;p_translate)</td></tr>
-<tr class="separator:a73d8fa6e1b299feff0b1a47b9d0cd23d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a080ec74223914eaeac3a2e2b5f8ad995"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a080ec74223914eaeac3a2e2b5f8ad995">Rotate</a> (Castor::Quaternion const &amp;p_rotate)</td></tr>
-<tr class="separator:a080ec74223914eaeac3a2e2b5f8ad995"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb63659c66b1eb89c07ba8c6f35d0960"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#acb63659c66b1eb89c07ba8c6f35d0960">Scale</a> (Castor::Point3r const &amp;p_scale)</td></tr>
-<tr class="separator:acb63659c66b1eb89c07ba8c6f35d0960"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae5b3c22ce63e603f80f980f54d6b3906"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ae5b3c22ce63e603f80f980f54d6b3906">MultMatrix</a> (Castor::Matrix4x4r const &amp;p_matrix)</td></tr>
-<tr class="separator:ae5b3c22ce63e603f80f980f54d6b3906"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae70375fa7e3a6d075a75757a5da47642"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ae70375fa7e3a6d075a75757a5da47642">MultMatrix</a> (real const *p_matrix)</td></tr>
-<tr class="separator:ae70375fa7e3a6d075a75757a5da47642"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a64b40b2815a723bf9a89b9d3d65acaa5"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a64b40b2815a723bf9a89b9d3d65acaa5">Perspective</a> (Castor::Angle const &amp;p_aFOVY, real p_rRatio, real p_rNear, real p_rFar)</td></tr>
-<tr class="separator:a64b40b2815a723bf9a89b9d3d65acaa5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4928009492a854076f3350756752e75a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a4928009492a854076f3350756752e75a">Frustum</a> (real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar)</td></tr>
-<tr class="separator:a4928009492a854076f3350756752e75a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e49e1a1d9bb9eeb44cd6626dfcc8564"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a6e49e1a1d9bb9eeb44cd6626dfcc8564">Ortho</a> (real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar)</td></tr>
-<tr class="separator:a6e49e1a1d9bb9eeb44cd6626dfcc8564"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a94cd1928167ff2e8a65936e2137db70a"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a94cd1928167ff2e8a65936e2137db70a">Project</a> (Castor::Point3r const &amp;p_ptObj, Castor::Point4r const &amp;p_ptViewport, Castor::Point3r &amp;p_ptResult)</td></tr>
-<tr class="separator:a94cd1928167ff2e8a65936e2137db70a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7da6da38b852887afc181dca0dbc9692"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a7da6da38b852887afc181dca0dbc9692">UnProject</a> (Castor::Point3i const &amp;p_ptWin, Castor::Point4r const &amp;p_ptViewport, Castor::Point3r &amp;p_ptResult)</td></tr>
-<tr class="separator:a7da6da38b852887afc181dca0dbc9692"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1691e5942fb0f6ef610f662a8371d2b3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a1691e5942fb0f6ef610f662a8371d2b3">PickMatrix</a> (real x, real y, real width, real height, int viewport[4])</td></tr>
-<tr class="separator:a1691e5942fb0f6ef610f662a8371d2b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3b722bd6a3a01c08e112c07a345f67e6"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a3b722bd6a3a01c08e112c07a345f67e6">ApplyViewport</a> (int CU_PARAM_UNUSED(p_iWindowWidth), int CU_PARAM_UNUSED(p_iWindowHeight))</td></tr>
-<tr class="separator:a3b722bd6a3a01c08e112c07a345f67e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a96479109a82369a533c6459bb1eb3470"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a96479109a82369a533c6459bb1eb3470">ApplyMatrices</a> (<a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> &amp;CU_PARAM_UNUSED(p_program))</td></tr>
-<tr class="separator:a96479109a82369a533c6459bb1eb3470"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a16b821eea65c1f3572ca28b1272c1367"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../dd/d47/a00445.html#a31ea9ce98e15cff2ef05ea3b013989c8">eMTXMODE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a16b821eea65c1f3572ca28b1272c1367">GetCurrentMode</a> ()</td></tr>
-<tr class="separator:a16b821eea65c1f3572ca28b1272c1367"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaefb35da6a63abb10a5fde4fd754fcc7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d53/a01789.html#ab87c05457f046041a5b0acda6b7b2b3e">matrix4x4</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#aaefb35da6a63abb10a5fde4fd754fcc7">GetCurrentMatrix</a> ()</td></tr>
-<tr class="separator:aaefb35da6a63abb10a5fde4fd754fcc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab984f8451e6017683ddbb996c6df430c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d6/d53/a01789.html#ab87c05457f046041a5b0acda6b7b2b3e">matrix4x4</a> const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ab984f8451e6017683ddbb996c6df430c">GetCurrentMatrix</a> () const</td></tr>
-<tr class="separator:ab984f8451e6017683ddbb996c6df430c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
-Protected Types</h2></td></tr>
-<tr class="memitem:ab87c05457f046041a5b0acda6b7b2b3e"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="../../d7/d10/a01785.html#abca97ee89c3db043b7db0270635292cd">Pipeline::matrix4x4</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ab87c05457f046041a5b0acda6b7b2b3e">matrix4x4</a></td></tr>
-<tr class="separator:ab87c05457f046041a5b0acda6b7b2b3e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac52b7775213e1e542d1aeb758d0a8e0d"><td class="memItemLeft" align="right" valign="top">typedef <a class="el" href="../../d7/d10/a01785.html#a584b6fdb48dd6e5215ca9dd099df7205">Pipeline::matrix3x3</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ac52b7775213e1e542d1aeb758d0a8e0d">matrix3x3</a></td></tr>
-<tr class="separator:ac52b7775213e1e542d1aeb758d0a8e0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2b9594abe1b05d9d045bf4072a6a29ab"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a2b9594abe1b05d9d045bf4072a6a29ab">FrameEvent</a> (<a class="el" href="../../d7/d41/a00532.html#ab09e688c8a96c4633dc7c4eb0d952ff5">eEVENT_TYPE</a> p_type)</td></tr>
+<tr class="memdesc:a2b9594abe1b05d9d045bf4072a6a29ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a2b9594abe1b05d9d045bf4072a6a29ab">More...</a><br /></td></tr>
+<tr class="separator:a2b9594abe1b05d9d045bf4072a6a29ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4ba59b1eed5c20532a7308fa269b401"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ab4ba59b1eed5c20532a7308fa269b401">FrameEvent</a> (<a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> const &amp;p_object)</td></tr>
+<tr class="memdesc:ab4ba59b1eed5c20532a7308fa269b401"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy constructor.  <a href="#ab4ba59b1eed5c20532a7308fa269b401">More...</a><br /></td></tr>
+<tr class="separator:ab4ba59b1eed5c20532a7308fa269b401"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a197a015443474ac288f980df09b3c9bf"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a197a015443474ac288f980df09b3c9bf">FrameEvent</a> (<a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> &amp;&amp;p_object)</td></tr>
+<tr class="memdesc:a197a015443474ac288f980df09b3c9bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move constructor.  <a href="#a197a015443474ac288f980df09b3c9bf">More...</a><br /></td></tr>
+<tr class="separator:a197a015443474ac288f980df09b3c9bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae67bf1403be39ee2056608a5a692b102"><td class="memItemLeft" align="right" valign="top">C3D_API <a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#ae67bf1403be39ee2056608a5a692b102">operator=</a> (<a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> const &amp;p_object)</td></tr>
+<tr class="memdesc:ae67bf1403be39ee2056608a5a692b102"><td class="mdescLeft">&#160;</td><td class="mdescRight">Copy assignment operator.  <a href="#ae67bf1403be39ee2056608a5a692b102">More...</a><br /></td></tr>
+<tr class="separator:ae67bf1403be39ee2056608a5a692b102"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a320a3475c89b883b4366383722ecbd45"><td class="memItemLeft" align="right" valign="top">C3D_API <a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a320a3475c89b883b4366383722ecbd45">operator=</a> (<a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> &amp;&amp;p_object)</td></tr>
+<tr class="memdesc:a320a3475c89b883b4366383722ecbd45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Move assignment operator.  <a href="#a320a3475c89b883b4366383722ecbd45">More...</a><br /></td></tr>
+<tr class="separator:a320a3475c89b883b4366383722ecbd45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a77980d2c7270e534b94c8b742414d905"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a77980d2c7270e534b94c8b742414d905">~FrameEvent</a> ()</td></tr>
+<tr class="memdesc:a77980d2c7270e534b94c8b742414d905"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a77980d2c7270e534b94c8b742414d905">More...</a><br /></td></tr>
+<tr class="separator:a77980d2c7270e534b94c8b742414d905"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a229dc8adc43ec6f47715a5080b3f35b1"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a229dc8adc43ec6f47715a5080b3f35b1">Apply</a> ()=0</td></tr>
+<tr class="memdesc:a229dc8adc43ec6f47715a5080b3f35b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies the event.  <a href="#a229dc8adc43ec6f47715a5080b3f35b1">More...</a><br /></td></tr>
+<tr class="separator:a229dc8adc43ec6f47715a5080b3f35b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37e3631c9c3eafd03aae69e7f5556200"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#ab09e688c8a96c4633dc7c4eb0d952ff5">eEVENT_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a37e3631c9c3eafd03aae69e7f5556200">GetType</a> ()</td></tr>
+<tr class="memdesc:a37e3631c9c3eafd03aae69e7f5556200"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the event type.  <a href="#a37e3631c9c3eafd03aae69e7f5556200">More...</a><br /></td></tr>
+<tr class="separator:a37e3631c9c3eafd03aae69e7f5556200"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:a0a11622fa5235e86ba1b054fd95f206e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d10/a01785.html">Pipeline</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a0a11622fa5235e86ba1b054fd95f206e">m_pPipeline</a></td></tr>
-<tr class="separator:a0a11622fa5235e86ba1b054fd95f206e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8a6e8b76d7171784861718488ac06d94"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#ab09e688c8a96c4633dc7c4eb0d952ff5">eEVENT_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d6/d53/a01789.html#a8a6e8b76d7171784861718488ac06d94">m_type</a></td></tr>
+<tr class="memdesc:a8a6e8b76d7171784861718488ac06d94"><td class="mdescLeft">&#160;</td><td class="mdescRight">The event type.  <a href="#a8a6e8b76d7171784861718488ac06d94">More...</a><br /></td></tr>
+<tr class="separator:a8a6e8b76d7171784861718488ac06d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>21/02/2012</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd></dd></dl>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="ac52b7775213e1e542d1aeb758d0a8e0d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac52b7775213e1e542d1aeb758d0a8e0d">&#9670;&nbsp;</a></span>matrix3x3</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="../../d7/d10/a01785.html#a584b6fdb48dd6e5215ca9dd099df7205">Pipeline::matrix3x3</a> <a class="el" href="../../d6/d53/a01789.html#ac52b7775213e1e542d1aeb758d0a8e0d">Castor3D::IPipelineImpl::matrix3x3</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab87c05457f046041a5b0acda6b7b2b3e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab87c05457f046041a5b0acda6b7b2b3e">&#9670;&nbsp;</a></span>matrix4x4</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef <a class="el" href="../../d7/d10/a01785.html#abca97ee89c3db043b7db0270635292cd">Pipeline::matrix4x4</a> <a class="el" href="../../d6/d53/a01789.html#ab87c05457f046041a5b0acda6b7b2b3e">Castor3D::IPipelineImpl::matrix4x4</a></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a58e007f4e607c4bfe4fd12cf5de317e9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a58e007f4e607c4bfe4fd12cf5de317e9">&#9670;&nbsp;</a></span>IPipelineImpl()</h2>
+<div class="textblock"><p>The interface which represents a frame event. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>03/03/2010 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.1</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Basically a frame event has a eEVENT_TYPE to know when it must be applied. <br />
+It can be applied, so the function must be implemented by children classes </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2b9594abe1b05d9d045bf4072a6a29ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b9594abe1b05d9d045bf4072a6a29ab">&#9670;&nbsp;</a></span>FrameEvent() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">Castor3D::IPipelineImpl::IPipelineImpl </td>
+          <td class="memname">C3D_API Castor3D::FrameEvent::FrameEvent </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d10/a01785.html">Pipeline</a> *&#160;</td>
-          <td class="paramname"><em>p_pPipeline</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#ab09e688c8a96c4633dc7c4eb0d952ff5">eEVENT_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td>The event type </td></tr>
+  </table>
+  </dd>
+</dl>
+
 </div>
 </div>
-<a id="a988a28f4bbe899d87182835cf181d6bb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a988a28f4bbe899d87182835cf181d6bb">&#9670;&nbsp;</a></span>~IPipelineImpl()</h2>
+<a id="ab4ba59b1eed5c20532a7308fa269b401"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4ba59b1eed5c20532a7308fa269b401">&#9670;&nbsp;</a></span>FrameEvent() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::FrameEvent::FrameEvent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> const &amp;&#160;</td>
+          <td class="paramname"><em>p_object</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Copy constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_object</td><td>The object to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a197a015443474ac288f980df09b3c9bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a197a015443474ac288f980df09b3c9bf">&#9670;&nbsp;</a></span>FrameEvent() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API Castor3D::FrameEvent::FrameEvent </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>p_object</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Move constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_object</td><td>The object to move </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a77980d2c7270e534b94c8b742414d905"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a77980d2c7270e534b94c8b742414d905">&#9670;&nbsp;</a></span>~FrameEvent()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -207,7 +199,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual Castor3D::IPipelineImpl::~IPipelineImpl </td>
+          <td class="memname">virtual C3D_API Castor3D::FrameEvent::~FrameEvent </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -219,12 +211,14 @@ Protected Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Destructor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a96479109a82369a533c6459bb1eb3470"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a96479109a82369a533c6459bb1eb3470">&#9670;&nbsp;</a></span>ApplyMatrices()</h2>
+<a id="a229dc8adc43ec6f47715a5080b3f35b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a229dc8adc43ec6f47715a5080b3f35b1">&#9670;&nbsp;</a></span>Apply()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -233,24 +227,29 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Castor3D::IPipelineImpl::ApplyMatrices </td>
+          <td class="memname">virtual C3D_API bool Castor3D::FrameEvent::Apply </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../d7/d13/a02045.html">ShaderProgramBase</a> &amp;&#160;</td>
-          <td class="paramname"><em>CU_PARAM_UNUSED</em>p_program</td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
+<p>Applies the event. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Must be implemented by children classes </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the event was applied successfully </dd></dl>
+
+<p>Implemented in <a class="el" href="../../dd/d80/a01893.html#a354bdaec59eb551c9442fbc6e3a0bb12">Castor3D::InitialiseEvent&lt; T &gt;</a>, <a class="el" href="../../df/d5a/a01681.html#ac2e6d0ecd17c8df55574030c478d6a26">Castor3D::CleanupEvent&lt; T &gt;</a>, <a class="el" href="../../d4/d29/a01817.html#a40ac8f254bb06f9dfc2f552ed7cc7143">Castor3D::FunctorEvent&lt; Functor &gt;</a>, <a class="el" href="../../dd/d75/a02377.html#aedd8be52037e590ba0c880ce4ab0e9a5">Castor3D::ResizeWindowEvent</a>, and <a class="el" href="../../de/dd4/a02541.html#a00ab093ee36972492f2ad2f1e2bbe72d">Castor3D::SubdivisionFrameEvent</a>.</p>
+
 </div>
 </div>
-<a id="a3b722bd6a3a01c08e112c07a345f67e6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3b722bd6a3a01c08e112c07a345f67e6">&#9670;&nbsp;</a></span>ApplyViewport()</h2>
+<a id="a37e3631c9c3eafd03aae69e7f5556200"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a37e3631c9c3eafd03aae69e7f5556200">&#9670;&nbsp;</a></span>GetType()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -259,103 +258,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual void Castor3D::IPipelineImpl::ApplyViewport </td>
-          <td>(</td>
-          <td class="paramtype">int &#160;</td>
-          <td class="paramname"><em>CU_PARAM_UNUSED</em>p_iWindowWidth, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int &#160;</td>
-          <td class="paramname"><em>CU_PARAM_UNUSED</em>p_iWindowHeight&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4928009492a854076f3350756752e75a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4928009492a854076f3350756752e75a">&#9670;&nbsp;</a></span>Frustum()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::Frustum </td>
-          <td>(</td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rLeft</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rRight</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rBottom</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rTop</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rNear</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rFar</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aaefb35da6a63abb10a5fde4fd754fcc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaefb35da6a63abb10a5fde4fd754fcc7">&#9670;&nbsp;</a></span>GetCurrentMatrix() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="../../d6/d53/a01789.html#ab87c05457f046041a5b0acda6b7b2b3e">matrix4x4</a>&amp; Castor3D::IPipelineImpl::GetCurrentMatrix </td>
+          <td class="memname"><a class="el" href="../../d7/d41/a00532.html#ab09e688c8a96c4633dc7c4eb0d952ff5">eEVENT_TYPE</a> Castor3D::FrameEvent::GetType </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -368,563 +271,70 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Retrieves the event type. </p>
+<dl class="section return"><dt>Returns</dt><dd>The event type </dd></dl>
+
+<p class="reference">References <a class="el" href="../../d6/d53/a01789.html#a8a6e8b76d7171784861718488ac06d94">m_type</a>.</p>
+
 </div>
 </div>
-<a id="ab984f8451e6017683ddbb996c6df430c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab984f8451e6017683ddbb996c6df430c">&#9670;&nbsp;</a></span>GetCurrentMatrix() <span class="overload">[2/2]</span></h2>
+<a id="ae67bf1403be39ee2056608a5a692b102"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae67bf1403be39ee2056608a5a692b102">&#9670;&nbsp;</a></span>operator=() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d6/d53/a01789.html#ab87c05457f046041a5b0acda6b7b2b3e">matrix4x4</a> const&amp; Castor3D::IPipelineImpl::GetCurrentMatrix </td>
+          <td class="memname">C3D_API <a class="el" href="../../d6/d53/a01789.html">FrameEvent</a>&amp; Castor3D::FrameEvent::operator= </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype"><a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> const &amp;&#160;</td>
+          <td class="paramname"><em>p_object</em></td><td>)</td>
+          <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
+
+<p>Copy assignment operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_object</td><td>The object to copy </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference to this object </dd></dl>
 
 </div>
 </div>
-<a id="a16b821eea65c1f3572ca28b1272c1367"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a16b821eea65c1f3572ca28b1272c1367">&#9670;&nbsp;</a></span>GetCurrentMode()</h2>
+<a id="a320a3475c89b883b4366383722ecbd45"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a320a3475c89b883b4366383722ecbd45">&#9670;&nbsp;</a></span>operator=() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../dd/d47/a00445.html#a31ea9ce98e15cff2ef05ea3b013989c8">eMTXMODE</a> Castor3D::IPipelineImpl::GetCurrentMode </td>
+          <td class="memname">C3D_API <a class="el" href="../../d6/d53/a01789.html">FrameEvent</a>&amp; Castor3D::FrameEvent::operator= </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../d6/d53/a01789.html">FrameEvent</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>p_object</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
 </div><div class="memdoc">
 
-</div>
-</div>
-<a id="a62c9bd58c27bd2fd411b57861775a01c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a62c9bd58c27bd2fd411b57861775a01c">&#9670;&nbsp;</a></span>Initialise()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual void Castor3D::IPipelineImpl::Initialise </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a9aef851cddc55000e3c806fde9df89c3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9aef851cddc55000e3c806fde9df89c3">&#9670;&nbsp;</a></span>LoadIdentity()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::LoadIdentity </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a45b4dd4e7b05a06caccacbb194847e38"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45b4dd4e7b05a06caccacbb194847e38">&#9670;&nbsp;</a></span>MatrixMode()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual <a class="el" href="../../dd/d47/a00445.html#a31ea9ce98e15cff2ef05ea3b013989c8">eMTXMODE</a> Castor3D::IPipelineImpl::MatrixMode </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../dd/d47/a00445.html#a31ea9ce98e15cff2ef05ea3b013989c8">eMTXMODE</a>&#160;</td>
-          <td class="paramname"><em>p_eMode</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae5b3c22ce63e603f80f980f54d6b3906"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae5b3c22ce63e603f80f980f54d6b3906">&#9670;&nbsp;</a></span>MultMatrix() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::MultMatrix </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Matrix4x4r const &amp;&#160;</td>
-          <td class="paramname"><em>p_matrix</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae70375fa7e3a6d075a75757a5da47642"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae70375fa7e3a6d075a75757a5da47642">&#9670;&nbsp;</a></span>MultMatrix() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::MultMatrix </td>
-          <td>(</td>
-          <td class="paramtype">real const *&#160;</td>
-          <td class="paramname"><em>p_matrix</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6e49e1a1d9bb9eeb44cd6626dfcc8564"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6e49e1a1d9bb9eeb44cd6626dfcc8564">&#9670;&nbsp;</a></span>Ortho()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::Ortho </td>
-          <td>(</td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rLeft</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rRight</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rBottom</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rTop</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rNear</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rFar</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a64b40b2815a723bf9a89b9d3d65acaa5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64b40b2815a723bf9a89b9d3d65acaa5">&#9670;&nbsp;</a></span>Perspective()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::Perspective </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Angle const &amp;&#160;</td>
-          <td class="paramname"><em>p_aFOVY</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rRatio</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rNear</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>p_rFar</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1691e5942fb0f6ef610f662a8371d2b3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1691e5942fb0f6ef610f662a8371d2b3">&#9670;&nbsp;</a></span>PickMatrix()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::PickMatrix </td>
-          <td>(</td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>x</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>y</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>width</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">real&#160;</td>
-          <td class="paramname"><em>height</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>viewport</em>[4]&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a652a0aeac0d4fd94f43d449f047c79f0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a652a0aeac0d4fd94f43d449f047c79f0">&#9670;&nbsp;</a></span>PopMatrix()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::PopMatrix </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a94cd1928167ff2e8a65936e2137db70a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a94cd1928167ff2e8a65936e2137db70a">&#9670;&nbsp;</a></span>Project()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::Project </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Point3r const &amp;&#160;</td>
-          <td class="paramname"><em>p_ptObj</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Castor::Point4r const &amp;&#160;</td>
-          <td class="paramname"><em>p_ptViewport</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Castor::Point3r &amp;&#160;</td>
-          <td class="paramname"><em>p_ptResult</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae20f4a5ee219469cf04e54996438059c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae20f4a5ee219469cf04e54996438059c">&#9670;&nbsp;</a></span>PushMatrix()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::PushMatrix </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a080ec74223914eaeac3a2e2b5f8ad995"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a080ec74223914eaeac3a2e2b5f8ad995">&#9670;&nbsp;</a></span>Rotate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::Rotate </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Quaternion const &amp;&#160;</td>
-          <td class="paramname"><em>p_rotate</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acb63659c66b1eb89c07ba8c6f35d0960"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acb63659c66b1eb89c07ba8c6f35d0960">&#9670;&nbsp;</a></span>Scale()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::Scale </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Point3r const &amp;&#160;</td>
-          <td class="paramname"><em>p_scale</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a73d8fa6e1b299feff0b1a47b9d0cd23d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a73d8fa6e1b299feff0b1a47b9d0cd23d">&#9670;&nbsp;</a></span>Translate()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::Translate </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Point3r const &amp;&#160;</td>
-          <td class="paramname"><em>p_translate</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7da6da38b852887afc181dca0dbc9692"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7da6da38b852887afc181dca0dbc9692">&#9670;&nbsp;</a></span>UnProject()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">virtual bool Castor3D::IPipelineImpl::UnProject </td>
-          <td>(</td>
-          <td class="paramtype">Castor::Point3i const &amp;&#160;</td>
-          <td class="paramname"><em>p_ptWin</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Castor::Point4r const &amp;&#160;</td>
-          <td class="paramname"><em>p_ptViewport</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">Castor::Point3r &amp;&#160;</td>
-          <td class="paramname"><em>p_ptResult</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
+<p>Move assignment operator. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_object</td><td>The object to move </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A reference to this object </dd></dl>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a0a11622fa5235e86ba1b054fd95f206e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a11622fa5235e86ba1b054fd95f206e">&#9670;&nbsp;</a></span>m_pPipeline</h2>
+<a id="a8a6e8b76d7171784861718488ac06d94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8a6e8b76d7171784861718488ac06d94">&#9670;&nbsp;</a></span>m_type</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -933,7 +343,7 @@ Protected Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../d7/d10/a01785.html">Pipeline</a>* Castor3D::IPipelineImpl::m_pPipeline</td>
+          <td class="memname"><a class="el" href="../../d7/d41/a00532.html#ab09e688c8a96c4633dc7c4eb0d952ff5">eEVENT_TYPE</a> Castor3D::FrameEvent::m_type</td>
         </tr>
       </table>
   </td>
@@ -943,15 +353,19 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>The event type. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d6/d53/a01789.html#a37e3631c9c3eafd03aae69e7f5556200">GetType()</a>.</p>
+
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d9/d39/a00257.html">Pipeline.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d7/d3f/a00173.html">FrameEvent.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:02 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:35 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

@@ -1,4 +1,4 @@
-<map id="Castor3D::Viewport::BinaryParser" name="Castor3D::Viewport::BinaryParser">
-<area shape="rect" id="node1" title="Viewport loader." alt="" coords="17,95,152,136"/>
-<area shape="rect" id="node2" href="$d2/d41/a01037.html" title=" " alt="" coords="5,5,164,47"/>
+<map id="Castor3D::PluginBase" name="Castor3D::PluginBase">
+<area shape="rect" id="node1" title="Plugin Base class." alt="" coords="24,80,175,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,193,32"/>
 </map>

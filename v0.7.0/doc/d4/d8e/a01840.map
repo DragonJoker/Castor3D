@@ -1,0 +1,5 @@
+<map id="Castor3D::RenderBuffer" name="Castor3D::RenderBuffer">
+<area shape="rect" id="node1" title="Render buffer base class." alt="" coords="134,5,293,32"/>
+<area shape="rect" id="node2" href="$d2/d95/a01449.html" title="Render buffer receiving colour component." alt="" coords="5,87,200,114"/>
+<area shape="rect" id="node3" href="$de/d13/a01473.html" title="Render buffer receiving depth and/or stencil component." alt="" coords="225,80,423,121"/>
+</map>

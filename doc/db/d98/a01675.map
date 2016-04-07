@@ -1,4 +1,4 @@
-<map id="Castor3D::MeshFactory" name="Castor3D::MeshFactory">
-<area shape="rect" id="node1" title="The mesh factory." alt="" coords="31,95,191,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,217,47"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Quaternion &gt;" name="Castor3D::ChunkParser&lt; Castor::Quaternion &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Quaternion." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::ChunkParser&lt; Castor::Coords2f &gt; Struct Template Reference</title>
+<title>Castor3D: Castor3D::CpuBuffer&lt; T &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,81 +39,631 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../df/d10/a01357.html">ChunkParser&lt; Castor::Coords2f &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../df/d10/a01357.html">CpuBuffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-types">Protected Types</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d7/dc4/a01354.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::ChunkParser&lt; Castor::Coords2f &gt; Struct Template Reference</div>  </div>
+<div class="title">Castor3D::CpuBuffer&lt; T &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Chunk parser.  
+<p>3D Buffer management class  
  <a href="../../df/d10/a01357.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::ChunkParser&lt; Castor::Coords2f &gt;:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::CpuBuffer&lt; T &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d2/d3f/a01356.png" border="0" usemap="#Castor3D_1_1ChunkParser_3_01Castor_1_1Coords2f_01_4_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1ChunkParser_3_01Castor_1_1Coords2f_01_4_inherit__map" id="Castor3D_1_1ChunkParser_3_01Castor_1_1Coords2f_01_4_inherit__map">
-<area shape="rect"  title="Chunk parser." alt="" coords="21,80,179,121"/>
-<area shape="rect"  href="../../dc/dd5/a01293.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
+<div class="center"><img src="../../d2/d3f/a01356.png" border="0" usemap="#Castor3D_1_1CpuBuffer_3_01T_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1CpuBuffer_3_01T_01_4_inherit__map" id="Castor3D_1_1CpuBuffer_3_01T_01_4_inherit__map">
+<area shape="rect"  title="3D Buffer management class" alt="" coords="14,80,185,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,193,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::ChunkParser&lt; Castor::Coords2f &gt;:</div>
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::CpuBuffer&lt; T &gt;:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d8/d4e/a01355.png" border="0" usemap="#Castor3D_1_1ChunkParser_3_01Castor_1_1Coords2f_01_4_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1ChunkParser_3_01Castor_1_1Coords2f_01_4_coll__map" id="Castor3D_1_1ChunkParser_3_01Castor_1_1Coords2f_01_4_coll__map">
-<area shape="rect"  title="Chunk parser." alt="" coords="21,80,179,121"/>
-<area shape="rect"  href="../../dc/dd5/a01293.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
+<div class="center"><img src="../../d8/d4e/a01355.png" border="0" usemap="#Castor3D_1_1CpuBuffer_3_01T_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1CpuBuffer_3_01T_01_4_coll__map" id="Castor3D_1_1CpuBuffer_3_01T_01_4_coll__map">
+<area shape="rect"  title="3D Buffer management class" alt="" coords="118,109,289,136"/>
+<area shape="rect"  title=" " alt="" coords="5,13,193,39"/>
+<area shape="rect"  title=" " alt="" coords="218,5,397,47"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa013cd1b49c1a22c153c252a871bba40"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#aa013cd1b49c1a22c153c252a871bba40">operator()</a> (Castor::Coords2f &amp;p_value, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk)</td></tr>
-<tr class="separator:aa013cd1b49c1a22c153c252a871bba40"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pub_methods_a01293"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a01293')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../dc/dd5/a01293.html">Castor3D::ChunkParserBase</a></td></tr>
-<tr class="memitem:a16366550ba054e571ecea89055b3a6b9 inherit pub_methods_a01293"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dc/dd5/a01293.html#a16366550ba054e571ecea89055b3a6b9">operator()</a> (uint8_t *p_pValues, uint32_t p_uiSize, <a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;p_chunk)</td></tr>
-<tr class="memdesc:a16366550ba054e571ecea89055b3a6b9 inherit pub_methods_a01293"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves a value array from a chunk.  <a href="../../dc/dd5/a01293.html#a16366550ba054e571ecea89055b3a6b9">More...</a><br /></td></tr>
-<tr class="separator:a16366550ba054e571ecea89055b3a6b9 inherit pub_methods_a01293"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3aba9975c6d7382201a0f7b660939c4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#ac3aba9975c6d7382201a0f7b660939c4">Destroy</a> ()</td></tr>
+<tr class="memdesc:ac3aba9975c6d7382201a0f7b660939c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destruction function.  <a href="#ac3aba9975c6d7382201a0f7b660939c4">More...</a><br /></td></tr>
+<tr class="separator:ac3aba9975c6d7382201a0f7b660939c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb4181074710fb17f4de5871c6ed7dd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#aeb4181074710fb17f4de5871c6ed7dd3">Cleanup</a> ()</td></tr>
+<tr class="memdesc:aeb4181074710fb17f4de5871c6ed7dd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup function.  <a href="#aeb4181074710fb17f4de5871c6ed7dd3">More...</a><br /></td></tr>
+<tr class="separator:aeb4181074710fb17f4de5871c6ed7dd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f1459f57c3955e5a8a6d4e4df9b7240"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a0f1459f57c3955e5a8a6d4e4df9b7240">Initialise</a> (<a class="el" href="../../d7/d41/a00532.html#a82ff980a069e1810c55e5c4abff6e8fb">eBUFFER_ACCESS_TYPE</a> p_type, <a class="el" href="../../d7/d41/a00532.html#a7a17faf6912fb22086bbc33635c7b13c">eBUFFER_ACCESS_NATURE</a> p_nature)</td></tr>
+<tr class="memdesc:a0f1459f57c3955e5a8a6d4e4df9b7240"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialisation function, initialises GPU buffer.  <a href="#a0f1459f57c3955e5a8a6d4e4df9b7240">More...</a><br /></td></tr>
+<tr class="separator:a0f1459f57c3955e5a8a6d4e4df9b7240"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3015080e4dd298edea564c54c0bf6db"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#ac3015080e4dd298edea564c54c0bf6db">Lock</a> (uint32_t p_offset, uint32_t p_count, uint32_t p_flags)</td></tr>
+<tr class="memdesc:ac3015080e4dd298edea564c54c0bf6db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locks the buffer, id est maps it into memory so we can modify it.  <a href="#ac3015080e4dd298edea564c54c0bf6db">More...</a><br /></td></tr>
+<tr class="separator:ac3015080e4dd298edea564c54c0bf6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a951bdd33f9ccb710c475774d81e0819b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a951bdd33f9ccb710c475774d81e0819b">Unlock</a> ()</td></tr>
+<tr class="memdesc:a951bdd33f9ccb710c475774d81e0819b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlocks the buffer, id est unmaps it from memory so no modification can be made after that.  <a href="#a951bdd33f9ccb710c475774d81e0819b">More...</a><br /></td></tr>
+<tr class="separator:a951bdd33f9ccb710c475774d81e0819b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1500d5b50dd96ff5f94b1af578e07433"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a1500d5b50dd96ff5f94b1af578e07433">Fill</a> (T const *p_buffer, ptrdiff_t p_size, <a class="el" href="../../d7/d41/a00532.html#a82ff980a069e1810c55e5c4abff6e8fb">Castor3D::eBUFFER_ACCESS_TYPE</a> p_type, <a class="el" href="../../d7/d41/a00532.html#a7a17faf6912fb22086bbc33635c7b13c">Castor3D::eBUFFER_ACCESS_NATURE</a> p_nature)</td></tr>
+<tr class="memdesc:a1500d5b50dd96ff5f94b1af578e07433"><td class="mdescLeft">&#160;</td><td class="mdescRight">Transmits data to the GPU buffer from RAM.  <a href="#a1500d5b50dd96ff5f94b1af578e07433">More...</a><br /></td></tr>
+<tr class="separator:a1500d5b50dd96ff5f94b1af578e07433"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae110e35cf9d056d849830db5588eda95"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#ae110e35cf9d056d849830db5588eda95">Bind</a> ()</td></tr>
+<tr class="memdesc:ae110e35cf9d056d849830db5588eda95"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activation function, to tell the GPU it is active.  <a href="#ae110e35cf9d056d849830db5588eda95">More...</a><br /></td></tr>
+<tr class="separator:ae110e35cf9d056d849830db5588eda95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a91e10b24516b48380e7b10de6aea7441"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a91e10b24516b48380e7b10de6aea7441">Unbind</a> ()</td></tr>
+<tr class="memdesc:a91e10b24516b48380e7b10de6aea7441"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deactivation function, to tell the GPU it is inactive.  <a href="#a91e10b24516b48380e7b10de6aea7441">More...</a><br /></td></tr>
+<tr class="separator:a91e10b24516b48380e7b10de6aea7441"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a669dbdc1f8d0c428a576b3a6c3ea161f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a669dbdc1f8d0c428a576b3a6c3ea161f">SetElement</a> (uint32_t p_index, T const &amp;p_value)</td></tr>
+<tr class="memdesc:a669dbdc1f8d0c428a576b3a6c3ea161f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets element value at given index.  <a href="#a669dbdc1f8d0c428a576b3a6c3ea161f">More...</a><br /></td></tr>
+<tr class="separator:a669dbdc1f8d0c428a576b3a6c3ea161f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adb2e5f03d17f996063c3cd50c2807683"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#adb2e5f03d17f996063c3cd50c2807683">AddElement</a> (T const &amp;p_value)</td></tr>
+<tr class="memdesc:adb2e5f03d17f996063c3cd50c2807683"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a value at the end of the buffer.  <a href="#adb2e5f03d17f996063c3cd50c2807683">More...</a><br /></td></tr>
+<tr class="separator:adb2e5f03d17f996063c3cd50c2807683"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a306fca2202364fef987c49f004957951"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a306fca2202364fef987c49f004957951">GetSize</a> () const</td></tr>
+<tr class="memdesc:a306fca2202364fef987c49f004957951"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the filled buffer size.  <a href="#a306fca2202364fef987c49f004957951">More...</a><br /></td></tr>
+<tr class="separator:a306fca2202364fef987c49f004957951"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0098946fad95f742a611d3b90ef0e1cf"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a0098946fad95f742a611d3b90ef0e1cf">GetCapacity</a> () const</td></tr>
+<tr class="memdesc:a0098946fad95f742a611d3b90ef0e1cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the allocated buffer size.  <a href="#a0098946fad95f742a611d3b90ef0e1cf">More...</a><br /></td></tr>
+<tr class="separator:a0098946fad95f742a611d3b90ef0e1cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a15ceaee981d76b8ebca27a266493fb7b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a15ceaee981d76b8ebca27a266493fb7b">Resize</a> (uint32_t p_uiNewSize)</td></tr>
+<tr class="memdesc:a15ceaee981d76b8ebca27a266493fb7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the allocated size of the buffer.  <a href="#a15ceaee981d76b8ebca27a266493fb7b">More...</a><br /></td></tr>
+<tr class="separator:a15ceaee981d76b8ebca27a266493fb7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aac875d49255a5975e7b19ba1557b0b7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#aac875d49255a5975e7b19ba1557b0b7f">Reserve</a> (uint32_t p_uiIncrement)</td></tr>
+<tr class="memdesc:aac875d49255a5975e7b19ba1557b0b7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Increases the allocated size of the buffer.  <a href="#aac875d49255a5975e7b19ba1557b0b7f">More...</a><br /></td></tr>
+<tr class="separator:aac875d49255a5975e7b19ba1557b0b7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6233d2a526855ce9502a5fe1dc30c412"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a6233d2a526855ce9502a5fe1dc30c412">Clear</a> ()</td></tr>
+<tr class="memdesc:a6233d2a526855ce9502a5fe1dc30c412"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears the buffer.  <a href="#a6233d2a526855ce9502a5fe1dc30c412">More...</a><br /></td></tr>
+<tr class="separator:a6233d2a526855ce9502a5fe1dc30c412"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80fcb01dd414ebb12bb8a95f4434635e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a80fcb01dd414ebb12bb8a95f4434635e">IsToDelete</a> () const</td></tr>
+<tr class="memdesc:a80fcb01dd414ebb12bb8a95f4434635e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the delete status of the buffer.  <a href="#a80fcb01dd414ebb12bb8a95f4434635e">More...</a><br /></td></tr>
+<tr class="separator:a80fcb01dd414ebb12bb8a95f4434635e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d3553da88b6b31d5d5ec70851064dea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a4d3553da88b6b31d5d5ec70851064dea">IsAssigned</a> () const</td></tr>
+<tr class="memdesc:a4d3553da88b6b31d5d5ec70851064dea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the assignment status of the buffer.  <a href="#a4d3553da88b6b31d5d5ec70851064dea">More...</a><br /></td></tr>
+<tr class="separator:a4d3553da88b6b31d5d5ec70851064dea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a66387a18f67f2b72842493678b695e64"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/d10/a01357.html#a30c39b5b8b92b42be539dc64049b685f">GpuBufferSPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a66387a18f67f2b72842493678b695e64">GetGpuBuffer</a> () const</td></tr>
+<tr class="memdesc:a66387a18f67f2b72842493678b695e64"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the GPU buffer.  <a href="#a66387a18f67f2b72842493678b695e64">More...</a><br /></td></tr>
+<tr class="separator:a66387a18f67f2b72842493678b695e64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8b578171236a4bd3730d156351bda3ba"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a8b578171236a4bd3730d156351bda3ba">Assign</a> ()</td></tr>
+<tr class="memdesc:a8b578171236a4bd3730d156351bda3ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the assignment status to <code>true</code>.  <a href="#a8b578171236a4bd3730d156351bda3ba">More...</a><br /></td></tr>
+<tr class="separator:a8b578171236a4bd3730d156351bda3ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdf9a0b8df98ab88e1ab24ab58d02380"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#acdf9a0b8df98ab88e1ab24ab58d02380">Unassign</a> ()</td></tr>
+<tr class="memdesc:acdf9a0b8df98ab88e1ab24ab58d02380"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the assignment status to <code>false</code>.  <a href="#acdf9a0b8df98ab88e1ab24ab58d02380">More...</a><br /></td></tr>
+<tr class="separator:acdf9a0b8df98ab88e1ab24ab58d02380"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f99c2bdc2a3bfdec60c01941d6a4e35"><td class="memItemLeft" align="right" valign="top">T const  *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a9f99c2bdc2a3bfdec60c01941d6a4e35">data</a> () const</td></tr>
+<tr class="memdesc:a9f99c2bdc2a3bfdec60c01941d6a4e35"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the data pointer.  <a href="#a9f99c2bdc2a3bfdec60c01941d6a4e35">More...</a><br /></td></tr>
+<tr class="separator:a9f99c2bdc2a3bfdec60c01941d6a4e35"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68c6a05adb9b1a2a7edf8f4c51af17b8"><td class="memItemLeft" align="right" valign="top">T *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a68c6a05adb9b1a2a7edf8f4c51af17b8">data</a> ()</td></tr>
+<tr class="memdesc:a68c6a05adb9b1a2a7edf8f4c51af17b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the data pointer.  <a href="#a68c6a05adb9b1a2a7edf8f4c51af17b8">More...</a><br /></td></tr>
+<tr class="separator:a68c6a05adb9b1a2a7edf8f4c51af17b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-types"></a>
+Protected Types</h2></td></tr>
+<tr class="memitem:a30c39b5b8b92b42be539dc64049b685f"><td class="memItemLeft" align="right" valign="top">typedef std::shared_ptr&lt; <a class="el" href="../../d2/d1f/a01361.html">GpuBuffer</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a30c39b5b8b92b42be539dc64049b685f">GpuBufferSPtr</a></td></tr>
+<tr class="separator:a30c39b5b8b92b42be539dc64049b685f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac0c258938b2e95d4c1030ad7b14346fc"><td class="memItemLeft" align="right" valign="top">typedef std::weak_ptr&lt; <a class="el" href="../../d2/d1f/a01361.html">GpuBuffer</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#ac0c258938b2e95d4c1030ad7b14346fc">GpuBufferWPtr</a></td></tr>
+<tr class="separator:ac0c258938b2e95d4c1030ad7b14346fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c77ba664e5c3730511a108569fadac3"><td class="memItemLeft" align="right" valign="top">typedef std::weak_ptr&lt; <a class="el" href="../../df/d10/a01357.html">CpuBuffer</a>&lt; T &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a0c77ba664e5c3730511a108569fadac3">CpuBufferWPtr</a></td></tr>
+<tr class="separator:a0c77ba664e5c3730511a108569fadac3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:ad9e6271e36d78e72b000d5f6d5233fe4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#ad9e6271e36d78e72b000d5f6d5233fe4">DECLARE_TPL_VECTOR</a> (T, T)</td></tr>
+<tr class="separator:ad9e6271e36d78e72b000d5f6d5233fe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a019e1635ebb29b220e0efef1c5c48ba8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a019e1635ebb29b220e0efef1c5c48ba8">CpuBuffer</a> (<a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;p_engine)</td></tr>
+<tr class="memdesc:a019e1635ebb29b220e0efef1c5c48ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a019e1635ebb29b220e0efef1c5c48ba8">More...</a><br /></td></tr>
+<tr class="separator:a019e1635ebb29b220e0efef1c5c48ba8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56e07d62f9e05a91e745b62bf6a2b4fa"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a56e07d62f9e05a91e745b62bf6a2b4fa">~CpuBuffer</a> ()</td></tr>
+<tr class="memdesc:a56e07d62f9e05a91e745b62bf6a2b4fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a56e07d62f9e05a91e745b62bf6a2b4fa">More...</a><br /></td></tr>
+<tr class="separator:a56e07d62f9e05a91e745b62bf6a2b4fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a9dd41775ea41d419b443a3f8c24f7dea"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a9dd41775ea41d419b443a3f8c24f7dea">m_bToDelete</a></td></tr>
+<tr class="memdesc:a9dd41775ea41d419b443a3f8c24f7dea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the buffer is to be deleted at next render loop.  <a href="#a9dd41775ea41d419b443a3f8c24f7dea">More...</a><br /></td></tr>
+<tr class="separator:a9dd41775ea41d419b443a3f8c24f7dea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6dd4c83d938f3ec144ab186699fe0db"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#ad6dd4c83d938f3ec144ab186699fe0db">m_bAssigned</a></td></tr>
+<tr class="memdesc:ad6dd4c83d938f3ec144ab186699fe0db"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tells the buffer has it's GPU buffer assigned.  <a href="#ad6dd4c83d938f3ec144ab186699fe0db">More...</a><br /></td></tr>
+<tr class="separator:ad6dd4c83d938f3ec144ab186699fe0db"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d8b4485a618858c0c1d9f1879d2307e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../df/d10/a01357.html#a30c39b5b8b92b42be539dc64049b685f">GpuBufferSPtr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a7d8b4485a618858c0c1d9f1879d2307e">m_pBuffer</a></td></tr>
+<tr class="memdesc:a7d8b4485a618858c0c1d9f1879d2307e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The GPU buffer.  <a href="#a7d8b4485a618858c0c1d9f1879d2307e">More...</a><br /></td></tr>
+<tr class="separator:a7d8b4485a618858c0c1d9f1879d2307e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95380fc99e1b08d39245a966256a1422"><td class="memItemLeft" align="right" valign="top">TArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a95380fc99e1b08d39245a966256a1422">m_arrayData</a></td></tr>
+<tr class="memdesc:a95380fc99e1b08d39245a966256a1422"><td class="mdescLeft">&#160;</td><td class="mdescRight">The buffer data.  <a href="#a95380fc99e1b08d39245a966256a1422">More...</a><br /></td></tr>
+<tr class="separator:a95380fc99e1b08d39245a966256a1422"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6cd1663aab9d50eab6e83c0ea11b6027"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../df/d10/a01357.html#a6cd1663aab9d50eab6e83c0ea11b6027">m_uiSavedSize</a></td></tr>
+<tr class="separator:a6cd1663aab9d50eab6e83c0ea11b6027"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><h3>template&lt;&gt;<br />
-struct Castor3D::ChunkParser&lt; Castor::Coords2f &gt;</h3>
+<div class="textblock"><h3>template&lt;typename T&gt;<br />
+class Castor3D::CpuBuffer&lt; T &gt;</h3>
 
-<p>Chunk parser. </p>
+<p>3D Buffer management class </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.7.0.0 </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>08/04/2014 </dd></dl>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="aa013cd1b49c1a22c153c252a871bba40"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa013cd1b49c1a22c153c252a871bba40">&#9670;&nbsp;</a></span>operator()()</h2>
+<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>09/02/2010</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>Class which holds the buffers used in 3D (texture, VBO ...) <br />
+Not to be used to manage usual buffers of data, use Castor::Buffer for that </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="a0c77ba664e5c3730511a108569fadac3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c77ba664e5c3730511a108569fadac3">&#9670;&nbsp;</a></span>CpuBufferWPtr</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool <a class="el" href="../../dc/d8c/a01297.html">Castor3D::ChunkParser</a>&lt; Castor::Coords2f &gt;::operator() </td>
+          <td class="memname">typedef std::weak_ptr&lt; <a class="el" href="../../df/d10/a01357.html">CpuBuffer</a>&lt; T &gt; &gt; <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::<a class="el" href="../../df/d10/a01357.html#a0c77ba664e5c3730511a108569fadac3">CpuBufferWPtr</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a30c39b5b8b92b42be539dc64049b685f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a30c39b5b8b92b42be539dc64049b685f">&#9670;&nbsp;</a></span>GpuBufferSPtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::shared_ptr&lt; <a class="el" href="../../d2/d1f/a01361.html">GpuBuffer</a>&lt; T &gt; &gt; <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::<a class="el" href="../../df/d10/a01357.html#a30c39b5b8b92b42be539dc64049b685f">GpuBufferSPtr</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac0c258938b2e95d4c1030ad7b14346fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0c258938b2e95d4c1030ad7b14346fc">&#9670;&nbsp;</a></span>GpuBufferWPtr</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::weak_ptr&lt; <a class="el" href="../../d2/d1f/a01361.html">GpuBuffer</a>&lt; T &gt; &gt; <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::<a class="el" href="../../df/d10/a01357.html#ac0c258938b2e95d4c1030ad7b14346fc">GpuBufferWPtr</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a019e1635ebb29b220e0efef1c5c48ba8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a019e1635ebb29b220e0efef1c5c48ba8">&#9670;&nbsp;</a></span>CpuBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::<a class="el" href="../../df/d10/a01357.html">CpuBuffer</a> </td>
           <td>(</td>
-          <td class="paramtype">Castor::Coords2f &amp;&#160;</td>
-          <td class="paramname"><em>p_value</em>, </td>
+          <td class="paramtype"><a class="el" href="../../d5/d77/a01749.html">Engine</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_engine</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_engine</td><td>The engine </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a56e07d62f9e05a91e745b62bf6a2b4fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56e07d62f9e05a91e745b62bf6a2b4fa">&#9670;&nbsp;</a></span>~CpuBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::~<a class="el" href="../../df/d10/a01357.html">CpuBuffer</a> </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destructor. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="adb2e5f03d17f996063c3cd50c2807683"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb2e5f03d17f996063c3cd50c2807683">&#9670;&nbsp;</a></span>AddElement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::AddElement </td>
+          <td>(</td>
+          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramname"><em>p_value</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Adds a value at the end of the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_value</td><td>The value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8b578171236a4bd3730d156351bda3ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8b578171236a4bd3730d156351bda3ba">&#9670;&nbsp;</a></span>Assign()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Assign </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the assignment status to <code>true</code>. </p>
+
+</div>
+</div>
+<a id="ae110e35cf9d056d849830db5588eda95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae110e35cf9d056d849830db5588eda95">&#9670;&nbsp;</a></span>Bind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Bind </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Activation function, to tell the GPU it is active. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful </dd></dl>
+
+</div>
+</div>
+<a id="aeb4181074710fb17f4de5871c6ed7dd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb4181074710fb17f4de5871c6ed7dd3">&#9670;&nbsp;</a></span>Cleanup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Cleanup </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Cleanup function. </p>
+
+</div>
+</div>
+<a id="a6233d2a526855ce9502a5fe1dc30c412"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6233d2a526855ce9502a5fe1dc30c412">&#9670;&nbsp;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Clear </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Clears the buffer. </p>
+
+</div>
+</div>
+<a id="a9f99c2bdc2a3bfdec60c01941d6a4e35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f99c2bdc2a3bfdec60c01941d6a4e35">&#9670;&nbsp;</a></span>data() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T const* <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the data pointer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The data pointer </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../da/de8/a02657.html#a457b6ab6fd00a328307072a044a40c0f">Castor3D::VertexBuffer::LinkCoords()</a>.</p>
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../df/d10/a01357_a9f99c2bdc2a3bfdec60c01941d6a4e35_icgraph.png" border="0" usemap="#df/d10/a01357_a9f99c2bdc2a3bfdec60c01941d6a4e35_icgraph" alt=""/></div>
+<map name="df/d10/a01357_a9f99c2bdc2a3bfdec60c01941d6a4e35_icgraph" id="df/d10/a01357_a9f99c2bdc2a3bfdec60c01941d6a4e35_icgraph">
+<area shape="rect"  title="Retrieves the data pointer." alt="" coords="208,5,348,47"/>
+<area shape="rect"  href="../../da/de8/a02657.html#a457b6ab6fd00a328307072a044a40c0f" title="Link all elements to this buffer." alt="" coords="5,5,160,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a68c6a05adb9b1a2a7edf8f4c51af17b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68c6a05adb9b1a2a7edf8f4c51af17b8">&#9670;&nbsp;</a></span>data() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T* <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::data </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the data pointer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The data pointer </dd></dl>
+
+</div>
+</div>
+<a id="ad9e6271e36d78e72b000d5f6d5233fe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad9e6271e36d78e72b000d5f6d5233fe4">&#9670;&nbsp;</a></span>DECLARE_TPL_VECTOR()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::DECLARE_TPL_VECTOR </td>
+          <td>(</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname">, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="../../d2/d57/a01033.html">BinaryChunk</a> &amp;&#160;</td>
-          <td class="paramname"><em>p_chunk</em>&#160;</td>
+          <td class="paramtype">T&#160;</td>
+          <td class="paramname">&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3aba9975c6d7382201a0f7b660939c4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3aba9975c6d7382201a0f7b660939c4">&#9670;&nbsp;</a></span>Destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Destroy </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Destruction function. </p>
+
+</div>
+</div>
+<a id="a1500d5b50dd96ff5f94b1af578e07433"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1500d5b50dd96ff5f94b1af578e07433">&#9670;&nbsp;</a></span>Fill()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Fill </td>
+          <td>(</td>
+          <td class="paramtype">T const *&#160;</td>
+          <td class="paramname"><em>p_buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ptrdiff_t&#160;</td>
+          <td class="paramname"><em>p_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a82ff980a069e1810c55e5c4abff6e8fb">Castor3D::eBUFFER_ACCESS_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a7a17faf6912fb22086bbc33635c7b13c">Castor3D::eBUFFER_ACCESS_NATURE</a>&#160;</td>
+          <td class="paramname"><em>p_nature</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -128,32 +678,663 @@ struct Castor3D::ChunkParser&lt; Castor::Coords2f &gt;</h3>
 </table>
 </div><div class="memdoc">
 
-<p></p>
+<p>Transmits data to the GPU buffer from RAM. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>The data </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>Data buffer size </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td>Transfer type </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_nature</td><td>Transfer nature </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful </dd></dl>
 
-<p class="reference">References <a class="el" href="../../dc/dd5/a01293.html#a16366550ba054e571ecea89055b3a6b9">Castor3D::ChunkParserBase::operator()()</a>.</p>
-<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the call graph for this function:</div>
-<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
 </div>
-<div id="dynsection-2-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../df/d10/a01357_aa013cd1b49c1a22c153c252a871bba40_cgraph.png" border="0" usemap="#df/d10/a01357_aa013cd1b49c1a22c153c252a871bba40_cgraph" alt=""/></div>
-<map name="df/d10/a01357_aa013cd1b49c1a22c153c252a871bba40_cgraph" id="df/d10/a01357_aa013cd1b49c1a22c153c252a871bba40_cgraph">
-<area shape="rect"  title=" " alt="" coords="5,27,164,83"/>
-<area shape="rect"  href="../../dc/dd5/a01293.html#a16366550ba054e571ecea89055b3a6b9" title="Retrieves a value array from a chunk." alt="" coords="212,35,401,76"/>
-<area shape="rect"  href="../../d2/d57/a01033.html#a9636e4cd028eee8eed7701f495e16462" title="Checks that the remaining place can hold the given size." alt="" coords="463,5,622,47"/>
-<area shape="rect"  href="../../d2/d57/a01033.html#aa14f084e927e3ff32d69fab4c71f3ee7" title="Retrieves data from the chunk." alt="" coords="449,71,636,98"/>
+</div>
+<a id="a0098946fad95f742a611d3b90ef0e1cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0098946fad95f742a611d3b90ef0e1cf">&#9670;&nbsp;</a></span>GetCapacity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::GetCapacity </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the allocated buffer size. </p>
+<dl class="section return"><dt>Returns</dt><dd>The size </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../df/d10/a01357.html#aac875d49255a5975e7b19ba1557b0b7f">Castor3D::CpuBuffer&lt; uint8_t &gt;::Reserve()</a>.</p>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../df/d10/a01357_a0098946fad95f742a611d3b90ef0e1cf_icgraph.png" border="0" usemap="#df/d10/a01357_a0098946fad95f742a611d3b90ef0e1cf_icgraph" alt=""/></div>
+<map name="df/d10/a01357_a0098946fad95f742a611d3b90ef0e1cf_icgraph" id="df/d10/a01357_a0098946fad95f742a611d3b90ef0e1cf_icgraph">
+<area shape="rect"  title="Retrieves the allocated buffer size." alt="" coords="193,5,333,47"/>
+<area shape="rect"  href="../../df/d10/a01357.html#aac875d49255a5975e7b19ba1557b0b7f" title="Increases the allocated size of the buffer." alt="" coords="5,5,145,47"/>
 </map>
 </div>
 
 </div>
 </div>
-<hr/>The documentation for this struct was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../df/d03/a00062.html">ChunkParser.hpp</a></li>
+<a id="a66387a18f67f2b72842493678b695e64"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a66387a18f67f2b72842493678b695e64">&#9670;&nbsp;</a></span>GetGpuBuffer()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/d10/a01357.html#a30c39b5b8b92b42be539dc64049b685f">GpuBufferSPtr</a> <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::GetGpuBuffer </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the GPU buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The GPU buffer </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../df/d10/a01357.html#ae110e35cf9d056d849830db5588eda95">Castor3D::CpuBuffer&lt; uint8_t &gt;::Bind()</a>, <a class="el" href="../../df/d10/a01357.html#aeb4181074710fb17f4de5871c6ed7dd3">Castor3D::CpuBuffer&lt; uint8_t &gt;::Cleanup()</a>, <a class="el" href="../../df/d10/a01357.html#ac3aba9975c6d7382201a0f7b660939c4">Castor3D::CpuBuffer&lt; uint8_t &gt;::Destroy()</a>, <a class="el" href="../../df/d10/a01357.html#a1500d5b50dd96ff5f94b1af578e07433">Castor3D::CpuBuffer&lt; uint8_t &gt;::Fill()</a>, <a class="el" href="../../df/d10/a01357.html#a0f1459f57c3955e5a8a6d4e4df9b7240">Castor3D::CpuBuffer&lt; uint8_t &gt;::Initialise()</a>, <a class="el" href="../../df/d10/a01357.html#ac3015080e4dd298edea564c54c0bf6db">Castor3D::CpuBuffer&lt; uint8_t &gt;::Lock()</a>, <a class="el" href="../../df/d10/a01357.html#a91e10b24516b48380e7b10de6aea7441">Castor3D::CpuBuffer&lt; uint8_t &gt;::Unbind()</a>, and <a class="el" href="../../df/d10/a01357.html#a951bdd33f9ccb710c475774d81e0819b">Castor3D::CpuBuffer&lt; uint8_t &gt;::Unlock()</a>.</p>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../df/d10/a01357_a66387a18f67f2b72842493678b695e64_icgraph.png" border="0" usemap="#df/d10/a01357_a66387a18f67f2b72842493678b695e64_icgraph" alt=""/></div>
+<map name="df/d10/a01357_a66387a18f67f2b72842493678b695e64_icgraph" id="df/d10/a01357_a66387a18f67f2b72842493678b695e64_icgraph">
+<area shape="rect"  title="Retrieves the GPU buffer." alt="" coords="193,235,333,276"/>
+<area shape="rect"  href="../../df/d10/a01357.html#ae110e35cf9d056d849830db5588eda95" title="Activation function, to tell the GPU it is active." alt="" coords="5,5,145,47"/>
+<area shape="rect"  href="../../df/d10/a01357.html#aeb4181074710fb17f4de5871c6ed7dd3" title="Cleanup function." alt="" coords="5,71,145,112"/>
+<area shape="rect"  href="../../df/d10/a01357.html#ac3aba9975c6d7382201a0f7b660939c4" title="Destruction function." alt="" coords="5,136,145,177"/>
+<area shape="rect"  href="../../df/d10/a01357.html#a1500d5b50dd96ff5f94b1af578e07433" title="Transmits data to the GPU buffer from RAM." alt="" coords="5,201,145,243"/>
+<area shape="rect"  href="../../df/d10/a01357.html#a0f1459f57c3955e5a8a6d4e4df9b7240" title="Initialisation function, initialises GPU buffer." alt="" coords="5,267,145,308"/>
+<area shape="rect"  href="../../df/d10/a01357.html#ac3015080e4dd298edea564c54c0bf6db" title="Locks the buffer, id est maps it into memory so we can modify it." alt="" coords="5,332,145,373"/>
+<area shape="rect"  href="../../df/d10/a01357.html#a91e10b24516b48380e7b10de6aea7441" title="Deactivation function, to tell the GPU it is inactive." alt="" coords="5,397,145,439"/>
+<area shape="rect"  href="../../df/d10/a01357.html#a951bdd33f9ccb710c475774d81e0819b" title="Unlocks the buffer, id est unmaps it from memory so no modification can be made after that." alt="" coords="5,463,145,504"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a306fca2202364fef987c49f004957951"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a306fca2202364fef987c49f004957951">&#9670;&nbsp;</a></span>GetSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::GetSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the filled buffer size. </p>
+<dl class="section return"><dt>Returns</dt><dd>The size </dd></dl>
+
+</div>
+</div>
+<a id="a0f1459f57c3955e5a8a6d4e4df9b7240"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0f1459f57c3955e5a8a6d4e4df9b7240">&#9670;&nbsp;</a></span>Initialise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Initialise </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a82ff980a069e1810c55e5c4abff6e8fb">eBUFFER_ACCESS_TYPE</a>&#160;</td>
+          <td class="paramname"><em>p_type</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="../../d7/d41/a00532.html#a7a17faf6912fb22086bbc33635c7b13c">eBUFFER_ACCESS_NATURE</a>&#160;</td>
+          <td class="paramname"><em>p_nature</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialisation function, initialises GPU buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_type</td><td>Buffer access type </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_nature</td><td>Buffer access nature </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK </dd></dl>
+
+</div>
+</div>
+<a id="a4d3553da88b6b31d5d5ec70851064dea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d3553da88b6b31d5d5ec70851064dea">&#9670;&nbsp;</a></span>IsAssigned()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::IsAssigned </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the assignment status of the buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The assignment status </dd></dl>
+
+</div>
+</div>
+<a id="a80fcb01dd414ebb12bb8a95f4434635e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80fcb01dd414ebb12bb8a95f4434635e">&#9670;&nbsp;</a></span>IsToDelete()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::IsToDelete </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the delete status of the buffer. </p>
+<dl class="section return"><dt>Returns</dt><dd>The delete status </dd></dl>
+
+</div>
+</div>
+<a id="ac3015080e4dd298edea564c54c0bf6db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3015080e4dd298edea564c54c0bf6db">&#9670;&nbsp;</a></span>Lock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T* <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Lock </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_offset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_count</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_flags</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Locks the buffer, id est maps it into memory so we can modify it. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Maps from buffer[p_offset*sizeof( T )] to buffer[(p_offset+p_uiSize-1)*sizeof( T )] </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_offset</td><td>The start offset in the buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_count</td><td>The mapped elements count </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_flags</td><td>The lock flags </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The mapped buffer address </dd></dl>
+
+</div>
+</div>
+<a id="aac875d49255a5975e7b19ba1557b0b7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac875d49255a5975e7b19ba1557b0b7f">&#9670;&nbsp;</a></span>Reserve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Reserve </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_uiIncrement</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Increases the allocated size of the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_uiIncrement</td><td>The size increment </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a15ceaee981d76b8ebca27a266493fb7b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15ceaee981d76b8ebca27a266493fb7b">&#9670;&nbsp;</a></span>Resize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Resize </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_uiNewSize</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the allocated size of the buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_uiNewSize</td><td>The new size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a669dbdc1f8d0c428a576b3a6c3ea161f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a669dbdc1f8d0c428a576b3a6c3ea161f">&#9670;&nbsp;</a></span>SetElement()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::SetElement </td>
+          <td>(</td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>p_index</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">T const &amp;&#160;</td>
+          <td class="paramname"><em>p_value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets element value at given index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_index</td><td>The index </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_value</td><td>The value </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="acdf9a0b8df98ab88e1ab24ab58d02380"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acdf9a0b8df98ab88e1ab24ab58d02380">&#9670;&nbsp;</a></span>Unassign()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Unassign </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the assignment status to <code>false</code>. </p>
+
+</div>
+</div>
+<a id="a91e10b24516b48380e7b10de6aea7441"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a91e10b24516b48380e7b10de6aea7441">&#9670;&nbsp;</a></span>Unbind()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Unbind </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deactivation function, to tell the GPU it is inactive. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if successful </dd></dl>
+
+</div>
+</div>
+<a id="a951bdd33f9ccb710c475774d81e0819b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a951bdd33f9ccb710c475774d81e0819b">&#9670;&nbsp;</a></span>Unlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::Unlock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unlocks the buffer, id est unmaps it from memory so no modification can be made after that. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>All modifications made in the mapped buffer are put into GPU memory </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a95380fc99e1b08d39245a966256a1422"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95380fc99e1b08d39245a966256a1422">&#9670;&nbsp;</a></span>m_arrayData</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TArray <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::m_arrayData</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The buffer data. </p>
+<p>The saved buffer size (to still have a size after clear) </p>
+
+<p class="reference">Referenced by <a class="el" href="../../df/d10/a01357.html#adb2e5f03d17f996063c3cd50c2807683">Castor3D::CpuBuffer&lt; uint8_t &gt;::AddElement()</a>, <a class="el" href="../../df/d10/a01357.html#a6233d2a526855ce9502a5fe1dc30c412">Castor3D::CpuBuffer&lt; uint8_t &gt;::Clear()</a>, <a class="el" href="../../df/d10/a01357.html#a9f99c2bdc2a3bfdec60c01941d6a4e35">Castor3D::CpuBuffer&lt; uint8_t &gt;::data()</a>, <a class="el" href="../../df/d10/a01357.html#a0098946fad95f742a611d3b90ef0e1cf">Castor3D::CpuBuffer&lt; uint8_t &gt;::GetCapacity()</a>, <a class="el" href="../../df/d10/a01357.html#a306fca2202364fef987c49f004957951">Castor3D::CpuBuffer&lt; uint8_t &gt;::GetSize()</a>, <a class="el" href="../../df/d10/a01357.html#aac875d49255a5975e7b19ba1557b0b7f">Castor3D::CpuBuffer&lt; uint8_t &gt;::Reserve()</a>, <a class="el" href="../../df/d10/a01357.html#a15ceaee981d76b8ebca27a266493fb7b">Castor3D::CpuBuffer&lt; uint8_t &gt;::Resize()</a>, and <a class="el" href="../../df/d10/a01357.html#a669dbdc1f8d0c428a576b3a6c3ea161f">Castor3D::CpuBuffer&lt; uint8_t &gt;::SetElement()</a>.</p>
+
+</div>
+</div>
+<a id="ad6dd4c83d938f3ec144ab186699fe0db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6dd4c83d938f3ec144ab186699fe0db">&#9670;&nbsp;</a></span>m_bAssigned</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::m_bAssigned</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells the buffer has it's GPU buffer assigned. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../df/d10/a01357.html#a8b578171236a4bd3730d156351bda3ba">Castor3D::CpuBuffer&lt; uint8_t &gt;::Assign()</a>, <a class="el" href="../../df/d10/a01357.html#a4d3553da88b6b31d5d5ec70851064dea">Castor3D::CpuBuffer&lt; uint8_t &gt;::IsAssigned()</a>, and <a class="el" href="../../df/d10/a01357.html#acdf9a0b8df98ab88e1ab24ab58d02380">Castor3D::CpuBuffer&lt; uint8_t &gt;::Unassign()</a>.</p>
+
+</div>
+</div>
+<a id="a9dd41775ea41d419b443a3f8c24f7dea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dd41775ea41d419b443a3f8c24f7dea">&#9670;&nbsp;</a></span>m_bToDelete</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::m_bToDelete</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tells the buffer is to be deleted at next render loop. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../df/d10/a01357.html#a80fcb01dd414ebb12bb8a95f4434635e">Castor3D::CpuBuffer&lt; uint8_t &gt;::IsToDelete()</a>.</p>
+
+</div>
+</div>
+<a id="a7d8b4485a618858c0c1d9f1879d2307e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d8b4485a618858c0c1d9f1879d2307e">&#9670;&nbsp;</a></span>m_pBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../df/d10/a01357.html#a30c39b5b8b92b42be539dc64049b685f">GpuBufferSPtr</a> <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::m_pBuffer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The GPU buffer. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../df/d10/a01357.html#ac3aba9975c6d7382201a0f7b660939c4">Castor3D::CpuBuffer&lt; uint8_t &gt;::Destroy()</a>, and <a class="el" href="../../df/d10/a01357.html#a66387a18f67f2b72842493678b695e64">Castor3D::CpuBuffer&lt; uint8_t &gt;::GetGpuBuffer()</a>.</p>
+
+</div>
+</div>
+<a id="a6cd1663aab9d50eab6e83c0ea11b6027"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6cd1663aab9d50eab6e83c0ea11b6027">&#9670;&nbsp;</a></span>m_uiSavedSize</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint32_t <a class="el" href="../../df/d10/a01357.html">Castor3D::CpuBuffer</a>&lt; T &gt;::m_uiSavedSize</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="reference">Referenced by <a class="el" href="../../df/d10/a01357.html#a6233d2a526855ce9502a5fe1dc30c412">Castor3D::CpuBuffer&lt; uint8_t &gt;::Clear()</a>, and <a class="el" href="../../df/d10/a01357.html#a306fca2202364fef987c49f004957951">Castor3D::CpuBuffer&lt; uint8_t &gt;::GetSize()</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following files:<ul>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d1/dc1/a00092.html">Castor3DPrerequisites_Render.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../df/d6a/a00119.html">CpuBuffer.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:53:58 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:34 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

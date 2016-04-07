@@ -1,4 +1,4 @@
-<map id="Castor3D::ChunkFiller&lt; Castor::Size &gt;" name="Castor3D::ChunkFiller&lt; Castor::Size &gt;">
-<area shape="rect" id="node1" title="Chunk filler." alt="" coords="20,80,169,121"/>
-<area shape="rect" id="node2" href="$de/df6/a01141.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
+<map id="Castor3D::is_initialisable&lt; T &gt;" name="Castor3D::is_initialisable&lt; T &gt;">
+<area shape="rect" id="node1" title="Helper class, telling if the template parameter has an Initialise(void) method." alt="" coords="5,80,201,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="50,5,157,32"/>
 </map>

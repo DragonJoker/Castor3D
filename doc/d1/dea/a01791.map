@@ -1,4 +1,5 @@
-<map id="Castor3D::Plane" name="Castor3D::Plane">
-<area shape="rect" id="node1" title="The plane representation." alt="" coords="31,80,148,107"/>
-<area shape="rect" id="node2" href="$d9/df5/a01673.html" title="Mesh category is used to create a mesh&#39;s vertices, it is created by MeshFactory." alt="" coords="5,5,173,32"/>
+<map id="Castor3D::FrameListener" name="Castor3D::FrameListener">
+<area shape="rect" id="node1" title="User event synchronisation class." alt="" coords="35,109,201,136"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,13,68,39"/>
+<area shape="rect" id="node3" title=" " alt="" coords="92,5,307,47"/>
 </map>

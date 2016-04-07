@@ -1,5 +1,4 @@
-<map id="Castor3D::LightCategory::TextLoader" name="Castor3D::LightCategory::TextLoader">
-<area shape="rect" id="node1" title="LightCategory loader." alt="" coords="256,46,420,87"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,208,61"/>
-<area shape="rect" id="node3" title=" " alt="" coords="57,85,156,112"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Coords4i &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords4i &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Coords4i." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

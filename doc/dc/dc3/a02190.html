@@ -39,28 +39,32 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/dbb/a02193.html">stVERTEX_GROUP</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d5/dbb/a02193.html">IPipelineImpl</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">Castor3D::stVERTEX_GROUP Member List</div>  </div>
+<div class="title">Castor3D::IPipelineImpl Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a85bf74c1127541211da16bf35e36cd4e">m_pBin</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a7108ddcde9ccbb65d846f2c30def4e75">m_pBones</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#ad494cbc4d1f1e4e232f0e674f40ff060">m_pNml</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#ada91554e6627abb744904e7dfb9ab09d">m_pTan</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a50f0e18d0ac980f696d837070cb5c3de">m_pTex</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a></td><td class="entry"></td></tr>
-  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a9ad8ff6c40aac33d04c4a56147a230b1">m_pVtx</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a></td><td class="entry"></td></tr>
-  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a1d08afe801e11fcc44a5dec6995b5888">m_uiCount</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::stVERTEX_GROUP</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#aa4fc7a88057fe9ae198b3f5d0f9e8b35">ApplyMatrix</a>(Castor::Matrix4x4r const &amp;p_matrix, Castor::String const &amp;p_name, FrameVariableBuffer &amp;p_matrixBuffer)</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#ab1c8b64b29fdf48ec6502a4343da9943">ApplyViewport</a>(int p_windowWidth, int p_windowHeight)=0</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a812a71f2b581cee5b84e6f790048747c">Frustum</a>(Castor::Matrix4x4r &amp;p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far)=0</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#acbc911b1d4ea6e01b326a2cc111654f6">IPipelineImpl</a>(Pipeline &amp;p_pipeline, bool p_rightHanded)</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a98eccd409a343ca96640ea5b7f276afb">LookAt</a>(Castor::Matrix4x4r &amp;p_result, Castor::Point3r const &amp;p_eye, Castor::Point3r const &amp;p_center, Castor::Point3r const &amp;p_up)=0</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#ad62f629029194f7f717a911f2ef31e0d">m_pipeline</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#a34a3cca3bc98ba0837aa42e0b23b3cf4">m_rightHanded</a></td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#ad10209df73e90943ff2ba046311b2ea4">Ortho</a>(Castor::Matrix4x4r &amp;p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far)=0</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#aa8830668b015c3baddcc61683373f899">Perspective</a>(Castor::Matrix4x4r &amp;p_result, Castor::Angle const &amp;p_fovy, real p_aspect, real p_near, real p_far)=0</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#af9f0f1adbd5baee7830839447205af8d">Pipeline</a> class</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">friend</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d5/dbb/a02193.html#ad8841967abd179941ae5637d3be939a7">~IPipelineImpl</a>()</td><td class="entry"><a class="el" href="../../d5/dbb/a02193.html">Castor3D::IPipelineImpl</a></td><td class="entry"><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:12 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:36 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

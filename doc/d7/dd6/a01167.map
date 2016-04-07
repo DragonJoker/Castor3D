@@ -1,4 +1,6 @@
-<map id="Castor3D::ChunkFiller&lt; Castor::Point2d &gt;" name="Castor3D::ChunkFiller&lt; Castor::Point2d &gt;">
-<area shape="rect" id="node1" title="Chunk filler." alt="" coords="20,80,169,121"/>
-<area shape="rect" id="node2" href="$de/df6/a01141.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
+<map id="Castor3D::BlendState" name="Castor3D::BlendState">
+<area shape="rect" id="node1" title="Blending configurations grouping class." alt="" coords="88,228,236,255"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,124,193,151"/>
+<area shape="rect" id="node3" title=" " alt="" coords="218,109,397,165"/>
+<area shape="rect" id="node4" href="$d7/d0c/a01173.html" title=" " alt="" coords="230,5,385,47"/>
 </map>

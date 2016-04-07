@@ -1,4 +1,7 @@
-<map id="Castor3D::SpotLight" name="Castor3D::SpotLight">
-<area shape="rect" id="node1" title="Class which represents a SpotLight." alt="" coords="18,80,157,107"/>
-<area shape="rect" id="node2" href="$dd/dda/a01621.html" title="Holds light components." alt="" coords="5,5,169,32"/>
+<map id="Castor3D::MovableObject::BinaryParser" name="Castor3D::MovableObject::BinaryParser">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="212,71,381,112"/>
+<area shape="rect" id="node3" href="$d9/d65/a01145.html" title="BillboardList loader." alt="" coords="439,5,594,47"/>
+<area shape="rect" id="node4" href="$d8/d53/a01225.html" title=" " alt="" coords="429,71,604,112"/>
+<area shape="rect" id="node5" href="$da/d8c/a01845.html" title="MovableObject loader." alt="" coords="446,136,587,177"/>
+<area shape="rect" id="node2" href="$d8/d92/a01165.html" title=" " alt="" coords="5,71,164,112"/>
 </map>

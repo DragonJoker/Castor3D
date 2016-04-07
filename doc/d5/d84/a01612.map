@@ -1,4 +1,4 @@
-<map id="Castor3D::InitialiseEvent&lt; T &gt;" name="Castor3D::InitialiseEvent&lt; T &gt;">
-<area shape="rect" id="node1" title="Initialiser event." alt="" coords="5,80,200,107"/>
-<area shape="rect" id="node2" href="$dd/dba/a01545.html" title="The interface which represents a frame event." alt="" coords="26,5,179,32"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Coords4d &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords4d &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Coords4d." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

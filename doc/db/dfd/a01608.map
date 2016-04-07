@@ -1,4 +1,4 @@
-<map id="Castor3D::IndexBuffer" name="Castor3D::IndexBuffer">
-<area shape="rect" id="node1" title="Index buffer representation." alt="" coords="5,95,153,121"/>
-<area shape="rect" id="node2" href="$dd/de4/a01121.html" title=" " alt="" coords="9,5,149,47"/>
+<map id="Castor3D::ChunkParser&lt; Castor::Coords3d &gt;" name="Castor3D::ChunkParser&lt; Castor::Coords3d &gt;">
+<area shape="rect" id="node1" title="ChunkParser specialisation for Castor::Coords3d." alt="" coords="21,80,179,121"/>
+<area shape="rect" id="node2" href="$db/dce/a01529.html" title="Chunk parser." alt="" coords="5,5,195,32"/>
 </map>

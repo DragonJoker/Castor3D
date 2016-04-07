@@ -1,4 +1,6 @@
-<map id="Castor3D::ChunkFiller&lt; Castor::Point2f &gt;" name="Castor3D::ChunkFiller&lt; Castor::Point2f &gt;">
-<area shape="rect" id="node1" title="Chunk filler." alt="" coords="20,80,169,121"/>
-<area shape="rect" id="node2" href="$de/df6/a01141.html" title="Chunk filler." alt="" coords="5,5,184,32"/>
+<map id="Castor3D::BillboardManager" name="Castor3D::BillboardManager">
+<area shape="rect" id="node1" title="BillboardsList manager." alt="" coords="764,27,948,54"/>
+<area shape="rect" id="node2" href="$d4/dbb/a02097.html" title=" " alt="" coords="511,20,716,61"/>
+<area shape="rect" id="node3" href="$d8/d24/a02001.html" title=" " alt="" coords="239,5,463,76"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,27,191,54"/>
 </map>

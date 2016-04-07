@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::OverlayManager Class Reference</title>
+<title>Castor3D: Castor3D::DynamicTexture Class Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,186 +39,255 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d0/d78/a01745.html">OverlayManager</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d0/d78/a01745.html">DynamicTexture</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="../../d1/dd5/a01742.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::OverlayManager Class Reference</div>  </div>
+<div class="title">Castor3D::DynamicTexture Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p><a class="el" href="../../d2/d0c/a01713.html" title="The overlay class.">Overlay</a> collection, with additional add and remove functions to manage Z-Index.  
+<p>Dynamic texture class.  
  <a href="../../d0/d78/a01745.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::OverlayManager:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::DynamicTexture:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d1/d04/a01744.png" border="0" usemap="#Castor3D_1_1OverlayManager_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1OverlayManager_inherit__map" id="Castor3D_1_1OverlayManager_inherit__map">
-<area shape="rect"  title="Overlay collection, with additional add and remove functions to manage Z&#45;Index." alt="" coords="5,80,183,107"/>
-<area shape="rect"  title=" " alt="" coords="33,5,155,32"/>
+<div class="center"><img src="../../d1/d04/a01744.png" border="0" usemap="#Castor3D_1_1DynamicTexture_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1DynamicTexture_inherit__map" id="Castor3D_1_1DynamicTexture_inherit__map">
+<area shape="rect"  title="Dynamic texture class." alt="" coords="33,155,212,181"/>
+<area shape="rect"  href="../../dd/d20/a02605.html" title="Texture base class." alt="" coords="59,80,186,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,240,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::OverlayManager:</div>
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::DynamicTexture:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../d5/d34/a01743.png" border="0" usemap="#Castor3D_1_1OverlayManager_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1OverlayManager_coll__map" id="Castor3D_1_1OverlayManager_coll__map">
-<area shape="rect"  title="Overlay collection, with additional add and remove functions to manage Z&#45;Index." alt="" coords="5,80,183,107"/>
-<area shape="rect"  title=" " alt="" coords="33,5,155,32"/>
+<div class="center"><img src="../../d5/d34/a01743.png" border="0" usemap="#Castor3D_1_1DynamicTexture_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1DynamicTexture_coll__map" id="Castor3D_1_1DynamicTexture_coll__map">
+<area shape="rect"  title="Dynamic texture class." alt="" coords="33,155,212,181"/>
+<area shape="rect"  href="../../dd/d20/a02605.html" title="Texture base class." alt="" coords="59,80,186,107"/>
+<area shape="rect"  title=" " alt="" coords="5,5,240,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
-Public Types</h2></td></tr>
-<tr class="memitem:a6bfb27ffc215eaa54cb9b4f5f49bff5b"><td class="memItemLeft" align="right" valign="top">typedef OverlayCollectionIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a6bfb27ffc215eaa54cb9b4f5f49bff5b">iterator</a></td></tr>
-<tr class="separator:a6bfb27ffc215eaa54cb9b4f5f49bff5b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8ab6a4cf6b40f7cdfd8b67825d86123b"><td class="memItemLeft" align="right" valign="top">typedef OverlayCollectionConstIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a8ab6a4cf6b40f7cdfd8b67825d86123b">const_iterator</a></td></tr>
-<tr class="separator:a8ab6a4cf6b40f7cdfd8b67825d86123b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5b95d5083963470537ccadd057b0e497"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a5b95d5083963470537ccadd057b0e497">OverlayManager</a> (<a class="el" href="../../db/d06/a01509.html">Engine</a> *p_pEngine)</td></tr>
-<tr class="memdesc:a5b95d5083963470537ccadd057b0e497"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a5b95d5083963470537ccadd057b0e497">More...</a><br /></td></tr>
-<tr class="separator:a5b95d5083963470537ccadd057b0e497"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f3a3094a81265a304e0f64e11991726"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a4f3a3094a81265a304e0f64e11991726">~OverlayManager</a> ()</td></tr>
-<tr class="memdesc:a4f3a3094a81265a304e0f64e11991726"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a4f3a3094a81265a304e0f64e11991726">More...</a><br /></td></tr>
-<tr class="separator:a4f3a3094a81265a304e0f64e11991726"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a71c641b7379901ab658137c4301b1c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a5a71c641b7379901ab658137c4301b1c">ClearOverlays</a> ()</td></tr>
-<tr class="memdesc:a5a71c641b7379901ab658137c4301b1c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clears all overlays lists.  <a href="#a5a71c641b7379901ab658137c4301b1c">More...</a><br /></td></tr>
-<tr class="separator:a5a71c641b7379901ab658137c4301b1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e63a1d03d5e223a3e1d337f0283fbd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a5e63a1d03d5e223a3e1d337f0283fbd3">AddOverlay</a> (Castor::String const &amp;p_strName, OverlaySPtr p_pOverlay, OverlaySPtr p_pParent)</td></tr>
-<tr class="memdesc:a5e63a1d03d5e223a3e1d337f0283fbd3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an overlay to the lists, given it's name.  <a href="#a5e63a1d03d5e223a3e1d337f0283fbd3">More...</a><br /></td></tr>
-<tr class="separator:a5e63a1d03d5e223a3e1d337f0283fbd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeb35188e1f6faab9b4d50b404b7d6c67"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#aeb35188e1f6faab9b4d50b404b7d6c67">AddOverlay</a> (int p_iZIndex, OverlaySPtr p_pOverlay)</td></tr>
-<tr class="memdesc:aeb35188e1f6faab9b4d50b404b7d6c67"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add an overlay to the lists, given it's z-index.  <a href="#aeb35188e1f6faab9b4d50b404b7d6c67">More...</a><br /></td></tr>
-<tr class="separator:aeb35188e1f6faab9b4d50b404b7d6c67"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b5d7424df6f5ff78e63bb5a38161aa8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a7b5d7424df6f5ff78e63bb5a38161aa8">HasOverlay</a> (int p_iZIndex)</td></tr>
-<tr class="memdesc:a7b5d7424df6f5ff78e63bb5a38161aa8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if an overlay exists at given z-index.  <a href="#a7b5d7424df6f5ff78e63bb5a38161aa8">More...</a><br /></td></tr>
-<tr class="separator:a7b5d7424df6f5ff78e63bb5a38161aa8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e999314df0d4bb11ce0ab48a3ccb9c8"><td class="memItemLeft" align="right" valign="top">OverlaySPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a0e999314df0d4bb11ce0ab48a3ccb9c8">GetOverlay</a> (Castor::String const &amp;p_strName)</td></tr>
-<tr class="memdesc:a0e999314df0d4bb11ce0ab48a3ccb9c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the overlay with the given name.  <a href="#a0e999314df0d4bb11ce0ab48a3ccb9c8">More...</a><br /></td></tr>
-<tr class="separator:a0e999314df0d4bb11ce0ab48a3ccb9c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99dbdf5af6a9cccf149c0cb2fe017591"><td class="memItemLeft" align="right" valign="top">OverlaySPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a99dbdf5af6a9cccf149c0cb2fe017591">GetOverlay</a> (int p_iZIndex)</td></tr>
-<tr class="memdesc:a99dbdf5af6a9cccf149c0cb2fe017591"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the overlay at given z-index.  <a href="#a99dbdf5af6a9cccf149c0cb2fe017591">More...</a><br /></td></tr>
-<tr class="separator:a99dbdf5af6a9cccf149c0cb2fe017591"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abd7bdafab35a4b927a9fcdeae7818758"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#abd7bdafab35a4b927a9fcdeae7818758">HasOverlay</a> (Castor::String const &amp;p_strName)</td></tr>
-<tr class="memdesc:abd7bdafab35a4b927a9fcdeae7818758"><td class="mdescLeft">&#160;</td><td class="mdescRight">Checks if an overlay with the given name exists.  <a href="#abd7bdafab35a4b927a9fcdeae7818758">More...</a><br /></td></tr>
-<tr class="separator:abd7bdafab35a4b927a9fcdeae7818758"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae4d5cb385f897b255ef4f1b7056eccfa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#ae4d5cb385f897b255ef4f1b7056eccfa">WriteOverlays</a> (Castor::TextFile &amp;p_file) const</td></tr>
-<tr class="memdesc:ae4d5cb385f897b255ef4f1b7056eccfa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes overlays in a text file.  <a href="#ae4d5cb385f897b255ef4f1b7056eccfa">More...</a><br /></td></tr>
-<tr class="separator:ae4d5cb385f897b255ef4f1b7056eccfa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a82eab645999328d08bea22d8ae8f17e8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a82eab645999328d08bea22d8ae8f17e8">ReadOverlays</a> (Castor::TextFile &amp;p_file)</td></tr>
-<tr class="memdesc:a82eab645999328d08bea22d8ae8f17e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads overlays from a text file.  <a href="#a82eab645999328d08bea22d8ae8f17e8">More...</a><br /></td></tr>
-<tr class="separator:a82eab645999328d08bea22d8ae8f17e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a769178dd2986523ea415a25732fcd063"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a769178dd2986523ea415a25732fcd063">SaveOverlays</a> (Castor::BinaryFile &amp;p_file) const</td></tr>
-<tr class="memdesc:a769178dd2986523ea415a25732fcd063"><td class="mdescLeft">&#160;</td><td class="mdescRight">Writes overlays in a binary file.  <a href="#a769178dd2986523ea415a25732fcd063">More...</a><br /></td></tr>
-<tr class="separator:a769178dd2986523ea415a25732fcd063"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4bdb6b685e7d5c4feedff6da1adf676a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a4bdb6b685e7d5c4feedff6da1adf676a">LoadOverlays</a> (Castor::BinaryFile &amp;p_file)</td></tr>
-<tr class="memdesc:a4bdb6b685e7d5c4feedff6da1adf676a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads overlays from a binary file.  <a href="#a4bdb6b685e7d5c4feedff6da1adf676a">More...</a><br /></td></tr>
-<tr class="separator:a4bdb6b685e7d5c4feedff6da1adf676a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0599d02801fea4b1fde9114ce65fa85d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a0599d02801fea4b1fde9114ce65fa85d">Update</a> ()</td></tr>
-<tr class="memdesc:a0599d02801fea4b1fde9114ce65fa85d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialises or cleans up the <a class="el" href="../../d5/d77/a01749.html" title="The overlay renderer.">OverlayRenderer</a>, according to engine rendering status.  <a href="#a0599d02801fea4b1fde9114ce65fa85d">More...</a><br /></td></tr>
-<tr class="separator:a0599d02801fea4b1fde9114ce65fa85d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb81929de571a731e52980591d5e6823"><td class="memItemLeft" align="right" valign="top">OverlayRendererSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#adb81929de571a731e52980591d5e6823">GetRenderer</a> () const</td></tr>
-<tr class="memdesc:adb81929de571a731e52980591d5e6823"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the overlay renderer.  <a href="#adb81929de571a731e52980591d5e6823">More...</a><br /></td></tr>
-<tr class="separator:adb81929de571a731e52980591d5e6823"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00f770fd73d85263e428476b99403524"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a00f770fd73d85263e428476b99403524">Begin</a> ()</td></tr>
-<tr class="memdesc:a00f770fd73d85263e428476b99403524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the first overlay.  <a href="#a00f770fd73d85263e428476b99403524">More...</a><br /></td></tr>
-<tr class="separator:a00f770fd73d85263e428476b99403524"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d257aca9eb813ba93f46f3b015dad09"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a1d257aca9eb813ba93f46f3b015dad09">Begin</a> () const</td></tr>
-<tr class="memdesc:a1d257aca9eb813ba93f46f3b015dad09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the first overlay.  <a href="#a1d257aca9eb813ba93f46f3b015dad09">More...</a><br /></td></tr>
-<tr class="separator:a1d257aca9eb813ba93f46f3b015dad09"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a32b77c437716368544def2eeb6df2bec"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a32b77c437716368544def2eeb6df2bec">RBegin</a> ()</td></tr>
-<tr class="memdesc:a32b77c437716368544def2eeb6df2bec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the first overlay.  <a href="#a32b77c437716368544def2eeb6df2bec">More...</a><br /></td></tr>
-<tr class="separator:a32b77c437716368544def2eeb6df2bec"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1204f92d279fed7f7247b7287d16027e"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a1204f92d279fed7f7247b7287d16027e">RBegin</a> () const</td></tr>
-<tr class="memdesc:a1204f92d279fed7f7247b7287d16027e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to the first overlay.  <a href="#a1204f92d279fed7f7247b7287d16027e">More...</a><br /></td></tr>
-<tr class="separator:a1204f92d279fed7f7247b7287d16027e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a774f52dc7442d8d05691bce79ba238fe"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a774f52dc7442d8d05691bce79ba238fe">End</a> ()</td></tr>
-<tr class="memdesc:a774f52dc7442d8d05691bce79ba238fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to after the last overlay.  <a href="#a774f52dc7442d8d05691bce79ba238fe">More...</a><br /></td></tr>
-<tr class="separator:a774f52dc7442d8d05691bce79ba238fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a589f275a96ee652d108ae893027c6ce9"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a589f275a96ee652d108ae893027c6ce9">End</a> () const</td></tr>
-<tr class="memdesc:a589f275a96ee652d108ae893027c6ce9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to after the last overlay.  <a href="#a589f275a96ee652d108ae893027c6ce9">More...</a><br /></td></tr>
-<tr class="separator:a589f275a96ee652d108ae893027c6ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:added65a5580523c8bf6b7a349a423c92"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#added65a5580523c8bf6b7a349a423c92">REnd</a> ()</td></tr>
-<tr class="memdesc:added65a5580523c8bf6b7a349a423c92"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to after the last overlay.  <a href="#added65a5580523c8bf6b7a349a423c92">More...</a><br /></td></tr>
-<tr class="separator:added65a5580523c8bf6b7a349a423c92"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a07a40ce8eeea54650e7eae001dc5b2a5"><td class="memItemLeft" align="right" valign="top">OverlayPtrIntMap::const_reverse_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a07a40ce8eeea54650e7eae001dc5b2a5">REnd</a> () const</td></tr>
-<tr class="memdesc:a07a40ce8eeea54650e7eae001dc5b2a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves an iterator to after the last overlay.  <a href="#a07a40ce8eeea54650e7eae001dc5b2a5">More...</a><br /></td></tr>
-<tr class="separator:a07a40ce8eeea54650e7eae001dc5b2a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a558c0c258c1b81a30ec0367b475aee69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a558c0c258c1b81a30ec0367b475aee69">BeginRendering</a> (Castor::Size const &amp;p_size)</td></tr>
-<tr class="memdesc:a558c0c258c1b81a30ec0367b475aee69"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begins the overlays rendering.  <a href="#a558c0c258c1b81a30ec0367b475aee69">More...</a><br /></td></tr>
-<tr class="separator:a558c0c258c1b81a30ec0367b475aee69"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1217c0f0116e5091acf8f5a6232e5554"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a1217c0f0116e5091acf8f5a6232e5554">EndRendering</a> ()</td></tr>
-<tr class="memdesc:a1217c0f0116e5091acf8f5a6232e5554"><td class="mdescLeft">&#160;</td><td class="mdescRight">Ends the overlays rendering.  <a href="#a1217c0f0116e5091acf8f5a6232e5554">More...</a><br /></td></tr>
-<tr class="separator:a1217c0f0116e5091acf8f5a6232e5554"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0b3053141ffb6fe59165135560f8aa0f"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a0b3053141ffb6fe59165135560f8aa0f">DynamicTexture</a> (<a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> &amp;p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess)</td></tr>
+<tr class="memdesc:a0b3053141ffb6fe59165135560f8aa0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a0b3053141ffb6fe59165135560f8aa0f">More...</a><br /></td></tr>
+<tr class="separator:a0b3053141ffb6fe59165135560f8aa0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84a5f888889c14f4711a65385adc6b71"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a84a5f888889c14f4711a65385adc6b71">~DynamicTexture</a> ()</td></tr>
+<tr class="memdesc:a84a5f888889c14f4711a65385adc6b71"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a84a5f888889c14f4711a65385adc6b71">More...</a><br /></td></tr>
+<tr class="separator:a84a5f888889c14f4711a65385adc6b71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44a279533a92a7b7d63270d9d1110acb"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a44a279533a92a7b7d63270d9d1110acb">Initialise</a> ()</td></tr>
+<tr class="memdesc:a44a279533a92a7b7d63270d9d1110acb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialisation function.  <a href="#a44a279533a92a7b7d63270d9d1110acb">More...</a><br /></td></tr>
+<tr class="separator:a44a279533a92a7b7d63270d9d1110acb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8dabbd67816ee66a3029c2792bf6278f"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a8dabbd67816ee66a3029c2792bf6278f">Cleanup</a> ()</td></tr>
+<tr class="memdesc:a8dabbd67816ee66a3029c2792bf6278f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cleanup function.  <a href="#a8dabbd67816ee66a3029c2792bf6278f">More...</a><br /></td></tr>
+<tr class="separator:a8dabbd67816ee66a3029c2792bf6278f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5dd5868f9b2d68f09077a72cd4407918"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a5dd5868f9b2d68f09077a72cd4407918">SetImage</a> (Castor::Size const &amp;p_size, Castor::ePIXEL_FORMAT p_format)</td></tr>
+<tr class="memdesc:a5dd5868f9b2d68f09077a72cd4407918"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the texture buffer.  <a href="#a5dd5868f9b2d68f09077a72cd4407918">More...</a><br /></td></tr>
+<tr class="separator:a5dd5868f9b2d68f09077a72cd4407918"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab86af8fa414d4677e9ebc907d22223f9"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#ab86af8fa414d4677e9ebc907d22223f9">SetImage</a> (Castor::Point3ui const &amp;p_size, Castor::ePIXEL_FORMAT p_format)</td></tr>
+<tr class="memdesc:ab86af8fa414d4677e9ebc907d22223f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the 3D texture buffer.  <a href="#ab86af8fa414d4677e9ebc907d22223f9">More...</a><br /></td></tr>
+<tr class="separator:ab86af8fa414d4677e9ebc907d22223f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad138e94dba7f7dd3a86b0b79a4e68957"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#ad138e94dba7f7dd3a86b0b79a4e68957">Resize</a> (Castor::Size const &amp;p_size)</td></tr>
+<tr class="memdesc:ad138e94dba7f7dd3a86b0b79a4e68957"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes the texture buffer.  <a href="#ad138e94dba7f7dd3a86b0b79a4e68957">More...</a><br /></td></tr>
+<tr class="separator:ad138e94dba7f7dd3a86b0b79a4e68957"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7026758b1215a8dc0f9c89d71fab8af8"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a7026758b1215a8dc0f9c89d71fab8af8">Resize</a> (Castor::Point3ui const &amp;p_size)</td></tr>
+<tr class="memdesc:a7026758b1215a8dc0f9c89d71fab8af8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Resizes the 3D texture buffer.  <a href="#a7026758b1215a8dc0f9c89d71fab8af8">More...</a><br /></td></tr>
+<tr class="separator:a7026758b1215a8dc0f9c89d71fab8af8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9590d3ab6ddec571c07405209cb544c"><td class="memItemLeft" align="right" valign="top">RenderTargetSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#ae9590d3ab6ddec571c07405209cb544c">GetRenderTarget</a> () const</td></tr>
+<tr class="memdesc:ae9590d3ab6ddec571c07405209cb544c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the render target.  <a href="#ae9590d3ab6ddec571c07405209cb544c">More...</a><br /></td></tr>
+<tr class="separator:ae9590d3ab6ddec571c07405209cb544c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa444752718550c07535bbade016fb5e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#aa444752718550c07535bbade016fb5e7">SetRenderTarget</a> (RenderTargetSPtr p_target)</td></tr>
+<tr class="memdesc:aa444752718550c07535bbade016fb5e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the render target.  <a href="#aa444752718550c07535bbade016fb5e7">More...</a><br /></td></tr>
+<tr class="separator:aa444752718550c07535bbade016fb5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25e2b8d6fb7ddbac4b9c781957786182"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a25e2b8d6fb7ddbac4b9c781957786182">GetSamplesCount</a> () const</td></tr>
+<tr class="memdesc:a25e2b8d6fb7ddbac4b9c781957786182"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the samples count.  <a href="#a25e2b8d6fb7ddbac4b9c781957786182">More...</a><br /></td></tr>
+<tr class="separator:a25e2b8d6fb7ddbac4b9c781957786182"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64bc142814eb5d7a873de251c86187d0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#a64bc142814eb5d7a873de251c86187d0">SetSamplesCount</a> (int p_count)</td></tr>
+<tr class="memdesc:a64bc142814eb5d7a873de251c86187d0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the samples count.  <a href="#a64bc142814eb5d7a873de251c86187d0">More...</a><br /></td></tr>
+<tr class="separator:a64bc142814eb5d7a873de251c86187d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adea06c813a71f30f17cd16923901c679"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#adea06c813a71f30f17cd16923901c679">Fill</a> (uint8_t const *p_buffer, Castor::Size const &amp;p_size, Castor::ePIXEL_FORMAT p_format)=0</td></tr>
+<tr class="memdesc:adea06c813a71f30f17cd16923901c679"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends the given image buffer to the driver.  <a href="#adea06c813a71f30f17cd16923901c679">More...</a><br /></td></tr>
+<tr class="separator:adea06c813a71f30f17cd16923901c679"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedda588532b2e613ece1b378a15faa4a"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d0/d78/a01745.html#aedda588532b2e613ece1b378a15faa4a">SetImage</a> (Castor::PxBufferBaseSPtr p_buffer)</td></tr>
+<tr class="memdesc:aedda588532b2e613ece1b378a15faa4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the texture buffer.  <a href="#aedda588532b2e613ece1b378a15faa4a">More...</a><br /></td></tr>
+<tr class="separator:aedda588532b2e613ece1b378a15faa4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_a02605"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_a02605')"><img src="../../closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="../../dd/d20/a02605.html">Castor3D::Texture</a></td></tr>
+<tr class="memitem:ab0bf2a46fc958f67b2e4da2d75866f54 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#ab0bf2a46fc958f67b2e4da2d75866f54">Texture</a> (<a class="el" href="../../d7/d41/a00532.html#a2d250e76c3af9de5052a5687057bdc3c">eTEXTURE_BASE_TYPE</a> p_type, <a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> &amp;p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess)</td></tr>
+<tr class="memdesc:ab0bf2a46fc958f67b2e4da2d75866f54 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="../../dd/d20/a02605.html#ab0bf2a46fc958f67b2e4da2d75866f54">More...</a><br /></td></tr>
+<tr class="separator:ab0bf2a46fc958f67b2e4da2d75866f54 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc48a8a196db77427e816337f8da5fff inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#adc48a8a196db77427e816337f8da5fff">~Texture</a> ()</td></tr>
+<tr class="memdesc:adc48a8a196db77427e816337f8da5fff inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="../../dd/d20/a02605.html#adc48a8a196db77427e816337f8da5fff">More...</a><br /></td></tr>
+<tr class="separator:adc48a8a196db77427e816337f8da5fff inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aedda588532b2e613ece1b378a15faa4a inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#aedda588532b2e613ece1b378a15faa4a">SetImage</a> (Castor::PxBufferBaseSPtr p_buffer)</td></tr>
+<tr class="memdesc:aedda588532b2e613ece1b378a15faa4a inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the texture buffer.  <a href="../../dd/d20/a02605.html#aedda588532b2e613ece1b378a15faa4a">More...</a><br /></td></tr>
+<tr class="separator:aedda588532b2e613ece1b378a15faa4a inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0f6a433c804bab508c6d715b3709824c inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a0f6a433c804bab508c6d715b3709824c">Bind</a> (uint32_t p_index) const</td></tr>
+<tr class="memdesc:a0f6a433c804bab508c6d715b3709824c inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Activation function, to tell the GPU it is active.  <a href="../../dd/d20/a02605.html#a0f6a433c804bab508c6d715b3709824c">More...</a><br /></td></tr>
+<tr class="separator:a0f6a433c804bab508c6d715b3709824c inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6c1ccafef2b07953565cf6e3dcef48d inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#ac6c1ccafef2b07953565cf6e3dcef48d">Unbind</a> (uint32_t p_index) const</td></tr>
+<tr class="memdesc:ac6c1ccafef2b07953565cf6e3dcef48d inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deactivation function, to tell the GPU it is inactive.  <a href="../../dd/d20/a02605.html#ac6c1ccafef2b07953565cf6e3dcef48d">More...</a><br /></td></tr>
+<tr class="separator:ac6c1ccafef2b07953565cf6e3dcef48d inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5e4fecf60bec61d541c0b3dd93a4e286 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a5e4fecf60bec61d541c0b3dd93a4e286">Create</a> ()=0</td></tr>
+<tr class="memdesc:a5e4fecf60bec61d541c0b3dd93a4e286 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creation function.  <a href="../../dd/d20/a02605.html#a5e4fecf60bec61d541c0b3dd93a4e286">More...</a><br /></td></tr>
+<tr class="separator:a5e4fecf60bec61d541c0b3dd93a4e286 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d0e4a7f404171df7132f4bc6ec8d8a4 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a4d0e4a7f404171df7132f4bc6ec8d8a4">Destroy</a> ()=0</td></tr>
+<tr class="memdesc:a4d0e4a7f404171df7132f4bc6ec8d8a4 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destruction function.  <a href="../../dd/d20/a02605.html#a4d0e4a7f404171df7132f4bc6ec8d8a4">More...</a><br /></td></tr>
+<tr class="separator:a4d0e4a7f404171df7132f4bc6ec8d8a4 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d5dfd26cd9a0aac2ef765ff3d6e1fcf inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API uint8_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a0d5dfd26cd9a0aac2ef765ff3d6e1fcf">Lock</a> (uint32_t p_lock)=0</td></tr>
+<tr class="memdesc:a0d5dfd26cd9a0aac2ef765ff3d6e1fcf inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locks image buffer from GPU, allowing modifications into it.  <a href="../../dd/d20/a02605.html#a0d5dfd26cd9a0aac2ef765ff3d6e1fcf">More...</a><br /></td></tr>
+<tr class="separator:a0d5dfd26cd9a0aac2ef765ff3d6e1fcf inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8058fef0f000b10394492ff35dd74af3 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a8058fef0f000b10394492ff35dd74af3">Unlock</a> (bool p_modified)=0</td></tr>
+<tr class="memdesc:a8058fef0f000b10394492ff35dd74af3 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlocks image buffer from GPU.  <a href="../../dd/d20/a02605.html#a8058fef0f000b10394492ff35dd74af3">More...</a><br /></td></tr>
+<tr class="separator:a8058fef0f000b10394492ff35dd74af3 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad810757a3fa29de0bd02c6f1418ecadf inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#ad810757a3fa29de0bd02c6f1418ecadf">GenerateMipmaps</a> () const =0</td></tr>
+<tr class="memdesc:ad810757a3fa29de0bd02c6f1418ecadf inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate texture mipmaps.  <a href="../../dd/d20/a02605.html#ad810757a3fa29de0bd02c6f1418ecadf">More...</a><br /></td></tr>
+<tr class="separator:ad810757a3fa29de0bd02c6f1418ecadf inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8d55356ee5f013251e0b2274e188f6a0 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a8d55356ee5f013251e0b2274e188f6a0">IsInitialised</a> () const</td></tr>
+<tr class="memdesc:a8d55356ee5f013251e0b2274e188f6a0 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the initialisation status.  <a href="../../dd/d20/a02605.html#a8d55356ee5f013251e0b2274e188f6a0">More...</a><br /></td></tr>
+<tr class="separator:a8d55356ee5f013251e0b2274e188f6a0 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55cc2e9342a75c8fdf53ea3c28cbfddc inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a2d250e76c3af9de5052a5687057bdc3c">eTEXTURE_BASE_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a55cc2e9342a75c8fdf53ea3c28cbfddc">GetBaseType</a> () const</td></tr>
+<tr class="memdesc:a55cc2e9342a75c8fdf53ea3c28cbfddc inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture type.  <a href="../../dd/d20/a02605.html#a55cc2e9342a75c8fdf53ea3c28cbfddc">More...</a><br /></td></tr>
+<tr class="separator:a55cc2e9342a75c8fdf53ea3c28cbfddc inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a0ae503f967e5d7d5ddeca6bc0bbb46 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a75831a789ff00489c43347ccbc9ce64c">eTEXTURE_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a6a0ae503f967e5d7d5ddeca6bc0bbb46">GetType</a> () const</td></tr>
+<tr class="memdesc:a6a0ae503f967e5d7d5ddeca6bc0bbb46 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture dimension.  <a href="../../dd/d20/a02605.html#a6a0ae503f967e5d7d5ddeca6bc0bbb46">More...</a><br /></td></tr>
+<tr class="separator:a6a0ae503f967e5d7d5ddeca6bc0bbb46 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ab7df27563e16b9f4eddbc65178e512 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a0ab7df27563e16b9f4eddbc65178e512">SetType</a> (<a class="el" href="../../d7/d41/a00532.html#a75831a789ff00489c43347ccbc9ce64c">eTEXTURE_TYPE</a> p_dimension)</td></tr>
+<tr class="memdesc:a0ab7df27563e16b9f4eddbc65178e512 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the texture dimension.  <a href="../../dd/d20/a02605.html#a0ab7df27563e16b9f4eddbc65178e512">More...</a><br /></td></tr>
+<tr class="separator:a0ab7df27563e16b9f4eddbc65178e512 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a5771e38d0e1ad05ae25c9f7262fcee inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a2b896fc694b95fab215979d959258081">eTEXTURE_MAP_MODE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a6a5771e38d0e1ad05ae25c9f7262fcee">GetMappingMode</a> () const</td></tr>
+<tr class="memdesc:a6a5771e38d0e1ad05ae25c9f7262fcee inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture mapping mode.  <a href="../../dd/d20/a02605.html#a6a5771e38d0e1ad05ae25c9f7262fcee">More...</a><br /></td></tr>
+<tr class="separator:a6a5771e38d0e1ad05ae25c9f7262fcee inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e7be7570a15b73505db767cba7930c5 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a6e7be7570a15b73505db767cba7930c5">SetMappingMode</a> (<a class="el" href="../../d7/d41/a00532.html#a2b896fc694b95fab215979d959258081">eTEXTURE_MAP_MODE</a> p_eMapMode)</td></tr>
+<tr class="memdesc:a6e7be7570a15b73505db767cba7930c5 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Defines the texture mapping mode.  <a href="../../dd/d20/a02605.html#a6e7be7570a15b73505db767cba7930c5">More...</a><br /></td></tr>
+<tr class="separator:a6e7be7570a15b73505db767cba7930c5 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8bdd808a8b7e5b1d6b16189e92db704 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">Castor::Size&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#aa8bdd808a8b7e5b1d6b16189e92db704">GetDimensions</a> () const</td></tr>
+<tr class="memdesc:aa8bdd808a8b7e5b1d6b16189e92db704 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture image dimensions.  <a href="../../dd/d20/a02605.html#aa8bdd808a8b7e5b1d6b16189e92db704">More...</a><br /></td></tr>
+<tr class="separator:aa8bdd808a8b7e5b1d6b16189e92db704 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a929f1d6b49ea5a89158bf8cab7bd37d1 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a929f1d6b49ea5a89158bf8cab7bd37d1">GetDepth</a> () const</td></tr>
+<tr class="memdesc:a929f1d6b49ea5a89158bf8cab7bd37d1 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture depth.  <a href="../../dd/d20/a02605.html#a929f1d6b49ea5a89158bf8cab7bd37d1">More...</a><br /></td></tr>
+<tr class="separator:a929f1d6b49ea5a89158bf8cab7bd37d1 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa43c7df85e1f78001496acde2a8fb7bc inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">Castor::ePIXEL_FORMAT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#aa43c7df85e1f78001496acde2a8fb7bc">GetPixelFormat</a> () const</td></tr>
+<tr class="memdesc:aa43c7df85e1f78001496acde2a8fb7bc inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture pixel format.  <a href="../../dd/d20/a02605.html#aa43c7df85e1f78001496acde2a8fb7bc">More...</a><br /></td></tr>
+<tr class="separator:aa43c7df85e1f78001496acde2a8fb7bc inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4910bb1cc1f4b061610d72c7d91b024b inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a4910bb1cc1f4b061610d72c7d91b024b">GetWidth</a> () const</td></tr>
+<tr class="memdesc:a4910bb1cc1f4b061610d72c7d91b024b inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture image width.  <a href="../../dd/d20/a02605.html#a4910bb1cc1f4b061610d72c7d91b024b">More...</a><br /></td></tr>
+<tr class="separator:a4910bb1cc1f4b061610d72c7d91b024b inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3739dca76827ba250098c0f9befe2a95 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a3739dca76827ba250098c0f9befe2a95">GetHeight</a> () const</td></tr>
+<tr class="memdesc:a3739dca76827ba250098c0f9befe2a95 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture image height.  <a href="../../dd/d20/a02605.html#a3739dca76827ba250098c0f9befe2a95">More...</a><br /></td></tr>
+<tr class="separator:a3739dca76827ba250098c0f9befe2a95 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ecc94b2410e8df6a40bbeb21ff43f18 inherit pub_methods_a02605"><td class="memItemLeft" align="right" valign="top">Castor::PxBufferBaseSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a7ecc94b2410e8df6a40bbeb21ff43f18">GetBuffer</a> () const</td></tr>
+<tr class="memdesc:a7ecc94b2410e8df6a40bbeb21ff43f18 inherit pub_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the texture buffer.  <a href="../../dd/d20/a02605.html#a7ecc94b2410e8df6a40bbeb21ff43f18">More...</a><br /></td></tr>
+<tr class="separator:a7ecc94b2410e8df6a40bbeb21ff43f18 inherit pub_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
+Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pro_methods_a02605"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_a02605')"><img src="../../closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="../../dd/d20/a02605.html">Castor3D::Texture</a></td></tr>
+<tr class="memitem:ad729a9f89259067a75e183451629d5be inherit pro_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#ad729a9f89259067a75e183451629d5be">DoInitialise</a> ()=0</td></tr>
+<tr class="memdesc:ad729a9f89259067a75e183451629d5be inherit pro_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">API specific initialisation function.  <a href="../../dd/d20/a02605.html#ad729a9f89259067a75e183451629d5be">More...</a><br /></td></tr>
+<tr class="separator:ad729a9f89259067a75e183451629d5be inherit pro_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8ae2264e4427ebb015470623242e7b78 inherit pro_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a8ae2264e4427ebb015470623242e7b78">DoBind</a> (uint32_t p_index) const =0</td></tr>
+<tr class="memdesc:a8ae2264e4427ebb015470623242e7b78 inherit pro_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">API specific binding function.  <a href="../../dd/d20/a02605.html#a8ae2264e4427ebb015470623242e7b78">More...</a><br /></td></tr>
+<tr class="separator:a8ae2264e4427ebb015470623242e7b78 inherit pro_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a55065679434f68242e6a6360937fbd58 inherit pro_methods_a02605"><td class="memItemLeft" align="right" valign="top">virtual C3D_API void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a55065679434f68242e6a6360937fbd58">DoUnbind</a> (uint32_t p_index) const =0</td></tr>
+<tr class="memdesc:a55065679434f68242e6a6360937fbd58 inherit pro_methods_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">API specific unbinding function.  <a href="../../dd/d20/a02605.html#a55065679434f68242e6a6360937fbd58">More...</a><br /></td></tr>
+<tr class="separator:a55065679434f68242e6a6360937fbd58 inherit pro_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade6c6c6c012fb9bd057294615737c8c4 inherit pro_methods_a02605"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#ade6c6c6c012fb9bd057294615737c8c4">DECLARE_VECTOR</a> (Castor::PxBufferBaseSPtr, PxBuffer)</td></tr>
+<tr class="separator:ade6c6c6c012fb9bd057294615737c8c4 inherit pro_methods_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_attribs_a02605"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_a02605')"><img src="../../closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="../../dd/d20/a02605.html">Castor3D::Texture</a></td></tr>
+<tr class="memitem:a9ee9bd05432d181418c1a09fabe96d92 inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a9ee9bd05432d181418c1a09fabe96d92">m_initialised</a></td></tr>
+<tr class="memdesc:a9ee9bd05432d181418c1a09fabe96d92 inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialisation status.  <a href="../../dd/d20/a02605.html#a9ee9bd05432d181418c1a09fabe96d92">More...</a><br /></td></tr>
+<tr class="separator:a9ee9bd05432d181418c1a09fabe96d92 inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b8c208ed829bf39aaaaa74ac900bb8e inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a2d250e76c3af9de5052a5687057bdc3c">eTEXTURE_BASE_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a1b8c208ed829bf39aaaaa74ac900bb8e">m_baseType</a></td></tr>
+<tr class="memdesc:a1b8c208ed829bf39aaaaa74ac900bb8e inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../dd/d20/a02605.html" title="Texture base class.">Texture</a> base type.  <a href="../../dd/d20/a02605.html#a1b8c208ed829bf39aaaaa74ac900bb8e">More...</a><br /></td></tr>
+<tr class="separator:a1b8c208ed829bf39aaaaa74ac900bb8e inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a682bbe21257b255a49d97a97f25c7ffa inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a75831a789ff00489c43347ccbc9ce64c">eTEXTURE_TYPE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a682bbe21257b255a49d97a97f25c7ffa">m_type</a></td></tr>
+<tr class="memdesc:a682bbe21257b255a49d97a97f25c7ffa inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../dd/d20/a02605.html" title="Texture base class.">Texture</a> type.  <a href="../../dd/d20/a02605.html#a682bbe21257b255a49d97a97f25c7ffa">More...</a><br /></td></tr>
+<tr class="separator:a682bbe21257b255a49d97a97f25c7ffa inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1e6b8f9eeb71ebdc6b840f42a7e2bcf inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d7/d41/a00532.html#a2b896fc694b95fab215979d959258081">eTEXTURE_MAP_MODE</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#aa1e6b8f9eeb71ebdc6b840f42a7e2bcf">m_mapMode</a></td></tr>
+<tr class="memdesc:aa1e6b8f9eeb71ebdc6b840f42a7e2bcf inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../dd/d20/a02605.html" title="Texture base class.">Texture</a> mapping modes.  <a href="../../dd/d20/a02605.html#aa1e6b8f9eeb71ebdc6b840f42a7e2bcf">More...</a><br /></td></tr>
+<tr class="separator:aa1e6b8f9eeb71ebdc6b840f42a7e2bcf inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a797c2ff349f1688e379ea472f906bb08 inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a797c2ff349f1688e379ea472f906bb08">m_depth</a></td></tr>
+<tr class="memdesc:a797c2ff349f1688e379ea472f906bb08 inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">3D <a class="el" href="../../dd/d20/a02605.html" title="Texture base class.">Texture</a> depth  <a href="../../dd/d20/a02605.html#a797c2ff349f1688e379ea472f906bb08">More...</a><br /></td></tr>
+<tr class="separator:a797c2ff349f1688e379ea472f906bb08 inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa4518d82b1400c0575ea396f060e6e74 inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top">Castor::PxBufferBaseSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#aa4518d82b1400c0575ea396f060e6e74">m_pixelBuffer</a></td></tr>
+<tr class="memdesc:aa4518d82b1400c0575ea396f060e6e74 inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="../../dd/d20/a02605.html" title="Texture base class.">Texture</a> pixels, at least at initialisation.  <a href="../../dd/d20/a02605.html#aa4518d82b1400c0575ea396f060e6e74">More...</a><br /></td></tr>
+<tr class="separator:aa4518d82b1400c0575ea396f060e6e74 inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a668b5879f68cc505e5b5dd5f36012457 inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top">Castor::ePIXEL_FORMAT&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a668b5879f68cc505e5b5dd5f36012457">m_pixelFormat</a></td></tr>
+<tr class="memdesc:a668b5879f68cc505e5b5dd5f36012457 inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pixel buffer format.  <a href="../../dd/d20/a02605.html#a668b5879f68cc505e5b5dd5f36012457">More...</a><br /></td></tr>
+<tr class="separator:a668b5879f68cc505e5b5dd5f36012457 inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6d0331f2ff4a6bf60d76d28de2677db inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top">Castor::Size&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#ad6d0331f2ff4a6bf60d76d28de2677db">m_size</a></td></tr>
+<tr class="memdesc:ad6d0331f2ff4a6bf60d76d28de2677db inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">The pixel buffer dimensions.  <a href="../../dd/d20/a02605.html#ad6d0331f2ff4a6bf60d76d28de2677db">More...</a><br /></td></tr>
+<tr class="separator:ad6d0331f2ff4a6bf60d76d28de2677db inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95671f26dfacdd84af560a428bf00b13 inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a95671f26dfacdd84af560a428bf00b13">m_cpuAccess</a></td></tr>
+<tr class="memdesc:a95671f26dfacdd84af560a428bf00b13 inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">The required CPU access (combination of eACCESS_TYPE).  <a href="../../dd/d20/a02605.html#a95671f26dfacdd84af560a428bf00b13">More...</a><br /></td></tr>
+<tr class="separator:a95671f26dfacdd84af560a428bf00b13 inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9347adcfae2ce6720ceb719c88aca406 inherit pro_attribs_a02605"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../dd/d20/a02605.html#a9347adcfae2ce6720ceb719c88aca406">m_gpuAccess</a></td></tr>
+<tr class="memdesc:a9347adcfae2ce6720ceb719c88aca406 inherit pro_attribs_a02605"><td class="mdescLeft">&#160;</td><td class="mdescRight">The required GPU access (combination of eACCESS_TYPE).  <a href="../../dd/d20/a02605.html#a9347adcfae2ce6720ceb719c88aca406">More...</a><br /></td></tr>
+<tr class="separator:a9347adcfae2ce6720ceb719c88aca406 inherit pro_attribs_a02605"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p><a class="el" href="../../d2/d0c/a01713.html" title="The overlay class.">Overlay</a> collection, with additional add and remove functions to manage Z-Index. </p>
+<div class="textblock"><p>Dynamic texture class. </p>
 <dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>09/02/2010 </dd></dl>
-<dl class="section version"><dt>Version</dt><dd>0.1 </dd></dl>
-</div><h2 class="groupheader">Member Typedef Documentation</h2>
-<a id="a8ab6a4cf6b40f7cdfd8b67825d86123b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8ab6a4cf6b40f7cdfd8b67825d86123b">&#9670;&nbsp;</a></span>const_iterator</h2>
+<dl class="section date"><dt>Date</dt><dd>14/02/2010</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>A dynamic texture can update it's buffer </dd></dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a0b3053141ffb6fe59165135560f8aa0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b3053141ffb6fe59165135560f8aa0f">&#9670;&nbsp;</a></span>DynamicTexture()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef OverlayCollectionConstIt <a class="el" href="../../d0/d78/a01745.html#a8ab6a4cf6b40f7cdfd8b67825d86123b">Castor3D::OverlayManager::const_iterator</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6bfb27ffc215eaa54cb9b4f5f49bff5b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6bfb27ffc215eaa54cb9b4f5f49bff5b">&#9670;&nbsp;</a></span>iterator</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">typedef OverlayCollectionIt <a class="el" href="../../d0/d78/a01745.html#a6bfb27ffc215eaa54cb9b4f5f49bff5b">Castor3D::OverlayManager::iterator</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a5b95d5083963470537ccadd057b0e497"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b95d5083963470537ccadd057b0e497">&#9670;&nbsp;</a></span>OverlayManager()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">Castor3D::OverlayManager::OverlayManager </td>
+          <td class="memname">C3D_API Castor3D::DynamicTexture::DynamicTexture </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="../../db/d06/a01509.html">Engine</a> *&#160;</td>
-          <td class="paramname"><em>p_pEngine</em></td><td>)</td>
+          <td class="paramtype"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> &amp;&#160;</td>
+          <td class="paramname"><em>p_renderSystem</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_cpuAccess</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint8_t&#160;</td>
+          <td class="paramname"><em>p_gpuAccess</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_renderSystem</td><td>The render system. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_cpuAccess</td><td>The required CPU access (combination of eACCESS_TYPE). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_gpuAccess</td><td>The required GPU access (combination of eACCESS_TYPE). </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a4f3a3094a81265a304e0f64e11991726"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f3a3094a81265a304e0f64e11991726">&#9670;&nbsp;</a></span>~OverlayManager()</h2>
+<a id="a84a5f888889c14f4711a65385adc6b71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84a5f888889c14f4711a65385adc6b71">&#9670;&nbsp;</a></span>~DynamicTexture()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +296,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">virtual Castor3D::OverlayManager::~OverlayManager </td>
+          <td class="memname">virtual C3D_API Castor3D::DynamicTexture::~DynamicTexture </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -245,89 +314,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5e63a1d03d5e223a3e1d337f0283fbd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e63a1d03d5e223a3e1d337f0283fbd3">&#9670;&nbsp;</a></span>AddOverlay() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Castor3D::OverlayManager::AddOverlay </td>
-          <td>(</td>
-          <td class="paramtype">Castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>p_strName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OverlaySPtr&#160;</td>
-          <td class="paramname"><em>p_pOverlay</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OverlaySPtr&#160;</td>
-          <td class="paramname"><em>p_pParent</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Add an overlay to the lists, given it's name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_strName</td><td>The overlay name </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_pOverlay</td><td>The overlay </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_pParent</td><td>The parent overlay </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="aeb35188e1f6faab9b4d50b404b7d6c67"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeb35188e1f6faab9b4d50b404b7d6c67">&#9670;&nbsp;</a></span>AddOverlay() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Castor3D::OverlayManager::AddOverlay </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>p_iZIndex</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">OverlaySPtr&#160;</td>
-          <td class="paramname"><em>p_pOverlay</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Add an overlay to the lists, given it's z-index. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_iZIndex</td><td>The wanted z-index </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_pOverlay</td><td>The overlay </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a00f770fd73d85263e428476b99403524"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a00f770fd73d85263e428476b99403524">&#9670;&nbsp;</a></span>Begin() <span class="overload">[1/2]</span></h2>
+<a id="a8dabbd67816ee66a3029c2792bf6278f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8dabbd67816ee66a3029c2792bf6278f">&#9670;&nbsp;</a></span>Cleanup()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -336,7 +324,7 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">OverlayPtrIntMap::iterator Castor3D::OverlayManager::Begin </td>
+          <td class="memname">virtual C3D_API void Castor3D::DynamicTexture::Cleanup </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -344,18 +332,19 @@ Public Member Functions</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieves an iterator to the first overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+<p>Cleanup function. </p>
+
+<p>Implements <a class="el" href="../../dd/d20/a02605.html#a9a63263772ebb62f7316fb3629e28a33">Castor3D::Texture</a>.</p>
 
 </div>
 </div>
-<a id="a1d257aca9eb813ba93f46f3b015dad09"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d257aca9eb813ba93f46f3b015dad09">&#9670;&nbsp;</a></span>Begin() <span class="overload">[2/2]</span></h2>
+<a id="adea06c813a71f30f17cd16923901c679"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adea06c813a71f30f17cd16923901c679">&#9670;&nbsp;</a></span>Fill()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -364,7 +353,60 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">OverlayPtrIntMap::const_iterator Castor3D::OverlayManager::Begin </td>
+          <td class="memname">virtual C3D_API void Castor3D::DynamicTexture::Fill </td>
+          <td>(</td>
+          <td class="paramtype">uint8_t const *&#160;</td>
+          <td class="paramname"><em>p_buffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::ePIXEL_FORMAT&#160;</td>
+          <td class="paramname"><em>p_format</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sends the given image buffer to the driver. </p>
+<dl class="section remark"><dt>Remarks</dt><dd>Doesn't update the internal buffer, so either never use it or always use it </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>The image buffer </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The image resolution </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_format</td><td>The image pixel format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ae9590d3ab6ddec571c07405209cb544c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9590d3ab6ddec571c07405209cb544c">&#9670;&nbsp;</a></span>GetRenderTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">RenderTargetSPtr Castor3D::DynamicTexture::GetRenderTarget </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -377,58 +419,105 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieves an iterator to the first overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+<p>Retrieves the render target. </p>
+<dl class="section return"><dt>Returns</dt><dd>The target </dd></dl>
 
 </div>
 </div>
-<a id="a558c0c258c1b81a30ec0367b475aee69"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a558c0c258c1b81a30ec0367b475aee69">&#9670;&nbsp;</a></span>BeginRendering()</h2>
+<a id="a25e2b8d6fb7ddbac4b9c781957786182"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25e2b8d6fb7ddbac4b9c781957786182">&#9670;&nbsp;</a></span>GetSamplesCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Castor3D::OverlayManager::BeginRendering </td>
+          <td class="memname">int Castor3D::DynamicTexture::GetSamplesCount </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Retrieves the samples count. </p>
+<dl class="section return"><dt>Returns</dt><dd>The samples count </dd></dl>
+
+</div>
+</div>
+<a id="a44a279533a92a7b7d63270d9d1110acb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44a279533a92a7b7d63270d9d1110acb">&#9670;&nbsp;</a></span>Initialise()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API bool Castor3D::DynamicTexture::Initialise </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialisation function. </p>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if OK. </dd></dl>
+
+<p>Implements <a class="el" href="../../dd/d20/a02605.html#a778fd6f437c2cbd628264b071c04f2f1">Castor3D::Texture</a>.</p>
+
+</div>
+</div>
+<a id="ad138e94dba7f7dd3a86b0b79a4e68957"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad138e94dba7f7dd3a86b0b79a4e68957">&#9670;&nbsp;</a></span>Resize() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual C3D_API void Castor3D::DynamicTexture::Resize </td>
           <td>(</td>
           <td class="paramtype">Castor::Size const &amp;&#160;</td>
           <td class="paramname"><em>p_size</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
-<p>Begins the overlays rendering. </p>
+<p>Resizes the texture buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The render window size </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The new size </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a5a71c641b7379901ab658137c4301b1c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a71c641b7379901ab658137c4301b1c">&#9670;&nbsp;</a></span>ClearOverlays()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Castor3D::OverlayManager::ClearOverlays </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Clears all overlays lists. </p>
-
-</div>
-</div>
-<a id="a774f52dc7442d8d05691bce79ba238fe"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a774f52dc7442d8d05691bce79ba238fe">&#9670;&nbsp;</a></span>End() <span class="overload">[1/2]</span></h2>
+<a id="a7026758b1215a8dc0f9c89d71fab8af8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7026758b1215a8dc0f9c89d71fab8af8">&#9670;&nbsp;</a></span>Resize() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -437,9 +526,140 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">OverlayPtrIntMap::iterator Castor3D::OverlayManager::End </td>
+          <td class="memname">virtual C3D_API void Castor3D::DynamicTexture::Resize </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">Castor::Point3ui const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Resizes the 3D texture buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The new size </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5dd5868f9b2d68f09077a72cd4407918"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5dd5868f9b2d68f09077a72cd4407918">&#9670;&nbsp;</a></span>SetImage() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::DynamicTexture::SetImage </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Size const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::ePIXEL_FORMAT&#160;</td>
+          <td class="paramname"><em>p_format</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines the texture buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The buffer dimensions </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_format</td><td>The buffer format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="ab86af8fa414d4677e9ebc907d22223f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab86af8fa414d4677e9ebc907d22223f9">&#9670;&nbsp;</a></span>SetImage() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::DynamicTexture::SetImage </td>
+          <td>(</td>
+          <td class="paramtype">Castor::Point3ui const &amp;&#160;</td>
+          <td class="paramname"><em>p_size</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Castor::ePIXEL_FORMAT&#160;</td>
+          <td class="paramname"><em>p_format</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines the 3D texture buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_size</td><td>The buffer dimensions </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_format</td><td>The buffer format </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aedda588532b2e613ece1b378a15faa4a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aedda588532b2e613ece1b378a15faa4a">&#9670;&nbsp;</a></span>SetImage() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">C3D_API void Castor3D::Texture::SetImage</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Defines the texture buffer. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_buffer</td><td>The buffer </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa444752718550c07535bbade016fb5e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa444752718550c07535bbade016fb5e7">&#9670;&nbsp;</a></span>SetRenderTarget()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Castor3D::DynamicTexture::SetRenderTarget </td>
+          <td>(</td>
+          <td class="paramtype">RenderTargetSPtr&#160;</td>
+          <td class="paramname"><em>p_target</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -450,13 +670,18 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieves an iterator to after the last overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
+<p>Defines the render target. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_target</td><td>The target </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
-<a id="a589f275a96ee652d108ae893027c6ce9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a589f275a96ee652d108ae893027c6ce9">&#9670;&nbsp;</a></span>End() <span class="overload">[2/2]</span></h2>
+<a id="a64bc142814eb5d7a873de251c86187d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64bc142814eb5d7a873de251c86187d0">&#9670;&nbsp;</a></span>SetSamplesCount()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -465,219 +690,10 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">OverlayPtrIntMap::const_iterator Castor3D::OverlayManager::End </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves an iterator to after the last overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
-
-</div>
-</div>
-<a id="a1217c0f0116e5091acf8f5a6232e5554"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1217c0f0116e5091acf8f5a6232e5554">&#9670;&nbsp;</a></span>EndRendering()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Castor3D::OverlayManager::EndRendering </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Ends the overlays rendering. </p>
-
-</div>
-</div>
-<a id="a0e999314df0d4bb11ce0ab48a3ccb9c8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e999314df0d4bb11ce0ab48a3ccb9c8">&#9670;&nbsp;</a></span>GetOverlay() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">OverlaySPtr Castor3D::OverlayManager::GetOverlay </td>
-          <td>(</td>
-          <td class="paramtype">Castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>p_strName</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieves the overlay with the given name. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_strName</td><td>The name </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The overlay, <code>nullptr</code> if not found </dd></dl>
-
-</div>
-</div>
-<a id="a99dbdf5af6a9cccf149c0cb2fe017591"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a99dbdf5af6a9cccf149c0cb2fe017591">&#9670;&nbsp;</a></span>GetOverlay() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">OverlaySPtr Castor3D::OverlayManager::GetOverlay </td>
+          <td class="memname">void Castor3D::DynamicTexture::SetSamplesCount </td>
           <td>(</td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>p_iZIndex</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Retrieves the overlay at given z-index. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_iZIndex</td><td>The z-index </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>The overlay, <code>nullptr</code> if not found </dd></dl>
-
-</div>
-</div>
-<a id="adb81929de571a731e52980591d5e6823"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb81929de571a731e52980591d5e6823">&#9670;&nbsp;</a></span>GetRenderer()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OverlayRendererSPtr Castor3D::OverlayManager::GetRenderer </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves the overlay renderer. </p>
-<dl class="section return"><dt>Returns</dt><dd>The overlay renderer </dd></dl>
-
-</div>
-</div>
-<a id="a7b5d7424df6f5ff78e63bb5a38161aa8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b5d7424df6f5ff78e63bb5a38161aa8">&#9670;&nbsp;</a></span>HasOverlay() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Castor3D::OverlayManager::HasOverlay </td>
-          <td>(</td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>p_iZIndex</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Checks if an overlay exists at given z-index. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_iZIndex</td><td>The z-index </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if an overlay is defined at the given z-index </dd></dl>
-
-</div>
-</div>
-<a id="abd7bdafab35a4b927a9fcdeae7818758"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abd7bdafab35a4b927a9fcdeae7818758">&#9670;&nbsp;</a></span>HasOverlay() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Castor3D::OverlayManager::HasOverlay </td>
-          <td>(</td>
-          <td class="paramtype">Castor::String const &amp;&#160;</td>
-          <td class="paramname"><em>p_strName</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Checks if an overlay with the given name exists. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_strName</td><td>The name </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if an overlay is defined with given name </dd></dl>
-
-</div>
-</div>
-<a id="a4bdb6b685e7d5c4feedff6da1adf676a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4bdb6b685e7d5c4feedff6da1adf676a">&#9670;&nbsp;</a></span>LoadOverlays()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Castor3D::OverlayManager::LoadOverlays </td>
-          <td>(</td>
-          <td class="paramtype">Castor::BinaryFile &amp;&#160;</td>
-          <td class="paramname"><em>p_file</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Reads overlays from a binary file. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_file</td><td>The file </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
-
-</div>
-</div>
-<a id="a32b77c437716368544def2eeb6df2bec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a32b77c437716368544def2eeb6df2bec">&#9670;&nbsp;</a></span>RBegin() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OverlayPtrIntMap::reverse_iterator Castor3D::OverlayManager::RBegin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>p_count</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -688,202 +704,23 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Retrieves an iterator to the first overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
-
-</div>
-</div>
-<a id="a1204f92d279fed7f7247b7287d16027e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1204f92d279fed7f7247b7287d16027e">&#9670;&nbsp;</a></span>RBegin() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OverlayPtrIntMap::const_reverse_iterator Castor3D::OverlayManager::RBegin </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves an iterator to the first overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
-
-</div>
-</div>
-<a id="a82eab645999328d08bea22d8ae8f17e8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a82eab645999328d08bea22d8ae8f17e8">&#9670;&nbsp;</a></span>ReadOverlays()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Castor3D::OverlayManager::ReadOverlays </td>
-          <td>(</td>
-          <td class="paramtype">Castor::TextFile &amp;&#160;</td>
-          <td class="paramname"><em>p_file</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Reads overlays from a text file. </p>
+<p>Defines the samples count. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_file</td><td>The file </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_count</td><td>The samples count </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
-
-</div>
-</div>
-<a id="added65a5580523c8bf6b7a349a423c92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#added65a5580523c8bf6b7a349a423c92">&#9670;&nbsp;</a></span>REnd() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OverlayPtrIntMap::reverse_iterator Castor3D::OverlayManager::REnd </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves an iterator to after the last overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
-
-</div>
-</div>
-<a id="a07a40ce8eeea54650e7eae001dc5b2a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a07a40ce8eeea54650e7eae001dc5b2a5">&#9670;&nbsp;</a></span>REnd() <span class="overload">[2/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">OverlayPtrIntMap::const_reverse_iterator Castor3D::OverlayManager::REnd </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Retrieves an iterator to after the last overlay. </p>
-<dl class="section return"><dt>Returns</dt><dd>The value </dd></dl>
-
-</div>
-</div>
-<a id="a769178dd2986523ea415a25732fcd063"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a769178dd2986523ea415a25732fcd063">&#9670;&nbsp;</a></span>SaveOverlays()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Castor3D::OverlayManager::SaveOverlays </td>
-          <td>(</td>
-          <td class="paramtype">Castor::BinaryFile &amp;&#160;</td>
-          <td class="paramname"><em>p_file</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Writes overlays in a binary file. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_file</td><td>The file </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
-
-</div>
-</div>
-<a id="a0599d02801fea4b1fde9114ce65fa85d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0599d02801fea4b1fde9114ce65fa85d">&#9670;&nbsp;</a></span>Update()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void Castor3D::OverlayManager::Update </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initialises or cleans up the <a class="el" href="../../d5/d77/a01749.html" title="The overlay renderer.">OverlayRenderer</a>, according to engine rendering status. </p>
-
-</div>
-</div>
-<a id="ae4d5cb385f897b255ef4f1b7056eccfa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae4d5cb385f897b255ef4f1b7056eccfa">&#9670;&nbsp;</a></span>WriteOverlays()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bool Castor3D::OverlayManager::WriteOverlays </td>
-          <td>(</td>
-          <td class="paramtype">Castor::TextFile &amp;&#160;</td>
-          <td class="paramname"><em>p_file</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Writes overlays in a text file. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">p_file</td><td>The file </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd><code>true</code> if ok </dd></dl>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d7/d40/a00236.html">OverlayManager.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../da/d1e/a00149.html">DynamicTexture.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:05 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:34 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

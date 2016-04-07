@@ -1,0 +1,8 @@
+<map id="Castor3D::ToneMapping" name="Castor3D::ToneMapping">
+<area shape="rect" id="node1" title="Tone mapping base class." alt="" coords="241,107,403,134"/>
+<area shape="rect" id="node3" href="$d8/d3a/a01869.html" title="Implements Haarm&#45;Peter Duiker tone mapping algorithm." alt="" coords="461,5,652,47"/>
+<area shape="rect" id="node4" href="$de/dd3/a01873.html" title="Implements Jim Hejl and Richard Burgess&#45;Dawson tone mapping algorithm." alt="" coords="457,71,657,112"/>
+<area shape="rect" id="node5" href="$dd/d2e/a01949.html" title="Implements linear tone mapping algorithm." alt="" coords="459,137,655,163"/>
+<area shape="rect" id="node6" href="$de/d1b/a02269.html" title="Implements Reinhard tone mapping algorithm." alt="" coords="451,187,663,214"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,107,193,134"/>
+</map>

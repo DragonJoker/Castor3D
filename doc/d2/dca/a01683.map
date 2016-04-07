@@ -1,5 +1,4 @@
-<map id="Castor3D::MovableObject::TextLoader" name="Castor3D::MovableObject::TextLoader">
-<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="261,46,431,87"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,213,61"/>
-<area shape="rect" id="node3" title=" " alt="" coords="60,85,159,112"/>
+<map id="Castor3D::ColourRenderBuffer" name="Castor3D::ColourRenderBuffer">
+<area shape="rect" id="node1" title="Render buffer receiving colour component." alt="" coords="5,80,200,107"/>
+<area shape="rect" id="node2" href="$d7/d6e/a02273.html" title="Render buffer base class." alt="" coords="23,5,182,32"/>
 </map>

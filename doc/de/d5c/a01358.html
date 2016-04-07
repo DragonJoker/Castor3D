@@ -39,23 +39,34 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d2/d1f/a01361.html">ChunkParser&lt; Castor::Coords3f &gt;</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d2/d1f/a01361.html">GpuBuffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="headertitle">
-<div class="title">Castor3D::ChunkParser&lt; Castor::Coords3f &gt; Member List</div>  </div>
+<div class="title">Castor3D::GpuBuffer&lt; T &gt; Member List</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>This is the complete list of members for <a class="el" href="../../d2/d1f/a01361.html">Castor3D::ChunkParser&lt; Castor::Coords3f &gt;</a>, including all inherited members.</p>
+<p>This is the complete list of members for <a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a>, including all inherited members.</p>
 <table class="directory">
-  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a4ed063b1f6b84a8da39d781d09a269dd">operator()</a>(Castor::Coords3f &amp;p_value, BinaryChunk &amp;p_chunk)</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::ChunkParser&lt; Castor::Coords3f &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
-  <tr><td class="entry"><a class="el" href="../../dc/dd5/a01293.html#a16366550ba054e571ecea89055b3a6b9">Castor3D::ChunkParserBase::operator()</a>(uint8_t *p_pValues, uint32_t p_uiSize, BinaryChunk &amp;p_chunk)</td><td class="entry"><a class="el" href="../../dc/dd5/a01293.html">Castor3D::ChunkParserBase</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a67f81567eb16574e7cac2024d022ab93">Bind</a>()=0</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a471503b72c632a3f5af4f2e967fab0fa">Bind</a>(bool p_instantiated)</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#af35fb6f72ec960aac898bed3838b51f6">Cleanup</a>()</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a68108396ecd2fb36fcd6c2ac250ff424">Create</a>()</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#af453c7fff2b5e469faddb59c876ec631">Destroy</a>()</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#ac3c55d4139e9adc5b237af94760f3145">Fill</a>(T const *p_buffer, ptrdiff_t p_size, Castor3D::eBUFFER_ACCESS_TYPE p_type, Castor3D::eBUFFER_ACCESS_NATURE p_nature)=0</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#ad5e94cc702555dc72a095f8d05a0162a">GpuBuffer</a>(RenderSystem &amp;p_renderSystem)</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#aa8ea19a67a336b4edf8c3b62d8ffedfb">HardwareBufferPtr</a> typedef</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">protected</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a5d604ba8cb2c8bb9563f0a0a8d2c560a">Initialise</a>(eBUFFER_ACCESS_TYPE p_type, eBUFFER_ACCESS_NATURE p_nature)=0</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a727a41da6cb98cdf6e0964236d25f73c">Lock</a>(uint32_t p_offset, uint32_t p_count, uint32_t p_flags)=0</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a4d8b7d4a91f92a0d879f18c5a78eb21e">Unbind</a>()=0</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a5498e0a474540cf9772849e1e3163728">Unlock</a>()=0</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">pure virtual</span></td></tr>
+  <tr class="even"><td class="entry"><a class="el" href="../../d2/d1f/a01361.html#a8399b995942a1abc7e98d18e35f26b57">~GpuBuffer</a>()</td><td class="entry"><a class="el" href="../../d2/d1f/a01361.html">Castor3D::GpuBuffer&lt; T &gt;</a></td><td class="entry"><span class="mlabel">inline</span><span class="mlabel">virtual</span></td></tr>
 </table></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:53:59 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:35 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>

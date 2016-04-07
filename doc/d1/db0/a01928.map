@@ -1,4 +1,7 @@
-<map id="Castor3D::RenderTarget" name="Castor3D::RenderTarget">
-<area shape="rect" id="node1" title="Render target class." alt="" coords="34,95,195,121"/>
-<area shape="rect" id="node2" href="$d6/d8b/a01117.html" title=" " alt="" coords="5,5,224,47"/>
+<map id="Castor3D::LightCategory::BinaryParser" name="Castor3D::LightCategory::BinaryParser">
+<area shape="rect" id="node1" title="LightCategory loader." alt="" coords="212,71,376,112"/>
+<area shape="rect" id="node3" href="$df/d2e/a01737.html" title="DirectionalLight loader." alt="" coords="424,5,597,47"/>
+<area shape="rect" id="node4" href="$d5/d3d/a02233.html" title="PointLight loader." alt="" coords="439,71,582,112"/>
+<area shape="rect" id="node5" href="$dd/dd9/a02529.html" title="SpotLight loader." alt="" coords="441,136,580,177"/>
+<area shape="rect" id="node2" href="$d8/d92/a01165.html" title=" " alt="" coords="5,71,164,112"/>
 </map>

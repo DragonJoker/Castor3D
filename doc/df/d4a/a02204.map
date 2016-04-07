@@ -1,4 +1,11 @@
-<map id="Castor3D::Viewport::BinaryParser" name="Castor3D::Viewport::BinaryParser">
-<area shape="rect" id="node1" title="Viewport loader." alt="" coords="17,95,152,136"/>
-<area shape="rect" id="node2" href="$d2/d41/a01037.html" title=" " alt="" coords="5,5,164,47"/>
+<map id="Castor3D::PluginBase" name="Castor3D::PluginBase">
+<area shape="rect" id="node1" title="Plugin Base class." alt="" coords="241,157,392,184"/>
+<area shape="rect" id="node3" href="$d0/d4e/a01741.html" title="Divider Plugin class." alt="" coords="450,5,609,32"/>
+<area shape="rect" id="node4" href="$d6/dbd/a01829.html" title="Generator Plugin class." alt="" coords="441,56,618,83"/>
+<area shape="rect" id="node5" href="$db/dd5/a01833.html" title="Generic Plugin class." alt="" coords="447,107,612,133"/>
+<area shape="rect" id="node6" href="$d7/d9c/a01885.html" title="Importer Plugin class." alt="" coords="446,157,613,184"/>
+<area shape="rect" id="node7" href="$df/de4/a02241.html" title="Post effect plug&#45;in class." alt="" coords="448,208,611,235"/>
+<area shape="rect" id="node8" href="$d0/d80/a02281.html" title="Renderer Plugin class." alt="" coords="443,259,615,285"/>
+<area shape="rect" id="node9" href="$da/d03/a02577.html" title="Render technique plug&#45;in class." alt="" coords="440,309,619,336"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,157,193,184"/>
 </map>

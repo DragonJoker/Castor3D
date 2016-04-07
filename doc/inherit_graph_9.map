@@ -1,4 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$d2/d41/a01037.html" title=" " alt="" coords="5,5,164,47"/>
-<area shape="rect" id="node2" href="$d3/dac/a01777.html" title="Pass loader." alt="" coords="212,13,409,39"/>
+<area shape="rect" id="node1" href="$d8/d92/a01165.html" title=" " alt="" coords="5,71,164,112"/>
+<area shape="rect" id="node2" href="$dc/dc8/a01929.html" title="LightCategory loader." alt="" coords="212,71,376,112"/>
+<area shape="rect" id="node3" href="$df/d2e/a01737.html" title="DirectionalLight loader." alt="" coords="424,5,597,47"/>
+<area shape="rect" id="node4" href="$d5/d3d/a02233.html" title="PointLight loader." alt="" coords="439,71,582,112"/>
+<area shape="rect" id="node5" href="$dd/dd9/a02529.html" title="SpotLight loader." alt="" coords="441,136,580,177"/>
 </map>

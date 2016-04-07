@@ -1,4 +1,4 @@
-<map id="Castor3D::TextureAttachment" name="Castor3D::TextureAttachment">
-<area shape="rect" id="node1" title="Description of an attachment between a frame buffer and a texture." alt="" coords="19,80,213,107"/>
-<area shape="rect" id="node2" href="$d5/dc8/a01541.html" title="Description of an attachment between a frame buffer and a render buffer." alt="" coords="5,5,227,32"/>
+<map id="Castor3D::OverlayFactory" name="Castor3D::OverlayFactory">
+<area shape="rect" id="node1" title="The mesh factory." alt="" coords="22,95,193,121"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,209,47"/>
 </map>

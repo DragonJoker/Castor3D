@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.15"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Castor3D: Castor3D::SceneFileParser Class Reference</title>
+<title>Castor3D: Castor3D::Manager&lt; Key, Elem, Owner, EngineGetter &gt; Class Template Reference</title>
 <link href="../../tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="../../jquery.js"></script>
 <script type="text/javascript" src="../../dynsections.js"></script>
@@ -39,118 +39,266 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="../../dd/d47/a00445.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d8/d24/a02001.html">SceneFileParser</a></li>  </ul>
+<li class="navelem"><a class="el" href="../../d7/d41/a00532.html">Castor3D</a></li><li class="navelem"><a class="el" href="../../d8/d24/a02001.html">Manager</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
+<a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pro-methods">Protected Member Functions</a> &#124;
+<a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="../../d5/d2e/a01998.html">List of all members</a>  </div>
   <div class="headertitle">
-<div class="title">Castor3D::SceneFileParser Class Reference</div>  </div>
+<div class="title">Castor3D::Manager&lt; Key, Elem, Owner, EngineGetter &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>ESCN file parser.  
+<p>Base class for an element manager.  
  <a href="../../d8/d24/a02001.html#details">More...</a></p>
 <div id="dynsection-0" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::SceneFileParser:</div>
+  <img id="dynsection-0-trigger" src="../../closed.png" alt="+"/> Inheritance diagram for Castor3D::Manager&lt; Key, Elem, Owner, EngineGetter &gt;:</div>
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../da/d51/a02000.png" border="0" usemap="#Castor3D_1_1SceneFileParser_inherit__map" alt="Inheritance graph"/></div>
-<map name="Castor3D_1_1SceneFileParser_inherit__map" id="Castor3D_1_1SceneFileParser_inherit__map">
-<area shape="rect"  title="ESCN file parser." alt="" coords="5,80,185,107"/>
-<area shape="rect"  title=" " alt="" coords="32,5,159,32"/>
+<div class="center"><img src="../../da/d51/a02000.png" border="0" usemap="#Castor3D_1_1Manager_3_01Key_00_01Elem_00_01Owner_00_01EngineGetter_01_4_inherit__map" alt="Inheritance graph"/></div>
+<map name="Castor3D_1_1Manager_3_01Key_00_01Elem_00_01Owner_00_01EngineGetter_01_4_inherit__map" id="Castor3D_1_1Manager_3_01Key_00_01Elem_00_01Owner_00_01EngineGetter_01_4_inherit__map">
+<area shape="rect"  title="Base class for an element manager." alt="" coords="5,80,233,121"/>
+<area shape="rect"  title=" " alt="" coords="27,5,212,32"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
-  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::SceneFileParser:</div>
+  <img id="dynsection-1-trigger" src="../../closed.png" alt="+"/> Collaboration diagram for Castor3D::Manager&lt; Key, Elem, Owner, EngineGetter &gt;:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><img src="../../de/d25/a01999.png" border="0" usemap="#Castor3D_1_1SceneFileParser_coll__map" alt="Collaboration graph"/></div>
-<map name="Castor3D_1_1SceneFileParser_coll__map" id="Castor3D_1_1SceneFileParser_coll__map">
-<area shape="rect"  title="ESCN file parser." alt="" coords="5,80,185,107"/>
-<area shape="rect"  title=" " alt="" coords="32,5,159,32"/>
+<div class="center"><img src="../../de/d25/a01999.png" border="0" usemap="#Castor3D_1_1Manager_3_01Key_00_01Elem_00_01Owner_00_01EngineGetter_01_4_coll__map" alt="Collaboration graph"/></div>
+<map name="Castor3D_1_1Manager_3_01Key_00_01Elem_00_01Owner_00_01EngineGetter_01_4_coll__map" id="Castor3D_1_1Manager_3_01Key_00_01Elem_00_01Owner_00_01EngineGetter_01_4_coll__map">
+<area shape="rect"  title="Base class for an element manager." alt="" coords="1517,61,1745,102"/>
+<area shape="rect"  title=" " alt="" coords="1180,47,1365,73"/>
+<area shape="rect"  href="../../db/d2a/a02325.html" title="The render system representation." alt="" coords="1187,97,1358,124"/>
+<area shape="rect"  title=" " alt="" coords="820,5,1008,32"/>
+<area shape="rect"  title=" " alt="" coords="831,57,997,98"/>
+<area shape="rect"  href="../../de/df6/a02197.html" title="The rendering pipeline." alt="" coords="539,64,669,91"/>
+<area shape="rect"  title=" " alt="" coords="181,64,416,91"/>
+<area shape="rect"  title=" " alt="" coords="831,123,997,149"/>
+<area shape="rect"  title=" " alt="" coords="795,174,1033,215"/>
+<area shape="rect"  href="../../d0/d71/a02329.html" title=" " alt="" coords="519,174,689,215"/>
+<area shape="rect"  title="STL class." alt="" coords="259,181,339,208"/>
+<area shape="rect"  title="STL class." alt="" coords="5,174,132,215"/>
 </map>
 <center><span class="legend">[<a href="../../graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:acfac309c191dd8ebfa36e142db8802af"><td class="memItemLeft" align="right" valign="top">typedef Castor::Collection&lt; Elem, Key &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#acfac309c191dd8ebfa36e142db8802af">Collection</a></td></tr>
+<tr class="separator:acfac309c191dd8ebfa36e142db8802af"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a41c130c3e121034bf7afda5b2baaad0f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a41c130c3e121034bf7afda5b2baaad0f">SceneFileParser</a> (<a class="el" href="../../db/d06/a01509.html">Engine</a> *p_pEngine)</td></tr>
-<tr class="separator:a41c130c3e121034bf7afda5b2baaad0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39705a740c48ee4aec482198fb62e452"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a39705a740c48ee4aec482198fb62e452">~SceneFileParser</a> ()</td></tr>
-<tr class="separator:a39705a740c48ee4aec482198fb62e452"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab83c8b39417eb49c2ce2fc886a6c72b1"><td class="memItemLeft" align="right" valign="top">RenderWindowSPtr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#ab83c8b39417eb49c2ce2fc886a6c72b1">GetRenderWindow</a> ()</td></tr>
-<tr class="separator:ab83c8b39417eb49c2ce2fc886a6c72b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a11a87c812315d5c551e924a4ffb5a285"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a11a87c812315d5c551e924a4ffb5a285">ParseFile</a> (Castor::TextFile &amp;p_file)</td></tr>
-<tr class="separator:a11a87c812315d5c551e924a4ffb5a285"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39299115ec58fe3185e025c1b21cb2f4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a39299115ec58fe3185e025c1b21cb2f4">ParseFile</a> (Castor::Path const &amp;p_pathFile)</td></tr>
-<tr class="separator:a39299115ec58fe3185e025c1b21cb2f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5d07bafa8c37267584637da1f568e3bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/d06/a01509.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a5d07bafa8c37267584637da1f568e3bd">GetEngine</a> () const</td></tr>
-<tr class="separator:a5d07bafa8c37267584637da1f568e3bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abb4695e9846211ff91554df0abda3ab4"><td class="memItemLeft" align="right" valign="top">ScenePtrStrMap::iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#abb4695e9846211ff91554df0abda3ab4">ScenesBegin</a> ()</td></tr>
-<tr class="separator:abb4695e9846211ff91554df0abda3ab4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14f4b35771ad74b44a57f15f27e5b1b2"><td class="memItemLeft" align="right" valign="top">ScenePtrStrMap::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a14f4b35771ad74b44a57f15f27e5b1b2">ScenesBegin</a> () const</td></tr>
-<tr class="separator:a14f4b35771ad74b44a57f15f27e5b1b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a978d83d39cfe449cd1c7de9d152df1be"><td class="memItemLeft" align="right" valign="top">ScenePtrStrMap::const_iterator&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a978d83d39cfe449cd1c7de9d152df1be">ScenesEnd</a> () const</td></tr>
-<tr class="separator:a978d83d39cfe449cd1c7de9d152df1be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36c86d799edb45fb92f274582fc4a2e3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a36c86d799edb45fb92f274582fc4a2e3">Cleanup</a> ()</td></tr>
+<tr class="memdesc:a36c86d799edb45fb92f274582fc4a2e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets all the elements to be cleaned up.  <a href="#a36c86d799edb45fb92f274582fc4a2e3">More...</a><br /></td></tr>
+<tr class="separator:a36c86d799edb45fb92f274582fc4a2e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a70517fbd2702b99752ccdae527b16258"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a70517fbd2702b99752ccdae527b16258">Clear</a> ()</td></tr>
+<tr class="memdesc:a70517fbd2702b99752ccdae527b16258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Flushes the collection.  <a href="#a70517fbd2702b99752ccdae527b16258">More...</a><br /></td></tr>
+<tr class="separator:a70517fbd2702b99752ccdae527b16258"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6fb03dd83751524ba738d42dba2c73a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#af6fb03dd83751524ba738d42dba2c73a">IsEmpty</a> ()</td></tr>
+<tr class="separator:af6fb03dd83751524ba738d42dba2c73a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ee70a8066ec27844cfea6ac8118a039"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a0ee70a8066ec27844cfea6ac8118a039">Insert</a> (Key const &amp;p_name, std::shared_ptr&lt; Elem &gt; p_element)</td></tr>
+<tr class="memdesc:a0ee70a8066ec27844cfea6ac8118a039"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an object, given a name.  <a href="#a0ee70a8066ec27844cfea6ac8118a039">More...</a><br /></td></tr>
+<tr class="separator:a0ee70a8066ec27844cfea6ac8118a039"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1419e38cf672631195cf326faee4791f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a1419e38cf672631195cf326faee4791f">Remove</a> (Key const &amp;p_name)</td></tr>
+<tr class="memdesc:a1419e38cf672631195cf326faee4791f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Removes an object, given a name.  <a href="#a1419e38cf672631195cf326faee4791f">More...</a><br /></td></tr>
+<tr class="separator:a1419e38cf672631195cf326faee4791f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e5b612c3660a1e729a7c122a94f8a95"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a1e5b612c3660a1e729a7c122a94f8a95">SetRenderSystem</a> (<a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> *p_renderSystem)</td></tr>
+<tr class="separator:a1e5b612c3660a1e729a7c122a94f8a95"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ce546af639f29a5b3cf9df45d3857e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a5ce546af639f29a5b3cf9df45d3857e6">SetRenderSystem</a> () const</td></tr>
+<tr class="separator:a5ce546af639f29a5b3cf9df45d3857e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac03e5ff0379d0862715c30a01b85cdb1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d5/d77/a01749.html">Engine</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#ac03e5ff0379d0862715c30a01b85cdb1">GetEngine</a> () const</td></tr>
+<tr class="separator:ac03e5ff0379d0862715c30a01b85cdb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:accf33341df9bde085a88bf3609b2e97c"><td class="memItemLeft" align="right" valign="top">Castor::String const  &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#accf33341df9bde085a88bf3609b2e97c">GetObjectTypeName</a> () const</td></tr>
+<tr class="separator:accf33341df9bde085a88bf3609b2e97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3cfaa82644c5b14a93ae40da6a90e8c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#aa3cfaa82644c5b14a93ae40da6a90e8c">Has</a> (Key const &amp;p_name) const</td></tr>
+<tr class="separator:aa3cfaa82644c5b14a93ae40da6a90e8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41767d5d95465e41467b7ecc0211387a"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; Elem &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a41767d5d95465e41467b7ecc0211387a">Find</a> (Key const &amp;p_name) const</td></tr>
+<tr class="memdesc:a41767d5d95465e41467b7ecc0211387a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Looks for an element with given name.  <a href="#a41767d5d95465e41467b7ecc0211387a">More...</a><br /></td></tr>
+<tr class="separator:a41767d5d95465e41467b7ecc0211387a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d42b76b53f3917843a9078ab91a09d8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a9d42b76b53f3917843a9078ab91a09d8">lock</a> () const</td></tr>
+<tr class="memdesc:a9d42b76b53f3917843a9078ab91a09d8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Locks the collection mutex.  <a href="#a9d42b76b53f3917843a9078ab91a09d8">More...</a><br /></td></tr>
+<tr class="separator:a9d42b76b53f3917843a9078ab91a09d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a44a2913ba8219d6997f84b60c8937103"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a44a2913ba8219d6997f84b60c8937103">unlock</a> () const</td></tr>
+<tr class="memdesc:a44a2913ba8219d6997f84b60c8937103"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unlocks the collection mutex.  <a href="#a44a2913ba8219d6997f84b60c8937103">More...</a><br /></td></tr>
+<tr class="separator:a44a2913ba8219d6997f84b60c8937103"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab28a3c72ceb239fabb8560e648b9cddd"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#ab28a3c72ceb239fabb8560e648b9cddd">begin</a> ()</td></tr>
+<tr class="memdesc:ab28a3c72ceb239fabb8560e648b9cddd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the first element of the collection.  <a href="#ab28a3c72ceb239fabb8560e648b9cddd">More...</a><br /></td></tr>
+<tr class="separator:ab28a3c72ceb239fabb8560e648b9cddd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af92acd0c659ed9e79ac7f32b03a6acea"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapConstIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#af92acd0c659ed9e79ac7f32b03a6acea">begin</a> () const</td></tr>
+<tr class="memdesc:af92acd0c659ed9e79ac7f32b03a6acea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an constant iterator to the first element of the collection.  <a href="#af92acd0c659ed9e79ac7f32b03a6acea">More...</a><br /></td></tr>
+<tr class="separator:af92acd0c659ed9e79ac7f32b03a6acea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82ed08f2bf4254e01c16e053c5cb3512"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a82ed08f2bf4254e01c16e053c5cb3512">end</a> ()</td></tr>
+<tr class="memdesc:a82ed08f2bf4254e01c16e053c5cb3512"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an iterator to the after last element of the collection.  <a href="#a82ed08f2bf4254e01c16e053c5cb3512">More...</a><br /></td></tr>
+<tr class="separator:a82ed08f2bf4254e01c16e053c5cb3512"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a327e1e45a0fec66b5234d2bed8db1763"><td class="memItemLeft" align="right" valign="top">Collection::TObjPtrMapConstIt&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a327e1e45a0fec66b5234d2bed8db1763">end</a> () const</td></tr>
+<tr class="memdesc:a327e1e45a0fec66b5234d2bed8db1763"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns an constant iterator to the after last element of the collection.  <a href="#a327e1e45a0fec66b5234d2bed8db1763">More...</a><br /></td></tr>
+<tr class="separator:a327e1e45a0fec66b5234d2bed8db1763"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad61a8b6fe78e7b1e8a76b23a1f62af05"><td class="memTemplParams" colspan="2">template&lt;typename ... Parameters&gt; </td></tr>
+<tr class="memitem:ad61a8b6fe78e7b1e8a76b23a1f62af05"><td class="memTemplItemLeft" align="right" valign="top">std::shared_ptr&lt; Elem &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05">Create</a> (Key const &amp;p_name, <a class="el" href="../../d3/d90/a02177.html">Parameters</a> &amp;&amp;... p_params)</td></tr>
+<tr class="memdesc:ad61a8b6fe78e7b1e8a76b23a1f62af05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates an object.  <a href="#ad61a8b6fe78e7b1e8a76b23a1f62af05">More...</a><br /></td></tr>
+<tr class="separator:ad61a8b6fe78e7b1e8a76b23a1f62af05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-methods"></a>
+Protected Member Functions</h2></td></tr>
+<tr class="memitem:a4d79a3f327a12f01bdee2728bcfda5a5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a4d79a3f327a12f01bdee2728bcfda5a5">Manager</a> (Owner &amp;p_owner)</td></tr>
+<tr class="memdesc:a4d79a3f327a12f01bdee2728bcfda5a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor.  <a href="#a4d79a3f327a12f01bdee2728bcfda5a5">More...</a><br /></td></tr>
+<tr class="separator:a4d79a3f327a12f01bdee2728bcfda5a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c625d211ac1b3ff030a842fca134815"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a0c625d211ac1b3ff030a842fca134815">~Manager</a> ()</td></tr>
+<tr class="memdesc:a0c625d211ac1b3ff030a842fca134815"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor.  <a href="#a0c625d211ac1b3ff030a842fca134815">More...</a><br /></td></tr>
+<tr class="separator:a0c625d211ac1b3ff030a842fca134815"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
+Protected Attributes</h2></td></tr>
+<tr class="memitem:a0b40e01ec5a7ab9052d302eb218a13df"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a0b40e01ec5a7ab9052d302eb218a13df">m_renderSystem</a></td></tr>
+<tr class="memdesc:a0b40e01ec5a7ab9052d302eb218a13df"><td class="mdescLeft">&#160;</td><td class="mdescRight">The <a class="el" href="../../db/d2a/a02325.html" title="The render system representation.">RenderSystem</a>.  <a href="#a0b40e01ec5a7ab9052d302eb218a13df">More...</a><br /></td></tr>
+<tr class="separator:a0b40e01ec5a7ab9052d302eb218a13df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ccf0226ae1d2164e0e6e14c5ad899e7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="../../d8/d24/a02001.html#acfac309c191dd8ebfa36e142db8802af">Collection</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="../../d8/d24/a02001.html#a9ccf0226ae1d2164e0e6e14c5ad899e7">m_elements</a></td></tr>
+<tr class="memdesc:a9ccf0226ae1d2164e0e6e14c5ad899e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">The elements collection.  <a href="#a9ccf0226ae1d2164e0e6e14c5ad899e7">More...</a><br /></td></tr>
+<tr class="separator:a9ccf0226ae1d2164e0e6e14c5ad899e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>ESCN file parser. </p>
-<p>Reads ESCN files and extracts all 3D data from it </p><dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>25/08/2010 </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a41c130c3e121034bf7afda5b2baaad0f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41c130c3e121034bf7afda5b2baaad0f">&#9670;&nbsp;</a></span>SceneFileParser()</h2>
+<div class="textblock"><h3>template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt;<br />
+class Castor3D::Manager&lt; Key, Elem, Owner, EngineGetter &gt;</h3>
+
+<p>Base class for an element manager. </p>
+<dl class="section author"><dt>Author</dt><dd>Sylvain DOREMUS </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>13/10/2015 </dd></dl>
+<dl class="section version"><dt>Version</dt><dd>0.8.0 </dd></dl>
+</div><h2 class="groupheader">Member Typedef Documentation</h2>
+<a id="acfac309c191dd8ebfa36e142db8802af"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acfac309c191dd8ebfa36e142db8802af">&#9670;&nbsp;</a></span>Collection</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">Castor3D::SceneFileParser::SceneFileParser </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="../../db/d06/a01509.html">Engine</a> *&#160;</td>
-          <td class="paramname"><em>p_pEngine</em></td><td>)</td>
-          <td></td>
+          <td class="memname">typedef Castor::Collection&lt; Elem, Key &gt; <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::<a class="el" href="../../d8/d24/a02001.html#acfac309c191dd8ebfa36e142db8802af">Collection</a></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructor </p>
 
 </div>
 </div>
-<a id="a39705a740c48ee4aec482198fb62e452"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39705a740c48ee4aec482198fb62e452">&#9670;&nbsp;</a></span>~SceneFileParser()</h2>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a4d79a3f327a12f01bdee2728bcfda5a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d79a3f327a12f01bdee2728bcfda5a5">&#9670;&nbsp;</a></span>Manager()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Castor3D::SceneFileParser::~SceneFileParser </td>
+          <td class="memname"><a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::<a class="el" href="../../d8/d24/a02001.html">Manager</a> </td>
+          <td>(</td>
+          <td class="paramtype">Owner &amp;&#160;</td>
+          <td class="paramname"><em>p_owner</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_owner</td><td>The owner. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0c625d211ac1b3ff030a842fca134815"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c625d211ac1b3ff030a842fca134815">&#9670;&nbsp;</a></span>~Manager()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::~<a class="el" href="../../d8/d24/a02001.html">Manager</a> </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Destructor </p>
+
+<p>Destructor. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5d07bafa8c37267584637da1f568e3bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d07bafa8c37267584637da1f568e3bd">&#9670;&nbsp;</a></span>GetEngine()</h2>
+<a id="ab28a3c72ceb239fabb8560e648b9cddd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab28a3c72ceb239fabb8560e648b9cddd">&#9670;&nbsp;</a></span>begin() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="../../db/d06/a01509.html">Engine</a>* Castor3D::SceneFileParser::GetEngine </td>
+          <td class="memname">Collection::TObjPtrMapIt <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::begin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns an iterator to the first element of the collection. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
+</div>
+</div>
+<a id="af92acd0c659ed9e79ac7f32b03a6acea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af92acd0c659ed9e79ac7f32b03a6acea">&#9670;&nbsp;</a></span>begin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Collection::TObjPtrMapConstIt <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::begin </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -163,87 +311,410 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Returns an constant iterator to the first element of the collection. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
 </div>
 </div>
-<a id="ab83c8b39417eb49c2ce2fc886a6c72b1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab83c8b39417eb49c2ce2fc886a6c72b1">&#9670;&nbsp;</a></span>GetRenderWindow()</h2>
+<a id="a36c86d799edb45fb92f274582fc4a2e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36c86d799edb45fb92f274582fc4a2e3">&#9670;&nbsp;</a></span>Cleanup()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">RenderWindowSPtr Castor3D::SceneFileParser::GetRenderWindow </td>
+          <td class="memname">void <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::Cleanup </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets all the elements to be cleaned up. </p>
+
+</div>
+</div>
+<a id="a70517fbd2702b99752ccdae527b16258"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70517fbd2702b99752ccdae527b16258">&#9670;&nbsp;</a></span>Clear()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::Clear </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Retrieves the render window defined by the scene </p>
+
+<p>Flushes the collection. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d4/dbb/a02097.html#a3a2d8c0c80c27ee5832526252893316d">Castor3D::ObjectManager&lt; Castor::String, AnimatedObjectGroup &gt;::MergeInto()</a>.</p>
+<div id="dynsection-2" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-2-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-2-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-2-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d8/d24/a02001_a70517fbd2702b99752ccdae527b16258_icgraph.png" border="0" usemap="#d8/d24/a02001_a70517fbd2702b99752ccdae527b16258_icgraph" alt=""/></div>
+<map name="d8/d24/a02001_a70517fbd2702b99752ccdae527b16258_icgraph" id="d8/d24/a02001_a70517fbd2702b99752ccdae527b16258_icgraph">
+<area shape="rect"  title="Flushes the collection." alt="" coords="268,13,411,54"/>
+<area shape="rect"  href="../../d4/dbb/a02097.html#a3a2d8c0c80c27ee5832526252893316d" title=" " alt="" coords="5,5,220,61"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="a11a87c812315d5c551e924a4ffb5a285"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a11a87c812315d5c551e924a4ffb5a285">&#9670;&nbsp;</a></span>ParseFile() <span class="overload">[1/2]</span></h2>
+<a id="ad61a8b6fe78e7b1e8a76b23a1f62af05"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad61a8b6fe78e7b1e8a76b23a1f62af05">&#9670;&nbsp;</a></span>Create()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<div class="memtemplate">
+template&lt;typename ... Parameters&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Castor3D::SceneFileParser::ParseFile </td>
+          <td class="memname">std::shared_ptr&lt; Elem &gt; <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::Create </td>
           <td>(</td>
-          <td class="paramtype">Castor::TextFile &amp;&#160;</td>
-          <td class="paramname"><em>p_file</em></td><td>)</td>
+          <td class="paramtype">Key const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="../../d3/d90/a02177.html">Parameters</a> &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>p_params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Parses the given file (expecting it to be in ESCN file format) </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Creates an object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in,out]</td><td class="paramname">p_file</td><td>The file </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The object name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_params</td><td>The other constructor parameters. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the parsed scene </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The created object. </dd></dl>
 
 </div>
 </div>
-<a id="a39299115ec58fe3185e025c1b21cb2f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a39299115ec58fe3185e025c1b21cb2f4">&#9670;&nbsp;</a></span>ParseFile() <span class="overload">[2/2]</span></h2>
+<a id="a82ed08f2bf4254e01c16e053c5cb3512"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82ed08f2bf4254e01c16e053c5cb3512">&#9670;&nbsp;</a></span>end() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">bool Castor3D::SceneFileParser::ParseFile </td>
+          <td class="memname">Collection::TObjPtrMapIt <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::end </td>
           <td>(</td>
-          <td class="paramtype">Castor::Path const &amp;&#160;</td>
-          <td class="paramname"><em>p_pathFile</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
-<p>Parses the given file (expecting it to be in ESCN file format) </p><dl class="params"><dt>Parameters</dt><dd>
+
+<p>Returns an iterator to the after last element of the collection. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
+</div>
+</div>
+<a id="a327e1e45a0fec66b5234d2bed8db1763"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a327e1e45a0fec66b5234d2bed8db1763">&#9670;&nbsp;</a></span>end() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Collection::TObjPtrMapConstIt <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::end </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Returns an constant iterator to the after last element of the collection. </p>
+<dl class="section return"><dt>Returns</dt><dd>The iterator </dd></dl>
+
+</div>
+</div>
+<a id="a41767d5d95465e41467b7ecc0211387a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41767d5d95465e41467b7ecc0211387a">&#9670;&nbsp;</a></span>Find()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::shared_ptr&lt; Elem &gt; <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::Find </td>
+          <td>(</td>
+          <td class="paramtype">Key const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Looks for an element with given name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">p_pathFile</td><td>The file path </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The object name. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>true if successful, false if not </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The found element, nullptr if not found. </dd></dl>
 
 </div>
 </div>
-<a id="abb4695e9846211ff91554df0abda3ab4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb4695e9846211ff91554df0abda3ab4">&#9670;&nbsp;</a></span>ScenesBegin() <span class="overload">[1/2]</span></h2>
+<a id="ac03e5ff0379d0862715c30a01b85cdb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac03e5ff0379d0862715c30a01b85cdb1">&#9670;&nbsp;</a></span>GetEngine()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ScenePtrStrMap::iterator Castor3D::SceneFileParser::ScenesBegin </td>
+          <td class="memname"><a class="el" href="../../d5/d77/a01749.html">Engine</a>* <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::GetEngine </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="../../d5/d77/a01749.html" title="Main System.">Engine</a>. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d8/d24/a02001.html#a36c86d799edb45fb92f274582fc4a2e3">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Cleanup()</a>, <a class="el" href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Create()</a>, and <a class="el" href="../../d3/d1e/a02093.html#a2f7334a960bc9ede28314040451bf9b0">Castor3D::ObjectManagerEngineGetter::Get()</a>.</p>
+<div id="dynsection-3" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-3-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-3-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-3-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d8/d24/a02001_ac03e5ff0379d0862715c30a01b85cdb1_icgraph.png" border="0" usemap="#d8/d24/a02001_ac03e5ff0379d0862715c30a01b85cdb1_icgraph" alt=""/></div>
+<map name="d8/d24/a02001_ac03e5ff0379d0862715c30a01b85cdb1_icgraph" id="d8/d24/a02001_ac03e5ff0379d0862715c30a01b85cdb1_icgraph">
+<area shape="rect"  title=" " alt="" coords="272,115,415,156"/>
+<area shape="rect"  href="../../d8/d24/a02001.html#a36c86d799edb45fb92f274582fc4a2e3" title="Sets all the elements to be cleaned up." alt="" coords="5,5,224,76"/>
+<area shape="rect"  href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05" title="Creates an object." alt="" coords="5,100,224,171"/>
+<area shape="rect"  href="../../d3/d1e/a02093.html#a2f7334a960bc9ede28314040451bf9b0" title=" " alt="" coords="9,195,221,236"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="accf33341df9bde085a88bf3609b2e97c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#accf33341df9bde085a88bf3609b2e97c">&#9670;&nbsp;</a></span>GetObjectTypeName()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Castor::String const&amp; <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::GetObjectTypeName </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="../../d5/d77/a01749.html" title="Main System.">Engine</a>. </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Create()</a>, and <a class="el" href="../../d8/d24/a02001.html#a0ee70a8066ec27844cfea6ac8118a039">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Insert()</a>.</p>
+<div id="dynsection-4" onclick="return toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;">
+  <img id="dynsection-4-trigger" src="../../closed.png" alt="+"/> Here is the caller graph for this function:</div>
+<div id="dynsection-4-summary" class="dynsummary" style="display:block;">
+</div>
+<div id="dynsection-4-content" class="dyncontent" style="display:none;">
+<div class="center"><img src="../../d8/d24/a02001_accf33341df9bde085a88bf3609b2e97c_icgraph.png" border="0" usemap="#d8/d24/a02001_accf33341df9bde085a88bf3609b2e97c_icgraph" alt=""/></div>
+<map name="d8/d24/a02001_accf33341df9bde085a88bf3609b2e97c_icgraph" id="d8/d24/a02001_accf33341df9bde085a88bf3609b2e97c_icgraph">
+<area shape="rect"  title=" " alt="" coords="272,68,415,109"/>
+<area shape="rect"  href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05" title="Creates an object." alt="" coords="5,5,224,76"/>
+<area shape="rect"  href="../../d8/d24/a02001.html#a0ee70a8066ec27844cfea6ac8118a039" title="Removes an object, given a name." alt="" coords="5,100,224,171"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="aa3cfaa82644c5b14a93ae40da6a90e8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3cfaa82644c5b14a93ae40da6a90e8c">&#9670;&nbsp;</a></span>Has()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::Has </td>
+          <td>(</td>
+          <td class="paramtype">Key const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The object name. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if an element with given name exists. </dd></dl>
+
+</div>
+</div>
+<a id="a0ee70a8066ec27844cfea6ac8118a039"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ee70a8066ec27844cfea6ac8118a039">&#9670;&nbsp;</a></span>Insert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::Insert </td>
+          <td>(</td>
+          <td class="paramtype">Key const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::shared_ptr&lt; Elem &gt;&#160;</td>
+          <td class="paramname"><em>p_element</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes an object, given a name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The element name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_element</td><td>The element. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af6fb03dd83751524ba738d42dba2c73a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6fb03dd83751524ba738d42dba2c73a">&#9670;&nbsp;</a></span>IsEmpty()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::IsEmpty </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -255,20 +726,23 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd><code>true</code> if the manager is empty. </dd></dl>
 
 </div>
 </div>
-<a id="a14f4b35771ad74b44a57f15f27e5b1b2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a14f4b35771ad74b44a57f15f27e5b1b2">&#9670;&nbsp;</a></span>ScenesBegin() <span class="overload">[2/2]</span></h2>
+<a id="a9d42b76b53f3917843a9078ab91a09d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d42b76b53f3917843a9078ab91a09d8">&#9670;&nbsp;</a></span>lock()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ScenePtrStrMap::const_iterator Castor3D::SceneFileParser::ScenesBegin </td>
+          <td class="memname">void <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::lock </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -281,19 +755,93 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
+<p>Locks the collection mutex. </p>
+
 </div>
 </div>
-<a id="a978d83d39cfe449cd1c7de9d152df1be"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a978d83d39cfe449cd1c7de9d152df1be">&#9670;&nbsp;</a></span>ScenesEnd()</h2>
+<a id="a1419e38cf672631195cf326faee4791f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1419e38cf672631195cf326faee4791f">&#9670;&nbsp;</a></span>Remove()</h2>
 
 <div class="memitem">
 <div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">ScenePtrStrMap::const_iterator Castor3D::SceneFileParser::ScenesEnd </td>
+          <td class="memname">void <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::Remove </td>
+          <td>(</td>
+          <td class="paramtype">Key const &amp;&#160;</td>
+          <td class="paramname"><em>p_name</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Removes an object, given a name. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_name</td><td>The object name. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1e5b612c3660a1e729a7c122a94f8a95"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e5b612c3660a1e729a7c122a94f8a95">&#9670;&nbsp;</a></span>SetRenderSystem() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::SetRenderSystem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a> *&#160;</td>
+          <td class="paramname"><em>p_renderSystem</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">p_renderSystem</td><td>The <a class="el" href="../../db/d2a/a02325.html" title="The render system representation.">RenderSystem</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a5ce546af639f29a5b3cf9df45d3857e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ce546af639f29a5b3cf9df45d3857e6">&#9670;&nbsp;</a></span>SetRenderSystem() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a>* <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::SetRenderSystem </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
@@ -305,16 +853,103 @@ Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The <a class="el" href="../../db/d2a/a02325.html" title="The render system representation.">RenderSystem</a>. </dd></dl>
+
+</div>
+</div>
+<a id="a44a2913ba8219d6997f84b60c8937103"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a44a2913ba8219d6997f84b60c8937103">&#9670;&nbsp;</a></span>unlock()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::unlock </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Unlocks the collection mutex. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Member Data Documentation</h2>
+<a id="a9ccf0226ae1d2164e0e6e14c5ad899e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ccf0226ae1d2164e0e6e14c5ad899e7">&#9670;&nbsp;</a></span>m_elements</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../d8/d24/a02001.html#acfac309c191dd8ebfa36e142db8802af">Collection</a> <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::m_elements</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">mutable</span><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The elements collection. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d8/d24/a02001.html#ab28a3c72ceb239fabb8560e648b9cddd">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::begin()</a>, <a class="el" href="../../d8/d24/a02001.html#a36c86d799edb45fb92f274582fc4a2e3">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Cleanup()</a>, <a class="el" href="../../d8/d24/a02001.html#a70517fbd2702b99752ccdae527b16258">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Clear()</a>, <a class="el" href="../../d8/d24/a02001.html#ad61a8b6fe78e7b1e8a76b23a1f62af05">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Create()</a>, <a class="el" href="../../d8/d24/a02001.html#a82ed08f2bf4254e01c16e053c5cb3512">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::end()</a>, <a class="el" href="../../d8/d24/a02001.html#a41767d5d95465e41467b7ecc0211387a">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Find()</a>, <a class="el" href="../../d8/d24/a02001.html#aa3cfaa82644c5b14a93ae40da6a90e8c">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Has()</a>, <a class="el" href="../../d8/d24/a02001.html#a0ee70a8066ec27844cfea6ac8118a039">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Insert()</a>, <a class="el" href="../../d8/d24/a02001.html#af6fb03dd83751524ba738d42dba2c73a">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::IsEmpty()</a>, <a class="el" href="../../d8/d24/a02001.html#a9d42b76b53f3917843a9078ab91a09d8">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::lock()</a>, <a class="el" href="../../d8/d24/a02001.html#a1419e38cf672631195cf326faee4791f">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::Remove()</a>, and <a class="el" href="../../d8/d24/a02001.html#a44a2913ba8219d6997f84b60c8937103">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::unlock()</a>.</p>
+
+</div>
+</div>
+<a id="a0b40e01ec5a7ab9052d302eb218a13df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0b40e01ec5a7ab9052d302eb218a13df">&#9670;&nbsp;</a></span>m_renderSystem</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Key, typename Elem, typename Owner, typename EngineGetter&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="../../db/d2a/a02325.html">RenderSystem</a>* <a class="el" href="../../d8/d24/a02001.html">Castor3D::Manager</a>&lt; Key, Elem, Owner, EngineGetter &gt;::m_renderSystem</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>The <a class="el" href="../../db/d2a/a02325.html" title="The render system representation.">RenderSystem</a>. </p>
+
+<p class="reference">Referenced by <a class="el" href="../../d8/d24/a02001.html#a1e5b612c3660a1e729a7c122a94f8a95">Castor3D::Manager&lt; Castor::String, Sampler, Engine, ResourceManagerEngineGetter &gt;::SetRenderSystem()</a>.</p>
 
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../df/d91/a00335.html">SceneFileParser.hpp</a></li>
+<li>Z:/Projets/C++/Castor3D/source/Core/Castor3D/Src/<a class="el" href="../../d9/d39/a00257.html">Manager.hpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Feb 14 2020 12:54:10 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Feb 14 2020 13:16:39 for Castor3D by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="../../doxygen.png" alt="doxygen"/>
 </a> 1.8.15
 </small></address>
