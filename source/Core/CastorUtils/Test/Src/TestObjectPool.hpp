@@ -296,28 +296,28 @@ namespace Testing
 
 					for ( size_t i = 0; i < obj_count; ++i )
 					{
-						*buffer++ = Policy::Allocate< type >();
+						*buffer++ = Policy::template Allocate< type >();
 					}
 
 					NextStep( "Random deallocations", time );
 
 					for ( size_t i : index )
 					{
-						Policy::Deallocate( arraybuffer[i] );
+						Policy::template Deallocate< type >( arraybuffer[i] );
 					}
 
 					NextStep( "Reallocations", time );
 
 					for ( size_t i : index )
 					{
-						arraybuffer[i] = Policy::Allocate< type >();
+						arraybuffer[i] = Policy::template Allocate< type >();
 					}
 
 					NextStep( "Deallocation", time );
 
 					for ( auto object : arraybuffer )
 					{
-						Policy::Deallocate( object );
+						Policy::template Deallocate< type >( object );
 					}
 				}
 				Finalise( time );
