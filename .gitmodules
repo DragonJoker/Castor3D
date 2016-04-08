@@ -1,0 +1,6 @@
+[submodule "source/CMake"]
+	path = source/CMake
+	url = https://github.com/DragonJoker/CMakeUtils.git
+[submodule "dependencies"]
+	path = dependencies
+	url = https://github.com/DragonJoker/Castor3DDeps.git
