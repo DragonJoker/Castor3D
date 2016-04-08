@@ -2,7 +2,7 @@ project( FbxImporter )
 
 find_package( FbxSDK )
 
-if( FbxSDK_FOUND )
+if( FbxSDK_FOUND OR FBXSDK_FOUND )
 	message( STATUS "+ Found FBX SDK" )
 
 	include_directories( ${CMAKE_SOURCE_DIR}/Core/CastorUtils/Src )

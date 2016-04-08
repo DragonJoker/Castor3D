@@ -227,10 +227,16 @@ namespace Castor3D
 		catch ( Castor::Exception & p_exc )
 		{
 			Logger::LogError( cuT( "RenderLoop - " ) + p_exc.GetFullDescription() );
+			Cleanup();
+			m_renderSystem->Cleanup();
+			throw;
 		}
 		catch ( std::exception & p_exc )
 		{
 			Logger::LogError( std::string( "RenderLoop - " ) + p_exc.what() );
+			Cleanup();
+			m_renderSystem->Cleanup();
+			throw;
 		}
 
 		Cleanup();

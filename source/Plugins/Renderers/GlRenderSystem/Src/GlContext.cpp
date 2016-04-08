@@ -47,6 +47,10 @@ namespace GlRender
 
 		if ( m_initialised )
 		{
+			if ( m_glRenderSystem->GetOpenGlMajor() < 3 )
+			{
+				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D" ) );
+			}
 		}
 
 		return m_initialised;
