@@ -1,32 +1,29 @@
-#include "VertexBoneData.hpp"
+﻿#include "VertexBoneData.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
 	stVERTEX_BONE_DATA::stVERTEX_BONE_DATA()
+		: m_ids {}
+		, m_weights {}
 	{
-		for ( int i = 0; i < C3D_MAX_BONES_PER_VERTEX; ++i )
-		{
-			m_ids[i] = 0;
-			m_weights[i] = 0;
-		}
 	}
 
-	void stVERTEX_BONE_DATA::AddBoneData( uint32_t p_uiBoneId, real p_rWeight )
+	void stVERTEX_BONE_DATA::AddBoneData( uint32_t p_boneId, real p_weight )
 	{
-		bool l_bDone = false;
+		bool l_done = false;
 
-		for ( int i = 0; i < C3D_MAX_BONES_PER_VERTEX && !l_bDone; i++ )
+		for ( int i = 0; i < C3D_MAX_BONES_PER_VERTEX && !l_done; i++ )
 		{
-			if ( m_weights[i] == 0.0 )
+			if ( m_weights[i] == 0.0_r )
 			{
-				m_ids[i]     = p_uiBoneId;
-				m_weights[i] = p_rWeight;
-				l_bDone = true;
+				m_ids[i] = p_boneId;
+				m_weights[i] = p_weight;
+				l_done = true;
 			}
 		}
 
-		CASTOR_ASSERT( l_bDone );
+		//ENSURE( l_done );
 	}
 }

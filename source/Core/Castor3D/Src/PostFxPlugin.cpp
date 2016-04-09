@@ -1,4 +1,4 @@
-#include "PostFxPlugin.hpp"
+﻿#include "PostFxPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -12,84 +12,84 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#pragma warning( disable:4290 )
 #if defined( _MSC_VER)
 #	if defined( _WIN64 )
 #		if ( _MSC_VER < 1700 )
-	static const String CreateEffectFunctionABIName			= cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PEAVRenderSystem@Castor3D@@EAVRenderTarget@4@ABVParameters@4@@Z" );
 #		else
-	static const String CreateEffectFunctionABIName			= cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PEAVRenderSystem@Castor3D@@AEAVRenderTarget@4@AEBVParameters@4@@Z" );
 #		endif
 #	else
 #		if ( _MSC_VER < 1700 )
-	static const String CreateEffectFunctionABIName			= cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@tr1@std@@PAVRenderSystem@Castor3D@@AAVRenderTarget@4@ABVParameters@4@@Z" );
 #		else
-	static const String CreateEffectFunctionABIName			= cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateEffectFunctionABIName = cuT( "?CreateEffect@@YA?AV?$shared_ptr@VPostEffect@Castor3D@@@std@@PAVRenderSystem@Castor3D@@AAVRenderTarget@4@ABVParameters@4@@Z" );
 #		endif
 #	endif
+	static const String GetPostEffectTypeFunctionABIName = cuT( "?GetPostEffectType@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ" );
 #elif defined( __GNUG__)
-	static const String CreateEffectFunctionABIName			= cuT( "_Z12CreateEffectPN8Castor3D12RenderSystemE" );
+	static const String CreateEffectFunctionABIName = cuT( "_Z12CreateEffectPN8Castor3D12RenderSystemERNS_12RenderTargetERKNS_10ParametersE" );
+#	if GCC_VERSION >= 50300
+	static const String GetPostEffectTypeFunctionABIName = cuT( "_Z17GetPostEffectTypeB5cxx11v" );
+#else
+	static const String GetPostEffectTypeFunctionABIName = cuT( "_Z17GetPostEffectTypev" );
+#endif
 #else
 #	error "Implement ABI names for this compiler"
 #endif
 
-	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_POSTFX, p_pLibrary )
+	PostFxPlugin::PostFxPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_POSTFX, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateEffect, CreateEffectFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateEffect plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateEffect plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
-	}
 
-	PostFxPlugin::PostFxPlugin( PostFxPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateEffect( p_plugin.m_pfnCreateEffect )
-	{
-	}
+		if ( !p_library->GetFunction( m_pfnGetPostEffectType, GetPostEffectTypeFunctionABIName ) )
+		{
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetPostEffectType plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
+		}
 
-	PostFxPlugin::PostFxPlugin( PostFxPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateEffect( std::move( p_plugin.m_pfnCreateEffect ) )
-	{
-		p_plugin.m_pfnCreateEffect	= NULL;
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( GetEngine() );
+		}
 	}
 
 	PostFxPlugin::~PostFxPlugin()
 	{
-	}
-
-	PostFxPlugin & PostFxPlugin::operator =( PostFxPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateEffect		= p_plugin.m_pfnCreateEffect;
-		return * this;
-	}
-
-	PostFxPlugin & PostFxPlugin::operator =( PostFxPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
+		if ( m_pfnOnUnload )
 		{
-			m_pfnCreateEffect			= std::move( p_plugin.m_pfnCreateEffect );
-			p_plugin.m_pfnCreateEffect	= NULL;
+			m_pfnOnUnload( GetEngine() );
 		}
-
-		return * this;
 	}
 
-	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_pRenderSystem )
+	PostEffectSPtr PostFxPlugin::CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params )
 	{
-		PostEffectSPtr l_pReturn;
+		PostEffectSPtr l_return;
 
 		if ( m_pfnCreateEffect )
 		{
-			l_pReturn = m_pfnCreateEffect( p_pRenderSystem );
+			l_return = m_pfnCreateEffect( p_renderSystem, p_renderTarget, p_params );
 		}
 
-		return l_pReturn;
+		return l_return;
+	}
+
+	String PostFxPlugin::GetPostEffectType()
+	{
+		String l_strReturn;
+
+		if ( m_pfnGetPostEffectType )
+		{
+			l_strReturn = m_pfnGetPostEffectType();
+		}
+
+		return l_strReturn;
 	}
 }

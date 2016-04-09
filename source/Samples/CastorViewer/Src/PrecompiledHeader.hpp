@@ -9,13 +9,6 @@
 #		define __WXMSW__
 #	endif
 
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#		pragma warning( disable:4996 )
-#	endif
-
 #	include <string>
 
 #	include <wx/app.h>
@@ -107,34 +100,15 @@
 #	include <vector>
 #	include <cmath>
 
-#	ifndef _UNICODE
-#		if CASTOR_UNICODE
-#			error "CastorViewer compiling in ASCII mode while Castor3D is in UNICODE mode"
-#		endif
-#	else
-#		if ! CASTOR_UNICODE
-#			error "CastorViewer compiling in UNICODE mode while Castor3D is in ASCII mode"
-#		endif
-#	endif
-
-#	include <FrameVariableDialog.hpp>
-#	include <GeometriesListFrame.hpp>
+#	include <SceneObjectsList.hpp>
 #	include <ImagesLoader.hpp>
-#	include <MaterialPanel.hpp>
-#	include <MaterialsFrame.hpp>
-#	include <MaterialsListView.hpp>
-#	include <PassPanel.hpp>
+#	include <PropertiesHolder.hpp>
+#	include <MaterialsList.hpp>
 #	include <RendererSelector.hpp>
 #	include <ShaderDialog.hpp>
 #	include <SplashScreen.hpp>
-
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
 #else
 #	include <GuiCommonPrerequisites.hpp>
 #endif
-
-using namespace GuiCommon;
 
 #endif

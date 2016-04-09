@@ -32,26 +32,29 @@ namespace Castor
 	\date		03/01/2011
 	\~english
 	\brief		Main resource loader class
-	\remark		Holds the two functions needed for a resource loader : Load and Save
+	\remarks	Holds the two functions needed for a resource loader : Load and Save
 	\~french
 	\brief		Classe de base pour les loaders de ressource
-	\remark		Contient les 2 fonctions nécessaire a un loader : Load et Save
+	\remarks	Contient les 2 fonctions nécessaire a un loader : Load et Save
 	*/
 	template< class T, eFILE_TYPE FT, class TFile >
 	class Loader
+		: public Castor::NonCopyable
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eMode	The file open mode
+		 *\param[in]	p_mode			The file open mode
+		 *\param[in]	p_encodingMode	The file encoding mode
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eMode	Le mode d'ouverture du fichier
+		 *\param[in]	p_mode			Le mode d'ouverture du fichier
+		 *\param[in]	p_encodingMode	Le mode d'encodage du fichier
 		 */
-		Loader( File::eOPEN_MODE p_eMode, File::eENCODING_MODE p_eEncodingMode = File::eENCODING_MODE_ASCII )
-			:	m_eOpenMode( p_eMode	)
-			,	m_eEncodingMode( p_eEncodingMode	)
+		Loader( File::eOPEN_MODE p_mode, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
+			: m_openMode( p_mode )
+			, m_encodingMode( p_encodingMode )
 		{
 		}
 		/**
@@ -75,7 +78,7 @@ namespace Castor
 		 */
 		virtual bool operator()( T & p_object, Path const & p_pathFile )
 		{
-			TFile l_file( p_pathFile, File::eOPEN_MODE_READ | m_eOpenMode, m_eEncodingMode );
+			TFile l_file( p_pathFile, File::eOPEN_MODE_READ | m_openMode, m_encodingMode );
 			return operator()( p_object, l_file );
 		}
 		/**
@@ -88,7 +91,7 @@ namespace Castor
 		 *\param[in,out]	p_object	L'objet à lire
 		 *\param[in,out]	p_file		Le fichier où lire l'objet
 		 */
-		virtual bool operator()( T & CU_PARAM_UNUSED( p_object ), TFile & CU_PARAM_UNUSED( p_file ) )
+		virtual bool operator()( T & p_object, TFile & p_file )
 		{
 			LOADER_ERROR( "Import not supported by the loader registered for this type" );
 		}
@@ -104,7 +107,7 @@ namespace Castor
 		 */
 		virtual bool operator()( T const & p_object, Path const & p_pathFile )
 		{
-			TFile l_file( p_pathFile, File::eOPEN_MODE_WRITE | m_eOpenMode, m_eEncodingMode );
+			TFile l_file( p_pathFile, File::eOPEN_MODE_WRITE | m_openMode, m_encodingMode );
 			return operator()( p_object, l_file );
 		}
 		/**
@@ -117,14 +120,16 @@ namespace Castor
 		 *\param[in]		p_object	L'objet à écrire
 		 *\param[in,out]	p_file		Le fichier où écrire l'objet
 		 */
-		virtual bool operator()( T const & CU_PARAM_UNUSED( p_object ), TFile & CU_PARAM_UNUSED( p_file ) )
+		virtual bool operator()( T const & p_object, TFile & p_file )
 		{
 			LOADER_ERROR( "Export not supported by the loader registered for this type" );
 		}
 
-	private:
-		File::eOPEN_MODE m_eOpenMode;
-		File::eENCODING_MODE m_eEncodingMode;
+	protected:
+		//!\~english The file open mode.	\~french Le mode d'ouverture du fichier.
+		File::eOPEN_MODE m_openMode;
+		//!\~english The file encoding mode.	\~french Le mode d'encodage du fichier.
+		File::eENCODING_MODE m_encodingMode;
 	};
 }
 

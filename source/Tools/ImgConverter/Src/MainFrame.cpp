@@ -1,6 +1,12 @@
 #include "MainFrame.hpp"
 #include "ImgConverter.hpp"
 
+#include <wx/choicdlg.h>
+#include <wx/filedlg.h>
+#include <wx/filename.h>
+#include <wx/sizer.h>
+#include <wx/stdpaths.h>
+
 using namespace ImgToIco;
 
 DECLARE_APP( ImgToIcoApp )

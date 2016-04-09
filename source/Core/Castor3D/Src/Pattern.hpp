@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -38,7 +34,7 @@ namespace Castor3D
 	\remark		Un chemin est une collection de points consécutifs
 	*/
 	template< typename T >
-	class C3D_API Pattern
+	class Pattern
 	{
 	public:
 		/**
@@ -70,19 +66,19 @@ namespace Castor3D
 		 */
 		Pointer GetReversed()const
 		{
-			Pointer l_pReturn = std::make_shared< Pattern< T > >();
+			Pointer l_return = std::make_shared< Pattern< T > >();
 
 			for ( typename TObjList::iterator l_it = m_listElements.begin(); l_it != m_listElements.end(); l_it++ )
 			{
-				l_pReturn->m_listElements.push_front( *l_it );
+				l_return->m_listElements.push_front( *l_it );
 			}
 
-			return l_pReturn;
+			return l_return;
 		}
 		/**
 		 *\~english
 		 *\brief		Tells if the pattern is closed (first element is also the last)
-		 *\return		\pt true if closed, \p false if not
+		 *\return		\p true if closed, \p false if not
 		 *\~french
 		 *\brief		Dit si le chemin est fermé (le premier élément est aussi le dernier)
 		 *\return		\p true si fermé, \p false sinon
@@ -97,15 +93,15 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Adds an element to the list, at a given index
 		 *\param[in]	p_tElement	The element to add
-		 *\param[in]	p_uiIndex	The index at which the insertion must be done
+		 *\param[in]	p_index	The index at which the insertion must be done
 		 *\~french
 		 *\brief		Ajoute un sommet, à l'indice donné
 		 *\param[in]	p_tElement	L'élément à ajouter
-		 *\param[in]	p_uiIndex	L'indice souhaité
+		 *\param[in]	p_index	L'indice souhaité
 		 */
-		void AddElement( TObjConstRef p_tElement, uint32_t p_uiIndex = 0xFFFFFFFF )
+		void AddElement( TObjConstRef p_tElement, uint32_t p_index = 0xFFFFFFFF )
 		{
-			if ( p_uiIndex >= m_listElements.size() )
+			if ( p_index >= m_listElements.size() )
 			{
 				m_listElements.push_back( p_tElement );
 			}
@@ -113,7 +109,7 @@ namespace Castor3D
 			{
 				typename TObjList::iterator l_it = m_listElements.begin();
 
-				for ( uint32_t i = 0; i < p_uiIndex; i++ )
+				for ( uint32_t i = 0; i < p_index; i++ )
 				{
 					l_it++;
 				}
@@ -134,19 +130,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Accessor to an element
-		 *\param[in]	p_uiIndex	the index of the wanted element
+		 *\param[in]	p_index	the index of the wanted element
 		 *\return		Modifiable element reference
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_uiIndex	Index de l'élément voulu
+		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence modifiable sur l'élément
 		 */
-		TObjRef operator []( uint32_t p_uiIndex )
+		TObjRef operator[]( uint32_t p_index )
 		{
-			CASTOR_ASSERT( p_uiIndex < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::iterator l_it = m_listElements.begin();
 
-			for ( uint32_t i = 0; i < p_uiIndex; i++ )
+			for ( uint32_t i = 0; i < p_index; i++ )
 			{
 				l_it++;
 			}
@@ -156,19 +152,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constant accessor to an element
-		 *\param[in]	p_uiIndex	the index of the wanted element
+		 *\param[in]	p_index	the index of the wanted element
 		 *\return		Constant element reference
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_uiIndex	Index de l'élément voulu
+		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence constante sur l'élément
 		 */
-		TObjConstRef operator []( uint32_t p_uiIndex )const
+		TObjConstRef operator[]( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_uiIndex < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::const_iterator l_it = m_listElements.begin();
 
-			for ( uint32_t i = 0; i < p_uiIndex; i++ )
+			for ( uint32_t i = 0; i < p_index; i++ )
 			{
 				l_it++;
 			}
@@ -178,19 +174,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Accessor to an element
-		 *\param[in]	p_uiIndex	the index of the wanted element
+		 *\param[in]	p_index	the index of the wanted element
 		 *\return		Modifiable element
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_uiIndex	Index de l'élément voulu
+		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence modifiable sur l'élément
 		 */
-		TObjRef GetElement( uint32_t p_uiIndex )
+		TObjRef GetElement( uint32_t p_index )
 		{
-			CASTOR_ASSERT( p_uiIndex < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::iterator l_it = m_listElements.begin();
 
-			for ( uint32_t i = 0; i < p_uiIndex; i++ )
+			for ( uint32_t i = 0; i < p_index; i++ )
 			{
 				l_it++;
 			}
@@ -200,19 +196,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constant accessor to an element
-		 *\param[in]	p_uiIndex	the index of the wanted element
+		 *\param[in]	p_index	the index of the wanted element
 		 *\return		Constant element
 		 *\~french
 		 *\brief		Accesseur sur les éléments
-		 *\param[in]	p_uiIndex	Index de l'élément voulu
+		 *\param[in]	p_index	Index de l'élément voulu
 		 *\return		Une référence constante sur l'élément
 		 */
-		TObjConstRef GetElement( uint32_t p_uiIndex )const
+		TObjConstRef GetElement( uint32_t p_index )const
 		{
-			CASTOR_ASSERT( p_uiIndex < m_listElements.size() );
+			REQUIRE( p_index < m_listElements.size() );
 			typename TObjList::const_iterator l_it = m_listElements.begin();
 
-			for ( uint32_t i = 0; i < p_uiIndex; i++ )
+			for ( uint32_t i = 0; i < p_index; i++ )
 			{
 				l_it++;
 			}
@@ -221,15 +217,13 @@ namespace Castor3D
 		}
 
 	private:
-		typedef T							TObj;
-		typedef T 			&				TObjRef;
-		typedef T const 		&			TObjConstRef;
-		typedef typename std::list< TObj >	TObjList;
+		typedef T TObj;
+		typedef T & TObjRef;
+		typedef T const & TObjConstRef;
+		typedef typename std::list< TObj > TObjList;
 		//!\~english The elements	\~french Les éléments
 		TObjList m_listElements;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

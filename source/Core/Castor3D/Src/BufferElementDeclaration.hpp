@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -27,57 +27,88 @@ namespace Castor3D
 	\version	0.6.1.0
 	\date		03/01/2011
 	\~english
-	\brief		Buffer element description
-	\remark		Describes usage and type of an element in a vertex buffer
+	\brief		Buffer element description.
+	\remark		Describes usage and type of an element in a vertex buffer.
 	\~french
-	\brief		Description d'un ÈlÈment de tampon
-	\remark		DÈcrit l'utilisation et le type d'un ÈlÈment de tampon de sommets
+	\brief		Description d'un √©l√©ment de tampon.
+	\remark		D√©crit l'utilisation et le type d'un √©l√©ment de tampon de sommets.
 	*/
 	struct BufferElementDeclaration
 	{
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
 		BufferElementDeclaration()
-			:	m_uiStream()
-			,	m_eUsage()
-			,	m_eDataType()
-			,	m_uiOffset()
+			: m_dataType()
+			, m_offset()
+			, m_name()
+			, m_usages( 0u )
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_uiStream	Stream index
-		 *\param[in]	p_eUsage	Element usage
-		 *\param[in]	p_eType		Element type
-		 *\param[in]	p_uiOffset	Offset in the stream
+		 *\brief		Constructor.
+		 *\param[in]	p_name		The associated variable name.
+		 *\param[in]	p_usages	Element possible usages (eELEMENT_USAGE combination).
+		 *\param[in]	p_type		Element type.
+		 *\param[in]	p_offset	Offset in the stream.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_uiStream	Index du flux
-		 *\param[in]	p_eUsage	Utilisation de l'ÈlÈment
-		 *\param[in]	p_eType		Type de l'ÈlÈment
-		 *\param[in]	p_uiOffset	Offset dans le tampon
+		 *\brief		Constructeur.
+		 *\param[in]	p_name		Le nom de la variable associ√©e.
+		 *\param[in]	p_usages	Les utilisations possibles de l'√©l√©ment (combinaison de eELEMENT_USAGE)
+		 *\param[in]	p_type		Type de l'√©l√©ment.
+		 *\param[in]	p_offset	Offset dans le tampon.
 		 */
-		BufferElementDeclaration( uint32_t p_uiStream, eELEMENT_USAGE p_eUsage, eELEMENT_TYPE p_eType, uint32_t p_uiOffset = 0 )
-			:	m_uiStream( p_uiStream )
-			,	m_eUsage( p_eUsage )
-			,	m_eDataType( p_eType )
-			,	m_uiOffset( p_uiOffset )
+		BufferElementDeclaration( Castor::String const & p_name, uint32_t p_usages, eELEMENT_TYPE p_type, uint32_t p_offset = 0 )
+			: m_dataType( p_type )
+			, m_offset( p_offset )
+			, m_name( p_name )
+			, m_usages( p_usages )
 		{
 		}
-		//!\~english Stream index	\~french Index du flux
-		uint32_t m_uiStream;
-		//!\~english Element usage	\~french Utilisation de l'ÈlÈment
-		eELEMENT_USAGE m_eUsage;
-		//!\~english Element type	\~french Type de l'ÈlÈment
-		eELEMENT_TYPE m_eDataType;
-		//!\~english Offset in stream	\~french Offset dans le tampon
-		uint32_t m_uiOffset;
+
+		//!\~english The associated variable name.	\~french Le nom de la variable associ√©e.
+		Castor::String m_name;
+		//!\~english Element usage.	\~french Utilisation de l'√©l√©ment.
+		uint32_t m_usages;
+		//!\~english Element type.	\~french Type de l'√©l√©ment.
+		eELEMENT_TYPE m_dataType;
+		//!\~english Offset in buffer.	\~french Offset dans le tampon.
+		uint32_t m_offset;
 	};
+	/**
+	 *\~english
+	 *\brief		Equality operator.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
+	 *\~french
+	 *\brief		Op√©rateur d'√©galit√©.
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets √† comparer
+	 */
+	inline bool operator==( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
+	{
+		return p_lhs.m_dataType == p_rhs.m_dataType
+			   && p_lhs.m_name == p_rhs.m_name
+			   && p_lhs.m_offset == p_rhs.m_offset
+			   && p_lhs.m_usages == p_rhs.m_usages;
+	}
+	/**
+	 *\~english
+	 *\brief		Equality operator.
+	 *\param[in]	p_lhs, p_rhs	The 2 objects to compare.
+	 *\~french
+	 *\brief		Op√©rateur d'√©galit√©.
+	 *\param[in]	p_lhs, p_rhs	Les 2 objets √† comparer
+	 */
+	inline bool operator!=( BufferElementDeclaration const & p_lhs, BufferElementDeclaration const & p_rhs )
+	{
+		return p_lhs.m_dataType != p_rhs.m_dataType
+			   || p_lhs.m_name != p_rhs.m_name
+			   || p_lhs.m_offset != p_rhs.m_offset
+			   || p_lhs.m_usages != p_rhs.m_usages;
+	}
 }
 
 #endif

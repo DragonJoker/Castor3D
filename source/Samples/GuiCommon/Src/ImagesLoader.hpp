@@ -26,7 +26,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
-	class wxImagesLoader
+	class ImagesLoader
 	{
 	private:
 		static ImageIdMap m_mapImages;
@@ -34,12 +34,12 @@ namespace GuiCommon
 		static ThreadPtrArray m_arrayCurrentLoads;
 
 	public:
-		wxImagesLoader();
-		~wxImagesLoader();
+		ImagesLoader();
+		~ImagesLoader();
 
 		static void Cleanup();
-		static void AddBitmap( uint32_t p_uiID, char const * const * p_pBits );
-		static wxImage * GetBitmap( uint32_t p_uiID );
+		static void AddBitmap( uint32_t p_id, char const * const * p_pBits );
+		static wxImage * GetBitmap( uint32_t p_id );
 		static void WaitAsyncLoads();
 	};
 }

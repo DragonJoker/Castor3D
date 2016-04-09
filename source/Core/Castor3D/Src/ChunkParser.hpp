@@ -36,8 +36,9 @@ namespace Castor3D
 	\~french
 	\brief		Videur de chunk
 	*/
-	struct C3D_API ChunkParserBase
+	class ChunkParserBase
 	{
+	public:
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
@@ -46,22 +47,22 @@ namespace Castor3D
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		R�cup�re un tableau de valeurs � partir d'un chunk
-		 *\param[out]	p_pValues	Re�oit les valeurs
+		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
+		 *\param[out]	p_pValues	Reçoit les valeurs
 		 *\param[out]	p_uiSize	La taille des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arriv�e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( uint8_t * p_pValues, uint32_t p_uiSize, BinaryChunk & p_chunk )
+		inline bool operator()( uint8_t * p_pValues, uint32_t p_uiSize, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = p_chunk.CheckAvailable( p_uiSize );
+			bool l_return = p_chunk.CheckAvailable( p_uiSize );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				p_chunk.Get( p_pValues, p_uiSize );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!
@@ -73,589 +74,1203 @@ namespace Castor3D
 	\~french
 	\brief		Videur de chunk
 	*/
-	template< typename T > struct C3D_API ChunkParser
-			:	public ChunkParserBase
+	template< typename T >
+	class ChunkParser
+		: public ChunkParserBase
 	{
+	public:
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_pValues	Receives the parsed values
-		 *\param[out]	p_uiCount	The values count
+		 *\param[out]	p_values	Receives the parsed values
+		 *\param[out]	p_count		The values count
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		R�cup�re un tableau de valeurs � partir d'un chunk
-		 *\param[out]	p_pValues	Re�oit les valeurs
-		 *\param[out]	p_uiCount	Le compte des valeurs
+		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
+		 *\param[out]	p_values	Reçoit les valeurs
+		 *\param[out]	p_count		Le compte des valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arriv�e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T * p_pValues, uint32_t p_uiCount, BinaryChunk & p_chunk )
+		inline bool operator()( T * p_values, uint32_t p_count, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_pValues ), p_uiCount * sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_values ), p_count * sizeof( T ), p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value array from a chunk
-		 *\param[out]	p_tValue	Receives the parsed values
+		 *\param[out]	p_values	Receives the parsed values
 		 *\param[in]	p_chunk		The chunk containing the values
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		R�cup�re un tableau de valeurs � partir d'un chunk
-		 *\param[out]	p_tValue	Re�oit les valeurs
+		 *\brief		Récupère un tableau de valeurs à partir d'un chunk
+		 *\param[out]	p_values	Reçoit les valeurs
 		 *\param[in]	p_chunk		Le chunk contenant les valeurs
-		 *\return		\p false si une erreur quelconque est arriv�e
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
 		template< uint32_t Count >
-		bool operator()( T( & p_tValue )[Count], BinaryChunk & p_chunk )
+		inline bool operator()( T( & p_values )[Count], BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_tValue ), Count * sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_values ), Count * sizeof( T ), p_chunk );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a value from a chunk
-		 *\param[out]	p_tValue	Receives the parsed value
-		 *\param[in]	p_chunk		The chunk containing the value
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
 		 *\return		\p false if any error occured
 		 *\~french
-		 *\brief		R�cup�re une valeur � partir d'un chunk
-		 *\param[out]	p_tValue	Re�oit la valeur
-		 *\param[in]	p_chunk		Le chunk contenant la valeur
-		 *\return		\p false si une erreur quelconque est arriv�e
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( T & p_tValue, BinaryChunk & p_chunk )
+		inline bool operator()( T & p_value, BinaryChunk & p_chunk )
 		{
-			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( &p_tValue ), sizeof( T ), p_chunk );
+			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( &p_value ), sizeof( T ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::String
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::String
 	*/
-	template<> struct C3D_API ChunkParser< Castor::String >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::String >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::String & p_strValue, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::String & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = p_chunk.CheckAvailable( 1 );
+			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				std::vector< char > l_pChar( l_uiSize + 1, 0 );
-				l_bReturn = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
+				l_return = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					p_strValue = Castor::str_utils::from_str( l_pChar.data() );
+					p_value = Castor::string::string_cast< xchar >( l_pChar.data() );
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Path
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Path
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Path >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Path >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Path & p_strValue, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Path & p_value, BinaryChunk & p_chunk )
 		{
-			bool l_bReturn = p_chunk.CheckAvailable( 1 );
+			bool l_return = p_chunk.CheckAvailable( 1 );
 			uint32_t l_uiSize = p_chunk.GetRemaining();
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				std::vector< char > l_pChar( l_uiSize + 1, 0 );
-				l_bReturn = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
+				l_return = ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( l_pChar.data() ), l_uiSize, p_chunk );
 
-				if ( l_bReturn )
+				if ( l_return )
 				{
-					p_strValue = Castor::str_utils::from_str( l_pChar.data() );
+					p_value = Castor::string::string_cast< xchar >( l_pChar.data() );
 				}
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point2f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point3f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point4f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point2d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point3d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point4d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2i
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point2i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( int ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3i
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point3i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( int ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4i
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point4i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( int ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point2ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point2ui
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point2ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point2ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point2ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point2ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( uint32_t ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point3ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point3ui
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point3ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point3ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point3ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point3ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( uint32_t ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Point4ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Point4ui
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Point4ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Point4ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Point4ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Point4ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( uint32_t ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords2f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords3f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords4f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords2d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords3d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords4d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2i
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords2i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( int ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3i
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords3i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( int ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4i
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4i
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4i >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4i >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords4i & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4i & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( int ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords2ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords2ui
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords2ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords2ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords2ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords2ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( uint32_t ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords3ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords3ui
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords3ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords3ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords3ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords3ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 3 * sizeof( uint32_t ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Coords4ui
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Coords4ui
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Coords4ui >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Coords4ui >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Coords4ui & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Coords4ui & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( uint32_t ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix2x2f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix2x2f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix2x2f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix2x2f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Matrix2x2f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix2x2f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix3x3f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix3x3f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix3x3f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix3x3f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Matrix3x3f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix3x3f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 9 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix4x4f
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix4x4f
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix4x4f >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix4x4f >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Matrix4x4f & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix4x4f & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 16 * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix2x2d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix2x2d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix2x2d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix2x2d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Matrix2x2d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix2x2d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix3x3d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix3x3d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix3x3d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix3x3d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Matrix3x3d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix3x3d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 9 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Matrix4x4d
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Matrix4x4d
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Matrix4x4d >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Matrix4x4d >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Matrix4x4d & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Matrix4x4d & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 16 * sizeof( double ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Colour
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Colour
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Colour >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Colour >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Colour & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Colour & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), Castor::Colour::eCOMPONENT_COUNT * sizeof( float ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Size
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Size
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Size >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Size >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Size & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Size & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( uint32_t ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkParser
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Position
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Position
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Position >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Position >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkParser::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Position & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Position & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 2 * sizeof( int ), p_chunk );
 		}
 	};
 	/*!
-	\copydoc 	Castor3D::ChunkFiller
+	\author 	Sylvain DOREMUS
+	\version	0.7.0.0
+	\date 		08/04/2014
+	\~english
+	\brief		ChunkParser specialisation for Castor::Quaternion
+	\~french
+	\brief		Spécialisation de ChunkParser pour Castor::Quaternion
 	*/
-	template<> struct C3D_API ChunkParser< Castor::Quaternion >
-			:	public ChunkParserBase
+	template<>
+	class ChunkParser< Castor::Quaternion >
+		: public ChunkParserBase
 	{
+	public:
 		/**
-		 *\copydoc		Castor3D::ChunkFiller::operator()
+		 *\~english
+		 *\brief		Retrieves a value from a chunk
+		 *\param[out]	p_value	Receives the parsed value
+		 *\param[in]	p_chunk	The chunk containing the value
+		 *\return		\p false if any error occured
+		 *\~french
+		 *\brief		Récupère une valeur à partir d'un chunk
+		 *\param[out]	p_value	Reçoit la valeur
+		 *\param[in]	p_chunk	Le chunk contenant la valeur
+		 *\return		\p false si une erreur quelconque est arrivée
 		 */
-		bool operator()( Castor::Quaternion & p_value, BinaryChunk & p_chunk )
+		inline bool operator()( Castor::Quaternion & p_value, BinaryChunk & p_chunk )
 		{
 			return ChunkParserBase::operator()( reinterpret_cast< uint8_t * >( p_value.ptr() ), 4 * sizeof( float ), p_chunk );
 		}

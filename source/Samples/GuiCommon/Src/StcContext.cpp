@@ -8,17 +8,17 @@ using namespace Castor;
 namespace GuiCommon
 {
 	StcContext::StcContext()
-		:	m_bSyntaxEnable( true	)
-		,	m_bFoldEnable( true	)
-		,	m_bIndentEnable( true	)
-		,	m_bReadOnlyInitial( false	)
-		,	m_bOverTypeInitial( false	)
-		,	m_bWrapModeInitial( false	)
-		,	m_bDisplayEOLEnable( false	)
-		,	m_bIndentGuideEnable( false	)
-		,	m_bLineNumberEnable( true	)
-		,	m_bLongLineOnEnable( true	)
-		,	m_bWhiteSpaceEnable( false	)
+		: m_bSyntaxEnable( true )
+		, m_bFoldEnable( true )
+		, m_bIndentEnable( true )
+		, m_bReadOnlyInitial( false )
+		, m_bOverTypeInitial( false )
+		, m_bWrapModeInitial( false )
+		, m_bDisplayEOLEnable( false )
+		, m_bIndentGuideEnable( false )
+		, m_bLineNumberEnable( true )
+		, m_bLongLineOnEnable( true )
+		, m_bWhiteSpaceEnable( false )
 	{
 		m_arrayLanguages.push_back( std::make_shared< LanguageInfo >() );
 	}
@@ -31,6 +31,6 @@ namespace GuiCommon
 	void StcContext::ParseFile( wxString const & p_strFileName )
 	{
 		LanguageFileParser l_parser( this );
-		l_parser.ParseFile( ( wxChar const * )p_strFileName.c_str() );
+		l_parser.ParseFile( make_String( p_strFileName ) );
 	}
 }

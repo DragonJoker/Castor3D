@@ -20,30 +20,17 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Macros.hpp"
 
-#if CASTOR_HAS_STDTHREAD
-#	include <thread>
-#	include <mutex>
-#	include <condition_variable>
-#else
-#	include <boost/thread/thread.hpp>
-#	include <boost/thread/recursive_mutex.hpp>
-#	include <boost/thread/mutex.hpp>
-#	include <boost/thread/condition_variable.hpp>
-namespace std
+#include <thread>
+#include <mutex>
+#include <condition_variable>
+
+namespace Castor
 {
-	using boost::thread;
-	using boost::mutex;
-	using boost::recursive_mutex;
-	using boost::unique_lock;
-	using boost::condition_variable;
-	using namespace boost;
+	template< typename Lockable >
+	std::unique_lock< Lockable > make_unique_lock( Lockable & p_lockable )
+	{
+		return std::unique_lock< Lockable >( p_lockable );
+	}
 }
-#endif
-
-#define CASTOR_MUTEX_AUTO_SCOPED_LOCK()			std::unique_lock< std::mutex > l_mutexAutoLock( m_mutex );
-#define CASTOR_MUTEX_SCOPED_LOCK( p_mutex )		std::unique_lock< std::mutex > l_mutexLock( p_mutex );
-
-#define CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK()			std::unique_lock< std::recursive_mutex > l_recMutexAutoLock( m_mutex );
-#define CASTOR_RECURSIVE_MUTEX_SCOPED_LOCK( p_mutex )		std::unique_lock< std::recursive_mutex > l_recMutexLock( p_mutex );
 
 #endif

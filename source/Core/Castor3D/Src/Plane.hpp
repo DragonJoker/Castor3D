@@ -18,11 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_PLANE_H___
 #define ___C3D_PLANE_H___
 
-#include "MeshCategory.hpp"
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -36,8 +32,8 @@ namespace Castor3D
 	\brief		Représentation d'un plan
 	\remark		Un plan peut être subdivisé en hauteur et en largeur
 	*/
-	class C3D_API Plane
-		: public MeshCategory
+	class Plane
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -46,41 +42,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Plane();
+		C3D_API Plane();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Plane();
+		C3D_API ~Plane();
 		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		A plane
-		 *\~french
-		 *\brief		Fonction de création utilisée par Factory
-		 *\return		Un plan
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Generates the mesh points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du mesh
-		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\~english
 		 *\brief		Retrieves the plane height
@@ -121,25 +94,30 @@ namespace Castor3D
 		{
 			return m_subDivisionsD;
 		}
-		/**
-		 *\~english
-		 *\brief		Stream operator
-		 *\~french
-		 *\brief		Operateur de flux
-		 */
-		inline friend std::ostream & operator <<( std::ostream & o, Plane const & c )
-		{
-			return o << "Plane(" << c.m_depth << "," << c.m_width << "," << c.m_subDivisionsW << "," << c.m_subDivisionsD << ")";
-		}
 
 	private:
-		real		m_depth;
-		real		m_width;
-		uint32_t	m_subDivisionsW;
-		uint32_t	m_subDivisionsD;
-	};
-}
+		/**
+		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*/
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
-#pragma warning( pop )
+	private:
+		real m_depth;
+		real m_width;
+		uint32_t m_subDivisionsW;
+		uint32_t m_subDivisionsD;
+		friend std::ostream & operator <<( std::ostream & o, Plane const & c );
+	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Operateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Plane const & c )
+	{
+		return o << "Plane(" << c.m_depth << "," << c.m_width << "," << c.m_subDivisionsW << "," << c.m_subDivisionsD << ")";
+	}
+}
 
 #endif

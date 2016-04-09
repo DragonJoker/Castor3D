@@ -19,13 +19,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CU_TEXTURE_UNIT_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "Renderable.hpp"
 #include "BinaryParser.hpp"
-#include "TextureRenderer.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -40,8 +36,8 @@ namespace Castor3D
 	\brief		Représentation d'une unité de texture
 	\remark		Une unité de texture se compose d'une texture avec des options telles que son canal, modes de mélange, transformations.
 	*/
-	class C3D_API TextureUnit
-		:	public Renderable< TextureUnit, TextureRenderer >
+	class TextureUnit
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/*!
@@ -52,7 +48,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de TextureUnit
 		*/
-		class C3D_API TextLoader : public Castor::Loader< TextureUnit, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< TextureUnit, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**
@@ -61,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a TextureUnit into a text file
@@ -72,7 +69,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_unit	La TextureUnit
 			 */
-			virtual bool operator()( TextureUnit const & p_unit, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( TextureUnit const & p_unit, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -83,8 +80,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de TextureUnit
 		*/
-		class C3D_API BinaryParser
-			:	public Castor3D::BinaryParser< TextureUnit >
+		class BinaryParser
+			: public Castor3D::BinaryParser< TextureUnit >
 		{
 		public:
 			/**
@@ -95,7 +92,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_pathFile	Le chemin courant
 			 */
-			BinaryParser( Castor::Path const & p_pathFile );
+			C3D_API BinaryParser( Castor::Path const & p_pathFile );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -108,7 +105,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( TextureUnit const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( TextureUnit const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -121,63 +118,63 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( TextureUnit & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( TextureUnit & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param		p_pEngine	The Engine
+		 *\param		p_engine	The Engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param		p_pEngine	Le moteur
+		 *\param		p_engine	Le moteur
 		 */
-		TextureUnit( Engine * p_pEngine );
+		C3D_API TextureUnit( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~TextureUnit();
+		C3D_API ~TextureUnit();
 		/**
 		 *\~english
 		 *\brief		Initialises the texture, id est : fills the image buffer, creates the texture in the render system
 		 *\~french
 		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer
 		 */
-		void Initialise();
+		C3D_API void Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture
 		 *\~french
 		 *\brief		Nettoie l'objet
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Sets the texture
-		 *\param[in]	p_pTexture	The texture
+		 *\param[in]	p_texture	The texture
 		 *\~french
 		 *\brief		Definit la texture
-		 *\param[in]	p_pTexture	La texture
+		 *\param[in]	p_texture	La texture
 		 */
-		void SetTexture( TextureBaseSPtr p_pTexture );
+		C3D_API void SetTexture( TextureSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit
 		 *\~french
 		 *\brief		Applique la texture
 		 */
-		virtual void Render();
+		C3D_API void Bind()const;
 		/**
 		 *\~english
 		 *\brief		Removes the texture unit from the stack, in order not to interfere with other ones
 		 *\~french
 		 *\brief		Desactive la texture
 		 */
-		virtual void EndRender();
+		C3D_API void Unbind()const;
 		/**
 		 *\~english
 		 *\brief		Uploads current image to the GPU
@@ -186,7 +183,7 @@ namespace Castor3D
 		 *\brief		Charge l'image courante sur le GPU
 		 *\param[in]	p_bSync	Dit si le chargement doit être synchrone ou pas
 		 */
-		void UploadImage( bool p_bSync );
+		C3D_API void UploadImage( bool p_bSync );
 		/**
 		 *\~english
 		 *\brief		Downloads the current image from the GPU
@@ -195,7 +192,7 @@ namespace Castor3D
 		 *\brief		Charge l'image courante à partir du GPU
 		 *\param[in]	p_bSync	Dit si le chargement doit être synchrone ou pas
 		 */
-		void DownloadImage( bool p_bSync );
+		C3D_API void DownloadImage( bool p_bSync );
 		/**
 		 *\~english
 		 *\brief		Loads the texture image from the given path
@@ -206,7 +203,115 @@ namespace Castor3D
 		 *\param[in]	p_pathFile	Le chemin du fichier image
 		 *\return		\p false si un problème quelconque est arrivé
 		 */
-		bool LoadTexture( Castor::Path const & p_pathFile );
+		C3D_API bool LoadTexture( Castor::Path const & p_pathFile );
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture dimension
+		 *\return		The texture dimension
+		 *\~french
+		 *\brief		Récupère la dimension de la texture
+		 *\return		La dimension de la texture
+		 */
+		C3D_API eTEXTURE_TYPE GetType()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture mapping mode
+		 *\return		The texture mapping mode
+		 *\~french
+		 *\brief		Récupère le mode mappage de la texture
+		 *\return		Le mode mappage de la texture
+		 */
+		C3D_API eTEXTURE_MAP_MODE GetMappingMode()const;
+		/**
+		 *\~english
+		 *\brief		Defines the texture mapping mode
+		 *\param[in]	p_mode	The texture mapping mode
+		 *\~french
+		 *\brief		Définit le mode de mappage de la texture
+		 *\param[in]	p_mode	Le mode de mappage de la texture
+		 */
+		C3D_API void SetMappingMode( eTEXTURE_MAP_MODE p_mode );
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		Récupère le buffer de l'image de la texture
+		 *\return		Le buffer
+		 */
+		C3D_API uint8_t const * GetImageBuffer()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		Récupère le buffer de l'image de la texture
+		 *\return		Le buffer
+		 */
+		C3D_API uint8_t * GetImageBuffer();
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image pixels
+		 *\return		The pixels
+		 *\~french
+		 *\brief		Récupère les pixels de l'image de la texture
+		 *\return		Les pixels
+		 */
+		C3D_API Castor::PxBufferBaseSPtr const GetImagePixels()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image pixels
+		 *\return		The pixels
+		 *\~french
+		 *\brief		Récupère les pixels de l'image de la texture
+		 *\return		Les pixels
+		 */
+		C3D_API Castor::PxBufferBaseSPtr GetImagePixels();
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image size (in bytes)
+		 *\return		The size
+		 *\~french
+		 *\brief		Récupère la taille de l'image de la texture (en octets)
+		 *\return		La taille
+		 */
+		C3D_API uint32_t GetImageSize()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image width
+		 *\return		The width
+		 *\~french
+		 *\brief		Récupère la largeur de l'image de la texture
+		 *\return		La largeur
+		 */
+		C3D_API uint32_t GetWidth()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image height
+		 *\return		The height
+		 *\~french
+		 *\brief		Récupère la hauteur de l'image de la texture
+		 *\return		La hauteur
+		 */
+		C3D_API uint32_t GetHeight()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image pixel format
+		 *\return		The pixel format
+		 *\~french
+		 *\brief		Récupère le format des pixels de l'image de la texture
+		 *\return		Le format des pixels
+		 */
+		C3D_API Castor::ePIXEL_FORMAT GetPixelFormat()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture initalisation status
+		 *\return		\p false if the texture is null or uninitialised
+		 *\~french
+		 *\brief		Récupère le statut d'initialisation de la texture
+		 *\return		\p false si la texture est nulle ou non initialisée
+		 */
+		C3D_API bool IsTextureInitialised()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture file path
@@ -227,7 +332,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture
 		 *\return		La valeur
 		 */
-		inline Castor3D::TextureBaseSPtr GetTexture()const
+		inline Castor3D::TextureSPtr GetTexture()const
 		{
 			return m_pTexture;
 		}
@@ -246,14 +351,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the alpha blending function
-		 *\param[in]	p_eFunc	The new value
+		 *\param[in]	p_func	The new value
 		 *\~french
 		 *\brief		Définit la fonction de mélange d'alpha
-		 *\param[in]	p_eFunc	La nouvelle valeur
+		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetAlpFunction( Castor3D::eALPHA_BLEND_FUNC p_eFunc )
+		inline void SetAlpFunction( Castor3D::eALPHA_BLEND_FUNC p_func )
 		{
-			m_eAlpFunction = p_eFunc;
+			m_eAlpFunction = p_func;
 		}
 		/**
 		 *\~english
@@ -270,14 +375,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets RGB blending function
-		 *\param[in]	p_eFunc	The new value
+		 *\param[in]	p_func	The new value
 		 *\~french
 		 *\brief		Définit fonction de mélange RGB
-		 *\param[in]	p_eFunc	La nouvelle valeur
+		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetRgbFunction( Castor3D::eRGB_BLEND_FUNC p_eFunc )
+		inline void SetRgbFunction( Castor3D::eRGB_BLEND_FUNC p_func )
 		{
-			m_eRgbFunction = p_eFunc;
+			m_eRgbFunction = p_func;
 		}
 		/**
 		 *\~english
@@ -294,14 +399,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the alpha function
-		 *\param[in]	p_eFunc	The new value
+		 *\param[in]	p_func	The new value
 		 *\~french
 		 *\brief		Définit la fonction d'alpha
-		 *\param[in]	p_eFunc	La nouvelle valeur
+		 *\param[in]	p_func	La nouvelle valeur
 		 */
-		inline void SetAlphaFunc( Castor3D::eALPHA_FUNC p_eFunc )
+		inline void SetAlphaFunc( Castor3D::eALPHA_FUNC p_func )
 		{
-			m_eAlphaFunc = p_eFunc;
+			m_eAlphaFunc = p_func;
 		}
 		/**
 		 *\~english
@@ -342,14 +447,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the texture channel
-		 *\param[in]	p_eChannel	The new value
+		 *\param[in]	p_channel	The new value
 		 *\~french
 		 *\brief		Définit le canal de la texture
-		 *\param[in]	p_eChannel	La nouvelle valeur
+		 *\param[in]	p_channel	La nouvelle valeur
 		 */
-		inline void SetChannel( Castor3D::eTEXTURE_CHANNEL p_eChannel )
+		inline void SetChannel( Castor3D::eTEXTURE_CHANNEL p_channel )
 		{
-			m_eChannel = p_eChannel;
+			m_eChannel = p_channel;
 		}
 		/**
 		 *\~english
@@ -361,19 +466,19 @@ namespace Castor3D
 		 */
 		inline uint32_t GetIndex()const
 		{
-			return m_uiIndex;
+			return m_index;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the unit index
-		 *\param[in]	p_uiIndex	The new value
+		 *\param[in]	p_index	The new value
 		 *\~french
 		 *\brief		Définit l'index de l'unité
-		 *\param[in]	p_uiIndex	La nouvelle valeur
+		 *\param[in]	p_index	La nouvelle valeur
 		 */
-		inline void SetIndex( uint32_t p_uiIndex )
+		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_uiIndex;
+			m_index = p_index;
 		}
 		/**
 		 *\~english
@@ -401,33 +506,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture dimension
-		 *\return		The texture dimension
-		 *\~french
-		 *\brief		Récupère la dimension de la texture
-		 *\return		La dimension de la texture
-		 */
-		eTEXTURE_DIMENSION GetDimension()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture mapping mode
-		 *\return		The texture mapping mode
-		 *\~french
-		 *\brief		Récupère le mode mappage de la texture
-		 *\return		Le mode mappage de la texture
-		 */
-		eTEXTURE_MAP_MODE GetMappingMode()const;
-		/**
-		 *\~english
-		 *\brief		Defines the texture mapping mode
-		 *\param[in]	p_eMode	The texture mapping mode
-		 *\~french
-		 *\brief		Définit le mode de mappage de la texture
-		 *\param[in]	p_eMode	Le mode de mappage de la texture
-		 */
-		void SetMappingMode( eTEXTURE_MAP_MODE p_eMode );
-		/**
-		 *\~english
 		 *\brief		Sets the target holding the texture
 		 *\param[in]	p_pTarget	The new value
 		 *\~french
@@ -436,15 +514,15 @@ namespace Castor3D
 		 */
 		inline void SetRenderTarget( RenderTargetSPtr p_pTarget )
 		{
-			m_pRenderTarget = p_pTarget;
+			m_renderTarget = p_pTarget;
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the sampler
-		 *\param[in]	p_pSampler	The new value
+		 *\brief		Defines the texture sampler
+		 *\param[in]	p_pSampler	The sampler
 		 *\~french
-		 *\brief		Définit le sampler
-		 *\param[in]	p_pSampler	La nouvelle valeur
+		 *\brief		Définit le sampler de la texture
+		 *\param[in]	p_pSampler	Le sampler
 		 */
 		inline void SetSampler( SamplerSPtr p_pSampler )
 		{
@@ -452,141 +530,72 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture image buffer
-		 *\return		The buffer
+		 *\brief		Retrieves the texture sampler
+		 *\return		The sampler
 		 *\~french
-		 *\brief		Récupère le buffer de l'image de la texture
+		 *\brief		Récupère le sampler de la texture
 		 *\return		Le buffer
 		 */
-		uint8_t const * GetImageBuffer()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le buffer de l'image de la texture
-		 *\return		Le buffer
-		 */
-		uint8_t * GetImageBuffer();
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixels
-		 *\return		The pixels
-		 *\~french
-		 *\brief		Récupère les pixels de l'image de la texture
-		 *\return		Les pixels
-		 */
-		Castor::PxBufferBaseSPtr const GetImagePixels()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixels
-		 *\return		The pixels
-		 *\~french
-		 *\brief		Récupère les pixels de l'image de la texture
-		 *\return		Les pixels
-		 */
-		Castor::PxBufferBaseSPtr GetImagePixels();
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image size (in bytes)
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille de l'image de la texture (en octets)
-		 *\return		La taille
-		 */
-		uint32_t GetImageSize()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur de l'image de la texture
-		 *\return		La largeur
-		 */
-		uint32_t GetWidth()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image height
-		 *\return		The height
-		 *\~french
-		 *\brief		Récupère la hauteur de l'image de la texture
-		 *\return		La hauteur
-		 */
-		uint32_t GetHeight()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixel format
-		 *\return		The pixel format
-		 *\~french
-		 *\brief		Récupère le format des pixels de l'image de la texture
-		 *\return		Le format des pixels
-		 */
-		Castor::ePIXEL_FORMAT GetPixelFormat()const;
+		inline SamplerSPtr GetSampler()const
+		{
+			return m_pSampler.lock();
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the RGB blend parameter
-		 *\param[in]	p_eIndex	The parameter index
+		 *\param[in]	p_index	The parameter index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le paramètre de mélange RGB
-		 *\param[in]	p_eIndex	L'index du paramètre
+		 *\param[in]	p_index	L'index du paramètre
 		 *\return		La valeur
 		 */
-		inline eBLEND_SOURCE GetRgbArgument( eBLEND_SRC_INDEX p_eIndex )const
+		inline eBLEND_SOURCE GetRgbArgument( eBLEND_SRC_INDEX p_index )const
 		{
-			return m_eRgbArguments[p_eIndex];
+			return m_eRgbArguments[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the RGB blend parameter
-		 *\param[in]	p_eIndex	The parameter index
-		 *\param[in]	p_eVal		The new value
+		 *\param[in]	p_index	The parameter index
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le paramètre de mélange RGB
-		 *\param[in]	p_eIndex	L'index du paramètre
-		 *\param[in]	p_eVal		La nouvelle valeur
+		 *\param[in]	p_index	L'index du paramètre
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetRgbArgument( eBLEND_SRC_INDEX p_eIndex, eBLEND_SOURCE p_eVal )
+		inline void SetRgbArgument( eBLEND_SRC_INDEX p_index, eBLEND_SOURCE p_value )
 		{
-			m_eRgbArguments[p_eIndex] = p_eVal;
+			m_eRgbArguments[p_index] = p_value;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the Alpha blend parameter
-		 *\param[in]	p_eIndex	The parameter index
+		 *\param[in]	p_index	The parameter index
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère le paramètre de mélange Alpha
-		 *\param[in]	p_eIndex	L'index du paramètre
+		 *\param[in]	p_index	L'index du paramètre
 		 *\return		La valeur
 		 */
-		inline eBLEND_SOURCE GetAlpArgument( eBLEND_SRC_INDEX p_eIndex )const
+		inline eBLEND_SOURCE GetAlpArgument( eBLEND_SRC_INDEX p_index )const
 		{
-			return m_eAlpArguments[p_eIndex];
+			return m_eAlpArguments[p_index];
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the Alpha blend parameter
-		 *\param[in]	p_eIndex	The parameter index
-		 *\param[in]	p_eVal		The new value
+		 *\param[in]	p_index	The parameter index
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le paramètre de mélange Alpha
-		 *\param[in]	p_eIndex	L'index du paramètre
-		 *\param[in]	p_eVal		La nouvelle valeur
+		 *\param[in]	p_index	L'index du paramètre
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetAlpArgument( eBLEND_SRC_INDEX p_eIndex, eBLEND_SOURCE val )
+		inline void SetAlpArgument( eBLEND_SRC_INDEX p_index, eBLEND_SOURCE p_value )
 		{
-			m_eAlpArguments[p_eIndex] = val;
+			m_eAlpArguments[p_index] = p_value;
 		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture initalisation status
-		 *\return		\p false if the texture is null or uninitialised
-		 *\~french
-		 *\brief		Récupère le statut d'initialisation de la texture
-		 *\return		\p false si la texture est nulle ou non initialisée
-		 */
-		bool IsTextureInitialised()const;
 		/**
 		 *\~english
 		 *\brief		Tells if the unit has a texture
@@ -602,14 +611,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the auto mipmaps generation status
-		 *\param[in]	p_bVal		The new value
+		 *\param[in]	p_value		The new value
 		 *\~french
 		 *\brief		Définit le statut d'auto génération des mipmaps
-		 *\param[in]	p_bVal		La nouvelle valeur
+		 *\param[in]	p_value		La nouvelle valeur
 		 */
-		inline void SetAutoMipmaps( bool p_bVal )
+		inline void SetAutoMipmaps( bool p_value )
 		{
-			m_bAutoMipmaps = p_bVal;
+			m_bAutoMipmaps = p_value;
 		}
 		/**
 		 *\~english
@@ -633,13 +642,13 @@ namespace Castor3D
 		 */
 		inline RenderTargetSPtr GetRenderTarget()const
 		{
-			return m_pRenderTarget.lock();
+			return m_renderTarget.lock();
 		}
 
 	private:
 		friend class TextureRenderer;
 		//!\~english The unit index inside it's pass	\~french L'index de l'unité dans sa passe
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 		//!\see eTEXTURE_CHANNEL	\~english The unit channel inside it's pass	\~french Le canal de l'unité dans sa passe
 		eTEXTURE_CHANNEL m_eChannel;
 		//!\~english The reference alpha value for alpha comparison	\~french La valeur d'alpha de référence pour la comparaison d'alpha
@@ -657,11 +666,11 @@ namespace Castor3D
 		//!\~english The unit transformations	\~french Les transformations de l'unité
 		Castor::Matrix4x4r m_mtxTransformations;
 		//!\~english The unit texture	\~french La texture de l'unité
-		TextureBaseSPtr m_pTexture;
+		TextureSPtr m_pTexture;
 		//!\~english The unit texture's path	\~french Le chemin de la texture de l'unité
 		Castor::Path m_pathTexture;
 		//!\~english The render target used to compute the texture, if this unit is a render target	\~french La render target utilisée pour générer la texture si cette unité est une render target
-		RenderTargetWPtr m_pRenderTarget;
+		RenderTargetWPtr m_renderTarget;
 		//!\~english The sampler state assigned to this unit	\~french Le sampler state affecté à cette unité
 		SamplerWPtr m_pSampler;
 		//!\~english The blend colour when it is enabled	\~french Couleur de mélange lorsque celui-ci est actif
@@ -671,7 +680,7 @@ namespace Castor3D
 		//!\~english Tells mipmaps must be regenerated after each texture data change	\~french Dit que les mipmaps doivent être regénérés après chaque changement des données de la texture
 		bool m_bAutoMipmaps;
 		//!\~english Tells the texture data has changed	\~french Dit que les données de la texture ont changé
-		bool m_bChanged;
+		mutable bool m_changed;
 	};
 	/**
 	 *\~english
@@ -690,63 +699,6 @@ namespace Castor3D
 		p_streamOut << p_texture->GetIndex();
 		return p_streamOut;
 	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamIn	The stream holding texture's data
-	 *\param[in,out]	p_texture	The output texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les données de la texture
-	 *\param[in,out]	p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::istream & operator >>( std::istream & p_streamIn, TextureUnitSPtr & p_texture )
-	{
-		uint32_t l_uiIndex = 0;
-		p_streamIn >> l_uiIndex;
-		p_texture->SetIndex( l_uiIndex );
-		return p_streamIn;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamOut	The stream receiving texture's data
-	 *\param[in]		p_texture	The input texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamOut	Le flux qui reçoit les données de la texture
-	 *\param[in]		p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::wostream & operator <<( std::wostream & p_streamOut, TextureUnitSPtr const & p_texture )
-	{
-		p_streamOut << p_texture->GetIndex();
-		return p_streamOut;
-	}
-	/**
-	 *\~english
-	 *\brief			Stream operator
-	 *\param[in,out]	p_streamIn	The stream holding texture's data
-	 *\param[in,out]	p_texture	The output texture
-	 *\return			A reference to the stream
-	 *\~french
-	 *\brief			Opérateur de flux
-	 *\param[in,out]	p_streamIn	Le flux qui contient les données de la texture
-	 *\param[in,out]	p_texture	La texture
-	 *\return			Une référence sur le flux
-	 */
-	inline std::wistream & operator >>( std::wistream & p_streamIn, TextureUnitSPtr & p_texture )
-	{
-		uint32_t l_uiIndex = 0;
-		p_streamIn >> l_uiIndex;
-		p_texture->SetIndex( l_uiIndex );
-		return p_streamIn;
-	}
 }
-
-#pragma warning( pop )
 
 #endif

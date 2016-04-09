@@ -1,4 +1,4 @@
-#include "GeneratorPlugin.hpp"
+﻿#include "GeneratorPlugin.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -13,86 +13,56 @@ using namespace Castor;
 namespace Castor3D
 {
 #if defined( _MSC_VER)
-	static const String CreateGeneratorFunctionABIName		= cuT( "?CreateGenerator@@YAPAVGenerator@Castor3D@@PAVTextureUnit@2@@Z" );
-	static const String DestroyGeneratorFunctionABIName		= cuT( "?DestroyGenerator@@YAXPAVGenerator@Castor3D@@@Z" );
+	static const String CreateGeneratorFunctionABIName = cuT( "?CreateGenerator@@YAPAVGenerator@Castor3D@@PAVTextureUnit@2@@Z" );
+	static const String DestroyGeneratorFunctionABIName = cuT( "?DestroyGenerator@@YAXPAVGenerator@Castor3D@@@Z" );
 #elif defined( __GNUG__)
-	static const String CreateGeneratorFunctionABIName		= cuT( "_Z15CreateGeneratorPN8Castor3D11TextureUnitE" );
-	static const String DestroyGeneratorFunctionABIName		= cuT( "_Z16DestroyGeneratorPN8Castor3D9GeneratorE" );
+	static const String CreateGeneratorFunctionABIName = cuT( "_Z15CreateGeneratorPN8Castor3D11TextureUnitE" );
+	static const String DestroyGeneratorFunctionABIName = cuT( "_Z16DestroyGeneratorPN8Castor3D9GeneratorE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
 
-	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_DIVIDER, p_pLibrary )
+	GeneratorPlugin::GeneratorPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_DIVIDER, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnCreateGenerator, CreateGeneratorFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateGenerator, CreateGeneratorFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateGenerator plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateGenerator plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnDestroyGenerator, DestroyGeneratorFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnDestroyGenerator, DestroyGeneratorFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyGenerator plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] DestroyGenerator plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
-	}
 
-	GeneratorPlugin::GeneratorPlugin( GeneratorPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateGenerator( p_plugin.m_pfnCreateGenerator )
-		,	m_pfnDestroyGenerator( p_plugin.m_pfnDestroyGenerator )
-	{
-	}
-
-	GeneratorPlugin::GeneratorPlugin( GeneratorPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateGenerator( std::move( p_plugin.m_pfnCreateGenerator ) )
-		,	m_pfnDestroyGenerator( std::move( p_plugin.m_pfnDestroyGenerator ) )
-	{
-		p_plugin.m_pfnCreateGenerator	= NULL;
-		p_plugin.m_pfnDestroyGenerator	= NULL;
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( GetEngine() );
+		}
 	}
 
 	GeneratorPlugin::~GeneratorPlugin()
 	{
-	}
-
-	GeneratorPlugin & GeneratorPlugin::operator =( GeneratorPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateGenerator	= p_plugin.m_pfnCreateGenerator;
-		m_pfnDestroyGenerator	= p_plugin.m_pfnDestroyGenerator;
-		return * this;
-	}
-
-	GeneratorPlugin & GeneratorPlugin::operator =( GeneratorPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != & p_plugin )
+		if ( m_pfnOnUnload )
 		{
-			m_pfnCreateGenerator	= std::move( p_plugin.m_pfnCreateGenerator );
-			m_pfnDestroyGenerator	= std::move( p_plugin.m_pfnDestroyGenerator );
-			p_plugin.m_pfnCreateGenerator	= NULL;
-			p_plugin.m_pfnDestroyGenerator	= NULL;
+			m_pfnOnUnload( GetEngine() );
 		}
-
-		return * this;
 	}
 
-	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_pTexture )
+	Subdivider * GeneratorPlugin::CreateGenerator( TextureUnit * p_texture )
 	{
-		Subdivider * l_pReturn = nullptr;
+		Subdivider * l_return = nullptr;
 
 		if ( m_pfnCreateGenerator )
 		{
-			l_pReturn = m_pfnCreateGenerator( p_pTexture );
+			l_return = m_pfnCreateGenerator( p_texture );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void GeneratorPlugin::DestroyGenerator( Subdivider * p_pGenerator )

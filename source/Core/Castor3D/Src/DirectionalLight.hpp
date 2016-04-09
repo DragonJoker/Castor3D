@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Light.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -37,8 +33,8 @@ namespace Castor3D
 	\brief		Classe representant une lumière directionnelle
 	\remark		Une lumière directionnelle illumine à partir d'un point infini dans une direction donnée
 	*/
-	class C3D_API DirectionalLight
-		:	public LightCategory
+	class DirectionalLight
+		: public LightCategory
 	{
 	public:
 		/*!
@@ -49,7 +45,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de DirectionalLight
 		*/
-		class C3D_API TextLoader : public LightCategory::TextLoader
+		class TextLoader
+			: public LightCategory::TextLoader
 		{
 		public:
 			/**
@@ -62,7 +59,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			virtual bool operator()( DirectionalLight const & p_light, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( DirectionalLight const & p_light, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -72,7 +69,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de DirectionalLight
 		*/
-		class C3D_API BinaryParser : public LightCategory::BinaryParser
+		class BinaryParser
+			: public LightCategory::BinaryParser
 		{
 		public:
 			/**
@@ -83,7 +81,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -96,7 +94,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( DirectionalLight const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( DirectionalLight const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -109,7 +107,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( DirectionalLight & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( DirectionalLight & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:
@@ -119,19 +117,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Not to be used by the user, use Scene::CreateLight function instead
+		 *\remarks		Not to be used by the user, use Scene::CreateLight function instead
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
+		 *\remarks		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
 		 */
-		DirectionalLight();
+		C3D_API DirectionalLight();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~DirectionalLight();
+		C3D_API ~DirectionalLight();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by the Factory
@@ -140,36 +138,23 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par la fabrique
 		 *\return		La lumière
 		 */
-		static LightCategorySPtr Create();
+		C3D_API static LightCategorySPtr Create();
 		/**
 		 *\~english
-		 *\brief		Renders the light
-		 *\param[in]	p_pRenderer		The renderer used to ... render this light
+		 *\brief		Puts the light into the given texture.
 		 *\~french
-		 *\brief		Fonction de rendu sans shader
-		 *\param[in]	p_pRenderer		Le renderer
+		 *\brief		Met la lumière dans la texture donnée.
 		 */
-		virtual void Render( LightRendererSPtr p_pRenderer );
-		/**
-		 *\~english
-		 *\brief		Renders the light
-		 *\param[in]	p_pRenderer		The renderer used to ... render this light
-		 *\param[in]	p_pProgram		The shader program that will receive the light's components
-		 *\~french
-		 *\brief		Fonction de rendu avec shader
-		 *\param[in]	p_pRenderer		Le renderer
-		 *\param[in]	p_pProgram		Le shader qui va recevoir les informations de la lumière
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram );
+		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Sets the light source direction
-		 *\param[in]	p_position	The new value
+		 *\param[in]	p_direction	The new value
 		 *\~french
 		 *\brief		Définit la direction de la source
-		 *\param[in]	p_position	La nouvelle valeur
+		 *\param[in]	p_direction	La nouvelle valeur
 		 */
-		virtual void SetDirection( Castor::Point3f const & p_direction );
+		C3D_API virtual void SetDirection( Castor::Point3f const & p_direction );
 		/**
 		 *\~english
 		 *\brief		Retrieves the light source direction
@@ -178,10 +163,8 @@ namespace Castor3D
 		 *\brief		Récupère la direction de la source
 		 *\return		La valeur
 		 */
-		virtual Castor::Point3f GetDirection()const;
+		C3D_API virtual Castor::Point3f GetDirection()const;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -31,26 +31,26 @@ namespace Castor3D
 	\~french
 	\brief		Tampon de rendu recevant une composante de couleur
 	*/
-	class C3D_API ColourRenderBuffer
-		:	public RenderBuffer
+	class ColourRenderBuffer
+		: public RenderBuffer
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_ePixelFormat	The buffer pixel format
+		 *\param[in]	p_format	The buffer pixel format
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_ePixelFormat	Le format des pixels du tampon
+		 *\param[in]	p_format	Le format des pixels du tampon
 		 */
-		ColourRenderBuffer( Castor::ePIXEL_FORMAT p_eFormat );
+		C3D_API ColourRenderBuffer( Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~ColourRenderBuffer();
+		C3D_API virtual ~ColourRenderBuffer();
 	};
 }
 

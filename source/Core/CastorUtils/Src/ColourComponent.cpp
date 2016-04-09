@@ -1,4 +1,4 @@
-#include "ColourComponent.hpp"
+﻿#include "ColourComponent.hpp"
 
 namespace Castor
 {

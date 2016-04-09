@@ -1,0 +1,10 @@
+; ComCastor3Dd.def : Declares the module parameters.
+
+LIBRARY      "ComCastor3Dd.dll"
+
+EXPORTS
+	DllCanUnloadNow		PRIVATE
+	DllGetClassObject	PRIVATE
+	DllRegisterServer	PRIVATE
+	DllUnregisterServer	PRIVATE
+	DllInstall			PRIVATE

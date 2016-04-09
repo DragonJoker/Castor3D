@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_CYLINDER_H___
 #define ___C3D_CYLINDER_H___
 
-#include "MeshCategory.hpp"
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -32,53 +32,28 @@ namespace Castor3D
 	\brief		Représentation d'un cylindre
 	\remark		Un cylindre est une primitive basique avec un nombre de faces paramétrable
 	*/
-	class C3D_API Cylinder
-		:	public MeshCategory
+	class Cylinder
+		: public MeshGenerator
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_factory	The factory used to clone this MeshCategory
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_factory	La fabrique utilisée pour cloner cette MeshCategory
 		 */
-		Cylinder();
+		C3D_API Cylinder();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Cylinder();
+		C3D_API ~Cylinder();
 		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		Cylinder
-		 *\~french
-		 *\brief		Fonction de création, utilisée par la Factory
-		 *\return		Un cylindre
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Generates the cylinder points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du cylindre
-		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces
@@ -109,22 +84,29 @@ namespace Castor3D
 		{
 			return m_radius;
 		}
+
+	private:
 		/**
-		 *\~english
-		 *\brief		Stream operator
-		 *\~french
-		 *\brief		Opérateur de flux
-		 */
-		inline friend std::ostream & operator <<( std::ostream & o, Cylinder const & c )
-		{
-			return o << "Cylinder(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
-		}
+		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*/
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
 	private:
 		real m_height;
 		real m_radius;
 		uint32_t m_nbFaces;
+		friend std::ostream & operator <<( std::ostream & o, Cylinder const & c );
 	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Opérateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Cylinder const & c )
+	{
+		return o << "Cylinder(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
+	}
 }
 
 #endif

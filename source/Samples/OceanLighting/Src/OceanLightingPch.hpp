@@ -6,12 +6,6 @@
 #if CASTOR_USE_PCH
 #	include "OceanLightingPrerequisites.hpp"
 
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#	endif
-
 #	include <algorithm>
 #	include <limits>
 #	include <fstream>
@@ -29,7 +23,7 @@
 #	include <FrameBuffer.hpp>
 #	include <Parameter.hpp>
 #	include <Pipeline.hpp>
-#	include <RasterState.hpp>
+#	include <RasteriserState.hpp>
 #	include <RenderTarget.hpp>
 #	include <RenderTechnique.hpp>
 #	include <RenderWindow.hpp>
@@ -51,10 +45,6 @@
 
 #	if CHECK_MEMORYLEAKS && defined( VLD_AVAILABLE ) && USE_VLD
 #		include <vld.h>
-#	endif
-
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
 #	endif
 #endif
 

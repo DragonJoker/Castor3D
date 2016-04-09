@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "BinaryFile.hpp"
 #include "TextFile.hpp"
-#include "NonCopyable.hpp"
 #include "BinaryLoader.hpp"
 #include "TextLoader.hpp"
 
@@ -36,8 +35,8 @@ namespace Castor
 	\brief		Templated static dimensions point representation
 	\remark		Can hold any type which has a defined Policy
 	\~french
-	\brief		Classe de points ‡ dimensions statiques
-	\remark		Peut recevoir les types de donnÈes qui ont une Policy crÈÈe
+	\brief		Classe de points √† dimensions statiques
+	\remark		Peut recevoir les types de donn√©es qui ont une Policy cr√©√©e
 	*/
 	template< typename T, uint32_t Count >
 	class Coords
@@ -53,7 +52,7 @@ namespace Castor
 		\brief		Loader de Coords< T, Count >
 		*/
 		class BinaryLoader
-			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >, public Castor::NonCopyable
+			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_BINARY, BinaryFile >
 		{
 		public:
 			/**
@@ -69,9 +68,9 @@ namespace Castor
 			 *\param[in,out]	p_object	The Coords< T, Count > to load
 			 *\param[in,out]	p_file		The file where to load the Coords< T, Count >
 			 *\~french
-			 *\brief			Charge un Coords< T, Count > ‡ partir d'un fichier binaire
-			 *\param[in,out]	p_object	Le Coords< T, Count > ‡ charger
-			 *\param[in,out]	p_file		Le fichier o˘ charger le Coords< T, Count >
+			 *\brief			Charge un Coords< T, Count > √† partir d'un fichier binaire
+			 *\param[in,out]	p_object	Le Coords< T, Count > √† charger
+			 *\param[in,out]	p_file		Le fichier o√π charger le Coords< T, Count >
 			 */
 			bool operator()( Coords< T, Count > & p_object, BinaryFile & p_file );
 			/**
@@ -81,8 +80,8 @@ namespace Castor
 			 *\param[in,out]	p_file		The file where to save the Coords< T, Count >
 			 *\~french
 			 *\brief			Ecrit un Coords< T, Count > dans un fichier binaire
-			 *\param[in,out]	p_object	Le Coords< T, Count > ‡ Ècrire
-			 *\param[in,out]	p_file		Le fichier o˘ Ècrire le Coords< T, Count >
+			 *\param[in,out]	p_object	Le Coords< T, Count > √† √©crire
+			 *\param[in,out]	p_file		Le fichier o√π √©crire le Coords< T, Count >
 			 */
 			bool operator()( Coords< T, Count > const & p_object, BinaryFile & p_file );
 		};
@@ -96,7 +95,7 @@ namespace Castor
 		\brief Loader de Coords< T, Count >
 		*/
 		class TextLoader
-			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >, public Castor::NonCopyable
+			: public Castor::Loader< Coords< T, Count >, eFILE_TYPE_TEXT, TextFile >
 		{
 		public:
 			/**
@@ -105,7 +104,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( File::eENCODING_MODE p_eEncodingMode = File::eENCODING_MODE_ASCII );
+			TextLoader( File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file
@@ -113,7 +112,7 @@ namespace Castor
 			 *\param[in]	p_file		The file
 			 *\return		\p true if ok
 			 *\~french
-			 *\brief		Charge un objet Coords< T, Count > ‡ partir d'un fichier texte
+			 *\brief		Charge un objet Coords< T, Count > √† partir d'un fichier texte
 			 *\param[out]	p_object	L'objet Coords< T, Count >
 			 *\param[in]	p_file		Le fichier
 			 *\return		\p true si ok
@@ -149,9 +148,9 @@ namespace Castor
 		static const std::size_t binary_size = sizeof( T ) * Count;
 
 	public:
-		//!\~english Typedef over a pointer on data	\~french Typedef d'un pointeur sur les donnÈes
+		//!\~english Typedef over a pointer on data	\~french Typedef d'un pointeur sur les donn√©es
 		typedef value_type * iterator;
-		//!\~english Typedef over a constant pointer on data	\~french Typedef d'un pointeur constant sur les donnÈes
+		//!\~english Typedef over a constant pointer on data	\~french Typedef d'un pointeur constant sur les donn√©es
 		typedef value_type const * const_iterator;
 
 	public:
@@ -168,7 +167,7 @@ namespace Castor
 		 *\param[in]	p_ptPoint	The Coords object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_ptPoint	L'objet Coords ‡ copier
+		 *\param[in]	p_ptPoint	L'objet Coords √† copier
 		 */
 		Coords( Coords< T, Count > const & p_ptPoint );
 		/**
@@ -176,8 +175,8 @@ namespace Castor
 		 *\brief		Move assignment Constructor
 		 *\param[in]	p_ptPoint	The Coords object to move
 		 *\~french
-		 *\brief		Constructeur par dÈplacement
-		 *\param[in]	p_ptPoint	L'objet Coords ‡ dÈplacer
+		 *\brief		Constructeur par d√©placement
+		 *\param[in]	p_ptPoint	L'objet Coords √† d√©placer
 		 */
 		Coords( Coords< T, Count > && p_ptPoint );
 		/**
@@ -186,16 +185,16 @@ namespace Castor
 		 *\param[in]	p_pValues	The data buffer
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pValues	Le buffer de donnÈes
+		 *\param[in]	p_pValues	Le buffer de donn√©es
 		 */
 		explicit Coords( T * p_pValues );
 		/**
 		 *\~english
 		 *\brief		Destructor
-		 *\remark		Not virtual but it should be ok to derive Coords because destructor is dummy
+		 *\remarks		Not virtual but it should be ok to derive Coords because destructor is dummy
 		 *\~french
 		 *\brief		Destructeur
-		 *\remark		Non virtuel mais il devrait Ítre possible de dÈriver Coords car le destructeur ne fait rien
+		 *\remarks		Non virtuel mais il devrait √™tre possible de d√©river Coords car le destructeur ne fait rien
 		 */
 		~Coords();
 		/**
@@ -204,214 +203,214 @@ namespace Castor
 		 *\param[in]	p_pValues	The values to affect
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation
-		 *\param[in]	p_pValues	Les valeurs ‡ affecter
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation
+		 *\param[in]	p_pValues	Les valeurs √† affecter
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator =( T * p_pValues );
+		Coords< T, Count > & operator=( T * p_pValues );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
 		 *\param[in]	p_pt	The Coords object to copy
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par copie
-		 *\param[in]	p_pt	L'objet Coords ‡ copier
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par copie
+		 *\param[in]	p_pt	L'objet Coords √† copier
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator =( Coords< T, Count > const & p_pt );
+		Coords< T, Count > & operator=( Coords< T, Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
 		 *\param[in]	p_pt	The Coords object to move
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par dÈplacement
-		 *\param[in]	p_pt	L'objet Coords ‡ dÈplacer
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par d√©placement
+		 *\param[in]	p_pt	L'objet Coords √† d√©placer
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator =( Coords< T, Count > && p_pt );
+		Coords< T, Count > & operator=( Coords< T, Count > && p_pt );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
 		 *\param[in]	p_pt	The Point object to copy
 		 *\return		A reference to this Point object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par copie
-		 *\param[in]	p_pt	L'objet Point ‡ copier
-		 *\return		Une rÈfÈrence sur cet objet Point
+		 *\brief		Op√©rateur d'affectation par copie
+		 *\param[in]	p_pt	L'objet Point √† copier
+		 *\return		Une r√©f√©rence sur cet objet Point
 		 */
-		Coords< T, Count > & operator =( Point< T, Count > const & p_pt );
+		Coords< T, Count > & operator=( Point< T, Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
 		 *\param[in]	p_pt	The Coords object to add
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par addition
-		 *\param[in]	p_pt	L'objet Coords ‡ ajouter
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par addition
+		 *\param[in]	p_pt	L'objet Coords √† ajouter
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator +=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator+=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
 		 *\param[in]	p_pt	The Coords object to substract
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par soustraction
-		 *\param[in]	p_pt	L'objet Coords ‡ soustraire
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par soustraction
+		 *\param[in]	p_pt	L'objet Coords √† soustraire
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator -=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator-=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
 		 *\param[in]	p_pt	The Coords object to multiply
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par multiplication
-		 *\param[in]	p_pt	L'objet Coords ‡ multiplier
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par multiplication
+		 *\param[in]	p_pt	L'objet Coords √† multiplier
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator *=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator*=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
 		 *\param[in]	p_pt	The Coords object to divide
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par division
-		 *\param[in]	p_pt	L'objet Coords ‡ diviser
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par division
+		 *\param[in]	p_pt	L'objet Coords √† diviser
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator /=( Coords< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator/=( Coords< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
 		 *\param[in]	p_pt	The Coords object to add
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par addition
-		 *\param[in]	p_pt	L'objet Coords ‡ ajouter
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par addition
+		 *\param[in]	p_pt	L'objet Coords √† ajouter
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator +=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator+=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
 		 *\param[in]	p_pt	The Coords object to substract
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par soustraction
-		 *\param[in]	p_pt	L'objet Coords ‡ soustraire
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par soustraction
+		 *\param[in]	p_pt	L'objet Coords √† soustraire
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator -=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator-=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
 		 *\param[in]	p_pt	The Coords object to multiply
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par multiplication
-		 *\param[in]	p_pt	L'objet Coords ‡ multiplier
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par multiplication
+		 *\param[in]	p_pt	L'objet Coords √† multiplier
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator *=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator*=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
 		 *\param[in]	p_pt	The Coords object to divide
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par division
-		 *\param[in]	p_pt	L'objet Coords ‡ diviser
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par division
+		 *\param[in]	p_pt	L'objet Coords √† diviser
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U, uint32_t _Count > Coords< T, Count > & operator /=( Point< U, _Count > const & p_pt );
+		template< typename U, uint32_t _Count > Coords< T, Count > & operator/=( Point< U, _Count > const & p_pt );
 		/**
 		 *\~english
 		 *\brief		Addition assignment operator
 		 *\param[in]	p_coords	The values to add
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par addition
-		 *\param[in]	p_coords	Les valeurs ‡ additionner
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par addition
+		 *\param[in]	p_coords	Les valeurs √† additionner
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator +=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator+=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Substraction assignment operator
 		 *\param[in]	p_coords	The values to substract
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par soustraction
-		 *\param[in]	p_coords	Les valeurs ‡ soustraire
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par soustraction
+		 *\param[in]	p_coords	Les valeurs √† soustraire
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator -=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator-=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
 		 *\param[in]	p_coords	The values to multiply
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par multiplication
-		 *\param[in]	p_coords	Les valeurs ‡ multiplier
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par multiplication
+		 *\param[in]	p_coords	Les valeurs √† multiplier
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator *=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator*=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
 		 *\param[in]	p_coords	The values to divide
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par division
-		 *\param[in]	p_coords	Les valeurs ‡ diviser
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par division
+		 *\param[in]	p_coords	Les valeurs √† diviser
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		template< typename U >	Coords< T, Count > & operator /=( U const * p_coords );
+		template< typename U >	Coords< T, Count > & operator/=( U const * p_coords );
 		/**
 		 *\~english
 		 *\brief		Multiplication assignment operator
 		 *\param[in]	p_coord	The value to multiply
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par multiplication
-		 *\param[in]	p_coord	La valeur ‡ multiplier
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par multiplication
+		 *\param[in]	p_coord	La valeur √† multiplier
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator *=( T const & p_coord );
+		Coords< T, Count > & operator*=( T const & p_coord );
 		/**
 		 *\~english
 		 *\brief		Division assignment operator
 		 *\param[in]	p_coord	The value to divide
 		 *\return		A reference to this Coords object
 		 *\~french
-		 *\brief		OpÈrateur d'affectation par division
-		 *\param[in]	p_coord	La valeur ‡ diviser
-		 *\return		Une rÈfÈrence sur cet objet Coords
+		 *\brief		Op√©rateur d'affectation par division
+		 *\param[in]	p_coord	La valeur √† diviser
+		 *\return		Une r√©f√©rence sur cet objet Coords
 		 */
-		Coords< T, Count > & operator /=( T const & p_coord );
+		Coords< T, Count > & operator/=( T const & p_coord );
 		/**
 		 *\~english
 		 *\brief		Swaps this pont data with the parameter ones
 		 *\param[in]	p_pt	The point to swap
 		 *\~french
-		 *\brief		Echange les donnÈes de c epoint avec celles du point donnÈ
-		 *\param[in]	p_pt	Le point ‡ Èchanger
+		 *\brief		Echange les donn√©es de c epoint avec celles du point donn√©
+		 *\param[in]	p_pt	Le point √† √©changer
 		 */
 		void swap( Coords< T, Count > & p_pt );
 		/**
 		 *\~english
 		 *\brief		Inverts data in the point
-		 *\remark		The first becomes last and so on
+		 *\remarks		The first becomes last and so on
 		 *\~french
-		 *\brief		Inverse les donnÈes dans ce point
-		 *\remark		Les premiers deviennent les derniers
+		 *\brief		Inverse les donn√©es dans ce point
+		 *\remarks		Les premiers deviennent les derniers
 		 */
 		void flip();
 		/**
@@ -419,7 +418,7 @@ namespace Castor
 		 *\brief		Retrieves the total size of the point
 		 *\return		count() * elem_size()
 		 *\~french
-		 *\brief		RÈcupËre la taille totale du point
+		 *\brief		R√©cup√®re la taille totale du point
 		 *\return		count() * elem_size()
 		 */
 		inline uint32_t size()const
@@ -431,8 +430,8 @@ namespace Castor
 		 *\brief			Retrieves data from the point and put it into an array
 		 *\param[in,out]	p_pResult	Receives the point data, needs to be allocated by the caller
 		 *\~french
-		 *\brief			RÈcupËre les donnÈes et les place dans un tableau
-		 *\param[in,out]	p_pResult	ReÁoit les donnÈes, doit Ítre allouÈ par l'appelant
+		 *\brief			R√©cup√®re les donn√©es et les place dans un tableau
+		 *\param[in,out]	p_pResult	Re√ßoit les donn√©es, doit √™tre allou√© par l'appelant
 		 */
 		void to_values( T * p_pResult )const;
 		/**
@@ -440,8 +439,8 @@ namespace Castor
 		 *\brief		Retrieves the number of coordinates
 		 *\return		The number of coordinates
 		 *\~french
-		 *\brief		RÈcupËre le nombre de coordonnÈes
-		 *\return		Le nombre de coordonnÈes
+		 *\brief		R√©cup√®re le nombre de coordonn√©es
+		 *\return		Le nombre de coordonn√©es
 		 */
 		inline uint32_t count()const
 		{
@@ -452,8 +451,8 @@ namespace Castor
 		 *\brief		Retrieves the coordinate type size
 		 *\return		The data type size
 		 *\~french
-		 *\brief		RÈcupËre la taille du type donnÈes
-		 *\return		La taille du type de donnÈes
+		 *\brief		R√©cup√®re la taille du type donn√©es
+		 *\return		La taille du type de donn√©es
 		 */
 		inline std::size_t elem_size()const
 		{
@@ -462,12 +461,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		No check is made, if you make an index error, expect a crash
+		 *\remarks		No check is made, if you make an index error, expect a crash
 		 *\return		A constant reference on data at wanted index
 		 *\~french
-		 *\brief		RÈcupËre la donnÈe ‡ l'index donnÈ
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous ‡ un crash
-		 *\return		Une rÈfÈrence constante sur la donnÈe ‡ l'index voulu
+		 *\brief		R√©cup√®re la donn√©e √† l'index donn√©
+		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous √† un crash
+		 *\return		Une r√©f√©rence constante sur la donn√©e √† l'index voulu
 		 */
 		inline T const & operator[]( uint32_t p_pos )const
 		{
@@ -476,12 +475,12 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		No check is made, if you make an index error, expect a crash
+		 *\remarks		No check is made, if you make an index error, expect a crash
 		 *\return		A reference on data at wanted index
 		 *\~french
-		 *\brief		RÈcupËre la donnÈe ‡ l'index donnÈ
-		 *\remark		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous ‡ un crash
-		 *\return		Une rÈfÈrence sur la donnÈe ‡ l'index voulu
+		 *\brief		R√©cup√®re la donn√©e √† l'index donn√©
+		 *\remarks		Aucun check n'est fait, s'il y a une erreur d'index, attendez-vous √† un crash
+		 *\return		Une r√©f√©rence sur la donn√©e √† l'index voulu
 		 */
 		inline T & operator[]( uint32_t p_pos )
 		{
@@ -490,23 +489,23 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
+		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
 		 *\return		A constant reference on data at wanted index
 		 *\~french
-		 *\brief		RÈcupËre la donnÈe ‡ l'index donnÈ
-		 *\remark		Cette fonction vÈrifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une rÈfÈrence constante sur la donnÈe ‡ l'index voulu
+		 *\brief		R√©cup√®re la donn√©e √† l'index donn√©
+		 *\remarks		Cette fonction v√©rifie l'index et lance une exception s'il est hors bornes
+		 *\return		Une r√©f√©rence constante sur la donn√©e √† l'index voulu
 		 */
 		T const & at( uint32_t p_pos )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the data at given index
-		 *\remark		This fonction checks the index and throws an exception if it is out of bounds
+		 *\remarks		This fonction checks the index and throws an exception if it is out of bounds
 		 *\return		A reference on data at wanted index
 		 *\~french
-		 *\brief		RÈcupËre la donnÈe ‡ l'index donnÈ
-		 *\remark		Cette fonction vÈrifie l'index et lance une exception s'il est hors bornes
-		 *\return		Une rÈfÈrence sur la donnÈe ‡ l'index voulu
+		 *\brief		R√©cup√®re la donn√©e √† l'index donn√©
+		 *\remarks		Cette fonction v√©rifie l'index et lance une exception s'il est hors bornes
+		 *\return		Une r√©f√©rence sur la donn√©e √† l'index voulu
 		 */
 		T & at( uint32_t p_pos );
 		/**
@@ -514,7 +513,7 @@ namespace Castor
 		 *\brief		Retrieves a non constant pointer on datas
 		 *\return		The pointer
 		 *\~french
-		 *\brief		RÈcupËre un pointeur non constant sur les donnÈes
+		 *\brief		R√©cup√®re un pointeur non constant sur les donn√©es
 		 *\return		Le pointeur
 		 */
 		inline T * ptr()
@@ -526,7 +525,7 @@ namespace Castor
 		 *\brief		Retrieves a constant pointer on datas
 		 *\return		The pointer
 		 *\~french
-		 *\brief		RÈcupËre un pointeur constant sur les donnÈes
+		 *\brief		R√©cup√®re un pointeur constant sur les donn√©es
 		 *\return		Le pointeur
 		 */
 		inline T const * const_ptr()const
@@ -538,8 +537,8 @@ namespace Castor
 		 *\brief		Retrieves an iterator to the first element
 		 *\return		The iterator
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur le premier ÈlÈment
-		 *\return		L'itÈrateur
+		 *\brief		R√©cup√®re un it√©rateur sur le premier √©l√©ment
+		 *\return		L'it√©rateur
 		 */
 		inline iterator begin()
 		{
@@ -550,8 +549,8 @@ namespace Castor
 		 *\brief		Retrieves a constant iterator to the first element
 		 *\return		The iterator
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur constant sur le premier ÈlÈment
-		 *\return		L'itÈrateur
+		 *\brief		R√©cup√®re un it√©rateur constant sur le premier √©l√©ment
+		 *\return		L'it√©rateur
 		 */
 		inline const_iterator begin()const
 		{
@@ -562,8 +561,8 @@ namespace Castor
 		 *\brief		Retrieves an iterator to the last element
 		 *\return		The iterator
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur le dernier ÈlÈment
-		 *\return		L'itÈrateur
+		 *\brief		R√©cup√®re un it√©rateur sur le dernier √©l√©ment
+		 *\return		L'it√©rateur
 		 */
 		inline iterator end()
 		{
@@ -574,8 +573,8 @@ namespace Castor
 		 *\brief		Retrieves a constant iterator to the last element
 		 *\return		The iterator
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur constant sur le dernier ÈlÈment
-		 *\return		L'itÈrateur
+		 *\brief		R√©cup√®re un it√©rateur constant sur le dernier √©l√©ment
+		 *\return		L'it√©rateur
 		 */
 		inline const_iterator end()const
 		{
@@ -591,22 +590,155 @@ namespace Castor
 	 *\param[in]	p_ptA, p_ptB	The points to compare
 	 *\return		\p true if points have same dimensions and same values
 	 *\~french
-	 *\brief		OpÈrateur d'ÈgalitÈ
-	 *\param[in]	p_ptA, p_ptB	Les points ‡ comparer
-	 *\return		\p true si les points ont les mÍmes dimensions et les mÍmes valeurs
+	 *\brief		Op√©rateur d'√©galit√©
+	 *\param[in]	p_ptA, p_ptB	Les points √† comparer
+	 *\return		\p true si les points ont les m√™mes dimensions et les m√™mes valeurs
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator ==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator==( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
 	/**
 	 *\~english
 	 *\brief		Difference operator
 	 *\param[in]	p_ptA, p_ptB	The points to compare
 	 *\return		\p true if points have different dimensions or at least one different value
 	 *\~french
-	 *\brief		OpÈrateur d'inÈgalitÈ
-	 *\param[in]	p_ptA, p_ptB	Les points ‡ comparer
-	 *\return		\p true si les points ont des dimensions diffÈrentes ou au moins une valeur diffÈrente
+	 *\brief		Op√©rateur d'in√©galit√©
+	 *\param[in]	p_ptA, p_ptB	Les points √† comparer
+	 *\return		\p true si les points ont des dimensions diff√©rentes ou au moins une valeur diff√©rente
 	 */
-	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator !=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> bool operator!=( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Addition operator
+	 *\param[in]	p_ptA, p_ptB	The points to add
+	 *\return		The addition result
+	 *\~french
+	 *\brief		Op√©rateur d'addition
+	 *\param[in]	p_ptA, p_ptB	Les points √† additionner
+	 *\return		Le r√©sultat de l'addition
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator+( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Substraction operator
+	 *\param[in]	p_ptA, p_ptB	The points to substract
+	 *\return		The substraction result
+	 *\~french
+	 *\brief		Op√©rateur de soustraction
+	 *\param[in]	p_ptA, p_ptB	Les points √† soustraire
+	 *\return		Le r√©sultat de la soustraction
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator-( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Op√©rateur de multiplication
+	 *\param[in]	p_ptA, p_ptB	Les points √† multiplier
+	 *\return		Le r√©sultat de la multiplication
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator*( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Division operator
+	 *\param[in]	p_ptA, p_ptB	The points to divide
+	 *\return		The division result
+	 *\~french
+	 *\brief		Op√©rateur de division
+	 *\param[in]	p_ptA, p_ptB	Les points √† diviser
+	 *\return		Le r√©sultat de la division
+	 */
+	template< typename T, uint32_t Count, typename U, uint32_t _Count	> Point< T, Count > operator/( Coords< T, Count > const & p_ptA, Coords< U, _Count > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Vectorial product operator
+	 *\param[in]	p_ptA, p_ptB	The points to multiply
+	 *\return		The vectorial product
+	 *\~french
+	 *\brief		Op√©rateur de produit vectoriel
+	 *\param[in]	p_ptA, p_ptB	Les points √† multiplier
+	 *\return		Le r√©sultat du produit vectoriel
+	 */
+	template< typename T, typename U > Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB );
+	/**
+	 *\~english
+	 *\brief		Addition operator
+	 *\param[in]	p_pt		The point
+	 *\param[in]	p_coords	The values to add
+	 *\return		The addition result
+	 *\~french
+	 *\brief		Op√©rateur d'addition
+	 *\param[in]	p_pt		Le point
+	 *\param[in]	p_coords	Les valeurs √† additionner
+	 *\return		Le r√©sultat de l'addition
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator+( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Substraction operator
+	 *\param[in]	p_pt		The point
+	 *\param[in]	p_coords	The values to substract
+	 *\return		The substraction result
+	 *\~french
+	 *\brief		Op√©rateur de soustraction
+	 *\param[in]	p_pt		Le point
+	 *\param[in]	p_coords	Les valeurs √† soustraire
+	 *\return		Le r√©sultat de la soustraction
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator-( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_pt		The point
+	 *\param[in]	p_coords	The values to multiply
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Op√©rateur de multiplication
+	 *\param[in]	p_pt		Le point
+	 *\param[in]	p_coords	Les valeurs √† mulitplier
+	 *\return		Le r√©sultat de la multiplication
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator*( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Division operator
+	 *\param[in]	p_pt		The point to divide
+	 *\param[in]	p_coords	The values
+	 *\return		The division result
+	 *\~french
+	 *\brief		Op√©rateur de division
+	 *\param[in]	p_pt		Le point √† diviser
+	 *\param[in]	p_coords	Les valeurs
+	 *\return		Le r√©sultat de la division
+	 */
+	template< typename T, uint32_t Count, typename U > Point< T, Count > operator/( Coords< T, Count > const & p_pt, U const * p_coords );
+	/**
+	 *\~english
+	 *\brief		Multiplication operator
+	 *\param[in]	p_pt	The point to multiply
+	 *\param[in]	p_coord	The value
+	 *\return		The multiplication result
+	 *\~french
+	 *\brief		Op√©rateur de multiplication
+	 *\param[in]	p_pt	Le point √† multiplier
+	 *\param[in]	p_coord	La valeur
+	 *\return		Le r√©sultat de la multiplication
+	 */
+	template< typename T, uint32_t Count > Point< T, Count > operator*( Coords< T, Count > const & p_pt, T const & p_coord );
+	/**
+	 *\~english
+	 *\brief		Division operator
+	 *\param[in]	p_pt	The point to divide
+	 *\param[in]	p_coord	The value
+	 *\return		The division result
+	 *\~french
+	 *\brief		Op√©rateur de division
+	 *\param[in]	p_pt	Le point √† diviser
+	 *\param[in]	p_coord	La valeur
+	 *\return		Le r√©sultat de la division
+	 */
+	template< typename T, uint32_t Count > Point< T, Count > operator/( Coords< T, Count > const & p_pt, T const & p_coord );
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		10/07/2012
@@ -623,20 +755,20 @@ namespace Castor
 		 *\brief		Negates every value of a point's data
 		 *\param[in]	p_ptPoint	The point
 		 *\~french
-		 *\brief		NÈgative chaque donnÈe du point donnÈ
+		 *\brief		N√©gative chaque donn√©e du point donn√©
 		 *\param[in]	p_ptPoint	Le point
 		 */
 		template< typename T, uint32_t Count > static void negate( Coords< T, Count > & p_ptPoint );
 		/**
 		 *\~english
 		 *\brief		Normalises the point
-		 *\remark		A point is normalised when it's length equals 1.0
+		 *\remarks		A point is normalised when it's length equals 1.0
 						<br />So each data is divided by the point's length
 		 *\param[in]	p_ptPoint	The point
 		 *\~french
 		 *\brief		Normalise le point
-		 *\remark		Un point est normalisÈ quand sa longueur vaut 1.0
-						<br />Chaque donnÈe est donc divisÈe par la longueur du point
+		 *\remarks		Un point est normalis√© quand sa longueur vaut 1.0
+						<br />Chaque donn√©e est donc divis√©e par la longueur du point
 		 *\param[in]	p_ptPoint	Le point
 						*/
 		template< typename T, uint32_t Count > static void normalise( Coords< T, Count > & p_ptPoint );
@@ -657,7 +789,7 @@ namespace Castor
 		 *\param[in]	p_ptA, p_ptB	The points
 		 *\return		The cosine
 		 *\~french
-		 *\brief		Calcule le cosinus trigonomÈtrique de l'angle entre 2 points
+		 *\brief		Calcule le cosinus trigonom√©trique de l'angle entre 2 points
 		 *\param[in]	p_ptA, p_ptB	Les points
 		 *\return		Le cosinus
 		 */
@@ -668,9 +800,9 @@ namespace Castor
 		 *\param[in]	p_ptPoint	The point
 		 *\return		The squared Euclidian distance
 		 *\~french
-		 *\brief		Calcule le carrÈ de la norme Euclidienne du point
+		 *\brief		Calcule le carr√© de la norme Euclidienne du point
 		 *\param[in]	p_ptPoint	Le point
-		 *\return		Le carrÈ de la norme Euclidienne
+		 *\return		Le carr√© de la norme Euclidienne
 		 */
 		template< typename T, uint32_t Count > static double distance_squared( Coords< T, Count > const & p_ptPoint );
 		/**
@@ -728,12 +860,12 @@ namespace Castor
  *\param[in]		p_pt		The input point
  *\return			A reference to the stream
  *\~french
- *\brief			OpÈrateur de flux
- *\param[in,out]	p_streamOut	Le flux qui reÁoit les donnÈes du point
- *\param[in]		p_pt		Le point entrÈ
- *\return			Une rÈfÈrence sur le flux
+ *\brief			Op√©rateur de flux
+ *\param[in,out]	p_streamOut	Le flux qui re√ßoit les donn√©es du point
+ *\param[in]		p_pt		Le point entr√©
+ *\return			Une r√©f√©rence sur le flux
  */
-template< typename T, uint32_t Count > Castor::String & operator <<( Castor::String & p_streamOut, Castor::Coords< T, Count > const & p_pt );
+template< typename T, uint32_t Count > Castor::String & operator<<( Castor::String & p_streamOut, Castor::Coords< T, Count > const & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -741,12 +873,12 @@ template< typename T, uint32_t Count > Castor::String & operator <<( Castor::Str
  *\param[in,out]	p_pt		The output point
  *\return			A reference to the stream
  *\~french
- *\brief			OpÈrateur de flux
- *\param[in,out]	p_streamIn	Le flux qui contient les donnÈes du point
+ *\brief			Op√©rateur de flux
+ *\param[in,out]	p_streamIn	Le flux qui contient les donn√©es du point
  *\param[in,out]	p_pt		Le point sortie
- *\return			Une rÈfÈrence sur le flux
+ *\return			Une r√©f√©rence sur le flux
  */
-template< typename T, uint32_t Count > Castor::String & operator >>( Castor::String & p_streamIn, Castor::Coords< T, Count > & p_pt );
+template< typename T, uint32_t Count > Castor::String & operator>>( Castor::String & p_streamIn, Castor::Coords< T, Count > & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -754,12 +886,12 @@ template< typename T, uint32_t Count > Castor::String & operator >>( Castor::Str
  *\param[in]		p_pt		The input point
  *\return			A reference to the stream
  *\~french
- *\brief			OpÈrateur de flux
- *\param[in,out]	p_streamOut	Le flux qui reÁoit les donnÈes du point
- *\param[in]		p_pt		Le point entrÈ
- *\return			Une rÈfÈrence sur le flux
+ *\brief			Op√©rateur de flux
+ *\param[in,out]	p_streamOut	Le flux qui re√ßoit les donn√©es du point
+ *\param[in]		p_pt		Le point entr√©
+ *\return			Une r√©f√©rence sur le flux
  */
-template< typename T, uint32_t Count, typename CharType > std::basic_ostream< CharType > & operator <<( std::basic_ostream< CharType > & p_streamOut, Castor::Coords< T, Count > const & p_pt );
+template< typename T, uint32_t Count, typename CharType > std::basic_ostream< CharType > & operator<<( std::basic_ostream< CharType > & p_streamOut, Castor::Coords< T, Count > const & p_pt );
 /**
  *\~english
  *\brief			Stream operator
@@ -767,12 +899,12 @@ template< typename T, uint32_t Count, typename CharType > std::basic_ostream< Ch
  *\param[in,out]	p_pt		The output point
  *\return			A reference to the stream
  *\~french
- *\brief			OpÈrateur de flux
- *\param[in,out]	p_streamIn	Le flux qui contient les donnÈes du point
+ *\brief			Op√©rateur de flux
+ *\param[in,out]	p_streamIn	Le flux qui contient les donn√©es du point
  *\param[in,out]	p_pt		Le point sortie
- *\return			Une rÈfÈrence sur le flux
+ *\return			Une r√©f√©rence sur le flux
  */
-template< typename T, uint32_t Count, typename CharType > std::basic_istream< CharType > & operator >>( std::basic_istream< CharType > & p_streamIn, Castor::Coords< T, Count > & p_pt );
+template< typename T, uint32_t Count, typename CharType > std::basic_istream< CharType > & operator>>( std::basic_istream< CharType > & p_streamIn, Castor::Coords< T, Count > & p_pt );
 
 #include "Coords.inl"
 

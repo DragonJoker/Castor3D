@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -33,45 +33,45 @@ namespace Castor3D
 	\remark		A render buffer is a buffer that receives specific component from a frame buffer
 	\~french
 	\brief		Classe de base d'un tampon de rendu
-	\remark		Un tampon de rendu est un tampon qui reçoit une composante spécifique d'un tampon d'image
+	\remark		Un tampon de rendu est un tampon qui reÃ§oit une composante spÃ©cifique d'un tampon d'image
 	*/
-	class C3D_API RenderBuffer
+	class RenderBuffer
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType			The buffer component
-		 *\param[in]	p_ePixelFormat	The buffer pixel format
+		 *\param[in]	p_type			The buffer component
+		 *\param[in]	p_format	The buffer pixel format
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType			La composante du tampon
-		 *\param[in]	p_ePixelFormat	Le format des pixels du tampon
+		 *\param[in]	p_type			La composante du tampon
+		 *\param[in]	p_format	Le format des pixels du tampon
 		 */
-		RenderBuffer( eBUFFER_COMPONENT p_eType, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API RenderBuffer( eBUFFER_COMPONENT p_type, Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderBuffer();
+		C3D_API virtual ~RenderBuffer();
 		/**
 		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction de crÃ©ation
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool Create() = 0;
+		C3D_API virtual bool Create() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void Destroy() = 0;
+		C3D_API virtual void Destroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -80,32 +80,32 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction d'initialisation
 		 *\param[in]	p_size	Les dimensions du tampon
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool Initialise( Castor::Size const & p_size ) = 0;
+		C3D_API virtual bool Initialise( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void Cleanup() = 0;
+		C3D_API virtual void Cleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\return		\p true if successful
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activÃ©
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool Bind() = 0;
+		C3D_API virtual bool Bind() = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
 		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
+		 *\brief		Fonction de dÃ©sactivation, pour dire au GPU qu'il est dÃ©sactivÃ©
 		 */
-		virtual void Unbind() = 0;
+		C3D_API virtual void Unbind() = 0;
 		/**
 		 *\~english
 		 *\brief		Resizing function
@@ -114,27 +114,27 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Fonction de redimensionnement
 		 *\param[in]	p_size	Les dimensions du tampon
-		 *\return		\p true si tout s'est bien passé
+		 *\return		\p true si tout s'est bien passÃ©
 		 */
-		virtual bool Resize( Castor::Size const & p_size ) = 0;
+		C3D_API virtual bool Resize( Castor::Size const & p_size ) = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the buffer pixel format
 		 *\return		The pixel format
 		 *\~french
-		 *\brief		Récupère le format des pixels du tampon
+		 *\brief		RÃ©cupÃ¨re le format des pixels du tampon
 		 *\return		Le format des pixels
 		 */
 		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
 		{
-			return m_ePixelFormat;
+			return m_pixelFormat;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the buffer dimensions
 		 *\return		The dimensions
 		 *\~french
-		 *\brief		Récupère les dimensions du tampon
+		 *\brief		RÃ©cupÃ¨re les dimensions du tampon
 		 *\return		Les dimensions
 		 */
 		inline Castor::Size const & GetDimensions()const
@@ -146,7 +146,7 @@ namespace Castor3D
 		 *\brief		Retrieves the buffer width
 		 *\return		The width
 		 *\~french
-		 *\brief		Récupère la largeur du tampon
+		 *\brief		RÃ©cupÃ¨re la largeur du tampon
 		 *\return		La largeur
 		 */
 		inline uint32_t GetWidth()const
@@ -158,7 +158,7 @@ namespace Castor3D
 		 *\brief		Retrieves the buffer height
 		 *\return		The height
 		 *\~french
-		 *\brief		Récupère la hauteur du tampon
+		 *\brief		RÃ©cupÃ¨re la hauteur du tampon
 		 *\return		La hauteur
 		 */
 		inline uint32_t GetHeight()const
@@ -170,7 +170,7 @@ namespace Castor3D
 		 *\brief		Retrieves the buffer component
 		 *\return		The component
 		 *\~french
-		 *\brief		Récupère la composante du tampon
+		 *\brief		RÃ©cupÃ¨re la composante du tampon
 		 *\return		La composante
 		 */
 		inline eBUFFER_COMPONENT GetComponent()const
@@ -182,35 +182,37 @@ namespace Castor3D
 		 *\brief		Defines the buffer samples count
 		 *\param[in]	p_iSamples	The samples count
 		 *\~french
-		 *\brief		Définit le nombre de samples du tampon
+		 *\brief		DÃ©finit le nombre de samples du tampon
 		 *\param[in]	p_iSamples	Le nombre de samples
 		 */
 		inline void SetSamplesCount( int p_iSamples )
 		{
-			m_iSamplesCount = p_iSamples;
+			m_samplesCount = p_iSamples;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the buffer samples count
 		 *\return		The samples count
 		 *\~french
-		 *\brief		Récupère le nombre de samples du tampon
+		 *\brief		RÃ©cupÃ¨re le nombre de samples du tampon
 		 *\return		Le nombre de samples
 		 */
 		inline int GetSamplesCount()
 		{
-			return m_iSamplesCount;
+			return m_samplesCount;
 		}
 
-	private:
-		//!\~english The component to which this buffer is bound	\~french La composante à laquelle ce tampon est associé
-		eBUFFER_COMPONENT m_eComponent;
+	protected:
 		//!\~english The buffer dimensions	\~french Les dimensions du buffer
 		Castor::Size m_size;
+
+	private:
+		//!\~english The component to which this buffer is bound	\~french La composante Ã  laquelle ce tampon est associÃ©
+		eBUFFER_COMPONENT m_eComponent;
 		//!\~english The buffer pixel format	\~french Le format des pixels du tampon
-		Castor::ePIXEL_FORMAT m_ePixelFormat;
-		//!\~english The samples count, if multisampling is enabled	\~french Le nombre d'échantillons, en cas de multisampling
-		int m_iSamplesCount;
+		Castor::ePIXEL_FORMAT m_pixelFormat;
+		//!\~english The samples count, if multisampling is enabled	\~french Le nombre d'Ã©chantillons, en cas de multisampling
+		int m_samplesCount;
 	};
 }
 

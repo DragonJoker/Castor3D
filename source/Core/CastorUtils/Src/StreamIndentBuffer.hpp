@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -44,6 +44,27 @@ namespace Castor
 			typedef typename traits::pos_type pos_type;
 			typedef typename traits::off_type off_type;
 
+		private:
+			/**
+			 *\~english
+			 *\brief		Copy constructor
+			 *\remarks		Not implemented to deactivate it
+			 *\~french
+			 *\brief		Constructeur par copie
+			 *\remarks		Non implémenté afin de le désactiver
+			 */
+			basic_indent_buffer( const basic_indent_buffer< char_type, fill_char, traits > & ) = delete;
+
+			/**
+			 *\~english
+			 *\brief		Copy assignment operator
+			 *\remarks		Not implemented to deactivate it
+			 *\~french
+			 *\brief		Opérateur d'affectation par copie
+			 *\remarks		Non implémenté afin de le désactiver
+			 */
+			basic_indent_buffer< char_type, fill_char, traits > & operator =( const basic_indent_buffer< char_type, fill_char, traits > & ) = delete;
+
 		public:
 			/**
 			 *\~english
@@ -67,26 +88,6 @@ namespace Castor
 			~basic_indent_buffer()
 			{
 			}
-
-			/**
-			 *\~english
-			 *\brief		Copy constructor
-			 *\remarks		Not implemented to deactivate it
-			 *\~french
-			 *\brief		Constructeur par copie
-			 *\remarks		Non implémenté afin de le désactiver
-			 */
-			basic_indent_buffer( const basic_indent_buffer< char_type, fill_char, traits > & );
-
-			/**
-			 *\~english
-			 *\brief		Copy assignment operator
-			 *\remarks		Not implemented to deactivate it
-			 *\~french
-			 *\brief		Opérateur d'affectation par copie
-			 *\remarks		Non implémenté afin de le désactiver
-			 */
-			basic_indent_buffer< char_type, fill_char, traits > & operator =( const basic_indent_buffer< char_type, fill_char, traits > & );
 
 			/**
 			 *\~english
@@ -163,8 +164,11 @@ namespace Castor
 			bool m_set;
 		};
 
-		typedef basic_indent_buffer< char > indent_buffer;
-		typedef basic_indent_buffer< wchar_t > windent_buffer;
+		typedef basic_indent_buffer< char > spc_indent_buffer;
+		typedef basic_indent_buffer< wchar_t > wspc_indent_buffer;
+
+		typedef basic_indent_buffer< char, '\t' > tab_indent_buffer;
+		typedef basic_indent_buffer< wchar_t, L'\t' > wtab_indent_buffer;
 	}
 }
 

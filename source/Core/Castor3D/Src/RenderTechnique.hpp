@@ -18,17 +18,17 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RENDER_TECHNIQUE_H___
 #define ___C3D_RENDER_TECHNIQUE_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include <Rectangle.hpp>
+#include "ToneMapping.hpp"
+#include "RenderNode.hpp"
+#include "TextureUnit.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <Rectangle.hpp>
+#include <OwnedBy.hpp>
 
 #if !defined( NDEBUG )
-#	define DEBUG_BUFFERS	0
+#	define DEBUG_BUFFERS 0
 #else
-#	define DEBUG_BUFFERS	0
+#	define DEBUG_BUFFERS 0
 #endif
 
 namespace Castor3D
@@ -39,38 +39,103 @@ namespace Castor3D
 	\date		12/11/2012
 	\~english
 	\brief		Render technique base class
-	\remark		A render technique is the description of a way to render a render target
+	\remarks	A render technique is the description of a way to render a render target
 	\~french
 	\brief		Classe de base d'une technique de rendu
-	\remark		Une technique de rendu est la description d'une mani�re de rendre une cible de rendu
+	\remarks	Une technique de rendu est la description d'une manière de rendre une cible de rendu
 	*/
-	class C3D_API RenderTechniqueBase
+	class RenderTechnique
+		: public Castor::OwnedBy< Engine >
 	{
+	public:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		21/02/2016
+		\~english
+		\brief		The render nodes for a specific scene.
+		\~french
+		\brief		Les noeuds de rendu pour une scène spécifique.
+		*/
+		template< typename MapT, typename NodeT >
+		struct stRENDER_NODES
+		{
+			//!\~english The render nodes, sorted by shader program.	\~french Les noeuds de rendu, triés par programme shader.
+			MapT m_renderNodes;
+			//!\~english The geometries without alpha blending, sorted by shader program.	\~french Les géométries sans alpha blending, triées par programme shader.
+			MapT m_opaqueRenderNodes;
+			//!\~english The geometries with alpha blending, sorted by shader program.	\~french Les géométries avec de l'alpha blend, triées par programme shader.
+			MapT m_transparentRenderNodes;
+			//!\~english The geometries with alpha blending, sorted by distance to the camera.	\~french Les géométries avec de l'alpha blend, triées par distance à la caméra.
+			std::multimap< double, NodeT > m_distanceSortedRenderNodes;
+		};
+
+	protected:
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		21/02/2016
+		\~english
+		\brief		The render nodes for a specific scene.
+		\~french
+		\brief		Les noeuds de rendu pour une scène spécifique.
+		*/
+		struct stSCENE_RENDER_NODES
+		{
+			//!\~english The scene.	\~french La scène.
+			Scene & m_scene;
+			//!\~english The render nodes, sorted by shader program.	\~french Les noeuds de rendu, triés par programme shader.
+			stRENDER_NODES< SubmeshRenderNodesByProgramMap, GeometryRenderNode > m_geometries;
+			//!\~english The billboards render nodes, sorted by shader program.	\~french Les noeuds de rendu de billboards, triés par programme shader.
+			stRENDER_NODES< BillboardRenderNodesByProgramMap, BillboardRenderNode > m_billboards;
+		};
+		/*!
+		\author		Sylvain DOREMUS
+		\version	0.7.0.0
+		\date		19/12/2012
+		\~english
+		\brief		Internal struct holding a complete frame buffer
+		\~french
+		\brief		Structure interne contenant un tampon d'image complet
+		*/
+		struct stFRAME_BUFFER
+		{
+		public:
+			stFRAME_BUFFER( RenderTechnique & p_technique );
+			bool Initialise( Castor::Size p_size );
+			void Cleanup();
+
+			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
+			DynamicTextureSPtr m_colourTexture;
+			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
+			DepthStencilRenderBufferSPtr m_depthBuffer;
+			//!\~english The frame buffer	\~french Le tampon d'image
+			FrameBufferSPtr m_frameBuffer;
+			//!\~english The attach between texture and main frame buffer	\~french L'attache entre la texture et le tampon principal
+			TextureAttachmentSPtr m_colourAttach;
+			//!\~english The attach between depth buffer and main frame buffer	\~french L'attache entre le tampon profondeur et le tampon principal
+			RenderBufferAttachmentSPtr m_depthAttach;
+
+		private:
+			RenderTechnique & m_technique;
+		};
+
 	protected:
 		/**
 		 *\~english
 		 *\brief		Constructor
 		 *\param[in]	p_name			The technique name
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_name			Le nom de la technique
-		 */
-		RenderTechniqueBase( Castor::String const & p_name );
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_name			The technique name
 		 *\param[in]	p_renderTarget	The render target for this technique
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\param[in]	p_renderSystem	The render system
 		 *\param[in]	p_params		The technique parameters
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_name			Le nom de la technique
 		 *\param[in]	p_renderTarget	La render target pour cette technique
-		 *\param[in]	p_pRenderSystem	Le render system
-		 *\param[in]	p_params		Les param�tres de la technique
+		 *\param[in]	p_renderSystem	Le render system
+		 *\param[in]	p_params		Les paramètres de la technique
 		 */
-		RenderTechniqueBase( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_pRenderSystem, Parameters const & p_params );
+		C3D_API RenderTechnique( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params );
 
 	public:
 		/**
@@ -79,23 +144,23 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~RenderTechniqueBase();
+		C3D_API virtual ~RenderTechnique();
 		/**
 		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de cr�ation
-		 *\return		\p true si tout s'est bien pass�
+		 *\brief		Fonction de création
+		 *\return		\p true si tout s'est bien passé
 		 */
-		bool Create();
+		C3D_API bool Create();
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		void Destroy();
+		C3D_API void Destroy();
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -106,77 +171,111 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture de base
 		 *\return		\p true if ok
 		 */
-		bool Initialise( uint32_t & p_index );
+		C3D_API bool Initialise( uint32_t & p_index );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Render begin function
-		 *\return		\p true if ok
+		 *\brief		Update function.
+		 *\remarks		Updates the scenes render nodes, if needed.
 		 *\~french
-		 *\brief		Fonction de d�but de rendu
-		 *\return		\p true si tout s'est bien pass�
+		 *\brief		Fonction de mise à jour.
+		 *\remarks		Met les noeuds de scènes à jour, si nécessaire.
 		 */
-		bool BeginRender();
+		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Adds a scene rendered through this technique.
+		 *\param[in]	p_scene	The scene.
+		 *\~french
+		 *\brief		Ajoute une scène dessinée via cette technique.
+		 *\param[in]	p_scene	La scène.
+		 */
+		C3D_API void AddScene( Scene & p_scene );
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[in]	p_scene			The scene to render
-		 *\param[in]	p_camera		The camera through which the scene is viewed
-		 *\param[in]	p_ePrimitives	The display mode
-		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered
-		 *\return		\p true if ok
+		 *\param[in]	p_scene		The scene to render
+		 *\param[in]	p_camera	The camera through which the scene is viewed
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La sc�ne � rendre
-		 *\param[in]	p_camera		La cam�ra � travers laquelle la sc�ne est vue
-		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps �coul� depuis le rendu de la derni�re frame
-		 *\return		\p true si tout s'est bien pass�
+		 *\param[in]	p_scene		La scène à dessiner
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame
 		 */
-		bool Render( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		C3D_API void Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime );
 		/**
 		 *\~english
-		 *\brief		Render end function
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
 		 *\~french
-		 *\brief		Fonction de fin de rendu
+		 *\brief		Récupère le source du pixel shader qui correspond aux flags donnés
+		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
 		 */
-		void EndRender();
+		C3D_API Castor::String GetPixelShaderSource( uint32_t p_flags )const;
 		/**
 		 *\~english
-		 *\brief		Retrieves the technique name
-		 *\return		The value
+		 *\return		The technique name.
 		 *\~french
-		 *\brief		R�cup�re le nom de la technique
-		 *\return		La valeur
+		 *\return		Le nom de la technique.
 		 */
 		inline Castor::String const & GetName()const
 		{
 			return m_name;
 		}
+		/**
+		 *\~english
+		 *\return		The render area dimensions.
+		 *\~french
+		 *\return		Les dimensions de la zone de rendu.
+		 */
+		inline Castor::Size const & GetSize()const
+		{
+			return m_size;
+		}
+		/**
+		 *\~english
+		 *\return		The colour texture holding the render's result.
+		 *\~french
+		 *\return		La texture de couleurs contenant le résultat du rendu.
+		 */
+		inline DynamicTexture const & GetResult()const
+		{
+			return *m_frameBuffer.m_colourTexture;
+		}
 
 	protected:
+		/**
+		 *\~english
+		 *\brief		Retrieves the pixel shader source matching the given flags
+		 *\param[in]	p_flags	A combination of eTEXTURE_CHANNEL
+		 *\~french
+		 *\brief		Récupère le source du pixel shader correspondant aux flags donnés
+		 *\param[in]	p_flags	Une combinaison de eTEXTURE_CHANNEL
+		 */
+		C3D_API virtual Castor::String DoGetPixelShaderSource( uint32_t p_flags )const;
 		/**
 		 *\~english
 		 *\brief		Creation function
 		 *\return		\p true if OK
 		 *\~french
-		 *\brief		Fonction de cr�ation
-		 *\return		\p true si tout s'est bien pass�
+		 *\brief		Fonction de création
+		 *\return		\p true si tout s'est bien passé
 		 */
-		virtual bool DoCreate() = 0;
+		C3D_API virtual bool DoCreate() = 0;
 		/**
 		 *\~english
 		 *\brief		Destruction function
 		 *\~french
 		 *\brief		Fonction de destruction
 		 */
-		virtual void DoDestroy() = 0;
+		C3D_API virtual void DoDestroy() = 0;
 		/**
 		 *\~english
 		 *\brief		Initialisation function
@@ -187,80 +286,270 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture de base
 		 *\return		\p true if ok
 		 */
-		virtual bool DoInitialise( uint32_t & p_index ) = 0;
+		C3D_API virtual bool DoInitialise( uint32_t & p_index ) = 0;
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		virtual void DoCleanup() = 0;
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
-		 *\brief		Render begin function
-		 *\return		\p true if ok
+		 *\brief		Render begin function.
+		 *\remarks		At the end of this method, the frame buffer that will receive draw calls must be bound.
+		 *\param[in]	p_scene		The scene to render
+		 *\return		\p true if ok.
 		 *\~french
-		 *\brief		Fonction de d�but de rendu
-		 *\return		\p true si tout s'est bien pass�
+		 *\brief		Fonction de début de rendu.
+		 *\remarks		A la sortie de cette méthode, le tampon d'image qui recevra les dessins doit être activé.
+		 *\param[in]	p_scene		La scène à dessiner
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool DoBeginRender() = 0;
+		C3D_API virtual bool DoBeginRender( Scene & p_scene ) = 0;
 		/**
 		 *\~english
 		 *\brief		Render function
-		 *\param[in]	p_scene			The scene to render
-		 *\param[in]	p_camera		The camera through which the scene is viewed
-		 *\param[in]	p_ePrimitives	The display mode
-		 *\param[in]	p_dFrameTime	The time elapsed since last frame was rendered
+		 *\param[in]	p_nodes		The nodes to render.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
 		 *\return		\p true if ok
 		 *\~french
 		 *\brief		Fonction de rendu
-		 *\param[in]	p_scene			La sc�ne � rendre
-		 *\param[in]	p_camera		La cam�ra � travers laquelle la sc�ne est vue
-		 *\param[in]	p_ePrimitives	Le mode d'affichage
-		 *\param[in]	p_dFrameTime	Le temps �coul� depuis le rendu de la derni�re frame
-		 *\return		\p true si tout s'est bien pass�
+		 *\param[in]	p_nodes		Les noeuds à dessiner.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		virtual bool DoRender( Scene & p_scene, Camera & p_camera, eTOPOLOGY p_ePrimitives, double p_dFrameTime );
+		C3D_API virtual void DoRender( stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime ) = 0;
 		/**
 		 *\~english
 		 *\brief		Render end function
+		 *\remarks		At the end of this method, no frame buffer must be bound.
+		 *\param[in]	p_scene		The scene to render
 		 *\~french
 		 *\brief		Fonction de fin de rendu
+		 *\remarks		A la sortie de cette méthode, aucun tampon d'image ne doit être activé.
+		 *\param[in]	p_scene		La scène à dessiner
 		 */
-		virtual void DoEndRender() = 0;
+		C3D_API virtual void DoEndRender( Scene & p_scene ) = 0;
+
+	protected:
+		/**
+		 *\~english
+		 *\brief			Sorts scene render nodes.
+		 *\param[in,out]	p_nodes	The nodes.
+		 *\~french
+		 *\brief			Trie les noeuds de rendu de scène.
+		 *\param[in,out]	p_nodes	Les noeuds.
+		 */
+		C3D_API void DoSortRenderNodes( stSCENE_RENDER_NODES & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Binds the given pass.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_node				The render node.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_node				Le noeud de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, GeometryRenderNode & p_node, uint64_t p_excludedMtxFlags );
+		/**
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\param[in]	p_renderNode	The render node.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 *\param[in]	p_renderNode	Le noeud de rendu.
+		 */
+		C3D_API void DoUnbindPass( Scene & p_scene, GeometryRenderNode & p_renderNode );
+		/**
+		 *\~english
+		 *\brief		Binds the given pass.
+		 *\param[in]	p_scene				The rendered scene.
+		 *\param[in]	p_pipeline			The render pipeline.
+		 *\param[in]	p_node				The render node.
+		 *\param[in]	p_excludedMtxFlags	Combination of MASK_MTXMODE, to be excluded from matrices used in program.
+		 *\~french
+		 *\brief		Active la passe donnée.
+		 *\param[in]	p_scene				La scène rendue.
+		 *\param[in]	p_pipeline			Le pipeline de rendu.
+		 *\param[in]	p_node				Le noeud de rendu.
+		 *\param[in]	p_excludedMtxFlags	Combinaison de MASK_MTXMODE, à exclure des matrices utilisées dans le programme.
+		 */
+		C3D_API void DoBindPass( Scene & p_scene, Pipeline & p_pipeline, BillboardRenderNode & p_node, uint64_t p_excludedMtxFlags );
+		/**
+		 *\~english
+		 *\brief		Unbinds the render node's pass.
+		 *\param[in]	p_scene			The scene.
+		 *\param[in]	p_renderNode	The render node.
+		 *\~french
+		 *\brief		Désctive la passe du noeud de rendu.
+		 *\param[in]	p_scene			La scène.
+		 *\param[in]	p_renderNode	Le noeud de rendu.
+		 */
+		C3D_API void DoUnbindPass( Scene & p_scene, BillboardRenderNode & p_renderNode );
+		/**
+		 *\~english
+		 *\brief		Renders non instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages non instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders instanced submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages instanciés.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderSubmeshesInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders distance sorted submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages triés par distance.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderSubmeshesNonInstanced( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, GeometryRenderNodeByDistanceMMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders submeshes.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des sous maillages.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderSubmeshes( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodeByDistanceMMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Renders billboards.
+		 *\param[in]	p_scene		The rendered scene.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\param[in]	p_nodes		The render nodes.
+		 *\~french
+		 *\brief		Dessine des billboards.
+		 *\param[in]	p_scene		La scène rendue.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_pipeline	Le pipeline de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu.
+		 */
+		C3D_API void DoRenderBillboards( Scene & p_scene, Camera const & p_camera,  Pipeline & p_pipeline, BillboardRenderNodesByProgramMap & p_nodes );
+		/**
+		 *\~english
+		 *\brief		Sorts the given render nodes by distance to the camera.
+		 *\param[in]	p_input		The unsorted render nodes.
+		 *\param[in]	p_camera	The camera.
+		 *\param[out]	p_output	The sorted render nodes.
+		 *\~french
+		 *\brief		Trie les noeuds de rendu donnés par distance à la caméra.
+		 *\param[in]	p_input		Les noeuds de rendu non triés.
+		 *\param[in]	p_camera	La caméra.
+		 *\param[out]	p_output	Les noeuds de rendu triés.
+		 */
+		C3D_API void DoResortAlpha( SubmeshRenderNodesByProgramMap p_input, Camera const & p_camera, GeometryRenderNodeByDistanceMMap & p_output );
+		/**
+		 *\~english
+		 *\brief		Sorts the given render nodes by distance to the camera.
+		 *\param[in]	p_input		The unsorted render nodes.
+		 *\param[in]	p_camera	The camera.
+		 *\param[out]	p_output	The sorted render nodes.
+		 *\~french
+		 *\brief		Trie les noeuds de rendu donnés par distance à la caméra.
+		 *\param[in]	p_input		Les noeuds de rendu non triés.
+		 *\param[in]	p_camera	La caméra.
+		 *\param[out]	p_output	Les noeuds de rendu triés.
+		 */
+		C3D_API void DoResortAlpha( BillboardRenderNodesByProgramMap p_input, Camera const & p_camera, BillboardRenderNodeByDistanceMMap & p_output );
+		/**
+		 *\~english
+		 *\brief		Render function.
+		 *\param[in]	p_size		The render target dimensions.
+		 *\param[in]	p_nodes		The scene render nodes.
+		 *\param[in]	p_camera	The camera through which the scene is viewed.
+		 *\param[in]	p_frameTime	The time elapsed since last frame was rendered.
+		 *\return		\p true if ok
+		 *\~french
+		 *\brief		Fonction de rendu.
+		 *\param[in]	p_size		Les dimensions de la cible de rendu.
+		 *\param[in]	p_nodes		Les noeuds de rendu de la scène.
+		 *\param[in]	p_camera	La caméra à travers laquelle la scène est vue.
+		 *\param[in]	p_frameTime	Le temps écoulé depuis le rendu de la dernière frame.
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		C3D_API void DoRender( Castor::Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime );
 
 	protected:
 		//!\~english The technique name	\~french Le nom de la technique
 		Castor::String m_name;
+		//!\~english The technique intialisation status.	\~french Le statut d'initialisation de la technique.
+		bool m_initialised;
 		//!\~english The parent render target	\~french La render target parente
-		RenderTarget * m_pRenderTarget;
-		//!\~english The	engine	\~french Le moteur
-		Engine * m_pEngine;
-		//!\~english The	render system	\~french Le render system
-		RenderSystem * m_pRenderSystem;
-		//!\~english The	overlays blend state	\~french L'�tat de m�lange pour les overlays
-		BlendStateWPtr m_wp2DBlendState;
-		//!\~english The	overlays depth stencil state	\~french L'�tat de profoundeur et stenxil pour les overlays
-		DepthStencilStateWPtr m_wp2DDepthStencilState;
-		//!\~english The	technique buffers size	\~french Les dimensions des tampons de la technique
+		RenderTarget * m_renderTarget;
+		//!\~english The render system	\~french Le render system
+		RenderSystem * m_renderSystem;
+		//!\~english The render area dimension.	\~french Les dimensions de l'aire de rendu.
 		Castor::Size m_size;
-		//!\~english The	technique blit rectangle	\~french Le rectangle de blit de la technique
-		Castor::Rectangle m_rect;
-		//!\~english The sampler used by the textures	\~french L'�chantillonneur utilis� par les textures
-		SamplerSPtr m_sampler;
-		//!\~english The frame buffer	\~french Le tampon d'image
-		FrameBufferSPtr m_pFrameBuffer;
-		//!\~english The buffer receiving the color render	\~french Le tampon recevant le rendu couleur
-		DynamicTextureSPtr m_pColorBuffer;
-		//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
-		DepthStencilRenderBufferSPtr m_pDepthBuffer;
-		//!\~english The attach between colour buffer and frame buffer	\~french L'attache entre le tampon couleur et le tampon d'image
-		TextureAttachmentSPtr m_pColorAttach;
-		//!\~english The attach between depth buffer and frame buffer	\~french L'attache entre le tampon profondeur et le tampon d'image
-		RenderBufferAttachmentSPtr m_pDepthAttach;
+		//!\~english The scenes rendered through this technique.	\~french Les scènes dessinées via cette technique.
+		std::map < Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
+		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
+		stFRAME_BUFFER m_frameBuffer;
+		//!\~english The rasteriser state to cull front faces.	\~french L'état de rastérisation pour masquer les faces avant.
+		RasteriserStateWPtr m_wpFrontRasteriserState;
+		//!\~english The rasteriser state to cull back faces.	\~french L'état de rastérisation pour masquer les faces arrière.
+		RasteriserStateWPtr m_wpBackRasteriserState;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

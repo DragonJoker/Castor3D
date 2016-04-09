@@ -1,4 +1,4 @@
-#include "File.hpp"
+﻿#include "File.hpp"
 #include "Math.hpp"
 #include "Utils.hpp"
 #include "Logger.hpp"
@@ -11,15 +11,7 @@
 #if defined( _WIN32 )
 #	include <direct.h>
 #	include <Shlobj.h>
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#	endif
 #	include <windows.h>
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
 #	define GetCurrentDir _getcwd
 #	undef CopyFile
 #	undef DeleteFile
@@ -34,7 +26,174 @@
 
 namespace Castor
 {
+	namespace
+	{
+		template< typename DirectoryFuncType, typename FileFuncType >
+		bool TraverseDirectory( Path const & p_folderPath, DirectoryFuncType p_directoryFunction, FileFuncType p_fileFunction )
+		{
+			REQUIRE( !p_folderPath.empty() );
+			bool l_return = false;
+
+#if defined( _WIN32 )
+
+			WIN32_FIND_DATA l_findData;
+			HANDLE l_handle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &l_findData );
+
+			if ( l_handle != INVALID_HANDLE_VALUE )
+			{
+				l_return = true;
+				String l_name = l_findData.cFileName;
+
+				if ( l_name != cuT( "." ) && l_name != cuT( ".." ) )
+				{
+					if ( ( l_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
+					{
+						l_return = p_directoryFunction( p_folderPath / l_name );
+					}
+					else
+					{
+						p_fileFunction( p_folderPath / l_name );
+					}
+				}
+
+				while ( l_return && ::FindNextFile( l_handle, &l_findData ) == TRUE )
+				{
+					if ( l_findData.cFileName != l_name )
+					{
+						l_name = l_findData.cFileName;
+
+						if ( l_name != cuT( "." ) && l_name != cuT( ".." ) )
+						{
+							if ( ( l_findData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == FILE_ATTRIBUTE_DIRECTORY )
+							{
+								l_return = p_directoryFunction( p_folderPath / l_name );
+							}
+							else
+							{
+								p_fileFunction( p_folderPath / l_name );
+							}
+						}
+					}
+				}
+
+				::FindClose( l_handle );
+			}
+
+#elif defined( __linux__ )
+
+			DIR * l_dir;
+
+			if ( ( l_dir = opendir( string::string_cast< char >( p_folderPath ).c_str() ) ) == nullptr )
+			{
+				switch ( errno )
+				{
+				case EACCES:
+					Logger::LogWarning( cuT( "Can't open dir : Permission denied - Directory : " ) + p_folderPath );
+					break;
+
+				case EBADF:
+					Logger::LogWarning( cuT( "Can't open dir : Invalid file descriptor - Directory : " ) + p_folderPath );
+					break;
+
+				case EMFILE:
+					Logger::LogWarning( cuT( "Can't open dir : Too many file descriptor in use - Directory : " ) + p_folderPath );
+					break;
+
+				case ENFILE:
+					Logger::LogWarning( cuT( "Can't open dir : Too many files currently open - Directory : " ) + p_folderPath );
+					break;
+
+				case ENOENT:
+					Logger::LogWarning( cuT( "Can't open dir : Directory doesn't exist - Directory : " ) + p_folderPath );
+					break;
+
+				case ENOMEM:
+					Logger::LogWarning( cuT( "Can't open dir : Insufficient memory - Directory : " ) + p_folderPath );
+					break;
+
+				case ENOTDIR:
+					Logger::LogWarning( cuT( "Can't open dir : <name> is not a directory - Directory : " ) + p_folderPath );
+					break;
+
+				default:
+					Logger::LogWarning( cuT( "Can't open dir : Unknown error - Directory : " ) + p_folderPath );
+					break;
+				}
+
+				l_return = false;
+			}
+			else
+			{
+				l_return = true;
+				dirent * l_dirent;
+
+				while ( l_return && ( l_dirent = readdir( l_dir ) ) != nullptr )
+				{
+					String l_name = string::string_cast< xchar >( l_dirent->d_name );
+
+					if ( l_name != cuT( "." ) && l_name != cuT( ".." ) )
+					{
+						if ( l_dirent->d_type == DT_DIR )
+						{
+							l_return = p_directoryFunction( p_folderPath / l_name );
+						}
+						else
+						{
+							p_fileFunction( p_folderPath / l_name );
+						}
+					}
+				}
+
+				closedir( l_dir );
+			}
+
+#else
+#	error "Unsupported platform"
+#endif
+			return l_return;
+		}
+
+		bool DeleteEmptyDirectory( Path const & p_path )
+		{
+#if defined( _MSC_VER )
+
+			bool l_return = _trmdir( p_path.c_str() ) == TRUE;
+
+#else
+
+			bool l_return = rmdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+
+#endif
+
+			if ( !l_return )
+			{
+				switch ( errno )
+				{
+				case ENOTEMPTY:
+					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], it is not empty." ) );
+					break;
+
+				case ENOENT:
+					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], the path is invalid." ) );
+					break;
+
+				case EACCES:
+					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], a program has an open handle to this directory." ) );
+					break;
+
+				default:
+					Logger::LogError( cuT( "Couldn't remove directory [" ) + p_path + cuT( "], unknown error." ) );
+					break;
+				}
+			}
+
+			return l_return;
+		}
+
+	}
+
 #if defined( _MSC_VER)
+
 	bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
 	{
 		errno_t l_err = fopen_s( &p_pFile, p_pszPath, p_pszMode );
@@ -61,18 +220,20 @@ namespace Castor
 	{
 		return _ftelli64( p_pFile );
 	}
+
 #else
+
 	bool FOpen( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
 	{
 		p_pFile = fopen( p_pszPath, p_pszMode );
-		return p_pFile != NULL;
+		return p_pFile != nullptr;
 	}
 
 #	if !defined( _WIN32 )
 	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
 	{
 		p_pFile = fopen64( p_pszPath, p_pszMode );
-		return p_pFile != NULL;
+		return p_pFile != nullptr;
 	}
 
 	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin )
@@ -88,7 +249,7 @@ namespace Castor
 	bool FOpen64( FILE *& p_pFile, char const * p_pszPath, char const * p_pszMode )
 	{
 		p_pFile = fopen( p_pszPath, p_pszMode );
-		return p_pFile != NULL;
+		return p_pFile != nullptr;
 	}
 
 	bool FSeek( FILE * p_pFile, int64_t p_i64Offset, int p_iOrigin )
@@ -100,22 +261,23 @@ namespace Castor
 	{
 		return ftell( p_pFile );
 	}
+
 #	endif
 #endif
 
-	File::File( Path const & p_strFileName, int p_iMode, eENCODING_MODE p_eEncoding )
-		:	m_iMode( p_iMode	)
+	File::File( Path const & p_strFileName, int p_mode, eENCODING_MODE p_eEncoding )
+		:	m_iMode( p_mode	)
 		,	m_eEncoding( p_eEncoding	)
 		,	m_strFileFullPath( p_strFileName	)
 		,	m_ullCursor( 0	)
 		,	m_ullLength( 0	)
-		,	m_pFile( NULL	)
+		,	m_pFile( nullptr	)
 		,	m_bOwnFile( true	)
 	{
 		REQUIRE( ! p_strFileName.empty() );
 		String l_strMode;
 
-		switch ( p_iMode )
+		switch ( p_mode )
 		{
 		case eOPEN_MODE_READ:
 			l_strMode = cuT( "r" );
@@ -150,21 +312,17 @@ namespace Castor
 			break;
 
 		default:
-			CASTOR_ASSERT( false );
+			FAILURE( "Unsupported file opening mode" );
 			break;
 		}
 
-		if ( ( p_iMode & eOPEN_MODE_BINARY ) == 0 )
+		if ( ( p_mode & eOPEN_MODE_BINARY ) == 0 )
 		{
 			switch ( p_eEncoding )
 			{
 			case eENCODING_MODE_AUTO:
-#ifdef _UNICODE
 				m_eEncoding = eENCODING_MODE_UTF8;
 				l_strMode += cuT( ", ccs=UTF-8" );
-#else
-				m_eEncoding = eENCODING_MODE_ASCII;
-#endif
 				break;
 
 			case eENCODING_MODE_UTF8:
@@ -176,7 +334,7 @@ namespace Castor
 			}
 		}
 
-		FOpen( m_pFile, str_utils::to_str( m_strFileFullPath ).c_str(), str_utils::to_str( l_strMode ).c_str() );
+		FOpen( m_pFile, string::string_cast< char >( m_strFileFullPath ).c_str(), string::string_cast< char >( l_strMode ).c_str() );
 
 		if ( m_pFile )
 		{
@@ -187,51 +345,15 @@ namespace Castor
 		}
 		else
 		{
-			CASTOR_EXCEPTION( str_utils::to_str( System::GetLastErrorText() ) );
+			CASTOR_EXCEPTION( "Couldn't open file " + string::string_cast< char >( m_strFileFullPath ) + " : " + string::string_cast< char >( System::GetLastErrorText() ) );
 		}
 
 		CHECK_INVARIANTS();
 	}
 
-	File::File( File const & p_file )
-		:	m_iMode( p_file.m_iMode	)
-		,	m_eEncoding( p_file.m_eEncoding	)
-		,	m_strFileFullPath( p_file.m_strFileFullPath	)
-		,	m_ullCursor( p_file.m_ullCursor	)
-		,	m_ullLength( p_file.m_ullLength	)
-		,	m_pFile( p_file.m_pFile	)
-		,	m_bOwnFile( false	)
-	{
-	}
-
-	File::File( File && p_file )
-		:	m_iMode( 0	)
-		,	m_eEncoding( eENCODING_MODE_AUTO	)
-		,	m_strFileFullPath(	)
-		,	m_ullCursor( 0	)
-		,	m_ullLength( 0	)
-		,	m_pFile( NULL	)
-		,	m_bOwnFile( true	)
-	{
-		m_iMode				= std::move( p_file.m_iMode	);
-		m_eEncoding			= std::move( p_file.m_eEncoding	);
-		m_strFileFullPath	= std::move( p_file.m_strFileFullPath	);
-		m_ullCursor			= std::move( p_file.m_ullCursor	);
-		m_ullLength			= std::move( p_file.m_ullLength	);
-		m_pFile				= std::move( p_file.m_pFile	);
-		m_bOwnFile			= std::move( p_file.m_bOwnFile	);
-		p_file.m_iMode				= 0;
-		p_file.m_eEncoding			= eENCODING_MODE_AUTO;
-		p_file.m_strFileFullPath.clear();
-		p_file.m_ullCursor			= 0;
-		p_file.m_ullLength			= 0;
-		p_file.m_pFile				= NULL;
-		p_file.m_bOwnFile			= true;
-	}
-
 	File::~File()
 	{
-		if ( m_pFile != NULL && m_bOwnFile )
+		if ( m_pFile != nullptr && m_bOwnFile )
 		{
 			fclose( m_pFile );
 		}
@@ -281,7 +403,7 @@ namespace Castor
 
 	bool File::IsOk()const
 	{
-		bool l_bReturn = false;
+		bool l_return = false;
 
 		if ( m_pFile )
 		{
@@ -289,12 +411,12 @@ namespace Castor
 			{
 				if ( feof( m_pFile ) == 0 )
 				{
-					l_bReturn = true;
+					l_return = true;
 				}
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	long long File::Tell()
@@ -311,54 +433,19 @@ namespace Castor
 		return l_llReturn;
 	}
 
-	File & File::operator =( File const & p_file )
-	{
-		m_iMode				= p_file.m_iMode;
-		m_eEncoding			= p_file.m_eEncoding;
-		m_strFileFullPath	= p_file.m_strFileFullPath;
-		m_ullCursor			= p_file.m_ullCursor;
-		m_ullLength			= p_file.m_ullLength;
-		m_pFile				= p_file.m_pFile;
-		m_bOwnFile			= false;
-		return * this;
-	}
-
-	File & File::operator =( File && p_file )
-	{
-		if ( this != & p_file )
-		{
-			m_iMode				= std::move( p_file.m_iMode	);
-			m_eEncoding			= std::move( p_file.m_eEncoding	);
-			m_strFileFullPath	= std::move( p_file.m_strFileFullPath	);
-			m_ullCursor			= std::move( p_file.m_ullCursor	);
-			m_ullLength			= std::move( p_file.m_ullLength	);
-			m_pFile				= std::move( p_file.m_pFile	);
-			m_bOwnFile			= std::move( p_file.m_bOwnFile	);
-			p_file.m_iMode				= 0;
-			p_file.m_eEncoding			= eENCODING_MODE_AUTO;
-			p_file.m_strFileFullPath.clear();
-			p_file.m_ullCursor			= 0;
-			p_file.m_ullLength			= 0;
-			p_file.m_pFile				= NULL;
-			p_file.m_bOwnFile			= true;
-		}
-
-		return * this;
-	}
-
 	BEGIN_INVARIANT_BLOCK( File )
 	CHECK_INVARIANT( m_pFile );
 	END_INVARIANT_BLOCK()
 
-	uint64_t File::DoWrite( uint8_t const * p_pBuffer, uint64_t p_uiSize )
+	uint64_t File::DoWrite( uint8_t const * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( m_iMode | eOPEN_MODE_WRITE ) );
+		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_WRITE ) );
 		uint64_t l_uiReturn = 0;
 
 		if ( IsOk() )
 		{
-			l_uiReturn = fwrite( p_pBuffer, 1, std::size_t( p_uiSize ), m_pFile );
+			l_uiReturn = fwrite( p_buffer, 1, std::size_t( p_uiSize ), m_pFile );
 			m_ullCursor += l_uiReturn;
 			ENSURE( l_uiReturn <= p_uiSize );
 		}
@@ -367,10 +454,10 @@ namespace Castor
 		return l_uiReturn;
 	}
 
-	uint64_t File::DoRead( uint8_t * p_pBuffer, uint64_t p_uiSize )
+	uint64_t File::DoRead( uint8_t * p_buffer, uint64_t p_uiSize )
 	{
 		CHECK_INVARIANTS();
-		REQUIRE( IsOk() && ( m_iMode | eOPEN_MODE_READ ) );
+		REQUIRE( IsOk() && ( m_iMode & eOPEN_MODE_READ ) );
 		uint64_t l_uiReturn = 0;
 		uint64_t l_uiPrev = 1;
 
@@ -379,7 +466,7 @@ namespace Castor
 			while ( l_uiReturn < p_uiSize && l_uiPrev != l_uiReturn )
 			{
 				l_uiPrev = l_uiReturn;
-				l_uiReturn += fread( p_pBuffer, 1, std::size_t( p_uiSize - l_uiReturn ), m_pFile );
+				l_uiReturn += fread( p_buffer, 1, std::size_t( p_uiSize - l_uiReturn ), m_pFile );
 			}
 
 			m_ullCursor += l_uiReturn;
@@ -390,116 +477,63 @@ namespace Castor
 		return l_uiReturn;
 	}
 
-	bool File::ListDirectoryFiles( Path const & p_folderPath, StringArray & p_files, bool CU_PARAM_UNUSED( p_recursive ) )
+	bool File::ListDirectoryFiles( Path const & p_folderPath, PathArray & p_files, bool p_recursive )
 	{
-		REQUIRE( ! p_folderPath.empty() );
-		bool l_bReturn = false;
-#if defined( _WIN32 )
-		WIN32_FIND_DATA l_findData;
-		HANDLE l_hHandle = ::FindFirstFile( ( p_folderPath / cuT( "*.*" ) ).c_str(), &l_findData );
-		String l_strBuffer;
-
-		if ( l_hHandle != INVALID_HANDLE_VALUE )
+		struct FileFunction
 		{
-			l_strBuffer = l_findData.cFileName;
-
-			if ( l_strBuffer != cuT( "." ) && l_strBuffer != cuT( ".." ) )
+			FileFunction( PathArray & p_files )
+				: m_files( p_files )
 			{
-				p_files.push_back( l_strBuffer );
 			}
-
-			l_bReturn = true;
-
-			while ( l_bReturn )
+			void operator()( Path const & p_path )
 			{
-				if ( ::FindNextFile( l_hHandle, &l_findData ) && l_findData.cFileName != l_strBuffer )
-				{
-					l_strBuffer = l_findData.cFileName;
-
-					if ( l_strBuffer != cuT( "." ) && l_strBuffer != cuT( ".." ) )
-					{
-						p_files.push_back( p_folderPath / l_strBuffer );
-					}
-				}
-				else
-				{
-					l_bReturn = false;
-				}
+				m_files.push_back( p_path );
 			}
+			PathArray & m_files;
+		};
 
-			l_bReturn = true;
-		}
-
-#elif defined( __linux__ )
-		DIR * l_pDir;
-
-		if ( ( l_pDir = opendir( str_utils::to_str( p_folderPath ).c_str() ) ) == NULL )
+		if ( p_recursive )
 		{
-			switch ( errno )
+			struct DirectoryFunction
 			{
-			case EACCES:
-				Logger::LogWarning( cuT( "Can't open dir : Permission denied - Directory : " ) + p_folderPath );
-				break;
+				DirectoryFunction( PathArray & p_files )
+					: m_files( p_files )
+				{
+				}
+				bool operator()( Path const & p_path )
+				{
+					return TraverseDirectory( p_path, DirectoryFunction( m_files ), FileFunction( m_files ) );
+				}
+				PathArray & m_files;
+			};
 
-			case EBADF:
-				Logger::LogWarning( cuT( "Can't open dir : Invalid file descriptor - Directory : " ) + p_folderPath );
-				break;
-
-			case EMFILE:
-				Logger::LogWarning( cuT( "Can't open dir : Too many file descriptor in use - Directory : " ) + p_folderPath );
-				break;
-
-			case ENFILE:
-				Logger::LogWarning( cuT( "Can't open dir : Too many files currently open - Directory : " ) + p_folderPath );
-				break;
-
-			case ENOENT:
-				Logger::LogWarning( cuT( "Can't open dir : Directory doesn't exist - Directory : " ) + p_folderPath );
-				break;
-
-			case ENOMEM:
-				Logger::LogWarning( cuT( "Can't open dir : Insufficient memory - Directory : " ) + p_folderPath );
-				break;
-
-			case ENOTDIR:
-				Logger::LogWarning( cuT( "Can't open dir : <name> is not a directory - Directory : " ) + p_folderPath );
-				break;
-
-			default:
-				Logger::LogWarning( cuT( "Can't open dir : Unknown error - Directory : " ) + p_folderPath );
-				break;
-			}
-
-			l_bReturn = false;
+			return TraverseDirectory( p_folderPath, DirectoryFunction( p_files ), FileFunction( p_files ) );
 		}
 		else
 		{
-			dirent * l_pDirent;
-
-			while ( ( l_pDirent = readdir( l_pDir ) ) != NULL )
+			struct DirectoryFunction
 			{
-				if ( strcmp( l_pDirent->d_name, "." ) )
+				DirectoryFunction()
 				{
-					p_files.push_back( p_folderPath / str_utils::from_str( l_pDirent->d_name ) );
 				}
-			}
+				bool operator()( Path const & p_path )
+				{
+					return true;
+				}
+			};
 
-			closedir( l_pDir );
-			l_bReturn = true;
+			return TraverseDirectory( p_folderPath, DirectoryFunction(), FileFunction( p_files ) );
 		}
-
-#else
-#	error "Unsupported platform"
-#endif
-		return l_bReturn;
 	}
 
-	Path File::DirectoryGetCurrent()
+	Path File::GetExecutableDirectory()
 	{
 		Path l_pathReturn;
+
 #if defined( _WIN32 )
+
 		xchar l_pPath[FILENAME_MAX];
-		DWORD dwResult = GetModuleFileName( NULL, l_pPath, _countof( l_pPath ) );
+		DWORD dwResult = GetModuleFileName( nullptr, l_pPath, _countof( l_pPath ) );
 
 		if ( dwResult != 0 )
 		{
@@ -507,6 +541,7 @@ namespace Castor
 		}
 
 #elif defined( __linux__ )
+
 		char l_pPath[FILENAME_MAX];
 		char l_szTmp[32];
 		sprintf( l_szTmp, "/proc/%d/exe", getpid() );
@@ -521,6 +556,7 @@ namespace Castor
 #else
 #	error "Unsupported platform"
 #endif
+
 		l_pathReturn = l_pathReturn.GetPath();
 		return l_pathReturn;
 	}
@@ -528,9 +564,11 @@ namespace Castor
 	Path File::GetUserDirectory()
 	{
 		Path l_pathReturn;
+
 #if defined( _WIN32 )
+
 		xchar l_path[FILENAME_MAX];
-		HRESULT l_hr = SHGetFolderPath( NULL, CSIDL_PROFILE, NULL, 0, l_path );
+		HRESULT l_hr = SHGetFolderPath( nullptr, CSIDL_PROFILE, nullptr, 0, l_path );
 
 		if ( SUCCEEDED( l_hr ) )
 		{
@@ -538,42 +576,143 @@ namespace Castor
 		}
 
 #elif defined( __linux__ )
+
 		struct passwd * l_pw = getpwuid( getuid() );
 		const char * l_homedir = l_pw->pw_dir;
-		l_pathReturn = str_utils::from_str( l_homedir );
+		l_pathReturn = string::string_cast< xchar >( l_homedir );
 
 #else
 #	error "Unsupported platform"
 #endif
+
 		return l_pathReturn;
 	}
 
 	bool File::DirectoryExists( Path const & p_path )
 	{
 #if defined( _WIN32 )
+
 		struct _stat status = { 0 };
-		_stat( str_utils::to_str( p_path ).c_str(), &status );
+		_stat( string::string_cast< char >( p_path ).c_str(), &status );
+
 #else
+
 		struct stat status = { 0 };
-		stat( str_utils::to_str( p_path ).c_str(), &status );
+		stat( string::string_cast< char >( p_path ).c_str(), &status );
+
 #endif
+
 		return ( status.st_mode & S_IFDIR ) == S_IFDIR;
 	}
 
-	bool File::DirectoryCreate( Path const & p_file )
+	bool File::DirectoryCreate( Path const & p_path, uint32_t p_flags )
 	{
+		Path l_path = p_path.GetPath();
+
+		if ( !l_path.empty() && !DirectoryExists( l_path ) )
+		{
+			DirectoryCreate( l_path, p_flags );
+		}
+
 #if defined( _MSC_VER )
-		return _tmkdir( p_file.c_str() ) == 0;
+
+		return _tmkdir( p_path.c_str() ) == 0;
+
 #elif defined( _WIN32 )
-		return mkdir( str_utils::to_str( p_file ).c_str() ) == 0;
+
+		return mkdir( string::string_cast< char >( p_path ).c_str() ) == 0;
+
 #else
-		return mkdir( str_utils::to_str( p_file ).c_str(), 777 ) == 0;
+		mode_t l_mode = 0;
+
+		if ( ( p_flags & eCREATE_MODE_USER_READ ) == eCREATE_MODE_USER_READ )
+		{
+			l_mode |= S_IRUSR;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_USER_WRITE ) == eCREATE_MODE_USER_WRITE )
+		{
+			l_mode |= S_IWUSR;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_USER_EXEC ) == eCREATE_MODE_USER_EXEC )
+		{
+			l_mode |= S_IXUSR;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_GROUP_READ ) == eCREATE_MODE_GROUP_READ )
+		{
+			l_mode |= S_IRGRP;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_GROUP_WRITE ) == eCREATE_MODE_GROUP_WRITE )
+		{
+			l_mode |= S_IWGRP;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_GROUP_EXEC ) == eCREATE_MODE_GROUP_EXEC )
+		{
+			l_mode |= S_IXGRP;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_OTHERS_READ ) == eCREATE_MODE_OTHERS_READ )
+		{
+			l_mode |= S_IROTH;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_OTHERS_WRITE ) == eCREATE_MODE_OTHERS_WRITE )
+		{
+			l_mode |= S_IWOTH;
+		}
+
+		if ( ( p_flags & eCREATE_MODE_OTHERS_EXEC ) == eCREATE_MODE_OTHERS_EXEC )
+		{
+			l_mode |= S_IXOTH;
+		}
+
+		return mkdir( string::string_cast< char >( p_path ).c_str(), l_mode ) == 0;
+
 #endif
+	}
+
+	bool File::DirectoryDelete( Path const & p_path )
+	{
+		struct FileFunction
+		{
+			void operator()( Path const & p_path )
+			{
+				File::DeleteFile( p_path );
+			}
+		};
+
+		struct DirectoryFunction
+		{
+			bool operator()( Path const & p_path )
+			{
+				bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+
+				if ( l_return )
+				{
+					l_return = DeleteEmptyDirectory( p_path );
+				}
+
+				return l_return;
+			}
+		};
+
+		bool l_return = TraverseDirectory( p_path, DirectoryFunction(), FileFunction() );
+
+		if ( l_return )
+		{
+			l_return = DeleteEmptyDirectory( p_path );
+		}
+
+		return l_return;
 	}
 
 	bool File::FileExists( Path const & p_pathFile )
 	{
-		std::ifstream l_ifile( str_utils::to_str( p_pathFile ).c_str() );
+		std::ifstream l_ifile( string::string_cast< char >( p_pathFile ).c_str() );
 		return l_ifile.is_open();
 	}
 
@@ -583,7 +722,7 @@ namespace Castor
 
 		if ( FileExists( p_file ) )
 		{
-			l_return = std::remove( str_utils::to_str( p_file ).c_str() ) == 0;
+			l_return = std::remove( string::string_cast< char >( p_file ).c_str() ) == 0;
 		}
 		else
 		{
@@ -597,11 +736,11 @@ namespace Castor
 	{
 		bool l_return = false;
 		Path l_file = p_folder / p_file.GetFileName() + cuT( "." ) + p_file.GetExtension();
-		std::ifstream l_src( str_utils::to_str( p_file ), std::ios::binary );
+		std::ifstream l_src( string::string_cast< char >( p_file ), std::ios::binary );
 
 		if ( l_src.is_open() )
 		{
-			std::ofstream l_dst( str_utils::to_str( l_file ), std::ios::binary );
+			std::ofstream l_dst( string::string_cast< char >( l_file ), std::ios::binary );
 
 			if ( l_src.is_open() )
 			{

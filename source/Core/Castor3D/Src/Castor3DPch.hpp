@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -45,6 +45,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #	include <CastorUtils.hpp>
 #	include <Angle.hpp>
+#	include <BlockTimer.hpp>
 #	include <Collection.hpp>
 #	include <Colour.hpp>
 #	include <CubeBox.hpp>
@@ -79,18 +80,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <TransformationMatrix.hpp>
 #	include <Utils.hpp>
 #	include <Unique.hpp>
-
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-
 #	include <Rectangle.hpp>
 
 #	if defined( __linux__ )
 #		include <GL/glx.h>
 #	endif
-
-#	pragma warning( pop )
 #endif
 
 #endif

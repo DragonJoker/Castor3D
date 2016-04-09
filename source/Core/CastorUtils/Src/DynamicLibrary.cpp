@@ -1,17 +1,10 @@
-#include "DynamicLibrary.hpp"
+﻿#include "DynamicLibrary.hpp"
 #include "Assertion.hpp"
 #include "Logger.hpp"
+#include "Utils.hpp"
 
 #if defined( _WIN32 )
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#	endif
 #	include <windows.h>
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
 #elif defined( __linux__ )
 #	include <dlfcn.h>
 #endif
@@ -19,13 +12,13 @@
 namespace Castor
 {
 	DynamicLibrary::DynamicLibrary()throw()
-		:	m_pLibrary( NULL	)
+		:	m_pLibrary( nullptr	)
 		,	m_pathLibrary(	)
 	{
 	}
 
 	DynamicLibrary::DynamicLibrary( DynamicLibrary const & p_lib )throw()
-		:	m_pLibrary( NULL	)
+		:	m_pLibrary( nullptr	)
 		,	m_pathLibrary(	)
 	{
 		if ( p_lib.m_pLibrary )
@@ -38,7 +31,7 @@ namespace Castor
 		:	m_pLibrary( std::move( p_lib.m_pLibrary )	)
 		,	m_pathLibrary( std::move( p_lib.m_pathLibrary )	)
 	{
-		p_lib.m_pLibrary = NULL;
+		p_lib.m_pLibrary = nullptr;
 		p_lib.m_pathLibrary.clear();
 	}
 
@@ -65,7 +58,7 @@ namespace Castor
 		{
 			m_pLibrary		= std::move( p_lib.m_pLibrary );
 			m_pathLibrary	= std::move( p_lib.m_pathLibrary );
-			p_lib.m_pLibrary = NULL;
+			p_lib.m_pLibrary = nullptr;
 			p_lib.m_pathLibrary.clear();
 		}
 
@@ -86,63 +79,69 @@ namespace Castor
 	{
 		if ( !m_pLibrary )
 		{
-			std::string l_strName( str_utils::to_str( p_name ) );
+			std::string l_name( string::string_cast< char >( p_name ) );
 #if defined( _WIN32 )
-			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
+			//UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
 
 			try
 			{
-				m_pLibrary = ::LoadLibraryA( l_strName.c_str() );
+				m_pLibrary = ::LoadLibraryA( l_name.c_str() );
 				m_pathLibrary = p_name;
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_strName + std::string( "]" ) );
-				m_pLibrary = NULL;
+				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
+				m_pLibrary = nullptr;
 			}
 
-			::SetErrorMode( l_uiOldMode );
+			if ( !m_pLibrary )
+			{
+				String l_strError = cuT( "Can't load dynamic library at [" ) + p_name + cuT( "]: " );
+				l_strError += System::GetLastErrorText();
+				Logger::LogError( l_strError );
+			}
+
+			//::SetErrorMode( l_uiOldMode );
 #else
 
 			try
 			{
-				m_pLibrary = dlopen( l_strName.c_str(), RTLD_LAZY );
+				m_pLibrary = dlopen( l_name.c_str(), RTLD_LAZY );
 				m_pathLibrary = p_name;
 			}
 			catch ( ... )
 			{
-				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_strName + std::string( "]" ) );
-				m_pLibrary = NULL;
+				Logger::LogError( std::string( "Can't load dynamic library at [" ) + l_name + std::string( "]" ) );
+				m_pLibrary = nullptr;
 			}
 
 #endif
 		}
 
-		return m_pLibrary != NULL;
+		return m_pLibrary != nullptr;
 	}
 
 	void * DynamicLibrary::DoGetFunction( String const & p_name )throw()
 	{
-		void * l_pReturn = NULL;
-		REQUIRE( m_pLibrary );
+		void * l_return = nullptr;
 
 		if ( m_pLibrary )
 		{
-			std::string l_strName( str_utils::to_str( p_name ) );
+			std::string l_name( string::string_cast< char >( p_name ) );
 #if defined( _WIN32 )
 			UINT l_uiOldMode = ::SetErrorMode( SEM_FAILCRITICALERRORS );
-			l_pReturn = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), l_strName.c_str() ) );
+			l_return = reinterpret_cast< void * >( ::GetProcAddress( static_cast< HMODULE >( m_pLibrary ), l_name.c_str() ) );
 			::SetErrorMode( l_uiOldMode );
 #else
 
 			try
 			{
-				l_pReturn = dlsym( m_pLibrary, l_strName.c_str() );
+				l_return = dlsym( m_pLibrary, l_name.c_str() );
 			}
 			catch ( ... )
 			{
-				l_pReturn = NULL;
-				Logger::LogError( std::string( "Can't load function [" ) + l_strName + std::string( "]" ) );
+				l_return = nullptr;
+				Logger::LogError( std::string( "Can't load function [" ) + l_name + std::string( "]" ) );
 			}
 
 #endif
@@ -152,7 +151,7 @@ namespace Castor
 			Logger::LogError( cuT( "Can't load function [" ) + p_name + cuT( "] because dynamic library is not loaded" ) );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
 	void DynamicLibrary::DoClose()throw()
@@ -175,7 +174,7 @@ namespace Castor
 			}
 
 #endif
-			m_pLibrary = NULL;
+			m_pLibrary = nullptr;
 		}
 	}
 }

@@ -1,26 +1,47 @@
-#include "Texture.hpp"
+﻿#include "Texture.hpp"
+
 #include "RenderSystem.hpp"
+#include "Engine.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	TextureBase::TextureBase( eTEXTURE_TYPE p_eType, RenderSystem * p_pRenderSystem )
-		:	m_bInitialised( false )
-		,	m_eType( p_eType )
-		,	m_eDimension( eTEXTURE_DIMENSION_2D )
-		,	m_eMapMode( eTEXTURE_MAP_MODE_NONE )
-		,	m_uiIndex( 0 )
-		,	m_pRenderSystem( p_pRenderSystem )
+	Texture::Texture( eTEXTURE_BASE_TYPE p_baseType, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+		: OwnedBy< RenderSystem >( p_renderSystem )
+		, m_initialised( false )
+		, m_baseType( p_baseType )
+		, m_type( eTEXTURE_TYPE_2D )
+		, m_mapMode( eTEXTURE_MAP_MODE_NONE )
+		, m_cpuAccess( p_cpuAccess )
+		, m_gpuAccess( p_gpuAccess )
 	{
 	}
 
-	TextureBase::~TextureBase()
+	Texture::~Texture()
 	{
 	}
 
-	void TextureBase::SetImage( Castor::PxBufferBaseSPtr p_pBuffer )
+	void Texture::SetImage( Castor::PxBufferBaseSPtr p_buffer )
 	{
-		m_pPixelBuffer = p_pBuffer;
+		m_depth = 1;
+		m_pixelBuffer = p_buffer;
+	}
+
+	bool Texture::Bind( uint32_t p_index )const
+	{
+		bool l_return = false;
+
+		if ( m_initialised )
+		{
+			l_return = DoBind( p_index );
+		}
+
+		return l_return;
+	}
+
+	void Texture::Unbind( uint32_t p_index )const
+	{
+		DoUnbind( p_index );
 	}
 }

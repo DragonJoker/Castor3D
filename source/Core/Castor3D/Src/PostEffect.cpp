@@ -1,12 +1,13 @@
-#include "PostEffect.hpp"
+﻿#include "PostEffect.hpp"
 
 using namespace Castor;
 using namespace Castor3D;
 
 //*************************************************************************************************
 
-PostEffect::PostEffect( RenderSystem * p_pRenderSystem )
-	:	m_pRenderSystem( p_pRenderSystem )
+PostEffect::PostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & CU_PARAM_UNUSED( p_param ) )
+	: m_renderSystem( p_renderSystem )
+	, m_renderTarget( p_renderTarget )
 {
 }
 

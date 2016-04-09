@@ -1,13 +1,17 @@
-#include "RenderBufferAttachment.hpp"
+﻿#include "RenderBufferAttachment.hpp"
+
 #include "FrameBuffer.hpp"
+#include "RenderBuffer.hpp"
+
+#include <PixelBufferBase.hpp>
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	RenderBufferAttachment::RenderBufferAttachment( RenderBufferSPtr p_pRenderBuffer )
-		:	FrameBufferAttachment()
-		,	m_pRenderBuffer( p_pRenderBuffer )
+	RenderBufferAttachment::RenderBufferAttachment( RenderBufferSPtr p_renderBuffer )
+		: FrameBufferAttachment( eATTACHMENT_TYPE_BUFFER )
+		, m_pRenderBuffer( p_renderBuffer )
 	{
 	}
 
@@ -15,26 +19,9 @@ namespace Castor3D
 	{
 	}
 
-	bool RenderBufferAttachment::Attach( eATTACHMENT_POINT p_eAttachment, FrameBufferSPtr p_pFrameBuffer )
+	PxBufferBaseSPtr RenderBufferAttachment::GetBuffer()const
 	{
-		bool l_bReturn = FrameBufferAttachment::Attach( p_eAttachment, p_pFrameBuffer );
-
-		if ( l_bReturn )
-		{
-			p_pFrameBuffer->Attach( this );
-		}
-
-		return l_bReturn;
-	}
-
-	void RenderBufferAttachment::Detach()
-	{
-		FrameBufferSPtr l_pFrameBuffer = GetFrameBuffer();
-
-		if ( l_pFrameBuffer )
-		{
-			l_pFrameBuffer->Detach( this );
-			FrameBufferAttachment::Detach();
-		}
+		RenderBufferSPtr l_renderBuffer = this->GetRenderBuffer();
+		return PxBufferBase::create( l_renderBuffer->GetDimensions(), l_renderBuffer->GetPixelFormat() );
 	}
 }

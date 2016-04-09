@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -23,8 +23,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BufferElementGroup.hpp"
 #include "VertexBuffer.hpp"
 #include "IndexBuffer.hpp"
-#include "MatrixBuffer.hpp"
-#include "TextureBuffer.hpp"
 #include "GeometryBuffers.hpp"
 
 #endif

@@ -9,8 +9,8 @@ namespace OceanLighting
 {
 	bool Application::OnInit()
 	{
-		long 		l_lLanguage		= wxLANGUAGE_DEFAULT;
-		Path		l_pathCurrent	= File::DirectoryGetCurrent().GetPath();
+		long l_lLanguage = wxLANGUAGE_DEFAULT;
+		Path l_pathCurrent = File::GetExecutableDirectory().GetPath();
 
 		// load language if possible, fall back to english otherwise
 		if ( wxLocale::IsAvailable( l_lLanguage ) )
@@ -64,20 +64,20 @@ namespace OceanLighting
 		{
 			try
 			{
-				eLOG_TYPE		l_eLogLevel;
+				ELogType l_eLogLevel;
 
 				if ( !l_parser.Found( wxT( 'l' ), reinterpret_cast< long * >( &l_eLogLevel ) ) )
 				{
 #if defined( NDEBUG )
-					l_eLogLevel = eLOG_TYPE_MESSAGE;
+					l_eLogLevel = ELogType_INFO;
 #else
-					l_eLogLevel = eLOG_TYPE_DEBUG;
+					l_eLogLevel = ELogType_DEBUG;
 #endif
 				}
 
 				Logger::Initialise( l_eLogLevel );
-				Logger::SetFileName( File::DirectoryGetCurrent() / cuT( "OceanLighting.log" ) );
-				Logger::LogMessage( cuT( "OceanLighting - Start" ) );
+				Logger::SetFileName( File::GetExecutableDirectory() / cuT( "OceanLighting.log" ) );
+				Logger::LogInfo( cuT( "OceanLighting - Start" ) );
 				wxInitAllImageHandlers();
 				m_pMainFrame = new MainFrame();
 				SetTopWindow( m_pMainFrame );
@@ -102,7 +102,7 @@ namespace OceanLighting
 	int Application::OnExit()
 	{
 		delete m_pLocale;
-		Logger::LogMessage( cuT( "OceanLighting - Exit" ) );
+		Logger::LogInfo( cuT( "OceanLighting - Exit" ) );
 		Logger::Cleanup();
 		wxImage::CleanUpHandlers();
 		return wxApp::OnExit();

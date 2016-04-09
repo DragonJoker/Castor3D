@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,57 +18,15 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_CAMERA_H___
 #define ___C3D_CAMERA_H___
 
-#include "Renderable.hpp"
 #include "MovableObject.hpp"
 #include "BinaryParser.hpp"
+#include "Viewport.hpp"
 
 #include <PlaneEquation.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
-	/*!
-	\author 	Sylvain DOREMUS
-	\date
-	\~english
-	\brief		The selection mode enumeration
-	\~french
-	\brief		Enumération des modes de sélection
-	*/
-	typedef enum eSELECTION_MODE CASTOR_TYPE( uint8_t )
-	{
-		eSELECTION_MODE_VERTEX,		//!< Vertex selection mode
-		eSELECTION_MODE_EDGE,		//!< Edge selection mode
-		eSELECTION_MODE_FACE,		//!< Face selection mode
-		eSELECTION_MODE_SUBMESH,	//!< Submesh selection mode
-		eSELECTION_MODE_OBJECT,		//!< Geometry selection mode
-		eSELECTION_MODE_COUNT
-	}	eSELECTION_MODE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\version	0.7.0
-	\date		27/02/2013
-	\~english
-	\brief		Struct holding a selection result
-	\~french
-	\brief		Structure contenant le résultat d'une sélection
-	*/
-	struct C3D_API stSELECT_RESULT
-	{
-		//!\~english A selection can be a vertex	\~french Une sélection peut être un vertex
-		VertexWPtr m_pVertex;
-		//!\~english A selection can be a face	\~french Une sélection peut être une face
-		FaceWPtr m_pFace;
-		//!\~english A selection can be a submesh	\~french Une sélection peut être un sous-maillage
-		SubmeshWPtr m_pSubmesh;
-		//!\~english A selection can be a mesh	\~french Une sélection peut être un maillage
-		MeshWPtr m_pMesh;
-		//!\~english A selection can be a geometry	\~french Une sélection peut être une géométrie
-		GeometryWPtr m_pGeometry;
-	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\version	0.1
@@ -80,9 +38,8 @@ namespace Castor3D
 	\brief		Classe de représentation de Camera
 	\remark		Donne la position, orientation, viewport ...
 	*/
-	class C3D_API Camera
-		:	public MovableObject
-		,	public Renderable< Camera, CameraRenderer >
+	class Camera
+		: public MovableObject
 	{
 	public:
 		/*!
@@ -94,8 +51,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Camera
 		*/
-		class C3D_API TextLoader
-			:	public MovableObject::TextLoader
+		class TextLoader
+			: public MovableObject::TextLoader
 		{
 		public:
 			/**
@@ -108,7 +65,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_camera	La camera
 			 */
-			virtual bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Camera const & p_camera, Castor::TextFile & p_file );
 		};
 		/*
 		\author		Sylvain DOREMUS
@@ -118,8 +75,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de Camera
 		*/
-		class C3D_API BinaryParser
-			:	public MovableObject::BinaryParser
+		class BinaryParser
+			: public MovableObject::BinaryParser
 		{
 		public:
 			/**
@@ -130,7 +87,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -143,7 +100,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Camera const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Camera const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -156,110 +113,72 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Camera & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Camera & p_obj, BinaryChunk & p_chunk )const;
 		};
-		/*!
-		 *\~english
-		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
-		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_strName	The camera name
-		 *\param[in]	p_size		The viewport render size
-		 *\param[in]	p_pNode		The parent camera node
-		 *\param[in]	p_eType		Projection type
-		 *\~french
-		 *\brief		Constructeur
-		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_strName	Le nom de la caméra
-		 *\param[in]	p_size		Les dimensions de rendu du viewport
-		 *\param[in]	p_pNode		SceneNode parent
-		 *\param[in]	p_eType		Type de projection
-		 */
-		Camera( Scene * p_pScene, Castor::String const & p_strName, Castor::Size const & p_size, const SceneNodeSPtr p_pNode, eVIEWPORT_TYPE p_eType, eTOPOLOGY p_ePrimitiveType = eTOPOLOGY_TRIANGLES, ePROJECTION_DIRECTION p_eProjectionDirection = ePROJECTION_DIRECTION_FRONT );
+
+	public:
 		/**
 		 *\~english
 		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
-		 *\remark		Not to be used by the user, use Scene::CreateCamera instead
-		 *\param[in]	p_strName	The camera name
-		 *\param[in]	p_pNode		The parent camera node
-		 *\param[in]	p_pViewport	Viewport to copy
+		 *\remarks		Not to be used by the user, use Scene::CreateCamera instead
+		 *\param[in]	p_name		The camera name
+		 *\param[in]	p_scene		The parent scene
+		 *\param[in]	p_node		The parent scene node
+		 *\param[in]	p_viewport	Viewport to copy
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
-		 *\param[in]	p_strName	Le nom de la caméra
-		 *\param[in]	p_pNode		SceneNode parent
-		 *\param[in]	p_pViewport	Viewport à copier
+		 *\remarks		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
+		 *\param[in]	p_name		Le nom de la caméra
+		 *\param[in]	p_scene		La scène parente
+		 *\param[in]	p_node		Le noeud de scène parent
+		 *\param[in]	p_viewport	Viewport à copier
 		 */
-		Camera( Scene * p_pScene, Castor::String const & p_strName, const SceneNodeSPtr p_pNode, ViewportSPtr p_pViewport );
+		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node, Viewport const & p_viewport );
 		/**
 		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_object	The object to copy
+		 *\brief		Constructor, needs the camera renderer, the name, window size and projection type. Creates a viewport renderer and a viewport
+		 *\remarks		Not to be used by the user, use Scene::CreateCamera instead
+		 *\param[in]	p_name	The camera name
+		 *\param[in]	p_scene	The parent scene
+		 *\param[in]	p_node	The parent scene node
 		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet à copier
+		 *\brief		Constructeur
+		 *\remarks		L'utilisateur ne devrait pas s'en servir, préférer l'utilisation de Scene::CreateCamera
+		 *\param[in]	p_name	Le nom de la caméra
+		 *\param[in]	p_scene	La scène parente
+		 *\param[in]	p_node	SceneNode parent
 		 */
-		Camera( Camera const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_object	The object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 */
-		Camera( Camera && p_object );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_object	The object to copy
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_object	L'objet à copier
-		 *\return		Une référence sur cet objet
-		 */
-		Camera & operator =( Camera const & p_object );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_object	The object to move
-		 *\return		A reference to this object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 *\return		Une référence sur cet objet
-		 */
-		Camera & operator =( Camera && p_object );
+		C3D_API Camera( Castor::String const & p_name, Scene & p_scene, const SceneNodeSPtr p_node );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Camera();
+		C3D_API virtual ~Camera();
 		/**
 		 *\~english
 		 *\brief		Applies the viewport, the rotation ...
 		 *\~french
 		 *\brief		Applique le viewport, la rotation ...
 		 */
-		virtual void Render();
+		C3D_API virtual void Render();
 		/**
 		 *\~english
 		 *\brief		Removes the transformations
 		 *\~french
 		 *\brief		Enlève les transformations
 		 */
-		virtual void EndRender();
+		C3D_API virtual void EndRender();
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
-		 *\param[in]	p_uiWidth, p_uiHeight	Display window size
+		 *\param[in]	p_width, p_height	Display window size
 		 *\~french
 		 *\brief		Redimensionne le viewport
-		 *\param[in]	p_uiWidth, p_uiHeight	Dimensions de la fenêtre d'affichage
+		 *\param[in]	p_width, p_height	Dimensions de la fenêtre d'affichage
 		 */
-		void Resize( uint32_t p_uiWidth, uint32_t p_uiHeight );
+		C3D_API void Resize( uint32_t p_width, uint32_t p_height );
 		/**
 		 *\~english
 		 *\brief		Resizes the viewport
@@ -268,75 +187,21 @@ namespace Castor3D
 		 *\brief		Redimensionne le viewport
 		 *\param[in]	p_size	Dimensions de la fenêtre d'affichage
 		 */
-		void Resize( Castor::Size const & p_size );
+		C3D_API void Resize( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Sets the orientation to identity
 		 *\~french
 		 *\brief		Met l'orientation à l'identité
 		 */
-		void ResetOrientation();
+		C3D_API void ResetOrientation();
 		/**
 		 *\~english
 		 *\brief		Sets the position to 0
 		 *\~french
 		 *\brief		Réinitialise la position
 		 */
-		void ResetPosition();
-		/**
-		 *\~english
-		 *\brief		Returns the first object at mouse coords x and y
-		 *\param[in]	p_pScene	The scene used for the selection
-		 *\param[in]	p_eMode		The selection mode (vertex, face, submesh, geometry)
-		 *\param[in]	p_iX		The x mouse coordinate
-		 *\param[in]	p_iY		The y mouse coordinate
-		 *\param[out]	p_stFound	The selection result
-		 *\return		\p true if something was found, false if not
-		 *\~french
-		 *\brief		Récupère l'objet le plus proche aux coordonnées souris x et y
-		 *\param[in]	p_pScene	La scène où on doit sélectionner un objet
-		 *\param[in]	p_eMode		Le mode de sélection (vertex, face, submesh, geometry)
-		 *\param[in]	p_iX, p_iY	Les coordonnées de la souris
-		 *\param[out]	p_stFound	Le résultat de la sélection
-		 *\return		\p false si aucun objet n'a été trouvé
-		*/
-		bool Select( SceneSPtr p_pScene, eSELECTION_MODE p_eMode, int p_iX, int p_iY, stSELECT_RESULT & p_stFound );
-		/**
-		 *\~english
-		 *\brief		Retrieves the Viewport
-		 *\return		The Viewport
-		 *\~french
-		 *\brief		Récupère le Viewport
-		 *\return		Le Viewport
-		 */
-		inline ViewportSPtr	GetViewport()const
-		{
-			return m_pViewport;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the display mode
-		 *\return		The display mode
-		 *\~french
-		 *\brief		Récupère le mode d'affichage
-		 *\return		Le mode d'affichage
-		 */
-		inline eTOPOLOGY GetPrimitiveType()const
-		{
-			return m_ePrimitiveType;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the display mode
-		 *\param[in]	val	The display mode
-		 *\~french
-		 *\brief		Définit le mode d'affichage
-		 *\param[in]	val	Le mode d'affichage
-		 */
-		inline void SetPrimitiveType( eTOPOLOGY val )
-		{
-			m_ePrimitiveType = val;
-		}
+		C3D_API void ResetPosition();
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport type
@@ -345,7 +210,7 @@ namespace Castor3D
 		 *\brief		Récupère le type de viewport
 		 *\return		Le type de viewport
 		 */
-		eVIEWPORT_TYPE GetViewportType()const;
+		C3D_API eVIEWPORT_TYPE GetViewportType()const;
 		/**
 		 *\~english
 		 *\brief		Sets the viewport type
@@ -354,7 +219,7 @@ namespace Castor3D
 		 *\brief		Définit le type de viewport
 		 *\param[in]	val	Le type de viewport
 		 */
-		void SetViewportType( eVIEWPORT_TYPE val );
+		C3D_API void SetViewportType( eVIEWPORT_TYPE val );
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport width
@@ -363,7 +228,7 @@ namespace Castor3D
 		 *\brief		Récupère la largeur du viewport
 		 *\return		La largeur
 		 */
-		uint32_t GetWidth()const;
+		C3D_API uint32_t GetWidth()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the viewport height
@@ -372,7 +237,7 @@ namespace Castor3D
 		 *\brief		Récupère la hauteur du viewport
 		 *\return		La hauteur
 		 */
-		uint32_t GetHeight()const;
+		C3D_API uint32_t GetHeight()const;
 		/**
 		 *\~english
 		 *\brief		Checks if given CubeBox is in the view frustum
@@ -386,7 +251,7 @@ namespace Castor3D
 		 *\param[in]	m_transformations	La matrice de transformations de la CubeBox
 		 *\return		\p false si la CubeBox est complètement en dehors du frustum de vue
 		 */
-		bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
+		C3D_API bool IsVisible( Castor::CubeBox const & p_box, Castor::Matrix4x4r const & m_transformations )const;
 		/**
 		 *\~english
 		 *\brief		Checks if given point is in the view frustum
@@ -398,22 +263,52 @@ namespace Castor3D
 		 *\param[in]	p_point	Le point
 		 *\return		\p false si le point en dehors du frustum de vue
 		 */
-		bool IsVisible( Castor::Point3r const & p_point )const;
+		C3D_API bool IsVisible( Castor::Point3r const & p_point )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the Viewport
+		 *\return		The Viewport
+		 *\~french
+		 *\brief		Récupère le Viewport
+		 *\return		Le Viewport
+		 */
+		inline Viewport const & GetViewport()const
+		{
+			return m_viewport;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the Viewport
+		 *\return		The Viewport
+		 *\~french
+		 *\brief		Récupère le Viewport
+		 *\return		Le Viewport
+		 */
+		inline Viewport & GetViewport()
+		{
+			return m_viewport;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the view matrix
+		 *\~french
+		 *\brief		Récupère la matrice de vue
+		 */
+		virtual Castor::Matrix4x4r const & GetView()const
+		{
+			return m_view;
+		}
 
 	private:
 		friend class Scene;
 		friend class CameraRenderer;
 		//!\~english The viewport of the camera	\~french Le viewport de la caméra
-		ViewportSPtr m_pViewport;
-		//!\~english Primitive display type	\~french Type des primitives d'affichage
-		eTOPOLOGY m_ePrimitiveType;
-		//!\~english Defines where the camera looks at on 2D mode	\~french Définit où la caméra regarde en mode 2D
-		ePROJECTION_DIRECTION m_eProjectionDirection;
+		Viewport m_viewport;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
 		Castor::PlaneEquation< real > m_planes[eFRUSTUM_PLANE_COUNT];
+		//!\~english The view matrix	\~french La matrice vue
+		Castor::Matrix4x4r m_view;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

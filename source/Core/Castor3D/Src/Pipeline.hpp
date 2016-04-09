@@ -20,184 +20,504 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <stack>
 #include <SquareMatrix.hpp>
+#include <OwnedBy.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <stack>
 
 namespace Castor3D
 {
-	//! Implementation of the rendering pipeline
+	static const uint32_t C3D_MAX_TEXTURE_MATRICES = 10;
 	/*!
-	Defines the various matrices, applies the numerous transformation it can support and applies them
-	\author Sylvain DOREMUS
-	\version 0.6.1.0
-	\date 03/01/2011
+	\author 	Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		03/01/2011
+	\~english
+	\brief		Implementation of the rendering pipeline.
+	\remark		Defines the various matrices, applies the transformations it can support.
+	\~french
+	\brief		Implémentation du pipeline de rendu.
+	\remark		Définit les diverses matrices, applique les transformations supportées.
 	*/
-	class C3D_API Pipeline
+	class IPipelineImpl
 	{
-	public:
-		typedef Castor::Matrix4x4r matrix4x4;
-		typedef Castor::Matrix3x3r matrix3x3;
+	protected:
+		friend class Pipeline;
 
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_pipeline		The parent pipeline.
+		 *\param[in]	p_rightHanded	Tells if the pipeline is right handed (true) or left handed (false).
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_pipeline		Le pipeline parent.
+		 *\param[in]	p_rightHanded	Dit si le pipeline utilise la main droite (true) ou la main gauche (false).
+		 */
+		C3D_API IPipelineImpl( Pipeline & p_pipeline, bool p_rightHanded );
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		C3D_API virtual ~IPipelineImpl();
+		/**
+		 *\~english
+		 *\brief		Puts the given matrix in the given frame variables buffer.
+		 *\param[in]	p_matrix		The matrix.
+		 *\param[in]	p_name			The shader variable name.
+		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
+		 *\~french
+		 *\brief		Met la matrice donnée dans le buffer de variables donné.
+		 *\param[in]	p_matrix		La matrice.
+		 *\param[in]	p_name			Le nom de la variable shader.
+		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
+		 */
+		C3D_API virtual void ApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer );
+		/**
+		 *\~english
+		 *\brief		Applies the given viewport dimension.
+		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
+		 *\~french
+		 *\brief		Applique les dimensions de viewport données.
+		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
+		 */
+		C3D_API virtual void ApplyViewport( int p_windowWidth, int p_windowHeight ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_fovy		Y Field of View.
+		 *\param[in]	p_aspect	Width / Height ratio.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective centrée.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_fovy		Angle de vision Y.
+		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 */
+		C3D_API virtual void Perspective( Castor::Matrix4x4r & p_result, Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_left		Left clipping plane value.
+		 *\param[in]	p_right		Right clipping plane value.
+		 *\param[in]	p_bottom	Bottom clipping plane value.
+		 *\param[in]	p_top		Top clipping plane value.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective non centrée.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_left		Position du plan gauche.
+		 *\param[in]	p_right		Position du plan droit.
+		 *\param[in]	p_bottom	Position du plan bas.
+		 *\param[in]	p_top		Position du plan haut.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 */
+		C3D_API virtual void Frustum( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets an orthogonal projection.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_left		Left clipping plane value.
+		 *\param[in]	p_right		Right clipping plane value.
+		 *\param[in]	p_bottom	Bottom clipping plane value.
+		 *\param[in]	p_top		Top clipping plane value.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\~french
+		 *\brief		Construit une matrice de projection orthographique.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_left		Position du plan gauche.
+		 *\param[in]	p_right		Position du plan droit.
+		 *\param[in]	p_bottom	Position du plan bas.
+		 *\param[in]	p_top		Position du plan haut.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 */
+		C3D_API virtual void Ortho( Castor::Matrix4x4r & p_result, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far ) = 0;
+		/**
+		 *\~english
+		 *\brief		Builds a view matrix that looks at a given point.
+		 *\param[out]	p_result	The matrix that will receive the result.
+		 *\param[in]	p_eye		The eye position.
+		 *\param[in]	p_center	The point to look at.
+		 *\param[in]	p_up		The up direction..
+		 *\~french
+		 *\brief		Construit une matrice de vue regardant un point donné.
+		 *\param[out]	p_result	La matrice qui contiendra le résultat.
+		 *\param[in]	p_eye		La position de l'oeil.
+		 *\param[in]	p_center	Le point à regarder.
+		 *\param[in]	p_up		La direction vers le haut.
+		 */
+		C3D_API virtual void LookAt( Castor::Matrix4x4r & p_result, Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up ) = 0;
+
+	protected:
+		//!\~english The parent pipeline	\~french Le pipeline parent
+		Pipeline & m_pipeline;
+		//!\~english Tells if the pipeline is right handed (true) or left handed (false).	\~french Dit si le pipeline utilise la main droite (true) ou la main gauche (false).
+		bool m_rightHanded;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		03/01/2011
+	\~english
+	\brief		The rendering pipeline.
+	\remark		Defines the various matrices, applies the transformations it can support.
+	\~french
+	\brief		Le pipeline de rendu.
+	\remark		Définit les diverses matrices, applique les transformations supportées.
+	*/
+	class Pipeline
+		: public Castor::OwnedBy< RenderSystem >
+	{
 	protected:
 		friend class IPipelineImpl;
 
 	private:
-		typedef std::stack<matrix4x4> MatrixStack;
-		typedef std::set< ShaderObjectBaseSPtr >	ShaderObjectSet;
-
-	protected:
-		Pipeline( RenderSystem * p_pRenderSystem );
+		typedef std::stack< Castor::Matrix4x4r > MatrixStack;
+		typedef std::set< ShaderObjectSPtr > ShaderObjectSet;
 
 	public:
-		virtual ~Pipeline();
-
-		virtual void Initialise() = 0;
-		virtual void UpdateFunctions( Castor3D::ShaderProgramBase * p_pProgram ) = 0;
-
-		inline void SetImpl( IPipelineImpl * p_pImpl )
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le render system.
+		 */
+		C3D_API Pipeline( RenderSystem & p_renderSystem );
+		/**
+		 *\~english
+		 *\brief		Denstructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		C3D_API virtual ~Pipeline();
+		/**
+		 *\~english
+		 *\brief		Initialises the pipeline.
+		 *\~french
+		 *\brief		Initialise le pipeline.
+		 */
+		C3D_API void Initialise();
+		/**
+		 *\~english
+		 *\brief		Projects the given screen point to 3D scene point.
+		 *\param[in]	p_screen	The screen coordinates.
+		 *\param[in]	p_viewport	The viewport.
+		 *\param[out]	p_result	Receives the scene coordinates.
+		 *\return		\p false if the current mode is not valid.
+		 *\~french
+		 *\brief		Projette le point écran donné en point 3D.
+		 *\param[in]	p_screen	Les coordonnées écran.
+		 *\param[in]	p_viewport	Le viewport.
+		 *\param[out]	p_result	Reçoit coordonnées dans la scène.
+		 *\return		\p false si le mode courant est invalide.
+		 */
+		C3D_API bool Project( Castor::Point3r const & p_screen, Castor::Point4r const & p_viewport, Castor::Point3r & p_result );
+		/**
+		 *\~english
+		 *\brief		Unprojects the given scene point to screen point.
+		 *\param[in]	p_scene		The scene coordinates.
+		 *\param[in]	p_viewport	The viewport.
+		 *\param[out]	p_result	Receives the screen coordinates.
+		 *\return		\p false if the current mode is not valid.
+		 *\~french
+		 *\brief		Dé-projette le point dans la scène donné en point écran.
+		 *\param[in]	p_scene		Les coordonnées dans la scène.
+		 *\param[in]	p_viewport	Le viewport.
+		 *\param[out]	p_result	Reçoit les coordonnées écran.
+		 *\return		\p false si le mode courant est invalide.
+		 */
+		C3D_API bool UnProject( Castor::Point3i const & p_scene, Castor::Point4r const & p_viewport, Castor::Point3r & p_result );
+		/**
+		 *\~english
+		 *\brief		Puts the current projection matrix into the given frame variables buffer.
+		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
+		 *\~french
+		 *\brief		Met la matrice de projection dans le buffer de variables donné.
+		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
+		 */
+		C3D_API void ApplyProjection( FrameVariableBuffer & p_matrixBuffer );
+		/**
+		 *\~english
+		 *\brief		Puts the current model matrix into the given frame variables buffer.
+		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
+		 *\~french
+		 *\brief		Met la matrice de modèle dans le buffer de variables donné.
+		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
+		 */
+		C3D_API void ApplyModel( FrameVariableBuffer & p_matrixBuffer );
+		/**
+		 *\~english
+		 *\brief		Puts the current vieww matrix into the given frame variables buffer.
+		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
+		 *\~french
+		 *\brief		Met la matrice de vue dans le buffer de variables donné.
+		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
+		 */
+		C3D_API void ApplyView( FrameVariableBuffer & p_matrixBuffer );
+		/**
+		 *\~english
+		 *\brief		Puts the current normals matrix into the given frame variables buffer.
+		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
+		 *\~french
+		 *\brief		Met la matrice de normales dans le buffer de variables donné.
+		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
+		 */
+		C3D_API void ApplyNormal( FrameVariableBuffer & p_matrixBuffer );
+		/**
+		 *\~english
+		 *\brief		Puts the current texture 0 matrix into the given frame variables buffer.
+		 *\param[in]	p_index			The texture index.
+		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
+		 *\~french
+		 *\brief		Met la matrice de texture 0 dans le buffer de variables donné.
+		 *\param[in]	p_index			L'indice de la texture.
+		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
+		 */
+		C3D_API void ApplyTexture( uint32_t p_index, FrameVariableBuffer & p_matrixBuffer );
+		/**
+		 *\~english
+		 *\brief		Puts all the matrices in the given frame variables buffer.
+		 *\param[in]	p_matrixBuffer	The matrix variables buffer.
+		 *\param[in]	p_matricesMask	A bitwise OR combination of MASK_MTXMODE, to select the matrices to apply.
+		 *\~french
+		 *\brief		Met toutes les matrices dans le buffer de variables donné.
+		 *\param[in]	p_matrixBuffer	Le buffer de variables de matrices.
+		 *\param[in]	p_matricesMask	Une combinaison en OU binaire de MASK_MTXMODE, pour filtrer les matrices à appliquer.
+		 */
+		C3D_API void ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_matricesMask );
+		/**
+		 *\~english
+		 *\brief		Applies the given viewport dimension.
+		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
+		 *\~french
+		 *\brief		Applique les dimensions de viewport données.
+		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
+		 */
+		C3D_API void ApplyViewport( int p_windowWidth, int p_windowHeight );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
+		 *\param[in]	p_fovy		Y Field of View
+		 *\param[in]	p_aspect	Width / Height ratio
+		 *\param[in]	p_near		Near clipping plane value
+		 *\param[in]	p_far		Far clipping plane value
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective centrée
+		 *\param[in]	p_fovy		Angle de vision Y
+		 *\param[in]	p_aspect	Ratio Largeur / Hauteur
+		 *\param[in]	p_near		Position du plan proche
+		 *\param[in]	p_far		Position du plan lointain
+		 */
+		C3D_API void Perspective( Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
+		 *\param[in]	p_left		Left clipping plane value
+		 *\param[in]	p_right		Right clipping plane value
+		 *\param[in]	p_bottom	Bottom clipping plane value
+		 *\param[in]	p_top		Top clipping plane value
+		 *\param[in]	p_near		Near clipping plane value
+		 *\param[in]	p_far		Far clipping plane value
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective non centrée
+		 *\param[in]	p_left		Position du plan gauche
+		 *\param[in]	p_right		Position du plan droit
+		 *\param[in]	p_bottom	Position du plan bas
+		 *\param[in]	p_top		Position du plan haut
+		 *\param[in]	p_near		Position du plan proche
+		 *\param[in]	p_far		Position du plan lointain
+		 */
+		C3D_API void Frustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
+		 *\param[in]	p_left		Left clipping plane value
+		 *\param[in]	p_right		Right clipping plane value
+		 *\param[in]	p_bottom	Bottom clipping plane value
+		 *\param[in]	p_top		Top clipping plane value
+		 *\param[in]	p_near		Near clipping plane value
+		 *\param[in]	p_far		Far clipping plane value
+		 *\~french
+		 *\brief		Construit une matrice de projection orthographique non centrée
+		 *\param[in]	p_left		Position du plan gauche
+		 *\param[in]	p_right		Position du plan droit
+		 *\param[in]	p_bottom	Position du plan bas
+		 *\param[in]	p_top		Position du plan haut
+		 *\param[in]	p_near		Position du plan proche
+		 *\param[in]	p_far		Position du plan lointain
+		 */
+		C3D_API void Ortho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a view matrix that looks at a given point.
+		 *\param[in]	p_eye		The eye position.
+		 *\param[in]	p_center	The point to look at.
+		 *\param[in]	p_up		The up direction..
+		 *\~french
+		 *\brief		Construit une matrice de vue regardant un point donné.
+		 *\param[in]	p_eye		La position de l'oeil.
+		 *\param[in]	p_center	Le point à regarder.
+		 *\param[in]	p_up		La direction vers le haut.
+		 */
+		C3D_API void LookAt( Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
+		/**
+		 *\~english
+		 *\brief		Updates the used implementation.
+		 *\~french
+		 *\brief		Met à jour l'implémentation utilisée.
+		 */
+		C3D_API virtual void UpdateImpl();
+		/**
+		 *\~english
+		 *\brief		Sets the model matrix.
+		 *\param[in]	p_mtx	The new matrix.
+		 *\~french
+		 *\brief		Définit la matrice modèle.
+		 *\param[in]	p_mtx	La nouvelle matrice.
+		 */
+		inline void SetModelMatrix( Castor::Matrix4x4r const & p_mtx )
 		{
-			m_pPipelineImpl = p_pImpl;
+			m_mtxModel = p_mtx;
 		}
-		inline RenderSystem * GetRenderSystem()const
+		/**
+		 *\~english
+		 *\brief		Sets the view matrix.
+		 *\param[in]	p_mtx	The new matrix.
+		 *\~french
+		 *\brief		Définit la matrice vue.
+		 *\param[in]	p_mtx	La nouvelle matrice.
+		 */
+		inline void SetViewMatrix( Castor::Matrix4x4r const & p_mtx )
 		{
-			return m_pRenderSystem;
+			m_mtxView = p_mtx;
 		}
-		inline void SetRenderSystem( RenderSystem * val )
+		/**
+		 *\~english
+		 *\brief		Sets the projection matrix.
+		 *\param[in]	p_mtx	The new matrix.
+		 *\~french
+		 *\brief		Définit la matrice projection.
+		 *\param[in]	p_mtx	La nouvelle matrice.
+		 */
+		inline void SetProjectionMatrix( Castor::Matrix4x4r const & p_mtx )
 		{
-			m_pRenderSystem = val;
+			m_mtxProjection = p_mtx;
 		}
-		inline IPipelineImpl * GetImpl()const
+		/**
+		 *\~english
+		 *\brief		Sets the projection matrix.
+		 *\param[in]	p_index	The texture index.
+		 *\param[in]	p_mtx	The new matrix.
+		 *\~french
+		 *\brief		Définit la matrice projection.
+		 *\param[in]	p_index	L'indice de la texture.
+		 *\param[in]	p_mtx	La nouvelle matrice.
+		 */
+		inline void SetTextureMatrix( uint32_t p_index, Castor::Matrix4x4r const & p_mtx )
 		{
-			return m_pPipelineImpl;
+			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
+			m_mtxTexture[p_index] = p_mtx;
 		}
-		matrix4x4 const & GetMatrix( eMTXMODE p_eMode )const;
-		matrix4x4 & GetMatrix( eMTXMODE p_eMode );
-		eMTXMODE MatrixMode( eMTXMODE p_eMode );
-		bool LoadIdentity();
-		bool PushMatrix();
-		bool PopMatrix();
-		bool Translate( Castor::Point3r const & p_translate );
-		bool Rotate( Castor::Quaternion const & p_rotate );
-		bool Scale( Castor::Point3r const & p_scale );
-		bool MultMatrix( Castor::Matrix4x4r const & p_matrix );
-		bool MultMatrix( real const * p_matrix );
-		bool Perspective( Castor::Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar );
-		bool Frustum( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
-		bool Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
-		bool Project( Castor::Point3r const & p_ptObj, Castor::Point4r const & p_ptViewport, Castor::Point3r & p_ptResult );
-		bool UnProject( Castor::Point3i const & p_ptWin, Castor::Point4r const & p_ptViewport, Castor::Point3r & p_ptResult );
-		bool PickMatrix( real x, real y, real width, real height, int viewport[4] );
-		void ApplyProjection( ShaderProgramBase & p_program );
-		void ApplyModel( ShaderProgramBase & p_program );
-		void ApplyView( ShaderProgramBase & p_program );
-		void ApplyNormal( ShaderProgramBase & p_program );
-		void ApplyModelView( ShaderProgramBase & p_program );
-		void ApplyProjectionView( ShaderProgramBase & p_program );
-		void ApplyProjectionModelView( ShaderProgramBase & p_program );
-		void ApplyTexture0( ShaderProgramBase & p_program );
-		void ApplyTexture1( ShaderProgramBase & p_program );
-		void ApplyTexture2( ShaderProgramBase & p_program );
-		void ApplyTexture3( ShaderProgramBase & p_program );
-		void ApplyMatrices( ShaderProgramBase & p_program );
-		void ApplyViewport( int p_iWindowWidth, int p_iWindowHeight );
+		/**
+		 *\~english
+		 *\brief		Retrieves the model matrix.
+		 *\return		The matrix.
+		 *\~french
+		 *\brief		Récupère la matrice modèle.
+		 *\return		La matrice.
+		 */
+		inline Castor::Matrix4x4r const & GetModelMatrix()const
+		{
+			return m_mtxModel;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the view matrix.
+		 *\return		The matrix.
+		 *\~french
+		 *\brief		Récupère la matrice vue.
+		 *\return		La matrice.
+		 */
+		inline Castor::Matrix4x4r const & GetViewMatrix()const
+		{
+			return m_mtxView;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the projection matrix.
+		 *\return		The matrix.
+		 *\~french
+		 *\brief		Récupère la matrice projection.
+		 *\return		La matrice.
+		 */
+		inline Castor::Matrix4x4r const & GetProjectionMatrix()const
+		{
+			return m_mtxProjection;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture matrix for given index.
+		 *\param[in]	p_index	The texture index.
+		 *\return		The matrix.
+		 *\~french
+		 *\brief		Récupère la matrice de texture pour l'indice donné.
+		 *\param[in]	p_index	L'indice de la texture.
+		 *\return		La matrice.
+		 */
+		inline Castor::Matrix4x4r const & GetTextureMatrix( uint32_t p_index )const
+		{
+			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
+			return m_mtxTexture[p_index];
+		}
 
 	private:
-		void DoApplyMatrix( eMTXMODE p_eMatrix, Castor::String const & p_strName, ShaderProgramBase & p_program );
-		void DoApplyMatrix( matrix4x4 const & p_matrix, Castor::String const & p_strName, ShaderProgramBase & p_program );
+		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer );
+
+		IPipelineImplSPtr DoGetImpl()const
+		{
+			return m_impl.lock();
+		}
 
 	public:
 		static const Castor::String MtxProjection;
 		static const Castor::String MtxModel;
 		static const Castor::String MtxView;
-		static const Castor::String MtxModelView;
-		static const Castor::String MtxProjectionView;
-		static const Castor::String MtxProjectionModelView;
 		static const Castor::String MtxNormal;
-		static const Castor::String MtxTexture0;
-		static const Castor::String MtxTexture1;
-		static const Castor::String MtxTexture2;
-		static const Castor::String MtxTexture3;
+		static const Castor::String MtxTexture[C3D_MAX_TEXTURE_MATRICES];
 		static const Castor::String MtxBones;
 
 	public:
-		matrix4x4 m_mtxIdentity;
+		//!\~english The identity matrix	\~french La matrice identité
+		Castor::Matrix4x4r m_mtxIdentity;
 
 	protected:
-		matrix4x4 m_matTmp;
-		MatrixStack m_matrix[eMTXMODE_COUNT];
-		matrix4x4 m_mtxModelView;
-		matrix4x4 m_mtxProjectionView;
-		matrix4x4 m_mtxProjectionModelView;
-		matrix4x4 m_mtxNormal;
-		eMTXMODE m_eCurrentMode;
-		RenderSystem * m_pRenderSystem;
-		IPipelineImpl * m_pPipelineImpl;
-		ShaderObjectSet m_setShaders[eMTXMODE_COUNT];
-		ShaderObjectSet m_setNmlShaders;
-		ShaderObjectSet m_setMVShaders;
-		ShaderObjectSet m_setPMVShaders;
-	};
-	/*!
-	\author Sylvain DOREMUS
-	\date 21/02/2012
-	\~english
-	\brief
-	\remark
-	\~french
-	\brief
-	\remark
-	*/
-	class C3D_API IPipelineImpl
-	{
-	protected:
-		typedef Pipeline::matrix4x4 matrix4x4;
-		typedef Pipeline::matrix3x3 matrix3x3;
-
-	public:
-		IPipelineImpl( Pipeline * p_pPipeline );
-		virtual ~IPipelineImpl();
-
-		virtual void Initialise();
-		virtual eMTXMODE MatrixMode( eMTXMODE p_eMode );
-		virtual bool LoadIdentity();
-		virtual bool PushMatrix();
-		virtual bool PopMatrix();
-		virtual bool Translate( Castor::Point3r const & p_translate );
-		virtual bool Rotate( Castor::Quaternion const & p_rotate );
-		virtual bool Scale( Castor::Point3r const & p_scale );
-		virtual bool MultMatrix( Castor::Matrix4x4r const & p_matrix );
-		virtual bool MultMatrix( real const * p_matrix );
-		virtual bool Perspective( Castor::Angle const & p_aFOVY, real p_rRatio, real p_rNear, real p_rFar );
-		virtual bool Frustum( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
-		virtual bool Ortho( real p_rLeft, real p_rRight, real p_rBottom, real p_rTop, real p_rNear, real p_rFar );
-		virtual bool Project( Castor::Point3r const & p_ptObj, Castor::Point4r const & p_ptViewport, Castor::Point3r & p_ptResult );
-		virtual bool UnProject( Castor::Point3i const & p_ptWin, Castor::Point4r const & p_ptViewport, Castor::Point3r & p_ptResult );
-		virtual bool PickMatrix( real x, real y, real width, real height, int viewport[4] );
-		virtual void ApplyViewport( int CU_PARAM_UNUSED( p_iWindowWidth ), int CU_PARAM_UNUSED( p_iWindowHeight ) ) {}
-		virtual void ApplyMatrices( ShaderProgramBase & CU_PARAM_UNUSED( p_program ) ) {}
-
-		inline eMTXMODE GetCurrentMode()
-		{
-			return m_pPipeline->m_eCurrentMode;
-		}
-		inline matrix4x4 & GetCurrentMatrix()
-		{
-			return m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top();
-		}
-		inline matrix4x4 const & GetCurrentMatrix()const
-		{
-			return m_pPipeline->m_matrix[m_pPipeline->m_eCurrentMode].top();
-		}
-
-	protected:
-		Pipeline * m_pPipeline;
+		//!\~english The model matrix	\~french La matrice modèle
+		Castor::Matrix4x4r m_mtxModel;
+		//!\~english The view matrix	\~french La matrice vue
+		Castor::Matrix4x4r m_mtxView;
+		//!\~english The projection matrix	\~french La matrice projection
+		Castor::Matrix4x4r m_mtxProjection;
+		//!\~english The normals matrix	\~french La matrice des normales
+		Castor::Matrix4x4r m_mtxNormal;
+		//!\~english The texture matrices	\~french Les matrices de texture
+		Castor::Matrix4x4r m_mtxTexture[C3D_MAX_TEXTURE_MATRICES];
+		//!\~english The driver specific Pipeline implementation	\~french L'implémentation du Pipeline, fournie par le driver
+		IPipelineImplWPtr m_impl;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

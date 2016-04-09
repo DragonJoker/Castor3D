@@ -18,13 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_UTILS_PCH_H___
 #define ___CASTOR_UTILS_PCH_H___
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#	pragma warning( disable:4996 )
-#endif
-
 #include "config.hpp"
 
 #if CASTOR_USE_PCH
@@ -58,22 +51,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #	include <sys/stat.h>
 #	include <wchar.h>
 
-#	if CASTOR_HAS_STDARRAY || CASTOR_HAS_TR1ARRAY
-#		include <array>
-#	else
-#		include <boost/array.hpp>
-#	endif
+#	include <array>
 
-#	if CASTOR_HAS_STDTHREAD
-#		include <condition_variable>
-#		include <mutex>
-#		include <thread>
-#	else
-#		include <boost/thread/condition_variable.hpp>
-#		include <boost/thread/mutex.hpp>
-#		include <boost/thread/recursive_mutex.hpp>
-#		include <boost/thread/thread.hpp>
-#	endif
+#	include <condition_variable>
+#	include <mutex>
+#	include <thread>
 
 #	include <ft2build.h>
 
@@ -113,10 +95,7 @@ extern "C"
 {
 #	include <FreeImage.h>
 }
-#endif
 
-#if defined( _MSC_VER )
-#	pragma warning( pop )
 #endif
 
 #endif

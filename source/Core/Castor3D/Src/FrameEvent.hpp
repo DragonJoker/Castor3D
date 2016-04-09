@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Debug.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -31,96 +33,97 @@ namespace Castor3D
 	\remark		Basically a frame event has a eEVENT_TYPE to know when it must be applied.
 				<br />It can be applied, so the function must be implemented by children classes
 	\~french
-	\brief		Interface représentant un évènement de frame
-	\remark		Un évènement a un eEVENT_TYPE pour savoir quand il doit être traité.
-				<br />La fonction de traitement doit être implémentée par les classes filles.
+	\brief		Interface reprÃ©sentant un Ã©vÃ¨nement de frame
+	\remark		Un Ã©vÃ¨nement a un eEVENT_TYPE pour savoir quand il doit Ãªtre traitÃ©.
+				<br />La fonction de traitement doit Ãªtre implÃ©mentÃ©e par les classes filles.
 	*/
-	class C3D_API FrameEvent
+	class FrameEvent
+		//: public Castor::Debug::Backtraced
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_eType	The event type
+		 *\param[in]	p_type	The event type
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eType	Le type d'évènement
+		 *\param[in]	p_type	Le type d'Ã©vÃ¨nement
 		 */
-		FrameEvent( eEVENT_TYPE p_eType );
+		C3D_API FrameEvent( eEVENT_TYPE p_type );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
 		 *\param[in]	p_object	The object to copy
 		 *\~french
 		 *\brief		Constructeur par copie
-		 *\param[in]	p_object	L'objet à copier
+		 *\param[in]	p_object	L'objet Ã  copier
 		 */
-		FrameEvent( FrameEvent const & p_object );
+		C3D_API FrameEvent( FrameEvent const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move constructor
 		 *\param[in]	p_object	The object to move
 		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
+		 *\brief		Constructeur par dÃ©placement
+		 *\param[in]	p_object	L'objet Ã  dÃ©placer
 		 */
-		FrameEvent( FrameEvent && p_object );
+		C3D_API FrameEvent( FrameEvent && p_object );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
 		 *\param[in]	p_object	The object to copy
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_object	L'objet à copier
-		 *\return		Une référence sur cet objet
+		 *\brief		OpÃ©rateur d'affectation par copie
+		 *\param[in]	p_object	L'objet Ã  copier
+		 *\return		Une rÃ©fÃ©rence sur cet objet
 		 */
-		FrameEvent & operator =( FrameEvent const & p_object );
+		C3D_API FrameEvent & operator =( FrameEvent const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
 		 *\param[in]	p_object	The object to move
 		 *\return		A reference to this object
 		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_object	L'objet à déplacer
-		 *\return		Une référence sur cet objet
+		 *\brief		OpÃ©rateur d'affectation par dÃ©placement
+		 *\param[in]	p_object	L'objet Ã  dÃ©placer
+		 *\return		Une rÃ©fÃ©rence sur cet objet
 		 */
-		FrameEvent & operator =( FrameEvent && p_object );
+		C3D_API FrameEvent & operator =( FrameEvent && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FrameEvent();
+		C3D_API virtual ~FrameEvent();
 		/**
 		 *\~english
 		 *\brief		Applies the event
-		 *\remark		Must be implemented by children classes
+		 *\remarks		Must be implemented by children classes
 		 *\return		\p true if the event was applied successfully
 		 *\~french
-		 *\brief		Traite l'évènement
-		 *\remark		Doit être implémentée dans les classes filles
-		 *\return		\p true si l'évènement a été traité avec succès
+		 *\brief		Traite l'Ã©vÃ¨nement
+		 *\remarks		Doit Ãªtre implÃ©mentÃ©e dans les classes filles
+		 *\return		\p true si l'Ã©vÃ¨nement a Ã©tÃ© traitÃ© avec succÃ¨s
 		 */
-		virtual bool Apply() = 0;
+		C3D_API virtual bool Apply() = 0;
 		/**
 		 *\~english
 		 *\brief		Retrieves the event type
 		 *\return		The event type
 		 *\~french
-		 *\brief		Récupère le type de l'évènement
-		 *\return		Le type de l'évènement
+		 *\brief		RÃ©cupÃ¨re le type de l'Ã©vÃ¨nement
+		 *\return		Le type de l'Ã©vÃ¨nement
 		 */
 		inline eEVENT_TYPE GetType()
 		{
-			return m_eType;
+			return m_type;
 		}
 
 	protected:
-		//!\~english The event type	\~french Le type d'évènement
-		eEVENT_TYPE m_eType;
+		//!\~english The event type	\~french Le type d'Ã©vÃ¨nement
+		eEVENT_TYPE m_type;
 	};
 }
 

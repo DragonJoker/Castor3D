@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -35,72 +31,225 @@ namespace Castor3D
 	\~french
 	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
 	*/
-	template< class Type, eINTERPOLATOR_MODE Mode > class C3D_API Interpolator
+	template< class Type >
+	class Interpolator
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_tSrc	The start
-		 *\param[in]	p_tDest	The end
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_tSrc	Le départ
-		 *\param[in]	p_tDest	L'arrivée
 		 */
-		Interpolator( Type const & p_tSrc, Type const & p_tDest )
-			:	m_tSrc( p_tSrc )
-			,	m_tCurrent( p_tSrc )
-			,	m_tDest( p_tDest )
+		inline Interpolator()
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		~Interpolator()
+		inline ~Interpolator()
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Interpolation function
-		 *\remark		Must be implemented by the interpolator you create
-		 *\param[in]	p_rPercent	The percentage
+		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\param[in]	p_dst		The end.
+		 *\param[in]	p_percent	The percentage.
 		 *\~french
-		 *\brief		Fonction d'interpolation
-		 *\remark		Doit être implémentée par l'interpolateur que vous créez
-		 *\param[in]	p_rPercent	Le pourcentage
+		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 *\param[in]	p_dst		L'arrivée.
+		 *\param[in]	p_percent	Le pourcentage.
 		 */
-		Type const & operator()( real p_rPercent )
+		C3D_API virtual Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const = 0;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.1
+	\date		09/02/2010
+	\~english
+	\brief		Template class which handles the interpolations, would it be quaternion, point, real, ... interpolations
+	\~french
+	\brief		Classe modèle pour gérer les interpolations (de point, quaternion, real, ...)
+	*/
+	template< class Type, eINTERPOLATOR_MODE Mode > class InterpolatorT;
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		24/01/2016
+	\~english
+	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_NONE.
+	\~french
+	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_NONE.
+	*/
+	template< class Type >
+	class InterpolatorT< Type, eINTERPOLATOR_MODE_NONE >
+		: public Interpolator< Type >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		inline InterpolatorT()
 		{
-			if ( p_rPercent <= 0.0 )
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\~french
+		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 */
+		inline Type Interpolate( Type const & p_src, Type const &, real )const
+		{
+			return p_src;
+		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.8.0
+	\date		24/01/2016
+	\~english
+	\brief		Partial specialisation of Interpolator, for eINTERPOLATOR_MODE_LINEAR.
+	\~french
+	\brief		Spécialisation partielle de Interpolator, pour eINTERPOLATOR_MODE_LINEAR.
+	*/
+	template< class Type >
+	class InterpolatorT< Type, eINTERPOLATOR_MODE_LINEAR >
+		: public Interpolator< Type >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\~french
+		 *\brief		Constructeur
+		 */
+		inline InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\param[in]	p_dst		The end.
+		 *\param[in]	p_percent	The percentage.
+		 *\~french
+		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 *\param[in]	p_dst		L'arrivée.
+		 *\param[in]	p_percent	Le pourcentage.
+		 */
+		inline Type Interpolate( Type const & p_src, Type const & p_dst, real p_percent )const
+		{
+			Type l_return;
+
+			if ( p_percent <= 0.0 )
 			{
-				m_tCurrent = m_tSrc;
+				l_return = p_src;
 			}
-			else if ( p_rPercent >= 1.0 )
+			else if ( p_percent >= 1.0 )
 			{
-				m_tCurrent = m_tDest;
+				l_return = p_dst;
 			}
 			else
 			{
-				m_tCurrent = m_tSrc + ( ( m_tDest - m_tSrc ) * p_rPercent );
+				l_return = p_src + ( ( p_dst - p_src ) * p_percent );
 			}
 
-			return m_tCurrent;
+			return l_return;
 		}
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\version	0.1
+	\date		09/02/2010
+	\~english
+	\brief		Class which handles the Quaternion linear interpolations.
+	\~french
+	\brief		Classe pour gérer les interpolations linéaires de Quaternion.
+	*/
+	template<>
+	class InterpolatorT< Castor::Quaternion, eINTERPOLATOR_MODE_LINEAR >
+		: public Interpolator< Castor::Quaternion >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\~french
+		 *\brief		Constructeur.
+		 */
+		inline InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Destructor.
+		 *\~french
+		 *\brief		Destructeur.
+		 */
+		inline ~InterpolatorT()
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Interpolation function.
+		 *\param[in]	p_src		The start.
+		 *\param[in]	p_dst		The end.
+		 *\param[in]	p_percent	The percentage.
+		 *\~french
+		 *\brief		Fonction d'interpolation.
+		 *\param[in]	p_src		Le départ.
+		 *\param[in]	p_dst		L'arrivée.
+		 *\param[in]	p_percent	Le pourcentage.
+		 */
+		inline Castor::Quaternion Interpolate( Castor::Quaternion const & p_src, Castor::Quaternion const & p_dst, real p_percent )const
+		{
+			Castor::Quaternion l_return;
 
-	protected:
-		//!\~english The starting value	\~french La valeur de départ
-		Type m_tSrc;
-		//!\~english The current value	\~french La valeur courante
-		Type m_tCurrent;
-		//!\~english The ending value	\~french La valeur d'arrivée
-		Type m_tDest;
+			if ( p_percent <= 0.0 )
+			{
+				l_return = p_src;
+			}
+			else if ( p_percent >= 1.0 )
+			{
+				l_return = p_dst;
+			}
+			else
+			{
+				l_return = p_src.slerp( p_dst, p_percent );
+			}
+
+			return l_return;
+		}
 	};
 }
-
-#pragma warning( pop )
 
 #endif

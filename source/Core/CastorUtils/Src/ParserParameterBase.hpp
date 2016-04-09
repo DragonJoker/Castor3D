@@ -27,17 +27,19 @@ namespace Castor
 	\version	0.7.0.0
 	\date		04/02/2013
 	\~english
-	\brief		Parser function parameter types enumeration
+	\brief		Parser function parameter types enumeration.
 	\~french
-	\brief		EnumÈration des types de paramËtres pour une fonction d'analyse
+	\brief		Enum√©ration des types de param√®tres pour une fonction d'analyse.
 	*/
 	typedef enum ePARAMETER_TYPE
-	CASTOR_TYPE( uint8_t )
+		: uint8_t
 	{
 		ePARAMETER_TYPE_TEXT,
 		ePARAMETER_TYPE_NAME,
 		ePARAMETER_TYPE_PATH,
 		ePARAMETER_TYPE_CHECKED_TEXT,
+		ePARAMETER_TYPE_32BITWISE_ORED_CHECKED_TEXT,
+		ePARAMETER_TYPE_64BITWISE_ORED_CHECKED_TEXT,
 		ePARAMETER_TYPE_BOOL,
 		ePARAMETER_TYPE_INT8,
 		ePARAMETER_TYPE_INT16,
@@ -64,73 +66,91 @@ namespace Castor
 		ePARAMETER_TYPE_POSITION,
 		ePARAMETER_TYPE_RECTANGLE,
 		ePARAMETER_TYPE_COLOUR,
-		ePARAMETER_TYPE_COUNT,
+		CASTOR_ENUM_BOUNDS( ePARAMETER_TYPE, ePARAMETER_TYPE_TEXT )
 	}	ePARAMETER_TYPE;
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		26/03/2013
 	\version	0.7.0
 	\~english
-	\brief		Template structure holding parameter specific data
+	\brief		Template structure holding parameter specific data.
 	\~french
-	\brief		Structure template contenant les donnÈes spÈcifiques du paramËtre
+	\brief		Structure template contenant les donn√©es sp√©cifiques du param√®tre.
 	*/
 	class ParserParameterBase
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter type
-		 *\return		The type
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		RÈcupËre le type du paramËtre
-		 *\return		Le type
+		 *\brief		Constructor.
 		 */
-		virtual ePARAMETER_TYPE GetType() = 0;
+		inline ParserParameterBase()
+		{
+		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME)
-		 *\return		The type
+		 *\brief		Retrieves the parameter type.
+		 *\return		The type.
 		 *\~french
-		 *\brief		RÈcupËre le type de base du paramËtre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME)
-		 *\return		Le type
+		 *\brief		R√©cup√®re le type du param√®tre.
+		 *\return		Le type.
 		 */
-		virtual ePARAMETER_TYPE GetBaseType()
+		CU_API virtual ePARAMETER_TYPE GetType() = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the parameter base type (like ePARAMETER_TYPE_TEXT for ePARAMETER_TYPE_NAME).
+		 *\return		The type.
+		 *\~french
+		 *\brief		R√©cup√®re le type de base du param√®tre (comme ePARAMETER_TYPE_TEXT pour ePARAMETER_TYPE_NAME).
+		 *\return		Le type.
+		 */
+		CU_API virtual ePARAMETER_TYPE GetBaseType()
 		{
 			return GetType();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter string type
-		 *\return		The type
+		 *\brief		Retrieves the parameter string type.
+		 *\return		The type.
 		 *\~french
-		 *\brief		RÈcupËre le type du chaÓne paramËtre
-		 *\return		Le type
+		 *\brief		R√©cup√®re le type du cha√Æne param√®tre.
+		 *\return		Le type.
 		 */
-		virtual xchar const * GetStrType() = 0;
+		CU_API virtual xchar const * const GetStrType() = 0;
 		/**
 		 *\~english
-		 *\brief			Checks the parameter
-		 *\param[in,out]	p_strParams	The text containing the parameter value
-		 *\return			\p false if any error occured
+		 *\return		A copy of this parameter.
 		 *\~french
-		 *\brief			VÈrifie le paramËtre
-		 *\param[in,out]	p_strParams	Le texte contenant la valeur du paramËtre
-		 *\return			\p si un problËme quelconque est arrivÈ
+		 *\return		Une copie de ce param√®tre.
 		 */
-		virtual bool Parse( String & p_strParams ) = 0;
+		CU_API virtual ParserParameterBaseSPtr Clone() = 0;
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter value
-		 *\param[out]	p_value	Receives the value
-		 *\return		The value
+		 *\brief			Checks the parameter.
+		 *\param[in,out]	p_params	The text containing the parameter value.
+		 *\return			\p false if any error occured.
 		 *\~french
-		 *\brief		RÈcupËre la valeur du paramËtre
-		 *\param[out]	p_value	ReÁoit la valeur
-		 *\return		La valeur
+		 *\brief			V√©rifie le param√®tre.
+		 *\param[in,out]	p_params	Le texte contenant la valeur du param√®tre.
+		 *\return			\p si un probl√®me quelconque est arriv√©.
+		 */
+		CU_API virtual bool Parse( String & p_params ) = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the parameter value.
+		 *\param[out]	p_value		Receives the value.
+		 *\return		The value.
+		 *\~french
+		 *\brief		R√©cup√®re la valeur du param√®tre.
+		 *\param[out]	p_value		Re√ßoit la valeur.
+		 *\return		La valeur.
 		 */
 		template< typename T > T const & Get( T & p_value );
 	};
 }
+
+#include "ParserParameterBase.inl"
 
 #endif

@@ -45,8 +45,8 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_name	Le nom
 		 */
-		NamedBase( T const & p_tName )
-			:	m_name( p_tName	)
+		NamedBase( T const & p_name )
+			: m_name( p_name )
 		{
 		}
 		/**
@@ -58,7 +58,7 @@ namespace Castor
 		 *\param[in]	p_named	L'objet à copier
 		 */
 		NamedBase( NamedBase const & p_named )
-			:	m_name( p_named.m_name	)
+			: m_name( p_named.m_name )
 		{
 		}
 		/**
@@ -70,7 +70,7 @@ namespace Castor
 		 *\param[in]	p_named	L'objet à déplacer
 		 */
 		NamedBase( NamedBase && p_named )
-			:	m_name()
+			: m_name()
 		{
 			m_name = std::move( p_named.m_name );
 		}
@@ -91,7 +91,7 @@ namespace Castor
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_named	L'objet à copier
 		 */
-		NamedBase & operator =( NamedBase const & p_named )
+		NamedBase & operator=( NamedBase const & p_named )
 		{
 			m_name = p_named.m_name;
 			return *this;
@@ -104,7 +104,7 @@ namespace Castor
 		 *\brief		Constructeur par déplacement
 		 *\param[in]	p_named	L'objet à déplacer
 		 */
-		NamedBase & operator =( NamedBase && p_named )
+		NamedBase & operator=( NamedBase && p_named )
 		{
 			if ( this != &p_named )
 			{
@@ -124,6 +124,18 @@ namespace Castor
 		inline T const & GetName()const
 		{
 			return m_name;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the name
+		 *\param[in]	p_name	The name
+		 *\~french
+		 *\brief		Définit le nom
+		 *\param[in]	p_name	Le nom
+		 */
+		inline void SetName( T const & p_name )
+		{
+			m_name = p_name;
 		}
 
 	protected:

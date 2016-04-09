@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Light.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -37,8 +33,8 @@ namespace Castor3D
 	\brief		Classe de représentation d'une PointLight
 	\remark		Une spot light est une source de lumière à un point donné qui illumine dans une direction donnée en suivant une forme cônique
 	*/
-	class C3D_API SpotLight
-		:	public LightCategory
+	class SpotLight
+		: public LightCategory
 	{
 	public:
 		/*!
@@ -49,7 +45,7 @@ namespace Castor3D
 		\~french
 		\brief		Loader de SpotLight
 		*/
-		class C3D_API TextLoader : public LightCategory::TextLoader
+		class TextLoader : public LightCategory::TextLoader
 		{
 		public:
 			/**
@@ -62,7 +58,7 @@ namespace Castor3D
 			 *\param[in]	p_file	Le fichier
 			 *\param[in]	p_light	La lumière
 			 */
-			virtual bool operator()( SpotLight const & p_light, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( SpotLight const & p_light, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -72,8 +68,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de SpotLight
 		*/
-		class C3D_API BinaryParser
-			:	public LightCategory::BinaryParser
+		class BinaryParser
+			: public LightCategory::BinaryParser
 		{
 		public:
 			/**
@@ -84,7 +80,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -97,7 +93,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( SpotLight const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( SpotLight const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -110,7 +106,7 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( SpotLight & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( SpotLight & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	private:
@@ -120,19 +116,19 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Not to be used by the user, use Scene::CreateLight function instead
+		 *\remarks		Not to be used by the user, use Scene::CreateLight function instead
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
+		 *\remarks		A ne pas utiliser par l'utilisateur, utiliser Scene::CreateLight à la place
 		 */
-		SpotLight();
+		C3D_API SpotLight();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~SpotLight();
+		C3D_API ~SpotLight();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by Factory
@@ -141,27 +137,14 @@ namespace Castor3D
 		 *\brief		Fonction de création utilisée par Factory
 		 *\return		Une source lumineuse
 		 */
-		static LightCategorySPtr Create();
+		C3D_API static LightCategorySPtr Create();
 		/**
 		 *\~english
-		 *\brief		Renders the light
-		 *\param[in]	p_pRenderer		The renderer used to ... render this light
+		 *\brief		Puts the light into the given texture.
 		 *\~french
-		 *\brief		Fonction de rendu sans shader
-		 *\param[in]	p_pRenderer		Le renderer
+		 *\brief		Met la lumière dans la texture donnée.
 		 */
-		virtual void Render( LightRendererSPtr p_pRenderer );
-		/**
-		 *\~english
-		 *\brief		Renders the light
-		 *\param[in]	p_pRenderer		The renderer used to ... render this light
-		 *\param[in]	p_pProgram		The shader program that will receive the light's components
-		 *\~french
-		 *\brief		Fonction de rendu avec shader
-		 *\param[in]	p_pRenderer		Le renderer
-		 *\param[in]	p_pProgram		Le shader qui va recevoir les informations de la lumière
-		 */
-		virtual void Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram );
+		C3D_API virtual void Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const;
 		/**
 		 *\~english
 		 *\brief		Sets the light source position
@@ -170,7 +153,7 @@ namespace Castor3D
 		 *\brief		Définit la position de la source
 		 *\param[in]	p_position	La nouvelle valeur
 		 */
-		virtual void SetPosition( Castor::Point3r const & p_position );
+		C3D_API virtual void SetPosition( Castor::Point3r const & p_position );
 		/**
 		 *\~english
 		 *\brief		Retrieves the light source position
@@ -179,7 +162,7 @@ namespace Castor3D
 		 *\brief		Récupère la position de la source
 		 *\return		La valeur
 		 */
-		virtual Castor::Point3f GetPosition()const;
+		C3D_API virtual Castor::Point3f GetPosition()const;
 		/**
 		 *\~english
 		 *\brief		Sets attenuation components
@@ -188,19 +171,19 @@ namespace Castor3D
 		 *\brief		Définit les composantes d'atténuation
 		 *\param[in]	p_ptAttenuation	Les composantes d'attenuation
 		 */
-		void SetAttenuation( Castor::Point3f const & p_ptAttenuation );
+		C3D_API void SetAttenuation( Castor::Point3f const & p_ptAttenuation );
 		/**
 		*\~english
 		*\brief			Sets the light exponent
 		 *\param[in]	p_exponent	The new exponent value
 		 */
-		void SetExponent( float p_exponent );
+		C3D_API void SetExponent( float p_exponent );
 		/**
 		*\~english
 		*\brief			Sets the light cutoff
 		 *\param[in]	p_cutOff	The new cutoff value
 		 */
-		void SetCutOff( float p_cutOff );
+		C3D_API void SetCutOff( float p_cutOff );
 		/**
 		 *\~english
 		 *\brief		Retrieves the attenuation components
@@ -251,6 +234,12 @@ namespace Castor3D
 		}
 
 	private:
+		using LightCategory::DoBindComponent;
+		void DoBindComponent( float p_exp, float p_cut, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Matrix4x4f const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+		void DoBindComponent( Castor::Matrix4x4d const & p_component, int p_index, int & p_offset, Castor::PxBufferBase & p_data )const;
+
+	private:
 		//!\~english The attenuation components : constant, linear and quadratic	\~french Les composantes d'attenuation : constante, linéaire et quadratique
 		Castor::Point3f m_attenuation;
 		//!\~english The light exponent, id est how much the light is focused	\~french L'exposant de la lumièrs, càd à quel point elle est concentrée
@@ -259,7 +248,5 @@ namespace Castor3D
 		float m_cutOff;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

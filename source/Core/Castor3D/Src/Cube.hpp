@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_CUBE_H___
 #define ___C3D_CUBE_H___
 
-#include "MeshCategory.hpp"
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -32,8 +32,8 @@ namespace Castor3D
 	\brief		Représentation d'un cube
 	\remark		La dénomination "Cube" est un abus de langage car ses 3 dimensions sont paramétrables (largeur, hauteur et profondeur)
 	*/
-	class C3D_API Cube
-		:	public MeshCategory
+	class Cube
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -42,41 +42,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Cube();
+		C3D_API Cube();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Cube();
+		C3D_API ~Cube();
 		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		A MeshCategory
-		 *\~french
-		 *\brief		Fonction de création, utilisée par la Factory
-		 *\return		Un MeshCategory
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Generates the cube points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du cube
-		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number (unused)
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces (inutilisé pour Cube)
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\~english
 		 *\brief		Retrieves the cube height
@@ -107,22 +84,29 @@ namespace Castor3D
 		{
 			return m_depth;
 		}
+
+	private:
 		/**
-		 *\~english
-		 *\brief		Stream operator
-		 *\~french
-		 *\brief		Opérateur de flux
-		 */
-		inline friend std::ostream & operator <<( std::ostream & o, Cube const & c )
-		{
-			return o << "Pave(" << c.m_height << "," << c.m_width << "," << c.m_depth << ")";
-		}
+		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*/
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
 	private:
 		real m_height;
 		real m_width;
 		real m_depth;
+		friend std::ostream & operator <<( std::ostream & o, Cube const & c );
 	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Opérateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Cube const & c )
+	{
+		return o << "Cube(" << c.m_height << "," << c.m_width << "," << c.m_depth << ")";
+	}
 }
 
 #endif

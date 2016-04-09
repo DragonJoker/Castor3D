@@ -18,11 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TORUS_H___
 #define ___C3D_TORUS_H___
 
-#include "MeshCategory.hpp"
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -38,8 +34,8 @@ namespace Castor3D
 	\remark		Un torre est une ellipse qui parcourt une ellipse
 				<br />L'ellipse originale sera appelée interne et possède son propre rayon et nombre de sections
 	*/
-	class C3D_API Torus
-		:	public MeshCategory
+	class Torus
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -48,41 +44,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Torus();
+		C3D_API Torus();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Torus();
+		C3D_API ~Torus();
 		/**
-		 *\~english
-		 *\brief		Generates the mesh points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du mesh
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		A torus
-		 *\~french
-		 *\brief		Fonction de création utilisée par Factory
-		 *\return		Un torre
-		 */
-		static MeshCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\~english
 		 *\brief		Retrieves the internal ellipse faces number
@@ -123,25 +96,30 @@ namespace Castor3D
 		{
 			return m_rExternalRadius;
 		}
+
+	private:
 		/**
-		 *\~english
-		 *\brief		Stream operator
-		 *\~french
-		 *\brief		Operateur de flux
-		 */
-		inline friend std::ostream & operator <<( std::ostream & o, Torus const & c )
-		{
-			return o << "Torus(" << c.m_uiInternalNbFaces << "," << c.m_uiExternalNbFaces << "," << c.m_rInternalRadius << "," << c.m_rExternalRadius << ")";
-		}
+		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*/
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
 	private:
 		real m_rInternalRadius;
 		real m_rExternalRadius;
 		uint32_t m_uiInternalNbFaces;
 		uint32_t m_uiExternalNbFaces;
+		friend std::ostream & operator <<( std::ostream & o, Torus const & c );
 	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Operateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Torus const & c )
+	{
+		return o << "Torus(" << c.m_uiInternalNbFaces << "," << c.m_uiExternalNbFaces << "," << c.m_rInternalRadius << "," << c.m_rExternalRadius << ")";
+	}
 }
-
-#pragma warning( pop )
 
 #endif

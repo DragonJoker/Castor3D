@@ -32,6 +32,7 @@ namespace Castor3D
 	*/
 	struct stFACE_INDICES
 	{
+		//!\~english The indices	\~french Les indices
 		uint32_t m_uiVertexIndex[3];
 	};
 }

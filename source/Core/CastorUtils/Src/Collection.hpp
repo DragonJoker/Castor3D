@@ -24,9 +24,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "NonCopyable.hpp"
 #include "Assertion.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4661 )
-
 namespace Castor
 {
 	/*!
@@ -46,13 +43,17 @@ namespace Castor
 	{
 	public:
 		DECLARE_SMART_PTR( TObj );
-		typedef std::map< TKey, TObjSPtr > TObjPtrMap;
-		typedef typename TObjPtrMap::iterator TObjPtrMapIt;
-		typedef typename TObjPtrMap::const_iterator TObjPtrMapConstIt;
-		typedef typename TObjPtrMap::reverse_iterator TObjPtrMapRIt;
-		typedef typename TObjPtrMap::const_reverse_iterator TObjPtrMapConstRIt;
+		DECLARE_TPL_MAP( TKey, TObjSPtr, TObjPtr );
 		typedef typename TObjPtrMap::value_type value_type;
-		typedef typename call_traits< TKey >::const_param_type key_param_type;	//!\~english Typedef over the key param type	\~french Typedef sur le type de la clef en paramètre de fonction
+		//!\~english Typedef over the key param type	\~french Typedef sur le type de la clef en paramètre de fonction
+		typedef typename call_traits< TKey >::const_param_type key_param_type;
+
+	private:
+		struct Search
+		{
+			TKey m_key;
+			TObjPtrMapConstIt m_result;
+		};
 
 	public:
 		/**
@@ -121,6 +122,13 @@ namespace Castor
 		inline TObjPtrMapConstIt end()const;
 		/**
 		 *\~english
+		 *\return		\p true if the collection is empty.
+		 *\~french
+		 *\return		\p true si la collection est vide.
+		 */
+		inline bool empty()const;
+		/**
+		 *\~english
 		 *\brief		Clears the collection
 		 *\~french
 		 *\brief		Vide la collection
@@ -182,15 +190,32 @@ namespace Castor
 		 */
 		inline TObjSPtr erase( key_param_type p_key );
 
-	private:
-		TObjPtrMap 						m_objectMap;
-		mutable std::recursive_mutex 	m_mutex;
-		mutable bool 					m_bLocked;
-	};
+	protected:
+		/**
+		 *\~english
+		 *\brief		Initialises last search (empty key, invalid result).
+		 *\~french
+		 *\brief		Initialise la dernière rechercher (clef vide, résultat invalide).
+		 */
+		void do_init_last()const;
+		/**
+		 *\~english
+		 *\brief		Updates the last search, performing the lookup in the map.
+		 *\param[in]	p_key	The key to test.
+		 *\~french
+		 *\brief		Met à jour la dernière recherche, en effectuant la recherche dans la map.
+		 *\param[in]	p_key	La clef à tester.
+		 */
+		inline void do_update_last( key_param_type p_key )const;
 
-#include "Collection.inl"
+	private:
+		TObjPtrMap m_objects;
+		mutable std::recursive_mutex m_mutex;
+		mutable bool m_locked;
+		mutable Search m_last;
+	};
 }
 
-#pragma warning( pop )
+#include "Collection.inl"
 
 #endif

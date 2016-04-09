@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -19,7 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_PARSER_PARAMETER_TYPE_EXCEPTION_H___
 
 #include "Exception.hpp"
-#include "ParserParameterBase.hpp"
+
+#include "ParserParameterHelpers.hpp"
 
 namespace Castor
 {
@@ -30,23 +31,26 @@ namespace Castor
 	\~english
 	\brief		Exception thrown when the user tries to retrieve a parameter of a wrong type
 	\~french
-	\brief		Exception lancée lorsque l'utilisateur se trompe de type de paramètre
+	\brief		Exception lancÃ©e lorsque l'utilisateur se trompe de type de paramÃ¨tre
 	*/
+	template< ePARAMETER_TYPE GivenType >
 	class ParserParameterTypeException
 		: public Castor::Exception
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_eGivenType	The type asked by the user
-		 *\param[in]	p_eExpectedType	The real parameter type
+		 *\brief		Constructor.
+		 *\param[in]	p_expectedType	The real parameter type.
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_eGivenType	Le type demandé par l'utilisateur
-		 *\param[in]	p_eExpectedType	Le type réel du paramètre
+		 *\param[in]	p_expectedType	Le type rÃ©el du paramÃ¨tre.
 		 */
-		ParserParameterTypeException( ePARAMETER_TYPE p_eGivenType, ePARAMETER_TYPE p_eExpectedType );
+		inline ParserParameterTypeException( ePARAMETER_TYPE p_expectedType )
+			: Castor::Exception( "", "", "", 0 )
+		{
+			m_description = "Wrong parameter type in parser: user gave " + string::string_cast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::string_cast< xchar >( GetTypeName( p_expectedType ) );
+		}
 	};
 }
 

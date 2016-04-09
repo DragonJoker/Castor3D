@@ -1,5 +1,8 @@
 #include "KeyboardEvent.hpp"
 
+#include "CastorViewer.hpp"
+#include "MainFrame.hpp"
+
 #include <RenderWindow.hpp>
 #include <Logger.hpp>
 
@@ -8,10 +11,9 @@ using namespace Castor;
 
 namespace CastorViewer
 {
-	KeyboardEvent::KeyboardEvent( RenderWindowSPtr p_pWindow, wxFrame * p_pMainFrame )
-		:	FrameEvent( eEVENT_TYPE_PRE_RENDER )
-		,	m_pWindow( p_pWindow )
-		,	m_pMainFrame( p_pMainFrame )
+	KeyboardEvent::KeyboardEvent( RenderWindowSPtr p_window )
+		: FrameEvent( eEVENT_TYPE_PRE_RENDER )
+		, m_window( p_window )
 	{
 	}
 
@@ -21,14 +23,12 @@ namespace CastorViewer
 
 	bool KeyboardEvent::Apply()
 	{
-		RenderWindowSPtr l_pWindow = m_pWindow.lock();
+		RenderWindowSPtr l_pWindow = m_window.lock();
 
 		if ( l_pWindow )
 		{
-			m_pMainFrame->ShowFullScreen( !l_pWindow->IsFullscreen(), wxFULLSCREEN_ALL );
-			Logger::LogDebug( cuT( "Main frame switched fullscreen" ) );
+			wxGetApp().GetMainFrame()->ToggleFullScreen( !l_pWindow->IsFullscreen() );
 			l_pWindow->UpdateFullScreen( !l_pWindow->IsFullscreen() );
-			Logger::LogDebug( cuT( "Render window switched fullscreen" ) );
 		}
 
 		return true;

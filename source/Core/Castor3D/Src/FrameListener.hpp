@@ -20,6 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
+#include <Named.hpp>
+
 namespace Castor3D
 {
 	/*!
@@ -33,23 +35,33 @@ namespace Castor3D
 	\brief		Classe de synchronisation des évènements
 	\remark		Le gestionnaire des évènements de frame, on peut y ajouter des évènements à traiter, qui le seront au moment voulu (en fonction de leur eEVENT_TYPE)
 	*/
-	class C3D_API FrameListener
+	class FrameListener
+		: public Castor::Named
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_name	The listener's name.
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_name	Le nom du listener
 		 */
-		FrameListener();
+		C3D_API FrameListener( Castor::String const & p_name );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~FrameListener();
+		C3D_API ~FrameListener();
+		/**
+		 *\~english
+		 *\brief		Empties the event lists.
+		 *\~french
+		 *\brief		Vide les listes d'évènements.
+		 */
+		C3D_API void Flush();
 		/**
 		 *\~english
 		 *\brief		Puts an event in the corresponding array
@@ -58,7 +70,7 @@ namespace Castor3D
 		 *\brief		Ajoute un évènement à la liste d'évènements correspondant à sont type
 		 *\param[in]	p_event	L'évènement à ajouter
 		 */
-		void PostEvent( FrameEventSPtr p_event );
+		C3D_API void PostEvent( FrameEventSPtr p_event );
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them
@@ -68,7 +80,16 @@ namespace Castor3D
 		 *\param[in]	p_type	Le type des évènements à traiter
 		 *\return
 		 */
-		bool FireEvents( eEVENT_TYPE p_type );
+		C3D_API bool FireEvents( eEVENT_TYPE p_type );
+
+	protected:
+		/**
+		 *\~english
+		 *\brief		Empties the event lists.
+		 *\~french
+		 *\brief		Vide les listes d'évènements.
+		 */
+		C3D_API virtual void DoFlush() {}
 
 	protected:
 		//!\~english The events arrays	\~french Les tableaux d'évènements

@@ -20,55 +20,46 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "WindowHandle.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 //*************************************************************************************************
 //
 // INCLUDE THIS FILE ONLY WHERE YOU NEED IT (for instance not in precompiled header file)
 //
 //*************************************************************************************************
 
-#if defined( _MSC_VER )
-#	pragma warning( push )
-#	pragma warning( disable:4311 )
-#	pragma warning( disable:4312 )
-#endif
-
 #if defined( _WIN32 )
 #	include <windows.h>
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
 #elif defined( __linux__ )
 #	include <GL/glx.h>
 #else
 #	error "Yet unsupported OS"
 #endif
+
 namespace Castor3D
 {
+
 #if defined( _WIN32 )
-	class IMswWindowHandle : public IWindowHandle
+
+	class IMswWindowHandle
+		: public IWindowHandle
 	{
 	private:
 		HWND m_hWnd;
 
 	public:
 		IMswWindowHandle( HWND p_hWnd )
-			:	m_hWnd( p_hWnd )
+			: m_hWnd( p_hWnd )
 		{
 		}
 
 		IMswWindowHandle( IMswWindowHandle const & p_handle )
-			:	m_hWnd( p_handle.m_hWnd )
+			: m_hWnd( p_handle.m_hWnd )
 		{
 		}
 
 		IMswWindowHandle( IMswWindowHandle && p_handle )
-			:	m_hWnd( std::move( p_handle.m_hWnd ) )
+			: m_hWnd( std::move( p_handle.m_hWnd ) )
 		{
-			p_handle.m_hWnd = NULL;
+			p_handle.m_hWnd = nullptr;
 		}
 
 		IMswWindowHandle & operator =( IMswWindowHandle const & p_handle )
@@ -82,7 +73,7 @@ namespace Castor3D
 			if ( this != & p_handle )
 			{
 				m_hWnd = std::move( p_handle.m_hWnd );
-				p_handle.m_hWnd = NULL;
+				p_handle.m_hWnd = nullptr;
 			}
 
 			return * this;
@@ -94,7 +85,7 @@ namespace Castor3D
 
 		virtual operator bool()
 		{
-			return m_hWnd != NULL;
+			return m_hWnd != nullptr;
 		}
 
 		inline HWND GetHwnd()const
@@ -102,38 +93,41 @@ namespace Castor3D
 			return m_hWnd;
 		}
 	};
+
 #elif defined( __linux__ )
-	class IXWindowHandle : public IWindowHandle
+
+	class IXWindowHandle
+		: public IWindowHandle
 	{
 	private:
 		GLXDrawable m_drawable;
-		Display * m_pDisplay;
+		Display * m_display;
 
 	public:
 		IXWindowHandle( GLXDrawable p_drawable, Display * p_pDisplay )
-			:	m_drawable( p_drawable )
-			,	m_pDisplay( p_pDisplay )
+			: m_drawable( p_drawable )
+			, m_display( p_pDisplay )
 		{
 		}
 
 		IXWindowHandle( IXWindowHandle const & p_handle )
-			:	m_drawable( p_handle.m_drawable )
-			,	m_pDisplay( p_handle.m_pDisplay )
+			: m_drawable( p_handle.m_drawable )
+			, m_display( p_handle.m_display )
 		{
 		}
 
 		IXWindowHandle( IXWindowHandle && p_handle )
-			:	m_drawable( std::move( p_handle.m_drawable ) )
-			,	m_pDisplay( std::move( p_handle.m_pDisplay ) )
+			: m_drawable( std::move( p_handle.m_drawable ) )
+			, m_display( std::move( p_handle.m_display ) )
 		{
 			p_handle.m_drawable = None;
-			p_handle.m_pDisplay = NULL;
+			p_handle.m_display = nullptr;
 		}
 
 		IXWindowHandle & operator =( IXWindowHandle const & p_handle )
 		{
-			m_drawable	= p_handle.m_drawable;
-			m_pDisplay	= p_handle.m_pDisplay;
+			m_drawable = p_handle.m_drawable;
+			m_display = p_handle.m_display;
 			return * this;
 		}
 
@@ -141,10 +135,10 @@ namespace Castor3D
 		{
 			if ( this != & p_handle )
 			{
-				m_drawable	= std::move( p_handle.m_drawable );
-				m_pDisplay	= std::move( p_handle.m_pDisplay );
+				m_drawable = std::move( p_handle.m_drawable );
+				m_display = std::move( p_handle.m_display );
 				p_handle.m_drawable = None;
-				p_handle.m_pDisplay = NULL;
+				p_handle.m_display = nullptr;
 			}
 
 			return * this;
@@ -156,23 +150,21 @@ namespace Castor3D
 
 		virtual operator bool()
 		{
-			return m_drawable != None && m_pDisplay != NULL;
+			return m_drawable != None && m_display != nullptr;
 		}
 
-		inline GLXDrawable 	GetDrawable()const
+		inline GLXDrawable GetDrawable()const
 		{
 			return m_drawable;
 		}
-		inline Display  *	GetDisplay()const
+		inline Display * GetDisplay()const
 		{
-			return m_pDisplay;
+			return m_display;
 		}
 	};
-#endif
-}
 
-#if defined( _MSC_VER )
-#	pragma warning( pop )
 #endif
+
+}
 
 #endif
