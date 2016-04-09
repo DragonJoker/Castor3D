@@ -1,5 +1,8 @@
-#include "SpotLight.hpp"
-#include "Vertex.hpp"
+﻿#include "SpotLight.hpp"
+
+#include "SceneNode.hpp"
+
+#include <PixelBuffer.hpp>
 
 using namespace Castor;
 
@@ -7,94 +10,94 @@ namespace Castor3D
 {
 	bool SpotLight::TextLoader::operator()( SpotLight const & p_light, TextFile & p_file )
 	{
-		bool l_bReturn = LightCategory::TextLoader()( p_light, p_file );
+		bool l_return = LightCategory::TextLoader()( p_light, p_file );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\t\tattenuation " ) ) > 0 && Point3f::TextLoader()( p_light.GetAttenuation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "\t\tattenuation " ) ) > 0 && Point3f::TextLoader()( p_light.GetAttenuation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\t\texponent %f\n" ), p_light.GetExponent() ) > 0;
+			l_return = p_file.Print( 256, cuT( "\t\texponent %f\n" ), p_light.GetExponent() ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.Print( 256, cuT( "\t\tcut_off %f\n" ), p_light.GetCutOff() ) > 0;
+			l_return = p_file.Print( 256, cuT( "\t\tcut_off %f\n" ), p_light.GetCutOff() ) > 0;
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
 	SpotLight::BinaryParser::BinaryParser( Path const & p_path )
-		:	LightCategory::BinaryParser( p_path )
+		: LightCategory::BinaryParser( p_path )
 	{
 	}
 
 	bool SpotLight::BinaryParser::Fill( SpotLight const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_LIGHT );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = LightCategory::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = LightCategory::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetAttenuation(), eCHUNK_TYPE_LIGHT_ATTENUATION, l_chunk );
+			l_return = DoFillChunk( p_obj.GetAttenuation(), eCHUNK_TYPE_LIGHT_ATTENUATION, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetExponent(), eCHUNK_TYPE_LIGHT_EXPONENT, l_chunk );
+			l_return = DoFillChunk( p_obj.GetExponent(), eCHUNK_TYPE_LIGHT_EXPONENT, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = DoFillChunk( p_obj.GetCutOff(), eCHUNK_TYPE_LIGHT_CUTOFF, l_chunk );
+			l_return = DoFillChunk( p_obj.GetCutOff(), eCHUNK_TYPE_LIGHT_CUTOFF, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool SpotLight::BinaryParser::Parse( SpotLight & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		float l_value;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
 				switch ( l_chunk.GetChunkType() )
 				{
 				case eCHUNK_TYPE_LIGHT_ATTENUATION:
-					l_bReturn = DoParseChunk( p_obj.GetAttenuation(), l_chunk );
+					l_return = DoParseChunk( p_obj.GetAttenuation(), l_chunk );
 					break;
 
 				case eCHUNK_TYPE_LIGHT_EXPONENT:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetExponent( l_value );
 					}
@@ -102,9 +105,9 @@ namespace Castor3D
 					break;
 
 				case eCHUNK_TYPE_LIGHT_CUTOFF:
-					l_bReturn = DoParseChunk( l_value, l_chunk );
+					l_return = DoParseChunk( l_value, l_chunk );
 
-					if ( l_bReturn )
+					if ( l_return )
 					{
 						p_obj.SetCutOff( l_value );
 					}
@@ -112,27 +115,27 @@ namespace Castor3D
 					break;
 
 				default:
-					l_bReturn = LightCategory::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+					l_return = LightCategory::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 					break;
 				}
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
 	SpotLight::SpotLight()
-		:	LightCategory( eLIGHT_TYPE_SPOT )
-		,	m_attenuation( 1, 0, 0 )
-		,	m_exponent( 0 )
-		,	m_cutOff( 180 )
+		: LightCategory( eLIGHT_TYPE_SPOT )
+		, m_attenuation( 1, 0, 0 )
+		, m_exponent( 0 )
+		, m_cutOff( 180 )
 	{
 	}
 
@@ -145,46 +148,23 @@ namespace Castor3D
 		return std::make_shared< SpotLight >();
 	}
 
-	void SpotLight::Render( LightRendererSPtr p_pRenderer )
+	void SpotLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
 	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->Enable();
-			p_pRenderer->ApplyPosition();
-			p_pRenderer->ApplyOrientation();
-			p_pRenderer->ApplyAmbient();
-			p_pRenderer->ApplyDiffuse();
-			p_pRenderer->ApplySpecular();
-			p_pRenderer->ApplyConstantAtt(	m_attenuation[0] );
-			p_pRenderer->ApplyLinearAtt(	m_attenuation[1] );
-			p_pRenderer->ApplyQuadraticAtt(	m_attenuation[2] );
-			p_pRenderer->ApplyExponent(	m_exponent );
-			p_pRenderer->ApplyCutOff(	m_cutOff );
-			p_pRenderer->Bind();
-		}
+		int l_offset = 0;
+		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
+		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
+		Point4f l_posType = GetPositionType();
+		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
+		DoBindComponent( GetAttenuation(), p_index, l_offset, p_texture );
+		Matrix4x4r l_orientation;
+		GetLight()->GetParent()->GetDerivedOrientation().to_matrix( l_orientation );
+		DoBindComponent( l_orientation, p_index, l_offset, p_texture );
+		DoBindComponent( GetExponent(), GetCutOff(), p_index, l_offset, p_texture );
 	}
 
-	void SpotLight::Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram )
+	void SpotLight::SetPosition( Castor::Point3r const & p_position )
 	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->EnableShader( p_pProgram );
-			p_pRenderer->ApplyPositionShader();
-			p_pRenderer->ApplyOrientationShader();
-			p_pRenderer->ApplyAmbientShader();
-			p_pRenderer->ApplyDiffuseShader();
-			p_pRenderer->ApplySpecularShader();
-			p_pRenderer->ApplyConstantAttShader( m_attenuation[0] );
-			p_pRenderer->ApplyLinearAttShader( m_attenuation[1] );
-			p_pRenderer->ApplyQuadraticAttShader( m_attenuation[2] );
-			p_pRenderer->ApplyExponentShader( m_exponent );
-			p_pRenderer->ApplyCutOffShader( m_cutOff );
-		}
-	}
-
-	void SpotLight::SetPosition( Castor::Point3r const & p_ptPosition )
-	{
-		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 2.0f ) );
+		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 2.0f ) );
 	}
 
 	Castor::Point3f SpotLight::GetPosition()const
@@ -206,5 +186,24 @@ namespace Castor3D
 	void SpotLight::SetCutOff( float p_cutOff )
 	{
 		m_cutOff = p_cutOff;
+	}
+
+	void SpotLight::DoBindComponent( float p_exp, float p_cut, int p_index, int & p_offset, PxBufferBase & p_data )const
+	{
+		float * l_pDst = reinterpret_cast< float * >( &( *p_data.get_at( p_index * 10 + p_offset++, 0 ) ) );
+		*l_pDst++ = p_exp;
+		*l_pDst++ = p_cut;
+	}
+
+	void SpotLight::DoBindComponent( Matrix4x4f const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
+	{
+		Point3f l_direction( 0, 0, 1 );
+		l_direction = matrix::get_transformed( p_component, l_direction );
+		DoBindComponent( l_direction, p_index, p_offset, p_data );
+	}
+
+	void SpotLight::DoBindComponent( Matrix4x4d const & p_component, int p_index, int & p_offset, PxBufferBase & p_data )const
+	{
+		DoBindComponent( Matrix4x4f( p_component.const_ptr() ), p_index, p_offset, p_data );
 	}
 }

@@ -1,6 +1,0 @@
-	Castor3D core engine
-	Castor3D is a 3D engine written in C++.
-	It works on Windows and also on GNU/Linux.
-	It uses OpenGL (with GLSL) or Direct3D 9 (with HLSL).
-	Cg shader language is also supported.
-	Development files.

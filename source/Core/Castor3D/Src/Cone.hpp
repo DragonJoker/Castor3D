@@ -18,11 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_CONE_H___
 #define ___C3D_CONE_H___
 
-#include "MeshCategory.hpp"
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "MeshGenerator.hpp"
 
 namespace Castor3D
 {
@@ -34,8 +30,8 @@ namespace Castor3D
 	\~french
 	\brief		Le cône est une primitive basique, avec un nombre paramétrable de faces
 	*/
-	class C3D_API Cone
-		:	public MeshCategory
+	class Cone
+		: public MeshGenerator
 	{
 	public:
 		/**
@@ -44,41 +40,18 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		Cone();
+		C3D_API Cone();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		~Cone();
+		C3D_API ~Cone();
 		/**
-		 *\~english
-		 *\brief		Creation function, used by Factory
-		 *\return		A cone
-		 *\~french
-		 *\brief		Fonction de création utilisée par Factory
-		 *\return		Un cône
+		 *\copydoc		Castor3D::MeshGenerator::Create
 		 */
-		static MeshCategorySPtr Create();
-		/**
-		 *\~english
-		 *\brief		Generates the mesh points and faces
-		 *\~french
-		 *\brief		Génère les points et faces du mesh
-		 */
-		virtual void Generate();
-		/**
-		 *\~english
-		 *\brief		Modifies the mesh caracteristics then rebuild it
-		 *\param[in]	p_arrayFaces		The new wanted mesh faces number
-		 *\param[in]	p_arrayDimensions	The new wanted mesh dimensions
-		 *\~french
-		 *\brief		Modifie les caractéristiques du mesh et le reconstruit
-		 *\param[in]	p_arrayFaces		Tableau contenant les nombres de faces
-		 *\param[in]	p_arrayDimensions	Tableau contenant les dimensions du mesh
-		 */
-		virtual void Initialise( UIntArray const & p_arrayFaces, RealArray const & p_arrayDimensions );
+		C3D_API static MeshGeneratorSPtr Create();
 		/**
 		 *\~english
 		 *\brief		Retrieves number of faces
@@ -109,16 +82,12 @@ namespace Castor3D
 		{
 			return m_radius;
 		}
+
+	private:
 		/**
-		 *\~english
-		 *\brief		Stream operator
-		 *\~french
-		 *\brief		Operateur de flux
-		 */
-		inline friend std::ostream & operator <<( std::ostream & o, Cone const & c )
-		{
-			return o << "Cone(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
-		}
+		*\copydoc		Castor3D::MeshGenerator::DoGenerate
+		*/
+		C3D_API virtual void DoGenerate( Mesh & p_mesh, UIntArray const & p_faces, RealArray const & p_dimensions );
 
 	private:
 		//!\~english The number of faces	\~french Nombre de faces
@@ -127,9 +96,18 @@ namespace Castor3D
 		real m_height;
 		//!\~english  The cone radius	\~french Le rayon de la base
 		real m_radius;
+		friend std::ostream & operator <<( std::ostream & o, Cone const & c );
 	};
+	/**
+	 *\~english
+	 *\brief		Stream operator
+	 *\~french
+	 *\brief		Operateur de flux
+	 */
+	inline std::ostream & operator <<( std::ostream & o, Cone const & c )
+	{
+		return o << "Cone(" << c.m_nbFaces << "," << c.m_height << "," << c.m_radius << ")";
+	}
 }
-
-#pragma warning( pop )
 
 #endif

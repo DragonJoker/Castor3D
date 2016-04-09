@@ -1,13 +1,14 @@
-#include "Light.hpp"
+﻿#include "Light.hpp"
+
+#include "DirectionalLight.hpp"
+#include "Engine.hpp"
 #include "LightFactory.hpp"
+#include "Pipeline.hpp"
+#include "PointLight.hpp"
+#include "RenderSystem.hpp"
 #include "Scene.hpp"
 #include "SceneNode.hpp"
-#include "DirectionalLight.hpp"
-#include "PointLight.hpp"
 #include "SpotLight.hpp"
-#include "Engine.hpp"
-#include "RenderSystem.hpp"
-#include "Pipeline.hpp"
 
 #include <Factory.hpp>
 
@@ -15,154 +16,113 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Light::Light( Scene * p_pScene, LightFactory & p_factory, eLIGHT_TYPE p_eLightType )
-		:	MovableObject( p_pScene, eMOVABLE_TYPE_LIGHT )
-		,	Renderable< Light, LightRenderer >( p_pScene->GetEngine() )
-		,	m_enabled( false )
+	Light::Light( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node, LightFactory & p_factory, eLIGHT_TYPE p_lightType )
+		: MovableObject( p_name, p_scene, eMOVABLE_TYPE_LIGHT, p_node )
+		, m_enabled( false )
 	{
-		m_pCategory = p_factory.Create( p_eLightType );
+		m_pCategory = p_factory.Create( p_lightType );
 		m_pCategory->SetLight( this );
-		GetRenderer()->Initialise();
-	}
 
-	Light::Light( LightFactory & p_factory, Scene * p_pScene, SceneNodeSPtr p_pNode, String const & p_name, eLIGHT_TYPE p_eLightType )
-		:	MovableObject( p_pScene, p_pNode.get(), p_name, eMOVABLE_TYPE_LIGHT )
-		,	Renderable< Light, LightRenderer >( p_pScene->GetEngine() )
-		,	m_enabled( false )
-	{
-		m_pCategory = p_factory.Create( p_eLightType );
-		m_pCategory->SetLight( this );
-		m_pCategory->SetPositionType( Point4f( m_pSceneNode->GetPosition()[0], m_pSceneNode->GetPosition()[1], m_pSceneNode->GetPosition()[2], real( 0.0 ) ) );
-		GetRenderer()->Initialise();
+		if ( p_node )
+		{
+			m_pCategory->SetPositionType( Point4f( p_node->GetPosition()[0], p_node->GetPosition()[1], p_node->GetPosition()[2], real( 0.0 ) ) );
+		}
 	}
 
 	Light::~Light()
 	{
 	}
 
-	void Light::Enable()
+	void Light::Bind( PxBufferBase & p_texture, uint32_t p_index )
 	{
-		if ( ! m_pRenderer.expired() )
+		SceneNodeSPtr l_node = GetParent();
+
+		switch ( m_pCategory->GetLightType() )
 		{
-			m_pRenderer.lock()->Enable();
+		case eLIGHT_TYPE_DIRECTIONAL:
+			GetDirectionalLight()->Bind( p_texture, p_index );
+			break;
+
+		case eLIGHT_TYPE_POINT:
+			GetPointLight()->Bind( p_texture, p_index );
+			break;
+
+		case eLIGHT_TYPE_SPOT:
+			GetSpotLight()->Bind( p_texture, p_index );
+			break;
 		}
 	}
 
-	void Light::Disable()
-	{
-		if ( ! m_pRenderer.expired() )
-		{
-			m_pRenderer.lock()->Disable();
-		}
-	}
-
-	void Light::Enable( ShaderProgramBase * p_pProgram )
-	{
-		if ( ! m_pRenderer.expired() )
-		{
-			m_pRenderer.lock()->EnableShader( p_pProgram );
-		}
-	}
-
-	void Light::Disable( ShaderProgramBase * p_pProgram )
-	{
-		if ( ! m_pRenderer.expired() )
-		{
-			m_pRenderer.lock()->DisableShader( p_pProgram );
-		}
-	}
-
-	void Light::Render()
-	{
-		if ( ! m_pRenderer.expired() )
-		{
-			if ( m_pSceneNode )
-			{
-				Point3r l_position = m_pSceneNode->GetPosition();
-
-				switch ( m_pCategory->GetLightType() )
-				{
-				case eLIGHT_TYPE_DIRECTIONAL:
-					std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( l_position );
-					break;
-
-				case eLIGHT_TYPE_POINT:
-					std::static_pointer_cast< PointLight >( m_pCategory )->SetPosition( l_position );
-					break;
-
-				case eLIGHT_TYPE_SPOT:
-					std::static_pointer_cast< SpotLight >( m_pCategory )->SetPosition( l_position );
-					break;
-				}
-			}
-
-			m_pCategory->Render( m_pRenderer.lock() );
-		}
-	}
-
-	void Light::EndRender()
-	{
-		Disable();
-	}
-
-	void Light::Render( ShaderProgramBase * p_pProgram )
-	{
-		if ( ! m_pRenderer.expired() )
-		{
-			if ( m_pSceneNode )
-			{
-				Point3r l_position = m_pSceneNode->GetDerivedPosition();
-//				l_position = GetEngine()->GetRenderSystem()->GetPipeline()->GetMatrix( eMTXMODE_VIEW ) * l_position;
-
-				switch ( m_pCategory->GetLightType() )
-				{
-				case eLIGHT_TYPE_DIRECTIONAL:
-					std::static_pointer_cast< DirectionalLight >( m_pCategory )->SetDirection( l_position );
-					break;
-
-				case eLIGHT_TYPE_POINT:
-					std::static_pointer_cast< PointLight >( m_pCategory )->SetPosition( l_position );
-					break;
-
-				case eLIGHT_TYPE_SPOT:
-					std::static_pointer_cast< SpotLight >( m_pCategory )->SetPosition( l_position );
-					break;
-				}
-			}
-
-			m_pCategory->Render( m_pRenderer.lock(), p_pProgram );
-		}
-	}
-
-	void Light::EndRender( ShaderProgramBase * p_pProgram )
-	{
-		Disable( p_pProgram );
-	}
-
-	void Light::AttachTo( SceneNode * p_pNode )
+	void Light::AttachTo( SceneNodeSPtr p_node )
 	{
 		Point4f l_ptPosType = GetPositionType();
+		SceneNodeSPtr l_node = GetParent();
 
-		if ( m_pSceneNode )
+		if ( l_node )
 		{
-			m_pSceneNode->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
+			l_node->SetPosition( Point3r( l_ptPosType[0], l_ptPosType[1], l_ptPosType[2] ) );
 		}
 
-		MovableObject::AttachTo( p_pNode );
+		MovableObject::AttachTo( p_node );
+		l_node = GetParent();
 
-		if ( m_pSceneNode )
+		if ( l_node )
 		{
-			l_ptPosType[0] = float( m_pSceneNode->GetPosition()[0] );
-			l_ptPosType[1] = float( m_pSceneNode->GetPosition()[1] );
-			l_ptPosType[2] = float( m_pSceneNode->GetPosition()[2] );
+			m_notifyIndex = l_node->RegisterObject( std::bind( &Light::OnNodeChanged, this ) );
+			OnNodeChanged();
 		}
 		else
 		{
 			l_ptPosType[0] = 0;
 			l_ptPosType[1] = 0;
 			l_ptPosType[2] = 0;
+			m_pCategory->SetPositionType( l_ptPosType );
+		}
+	}
+
+	DirectionalLightSPtr Light::GetDirectionalLight()const
+	{
+		DirectionalLightSPtr l_return;
+
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_DIRECTIONAL )
+		{
+			l_return = std::static_pointer_cast< DirectionalLight >( m_pCategory );
 		}
 
+		return l_return;
+	}
+
+	PointLightSPtr Light::GetPointLight()const
+	{
+		PointLightSPtr l_return;
+
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_POINT )
+		{
+			l_return = std::static_pointer_cast< PointLight >( m_pCategory );
+		}
+
+		return l_return;
+	}
+
+	SpotLightSPtr Light::GetSpotLight()const
+	{
+		SpotLightSPtr l_return;
+
+		if ( m_pCategory->GetLightType() == eLIGHT_TYPE_SPOT )
+		{
+			l_return = std::static_pointer_cast< SpotLight >( m_pCategory );
+		}
+
+		return l_return;
+	}
+
+	void Light::OnNodeChanged()
+	{
+		SceneNodeSPtr l_node = GetParent();
+		Point4f l_ptPosType = GetPositionType();
+		l_ptPosType[0] = float( l_node->GetDerivedPosition()[0] );
+		l_ptPosType[1] = float( l_node->GetDerivedPosition()[1] );
+		l_ptPosType[2] = float( l_node->GetDerivedPosition()[2] );
 		m_pCategory->SetPositionType( l_ptPosType );
 	}
 }

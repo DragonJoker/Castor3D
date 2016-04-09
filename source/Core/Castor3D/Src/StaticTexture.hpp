@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Texture.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -34,82 +30,50 @@ namespace Castor3D
 	\remark		A static texture deletes it's buffer from ram when initialised
 	\~french
 	\brief		Class de texture statique
-	\remark		Une texture statique supprime son buffer de la ram quand elle est initialisée
+	\remark		Une texture statique supprime son buffer de la ram quand elle est initialisÃ©e
 	*/
-	class C3D_API StaticTexture
-		:	public TextureBase
+	class StaticTexture
+		: public Texture
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The render system.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le render system.
 		 */
-		StaticTexture( RenderSystem * p_pRenderSystem );
+		C3D_API StaticTexture( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~StaticTexture();
-		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_uiIndex		The texture index
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_uiIndex		L'index de la texture
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool Initialise( uint32_t p_uiIndex );
+		C3D_API virtual ~StaticTexture();
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array
 		 *\param[in]	p_dimensions	The texture dimensions
-		 *\param[in]	p_pBuffer		The buffer
+		 *\param[in]	p_buffer		The buffer
 		 *\~french
-		 *\brief		Définit le buffer de la texture, ainsi que ses dimensions, dans le cas de texture 2D ou tableau de textures
+		 *\brief		DÃ©finit le buffer de la texture, ainsi que ses dimensions, dans le cas de texture 2D ou tableau de textures
 		 *\param[in]	p_dimensions	Les dimensions de la texture
-		 *\param[in]	p_pBuffer		Le buffer
+		 *\param[in]	p_buffer		Le buffer
 		 */
-		void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_pBuffer );
+		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer );
 		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
-		virtual void Cleanup();
+		C3D_API virtual bool Initialise();
 		/**
-		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_uiIndex	The texture index
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_uiIndex	L'index de texture
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::Texture::Cleanup
 		 */
-		virtual bool Bind();
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\param[in]	p_uiIndex	The texture index
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 *\param[in]	p_uiIndex	L'index de texture
-		 */
-		virtual void Unbind();
+		C3D_API virtual void Cleanup();
 
-		using TextureBase::SetImage;
+		using Texture::SetImage;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

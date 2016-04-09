@@ -2,30 +2,40 @@
 #include "Size.hpp"
 
 #if defined( _WIN32 )
-#	if defined( _MSC_VER )
-#		pragma warning( push )
-#		pragma warning( disable:4311 )
-#		pragma warning( disable:4312 )
-#	endif
 #	include <Windows.h>
-#	if defined( _MSC_VER )
-#		pragma warning( pop )
-#	endif
+#else
+#	include <X11/Xlib.h>
 #endif
 
 #if defined( __GNUG__ )
-#	include <sys/time.h>
-#	include <errno.h>
-#	include <iostream>
-#	include <unistd.h>
-#	include <cerrno>
-#	if !defined( _WIN32 )
-#		include <X11/Xlib.h>
-#	endif
+
+#define cpuid( func, ax, bx, cx, dx )\
+	__asm__ __volatile__ ( "cpuid":\
+	"=a" (ax), "=b" (bx), "=c" (cx), "=d" (dx) : "a" (func));
+
+#elif defined( _MSC_VER )
+
+#define cpuid( func, a, b, c, d )\
+	asm {\
+		mov	eax, func\
+		cpuid\
+		mov	a, eax\
+		mov	b, ebx\
+		mov	c, ecx\
+		mov	d, edx\
+	}
 #endif
 
 namespace Castor
 {
+	namespace System
+	{
+		void Sleep( uint32_t p_uiTime )
+		{
+			std::this_thread::sleep_for( std::chrono::milliseconds( p_uiTime ) );
+		}
+	}
+
 #if defined( _WIN32 )
 	namespace System
 	{
@@ -54,30 +64,37 @@ namespace Castor
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
 			stSCREEN l_screen = { p_screen, 0, p_size };
-			BOOL bRet = ::EnumDisplayMonitors( NULL, NULL, MonitorEnum, WPARAM( &l_screen ) );
+			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, MonitorEnum, WPARAM( &l_screen ) );
 			return true;
 		}
 
 		Castor::String GetLastErrorText()
 		{
-			String l_strReturn;
 			DWORD l_dwError = GetLastError();
-			LPTSTR l_szError = NULL;
+			String l_strReturn = string::to_string( l_dwError );;
 
-			if ( l_dwError != ERROR_SUCCESS && ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, l_dwError, 0, LPTSTR( &l_szError ), 0, NULL ) != 0 )
+			if ( l_dwError != ERROR_SUCCESS )
 			{
-				l_strReturn = str_utils::to_string( l_dwError ) + cuT( " (" ) + l_szError + cuT( ")" );
-				str_utils::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
-				str_utils::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
-				LocalFree( l_szError );
+				LPTSTR l_szError = nullptr;
+
+				if ( ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, l_dwError, 0, LPTSTR( &l_szError ), 0, nullptr ) != 0 )
+				{
+					l_strReturn += cuT( " (" ) + String( l_szError ) + cuT( ")" );
+					string::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
+					string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+					LocalFree( l_szError );
+				}
+				else
+				{
+					l_strReturn += cuT( " (Unable to retrieve error text)" );
+				}
+			}
+			else
+			{
+				l_strReturn += cuT( " (No error)" );
 			}
 
 			return l_strReturn;
-		}
-
-		void Sleep( uint32_t p_uiTime )
-		{
-			::Sleep( p_uiTime );
 		}
 
 		uint8_t GetCPUCount()
@@ -101,10 +118,10 @@ namespace Castor
 	{
 		bool GetScreenSize( uint32_t p_screen, Castor::Size & p_size )
 		{
-			bool l_bReturn = false;
-			Display * pdsp = NULL;
-			Screen * pscr = NULL;
-			pdsp = XOpenDisplay( NULL );
+			bool l_return = false;
+			Display * pdsp = nullptr;
+			Screen * pscr = nullptr;
+			pdsp = XOpenDisplay( nullptr );
 
 			if ( !pdsp )
 			{
@@ -121,47 +138,37 @@ namespace Castor
 				else
 				{
 					p_size.set( pscr->width, pscr->height );
-					l_bReturn = true;
+					l_return = true;
 				}
 
 				XCloseDisplay( pdsp );
 			}
 
-			return l_bReturn;
+			return l_return;
 		}
 
 		String GetLastErrorText()
 		{
 			String l_strReturn;
 			int l_error = errno;
-			char * l_szError = NULL;
+			char * l_szError = nullptr;
 
-			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != NULL )
+			if ( l_error != 0 && ( l_szError = strerror( l_error ) ) != nullptr )
 			{
-				l_strReturn = str_utils::to_string( l_error ) + cuT( " (" ) + str_utils::from_str( l_szError ) + cuT( ")" );
-				str_utils::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
+				l_strReturn = string::to_string( l_error ) + cuT( " (" ) + string::string_cast< xchar >( l_szError ) + cuT( ")" );
+				string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
 			}
 
 			return l_strReturn;
-		}
-
-		void Sleep( uint32_t p_uiTime )
-		{
-			usleep( p_uiTime * 1000 );
 		}
 
 		uint8_t GetCPUCount()
 		{
 			char res[128];
 			FILE * fp = popen( "/bin/cat /proc/cpuinfo |grep -c '^processor'", "r" );
-			fread( res, 1, sizeof( res ) - 1, fp );
+			ENSURE( fread( res, 1, sizeof( res ) - 1, fp ) < sizeof( res ) );
 			pclose( fp );
 			return res[0];
-		}
-
-		void Localtime( std::tm * p_tm, time_t const * p_pTime )
-		{
-			p_tm = localtime( p_pTime );
 		}
 	}
 

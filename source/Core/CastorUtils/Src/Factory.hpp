@@ -19,12 +19,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CASTOR_FACTORY_H___
 
 #include "NonCopyable.hpp"
+#include "Exception.hpp"
 
 #include <type_traits>
 #include <functional>
 
 namespace Castor
 {
+	static const std::string ERROR_UNKNOWN_OBJECT = "Unknown object type";
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -38,12 +40,12 @@ namespace Castor
 	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
 				<br />static std::shared_ptr< Obj > Create();
 	*/
-	template< class Obj, class Key, typename Creator, class Predicate >
+	template< class Obj, class Key, class PtrType, typename Creator, class Predicate >
 	class Factory
 		: public Castor::NonCopyable
 	{
 	protected:
-		typedef std::shared_ptr< Obj > ObjPtr;
+		typedef PtrType ObjPtr;
 		typedef std::map< Key, Creator, Predicate > ObjMap;
 
 	public:
@@ -82,7 +84,37 @@ namespace Castor
 		{
 			m_registered.insert( std::make_pair( p_key, p_creator ) );
 		}
-#if CASTOR_HAS_VARIADIC_TEMPLATES
+		/**
+		 *\~english
+		 *\brief		Unregisters an object type
+		 *\param[in]	p_key		The object type
+		 *\~french
+		 *\brief		Désenregistre un type d'objet
+		 *\param[in]	p_key		Le type d'objet
+		 */
+		void Unregister( Key const & p_key )
+		{
+			auto l_it = m_registered.find( p_key );
+
+			if ( l_it != m_registered.end() )
+			{
+				m_registered.erase( p_key );
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Checks if the given object type is registered.
+		 *\param[in]	p_key	The object type.
+		 *\return		\p true if registered.
+		 *\~french
+		 *\brief		Vérifie si un type d'objet est enregistré.
+		 *\param[in]	p_key	Le type d'objet.
+		 *\return		\p true si enregistré.
+		 */
+		bool IsRegistered( Key const & p_key )
+		{
+			return m_registered.find( p_key ) != m_registered.end();
+		}
 		/**
 		 *\~english
 		 *\brief		Creates an object from a key
@@ -96,19 +128,22 @@ namespace Castor
 		 *\return		L'objet créé
 		 */
 		template< typename ... Parameters >
-		ObjPtr Create( Key const & p_key, Parameters && ... p_params )
+		ObjPtr Create( Key const & p_key, Parameters && ... p_params )const
 		{
 			ObjPtr l_return;
-			typename ObjMap::iterator l_it = m_registered.find( p_key );
+			auto l_it = m_registered.find( p_key );
 
 			if ( l_it != m_registered.end() )
 			{
 				l_return = l_it->second( std::forward< Parameters >( p_params )... );
 			}
+			else
+			{
+				CASTOR_EXCEPTION( ERROR_UNKNOWN_OBJECT );
+			}
 
 			return l_return;
 		}
-#endif
 
 	protected:
 		ObjMap m_registered;

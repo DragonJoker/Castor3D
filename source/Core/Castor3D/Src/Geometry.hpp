@@ -19,11 +19,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___C3D_GEOMETRY_H___
 
 #include "Castor3DPrerequisites.hpp"
-#include "MovableObject.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "MovableObject.hpp"
 
 namespace Castor3D
 {
@@ -36,8 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		Classe de gestion d'une géométrie affichable
 	*/
-	class C3D_API Geometry
-		:	public MovableObject
+	class Geometry
+		: public MovableObject
 	{
 	public:
 		/*!
@@ -49,8 +46,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader de Geometry
 		*/
-		class C3D_API TextLoader
-			:	public MovableObject::TextLoader
+		class TextLoader
+			: public MovableObject::TextLoader
 		{
 		public:
 			/**
@@ -63,7 +60,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\param[in]	p_geometry	La géométrie
 			 */
-			virtual bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Geometry const & p_geometry, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -73,8 +70,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de MovableObject
 		*/
-		class C3D_API BinaryParser
-			:	public MovableObject::BinaryParser
+		class BinaryParser
+			: public MovableObject::BinaryParser
 		{
 		public:
 			/**
@@ -85,7 +82,7 @@ namespace Castor3D
 			 *\brief		Constructeur
 			 *\param[in]	p_path	Le chemin d'accès au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -98,7 +95,7 @@ namespace Castor3D
 			 *\param[out]	p_chunk	Le chunk à remplir
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Fill( Geometry const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( Geometry const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -111,41 +108,41 @@ namespace Castor3D
 			 *\param[in]	p_chunk	Le chunk contenant les données
 			 *\return		\p false si une erreur quelconque est arrivée
 			 */
-			virtual bool Parse( Geometry & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( Geometry & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\remark		Not to be used by the user, use Scene::CreatePrimitive function
-		 *\param[in]	p_pScene	The parent scene
+		 *\remarks		Not to be used by the user, use Scene::CreatePrimitive function
+		 *\param[in]	p_name		The geometry name
+		 *\param[in]	p_scene		The parent scene
 		 *\param[in]	p_mesh		The mesh, default is nullptr
 		 *\param[in]	p_sn		The scene node to which the geometry is attached
-		 *\param[in]	p_name		The geometry name, default is void
 		 *\~french
 		 *\brief		Constructeur
-		 *\remark		A ne pas utiliser directement, utilisez Scene::CreatePrimitive
-		 *\param[in]	p_pScene	La scène parente
+		 *\remarks		A ne pas utiliser directement, utilisez Scene::CreatePrimitive
+		 *\param[in]	p_name		Nom de la géométrie
+		 *\param[in]	p_scene		La scène parente
 		 *\param[in]	p_mesh		Le maillage, par défaut nullptr
 		 *\param[in]	p_sn		Le scene node auquel la géométrie est attachée
-		 *\param[in]	p_name		Nom de la géométrie
 		 */
-		Geometry( Scene * p_pScene = NULL, MeshSPtr p_mesh = nullptr, SceneNodeSPtr p_sn = nullptr, Castor::String const & p_name = cuT( "" ) );
+		C3D_API Geometry( Castor::String const & p_name, Scene & p_scene, SceneNodeSPtr p_sn, MeshSPtr p_mesh = nullptr );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Geometry();
+		C3D_API virtual ~Geometry();
 		/**
 		 *\~english
 		 *\brief		Cleans all the object owned and created by the geometry
 		 *\~french
 		 *\brief		Nettoie tous les objets créés par la géométrie
 		 */
-		void Cleanup();
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *brief			Creates the mesh buffers
@@ -156,30 +153,30 @@ namespace Castor3D
 		 *\param[out]	p_nbFaces	Reçoit le nombre de faces du mesh
 		 *\param[out]	p_nbVertex	Reçoit le nombre de vertex du mesh
 		 */
-		void CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex );
+		C3D_API void CreateBuffers( uint32_t & p_nbFaces, uint32_t & p_nbVertex );
 		/**
 		 *\~english
 		 *\brief		Renders the geometry in a given display mode
 		 *\~french
 		 *\brief		Rend la géometrie dans un mode d'affichage donné
 		 */
-		virtual void Render();
+		C3D_API virtual void Render();
 		/**
 		 *\~english
 		 *\brief		End render function, dummy
 		 *\~french
 		 *\brief		Fonction de fin de rendu, inutilisée
 		 */
-		virtual void EndRender() {}
+		C3D_API virtual void EndRender() {}
 		/**
 		 *\~english
 		 *\brief		Defines this geometry's mesh
-		 *\param[in]	p_pMesh	The mesh
+		 *\param[in]	p_mesh	The mesh
 		 *\~french
 		 *\brief		Définit le maillage de la géométrie
-		 *\param[in]	p_pMesh	Le maillage
+		 *\param[in]	p_mesh	Le maillage
 		 */
-		void SetMesh( MeshSPtr p_pMesh );
+		C3D_API void SetMesh( MeshSPtr p_mesh );
 		/**
 		 *\~english
 		 *\brief		Retrieves the submesh material
@@ -190,7 +187,7 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage
 		 *\return		Le matériau
 		 */
-		MaterialSPtr GetMaterial( SubmeshSPtr p_submesh )const;
+		C3D_API MaterialSPtr GetMaterial( SubmeshSPtr p_submesh )const;
 		/**
 		 *\~english
 		 *\brief		Defines a submesh material
@@ -201,7 +198,7 @@ namespace Castor3D
 		 *\param[in]	p_submesh	Le sous-maillage
 		 *\param[in]	p_material	Le matériau
 		 */
-		void SetMaterial( SubmeshSPtr p_submesh, MaterialSPtr p_material );
+		C3D_API void SetMaterial( SubmeshSPtr p_submesh, MaterialSPtr p_material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the mesh
@@ -260,19 +257,19 @@ namespace Castor3D
 		 */
 		inline AnimatedObjectSPtr const & GetAnimatedObject()const
 		{
-			return m_pAnimatedObject;
+			return m_animatedObject;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the animated skeleton instance
-		 *\param[in]	p_pSkeleton	The new value
+		 *\param[in]	p_object	The new value
 		 *\~french
 		 *\brief		Définit l'instance animée du squelette
-		 *\param[in]	p_pSkeleton	La nouvelle valeur
+		 *\param[in]	p_object	La nouvelle valeur
 		 */
-		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_pObject )
+		inline void SetAnimatedObject( AnimatedObjectSPtr const & p_object )
 		{
-			m_pAnimatedObject = p_pObject;
+			m_animatedObject = p_object;
 		}
 
 	protected:
@@ -287,12 +284,10 @@ namespace Castor3D
 		//!\~english Tells if the geometry is visible	\~french Dit si la géométrie est visible
 		bool m_visible;
 		//!\~english The animated object instance, if any	\~french L'instance d'objet animé, s'il y en a un
-		AnimatedObjectSPtr m_pAnimatedObject;
+		AnimatedObjectSPtr m_animatedObject;
 		//!\~english The submeshes materials	\~french Les matériaux des sous maillages
 		std::map< SubmeshSPtr, MaterialSPtr > m_submeshesMaterials;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

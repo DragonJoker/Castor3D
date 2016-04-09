@@ -25,10 +25,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Coords.hpp>
 #include <Point.hpp>
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -42,7 +38,7 @@ namespace Castor3D
 	\brief		Représentation d'un vertex
 	\remark		Encadre un BufferElementGroup pour récupérer facilement la position d'un vertex, sa normale, sa tangente, ses coordonnées de texture, un indice
 	*/
-	class C3D_API Vertex
+	class Vertex
 	{
 	public:
 		/*!
@@ -54,8 +50,8 @@ namespace Castor3D
 		\~french
 		\brief Loader de Vertex
 		*/
-		class C3D_API TextLoader
-			: public Castor::Loader< Vertex, Castor::eFILE_TYPE_TEXT, Castor::TextFile >, public Castor::NonCopyable
+		class TextLoader
+			: public Castor::Loader< Vertex, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
 		{
 		public:
 			/**
@@ -64,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( Castor::File::eENCODING_MODE p_eEncodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Loads a Vertex object from a text file
@@ -77,7 +73,7 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( Castor3D::Vertex & p_object, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::Vertex & p_object, Castor::TextFile & p_file );
 			/**
 			 *\~english
 			 *\brief		Writes a Vertex object into a text file
@@ -90,7 +86,7 @@ namespace Castor3D
 			 *\param[out]	p_file		Le fichier
 			 *\return		\p true si ok
 			 */
-			virtual bool operator()( Castor3D::Vertex const & p_object, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( Castor3D::Vertex const & p_object, Castor::TextFile & p_file );
 		};
 
 	public:
@@ -102,7 +98,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_group		Le groupe encadré
 		 */
-		Vertex( BufferElementGroup & p_group );
+		C3D_API Vertex( BufferElementGroup & p_group );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -111,7 +107,7 @@ namespace Castor3D
 		 *\brief		Constructeur par copie
 		 *\param[in]	p_source		L'objet source
 		 */
-		Vertex( Vertex const & p_source );
+		C3D_API Vertex( Vertex const & p_source );
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator
@@ -122,14 +118,14 @@ namespace Castor3D
 		 *\param[in]	p_source		L'objet source
 		 *\return		Une référence sur cet objet
 		 */
-		Vertex & operator =( Vertex const & p_source );
+		C3D_API Vertex & operator=( Vertex const & p_source );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~Vertex();
+		C3D_API virtual ~Vertex();
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position
@@ -169,14 +165,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position
-		 *\param[in]	p_pCoords	The new value
+		 *\param[in]	p_coords	The new value
 		 *\~french
 		 *\brief		Définit la position du vertice
-		 *\param[in]	p_pCoords	La nouvelle valeur
+		 *\param[in]	p_coords	La nouvelle valeur
 		 */
-		inline void SetPosition( real const * p_pCoords )
+		inline void SetPosition( real const * p_coords )
 		{
-			SetPosition( m_group.ptr(), p_pCoords );
+			SetPosition( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -217,14 +213,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex normal
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la normale du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetNormal( real const * p_pCoords )
+		inline void SetNormal( real const * p_coords )
 		{
-			SetNormal( m_group.ptr(), p_pCoords );
+			SetNormal( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -265,14 +261,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la tangente du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetTangent( real const * p_pCoords )
+		inline void SetTangent( real const * p_coords )
 		{
-			SetTangent( m_group.ptr(), p_pCoords );
+			SetTangent( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -313,14 +309,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit la bitangente du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetBitangent( real const * p_pCoords )
+		inline void SetBitangent( real const * p_coords )
 		{
-			SetBitangent( m_group.ptr(), p_pCoords );
+			SetBitangent( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -361,14 +357,14 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates
-		 *\param[in]	p_pCoords	The data buffer
+		 *\param[in]	p_coords	The data buffer
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du vertex
-		 *\param[in]	p_pCoords	Le buffer de données
+		 *\param[in]	p_coords	Le buffer de données
 		 */
-		inline void SetTexCoord( real const * p_pCoords )
+		inline void SetTexCoord( real const * p_coords )
 		{
-			SetTexCoord( m_group.ptr(), p_pCoords );
+			SetTexCoord( m_group.ptr(), p_coords );
 		}
 		/**
 		 *\~english
@@ -673,523 +669,523 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetPosition( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetPosition( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetPosition( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetPosition( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static inline Castor::Coords3r & GetPosition( void * p_pBuffer, Castor::Coords3r & p_coord )
+		static inline Castor::Coords3r & GetPosition( void * p_buffer, Castor::Coords3r & p_coord )
 		{
-			return p_coord = GetPosition( p_pBuffer );
+			return p_coord = GetPosition( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex position from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la position d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetPosition( void const * p_pBuffer, Castor::Point3r & p_coord )
+		static Castor::Point3r & GetPosition( void const * p_buffer, Castor::Point3r & p_coord )
 		{
-			return p_coord = GetPosition( p_pBuffer );
+			return p_coord = GetPosition( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetNormal( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetNormal( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetNormal( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetNormal( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetNormal( void * p_pBuffer, Castor::Coords3r & p_coord )
+		static Castor::Coords3r & GetNormal( void * p_buffer, Castor::Coords3r & p_coord )
 		{
-			return p_coord = GetNormal( p_pBuffer );
+			return p_coord = GetNormal( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex normal from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la normale d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetNormal( void const * p_pBuffer, Castor::Point3r & p_coord )
+		static Castor::Point3r & GetNormal( void const * p_buffer, Castor::Point3r & p_coord )
 		{
-			return p_coord = GetNormal( p_pBuffer );
+			return p_coord = GetNormal( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetTangent( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetTangent( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetTangent( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetTangent( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetTangent( void * p_pBuffer, Castor::Coords3r & p_coord )
+		static Castor::Coords3r & GetTangent( void * p_buffer, Castor::Coords3r & p_coord )
 		{
-			return p_coord = GetTangent( p_pBuffer );
+			return p_coord = GetTangent( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex tangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la tangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetTangent( void const * p_pBuffer, Castor::Point3r & p_coord )
+		static Castor::Point3r & GetTangent( void const * p_buffer, Castor::Point3r & p_coord )
 		{
-			return p_coord = GetTangent( p_pBuffer );
+			return p_coord = GetTangent( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetBitangent( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetBitangent( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetBitangent( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetBitangent( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetBitangent( void * p_pBuffer, Castor::Coords3r & p_coord )
+		static Castor::Coords3r & GetBitangent( void * p_buffer, Castor::Coords3r & p_coord )
 		{
-			return p_coord = GetBitangent( p_pBuffer );
+			return p_coord = GetBitangent( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex bitangent from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère la bitangente d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetBitangent( void const * p_pBuffer, Castor::Point3r & p_coord )
+		static Castor::Point3r & GetBitangent( void const * p_buffer, Castor::Point3r & p_coord )
 		{
-			return p_coord = GetBitangent( p_pBuffer );
+			return p_coord = GetBitangent( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r GetTexCoord( void * p_pBuffer );
+		C3D_API static Castor::Coords3r GetTexCoord( void * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\return		La valeur
 		 */
-		static Castor::Point3r GetTexCoord( void const * p_pBuffer );
+		C3D_API static Castor::Point3r GetTexCoord( void const * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Coords3r & GetTexCoord( void * p_pBuffer, Castor::Coords3r & p_coord )
+		static Castor::Coords3r & GetTexCoord( void * p_buffer, Castor::Coords3r & p_coord )
 		{
-			return p_coord = GetTexCoord( p_pBuffer );
+			return p_coord = GetTexCoord( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves a vertex texture coordinates from a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[out]	p_coord		Receives the value
 		 *\return		The value
 		 *\~french
 		 *\brief		Récupère les coordonnées de texture d'un vertex à partir d'un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[out]	p_coord		Reçoit la valeur
 		 *\return		La valeur
 		 */
-		static Castor::Point3r & GetTexCoord( void const * p_pBuffer, Castor::Point3r & p_coord )
+		static Castor::Point3r & GetTexCoord( void const * p_buffer, Castor::Point3r & p_coord )
 		{
-			return p_coord = GetTexCoord( p_pBuffer );
+			return p_coord = GetTexCoord( p_buffer );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetPosition( void * p_pBuffer, Castor::Coords3r const & p_coord )
+		static inline void SetPosition( void * p_buffer, Castor::Coords3r const & p_coord )
 		{
-			SetPosition( p_pBuffer, p_coord.const_ptr() );
+			SetPosition( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetPosition( void * p_pBuffer, Castor::Point3r const & p_coord )
+		static inline void SetPosition( void * p_buffer, Castor::Point3r const & p_coord )
 		{
-			SetPosition( p_pBuffer, p_coord.const_ptr() );
+			SetPosition( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetPosition( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetPosition( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex position in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
 		 *\brief		Définit la position du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetPosition( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetPosition( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex normal in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetNormal( void * p_pBuffer, Castor::Coords3r const & p_coord )
+		static inline void SetNormal( void * p_buffer, Castor::Coords3r const & p_coord )
 		{
-			SetNormal( p_pBuffer, p_coord.const_ptr() );
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the vertex normal in a buffer
-		 *\param[in]	p_pBuffer	The buffer
-		 *\param[in]	p_coord		The new value
-		 *\~french
-		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
-		 *\param[in]	p_coord		La nouvelle valeur
-		 */
-		static inline void SetNormal( void * p_pBuffer, Castor::Point3r const & p_coord )
-		{
-			SetNormal( p_pBuffer, p_coord.const_ptr() );
+			SetNormal( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex normal in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetNormal( void * p_pBuffer, real const * p_coord );
+		static inline void SetNormal( void * p_buffer, Castor::Point3r const & p_coord )
+		{
+			SetNormal( p_buffer, p_coord.const_ptr() );
+		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex normal in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\param[in]	p_coord		The new value
+		 *\~french
+		 *\brief		Définit la normale du vertex dans un buffer
+		 *\param[in]	p_buffer	Le buffer
+		 *\param[in]	p_coord		La nouvelle valeur
+		 */
+		C3D_API static void SetNormal( void * p_buffer, real const * p_coord );
+		/**
+		 *\~english
+		 *\brief		Sets the vertex normal in a buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
 		 *\brief		Définit la normale du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetNormal( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetNormal( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTangent( void * p_pBuffer, Castor::Coords3r const & p_coord )
+		static inline void SetTangent( void * p_buffer, Castor::Coords3r const & p_coord )
 		{
-			SetTangent( p_pBuffer, p_coord.const_ptr() );
+			SetTangent( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTangent( void * p_pBuffer, Castor::Point3r const & p_coord )
+		static inline void SetTangent( void * p_buffer, Castor::Point3r const & p_coord )
 		{
-			SetTangent( p_pBuffer, p_coord.const_ptr() );
+			SetTangent( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetTangent( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetTangent( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex tangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
 		 *\brief		Définit la tangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetTangent( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetTangent( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetBitangent( void * p_pBuffer, Castor::Coords3r const & p_coord )
+		static inline void SetBitangent( void * p_buffer, Castor::Coords3r const & p_coord )
 		{
-			SetBitangent( p_pBuffer, p_coord.const_ptr() );
+			SetBitangent( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetBitangent( void * p_pBuffer, Castor::Point3r const & p_coord )
+		static inline void SetBitangent( void * p_buffer, Castor::Point3r const & p_coord )
 		{
-			SetBitangent( p_pBuffer, p_coord.const_ptr() );
+			SetBitangent( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetBitangent( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetBitangent( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex bitangent in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
 		 *\brief		Définit la bitangente du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetBitangent( void * p_pBuffer, real x, real y, real z );
+		C3D_API static void SetBitangent( void * p_buffer, real x, real y, real z );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( void * p_pBuffer, Castor::Coords3r const & p_coord )
+		static inline void SetTexCoord( void * p_buffer, Castor::Coords3r const & p_coord )
 		{
-			SetTexCoord( p_pBuffer, p_coord.const_ptr() );
+			SetTexCoord( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static inline void SetTexCoord( void * p_pBuffer, Castor::Point3r const & p_coord )
+		static inline void SetTexCoord( void * p_buffer, Castor::Point3r const & p_coord )
 		{
-			SetTexCoord( p_pBuffer, p_coord.const_ptr() );
+			SetTexCoord( p_buffer, p_coord.const_ptr() );
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	p_coord		The new value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	p_coord		La nouvelle valeur
 		 */
-		static void SetTexCoord( void * p_pBuffer, real const * p_coord );
+		C3D_API static void SetTexCoord( void * p_buffer, real const * p_coord );
 		/**
 		 *\~english
 		 *\brief		Sets the vertex texture coordinates in a buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_buffer	The buffer
 		 *\param[in]	x,y,z		The new value
 		 *\~french
 		 *\brief		Définit les coordonnées de texture du vertex dans un buffer
-		 *\param[in]	p_pBuffer	Le buffer
+		 *\param[in]	p_buffer	Le buffer
 		 *\param[in]	x,y,z		La nouvelle valeur
 		 */
-		static void SetTexCoord( void * p_pBuffer, real x, real y, real z = 0 );
+		C3D_API static void SetTexCoord( void * p_buffer, real x, real y, real z = 0 );
 		/**
 		 *\~english
 		 *\brief		Retrieves the group position
@@ -2071,7 +2067,7 @@ namespace Castor3D
 			SetTexCoord( p_element.ptr(), x, y, z );
 		}
 
-	protected:
+	private:
 		//!\~english Vertex position elements count	\~french Compte des élément de la position du vertex
 		static const uint32_t sm_uiCountPos = 3;
 		//!\~english Vertex normal elements count	\~french Compte des élément de la normale du vertex
@@ -2107,7 +2103,5 @@ namespace Castor3D
 		BufferElementGroup & m_group;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,14 +18,50 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_OVERLAY_MANAGER_H___
 #define ___C3D_OVERLAY_MANAGER_H___
 
+#include "ResourceManager.hpp"
 #include "Overlay.hpp"
+#include "OverlayFactory.hpp"
+#include "Viewport.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		04/02/2016
+	\version	0.8.0
+	\~english
+	\brief		Helper structure to get an object type name.
+	\~french
+	\brief		Structure permettant de r√©cup√©rer le nom du type d'un objet.
+	*/
+	template<> struct ManagedObjectNamer< Overlay >
+	{
+		C3D_API static const Castor::String Name;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
+	\date 		03/10/2015
+	\version	0.8.0
+	\~english
+	\brief		Structure used to sort overlays by order.
+	\~french
+	\brief		Structure utilis√©e pour trier les incrustations par ordre.
+	*/
+	struct OverlayCategorySort
+	{
+		/**
+		 *\~english
+		 *\brief		Comparison operator.
+		 *\~french
+		 *\brief		Op√©rateur de comparaison.
+		 */
+		bool operator()( OverlayCategorySPtr p_a, OverlayCategorySPtr p_b )
+		{
+			return p_a->GetLevel() < p_b->GetLevel() || ( p_a->GetLevel() == p_b->GetLevel() && p_a->GetIndex() < p_b->GetIndex() );
+		}
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		09/02/2010
@@ -33,14 +69,16 @@ namespace Castor3D
 	\~english
 	\brief		Overlay collection, with additional add and remove functions to manage Z-Index
 	\~french
-	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour gÈrer les Z-Index
+	\brief		Collection d'incrustations, avec des fonctions additionnelles d'ajout et de suppression pour g√©rer les Z-Index
 	*/
-	class C3D_API OverlayManager
-		:	private OverlayCollection
+	class OverlayManager
+		: public ResourceManager< Castor::String, Overlay >
 	{
 	public:
-		typedef OverlayCollectionIt			iterator;
-		typedef OverlayCollectionConstIt	const_iterator;
+		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapIt iterator;
+		typedef Castor::Collection< Overlay, Castor::String >::TObjPtrMapConstIt const_iterator;
+		typedef std::set< OverlayCategorySPtr, OverlayCategorySort > OverlayCategorySet;
+		DECLARE_MAP( Castor::String, FontTextureSPtr, FontTextureStr );
 
 	public:
 		/**
@@ -49,89 +87,218 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		OverlayManager( Engine * p_pEngine );
+		C3D_API OverlayManager( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~OverlayManager();
+		C3D_API ~OverlayManager();
 		/**
 		 *\~english
 		 *\brief		Clears all overlays lists
 		 *\~french
 		 *\brief		Vide les listes d'incrustations
 		 */
-		void ClearOverlays();
+		C3D_API void Clear();
 		/**
 		 *\~english
-		 *\brief		Add an overlay to the lists, given it's name
-		 *\param[in]	p_strName	The overlay name
-		 *\param[in]	p_pOverlay	The overlay
-		 *\param[in]	p_pParent	The parent overlay
+		 *\brief		Cleans all overlays up.
 		 *\~french
-		 *\brief		Ajoute une incrustation aux listes, selon son nom
-		 *\param[in]	p_strName	Le nom
-		 *\param[in]	p_pOverlay	L'incrustation
-		 *\param[in]	p_pParent	L'incrustation parente
+		 *\brief		Nettoie les incrustations.
 		 */
-		void AddOverlay( Castor::String const & p_strName, OverlaySPtr p_pOverlay, OverlaySPtr p_pParent );
+		C3D_API void Cleanup();
 		/**
 		 *\~english
-		 *\brief		Add an overlay to the lists, given it's z-index
-		 *\param[in]	p_iZIndex	The wanted z-index
-		 *\param[in]	p_pOverlay	The overlay
+		 *\brief		Removes an overlay from the lists.
+		 *\param[in]	p_name		The overlay name.
 		 *\~french
-		 *\brief		Ajoute une incrustation aux listes, selon son z-index
-		 *\param[in]	p_iZIndex	Le z-index voulu
-		 *\param[in]	p_pOverlay	L'incrustation
+		 *\brief		Enl√®ve une incrustation des listes.
+		 *\param[in]	p_name		Le nom de l'incrustation.
 		 */
-		void AddOverlay( int p_iZIndex, OverlaySPtr p_pOverlay );
+		C3D_API void Remove( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Checks if an overlay exists at given z-index
-		 *\param[in]	p_iZIndex	The z-index
-		 *\return		\p true if an overlay is defined at the given z-index
+		 *\brief		Creates an overlay, given a type and the overlay definitions
+		 *\remarks		If an overlay with the given name already exists, no creation is done, the return is the existing overlay
+		 *\param[in]	p_type		The overlay type (panel, text ...)
+		 *\param[in]	p_name	The overlay name
+		 *\param[in]	p_parent	The parent overlay, nullptr if none
+		 *\param[in]	p_scene	The scene that holds the overlay
+		 *\return		The created overlay
 		 *\~french
-		 *\brief		VÈrifie si une incrustation existe au z-index donnÈ
-		 *\param[in]	p_iZIndex	Le z-index
-		 *\return		\p true si un overlayest dÈfini au z-index donnÈ
+		 *\brief		Cr√©e un overlay
+		 *\remarks		Si un overlay avec le m√™me nom existe d√©j√†, aucune cr√©ation n'est faite, l'existant est retourn√©
+		 *\param[in]	p_type		Le type d'overlay
+		 *\param[in]	p_name	Le nom voulu pour l'overlay
+		 *\param[in]	p_parent	L'overlay parent, nullptr si aucun
+		 *\param[in]	p_scene	La sc√®ne contenant l'overlay
+		 *\return		L'overlay
 		 */
-		bool HasOverlay( int p_iZIndex );
+		C3D_API OverlaySPtr Create( Castor::String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene );
 		/**
 		 *\~english
-		 *\brief		Retrieves the overlay with the given name
-		 *\param[in]	p_strName	The name
-		 *\return		The overlay, \p nullptr if not found
+		 *\brief		Creates a panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position, relative to parent, or screen, if no parent.
+		 *\param[in]	p_size		The size, relative to parent, or screen, if no parent.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
 		 *\~french
-		 *\brief		RÈcupËre l'incrustation avec le nom donnÈ
-		 *\param[in]	p_strName	Le nom
-		 *\return		L'incrustation, \p nullptr si non trouvÈe
+		 *\brief		Cr√©e une incrustation panneau.
+		 *\remarks		Poste l'√©v√®nement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position relative au parent, ou √† l'√©cran, si pas de parent.
+		 *\param[in]	p_size		La taille relative au parent, ou √† l'√©cran, si pas de parent.
+		 *\param[in]	p_material	Le mat√©riau de l'incrustation.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi cr√©√©e.
 		 */
-		OverlaySPtr GetOverlay( Castor::String const & p_strName );
+		C3D_API PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
-		 *\brief		Retrieves the overlay at given z-index
-		 *\param[in]	p_iZIndex	The z-index
-		 *\return		The overlay, \p nullptr if not found
+		 *\brief		Creates a panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position in pixels, inside the parent, or screen if no parent.
+		 *\param[in]	p_size		The absolute size in pixels.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
 		 *\~french
-		 *\brief		RÈcupËre l'incrustation au z-index donnÈ
-		 *\param[in]	p_iZIndex	Le z-index
-		 *\return		L'incrustation, \p nullptr si non trouvÈe
+		 *\brief		Cr√©e une incrustation panneau.
+		 *\remarks		Poste l'√©v√®nement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position en pixels, dans le parent, ou l'√©cran, si pas de parent.
+		 *\param[in]	p_size		La taille absolue, en pixels.
+		 *\param[in]	p_material	Le mat√©riau de l'incrustation.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi cr√©√©e.
 		 */
-		OverlaySPtr GetOverlay( int p_iZIndex );
+		C3D_API PanelOverlaySPtr CreatePanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent = nullptr );
 		/**
 		 *\~english
-		 *\brief		Checks if an overlay with the given name exists
-		 *\param[in]	p_strName	The name
-		 *\return		\p true if an overlay is defined with given name
+		 *\brief		Creates a border panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name				The overlay name.
+		 *\param[in]	p_position			The position, relative to parent, or screen, if no parent.
+		 *\param[in]	p_size				The size, relative to parent, or screen, if no parent.
+		 *\param[in]	p_material			The overlay material.
+		 *\param[in]	p_bordersSize		The overlay borders size.
+		 *\param[in]	p_bordersMaterial	The overlay borders material.
+		 *\param[in]	p_parent			The parent overlay.
+		 *\return		The created overlay.
 		 *\~french
-		 *\brief		VÈrifie si une incrustation avec le nom donnÈ existe
-		 *\param[in]	p_strName	Le nom
-		 *\return		\p true Si une incrustation est dÈfini avec le nom donnÈ
+		 *\brief		Cr√©e une incrustation panneau bordur√©.
+		 *\remarks		Poste l'√©v√®nement d'initialisation au moteur.
+		 *\param[in]	p_name				Le nom de l'incrustation.
+		 *\param[in]	p_position			La position relative au parent, ou √† l'√©cran, si pas de parent.
+		 *\param[in]	p_size				La taille relative au parent, ou √† l'√©cran, si pas de parent.
+		 *\param[in]	p_material			Le mat√©riau de l'incrustation.
+		 *\param[in]	p_bordersSize		Les dimensions des bords de l'incrustation.
+		 *\param[in]	p_bordersMaterial	Le mat√©riau des bordures de l'incrustation.
+		 *\param[in]	p_parent			L'incrustation parente.
+		 *\return		L'incrustation ainsi cr√©√©e.
 		 */
-		bool HasOverlay( Castor::String const & p_strName );
+		C3D_API BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a panel overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name				The overlay name.
+		 *\param[in]	p_position			The position in pixels, inside the parent, or screen if no parent.
+		 *\param[in]	p_size				The absolute size in pixels.
+		 *\param[in]	p_material			The overlay material.
+		 *\param[in]	p_bordersSize		The overlay borders pixel size.
+		 *\param[in]	p_bordersMaterial	The overlay borders material.
+		 *\param[in]	p_parent			The parent overlay.
+		 *\return		The created overlay.
+		 *\brief		Cr√©e une incrustation panneau bordur√©.
+		 *\remarks		Poste l'√©v√®nement d'initialisation au moteur.
+		 *\param[in]	p_name				Le nom de l'incrustation.
+		 *\param[in]	p_position			La position en pixels, dans le parent, ou l'√©cran, si pas de parent.
+		 *\param[in]	p_size				La taille absolue, en pixels.
+		 *\param[in]	p_material			Le mat√©riau de l'incrustation.
+		 *\param[in]	p_bordersSize		Les dimensions des bords de l'incrustation.
+		 *\param[in]	p_bordersMaterial	Le mat√©riau des bordures de l'incrustation.
+		 *\param[in]	p_parent			L'incrustation parente.
+		 *\return		L'incrustation ainsi cr√©√©e.
+		 */
+		C3D_API BorderPanelOverlaySPtr CreateBorderPanel( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a text overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position, relative to parent, or screen, if no parent.
+		 *\param[in]	p_size		The size, relative to parent, or screen, if no parent.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_font		The font used to display the text.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
+		 *\~french
+		 *\brief		Cr√©e une incrustation texte.
+		 *\remarks		Poste l'√©v√®nement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position relative au parent, ou √† l'√©cran, si pas de parent.
+		 *\param[in]	p_size		La taille relative au parent, ou √† l'√©cran, si pas de parent.
+		 *\param[in]	p_material	Le mat√©riau de l'incrustation.
+		 *\param[in]	p_font		La police utilis√©e pour afficher le texte.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi cr√©√©e.
+		 */
+		C3D_API TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Point2d const & p_position, Castor::Point2d const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Creates a text overlay.
+		 *\remarks		Posts the intialisation event to the engine.
+		 *\param[in]	p_name		The overlay name.
+		 *\param[in]	p_position	The position in pixels, inside the parent, or screen if no parent.
+		 *\param[in]	p_size		The absolute size in pixels.
+		 *\param[in]	p_material	The overlay material.
+		 *\param[in]	p_font		The font used to display the text.
+		 *\param[in]	p_parent	The parent overlay.
+		 *\return		The created overlay.
+		 *\~french
+		 *\brief		Cr√©e une incrustation panneau.
+		 *\remarks		Poste l'√©v√®nement d'initialisation au moteur.
+		 *\param[in]	p_name		Le nom de l'incrustation.
+		 *\param[in]	p_position	La position en pixels, dans le parent, ou l'√©cran, si pas de parent.
+		 *\param[in]	p_size		La taille absolue, en pixels.
+		 *\param[in]	p_material	Le mat√©riau de l'incrustation.
+		 *\param[in]	p_font		La police utilis√©e pour afficher le texte.
+		 *\param[in]	p_parent	L'incrustation parente.
+		 *\return		L'incrustation ainsi cr√©√©e.
+		 */
+		C3D_API TextOverlaySPtr CreateText( Castor::String const & p_name, Castor::Position const & p_position, Castor::Size const & p_size, MaterialSPtr p_material, Castor::FontSPtr p_font, OverlaySPtr p_parent = nullptr );
+		/**
+		 *\~english
+		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
+		 *\~french
+		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
+		 */
+		C3D_API void UpdateRenderer();
+		/**
+		 *\~english
+		 *\brief		Updates overlays.
+		 *\~french
+		 *\brief		Met √† jour les incrustations.
+		 */
+		C3D_API void Update();
+		/**
+		 *\~english
+		 *\brief		Renders all visible overlays
+		 *\param[in]	p_scene	The scene displayed, to display its overlays and the global ones
+		 *\param[in]	p_size	The render target size
+		 *\~french
+		 *\brief		Fonction de rendu des overlays visibles
+		 *\param[in]	p_scene	La sc√®ne rendue, pour afficher ses overlays en plus des globaux
+		 *\param[in]	p_size	Les dimensions de la cible du rendu
+		 */
+		C3D_API void Render( Scene const & p_scene, Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a text file
@@ -140,20 +307,20 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ecrit les overlays dans un fichier texte
 		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÈ
+		 *\return		\p true si tout s'est bien pass√©
 		 */
-		bool WriteOverlays( Castor::TextFile & p_file )const;
+		C3D_API bool Write( Castor::TextFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads overlays from a text file
 		 *\param[in]	p_file	The file
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Lit les overlays ‡ partir d'un fichier texte
+		 *\brief		Lit les overlays √† partir d'un fichier texte
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÈ
+		 *\return		\p true si tout s'est bien pass√©
 		 */
-		bool ReadOverlays( Castor::TextFile & p_file );
+		C3D_API bool Read( Castor::TextFile & p_file );
 		/**
 		 *\~english
 		 *\brief		Writes overlays in a binary file
@@ -162,33 +329,48 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Ecrit les overlays dans un fichier binaire
 		 *\param[out]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÈ
+		 *\return		\p true si tout s'est bien pass√©
 		 */
-		bool SaveOverlays( Castor::BinaryFile & p_file )const;
+		C3D_API bool Save( Castor::BinaryFile & p_file )const;
 		/**
 		 *\~english
 		 *\brief		Reads overlays from a binary file
 		 *\param[in]	p_file	The file
 		 *\return		\p true if ok
 		 *\~french
-		 *\brief		Lit les overlays ‡ partir d'un fichier binaire
+		 *\brief		Lit les overlays √† partir d'un fichier binaire
 		 *\param[in]	p_file	Le fichier
-		 *\return		\p true si tout s'est bien passÈ
+		 *\return		\p true si tout s'est bien pass√©
 		 */
-		bool LoadOverlays( Castor::BinaryFile & p_file );
+		C3D_API bool Load( Castor::BinaryFile & p_file );
+		/**
+		*\~english
+		*\brief		Retrieves a FontTexture given a font name.
+		*\param[in]	p_name	The font name.
+		*\return		The FontTexture if it exist, nullptr if not.
+		*\~french
+		*\brief		R√©cup√®re une FontTexture, √† partir d'un nom de police.
+		*\param[in]	p_name	Le nom de la police.
+		*\return		La FontTexture si elle exite, nullptr sinon.
+		*/
+		C3D_API FontTextureSPtr GetFontTexture( Castor::String const & p_name );
 		/**
 		 *\~english
-		 *\brief		Initialises or cleans up the OverlayRenderer, according to engine rendering status
+		 *\brief		Creates a FontTexture from a font.
+		 *\param[in]	p_font	The font.
+		 *\return		The created FontTexture.
 		 *\~french
-		 *\brief		Initialise ou nettoie l'OverlayRenderer, selon le statut du rendu
+		 *\brief		Cr√©e une FontTexture, √† partir d'une police.
+		 *\param[in]	p_font	La police.
+		 *\return		La FontTexture cr√©√©e.
 		 */
-		void Update();
+		C3D_API FontTextureSPtr CreateFontTexture( Castor::FontSPtr p_font );
 		/**
 		 *\~english
 		 *\brief		Retrieves the overlay renderer
 		 *\return		The overlay renderer
 		 *\~french
-		 *\brief		RÈcupËre le renderer d'incrustation
+		 *\brief		R√©cup√®re le renderer d'incrustation
 		 *\return		Le renderer d'incrustation
 		 */
 		OverlayRendererSPtr GetRenderer()const
@@ -200,131 +382,107 @@ namespace Castor3D
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur la premiËre incrustation
+		 *\brief		R√©cup√®re un it√©rateur sur la premi√®re incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrIntMap::iterator Begin()
+		inline OverlayCategorySet::iterator begin()
 		{
-			return m_mapOverlaysByZIndex.begin();
+			return m_overlays.begin();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to the first overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur la premiËre incrustation
+		 *\brief		R√©cup√®re un it√©rateur sur la premi√®re incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrIntMap::const_iterator Begin()const
+		inline OverlayCategorySet::const_iterator begin()const
 		{
-			return m_mapOverlaysByZIndex.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur la premiËre incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayPtrIntMap::reverse_iterator RBegin()
-		{
-			return m_mapOverlaysByZIndex.rbegin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an iterator to the first overlay
-		 *\return		The value
-		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur la premiËre incrustation
-		 *\return		La valeur
-		 */
-		inline OverlayPtrIntMap::const_reverse_iterator RBegin()const
-		{
-			return m_mapOverlaysByZIndex.rbegin();
+			return m_overlays.begin();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur aprËs la derniËre incrustation
+		 *\brief		R√©cup√®re un it√©rateur sur apr√®s la derni√®re incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrIntMap::iterator End()
+		inline OverlayCategorySet::iterator end()
 		{
-			return m_mapOverlaysByZIndex.end();
+			return m_overlays.end();
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves an iterator to after the last overlay
 		 *\return		The value
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur aprËs la derniËre incrustation
+		 *\brief		R√©cup√®re un it√©rateur sur apr√®s la derni√®re incrustation
 		 *\return		La valeur
 		 */
-		inline OverlayPtrIntMap::const_iterator End()const
+		inline OverlayCategorySet::const_iterator end()const
 		{
-			return m_mapOverlaysByZIndex.end();
+			return m_overlays.end();
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to after the last overlay
-		 *\return		The value
+		 *\brief		Retrieves the Overlay factory
+		 *\return		The factory
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur aprËs la derniËre incrustation
-		 *\return		La valeur
+		 *\brief		R√©cup√®re la fabrique d'Overlay
+		 *\return		La fabrique
 		 */
-		inline OverlayPtrIntMap::reverse_iterator REnd()
+		inline OverlayFactory const & GetOverlayFactory()const
 		{
-			return m_mapOverlaysByZIndex.rend();
+			return m_overlayFactory;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves an iterator to after the last overlay
-		 *\return		The value
+		 *\brief		Retrieves the Overlay factory
+		 *\return		The factory
 		 *\~french
-		 *\brief		RÈcupËre un itÈrateur sur aprËs la derniËre incrustation
-		 *\return		La valeur
+		 *\brief		R√©cup√®re la fabrique d'Overlay
+		 *\return		La fabrique
 		 */
-		inline OverlayPtrIntMap::const_reverse_iterator REnd()const
+		inline OverlayFactory & GetFactory()
 		{
-			return m_mapOverlaysByZIndex.rend();
+			return m_overlayFactory;
 		}
-		/**
-		 *\~english
-		 *\brief		Begins the overlays rendering
-		 *\param[in]	p_size	The render window size
-		 *\~french
-		 *\brief		Commence le rendu des incrustations
-		 *\param[in]	p_size	La taille de la fenÍtre de rendu
-		 */
-		void BeginRendering( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Ends the overlays rendering
-		 *\~french
-		 *\brief		Termine le rendu des incrustations
-		 */
-		void EndRendering();
-
-		using OverlayCollection::lock;
-		using OverlayCollection::unlock;
 
 	private:
-		//!\~english Current available Z index	\~french Z index disponible
-		int m_iCurrentZIndex;
-		//!\~english The overlays, sorted by Z index	\~french Les incrustations, triÈes par Z index
-		OverlayPtrIntMap m_mapOverlaysByZIndex;
-		//!\~english The engine	\~french Le moteur
-		Engine * m_pEngine;
+		/**
+		 *\~english
+		 *\brief		Add an overlay to the lists, given it's name
+		 *\param[in]	p_name		The overlay name
+		 *\param[in]	p_overlay	The overlay
+		 *\param[in]	p_parent	The parent overlay
+		 *\~french
+		 *\brief		Ajoute une incrustation aux listes, selon son nom
+		 *\param[in]	p_name		Le nom
+		 *\param[in]	p_overlay	L'incrustation
+		 *\param[in]	p_parent	L'incrustation parente
+		 */
+		C3D_API void DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent );
+
+	private:
+		//!\~english The OverlayCategory factory	\~french La fabrique de OverlayCategory
+		OverlayFactory m_overlayFactory;
+		//!\~english The overlays, in rendering order.	\~french Les incrustations, dans l'ordre de rendu.
+		OverlayCategorySet m_overlays;
 		//!\~english The overlay renderer	\~french le renderer d'incrustation
 		OverlayRendererSPtr m_pRenderer;
+		//!\~english The rendering viewport.	\~french Le viewport de rendu.
+		Viewport m_viewport;
+		//!\~english The overlay count, per level	\~french Le nombre d'incrustations par niveau
+		std::vector< int > m_overlayCountPerLevel;
+		//!\~english The pojection matrix.	\~french La matrice de projection.
+		Castor::Matrix4x4r m_projection;
+		//!\~english The FontTextures, sorted by font name.	\~french Les FontTexutrs, tri√©es par nom de policce.
+		FontTextureStrMap m_fontTextures;
 	};
-	typedef OverlayManager::iterator		OverlayManagerIt;
-	typedef OverlayManager::const_iterator	OverlayManagerConstIt;
+	typedef OverlayManager::iterator OverlayManagerIt;
+	typedef OverlayManager::const_iterator OverlayManagerConstIt;
 }
-
-#pragma warning( pop )
 
 #endif

@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,10 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Texture.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -34,80 +30,62 @@ namespace Castor3D
 	\remark		A dynamic texture can update it's buffer
 	\~french
 	\brief		Class de texture dynamique
-	\remark		Une texture statique peut mettre à jour son buffer
+	\remark		Une texture statique peut mettre Ã  jour son buffer
 	*/
-	class C3D_API DynamicTexture
-		:	public TextureBase
+	class DynamicTexture
+		: public Texture
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The render system
+		 *\brief		Constructor.
+		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	Le render system
+		 *\brief		Constructeur.
+		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_cpuAccess		Les accÃ¨s requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accÃ¨s requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		DynamicTexture( RenderSystem * p_pRenderSystem );
+		C3D_API DynamicTexture( RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DynamicTexture();
+		C3D_API virtual ~DynamicTexture();
 		/**
-		 *\~english
-		 *\brief		Initialisation function
-		 *\param[in]	p_uiIndex		The texture index
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction d'initialisation
-		 *\param[in]	p_uiIndex		L'index de la texture
-		 *\return		\p true si tout s'est bien passé
+		 *\copydoc		Castor3D::Texture::Initialise
 		 */
-		virtual bool Initialise( uint32_t p_uiIndex );
+		C3D_API virtual bool Initialise();
 		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
+		 *\copydoc		Castor3D::Texture::Cleanup
 		 */
-		virtual void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\return		\p true if successful
-		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\return		\p true si tout s'est bien passé
-		 */
-		virtual bool Bind();
-		/**
-		 *\~english
-		 *\brief		Deactivation function, to tell the GPU it is inactive
-		 *\~french
-		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
-		 */
-		virtual void Unbind();
+		C3D_API virtual void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_size		The buffer dimensions
+		 *\param[in]	p_format	The buffer format
 		 *\~french
-		 *\brief		Définit le buffer de la texture
-		 *\param[in]	p_pBuffer	The buffer
+		 *\brief		DÃ©finit le buffer de la texture
+		 *\param[in]	p_size		La taille du tampon
+		 *\param[in]	p_format	Le format du tampon
 		 */
-		void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Defines the 3D texture buffer
-		 *\param[in]	p_pBuffer	The buffer
+		 *\param[in]	p_size		The buffer dimensions
+		 *\param[in]	p_format	The buffer format
 		 *\~french
-		 *\brief		Définit le buffer de la texture 3D
-		 *\param[in]	p_pBuffer	The buffer
+		 *\brief		DÃ©finit le buffer de la texture 3D
+		 *\param[in]	p_size		La taille du tampon
+		 *\param[in]	p_format	Le format du tampon
 		 */
-		void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_ePixelFormat );
+		C3D_API void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Resizes the texture buffer
@@ -116,7 +94,7 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		virtual void Resize( Castor::Size const & p_size );
+		C3D_API virtual void Resize( Castor::Size const & p_size );
 		/**
 		 *\~english
 		 *\brief		Resizes the 3D texture buffer
@@ -125,93 +103,79 @@ namespace Castor3D
 		 *\brief		Redimensionne le buffer de la texture 3D
 		 *\param[in]	p_size	La nouvelle taille
 		 */
-		virtual void Resize( Castor::Point3ui const & p_size );
+		C3D_API virtual void Resize( Castor::Point3ui const & p_size );
 		/**
 		 *\~english
-		 *\brief		Retrieves the render target status
-		 *\return		The status
+		 *\brief		Retrieves the render target
+		 *\return		The target
 		 *\~french
-		 *\brief		Récupère le statut de cible de rendu
-		 *\return		Le statut
+		 *\brief		RÃ©cupÃ¨re la cible de rendu
+		 *\return		La cible
 		 */
-		inline bool	IsRenderTarget()const
+		inline RenderTargetSPtr	GetRenderTarget()const
 		{
-			return m_bRenderTarget;
+			return m_renderTarget.lock();
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the render target status
-		 *\param[in]	val	The status
+		 *\brief		Defines the render target
+		 *\param[in]	p_target	The target
 		 *\~french
-		 *\brief		Définit le statut de cible de rendu
-		 *\param[in]	val	Le statut
+		 *\brief		DÃ©finit la cible de rendu
+		 *\param[in]	p_target	La cible
 		 */
-		inline void SetRenderTarget( bool val )
+		inline void SetRenderTarget( RenderTargetSPtr p_target )
 		{
-			m_bRenderTarget = val;
+			m_renderTarget = p_target;
 		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the samples count
 		 *\return		The samples count
 		 *\~french
-		 *\brief		Récupère le nombre de samples
+		 *\brief		RÃ©cupÃ¨re le nombre de samples
 		 *\return		Le nombre de samples
 		 */
 		inline int	GetSamplesCount()const
 		{
-			return m_iSamplesCount;
+			return m_samplesCount;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the samples count
-		 *\param[in]	val	The samples count
+		 *\param[in]	p_count	The samples count
 		 *\~french
-		 *\brief		Définit le nombre de samples
-		 *\param[in]	val	Le nombre de samples
+		 *\brief		DÃ©finit le nombre de samples
+		 *\param[in]	p_count	Le nombre de samples
 		 */
-		inline void SetSamplesCount( int p_iCount )
+		inline void SetSamplesCount( int p_count )
 		{
-			m_iSamplesCount = p_iCount;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the unit index
-		 *\param[in]	p_uiIndex	The new value
-		 *\~french
-		 *\brief		Définit l'index de l'unité
-		 *\param[in]	p_uiIndex	La nouvelle valeur
-		 */
-		inline void SetIndex( uint32_t p_uiIndex )
-		{
-			m_uiIndex = p_uiIndex;
+			m_samplesCount = p_count;
 		}
 		/**
 		 *\~english
 		 *\brief		Sends the given image buffer to the driver
-		 *\remark		Doesn't update the internal buffer, so either never use it or always use it
-		 *\param[in]	p_pBuffer	The image buffer
+		 *\remarks		Doesn't update the internal buffer, so either never use it or always use it
+		 *\param[in]	p_buffer	The image buffer
 		 *\param[in]	p_size		The image resolution
-		 *\param[in]	p_eFormat	The image pixel format
+		 *\param[in]	p_format	The image pixel format
 		 *\~french
 		 *\brief		Envoie le buffer d'image au driver
-		 *\remark		Ne met pas à jour le buffer interne, donc ne l'utilisez jamais ou utilisez la tout le temps
-		 *\param[in]	p_pBuffer	Le buffer d'image
+		 *\remarks		Ne met pas Ã  jour le buffer interne, donc ne l'utilisez jamais ou utilisez la tout le temps
+		 *\param[in]	p_buffer	Le buffer d'image
 		 *\param[in]	p_size		Les dimensions de l'image
-		 *\param[in]	p_eFormat	Le format des pixels de l'image
+		 *\param[in]	p_format	Le format des pixels de l'image
 		 */
-		virtual void Fill( uint8_t const * p_pBuffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_eFormat ) = 0;
+		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
 
-		using TextureBase::SetImage;
+		using Texture::SetImage;
 
 	private:
-		//!\~english Tells that the texture needs to be initialised as a render target	\~french Dit qu e la texture doit être initialiséée en tant que render target
-		bool m_bRenderTarget;
-		//!\~english The samples count, if it is a multisample texture	\~french Le nombre de samples dans le cas où c'est une texture multisample
-		int m_iSamplesCount;
+		//!\~english The texture render target	\~french La cible de rendu
+		RenderTargetWPtr m_renderTarget;
+		//!\~english The samples count, if it is a multisample texture	\~french Le nombre de samples dans le cas oÃ¹ c'est une texture multisample
+		int m_samplesCount;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

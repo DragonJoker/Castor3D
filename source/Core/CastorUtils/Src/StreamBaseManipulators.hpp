@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -125,10 +125,10 @@ namespace Castor
 		 *\param[in]	stream	Le flux
 		 *\param[in]	manip	Le manipulateur
 		 */
-		inline std::ostream & operator<<( std::ostream & os, const manip::base_manip & manip )
+		inline std::ostream & operator<<( std::ostream & stream, const manip::base_manip & manip )
 		{
-			manip.apply( os );
-			return os;
+			manip.apply( stream );
+			return stream;
 		}
 
 		/**
@@ -143,12 +143,11 @@ namespace Castor
 		 *\param[in]	stream	Le flux
 		 *\param[in]	manip	Le manipulateur
 		 */
-		inline std::wostream & operator<<( std::wostream & os, const manip::wbase_manip & manip )
+		inline std::wostream & operator<<( std::wostream & stream, const manip::wbase_manip & manip )
 		{
-			manip.apply( os );
-			return os;
+			manip.apply( stream );
+			return stream;
 		}
-
 		/*!
 		\author		Sylvain DOREMUS
 		\version	0.7.0.0
@@ -216,7 +215,7 @@ namespace Castor
 
 				// We want to conver the base, so do it and output.
 
-				int digits[CHAR_BIT * sizeof( NumType )];
+				int digits[CHAR_BIT * sizeof( NumType )] = { 0 };
 				int i = 0;
 				NumType tempVal = absVal( val );
 

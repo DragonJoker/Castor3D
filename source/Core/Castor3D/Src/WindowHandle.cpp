@@ -1,26 +1,26 @@
-#include "WindowHandle.hpp"
+﻿#include "WindowHandle.hpp"
 
 using namespace Castor;
 
 namespace Castor3D
 {
 	WindowHandle::WindowHandle()
-		:	m_pHandle()
+		: m_pHandle()
 	{
 	}
 
 	WindowHandle::WindowHandle( IWindowHandleSPtr p_pHandle )
-		:	m_pHandle( p_pHandle )
+		: m_pHandle( p_pHandle )
 	{
 	}
 
 	WindowHandle::WindowHandle( WindowHandle const & p_handle )
-		:	m_pHandle( p_handle.m_pHandle )
+		: m_pHandle( p_handle.m_pHandle )
 	{
 	}
 
 	WindowHandle::WindowHandle( WindowHandle && p_handle )
-		:	m_pHandle( std::move( p_handle.m_pHandle ) )
+		: m_pHandle( std::move( p_handle.m_pHandle ) )
 	{
 		p_handle.m_pHandle.reset();
 	}

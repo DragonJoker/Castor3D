@@ -53,11 +53,11 @@ namespace Castor
 		 *\param[in]	p_function		Le nom de la fonction
 		 *\param[in]	p_line			Le numéro de ligne
 		 */
-		Exception(	std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
-			:	m_line( p_line	)
-			,	m_description( p_description	)
-			,	m_filename( p_file ? p_file : ""	)
-			,	m_functionName( p_function ? p_function : ""	)
+		Exception( std::string const & p_description, char const * p_file, char const * p_function, uint32_t p_line )
+			: m_line( p_line )
+			, m_description( p_description )
+			, m_filename( p_file ? p_file : "" )
+			, m_functionName( p_function ? p_function : "" )
 		{
 		}
 		/**
@@ -77,7 +77,7 @@ namespace Castor
 		 *\brief		Récupère la description de l'exception
 		 *\return		La description de l'exception
 		 */
-		inline virtual char const *	what()const throw()
+		virtual char const * what()const throw()
 		{
 			return m_description.c_str();
 		}
@@ -202,6 +202,6 @@ namespace Castor
 \~french
 \brief		Macro définie pour faciliter l'utilisation de Castor::Exception
 */
-#	define CASTOR_EXCEPTION( p_text ) throw Castor::Exception( (p_text), __FILE__, __FUNCTION__, __LINE__ )
+#define CASTOR_EXCEPTION( p_text ) throw Castor::Exception( (p_text), __FILE__, __FUNCTION__, __LINE__ )
 
 #endif

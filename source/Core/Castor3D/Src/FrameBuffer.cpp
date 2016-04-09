@@ -15,8 +15,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	FrameBuffer::FrameBuffer( Engine * p_pEngine )
-		:	m_pEngine( p_pEngine )
+	FrameBuffer::FrameBuffer( Engine & p_engine )
+		: OwnedBy< Engine >( p_engine )
 	{
 	}
 
@@ -24,194 +24,283 @@ namespace Castor3D
 	{
 	}
 
-	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_eMode, eFRAMEBUFFER_TARGET p_eTarget )
+	bool FrameBuffer::Initialise( Castor::Size const & p_size )
 	{
-		bool l_bReturn = DoBind( p_eTarget );
+		return true;
+	}
 
-		if ( l_bReturn && m_arrayAttaches.size() && p_eMode == eFRAMEBUFFER_MODE_AUTOMATIC )
+	void FrameBuffer::Cleanup()
+	{
+	}
+
+	void FrameBuffer::SetClearColour( Castor::Colour const & p_clrClear )
+	{
+		m_clearColour = p_clrClear;
+	}
+
+	void FrameBuffer::Clear()
+	{
+		uint32_t l_targets = 0;
+
+		for ( auto && l_attach : m_attaches )
 		{
-			SetDrawBuffers( m_arrayAttaches );
+			if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
+			{
+				l_targets |= eBUFFER_COMPONENT_COLOUR;
+			}
+			else if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_DEPTH )
+			{
+				l_targets |= eBUFFER_COMPONENT_DEPTH;
+			}
+			else if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_STENCIL )
+			{
+				l_targets |= eBUFFER_COMPONENT_STENCIL;
+			}
 		}
 
-		return l_bReturn;
+		DoClear( l_targets );
+	}
+
+	bool FrameBuffer::Bind( eFRAMEBUFFER_MODE p_mode, eFRAMEBUFFER_TARGET p_target )
+	{
+		bool l_return = DoBind( p_target );
+
+		if ( l_return && !m_attaches.empty() && p_mode == eFRAMEBUFFER_MODE_AUTOMATIC )
+		{
+			SetDrawBuffers( m_attaches );
+		}
+
+		return l_return;
 	}
 
 	void FrameBuffer::Unbind()
 	{
+#if DEBUG_BUFFERS
+
+		if ( !m_attaches.empty() )
+		{
+			for ( auto && l_attach : m_attaches )
+			{
+				if ( l_attach->GetAttachmentPoint() == eATTACHMENT_POINT_COLOUR )
+				{
+					PxBufferBaseSPtr l_buffer = l_attach->GetBuffer();
+
+					if ( l_buffer && DownloadBuffer( l_attach->GetAttachmentPoint(), l_attach->GetAttachmentIndex(), l_buffer ) )
+					{
+						StringStream l_name;
+						l_name << Engine::GetEngineDirectory() << cuT( "\\ColourBuffer_" ) << ( void * )l_buffer.get() << cuT( "_FBA_Unbind.png" );
+						Image::BinaryLoader()( Image( cuT( "tmp" ), *l_buffer ), l_name.str() );
+					}
+				}
+			}
+		}
+
+#endif
+
 		DoUnbind();
 	}
 
-	void FrameBuffer::Attach( RenderBufferAttachmentRPtr p_pAttach )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
 	{
-		DoAttach( p_pAttach );// the renderer virtual function
-		DoRboAttach( p_pAttach->GetAttachmentPoint(), p_pAttach->GetRenderBuffer() );
+		p_texture->SetTarget( p_target );
+		p_texture->SetLayer( p_layer );
+		return DoAttach( p_point, p_index, p_texture );
 	}
 
-	void FrameBuffer::Detach( RenderBufferAttachmentRPtr p_pAttach )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
 	{
-		DoDetach( p_pAttach->GetAttachmentPoint() );
-		DoDetach( p_pAttach );// the renderer virtual function
+		return Attach( p_point, 0, p_texture, p_target, p_layer );
 	}
 
-	void FrameBuffer::Attach( TextureAttachmentRPtr p_pAttach )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		DoAttach( p_pAttach );// the renderer virtual function
-		DoTexAttach( p_pAttach->GetAttachmentPoint(), p_pAttach->GetTexture() );
+		return DoAttach( p_point, p_index, p_renderBuffer );
 	}
 
-	void FrameBuffer::Detach( TextureAttachmentRPtr p_pAttach )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, RenderBufferAttachmentSPtr p_renderBuffer )
 	{
-		DoDetach( p_pAttach->GetAttachmentPoint() );
-		DoDetach( p_pAttach );// the renderer virtual function
+		return Attach( p_point, 0, p_renderBuffer );
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_eAttachment, DynamicTextureSPtr p_pTexture, eTEXTURE_TARGET p_eTarget, int p_iLayer )
+	FrameBufferAttachmentSPtr FrameBuffer::GetAttachment( eATTACHMENT_POINT p_point, uint8_t p_index )
 	{
-		bool l_bReturn = DoAttach( p_eAttachment, p_pTexture, p_eTarget, p_iLayer );
-
-		if ( l_bReturn )
+		auto l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point, &p_index]( FrameBufferAttachmentSPtr p_attach )
 		{
-			DoTexAttach( p_eAttachment, p_pTexture );
+			return p_attach->GetAttachmentIndex() == p_index && p_attach->GetAttachmentPoint() == p_point;
+		} );
+
+		FrameBufferAttachmentSPtr l_return;
+
+		if ( l_it != m_attaches.end() )
+		{
+			l_return = *l_it;
 		}
 
-		return l_bReturn;
-	}
-
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_eAttachment, RenderBufferSPtr p_pRenderBuffer )
-	{
-		bool l_bReturn = DoAttach( p_eAttachment, p_pRenderBuffer );
-
-		if ( l_bReturn )
-		{
-			DoRboAttach( p_eAttachment, p_pRenderBuffer );
-		}
-
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FrameBuffer::DetachAll()
 	{
-		DoDetachAll();
-		m_arrayAttaches.clear();
-		m_mapRbo.clear();
-		m_mapTex.clear();
+		for ( auto l_attach : m_attaches )
+		{
+			l_attach->Detach();
+		}
+
+		m_attaches.clear();
 	}
 
 	void FrameBuffer::Resize( Castor::Size const & p_size )
 	{
-		std::for_each( m_mapRbo.begin(), m_mapRbo.end(), [&]( std::pair< eATTACHMENT_POINT, RenderBufferSPtr > p_pair )
+		for ( auto && l_attach : m_attaches )
 		{
-			p_pair.second->Resize( p_size );
-		} );
-		std::for_each( m_mapTex.begin(), m_mapTex.end(), [&]( std::pair< eATTACHMENT_POINT, DynamicTextureSPtr > p_pair )
-		{
-			p_pair.second->Resize( p_size );
-		} );
-	}
-
-	bool FrameBuffer::BlitInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_uiComponents )
-	{
-		bool l_bReturn = p_pBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
-
-		if ( l_bReturn )
-		{
-			l_bReturn = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
-		}
-
-		if ( l_bReturn )
-		{
-			l_bReturn = DoStretchInto( p_pBuffer, p_rectSrcDst, p_rectSrcDst, p_uiComponents, eINTERPOLATION_MODE_NEAREST );
-			p_pBuffer->Unbind();
-		}
-
-		return l_bReturn;
-	}
-
-	bool FrameBuffer::StretchInto( FrameBufferSPtr p_pBuffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_uiComponents, eINTERPOLATION_MODE p_eInterpolation )
-	{
-		bool l_bReturn = p_pBuffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
-
-		if ( l_bReturn )
-		{
-			l_bReturn = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
-
-			if ( l_bReturn )
+			if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 			{
-				l_bReturn = DoStretchInto( p_pBuffer, p_rectSrc, p_rectDst, p_uiComponents, p_eInterpolation );
+				std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture()->Resize( p_size );
+			}
+			else
+			{
+				std::static_pointer_cast< RenderBufferAttachment >( l_attach )->GetRenderBuffer()->Resize( p_size );
+			}
+		}
+	}
+
+	bool FrameBuffer::BlitInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrcDst, uint32_t p_components )
+	{
+		bool l_return = p_buffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
+
+		if ( l_return )
+		{
+			l_return = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
+
+			if ( l_return )
+			{
+				l_return = DoBlitInto( p_buffer, p_rectSrcDst, p_components );
 				Unbind();
 			}
 
-			p_pBuffer->Unbind();
+			p_buffer->Unbind();
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
-	void FrameBuffer::RenderToBuffer( FrameBufferSPtr p_pBuffer, Size const & p_sizeDst, uint32_t p_uiComponents, DepthStencilStateSPtr p_pDepthStencilState, RasteriserStateSPtr p_pRasteriserState )
+	bool FrameBuffer::StretchInto( FrameBufferSPtr p_buffer, Castor::Rectangle const & p_rectSrc, Castor::Rectangle const & p_rectDst, uint32_t p_components, eINTERPOLATION_MODE p_interpolation )
 	{
-		if ( m_mapTex.size() )
+		bool l_return = p_buffer->Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_DRAW );
+
+		if ( l_return )
 		{
-			DynamicTextureSPtr l_pTexture = m_mapTex.begin()->second;
+			l_return = Bind( eFRAMEBUFFER_MODE_MANUAL, eFRAMEBUFFER_TARGET_READ );
 
-			if ( l_pTexture && p_pBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
+			if ( l_return )
 			{
-				p_pDepthStencilState->Apply();
-				p_pRasteriserState->Apply();
-				m_pEngine->GetRenderSystem()->GetCurrentContext()->BToBRender( p_sizeDst, l_pTexture, p_uiComponents );
-				p_pBuffer->Unbind();
+				l_return = DoStretchInto( p_buffer, p_rectSrc, p_rectDst, p_components, p_interpolation );
+				Unbind();
+			}
 
-				if ( p_pBuffer->m_mapTex.size() )
+			p_buffer->Unbind();
+		}
+
+		return l_return;
+	}
+
+	void FrameBuffer::SetDrawBuffers()
+	{
+		SetDrawBuffers( m_attaches );
+	}
+
+	void FrameBuffer::SetDrawBuffer( TextureAttachmentSPtr p_attach )
+	{
+		SetDrawBuffers( AttachArray( 1, p_attach ) );
+	}
+
+	void FrameBuffer::SetDrawBuffer( RenderBufferAttachmentSPtr p_attach )
+	{
+		SetDrawBuffers( AttachArray( 1, p_attach ) );
+	}
+
+	uint32_t FrameBuffer::DoGetSamplesCount( eATTACHMENT_POINT p_point, uint8_t p_index )
+	{
+		uint32_t l_return = 0;
+
+		if ( !m_attaches.empty() && p_point != eATTACHMENT_POINT_NONE )
+		{
+			auto && l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
+			{
+				return p_attach->GetAttachmentPoint() == p_point;
+			} );
+
+			if ( l_it != m_attaches.end() )
+			{
+				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 				{
-					l_pTexture = p_pBuffer->m_mapTex.begin()->second;
-					l_pTexture->Bind();
-					l_pTexture->GenerateMipmaps();
-					l_pTexture->Unbind();
+					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
+					l_return = l_attach->GetTexture()->GetSamplesCount();
+				}
+				else
+				{
+					RenderBufferAttachmentSPtr l_attach = std::static_pointer_cast< RenderBufferAttachment >( *l_it );
+					l_return = l_attach->GetRenderBuffer()->GetSamplesCount();
 				}
 			}
 		}
-		else
-		{
-			Logger::LogWarning( cuT( "Can't render a frame buffer that has no texture to bind" ) );
-		}
+
+		return l_return;
 	}
 
-	void FrameBuffer::DoTexAttach( eATTACHMENT_POINT p_eAttach, DynamicTextureSPtr p_pTexture )
+	ePIXEL_FORMAT FrameBuffer::DoGetPixelFormat( eATTACHMENT_POINT p_point, uint8_t p_index )
 	{
-		DoDetach( p_eAttach );
-		m_arrayAttaches.push_back( p_eAttach );
-		std::sort( m_arrayAttaches.begin(), m_arrayAttaches.end() );
-		m_mapTex[p_eAttach] = p_pTexture;
-	}
+		ePIXEL_FORMAT l_return = ePIXEL_FORMAT_COUNT;
 
-	void FrameBuffer::DoRboAttach( eATTACHMENT_POINT p_eAttach, RenderBufferSPtr p_pRenderBuffer )
-	{
-		DoDetach( p_eAttach );
-		m_arrayAttaches.push_back( p_eAttach );
-		std::sort( m_arrayAttaches.begin(), m_arrayAttaches.end() );
-		m_mapRbo[p_eAttach] = p_pRenderBuffer;
-	}
-
-	void FrameBuffer::DoDetach( eATTACHMENT_POINT p_eAttach )
-	{
-		AttachArrayIt l_itAtt = std::find( m_arrayAttaches.begin(), m_arrayAttaches.end(), p_eAttach );
-
-		if ( l_itAtt != m_arrayAttaches.end() )
+		if ( !m_attaches.empty() && p_point != eATTACHMENT_POINT_NONE )
 		{
-			m_arrayAttaches.erase( l_itAtt );
+			auto && l_it = std::find_if( m_attaches.begin(), m_attaches.end(), [&p_point]( FrameBufferAttachmentSPtr p_attach )
+			{
+				return p_attach->GetAttachmentPoint() == p_point;
+			} );
+
+			if ( l_it != m_attaches.end() )
+			{
+				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
+				{
+					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
+					l_return = l_attach->GetTexture()->GetPixelFormat();
+				}
+				else
+				{
+					RenderBufferAttachmentSPtr l_attach = std::static_pointer_cast< RenderBufferAttachment >( *l_it );
+					l_return = l_attach->GetRenderBuffer()->GetPixelFormat();
+				}
+			}
 		}
 
-		RboAttachMapIt l_itRbo = m_mapRbo.find( p_eAttach );
+		return l_return;
+	}
 
-		if ( l_itRbo != m_mapRbo.end() )
+	bool FrameBuffer::DoAttach( eATTACHMENT_POINT p_point, uint8_t p_index, FrameBufferAttachmentSPtr p_attach )
+	{
+		DoDetach( p_point, p_index );
+		bool l_return = p_attach->Attach( p_point, p_index, shared_from_this() );
+
+		if ( l_return )
 		{
-			m_mapRbo.erase( l_itRbo );
+			m_attaches.push_back( p_attach );
 		}
 
-		TexAttachMapIt l_itTex = m_mapTex.find( p_eAttach );
+		return l_return;
+	}
 
-		if ( l_itTex != m_mapTex.end() )
+	void FrameBuffer::DoDetach( eATTACHMENT_POINT p_point, uint8_t p_index )
+	{
+		auto l_itAtt = std::find_if( m_attaches.begin(), m_attaches.end(), [p_point, p_index]( FrameBufferAttachmentSPtr p_att )
 		{
-			m_mapTex.erase( l_itTex );
+			return p_att->GetAttachmentPoint() == p_point && p_att->GetAttachmentIndex() == p_index;
+		} );
+
+		if ( l_itAtt != m_attaches.end() )
+		{
+			( *l_itAtt )->Detach();
+			m_attaches.erase( l_itAtt );
 		}
 	}
 }

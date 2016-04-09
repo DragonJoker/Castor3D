@@ -1,12 +1,17 @@
 #include "OverlayManager.hpp"
+
+#include "BorderPanelOverlay.hpp"
+#include "Engine.hpp"
 #include "Overlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "PanelOverlay.hpp"
-#include "BorderPanelOverlay.hpp"
-#include "TextOverlay.hpp"
-#include "Engine.hpp"
-#include "SceneFileParser.hpp"
+#include "Pipeline.hpp"
 #include "RenderSystem.hpp"
+#include "Scene.hpp"
+#include "SceneFileParser.hpp"
+#include "TextOverlay.hpp"
+
+#include <Font.hpp>
 
 using namespace Castor;
 
@@ -16,19 +21,14 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	struct OverlayInitialiser
-	{
-		void operator()( OverlaySPtr p_pOverlay )
-		{
-			p_pOverlay->Initialise();
-		}
-	};
+	const String ManagedObjectNamer< Overlay >::Name = cuT( "Overlay" );
 
 	//*************************************************************************************************
 
-	OverlayManager::OverlayManager( Engine * p_pEngine )
-		:	m_iCurrentZIndex( 0 )
-		,	m_pEngine( p_pEngine )
+	OverlayManager::OverlayManager( Engine & p_engine )
+		: ResourceManager< String, Overlay >( p_engine )
+		, m_overlayCountPerLevel( 1000, 0 )
+		, m_viewport( Viewport::Ortho( p_engine, 0, 1, 1, 0, 0, 1000 ) )
 	{
 	}
 
@@ -36,175 +36,140 @@ namespace Castor3D
 	{
 	}
 
-	void OverlayManager::ClearOverlays()
+	void OverlayManager::Clear()
 	{
-		OverlayCollection::lock();
-		OverlayCollection::clear();
-		clear_pair_container( m_mapOverlaysByZIndex );
-		m_iCurrentZIndex = 1;
-		OverlayCollection::unlock();
+		auto l_lock = make_unique_lock( *this );
+		ResourceManager< String, Overlay >::Clear();
+		m_overlays.clear();
+		m_fontTextures.clear();
 	}
 
-	void OverlayManager::AddOverlay( Castor::String const & p_strName, OverlaySPtr p_pOverlay, OverlaySPtr p_pParent )
+	void OverlayManager::Cleanup()
 	{
-		OverlayCollection::insert( p_strName, p_pOverlay );
+		auto l_lock = make_unique_lock( *this );
 
-		if ( !p_pParent )
+		for ( auto && l_it : m_fontTextures )
 		{
-			AddOverlay( m_iCurrentZIndex, p_pOverlay );
+			GetEngine()->PostEvent( MakeCleanupEvent( *l_it.second ) );
+		}
+	}
+
+	PanelOverlaySPtr OverlayManager::CreatePanel( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
+	{
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_PANEL, p_parent, nullptr );
+		l_overlay->SetPosition( p_position );
+		l_overlay->SetSize( p_size );
+		l_overlay->SetMaterial( p_material );
+		return l_overlay->GetPanelOverlay();
+	}
+
+	PanelOverlaySPtr OverlayManager::CreatePanel( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, OverlaySPtr p_parent )
+	{
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_PANEL, p_parent, nullptr );
+		l_overlay->SetPixelPosition( p_position );
+		l_overlay->SetPixelSize( p_size );
+		l_overlay->SetMaterial( p_material );
+		return l_overlay->GetPanelOverlay();
+	}
+
+	BorderPanelOverlaySPtr OverlayManager::CreateBorderPanel( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, Point4d const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
+	{
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_BORDER_PANEL, p_parent, nullptr );
+		l_overlay->SetMaterial( p_material );
+		l_overlay->SetPosition( p_position );
+		l_overlay->SetSize( p_size );
+		BorderPanelOverlaySPtr l_return = l_overlay->GetBorderPanelOverlay();
+		l_return->SetBorderMaterial( p_bordersMaterial );
+		l_return->SetBorderSize( p_bordersSize );
+		return l_return;
+	}
+
+	BorderPanelOverlaySPtr OverlayManager::CreateBorderPanel( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, Rectangle const & p_bordersSize, MaterialSPtr p_bordersMaterial, OverlaySPtr p_parent )
+	{
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_BORDER_PANEL, p_parent, nullptr );
+		l_overlay->SetPixelPosition( p_position );
+		l_overlay->SetPixelSize( p_size );
+		l_overlay->SetMaterial( p_material );
+		BorderPanelOverlaySPtr l_return = l_overlay->GetBorderPanelOverlay();
+		l_return->SetBorderMaterial( p_bordersMaterial );
+		l_return->SetBorderPixelSize( p_bordersSize );
+		return l_return;
+	}
+
+	TextOverlaySPtr OverlayManager::CreateText( String const & p_name, Point2d const & p_position, Point2d const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
+	{
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_TEXT, p_parent, nullptr );
+		l_overlay->SetMaterial( p_material );
+		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
+		l_return->SetPosition( p_position );
+		l_return->SetSize( p_size );
+		l_return->SetFont( p_font->GetName() );
+		return l_return;
+	}
+
+	TextOverlaySPtr OverlayManager::CreateText( String const & p_name, Position const & p_position, Size const & p_size, MaterialSPtr p_material, FontSPtr p_font, OverlaySPtr p_parent )
+	{
+		OverlaySPtr l_overlay = Create( p_name, eOVERLAY_TYPE_TEXT, p_parent, nullptr );
+		l_overlay->SetMaterial( p_material );
+		TextOverlaySPtr l_return = l_overlay->GetTextOverlay();
+		l_return->SetPixelPosition( p_position );
+		l_return->SetPixelSize( p_size );
+		l_return->SetFont( p_font->GetName() );
+		return l_return;
+	}
+
+	OverlaySPtr OverlayManager::Create( String const & p_name, eOVERLAY_TYPE p_type, OverlaySPtr p_parent, SceneSPtr p_scene )
+	{
+		auto l_lock = make_unique_lock( *this );
+		OverlaySPtr l_return;
+
+		if ( !m_elements.has( p_name ) )
+		{
+			l_return = std::make_shared< Overlay >( *GetEngine(), p_type, p_scene, p_parent );
+			l_return->SetName( p_name );
+
+			if ( p_scene )
+			{
+				p_scene->AddOverlay( l_return );
+			}
+
+			DoAddOverlay( p_name, l_return, p_parent );
+			Castor::Logger::LogInfo( Castor::StringStream() << INFO_MANAGER_CREATED_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 		else
 		{
-			p_pParent->AddChild( p_pOverlay, m_iCurrentZIndex );
+			l_return = m_elements.find( p_name );
+			Castor::Logger::LogWarning( Castor::StringStream() << WARNING_MANAGER_DUPLICATE_OBJECT << this->GetObjectTypeName() << cuT( ": " ) << p_name );
 		}
 
-		m_iCurrentZIndex++;
+		return  l_return;
 	}
 
-	void OverlayManager::AddOverlay( int p_iZIndex, OverlaySPtr p_pOverlay )
+	void OverlayManager::Remove( Castor::String const & p_name )
 	{
-		p_pOverlay->SetZIndex( p_iZIndex );
-		m_mapOverlaysByZIndex.insert( std::make_pair( p_iZIndex, p_pOverlay ) );
-	}
+		auto l_lock = make_unique_lock( *this );
+		OverlaySPtr l_overlay = m_elements.find( p_name );
 
-	bool OverlayManager::HasOverlay( int p_iZIndex )
-	{
-		return m_mapOverlaysByZIndex.find( p_iZIndex ) != m_mapOverlaysByZIndex.end();
-	}
-
-	bool OverlayManager::HasOverlay( Castor::String const & p_strName )
-	{
-		return OverlayCollection::has( p_strName );
-	}
-
-	OverlaySPtr OverlayManager::GetOverlay( int p_iZIndex )
-	{
-		OverlaySPtr l_pReturn;
-		OverlayPtrIntMapIt l_it = m_mapOverlaysByZIndex.find( p_iZIndex );
-
-		if ( l_it != m_mapOverlaysByZIndex.end() )
+		if ( l_overlay )
 		{
-			l_pReturn = l_it->second;
-		}
+			m_elements.erase( p_name );
 
-		return l_pReturn;
-	}
-
-	OverlaySPtr OverlayManager::GetOverlay( Castor::String const & p_strName )
-	{
-		return OverlayCollection::find( p_strName );
-	}
-
-	bool OverlayManager::WriteOverlays( Castor::TextFile & p_file )const
-	{
-		OverlayCollection::lock();
-		bool l_bReturn = true;
-		OverlayPtrIntMap::const_iterator l_it = m_mapOverlaysByZIndex.begin();
-		bool l_bFirst = true;
-
-		while ( l_bReturn && l_it != m_mapOverlaysByZIndex.end() )
-		{
-			if ( l_bFirst )
+			if ( l_overlay->GetChildsCount() )
 			{
-				l_bFirst = false;
-			}
-			else
-			{
-				p_file.WriteText( cuT( "\n" ) );
-			}
+				Size l_size = m_pRenderer->GetSize();
 
-			switch ( l_it->second->GetType() )
-			{
-			case eOVERLAY_TYPE_PANEL:
-				l_bReturn = PanelOverlay::TextLoader()(	* std::static_pointer_cast< PanelOverlay >(	l_it->second->GetOverlayCategory() ), p_file );
-				break;
-
-			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_bReturn = BorderPanelOverlay::TextLoader()(	* std::static_pointer_cast< BorderPanelOverlay >(	l_it->second->GetOverlayCategory() ), p_file );
-				break;
-
-			case eOVERLAY_TYPE_TEXT:
-				l_bReturn = TextOverlay::TextLoader()(	* std::static_pointer_cast< TextOverlay >(	l_it->second->GetOverlayCategory() ), p_file );
-				break;
-
-			default:
-				l_bReturn = false;
-			}
-
-			++l_it;
-		}
-
-		OverlayCollection::unlock();
-		return l_bReturn;
-	}
-
-	bool OverlayManager::ReadOverlays( Castor::TextFile & p_file )
-	{
-		SceneFileParser l_parser( m_pEngine );
-		return l_parser.ParseFile( p_file );
-	}
-
-	bool OverlayManager::SaveOverlays( Castor::BinaryFile & p_file )const
-	{
-		OverlayCollection::lock();
-		bool l_bReturn = p_file.Write( uint32_t( m_mapOverlaysByZIndex.size() ) ) == sizeof( uint32_t );
-		OverlayPtrIntMap::const_iterator l_it = m_mapOverlaysByZIndex.begin();
-
-		while ( l_bReturn && l_it != m_mapOverlaysByZIndex.end() )
-		{
-			l_bReturn = BinaryLoader< Overlay >()( *l_it->second, p_file );
-			++l_it;
-		}
-
-		OverlayCollection::unlock();
-		return l_bReturn;
-	}
-
-	bool OverlayManager::LoadOverlays( Castor::BinaryFile & p_file )
-	{
-		OverlayCollection::lock();
-		uint32_t l_uiSize;
-		bool l_bReturn = p_file.Write( l_uiSize ) == sizeof( uint32_t );
-		String l_strName;
-		eOVERLAY_TYPE l_eType;
-		OverlaySPtr l_pOverlay;
-
-		for ( uint32_t i = 0; i < l_uiSize && l_bReturn; i++ )
-		{
-			l_bReturn = p_file.Read( l_strName );
-
-			if ( l_bReturn )
-			{
-				l_bReturn = p_file.Read( l_eType ) == sizeof( eOVERLAY_TYPE );
-			}
-
-			if ( l_bReturn )
-			{
-				l_pOverlay = OverlayCollection::find( l_strName ) ;
-
-				if ( ! l_pOverlay )
+				for ( auto && l_child : *l_overlay )
 				{
-					l_pOverlay = std::make_shared< Overlay >( m_pEngine, l_eType );
-					l_pOverlay->SetName( l_strName );
-					OverlayCollection::insert( l_strName, l_pOverlay );
+					l_child->SetPosition( l_child->GetAbsolutePosition() );
+					l_child->SetSize( l_child->GetAbsoluteSize() );
 				}
-
-				l_bReturn = l_pOverlay.use_count() > 0;
-			}
-
-			if ( l_bReturn )
-			{
-				l_bReturn = BinaryLoader< Overlay >()( *l_pOverlay, p_file );
 			}
 		}
-
-		OverlayCollection::unlock();
-		return l_bReturn;
 	}
 
-	void OverlayManager::Update()
+	void OverlayManager::UpdateRenderer()
 	{
-		if ( m_pEngine->IsCleaned() )
+		if ( GetEngine()->IsCleaned() )
 		{
 			if ( m_pRenderer )
 			{
@@ -216,31 +181,203 @@ namespace Castor3D
 		{
 			if ( !m_pRenderer )
 			{
-				m_pRenderer = m_pEngine->GetRenderSystem()->CreateOverlayRenderer();
-				lock();
-				std::for_each( begin(), end(), [&]( std::pair< String, OverlaySPtr > pair )
-				{
-					pair.second->GetOverlayCategory()->SetRenderer( m_pRenderer );
-				} );
-				unlock();
+				m_pRenderer = std::make_shared< OverlayRenderer >( *GetEngine()->GetRenderSystem() );
 				m_pRenderer->Initialise();
 			}
 		}
 	}
 
-	void OverlayManager::BeginRendering( Size const & p_size )
+	void OverlayManager::Update()
 	{
-		if ( m_pRenderer )
+		auto l_lock = make_unique_lock( *this );
+
+		for ( auto l_category : m_overlays )
 		{
-			m_pRenderer->BeginRender( p_size );
+			l_category->Update();
 		}
 	}
 
-	void OverlayManager::EndRendering()
+	void OverlayManager::Render( Scene const & p_scene, Castor::Size const & p_size )
 	{
-		if ( m_pRenderer )
+		auto l_lock = make_unique_lock( *this );
+		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
+		Context * l_context = l_renderSystem->GetCurrentContext();
+
+		if ( l_context && m_pRenderer )
 		{
+			m_viewport.SetSize( p_size );
+			m_viewport.SetRight( real( p_size.width() ) );
+			m_viewport.SetBottom( real( p_size.height() ) );
+			m_viewport.Render( l_renderSystem->GetPipeline() );
+			m_pRenderer->BeginRender( p_size );
+
+			for ( auto l_category : m_overlays )
+			{
+				SceneSPtr l_scene = l_category->GetOverlay().GetScene();
+
+				if ( l_category->GetOverlay().IsVisible() && ( !l_scene || l_scene->GetName() == p_scene.GetName() ) )
+				{
+					l_category->Render();
+				}
+			}
+
 			m_pRenderer->EndRender();
 		}
+	}
+
+	bool OverlayManager::Write( Castor::TextFile & p_file )const
+	{
+		auto l_lock = make_unique_lock( *this );
+		bool l_return = true;
+		auto && l_it = m_overlays.begin();
+		bool l_first = true;
+
+		while ( l_return && l_it != m_overlays.end() )
+		{
+			Overlay & l_overlay = ( *l_it )->GetOverlay();
+
+			if ( l_first )
+			{
+				l_first = false;
+			}
+			else
+			{
+				p_file.WriteText( cuT( "\n" ) );
+			}
+
+			switch ( l_overlay.GetType() )
+			{
+			case eOVERLAY_TYPE_PANEL:
+				l_return = PanelOverlay::TextLoader()( *l_overlay.GetPanelOverlay(), p_file );
+				break;
+
+			case eOVERLAY_TYPE_BORDER_PANEL:
+				l_return = BorderPanelOverlay::TextLoader()( *l_overlay.GetBorderPanelOverlay(), p_file );
+				break;
+
+			case eOVERLAY_TYPE_TEXT:
+				l_return = TextOverlay::TextLoader()( *l_overlay.GetTextOverlay(), p_file );
+				break;
+
+			default:
+				l_return = false;
+			}
+
+			++l_it;
+		}
+
+		return l_return;
+	}
+
+	bool OverlayManager::Read( Castor::TextFile & p_file )
+	{
+		auto l_lock = make_unique_lock( *this );
+		SceneFileParser l_parser( *GetEngine() );
+		return l_parser.ParseFile( p_file );
+	}
+
+	bool OverlayManager::Save( Castor::BinaryFile & p_file )const
+	{
+		auto l_lock = make_unique_lock( *this );
+		bool l_return = p_file.Write( uint32_t( m_overlays.size() ) ) == sizeof( uint32_t );
+		auto && l_it = m_overlays.begin();
+
+		while ( l_return && l_it != m_overlays.end() )
+		{
+			l_return = BinaryLoader< Overlay >()( ( *l_it )->GetOverlay(), p_file );
+			++l_it;
+		}
+
+		return l_return;
+	}
+
+	bool OverlayManager::Load( Castor::BinaryFile & p_file )
+	{
+		auto l_lock = make_unique_lock( *this );
+		uint32_t l_size;
+		bool l_return = p_file.Write( l_size ) == sizeof( uint32_t );
+		String l_name;
+		eOVERLAY_TYPE l_type;
+		OverlaySPtr l_overlay;
+
+		for ( uint32_t i = 0; i < l_size && l_return; i++ )
+		{
+			l_return = p_file.Read( l_name );
+
+			if ( l_return )
+			{
+				l_return = p_file.Read( l_type ) == sizeof( eOVERLAY_TYPE );
+			}
+
+			if ( l_return )
+			{
+				l_overlay = Find( l_name ) ;
+
+				if ( !l_overlay )
+				{
+					l_overlay = std::make_shared< Overlay >( *GetEngine(), l_type );
+					l_overlay->SetName( l_name );
+					DoAddOverlay( l_name, l_overlay, nullptr );
+				}
+
+				l_return = l_overlay != nullptr;
+			}
+
+			if ( l_return )
+			{
+				l_return = BinaryLoader< Overlay >()( *l_overlay, p_file );
+			}
+		}
+
+		return l_return;
+	}
+
+	FontTextureSPtr OverlayManager::GetFontTexture( Castor::String const & p_name )
+	{
+		auto l_it = m_fontTextures.find( p_name );
+		FontTextureSPtr l_return;
+
+		if ( l_it != m_fontTextures.end() )
+		{
+			l_return = l_it->second;
+		}
+
+		return l_return;
+	}
+
+	FontTextureSPtr OverlayManager::CreateFontTexture( Castor::FontSPtr p_font )
+	{
+		auto l_it = m_fontTextures.find( p_font->GetName() );
+		FontTextureSPtr l_return;
+
+		if ( l_it == m_fontTextures.end() )
+		{
+			l_return = std::make_shared< FontTexture >( *GetEngine(), p_font );
+			m_fontTextures.insert( std::make_pair( p_font->GetName(), l_return ) );
+			GetEngine()->PostEvent( MakeInitialiseEvent( *l_return ) );
+		}
+
+		return l_return;
+	}
+
+	void OverlayManager::DoAddOverlay( Castor::String const & p_name, OverlaySPtr p_overlay, OverlaySPtr p_parent )
+	{
+		auto l_lock = make_unique_lock( *this );
+		m_elements.insert( p_name, p_overlay );
+		int l_level = 0;
+
+		if ( p_parent )
+		{
+			l_level = p_parent->GetLevel() + 1;
+			p_parent->AddChild( p_overlay );
+		}
+
+		if ( l_level > int( m_overlayCountPerLevel.size() ) )
+		{
+			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
+		}
+
+		p_overlay->SetOrder( ++m_overlayCountPerLevel[l_level], l_level );
+		m_overlays.insert( p_overlay->GetCategory() );
 	}
 }

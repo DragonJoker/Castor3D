@@ -1,4 +1,4 @@
-/*
+Ôªø/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -22,10 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "BufferElementDeclaration.hpp"
 #include "BufferDeclaration.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
 namespace Castor3D
 {
 	/*!
@@ -36,77 +32,77 @@ namespace Castor3D
 	\brief		Vertex buffer representation
 	\remark		Holds the submesh vertices informations
 	\~french
-	\brief		ReprÈsentation d'un tampon de sommets
+	\brief		Repr√©sentation d'un tampon de sommets
 	\remark		Contient les informations des sommets d'un submesh
 	*/
-	class C3D_API VertexBuffer
-		:	public CpuBuffer< uint8_t >
+	class VertexBuffer
+		: public CpuBuffer< uint8_t >
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		The elements descriptions
+		 *\brief		Constructor.
+		 *\param[in]	p_engine		The engine.
+		 *\param[in]	p_declaration	The buffer declaration.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		Les descriptions des ÈlÈments
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine		Le moteur.
+		 *\param[in]	p_declaration	La d√©claration du tampon.
 		 */
-		template< uint32_t N >
-		VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const( & p_pElements )[N] )
-			:	CpuBuffer< uint8_t >( p_pRenderSystem )
-			,	m_bufferDeclaration( p_pElements, N )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		The elements descriptions
-		 *\param[in]	p_uiNbElements	The elements descriptions count
-		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_pRenderSystem	The RenderSystem
-		 *\param[in]	p_pElements		Les descriptions des ÈlÈments
-		 *\param[in]	p_uiNbElements	Le compte des descriptions des ÈlÈments
-		 */
-		VertexBuffer( RenderSystem * p_pRenderSystem, BufferElementDeclaration const * p_pElements, uint32_t p_uiNbElements );
+		C3D_API VertexBuffer( Engine & p_engine, BufferDeclaration const & p_declaration );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~VertexBuffer();
+		C3D_API ~VertexBuffer();
+		/**
+		 *\~english
+		 *\brief		Creation function
+		 *\return		\p true if OK
+		 *\~french
+		 *\brief		Fonction de cr√©ation
+		 *\return		\p true si tout s'est bien pass√©
+		 */
+		C3D_API bool Create();
 		/**
 		 *\~english
 		 *\brief		Gets buffer declaration
 		 *\return		The buffer declaration
 		 *\~french
-		 *\brief		RÈcupËre la dÈclaration du tampon
-		 *\return		La dÈclaration du tampon
+		 *\brief		R√©cup√®re la d√©claration du tampon
+		 *\return		La d√©claration du tampon
 		 */
-		BufferDeclaration const & GetDeclaration()const
+		inline BufferDeclaration const & GetDeclaration()const
 		{
 			return m_bufferDeclaration;
 		}
-
-	private:
 		/**
 		 *\~english
-		 *\brief		Initialisation function
+		 *\brief		Link all elements to this buffer
+		 *\param[in]	p_begin, p_end	The elements array iterators
 		 *\~french
-		 *\brief		Fonction d'initialisation
+		 *\brief		Lie tous les √©m√©ents √† ce tampon
+		 *\param[in]	p_begin, p_end	Les it√©rateurs du tableau d'√©l√©ments
 		 */
-		virtual bool DoCreateBuffer();
+		template< typename ItType >
+		inline void LinkCoords( ItType p_begin, ItType p_end )
+		{
+			uint32_t l_stride = m_bufferDeclaration.GetStride();
+			uint8_t * l_buffer = CpuBuffer< uint8_t >::data();
+
+			for ( auto && l_it = p_begin; l_it != p_end; ++l_it )
+			{
+				( *l_it )->LinkCoords( l_buffer, l_stride );
+				l_buffer += l_stride;
+			}
+		}
 
 	protected:
-		//!\~english Buffer elements description	\~french Description des ÈlÈment du tampon
+		//!\~english Buffer elements description	\~french Description des √©l√©ment du tampon
 		BufferDeclaration m_bufferDeclaration;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

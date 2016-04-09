@@ -35,12 +35,11 @@ namespace GuiCommon
 	*/
 	typedef enum eSECTION
 	{
-		eSECTION_ROOT
-		,	eSECTION_LANGUAGE
-		,	eSECTION_SECTION
-		,	eSECTION_STYLE
-		,	eSECTION_LIST
-		,	eSECTION_COUNT
+		eSECTION_ROOT = MAKE_SECTION_NAME( 'R', 'O', 'O', 'T' ),
+		eSECTION_LANGUAGE = MAKE_SECTION_NAME( 'L', 'A', 'N', 'G' ),
+		eSECTION_SECTION = MAKE_SECTION_NAME( 'S', 'E', 'C', 'T' ),
+		eSECTION_STYLE = MAKE_SECTION_NAME( 'S', 'T', 'Y', 'L' ),
+		eSECTION_LIST = MAKE_SECTION_NAME( 'L', 'I', 'S', 'T' ),
 	}	eSECTION;
 	/*!
 	\author Sylvain DOREMUS
@@ -52,7 +51,7 @@ namespace GuiCommon
 	\brief Analyseur de fichiers de langage
 	*/
 	class LanguageFileParser
-		:	public Castor::FileParser
+		: public Castor::FileParser
 	{
 	private:
 		StcContext * m_pStcContext;
@@ -67,29 +66,30 @@ namespace GuiCommon
 	private:
 		virtual void DoInitialiseParser( Castor::TextFile & p_file );
 		virtual void DoCleanupParser();
-		virtual void DoDiscardParser( Castor::String const & p_strLine );
-		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_strLine ) )
+		virtual bool DoDiscardParser( Castor::String const & p_line );
+		virtual bool DoDelegateParser( Castor::String const & CU_PARAM_UNUSED( p_line ) )
 		{
 			return false;
 		}
 		virtual void DoValidate();
+		virtual Castor::String DoGetSectionName( uint32_t p_section );
 	};
 
-	DECLARE_ATTRIBUTE_PARSER( Root_Language	)
-	DECLARE_ATTRIBUTE_PARSER( Language_Pattern	)
-	DECLARE_ATTRIBUTE_PARSER( Language_Lexer	)
-	DECLARE_ATTRIBUTE_PARSER( Language_FoldFlags	)
-	DECLARE_ATTRIBUTE_PARSER( Language_Section	)
-	DECLARE_ATTRIBUTE_PARSER( Language_Style	)
-	DECLARE_ATTRIBUTE_PARSER( Style_Type	)
-	DECLARE_ATTRIBUTE_PARSER( Style_FgColour	)
-	DECLARE_ATTRIBUTE_PARSER( Style_BgColour	)
-	DECLARE_ATTRIBUTE_PARSER( Style_FontName	)
-	DECLARE_ATTRIBUTE_PARSER( Style_FontStyle	)
-	DECLARE_ATTRIBUTE_PARSER( Style_FontSize	)
-	DECLARE_ATTRIBUTE_PARSER( Section_Type	)
-	DECLARE_ATTRIBUTE_PARSER( Section_List	)
-	DECLARE_ATTRIBUTE_PARSER( Section_End	)
+	DECLARE_ATTRIBUTE_PARSER( Root_Language )
+	DECLARE_ATTRIBUTE_PARSER( Language_Pattern )
+	DECLARE_ATTRIBUTE_PARSER( Language_Lexer )
+	DECLARE_ATTRIBUTE_PARSER( Language_FoldFlags )
+	DECLARE_ATTRIBUTE_PARSER( Language_Section )
+	DECLARE_ATTRIBUTE_PARSER( Language_Style )
+	DECLARE_ATTRIBUTE_PARSER( Style_Type )
+	DECLARE_ATTRIBUTE_PARSER( Style_FgColour )
+	DECLARE_ATTRIBUTE_PARSER( Style_BgColour )
+	DECLARE_ATTRIBUTE_PARSER( Style_FontName )
+	DECLARE_ATTRIBUTE_PARSER( Style_FontStyle )
+	DECLARE_ATTRIBUTE_PARSER( Style_FontSize )
+	DECLARE_ATTRIBUTE_PARSER( Section_Type )
+	DECLARE_ATTRIBUTE_PARSER( Section_List )
+	DECLARE_ATTRIBUTE_PARSER( Section_End )
 }
 
 #endif

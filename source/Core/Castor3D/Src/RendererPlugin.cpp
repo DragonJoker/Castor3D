@@ -1,4 +1,6 @@
-#include "RendererPlugin.hpp"
+﻿#include "RendererPlugin.hpp"
+
+#include "RenderSystem.hpp"
 
 #if defined( _WIN32 )
 #	include <Windows.h>
@@ -12,115 +14,78 @@ using namespace Castor;
 
 namespace Castor3D
 {
-#pragma warning( disable:4290 )
 #if defined( _MSC_VER)
-	static const String GetRendererTypeFunctionABIName		= cuT( "?GetRendererType@@YA?AW4eRENDERER_TYPE@Castor3D@@XZ" );
+	static const String GetRendererTypeFunctionABIName = cuT( "?GetRendererType@@YA?AW4eRENDERER_TYPE@Castor3D@@XZ" );
 #	if defined( _WIN64 )
-	static const String CreateRenderSystemFunctionABIName	= cuT( "?CreateRenderSystem@@YAPEAVRenderSystem@Castor3D@@PEAVEngine@2@PEAVLogger@Castor@@@Z" );
-	static const String DestroyRenderSystemFunctionABIName	= cuT( "?DestroyRenderSystem@@YAXPEAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateRenderSystemFunctionABIName = cuT( "?CreateRenderSystem@@YAPEAVRenderSystem@Castor3D@@PEAVEngine@2@@Z" );
+	static const String DestroyRenderSystemFunctionABIName = cuT( "?DestroyRenderSystem@@YAXPEAVRenderSystem@Castor3D@@@Z" );
 #	else
-	static const String CreateRenderSystemFunctionABIName	= cuT( "?CreateRenderSystem@@YAPAVRenderSystem@Castor3D@@PAVEngine@2@PAVLogger@Castor@@@Z" );
-	static const String DestroyRenderSystemFunctionABIName	= cuT( "?DestroyRenderSystem@@YAXPAVRenderSystem@Castor3D@@@Z" );
+	static const String CreateRenderSystemFunctionABIName = cuT( "?CreateRenderSystem@@YAPAVRenderSystem@Castor3D@@PAVEngine@2@@Z" );
+	static const String DestroyRenderSystemFunctionABIName = cuT( "?DestroyRenderSystem@@YAXPAVRenderSystem@Castor3D@@@Z" );
 #	endif
 #elif defined( __GNUG__)
-	static const String GetRendererTypeFunctionABIName		= cuT( "_Z15GetRendererTypev" );
-	static const String CreateRenderSystemFunctionABIName	= cuT( "_Z18CreateRenderSystemPN8Castor3D6EngineEPN6Castor6LoggerE" );
-	static const String DestroyRenderSystemFunctionABIName	= cuT( "_Z19DestroyRenderSystemPN8Castor3D12RenderSystemE" );
+	static const String GetRendererTypeFunctionABIName = cuT( "_Z15GetRendererTypev" );
+	static const String CreateRenderSystemFunctionABIName = cuT( "_Z18CreateRenderSystemPN8Castor3D6EngineE" );
+	static const String DestroyRenderSystemFunctionABIName = cuT( "_Z19DestroyRenderSystemPN8Castor3D12RenderSystemE" );
 #else
 #	error "Implement ABI names for this compiler"
 #endif
 
-	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_pLibrary )
-		:	PluginBase( ePLUGIN_TYPE_RENDERER, p_pLibrary )
+	RendererPlugin::RendererPlugin( DynamicLibrarySPtr p_library, Engine * p_engine )
+		: PluginBase( ePLUGIN_TYPE_RENDERER, p_library, *p_engine )
 	{
-		if ( !p_pLibrary->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnGetRendererType, GetRendererTypeFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] GetRendererType plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] GetRendererType plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnCreateRenderSystem, CreateRenderSystemFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnCreateRenderSystem, CreateRenderSystemFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] CreateRenderSystem plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] CreateRenderSystem plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
 
-		if ( !p_pLibrary->GetFunction( m_pfnDestroyRenderSystem, DestroyRenderSystemFunctionABIName ) )
+		if ( !p_library->GetFunction( m_pfnDestroyRenderSystem, DestroyRenderSystemFunctionABIName ) )
 		{
-			String l_strError = cuT( "Error encountered while loading dll [" ) + p_pLibrary->GetPath().GetFileName() + cuT( "] DestroyRenderSystem plugin function : " );
-			l_strError += str_utils::to_string( dlerror() );
-			CASTOR_PLUGIN_EXCEPTION( str_utils::to_str( l_strError ), false );
+			String l_strError = cuT( "Error encountered while loading dll [" ) + p_library->GetPath().GetFileName() + cuT( "] DestroyRenderSystem plug-in function : " );
+			l_strError += System::GetLastErrorText();
+			CASTOR_PLUGIN_EXCEPTION( string::string_cast< char >( l_strError ), false );
 		}
-	}
 
-	RendererPlugin::RendererPlugin( RendererPlugin const & p_plugin )
-		:	PluginBase( p_plugin )
-		,	m_pfnCreateRenderSystem( p_plugin.m_pfnCreateRenderSystem )
-		,	m_pfnDestroyRenderSystem( p_plugin.m_pfnDestroyRenderSystem )
-		,	m_pfnGetRendererType( p_plugin.m_pfnGetRendererType )
-	{
-	}
-
-	RendererPlugin::RendererPlugin( RendererPlugin && p_plugin )
-		:	PluginBase( std::move( p_plugin ) )
-		,	m_pfnCreateRenderSystem( std::move( p_plugin.m_pfnCreateRenderSystem ) )
-		,	m_pfnDestroyRenderSystem( std::move( p_plugin.m_pfnDestroyRenderSystem ) )
-		,	m_pfnGetRendererType( std::move( p_plugin.m_pfnGetRendererType ) )
-	{
-		p_plugin.m_pfnCreateRenderSystem	= NULL;
-		p_plugin.m_pfnDestroyRenderSystem	= NULL;
-		p_plugin.m_pfnGetRendererType		= NULL;
+		if ( m_pfnOnLoad )
+		{
+			m_pfnOnLoad( GetEngine() );
+		}
 	}
 
 	RendererPlugin::~RendererPlugin()
 	{
-	}
-
-	RendererPlugin & RendererPlugin::operator =( RendererPlugin const & p_plugin )
-	{
-		PluginBase::operator =( p_plugin );
-		m_pfnCreateRenderSystem		= p_plugin.m_pfnCreateRenderSystem;
-		m_pfnDestroyRenderSystem	= p_plugin.m_pfnDestroyRenderSystem;
-		m_pfnGetRendererType		= p_plugin.m_pfnGetRendererType;
-		return * this;
-	}
-
-	RendererPlugin & RendererPlugin::operator =( RendererPlugin && p_plugin )
-	{
-		PluginBase::operator =( std::move( p_plugin ) );
-
-		if ( this != &p_plugin )
+		if ( m_pfnOnUnload )
 		{
-			m_pfnCreateRenderSystem		= std::move( p_plugin.m_pfnCreateRenderSystem );
-			m_pfnDestroyRenderSystem	= std::move( p_plugin.m_pfnDestroyRenderSystem );
-			m_pfnGetRendererType		= std::move( p_plugin.m_pfnGetRendererType );
-			p_plugin.m_pfnCreateRenderSystem	= NULL;
-			p_plugin.m_pfnDestroyRenderSystem	= NULL;
-			p_plugin.m_pfnGetRendererType		= NULL;
+			m_pfnOnUnload( GetEngine() );
 		}
-
-		return * this;
 	}
 
-	RenderSystem * RendererPlugin::CreateRenderSystem( Engine * p_pEngine, Logger * p_pLogger )
+	RenderSystem * RendererPlugin::CreateRenderSystem( Engine * p_engine )
 	{
-		RenderSystem * l_pReturn = NULL;
+		RenderSystem * l_return = nullptr;
 
 		if ( m_pfnCreateRenderSystem )
 		{
-			l_pReturn = m_pfnCreateRenderSystem( p_pEngine, p_pLogger );
+			l_return = m_pfnCreateRenderSystem( p_engine );
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
-	void RendererPlugin::DestroyRenderSystem( RenderSystem * p_pRenderSystem )
+	void RendererPlugin::DestroyRenderSystem( RenderSystem * p_renderSystem )
 	{
 		if ( m_pfnDestroyRenderSystem )
 		{
-			m_pfnDestroyRenderSystem( p_pRenderSystem );
+			m_pfnDestroyRenderSystem( p_renderSystem );
 		}
 	}
 

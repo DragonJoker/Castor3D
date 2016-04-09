@@ -1,10 +1,8 @@
 #include "RenderPanel.hpp"
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
-#include "CameraRotateEvent.hpp"
-#include "CameraTranslateEvent.hpp"
-#include "FirstPersonCameraRotateEvent.hpp"
-#include "FirstPersonCameraTranslateEvent.hpp"
+#include "RotateNodeEvent.hpp"
+#include "TranslateNodeEvent.hpp"
 #include "KeyboardEvent.hpp"
 
 #include <algorithm>
@@ -12,35 +10,92 @@
 #include <wx/display.h>
 
 #include <Camera.hpp>
+#include <ListenerManager.hpp>
+#include <FunctorEvent.hpp>
 #include <RenderWindow.hpp>
 #include <Scene.hpp>
-#include <SceneNode.hpp>
+#include <SceneNodeManager.hpp>
 #include <WindowHandle.hpp>
+
+#include <Math.hpp>
 #include <Utils.hpp>
+
+#if HAS_CASTORGUI
+#	include <ControlsManager.hpp>
+#endif
 
 #define ID_NEW_WINDOW 10000
 
 using namespace Castor3D;
 using namespace Castor;
 
-DECLARE_APP( CastorViewer::CastorViewerApp )
-
 namespace CastorViewer
 {
+	namespace
+	{
+		static const real MAX_CAM_SPEED = 2.0_r;
+		static const real MIN_CAM_SPEED = 0.1_r;
+		static const real CAM_SPEED_INC = 0.9_r;
+	}
+
+#if HAS_CASTORGUI
+
+	namespace
+	{
+		CastorGui::eKEYBOARD_KEY ConvertKeyCode( int p_code )
+		{
+			CastorGui::eKEYBOARD_KEY l_return = CastorGui::eKEYBOARD_KEY_NONE;
+
+			if ( p_code < 0x20 )
+			{
+				switch ( p_code )
+				{
+				case WXK_BACK:
+				case WXK_TAB:
+				case WXK_RETURN:
+				case WXK_ESCAPE:
+					l_return = CastorGui::eKEYBOARD_KEY( p_code );
+					break;
+				}
+			}
+			else if ( p_code == 0x7F )
+			{
+				l_return = CastorGui::eKEY_DELETE;
+			}
+			else if ( p_code > 0xFF )
+			{
+				l_return = CastorGui::eKEYBOARD_KEY( p_code + CastorGui::eKEY_START - WXK_START );
+			}
+			else
+			{
+				// ASCII or extended ASCII character
+				l_return = CastorGui::eKEYBOARD_KEY( p_code );
+			}
+
+			return l_return;
+		}
+	}
+
+#endif
+
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
-		:	wxPanel( parent, p_id, pos, size, style	)
-		,	m_mouseLeftDown( false	)
-		,	m_mouseRightDown( false	)
-		,	m_mouseMiddleDown( false	)
-		,	m_rZoom( 1.0	)
-		,	m_deltaX( 0.0	)
-		,	m_deltaY( 0.0	)
-		,	m_x( 0.0	)
-		,	m_y( 0.0	)
-		,	m_oldX( 0.0	)
-		,	m_oldY( 0.0	)
-		,	m_eCameraMode( eCAMERA_MODE_FIXED	)
-		,	m_rFpCamSpeed( 2.0	)
+		: wxPanel( parent, p_id, pos, size, style )
+		, m_mouseLeftDown( false )
+		, m_mouseRightDown( false )
+		, m_mouseMiddleDown( false )
+		, m_rZoom( 1.0_r )
+		, m_x( 0.0_r )
+		, m_y( 0.0_r )
+		, m_oldX( 0.0_r )
+		, m_oldY( 0.0_r )
+		, m_eCameraMode( eCAMERA_MODE_FIXED )
+		, m_rFpCamSpeed( MAX_CAM_SPEED )
+
+#if HAS_CASTORGUI
+
+		, m_controlsManager( nullptr )
+
+#endif
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -61,7 +116,7 @@ namespace CastorViewer
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
 			delete m_pTimer[i];
-			m_pTimer[i] = NULL;
+			m_pTimer[i] = nullptr;
 		}
 	}
 
@@ -78,49 +133,62 @@ namespace CastorViewer
 		wxClientDC l_dc( this );
 	}
 
-	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_pWindow )
+	void RenderPanel::SetRenderWindow( Castor3D::RenderWindowSPtr p_window )
 	{
 		m_pRenderWindow.reset();
 
-		if ( p_pWindow )
+		if ( p_window )
 		{
-			if ( p_pWindow->Initialise( GuiCommon::wxMakeWindowHandle( this ) ) )
+			Castor::Size l_sizeWnd = GuiCommon::make_Size( GetClientSize() );
+
+			if ( p_window->Initialise( l_sizeWnd, GuiCommon::make_WindowHandle( this ) ) )
 			{
 				Castor::Size l_sizeScreen;
-				Castor::Size l_sizeWnd = p_pWindow->GetSize();
 				Castor::System::GetScreenSize( 0, l_sizeScreen );
 				GetParent()->SetClientSize( l_sizeWnd.width(), l_sizeWnd.height() );
-				GetParent()->SetPosition( wxPoint( std::max< int >( 0, ( l_sizeScreen.width() - l_sizeWnd.width() ) / 2 ), std::max< int >( 0, ( l_sizeScreen.height() - l_sizeWnd.height() ) / 2 ) ) );
-				m_pListener = p_pWindow->GetListener();
-				SceneSPtr l_pScene = p_pWindow->GetScene();
+				GetParent()->SetPosition( wxPoint( std::abs( int( l_sizeScreen.width() ) - int( l_sizeWnd.width() ) ) / 2, std::abs( int( l_sizeScreen.height() ) - int( l_sizeWnd.height() ) ) / 2 ) );
+				m_pListener = p_window->GetListener();
+				SceneSPtr l_scene = p_window->GetScene();
 				wxDisplay l_wxDisplay;
 				wxRect l_rect( 0, 0, l_sizeScreen.width(), l_sizeScreen.height() );
 
-				if ( l_pScene )
+				if ( l_scene )
 				{
-					m_pRotateCamEvent		= std::make_shared< CameraRotateEvent		>( l_pScene->GetObjectRootNode(),	real( 0 ), real( 0 ), real( 0 ) );
-					m_pTranslateCamEvent	= std::make_shared< CameraTranslateEvent	>( l_pScene->GetCameraRootNode(),	real( 0 ), real( 0 ), real( 0 ) );
-					SceneNodeSPtr l_pCamBaseNode		= l_pScene->CreateSceneNode( cuT( "CastorViewer_CamNode"	), l_pScene->GetCameraRootNode()	);
-					l_pCamBaseNode->SetPosition( Point3r( 0, 0, -100 ) );
-					SceneNodeSPtr l_pCamYawNode		= l_pScene->CreateSceneNode( cuT( "CastorViewer_CamYawNode"	), l_pCamBaseNode	);
-					SceneNodeSPtr l_pCamPitchNode	= l_pScene->CreateSceneNode( cuT( "CastorViewer_CamPitchNode"	), l_pCamYawNode	);
-					SceneNodeSPtr l_pCamRollNode	= l_pScene->CreateSceneNode( cuT( "CastorViewer_CamRollNode"	), l_pCamPitchNode	);
-					CameraSPtr l_pCamera = l_pScene->CreateCamera( cuT( "CastorViewer_Camera" ), l_rect.width, l_rect.height, l_pCamRollNode, eVIEWPORT_TYPE_3D );
-					p_pWindow->SetCamera( l_pCamera );
+					m_cameraNode = p_window->GetCamera()->GetParent();
 
-					if ( p_pWindow->GetCamera() )
+					if ( l_scene->GetSceneNodeManager().Has( cuT( "PointLightsNode" ) ) )
 					{
-						m_pFpRotateCamEvent		= std::make_shared< FirstPersonCameraRotateEvent		>( l_pCamRollNode,	real( 0 ), real( 0 ) );
-						m_pFpTranslateCamEvent	= std::make_shared< FirstPersonCameraTranslateEvent	>( l_pCamRollNode,	real( 0 ), real( 0 ), real( 0 ) );
-						m_ptOriginalPosition = l_pCamRollNode->GetPosition();
-						m_qOriginalOrientation = l_pCamRollNode->GetOrientation();
+						m_lightsNode = l_scene->GetSceneNodeManager().Find( cuT( "PointLightsNode" ) );
 					}
 
-					m_pRenderWindow = p_pWindow;
-					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_pWindow, wxGetApp().GetMainFrame() );
+					if ( m_cameraNode )
+					{
+						m_ptOriginalPosition = m_cameraNode->GetPosition();
+						m_qOriginalOrientation = m_cameraNode->GetOrientation();
+						m_currentNode = m_cameraNode;
+					}
+
+					m_pRenderWindow = p_window;
+					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_window );
 				}
+
+#if HAS_CASTORGUI
+
+				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_window->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
+
+#endif
 			}
 		}
+	}
+
+	void RenderPanel::DoResetTimers()
+	{
+		DoStopTimer( eTIMER_ID_COUNT );
+		m_rZoom = 1.0_r;
+		m_x = 0.0_r;
+		m_y = 0.0_r;
+		m_oldX = 0.0_r;
+		m_oldY = 0.0_r;
 	}
 
 	void RenderPanel::DoStartTimer( int p_iId )
@@ -143,83 +211,159 @@ namespace CastorViewer
 		}
 	}
 
+	void RenderPanel::DoResetCamera()
+	{
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+
+		if ( l_pWindow )
+		{
+			DoResetTimers();
+
+			if ( m_cameraNode )
+			{
+				m_cameraNode->SetOrientation( m_qOriginalOrientation );
+				m_cameraNode->SetPosition( m_ptOriginalPosition );
+			}
+		}
+	}
+
+	void RenderPanel::DoReloadScene()
+	{
+		DoResetTimers();
+		wxGetApp().GetMainFrame()->LoadScene();
+	}
+
+	real RenderPanel::DoTransformX( int x )
+	{
+		real l_result = real( x );
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result *= real( l_window->GetCamera()->GetWidth() ) / GetClientSize().x;
+		}
+
+		return l_result;
+	}
+
+	real RenderPanel::DoTransformY( int y )
+	{
+		real l_result = real( y );
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result *= real( l_window->GetCamera()->GetHeight() ) / GetClientSize().y;
+		}
+
+		return l_result;
+	}
+
+	int RenderPanel::DoTransformX( real x )
+	{
+		int l_result = int( x );
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result = int( x * GetClientSize().x / real( l_window->GetCamera()->GetWidth() ) );
+		}
+
+		return l_result;
+	}
+
+	int RenderPanel::DoTransformY( real y )
+	{
+		int l_result = int( y );
+		RenderWindowSPtr l_window = m_pRenderWindow.lock();
+
+		if ( l_window )
+		{
+			l_result = int( y * GetClientSize().y / real( l_window->GetCamera()->GetHeight() ) );
+		}
+
+		return l_result;
+	}
+
 	BEGIN_EVENT_TABLE( RenderPanel, wxPanel )
-		EVT_TIMER( eTIMER_ID_FORWARD,	RenderPanel::OnTimerFwd	)
-		EVT_TIMER( eTIMER_ID_BACK,		RenderPanel::OnTimerBck	)
-		EVT_TIMER( eTIMER_ID_LEFT,		RenderPanel::OnTimerLft	)
-		EVT_TIMER( eTIMER_ID_RIGHT,		RenderPanel::OnTimerRgt	)
-		EVT_TIMER( eTIMER_ID_UP,		RenderPanel::OnTimerUp	)
-		EVT_TIMER( eTIMER_ID_DOWN,		RenderPanel::OnTimerDwn	)
-		EVT_SIZE(	RenderPanel::OnSize	)
-		EVT_MOVE(	RenderPanel::OnMove	)
-		EVT_PAINT(	RenderPanel::OnPaint	)
-		EVT_ENTER_WINDOW(	RenderPanel::OnEnterWindow	)
-		EVT_LEAVE_WINDOW(	RenderPanel::OnLeaveWindow	)
-		EVT_ERASE_BACKGROUND(	RenderPanel::OnEraseBackground	)
-		EVT_SET_FOCUS(	RenderPanel::OnSetFocus	)
-		EVT_KILL_FOCUS(	RenderPanel::OnKillFocus	)
-		EVT_KEY_DOWN(	RenderPanel::OnKeyDown	)
-		EVT_KEY_UP(	RenderPanel::OnKeyUp	)
-		EVT_LEFT_DCLICK(	RenderPanel::OnMouseLDClick	)
-		EVT_LEFT_DOWN(	RenderPanel::OnMouseLDown	)
-		EVT_LEFT_UP(	RenderPanel::OnMouseLUp	)
-		EVT_MIDDLE_DOWN(	RenderPanel::OnMouseMDown	)
-		EVT_MIDDLE_UP(	RenderPanel::OnMouseMUp	)
-		EVT_RIGHT_DOWN(	RenderPanel::OnMouseRDown	)
-		EVT_RIGHT_UP(	RenderPanel::OnMouseRUp	)
-		EVT_MOTION(	RenderPanel::OnMouseMove	)
-		EVT_MOUSEWHEEL(	RenderPanel::OnMouseWheel	)
-		EVT_MENU(	wxID_EXIT,			RenderPanel::OnMenuClose	)
+		EVT_TIMER( eTIMER_ID_FORWARD, RenderPanel::OnTimerFwd )
+		EVT_TIMER( eTIMER_ID_BACK, RenderPanel::OnTimerBck )
+		EVT_TIMER( eTIMER_ID_LEFT, RenderPanel::OnTimerLft )
+		EVT_TIMER( eTIMER_ID_RIGHT, RenderPanel::OnTimerRgt )
+		EVT_TIMER( eTIMER_ID_UP, RenderPanel::OnTimerUp )
+		EVT_TIMER( eTIMER_ID_DOWN, RenderPanel::OnTimerDwn )
+		EVT_SIZE( RenderPanel::OnSize )
+		EVT_MOVE( RenderPanel::OnMove )
+		EVT_PAINT( RenderPanel::OnPaint )
+		EVT_ENTER_WINDOW( RenderPanel::OnEnterWindow )
+		EVT_LEAVE_WINDOW( RenderPanel::OnLeaveWindow )
+		EVT_ERASE_BACKGROUND( RenderPanel::OnEraseBackground )
+		EVT_SET_FOCUS( RenderPanel::OnSetFocus )
+		EVT_KILL_FOCUS( RenderPanel::OnKillFocus )
+		EVT_KEY_DOWN( RenderPanel::OnKeyDown )
+		EVT_KEY_UP( RenderPanel::OnKeyUp )
+		EVT_CHAR( RenderPanel::OnChar )
+		EVT_LEFT_DCLICK( RenderPanel::OnMouseLDClick )
+		EVT_LEFT_DOWN( RenderPanel::OnMouseLDown )
+		EVT_LEFT_UP( RenderPanel::OnMouseLUp )
+		EVT_MIDDLE_DOWN( RenderPanel::OnMouseMDown )
+		EVT_MIDDLE_UP( RenderPanel::OnMouseMUp )
+		EVT_RIGHT_DOWN( RenderPanel::OnMouseRDown )
+		EVT_RIGHT_UP( RenderPanel::OnMouseRUp )
+		EVT_MOTION( RenderPanel::OnMouseMove )
+		EVT_MOUSEWHEEL( RenderPanel::OnMouseWheel )
+		EVT_MENU( wxID_EXIT, RenderPanel::OnMenuClose )
 	END_EVENT_TABLE()
 
 	void RenderPanel::OnTimerFwd( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pFpTranslateCamEvent, m_pListener, real( 0 ), real( 0 ), m_rFpCamSpeed );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, -m_rFpCamSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerBck( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pFpTranslateCamEvent, m_pListener, real( 0 ), real( 0 ), -m_rFpCamSpeed );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, 0.0_r, m_rFpCamSpeed ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerLft( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pFpTranslateCamEvent, m_pListener, m_rFpCamSpeed, real( 0 ), real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, -m_rFpCamSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerRgt( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pFpTranslateCamEvent, m_pListener, -m_rFpCamSpeed, real( 0 ), real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, m_rFpCamSpeed, 0.0_r, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerUp( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pFpTranslateCamEvent, m_pListener, real( 0 ), -m_rFpCamSpeed, real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, m_rFpCamSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnTimerDwn( wxTimerEvent & p_event )
 	{
-		MouseCameraEvent::Add( m_pFpTranslateCamEvent, m_pListener, real( 0 ), m_rFpCamSpeed, real( 0 ) );
+		m_pListener->PostEvent( std::make_shared< TranslateNodeEvent >( m_currentNode, 0.0_r, -m_rFpCamSpeed, 0.0_r ) );
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnSize( wxSizeEvent & p_event )
 	{
-		wxClientDC l_dc( this );
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
 
-		if ( m_pRenderWindow.lock() )
+		if ( l_pWindow )
 		{
-			m_pRenderWindow.lock()->Resize( p_event.GetSize().x, p_event.GetSize().y );
+			l_pWindow->Resize( p_event.GetSize().x, p_event.GetSize().y );
 		}
 		else
 		{
-			l_dc.SetBrush( wxBrush( *wxWHITE ) );
-			l_dc.SetPen( wxPen( *wxWHITE ) );
+			wxClientDC l_dc( this );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, p_event.GetSize().x, p_event.GetSize().y );
 		}
 
@@ -228,12 +372,13 @@ namespace CastorViewer
 
 	void RenderPanel::OnMove( wxMoveEvent & p_event )
 	{
-		wxClientDC l_dc( this );
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
 
-		if ( !m_pRenderWindow.lock() )
+		if ( !l_pWindow )
 		{
-			l_dc.SetBrush( wxBrush( *wxWHITE ) );
-			l_dc.SetPen( wxPen( *wxWHITE ) );
+			wxClientDC l_dc( this );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 
@@ -242,12 +387,13 @@ namespace CastorViewer
 
 	void RenderPanel::OnPaint( wxPaintEvent & p_event )
 	{
-		wxPaintDC l_dc( this );
+		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
 
-		if ( !m_pRenderWindow.lock() )
+		if ( !l_pWindow )
 		{
-			l_dc.SetBrush( wxBrush( *wxWHITE ) );
-			l_dc.SetPen( wxPen( *wxWHITE ) );
+			wxPaintDC l_dc( this );
+			l_dc.SetBrush( wxBrush( GuiCommon::INACTIVE_TAB_COLOUR ) );
+			l_dc.SetPen( wxPen( GuiCommon::INACTIVE_TAB_COLOUR ) );
 			l_dc.DrawRectangle( 0, 0, GetClientSize().x, GetClientSize().y );
 		}
 
@@ -282,33 +428,46 @@ namespace CastorViewer
 
 	void RenderPanel::OnKeyDown( wxKeyEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+#if HAS_CASTORGUI
 
-		switch ( p_event.GetKeyCode() )
+		if ( !m_controlsManager || !m_controlsManager->FireKeyDown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+
+#endif
 		{
-		case WXK_LEFT:
-			DoStartTimer( eTIMER_ID_LEFT );
-			break;
+			switch ( p_event.GetKeyCode() )
+			{
+			case WXK_LEFT:
+			case 'Q':
+				DoStartTimer( eTIMER_ID_LEFT );
+				break;
 
-		case WXK_RIGHT:
-			DoStartTimer( eTIMER_ID_RIGHT );
-			break;
+			case WXK_RIGHT:
+			case 'D':
+				DoStartTimer( eTIMER_ID_RIGHT );
+				break;
 
-		case WXK_UP:
-			DoStartTimer( eTIMER_ID_FORWARD );
-			break;
+			case WXK_UP:
+			case 'Z':
+				DoStartTimer( eTIMER_ID_FORWARD );
+				break;
 
-		case WXK_DOWN:
-			DoStartTimer( eTIMER_ID_BACK );
-			break;
+			case WXK_DOWN:
+			case 'S':
+				DoStartTimer( eTIMER_ID_BACK );
+				break;
 
-		case WXK_PAGEUP:
-			DoStartTimer( eTIMER_ID_UP );
-			break;
+			case WXK_PAGEUP:
+				DoStartTimer( eTIMER_ID_UP );
+				break;
 
-		case WXK_PAGEDOWN:
-			DoStartTimer( eTIMER_ID_DOWN );
-			break;
+			case WXK_PAGEDOWN:
+				DoStartTimer( eTIMER_ID_DOWN );
+				break;
+
+			case 'L':
+				m_currentNode = m_lightsNode;
+				break;
+			}
 		}
 
 		p_event.Skip();
@@ -316,226 +475,240 @@ namespace CastorViewer
 
 	void RenderPanel::OnKeyUp( wxKeyEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+#if HAS_CASTORGUI
 
-		switch ( p_event.GetKeyCode() )
+		if ( !m_controlsManager || !m_controlsManager->FireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
+
+#endif
 		{
-		case 'C':
-			DoStopTimer( eTIMER_ID_COUNT );
-			m_eCameraMode = eCAMERA_MODE( ( eCAMERA_MODE_COUNT - 1 ) - int( m_eCameraMode ) );
-
-			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
+			switch ( p_event.GetKeyCode() )
 			{
-				this->SetCursor( *m_pCursorNone );
-			}
-			else
-			{
-				this->SetCursor( *m_pCursorArrow );
-			}
-
-			break;
-
-		case 'R':
-			DoStopTimer( eTIMER_ID_COUNT );
-			l_pWindow->GetScene()->GetObjectRootNode()->SetPosition( Point3r( 0, 0, 0 ) );
-			l_pWindow->GetScene()->GetObjectRootNode()->SetOrientation( m_qOriginalOrientation );
-			l_pWindow->GetCamera()->GetParent()->SetPosition( m_ptOriginalPosition );
-			m_rZoom		= 1.0;
-			m_deltaX	= 0.0;
-			m_deltaY	= 0.0;
-			m_x			= 0.0;
-			m_y			= 0.0;
-			m_oldX		= 0.0;
-			m_oldY		= 0.0;
-			break;
-
-		case 'W':
-			DoStopTimer( eTIMER_ID_COUNT );
-
-			switch ( l_pWindow->GetPrimitiveType() )
-			{
-			case eTOPOLOGY_TRIANGLES:
-				l_pWindow->SetPrimitiveType( eTOPOLOGY_LINES );
+			case 'R':
+				DoResetCamera();
 				break;
 
-			case eTOPOLOGY_LINES:
-				l_pWindow->SetPrimitiveType( eTOPOLOGY_POINTS );
+			case WXK_F5:
+				DoReloadScene();
 				break;
 
-			case eTOPOLOGY_POINTS:
-				l_pWindow->SetPrimitiveType( eTOPOLOGY_TRIANGLES );
-				break;
-			}
-
-			break;
-
-		case WXK_F5:
-			DoStopTimer( eTIMER_ID_COUNT );
-			wxGetApp().GetMainFrame()->LoadScene();
-			m_rZoom		= 1.0;
-			m_deltaX	= 0.0;
-			m_deltaY	= 0.0;
-			m_x			= 0.0;
-			m_y			= 0.0;
-			m_oldX		= 0.0;
-			m_oldY		= 0.0;
-			break;
-
-		case WXK_LEFT:
-			if ( m_eCameraMode == eCAMERA_MODE_FIXED )
-			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, 90.0, 0, 0 );
-			}
-			else
-			{
+			case WXK_LEFT:
+			case 'Q':
 				DoStopTimer( eTIMER_ID_LEFT );
-			}
+				break;
 
-			break;
-
-		case WXK_RIGHT:
-			if ( m_eCameraMode == eCAMERA_MODE_FIXED )
-			{
-				MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, -90.0, 0, 0 );
-			}
-			else
-			{
+			case WXK_RIGHT:
+			case 'D':
 				DoStopTimer( eTIMER_ID_RIGHT );
-			}
+				break;
 
-			break;
-
-		case WXK_UP:
-			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
-			{
+			case WXK_UP:
+			case 'Z':
 				DoStopTimer( eTIMER_ID_FORWARD );
-			}
+				break;
 
-			break;
-
-		case WXK_DOWN:
-			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
-			{
+			case WXK_DOWN:
+			case 'S':
 				DoStopTimer( eTIMER_ID_BACK );
-			}
+				break;
 
-			break;
-
-		case WXK_PAGEUP:
-			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
-			{
+			case WXK_PAGEUP:
 				DoStopTimer( eTIMER_ID_UP );
-			}
+				break;
 
-			break;
-
-		case WXK_PAGEDOWN:
-			if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
-			{
+			case WXK_PAGEDOWN:
 				DoStopTimer( eTIMER_ID_DOWN );
-			}
+				break;
 
-			break;
+			case 'L':
+				m_currentNode = m_cameraNode;
+				break;
+			}
 		}
+
+		p_event.Skip();
+	}
+
+	void RenderPanel::OnChar( wxKeyEvent & p_event )
+	{
+#if HAS_CASTORGUI
+
+		if ( m_controlsManager )
+		{
+			wxChar l_key = p_event.GetUnicodeKey();
+			wxString l_tmp;
+			l_tmp << l_key;
+			m_controlsManager->FireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( l_tmp.mb_str( wxConvUTF8 ) ) );
+		}
+
+#endif
 
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseLDClick( wxMouseEvent & p_event )
 	{
-		m_pListener->PostEvent( m_pKeyboardEvent );
+		if ( m_pListener )
+		{
+			m_pListener->PostEvent( m_pKeyboardEvent );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseLDown( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = true;
-		m_oldX = real( p_event.GetX() );
-		m_oldY = real( p_event.GetY() );
+		m_oldX = DoTransformX( p_event.GetX() );
+		m_oldY = DoTransformY( p_event.GetY() );
+
+#if HAS_CASTORGUI
+
+		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT ) )
+
+#endif
+		{
+			SetCursor( *m_pCursorNone );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseLUp( wxMouseEvent & p_event )
 	{
 		m_mouseLeftDown = false;
+
+#if HAS_CASTORGUI
+
+		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT ) )
+
+#endif
+		{
+			SetCursor( *m_pCursorArrow );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseMDown( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = true;
-		m_oldX = real( p_event.GetX() );
-		m_oldY = real( p_event.GetY() );
+		m_oldX = DoTransformX( p_event.GetX() );
+		m_oldY = DoTransformY( p_event.GetY() );
+
+#if HAS_CASTORGUI
+
+		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
+
+
+#endif
+		{
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseMUp( wxMouseEvent & p_event )
 	{
 		m_mouseMiddleDown = false;
+
+#if HAS_CASTORGUI
+
+		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
+
+#endif
+		{
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseRDown( wxMouseEvent & p_event )
 	{
 		m_mouseRightDown = true;
-		m_oldX = real( p_event.GetX() );
-		m_oldY = real( p_event.GetY() );
+		m_oldX = DoTransformX( p_event.GetX() );
+		m_oldY = DoTransformY( p_event.GetY() );
+
+#if HAS_CASTORGUI
+
+		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT ) )
+
+#endif
+		{
+			SetCursor( *m_pCursorNone );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseRUp( wxMouseEvent & p_event )
 	{
 		m_mouseRightDown = false;
+
+#if HAS_CASTORGUI
+
+		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT ) )
+
+#endif
+		{
+			SetCursor( *m_pCursorArrow );
+		}
+
 		p_event.Skip();
 	}
 
 	void RenderPanel::OnMouseMove( wxMouseEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
-		m_x = real( p_event.GetX() );
-		m_y = real( p_event.GetY() );
-		m_deltaX = ( m_oldX - m_x ) / 2.0f;
-		m_deltaY = ( m_oldY - m_y ) / 2.0f;
+		m_x = DoTransformX( p_event.GetX() );
+		m_y = DoTransformY( p_event.GetY() );
 
-		if ( l_pWindow )
+#if HAS_CASTORGUI
+
+		if ( m_controlsManager && m_controlsManager->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
-			if ( m_eCameraMode == eCAMERA_MODE_FIXED )
+			p_event.Skip();
+		}
+		else
+
+#endif
+		{
+			RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+
+			if ( l_pWindow )
 			{
+				real l_deltaX = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldX - m_x ) / 2.0_r;
+				real l_deltaY = ( m_rFpCamSpeed / 2.0_r ) * ( m_oldY - m_y ) / 2.0_r;
+
+				if ( p_event.ControlDown() )
+				{
+					l_deltaX = 0;
+				}
+				else if ( p_event.ShiftDown() )
+				{
+					l_deltaY = 0;
+				}
+
 				if ( m_mouseLeftDown )
 				{
-					if ( l_pWindow->GetViewportType() == eVIEWPORT_TYPE_3D )
-					{
-						MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, m_deltaX, 0, 0 );
-					}
-					else
-					{
-						MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, 0, 0, m_deltaX );
-					}
-				}
-				else if ( m_mouseMiddleDown )
-				{
-					MouseCameraEvent::Add( m_pRotateCamEvent, m_pListener, 0, m_deltaX, 0 );
+					m_pListener->PostEvent( std::make_shared< RotateNodeEvent >( m_currentNode, l_deltaY, l_deltaX, 0.0_r ) );
 				}
 				else if ( m_mouseRightDown )
 				{
-					MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, -m_rZoom * m_deltaX / real( 40 ), m_rZoom * m_deltaY / real( 40 ), 0 );
+					m_pListener->PostEvent( std::make_shared< RotateNodeEvent >( m_currentNode, -l_deltaX, l_deltaY, 0.0_r ) );
 				}
 
-				p_event.Skip();
+				if ( m_mouseLeftDown || m_mouseRightDown )
+				{
+					WarpPointer( DoTransformX( m_oldX ), DoTransformY( m_oldY ) );
+					m_x = m_oldX;
+					m_y = m_oldY;
+				}
+
+				p_event.Skip( false );
 			}
 			else
 			{
-				Quaternion l_qCamera = l_pWindow->GetCamera()->GetParent()->GetOrientation();
-				MouseCameraEvent::Add( m_pFpRotateCamEvent, m_pListener, m_deltaX, m_deltaY, 0 );
-				WarpPointer( int( m_oldX ), int( m_oldY ) );
-				m_x = m_oldX;
-				m_y = m_oldY;
-				p_event.Skip( false );
+				p_event.Skip();
 			}
-		}
-		else
-		{
-			p_event.Skip();
 		}
 
 		m_oldX = m_x;
@@ -544,44 +717,24 @@ namespace CastorViewer
 
 	void RenderPanel::OnMouseWheel( wxMouseEvent & p_event )
 	{
-		RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
+		int l_wheelRotation = p_event.GetWheelRotation();
 
-		if ( m_eCameraMode == eCAMERA_MODE_FIXED )
+#if HAS_CASTORGUI
+
+		if ( !m_controlsManager || !m_controlsManager->FireMouseWheel( Position( 0, l_wheelRotation ) ) )
+
+#endif
 		{
-			if ( l_pWindow )
-			{
-				int l_wheelRotation = p_event.GetWheelRotation();
-				Point3r const & l_cameraPos = l_pWindow->GetCamera()->GetParent()->GetPosition();
-
-				if ( l_wheelRotation < 0 )
-				{
-					MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, 0, 0, ( l_cameraPos[2] - real( 1 ) ) / 10 );
-					m_rZoom /= real( 0.9 );
-				}
-				else if ( l_wheelRotation > 0 )
-				{
-					MouseCameraEvent::Add( m_pTranslateCamEvent, m_pListener, 0, 0, ( real( 1 ) - l_cameraPos[2] ) / 10 );
-					m_rZoom *= real( 0.9 );
-				}
-
-				if ( m_rZoom <= 1.0 )
-				{
-					m_rZoom = real( 1.0 );
-				}
-			}
-		}
-		else if ( m_eCameraMode == eCAMERA_MODE_MOBILE )
-		{
-			int l_wheelRotation = p_event.GetWheelRotation();
-
 			if ( l_wheelRotation < 0 )
 			{
-				m_rFpCamSpeed *= real( 0.9 );
+				m_rFpCamSpeed *= CAM_SPEED_INC;
 			}
 			else
 			{
-				m_rFpCamSpeed /= real( 0.9 );
+				m_rFpCamSpeed /= CAM_SPEED_INC;
 			}
+
+			clamp( m_rFpCamSpeed, MIN_CAM_SPEED, MAX_CAM_SPEED );
 		}
 
 		p_event.Skip();

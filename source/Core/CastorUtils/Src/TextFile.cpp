@@ -1,36 +1,14 @@
-#include "TextFile.hpp"
+﻿#include "TextFile.hpp"
 
 namespace Castor
 {
-	TextFile::TextFile( Path const & p_fileName, int p_iMode, eENCODING_MODE p_eEncodingMode )
-		:	File( p_fileName, p_iMode & ( ~eOPEN_MODE_BINARY ), p_eEncodingMode	)
-	{
-	}
-
-	TextFile::TextFile( TextFile const & p_file )
-		:	File( p_file	)
-	{
-	}
-
-	TextFile::TextFile( TextFile && p_file )
-		:	File( std::move( p_file )	)
+	TextFile::TextFile( Path const & p_fileName, int p_mode, eENCODING_MODE p_encodingMode )
+		:	File( p_fileName, p_mode & ( ~eOPEN_MODE_BINARY ), p_encodingMode	)
 	{
 	}
 
 	TextFile::~TextFile()
 	{
-	}
-
-	TextFile & TextFile::operator =( TextFile const & p_file )
-	{
-		File::operator =( p_file );
-		return *this;
-	}
-
-	TextFile & TextFile::operator =( TextFile && p_file )
-	{
-		File::operator =( std::move( p_file ) );
-		return *this;
 	}
 
 	uint64_t TextFile::ReadLine( String & p_toRead, uint64_t p_size, String p_strSeparators )
@@ -52,12 +30,12 @@ namespace Castor
 				if ( m_eEncoding == eENCODING_MODE_ASCII )
 				{
 					l_iOrigChar = getc( m_pFile );
-					l_cChar = str_utils::from_char( char( l_iOrigChar ) )[0];
+					l_cChar = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
 				}
 				else
 				{
 					l_iOrigChar = getwc( m_pFile );
-					l_cChar = str_utils::from_wchar( wchar_t( l_iOrigChar ) )[0];
+					l_cChar = string::string_cast< xchar, wchar_t >( { wchar_t( l_iOrigChar ), wchar_t( 0 ) } )[0];
 				}
 
 				l_bContinue =  ! feof( m_pFile );
@@ -65,19 +43,18 @@ namespace Castor
 				if ( l_bContinue )
 				{
 					l_bContinue = p_strSeparators.find( l_cChar ) == String::npos;
-					/*
-										if ( ! l_bContinue)
-										{
-											if (m_eEncoding == eASCII)
-											{
-												ungetc( int( String( l_cChar).char_str()[0]), m_pFile);
-											}
-											else
-											{
-												ungetwc( wint_t( String( l_cChar).wchar_str()[0]), m_pFile);
-											}
-										}
-					*/
+
+					//if ( ! l_bContinue)
+					//{
+					//	if (m_eEncoding == eASCII)
+					//	{
+					//		ungetc( int( String( l_cChar).char_str()[0]), m_pFile);
+					//	}
+					//	else
+					//	{
+					//		ungetwc( wint_t( String( l_cChar).wchar_str()[0]), m_pFile);
+					//	}
+					//}
 				}
 
 				if ( l_bContinue )
@@ -113,12 +90,12 @@ namespace Castor
 			if ( m_eEncoding == eENCODING_MODE_ASCII )
 			{
 				l_iOrigChar = getc( m_pFile );
-				p_toRead = str_utils::from_char( char( l_iOrigChar ) )[0];
+				p_toRead = string::string_cast< xchar, char >( { char( l_iOrigChar ), char( 0 ) } )[0];
 			}
 			else
 			{
 				l_iOrigChar = getwc( m_pFile );
-				p_toRead = str_utils::from_wchar( wchar_t( l_iOrigChar ) )[0];
+				p_toRead = string::string_cast< xchar, wchar_t >( { wchar_t( l_iOrigChar ), wchar_t( 0 ) } )[0];
 			}
 
 			l_uiReturn++;
@@ -127,7 +104,7 @@ namespace Castor
 		return l_uiReturn;
 	}
 
-	uint64_t TextFile::WriteText( String const & p_strLine )
+	uint64_t TextFile::WriteText( String const & p_line )
 	{
 		CHECK_INVARIANTS();
 		REQUIRE( ( m_iMode & eOPEN_MODE_WRITE ) || ( m_iMode & eOPEN_MODE_APPEND ) );
@@ -137,11 +114,11 @@ namespace Castor
 		{
 			if ( m_eEncoding != eENCODING_MODE_ASCII )
 			{
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( str_utils::to_wstr( p_strLine ).c_str() ), sizeof( char ) * p_strLine.size() );
+				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< wchar_t >( p_line ).c_str() ), sizeof( char ) * p_line.size() );
 			}
 			else
 			{
-				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( str_utils::to_str( p_strLine ).c_str() ), sizeof( char ) * p_strLine.size() );
+				l_uiReturn =  DoWrite( reinterpret_cast< uint8_t const * >( string::string_cast< char >( p_line ).c_str() ), sizeof( char ) * p_line.size() );
 			}
 		}
 

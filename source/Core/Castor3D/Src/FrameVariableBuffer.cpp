@@ -1,4 +1,4 @@
-#include "FrameVariableBuffer.hpp"
+﻿#include "FrameVariableBuffer.hpp"
 #include "FrameVariable.hpp"
 
 using namespace Castor;
@@ -8,69 +8,88 @@ namespace Castor3D
 {
 	uint32_t FrameVariableBuffer::sm_uiCount = 0;
 
-	FrameVariableBuffer::FrameVariableBuffer( String const & p_strName, RenderSystem * p_pRenderSystem )
-		:	m_pRenderSystem( p_pRenderSystem )
-		,	m_strName( p_strName )
-		,	m_uiIndex( sm_uiCount++ )
+	FrameVariableBuffer::FrameVariableBuffer( String const & p_name, RenderSystem & p_renderSystem )
+		: OwnedBy< RenderSystem >( p_renderSystem )
+		, m_name( p_name )
+		, m_index( sm_uiCount++ )
 	{
 	}
 
 	FrameVariableBuffer::~FrameVariableBuffer()
 	{
-		CASTOR_ASSERT( m_mapVariables.size() == 0 && m_listVariables.size() == 0 );
 	}
 
-	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgramBase & p_program, eFRAME_VARIABLE_TYPE p_eType, String const & p_strName, uint32_t p_uiNbOcc )
+	FrameVariableSPtr FrameVariableBuffer::CreateVariable( ShaderProgram & p_program, eFRAME_VARIABLE_TYPE p_type, String const & p_name, uint32_t p_occurences )
 	{
-		FrameVariableSPtr l_pReturn;
-		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_strName );
+		FrameVariableSPtr l_return;
+		FrameVariablePtrStrMapConstIt l_it = m_mapVariables.find( p_name );
 
 		if ( l_it == m_mapVariables.end() )
 		{
-			l_pReturn = DoCreateVariable( &p_program, p_eType, p_strName, p_uiNbOcc );
+			l_return = DoCreateVariable( &p_program, p_type, p_name, p_occurences );
 
-			if ( l_pReturn )
+			if ( l_return )
 			{
-				m_mapVariables.insert( std::make_pair( p_strName, l_pReturn ) );
-				m_listVariables.push_back( l_pReturn );
+				m_mapVariables.insert( std::make_pair( p_name, l_return ) );
+				m_listVariables.push_back( l_return );
 			}
 		}
 		else
 		{
-			l_pReturn = l_it->second.lock();
+			l_return = l_it->second.lock();
 		}
 
-		return l_pReturn;
+		return l_return;
 	}
 
-	bool FrameVariableBuffer::Initialise( ShaderProgramBase & p_program )
+	void FrameVariableBuffer::RemoveVariable( String const & p_name )
 	{
-		bool l_bReturn = true;
+		FrameVariablePtrStrMapConstIt l_itMap = m_mapVariables.find( p_name );
+
+		if ( l_itMap != m_mapVariables.end() )
+		{
+			m_mapVariables.erase( l_itMap );
+		}
+
+		auto && l_itList = std::find_if( m_listVariables.begin(), m_listVariables.end(), [&p_name]( FrameVariableSPtr p_variable )
+		{
+			return p_name == p_variable->GetName();
+		} );
+
+		if ( l_itList != m_listVariables.end() )
+		{
+			m_listVariables.erase( l_itList );
+		}
+	}
+
+	bool FrameVariableBuffer::Initialise( ShaderProgram & p_program )
+	{
+		bool l_return = true;
 
 		if ( !DoInitialise( &p_program ) )
 		{
-			uint32_t l_uiTotalSize = 0;
+			uint32_t l_totalSize = 0;
 
-			for ( FrameVariablePtrListIt l_it = m_listVariables.begin(); l_it != m_listVariables.end(); ++l_it )
+			for ( auto && l_variable : m_listVariables )
 			{
-				if ( ( *l_it )->Initialise() )
+				if ( l_variable->Initialise() )
 				{
-					l_uiTotalSize += ( *l_it )->size();
-					m_listInitialised.push_back( *l_it );
+					l_totalSize += l_variable->size();
+					m_listInitialised.push_back( l_variable );
 				}
 			}
 
-			m_buffer.resize( l_uiTotalSize );
-			l_uiTotalSize = 0;
+			m_buffer.resize( l_totalSize );
+			uint8_t * l_buffer = m_buffer.data();
 
-			for ( FrameVariablePtrListIt l_it = m_listInitialised.begin(); l_it != m_listInitialised.end(); ++l_it )
+			for ( auto && l_variable : m_listInitialised )
 			{
-				( *l_it )->link( &m_buffer[l_uiTotalSize] );
-				l_uiTotalSize += ( *l_it )->size();
+				l_variable->link( l_buffer );
+				l_buffer += l_variable->size();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	void FrameVariableBuffer::Cleanup()
@@ -80,13 +99,13 @@ namespace Castor3D
 		m_listVariables.clear();
 	}
 
-	bool FrameVariableBuffer::Bind()
+	bool FrameVariableBuffer::Bind( uint32_t p_index )
 	{
-		return DoBind();
+		return DoBind( p_index );
 	}
 
-	void FrameVariableBuffer::Unbind()
+	void FrameVariableBuffer::Unbind( uint32_t p_index )
 	{
-		DoUnbind();
+		DoUnbind( p_index );
 	}
 }

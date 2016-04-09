@@ -1,26 +1,47 @@
+option( CASTOR_USE_SSE2 "Use SSE2 instructions for Point4f and Matrix4x4f operations" TRUE)
+
 project( CastorUtils )
 
 include( Doxygen )
 
 find_package( Freetype )
+if ( MSW )
+	find_package( ZLIB 1.2.7 )
+else ()
+	find_package( ZLIB )
+endif ()
 find_package( FreeImage )
+find_package( LibZip )
 
 if( NOT WIN32 )
 	find_package( X11 )
 endif()
 
 if( FREETYPE_FOUND )
-	message( STATUS "+ Found FreeType" )
+	message( STATUS "+ Found FreeType (version ${FREETYPE_VERSION_STRING})" )
+endif()
+
+if( ZLIB_FOUND )
+	message( STATUS "+ Found Zlib (version ${ZLIB_VERSION_STRING})" )
 endif()
 
 if( FREEIMAGE_FOUND )
-	message( STATUS "+ Found FreeImage" )
+	message( STATUS "+ Found FreeImage (version ${FreeImage_VERSION_STRING})" )
 endif()
 
-if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
+if( LIBZIP_FOUND )
+	message( STATUS "+ Found libzip" )
+endif()
+
+if( FREEIMAGE_FOUND AND FREETYPE_FOUND AND ZLIB_FOUND AND LIBZIP_FOUND )
 	include_directories( ${FREETYPE_INCLUDE_DIRS} )
 	include_directories( ${FreeImage_INCLUDE_DIR} )
-	
+	include_directories( ${ZLIB_INCLUDE_DIRS} )
+	include_directories( ${LIBZIP_INCLUDE_DIRS} )
+
+	option( CASTOR_USE_DOUBLE "Use double precision floats for Castor::real type" FALSE )
+	option( CASTOR_USE_TRACK "Enable function tracking" FALSE )
+
 	#FreeImage Libs
 	set( FreeImageLibraries "")
 	foreach(Lib ${FreeImage_LIBRARIES})
@@ -30,7 +51,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 			set(FreeImageLibraries "${Lib}")
 		endif()
 	endforeach()
-	
+
 	#FreeType Libs
 	set( FreeTypeLibraries "")
 	foreach(Lib ${FREETYPE_LIBRARIES})
@@ -40,49 +61,119 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 			set(FreeTypeLibraries "${Lib}")
 		endif()
 	endforeach()
-	
-	set( x11Libraries "" )
-	foreach( Lib ${X11_LIBRARIES} )
-		if( x11Libraries )
-			set( x11Libraries "${x11Libraries}|${Lib}" )
+
+	#Zlib Libs
+	set( ZlibLibraries "")
+	foreach(Lib ${ZLIB_LIBRARIES})
+		if (ZlibLibraries)
+			set(ZlibLibraries "${ZlibLibraries}|${Lib}")
 		else()
-			set( x11Libraries "${Lib}" )
+			set(ZlibLibraries "${Lib}")
 		endif()
 	endforeach()
-	
+
+	#libzip Libs
+	set( LibZipLibraries "")
+	foreach(Lib ${LIBZIP_LIBRARY})
+		if (LibZipLibraries)
+			set(LibZipLibraries "${LibZipLibraries}|${Lib}")
+		else()
+			set(LibZipLibraries "${Lib}")
+		endif()
+	endforeach()
+
+	#X11 Libs
+	set( X11Libraries "" )
+	foreach( Lib ${X11_LIBRARIES} )
+		if( X11Libraries )
+			set( X11Libraries "${X11Libraries}|${Lib}" )
+		else()
+			set( X11Libraries "${Lib}" )
+		endif()
+	endforeach()
+
 	set( CastorBinsDependencies 
 		${CastorBinsDependencies}
-		CastorUtils
+		${PROJECT_NAME}
 		PARENT_SCOPE
 	)
-	
-	set( CU_VERSION_MAJOR	0 )
-	set( CU_VERSION_MINOR	7 )
-	set( CU_VERSION_BUILD	0 )
-	
-	set( CASTOR_USE_PCH 0 )
+
+	set( CastorMinLibraries
+		${CastorMinLibraries}
+		${FreeImageLibraries}
+		${FreeTypeLibraries}
+		${ZlibLibraries}
+		${LibZipLibraries}
+		${X11Libraries}
+	)
+
+	set( ${PROJECT_NAME}_DESCRIPTION "${MAIN_PROJECT_NAME} Utils" )
+	set( ${PROJECT_NAME}_VERSION_MAJOR	0 )
+	set( ${PROJECT_NAME}_VERSION_MINOR	8 )
+	set( ${PROJECT_NAME}_VERSION_BUILD	0 )
+
 	if( PROJECTS_USE_PRECOMPILED_HEADERS )
 		set( CASTOR_USE_PCH 1 )
+	else()
+		set( CASTOR_USE_PCH 0 )
 	endif()
-	
+	if( CASTOR_USE_DOUBLE )
+		set( CASTOR_USE_DOUBLE 1 )
+	else()
+		set( CASTOR_USE_DOUBLE 0 )
+	endif()
+	if( CASTOR_USE_TRACK )
+		set( CASTOR_USE_TRACK 1 )
+	else()
+		set( CASTOR_USE_TRACK 0 )
+	endif()
+	if( CASTOR_USE_SSE2 )
+		set( CASTOR_USE_SSE2 1 )
+	else()
+		set( CASTOR_USE_SSE2 0 )
+	endif()
+
 	configure_file( 
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/config.hpp.in
 		${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
 		@ONLY
 		NEWLINE_STYLE LF
 	)
-	
+
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR} )
 	include_directories( ${CMAKE_CURRENT_BINARY_DIR}/Src )
-	
+
 	add_target(
-		CastorUtils
-		lib
+		${PROJECT_NAME}
+		api_dll
 		""
 		"${CastorMinLibraries};${x11Libraries}"
 		"CastorUtilsPch.hpp"
 		"CastorUtilsPch.cpp"
+		"${FreeImage_FLAGS}"
+		""
+		""
+		"${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp"
 	)
+
+	if ( WIN32 )
+		target_link_libraries( ${PROJECT_NAME} Dbghelp )
+	else ()
+		target_link_libraries( ${PROJECT_NAME} dl )
+	endif ()
+
+	file( GLOB CASTOR_Pool_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.inl
+	)
+	file( GLOB CASTOR_Pool_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pool*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*MemoryData*.cpp
+	)
+	source_group( "Header Files\\Pool" FILES ${CASTOR_Pool_HEADER_FILES} )
+	source_group( "Source Files\\Pool" FILES ${CASTOR_Pool_SOURCE_FILES} )
 
 	file( GLOB CASTOR_Math_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Angle*.hpp
@@ -187,6 +278,19 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 	source_group( "Header Files\\Graphics" FILES ${CASTOR_Graphics_HEADER_FILES} )
 	source_group( "Source Files\\Graphics" FILES ${CASTOR_Graphics_SOURCE_FILES} )
 
+	file( GLOB CASTOR_FileParser_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.inl
+	)
+	file( GLOB CASTOR_FileParser_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*FileParser*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*ParserParameter*.cpp
+	)
+	source_group( "Header Files\\FileParser" FILES ${CASTOR_FileParser_HEADER_FILES} )
+	source_group( "Source Files\\FileParser" FILES ${CASTOR_FileParser_SOURCE_FILES} )
+
 	file( GLOB CASTOR_Data_HEADER_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.inl
@@ -196,12 +300,15 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.inl
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.inl
 	)
 	file( GLOB CASTOR_Data_SOURCE_FILES
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*File*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parser*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Loader*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Path*.cpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Archive*.cpp
 	)
 	source_group( "Header Files\\Data" FILES ${CASTOR_Data_HEADER_FILES} )
 	source_group( "Source Files\\Data" FILES ${CASTOR_Data_SOURCE_FILES} )
@@ -251,6 +358,8 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 	source_group( "Source Files\\Miscellaneous" FILES ${CASTOR_Miscellaneous_SOURCE_FILES} )
 
 	file( GLOB CASTOR_Config_HEADER_FILES
+		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.hpp
+		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.hpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.inl
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Config*.hpp
@@ -261,6 +370,7 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*SmartPtr*.inl
 	)
 	file( GLOB CASTOR_Config_SOURCE_FILES
+		${CMAKE_CURRENT_BINARY_DIR}/Src/*config*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*config*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Config*.cpp
 		${CMAKE_CURRENT_SOURCE_DIR}/Src/*Macros*.cpp
@@ -271,27 +381,213 @@ if( FREEIMAGE_FOUND AND FREETYPE_FOUND )
 
 	install(
 		FILES ${CMAKE_CURRENT_BINARY_DIR}/Src/config.hpp
-		DESTINATION include/CastorUtils
-		COMPONENT CastorUtils
+		DESTINATION include/${PROJECT_NAME}
+		COMPONENT ${PROJECT_NAME}_dev
 	)
-	
+
 	if ( WIN32 )
 		include( InstallRequiredSystemLibraries )
 		# Preparing FreeImage and freetype dlls installation
 		get_filename_component( FreeTypePath ${FREETYPE_LIBRARY} PATH)
-		install(
-			FILES ${FreeTypePath}/../bin/freetype6.dll ${FreeTypePath}/../bin/zlib1.dll ${FreeImage_LIBRARY_DIR}/FreeImage.dll
-			DESTINATION bin
-			COMPONENT CastorUtils
+		get_filename_component( FreeTypePath ${FreeTypePath} PATH)
+		get_filename_component( LibZipPath ${LIBZIP_LIBRARY} PATH)
+		get_filename_component( LibZipPath ${LibZipPath} PATH)
+
+		if ( ZLIB_LIBRARY_RELEASE OR ZLIB_LIBRARY_DEBUG )
+			if ( ZLIB_LIBRARY_RELEASE )
+				get_filename_component( ZlibPath ${ZLIB_LIBRARY_RELEASE} PATH)
+				string( FIND ${ZlibPath} "Release" _FOUND )
+
+				if ( ${_FOUND} EQUAL -1 )
+					get_filename_component( ZlibPath ${ZlibPath} PATH)
+				endif ()
+
+				get_filename_component( ZlibPath ${ZlibPath} PATH)
+
+				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
+					add_custom_command(
+						TARGET ${PROJECT_NAME}
+						POST_BUILD
+						COMMAND
+							${CMAKE_COMMAND} -E
+								copy_if_different
+								${ZlibPath}/bin/zlib1.dll
+								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+					)
+					install(
+						FILES ${ZlibPath}/bin/zlib1.dll
+						DESTINATION bin
+						COMPONENT ${PROJECT_NAME}
+					)
+				elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
+					add_custom_command(
+						TARGET ${PROJECT_NAME}
+						POST_BUILD
+						COMMAND
+							${CMAKE_COMMAND} -E
+								copy_if_different
+								${ZlibPath}/bin/zlibwapi.dll
+								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+					)
+					install(
+						FILES ${ZlibPath}/bin/zlibwapi.dll
+						DESTINATION bin
+						COMPONENT ${PROJECT_NAME}
+					)
+				endif ()
+			endif ()
+			if ( ZLIB_LIBRARY_DEBUG )
+				get_filename_component( ZlibPath ${ZLIB_LIBRARY_DEBUG} PATH)
+				string( FIND ${ZlibPath} "Release" _FOUND )
+
+				if ( ${_FOUND} EQUAL -1 )
+					get_filename_component( ZlibPath ${ZlibPath} PATH)
+				endif ()
+
+				get_filename_component( ZlibPath ${ZlibPath} PATH)
+
+				if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
+					add_custom_command(
+						TARGET ${PROJECT_NAME}
+						POST_BUILD
+						COMMAND
+							${CMAKE_COMMAND} -E
+								copy_if_different
+								${ZlibPath}/bin/zlib1.dll
+								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+					)
+					install(
+						FILES ${ZlibPath}/bin/zlib1.dll
+						DESTINATION bin
+						COMPONENT ${PROJECT_NAME}
+					)
+				elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
+					add_custom_command(
+						TARGET ${PROJECT_NAME}
+						POST_BUILD
+						COMMAND
+							${CMAKE_COMMAND} -E
+								copy_if_different
+								${ZlibPath}/bin/zlibwapi.dll
+								${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+					)
+					install(
+						FILES ${ZlibPath}/bin/zlibwapi.dll
+						DESTINATION bin
+						COMPONENT ${PROJECT_NAME}
+					)
+				endif ()
+			endif ()
+		else ()
+			get_filename_component( ZlibPath ${ZLIB_LIBRARY} PATH)
+			string( FIND ${ZlibPath} "Release" _FOUND )
+
+			if ( NOT ${_FOUND} EQUAL -1 )
+				get_filename_component( ZlibPath ${ZlibPath} PATH)
+			endif ()
+
+			string( FIND ${ZlibPath} "Debug" _FOUND )
+
+			if ( NOT ${_FOUND} EQUAL -1 )
+				get_filename_component( ZlibPath ${ZlibPath} PATH)
+			endif ()
+
+			get_filename_component( ZlibPath ${ZlibPath} PATH)
+
+			if ( EXISTS ${ZlibPath}/bin/zlib1.dll )
+				add_custom_command(
+					TARGET ${PROJECT_NAME}
+					POST_BUILD
+					COMMAND
+						${CMAKE_COMMAND} -E
+							copy_if_different
+							${ZlibPath}/bin/zlib1.dll
+							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+				)
+				install(
+					FILES ${ZlibPath}/bin/zlib1.dll
+					DESTINATION bin
+					COMPONENT ${PROJECT_NAME}
+				)
+			elseif ( EXISTS ${ZlibPath}/bin/zlib.dll )
+				add_custom_command(
+					TARGET ${PROJECT_NAME}
+					POST_BUILD
+					COMMAND
+						${CMAKE_COMMAND} -E
+							copy_if_different
+							${ZlibPath}/bin/zlib.dll
+							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+				)
+				install(
+					FILES ${ZlibPath}/bin/zlib.dll
+					DESTINATION bin
+					COMPONENT ${PROJECT_NAME}
+				)
+			elseif ( EXISTS ${ZlibPath}/bin/zlibwapi.dll )
+				add_custom_command(
+					TARGET ${PROJECT_NAME}
+					POST_BUILD
+					COMMAND
+						${CMAKE_COMMAND} -E
+							copy_if_different
+							${ZlibPath}/bin/zlibwapi.dll
+							${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+				)
+				install(
+					FILES ${ZlibPath}/bin/zlibwapi.dll
+					DESTINATION bin
+					COMPONENT ${PROJECT_NAME}
+				)
+			endif ()
+		endif ()
+
+		add_custom_command(
+			TARGET ${PROJECT_NAME}
+			POST_BUILD
+			COMMAND
+				${CMAKE_COMMAND} -E
+					copy_if_different
+					${LibZipPath}/bin/zip.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+			COMMAND
+				${CMAKE_COMMAND} -E
+					copy_if_different
+					${FreeImage_LIBRARY_DIR}/FreeImage.dll
+					${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
 		)
+		install(
+			FILES
+				${FreeImage_LIBRARY_DIR}/FreeImage.dll
+				${LibZipPath}/bin/zip.dll
+			DESTINATION bin
+			COMPONENT ${PROJECT_NAME}
+		)
+
+		if ( EXISTS ${FreeTypePath}/bin/freetype6.dll )
+			add_custom_command(
+				TARGET ${PROJECT_NAME}
+				POST_BUILD
+				COMMAND
+					${CMAKE_COMMAND} -E
+						copy_if_different
+						${FreeTypePath}/bin/freetype6.dll
+						${PROJECTS_BINARIES_OUTPUT_DIR}/$<CONFIGURATION>/bin
+			)
+			install(
+				FILES ${FreeTypePath}/bin/freetype6.dll
+				DESTINATION bin
+				COMPONENT ${PROJECT_NAME}
+			)
+		endif ()
 	endif ()
-	
-	set_property( TARGET CastorUtils PROPERTY FOLDER "Core" )
-	add_target_astyle( CastorUtils ".h;.hpp;.inl;.cpp" )
-	add_target_doc( CastorUtils "French" "*.h *.hpp" )
-	add_target_doc( CastorUtils "English" "*.h *.hpp" )
-	
-	set( Build "yes (version ${CU_VERSION_MAJOR}.${CU_VERSION_MINOR}.${CU_VERSION_BUILD})" PARENT_SCOPE )
+
+	set_property( TARGET ${PROJECT_NAME} PROPERTY FOLDER "Core/CastorUtils" )
+	add_target_astyle( ${PROJECT_NAME} ".h;.hpp;.inl;.cpp" )
+	add_target_doc( ${PROJECT_NAME} "French" "*.h *.hpp" )
+	add_target_doc( ${PROJECT_NAME} "English" "*.h *.hpp" )
+
+	set( Build "yes (version ${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}.${${PROJECT_NAME}_VERSION_BUILD})" PARENT_SCOPE )
 else ()
 	set( msg "no (missing :" )
 	if( NOT FREEIMAGE_FOUND )
@@ -300,13 +596,22 @@ else ()
 	if( NOT FREETYPE_FOUND )
 		set( msg "${msg} Freetype" )
 	endif()
+	if( NOT ZLIB_FOUND )
+		set( msg "${msg} Zlib" )
+	endif()
+	if( NOT LIBZIP_FOUND )
+		set( msg "${msg} libzip" )
+	endif()
 	set( Build "${msg})" PARENT_SCOPE )
+	set( Error TRUE PARENT_SCOPE )
 endif ()
 
 set( CastorMinLibraries
 	${CastorMinLibraries}
-	${FreeImageLibraries}
-	${FreeTypeLibraries}
-	CastorUtils
+	${PROJECT_NAME}
 	PARENT_SCOPE
 )
+
+if( ${CASTOR_BUILDGRP_TEST} )
+	add_subdirectory( Test )
+endif()

@@ -1,132 +1,207 @@
 #include "Context.hpp"
-#include "DepthStencilState.hpp"
-#include "OneFrameVariable.hpp"
-#include "RenderWindow.hpp"
-#include "WindowRenderer.hpp"
-#include "RenderSystem.hpp"
-#include "Texture.hpp"
+
+#include "BlendStateManager.hpp"
 #include "Buffer.hpp"
-#include "Viewport.hpp"
-#include "ShaderProgram.hpp"
-#include "Vertex.hpp"
-#include "Pipeline.hpp"
+#include "DepthStencilStateManager.hpp"
 #include "Engine.hpp"
+#include "FrameVariableBuffer.hpp"
+#include "GpuQuery.hpp"
+#include "MatrixFrameVariable.hpp"
+#include "OneFrameVariable.hpp"
+#include "Pipeline.hpp"
+#include "RenderWindow.hpp"
+#include "RenderSystem.hpp"
 #include "ShaderManager.hpp"
+#include "ShaderProgram.hpp"
+#include "Texture.hpp"
+#include "Vertex.hpp"
+#include "Viewport.hpp"
+
+#include <GlslSource.hpp>
 
 using namespace Castor;
 
 namespace Castor3D
 {
-	Context::Context()
-		:	m_pWindow( NULL )
-		,	m_pRenderSystem( NULL )
-		,	m_bInitialised( false )
-		,	m_bDeferredShadingSet( false )
-		,	m_bMultiSampling( false )
+	Context::Context( RenderSystem & p_renderSystem, bool p_invertFinal )
+		: OwnedBy< RenderSystem >( p_renderSystem )
+		, m_window( nullptr )
+		, m_initialised( false )
+		, m_bMultiSampling( false )
+		, m_viewport( Viewport::Ortho( *GetRenderSystem()->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
+		, m_declaration( nullptr, 0 )
 	{
-		BufferElementDeclaration	l_vertexDeclarationElements[] =
-		{
-			BufferElementDeclaration( 0, eELEMENT_USAGE_POSITION,	eELEMENT_TYPE_2FLOATS ),
-			BufferElementDeclaration( 0, eELEMENT_USAGE_TEXCOORDS0,	eELEMENT_TYPE_2FLOATS ),
-		};
 		real l_pBuffer[] =
 		{
 			0, 0, 0, 0,
-			0, 1, 0, 1,
 			1, 1, 1, 1,
+			0, 1, 0, 1,
+			0, 0, 0, 0,
 			1, 0, 1, 0,
+			1, 1, 1, 1,
 		};
+
 		std::memcpy( m_pBuffer, l_pBuffer, sizeof( l_pBuffer ) );
-		m_pDeclaration = std::make_shared< BufferDeclaration >( l_vertexDeclarationElements );
-		uint32_t i = 0;
-		std::for_each( m_arrayVertex.begin(), m_arrayVertex.end(), [&]( BufferElementGroupSPtr & p_vertex )
+		m_declaration = BufferDeclaration(
 		{
-			p_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_pDeclaration->GetStride()] );
+			BufferElementDeclaration{ ShaderProgram::Position, eELEMENT_USAGE_POSITION, eELEMENT_TYPE_2FLOATS },
+			BufferElementDeclaration{ ShaderProgram::Texture, eELEMENT_USAGE_TEXCOORDS, eELEMENT_TYPE_2FLOATS }
 		} );
 	}
 
 	Context::~Context()
 	{
-		std::for_each( m_arrayVertex.begin(), m_arrayVertex.end(), [&]( BufferElementGroupSPtr & p_vertex )
+		for ( auto & l_vertex : m_arrayVertex )
 		{
-			p_vertex.reset();
-		} );
-		m_pDeclaration.reset();
+			l_vertex.reset();
+		}
 	}
 
 	bool Context::Initialise( RenderWindow * p_window )
 	{
-		m_pWindow = p_window;
-		m_pRenderSystem	= m_pWindow->GetRenderer()->GetRenderSystem();
-		m_bDeferredShadingSet = p_window->IsUsingDeferredRendering();
-		m_pBtoBShaderProgram = m_pRenderSystem->GetEngine()->GetShaderManager().GetNewProgram();
+		m_window = p_window;
+		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
+		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
+		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
+		ShaderProgramSPtr l_program = l_manager.GetNewProgram();
+		m_renderTextureProgram = l_program;
+		m_mapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
+		m_mapDiffuse->SetValue( 0 );
+		l_manager.CreateMatrixBuffer( *l_program, MASK_SHADER_TYPE_VERTEX );
 		m_bMultiSampling = p_window->IsMultisampling();
-		VertexBufferUPtr l_pVtxBuffer;
-		IndexBufferUPtr l_pIdxBuffer;
-		l_pVtxBuffer = std::make_unique< VertexBuffer >( m_pRenderSystem, &( *m_pDeclaration )[0], m_pDeclaration->Size() );
-		l_pIdxBuffer = std::make_unique< IndexBuffer >( m_pRenderSystem );
-		uint32_t l_uiStride = m_pDeclaration->GetStride();
-		l_pVtxBuffer->Resize( 4 * l_uiStride );
-		m_arrayVertex[0]->LinkCoords( &l_pVtxBuffer->data()[0 * l_uiStride], l_uiStride );
-		m_arrayVertex[1]->LinkCoords( &l_pVtxBuffer->data()[1 * l_uiStride], l_uiStride );
-		m_arrayVertex[2]->LinkCoords( &l_pVtxBuffer->data()[2 * l_uiStride], l_uiStride );
-		m_arrayVertex[3]->LinkCoords( &l_pVtxBuffer->data()[3 * l_uiStride], l_uiStride );
-		l_pIdxBuffer->AddElement( 0 );
-		l_pIdxBuffer->AddElement( 2 );
-		l_pIdxBuffer->AddElement( 1 );
-		l_pIdxBuffer->AddElement( 0 );
-		l_pIdxBuffer->AddElement( 3 );
-		l_pIdxBuffer->AddElement( 2 );
-		m_pGeometryBuffers = m_pRenderSystem->CreateGeometryBuffers( std::move( l_pVtxBuffer ), std::move( l_pIdxBuffer ), nullptr );
-		m_pViewport = std::make_shared< Viewport >( m_pRenderSystem->GetEngine(), Size( 10, 10 ), eVIEWPORT_TYPE_2D );
-		m_pViewport->SetLeft(	real( 0.0 ) );
-		m_pViewport->SetRight(	real( 1.0 ) );
-		m_pViewport->SetTop(	real( 1.0 ) );
-		m_pViewport->SetBottom(	real( 0.0 ) );
-		m_pViewport->SetNear(	real( 0.0 ) );
-		m_pViewport->SetFar(	real( 1.0 ) );
-		m_pDsStateBackground = m_pRenderSystem->GetEngine()->CreateDepthStencilState( cuT( "ContextBackgroundDSState" ) );
-		m_pDsStateBackground->SetDepthTest( false );
-		m_pDsStateBackground->SetDepthMask( eWRITING_MASK_ZERO );
-		return DoInitialise();
+		m_pDsStateNoDepth = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthState" ) );
+		m_pDsStateNoDepth->SetDepthTest( false );
+		m_pDsStateNoDepth->SetDepthMask( eWRITING_MASK_ZERO );
+		m_pDsStateNoDepthWrite = GetRenderSystem()->GetEngine()->GetDepthStencilStateManager().Create( cuT( "NoDepthWriterState" ) );
+		m_pDsStateNoDepthWrite->SetDepthMask( eWRITING_MASK_ZERO );
+		bool l_return = DoInitialise();
+
+		{
+			using namespace GLSL;
+			String l_strVtxShader;
+			{
+				// Vertex shader
+				auto l_writer = GetRenderSystem()->CreateGlslWriter();
+
+				UBO_MATRIX( l_writer );
+
+				// Shader inputs
+				auto position = l_writer.GetAttribute< Vec2 >( ShaderProgram::Position );
+				auto texture = l_writer.GetAttribute< Vec2 >( ShaderProgram::Texture );
+
+				// Shader outputs
+				auto vtx_texture = l_writer.GetOutput< Vec2 >( cuT( "vtx_texture" ) );
+				auto gl_Position = l_writer.GetBuiltin< Vec4 >( cuT( "gl_Position" ) );
+
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+				{
+					vtx_texture = texture;
+					gl_Position = c3d_mtxProjection * vec4( position.X, position.Y, 0.0, 1.0 );
+				} );
+				l_strVtxShader = l_writer.Finalise();
+			}
+
+			String l_strPxlShader;
+			{
+				auto l_writer = GetRenderSystem()->CreateGlslWriter();
+
+				// Shader inputs
+				auto c3d_mapDiffuse = l_writer.GetUniform< Sampler2D >( ShaderProgram::MapDiffuse );
+				auto vtx_texture = l_writer.GetInput< Vec2 >( cuT( "vtx_texture" ) );
+
+				// Shader outputs
+				auto plx_v4FragColor = l_writer.GetFragData< Vec4 >( cuT( "plx_v4FragColor" ), 0 );
+
+				l_writer.ImplementFunction< void >( cuT( "main" ), [&]()
+				{
+					plx_v4FragColor = vec4( texture2D( c3d_mapDiffuse, vec2( vtx_texture.X, vtx_texture.Y ) ).XYZ, 1.0 );
+				} );
+				l_strPxlShader = l_writer.Finalise();
+			}
+
+			eSHADER_MODEL l_model = GetRenderSystem()->GetMaxShaderModel();
+			ShaderProgramSPtr l_program = m_renderTextureProgram.lock();
+			l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVtxShader );
+			l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPxlShader );
+		}
+
+		if ( l_return )
+		{
+			DoSetCurrent();
+			m_timerQuery[0]->Create();
+			m_timerQuery[1]->Create();
+			m_timerQuery[1 - m_queryIndex]->Begin();
+			m_timerQuery[1 - m_queryIndex]->End();
+			l_program->Initialise();
+			uint32_t i = 0;
+
+			for ( auto & l_vertex : m_arrayVertex )
+			{
+				l_vertex = std::make_shared< BufferElementGroup >( &reinterpret_cast< uint8_t * >( m_pBuffer )[i++ * m_declaration.GetStride()] );
+			}
+
+			m_vertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
+			m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
+			m_vertexBuffer->Create();
+			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_pDsStateNoDepth->Initialise();
+			m_pDsStateNoDepthWrite->Initialise();
+			DoEndCurrent();
+		}
+
+		return l_return;
 	}
 
 	void Context::Cleanup()
 	{
-		m_bInitialised = false;
+		m_initialised = false;
+		DoSetCurrent();
 		DoCleanup();
-		SetCurrent();
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
+		m_pDsStateNoDepth->Cleanup();
+		m_pDsStateNoDepthWrite->Cleanup();
+		m_vertexBuffer->Cleanup();
+		m_vertexBuffer->Destroy();
+		m_vertexBuffer.reset();
+		m_geometryBuffers.reset();
+		ShaderProgramSPtr l_program = m_renderTextureProgram.lock();
 
-		if ( l_pProgram )
+		if ( l_program )
 		{
-			l_pProgram->Cleanup();
-			l_pProgram.reset();
+			l_program->Cleanup();
 		}
 
-		m_pGeometryBuffers->GetIndexBuffer().Cleanup();
-		m_pGeometryBuffers->GetVertexBuffer().Cleanup();
-		m_pGeometryBuffers->Cleanup();
-		m_pGeometryBuffers.reset();
-		m_pViewport.reset();
-		EndCurrent();
+		m_timerQuery[0]->Destroy();
+		m_timerQuery[1]->Destroy();
+		DoEndCurrent();
+		DoDestroy();
+		m_pDsStateNoDepth.reset();
+		m_pDsStateNoDepthWrite.reset();
+		m_geometryBuffers.reset();
+		m_bMultiSampling = false;
+		m_renderTextureProgram.reset();
+		m_timerQuery[0].reset();
+		m_timerQuery[1].reset();
+		m_window = nullptr;
 	}
 
 	void Context::SetCurrent()
 	{
 		DoSetCurrent();
-		m_pRenderSystem->SetCurrentContext( this );
+		GetRenderSystem()->SetCurrentContext( this );
+		m_timerQuery[m_queryIndex]->Begin();
 	}
 
 	void Context::EndCurrent()
 	{
-		m_pRenderSystem->SetCurrentContext( NULL );
+		m_timerQuery[m_queryIndex]->End();
+		m_queryIndex = 1 - m_queryIndex;
+		uint64_t l_time = 0;
+		m_timerQuery[m_queryIndex]->GetInfos( eQUERY_INFO_RESULT, l_time );
+		GetRenderSystem()->IncGpuTime( std::chrono::nanoseconds( l_time ) );
+		GetRenderSystem()->SetCurrentContext( nullptr );
 		DoEndCurrent();
-	}
-
-	void Context::CullFace( eFACE p_eCullFace )
-	{
-		DoCullFace( p_eCullFace );
 	}
 
 	void Context::SwapBuffers()
@@ -134,61 +209,40 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::SetClearColour( Castor::Colour const & p_clrClear )
+	void Context::RenderTexture( Castor::Size const & p_size, Texture const & p_texture )
 	{
-		DoSetClearColour( p_clrClear );
+		DoRenderTexture( p_size, p_texture, m_geometryBuffers, m_renderTextureProgram.lock() );
 	}
 
-	void Context::Clear( uint32_t p_uiTargets )
+	void Context::RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program )
 	{
-		DoClear( p_uiTargets );
+		DoRenderTexture( p_size, p_texture, m_geometryBuffers, p_program );
 	}
 
-	void Context::Bind( eBUFFER p_eBuffer, eFRAMEBUFFER_TARGET p_eTarget )
+	void Context::DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program )
 	{
-		DoBind( p_eBuffer, p_eTarget );
-	}
+		ShaderProgramSPtr l_program = p_program;
+		m_viewport.SetSize( p_size );
+		m_viewport.Render( GetRenderSystem()->GetPipeline() );
 
-	void Context::SetAlphaFunc( eALPHA_FUNC p_eFunc, uint8_t p_byValue )
-	{
-		DoSetAlphaFunc( p_eFunc, p_byValue );
-	}
-
-	void Context::BToBRender( Castor::Size const & p_size, TextureBaseSPtr p_pTexture, uint32_t p_uiComponents )
-	{
-		Pipeline * l_pPipeline = m_pRenderSystem->GetPipeline();
-		ShaderProgramBaseSPtr l_pProgram = m_pBtoBShaderProgram.lock();
-		m_pViewport->SetSize( p_size );
-		Clear( p_uiComponents );
-		m_pViewport->Render();
-		CullFace( eFACE_BACK );
-		l_pPipeline->MatrixMode( eMTXMODE_MODEL );
-		l_pPipeline->LoadIdentity();
-		l_pPipeline->MatrixMode( eMTXMODE_VIEW );
-		l_pPipeline->LoadIdentity();
-
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
+		if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 		{
-			OneTextureFrameVariableSPtr l_pMapDiffuse = l_pProgram->FindFrameVariable( cuT( "c3d_mapDiffuse" ), eSHADER_TYPE_PIXEL );
+			FrameVariableBufferSPtr l_matrices = l_program->FindFrameVariableBuffer( ShaderProgram::BufferMatrix );
 
-			if ( l_pMapDiffuse )
+			if ( l_matrices )
 			{
-				l_pMapDiffuse->SetValue( p_pTexture.get() );
+				GetRenderSystem()->GetPipeline().ApplyProjection( *l_matrices );
 			}
 
-			l_pProgram->Begin( 0, 1 );
-			l_pPipeline->ApplyMatrices( *l_pProgram );
-		}
+			l_program->Bind();
 
-		if ( p_pTexture->Bind() )
-		{
-			m_pGeometryBuffers->Draw( eTOPOLOGY_TRIANGLES, l_pProgram, m_pGeometryBuffers->GetIndexBuffer().GetSize(), 0 );
-			p_pTexture->Unbind();
-		}
+			if ( p_texture.Bind( 0 ) )
+			{
+				p_geometryBuffers->Draw( uint32_t( m_arrayVertex.size() ), 0 );
+				p_texture.Unbind( 0 );
+			}
 
-		if ( l_pProgram && l_pProgram->GetStatus() == ePROGRAM_STATUS_LINKED )
-		{
-			l_pProgram->End();
+			l_program->Unbind();
 		}
 	}
 }

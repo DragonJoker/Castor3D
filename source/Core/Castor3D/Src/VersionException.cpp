@@ -1,4 +1,4 @@
-#include "VersionException.hpp"
+﻿#include "VersionException.hpp"
 #include "Version.hpp"
 
 #include <Logger.hpp>

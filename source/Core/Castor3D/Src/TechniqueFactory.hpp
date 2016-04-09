@@ -33,8 +33,8 @@ namespace Castor3D
 	\~french
 	\brief		La fabrique de techniques de rendu
 	*/
-	class C3D_API TechniqueFactory
-		:	public Castor::Factory< RenderTechniqueBase, Castor::String, std::function< RenderTechniqueBaseSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >
+	class TechniqueFactory
+		: public Castor::Factory< RenderTechnique, Castor::String, std::shared_ptr< RenderTechnique >, std::function< RenderTechniqueSPtr( RenderTarget &, RenderSystem *, Parameters const & ) > >
 	{
 	public:
 		/**
@@ -43,51 +43,21 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TechniqueFactory();
+		C3D_API TechniqueFactory();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~TechniqueFactory();
+		C3D_API virtual ~TechniqueFactory();
 		/**
 		 *\~english
 		 *\brief		Registers all objects types
 		 *\~french
 		 *\brief		Enregistre tous les types d'objets
 		 */
-		virtual void Initialise();
-#if !CASTOR_HAS_VARIADIC_TEMPLATES
-		/**
-		 *\~english
-		 *\brief		Creates an object from a key
-		 *\param[in]	p_key	The object type
-		 *\param[in]	p_p1	The 1st creation parameter
-		 *\param[in]	p_p2	The 2nd creation parameter
-		 *\param[in]	p_p3	The 3rd creation parameter
-		 *\return		The created object
-		 *\~french
-		 *\brief		Crée un objet à partir d'une clef (type d'objet)
-		 *\param[in]	p_key	Le type d'objet
-		 *\param[in]	p_p1	Le 1er paramètre de création
-		 *\param[in]	p_p2	Le 2eme paramètre de création
-		 *\param[in]	p_p3	Le 3eme paramètre de création
-		 *\return		L'objet créé
-		 */
-		ObjPtr Create( Castor::String const & p_key, RenderTarget & p_target, RenderSystem * p_rs, Parameters const & p_params )
-		{
-			ObjPtr l_return;
-			ObjMap::iterator l_it = m_registered.find( p_key );
-
-			if ( l_it != m_registered.end() )
-			{
-				l_return = l_it->second( p_target, p_rs, p_params );
-			}
-
-			return l_return;
-		}
-#endif
+		C3D_API virtual void Initialise();
 	};
 }
 

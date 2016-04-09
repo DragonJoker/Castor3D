@@ -1,6 +1,9 @@
 #ifndef ___ImgToIcoApp___
 #define ___ImgToIcoApp___
 
+#include <wx/app.h>
+#include "MainFrame.hpp"
+
 namespace ImgToIco
 {
 	class MainFrame;
@@ -13,8 +16,8 @@ namespace ImgToIco
 		wxLocale * m_pLocale;
 
 	public:
-		ImgToIcoApp(){}
-		virtual ~ImgToIcoApp(){}
+		ImgToIcoApp() {}
+		virtual ~ImgToIcoApp() {}
 		virtual bool OnInit();
 		virtual int OnExit();
 	};

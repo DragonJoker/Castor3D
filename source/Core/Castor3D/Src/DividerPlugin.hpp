@@ -29,39 +29,41 @@ namespace Castor3D
 	\~english
 	\brief		Divider Plugin class
 	\~french
-	\brief		Classe de plugin de subdivision
+	\brief		Classe de plug-in de subdivision
 	*/
-	class C3D_API DividerPlugin
+	class DividerPlugin
 		: public PluginBase
 	{
 	private:
 		friend class PluginBase;
 		friend class Engine;
-		typedef Subdivider *	CreateDividerFunction();
-		typedef void			DestroyDividerFunction( Subdivider * p_pDivider );
-		typedef Castor::String	GetDividerTypeFunction();
+		typedef Subdivider * CreateDividerFunction();
+		typedef void DestroyDividerFunction( Subdivider * p_pDivider );
+		typedef Castor::String GetDividerTypeFunction();
 
-		typedef CreateDividerFunction		*	PCreateDividerFunction;
-		typedef DestroyDividerFunction		*	PDestroyDividerFunction;
-		typedef GetDividerTypeFunction		*	PGetDividerTypeFunction;
+		typedef CreateDividerFunction * PCreateDividerFunction;
+		typedef DestroyDividerFunction * PDestroyDividerFunction;
+		typedef GetDividerTypeFunction * PGetDividerTypeFunction;
 
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pLibrary	The shared library holding the plugin
+		 *\param[in]	p_library	The shared library holding the plug-in
+		 *\param[in]	p_engine	The engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pLibrary	La librairie partagée contenant le plugin
+		 *\param[in]	p_library	La librairie partagée contenant le plug-in
+		 *\param[in]	p_engine	Le moteur
 		 */
-		DividerPlugin( Castor::DynamicLibrarySPtr p_pLibrary );
+		C3D_API DividerPlugin( Castor::DynamicLibrarySPtr p_library, Engine * p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~DividerPlugin();
+		C3D_API virtual ~DividerPlugin();
 		/**
 		 *\~english
 		 *\brief		Creates the Subdivider
@@ -70,7 +72,7 @@ namespace Castor3D
 		 *\brief		Crée le Subdivider
 		 *\return		L'instance de Subdivider créée
 		 */
-		Subdivider * CreateDivider();
+		C3D_API Subdivider * CreateDivider();
 		/**
 		 *\~english
 		 *\brief		Destroys the given Subdivider
@@ -79,56 +81,14 @@ namespace Castor3D
 		 *\brief		Détruit le Subdivider donné
 		 *\param[in]	p_pDivider	Le Subdivider
 		 */
-		void DestroyDivider( Subdivider * p_pDivider );
+		C3D_API void DestroyDivider( Subdivider * p_pDivider );
 		/**
 		 *\~english
 		 *\brief		Tells the divider short name
 		 *\~french
 		 *\brief		Donne le nom court du diviseur
 		 */
-		Castor::String GetDividerType();
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Copy constructor
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\~french
-		 *\brief		Constructeur par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 */
-		DividerPlugin( DividerPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move constructor
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\~french
-		 *\brief		Constructeur par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 */
-		DividerPlugin( DividerPlugin && p_plugin );
-		/**
-		 *\~english
-		 *\brief		Copy assignment operator
-		 *\param[in]	p_plugin	The Plugin object to copy
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par copie
-		 *\param[in]	p_plugin	L'objet Plugin à copier
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		DividerPlugin & operator =( DividerPlugin const & p_plugin );
-		/**
-		 *\~english
-		 *\brief		Move assignment operator
-		 *\param[in]	p_plugin	The Plugin object to move
-		 *\return		A reference to this Plugin object
-		 *\~french
-		 *\brief		Opérateur d'affectation par déplacement
-		 *\param[in]	p_plugin	L'objet Plugin à déplacer
-		 *\return		Une référence sur cet objet Plugin
-		 */
-		DividerPlugin & operator =( DividerPlugin && p_plugin );
+		C3D_API Castor::String GetDividerType();
 
 	private:
 		PCreateDividerFunction m_pfnCreateDivider;

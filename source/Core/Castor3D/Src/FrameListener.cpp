@@ -1,23 +1,36 @@
-#include "FrameListener.hpp"
+﻿#include "FrameListener.hpp"
 #include "FrameEvent.hpp"
+
+using namespace Castor;
 
 namespace Castor3D
 {
-	FrameListener::FrameListener()
+	FrameListener::FrameListener( String const & p_name )
+		: Named( p_name )
 	{
 	}
 
 	FrameListener::~FrameListener()
 	{
-		for ( std::array< FrameEventPtrArray, eEVENT_TYPE_COUNT >::iterator l_it = m_events.begin(); l_it != m_events.end(); ++l_it )
+		for ( auto && l_it : m_events )
 		{
-			l_it->clear();
+			l_it.clear();
 		}
+	}
+
+	void FrameListener::Flush()
+	{
+		for ( auto && l_list : m_events )
+		{
+			l_list.clear();
+		}
+
+		DoFlush();
 	}
 
 	void FrameListener::PostEvent( FrameEventSPtr p_event )
 	{
-		CASTOR_RECURSIVE_MUTEX_AUTO_SCOPED_LOCK();
+		auto l_lock = Castor::make_unique_lock( m_mutex );
 		m_events[p_event->GetType()].push_back( p_event );
 	}
 
@@ -27,13 +40,31 @@ namespace Castor3D
 		FrameEventPtrArray l_arrayEvents;
 		std::swap( l_arrayEvents, m_events[p_type] );
 		m_mutex.unlock();
-		bool l_bReturn = true;
+		bool l_return = true;
 
-		for ( FrameEventPtrArrayIt l_it = l_arrayEvents.begin(); l_it != l_arrayEvents.end() && l_bReturn; ++l_it )
+		try
 		{
-			l_bReturn = ( *l_it )->Apply();
+			for ( auto && l_it = l_arrayEvents.begin(); l_it != l_arrayEvents.end() && l_return; ++l_it )
+			{
+				l_return = ( *l_it )->Apply();
+			}
+		}
+		catch ( Exception & p_exc )
+		{
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.GetFullDescription() ) );
+			l_return = false;
+		}
+		catch ( std::exception & p_exc )
+		{
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events: " ) << string::string_cast< xchar >( p_exc.what() ) );
+			l_return = false;
+		}
+		catch ( ... )
+		{
+			Logger::LogError( StringStream() << cuT( "Encountered exception while processing events" ) );
+			l_return = false;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 }

@@ -31,45 +31,47 @@ namespace Castor3D
 	\~french
 	\brief		Contient les données d'un groupe d'éléments de tampon de sommets
 	*/
-	class C3D_API BufferElementGroup
+	class BufferElementGroup
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pBuffer		The data buffer
-		 *\param[in]	p_uiIndex		The group index
+		 *\param[in]	p_buffer		The data buffer
+		 *\param[in]	p_index		The group index
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pBuffer		Le tampon de données
-		 *\param[in]	p_uiIndex		L'indice du groupe
+		 *\param[in]	p_buffer		Le tampon de données
+		 *\param[in]	p_index		L'indice du groupe
 		 */
-		BufferElementGroup( uint8_t * p_pBuffer = NULL, uint32_t p_uiIndex = 0 );
+		C3D_API BufferElementGroup( uint8_t * p_buffer = nullptr, uint32_t p_index = 0 );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~BufferElementGroup();
+		C3D_API virtual ~BufferElementGroup();
 		/**
 		 *\~english
 		 *\brief		Links the element values to the ones in parameter.
 		 *\~french
 		 *\brief		Lie les valeurs de l'élément à celles données en paramètre.
 		 */
-		void LinkCoords( uint8_t * p_pBuffer );
+		C3D_API void LinkCoords( uint8_t * p_buffer );
 		/**
 		 *\~english
 		 *\brief		Links the element values to the ones in parameter.
-		 *\remark		Replace buffer values by element values
-		 *\param[in]	p_pBuffer	The values buffer
+		 *\remarks		Replace buffer values by element values
+		 *\param[in]	p_buffer	The values buffer
+		 *\param[in]	p_stride	The element binay size
 		 *\~french
 		 *\brief		Lie les valeurs de l'élément à celles données en paramètre.
-		 *\remark		Remplace les valeurs du tampon par celles de l'élément
-		 *\param[in]	p_pBuffer	Le tampon de valeurs
+		 *\remarks		Remplace les valeurs du tampon par celles de l'élément
+		 *\param[in]	p_buffer	Le tampon de valeurs
+		 *\param[in]	p_stride	La taille binaire de l'élément
 		 */
-		void LinkCoords( uint8_t * p_pBuffer, uint32_t p_uiSize );
+		C3D_API void LinkCoords( uint8_t * p_buffer, uint32_t p_stride );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pointer on the data buffer
@@ -104,26 +106,26 @@ namespace Castor3D
 		 */
 		inline uint32_t GetIndex()const
 		{
-			return m_uiIndex;
+			return m_index;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the group index
-		 *\param[in]	p_uiIndex	The new value
+		 *\param[in]	p_index	The new value
 		 *\~french
 		 *\brief		Définit l'indice du groupe
-		 *\param[in]	p_uiIndex	La nouvelle valeur
+		 *\param[in]	p_index	La nouvelle valeur
 		 */
-		inline void SetIndex( uint32_t p_uiIndex )
+		inline void SetIndex( uint32_t p_index )
 		{
-			m_uiIndex = p_uiIndex;
+			m_index = p_index;
 		}
 
 	protected:
 		//!\~english The elements values	\~french Les valeurs des éléments
 		uint8_t * m_pBuffer;
 		//!\~english The group index	\~french L'indice du groupe
-		uint32_t m_uiIndex;
+		uint32_t m_index;
 	};
 }
 

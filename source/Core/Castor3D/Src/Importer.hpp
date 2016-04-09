@@ -22,10 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "Parameter.hpp"
 
 #include <Path.hpp>
-
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -38,18 +35,19 @@ namespace Castor3D
 	\~french
 	\brief		Classe de base pour l'import de fichiers externes
 	*/
-	class C3D_API Importer
+	class Importer
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_pEngine		The core engine
+		 *\param[in]	p_engine		The core engine
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_pEngine		Le moteur
+		 *\param[in]	p_engine		Le moteur
 		 */
-		Importer( Engine * p_pEngine );
+		C3D_API Importer( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Scene import Function
@@ -62,32 +60,37 @@ namespace Castor3D
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import
 		 *\return		La Scene importée
 		 */
-		SceneSPtr ImportScene( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API SceneSPtr ImportScene( Castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
 		 *\brief		Mesh import Function
+		 *\param[in]	p_scene			The scene into which the Mesh is loaded.
 		 *\param[in]	p_pathFile		The location of the file to import
 		 *\param[in]	p_parameters	Import configuration parameters
 		 *\return		The imported Mesh
 		 *\~french
 		 *\brief		Fonction d'import de Mesh
+		 *\param[in]	p_scene			La scène dans laquelle le maillage est chargé
 		 *\param[in]	p_pathFile		Le chemin vers le fichier à importer
 		 *\param[in]	p_parameters	Paramètres de configuration de l'import
 		 *\return		Le Mesh importé
 		 */
-		MeshSPtr ImportMesh( Castor::Path const & p_pathFile, Parameters const & p_parameters );
+		C3D_API MeshSPtr ImportMesh( Scene & p_scene, Castor::Path const & p_pathFile, Parameters const & p_parameters );
 		/**
 		 *\~english
-		 *\brief		Retrieves the core engine
-		 *\return		The engine
+		 *\brief		Loads a texture and adds it to the given pass.
+		 *\param[in]	p_path		The image file path (can be relative or absolute).
+		 *\param[in]	p_pass		The pass.
+		 *\param[in]	p_channel	The channel affected.
+		 *\return		\p false if any error occured.
 		 *\~french
-		 *\brief		Récupère le moteur
-		 *\return		Le moteur
+		 *\brief		Charge une texture et l'ajoute à la passe donnée.
+		 *\param[in]	p_path		Le chemin vers l'image (peut être relatif ou absolu).
+		 *\param[in]	p_pass		La passe.
+		 *\param[in]	p_channel	Le canal affecté à l'image.
+		 *\return		\p false en cas d'erreur.
 		 */
-		inline Engine * GetEngine()const
-		{
-			return m_pEngine;
-		}
+		C3D_API TextureUnitSPtr LoadTexture( Castor::Path const & p_path, Pass & p_pass, eTEXTURE_CHANNEL p_channel );
 
 	protected:
 		/**
@@ -98,16 +101,18 @@ namespace Castor3D
 		 *\brief		Fonction d'import de Scene
 		 *\return		La Scene importée
 		 */
-		virtual SceneSPtr DoImportScene() = 0;
+		C3D_API virtual SceneSPtr DoImportScene() = 0;
 		/**
 		 *\~english
-		 *\brief		Mesh import Function
+		 *\brief		Mesh import Function.
+		 *\param[in]	p_scene	The scene into which the Mesh is loaded.
 		 *\return		The imported Mesh
 		 *\~french
-		 *\brief		Fonction d'import de Mesh
-		 *\return		Le Mesh importé
+		 *\brief		Fonction d'import de maillage.
+		 *\param[in]	p_scene	La scène dans laquelle le maillage est chargé
+		 *\return		Le maillage importé.
 		 */
-		virtual MeshSPtr DoImportMesh() = 0;
+		C3D_API virtual MeshSPtr DoImportMesh( Scene & p_scene ) = 0;
 
 	protected:
 		//!\~english The file name	\~french Le nom du fichier
@@ -116,15 +121,11 @@ namespace Castor3D
 		Castor::Path m_filePath;
 		//!\~english The loaded scene nodes	\~french Les noeuds chargés
 		SceneNodePtrArray m_nodes;
-		//!\~english The core engine	\~french Le moteur
-		Engine * m_pEngine;
 		//!\~english The loaded geometries	\~french Les géométries chargées
 		GeometryPtrStrMap m_geometries;
 		//!\~english Import configuration parameters	\~french Paramètres de configuration de l'import
 		Parameters m_parameters;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

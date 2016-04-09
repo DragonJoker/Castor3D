@@ -18,9 +18,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GUICOMMON_STYLE_INFO_H___
 #define ___GUICOMMON_STYLE_INFO_H___
 
-#pragma warning( push )
-#pragma warning( disable:4996 )
-
 #include "GuiCommonPrerequisites.hpp"
 
 namespace GuiCommon
@@ -36,10 +33,10 @@ namespace GuiCommon
 	*/
 	typedef enum eSTC_STYLE
 	{
-		eSTC_STYLE_BOLD		= 0x01
-							  ,	eSTC_STYLE_ITALIC	= 0x02
-									  ,	eSTC_STYLE_UNDERL	= 0x04
-											  ,	eSTC_STYLE_HIDDEN	= 0x08
+		eSTC_STYLE_BOLD		= 0x01,
+		eSTC_STYLE_ITALIC	= 0x02,
+		eSTC_STYLE_UNDERL	= 0x04,
+		eSTC_STYLE_HIDDEN	= 0x08,
 	}	eSTC_STYLE;
 	/*!
 	\author Sylvain DOREMUS
@@ -52,13 +49,13 @@ namespace GuiCommon
 	*/
 	typedef enum eSTC_FOLD
 	{
-		eSTC_FOLD_COMMENT	= 0x01
-							  ,	eSTC_FOLD_COMPACT	= 0x02
-									  ,	eSTC_FOLD_PREPROC	= 0x04
-											  ,	eSTC_FOLD_HTML		= 0x10
-													  ,	eSTC_FOLD_HTMLPREP	= 0x20
-															  ,	eSTC_FOLD_COMMENTPY	= 0x40
-																	  ,	eSTC_FOLD_QUOTESPY	= 0x80
+		eSTC_FOLD_COMMENT	= 0x01,
+		eSTC_FOLD_COMPACT	= 0x02,
+		eSTC_FOLD_PREPROC	= 0x04,
+		eSTC_FOLD_HTML		= 0x10,
+		eSTC_FOLD_HTMLPREP	= 0x20,
+		eSTC_FOLD_COMMENTPY	= 0x40,
+		eSTC_FOLD_QUOTESPY	= 0x80,
 	}	eSTC_FOLD;
 	/*!
 	\author Sylvain DOREMUS
@@ -71,7 +68,7 @@ namespace GuiCommon
 	*/
 	typedef enum eSTC_FLAG
 	{
-		eSTC_FLAG_WRAPMODE	= 0x10
+		eSTC_FLAG_WRAPMODE	= 0x10,
 	}	eSTC_FLAG;
 	/*!
 	\author Sylvain DOREMUS
@@ -85,7 +82,7 @@ namespace GuiCommon
 	class StyleInfo
 	{
 	private:
-		wxString m_strName;
+		wxString m_name;
 		wxString m_strForeground;
 		wxString m_strBackground;
 		wxString m_strFontName;
@@ -94,7 +91,7 @@ namespace GuiCommon
 		int m_iLetterCase;
 
 	public:
-		StyleInfo( wxString const & p_strName, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontsize, int p_iFontstyle, int p_iLetterCase );
+		StyleInfo( wxString const & p_name, wxString const & p_strForeground, wxString const & p_strBackground, wxString const & p_strFontName, int p_iFontsize, int p_iFontstyle, int p_iLetterCase );
 		StyleInfo( StyleInfo const & p_infos );
 		StyleInfo & operator =( StyleInfo const & p_infos );
 		virtual ~StyleInfo();
@@ -103,55 +100,67 @@ namespace GuiCommon
 		{
 			return m_iLetterCase;
 		}
+
 		inline int GetFontStyle()const
 		{
 			return m_iFontStyle;
 		}
+
 		inline int GetFontSize()const
 		{
 			return m_iFontSize;
 		}
+
 		inline wxString	const & GetFontName()const
 		{
 			return m_strFontName;
 		}
+
 		inline wxString	const & GetBackground()const
 		{
 			return m_strBackground;
 		}
+
 		inline wxString	const & GetForeground()const
 		{
 			return m_strForeground;
 		}
+
 		inline wxString	const & GetName()const
 		{
-			return m_strName;
+			return m_name;
 		}
 
 		inline void SetName( wxString const & val )
 		{
-			m_strName = val;
+			m_name = val;
 		}
+
 		inline void SetForeground( wxString const & val )
 		{
 			m_strForeground = val;
 		}
+
 		inline void SetBackground( wxString const & val )
 		{
 			m_strBackground = val;
 		}
+
 		inline void SetFontName( wxString const & val )
 		{
 			m_strFontName = val;
 		}
+
 		inline void SetFontSize( int val )
 		{
 			m_iFontSize = val;
 		}
+
 		inline void SetFontStyle( int val )
 		{
 			m_iFontStyle = val;
 		}
+
 		inline void SetLetterCase( int val )
 		{
 			m_iLetterCase = val;

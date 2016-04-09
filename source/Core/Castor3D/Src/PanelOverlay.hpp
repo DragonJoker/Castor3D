@@ -20,14 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "OverlayCategory.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-
-#ifdef DrawText
-#	undef DrawText
-#endif
-
 namespace Castor3D
 {
 	/*!
@@ -38,8 +30,8 @@ namespace Castor3D
 	\~french
 	\brief		Une simple incrustation rectangulaire
 	*/
-	class C3D_API PanelOverlay
-		:	public OverlayCategory
+	class PanelOverlay
+		: public OverlayCategory
 	{
 	public:
 		/*!
@@ -52,8 +44,8 @@ namespace Castor3D
 		\brief		PanelOverlay loader
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
-		class C3D_API TextLoader
-			:	public OverlayCategory::TextLoader
+		class TextLoader
+			: public OverlayCategory::TextLoader
 		{
 		public:
 			/**
@@ -63,12 +55,12 @@ namespace Castor3D
 			 *\param[in]	p_overlay	the overlay to save
 			 *\return		\p true if everything is OK
 			 *\~french
-			 *\brief		Sauvegarde l'incrustation donnée dans un fichier texte
-			 *\param[in]	p_file		Le fichier où enregistrer l'incrustation
-			 *\param[in]	p_overlay	L'incrustation à enregistrer
-			 *\return		\p true si tout s'est bien passé
+			 *\brief		Sauvegarde l'incrustation donnÃ©e dans un fichier texte
+			 *\param[in]	p_file		Le fichier oÃ¹ enregistrer l'incrustation
+			 *\param[in]	p_overlay	L'incrustation Ã  enregistrer
+			 *\return		\p true si tout s'est bien passÃ©
 			 */
-			virtual bool operator()( PanelOverlay const & p_overlay, Castor::TextFile & p_file );
+			C3D_API virtual bool operator()( PanelOverlay const & p_overlay, Castor::TextFile & p_file );
 		};
 		/*!
 		\author		Sylvain DOREMUS
@@ -78,8 +70,8 @@ namespace Castor3D
 		\~english
 		\brief		Loader de PanelOverlay
 		*/
-		class C3D_API BinaryParser
-			:	public OverlayCategory::BinaryParser
+		class BinaryParser
+			: public OverlayCategory::BinaryParser
 		{
 		public:
 			/**
@@ -88,9 +80,9 @@ namespace Castor3D
 			 *\param[in]	p_path	The current folder path
 			 *\~french
 			 *\brief		Constructeur
-			 *\param[in]	p_path	Le chemin d'accès au dossier courant
+			 *\param[in]	p_path	Le chemin d'accÃ¨s au dossier courant
 			 */
-			BinaryParser( Castor::Path const & p_path );
+			C3D_API BinaryParser( Castor::Path const & p_path );
 			/**
 			 *\~english
 			 *\brief		Function used to fill the chunk from specific data
@@ -98,12 +90,12 @@ namespace Castor3D
 			 *\param[out]	p_chunk	The chunk to fill
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques
-			 *\param[in]	p_obj	L'objet à écrire
-			 *\param[out]	p_chunk	Le chunk à remplir
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisÃ©e afin de remplir le chunk de donnÃ©es spÃ©cifiques
+			 *\param[in]	p_obj	L'objet Ã  Ã©crire
+			 *\param[out]	p_chunk	Le chunk Ã  remplir
+			 *\return		\p false si une erreur quelconque est arrivÃ©e
 			 */
-			virtual bool Fill( PanelOverlay const & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Fill( PanelOverlay const & p_obj, BinaryChunk & p_chunk )const;
 			/**
 			 *\~english
 			 *\brief		Function used to retrieve specific data from the chunk
@@ -111,12 +103,12 @@ namespace Castor3D
 			 *\param[in]	p_chunk	The chunk containing data
 			 *\return		\p false if any error occured
 			 *\~french
-			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk
-			 *\param[out]	p_obj	L'objet à lire
-			 *\param[in]	p_chunk	Le chunk contenant les données
-			 *\return		\p false si une erreur quelconque est arrivée
+			 *\brief		Fonction utilisÃ©e afin de rÃ©cupÃ©rer des donnÃ©es spÃ©cifiques Ã  partir d'un chunk
+			 *\param[out]	p_obj	L'objet Ã  lire
+			 *\param[in]	p_chunk	Le chunk contenant les donnÃ©es
+			 *\return		\p false si une erreur quelconque est arrivÃ©e
 			 */
-			virtual bool Parse( PanelOverlay & p_obj, BinaryChunk & p_chunk )const;
+			C3D_API virtual bool Parse( PanelOverlay & p_obj, BinaryChunk & p_chunk )const;
 		};
 
 	public:
@@ -126,23 +118,35 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		PanelOverlay();
+		C3D_API PanelOverlay();
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~PanelOverlay();
+		C3D_API virtual ~PanelOverlay();
 		/**
 		 *\~english
 		 *\brief		Creation function, used by the factory
 		 *\return		An overlay
 		 *\~french
-		 *\brief		Fonction de création utilisée par la fabrique
+		 *\brief		Fonction de crÃ©ation utilisÃ©e par la fabrique
 		 *\return		Un overlay
 		 */
-		static OverlayCategorySPtr Create();
+		C3D_API static OverlayCategorySPtr Create();
+		/**
+		 *\~english
+		 *\brief		Retrieves the panel vertex buffer
+		 *\return		The buffer
+		 *\~french
+		 *\brief		RÃ©cupÃ¨re le tampon de sommets du panneau
+		 *\return		Le tampon
+		 */
+		inline OverlayCategory::VertexArray const & GetPanelVertex()const
+		{
+			return m_arrayVtx;
+		}
 
 	protected:
 		/**
@@ -151,21 +155,23 @@ namespace Castor3D
 		 *\param[in]	p_renderer	The renderer used to draw this overlay
 		 *\~french
 		 *\brief		Dessine l'incrustation
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\param[in]	p_renderer	Le renderer utilisÃ© pour dessiner cette incrustation
 		 */
-		virtual void DoRender( OverlayRendererSPtr p_renderer );
+		C3D_API virtual void DoRender( OverlayRendererSPtr p_renderer );
 		/**
 		 *\~english
-		 *\brief		Updates the vertex buffer
-		 *\param[in]	p_renderer	The renderer used to draw this overlay
+		 *\brief		Updates the vertex buffer.
+		 *\param[in]	p_size	The render target size.
 		 *\~french
-		 *\brief		Met à jour le tampon de sommets
-		 *\param[in]	p_renderer	Le renderer utilisé pour dessiner cette incrustation
+		 *\brief		Met Ã  jour le tampon de sommets.
+		 *\param[in]	p_size	Les dimensions de la cible de rendu.
 		 */
-		virtual void DoUpdate( OverlayRendererSPtr p_renderer );
+		C3D_API virtual void DoUpdateBuffer( Castor::Size const & p_size );
+
+	protected:
+		//!\~english The vertex buffer data	\~french Les donnÃ©es du tampon de sommets
+		VertexArray m_arrayVtx;
 	};
 }
-
-#pragma warning( pop )
 
 #endif

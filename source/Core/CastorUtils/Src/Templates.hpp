@@ -26,133 +26,105 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace Castor
 {
-	namespace details
+	namespace detail
 	{
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Functor used to delete an object with for_each
-		\~french
-		\brief		Foncteur utilisé pour désallouer un objet dans un for_each
-		*/
-		template< typename ObjType >
-		struct obj_deleter
+		/**
+		 *\~english
+		 *\brief		Deletes all container's objects
+		 *\param[in]	p_container	The container
+		 *\param[in]	p_object	A dummy object
+		 *\~french
+		 *\brief		Désalloue tous les objets du conteneur
+		 *\param[in]	p_container	Le conteneur
+		 *\param[in]	p_object	Un objet bidon
+		 */
+		template< typename CtnrType, typename ObjType >
+		void clear_content( CtnrType & p_container, ObjType p_object )
 		{
-			void operator()( ObjType * p_pPointer )
+		}
+		/**
+		 *\~english
+		 *\brief		Deletes all container's objects
+		 *\param[in]	p_container	The container
+		 *\param[in]	p_object	A dummy object
+		 *\~french
+		 *\brief		Désalloue tous les objets du conteneur
+		 *\param[in]	p_container	Le conteneur
+		 *\param[in]	p_object	Un objet bidon
+		 */
+		template< typename CtnrType, typename ObjType >
+		void clear_content( CtnrType & p_container, ObjType * p_object )
+		{
+			std::for_each( p_container.begin(), p_container.end(), []( ObjType * p_pointer )
 			{
-				delete p_pPointer;
-			}
-		};
+				delete p_pointer;
+			} );
+		}
 		/**
 		 *\~english
-		 *\brief		Deletes all container's objects
+		 *\brief		Deletes all container's pairs
 		 *\param[in]	p_container	The container
-		 *\param[in]	p_object	A dummy object
+		 *\param[in]	p_object	A dummy pair
 		 *\~french
-		 *\brief		Désalloue tous les objets du conteneur
+		 *\brief		Désalloue toutes les paires du conteneur
 		 *\param[in]	p_container	Le conteneur
-		 *\param[in]	p_object	Un objet bidon
+		 *\param[in]	p_object	Une paire bidon
 		 */
-		template< typename CtnrType, typename ObjType >
-		void clear_content( CtnrType & CU_PARAM_UNUSED( p_container ), ObjType CU_PARAM_UNUSED( p_object ) )
+		template< class CtnrType, typename KeyType, typename ObjType >
+		void clear_pair_content( CtnrType & p_container, std::pair< KeyType, ObjType > p_object )
 		{
 		}
 		/**
 		 *\~english
-		 *\brief		Deletes all container's objects
+		 *\brief		Deletes all container's pairs
 		 *\param[in]	p_container	The container
-		 *\param[in]	p_object	A dummy object
+		 *\param[in]	p_object	A dummy pair
 		 *\~french
-		 *\brief		Désalloue tous les objets du conteneur
+		 *\brief		Désalloue toutes les paires du conteneur
 		 *\param[in]	p_container	Le conteneur
-		 *\param[in]	p_object	Un objet bidon
+		 *\param[in]	p_object	Une paire bidon
 		 */
-		template< typename CtnrType, typename ObjType >
-		void clear_content( CtnrType & p_container, ObjType * CU_PARAM_UNUSED( p_object ) )
+		template< class CtnrType, typename KeyType, typename ObjType >
+		void clear_pair_content( CtnrType & p_container, std::pair< KeyType, ObjType * > p_object )
 		{
-			std::for_each( p_container.begin(), p_container.end(), obj_deleter< ObjType >() );
-		}
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Functor used to delete a pair with for_each
-		\~french
-		\brief		Foncteur utilisé pour désallouer une paire dans un for_each
-		*/
-		template< typename KeyType, typename ObjType >
-		struct pair_deleter
-		{
-			void operator()( std::pair< KeyType, ObjType * > p_pair )
+			std::for_each( p_container.begin(), p_container.end(), []( std::pair< KeyType, ObjType * > & p_pair )
 			{
 				delete p_pair.second;
-			}
-		};
-		/**
-		 *\~english
-		 *\brief		Deletes all container's pairs
-		 *\param[in]	p_container	The container
-		 *\param[in]	p_object	A dummy pair
-		 *\~french
-		 *\brief		Désalloue toutes les paires du conteneur
-		 *\param[in]	p_container	Le conteneur
-		 *\param[in]	p_object	Une paire bidon
-		 */
-		template< class CtnrType, typename KeyType, typename ObjType >
-		void clear_pair_content( CtnrType & CU_PARAM_UNUSED( p_container ), std::pair< KeyType, ObjType > CU_PARAM_UNUSED( p_pair ) )
-		{
-		}
-		/**
-		 *\~english
-		 *\brief		Deletes all container's pairs
-		 *\param[in]	p_container	The container
-		 *\param[in]	p_object	A dummy pair
-		 *\~french
-		 *\brief		Désalloue toutes les paires du conteneur
-		 *\param[in]	p_container	Le conteneur
-		 *\param[in]	p_object	Une paire bidon
-		 */
-		template< class CtnrType, typename KeyType, typename ObjType >
-		void clear_pair_content( CtnrType & p_container, std::pair< KeyType, ObjType * > CU_PARAM_UNUSED( p_pair ) )
-		{
-			std::for_each( p_container.begin(), p_container.end(), pair_deleter< KeyType, ObjType >() );
+			} );
 		}
 	}
 	/**
 	 *\~english
 	 *\brief		Clears a container
-	 *\remark		Deallocates all the content if needed
+	 *\remarks		Deallocates all the content if needed
 	 *\param[in]	p_container	The container to clear
 	 *\~french
 	 *\brief		Vide un conteneur
-	 *\remark		Désalloue le contenu si besoin est
+	 *\remarks		Désalloue le contenu si besoin est
 	 *\param[in]	p_container	Le contenur à vider
 	 */
 	template< class CtnrType >
 	void clear_container( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		details::clear_content( p_container, value_type() );
+		detail::clear_content( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/**
 	 *\~english
 	 *\brief		Clears a pair container (like std::map)
-	 *\remark		Deallocates all the content if needed
+	 *\remarks		Deallocates all the content if needed
 	 *\param[in]	p_container	The container to clear
 	 *\~french
 	 *\brief		Vide un conteneur de paires (std::map, par exemple)
-	 *\remark		Désalloue le contenu si besoin est
+	 *\remarks		Désalloue le contenu si besoin est
 	 *\param[in]	p_container	Le contenur à vider
 	 */
 	template< class CtnrType >
 	void clear_pair_container( CtnrType & p_container )
 	{
 		typedef typename CtnrType::value_type value_type;
-		details::clear_pair_content( p_container, value_type() );
+		detail::clear_pair_content( p_container, value_type() );
 		CtnrType().swap( p_container );
 	}
 	/*!
@@ -298,7 +270,7 @@ namespace Castor
 		static value_type parse( String const & p_str )
 		{
 			value_type l_tReturn;
-			str_utils::parse( p_str, l_tReturn );
+			string::parse( p_str, l_tReturn );
 			return l_tReturn;
 		}
 		/**
@@ -430,13 +402,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Adds two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before adding
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Additionne 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant l'addition
 		 *\return			La référence sur le premier param
@@ -448,13 +420,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Substracts two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before substracting
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Soustrait 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la soustraction
 		 *\return			La référence sur le premier param
@@ -466,13 +438,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Multiplies two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before multiplying
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Multiplie 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la multiplication
 		 *\return			La référence sur le premier param
@@ -484,13 +456,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Divides two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before dividing
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Divise 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la division
 		 *\return			La référence sur le premier param
@@ -576,7 +548,7 @@ namespace Castor
 		 */
 		static bool is_null( value_type p_a )
 		{
-			return equals< value_type >( p_a, zero() );
+			return !p_a;
 		}
 		/**
 		 *\~english
@@ -588,7 +560,7 @@ namespace Castor
 		 */
 		static value_type negate( value_type p_a )
 		{
-			return ! p_a;
+			return !p_a;
 		}
 		/**
 		 *\~english
@@ -614,7 +586,7 @@ namespace Castor
 		 */
 		static value_type parse( String const & p_strVal )
 		{
-			return p_strVal == cuT( "true" ) || p_strVal == cuT( "TRUE" ) || p_strVal == cuT( "1" ) || str_utils::to_int( p_strVal ) != 0;
+			return p_strVal == cuT( "true" ) || p_strVal == cuT( "TRUE" ) || p_strVal == cuT( "1" ) || string::to_int( p_strVal ) != 0;
 		}
 		/**
 		 *\~english
@@ -624,7 +596,9 @@ namespace Castor
 		 *\brief		Si le type est un type flottant, arrondit le paramètre, sinon ne fait rien
 		 *\param[in]	p_a	La valeur à arrondir
 		 */
-		static void stick( value_type & ) {}
+		static void stick( value_type & p_a )
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Converts a given param of a given type to this class template type
@@ -637,7 +611,7 @@ namespace Castor
 		 */
 		template< typename Ty > static value_type convert( Ty const & p_value )
 		{
-			return ! Policy< Ty >::is_null( p_value );
+			return !Policy< Ty >::is_null( p_value );
 		}
 		/**
 		 *\~english
@@ -722,13 +696,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Adds two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before adding
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Additionne 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant l'addition
 		 *\return			La référence sur le premier param
@@ -740,13 +714,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Substracts two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before substracting
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Soustrait 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la soustraction
 		 *\return			La référence sur le premier param
@@ -758,13 +732,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Multiplies two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before multiplying
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Multiplie 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la multiplication
 		 *\return			La référence sur le premier param
@@ -776,13 +750,13 @@ namespace Castor
 		/**
 		 *\~english
 		 *\brief			Divides two params of different type, gives the result
-		 *\remark			The first param receives the result
+		 *\remarks			The first param receives the result
 		 *\param[in,out]	p_a	The first param, receives the result
 		 *\param[in]		p_b	The second param, converted into \p p_a 's type before dividing
 		 *\return			Reference to the first param
 		 *\~french
 		 *\brief			Divise 2 param de type différent, retourne le résultat
-		 *\remark			Le premier param reçoit le résultat
+		 *\remarks			Le premier param reçoit le résultat
 		 *\param[in,out]	p_a	Le premier param, reçoit le résultat
 		 *\param[in]		p_b	Le second param, converti dans le type de \p p_a avant la division
 		 *\return			La référence sur le premier param
@@ -807,6 +781,90 @@ namespace Castor
 		{
 			return p_a = convert< Ty >( p_b );
 		}
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the minimum value of two, at compile time.
+	\~french
+	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
+	*/
+	template< uint32_t A, uint32_t B, typename Enable = void > struct min_value;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the minimum value of two, at compile time.
+	\remarks	min_value specialisation for A <= B.
+	\~french
+	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
+	\remarks	spécialisation de min_value pour A <= B.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct min_value < A, B, typename std::enable_if< ( A <= B ) >::type >
+	{
+		static const uint32_t value = A;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the minimum value of two, at compile time.
+	\remarks	min_value specialisation for B < A.
+	\~french
+	\brief		Utilisé pour obtenir la valeur minimale entre deux, à la compilation.
+	\remarks	spécialisation de min_value pour B < A.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct min_value < A, B, typename std::enable_if< ( B < A ) >::type >
+	{
+		static const uint32_t value = A;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the maximum value of two, at compile time.
+	\~french
+	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
+	*/
+	template< uint32_t A, uint32_t B, typename Enable = void > struct max_value;
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the maximum value of two, at compile time.
+	\remarks	max_value specialisation for A >= B.
+	\~french
+	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
+	\remarks	spécialisation de max_value pour A <= B.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct max_value< A, B, typename std::enable_if< ( A >= B ) >::type >
+	{
+		static const uint32_t value = A;
+	};
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.8.0
+	\date		17/09/2015
+	\~english
+	\brief		Used to have the maximum value of two, at compile time.
+	\remarks	max_value specialisation for B > A.
+	\~french
+	\brief		Utilisé pour obtenir la valeur maximale entre deux, à la compilation.
+	\remarks	spécialisation de max_value pour B > A.
+	*/
+	template< uint32_t A, uint32_t B >
+	struct max_value< A, B, typename std::enable_if< ( B > A ) >::type >
+	{
+		static const uint32_t value = A;
 	};
 }
 

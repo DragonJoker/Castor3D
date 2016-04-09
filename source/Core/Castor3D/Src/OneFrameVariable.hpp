@@ -20,13 +20,18 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "FrameVariable.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
-#pragma warning( disable:4290 )
-
 namespace Castor3D
 {
+	/*!
+	\author		Sylvain DOREMUS
+	\version	0.6.1.0
+	\date		14/08/2010
+	\~english
+	\brief		Helper structure containing definitions for a frame variable type.
+	\~french
+	\brief		Structure d'aide contenant des informations sur une variable de frame.
+	*/
+	template< typename T > struct OneFrameVariableDefinitions;
 	/*!
 	\author		Sylvain DOREMUS
 	\version	0.6.1.0
@@ -36,7 +41,7 @@ namespace Castor3D
 	\~french
 	\brief		Variable simple à type variable
 	*/
-	template <typename T>
+	template< typename T >
 	class OneFrameVariable
 		: public TFrameVariable<T>
 	{
@@ -47,19 +52,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor
+		 *\param[in]	p_program	The program
 		 *\~french
 		 *\brief		Constructeur
+		 *\param[in]	p_program	Le programme
 		 */
-		OneFrameVariable( ShaderProgramBase * p_pProgram );
+		OneFrameVariable( ShaderProgram * p_program );
 		/**
 		 *\~english
 		 *\brief		Constructor
-		 *\param[in]	p_uiOcc		The array dimension
+		 *\param[in]	p_program		The program
+		 *\param[in]	p_occurences	The array dimension
 		 *\~french
 		 *\brief		Constructeur
-		 *\param[in]	p_uiOcc		Les dimensions du tableau
+		 *\param[in]	p_program		Le programme
+		 *\param[in]	p_occurences	Les dimensions du tableau
 		 */
-		OneFrameVariable( ShaderProgramBase * p_pProgram, uint32_t p_uiOcc );
+		OneFrameVariable( ShaderProgram * p_program, uint32_t p_occurences );
 		/**
 		 *\~english
 		 *\brief		Copy constructor
@@ -88,7 +97,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à copier
 		 *\return		Une référence sur cet objet
 		 */
-		OneFrameVariable & operator =( OneFrameVariable< T > const & p_object );
+		OneFrameVariable & operator=( OneFrameVariable< T > const & p_object );
 		/**
 		 *\~english
 		 *\brief		Move assignment operator
@@ -99,7 +108,7 @@ namespace Castor3D
 		 *\param[in]	p_object	L'objet à déplacer
 		 *\return		Une référence sur cet objet
 		 */
-		OneFrameVariable & operator =( OneFrameVariable< T > && p_object );
+		OneFrameVariable & operator=( OneFrameVariable< T > && p_object );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -109,45 +118,13 @@ namespace Castor3D
 		virtual ~OneFrameVariable();
 		/**
 		 *\~english
-		 *\brief		Array subscript operator
-		 *\remark		Doesn't check the index bounds
-		 *\param[in]	p_uiIndex	The index
-		 *\return		A reference to the value at given index
-		 *\~french
-		 *\brief		Opérateur d'accès de type tableau
-		 *\remark		Ne vérifie pas que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
-		 *\return		Une référence sur la valeur à l'index donné
-		 */
-		inline T & operator []( uint32_t p_uiIndex )
-		{
-			return this->m_pValues[p_uiIndex];
-		}
-		/**
-		 *\~english
-		 *\brief		Array subscript operator
-		 *\remark		Doesn't check the index bounds
-		 *\param[in]	p_uiIndex	The index
-		 *\return		A constant reference to the value at given index
-		 *\~french
-		 *\brief		Opérateur d'accès de type tableau
-		 *\remark		Ne vérifie pas que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
-		 *\return		Une référence constante sur la valeur à l'index donné
-		 */
-		inline T const & operator []( uint32_t p_uiIndex )const
-		{
-			return this->m_pValues[p_uiIndex];
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the value
 		 *\return		A reference to the value
 		 *\~french
 		 *\brief		Récupère la valeur
 		 *\return		Une référence sur la valeur
 		 */
-		inline T & GetValue()throw( std::out_of_range );
+		inline T & GetValue();
 		/**
 		 *\~english
 		 *\brief		Retrieves the value
@@ -156,33 +133,173 @@ namespace Castor3D
 		 *\brief		Récupère la valeur
 		 *\return		Une référence constante sur la valeur
 		 */
-		inline T const & GetValue()const throw( std::out_of_range );
+		inline T const & GetValue()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
-		 *\remark		Check the index bounds
-		 *\param[in]	p_uiIndex	The index
+		 *\remarks		Check the index bounds
+		 *\param[in]	p_index	The index
 		 *\return		A reference to the value at given index
 		 *\~french
 		 *\brief		Récupère la valeur à l'index donné
-		 *\remark		Vérifie que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
+		 *\remarks		Vérifie que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
 		 *\return		Une référence sur la valeur à l'index donné
 		 */
-		inline T & GetValue( uint32_t p_uiIndex )throw( std::out_of_range );
+		inline T & GetValue( uint32_t p_index );
 		/**
 		 *\~english
 		 *\brief		Retrieves the value at given index
-		 *\remark		Check the index bounds
-		 *\param[in]	p_uiIndex	The index
+		 *\remarks		Check the index bounds
+		 *\param[in]	p_index	The index
 		 *\return		A constant reference to the value at given index
 		 *\~french
 		 *\brief		Récupère la valeur à l'index donné
-		 *\remark		Vérifie que l'index est dans les bornes
-		 *\param[in]	p_uiIndex	L'indice
+		 *\remarks		Vérifie que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
 		 *\return		Une référence constante sur la valeur à l'index donné
 		 */
-		inline T const & GetValue( uint32_t p_uiIndex )const throw( std::out_of_range );
+		inline T const & GetValue( uint32_t p_index )const;
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable
+		 *\param[in]	p_value	The new value
+		 *\~french
+		 *\brief		Définit la valeur de la variable
+		 *\param[in]	p_value	La valeur
+		 */
+		inline void SetValue( T const & p_value );
+		/**
+		 *\~english
+		 *\brief		Defines the value of the variable
+		 *\param[in]	p_value	The new value
+		 *\param[in]	p_index	The index of the value
+		 *\~french
+		 *\brief		Définit la valeur de la variable
+		 *\param[in]	p_value	La valeur
+		 *\param[in]	p_index	L'index de la valeur à modifier
+		 */
+		inline void SetValue( T const & p_value, uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\param[in]	p_size		The values count.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 *\param[in]	p_size		Le nombre de valeurs.
+		 */
+		inline void SetValues( T const * p_values, size_t p_size );
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		template< size_t N >
+		inline void SetValues( T const ( & p_values )[N] )
+		{
+			SetValues( p_values, N );
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		template< size_t N >
+		inline void SetValues( std::array< T, N > const & p_values )
+		{
+			SetValues( p_values.data(), N );
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the values of the variable.
+		 *\param[in]	p_values	The values buffer.
+		 *\~french
+		 *\brief		Définit les valeurs de la variable.
+		 *\param[in]	p_values	Les valeurs.
+		 */
+		inline void SetValues( std::vector< T > const & p_values )
+		{
+			SetValues( p_values.data(), uint32_t( p_values.size() ) );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the byte size of the variable
+		 *\return		The size
+		 *\~french
+		 *\brief		Récupère la taille en octets de la variable
+		 *\return		La taille
+		 */
+		virtual uint32_t size()const;
+		/**
+		 *\~english
+		 *\brief		Gives the variable full type
+		 *\return		The type
+		 *\~english
+		 *\brief		Donne le type complet de la variable
+		 *\return		Le type
+		 */
+		static inline eFRAME_VARIABLE_TYPE GetFrameVariableType();
+		/**
+		 *\~english
+		 *\brief		Gives the variable full type
+		 *\return		The type
+		 *\~english
+		 *\brief		Donne le type complet de la variable
+		 *\return		Le type
+		 */
+		static inline Castor::String GetFrameVariableTypeName();
+		/**
+		 *\~english
+		 *\brief		Array subscript operator
+		 *\remarks		Doesn't check the index bounds
+		 *\param[in]	p_index	The index
+		 *\return		A reference to the value at given index
+		 *\~french
+		 *\brief		Opérateur d'accès de type tableau
+		 *\remarks		Ne vérifie pas que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
+		 *\return		Une référence sur la valeur à l'index donné
+		 */
+		inline T & operator[]( uint32_t p_index )
+		{
+			return this->m_values[p_index];
+		}
+		/**
+		 *\~english
+		 *\brief		Array subscript operator
+		 *\remarks		Doesn't check the index bounds
+		 *\param[in]	p_index	The index
+		 *\return		A constant reference to the value at given index
+		 *\~french
+		 *\brief		Opérateur d'accès de type tableau
+		 *\remarks		Ne vérifie pas que l'index est dans les bornes
+		 *\param[in]	p_index	L'indice
+		 *\return		Une référence constante sur la valeur à l'index donné
+		 */
+		inline T const & operator[]( uint32_t p_index )const
+		{
+			return this->m_values[p_index];
+		}
+		/**
+		 *\~english
+		 *\brief		Gives the full type of the variable
+		 *\return		The type of the variable
+		 *\~french
+		 *\brief		Donne le type complet de la variable
+		 *\return		Le type complet
+		 */
+		static inline eVARIABLE_TYPE GetVariableType()
+		{
+			return eVARIABLE_TYPE_ONE;
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the variable type
@@ -209,72 +326,32 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
-		 *\~french
-		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
-		 */
-		inline void SetValue( T const & p_tValue );
-		/**
-		 *\~english
-		 *\brief		Defines the value of the variable
-		 *\param[in]	p_tValue	The new value
-		 *\param[in]	p_uiIndex	The index of the value
-		 *\~french
-		 *\brief		Définit la valeur de la variable
-		 *\param[in]	p_tValue	La valeur
-		 *\param[in]	p_uiIndex	L'index de la valeur à modifier
-		 */
-		inline void SetValue( T const & p_tValue, uint32_t p_uiIndex );
-		/**
-		 *\~english
-		 *\brief		Gives the full type of the variable
-		 *\return		The type of the variable
-		 *\~french
-		 *\brief		Donne le type complet de la variable
-		 *\return		Le type complet
-		 */
-		static inline eVARIABLE_TYPE GetVariableType()
-		{
-			return eVARIABLE_TYPE_ONE;
-		}
-		/**
-		 *\~english
-		 *\brief		Gives the variable full type
+		 *\brief		Gives the variable full type name
 		 *\return		The type
 		 *\~english
-		 *\brief		Donne le type complet de la variable
+		 *\brief		Donne le nom du type complet de la variable
 		 *\return		Le type
 		 */
-		static inline eFRAME_VARIABLE_TYPE GetFrameVariableType();
-		/**
-		 *\~english
-		 *\brief		Retrieves the byte size of the variable
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille en octets de la variable
-		 *\return		La taille
-		 */
-		virtual uint32_t size()const;
+		inline Castor::String GetFullTypeName()const
+		{
+			return OneFrameVariable< T >::GetFrameVariableTypeName();
+		}
 
 	private:
 		/**
 		 *\~english
 		 *\brief		Defines the value of the variable, from a string
-		 *\param[in]	p_strValue	The string containing the value
-		 *\param[in]	p_uiIndex	The index of the value
+		 *\param[in]	p_value	The string containing the value
+		 *\param[in]	p_index	The index of the value
 		 *\~french
 		 *\brief		Définit la valeur de la variable à partir d'une chaîne
-		 *\param[in]	p_strValue	La chaîne
-		 *\param[in]	p_uiIndex	L'index de la valeur à modifier
+		 *\param[in]	p_value	La chaîne
+		 *\param[in]	p_index	L'index de la valeur à modifier
 		 */
-		inline void DoSetValueStr( Castor::String const & p_strValue, uint32_t p_uiIndex );
+		inline void DoSetValueStr( Castor::String const & p_value, uint32_t p_index );
 	};
 }
 
 #include "OneFrameVariable.inl"
-
-#pragma warning( pop )
 
 #endif

@@ -1,4 +1,4 @@
-#include "PanelOverlay.hpp"
+﻿#include "PanelOverlay.hpp"
 #include "OverlayRenderer.hpp"
 #include "Overlay.hpp"
 
@@ -17,19 +17,19 @@ namespace Castor3D
 			l_pParent = l_pParent->GetParent();
 		}
 
-		bool l_bReturn = p_file.WriteText( l_strTabs + cuT( "panel_overlay " ) + p_overlay.GetOverlay().GetName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( l_strTabs + cuT( "panel_overlay " ) + p_overlay.GetOverlay().GetName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
+			l_return = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
@@ -71,24 +71,22 @@ namespace Castor3D
 		p_renderer->DrawPanel( *this );
 	}
 
-	void PanelOverlay::DoUpdate( OverlayRendererSPtr p_renderer )
+	void PanelOverlay::DoUpdateBuffer( Size const & p_size )
 	{
-		int l_zIndex = 1000 - GetOverlay().GetZIndex();
-		Size l_screenSize = p_renderer->GetSize();
-		Position l_pos = GetAbsolutePosition( l_screenSize );
-		Size l_size = GetAbsoluteSize( l_screenSize );
+		Position l_pos = GetAbsolutePosition( p_size );
+		Size l_size = GetAbsoluteSize( p_size );
 
 		int32_t l_centerL = l_pos.x();
 		int32_t l_centerT = l_pos.y();
 		int32_t l_centerR = l_pos.x() + l_size.width();
 		int32_t l_centerB = l_pos.y() + l_size.height();
 
-		OverlayCategory::Vertex l_vertex0 = { { l_centerL, l_centerT, l_zIndex }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex l_vertex1 = { { l_centerL, l_centerB, l_zIndex }, { real( m_uv[0] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex l_vertex2 = { { l_centerR, l_centerB, l_zIndex }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex l_vertex3 = { { l_centerL, l_centerT, l_zIndex }, { real( m_uv[0] ), real( m_uv[3] ) } };
-		OverlayCategory::Vertex l_vertex4 = { { l_centerR, l_centerB, l_zIndex }, { real( m_uv[2] ), real( m_uv[1] ) } };
-		OverlayCategory::Vertex l_vertex5 = { { l_centerR, l_centerT, l_zIndex }, { real( m_uv[2] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex l_vertex0 = { { l_centerL, l_centerT }, { real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex l_vertex1 = { { l_centerL, l_centerB }, { real( m_uv[0] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex l_vertex2 = { { l_centerR, l_centerB }, { real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex l_vertex3 = { { l_centerL, l_centerT }, { real( m_uv[0] ), real( m_uv[3] ) } };
+		OverlayCategory::Vertex l_vertex4 = { { l_centerR, l_centerB }, { real( m_uv[2] ), real( m_uv[1] ) } };
+		OverlayCategory::Vertex l_vertex5 = { { l_centerR, l_centerT }, { real( m_uv[2] ), real( m_uv[3] ) } };
 
 		m_arrayVtx[0] = l_vertex0;
 		m_arrayVtx[1] = l_vertex1;

@@ -1,4 +1,4 @@
-/*
+﻿/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CASTOR_FILE_PARSER_CONTEXT_H___
 #define ___CASTOR_FILE_PARSER_CONTEXT_H___
 
-#include <stack>
+#include <deque>
 #include <limits>
 #include "File.hpp"
 
@@ -42,8 +42,8 @@ namespace Castor
 	\brief		The context used into file parsing functions
 	\remark		While parsing a "brace file", the context holds the important data retrieved
 	\~french
-	\brief		Contexte utilis� dans les fonctions d'analyse
-	\remark		Lorsqu'on analyse un fichier, le contexte contient les informations importantes qui ont �t� r�cup�r�es.
+	\brief		Contexte utilisé dans les fonctions d'analyse
+	\remark		Lorsqu'on analyse un fichier, le contexte contient les informations importantes qui ont été récupérées.
 	*/
 	class FileParserContext
 	{
@@ -56,24 +56,59 @@ namespace Castor
 		 *\brief		Constructeur
 		 *\param[in]	p_pFile	Le fichier en cours de traitement
 		 */
-		FileParserContext( TextFile * p_pFile );
+		CU_API FileParserContext( TextFile * p_pFile );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		virtual ~FileParserContext();
+		CU_API virtual ~FileParserContext();
+		/**
+		 *\~english
+		 *\brief		Registers a user context.
+		 *\param[in]	p_name	The context name, must be unique.
+		 *\param[in]	p_data	The user context data.
+		 *\~french
+		 *\brief		Enregistre un contexte utilisateur.
+		 *\param[in]	p_name	Le nom du contexte, doit être unique.
+		 *\param[in]	p_data	Les données du contexte utilisateur.
+		 */
+		CU_API void RegisterUserContext( String const & p_name, void * p_data );
+		/**
+		 *\~english
+		 *\brief		Unregisters a user context.
+		 *\param[in]	p_name	The context name.
+		 *\return		The user context data.
+		 *\~french
+		 *\brief		Désenregistre un contexte utilisateur.
+		 *\param[in]	p_name	Le nom du contexte.
+		 *\return		Les données du contexte utilisateur.
+		 */
+		CU_API void * UnregisterUserContext( String const & p_name );
+		/**
+		 *\~english
+		 *\brief		Retrieves a user context.
+		 *\param[in]	p_name	The context name.
+		 *\return		The user context data.
+		 *\~french
+		 *\brief		Récupère un contexte utilisateur.
+		 *\param[in]	p_name	Le nom du contexte.
+		 *\return		Les données du contexte utilisateur.
+		 */
+		CU_API void * GetUserContext( String const & p_name );
 
 	public:
 		//!\~english The file currently parsed	\~french Le fichier en cours d'analyse
-		TextFile * pFile;
+		TextFile * m_file;
 		//!\~english The current line	\~french La ligne en cours d'analyse
-		unsigned long long ui64Line;
+		unsigned long long m_line;
 		//!\~english The sections stack	\~french La pile de sections
-		std::stack< int > stackSections;
+		std::deque< uint32_t > m_sections;
 		//!\~english The current function name	\~french Le nom de la fonction actuelle
-		String strFunctionName;
+		String m_functionName;
+		//!\~english The user context data, useful in plug-ins.	\~french Les données de contexte utilisateur, utile dans les plug-ins.
+		std::map< String, void * > m_userContexts;
 	};
 }
 

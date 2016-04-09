@@ -1,4 +1,4 @@
-#include "DirectionalLight.hpp"
+﻿#include "DirectionalLight.hpp"
 
 
 using namespace Castor;
@@ -7,70 +7,70 @@ namespace Castor3D
 {
 	bool DirectionalLight::TextLoader::operator()( DirectionalLight const & p_light, TextFile & p_file )
 	{
-		bool l_bReturn = LightCategory::TextLoader()( p_light, p_file );
+		bool l_return = LightCategory::TextLoader()( p_light, p_file );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
 	DirectionalLight::BinaryParser::BinaryParser( Path const & p_path )
-		:	LightCategory::BinaryParser( p_path )
+		: LightCategory::BinaryParser( p_path )
 	{
 	}
 
 	bool DirectionalLight::BinaryParser::Fill( DirectionalLight const & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		BinaryChunk l_chunk( eCHUNK_TYPE_LIGHT );
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
-			l_bReturn = LightCategory::BinaryParser( m_path ).Fill( p_obj, l_chunk );
+			l_return = LightCategory::BinaryParser( m_path ).Fill( p_obj, l_chunk );
 		}
 
-		if ( l_bReturn )
+		if ( l_return )
 		{
 			l_chunk.Finalise();
 			p_chunk.AddSubChunk( l_chunk );
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	bool DirectionalLight::BinaryParser::Parse( DirectionalLight & p_obj, BinaryChunk & p_chunk )const
 	{
-		bool l_bReturn = true;
+		bool l_return = true;
 		String l_name;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
 			BinaryChunk l_chunk;
-			l_bReturn = p_chunk.GetSubChunk( l_chunk );
+			l_return = p_chunk.GetSubChunk( l_chunk );
 
-			if ( l_bReturn )
+			if ( l_return )
 			{
-				l_bReturn = LightCategory::BinaryParser( m_path ).Parse( p_obj, l_chunk );
+				l_return = LightCategory::BinaryParser( m_path ).Parse( p_obj, l_chunk );
 			}
 
-			if ( !l_bReturn )
+			if ( !l_return )
 			{
 				p_chunk.EndParse();
 			}
 		}
 
-		return l_bReturn;
+		return l_return;
 	}
 
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight()
-		:	LightCategory( eLIGHT_TYPE_DIRECTIONAL )
+		: LightCategory( eLIGHT_TYPE_DIRECTIONAL )
 	{
 	}
 
@@ -83,34 +83,18 @@ namespace Castor3D
 		return std::make_shared< DirectionalLight >();
 	}
 
-	void DirectionalLight::Render( LightRendererSPtr p_pRenderer )
+	void DirectionalLight::Bind( Castor::PxBufferBase & p_texture, uint32_t p_index )const
 	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->Enable();
-			p_pRenderer->ApplyPosition();
-			p_pRenderer->ApplyAmbient();
-			p_pRenderer->ApplyDiffuse();
-			p_pRenderer->ApplySpecular();
-			p_pRenderer->Bind();
-		}
+		int l_offset = 0;
+		DoBindComponent( GetColour(), p_index, l_offset, p_texture );
+		DoBindComponent( GetIntensity(), p_index, l_offset, p_texture );
+		Point4f l_posType = GetPositionType();
+		DoBindComponent( Point4f( l_posType[0], l_posType[1], -l_posType[2], l_posType[3] ), p_index, l_offset, p_texture );
 	}
 
-	void DirectionalLight::Render( LightRendererSPtr p_pRenderer, ShaderProgramBase * p_pProgram )
+	void DirectionalLight::SetDirection( Castor::Point3f const & p_position )
 	{
-		if ( p_pRenderer )
-		{
-			p_pRenderer->ApplyPositionShader();
-			p_pRenderer->ApplyAmbientShader();
-			p_pRenderer->ApplyDiffuseShader();
-			p_pRenderer->ApplySpecularShader();
-			p_pRenderer->EnableShader( p_pProgram );
-		}
-	}
-
-	void DirectionalLight::SetDirection( Castor::Point3f const & p_ptPosition )
-	{
-		LightCategory::SetPositionType( Castor::Point4f( p_ptPosition[0], p_ptPosition[1], p_ptPosition[2], 0.0f ) );
+		LightCategory::SetPositionType( Castor::Point4f( p_position[0], p_position[1], p_position[2], 0.0f ) );
 	}
 
 	Castor::Point3f DirectionalLight::GetDirection()const

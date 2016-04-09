@@ -34,101 +34,242 @@ namespace Castor3D
 	\brief		Classe de base (abstraite) pour les subdiviseurs
 	\remark		Contient l'interface commune aux subdiviseurs
 	*/
-	class C3D_API Subdivider
+	class Subdivider
 	{
 	protected:
-		typedef void SubdivisionEndFunction( void *, Subdivider * );
-		typedef SubdivisionEndFunction * PSubdivisionEndFunction;
-
-		SubmeshSPtr						m_submesh;			//!< The submesh being subdivided
-		FacePtrArray					m_arrayFaces;
-		Castor::Point3r					m_ptDivisionCenter;
-		std::shared_ptr< std::thread >	m_pThread;
-		bool							m_bGenerateBuffers;
-		PSubdivisionEndFunction			m_pfnSubdivisionEnd;
-		void 			*				m_pArg;
-		bool							m_bThreaded;
-		std::recursive_mutex			m_mutex;
+		typedef std::function< void( Subdivider & ) > SubdivisionEndFunction;
 
 	public:
 		/**
-		 * Constructor
-		 *\param[in]	p_submesh	The submesh to subdivide
+		 *\~english
+		 *\brief		Default constructor
+		 *\~french
+		 *\brief		Constructeur par défaut
 		 */
-		Subdivider();
+		C3D_API Subdivider();
 		/**
-		 * Destructor
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
 		 */
-		virtual ~Subdivider();
+		C3D_API virtual ~Subdivider();
 		/**
-		 * Main subdivision function, must be implemented by children classes
-		 *\param[in]	p_pCenter	The point used as center to compute new points
+		 *\~english
+		 *\brief		Main subdivision function
+		 *\param[in]	p_submesh			The submesh to subdivide
+		 *\param[in]	p_occurences		The subdivisions occurences
+		 *\param[in]	p_generateBuffers	Tells if the buffers must be generated after subdivision
+		 *\param[in]	p_threaded			Tells if subdivision must be threaded
+		 *\~french
+		 *\brief		Fonction de subdivision
+		 *\param[in]	p_submesh			Le sous maillage à subdiviser
+		 *\param[in]	p_occurences		Le nombre de subdivisions à effectuer
+		 *\param[in]	p_generateBuffers	Dit si les tampons doivent être générés
+		 *\param[in]	p_threaded			Dit si la subdivision doit être threadée
 		 */
-		void Subdivide( SubmeshSPtr p_pSubmesh, Castor::Point3r * p_pCenter, bool p_bGenerateBuffers = true, bool p_bThreaded = false );
+		C3D_API virtual void Subdivide( SubmeshSPtr p_submesh, int p_occurences, bool p_generateBuffers = true, bool p_threaded = false );
 		/**
-		 * Defines a function to execute when the threaded subdivision ends
-		 * That function *MUST NEITHER* destroy the thread *NOR* the subdivider
-		 *\param[in]	p_pfnSubdivisionEnd	Pointer over the function to execute
-		 *\param[in]	p_pArg	Optional parameter for the function
+		 *\~english
+		 *\brief		Cleans all member variables
+		 *\~french
+		 *\brief		Nettoie tous les membres
 		 */
-		void SetThreadEndFunction( PSubdivisionEndFunction p_pfnSubdivisionEnd, void * p_pArg = nullptr )
-		{
-			m_pfnSubdivisionEnd = p_pfnSubdivisionEnd;
-			m_pArg = p_pArg;
-		}
+		C3D_API virtual void Cleanup();
 		/**
-		 * Cleans all member variables, making this divider dummy
+		 *\~english
+		 *\brief		Creates and adds a vertex to my list
+		 *\param[in]	x, y, z	The vertex coordinates
+		 *\return		The created vertex
+		 *\~french
+		 *\brief		Crée et ajoute un sommet à la liste
+		 *\param[in]	x, y, z	Les coordonnées de la position du sommet
+		 *\return		Le sommet créé
 		 */
-		virtual void Cleanup();
+		C3D_API BufferElementGroupSPtr AddPoint( real x, real y, real z );
 		/**
-		 * Creates and adds a vertex to my list
-		 *\param[in]	x	The vertex X coordinate
-		 *\param[in]	y	The vertex Y coordinate
-		 *\param[in]	z	The vertex Z coordinate
-		 *\return	The created vertex
-		 */
-		BufferElementGroupSPtr AddPoint( real x, real y, real z );
-		/**
-		 * Adds a vertex to my list
+		 *\~english
+		 *\brief		Adds a vertex to my list
 		 *\param[in]	p_v	The vertex to add
-		 *\return	The vertex
+		 *\return		The created vertex
+		 *\~french
+		 *\brief		Crée et ajoute un sommet à la liste
+		 *\param[in]	p_v	La position du sommet à ajouter
+		 *\return		Le sommet créé
 		 */
-		BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
+		C3D_API BufferElementGroupSPtr AddPoint( Castor::Point3r const & p_v );
 		/**
-		 * Creates and adds a vertex to my list
+		 *\~english
+		 *\brief		Creates and adds a vertex to my list
 		 *\param[in]	p_v	The vertex coordinates
-		 *\return	The created vertex
+		 *\return		The created vertex
+		 *\~french
+		 *\brief		Crée et ajoute un sommet à la liste
+		 *\param[in]	p_v	Les coordonnées de la position du sommet à ajouter
+		 *\return		Le sommet créé
 		 */
-		BufferElementGroupSPtr AddPoint( real * p_v );
+		C3D_API BufferElementGroupSPtr AddPoint( real * p_v );
 		/**
-		 * Creates and adds a face to the wanted smoothgroup
+		 *\~english
+		 *\brief		Creates and adds a face
 		 *\param[in]	a	The first face's vertex index
 		 *\param[in]	b	The second face's vertex index
 		 *\param[in]	c	The third face's vertex index
-		 *\param[in]	p_sgIndex	The wanted smoothing group index
-		 *\return	The created face
+		 *\return		The created face
+		 *\~french
+		 *\brief		Crée et ajoute une face
+		 *\param[in]	a	L'indice du premier sommet de la face
+		 *\param[in]	b	L'indice du second sommet de la face
+		 *\param[in]	c	L'indice du troisième sommet de la face
+		 *\return		La face créée
 		 */
-		virtual FaceSPtr AddFace( uint32_t a, uint32_t b, uint32_t c );
+		C3D_API virtual Face AddFace( uint32_t a, uint32_t b, uint32_t c );
 		/**
-		 * Tests if the given Point3r is in mine
+		 *\~english
+		 *\brief		Tests if the given Point3r is in mine
 		 *\param[in]	p_vertex	The vertex to test
-		 *\return	The index of the vertex equal to parameter, -1 if not found
+		 *\param[in]	p_precision	The comparison precision
+		 *\return		The index of the vertex equal to parameter, -1 if not found
+		 *\~french
+		 *\brief		Teste si le point donné fait partie de ceux de ce submesh
+		 *\param[in]	p_vertex	Le point à tester
+		 *\param[in]	p_precision	La précision de comparaison
+		 *\return		L'index du point s'il a été trouvé, -1 sinon
 		 */
-		virtual int IsInMyPoints( Castor::Point3r const & p_vertex );
-		uint32_t GetNbPoints()const;
-		BufferElementGroupSPtr GetPoint( uint32_t i )const;
+		C3D_API virtual int IsInMyPoints( Castor::Point3r const & p_vertex, double p_precision );
+		/**
+		 *\~english
+		 *\brief		Retrieves the points count
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le nombre de points
+		 *\return		La valeur
+		 */
+		C3D_API uint32_t GetPointsCount()const;
+		/**
+		 *\~english
+		 *\brief		Retrieves the wanted point
+		 *\param[in]	i	The point index
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le point voulu
+		 *\param[in]	i	L'indice du point
+		 *\return		La valeur
+		 */
+		C3D_API BufferElementGroupSPtr GetPoint( uint32_t i )const;
+		/**
+		 *\~english
+		 *\return		Retrieves the points array
+		 *\~french
+		 *\return		Récupère le tableau de points
+		 */
+		C3D_API VertexPtrArray const & GetPoints()const;
+		/**
+		 *\~english
+		 *\brief		Defines a function to execute when the threaded subdivision ends
+		 *\remarks		That function *MUST NEITHER* destroy the thread *NOR* the subdivider
+		 *\param[in]	p_pfnSubdivisionEnd	Pointer over the function to execute
+		 *\~french
+		 *\brief		Définit une fonction qui sera appelée lors de la fin de la subdivision
+		 *\remarks		Cette fonction *NE DOIT PAS* détruire le thread *NI* le subdiviseur
+		 *\param[in]	p_pfnSubdivisionEnd	Pointeur de la fonction à exécuter
+		 */
+		inline void SetSubdivisionEndCallback( SubdivisionEndFunction p_pfnSubdivisionEnd )
+		{
+			m_pfnSubdivisionEnd = p_pfnSubdivisionEnd;
+		}
 
 	protected:
-		static uint32_t DoSubdivideThreaded( Subdivider * p_pThis );
 		/**
-		 * Initialisation function
+		 *\~english
+		 *\brief		Threaded subdivision function
+		 *\~french
+		 *\brief		Fonction de subdivision du thread
 		 */
-		virtual void DoInitialise();
-		void DoSwapBuffers();
-		virtual void DoSubdivide() = 0;
-		void DoSetTextCoords( FaceSPtr p_face, BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );
-		void DoComputeCenterFrom( Castor::Point3r const & p_a, Castor::Point3r const & p_b, Castor::Point3r const & p_ptANormal, Castor::Point3r const & p_ptBNormal, Castor::Point3r & p_ptResult );
-		void DoComputeCenterFrom( Castor::Point3r const & p_a, Castor::Point3r const & p_b, Castor::Point3r const & p_c, Castor::Point3r const & p_ptANormal, Castor::Point3r const & p_ptBNormal, Castor::Point3r const & p_ptCNormal, Castor::Point3r & p_ptResult );
+		C3D_API uint32_t DoSubdivideThreaded();
+		/**
+		 *\~english
+		 *\brief		Checks if the given point is in my list and if not creates and adds it
+		 *\param[in]	p_point	The vertex coordinates
+		 *\return		The created vertex
+		 *\~french
+		 *\brief		Vérifie si le point donnée est déjà dans la liste, et sinon le crée et l'ajoute
+		 *\param[in]	p_point	Les coordonnées de la position du sommet à ajouter
+		 *\return		Le sommet créé
+		 */
+		C3D_API Castor3D::BufferElementGroupSPtr DoTryAddPoint( Castor::Point3r const & p_point );
+		/**
+		 *\~english
+		 *\brief		Main subdivision function
+		 *\param[in]	p_submesh			The submesh to subdivide
+		 *\param[in]	p_generateBuffers	Tells if the buffers must be generated after subdivision
+		 *\param[in]	p_threaded			Tells if subdivision must be threaded
+		 *\~french
+		 *\brief		Fonction de subdivision
+		 *\param[in]	p_submesh			Le sous maillage à subdiviser
+		 *\param[in]	p_generateBuffers	Dit si les tampons doivent être générés
+		 *\param[in]	p_threaded			Dit si la subdivision doit être threadée
+		 */
+		C3D_API virtual void DoSubdivide( SubmeshSPtr p_submesh, bool p_generateBuffers, bool p_threaded );
+		/**
+		 *\~english
+		 *\brief		Initialisation function
+		 *\~french
+		 *\brief		Fonction d'initialisation
+		 */
+		C3D_API virtual void DoInitialise();
+		/**
+		 *\~english
+		 *\brief		Swaps the internal faces with the submeshes ones
+		 *\~french
+		 *\brief		Echange les faces internes avec celles du sous-maillage
+		 */
+		C3D_API void DoSwapBuffers();
+		/**
+		 *\~english
+		 *\brief		Effectively subdivides the submesh
+		 *\~french
+		 *\brief		Subdivise le sous-maillage
+		 */
+		C3D_API virtual void DoSubdivide() = 0;
+		/**
+		 *\~english
+		 *\brief		Computes the texture coordinates for given vertices, creates the faces
+		 *\param[in]	p_a, p_b, p_c	The source vertices
+		 *\param[in]	p_d, p_e, p_f	The new vertices
+		 *\~french
+		 *\brief		Calcule les coordonnées de texture des sommets donnés, crée les faces
+		 *\param[in]	p_a, p_b, p_c	Les sommets source
+		 *\param[in]	p_d, p_e, p_f	Les nouveaux sommets
+		 */
+		C3D_API void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_d, BufferElementGroup & p_e, BufferElementGroup & p_f );
+		/**
+		 *\~english
+		 *\brief		Computes the texture coordinates for the new vertex, creates the faces
+		 *\param[in]	p_a, p_b, p_c	The source vertices
+		 *\param[in]	p_p				The new vertex
+		 *\~french
+		 *\brief		Calcule les coordonnées de texture du nouveau sommet, crée les faces
+		 *\param[in]	p_a, p_b, p_c	Les sommets sources
+		 *\param[in]	p_p				Le nouveau sommet
+		 */
+		C3D_API void DoSetTextCoords( BufferElementGroup const & p_a, BufferElementGroup const & p_b, BufferElementGroup const & p_c, BufferElementGroup & p_p );
+
+	protected:
+		//!\~english The submesh being subdivided	\~french Le sous-maillage à diviser
+		SubmeshSPtr m_submesh;
+		//!\~english The faces	\~french Les faces
+		FaceArray m_arrayFaces;
+		//!\~english Tells if the buffers must be generatef	\~french Dit si les tampons doivent être générés
+		bool m_bGenerateBuffers;
+		//!\~english The subdivision end callback	\~french Le callback de fin de subdivision
+		SubdivisionEndFunction m_pfnSubdivisionEnd;
+		//!\~english The subdivision thread	\~french Le thread de subdivision
+		std::shared_ptr< std::thread > m_pThread;
+		//!\~english Tells that the subdivision is threaded	\~french Dit si la subdivision est threadée
+		bool m_bThreaded;
+		//!\~english The subdivision thread mutex	\~french Le mutex du thread de subdivision
+		std::recursive_mutex m_mutex;
 	};
 }
 

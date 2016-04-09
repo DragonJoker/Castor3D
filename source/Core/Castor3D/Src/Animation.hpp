@@ -18,11 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_ANIMATION_H___
 #define ___C3D_ANIMATION_H___
 
-#include "MovingObjectBase.hpp"
+#include "Castor3DPrerequisites.hpp"
 
-#pragma warning( push )
-#pragma warning( disable:4251 )
-#pragma warning( disable:4275 )
+#include "AnimationObject.hpp"
 
 namespace Castor3D
 {
@@ -30,7 +28,6 @@ namespace Castor3D
 	\author		Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
-	\todo		Review all the animation system because it's not clear, not optimised, and not good enough to be validated
 	\todo		Write and Read functions.
 	\~english
 	\brief		Animation class
@@ -39,126 +36,196 @@ namespace Castor3D
 	\brief		Classe d'animation
 	\remark		Classe gérant une Animation, sa durée, les key frames ...
 	*/
-	class C3D_API Animation
-		:	public Castor::Named
+	class Animation
+		: public Castor::Named
 	{
 	public:
 		/*!
-		\author 	Sylvain DOREMUS
-		\date 		09/02/2010
+		\author		Sylvain DOREMUS
+		\version	0.8.0
+		\date		26/01/2016
 		\~english
-		\brief		Animation State Enum
-		\remark		The enumeration which defines all the states of an animation : playing, stopped, paused
-		\~french
-		\brief		Enumération des états d'une animation
+		\brief		Animation binary loader.
+		\~english
+		\brief		Loader binaire d'Animation.
 		*/
-		typedef enum eSTATE CASTOR_TYPE( uint8_t )
+		class BinaryParser
+			: public Castor3D::BinaryParser< Animation >
 		{
-			eSTATE_PLAYING	//!< Playing animation state
-			,	eSTATE_STOPPED	//!< Stopped animation state
-			,	eSTATE_PAUSED	//!< Paused animation state
-			,	eSTATE_COUNT
-		}	eSTATE;
+		public:
+			/**
+			 *\~english
+			 *\brief		Constructor.
+			 *\param[in]	p_path	The current folder path.
+			 *\~french
+			 *\brief		Constructeur.
+			 *\param[in]	p_path	Le chemin d'accès au dossier courant.
+			 */
+			C3D_API BinaryParser( Castor::Path const & p_path );
+			/**
+			 *\~english
+			 *\brief		Function used to fill the chunk from specific data.
+			 *\param[in]	p_obj	The object to write.
+			 *\param[out]	p_chunk	The chunk to fill.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de remplir le chunk de données spécifiques.
+			 *\param[in]	p_obj	L'objet à écrire.
+			 *\param[out]	p_chunk	Le chunk à remplir.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Fill( Animation const & p_obj, BinaryChunk & p_chunk )const;
+			/**
+			 *\~english
+			 *\brief		Function used to retrieve specific data from the chunk.
+			 *\param[out]	p_obj	The object to read.
+			 *\param[in]	p_chunk	The chunk containing data.
+			 *\return		\p false if any error occured.
+			 *\~french
+			 *\brief		Fonction utilisée afin de récupérer des données spécifiques à partir d'un chunk.
+			 *\param[out]	p_obj	L'objet à lire.
+			 *\param[in]	p_chunk	Le chunk contenant les données.
+			 *\return		\p false si une erreur quelconque est arrivée.
+			 */
+			C3D_API virtual bool Parse( Animation & p_obj, BinaryChunk & p_chunk )const;
+		};
 
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_strName	The name of the animation
+		 *\brief		Constructor.
+		 *\param[in]	p_name	The name of the animation.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_strName	Le nom de l'animation
+		 *\brief		Constructeur.
+		 *\param[in]	p_name	Le nom de l'animation.
 		 */
-		Animation( Castor::String const & p_strName = Castor::cuEmptyString );
+		C3D_API Animation( Castor::String const & p_name = Castor::cuEmptyString );
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		~Animation();
+		C3D_API ~Animation();
 		/**
 		 *\~english
-		 *\brief		Creates and adds an animated node
+		 *\brief		Updates the animation, updates the key frame at the good time index.
+		 *\param[in]	p_tslf	The time since the last frame.
 		 *\~french
-		 *\brief		Crée et ajoute un noeud animé
+		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps.
+		 *\param[in]	p_tslf	Le temps écoulé depuis la dernière frame.
 		 */
-		MovingObjectBaseSPtr AddMovingObject();
+		C3D_API void Update( real p_tslf );
 		/**
 		 *\~english
-		 *\brief		Creates and adds an animated bone
-		 *\param[in]	p_pObject		The bone to add
+		 *\brief		Plays the animation.
 		 *\~french
-		 *\brief		Crée et ajoute un os animé
-		 *\param[in]	p_pObject		L'os
+		 *\brief		Démarre l'animation.
 		 */
-		MovingObjectBaseSPtr AddMovingObject( BoneSPtr p_pObject );
+		C3D_API void Play();
 		/**
 		 *\~english
-		 *\brief		Creates and adds an animated object
-		 *\param[in]	p_pObject		The movable object to add
+		 *\brief		Pauses the animation.
 		 *\~french
-		 *\brief		Crée et ajoute un objet animé
-		 *\param[in]	p_pObject		L'objet déplaçable
+		 *\brief		Met l'animation en pause.
 		 */
-		MovingObjectBaseSPtr AddMovingObject( MovableObjectSPtr p_pObject );
+		C3D_API void Pause();
 		/**
 		 *\~english
-		 *\brief		Adds an animated object
-		 *\param[in]	p_pObject		The animated object to add
+		 *\brief		Stops the animation.
 		 *\~french
-		 *\brief		Ajoute un objet animé
-		 *\param[in]	p_pObject		L'objet animé
+		 *\brief		Stoppe l'animation.
 		 */
-		void AddMovingObject( MovingObjectBaseSPtr p_pObject );
+		C3D_API void Stop();
 		/**
 		 *\~english
-		 *\brief		Retrieves an animated bone
-		 *\param[in]	p_pObject		The bone to add
+		 *\brief		Creates and adds a moving node.
+		 *\param[in]	p_name		The node name.
+		 *\param[in]	p_parent	The moving object's parent.
 		 *\~french
-		 *\brief		Récupère un os animé
-		 *\param[in]	p_pObject		L'os
+		 *\brief		Crée et ajoute un noeud mouvant.
+		 *\param[in]	p_name		Le nom du noeud.
+		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		MovingObjectBaseSPtr GetMovingObject( BoneSPtr p_pObject )const;
+		C3D_API AnimationObjectSPtr AddObject( Castor::String const & p_name, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
-		 *\brief		Retrieves an animated object
-		 *\param[in]	p_pObject		The movable object to add
+		 *\brief		Creates and adds a moving object.
+		 *\param[in]	p_object	The moving object to add.
+		 *\param[in]	p_parent	The moving object's parent.
 		 *\~french
-		 *\brief		Récupère un objet animé
-		 *\param[in]	p_pObject		L'objet déplaçable
+		 *\brief		Crée et ajoute un objet mouvant.
+		 *\param[in]	p_object	L'objet déplaçable.
+		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		MovingObjectBaseSPtr GetMovingObject( MovableObjectSPtr p_pObject )const;
+		C3D_API AnimationObjectSPtr AddObject( GeometrySPtr p_object, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
-		 *\brief		Updates the animation, updates the key frame at the good time index
-		 *\param[in]	p_rTslf	The time since the last frame
+		 *\brief		Creates and adds a moving bone.
+		 *\param[in]	p_bone		The bone to add.
+		 *\param[in]	p_parent	The moving object's parent.
 		 *\~french
-		 *\brief		Met l'animation à jour, met à jour les key frames aux bons index de temps
-		 *\param[in]	p_rTslf	Le temps écoulé depuis la dernière frame
+		 *\brief		Crée et ajoute un os mouvant.
+		 *\param[in]	p_bone		L'os.
+		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		void Update( real p_rTslf );
+		C3D_API AnimationObjectSPtr AddObject( BoneSPtr p_bone, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
-		 *\brief		Plays the animation
+		 *\brief		Adds an animated object.
+		 *\param[in]	p_object	The animated object to add.
+		 *\param[in]	p_parent	The moving object's parent.
 		 *\~french
-		 *\brief		Démarre l'animation
+		 *\brief		Ajoute un objet animé.
+		 *\param[in]	p_object	L'objet animé.
+		 *\param[in]	p_parent	Le parent de l'objet déplaçable.
 		 */
-		void Play();
+		C3D_API void AddObject( AnimationObjectSPtr p_object, AnimationObjectSPtr p_parent );
 		/**
 		 *\~english
-		 *\brief		Pauses the animation
+		 *\brief		Tells if the animation has the animated object.
+		 *\param[in]	p_type	The object type.
+		 *\param[in]	p_name	The object name.
 		 *\~french
-		 *\brief		Met l'animation en pause
+		 *\brief		Dit si l'animation a l'objet animé.
+		 *\param[in]	p_type	Le type de l'objet.
+		 *\param[in]	p_name	Le nom de l'objet.
 		 */
-		void Pause();
+		C3D_API bool HasObject( eANIMATION_OBJECT_TYPE p_type, Castor::String const & p_name )const;
 		/**
 		 *\~english
-		 *\brief		Stops the animation
+		 *\brief		Retrieves an animated object.
+		 *\param[in]	p_object	The movable object to add.
 		 *\~french
-		 *\brief		Stoppe l'animation
+		 *\brief		Récupère un objet animé.
+		 *\param[in]	p_object	L'objet déplaçable.
 		 */
-		void Stop();
+		C3D_API AnimationObjectSPtr GetObject( MovableObjectSPtr p_object )const;
+		/**
+		 *\~english
+		 *\brief		Retrieves an animated bone.
+		 *\param[in]	p_bone	The bone.
+		 *\~french
+		 *\brief		Récupère un os animé.
+		 *\param[in]	p_bone	L'os.
+		 */
+		C3D_API AnimationObjectSPtr GetObject( BoneSPtr p_bone )const;
+		/**
+		 *\~english
+		 *\return		The key frames interpolation mode.
+		 *\~french
+		 *\return		Le mode d'interpolation des key frames.
+		 */
+		C3D_API void SetInterpolationMode( eINTERPOLATOR_MODE p_mode );
+		/**
+		 *\~english
+		 *\brief		Clones this animation.
+		 *\return		The clone.
+		 *\~french
+		 *\brief		Clone cette animation.
+		 *\return		Le clone.
+		 */
+		C3D_API AnimationSPtr Clone()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the animation state
@@ -167,9 +234,9 @@ namespace Castor3D
 		 *\brief		Récupère l'état de l'animation
 		 *\return		L'état de l'animation
 		 */
-		inline eSTATE GetState()const
+		inline eANIMATION_STATE GetState()const
 		{
-			return m_eState;
+			return m_state;
 		}
 		/**
 		 *\~english
@@ -181,7 +248,7 @@ namespace Castor3D
 		 */
 		inline real GetScale()const
 		{
-			return m_rScale;
+			return m_scale;
 		}
 		/**
 		 *\~english
@@ -193,31 +260,31 @@ namespace Castor3D
 		 */
 		inline bool IsLooped()const
 		{
-			return m_bLooped;
+			return m_looped;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the animation time scale
-		 *\param[in]	p_rScale	The new value
+		 *\param[in]	p_scale	The new value
 		 *\~french
 		 *\brief		Définit le multiplicateur de temps de l'animation
-		 *\param[in]	p_rScale	La nouvelle valeur
+		 *\param[in]	p_scale	La nouvelle valeur
 		 */
-		inline void	SetScale( real p_rScale )
+		inline void	SetScale( real p_scale )
 		{
-			m_rScale = p_rScale;
+			m_scale = p_scale;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the animation loop status
-		 *\param[in]	p_bLooped	The new value
+		 *\param[in]	p_looped	The new value
 		 *\~french
 		 *\brief		Définit l'état de boucle de l'animation
-		 *\param[in]	p_bLooped	La nouvelle valeur
+		 *\param[in]	p_looped	La nouvelle valeur
 		 */
-		inline void SetLooped( bool p_bLooped )
+		inline void SetLooped( bool p_looped )
 		{
-			m_bLooped = p_bLooped;
+			m_looped = p_looped;
 		}
 		/**
 		 *\~english
@@ -227,75 +294,27 @@ namespace Castor3D
 		 *\brief		Récupère le nombre d'objets mouvants
 		 *\return		Le nombre
 		 */
-		inline uint32_t GetMovingObjectsCount()const
+		inline AnimationObjectPtrStrMap const & GetObjects()const
 		{
-			return uint32_t( m_mapToMove.size() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an interator on the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapIt Begin()
-		{
-			return m_mapToMove.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant interator on the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapConstIt Begin()const
-		{
-			return m_mapToMove.begin();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves an interator on the end of the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur sur la fin de la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapIt End()
-		{
-			return m_mapToMove.end();
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves a constant interator on the end of the moving objects map
-		 *\return		The iterator
-		 *\~french
-		 *\brief		Récupère un itérateur constant sur la fin de la map d'objets mouvants
-		 *\return		L'itérateur
-		 */
-		inline MovingObjectPtrStrMapConstIt End()const
-		{
-			return m_mapToMove.end();
+			return m_toMove;
 		}
 
 	protected:
 		//!\~english The current playing time	\~french L'index de temps courant
-		real m_rCurrentTime;
+		real m_currentTime;
 		//!\~english The current state of the animation	\~french L'état actuel de l'animation
-		eSTATE m_eState;
+		eANIMATION_STATE m_state;
 		//!\~english The animation time scale	\~french Le multiplicateur de temps
-		real m_rScale;
+		real m_scale;
 		//!\~english The animation length	\~french La durée de l'animation
-		real m_rLength;
+		real m_length;
 		//!\~english Tells whether or not the animation is looped	\~french Dit si oui ou non l'animation est bouclée
-		bool m_bLooped;
+		bool m_looped;
+		//! The parent moving objects
+		AnimationObjectPtrArray m_arrayMoving;
 		//! The moving objects
-		MovingObjectPtrStrMap m_mapToMove;
+		AnimationObjectPtrStrMap m_toMove;
 	};
 }
-
-#pragma warning( pop )
 
 #endif
