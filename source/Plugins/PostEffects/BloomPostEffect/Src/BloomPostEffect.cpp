@@ -208,7 +208,7 @@ namespace Bloom
 
 	BloomPostEffect::BloomPostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
 		: PostEffect( p_renderSystem, p_renderTarget, p_param )
-		, m_viewport( Viewport::Ortho( *p_renderSystem.GetEngine(), 0, 1, 0, 1, 0, 1 ) )
+		, m_viewport{ *p_renderSystem.GetEngine() }
 		, m_offsetX( 1.2f )
 		, m_offsetY( 1.2f )
 		, m_kernel( { 5, 6, 5 } )
@@ -265,6 +265,7 @@ namespace Bloom
 	bool BloomPostEffect::Initialise()
 	{
 		bool l_return = false;
+		m_viewport.Initialise();
 		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
 		eSHADER_MODEL l_model = GetRenderSystem()->GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
@@ -381,6 +382,8 @@ namespace Bloom
 		{
 			l_surface.Cleanup();
 		}
+
+		m_viewport.Cleanup();
 	}
 
 	bool BloomPostEffect::Apply( FrameBuffer & p_framebuffer )

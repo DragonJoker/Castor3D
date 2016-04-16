@@ -156,72 +156,6 @@ namespace Castor3D
 		C3D_API void ApplyMatrices( FrameVariableBuffer & p_matrixBuffer, uint64_t p_matricesMask );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
-		 *\param[in]	p_fovy		Y Field of View
-		 *\param[in]	p_aspect	Width / Height ratio
-		 *\param[in]	p_near		Near clipping plane value
-		 *\param[in]	p_far		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection en perspective centrée
-		 *\param[in]	p_fovy		Angle de vision Y
-		 *\param[in]	p_aspect	Ratio Largeur / Hauteur
-		 *\param[in]	p_near		Position du plan proche
-		 *\param[in]	p_far		Position du plan lointain
-		 */
-		C3D_API void Perspective( Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
-		 *\param[in]	p_left		Left clipping plane value
-		 *\param[in]	p_right		Right clipping plane value
-		 *\param[in]	p_bottom	Bottom clipping plane value
-		 *\param[in]	p_top		Top clipping plane value
-		 *\param[in]	p_near		Near clipping plane value
-		 *\param[in]	p_far		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection en perspective non centrée
-		 *\param[in]	p_left		Position du plan gauche
-		 *\param[in]	p_right		Position du plan droit
-		 *\param[in]	p_bottom	Position du plan bas
-		 *\param[in]	p_top		Position du plan haut
-		 *\param[in]	p_near		Position du plan proche
-		 *\param[in]	p_far		Position du plan lointain
-		 */
-		C3D_API void Frustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
-		/**
-		 *\~english
-		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
-		 *\param[in]	p_left		Left clipping plane value
-		 *\param[in]	p_right		Right clipping plane value
-		 *\param[in]	p_bottom	Bottom clipping plane value
-		 *\param[in]	p_top		Top clipping plane value
-		 *\param[in]	p_near		Near clipping plane value
-		 *\param[in]	p_far		Far clipping plane value
-		 *\~french
-		 *\brief		Construit une matrice de projection orthographique non centrée
-		 *\param[in]	p_left		Position du plan gauche
-		 *\param[in]	p_right		Position du plan droit
-		 *\param[in]	p_bottom	Position du plan bas
-		 *\param[in]	p_top		Position du plan haut
-		 *\param[in]	p_near		Position du plan proche
-		 *\param[in]	p_far		Position du plan lointain
-		 */
-		C3D_API void Ortho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
-		/**
-		 *\~english
-		 *\brief		Builds a view matrix that looks at a given point.
-		 *\param[in]	p_eye		The eye position.
-		 *\param[in]	p_center	The point to look at.
-		 *\param[in]	p_up		The up direction..
-		 *\~french
-		 *\brief		Construit une matrice de vue regardant un point donné.
-		 *\param[in]	p_eye		La position de l'oeil.
-		 *\param[in]	p_center	Le point à regarder.
-		 *\param[in]	p_up		La direction vers le haut.
-		 */
-		C3D_API void LookAt( Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
-		/**
-		 *\~english
 		 *\brief		Sets the model matrix.
 		 *\param[in]	p_mtx	The new matrix.
 		 *\~french
@@ -322,15 +256,6 @@ namespace Castor3D
 			REQUIRE( p_index < C3D_MAX_TEXTURE_MATRICES );
 			return m_mtxTexture[p_index];
 		}
-		/**
-		 *\~english
-		 *\brief		Applies the given viewport dimension.
-		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
-		 *\~french
-		 *\brief		Applique les dimensions de viewport données.
-		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
-		 */
-		C3D_API virtual void ApplyViewport( int p_windowWidth, int p_windowHeight ) = 0;
 
 	private:
 		void DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, Castor::String const & p_name, FrameVariableBuffer & p_matrixBuffer );

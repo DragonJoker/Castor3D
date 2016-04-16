@@ -1,6 +1,7 @@
 #include "Camera.hpp"
 
 #include "Engine.hpp"
+#include "InitialiseEvent.hpp"
 #include "Pipeline.hpp"
 #include "RenderSystem.hpp"
 #include "Scene.hpp"
@@ -153,10 +154,11 @@ namespace Castor3D
 		: MovableObject{ p_name, p_scene, eMOVABLE_TYPE_CAMERA, p_node }
 		, m_viewport{ p_viewport }
 	{
+		p_scene.GetEngine()->PostEvent( MakeInitialiseEvent( m_viewport ) );
 	}
 
 	Camera::Camera( String const & p_name, Scene & p_scene, SceneNodeSPtr p_node )
-		: Camera{ p_name, p_scene, p_node, Viewport::Ortho( *p_scene.GetEngine(), 0, 1, 0, 1, 0, 1 ) }
+		: Camera{ p_name, p_scene, p_node, Viewport{ *p_scene.GetEngine() } }
 	{
 	}
 

@@ -6,6 +6,7 @@
 #include "Engine.hpp"
 #include "FrameVariableBuffer.hpp"
 #include "GpuQuery.hpp"
+#include "InitialiseEvent.hpp"
 #include "MatrixFrameVariable.hpp"
 #include "OneFrameVariable.hpp"
 #include "Pipeline.hpp"
@@ -28,7 +29,7 @@ namespace Castor3D
 		, m_window{ nullptr }
 		, m_initialised{ false }
 		, m_bMultiSampling{ false }
-		, m_viewport{ Viewport::Ortho( *GetRenderSystem()->GetEngine(), 0, 1, 0, 1, 0, 1 ) }
+		, m_viewport{ *GetRenderSystem()->GetEngine() }
 		, m_bufferVertex{ 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 1, 1, 1, 1, }
 		, m_declaration
 		{
@@ -56,6 +57,7 @@ namespace Castor3D
 
 	bool Context::Initialise( RenderWindow * p_window )
 	{
+		m_viewport.Initialise();
 		m_window = p_window;
 		m_timerQuery[0] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
 		m_timerQuery[1] = GetRenderSystem()->CreateQuery( eQUERY_TYPE_TIME_ELAPSED );
@@ -123,6 +125,7 @@ namespace Castor3D
 		m_timerQuery[0].reset();
 		m_timerQuery[1].reset();
 		m_window = nullptr;
+		m_viewport.Cleanup();
 	}
 
 	void Context::SetCurrent()

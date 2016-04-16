@@ -344,7 +344,7 @@ namespace Castor3D
 
 						if ( l_return )
 						{
-							CameraSPtr l_camera = p_obj.GetCameraManager().Create( l_name, nullptr, Viewport::Ortho( *p_obj.GetEngine(), 0.0_r, 10.0_r, 0.0_r, 10.0_r, 0.0_r, 1.0_r ) );
+							CameraSPtr l_camera = p_obj.GetCameraManager().Create( l_name, nullptr );
 							l_return = Camera::BinaryParser( m_path ).Parse( *l_camera, l_chunk );
 						}
 					}

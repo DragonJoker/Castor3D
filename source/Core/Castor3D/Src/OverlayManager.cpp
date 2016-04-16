@@ -26,10 +26,12 @@ namespace Castor3D
 	//*************************************************************************************************
 
 	OverlayManager::OverlayManager( Engine & p_engine )
-		: ResourceManager< String, Overlay >( p_engine )
-		, m_overlayCountPerLevel( 1000, 0 )
-		, m_viewport( Viewport::Ortho( p_engine, 0, 1, 1, 0, 0, 1000 ) )
+		: ResourceManager< String, Overlay >{ p_engine }
+		, m_overlayCountPerLevel{ 1000, 0 }
+		, m_viewport{ p_engine }
 	{
+		m_viewport.SetOrtho( 0, 1, 1, 0, 0, 1000 );
+		p_engine.PostEvent( MakeInitialiseEvent( m_viewport ) );
 	}
 
 	OverlayManager::~OverlayManager()
@@ -46,6 +48,7 @@ namespace Castor3D
 
 	void OverlayManager::Cleanup()
 	{
+		m_viewport.Cleanup();
 		auto l_lock = make_unique_lock( *this );
 
 		for ( auto && l_it : m_fontTextures )
@@ -372,7 +375,7 @@ namespace Castor3D
 			p_parent->AddChild( p_overlay );
 		}
 
-		if ( l_level > int( m_overlayCountPerLevel.size() ) )
+		while ( l_level >= int( m_overlayCountPerLevel.size() ) )
 		{
 			m_overlayCountPerLevel.resize( m_overlayCountPerLevel.size() * 2 );
 		}

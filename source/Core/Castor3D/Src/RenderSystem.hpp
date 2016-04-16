@@ -384,6 +384,17 @@ namespace Castor3D
 		C3D_API virtual GpuQuerySPtr CreateQuery( eQUERY_TYPE p_type ) = 0;
 		/**
 		 *\~english
+		 *\brief		Creates a viewport render API specific implementation.
+		 *\param[in]	p_viewport	The parent vieport.
+		 *\return		The created implementation.
+		 *\~french
+		 *\brief		Crée une implémentation de viewport spécifique à l'API de rendu.
+		 *\param[in]	p_viewport	Le voewport parent.
+		 *\return		L'implémentation créée.
+		 */
+		C3D_API virtual IViewportImplUPtr CreateViewport( Viewport & p_viewport ) = 0;
+		/**
+		 *\~english
 		 *\brief		Tells if the RenderSystem supports given shader type
 		 *\param[in]	p_type	The shader type
 		 *\~french
