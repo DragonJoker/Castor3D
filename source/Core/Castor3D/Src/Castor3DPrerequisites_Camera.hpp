@@ -25,10 +25,12 @@ namespace Castor3D
 
 	class Camera;
 	class Viewport;
+	class IViewportImpl;
 	class Ray;
 
 	DECLARE_SMART_PTR( Camera );
 	DECLARE_SMART_PTR( Viewport );
+	DECLARE_SMART_PTR( IViewportImpl );
 	DECLARE_SMART_PTR( Ray );
 
 	//! Camera pointer map, sorted by name

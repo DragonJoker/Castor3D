@@ -57,6 +57,9 @@ namespace Castor3D
 		std::locale::global( std::locale() );
 		Image::BinaryLoader::InitialiseImageLib();
 
+		// m_listenerManager *MUST* be the first created.
+		m_listenerManager = std::make_unique< ListenerManager >( *this );
+
 		m_shaderManager = std::make_unique< ShaderManager >( *this );
 		m_samplerManager = std::make_unique< SamplerManager >( *this );
 		m_depthStencilStateManager = std::make_unique< DepthStencilStateManager >( *this );
@@ -69,7 +72,6 @@ namespace Castor3D
 		m_overlayManager = std::make_unique< OverlayManager >( *this );
 		m_sceneManager = std::make_unique< SceneManager >( *this );
 		m_targetManager = std::make_unique< TargetManager >( *this );
-		m_listenerManager = std::make_unique< ListenerManager >( *this );
 		m_techniqueManager = std::make_unique< RenderTechniqueManager >( *this );
 
 		if ( !File::DirectoryExists( GetEngineDirectory() ) )

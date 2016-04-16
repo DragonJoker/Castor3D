@@ -139,62 +139,6 @@ namespace Castor3D
 		}
 	}
 
-	void Pipeline::Perspective( Angle const & p_fovy, real p_aspect, real p_near, real p_far )
-	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluPerspective.xml)
-		real l_range = real( ( 1 / tan( p_fovy.radians() * 0.5 ) ) );
-		m_mtxProjection.initialise();
-		m_mtxProjection[0][0] = real( l_range / p_aspect );
-		m_mtxProjection[1][1] = real( l_range );
-		m_mtxProjection[2][2] = real( ( p_far + p_near ) / ( p_near - p_far ) );
-		m_mtxProjection[2][3] = real( -1 );
-		m_mtxProjection[3][2] = real( 2 * p_far * p_near / ( p_near - p_far ) );
-	}
-
-	void Pipeline::Frustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
-	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glFrustum.xml)
-		m_mtxProjection.initialise();
-		m_mtxProjection[0][0] = real( ( 2 * p_near ) / ( p_right - p_left ) );
-		m_mtxProjection[1][1] = real( ( 2 * p_near ) / ( p_top - p_bottom ) );
-		m_mtxProjection[2][0] = real( ( p_right + p_left ) / ( p_right - p_left ) );
-		m_mtxProjection[2][1] = real( ( p_top + p_bottom ) / ( p_top - p_bottom ) );
-		m_mtxProjection[2][2] = real( -( p_far + p_near ) / ( p_far - p_near ) );
-		m_mtxProjection[2][3] = real( -1 );
-		m_mtxProjection[3][2] = real( -( 2 * p_far * p_near ) / ( p_far - p_near ) );
-	}
-
-	void Pipeline::Ortho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far )
-	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/glOrtho.xml)
-		m_mtxProjection.set_identity();
-		m_mtxProjection[0][0] = real( 2 / ( p_right - p_left ) );
-		m_mtxProjection[1][1] = real( 2 / ( p_top - p_bottom ) );
-		m_mtxProjection[2][2] = real( -2 / ( p_far - p_near ) );
-		m_mtxProjection[3][0] = real( -( p_right + p_left ) / ( p_right - p_left ) );
-		m_mtxProjection[3][1] = real( -( p_top + p_bottom ) / ( p_top - p_bottom ) );
-		m_mtxProjection[3][2] = real( -( p_far + p_near ) / ( p_far - p_near ) );
-	}
-
-	void Pipeline::LookAt( Point3r const & p_eye, Point3r const & p_center, Point3r const & p_up )
-	{
-		// OpenGL right handed (cf. https://www.opengl.org/sdk/docs/man2/xhtml/gluLookAt.xml)
-		Point3r l_f( point::get_normalised( p_center - p_eye ) );
-		Point3r l_u( point::get_normalised( p_up ) );
-		Point3r l_s( point::get_normalised( l_f ^ l_u ) );
-		l_u = l_s ^ l_f;
-		m_mtxProjection.set_identity();
-		m_mtxProjection[0][0] = l_s[0];
-		m_mtxProjection[0][1] = l_u[0];
-		m_mtxProjection[0][2] = -l_f[0];
-		m_mtxProjection[1][0] = l_s[1];
-		m_mtxProjection[1][1] = l_u[1];
-		m_mtxProjection[1][2] = -l_f[1];
-		m_mtxProjection[2][0] = l_s[2];
-		m_mtxProjection[2][1] = l_u[2];
-		m_mtxProjection[2][2] = -l_f[2];
-	}
-
 	void Pipeline::DoApplyMatrix( Castor::Matrix4x4r const & p_matrix, String const & p_name, FrameVariableBuffer & p_matrixBuffer )
 	{
 		Matrix4x4rFrameVariableSPtr l_variable;

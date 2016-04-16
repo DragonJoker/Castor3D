@@ -18,8 +18,9 @@
 #include "GlRasteriserState.hpp"
 #include "GlFrameVariableBuffer.hpp"
 #include "GlSampler.hpp"
+#include "GlViewport.hpp"
 
-#include "GlslSource.hpp"
+#include <GlslSource.hpp>
 
 #include <Engine.hpp>
 #include <RenderTechnique.hpp>
@@ -172,14 +173,19 @@ namespace GlRender
 		return std::make_shared< GlFrameBuffer >( GetOpenGl(), *GetEngine() );
 	}
 
-	Castor3D::BackBuffersSPtr GlRenderSystem::CreateBackBuffers()
+	BackBuffersSPtr GlRenderSystem::CreateBackBuffers()
 	{
 		return std::make_shared< GlBackBuffers >( GetOpenGl(), *GetEngine() );
 	}
 
-	Castor3D::GpuQuerySPtr GlRenderSystem::CreateQuery( eQUERY_TYPE p_type )
+	GpuQuerySPtr GlRenderSystem::CreateQuery( eQUERY_TYPE p_type )
 	{
 		return std::make_shared< GlQuery >( *this, p_type );
+	}
+
+	IViewportImplUPtr GlRenderSystem::CreateViewport( Viewport & p_viewport )
+	{
+		return std::make_unique< GlViewport >( *this, p_viewport );
 	}
 
 	void GlRenderSystem::DoInitialise()

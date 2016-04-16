@@ -29,6 +29,51 @@ namespace Castor3D
 {
 	/*!
 	\author 	Sylvain DOREMUS
+	\version	0.9.0
+	\date		16/04/2016
+	\~english
+	\brief		Render API specific viewport implementation.
+	\~french
+	\brief		Implémentation de viewport spécifique à l'API de rendu.
+	*/
+	class IViewportImpl
+		: public Castor::OwnedBy< RenderSystem >
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor
+		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_viewport		The parent viewport.
+		 *\~french
+		 *\brief		Constructeur
+		 *\param[in]	p_renderSystem	Le RenderSystem.
+		 *\param[in]	p_viewport		Le viewport parent.
+		 */
+		C3D_API IViewportImpl( RenderSystem & p_renderSystem, Viewport & p_viewport );
+		/**
+		 *\~english
+		 *\brief		Destructor
+		 *\~french
+		 *\brief		Destructeur
+		 */
+		C3D_API virtual ~IViewportImpl();
+		/**
+		 *\~english
+		 *\brief		Applies the given viewport dimension.
+		 *\param[in]	p_windowWidth, p_windowHeight	The dimensions.
+		 *\~french
+		 *\brief		Applique les dimensions de viewport données.
+		 *\param[in]	p_windowWidth, p_windowHeight	Les dimensions.
+		 */
+		C3D_API virtual bool Apply() = 0;
+
+	protected:
+		//!\~english The parent viewport.	\~french Le viewport parent.
+		Viewport & m_viewport;
+	};
+	/*!
+	\author 	Sylvain DOREMUS
 	\version	0.1
 	\date		09/02/2010
 	\~english
@@ -39,6 +84,7 @@ namespace Castor3D
 	\remark		Donne le type de projection FOV, ...
 	*/
 	class Viewport
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		C3D_API static const Castor::String string_type[eVIEWPORT_TYPE_COUNT];
@@ -157,98 +203,72 @@ namespace Castor3D
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_type		Projection type
+		 *\brief		Constructor.
+		 *\param[in]	p_engine	The engine.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_type		Type de projection
+		 *\brief		Constructeur.
+		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API Viewport( Engine & p_engine, eVIEWPORT_TYPE p_type );
+		C3D_API Viewport( Engine & p_engine );
 		/**
 		 *\~english
-		 *\brief		Builds a centered perspective viewport.
-		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_fovy		Y Field of View.
-		 *\param[in]	p_aspect	Width / Height ratio.
-		 *\param[in]	p_near		Near clipping plane value.
-		 *\param[in]	p_far		Far clipping plane value.
-		 *\return		The viewport.
+		 *\brief		Copy constructor.
+		 *\param[in]	p_rhs	The object to copy.
 		 *\~french
-		 *\brief		Construit vioewport en perspective centrée.
-		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_fovy		Angle de vision Y.
-		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
-		 *\param[in]	p_near		Position du plan proche.
-		 *\param[in]	p_far		Position du plan éloigné.
-		 *\return		Le viewport.
+		 *\brief		Constructeur par copie.
+		 *\param[in]	p_rhs	L'objet à copier.
 		 */
-		C3D_API static Viewport Perspective( Engine & p_engine, Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		C3D_API Viewport( Viewport const & p_rhs );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
-		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_left		Left clipping plane value.
-		 *\param[in]	p_right		Right clipping plane value.
-		 *\param[in]	p_bottom	Bottom clipping plane value.
-		 *\param[in]	p_top		Top clipping plane value.
-		 *\param[in]	p_near		Near clipping plane value.
-		 *\param[in]	p_far		Far clipping plane value.
-		 *\return		The viewport.
+		 *\brief		Move constructor.
+		 *\param[in]	p_rhs	The object to move.
 		 *\~french
-		 *\brief		Construit une matrice de projection en perspective non centrée.
-		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_left		Position du plan gauche.
-		 *\param[in]	p_right		Position du plan droit.
-		 *\param[in]	p_bottom	Position du plan bas.
-		 *\param[in]	p_top		Position du plan haut.
-		 *\param[in]	p_near		Position du plan proche.
-		 *\param[in]	p_far		Position du plan éloigné.
-		 *\return		Le viewport.
+		 *\brief		Constructeur par déplacement.
+		 *\param[in]	p_rhs	L'objet à déplacer.
 		 */
-		C3D_API static Viewport Frustum( Engine & p_engine, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API Viewport( Viewport && p_rhs );
 		/**
 		 *\~english
-		 *\brief		Builds a matrix that sets an orthogonal projection.
-		 *\param[in]	p_engine	The core engine
-		 *\param[in]	p_left		Left clipping plane value.
-		 *\param[in]	p_right		Right clipping plane value.
-		 *\param[in]	p_bottom	Bottom clipping plane value.
-		 *\param[in]	p_top		Top clipping plane value.
-		 *\param[in]	p_near		Near clipping plane value.
-		 *\param[in]	p_far		Far clipping plane value.
-		 *\return		The viewport.
+		 *\brief		Copy assignment operator.
+		 *\param[in]	p_rhs	The object to copy.
 		 *\~french
-		 *\brief		Construit une matrice de projection orthographique.
-		 *\param[in]	p_engine	Le moteur
-		 *\param[in]	p_left		Position du plan gauche.
-		 *\param[in]	p_right		Position du plan droit.
-		 *\param[in]	p_bottom	Position du plan bas.
-		 *\param[in]	p_top		Position du plan haut.
-		 *\param[in]	p_near		Position du plan proche.
-		 *\param[in]	p_far		Position du plan éloigné.
-		 *\return		Le viewport.
+		 *\brief		Opérateur d'affectation par copie.
+		 *\param[in]	p_rhs	L'objet à copier.
 		 */
-		C3D_API static Viewport Ortho( Engine & p_engine, real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		C3D_API Viewport & operator=( Viewport const & p_rhs );
+		/**
+		 *\~english
+		 *\brief		Move assignment operator.
+		 *\param[in]	p_rhs	The object to move.
+		 *\~french
+		 *\brief		Opérateur d'affectation par déplacement.
+		 *\param[in]	p_rhs	L'objet à déplacer.
+		 */
+		C3D_API Viewport & operator=( Viewport && p_rhs );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Viewport();
+		C3D_API ~Viewport();
 		/**
 		 *\~english
-		 *\brief		Renders the viewport specifics
-		 *\remarks		Applies the perspective
-		 *\return		\p true if the frustum view has been modified
+		 *\brief		Creates the render API specific implementation.
+		 *\return		\p true if everything's ok.
 		 *\~french
-		 *\brief		Rend le viewport
-		 *\remarks		Applique la perspective
-		 *\return		\p true si le frustum de vue a été modifié
+		 *\brief		Crée l'implémentation spécifique à l'API de rendu.
+		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( RenderSystem & p_renderSystem );
+		C3D_API bool Initialise();
+		/**
+		 *\~english
+		 *\brief		Destroys the render API specific implementation.
+		 *\~french
+		 *\brief		Détruit l'implémentation spécifique à l'API de rendu.
+		 */
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Renders the viewport specifics
@@ -260,6 +280,65 @@ namespace Castor3D
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
 		C3D_API bool Render( Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Builds a centered perspective viewport.
+		 *\param[in]	p_fovy		Y Field of View.
+		 *\param[in]	p_aspect	Width / Height ratio.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\return		The viewport.
+		 *\~french
+		 *\brief		Construit vioewport en perspective centrée.
+		 *\param[in]	p_fovy		Angle de vision Y.
+		 *\param[in]	p_aspect	Ratio Largeur / Hauteur.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 *\return		Le viewport.
+		 */
+		C3D_API void SetPerspective( Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters.
+		 *\param[in]	p_left		Left clipping plane value.
+		 *\param[in]	p_right		Right clipping plane value.
+		 *\param[in]	p_bottom	Bottom clipping plane value.
+		 *\param[in]	p_top		Top clipping plane value.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\return		The viewport.
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective non centrée.
+		 *\param[in]	p_left		Position du plan gauche.
+		 *\param[in]	p_right		Position du plan droit.
+		 *\param[in]	p_bottom	Position du plan bas.
+		 *\param[in]	p_top		Position du plan haut.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 *\return		Le viewport.
+		 */
+		C3D_API void SetFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets an orthogonal projection.
+		 *\param[in]	p_left		Left clipping plane value.
+		 *\param[in]	p_right		Right clipping plane value.
+		 *\param[in]	p_bottom	Bottom clipping plane value.
+		 *\param[in]	p_top		Top clipping plane value.
+		 *\param[in]	p_near		Near clipping plane value.
+		 *\param[in]	p_far		Far clipping plane value.
+		 *\return		The viewport.
+		 *\~french
+		 *\brief		Construit une matrice de projection orthographique.
+		 *\param[in]	p_left		Position du plan gauche.
+		 *\param[in]	p_right		Position du plan droit.
+		 *\param[in]	p_bottom	Position du plan bas.
+		 *\param[in]	p_top		Position du plan haut.
+		 *\param[in]	p_near		Position du plan proche.
+		 *\param[in]	p_far		Position du plan éloigné.
+		 *\return		Le viewport.
+		 */
+		C3D_API void SetOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
 		/**
 		 *\~english
 		 *\return		The viewport render size
@@ -545,6 +624,74 @@ namespace Castor3D
 		}
 
 	private:
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a centered perspective projection from the given parameters
+		 *\param[in]	p_fovy		Y Field of View
+		 *\param[in]	p_aspect	Width / Height ratio
+		 *\param[in]	p_near		Near clipping plane value
+		 *\param[in]	p_far		Far clipping plane value
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective centrée
+		 *\param[in]	p_fovy		Angle de vision Y
+		 *\param[in]	p_aspect	Ratio Largeur / Hauteur
+		 *\param[in]	p_near		Position du plan proche
+		 *\param[in]	p_far		Position du plan lointain
+		 */
+		void DoComputePerspective( Castor::Angle const & p_fovy, real p_aspect, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered perspective projection from the given parameters
+		 *\param[in]	p_left		Left clipping plane value
+		 *\param[in]	p_right		Right clipping plane value
+		 *\param[in]	p_bottom	Bottom clipping plane value
+		 *\param[in]	p_top		Top clipping plane value
+		 *\param[in]	p_near		Near clipping plane value
+		 *\param[in]	p_far		Far clipping plane value
+		 *\~french
+		 *\brief		Construit une matrice de projection en perspective non centrée
+		 *\param[in]	p_left		Position du plan gauche
+		 *\param[in]	p_right		Position du plan droit
+		 *\param[in]	p_bottom	Position du plan bas
+		 *\param[in]	p_top		Position du plan haut
+		 *\param[in]	p_near		Position du plan proche
+		 *\param[in]	p_far		Position du plan lointain
+		 */
+		void DoComputeFrustum( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a matrix that sets a non centered orthogonal projection from the given parameters
+		 *\param[in]	p_left		Left clipping plane value
+		 *\param[in]	p_right		Right clipping plane value
+		 *\param[in]	p_bottom	Bottom clipping plane value
+		 *\param[in]	p_top		Top clipping plane value
+		 *\param[in]	p_near		Near clipping plane value
+		 *\param[in]	p_far		Far clipping plane value
+		 *\~french
+		 *\brief		Construit une matrice de projection orthographique non centrée
+		 *\param[in]	p_left		Position du plan gauche
+		 *\param[in]	p_right		Position du plan droit
+		 *\param[in]	p_bottom	Position du plan bas
+		 *\param[in]	p_top		Position du plan haut
+		 *\param[in]	p_near		Position du plan proche
+		 *\param[in]	p_far		Position du plan lointain
+		 */
+		void DoComputeOrtho( real p_left, real p_right, real p_bottom, real p_top, real p_near, real p_far );
+		/**
+		 *\~english
+		 *\brief		Builds a view matrix that looks at a given point.
+		 *\param[in]	p_eye		The eye position.
+		 *\param[in]	p_center	The point to look at.
+		 *\param[in]	p_up		The up direction..
+		 *\~french
+		 *\brief		Construit une matrice de vue regardant un point donné.
+		 *\param[in]	p_eye		La position de l'oeil.
+		 *\param[in]	p_center	Le point à regarder.
+		 *\param[in]	p_up		La direction vers le haut.
+		 */
+		void DoComputeLookAt( Castor::Point3r const & p_eye, Castor::Point3r const & p_center, Castor::Point3r const & p_up );
+
+	private:
 		//!\~english The left viewport plane	\~french Position du plan gauche
 		real m_left;
 		//!\~english The right viewport plane	\~french Position du plan droit
@@ -568,9 +715,11 @@ namespace Castor3D
 		//!\~english Tells the view frustum's planes need to be updated	\~french Dit que les plans du frustum de vue doivent être mis à jour
 		bool m_modified;
 		//!\~english The view frustum's planes	\~french Les plans du frustum de vue
-		Castor::PlaneEquation< real > m_planes[eFRUSTUM_PLANE_COUNT];
+		std::array< Castor::PlaneEquation< real >, eFRUSTUM_PLANE_COUNT > m_planes;
 		//!\~english The projection matrix.	\~french La matrice de projection.
 		Castor::Matrix4x4r m_projection;
+		//!\~english The render API specific implementation.	\~french L'implémentation spécifique à l'API de rendu.
+		IViewportImplUPtr m_impl;
 	};
 }
 

@@ -3326,7 +3326,8 @@ END_ATTRIBUTE()
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_CameraViewport )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-	l_parsingContext->pViewport = std::make_shared< Viewport >( Viewport::Perspective( *l_parsingContext->m_pParser->GetEngine(), Angle::from_degrees( 0 ), 1, 0, 1 ) );
+	l_parsingContext->pViewport = std::make_shared< Viewport >( *l_parsingContext->m_pParser->GetEngine() );
+	l_parsingContext->pViewport->SetPerspective( Angle::from_degrees( 0 ), 1, 0, 1 );
 }
 END_ATTRIBUTE_PUSH( eSECTION_VIEWPORT )
 

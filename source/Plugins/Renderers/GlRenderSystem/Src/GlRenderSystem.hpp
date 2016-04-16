@@ -95,6 +95,10 @@ namespace GlRender
 		 */
 		virtual Castor3D::GpuQuerySPtr CreateQuery( Castor3D::eQUERY_TYPE p_type );
 		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateViewport
+		 */
+		virtual Castor3D::IViewportImplUPtr CreateViewport( Castor3D::Viewport & p_viewport );
+		/**
 		 *\copydoc		Castor3D::RenderSystem::UseVertexBufferObjects
 		 */
 		inline bool UseVertexBufferObjects()
