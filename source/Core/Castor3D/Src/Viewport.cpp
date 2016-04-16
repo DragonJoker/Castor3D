@@ -88,7 +88,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetType( eVIEWPORT_TYPE( l_type ) );
+						p_obj.UpdateType( eVIEWPORT_TYPE( l_type ) );
 					}
 
 					break;
@@ -98,7 +98,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetNear( real( l_value ) );
+						p_obj.UpdateNear( real( l_value ) );
 					}
 
 					break;
@@ -108,7 +108,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetFar( real( l_value ) );
+						p_obj.UpdateFar( real( l_value ) );
 					}
 
 					break;
@@ -118,7 +118,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetLeft( real( l_value ) );
+						p_obj.UpdateLeft( real( l_value ) );
 					}
 
 					break;
@@ -128,7 +128,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetRight( real( l_value ) );
+						p_obj.UpdateRight( real( l_value ) );
 					}
 
 					break;
@@ -138,7 +138,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetTop( real( l_value ) );
+						p_obj.UpdateTop( real( l_value ) );
 					}
 
 					break;
@@ -148,7 +148,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetBottom( real( l_value ) );
+						p_obj.UpdateBottom( real( l_value ) );
 					}
 
 					break;
@@ -158,7 +158,7 @@ namespace Castor3D
 
 					if ( l_return )
 					{
-						p_obj.SetFovY( Angle::from_degrees( l_value ) );
+						p_obj.UpdateFovY( Angle::from_degrees( l_value ) );
 					}
 
 					break;

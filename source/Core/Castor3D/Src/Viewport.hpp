@@ -248,6 +248,17 @@ namespace Castor3D
 		 *\remarks		Applique la perspective
 		 *\return		\p true si le frustum de vue a été modifié
 		 */
+		C3D_API bool Initialise( RenderSystem & p_renderSystem );
+		/**
+		 *\~english
+		 *\brief		Renders the viewport specifics
+		 *\remarks		Applies the perspective
+		 *\return		\p true if the frustum view has been modified
+		 *\~french
+		 *\brief		Rend le viewport
+		 *\remarks		Applique la perspective
+		 *\return		\p true si le frustum de vue a été modifié
+		 */
 		C3D_API bool Render( Pipeline & p_pipeline );
 		/**
 		 *\~english
@@ -380,135 +391,6 @@ namespace Castor3D
 			return m_modified;
 		}
 		/**
-		*\~english
-		*\brief		Sets the viewport render size
-		*\param[in]	p_size	The new value
-		*\~french
-		*\brief		Définit les dimensions de rendu du viewport
-		*\param[in]	p_size	La nouvelle valeur
-		*/
-		inline void SetSize( const Castor::Size & p_size )
-		{
-			m_size = p_size;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the viewport projection type
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le type de projection du viewport
-		 *\return		La valeur
-		 */
-		inline void SetType( eVIEWPORT_TYPE p_type )
-		{
-			m_modified |= m_type != p_type;
-			m_type = p_type;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the aspect ratio
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le ratio d'aspect
-		 *\return		La valeur
-		 */
-		inline void SetRatio( real p_rRatio )
-		{
-			m_modified |= m_ratio != p_rRatio;
-			m_ratio = p_rRatio;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the near plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan proche
-		 *\return		La valeur
-		 */
-		inline void SetNear( real p_rNear )
-		{
-			m_modified |= m_near != p_rNear;
-			m_near = p_rNear;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the far plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan lointain
-		 *\return		La valeur
-		 */
-		inline void SetFar( real p_rFar )
-		{
-			m_modified |= m_far != p_rFar;
-			m_far = p_rFar;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertical view angle
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère l'angle de vue vertical
-		 *\return		La valeur
-		 */
-		inline void SetFovY( Castor::Angle const & p_aFovY )
-		{
-			m_modified |= m_fovY != p_aFovY;
-			m_fovY = p_aFovY;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the left plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan gauche
-		 *\return		La valeur
-		 */
-		inline void SetLeft( real p_rLeft )
-		{
-			m_modified |= m_left != p_rLeft;
-			m_left = p_rLeft;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the right plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan droit
-		 *\return		La valeur
-		 */
-		inline void SetRight( real p_rRight )
-		{
-			m_modified |= m_right != p_rRight;
-			m_right = p_rRight;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the top plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan haut
-		 *\return		La valeur
-		 */
-		inline void SetTop( real p_rTop )
-		{
-			m_modified |= m_top != p_rTop;
-			m_top = p_rTop;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the bottom plane position
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère la position du plan bas
-		 *\return		La valeur
-		 */
-		inline void SetBottom( real p_rBottom )
-		{
-			m_modified |= m_bottom != p_rBottom;
-			m_bottom = p_rBottom;
-		}
-		/**
 		 *\~english
 		 *\brief		Retrieves the wanted frustum view plane
 		 *\param[in]	p_ePlane	The wanted plane index
@@ -531,6 +413,135 @@ namespace Castor3D
 		inline Castor::Matrix4x4r const & GetProjection()const
 		{
 			return m_projection;
+		}
+		/**
+		*\~english
+		*\brief		Sets the viewport render size
+		*\param[in]	p_size	The new value
+		*\~french
+		*\brief		Définit les dimensions de rendu du viewport
+		*\param[in]	p_size	La nouvelle valeur
+		*/
+		inline void Resize( const Castor::Size & p_size )
+		{
+			m_size = p_size;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the viewport projection type
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le type de projection du viewport
+		 *\return		La valeur
+		 */
+		inline void UpdateType( eVIEWPORT_TYPE p_type )
+		{
+			m_modified |= m_type != p_type;
+			m_type = p_type;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the aspect ratio
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère le ratio d'aspect
+		 *\return		La valeur
+		 */
+		inline void UpdateRatio( real p_rRatio )
+		{
+			m_modified |= m_ratio != p_rRatio;
+			m_ratio = p_rRatio;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the near plane position
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position du plan proche
+		 *\return		La valeur
+		 */
+		inline void UpdateNear( real p_rNear )
+		{
+			m_modified |= m_near != p_rNear;
+			m_near = p_rNear;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the far plane position
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position du plan lointain
+		 *\return		La valeur
+		 */
+		inline void UpdateFar( real p_rFar )
+		{
+			m_modified |= m_far != p_rFar;
+			m_far = p_rFar;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the vertical view angle
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère l'angle de vue vertical
+		 *\return		La valeur
+		 */
+		inline void UpdateFovY( Castor::Angle const & p_aFovY )
+		{
+			m_modified |= m_fovY != p_aFovY;
+			m_fovY = p_aFovY;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the left plane position
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position du plan gauche
+		 *\return		La valeur
+		 */
+		inline void UpdateLeft( real p_rLeft )
+		{
+			m_modified |= m_left != p_rLeft;
+			m_left = p_rLeft;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the right plane position
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position du plan droit
+		 *\return		La valeur
+		 */
+		inline void UpdateRight( real p_rRight )
+		{
+			m_modified |= m_right != p_rRight;
+			m_right = p_rRight;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the top plane position
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position du plan haut
+		 *\return		La valeur
+		 */
+		inline void UpdateTop( real p_rTop )
+		{
+			m_modified |= m_top != p_rTop;
+			m_top = p_rTop;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the bottom plane position
+		 *\return		The value
+		 *\~french
+		 *\brief		Récupère la position du plan bas
+		 *\return		La valeur
+		 */
+		inline void UpdateBottom( real p_rBottom )
+		{
+			m_modified |= m_bottom != p_rBottom;
+			m_bottom = p_rBottom;
 		}
 
 	private:

@@ -533,7 +533,7 @@ namespace Castor3D
 	{
 		if ( m_pTexture && m_pTexture->IsInitialised() )
 		{
-			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetPipeline();
+			Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
 			auto l_return = m_pTexture->Bind( m_index );
 
 			if ( l_return 

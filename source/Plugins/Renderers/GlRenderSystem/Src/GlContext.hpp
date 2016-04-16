@@ -32,19 +32,36 @@ namespace GlRender
 		GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl );
 		virtual ~GlContext();
 
-		GlContextImpl * GetImpl();
-		virtual void UpdateFullScreen( bool p_value );
+		GlContextImpl & GetImpl();
 
 	private:
+		/**
+		 *\copydoc		Castor3D::Context::DoInitialise
+		 */
 		virtual bool DoInitialise();
+		/**
+		 *\copydoc		Castor3D::Context::DoCleanup
+		 */
 		virtual void DoCleanup();
+		/**
+		 *\copydoc		Castor3D::Context::DoDestroy
+		 */
 		virtual void DoDestroy();
+		/**
+		 *\copydoc		Castor3D::Context::DoSetCurrent
+		 */
 		virtual void DoSetCurrent();
+		/**
+		 *\copydoc		Castor3D::Context::DoEndCurrent
+		 */
 		virtual void DoEndCurrent();
+		/**
+		 *\copydoc		Castor3D::Context::DoSwapBuffers
+		 */
 		virtual void DoSwapBuffers();
 
 	private:
-		GlContextImpl * m_implementation;
+		std::unique_ptr< GlContextImpl > m_implementation;
 		GlRenderSystem * m_glRenderSystem;
 	};
 }

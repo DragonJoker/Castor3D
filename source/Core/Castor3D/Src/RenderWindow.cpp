@@ -324,13 +324,9 @@ namespace Castor3D
 		return l_return;
 	}
 
-	void RenderWindow::UpdateFullScreen( bool val )
+	void RenderWindow::UpdateFullScreen( bool p_value )
 	{
-		if ( m_bFullscreen != val )
-		{
-			m_context->UpdateFullScreen( val );
-			m_bFullscreen = val;
-		}
+		m_bFullscreen = p_value;
 	}
 
 	void RenderWindow::SetSamplesCount( int32_t val )

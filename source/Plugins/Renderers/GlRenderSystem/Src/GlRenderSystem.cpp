@@ -42,13 +42,10 @@ namespace GlRender
 	{
 		m_instancing = true;
 		m_accumBuffer = true;
-		m_pipelineImpl = std::make_shared< GlPipelineImpl >( GetOpenGl(), *m_pipeline );
-		m_pipeline->UpdateImpl();
 	}
 
 	GlRenderSystem::~GlRenderSystem()
 	{
-		m_pipelineImpl.reset();
 	}
 
 	bool GlRenderSystem::InitOpenGlExtensions()
@@ -199,7 +196,6 @@ namespace GlRender
 			m_useShader[eSHADER_TYPE_GEOMETRY] = GetOpenGl().HasGSh();
 			m_useShader[eSHADER_TYPE_PIXEL] = GetOpenGl().HasPSh();
 			m_useShader[eSHADER_TYPE_VERTEX] = GetOpenGl().HasVSh();
-			m_pipeline->Initialise();
 		}
 	}
 

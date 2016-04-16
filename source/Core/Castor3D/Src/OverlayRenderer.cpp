@@ -452,7 +452,7 @@ namespace Castor3D
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
 		RenderNode & l_node = DoGetPanelProgram( p_pass );
-		p_pass.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+		p_pass.GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
 		p_pass.FillShaderVariables( l_node );
 		l_node.m_program.Bind();
 		p_pass.Render2D();
@@ -464,7 +464,7 @@ namespace Castor3D
 	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, Texture const & p_texture, Sampler const & p_sampler , uint32_t p_count )
 	{
 		RenderNode & l_node = DoGetTextProgram( p_pass );
-		p_pass.GetEngine()->GetRenderSystem()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
+		p_pass.GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );
 
 		OneIntFrameVariableSPtr l_textureVariable = l_node.m_program.FindFrameVariable( ShaderProgram::MapText, eSHADER_TYPE_PIXEL );
 

@@ -538,7 +538,7 @@ namespace Castor3D
 		return m_status == ePROGRAM_STATUS_LINKED;
 	}
 
-	void ShaderProgram::DoBind( bool p_bindUbo )
+	void ShaderProgram::DoBind( bool p_bindUbo )const
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{
@@ -559,7 +559,7 @@ namespace Castor3D
 		}
 	}
 
-	void ShaderProgram::DoUnbind()
+	void ShaderProgram::DoUnbind()const
 	{
 		if ( m_status == ePROGRAM_STATUS_LINKED )
 		{

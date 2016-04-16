@@ -95,13 +95,6 @@ namespace GlRender
 		 */
 		virtual Castor3D::GpuQuerySPtr CreateQuery( Castor3D::eQUERY_TYPE p_type );
 		/**
-		 *\copydoc		Castor3D::RenderSystem::GetPipelineImpl
-		 */
-		virtual Castor3D::IPipelineImplSPtr GetPipelineImpl()
-		{
-			return m_pipelineImpl;
-		}
-		/**
 		 *\copydoc		Castor3D::RenderSystem::UseVertexBufferObjects
 		 */
 		inline bool UseVertexBufferObjects()
@@ -140,7 +133,6 @@ namespace GlRender
 		virtual void DoCleanup();
 
 	protected:
-		std::shared_ptr< GlPipelineImpl > m_pipelineImpl;
 		bool m_useVertexBufferObjects;
 		bool m_extensionsInit;
 		int m_openGlMajor;

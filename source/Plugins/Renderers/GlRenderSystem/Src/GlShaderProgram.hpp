@@ -53,11 +53,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Bind
 		 */
-		virtual void Bind( bool p_bindUbo );
+		virtual void Bind( bool p_bindUbo )const;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Unbind
 		 */
-		virtual void Unbind();
+		virtual void Unbind()const;
 		/**
 		 *\copydoc		Castor3D::ShaderProgram::Link
 		 */

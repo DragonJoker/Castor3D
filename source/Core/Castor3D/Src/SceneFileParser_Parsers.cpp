@@ -3353,7 +3353,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportType )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	uint32_t l_uiType;
-	l_parsingContext->pViewport->SetType( eVIEWPORT_TYPE( p_params[0]->Get( l_uiType ) ) );
+	l_parsingContext->pViewport->UpdateType( eVIEWPORT_TYPE( p_params[0]->Get( l_uiType ) ) );
 }
 END_ATTRIBUTE()
 
@@ -3362,7 +3362,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportLeft )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	real l_rValue;
 	p_params[0]->Get( l_rValue );
-	l_parsingContext->pViewport->SetLeft( l_rValue );
+	l_parsingContext->pViewport->UpdateLeft( l_rValue );
 }
 END_ATTRIBUTE()
 
@@ -3371,7 +3371,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportRight )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	real l_rValue;
 	p_params[0]->Get( l_rValue );
-	l_parsingContext->pViewport->SetRight( l_rValue );
+	l_parsingContext->pViewport->UpdateRight( l_rValue );
 }
 END_ATTRIBUTE()
 
@@ -3380,7 +3380,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportTop )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	real l_rValue;
 	p_params[0]->Get( l_rValue );
-	l_parsingContext->pViewport->SetTop( l_rValue );
+	l_parsingContext->pViewport->UpdateTop( l_rValue );
 }
 END_ATTRIBUTE()
 
@@ -3389,7 +3389,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportBottom )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	real l_rValue;
 	p_params[0]->Get( l_rValue );
-	l_parsingContext->pViewport->SetBottom( l_rValue );
+	l_parsingContext->pViewport->UpdateBottom( l_rValue );
 }
 END_ATTRIBUTE()
 
@@ -3398,7 +3398,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportNear )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	real l_rValue;
 	p_params[0]->Get( l_rValue );
-	l_parsingContext->pViewport->SetNear( l_rValue );
+	l_parsingContext->pViewport->UpdateNear( l_rValue );
 }
 END_ATTRIBUTE()
 
@@ -3407,7 +3407,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportFar )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	real l_rValue;
 	p_params[0]->Get( l_rValue );
-	l_parsingContext->pViewport->SetFar( l_rValue );
+	l_parsingContext->pViewport->UpdateFar( l_rValue );
 }
 END_ATTRIBUTE()
 
@@ -3416,7 +3416,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportSize )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	Size l_size;
 	p_params[0]->Get( l_size );
-	l_parsingContext->pViewport->SetSize( l_size );
+	l_parsingContext->pViewport->Resize( l_size );
 }
 END_ATTRIBUTE()
 
@@ -3425,7 +3425,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportFovY )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	float l_fFovY;
 	p_params[0]->Get( l_fFovY );
-	l_parsingContext->pViewport->SetFovY( Angle::from_degrees( l_fFovY ) );
+	l_parsingContext->pViewport->UpdateFovY( Angle::from_degrees( l_fFovY ) );
 }
 END_ATTRIBUTE()
 
@@ -3434,7 +3434,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_ViewportAspectRatio )
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
 	float l_fRatio;
 	p_params[0]->Get( l_fRatio );
-	l_parsingContext->pViewport->SetRatio( l_fRatio );
+	l_parsingContext->pViewport->UpdateRatio( l_fRatio );
 }
 END_ATTRIBUTE()
 

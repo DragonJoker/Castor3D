@@ -492,14 +492,14 @@ namespace Castor3D
 		 *\brief		Active le programme.
 		 *\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
 		 */
-		C3D_API virtual void Bind( bool p_bindUbo = true ) = 0;
+		C3D_API virtual void Bind( bool p_bindUbo = true )const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivates the program
 		 *\~french
 		 *\brief		Désactive le programme
 		 */
-		C3D_API virtual void Unbind() = 0;
+		C3D_API virtual void Unbind()const = 0;
 		/**
 		 *\~english
 		 *\brief		Links all shader objects held by the program
@@ -600,41 +600,41 @@ namespace Castor3D
 
 	protected:
 		/**
-		*\~english
-		*\brief		Cleans the program up
-		*\~french
-		*\brief		Nettoie le programme
-		*/
+		 *\~english
+		 *\brief		Cleans the program up
+		 *\~french
+		 *\brief		Nettoie le programme
+		 */
 		C3D_API void DoCleanup();
 		/**
-		*\~english
-		*\brief		Initialises the program
-		*\~french
-		*\brief		Initialise le programme
-		*/
+		 *\~english
+		 *\brief		Initialises the program
+		 *\~french
+		 *\brief		Initialise le programme
+		 */
 		C3D_API bool DoInitialise();
 		/**
-		*\~english
-		*\brief		Activates the program.
-		*\param[in]	p_bindUbo	Tells if the frame variable buffers muts be bound.
-		*\~french
-		*\brief		Active le programme.
-		*\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
-		*/
-		C3D_API void DoBind( bool p_bindUbo );
+		 *\~english
+		 *\brief		Activates the program.
+		 *\param[in]	p_bindUbo	Tells if the frame variable buffers muts be bound.
+		 *\~french
+		 *\brief		Active le programme.
+		 *\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
+		 */
+		C3D_API void DoBind( bool p_bindUbo )const;
+		 /**
+		 *\~english
+		 *\brief		Deactivates the program
+		 *\~french
+		 *\brief		Désactive le programme
+		 */
+		C3D_API void DoUnbind()const;
 		/**
-		*\~english
-		*\brief		Deactivates the program
-		*\~french
-		*\brief		Désactive le programme
-		*/
-		C3D_API void DoUnbind();
-		/**
-		*\~english
-		*\brief		Links all shader objects held by the program
-		*\~french
-		*\brief		Link tous les objets du programme
-		*/
+		 *\~english
+		 *\brief		Links all shader objects held by the program
+		 *\~french
+		 *\brief		Link tous les objets du programme
+		 */
 		C3D_API bool DoLink();
 
 	private:
