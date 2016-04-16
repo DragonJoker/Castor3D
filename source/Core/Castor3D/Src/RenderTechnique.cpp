@@ -648,13 +648,13 @@ namespace Castor3D
 	void RenderTechnique::DoRender( Size const & p_size, stSCENE_RENDER_NODES & p_nodes, Camera & p_camera, uint32_t p_frameTime )
 	{
 		RenderSystem * l_renderSystem = GetEngine()->GetRenderSystem();
-		Pipeline & l_pipeline = l_renderSystem->GetPipeline();
 		ContextRPtr l_context = l_renderSystem->GetCurrentContext();
+		Pipeline & l_pipeline = l_context->GetPipeline();
 		auto l_rsFront = m_wpFrontRasteriserState.lock();
 		auto l_rsBack = m_wpBackRasteriserState.lock();
 
-		p_camera.GetViewport().SetSize( p_size );
-		p_camera.Render();
+		p_camera.GetViewport().Resize( p_size );
+		p_camera.Render( l_pipeline );
 
 		if ( !p_nodes.m_geometries.m_opaqueRenderNodes.empty() || !p_nodes.m_billboards.m_opaqueRenderNodes.empty() )
 		{

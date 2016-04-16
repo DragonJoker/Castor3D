@@ -355,13 +355,6 @@ namespace Castor3D
 		C3D_API virtual std::shared_ptr< GpuBuffer< uint32_t > > CreateIndexBuffer( CpuBuffer< uint32_t > * p_buffer ) = 0;
 		/**
 		 *\~english
-		 *\return		A pipeline implementation, depending on loaded API
-		 *\~french
-		 *\return		Une implémentation de pipeline, en fonction de l'API chargée.
-		 */
-		C3D_API virtual IPipelineImplSPtr GetPipelineImpl() = 0;
-		/**
-		 *\~english
 		 *\brief		Creates a frame buffer.
 		 *\return		The created frame buffer.
 		 *\~french
@@ -430,26 +423,6 @@ namespace Castor3D
 		inline void SetStereoAvailable( bool p_bStereo )
 		{
 			m_stereoAvailable = p_bStereo;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the pipeline
-		 *\~french
-		 *\brief		Récupère le pipeline
-		 */
-		inline Pipeline const & GetPipeline()const
-		{
-			return *m_pipeline;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the pipeline
-		 *\~french
-		 *\brief		Récupère le pipeline
-		 */
-		inline Pipeline & GetPipeline()
-		{
-			return *m_pipeline;
 		}
 		/**
 		 *\~english
@@ -662,8 +635,6 @@ namespace Castor3D
 		ContextSPtr m_mainContext;
 		//!\~english The currently active render context	\~french Le contexte de rendu actuellement actif
 		ContextRPtr m_currentContext;
-		//!\~english The matrix pipeline	\~french Le pipeline contenant les matrices
-		std::unique_ptr< Pipeline > m_pipeline;
 		//!\~english Scene stack	\~french Pile des scènes
 		std::stack< SceneRPtr > m_stackScenes;
 		//!\~english The current loaded renderer api type	\~french Le type de l'api de rendu actuellement chargée

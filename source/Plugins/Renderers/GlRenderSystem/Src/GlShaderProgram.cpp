@@ -99,7 +99,7 @@ namespace GlRender
 		return l_return;
 	}
 
-	void GlShaderProgram::Bind( bool p_bindUbo )
+	void GlShaderProgram::Bind( bool p_bindUbo )const
 	{
 		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
 		{
@@ -108,7 +108,7 @@ namespace GlRender
 		}
 	}
 
-	void GlShaderProgram::Unbind()
+	void GlShaderProgram::Unbind()const
 	{
 		if ( GetGlName() != eGL_INVALID_INDEX && m_status == ePROGRAM_STATUS_LINKED )
 		{

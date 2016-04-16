@@ -206,9 +206,9 @@ namespace Bloom
 
 	//*********************************************************************************************
 
-	BloomPostEffect::BloomPostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
+	BloomPostEffect::BloomPostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_param )
 		: PostEffect( p_renderSystem, p_renderTarget, p_param )
-		, m_viewport( Viewport::Ortho( *p_renderSystem->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
+		, m_viewport( Viewport::Ortho( *p_renderSystem.GetEngine(), 0, 1, 0, 1, 0, 1 ) )
 		, m_offsetX( 1.2f )
 		, m_offsetY( 1.2f )
 		, m_kernel( { 5, 6, 5 } )
@@ -265,20 +265,20 @@ namespace Bloom
 	bool BloomPostEffect::Initialise()
 	{
 		bool l_return = false;
-		ShaderManager & l_manager = m_renderSystem->GetEngine()->GetShaderManager();
-		eSHADER_MODEL l_model = m_renderSystem->GetMaxShaderModel();
+		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
+		eSHADER_MODEL l_model = GetRenderSystem()->GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 		String l_vertex;
 		String l_hipass;
 		String l_blur;
 		String l_combine;
 
-		if ( m_renderSystem->GetRendererType() == eRENDERER_TYPE_OPENGL )
+		if ( GetRenderSystem()->GetRendererType() == eRENDERER_TYPE_OPENGL )
 		{
-			l_vertex = GetGlslVertexProgram( m_renderSystem );
-			l_hipass = GetGlslHiPassProgram( m_renderSystem );
-			l_blur = GetGlslBlurProgram( m_renderSystem );
-			l_combine = GetGlslCombineProgram( m_renderSystem );
+			l_vertex = GetGlslVertexProgram( GetRenderSystem() );
+			l_hipass = GetGlslHiPassProgram( GetRenderSystem() );
+			l_blur = GetGlslBlurProgram( GetRenderSystem() );
+			l_combine = GetGlslCombineProgram( GetRenderSystem() );
 		}
 		else
 		{
@@ -300,7 +300,7 @@ namespace Bloom
 		{
 			ShaderProgramSPtr l_program = l_manager.GetNewProgram();
 			m_filterMapDiffuse = l_program->CreateFrameVariable( ShaderProgram::MapDiffuse, eSHADER_TYPE_PIXEL );
-			auto l_filterConfig = m_renderSystem->CreateFrameVariableBuffer( FilterConfig );
+			auto l_filterConfig = GetRenderSystem()->CreateFrameVariableBuffer( FilterConfig );
 			m_filterCoefficients = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigCoefficients, KERNEL_SIZE ) );
 			m_filterOffsetX = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetX ) );
 			m_filterOffsetY = std::static_pointer_cast< OneFloatFrameVariable >( l_filterConfig->CreateVariable( *l_program, eFRAME_VARIABLE_TYPE_FLOAT, FilterConfigOffsetY ) );
@@ -329,12 +329,12 @@ namespace Bloom
 			l_program->Initialise();
 			m_combineProgram = l_program;
 
-			m_vertexBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), m_declaration );
+			m_vertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			m_vertexBuffer->Resize( uint32_t( m_vertices.size() * m_declaration.GetStride() ) );
 			m_vertexBuffer->LinkCoords( m_vertices.begin(), m_vertices.end() );
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
 		}
 
 		uint32_t l_index = 0;
@@ -401,7 +401,7 @@ namespace Bloom
 
 			if ( p_framebuffer.Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
-				m_renderSystem->GetCurrentContext()->RenderTexture( m_colourTexture->GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_colourTexture->GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
 				p_framebuffer.Unbind();
 			}
 		}
@@ -418,7 +418,7 @@ namespace Bloom
 		{
 			l_source->m_fbo->Clear();
 			m_hiPassMapDiffuse->SetValue( 0 );
-			m_renderSystem->GetCurrentContext()->RenderTexture( l_source->m_size, *m_colourTexture, m_hiPassProgram.lock() );
+			GetRenderSystem()->GetCurrentContext()->RenderTexture( l_source->m_size, *m_colourTexture, m_hiPassProgram.lock() );
 			l_source->m_fbo->Unbind();
 		}
 
@@ -427,7 +427,7 @@ namespace Bloom
 
 	void BloomPostEffect::DoDownSample()
 	{
-		auto l_context = m_renderSystem->GetCurrentContext();
+		auto l_context = GetRenderSystem()->GetCurrentContext();
 		auto l_source = &m_hiPassSurfaces[0];
 
 		for ( uint32_t i = 1; i < m_hiPassSurfaces.size(); ++i )
@@ -447,7 +447,7 @@ namespace Bloom
 
 	void BloomPostEffect::DoBlur( SurfaceArray & p_sources, SurfaceArray & p_destinations, Castor3D::OneFloatFrameVariableSPtr p_offset, float p_offsetValue )
 	{
-		auto l_context = m_renderSystem->GetCurrentContext();
+		auto l_context = GetRenderSystem()->GetCurrentContext();
 		m_filterCoefficients->SetValues( m_kernel );
 		m_filterOffsetX->SetValue( 0 );
 		m_filterOffsetY->SetValue( 0 );
@@ -476,8 +476,9 @@ namespace Bloom
 
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
-				m_viewport.SetSize( m_colourTexture->GetDimensions() );
-				m_viewport.Render( m_renderSystem->GetPipeline() );
+				auto & l_pipeline = GetRenderSystem()->GetCurrentContext()->GetPipeline();
+				m_viewport.Resize( m_colourTexture->GetDimensions() );
+				m_viewport.Render( l_pipeline );
 
 				auto const & l_texture0 = *m_hiPassSurfaces[0].m_colourTexture;
 				auto const & l_texture1 = *m_hiPassSurfaces[1].m_colourTexture;
@@ -488,7 +489,7 @@ namespace Bloom
 
 				if ( l_matrices )
 				{
-					m_renderSystem->GetPipeline().ApplyProjection( *l_matrices );
+					l_pipeline.ApplyProjection( *l_matrices );
 				}
 
 				l_program->Bind();

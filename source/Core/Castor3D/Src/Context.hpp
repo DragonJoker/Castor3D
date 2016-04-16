@@ -44,13 +44,11 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_renderSystem	The RenderSystem.
-		 *\param[in]	p_invertFinal	Tells if the final render is to be inverted.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le RenderSystem.
-		 *\param[in]	p_invertFinal	Dit si on inverse l'image du rendu final.
 		 */
-		C3D_API Context( RenderSystem & p_renderSystem, bool p_invertFinal );
+		C3D_API Context( RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -123,15 +121,6 @@ namespace Castor3D
 		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program );
 		/**
 		 *\~english
-		 *\brief		Changes fullscreen status
-		 *\param[in]	val	The new fullscreen status
-		 *\~french
-		 *\brief		Change le statut de plein écran
-		 *\param[in]	val	Le nouveau statut de plein écran
-		 */
-		C3D_API virtual void UpdateFullScreen( bool val ) = 0;
-		/**
-		 *\~english
 		 *\brief		Tells the context is initialised
 		 *\~french
 		 *\brief		Dit si le contexte est initialisé
@@ -170,7 +159,7 @@ namespace Castor3D
 		 */
 		inline DepthStencilStateSPtr GetNoDepthState()const
 		{
-			return m_pDsStateNoDepth;
+			return m_dsStateNoDepth;
 		}
 		/**
 		 *\~english
@@ -180,7 +169,7 @@ namespace Castor3D
 		 */
 		inline DepthStencilStateSPtr GetNoDepthWriteState()const
 		{
-			return m_pDsStateNoDepthWrite;
+			return m_dsStateNoDepthWrite;
 		}
 		/**
 		 *\~english
@@ -201,6 +190,26 @@ namespace Castor3D
 		inline RenderWindow & GetWindow()
 		{
 			return *m_window;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the pipeline
+		 *\~french
+		 *\brief		Récupère le pipeline
+		 */
+		inline Pipeline const & GetPipeline()const
+		{
+			return *m_pipeline;
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the pipeline
+		 *\~french
+		 *\brief		Récupère le pipeline
+		 */
+		inline Pipeline & GetPipeline()
+		{
+			return *m_pipeline;
 		}
 
 	protected:
@@ -262,7 +271,16 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgramSPtr p_program );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program );
+		/**
+		 *\~english
+		 *\brief		Creates the render to texture shader program.
+		 *\return		The program.
+		 *\~french
+		 *\brief		Crée le programme shader de dessin de texture.
+		 *\return		Le programme.
+		 */
+		ShaderProgramSPtr DoCreateProgram();
 
 	protected:
 		//!\~english RenderWindow associated to this context	\~french RenderWindow associée à ce contexte
@@ -284,17 +302,19 @@ namespace Castor3D
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!	6 * [2(vertex position) 2(texture coordinates)]
-		Castor::real m_pBuffer[24];
+		Castor::real m_bufferVertex[24];
 		//!\~english The DepthStencilState without depth write and test.	\~french Le DepthStencilState sans test ni écriture de profondeur.
-		DepthStencilStateSPtr m_pDsStateNoDepth;
+		DepthStencilStateSPtr m_dsStateNoDepth;
 		//!\~english The DepthStencilState without depth write.	\~french Le DepthStencilState sans écriture de profondeur.
-		DepthStencilStateSPtr m_pDsStateNoDepthWrite;
+		DepthStencilStateSPtr m_dsStateNoDepthWrite;
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
 		VertexBufferUPtr m_vertexBuffer;
 		//!\~english The GPU time elapsed queries.	\~french Les requêtes GPU de temps écoulé.
 		std::array< GpuQuerySPtr, 2 > m_timerQuery;
 		//!\~english The active query index.	\~french L'index de la requête active.
 		uint32_t m_queryIndex = 0;
+		//!\~english The matrix pipeline	\~french Le pipeline contenant les matrices
+		std::unique_ptr< Pipeline > m_pipeline;
 	};
 }
 

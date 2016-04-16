@@ -6,6 +6,7 @@
 #	include "GlX11Context.hpp"
 #endif
 
+#include "GlPipeline.hpp"
 #include "GlRenderSystem.hpp"
 
 #include <RenderWindow.hpp>
@@ -20,25 +21,23 @@ using namespace Castor3D;
 namespace GlRender
 {
 	GlContext::GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl )
-		: Context( p_renderSystem, false )
-		, m_glRenderSystem( &p_renderSystem )
+		: Context( p_renderSystem )
 		, Holder( p_gl )
+		, m_glRenderSystem( &p_renderSystem )
+		, m_implementation( std::make_unique< GlContextImpl >( GetOpenGl(), this ) )
 	{
-		m_implementation = new GlContextImpl( GetOpenGl(), this );
+		m_pipeline = std::make_unique< GlPipeline >( GetOpenGl(), *this );
 	}
 
 	GlContext::~GlContext()
 	{
-		delete m_implementation;
+		m_pipeline.reset();
+		m_implementation.reset();
 	}
 
-	GlContextImpl * GlContext::GetImpl()
+	GlContextImpl & GlContext::GetImpl()
 	{
-		return m_implementation;
-	}
-
-	void GlContext::UpdateFullScreen( bool p_value )
-	{
+		return *m_implementation;
 	}
 
 	bool GlContext::DoInitialise()
@@ -67,16 +66,16 @@ namespace GlRender
 
 	void GlContext::DoSetCurrent()
 	{
-		GetImpl()->SetCurrent();
+		GetImpl().SetCurrent();
 	}
 
 	void GlContext::DoEndCurrent()
 	{
-		GetImpl()->EndCurrent();
+		GetImpl().EndCurrent();
 	}
 
 	void GlContext::DoSwapBuffers()
 	{
-		GetImpl()->SwapBuffers();
+		GetImpl().SwapBuffers();
 	}
 }

@@ -58,15 +58,15 @@ namespace GlRender
 			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
 		}
 
-		if ( !l_mainContext || l_mainContext->GetImpl()->m_hWnd != m_hWnd )
+		if ( !l_mainContext || l_mainContext->GetImpl().m_hWnd != m_hWnd )
 		{
 			m_hDC = ::GetDC( m_hWnd );
 		}
-		else if ( l_mainContext->GetImpl()->m_hWnd == m_hWnd )
+		else if ( l_mainContext->GetImpl().m_hWnd == m_hWnd )
 		{
 			l_isMain = true;
-			m_hContext = l_mainContext->GetImpl()->m_hContext;
-			m_hDC = l_mainContext->GetImpl()->m_hDC;
+			m_hContext = l_mainContext->GetImpl().m_hContext;
+			m_hDC = l_mainContext->GetImpl().m_hDC;
 		}
 
 		if ( !l_renderSystem->IsInitialised() && !l_isMain )
@@ -105,7 +105,7 @@ namespace GlRender
 			{
 				if ( l_mainContext )
 				{
-					wglShareLists( m_hContext, l_mainContext->GetImpl()->GetContext() );
+					wglShareLists( m_hContext, l_mainContext->GetImpl().GetContext() );
 				}
 
 				m_initialised = true;
@@ -161,7 +161,7 @@ namespace GlRender
 				GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( m_context->GetRenderSystem() );
 				GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 
-				if ( l_mainContext.get() == m_context || !l_mainContext || l_mainContext->GetImpl()->m_hWnd != m_hWnd )
+				if ( l_mainContext.get() == m_context || !l_mainContext || l_mainContext->GetImpl().m_hWnd != m_hWnd )
 				{
 					GetOpenGl().DeleteContext( m_hContext );
 					::ReleaseDC( m_hWnd, m_hDC );
@@ -380,7 +380,7 @@ namespace GlRender
 
 				if ( l_mainContext )
 				{
-					m_hContext = glCreateContextAttribs( m_hDC, l_mainContext->GetImpl()->GetContext(), &l_attribList[0] );
+					m_hContext = glCreateContextAttribs( m_hDC, l_mainContext->GetImpl().GetContext(), &l_attribList[0] );
 				}
 				else
 				{

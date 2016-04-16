@@ -205,10 +205,10 @@ namespace Castor3D
 
 		if ( l_context && m_pRenderer )
 		{
-			m_viewport.SetSize( p_size );
-			m_viewport.SetRight( real( p_size.width() ) );
-			m_viewport.SetBottom( real( p_size.height() ) );
-			m_viewport.Render( l_renderSystem->GetPipeline() );
+			m_viewport.Resize( p_size );
+			m_viewport.UpdateRight( real( p_size.width() ) );
+			m_viewport.UpdateBottom( real( p_size.height() ) );
+			m_viewport.Render( l_context->GetPipeline() );
 			m_pRenderer->BeginRender( p_size );
 
 			for ( auto l_category : m_overlays )

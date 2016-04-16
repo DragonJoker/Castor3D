@@ -156,7 +156,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetType( p_value );
+			m_viewport.UpdateType( p_value );
 		} );
 	}
 
@@ -164,7 +164,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetSize( p_value );
+			m_viewport.Resize( p_value );
 		} );
 	}
 
@@ -172,7 +172,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetTop( float( p_value ) );
+			m_viewport.UpdateTop( float( p_value ) );
 		} );
 	}
 
@@ -180,7 +180,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetBottom( float( p_value ) );
+			m_viewport.UpdateBottom( float( p_value ) );
 		} );
 	}
 
@@ -188,7 +188,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetLeft( float( p_value ) );
+			m_viewport.UpdateLeft( float( p_value ) );
 		} );
 	}
 
@@ -196,7 +196,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetRight( float( p_value ) );
+			m_viewport.UpdateRight( float( p_value ) );
 		} );
 	}
 
@@ -204,7 +204,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetNear( float( p_value ) );
+			m_viewport.UpdateNear( float( p_value ) );
 		} );
 	}
 
@@ -212,7 +212,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetFar( float( p_value ) );
+			m_viewport.UpdateFar( float( p_value ) );
 		} );
 	}
 
@@ -220,7 +220,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetFovY( Angle::from_degrees( p_value ) );
+			m_viewport.UpdateFovY( Angle::from_degrees( p_value ) );
 		} );
 	}
 
@@ -228,7 +228,7 @@ namespace GuiCommon
 	{
 		DoApplyChange( [p_value, this]()
 		{
-			m_viewport.SetRatio( float( p_value ) );
+			m_viewport.UpdateRatio( float( p_value ) );
 		} );
 	}
 }

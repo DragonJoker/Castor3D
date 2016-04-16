@@ -122,7 +122,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 		{
 			if ( l_mainContext )
 			{
-				m_glxContext = glXCreateContext( m_display, l_visualInfo, l_mainContext->GetImpl()->GetContext(), GL_TRUE );
+				m_glxContext = glXCreateContext( m_display, l_visualInfo, l_mainContext->GetImpl().GetContext(), GL_TRUE );
 			}
 			else
 			{
@@ -381,7 +381,7 @@ bool GlContextImpl::DoCreateGl3Context( Castor3D::RenderWindow * p_window )
 
 		if ( l_mainContext )
 		{
-			m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], l_mainContext->GetImpl()->GetContext(), true, &l_arrayAttribs[0] );
+			m_glxContext = GetOpenGl().CreateContextAttribs( m_display, m_fbConfig[0], l_mainContext->GetImpl().GetContext(), true, &l_arrayAttribs[0] );
 		}
 		else
 		{

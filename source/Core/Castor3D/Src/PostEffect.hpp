@@ -36,6 +36,7 @@ namespace Castor3D
 				<br />Les effets post rendu sont appliqués de manière cumulative.
 	*/
 	class PostEffect
+		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
 		/**
@@ -50,7 +51,7 @@ namespace Castor3D
 		 *\param[in]	p_renderTarget	La cible de rendu sur laquelle cet effet s'applique.
 		 *\param[in]	p_params		Les paramètres optionnels.
 		 */
-		C3D_API PostEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
+		C3D_API PostEffect( RenderSystem & p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -87,8 +88,6 @@ namespace Castor3D
 		C3D_API virtual bool Apply( FrameBuffer & p_framebuffer ) = 0;
 
 	protected:
-		//!\~english The render system.	\~french Le render system.
-		RenderSystem * m_renderSystem;
 		//!\~english The render target to which this effect is attached.	\~french La cible de rendu à laquelle est attachée cet effet.
 		RenderTarget & m_renderTarget;
 	};

@@ -40,13 +40,10 @@ namespace Castor3D
 		m_useShader[eSHADER_TYPE_GEOMETRY] = false;
 		m_useShader[eSHADER_TYPE_HULL] = false;
 		m_useShader[eSHADER_TYPE_DOMAIN] = false;
-
-		m_pipeline = std::make_unique< Pipeline >( *this );
 	}
 
 	RenderSystem::~RenderSystem()
 	{
-		m_pipeline.reset();
 		m_mainContext.reset();
 	}
 
