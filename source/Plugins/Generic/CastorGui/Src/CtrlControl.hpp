@@ -18,6 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CI_CTRL_CONTROL_H___
 #define ___CI_CTRL_CONTROL_H___
 
+#include "CastorGuiPrerequisites.hpp"
+
 #include <Pixel.hpp>
 
 #include <EventHandler.hpp>
