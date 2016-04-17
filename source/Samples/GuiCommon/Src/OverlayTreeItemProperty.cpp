@@ -50,7 +50,7 @@ namespace GuiCommon
 		static std::array< wxString, eTEXT_WRAPPING_MODE_COUNT > PROPERTY_OVERLAY_WRAPPING_TEXTS{ _( "None" ), _( "Letter" ), _( "Word" ) };
 		static std::array< int, eTEXT_WRAPPING_MODE_COUNT > PROPERTY_OVERLAY_WRAPPING_VALUES{ eTEXT_WRAPPING_MODE_NONE, eTEXT_WRAPPING_MODE_BREAK, eTEXT_WRAPPING_MODE_BREAK_WORDS };
 		static wxString PROPERTY_OVERLAY_SPACING = _( "Line spacing" );
-		static std::array< wxString, eTEXT_LINE_SPACING_MODE_COUNT > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own line height" ), _( "Max line height" ), _( "Max font height" ) };
+		static std::array< wxString, eTEXT_LINE_SPACING_MODE_COUNT > PROPERTY_OVERLAY_SPACING_TEXTS{ _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
 		static std::array< int, eTEXT_LINE_SPACING_MODE_COUNT > PROPERTY_OVERLAY_SPACING_VALUES{ eTEXT_LINE_SPACING_MODE_OWN_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT };
 		static wxString PROPERTY_OVERLAY_TEXTURING = _( "Texture mapping" );
 		static std::array< wxString, eTEXT_TEXTURING_MODE_COUNT > PROPERTY_OVERLAY_TEXTURING_TEXTS{ _( "Letter" ), _( "Text" ) };
@@ -86,7 +86,7 @@ namespace GuiCommon
 		PROPERTY_OVERLAY_WRAPPING_TEXTS = { _( "None" ), _( "Letter" ), _( "Word" ) };
 		PROPERTY_OVERLAY_WRAPPING_VALUES = { eTEXT_WRAPPING_MODE_NONE, eTEXT_WRAPPING_MODE_BREAK, eTEXT_WRAPPING_MODE_BREAK_WORDS };
 		PROPERTY_OVERLAY_SPACING = _( "Line spacing" );
-		PROPERTY_OVERLAY_SPACING_TEXTS = { _( "Own line height" ), _( "Max line height" ), _( "Max font height" ) };
+		PROPERTY_OVERLAY_SPACING_TEXTS = { _( "Own height" ), _( "Max lines height" ), _( "Max fonts height" ) };
 		PROPERTY_OVERLAY_SPACING_VALUES = { eTEXT_LINE_SPACING_MODE_OWN_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT, eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT };
 		PROPERTY_OVERLAY_TEXTURING = _( "Texture mapping" );
 		PROPERTY_OVERLAY_TEXTURING_TEXTS = { _( "Letter" ), _( "Text" ) };
