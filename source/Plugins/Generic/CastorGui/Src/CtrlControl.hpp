@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CI_CTRL_CONTROL_H___
 #define ___CI_CTRL_CONTROL_H___
 
-#include "EventHandler.hpp"
-#include "Pixel.hpp"
+#include <Pixel.hpp>
 
+#include <EventHandler.hpp>
 #include <Position.hpp>
 #include <Rectangle.hpp>
 #include <Size.hpp>
@@ -32,7 +32,7 @@ namespace CastorGui
 	 *\brief		Description of a contro
 	*/
 	class Control
-		: public EventHandler< Control >
+		: public Castor3D::NonClientEventHandler< Control >
 	{
 	public:
 		/** Constructor.

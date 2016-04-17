@@ -227,140 +227,6 @@ namespace CastorGui
 
 	/*!
 	 *\author		Sylvain DOREMUS
-	 *\date		02/03/2015
-	 *\version		0.1.0
-	 *\brief		Mouse buttons enumeration
-	*/
-	typedef enum eMOUSE_BUTTON
-	{
-		//! The left button
-		eMOUSE_BUTTON_LEFT,
-		//! The middle button
-		eMOUSE_BUTTON_MIDDLE,
-		//! The right button
-		eMOUSE_BUTTON_RIGHT,
-		//! The buttons count
-		eMOUSE_BUTTON_COUNT,
-	}	eMOUSE_BUTTON;
-
-	/*!
-	 *\author		Sylvain DOREMUS
-	 *\date		02/03/2015
-	 *\version		0.1.0
-	 *\brief		Keyboard keys enumeration
-	*/
-	typedef enum eKEYBOARD_KEY
-	{
-		eKEYBOARD_KEY_NONE,
-		eKEY_BACKSPACE = 0x08,
-		eKEY_TAB = 0x0A,
-		eKEY_RETURN = 0x0D,
-		eKEY_ESCAPE = 0x1B,
-		eKEY_SPACE = 0x20,
-
-		// values from 0x21 to 0x7E are reserved for the standard ASCII characters
-
-		eKEY_DELETE = 0x7F,
-
-		// values from 0x80 to 0xFF are reserved for ASCII extended characters
-
-		eKEY_START   = 0x100,
-		eKEY_LBUTTON,
-		eKEY_RBUTTON,
-		eKEY_CANCEL,
-		eKEY_MBUTTON,
-		eKEY_CLEAR,
-		eKEY_SHIFT,
-		eKEY_ALT,
-		eKEY_CONTROL,
-		eKEY_MENU,
-		eKEY_PAUSE,
-		eKEY_CAPITAL,
-		eKEY_END,
-		eKEY_HOME,
-		eKEY_LEFT,
-		eKEY_UP,
-		eKEY_RIGHT,
-		eKEY_DOWN,
-		eKEY_SELECT,
-		eKEY_PRINT,
-		eKEY_EXECUTE,
-		eKEY_SNAPSHOT,
-		eKEY_INSERT,
-		eKEY_HELP,
-		eKEY_NUMPAD0,
-		eKEY_NUMPAD1,
-		eKEY_NUMPAD2,
-		eKEY_NUMPAD3,
-		eKEY_NUMPAD4,
-		eKEY_NUMPAD5,
-		eKEY_NUMPAD6,
-		eKEY_NUMPAD7,
-		eKEY_NUMPAD8,
-		eKEY_NUMPAD9,
-		eKEY_MULTIPLY,
-		eKEY_ADD,
-		eKEY_SEPARATOR,
-		eKEY_SUBTRACT,
-		eKEY_DECIMAL,
-		eKEY_DIVIDE,
-		eKEY_F1,
-		eKEY_F2,
-		eKEY_F3,
-		eKEY_F4,
-		eKEY_F5,
-		eKEY_F6,
-		eKEY_F7,
-		eKEY_F8,
-		eKEY_F9,
-		eKEY_F10,
-		eKEY_F11,
-		eKEY_F12,
-		eKEY_F13,
-		eKEY_F14,
-		eKEY_F15,
-		eKEY_F16,
-		eKEY_F17,
-		eKEY_F18,
-		eKEY_F19,
-		eKEY_F20,
-		eKEY_F21,
-		eKEY_F22,
-		eKEY_F23,
-		eKEY_F24,
-		eKEY_NUMLOCK,
-		eKEY_SCROLL,
-		eKEY_PAGEUP,
-		eKEY_PAGEDOWN,
-		eKEY_NUMPAD_SPACE,
-		eKEY_NUMPAD_TAB,
-		eKEY_NUMPAD_ENTER,
-		eKEY_NUMPAD_F1,
-		eKEY_NUMPAD_F2,
-		eKEY_NUMPAD_F3,
-		eKEY_NUMPAD_F4,
-		eKEY_NUMPAD_HOME,
-		eKEY_NUMPAD_LEFT,
-		eKEY_NUMPAD_UP,
-		eKEY_NUMPAD_RIGHT,
-		eKEY_NUMPAD_DOWN,
-		eKEY_NUMPAD_PAGEUP,
-		eKEY_NUMPAD_PAGEDOWN,
-		eKEY_NUMPAD_END,
-		eKEY_NUMPAD_BEGIN,
-		eKEY_NUMPAD_INSERT,
-		eKEY_NUMPAD_DELETE,
-		eKEY_NUMPAD_EQUAL,
-		eKEY_NUMPAD_MULTIPLY,
-		eKEY_NUMPAD_ADD,
-		eKEY_NUMPAD_SEPARATOR,
-		eKEY_NUMPAD_SUBTRACT,
-		eKEY_NUMPAD_DECIMAL,
-		eKEY_NUMPAD_DIVIDE,
-	}	eKEYBOARD_KEY;
-
-	/*!
-	 *\author		Sylvain DOREMUS
 	 *\date		10/03/2015
 	 *\version		0.1.0
 	 *\brief		Mouse cursors enumeration
@@ -377,83 +243,6 @@ namespace CastorGui
 		eMOUSE_CURSOR_COUNT,
 	}	eMOUSE_CURSOR;
 
-	/*!
-	 *\author		Sylvain DOREMUS
-	 *\date		02/03/2015
-	 *\version		0.1.0
-	 *\brief		Supported events enumeration
-	*/
-	typedef enum eEVENT_TYPE
-	{
-		//! Control event type
-		eEVENT_TYPE_CONTROL,
-		//! Mouse event type
-		eEVENT_TYPE_MOUSE,
-		//! Keyboard event type
-		eEVENT_TYPE_KEYBOARD,
-	}	eEVENT_TYPE;
-
-	/*!
-	 *\author		Sylvain DOREMUS
-	 *\date		12/03/2015
-	 *\version		0.1.0
-	 *\brief		Enumeration of supported control events
-	*/
-	typedef enum eCONTROL_EVENT
-	: uint8_t
-	{
-		//! Control activated
-		eCONTROL_EVENT_ACTIVATE,
-		//! Control deactivated
-		eCONTROL_EVENT_DEACTIVATE,
-		//! The control events count
-		eCONTROL_EVENT_COUNT,
-	}	eCONTROL_EVENT;
-
-	/*!
-	 *\author		Sylvain DOREMUS
-	 *\date		02/03/2015
-	 *\version		0.1.0
-	 *\brief		Supported mouse events enumeration
-	*/
-	typedef enum eMOUSE_EVENT
-	{
-		//! The mouse enters into the control client area
-		eMOUSE_EVENT_MOUSE_ENTER,
-		//! The mouse leaves the control client area
-		eMOUSE_EVENT_MOUSE_LEAVE,
-		//! The mouse moves into the control client area
-		eMOUSE_EVENT_MOUSE_MOVE,
-		//! The mouse remains into the client area during hover time
-		eMOUSE_EVENT_MOUSE_HOVER,
-		//! One mouse button is pushed
-		eMOUSE_EVENT_MOUSE_BUTTON_PUSHED,
-		//! One mouse button is released
-		eMOUSE_EVENT_MOUSE_BUTTON_RELEASED,
-		//! One mouse wheel is rolled
-		eMOUSE_EVENT_MOUSE_WHEEL,
-		//! The mouse events count
-		eMOUSE_EVENT_COUNT,
-	}	eMOUSE_EVENT;
-
-	/*!
-	 *\author		Sylvain DOREMUS
-	 *\date		02/03/2015
-	 *\version		0.1.0
-	 *\brief		Supported keyboard events enumeration
-	*/
-	typedef enum eKEYBOARD_EVENT
-	{
-		//! A key is pushed
-		eKEYBOARD_EVENT_KEY_PUSHED,
-		//! A key is released
-		eKEYBOARD_EVENT_KEY_RELEASED,
-		//! A printable key is pressed, the KeyboardEvent will hold the character to display
-		eKEYBOARD_EVENT_CHAR,
-		//! The keyboard events count
-		eKEYBOARD_EVENT_COUNT,
-	}	eKEYBOARD_EVENT;
-
 	template< class Derived > class EventHandler;
 	class ControlsManager;
 
@@ -465,10 +254,6 @@ namespace CastorGui
 	class SliderCtrl;
 	class StaticCtrl;
 
-	class GuiEvent;
-	class ControlEvent;
-	class KeyboardEvent;
-	class MouseEvent;
 
 	DECLARE_SMART_PTR( ControlsManager );
 	DECLARE_SMART_PTR( Control );
@@ -478,10 +263,6 @@ namespace CastorGui
 	DECLARE_SMART_PTR( ListBoxCtrl );
 	DECLARE_SMART_PTR( SliderCtrl );
 	DECLARE_SMART_PTR( StaticCtrl );
-	DECLARE_SMART_PTR( GuiEvent );
-	DECLARE_SMART_PTR( ControlEvent );
-	DECLARE_SMART_PTR( KeyboardEvent );
-	DECLARE_SMART_PTR( MouseEvent );
 
 	typedef std::vector< ControlSPtr > ControlArray;
 

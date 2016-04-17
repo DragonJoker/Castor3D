@@ -90,7 +90,7 @@ namespace CastorGui
 		*/
 		inline uint32_t Connect( eSLIDER_EVENT p_event, std::function< void( int ) > p_function )
 		{
-			return m_signals[p_event].Connect( p_function );
+			return m_signals[p_event].connect( p_function );
 		}
 
 		/** Disconnects a function from a slider event
@@ -99,7 +99,7 @@ namespace CastorGui
 		*/
 		inline void Disconnect( eSLIDER_EVENT p_event, uint32_t p_index )
 		{
-			m_signals[p_event].Disconnect( p_index );
+			m_signals[p_event].disconnect( p_index );
 		}
 
 	private:
@@ -144,45 +144,45 @@ namespace CastorGui
 		/** Event when mouse moves over the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseMove( MouseEvent const & p_event );
+		void OnMouseMove( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse leaves the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLeave( MouseEvent const & p_event );
+		void OnMouseLeave( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLButtonUp( MouseEvent const & p_event );
+		void OnMouseLButtonUp( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse moves over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseMove( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnTickMouseMove( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseLButtonDown( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnTickMouseLButtonDown( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	p_control	The tick control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnTickMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnTickMouseLButtonUp( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnKeyDown( KeyboardEvent const & p_event );
+		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event );
+		void OnNcKeyDown( ControlSPtr p_control, Castor3D::KeyboardEvent const & p_event );
 
 		/** Updates the tick position
 		 *\param[in]	p_delta		The position delta
@@ -208,7 +208,7 @@ namespace CastorGui
 		//! The static used to display the line
 		StaticCtrlWPtr m_tick;
 		//! The slider events signals
-		Signal< std::function< void( int ) > > m_signals[eSLIDER_EVENT_COUNT];
+		Castor::Signal< std::function< void( int ) > > m_signals[eSLIDER_EVENT_COUNT];
 	};
 }
 

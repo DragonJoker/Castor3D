@@ -17,7 +17,7 @@ using namespace Castor3D;
 namespace CastorGui
 {
 	Control::Control( eCONTROL_TYPE p_type, Engine * p_engine, ControlRPtr p_parent, uint32_t p_id, Position const & p_position, Size const & p_size, uint32_t p_style, bool p_visible )
-		: EventHandler< Control >( p_type != eCONTROL_TYPE_STATIC )
+		: NonClientEventHandler< Control >( p_type != eCONTROL_TYPE_STATIC )
 		, m_type( p_type )
 		, m_id( p_id )
 		, m_position( p_position )

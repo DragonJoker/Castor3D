@@ -2,7 +2,7 @@
 
 #include "Engine.hpp"
 #include "Face.hpp"
-#include "SubdivisionFrameEvent.hpp"
+#include "FunctorEvent.hpp"
 #include "Submesh.hpp"
 #include "Vertex.hpp"
 
@@ -171,7 +171,11 @@ namespace Castor3D
 
 		if ( m_bGenerateBuffers )
 		{
-			m_submesh->GetEngine()->PostEvent( std::make_shared< SubdivisionFrameEvent >( m_submesh ) );
+			m_submesh->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				m_submesh->ComputeNormals();
+				m_submesh->Initialise();
+			} ) );
 		}
 
 		if ( m_pfnSubdivisionEnd )

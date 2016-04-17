@@ -115,7 +115,7 @@ namespace CastorGui
 		 */
 		inline uint32_t Connect( eBUTTON_EVENT p_event, std::function< void() > p_function )
 		{
-			return m_signals[p_event].Connect( p_function );
+			return m_signals[p_event].connect( p_function );
 		}
 
 		/** Disconnects a function from a button event
@@ -124,7 +124,7 @@ namespace CastorGui
 		 */
 		inline void Disconnect( eBUTTON_EVENT p_event, uint32_t p_index )
 		{
-			m_signals[p_event].Disconnect( p_index );
+			m_signals[p_event].disconnect( p_index );
 		}
 
 	private:
@@ -159,22 +159,22 @@ namespace CastorGui
 		/** Event when mouse enters the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseEnter( MouseEvent const & p_event );
+		void OnMouseEnter( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse leaves the control
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLeave( MouseEvent const & p_event );
+		void OnMouseLeave( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is pressed.
 		 *\param[in]	p_event		The mouse event.
 		 */
-		void OnMouseButtonDown( MouseEvent const & p_event );
+		void OnMouseButtonDown( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released.
 		 *\param[in]	p_event		The mouse event.
 		 */
-		void OnMouseButtonUp( MouseEvent const & p_event );
+		void OnMouseButtonUp( Castor3D::MouseEvent const & p_event );
 
 		/** Creates a material with an ambient colour equal to p_material->ambient + p_offset
 		 *\param[in]	p_material	The material.
@@ -203,7 +203,7 @@ namespace CastorGui
 		//! The pushed button foreground material.
 		Castor3D::MaterialWPtr m_pushedForegroundMaterial;
 		//! The button events signals
-		Signal< std::function< void() > > m_signals[eBUTTON_EVENT_COUNT];
+		Castor::Signal< std::function< void() > > m_signals[eBUTTON_EVENT_COUNT];
 	};
 }
 

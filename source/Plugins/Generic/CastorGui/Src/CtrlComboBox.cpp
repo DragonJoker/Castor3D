@@ -149,8 +149,14 @@ namespace CastorGui
 		m_choices->SetPosition( Position( 0, GetSize().height() ) );
 		m_choices->SetSize( Size( GetSize().width() - GetSize().height(), -1 ) );
 
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ComboBoxCtrl::OnKeyDown, this, std::placeholders::_1 ) );
-		EventHandler::ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ComboBoxCtrl::OnNcKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
+		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		{
+			OnKeyDown( p_event );
+		} );
+		NonClientEventHandler::ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		{
+			OnNcKeyDown( p_control, p_event );
+		} );
 
 		ControlsManagerSPtr l_manager = GetControlsManager();
 		TextOverlaySPtr l_text = m_text.lock();

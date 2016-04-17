@@ -218,10 +218,23 @@ namespace CastorGui
 	{
 		StaticCtrlSPtr l_item = std::make_shared< StaticCtrl >( GetEngine(), this, p_value, Position(), Size( GetSize().width(), DEFAULT_HEIGHT ), eSTATIC_STYLE_VALIGN_CENTER );
 		l_item->SetCatchesMouseEvents( true );
-		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ListBoxCtrl::OnItemMouseEnter, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ListBoxCtrl::OnItemMouseLeave, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_item->ConnectNC( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ListBoxCtrl::OnItemMouseLButtonUp, this, std::placeholders::_1, std::placeholders::_2 ) );
-		l_item->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ListBoxCtrl::OnItemKeyDown, this, std::placeholders::_1, std::placeholders::_2 ) );
+
+		l_item->ConnectNC( eMOUSE_EVENT_ENTER, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		{
+			OnItemMouseEnter( p_control, p_event );
+		} );
+		l_item->ConnectNC( eMOUSE_EVENT_LEAVE, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		{
+			OnItemMouseLeave( p_control, p_event );
+		} );
+		l_item->ConnectNC( eMOUSE_EVENT_BUTTON_RELEASED, [this]( ControlSPtr p_control, MouseEvent const & p_event )
+		{
+			OnItemMouseLButtonUp( p_control, p_event );
+		} );
+		l_item->ConnectNC( eKEYBOARD_EVENT_KEY_PUSHED, [this]( ControlSPtr p_control, KeyboardEvent const & p_event )
+		{
+			OnItemKeyDown( p_control, p_event );
+		} );
 
 		if ( m_fontName.empty() )
 		{
@@ -275,7 +288,11 @@ namespace CastorGui
 
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
 		SetSize( Size( GetSize().width(), uint32_t( m_values.size() * DEFAULT_HEIGHT ) ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &ListBoxCtrl::OnKeyDown, this, std::placeholders::_1 ) );
+
+		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		{
+			OnKeyDown( p_event );
+		} );
 
 		for ( auto && l_value : m_initialValues )
 		{

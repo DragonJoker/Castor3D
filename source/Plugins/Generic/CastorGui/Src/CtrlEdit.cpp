@@ -30,13 +30,35 @@ namespace CastorGui
 		m_caretIt = m_caption.end();
 		m_cursor = eMOUSE_CURSOR_TEXT;
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &EditCtrl::OnMouseLButtonDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &EditCtrl::OnMouseLButtonUp, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, std::bind( &EditCtrl::OnKeyDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_KEY_RELEASED, std::bind( &EditCtrl::OnKeyUp, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eKEYBOARD_EVENT_CHAR, std::bind( &EditCtrl::OnChar, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eCONTROL_EVENT_ACTIVATE, std::bind( &EditCtrl::OnActivate, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eCONTROL_EVENT_DEACTIVATE, std::bind( &EditCtrl::OnDeactivate, this, std::placeholders::_1 ) );
+
+		EventHandler::Connect( eMOUSE_EVENT_BUTTON_PUSHED, [this]( MouseEvent const & p_event )
+		{
+			OnMouseLButtonDown( p_event );
+		} );
+		EventHandler::Connect( eMOUSE_EVENT_BUTTON_RELEASED, [this]( MouseEvent const & p_event )
+		{
+			OnMouseLButtonUp( p_event );
+		} );
+		EventHandler::Connect( eKEYBOARD_EVENT_KEY_PUSHED, [this]( KeyboardEvent const & p_event )
+		{
+			OnKeyDown( p_event );
+		} );
+		EventHandler::Connect( eKEYBOARD_EVENT_KEY_RELEASED, [this]( KeyboardEvent const & p_event )
+		{
+			OnKeyUp( p_event );
+		} );
+		EventHandler::Connect( eKEYBOARD_EVENT_CHAR, [this]( KeyboardEvent const & p_event )
+		{
+			OnChar( p_event );
+		} );
+		EventHandler::Connect( eHANDLER_EVENT_ACTIVATE, [this]( HandlerEvent const & p_event )
+		{
+			OnActivate( p_event );
+		} );
+		EventHandler::Connect( eHANDLER_EVENT_DEACTIVATE, [this]( HandlerEvent const & p_event )
+		{
+			OnDeactivate( p_event );
+		} );
 
 		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlEdit_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
@@ -159,13 +181,13 @@ namespace CastorGui
 		return l_caption;
 	}
 
-	void EditCtrl::OnActivate( ControlEvent const & p_event )
+	void EditCtrl::OnActivate( HandlerEvent const & p_event )
 	{
 		m_active = true;
 		DoUpdateCaption();
 	}
 
-	void EditCtrl::OnDeactivate( ControlEvent const & p_event )
+	void EditCtrl::OnDeactivate( HandlerEvent const & p_event )
 	{
 		m_active = false;
 		DoUpdateCaption();

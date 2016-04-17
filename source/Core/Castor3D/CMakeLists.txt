@@ -201,18 +201,49 @@ file( GLOB ${PROJECT_NAME}_State_SOURCE_FILES
 source_group( "Header Files\\State" FILES ${${PROJECT_NAME}_State_HEADER_FILES} )
 source_group( "Source Files\\State" FILES ${${PROJECT_NAME}_State_SOURCE_FILES} )
 
-file( GLOB ${PROJECT_NAME}_Event_HEADER_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Event*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Event*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Listener*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Listener*.inl
+file( GLOB ${PROJECT_NAME}_FrameEvent_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameEvent*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameEvent*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*CleanupEvent*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*CleanupEvent*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FunctorEvent*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FunctorEvent*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*InitialiseEvent*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*InitialiseEvent*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameListener*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameListener*.inl
 )
-file( GLOB ${PROJECT_NAME}_Event_SOURCE_FILES
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Event*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Listener*.cpp
+file( GLOB ${PROJECT_NAME}_FrameEvent_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameEvent*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*CleanupEvent*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FunctorEvent*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*InitialiseEvent*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*FrameListener*.cpp
 )
-source_group( "Header Files\\Event" FILES ${${PROJECT_NAME}_Event_HEADER_FILES} )
-source_group( "Source Files\\Event" FILES ${${PROJECT_NAME}_Event_SOURCE_FILES} )
+source_group( "Header Files\\Event\\Frame" FILES ${${PROJECT_NAME}_FrameEvent_HEADER_FILES} )
+source_group( "Source Files\\Event\\Frame" FILES ${${PROJECT_NAME}_FrameEvent_SOURCE_FILES} )
+
+file( GLOB ${PROJECT_NAME}_UserInput_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*UserInput*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*UserInput*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*HandlerEvent*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*HandlerEvent*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*KeyboardEvent*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*KeyboardEvent*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MouseEvent*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MouseEvent*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*EventHandler*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*EventHandler*.inl
+)
+file( GLOB ${PROJECT_NAME}_UserInput_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*UserInput*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*HandlerEvent*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*KeyboardEvent*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*MouseEvent*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*EventHandler*.cpp
+)
+source_group( "Header Files\\Event\\UserInput" FILES ${${PROJECT_NAME}_UserInput_HEADER_FILES} )
+source_group( "Source Files\\Event\\UserInput" FILES ${${PROJECT_NAME}_UserInput_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_Shader_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Shader*.hpp
@@ -340,7 +371,7 @@ file( GLOB ${PROJECT_NAME}_Miscellaneous_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Generator*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parameter*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pattern*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Handle*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Handle.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Effect*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Version*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*GpuQuery*.hpp
@@ -349,7 +380,7 @@ file( GLOB ${PROJECT_NAME}_Miscellaneous_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Generator*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Parameter*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pattern*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Handle*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Handle.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Effect*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Version*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*GpuQuery*.cpp

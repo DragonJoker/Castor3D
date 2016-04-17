@@ -28,10 +28,22 @@ namespace CastorGui
 		, m_caption( p_caption )
 	{
 		SetBackgroundBorders( Rectangle( 1, 1, 1, 1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_ENTER, std::bind( &ButtonCtrl::OnMouseEnter, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_LEAVE, std::bind( &ButtonCtrl::OnMouseLeave, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_PUSHED, std::bind( &ButtonCtrl::OnMouseButtonDown, this, std::placeholders::_1 ) );
-		EventHandler::Connect( eMOUSE_EVENT_MOUSE_BUTTON_RELEASED, std::bind( &ButtonCtrl::OnMouseButtonUp, this, std::placeholders::_1 ) );
+		EventHandler::Connect( eMOUSE_EVENT_ENTER, [this]( MouseEvent const & p_event )
+		{
+			OnMouseEnter( p_event );
+		} );
+		EventHandler::Connect( eMOUSE_EVENT_LEAVE, [this]( MouseEvent const & p_event )
+		{
+			OnMouseLeave( p_event );
+		} );
+		EventHandler::Connect( eMOUSE_EVENT_BUTTON_PUSHED, [this]( MouseEvent const & p_event )
+		{
+			OnMouseButtonDown( p_event );
+		} );
+		EventHandler::Connect( eMOUSE_EVENT_BUTTON_RELEASED, [this]( MouseEvent const & p_event )
+		{
+			OnMouseButtonUp( p_event );
+		} );
 
 		TextOverlaySPtr l_text = GetEngine()->GetOverlayManager().Create( cuT( "T_CtrlButton_" ) + string::to_string( GetId() ), eOVERLAY_TYPE_TEXT, GetBackground()->GetOverlay().shared_from_this(), nullptr )->GetTextOverlay();
 		l_text->SetPixelSize( GetSize() );
