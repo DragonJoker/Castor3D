@@ -73,6 +73,24 @@ namespace Castor3D
 		CASTOR_ENUM_BOUNDS( eTEXT_TEXTURING_MODE, eTEXT_TEXTURING_MODE_LETTER )
 	}	eTEXT_TEXTURING_MODE;
 	/*!
+	\author 	Sylvain DOREMUS
+	\date 		16/04/2016
+	\~english
+	\brief		Text line spacing modes, handles the way lines are spaced, which each other, inside one TextOverlay.
+	\~french
+	\brief		Modes d'espacement des lignes du texte, gère la manière dont les lignes sont espacées entre elles, dans un TextOverlay.
+	*/
+	typedef enum eTEXT_LINE_SPACING_MODE
+	{
+		//!\~english The height of each line is its own height.	\~french La hauteur d'une ligne est sa propre hauteur.
+		eTEXT_LINE_SPACING_MODE_OWN_HEIGHT,
+		//!\~english The height of the lines is the maximum height between them.	\~french La hauteur des lignes est la plus grande hauteur parmi elles.
+		eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT,
+		//!\~english The height of the lines is the maximum height from the font's characters.	\~french La hauteur des lignes est la plus grande hauteur des caractères de la police.
+		eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT,
+		CASTOR_ENUM_BOUNDS( eTEXT_LINE_SPACING_MODE, eTEXT_LINE_SPACING_MODE_OWN_HEIGHT )
+	}	eTEXT_LINE_SPACING_MODE;
+	/*!
 	\author		Sylvain DOREMUS
 	\date		23/09/2015
 	\version	0.8.0

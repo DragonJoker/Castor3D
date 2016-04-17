@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CastorShape 0.8.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-02-12 00:15+0000\n"
-"PO-Revision-Date: 2016-02-12 00:32+0000\n"
+"POT-Creation-Date: 2016-04-17 01:11+0100\n"
+"PO-Revision-Date: 2016-04-17 01:13+0100\n"
 "Last-Translator: dragonjoker <dragonjoker59@hotmail.com>\n"
 "Language-Team: Sylvain Doremus <dragonjoker59@hotmail.com>\n"
 "Language: fr\n"
@@ -228,7 +228,7 @@ msgstr "Rayon"
 #: CastorShape/Src/NewMaterialDialog.cpp:46
 #: CastorShape/Src/NewMaterialDialog.cpp:78 GuiCommon/Src/SizeProperties.cpp:19
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:25
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:42
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:43
 #: GuiCommon/Src/PointProperties.hpp:51
 msgid "Height"
 msgstr "Hauteur"
@@ -259,7 +259,7 @@ msgstr "Nouveau cylindre"
 #: GuiCommon/Src/FrameVariableBufferTreeItemProperty.cpp:16
 #: GuiCommon/Src/FrameVariableBufferTreeItemProperty.cpp:24
 #: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:23
-#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:310
+#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:303
 msgid "Name"
 msgstr "Nom"
 
@@ -270,15 +270,17 @@ msgstr "Nom de la géométrie"
 
 #: CastorShape/Src/NewGeometryDialog.cpp:21
 #: CastorShape/Src/NewGeometryDialog.cpp:31
+#: GuiCommon/Src/BillboardTreeItemProperty.cpp:18
+#: GuiCommon/Src/BillboardTreeItemProperty.cpp:27
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:33
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:55
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:69
 #: GuiCommon/Src/SubmeshTreeItemProperty.cpp:23
 #: GuiCommon/Src/SubmeshTreeItemProperty.cpp:43
 msgid "Material"
 msgstr "Matériau"
 
 #: CastorShape/Src/NewGeometryDialog.cpp:64
-#: GuiCommon/Src/GuiCommonPrerequisites.hpp:324
+#: GuiCommon/Src/GuiCommonPrerequisites.hpp:326
 msgid "New..."
 msgstr "Nouveau ..."
 
@@ -333,7 +335,7 @@ msgstr "Passe :"
 #: GuiCommon/Src/PassTreeItemProperty.cpp:21
 #: GuiCommon/Src/PassTreeItemProperty.cpp:37
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:26
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:43
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:44
 msgid "Ambient"
 msgstr "Ambiante"
 
@@ -344,7 +346,7 @@ msgstr "Ambiante"
 #: GuiCommon/Src/PassTreeItemProperty.cpp:22
 #: GuiCommon/Src/PassTreeItemProperty.cpp:38
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:21
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:38
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:39
 msgid "Diffuse"
 msgstr "Diffuse"
 
@@ -355,7 +357,7 @@ msgstr "Diffuse"
 #: GuiCommon/Src/PassTreeItemProperty.cpp:23
 #: GuiCommon/Src/PassTreeItemProperty.cpp:39
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:24
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:41
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:42
 msgid "Specular"
 msgstr "Spéculaire"
 
@@ -363,6 +365,8 @@ msgstr "Spéculaire"
 #: CastorShape/Src/NewMaterialDialog.cpp:63
 #: GuiCommon/Src/PassTreeItemProperty.cpp:24
 #: GuiCommon/Src/PassTreeItemProperty.cpp:40
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:28
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:46
 msgid "Emissive"
 msgstr "Emission"
 
@@ -389,7 +393,7 @@ msgstr "Deux faces"
 #: GuiCommon/Src/PassTreeItemProperty.cpp:27
 #: GuiCommon/Src/PassTreeItemProperty.cpp:43
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:23
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:40
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:41
 msgid "Opacity"
 msgstr "Opacité"
 
@@ -420,14 +424,14 @@ msgstr "Texture :"
 #: CastorShape/Src/NewMaterialDialog.cpp:39
 #: CastorShape/Src/NewMaterialDialog.cpp:71
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:18
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:35
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:36
 msgid "Image"
 msgstr "Image"
 
 #: CastorShape/Src/NewMaterialDialog.cpp:40
 #: CastorShape/Src/NewMaterialDialog.cpp:72
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:19
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:36
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:37
 msgid "Channel"
 msgstr "Canal"
 
@@ -436,21 +440,21 @@ msgstr "Canal"
 #: GuiCommon/Src/LightTreeItemProperty.cpp:23
 #: GuiCommon/Src/LightTreeItemProperty.cpp:37
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:20
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:37
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:38
 msgid "Colour"
 msgstr "Couleur"
 
 #: CastorShape/Src/NewMaterialDialog.cpp:43
 #: CastorShape/Src/NewMaterialDialog.cpp:75
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:22
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:39
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:40
 msgid "Normal"
 msgstr "Normal"
 
 #: CastorShape/Src/NewMaterialDialog.cpp:48
 #: CastorShape/Src/NewMaterialDialog.cpp:80
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:27
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:44
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:45
 msgid "Gloss"
 msgstr "Gloss"
 
@@ -552,6 +556,20 @@ msgstr "Le multiplicateur de temps de l'animation."
 msgid "Sets the animation looped or not"
 msgstr "Définit si l'animation est bouclée ou non."
 
+#: GuiCommon/Src/BillboardTreeItemProperty.cpp:17
+#: GuiCommon/Src/BillboardTreeItemProperty.cpp:26
+msgid "Billboard: "
+msgstr "Billboard:"
+
+#: GuiCommon/Src/BillboardTreeItemProperty.cpp:19
+#: GuiCommon/Src/BillboardTreeItemProperty.cpp:28
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:32
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:68
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:22
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:42
+msgid "Size"
+msgstr "Taille"
+
 #: GuiCommon/Src/CameraTreeItemProperty.cpp:15
 #: GuiCommon/Src/CameraTreeItemProperty.cpp:23
 msgid "Camera: "
@@ -559,45 +577,45 @@ msgstr "Caméra : "
 
 #: GuiCommon/Src/CameraTreeItemProperty.cpp:16
 #: GuiCommon/Src/CameraTreeItemProperty.cpp:24
-#: GuiCommon/Src/SceneObjectsList.cpp:211
+#: GuiCommon/Src/SceneObjectsList.cpp:215
 #: GuiCommon/Src/ViewportTreeItemProperty.cpp:17
 #: GuiCommon/Src/ViewportTreeItemProperty.cpp:37
 msgid "Viewport"
 msgstr "Viewport"
 
-#: GuiCommon/Src/CastorApplication.cpp:154
+#: GuiCommon/Src/CastorApplication.cpp:163
 msgid "Displays this help"
 msgstr "Affiche cette aide"
 
-#: GuiCommon/Src/CastorApplication.cpp:155
+#: GuiCommon/Src/CastorApplication.cpp:164
 msgid "Defines log level"
 msgstr "Définit le niveau de log"
 
-#: GuiCommon/Src/CastorApplication.cpp:156
-msgid "Defines initial scene file"
-msgstr "Définit le fichier de scène initial"
+#: GuiCommon/Src/CastorApplication.cpp:165
+msgid "The initial scene file"
+msgstr "Fichier de scène initial"
 
-#: GuiCommon/Src/CastorApplication.cpp:157
+#: GuiCommon/Src/CastorApplication.cpp:166
 msgid "Defines the renderer to OpenGl"
 msgstr "Définit l'API de rendu à OpenGl"
 
-#: GuiCommon/Src/CastorApplication.cpp:158
+#: GuiCommon/Src/CastorApplication.cpp:167
 msgid "Defines the renderer to Direct3D (11)"
 msgstr "Définit l'API de rendu à Direct3D (11)"
 
-#: GuiCommon/Src/CastorApplication.cpp:197
+#: GuiCommon/Src/CastorApplication.cpp:206
 msgid "Loading language"
 msgstr "Chargement de la langue"
 
-#: GuiCommon/Src/CastorApplication.cpp:254
+#: GuiCommon/Src/CastorApplication.cpp:263
 msgid "Initialising Castor3D"
 msgstr "Initialisation de Castor3D"
 
-#: GuiCommon/Src/CastorApplication.cpp:301
-msgid "Loading plugins"
+#: GuiCommon/Src/CastorApplication.cpp:310
+msgid "Loading plug-ins"
 msgstr "Chargement des plug-ins"
 
-#: GuiCommon/Src/CastorApplication.cpp:307
+#: GuiCommon/Src/CastorApplication.cpp:316
 msgid "Loading images"
 msgstr "Chargement des images"
 
@@ -607,24 +625,24 @@ msgid "Frame Variable Buffer: "
 msgstr "Tampon de variables de frame : "
 
 #: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:22
-#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:309
+#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:302
 msgid "Frame Variable: "
 msgstr "Variable de frame : "
 
 #: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:24
-#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:311
+#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:304
 msgid "Value"
 msgstr "Valeur"
 
 #: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:25
-#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:312
+#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:305
 #: GuiCommon/Src/ViewportTreeItemProperty.cpp:18
 #: GuiCommon/Src/ViewportTreeItemProperty.cpp:38
 msgid "Type"
 msgstr "Type"
 
 #: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:26
-#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:313
+#: GuiCommon/Src/FrameVariableTreeItemProperty.cpp:306
 msgid "Occurences"
 msgstr "Occurences"
 
@@ -637,33 +655,29 @@ msgstr "Racine"
 msgid "Geometry: "
 msgstr "Géométrie : "
 
-#: GuiCommon/Src/GuiCommonPrerequisites.cpp:284
+#: GuiCommon/Src/GuiCommonPrerequisites.cpp:295
 msgid "Import successful"
 msgstr "Importation réussie"
 
-#: GuiCommon/Src/GuiCommonPrerequisites.cpp:289
+#: GuiCommon/Src/GuiCommonPrerequisites.cpp:300
 msgid "The given file is not a valid CBSN file"
 msgstr "Le fichier donné n'est pas un fichier CBSN valide."
 
-#: GuiCommon/Src/GuiCommonPrerequisites.cpp:294
+#: GuiCommon/Src/GuiCommonPrerequisites.cpp:305
 msgid "Failed to read the binary scene file"
 msgstr "Impossible de lire le fichier de scène binaire"
 
-#: GuiCommon/Src/GuiCommonPrerequisites.cpp:318
+#: GuiCommon/Src/GuiCommonPrerequisites.cpp:329
 msgid "Failed to parse the scene file, with following error:"
 msgstr "Echec de l'analyse du fichier de scène, avec l'erreur suivante :"
 
-#: GuiCommon/Src/GuiCommonPrerequisites.cpp:329
+#: GuiCommon/Src/GuiCommonPrerequisites.cpp:340
 msgid "Failed to parse the binary scene file, with following error:"
 msgstr "Echec de l'analyse du fichier de scène binaire, avec l'erreur suivante :"
 
-#: GuiCommon/Src/GuiCommonPrerequisites.cpp:335
+#: GuiCommon/Src/GuiCommonPrerequisites.cpp:346
 msgid "Scene file doesn't exist :"
 msgstr "Le fichier de scène n'existe pas :"
-
-#: GuiCommon/Src/GuiCommonPrerequisites.cpp:490
-msgid "Castor initialisation failed with following error:"
-msgstr "L'initialisation de Castor a échoué avec l'erreur suivante :"
 
 #: GuiCommon/Src/LightTreeItemProperty.cpp:20
 #: GuiCommon/Src/LightTreeItemProperty.cpp:34
@@ -703,7 +717,7 @@ msgstr "Passe "
 msgid "Texture Unit "
 msgstr "Unité de texture "
 
-#: GuiCommon/Src/MaterialsList.cpp:134 GuiCommon/Src/SceneObjectsList.cpp:185
+#: GuiCommon/Src/MaterialsList.cpp:134 GuiCommon/Src/SceneObjectsList.cpp:189
 msgid "Render Target"
 msgstr "Cible de rendu"
 
@@ -715,7 +729,7 @@ msgstr "Noeud de scène : "
 #: GuiCommon/Src/NodeTreeItemProperty.cpp:21
 #: GuiCommon/Src/NodeTreeItemProperty.cpp:33
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:31
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:53
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:67
 msgid "Position"
 msgstr "Position"
 
@@ -735,76 +749,174 @@ msgid "Visible"
 msgstr "Visible"
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:28
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:50
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:64
 msgid "Overlay: "
 msgstr "Incrustation : "
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:29
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:51
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:65
 msgid "Border Panel Overlay"
 msgstr "Incrustation panneau borduré"
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:30
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:52
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:66
 msgid "Text Overlay"
 msgstr "Incrustation texte"
 
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:32
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:54
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:22
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:42
-msgid "Size"
-msgstr "Taille"
-
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:34
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:56
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:70
 msgid "Border Size"
 msgstr "Taille bord."
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:35
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:57
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:71
 msgid "Border Material"
 msgstr "Matériau bord."
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:36
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:58
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:72
 msgid "Border Inner UV"
 msgstr "UV bord. interne"
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:37
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:59
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:73
 msgid "Border Outer UV"
 msgstr "UV bord. externe"
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:38
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:60
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:74
 msgid "Border Position"
 msgstr "Position bord."
 
 #: GuiCommon/Src/OverlayTreeItemProperty.cpp:39
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:61
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:75
 msgid "Internal"
 msgstr "Interne"
 
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:40
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:62
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:39
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:75
 msgid "Middle"
 msgstr "Milieu"
 
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:41
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:63
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:39
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:75
 msgid "External"
 msgstr "Externe"
 
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:42
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:64
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:41
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:77
 msgid "Font"
 msgstr "Police"
 
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:43
-#: GuiCommon/Src/OverlayTreeItemProperty.cpp:65
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:42
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:78
 msgid "Caption"
 msgstr "Libellé"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:43
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:79
+msgid "Horiz. align."
+msgstr "Align. horiz."
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:44
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:80
+#: GuiCommon/Src/RectangleProperties.cpp:18
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:25
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:45
+#: GuiCommon/Src/PointProperties.hpp:52 GuiCommon/Src/PointProperties.hpp:53
+msgid "Left"
+msgstr "Gauche"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:44
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:47
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:80
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:83
+msgid "Center"
+msgstr "Centré"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:44
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:80
+#: GuiCommon/Src/RectangleProperties.cpp:20
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:26
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:46
+#: GuiCommon/Src/PointProperties.hpp:53
+msgid "Right"
+msgstr "Droite"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:46
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:82
+msgid "Vertic. align."
+msgstr "Align. vertic."
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:47
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:83
+#: GuiCommon/Src/RectangleProperties.cpp:19
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:23
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:43
+#: GuiCommon/Src/PointProperties.hpp:52 GuiCommon/Src/PointProperties.hpp:53
+msgid "Top"
+msgstr "Haut"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:47
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:83
+#: GuiCommon/Src/RectangleProperties.cpp:21
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:24
+#: GuiCommon/Src/ViewportTreeItemProperty.cpp:44
+#: GuiCommon/Src/PointProperties.hpp:53
+msgid "Bottom"
+msgstr "Bas"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:49
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:85
+msgid "Wrapping"
+msgstr "Encapsulation"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:50
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:86
+msgid "None"
+msgstr "Aucune"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:50
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:56
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:86
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:92
+msgid "Letter"
+msgstr "Lettre"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:50
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:86
+msgid "Word"
+msgstr "Mot"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:52
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:88
+msgid "Line spacing"
+msgstr "Espacement des lignes"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:53
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:89
+msgid "Own height"
+msgstr "Hauteur propre"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:53
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:89
+msgid "Max lines height"
+msgstr "Hauteur max. des lignes"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:53
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:89
+msgid "Max fonts height"
+msgstr "Hauteur max. de la police"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:55
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:91
+msgid "Texture mapping"
+msgstr "Application texture"
+
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:56
+#: GuiCommon/Src/OverlayTreeItemProperty.cpp:92
+msgid "Text"
+msgstr "Texte"
 
 #: GuiCommon/Src/Recorder.cpp:79
 msgid "AVI Video files"
@@ -850,49 +962,13 @@ msgstr "Impossible d'initialiser le contexte de conversion"
 msgid "Could not encode frame"
 msgstr "Impossible d'encoder la frame"
 
-#: GuiCommon/Src/Recorder.cpp:522
-msgid "Can't open file with OpenCV, encoding: H264, please select another codec"
-msgstr "Impossible d'ouvrir le fichier avec OpenCV, encodage : H264, veuillez choisir un aure codec"
-
-#: GuiCommon/Src/Recorder.cpp:526
-msgid "Could not open file with OpenCV"
-msgstr "Impossible d'ouvrir le fichier avec OpenCV"
-
-#: GuiCommon/Src/Recorder.cpp:530
+#: GuiCommon/Src/Recorder.cpp:521
 msgid "Could not open file with OpenCV, encoding: H264"
 msgstr "Impossible d'ouvrir le fichier avec OpenCV, encodage : H264"
 
-#: GuiCommon/Src/Recorder.cpp:561
+#: GuiCommon/Src/Recorder.cpp:551
 msgid "Unknown error"
 msgstr "Erreur inconnue"
-
-#: GuiCommon/Src/RectangleProperties.cpp:18
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:25
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:45
-#: GuiCommon/Src/PointProperties.hpp:52 GuiCommon/Src/PointProperties.hpp:53
-msgid "Left"
-msgstr "Gauche"
-
-#: GuiCommon/Src/RectangleProperties.cpp:19
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:23
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:43
-#: GuiCommon/Src/PointProperties.hpp:52 GuiCommon/Src/PointProperties.hpp:53
-msgid "Top"
-msgstr "Haut"
-
-#: GuiCommon/Src/RectangleProperties.cpp:20
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:26
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:46
-#: GuiCommon/Src/PointProperties.hpp:53
-msgid "Right"
-msgstr "Droite"
-
-#: GuiCommon/Src/RectangleProperties.cpp:21
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:24
-#: GuiCommon/Src/ViewportTreeItemProperty.cpp:44
-#: GuiCommon/Src/PointProperties.hpp:53
-msgid "Bottom"
-msgstr "Bas"
 
 #: GuiCommon/Src/RenderTargetTreeItemProperty.cpp:15
 #: GuiCommon/Src/RenderTargetTreeItemProperty.cpp:22
@@ -905,7 +981,7 @@ msgstr "Fenêtre"
 
 #: GuiCommon/Src/RenderTargetTreeItemProperty.cpp:40
 #: GuiCommon/Src/TextureTreeItemProperty.cpp:17
-#: GuiCommon/Src/TextureTreeItemProperty.cpp:34
+#: GuiCommon/Src/TextureTreeItemProperty.cpp:35
 msgid "Texture"
 msgstr "Texture"
 
@@ -924,7 +1000,7 @@ msgstr ""
 "Choisir l'API de rendu\n"
 "dans la liste ci-dessous."
 
-#: GuiCommon/Src/SceneObjectsList.cpp:200
+#: GuiCommon/Src/SceneObjectsList.cpp:204
 msgid "Submesh "
 msgstr "Sous-maillage"
 
@@ -997,19 +1073,19 @@ msgstr "&Quitter\tCTRL+E+P"
 msgid "&Edit preferences ...\tCTRL+E"
 msgstr "&Préférences ...\tCTRL+E"
 
-#: GuiCommon/Src/ShaderDialog.cpp:185
+#: GuiCommon/Src/ShaderDialog.cpp:184
 msgid "Fill the vertex shader file name"
 msgstr "Choisissez un fichier de vertex shader"
 
-#: GuiCommon/Src/ShaderDialog.cpp:185 GuiCommon/Src/ShaderDialog.cpp:191
+#: GuiCommon/Src/ShaderDialog.cpp:184 GuiCommon/Src/ShaderDialog.cpp:190
 msgid "ERROR"
 msgstr "ERREUR"
 
-#: GuiCommon/Src/ShaderDialog.cpp:191
+#: GuiCommon/Src/ShaderDialog.cpp:190
 msgid "Fill the fragment file name"
 msgstr "Choisissez un fichier de pixel shader"
 
-#: GuiCommon/Src/ShaderDialog.cpp:221
+#: GuiCommon/Src/ShaderDialog.cpp:220
 msgid "Select a shader program file"
 msgstr "Choisissez un fichier de shader"
 
@@ -1143,3 +1219,18 @@ msgstr "Ouverture verticale"
 #: GuiCommon/Src/ViewportTreeItemProperty.cpp:50
 msgid "Ratio"
 msgstr "Ratio"
+
+#~ msgid "Defines initial scene file"
+#~ msgstr "Définit le fichier de scène initial"
+
+#~ msgid "Loading plugins"
+#~ msgstr "Chargement des plug-ins"
+
+#~ msgid "Castor initialisation failed with following error:"
+#~ msgstr "L'initialisation de Castor a échoué avec l'erreur suivante :"
+
+#~ msgid "Can't open file with OpenCV, encoding: H264, please select another codec"
+#~ msgstr "Impossible d'ouvrir le fichier avec OpenCV, encodage : H264, veuillez choisir un aure codec"
+
+#~ msgid "Could not open file with OpenCV"
+#~ msgstr "Impossible d'ouvrir le fichier avec OpenCV"

@@ -43,25 +43,34 @@ namespace Castor
 		 *\brief		Constructor
 		 *\param[in]	p_char		The glyph character
 		 *\param[in]	p_size		The glyph dimensions
-		 *\param[in]	p_position	The glyph position
+		 *\param[in]	p_position	The glyph position relative to cursor
 		 *\param[in]	p_advance	Pixels to advance in order to go next character
 		 *\param[in]	p_bitmap	The glyph image
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	p_char		Le caractère de la glyphe
 		 *\param[in]	p_size		Les dimensions de la glyphe
-		 *\param[in]	p_position	La position de la glyphe
+		 *\param[in]	p_position	La position de la glyphe par rapport au curseur
 		 *\param[in]	p_advance	Nombre de pixels pour placer le caractère suivant
 		 *\param[in]	p_bitmap	L'image de la glyphe
 		 */
-		CU_API Glyph( char32_t p_char = 0, Size const & p_size = Size(), Position const & p_position = Position(), Size const & p_advance = Size(), ByteArray const & p_bitmap = ByteArray() );
+		inline Glyph( char32_t p_char, Size const & p_size, Position const & p_bearing, uint32_t p_advance, ByteArray const & p_bitmap )
+			: m_size{ p_size }
+			, m_bearing{ p_bearing }
+			, m_bitmap{ p_bitmap }
+			, m_advance{ p_advance }
+			, m_character{ p_char }
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		CU_API ~Glyph();
+		inline ~Glyph()
+		{
+		}
 		/**
 		 *\~english
 		 *\brief		Retrieves the glyph character
@@ -73,18 +82,6 @@ namespace Castor
 		inline char32_t GetCharacter()const
 		{
 			return m_character;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the glyph dimensions
-		 *\param[in]	p_size	The glyph dimensions
-		 *\~french
-		 *\brief		Définit les dimensions de la glyphe
-		 *\param[in]	p_size	Les dimensions de la glyphe
-		 */
-		inline void SetSize( Size const & p_size )
-		{
-			m_size = p_size;
 		}
 		/**
 		 *\~english
@@ -100,39 +97,15 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Sets the glyph position
-		 *\param[in]	p_position	The glyph position
+		 *\brief		Retrieves the 
+		 *\return		The glyph position relative to cursor.
 		 *\~french
-		 *\brief		Définit la position de la glyphe
-		 *\param[in]	p_position	La position de la glyphe
+		 *\brief		Récupère la 
+		 *\return		La position de la glyphe par rapport au curseur.
 		 */
-		inline void SetPosition( Position const & p_position )
+		inline Position const & GetBearing()const
 		{
-			m_position = p_position;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the glyph position
-		 *\return		The glyph position
-		 *\~french
-		 *\brief		Récupère la position de la glyphe
-		 *\return		La position de la glyphe
-		 */
-		inline Position const & GetPosition()const
-		{
-			return m_position;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the number of pixels to go before drawing next glyph
-		 *\param[in]	p_advance	The value
-		 *\~french
-		 *\brief		Définit le nombre de pixels pour place la prchaine glyphe
-		 *\param[in]	p_advance	La valeur
-		 */
-		inline void SetAdvance( Size const & p_advance )
-		{
-			m_advance = p_advance;
+			return m_bearing;
 		}
 		/**
 		 *\~english
@@ -142,21 +115,9 @@ namespace Castor
 		 *\brief		Récupère le nombre de pixels pour place la prchaine glyphe
 		 *\return		La valeur
 		 */
-		inline Size const & GetAdvance()const
+		inline uint32_t GetAdvance()const
 		{
 			return m_advance;
-		}
-		/**
-		 *\~english
-		 *\brief		Sets the glyph image
-		 *\param[in]	p_bitmap	The image of the glyph
-		 *\~french
-		 *\brief		Définit l'image de la glyphe
-		 *\param[in]	p_bitmap	L'image de la glyphe
-		 */
-		inline void SetBitmap( ByteArray const & p_bitmap )
-		{
-			m_bitmap = p_bitmap;
 		}
 		/**
 		 *\~english
@@ -170,31 +131,91 @@ namespace Castor
 		{
 			return m_bitmap;
 		}
-		/**
-		 *\~english
-		 *\brief		Adjusts the glyph position
-		 *\param[in]	x, y	The glyph position decal
-		 *\~french
-		 *\brief		Ajuste la position de la glyphe
-		 *\param[in]	x, y	Le décalage de position de la glyphe
-		 */
-		inline void AdjustPosition( uint32_t x, uint32_t y )
-		{
-			m_position.offset( x, y );
-		}
 
 	private:
-		//!\~english Glyph position, in texture	\~french Poisition de la glyphe, dans la texture
-		Position m_position;
-		//!\~english Glyph dimensions	\~french Dimensions de la glyphe
-		Size m_size;
+		//!\~english Glyph position relative to cursor.	\~french Position de la glyphe par rapport au curseur.
+		Position const m_bearing;
+		//!\~english Glyph dimensions.	\~french Dimensions de la glyphe.
+		Size const m_size;
 		//!\~english Pixels to advance in order to go next character	\~french Nombre de pixels pour placer le caractère suivant
-		Size m_advance;
+		uint32_t m_advance;
 		//!\~english Glyph image	\~french Image de la glyphe
-		ByteArray m_bitmap;
+		ByteArray const m_bitmap;
 		//!\~english Glyph character	\~french Caractère de la glyphe
-		char32_t m_character;
+		char32_t const m_character;
 	};
+	/**
+	 *\~english
+	 *\brief		Equality comparison operator.
+	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\~french
+	 *\brief		Opérateur de comparaison d'égalité.
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 */
+	inline bool operator==( Glyph const & p_lhs, Glyph const & p_rhs )
+	{
+		return p_lhs.GetCharacter() == p_rhs.GetCharacter();
+	}
+	/**
+	 *\~english
+	 *\brief		Difference comparison operator.
+	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\~french
+	 *\brief		Opérateur de comparaison de différence.
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 */
+	inline bool operator!=( Glyph const & p_lhs, Glyph const & p_rhs )
+	{
+		return p_lhs.GetCharacter() != p_rhs.GetCharacter();
+	}
+	/**
+	 *\~english
+	 *\brief		Less than comparison operator.
+	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\~french
+	 *\brief		Opérateur de comparaison inférieur.
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 */
+	inline bool operator<( Glyph const & p_lhs, Glyph const & p_rhs )
+	{
+		return p_lhs.GetCharacter() < p_rhs.GetCharacter();
+	}
+	/**
+	 *\~english
+	 *\brief		Greater than comparison operator.
+	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\~french
+	 *\brief		Opérateur de comparaison supérieur.
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 */
+	inline bool operator>( Glyph const & p_lhs, Glyph const & p_rhs )
+	{
+		return p_lhs.GetCharacter() > p_rhs.GetCharacter();
+	}
+	/**
+	 *\~english
+	 *\brief		Less than or equal to comparison operator.
+	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\~french
+	 *\brief		Opérateur de comparaison inférieur ou égal.
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 */
+	inline bool operator<=( Glyph const & p_lhs, Glyph const & p_rhs )
+	{
+		return p_lhs.GetCharacter() <= p_rhs.GetCharacter();
+	}
+	/**
+	 *\~english
+	 *\brief		Greater than or equal to comparison operator.
+	 *\param[in]	p_lhs, p_rhs	The values to compare.
+	 *\~french
+	 *\brief		Opérateur de comparaison supérieur ou égal.
+	 *\param[in]	p_lhs, p_rhs	Les valeurs à comparer.
+	 */
+	inline bool operator>=( Glyph const & p_lhs, Glyph const & p_rhs )
+	{
+		return p_lhs.GetCharacter() >= p_rhs.GetCharacter();
+	}
 }
 
 #endif
