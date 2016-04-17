@@ -231,62 +231,62 @@ namespace Castor3D
 
 			if ( !m_currentCaption.empty() && l_font )
 			{
-				uint32_t l_maxHeight = l_font->GetMaxHeight();
-
 				if ( m_textChanged )
 				{
-					Point2d l_ovAbsSize = GetOverlay().GetAbsoluteSize();
-					Point2d l_size( p_size.width() * l_ovAbsSize[0], p_size.height() * l_ovAbsSize[1] );
+					Point2d const l_ovAbsSize = GetOverlay().GetAbsoluteSize();
+					Point2d const l_size( p_size.width() * l_ovAbsSize[0], p_size.height() * l_ovAbsSize[1] );
 					m_previousCaption = m_currentCaption;
 					m_arrayVtx.clear();
 					m_arrayVtx.reserve( m_previousCaption.size() * 6 );
-					Position l_ovPosition = GetAbsolutePosition( p_size );
+					Position const l_ovPosition = GetAbsolutePosition( p_size );
 
 					DisplayableLineArray l_lines = DoPrepareText( p_size, l_size );
 					Size const & l_texDim = l_fontTexture->GetTexture()->GetDimensions();
+					uint32_t const l_maxHeight = l_font->GetMaxHeight();
 
-					for ( auto l_line : l_lines )
+					for ( auto const & l_line : l_lines )
 					{
+						double const l_height = l_line.m_height;
 						double l_topCrop = std::max( 0.0, -l_line.m_position[1] );
-						double l_bottomCrop = std::max( 0.0, l_line.m_position[1] + l_maxHeight - l_size[1] );
+						double l_bottomCrop = std::max( 0.0, l_line.m_position[1] + l_height - l_size[1] );
 
-						if ( l_topCrop + l_bottomCrop <= l_maxHeight )
+						if ( l_topCrop + l_bottomCrop <= l_height )
 						{
-							for ( auto l_char : l_line.m_characters )
+							for ( auto const & l_char : l_line.m_characters )
 							{
-								l_topCrop = std::max( 0.0, -l_line.m_position[1] - ( l_maxHeight - l_char.m_glyph->GetPosition().y() ) );
-								l_bottomCrop = std::max( 0.0, l_line.m_position[1] + l_maxHeight - l_size[1] );
-								double l_fontUvTopCrop = l_topCrop / l_texDim.height();
-								double l_fontUvBottomCrop = l_bottomCrop / l_texDim.height();
+								l_topCrop = std::max( 0.0, -l_line.m_position[1] - ( l_height - l_char.m_glyph.GetBearing().y() ) );
+								l_bottomCrop = std::max( 0.0, l_line.m_position[1] + ( l_height - l_char.m_position[1] ) + l_char.m_size[1] - l_size[1] );
 
-								double l_leftUncropped = l_char.m_left + l_line.m_position[0];
-								double l_leftCrop = std::max( 0.0, -l_leftUncropped );
-								double l_rightCrop = std::max( 0.0, l_leftUncropped + l_char.m_size[0] - l_size[0] );
+								double const l_leftUncropped = l_char.m_position[0] + l_line.m_position[0];
+								double const l_leftCrop = std::max( 0.0, -l_leftUncropped );
+								double const l_rightCrop = std::max( 0.0, l_leftUncropped + l_char.m_size[0] - l_size[0] );
 
 								if ( l_leftCrop + l_rightCrop < l_char.m_size[0] )
 								{
 									//
 									// Compute Letter's Position.
 									//
-									double l_topUncropped = l_line.m_position[1] + l_font->GetMaxHeight() - l_char.m_glyph->GetPosition().y();
-									int32_t l_left = l_ovPosition.x() + std::max( 0, int32_t( l_leftUncropped + l_leftCrop ) );
-									int32_t l_top = l_ovPosition.y() + std::max( 0, int32_t( l_topUncropped + l_topCrop ) );
-									int32_t l_right = l_ovPosition.x() + int32_t( std::min( l_leftUncropped + l_char.m_size[0] - l_rightCrop, l_size[0] ) );
-									int32_t l_bottom = l_ovPosition.y() + int32_t( std::min( l_topUncropped + l_char.m_size[1] - l_bottomCrop, l_size[1] ) );
+									double const l_topUncropped = l_line.m_position[1] + l_height - l_char.m_position[1];
+									int32_t const l_left = l_ovPosition.x() + std::max( 0, int32_t( l_leftUncropped + l_leftCrop ) );
+									int32_t const l_top = l_ovPosition.y() + std::max( 0, int32_t( l_topUncropped + l_topCrop ) );
+									int32_t const l_right = l_ovPosition.x() + int32_t( std::min( l_leftUncropped + l_char.m_size[0] - l_rightCrop, l_size[0] ) );
+									int32_t const l_bottom = l_ovPosition.y() + int32_t( std::min( l_topUncropped + l_char.m_size[1] - l_bottomCrop, l_size[1] ) );
 
 									//
 									// Compute Letter's Font UV.
 									//
-									Position l_fontUvPosition = l_fontTexture->GetGlyphPosition( l_char.m_glyph->GetCharacter() );
-									double l_fontUvLeftCrop = l_leftCrop / l_texDim.height();
-									double l_fontUvRightCrop = l_rightCrop / l_texDim.height();
-									double l_fontUvLeftUncropped = double( l_fontUvPosition.x() ) / l_texDim.width();
-									double l_fontUvTopUncropped = double( l_fontUvPosition.y() ) / l_texDim.height();
-									real l_fontUvLeft = real( l_fontUvLeftUncropped + l_fontUvLeftCrop );
-									real l_fontUvRight = real( l_fontUvLeftUncropped + ( l_char.m_size[0] / l_texDim.width() ) - l_fontUvRightCrop );
+									double const l_fontUvTopCrop = l_topCrop / l_texDim.height();
+									double const l_fontUvBottomCrop = l_bottomCrop / l_texDim.height();
+									Position const l_fontUvPosition = l_fontTexture->GetGlyphPosition( l_char.m_glyph.GetCharacter() );
+									double const l_fontUvLeftCrop = l_leftCrop / l_texDim.height();
+									double const l_fontUvRightCrop = l_rightCrop / l_texDim.height();
+									double const l_fontUvLeftUncropped = double( l_fontUvPosition.x() ) / l_texDim.width();
+									double const l_fontUvTopUncropped = double( l_fontUvPosition.y() ) / l_texDim.height();
+									real const l_fontUvLeft = real( l_fontUvLeftUncropped + l_fontUvLeftCrop );
+									real const l_fontUvRight = real( l_fontUvLeftUncropped + ( l_char.m_size[0] / l_texDim.width() ) - l_fontUvRightCrop );
 									// The UV is vertically inverted since the image is top-bottom, and the overlay is drawn bottom-up.
-									real l_fontUvBottom = real( l_fontUvTopUncropped + l_fontUvBottomCrop );
-									real l_fontUvTop = real( l_fontUvTopUncropped + ( l_char.m_size[1] / l_texDim.height() ) - l_fontUvTopCrop );
+									real const l_fontUvBottom = real( l_fontUvTopUncropped + l_fontUvBottomCrop );
+									real const l_fontUvTop = real( l_fontUvTopUncropped + ( l_char.m_size[1] / l_texDim.height() ) - l_fontUvTopCrop );
 
 									//
 									// Compute Letter's Texture UV.
@@ -304,10 +304,10 @@ namespace Castor3D
 									//
 									// Fill buffer
 									//
-									TextOverlay::Vertex l_vertexTR = { { l_right, l_top },    { l_fontUvRight, l_fontUvTop },    { l_texUvRight, l_texUvTop } };
-									TextOverlay::Vertex l_vertexTL = { { l_left,  l_top },    { l_fontUvLeft,  l_fontUvTop },    { l_texUvLeft,  l_texUvTop } };
-									TextOverlay::Vertex l_vertexBL = { { l_left,  l_bottom }, { l_fontUvLeft,  l_fontUvBottom }, { l_texUvLeft,  l_texUvBottom } };
-									TextOverlay::Vertex l_vertexBR = { { l_right, l_bottom }, { l_fontUvRight, l_fontUvBottom }, { l_texUvRight, l_texUvBottom } };
+									TextOverlay::Vertex const l_vertexTR = { { l_right, l_top },    { l_fontUvRight, l_fontUvTop },    { l_texUvRight, l_texUvTop } };
+									TextOverlay::Vertex const l_vertexTL = { { l_left,  l_top },    { l_fontUvLeft,  l_fontUvTop },    { l_texUvLeft,  l_texUvTop } };
+									TextOverlay::Vertex const l_vertexBL = { { l_left,  l_bottom }, { l_fontUvLeft,  l_fontUvBottom }, { l_texUvLeft,  l_texUvBottom } };
+									TextOverlay::Vertex const l_vertexBR = { { l_right, l_bottom }, { l_fontUvRight, l_fontUvBottom }, { l_texUvRight, l_texUvBottom } };
 
 									m_arrayVtx.push_back( l_vertexBL );
 									m_arrayVtx.push_back( l_vertexBR );
@@ -363,20 +363,19 @@ namespace Castor3D
 		DisplayableLineArray l_return;
 		DisplayableLine l_line;
 
-		for ( auto l_lineText : l_lines )
+		for ( auto const & l_lineText : l_lines )
 		{
 			double l_left = 0;
 			double l_wordWidth = 0;
 			std::u32string l_word;
 
-			for ( string::utf8::iterator l_itLine = l_lineText.begin(); l_itLine != l_lineText.end(); ++l_itLine )
+			for ( string::utf8::const_iterator l_itLine = l_lineText.begin(); l_itLine != l_lineText.end(); ++l_itLine )
 			{
-				Glyph * l_glyph = &l_font->GetGlyphAt( *l_itLine );
+				Glyph const & l_glyph{ l_font->GetGlyphAt( *l_itLine ) };
+				DisplayableChar l_character{ Point2d{}, Point2d{ l_glyph.GetAdvance(), l_glyph.GetSize().height() }, l_glyph };
 
-				DisplayableChar l_character = { l_glyph, 0.0, Point2d( double( std::max( l_glyph->GetSize().width(), l_glyph->GetAdvance().width() ) ), double( std::max( l_glyph->GetSize().height(), l_glyph->GetAdvance().height() ) ) ) };
-
-				if ( l_glyph->GetCharacter() == cuT( ' ' )
-						|| l_glyph->GetCharacter() == cuT( '\t' ) )
+				if ( l_glyph.GetCharacter() == cuT( ' ' )
+						|| l_glyph.GetCharacter() == cuT( '\t' ) )
 				{
 					// Write the word and leave space before next word.
 					DoPrepareWord( p_renderSize, l_word, l_wordWidth, p_size, l_left, l_line, l_return );
@@ -386,7 +385,7 @@ namespace Castor3D
 				}
 				else
 				{
-					l_word += l_glyph->GetCharacter();
+					l_word += l_glyph.GetCharacter();
 					l_wordWidth += l_character.m_size[0];
 				}
 			}
@@ -396,39 +395,32 @@ namespace Castor3D
 				DoPrepareWord( p_renderSize, l_word, l_wordWidth, p_size, l_left, l_line, l_return );
 			}
 
-			if ( !l_line.m_characters.empty() )
-			{
-				DoFinishLine( p_size, l_left, l_line, l_return );
-			}
-			else
-			{
-				l_line.m_position[1] += l_font->GetMaxHeight();
-			}
+			l_line = DoFinishLine( p_size, l_line, l_left, l_return );
 		}
 
-		DoAlignVertically( p_size[1], l_line.m_position[1] + l_font->GetMaxHeight(), l_return );
+		DoAlignVertically( p_size[1], l_return );
 		return l_return;
 	}
 
 	void TextOverlay::DoPrepareWord( Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines )
 	{
 		FontTextureSPtr l_fontTexture = GetFontTexture();
-		FontSPtr l_font = l_fontTexture->GetFont();
+		Font const & l_font = *l_fontTexture->GetFont();
 		Position l_ovPosition = GetAbsolutePosition( p_renderSize );
 
 		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK_WORDS )
 		{
 			// The word will overflow the overlay size, so we jump to the next line,
 			// and will write the word on this next line.
-			DoFinishLine( p_size, p_left, p_line, p_lines );
+			p_line = DoFinishLine( p_size, p_line, p_left, p_lines );
 		}
 
 		for ( auto l_character : p_word )
 		{
-			Glyph * l_glyph = &l_font->GetGlyphAt( l_character );
-			Point2d l_charSize( double( std::max( l_glyph->GetSize().width(), l_glyph->GetAdvance().width() ) ), double( std::max( l_glyph->GetSize().height(), l_glyph->GetAdvance().height() ) ) );
+			Glyph const & l_glyph = l_font[l_character];
+			Point2d l_charSize( double( l_glyph.GetAdvance() ), double( l_glyph.GetSize().height() ) );
 
-			p_left += l_glyph->GetPosition().x();
+			p_left += l_glyph.GetBearing().x();
 
 			if ( p_left > p_size[0] )
 			{
@@ -441,7 +433,7 @@ namespace Castor3D
 				else if ( m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK )
 				{
 					// Break => Jump to the next line.
-					DoFinishLine( p_size, p_left, p_line, p_lines );
+					p_line = DoFinishLine( p_size, p_line, p_left, p_lines );
 				}
 			}
 			else if ( p_left + l_charSize[0] > p_size[0] )
@@ -450,33 +442,45 @@ namespace Castor3D
 				if ( m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK )
 				{
 					// Break => Jump to the next line.
-					DoFinishLine( p_size, p_left, p_line, p_lines );
+					p_line = DoFinishLine( p_size, p_line, p_left, p_lines );
 				}
 			}
 
 			if ( l_charSize[0] > 0 )
 			{
-				p_line.m_characters.push_back( { l_glyph, p_left, l_charSize } );
+				p_line.m_characters.push_back( { Point2d{ p_left, 0.0 }, l_charSize, l_glyph } );
 			}
 
 			p_left += l_charSize[0];
 		}
 	}
 
-	void TextOverlay::DoFinishLine( Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines )
+	TextOverlay::DisplayableLine TextOverlay::DoFinishLine( Point2d const & p_size, DisplayableLine p_line, double & p_left, DisplayableLineArray & p_lines )
 	{
-		FontTextureSPtr l_fontTexture = GetFontTexture();
-		FontSPtr l_font = l_fontTexture->GetFont();
-		uint32_t l_maxHeight = l_font->GetMaxHeight();
-		double l_top = p_line.m_position[1] + l_maxHeight;
+		p_line.m_height = 0.0;
+		double l_maxBottomBearing{ 0.0 };
+
+		for ( auto const & l_character : p_line.m_characters )
+		{
+			auto l_bottomBearing = std::max( 0.0, double( l_character.m_glyph.GetSize().height() - l_character.m_glyph.GetBearing().y() ) );
+			p_line.m_height = std::max( p_line.m_height, l_character.m_size[1] + l_bottomBearing );
+			l_maxBottomBearing = std::max( l_maxBottomBearing, l_bottomBearing );
+		}
+
+		for ( auto & l_character : p_line.m_characters )
+		{
+			l_character.m_position[1] = std::max( 0.0, double( l_maxBottomBearing + l_character.m_glyph.GetBearing().y() ) );
+		}
+
 		p_line.m_width = p_left;
-		DoAlignHorizontally( p_size[0], p_line, p_lines );
 		p_left = 0;
-		p_line.m_position = Point2d( 0, l_top );
+		DoAlignHorizontally( p_size[0], p_line, p_lines );
+		return DisplayableLine{ Point2d{ 0, p_line.m_position[1] + p_line.m_height }, 0.0, 0.0 };
 	}
 
-	void TextOverlay::DoAlignHorizontally( double p_width, DisplayableLine & p_line, DisplayableLineArray & p_lines )
+	void TextOverlay::DoAlignHorizontally( double p_width, DisplayableLine p_line, DisplayableLineArray & p_lines )
 	{
+		// Move letters according to halign
 		if ( m_hAlign != eHALIGN_LEFT )
 		{
 			double l_offset = p_width - p_line.m_width;
@@ -488,28 +492,66 @@ namespace Castor3D
 
 			for ( auto && l_character : p_line.m_characters )
 			{
-				l_character.m_left += l_offset;
+				l_character.m_position[0] += l_offset;
 			}
 		}
 
+		// Remove letters overflowing the maximum width
 		auto l_removed = std::remove_if( p_line.m_characters.begin(), p_line.m_characters.end(), [&p_width]( DisplayableChar const & p_char )
 		{
-			return p_char.m_left > p_width
-				   || p_char.m_left + p_char.m_size[0] < 0;
+			return p_char.m_position[0] > p_width
+				   || p_char.m_position[0] + p_char.m_size[0] < 0;
 		} );
 
 		p_line.m_characters.erase( l_removed, p_line.m_characters.end() );
 
-		p_lines.push_back( p_line );
-		DisplayableLine l_line;
-		std::swap( p_line, l_line );
+		// Add the line to the lines array.
+		if ( !p_line.m_characters.empty() )
+		{
+			p_lines.push_back( p_line );
+		}
 	}
 
-	void TextOverlay::DoAlignVertically( double p_height, double p_linesHeight, DisplayableLineArray & p_lines )
+	void TextOverlay::DoAlignVertically( double p_height, DisplayableLineArray & p_lines )
 	{
+		// Compute each line height, according to lines spacing mode
+		if ( m_lineSpacingMode != eTEXT_LINE_SPACING_MODE_OWN_HEIGHT )
+		{
+			double l_height{ 0.0 };
+
+			if ( m_lineSpacingMode == eTEXT_LINE_SPACING_MODE_MAX_LINE_HEIGHT )
+			{
+				for ( auto const & l_line : p_lines )
+				{
+					l_height = std::max( l_line.m_height, l_height );
+				}
+			}
+			else if ( m_lineSpacingMode == eTEXT_LINE_SPACING_MODE_MAX_FONT_HEIGHT )
+			{
+				l_height = double( GetFontTexture()->GetFont()->GetMaxHeight() );
+			}
+
+			double l_offset{ 0.0 };
+
+			for ( auto & l_line : p_lines )
+			{
+				l_line.m_position[1] += l_offset;
+				l_offset += l_height - l_line.m_height;
+				l_line.m_height = l_height;
+			}
+		}
+
+		double l_linesHeight{ 0.0 };
+
+		for ( auto const & l_line : p_lines )
+		{
+			l_linesHeight += l_line.m_height;
+		}
+
+		// Move lines according to valign
 		if ( m_vAlign != eVALIGN_TOP )
 		{
-			double l_offset = p_height - p_linesHeight;
+			double l_offset = p_height - l_linesHeight;
 
 			if ( m_vAlign == eVALIGN_CENTER )
 			{
@@ -522,12 +564,11 @@ namespace Castor3D
 			}
 		}
 
-		uint32_t l_maxHeight = GetFontTexture()->GetFont()->GetMaxHeight();
-
-		auto l_removed = std::remove_if( p_lines.begin(), p_lines.end(), [&p_height, &l_maxHeight]( DisplayableLine const & p_line )
+		// Remove lines overflowing the maximum height
+		auto l_removed = std::remove_if( p_lines.begin(), p_lines.end(), [&p_height]( DisplayableLine const & p_line )
 		{
 			return p_line.m_position[1] > p_height
-				   || p_line.m_position[1] + l_maxHeight < 0;
+				   || p_line.m_position[1] + p_line.m_height < 0;
 		} );
 
 		p_lines.erase( l_removed, p_lines.end() );

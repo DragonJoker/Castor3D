@@ -49,17 +49,17 @@ namespace Castor3D
 
 		if ( l_font )
 		{
-			uint32_t l_uiMaxWidth = l_font->GetMaxWidth();
-			uint32_t l_uiMaxHeight = l_font->GetMaxHeight();
-			uint32_t l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
+			uint32_t const l_uiMaxWidth = l_font->GetMaxWidth();
+			uint32_t const l_uiMaxHeight = l_font->GetMaxHeight();
+			uint32_t const l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
 			m_texture->SetImage( PxBufferBase::create( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), ePIXEL_FORMAT_L8 ) );
 
-			Castor::Font::GlyphMap::const_iterator l_it = l_font->begin();
-			Size l_sizeImg = m_texture->GetDimensions();
-			uint32_t l_uiTotalWidth = l_sizeImg.width();
+			auto l_it = l_font->begin();
+			Size const & l_sizeImg = m_texture->GetDimensions();
+			uint32_t const l_uiTotalWidth = l_sizeImg.width();
 			uint32_t l_uiOffY = l_sizeImg.height() - l_uiMaxHeight;
 			uint8_t * l_pBuffer = m_texture->GetBuffer()->ptr();
-			size_t l_bufsize = m_texture->GetBuffer()->size();
+			size_t const l_bufsize = m_texture->GetBuffer()->size();
 
 			for ( uint32_t y = 0; y < l_count && l_it != l_font->end(); ++y )
 			{
@@ -67,10 +67,10 @@ namespace Castor3D
 
 				for ( uint32_t x = 0; x < 16 && l_it != l_font->end(); ++x )
 				{
-					Glyph & l_glyph = *l_it->second;
-					Size l_size = l_glyph.GetSize();
-					ByteArray l_buffer = l_glyph.GetBitmap();
-					uint32_t l_dstLineIndex = ( l_uiTotalWidth * l_uiOffY ) + l_uiOffX;
+					Glyph const & l_glyph = *l_it;
+					Size const & l_size = l_glyph.GetSize();
+					ByteArray const & l_buffer = l_glyph.GetBitmap();
+					uint32_t const l_dstLineIndex = ( l_uiTotalWidth * l_uiOffY ) + l_uiOffX;
 					uint8_t * l_dstLineBuffer = &l_pBuffer[l_dstLineIndex];
 
 					for ( uint32_t i = 0; i < l_size.height(); ++i )
