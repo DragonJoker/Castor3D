@@ -13,21 +13,6 @@ FT_END_HEADER
 
 namespace Castor
 {
-	namespace
-	{
-		inline int next_p2( int p_value )
-		{
-			int l_iReturn = 1;
-
-			while ( l_iReturn < p_value )
-			{
-				l_iReturn <<= 1;
-			}
-
-			return l_iReturn;
-		}
-	}
-
 	namespace ft
 	{
 #define CHECK_FT_ERR( func, ... ) CheckErr( func( __VA_ARGS__ ), #func )
@@ -127,10 +112,8 @@ namespace Castor
 				: public Font::SFontImpl
 		{
 			SFreeTypeFontImpl( Path const & p_pathFile, uint32_t p_height )
-				: m_height( p_height )
-				, m_path( p_pathFile )
-				, m_library( nullptr )
-				, m_face( nullptr )
+				: m_height{ p_height }
+				, m_path{ p_pathFile }
 			{
 			}
 
@@ -154,21 +137,26 @@ namespace Castor
 				m_face = nullptr;
 			}
 
-			virtual void LoadGlyph( Glyph & p_glyph )
+			virtual Glyph LoadGlyph( char32_t p_char )
 			{
-				FT_Glyph l_glyph;
-				uint8_t l_char = uint8_t( p_glyph.GetCharacter() );
-				FT_UInt l_index = FT_Get_Char_Index( m_face, l_char );
+				FT_Glyph l_glyph{};
+				FT_ULong const l_char( p_char );
+				FT_UInt const l_index{ FT_Get_Char_Index( m_face, l_char ) };
 				CHECK_FT_ERR( FT_Load_Glyph, m_face, l_index, FT_LOAD_DEFAULT );
 				CHECK_FT_ERR( FT_Get_Glyph, m_face->glyph, &l_glyph );
 				CHECK_FT_ERR( FT_Glyph_To_Bitmap, &l_glyph, FT_RENDER_MODE_NORMAL, 0, 1 );
-				FT_BitmapGlyph l_bmpGlyph = FT_BitmapGlyph( l_glyph );
-				FT_Bitmap & l_bitmap = l_bmpGlyph->bitmap;
-				Size l_advance( uint32_t( std::abs( l_glyph->advance.x ) / 65536.0 ), uint32_t( l_glyph->advance.y  / 65536.0 ) );
-				uint32_t l_pitch = std::abs( l_bitmap.pitch );
-				Size l_size( l_pitch, l_bitmap.rows );
-				Position l_position( l_bmpGlyph->left, l_bmpGlyph->top );
+				FT_BitmapGlyph const l_bmpGlyph = FT_BitmapGlyph( l_glyph );
+				FT_Bitmap const & l_bitmap = l_bmpGlyph->bitmap;
+				uint32_t const l_pitch( std::abs( l_bitmap.pitch ) );
+				Size const l_size{ l_pitch, uint32_t( l_bitmap.rows ) };
+				Position const l_bearing{ l_bmpGlyph->left, l_bmpGlyph->top };
 				ByteArray l_buffer( l_size.width() * l_size.height() );
+				uint32_t l_advance{ uint32_t( std::abs( l_glyph->advance.x ) / 65536.0 ) };
+
+				if ( l_advance < l_size[0] )
+				{
+					l_advance = l_size[0] + l_bearing[0];
+				}
 
 				if ( l_bitmap.pitch < 0 )
 				{
@@ -195,27 +183,25 @@ namespace Castor
 					}
 				}
 
-				p_glyph.SetSize( l_size );
-				p_glyph.SetPosition( l_position );
-				p_glyph.SetAdvance( l_advance );
-				p_glyph.SetBitmap( l_buffer );
+				return Glyph{ p_char, l_size, l_bearing, l_advance, l_buffer };
 			}
 
-			Path m_path;
-			uint32_t m_height;
-			FT_Library m_library;
-			FT_Face m_face;
+		private:
+			Path const m_path;
+			uint32_t const m_height;
+			FT_Library m_library{};
+			FT_Face m_face{};
 		};
 	}
 
 	Font::BinaryLoader::BinaryLoader()
-		:	Loader< Font, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
+		: Loader< Font, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
 	{
 	}
 
 	bool Font::BinaryLoader::operator()( Font & p_font, Path const & p_pathFile, uint32_t p_height )
 	{
-		m_uiHeight = p_height;
+		m_height = p_height;
 		return operator()( p_font, p_pathFile );
 	}
 
@@ -231,27 +217,23 @@ namespace Castor
 			{
 				if ( !p_font.HasGlyphLoader() )
 				{
-					p_font.SetGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_pathFile, m_uiHeight ) );
+					p_font.SetGlyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_pathFile, m_height ) );
 				}
 
 				p_font.SetFaceName( p_pathFile.GetFileName() );
 				p_font.GetGlyphLoader().Initialise();
-				uint8_t l_min = std::numeric_limits< uint8_t >::lowest();
-				uint8_t l_max = std::numeric_limits< uint8_t >::max();
-				int l_maxHeight = 0;
-				int l_maxWidth = 0;
+				uint8_t const l_min = std::numeric_limits< uint8_t >::lowest();
+				uint8_t const l_max = std::numeric_limits< uint8_t >::max();
+				uint32_t l_maxHeight = 0;
+				uint32_t l_maxWidth = 0;
 
-				// We first load the glyphs, updating the top position
+				// We load the glyphs
 				for ( uint8_t c = l_min; c < l_max; c++ )
 				{
-					char l_tmp[] = { char( c ), 0, 0, 0 };
-					char32_t l_char = string::utf8::to_utf8( l_tmp );
-					p_font.DoLoadGlyph( l_char );
-					Glyph & l_glyph = p_font[l_char];
-					Size l_size( l_glyph.GetSize() );
-					Position l_ptPosition( l_glyph.GetPosition() );
-					l_maxHeight = std::max< int >( l_maxHeight, l_size.height() );
-					l_maxWidth = std::max< int >( l_maxWidth, l_size.width() );
+					char l_tmp[]{ char( c ), 0, 0, 0 };
+					Glyph const & l_glyph = p_font.DoLoadGlyph( string::utf8::to_utf8( l_tmp ) );
+					l_maxHeight = std::max< int >( l_maxHeight, l_glyph.GetSize().height() );
+					l_maxWidth = std::max< int >( l_maxWidth, l_glyph.GetAdvance() );
 				}
 
 				p_font.GetGlyphLoader().Cleanup();
@@ -272,19 +254,19 @@ namespace Castor
 
 	Font::Font( String const & p_name, uint32_t p_height )
 		: Resource< Font >( p_name )
-		, m_uiHeight( p_height )
-		, m_iMaxHeight( 0 )
-		, m_iMaxTop( 0 )
-		, m_iMaxWidth( 0 )
+		, m_height( p_height )
+		, m_maxHeight( 0 )
+		, m_maxTop( 0 )
+		, m_maxWidth( 0 )
 	{
 	}
 
 	Font::Font( Path const & p_path, String const & p_name, uint32_t p_height )
 		: Resource< Font >( p_name )
-		, m_uiHeight( p_height )
-		, m_iMaxHeight( 0 )
-		, m_iMaxTop( 0 )
-		, m_iMaxWidth( 0 )
+		, m_height( p_height )
+		, m_maxHeight( 0 )
+		, m_maxTop( 0 )
+		, m_maxWidth( 0 )
 		, m_glyphLoader( std::make_unique< ft::SFreeTypeFontImpl >( p_path, p_height ) )
 		, m_pathFile( p_path )
 	{
@@ -302,20 +284,23 @@ namespace Castor
 		m_glyphLoader->Cleanup();
 	}
 
-	void Font::DoLoadGlyph( char32_t p_char )
+	Glyph const & Font::DoLoadGlyph( char32_t p_char )
 	{
-		auto && l_it = m_loadedGlyphs.find( p_char );
+		auto && l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+		{
+			return p_glyph.GetCharacter() == p_char;
+		} );
 
 		if ( l_it == m_loadedGlyphs.end() )
 		{
-			m_loadedGlyphs.insert( std::make_pair( p_char, std::make_unique< Glyph >( p_char ) ) );
-			l_it = m_loadedGlyphs.find( p_char );
+			m_loadedGlyphs.push_back( m_glyphLoader->LoadGlyph( p_char ) );
+
+			l_it = std::find_if( m_loadedGlyphs.begin(), m_loadedGlyphs.end(), [p_char]( Glyph const & p_glyph )
+			{
+				return p_glyph.GetCharacter() == p_char;
+			} );
 		}
 
-		return m_glyphLoader->LoadGlyph( *l_it->second );
+		return *l_it;
 	}
-
-	BEGIN_INVARIANT_BLOCK( Font )
-	CHECK_INVARIANT( m_uiHeight != 0 );
-	END_INVARIANT_BLOCK()
 }
