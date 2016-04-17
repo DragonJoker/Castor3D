@@ -1043,7 +1043,7 @@ namespace GlRender
 		return l_iReturn;
 	}
 
-	#if defined( _WIN32 )
+#if defined( _WIN32 )
 
 	bool OpenGl::MakeCurrent( HDC hdc, HGLRC hglrc )const
 	{
@@ -1090,7 +1090,7 @@ namespace GlRender
 		return m_pfnDeleteContext( hContext ) == TRUE;
 	}
 
-	#elif defined( __linux__ )
+#elif defined( __linux__ )
 
 	bool OpenGl::MakeCurrent( Display * pDisplay, GLXDrawable drawable, GLXContext context )const
 	{
@@ -1138,11 +1138,11 @@ namespace GlRender
 		return true;
 	}
 
-	#else
+#else
 
-	#	error "Yet unsupported OS"
+#	error "Yet unsupported OS"
 
-	#endif
+#endif
 
 	bool OpenGl::Viewport( int x, int y, int width, int height )const
 	{

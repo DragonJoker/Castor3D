@@ -24,7 +24,7 @@ namespace GLSL
 {
 	template< typename T >
 	struct Array
-			: public T
+		: public T
 	{
 		Array( GlslWriter * p_writer, const Castor::String & p_name, uint32_t p_dimension );
 		template< typename U > T & operator[]( U const & p_offset );

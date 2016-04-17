@@ -10,7 +10,7 @@
 	}
 
 	template<> struct OneFrameVariableDefinitions< bool >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
@@ -18,7 +18,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< int >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
@@ -26,7 +26,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< uint32_t >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
@@ -34,7 +34,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< float >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;
@@ -42,7 +42,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct OneFrameVariableDefinitions< double >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 1 * 1 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_ONE;

@@ -21,7 +21,7 @@ namespace CastorGui
 	{
 		MaterialManager & l_manager = p_engine->GetMaterialManager();
 		MaterialSPtr l_return;
-		
+
 		if ( l_manager.Has( p_name ) )
 		{
 			l_return = l_manager.Find( p_name );

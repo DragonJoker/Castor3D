@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GLSL
 {
 	struct Vec2
-			: public Type
+		: public Type
 	{
 		inline Vec2();
 		inline Vec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -43,7 +43,7 @@ namespace GLSL
 	};
 
 	struct Vec3
-			: public Type
+		: public Type
 	{
 		inline Vec3();
 		inline Vec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -84,7 +84,8 @@ namespace GLSL
 		GLSL_LAST_SWIZZLE( Vec3, Vec3, bgr );
 	};
 
-	struct Vec4 : public Type
+	struct Vec4
+		 : public Type
 	{
 		inline Vec4();
 		inline Vec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

@@ -69,7 +69,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator
-				: public Operator< TypeA, TypeA, TypeB >
+			: public Operator< TypeA, TypeA, TypeB >
 		{
 			using OperatorType = Operator< TypeA, TypeA, TypeB >;
 			using Ret = typename OperatorType::Ret;
@@ -79,7 +79,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator< Optional< TypeA >, TypeB >
-				: public Operator< Optional< TypeA >, Optional< TypeA >, TypeB >
+			: public Operator< Optional< TypeA >, Optional< TypeA >, TypeB >
 		{
 			using OperatorType = Operator< Optional< TypeA >, Optional< TypeA >, TypeB >;
 			using Ret = typename OperatorType::Ret;
@@ -89,7 +89,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator< TypeA, Optional< TypeB > >
-				: public Operator< Optional< TypeA >, TypeA, Optional< TypeB > >
+			: public Operator< Optional< TypeA >, TypeA, Optional< TypeB > >
 		{
 			using OperatorType = Operator< Optional< TypeA >, TypeA, Optional< TypeB > >;
 			using Ret = typename OperatorType::Ret;
@@ -99,7 +99,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct ArithmeticOperator< Optional< TypeA >, Optional< TypeB > >
-				: public Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >
+			: public Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >
 		{
 			using OperatorType = Operator< Optional< TypeA >, Optional< TypeA >, Optional< TypeB > >;
 			using Ret = typename OperatorType::Ret;
@@ -109,7 +109,7 @@ namespace GLSL
 
 		template< typename TypeA, typename TypeB >
 		struct BooleanOperator
-				: public Operator< GlslBool, TypeA, TypeB >
+			: public Operator< GlslBool, TypeA, TypeB >
 		{
 			using OperatorType = Operator< GlslBool, TypeA, TypeB >;
 			using Ret = typename OperatorType::Ret;

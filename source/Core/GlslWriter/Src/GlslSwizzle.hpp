@@ -30,7 +30,7 @@ namespace GLSL
 {
 	template< typename Input, typename Output >
 	struct Swizzle
-			: public Expr
+		: public Expr
 	{
 		inline Swizzle( Castor::String const & p_name, Input * p_input );
 		inline Swizzle & operator=( Swizzle const & p_rhs );

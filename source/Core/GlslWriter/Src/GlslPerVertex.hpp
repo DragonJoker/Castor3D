@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GLSL
 {
 	struct gl_PerVertex
-			: public Type
+		: public Type
 	{
 		inline gl_PerVertex();
 		inline gl_PerVertex( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

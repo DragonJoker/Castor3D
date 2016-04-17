@@ -56,10 +56,10 @@ namespace GLSL
 				FragmentInput const & p_fragmentIn, OutputComponents & p_output );
 
 		GlslWriter_API void ComputePointLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
-											FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+											   FragmentInput const & p_fragmentIn, OutputComponents & p_output );
 
 		GlslWriter_API void ComputeSpotLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
-										  FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+											  FragmentInput const & p_fragmentIn, OutputComponents & p_output );
 
 	protected:
 		GlslWriter_API Light GetLightColourAndPosition( Type const & p_value );
@@ -93,7 +93,7 @@ namespace GLSL
 		virtual void Declare_ComputeSpotLight();
 
 		void DoComputeLight( Light const & p_light, Vec3 const & p_worldEye, Vec3 const & p_direction, Float const & p_shininess,
-							  FragmentInput const & p_fragmentIn, OutputComponents & p_output );
+							 FragmentInput const & p_fragmentIn, OutputComponents & p_output );
 		void DoDeclare_ComputeLight();
 
 	public:

@@ -71,7 +71,7 @@ namespace Castor3D
 			return m_handlerEventType;
 		}
 		/**
-		 *\~english 
+		 *\~english
 		 *\return		The handler.
 		 *\~french
 		 *\return		Le gestionnaire.

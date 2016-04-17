@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GLSL
 {
 	struct IVec2
-			: public Type
+		: public Type
 	{
 		inline IVec2();
 		inline IVec2( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -43,7 +43,7 @@ namespace GLSL
 	};
 
 	struct IVec3
-			: public Type
+		: public Type
 	{
 		inline IVec3();
 		inline IVec3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -85,7 +85,7 @@ namespace GLSL
 	};
 
 	struct IVec4
-			: public Type
+		: public Type
 	{
 		inline IVec4();
 		inline IVec4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

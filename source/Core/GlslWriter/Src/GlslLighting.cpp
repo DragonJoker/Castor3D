@@ -230,7 +230,7 @@ namespace GLSL
 	}
 
 	void LightingModel::ComputePointLight( Light const & p_light, Vec3 const & p_worldEye, Float const & p_shininess,
-											FragmentInput const & p_fragmentIn, OutputComponents & p_output )
+										   FragmentInput const & p_fragmentIn, OutputComponents & p_output )
 	{
 		m_writer << WriteFunctionCall< Void >( &m_writer, cuT( "ComputePointLight" ), p_light, p_worldEye, p_shininess, p_fragmentIn, p_output ) << Endi();
 	}

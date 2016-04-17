@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GLSL
 {
 	struct GlslBool
-			: public Type
+		: public Type
 	{
 		inline GlslBool();
 		inline GlslBool( bool p_value );

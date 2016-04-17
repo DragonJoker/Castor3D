@@ -109,7 +109,7 @@ namespace Castor
 		}
 
 		struct SFreeTypeFontImpl
-				: public Font::SFontImpl
+			: public Font::SFontImpl
 		{
 			SFreeTypeFontImpl( Path const & p_pathFile, uint32_t p_height )
 				: m_height{ p_height }
@@ -230,7 +230,7 @@ namespace Castor
 				// We load the glyphs
 				for ( uint8_t c = l_min; c < l_max; c++ )
 				{
-					char l_tmp[]{ char( c ), 0, 0, 0 };
+					char l_tmp[] { char( c ), 0, 0, 0 };
 					Glyph const & l_glyph = p_font.DoLoadGlyph( string::utf8::to_utf8( l_tmp ) );
 					l_maxHeight = std::max< int >( l_maxHeight, l_glyph.GetSize().height() );
 					l_maxWidth = std::max< int >( l_maxWidth, l_glyph.GetAdvance() );

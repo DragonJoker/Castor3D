@@ -293,7 +293,7 @@ namespace Castor3D
 		 *\param[in]	p_boneData	Les données de bones.
 		 */
 		template< uint32_t Count >
-		inline void AddBoneDatas( stVERTEX_BONE_DATA const ( & p_boneData )[Count] )
+		inline void AddBoneDatas( stVERTEX_BONE_DATA const( & p_boneData )[Count] )
 		{
 			AddBoneDatas( p_boneData, p_boneData + Count );
 		}

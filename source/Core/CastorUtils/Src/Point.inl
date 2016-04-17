@@ -30,7 +30,7 @@ namespace Castor
 			if ( Index < Count )
 			{
 				p_result[Index] = T( p_current );
-				construct < T, Count, Index + 1, Values... >( p_result, p_values... );
+				construct < T, Count, Index + 1, Values... > ( p_result, p_values... );
 			}
 		}
 	}
@@ -402,10 +402,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Point< T, 3 > const & p_ptA, Point< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			);
+				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			   );
 	}
 	template <typename T, uint32_t Count, typename U>
 	inline Point< T, Count > operator+( Point< T, Count > const & p_pt, U const * p_coords )
@@ -479,10 +479,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Coords< T, 3 > const & p_ptA, Point< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			);
+				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			   );
 	}
 
 	template< typename T, uint32_t Count, typename U, uint32_t _Count >
@@ -526,10 +526,10 @@ namespace Castor
 	inline Point< T, 3 > operator^( Point< T, 3 > const & p_ptA, Coords< U, 3 > const & p_ptB )
 	{
 		return Point< T, 3 >(
-			( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
-			( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
-			( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
-			);
+				   ( p_ptA[1] * p_ptB[2] ) - ( p_ptA[2] * p_ptB[1] ),
+				   ( p_ptA[2] * p_ptB[0] ) - ( p_ptA[0] * p_ptB[2] ),
+				   ( p_ptA[0] * p_ptB[1] ) - ( p_ptA[1] * p_ptB[0] )
+			   );
 	}
 	template< typename T, uint32_t Count >
 	inline Point< T, Count > operator-( Point< T, Count > const & p_pt )

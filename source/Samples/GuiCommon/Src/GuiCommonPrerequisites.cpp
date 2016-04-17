@@ -36,7 +36,7 @@ namespace GuiCommon
 	namespace
 	{
 		struct wxWidgetsFontImpl
-				: public Castor::Font::SFontImpl
+			: public Castor::Font::SFontImpl
 		{
 			wxWidgetsFontImpl( wxFont const & p_font )
 				: m_font( p_font )

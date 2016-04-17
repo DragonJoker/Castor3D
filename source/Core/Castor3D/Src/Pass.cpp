@@ -321,7 +321,7 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME = 
+	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME =
 	{
 		{ eTEXTURE_CHANNEL_COLOUR, cuT( "Colour" ) },
 		{ eTEXTURE_CHANNEL_DIFFUSE, cuT( "Diffuse" ) },
@@ -527,8 +527,8 @@ namespace Castor3D
 	bool Pass::HasAlphaBlending()const
 	{
 		return m_pBlendState->IsBlendEnabled()
-			|| ( ( m_textureFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
-			|| m_fAlpha < 1.0f;
+			   || ( ( m_textureFlags & eTEXTURE_CHANNEL_OPACITY ) == eTEXTURE_CHANNEL_OPACITY )
+			   || m_fAlpha < 1.0f;
 	}
 
 	void Pass::Bind()

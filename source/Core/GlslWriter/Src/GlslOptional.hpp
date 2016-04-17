@@ -24,7 +24,7 @@ namespace GLSL
 {
 	template< typename TypeT >
 	struct Optional
-			: public TypeT
+		: public TypeT
 	{
 		Optional( GlslWriter * p_writer, Castor::String const & p_name, bool p_enabled );
 		Optional( TypeT const & p_other, bool p_enabled );
@@ -44,13 +44,13 @@ namespace GLSL
 
 	template< typename T >
 	struct is_optional
-			: public std::false_type
+		: public std::false_type
 	{
 	};
 
 	template< typename T >
 	struct is_optional< Optional< T > >
-			: public std::true_type
+		: public std::true_type
 	{
 	};
 }

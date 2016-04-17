@@ -99,7 +99,7 @@ namespace Castor3D
 	{
 		m_debugOverlays->Show( p_show );
 	}
-	
+
 	void RenderLoop::UpdateVSync( bool p_enable )
 	{
 	}

@@ -27,7 +27,7 @@ namespace GLSL
 	template< typename T > struct is_type : public std::false_type {};
 
 	struct Type
-			: public Expr
+		: public Expr
 	{
 		GlslWriter_API Type( Castor::String const & p_type );
 		GlslWriter_API Type( Castor::String const & p_type, GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

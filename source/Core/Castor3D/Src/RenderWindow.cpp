@@ -235,6 +235,7 @@ namespace Castor3D
 		}
 
 		m_context->EndCurrent();
+
 		if ( m_context != GetEngine()->GetRenderSystem()->GetMainContext() )
 		{
 			m_context->Cleanup();

@@ -145,7 +145,7 @@ namespace GlRender
 
 	//*************************************************************************************************
 
-	#define CASTOR_DBG_WIN32 0
+#define CASTOR_DBG_WIN32 0
 
 	OpenGl::OpenGl( GlRenderSystem & p_renderSystem )
 		: m_bHasAnisotropic( false )
@@ -445,25 +445,25 @@ namespace GlRender
 
 		Cleanup();
 
-	#if defined( _WIN32 )
+#if defined( _WIN32 )
 
 		m_pfnMakeCurrent = &wglMakeCurrent;
 		m_pfnSwapBuffers = &::SwapBuffers;
 		m_pfnCreateContext = &wglCreateContext;
 		m_pfnDeleteContext = &wglDeleteContext;
 
-	#elif defined( __linux__ )
+#elif defined( __linux__ )
 
 		m_pfnMakeCurrent = &glXMakeCurrent;
 		m_pfnSwapBuffers = &glXSwapBuffers;
 		m_pfnCreateContext = &glXCreateContext;
 		m_pfnDeleteContext = &glXDestroyContext;
 
-	#else
+#else
 
-	#	error "Yet unsupported OS"
+#	error "Yet unsupported OS"
 
-	#endif
+#endif
 	}
 
 	OpenGl::~OpenGl()
@@ -988,7 +988,7 @@ namespace GlRender
 		m_iVersion = 0;
 	}
 
-	#if !defined( NDEBUG )
+#if !defined( NDEBUG )
 
 	void OpenGl::Track( void * p_object, std::string const & p_name, std::string const & p_file, int p_line )const
 	{
@@ -1000,7 +1000,7 @@ namespace GlRender
 		m_renderSystem.Untrack( p_object );
 	}
 
-	#endif
+#endif
 
 	bool OpenGl::GlCheckError( std::string const & p_text )const
 	{

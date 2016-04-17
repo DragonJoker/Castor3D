@@ -1,7 +1,7 @@
 ﻿namespace Castor3D
 {
 	template<> struct MtxFrameVariableDefinitions< bool, 2, 2 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
@@ -9,7 +9,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 2, 3 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
@@ -17,7 +17,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 2, 4 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 2 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
@@ -25,7 +25,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 2, 2 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
@@ -33,7 +33,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 2, 3 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
@@ -41,7 +41,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 2, 4 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 2 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
@@ -49,7 +49,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 2, 2 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
@@ -57,7 +57,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 2, 3 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
@@ -65,7 +65,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 2, 4 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 2 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
@@ -73,7 +73,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 2, 2 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
@@ -81,7 +81,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 2, 3 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
@@ -89,7 +89,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 2, 4 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 2 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
@@ -97,7 +97,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 2, 2 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X2;
@@ -105,7 +105,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 2, 3 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X3;
@@ -113,7 +113,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 2, 4 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 2 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT2X4;
@@ -121,7 +121,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 3, 2 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
@@ -129,7 +129,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 3, 3 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
@@ -137,7 +137,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 3, 4 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 3 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
@@ -145,7 +145,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 3, 2 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
@@ -153,7 +153,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 3, 3 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
@@ -161,7 +161,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 3, 4 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 3 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
@@ -169,7 +169,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 3, 2 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
@@ -177,7 +177,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 3, 3 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
@@ -185,7 +185,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 3, 4 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 3 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
@@ -193,7 +193,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 3, 2 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
@@ -201,7 +201,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 3, 3 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
@@ -209,7 +209,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 3, 4 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 3 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
@@ -217,7 +217,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 3, 2 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X2;
@@ -225,7 +225,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 3, 3 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X3;
@@ -233,7 +233,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 3, 4 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 3 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT3X4;
@@ -241,7 +241,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 4, 2 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
@@ -249,7 +249,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 4, 3 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
@@ -257,7 +257,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< bool, 4, 4 >
-			: public FrameVariableDataTyper< bool >
+		: public FrameVariableDataTyper< bool >
 	{
 		static const uint32_t Size = uint32_t( sizeof( bool ) * 4 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
@@ -265,7 +265,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 4, 2 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
@@ -273,7 +273,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 4, 3 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
@@ -281,7 +281,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< int, 4, 4 >
-			: public FrameVariableDataTyper< int >
+		: public FrameVariableDataTyper< int >
 	{
 		static const uint32_t Size = uint32_t( sizeof( int ) * 4 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
@@ -289,7 +289,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 4, 2 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
@@ -297,7 +297,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 4, 3 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
@@ -305,7 +305,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< uint32_t, 4, 4 >
-			: public FrameVariableDataTyper< uint32_t >
+		: public FrameVariableDataTyper< uint32_t >
 	{
 		static const uint32_t Size = uint32_t( sizeof( uint32_t ) * 4 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
@@ -313,7 +313,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 4, 2 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
@@ -321,7 +321,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 4, 3 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
@@ -329,7 +329,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< float, 4, 4 >
-			: public FrameVariableDataTyper< float >
+		: public FrameVariableDataTyper< float >
 	{
 		static const uint32_t Size = uint32_t( sizeof( float ) * 4 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;
@@ -337,7 +337,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 4, 2 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 2 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X2;
@@ -345,7 +345,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 4, 3 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 3 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X3;
@@ -353,7 +353,7 @@
 		C3D_API static const xchar * FullTypeName;
 	};
 	template<> struct MtxFrameVariableDefinitions< double, 4, 4 >
-			: public FrameVariableDataTyper< double >
+		: public FrameVariableDataTyper< double >
 	{
 		static const uint32_t Size = uint32_t( sizeof( double ) * 4 * 4 );
 		static const eVARIABLE_TYPE Count = eVARIABLE_TYPE_MAT4X4;

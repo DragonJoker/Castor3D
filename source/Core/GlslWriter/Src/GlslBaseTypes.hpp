@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GLSL
 {
 	struct Int
-			: public Type
+		: public Type
 	{
 		inline Int();
 		inline Int( Int && p_value );
@@ -43,7 +43,7 @@ namespace GLSL
 	};
 
 	struct Float
-			: public Type
+		: public Type
 	{
 		inline Float();
 		inline Float( Float && p_value );

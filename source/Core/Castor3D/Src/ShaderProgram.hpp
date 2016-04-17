@@ -622,7 +622,7 @@ namespace Castor3D
 		 *\param[in]	p_bindUbo	Dit si les tampons de variables de frames doivent être liés.
 		 */
 		C3D_API void DoBind( bool p_bindUbo )const;
-		 /**
+		/**
 		 *\~english
 		 *\brief		Deactivates the program
 		 *\~french

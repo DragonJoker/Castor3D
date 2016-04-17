@@ -97,10 +97,8 @@ namespace Castor
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the 
 		 *\return		The glyph position relative to cursor.
 		 *\~french
-		 *\brief		Récupère la 
 		 *\return		La position de la glyphe par rapport au curseur.
 		 */
 		inline Position const & GetBearing()const

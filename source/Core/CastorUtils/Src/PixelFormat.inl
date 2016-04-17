@@ -19,17 +19,20 @@ namespace Castor
 		uint16_t h = *source;
 
 		if ( ( h & 0x7FFFu ) == 0 )
-		{  // Signed zero
+		{
+			// Signed zero
 			*xp = ( ( uint32_t )h ) << 16;  // Return the signed zero
 		}
 		else
-		{ // Not zero
+		{
+			// Not zero
 			uint16_t hs = h & 0x8000u;  // Pick off sign bit
 			uint16_t he = h & 0x7C00u;  // Pick off exponent bits
 			uint16_t hm = h & 0x03FFu;  // Pick off mantissa bits
 
 			if ( he == 0 )
-			{  // Denormal will convert to normalized
+			{
+				// Denormal will convert to normalized
 				int32_t e = -1; // The following loop figures out how much extra to adjust the exponent
 
 				do
@@ -46,9 +49,11 @@ namespace Castor
 				*xp = ( xs | xe | xm ); // Combine sign bit, exponent bits, and mantissa bits
 			}
 			else if ( he == 0x7C00u )
-			{  // Inf or NaN (all the exponent bits are set)
+			{
+				// Inf or NaN (all the exponent bits are set)
 				if ( hm == 0 )
-				{ // If mantissa is zero ...
+				{
+					// If mantissa is zero ...
 					*xp = ( ( ( uint32_t )hs ) << 16 ) | ( ( uint32_t )0x7F800000u ); // Signed Inf
 				}
 				else
@@ -57,7 +62,8 @@ namespace Castor
 				}
 			}
 			else
-			{ // Normalized number
+			{
+				// Normalized number
 				uint32_t xs = ( ( uint32_t )hs ) << 16; // Sign bit
 				int32_t xes = ( ( int32_t )( he >> 10 ) ) - 15 + 127; // Exponent unbias the halfp, then bias the single
 				uint32_t xe = ( uint32_t )( xes << 23 ); // Exponent
@@ -73,23 +79,28 @@ namespace Castor
 		uint32_t x = *reinterpret_cast< uint32_t * >( &source ); // Type pun input as an unsigned 32-bit int
 
 		if ( ( x & 0x7FFFFFFFu ) == 0 )
-		{  // Signed zero
+		{
+			// Signed zero
 			*hp = uint16_t( x >> 16 );  // Return the signed zero
 		}
 		else
-		{ // Not zero
+		{
+			// Not zero
 			uint32_t xs = x & 0x80000000u;  // Pick off sign bit
 			uint32_t xe = x & 0x7F800000u;  // Pick off exponent bits
 			uint32_t xm = x & 0x007FFFFFu;  // Pick off mantissa bits
 
 			if ( xe == 0 )
-			{  // Denormal will underflow, return a signed zero
+			{
+				// Denormal will underflow, return a signed zero
 				*hp = uint16_t( xs >> 16 );
 			}
 			else if ( xe == 0x7F800000u )
-			{  // Inf or NaN (all the exponent bits are set)
+			{
+				// Inf or NaN (all the exponent bits are set)
 				if ( xm == 0 )
-				{ // If mantissa is zero ...
+				{
+					// If mantissa is zero ...
 					*hp = uint16_t( ( xs >> 16 ) | 0x7C00u ); // Signed Inf
 				}
 				else
@@ -98,19 +109,23 @@ namespace Castor
 				}
 			}
 			else
-			{ // Normalized number
+			{
+				// Normalized number
 				uint16_t hs( xs >> 16 ); // Sign bit
 				int32_t hes( ( ( int )( xe >> 23 ) ) - 127 + 15 ); // Exponent unbias the single, then bias the halfp
 				uint16_t hm{};
 
 				if ( hes >= 0x1F )
-				{  // Overflow
+				{
+					// Overflow
 					*hp = uint16_t( ( xs >> 16 ) | 0x7C00u ); // Signed Inf
 				}
 				else if ( hes <= 0 )
-				{  // Underflow
+				{
+					// Underflow
 					if ( ( 14 - hes ) > 24 )
-					{  // Mantissa shifted all the way off & no rounding possibility
+					{
+						// Mantissa shifted all the way off & no rounding possibility
 						hm = 0u;  // Set mantissa to zero
 					}
 					else
@@ -123,6 +138,7 @@ namespace Castor
 							hm += ( uint16_t )1u; // Round, might overflow into exp bit, but this is OK
 						}
 					}
+
 					*hp = ( hs | hm ); // Combine sign bit and mantissa bits, biased exponent is zero
 				}
 				else

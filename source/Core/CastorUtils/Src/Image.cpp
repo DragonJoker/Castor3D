@@ -68,7 +68,7 @@ namespace Castor
 	{
 		FreeImage_DeInitialise();
 	}
-	
+
 	Image::BinaryLoader::BinaryLoader()
 		: Loader< Image, eFILE_TYPE_BINARY, BinaryFile >{ File::eOPEN_MODE_DUMMY }
 	{

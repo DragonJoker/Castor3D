@@ -37,7 +37,7 @@ namespace Castor
 		*/
 		template < typename char_type, char_type fill_char = ' ', typename traits = std::char_traits< char_type > >
 		struct basic_indent_buffer
-				: public std::basic_streambuf< char_type, traits >
+			: public std::basic_streambuf< char_type, traits >
 		{
 		public:
 			typedef typename traits::int_type int_type;

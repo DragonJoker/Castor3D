@@ -31,7 +31,7 @@ namespace Castor
 		}
 
 		struct ZipImpl
-				: public ZipArchive::ZipImpl
+			: public ZipArchive::ZipImpl
 		{
 			ZipImpl()
 				: m_zip( nullptr )

@@ -155,7 +155,7 @@ namespace Castor3D
 				}
 			}
 		}
-	
+
 		void DoSortBillboardRenderNodes( RenderTechnique const & p_technique, Scene & p_scene, RenderTechnique::stRENDER_NODES< BillboardRenderNodesByProgramMap, BillboardRenderNode > & p_nodes )
 		{
 			p_nodes.m_renderNodes.clear();

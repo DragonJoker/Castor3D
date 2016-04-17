@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GLSL
 {
 	struct Void
-			: public Type
+		: public Type
 	{
 		inline Void();
 		inline Void( GlslWriter * p_writer );

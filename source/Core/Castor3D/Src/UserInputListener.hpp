@@ -280,7 +280,7 @@ namespace Castor3D
 
 		/**@name General */
 		//@{
-		
+
 		/**
 		 *copydoc		Castor3D::UserInputListener::Initialise
 		 */
@@ -291,7 +291,7 @@ namespace Castor3D
 		C3D_API virtual void DoCleanup() = 0;
 
 		//@}
-		
+
 	protected:
 		//!\~english  The mutex used to protect the handlers array.	\~french Le mutex de protection du tableau de gestionnaires.
 		mutable std::mutex m_mutexHandlers;

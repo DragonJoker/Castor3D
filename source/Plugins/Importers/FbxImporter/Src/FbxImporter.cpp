@@ -79,7 +79,7 @@ namespace C3dFbx
 			Logger::LogDebug( StringStream() << "Autodesk FBX SDK version " << p_fbxManager->GetVersion() << std::endl );
 
 			//Create an IOSettings object. This object holds all import/export settings.
-			FbxIOSettings* ios = FbxIOSettings::Create( p_fbxManager, IOSROOT );
+			FbxIOSettings * ios = FbxIOSettings::Create( p_fbxManager, IOSROOT );
 			p_fbxManager->SetIOSettings( ios );
 
 			//Load plug-ins from the executable directory (optional)
@@ -153,22 +153,22 @@ namespace C3dFbx
 
 				for ( int i = 0; i < lAnimStackCount; i++ )
 				{
-					FbxTakeInfo* lTakeInfo = l_fbxImporter->GetTakeInfo( i );
+					FbxTakeInfo * lTakeInfo = l_fbxImporter->GetTakeInfo( i );
 
 					Logger::LogDebug( std::stringstream() << "    Animation Stack " << i );
 					Logger::LogDebug( std::stringstream() << "         Name: \"" << lTakeInfo->mName.Buffer() << "\"" );
 					Logger::LogDebug( std::stringstream() << "         Description: \"" << lTakeInfo->mDescription.Buffer() << "\"" );
 
-					// Change the value of the import name if the animation stack should be imported 
+					// Change the value of the import name if the animation stack should be imported
 					// under a different name.
 					Logger::LogDebug( std::stringstream() << "         Import Name: \"" << lTakeInfo->mImportName.Buffer() << "\"" );
 
 					// Set the value of the import state to false if the animation stack should be not
-					// be imported. 
+					// be imported.
 					Logger::LogDebug( std::stringstream() << "         Import State: " << ( lTakeInfo->mSelect ? "true" : "false" ) << "\n" );
 				}
 
-				// Set the import states. By default, the import states are always set to 
+				// Set the import states. By default, the import states are always set to
 				// true. The code below shows how to change these states.
 				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_MATERIAL, true );
 				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_TEXTURE, true );
@@ -189,10 +189,10 @@ namespace C3dFbx
 				std::string l_password;
 
 				FBXSDK_CRT_SECURE_NO_WARNING_BEGIN
-					std::cin >> l_password;
+				std::cin >> l_password;
 				FBXSDK_CRT_SECURE_NO_WARNING_END
 
-					FbxString l_string( l_password.c_str() );
+				FbxString l_string( l_password.c_str() );
 
 				p_fbxManager->GetIOSettings()->SetStringProp( IMP_FBX_PASSWORD, l_string );
 				p_fbxManager->GetIOSettings()->SetBoolProp( IMP_FBX_PASSWORD_ENABLE, true );
@@ -257,7 +257,7 @@ namespace C3dFbx
 			{
 				uint32_t l_count = p_fbxValues->GetDirectArray().GetCount();
 				bool l_useIndex = p_fbxValues->GetReferenceMode() == FbxLayerElement::eIndexToDirect
-					|| p_fbxValues->GetReferenceMode() == FbxLayerElement::eIndex;
+								  || p_fbxValues->GetReferenceMode() == FbxLayerElement::eIndex;
 
 				switch ( p_fbxValues->GetMappingMode() )
 				{
@@ -439,7 +439,7 @@ namespace C3dFbx
 				{
 					FbxGeometryConverter l_converter( l_fbxManager );
 					l_converter.SplitMeshesPerMaterial( l_fbxScene, true );
-					
+
 					if ( l_converter.Triangulate( l_fbxScene, true ) )
 					{
 						DoLoadMaterials( p_scene, l_fbxScene );
@@ -579,14 +579,14 @@ namespace C3dFbx
 						FbxTime l_time;
 						l_time.SetFrame( i, FbxTime::eFrames24 );
 						Point3r l_translate = l_geoTranslate
-							+ Point3r{ ( p_node->EvaluateLocalTranslation( l_time ) ).Buffer() }
-							+ Point3r{ ( l_link->EvaluateLocalTranslation( l_time ) ).Buffer() };
+											  + Point3r{ ( p_node->EvaluateLocalTranslation( l_time ) ).Buffer() }
+											  + Point3r{ ( l_link->EvaluateLocalTranslation( l_time ) ).Buffer() };
 						Quaternion l_rotate = l_geoRotate
-							* Quaternion{ ( p_node->EvaluateLocalRotation( l_time ) ).Buffer() }
-							* Quaternion{ ( l_link->EvaluateLocalRotation( l_time ) ).Buffer() };
+											  * Quaternion{ ( p_node->EvaluateLocalRotation( l_time ) ).Buffer() }
+											  * Quaternion{ ( l_link->EvaluateLocalRotation( l_time ) ).Buffer() };
 						Point3r l_scale = l_geoScale
-							* Point3r{ ( p_node->EvaluateLocalScaling( l_time ) ).Buffer() }
-							* Point3r{ ( l_link->EvaluateLocalScaling( l_time ) ).Buffer() };
+										  * Point3r{ ( p_node->EvaluateLocalScaling( l_time ) ).Buffer() }
+										  * Point3r{ ( l_link->EvaluateLocalScaling( l_time ) ).Buffer() };
 						l_object->AddKeyFrame( real( l_from ), l_translate, l_rotate, l_scale );
 						l_from += l_inc;
 					}
@@ -825,7 +825,7 @@ namespace C3dFbx
 		return nullptr;
 	}
 
-	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME = 
+	std::map< eTEXTURE_CHANNEL, String > TEXTURE_CHANNEL_NAME =
 	{
 		{ eTEXTURE_CHANNEL_COLOUR, cuT( "Colour" ) },
 		{ eTEXTURE_CHANNEL_DIFFUSE, cuT( "Diffuse" ) },

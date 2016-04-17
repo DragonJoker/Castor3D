@@ -34,7 +34,7 @@ namespace Castor
 	\brief Enumération des composantes de Pixel
 	*/
 	typedef enum ePIXEL_COMPONENT
-	: uint8_t
+		: uint8_t
 	{
 		//!\~english Red	\~french Rouge
 		ePIXEL_COMPONENT_RED,

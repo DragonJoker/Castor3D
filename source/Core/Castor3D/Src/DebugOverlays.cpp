@@ -60,16 +60,16 @@ namespace Castor3D
 		m_externTime = GetTextOverlay( p_manager, cuT( "DebugPanel-ExternalTime-Value" ) );
 
 		m_valid = m_debugCpuTime
-			&& m_debugGpuClientTime
-			&& m_debugGpuServerTime
-			&& m_debugTotalTime
-			&& m_debugAverageFps
-			&& m_debugAverageTime
-			&& m_debugVertexCount
-			&& m_debugFaceCount
-			&& m_debugObjectCount
-			&& m_debugTime
-			&& m_externTime;
+				  && m_debugGpuClientTime
+				  && m_debugGpuServerTime
+				  && m_debugTotalTime
+				  && m_debugAverageFps
+				  && m_debugAverageTime
+				  && m_debugVertexCount
+				  && m_debugFaceCount
+				  && m_debugObjectCount
+				  && m_debugTime
+				  && m_externTime;
 
 		if ( l_panel )
 		{

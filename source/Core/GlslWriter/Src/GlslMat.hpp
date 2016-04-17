@@ -23,7 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 namespace GLSL
 {
 	struct Mat3
-			: public Type
+		: public Type
 	{
 		inline Mat3();
 		inline Mat3( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
@@ -33,7 +33,7 @@ namespace GLSL
 	};
 
 	struct Mat4
-			: public Type
+		: public Type
 	{
 		inline Mat4();
 		inline Mat4( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );

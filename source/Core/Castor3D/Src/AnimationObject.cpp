@@ -168,7 +168,7 @@ namespace Castor3D
 		m_children.push_back( p_object );
 	}
 
-	void AnimationObject::Update( real p_time,Matrix4x4r const & p_transformations )
+	void AnimationObject::Update( real p_time, Matrix4x4r const & p_transformations )
 	{
 		if ( HasKeyFrames() )
 		{

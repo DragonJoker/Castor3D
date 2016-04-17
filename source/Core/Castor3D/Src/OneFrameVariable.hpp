@@ -200,7 +200,7 @@ namespace Castor3D
 		 *\param[in]	p_values	Les valeurs.
 		 */
 		template< size_t N >
-		inline void SetValues( T const ( & p_values )[N] )
+		inline void SetValues( T const( & p_values )[N] )
 		{
 			SetValues( p_values, N );
 		}

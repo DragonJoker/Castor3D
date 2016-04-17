@@ -39,7 +39,7 @@ struct TinyObj
 /** Petit objet, dérivant de TinyObj et contenant en plus un double, et un float
 */
 struct SmallObj
-		: public TinyObj
+	: public TinyObj
 {
 	double valueB;
 	float valueC;
@@ -48,7 +48,7 @@ struct SmallObj
 /** Objet, dérivant de SmallObj et contenant en plus un double, un float, et un tableau de 1 KO
 */
 struct Obj
-		: public SmallObj
+	: public SmallObj
 {
 	double valueD;
 	float valueE;
@@ -58,7 +58,7 @@ struct Obj
 /** Gros objet, dérivant de Obj et contenant en plus un tableau de 1 MO
 */
 struct BigObj
-		: public Obj
+	: public Obj
 {
 	uint8_t valueG[1024 * 1024];
 
@@ -266,7 +266,7 @@ namespace AllocPolicies
 		template< typename type, typename ... Params >
 		static inline type * Allocate( void * mem, Params ... params )
 		{
-			return new ( mem ) type( params... );
+			return new( mem ) type( params... );
 		}
 
 		/** Désalloue un objet

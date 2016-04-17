@@ -81,7 +81,7 @@ namespace C3dFbx
 		virtual Castor3D::MeshSPtr DoImportMesh( Castor3D::Scene & p_scene );
 
 		void DoLoadMeshes( Castor3D::Scene & p_scene, FbxNode * p_node );
-		void DoLoadSkeleton( FbxNode* p_fbxScene );
+		void DoLoadSkeleton( FbxNode * p_fbxScene );
 		void DoLoadMaterials( Castor3D::Scene & p_scene, FbxScene * p_fbxScene );
 		void DoLoadAnimations( FbxScene * p_fbxScene );
 		void DoProcessBones( FbxNode * p_node, Castor3D::Skeleton & p_skeleton, Castor3D::BoneSPtr p_parent );

@@ -66,7 +66,7 @@ namespace Castor3D
 				LOCALE_ASSIGN( l_writer, Vec3, l_hdrColor, texture2D( c3d_mapDiffuse, vtx_texture ).RGB );
 				// Exposure tone mapping
 				LOCALE_ASSIGN( l_writer, Vec3, l_mapped, vec3( Float( 1.0f ) ) - exp( -l_hdrColor * c3d_exposure ) );
-				// Gamma correction 
+				// Gamma correction
 				l_mapped = pow( l_mapped, vec3( 1.0f / c3d_gamma ) );
 				plx_v4FragColor = vec4( l_mapped, 1.0 );
 			} );
