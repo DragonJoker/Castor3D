@@ -158,12 +158,12 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the text font
-		 *\param[in]	p_strFont	The new value
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit la police du texte
-		 *\param[in]	p_strFont	La nouvelle valeur
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		C3D_API void SetFont( Castor::String const & p_strFont );
+		C3D_API void SetFont( Castor::String const & p_value );
 		/**
 		 *\~english
 		 *\brief		Retrieves the font name.
@@ -223,50 +223,58 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Sets the overlay text
-		 *\param[in]	p_caption	The new value
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	p_caption	La nouvelle valeur
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetCaption( Castor::String const & p_caption )
+		inline void SetCaption( Castor::String const & p_value )
 		{
-			m_currentCaption = p_caption;
+			m_currentCaption = p_value;
 			m_textChanged = true;
 		}
 		/**
 		 *\~english
 		 *\brief		Sets the overlay text
-		 *\param[in]	p_caption	The new value
+		 *\param[in]	p_value	The new value
 		 *\~french
 		 *\brief		Définit le texte de l'incrustation
-		 *\param[in]	p_caption	La nouvelle valeur
+		 *\param[in]	p_value	La nouvelle valeur
 		 */
-		inline void SetCaption( Castor::OutputStream const & p_caption )
+		inline void SetCaption( Castor::OutputStream const & p_value )
 		{
 			Castor::StringStream l_ss;
-			l_ss << p_caption.rdbuf();
+			l_ss << p_value.rdbuf();
 			SetCaption( l_ss.str() );
 		}
 		/**
 		 *\~english
-		 *\brief		Sets text wrapping mode
-		 *\param[in]	p_mode	The new value
+		 *\return		The text wrapping mode.
 		 *\~french
-		 *\brief		Définit le mode de découpe du texte
-		 *\param[in]	p_mode	La nouvelle valeur
-		 */
-		inline void SetTextWrappingMode( eTEXT_WRAPPING_MODE p_mode )
+		 *\return		Le mode de découpe du texte.
+		*/
+		inline eTEXT_WRAPPING_MODE GetTextWrappingMode()const
 		{
-			m_textChanged |= m_wrappingMode != p_mode;
-			m_wrappingMode = p_mode;
+			return m_wrappingMode;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the horizontal alignment
-		 *\return		The value
+		 *\brief		Sets text wrapping mode
+		 *\param[in]	p_value	The new value
 		 *\~french
-		 *\brief		Récupère l'alignement horizontal
-		 *\return		La valeur
+		 *\brief		Définit le mode de découpe du texte
+		 *\param[in]	p_value	La nouvelle valeur
+		 */
+		inline void SetTextWrappingMode( eTEXT_WRAPPING_MODE p_value )
+		{
+			m_textChanged |= m_wrappingMode != p_value;
+			m_wrappingMode = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The horizontal alignment.
+		 *\~french
+		 *\return		L'alignement horizontal.
 		*/
 		inline eHALIGN GetHAlign()const
 		{
@@ -274,11 +282,22 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the vertical alignment
-		 *\return		The value
+		 *\brief		Defines the horizontal alignment
+		 *\param[in]	p_value	The new value
 		 *\~french
-		 *\brief		Récupère l'alignement vertical
-		 *\return		La valeur
+		 *\brief		Définit l'alignement horizontal
+		 *\param[in]	p_value	La nouvelle valeur
+		*/
+		inline void SetHAlign( eHALIGN p_value )
+		{
+			m_textChanged |= m_hAlign != p_value;
+			m_hAlign = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The vertical alignment.
+		 *\~french
+		 *\return		L'alignement vertical.
 		*/
 		inline eVALIGN GetVAlign()const
 		{
@@ -286,42 +305,62 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the horizontal alignment
-		 *\param[in]	p_align	The new value
+		 *\brief		Defines the vertical alignment
+		 *\param[in]	p_value	The new value
 		 *\~french
-		 *\brief		Définit l'alignement horizontal
-		 *\param[in]	p_align	La nouvelle valeur
+		 *\brief		Définit l'alignement vertical
+		 *\param[in]	p_value	La nouvelle valeur
 		*/
-		inline void SetHAlign( eHALIGN p_align )
+		inline void SetVAlign( eVALIGN p_value )
 		{
-			m_textChanged |= m_hAlign != p_align;
-			m_hAlign = p_align;
+			m_textChanged |= m_vAlign != p_value;
+			m_vAlign = p_value;
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the vertical alignment
-		 *\param[in]	p_align	The new value
+		 *\return		The text texture mapping mode.
 		 *\~french
-		 *\brief		Définit l'alignement vertical
-		 *\param[in]	p_align	La nouvelle valeur
+		 *\return		Le mode de mappage de texture du texte.
 		*/
-		inline void SetVAlign( eVALIGN p_align )
+		inline eTEXT_TEXTURING_MODE GetTexturingMode()const
 		{
-			m_textChanged |= m_vAlign != p_align;
-			m_vAlign = p_align;
+			return m_texturingMode;
 		}
 		/**
 		 *\~english
 		 *\brief		Defines the text texture mapping mode.
-		 *\param[in]	p_mode	The new value.
+		 *\param[in]	p_value	The new value.
 		 *\~french
 		 *\brief		Définit le mode de mappage de texture du texte.
-		 *\param[in]	p_mode	La nouvelle valeur.
+		 *\param[in]	p_value	La nouvelle valeur.
 		*/
-		inline void SetTexturingMode( eTEXT_TEXTURING_MODE p_mode )
+		inline void SetTexturingMode( eTEXT_TEXTURING_MODE p_value )
 		{
-			m_textChanged |= m_texturingMode != p_mode;
-			m_texturingMode = p_mode;
+			m_textChanged |= m_texturingMode != p_value;
+			m_texturingMode = p_value;
+		}
+		/**
+		 *\~english
+		 *\return		The lines spacing mode.
+		 *\~french
+		 *\return		Le mode d'espacement des lignes.
+		*/
+		inline eTEXT_LINE_SPACING_MODE GetLineSpacingMode()const
+		{
+			return m_lineSpacingMode;
+		}
+		/**
+		 *\~english
+		 *\brief		Defines the lines spacing mode.
+		 *\param[in]	p_value	The new value.
+		 *\~french
+		 *\brief		Définit le mode d'espacement des lignes.
+		 *\param[in]	p_value	La nouvelle valeur.
+		*/
+		inline void SetLineSpacingMode( eTEXT_LINE_SPACING_MODE p_value )
+		{
+			m_textChanged |= m_lineSpacingMode != p_value;
+			m_lineSpacingMode = p_value;
 		}
 
 	private:
@@ -335,12 +374,51 @@ namespace Castor3D
 		*/
 		struct DisplayableChar
 		{
-			//!\~english The character to display	\~french Le caractère à afficher.
-			Castor::Glyph * m_glyph;
 			//!\~english The character position, relative to its line.	\~french La position du caractère, relative à sa ligne.
-			double m_left;
+			Castor::Point2d m_position;
 			//!\~english The character dimensions.	\~french Les dimensions du caractère.
 			Castor::Point2d m_size;
+			//!\~english The character to display	\~french Le caractère à afficher.
+			Castor::Glyph const & m_glyph;
+
+			DisplayableChar( Castor::Point2d const & p_position, Castor::Point2d const & p_size, Castor::Glyph const & p_glyph )
+				: m_position{ p_position }
+				, m_size{ p_size }
+				, m_glyph{ p_glyph }
+			{
+			}
+
+			DisplayableChar( DisplayableChar const & p_rhs )
+				: m_position{ p_rhs.m_position }
+				, m_size{ p_rhs.m_size }
+				, m_glyph{ p_rhs.m_glyph }
+			{
+			}
+
+			DisplayableChar( DisplayableChar && p_rhs )
+				: m_position{ std::move( p_rhs.m_position ) }
+				, m_size{ std::move( p_rhs.m_size ) }
+				, m_glyph{ p_rhs.m_glyph }
+			{
+			}
+
+			DisplayableChar & operator=( DisplayableChar const & p_rhs )
+			{
+				m_position = p_rhs.m_position;
+				m_size = p_rhs.m_size;
+				return *this;
+			}
+
+			DisplayableChar & operator=( DisplayableChar && p_rhs )
+			{
+				if ( &p_rhs != this )
+				{
+					m_position = std::move( p_rhs.m_position );
+					m_size = std::move( p_rhs.m_size );
+				}
+
+				return *this;
+			}
 		};
 		/*!
 		\author 	Sylvain DOREMUS
@@ -352,12 +430,14 @@ namespace Castor3D
 		*/
 		struct DisplayableLine
 		{
-			//!\~english The displayable characters.	\~french Les caractères affichables.
-			std::vector< DisplayableChar > m_characters;
 			//!\~english The line position.	\~french La position de la ligne.
 			Castor::Point2d m_position;
 			//!\~english The line width.	\~french La largeur de la ligne.
 			double m_width;
+			//!\~english The line height.	\~french La hauteur de la ligne.
+			double m_height;
+			//!\~english The displayable characters.	\~french Les caractères affichables.
+			std::vector< DisplayableChar > m_characters;
 		};
 		using DisplayableLineArray = std::vector< DisplayableLine >;
 		using TextureCoordinates = std::array< float, 2 >;
@@ -439,43 +519,41 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Fills the line, and jumps to the next one.
 		 *\param[in]	p_size	The overlay size.
+		 *\param[in]	p_line	The line.
 		 *\param[out]	p_left	The left position.
-		 *\param[out]	p_line	The line.
 		 *\param[out]	p_lines	The lines.
 		 *\~french
 		 *\brief		Finit la ligne et passe à la ligne suivante.
 		 *\param[in]	p_size	La taille de l'incrustation.
+		 *\param[in]	p_line	La ligne.
 		 *\param[out]	p_left	La position à gauche.
-		 *\param[out]	p_line	La ligne.
 		 *\param[out]	p_lines	Les lignes.
 		 */
-		C3D_API void DoFinishLine( Castor::Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines );
+		C3D_API DisplayableLine DoFinishLine( Castor::Point2d const & p_size, DisplayableLine p_line, double & p_left, DisplayableLineArray & p_lines );
 		/**
 		 *\~english
 		 *\brief		Horizontally align a line.
-		 *\param[in]	p_width		The overlay width.
-		 *\param[out]	p_lineVtx	The line.
-		 *\param[out]	p_linesVtx	The lines.
+		 *\param[in]	p_width	The overlay width.
+		 *\param[in]	p_line	The line.
+		 *\param[out]	p_lines	The lines.
 		 *\~french
 		 *\brief		Aligne horizontalement une ligne.
-		 *\param[in]	p_width		La largeur de l'incrustation.
-		 *\param[out]	p_lineVtx	La ligne.
-		 *\param[out]	p_linesVtx	Les lignes.
+		 *\param[in]	p_width	La largeur de l'incrustation.
+		 *\param[in]	p_line	La ligne.
+		 *\param[out]	p_lines	Les lignes.
 		 */
-		C3D_API void DoAlignHorizontally( double p_width, DisplayableLine & p_line, DisplayableLineArray & p_lines );
+		C3D_API void DoAlignHorizontally( double p_width, DisplayableLine p_line, DisplayableLineArray & p_lines );
 		/**
 		 *\~english
-		 *\brief		Vertically align text
-		 *\param[in]	p_height		The overlay width
-		 *\param[out]	p_linesHeight	The lines height
-		 *\param[out]	p_lines			The lines
+		 *\brief		Vertically align text.
+		 *\param[in]	p_height	The overlay height.
+		 *\param[out]	p_lines		The lines.
 		 *\~french
 		 *\brief		Aligne verticalement un texte.
-		 *\param[in]	p_height		La hauteur de l'incrustation.
-		 *\param[out]	p_linesHeight	La hauteur des lignes.
-		 *\param[out]	p_lines			Les lignes.
+		 *\param[in]	p_height	La hauteur de l'incrustation.
+		 *\param[out]	p_lines		Les lignes.
 		 */
-		C3D_API void DoAlignVertically( double p_height, double p_linesHeight, DisplayableLineArray & p_lines );
+		C3D_API void DoAlignVertically( double p_height, DisplayableLineArray & p_lines );
 
 	protected:
 		//!\~english The vertex buffer data	\~french Les données du tampon de sommets
@@ -488,6 +566,8 @@ namespace Castor3D
 		FontTextureWPtr m_fontTexture;
 		//!\~english The wrapping mode	\~french Le mode de découpe du texte
 		eTEXT_WRAPPING_MODE m_wrappingMode{ eTEXT_WRAPPING_MODE_NONE };
+		//!\~english The lines spacing mode.	\~french Le mode d'espacement des lignes.
+		eTEXT_LINE_SPACING_MODE m_lineSpacingMode{ eTEXT_LINE_SPACING_MODE_OWN_HEIGHT };
 		//!\~english The horizontal alignment.	\~french L'alignement horizontal du texte.
 		eHALIGN m_hAlign{ eHALIGN_LEFT };
 		//!\~english The vertical alignment.	\~french L'alignement vertical du texte.

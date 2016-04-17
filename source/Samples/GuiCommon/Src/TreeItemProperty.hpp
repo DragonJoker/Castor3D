@@ -25,6 +25,38 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 namespace GuiCommon
 {
+	/**
+	 *\~english
+	 *\brief		Builds a wxArrayString from a an array of wxString.
+	 *\param[in]	p_values	The array.
+	 *\return		The wxArrayString.
+	 *\~french
+	 *\brief		Construit un wxArrayString à partir d'un array de wxString.
+	*\param[in]		p_values	L'array.
+	 *\return		Le wxArrayString.
+	 */
+	template< size_t Count >
+	wxArrayString make_wxArrayString( std::array< wxString, Count > p_values )
+	{
+		return wxArrayString{ Count, p_values.data() };
+	}
+	/**
+	 *\~english
+	 *\brief		Builds a make_wxArrayInt from a an array of int.
+	 *\param[in]	p_values	The array.
+	 *\return		The make_wxArrayInt.
+	 *\~french
+	 *\brief		Construit un make_wxArrayInt à partir d'un array d'int.
+	*\param[in]		p_values	L'array.
+	 *\return		Le make_wxArrayInt.
+	 */
+	template< size_t Count >
+	wxArrayInt make_wxArrayInt( std::array< int, Count > p_values )
+	{
+		wxArrayInt l_return{ Count };
+		std::memcpy( &l_return[0], p_values.data(), Count * sizeof( int ) );
+		return l_return;
+	}
 	/*!
 	\author 	Sylvain DOREMUS
 	\date 		24/08/2015
@@ -90,7 +122,7 @@ namespace GuiCommon
 		/**
 		 *\~english
 		 *\brief		Displays the wxTree item menu, at given coordinates
-		 *\param[in]	p_window	The wxWindow thqt displays the menu
+		 *\param[in]	p_window	The wxWindow that displays the menu
 		 *\param[in]	x, y		The coordinates
 		 *\~french
 		 *\brief		Affiche le menu de l'objet du wxTree, aux coordonnées données
