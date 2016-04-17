@@ -260,6 +260,28 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
+		 *\return		The user input listener.
+		 *\~french
+		 *\return		Le listener d'entrées utilisateur.
+		 */
+		inline UserInputListenerSPtr GetUserInputListener()
+		{
+			return m_userInputListener;
+		}
+		/**
+		 *\~english
+		 *\brief		Sets the user input listener.
+		 *\param[in]	p_listener	The new value.
+		 *\~french
+		 *\brief		Définit le listener d'entrées utilisateur.
+		 *\param[in]	p_listener	La nouvelle valeur.
+		 */
+		inline void SetUserInputListener( UserInputListenerSPtr p_listener )
+		{
+			m_userInputListener = p_listener;
+		}
+		/**
+		 *\~english
 		 *\brief		Retrieves the RenderSystem
 		 *\return		The RenderSystem
 		 *\~french
@@ -457,6 +479,8 @@ namespace Castor3D
 		Castor::FontManager m_fontManager;
 		//!\~english The images collection	\~french La collection d'images
 		Castor::ImageManager m_imageManager;
+		//!\~english The user input listener.	\~french La listener d'entrées utilisateur.
+		UserInputListenerSPtr m_userInputListener;
 		//!\~english The map holding the parsers, sorted by section, and plug-in name	\~french La map de parseurs, triés par section, et nom de plug-in
 		std::map< Castor::String, Castor::FileParser::AttributeParsersBySection > m_additionalParsers;
 		//!\~english The map holding the sections, sorted plug-in name.	\~french La map de sections, triées par nom de plug-in.

@@ -15,14 +15,11 @@
 #include <RenderWindow.hpp>
 #include <Scene.hpp>
 #include <SceneNodeManager.hpp>
+#include <UserInputListener.hpp>
 #include <WindowHandle.hpp>
 
 #include <Math.hpp>
 #include <Utils.hpp>
-
-#if HAS_CASTORGUI
-#	include <ControlsManager.hpp>
-#endif
 
 #define ID_NEW_WINDOW 10000
 
@@ -38,13 +35,11 @@ namespace CastorViewer
 		static const real CAM_SPEED_INC = 0.9_r;
 	}
 
-#if HAS_CASTORGUI
-
 	namespace
 	{
-		CastorGui::eKEYBOARD_KEY ConvertKeyCode( int p_code )
+		eKEYBOARD_KEY ConvertKeyCode( int p_code )
 		{
-			CastorGui::eKEYBOARD_KEY l_return = CastorGui::eKEYBOARD_KEY_NONE;
+			eKEYBOARD_KEY l_return = eKEYBOARD_KEY_NONE;
 
 			if ( p_code < 0x20 )
 			{
@@ -54,29 +49,27 @@ namespace CastorViewer
 				case WXK_TAB:
 				case WXK_RETURN:
 				case WXK_ESCAPE:
-					l_return = CastorGui::eKEYBOARD_KEY( p_code );
+					l_return = eKEYBOARD_KEY( p_code );
 					break;
 				}
 			}
 			else if ( p_code == 0x7F )
 			{
-				l_return = CastorGui::eKEY_DELETE;
+				l_return = eKEY_DELETE;
 			}
 			else if ( p_code > 0xFF )
 			{
-				l_return = CastorGui::eKEYBOARD_KEY( p_code + CastorGui::eKEY_START - WXK_START );
+				l_return = eKEYBOARD_KEY( p_code + eKEY_START - WXK_START );
 			}
 			else
 			{
 				// ASCII or extended ASCII character
-				l_return = CastorGui::eKEYBOARD_KEY( p_code );
+				l_return = eKEYBOARD_KEY( p_code );
 			}
 
 			return l_return;
 		}
 	}
-
-#endif
 
 	RenderPanel::RenderPanel( wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 		: wxPanel( parent, p_id, pos, size, style )
@@ -90,12 +83,6 @@ namespace CastorViewer
 		, m_oldY( 0.0_r )
 		, m_eCameraMode( eCAMERA_MODE_FIXED )
 		, m_rFpCamSpeed( MAX_CAM_SPEED )
-
-#if HAS_CASTORGUI
-
-		, m_controlsManager( nullptr )
-
-#endif
 	{
 		for ( int i = 0; i < eTIMER_ID_COUNT; i++ )
 		{
@@ -171,12 +158,6 @@ namespace CastorViewer
 					m_pRenderWindow = p_window;
 					m_pKeyboardEvent = std::make_shared< KeyboardEvent >( p_window );
 				}
-
-#if HAS_CASTORGUI
-
-				m_controlsManager = std::static_pointer_cast< CastorGui::ControlsManager >( p_window->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-
-#endif
 			}
 		}
 	}
@@ -428,11 +409,9 @@ namespace CastorViewer
 
 	void RenderPanel::OnKeyDown( wxKeyEvent & p_event )
 	{
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireKeyDown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireKeyDown( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
@@ -475,11 +454,9 @@ namespace CastorViewer
 
 	void RenderPanel::OnKeyUp( wxKeyEvent & p_event )
 	{
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireKeyUp( ConvertKeyCode( p_event.GetKeyCode() ), p_event.ControlDown(), p_event.AltDown(), p_event.ShiftDown() ) )
 		{
 			switch ( p_event.GetKeyCode() )
 			{
@@ -530,17 +507,15 @@ namespace CastorViewer
 
 	void RenderPanel::OnChar( wxKeyEvent & p_event )
 	{
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( m_controlsManager )
+		if ( l_inputListener )
 		{
 			wxChar l_key = p_event.GetUnicodeKey();
 			wxString l_tmp;
 			l_tmp << l_key;
-			m_controlsManager->FireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( l_tmp.mb_str( wxConvUTF8 ) ) );
+			l_inputListener->FireChar( ConvertKeyCode( p_event.GetKeyCode() ), String( l_tmp.mb_str( wxConvUTF8 ) ) );
 		}
-
-#endif
 
 		p_event.Skip();
 	}
@@ -561,11 +536,9 @@ namespace CastorViewer
 		m_oldX = DoTransformX( p_event.GetX() );
 		m_oldY = DoTransformY( p_event.GetY() );
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( eMOUSE_BUTTON_LEFT ) )
 		{
 			SetCursor( *m_pCursorNone );
 		}
@@ -577,11 +550,9 @@ namespace CastorViewer
 	{
 		m_mouseLeftDown = false;
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( eMOUSE_BUTTON_LEFT ) )
 		{
 			SetCursor( *m_pCursorArrow );
 		}
@@ -595,12 +566,9 @@ namespace CastorViewer
 		m_oldX = DoTransformX( p_event.GetX() );
 		m_oldY = DoTransformY( p_event.GetY() );
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
-
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( eMOUSE_BUTTON_MIDDLE ) )
 		{
 		}
 
@@ -611,11 +579,9 @@ namespace CastorViewer
 	{
 		m_mouseMiddleDown = false;
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( eMOUSE_BUTTON_MIDDLE ) )
 		{
 		}
 
@@ -628,11 +594,9 @@ namespace CastorViewer
 		m_oldX = DoTransformX( p_event.GetX() );
 		m_oldY = DoTransformY( p_event.GetY() );
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonPushed( eMOUSE_BUTTON_RIGHT ) )
 		{
 			SetCursor( *m_pCursorNone );
 		}
@@ -644,11 +608,9 @@ namespace CastorViewer
 	{
 		m_mouseRightDown = false;
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireMouseButtonReleased( eMOUSE_BUTTON_RIGHT ) )
 		{
 			SetCursor( *m_pCursorArrow );
 		}
@@ -661,15 +623,13 @@ namespace CastorViewer
 		m_x = DoTransformX( p_event.GetX() );
 		m_y = DoTransformY( p_event.GetY() );
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( m_controlsManager && m_controlsManager->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
+		if ( !l_inputListener || !l_inputListener->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
 			p_event.Skip();
 		}
 		else
-
-#endif
 		{
 			RenderWindowSPtr l_pWindow = m_pRenderWindow.lock();
 
@@ -719,11 +679,9 @@ namespace CastorViewer
 	{
 		int l_wheelRotation = p_event.GetWheelRotation();
 
-#if HAS_CASTORGUI
+		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !m_controlsManager || !m_controlsManager->FireMouseWheel( Position( 0, l_wheelRotation ) ) )
-
-#endif
+		if ( !l_inputListener || !l_inputListener->FireMouseWheel( Position( 0, l_wheelRotation ) ) )
 		{
 			if ( l_wheelRotation < 0 )
 			{

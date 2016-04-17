@@ -57,6 +57,7 @@ namespace Castor3D
 #include "Castor3DPrerequisites_Scene.hpp"
 #include "Castor3DPrerequisites_Shader.hpp"
 #include "Castor3DPrerequisites_Render.hpp"
+#include "Castor3DPrerequisites_Event.hpp"
 
 namespace Castor3D
 {

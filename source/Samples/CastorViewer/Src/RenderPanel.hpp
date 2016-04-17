@@ -133,10 +133,6 @@ namespace CastorViewer
 		FirstPersonCameraTranslateEventSPtr m_pFpTranslateCamEvent;
 		KeyboardEventSPtr m_pKeyboardEvent;
 		Castor::real m_rFpCamSpeed;
-
-#if HAS_CASTORGUI
-		CastorGui::ControlsManagerSPtr m_controlsManager;
-#endif
 	};
 }
 

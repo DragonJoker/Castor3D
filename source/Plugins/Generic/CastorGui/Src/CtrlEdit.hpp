@@ -88,7 +88,7 @@ namespace CastorGui
 		 */
 		inline uint32_t Connect( eEDIT_EVENT p_event, std::function< void( Castor::String const & ) > p_function )
 		{
-			return m_signals[p_event].Connect( p_function );
+			return m_signals[p_event].connect( p_function );
 		}
 
 		/** Disconnects a function from an edit event
@@ -97,7 +97,7 @@ namespace CastorGui
 		 */
 		inline void Disconnect( eEDIT_EVENT p_event, uint32_t p_index )
 		{
-			m_signals[p_event].Disconnect( p_index );
+			m_signals[p_event].disconnect( p_index );
 		}
 
 		/** Retreves the multiline status of the edit.
@@ -144,37 +144,37 @@ namespace CastorGui
 		/** Event when the control is activated
 		 *\param[in]	p_event		The control event
 		 */
-		void OnActivate( ControlEvent const & p_event );
+		void OnActivate( Castor3D::HandlerEvent const & p_event );
 
 		/** Event when the control is deactivated
 		 *\param[in]	p_event		The control event
 		 */
-		void OnDeactivate( ControlEvent const & p_event );
+		void OnDeactivate( Castor3D::HandlerEvent const & p_event );
 
 		/** Event when mouse left button is pushed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLButtonDown( MouseEvent const & p_event );
+		void OnMouseLButtonDown( Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnMouseLButtonUp( MouseEvent const & p_event );
+		void OnMouseLButtonUp( Castor3D::MouseEvent const & p_event );
 
 		/** Event when a printable key is pressed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnChar( KeyboardEvent const & p_event );
+		void OnChar( Castor3D::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnKeyDown( KeyboardEvent const & p_event );
+		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnKeyUp( KeyboardEvent const & p_event );
+		void OnKeyUp( Castor3D::KeyboardEvent const & p_event );
 
 		/** Adds a character at caret index
 		 */
@@ -207,7 +207,7 @@ namespace CastorGui
 		//! The text overlay used to display the caption
 		Castor3D::TextOverlayWPtr m_text;
 		//! The edit events signals
-		Signal< std::function< void( Castor::String const & ) > > m_signals[eEDIT_EVENT_COUNT];
+		Castor::Signal< std::function< void( Castor::String const & ) > > m_signals[eEDIT_EVENT_COUNT];
 		//! Tells if the Edit is a multiline one.
 		bool m_multiLine;
 	};

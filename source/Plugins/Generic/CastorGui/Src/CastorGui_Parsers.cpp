@@ -92,7 +92,7 @@ namespace CastorGui
 
 	ControlsManager & GetControlsManager( FileParserContextSPtr p_context )
 	{
-		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetEngine()->GetListenerManager().Find( PLUGIN_NAME ) );
+		return static_cast< ControlsManager & >( *std::static_pointer_cast< SceneFileContext >( p_context )->m_pParser->GetEngine()->GetUserInputListener() );
 	}
 
 	ParserContext & GetParserContext( FileParserContextSPtr p_context )

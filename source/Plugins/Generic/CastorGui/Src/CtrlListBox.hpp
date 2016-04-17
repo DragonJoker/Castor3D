@@ -198,7 +198,7 @@ namespace CastorGui
 		 */
 		inline uint32_t Connect( eLISTBOX_EVENT p_event, std::function< void( int ) > p_function )
 		{
-			return m_signals[p_event].Connect( p_function );
+			return m_signals[p_event].connect( p_function );
 		}
 
 		/** Disconnects a function from a listbox event
@@ -207,7 +207,7 @@ namespace CastorGui
 		 */
 		inline void Disconnect( eLISTBOX_EVENT p_event, uint32_t p_index )
 		{
-			m_signals[p_event].Disconnect( p_index );
+			m_signals[p_event].disconnect( p_index );
 		}
 
 	private:
@@ -258,29 +258,29 @@ namespace CastorGui
 		 *\param[in]	p_control	The item
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnItemMouseEnter( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnItemMouseEnter( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse leaves an item
 		 *\param[in]	p_control	The item
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnItemMouseLeave( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnItemMouseLeave( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when mouse left button is released on an item
 		 *\param[in]	p_control	The item
 		 *\param[in]	p_event		The mouse event
 		 */
-		void OnItemMouseLButtonUp( ControlSPtr p_control, MouseEvent const & p_event );
+		void OnItemMouseLButtonUp( ControlSPtr p_control, Castor3D::MouseEvent const & p_event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnItemKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event );
+		void OnItemKeyDown( ControlSPtr p_control, Castor3D::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed
 		 *\param[in]	p_event		The keyboard event
 		 */
-		void OnKeyDown( KeyboardEvent const & p_event );
+		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
 
 		/** Common construction method.
 		 */
@@ -306,7 +306,7 @@ namespace CastorGui
 		//! The foreground colour
 		Castor3D::MaterialWPtr m_selectedItemForegroundMaterial;
 		//! The listbox events signals
-		Signal< std::function< void( int ) > > m_signals[eLISTBOX_EVENT_COUNT];
+		Castor::Signal< std::function< void( int ) > > m_signals[eLISTBOX_EVENT_COUNT];
 		//! The items font name.
 		Castor::String m_fontName;
 	};

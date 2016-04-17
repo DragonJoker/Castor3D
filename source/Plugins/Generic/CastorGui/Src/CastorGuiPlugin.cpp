@@ -144,12 +144,12 @@ C3D_CGui_API void OnLoad( Castor3D::Engine * p_engine )
 {
 	p_engine->RegisterParsers( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateParsers( p_engine ) ) );
 	p_engine->RegisterSections( CastorGui::PLUGIN_NAME, std::move( CastorGui::CreateSections() ) );
-	p_engine->GetListenerManager().Insert( CastorGui::PLUGIN_NAME, std::make_shared< CastorGui::ControlsManager >( p_engine ) );
+	p_engine->SetUserInputListener( std::make_shared< CastorGui::ControlsManager >( *p_engine ) );
 }
 
 C3D_CGui_API void OnUnload( Castor3D::Engine * p_engine )
 {
-	p_engine->GetListenerManager().Remove( CastorGui::PLUGIN_NAME );
+	p_engine->SetUserInputListener( nullptr );
 	p_engine->UnregisterParsers( CastorGui::PLUGIN_NAME );
 	p_engine->UnregisterSections( CastorGui::PLUGIN_NAME );
 }

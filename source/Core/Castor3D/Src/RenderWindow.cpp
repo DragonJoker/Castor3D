@@ -18,7 +18,6 @@
 #include "RenderLoop.hpp"
 #include "RenderSystem.hpp"
 #include "TargetManager.hpp"
-#include "ResizeWindowEvent.hpp"
 #include "Scene.hpp"
 #include "ShaderProgram.hpp"
 #include "Vertex.hpp"

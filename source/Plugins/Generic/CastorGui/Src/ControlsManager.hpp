@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "CastorGuiPrerequisites.hpp"
 
 #include <Position.hpp>
-#include <FrameListener.hpp>
+#include <UserInputListener.hpp>
 
 #include "EventHandler.hpp"
 
@@ -35,7 +35,7 @@ namespace CastorGui
 	*/
 	class ControlsManager
 		: public std::enable_shared_from_this< ControlsManager >
-		, public Castor3D::FrameListener
+		, public Castor3D::UserInputListener
 	{
 	public:
 		/**@name General */
@@ -44,32 +44,11 @@ namespace CastorGui
 		/** Constructor
 		 *\param[in]	p_engine		The engine
 		*/
-		C3D_CGui_API ControlsManager( Castor3D::Engine * p_engine );
+		C3D_CGui_API ControlsManager( Castor3D::Engine & p_engine );
 
 		/** Destructor
 		*/
 		C3D_CGui_API virtual ~ControlsManager();
-
-		/** Initialises the base materials.
-		 *\return		true, hopefully :P
-		*/
-		C3D_CGui_API bool Initialise();
-
-		/** Cleans up the manager.
-		*/
-		C3D_CGui_API void Cleanup();
-
-		/** Handles all queued events
-		*/
-		C3D_CGui_API void ProcessEvents();
-
-		/** Retrieves the current mouse position
-		 *\return		The value
-		*/
-		Castor::Position const & GetMousePosition()const
-		{
-			return m_mouse.m_position;
-		}
 
 		/** Retrieves the default font used by controls
 		 *\return		The font
@@ -86,63 +65,6 @@ namespace CastorGui
 		{
 			m_defaultFont = p_font;
 		}
-
-		//@}
-		/**@name Mouse events */
-		//@{
-
-		/** Fires a mouse move event.
-		 *\param[in]	p_position	The mouse position.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseMove( Castor::Position const & p_position );
-
-		/** Fires a mouse pushed event.
-		 *\param[in]	p_button	The mouse button.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseButtonPushed( eMOUSE_BUTTON p_button );
-
-		/** Fires a mouse released event.
-		 *\param[in]	p_button	The mouse button.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseButtonReleased( eMOUSE_BUTTON p_button );
-
-		/** Fires a mouse wheel event.
-		 *\param[in]	p_offsets	The mouse wheel offsets (x and y).
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireMouseWheel( Castor::Position const & p_offsets );
-
-		//@}
-		/**@name Keyboard events */
-		//@{
-
-		/** Fires a keyboard key down event.
-		 *\param[in]	p_key		The key.
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
-		 *\param[in]	p_alt		Tells if the Alt key is down.
-		 *\param[in]	p_shift		Tells if the Shift key is down.
-		 *\return		\p true if the event is processed by a control.
-		 */
-		C3D_CGui_API bool FireKeyDown( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
-
-		/** Fires a keyboard key up event.
-		 *\param[in]	p_key		The key.
-		 *\param[in]	p_ctrl		Tells if the Ctrl key is down.
-		 *\param[in]	p_alt		Tells if the Alt key is down.
-		 *\param[in]	p_shift		Tells if the Shift key is down.
-		 *\return		\p true if the event is processed by a control.
-		*/
-		C3D_CGui_API bool FireKeyUp( eKEYBOARD_KEY p_key, bool p_ctrl, bool p_alt, bool p_shift );
-
-		/** Fires a printable key event.
-		 *\param[in]	p_key		The key.
-		 *\param[in]	p_char		The character coorresponding to the key, displayable as is.
-		 *\return		\p true if the event is processed by a control.
-		*/
-		C3D_CGui_API bool FireChar( eKEYBOARD_KEY p_key, Castor::String const & p_char );
 
 		//@}
 		/**@name Controls management */
@@ -174,29 +96,22 @@ namespace CastorGui
 		*/
 		C3D_CGui_API ControlSPtr GetControl( uint32_t p_id );
 
-		/** Retrieves the active control
-		 *\return		The control
-		*/
-		inline ControlSPtr GetActiveControl()const
-		{
-			return m_activeControl.lock();
-		}
-
-		/** Retrieves the focused control
-		 *\return		The control
-		*/
-		inline ControlSPtr GetFocusedControl()const
-		{
-			return m_lastMouseTarget.lock();
-		}
-
 		//@}
 
 	private:
-		/** Retrieves the first control which can be targeted by mouse, at its position
+		/** Initialises the base materials.
+		*\return		true, hopefully :P
+		*/
+		bool DoInitialise();
+
+		/** Cleans up the manager.
+		*/
+		void DoCleanup();
+
+		/** Retrieves the first handler which can be targeted by mouse, at its position
 		 *\param[in]	p_position		The mouse position
 		*/
-		ControlSPtr DoGetMouseTargetableControl( Castor::Position const & p_position )const;
+		Castor3D::EventHandlerSPtr DoGetMouseTargetableHandler( Castor::Position const & p_position )const;
 
 		/** Updates the z-index ordered controls array
 		*/
@@ -211,38 +126,15 @@ namespace CastorGui
 		 */
 		virtual void DoFlush();
 
-		/** Retrieve the controls in a thread-safe way
-		 *\return		The controls array
-		*/
-		std::vector< ControlSPtr > DoGetControls()const
-		{
-			std::unique_lock< std::mutex > l_lock( m_mutexControls );
-			return m_controls;
-		}
-
 	private:
-		//! The engine
-		Castor3D::Engine * m_engine;
-		//! The current mouse state
-		MouseState m_mouse;
-		//! The current keyboard state
-		KeyboardState m_keyboard;
-		//! The currently active control
-		ControlWPtr m_activeControl;
-		//! The currently active control
-		ControlWPtr m_lastMouseTarget;
-		//! The mutex used to protect the controls array.
+		//!\~english  The mutex used to protect the controls array.	\~french Le mutex de protection du tableau de contrôles.
 		mutable std::mutex m_mutexControls;
-		//! The controls array
-		std::vector< ControlSPtr > m_controls;
 		//! The controls array
 		mutable std::vector< ControlSPtr > m_controlsByZIndex;
 		//! The controls map, sorted by ID
 		std::map< uint32_t, ControlWPtr > m_controlsById;
 		//! Tells the controls array has changed
 		bool m_changed;
-		//! Tells if the manager needs to be refreshed or not.
-		bool m_enabled;
 		//! The default font used by controls
 		Castor::FontWPtr m_defaultFont;
 	};

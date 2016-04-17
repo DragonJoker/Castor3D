@@ -165,7 +165,7 @@ namespace CastorGui
 		*/
 		inline uint32_t Connect( eCOMBOBOX_EVENT p_event, std::function< void( int ) > p_function )
 		{
-			return m_signals[p_event].Connect( p_function );
+			return m_signals[p_event].connect( p_function );
 		}
 
 		/** Disconnects a function from a combobox event
@@ -174,7 +174,7 @@ namespace CastorGui
 		*/
 		inline void Disconnect( eCOMBOBOX_EVENT p_event, uint32_t p_index )
 		{
-			m_signals[p_event].Disconnect( p_index );
+			m_signals[p_event].disconnect( p_index );
 		}
 
 	private:
@@ -218,12 +218,12 @@ namespace CastorGui
 		/** Event when a keyboard key is pressed
 		*\param[in]	p_event		The keyboard event
 		*/
-		void OnKeyDown( KeyboardEvent const & p_event );
+		void OnKeyDown( Castor3D::KeyboardEvent const & p_event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
 		*\param[in]	p_event		The keyboard event
 		*/
-		void OnNcKeyDown( ControlSPtr p_control, KeyboardEvent const & p_event );
+		void OnNcKeyDown( ControlSPtr p_control, Castor3D::KeyboardEvent const & p_event );
 
 		/** Switch the combobox list
 		*/
@@ -241,7 +241,7 @@ namespace CastorGui
 		//! Teh selected value index
 		int m_selected;
 		//! The combobox events signals
-		Signal< std::function< void( int ) > > m_signals[eCOMBOBOX_EVENT_COUNT];
+		Castor::Signal< std::function< void( int ) > > m_signals[eCOMBOBOX_EVENT_COUNT];
 	};
 }
 

@@ -20,7 +20,12 @@ namespace CastorGui
 	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, Colour const & p_colour )
 	{
 		MaterialManager & l_manager = p_engine->GetMaterialManager();
-		MaterialSPtr l_return = l_manager.Find( p_name );
+		MaterialSPtr l_return;
+		
+		if ( l_manager.Has( p_name ) )
+		{
+			l_return = l_manager.Find( p_name );
+		}
 
 		if ( !l_return )
 		{
@@ -35,7 +40,12 @@ namespace CastorGui
 	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureSPtr p_texture )
 	{
 		MaterialManager & l_manager = p_engine->GetMaterialManager();
-		MaterialSPtr l_return = l_manager.Find( p_name );
+		MaterialSPtr l_return;
+
+		if ( l_manager.Has( p_name ) )
+		{
+			l_return = l_manager.Find( p_name );
+		}
 
 		if ( !l_return )
 		{
