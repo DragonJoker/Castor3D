@@ -81,12 +81,13 @@ namespace Castor3D
 			m_timerQuery[1 - m_queryIndex]->End();
 			l_program->Initialise();
 
-			m_vertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			m_vertexBuffer->Resize( uint32_t( m_arrayVertex.size() * m_declaration.GetStride() ) );
 			m_vertexBuffer->LinkCoords( m_arrayVertex.begin(), m_arrayVertex.end() );
 			m_vertexBuffer->Create();
 			m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_geometryBuffers = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+			m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr );
 			m_dsStateNoDepth->Initialise();
 			m_dsStateNoDepthWrite->Initialise();
 			DoEndCurrent();
@@ -105,6 +106,7 @@ namespace Castor3D
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
 		m_vertexBuffer.reset();
+		m_geometryBuffers->Cleanup();
 		m_geometryBuffers.reset();
 		ShaderProgramSPtr l_program = m_renderTextureProgram.lock();
 

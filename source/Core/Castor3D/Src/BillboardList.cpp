@@ -3,6 +3,7 @@
 #include "Buffer.hpp"
 #include "Engine.hpp"
 #include "FrameVariableBuffer.hpp"
+#include "FunctorEvent.hpp"
 #include "Material.hpp"
 #include "MaterialManager.hpp"
 #include "Pass.hpp"
@@ -167,7 +168,7 @@ namespace Castor3D
 
 	bool BillboardList::Initialise()
 	{
-		m_vertexBuffer = std::make_unique< VertexBuffer >( *GetScene()->GetEngine(), m_declaration );
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetScene()->GetEngine(), m_declaration );
 		uint32_t l_stride = m_declaration.GetStride();
 		m_vertexBuffer->Resize( uint32_t( m_arrayPositions.size() * l_stride ) );
 		uint8_t * l_buffer = m_vertexBuffer->data();
@@ -179,11 +180,17 @@ namespace Castor3D
 		}
 
 		m_vertexBuffer->Create();
+		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 		return true;
 	}
 
 	void BillboardList::Cleanup()
 	{
+		for ( auto l_buffers : m_geometryBuffers )
+		{
+			l_buffers->Cleanup();
+		}
+
 		m_geometryBuffers.clear();
 		m_vertexBuffer->Cleanup();
 		m_vertexBuffer->Destroy();
@@ -211,12 +218,11 @@ namespace Castor3D
 		m_needUpdate = true;
 	}
 
-	void BillboardList::Draw( ShaderProgram const & p_program )
+	void BillboardList::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
 		DoUpdate();
-		GeometryBuffers & l_geometryBuffers = DoPrepareGeometryBuffers( p_program );
 		uint32_t l_size = m_vertexBuffer->GetSize() / m_declaration.GetStride();
-		l_geometryBuffers.Draw( l_size, 0 );
+		p_geometryBuffers.Draw( l_size, 0 );
 	}
 
 	void BillboardList::SetMaterial( MaterialSPtr p_pMaterial )
@@ -251,23 +257,22 @@ namespace Castor3D
 		}
 	}
 
-	GeometryBuffers & BillboardList::DoPrepareGeometryBuffers( ShaderProgram const & p_program )
+	GeometryBuffers & BillboardList::GetGeometryBuffers( ShaderProgram const & p_program )
 	{
-		if ( p_program.GetStatus() != ePROGRAM_STATUS_LINKED )
-		{
-			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
-		}
-
 		GeometryBuffersSPtr l_buffers;
-		auto const & l_layout = p_program.GetLayout();
-		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&l_layout]( GeometryBuffersSPtr p_buffers )
+		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
 		{
-			return p_buffers->GetLayout() == l_layout;
+			return &p_buffers->GetProgram() == &p_program;
 		} );
 
 		if ( l_it == m_geometryBuffers.end() )
 		{
-			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_POINTS, p_program, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+			l_buffers = GetScene()->GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_POINTS, p_program );
+
+			GetScene()->GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
+			{
+				l_buffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr );
+			} ) );
 			m_geometryBuffers.push_back( l_buffers );
 		}
 		else

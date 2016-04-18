@@ -113,9 +113,9 @@ namespace GlRender
 		return std::make_shared< GlContext >( *this, GetOpenGl() );
 	}
 
-	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst )
+	GeometryBuffersSPtr GlRenderSystem::CreateGeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program )
 	{
-		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program, p_vtx, p_idx, p_bones, p_inst );
+		return std::make_shared< GlGeometryBuffers >( GetOpenGl(), p_topology, p_program );
 	}
 
 	DepthStencilStateSPtr GlRenderSystem::CreateDepthStencilState()

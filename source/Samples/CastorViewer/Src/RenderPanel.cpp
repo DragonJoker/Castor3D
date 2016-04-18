@@ -625,7 +625,7 @@ namespace CastorViewer
 
 		auto l_inputListener = wxGetApp().GetCastor()->GetUserInputListener();
 
-		if ( !l_inputListener || !l_inputListener->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
+		if ( l_inputListener && l_inputListener->FireMouseMove( Position( int32_t( m_x ), int32_t( m_y ) ) ) )
 		{
 			p_event.Skip();
 		}

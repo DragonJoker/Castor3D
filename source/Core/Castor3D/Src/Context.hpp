@@ -308,7 +308,7 @@ namespace Castor3D
 		//!\~english The DepthStencilState without depth write.	\~french Le DepthStencilState sans écriture de profondeur.
 		DepthStencilStateSPtr m_dsStateNoDepthWrite;
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
-		VertexBufferUPtr m_vertexBuffer;
+		VertexBufferSPtr m_vertexBuffer;
 		//!\~english The GPU time elapsed queries.	\~french Les requêtes GPU de temps écoulé.
 		std::array< GpuQuerySPtr, 2 > m_timerQuery;
 		//!\~english The active query index.	\~french L'index de la requête active.

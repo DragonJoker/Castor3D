@@ -29,39 +29,48 @@ namespace Castor
 		template< typename T >
 		inline bool ParseValues( String & p_params, size_t p_count, T * p_value )
 		{
-			String l_regexString = RegexFormat< T >::Value;
+			bool l_return = false;
 
-			for ( size_t i = 1; i < p_count; ++i )
+			try
 			{
-				l_regexString += String( VALUE_SEPARATOR ) + RegexFormat< T >::Value;
-			}
+				String l_regexString = RegexFormat< T >::Value;
 
-			l_regexString += IGNORED_END;
-
-			const Regex l_regex{ l_regexString };
-			auto l_begin = std::begin( p_params );
-			auto l_end = std::end( p_params );
-			const SRegexIterator l_it( l_begin, l_end, l_regex );
-			const SRegexIterator l_endit;
-			String l_result;
-			bool l_return = l_it != l_endit && l_it->size() >= p_count;
-
-			if ( l_return )
-			{
-				for ( size_t i = 1; i <= p_count; ++i )
+				for ( size_t i = 1; i < p_count; ++i )
 				{
-					std::basic_istringstream< xchar > l_stream( ( *l_it )[i] );
-					l_stream >> p_value[i - 1];
+					l_regexString += String( VALUE_SEPARATOR ) + RegexFormat< T >::Value;
 				}
 
-				if ( l_it->size() > p_count )
+				l_regexString += IGNORED_END;
+
+				const Regex l_regex{ l_regexString };
+				auto l_begin = std::begin( p_params );
+				auto l_end = std::end( p_params );
+				const SRegexIterator l_it( l_begin, l_end, l_regex );
+				const SRegexIterator l_endit;
+				String l_result;
+				l_return = l_it != l_endit && l_it->size() >= p_count;
+
+				if ( l_return )
 				{
-					p_params = ( *l_it )[p_count + 1];
+					for ( size_t i = 1; i <= p_count; ++i )
+					{
+						std::basic_istringstream< xchar > l_stream( ( *l_it )[i] );
+						l_stream >> p_value[i - 1];
+					}
+
+					if ( l_it->size() > p_count )
+					{
+						p_params = ( *l_it )[p_count + 1];
+					}
+				}
+				else
+				{
+					Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
 				}
 			}
-			else
+			catch ( std::exception & p_exc )
 			{
-				Logger::LogWarning( StringStream() << cuT( "Couldn't parse from " ) << p_params );
+				Logger::LogError( StringStream() << cuT( "Couldn't parse from " ) << p_params << cuT( ": " ) << string::string_cast< xchar >( p_exc.what() ) );
 			}
 
 			return l_return;

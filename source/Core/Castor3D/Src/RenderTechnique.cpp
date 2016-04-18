@@ -11,6 +11,7 @@
 #include "DepthStencilRenderBuffer.hpp"
 #include "FrameBuffer.hpp"
 #include "FrameVariableBuffer.hpp"
+#include "GeometryBuffers.hpp"
 #include "GeometryManager.hpp"
 #include "LightManager.hpp"
 #include "Material.hpp"
@@ -127,6 +128,7 @@ namespace Castor3D
 								GeometryRenderNode l_renderNode =
 								{
 									*l_primitive.second,
+									l_submesh->GetGeometryBuffers( *l_program ),
 									*l_submesh,
 									*l_sceneNode,
 									{
@@ -195,6 +197,7 @@ namespace Castor3D
 							BillboardRenderNode l_renderNode =
 							{
 								*l_billboard.second,
+								l_billboard.second->GetGeometryBuffers( *l_program ),
 								*l_sceneNode,
 								*l_billboardBuffer,
 								*l_billboardBuffer->GetVariable( cuT( "c3d_v2iDimensions" ), l_pt2i ),
@@ -392,16 +395,23 @@ namespace Castor3D
 				DoSortRenderNodes( l_sceneNodes.second );
 			}
 		}
+
+		for ( auto & l_scene : m_newScenes )
+		{
+			auto l_pair = m_scenesRenderNodes.insert( { l_scene->GetName(), { *l_scene } } );
+
+			if ( l_pair.second )
+			{
+				DoSortRenderNodes( l_pair.first->second );
+			}
+		}
+
+		m_newScenes.clear();
 	}
 
 	void RenderTechnique::AddScene( Scene & p_scene )
 	{
-		auto l_pair = m_scenesRenderNodes.insert( { p_scene.GetName(), { p_scene } } );
-
-		if ( l_pair.second )
-		{
-			DoSortRenderNodes( l_pair.first->second );
-		}
+		m_newScenes.push_back( &p_scene );
 	}
 
 	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime )
@@ -505,10 +515,13 @@ namespace Castor3D
 		{
 			for ( auto l_renderNode : p_renderNodes )
 			{
-				p_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
-				DoBindPass( p_scene, p_pipeline, l_renderNode, 0 );
-				l_renderNode.m_submesh.Draw( l_renderNode.m_scene.m_node.m_program );
-				DoUnbindPass( p_scene, l_renderNode );
+				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
+				{
+					p_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
+					DoBindPass( p_scene, p_pipeline, l_renderNode, 0 );
+					l_renderNode.m_submesh.Draw( l_renderNode.m_buffers );
+					DoUnbindPass( p_scene, l_renderNode );
+				}
 			}
 		} );
 	}
@@ -532,17 +545,20 @@ namespace Castor3D
 				}
 
 				DoBindPass( p_scene, p_pipeline, p_renderNodes[0], MASK_MTXMODE_MODEL );
-				p_submesh.DrawInstanced( p_renderNodes[0].m_scene.m_node.m_program, l_count );
+				p_submesh.DrawInstanced( p_renderNodes[0].m_buffers, l_count );
 				DoUnbindPass( p_scene, p_renderNodes[0] );
 			}
 			else
 			{
 				for ( auto l_renderNode : p_renderNodes )
 				{
-					p_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
-					DoBindPass( p_scene, p_pipeline, l_renderNode, 0 );
-					l_renderNode.m_submesh.Draw( l_renderNode.m_scene.m_node.m_program );
-					DoUnbindPass( p_scene, l_renderNode );
+					if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
+					{
+						p_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
+						DoBindPass( p_scene, p_pipeline, l_renderNode, 0 );
+						l_renderNode.m_submesh.Draw( l_renderNode.m_buffers );
+						DoUnbindPass( p_scene, l_renderNode );
+					}
 				}
 			}
 		} );
@@ -556,7 +572,7 @@ namespace Castor3D
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
 			DoBindPass( p_scene, p_pipeline, l_it.second, 0 );
-			l_it.second.m_submesh.Draw( l_it.second.m_scene.m_node.m_program );
+			l_it.second.m_submesh.Draw( l_it.second.m_buffers );
 			DoUnbindPass( p_scene, l_it.second );
 		}
 	}
@@ -581,7 +597,7 @@ namespace Castor3D
 		{
 			p_pipeline.SetModelMatrix( l_it.second.m_sceneNode.GetDerivedTransformationMatrix() );
 			DoBindPass( p_scene, p_pipeline, l_it.second, 0 );
-			l_it.second.m_billboard.Draw( l_it.second.m_scene.m_node.m_program );
+			l_it.second.m_billboard.Draw( l_it.second.m_buffers );
 			DoUnbindPass( p_scene, l_it.second );
 		}
 	}
@@ -592,10 +608,13 @@ namespace Castor3D
 		{
 			for ( auto l_renderNode : p_renderNodes )
 			{
-				p_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
-				DoBindPass( p_scene, p_pipeline, l_renderNode, 0 );
-				l_renderNode.m_billboard.Draw( l_renderNode.m_scene.m_node.m_program );
-				DoUnbindPass( p_scene, l_renderNode );
+				if ( l_renderNode.m_sceneNode.IsDisplayable() && l_renderNode.m_sceneNode.IsVisible() )
+				{
+					p_pipeline.SetModelMatrix( l_renderNode.m_sceneNode.GetDerivedTransformationMatrix() );
+					DoBindPass( p_scene, p_pipeline, l_renderNode, 0 );
+					l_renderNode.m_billboard.Draw( l_renderNode.m_buffers );
+					DoUnbindPass( p_scene, l_renderNode );
+				}
 			}
 		} );
 	}

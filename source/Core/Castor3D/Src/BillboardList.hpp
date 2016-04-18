@@ -192,13 +192,13 @@ namespace Castor3D
 		C3D_API void AddPoints( Castor::Point3rArray const & p_ptPositions );
 		/**
 		 *\~english
-		 *\brief		Renders the billboards.
-		 *\param[in]	p_program	The shader program.
+		 *\brief		Draws the billboards.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw these billboards.
 		 *\~french
-		 *\brief		Rend les billboards.
-		 *\param[in]	p_program	Le programme shader.
+		 *\brief		Dessine les billboards.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ces billboards.
 		 */
-		C3D_API void Draw( ShaderProgram const & p_program );
+		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Sets the billboards dimensions
@@ -217,6 +217,15 @@ namespace Castor3D
 		 *\param[in]	p_cameraPosition	La position de la caméra, relative au billboard.
 		 */
 		C3D_API void SortPoints( Castor::Point3r const & p_cameraPosition );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GeometryBuffers for given program.
+		 *\param[in]	p_program	The program.
+		 *\~french
+		 *\brief		Récupère un GeometryBuffers pour le programme donné.
+		 *\param[in]	p_program	Le programme.
+		 */
+		C3D_API GeometryBuffers & GetGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Gets a point from the list
@@ -332,7 +341,6 @@ namespace Castor3D
 		}
 
 	private:
-		GeometryBuffers & DoPrepareGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Updates the vertex buffer, if needed.
@@ -353,7 +361,7 @@ namespace Castor3D
 		//!\~english The billboards dimensions	\~french Les dimensions des billboards
 		Castor::Size m_dimensions;
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
-		VertexBufferUPtr m_vertexBuffer;
+		VertexBufferSPtr m_vertexBuffer;
 		//!\~english The GeometryBuffers with which this billboards list is compatible.	\~french Les GeometryBuffers avec lesquel ce billboards list est compatible.
 		std::vector< GeometryBuffersSPtr > m_geometryBuffers;
 		//!\~english The transformed camera position at last sort.	\~french La position transformée de la caméra au dernier tri.

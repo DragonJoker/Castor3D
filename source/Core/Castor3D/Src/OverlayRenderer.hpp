@@ -279,11 +279,11 @@ namespace Castor3D
 
 	protected:
 		//!\~english Vertex buffers for panels.	\~french Tampons de sommets pour les panneaux.
-		VertexBufferUPtr m_panelVertexBuffer;
+		VertexBufferSPtr m_panelVertexBuffer;
 		//!\~english Vertex buffers for borders.	\~french Tampons de sommets pour les bordures.
-		VertexBufferUPtr m_borderVertexBuffer;
+		VertexBufferSPtr m_borderVertexBuffer;
 		//!\~english The Vertex buffers used to render texts.	\~french Les tampons de sommets utilisés pour rendre les textes.
-		std::vector< VertexBufferUPtr > m_textsVertexBuffers;
+		std::vector< VertexBufferSPtr > m_textsVertexBuffers;
 		//!\~english Geometry buffers for panels	\~french Tampons de géometrie pour les panneaux
 		OverlayGeometryBuffers m_panelGeometryBuffers;
 		//!\~english Geometry buffers for borders	\~french Tampons de géometrie pour les bordures

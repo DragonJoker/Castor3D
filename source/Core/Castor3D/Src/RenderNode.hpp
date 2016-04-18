@@ -87,6 +87,8 @@ namespace Castor3D
 	{
 		//!\~english The geometry instanciating the submesh.	\~french La géométrie instanciant le submesh.
 		Geometry & m_geometry;
+		//!\~english The geometry buffers.	\~french Les tampons de la géométrie.
+		GeometryBuffers & m_buffers;
 		//!\~english The submesh.	\~french Le sous-maillage.
 		Submesh & m_submesh;
 		//!\~english The parent scene node.	\~french Le scene node parent.
@@ -106,6 +108,8 @@ namespace Castor3D
 	{
 		//!\~english The billboard.	\~french Le billboard.
 		BillboardList & m_billboard;
+		//!\~english The geometry buffers.	\~french Les tampons de la géométrie.
+		GeometryBuffers & m_buffers;
 		//!\~english The parent scene node.	\~french Le scene node parent.
 		SceneNode & m_sceneNode;
 		//!\~english The billboard UBO.	\~french L'UBO de billboard.
