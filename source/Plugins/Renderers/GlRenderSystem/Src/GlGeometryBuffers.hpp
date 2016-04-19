@@ -54,20 +54,12 @@ namespace GlRender
 		 *\brief		Constructor.
 		 *\param[in]	p_topology	The buffers topology.
 		 *\param[in]	p_program	The shader program.
-		 *\param[in]	p_vtx		The vertex buffer.
-		 *\param[in]	p_idx		The index buffer.
-		 *\param[in]	p_bones		The bones data buffer.
-		 *\param[in]	p_inst		The instances matrices buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
-		 *\param[in]	p_vtx		Le tampon de sommets.
-		 *\param[in]	p_idx		Le tampon d'indices.
-		 *\param[in]	p_bones		Le tampon de données de bones.
-		 *\param[in]	p_inst		Le tampon de matrices d'instances.
 		 */
-		GlGeometryBuffers( OpenGl & p_gl, Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program, Castor3D::VertexBuffer * p_vtx, Castor3D::IndexBuffer * p_idx, Castor3D::VertexBuffer * p_bones, Castor3D::VertexBuffer * p_inst );
+		GlGeometryBuffers( OpenGl & p_gl, Castor3D::eTOPOLOGY p_topology, Castor3D::ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -78,13 +70,22 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::GeometryBuffers::Draw
 		 */
-		virtual bool Draw( uint32_t p_uiSize, uint32_t p_index )const;
+		virtual bool Draw( uint32_t p_size, uint32_t p_index )const;
 		/**
 		 *\copydoc		Castor3D::GeometryBuffers::DrawInstanced
 		 */
-		virtual bool DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )const;
+		virtual bool DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const;
 
 	private:
+		/**
+		 *\copydoc		Castor3D::GeometryBuffers::DoInitialise
+		 */
+		virtual bool DoInitialise();
+		/**
+		 *\copydoc		Castor3D::GeometryBuffers::DoCleanup
+		 */
+		virtual void DoCleanup();
+
 		Castor3D::BufferDeclaration::const_iterator DoFindElement( Castor3D::BufferDeclaration const & p_declaration, Castor3D::BufferElementDeclaration const & p_element )const;
 		GlAttributeBaseSPtr DoCreateAttribute( Castor3D::BufferElementDeclaration const & p_element, uint32_t p_offset, Castor3D::BufferDeclaration const & p_declaration );
 		bool DoCreateAttributes( Castor3D::ProgramInputLayout const & p_layout, Castor3D::BufferDeclaration const & p_declaration, GlAttributePtrArray & p_attributes );

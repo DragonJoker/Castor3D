@@ -114,8 +114,8 @@ namespace Castor3D
 		if ( l_it == m_mapBillboards.end() )
 		{
 			m_mapBillboards.insert( std::make_pair( l_key, p_program ) );
+			p_program->GetRenderSystem()->GetEngine()->PostEvent( MakeInitialiseEvent( *p_program ) );
 			m_arrayPrograms.push_back( p_program );
-			GetEngine()->PostEvent( MakeInitialiseEvent( *p_program ) );
 		}
 	}
 

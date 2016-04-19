@@ -542,7 +542,9 @@ namespace Castor3D
 		//!\~english The render area dimension.	\~french Les dimensions de l'aire de rendu.
 		Castor::Size m_size;
 		//!\~english The scenes rendered through this technique.	\~french Les scènes dessinées via cette technique.
-		std::map < Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
+		std::map< Castor::String, stSCENE_RENDER_NODES > m_scenesRenderNodes;
+		//!\~english The newly added scenes.	\~french Les scènes récemment ajoutées.
+		std::vector< SceneRPtr > m_newScenes;
 		//!\~english The HDR frame buffer.	\~french Le tampon d'image HDR.
 		stFRAME_BUFFER m_frameBuffer;
 		//!\~english The rasteriser state to cull front faces.	\~french L'état de rastérisation pour masquer les faces avant.

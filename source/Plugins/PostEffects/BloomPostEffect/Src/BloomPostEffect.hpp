@@ -88,7 +88,7 @@ namespace Bloom
 		Castor3D::Viewport m_viewport;
 		Castor3D::BufferDeclaration m_declaration;
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_vertices;
-		Castor3D::VertexBufferUPtr m_vertexBuffer;
+		Castor3D::VertexBufferSPtr m_vertexBuffer;
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		Castor::real m_buffer[12];
 		SurfaceArray m_hiPassSurfaces;

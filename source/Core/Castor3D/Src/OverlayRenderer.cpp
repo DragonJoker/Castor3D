@@ -97,7 +97,7 @@ namespace Castor3D
 		if ( !m_panelVertexBuffer )
 		{
 			// Panel Overlays buffers
-			m_panelVertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_panelVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			uint32_t l_stride = m_declaration.GetStride();
 			m_panelVertexBuffer->Resize( uint32_t( m_panelVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_panelVertexBuffer->data();
@@ -112,15 +112,17 @@ namespace Castor3D
 			m_panelVertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 
 			auto l_program = DoGetPanelProgram( 0 );
-			m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_panelVertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_panelGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+			m_panelGeometryBuffers.m_noTexture->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr );
 			l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
-			m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_panelVertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_panelGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+			m_panelGeometryBuffers.m_textured->Initialise( m_panelVertexBuffer, nullptr, nullptr, nullptr );
 		}
 
 		if ( !m_borderVertexBuffer )
 		{
 			// Border Overlays buffers
-			m_borderVertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
+			m_borderVertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_declaration );
 			uint32_t l_stride = m_declaration.GetStride();
 			m_borderVertexBuffer->Resize( uint32_t( m_borderVertex.size() * l_stride ) );
 			uint8_t * l_buffer = m_borderVertexBuffer->data();
@@ -135,9 +137,11 @@ namespace Castor3D
 			m_borderVertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 
 			auto l_program = DoGetPanelProgram( 0 );
-			m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_borderVertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_borderGeometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+			m_borderGeometryBuffers.m_noTexture->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr );
 			l_program = DoGetPanelProgram( eTEXTURE_CHANNEL_COLOUR );
-			m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, m_borderVertexBuffer.get(), nullptr, nullptr, nullptr );
+			m_borderGeometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+			m_borderGeometryBuffers.m_textured->Initialise( m_borderVertexBuffer, nullptr, nullptr, nullptr );
 		}
 
 		// Create one text overlays buffer
@@ -193,31 +197,41 @@ namespace Castor3D
 
 		if ( m_panelVertexBuffer )
 		{
+			m_panelGeometryBuffers.m_noTexture->Cleanup();
+			m_panelGeometryBuffers.m_textured->Cleanup();
+			m_panelGeometryBuffers.m_noTexture.reset();
+			m_panelGeometryBuffers.m_textured.reset();
 			m_panelVertexBuffer->Cleanup();
 			m_panelVertexBuffer->Destroy();
 			m_panelVertexBuffer.reset();
-			m_panelGeometryBuffers.m_noTexture.reset();
-			m_panelGeometryBuffers.m_textured.reset();
 		}
 
 		if ( m_borderVertexBuffer )
 		{
+			m_borderGeometryBuffers.m_noTexture->Cleanup();
+			m_borderGeometryBuffers.m_textured->Cleanup();
+			m_borderGeometryBuffers.m_noTexture.reset();
+			m_borderGeometryBuffers.m_textured.reset();
 			m_borderVertexBuffer->Cleanup();
 			m_borderVertexBuffer->Destroy();
 			m_borderVertexBuffer.reset();
-			m_borderGeometryBuffers.m_noTexture.reset();
-			m_borderGeometryBuffers.m_textured.reset();
 		}
+
+		for ( auto & l_buffer : m_textsGeometryBuffers )
+		{
+			l_buffer.m_noTexture->Cleanup();
+			l_buffer.m_textured->Cleanup();
+		}
+
+		m_textsGeometryBuffers.clear();
 
 		for ( auto && l_buffer : m_textsVertexBuffers )
 		{
 			l_buffer->Cleanup();
 			l_buffer->Destroy();
-			l_buffer.reset();
 		}
 
 		m_textsVertexBuffers.clear();
-		m_textsGeometryBuffers.clear();
 	}
 
 	void OverlayRenderer::DrawPanel( PanelOverlay & p_overlay )
@@ -441,16 +455,18 @@ namespace Castor3D
 
 	OverlayRenderer::OverlayGeometryBuffers OverlayRenderer::DoCreateTextGeometryBuffers()
 	{
-		VertexBufferUPtr l_vertexBuffer = std::make_unique< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_textDeclaration );
+		auto l_vertexBuffer = std::make_shared< VertexBuffer >( *GetRenderSystem()->GetEngine(), m_textDeclaration );
 		l_vertexBuffer->Resize( C3D_MAX_CHARS_PER_BUFFER * m_textDeclaration.GetStride() );
 		l_vertexBuffer->Create();
 		l_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_DYNAMIC, eBUFFER_ACCESS_NATURE_DRAW );
 
 		OverlayGeometryBuffers l_geometryBuffers;
 		auto l_program = DoGetTextProgram( 0 );
-		l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, l_vertexBuffer.get(), nullptr, nullptr, nullptr );
+		l_geometryBuffers.m_noTexture = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+		l_geometryBuffers.m_noTexture->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr );
 		l_program = DoGetTextProgram( eTEXTURE_CHANNEL_COLOUR );
-		l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program, l_vertexBuffer.get(), nullptr, nullptr, nullptr );
+		l_geometryBuffers.m_textured = GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *l_program );
+		l_geometryBuffers.m_textured->Initialise( l_vertexBuffer, nullptr, nullptr, nullptr );
 
 		m_textsVertexBuffers.push_back( std::move( l_vertexBuffer ) );
 		m_textsGeometryBuffers.push_back( l_geometryBuffers );

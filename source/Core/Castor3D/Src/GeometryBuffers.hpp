@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <IndexBuffer.hpp>
-#include <VertexBuffer.hpp>
+#include "IndexBuffer.hpp"
+#include "VertexBuffer.hpp"
 
 namespace Castor3D
 {
@@ -46,20 +46,12 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_topology	The buffers topology.
 		 *\param[in]	p_program	The shader program.
-		 *\param[in]	p_vtx		The vertex buffer.
-		 *\param[in]	p_idx		The index buffer.
-		 *\param[in]	p_bones		The bones data buffer.
-		 *\param[in]	p_inst		The instances matrices buffer.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_topology	La topologie des tampons.
 		 *\param[in]	p_program	Le programme shader.
-		 *\param[in]	p_vtx		Le tampon de sommets.
-		 *\param[in]	p_idx		Le tampon d'indices.
-		 *\param[in]	p_bones		Le tampon de données de bones.
-		 *\param[in]	p_inst		Le tampon de matrices d'instances.
 		 */
-		C3D_API GeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst );
+		C3D_API GeometryBuffers( eTOPOLOGY p_topology, ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -69,41 +61,65 @@ namespace Castor3D
 		C3D_API virtual ~GeometryBuffers();
 		/**
 		 *\~english
+		 *\brief		Creates the VAO.
+		 *\param[in]	p_vtx	The vertex buffer.
+		 *\param[in]	p_idx	The index buffer.
+		 *\param[in]	p_bones	The bones data buffer.
+		 *\param[in]	p_inst	The instances matrices buffer.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Crée le VAO.
+		 *\param[in]	p_vtx	Le tampon de sommets.
+		 *\param[in]	p_idx	Le tampon d'indices.
+		 *\param[in]	p_bones	Le tampon de données de bones.
+		 *\param[in]	p_inst	Le tampon de matrices d'instances.
+		 *\return		\p true si ça s'est bien passé.
+		 */
+		C3D_API bool Initialise( VertexBufferSPtr p_vtx, IndexBufferSPtr p_idx, VertexBufferSPtr p_bones, VertexBufferSPtr p_inst );
+		/**
+		 *\~english
+		 *\brief		Destroys the VAO.
+		 *\~french
+		 *\brief		Détruit le VAO.
+		 */
+		C3D_API void Cleanup();
+		/**
+		 *\~english
 		 *\brief		Draws the geometry held into the buffers
-		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_index		Specifies the starting index in the enabled arrays
+		 *\param[in]	p_size	Specifies the number of elements to be rendered
+		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Dessine la géométrie contenue dans les buffers
-		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
+		 *\param[in]	p_size	Spécifie le nombre de vertices à rendre
 		 *\param[in]	p_index	Spécifie l'indice du premier vertice
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool Draw( uint32_t p_uiSize, uint32_t p_index )const = 0;
+		C3D_API virtual bool Draw( uint32_t p_size, uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Draws the geometry held into the buffers
-		 *\param[in]	p_uiSize	Specifies the number of elements to be rendered
-		 *\param[in]	p_index		Specifies the starting index in the enabled arrays
-		 *\param[in]	p_count		The instances count
+		 *\param[in]	p_size	Specifies the number of elements to be rendered
+		 *\param[in]	p_index	Specifies the starting index in the enabled arrays
+		 *\param[in]	p_count	The instances count
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Dessine la géométrie contenue dans les buffers
-		 *\param[in]	p_uiSize	Spécifie le nombre de vertices à rendre
-		 *\param[in]	p_index		Spécifie l'indice du premier vertice
-		 *\param[in]	p_count		Le nombre d'instances à dessiner
+		 *\param[in]	p_size	Spécifie le nombre de vertices à rendre
+		 *\param[in]	p_index	Spécifie l'indice du premier vertice
+		 *\param[in]	p_count	Le nombre d'instances à dessiner
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API virtual bool DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )const = 0;
+		C3D_API virtual bool DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const = 0;
 		/**
 		 *\~english
-		 *\return		The program layout.
+		 *\return		The program.
 		 *\~french
-		 *\return		Le layout du programme.
+		 *\return		Le programme.
 		 */
-		inline ProgramInputLayout const & GetLayout()const
+		inline ShaderProgram const & GetProgram()const
 		{
-			return m_layout;
+			return m_program;
 		}
 		/**
 		 *\~english
@@ -128,17 +144,35 @@ namespace Castor3D
 			m_topology = p_value;
 		}
 
+	private:
+		/**
+		 *\~english
+		 *\brief		Creates the VAO.
+		 *\return		\p true on ok.
+		 *\~french
+		 *\brief		Crée le VAO.
+		 *\return		\p true si ça s'est bien passé.
+		 */
+		C3D_API virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Destroys the VAO.
+		 *\~french
+		 *\brief		Détruit le VAO.
+		 */
+		C3D_API virtual void DoCleanup() = 0;
+
 	protected:
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
-		VertexBuffer * m_vertexBuffer = nullptr;
+		VertexBufferSPtr m_vertexBuffer{ nullptr };
 		//!\~english The index buffer.	\~french Le tampon d'indices.
-		IndexBuffer * m_indexBuffer = nullptr;
+		IndexBufferSPtr m_indexBuffer{ nullptr };
 		//!\~english The bones buffer.	\~french Le tampon de bones.
-		VertexBuffer * m_bonesBuffer = nullptr;
+		VertexBufferSPtr m_bonesBuffer{ nullptr };
 		//!\~english The matrix buffer.	\~french Le tampon de matrices.
-		VertexBuffer * m_matrixBuffer = nullptr;
+		VertexBufferSPtr m_matrixBuffer{ nullptr };
 		//!\~english The shader program.	\~french Le programme de rendu.
-		ProgramInputLayout const & m_layout;
+		ShaderProgram const & m_program;
 		//!\~english The buffers topology.	\~french La topologie des tampons.
 		eTOPOLOGY m_topology;
 	};

@@ -104,9 +104,16 @@ namespace Castor3D
 	{
 	}
 
+	void RenderLoop::DoCpuUpdate()
+	{
+		GetEngine()->GetRenderTechniqueManager().Update();
+		GetEngine()->GetSceneManager().Update();
+		GetEngine()->GetOverlayManager().Update();
+		m_debugOverlays->EndCpuTask();
+	}
+
 	void RenderLoop::DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount )
 	{
-		PreciseTimer l_timer;
 		m_renderSystem->GetMainContext()->SetCurrent();
 
 		try
@@ -130,11 +137,13 @@ namespace Castor3D
 
 		m_renderSystem->GetMainContext()->EndCurrent();
 		GetEngine()->GetWindowManager().Render( true );
+		m_debugOverlays->EndGpuTask();
 	}
 
 	void RenderLoop::DoCpuStep()
 	{
 		GetEngine()->GetListenerManager().FireEvents( eEVENT_TYPE_POST_RENDER );
+		m_debugOverlays->EndCpuTask();
 	}
 
 	void RenderLoop::DoRenderFrame()
@@ -145,14 +154,9 @@ namespace Castor3D
 			uint32_t l_faces = 0;
 			uint32_t l_objects = 0;
 			m_debugOverlays->StartFrame();
-			GetEngine()->GetRenderTechniqueManager().Update();
-			GetEngine()->GetSceneManager().Update();
-			GetEngine()->GetOverlayManager().Update();
-			m_debugOverlays->EndCpuTask();
+			DoCpuUpdate();
 			DoGpuStep( l_vertices, l_faces, l_objects );
-			m_debugOverlays->EndGpuTask();
 			DoCpuStep();
-			m_debugOverlays->EndCpuTask();
 			m_debugOverlays->EndFrame( l_vertices, l_faces, l_objects );
 		}
 	}

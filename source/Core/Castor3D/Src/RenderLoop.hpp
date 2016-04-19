@@ -222,6 +222,7 @@ namespace Castor3D
 		C3D_API virtual ContextSPtr DoCreateMainContext( RenderWindow & p_window ) = 0;
 
 	private:
+		void DoCpuUpdate();
 		void DoGpuStep( uint32_t & p_vtxCount, uint32_t & p_fceCount, uint32_t & p_objCount );
 		void DoCpuStep();
 

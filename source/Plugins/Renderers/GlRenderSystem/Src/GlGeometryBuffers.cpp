@@ -12,8 +12,8 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, eTOPOLOGY p_topology, ShaderProgram const & p_program, VertexBuffer * p_vtx, IndexBuffer * p_idx, VertexBuffer * p_bones, VertexBuffer * p_inst )
-		: GeometryBuffers( p_topology, p_program, p_vtx, p_idx, p_bones, p_inst )
+	GlGeometryBuffers::GlGeometryBuffers( OpenGl & p_gl, eTOPOLOGY p_topology, ShaderProgram const & p_program )
+		: GeometryBuffers( p_topology, p_program )
 		, ObjectType( p_gl,
 					  "GlVertexArrayObjects",
 					  std::bind( &OpenGl::GenVertexArrays, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
@@ -23,57 +23,13 @@ namespace GlRender
 					)
 		, m_program( p_program )
 	{
-		bool l_return = ObjectType::Create();
-
-		if ( l_return )
-		{
-			l_return = GetOpenGl().BindVertexArray( GetGlName() );
-		}
-
-		if ( l_return )
-		{
-			if ( DoCreateAttributes( p_program.GetLayout(), p_vtx->GetDeclaration(), m_vertexAttributes ) )
-			{
-				m_vertexBuffer->Bind();
-				DoBindAttributes( m_vertexAttributes );
-			}
-
-			if ( m_indexBuffer )
-			{
-				m_indexBuffer->Bind();
-			}
-
-			if ( m_bonesBuffer )
-			{
-				if ( DoCreateAttributes( p_program.GetLayout(), p_bones->GetDeclaration(), m_bonesAttributes ) )
-				{
-					m_bonesBuffer->Bind();
-					DoBindAttributes( m_bonesAttributes );
-				}
-			}
-
-			if ( m_matrixBuffer )
-			{
-				if ( DoCreateAttributes( p_program.GetLayout(), p_inst->GetDeclaration(), m_matrixAttributes ) )
-				{
-					m_matrixBuffer->Bind();
-					DoBindAttributes( m_matrixAttributes );
-				}
-			}
-
-			GetOpenGl().BindVertexArray( 0 );
-		}
 	}
 
 	GlGeometryBuffers::~GlGeometryBuffers()
 	{
-		m_vertexAttributes.clear();
-		m_matrixAttributes.clear();
-		m_bonesAttributes.clear();
-		ObjectType::Destroy();
 	}
 
-	bool GlGeometryBuffers::Draw( uint32_t p_uiSize, uint32_t p_index )const
+	bool GlGeometryBuffers::Draw( uint32_t p_size, uint32_t p_index )const
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
@@ -87,11 +43,11 @@ namespace GlRender
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElements( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
+				GetOpenGl().DrawElements( l_eMode, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ) );
 			}
 			else
 			{
-				GetOpenGl().DrawArrays( l_eMode, int( p_index ), int( p_uiSize ) );
+				GetOpenGl().DrawArrays( l_eMode, int( p_index ), int( p_size ) );
 			}
 
 			ObjectType::Unbind();
@@ -100,7 +56,7 @@ namespace GlRender
 		return true;
 	}
 
-	bool GlGeometryBuffers::DrawInstanced( uint32_t p_uiSize, uint32_t p_index, uint32_t p_count )const
+	bool GlGeometryBuffers::DrawInstanced( uint32_t p_size, uint32_t p_index, uint32_t p_count )const
 	{
 		eGL_PRIMITIVE l_eMode = GetOpenGl().Get( m_topology );
 
@@ -119,17 +75,76 @@ namespace GlRender
 		{
 			if ( m_indexBuffer )
 			{
-				GetOpenGl().DrawElementsInstanced( l_eMode, int( p_uiSize ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
+				GetOpenGl().DrawElementsInstanced( l_eMode, int( p_size ), eGL_TYPE_UNSIGNED_INT, BUFFER_OFFSET( p_index ), int( p_count ) );
 			}
 			else
 			{
-				GetOpenGl().DrawArraysInstanced( l_eMode, int( p_index ), int( p_uiSize ), int( p_count ) );
+				GetOpenGl().DrawArraysInstanced( l_eMode, int( p_index ), int( p_size ), int( p_count ) );
 			}
 
 			ObjectType::Unbind();
 		}
 
 		return true;
+	}
+
+	bool GlGeometryBuffers::DoInitialise()
+	{
+		if ( m_program.GetStatus() != ePROGRAM_STATUS_LINKED )
+		{
+			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
+		}
+
+		bool l_return = ObjectType::Create();
+
+		if ( l_return )
+		{
+			l_return = GetOpenGl().BindVertexArray( GetGlName() );
+		}
+
+		if ( l_return )
+		{
+			if ( DoCreateAttributes( m_program.GetLayout(), m_vertexBuffer->GetDeclaration(), m_vertexAttributes ) )
+			{
+				m_vertexBuffer->Bind();
+				DoBindAttributes( m_vertexAttributes );
+			}
+
+			if ( m_indexBuffer )
+			{
+				m_indexBuffer->Bind();
+			}
+
+			if ( m_bonesBuffer )
+			{
+				if ( DoCreateAttributes( m_program.GetLayout(), m_bonesBuffer->GetDeclaration(), m_bonesAttributes ) )
+				{
+					m_bonesBuffer->Bind();
+					DoBindAttributes( m_bonesAttributes );
+				}
+			}
+
+			if ( m_matrixBuffer )
+			{
+				if ( DoCreateAttributes( m_program.GetLayout(), m_matrixBuffer->GetDeclaration(), m_matrixAttributes ) )
+				{
+					m_matrixBuffer->Bind();
+					DoBindAttributes( m_matrixAttributes );
+				}
+			}
+
+			GetOpenGl().BindVertexArray( 0 );
+		}
+
+		return l_return;
+	}
+
+	void GlGeometryBuffers::DoCleanup()
+	{
+		m_vertexAttributes.clear();
+		m_matrixAttributes.clear();
+		m_bonesAttributes.clear();
+		ObjectType::Destroy();
 	}
 
 	BufferDeclaration::const_iterator GlGeometryBuffers::DoFindElement( BufferDeclaration const & p_declaration, BufferElementDeclaration const & p_element )const

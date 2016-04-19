@@ -4,6 +4,7 @@
 #include "Buffer.hpp"
 #include "Engine.hpp"
 #include "Face.hpp"
+#include "FunctorEvent.hpp"
 #include "InitialiseEvent.hpp"
 #include "Material.hpp"
 #include "MaterialManager.hpp"
@@ -558,9 +559,8 @@ namespace Castor3D
 		DoCreateBuffers();
 	}
 
-	void Submesh::Draw( ShaderProgram const & p_program )
+	void Submesh::Draw( GeometryBuffers const & p_geometryBuffers )
 	{
-		GeometryBuffers & l_geometryBuffers = DoPrepareGeometryBuffers( p_program );
 		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
 
 		if ( m_indexBuffer )
@@ -568,12 +568,11 @@ namespace Castor3D
 			l_size = m_indexBuffer->GetSize();
 		}
 
-		l_geometryBuffers.Draw( l_size, 0 );
+		p_geometryBuffers.Draw( l_size, 0 );
 	}
 
-	void Submesh::DrawInstanced( ShaderProgram const & p_program, uint32_t p_count )
+	void Submesh::DrawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count )
 	{
-		GeometryBuffers & l_geometryBuffers = DoPrepareGeometryBuffers( p_program );
 		uint32_t l_size = m_vertexBuffer->GetSize() / m_layout.GetStride();
 
 		if ( m_indexBuffer )
@@ -581,7 +580,7 @@ namespace Castor3D
 			l_size = m_indexBuffer->GetSize();
 		}
 
-		l_geometryBuffers.DrawInstanced( l_size, 0, p_count );
+		p_geometryBuffers.DrawInstanced( l_size, 0, p_count );
 	}
 
 	void Submesh::ComputeFacesFromPolygonVertex()
@@ -991,14 +990,39 @@ namespace Castor3D
 		}
 	}
 
+	GeometryBuffers & Submesh::GetGeometryBuffers( ShaderProgram const & p_program )
+	{
+		GeometryBuffersSPtr l_buffers;
+		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&p_program]( GeometryBuffersSPtr p_buffers )
+		{
+			return &p_buffers->GetProgram() == &p_program;
+		} );
+
+		if ( l_it == m_geometryBuffers.end() )
+		{
+			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program );
+			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this, l_buffers]()
+			{
+				l_buffers->Initialise( m_vertexBuffer, m_indexBuffer, m_bonesBuffer, m_matrixBuffer );
+			} ) );
+			m_geometryBuffers.push_back( l_buffers );
+		}
+		else
+		{
+			l_buffers = *l_it;
+		}
+
+		return *l_buffers;
+	}
+
 	void Submesh::DoCreateBuffers()
 	{
-		m_vertexBuffer = std::make_unique< VertexBuffer >( *GetEngine(), m_layout );
-		m_indexBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *GetEngine(), m_layout );
+		m_indexBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
 
 		if ( ( GetProgramFlags() & ePROGRAM_FLAG_SKINNING ) == ePROGRAM_FLAG_SKINNING )
 		{
-			m_bonesBuffer = std::make_unique< VertexBuffer >( *GetEngine(), BufferDeclaration
+			m_bonesBuffer = std::make_shared< VertexBuffer >( *GetEngine(), BufferDeclaration
 			{
 				{
 					BufferElementDeclaration{ ShaderProgram::BoneIds0, eELEMENT_USAGE_BONE_IDS0, eELEMENT_TYPE_4INTS, 0 },
@@ -1020,7 +1044,7 @@ namespace Castor3D
 			if ( l_count > 1 )
 			{
 				m_programFlags |= ePROGRAM_FLAG_INSTANCIATION;
-				m_matrixBuffer = std::make_unique< VertexBuffer >( *GetEngine(), BufferDeclaration
+				m_matrixBuffer = std::make_shared< VertexBuffer >( *GetEngine(), BufferDeclaration
 				{
 					{
 						BufferElementDeclaration{ ShaderProgram::Transform, eELEMENT_USAGE_TRANSFORM, eELEMENT_TYPE_4x4FLOATS, 0 },
@@ -1056,6 +1080,11 @@ namespace Castor3D
 		{
 			m_bonesBuffer->Cleanup();
 			m_bonesBuffer->Destroy();
+		}
+
+		for ( auto l_buffers : m_geometryBuffers )
+		{
+			l_buffers->Cleanup();
 		}
 
 		m_geometryBuffers.clear();
@@ -1202,32 +1231,5 @@ namespace Castor3D
 				l_matrixBuffer.Resize( l_uiSize );
 			}
 		}
-	}
-
-	GeometryBuffers & Submesh::DoPrepareGeometryBuffers( ShaderProgram const & p_program )
-	{
-		if ( p_program.GetStatus() != ePROGRAM_STATUS_LINKED )
-		{
-			CASTOR_EXCEPTION( "Can't retrieve a program input layout from a non compiled shader." );
-		}
-
-		GeometryBuffersSPtr l_buffers;
-		auto const & l_layout = p_program.GetLayout();
-		auto l_it = std::find_if( std::begin( m_geometryBuffers ), std::end( m_geometryBuffers ), [&l_layout]( GeometryBuffersSPtr p_buffers )
-		{
-			return p_buffers->GetLayout() == l_layout;
-		} );
-
-		if ( l_it == m_geometryBuffers.end() )
-		{
-			l_buffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, p_program, m_vertexBuffer.get(), m_indexBuffer.get(), m_bonesBuffer.get(), m_matrixBuffer.get() );
-			m_geometryBuffers.push_back( l_buffers );
-		}
-		else
-		{
-			l_buffers = *l_it;
-		}
-
-		return *l_buffers;
 	}
 }

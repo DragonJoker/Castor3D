@@ -370,23 +370,23 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Draws the submesh.
-		 *\param[in]	p_program	The shader program.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw this submesh.
 		 *\~french
 		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	p_program	Le programme shader.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
 		 */
-		C3D_API void Draw( ShaderProgram const & p_program );
+		C3D_API void Draw( GeometryBuffers const & p_geometryBuffers );
 		/**
 		 *\~english
 		 *\brief		Draws the submesh.
-		 *\param[in]	p_program	The shader program.
-		 *\param[in]	p_count		The instances count.
+		 *\param[in]	p_geometryBuffers	The geometry buffers used to draw this submesh.
+		 *\param[in]	p_count				The instances count.
 		 *\~french
 		 *\brief		Dessine le sous-maillage.
-		 *\param[in]	p_program	Le programme shader.
-		 *\param[in]	p_count		Le nombre d'instances.
+		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner ce sous-maillage.
+		 *\param[in]	p_count				Le nombre d'instances.
 		 */
-		C3D_API void DrawInstanced( ShaderProgram const & p_program, uint32_t p_count );
+		C3D_API void DrawInstanced( GeometryBuffers const & p_geometryBuffers, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Creates faces from the points
@@ -502,6 +502,15 @@ namespace Castor3D
 		 *\param[in]	p_value	La nouvelle valeur.
 		 */
 		C3D_API void SetTopology( eTOPOLOGY p_value );
+		/**
+		 *\~english
+		 *\brief		Retrieves a GeometryBuffers for given program.
+		 *\param[in]	p_program	The program.
+		 *\~french
+		 *\brief		Récupère un GeometryBuffers pour le programme donné.
+		 *\param[in]	p_program	Le programme.
+		 */
+		C3D_API GeometryBuffers & GetGeometryBuffers( ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Retrieves the skeleton
@@ -857,7 +866,6 @@ namespace Castor3D
 		void DoGenerateIndexBuffer();
 		void DoGenerateBonesBuffer();
 		void DoGenerateMatrixBuffer( uint32_t p_count );
-		GeometryBuffers & DoPrepareGeometryBuffers( ShaderProgram const & p_program );
 
 	private:
 		//!\~english The submesh ID.	\~french L'id du sbmesh.
@@ -867,13 +875,13 @@ namespace Castor3D
 		//!\~english Vertex elements declaration, deduced from points.	\~french Déclaration des éléments d'un sommet, déduite à partir des points.
 		BufferDeclaration m_layout;
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
-		VertexBufferUPtr m_vertexBuffer;
+		VertexBufferSPtr m_vertexBuffer;
 		//!\~english The index buffer.	\~french Le tampon d'indices.
-		IndexBufferUPtr m_indexBuffer;
+		IndexBufferSPtr m_indexBuffer;
 		//!\~english The bone data buffer (animation).	\~french Le tampon de données de bones (animation).
-		VertexBufferUPtr m_bonesBuffer;
+		VertexBufferSPtr m_bonesBuffer;
 		//!\~english The matrix buffer (instantiation).	\~french Le tampon de matrices (instanciation).
-		VertexBufferUPtr m_matrixBuffer;
+		VertexBufferSPtr m_matrixBuffer;
 		//!\~english The faces in the submesh.	\~french Le tableau de faces.
 		FaceArray m_faces;
 		//!\~english Tells if normals exist or need to be computed.	\~french Dit si les normales existent ou doivent être calculées.
