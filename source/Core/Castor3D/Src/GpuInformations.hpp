@@ -206,6 +206,11 @@ namespace Castor3D
 			{
 				m_minValues.insert( { GpuMin( i ), std::numeric_limits< int32_t >::max() } );
 			}
+
+			for ( auto & l_value : m_useShader )
+			{
+				l_value = false;
+			}
 		}
 		/**
 		 *\~english
@@ -543,7 +548,7 @@ namespace Castor3D
 		//!\~english The shader language version.	\~french La version du langage de shader.
 		uint32_t m_shaderLanguageVersion{ 0 };
 		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
-		std::array< bool, eSHADER_TYPE_COUNT > m_useShader{ false };
+		std::array< bool, eSHADER_TYPE_COUNT > m_useShader;
 		//!\~english The minimum values.	\~french Les valeurs minimales.
 		std::map< GpuMin, int32_t > m_minValues;
 		//!\~english The maximum values.	\~french Les valeurs maximales.
