@@ -156,7 +156,7 @@ bool GlContextImpl::Initialise( RenderWindow * p_window )
 				if ( !l_renderSystem->IsInitialised() )
 				{
 					glXMakeCurrent( m_display, m_drawable, m_glxContext );
-					l_renderSystem->Initialise();
+					l_renderSystem->Initialise( std::move( m_gpuInformations ) );
 					p_window->GetEngine()->GetMaterialManager().Initialise();
 					glXMakeCurrent( m_display, None, nullptr );
 				}
@@ -318,7 +318,7 @@ XVisualInfo * GlContextImpl::DoCreateVisualInfoWithFBConfig( RenderWindow * p_wi
 	{
 		if ( p_window->IsUsingStereo() )
 		{
-			p_window->GetEngine()->GetRenderSystem()->SetStereoAvailable( true );
+			m_context->SetStereoAvailable( true );
 			Logger::LogDebug( cuT( "GlXContext::Create - Stereo glXChooseFBConfig successful with detailed attributes" ) );
 		}
 		else

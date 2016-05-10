@@ -77,7 +77,7 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetMaxShaderModel();
+				eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 				l_return->SetSource( eSHADER_TYPE_VERTEX, l_model, GetEngine()->GetRenderSystem()->GetVertexShaderSource( p_programFlags ) );
 				l_return->SetSource( eSHADER_TYPE_PIXEL, l_model, p_technique.GetPixelShaderSource( p_textureFlags ) );
 

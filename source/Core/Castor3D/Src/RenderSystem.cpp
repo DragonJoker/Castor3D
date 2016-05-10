@@ -22,24 +22,13 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderSystem::RenderSystem( Engine & p_engine, eRENDERER_TYPE p_eRendererType )
-		: OwnedBy< Engine >( p_engine )
-		, m_rendererType( p_eRendererType )
-		, m_initialised( false )
-		, m_stereoAvailable( false )
-		, m_instancing( false )
-		, m_accumBuffer( false )
-		, m_nonPowerOfTwoTextures( false )
-		, m_currentContext( nullptr )
-		, m_pCurrentCamera( nullptr )
-		, m_shaderLanguageVersion( 0 )
-		, m_hasConstantsBuffers( false )
-		, m_hasTextureBuffers( false )
+		: OwnedBy< Engine >{ p_engine }
+		, m_rendererType{ p_eRendererType }
+		, m_initialised{ false }
+		, m_currentContext{ nullptr }
+		, m_pCurrentCamera{ nullptr }
+		, m_gpuInformations{}
 	{
-		m_useShader[eSHADER_TYPE_VERTEX] = false;
-		m_useShader[eSHADER_TYPE_PIXEL] = false;
-		m_useShader[eSHADER_TYPE_GEOMETRY] = false;
-		m_useShader[eSHADER_TYPE_HULL] = false;
-		m_useShader[eSHADER_TYPE_DOMAIN] = false;
 	}
 
 	RenderSystem::~RenderSystem()
@@ -47,9 +36,15 @@ namespace Castor3D
 		m_mainContext.reset();
 	}
 
-	void RenderSystem::Initialise()
+	void RenderSystem::Initialise( GpuInformations && p_informations )
 	{
+		m_gpuInformations = std::move( p_informations );
 		DoInitialise();
+		m_gpuInformations.UpdateMaxShaderModel();
+		REQUIRE( m_gpuInformations.GetMaxShaderModel() >= eSHADER_MODEL_3 );
+		Logger::LogInfo( cuT( "Vendor: " ) + m_gpuInformations.GetVendor() );
+		Logger::LogInfo( cuT( "Renderer: " ) + m_gpuInformations.GetRenderer() );
+		Logger::LogInfo( cuT( "Version: " ) + m_gpuInformations.GetVersion() );
 	}
 
 	void RenderSystem::Cleanup()
@@ -117,7 +112,7 @@ namespace Castor3D
 
 	GLSL::GlslWriter RenderSystem::CreateGlslWriter()
 	{
-		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ GetShaderLanguageVersion(), HasConstantsBuffers(), HasTextureBuffers() } };
+		return GLSL::GlslWriter{ GLSL::GlslWriterConfig{ m_gpuInformations.GetShaderLanguageVersion(), m_gpuInformations.HasConstantsBuffers(), m_gpuInformations.HasTextureBuffers() } };
 	}
 
 	String RenderSystem::GetVertexShaderSource( uint32_t p_programFlags )

@@ -49,7 +49,7 @@ namespace GlRender
 		GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 		m_hWnd = p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
 		auto l_colour = p_window->GetPixelFormat();
-		auto l_stereo = p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->IsStereoAvailable();
+		auto l_stereo = p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->GetGpuInformations().IsStereoAvailable();
 		bool l_isMain = false;
 
 		if ( !l_mainContext )
@@ -84,7 +84,7 @@ namespace GlRender
 			}
 			else
 			{
-				l_renderSystem->SetStereoAvailable( false );
+				m_gpuInformations.RemoveFeature( GpuFeature::Stereo );
 				l_bHasPF = DoSelectPixelFormat( l_colour, false );
 			}
 		}
@@ -124,7 +124,7 @@ namespace GlRender
 		{
 			glTrack( GetOpenGl(), "GlContextImpl", this );
 			SetCurrent();
-			l_renderSystem->Initialise();
+			l_renderSystem->Initialise( std::move( m_gpuInformations ));
 			p_window->GetEngine()->GetMaterialManager().Initialise();
 #if !defined( NDEBUG )
 
@@ -338,7 +338,7 @@ namespace GlRender
 			l_return = DoSelectPixelFormat( p_colour, true );
 		}
 
-		l_renderSystem->SetStereoAvailable( l_bStereoAvailable );
+		m_gpuInformations.UpdateFeature( GpuFeature::Stereo, l_bStereoAvailable );
 		return l_return;
 	}
 

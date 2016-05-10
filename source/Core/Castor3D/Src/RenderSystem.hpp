@@ -1,5 +1,5 @@
-﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+/*
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -18,8 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_RENDER_SYSTEM_H___
 #define ___C3D_RENDER_SYSTEM_H___
 
-#include "Castor3DPrerequisites.hpp"
-#include "Context.hpp"
+#include "GpuInformations.hpp"
 
 #include <stack>
 
@@ -37,26 +36,6 @@ namespace Castor3D
 	\date 		09/02/2010
 	\version	0.1
 	\~english
-	\brief		Template class used to create a renderer
-	\~french
-	\brief		Classe template utilisée pour créer un renderer
-	*/
-	template< class Ty > struct RendererCreator;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
-	\~english
-	\brief		Template class used to add a renderer to the list
-	\~french
-	\brief		Classe template utilisée pour ajouter un renderer à la liste
-	*/
-	template< class Ty > struct RendererAdder;
-	/*!
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
-	\~english
 	\brief		The render system representation
 	\remarks	This is the class which is the link between Castor3D and the renderer driver (OpenGL or Direct3D)
 				<br />Hence it is also the only class which can create the renderers
@@ -68,10 +47,6 @@ namespace Castor3D
 	class RenderSystem
 		: public Castor::OwnedBy< Engine >
 	{
-	protected:
-		template< class Ty > friend struct RendererCreator;
-		template< class Ty > friend struct RendererAdder;
-
 	public:
 		/**
 		 *\~english
@@ -97,7 +72,7 @@ namespace Castor3D
 		 *\~french
 		 *\brief		Initialise le render system
 		 */
-		C3D_API void Initialise();
+		C3D_API void Initialise( GpuInformations && p_informations );
 		/**
 		 *\~english
 		 *\brief		Cleans the render system up
@@ -199,27 +174,13 @@ namespace Castor3D
 		C3D_API Castor::String GetVertexShaderSource( uint32_t p_programFlags );
 		/**
 		 *\~english
-		 *\brief		Checks support for given shader model
-		 *\param[in]	p_model	The shader model
-		 *\return		\p false if the given model is not supported by current API
+		 *\return		The GPU informations.
 		 *\~french
-		 *\brief		Vérifie le support d'un modèle de shaders
-		 *\param[in]	p_model	Le modèle de shaders
-		 *\return		\p false si le modèle donné n'est pas supporté par l'API actuelle
+		 *\return		Les informations sur le GPU.
 		 */
-		inline bool CheckSupport( eSHADER_MODEL p_model )
+		inline GpuInformations const & GetGpuInformations()const
 		{
-			return p_model <= m_maxShaderModel;
-		}
-		/**
-		 *\~english
-		 *\return		The maximum supported shader model.
-		 *\~french
-		 *\return		Le modèle de shader maximal supporté.
-		 */
-		inline eSHADER_MODEL GetMaxShaderModel()
-		{
-			return m_maxShaderModel;
+			return m_gpuInformations;
 		}
 		/**
 		 *\~english
@@ -387,18 +348,6 @@ namespace Castor3D
 		C3D_API virtual IViewportImplUPtr CreateViewport( Viewport & p_viewport ) = 0;
 		/**
 		 *\~english
-		 *\brief		Tells if the RenderSystem supports given shader type
-		 *\param[in]	p_type	The shader type
-		 *\~french
-		 *\brief		Dit si le RenderSystem supporte le type de shader donné
-		 *\param[in]	p_type	Le type de shader
-		 */
-		inline bool HasShaderType( eSHADER_TYPE p_type )const
-		{
-			return m_useShader[p_type];
-		}
-		/**
-		 *\~english
 		 *\brief		Tells if the RenderSystem is initialised
 		 *\~french
 		 *\brief		Dit si le RenderSystem est initialisé
@@ -409,26 +358,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Tells if the RenderSystem supports stereo
-		 *\~french
-		 *\brief		Dit si le RenderSystem supporte la stéréo
-		 */
-		inline bool IsStereoAvailable()const
-		{
-			return m_stereoAvailable;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines if the RenderSystem supports stereo
-		 *\~french
-		 *\brief		Définit si le RenderSystem supporte la stéréo
-		 */
-		inline void SetStereoAvailable( bool p_bStereo )
-		{
-			m_stereoAvailable = p_bStereo;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the renderer API
 		 *\~french
 		 *\brief		Récupère l'API de rendu
@@ -436,42 +365,6 @@ namespace Castor3D
 		inline eRENDERER_TYPE GetRendererType()const
 		{
 			return m_rendererType;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the instanced draw calls support
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le support de l'instanciation
-		 *\return		La valeur
-		 */
-		inline bool HasInstancing()const
-		{
-			return m_instancing;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the accumulation buffer support
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le support du buffer d'accumulation
-		 *\return		La valeur
-		 */
-		inline bool HasAccumulationBuffer()const
-		{
-			return m_accumBuffer;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the non power of two textures support
-		 *\return		The value
-		 *\~french
-		 *\brief		Récupère le support des textures non puissance de deux
-		 *\return		La valeur
-		 */
-		inline bool HasNonPowerOfTwoTextures()const
-		{
-			return m_nonPowerOfTwoTextures;
 		}
 		/**
 		 *\~english
@@ -568,36 +461,6 @@ namespace Castor3D
 		{
 			return m_gpuTime;
 		}
-		/**
-		 *\~english
-		 *\return		The shader language version.
-		 *\~french
-		 *\return		La version du langage shader.
-		 */
-		inline uint32_t GetShaderLanguageVersion()const
-		{
-			return m_shaderLanguageVersion;
-		}
-		/**
-		 *\~english
-		 *\return		The constant buffers support status.
-		 *\~french
-		 *\return		Le statut du support des tampons de constantes.
-		 */
-		inline bool HasConstantsBuffers()const
-		{
-			return m_hasConstantsBuffers;
-		}
-		/**
-		 *\~english
-		 *\return		The texture buffers support status.
-		 *\~french
-		 *\return		Le statut du support des tampons de textures.
-		 */
-		inline bool HasTextureBuffers()const
-		{
-			return m_hasTextureBuffers;
-		}
 
 	protected:
 		/**
@@ -620,18 +483,8 @@ namespace Castor3D
 		std::recursive_mutex m_mutex;
 		//!\~english Tells whether or not it is initialised	\~french Dit si le render system est initialisé
 		bool m_initialised;
-		//!\~english Tells whether or not the selected render API supports instanced draw calls	\~french Dit si l'API de rendu choisie supporte le dessin instancié
-		bool m_instancing;
-		//!\~english Tells whether or not the selected render API supports accumulation buffers	\~french Dit si l'API de rendu choisie supporte le buffer d'accumulation
-		bool m_accumBuffer;
-		//!\~english Tells whether or not the selected render API supports non power of two textures	\~french Dit si l'API de rendu choisie supporte les textures non puissance de 2
-		bool m_nonPowerOfTwoTextures;
-		//!\~english Tells the RenderSystem supports stereo	\~french Dit si le RenderSystem supporte la stéréo
-		bool m_stereoAvailable;
-		//!\~english Tells which types of shaders are supported	\~french Dit quel type de shaders sont supportés
-		bool m_useShader[eSHADER_TYPE_COUNT];
-		//!\~english The maximum supported shader model.	\~french Le modèle de shader maximum supporté.
-		eSHADER_MODEL m_maxShaderModel;
+		//!\~english The GPU informations.	\~french Les informations sur le GPU.
+		GpuInformations m_gpuInformations;
 		//!\~english The overlay renderer	\~french Le renderer d'overlays
 		OverlayRendererSPtr m_overlayRenderer;
 		//!\~english The main render context	\~french Le contexte de rendu principal
@@ -646,12 +499,6 @@ namespace Castor3D
 		CameraRPtr m_pCurrentCamera;
 		//!\~english The time spent on GPU for current frame.	\~french Le temps passé sur le GPU pour l'image courante.
 		std::chrono::milliseconds m_gpuTime;
-		//!\~english The shader language version.	\~french La version du langage de shader.
-		uint32_t m_shaderLanguageVersion;
-		//!\~english The constants buffers support status.	\~french Le statut du support de tampons de constantes.
-		bool m_hasConstantsBuffers;
-		//!\~english The texture buffers support status.	\~french Le statut du support de tampons de textures.
-		bool m_hasTextureBuffers;
 
 #if C3D_TRACE_OBJECTS
 

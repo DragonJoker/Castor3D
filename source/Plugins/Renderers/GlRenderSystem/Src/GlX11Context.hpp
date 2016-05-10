@@ -1,5 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -57,6 +57,7 @@ namespace GlRender
 		GLXFBConfig	* m_fbConfig;
 		GlContext * m_context;
 		bool m_initialised;
+		Castor3D::GpuInformations m_gpuInformations;
 	};
 }
 #endif

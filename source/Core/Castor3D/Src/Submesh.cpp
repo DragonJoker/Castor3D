@@ -1033,7 +1033,7 @@ namespace Castor3D
 			} );
 			ENSURE( m_bonesBuffer->GetDeclaration().GetStride() == BonedVertex::Stride );
 		}
-		else if ( GetEngine()->GetRenderSystem()->HasInstancing() )
+		else if ( GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
 			uint32_t l_count = 0;
 			l_count = std::accumulate( m_instanceCount.begin(), m_instanceCount.end(), l_count, [&]( uint32_t p_count, std::pair< MaterialSPtr, uint32_t > const & p_pair )

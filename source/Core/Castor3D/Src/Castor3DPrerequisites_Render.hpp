@@ -1,5 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -500,6 +500,7 @@ namespace Castor3D
 	}	eTONE_MAPPING_TYPE;
 
 	template< typename T > class CpuBuffer;
+	class GpuInformations;
 	class RenderSystem;
 	class RenderTechnique;
 	class Context;

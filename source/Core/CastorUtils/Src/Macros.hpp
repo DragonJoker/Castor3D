@@ -1,5 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -211,5 +211,10 @@ typedef wchar_t ychar;
 	EnumName##_COUNT,\
 	EnumName##_MIN = EnumMin,\
 	EnumName##_MAX = EnumName##_COUNT - 1
+
+#define CASTOR_ENUM_CLASS_BOUNDS( EnumMin )\
+	Count,\
+	Min = EnumMin,\
+	Max = Count - 1
 
 #endif

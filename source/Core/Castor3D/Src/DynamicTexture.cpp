@@ -24,7 +24,7 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
+			if ( !GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 			{
 				Castor::Image l_img( cuT( "Tmp" ), *m_pixelBuffer );
 				Castor::Size l_size = m_pixelBuffer->dimensions();
@@ -54,7 +54,7 @@ namespace Castor3D
 		{
 			Castor::Size l_size = p_size;
 
-			if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
+			if ( !GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 			{
 				l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
 			}
@@ -69,7 +69,7 @@ namespace Castor3D
 	{
 		Size l_size;
 
-		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
+		if ( !GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
 			m_depth = GetNext2Pow( p_size[2] );
 			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_depth );
@@ -93,7 +93,7 @@ namespace Castor3D
 		m_depth = 1;
 		Castor::Size l_size = p_size;
 
-		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
+		if ( !GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
 			l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
 		}
@@ -105,7 +105,7 @@ namespace Castor3D
 	{
 		Size l_size;
 
-		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
+		if ( !GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
 			m_depth = GetNext2Pow( p_size[2] );
 			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_depth );

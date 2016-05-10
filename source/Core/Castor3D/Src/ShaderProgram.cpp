@@ -1,4 +1,4 @@
-﻿#include "ShaderProgram.hpp"
+#include "ShaderProgram.hpp"
 
 #include "ShaderObject.hpp"
 #include "FrameVariableBuffer.hpp"
@@ -261,7 +261,7 @@ namespace Castor3D
 
 		for ( auto && l_shader : m_pShaders )
 		{
-			if ( l_shader && GetRenderSystem()->HasShaderType( eSHADER_TYPE( i++ ) ) )
+			if ( l_shader && GetRenderSystem()->GetGpuInformations().HasShaderType( eSHADER_TYPE( i++ ) ) )
 			{
 				l_shader->SetFile( p_eModel, p_path );
 			}
@@ -307,7 +307,7 @@ namespace Castor3D
 			{
 				for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 				{
-					if ( GetRenderSystem()->CheckSupport( eSHADER_MODEL( i ) ) )
+					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( eSHADER_MODEL( i ) ) )
 					{
 						m_pShaders[p_target]->SetFile( eSHADER_MODEL( i ), p_pathFile );
 					}
@@ -354,7 +354,7 @@ namespace Castor3D
 			{
 				for ( int i = 0; i < eSHADER_MODEL_COUNT; ++i )
 				{
-					if ( GetRenderSystem()->CheckSupport( eSHADER_MODEL( i ) ) )
+					if ( GetRenderSystem()->GetGpuInformations().CheckSupport( eSHADER_MODEL( i ) ) )
 					{
 						m_pShaders[p_target]->SetSource( eSHADER_MODEL( i ), p_strSource );
 					}
