@@ -656,7 +656,7 @@ namespace Castor3D
 			l_program->CreateFrameVariable( ShaderProgram::MapOpacity, eSHADER_TYPE_PIXEL );
 		}
 
-		eSHADER_MODEL l_model = GetRenderSystem()->GetMaxShaderModel();
+		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		l_program->SetSource( eSHADER_TYPE_VERTEX, l_model, l_strVs );
 		l_program->SetSource( eSHADER_TYPE_PIXEL, l_model, l_strPs );
 

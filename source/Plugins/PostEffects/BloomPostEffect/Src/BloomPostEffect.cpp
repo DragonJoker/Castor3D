@@ -267,7 +267,7 @@ namespace Bloom
 		bool l_return = false;
 		m_viewport.Initialise();
 		ShaderManager & l_manager = GetRenderSystem()->GetEngine()->GetShaderManager();
-		eSHADER_MODEL l_model = GetRenderSystem()->GetMaxShaderModel();
+		eSHADER_MODEL l_model = GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 		Size l_size = m_renderTarget.GetSize();
 		String l_vertex;
 		String l_hipass;

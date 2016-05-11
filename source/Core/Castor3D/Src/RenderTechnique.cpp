@@ -579,7 +579,7 @@ namespace Castor3D
 
 	void RenderTechnique::DoRenderSubmeshes( Scene & p_scene, Camera const & p_camera, Pipeline & p_pipeline, SubmeshRenderNodesByProgramMap & p_nodes )
 	{
-		if ( GetEngine()->GetRenderSystem()->HasInstancing() )
+		if ( GetEngine()->GetRenderSystem()->GetGpuInformations().HasInstancing() )
 		{
 			DoRenderSubmeshesInstanced( p_scene, p_camera, p_pipeline, p_nodes );
 		}

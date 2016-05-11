@@ -1,5 +1,5 @@
 ﻿/*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -85,12 +85,12 @@ namespace Castor
 	{\
 	private:\
 		OwnedBy & operator=( OwnedBy< owner > const & p_rhs ) = delete;\
-		OwnedBy & operator=( OwnedBy< owner > && p_rhs ) = delete;\
 	public:\
 		OwnedBy( owner & p_owner );\
-		OwnedBy( OwnedBy< owner > const & p_rhs );\
-		OwnedBy( OwnedBy< owner > && p_rhs );\
-		~OwnedBy();\
+		OwnedBy( OwnedBy< owner > const & p_rhs ) = default;\
+		OwnedBy( OwnedBy< owner > && p_rhs ) = default;\
+		OwnedBy & operator=( OwnedBy< owner > && p_rhs ) = default;\
+		~OwnedBy() = default;\
 		owner * Get##name()const;\
 	private:\
 		owner & m_owner;\
@@ -107,17 +107,6 @@ namespace Castor
 #	define IMPLEMENT_EXPORTED_OWNED_BY( owner, name )\
 	OwnedBy< owner >::OwnedBy( owner & p_owner )\
 		: m_owner( p_owner )\
-	{\
-	}\
-	OwnedBy< owner >::OwnedBy( OwnedBy< owner > const & p_rhs )\
-		: m_owner( p_rhs.m_owner )\
-	{\
-	}\
-	OwnedBy< owner >::OwnedBy( OwnedBy< owner > && p_rhs )\
-		: m_owner( p_rhs.m_owner )\
-	{\
-	}\
-	OwnedBy< owner >::~OwnedBy()\
 	{\
 	}\
 	owner * OwnedBy< owner >::Get##name()const\

@@ -21,7 +21,7 @@ namespace Castor3D
 
 	void StaticTexture::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer )
 	{
-		if ( !GetRenderSystem()->HasNonPowerOfTwoTextures() )
+		if ( !GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
 		{
 			m_depth = GetNext2Pow( p_dimensions[2] );
 			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_depth );

@@ -1,5 +1,5 @@
 /*
-This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
+This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
 the terms of the GNU Lesser General Public License as published by the Free Software
@@ -19,13 +19,23 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_MSW_CONTEXT_H___
 
 #ifdef _WIN32
+
 #include "GlHolder.hpp"
 
-#include <Castor3DPrerequisites.hpp>
-#include <Windows.h>
+#include <GpuInformations.hpp>
+
+#ifndef _WINDEF_
+
+#define DECLARE_WIN_HANDLE( Name ) struct Name##__{int unused;}; typedef struct Name##__ *Name
+DECLARE_WIN_HANDLE( HDC );
+DECLARE_WIN_HANDLE( HGLRC );
+DECLARE_WIN_HANDLE( HWND );
+
+#endif
 
 namespace GlRender
 {
+	class GlContext;
 	class GlContext;
 
 	class GlContextImpl
@@ -46,9 +56,15 @@ namespace GlRender
 		{
 			return m_hDC;
 		}
+
 		inline HGLRC GetContext()const
 		{
 			return m_hContext;
+		}
+
+		inline Castor3D::GpuInformations && GetGpuInformations()
+		{
+			return std::move( m_gpuInformations );
 		}
 
 	protected:
@@ -64,8 +80,11 @@ namespace GlRender
 		HWND m_hWnd;
 		GlContext * m_context;
 		bool m_initialised;
+		Castor3D::GpuInformations m_gpuInformations;
 	};
 }
+
+#undef DECLARE_WIN_HANDLE
 #endif
 
 #endif

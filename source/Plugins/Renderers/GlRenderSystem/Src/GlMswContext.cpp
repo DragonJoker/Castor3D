@@ -20,13 +20,20 @@ using namespace Castor;
 
 namespace GlRender
 {
+	namespace
+	{
 #if !defined( NDEBUG )
-	static const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT | eGL_CREATECONTEXT_ATTRIB_DEBUG_BIT;
-	static const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_CORE_BIT;
+
+		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT | eGL_CREATECONTEXT_ATTRIB_DEBUG_BIT;
+		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_CORE_BIT;
+
 #else
-	static const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT;
-	static const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_COMPATIBILITY_BIT;
+
+		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS = eGL_CREATECONTEXT_ATTRIB_FORWARD_COMPATIBLE_BIT;
+		static const int C3D_GL_CONTEXT_CREATION_DEFAULT_MASK = eGL_PROFILE_ATTRIB_COMPATIBILITY_BIT;
+
 #endif
+	}
 
 	GlContextImpl::GlContextImpl( OpenGl & p_gl, GlContext * p_context )
 		: m_hDC( nullptr )
@@ -44,19 +51,14 @@ namespace GlRender
 
 	bool GlContextImpl::Initialise( RenderWindow * p_window )
 	{
-		Engine * l_engine = p_window->GetEngine();
-		GlRenderSystem * l_renderSystem = static_cast< GlRenderSystem * >( p_window->GetEngine()->GetRenderSystem() );
-		GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+		auto l_engine = p_window->GetEngine();
+		auto l_renderSystem = static_cast< GlRenderSystem * >( l_engine->GetRenderSystem() );
+		auto l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
+
 		m_hWnd = p_window->GetHandle().GetInternal< IMswWindowHandle >()->GetHwnd();
 		auto l_colour = p_window->GetPixelFormat();
-		auto l_stereo = p_window->IsUsingStereo() && p_window->GetEngine()->GetRenderSystem()->IsStereoAvailable();
+		auto l_stereo = p_window->IsUsingStereo() && l_renderSystem->GetGpuInformations().IsStereoAvailable();
 		bool l_isMain = false;
-
-		if ( !l_mainContext )
-		{
-			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
-			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
-		}
 
 		if ( !l_mainContext || l_mainContext->GetImpl().m_hWnd != m_hWnd )
 		{
@@ -84,7 +86,7 @@ namespace GlRender
 			}
 			else
 			{
-				l_renderSystem->SetStereoAvailable( false );
+				m_gpuInformations.RemoveFeature( GpuFeature::Stereo );
 				l_bHasPF = DoSelectPixelFormat( l_colour, false );
 			}
 		}
@@ -123,28 +125,6 @@ namespace GlRender
 		if ( m_initialised && !l_isMain )
 		{
 			glTrack( GetOpenGl(), "GlContextImpl", this );
-			SetCurrent();
-			l_renderSystem->Initialise();
-			p_window->GetEngine()->GetMaterialManager().Initialise();
-#if !defined( NDEBUG )
-
-			if ( GetOpenGl().HasDebugOutput() )
-			{
-				GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGPROC( &OpenGl::StDebugLog ), &GetOpenGl() );
-				GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGAMDPROC( &OpenGl::StDebugLogAMD ), &GetOpenGl() );
-				GetOpenGl().Enable( eGL_TWEAK_DEBUG_OUTPUT_SYNCHRONOUS );
-			}
-
-#endif
-			EndCurrent();
-			UpdateVSync( p_window->GetVSync() );
-			l_engine->GetRenderLoop().UpdateVSync( p_window->GetVSync() );
-
-			if ( !l_mainContext )
-			{
-				Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
-				Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
-			}
 		}
 
 		return m_initialised;
@@ -163,7 +143,11 @@ namespace GlRender
 
 				if ( l_mainContext.get() == m_context || !l_mainContext || l_mainContext->GetImpl().m_hWnd != m_hWnd )
 				{
-					GetOpenGl().DeleteContext( m_hContext );
+					if ( !GetOpenGl().DeleteContext( m_hContext ) )
+					{
+						Logger::LogError( cuT( "GlContextImpl::Cleanup - " ) +  System::GetLastErrorText() );
+					}
+
 					::ReleaseDC( m_hWnd, m_hDC );
 				}
 			}
@@ -338,7 +322,7 @@ namespace GlRender
 			l_return = DoSelectPixelFormat( p_colour, true );
 		}
 
-		l_renderSystem->SetStereoAvailable( l_bStereoAvailable );
+		m_gpuInformations.UpdateFeature( GpuFeature::Stereo, l_bStereoAvailable );
 		return l_return;
 	}
 
@@ -354,18 +338,16 @@ namespace GlRender
 			{
 				std::function< HGLRC( HDC hDC, HGLRC hShareContext, int const * attribList ) > glCreateContextAttribs;
 				HGLRC l_hContext = m_hContext;
-				IntArray l_attribList;
 				int l_major = GetOpenGl().GetVersion() / 10;
 				int l_minor = GetOpenGl().GetVersion() % 10;
-				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_MAJOR_VERSION );
-				l_attribList.push_back( l_major );
-				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_MINOR_VERSION );
-				l_attribList.push_back( l_minor );
-				l_attribList.push_back( eGL_CREATECONTEXT_ATTRIB_FLAGS );
-				l_attribList.push_back( C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS );
-				l_attribList.push_back( eGL_PROFILE_ATTRIB_MASK );
-				l_attribList.push_back( C3D_GL_CONTEXT_CREATION_DEFAULT_MASK );
-				l_attribList.push_back( 0 );
+				IntArray l_attribList
+				{
+					eGL_CREATECONTEXT_ATTRIB_MAJOR_VERSION, l_major,
+					eGL_CREATECONTEXT_ATTRIB_MINOR_VERSION, l_minor,
+					eGL_CREATECONTEXT_ATTRIB_FLAGS, C3D_GL_CONTEXT_CREATION_DEFAULT_FLAGS,
+					eGL_PROFILE_ATTRIB_MASK, C3D_GL_CONTEXT_CREATION_DEFAULT_MASK,
+					0
+				};
 				GlContextSPtr l_mainContext = std::static_pointer_cast< GlContext >( l_renderSystem->GetMainContext() );
 				SetCurrent();
 
@@ -380,11 +362,11 @@ namespace GlRender
 
 				if ( l_mainContext )
 				{
-					m_hContext = glCreateContextAttribs( m_hDC, l_mainContext->GetImpl().GetContext(), &l_attribList[0] );
+					m_hContext = glCreateContextAttribs( m_hDC, l_mainContext->GetImpl().GetContext(), l_attribList.data() );
 				}
 				else
 				{
-					m_hContext = glCreateContextAttribs( m_hDC, nullptr, &l_attribList[0] );
+					m_hContext = glCreateContextAttribs( m_hDC, nullptr, l_attribList.data() );
 				}
 
 				EndCurrent();
@@ -402,9 +384,9 @@ namespace GlRender
 			}
 			else
 			{
-				//It's not possible to make a GL 3[0] context. Use the old style context (GL 2.1 and before)
+				//It's not possible to make a GL 3.x and later context. Use the old style context (GL 2.1 and before)
 				l_renderSystem->SetOpenGlVersion( 2, 1 );
-				Logger::LogWarning( cuT( "GlContext::Create - Can't create OpenGL 3.x/4.x context, since glCreateContextAttribs is not supported." ) );
+				Logger::LogWarning( cuT( "GlContext::Create - Can't create OpenGL >= 3.x context, since glCreateContextAttribs is not supported." ) );
 				l_return = true;
 			}
 		}

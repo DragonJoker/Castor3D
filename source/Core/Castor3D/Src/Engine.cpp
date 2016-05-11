@@ -1,4 +1,4 @@
-﻿#include "Engine.hpp"
+#include "Engine.hpp"
 
 #include "BlendStateManager.hpp"
 #include "CleanupEvent.hpp"
@@ -307,7 +307,7 @@ namespace Castor3D
 
 		if ( m_renderSystem )
 		{
-			l_return = m_renderSystem->CheckSupport( p_eShaderModel );
+			l_return = m_renderSystem->GetGpuInformations().CheckSupport( p_eShaderModel );
 		}
 
 		return l_return;

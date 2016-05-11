@@ -1264,7 +1264,7 @@ namespace GlRender
 #if defined( _WIN32 )
 			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::string::string_cast< char >( p_name ).c_str() ) );
 #else
-			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( ( GLubyte const * )Castor::string::string_cast< char >( p_name ).c_str() ) );
+			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( reinterpret_cast< GLubyte const * >( Castor::string::string_cast< char >( p_name ).c_str() ) ) );
 #endif
 			return p_func != nullptr;
 		}
@@ -1319,6 +1319,10 @@ namespace GlRender
 	MAKE_GL_EXTENSION( NV_shader_buffer_load )
 	MAKE_GL_EXTENSION( ARB_timer_query )
 	MAKE_GL_EXTENSION( ARB_program_interface_query )
+	MAKE_GL_EXTENSION( ARB_shader_storage_buffer_object )
+	MAKE_GL_EXTENSION( ARB_explicit_uniform_location )
+	MAKE_GL_EXTENSION( ATI_meminfo )
+	MAKE_GL_EXTENSION( NVX_gpu_memory_info )
 
 #	if defined( _WIN32 )
 

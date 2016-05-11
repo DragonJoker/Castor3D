@@ -81,27 +81,7 @@ namespace GuiCommon
 		m_shaderModel = eSHADER_MODEL_COUNT;
 		ShaderProgramSPtr l_program = m_shaderProgram.lock();
 		RenderSystem * l_renderSystem = l_program->GetRenderSystem();
-
-		if ( l_renderSystem->CheckSupport( eSHADER_MODEL_5 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_5;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_4 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_4;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_3 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_3;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_2 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_2;
-		}
-		else if ( l_renderSystem->CheckSupport( eSHADER_MODEL_1 ) )
-		{
-			m_shaderModel = eSHADER_MODEL_1;
-		}
+		m_shaderModel = l_program->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 	}
 
 	void ShaderEditorPage::DoInitialiseLayout()
