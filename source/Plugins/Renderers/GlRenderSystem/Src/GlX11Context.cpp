@@ -263,6 +263,7 @@ namespace GlRender
 			{
 				// Can't be because of stereo, we try a default FBConfig
 				Logger::LogWarning( cuT( "GlXContext::Create - glXChooseFBConfig failed, using default FB config" ) );
+				int l_data = 0;
 				m_fbConfig = glXChooseFBConfig( m_display, p_screen, &l_data, &l_result );
 
 				if ( !m_fbConfig )
@@ -330,7 +331,7 @@ namespace GlRender
 		{
 			int l_major = GetOpenGl().GetVersion() / 10;
 			int l_minor = GetOpenGl().GetVersion() % 10;
-			IntArray l_arrayAttribs
+			IntArray l_attribList
 			{
 				eGL_CREATECONTEXT_ATTRIB_MAJOR_VERSION, l_major,
 				eGL_CREATECONTEXT_ATTRIB_MINOR_VERSION, l_minor,
