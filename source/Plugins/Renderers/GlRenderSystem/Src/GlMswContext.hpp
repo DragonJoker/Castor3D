@@ -19,13 +19,23 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___GL_MSW_CONTEXT_H___
 
 #ifdef _WIN32
+
 #include "GlHolder.hpp"
 
-#include <Castor3DPrerequisites.hpp>
-#include <Windows.h>
+#include <GpuInformations.hpp>
+
+#ifndef _WINDEF_
+
+#define DECLARE_WIN_HANDLE( Name ) struct Name##__{int unused;}; typedef struct Name##__ *Name
+DECLARE_WIN_HANDLE( HDC );
+DECLARE_WIN_HANDLE( HGLRC );
+DECLARE_WIN_HANDLE( HWND );
+
+#endif
 
 namespace GlRender
 {
+	class GlContext;
 	class GlContext;
 
 	class GlContextImpl
@@ -46,9 +56,15 @@ namespace GlRender
 		{
 			return m_hDC;
 		}
+
 		inline HGLRC GetContext()const
 		{
 			return m_hContext;
+		}
+
+		inline Castor3D::GpuInformations && GetGpuInformations()
+		{
+			return std::move( m_gpuInformations );
 		}
 
 	protected:
@@ -67,6 +83,8 @@ namespace GlRender
 		Castor3D::GpuInformations m_gpuInformations;
 	};
 }
+
+#undef DECLARE_WIN_HANDLE
 #endif
 
 #endif

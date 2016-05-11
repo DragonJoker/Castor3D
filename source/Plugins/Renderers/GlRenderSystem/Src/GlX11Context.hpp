@@ -18,9 +18,11 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_X11_CONTEXT_H___
 #define ___GL_X11_CONTEXT_H___
 
+#if defined( __linux__ )
 #include "GlHolder.hpp"
 
-#if defined( __linux__ )
+#include <GpuInformations.hpp>
+
 namespace GlRender
 {
 	class GlContext;
@@ -44,9 +46,14 @@ namespace GlRender
 			return m_glxContext;
 		}
 
+		inline Castor3D::GpuInformations && GetGpuInformations()
+		{
+			return std::move( m_gpuInformations );
+		}
+
 	private:
-		XVisualInfo * DoCreateVisualInfoWithFBConfig( Castor3D::RenderWindow * p_window, Castor::IntArray & p_arrayAttribs, int p_screen );
-		XVisualInfo * DoCreateVisualInfoWithoutFBConfig( Castor::IntArray & p_arrayAttribs, int p_screen );
+		XVisualInfo * DoCreateVisualInfoWithFBConfig( Castor3D::RenderWindow * p_window, Castor::IntArray p_arrayAttribs, int p_screen );
+		XVisualInfo * DoCreateVisualInfoWithoutFBConfig( Castor::IntArray p_arrayAttribs, int p_screen );
 		bool DoCreateGl3Context( Castor3D::RenderWindow * p_window );
 
 	protected:
@@ -54,7 +61,7 @@ namespace GlRender
 		int m_glxVersion;
 		Display * m_display;
 		GLXDrawable m_drawable;
-		GLXFBConfig	* m_fbConfig;
+		GLXFBConfig * m_fbConfig;
 		GlContext * m_context;
 		bool m_initialised;
 		Castor3D::GpuInformations m_gpuInformations;

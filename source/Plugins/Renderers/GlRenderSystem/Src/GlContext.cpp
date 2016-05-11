@@ -9,10 +9,12 @@
 #include "GlPipeline.hpp"
 #include "GlRenderSystem.hpp"
 
-#include <RenderWindow.hpp>
-#include <ShaderProgram.hpp>
 #include <GeometryBuffers.hpp>
 #include <IndexBuffer.hpp>
+#include <MaterialManager.hpp>
+#include <RenderLoop.hpp>
+#include <RenderWindow.hpp>
+#include <ShaderProgram.hpp>
 #include <VertexBuffer.hpp>
 
 using namespace Castor;
@@ -21,10 +23,10 @@ using namespace Castor3D;
 namespace GlRender
 {
 	GlContext::GlContext( GlRenderSystem & p_renderSystem, OpenGl & p_gl )
-		: Context( p_renderSystem )
-		, Holder( p_gl )
-		, m_glRenderSystem( &p_renderSystem )
-		, m_implementation( std::make_unique< GlContextImpl >( GetOpenGl(), this ) )
+		: Context{ p_renderSystem }
+		, Holder{ p_gl }
+		, m_glRenderSystem{ &p_renderSystem }
+		, m_implementation{ std::make_unique< GlContextImpl >( GetOpenGl(), this ) }
 	{
 		m_pipeline = std::make_unique< GlPipeline >( GetOpenGl(), *this );
 	}
@@ -42,14 +44,54 @@ namespace GlRender
 
 	bool GlContext::DoInitialise()
 	{
-		m_initialised = m_implementation->Initialise( m_window );
+		auto l_engine = m_window->GetEngine();
+		auto l_renderSystem = static_cast< GlRenderSystem * >( l_engine->GetRenderSystem() );
+		auto l_mainContext = l_renderSystem->GetMainContext();
+
+		if ( !l_mainContext )
+		{
+			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+			Logger::LogInfo( cuT( "Initialising OpenGL" ) );
+		}
+
+		m_initialised = GetImpl().Initialise( m_window );
 
 		if ( m_initialised )
 		{
+			if ( !l_mainContext )
+			{
+				GetImpl().SetCurrent();
+				l_renderSystem->Initialise( std::move( GetImpl().GetGpuInformations() ) );
+				l_engine->GetMaterialManager().Initialise();
+
+#if !defined( NDEBUG )
+
+				if ( GetOpenGl().HasDebugOutput() )
+				{
+					GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGPROC( &OpenGl::StDebugLog ), &GetOpenGl() );
+					GetOpenGl().DebugMessageCallback( OpenGl::PFNGLDEBUGAMDPROC( &OpenGl::StDebugLogAMD ), &GetOpenGl() );
+					GetOpenGl().Enable( eGL_TWEAK_DEBUG_OUTPUT_SYNCHRONOUS );
+				}
+
+#endif
+
+				GetImpl().EndCurrent();
+				Logger::LogInfo( cuT( "OpenGL Initialisation Ended" ) );
+				Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
+			}
+
+			GetImpl().UpdateVSync( m_window->GetVSync() );
+			l_engine->GetRenderLoop().UpdateVSync( m_window->GetVSync() );
+
 			if ( m_glRenderSystem->GetOpenGlMajor() < 3 )
 			{
 				CASTOR_EXCEPTION( cuT( "The supported OpenGL version is insufficient to run Castor3D" ) );
 			}
+		}
+		else if ( !l_mainContext )
+		{
+			Logger::LogError( cuT( "OpenGL Initialisation Failed" ) );
+			Logger::LogInfo( cuT( "***********************************************************************************************************************" ) );
 		}
 
 		return m_initialised;
@@ -61,7 +103,7 @@ namespace GlRender
 
 	void GlContext::DoDestroy()
 	{
-		m_implementation->Cleanup();
+		GetImpl().Cleanup();
 	}
 
 	void GlContext::DoSetCurrent()

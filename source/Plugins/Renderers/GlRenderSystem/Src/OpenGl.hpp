@@ -1264,7 +1264,7 @@ namespace GlRender
 #if defined( _WIN32 )
 			p_func = reinterpret_cast< Func >( wglGetProcAddress( Castor::string::string_cast< char >( p_name ).c_str() ) );
 #else
-			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( ( GLubyte const * )Castor::string::string_cast< char >( p_name ).c_str() ) );
+			p_func = reinterpret_cast< Func >( glXGetProcAddressARB( reinterpret_cast< GLubyte const * >( Castor::string::string_cast< char >( p_name ).c_str() ) ) );
 #endif
 			return p_func != nullptr;
 		}
