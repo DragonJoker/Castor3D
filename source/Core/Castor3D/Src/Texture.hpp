@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -60,13 +60,13 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~Texture();
 		/**
-		*\~english
-		*\brief		Defines the texture buffer
-		*\param[in]	p_buffer	The buffer
-		*\~french
-		*\brief		Définit le buffer de la texture
-		*\param[in]	p_buffer	Le buffer
-		*/
+		 *\~english
+		 *\brief		Defines the texture buffer
+		 *\param[in]	p_buffer	The buffer
+		 *\~french
+		 *\brief		Définit le buffer de la texture
+		 *\param[in]	p_buffer	Le buffer
+		 */
 		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
@@ -332,7 +332,7 @@ namespace Castor3D
 		//!\~english 3D Texture depth	\~french Profondeur de la texture 3D
 		uint32_t m_depth;
 		//!\~english Texture pixels, at least at initialisation	\~french Pixels de la texture, au moins au moment de l'initialisation
-		Castor::PxBufferBaseSPtr m_pixelBuffer;
+		PxBufferArray m_pixelBuffers;
 		//!\~english The pixel buffer format	\~french Le format du buffer de pixels
 		Castor::ePIXEL_FORMAT m_pixelFormat;
 		//!\~english The pixel buffer dimensions	\~french Les dimensions du buffer de pixels

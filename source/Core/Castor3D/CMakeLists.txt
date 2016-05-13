@@ -276,18 +276,29 @@ file( GLOB ${PROJECT_NAME}_Material_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Material*.inl
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pass*.hpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pass*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.hpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.inl
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.hpp
 )
 file( GLOB ${PROJECT_NAME}_Material_SOURCE_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Material*.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Pass*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.cpp
-	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.cpp
 )
 source_group( "Header Files\\Material" FILES ${${PROJECT_NAME}_Material_HEADER_FILES} )
 source_group( "Source Files\\Material" FILES ${${PROJECT_NAME}_Material_SOURCE_FILES} )
+
+file( GLOB ${PROJECT_NAME}_Texture_HEADER_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.inl
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*CubeMap*.hpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*CubeMap*.inl
+)
+file( GLOB ${PROJECT_NAME}_Texture_SOURCE_FILES
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Texture*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Sampler*.cpp
+	${CMAKE_CURRENT_SOURCE_DIR}/Src/*CubeMap*.cpp
+)
+source_group( "Header Files\\Texture" FILES ${${PROJECT_NAME}_Texture_HEADER_FILES} )
+source_group( "Source Files\\Texture" FILES ${${PROJECT_NAME}_Texture_SOURCE_FILES} )
 
 file( GLOB ${PROJECT_NAME}_Mesh_HEADER_FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/*Mesh*.hpp

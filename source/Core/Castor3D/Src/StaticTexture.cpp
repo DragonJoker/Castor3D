@@ -1,4 +1,4 @@
-﻿#include "StaticTexture.hpp"
+#include "StaticTexture.hpp"
 
 #include "RenderSystem.hpp"
 #include "Sampler.hpp"
@@ -26,12 +26,12 @@ namespace Castor3D
 			m_depth = GetNext2Pow( p_dimensions[2] );
 			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_depth );
 			Castor::Image l_img( cuT( "Tmp" ), *p_buffer );
-			m_pixelBuffer = l_img.Resample( l_size ).GetPixels();
+			m_pixelBuffers[0] = l_img.Resample( l_size ).GetPixels();
 		}
 		else
 		{
 			m_depth = p_dimensions[2];
-			m_pixelBuffer = p_buffer;
+			m_pixelBuffers[0] = p_buffer;
 		}
 	}
 
@@ -41,12 +41,12 @@ namespace Castor3D
 		{
 			m_initialised = DoInitialise();
 
-			if ( m_initialised && m_pixelBuffer && m_pixelBuffer->ptr() )
+			if ( m_initialised && m_pixelBuffers[0] && m_pixelBuffers[0]->ptr() )
 			{
-				m_size = m_pixelBuffer->dimensions();
-				m_pixelFormat = m_pixelBuffer->format();
-				m_pixelBuffer->clear();
-				m_pixelBuffer.reset();
+				m_size = m_pixelBuffers[0]->dimensions();
+				m_pixelFormat = m_pixelBuffers[0]->format();
+				m_pixelBuffers[0]->clear();
+				m_pixelBuffers[0].reset();
 			}
 
 		}
@@ -60,9 +60,6 @@ namespace Castor3D
 
 	void StaticTexture::Cleanup()
 	{
-		if ( m_initialised )
-		{
-			m_initialised = false;
-		}
+		m_initialised = false;
 	}
 }

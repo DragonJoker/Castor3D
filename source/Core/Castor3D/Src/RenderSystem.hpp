@@ -270,6 +270,15 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a texture.
+		 *\return		The created texture, dependant of current API.
+		 *\~french
+		 *\brief		Crée une texture.
+		 *\return		La texture créée, dépendante de l'API actuelle.
+		 */
+		C3D_API virtual CubeMapTextureSPtr CreateCubeMapTexture() = 0;
+		/**
+		 *\~english
+		 *\brief		Creates a texture.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\return		The created texture, dependant of current API.

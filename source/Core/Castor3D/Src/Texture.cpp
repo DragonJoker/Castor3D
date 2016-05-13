@@ -1,4 +1,4 @@
-﻿#include "Texture.hpp"
+#include "Texture.hpp"
 
 #include "RenderSystem.hpp"
 #include "Engine.hpp"
@@ -25,7 +25,7 @@ namespace Castor3D
 	void Texture::SetImage( Castor::PxBufferBaseSPtr p_buffer )
 	{
 		m_depth = 1;
-		m_pixelBuffer = p_buffer;
+		m_pixelBuffers[0] = p_buffer;
 	}
 
 	bool Texture::Bind( uint32_t p_index )const
