@@ -71,6 +71,21 @@ namespace Castor
 	 *\see			localtime
 	 */
 	void Localtime( std::tm * p_tm, time_t const * p_pTime );
+	/**
+	 *\~english
+	 *\param[in]	p_flags	The flags.
+	 *\param[in]	p_flag	The flag looked for.
+	 *\return		\p true if p_flags contain p_flag.
+	 *\~french
+	 *\param[in]	p_flags	Les indicateurs.
+	 *\param[in]	p_flag	L'indicateur recherché.
+	 *\return		\p true si p_flags contient p_flag.
+	 */
+	template< typename T, typename U >
+	inline bool CheckFlag( T p_flags, U p_flag )
+	{
+		return ( p_flags & p_flag ) == p_flag;
+	}
 }
 
 #endif

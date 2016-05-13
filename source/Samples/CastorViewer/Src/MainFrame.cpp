@@ -537,13 +537,15 @@ namespace CastorViewer
 
 #if defined( GUICOMMON_RECORDS )
 
-		if ( l_bReturn && !CASTOR3D_THREADED )
+		if ( l_bReturn )
 		{
+			if ( CASTOR3D_THREADED )
+			{
+				m_timer = new wxTimer( this, eID_RENDER_TIMER );
+			}
+
 			m_timer->Stop();
 			m_timer->Start( 1000 / m_recordFps );
-		}
-		else
-		{
 		}
 
 #endif
@@ -554,12 +556,27 @@ namespace CastorViewer
 	{
 #if defined( GUICOMMON_RECORDS )
 
-		m_pRenderPanel->GetRenderWindow()->SaveFrame();
-		wxGetApp().GetCastor()->GetRenderLoop().RenderSyncFrame();
+		auto & l_castor = *wxGetApp().GetCastor();
+		PxBufferBaseSPtr l_buffer;
+
+		if ( l_castor.IsThreaded() )
+		{
+			l_castor.GetRenderLoop().Pause();
+			m_pRenderPanel->GetRenderWindow()->SaveFrame();
+			l_castor.GetRenderLoop().RenderSyncFrame();
+			l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
+			l_castor.GetRenderLoop().Resume();
+		}
+		else
+		{
+			m_pRenderPanel->GetRenderWindow()->SaveFrame();
+			l_castor.GetRenderLoop().RenderSyncFrame();
+			l_buffer = m_pRenderPanel->GetRenderWindow()->GetSavedFrame();
+		}
 
 		try
 		{
-			m_recorder.RecordFrame( m_pRenderPanel->GetRenderWindow()->GetSavedFrame() );
+			m_recorder.RecordFrame( l_buffer );
 		}
 		catch ( std::exception & p_exc )
 		{
@@ -630,16 +647,7 @@ namespace CastorViewer
 			{
 				if ( m_pRenderPanel && m_recorder.IsRecording() && m_recorder.UpdateTime() )
 				{
-					if ( l_castor.IsThreaded() )
-					{
-						l_castor.GetRenderLoop().Pause();
-						DoRecordFrame();
-						l_castor.GetRenderLoop().Resume();
-					}
-					else
-					{
-						DoRecordFrame();
-					}
+					DoRecordFrame();
 				}
 				else if ( !l_castor.IsThreaded() )
 				{
