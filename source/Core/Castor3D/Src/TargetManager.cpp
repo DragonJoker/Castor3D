@@ -1,8 +1,8 @@
-﻿#include "TargetManager.hpp"
+#include "TargetManager.hpp"
 
 #include "GeometryManager.hpp"
-#include "RenderSystem.hpp"
-#include "Scene.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
 
 using namespace Castor;
 

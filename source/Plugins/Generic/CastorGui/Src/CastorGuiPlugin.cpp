@@ -1,7 +1,8 @@
 #include <Engine.hpp>
 #include <ListenerManager.hpp>
-#include <RenderSystem.hpp>
-#include <SceneFileParser.hpp>
+
+#include <Render/RenderSystem.hpp>
+#include <Scene/SceneFileParser.hpp>
 
 #include <Logger.hpp>
 

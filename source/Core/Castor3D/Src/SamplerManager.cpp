@@ -1,7 +1,5 @@
 #include "SamplerManager.hpp"
 
-#include "RenderSystem.hpp"
-
 using namespace Castor;
 
 namespace Castor3D

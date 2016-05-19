@@ -5,10 +5,10 @@
 #include "CtrlListBox.hpp"
 
 #include <Engine.hpp>
-#include <Overlay.hpp>
 #include <OverlayManager.hpp>
-#include <BorderPanelOverlay.hpp>
-#include <TextOverlay.hpp>
+
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
 
 #include <Font.hpp>
 

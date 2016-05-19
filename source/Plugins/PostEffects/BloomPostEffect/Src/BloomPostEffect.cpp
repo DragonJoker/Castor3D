@@ -1,28 +1,29 @@
 #include "BloomPostEffect.hpp"
 
-#include <BackBuffers.hpp>
 #include <BlendStateManager.hpp>
-#include <BufferDeclaration.hpp>
-#include <BufferElementDeclaration.hpp>
-#include <Context.hpp>
-#include <DynamicTexture.hpp>
 #include <Engine.hpp>
-#include <FrameBufferAttachment.hpp>
-#include <FrameVariableBuffer.hpp>
-#include <GeometryBuffers.hpp>
-#include <OneFrameVariable.hpp>
-#include <Parameter.hpp>
-#include <Pipeline.hpp>
-#include <RenderSystem.hpp>
-#include <RenderTarget.hpp>
-#include <RenderWindow.hpp>
 #include <SamplerManager.hpp>
 #include <ShaderManager.hpp>
-#include <TextureAttachment.hpp>
-#include <TextureUnit.hpp>
-#include <Vertex.hpp>
-#include <VertexBuffer.hpp>
-#include <Viewport.hpp>
+
+#include <FrameBuffer/BackBuffers.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Mesh/Buffer/BufferElementDeclaration.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Render/Context.hpp>
+#include <Render/Pipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Texture/DynamicTexture.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <numeric>
 

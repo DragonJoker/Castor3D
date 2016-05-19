@@ -18,14 +18,14 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___CI_CASTOR_GUI_PCH_H___
 #define ___CI_CASTOR_GUI_PCH_H___
 
-#include <BorderPanelOverlay.hpp>
 #include <Engine.hpp>
-#include <InitialiseEvent.hpp>
-#include <Material.hpp>
 #include <OverlayManager.hpp>
-#include <Pass.hpp>
-#include <TextOverlay.hpp>
-#include <TextureUnit.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include "CastorGuiPrerequisites.hpp"
 

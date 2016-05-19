@@ -1,7 +1,8 @@
 #include "SMaxImporter.hpp"
 
 #include <Engine.hpp>
-#include <ImporterPlugin.hpp>
+
+#include <Plugin/ImporterPlugin.hpp>
 
 using namespace SMax;
 using namespace Castor3D;

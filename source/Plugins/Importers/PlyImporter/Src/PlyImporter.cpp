@@ -1,23 +1,24 @@
 #include "PlyImporter.hpp"
 
-#include <Camera.hpp>
+#include <CameraManager.hpp>
 #include <Engine.hpp>
-#include <Face.hpp>
 #include <GeometryManager.hpp>
-#include <InitialiseEvent.hpp>
-#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
-#include <Pass.hpp>
-#include <Plugin.hpp>
-#include <RenderSystem.hpp>
 #include <SceneNodeManager.hpp>
 #include <SceneManager.hpp>
-#include <Submesh.hpp>
-#include <TextureUnit.hpp>
-#include <Version.hpp>
-#include <Vertex.hpp>
-#include <Viewport.hpp>
+
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Manager/ManagerView.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Miscellaneous/Version.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Texture/TextureUnit.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

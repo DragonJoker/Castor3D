@@ -1,37 +1,35 @@
-#include <Engine.hpp>
-#include <RenderSystem.hpp>
-
 #include <Logger.hpp>
+
+#include <Engine.hpp>
+
+#include <Plugin/PostFxPlugin.hpp>
+#include <Render/RenderSystem.hpp>
 
 #include "BloomPostEffect.hpp"
 
-#include <PostFxPlugin.hpp>
-
-using namespace Castor3D;
-using namespace Castor;
 using namespace Bloom;
 
-C3D_Bloom_API void GetRequiredVersion( Version & p_version )
+C3D_Bloom_API void GetRequiredVersion( Castor3D::Version & p_version )
 {
-	p_version = Version();
+	p_version = Castor3D::Version();
 }
 
-C3D_Bloom_API ePLUGIN_TYPE GetType()
+C3D_Bloom_API Castor3D::ePLUGIN_TYPE GetType()
 {
-	return ePLUGIN_TYPE_POSTFX;
+	return Castor3D::ePLUGIN_TYPE_POSTFX;
 }
 
-C3D_Bloom_API String GetName()
+C3D_Bloom_API Castor::String GetName()
 {
 	return cuT( "Bloom PostEffect" );
 }
 
-C3D_Bloom_API String GetPostEffectType()
+C3D_Bloom_API Castor::String GetPostEffectType()
 {
 	return cuT( "bloom" );
 }
 
-C3D_Bloom_API PostEffectSPtr CreateEffect( RenderSystem * p_renderSystem, RenderTarget & p_renderTarget, Parameters const & p_params )
+C3D_Bloom_API Castor3D::PostEffectSPtr CreateEffect( Castor3D::RenderSystem * p_renderSystem, Castor3D::RenderTarget & p_renderTarget, Castor3D::Parameters const & p_params )
 {
 	return std::make_shared< BloomPostEffect >( *p_renderSystem, p_renderTarget, p_params );
 }

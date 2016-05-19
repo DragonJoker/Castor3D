@@ -1,6 +1,6 @@
-﻿#include "DepthStencilStateManager.hpp"
+#include "DepthStencilStateManager.hpp"
 
-#include "RenderSystem.hpp"
+#include "Render/RenderSystem.hpp"
 
 using namespace Castor;
 

@@ -1,14 +1,14 @@
 #include "ShaderManager.hpp"
 
 #include "Engine.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "InitialiseEvent.hpp"
-#include "CleanupEvent.hpp"
-#include "OneFrameVariable.hpp"
-#include "Pipeline.hpp"
-#include "RenderSystem.hpp"
-#include "RenderTechnique.hpp"
-#include "ShaderProgram.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
+#include "Event/Frame/CleanupEvent.hpp"
+#include "Render/Pipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Technique/RenderTechnique.hpp"
+#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/OneFrameVariable.hpp"
+#include "Shader/ShaderProgram.hpp"
 
 using namespace Castor;
 

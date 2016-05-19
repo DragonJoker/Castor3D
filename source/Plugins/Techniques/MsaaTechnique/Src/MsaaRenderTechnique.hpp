@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MSAA_RENDER_TECHNIQUE_H___
 #define ___C3D_MSAA_RENDER_TECHNIQUE_H___
 
-#include <RenderTechnique.hpp>
+#include <Technique/RenderTechnique.hpp>
 
 #ifndef _WIN32
 #	define C3D_MsaaTechnique_API

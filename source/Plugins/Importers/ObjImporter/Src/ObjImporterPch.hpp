@@ -21,22 +21,22 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <config.hpp>
 
 #if CASTOR_USE_PCH
-#	include <Material.hpp>
-#	include <Pass.hpp>
-#	include <TextureUnit.hpp>
-#	include <Mesh.hpp>
-#	include <Submesh.hpp>
-#	include <Vertex.hpp>
-#	include <Buffer.hpp>
-#	include <Geometry.hpp>
-#	include <Face.hpp>
-#	include <Scene.hpp>
-#	include <SceneNode.hpp>
-#	include <Version.hpp>
-#	include <Plugin.hpp>
 #	include <Engine.hpp>
-#	include <Texture.hpp>
-#	include <Vertex.hpp>
+#	include <GeometryManager.hpp>
+#	include <MaterialManager.hpp>
+#	include <MeshManager.hpp>
+#	include <SceneManager.hpp>
+#	include <SceneNodeManager.hpp>
+
+#	include <Material/Pass.hpp>
+#	include <Mesh/Face.hpp>
+#	include <Mesh/Submesh.hpp>
+#	include <Mesh/Vertex.hpp>
+#	include <Mesh/Buffer/Buffer.hpp>
+#	include <Miscellaneous/Version.hpp>
+#	include <Plugin/Plugin.hpp>
+#	include <Texture/TextureLayout.hpp>
+#	include <Texture/TextureUnit.hpp>
 #endif
 
 #endif

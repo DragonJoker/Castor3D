@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,8 +20,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include "TechniqueFactory.hpp"
-#include "Version.hpp"
+#include "Technique/TechniqueFactory.hpp"
+#include "Miscellaneous/Version.hpp"
 
 #include <FileParser.hpp>
 #include <FontManager.hpp>

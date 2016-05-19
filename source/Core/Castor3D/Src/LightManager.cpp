@@ -1,11 +1,11 @@
 #include "LightManager.hpp"
 
-#include "DynamicTexture.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "RenderSystem.hpp"
 #include "SceneManager.hpp"
-#include "ShaderProgram.hpp"
-#include "TextureUnit.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Texture/DynamicTexture.hpp"
+#include "Texture/TextureUnit.hpp"
 
 using namespace Castor;
 
@@ -15,7 +15,6 @@ namespace Castor3D
 
 	LightManager::LightManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
 		: ObjectManager< Castor::String, Light >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
-		, m_lightFactory( GetEngine()->GetSceneManager().GetFactory() )
 		, m_lightsTexture( std::make_shared< TextureUnit >( *GetEngine() ) )
 	{
 		m_lightsData = PxBufferBase::create( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );

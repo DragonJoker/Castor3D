@@ -1,15 +1,15 @@
 #include "OverlayManager.hpp"
 
-#include "BorderPanelOverlay.hpp"
 #include "Engine.hpp"
-#include "Overlay.hpp"
-#include "OverlayRenderer.hpp"
-#include "PanelOverlay.hpp"
-#include "Pipeline.hpp"
-#include "RenderSystem.hpp"
-#include "Scene.hpp"
-#include "SceneFileParser.hpp"
-#include "TextOverlay.hpp"
+#include "Overlay/BorderPanelOverlay.hpp"
+#include "Overlay/Overlay.hpp"
+#include "Overlay/OverlayRenderer.hpp"
+#include "Overlay/PanelOverlay.hpp"
+#include "Overlay/TextOverlay.hpp"
+#include "Render/Pipeline.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Scene/Scene.hpp"
+#include "Scene/SceneFileParser.hpp"
 
 #include <Font.hpp>
 

@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CI_CASTOR_GUI_PREREQUISITES_H___
 
 #include <Castor3DPrerequisites.hpp>
-#include <GenericPlugin.hpp>
+#include <Plugin/GenericPlugin.hpp>
 
 #include <Colour.hpp>
 

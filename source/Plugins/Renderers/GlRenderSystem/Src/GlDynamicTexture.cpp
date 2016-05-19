@@ -68,6 +68,6 @@ namespace GlRender
 
 	bool GlDynamicTexture::DoInitialise()
 	{
-		return m_texture.Initialise( m_pixelBuffers[0], m_type, m_depth, m_cpuAccess, m_gpuAccess );
+		return m_texture.Initialise( m_pixelBuffer, m_type, m_depth, m_cpuAccess, m_gpuAccess );
 	}
 }

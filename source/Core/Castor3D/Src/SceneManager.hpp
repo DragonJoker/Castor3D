@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SCENE_MANAGER_H___
 #define ___C3D_SCENE_MANAGER_H___
 
-#include "ResourceManager.hpp"
+#include "Manager/ResourceManager.hpp"
 
-#include "LightFactory.hpp"
-#include "Scene.hpp"
+#include "Scene/Light/LightFactory.hpp"
+#include "Scene/Scene.hpp"
 
 namespace Castor3D
 {
@@ -74,34 +74,6 @@ namespace Castor3D
 		 *\brief		Met à jout toutes les scènes.
 		 */
 		C3D_API void Update();
-		/**
-		 *\~english
-		 *\brief		Retrieves the Light factory.
-		 *\return		The factory.
-		 *\~french
-		 *\brief		Récupère la fabrique de Light.
-		 *\return		La fabrique.
-		 */
-		inline LightFactory const & GetFactory()const
-		{
-			return m_factory;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the Light factory.
-		 *\return		The factory.
-		 *\~french
-		 *\brief		Récupère la fabrique de Light.
-		 *\return		La fabrique.
-		 */
-		inline LightFactory & GetFactory()
-		{
-			return m_factory;
-		}
-
-	private:
-		//!\~english The LightCategory factory	\~french La fabrique de LightCategory
-		LightFactory m_factory;
 	};
 }
 

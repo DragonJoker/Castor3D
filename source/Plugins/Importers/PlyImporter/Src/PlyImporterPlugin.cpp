@@ -1,7 +1,8 @@
 #include "PlyImporter.hpp"
 
-#include <ImporterPlugin.hpp>
 #include <Engine.hpp>
+
+#include <Plugin/ImporterPlugin.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

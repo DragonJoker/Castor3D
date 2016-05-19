@@ -1,34 +1,35 @@
 #include "DeferredRenderTechnique.hpp"
 
 #include <BlendStateManager.hpp>
-#include <BufferDeclaration.hpp>
-#include <BufferElementDeclaration.hpp>
-#include <BufferElementGroup.hpp>
 #include <CameraManager.hpp>
-#include <ColourRenderBuffer.hpp>
-#include <Context.hpp>
-#include <DepthStencilRenderBuffer.hpp>
 #include <DepthStencilStateManager.hpp>
-#include <DynamicTexture.hpp>
 #include <Engine.hpp>
-#include <FrameBuffer.hpp>
-#include <FrameVariableBuffer.hpp>
-#include <GeometryBuffers.hpp>
-#include <IndexBuffer.hpp>
 #include <LightManager.hpp>
-#include <OneFrameVariable.hpp>
-#include <Pipeline.hpp>
-#include <PointFrameVariable.hpp>
-#include <RasteriserState.hpp>
-#include <RenderBufferAttachment.hpp>
-#include <RenderSystem.hpp>
-#include <RenderTarget.hpp>
-#include <Scene.hpp>
-#include <SceneNode.hpp>
+#include <RasteriserStateManager.hpp>
+#include <SceneManager.hpp>
+#include <SceneNodeManager.hpp>
 #include <ShaderManager.hpp>
-#include <TextureAttachment.hpp>
-#include <VertexBuffer.hpp>
-#include <Viewport.hpp>
+#include <TargetManager.hpp>
+
+#include <FrameBuffer/ColourRenderBuffer.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Mesh/Buffer/BufferElementDeclaration.hpp>
+#include <Mesh/Buffer/BufferElementGroup.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/IndexBuffer.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Render/Context.hpp>
+#include <Render/Pipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Shader/PointFrameVariable.hpp>
+#include <Texture/DynamicTexture.hpp>
 
 #include <Logger.hpp>
 
@@ -56,8 +57,9 @@ namespace Deferred
 
 	RenderTechnique::RenderTechnique( RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 		: Castor3D::RenderTechnique( cuT( "deferred" ), p_renderTarget, p_renderSystem, p_params )
-		, m_viewport( Viewport::Ortho( *p_renderSystem->GetEngine(), 0, 1, 0, 1, 0, 1 ) )
+		, m_viewport( *p_renderSystem->GetEngine() )
 	{
+		m_viewport.SetOrtho( 0, 1, 0, 1, 0, 1 );
 		Logger::LogInfo( cuT( "Using deferred shading" ) );
 		m_geometryPassFrameBuffer = m_renderSystem->CreateFrameBuffer();
 
@@ -121,7 +123,7 @@ namespace Deferred
 			1, 1, 1, 1,
 		};
 
-		m_vertexBuffer = std::make_unique< VertexBuffer >( *m_renderSystem->GetEngine(), m_declaration );
+		m_vertexBuffer = std::make_shared< VertexBuffer >( *m_renderSystem->GetEngine(), m_declaration );
 		uint32_t l_stride = m_declaration.GetStride();
 		m_vertexBuffer->Resize( sizeof( l_data ) );
 		uint8_t * l_buffer = m_vertexBuffer->data();
@@ -166,7 +168,7 @@ namespace Deferred
 			m_lightPassScene = l_scene;
 
 			m_vertexBuffer->Create();
-			eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetMaxShaderModel();
+			eSHADER_MODEL l_model = GetEngine()->GetRenderSystem()->GetGpuInformations().GetMaxShaderModel();
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_VERTEX, l_model, DoGetLightPassVertexShaderSource( 0 ) );
 			m_lightPassShaderProgram->SetSource( eSHADER_TYPE_PIXEL, l_model, DoGetLightPassPixelShaderSource( 0 ) );
 		}
@@ -244,7 +246,8 @@ namespace Deferred
 		l_scene->GetVariable( ShaderProgram::CameraPos, m_pShaderCamera );
 		m_lightPassScene = l_scene;
 		m_vertexBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_lightPassShaderProgram, m_vertexBuffer.get(), nullptr, nullptr, nullptr );
+		m_geometryBuffers = m_renderSystem->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_lightPassShaderProgram );
+		m_geometryBuffers->Initialise( m_vertexBuffer, nullptr, nullptr, nullptr );
 		return l_return;
 	}
 
@@ -315,7 +318,7 @@ namespace Deferred
 
 		if ( m_frameBuffer.m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 		{
-			Pipeline & l_pipeline = m_renderSystem->GetPipeline();
+			Pipeline & l_pipeline = m_renderSystem->GetCurrentContext()->GetPipeline();
 
 			m_frameBuffer.m_frameBuffer->SetClearColour( p_scene.GetBackgroundColour() );
 			m_frameBuffer.m_frameBuffer->Clear();
@@ -324,7 +327,7 @@ namespace Deferred
 			m_renderTarget->GetRasteriserState()->Apply();
 			m_lightPassBlendState->Apply();
 
-			m_viewport.SetSize( m_size );
+			m_viewport.Resize( m_size );
 			m_viewport.Render( l_pipeline );
 
 			if ( m_pShaderCamera )

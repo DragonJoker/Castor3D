@@ -1,4 +1,4 @@
-﻿#include "SceneManager.hpp"
+#include "SceneManager.hpp"
 
 #include "SceneNodeManager.hpp"
 #include "GeometryManager.hpp"

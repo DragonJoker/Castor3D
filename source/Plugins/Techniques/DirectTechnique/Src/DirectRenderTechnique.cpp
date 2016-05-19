@@ -1,19 +1,24 @@
 #include "DirectRenderTechnique.hpp"
 
-#include <Camera.hpp>
-#include <DepthStencilRenderBuffer.hpp>
-#include <DepthStencilState.hpp>
-#include <FrameBuffer.hpp>
-#include <Light.hpp>
+#include <CameraManager.hpp>
+#include <DepthStencilStateManager.hpp>
+#include <LightManager.hpp>
 #include <MaterialManager.hpp>
 #include <OverlayManager.hpp>
-#include <PanelOverlay.hpp>
-#include <RasteriserState.hpp>
-#include <RenderTarget.hpp>
-#include <RenderSystem.hpp>
-#include <Scene.hpp>
-#include <ShaderProgram.hpp>
-#include <TextOverlay.hpp>
+#include <RasteriserStateManager.hpp>
+#include <SceneManager.hpp>
+#include <TargetManager.hpp>
+
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Shader/PointFrameVariable.hpp>
+#include <Texture/DynamicTexture.hpp>
 
 #include <FontManager.hpp>
 #include <Logger.hpp>

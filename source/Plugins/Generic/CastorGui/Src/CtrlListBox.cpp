@@ -3,13 +3,21 @@
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <Engine.hpp>
-#include <FunctorEvent.hpp>
-#include <MaterialManager.hpp>
-#include <Pass.hpp>
 #include <OverlayManager.hpp>
-#include <TextOverlay.hpp>
+
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
+
+#include <Engine.hpp>
+#include <MaterialManager.hpp>
+#include <OverlayManager.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
 
 #include <Font.hpp>
 

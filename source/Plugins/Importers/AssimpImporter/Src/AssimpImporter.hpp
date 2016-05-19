@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -20,32 +20,32 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Castor3DPrerequisites.hpp>
 
-#include <Importer.hpp>
-#include <Animation.hpp>
 #include <FileParser.hpp>
 
-#include <RenderSystem.hpp>
-#include <Buffer.hpp>
-#include <SceneNode.hpp>
-#include <Scene.hpp>
-#include <Camera.hpp>
-#include <Viewport.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
-#include <Version.hpp>
-#include <Geometry.hpp>
-#include <Mesh.hpp>
 #include <Engine.hpp>
-#include <Submesh.hpp>
-#include <Texture.hpp>
-#include <Plugin.hpp>
-#include <Face.hpp>
-#include <Vertex.hpp>
-#include <Skeleton.hpp>
-#include <Parameter.hpp>
-#include <Animation.hpp>
-#include <KeyFrame.hpp>
+
+#include <Animation/Animation.hpp>
+#include <Animation/KeyFrame.hpp>
+#include <Animation/Skeleton.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Importer.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Miscellaneous/Version.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/SceneNode.hpp>
+#include <Scene/Scene.hpp>
+#include <Texture/TextureUnit.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <assimp/Importer.hpp> // C++ importer interface
 #include <assimp/scene.h> // Output data structure

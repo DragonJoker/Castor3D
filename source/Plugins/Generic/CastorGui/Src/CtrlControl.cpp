@@ -2,14 +2,16 @@
 
 #include "ControlsManager.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <FunctorEvent.hpp>
-#include <InitialiseEvent.hpp>
-#include <Material.hpp>
-#include <Overlay.hpp>
+#include <Engine.hpp>
+#include <MaterialManager.hpp>
 #include <OverlayManager.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_Md2Importer___
 #define ___C3D_Md2Importer___
 
-#include <Importer.hpp>
+#include <Mesh/Importer.hpp>
 
 // These are the needed defines for the max values when loading .MD2 files
 #define MD2_MAX_TRIANGLES		4096

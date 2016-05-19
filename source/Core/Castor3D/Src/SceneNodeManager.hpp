@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SCENE_NODE_MANAGER_H___
 #define ___C3D_SCENE_NODE_MANAGER_H___
 
-#include "ObjectManager.hpp"
+#include "Manager/ObjectManager.hpp"
 
-#include "SceneNode.hpp"
+#include "Scene/SceneNode.hpp"
 
 namespace Castor3D
 {

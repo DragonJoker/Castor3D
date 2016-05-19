@@ -1,6 +1,4 @@
-﻿#include "MeshManager.hpp"
-
-#include "Mesh.hpp"
+#include "MeshManager.hpp"
 
 using namespace Castor;
 

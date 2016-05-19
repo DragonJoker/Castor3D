@@ -1,28 +1,30 @@
-﻿#include "ObjImporter.hpp"
+#include "ObjImporter.hpp"
+
 #include "ObjGroup.hpp"
 
-#include <Buffer.hpp>
 #include <Colour.hpp>
+#include <Image.hpp>
+
 #include <Engine.hpp>
-#include <Face.hpp>
 #include <GeometryManager.hpp>
-#include <InitialiseEvent.hpp>
-#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
-#include <Pass.hpp>
-#include <Plugin.hpp>
-#include <RenderSystem.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <StaticTexture.hpp>
-#include <Submesh.hpp>
-#include <Texture.hpp>
-#include <TextureUnit.hpp>
-#include <Version.hpp>
-#include <Vertex.hpp>
 
-#include <Image.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Manager/ManagerView.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
+#include <Miscellaneous/Version.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Texture/StaticTexture.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

@@ -1,22 +1,28 @@
 #include "MsaaRenderTechnique.hpp"
 
-#include <FrameBuffer.hpp>
-#include <RasteriserState.hpp>
-#include <RenderTarget.hpp>
-#include <ColourRenderBuffer.hpp>
-#include <DepthStencilRenderBuffer.hpp>
-#include <RenderBufferAttachment.hpp>
-#include <TextureAttachment.hpp>
+#include <CameraManager.hpp>
 #include <DepthStencilStateManager.hpp>
+#include <LightManager.hpp>
+#include <MaterialManager.hpp>
+#include <OverlayManager.hpp>
 #include <RasteriserStateManager.hpp>
-#include <RenderSystem.hpp>
-#include <Engine.hpp>
-#include <Scene.hpp>
-#include <Parameter.hpp>
-#include <ShaderProgram.hpp>
-#include <DynamicTexture.hpp>
+#include <SceneManager.hpp>
+#include <TargetManager.hpp>
 
-#include <Image.hpp>
+#include <FrameBuffer/ColourRenderBuffer.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Shader/PointFrameVariable.hpp>
+#include <Texture/DynamicTexture.hpp>
+
+#include <FontManager.hpp>
 #include <Logger.hpp>
 
 using namespace Castor;

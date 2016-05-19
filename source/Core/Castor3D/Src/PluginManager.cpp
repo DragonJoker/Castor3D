@@ -1,12 +1,12 @@
-﻿#include "PluginManager.hpp"
+#include "PluginManager.hpp"
 
-#include "DividerPlugin.hpp"
-#include "GenericPlugin.hpp"
-#include "ImporterPlugin.hpp"
-#include "PostFxPlugin.hpp"
-#include "RendererPlugin.hpp"
-#include "TechniquePlugin.hpp"
-#include "VersionException.hpp"
+#include "Plugin/DividerPlugin.hpp"
+#include "Plugin/GenericPlugin.hpp"
+#include "Plugin/ImporterPlugin.hpp"
+#include "Plugin/PostFxPlugin.hpp"
+#include "Plugin/RendererPlugin.hpp"
+#include "Plugin/TechniquePlugin.hpp"
+#include "Miscellaneous/VersionException.hpp"
 
 #include <DynamicLibrary.hpp>
 

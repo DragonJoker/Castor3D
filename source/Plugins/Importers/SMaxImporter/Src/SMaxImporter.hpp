@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___3DS_IMPORTER_H___
 #define ___3DS_IMPORTER_H___
 
-#include <Importer.hpp>
+#include <Mesh/Importer.hpp>
 
 #include <Colour.hpp>
 

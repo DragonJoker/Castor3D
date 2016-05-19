@@ -2,14 +2,13 @@
 
 #include "ControlsManager.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <InitialiseEvent.hpp>
-#include <Material.hpp>
 #include <MaterialManager.hpp>
-#include <Overlay.hpp>
 #include <OverlayManager.hpp>
-#include <Pass.hpp>
-#include <TextOverlay.hpp>
+
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
 
 #include <Font.hpp>
 

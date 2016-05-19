@@ -3,9 +3,10 @@
 #include "ControlsManager.hpp"
 #include "CtrlStatic.hpp"
 
-#include <BorderPanelOverlay.hpp>
 #include <MaterialManager.hpp>
 #include <OverlayManager.hpp>
+
+#include <Overlay/BorderPanelOverlay.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

@@ -1,10 +1,11 @@
 #include "DirectRenderTechnique.hpp"
 
+#include <Logger.hpp>
+
 #include <Engine.hpp>
 #include <TechniqueManager.hpp>
-#include <Version.hpp>
 
-#include <Logger.hpp>
+#include <Miscellaneous/Version.hpp>
 
 using namespace Direct;
 static const Castor::String NAME = cuT( "direct" );

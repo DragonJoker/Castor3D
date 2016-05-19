@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_Md3Importer___
 #define ___C3D_Md3Importer___
 
-#include <Importer.hpp>
+#include <Mesh/Importer.hpp>
 
 #ifndef _WIN32
 #	define C3D_Md3_API

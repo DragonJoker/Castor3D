@@ -1,7 +1,8 @@
-﻿#include "Castor3DPrerequisites.hpp"
+#include "Castor3DPrerequisites.hpp"
 
 #include <Engine.hpp>
-#include <RenderSystem.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Scene/Scene.hpp>
 
 namespace Castor
 {
