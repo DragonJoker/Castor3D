@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <DepthStencilState.hpp>
+#include <State/DepthStencilState.hpp>
 
 namespace GlRender
 {

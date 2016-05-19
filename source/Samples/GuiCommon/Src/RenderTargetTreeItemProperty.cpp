@@ -1,6 +1,6 @@
 #include "RenderTargetTreeItemProperty.hpp"
 
-#include <RenderTarget.hpp>
+#include <Render/RenderTarget.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

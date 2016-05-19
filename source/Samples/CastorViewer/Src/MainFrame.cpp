@@ -10,11 +10,7 @@
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 
-#include <RenderTarget.hpp>
-#include <RenderLoop.hpp>
 #include <ImagesLoader.hpp>
-#include <FunctorEvent.hpp>
-#include <InitialiseEvent.hpp>
 #include <MaterialsList.hpp>
 #include <RendererSelector.hpp>
 #include <SplashScreen.hpp>
@@ -22,23 +18,25 @@
 #include <AuiTabArt.hpp>
 #include <AuiToolBarArt.hpp>
 
-#include <GeometryBuffers.hpp>
-#include <IndexBuffer.hpp>
-#include <Material.hpp>
 #include <MaterialManager.hpp>
-#include <Mesh.hpp>
-#include <Pass.hpp>
-#include <RenderLoop.hpp>
-#include <RenderWindow.hpp>
-#include <Sampler.hpp>
 #include <SceneManager.hpp>
-#include <SceneFileParser.hpp>
-#include <Submesh.hpp>
-#include <TextureUnit.hpp>
-#include <Vertex.hpp>
-#include <VertexBuffer.hpp>
-#include <VersionException.hpp>
-#include <PluginException.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Mesh.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/IndexBuffer.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Miscellaneous/VersionException.hpp>
+#include <Plugin/PluginException.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/SceneFileParser.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <xpms/castor.xpm>
 #include <xpms/print_screen.xpm>

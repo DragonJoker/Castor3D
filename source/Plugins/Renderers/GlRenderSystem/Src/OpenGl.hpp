@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <GlslWriterPrerequisites.hpp>
 
-#include <TextureUnit.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #if !defined( CALLBACK )
 #	if defined( _WIN32 )

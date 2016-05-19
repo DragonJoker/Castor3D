@@ -381,7 +381,7 @@ namespace GuiCommon
 				m_pAvCodecContext->width = l_size.x;
 				m_pAvCodecContext->height = l_size.y;
 				// Frames per second
-				m_pAvCodecContext->time_base = ( AVRational )
+				m_pAvCodecContext->time_base = AVRational
 				{
 					1, m_iWantedFPS
 				};
@@ -467,7 +467,7 @@ namespace GuiCommon
 		private:
 			const AVCodecID m_iCodecID = AV_CODEC_ID_H264;
 			const int m_iBitRate = 600000;
-			const AVPixelFormat m_iPixFmt = PIX_FMT_YUV420P;
+			const AVPixelFormat m_iPixFmt = AV_PIX_FMT_YUV420P;
 			AVCodec * m_pAvCodec;
 			AVFrame * m_pAvFrame;
 			AVPicture m_avEncodedPicture;

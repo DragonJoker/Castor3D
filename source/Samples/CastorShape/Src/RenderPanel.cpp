@@ -18,8 +18,8 @@
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
 #include <TargetManager.hpp>
-#include <WindowHandle.hpp>
 #include <WindowManager.hpp>
+#include <Miscellaneous/WindowHandle.hpp>
 
 using namespace Castor3D;
 using namespace CastorShape;
@@ -27,10 +27,9 @@ using namespace Castor;
 
 #define ID_NEW_WINDOW 10000
 
-RenderPanel::RenderPanel( eVIEWPORT_TYPE p_renderType, SceneSPtr p_scene, ePROJECTION_DIRECTION p_look, wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
+RenderPanel::RenderPanel( eVIEWPORT_TYPE p_renderType, SceneSPtr p_scene, wxWindow * parent, wxWindowID p_id, wxPoint const & pos, wxSize const & size, long style )
 	: wxPanel( parent, p_id, pos, size, style )
 	, m_renderType( p_renderType )
-	, m_lookAt( p_look )
 	, m_mainScene( p_scene )
 	, m_mouseLeftDown( false )
 	, m_mouseRightDown( false )
@@ -93,7 +92,7 @@ void RenderPanel::InitialiseRenderWindow()
 	}
 
 	CameraSPtr l_pCamera = m_mainScene->GetCameraManager().Create( l_streamName.str() + cuT( "_Camera" ), l_node );
-	l_pCamera->GetViewport().SetSize( Size( GetClientSize().x, GetClientSize().y ) );
+	l_pCamera->GetViewport().Resize( Size( GetClientSize().x, GetClientSize().y ) );
 	l_pRenderTarget->SetScene( m_mainScene );
 	l_pRenderTarget->SetCamera( l_pCamera );
 	l_pRenderTarget->SetSize( Size( GetClientSize().x, GetClientSize().y ) );

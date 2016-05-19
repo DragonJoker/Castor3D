@@ -779,9 +779,8 @@ interface IGlyph
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "property Size" )] HRESULT Size( [out, retval] ISize ** pVal );
-	[propget, id( 2 ), helpstring( "property Position" )] HRESULT Position( [out, retval] IPosition ** pVal );
-	[propget, id( 3 ), helpstring( "property Advance" )] HRESULT Advance( [out, retval] ISize ** pVal );
-	[id( 4 ), helpstring( "method AdjustPosition" )] HRESULT AdjustPosition( [in] UINT x, [in] UINT y );
+	[propget, id( 2 ), helpstring( "property Bearing" )] HRESULT Bearing( [out, retval] IPosition ** pVal );
+	[propget, id( 3 ), helpstring( "property Advance" )] HRESULT Advance( [out, retval] int * pVal );
 };
 
 // ICastorFont

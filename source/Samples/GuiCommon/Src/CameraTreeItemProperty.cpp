@@ -1,6 +1,6 @@
 #include "CameraTreeItemProperty.hpp"
 
-#include <Camera.hpp>
+#include <Scene/Camera.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

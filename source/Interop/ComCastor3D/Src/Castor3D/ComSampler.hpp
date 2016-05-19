@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComColour.hpp"
 
-#include <Sampler.hpp>
+#include <Texture/Sampler.hpp>
 
 namespace CastorCom
 {

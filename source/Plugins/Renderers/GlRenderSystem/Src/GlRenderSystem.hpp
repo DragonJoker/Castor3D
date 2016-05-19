@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "GlPipeline.hpp"
 #include "GlContext.hpp"
 
-#include <RenderSystem.hpp>
+#include <Render/RenderSystem.hpp>
 
 namespace GlRender
 {

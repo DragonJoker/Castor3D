@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "GlRenderSystemPrerequisites.hpp"
 #include "GlTexture.hpp"
 
-#include <StaticTexture.hpp>
+#include <Texture/StaticTexture.hpp>
 
 namespace GlRender
 {

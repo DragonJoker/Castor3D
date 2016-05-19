@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlQuery.hpp"
 
-#include <Context.hpp>
+#include <Render/Context.hpp>
 
 namespace GlRender
 {

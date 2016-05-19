@@ -9,14 +9,14 @@
 
 #include <wx/display.h>
 
-#include <Camera.hpp>
 #include <ListenerManager.hpp>
-#include <FunctorEvent.hpp>
-#include <RenderWindow.hpp>
-#include <Scene.hpp>
 #include <SceneNodeManager.hpp>
-#include <UserInputListener.hpp>
-#include <WindowHandle.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Event/UserInput/UserInputListener.hpp>
+#include <Miscellaneous/WindowHandle.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Scene.hpp>
 
 #include <Math.hpp>
 #include <Utils.hpp>

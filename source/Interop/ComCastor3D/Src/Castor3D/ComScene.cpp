@@ -9,7 +9,8 @@
 #include <GeometryManager.hpp>
 #include <LightManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <Viewport.hpp>
+
+#include <Render/Viewport.hpp>
 
 namespace CastorCom
 {
@@ -142,7 +143,7 @@ namespace CastorCom
 				if ( hr == S_OK )
 				{
 					auto l_camera = m_internal->GetCameraManager().Create( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr );
-					l_camera->GetViewport().SetSize( Castor::Size( ww, wh ) );
+					l_camera->GetViewport().Resize( Castor::Size( ww, wh ) );
 					static_cast< CCamera * >( *pVal )->SetInternal( l_camera );
 				}
 			}

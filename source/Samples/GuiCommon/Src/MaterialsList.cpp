@@ -7,12 +7,11 @@
 #include "RenderTargetTreeItemProperty.hpp"
 #include "TextureTreeItemProperty.hpp"
 
-#include <DynamicTexture.hpp>
 #include <Engine.hpp>
-#include <Material.hpp>
 #include <MaterialManager.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
+#include <Material/Pass.hpp>
+#include <Texture/DynamicTexture.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <Logger.hpp>
 

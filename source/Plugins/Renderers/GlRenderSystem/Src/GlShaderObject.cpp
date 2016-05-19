@@ -1,8 +1,8 @@
 #include "GlShaderObject.hpp"
+
+#include "GlRenderSystem.hpp"
 #include "GlShaderProgram.hpp"
 #include "OpenGl.hpp"
-
-#include <RenderSystem.hpp>
 
 #include <Logger.hpp>
 

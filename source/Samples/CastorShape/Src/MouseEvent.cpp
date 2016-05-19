@@ -1,7 +1,7 @@
 #include "MouseEvent.hpp"
 
-#include <FrameListener.hpp>
-#include <SceneNode.hpp>
+#include <Event/Frame/FrameListener.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include <Angle.hpp>
 

@@ -1,8 +1,8 @@
 #include "TextureTreeItemProperty.hpp"
 
-#include <Texture.hpp>
-#include <TextureUnit.hpp>
-#include <FunctorEvent.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

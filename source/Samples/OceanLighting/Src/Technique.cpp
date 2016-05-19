@@ -17,20 +17,19 @@
 #include "Technique.hpp"
 
 #include <BlendStateManager.hpp>
-#include <RenderSystem.hpp>
-#include <RasteriserState.hpp>
 #include <DepthStencilStateManager.hpp>
-#include <DepthStencilRenderBuffer.hpp>
-#include <TextureAttachment.hpp>
-#include <RenderBufferAttachment.hpp>
-#include <FrameVariableBuffer.hpp>
-#include <OneFrameVariable.hpp>
-#include <PointFrameVariable.hpp>
-#include <MatrixFrameVariable.hpp>
 #include <RasteriserStateManager.hpp>
 #include <SamplerManager.hpp>
-#include <StaticTexture.hpp>
-#include <DynamicTexture.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Shader/PointFrameVariable.hpp>
+#include <Shader/MatrixFrameVariable.hpp>
+#include <Texture/StaticTexture.hpp>
+#include <Texture/DynamicTexture.hpp>
 
 #include <Assertion.hpp>
 #include <Image.hpp>
@@ -168,6 +167,7 @@ namespace OceanLighting
 		, m_bGenerateWavesSpectrum( false )
 		, m_bGenerateMesh( false )
 		, m_bGenerateWaves( false )
+		, m_viewport( *p_renderSystem->GetEngine() )
 	{
 		m_vboBuffer[0] = 0.0f;
 		m_vboBuffer[1] = 0.0f;
@@ -214,14 +214,14 @@ namespace OceanLighting
 		m_fftFbo2 = GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		m_pAttachFftA = m_fftFbo2->CreateAttachment( m_pTexFFTA );
 		m_pAttachFftB = m_fftFbo2->CreateAttachment( m_pTexFFTB );
-		m_variancesVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
-		m_initVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
-		m_fftxVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
-		m_fftyVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
-		m_variancesIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
-		m_initIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
-		m_fftxIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
-		m_fftyIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+		m_variancesVtxBuffer = std::make_shared< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+		m_initVtxBuffer = std::make_shared< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+		m_fftxVtxBuffer = std::make_shared< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+		m_fftyVtxBuffer = std::make_shared< VertexBuffer >( *GetEngine(), l_quadVertexDeclarationElements );
+		m_variancesIdxBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
+		m_initIdxBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
+		m_fftxIdxBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
+		m_fftyIdxBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
 		real l_quadVertices[] =
 		{
 			-1.0, -1.0, 0.0, 0.0
@@ -255,12 +255,12 @@ namespace OceanLighting
 #endif
 		m_fbo = m_renderSystem->CreateFrameBuffer();
 		m_pAttachSky = m_fbo->CreateAttachment( m_pTexSky );
-		m_skyVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
-		m_skymapVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
-		m_cloudsVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_cloudsVertexDeclarationElements );
-		m_skyIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
-		m_skymapIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
-		m_cloudsIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
+		m_skyVtxBuffer = std::make_shared< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
+		m_skymapVtxBuffer = std::make_shared< VertexBuffer >( *GetEngine(), l_skymapDeclaration );
+		m_cloudsVtxBuffer = std::make_shared< VertexBuffer >( *GetEngine(), l_cloudsVertexDeclarationElements );
+		m_skyIdxBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
+		m_skymapIdxBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
+		m_cloudsIdxBuffer = std::make_shared< IndexBuffer >( *GetEngine() );
 		real l_skyVertices[] =
 		{
 			-1, -1
@@ -660,9 +660,8 @@ namespace OceanLighting
 			}
 		}
 
-		VertexBufferUPtr l_pVtxBuffer = std::make_unique< VertexBuffer >( *GetEngine(), l_meshDeclaration );
-		l_pVtxBuffer->Resize( n * sizeof( float ) );
-		std::memcpy( l_pVtxBuffer->data(), &data[0], n * sizeof( float ) );
+		m_renderVtxBuffer->Resize( n * sizeof( float ) );
+		std::memcpy( m_renderVtxBuffer->data(), &data[0], n * sizeof( float ) );
 		std::vector< uint32_t > indices( 6 * int( ceil( m_height * ( s + vmargin ) / m_gridSize ) + 4 ) * int( ceil( m_width * ( 1.0 + 2.0 * hmargin ) / m_gridSize ) + 4 ) );
 		n = 0;
 		int nj = 0;
@@ -685,14 +684,14 @@ namespace OceanLighting
 			nj++;
 		}
 
-		IndexBufferUPtr l_pIdxBuffer = std::make_unique< IndexBuffer >( *GetEngine() );
-		l_pIdxBuffer->Resize( n );
-		std::memcpy( l_pIdxBuffer->data(), &indices[0], n * sizeof( uint32_t ) );
+		m_renderIdxBuffer->Resize( n );
+		std::memcpy( m_renderIdxBuffer->data(), &indices[0], n * sizeof( uint32_t ) );
 		m_renderVtxBuffer->Create();
 		m_renderIdxBuffer->Create();
 		m_renderVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_renderIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_renderGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_render, m_renderVtxBuffer.get(), m_renderIdxBuffer.get(), nullptr, nullptr );
+		m_renderGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_render );
+		m_renderGBuffers->Initialise( m_renderVtxBuffer, m_renderIdxBuffer, nullptr, nullptr );
 	}
 
 	bool RenderTechnique::DoCreate()
@@ -729,7 +728,7 @@ namespace OceanLighting
 		m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 		m_pSamplerAnisotropicRepeat->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 		m_pSamplerAnisotropicRepeat->SetMaxAnisotropy( real( 0.1 ) );
-		m_frameBuffer->Create( 0 );
+		m_frameBuffer->Create();
 		m_pColorBuffer->Create();
 		m_pDepthBuffer->Create();
 		m_pTexIrradiance->Create();
@@ -737,7 +736,7 @@ namespace OceanLighting
 		m_pTexTransmittance->Create();
 		m_pTexSky->Create();
 		m_pTexNoise->Create();
-		m_fbo->Create( 0 );
+		m_fbo->Create();
 		m_skyVtxBuffer->Create();
 		m_skymapVtxBuffer->Create();
 		m_cloudsVtxBuffer->Create();
@@ -751,9 +750,9 @@ namespace OceanLighting
 		m_pTexFFTA->Create();
 		m_pTexFFTB->Create();
 		m_pTexButterfly->Create();
-		m_variancesFbo->Create( 0 );
-		m_fftFbo1->Create( 0 );
-		m_fftFbo2->Create( 0 );
+		m_variancesFbo->Create();
+		m_fftFbo1->Create();
+		m_fftFbo2->Create();
 		m_variancesVtxBuffer->Create();
 		m_variancesIdxBuffer->Create();
 		m_initVtxBuffer->Create();
@@ -972,16 +971,20 @@ namespace OceanLighting
 #if ENABLE_FFT
 		m_variancesVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_variancesIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_variancesGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_variances, m_variancesVtxBuffer.get(), m_variancesIdxBuffer.get(), nullptr, nullptr );
+		m_variancesGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_variances );
+		m_variancesGBuffers->Initialise( m_variancesVtxBuffer, m_variancesIdxBuffer, nullptr, nullptr );
 		m_initVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_initIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_initGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_init, m_initVtxBuffer.get(), m_initIdxBuffer.get(), nullptr, nullptr );
+		m_initGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_init );
+		m_initGBuffers->Initialise( m_initVtxBuffer, m_initIdxBuffer, nullptr, nullptr );
 		m_fftxVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_fftxIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_fftxGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_fftx, m_fftxVtxBuffer.get(), m_fftxIdxBuffer.get(), nullptr, nullptr );
+		m_fftxGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_fftx );
+		m_fftxGBuffers->Initialise( m_fftxVtxBuffer, m_fftxIdxBuffer, nullptr, nullptr );
 		m_fftyVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_fftyIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_fftyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_ffty, m_fftyVtxBuffer.get(), m_fftyIdxBuffer.get(), nullptr, nullptr );
+		m_fftyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_ffty );
+		m_fftyGBuffers->Initialise( m_fftyVtxBuffer, m_fftyIdxBuffer, nullptr, nullptr );
 #endif
 		m_skyVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_skymapVtxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
@@ -989,9 +992,12 @@ namespace OceanLighting
 		m_skyIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_skymapIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
 		m_cloudsIdxBuffer->Initialise( eBUFFER_ACCESS_TYPE_STATIC, eBUFFER_ACCESS_NATURE_DRAW );
-		m_skyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_sky, m_skyVtxBuffer.get(), m_skyIdxBuffer.get(), nullptr, nullptr );
-		m_skymapGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_skymap, m_skymapVtxBuffer.get(), m_skymapIdxBuffer.get(), nullptr, nullptr );
-		m_cloudsGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_clouds, m_cloudsVtxBuffer.get(), m_cloudsIdxBuffer.get(), nullptr, nullptr );
+		m_skyGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_sky );
+		m_skyGBuffers->Initialise( m_skyVtxBuffer, m_skyIdxBuffer, nullptr, nullptr );
+		m_skymapGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_skymap );
+		m_skymapGBuffers->Initialise( m_skymapVtxBuffer, m_skymapIdxBuffer, nullptr, nullptr );
+		m_cloudsGBuffers = GetEngine()->GetRenderSystem()->CreateGeometryBuffers( eTOPOLOGY_TRIANGLES, *m_clouds );
+		m_cloudsGBuffers->Initialise( m_cloudsVtxBuffer, m_cloudsIdxBuffer, nullptr, nullptr );
 #if ENABLE_FFT
 		m_variancesFbo->Bind( eFRAMEBUFFER_MODE_CONFIG );
 
@@ -1080,7 +1086,7 @@ namespace OceanLighting
 		m_pDepthBuffer->Cleanup();
 	}
 
-	bool RenderTechnique::DoBeginRender()
+	bool RenderTechnique::DoBeginRender( Scene & p_scene )
 	{
 		if ( m_bReloadPrograms )
 		{
@@ -1122,12 +1128,13 @@ namespace OceanLighting
 
 	void RenderTechnique::DoRender( RenderTechnique::stSCENE_RENDER_NODES & CU_PARAM_UNUSED( p_nodes ), Camera & CU_PARAM_UNUSED( p_camera ), uint32_t CU_PARAM_UNUSED( p_frameTime ) )
 	{
-		Pipeline & l_pPipeline = GetEngine()->GetRenderSystem()->GetPipeline();
+		Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
 		Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
 		m_fbo->Bind();
 		m_pDepthStencilState.lock()->Apply();
 		m_pRasteriserState.lock()->Apply();
-		l_pPipeline.ApplyViewport( m_skyTexSize, m_skyTexSize );
+		m_viewport.Resize( Size( m_skyTexSize, m_skyTexSize ) );
+		m_viewport.Render( l_pipeline );
 		m_skymapSunDir->SetValue( sun );
 		m_skymapOctaves->SetValue( m_octaves );
 		m_skymapLacunarity->SetValue( m_lacunarity );
@@ -1149,9 +1156,9 @@ namespace OceanLighting
 		Image::BinaryLoader()( const_cast< const Image & >( l_image ), cuT( "Skymap.bmp" ) );
 	}
 
-	void RenderTechnique::DoEndRender()
+	void RenderTechnique::DoEndRender( Scene & p_scene )
 	{
-		Pipeline & l_pPipeline = GetEngine()->GetRenderSystem()->GetPipeline();
+		Pipeline & l_pipeline = GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline();
 		Point3f sun( sin( m_sunTheta ) * cos( m_sunPhi ), sin( m_sunTheta ) * sin( m_sunPhi ), cos( m_sunTheta ) );
 #if ENABLE_FFT
 		static double m_lastTime = 0.0;
@@ -1162,7 +1169,8 @@ namespace OceanLighting
 		m_frameBuffer->Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW );
 		m_renderTarget->GetDepthStencilState()->Apply();
 		m_renderTarget->GetRasteriserState()->Apply();
-		l_pPipeline.ApplyViewport( m_width, m_height );
+		m_viewport.Resize( Size( m_width, m_height ) );
+		m_viewport.Render( l_pipeline );
 #if ENABLE_FFT
 		float ch = m_cameraHeight;
 #else
@@ -1704,7 +1712,8 @@ namespace OceanLighting
 		}
 
 		m_variancesFbo->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
-		GetEngine()->GetRenderSystem()->GetPipeline().ApplyViewport( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE );
+		m_viewport.Resize( Size( m_N_SLOPE_VARIANCE, m_N_SLOPE_VARIANCE ) );
+		m_viewport.Render( GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline() );
 		m_variancesGridSizes->SetValue( Point4f( m_GRID1_SIZE, m_GRID2_SIZE, m_GRID3_SIZE, m_GRID4_SIZE ) );
 		m_variancesSlopeVarianceDelta->SetValue( float( 0.5 * ( theoreticSlopeVariance - totalSlopeVariance ) ) );
 		m_variancesBlendState.lock()->Apply();
@@ -1802,12 +1811,13 @@ namespace OceanLighting
 	void RenderTechnique::simulateFFTWaves( float t )
 	{
 		RenderSystem * l_pRS = GetEngine()->GetRenderSystem();
-		Pipeline & l_pPipeline = l_pRS->GetPipeline();
+		Pipeline & l_pipeline = l_pRS->GetCurrentContext()->GetPipeline();
 		TextureSPtr l_pTex;
 		// init
 		m_fftFbo1->Bind( eFRAMEBUFFER_MODE_AUTOMATIC );
 		m_fftFbo1->SetReadBuffer( eATTACHMENT_POINT_COLOUR, 0 );
-		l_pPipeline.ApplyViewport( m_FFT_SIZE, m_FFT_SIZE );
+		m_viewport.Resize( Size( m_FFT_SIZE, m_FFT_SIZE ) );
+		m_viewport.Render( l_pipeline );
 		m_initFftSize->SetValue( float( m_FFT_SIZE ) );
 		m_initInverseGridSizes->SetValue( Point4f( 2.0 * M_PI * m_FFT_SIZE / m_GRID1_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID2_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID3_SIZE, 2.0 * M_PI * m_FFT_SIZE / m_GRID4_SIZE ) );
 		m_initT->SetValue( t );

@@ -11,17 +11,17 @@
 
 #include <Font.hpp>
 
-#include <FunctorEvent.hpp>
-#include <InitialiseEvent.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
-#include <PlatformWindowHandle.hpp>
 #include <PluginManager.hpp>
 #include <SamplerManager.hpp>
 #include <SceneManager.hpp>
-#include <SceneFileParser.hpp>
-#include <TextureUnit.hpp>
 #include <WindowManager.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Miscellaneous/PlatformWindowHandle.hpp>
+#include <Scene/SceneFileParser.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <PixelBufferBase.hpp>
 

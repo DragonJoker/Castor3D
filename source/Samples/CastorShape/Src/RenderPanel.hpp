@@ -31,7 +31,6 @@ namespace CastorShape
 	public:
 		RenderPanel( Castor3D::eVIEWPORT_TYPE p_renderType,
 					 Castor3D::SceneSPtr p_scene,
-					 Castor3D::ePROJECTION_DIRECTION p_look,
 					 wxWindow * parent, wxWindowID p_id,
 					 wxPoint const & pos = wxDefaultPosition,
 					 wxSize const & size = wxDefaultSize,
@@ -100,7 +99,6 @@ namespace CastorShape
 		bool m_mouseMiddleDown;	//!< The middle mouse button status
 
 		Castor3D::eVIEWPORT_TYPE m_renderType;
-		Castor3D::ePROJECTION_DIRECTION m_lookAt;
 		Castor3D::RenderWindowWPtr m_pRenderWindow;
 		Castor3D::SceneSPtr m_mainScene;
 		Castor3D::FrameListenerSPtr m_listener;

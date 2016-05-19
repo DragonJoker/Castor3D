@@ -3,9 +3,9 @@
 #include "ShaderDialog.hpp"
 
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Material/Material.hpp>
+#include <Material/Pass.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

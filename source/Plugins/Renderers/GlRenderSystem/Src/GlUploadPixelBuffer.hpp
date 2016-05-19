@@ -20,10 +20,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlGpuIoBuffer.hpp"
 
-#include <Sampler.hpp>
-#include <Texture.hpp>
-#include <StaticTexture.hpp>
-#include <DynamicTexture.hpp>
+#include <Texture/Sampler.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/StaticTexture.hpp>
+#include <Texture/DynamicTexture.hpp>
 
 namespace GlRender
 {

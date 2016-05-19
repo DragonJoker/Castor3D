@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComCamera.hpp"
 #include "ComScene.hpp"
 
-#include <RenderTarget.hpp>
+#include <Render/RenderTarget.hpp>
 
 namespace CastorCom
 {

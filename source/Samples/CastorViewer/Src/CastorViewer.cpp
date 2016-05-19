@@ -3,10 +3,6 @@
 
 #include <wx/cmdline.h>
 
-#include <Pass.hpp>
-#include <Submesh.hpp>
-#include <TextureUnit.hpp>
-
 #include <File.hpp>
 #include <Exception.hpp>
 

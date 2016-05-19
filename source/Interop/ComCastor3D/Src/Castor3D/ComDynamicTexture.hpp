@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComTexture.hpp"
 #include "ComRenderTarget.hpp"
 
-#include <DynamicTexture.hpp>
+#include <Texture/DynamicTexture.hpp>
 
 namespace CastorCom
 {

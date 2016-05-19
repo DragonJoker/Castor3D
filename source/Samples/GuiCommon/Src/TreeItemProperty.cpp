@@ -1,8 +1,8 @@
 #include "TreeItemProperty.hpp"
 
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
 #include <MaterialManager.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

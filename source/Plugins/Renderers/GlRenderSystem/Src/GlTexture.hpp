@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlObject.hpp"
 
-#include <StaticTexture.hpp>
+#include <Texture/StaticTexture.hpp>
 
 namespace GlRender
 {

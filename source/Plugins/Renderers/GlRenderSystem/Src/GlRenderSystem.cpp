@@ -20,13 +20,13 @@
 #include "GlSampler.hpp"
 #include "GlViewport.hpp"
 
+#include <Logger.hpp>
+
 #include <GlslSource.hpp>
 
 #include <Engine.hpp>
-#include <RenderTechnique.hpp>
 #include <ShaderManager.hpp>
-
-#include <Logger.hpp>
+#include <Technique/RenderTechnique.hpp>
 
 #include <GL/gl.h>
 

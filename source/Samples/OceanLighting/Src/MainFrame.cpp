@@ -5,15 +5,15 @@
 #include "MainFrame.hpp"
 
 #include <CameraManager.hpp>
-#include <PlatformWindowHandle.hpp>
 #include <PluginManager.hpp>
-#include <Parameter.hpp>
-#include <RenderLoop.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
 #include <TargetManager.hpp>
 #include <TechniqueManager.hpp>
 #include <WindowManager.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Miscellaneous/PlatformWindowHandle.hpp>
+#include <Render/RenderLoop.hpp>
 
 using namespace Castor;
 using namespace Castor3D;
@@ -337,8 +337,8 @@ namespace OceanLighting
 			SceneSPtr l_scene = m_pCastor3D->GetSceneManager().Create( cuT( "DummyScene" ), *m_pCastor3D );
 			SceneNodeSPtr l_node = l_scene->GetSceneNodeManager().Create( cuT( "DummyCameraNode" ), l_scene->GetCameraRootNode() );
 			CameraSPtr l_pCamera = l_scene->GetCameraManager().Create( cuT( "DummyCamera" ), l_node );
-			l_pCamera->GetViewport().SetSize( Size( m_width, m_height ) );
-			l_pCamera->GetViewport() = Viewport::Perspective( *m_pCastor3D, Angle(), 1, 0.1_r, 1000.0_r );
+			l_pCamera->GetViewport().Resize( Size( m_width, m_height ) );
+			l_pCamera->GetViewport().SetPerspective( Angle(), 1, 0.1_r, 1000.0_r );
 			RenderTargetSPtr l_target = m_pCastor3D->GetTargetManager().Create( eTARGET_TYPE_WINDOW );
 			l_target->SetPixelFormat( ePIXEL_FORMAT_A8R8G8B8 );
 			l_target->SetSize( Size( m_width, m_height ) );

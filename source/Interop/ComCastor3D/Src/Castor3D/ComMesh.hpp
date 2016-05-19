@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 
-#include <Mesh.hpp>
+#include <Mesh/Mesh.hpp>
 
 namespace CastorCom
 {

@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <Viewport.hpp>
+#include <Render/Viewport.hpp>
 
 namespace GlRender
 {

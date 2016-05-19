@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <GpuInformations.hpp>
+#include <Miscellaneous/GpuInformations.hpp>
 
 #ifndef _WINDEF_
 

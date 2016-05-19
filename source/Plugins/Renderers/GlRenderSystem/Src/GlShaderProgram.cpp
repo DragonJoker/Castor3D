@@ -7,7 +7,7 @@
 #include "GlFrameVariableBuffer.hpp"
 #include "OpenGl.hpp"
 
-#include "GlslSource.hpp"
+#include <GlslSource.hpp>
 
 #include <Logger.hpp>
 

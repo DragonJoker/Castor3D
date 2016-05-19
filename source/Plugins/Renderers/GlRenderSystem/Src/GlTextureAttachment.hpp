@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <TextureAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
 
 namespace GlRender
 {

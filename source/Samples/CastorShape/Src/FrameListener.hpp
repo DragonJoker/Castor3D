@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorShapePrerequisites.hpp"
 
-#include <FrameEvent.hpp>
+#include <Event/Frame/FrameEvent.hpp>
 
 namespace CastorShape
 {

@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComTexture.hpp"
 
-#include <StaticTexture.hpp>
+#include <Texture/StaticTexture.hpp>
 
 namespace CastorCom
 {

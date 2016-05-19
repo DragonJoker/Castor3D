@@ -1,6 +1,6 @@
 #include "FrameVariableBufferTreeItemProperty.hpp"
 
-#include <FrameVariableBuffer.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

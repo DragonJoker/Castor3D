@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "GlRenderSystemPrerequisites.hpp"
 #include "GlTexture.hpp"
 
-#include <DynamicTexture.hpp>
+#include <Texture/DynamicTexture.hpp>
 
 namespace GlRender
 {

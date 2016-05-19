@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlRenderBuffer.hpp"
 
-#include <DepthStencilRenderBuffer.hpp>
+#include <FrameBuffer/DepthStencilRenderBuffer.hpp>
 
 namespace GlRender
 {

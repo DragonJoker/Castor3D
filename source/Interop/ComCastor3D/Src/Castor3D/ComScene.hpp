@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComSceneNode.hpp"
 #include "ComColour.hpp"
 
-#include <Scene.hpp>
+#include <Scene/Scene.hpp>
 
 namespace CastorCom
 {

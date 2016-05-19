@@ -1,6 +1,6 @@
 #include "TranslateNodeEvent.hpp"
 
-#include <SceneNode.hpp>
+#include <Scene/SceneNode.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

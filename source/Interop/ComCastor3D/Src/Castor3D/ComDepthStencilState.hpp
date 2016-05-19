@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComColour.hpp"
 
-#include <DepthStencilState.hpp>
+#include <State/DepthStencilState.hpp>
 
 namespace CastorCom
 {

@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #if defined( __linux__ )
 #include "GlHolder.hpp"
 
-#include <GpuInformations.hpp>
+#include <Miscellaneous/GpuInformations.hpp>
 
 namespace GlRender
 {

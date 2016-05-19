@@ -5,8 +5,8 @@
 #include "FrameVariablesList.hpp"
 #include "PropertiesHolder.hpp"
 
-#include <RenderSystem.hpp>
-#include <ShaderProgram.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

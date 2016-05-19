@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_FRAME_VARIABLE_BUFFER_H___
 #define ___GL_FRAME_VARIABLE_BUFFER_H___
 
-#include <FrameVariableBuffer.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
 
 #include "GlRenderSystemPrerequisites.hpp"
 #include "GlBufferBase.hpp"

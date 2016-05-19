@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlObject.hpp"
 
-#include <Sampler.hpp>
+#include <Texture/Sampler.hpp>
 
 namespace GlRender
 {

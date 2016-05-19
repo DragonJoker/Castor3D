@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_ONE_FRAME_VARIABLE_H___
 #define ___GL_ONE_FRAME_VARIABLE_H___
 
-#include <OneFrameVariable.hpp>
+#include <Shader/OneFrameVariable.hpp>
 
 #include "GlFrameVariableBase.hpp"
 

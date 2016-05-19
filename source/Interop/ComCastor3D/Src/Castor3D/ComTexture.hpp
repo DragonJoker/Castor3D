@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComSampler.hpp"
 #include "ComPixelBuffer.hpp"
 
-#include <Texture.hpp>
+#include <Texture/TextureLayout.hpp>
 
 namespace CastorCom
 {

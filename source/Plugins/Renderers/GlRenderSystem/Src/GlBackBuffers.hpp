@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <BackBuffers.hpp>
+#include <FrameBuffer/BackBuffers.hpp>
 
 namespace GlRender
 {

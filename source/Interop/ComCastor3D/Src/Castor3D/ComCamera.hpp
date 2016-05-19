@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComAtlObject.hpp"
 #include "ComScene.hpp"
 
-#include <Camera.hpp>
+#include <Scene/Camera.hpp>
 
 namespace CastorCom
 {

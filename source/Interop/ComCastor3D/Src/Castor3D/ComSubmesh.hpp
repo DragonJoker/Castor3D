@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComTexture.hpp"
 #include "ComColour.hpp"
 
-#include <Submesh.hpp>
+#include <Mesh/Submesh.hpp>
 
 namespace CastorCom
 {

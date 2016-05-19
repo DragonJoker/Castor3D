@@ -10,10 +10,6 @@
 #include <wx/panel.h>
 #include <wx/timer.h>
 
-#if HAS_CASTORGUI
-#	include <CastorGuiPrerequisites.hpp>
-#endif
-
 namespace CastorViewer
 {
 	typedef enum eTIMER_ID

@@ -23,8 +23,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComVector3D.hpp"
 #include "ComQuaternion.hpp"
 
-#include <Scene.hpp>
-#include <SceneNode.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 namespace CastorCom
 {

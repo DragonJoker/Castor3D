@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComMesh.hpp"
 #include "ComSubmesh.hpp"
 
-#include <Geometry.hpp>
+#include <Scene/Geometry.hpp>
 
 namespace CastorCom
 {

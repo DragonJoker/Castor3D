@@ -11,13 +11,12 @@
 #include <cstring>
 #include <cstdio>
 
-#include <PlatformWindowHandle.hpp>
-#include <Material.hpp>
-#include <MaterialManager.hpp>
-#include <RenderLoop.hpp>
-#include <RenderWindow.hpp>
-
 #include <Logger.hpp>
+
+#include <MaterialManager.hpp>
+#include <Miscellaneous/PlatformWindowHandle.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Render/RenderWindow.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

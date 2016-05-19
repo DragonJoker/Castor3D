@@ -1,11 +1,7 @@
 #include "ComRenderWindow.hpp"
 
-#include <PlatformWindowHandle.hpp>
-
-#if HAS_CASTORGUI
-#	include <ControlsManager.hpp>
-#	include <ListenerManager.hpp>
-#endif
+#include <Miscellaneous/PlatformWindowHandle.hpp>
+#include <Event/UserInput/UserInputListener.hpp>
 
 namespace CastorCom
 {
@@ -96,8 +92,12 @@ namespace CastorCom
 
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-				l_controlsManager.FireMouseMove( Castor::Position( m_oldX, m_oldY ) );
+				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+
+				if ( l_inputListener )
+				{
+					l_inputListener->FireMouseMove( Castor::Position( int32_t( m_oldX ), int32_t( m_oldY ) ) );
+				}
 			}
 			catch ( Castor::Exception & )
 			{
@@ -126,8 +126,12 @@ namespace CastorCom
 
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_LEFT );
+				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+
+				if ( l_inputListener )
+				{
+					l_inputListener->FireMouseButtonPushed( Castor3D::eMOUSE_BUTTON_LEFT );
+				}
 			}
 			catch ( Castor::Exception & )
 			{
@@ -156,8 +160,12 @@ namespace CastorCom
 
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_LEFT );
+				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+
+				if ( l_inputListener )
+				{
+					l_inputListener->FireMouseButtonReleased( Castor3D::eMOUSE_BUTTON_LEFT );
+				}
 			}
 			catch ( Castor::Exception & )
 			{
@@ -186,8 +194,12 @@ namespace CastorCom
 
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_MIDDLE );
+				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+
+				if ( l_inputListener )
+				{
+					l_inputListener->FireMouseButtonPushed( Castor3D::eMOUSE_BUTTON_MIDDLE );
+				}
 			}
 			catch ( Castor::Exception & )
 			{
@@ -216,8 +228,12 @@ namespace CastorCom
 
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_MIDDLE );
+				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+
+				if ( l_inputListener )
+				{
+					l_inputListener->FireMouseButtonReleased( Castor3D::eMOUSE_BUTTON_MIDDLE );
+				}
 			}
 			catch ( Castor::Exception & )
 			{
@@ -246,8 +262,12 @@ namespace CastorCom
 
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-				l_controlsManager.FireMouseButtonPushed( CastorGui::eMOUSE_BUTTON_RIGHT );
+				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+
+				if ( l_inputListener )
+				{
+					l_inputListener->FireMouseButtonPushed( Castor3D::eMOUSE_BUTTON_RIGHT );
+				}
 			}
 			catch ( Castor::Exception & )
 			{
@@ -276,8 +296,12 @@ namespace CastorCom
 
 			try
 			{
-				CastorGui::ControlsManager & l_controlsManager = *std::static_pointer_cast< CastorGui::ControlsManager >( m_internal->GetEngine()->GetListenerManager().Find( CastorGui::PLUGIN_NAME ) );
-				l_controlsManager.FireMouseButtonReleased( CastorGui::eMOUSE_BUTTON_RIGHT );
+				auto l_inputListener = m_internal->GetEngine()->GetUserInputListener();
+
+				if ( l_inputListener )
+				{
+					l_inputListener->FireMouseButtonReleased( Castor3D::eMOUSE_BUTTON_RIGHT );
+				}
 			}
 			catch ( Castor::Exception & )
 			{

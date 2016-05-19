@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComVector3D.hpp"
 
-#include <LightCategory.hpp>
+#include <Scene/Light/LightCategory.hpp>
 
 namespace CastorCom
 {

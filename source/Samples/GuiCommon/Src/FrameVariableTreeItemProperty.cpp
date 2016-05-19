@@ -1,11 +1,11 @@
 #include "FrameVariableTreeItemProperty.hpp"
 
-#include <FrameVariableBuffer.hpp>
-#include <MatrixFrameVariable.hpp>
-#include <OneFrameVariable.hpp>
-#include <PointFrameVariable.hpp>
-#include <RenderSystem.hpp>
-#include <ShaderProgram.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/MatrixFrameVariable.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Shader/PointFrameVariable.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 #include "PointProperties.hpp"
 #include "MatrixProperties.hpp"

@@ -1,7 +1,7 @@
 #include "SceneTreeItemProperty.hpp"
 
-#include <Scene.hpp>
-#include <StaticTexture.hpp>
+#include <Scene/Scene.hpp>
+#include <Texture/StaticTexture.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

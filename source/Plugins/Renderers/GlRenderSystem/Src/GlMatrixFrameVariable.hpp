@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_MATRIX_FRAME_VARIABLE_H___
 #define ___GL_MATRIX_FRAME_VARIABLE_H___
 
-#include <MatrixFrameVariable.hpp>
+#include <Shader/MatrixFrameVariable.hpp>
 
 #include "GlFrameVariableBase.hpp"
 
