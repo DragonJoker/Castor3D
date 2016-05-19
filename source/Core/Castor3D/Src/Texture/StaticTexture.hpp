@@ -33,7 +33,7 @@ namespace Castor3D
 	\remark		Une texture statique supprime son buffer de la ram quand elle est initialisée
 	*/
 	class StaticTexture
-		: public Texture
+		: public TextureLayout
 	{
 	public:
 		/**

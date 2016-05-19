@@ -81,7 +81,7 @@ namespace Castor3D
 		 *\param[in]	p_size		Les dimensions de la cible.
 		 *\param[in]	p_texture	La texture HDR.
 		 */
-		C3D_API void Apply( Castor::Size const & p_size, Texture const & p_texture );
+		C3D_API void Apply( Castor::Size const & p_size, TextureLayout const & p_texture );
 
 	protected:
 		/**

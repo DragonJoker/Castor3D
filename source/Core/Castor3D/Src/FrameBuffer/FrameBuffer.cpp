@@ -102,14 +102,14 @@ namespace Castor3D
 		DoUnbind();
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer )
 	{
 		p_texture->SetTarget( p_target );
 		p_texture->SetLayer( p_layer );
 		return DoAttach( p_point, p_index, p_texture );
 	}
 
-	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer )
+	bool FrameBuffer::Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer )
 	{
 		return Attach( p_point, 0, p_texture, p_target, p_layer );
 	}

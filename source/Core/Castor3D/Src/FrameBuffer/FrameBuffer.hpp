@@ -184,7 +184,7 @@ namespace Castor3D
 		 *\param[in]	p_index		The attachment index
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
-		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
@@ -192,27 +192,27 @@ namespace Castor3D
 		 *\param[in]	p_index		L'index d'attache
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, uint8_t p_index, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a texture to this frame buffer, at given attachment point
 		 *\param[in]	p_point		The attachment point
 		 *\param[in]	p_texture	The texture
 		 *\param[in]	p_target	The dimension to which the texture must be attached
-		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_layer		The associated layer, if p_dimension equal eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
 		 *\return		\p true if OK
 		 *\~french
 		 *\brief		Attache une texture à ce tampon d'image, au point d'attache voulu
 		 *\param[in]	p_point		Le point d'attache
 		 *\param[in]	p_texture	La texture
 		 *\param[in]	p_target	La dimension à laquelle la texture doit être attachée
-		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TARGET_3D or eTEXTURE_TARGET_LAYER
+		 *\param[in]	p_layer		La couche associée, si p_dimension vaut eTEXTURE_TYPE_3D or eTEXTURE_TYPE_2DARRAY
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TARGET p_target, int p_layer = 0 );
+		C3D_API bool Attach( eATTACHMENT_POINT p_point, TextureAttachmentSPtr p_texture, eTEXTURE_TYPE p_target, int p_layer = 0 );
 		/**
 		 *\~english
 		 *\brief		Attaches a render buffer to this frame buffer, at given attachment point

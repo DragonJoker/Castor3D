@@ -6,6 +6,8 @@
 #include "Shader/ShaderProgram.hpp"
 #include "Texture/DynamicTexture.hpp"
 #include "Texture/TextureUnit.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureImage.hpp"
 
 using namespace Castor;
 
@@ -93,7 +95,21 @@ namespace Castor3D
 				}
 			}
 
-			m_lightsTexture->UploadImage( false );
+			auto l_layout = m_lightsTexture->GetTexture();
+
+			if ( l_layout )
+			{
+				auto l_image = l_layout->GetImage();
+				auto l_locked = l_layout->Lock( eACCESS_TYPE_WRITE );
+
+				if ( l_locked && l_image )
+				{
+					memcpy( l_locked, l_image->GetBuffer()->const_ptr(), l_image->GetBuffer()->size() );
+				}
+
+				l_layout->Unlock( true );
+			}
+
 			m_lightsTexture->Bind();
 		}
 	}

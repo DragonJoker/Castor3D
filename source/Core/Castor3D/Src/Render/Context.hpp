@@ -106,7 +106,7 @@ namespace Castor3D
 		 *\param[in]	p_size			La taille du viewport de rendu.
 		 *\param[in]	p_texture		La texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture );
+		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture );
 		/**
 		 *\~english
 		 *\brief		Renders the given texture.
@@ -119,7 +119,7 @@ namespace Castor3D
 		 *\param[in]	p_texture			La texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program );
+		C3D_API void RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, ShaderProgramSPtr p_program );
 		/**
 		 *\~english
 		 *\brief		Tells the context is initialised
@@ -272,7 +272,7 @@ namespace Castor3D
 		 *\param[in]	p_geometryBuffers	Les tampons de géométrie utilisés pour dessiner la texture.
 		 *\param[in]	p_program			Le programme utilisé pour dessiner la texture.
 		 */
-		C3D_API void DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program );
+		C3D_API void DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program );
 		/**
 		 *\~english
 		 *\brief		Creates the render to texture shader program.

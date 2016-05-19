@@ -154,12 +154,12 @@ namespace Castor3D
 		DoSwapBuffers();
 	}
 
-	void Context::RenderTexture( Castor::Size const & p_size, Texture const & p_texture )
+	void Context::RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture )
 	{
 		DoRenderTexture( p_size, p_texture, m_geometryBuffers, *m_renderTextureProgram.lock() );
 	}
 
-	void Context::RenderTexture( Castor::Size const & p_size, Texture const & p_texture, ShaderProgramSPtr p_program )
+	void Context::RenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, ShaderProgramSPtr p_program )
 	{
 		if ( p_program )
 		{
@@ -167,7 +167,7 @@ namespace Castor3D
 		}
 	}
 
-	void Context::DoRenderTexture( Castor::Size const & p_size, Texture const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program )
+	void Context::DoRenderTexture( Castor::Size const & p_size, TextureLayout const & p_texture, GeometryBuffersSPtr p_geometryBuffers, ShaderProgram const & p_program )
 	{
 		m_viewport.Resize( p_size );
 		m_viewport.Render( GetPipeline() );

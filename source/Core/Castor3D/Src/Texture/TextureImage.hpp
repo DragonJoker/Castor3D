@@ -34,24 +34,18 @@ namespace Castor3D
 	\brief		Class de base d'une texture
 	*/
 	class TextureImage
-		: public Castor::OwnedBy< RenderSystem >
+		: public Castor::OwnedBy< Engine >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type			The texture type.
-		 *\param[in]	p_renderSystem	The render system.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_engine	The engine.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type			Le type de texture.
-		 *\param[in]	p_renderSystem	Le render system.
-		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_engine	Le moteur.
 		 */
-		C3D_API TextureImage( eTEXTURE_BASE_TYPE p_type, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API TextureImage( Engine & p_engine );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -61,22 +55,55 @@ namespace Castor3D
 		C3D_API virtual ~TextureImage();
 		/**
 		 *\~english
-		 *\brief		Defines the texture buffer
-		 *\param[in]	p_buffer	The buffer
+		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array.
+		 *\param[in]	p_dimensions	The texture dimensions.
+		 *\param[in]	p_buffer		The buffer.
 		 *\~french
-		 *\brief		Définit le buffer de la texture
-		 *\param[in]	p_buffer	Le buffer
+		 *\brief		Définit le tampon de la texture, ainsi que ses dimensions, dans le cas de texture 3D ou tableau de textures.
+		 *\param[in]	p_dimensions	Les dimensions de la texture.
+		 *\param[in]	p_buffer		Le tampon.
+		 */
+		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer );
+		/**
+		 *\~english
+		 *\brief		Defines the texture buffer.
+		 *\param[in]	p_buffer	The buffer.
+		 *\~french
+		 *\brief		Définit le tampon de la texture.
+		 *\param[in]	p_buffer	Le tampon.
 		 */
 		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
-		 *\brief		Activation function, to tell the GPU it is active
-		 *\param[in]	p_index	The texture index
-		 *\return		\p true if successful
+		 *\brief		Defines the texture buffer.
+		 *\param[in]	p_size		The buffer dimensions.
+		 *\param[in]	p_format	The buffer format.
 		 *\~french
-		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé
-		 *\param[in]	p_index	L'index de texture
-		 *\return		\p true si tout s'est bien passé
+		 *\brief		Définit le tampon de la texture.
+		 *\param[in]	p_size		La taille du tampon.
+		 *\param[in]	p_format	Le format du tampon.
+		 */
+		C3D_API void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		/**
+		 *\~english
+		 *\brief		Defines the 3D texture buffer.
+		 *\param[in]	p_size		The buffer dimensions.
+		 *\param[in]	p_format	The buffer format.
+		 *\~french
+		 *\brief		Définit le tampon de la texture 3D.
+		 *\param[in]	p_size		La taille du tampon.
+		 *\param[in]	p_format	Le format du tampon.
+		 */
+		C3D_API void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format );
+		/**
+		 *\~english
+		 *\brief		Activation function, to tell the GPU it is active.
+		 *\param[in]	p_index	The texture index.
+		 *\return		\p true if successful.
+		 *\~french
+		 *\brief		Fonction d'activation, pour dire au GPU qu'il est activé.
+		 *\param[in]	p_index	L'index de texture.
+		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool Bind( uint32_t p_index )const;
 		/**
@@ -90,36 +117,24 @@ namespace Castor3D
 		C3D_API void Unbind( uint32_t p_index )const;
 		/**
 		 *\~english
-		 *\brief		Creation function
-		 *\return		\p true if OK
-		 *\~french
-		 *\brief		Fonction de création
-		 *\return		\p true si tout s'est bien passé
-		 */
-		C3D_API virtual bool Create() = 0;
-		/**
-		 *\~english
-		 *\brief		Destruction function
-		 *\~french
-		 *\brief		Fonction de destruction
-		 */
-		C3D_API virtual void Destroy() = 0;
-		/**
-		 *\~english
 		 *\brief		Initialisation function.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Initialise() = 0;
+		C3D_API bool Initialise( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		C3D_API virtual void Cleanup() = 0;
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
@@ -130,7 +145,7 @@ namespace Castor3D
 		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
 		 *\return		Le buffer de l'image
 		 */
-		C3D_API virtual uint8_t * Lock( uint32_t p_lock ) = 0;
+		C3D_API uint8_t * Lock( uint32_t p_lock );
 		/**
 		 *\~english
 		 *\brief		Unlocks image buffer from GPU
@@ -139,86 +154,7 @@ namespace Castor3D
 		 *\brief		Délocke le buffer de l'image à partir du GPU
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
 		 */
-		C3D_API virtual void Unlock( bool p_modified ) = 0;
-		/**
-		 *\~english
-		 *\brief		Generate texture mipmaps
-		 *\~french
-		 *\brief		Génère les mipmaps de la texture
-		 */
-		C3D_API virtual void GenerateMipmaps()const = 0;
-		/**
-		 *\~english
-		 *\brief		Retrieves the initialisation status
-		 *\return		The initialisation status
-		 *\~french
-		 *\brief		Récupère le statut d'initialisation
-		 *\return		Le statut d'initialisation
-		 */
-		inline bool IsInitialised()const
-		{
-			return m_initialised;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture type
-		 *\return		The texture type
-		 *\~french
-		 *\brief		Récupère le type de texture
-		 *\return		Le type de texture
-		 */
-		inline eTEXTURE_BASE_TYPE GetBaseType()const
-		{
-			return m_baseType;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture dimension
-		 *\return		The texture dimension
-		 *\~french
-		 *\brief		Récupère la dimension de la texture
-		 *\return		La dimension de la texture
-		 */
-		inline eTEXTURE_TYPE GetType()const
-		{
-			return m_type;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the texture dimension
-		 *\param[in]	p_dimension	The texture dimension
-		 *\~french
-		 *\brief		Définit la dimension de la texture
-		 *\param[in]	p_dimension	La dimension de la texture
-		 */
-		inline void SetType( eTEXTURE_TYPE p_dimension )
-		{
-			m_type = p_dimension;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture mapping mode
-		 *\return		The texture mapping mode
-		 *\~french
-		 *\brief		Récupère le mode mappage de la texture
-		 *\return		Le mode mappage de la texture
-		 */
-		inline eTEXTURE_MAP_MODE GetMappingMode()const
-		{
-			return m_mapMode;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the texture mapping mode
-		 *\param[in]	p_eMapMode	The texture mapping mode
-		 *\~french
-		 *\brief		Définit le mode mappage de la texture
-		 *\param[in]	p_eMapMode	Le mode mappage de la texture
-		 */
-		inline void SetMappingMode( eTEXTURE_MAP_MODE p_eMapMode )
-		{
-			m_mapMode = p_eMapMode;
-		}
+		C3D_API void Unlock( bool p_modified );
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture image dimensions
@@ -230,6 +166,45 @@ namespace Castor3D
 		inline Castor::Size GetDimensions()const
 		{
 			return Castor::Size( GetWidth(), GetHeight() );
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture pixel format
+		 *\return		The pixel format
+		 *\~french
+		 *\brief		Récupère le format des pixels de la texture
+		 *\return		Le format des pixels
+		 */
+		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
+		{
+			REQUIRE( m_pixelBuffer );
+			return m_pixelBuffer->format();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image width
+		 *\return		The width
+		 *\~french
+		 *\brief		Récupère la largeur de l'image de la texture
+		 *\return		La largeur
+		 */
+		uint32_t GetWidth()const
+		{
+			REQUIRE( m_pixelBuffer );
+			return m_pixelBuffer->dimensions().width();
+		}
+		/**
+		 *\~english
+		 *\brief		Retrieves the texture image height
+		 *\return		The height
+		 *\~french
+		 *\brief		Récupère la hauteur de l'image de la texture
+		 *\return		La hauteur
+		 */
+		uint32_t GetHeight()const
+		{
+			REQUIRE( m_pixelBuffer );
+			return m_pixelBuffer->dimensions().height() / m_depth;
 		}
 		/**
 		 *\~english
@@ -245,42 +220,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture pixel format
-		 *\return		The pixel format
-		 *\~french
-		 *\brief		Récupère le format des pixels de la texture
-		 *\return		Le format des pixels
-		 */
-		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
-		{
-			return ( m_pixelBuffer ? m_pixelBuffer->format() : m_pixelFormat );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur de l'image de la texture
-		 *\return		La largeur
-		 */
-		uint32_t GetWidth()const
-		{
-			return ( m_pixelBuffer ? m_pixelBuffer->dimensions().width() : m_size.width() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image height
-		 *\return		The height
-		 *\~french
-		 *\brief		Récupère la hauteur de l'image de la texture
-		 *\return		La hauteur
-		 */
-		uint32_t GetHeight()const
-		{
-			return ( m_pixelBuffer ? m_pixelBuffer->dimensions().height() : m_size.height() ) / m_depth;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the texture buffer
 		 *\return		The buffer
 		 *\~french
@@ -293,53 +232,15 @@ namespace Castor3D
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		API specific initialisation function
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Initialisation spécifique selon l'API
-		 *\return		\p si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		API specific binding function
-		 *\return		\p if OK
-		 *\~french
-		 *\brief		Activation spécifique selon l'API
-		 *\return		\p si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoBind( uint32_t p_index )const = 0;
-		/**
-		 *\~english
-		 *\brief		API specific unbinding function
-		 *\~french
-		 *\brief		Désactivation spécifique selon l'API
-		 */
-		C3D_API virtual void DoUnbind( uint32_t p_index )const = 0;
-
-	protected:
-		//!\~english Initialisation status	\~french Statut d'initialisation
-		bool m_initialised;
-		//!\~english Texture base type.	\~french La type de base de la texture.
-		eTEXTURE_BASE_TYPE m_baseType;
-		//!\~english Texture type.	\~french Type de texture.
-		eTEXTURE_TYPE m_type;
-		//!\~english Texture mapping modes	\~french Modes de mappage de la texture
-		eTEXTURE_MAP_MODE m_mapMode;
-		//!\~english 3D Texture depth	\~french Profondeur de la texture 3D
+		//!\~english 3D Texture depth.
+		//!\~french Profondeur de la texture 3D.
 		uint32_t m_depth;
-		//!\~english Texture pixels, at least at initialisation	\~french Pixels de la texture, au moins au moment de l'initialisation
+		//!\~english Texture pixels, at least at initialisation.
+		//!\~french Pixels de la texture, au moins au moment de l'initialisation.
 		Castor::PxBufferBaseSPtr m_pixelBuffer;
-		//!\~english The pixel buffer format	\~french Le format du buffer de pixels
-		Castor::ePIXEL_FORMAT m_pixelFormat;
-		//!\~english The pixel buffer dimensions	\~french Les dimensions du buffer de pixels
-		Castor::Size m_size;
-		//!\~english The required CPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		uint8_t m_cpuAccess;
-		//!\~english The required GPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
-		uint8_t m_gpuAccess;
+		//!\~english The texture GPU storage.
+		//!\~french Le stockage GPU de la texture.
+		TextureStorageUPtr m_storage;
 	};
 }
 

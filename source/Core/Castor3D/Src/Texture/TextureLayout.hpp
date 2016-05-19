@@ -33,7 +33,7 @@ namespace Castor3D
 	\~french
 	\brief		Class de base d'une texture
 	*/
-	class Texture
+	class TextureLayout
 		: public Castor::OwnedBy< RenderSystem >
 	{
 	public:
@@ -42,32 +42,19 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_renderSystem	The render system.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_type			Le type de texture.
 		 *\param[in]	p_renderSystem	Le render system.
-		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API Texture( eTEXTURE_BASE_TYPE p_type, RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API TextureLayout( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem );
 		/**
 		 *\~english
 		 *\brief		Destructor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		C3D_API virtual ~Texture();
-		/**
-		 *\~english
-		 *\brief		Defines the texture buffer
-		 *\param[in]	p_buffer	The buffer
-		 *\~french
-		 *\brief		Définit le buffer de la texture
-		 *\param[in]	p_buffer	Le buffer
-		 */
-		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_buffer );
+		C3D_API virtual ~TextureLayout();
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
@@ -161,18 +148,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture type
-		 *\return		The texture type
-		 *\~french
-		 *\brief		Récupère le type de texture
-		 *\return		Le type de texture
-		 */
-		inline eTEXTURE_BASE_TYPE GetBaseType()const
-		{
-			return m_baseType;
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the texture dimension
 		 *\return		The texture dimension
 		 *\~french
@@ -185,111 +160,31 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the texture dimension
-		 *\param[in]	p_dimension	The texture dimension
+		 *\brief		Defines the texture image.
+		 *\param[in]	p_image	The image.
+		 *\param[in]	p_index	The image index.
 		 *\~french
-		 *\brief		Définit la dimension de la texture
-		 *\param[in]	p_dimension	La dimension de la texture
+		 *\brief		Définit l'image de la texture.
+		 *\param[in]	p_image	L'image.
+		 *\param[in]	p_index	L'index de l'image.
 		 */
-		inline void SetType( eTEXTURE_TYPE p_dimension )
+		inline void SetImage( TextureImageSPtr p_image, size_t p_index = 0 )
 		{
-			m_type = p_dimension;
+			REQUIRE( p_index < m_images.size() );
+			m_images[p_index] = p_image;
 		}
 		/**
 		 *\~english
-		 *\brief		Retrieves the texture mapping mode
-		 *\return		The texture mapping mode
+		 *\param[in]	p_index	The image index.
+		 *\return		The texture image.
 		 *\~french
-		 *\brief		Récupère le mode mappage de la texture
-		 *\return		Le mode mappage de la texture
+		 *\param[in]	p_index	L'index de l'image.
+		 *\return		L'image de la texture.
 		 */
-		inline eTEXTURE_MAP_MODE GetMappingMode()const
+		inline TextureImageSPtr GetImage( size_t p_index = 0 )
 		{
-			return m_mapMode;
-		}
-		/**
-		 *\~english
-		 *\brief		Defines the texture mapping mode
-		 *\param[in]	p_eMapMode	The texture mapping mode
-		 *\~french
-		 *\brief		Définit le mode mappage de la texture
-		 *\param[in]	p_eMapMode	Le mode mappage de la texture
-		 */
-		inline void SetMappingMode( eTEXTURE_MAP_MODE p_eMapMode )
-		{
-			m_mapMode = p_eMapMode;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image dimensions
-		 *\return		The image dimensions
-		 *\~french
-		 *\brief		Récupère les dimensions de l'image de la texture
-		 *\return		Les dimensions de l'image
-		 */
-		inline Castor::Size GetDimensions()const
-		{
-			return Castor::Size( GetWidth(), GetHeight() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture depth
-		 *\return		The depth, 1 if not 3D
-		 *\~french
-		 *\brief		Récupère la profondeur de la texture
-		 *\return		La profondeur, 1 si pas 3D
-		 */
-		inline uint32_t GetDepth()const
-		{
-			return m_depth;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture pixel format
-		 *\return		The pixel format
-		 *\~french
-		 *\brief		Récupère le format des pixels de la texture
-		 *\return		Le format des pixels
-		 */
-		inline Castor::ePIXEL_FORMAT GetPixelFormat()const
-		{
-			return ( m_pixelBuffer ? m_pixelBuffer->format() : m_pixelFormat );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur de l'image de la texture
-		 *\return		La largeur
-		 */
-		uint32_t GetWidth()const
-		{
-			return ( m_pixelBuffer ? m_pixelBuffer->dimensions().width() : m_size.width() );
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image height
-		 *\return		The height
-		 *\~french
-		 *\brief		Récupère la hauteur de l'image de la texture
-		 *\return		La hauteur
-		 */
-		uint32_t GetHeight()const
-		{
-			return ( m_pixelBuffer ? m_pixelBuffer->dimensions().height() : m_size.height() ) / m_depth;
-		}
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le buffer de la texture
-		 *\return		Le buffer
-		 */
-		inline Castor::PxBufferBaseSPtr GetBuffer()const
-		{
-			return m_pixelBuffer;
+			REQUIRE( p_index < m_images.size() );
+			return m_images[p_index];
 		}
 
 	protected:
@@ -320,27 +215,12 @@ namespace Castor3D
 		C3D_API virtual void DoUnbind( uint32_t p_index )const = 0;
 
 	protected:
-		DECLARE_VECTOR( Castor::PxBufferBaseSPtr, PxBuffer );
 		//!\~english Initialisation status	\~french Statut d'initialisation
 		bool m_initialised;
-		//!\~english Texture base type.	\~french La type de base de la texture.
-		eTEXTURE_BASE_TYPE m_baseType;
 		//!\~english Texture type.	\~french Type de texture.
 		eTEXTURE_TYPE m_type;
-		//!\~english Texture mapping modes	\~french Modes de mappage de la texture
-		eTEXTURE_MAP_MODE m_mapMode;
-		//!\~english 3D Texture depth	\~french Profondeur de la texture 3D
-		uint32_t m_depth;
-		//!\~english Texture pixels, at least at initialisation	\~french Pixels de la texture, au moins au moment de l'initialisation
-		Castor::PxBufferBaseSPtr m_pixelBuffer;
-		//!\~english The pixel buffer format	\~french Le format du buffer de pixels
-		Castor::ePIXEL_FORMAT m_pixelFormat;
-		//!\~english The pixel buffer dimensions	\~french Les dimensions du buffer de pixels
-		Castor::Size m_size;
-		//!\~english The required CPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		uint8_t m_cpuAccess;
-		//!\~english The required GPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
-		uint8_t m_gpuAccess;
+		//!\~english The texture images.	\~french Les images de la texture.
+		TextureImagePtrArray m_images;
 	};
 }
 

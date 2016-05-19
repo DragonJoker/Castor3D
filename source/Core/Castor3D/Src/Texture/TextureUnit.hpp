@@ -160,7 +160,7 @@ namespace Castor3D
 		 *\brief		Definit la texture
 		 *\param[in]	p_texture	La texture
 		 */
-		C3D_API void SetTexture( TextureSPtr p_texture );
+		C3D_API void SetTexture( TextureLayoutSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Applies the texture unit
@@ -175,24 +175,6 @@ namespace Castor3D
 		 *\brief		Desactive la texture
 		 */
 		C3D_API void Unbind()const;
-		/**
-		 *\~english
-		 *\brief		Uploads current image to the GPU
-		 *\param[in]	p_bSync	Tells if the upload must be synchronous or not
-		 *\~french
-		 *\brief		Charge l'image courante sur le GPU
-		 *\param[in]	p_bSync	Dit si le chargement doit être synchrone ou pas
-		 */
-		C3D_API void UploadImage( bool p_bSync );
-		/**
-		 *\~english
-		 *\brief		Downloads the current image from the GPU
-		 *\param[in]	p_bSync	Tells if the download must be synchronous or not
-		 *\~french
-		 *\brief		Charge l'image courante à partir du GPU
-		 *\param[in]	p_bSync	Dit si le chargement doit être synchrone ou pas
-		 */
-		C3D_API void DownloadImage( bool p_bSync );
 		/**
 		 *\~english
 		 *\brief		Loads the texture image from the given path
@@ -213,96 +195,6 @@ namespace Castor3D
 		 *\return		La dimension de la texture
 		 */
 		C3D_API eTEXTURE_TYPE GetType()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture mapping mode
-		 *\return		The texture mapping mode
-		 *\~french
-		 *\brief		Récupère le mode mappage de la texture
-		 *\return		Le mode mappage de la texture
-		 */
-		C3D_API eTEXTURE_MAP_MODE GetMappingMode()const;
-		/**
-		 *\~english
-		 *\brief		Defines the texture mapping mode
-		 *\param[in]	p_mode	The texture mapping mode
-		 *\~french
-		 *\brief		Définit le mode de mappage de la texture
-		 *\param[in]	p_mode	Le mode de mappage de la texture
-		 */
-		C3D_API void SetMappingMode( eTEXTURE_MAP_MODE p_mode );
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le buffer de l'image de la texture
-		 *\return		Le buffer
-		 */
-		C3D_API uint8_t const * GetImageBuffer()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image buffer
-		 *\return		The buffer
-		 *\~french
-		 *\brief		Récupère le buffer de l'image de la texture
-		 *\return		Le buffer
-		 */
-		C3D_API uint8_t * GetImageBuffer();
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixels
-		 *\return		The pixels
-		 *\~french
-		 *\brief		Récupère les pixels de l'image de la texture
-		 *\return		Les pixels
-		 */
-		C3D_API Castor::PxBufferBaseSPtr const GetImagePixels()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixels
-		 *\return		The pixels
-		 *\~french
-		 *\brief		Récupère les pixels de l'image de la texture
-		 *\return		Les pixels
-		 */
-		C3D_API Castor::PxBufferBaseSPtr GetImagePixels();
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image size (in bytes)
-		 *\return		The size
-		 *\~french
-		 *\brief		Récupère la taille de l'image de la texture (en octets)
-		 *\return		La taille
-		 */
-		C3D_API uint32_t GetImageSize()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image width
-		 *\return		The width
-		 *\~french
-		 *\brief		Récupère la largeur de l'image de la texture
-		 *\return		La largeur
-		 */
-		C3D_API uint32_t GetWidth()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image height
-		 *\return		The height
-		 *\~french
-		 *\brief		Récupère la hauteur de l'image de la texture
-		 *\return		La hauteur
-		 */
-		C3D_API uint32_t GetHeight()const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the texture image pixel format
-		 *\return		The pixel format
-		 *\~french
-		 *\brief		Récupère le format des pixels de l'image de la texture
-		 *\return		Le format des pixels
-		 */
-		C3D_API Castor::ePIXEL_FORMAT GetPixelFormat()const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the texture initalisation status
@@ -332,7 +224,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture
 		 *\return		La valeur
 		 */
-		inline Castor3D::TextureSPtr GetTexture()const
+		inline Castor3D::TextureLayoutSPtr GetTexture()const
 		{
 			return m_pTexture;
 		}
@@ -666,7 +558,7 @@ namespace Castor3D
 		//!\~english The unit transformations	\~french Les transformations de l'unité
 		Castor::Matrix4x4r m_mtxTransformations;
 		//!\~english The unit texture	\~french La texture de l'unité
-		TextureSPtr m_pTexture;
+		TextureLayoutSPtr m_pTexture;
 		//!\~english The unit texture's path	\~french Le chemin de la texture de l'unité
 		Castor::Path m_pathTexture;
 		//!\~english The render target used to compute the texture, if this unit is a render target	\~french La render target utilisée pour générer la texture si cette unité est une render target

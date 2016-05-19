@@ -33,7 +33,7 @@ namespace Castor3D
 	\remark		Une texture statique peut mettre à jour son buffer
 	*/
 	class DynamicTexture
-		: public Texture
+		: public TextureLayout
 	{
 	public:
 		/**

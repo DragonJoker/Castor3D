@@ -93,7 +93,7 @@ namespace Castor3D
 		}
 	}
 
-	void ToneMapping::Apply( Size const & p_size, Texture const & p_texture )
+	void ToneMapping::Apply( Size const & p_size, TextureLayout const & p_texture )
 	{
 		m_exposureVar->SetValue( m_exposure );
 		DoUpdate();
