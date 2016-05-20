@@ -40,15 +40,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_type			Le type de texture.
 		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API DynamicTexture( RenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API DynamicTexture( RenderSystem & p_renderSystem, eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -56,54 +58,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~DynamicTexture();
-		/**
-		 *\copydoc		Castor3D::Texture::Initialise
-		 */
-		C3D_API virtual bool Initialise();
-		/**
-		 *\copydoc		Castor3D::Texture::Cleanup
-		 */
-		C3D_API virtual void Cleanup();
-		/**
-		 *\~english
-		 *\brief		Defines the texture buffer
-		 *\param[in]	p_size		The buffer dimensions
-		 *\param[in]	p_format	The buffer format
-		 *\~french
-		 *\brief		Définit le buffer de la texture
-		 *\param[in]	p_size		La taille du tampon
-		 *\param[in]	p_format	Le format du tampon
-		 */
-		C3D_API void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
-		 *\~english
-		 *\brief		Defines the 3D texture buffer
-		 *\param[in]	p_size		The buffer dimensions
-		 *\param[in]	p_format	The buffer format
-		 *\~french
-		 *\brief		Définit le buffer de la texture 3D
-		 *\param[in]	p_size		La taille du tampon
-		 *\param[in]	p_format	Le format du tampon
-		 */
-		C3D_API void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
-		 *\~english
-		 *\brief		Resizes the texture buffer
-		 *\param[in]	p_size	The new size
-		 *\~french
-		 *\brief		Redimensionne le buffer de la texture
-		 *\param[in]	p_size	La nouvelle taille
-		 */
-		C3D_API virtual void Resize( Castor::Size const & p_size );
-		/**
-		 *\~english
-		 *\brief		Resizes the 3D texture buffer
-		 *\param[in]	p_size	The new size
-		 *\~french
-		 *\brief		Redimensionne le buffer de la texture 3D
-		 *\param[in]	p_size	La nouvelle taille
-		 */
-		C3D_API virtual void Resize( Castor::Point3ui const & p_size );
 		/**
 		 *\~english
 		 *\brief		Retrieves the render target
@@ -167,8 +121,6 @@ namespace Castor3D
 		 *\param[in]	p_format	Le format des pixels de l'image
 		 */
 		C3D_API virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
-
-		using Texture::SetImage;
 
 	private:
 		//!\~english The texture render target	\~french La cible de rendu

@@ -486,7 +486,7 @@ namespace Castor3D
 		l_node.m_program.Unbind();
 	}
 
-	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, Texture const & p_texture, Sampler const & p_sampler , uint32_t p_count )
+	void OverlayRenderer::DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler , uint32_t p_count )
 	{
 		RenderNode & l_node = DoGetTextProgram( p_pass );
 		p_pass.GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline().ApplyProjection( l_node.m_matrixUbo );

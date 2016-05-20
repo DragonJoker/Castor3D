@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -150,7 +150,6 @@ namespace Castor3D
 	// Texture Unit Parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitImage )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitRenderTarget )
-	DECLARE_ATTRIBUTE_PARSER( Parser_UnitMapType )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitAlphaFunc )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitRgbBlend )
 	DECLARE_ATTRIBUTE_PARSER( Parser_UnitAlphaBlend )

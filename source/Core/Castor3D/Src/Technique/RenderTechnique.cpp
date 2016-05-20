@@ -238,10 +238,11 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		m_colourTexture->SetType( eTEXTURE_TYPE_2D );
-		m_colourTexture->SetImage( p_size, ePIXEL_FORMAT_ARGB16F32F );
-		p_size = m_colourTexture->GetDimensions();
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_image = std::make_unique< TextureImage >( *m_technique.GetEngine() );
+		l_image->SetSource( p_size, ePIXEL_FORMAT_ARGB16F32F );
+		p_size = l_image->GetDimensions();
+		m_colourTexture->SetImage( std::move( l_image ) );
 
 		bool l_return = m_colourTexture->Create();
 
@@ -285,7 +286,7 @@ namespace Castor3D
 
 			if ( l_return && m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 			{
-				m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, eTEXTURE_TARGET_2D );
+				m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, m_colourTexture->GetType() );
 				m_frameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_depthAttach );
 				l_return = m_frameBuffer->IsComplete();
 				m_frameBuffer->Unbind();

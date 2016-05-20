@@ -18,10 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TEXTURE_IMAGE_H___
 #define ___C3D_TEXTURE_IMAGE_H___
 
-#include "Castor3DPrerequisites.hpp"
+#include "TextureStorage.hpp"
 
 #include <PixelBufferBase.hpp>
-#include <OwnedBy.hpp>
 
 namespace Castor3D
 {
@@ -48,13 +47,6 @@ namespace Castor3D
 		C3D_API TextureImage( Engine & p_engine );
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		C3D_API virtual ~TextureImage();
-		/**
-		 *\~english
 		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array.
 		 *\param[in]	p_dimensions	The texture dimensions.
 		 *\param[in]	p_buffer		The buffer.
@@ -63,7 +55,7 @@ namespace Castor3D
 		 *\param[in]	p_dimensions	Les dimensions de la texture.
 		 *\param[in]	p_buffer		Le tampon.
 		 */
-		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void SetSource( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer.
@@ -72,7 +64,7 @@ namespace Castor3D
 		 *\brief		Définit le tampon de la texture.
 		 *\param[in]	p_buffer	Le tampon.
 		 */
-		C3D_API void SetImage( Castor::PxBufferBaseSPtr p_buffer );
+		C3D_API void SetSource( Castor::PxBufferBaseSPtr p_buffer );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer.
@@ -83,7 +75,7 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du tampon.
 		 *\param[in]	p_format	Le format du tampon.
 		 */
-		C3D_API void SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		C3D_API void SetSource( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 		/**
 		 *\~english
 		 *\brief		Defines the 3D texture buffer.
@@ -94,7 +86,25 @@ namespace Castor3D
 		 *\param[in]	p_size		La taille du tampon.
 		 *\param[in]	p_format	Le format du tampon.
 		 */
-		C3D_API void SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format );
+		C3D_API void SetSource( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format );
+		/**
+		 *\~english
+		 *\brief		Resizes the texture buffer
+		 *\param[in]	p_size	The new size
+		 *\~french
+		 *\brief		Redimensionne le buffer de la texture
+		 *\param[in]	p_size	La nouvelle taille
+		 */
+		C3D_API void Resize( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief		Resizes the 3D texture buffer
+		 *\param[in]	p_size	The new size
+		 *\~french
+		 *\brief		Redimensionne le buffer de la texture 3D
+		 *\param[in]	p_size	La nouvelle taille
+		 */
+		C3D_API void Resize( Castor::Point3ui const & p_size );
 		/**
 		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active.
@@ -117,17 +127,19 @@ namespace Castor3D
 		C3D_API void Unbind( uint32_t p_index )const;
 		/**
 		 *\~english
-		 *\brief		Initialisation function.
+		 *\brief		Initialises the GPU storage.
+		 *\param[in]	p_type		The texture type.
 		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
 		 *\return		\p true if OK.
 		 *\~french
-		 *\brief		Fonction d'initialisation.
+		 *\brief		Initialise le stockage GPU.
+		 *\param[in]	p_type		Le type de texture.
 		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool Initialise( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API bool Initialise( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Cleanup function
@@ -230,16 +242,53 @@ namespace Castor3D
 		{
 			return m_pixelBuffer;
 		}
+		/**
+		 *\~english
+		 *\return		The static source status.
+		 *\~french
+		 *\return		Le statut de source statique.
+		 */
+		inline bool IsStaticSource()const
+		{
+			return m_staticSource;
+		}
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Resizes the texture buffer
+		 *\param[in]	p_size	The new size
+		 *\~french
+		 *\brief		Redimensionne le buffer de la texture
+		 *\param[in]	p_size	La nouvelle taille
+		 */
+		void DoResize( Castor::Size const & p_size );
+		/**
+		 *\~english
+		 *\brief			Readjusts dimensions if the selected rendering API doesn't support NPOT textures.
+		 *\param[in,out]	p_size	The size.
+		 *\param[in,out]	p_depth	The depth.
+		 *\return			\p true if the dimensions have changed.
+		 *\~french
+		 *\brief			Réajuste les dimensions données si l'API de rendu sélectionnée ne supporte pas les textures NPOT.
+		 *\param[in,out]	p_size	La taille.
+		 *\param[in,out]	p_depth	La profondeur.
+		 *\return			\p true si les dimensions ont changé.
+		 */
+		bool DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth );
 
 	protected:
-		//!\~english 3D Texture depth.
-		//!\~french Profondeur de la texture 3D.
-		uint32_t m_depth;
-		//!\~english Texture pixels, at least at initialisation.
-		//!\~french Pixels de la texture, au moins au moment de l'initialisation.
+		//!\~english	Tells if the texture source is static.
+		//!\~french		Dit si la source de la texture est statique.
+		bool m_staticSource{ true };
+		//!\~english	The 3D Texture depth.
+		//!\~french		Profondeur de la texture 3D.
+		uint32_t m_depth{ 1 };
+		//!\~english	Texture pixels, at least at initialisation.
+		//!\~french		Les pixels de la texture, au moins au moment de l'initialisation.
 		Castor::PxBufferBaseSPtr m_pixelBuffer;
-		//!\~english The texture GPU storage.
-		//!\~french Le stockage GPU de la texture.
+		//!\~english	The texture GPU storage.
+		//!\~french		Le stockage GPU de la texture.
 		TextureStorageUPtr m_storage;
 	};
 }

@@ -270,7 +270,7 @@ namespace Castor3D
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto l_colourTexture = m_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
 		l_colourTexture->SetRenderTarget( m_renderTarget.shared_from_this() );
 		m_colorTexture.SetTexture( l_colourTexture );
@@ -290,9 +290,8 @@ namespace Castor3D
 	{
 		bool l_return = false;
 		m_colorTexture.SetIndex( p_index );
-		m_colorTexture.GetTexture()->SetType( eTEXTURE_TYPE_2D );
-		std::static_pointer_cast< DynamicTexture >( m_colorTexture.GetTexture() )->SetImage( p_size, m_renderTarget.GetPixelFormat() );
-		Size l_size = m_colorTexture.GetTexture()->GetDimensions();
+		std::static_pointer_cast< DynamicTexture >( m_colorTexture.GetTexture() )->GetImage().SetSource( p_size, m_renderTarget.GetPixelFormat() );
+		Size l_size = m_colorTexture.GetTexture()->GetImage().GetDimensions();
 		m_frameBuffer->Create();
 		m_colorTexture.GetTexture()->Create();
 		m_colorTexture.GetTexture()->Initialise();
@@ -300,7 +299,7 @@ namespace Castor3D
 
 		if ( m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
-			m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, eTEXTURE_TARGET_2D );
+			m_frameBuffer->Attach( eATTACHMENT_POINT_COLOUR, 0, m_pColorAttach, m_colorTexture.GetTexture()->GetType() );
 			l_return = m_frameBuffer->IsComplete();
 			m_frameBuffer->Unbind();
 		}
@@ -377,7 +376,7 @@ namespace Castor3D
 			}
 
 			m_fbLeftEye.Initialise( p_index, m_size );
-			m_size = m_fbLeftEye.m_colorTexture.GetTexture()->GetDimensions();
+			m_size = m_fbLeftEye.m_colorTexture.GetTexture()->GetImage().GetDimensions();
 			m_fbRightEye.Initialise( p_index, m_size );
 			m_renderTechnique->Create();
 			uint32_t l_index = p_index;
@@ -459,11 +458,6 @@ namespace Castor3D
 				}
 			}
 		}
-	}
-
-	DynamicTextureSPtr RenderTarget::CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )const
-	{
-		return GetEngine()->GetRenderSystem()->CreateDynamicTexture( p_cpuAccess, p_gpuAccess );
 	}
 
 	eVIEWPORT_TYPE RenderTarget::GetViewportType()const

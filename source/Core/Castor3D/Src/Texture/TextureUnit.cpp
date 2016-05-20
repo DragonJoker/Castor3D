@@ -69,13 +69,13 @@ namespace Castor3D
 					l_return = DoParseChunk( l_size, l_chunk );
 					break;
 
-				case eCHUNK_TYPE_TEXTURE_DATA:
-					l_pPxBuffer = PxBufferBase::create( l_size, l_ePf, l_chunk.GetRemainingData(), l_ePf );
-					l_image = std::make_shared< TextureImage >( *p_unit.GetEngine() );
-					l_image->SetImage( l_pPxBuffer );
-					l_texture = p_unit.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-					p_unit.SetTexture( l_texture );
-					break;
+				//case eCHUNK_TYPE_TEXTURE_DATA:
+				//	l_pPxBuffer = PxBufferBase::create( l_size, l_ePf, l_chunk.GetRemainingData(), l_ePf );
+				//	l_image = std::make_shared< TextureImage >( *p_unit.GetEngine() );
+				//	l_image->SetSource( l_pPxBuffer );
+				//	l_texture = p_unit.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+				//	p_unit.SetTexture( l_texture );
+				//	break;
 
 				case eCHUNK_TYPE_TEXTURE_ALPHA_FUNC:
 					l_return = DoParseChunk( l_eAlphaFn, l_chunk );
@@ -229,20 +229,20 @@ namespace Castor3D
 			}
 			else if ( l_pTexture )
 			{
-				uint8_t const * l_pBuffer = p_unit.GetImageBuffer();
+				uint8_t const * l_pBuffer = l_pTexture->GetImage().GetBuffer()->const_ptr();
 
 				if ( l_pBuffer )
 				{
-					l_return = DoFillChunk( l_pTexture->GetImage()->GetPixelFormat(), eCHUNK_TYPE_TEXTURE_FORMAT, l_chunk );
+					l_return = DoFillChunk( l_pTexture->GetImage().GetPixelFormat(), eCHUNK_TYPE_TEXTURE_FORMAT, l_chunk );
 
 					if ( l_return )
 					{
-						l_return = DoFillChunk( l_pTexture->GetImage()->GetDimensions(), eCHUNK_TYPE_TEXTURE_DIMENSIONS, l_chunk );
+						l_return = DoFillChunk( l_pTexture->GetImage().GetDimensions(), eCHUNK_TYPE_TEXTURE_DIMENSIONS, l_chunk );
 					}
 
 					if ( l_return )
 					{
-						l_return = DoFillChunk( l_pBuffer, l_pTexture->GetImage()->GetBuffer()->size(), eCHUNK_TYPE_TEXTURE_DATA, l_chunk );
+						l_return = DoFillChunk( l_pBuffer, l_pTexture->GetImage().GetBuffer()->size(), eCHUNK_TYPE_TEXTURE_DATA, l_chunk );
 					}
 
 					l_written = true;
@@ -408,7 +408,7 @@ namespace Castor3D
 					l_return = p_file.WriteText( cuT( "\t\t\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
 				}
 
-				if ( l_texture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC )
+				if ( !l_texture->GetImage().IsStaticSource() )
 				{
 					if ( l_return && p_unit.GetRenderTarget() )
 					{
@@ -558,9 +558,9 @@ namespace Castor3D
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-			l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-			l_pStaTexture->SetImage( l_pImage->GetPixels() );
+			StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+			l_pStaTexture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+			l_pStaTexture->GetImage().SetSource( l_pImage->GetPixels() );
 			SetTexture( l_pStaTexture );
 			m_pathTexture = p_pathFile;
 			m_changed = true;

@@ -34,7 +34,7 @@ namespace Castor3D
 	\remark		Une texture spéciale contenant les textures de 6 faces d'un cube.
 	*/
 	class CubeMapTexture
-		: public Texture
+		: public TextureLayout
 	{
 	public:
 		/**
@@ -58,15 +58,6 @@ namespace Castor3D
 		 */
 		C3D_API virtual ~CubeMapTexture();
 		/**
-		 *\~english
-		 *\brief		Defines the textures buffers.
-		 *\param[in]	p_buffers	The buffers.
-		 *\~french
-		 *\brief		Définit les tampons des textures.
-		 *\param[in]	p_buffers	Les tampons.
-		 */
-		C3D_API void SetImages( PxBufferArray p_buffers );
-		/**
 		 *\copydoc		Castor3D::Texture::Initialise
 		 */
 		C3D_API virtual bool Initialise();
@@ -74,22 +65,6 @@ namespace Castor3D
 		 *\copydoc		Castor3D::Texture::Cleanup
 		 */
 		C3D_API virtual void Cleanup();
-
-	private:
-		/**
-		 *\~english
-		 *\brief		Defines the texture buffer for given face
-		 *\param[in]	p_buffer	The texture buffer.
-		 *\param[in]	p_index		The texture face.
-		 *\~french
-		 *\brief		Définit le buffer de la texture de la face donnée.
-		 *\param[in]	p_buffer	Le tampon de la texture.
-		 *\param[in]	p_face		La face de la texture.
-		 */
-		void DoSetImage( Castor::PxBufferBaseSPtr p_buffer, CubeMapFace p_face );
-
-	private:
-		using Texture::SetImage;
 	};
 }
 

@@ -480,12 +480,12 @@ namespace Castor3D
 
 		if ( m_toSave )
 		{
-			auto l_buffer = l_texture->Lock( eACCESS_TYPE_READ );
+			auto l_buffer = l_texture->GetImage().Lock( eACCESS_TYPE_READ );
 
 			if ( l_buffer )
 			{
 				std::memcpy( m_saveBuffer->ptr(), l_buffer, m_saveBuffer->size() );
-				l_texture->Unlock( false );
+				l_texture->GetImage().Unlock( false );
 			}
 
 			m_toSave = false;

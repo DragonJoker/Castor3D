@@ -205,7 +205,6 @@ namespace Castor3D
 
 		UIntStrMap m_mapBlendFactors;
 		UIntStrMap m_mapTypes;
-		UIntStrMap m_mapMapModes;
 		UIntStrMap m_mapAlphaFuncs;
 		UIntStrMap m_mapTextureArguments;
 		UIntStrMap m_mapTextureRgbFunctions;

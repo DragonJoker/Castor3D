@@ -593,23 +593,23 @@ namespace Castor3D
 			DoPrepareTexture( eTEXTURE_CHANNEL_GLOSS, l_pGlossMap, l_index );
 			DoPrepareTexture( eTEXTURE_CHANNEL_HEIGHT, l_pHeightMap, l_index );
 
-			if ( l_pOpacityMap && l_pOpacityMap->GetImagePixels() )
+			if ( l_pOpacityMap && l_pOpacityMap->GetTexture()->GetImage().GetBuffer() )
 			{
-				PxBufferBaseSPtr l_pReduced = l_pOpacityMap->GetImagePixels();
+				PxBufferBaseSPtr l_pReduced = l_pOpacityMap->GetTexture()->GetImage().GetBuffer();
 				PF::ReduceToAlpha( l_pReduced );
-				l_pOpacityMap->GetTexture()->SetImage( l_pReduced );
+				l_pOpacityMap->GetTexture()->GetImage().SetSource( l_pReduced );
 				l_pImageOpa.reset();
 			}
 			else if ( l_pImageOpa )
 			{
-				StaticTextureSPtr l_pTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-				l_pTexture->SetType( eTEXTURE_TYPE_2D );
-				l_pTexture->SetImage( l_pImageOpa );
+				StaticTextureSPtr l_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+				l_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+				l_texture->GetImage().SetSource( l_pImageOpa );
 				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
 				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
 				l_pOpacityMap->SetChannel( eTEXTURE_CHANNEL_OPACITY );
 				l_pOpacityMap->SetSampler( l_pOpaSrc->GetSampler() );
-				l_pOpacityMap->SetTexture( l_pTexture );
+				l_pOpacityMap->SetTexture( l_texture );
 				AddTextureUnit( l_pOpacityMap );
 				l_pImageOpa.reset();
 			}
@@ -704,13 +704,13 @@ namespace Castor3D
 	{
 		PxBufferBaseSPtr l_return;
 
-		if ( p_unit && ( p_unit->GetImagePixels() || p_unit->GetRenderTarget() ) )
+		if ( p_unit && ( p_unit->GetTexture()->GetImage().GetBuffer() || p_unit->GetRenderTarget() ) )
 		{
-			if ( p_unit->GetImagePixels() )
+			if ( p_unit->GetTexture()->GetImage().GetBuffer() )
 			{
-				PxBufferBaseSPtr l_pExtracted = p_unit->GetImagePixels();
-				l_return = PF::ExtractAlpha( l_pExtracted );
-				p_unit->GetTexture()->SetImage( l_pExtracted );
+				PxBufferBaseSPtr l_extracted = p_unit->GetTexture()->GetImage().GetBuffer();
+				l_return = PF::ExtractAlpha( l_extracted );
+				p_unit->GetTexture()->GetImage().SetSource( l_extracted );
 			}
 
 			p_unit->SetIndex( p_index++ );

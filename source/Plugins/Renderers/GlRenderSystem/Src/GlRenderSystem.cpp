@@ -19,6 +19,9 @@
 #include "GlFrameVariableBuffer.hpp"
 #include "GlSampler.hpp"
 #include "GlViewport.hpp"
+#include "GlDirectTextureStorage.hpp"
+#include "GlPboTextureStorage.hpp"
+#include "GlTboTextureStorage.hpp"
 
 #include <Logger.hpp>
 
@@ -376,14 +379,38 @@ namespace GlRender
 		return std::make_shared< GlVertexBufferObject >( *this, GetOpenGl(), p_buffer );
 	}
 
-	StaticTextureSPtr GlRenderSystem::CreateStaticTexture()
+	StaticTextureSPtr GlRenderSystem::CreateStaticTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		return std::make_shared< GlStaticTexture >( GetOpenGl(), *this );
+		return std::make_shared< GlStaticTexture >( p_type, GetOpenGl(), p_type, *this, p_cpuAccess, p_gpuAccess );
 	}
 
-	DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	DynamicTextureSPtr GlRenderSystem::CreateDynamicTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		return std::make_shared< GlDynamicTexture >( GetOpenGl(), *this, p_cpuAccess, p_gpuAccess );
+		return std::make_shared< GlDynamicTexture >( p_type, GetOpenGl(), p_type, *this, p_cpuAccess, p_gpuAccess );
+	}
+
+	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( eTEXTURE_TYPE p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	{
+		TextureStorageUPtr l_return;
+
+		if ( p_type == eTEXTURE_TYPE_BUFFER )
+		{
+			l_return = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+		}
+
+		if ( !l_return )
+		{
+			if ( true )//p_image.IsStaticSource() )
+			{
+				l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			}
+			else
+			{
+				l_return = std::make_unique< GlPboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+			}
+		}
+
+		return l_return;
 	}
 
 	FrameBufferSPtr GlRenderSystem::CreateFrameBuffer()

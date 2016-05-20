@@ -29,7 +29,7 @@ namespace GlRender
 		: public Castor3D::StaticTexture
 	{
 	public:
-		GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem );
+		GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		~GlStaticTexture();
 
 		virtual bool Create();

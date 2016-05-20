@@ -38,7 +38,7 @@ namespace Castor3D
 
 		if ( l_skeleton )
 		{
-			int i = 0;
+			uint32_t i{ 0u };
 
 			if ( m_playingAnimations.empty() )
 			{

@@ -29,15 +29,23 @@ namespace GlRender
 		: public Castor3D::DynamicTexture
 	{
 	public:
-		GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		GlDynamicTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		~GlDynamicTexture();
-
+		/**
+		 *\copydoc		Castor3D::TextureLayout::Create
+		 */
 		virtual bool Create();
+		/**
+		 *\copydoc		Castor3D::TextureLayout::Destroy
+		 */
 		virtual void Destroy();
-		virtual void Cleanup();
-		virtual uint8_t * Lock( uint32_t p_lock );
-		virtual void Unlock( bool p_modified );
+		/**
+		 *\copydoc		Castor3D::TextureLayout::GenerateMipmaps
+		 */
 		virtual void GenerateMipmaps()const;
+		/**
+		 *\copydoc		Castor3D::TextureLayout::Fill
+		 */
 		virtual void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 
 		inline uint32_t GetGlName()const
@@ -46,12 +54,22 @@ namespace GlRender
 		}
 
 	private:
-		virtual bool DoBind( uint32_t p_index )const;
-		virtual void DoUnbind( uint32_t p_index )const;
+		/**
+		 *\copydoc		Castor3D::TextureLayout::DoInitialise
+		 */
 		virtual bool DoInitialise();
-
-	private:
-		GlTexture m_texture;
+		/**
+		 *\copydoc		Castor3D::TextureLayout::DoCleanup
+		 */
+		virtual void DoCleanup();
+		/**
+		 *\copydoc		Castor3D::TextureLayout::DoBind
+		 */
+		virtual bool DoBind( uint32_t p_index )const;
+		/**
+		 *\copydoc		Castor3D::TextureLayout::DoUnbind
+		 */
+		virtual void DoUnbind( uint32_t p_index )const;
 	};
 }
 

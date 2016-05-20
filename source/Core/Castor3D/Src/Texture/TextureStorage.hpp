@@ -20,7 +20,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "Castor3DPrerequisites.hpp"
 
-#include <PixelBufferBase.hpp>
 #include <OwnedBy.hpp>
 
 namespace Castor3D
@@ -34,20 +33,24 @@ namespace Castor3D
 	\brief		Class de base d'une texture
 	*/
 	class TextureStorage
-		: public Castor::OwnedBy< RenderSystem >
+		: public Castor::OwnedBy< TextureImage >
 	{
 	public:
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_type		The storage texture type.
+		 *\param[in]	p_image		The TextureImage.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_type		Le type de texture du stockage.
+		 *\param[in]	p_image		La TextureImage.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API TextureStorage( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API TextureStorage( eTEXTURE_TYPE p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -65,7 +68,7 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de texture
 		 *\return		\p true si tout s'est bien passé
 		 */
-		C3D_API bool Bind( uint32_t p_index )const;
+		C3D_API virtual bool Bind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Deactivation function, to tell the GPU it is inactive
@@ -74,7 +77,7 @@ namespace Castor3D
 		 *\brief		Fonction de désactivation, pour dire au GPU qu'il est désactivé
 		 *\param[in]	p_index	L'index de texture
 		 */
-		C3D_API void Unbind( uint32_t p_index )const;
+		C3D_API virtual void Unbind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
 		 *\brief		Locks image buffer from GPU, allowing modifications into it
@@ -95,39 +98,47 @@ namespace Castor3D
 		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
 		 */
 		C3D_API virtual void Unlock( bool p_modified ) = 0;
+		/**
+		 *\~english
+		 *\return		The CPU access rights.
+		 *\~french
+		 *\return		Les droits d'accès du CPU.
+		 */
+		inline auto GetCPUAccess()const
+		{
+			return m_cpuAccess;
+		}
+		/**
+		 *\~english
+		 *\return		The GPU access rights.
+		 *\~french
+		 *\return		Les droits d'accès du GPU.
+		 */
+		inline auto GetGPUAccess()const
+		{
+			return m_gpuAccess;
+		}
+		/**
+		 *\~english
+		 *\return		The storage texture type.
+		 *\~french
+		 *\return		Le type de texture du stockage.
+		 */
+		inline auto GetType()const
+		{
+			return m_type;
+		}
 
 	protected:
-		/**
-		 *\~english
-		 *\brief		API specific initialisation function
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Initialisation spécifique selon l'API
-		 *\return		\p si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		API specific binding function
-		 *\return		\p if OK
-		 *\~french
-		 *\brief		Activation spécifique selon l'API
-		 *\return		\p si tout s'est bien passé
-		 */
-		C3D_API virtual bool DoBind( uint32_t p_index )const = 0;
-		/**
-		 *\~english
-		 *\brief		API specific unbinding function
-		 *\~french
-		 *\brief		Désactivation spécifique selon l'API
-		 */
-		C3D_API virtual void DoUnbind( uint32_t p_index )const = 0;
-
-	protected:
-		//!\~english The required CPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		//!\~english	The required CPU access (combination of eACCESS_TYPE).
+		//!\~french		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		uint8_t m_cpuAccess;
-		//!\~english The required GPU access (combination of eACCESS_TYPE).	\~french Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		//!\~english	The required GPU access (combination of eACCESS_TYPE).
+		//!\~french		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		uint8_t m_gpuAccess;
+		//!\~english	The storage texture type.
+		//!\~french		Le type de texture du stockage.
+		eTEXTURE_TYPE m_type;
 	};
 }
 

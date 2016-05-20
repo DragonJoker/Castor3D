@@ -40,11 +40,17 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_type			The texture type.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_type			Le type de texture.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API StaticTexture( RenderSystem & p_renderSystem );
+		C3D_API StaticTexture( RenderSystem & p_renderSystem, eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -52,27 +58,6 @@ namespace Castor3D
 		 *\brief		Destructeur
 		 */
 		C3D_API virtual ~StaticTexture();
-		/**
-		 *\~english
-		 *\brief		Defines the texture buffer and its dimensions, for a 3D texture or a texture array
-		 *\param[in]	p_dimensions	The texture dimensions
-		 *\param[in]	p_buffer		The buffer
-		 *\~french
-		 *\brief		Définit le buffer de la texture, ainsi que ses dimensions, dans le cas de texture 2D ou tableau de textures
-		 *\param[in]	p_dimensions	Les dimensions de la texture
-		 *\param[in]	p_buffer		Le buffer
-		 */
-		C3D_API void SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer );
-		/**
-		 *\copydoc		Castor3D::Texture::Initialise
-		 */
-		C3D_API virtual bool Initialise();
-		/**
-		 *\copydoc		Castor3D::Texture::Cleanup
-		 */
-		C3D_API virtual void Cleanup();
-
-		using Texture::SetImage;
 	};
 }
 

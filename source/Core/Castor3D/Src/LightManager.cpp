@@ -1,6 +1,7 @@
 #include "LightManager.hpp"
 
 #include "SceneManager.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
@@ -16,13 +17,12 @@ namespace Castor3D
 	const String ManagedObjectNamer< Light >::Name = cuT( "Light" );
 
 	LightManager::LightManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		: ObjectManager< Castor::String, Light >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
-		, m_lightsTexture( std::make_shared< TextureUnit >( *GetEngine() ) )
+		: ObjectManager< Castor::String, Light >{ p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode }
+		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
 	{
-		m_lightsData = PxBufferBase::create( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
-		DynamicTextureSPtr l_texture = GetEngine()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
-		l_texture->SetType( eTEXTURE_TYPE_BUFFER );
-		l_texture->SetImage( m_lightsData );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateDynamicTexture( eTEXTURE_TYPE_BUFFER, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
+		l_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+		l_texture->GetImage().SetSource( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
 		m_lightsTexture->SetSampler( l_sampler );
@@ -32,7 +32,6 @@ namespace Castor3D
 
 	LightManager::~LightManager()
 	{
-		m_lightsData.reset();
 		m_lightsTexture.reset();
 	}
 
@@ -82,32 +81,33 @@ namespace Castor3D
 
 		if ( l_lights && l_lightsCount )
 		{
-			l_lights->SetValue( m_lightsTexture->GetIndex() );
-			int l_index = 0;
-
-			for ( auto && l_it : m_typeSortedLights )
-			{
-				l_lightsCount->GetValue( 0 )[l_it.first] += uint32_t( l_it.second.size() );
-
-				for ( auto l_light : l_it.second )
-				{
-					l_light->Bind( *m_lightsData, l_index++ );
-				}
-			}
-
 			auto l_layout = m_lightsTexture->GetTexture();
 
 			if ( l_layout )
 			{
-				auto l_image = l_layout->GetImage();
-				auto l_locked = l_layout->Lock( eACCESS_TYPE_WRITE );
+				auto const & l_image = l_layout->GetImage();
+				auto l_buffer = l_image.GetBuffer();
+				l_lights->SetValue( m_lightsTexture->GetIndex() );
+				int l_index = 0;
 
-				if ( l_locked && l_image )
+				for ( auto && l_it : m_typeSortedLights )
 				{
-					memcpy( l_locked, l_image->GetBuffer()->const_ptr(), l_image->GetBuffer()->size() );
+					l_lightsCount->GetValue( 0 )[l_it.first] += uint32_t( l_it.second.size() );
+
+					for ( auto l_light : l_it.second )
+					{
+						l_light->Bind( *l_buffer, l_index++ );
+					}
 				}
 
-				l_layout->Unlock( true );
+				auto l_locked = l_layout->GetImage().Lock( eACCESS_TYPE_WRITE );
+
+				if ( l_locked )
+				{
+					memcpy( l_locked, l_image.GetBuffer()->const_ptr(), l_image.GetBuffer()->size() );
+				}
+
+				l_layout->GetImage().Unlock( true );
 			}
 
 			m_lightsTexture->Bind();

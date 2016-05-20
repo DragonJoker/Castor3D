@@ -1,4 +1,4 @@
-﻿namespace Castor3D
+namespace Castor3D
 {
 	template<> struct FrameVariableDataTyper< bool >
 	{
@@ -20,7 +20,7 @@
 	{
 		C3D_API static const xchar * DataTypeName;
 	};
-	template<> struct FrameVariableDataTyper< Texture * >
+	template<> struct FrameVariableDataTyper< TextureLayout * >
 	{
 		C3D_API static const xchar * DataTypeName;
 	};

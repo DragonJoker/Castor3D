@@ -10,6 +10,7 @@
 #include "State/DepthStencilState.hpp"
 #include "State/RasteriserState.hpp"
 #include "Texture/DynamicTexture.hpp"
+#include "Texture/TextureImage.hpp"
 
 #include <Logger.hpp>
 
@@ -157,7 +158,7 @@ namespace Castor3D
 		{
 			if ( l_attach->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 			{
-				std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture()->Resize( p_size );
+				std::static_pointer_cast< TextureAttachment >( l_attach )->GetTexture()->GetImage().Resize( p_size );
 			}
 			else
 			{
@@ -266,7 +267,7 @@ namespace Castor3D
 				if ( ( *l_it )->GetAttachmentType() == eATTACHMENT_TYPE_TEXTURE )
 				{
 					TextureAttachmentSPtr l_attach = std::static_pointer_cast< TextureAttachment >( *l_it );
-					l_return = l_attach->GetTexture()->GetPixelFormat();
+					l_return = l_attach->GetTexture()->GetImage().GetPixelFormat();
 				}
 				else
 				{

@@ -6,6 +6,7 @@
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderSystem.hpp"
 #include "Texture/StaticTexture.hpp"
+#include "Texture/TextureImage.hpp"
 
 #include <Font.hpp>
 #include <Image.hpp>
@@ -26,8 +27,8 @@ namespace Castor3D
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 		m_sampler = l_pSampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-		m_texture->SetType( eTEXTURE_TYPE_2D );
+		m_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+		m_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
 	}
 
 	FontTexture::~FontTexture()
@@ -53,14 +54,15 @@ namespace Castor3D
 			uint32_t const l_uiMaxWidth = l_font->GetMaxWidth();
 			uint32_t const l_uiMaxHeight = l_font->GetMaxHeight();
 			uint32_t const l_count = uint32_t( std::ceil( std::distance( l_font->begin(), l_font->end() ) / 16.0 ) );
-			m_texture->SetImage( PxBufferBase::create( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), ePIXEL_FORMAT_L8 ) );
+			auto & l_image = m_texture->GetImage();
+			l_image.SetSource( PxBufferBase::create( Size( l_uiMaxWidth * 16, l_uiMaxHeight * l_count ), ePIXEL_FORMAT_L8 ) );
 
 			auto l_it = l_font->begin();
-			Size const & l_sizeImg = m_texture->GetDimensions();
+			Size const & l_sizeImg = l_image.GetDimensions();
 			uint32_t const l_uiTotalWidth = l_sizeImg.width();
 			uint32_t l_uiOffY = l_sizeImg.height() - l_uiMaxHeight;
-			uint8_t * l_pBuffer = m_texture->GetBuffer()->ptr();
-			size_t const l_bufsize = m_texture->GetBuffer()->size();
+			uint8_t * l_pBuffer = l_image.GetBuffer()->ptr();
+			size_t const l_bufsize = l_image.GetBuffer()->size();
 
 			for ( uint32_t y = 0; y < l_count && l_it != l_font->end(); ++y )
 			{

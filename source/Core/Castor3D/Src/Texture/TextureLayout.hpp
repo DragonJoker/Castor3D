@@ -15,13 +15,10 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef ___C3D_TEXTURE_H___
-#define ___C3D_TEXTURE_H___
+#ifndef ___C3D_TEXTURE_LAYOUT_H___
+#define ___C3D_TEXTURE_LAYOUT_H___
 
-#include "Castor3DPrerequisites.hpp"
-
-#include <PixelBufferBase.hpp>
-#include <OwnedBy.hpp>
+#include "TextureImage.hpp"
 
 namespace Castor3D
 {
@@ -42,12 +39,16 @@ namespace Castor3D
 		 *\brief		Constructor.
 		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_renderSystem	The render system.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_type			Le type de texture.
 		 *\param[in]	p_renderSystem	Le render system.
+		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API TextureLayout( eTEXTURE_TYPE p_type, RenderSystem & p_renderSystem );
+		C3D_API TextureLayout( RenderSystem & p_renderSystem, eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -99,34 +100,14 @@ namespace Castor3D
 		 *\brief		Fonction d'initialisation.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API virtual bool Initialise() = 0;
+		C3D_API bool Initialise();
 		/**
 		 *\~english
 		 *\brief		Cleanup function
 		 *\~french
 		 *\brief		Fonction de nettoyage
 		 */
-		C3D_API virtual void Cleanup() = 0;
-		/**
-		 *\~english
-		 *\brief		Locks image buffer from GPU, allowing modifications into it
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE
-		 *\return		The image buffer
-		 *\~french
-		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
-		 *\return		Le buffer de l'image
-		 */
-		C3D_API virtual uint8_t * Lock( uint32_t p_lock ) = 0;
-		/**
-		 *\~english
-		 *\brief		Unlocks image buffer from GPU
-		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU
-		 *\~french
-		 *\brief		Délocke le buffer de l'image à partir du GPU
-		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
-		 */
-		C3D_API virtual void Unlock( bool p_modified ) = 0;
+		C3D_API void Cleanup();
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
@@ -168,10 +149,10 @@ namespace Castor3D
 		 *\param[in]	p_image	L'image.
 		 *\param[in]	p_index	L'index de l'image.
 		 */
-		inline void SetImage( TextureImageSPtr p_image, size_t p_index = 0 )
+		inline void SetImage( TextureImageUPtr && p_image, size_t p_index = 0 )
 		{
 			REQUIRE( p_index < m_images.size() );
-			m_images[p_index] = p_image;
+			m_images[p_index] = std::move( p_image );
 		}
 		/**
 		 *\~english
@@ -181,22 +162,42 @@ namespace Castor3D
 		 *\param[in]	p_index	L'index de l'image.
 		 *\return		L'image de la texture.
 		 */
-		inline TextureImageSPtr GetImage( size_t p_index = 0 )
+		inline TextureImage const & GetImage( size_t p_index = 0 )const
 		{
-			REQUIRE( p_index < m_images.size() );
-			return m_images[p_index];
+			REQUIRE( p_index < m_images.size() && m_images[p_index] );
+			return *m_images[p_index];
 		}
-
-	protected:
 		/**
 		 *\~english
-		 *\brief		API specific initialisation function
+		 *\param[in]	p_index	The image index.
+		 *\return		The texture image.
+		 *\~french
+		 *\param[in]	p_index	L'index de l'image.
+		 *\return		L'image de la texture.
+		 */
+		inline TextureImage & GetImage( size_t p_index = 0 )
+		{
+			REQUIRE( p_index < m_images.size() && m_images[p_index] );
+			return *m_images[p_index];
+		}
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Initialisation function.
 		 *\return		\p true if OK.
 		 *\~french
-		 *\brief		Initialisation spécifique selon l'API
-		 *\return		\p si tout s'est bien passé
+		 *\brief		Fonction d'initialisation.
+		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API virtual bool DoInitialise() = 0;
+		/**
+		 *\~english
+		 *\brief		Cleanup function
+		 *\~french
+		 *\brief		Fonction de nettoyage
+		 */
+		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		API specific binding function
@@ -215,12 +216,21 @@ namespace Castor3D
 		C3D_API virtual void DoUnbind( uint32_t p_index )const = 0;
 
 	protected:
-		//!\~english Initialisation status	\~french Statut d'initialisation
-		bool m_initialised;
-		//!\~english Texture type.	\~french Type de texture.
+		//!\~english	Initialisation status
+		//!\~french		Statut d'initialisation
+		bool m_initialised{ false };
+		//!\~english	Texture type.
+		//!\~french		Type de texture.
 		eTEXTURE_TYPE m_type;
-		//!\~english The texture images.	\~french Les images de la texture.
-		TextureImagePtrArray m_images;
+		//!\~english	The texture images.
+		//!\~french		Les images de la texture.
+		std::vector< TextureImageUPtr > m_images;
+		//!\~english	The required CPU access (combination of eACCESS_TYPE).
+		//!\~french		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		uint8_t m_cpuAccess;
+		//!\~english	The required GPU access (combination of eACCESS_TYPE).
+		//!\~french		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		uint8_t m_gpuAccess;
 	};
 }
 

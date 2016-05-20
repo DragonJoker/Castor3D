@@ -251,7 +251,7 @@ namespace Castor3D
 		 *\param[in]	p_sampler			L'échantillonneur de la texture.
 		 *\param[in]	p_count				Le nombre de sommets.
 		 */
-		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, Texture const & p_texture, Sampler const & p_sampler, uint32_t p_count );
+		C3D_API void DoDrawItem( Pass & p_pass, GeometryBuffers const & p_geometryBuffers, TextureLayout const & p_texture, Sampler const & p_sampler, uint32_t p_count );
 		/**
 		 *\~english
 		 *\brief		Fills a GeometryBuffers from a part of a text vertex array

@@ -11,76 +11,91 @@ namespace Castor3D
 {
 	TextureImage::TextureImage( Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
-		, m_depth{ 1 }
 	{
 	}
 
-	TextureImage::~TextureImage()
+	void TextureImage::SetSource( Point3ui const & p_dimensions, PxBufferBaseSPtr p_buffer )
 	{
-	}
+		m_depth = p_dimensions[2];
+		Size l_size{ p_dimensions[0], p_dimensions[1] };
+		m_staticSource = true;
 
-	void TextureImage::SetImage( Castor::Point3ui const & p_dimensions, Castor::PxBufferBaseSPtr p_buffer )
-	{
-		if ( !GetEngine()->GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
+		if ( DoAdjustDimensions( l_size, m_depth ) )
 		{
-			m_depth = GetNext2Pow( p_dimensions[2] );
-			Size l_size( GetNext2Pow( p_dimensions[0] ), GetNext2Pow( p_dimensions[1] ) * m_depth );
-			Castor::Image l_img( cuT( "Tmp" ), *p_buffer );
+			Image l_img( cuT( "Tmp" ), *p_buffer );
 			m_pixelBuffer = l_img.Resample( l_size ).GetPixels();
 		}
 		else
 		{
-			m_depth = p_dimensions[2];
 			m_pixelBuffer = p_buffer;
 		}
 	}
 
-	void TextureImage::SetImage( Castor::PxBufferBaseSPtr p_buffer )
+	void TextureImage::SetSource( PxBufferBaseSPtr p_buffer )
 	{
 		m_depth = 1;
-		m_pixelBuffer = p_buffer;
-	}
+		Size l_size{ p_buffer->dimensions() };
+		m_staticSource = true;
 
-	void TextureImage::SetImage( Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
-	{
-		m_depth = 1;
-		Castor::Size l_size = p_size;
-
-		if ( !GetEngine()->GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
+		if ( DoAdjustDimensions( l_size, m_depth ) )
 		{
-			l_size.set( GetNext2Pow( l_size.width() ), GetNext2Pow( l_size.height() ) );
-		}
-
-		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_format );
-	}
-
-	void TextureImage::SetImage( Castor::Point3ui const & p_size, Castor::ePIXEL_FORMAT p_format )
-	{
-		Size l_size;
-
-		if ( !GetEngine()->GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
-		{
-			m_depth = GetNext2Pow( p_size[2] );
-			l_size.set( GetNext2Pow( p_size[0] ), GetNext2Pow( p_size[1] ) * m_depth );
+			Image l_img( cuT( "Tmp" ), *p_buffer );
+			m_pixelBuffer = l_img.Resample( l_size ).GetPixels();
 		}
 		else
 		{
-			m_depth = p_size[2];
-			l_size.set( p_size[0], p_size[1] * m_depth );
+			m_pixelBuffer = p_buffer;
 		}
-
-		m_pixelBuffer = Castor::PxBufferBase::create( l_size, p_format );
 	}
 
-	bool TextureImage::Initialise( uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	void TextureImage::SetSource( Size const & p_size, ePIXEL_FORMAT p_format )
+	{
+		m_depth = 1;
+		Size l_size{ p_size };
+		DoAdjustDimensions( l_size, m_depth );
+		m_pixelBuffer = PxBufferBase::create( l_size, p_format );
+		m_staticSource = false;
+	}
+
+	void TextureImage::SetSource( Point3ui const & p_size, ePIXEL_FORMAT p_format )
+	{
+		m_depth = p_size[2];
+		Size l_size{ p_size[0], p_size[1] };
+		DoAdjustDimensions( l_size, m_depth );
+		m_pixelBuffer = PxBufferBase::create( l_size, p_format );
+		m_staticSource = false;
+	}
+
+	void TextureImage::Resize( Size const & p_size )
+	{
+		m_depth = 1;
+		DoResize( p_size );
+	}
+
+	void TextureImage::Resize( Point3ui const & p_size )
+	{
+		m_depth = p_size[2];
+		DoResize( Size{ p_size[0], p_size[1] } );
+	}
+
+	bool TextureImage::Initialise( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
 		bool l_return = false;
 
-		if ( m_storage )
+		if ( !m_storage )
 		{
-			m_storage = GetEngine()->GetRenderSystem()->CreateStorage( p_cpuAccess, p_gpuAccess );
+			try
+			{
+				m_storage = GetEngine()->GetRenderSystem()->CreateTextureStorage( p_type, *this, p_cpuAccess, p_gpuAccess );
+				l_return = true;
+			}
+			catch ( std::exception & p_exc )
+			{
+				Logger::LogError( StringStream() << cuT( "TextureImage::Initialise - Error encountered while allocating storage: " ) << string::string_cast< xchar >( p_exc.what() ) );
+			}
 		}
 
+		ENSURE( m_storage );
 		return l_return;
 	}
 
@@ -91,41 +106,61 @@ namespace Castor3D
 
 	bool TextureImage::Bind( uint32_t p_index )const
 	{
-		bool l_return = false;
-
-		if ( m_storage )
-		{
-			l_return = m_storage->Bind( p_index );
-		}
-
-		return l_return;
+		REQUIRE( m_storage );
+		return m_storage->Bind( p_index );
 	}
 
 	void TextureImage::Unbind( uint32_t p_index )const
 	{
-		if ( m_storage )
-		{
-			m_storage->Unbind( p_index );
-		}
+		REQUIRE( m_storage );
+		m_storage->Unbind( p_index );
 	}
 
 	uint8_t * TextureImage::Lock( uint32_t p_lock )
 	{
-		uint8_t * l_return = nullptr;
-
-		if ( m_storage )
-		{
-			l_return = m_storage->Lock( p_lock );
-		}
-
-		return l_return;
+		REQUIRE( m_storage );
+		return m_storage->Lock( p_lock );
 	}
 
 	void TextureImage::Unlock( bool p_modified )
 	{
-		if ( m_storage )
+		REQUIRE( m_storage );
+		m_storage->Unlock( p_modified );
+	}
+
+	void TextureImage::DoResize( Size const & p_size )
+	{
+		REQUIRE( !m_staticSource );
+		Size l_size{ p_size };
+		DoAdjustDimensions( l_size, m_depth );
+
+		if ( m_pixelBuffer && m_pixelBuffer->dimensions() != p_size )
 		{
-			m_storage->Unlock( p_modified );
+			m_pixelBuffer = PxBufferBase::create( p_size, m_pixelBuffer->format() );
+
+			if ( m_storage )
+			{
+				auto l_cpuAccess = m_storage->GetCPUAccess();
+				auto l_gpuAccess = m_storage->GetGPUAccess();
+				auto l_type = m_storage->GetType();
+				Cleanup();
+				Initialise( l_type, l_cpuAccess, l_gpuAccess );
+			}
 		}
+	}
+
+	bool TextureImage::DoAdjustDimensions( Castor::Size & p_size, uint32_t & p_depth )
+	{
+		bool l_return = false;
+
+		if ( !GetEngine()->GetRenderSystem()->GetGpuInformations().HasNonPowerOfTwoTextures() )
+		{
+			p_depth = GetNext2Pow( p_depth );
+			p_size.set( GetNext2Pow( p_size.width() ), GetNext2Pow( p_size.height() ) );
+			l_return = true;
+		}
+
+		p_size[1] *= p_depth;
+		return l_return;
 	}
 }

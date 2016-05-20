@@ -570,10 +570,10 @@ namespace Castor3D
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-			l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-			l_pStaTexture->SetImage( l_pImage->GetPixels() );
-			m_backgroundImage = l_pStaTexture;
+			StaticTextureSPtr l_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+			l_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+			l_texture->GetImage().SetSource( l_pImage->GetPixels() );
+			m_backgroundImage = l_texture;
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
 				m_backgroundImage->Create();

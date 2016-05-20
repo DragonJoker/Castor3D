@@ -260,41 +260,57 @@ namespace Castor3D
 		C3D_API virtual ShaderProgramSPtr CreateShaderProgram() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture.
-		 *\return		The created texture, dependant of current API.
+		 *\brief		Creates a static texture.
+		 *\param[in]	p_type		The texture type.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\return		The created texture, depending of current API.
 		 *\~french
-		 *\brief		Crée une texture.
+		 *\brief		Crée une texture statique.
+		 *\param[in]	p_type		Le type de texture.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual StaticTextureSPtr CreateStaticTexture() = 0;
+		C3D_API virtual StaticTextureSPtr CreateStaticTexture( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture.
-		 *\return		The created texture, dependant of current API.
+		 *\brief		Creates a dynamic texture.
+		 *\param[in]	p_type		The texture type.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\return		The created texture, depending on current API.
 		 *\~french
-		 *\brief		Crée une texture.
+		 *\brief		Crée une texture dynamique.
+		 *\param[in]	p_type		Le type de texture.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual CubeMapTextureSPtr CreateCubeMapTexture() = 0;
+		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a texture.
-		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
-		 *\return		The created texture, dependant of current API.
+		 *\brief		Creates a texture storage.
+		 *\param[in]	p_type		The texture type.
+		 *\param[in]	p_image		The texture image.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\return		The created storage, depending on current API.
 		 *\~french
-		 *\brief		Crée une texture.
-		 *\param[in]	p_cpuAccess		Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess		Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
-		 *\return		La texture créée, dépendante de l'API actuelle.
+		 *\brief		Crée un stockage de texture.
+		 *\param[in]	p_type		Le type de texture.
+		 *\param[in]	p_image		L'image de la texture.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\return		Le stockage créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
+		C3D_API virtual TextureStorageUPtr CreateTextureStorage( eTEXTURE_TYPE p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer
 		 *\remarks		Only the render system can do that
 		 *\param[in]	p_buffer	The hardware buffer to which the vertex buffer will be linked
-		 *\return		The created vertex buffer, dependant of current API
+		 *\return		The created vertex buffer, depending on current API
 		 *\~french
 		 *\brief		Crée un tampon de sommets
 		 *\remarks		Seul le render system peut faire ça
@@ -307,7 +323,7 @@ namespace Castor3D
 		 *\brief		Creates an index buffer
 		 *\remarks		Only the render system can do that
 		 *\param[in]	p_buffer	The hardware buffer to which the index buffer will be linked
-		 *\return		The created index buffer, dependant of current API
+		 *\return		The created index buffer, depending on current API
 		 *\~french
 		 *\brief		Crée un tampon d'indices
 		 *\remarks		Seul le render system peut faire ça

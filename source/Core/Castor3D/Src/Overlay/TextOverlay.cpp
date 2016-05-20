@@ -242,7 +242,7 @@ namespace Castor3D
 					Position const l_ovPosition = GetAbsolutePosition( p_size );
 
 					DisplayableLineArray l_lines = DoPrepareText( p_size, l_size );
-					Size const & l_texDim = l_fontTexture->GetTexture()->GetDimensions();
+					Size const & l_texDim = l_fontTexture->GetTexture()->GetImage().GetDimensions();
 					uint32_t const l_maxHeight = l_font->GetMaxHeight();
 
 					for ( auto const & l_line : l_lines )

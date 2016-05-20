@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -355,7 +355,7 @@ namespace Castor3D
 		 *\brief		Récupère l'image de fond de la scène
 		 *\return		La valeur
 		 */
-		inline TextureSPtr GetBackgroundImage()const
+		inline TextureLayoutSPtr GetBackgroundImage()const
 		{
 			return m_backgroundImage;
 		}
@@ -444,7 +444,7 @@ namespace Castor3D
 		//!\~english The scene background colour	\~french La couleur de fond de la scène
 		Castor::Colour m_backgroundColour;
 		//!\~english The background image	\~french L'image de fond
-		TextureSPtr m_backgroundImage;
+		TextureLayoutSPtr m_backgroundImage;
 	};
 }
 

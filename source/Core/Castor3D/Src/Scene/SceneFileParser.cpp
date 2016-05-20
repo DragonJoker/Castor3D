@@ -119,10 +119,6 @@ SceneFileParser::SceneFileParser( Engine & p_engine )
 	m_mapTypes[cuT( "2d" )] = eTEXTURE_TYPE_2D;
 	m_mapTypes[cuT( "3d" )] = eTEXTURE_TYPE_3D;
 
-	m_mapMapModes[cuT( "none" )] = eTEXTURE_MAP_MODE_NONE;
-	m_mapMapModes[cuT( "reflection" )] = eTEXTURE_MAP_MODE_REFLECTION;
-	m_mapMapModes[cuT( "sphere" )] = eTEXTURE_MAP_MODE_SPHERE;
-
 	m_mapAlphaFuncs[cuT( "always" )] = eALPHA_FUNC_ALWAYS;
 	m_mapAlphaFuncs[cuT( "less" )] = eALPHA_FUNC_LESS;
 	m_mapAlphaFuncs[cuT( "less_or_equal" )] = eALPHA_FUNC_LESS_OR_EQUAL;
@@ -437,7 +433,6 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "image" ), Parser_UnitImage, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "render_target" ), Parser_UnitRenderTarget );
-	AddParser( eSECTION_TEXTURE_UNIT, cuT( "map_type" ), Parser_UnitMapType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapMapModes ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_func" ), Parser_UnitAlphaFunc, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapAlphaFuncs ), MakeParameter< ePARAMETER_TYPE_FLOAT >() } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "rgb_blend" ), Parser_UnitRgbBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureRgbFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );
 	AddParser( eSECTION_TEXTURE_UNIT, cuT( "alpha_blend" ), Parser_UnitAlphaBlend, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureAlphaFunctions ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ), MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapTextureArguments ) } );

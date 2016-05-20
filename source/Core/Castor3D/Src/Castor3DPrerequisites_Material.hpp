@@ -452,8 +452,6 @@ namespace Castor3D
 	DECLARE_SMART_PTR( Pass );
 	DECLARE_SMART_PTR( Sampler );
 
-	//! TextureImage pointer array
-	DECLARE_VECTOR( TextureImageSPtr, TextureImagePtr );
 	//! Material pointer array
 	DECLARE_VECTOR( MaterialSPtr, MaterialPtr );
 	//! TextureUnit array

@@ -73,11 +73,15 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateStaticTexture
 		 */
-		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
+		virtual Castor3D::StaticTextureSPtr CreateStaticTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateDynamicTexture
 		 */
-		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		/**
+		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
+		 */
+		virtual Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::eTEXTURE_TYPE p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameVariableBuffer
 		 */

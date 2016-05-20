@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -120,7 +120,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture.
 		 *\return		La texture.
 		 */
-		inline TextureSPtr GetTexture()const
+		inline TextureLayoutSPtr GetTexture()const
 		{
 			return m_texture;
 		}
@@ -169,7 +169,7 @@ namespace Castor3D
 		//!\~english The texture sampler.	\~french L'échantillonneur de la texture.
 		SamplerWPtr m_sampler;
 		//!\~english The texture that will receive the glyphs.	\~french La texture qui recevra les glyphes.
-		TextureSPtr m_texture;
+		TextureLayoutSPtr m_texture;
 		//!\~english Glyphs positions in the texture.	\~french Position des glyphes.
 		GlyphPositionMap m_glyphsPositions;
 		//!\~english The signal used to notify clients that this texture has changed.	\~french Signal utilisé pour notifier les clients que cette texture a changé.

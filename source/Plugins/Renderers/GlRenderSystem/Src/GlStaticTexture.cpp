@@ -10,9 +10,9 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlStaticTexture::GlStaticTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem )
-		: StaticTexture( p_renderSystem )
-		, m_texture( p_gl, p_renderSystem, true )
+	GlStaticTexture::GlStaticTexture( OpenGl & p_gl, Castor3D::eTEXTURE_TYPE p_type, GlRenderSystem & p_renderSystem )
+		: StaticTexture{ p_type, p_renderSystem }
+		, m_texture{ p_gl, p_renderSystem, true }
 	{
 	}
 

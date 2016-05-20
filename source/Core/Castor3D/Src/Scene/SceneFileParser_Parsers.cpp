@@ -2337,23 +2337,6 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitRenderTarget )
 }
 END_ATTRIBUTE_PUSH( eSECTION_RENDER_TARGET )
 
-IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitMapType )
-{
-	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
-
-	if ( !l_parsingContext->pTextureUnit )
-	{
-		PARSING_ERROR( cuT( "No TextureUnit initialised." ) );
-	}
-	else if ( !p_params.empty() )
-	{
-		uint32_t l_uiMode;
-		p_params[0]->Get( l_uiMode );
-		l_parsingContext->pTextureUnit->SetMappingMode( eTEXTURE_MAP_MODE( l_uiMode ) );
-	}
-}
-END_ATTRIBUTE()
-
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_UnitAlphaFunc )
 {
 	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );

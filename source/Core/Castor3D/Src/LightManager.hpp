@@ -192,8 +192,6 @@ namespace Castor3D
 		LightFactory m_lightFactory;
 		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.
 		LightsMap m_typeSortedLights;
-		//!\~english The image containing lights data	\~french L'image contenant les données des lumières
-		Castor::PxBufferBaseSPtr m_lightsData;
 		//!\~english The lights texture	\~french La texture contenant les lumières
 		TextureUnitSPtr m_lightsTexture;
 	};
