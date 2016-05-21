@@ -71,13 +71,9 @@ namespace GlRender
 		 */
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer );
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateStaticTexture
+		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
-		virtual Castor3D::StaticTextureSPtr CreateStaticTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
-		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateDynamicTexture
-		 */
-		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		virtual Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */

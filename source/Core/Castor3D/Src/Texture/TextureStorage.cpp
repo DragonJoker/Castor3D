@@ -19,4 +19,9 @@ namespace Castor3D
 	TextureStorage::~TextureStorage()
 	{
 	}
+
+	void TextureStorage::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
+	{
+		DoFill( p_buffer, p_size, p_format );
+	}
 }

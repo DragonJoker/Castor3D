@@ -103,7 +103,7 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture )
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture )
 		{
 			return nullptr;
 		}

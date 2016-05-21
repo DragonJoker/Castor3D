@@ -32,6 +32,10 @@ namespace Castor3D
 		, m_cpuAccess{ p_cpuAccess }
 		, m_gpuAccess{ p_gpuAccess }
 	{
+		for ( auto & l_image : m_images )
+		{
+			l_image = std::make_unique< TextureImage >( *p_renderSystem.GetEngine() );
+		}
 	}
 
 	TextureLayout::~TextureLayout()
@@ -42,14 +46,19 @@ namespace Castor3D
 	{
 		if ( !m_initialised )
 		{
-			bool l_return = DoInitialise();
+			bool l_return = DoBind( 0 );
 
 			if ( l_return )
 			{
 				for ( auto const & l_image : m_images )
 				{
-					l_return = l_image->Initialise( m_type, m_cpuAccess, m_gpuAccess );
+					if ( l_return )
+					{
+						l_return = l_image->Initialise( m_type, m_cpuAccess, m_gpuAccess );
+					}
 				}
+
+				DoUnbind( 0 );
 			}
 
 			m_initialised = l_return;
@@ -66,9 +75,9 @@ namespace Castor3D
 			{
 				l_image->Cleanup();
 			}
-
-			DoCleanup();
 		}
+
+		m_initialised = false;
 	}
 
 	bool TextureLayout::Bind( uint32_t p_index )const

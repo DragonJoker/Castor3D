@@ -48,11 +48,11 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Bind
 		 */
-		virtual bool Bind( uint32_t p_index );
+		virtual bool Bind( uint32_t p_index )const;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Unbind
 		 */
-		virtual void Unbind( uint32_t p_index );
+		virtual void Unbind( uint32_t p_index )const;
 		/**
 		 *\copydoc		Castor3D::TextureStorage::Lock
 		 */
@@ -64,7 +64,7 @@ namespace GlRender
 
 	private:
 		/**
-		 *\copydoc		GlRender::GlTextureStorage::DoFill
+		 *\copydoc		Castor3D::TextureStorage::DoFill
 		 */
 		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 	};

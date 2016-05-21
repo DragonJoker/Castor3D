@@ -55,7 +55,7 @@ namespace Castor3D
 	\remark		Contient les fenêtres de rendu, les plug-ins, drivers de rendu...
 	*/
 	class Engine
-		: Castor::Unique< Engine >
+		: public Castor::Unique< Engine >
 	{
 	public:
 		/**

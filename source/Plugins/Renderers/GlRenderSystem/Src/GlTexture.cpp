@@ -14,14 +14,14 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTexture::GlTexture( OpenGl & p_gl, eTEXTURE_TYPE p_type, GlRenderSystem & p_renderSystem )
+	GlTexture::GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 		: ObjectType{ p_gl,
 					  "GlTexture",
 					  std::bind( &OpenGl::GenTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::DeleteTextures, std::ref( p_gl ), std::placeholders::_1, std::placeholders::_2 ),
 					  std::bind( &OpenGl::IsTexture, std::ref( p_gl ), std::placeholders::_1 )
 					}
-		, TextureLayout{ p_renderSystem, p_type }
+		, TextureLayout{ p_renderSystem, p_type, p_cpuAccess, p_gpuAccess }
 		, m_glRenderSystem{ &p_renderSystem }
 		, m_glDimension{ p_gl.Get( p_type ) }
 	{
@@ -41,52 +41,16 @@ namespace GlRender
 		ObjectType::Destroy();
 	}
 
-	void GlTexture::Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
-	{
-		REQUIRE( m_storage );
-		m_storage->Fill( p_buffer, p_size, p_format );
-	}
-
 	void GlTexture::GenerateMipmaps()const
 	{
-		if ( GetGlName() != eGL_INVALID_INDEX && m_glDimension != eGL_TEXDIM_2DMS && m_glDimension != eGL_TEXDIM_BUFFER )
+		if ( GetGlName() != eGL_INVALID_INDEX && m_type != eTEXTURE_TYPE_2DMS && m_type != eTEXTURE_TYPE_BUFFER )
 		{
 			GetOpenGl().GenerateMipmap( m_glDimension );
 		}
 	}
 
-	bool GlTexture::DoInitialise()
-	{
-		bool l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + 0 ) );
-
-		if ( l_return )
-		{
-			l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
-
-			if ( l_return )
-			{
-				m_storage->Create( p_buffer );
-
-				if ( l_return )
-				{
-					l_return = m_storage->Initialise( p_layer );
-				}
-
-				GetOpenGl().BindTexture( m_glDimension, 0 );
-			}
-		}
-
-		return l_return;
-	}
-
-	void GlTexture::DoCleanup()
-	{
-	}
-
 	bool GlTexture::DoBind( uint32_t p_index )const
 	{
-		REQUIRE( m_storage );
-
 		bool l_return = GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 
 		if ( l_return )
@@ -94,18 +58,11 @@ namespace GlRender
 			l_return = GetOpenGl().BindTexture( m_glDimension, GetGlName() );
 		}
 
-		if ( l_return )
-		{
-			m_storage->Bind( p_index );
-		}
-
 		return l_return;
 	}
 
 	void GlTexture::DoUnbind( uint32_t p_index )const
 	{
-		REQUIRE( m_storage );
-		m_storage->Unbind( p_index );
 		GetOpenGl().ActiveTexture( eGL_TEXTURE_INDEX( eGL_TEXTURE_INDEX_0 + p_index ) );
 		GetOpenGl().BindTexture( m_glDimension, 0 );
 	}

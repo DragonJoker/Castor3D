@@ -43,7 +43,7 @@ namespace Castor3D
 		 *\brief		Constructeur
 		 *\param[in]	p_texture	La texture
 		 */
-		C3D_API TextureAttachment( DynamicTextureSPtr p_texture );
+		C3D_API TextureAttachment( TextureLayoutSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -63,7 +63,7 @@ namespace Castor3D
 		 *\brief		Récupère la texture
 		 *\return		La texture
 		 */
-		inline DynamicTextureSPtr GetTexture()const
+		inline TextureLayoutSPtr GetTexture()const
 		{
 			return m_texture.lock();
 		}
@@ -120,7 +120,7 @@ namespace Castor3D
 		using FrameBufferAttachment::Attach;
 
 		//!\~english The attached texture	\~french La texture attachée
-		DynamicTextureWPtr m_texture;
+		TextureLayoutWPtr m_texture;
 		//!\~english The texture target type	\~french Le type de cible de la texture
 		eTEXTURE_TYPE m_target;
 		//!\~english The attached layer	\~french La couche attachée

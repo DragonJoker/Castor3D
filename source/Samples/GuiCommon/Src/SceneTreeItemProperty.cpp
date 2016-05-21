@@ -1,7 +1,6 @@
 #include "SceneTreeItemProperty.hpp"
 
 #include <Scene/Scene.hpp>
-#include <Texture/StaticTexture.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>
@@ -62,11 +61,11 @@ namespace GuiCommon
 		}
 	}
 
-	wxPGProperty * SceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureSPtr p_texture )
+	wxPGProperty * SceneTreeItemProperty::DoCreateTextureImageProperty( wxString const & p_name, Castor3D::TextureLayoutSPtr p_texture )
 	{
 		wxPGProperty * l_property = nullptr;
 
-		if ( p_texture->GetBaseType() == eTEXTURE_BASE_TYPE_STATIC )
+		if ( p_texture->GetImage().IsStaticSource() )
 		{
 			l_property = new wxImageFileProperty( PROPERTY_SCENE_BACKGROUND_IMAGE );
 		}

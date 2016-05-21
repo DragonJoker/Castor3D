@@ -20,7 +20,7 @@
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
-#include <Texture/DynamicTexture.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <FontManager.hpp>
 #include <Logger.hpp>

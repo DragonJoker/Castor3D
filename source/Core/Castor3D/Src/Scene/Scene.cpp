@@ -40,8 +40,8 @@
 #include "Shader/MatrixFrameVariable.hpp"
 #include "Shader/OneFrameVariable.hpp"
 #include "Shader/PointFrameVariable.hpp"
-#include "Texture/DynamicTexture.hpp"
-#include "Texture/StaticTexture.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Manager/ManagerView.hpp"
 
@@ -570,8 +570,7 @@ namespace Castor3D
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-			l_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
 			l_texture->GetImage().SetSource( l_pImage->GetPixels() );
 			m_backgroundImage = l_texture;
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()

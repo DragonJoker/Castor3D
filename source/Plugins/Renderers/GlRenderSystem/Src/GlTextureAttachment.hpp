@@ -39,7 +39,7 @@ namespace GlRender
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
 		 */
-		GlTextureAttachment( OpenGl & p_gl, Castor3D::DynamicTextureSPtr p_texture );
+		GlTextureAttachment( OpenGl & p_gl, Castor3D::TextureLayoutSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor.

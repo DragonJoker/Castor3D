@@ -26,11 +26,12 @@ namespace Castor3D
 {
 	/*!
 	\author		Sylvain DOREMUS
-	\date		14/02/2010
+	\date		19/05/2016
+	\version	0.9.0
 	\~english
-	\brief		Texture base class
+	\brief		GPU texture storage base class.
 	\~french
-	\brief		Class de base d'une texture
+	\brief		Class de base du stockage GPU d'une texture.
 	*/
 	class TextureStorage
 		: public Castor::OwnedBy< TextureImage >
@@ -60,6 +61,19 @@ namespace Castor3D
 		C3D_API virtual ~TextureStorage();
 		/**
 		 *\~english
+		 *\brief		Initialises the texture initial storage data.
+		 *\param[in]	p_buffer	The texture pixel buffer.
+		 *\param[in]	p_size		The pixel buffer dimensions.
+		 *\param[in]	p_format	The pixel buffer format.
+		 *\~french
+		 *\brief		Charge sur le GPU les données initiales.
+		 *\param[in]	p_buffer	Le tampon de données.
+		 *\param[in]	p_size		La taille du tampon.
+		 *\param[in]	p_format	Le format des données.
+		 */
+		C3D_API void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
+		/**
+		 *\~english
 		 *\brief		Activation function, to tell the GPU it is active
 		 *\param[in]	p_index	The texture index
 		 *\return		\p true if successful
@@ -80,22 +94,26 @@ namespace Castor3D
 		C3D_API virtual void Unbind( uint32_t p_index )const = 0;
 		/**
 		 *\~english
-		 *\brief		Locks image buffer from GPU, allowing modifications into it
-		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE
-		 *\return		The image buffer
+		 *\brief		Locks image buffer from GPU, allowing modifications into it.
+		 *\remarks		The parent texture must be bound.
+		 *\param[in]	p_lock	Defines the lock mode (r, w, rw), combination of eACCESS_TYPE.
+		 *\return		The image buffer.
 		 *\~french
-		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus
-		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE
-		 *\return		Le buffer de l'image
+		 *\brief		Locke le buffer de l'image à partir du GPU, permettant des modification dessus.
+		 *\remarks		La texture parente doit être activée.
+		 *\param[in]	p_lock	Définit le mode de lock (lecture, écriture, les 2), combinaison de eACCESS_TYPE.
+		 *\return		Le buffer de l'image.
 		 */
 		C3D_API virtual uint8_t * Lock( uint32_t p_lock ) = 0;
 		/**
 		 *\~english
-		 *\brief		Unlocks image buffer from GPU
-		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU
+		 *\brief		Unlocks image buffer from GPU.
+		 *\remarks		The parent texture must be bound.
+		 *\param[in]	p_modified	Tells if the buffer has been modified, so modifications are uploaded to GPU.
 		 *\~french
-		 *\brief		Délocke le buffer de l'image à partir du GPU
-		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU
+		 *\brief		Délocke le buffer de l'image à partir du GPU.
+		 *\remarks		La texture parente doit être activée.
+		 *\param[in]	p_modified	Dit si le buffer a été modifié, afin que les modifications soient mises sur le GPU.
 		 */
 		C3D_API virtual void Unlock( bool p_modified ) = 0;
 		/**
@@ -128,6 +146,21 @@ namespace Castor3D
 		{
 			return m_type;
 		}
+
+	private:
+		/**
+		 *\~english
+		 *\brief		Initialises the texture initial storage data.
+		 *\param[in]	p_buffer	The texture pixel buffer.
+		 *\param[in]	p_size		The pixel buffer dimensions.
+		 *\param[in]	p_format	The pixel buffer format.
+		 *\~french
+		 *\brief		Charge sur le GPU les données initiales.
+		 *\param[in]	p_buffer	Le tampon de données.
+		 *\param[in]	p_size		La taille du tampon.
+		 *\param[in]	p_format	Le format des données.
+		 */
+		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
 
 	protected:
 		//!\~english	The required CPU access (combination of eACCESS_TYPE).

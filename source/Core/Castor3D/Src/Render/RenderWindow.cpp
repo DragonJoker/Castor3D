@@ -23,7 +23,7 @@
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Miscellaneous/WindowHandle.hpp"
-#include "Texture/DynamicTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Shader/FrameVariable.hpp"
 
 #include <Logger.hpp>

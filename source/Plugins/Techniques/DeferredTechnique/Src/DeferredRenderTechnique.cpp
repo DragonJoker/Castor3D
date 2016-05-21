@@ -29,7 +29,7 @@
 #include <Shader/FrameVariableBuffer.hpp>
 #include <Shader/OneFrameVariable.hpp>
 #include <Shader/PointFrameVariable.hpp>
-#include <Texture/DynamicTexture.hpp>
+#include <Texture/TextureLayout.hpp>
 
 #include <Logger.hpp>
 
@@ -65,9 +65,7 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_COUNT; i++ )
 		{
-			auto l_texture = m_renderSystem->CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-			l_texture->SetRenderTarget( p_renderTarget.shared_from_this() );
-			l_texture->SetType( eTEXTURE_TYPE_2D );
+			auto l_texture = m_renderSystem->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 			m_geometryPassTexAttachs[i] = m_geometryPassFrameBuffer->CreateAttachment( l_texture );
 			m_lightPassTextures[i] = std::make_shared< TextureUnit >( *GetEngine() );
 			m_lightPassTextures[i]->SetIndex( i );
@@ -194,14 +192,14 @@ namespace Deferred
 
 		for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 		{
-			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[i]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_ARGB16F32F );
+			m_lightPassTextures[i]->GetTexture()->GetImage().SetSource( m_size, ePIXEL_FORMAT_ARGB16F32F );
 			m_lightPassTextures[i]->Initialise();
 			p_index++;
 		}
 
 		if ( l_return )
 		{
-			std::static_pointer_cast< DynamicTexture >( m_lightPassTextures[eDS_TEXTURE_DEPTH]->GetTexture() )->SetImage( m_size, ePIXEL_FORMAT_DEPTH32 );
+			m_lightPassTextures[eDS_TEXTURE_DEPTH]->GetTexture()->GetImage().SetSource( m_size, ePIXEL_FORMAT_DEPTH32 );
 			m_lightPassTextures[eDS_TEXTURE_DEPTH]->Initialise();
 			p_index++;
 		}
@@ -220,12 +218,12 @@ namespace Deferred
 		{
 			for ( int i = 0; i < eDS_TEXTURE_DEPTH && l_return; i++ )
 			{
-				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, i, m_geometryPassTexAttachs[i], eTEXTURE_TARGET_2D );
+				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_COLOUR, i, m_geometryPassTexAttachs[i], m_lightPassTextures[i]->GetType() );
 			}
 
 			if ( l_return )
 			{
-				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_geometryPassTexAttachs[eDS_TEXTURE_DEPTH], eTEXTURE_TARGET_2D );
+				l_return = m_geometryPassFrameBuffer->Attach( eATTACHMENT_POINT_DEPTH, m_geometryPassTexAttachs[eDS_TEXTURE_DEPTH], m_lightPassTextures[eDS_TEXTURE_DEPTH]->GetType() );
 			}
 
 			if ( l_return )

@@ -42,8 +42,10 @@ namespace GlRender
 		 *\param[in]	p_gl			The OpenGL APIs.
 		 *\param[in]	p_type			The texture type.
 		 *\param[in]	p_renderSystem	The RenderSystem.
+		 *\param[in]	p_cpuAccess		The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess		The required GPU access (combination of eACCESS_TYPE).
 		 */
-		GlTexture( OpenGl & p_gl, Castor3D::eTEXTURE_TYPE p_type, GlRenderSystem & p_renderSystem );
+		GlTexture( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -57,13 +59,6 @@ namespace GlRender
 		 */
 		virtual void Destroy();
 		/**
-		 *\brief		Initialises the texture initial storage data.
-		 *\param[in]	p_buffer	The texture pixel buffer.
-		 *\param[in]	p_size		The pixel buffer dimensions.
-		 *\param[in]	p_format	The pixel buffer format.
-		 */
-		void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
 		*\brief		Forces mipmaps generation.
 		*/
 		void GenerateMipmaps()const;
@@ -76,14 +71,6 @@ namespace GlRender
 		}
 
 	private:
-		/**
-		 *\copydoc		Castor3D::TextureLayout::DoInitialise
-		 */
-		virtual bool DoInitialise();
-		/**
-		 *\copydoc		Castor3D::TextureLayout::DoCleanup
-		 */
-		virtual void DoCleanup();
 		/**
 		 *\copydoc		Castor3D::TextureLayout::DoBind
 		 */

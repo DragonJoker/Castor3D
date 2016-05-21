@@ -5,7 +5,7 @@
 
 #include "Event/Frame/InitialiseEvent.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Texture/StaticTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
 
 #include <Font.hpp>
@@ -27,8 +27,7 @@ namespace Castor3D
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MIN, eINTERPOLATION_MODE_LINEAR );
 		l_pSampler->SetInterpolationMode( eINTERPOLATION_FILTER_MAG, eINTERPOLATION_MODE_LINEAR );
 		m_sampler = l_pSampler;
-		m_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-		m_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+		m_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
 	}
 
 	FontTexture::~FontTexture()

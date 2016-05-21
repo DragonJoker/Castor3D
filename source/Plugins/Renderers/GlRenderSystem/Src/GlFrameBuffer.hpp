@@ -96,7 +96,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
 		 */
-		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_texture );
+		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture );
 
 	public:
 		using BindableType::GetGlName;

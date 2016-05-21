@@ -345,7 +345,7 @@ namespace Castor3D
 		 *\param[in]	p_texture	La texture
 		 *\return		L'attache créée
 		 */
-		C3D_API virtual TextureAttachmentSPtr CreateAttachment( DynamicTextureSPtr p_texture ) = 0;
+		C3D_API virtual TextureAttachmentSPtr CreateAttachment( TextureLayoutSPtr p_texture ) = 0;
 		/**
 		 *\~english
 		 *\brief		Checks if the FBO is complete
@@ -380,17 +380,6 @@ namespace Castor3D
 		}
 
 	protected:
-		/**
-		 *\~english
-		 *\param[in]	p_point	The attachment point.
-		 *\param[in]	p_index			The attachment index.
-		 *\return		The samples count for attachment.
-		 *\~french
-		 *\param[in]	p_point	Le point d'attache.
-		 *\param[in]	p_index			L'index d'attache.
-		 *\return		Le nombre d'échantillons pour l'attache.
-		 */
-		C3D_API uint32_t DoGetSamplesCount( eATTACHMENT_POINT p_point, uint8_t p_index );
 		/**
 		 *\~english
 		 *\param[in]	p_point	The attachment point.

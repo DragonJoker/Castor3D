@@ -29,7 +29,7 @@
 #include "Render/RenderTarget.hpp"
 #include "Scene/Scene.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
-#include "Texture/DynamicTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <GlslSource.hpp>
 
@@ -238,11 +238,9 @@ namespace Castor3D
 
 	bool RenderTechnique::stFRAME_BUFFER::Initialise( Size p_size )
 	{
-		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
-		auto l_image = std::make_unique< TextureImage >( *m_technique.GetEngine() );
-		l_image->SetSource( p_size, ePIXEL_FORMAT_ARGB16F32F );
-		p_size = l_image->GetDimensions();
-		m_colourTexture->SetImage( std::move( l_image ) );
+		m_colourTexture = m_technique.GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		m_colourTexture->GetImage().SetSource( p_size, ePIXEL_FORMAT_ARGB16F32F );
+		p_size = m_colourTexture->GetImage().GetDimensions();
 
 		bool l_return = m_colourTexture->Create();
 
@@ -302,22 +300,25 @@ namespace Castor3D
 
 	void RenderTechnique::stFRAME_BUFFER::Cleanup()
 	{
-		m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
-		m_frameBuffer->DetachAll();
-		m_frameBuffer->Unbind();
-		m_frameBuffer->Cleanup();
-		m_colourTexture->Cleanup();
-		m_depthBuffer->Cleanup();
+		if ( m_frameBuffer )
+		{
+			m_frameBuffer->Bind( eFRAMEBUFFER_MODE_CONFIG );
+			m_frameBuffer->DetachAll();
+			m_frameBuffer->Unbind();
+			m_frameBuffer->Cleanup();
+			m_colourTexture->Cleanup();
+			m_depthBuffer->Cleanup();
 
-		m_colourTexture->Destroy();
-		m_depthBuffer->Destroy();
-		m_frameBuffer->Destroy();
+			m_colourTexture->Destroy();
+			m_depthBuffer->Destroy();
+			m_frameBuffer->Destroy();
 
-		m_depthAttach.reset();
-		m_depthBuffer.reset();
-		m_colourAttach.reset();
-		m_colourTexture.reset();
-		m_frameBuffer.reset();
+			m_depthAttach.reset();
+			m_depthBuffer.reset();
+			m_colourAttach.reset();
+			m_colourTexture.reset();
+			m_frameBuffer.reset();
+		}
 	}
 
 	//*************************************************************************************************
@@ -418,21 +419,26 @@ namespace Castor3D
 
 	void RenderTechnique::Render( Scene & p_scene, Camera & p_camera, uint32_t p_frameTime )
 	{
-		m_renderSystem->PushScene( &p_scene );
+		auto l_it = m_scenesRenderNodes.find( p_scene.GetName() );
 
-		if ( DoBeginRender( p_scene ) )
+		if ( l_it != m_scenesRenderNodes.end() )
 		{
-			p_scene.RenderBackground( GetSize() );
-			DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_frameTime );
-			DoEndRender( p_scene );
-		}
+			m_renderSystem->PushScene( &p_scene );
 
-		for ( auto && l_effect : m_renderTarget->GetPostEffects() )
-		{
-			l_effect->Apply( *m_frameBuffer.m_frameBuffer );
-		}
+			if ( DoBeginRender( p_scene ) )
+			{
+				p_scene.RenderBackground( GetSize() );
+				DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_frameTime );
+				DoEndRender( p_scene );
+			}
 
-		m_renderSystem->PopScene();
+			for ( auto && l_effect : m_renderTarget->GetPostEffects() )
+			{
+				l_effect->Apply( *m_frameBuffer.m_frameBuffer );
+			}
+
+			m_renderSystem->PopScene();
+		}
 	}
 
 	String RenderTechnique::GetPixelShaderSource( uint32_t p_flags )const

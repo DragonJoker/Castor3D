@@ -30,12 +30,12 @@ namespace GlRender
 		m_glBuffer.Destroy();
 	}
 
-	bool GlTboTextureStorage::Bind( uint32_t p_index )
+	bool GlTboTextureStorage::Bind( uint32_t p_index )const
 	{
 		return GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, m_glBuffer.GetGlName() );
 	}
 
-	void GlTboTextureStorage::Unbind( uint32_t p_index )
+	void GlTboTextureStorage::Unbind( uint32_t p_index )const
 	{
 		GetOpenGl().TexBuffer( eGL_TEXDIM_BUFFER, m_glInternal, 0 );
 	}

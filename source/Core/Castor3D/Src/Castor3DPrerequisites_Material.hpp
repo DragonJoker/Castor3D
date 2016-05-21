@@ -433,20 +433,14 @@ namespace Castor3D
 	class TextureImage;
 	class TextureLayout;
 	class TextureStorage;
-	class StaticTexture;
-	class DynamicTexture;
 	class TextureUnit;
 	class Material;
 	class Pass;
 	class Sampler;
-	class CubeMapTexture;
 
 	DECLARE_SMART_PTR( TextureImage );
 	DECLARE_SMART_PTR( TextureLayout );
 	DECLARE_SMART_PTR( TextureStorage );
-	DECLARE_SMART_PTR( StaticTexture );
-	DECLARE_SMART_PTR( DynamicTexture );
-	DECLARE_SMART_PTR( CubeMapTexture );
 	DECLARE_SMART_PTR( TextureUnit );
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );

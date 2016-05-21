@@ -10,7 +10,7 @@
 #include "Event/Frame/FunctorEvent.hpp"
 #include "Material/Material.hpp"
 #include "Render/RenderSystem.hpp"
-#include "Texture/StaticTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <Font.hpp>
 #include <Image.hpp>

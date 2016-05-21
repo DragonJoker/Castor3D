@@ -21,7 +21,7 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/MatrixFrameVariable.hpp"
 #include "Shader/OneFrameVariable.hpp"
-#include "Texture/DynamicTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Shader/PointFrameVariable.hpp"
 
 #include <Font.hpp>

@@ -26,7 +26,7 @@
 #include "Mesh/Buffer/Buffer.hpp"
 #include "Miscellaneous/Parameter.hpp"
 #include "Miscellaneous/PostEffect.hpp"
-#include "Texture/DynamicTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 
 #include <Logger.hpp>
 #include <Image.hpp>
@@ -270,9 +270,8 @@ namespace Castor3D
 	{
 		m_frameBuffer = m_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
 		SamplerSPtr l_pSampler = m_renderTarget.GetEngine()->GetSamplerManager().Find( RenderTarget::DefaultSamplerName + string::to_string( m_renderTarget.m_index ) );
-		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateDynamicTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = m_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 		m_pColorAttach = m_frameBuffer->CreateAttachment( l_colourTexture );
-		l_colourTexture->SetRenderTarget( m_renderTarget.shared_from_this() );
 		m_colorTexture.SetTexture( l_colourTexture );
 		m_colorTexture.SetSampler( l_pSampler );
 		return true;
@@ -290,7 +289,7 @@ namespace Castor3D
 	{
 		bool l_return = false;
 		m_colorTexture.SetIndex( p_index );
-		std::static_pointer_cast< DynamicTexture >( m_colorTexture.GetTexture() )->GetImage().SetSource( p_size, m_renderTarget.GetPixelFormat() );
+		m_colorTexture.GetTexture()->GetImage().SetSource( p_size, m_renderTarget.GetPixelFormat() );
 		Size l_size = m_colorTexture.GetTexture()->GetImage().GetDimensions();
 		m_frameBuffer->Create();
 		m_colorTexture.GetTexture()->Create();

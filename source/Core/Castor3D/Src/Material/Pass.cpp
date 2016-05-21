@@ -12,7 +12,7 @@
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/OneFrameVariable.hpp"
 #include "Shader/PointFrameVariable.hpp"
-#include "Texture/StaticTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 
 #include <Logger.hpp>
@@ -602,8 +602,7 @@ namespace Castor3D
 			}
 			else if ( l_pImageOpa )
 			{
-				StaticTextureSPtr l_texture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-				l_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+				auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
 				l_texture->GetImage().SetSource( l_pImageOpa );
 				l_pOpacityMap = std::make_shared< TextureUnit >( *GetEngine() );
 				l_pOpacityMap->SetAutoMipmaps( l_pOpaSrc->GetAutoMipmaps() );
@@ -704,13 +703,15 @@ namespace Castor3D
 	{
 		PxBufferBaseSPtr l_return;
 
-		if ( p_unit && ( p_unit->GetTexture()->GetImage().GetBuffer() || p_unit->GetRenderTarget() ) )
+		if ( p_unit )
 		{
-			if ( p_unit->GetTexture()->GetImage().GetBuffer() )
+			auto l_texture = p_unit->GetTexture();
+
+			if ( l_texture && l_texture->GetImage().GetBuffer() )
 			{
-				PxBufferBaseSPtr l_extracted = p_unit->GetTexture()->GetImage().GetBuffer();
+				PxBufferBaseSPtr l_extracted = l_texture->GetImage().GetBuffer();
 				l_return = PF::ExtractAlpha( l_extracted );
-				p_unit->GetTexture()->GetImage().SetSource( l_extracted );
+				l_texture->GetImage().SetSource( l_extracted );
 			}
 
 			p_unit->SetIndex( p_index++ );

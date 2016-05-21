@@ -49,22 +49,6 @@ namespace GlRender
 		 *\brief		Destructor.
 		 */
 		~GlTextureStorage();
-		/**
-		*\brief		Initialises the texture initial storage data.
-		*\param[in]	p_buffer	The texture pixel buffer.
-		*\param[in]	p_size		The pixel buffer dimensions.
-		*\param[in]	p_format	The pixel buffer format.
-		*/
-		void Fill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-
-	protected:
-		/**
-		*\brief		Initialises the texture initial storage data.
-		*\param[in]	p_buffer	The texture pixel buffer.
-		*\param[in]	p_size		The pixel buffer dimensions.
-		*\param[in]	p_format	The pixel buffer format.
-		*/
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format ) = 0;
 
 	protected:
 		//! The RenderSystem.

@@ -17,11 +17,6 @@ namespace Castor
 	{
 	public:
 		CMsvcConsoleInfo()
-			: m_oldCodePage( 0 )
-			, m_screenBuffer( INVALID_HANDLE_VALUE )
-			, m_oldInfos( nullptr )
-			, m_allocated( false )
-			, m_console( false )
 		{
 			if ( ::AllocConsole() )
 			{
@@ -69,148 +64,158 @@ namespace Castor
 
 		void BeginLog( ELogType logLevel )
 		{
-			WORD attributes;
+			WORD l_attributes;
 
 			switch ( logLevel )
 			{
 			case ELogType_DEBUG:
-				attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+				l_attributes = FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 				break;
 
 			case ELogType_WARNING:
-				attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
+				l_attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY;
 				break;
 
 			case ELogType_ERROR:
-				attributes = FOREGROUND_RED | FOREGROUND_INTENSITY;
+				l_attributes = FOREGROUND_RED | FOREGROUND_INTENSITY;
 				break;
 
 			default:
-				attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
+				l_attributes = FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY;
 				break;
 			}
 
-			::SetConsoleTextAttribute( m_screenBuffer, attributes );
+			::SetConsoleTextAttribute( m_screenBuffer, l_attributes );
 		}
 
-		void Print( String const & toLog, bool newLine )
+		void Print( String const & p_toLog, bool p_newLine )
 		{
-			::OutputDebugString( toLog.c_str() );
-			DWORD written = 0;
+			::OutputDebugString( p_toLog.c_str() );
 
-			if ( newLine )
+			if ( p_newLine )
 			{
 				::OutputDebugString( cuT( "\n" ) );
-				CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
-
-				if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &csbiInfo ) )
-				{
-					csbiInfo.dwCursorPosition.X = 0;
-					::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, nullptr );
-					SHORT offsetY = SHORT( 1 + written / csbiInfo.dwSize.X );
-
-					if ( ( csbiInfo.dwSize.Y - offsetY ) <= csbiInfo.dwCursorPosition.Y )
-					{
-						// The cursor is on the last row
-						// The scroll rectangle is from second row to last displayed row
-						SMALL_RECT scrollRect;
-						scrollRect.Top = 1;
-						scrollRect.Bottom = csbiInfo.dwSize.Y - 1;
-						scrollRect.Left = 0;
-						scrollRect.Right = csbiInfo.dwSize.X - 1;
-						// The destination for the scroll rectangle is one row up.
-						COORD coordDest;
-						coordDest.X = 0;
-						coordDest.Y = 0;
-						// Set the fill character and attributes.
-						CHAR_INFO fill;
-						fill.Attributes = 0;
-						fill.Char.AsciiChar = char( ' ' );
-						// Scroll
-						::ScrollConsoleScreenBuffer( m_screenBuffer, &scrollRect, nullptr, coordDest, &fill );
-					}
-					else
-					{
-						// The cursor isn't on the last row
-						csbiInfo.dwCursorPosition.Y += offsetY;
-					}
-
-					::SetConsoleCursorPosition( m_screenBuffer, csbiInfo.dwCursorPosition );
-				}
 			}
-			else
+
+			CONSOLE_SCREEN_BUFFER_INFO l_csbiInfo;
+
+			if ( ::GetConsoleScreenBufferInfo( m_screenBuffer, &l_csbiInfo ) )
 			{
-				::WriteConsole( m_screenBuffer, toLog.c_str(), DWORD( toLog.size() ), &written, nullptr );
+				l_csbiInfo.dwCursorPosition.X = 0;
+				DWORD l_written = 0;
+				::WriteConsole( m_screenBuffer, p_toLog.c_str(), DWORD( p_toLog.size() ), &l_written, nullptr );
+				SHORT l_offsetY = SHORT( 1 + l_written / l_csbiInfo.dwSize.X );
+
+				if ( ( l_csbiInfo.dwSize.Y - l_offsetY ) <= l_csbiInfo.dwCursorPosition.Y )
+				{
+					// The cursor is on the last row
+					// The scroll rectangle is from second row to last displayed row
+					SMALL_RECT l_scrollRect;
+					l_scrollRect.Top = 1;
+					l_scrollRect.Bottom = l_csbiInfo.dwSize.Y - 1;
+					l_scrollRect.Left = 0;
+					l_scrollRect.Right = l_csbiInfo.dwSize.X - 1;
+					// The destination for the scroll rectangle is one row up.
+					COORD l_coordDest;
+					l_coordDest.X = 0;
+					l_coordDest.Y = 0;
+					// Set the fill character and attributes.
+					CHAR_INFO l_fill;
+					l_fill.Attributes = 0;
+					l_fill.Char.AsciiChar = ' ';
+					l_fill.Char.UnicodeChar = L' ';
+					// Scroll
+					::ScrollConsoleScreenBuffer( m_screenBuffer, &l_scrollRect, nullptr, l_coordDest, &l_fill );
+				}
+				else
+				{
+					// The cursor isn't on the last row
+					l_csbiInfo.dwCursorPosition.Y += l_offsetY;
+				}
+
+				::SetConsoleCursorPosition( m_screenBuffer, l_csbiInfo.dwCursorPosition );
 			}
 		}
 
 	private:
 		void DoInitialiseConsole()
 		{
-			m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
-
-			if ( m_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( m_screenBuffer ) )
+			if ( m_screenBuffer == INVALID_HANDLE_VALUE )
 			{
-				m_oldInfos = new CONSOLE_FONT_INFOEX;
-				CONSOLE_FONT_INFOEX * oldInfos = m_oldInfos;
-				oldInfos->cbSize = sizeof( CONSOLE_FONT_INFOEX );
+				m_screenBuffer = ::CreateConsoleScreenBuffer( GENERIC_WRITE | GENERIC_READ, 0, nullptr, CONSOLE_TEXTMODE_BUFFER, nullptr );
+				DoInitialiseConsoleHandle( m_screenBuffer, m_oldInfos, m_oldCodePage );
+				FILE * l_dump;
+				freopen_s( &l_dump, "conout$", "w", stdout );
+				freopen_s( &l_dump, "conout$", "w", stderr );
+				m_console = true;
+			}
+			else
+			{
+				DoInitialiseConsoleHandle( m_screenBuffer, m_oldInfos, m_oldCodePage );
+			}
+		}
 
-				if ( ::GetCurrentConsoleFontEx( m_screenBuffer, FALSE, oldInfos ) )
+		void DoInitialiseConsoleHandle( HANDLE p_screenBuffer, CONSOLE_FONT_INFOEX *& p_oldInfos, uint32_t & p_oldCodePage )
+		{
+			if ( p_screenBuffer != INVALID_HANDLE_VALUE && ::SetConsoleActiveScreenBuffer( p_screenBuffer ) )
+			{
+				p_oldInfos = new CONSOLE_FONT_INFOEX;
+				CONSOLE_FONT_INFOEX * l_oldInfos = p_oldInfos;
+				l_oldInfos->cbSize = sizeof( CONSOLE_FONT_INFOEX );
+
+				if ( ::GetCurrentConsoleFontEx( p_screenBuffer, FALSE, l_oldInfos ) )
 				{
-					CONSOLE_FONT_INFOEX newInfos = { 0 };
-					newInfos.cbSize = sizeof( CONSOLE_FONT_INFOEX );
-					newInfos.dwFontSize = oldInfos->dwFontSize;
-					newInfos.FontWeight = oldInfos->FontWeight;
-					newInfos.nFont = 6;
-					newInfos.FontFamily = 54;
-					wcscpy( newInfos.FaceName, L"Lucida Console" );
+					CONSOLE_FONT_INFOEX l_newInfos = { 0 };
+					l_newInfos.cbSize = sizeof( CONSOLE_FONT_INFOEX );
+					l_newInfos.dwFontSize = l_oldInfos->dwFontSize;
+					l_newInfos.FontWeight = l_oldInfos->FontWeight;
+					l_newInfos.nFont = 6;
+					l_newInfos.FontFamily = 54;
+					wcscpy( l_newInfos.FaceName, L"Lucida Console" );
 
-					if ( !::SetCurrentConsoleFontEx( m_screenBuffer, FALSE, &newInfos ) )
+					if ( !::SetCurrentConsoleFontEx( p_screenBuffer, FALSE, &l_newInfos ) )
 					{
-						delete m_oldInfos;
-						m_oldInfos = nullptr;
+						delete p_oldInfos;
+						p_oldInfos = nullptr;
 					}
 				}
 				else
 				{
-					delete m_oldInfos;
-					m_oldInfos = nullptr;
+					delete p_oldInfos;
+					p_oldInfos = nullptr;
 				}
 
-				COORD coord = { 160, 9999 };
-				::SetConsoleScreenBufferSize( m_screenBuffer, coord );
+				COORD l_coord = { 160, 9999 };
+				::SetConsoleScreenBufferSize( p_screenBuffer, l_coord );
 			}
 
-			m_oldCodePage = ::GetConsoleOutputCP();
+			p_oldCodePage = ::GetConsoleOutputCP();
 			::EnumSystemCodePages( &DoCodePageProc, CP_INSTALLED );
-
-			FILE * dump;
-			freopen_s( &dump, "conout$", "w", stdout );
-			freopen_s( &dump, "conout$", "w", stderr );
-			m_console = true;
 		}
+
 		static BOOL __stdcall DoCodePageProc( xchar * szCodePage )
 		{
-			BOOL ret = TRUE;
-			String codePage( szCodePage );
-			int cp = stoi( codePage );
+			BOOL l_return = TRUE;
+			String l_codePage( szCodePage );
+			int l_cp = stoi( l_codePage );
 
-			if ( cp == CP_UTF8 )
+			if ( l_cp == CP_UTF8 )
 			{
-				::SetConsoleCP( cp );
-				::SetConsoleOutputCP( cp );
-				ret = FALSE;
+				::SetConsoleCP( l_cp );
+				::SetConsoleOutputCP( l_cp );
+				l_return = FALSE;
 			}
 
-			return ret;
+			return l_return;
 		}
 
 	private:
-		uint32_t m_oldCodePage;
-		HANDLE m_screenBuffer;
-		CONSOLE_FONT_INFOEX * m_oldInfos;
-		bool m_allocated;
-		bool m_console;
+		uint32_t m_oldCodePage{ 0 };
+		HANDLE m_screenBuffer{ INVALID_HANDLE_VALUE };
+		CONSOLE_FONT_INFOEX * m_oldInfos{ nullptr };
+		bool m_allocated{ false };
+		bool m_console{ false };
+
 	};
 
 #elif defined( _WIN32 )

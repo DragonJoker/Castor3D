@@ -70,7 +70,7 @@ namespace Bloom
 		void DoCombine();
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 
-		Castor3D::DynamicTextureSPtr m_colourTexture;
+		Castor3D::TextureLayoutSPtr m_colourTexture;
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;
 

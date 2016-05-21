@@ -5,7 +5,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Shader/FrameVariableBuffer.hpp"
 #include "Shader/ShaderProgram.hpp"
-#include "Texture/DynamicTexture.hpp"
+#include "Texture/TextureLayout.hpp"
 #include "Texture/TextureUnit.hpp"
 #include "Texture/TextureLayout.hpp"
 #include "Texture/TextureImage.hpp"
@@ -20,8 +20,7 @@ namespace Castor3D
 		: ObjectManager< Castor::String, Light >{ p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode }
 		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
 	{
-		auto l_texture = GetEngine()->GetRenderSystem()->CreateDynamicTexture( eTEXTURE_TYPE_BUFFER, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
-		l_texture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_BUFFER, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
 		l_texture->GetImage().SetSource( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );

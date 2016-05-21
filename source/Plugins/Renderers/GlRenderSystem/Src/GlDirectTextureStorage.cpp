@@ -24,37 +24,12 @@ namespace GlRender
 	{
 	}
 
-	void GlDirectTextureStorage::DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
-	{
-		OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( p_format );
-		auto l_glDimension = GetOpenGl().Get( m_type );
-
-		switch ( l_glDimension )
-		{
-		case eGL_TEXDIM_1D:
-			GetOpenGl().TexImage1D( eGL_TEXDIM_1D, 0, l_glPixelFmt.Internal, p_size.width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
-			break;
-
-		case eGL_TEXDIM_2D:
-			GetOpenGl().TexImage2D( eGL_TEXDIM_2D, 0, l_glPixelFmt.Internal, p_size, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
-			break;
-
-		case eGL_TEXDIM_3D:
-			GetOpenGl().TexImage3D( eGL_TEXDIM_3D, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
-			break;
-
-		case eGL_TEXDIM_2D_ARRAY:
-			GetOpenGl().TexImage3D( eGL_TEXDIM_2D_ARRAY, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
-			break;
-		}
-	}
-
-	bool GlDirectTextureStorage::Bind( uint32_t p_index )
+	bool GlDirectTextureStorage::Bind( uint32_t p_index )const
 	{
 		return true;
 	}
 
-	void GlDirectTextureStorage::Unbind( uint32_t p_index )
+	void GlDirectTextureStorage::Unbind( uint32_t p_index )const
 	{
 	}
 
@@ -78,26 +53,50 @@ namespace GlRender
 			auto l_buffer = GetOwner()->GetBuffer();
 			auto l_glDimension = GetOpenGl().Get( m_type );
 			OpenGl::PixelFmt l_format = GetOpenGl().Get( l_buffer->format() );
-			GetOpenGl().BindTexture( l_glDimension, GetOwner()->GetGlName() );
 
 			switch ( l_glDimension )
 			{
 			case eGL_TEXDIM_1D:
-				GetOpenGl().TexSubImage1D( eGL_TEXDIM_1D, 0, 0, l_buffer->width(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
+				GetOpenGl().TexSubImage1D( l_glDimension, 0, 0, l_buffer->width(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
 				break;
 
 			case eGL_TEXDIM_2D:
-				GetOpenGl().TexSubImage2D( eGL_TEXDIM_2D, 0, 0, 0, l_buffer->width(), l_buffer->height(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
+				GetOpenGl().TexSubImage2D( l_glDimension, 0, 0, 0, l_buffer->width(), l_buffer->height(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
 				break;
 
 			case eGL_TEXDIM_3D:
-				GetOpenGl().TexSubImage3D( eGL_TEXDIM_3D, 0, 0, 0, 0, l_buffer->width(), l_buffer->height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
+				GetOpenGl().TexSubImage3D( l_glDimension, 0, 0, 0, 0, l_buffer->width(), l_buffer->height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
 				break;
 
 			case eGL_TEXDIM_2D_ARRAY:
-				GetOpenGl().TexSubImage3D( eGL_TEXDIM_2D_ARRAY, 0, 0, 0, 0, l_buffer->width(), l_buffer->height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
+				GetOpenGl().TexSubImage3D( l_glDimension, 0, 0, 0, 0, l_buffer->width(), l_buffer->height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), l_format.Format, l_format.Type, l_buffer->const_ptr() );
 				break;
 			}
+		}
+	}
+
+	void GlDirectTextureStorage::DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format )
+	{
+		OpenGl::PixelFmt l_glPixelFmt = GetOpenGl().Get( p_format );
+		auto l_glDimension = GetOpenGl().Get( m_type );
+
+		switch ( l_glDimension )
+		{
+		case eGL_TEXDIM_1D:
+			GetOpenGl().TexImage1D( l_glDimension, 0, l_glPixelFmt.Internal, p_size.width(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
+
+		case eGL_TEXDIM_2D:
+			GetOpenGl().TexImage2D( l_glDimension, 0, l_glPixelFmt.Internal, p_size, 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
+
+		case eGL_TEXDIM_3D:
+			GetOpenGl().TexImage3D( l_glDimension, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
+
+		case eGL_TEXDIM_2D_ARRAY:
+			GetOpenGl().TexImage3D( l_glDimension, 0, l_glPixelFmt.Internal, p_size.width(), p_size.height() / GetOwner()->GetDepth(), GetOwner()->GetDepth(), 0, l_glPixelFmt.Format, l_glPixelFmt.Type, p_buffer );
+			break;
 		}
 	}
 }

@@ -403,7 +403,7 @@ namespace OceanLighting
 		//!\~english The frame buffer	\~french Le tampon d'image
 		Castor3D::FrameBufferSPtr m_frameBuffer;
 		//!\~english The buffer receiving the color render	\~french Le tampon recevant le rendu couleur
-		Castor3D::DynamicTextureSPtr m_pColorBuffer;
+		Castor3D::TextureLayoutSPtr m_pColorBuffer;
 		//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
 		Castor3D::DepthStencilRenderBufferSPtr m_pDepthBuffer;
 		//!\~english The attach between colour buffer and frame buffer	\~french L'attache entre le buffer couleur et le frame buffer
@@ -562,8 +562,8 @@ namespace OceanLighting
 		std::vector< Castor3D::TextureAttachmentSPtr > m_arrayFftAttaches;
 
 		Castor3D::FrameBufferSPtr m_fftFbo2;
-		Castor3D::DynamicTextureSPtr m_pTexFFTA;
-		Castor3D::DynamicTextureSPtr m_pTexFFTB;
+		Castor3D::TextureLayoutSPtr m_pTexFFTA;
+		Castor3D::TextureLayoutSPtr m_pTexFFTB;
 		Castor3D::TextureAttachmentSPtr m_pAttachFftA;
 		Castor3D::TextureAttachmentSPtr m_pAttachFftB;
 
@@ -614,16 +614,16 @@ namespace OceanLighting
 		Castor3D::GeometryBuffersSPtr m_fftyGBuffers;
 		Castor3D::BlendStateWPtr m_fftyBlendState;
 
-		Castor3D::DynamicTextureSPtr m_pTexSpectrum_1_2;
-		Castor3D::DynamicTextureSPtr m_pTexSpectrum_3_4;
-		Castor3D::DynamicTextureSPtr m_pTexSlopeVariance;	// the 3d texture containing precomputed filtered slope m_variances
-		Castor3D::DynamicTextureSPtr m_pTexButterfly;
+		Castor3D::TextureLayoutSPtr m_pTexSpectrum_1_2;
+		Castor3D::TextureLayoutSPtr m_pTexSpectrum_3_4;
+		Castor3D::TextureLayoutSPtr m_pTexSlopeVariance;	// the 3d texture containing precomputed filtered slope m_variances
+		Castor3D::TextureLayoutSPtr m_pTexButterfly;
 #else
 		float m_nyquistMin;
 		float m_nyquistMax;
 
 		// WAVES PARAMETERS (INPUT)
-		Castor3D::DynamicTextureSPtr m_pTexWave;
+		Castor3D::TextureLayoutSPtr m_pTexWave;
 		int m_nbWaves;
 		Castor::Coords4f * m_waves;
 		float * m_pWaves;
@@ -648,11 +648,11 @@ namespace OceanLighting
 		Castor3D::SamplerSPtr m_pSamplerAnisotropicClamp;
 		Castor3D::SamplerSPtr m_pSamplerAnisotropicRepeat;
 
-		Castor3D::StaticTextureSPtr m_pTexIrradiance;
-		Castor3D::StaticTextureSPtr m_pTexInscatter;
-		Castor3D::StaticTextureSPtr m_pTexTransmittance;
-		Castor3D::DynamicTextureSPtr m_pTexSky;
-		Castor3D::DynamicTextureSPtr m_pTexNoise;
+		Castor3D::TextureLayoutSPtr m_pTexIrradiance;
+		Castor3D::TextureLayoutSPtr m_pTexInscatter;
+		Castor3D::TextureLayoutSPtr m_pTexTransmittance;
+		Castor3D::TextureLayoutSPtr m_pTexSky;
+		Castor3D::TextureLayoutSPtr m_pTexNoise;
 
 		bool m_bReloadPrograms;
 		bool m_bLayer;

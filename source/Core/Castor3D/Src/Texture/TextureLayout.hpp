@@ -141,21 +141,6 @@ namespace Castor3D
 		}
 		/**
 		 *\~english
-		 *\brief		Defines the texture image.
-		 *\param[in]	p_image	The image.
-		 *\param[in]	p_index	The image index.
-		 *\~french
-		 *\brief		Définit l'image de la texture.
-		 *\param[in]	p_image	L'image.
-		 *\param[in]	p_index	L'index de l'image.
-		 */
-		inline void SetImage( TextureImageUPtr && p_image, size_t p_index = 0 )
-		{
-			REQUIRE( p_index < m_images.size() );
-			m_images[p_index] = std::move( p_image );
-		}
-		/**
-		 *\~english
 		 *\param[in]	p_index	The image index.
 		 *\return		The texture image.
 		 *\~french
@@ -182,22 +167,6 @@ namespace Castor3D
 		}
 
 	private:
-		/**
-		 *\~english
-		 *\brief		Initialisation function.
-		 *\return		\p true if OK.
-		 *\~french
-		 *\brief		Fonction d'initialisation.
-		 *\return		\p true si tout s'est bien passé.
-		 */
-		C3D_API virtual bool DoInitialise() = 0;
-		/**
-		 *\~english
-		 *\brief		Cleanup function
-		 *\~french
-		 *\brief		Fonction de nettoyage
-		 */
-		C3D_API virtual void DoCleanup() = 0;
 		/**
 		 *\~english
 		 *\brief		API specific binding function

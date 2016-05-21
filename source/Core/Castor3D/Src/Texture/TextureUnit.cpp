@@ -3,9 +3,8 @@
 #include "Engine.hpp"
 #include "TargetManager.hpp"
 
-#include "DynamicTexture.hpp"
+#include "TextureLayout.hpp"
 #include "Sampler.hpp"
-#include "StaticTexture.hpp"
 #include "TextureImage.hpp"
 #include "TextureLayout.hpp"
 
@@ -40,7 +39,7 @@ namespace Castor3D
 		eBLEND_SOURCE l_eSrc;
 		PxBufferBaseSPtr l_pPxBuffer;
 		TextureImageSPtr l_image;
-		DynamicTextureSPtr l_texture;
+		TextureLayoutSPtr l_texture;
 
 		while ( p_chunk.CheckAvailable( 1 ) )
 		{
@@ -558,8 +557,7 @@ namespace Castor3D
 
 		if ( l_pImage )
 		{
-			StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-			l_pStaTexture->SetImage( std::make_unique< TextureImage >( *GetEngine() ) );
+			auto l_pStaTexture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
 			l_pStaTexture->GetImage().SetSource( l_pImage->GetPixels() );
 			SetTexture( l_pStaTexture );
 			m_pathTexture = p_pathFile;

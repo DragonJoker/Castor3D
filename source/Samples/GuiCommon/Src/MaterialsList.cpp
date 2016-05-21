@@ -10,7 +10,7 @@
 #include <Engine.hpp>
 #include <MaterialManager.hpp>
 #include <Material/Pass.hpp>
-#include <Texture/DynamicTexture.hpp>
+#include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
 #include <Logger.hpp>
@@ -122,11 +122,10 @@ namespace GuiCommon
 	void MaterialsList::DoAddTexture( wxTreeItemId p_id, uint32_t p_index, Castor3D::TextureUnitSPtr p_texture )
 	{
 		wxTreeItemId l_id = AppendItem( p_id, wxString( _( "Texture Unit " ) ) << p_index, eBMP_TEXTURE - eBMP_MATERIAL, eBMP_TEXTURE_SEL - eBMP_MATERIAL, new TextureTreeItemProperty( m_propertiesHolder->IsEditable(), p_texture ) );
-		TextureSPtr l_texture = p_texture->GetTexture();
 
-		if ( l_texture && l_texture->GetBaseType() == eTEXTURE_BASE_TYPE_DYNAMIC )
+		if ( p_texture->GetRenderTarget() )
 		{
-			RenderTargetSPtr l_target = std::static_pointer_cast< DynamicTexture >( l_texture )->GetRenderTarget();
+			RenderTargetSPtr l_target = p_texture->GetRenderTarget();
 
 			if ( l_target )
 			{

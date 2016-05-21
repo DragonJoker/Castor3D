@@ -106,7 +106,7 @@ namespace Castor3D
 			void Cleanup();
 
 			//!\~english The texture receiving the color render	\~french La texture recevant le rendu couleur
-			DynamicTextureSPtr m_colourTexture;
+			TextureLayoutSPtr m_colourTexture;
 			//!\~english The buffer receiving the depth render	\~french Le tampon recevant le rendu profondeur
 			DepthStencilRenderBufferSPtr m_depthBuffer;
 			//!\~english The frame buffer	\~french Le tampon d'image
@@ -245,7 +245,7 @@ namespace Castor3D
 		 *\~french
 		 *\return		La texture de couleurs contenant le résultat du rendu.
 		 */
-		inline DynamicTexture const & GetResult()const
+		inline TextureLayout const & GetResult()const
 		{
 			return *m_frameBuffer.m_colourTexture;
 		}

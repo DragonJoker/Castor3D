@@ -260,34 +260,19 @@ namespace Castor3D
 		C3D_API virtual ShaderProgramSPtr CreateShaderProgram() = 0;
 		/**
 		 *\~english
-		 *\brief		Creates a static texture.
+		 *\brief		Creates a texture.
 		 *\param[in]	p_type		The texture type.
 		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
 		 *\return		The created texture, depending of current API.
 		 *\~french
-		 *\brief		Crée une texture statique.
+		 *\brief		Crée une texture.
 		 *\param[in]	p_type		Le type de texture.
 		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		La texture créée, dépendante de l'API actuelle.
 		 */
-		C3D_API virtual StaticTextureSPtr CreateStaticTexture( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
-		/**
-		 *\~english
-		 *\brief		Creates a dynamic texture.
-		 *\param[in]	p_type		The texture type.
-		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
-		 *\return		The created texture, depending on current API.
-		 *\~french
-		 *\brief		Crée une texture dynamique.
-		 *\param[in]	p_type		Le type de texture.
-		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
-		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
-		 *\return		La texture créée, dépendante de l'API actuelle.
-		 */
-		C3D_API virtual DynamicTextureSPtr CreateDynamicTexture( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
+		C3D_API virtual TextureLayoutSPtr CreateTexture( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a texture storage.

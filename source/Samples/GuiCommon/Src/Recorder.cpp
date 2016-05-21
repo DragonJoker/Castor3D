@@ -422,6 +422,8 @@ namespace GuiCommon
 					StopRecord();
 					throw std::runtime_error( ( char const * )wxString( _( "Could not open file" ) ).mb_str( wxConvUTF8 ) );
 				}
+
+				return true;
 			}
 
 			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer )

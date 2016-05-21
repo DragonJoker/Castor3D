@@ -449,9 +449,9 @@ namespace GuiCommon
 
 	void CreateBitmapFromBuffer( TextureUnitSPtr p_pUnit, bool p_flip, wxBitmap & p_bitmap )
 	{
-		if ( p_pUnit->GetImagePixels() )
+		if ( p_pUnit->GetTexture()->GetImage().GetBuffer() )
 		{
-			CreateBitmapFromBuffer( p_pUnit->GetImagePixels(), p_flip, p_bitmap );
+			CreateBitmapFromBuffer( p_pUnit->GetTexture()->GetImage().GetBuffer(), p_flip, p_bitmap );
 		}
 		else if ( !p_pUnit->GetTexturePath().empty() )
 		{
