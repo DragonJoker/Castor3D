@@ -2,6 +2,7 @@
 
 #include <Engine.hpp>
 #include <Animation/AnimatedObjectGroup.hpp>
+#include <Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>
 

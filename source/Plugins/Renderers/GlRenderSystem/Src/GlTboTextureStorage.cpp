@@ -5,6 +5,8 @@
 #include <Logger.hpp>
 #include <PixelBufferBase.hpp>
 
+#include <Texture/TextureImage.hpp>
+
 using namespace Castor3D;
 using namespace Castor;
 

@@ -33,7 +33,7 @@ namespace Obj
 	{
 	private:
 		DECLARE_MAP( Castor3D::PassSPtr, Castor::Point3f, FloatPass );
-		DECLARE_VECTOR( Castor3D::StaticTextureSPtr, StaticTexture );
+		DECLARE_VECTOR( Castor3D::TextureLayoutSPtr, Texture );
 		typedef std::shared_ptr< std::thread > ThreadSPtr;
 
 	public:
@@ -60,7 +60,7 @@ namespace Obj
 	private:
 		Castor::ImageManager & m_collImages;
 		Castor3D::MaterialPtrArray m_arrayLoadedMaterials;
-		StaticTextureArray m_arrayTextures;
+		TextureArray m_arrayTextures;
 		Castor::TextFile * m_pFile;
 		FloatPassMap m_mapOffsets;
 		FloatPassMap m_mapScales;

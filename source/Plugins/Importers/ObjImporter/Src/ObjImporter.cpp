@@ -22,7 +22,6 @@
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Texture/StaticTexture.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -114,7 +113,7 @@ namespace Obj
 
 			if ( l_texture )
 			{
-				m_arrayTextures.push_back(std::static_pointer_cast< StaticTexture >( l_texture->GetTexture() ) );
+				m_arrayTextures.push_back( l_texture->GetTexture() );
 			}
 		}
 	}

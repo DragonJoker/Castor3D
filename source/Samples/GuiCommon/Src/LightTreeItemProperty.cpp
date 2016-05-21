@@ -2,6 +2,7 @@
 
 #include <Engine.hpp>
 #include <Event/Frame/FunctorEvent.hpp>
+#include <Scene/Scene.hpp>
 #include <Scene/Light/DirectionalLight.hpp>
 #include <Scene/Light/SpotLight.hpp>
 #include <Scene/Light/Light.hpp>

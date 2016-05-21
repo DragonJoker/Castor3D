@@ -15,11 +15,12 @@ the program; if not, write to the Free Software Foundation, Inc., 59 Temple
 Place - Suite 330, Boston, MA 02111-1307, USA, or go to
 http://www.gnu.org/copyleft/lesser.txt.
 */
-#ifndef __COMC3D_COM_TEXTURE_BASE_H__
-#define __COMC3D_COM_TEXTURE_BASE_H__
+#ifndef __COMC3D_COM_TEXTURE_LAYOUT_H__
+#define __COMC3D_COM_TEXTURE_LAYOUT_H__
 
 #include "ComSampler.hpp"
 #include "ComPixelBuffer.hpp"
+#include "ComTextureImage.hpp"
 
 #include <Texture/TextureLayout.hpp>
 
@@ -30,12 +31,12 @@ namespace CastorCom
 	\version	0.7.0
 	\date		10/09/2014
 	\~english
-	\brief		This class defines a CTexture object accessible from COM.
+	\brief		This class defines a CTextureLayout object accessible from COM.
 	\~french
-	\brief		Cette classe définit un CTexture accessible depuis COM.
+	\brief		Cette classe définit un CTextureLayout accessible depuis COM.
 	*/
-	class ATL_NO_VTABLE CTexture
-		:	COM_ATL_OBJECT( Texture )
+	class ATL_NO_VTABLE CTextureLayout
+		:	COM_ATL_OBJECT( TextureLayout )
 	{
 	public:
 		/**
@@ -44,41 +45,40 @@ namespace CastorCom
 		 *\~french
 		 *\brief		Constructeur par défaut.
 		 */
-		CTexture();
+		CTextureLayout();
 		/**
 		 *\~english
 		 *\brief		Destructor.
 		 *\~french
 		 *\brief		Destructeur.
 		 */
-		virtual ~CTexture();
+		virtual ~CTextureLayout();
 
-		inline Castor3D::TextureSPtr GetInternal()const
+		inline Castor3D::TextureLayoutSPtr GetInternal()const
 		{
 			return m_internal;
 		}
 
-		inline void SetInternal( Castor3D::TextureSPtr state )
+		inline void SetInternal( Castor3D::TextureLayoutSPtr state )
 		{
 			m_internal = state;
 		}
 
-		COM_PROPERTY( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::Texture::GetType ), make_putter( m_internal.get(), &Castor3D::Texture::SetType ) );
-		COM_PROPERTY( MappingMode, eTEXTURE_MAP_MODE, make_getter( m_internal.get(), &Castor3D::Texture::GetMappingMode ), make_putter( m_internal.get(), &Castor3D::Texture::SetMappingMode ) );
-		COM_PROPERTY( Buffer, IPixelBuffer *, make_getter( m_internal.get(), &Castor3D::Texture::GetBuffer ), make_putter( m_internal.get(), &Castor3D::Texture::SetImage ) );
+		COM_PROPERTY_INDEXED_GET( Image, unsigned int, ITextureImage *, make_indexed_getter( m_internal.get(), &Castor3D::TextureLayout::GetImage ) );
 
-		COM_PROPERTY_GET( BaseType, eTEXTURE_BASE_TYPE, make_getter( m_internal.get(), &Castor3D::Texture::GetBaseType ) );
+		COM_PROPERTY_GET( Type, eTEXTURE_TYPE, make_getter( m_internal.get(), &Castor3D::TextureLayout::GetType ) );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
+
 	private:
-		Castor3D::TextureSPtr m_internal;
+		Castor3D::TextureLayoutSPtr m_internal;
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object	\~french Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet
-	OBJECT_ENTRY_AUTO( __uuidof( Texture ), CTexture );
+	OBJECT_ENTRY_AUTO( __uuidof( TextureLayout ), CTextureLayout );
 
-	DECLARE_VARIABLE_PTR_GETTER( Texture, Castor3D, Texture );
-	DECLARE_VARIABLE_PTR_PUTTER( Texture, Castor3D, Texture );
+	DECLARE_VARIABLE_PTR_GETTER( TextureLayout, Castor3D, TextureLayout );
+	DECLARE_VARIABLE_PTR_PUTTER( TextureLayout, Castor3D, TextureLayout );
 }
 
 #endif

@@ -19,7 +19,6 @@ function( InteropBuild )
 			find_package( PythonLibs )
 
 			if ( PYTHONLIBS_FOUND )
-			#set( Boost_USE_STATIC_LIBS ON )
 				find_package( Boost OPTIONAL_COMPONENTS python )
 
 				if ( Boost_PYTHON_FOUND )

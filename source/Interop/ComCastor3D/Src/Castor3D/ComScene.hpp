@@ -85,7 +85,7 @@ namespace CastorCom
 		STDMETHOD( RemoveNode )( /* [in] */ ISceneNode * node );
 		STDMETHOD( RemoveGeometry )( /* [in] */ IGeometry * geometry );
 		STDMETHOD( RemoveCamera )( /* [in] */ ICamera * camera );
-		STDMETHOD( GetBackgroundImage )( /* [out, retval] */ ITexture ** pVal );
+		STDMETHOD( GetBackgroundImage )( /* [out, retval] */ ITextureLayout ** pVal );
 
 	private:
 		Castor3D::SceneSPtr m_internal;

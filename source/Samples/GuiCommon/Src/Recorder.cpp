@@ -28,6 +28,8 @@ extern "C"
 #	endif
 #endif
 
+#include <PixelBufferBase.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 

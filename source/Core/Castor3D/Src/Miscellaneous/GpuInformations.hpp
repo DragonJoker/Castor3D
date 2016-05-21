@@ -22,6 +22,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <OwnedBy.hpp>
 
+#if defined( min )
+#	undef min
+#	undef max
+#	undef abs
+#endif
+
 namespace Castor3D
 {
 	/*!

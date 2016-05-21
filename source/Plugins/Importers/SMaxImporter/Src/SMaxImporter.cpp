@@ -20,7 +20,6 @@
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Texture/StaticTexture.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 

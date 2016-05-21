@@ -6,6 +6,8 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderTarget.hpp"
 
+#include <Image.hpp>
+
 using namespace Castor;
 namespace Castor3D
 {

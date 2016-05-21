@@ -22,7 +22,6 @@
 #include <Miscellaneous/Version.hpp>
 #include <Plugin/Plugin.hpp>
 #include <Render/RenderSystem.hpp>
-#include <Texture/StaticTexture.hpp>
 #include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
@@ -883,7 +882,7 @@ namespace Lwo
 		UI4 l_uiVx;
 		eTEX_CHANNEL l_eChannel = eTEX_CHANNEL_COLR;
 		bool l_continue = true;
-		TextureUnitSPtr l_pTexture;
+		TextureUnitSPtr l_unit;
 		ImageVxMap::iterator l_it;
 		p_pSubchunk->m_usRead += DoReadBlockHeader( &l_blockHeader, l_eChannel );
 
@@ -921,17 +920,16 @@ namespace Lwo
 					{
 						StringStream l_strLog( cuT( "			Texture found: " ) );
 						Logger::LogDebug( l_strLog << l_it->second->GetPath().c_str() );
-						l_pTexture = std::make_shared< TextureUnit >( *p_pPass->GetEngine() );
-						StaticTextureSPtr l_pStaTexture = GetEngine()->GetRenderSystem()->CreateStaticTexture();
-						l_pStaTexture->SetType( eTEXTURE_TYPE_2D );
-						l_pStaTexture->SetImage( l_it->second->GetPixels() );
-						l_pTexture->SetTexture( l_pStaTexture );
-						DoSetChannel( l_pTexture, l_eChannel );
-						p_pPass->AddTextureUnit( l_pTexture );
+						l_unit = std::make_shared< TextureUnit >( *p_pPass->GetEngine() );
+						auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
+						l_texture->GetImage().SetSource( l_it->second->GetPixels() );
+						l_unit->SetTexture( l_texture );
+						DoSetChannel( l_unit, l_eChannel );
+						p_pPass->AddTextureUnit( l_unit );
 					}
 					else
 					{
-						l_pTexture.reset();
+						l_unit.reset();
 					}
 
 					break;
@@ -940,7 +938,7 @@ namespace Lwo
 					l_currentSubchunk.m_usRead += UI2( m_pFile->Read( l_eChannel ) );
 					SwitchEndianness( l_eChannel );
 					Logger::LogDebug( StringStream() << cuT( "			Channel: " ) << l_eChannel );
-					DoSetChannel( l_pTexture, l_eChannel );
+					DoSetChannel( l_unit, l_eChannel );
 					break;
 
 				case eID_TAG_BLOK_PROJ:

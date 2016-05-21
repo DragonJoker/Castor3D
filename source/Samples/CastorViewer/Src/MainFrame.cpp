@@ -10,13 +10,7 @@
 #include <wx/mstream.h>
 #include <wx/renderer.h>
 
-#include <ImagesLoader.hpp>
-#include <MaterialsList.hpp>
-#include <RendererSelector.hpp>
-#include <SplashScreen.hpp>
-#include <AuiDockArt.hpp>
-#include <AuiTabArt.hpp>
-#include <AuiToolBarArt.hpp>
+#include <PixelBufferBase.hpp>
 
 #include <MaterialManager.hpp>
 #include <SceneManager.hpp>
@@ -37,6 +31,14 @@
 #include <Scene/SceneFileParser.hpp>
 #include <Texture/Sampler.hpp>
 #include <Texture/TextureUnit.hpp>
+
+#include <ImagesLoader.hpp>
+#include <MaterialsList.hpp>
+#include <RendererSelector.hpp>
+#include <SplashScreen.hpp>
+#include <AuiDockArt.hpp>
+#include <AuiTabArt.hpp>
+#include <AuiToolBarArt.hpp>
 
 #include <xpms/castor.xpm>
 #include <xpms/print_screen.xpm>

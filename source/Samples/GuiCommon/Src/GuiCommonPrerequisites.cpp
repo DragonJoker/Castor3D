@@ -21,6 +21,7 @@
 #include <Event/Frame/InitialiseEvent.hpp>
 #include <Miscellaneous/PlatformWindowHandle.hpp>
 #include <Scene/SceneFileParser.hpp>
+#include <Texture/TextureLayout.hpp>
 #include <Texture/TextureUnit.hpp>
 
 #include <PixelBufferBase.hpp>

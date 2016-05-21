@@ -21,7 +21,6 @@
 #include <Render/Viewport.hpp>
 #include <Scene/Camera.hpp>
 #include <Scene/Geometry.hpp>
-#include <Texture/StaticTexture.hpp>
 #include <Texture/TextureUnit.hpp>
 #include <Manager/ManagerView.hpp>
 
