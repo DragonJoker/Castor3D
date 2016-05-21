@@ -14,11 +14,7 @@ namespace Castor
 
 	LoggerImpl::LoggerImpl()
 	{
-#if defined( NDEBUG )
-		m_console = std::make_unique< DefaultConsole >();
-#else
-		m_console = std::make_unique< DebugConsole >();
-#endif
+		m_console = std::make_unique< ProgramConsole >();
 	}
 
 	LoggerImpl::~LoggerImpl()

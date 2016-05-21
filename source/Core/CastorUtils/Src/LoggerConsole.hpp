@@ -33,45 +33,41 @@ namespace Castor
 	\~french
 	\brief		Classe d'informations de console, dépendante de la plateforme.
 	*/
-	class IConsole
+	class ConsoleImpl
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
-		IConsole()
-		{
-		}
+		ConsoleImpl() = default;
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		virtual ~IConsole()
-		{
-		}
+		virtual ~ConsoleImpl() = default;
 		/**
 		 *\~english
-		 *\brief		Configures console for the given log type
-		 *\param[in]	p_logLevel	The log level
+		 *\brief		Configures console for the given log type.
+		 *\param[in]	p_logLevel	The log level.
 		 *\~french
-		 *\brief		Configure la console pour le niveau de log demandé
-		 *\param[in]	p_logLevel	Le niveau de log
+		 *\brief		Configure la console pour le niveau de log demandé.
+		 *\param[in]	p_logLevel	Le niveau de log.
 		 */
 		virtual void BeginLog( ELogType p_logLevel ) = 0;
 		/**
 		 *\~english
-		 *\brief		Prints a text in the console, adds the line end character if asked
-		 *\param[in]	p_toLog		The text to log
-		 *\param[in]	p_newLine	Tells if the line end character must be added
+		 *\brief		Prints a text in the console, adds the line end character if asked.
+		 *\param[in]	p_toLog		The text to log.
+		 *\param[in]	p_newLine	Tells if the line end character must be added.
 		 *\~french
-		 *\brief		Affiche un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_toLog		Le texte à logger
-		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté
+		 *\brief		Affiche un texte dans la console, ajoute le caractère de fin de ligne si demandé.
+		 *\param[in]	p_toLog		Le texte à logger.
+		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté.
 		 */
 		virtual void Print( String const & p_toLog, bool p_newLine ) = 0;
 	};
@@ -80,151 +76,52 @@ namespace Castor
 	\version	0.6.1.0
 	\date		19/10/2011
 	\~english
-	\brief		Console base class
+	\brief		Console base class.
 	\~french
-	\brief		Classe de base d'une console
+	\brief		Classe de base d'une console.
 	*/
 	class ProgramConsole
 	{
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 */
-		ProgramConsole()
-		{
-		}
+		ProgramConsole();
 		/**
 		 *\~english
-		 *\brief		Destructor
+		 *\brief		Destructor.
 		 *\~french
-		 *\brief		Destructeur
+		 *\brief		Destructeur.
 		 */
-		virtual ~ProgramConsole()
-		{
-		}
+		~ProgramConsole();
 		/**
 		 *\~english
-		 *\brief		Configures console for the given log type
-		 *\param[in]	p_logLevel	The log level
+		 *\brief		Configures console for the given log type.
+		 *\param[in]	p_logLevel	The log level.
 		 *\~french
-		 *\brief		Configure la console pour le niveau de log demandé
-		 *\param[in]	p_logLevel	Le niveau de log
+		 *\brief		Configure la console pour le niveau de log demandé.
+		 *\param[in]	p_logLevel	Le niveau de log.
 		 */
-		virtual void BeginLog( ELogType p_logLevel ) = 0;
+		void BeginLog( ELogType p_logLevel );
 		/**
 		 *\~english
-		 *\brief		Prints a text in the console, adds the line end character if asked
-		 *\param[in]	p_toLog		The text to log
-		 *\param[in]	p_newLine	Tells if the line end character must be added
+		 *\brief		Prints a text in the console, adds the line end character if asked.
+		 *\param[in]	p_toLog		The text to log.
+		 *\param[in]	p_newLine	Tells if the line end character must be added.
 		 *\~french
-		 *\brief		Affiche un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_toLog		Le texte à logger
-		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté
+		 *\brief		Affiche un texte dans la console, ajoute le caractère de fin de ligne si demandé.
+		 *\param[in]	p_toLog		Le texte à logger.
+		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté.
 		 */
-		virtual void Print( String const & p_toLog, bool p_newLine ) = 0;
+		void Print( String const & p_toLog, bool p_newLine );
 
 	protected:
-		//! The console
-		std::unique_ptr< IConsole > m_console;
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Traditional consol class
-	\~french
-	\brief		Classe de console traditionnelle
-	*/
-	class DefaultConsole
-		: public ProgramConsole
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		DefaultConsole();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~DefaultConsole();
-		/**
-		 *\~english
-		 *\brief		Configures console for the given log type
-		 *\param[in]	p_logLevel	The log level
-		 *\~french
-		 *\brief		Configure la console pour le niveau de log demandé
-		 *\param[in]	p_logLevel	Le niveau de log
-		 */
-		virtual void BeginLog( ELogType p_logLevel );
-		/**
-		 *\~english
-		 *\brief		Prints a text in the console, adds the line end character if asked
-		 *\param[in]	p_toLog		The text to log
-		 *\param[in]	p_newLine	Tells if the line end character must be added
-		 *\~french
-		 *\brief		Affiche un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_toLog		Le texte à logger
-		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté
-		 */
-		virtual void Print( String const & p_toLog, bool p_newLine );
-	};
-	/*!
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		19/10/2011
-	\~english
-	\brief		Debug console class, adds colours when possible
-	\~french
-	\brief		Classe de console de débogage, ajoutant des couleurs si possible
-	*/
-	class DebugConsole
-		: public ProgramConsole
-	{
-	public:
-		/**
-		 *\~english
-		 *\brief		Constructor
-		 *\~french
-		 *\brief		Constructeur
-		 */
-		DebugConsole();
-		/**
-		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		virtual ~DebugConsole();
-		/**
-		 *\~english
-		 *\brief		Configures console for the given log type
-		 *\param[in]	p_logLevel	The log level
-		 *\~french
-		 *\brief		Configure la console pour le niveau de log demandé
-		 *\param[in]	p_logLevel	Le niveau de log
-		 */
-		virtual void BeginLog( ELogType p_logLevel );
-		/**
-		 *\~english
-		 *\brief		Prints a text in the console, adds the line end character if asked
-		 *\param[in]	p_toLog		The text to log
-		 *\param[in]	p_newLine	Tells if the line end character must be added
-		 *\~french
-		 *\brief		Affiche un texte dans la console, ajoute le caractère de fin de ligne si demandé
-		 *\param[in]	p_toLog		Le texte à logger
-		 *\param[in]	p_newLine	Dit si le caractère de fin de ligne doit être ajouté
-		 */
-		virtual void Print( String const & p_toLog, bool p_newLine );
+		//!\~english	The platform specific console.
+		//!\~french		La console spécifique à la plateforme.
+		std::unique_ptr< ConsoleImpl > m_console;
 	};
 }
 

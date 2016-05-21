@@ -3,6 +3,7 @@
 
 #if defined( _WIN32 )
 #	include <Windows.h>
+#	include <codecvt>
 #else
 #	include <X11/Xlib.h>
 #endif
@@ -70,19 +71,21 @@ namespace Castor
 
 		Castor::String GetLastErrorText()
 		{
-			DWORD l_dwError = GetLastError();
+			DWORD l_dwError = ::GetLastError();
 			String l_strReturn = string::to_string( l_dwError );;
 
 			if ( l_dwError != ERROR_SUCCESS )
 			{
-				LPTSTR l_szError = nullptr;
+				LPWSTR l_szError = nullptr;
 
-				if ( ::FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, l_dwError, 0, LPTSTR( &l_szError ), 0, nullptr ) != 0 )
+				if ( ::FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, nullptr, l_dwError, 0, LPWSTR( &l_szError ), 0, nullptr ) != 0 )
 				{
-					l_strReturn += cuT( " (" ) + String( l_szError ) + cuT( ")" );
+					std::wstring_convert< std::codecvt_utf8_utf16< wchar_t >, wchar_t > l_conversion;
+					String l_converted = l_conversion.to_bytes( l_szError );
+					l_strReturn += cuT( " (" ) + l_converted + cuT( ")" );
 					string::replace( l_strReturn, cuT( "\r" ), cuT( "" ) );
 					string::replace( l_strReturn, cuT( "\n" ), cuT( "" ) );
-					LocalFree( l_szError );
+					::LocalFree( l_szError );
 				}
 				else
 				{

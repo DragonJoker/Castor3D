@@ -93,12 +93,6 @@ namespace Castor
 			return 0;
 		}
 
-		virtual void print( string_type const & p_text )
-		{
-			m_old->sputn( p_text.c_str(), p_text.size() );
-			m_old->sputc( CharType{ '\n' } );
-		}
-
 	private:
 		string_type m_buffer;
 		ostream_type & m_stream;
@@ -263,7 +257,6 @@ namespace Castor
 	void Logger::LogDebug( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_DEBUG, p_msg );
-		static_cast< LogStreambuf< char, DebugLogStreambufTraits< char > > * >( GetSingleton().m_clog )->print( p_msg );
 	}
 
 	void Logger::LogDebug( std::ostream const & p_msg )
@@ -277,7 +270,6 @@ namespace Castor
 	void Logger::LogDebug( std::wstring const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_DEBUG, p_msg );
-		static_cast< LogStreambuf< wchar_t, DebugLogStreambufTraits< wchar_t > > * >( GetSingleton().m_wclog )->print( p_msg );
 	}
 
 	void Logger::LogDebug( std::wostream const & p_msg )
@@ -290,7 +282,6 @@ namespace Castor
 	void Logger::LogInfo( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_INFO, p_msg );
-		static_cast< LogStreambuf< char, InfoLogStreambufTraits< char > > * >( GetSingleton().m_cout )->print( p_msg );
 	}
 
 	void Logger::LogInfo( std::ostream const & p_msg )
@@ -303,7 +294,6 @@ namespace Castor
 	void Logger::LogInfo( std::wstring const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_INFO, p_msg );
-		static_cast< LogStreambuf< wchar_t, InfoLogStreambufTraits< wchar_t > > * >( GetSingleton().m_wcout )->print( p_msg );
 	}
 
 	void Logger::LogInfo( std::wostream const & p_msg )
@@ -316,7 +306,6 @@ namespace Castor
 	void Logger::LogWarning( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_WARNING, p_msg );
-		static_cast< LogStreambuf< char, InfoLogStreambufTraits< char > > * >( GetSingleton().m_cout )->print( p_msg );
 	}
 
 	void Logger::LogWarning( std::ostream const & p_msg )
@@ -329,7 +318,6 @@ namespace Castor
 	void Logger::LogWarning( std::wstring const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_WARNING, p_msg );
-		static_cast< LogStreambuf< wchar_t, InfoLogStreambufTraits< wchar_t > > * >( GetSingleton().m_wcout )->print( p_msg );
 	}
 
 	void Logger::LogWarning( std::wostream const & p_msg )
@@ -342,7 +330,6 @@ namespace Castor
 	void Logger::LogError( std::string const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_ERROR, p_msg );
-		static_cast< LogStreambuf< char, ErrorLogStreambufTraits< char > > * >( GetSingleton().m_cerr )->print( p_msg );
 	}
 
 	void Logger::LogError( std::ostream const & p_msg )
@@ -355,7 +342,6 @@ namespace Castor
 	void Logger::LogError( std::wstring const & p_msg )
 	{
 		GetSingleton().DoPushMessage( ELogType_ERROR, p_msg );
-		static_cast< LogStreambuf< wchar_t, ErrorLogStreambufTraits< wchar_t > > * >( GetSingleton().m_wcerr )->print( p_msg );
 	}
 
 	void Logger::LogError( std::wostream const & p_msg )
