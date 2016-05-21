@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "GlObject.hpp"
 #include "GlProgramInputLayout.hpp"
 
-#include <ShaderProgram.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 namespace GlRender
 {

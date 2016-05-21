@@ -19,7 +19,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #define ___CI_CASTOR_GUI_PREREQUISITES_H___
 
 #include <Castor3DPrerequisites.hpp>
-#include <GenericPlugin.hpp>
+#include <Plugin/GenericPlugin.hpp>
 
 #include <Colour.hpp>
 
@@ -280,7 +280,7 @@ namespace CastorGui
 	 *\param[in]	p_texture	The material texture.
 	 *\return		The created material.
 	*/
-	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor3D::TextureSPtr p_texture );
+	Castor3D::MaterialSPtr CreateMaterial( Castor3D::Engine * p_engine, Castor::String const & p_name, Castor3D::TextureLayoutSPtr p_texture );
 }
 
 #endif

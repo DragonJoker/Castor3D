@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <RasteriserState.hpp>
+#include <State/RasteriserState.hpp>
 
 namespace GlRender
 {

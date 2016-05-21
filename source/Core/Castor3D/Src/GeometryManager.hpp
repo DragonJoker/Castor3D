@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_GEOMETRY_MANAGER_H___
 #define ___C3D_GEOMETRY_MANAGER_H___
 
-#include "ObjectManager.hpp"
+#include "Manager/ObjectManager.hpp"
 
-#include "FunctorEvent.hpp"
-#include "Geometry.hpp"
+#include "Event/Frame/FunctorEvent.hpp"
+#include "Scene/Geometry.hpp"
 
 namespace Castor3D
 {

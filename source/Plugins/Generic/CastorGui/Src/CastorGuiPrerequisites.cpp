@@ -1,14 +1,15 @@
 #include "CastorGuiPrerequisites.hpp"
 
-#include <BorderPanelOverlay.hpp>
 #include <Engine.hpp>
-#include <InitialiseEvent.hpp>
 #include <MaterialManager.hpp>
-#include <Overlay.hpp>
-#include <PanelOverlay.hpp>
-#include <Pass.hpp>
-#include <TextOverlay.hpp>
-#include <TextureUnit.hpp>
+
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/Overlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <Font.hpp>
 
@@ -37,7 +38,7 @@ namespace CastorGui
 		return l_return;
 	}
 
-	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureSPtr p_texture )
+	MaterialSPtr CreateMaterial( Engine * p_engine, String const & p_name, TextureLayoutSPtr p_texture )
 	{
 		MaterialManager & l_manager = p_engine->GetMaterialManager();
 		MaterialSPtr l_return;

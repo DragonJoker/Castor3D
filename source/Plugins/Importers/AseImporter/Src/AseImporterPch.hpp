@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.htm)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -23,25 +23,28 @@ http://www.gnu.org/copyleft/lesser.txt.
 #if CASTOR_USE_PCH
 #	include <Castor3DPrerequisites.hpp>
 
-#	include <RenderSystem.hpp>
-#	include <Buffer.hpp>
-#	include <SceneNode.hpp>
-#	include <Scene.hpp>
-#	include <Camera.hpp>
-#	include <Viewport.hpp>
-#	include <Material.hpp>
-#	include <Pass.hpp>
-#	include <TextureUnit.hpp>
-#	include <Version.hpp>
-#	include <Geometry.hpp>
-#	include <Mesh.hpp>
 #	include <Engine.hpp>
-#	include <Submesh.hpp>
-#	include <Texture.hpp>
-#	include <Plugin.hpp>
-#	include <Face.hpp>
-#	include <Vertex.hpp>
-#	include <ImporterPlugin.hpp>
+#	include <MaterialManager.hpp>
+#	include <MeshManager.hpp>
+#	include <SceneManager.hpp>
+#	include <SceneNodeManager.hpp>
+
+#	include <Manager/ManagerView.hpp>
+#	include <Material/Pass.hpp>
+#	include <Mesh/Submesh.hpp>
+#	include <Mesh/Face.hpp>
+#	include <Mesh/Vertex.hpp>
+#	include <Mesh/Buffer/Buffer.hpp>
+#	include <Miscellaneous/Version.hpp>
+#	include <Plugin/Plugin.hpp>
+#	include <Plugin/ImporterPlugin.hpp>
+#	include <Render/RenderSystem.hpp>
+#	include <Render/Viewport.hpp>
+#	include <Scene/Camera.hpp>
+#	include <Scene/Geometry.hpp>
+#	include <Texture/StaticTexture.hpp>
+#	include <Texture/TextureUnit.hpp>
+#	include <Manager/ManagerView.hpp>
 #endif
 
 #endif

@@ -2,11 +2,12 @@
 
 #include "ControlsManager.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <Overlay.hpp>
 #include <OverlayManager.hpp>
-#include <PanelOverlay.hpp>
-#include <TextOverlay.hpp>
+
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <Font.hpp>
 

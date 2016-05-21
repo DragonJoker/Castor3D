@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComRenderTarget.hpp"
 
-#include <RenderWindow.hpp>
+#include <Render/RenderWindow.hpp>
 
 namespace CastorCom
 {

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___LWO_IMPORTER_PREREQUISITES_H___
 #define ___LWO_IMPORTER_PREREQUISITES_H___
 
-#include <Importer.hpp>
+#include <Mesh/Importer.hpp>
 
 #ifndef _WIN32
 #	define C3D_Lwo_API

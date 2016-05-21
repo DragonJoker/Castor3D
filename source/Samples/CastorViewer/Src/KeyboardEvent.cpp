@@ -3,7 +3,7 @@
 #include "CastorViewer.hpp"
 #include "MainFrame.hpp"
 
-#include <RenderWindow.hpp>
+#include <Render/RenderWindow.hpp>
 #include <Logger.hpp>
 
 using namespace Castor3D;

@@ -8,6 +8,8 @@
 
 #include <GlslWriter.hpp>
 
+#include <iomanip>
+
 using namespace Castor3D;
 using namespace Castor;
 
@@ -1050,87 +1052,105 @@ namespace GlRender
 		if ( id != 131185 )
 		{
 			bool l_error = false;
-			String l_toLog = cuT( "OpenGl Debug - " );
+			StringStream l_toLog;
+			l_toLog << cuT( "OpenGl Debug\n  Source: " );
 
 			switch ( source )
 			{
 			case eGL_DEBUG_SOURCE_API:
-				l_toLog += cuT( "Source:OpenGL\t" );
+				l_toLog << cuT( "OpenGL" );
 				break;
 
 			case eGL_DEBUG_SOURCE_WINDOW_SYSTEM:
-				l_toLog += cuT( "Source:Windows\t" );
+				l_toLog << cuT( "Window System" );
 				break;
 
 			case eGL_DEBUG_SOURCE_SHADER_COMPILER:
-				l_toLog += cuT( "Source:Shader compiler\t" );
+				l_toLog << cuT( "Shader compiler" );
 				break;
 
 			case eGL_DEBUG_SOURCE_THIRD_PARTY:
-				l_toLog += cuT( "Source:Third party\t" );
+				l_toLog << cuT( "Third party" );
 				break;
 
 			case eGL_DEBUG_SOURCE_APPLICATION:
-				l_toLog += cuT( "Source:Application\t" );
+				l_toLog << cuT( "Application" );
 				break;
 
 			case eGL_DEBUG_SOURCE_OTHER:
-				l_toLog += cuT( "Source:Other\t" );
+				l_toLog << cuT( "Other" );
+				break;
+
+			default:
+				l_toLog << cuT( "Undefined" );
 				break;
 			}
+
+			l_toLog << cuT( "\n  Type: " );
 
 			switch ( type )
 			{
 			case eGL_DEBUG_TYPE_ERROR:
-				l_toLog += cuT( "Type:Error\t" );
+				l_toLog << cuT( "Error" );
 				break;
 
 			case eGL_DEBUG_TYPE_DEPRECATED_BEHAVIOR:
-				l_toLog += cuT( "Type:Deprecated behavior\t" );
+				l_toLog << cuT( "Deprecated behavior" );
 				break;
 
 			case eGL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:
-				l_toLog += cuT( "Type:Undefined behavior\t" );
+				l_toLog << cuT( "Undefined behavior" );
 				break;
 
 			case eGL_DEBUG_TYPE_PORTABILITY:
-				l_toLog += cuT( "Type:Portability\t" );
+				l_toLog << cuT( "Portability" );
 				break;
 
 			case eGL_DEBUG_TYPE_PERFORMANCE:
-				l_toLog += cuT( "Type:Performance\t" );
+				l_toLog << cuT( "Performance" );
 				break;
 
 			case eGL_DEBUG_TYPE_OTHER:
-				l_toLog += cuT( "Type:Other\t" );
+				l_toLog << cuT( "Other" );
+				break;
+
+			default:
+				l_toLog << cuT( "Undefined" );
 				break;
 			}
 
-			l_toLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
+			l_toLog << cuT( "\n  ID: " ) + string::to_string( id ) + cuT( "\n  Severity: " );
 
 			switch ( severity )
 			{
 			case eGL_DEBUG_SEVERITY_HIGH:
 				l_error = true;
-				l_toLog += cuT( "Severity:High\t" );
+				l_toLog << cuT( "High" );
 				break;
 
 			case eGL_DEBUG_SEVERITY_MEDIUM:
-				l_toLog += cuT( "Severity:Medium\t" );
+				l_toLog << cuT( "Medium" );
 				break;
 
 			case eGL_DEBUG_SEVERITY_LOW:
-				l_toLog += cuT( "Severity:Low\t" );
+				l_toLog << cuT( "Low" );
+				break;
+
+			default:
+				l_toLog << cuT( "Undefined" );
 				break;
 			}
 
+			l_toLog << cuT( "\n  Message: " ) << string::string_cast< xchar >( message );
+			l_toLog << cuT( "\n  " ) << Debug::Backtrace{};
+
 			if ( l_error )
 			{
-				Logger::LogError( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+				Logger::LogError( l_toLog );
 			}
 			else
 			{
-				Logger::LogWarning( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+				Logger::LogWarning( l_toLog );
 			}
 		}
 	}
@@ -1138,68 +1158,80 @@ namespace GlRender
 	void OpenGl::DebugLogAMD( uint32_t id, eGL_DEBUG_CATEGORY category, eGL_DEBUG_SEVERITY severity, int CU_PARAM_UNUSED( length ), const char * message )const
 	{
 		bool l_error = false;
-		String l_toLog = cuT( "OpenGl Debug - " );
+		StringStream l_toLog;
+		l_toLog << cuT( "OpenGl Debug\n  Category: " );
 
 		switch ( category )
 		{
 		case eGL_DEBUG_CATEGORY_API_ERROR:
-			l_toLog += cuT( "Category:OpenGL\t" );
+			l_toLog << cuT( "OpenGL" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_WINDOW_SYSTEM:
-			l_toLog += cuT( "Category:Windows\t" );
+			l_toLog << cuT( "Windows" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_DEPRECATION:
-			l_toLog += cuT( "Category:Deprecated behavior\t" );
+			l_toLog << cuT( "Deprecated behavior" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_UNDEFINED_BEHAVIOR:
-			l_toLog += cuT( "Category:Undefined behavior\t" );
+			l_toLog << cuT( "Undefined behavior" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_PERFORMANCE:
-			l_toLog += cuT( "Category:Performance\t" );
+			l_toLog << cuT( "Performance" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_SHADER_COMPILER:
-			l_toLog += cuT( "Category:Shader compiler\t" );
+			l_toLog << cuT( "Shader compiler" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_APPLICATION:
-			l_toLog += cuT( "Category:Application\t" );
+			l_toLog << cuT( "Application" );
 			break;
 
 		case eGL_DEBUG_CATEGORY_OTHER:
-			l_toLog += cuT( "Category:Other\t" );
+			l_toLog << cuT( "Other" );
+			break;
+
+		default:
+			l_toLog << cuT( "Undefined" );
 			break;
 		}
 
-		l_toLog += cuT( "ID:" ) + string::to_string( id ) + cuT( "\t" );
+		l_toLog << cuT( "\n  ID: " ) << string::to_string( id ) << cuT( "\n  Severity: " );
 
 		switch ( severity )
 		{
 		case eGL_DEBUG_SEVERITY_HIGH:
 			l_error = true;
-			l_toLog += cuT( "Severity:High\t" );
+			l_toLog << cuT( "High" );
 			break;
 
 		case eGL_DEBUG_SEVERITY_MEDIUM:
-			l_toLog += cuT( "Severity:Medium\t" );
+			l_toLog << cuT( "Medium" );
 			break;
 
 		case eGL_DEBUG_SEVERITY_LOW:
-			l_toLog += cuT( "Severity:Low\t" );
+			l_toLog << cuT( "Low" );
+			break;
+
+		default:
+			l_toLog << cuT( "Undefined" );
 			break;
 		}
 
+		l_toLog << cuT( "\n  Message: " ) << string::string_cast< xchar >( message );
+		l_toLog << cuT( "\n  " ) << Debug::Backtrace{};
+
 		if ( l_error )
 		{
-			Logger::LogError( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+			Logger::LogError( l_toLog );
 		}
 		else
 		{
-			Logger::LogWarning( l_toLog + cuT( "Message:" ) + string::string_cast< xchar >( message ) );
+			Logger::LogWarning( l_toLog );
 		}
 	}
 

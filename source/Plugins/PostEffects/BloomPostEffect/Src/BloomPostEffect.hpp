@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_SsaoPostEffect___
 #define ___C3D_SsaoPostEffect___
 
-#include <BufferDeclaration.hpp>
-#include <PostEffect.hpp>
-#include <TextureUnit.hpp>
-#include <Viewport.hpp>
+#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Miscellaneous/PostEffect.hpp>
+#include <Texture/TextureUnit.hpp>
+#include <Render/Viewport.hpp>
 
 #ifndef _WIN32
 #	define C3D_Bloom_API
@@ -70,7 +70,7 @@ namespace Bloom
 		void DoCombine();
 		Castor3D::SamplerSPtr DoCreateSampler( bool p_linear );
 
-		Castor3D::DynamicTextureSPtr m_colourTexture;
+		Castor3D::TextureLayoutSPtr m_colourTexture;
 		Castor3D::SamplerSPtr m_linearSampler;
 		Castor3D::SamplerSPtr m_nearestSampler;
 

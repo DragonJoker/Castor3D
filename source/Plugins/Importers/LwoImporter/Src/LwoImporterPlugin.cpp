@@ -1,7 +1,7 @@
 #include "LwoImporter.hpp"
 
-#include <ImporterPlugin.hpp>
-#include <Version.hpp>
+#include <Plugin/ImporterPlugin.hpp>
+#include <Miscellaneous/Version.hpp>
 
 C3D_Lwo_API void GetRequiredVersion( Castor3D::Version & p_version )
 {

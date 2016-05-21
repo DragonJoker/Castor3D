@@ -1,11 +1,14 @@
 #include "LightManager.hpp"
 
-#include "DynamicTexture.hpp"
-#include "FrameVariableBuffer.hpp"
-#include "RenderSystem.hpp"
 #include "SceneManager.hpp"
-#include "ShaderProgram.hpp"
-#include "TextureUnit.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
+#include "Render/RenderSystem.hpp"
+#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/ShaderProgram.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureUnit.hpp"
+#include "Texture/TextureLayout.hpp"
+#include "Texture/TextureImage.hpp"
 
 using namespace Castor;
 
@@ -14,14 +17,11 @@ namespace Castor3D
 	const String ManagedObjectNamer< Light >::Name = cuT( "Light" );
 
 	LightManager::LightManager( Scene & p_owner, SceneNodeSPtr p_rootNode, SceneNodeSPtr p_rootCameraNode, SceneNodeSPtr p_rootObjectNode )
-		: ObjectManager< Castor::String, Light >( p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode )
-		, m_lightFactory( GetEngine()->GetSceneManager().GetFactory() )
-		, m_lightsTexture( std::make_shared< TextureUnit >( *GetEngine() ) )
+		: ObjectManager< Castor::String, Light >{ p_owner, p_rootNode, p_rootCameraNode, p_rootObjectNode }
+		, m_lightsTexture{ std::make_shared< TextureUnit >( *GetEngine() ) }
 	{
-		m_lightsData = PxBufferBase::create( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
-		DynamicTextureSPtr l_texture = GetEngine()->GetRenderSystem()->CreateDynamicTexture( eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
-		l_texture->SetType( eTEXTURE_TYPE_BUFFER );
-		l_texture->SetImage( m_lightsData );
+		auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_BUFFER, eACCESS_TYPE_WRITE, eACCESS_TYPE_READ );
+		l_texture->GetImage().SetSource( Size( 1000, 1 ), ePIXEL_FORMAT_ARGB32F );
 		SamplerSPtr l_sampler = GetEngine()->GetLightsSampler();
 		m_lightsTexture->SetAutoMipmaps( false );
 		m_lightsTexture->SetSampler( l_sampler );
@@ -31,7 +31,6 @@ namespace Castor3D
 
 	LightManager::~LightManager()
 	{
-		m_lightsData.reset();
 		m_lightsTexture.reset();
 	}
 
@@ -81,20 +80,35 @@ namespace Castor3D
 
 		if ( l_lights && l_lightsCount )
 		{
-			l_lights->SetValue( m_lightsTexture->GetIndex() );
-			int l_index = 0;
+			auto l_layout = m_lightsTexture->GetTexture();
 
-			for ( auto && l_it : m_typeSortedLights )
+			if ( l_layout )
 			{
-				l_lightsCount->GetValue( 0 )[l_it.first] += uint32_t( l_it.second.size() );
+				auto const & l_image = l_layout->GetImage();
+				auto l_buffer = l_image.GetBuffer();
+				l_lights->SetValue( m_lightsTexture->GetIndex() );
+				int l_index = 0;
 
-				for ( auto l_light : l_it.second )
+				for ( auto && l_it : m_typeSortedLights )
 				{
-					l_light->Bind( *m_lightsData, l_index++ );
+					l_lightsCount->GetValue( 0 )[l_it.first] += uint32_t( l_it.second.size() );
+
+					for ( auto l_light : l_it.second )
+					{
+						l_light->Bind( *l_buffer, l_index++ );
+					}
 				}
+
+				auto l_locked = l_layout->GetImage().Lock( eACCESS_TYPE_WRITE );
+
+				if ( l_locked )
+				{
+					memcpy( l_locked, l_image.GetBuffer()->const_ptr(), l_image.GetBuffer()->size() );
+				}
+
+				l_layout->GetImage().Unlock( true );
 			}
 
-			m_lightsTexture->UploadImage( false );
 			m_lightsTexture->Bind();
 		}
 	}

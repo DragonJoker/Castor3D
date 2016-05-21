@@ -1,7 +1,8 @@
 #include "BillboardTreeItemProperty.hpp"
 
-#include <BillboardList.hpp>
 #include <MaterialManager.hpp>
+#include <Scene/BillboardList.hpp>
+#include <Scene/Scene.hpp>
 
 #include "AdditionalProperties.hpp"
 #include "SizeProperties.hpp"

@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___ASE_IMPORTER_PREREQUISITES_H___
 #define ___ASE_IMPORTER_PREREQUISITES_H___
 
-#include <Importer.hpp>
+#include <Mesh/Importer.hpp>
 #include <FileParser.hpp>
 
 #ifndef _WIN32

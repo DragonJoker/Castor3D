@@ -1,17 +1,18 @@
 #include "AssimpImporter.hpp"
 
-#include <AnimationObject.hpp>
-#include <Bone.hpp>
 #include <GeometryManager.hpp>
-#include <InitialiseEvent.hpp>
-#include <ImporterPlugin.hpp>
-#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <PluginManager.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <SkeletonAnimationBone.hpp>
+
+#include <Animation/AnimationObject.hpp>
+#include <Animation/Bone.hpp>
+#include <Animation/SkeletonAnimationBone.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Plugin/ImporterPlugin.hpp>
+#include <Manager/ManagerView.hpp>
 
 #include <Logger.hpp>
 

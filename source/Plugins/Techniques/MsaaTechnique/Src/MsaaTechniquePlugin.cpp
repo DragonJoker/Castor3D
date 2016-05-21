@@ -1,10 +1,11 @@
 #include "MsaaRenderTechnique.hpp"
 
+#include <Logger.hpp>
+
 #include <Engine.hpp>
 #include <TechniqueManager.hpp>
-#include <Version.hpp>
 
-#include <Logger.hpp>
+#include <Miscellaneous/Version.hpp>
 
 using namespace Msaa;
 static const Castor::String NAME = cuT( "msaa" );

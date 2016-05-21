@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlObject.hpp"
 
-#include <ShaderObject.hpp>
+#include <Shader/ShaderObject.hpp>
 
 namespace GlRender
 {

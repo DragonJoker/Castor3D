@@ -4,7 +4,7 @@
 #include "GlDepthStencilRenderBuffer.hpp"
 #include "GlRenderBufferAttachment.hpp"
 #include "GlTextureAttachment.hpp"
-#include "GlDynamicTexture.hpp"
+#include "GlTexture.hpp"
 #include "OpenGl.hpp"
 
 using namespace Castor3D;
@@ -116,7 +116,7 @@ namespace GlRender
 		return std::make_shared< GlRenderBufferAttachment >( GetOpenGl(), p_renderBuffer );
 	}
 
-	TextureAttachmentSPtr GlFrameBuffer::CreateAttachment( DynamicTextureSPtr p_texture )
+	TextureAttachmentSPtr GlFrameBuffer::CreateAttachment( TextureLayoutSPtr p_texture )
 	{
 		return std::make_shared< GlTextureAttachment >( GetOpenGl(), p_texture );
 	}

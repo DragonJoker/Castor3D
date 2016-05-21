@@ -4,19 +4,17 @@
 #include "AuiTabArt.hpp"
 #include "AuiToolBarArt.hpp"
 #include "StcTextEditor.hpp"
-#include "Parameter.hpp"
 #include "FrameVariablesList.hpp"
 #include "PropertiesHolder.hpp"
 #include "ShaderEditorPage.hpp"
 
 #include <Engine.hpp>
-#include <RenderSystem.hpp>
-#include <Pass.hpp>
-#include <RenderWindow.hpp>
-#include <RenderTarget.hpp>
 #include <ShaderManager.hpp>
-#include <ShaderProgram.hpp>
+#include <TargetManager.hpp>
 #include <WindowManager.hpp>
+#include <Material/Pass.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Render/RenderSystem.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

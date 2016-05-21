@@ -1,28 +1,29 @@
 #include "BloomPostEffect.hpp"
 
-#include <BackBuffers.hpp>
 #include <BlendStateManager.hpp>
-#include <BufferDeclaration.hpp>
-#include <BufferElementDeclaration.hpp>
-#include <Context.hpp>
-#include <DynamicTexture.hpp>
 #include <Engine.hpp>
-#include <FrameBufferAttachment.hpp>
-#include <FrameVariableBuffer.hpp>
-#include <GeometryBuffers.hpp>
-#include <OneFrameVariable.hpp>
-#include <Parameter.hpp>
-#include <Pipeline.hpp>
-#include <RenderSystem.hpp>
-#include <RenderTarget.hpp>
-#include <RenderWindow.hpp>
 #include <SamplerManager.hpp>
 #include <ShaderManager.hpp>
-#include <TextureAttachment.hpp>
-#include <TextureUnit.hpp>
-#include <Vertex.hpp>
-#include <VertexBuffer.hpp>
-#include <Viewport.hpp>
+
+#include <FrameBuffer/BackBuffers.hpp>
+#include <FrameBuffer/FrameBufferAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Mesh/Buffer/BufferElementDeclaration.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Miscellaneous/Parameter.hpp>
+#include <Render/Context.hpp>
+#include <Render/Pipeline.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/RenderTarget.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Render/Viewport.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/OneFrameVariable.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <numeric>
 
@@ -165,14 +166,13 @@ namespace Bloom
 		m_colourTexture->SetIndex( p_index );
 
 		m_fbo = p_renderTarget.GetEngine()->GetRenderSystem()->CreateFrameBuffer();
-		auto l_colourTexture = p_renderTarget.CreateDynamicTexture( eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
+		auto l_colourTexture = p_renderTarget.GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ | eACCESS_TYPE_WRITE );
 
 		m_colourTexture->SetSampler( p_sampler );
-		l_colourTexture->SetRenderTarget( p_renderTarget.shared_from_this() );
+		//l_colourTexture->GetImage().SetSource( p_renderTarget );
+		l_colourTexture->GetImage().SetSource( p_size, ePIXEL_FORMAT_A8R8G8B8 );
 		m_colourAttach = m_fbo->CreateAttachment( l_colourTexture );
 
-		l_colourTexture->SetType( eTEXTURE_TYPE_2D );
-		l_colourTexture->SetImage( p_size, ePIXEL_FORMAT_A8R8G8B8 );
 		m_fbo->Create();
 		m_colourTexture->SetTexture( l_colourTexture );
 		m_colourTexture->Initialise();
@@ -181,7 +181,7 @@ namespace Bloom
 
 		if ( m_fbo->Bind( eFRAMEBUFFER_MODE_CONFIG ) )
 		{
-			m_fbo->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, eTEXTURE_TARGET_2D );
+			m_fbo->Attach( eATTACHMENT_POINT_COLOUR, 0, m_colourAttach, l_colourTexture->GetType() );
 			l_return = m_fbo->IsComplete();
 			m_fbo->Unbind();
 		}
@@ -406,7 +406,7 @@ namespace Bloom
 
 			if ( p_framebuffer.Bind( eFRAMEBUFFER_MODE_AUTOMATIC, eFRAMEBUFFER_TARGET_DRAW ) )
 			{
-				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_colourTexture->GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
+				GetRenderSystem()->GetCurrentContext()->RenderTexture( m_colourTexture->GetImage().GetDimensions(), *m_blurSurfaces[0].m_colourTexture->GetTexture() );
 				p_framebuffer.Unbind();
 			}
 		}
@@ -482,7 +482,7 @@ namespace Bloom
 			if ( l_program && l_program->GetStatus() == ePROGRAM_STATUS_LINKED )
 			{
 				auto & l_pipeline = GetRenderSystem()->GetCurrentContext()->GetPipeline();
-				m_viewport.Resize( m_colourTexture->GetDimensions() );
+				m_viewport.Resize( m_colourTexture->GetImage().GetDimensions() );
 				m_viewport.Render( l_pipeline );
 
 				auto const & l_texture0 = *m_hiPassSurfaces[0].m_colourTexture;

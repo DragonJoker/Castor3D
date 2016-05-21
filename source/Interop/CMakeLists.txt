@@ -19,7 +19,6 @@ function( InteropBuild )
 			find_package( PythonLibs )
 
 			if ( PYTHONLIBS_FOUND )
-			#set( Boost_USE_STATIC_LIBS ON )
 				find_package( Boost OPTIONAL_COMPONENTS python )
 
 				if ( Boost_PYTHON_FOUND )
@@ -63,7 +62,7 @@ function( InteropBuild )
 
 		if( ${CASTOR_BUILD_INTEROP_COM} )
 			set( Build ${ComC3D} )
-		add_subdirectory( Interop/ComCastor3D )
+			add_subdirectory( Interop/ComCastor3D )
 			set( ComC3D ${Build} PARENT_SCOPE )
 		endif()
 

@@ -1,9 +1,9 @@
 #include "NodeTreeItemProperty.hpp"
 
-#include <Scene.hpp>
-#include <SceneNode.hpp>
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 #include "PointProperties.hpp"
 #include "QuaternionProperties.hpp"

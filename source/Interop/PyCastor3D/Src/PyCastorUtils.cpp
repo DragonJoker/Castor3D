@@ -61,14 +61,16 @@ void ExportCastorUtils()
 	.value( "DEPTH24S8", ePIXEL_FORMAT_DEPTH24S8 )
 	.value( "DEPTH32", ePIXEL_FORMAT_DEPTH32 )
 	.value( "STENCIL1", ePIXEL_FORMAT_STENCIL1 )
-	.value( "STENCIL8", ePIXEL_FORMAT_STENCIL8 );
+	.value( "STENCIL8", ePIXEL_FORMAT_STENCIL8 )
+	;
 	//@}
 	/**@group_name eINTERSECTION	*/
 	//@{
 	py::enum_< eINTERSECTION >( "Intersection" )
 	.value( "IN", eINTERSECTION_IN )
 	.value( "OUT", eINTERSECTION_OUT )
-	.value( "INTERSECT", eINTERSECTION_INTERSECT );
+	.value( "INTERSECT", eINTERSECTION_INTERSECT )
+	;
 	//@}
 	/**@group_name eLOG_TYPE	*/
 	//@{
@@ -77,7 +79,8 @@ void ExportCastorUtils()
 	.value( "INFO", ELogType_INFO )
 	.value( "WARNING", ELogType_WARNING )
 	.value( "ERROR", ELogType_ERROR )
-	.value( "ALL", ELogType_COUNT );
+	.value( "ALL", ELogType_COUNT )
+	;
 	//@}
 	/**@group_name Colour	*/
 	//@{
@@ -95,10 +98,12 @@ void ExportCastorUtils()
 	.def( py::self += py::other< real >() )
 	.def( py::self -= py::other< real >() )
 	.def( py::self *= py::other< real >() )
-	.def( py::self /= py::other< real >() );
+	.def( py::self /= py::other< real >() )
+	;
 	//@}
 	/**@group_name Vector2D	*/
 	//@{
+	py::def( "dot", cpy::VectorCrosser() );
 	py::class_< Point2r, std::shared_ptr< Point2r >, boost::noncopyable >( "Vector2D", py::init< real, real >() )
 	.add_property( "x", cpy::make_getter( &Point2r::operator[], 0u ), cpy::make_setter( &Point2r::operator[], 0u ), "The X coordinate" )
 	.add_property( "y", cpy::make_getter( &Point2r::operator[], 1u ), cpy::make_setter( &Point2r::operator[], 1u ), "The Y coordinate" )
@@ -112,11 +117,13 @@ void ExportCastorUtils()
 	.def( py::self != py::other< Point2r >() )
 	.def( py::self *= py::other< real >() )
 	.def( py::self /= py::other< real >() )
-	.def( "length", cpy::VectorLengther() );
-	py::def( "dot", cpy::VectorCrosser() );
+	.def( "length", cpy::VectorLengther() )
+	;
 	//@}
 	/**@group_name Vector3D	*/
 	//@{
+	py::def( "cross", cpy::VectorDotter() );
+	py::def( "dot", cpy::VectorCrosser() );
 	py::class_< Point3r, std::shared_ptr< Point3r >, boost::noncopyable >( "Vector3D", py::init< real, real, real >() )
 	.add_property( "x", cpy::make_getter( &Point3r::operator[], 0u ), cpy::make_setter( &Point3r::operator[], 0u ), "The X coordinate" )
 	.add_property( "y", cpy::make_getter( &Point3r::operator[], 1u ), cpy::make_setter( &Point3r::operator[], 1u ), "The Y coordinate" )
@@ -131,9 +138,8 @@ void ExportCastorUtils()
 	.def( py::self != py::other< Point3r >() )
 	.def( py::self *= py::other< real >() )
 	.def( py::self /= py::other< real >() )
-	.def( "length", cpy::VectorLengther() );
-	py::def( "cross", cpy::VectorDotter() );
-	py::def( "dot", cpy::VectorCrosser() );
+	.def( "length", cpy::VectorLengther() )
+	;
 	//@}
 	/**@group_name Angle	*/
 	//@{
@@ -157,7 +163,8 @@ void ExportCastorUtils()
 	.def( py::self == py::other< Angle >() )
 	.def( py::self != py::other< Angle >() )
 	.def( py::self *= py::other< real >() )
-	.def( py::self /= py::other< real >() );
+	.def( py::self /= py::other< real >() )
+	;
 	//@}
 	/**@group_name Quaternion	*/
 	//@{
@@ -190,13 +197,15 @@ void ExportCastorUtils()
 	.def( py::self -= py::other< Quaternion >() )
 	.def( py::self *= py::other< Quaternion >() )
 	.def( py::self == py::other< Quaternion >() )
-	.def( py::self != py::other< Quaternion >() );
+	.def( py::self != py::other< Quaternion >() )
+	;
 	//@}
 	/**@group_name Matrix	*/
 	//@{
 	py::class_< Matrix4x4r >( "Matrix", py::init<>() )
 	.def( "transpose", py::make_function( &Matrix4x4r::transpose, py::return_value_policy< py::reference_existing_object >() ) )
-	.def( "invert", py::make_function( &Matrix4x4r::invert, py::return_value_policy< py::reference_existing_object >() ) );
+	.def( "invert", py::make_function( &Matrix4x4r::invert, py::return_value_policy< py::reference_existing_object >() ) )
+	;
 	//@}
 	/**@group_name Position	*/
 	//@{
@@ -206,7 +215,8 @@ void ExportCastorUtils()
 	.def( "set", &Position::set )
 	.def( "offset", &Position::offset )
 	.def( py::self == py::other< Position >() )
-	.def( py::self != py::other< Position >() );
+	.def( py::self != py::other< Position >() )
+	;
 	//@}
 	/**@group_name Size	*/
 	//@{
@@ -216,7 +226,8 @@ void ExportCastorUtils()
 	.def( "set", &Size::set )
 	.def( "grow", &Size::grow )
 	.def( py::self == py::other< Size >() )
-	.def( py::self != py::other< Size >() );
+	.def( py::self != py::other< Size >() )
+	;
 	//@}
 	/**@group_name Rectangle	*/
 	//@{
@@ -231,24 +242,26 @@ void ExportCastorUtils()
 	.add_property( "height", &Rectangle::height, "The rectangle height" )
 	.def( "set", &Rectangle::set )
 	.def( "intersects", IntPoint )
-	.def( "intersects", IntRect );
+	.def( "intersects", IntRect )
+	;
 	//@}
 	/**@group_name Glyph	*/
 	//@{
 	py::class_< Glyph, boost::noncopyable >( "Glyph", py::no_init )
 	.add_property( "size", py::make_function( &Glyph::GetSize, py::return_value_policy< py::copy_const_reference >() ), "The glyph height" )
-	.add_property( "position", py::make_function( &Glyph::GetPosition, py::return_value_policy< py::copy_const_reference >() ), "The glyph position" )
-	.add_property( "advance", py::make_function( &Glyph::GetAdvance, py::return_value_policy< py::copy_const_reference >() ), "The offset after the glyph" )
-	.def( "adjust_position", &Glyph::AdjustPosition );
+	.add_property( "bearing", py::make_function( &Glyph::GetBearing, py::return_value_policy< py::copy_const_reference >() ), "The glyph position" )
+	.add_property( "advance", &Glyph::GetAdvance, "The offset after the glyph" )
+	;
 	//@}
 	/**@group_name Font	*/
 	//@{
-	typedef Font::GlyphMap::iterator( Font::*GlyphsItFunc )();
+	typedef Font::GlyphArray::iterator( Font::*GlyphsItFunc )();
 	py::class_< Font, boost::noncopyable >( "Font", py::init< Path const &, String const &, uint32_t >() )
 	.add_property( "height", &Font::GetHeight, "The font height" )
 	.add_property( "max_height", &Font::GetMaxHeight, "The glyphs maximum height" )
 	.add_property( "max_width", &Font::GetMaxWidth, "The glyphs maximum width" )
-	.add_property( "glyphs", py::range< GlyphsItFunc, GlyphsItFunc >( &Font::begin, &Font::end ), "The glyphs" );
+	.add_property( "glyphs", py::range< GlyphsItFunc, GlyphsItFunc >( &Font::begin, &Font::end ), "The glyphs" )
+	;
 	//@}
 	/**@group_name PixelBuffer	*/
 	//@{
@@ -260,7 +273,8 @@ void ExportCastorUtils()
 	.def( "flip", &PxBufferBase::flip, py::return_value_policy< py::reference_existing_object >() )
 	.def( "mirror", &PxBufferBase::mirror, py::return_value_policy< py::reference_existing_object >() )
 	.def( "create", cpy::PxBufferCreator() )
-	.staticmethod( "create" );
+	.staticmethod( "create" )
+	;
 	//@}
 	/**@group_name Image	*/
 	//@{
@@ -270,7 +284,8 @@ void ExportCastorUtils()
 	.def( "resample", &Image::Resample, py::return_value_policy< py::reference_existing_object >() )
 	.def( "fill", &Image::Fill, py::return_value_policy< py::reference_existing_object >() )
 	.def( "copy_image", &Image::CopyImage, py::return_value_policy< py::reference_existing_object >() )
-	.def( "sub_image", &Image::SubImage );
+	.def( "sub_image", &Image::SubImage )
+	;
 	//@}
 	/**@group_name Logger	*/
 	//@{
@@ -295,7 +310,8 @@ void ExportCastorUtils()
 	.staticmethod( "log_debug" )
 	.staticmethod( "log_message" )
 	.staticmethod( "log_warning" )
-	.staticmethod( "log_error" );
+	.staticmethod( "log_error" )
+	;
 	//@}
 }
 

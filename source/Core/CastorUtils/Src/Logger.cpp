@@ -47,8 +47,11 @@ namespace Castor
 		: public std::basic_streambuf< CharType >
 	{
 	public:
-		typedef typename std::basic_streambuf< CharType >::int_type int_type;
-		typedef typename std::basic_streambuf< CharType >::traits_type traits_type;
+		using string_type = std::basic_string< CharType >;
+		using ostream_type = std::basic_ostream< CharType >;
+		using streambuf_type = std::basic_streambuf< CharType >;
+		using int_type = typename std::basic_streambuf< CharType >::int_type;
+		using traits_type = typename std::basic_streambuf< CharType >::traits_type;
 
 		LogStreambuf( std::basic_ostream< CharType > & p_stream )
 			: m_stream( p_stream )
@@ -91,9 +94,9 @@ namespace Castor
 		}
 
 	private:
-		std::basic_string< CharType > m_buffer;
-		std::basic_ostream< CharType > & m_stream;
-		std::basic_streambuf< CharType > * m_old;
+		string_type m_buffer;
+		ostream_type & m_stream;
+		streambuf_type * m_old;
 	};
 
 	template< typename CharType >

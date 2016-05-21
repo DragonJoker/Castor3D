@@ -1,6 +1,6 @@
 #include "RotateNodeEvent.hpp"
 
-#include <SceneNode.hpp>
+#include <Scene/SceneNode.hpp>
 #include <Angle.hpp>
 
 using namespace Castor3D;

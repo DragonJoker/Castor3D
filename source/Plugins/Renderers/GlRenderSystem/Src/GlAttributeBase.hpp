@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "GlRenderSystemPrerequisites.hpp"
 #include "GlShaderProgram.hpp"
 
-#include <Buffer.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
 
 namespace GlRender
 {

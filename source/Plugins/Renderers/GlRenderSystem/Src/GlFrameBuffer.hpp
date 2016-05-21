@@ -22,9 +22,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlBindable.hpp"
 
-#include <FrameBuffer.hpp>
-#include <TextureAttachment.hpp>
-#include <RenderBufferAttachment.hpp>
+#include <FrameBuffer/FrameBuffer.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
+#include <FrameBuffer/RenderBufferAttachment.hpp>
 
 namespace GlRender
 {
@@ -96,7 +96,7 @@ namespace GlRender
 		/**
 		 *\copydoc		Castor3D::FrameBuffer::CreateAttachment
 		 */
-		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::DynamicTextureSPtr p_texture );
+		virtual Castor3D::TextureAttachmentSPtr CreateAttachment( Castor3D::TextureLayoutSPtr p_texture );
 
 	public:
 		using BindableType::GetGlName;

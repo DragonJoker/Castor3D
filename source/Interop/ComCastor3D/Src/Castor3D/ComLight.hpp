@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComPointLight.hpp"
 #include "ComSpotLight.hpp"
 
-#include <Light.hpp>
+#include <Scene/Light/Light.hpp>
 
 namespace CastorCom
 {

@@ -18,13 +18,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_SCENE_NODE_H__
 #define __COMC3D_COM_SCENE_NODE_H__
 
-#include "ComTexture.hpp"
+#include "ComTextureLayout.hpp"
 #include "ComColour.hpp"
 #include "ComVector3D.hpp"
 #include "ComQuaternion.hpp"
 
-#include <Scene.hpp>
-#include <SceneNode.hpp>
+#include <Scene/Scene.hpp>
+#include <Scene/SceneNode.hpp>
 
 namespace CastorCom
 {

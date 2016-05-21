@@ -23,8 +23,6 @@
 #include <wx/artprov.h>
 
 #include <AnimatedObjectGroupManager.hpp>
-#include <AnimatedObject.hpp>
-#include <Animation.hpp>
 #include <BillboardManager.hpp>
 #include <CameraManager.hpp>
 #include <GeometryManager.hpp>
@@ -35,6 +33,9 @@
 #include <OverlayManager.hpp>
 #include <SceneManager.hpp>
 #include <WindowManager.hpp>
+
+#include <Animation/AnimatedObject.hpp>
+#include <Animation/Animation.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

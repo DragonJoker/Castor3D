@@ -1,13 +1,12 @@
 #include "OverlayTreeItemProperty.hpp"
 
-#include <BorderPanelOverlay.hpp>
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
-#include <Material.hpp>
 #include <MaterialManager.hpp>
-#include <Overlay.hpp>
-#include <PanelOverlay.hpp>
-#include <TextOverlay.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/Overlay.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
 
 #include <Font.hpp>
 

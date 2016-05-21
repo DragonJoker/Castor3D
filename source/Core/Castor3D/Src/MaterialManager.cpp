@@ -1,11 +1,11 @@
-﻿#include "MaterialManager.hpp"
-#include "Material.hpp"
-#include "Pass.hpp"
-#include "SceneFileParser.hpp"
-#include "SamplerManager.hpp"
-#include "InitialiseEvent.hpp"
-#include "CleanupEvent.hpp"
+#include "MaterialManager.hpp"
+
 #include "Engine.hpp"
+#include "SamplerManager.hpp"
+#include "Event/Frame/InitialiseEvent.hpp"
+#include "Event/Frame/CleanupEvent.hpp"
+#include "Material/Pass.hpp"
+#include "Scene/SceneFileParser.hpp"
 
 #include <Logger.hpp>
 

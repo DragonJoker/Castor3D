@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_MATERIAL_H__
 #define __COMC3D_COM_MATERIAL_H__
 
-#include "ComTexture.hpp"
+#include "ComTextureLayout.hpp"
 
-#include <Material.hpp>
+#include <Material/Material.hpp>
 
 namespace CastorCom
 {

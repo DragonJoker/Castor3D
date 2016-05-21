@@ -1,7 +1,7 @@
 #include "ViewportTreeItemProperty.hpp"
 
-#include <Viewport.hpp>
-#include <FunctorEvent.hpp>
+#include <Render/Viewport.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
 
 #include "SizeProperties.hpp"
 

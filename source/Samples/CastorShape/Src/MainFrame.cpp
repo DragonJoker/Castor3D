@@ -21,21 +21,21 @@
 #include <AuiToolBarArt.hpp>
 #include <SplashScreen.hpp>
 
-#include <DirectionalLight.hpp>
-#include <DividerPlugin.hpp>
 #include <GeometryManager.hpp>
-#include <ImporterPlugin.hpp>
-#include <Importer.hpp>
 #include <LightManager.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
-#include <Pass.hpp>
 #include <PluginManager.hpp>
-#include <RenderLoop.hpp>
-#include <RenderWindow.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <Subdivider.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Importer.hpp>
+#include <Mesh/Subdivider.hpp>
+#include <Scene/Light/DirectionalLight.hpp>
+#include <Plugin/DividerPlugin.hpp>
+#include <Plugin/ImporterPlugin.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Render/RenderWindow.hpp>
 
 #include <xpms/castor_dark.xpm>
 
@@ -338,13 +338,13 @@ namespace CastorShape
 
 		if ( l_scene )
 		{
-			m_3dFrame = new RenderPanel( eVIEWPORT_TYPE_PERSPECTIVE, l_scene, ePROJECTION_DIRECTION_FRONT, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, 0 ), wxSize( l_width - 1, l_height - 1 ) );
+			m_3dFrame = new RenderPanel( eVIEWPORT_TYPE_PERSPECTIVE, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, 0 ), wxSize( l_width - 1, l_height - 1 ) );
 
 			if ( m_bMultiFrames )
 			{
-				m_2dFrameHD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, ePROJECTION_DIRECTION_FRONT, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, 0 ), wxSize( l_width - 1, l_height - 1 ) );
-				m_2dFrameBG = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, ePROJECTION_DIRECTION_LEFT, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
-				m_2dFrameBD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, ePROJECTION_DIRECTION_TOP, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameHD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, 0 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameBG = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
+				m_2dFrameBD = new RenderPanel( eVIEWPORT_TYPE_ORTHO, l_scene, m_renderPanelsContainer, wxID_ANY, wxPoint( l_width + 1, l_height + 1 ), wxSize( l_width - 1, l_height - 1 ) );
 				m_separator1 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( 0, l_height - 1 ), wxSize( l_width, 2 ) );
 				m_separator2 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( l_width, l_height - 1 ), wxSize( l_width, 2 ) );
 				m_separator3 = new wxPanel( m_renderPanelsContainer, wxID_ANY, wxPoint( l_width - 1, 0 ), wxSize( 2, l_height ) );

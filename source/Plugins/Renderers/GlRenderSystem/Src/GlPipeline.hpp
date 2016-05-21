@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <Pipeline.hpp>
+#include <Render/Pipeline.hpp>
 
 namespace GlRender
 {

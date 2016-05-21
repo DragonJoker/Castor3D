@@ -1,7 +1,7 @@
 #include "AseImporter.hpp"
 
-#include <ImporterPlugin.hpp>
-#include <Version.hpp>
+#include <Plugin/ImporterPlugin.hpp>
+#include <Miscellaneous/Version.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

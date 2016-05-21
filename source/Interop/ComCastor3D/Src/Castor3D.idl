@@ -231,17 +231,6 @@ typedef enum
 	eTEXTURE_CHANNEL_ALL,
 }	eTEXTURE_CHANNEL;
 
-// eTEXTURE_MAP_MODE
-[
-	uuid( 599CF5DA-39F4-4CA8-A8C4-1142230B423D )
-]
-typedef enum
-{
-	eTEXTURE_MAP_MODE_NONE,
-	eTEXTURE_MAP_MODE_REFLECTION,
-	eTEXTURE_MAP_MODE_SPHERE,
-}	eTEXTURE_MAP_MODE;
-
 // eRGB_BLEND_FUNC
 [
 	uuid( 1A330154-AE9E-44E0-865F-BA0661671228 )
@@ -305,16 +294,6 @@ typedef enum
 	eALPHA_FUNC_GREATER,
 	eALPHA_FUNC_NEVER,
 }	eALPHA_FUNC;
-
-// eTEXTURE_BASE_TYPE
-[
-	uuid( 02A480E3-85BC-4757-AE81-118C2A805EFD )
-]
-typedef enum
-{
-	eTEXTURE_BASE_TYPE_STATIC,
-	eTEXTURE_BASE_TYPE_DYNAMIC,
-}	eTEXTURE_BASE_TYPE;
 
 // eTEXTURE_TYPE
 [
@@ -554,9 +533,8 @@ interface IOverlay;
 interface IAnimable;
 interface IAnimatedObject;
 interface IAnimatedObjectGroup;
-interface ITexture;
-interface IDynamicTexture;
-interface IStaticTexture;
+interface ITextureImage;
+interface ITextureLayout;
 interface ITextureUnit;
 interface IPass;
 interface IMaterial;
@@ -779,9 +757,8 @@ interface IGlyph
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "property Size" )] HRESULT Size( [out, retval] ISize ** pVal );
-	[propget, id( 2 ), helpstring( "property Position" )] HRESULT Position( [out, retval] IPosition ** pVal );
-	[propget, id( 3 ), helpstring( "property Advance" )] HRESULT Advance( [out, retval] ISize ** pVal );
-	[id( 4 ), helpstring( "method AdjustPosition" )] HRESULT AdjustPosition( [in] UINT x, [in] UINT y );
+	[propget, id( 2 ), helpstring( "property Bearing" )] HRESULT Bearing( [out, retval] IPosition ** pVal );
+	[propget, id( 3 ), helpstring( "property Advance" )] HRESULT Advance( [out, retval] int * pVal );
 };
 
 // ICastorFont
@@ -1037,59 +1014,44 @@ interface ISampler
 	[id( 14 ), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
 };
 
-// ITexture
+// ITextureImage
 [
-	uuid( 8985F532-34C0-4996-882C-8850D45C53F1 ),
-	helpstring( "Castor3D Texture interface" ),
+	uuid( AD4C78E2-277A-4F6E-A1BB-F94FEA78F4A5 ),
+	helpstring( "Castor3D TextureImage interface" ),
 	dual,
 	oleautomation
 ]
-interface ITexture
+interface ITextureImage
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT BaseType( [out, retval] eTEXTURE_BASE_TYPE * pVal );
-	[propget, id( 2 ), helpstring( "The texture dimension" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
-	[propput, id( 2 ), helpstring( "The texture dimension" )] HRESULT Type( [in] eTEXTURE_TYPE val );
-	[propget, id( 3 ), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [out, retval] eTEXTURE_MAP_MODE * pVal );
-	[propput, id( 3 ), helpstring( "The texture mapping mode" )] HRESULT MappingMode( [in] eTEXTURE_MAP_MODE val );
+	[propget, id( 1 ), helpstring( "The texture image height" )] HRESULT Height( [out, retval] unsigned int * pVal );
+	[propget, id( 2 ), helpstring( "The texture image width" )] HRESULT Width( [out, retval] unsigned int * pVal );
+	[propget, id( 3 ), helpstring( "The texture image depth" )] HRESULT Depth( [out, retval] unsigned int * pVal );
 	[propget, id( 4 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [out, retval] IPixelBuffer ** pVal );
-	[propput, id( 4 ), helpstring( "The texture image buffer" )] HRESULT Buffer( [in] IPixelBuffer * val );
+	[id(  5 ), helpstring( "Initialises the texture" )] HRESULT Initialise( [in] eTEXTURE_TYPE p_type, [in] unsigned int p_cpuAccess, [in] unsigned int p_gpuAccess );
+	[id(  6 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
+	[id(  7 ), helpstring( "Resizes the texture" )] HRESULT Resize2D( [in] unsigned int w, [in] unsigned int h );
+	[id(  8 ), helpstring( "Resizes the texture" )] HRESULT Resize3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d );
+	[id(  9 ), helpstring( "Sets the image source" )] HRESULT Static2DSource( [in] IPixelBuffer * val );
+	[id( 10 ), helpstring( "Sets the image source" )] HRESULT Static3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] IPixelBuffer * val );
+	[id( 11 ), helpstring( "Sets the image source" )] HRESULT Dynamic2DSource( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
+	[id( 12 ), helpstring( "Sets the image source" )] HRESULT Dynamic3DSource( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
+};
+
+// ITextureLayout
+[
+	uuid( 8985F532-34C0-4996-882C-8850D45C53F1 ),
+	helpstring( "Castor3D TextureLayout interface" ),
+	dual,
+	oleautomation
+]
+interface ITextureLayout
+	: IDispatch
+{
+	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT Type( [out, retval] eTEXTURE_TYPE * pVal );
+	[propget, id( 2 ), helpstring( "The texture image" )] HRESULT Image( [in] unsigned int index, [out, retval] ITextureImage ** pVal );
 	[id( 6 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
 	[id( 7 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
-};
-
-// IStaticTexture
-[
-	uuid( B3384429-7C16-4525-9907-927EC517C14B ),
-	helpstring( "Castor3D StaticTexture interface" ),
-	dual,
-	oleautomation
-]
-interface IStaticTexture
-	: ITexture
-{
-	[id( 11 ), helpstring( "Sets a 1D or 2D image data" )] HRESULT SetImage( [in] IPixelBuffer * val );
-	[id( 12 ), helpstring( "Sets a 3D image data" )] HRESULT Set3DImage( [in] ISize * size, unsigned int depth, [in] IPixelBuffer * val );
-};
-
-// IDynamicTexture
-[
-	uuid( 775B667F-A283-474A-A86D-0817A623B878 ),
-	helpstring( "Castor3D DynamicTexture interface" ),
-	dual,
-	oleautomation
-]
-interface IDynamicTexture
-	: ITexture
-{
-	[propget, id( 11 ), helpstring( "The render target" )] HRESULT RenderTarget( [out, retval] IRenderTarget ** pVal );
-	[propput, id( 11 ), helpstring( "The render target" )] HRESULT RenderTarget( [in] IRenderTarget * val );
-	[propget, id( 12 ), helpstring( "The samples count" )] HRESULT SamplesCount( [out, retval] unsigned int * pVal );
-	[propput, id( 12 ), helpstring( "The samples count" )] HRESULT SamplesCount( [in] unsigned int val );
-	[id( 13 ), helpstring( "Sets a 2D image data" )] HRESULT Set2DImage( [in] ISize * size, [in] ePIXEL_FORMAT fmt );
-	[id( 14 ), helpstring( "Sets a 3D image data" )] HRESULT Set3DImage( [in] ISize * size, unsigned int depth, [in] ePIXEL_FORMAT fmt );
-	[id( 15 ), helpstring( "Resizes the 2D texture image" )] HRESULT Resize2D( [in] ISize * size );
-	[id( 16 ), helpstring( "Resizes the 3D texture image" )] HRESULT Resize3D( [in] ISize * size, [in] unsigned int depth );
 };
 
 // ITextureUnit
@@ -1102,8 +1064,8 @@ interface IDynamicTexture
 interface ITextureUnit
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITexture ** pVal );
-	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITexture * val );
+	[propget, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITextureLayout ** pVal );
+	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITextureLayout * val );
 	[propget, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
 	[propput, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [in] ISampler * val );
 	[propget, id( 3 ), helpstring( "The Alpha Test function" )] HRESULT AlphaFunc( [out, retval] eALPHA_FUNC * pVal );
@@ -1262,7 +1224,7 @@ interface IScene
 	[id( 22 ), helpstring( "Removes the scene node with the given name" )] HRESULT RemoveNode( [in] ISceneNode * node );
 	[id( 23 ), helpstring( "Removes the geometry with the given name" )] HRESULT RemoveGeometry( [in] IGeometry * geometry );
 	[id( 24 ), helpstring( "Removes the camera with the given name" )] HRESULT RemoveCamera( [in] ICamera * camera );
-	[id( 30 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITexture ** pVal );
+	[id( 30 ), helpstring( "Retrieves the backround image" )] HRESULT GetBackgroundImage( [out, retval] ITextureLayout ** pVal );
 };
 
 // IRenderWindow
@@ -1842,31 +1804,22 @@ library Castor3D
 		[default] interface ISampler;
 	}
 
-	// Texture
+	// TextureImage
+	[
+		uuid( 3CA68187-BD17-4E78-8D5C-B994DDA134BA )
+	]
+	coclass TextureImage
+	{
+		[default] interface ITextureImage;
+	}
+
+	// TextureLayout
 	[
 		uuid( 0FF08968-9937-4771-8949-0E86E3615F98 )
 	]
-	coclass Texture
+	coclass TextureLayout
 	{
-		[default] interface ITexture;
-	}
-
-	// StaticTexture
-	[
-		uuid( C10380AA-4B12-400E-BA6C-0B60866084FB )
-	]
-	coclass StaticTexture
-	{
-		[default] interface IStaticTexture;
-	}
-
-	// DynamicTexture
-	[
-		uuid( F88BDBA4-4D87-4839-9DEC-4534FE431C02 )
-	]
-	coclass DynamicTexture
-	{
-		[default] interface IDynamicTexture;
+		[default] interface ITextureLayout;
 	}
 
 	// TextureUnit

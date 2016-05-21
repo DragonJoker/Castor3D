@@ -22,12 +22,12 @@ http://www.gnu.org/copyleft/lesser.txt.
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
 
-#include <Submesh.hpp>
-#include <Face.hpp>
-#include <Vertex.hpp>
+#include <Event/Frame/FrameListener.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Subdivider.hpp>
 
-#include <Subdivider.hpp>
-#include <FrameListener.hpp>
 #include <PlaneEquation.hpp>
 
 #pragma warning( pop )

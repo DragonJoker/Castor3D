@@ -8,10 +8,11 @@
 #include "CtrlSlider.hpp"
 #include "CtrlStatic.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <SceneFileParser.hpp>
 #include <ListenerManager.hpp>
 #include <MaterialManager.hpp>
+
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Scene/SceneFileParser.hpp>
 
 #include <stack>
 

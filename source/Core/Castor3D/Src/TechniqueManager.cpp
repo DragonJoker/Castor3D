@@ -18,8 +18,18 @@ namespace Castor3D
 	RenderTechniqueSPtr RenderTechniqueManager::Create( Castor::String const & p_name, RenderTarget & p_renderTarget, RenderSystem * p_renderSystem, Parameters const & p_params )
 	{
 		auto l_lock = make_unique_lock( *this );
-		auto l_return = m_techniqueFactory.Create( p_name, p_renderTarget, p_renderSystem, p_params );
-		Insert( p_name, l_return );
+		RenderTechniqueSPtr l_return;
+
+		if ( !Has( p_name ) )
+		{
+			l_return = m_techniqueFactory.Create( p_name, p_renderTarget, p_renderSystem, p_params );
+			Insert( p_name, l_return );
+		}
+		else
+		{
+			l_return = Find( p_name );
+		}
+
 		return l_return;
 	}
 

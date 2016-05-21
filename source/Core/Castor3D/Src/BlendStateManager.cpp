@@ -1,6 +1,6 @@
-﻿#include "BlendStateManager.hpp"
+#include "BlendStateManager.hpp"
 
-#include "RenderSystem.hpp"
+#include "Render/RenderSystem.hpp"
 
 using namespace Castor;
 

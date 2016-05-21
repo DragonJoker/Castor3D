@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_TECHNIQUE_MANAGER_H___
 #define ___C3D_TECHNIQUE_MANAGER_H___
 
-#include "RenderTechnique.hpp"
+#include "Manager/ResourceManager.hpp"
 
-#include "ResourceManager.hpp"
-#include "TechniqueFactory.hpp"
+#include "Technique/RenderTechnique.hpp"
+#include "Technique/TechniqueFactory.hpp"
 
 namespace Castor3D
 {

@@ -1,8 +1,9 @@
-﻿#include "CameraManager.hpp"
+#include "CameraManager.hpp"
 
-#include "FrameVariableBuffer.hpp"
-#include "RenderSystem.hpp"
-#include "ShaderProgram.hpp"
+#include "Render/RenderSystem.hpp"
+
+#include "Shader/FrameVariableBuffer.hpp"
+#include "Shader/ShaderProgram.hpp"
 
 using namespace Castor;
 

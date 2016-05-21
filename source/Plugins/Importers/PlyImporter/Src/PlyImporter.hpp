@@ -25,8 +25,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #pragma warning( disable:4311 )
 #pragma warning( disable:4312 )
 
-#include <Importer.hpp>
-#include <Buffer.hpp>
+#include <Mesh/Importer.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
 
 #pragma warning( pop )
 

@@ -24,14 +24,13 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include <Castor3DPrerequisites.hpp>
 
-#include <Submesh.hpp>
-#include <Vertex.hpp>
-#include <Face.hpp>
-#include <Version.hpp>
-#include <Plugin.hpp>
-
-#include <Subdivider.hpp>
-#include <FrameListener.hpp>
+#include <Event/Frame/FrameListener.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Subdivider.hpp>
+#include <Miscellaneous/Version.hpp>
+#include <Plugin/Plugin.hpp>
 
 #pragma warning( pop )
 

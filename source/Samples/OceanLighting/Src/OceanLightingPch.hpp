@@ -15,25 +15,24 @@
 #	include <ctime>
 
 #	include <Castor3DPrerequisites.hpp>
-#	include <BlendState.hpp>
-#	include <Buffer.hpp>
-#	include <Context.hpp>
-#	include <DepthStencilState.hpp>
 #	include <Engine.hpp>
-#	include <FrameBuffer.hpp>
-#	include <Parameter.hpp>
-#	include <Pipeline.hpp>
-#	include <RasteriserState.hpp>
-#	include <RenderTarget.hpp>
-#	include <RenderTechnique.hpp>
-#	include <RenderWindow.hpp>
-#	include <Sampler.hpp>
-#	include <Scene.hpp>
 #	include <ShaderManager.hpp>
-#	include <ShaderProgram.hpp>
-#	include <Texture.hpp>
-#	include <Vertex.hpp>
-#	include <WindowHandle.hpp>
+#	include <SceneManager.hpp>
+#	include <FrameBuffer/FrameBuffer.hpp>
+#	include <Mesh/Vertex.hpp>
+#	include <Mesh/Buffer/Buffer.hpp>
+#	include <Miscellaneous/Parameter.hpp>
+#	include <Miscellaneous/WindowHandle.hpp>
+#	include <State/BlendState.hpp>
+#	include <State/DepthStencilState.hpp>
+#	include <State/RasteriserState.hpp>
+#	include <Render/Context.hpp>
+#	include <Render/Pipeline.hpp>
+#	include <Render/RenderTarget.hpp>
+#	include <Render/RenderWindow.hpp>
+#	include <Technique/RenderTechnique.hpp>
+#	include <Texture/Sampler.hpp>
+#	include <Texture/TextureLayout.hpp>
 
 #	if defined( __linux )
 #		include <GL/glx.h>

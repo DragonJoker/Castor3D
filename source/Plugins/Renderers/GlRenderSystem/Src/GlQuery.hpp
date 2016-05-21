@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_QUERY_H___
 #define ___GL_QUERY_H___
 
-#include <GpuQuery.hpp>
+#include <Miscellaneous/GpuQuery.hpp>
 
 #include "GlObject.hpp"
 #include "OpenGl.hpp"

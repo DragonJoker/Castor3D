@@ -16,6 +16,10 @@ link_directories( ${Boost_LIBRARY_DIR} )
 #link_directories( ${Boost_LIBRARY_DIR_RELEASE} )
 #link_directories( ${Boost_LIBRARY_DIR_DEBUG} )
 
+if (MSVC)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /bigobj")
+endif()
+
 add_target( 
 	PyCastor3D
 	dll

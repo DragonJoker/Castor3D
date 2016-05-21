@@ -1353,13 +1353,9 @@ namespace GlRender
 	class GlTextureStorage;
 	class GlTexturePboStorage;
 	class GlTextureTboStorage;
-	class GlDynamicTexture;
-	class GlStaticTexture;
 	class GlGpuIoBuffer;
 	class GlDownloadPixelBuffer;
 	class GlUploadPixelBuffer;
-	DECLARE_SMART_PTR( GlDynamicTexture );
-	DECLARE_SMART_PTR( GlStaticTexture );
 	DECLARE_SMART_PTR( GlTextureStorage );
 	DECLARE_SMART_PTR( GlGpuIoBuffer );
 	DECLARE_SMART_PTR( GlDownloadPixelBuffer );

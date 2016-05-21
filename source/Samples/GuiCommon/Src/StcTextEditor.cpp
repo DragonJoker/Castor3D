@@ -2,7 +2,7 @@
 #include "LanguageInfo.hpp"
 #include "StyleInfo.hpp"
 
-#	include <wx/filename.h>
+#include <wx/filename.h>
 
 using namespace GuiCommon;
 

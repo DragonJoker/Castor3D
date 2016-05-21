@@ -88,7 +88,7 @@ namespace CastorCom
 			{
 				if ( value )
 				{
-					*value = parameter_cast< _Value >( ( m_instance->*m_function )( parameter_cast< Index >( index ) ) );
+					*value = parameter_cast< _Value & >( ( m_instance->*m_function )( parameter_cast< Index >( index ) ) );
 					hr = S_OK;
 				}
 			}

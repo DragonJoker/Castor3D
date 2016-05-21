@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <TextureAttachment.hpp>
+#include <FrameBuffer/TextureAttachment.hpp>
 
 namespace GlRender
 {
@@ -39,7 +39,7 @@ namespace GlRender
 		 *\para[in]		p_gl		Les APIs OpenGL.
 		 *\param[in]	p_texture	La texture.
 		 */
-		GlTextureAttachment( OpenGl & p_gl, Castor3D::DynamicTextureSPtr p_texture );
+		GlTextureAttachment( OpenGl & p_gl, Castor3D::TextureLayoutSPtr p_texture );
 		/**
 		 *\~english
 		 *\brief		Destructor.

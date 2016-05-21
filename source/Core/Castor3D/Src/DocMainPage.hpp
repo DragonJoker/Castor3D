@@ -137,7 +137,7 @@
  *<li>Introducing FrameVariableBuffer to manage frame variables with OpenGl UBO or DirectX 11 Constants buffer.</li>
  *<li>Implemented initialisation and cleanup of GPU side objects in two events : InitialiseEvent and CleanupEvent.</li>
  *<li>Merged GpuBuffer::Initialise and GpuBuffer::SetShaderProgram functions to ease their use.</li>
- *<li>Removed auto mipmap generation, now if user wants it, he does it with DynamicTexture::GenerateMipmaps function.</li>
+ *<li>Removed auto mipmap generation, now if user wants it, he does it with TextureLayout::GenerateMipmaps function.</li>
  *<li>Added DepthStencilState class to manage those buffers states like Direct3D 11 (who does it well).</li>
  *<li>Added blend state, implemented raster state.</li>
  *<li>Put a BlendState instance in Pass and removed rgb/alpha blending from the pass.</li>
@@ -217,7 +217,7 @@
  *<li>Passes now initialise their shaders in Pass::Initialiser instead of trying to do it at each frame.</li>
  *<li>Changed RenderTarget : now it only holds frame buffer and all needed for that. It is now a Renderable so TargetRenderer has been created.</li>
  *<li>RenderWindow no longer extends RenderTarget, but now it has a RenderTarget as a private class member.</li>
- *<li>Created Texture class, StaticTexture and DynamicTexture to help implementing render targets.</li>
+ *<li>Created Texture class, StaticTexture and TextureLayout to help implementing render targets.</li>
  *<li>RenderTarget now uses RenderTechnique to make its rendering.</li>
  *<li>Created GeometryBuffers class which holds a Vertex buffer and an Index buffer, they are created by the RenderSystem.</li>
  *<li>Moved RenderTechnique basic frame buffer, texture and depth buffer into RenderTarget.</li>
@@ -567,7 +567,7 @@
  *<li>Ajout de la classe FrameVariableBuffer pour gérer les variables uniformes avec les UBO OpenGL ou les Constant buffer de Direct3D 11.</li>
  *<li>Ajout de la classe DepthStencilState pour gérer ces états à la mode Direct3D 11 (qui fait ça bien).</li>
  *<li>De même, ajout des classes BlendState et RasteriserState.</li>
- *<li>Création des classes Texture, StaticTexture et DynamicTexture pour faciliter l'implémentation des cibles de rendu.</li>
+ *<li>Création des classes Texture, StaticTexture et TextureLayout pour faciliter l'implémentation des cibles de rendu.</li>
  *<li>Ajout de canaux pour les textures (couleur, ambiante, diffusion, speculaire, normale, hauteur, brillance).</li>
  *<li>Création de la classe TechniqueParameters pour passer des paramètres spécifiques aux techniques comme, par exemple, le nombre d'échantillons (pour le MSAA).</li>
  *<li>Introduction de la classe SamplerState pour grouper les appels à SetSamplerState et autres.</li>
@@ -585,7 +585,7 @@
  *<li>Découpe de eBUFFER_MODE en eBUFFER_ACCESS_TYPE et eBUFFER_ACCESS_NATURE.</li>
  *<li>L'initialisation des objets GPU se passe maintenant avec l'utilisation de deux évènements : InitialiseEvent et CleanupEvent.</li>
  *<li>Fusion de GpuBuffer::Initialise et GpuBuffer::SetShaderProgram afin d'en simplifier l'utilisation.</li>
- *<li>Suppression de la génération automatique des mipmaps. Maintenant, si l'utilisateur vuet les générer, il utilise la fonction DynamicTexture::GenerateMipmaps.</li>
+ *<li>Suppression de la génération automatique des mipmaps. Maintenant, si l'utilisateur vuet les générer, il utilise la fonction TextureLayout::GenerateMipmaps.</li>
  *<li>Implémentation de l'instanciation hardware des maillages.</li>
  *<li>Modifications de Castor3D::Submesh :
  *<ul>

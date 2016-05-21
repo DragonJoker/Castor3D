@@ -9,13 +9,14 @@
 #include "GlPipeline.hpp"
 #include "GlRenderSystem.hpp"
 
-#include <GeometryBuffers.hpp>
-#include <IndexBuffer.hpp>
 #include <MaterialManager.hpp>
-#include <RenderLoop.hpp>
-#include <RenderWindow.hpp>
-#include <ShaderProgram.hpp>
-#include <VertexBuffer.hpp>
+
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Mesh/Buffer/IndexBuffer.hpp>
+#include <Mesh/Buffer/VertexBuffer.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Render/RenderWindow.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

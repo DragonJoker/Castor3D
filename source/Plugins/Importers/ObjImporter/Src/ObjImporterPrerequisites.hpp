@@ -18,8 +18,8 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___OBJ_IMPORTER_PREREQUISITES_H___
 #define ___OBJ_IMPORTER_PREREQUISITES_H___
 
-#include <Importer.hpp>
-#include <FaceIndices.hpp>
+#include <Mesh/Importer.hpp>
+#include <Mesh/FaceIndices.hpp>
 
 #ifndef _WIN32
 #	define C3D_Obj_API

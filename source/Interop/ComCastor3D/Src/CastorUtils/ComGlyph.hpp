@@ -31,12 +31,12 @@ namespace CastorCom
 	\version	0.7.0
 	\date		10/09/2014
 	\~english
-	\brief		This class defines a CImage object accessible from COM.
+	\brief		This class defines a CGlyph object accessible from COM.
 	\~french
-	\brief		Cette classe définit un CImage accessible depuis COM.
+	\brief		Cette classe définit un CGlyph accessible depuis COM.
 	*/
 	class ATL_NO_VTABLE CGlyph
-		:	COM_ATL_OBJECT( Glyph )
+		: COM_ATL_OBJECT( Glyph )
 	{
 	public:
 		/**
@@ -60,10 +60,9 @@ namespace CastorCom
 		}
 
 		COM_PROPERTY_GET( Size, ISize *, make_getter( m_glyph, &Castor::Glyph::GetSize ) );
-		COM_PROPERTY_GET( Position, IPosition *, make_getter( m_glyph, &Castor::Glyph::GetPosition ) );
-		COM_PROPERTY_GET( Advance, ISize *, make_getter( m_glyph, &Castor::Glyph::GetAdvance ) );
+		COM_PROPERTY_GET( Bearing, IPosition *, make_getter( m_glyph, &Castor::Glyph::GetBearing ) );
+		COM_PROPERTY_GET( Advance, INT, make_getter( m_glyph, &Castor::Glyph::GetAdvance ) );
 
-		STDMETHOD( AdjustPosition )( /* [in] */ UINT x, /* [in] */ UINT y );
 	private:
 		Castor::Glyph * m_glyph;
 	};

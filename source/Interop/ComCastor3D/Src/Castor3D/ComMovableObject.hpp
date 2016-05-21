@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 
-#include <MovableObject.hpp>
+#include <Scene/MovableObject.hpp>
 
 namespace CastorCom
 {

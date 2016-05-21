@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_TEXTURE_UNIT_H__
 #define __COMC3D_COM_TEXTURE_UNIT_H__
 
-#include "ComTexture.hpp"
+#include "ComTextureLayout.hpp"
 #include "ComColour.hpp"
 
-#include <TextureUnit.hpp>
+#include <Texture/TextureUnit.hpp>
 
 namespace CastorCom
 {
@@ -63,7 +63,7 @@ namespace CastorCom
 			m_internal = internal;
 		}
 
-		COM_PROPERTY( Texture, ITexture *, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetTexture ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetTexture ) );
+		COM_PROPERTY( Texture, ITextureLayout *, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetTexture ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetTexture ) );
 		COM_PROPERTY( Sampler, ISampler *, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetSampler ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetSampler ) );
 		COM_PROPERTY( AlphaFunc, eALPHA_FUNC, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlphaFunc ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlphaFunc ) );
 		COM_PROPERTY( AlphaValue, float, make_getter( m_internal.get(), &Castor3D::TextureUnit::GetAlphaValue ), make_putter( m_internal.get(), &Castor3D::TextureUnit::SetAlphaValue ) );

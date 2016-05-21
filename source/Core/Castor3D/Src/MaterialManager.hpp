@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_MATERIAL_MANAGER_H___
 #define ___C3D_MATERIAL_MANAGER_H___
 
-#include "ResourceManager.hpp"
+#include "Manager/ResourceManager.hpp"
 
-#include "Material.hpp"
+#include "Material/Material.hpp"
 
 namespace Castor3D
 {

@@ -31,37 +31,38 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <SquareMatrix.hpp>
 #include <Quaternion.hpp>
 
-#include <Animable.hpp>
-#include <AnimatedObject.hpp>
 #include <AnimatedObjectGroupManager.hpp>
 #include <BillboardManager.hpp>
-#include <Engine.hpp>
-#include <SceneManager.hpp>
-#include <CameraManager.hpp>
-#include <MeshManager.hpp>
-#include <Submesh.hpp>
-#include <LightManager.hpp>
-#include <DirectionalLight.hpp>
-#include <SpotLight.hpp>
-#include <PointLight.hpp>
-#include <MaterialManager.hpp>
-#include <Pass.hpp>
-#include <PluginManager.hpp>
-#include <TextureUnit.hpp>
-#include <StaticTexture.hpp>
-#include <DynamicTexture.hpp>
-#include <SceneNodeManager.hpp>
-#include <ShaderProgram.hpp>
-#include <SamplerManager.hpp>
-#include <GeometryManager.hpp>
-#include <WindowManager.hpp>
-#include <OverlayManager.hpp>
-#include <PanelOverlay.hpp>
-#include <BorderPanelOverlay.hpp>
-#include <TextOverlay.hpp>
 #include <BlendStateManager.hpp>
 #include <DepthStencilStateManager.hpp>
+#include <CameraManager.hpp>
+#include <Engine.hpp>
+#include <GeometryManager.hpp>
+#include <LightManager.hpp>
+#include <MaterialManager.hpp>
+#include <MeshManager.hpp>
+#include <OverlayManager.hpp>
+#include <PluginManager.hpp>
 #include <RasteriserStateManager.hpp>
+#include <SamplerManager.hpp>
+#include <SceneManager.hpp>
+#include <SceneNodeManager.hpp>
+#include <WindowManager.hpp>
+
+#include <Animation/Animable.hpp>
+#include <Animation/AnimatedObject.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Overlay/PanelOverlay.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
+#include <Overlay/TextOverlay.hpp>
+#include <Scene/Light/DirectionalLight.hpp>
+#include <Scene/Light/SpotLight.hpp>
+#include <Scene/Light/PointLight.hpp>
+#include <Shader/ShaderProgram.hpp>
+#include <Texture/TextureImage.hpp>
+#include <Texture/TextureLayout.hpp>
+#include <Texture/TextureUnit.hpp>
 
 namespace cpy
 {
@@ -290,7 +291,7 @@ namespace cpy
 
 	struct Texture3DResizer
 	{
-		void operator()( Castor3D::DynamicTexture * texture, Castor::Size const & size, uint32_t depth )
+		void operator()( Castor3D::TextureImage * texture, Castor::Size const & size, uint32_t depth )
 		{
 			texture->Resize( Castor::Point3ui( size.width(), size.height(), depth ) );
 		}
@@ -299,9 +300,9 @@ namespace cpy
 	template< class Texture, typename Param >
 	struct Texture3DImageSetter
 	{
-		void operator()( Texture * texture, Castor::Size const & size, uint32_t depth, Param param )
+		void operator()( Castor3D::TextureImage * texture, Castor::Size const & size, uint32_t depth, Param param )
 		{
-			texture->SetImage( Castor::Point3ui( size.width(), size.height(), depth ), param );
+			texture->SetSource( Castor::Point3ui( size.width(), size.height(), depth ), param );
 		}
 	};
 
@@ -495,10 +496,10 @@ namespace boost
 			{
 				return boost::mpl::vector< void, Castor3D::Geometry *, Castor3D::SubmeshSPtr, Castor3D::MaterialSPtr >();
 			}
-			inline boost::mpl::vector< void, Castor3D::DynamicTexture *, Castor::Size const &, uint32_t >
+			inline boost::mpl::vector< void, Castor3D::TextureImage *, Castor::Size const &, uint32_t >
 			get_signature( cpy::Texture3DResizer, void * = 0 )
 			{
-				return boost::mpl::vector< void, Castor3D::DynamicTexture *, Castor::Size const &, uint32_t >();
+				return boost::mpl::vector< void, Castor3D::TextureImage *, Castor::Size const &, uint32_t >();
 			}
 			template< class Texture, typename Param >
 			inline boost::mpl::vector< void, Texture *, Castor::Size const &, uint32_t, Param >

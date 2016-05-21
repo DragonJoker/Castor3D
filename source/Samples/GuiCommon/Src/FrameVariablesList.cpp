@@ -6,10 +6,10 @@
 #include "PropertiesHolder.hpp"
 
 #include <Engine.hpp>
-#include <FrameVariable.hpp>
-#include <FrameVariableBuffer.hpp>
-#include <RenderSystem.hpp>
-#include <ShaderProgram.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Shader/FrameVariable.hpp>
+#include <Shader/FrameVariableBuffer.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 #include <wx/imaglist.h>
 

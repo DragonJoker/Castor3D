@@ -1,7 +1,7 @@
 #include "GlRenderBuffer.hpp"
 #include "OpenGl.hpp"
 
-#include <RenderBuffer.hpp>
+#include <FrameBuffer/RenderBuffer.hpp>
 
 using namespace Castor3D;
 using namespace Castor;

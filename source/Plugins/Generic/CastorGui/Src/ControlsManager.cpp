@@ -1,4 +1,4 @@
-﻿#include "ControlsManager.hpp"
+#include "ControlsManager.hpp"
 
 #include "CtrlControl.hpp"
 #include "CtrlButton.hpp"
@@ -8,9 +8,9 @@
 #include "CtrlSlider.hpp"
 #include "CtrlStatic.hpp"
 
-#include <BorderPanelOverlay.hpp>
-#include <InitialiseEvent.hpp>
-#include <FunctorEvent.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Overlay/BorderPanelOverlay.hpp>
 
 using namespace Castor;
 using namespace Castor3D;

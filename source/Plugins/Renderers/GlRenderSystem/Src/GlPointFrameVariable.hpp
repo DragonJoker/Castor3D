@@ -18,7 +18,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___GL_POINT_FRAME_VARIABLE_H___
 #define ___GL_POINT_FRAME_VARIABLE_H___
 
-#include <PointFrameVariable.hpp>
+#include <Shader/PointFrameVariable.hpp>
 
 #include "GlFrameVariableBase.hpp"
 

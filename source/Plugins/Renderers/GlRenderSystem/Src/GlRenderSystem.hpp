@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "GlPipeline.hpp"
 #include "GlContext.hpp"
 
-#include <RenderSystem.hpp>
+#include <Render/RenderSystem.hpp>
 
 namespace GlRender
 {
@@ -71,13 +71,13 @@ namespace GlRender
 		 */
 		virtual std::shared_ptr< Castor3D::GpuBuffer< uint8_t > > CreateVertexBuffer( Castor3D::CpuBuffer< uint8_t > * p_buffer );
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateStaticTexture
+		 *\copydoc		Castor3D::RenderSystem::CreateTexture
 		 */
-		virtual Castor3D::StaticTextureSPtr CreateStaticTexture();
+		virtual Castor3D::TextureLayoutSPtr CreateTexture( Castor3D::eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
-		 *\copydoc		Castor3D::RenderSystem::CreateDynamicTexture
+		 *\copydoc		Castor3D::RenderSystem::CreateTextureStorage
 		 */
-		virtual Castor3D::DynamicTextureSPtr CreateDynamicTexture( uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		virtual Castor3D::TextureStorageUPtr CreateTextureStorage( Castor3D::eTEXTURE_TYPE p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\copydoc		Castor3D::RenderSystem::CreateFrameVariableBuffer
 		 */

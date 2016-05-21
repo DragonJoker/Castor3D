@@ -28,6 +28,8 @@ extern "C"
 #	endif
 #endif
 
+#include <PixelBufferBase.hpp>
+
 using namespace Castor;
 using namespace Castor3D;
 
@@ -381,7 +383,7 @@ namespace GuiCommon
 				m_pAvCodecContext->width = l_size.x;
 				m_pAvCodecContext->height = l_size.y;
 				// Frames per second
-				m_pAvCodecContext->time_base = ( AVRational )
+				m_pAvCodecContext->time_base = AVRational
 				{
 					1, m_iWantedFPS
 				};
@@ -422,6 +424,8 @@ namespace GuiCommon
 					StopRecord();
 					throw std::runtime_error( ( char const * )wxString( _( "Could not open file" ) ).mb_str( wxConvUTF8 ) );
 				}
+
+				return true;
 			}
 
 			virtual void DoRecordFrame( PxBufferBaseSPtr p_buffer )
@@ -467,7 +471,7 @@ namespace GuiCommon
 		private:
 			const AVCodecID m_iCodecID = AV_CODEC_ID_H264;
 			const int m_iBitRate = 600000;
-			const AVPixelFormat m_iPixFmt = PIX_FMT_YUV420P;
+			const AVPixelFormat m_iPixFmt = AV_PIX_FMT_YUV420P;
 			AVCodec * m_pAvCodec;
 			AVFrame * m_pAvFrame;
 			AVPicture m_avEncodedPicture;

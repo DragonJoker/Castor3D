@@ -5,7 +5,7 @@
 
 #include <Engine.hpp>
 #include <PluginManager.hpp>
-#include <RendererPlugin.hpp>
+#include <Plugin/RendererPlugin.hpp>
 
 using namespace Castor3D;
 

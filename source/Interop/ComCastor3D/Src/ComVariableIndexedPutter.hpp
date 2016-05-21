@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComParameterCast.hpp"
 
 #include <Engine.hpp>
-#include <FunctorEvent.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
 
 namespace CastorCom
 {

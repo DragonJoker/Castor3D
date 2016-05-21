@@ -2,25 +2,27 @@
 #include "AseFileContext.hpp"
 #include "AseImporter.hpp"
 
-#include <Buffer.hpp>
-#include <Camera.hpp>
 #include <Engine.hpp>
-#include <Face.hpp>
-#include <Geometry.hpp>
-#include <ManagerView.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
-#include <Pass.hpp>
-#include <Plugin.hpp>
-#include <RenderSystem.hpp>
 #include <SceneManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <StaticTexture.hpp>
-#include <Submesh.hpp>
-#include <TextureUnit.hpp>
-#include <Version.hpp>
-#include <Vertex.hpp>
-#include <Viewport.hpp>
+
+#include <Manager/ManagerView.hpp>
+#include <Material/Pass.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Face.hpp>
+#include <Mesh/Vertex.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
+#include <Miscellaneous/Version.hpp>
+#include <Plugin/Plugin.hpp>
+#include <Plugin/ImporterPlugin.hpp>
+#include <Render/RenderSystem.hpp>
+#include <Render/Viewport.hpp>
+#include <Scene/Camera.hpp>
+#include <Scene/Geometry.hpp>
+#include <Texture/TextureUnit.hpp>
+#include <Manager/ManagerView.hpp>
 
 #include <Image.hpp>
 

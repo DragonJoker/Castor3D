@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComLightCategory.hpp"
 
-#include <PointLight.hpp>
+#include <Scene/Light/PointLight.hpp>
 
 namespace CastorCom
 {

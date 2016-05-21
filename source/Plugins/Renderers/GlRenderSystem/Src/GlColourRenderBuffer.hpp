@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlRenderBuffer.hpp"
 
-#include <ColourRenderBuffer.hpp>
+#include <FrameBuffer/ColourRenderBuffer.hpp>
 
 namespace GlRender
 {

@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComAtlObject.hpp"
 
-#include <ShaderProgram.hpp>
+#include <Shader/ShaderProgram.hpp>
 
 namespace CastorCom
 {

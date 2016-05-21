@@ -22,7 +22,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlHolder.hpp"
 
-#include <ProgramInputLayout.hpp>
+#include <Shader/ProgramInputLayout.hpp>
 
 namespace GlRender
 {

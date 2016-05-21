@@ -1,7 +1,7 @@
 #include "GlTextureAttachment.hpp"
 
 #include "GlFrameBuffer.hpp"
-#include "GlDynamicTexture.hpp"
+#include "GlTexture.hpp"
 #include "OpenGl.hpp"
 
 using namespace Castor3D;
@@ -9,7 +9,7 @@ using namespace Castor;
 
 namespace GlRender
 {
-	GlTextureAttachment::GlTextureAttachment( OpenGl & p_gl, DynamicTextureSPtr p_texture )
+	GlTextureAttachment::GlTextureAttachment( OpenGl & p_gl, TextureLayoutSPtr p_texture )
 		: TextureAttachment( p_texture )
 		, Holder( p_gl )
 		, m_glAttachmentPoint( eGL_TEXTURE_ATTACHMENT_NONE )
@@ -75,11 +75,11 @@ namespace GlRender
 		if ( GetOpenGl().HasFbo() )
 		{
 			m_glAttachmentPoint = eGL_TEXTURE_ATTACHMENT( GetOpenGl().Get( GetAttachmentPoint() ) + GetAttachmentIndex() );
-			GlDynamicTextureSPtr l_pTexture = std::static_pointer_cast< GlDynamicTexture >( GetTexture() );
+			auto l_pTexture = std::static_pointer_cast< GlTexture >( GetTexture() );
 
 			switch ( GetTarget() )
 			{
-			case eTEXTURE_TARGET_1D:
+			case eTEXTURE_TYPE_1D:
 
 				if ( l_pTexture->GetType() == eTEXTURE_TYPE_1D )
 				{
@@ -92,7 +92,7 @@ namespace GlRender
 
 				break;
 
-			case eTEXTURE_TARGET_2D:
+			case eTEXTURE_TYPE_2D:
 
 				if ( l_pTexture->GetType() == eTEXTURE_TYPE_2D )
 				{
@@ -105,7 +105,7 @@ namespace GlRender
 
 				break;
 
-			case eTEXTURE_TARGET_3D:
+			case eTEXTURE_TYPE_3D:
 
 				if ( l_pTexture->GetType() == eTEXTURE_TYPE_3D )
 				{
@@ -118,7 +118,7 @@ namespace GlRender
 
 				break;
 
-			case eTEXTURE_TARGET_LAYER:
+			case eTEXTURE_TYPE_2DARRAY:
 				l_return = GetOpenGl().FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, l_pTexture->GetGlName(), 0, GetLayer() );
 				break;
 			}
@@ -145,25 +145,25 @@ namespace GlRender
 	{
 		if ( GetOpenGl().HasFbo() )
 		{
-			GlDynamicTextureSPtr l_pTexture = std::static_pointer_cast< GlDynamicTexture >( GetTexture() );
+			auto l_pTexture = GetTexture();
 
 			if ( m_glStatus != eGL_FRAMEBUFFER_UNSUPPORTED )
 			{
 				switch ( GetTarget() )
 				{
-				case eTEXTURE_TARGET_1D:
+				case eTEXTURE_TYPE_1D:
 					GetOpenGl().FramebufferTexture1D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), 0, 0 );
 					break;
 
-				case eTEXTURE_TARGET_2D:
+				case eTEXTURE_TYPE_2D:
 					GetOpenGl().FramebufferTexture2D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), 0, 0 );
 					break;
 
-				case eTEXTURE_TARGET_3D:
+				case eTEXTURE_TYPE_3D:
 					GetOpenGl().FramebufferTexture3D( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, GetOpenGl().Get( l_pTexture->GetType() ), 0, 0, GetLayer() );
 					break;
 
-				case eTEXTURE_TARGET_LAYER:
+				case eTEXTURE_TYPE_2DARRAY:
 					GetOpenGl().FramebufferTextureLayer( eGL_FRAMEBUFFER_MODE_DEFAULT, m_glAttachmentPoint, 0, 0, GetLayer() );
 					break;
 				}

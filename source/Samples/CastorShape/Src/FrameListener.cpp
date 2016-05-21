@@ -1,8 +1,8 @@
 #include "FrameListener.hpp"
 #include "RenderPanel.hpp"
 
-#include <Ray.hpp>
-#include <Scene.hpp>
+#include <Miscellaneous/Ray.hpp>
+#include <Scene/Scene.hpp>
 
 using namespace Castor3D;
 using namespace CastorShape;

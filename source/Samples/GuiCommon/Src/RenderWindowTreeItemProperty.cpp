@@ -1,6 +1,6 @@
 #include "RenderWindowTreeItemProperty.hpp"
 
-#include <RenderWindow.hpp>
+#include <Render/RenderWindow.hpp>
 
 #include "AdditionalProperties.hpp"
 #include <wx/propgrid/advprops.h>

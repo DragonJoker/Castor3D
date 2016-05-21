@@ -2,14 +2,14 @@
 #include "ComGeometry.hpp"
 #include "ComCamera.hpp"
 #include "ComLight.hpp"
-#include "ComTexture.hpp"
 
 #include <BillboardManager.hpp>
 #include <CameraManager.hpp>
 #include <GeometryManager.hpp>
 #include <LightManager.hpp>
 #include <SceneNodeManager.hpp>
-#include <Viewport.hpp>
+
+#include <Render/Viewport.hpp>
 
 namespace CastorCom
 {
@@ -142,7 +142,7 @@ namespace CastorCom
 				if ( hr == S_OK )
 				{
 					auto l_camera = m_internal->GetCameraManager().Create( FromBstr( name ), node ? static_cast< CSceneNode * >( node )->GetInternal() : nullptr );
-					l_camera->GetViewport().SetSize( Castor::Size( ww, wh ) );
+					l_camera->GetViewport().Resize( Castor::Size( ww, wh ) );
 					static_cast< CCamera * >( *pVal )->SetInternal( l_camera );
 				}
 			}
@@ -415,7 +415,7 @@ namespace CastorCom
 		return hr;
 	}
 
-	STDMETHODIMP CScene::GetBackgroundImage( /* [out, retval] */ ITexture ** pVal )
+	STDMETHODIMP CScene::GetBackgroundImage( /* [out, retval] */ ITextureLayout ** pVal )
 	{
 		HRESULT hr = E_POINTER;
 
@@ -423,11 +423,11 @@ namespace CastorCom
 		{
 			if ( pVal )
 			{
-				hr = CTexture::CreateInstance( pVal );
+				hr = CTextureLayout::CreateInstance( pVal );
 
 				if ( hr == S_OK )
 				{
-					static_cast< CTexture * >( *pVal )->SetInternal( m_internal->GetBackgroundImage() );
+					static_cast< CTextureLayout * >( *pVal )->SetInternal( m_internal->GetBackgroundImage() );
 				}
 			}
 		}

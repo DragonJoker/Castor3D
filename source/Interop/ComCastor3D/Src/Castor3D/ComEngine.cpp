@@ -14,17 +14,18 @@
 
 #include <BlendStateManager.hpp>
 #include <DepthStencilStateManager.hpp>
-#include <FunctorEvent.hpp>
-#include <InitialiseEvent.hpp>
 #include <MaterialManager.hpp>
 #include <MeshManager.hpp>
 #include <PluginManager.hpp>
 #include <RasteriserStateManager.hpp>
-#include <RenderLoop.hpp>
 #include <SamplerManager.hpp>
-#include <SceneFileParser.hpp>
 #include <SceneManager.hpp>
 #include <WindowManager.hpp>
+
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Render/RenderLoop.hpp>
+#include <Scene/SceneFileParser.hpp>
 
 #define CASTOR3D_THREADED 0
 

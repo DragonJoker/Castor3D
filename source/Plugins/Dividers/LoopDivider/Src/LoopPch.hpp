@@ -22,17 +22,6 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #if CASTOR_USE_PCH
 #	include "LoopPrerequisites.hpp"
-
-#	include <Castor3DPrerequisites.hpp>
-
-#	include <Submesh.hpp>
-#	include <Vertex.hpp>
-#	include <Face.hpp>
-#	include <Version.hpp>
-#	include <Plugin.hpp>
-
-#	include <Subdivider.hpp>
-#	include <FrameListener.hpp>
 #endif
 
 #endif

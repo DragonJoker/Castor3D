@@ -1,12 +1,11 @@
 #include "SubmeshTreeItemProperty.hpp"
 
-#include <FunctorEvent.hpp>
-#include <Geometry.hpp>
-#include <GeometryBuffers.hpp>
-#include <Material.hpp>
 #include <MaterialManager.hpp>
-#include <Scene.hpp>
-#include <Submesh.hpp>
+#include <Event/Frame/FunctorEvent.hpp>
+#include <Mesh/Submesh.hpp>
+#include <Mesh/Buffer/GeometryBuffers.hpp>
+#include <Scene/Geometry.hpp>
+#include <Scene/Scene.hpp>
 
 #include "AdditionalProperties.hpp"
 

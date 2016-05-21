@@ -1,4 +1,5 @@
 cmake_minimum_required( VERSION 2.8 )
+
 #--------------------------------------------------------------------------------------------------
 #	Initial configurations
 #--------------------------------------------------------------------------------------------------
@@ -45,6 +46,7 @@ if ( EXISTS ${CMAKE_SOURCE_DIR}/../dependencies/${COMPILER}/${PROJECTS_PLATFORM}
 	set( LIBZIP_ROOT_DIR ${DEPENDENCIES_DIR}/libzip )
 	set( ASSIMP_ROOT_DIR ${DEPENDENCIES_DIR}/assimp )
 	set( GLM_ROOT_DIR ${DEPENDENCIES_DIR}/glm )
+	set( FFMPEG_DIR ${DEPENDENCIES_DIR}/ffmpeg )
 	set( OpenCV_DIR ${DEPENDENCIES_DIR}/opencv )
 	set( OpenCV_LIBRARY_DIR ${DEPENDENCIES_DIR}/opencv/lib )
 	set( OpenCV_LIB_DIR_OPT ${DEPENDENCIES_DIR}/opencv/lib )
@@ -130,6 +132,21 @@ set( CastorBinsDependencies
 
 option( CASTOR_BUILDGRP_TEST "Build test projects" FALSE )
 option( CASTOR_BUILDGRP_SETUP "Build setup projects" FALSE )
+
+# Small macro to add subdirectory files to current target source and header files
+macro( parse_subdir_files _FOLDER _GROUP )
+	file( GLOB _FOLDER_HEADER_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.h
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.hpp
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.inl
+	)
+	file( GLOB _FOLDER_SOURCE_FILES
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.c
+		${CMAKE_CURRENT_SOURCE_DIR}/Src/${_FOLDER}/*.cpp
+	)
+	source_group( "Header Files\\${_GROUP}" FILES ${_FOLDER_HEADER_FILES} )
+	source_group( "Source Files\\${_GROUP}" FILES ${_FOLDER_SOURCE_FILES} )
+endmacro()
 
 if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 	if( Boost_FOUND )

@@ -1,10 +1,9 @@
 #include "NewMaterialDialog.hpp"
 
-#include <InitialiseEvent.hpp>
 #include <MaterialManager.hpp>
-#include <Material.hpp>
-#include <Pass.hpp>
-#include <TextureUnit.hpp>
+#include <Event/Frame/InitialiseEvent.hpp>
+#include <Material/Pass.hpp>
+#include <Texture/TextureUnit.hpp>
 
 #include <GradientButton.hpp>
 #include <AdditionalProperties.hpp>

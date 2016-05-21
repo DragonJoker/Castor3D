@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "ComColour.hpp"
 
-#include <BlendState.hpp>
+#include <State/BlendState.hpp>
 
 namespace CastorCom
 {

@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef __COMC3D_COM_SUBMESH_H__
 #define __COMC3D_COM_SUBMESH_H__
 
-#include "ComTexture.hpp"
+#include "ComTextureLayout.hpp"
 #include "ComColour.hpp"
 
-#include <Submesh.hpp>
+#include <Mesh/Submesh.hpp>
 
 namespace CastorCom
 {

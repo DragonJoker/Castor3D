@@ -1,4 +1,4 @@
-﻿/*
+/*
 This source file is part of Castor3D (http://castor3d.developpez.com/castor3d.html)
 
 This program is free software; you can redistribute it and/or modify it under
@@ -18,10 +18,10 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_LIGHT_MANAGER_H___
 #define ___C3D_LIGHT_MANAGER_H___
 
-#include "ObjectManager.hpp"
+#include "Manager/ObjectManager.hpp"
 
-#include "Light.hpp"
-#include "LightFactory.hpp"
+#include "Scene/Light/Light.hpp"
+#include "Scene/Light/LightFactory.hpp"
 
 namespace Castor3D
 {
@@ -189,11 +189,9 @@ namespace Castor3D
 
 	private:
 		//!\~english The lights factory	\~french La fabrique de lumières
-		LightFactory & m_lightFactory;
+		LightFactory m_lightFactory;
 		//!\~english The lights sorted byt light type	\~french Les lumières, triées par type de lumière.
 		LightsMap m_typeSortedLights;
-		//!\~english The image containing lights data	\~french L'image contenant les données des lumières
-		Castor::PxBufferBaseSPtr m_lightsData;
 		//!\~english The lights texture	\~french La texture contenant les lumières
 		TextureUnitSPtr m_lightsTexture;
 	};

@@ -21,7 +21,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include "ComColour.hpp"
 #include "ComShaderProgram.hpp"
 
-#include <Pass.hpp>
+#include <Material/Pass.hpp>
 
 namespace CastorCom
 {

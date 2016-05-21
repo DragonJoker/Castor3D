@@ -20,7 +20,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "GlBuffer.hpp"
 
-#include <Buffer.hpp>
+#include <Mesh/Buffer/Buffer.hpp>
 
 namespace GlRender
 {

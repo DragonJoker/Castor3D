@@ -26,24 +26,6 @@ namespace Castor3D
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
-	\brief		Texture mapping modes enumeration
-	\~french
-	\brief		Enumération des modes de mapping des textures
-	*/
-	typedef enum eTEXTURE_MAP_MODE
-		: uint8_t
-	{
-		//!\~english Usual map mode	\~french Mode habituel (aucune transformation des UVW)
-		eTEXTURE_MAP_MODE_NONE,
-		//!\~english Reflexion map mode	\~french Mode reflexion map
-		eTEXTURE_MAP_MODE_REFLECTION,
-		//!\~english Sphere map mode	\~french Mode sphere map
-		eTEXTURE_MAP_MODE_SPHERE,
-		CASTOR_ENUM_BOUNDS( eTEXTURE_MAP_MODE, eTEXTURE_MAP_MODE_NONE )
-	}	eTEXTURE_MAP_MODE;
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
 	\brief		Alpha functions enumeration
 	\~french
 	\brief		Enumération des fonctions alpha
@@ -51,21 +33,29 @@ namespace Castor3D
 	typedef enum eALPHA_FUNC
 		: uint8_t
 	{
-		//!\~english Always take texture colour	\~french Prend toujours la couleur de la texture
+		//!\~english Always take texture colour
+		//!\~french Prend toujours la couleur de la texture
 		eALPHA_FUNC_ALWAYS,
-		//!\~english Takes texture colour if alpha is less than given value	\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnee
+		//!\~english Takes texture colour if alpha is less than given value
+		//!\~french Prend la couleur de la texture si l'alpha est inferieur a la valeur donnée
 		eALPHA_FUNC_LESS,
-		//!\~english Takes texture colour if alpha is less than or equal to given value	\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnee
+		//!\~english Takes texture colour if alpha is less than or equal to given value
+		//!\~french Prend la couleur de la texture si l'alpha est inferieur ou egal a la valeur donnée
 		eALPHA_FUNC_LESS_OR_EQUAL,
-		//!\~english Takes texture colour if alpha is equal to given value	\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnee
+		//!\~english Takes texture colour if alpha is equal to given value
+		//!\~french Prend la couleur de la texture si l'alpha est egal a la valeur donnée
 		eALPHA_FUNC_EQUAL,
-		//!\~english Takes texture colour if alpha is different of given value	\~french Prend la couleur de la texture si l'alpha est different de la valeur donnee
+		//!\~english Takes texture colour if alpha is different of given value
+		//!\~french Prend la couleur de la texture si l'alpha est different de la valeur donnée
 		eALPHA_FUNC_NOT_EQUAL,
-		//!\~english Takes texture colour if alpha is grater than or equal to given value	\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnee
+		//!\~english Takes texture colour if alpha is grater than or equal to given value
+		//!\~french Prend la couleur de la texture si l'alpha est superieur ou egal a la valeur donnée
 		eALPHA_FUNC_GREATER_OR_EQUAL,
-		//!\~english Takes texture colour if alpha is greater than given value	\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnee
+		//!\~english Takes texture colour if alpha is greater than given value
+		//!\~french Prend la couleur de la texture si l'alpha est superieur a la valeur donnée
 		eALPHA_FUNC_GREATER,
-		//!\~english Never take texture colour	\~french Ne prend jamais la couleur de la texture
+		//!\~english Never take texture colour
+		//!\~french Ne prend jamais la couleur de la texture
 		eALPHA_FUNC_NEVER,
 		CASTOR_ENUM_BOUNDS( eALPHA_FUNC, eALPHA_FUNC_ALWAYS )
 	}	eALPHA_FUNC;
@@ -274,17 +264,23 @@ namespace Castor3D
 	typedef enum eBLEND_MODE
 		: uint8_t
 	{
-		//!\~english Order dependent blending.	\~french Mélange dépendant de l'ordre
+		//!\~english Order dependent blending.
+		//!\~french Mélange dépendant de l'ordre.
 		eBLEND_MODE_NONE,
-		//!\~english Order independent, add the components.	\~french Mélange indépendant de l'ordre, additionnant les composantes
+		//!\~english Order independent, add the components.
+		//!\~french Mélange indépendant de l'ordre, additionnant les composantes.
 		eBLEND_MODE_ADDITIVE,
-		//!\~english Order independent, multiply the components.	\~french Indépendant de l'ordre, multipliant les composantes
+		//!\~english Order independent, multiply the components.
+		//!\~french Indépendant de l'ordre, multipliant les composantes.
 		eBLEND_MODE_MULTIPLICATIVE,
-		//!\~english Order dependent, interpolate the components.	\~french Indépendant de l'ordre, interpolant les composantes
+		//!\~english Order dependent, interpolate the components.
+		//!\~french Indépendant de l'ordre, interpolant les composantes.
 		eBLEND_MODE_INTERPOLATIVE,
-		//!\~english Order independent, using A-buffer, not implemented yet.	\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté)
+		//!\~english Order independent, using A-buffer, not implemented yet.
+		//!\~french Indépendant de l'ordre, utilisant les A-Buffer (non implémenté).
 		eBLEND_MODE_A_BUFFER,
-		//!\~english Order independent, using depth peeling, not implemented yet.	\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté)
+		//!\~english Order independent, using depth peeling, not implemented yet.
+		//!\~french Indépendant de l'ordre, utilisant le pelage en profondeur (non implémenté).
 		eBLEND_MODE_DEPTH_PEELING,
 		CASTOR_ENUM_BOUNDS( eBLEND_MODE, eBLEND_MODE_NONE )
 	}	eBLEND_MODE;
@@ -299,7 +295,7 @@ namespace Castor3D
 		: uint8_t
 	{
 		//!\~english 1 dimension texture buffer, used to store data.
-		//!\~french tampons de texture à une dimension, utilisé pour stocker des données.
+		//!\~french tampons de texture à 1 dimension, utilisé pour stocker des données.
 		eTEXTURE_TYPE_BUFFER,
 		//!\~english 1 dimension textures => one coordinate => U mapping
 		//!\~french Textures à 1 dimension => une coordonnée => U mapping
@@ -333,37 +329,33 @@ namespace Castor3D
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
-	\brief		Texture targets enumeration
+	\brief		Cube map faces.
 	\~french
-	\brief		Enumération des cibles de texture
+	\brief		Les faces d'une cube map.
 	*/
-	typedef enum eTEXTURE_TARGET
+	enum class CubeMapFace
 		: uint8_t
 	{
-		//!\~english 1 dimension texture	\~french Texture 1D
-		eTEXTURE_TARGET_1D,
-		//!\~english 2 dimensions texture	\~french Texture 2D
-		eTEXTURE_TARGET_2D,
-		//!\~english 3 dimensions texture	\~french Texture 3D
-		eTEXTURE_TARGET_3D,
-		//!\~english Layer texture	\~french Texture en couches
-		eTEXTURE_TARGET_LAYER,
-		CASTOR_ENUM_BOUNDS( eTEXTURE_TARGET, eTEXTURE_TARGET_1D )
-	}	eTEXTURE_TARGET;
-	/*!
-	\author 	Sylvain DOREMUS
-	\~english
-	\brief		Texture types enumeration
-	\~french
-	\brief		Enumération des types de texture
-	*/
-	typedef enum eTEXTURE_BASE_TYPE
-		: uint8_t
-	{
-		eTEXTURE_BASE_TYPE_STATIC,
-		eTEXTURE_BASE_TYPE_DYNAMIC,
-		CASTOR_ENUM_BOUNDS( eTEXTURE_BASE_TYPE, eTEXTURE_BASE_TYPE_STATIC )
-	}	eTEXTURE_BASE_TYPE;
+		//!\~english Face on positive X
+		//!\~french Face des X positifs.
+		PositiveX,
+		//!\~english Face on negative X
+		//!\~french Face des X négatifs.
+		NegativeX,
+		//!\~english Face on positive Y
+		//!\~french Face des Y positifs.
+		PositiveY,
+		//!\~english Face on negative Y
+		//!\~french Face des Y négatifs.
+		NegativeY,
+		//!\~english Face on positive Z
+		//!\~french Face des Z positifs.
+		PositiveZ,
+		//!\~english Face on negative Z
+		//!\~french Face des Z négatifs.
+		NegativeZ,
+		CASTOR_ENUM_CLASS_BOUNDS( PositiveX )
+	};
 	/*!
 	\author 	Sylvain DOREMUS
 	\~english
@@ -403,42 +395,52 @@ namespace Castor3D
 	typedef enum eTEXTURE_CHANNEL
 		: uint32_t
 	{
-		//!\~english Colour map	\~french Map de couleurs
+		//!\~english Colour map
+		//!\~french Map de couleurs
 		eTEXTURE_CHANNEL_COLOUR = 0x00000001,
-		//!\~english Diffuse map	\~french Map de diffuse
+		//!\~english Diffuse map
+		//!\~french Map de diffuse
 		eTEXTURE_CHANNEL_DIFFUSE = 0x00000002,
-		//!\~english Normal map	\~french Map de normales
+		//!\~english Normal map
+		//!\~french Map de normales
 		eTEXTURE_CHANNEL_NORMAL = 0x00000004,
-		//!\~english Opacity map	\~french Map d'opacité
+		//!\~english Opacity map
+		//!\~french Map d'opacité
 		eTEXTURE_CHANNEL_OPACITY = 0x00000008,
-		//!\~english Specular map	\~french Map de spéculaire
+		//!\~english Specular map
+		//!\~french Map de spéculaire
 		eTEXTURE_CHANNEL_SPECULAR = 0x00000010,
-		//!\~english Height map	\~french Map de hauteur
+		//!\~english Height map
+		//!\~french Map de hauteur
 		eTEXTURE_CHANNEL_HEIGHT = 0x00000020,
-		//!\~english Ambient map	\~french Map d'ambiante
+		//!\~english Ambient map
+		//!\~french Map d'ambiante
 		eTEXTURE_CHANNEL_AMBIENT = 0x00000040,
-		//!\~english Gloss map	\~french Map de gloss
+		//!\~english Gloss map
+		//!\~french Map de gloss
 		eTEXTURE_CHANNEL_GLOSS = 0x00000080,
-		//!\~english Emissive map	\~french Map d'émissive
+		//!\~english Emissive map
+		//!\~french Map d'émissive
 		eTEXTURE_CHANNEL_EMISSIVE = 0x00000100,
-		//!\~english Mask for all the texture channels	\~french Masque pour les canaux de texture
+		//!\~english Mask for all the texture channels
+		//!\~french Masque pour les canaux de texture
 		eTEXTURE_CHANNEL_ALL = 0x0000FFFF,
 		//!\~english Not really a texture channel (it is out of eTEXTURE_CHANNEL_ALL), used to tell we want text overlay shader source
 		//!\~french Pas vraiment un canal de texture (hors de eTEXTURE_CHANNEL_ALL), utilisé pour dire que nous voulons un shader d'incrustation texte
 		eTEXTURE_CHANNEL_TEXT = 0x00010000,
 	}	eTEXTURE_CHANNEL;
 
-	class Texture;
-	class StaticTexture;
-	class DynamicTexture;
+	class TextureImage;
+	class TextureLayout;
+	class TextureStorage;
 	class TextureUnit;
 	class Material;
 	class Pass;
 	class Sampler;
 
-	DECLARE_SMART_PTR( Texture );
-	DECLARE_SMART_PTR( StaticTexture );
-	DECLARE_SMART_PTR( DynamicTexture );
+	DECLARE_SMART_PTR( TextureImage );
+	DECLARE_SMART_PTR( TextureLayout );
+	DECLARE_SMART_PTR( TextureStorage );
 	DECLARE_SMART_PTR( TextureUnit );
 	DECLARE_SMART_PTR( Material );
 	DECLARE_SMART_PTR( Pass );

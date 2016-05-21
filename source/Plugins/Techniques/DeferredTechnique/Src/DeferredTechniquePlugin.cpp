@@ -1,10 +1,11 @@
 #include "DeferredRenderTechnique.hpp"
 
+#include <Logger.hpp>
+
 #include <Engine.hpp>
 #include <TechniqueManager.hpp>
-#include <Version.hpp>
 
-#include <Logger.hpp>
+#include <Miscellaneous/Version.hpp>
 
 using namespace Deferred;
 static const Castor::String NAME = cuT( "deferred" );

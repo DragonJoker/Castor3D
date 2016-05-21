@@ -18,9 +18,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 #ifndef ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 #define ___C3D_DEFERRED_SHADING_RENDER_TECHNIQUE_H___
 
-#include <BufferDeclaration.hpp>
-#include <RenderTechnique.hpp>
-#include <Viewport.hpp>
+#include <Mesh/Buffer/BufferDeclaration.hpp>
+#include <Technique/RenderTechnique.hpp>
+#include <Render/Viewport.hpp>
 
 #ifndef _WIN32
 #	define C3D_DeferredTechnique_API
@@ -180,7 +180,7 @@ namespace Deferred
 		//!\~english Vertex array (quad definition)	\~french Tableau de vertex (définition du quad)
 		std::array< Castor3D::BufferElementGroupSPtr, 6 > m_arrayVertex;
 		//!\~english The vertex buffer.	\~french Le tampon de sommets.
-		Castor3D::VertexBufferUPtr m_vertexBuffer;
+		Castor3D::VertexBufferSPtr m_vertexBuffer;
 		//!\~english Geometry buffers holder	\~french Conteneur de buffers de géométries
 		Castor3D::GeometryBuffersSPtr m_geometryBuffers;
 		//!\~english The viewport used when rendering is done	\~french Le viewport utilisé pour rendre la cible sur sa cible (fenêtre ou texture)

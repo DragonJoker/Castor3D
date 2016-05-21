@@ -20,9 +20,9 @@ http://www.gnu.org/copyleft/lesser.txt.
 
 #include "CastorGuiPrerequisites.hpp"
 
-#include <Pixel.hpp>
+#include <Event/UserInput/EventHandler.hpp>
 
-#include <EventHandler.hpp>
+#include <Pixel.hpp>
 #include <Position.hpp>
 #include <Rectangle.hpp>
 #include <Size.hpp>
