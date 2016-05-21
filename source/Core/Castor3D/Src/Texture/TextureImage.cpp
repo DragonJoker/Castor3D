@@ -124,7 +124,7 @@ namespace Castor3D
 		public:
 			Dynamic2DTextureSource( Size const & p_dimensions, ePIXEL_FORMAT p_format )
 			{
-				auto l_size{ p_dimensions };
+				Size l_size{ p_dimensions };
 				uint32_t l_depth{ 1u };
 				DoAdjustDimensions( l_size, l_depth );
 				m_buffer = PxBufferBase::create( l_size, p_format );

@@ -405,9 +405,9 @@ namespace Castor3D
 
 	void TextOverlay::DoPrepareWord( Size const & p_renderSize, std::u32string const & p_word, double p_wordWidth, Point2d const & p_size, double & p_left, DisplayableLine & p_line, DisplayableLineArray & p_lines )
 	{
-		FontTextureSPtr l_fontTexture = GetFontTexture();
-		Font const & l_font = *l_fontTexture->GetFont();
-		Position l_ovPosition = GetAbsolutePosition( p_renderSize );
+		auto l_fontTexture = GetFontTexture();
+		auto const & l_font = *l_fontTexture->GetFont();
+		auto l_ovPosition = GetAbsolutePosition( p_renderSize );
 
 		if ( p_left + p_wordWidth > p_size[0] && m_wrappingMode == eTEXT_WRAPPING_MODE_BREAK_WORDS )
 		{
