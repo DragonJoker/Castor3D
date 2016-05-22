@@ -42,7 +42,7 @@ namespace GlRender
 		 *\param[in]	p_cpuAccess		The required CPU access.
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::eTEXTURE_TYPE p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		GlPboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -66,10 +66,6 @@ namespace GlRender
 
 	private:
 		/**
-		 *\copydoc		Castor3D::TextureStorage::DoFill
-		 */
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
-		/**
 		 *\brief		Uploads the image pixels in asynchonous mode.
 		 */
 		void DoUploadAsync();
@@ -85,10 +81,6 @@ namespace GlRender
 		 *\brief		Downloads the image pixels in synchronous mode.
 		 */
 		void DoDownloadSync();
-		/**
-		 *\brief		Uploads the image pixels to the current storage (PBO or direct texture).
-		 */
-		void DoUploadImage( uint32_t p_width, uint32_t p_height, OpenGl::PixelFmt const & p_format, uint8_t const * p_buffer );
 
 	private:
 		//! The pixel transfer buffer, used to upload the pixels.

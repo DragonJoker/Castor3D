@@ -142,11 +142,22 @@ namespace Castor3D
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	p_engine	The engine.
+		 *\param[in]	p_index		The image index in its layout.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	p_engine	Le moteur.
+		 *\param[in]	p_index		L'index de l'image dans son layout.
 		 */
-		C3D_API TextureImage( Engine & p_engine );
+		C3D_API TextureImage( Engine & p_engine, uint32_t p_index );
+		/**
+		 *\~english
+		 *\brief		Defines the texture buffer from an image file.
+		 *\param[in]	p_path	The image file path.
+		 *\~french
+		 *\brief		Définit le tampon de la texture depuis un fichier image.
+		 *\param[in]	p_path	Le chemin d'accès à l'image.
+		 */
+		C3D_API void SetSource( Castor::Path const & p_path );
 		/**
 		 *\~english
 		 *\brief		Defines the texture buffer.
@@ -355,6 +366,16 @@ namespace Castor3D
 		{
 			return m_source->IsStatic();
 		}
+		/**
+		 *\~english
+		 *\return		The image index in its layout.
+		 *\~french
+		 *\return		L'index de l'image dans son layout.
+		 */
+		inline uint32_t GetIndex()const
+		{
+			return m_index;
+		}
 
 	private:
 		/**
@@ -365,7 +386,22 @@ namespace Castor3D
 		 *\brief		Réinitialise le stockage.
 		 *\remarks		Ne fait rien si le stockage n'avait pas été créé.
 		 */
-		void DoResetStorage();
+		bool DoResetStorage();
+		/**
+		 *\~english
+		 *\brief		Initialises the GPU storage.
+		 *\param[in]	p_type		The storage type.
+		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
+		 *\return		\p true if OK.
+		 *\~french
+		 *\brief		Initialise le stockage GPU.
+		 *\param[in]	p_type		Le type de stockage.
+		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
+		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
+		 *\return		\p true si tout s'est bien passé.
+		 */
+		bool DoCreateStorage( TextureStorageType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 
 	protected:
 		//!\~english	The texture source.
@@ -374,6 +410,9 @@ namespace Castor3D
 		//!\~english	The texture GPU storage.
 		//!\~french		Le stockage GPU de la texture.
 		TextureStorageUPtr m_storage;
+		//!\~english	The image index in its layout.
+		//!\~french		L'index de l'image dans son layout.
+		uint32_t m_index;
 	};
 }
 

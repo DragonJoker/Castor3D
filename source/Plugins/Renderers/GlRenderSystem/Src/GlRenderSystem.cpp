@@ -383,11 +383,11 @@ namespace GlRender
 		return std::make_shared< GlTexture >( GetOpenGl(), *this, p_type, p_cpuAccess, p_gpuAccess );
 	}
 
-	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( eTEXTURE_TYPE p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureStorageUPtr GlRenderSystem::CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
 		TextureStorageUPtr l_return;
 
-		if ( p_type == eTEXTURE_TYPE_BUFFER )
+		if ( p_type == TextureStorageType::Buffer )
 		{
 			l_return = std::make_unique< GlTboTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
 		}

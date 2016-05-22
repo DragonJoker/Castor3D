@@ -24,88 +24,6 @@ namespace GlRender
 		return glCheckError( GetOpenGl(), cuT( "glBindTexture" ) );
 	}
 
-	bool TexFunctions::TexSubImage1D( eGL_TEXDIM mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTexSubImage1D( mode, level, xoffset, width, format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTexSubImage1D" ) );
-	}
-
-	bool TexFunctions::TexSubImage2D( eGL_TEXDIM mode, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTexSubImage2D( mode, level, xoffset, yoffset, width, height, format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTexSubImage2D" ) );
-	}
-
-	bool TexFunctions::TexSubImage2D( eGL_TEXDIM mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTexSubImage2D( mode, level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTexSubImage2D" ) );
-	}
-
-	bool TexFunctions::TexSubImage2D( eGL_TEXDIM mode, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTexSubImage2D( mode, level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTexSubImage2D" ) );
-	}
-
-	bool TexFunctions::TexSubImage3D( eGL_TEXDIM mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTexSubImage3D( mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTexSubImage3D" ) );
-	}
-
-	bool TexFunctions::TexImage1D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTexImage1D( mode, level, internalFormat, width, border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTexImage1D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
-	}
-
-	bool TexFunctions::TexImage2D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTexImage2D( mode, level, internalFormat, width, height, border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTexImage2D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
-	}
-
-	bool TexFunctions::TexImage2D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTexImage2D( mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTexImage2D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
-	}
-
-	bool TexFunctions::TexImage3D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTexImage3D( mode, level, internalFormat, width, height, depth, border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTexImage3D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
-	}
-
 	bool TexFunctions::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, int param )
 	{
 		m_pfnTexParameteri( mode, pname, param );
@@ -130,7 +48,89 @@ namespace GlRender
 		return glCheckError( GetOpenGl(), cuT( "glTexParameterfv" ) );
 	}
 
-	bool TexFunctions::GetTexImage( eGL_TEXDIM mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )
+	bool TexFunctions::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTexSubImage1D( mode, level, xoffset, width, format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTexSubImage1D" ) );
+	}
+
+	bool TexFunctions::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTexSubImage2D( mode, level, xoffset, yoffset, width, height, format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTexSubImage2D" ) );
+	}
+
+	bool TexFunctions::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTexSubImage2D( mode, level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTexSubImage2D" ) );
+	}
+
+	bool TexFunctions::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTexSubImage2D( mode, level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTexSubImage2D" ) );
+	}
+
+	bool TexFunctions::TexSubImage3D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTexSubImage3D( mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTexSubImage3D" ) );
+	}
+
+	bool TexFunctions::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTexImage1D( mode, level, internalFormat, width, border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTexImage1D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTexImage2D( mode, level, internalFormat, width, height, border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTexImage2D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctions::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTexImage2D( mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTexImage2D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctions::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTexImage3D( mode, level, internalFormat, width, height, depth, border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTexImage3D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctions::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )
 	{
 		m_pfnGetTexImage( mode, level, format, type, img );
 		return glCheckError( GetOpenGl(), cuT( "glGetTexImage" ) );
@@ -146,88 +146,6 @@ namespace GlRender
 		}
 
 		return glCheckError( GetOpenGl(), cuT( "glGenerateTextureMipmap" ) );
-	}
-
-	bool TexFunctionsDSA::TexSubImage1D( eGL_TEXDIM mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTextureSubImage1D( m_uiTexture, mode, level, xoffset, width, format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage1D" ) );
-	}
-
-	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXDIM mode, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTextureSubImage2D( m_uiTexture, mode, level, xoffset, yoffset, width, height, format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage2D" ) );
-	}
-
-	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXDIM mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTextureSubImage2D( m_uiTexture, mode, level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage2D" ) );
-	}
-
-	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXDIM mode, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTextureSubImage2D( m_uiTexture, mode, level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage2D" ) );
-	}
-
-	bool TexFunctionsDSA::TexSubImage3D( eGL_TEXDIM mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data )
-	{
-		m_pfnTextureSubImage3D( m_uiTexture, mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
-		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage3D" ) );
-	}
-
-	bool TexFunctionsDSA::TexImage1D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTextureImage1D( m_uiTexture, mode, level, internalFormat, width, border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTextureImage1D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
-	}
-
-	bool TexFunctionsDSA::TexImage2D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTextureImage2D( m_uiTexture, mode, level, internalFormat, width, height, border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTextureImage2D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
-	}
-
-	bool TexFunctionsDSA::TexImage2D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTextureImage2D( m_uiTexture, mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTextureImage2D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
-	}
-
-	bool TexFunctionsDSA::TexImage3D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
-	{
-		try
-		{
-			m_pfnTextureImage3D( m_uiTexture, mode, level, internalFormat, width, height, depth, border, format, type, data );
-			return glCheckError( GetOpenGl(), cuT( "glTextureImage3D" ) );
-		}
-		catch ( ... )
-		{
-			return false;
-		}
 	}
 
 	bool TexFunctionsDSA::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, int param )
@@ -254,7 +172,89 @@ namespace GlRender
 		return glCheckError( GetOpenGl(), cuT( "glTextureParameterfv" ) );
 	}
 
-	bool TexFunctionsDSA::GetTexImage( eGL_TEXDIM mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )
+	bool TexFunctionsDSA::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTextureSubImage1D( m_uiTexture, mode, level, xoffset, width, format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage1D" ) );
+	}
+
+	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTextureSubImage2D( m_uiTexture, mode, level, xoffset, yoffset, width, height, format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage2D" ) );
+	}
+
+	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTextureSubImage2D( m_uiTexture, mode, level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage2D" ) );
+	}
+
+	bool TexFunctionsDSA::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTextureSubImage2D( m_uiTexture, mode, level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage2D" ) );
+	}
+
+	bool TexFunctionsDSA::TexSubImage3D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data )
+	{
+		m_pfnTextureSubImage3D( m_uiTexture, mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
+		return glCheckError( GetOpenGl(), cuT( "glTextureSubImage3D" ) );
+	}
+
+	bool TexFunctionsDSA::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTextureImage1D( m_uiTexture, mode, level, internalFormat, width, border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTextureImage1D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTextureImage2D( m_uiTexture, mode, level, internalFormat, width, height, border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTextureImage2D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctionsDSA::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTextureImage2D( m_uiTexture, mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTextureImage2D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctionsDSA::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )
+	{
+		try
+		{
+			m_pfnTextureImage3D( m_uiTexture, mode, level, internalFormat, width, height, depth, border, format, type, data );
+			return glCheckError( GetOpenGl(), cuT( "glTextureImage3D" ) );
+		}
+		catch ( ... )
+		{
+			return false;
+		}
+	}
+
+	bool TexFunctionsDSA::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )
 	{
 		m_pfnGetTextureImage( m_uiTexture, mode, level, format, type, img );
 		return glCheckError( GetOpenGl(), cuT( "glGetTextureImage" ) );
@@ -782,6 +782,11 @@ namespace GlRender
 		return QueryInfos[p_value];
 	}
 
+	inline eGL_TEXTURE_STORAGE OpenGl::Get( Castor3D::TextureStorageType p_value )const
+	{
+		return TextureStorages[uint32_t( p_value )];
+	}
+
 	inline bool OpenGl::Get( Castor3D::eWRITING_MASK p_eMask )const
 	{
 		return WriteMasks[p_eMask];
@@ -1213,51 +1218,6 @@ namespace GlRender
 		return glCheckError( *this, "glClientActiveTexture" );
 	}
 
-	bool OpenGl::TexSubImage1D( eGL_TEXDIM mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )const
-	{
-		return m_pTexFunctions->TexSubImage1D( mode, level, xoffset, width, format, type, data );
-	}
-
-	bool OpenGl::TexSubImage2D( eGL_TEXDIM mode, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )const
-	{
-		return m_pTexFunctions->TexSubImage2D( mode, level, xoffset, yoffset, width, height, format, type, data );
-	}
-
-	bool OpenGl::TexSubImage2D( eGL_TEXDIM mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data )const
-	{
-		return m_pTexFunctions->TexSubImage2D( mode, level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), format, type, data );
-	}
-
-	bool OpenGl::TexSubImage2D( eGL_TEXDIM mode, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data )const
-	{
-		return m_pTexFunctions->TexSubImage2D( mode, level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), format, type, data );
-	}
-
-	bool OpenGl::TexSubImage3D( eGL_TEXDIM mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data )const
-	{
-		return m_pTexFunctions->TexSubImage3D( mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
-	}
-
-	bool OpenGl::TexImage1D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )const
-	{
-		return m_pTexFunctions->TexImage1D( mode, level, internalFormat, width, border, format, type, data );
-	}
-
-	bool OpenGl::TexImage2D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )const
-	{
-		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, width, height, border, format, type, data );
-	}
-
-	bool OpenGl::TexImage2D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )const
-	{
-		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
-	}
-
-	bool OpenGl::TexImage3D( eGL_TEXDIM mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )const
-	{
-		return m_pTexFunctions->TexImage3D( mode, level, internalFormat, width, height, depth, border, format, type, data );
-	}
-
 	bool OpenGl::TexParameter( eGL_TEXDIM mode, eGL_TEXTURE_PARAMETER pname, int param )const
 	{
 		return m_pTexFunctions->TexParameter( mode, pname, param );
@@ -1278,7 +1238,52 @@ namespace GlRender
 		return m_pTexFunctions->TexParameter( mode, pname, params );
 	}
 
-	bool OpenGl::GetTexImage( eGL_TEXDIM mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )const
+	bool OpenGl::TexSubImage1D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int width, eGL_FORMAT format, eGL_TYPE type, void const * data )const
+	{
+		return m_pTexFunctions->TexSubImage1D( mode, level, xoffset, width, format, type, data );
+	}
+
+	bool OpenGl::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )const
+	{
+		return m_pTexFunctions->TexSubImage2D( mode, level, xoffset, yoffset, width, height, format, type, data );
+	}
+
+	bool OpenGl::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Position const & p_position, Castor::Size const & p_size, eGL_FORMAT format, eGL_TYPE type, void const * data )const
+	{
+		return m_pTexFunctions->TexSubImage2D( mode, level, p_position.x(), p_position.y(), p_size.width(), p_size.height(), format, type, data );
+	}
+
+	bool OpenGl::TexSubImage2D( eGL_TEXTURE_STORAGE mode, int level, Castor::Rectangle const & p_rect, eGL_FORMAT format, eGL_TYPE type, void const * data )const
+	{
+		return m_pTexFunctions->TexSubImage2D( mode, level, p_rect.left(), p_rect.top(), p_rect.width(), p_rect.height(), format, type, data );
+	}
+
+	bool OpenGl::TexSubImage3D( eGL_TEXTURE_STORAGE mode, int level, int xoffset, int yoffset, int zoffset, int width, int height, int depth, eGL_FORMAT format, eGL_TYPE type, void const * data )const
+	{
+		return m_pTexFunctions->TexSubImage3D( mode, level, xoffset, yoffset, zoffset, width, height, depth, format, type, data );
+	}
+
+	bool OpenGl::TexImage1D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	{
+		return m_pTexFunctions->TexImage1D( mode, level, internalFormat, width, border, format, type, data );
+	}
+
+	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	{
+		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, width, height, border, format, type, data );
+	}
+
+	bool OpenGl::TexImage2D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, Castor::Size const & p_size, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	{
+		return m_pTexFunctions->TexImage2D( mode, level, internalFormat, p_size.width(), p_size.height(), border, format, type, data );
+	}
+
+	bool OpenGl::TexImage3D( eGL_TEXTURE_STORAGE mode, int level, eGL_INTERNAL internalFormat, int width, int height, int depth, int border, eGL_FORMAT format, uint32_t type, void const * data )const
+	{
+		return m_pTexFunctions->TexImage3D( mode, level, internalFormat, width, height, depth, border, format, type, data );
+	}
+
+	bool OpenGl::GetTexImage( eGL_TEXTURE_STORAGE mode, int level, eGL_FORMAT format, eGL_TYPE type, void * img )const
 	{
 		return m_pTexFunctions->GetTexImage( mode, level, format, type, img );
 	}
@@ -2102,13 +2107,13 @@ namespace GlRender
 		return l_return;
 	}
 
-	bool OpenGl::TexImage2DMultisample( eGL_TEXDIM p_target, int p_iSamples, eGL_INTERNAL p_eInternalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations )const
+	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, eGL_INTERNAL p_eInternalFormat, int p_iWidth, int p_iHeight, bool p_bFixedSampleLocations )const
 	{
 		m_pfnTexImage2DMultisample( p_target, p_iSamples, p_eInternalFormat, p_iWidth, p_iHeight, p_bFixedSampleLocations );
 		return glCheckError( *this, "glTexImage2DMultisample" );
 	}
 
-	bool OpenGl::TexImage2DMultisample( eGL_TEXDIM p_target, int p_iSamples, eGL_INTERNAL p_eInternalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations )const
+	bool OpenGl::TexImage2DMultisample( eGL_TEXTURE_STORAGE p_target, int p_iSamples, eGL_INTERNAL p_eInternalFormat, Castor::Size const & p_size, bool p_bFixedSampleLocations )const
 	{
 		m_pfnTexImage2DMultisample( p_target, p_iSamples, p_eInternalFormat, p_size.width(), p_size.height(), p_bFixedSampleLocations );
 		return glCheckError( *this, "glTexImage2DMultisample" );

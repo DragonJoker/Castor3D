@@ -427,7 +427,7 @@ namespace Castor3D
 
 			if ( DoBeginRender( p_scene ) )
 			{
-				p_scene.RenderBackground( GetSize() );
+				p_scene.RenderBackground( GetSize(), GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline() );
 				DoRender( m_scenesRenderNodes.find( p_scene.GetName() )->second, p_camera, p_frameTime );
 				DoEndRender( p_scene );
 			}
@@ -697,6 +697,8 @@ namespace Castor3D
 				DoRenderBillboards( p_nodes.m_scene, p_camera, l_pipeline, p_nodes.m_billboards.m_opaqueRenderNodes );
 			}
 		}
+
+		p_nodes.m_scene.RenderForeground( p_size, p_camera, GetEngine()->GetRenderSystem()->GetCurrentContext()->GetPipeline() );
 
 		if ( !p_nodes.m_geometries.m_transparentRenderNodes.empty() )
 		{

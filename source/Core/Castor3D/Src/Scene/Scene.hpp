@@ -200,12 +200,25 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Renders the scene background.
-		 *\param[in]	p_size	The target dimensions.
+		 *\param[in]	p_size		The target dimensions.
+		 *\param[in]	p_pipeline	The render pipeline.
 		 *\~french
 		 *\brief		Rend le fond de la scène.
-		 *\param[in]	p_size	Les dimensions de la cible.
+		 *\param[in]	p_size		Les dimensions de la cible.
+		 *\param[in]	p_pipeline	Le pipeline de rend.
 		 */
-		C3D_API void RenderBackground( Castor::Size const & p_size );
+		C3D_API void RenderBackground( Castor::Size const & p_size, Pipeline & p_pipeline );
+		/**
+		 *\~english
+		 *\brief		Renders the scene foreground (skybox).
+		 *\param[in]	p_size		The target dimensions.
+		 *\param[in]	p_pipeline	The render pipeline.
+		 *\~french
+		 *\brief		Rend le devant de la scène (skybox).
+		 *\param[in]	p_size		Les dimensions de la cible.
+		 *\param[in]	p_pipeline	Le pipeline de rend.
+		 */
+		C3D_API void RenderForeground( Castor::Size const & p_size, Camera const & p_camera, Pipeline & p_pipeline );
 		/**
 		 *\~english
 		 *\brief		Updates the scene before render.
@@ -221,7 +234,16 @@ namespace Castor3D
 		 *\brief		Définit l'image de fond pour la scène
 		 *\param[in]	p_pathFile	Le chemin d'accès à l'image
 		 */
-		C3D_API bool SetBackgroundImage( Castor::Path const & p_pathFile );
+		C3D_API bool SetBackground( Castor::Path const & p_pathFile );
+		/**
+		 *\~english
+		 *\brief		Sets the skybox for the scene.
+		 *\param[in]	p_skybox	The skybox.
+		 *\~french
+		 *\brief		Définit la skybox de la scène.
+		 *\param[in]	p_skybox	La skybox.
+		 */
+		C3D_API bool SetForeground( SkyboxSPtr p_skybox );
 		/**
 		 *\~english
 		 *\brief		Imports a scene from an foreign file
@@ -407,44 +429,66 @@ namespace Castor3D
 		//@}
 
 	private:
-		//!\~english The root node	\~french Le noeud père de tous les noeuds de la scène
+		//!\~english	The root node
+		//!\~french		Le noeud père de tous les noeuds de la scène
 		SceneNodeSPtr m_rootNode;
-		//!\~english The root node used only for cameras (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds de caméra
+		//!\~english	The root node used only for cameras (used to ease the use of cameras)
+		//!\~french		Le noeud père de tous les noeuds de caméra
 		SceneNodeSPtr m_rootCameraNode;
-		//!\~english The root node for every object other than camera (used to ease the use of cameras)	\~french Le noeud père de tous les noeuds d'objet
+		//!\~english	The root node for every object other than camera (used to ease the use of cameras)
+		//!\~french		Le noeud père de tous les noeuds d'objet
 		SceneNodeSPtr m_rootObjectNode;
-		//!\~english The scene nodes manager.	\~french Le gestionnaire de noeuds de scène.
+		//!\~english	The scene nodes manager.
+		//!\~french		Le gestionnaire de noeuds de scène.
 		DECLARE_MANAGER_MEMBER( sceneNode, SceneNode );
-		//!\~english The camera manager.	\~french Le gestionnaire de caméras.
+		//!\~english	The camera manager.
+		//!\~french		Le gestionnaire de caméras.
 		DECLARE_MANAGER_MEMBER( camera, Camera );
-		//!\~english The lights manager.	\~french Le gestionnaire de lumières.
+		//!\~english	The lights manager.
+		//!\~french		Le gestionnaire de lumières.
 		DECLARE_MANAGER_MEMBER( light, Light );
-		//!\~english The geometies manager.	\~french Le gestionnaire de géométries.
+		//!\~english	The geometies manager.
+		//!\~french		Le gestionnaire de géométries.
 		DECLARE_MANAGER_MEMBER( geometry, Geometry );
-		//!\~english The billboards manager.	\~french Le gestionnaire de billboards.
+		//!\~english	The billboards manager.
+		//!\~french		Le gestionnaire de billboards.
 		DECLARE_MANAGER_MEMBER( billboard, Billboard );
-		//!\~english The animated objects groups manager.	\~french Le gestionnaire de groupes d'objets animés.
+		//!\~english	The animated objects groups manager.
+		//!\~french		Le gestionnaire de groupes d'objets animés.
 		DECLARE_MANAGER_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
-		//!\~english The scene meshes view.	\~french La vue sur les maillages de la scène.
+		//!\~english	The scene meshes view.
+		//!\~french		La vue sur les maillages de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( mesh, Mesh, eEVENT_TYPE_PRE_RENDER );
-		//!\~english The scene materials view.	\~french La vue sur les matériaux de la scène.
+		//!\~english	The scene materials view.
+		//!\~french		La vue sur les matériaux de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( material, Material, eEVENT_TYPE_PRE_RENDER );
-		//!\~english The scene samplers view.	\~french La vue sur les échantillonneurs de la scène.
+		//!\~english	The scene samplers view.
+		//!\~french		La vue sur les échantillonneurs de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER( sampler, Sampler, eEVENT_TYPE_PRE_RENDER );
-		//!\~english The scene render windows view.	\~french La vue sur les fenêtres de rendu de la scène.
+		//!\~english	The scene render windows view.
+		//!\~french		La vue sur les fenêtres de rendu de la scène.
 		DECLARE_MANAGER_VIEW_MEMBER_EX( window, Window, RenderWindow, eEVENT_TYPE_POST_RENDER );
-		//!\~english Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated	\~french Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
+		//!\~english	Tells if the scene has changed, id est if a geometry has been created or added to it => Vertex buffers need to be generated
+		//!\~french		Dit si la scène a changé (si des géométries ont besoin d'être initialisées, essentiellement).
 		bool m_changed;
-		//!\~english Ambient light color	\~french Couleur de la lumière ambiante
+		//!\~english	Ambient light color
+		//!\~french		Couleur de la lumière ambiante
 		Castor::Colour m_ambientLight;
-		//!\~english The mutex, to make the Scene threadsafe	\~french Le mutex protégeant les données de la scène
+		//!\~english	The mutex, to make the Scene threadsafe
+		//!\~french		Le mutex protégeant les données de la scène
 		mutable std::recursive_mutex m_mutex;
-		//!\~english The overlays array	\~french Le tableau d'overlays
+		//!\~english	The overlays array
+		//!\~french		Le tableau d'overlays
 		OverlayPtrArray m_overlays;
-		//!\~english The scene background colour	\~french La couleur de fond de la scène
+		//!\~english	The scene background colour
+		//!\~french		La couleur de fond de la scène
 		Castor::Colour m_backgroundColour;
-		//!\~english The background image	\~french L'image de fond
+		//!\~english	The background image
+		//!\~french		L'image de fond
 		TextureLayoutSPtr m_backgroundImage;
+		//!\~english	The skybox
+		//!\~french		La skybox
+		SkyboxSPtr m_skybox;
 	};
 }
 

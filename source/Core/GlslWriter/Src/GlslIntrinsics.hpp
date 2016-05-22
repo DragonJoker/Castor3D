@@ -87,6 +87,7 @@ namespace GLSL
 	GlslWriter_API Vec4 texture1D( Sampler1D const & p_sampler, Type const & p_value );
 	GlslWriter_API Vec4 texture2D( Sampler2D const & p_sampler, Type const & p_value );
 	GlslWriter_API Vec4 texture3D( Sampler3D const & p_sampler, Type const & p_value );
+	GlslWriter_API Vec4 textureCube( SamplerCube const & p_sampler, Type const & p_value );
 	GlslWriter_API Vec4 texelFetch( SamplerBuffer const & p_sampler, Type const & p_value );
 	GlslWriter_API Vec4 texelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
 	GlslWriter_API Vec4 texelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
@@ -102,6 +103,7 @@ namespace GLSL
 	GlslWriter_API Optional< Vec4 > texture1D( Optional< Sampler1D > const & p_sampler, Type const & p_value );
 	GlslWriter_API Optional< Vec4 > texture2D( Optional< Sampler2D > const & p_sampler, Type const & p_value );
 	GlslWriter_API Optional< Vec4 > texture3D( Optional< Sampler3D > const & p_sampler, Type const & p_value );
+	GlslWriter_API Optional< Vec4 > textureCube( Optional< SamplerCube > const & p_sampler, Type const & p_value );
 	GlslWriter_API Optional< Vec4 > texelFetch( Optional< SamplerBuffer > const & p_sampler, Type const & p_value );
 	GlslWriter_API Optional< Vec4 > texelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif );
 	GlslWriter_API Optional< Vec4 > texelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif );

@@ -175,6 +175,7 @@ namespace GLSL
 		GLSL_SWIZZLE( Vec4, Vec3, abr );
 		GLSL_LAST_SWIZZLE( Vec4, Vec3, abg );
 		GLSL_FIRST_SWIZZLE( Vec4, Vec4, xyzw );
+		GLSL_SWIZZLE( Vec4, Vec4, xyww );
 		GLSL_SWIZZLE( Vec4, Vec4, xywz );
 		GLSL_SWIZZLE( Vec4, Vec4, xzyw );
 		GLSL_SWIZZLE( Vec4, Vec4, xzwy );

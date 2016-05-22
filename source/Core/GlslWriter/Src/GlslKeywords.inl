@@ -28,6 +28,10 @@ namespace GLSL
 	{
 		return m_strTexture3D;
 	}
+	inline Castor::String const & KeywordsBase::GetTextureCube()const
+	{
+		return m_strTextureCube;
+	}
 	inline Castor::String const & KeywordsBase::GetTexelFetchBuffer()const
 	{
 		return m_strTexelFetchBuffer;
@@ -122,8 +126,10 @@ namespace GLSL
 			m_strTexture1D = cuT( "texture1D" );
 			m_strTexture2D = cuT( "texture2D" );
 			m_strTexture3D = cuT( "texture3D" );
+			m_strTextureCube = cuT( "textureCube" );
 			m_strTexelFetch1D = cuT( "texture1D" );
 			m_strTexelFetch2D = cuT( "texture2D" );
+			m_strTexelFetch3D = cuT( "texture3D" );
 			m_strTexelFetch3D = cuT( "texture3D" );
 			m_strPixelOutputName = cuT( "gl_FragColor" );
 			m_strGSOutPositionName = cuT( "gl_FragData[0]" );
@@ -167,6 +173,7 @@ namespace GLSL
 			m_strTexture1D = cuT( "texture1D" );
 			m_strTexture2D = cuT( "texture2D" );
 			m_strTexture3D = cuT( "texture3D" );
+			m_strTextureCube = cuT( "textureCube" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );
@@ -215,6 +222,7 @@ namespace GLSL
 			m_strTexture1D = cuT( "texture" );
 			m_strTexture2D = cuT( "texture" );
 			m_strTexture3D = cuT( "texture" );
+			m_strTextureCube = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );
@@ -268,6 +276,7 @@ namespace GLSL
 			m_strTexture1D = cuT( "texture" );
 			m_strTexture2D = cuT( "texture" );
 			m_strTexture3D = cuT( "texture" );
+			m_strTextureCube = cuT( "texture" );
 			m_strTexelFetchBuffer = cuT( "texelFetch" );
 			m_strTexelFetch1D = cuT( "texelFetch" );
 			m_strTexelFetch2D = cuT( "texelFetch" );

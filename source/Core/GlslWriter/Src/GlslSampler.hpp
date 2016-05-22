@@ -57,6 +57,15 @@ namespace GLSL
 		template< typename T > inline Sampler3D & operator=( T const & p_rhs );
 		inline operator uint32_t();
 	};
+
+	struct SamplerCube
+		: public Type
+	{
+		inline SamplerCube();
+		inline SamplerCube( GlslWriter * p_writer, Castor::String const & p_name = Castor::String() );
+		template< typename T > inline SamplerCube & operator=( T const & p_rhs );
+		inline operator uint32_t();
+	};
 }
 
 #include "GlslSampler.inl"

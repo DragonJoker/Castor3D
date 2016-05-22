@@ -16,6 +16,7 @@
 /data/Scene/Parc
 /data/Scene/FbxScene
 /data/Scene/Sampler
+/data/Scene/Skybox
 /.gitattributes
 *.csproj
 *.user

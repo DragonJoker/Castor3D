@@ -8,7 +8,7 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureStorage::TextureStorage( eTEXTURE_TYPE p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	TextureStorage::TextureStorage( TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 		: OwnedBy< TextureImage >{ p_image }
 		, m_cpuAccess{ p_cpuAccess }
 		, m_gpuAccess{ p_gpuAccess }

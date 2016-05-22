@@ -40,7 +40,7 @@ namespace GlRender
 		 *\param[in]	p_cpuAccess		The required CPU access.
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		GlDirectTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::eTEXTURE_TYPE p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		GlDirectTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */
@@ -61,12 +61,6 @@ namespace GlRender
 		 *\copydoc		Castor3D::TextureStorage::Unlock
 		 */
 		virtual void Unlock( bool p_modified );
-
-	private:
-		/**
-		 *\copydoc		Castor3D::TextureStorage::DoFill
-		 */
-		virtual void DoFill( uint8_t const * p_buffer, Castor::Size const & p_size, Castor::ePIXEL_FORMAT p_format );
 	};
 }
 
