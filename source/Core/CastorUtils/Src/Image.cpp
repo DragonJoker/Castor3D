@@ -380,7 +380,7 @@ namespace Castor
 					}
 
 #endif
-					m_pBuffer = PxBufferBase::create( l_size, l_ePF, l_pixels, l_ePF );
+					m_pBuffer = PxBufferBase::create( p_size, l_ePF, l_pixels, l_ePF );
 				}
 
 				FreeImage_Unload( l_fiImage );

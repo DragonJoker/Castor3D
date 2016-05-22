@@ -65,6 +65,7 @@ namespace Castor3D
 		eSECTION_ANIMGROUP = MAKE_SECTION_NAME( 'A', 'N', 'G', 'P' ),
 		eSECTION_ANIMATED_OBJECT = MAKE_SECTION_NAME( 'A', 'N', 'O', 'J' ),
 		eSECTION_ANIMATION = MAKE_SECTION_NAME( 'A', 'N', 'M', 'T' ),
+		eSECTION_SKYBOX = MAKE_SECTION_NAME( 'S', 'K', 'B', 'X' ),
 	}	eSECTION;
 	//! The context used into parsing functions
 	/*!
@@ -127,6 +128,7 @@ namespace Castor3D
 		AnimatedObjectGroupSPtr pAnimGroup;
 		AnimatedObjectSPtr pAnimObject;
 		AnimationSPtr pAnimation;
+		SkyboxSPtr pSkybox;
 
 	public:
 		/**

@@ -119,4 +119,29 @@ namespace GLSL
 	}
 
 	//*****************************************************************************************
+
+	SamplerCube::SamplerCube()
+		: Type( cuT( "samplerCube " ) )
+	{
+	}
+
+	SamplerCube::SamplerCube( GlslWriter * p_writer, Castor::String const & p_name )
+		: Type( cuT( "samplerCube " ), p_writer, p_name )
+	{
+	}
+
+	template< typename T >
+	SamplerCube & SamplerCube::operator=( T const & p_rhs )
+	{
+		UpdateWriter( p_rhs );
+		m_writer->WriteAssign( *this, p_rhs );
+		return *this;
+	}
+
+	SamplerCube::operator uint32_t()
+	{
+		return 0u;
+	}
+
+	//*****************************************************************************************
 }

@@ -41,7 +41,7 @@ namespace GlRender
 		 *\param[in]	p_cpuAccess		The required CPU access.
 		 *\param[in]	p_gpuAccess		The required GPU access.
 		 */
-		GlTboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::eTEXTURE_TYPE p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		GlTboTextureStorage( OpenGl & p_gl, GlRenderSystem & p_renderSystem, Castor3D::TextureStorageType p_type, Castor3D::TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\brief		Destructor.
 		 */

@@ -41,6 +41,7 @@
 #include "Render/RenderSystem.hpp"
 #include "Render/RenderWindow.hpp"
 #include "Render/Viewport.hpp"
+#include "Scene/Skybox.hpp"
 #include "Scene/Light/DirectionalLight.hpp"
 #include "Scene/Light/PointLight.hpp"
 #include "Scene/Light/SpotLight.hpp"
@@ -704,7 +705,7 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneBkImage )
 
 		if ( File::FileExists( l_pathFile ) )
 		{
-			l_parsingContext->pScene->SetBackgroundImage( l_pathFile );
+			l_parsingContext->pScene->SetBackground( l_pathFile );
 		}
 		else
 		{
@@ -1006,6 +1007,21 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneTextOverlay )
 	}
 }
 END_ATTRIBUTE_PUSH( eSECTION_TEXT_OVERLAY )
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SceneSkybox )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( !l_parsingContext->pScene )
+	{
+		PARSING_ERROR( cuT( "No scene initialised." ) );
+	}
+	else
+	{
+		l_parsingContext->pSkybox = std::make_shared< Skybox >( *l_parsingContext->m_pParser->GetEngine() );
+	}
+}
+END_ATTRIBUTE_PUSH( eSECTION_SKYBOX )
 
 IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_LightParent )
 {
@@ -3720,6 +3736,124 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_AnimationEnd )
 	else
 	{
 		PARSING_ERROR( cuT( "No animation initialised" ) );
+	}
+}
+END_ATTRIBUTE_POP()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxLeft )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pSkybox )
+	{
+		Path l_path;
+		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeX ) ).SetSource( l_path );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No skybox initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxRight )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pSkybox )
+	{
+		Path l_path;
+		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveX ) ).SetSource( l_path );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No skybox initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxTop )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pSkybox )
+	{
+		Path l_path;
+		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeY ) ).SetSource( l_path );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No skybox initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxBottom )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pSkybox )
+	{
+		Path l_path;
+		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveY ) ).SetSource( l_path );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No skybox initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxFront )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pSkybox )
+	{
+		Path l_path;
+		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::NegativeZ ) ).SetSource( l_path );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No skybox initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxBack )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pSkybox )
+	{
+		Path l_path;
+		l_path = p_context->m_file->GetFilePath() / p_params[0]->Get( l_path );
+		l_parsingContext->pSkybox->GetTexture().GetImage( uint32_t( CubeMapFace::PositiveZ ) ).SetSource( l_path );
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No skybox initialised" ) );
+	}
+}
+END_ATTRIBUTE()
+
+IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_SkyboxEnd )
+{
+	SceneFileContextSPtr l_parsingContext = std::static_pointer_cast< SceneFileContext >( p_context );
+
+	if ( l_parsingContext->pSkybox )
+	{
+		l_parsingContext->pScene->SetForeground( l_parsingContext->pSkybox );
+		l_parsingContext->pSkybox.reset();
+	}
+	else
+	{
+		PARSING_ERROR( cuT( "No skybox initialised" ) );
 	}
 }
 END_ATTRIBUTE_POP()

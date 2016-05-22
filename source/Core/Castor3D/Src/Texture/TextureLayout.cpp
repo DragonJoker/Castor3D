@@ -18,7 +18,7 @@ namespace Castor3D
 
 			if ( p_type == eTEXTURE_TYPE_CUBE )
 			{
-				l_return = 6;
+				l_return = size_t( CubeMapFace::Count );
 			}
 
 			return l_return;
@@ -32,9 +32,11 @@ namespace Castor3D
 		, m_cpuAccess{ p_cpuAccess }
 		, m_gpuAccess{ p_gpuAccess }
 	{
+		uint32_t l_index = 0u;
+
 		for ( auto & l_image : m_images )
 		{
-			l_image = std::make_unique< TextureImage >( *p_renderSystem.GetEngine() );
+			l_image = std::make_unique< TextureImage >( *p_renderSystem.GetEngine(), l_index++ );
 		}
 	}
 

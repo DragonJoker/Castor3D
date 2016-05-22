@@ -32,6 +32,7 @@ namespace GLSL
 	struct Sampler2D;
 	struct Sampler2DRect;
 	struct Sampler3D;
+	struct SamplerCube;
 
 	class LightingModel;
 
@@ -133,6 +134,7 @@ namespace GLSL
 		GlslWriter_API Vec4 Texture1D( Sampler1D const & p_sampler, Type const & p_value );
 		GlslWriter_API Vec4 Texture2D( Sampler2D const & p_sampler, Type const & p_value );
 		GlslWriter_API Vec4 Texture3D( Sampler3D const & p_sampler, Type const & p_value );
+		GlslWriter_API Vec4 TextureCube( SamplerCube const & p_sampler, Type const & p_value );
 		GlslWriter_API Vec4 TexelFetch( SamplerBuffer const & p_sampler, Type const & p_value );
 		GlslWriter_API Vec4 TexelFetch( Sampler1D const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Vec4 TexelFetch( Sampler2D const & p_sampler, Type const & p_value, Int const & p_modif );
@@ -140,6 +142,7 @@ namespace GLSL
 		GlslWriter_API Optional< Vec4 > Texture1D( Optional< Sampler1D > const & p_sampler, Type const & p_value );
 		GlslWriter_API Optional< Vec4 > Texture2D( Optional< Sampler2D > const & p_sampler, Type const & p_value );
 		GlslWriter_API Optional< Vec4 > Texture3D( Optional< Sampler3D > const & p_sampler, Type const & p_value );
+		GlslWriter_API Optional< Vec4 > TextureCube( Optional< SamplerCube > const & p_sampler, Type const & p_value );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< SamplerBuffer > const & p_sampler, Type const & p_value );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler1D > const & p_sampler, Type const & p_value, Int const & p_modif );
 		GlslWriter_API Optional< Vec4 > TexelFetch( Optional< Sampler2D > const & p_sampler, Type const & p_value, Int const & p_modif );

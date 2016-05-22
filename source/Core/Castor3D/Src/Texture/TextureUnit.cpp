@@ -548,21 +548,19 @@ namespace Castor3D
 	bool TextureUnit::LoadTexture( Path const & p_pathFile )
 	{
 		bool l_return = false;
-		ImageSPtr l_pImage;
 
-		if ( !p_pathFile.empty() && File::FileExists( p_pathFile ) )
+		try
 		{
-			l_pImage = GetEngine()->GetImageManager().create( p_pathFile.GetFileName(), p_pathFile );
-		}
-
-		if ( l_pImage )
-		{
-			auto l_pStaTexture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
-			l_pStaTexture->GetImage().SetSource( l_pImage->GetPixels() );
-			SetTexture( l_pStaTexture );
+			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, eACCESS_TYPE_READ, eACCESS_TYPE_READ );
+			l_texture->GetImage().SetSource( p_pathFile );
+			SetTexture( l_texture );
 			m_pathTexture = p_pathFile;
 			m_changed = true;
 			l_return = true;
+		}
+		catch ( Castor::Exception & p_exc )
+		{
+			Logger::LogError( p_exc.what() );
 		}
 
 		return l_return;

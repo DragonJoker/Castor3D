@@ -399,11 +399,11 @@ namespace GlRender
 
 		DepthFuncs[eDEPTH_FUNC_NEVER] = eGL_FUNC_NEVER;
 		DepthFuncs[eDEPTH_FUNC_LESS] = eGL_FUNC_LESS;
-		DepthFuncs[eDEPTH_FUNC_EQUAL] = eGL_FUNC_LEQUAL;
-		DepthFuncs[eDEPTH_FUNC_LEQUAL] = eGL_FUNC_EQUAL;
-		DepthFuncs[eDEPTH_FUNC_GREATER] = eGL_FUNC_NOTEQUAL;
-		DepthFuncs[eDEPTH_FUNC_NOTEQUAL] = eGL_FUNC_GEQUAL;
-		DepthFuncs[eDEPTH_FUNC_GEQUAL] = eGL_FUNC_GREATER;
+		DepthFuncs[eDEPTH_FUNC_EQUAL] = eGL_FUNC_EQUAL;
+		DepthFuncs[eDEPTH_FUNC_LEQUAL] = eGL_FUNC_LEQUAL;
+		DepthFuncs[eDEPTH_FUNC_GREATER] = eGL_FUNC_GREATER;
+		DepthFuncs[eDEPTH_FUNC_NOTEQUAL] = eGL_FUNC_NOTEQUAL;
+		DepthFuncs[eDEPTH_FUNC_GEQUAL] = eGL_FUNC_GEQUAL;
 		DepthFuncs[eDEPTH_FUNC_ALWAYS] = eGL_FUNC_ALWAYS;
 
 		WriteMasks[eWRITING_MASK_ZERO] = false;
@@ -444,6 +444,18 @@ namespace GlRender
 		QueryInfos[eQUERY_INFO_RESULT] = eGL_QUERY_INFO_RESULT;
 		QueryInfos[eQUERY_INFO_RESULT_AVAILABLE] = eGL_QUERY_INFO_RESULT_AVAILABLE;
 		QueryInfos[eQUERY_INFO_RESULT_NO_WAIT] = eGL_QUERY_INFO_RESULT_NO_WAIT;
+
+		TextureStorages[size_t( Castor3D::TextureStorageType::Buffer )] = eGL_TEXTURE_STORAGE_BUFFER;
+		TextureStorages[size_t( Castor3D::TextureStorageType::OneDimension )] = eGL_TEXTURE_STORAGE_1D;
+		TextureStorages[size_t( Castor3D::TextureStorageType::TwoDimensions )] = eGL_TEXTURE_STORAGE_2D;
+		TextureStorages[size_t( Castor3D::TextureStorageType::TwoDimensionsMS )] = eGL_TEXTURE_STORAGE_2DMS;
+		TextureStorages[size_t( Castor3D::TextureStorageType::ThreeDimensions )] = eGL_TEXTURE_STORAGE_3D;
+		TextureStorages[size_t( Castor3D::TextureStorageType::CubeMapPositiveX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSX;
+		TextureStorages[size_t( Castor3D::TextureStorageType::CubeMapNegativeX )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGX;
+		TextureStorages[size_t( Castor3D::TextureStorageType::CubeMapPositiveY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSY;
+		TextureStorages[size_t( Castor3D::TextureStorageType::CubeMapNegativeY )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGY;
+		TextureStorages[size_t( Castor3D::TextureStorageType::CubeMapPositiveZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_POSZ;
+		TextureStorages[size_t( Castor3D::TextureStorageType::CubeMapNegativeZ )] = eGL_TEXTURE_STORAGE_CUBE_MAP_FACE_NEGZ;
 
 		Cleanup();
 

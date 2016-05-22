@@ -276,20 +276,20 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Creates a texture storage.
-		 *\param[in]	p_type		The texture type.
+		 *\param[in]	p_type		The storage type.
 		 *\param[in]	p_image		The texture image.
 		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
 		 *\return		The created storage, depending on current API.
 		 *\~french
 		 *\brief		Crée un stockage de texture.
-		 *\param[in]	p_type		Le type de texture.
+		 *\param[in]	p_type		Le type de stockage.
 		 *\param[in]	p_image		L'image de la texture.
 		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 *\return		Le stockage créé, dépendant de l'API actuelle.
 		 */
-		C3D_API virtual TextureStorageUPtr CreateTextureStorage( eTEXTURE_TYPE p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
+		C3D_API virtual TextureStorageUPtr CreateTextureStorage( TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess ) = 0;
 		/**
 		 *\~english
 		 *\brief		Creates a vertex buffer

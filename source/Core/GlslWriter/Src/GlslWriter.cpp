@@ -244,6 +244,11 @@ namespace GLSL
 		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexture3D(), p_sampler, p_value );
 	}
 
+	Vec4 GlslWriter::TextureCube( SamplerCube const & p_sampler, Type const & p_value )
+	{
+		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTextureCube(), p_sampler, p_value );
+	}
+
 	Vec4 GlslWriter::TexelFetch( SamplerBuffer const & p_sampler, Type const & p_value )
 	{
 		return WriteFunctionCall< Vec4 >( this, m_keywords->GetTexelFetchBuffer(), p_sampler, p_value );
@@ -277,6 +282,11 @@ namespace GLSL
 	Optional< Vec4 > GlslWriter::Texture3D( Optional< Sampler3D > const & p_sampler, Type const & p_value )
 	{
 		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTexture3D(), p_sampler, p_value );
+	}
+
+	Optional< Vec4 > GlslWriter::TextureCube( Optional< SamplerCube > const & p_sampler, Type const & p_value )
+	{
+		return WriteOptionalFunctionCall< Vec4 >( this, m_keywords->GetTextureCube(), p_sampler, p_value );
 	}
 
 	Optional< Vec4 > GlslWriter::TexelFetch( Optional< SamplerBuffer > const & p_sampler, Type const & p_value )

@@ -40,18 +40,18 @@ namespace Castor3D
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	p_type		The storage texture type.
+		 *\param[in]	p_type		The storage type.
 		 *\param[in]	p_image		The TextureImage.
 		 *\param[in]	p_cpuAccess	The required CPU access (combination of eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	The required GPU access (combination of eACCESS_TYPE).
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	p_type		Le type de texture du stockage.
+		 *\param[in]	p_type		Le type de stockage.
 		 *\param[in]	p_image		La TextureImage.
 		 *\param[in]	p_cpuAccess	Les accès requis pour le CPU (combinaison de eACCESS_TYPE).
 		 *\param[in]	p_gpuAccess	Les accès requis pour le GPU (combinaison de eACCESS_TYPE).
 		 */
-		C3D_API TextureStorage( eTEXTURE_TYPE p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
+		C3D_API TextureStorage( TextureStorageType p_type, TextureImage & p_image, uint8_t p_cpuAccess, uint8_t p_gpuAccess );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -171,7 +171,7 @@ namespace Castor3D
 		uint8_t m_gpuAccess;
 		//!\~english	The storage texture type.
 		//!\~french		Le type de texture du stockage.
-		eTEXTURE_TYPE m_type;
+		TextureStorageType m_type;
 	};
 }
 

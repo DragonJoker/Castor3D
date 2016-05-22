@@ -49,6 +49,7 @@ namespace GLSL
 		inline Castor::String const & GetTexture1D()const;
 		inline Castor::String const & GetTexture2D()const;
 		inline Castor::String const & GetTexture3D()const;
+		inline Castor::String const & GetTextureCube()const;
 		inline Castor::String const & GetTexelFetchBuffer()const;
 		inline Castor::String const & GetTexelFetch1D()const;
 		inline Castor::String const & GetTexelFetch2D()const;
@@ -84,6 +85,7 @@ namespace GLSL
 		Castor::String m_strTexture1D;
 		Castor::String m_strTexture2D;
 		Castor::String m_strTexture3D;
+		Castor::String m_strTextureCube;
 		Castor::String m_strTexelFetchBuffer;
 		Castor::String m_strTexelFetch1D;
 		Castor::String m_strTexelFetch2D;

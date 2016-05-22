@@ -16,6 +16,8 @@
 #include "ShaderManager.hpp"
 #include "WindowManager.hpp"
 
+#include "Skybox.hpp"
+
 #include "Animation/AnimatedObject.hpp"
 #include "Animation/Animation.hpp"
 #include "Animation/Bone.hpp"
@@ -478,6 +480,7 @@ namespace Castor3D
 
 	Scene::~Scene()
 	{
+		m_skybox.reset();
 		m_animatedObjectGroupManager.reset();
 		m_billboardManager.reset();
 		m_cameraManager.reset();
@@ -537,9 +540,17 @@ namespace Castor3D
 				m_backgroundImage->Destroy();
 			} ) );
 		}
+
+		if ( m_skybox )
+		{
+			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
+			{
+				m_skybox->Cleanup();
+			} ) );
+		}
 	}
 
-	void Scene::RenderBackground( Size const & p_size )
+	void Scene::RenderBackground( Size const & p_size, Pipeline & p_pipeline )
 	{
 		if ( m_backgroundImage )
 		{
@@ -552,26 +563,28 @@ namespace Castor3D
 		}
 	}
 
+	void Scene::RenderForeground( Size const & p_size, Camera const & p_camera, Pipeline & p_pipeline )
+	{
+		if ( m_skybox )
+		{
+			m_skybox->Render( p_camera, p_pipeline );
+		}
+	}
+
 	void Scene::Update()
 	{
 		m_animatedObjectGroupManager->Update();
 		m_changed = false;
 	}
 
-	bool Scene::SetBackgroundImage( Path const & p_pathFile )
+	bool Scene::SetBackground( Path const & p_pathFile )
 	{
 		bool l_return = false;
-		ImageSPtr l_pImage;
 
-		if ( !p_pathFile.empty() )
-		{
-			l_pImage = GetEngine()->GetImageManager().create( p_pathFile.GetFileName(), p_pathFile );
-		}
-
-		if ( l_pImage )
+		try
 		{
 			auto l_texture = GetEngine()->GetRenderSystem()->CreateTexture( eTEXTURE_TYPE_2D, 0, eACCESS_TYPE_READ );
-			l_texture->GetImage().SetSource( l_pImage->GetPixels() );
+			l_texture->GetImage().SetSource( p_pathFile );
 			m_backgroundImage = l_texture;
 			GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [this]()
 			{
@@ -583,8 +596,22 @@ namespace Castor3D
 			} ) );
 			l_return = true;
 		}
+		catch ( Castor::Exception & p_exc )
+		{
+			Logger::LogError( p_exc.what() );
+		}
 
 		return l_return;
+	}
+
+	bool Scene::SetForeground( SkyboxSPtr p_skybox )
+	{
+		m_skybox = p_skybox;
+		GetEngine()->PostEvent( MakeFunctorEvent( eEVENT_TYPE_PRE_RENDER, [p_skybox]()
+		{
+			p_skybox->Initialise();
+		} ) );
+		return true;
 	}
 
 	void Scene::Merge( SceneSPtr p_scene )

@@ -165,6 +165,7 @@ namespace GLSL
 #	define ABR abr
 #	define ABG abg
 #	define XYZW xyzw
+#	define XYWW xyww
 #	define XYWZ xywz
 #	define XZYW xzyw
 #	define XZWY xzwy
@@ -312,6 +313,7 @@ namespace GLSL
 #	define ABR abr()
 #	define ABG abg()
 #	define XYZW xyzw()
+#	define XYWW xyww()
 #	define XYWZ xywz()
 #	define XZYW xzyw()
 #	define XZWY xzwy()

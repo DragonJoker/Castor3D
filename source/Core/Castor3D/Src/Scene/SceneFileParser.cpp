@@ -373,6 +373,7 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_SCENE, cuT( "panel_overlay" ), Parser_ScenePanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "border_panel_overlay" ), Parser_SceneBorderPanelOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_SCENE, cuT( "text_overlay" ), Parser_SceneTextOverlay, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
+	AddParser( eSECTION_SCENE, cuT( "skybox" ), Parser_SceneSkybox );
 
 	AddParser( eSECTION_LIGHT, cuT( "parent" ), Parser_LightParent, { MakeParameter< ePARAMETER_TYPE_NAME >() } );
 	AddParser( eSECTION_LIGHT, cuT( "type" ), Parser_LightType, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapLightTypes ) } );
@@ -548,6 +549,14 @@ void SceneFileParser::DoInitialiseParser( TextFile & p_file )
 	AddParser( eSECTION_ANIMATION, cuT( "interpolation" ), Parser_AnimationInterpolation, { MakeParameter< ePARAMETER_TYPE_CHECKED_TEXT >( m_mapInterpolatorModes ) } );
 	AddParser( eSECTION_ANIMATION, cuT( "start" ), Parser_AnimationStart );
 	AddParser( eSECTION_ANIMATION, cuT( "}" ), Parser_AnimationEnd );
+
+	AddParser( eSECTION_SKYBOX, cuT( "left" ), Parser_SkyboxLeft, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SKYBOX, cuT( "right" ), Parser_SkyboxRight, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SKYBOX, cuT( "top" ), Parser_SkyboxTop, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SKYBOX, cuT( "bottom" ), Parser_SkyboxBottom, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SKYBOX, cuT( "front" ), Parser_SkyboxFront, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SKYBOX, cuT( "back" ), Parser_SkyboxBack, { MakeParameter< ePARAMETER_TYPE_PATH >() } );
+	AddParser( eSECTION_SKYBOX, cuT( "}" ), Parser_SkyboxEnd );
 
 	for ( auto && l_it : GetEngine()->GetAdditionalParsers() )
 	{

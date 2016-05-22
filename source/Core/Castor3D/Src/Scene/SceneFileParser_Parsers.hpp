@@ -81,6 +81,7 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_ScenePanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneBorderPanelOverlay )
 	DECLARE_ATTRIBUTE_PARSER( Parser_SceneTextOverlay )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SceneSkybox )
 
 	// Light parsers
 	DECLARE_ATTRIBUTE_PARSER( Parser_LightParent )
@@ -262,6 +263,15 @@ namespace Castor3D
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationInterpolation )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationStart )
 	DECLARE_ATTRIBUTE_PARSER( Parser_AnimationEnd )
+
+	// Skybox parsers
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxLeft )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxRight )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxTop )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxBottom )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxFront )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxBack )
+	DECLARE_ATTRIBUTE_PARSER( Parser_SkyboxEnd )
 }
 
 #endif

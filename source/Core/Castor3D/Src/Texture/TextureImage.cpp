@@ -61,6 +61,40 @@ namespace Castor3D
 
 		//*********************************************************************************************
 
+		class StaticFileTextureSource
+			: public Static2DTextureSource
+		{
+		public:
+			StaticFileTextureSource( Path const & p_path )
+				: Static2DTextureSource{ DoLoadImage( p_path ) }
+				, m_path{ p_path }
+			{
+			}
+
+		private:
+			static PxBufferBaseSPtr DoLoadImage( Path const & p_path )
+			{
+				ImageSPtr l_image;
+
+				if ( !p_path.empty() && File::FileExists( p_path ) )
+				{
+					l_image = Engine::GetInstance().GetImageManager().create( p_path.GetFileName(), p_path );
+				}
+
+				if ( !l_image )
+				{
+					CASTOR_EXCEPTION( cuT( "TextureImage::SetSource - Couldn't load image " ) + p_path );
+				}
+
+				return l_image->GetPixels();
+			}
+
+		private:
+			Path m_path;
+		};
+
+		//*********************************************************************************************
+
 		class Static3DTextureSource
 			: public StaticTextureSource
 		{
@@ -158,6 +192,52 @@ namespace Castor3D
 		private:
 			uint32_t m_depth{ 1u };
 		};
+
+		//*********************************************************************************************
+
+		TextureStorageType GetStorageType( eTEXTURE_TYPE p_type, uint32_t p_index )
+		{
+			TextureStorageType l_return = TextureStorageType::Count;
+
+			switch ( p_type )
+			{
+			case eTEXTURE_TYPE_BUFFER:
+				l_return = TextureStorageType::Buffer;
+				break;
+
+			case eTEXTURE_TYPE_1D:
+				l_return = TextureStorageType::OneDimension;
+				break;
+
+			case eTEXTURE_TYPE_1DARRAY:
+			case eTEXTURE_TYPE_2D:
+				l_return = TextureStorageType::TwoDimensions;
+				break;
+
+			case eTEXTURE_TYPE_2DARRAY:
+				l_return = TextureStorageType::ThreeDimensions;
+				break;
+
+			case eTEXTURE_TYPE_2DMS:
+				l_return = TextureStorageType::TwoDimensionsMS;
+				break;
+
+			case eTEXTURE_TYPE_3D:
+				l_return = TextureStorageType::ThreeDimensions;
+				break;
+
+			case eTEXTURE_TYPE_CUBE:
+				l_return = TextureStorageType( uint32_t( TextureStorageType::CubeMapPositiveX ) + p_index );
+				break;
+
+			default:
+				FAILURE( "The given texture type doesn't have any associated storage type" );
+				CASTOR_EXCEPTION( cuT( "The given texture type doesn't have any associated storage type" ) );
+				break;
+			}
+
+			return l_return;
+		}
 	}
 
 	//*********************************************************************************************
@@ -179,9 +259,15 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	TextureImage::TextureImage( Engine & p_engine )
+	TextureImage::TextureImage( Engine & p_engine, uint32_t p_index )
 		: OwnedBy< Engine >{ p_engine }
+		, m_index{ p_index }
 	{
+	}
+
+	void TextureImage::SetSource( Castor::Path const & p_path )
+	{
+		m_source = std::make_unique< StaticFileTextureSource >( p_path );
 	}
 
 	void TextureImage::SetSource( PxBufferBaseSPtr p_buffer )
@@ -222,23 +308,7 @@ namespace Castor3D
 
 	bool TextureImage::Initialise( eTEXTURE_TYPE p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
 	{
-		bool l_return = false;
-
-		if ( !m_storage )
-		{
-			try
-			{
-				m_storage = GetEngine()->GetRenderSystem()->CreateTextureStorage( p_type, *this, p_cpuAccess, p_gpuAccess );
-				l_return = true;
-			}
-			catch ( std::exception & p_exc )
-			{
-				Logger::LogError( StringStream() << cuT( "TextureImage::Initialise - Error encountered while allocating storage: " ) << string::string_cast< xchar >( p_exc.what() ) );
-			}
-		}
-
-		ENSURE( m_storage );
-		return l_return;
+		return DoCreateStorage( GetStorageType( p_type, m_index ), p_cpuAccess, p_gpuAccess );
 	}
 
 	void TextureImage::Cleanup()
@@ -270,15 +340,40 @@ namespace Castor3D
 		m_storage->Unlock( p_modified );
 	}
 
-	void TextureImage::DoResetStorage()
+	bool TextureImage::DoResetStorage()
 	{
+		bool l_return = true;
+
 		if ( m_storage )
 		{
 			auto l_cpuAccess = m_storage->GetCPUAccess();
 			auto l_gpuAccess = m_storage->GetGPUAccess();
 			auto l_type = m_storage->GetType();
 			Cleanup();
-			Initialise( l_type, l_cpuAccess, l_gpuAccess );
+			l_return = DoCreateStorage( l_type, l_cpuAccess, l_gpuAccess );
 		}
+
+		return l_return;
+	}
+
+	bool TextureImage::DoCreateStorage( TextureStorageType p_type, uint8_t p_cpuAccess, uint8_t p_gpuAccess )
+	{
+		bool l_return = false;
+
+		if ( !m_storage )
+		{
+			try
+			{
+				m_storage = GetEngine()->GetRenderSystem()->CreateTextureStorage( p_type, *this, p_cpuAccess, p_gpuAccess );
+				l_return = true;
+			}
+			catch ( std::exception & p_exc )
+			{
+				Logger::LogError( StringStream() << cuT( "TextureImage::Initialise - Error encountered while allocating storage: " ) << string::string_cast< xchar >( p_exc.what() ) );
+			}
+		}
+
+		ENSURE( m_storage );
+		return l_return;
 	}
 }

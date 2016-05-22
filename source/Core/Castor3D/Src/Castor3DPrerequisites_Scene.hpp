@@ -28,11 +28,13 @@ namespace Castor3D
 	class SceneNode;
 	class SceneFileContext;
 	class SceneFileParser;
+	class Skybox;
 
 	DECLARE_SMART_PTR( SceneNode );
 	DECLARE_SMART_PTR( Scene );
 	DECLARE_SMART_PTR( SceneFileContext );
 	DECLARE_SMART_PTR( SceneFileParser );
+	DECLARE_SMART_PTR( Skybox );
 
 	//! SceneNode pointer array
 	DECLARE_VECTOR( SceneNodeSPtr, SceneNodePtr );
