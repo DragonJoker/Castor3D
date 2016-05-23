@@ -1545,6 +1545,36 @@ namespace GlRender
 		return glCheckError( *this, "glPixelStoref" );
 	}
 
+	bool OpenGl::TexStorage1D( GLenum target, GLint levels, GLint internalformat, GLsizei width )const
+	{
+		m_pfnTexStorage1D( target, levels, internalformat, width );
+		return glCheckError( *this, "glTexStorage1D" );
+	}
+
+	bool OpenGl::TexStorage2D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height )const
+	{
+		m_pfnTexStorage2D( target, levels, internalformat, width, height );
+		return glCheckError( *this, "glTexStorage2D" );
+	}
+
+	bool OpenGl::TexStorage3D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth )const
+	{
+		m_pfnTexStorage3D( target, levels, internalformat, width, height, depth );
+		return glCheckError( *this, "glTexStorage3D" );
+	}
+
+	bool OpenGl::TexStorage2DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const
+	{
+		m_pfnTexStorage2DMultisample( target, samples, internalformat, width, height, fixedsamplelocations );
+		return glCheckError( *this, "glTexStorage2DMultisample" );
+	}
+
+	bool OpenGl::TexStorage3DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const
+	{
+		m_pfnTexStorage3DMultisample( target, samples, internalformat, width, height, depth, fixedsamplelocations );
+		return glCheckError( *this, "glTexStorage3DMultisample" );
+	}
+
 	bool OpenGl::GenSamplers( int count, uint32_t * samplers )const
 	{
 		m_pfnGenSamplers( count, samplers );

@@ -503,6 +503,11 @@ namespace GlRender
 		inline bool DrawPixels( int width, int height, eGL_FORMAT format, eGL_TYPE type, void const * data )const;
 		inline bool PixelStore( eGL_STORAGE_MODE p_mode, int p_iParam )const;
 		inline bool PixelStore( eGL_STORAGE_MODE p_mode, float p_fParam )const;
+		inline bool TexStorage1D( GLenum target, GLint levels, GLint internalformat, GLsizei width )const;
+		inline bool TexStorage2D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height )const;
+		inline bool TexStorage3D( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth )const;
+		inline bool TexStorage2DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations )const;
+		inline bool TexStorage3DMultisample( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations )const;
 
 		//@}
 		/**@name Sampler functions */
@@ -998,6 +1003,11 @@ namespace GlRender
 		std::function< void( int width, int height, uint32_t format, uint32_t type, void const * data ) > m_pfnDrawPixels;
 		std::function< void( uint32_t pname, int param ) > m_pfnPixelStorei;
 		std::function< void( uint32_t pname, float param ) > m_pfnPixelStoref;
+		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width ) > m_pfnTexStorage1D;
+		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height ) > m_pfnTexStorage2D;
+		std::function< void( GLenum target, GLint levels, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth ) > m_pfnTexStorage3D;
+		std::function< void( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLboolean fixedsamplelocations ) > m_pfnTexStorage2DMultisample;
+		std::function< void( GLenum target, GLsizei samples, GLint internalformat, GLsizei width, GLsizei height, GLsizei depth, GLboolean fixedsamplelocations ) > m_pfnTexStorage3DMultisample;
 
 		//@}
 		/**@name Sampler */
@@ -1333,6 +1343,8 @@ namespace GlRender
 	MAKE_GL_EXTENSION( ARB_explicit_uniform_location )
 	MAKE_GL_EXTENSION( ATI_meminfo )
 	MAKE_GL_EXTENSION( NVX_gpu_memory_info )
+	MAKE_GL_EXTENSION( ARB_texture_storage )
+	MAKE_GL_EXTENSION( ARB_texture_storage_multisample )
 
 #	if defined( _WIN32 )
 

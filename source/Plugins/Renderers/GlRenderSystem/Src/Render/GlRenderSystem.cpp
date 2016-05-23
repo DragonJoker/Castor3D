@@ -19,6 +19,7 @@
 #include "Texture/GlDirectTextureStorage.hpp"
 #include "Texture/GlPboTextureStorage.hpp"
 #include "Texture/GlSampler.hpp"
+#include "Texture/GlImmutableTextureStorage.hpp"
 #include "Texture/GlTboTextureStorage.hpp"
 #include "Texture/GlTexture.hpp"
 
@@ -398,7 +399,20 @@ namespace GlRender
 		{
 			if ( true )//p_image.IsStaticSource() )
 			{
-				l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				if ( GetOpenGl().HasExtension( ARB_texture_storage )
+					 && p_type != TextureStorageType::CubeMapPositiveX
+					 && p_type != TextureStorageType::CubeMapNegativeX
+					 && p_type != TextureStorageType::CubeMapPositiveY
+					 && p_type != TextureStorageType::CubeMapNegativeY
+					 && p_type != TextureStorageType::CubeMapPositiveZ
+					 && p_type != TextureStorageType::CubeMapNegativeZ )
+				{
+					l_return = std::make_unique< GlImmutableTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				}
+				else
+				{
+					l_return = std::make_unique< GlDirectTextureStorage >( GetOpenGl(), *this, p_type, p_image, p_cpuAccess, p_gpuAccess );
+				}
 			}
 			else
 			{
