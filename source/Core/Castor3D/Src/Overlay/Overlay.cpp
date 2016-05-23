@@ -15,14 +15,14 @@ namespace Castor3D
 {
 	//*************************************************************************************************
 
-	Overlay::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Overlay, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Overlay::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< Overlay >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool Overlay::TextLoader::operator()( Overlay const & p_overlay, TextFile & p_file )
 	{
-		return OverlayCategory::TextLoader()( *p_overlay.m_category, p_file );
+		return OverlayCategory::TextLoader( m_tabs )( *p_overlay.m_category, p_file );
 	}
 
 	//*************************************************************************************************

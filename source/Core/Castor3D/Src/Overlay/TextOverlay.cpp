@@ -23,37 +23,33 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	TextOverlay::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: OverlayCategory::TextLoader( p_tabs, p_encodingMode )
+	{
+	}
+
 	bool TextOverlay::TextLoader::operator()( TextOverlay const & p_overlay, TextFile & p_file )
 	{
-		String l_strTabs;
-		OverlaySPtr l_pParent = p_overlay.GetOverlay().GetParent();
-
-		while ( l_pParent )
-		{
-			l_strTabs += cuT( '\t' );
-			l_pParent = l_pParent->GetParent();
-		}
-
-		bool l_return = p_file.WriteText( l_strTabs + cuT( "text_overlay " ) + p_overlay.GetOverlayName() + cuT( "\n" ) + l_strTabs + cuT( "{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "text_overlay " ) + p_overlay.GetOverlayName() + cuT( "\n" ) + m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tfont " ) + p_overlay.GetFontTexture()->GetFontName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfont " ) + p_overlay.GetFontTexture()->GetFontName() ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tcaption " ) + p_overlay.GetCaption() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tcaption " ) + p_overlay.GetCaption() ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Overlay::TextLoader()( p_overlay.GetOverlay(), p_file );
+			l_return = Overlay::TextLoader( m_tabs )( p_overlay.GetOverlay(), p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

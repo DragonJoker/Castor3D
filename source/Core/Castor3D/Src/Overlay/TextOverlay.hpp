@@ -67,6 +67,13 @@ namespace Castor3D
 		public:
 			/**
 			 *\~english
+			 *\brief		Constructor
+			 *\~french
+			 *\brief		Constructeur
+			 */
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			/**
+			 *\~english
 			 *\brief		Saves an overlay into a text file
 			 *\param[in]	p_file		the file to save the overlay in
 			 *\param[in]	p_overlay	the overlay to save

@@ -23,6 +23,7 @@ http://www.gnu.org/copyleft/lesser.txt.
 #include <Angle.hpp>
 #include <PlaneEquation.hpp>
 #include <OwnedBy.hpp>
+#include <Size.hpp>
 
 namespace Castor3D
 {
@@ -98,7 +99,7 @@ namespace Castor3D
 		\brief		Loader de Viewport
 		*/
 		class TextLoader
-			: public Castor::Loader< Viewport, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< Viewport >
 		{
 		public:
 			/**
@@ -107,7 +108,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a Viewport into a text file

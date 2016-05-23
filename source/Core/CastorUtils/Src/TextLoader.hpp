@@ -42,8 +42,9 @@ namespace Castor
 		 *\~french
 		 *\brief		Constructeur
 		 */
-		TextLoader( File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
-			: Loader< T, eFILE_TYPE_BINARY, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+		TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII )
+			: Loader< T, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+			, m_tabs( p_tabs )
 		{
 		}
 		/**
@@ -55,6 +56,11 @@ namespace Castor
 		virtual ~TextLoader()
 		{
 		}
+
+	protected:
+		//!\~english	The current indentation.
+		//!\~french		L'indentation courante.
+		String m_tabs;
 	};
 }
 

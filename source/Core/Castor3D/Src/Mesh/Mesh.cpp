@@ -21,22 +21,15 @@ namespace Castor3D
 	bool Mesh::BinaryParser::Fill( Mesh const & p_obj, BinaryChunk & p_chunk )const
 	{
 		bool l_return = true;
-		BinaryChunk l_chunk( eCHUNK_TYPE_MESH );
 
 		if ( l_return )
 		{
-			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, l_chunk );
+			l_return = DoFillChunk( p_obj.GetName(), eCHUNK_TYPE_NAME, p_chunk );
 		}
 
 		for ( auto && l_submesh : p_obj )
 		{
-			Submesh::BinaryParser( m_path ).Fill( *l_submesh, l_chunk );
-		}
-
-		if ( l_return )
-		{
-			l_chunk.Finalise();
-			p_chunk.AddSubChunk( l_chunk );
+			Submesh::BinaryParser( m_path ).Fill( *l_submesh, p_chunk );
 		}
 
 		return l_return;

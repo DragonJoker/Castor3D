@@ -20,40 +20,45 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	BillboardList::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: MovableObject::TextLoader( p_tabs, p_encodingMode )
+	{
+	}
+
 	bool BillboardList::TextLoader::operator()( BillboardList const & p_obj, Castor::TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\tbillboard \"" ) + p_obj.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "billboard \"" ) + p_obj.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader()( p_obj, p_file );
+			l_return = MovableObject::TextLoader( m_tabs )( p_obj, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial \"" ) + p_obj.GetMaterial()->GetName() + cuT( "\"\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\t\tdimensions %d %d" ), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tdimensions %d %d" ), m_tabs.c_str(), p_obj.GetDimensions().width(), p_obj.GetDimensions().height() ) > 0;
 		}
 
 		if ( l_return && p_obj.GetCount() )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tpositions\n\t\t{\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tpositions\n\t\t{\n" ) ) > 0;
 
 			for ( auto const & l_point : p_obj )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tpos %f %f %f" ), l_point[0], l_point[1], l_point[2] ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\t\tpos %f %f %f" ), m_tabs.c_str(), l_point[0], l_point[1], l_point[2] ) > 0;
 			}
 
-			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

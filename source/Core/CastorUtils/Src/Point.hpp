@@ -120,49 +120,6 @@ namespace Castor
 	{
 	public:
 		/*!
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		Point< T, Count > loader
-		\~french
-		\brief		Loader de Point< T, Count >
-		*/
-		class BinaryLoader
-			: public Castor::Loader< Point< T, Count >, eFILE_TYPE_BINARY, BinaryFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			BinaryLoader();
-			/**
-			 *\~english
-			 *\brief			Loads a Point< T, Count > from a binary file
-			 *\param[in,out]	p_object	The Point< T, Count > to load
-			 *\param[in,out]	p_file		The file where to load the Point< T, Count >
-			 *\~french
-			 *\brief			Charge un Point< T, Count > à partir d'un fichier binaire
-			 *\param[in,out]	p_object	Le Point< T, Count > à charger
-			 *\param[in,out]	p_file		Le fichier où charger le Point< T, Count >
-			 */
-			bool operator()( Point< T, Count > & p_object, BinaryFile & p_file );
-			/**
-			 *\~english
-			 *\brief			Saves a Point< T, Count > to a binary file
-			 *\param[in]		p_object	The Point< T, Count > to save
-			 *\param[in,out]	p_file		The file where to save the Point< T, Count >
-			 *\~french
-			 *\brief			Ecrit un Point< T, Count > dans un fichier binaire
-			 *\param[in,out]	p_object	Le Point< T, Count > à écrire
-			 *\param[in,out]	p_file		Le fichier où écrire le Point< T, Count >
-			 */
-			bool operator()( Point< T, Count > const & p_object, BinaryFile & p_file );
-		};
-		/*!
 		\author Sylvain DOREMUS
 		\version 0.6.1.0
 		\date 03/01/2011
@@ -172,7 +129,7 @@ namespace Castor
 		\brief Loader de Coords< T, Count >
 		*/
 		class TextLoader
-			: public Castor::Loader< Point< T, Count >, eFILE_TYPE_TEXT, TextFile >
+			: public Castor::TextLoader< Point< T, Count > >
 		{
 		public:
 			/**
@@ -181,7 +138,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			TextLoader( File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
+			TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Loads a Coords< T, Count > object from a text file

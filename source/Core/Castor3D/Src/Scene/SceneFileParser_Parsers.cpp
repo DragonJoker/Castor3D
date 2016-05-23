@@ -1198,11 +1198,28 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_NodeParent )
 	{
 		String l_name;
 		p_params[0]->Get( l_name );
-		SceneNodeSPtr l_pParent = l_parsingContext->pScene->GetSceneNodeManager().Find( l_name );
+		SceneNodeSPtr l_parent;
 
-		if ( l_pParent )
+		if ( l_name == Scene::ObjectRootNode )
 		{
-			l_parsingContext->pSceneNode->AttachTo( l_pParent );
+			l_parent = l_parsingContext->pScene->GetObjectRootNode();
+		}
+		else if ( l_name == Scene::CameraRootNode )
+		{
+			l_parent = l_parsingContext->pScene->GetCameraRootNode();
+		}
+		else if ( l_name == Scene::RootNode )
+		{
+			l_parent = l_parsingContext->pScene->GetRootNode();
+		}
+		else
+		{
+			l_parent = l_parsingContext->pScene->GetSceneNodeManager().Find( l_name );
+		}
+
+		if ( l_parent )
+		{
+			l_parsingContext->pSceneNode->AttachTo( l_parent );
 		}
 		else
 		{
@@ -1574,14 +1591,16 @@ IMPLEMENT_ATTRIBUTE_PARSER( Castor3D, Parser_MeshImport )
 			}
 		}
 
+		Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
+
 		if ( string::lower_case( l_pathFile.GetExtension() ) == cuT( "cmsh" ) )
 		{
 			BinaryFile l_file( l_pathFile, File::eOPEN_MODE_READ );
+			l_parsingContext->pMesh = l_pEngine->GetMeshManager().Create( l_parsingContext->strName2, eMESH_TYPE_CUSTOM );
 			Mesh::BinaryParser{ l_pathFile }.Parse( *l_parsingContext->pMesh, l_file );
 		}
 		else
 		{
-			Engine * l_pEngine = l_parsingContext->m_pParser->GetEngine();
 			ImporterPluginSPtr l_pPlugin;
 			ImporterSPtr l_pImporter;
 			ImporterPlugin::ExtensionArray l_arrayExtensions;

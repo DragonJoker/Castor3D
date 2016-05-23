@@ -13,47 +13,38 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	OverlayCategory::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< OverlayCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	OverlayCategory::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< OverlayCategory >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool OverlayCategory::TextLoader::operator()( OverlayCategory const & p_overlay, TextFile & p_file )
 	{
-		String l_strTabs;
-		OverlaySPtr l_pParent = p_overlay.GetOverlay().GetParent();
-
-		while ( l_pParent )
-		{
-			l_strTabs += cuT( '\t' );
-			l_pParent = l_pParent->GetParent();
-		}
-
-		bool l_return = p_file.Print( 1024, cuT( "%S\tposition " ), l_strTabs.c_str() ) > 0;
+		bool l_return = p_file.Print( 1024, cuT( "%S\tposition " ), m_tabs.c_str() ) > 0;
 
 		if ( l_return )
 		{
-			l_return = Point2d::TextLoader()( p_overlay.GetPosition(), p_file );
+			l_return = Point2d::TextLoader( m_tabs )( p_overlay.GetPosition(), p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 1024, cuT( "\n%S\tsize " ), l_strTabs.c_str() ) > 0;
+			l_return = p_file.Print( 1024, cuT( "\n%S\tsize " ), m_tabs.c_str() ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Point2d::TextLoader()( p_overlay.GetSize(), p_file );
+			l_return = Point2d::TextLoader( m_tabs )( p_overlay.GetSize(), p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tvisible " ) + ( p_overlay.IsVisible() ? String( cuT( "true" ) ) : String( cuT( "false" ) ) ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tvisible " ) + ( p_overlay.IsVisible() ? String( cuT( "true" ) ) : String( cuT( "false" ) ) ) ) > 0;
 		}
 
 		if ( l_return && p_overlay.GetMaterial() )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterial " ) + p_overlay.GetMaterial()->GetName() ) > 0;
 		}
 
 		for ( auto && l_overlay : p_overlay.GetOverlay() )
@@ -61,15 +52,15 @@ namespace Castor3D
 			switch ( l_overlay->GetType() )
 			{
 			case eOVERLAY_TYPE_PANEL:
-				l_return = PanelOverlay::TextLoader()( *l_overlay->GetPanelOverlay(), p_file );
+				l_return = PanelOverlay::TextLoader( m_tabs )( *l_overlay->GetPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_BORDER_PANEL:
-				l_return = BorderPanelOverlay::TextLoader()( *l_overlay->GetBorderPanelOverlay(), p_file );
+				l_return = BorderPanelOverlay::TextLoader( m_tabs )( *l_overlay->GetBorderPanelOverlay(), p_file );
 				break;
 
 			case eOVERLAY_TYPE_TEXT:
-				l_return = TextOverlay::TextLoader()( *l_overlay->GetTextOverlay(), p_file );
+				l_return = TextOverlay::TextLoader( m_tabs )( *l_overlay->GetTextOverlay(), p_file );
 				break;
 
 			default:

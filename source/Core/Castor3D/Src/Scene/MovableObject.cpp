@@ -9,15 +9,14 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	MovableObject::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< MovableObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	MovableObject::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< MovableObject >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool MovableObject::TextLoader::operator()( MovableObject const & p_object, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\t\tparent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
-		return l_return;
+		return p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_object.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
 	}
 
 	//*************************************************************************************************

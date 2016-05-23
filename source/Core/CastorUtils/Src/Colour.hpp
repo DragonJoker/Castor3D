@@ -45,54 +45,12 @@ namespace Castor
 		\author		Sylvain DOREMUS
 		\date		14/02/2010
 		\~english
-		\brief		Colour binary loader
-		\~french
-		\brief		Loader de Colour à partir de données binaires
-		*/
-		class BinaryLoader
-			: public Castor::Loader< Colour, eFILE_TYPE_BINARY, BinaryFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			CU_API BinaryLoader();
-			/**
-			 *\~english
-			 *\brief			Reads a colour from a binary file
-			 *\param[in,out]	p_file		The file from where we read the colour
-			 *\param[in,out]	p_colour	The colour to read
-			 *\~french
-			 *\brief			Lit une couleur à partir d'un fichier binaire
-			 *\param[in,out]	p_file		Le fichier dans lequel on lit la couleur
-			 *\param[in,out]	p_colour	La couleur à lire
-			 */
-			CU_API virtual bool operator()( Colour & p_colour, BinaryFile & p_file );
-			/**
-			 *\~english
-			 *\brief			Writes a colour into a binary file
-			 *\param[in,out]	p_file		The file into which colour is written
-			 *\param[in]		p_colour	The colour to write
-			 *\~french
-			 *\brief			Ecrit une couleur dans un fichier binaire
-			 *\param[in,out]	p_file		Le fichier dans lequel on écrit la couleur
-			 *\param[in]		p_colour	La couleur à écrire
-			 */
-			CU_API virtual bool operator()( Colour const & p_colour, BinaryFile & p_file );
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\date		14/02/2010
-		\~english
 		\brief		Colour text loader
 		\~french
 		\brief		Loader de Colour à partir d'un texte
 		*/
 		class TextLoader
-			: public Castor::Loader< Colour, eFILE_TYPE_TEXT, TextFile >
+			: public Castor::TextLoader< Colour >
 		{
 		public:
 			/**
@@ -101,7 +59,7 @@ namespace Castor
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			CU_API TextLoader( File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
+			CU_API TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode = File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Reads a colour from a text file

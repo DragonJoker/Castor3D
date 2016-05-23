@@ -5,13 +5,18 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	DirectionalLight::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: LightCategory::TextLoader( p_tabs, p_encodingMode )
+	{
+	}
+
 	bool DirectionalLight::TextLoader::operator()( DirectionalLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextLoader()( p_light, p_file );
+		bool l_return = LightCategory::TextLoader::operator()( p_light, p_file );
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

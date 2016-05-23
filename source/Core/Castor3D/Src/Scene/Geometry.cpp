@@ -19,45 +19,52 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	Geometry::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: MovableObject::TextLoader( p_tabs, p_encodingMode )
+	{
+	}
+
 	bool Geometry::TextLoader::operator()( Geometry const & p_geometry, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Writing Geometry " ) + p_geometry.GetName() );
-		bool l_return = p_file.WriteText( cuT( "\tobject \"" ) + p_geometry.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "object \"" ) + p_geometry.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader()( p_geometry, p_file );
+			l_return = MovableObject::TextLoader( m_tabs )( p_geometry, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tmesh\n" ) ) > 0;
-			l_return = p_file.WriteText( cuT( "\t\t{\n" ) ) > 0;
-			l_return = p_file.WriteText( cuT( "\t\t\timport " ) + p_geometry.GetMesh()->GetName() + cuT( ".cmsh" ) ) > 0;
-			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmesh \"" ) + p_geometry.GetMesh()->GetName() + cuT( "\"\n" ) ) > 0;
+			l_return &= p_file.WriteText( m_tabs + cuT( "\t{\n" ) ) > 0;
+			l_return &= p_file.WriteText( m_tabs + cuT( "\t\timport \"" ) + p_geometry.GetMesh()->GetName() + cuT( ".cmsh\"\n" ) ) > 0;
+			l_return &= p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tmaterials\n\t\t{\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tmaterials\n\t\t{\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
+			uint16_t l_index{ 0u };
+
 			for ( auto && l_submesh : *p_geometry.GetMesh() )
 			{
-				l_return = p_file.WriteText( cuT( "\t\t\t\tmaterial \"" ) + p_geometry.GetMaterial( l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\t\tmaterial " ) + string::to_string( l_index++ ) + cuT( " \"" ) + p_geometry.GetMaterial( l_submesh )->GetName() + cuT( "\"\n" ) ) > 0;
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\t}\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

@@ -34,8 +34,8 @@ namespace Castor3D
 
 	//*********************************************************************************************
 
-	Pass::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Pass, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Pass::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< Pass >( p_tabs, p_encodingMode )
 	{
 	}
 
@@ -61,66 +61,55 @@ namespace Castor3D
 			cuT( "src1_alpha" ),
 			cuT( "inv_src1_alpha" ),
 		};
-		bool l_return = p_file.WriteText( cuT( "\tpass\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "pass\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\t\tambient " ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tambient " ), m_tabs.c_str() ) > 0
+				&& Colour::TextLoader( String() )( p_pass.GetAmbient(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Colour::TextLoader()( p_pass.GetAmbient(), p_file );
+			l_return = p_file.Print( 256, cuT( "%s\tdiffuse " ), m_tabs.c_str() ) > 0
+				&& Colour::TextLoader( String() )( p_pass.GetDiffuse(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\n\t\tdiffuse " ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\temissive " ), m_tabs.c_str() ) > 0
+				&& Colour::TextLoader( String() )( p_pass.GetEmissive(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = Colour::TextLoader()( p_pass.GetDiffuse(), p_file );
+			l_return = p_file.Print( 256, cuT( "%s\tspecular " ), m_tabs.c_str() ) > 0
+				&& Colour::TextLoader( String() )( p_pass.GetSpecular(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\n\t\temissive " ) ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = Colour::TextLoader()( p_pass.GetEmissive(), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.Print( 256, cuT( "\n\t\tspecular " ) ) > 0;
-		}
-
-		if ( l_return )
-		{
-			l_return = Colour::TextLoader()( p_pass.GetSpecular(), p_file );
-		}
-
-		if ( l_return )
-		{
-			l_return = p_file.Print( 256, cuT( "\n\t\tshininess %f\n" ), p_pass.GetShininess() ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tshininess " ) + string::to_string( p_pass.GetShininess() ) + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return && p_pass.GetAlpha() < 1 )
 		{
-			l_return = p_file.Print( 256, cuT( "\n\t\talpha %f\n" ), p_pass.GetAlpha() ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\talpha %f\n" ), m_tabs.c_str(), p_pass.GetAlpha() ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttwo_sided " ) + String( p_pass.IsTwoSided() ? cuT( "true" ) : cuT( "false" ) ) + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return && ( p_pass.GetBlendState()->GetAlphaSrcBlend() != eBLEND_ONE || p_pass.GetBlendState()->GetAlphaDstBlend() != eBLEND_ZERO ) )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tblend_func " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaSrcBlend()] + cuT( " " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaDstBlend()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tblend_func " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaSrcBlend()] + cuT( " " ) + StrBlendFactors[p_pass.GetBlendState()->GetAlphaDstBlend()] + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
@@ -131,13 +120,13 @@ namespace Castor3D
 			for ( uint32_t i = 0; i < l_uiNbTextureUnits && l_return; i++ )
 			{
 				p_file.WriteText( cuT( "\n" ) );
-				l_return = TextureUnit::TextLoader()( * p_pass.GetTextureUnit( i ), p_file );
+				l_return = TextureUnit::TextLoader( m_tabs + cuT( "\t" ) )( *p_pass.GetTextureUnit( i ), p_file );
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

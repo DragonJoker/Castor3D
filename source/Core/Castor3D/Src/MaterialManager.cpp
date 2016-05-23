@@ -69,7 +69,7 @@ namespace Castor3D
 
 		for ( auto l_it : GetEngine()->GetSamplerManager() )
 		{
-			Sampler::TextLoader()( *l_it.second, p_file );
+			Sampler::TextLoader( String{} )( *l_it.second, p_file );
 		}
 
 		GetEngine()->GetSamplerManager().unlock();
@@ -89,7 +89,7 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_return = Material::TextLoader()( * l_it->second, p_file );
+			l_return = Material::TextLoader( String() )( * l_it->second, p_file );
 			++l_it;
 		}
 
@@ -102,15 +102,5 @@ namespace Castor3D
 		SceneFileParser l_parser( *GetEngine() );
 		l_parser.ParseFile( p_file );
 		return true;
-	}
-
-	bool MaterialManager::Save( BinaryFile & p_file )const
-	{
-		return false;
-	}
-
-	bool MaterialManager::Load( BinaryFile & p_file )
-	{
-		return false;
 	}
 }

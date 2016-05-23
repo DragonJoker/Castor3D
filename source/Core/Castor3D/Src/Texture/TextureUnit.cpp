@@ -18,8 +18,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	TextureUnit::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< TextureUnit, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	TextureUnit::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< TextureUnit >( p_tabs, p_encodingMode )
 	{
 	}
 
@@ -38,57 +38,60 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = p_file.WriteText( cuT( "\t\ttexture_unit\n\t\t{\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "texture_unit\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tcolour " ) ) > 0 && Colour::TextLoader()( p_unit.GetBlendColour(), p_file ) && p_file.Print( 256, cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tcolour " ), m_tabs.c_str() ) > 0
+					&& Colour::TextLoader( String() )( p_unit.GetBlendColour(), p_file )
+					&& p_file.Print( 256, cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return && p_unit.GetSampler() && p_unit.GetSampler()->GetName() != cuT( "Default" ) )
 			{
-				l_return = p_file.WriteText( cuT( "\t\t\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tsampler \"" ) + p_unit.GetSampler()->GetName() + cuT( "\"\n" ) ) > 0;
 			}
 
 			if ( l_return && p_unit.GetChannel() != 0 )
 			{
 				switch ( p_unit.GetChannel() )
 				{
-				case eTEXTURE_CHANNEL_COLOUR	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel colour\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_COLOUR:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel colour\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_DIFFUSE	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel diffuse\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_DIFFUSE:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel diffuse\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_NORMAL	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel normal\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_NORMAL:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel normal\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_OPACITY	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel opacity\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_OPACITY:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel opacity\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_SPECULAR	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel specular\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_SPECULAR:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel specular\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_EMISSIVE	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel emissive\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_EMISSIVE:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel emissive\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_HEIGHT	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel height\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_HEIGHT:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel height\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_AMBIENT	:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel ambient\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_AMBIENT:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel ambient\n" ) ) > 0;
 					break;
 
-				case eTEXTURE_CHANNEL_GLOSS		:
-					l_return = p_file.WriteText( cuT( "\t\t\tchannel gloss\n" ) ) > 0;
+				case eTEXTURE_CHANNEL_GLOSS:
+					l_return = p_file.WriteText( m_tabs + cuT( "\tchannel gloss\n" ) ) > 0;
 					break;
 
 				default:
@@ -97,24 +100,24 @@ namespace Castor3D
 
 				if ( l_return && p_unit.GetAlphaFunc() != eALPHA_FUNC_ALWAYS )
 				{
-					l_return = p_file.WriteText( cuT( "\t\t\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "\talpha_func " ) + l_strAlphaFuncs[p_unit.GetAlphaFunc()] + cuT( " " ) + string::to_string( p_unit.GetAlphaValue() ) + cuT( "\n" ) ) > 0;
 				}
 
 				if ( l_return && p_unit.GetRgbFunction() != eRGB_BLEND_FUNC_NONE )
 				{
-					l_return = p_file.WriteText( cuT( "\t\t\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "\trgb_blend " ) + l_strTextureRgbFunctions[p_unit.GetRgbFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetRgbArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
 				}
 
 				if ( l_return && p_unit.GetAlpFunction() != eALPHA_BLEND_FUNC_NONE )
 				{
-					l_return = p_file.WriteText( cuT( "\t\t\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "\talpha_blend " ) + l_strTextureAlphaFunctions[p_unit.GetAlpFunction()] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_0 )] + cuT( " " ) + l_strTextureArguments[p_unit.GetAlpArgument( eBLEND_SRC_INDEX_1 )] + cuT( "\n" ) ) > 0;
 				}
 
 				if ( !l_texture->GetImage().IsStaticSource() )
 				{
 					if ( l_return && p_unit.GetRenderTarget() )
 					{
-						l_return = RenderTarget::TextLoader( cuT( "\t\t\t" ) )( *p_unit.GetRenderTarget(), p_file );
+						l_return = RenderTarget::TextLoader( m_tabs + cuT( "\t" ) )( *p_unit.GetRenderTarget(), p_file );
 					}
 				}
 				else
@@ -129,12 +132,12 @@ namespace Castor3D
 					}
 
 					File::CopyFile( l_path, p_file.GetFilePath() / cuT( "Textures" ) );
-					l_return = p_file.WriteText( cuT( "\t\t\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "\timage \"" ) + l_relative + cuT( "\"\n" ) ) > 0;
 				}
 
 				if ( l_return )
 				{
-					l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 				}
 			}
 		}

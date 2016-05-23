@@ -52,7 +52,7 @@ namespace Castor3D
 		\brief		Loader de RenderTarget
 		*/
 		class TextLoader
-			: public Castor::Loader< RenderTarget, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< RenderTarget >
 		{
 		public:
 			/**
@@ -77,10 +77,6 @@ namespace Castor3D
 			 *\param[in]	p_file		Le fichier
 			 */
 			C3D_API virtual bool operator()( Castor3D::RenderTarget const & p_target, Castor::TextFile & p_file );
-
-		private:
-			//!\~english The tabulations to put at the beginning of each line	\~french Les tabulations à mettre à chaque début de ligne
-			Castor::String m_tabs;
 		};
 
 	private:

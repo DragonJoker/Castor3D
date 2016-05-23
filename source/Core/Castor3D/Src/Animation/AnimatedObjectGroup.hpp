@@ -50,50 +50,8 @@ namespace Castor3D
 		\~french
 		\brief		Loader d'AnimatedObjectGroup
 		*/
-		class BinaryLoader
-			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_BINARY, Castor::BinaryFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API BinaryLoader();
-			/**
-			 *\~english
-			 *\brief		Loads an AnimatedObjectGroup from a binary file
-			 *\param[in]	p_file	The file to load the AnimatedObjectGroup from
-			 *\param[in]	p_group	The AnimatedObjectGroup to load
-			 *\param[in]	p_scene	The scene which holds the AnimatedObjectGroup
-			 *\return		\p true if OK
-			 *\~french
-			 *\brief		Charge un AnimatedObjectGroup à partir d'un fichier binaire
-			 *\param[in]	p_file	Le fichier où charger le AnimatedObjectGroup
-			 *\param[in]	p_group	Le AnimatedObjectGroup à charger
-			 *\param[in]	p_scene	La scène qui contient le AnimatedObjectGroup
-			 *\return		\p true si tout s'est bien passé
-			 */
-			C3D_API virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file, Scene * p_scene );
-
-		private:
-			virtual bool operator()( AnimatedObjectGroup & p_group, Castor::BinaryFile & p_file );
-
-		private:
-			Scene * m_scene;
-		};
-		/*!
-		\author		Sylvain DOREMUS
-		\version	0.6.1.0
-		\date		19/10/2011
-		\~english
-		\brief		AnimatedObjectGroup loader
-		\~french
-		\brief		Loader d'AnimatedObjectGroup
-		*/
 		class TextLoader
-			: public Castor::Loader< AnimatedObjectGroup, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< AnimatedObjectGroup >
 		{
 		public:
 			/**
@@ -102,7 +60,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes an animated object group into a text file

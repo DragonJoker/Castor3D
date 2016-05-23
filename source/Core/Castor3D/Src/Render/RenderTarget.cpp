@@ -36,8 +36,7 @@ using namespace Castor;
 namespace Castor3D
 {
 	RenderTarget::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
-		: Loader< RenderTarget, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
-		, m_tabs( p_tabs )
+		: Castor::TextLoader< RenderTarget >( p_tabs, p_encodingMode )
 	{
 	}
 

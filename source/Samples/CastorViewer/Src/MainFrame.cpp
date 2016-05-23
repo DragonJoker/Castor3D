@@ -774,6 +774,7 @@ namespace CastorViewer
 		l_wildcard += CSCN_WILDCARD;
 		l_wildcard += _( "Wavefront OBJ" );
 		l_wildcard += OBJ_WILDCARD;
+		l_wildcard += wxT( "|" );
 		wxFileDialog l_fileDialog( this, _( "Export the scene" ), wxEmptyString, wxEmptyString, l_wildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 		SceneSPtr l_scene = m_pMainScene.lock();
 

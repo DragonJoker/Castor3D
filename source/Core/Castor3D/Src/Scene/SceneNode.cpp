@@ -20,49 +20,58 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	SceneNode::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< SceneNode, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	SceneNode::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< SceneNode >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool SceneNode::TextLoader::operator()( SceneNode const & p_node, TextFile & p_file )
 	{
 		bool l_return = false;
-		Logger::LogInfo( cuT( "Writing Node " ) + p_node.GetName() );
 
-		if ( p_node.GetName() != cuT( "RootNode" ) )
+		if ( p_node.GetName() != cuT( "RootNode" )
+			 && p_node.GetName() != cuT( "ObjectRootNode" )
+			 && p_node.GetName() != cuT( "CameraRootNode" ) )
 		{
-			l_return = p_file.WriteText( cuT( "\tscene_node \"" ) + p_node.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+			Logger::LogInfo( cuT( "Writing Node " ) + p_node.GetName() );
+			l_return = p_file.WriteText( m_tabs + cuT( "scene_node \"" ) + p_node.GetName() + cuT( "\"\n\t{\n" ) ) > 0;
 
 			if ( l_return && p_node.GetParent() )
 			{
-				l_return = p_file.WriteText( cuT( "\t\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tparent \"" ) + p_node.GetParent()->GetName() + cuT( "\"\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\torientation " ) ) > 0 && Quaternion::TextLoader()( p_node.GetOrientation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\torientation " ), m_tabs.c_str() ) > 0
+					&& Quaternion::TextLoader( String() )( p_node.GetOrientation(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\tposition " ) ) > 0 && Point3r::TextLoader()( p_node.GetPosition(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tposition " ), m_tabs.c_str() ) > 0
+					&& Point3r::TextLoader( String() )( p_node.GetPosition(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\tscale " ) ) > 0 && Point3r::TextLoader()( p_node.GetScale(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tscale " ), m_tabs.c_str() ) > 0
+					&& Point3r::TextLoader( String() )( p_node.GetScale(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.WriteText( cuT( "\n\t}\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 
 		if ( l_return )
 		{
-			Logger::LogInfo( cuT( "Writing Childs" ) );
+			Logger::LogInfo( cuT( "Writing Children" ) );
+			l_return = p_file.WriteText( cuT( "\n" ) ) > 0;
 
 			for ( auto && l_it = p_node.ChildsBegin(); l_it != p_node.ChildsEnd() && l_return; ++l_it )
 			{
@@ -70,14 +79,15 @@ namespace Castor3D
 
 				if ( l_node )
 				{
-					l_return = SceneNode::TextLoader()( *l_node, p_file );
+					l_return = SceneNode::TextLoader( m_tabs )( *l_node, p_file );
+					l_return = p_file.WriteText( cuT( "\n" ) ) > 0;
 				}
 			}
 		}
 
 		if ( l_return )
 		{
-			Logger::LogInfo( cuT( "Childs Written" ) );
+			Logger::LogInfo( cuT( "Children Written" ) );
 		}
 
 		return l_return;

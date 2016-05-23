@@ -8,19 +8,20 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	LightCategory::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< LightCategory, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	LightCategory::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< LightCategory >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool LightCategory::TextLoader::operator()( LightCategory const & p_light, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Writing Light " ) + p_light.GetLight()->GetName() );
-		bool l_return = p_file.WriteText( cuT( "\tlight \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "light \"" ) + p_light.GetLight()->GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = MovableObject::TextLoader()( *p_light.GetLight(), p_file );
+			l_return = MovableObject::TextLoader( m_tabs )( *p_light.GetLight(), p_file );
 		}
 
 		if ( l_return )
@@ -28,27 +29,27 @@ namespace Castor3D
 			switch ( p_light.GetLightType() )
 			{
 			case eLIGHT_TYPE_DIRECTIONAL:
-				l_return = p_file.WriteText( cuT( "\t\ttype directional\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\ttype directional\n" ) ) > 0;
 				break;
 
 			case eLIGHT_TYPE_POINT:
-				l_return = p_file.WriteText( cuT( "\t\ttype point_light\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\ttype point_light\n" ) ) > 0;
 				break;
 
 			case eLIGHT_TYPE_SPOT:
-				l_return = p_file.WriteText( cuT( "\t\ttype spot_light\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\ttype spot_light\n" ) ) > 0;
 				break;
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tcolour " ) ) > 0 && Point3f::TextLoader()( p_light.GetColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tcolour " ) ) > 0 && Point3f::TextLoader( m_tabs )( p_light.GetColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\tintensity " ) ) > 0 && Point3f::TextLoader()( p_light.GetIntensity(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tintensity " ) ) > 0 && Point3f::TextLoader( m_tabs )( p_light.GetIntensity(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		return l_return;

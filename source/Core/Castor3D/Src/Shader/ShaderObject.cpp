@@ -35,25 +35,26 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderObject::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< ShaderObject, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	ShaderObject::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< ShaderObject >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool ShaderObject::TextLoader::operator()( ShaderObject const & p_shaderObject, TextFile & p_file )
 	{
-		String l_strTabs = cuT( "\t\t\t" );
-		bool l_return = p_file.WriteText( l_strTabs + p_shaderObject.GetStrType() ) > 0;
-		static std::array< String, eSHADER_MODEL_COUNT > l_arrayModels;
-		l_arrayModels[eSHADER_MODEL_1] = cuT( "sm_1" );
-		l_arrayModels[eSHADER_MODEL_2] = cuT( "sm_2" );
-		l_arrayModels[eSHADER_MODEL_3] = cuT( "sm_3" );
-		l_arrayModels[eSHADER_MODEL_4] = cuT( "sm_4" );
-		l_arrayModels[eSHADER_MODEL_5] = cuT( "sm_5" );
+		bool l_return = p_file.WriteText( m_tabs + p_shaderObject.GetStrType() ) > 0;
+		static std::array< String, eSHADER_MODEL_COUNT > const l_arrayModels
+		{
+			cuT( "sm_1" ),
+			cuT( "sm_2" ),
+			cuT( "sm_3" ),
+			cuT( "sm_4" ),
+			cuT( "sm_5" ),
+		};
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "\n{\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\n{\n" ) ) > 0;
 		}
 
 		Path l_pathFile = p_file.GetFilePath() / cuT( "Shaders" );
@@ -70,7 +71,7 @@ namespace Castor3D
 				{
 					File::CopyFile( l_file, l_pathFile );
 					l_file = Path( cuT( "Shaders" ) ) / l_file.GetFileName() + cuT( "." ) + l_file.GetExtension();
-					l_return = p_file.WriteText( l_strTabs + cuT( "\tfile \"" ) + l_arrayModels[i] + cuT( " " ) + l_file + cuT( "\"\n" ) ) > 0;
+					l_return = p_file.WriteText( m_tabs + cuT( "\tfile " ) + l_arrayModels[i] + cuT( " \"" ) + l_file + cuT( "\"\n" ) ) > 0;
 				}
 			}
 		}
@@ -79,13 +80,13 @@ namespace Castor3D
 		{
 			for ( auto && l_it : p_shaderObject.GetFrameVariables() )
 			{
-				l_return = FrameVariable::TextLoader()( *l_it, p_file );
+				l_return = FrameVariable::TextLoader( m_tabs + cuT( "\t" ) )( *l_it, p_file );
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

@@ -60,7 +60,7 @@ namespace Castor3D
 		\remark		Charge et enregistre les incrustations dans des fichiers
 		*/
 		class TextLoader
-			: public Castor::Loader< OverlayCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< OverlayCategory >
 		{
 		public:
 			/**
@@ -69,7 +69,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Saves an overlay into a text file

@@ -42,55 +42,6 @@ namespace Castor3D
 	class Vertex
 	{
 	public:
-		/*!
-		\author Sylvain DOREMUS
-		\version 0.6.1.0
-		\date 03/01/2011
-		\~english
-		\brief Vertex loader
-		\~french
-		\brief Loader de Vertex
-		*/
-		class TextLoader
-			: public Castor::Loader< Vertex, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
-		{
-		public:
-			/**
-			 *\~english
-			 *\brief		Constructor
-			 *\~french
-			 *\brief		Constructeur
-			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
-			/**
-			 *\~english
-			 *\brief		Loads a Vertex object from a text file
-			 *\param[out]	p_object	The Vertex object to read
-			 *\param[in]	p_file		The file
-			 *\return		\p true if ok
-			 *\~french
-			 *\brief		Charge un objet Vertex à partir d'un fichier texte
-			 *\param[out]	p_object	L'objet Vertex
-			 *\param[in]	p_file		Le fichier
-			 *\return		\p true si ok
-			 */
-			C3D_API virtual bool operator()( Castor3D::Vertex & p_object, Castor::TextFile & p_file );
-			/**
-			 *\~english
-			 *\brief		Writes a Vertex object into a text file
-			 *\param[in]	p_object	The Vertex object to write
-			 *\param[out]	p_file		The file
-			 *\return		\p true if ok
-			 *\~french
-			 *\brief		Ecrit un objet Vertex dans un fichier texte
-			 *\param[in]	p_object	L'objet Vertex
-			 *\param[out]	p_file		Le fichier
-			 *\return		\p true si ok
-			 */
-			C3D_API virtual bool operator()( Castor3D::Vertex const & p_object, Castor::TextFile & p_file );
-		};
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor

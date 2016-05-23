@@ -33,8 +33,8 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
-	ShaderProgram::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< ShaderProgram, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	ShaderProgram::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< ShaderProgram >( p_tabs, p_encodingMode )
 	{
 	}
 
@@ -58,13 +58,12 @@ namespace Castor3D
 
 		if ( l_hasFile )
 		{
-			String l_strTabs = cuT( "\t\t" );
 			ShaderObjectSPtr l_object;
 
 			switch ( p_shaderProgram.GetLanguage() )
 			{
 			case eSHADER_LANGUAGE_GLSL:
-				l_return = p_file.WriteText( l_strTabs + cuT( "gl_shader_program\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "gl_shader_program\n" ) ) > 0;
 				break;
 
 			default:
@@ -74,7 +73,7 @@ namespace Castor3D
 
 			if ( l_return )
 			{
-				l_return = p_file.WriteText( l_strTabs + cuT( "{\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 			}
 
 			for ( int i = 0; i < eSHADER_TYPE_COUNT && l_return; i++ )
@@ -83,13 +82,13 @@ namespace Castor3D
 
 				if ( l_object )
 				{
-					l_return = ShaderObject::TextLoader()( *l_object, p_file );
+					l_return = ShaderObject::TextLoader( m_tabs + cuT( "\t" ) )( *l_object, p_file );
 				}
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.WriteText( l_strTabs + cuT( "}\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 		else

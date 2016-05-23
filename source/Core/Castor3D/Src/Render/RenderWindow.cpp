@@ -32,32 +32,33 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	RenderWindow::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< RenderWindow, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	RenderWindow::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< RenderWindow >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool RenderWindow::TextLoader::operator()( RenderWindow const & p_window, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "RenderWindow::Write - Window Name" ) );
-		bool l_return = p_file.WriteText( cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "window \"" ) + p_window.GetName() + cuT( "\"\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return && p_window.GetVSync() )
 		{
-			l_return = p_file.WriteText( cuT( "\tvsync true\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tvsync true\n" ) ) > 0;
 		}
 
 		if ( l_return && p_window.IsFullscreen() )
 		{
-			l_return = p_file.WriteText( cuT( "\tfullscreen true\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\tfullscreen true\n" ) ) > 0;
 		}
 
 		if ( l_return && p_window.GetRenderTarget() )
 		{
-			l_return = RenderTarget::TextLoader( cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
+			l_return = RenderTarget::TextLoader( m_tabs + cuT( "\t" ) )( *p_window.GetRenderTarget(), p_file );
 		}
 
-		p_file.WriteText( cuT( "}\n" ) );
+		p_file.WriteText( m_tabs + cuT( "}\n" ) );
 		return l_return;
 	}
 

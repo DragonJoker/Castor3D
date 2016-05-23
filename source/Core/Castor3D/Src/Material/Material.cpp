@@ -11,18 +11,18 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Material::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Material, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Material::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< Material >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool Material::TextLoader::operator()( Material const & p_material, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "material \"" ) + p_material.GetName() + cuT( "\"\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "{\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 		}
 
 		bool l_first = true;
@@ -38,12 +38,12 @@ namespace Castor3D
 				p_file.WriteText( cuT( "\n" ) );
 			}
 
-			l_return = Pass::TextLoader()( *l_pass, p_file );
+			l_return = Pass::TextLoader( m_tabs + cuT( "\t" ) )( *l_pass, p_file );
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

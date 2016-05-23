@@ -270,37 +270,26 @@ namespace CastorViewer
 		}
 
 		Path l_filePath = l_folder / p_fileName.GetFileName();
-		TextFile l_mtlFile( l_filePath + cuT( ".cmtl" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_UTF8 );
-		TextFile l_scnFile( l_filePath + cuT( ".cscn" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_UTF8 );
-		l_result = p_castor3d->GetMaterialManager().Write( l_mtlFile );
 
 		if ( l_result )
 		{
-			if ( l_scnFile.WriteText( cuT( "mtl_file \"" ) + p_fileName.GetFileName() + cuT( ".cmtl\"\n\n" ) ) > 0 )
+			TextFile l_scnFile( l_filePath + cuT( ".cscn" ), File::eOPEN_MODE_WRITE, File::eENCODING_MODE_ASCII );
+			l_result = Scene::TextLoader( String() )( p_scene, l_scnFile );
+		}
+
+		if ( l_result )
+		{
+			p_castor3d->GetMeshManager().lock();
+
+			for ( auto l_it : p_castor3d->GetMeshManager() )
 			{
-				l_result = Scene::TextLoader()( p_scene, l_scnFile );
+				auto l_path = l_folder / l_it.first + cuT( ".cmsh" );
+				BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE };
+				l_result &= Mesh::BinaryParser{ l_path }.Fill( *l_it.second, l_file );
 			}
+
+			p_castor3d->GetMeshManager().unlock();
 		}
-
-		p_castor3d->GetWindowManager().lock();
-
-		for ( auto l_it : p_castor3d->GetWindowManager() )
-		{
-			l_result &= RenderWindow::TextLoader()( *l_it.second, l_scnFile );
-		}
-
-		p_castor3d->GetWindowManager().unlock();
-
-		p_castor3d->GetMeshManager().lock();
-
-		for ( auto l_it : p_castor3d->GetMeshManager() )
-		{
-			auto l_path = l_folder / l_it.first + cuT( ".cmsh" );
-			BinaryFile l_file{ l_path, File::eOPEN_MODE_WRITE};
-			l_result &= Mesh::BinaryParser{ l_path }.Fill( *l_it.second, l_file );
-		}
-
-		p_castor3d->GetMeshManager().unlock();
 
 		if ( l_result )
 		{

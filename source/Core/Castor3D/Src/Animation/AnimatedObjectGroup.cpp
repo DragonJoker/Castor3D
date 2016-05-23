@@ -15,61 +15,31 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	AnimatedObjectGroup::BinaryLoader::BinaryLoader()
-		: Loader< AnimatedObjectGroup, eFILE_TYPE_BINARY, BinaryFile >( File::eOPEN_MODE_DUMMY )
-	{
-	}
-
-	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file, Scene * p_scene )
-	{
-		m_scene = p_scene;
-		return operator()( p_group, p_file );
-	}
-
-	bool AnimatedObjectGroup::BinaryLoader::operator()( AnimatedObjectGroup & p_group, BinaryFile & p_file )
-	{
-		Collection< AnimatedObjectGroup, String > l_collection;
-		bool l_result = false;
-
-		if ( !l_result || l_collection.has( p_group.GetName() ) )
-		{
-			Logger::LogWarning( cuT( "Can't add AnimatedObjectGroup [" ) + p_group.GetName() + cuT( "]" ) );
-		}
-		else
-		{
-			Logger::LogInfo( cuT( "AnimatedObjectGroup [" ) + p_group.GetName() +  + cuT( "] added" ) );
-		}
-
-		return l_result;
-	}
-
-	//*************************************************************************************************
-
-	AnimatedObjectGroup::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< AnimatedObjectGroup, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	AnimatedObjectGroup::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< AnimatedObjectGroup >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool AnimatedObjectGroup::TextLoader::operator()( AnimatedObjectGroup const & p_group, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "animated_object_group " ) + p_group.GetName() + cuT( "\n{\n" ) ) > 0;
 
 		for ( auto l_it : p_group.GetAnimations() )
 		{
-			l_return &= p_file.WriteText( cuT( "\tanimation " ) + l_it.first + cuT( "\n" ) ) > 0;
+			l_return &= p_file.WriteText( m_tabs + cuT( "\tanimation " ) + l_it.first + cuT( "\n" ) ) > 0;
 		}
 
 		for ( auto l_it : p_group.GetObjects() )
 		{
 			if ( l_it.second->GetGeometry() )
 			{
-				l_return &= p_file.WriteText( cuT( "\tanimated_object " ) + l_it.second->GetName() + cuT( "\n" ) ) > 0;
+				l_return &= p_file.WriteText( m_tabs + cuT( "\tanimated_object " ) + l_it.second->GetName() + cuT( "\n" ) ) > 0;
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "}\n\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n\n" ) ) > 0;
 		}
 
 		return l_return;

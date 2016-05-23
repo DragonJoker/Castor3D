@@ -49,7 +49,7 @@ namespace Castor3D
 		\brief		Loader de Sampler
 		*/
 		class TextLoader
-			: public Castor::Loader< Sampler, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< Sampler >
 		{
 		public:
 			/**
@@ -58,7 +58,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a sampler into a text file

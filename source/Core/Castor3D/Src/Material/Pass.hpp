@@ -50,7 +50,7 @@ namespace Castor3D
 		\brief Loader de Pass
 		*/
 		class TextLoader
-			: public Castor::Loader< Pass, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< Pass >
 		{
 		public:
 			/**
@@ -59,7 +59,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief			Writes a pass into a text file

@@ -10,42 +10,43 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Viewport::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Viewport, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Viewport::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< Viewport >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool Viewport::TextLoader::operator()( Viewport const & p_viewport, TextFile & p_file )
 	{
-		bool l_return = p_file.WriteText( cuT( "\t\tviewport\n\t\t{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "viewport\n" ) ) > 0
+			&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\t\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "\ttype " ) + Viewport::string_type[p_viewport.GetType()] + cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
 			if ( p_viewport.GetType() == eVIEWPORT_TYPE_ORTHO || p_viewport.GetType() == eVIEWPORT_TYPE_FRUSTUM )
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tleft %f\n" ), p_viewport.GetLeft() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tright %f\n" ), p_viewport.GetRight() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\ttop %f\n" ), p_viewport.GetTop() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tbottom %f\n" ), p_viewport.GetBottom() ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tleft " ) + string::to_string( p_viewport.GetLeft() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tright " ) + string::to_string( p_viewport.GetRight() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\ttop " ) + string::to_string( p_viewport.GetTop() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tbottom " ) + string::to_string( p_viewport.GetBottom() ) + cuT( "\n" ) ) > 0;
 			}
 			else
 			{
-				l_return = p_file.Print( 256, cuT( "\t\t\tnear %f\n" ), p_viewport.GetNear() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tfar %f\n" ), p_viewport.GetFar() ) > 0;
-				l_return = p_file.Print( 256, cuT( "\t\t\tfov_y %f\n" ), p_viewport.GetFovY().degrees() ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tnear " ) + string::to_string( p_viewport.GetNear() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tfar " ) + string::to_string( p_viewport.GetFar() ) + cuT( "\n" ) ) > 0
+					&& p_file.WriteText( m_tabs + cuT( "\tfov_y " ) + string::to_string( p_viewport.GetFovY().degrees() ) + cuT( "\n" ) ) > 0;
 			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

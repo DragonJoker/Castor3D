@@ -93,7 +93,7 @@ namespace Castor3D
 		\brief		Loader de scène
 		*/
 		class TextLoader
-			: public Castor::Loader< Scene, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< Scene >
 		{
 		public:
 			/**
@@ -102,7 +102,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a scene into a text file
@@ -441,6 +441,17 @@ namespace Castor3D
 		//!\~english	The skybox
 		//!\~french		La skybox
 		SkyboxSPtr m_skybox;
+
+	public:
+		//!\~english	The cameras root node name.
+		//!\~french		Le nom du noeud de scène racine des caméras.
+		static Castor::String CameraRootNode;
+		//!\~english	The objects root node name.
+		//!\~french		Le nom du noeud de scène racine des objets.
+		static Castor::String ObjectRootNode;
+		//!\~english	The root node name.
+		//!\~french		Le nom du noeud de scène racine.
+		static Castor::String RootNode;
 	};
 }
 

@@ -58,7 +58,7 @@ namespace Castor3D
 		\remark Charge/écrit des Castor3D::SceneNode à partir de/dans un fichier
 		*/
 		class TextLoader
-			: public Castor::Loader< SceneNode, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< SceneNode >
 		{
 		public:
 			/**
@@ -67,7 +67,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 * Writes a Castor3D::SceneNode into a text file

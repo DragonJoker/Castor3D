@@ -6,8 +6,8 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Sampler::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		:	Loader< Sampler, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Sampler::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< Sampler >( p_tabs, p_encodingMode )
 	{
 	}
 
@@ -17,84 +17,84 @@ namespace Castor3D
 
 		if ( p_sampler.GetName() != cuT( "LightsSampler" ) && p_sampler.GetName() != RenderTarget::DefaultSamplerName )
 		{
-			typedef std::map< uint32_t, String > StrUIntMap;
-			static StrUIntMap l_mapInterpolationModes;
-			static StrUIntMap l_mapWrappingModes;
+			using StrUIntMap = std::map< uint32_t, String >;
 
-			if ( l_mapInterpolationModes.empty() )
+			StrUIntMap l_mapInterpolationModes
 			{
-				l_mapInterpolationModes[ eINTERPOLATION_MODE_NEAREST] = cuT( "nearest" );
-				l_mapInterpolationModes[ eINTERPOLATION_MODE_LINEAR] = cuT( "linear" );
+				{ eINTERPOLATION_MODE_NEAREST, cuT( "nearest" ) },
+				{ eINTERPOLATION_MODE_LINEAR, cuT( "linear" ) },
+			};
+			StrUIntMap l_mapWrappingModes
+			{
+				{ eWRAP_MODE_REPEAT, cuT( "repeat" ) },
+				{ eWRAP_MODE_MIRRORED_REPEAT, cuT( "mirrored_repeat" ) },
+				{ eWRAP_MODE_CLAMP_TO_BORDER, cuT( "clamp_to_border" ) },
+				{ eWRAP_MODE_CLAMP_TO_EDGE, cuT( "clamp_to_edge" ) },
+			};
+
+			l_return = p_file.WriteText( m_tabs + cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n" ) ) > 0
+				&& p_file.WriteText( m_tabs + cuT( "{\n" ) ) > 0;
+
+			if ( l_return && p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MIN ) != eINTERPOLATION_MODE_UNDEFINED )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "\tmin_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MIN )] + cuT( "\n" ) ) > 0;
 			}
 
-			if ( l_mapWrappingModes.empty() )
+			if ( l_return && p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MIN ) != eINTERPOLATION_FILTER_MAG )
 			{
-				l_mapWrappingModes[ eWRAP_MODE_REPEAT] = cuT( "repeat" );
-				l_mapWrappingModes[ eWRAP_MODE_MIRRORED_REPEAT] = cuT( "mirrored_repeat" );
-				l_mapWrappingModes[ eWRAP_MODE_CLAMP_TO_BORDER] = cuT( "clamp_to_border" );
-				l_mapWrappingModes[ eWRAP_MODE_CLAMP_TO_EDGE] = cuT( "clamp_to_edge" );
+				l_return = p_file.WriteText( m_tabs + cuT( "\tmag_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MAG )] + cuT( "\n" ) ) > 0;
 			}
 
-			l_return = p_file.WriteText( cuT( "sampler \"" ) + p_sampler.GetName() + cuT( "\"\n{\n" ) ) > 0;
-
-			if ( l_return )
+			if ( l_return && p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MIN ) != eINTERPOLATION_FILTER_MIP )
 			{
-				l_return = p_file.WriteText( cuT( "\tmin_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MIN )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tmip_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MIP )] + cuT( "\n" ) ) > 0;
 			}
 
-			if ( l_return )
+			if ( l_return && p_sampler.GetWrappingMode( eTEXTURE_UVW_U ) != eWRAP_MODE_COUNT )
 			{
-				l_return = p_file.WriteText( cuT( "\tmag_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MAG )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tu_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( eTEXTURE_UVW_U )] + cuT( "\n" ) ) > 0;
 			}
 
-			if( l_return )
+			if ( l_return && p_sampler.GetWrappingMode( eTEXTURE_UVW_V ) != eWRAP_MODE_COUNT )
 			{
-				l_return = p_file.WriteText( cuT( "\tmip_filter " ) + l_mapInterpolationModes[p_sampler.GetInterpolationMode( eINTERPOLATION_FILTER_MIP )] + cuT( "\n" ) ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tv_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( eTEXTURE_UVW_V )] + cuT( "\n" ) ) > 0;
 			}
 
-			if ( l_return )
+			if ( l_return && p_sampler.GetWrappingMode( eTEXTURE_UVW_W ) != eWRAP_MODE_COUNT )
 			{
-				l_return = p_file.WriteText( cuT( "\tu_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( eTEXTURE_UVW_U )] + cuT( "\n" ) ) > 0;
-			}
-
-			if ( l_return )
-			{
-				l_return = p_file.WriteText( cuT( "\tv_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( eTEXTURE_UVW_V )] + cuT( "\n" ) ) > 0;
-			}
-
-			if ( l_return )
-			{
-				l_return = p_file.WriteText( cuT( "\tw_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( eTEXTURE_UVW_W )] + cuT( "\n" ) ) > 0;
-			}
-
-			if ( l_return )
-			{
-				l_return = p_file.Print( 256, cuT( "\tmin_lod %.2f\n" ), p_sampler.GetMinLod() ) > 0;
+				l_return = p_file.WriteText( m_tabs + cuT( "\tw_wrap_mode " ) + l_mapWrappingModes[p_sampler.GetWrappingMode( eTEXTURE_UVW_W )] + cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\tmax_lod %.2f\n" ), p_sampler.GetMaxLod() ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tmin_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMinLod() ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\tlod_bias %.2f\n" ), p_sampler.GetLodBias() ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tmax_lod %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxLod() ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\tborder_colour " ) ) > 0 && Colour::TextLoader()( p_sampler.GetBorderColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tlod_bias %.2f\n" ), m_tabs.c_str(), p_sampler.GetLodBias() ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.Print( 256, cuT( "\tmax_anisotropy %.2f\n" ), p_sampler.GetMaxAnisotropy() ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tborder_colour " ), m_tabs.c_str() ) > 0
+					&& Colour::TextLoader( String() )( p_sampler.GetBorderColour(), p_file )
+					&& p_file.WriteText( cuT( "\n" ) ) > 0;
 			}
 
 			if ( l_return )
 			{
-				l_return = p_file.WriteText( cuT( "}\n\n" ) ) > 0;
+				l_return = p_file.Print( 256, cuT( "%s\tmax_anisotropy %.2f\n" ), m_tabs.c_str(), p_sampler.GetMaxAnisotropy() ) > 0;
+			}
+
+			if ( l_return )
+			{
+				l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 			}
 		}
 

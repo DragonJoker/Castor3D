@@ -57,7 +57,7 @@ scene "TextureScene"
 		primitive triangles
 		viewport
 		{
-			type 3d
+			type perspective
 			fov_y 45.0
 			aspect_ratio 1
 			near 0.2
@@ -158,7 +158,7 @@ scene "FinalScene"
 		primitive triangles
 		viewport "MainViewport"
 		{
-			type 3d
+			type perspective
 			fov_y 45.0
 			aspect_ratio 1.778
 			near 0.1

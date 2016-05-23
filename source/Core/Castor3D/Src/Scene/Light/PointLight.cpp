@@ -6,18 +6,25 @@ using namespace Castor;
 
 namespace Castor3D
 {
+	PointLight::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: LightCategory::TextLoader( p_tabs, p_encodingMode )
+	{
+	}
+
 	bool PointLight::TextLoader::operator()( PointLight const & p_light, TextFile & p_file )
 	{
-		bool l_return = LightCategory::TextLoader()( p_light, p_file );
+		bool l_return = LightCategory::TextLoader::operator()( p_light, p_file );
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\t\tattenuation " ) ) > 0 && Point3f::TextLoader()( p_light.GetAttenuation(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			l_return = p_file.Print( 256, cuT( "%s\tattenuation " ), m_tabs.c_str() ) > 0
+				&& Point3f::TextLoader( String() )( p_light.GetAttenuation(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.WriteText( cuT( "\t}\n" ) ) > 0;
+			l_return = p_file.WriteText( m_tabs + cuT( "}\n" ) ) > 0;
 		}
 
 		return l_return;

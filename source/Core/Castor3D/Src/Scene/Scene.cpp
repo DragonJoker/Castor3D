@@ -54,36 +54,67 @@ using namespace Castor;
 
 namespace Castor3D
 {
-	Scene::TextLoader::TextLoader( File::eENCODING_MODE p_encodingMode )
-		: Loader< Scene, eFILE_TYPE_TEXT, TextFile >( File::eOPEN_MODE_DUMMY, p_encodingMode )
+	Scene::TextLoader::TextLoader( String const & p_tabs, File::eENCODING_MODE p_encodingMode )
+		: Castor::TextLoader< Scene >( p_tabs, p_encodingMode )
 	{
 	}
 
 	bool Scene::TextLoader::operator()( Scene const & p_scene, TextFile & p_file )
 	{
 		Logger::LogInfo( cuT( "Scene::Write - Scene Name" ) );
-		bool l_return = p_file.WriteText( cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
+		bool l_return = p_file.WriteText( m_tabs + cuT( "scene \"" ) + p_scene.GetName() + cuT( "\"\n{\n" ) ) > 0;
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\tbackground_colour " ) ) > 0 && Colour::TextLoader()( p_scene.GetBackgroundColour(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			Logger::LogInfo( cuT( "Scene::Write - Samplers" ) );
+			for ( auto const & l_name : p_scene.GetSamplerView() )
+			{
+				auto l_sampler = p_scene.GetSamplerView().Find( l_name );
+				l_return &= Sampler::TextLoader( m_tabs + cuT( "\t" ) )( *l_sampler, p_file );
+				p_file.WriteText( cuT( "\n" ) );
+			}
 		}
 
 		if ( l_return )
 		{
-			l_return = p_file.Print( 256, cuT( "\tambient_light " ) ) > 0 && Colour::TextLoader()( p_scene.GetAmbientLight(), p_file ) && p_file.WriteText( cuT( "\n" ) ) > 0;
+			Logger::LogInfo( cuT( "Scene::Write - Materials" ) );
+			for ( auto const & l_name : p_scene.GetMaterialView() )
+			{
+				auto l_material = p_scene.GetMaterialView().Find( l_name );
+				l_return &= Material::TextLoader( m_tabs + cuT( "\t" ) )( *l_material, p_file );
+				p_file.WriteText( cuT( "\n" ) );
+			}
 		}
 
 		if ( l_return )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Camera Nodes" ) );
-			l_return = SceneNode::TextLoader()( *p_scene.GetCameraRootNode(), p_file );
+			Logger::LogInfo( cuT( "Scene::Write - Background colour" ) );
+			l_return = p_file.Print( 256, cuT( "%s\tbackground_colour " ), m_tabs.c_str() ) > 0
+				&& Colour::TextLoader( String() )( p_scene.GetBackgroundColour(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
 		}
 
 		if ( l_return )
 		{
-			Logger::LogInfo( cuT( "Scene::Write - Object Nodes" ) );
-			l_return = SceneNode::TextLoader()( *p_scene.GetObjectRootNode(), p_file );
+			Logger::LogInfo( cuT( "Scene::Write - Ambient light" ) );
+			l_return = p_file.Print( 256, cuT( "%s\tambient_light " ), m_tabs.c_str() ) > 0
+				&& Colour::TextLoader( String() )( p_scene.GetAmbientLight(), p_file )
+				&& p_file.WriteText( cuT( "\n" ) ) > 0;
+			p_file.WriteText( cuT( "\n" ) );
+		}
+
+		Logger::LogInfo( cuT( "Scene::Write - Cameras nodes" ) );
+		for ( auto const & l_it : p_scene.GetCameraRootNode()->GetChilds() )
+		{
+			l_return &= SceneNode::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
+			p_file.WriteText( cuT( "\n" ) );
+		}
+
+		Logger::LogInfo( cuT( "Scene::Write - Objects nodes" ) );
+		for ( auto const & l_it : p_scene.GetObjectRootNode()->GetChilds() )
+		{
+			l_return &= SceneNode::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second.lock(), p_file );
+			p_file.WriteText( cuT( "\n" ) );
 		}
 
 		if ( l_return )
@@ -93,7 +124,8 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetCameraManager() )
 			{
-				l_return &= Camera::TextLoader()( *l_it.second, p_file );
+				l_return &= Camera::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				p_file.WriteText( cuT( "\n" ) );
 			}
 		}
 
@@ -106,24 +138,26 @@ namespace Castor3D
 			{
 				auto l_light = l_it.second;
 
-				switch ( l_light->GetType() )
+				switch ( l_light->GetLightType() )
 				{
 				case eLIGHT_TYPE_DIRECTIONAL:
-					l_return &= DirectionalLight::TextLoader()( *l_light->GetDirectionalLight(), p_file );
+					l_return &= DirectionalLight::TextLoader( m_tabs + cuT( "\t" ) )( *l_light->GetDirectionalLight(), p_file );
 					break;
 
 				case eLIGHT_TYPE_POINT:
-					l_return &= PointLight::TextLoader()( *l_light->GetPointLight(), p_file );
+					l_return &= PointLight::TextLoader( m_tabs + cuT( "\t" ) )( *l_light->GetPointLight(), p_file );
 					break;
 
 				case eLIGHT_TYPE_SPOT:
-					l_return &= SpotLight::TextLoader()( *l_light->GetSpotLight(), p_file );
+					l_return &= SpotLight::TextLoader( m_tabs + cuT( "\t" ) )( *l_light->GetSpotLight(), p_file );
 					break;
 
 				default:
 					l_return = false;
 					break;
 				}
+
+				p_file.WriteText( cuT( "\n" ) );
 			}
 		}
 
@@ -134,7 +168,19 @@ namespace Castor3D
 
 			for ( auto const & l_it : p_scene.GetGeometryManager() )
 			{
-				l_return &= Geometry::TextLoader()( *l_it.second, p_file );
+				l_return &= Geometry::TextLoader( m_tabs + cuT( "\t" ) )( *l_it.second, p_file );
+				p_file.WriteText( cuT( "\n" ) );
+			}
+		}
+
+		if ( l_return )
+		{
+			Logger::LogInfo( cuT( "Scene::Write - Windows" ) );
+			for ( auto const & l_name : p_scene.GetRenderWindowView() )
+			{
+				auto l_window = p_scene.GetRenderWindowView().Find( l_name );
+				l_return &= RenderWindow::TextLoader( m_tabs + cuT( "\t" ) )( *l_window, p_file );
+				p_file.WriteText( cuT( "\n" ) );
 			}
 		}
 
@@ -144,6 +190,10 @@ namespace Castor3D
 
 	//*************************************************************************************************
 
+	String Scene::RootNode = cuT( "RootNode" );
+	String Scene::CameraRootNode = cuT( "CameraRootNode" );
+	String Scene::ObjectRootNode = cuT( "ObjectRootNode" );
+
 	Scene::Scene( String const & p_name, Engine & p_engine )
 		: OwnedBy< Engine >{ p_engine }
 		, Named( p_name )
@@ -151,9 +201,9 @@ namespace Castor3D
 		, m_rootObjectNode()
 		, m_changed( false )
 	{
-		m_rootNode = std::make_shared< SceneNode >( cuT( "RootNode" ), *this );
-		m_rootCameraNode = std::make_shared< SceneNode >( cuT( "CameraRootNode" ), *this );
-		m_rootObjectNode = std::make_shared< SceneNode >( cuT( "ObjectRootNode" ), *this );
+		m_rootNode = std::make_shared< SceneNode >( RootNode, *this );
+		m_rootCameraNode = std::make_shared< SceneNode >( CameraRootNode, *this );
+		m_rootObjectNode = std::make_shared< SceneNode >( ObjectRootNode, *this );
 		m_rootCameraNode->AttachTo( m_rootNode );
 		m_rootObjectNode->AttachTo( m_rootNode );
 

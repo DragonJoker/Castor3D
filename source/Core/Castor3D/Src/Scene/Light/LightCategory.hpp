@@ -44,7 +44,7 @@ namespace Castor3D
 		\brief		Loader de LightCategory
 		*/
 		class TextLoader
-			: public Castor::Loader< LightCategory, Castor::eFILE_TYPE_TEXT, Castor::TextFile >
+			: public Castor::TextLoader< LightCategory >
 		{
 		public:
 			/**
@@ -53,7 +53,7 @@ namespace Castor3D
 			 *\~french
 			 *\brief		Constructeur
 			 */
-			C3D_API TextLoader( Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
+			C3D_API TextLoader( Castor::String const & p_tabs, Castor::File::eENCODING_MODE p_encodingMode = Castor::File::eENCODING_MODE_ASCII );
 			/**
 			 *\~english
 			 *\brief		Writes a light into a text file
